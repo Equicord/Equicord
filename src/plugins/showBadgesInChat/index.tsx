@@ -154,7 +154,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "ShowBadgesInChat",
     authors: [Devs.Shalev, Devs.fres, Devs.ryan, Devs.KrystalSkull],
-    description: "Shows profile badges in chat. Shoutout krystalskullofficial for the idea.",
+    description: "Shows profile badges in chat. That includes built in Discord Badges. Also shows Vencord Contributor Badges and all Donor badges (more sources of badges to most likely come soon)",
     dependencies: ["MessageDecorationsAPI"],
     patches: [
         {
