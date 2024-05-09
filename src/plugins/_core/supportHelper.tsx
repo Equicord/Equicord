@@ -50,8 +50,8 @@ const TrustedRolesIds = [
 export default definePlugin({
     name: "SupportHelper",
     required: true,
-    description: "Helps us provide support to you",
-    authors: [Devs.Ven, EquicordDevs.thororen],
+    description: "",
+    authors: [Devs.Ven, EquicordDevs.thororen, EquicordDevs.coolesding],
     dependencies: ["CommandsAPI"],
 
     patches: [{
@@ -119,13 +119,11 @@ ${makeCodeblock(enabledPlugins.join(", "))}
                         {'[class*="backdrop_"][style*="backdrop-filter"]{backdrop-filter:blur(16px) brightness(0.25) !important;}'}
                     </style>
                     <img src="https://media.tenor.com/QtGqjwBpRzwAAAAi/wumpus-dancing.gif" />
-                    <Forms.FormText>Are you sure you want to do this?</Forms.FormText>
-                    <Forms.FormText>The support channel is full of brainrotted idiots,</Forms.FormText>
-                    <Forms.FormText>potentially including you!</Forms.FormText>
-                    <Forms.FormText>Are you sure you're up to date with upstream?</Forms.FormText>
-                    <Forms.FormText>Are you ready to endure other people's brainrot?</Forms.FormText>
+                    <Forms.FormText>Before you ask for help,</Forms.FormText>
+                    <Forms.FormText>Check for updates and if this</Forms.FormText>
+                    <Forms.FormText>issue could be caused by Equicord!</Forms.FormText>
                 </div>,
-                confirmText: "Get mental health support",
+                confirmText: "I am ready!",
                 onConfirm: () => history.back()
             });
 
@@ -136,7 +134,7 @@ ${makeCodeblock(enabledPlugins.join(", "))}
                 return Alerts.show({
                     title: "Hold on!",
                     body: <div>
-                        <Forms.FormText>You are using an outdated version of Vencord! Chances are, your issue is already fixed.</Forms.FormText>
+                        <Forms.FormText>You are using an outdated version of Equicord! Chances are, your issue is already fixed.</Forms.FormText>
                         <Forms.FormText className={Margins.top8}>
                             Please first update before asking for support!
                         </Forms.FormText>
@@ -160,13 +158,12 @@ ${makeCodeblock(enabledPlugins.join(", "))}
                 return Alerts.show({
                     title: "Hold on!",
                     body: <div>
-                        <Forms.FormText>You are using an externally updated Vencord version, which we do not provide support for!</Forms.FormText>
+                        <Forms.FormText>You are using an externally updated Equicord version, the ability to help you here may be limited.</Forms.FormText>
                         <Forms.FormText className={Margins.top8}>
-                            Please either switch to an <Link href="https://vencord.dev/download">officially supported version of Vencord</Link>, or
-                            contact your package maintainer for support instead.
+                            Please join the <Link href="https://discord.gg/5Xh2W87egW">Equicord Server</Link> for support,
+                            or if this issue persists on Vencord, continue on.
                         </Forms.FormText>
                     </div>,
-                    onCloseCallback: () => setTimeout(() => NavigationRouter.back(), 50)
                 });
             }
 
@@ -175,13 +172,12 @@ ${makeCodeblock(enabledPlugins.join(", "))}
                 return Alerts.show({
                     title: "Hold on!",
                     body: <div>
-                        <Forms.FormText>You are using a fork of Vencord, which we do not provide support for!</Forms.FormText>
+                        <Forms.FormText>You are running a modified version of Vencord.</Forms.FormText>
                         <Forms.FormText className={Margins.top8}>
-                            Please either switch to an <Link href="https://vencord.dev/download">officially supported version of Vencord</Link>, or
-                            contact your package maintainer for support instead.
+                            Please join the <Link href="https://discord.gg/5Xh2W87egW">Equicord Server </Link> for support,
+                            or if this issue persists on Vencord, continue on.
                         </Forms.FormText>
                     </div>,
-                    onCloseCallback: () => setTimeout(() => NavigationRouter.back(), 50)
                 });
             }
         }
@@ -193,9 +189,9 @@ ${makeCodeblock(enabledPlugins.join(", "))}
 
         return (
             <Card className={`vc-plugins-restart-card ${Margins.top8}`}>
-                Please do not private message Vencord plugin developers for support!
+                Please do not private message plugin developers for support!
                 <br />
-                Instead, use the Vencord support channel: {Parser.parse("https://discord.com/channels/1015060230222131221/1026515880080842772")}
+                Instead, use the support channel: {Parser.parse("https://discord.com/channels/1015060230222131221/1026515880080842772")}
                 {!ChannelStore.getChannel(SUPPORT_CHANNEL_ID) && " (Click the link to join)"}
             </Card>
         );
