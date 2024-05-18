@@ -1,9 +1,3 @@
-/*
- * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -73,7 +67,7 @@ export default definePlugin({
         { // Settings, sidebar
             find: "Messages.BILLING_SETTINGS",
             replacement: {
-                match: /\{section:\i\.SectionTypes\.HEADER,label:\i\.default\.Messages\.BILLING_SETTINGS\},.*?\{section:\i\.SectionTypes\.DIVIDER\},/,
+                match: /\{header:[^:,]*\.Messages.BILLING_SETTINGS,[^}]*\]},/,
                 replace: "/*$&*/"
             },
             predicate: () => settings.store.billing,
@@ -95,10 +89,10 @@ export default definePlugin({
             predicate: () => settings.store.emojiList,
         },
         { // Emoji category list
-            find: ".Messages.EMOJI_PICKER_SCROLL_TO_UNICODE_A11Y_LABEL",
+            find: "useEmojiCategories:function()",
             replacement: {
-                match: /(\w+)=\(0,\w+.useCategoryNitroLockedStates\)\(\w+,\w+,(\w+)\)/,
-                replace: "$&,__98=($2=$2.filter((_,$2)=>!$1[$2]))"
+                match: /(?<=(\i)\.unshift\((\i)\):)(?=\1\.push\(\2\))/,
+                replace: "$2.isNitroLocked||"
             },
             predicate: () => settings.store.emojiList,
         }
