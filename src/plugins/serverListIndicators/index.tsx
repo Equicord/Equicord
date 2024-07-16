@@ -166,10 +166,8 @@ export default definePlugin({
 
     start() {
         addServerListElement(ServerListRenderPosition.Above, this.renderIndicator);
-        // enableStyle(style);
         handlePresenceUpdate();
         handleGuildUpdate();
-
     },
 
     stop() {
