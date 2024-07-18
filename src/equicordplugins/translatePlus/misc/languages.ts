@@ -68,6 +68,7 @@ export const Languages = {
     "ee": "Ewe",
     "tl": "Filipino",
     "tp": "Toki Pona",
+    "sh": "Shavian",
     "fi": "Finnish",
     "fr": "French",
     "fy": "Frisian",
