@@ -58,11 +58,6 @@ export const settings = definePluginSettings({
         type: OptionType.STRING,
         description: "An API to translate messages to Toki Pona",
         default: "https://aiapi.serversmp.xyz/toki"
-    },
-    tokiPonaAuth: {
-        type: OptionType.STRING,
-        description: "An API key to use with the Toki Pona API",
-        default: ""
     }
 }).withPrivateSettings<{
     showAutoTranslateAlert: boolean;
