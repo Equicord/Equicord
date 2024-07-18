@@ -5,16 +5,17 @@
  */
 
 import { Parser, useEffect, useState } from "@webpack/common";
+import { Message } from "discord-types/general";
 
-import { cl } from "../misc/class";
 import { languages } from "../misc/languages";
+import { cl, Translation } from "../misc/types";
 import { Icon } from "./icon";
 import { translate } from "./translator";
 
 const setters = new Map();
 
-export function Accessory({ message }) {
-    const [translation, setTranslation] = useState();
+export function Accessory({ message }: { message: Message; }) {
+    const [translation, setTranslation] = useState<Translation | undefined>(undefined);
 
     useEffect(() => {
         if ((message as any).vencordEmbeddedBy) return;
@@ -36,6 +37,6 @@ export function Accessory({ message }) {
     );
 }
 
-export async function handleTranslate(message) {
+export async function handleTranslate(message: Message) {
     setters.get(message.id)!(await translate(message.content));
 }

@@ -6,25 +6,25 @@
 
 import { settings } from "../settings";
 
-function isTokiPona(text) {
+function isTokiPona(text: string) {
     const dictionary = /\b(?:leko|weka|pan|lete|linja|lipu|suli|nimi|akesi|misikeke|selo|ike|sijelo|sona|lili|pimeja|ante|jo|loje|telo|walo|kijetesantakalu|kasi|waso|wile|utala|lukin|sina|lape|ma|pilin|jasima|la|olin|pipi|meso|lawa|pi|pakala|oko|tan|ken|jaki|unpa|esun|seme|sitelen|len|kule|soko|open|ala|tenpo|lon|sinpin|pini|kokosila|mama|musi|monsi|mewika|taso|ona|mun|kiwen|tomo|mute|mi|nena|palisa|meli|laso|wawa|ale|kipisi|kulupu|ilo|lupa|nanpa|en|mu|jelo|kili|tonsi|moku|ni|kama|pu|poki|monsuta|sin|lasina|poka|soweli|sewi|elena|epiku|moli|pona|lanpan|alasa|anu|kute|uta|luka|suno|sama|awen|namako|suwi|noka|seli|mije|sike|jan|pali|tawa|inli|nasa|mani|wan|insa|nijon|nasin|kalama|ijo|toki|anpa|kala|kepeken|ko|kon|pana|tu|supa|kin|usawi|yupekosi)\b/gm;
 
     return (text.match(dictionary) || []).length >= text.split(/\s+/).length * 0.5;
 }
 
-function isSitelen(text) {
+function isSitelen(text: string) {
     const dictionary = /(?:󱤀|󱤁|󱤂|󱤃|󱤄|󱤅|󱤆|󱤇|󱤈|󱤉|󱤊|󱤋|󱤌|󱤍|󱤎|󱤏|󱤐|󱤑|󱤒|󱤓|󱤔|󱤕|󱤖|󱤗|󱤘|󱤙|󱤚|󱤛|󱤜|󱤝|󱤞|󱤟|󱤠|󱤡|󱤢|󱤣|󱤤|󱤥|󱤦|󱤧|󱤨|󱤩|󱤪|󱤫|󱤬|󱤭|󱤮|󱤯|󱤰|󱤱|󱤲|󱤳|󱤴|󱤵|󱤶|󱤷|󱤸|󱤹|󱤺|󱤻|󱤼|󱤽|󱤾|󱤿|󱥀|󱥁|󱥂|󱥃|󱥄|󱥅|󱥆|󱥇|󱥈|󱥉|󱥊|󱥋|󱥌|󱥍|󱥎|󱥏|󱥐|󱥑|󱥒|󱥓|󱥔|󱥕|󱥖|󱥗|󱥘|󱥙|󱥚|󱥛|󱥜|󱥝|󱥞|󱥟|󱥠|󱥡|󱥢|󱥣|󱥤|󱥥|󱥦|󱥧|󱥨|󱥩|󱥪|󱥫|󱥬|󱥭|󱥮|󱥯|󱥰|󱥱|󱥲|󱥳|󱥴|󱥵|󱥶|󱥷|󱦠|󱦡|󱦢|󱦣|󱥸|󱥹|󱥺|󱥻|󱥼|󱥽|󱥾|󱥿|󱦀|󱦁|󱦂|󱦃|󱦄|󱦅|󱦆|󱦇|󱦈|󱦐|󱦑|󱦒|󱦓|󱦔|󱦕|󱦖|󱦗|󱦘|󱦙|󱦚|󱦛|󱦜|󱦝)/gm;
 
     return dictionary.test(text);
 }
 
-function isShavian(text) {
+function isShavian(text: string) {
     const shavianRegex = /[\u{10450}-\u{1047F}]+/u;
 
     return shavianRegex.test(text);
 }
 
-async function translateShavian(message) {
+async function translateShavian(message: string) {
     const dictionary = await (await fetch("https://forkprince.github.io/TranslatePlus/shavian.json")).json();
 
     const punctuationMap = {
@@ -69,7 +69,7 @@ async function translateShavian(message) {
     return translated.trim();
 }
 
-async function translateSitelen(message) {
+async function translateSitelen(message: string) {
     message = Array.from(message).join(" ");
 
     const dictionary = await (await fetch("https://forkprince.github.io/TranslatePlus/sitelen-pona.json")).json();
@@ -83,7 +83,7 @@ async function translateSitelen(message) {
     return translate;
 }
 
-async function google(target: String, text: String) {
+async function google(target: string, text: string) {
     const translate = await (await fetch(`https://translate.googleapis.com/translate_a/single?${new URLSearchParams({ client: "gtx", sl: "auto", tl: target, dt: "t", dj: "1", source: "input", q: text })}`)).json();
 
     return {
@@ -92,7 +92,7 @@ async function google(target: String, text: String) {
     };
 }
 
-export async function translate(text: String): Promise<any> {
+export async function translate(text: string): Promise<any> {
     const { target, toki, sitelen, shavian } = settings.store;
 
     const output = { src: "", text: "" };
