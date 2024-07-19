@@ -19,7 +19,7 @@
 import { debounce } from "@shared/debounce";
 import { contextBridge, webFrame } from "electron";
 import { readFileSync, watch } from "fs";
-import { join } from "path";
+import { dirname, join } from "path";
 
 import VencordNative from "./VencordNative";
 
@@ -28,13 +28,7 @@ contextBridge.exposeInMainWorld("VencordNative", VencordNative);
 // Discord
 if (location.protocol !== "data:") {
     // #region cssInsert
-    let rendererPath;
-    if (IS_VESKTOP || IS_EQUIBOP) {
-        rendererPath = "vencordDesktopRenderer.css";
-    } else {
-        rendererPath = "renderer.css";
-    }
-    const rendererCss = join(__dirname, rendererPath);
+    const rendererCss = join(__dirname, "renderer.css");
 
     const style = document.createElement("style");
     style.id = "vencord-css-core";
@@ -51,7 +45,7 @@ if (location.protocol !== "data:") {
     if (IS_DEV) {
         // persistent means keep process running if watcher is the only thing still running
         // which we obviously don't want
-        watch(rendererCss, { persistent: false }, () => {
+        watch(dirname(rendererCss), { persistent: false }, () => {
             document.getElementById("vencord-css-core")!.textContent = readFileSync(rendererCss, "utf-8");
         });
     }

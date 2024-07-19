@@ -21,53 +21,90 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 -   Request for plugins from Discord.
 
 <details>
-<summary>Extra included plugins (61 additional plugins)</summary>
+<summary>Extra included plugins (107 additional plugins)</summary>
 
 - AllCallTimers by MaxHerbold and D3SOX
 - AltKrispSwitch by newwares
+- AmITyping by MrDiamond
 - Anammox by Kyuuhachi
+- DecodeBase64 by ThePirateStoner
 - BetterActivities by D3SOX, Arjix, AutumnVN
+- BetterBanReasons by Inbestigator
 - BetterQuickReact by Ven and Sqaaakoi
+- BetterUserArea by Samwich
+- BlockKeywords by catcraft
 - BlockKrsip by D3SOX
 - BypassDND by Inbestigator
 - CleanChannelName by AutumnVN
+- ClientSideBlock by Samwich
 - ColorMessage by Kyuuhachi
+- CommandPalette by Ethan
 - CopyUserMention by Cortex and castdrian
 - CustomAppIcons by Happy Enderman and SerStars
+- CustomSounds by ScattrdBlade
+- CuteAnimeBoys by ShadyGoat
+- CuteNekos by echo
+- CutePats by thororen
 - DeadMembers by Kyuuhachi
+- Demonstration by Samwich
 - DiscordColorways by DaBluLite
 - DNDWhilePlaying by thororen
 - DoNotLeak by Perny
+- DontFilterMe by Samwich
 - DoubleCounterBypass by nyx
 - EmojiDumper by Cortex, Samwich, Woosh
 - Encryptcord by Inbestigator
 - EquicordCSS by FoxStorm1 and thororen (and all respective css developers)
 - ExportContacts by dat_insanity
 - FindReply by newwares
+- FrequentQuickSwitcher by Samwich
 - FriendshipRanks by Samwich
+- FriendTags by Samwich
+- GensokyoRadioRPC by RyanCaoDev and Prince527
+- GifRoulette by Samwich
+- Glide by Samwich
 - GlobalBadges by HypedDomi and Hosted by Wolfie
 - GodMode by Tolgchu
+- GoogleThat by Samwich
+- Grammar by Samwich
+- GrammarFix by unstream
 - HideMessage by Hanzy
 - HolyNotes by Wolfie
-- Hop On by ImLvna
+- HomeTyping by Samwich
+- HopOn by ImLvna
+- Identity by Samwich
 - IgnoreTerms by D3SOX
+- IrcColors by Grzesiek11
 - IRememberYou by zoodogood
+- JumpToStart by Samwich
 - KeyboardSounds by HypedDomi
 - KeywordNotify by camila314
+- MediaDownloader by Colorman
 - Meow by Samwich
 - MessageLinkTooltip by Kyuuhachi
 - MessageLoggerEnhanced by Aria
+- MessageTranslate by Samwich
+- ModalFade by Kyuuhachi
+- NewPluginsManager by Sqaaakoi
 - noAppsAllowed by kvba
+- NoBulletPoints by Samwich
+- NoDefaultEmojis by Samwich
+- NoDeleteSafety by Samwich
 - NoModalAnimation by AutumnVN
 - NoNitroUpsell by thororen
+- NoRoleHeaders by Samwich
+- NotificationTitle by Kyuuhachi
 - NotifyUserChanges by D3SOX
 - OnePingPerDM by ProffDea
 - PlatformSpoofer by Drag
 - PurgeMessages by bhop and nyx
-- Quest Completer by HappyEnderman, SerStars, thororen
+- QuestCompleter by HappyEnderman, SerStars, thororen
 - QuestionMarkReplacement by nyx
+- Quoter by Samwich
 - RepeatMessage by Tolgchu
+- ReplaceActivityTypes by Nyako
 - ReplyPingControl by ant0n and MrDiamond
+- RPCStats by Samwich
 - ScreenRecorder by AutumnVN
 - SearchFix by Jaxx
 - SekaiStickers by MaiKokain
@@ -76,13 +113,21 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - Slap by Korbo
 - SoundBoardLogger by Moxxie, fres, echo, thororen
 - TalkInReverse by Tolgchu
+- TeX by Kyuuhachi
+- TextToSpeech by Samwich
 - ThemeLibrary by Fafa
 - Title by Kyuuhachi
+- TosuRPC by AutumnVN
+- Translate+ by Prince527 (Using Translate by Ven)
 - UnlimitedAccounts by Balaclava and thororen
 - UserPFP by nexpid and thororen
+- UwUifier by echo
 - VCSupport by thororen
 - VencordRPC by AutumnVN
+- VideoSpeed by Samwich
+- ViewRaw2 by Kyuuhachi
 - VoiceChatUtilities by Dams and D3SOX
+- WebpackTarball by Kyuuhachi
 - WhosWatching by fres
 - Woof by Samwich
 - YoutubeDescription by arHSM
@@ -92,10 +137,20 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 
 ## Installing / Uninstalling
 
+Windows
+- [GUI](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl.exe)
+- [CLI](https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli.exe)
+
+MacOS
+- [GUI](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl.MacOS.zip)
+
+Linux
+- [CLI](https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli-Linux)
+
 ### Dependencies
 [Git](https://git-scm.com/download) and [Node.JS LTS](https://nodejs.dev/en/) are required.
 
-### Installing Equicord
+### Installing Equicord Devbuild
 
 Install `pnpm`:
 

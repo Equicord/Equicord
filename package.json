@@ -12,12 +12,7 @@
         "url": "git+https://github.com/Equicord/Equicord.git"
     },
     "license": "GPL-3.0-or-later",
-    "author": "Vendicated",
-    "contributors": [
-        "Equicord",
-        "Thororen1234",
-        "Yeetov"
-    ],
+    "author": "Equicord",
     "scripts": {
         "build": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
         "buildStandalone": "pnpm build --standalone",
@@ -29,6 +24,7 @@
         "dev": "pnpm watch",
         "watchWeb": "pnpm buildWeb --watch",
         "generatePluginJson": "tsx scripts/generatePluginList.ts",
+        "generateEquicordPluginJson": "tsx scripts/generateEquicordPluginList.ts",
         "generateTypes": "tspc --emitDeclarationOnly --declaration --outDir packages/vencord-types",
         "inject": "node scripts/runInstaller.mjs",
         "uninject": "node scripts/runInstaller.mjs",
@@ -52,10 +48,12 @@
         "monaco-editor": "^0.50.0",
         "nanoid": "^4.0.2",
         "usercss-meta": "^0.12.0",
+        "openai": "^4.30.0",
         "virtual-merge": "^1.0.1"
     },
     "devDependencies": {
         "@react-spring/web": "^9.7.3",
+        "@electron/asar": "^3.2.10",
         "@types/chrome": "^0.0.246",
         "@types/diff": "^5.0.3",
         "@types/lodash": "^4.14.194",
