@@ -5,7 +5,7 @@
  */
 
 export const images = {
-    cross: "https://files.catbox.moe/j0rf6a.png",
+    cross: "https://i.imgur.com/XxRnu3b.png",
     deviceImage: {
         success:
             "https://github.com/nexpid/Themelings/raw/data/icons/images/native/img_remote_auth_succeeded.png",
