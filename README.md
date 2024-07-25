@@ -33,7 +33,7 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - BetterQuickReact by Ven and Sqaaakoi
 - BetterUserArea by Samwich
 - BlockKeywords by catcraft
-- BlockKrsip by D3SOX
+- BlockKrisp by D3SOX
 - BypassDND by Inbestigator
 - CleanChannelName by AutumnVN
 - ClientSideBlock by Samwich

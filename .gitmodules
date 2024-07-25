@@ -1,0 +1,18 @@
+[submodule "src/equicordplugins/baseDecoder"]
+	path = src/equicordplugins/baseDecoder
+	url = https://github.com/ThePirateStoner/vencord-base64-decoder
+[submodule "src/equicordplugins/betterActivities"]
+	path = src/equicordplugins/betterActivities
+	url = https://github.com/D3SOX/vc-betterActivities
+[submodule "src/equicordplugins/blockKrisp"]
+	path = src/equicordplugins/blockKrisp
+	url = https://github.com/D3SOX/vc-blockKrisp.git
+[submodule "src/equicordplugins/ignoreTerms"]
+	path = src/equicordplugins/ignoreTerms
+	url = https://github.com/D3SOX/vc-ignoreTerms.git
+[submodule "src/equicordplugins/notifyUserChanges"]
+	path = src/equicordplugins/notifyUserChanges
+	url = https://github.com/D3SOX/vc-notifyUserChanges
+[submodule "src/equicordplugins/voiceChatUtils"]
+	path = src/equicordplugins/voiceChatUtils
+	url = https://github.com/D3SOX/vc-voiceChatUtilities
