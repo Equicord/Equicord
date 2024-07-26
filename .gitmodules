@@ -16,3 +16,36 @@
 [submodule "src/equicordplugins/voiceChatUtils"]
 	path = src/equicordplugins/voiceChatUtils
 	url = https://github.com/D3SOX/vc-voiceChatUtilities
+[submodule "src/equicordplugins/customSounds"]
+	path = src/equicordplugins/customSounds
+	url = https://github.com/ScattrdBlade/customSounds
+[submodule "src/equicordplugins/cuteAnimeBoys"]
+	path = src/equicordplugins/cuteAnimeBoys
+	url = https://github.com/ShadiestGoat/vencord-cuteanimeboys
+[submodule "src/equicordplugins/discordColorways"]
+	path = src/equicordplugins/discordColorways
+	url = https://github.com/DaBluLite/DiscordColorways-VencordUserplugin
+[submodule "src/equicordplugins/keywordNotify"]
+	path = src/equicordplugins/keywordNotify
+	url = https://github.com/camila314/vencord-KeywordNotify
+[submodule "src/equicordplugins/newPluginsManager"]
+	path = src/equicordplugins/newPluginsManager
+	url = https://github.com/Sqaaakoi/vc-newPluginsManager.git
+[submodule "src/equicordplugins/replaceActivityTypes"]
+	path = src/equicordplugins/replaceActivityTypes
+	url = https://github.com/nyakowint/replaceActivityTypes.git
+[submodule "src/equicordplugins/sekaiStickers"]
+	path = src/equicordplugins/sekaiStickers
+	url = https://codeberg.org/maikokain/sekaistickers-vencord.git
+[submodule "src/equicordplugins/serverSearch"]
+	path = src/equicordplugins/serverSearch
+	url = https://gist.github.com/camila314/26890fe52d7be6b4a13167a65ea6efc1.git
+[submodule "src/equicordplugins/gensokyoRadioRPC"]
+	path = src/equicordplugins/gensokyoRadioRPC
+	url = https://github.com/ForkPrince/GensokyoRadioRPC.git
+[submodule "src/equicordplugins/globalBadges"]
+	path = src/equicordplugins/globalBadges
+	url = https://github.com/Domis-Vencord-Plugins/GlobalBadges.git
+[submodule "src/equicordplugins/holyNotes"]
+	path = src/equicordplugins/holyNotes
+	url = https://github.com/WolfPlugs/HolyNotes-VC.git
