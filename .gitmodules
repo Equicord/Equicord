@@ -43,9 +43,6 @@
 [submodule "src/equicordplugins/gensokyoRadioRPC"]
 	path = src/equicordplugins/gensokyoRadioRPC
 	url = https://github.com/ForkPrince/GensokyoRadioRPC.git
-[submodule "src/equicordplugins/globalBadges"]
-	path = src/equicordplugins/globalBadges
-	url = https://github.com/Domis-Vencord-Plugins/GlobalBadges.git
 [submodule "src/equicordplugins/holyNotes"]
 	path = src/equicordplugins/holyNotes
 	url = https://github.com/WolfPlugs/HolyNotes-VC.git
