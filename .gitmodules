@@ -49,3 +49,6 @@
 [submodule "src/equicordplugins/holyNotes"]
 	path = src/equicordplugins/holyNotes
 	url = https://github.com/WolfPlugs/HolyNotes-VC.git
+[submodule "src/equicordplugins/themeLibrary"]
+	path = src/equicordplugins/themeLibrary
+	url = https://github.com/Faf4a/ThemeLibrary
