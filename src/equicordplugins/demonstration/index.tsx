@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -32,42 +33,67 @@ const validKeycodes = [
     "NumpadDivide", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "NumLock", "ScrollLock"
 ];
 
-const settings = definePluginSettings(
-    {
-        keyBind: {
-            description: "The key to toggle the theme when pressed",
-            type: OptionType.STRING,
-            default: "F6",
-            isValid: (value: string) => {
-                if (validKeycodes.includes(value)) {
-                    return true;
-                }
-                return false;
+const settings = definePluginSettings({
+    keyBind: {
+        description: "The key to toggle the theme when pressed",
+        type: OptionType.STRING,
+        default: "F6",
+        isValid: (value: string) => {
+            if (validKeycodes.includes(value)) {
+                return true;
             }
-        },
-        soundVolume: {
-            description: "How loud the toggle sound is (0 to disable)",
-            type: OptionType.SLIDER,
-            default: 0.5,
-            markers: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-        },
-    });
+            return false;
+        }
+    },
+    soundVolume: {
+        description: "How loud the toggle sound is (0 to disable)",
+        type: OptionType.SLIDER,
+        default: 0.5,
+        markers: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+    },
+    showConfirmationNotification: {
+        description: "Show a notification to remind shortcuts",
+        type: OptionType.BOOLEAN,
+        default: true,
+    }
+});
 
-function handleKeydown(event) {
-    if (event.code !== settings.store.keyBind) { return; }
-
+function handleToggle() {
     const style = document.getElementById("DemonstrationStyle");
     if (style != null) {
         style.remove();
         playSound("https://files.catbox.moe/wp5rpz.wav");
+        showNotification({
+            title: "Demonstration",
+            body: "Demonstration Disabled",
+            color: "var(--red-400)"
+        });
     }
     else {
-        injectCSS();
-        playSound("https://files.catbox.moe/ckz46t.wav");
+        if (settings.store.showConfirmationNotification) {
+            showNotification({
+                title: "Demonstration",
+                body: `Enabling Demonstration. Remember the shortcut: ${settings.store.keyBind} !!!\nClick this notification to see changes.`,
+                color: "var(--yellow-300)",
+                permanent: true,
+                onClick: () => {
+                    injectCSS();
+                    playSound("https://files.catbox.moe/ckz46t.wav");
+                }
+            });
+        } else {
+            injectCSS();
+            playSound("https://files.catbox.moe/ckz46t.wav");
+        }
     }
 }
 
-async function playSound(url) {
+function handleKeydown(event: KeyboardEvent) {
+    if (event.code !== settings.store.keyBind) { return; }
+    handleToggle();
+}
+
+async function playSound(url: string) {
     const audio = new Audio(url);
     audio.volume = settings.store.soundVolume;
     await audio.play().catch(error => {
@@ -76,10 +102,15 @@ async function playSound(url) {
     audio.remove();
 }
 
+
 export default definePlugin({
     name: "Demonstration",
     description: "Plugin for taking theme screenshots - censors identifying images and text.",
     authors: [Devs.Samwich],
+    settings,
+    toolboxActions: {
+        "Toggle Demonstration": (() => handleToggle())
+    },
     settingsAboutComponent: () => {
         return (
             <>
@@ -93,5 +124,5 @@ export default definePlugin({
     stop() {
         document.removeEventListener("keydown", handleKeydown);
     },
-    settings
+
 });
