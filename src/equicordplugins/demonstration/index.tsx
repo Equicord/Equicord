@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
+import { classNameFactory } from "@api/Styles";
 import { Devs } from "@utils/constants";
+import { closeModal, ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { Text } from "@webpack/common";
+import { Button, Forms, Switch, Text } from "@webpack/common";
 
 // definitely not stolen from glide :P
 async function injectCSS() {
@@ -51,36 +52,59 @@ const settings = definePluginSettings({
         default: 0.5,
         markers: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
     },
-    showConfirmationNotification: {
-        description: "Show a notification to remind shortcuts",
+    showConfirmationModal: {
+        description: "Show modal to remind shortcut",
         type: OptionType.BOOLEAN,
         default: true,
     }
 });
+
+function ToggleModal() {
+    const value = !settings.use(["showConfirmationModal"]).showConfirmationModal;
+    return (
+        <Switch
+            note="You can re-enable this setting later"
+            value={value}
+            onChange={v => { settings.store.showConfirmationModal = !v; }}>
+            Disable modal?
+        </Switch>
+    );
+}
 
 function handleToggle() {
     const style = document.getElementById("DemonstrationStyle");
     if (style != null) {
         style.remove();
         playSound("https://files.catbox.moe/wp5rpz.wav");
-        showNotification({
-            title: "Demonstration",
-            body: "Demonstration Disabled",
-            color: "var(--red-400)"
-        });
     }
     else {
-        if (settings.store.showConfirmationNotification) {
-            showNotification({
-                title: "Demonstration",
-                body: `Enabling Demonstration. Remember the shortcut: ${settings.store.keyBind} !!!\nClick this notification to see changes.`,
-                color: "var(--yellow-300)",
-                permanent: true,
-                onClick: () => {
-                    injectCSS();
-                    playSound("https://files.catbox.moe/ckz46t.wav");
-                }
-            });
+        if (settings.store.showConfirmationModal) {
+            const cl = classNameFactory("vc-demonstration-modal");
+
+            const key = openModal(props => (
+                <ModalRoot {...props}>
+                    <ModalHeader className={cl("header")}>
+                        <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }} >Demonstration</Text>
+                        <ModalCloseButton onClick={() => closeModal(key)}></ModalCloseButton>
+                    </ModalHeader>
+                    <ModalContent className={cl("content")}>
+                        <Forms.FormText>
+                            This will censor all text! To disable this, remember the shortcut:
+                        </Forms.FormText>
+                        <Text variant="heading-xl/bold" style={{ textAlign: "center", width: "100%", paddingTop: "20px", paddingBottom: "20px" }}>
+                            {settings.store.keyBind}
+                        </Text>
+                        <ToggleModal />
+                    </ModalContent>
+                    <Button
+                        onClick={() => {
+                            closeModal(key);
+                            injectCSS();
+                            playSound("https://files.catbox.moe/ckz46t.wav");
+                        }}
+                    >Okay!</Button>
+                </ModalRoot>
+            ));
         } else {
             injectCSS();
             playSound("https://files.catbox.moe/ckz46t.wav");
