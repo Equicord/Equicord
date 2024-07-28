@@ -6,7 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import { closeModal, ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, Forms, Switch, Text } from "@webpack/common";
@@ -130,7 +130,7 @@ async function playSound(url: string) {
 export default definePlugin({
     name: "Demonstration",
     description: "Plugin for taking theme screenshots - censors identifying images and text.",
-    authors: [Devs.Samwich],
+    authors: [Devs.Samwich, EquicordDevs.Panniku],
     settings,
     toolboxActions: {
         "Toggle Demonstration": (() => handleToggle())
