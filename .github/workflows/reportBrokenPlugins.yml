@@ -15,8 +15,7 @@ jobs:
       - uses: actions/checkout@v4
         if: ${{ github.event_name == 'schedule' }}
         with:
-          ref: dev
-          submodules: "recursive"
+            ref: dev
 
       - uses: actions/checkout@v4
         if: ${{ github.event_name == 'workflow_dispatch' }}
