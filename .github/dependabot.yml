@@ -1,0 +1,13 @@
+version: 2
+
+updates:
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "04:00"
+    target-branch: "sub" # change this to your branch
+    reviewers:
+      - "thororen1234"
+    commit-message:
+      prefix: "dependabot"
