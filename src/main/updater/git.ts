@@ -68,7 +68,14 @@ async function calculateGitChanges() {
 
 async function pull() {
     const res = await git("pull");
-    return res.stdout.includes("Fast-forward");
+
+    if (res.stdout.includes("Fast-forward")) {
+        await git("submodule", "update", "--init", "--recursive");
+
+        return true;
+    }
+
+    return false;
 }
 
 async function build() {
