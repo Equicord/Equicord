@@ -6,7 +6,7 @@ updates:
     schedule:
       interval: "daily"
       time: "04:00"
-    target-branch: "sub" # change this to your branch
+    target-branch: "main" # dependabot only works with the default branch :(
     reviewers:
       - "thororen1234"
     commit-message:
