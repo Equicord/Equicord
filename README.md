@@ -194,9 +194,9 @@ https://discord.gg/5Xh2W87egW
 
 ## Credits
 
-Thank you to [Suncord](https://github.com/verticalsync/Suncord) by [VerticalSync](https://github.com/verticalsync) for helping me when needed.
-
 Thank you to [Vendicated](https://github.com/Vendicated) for creating [Vencord](https://github.com/Vendicated/Vencord).
+
+Thank you to [Suncord [EOL]](https://github.com/verticalsync/Suncord) by [VerticalSync](https://github.com/verticalsync) for helping me when needed.
 
 ## Star History
 

@@ -39,7 +39,7 @@ interface BadgeCache {
 let badgeImages;
 
 // const API_URL = "https://clientmodbadges-api.herokuapp.com/";
-const API_URL = "https://globalbadges.suncord.rest/";
+const API_URL = "https://globalbadges.equicord.fyi/";
 
 const cache = new Map<string, BadgeCache>();
 const EXPIRES = 1000 * 60 * 15;
@@ -88,7 +88,7 @@ const GlobalBadges = ({ userId }: { userId: string; }) => {
     Object.keys(badges).forEach(mod => {
         if (mod.toLowerCase() === "vencord") return;
         if (mod.toLowerCase() === "equicord") return;
-        if (mod.toLowerCase() === "suncord") return;
+        // RIP SUNCORD
         badges[mod].forEach(badge => {
             if (typeof badge === "string") {
                 const fullNames = { "hunter": "Bug Hunter", "early": "Early User" };
@@ -101,6 +101,10 @@ const GlobalBadges = ({ userId }: { userId: string; }) => {
             const cleanName = badge.name.replace(mod, "").trim();
             const prefix = showPrefix() ? mod : "";
             if (!badge.custom) badge.name = `${prefix} ${cleanName.charAt(0).toUpperCase() + cleanName.slice(1)}`;
+            if (badge.custom) {
+                if (cleanName.toLowerCase().includes(mod)) return;
+                else if (prefix) badge.name = `${cleanName} (${prefix})`.replaceAll(" ()", "");
+            }
             globalBadges.push(<BadgeComponent name={badge.name} img={badge.badge} />);
             badgeModal.push(<BadgeModalComponent name={badge.name} img={badge.badge} />);
         });
