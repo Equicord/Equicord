@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { findComponentByCodeLazy } from "@webpack";
 import { moment, React, useMemo } from "@webpack/common";
@@ -30,7 +29,7 @@ interface ActivityTooltipProps {
     activity: Activity;
     application?: Application;
     user: User;
-    cl: ReturnType<typeof classNameFactory>;
+    cl: ReturnType<typeof import("@api/Styles").classNameFactory>;
 }
 
 export default function ActivityTooltip({ activity, application, user, cl }: Readonly<ActivityTooltipProps>) {
