@@ -21,7 +21,7 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 -   Request for plugins from Discord.
 
 <details>
-<summary>Extra included plugins (118 additional plugins)</summary>
+<summary>Extra included plugins (119 additional plugins)</summary>
 
 - AllCallTimers by MaxHerbold and D3SOX
 - AltKrispSwitch by newwares
@@ -82,6 +82,7 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - IRememberYou by zoodogood
 - JumpToStart by Samwich
 - KeyboardSounds by HypedDomi
+- KeywordNotify by camila314 (maintained by thororen)
 - LoginWithQR by nexpid
 - MediaDownloader by Colorman
 - Meow by Samwich
