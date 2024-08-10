@@ -21,7 +21,7 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 -   Request for plugins from Discord.
 
 <details>
-<summary>Extra included plugins (119 additional plugins)</summary>
+<summary>Extra included plugins (122 additional plugins)</summary>
 
 - AllCallTimers by MaxHerbold and D3SOX
 - AltKrispSwitch by newwares
@@ -80,22 +80,24 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - InRole by nin0dev
 - IrcColors by Grzesiek11
 - IRememberYou by zoodogood
+- Jumpscare by Joona
 - JumpToStart by Samwich
 - KeyboardSounds by HypedDomi
 - KeywordNotify by camila314 (maintained by thororen)
 - LoginWithQR by nexpid
 - MediaDownloader by Colorman
 - Meow by Samwich
+- MessageColors by Hen
 - MessageLinkTooltip by Kyuuhachi
 - MessageLoggerEnhanced by Aria
 - MessageTranslate by Samwich
 - ModalFade by Kyuuhachi
-- MusicTitleRPC by Blackilykay
 - NewPluginsManager by Sqaaakoi
 - noAppsAllowed by kvba
 - NoBulletPoints by Samwich
 - NoDefaultEmojis by Samwich
 - NoDeleteSafety by Samwich
+- NoMirroredCamera by Nyx
 - NoModalAnimation by AutumnVN
 - NoNitroUpsell by thororen
 - NoRoleHeaders by Samwich
@@ -130,6 +132,7 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - Translate+ by Prince527 (Using Translate by Ven)
 - UnitConverter by sadan
 - UnlimitedAccounts by thororen
+- UnreadCountBadge by Joona
 - UserPFP by nexpid (maintained by thororen)
 - UwUifier by echo
 - VCSupport by thororen
