@@ -80,12 +80,13 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - InRole by nin0dev
 - IrcColors by Grzesiek11
 - IRememberYou by zoodogood
-- Jumpscare by Joona
+- Jumpscare by Surgedevs
 - JumpToStart by Samwich
 - KeyboardSounds by HypedDomi
 - KeywordNotify by camila314 (maintained by thororen)
 - LoginWithQR by nexpid
 - MediaDownloader by Colorman
+- MediaPlaybackSpeed by D3SOX
 - Meow by Samwich
 - MessageColors by Hen
 - MessageLinkTooltip by Kyuuhachi
@@ -102,7 +103,6 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - NoNitroUpsell by thororen
 - NoRoleHeaders by Samwich
 - NotificationTitle by Kyuuhachi
-- NotifyUserChanges by D3SOX
 - OnePingPerDM by ProffDea
 - PlatformSpoofer by Drag
 - PurgeMessages by bhop and nyx
@@ -117,7 +117,7 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - SearchFix by Jaxx
 - SekaiStickers by MaiKokain
 - ServerSearch by camila314
-- Shakespearean by vmohammad
+- Shakespearean by vmohammad (Dev build only)
 - ShowBadgesInChat by Inbestigator and KrystalSkull
 - Slap by Korbo
 - SoundBoardLogger by Moxxie, fres, echo (maintained by thororen)
@@ -139,7 +139,7 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - VencordRPC by AutumnVN
 - VideoSpeed by Samwich
 - ViewRaw2 by Kyuuhachi
-- VoiceChatUtilities by Dams and D3SOX
+- VoiceChatUtilities by D3SOX
 - WebpackTarball by Kyuuhachi
 - WhosWatching by fres
 - WigglyText by nexpid
