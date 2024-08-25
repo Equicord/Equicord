@@ -228,7 +228,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                             <div className="vc-settings-modal-links">
                                 <GithubButton
                                     text="View source code"
-                                    href={`https://github.com/${gitRemote}/tree/main/src/plugins/${pluginMeta.folderName}`}
+                                    href={`https://github.com/${gitRemote}/tree/main/${pluginMeta.folderName}`}
                                 />
                             </div>
                         )}

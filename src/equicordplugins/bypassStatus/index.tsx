@@ -6,7 +6,7 @@
 
 import { type NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { Notifications } from "@api/index";
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
 import { Logger } from "@utils/Logger";
@@ -61,7 +61,7 @@ async function showNotification(message: Message, guildId: string | undefined): 
             new Audio("https://discord.com/assets/9422aef94aa931248105.mp3").play();
         }
     } catch (error) {
-        new Logger("BypassDND").error("Failed to notify user: ", error);
+        new Logger("BypassStatus").error("Failed to notify user: ", error);
     }
 }
 
@@ -74,8 +74,8 @@ function ContextCallback(name: "guild" | "user" | "channel"): NavContextMenuPatc
         children.splice(-1, 0, (
             <Menu.MenuGroup>
                 <Menu.MenuItem
-                    id={`dnd-${name}-bypass`}
-                    label={`${enabled ? "Remove" : "Add"} DND Bypass`}
+                    id={`status-${name}-bypass`}
+                    label={`${enabled ? "Remove" : "Add"} Status Bypass`}
                     icon={() => Icon(enabled)}
                     action={() => {
                         let bypasses: string[] = settings.store[`${name}s`].split(", ");
@@ -113,17 +113,41 @@ const settings = definePluginSettings({
     },
     allowOutsideOfDms: {
         type: OptionType.BOOLEAN,
-        description: "Allow selected users to bypass DND outside of DMs too (acts like a channel/guild bypass, but it's for all messages sent by the selected users)"
+        description: "Allow selected users to bypass status outside of DMs too (acts like a channel/guild bypass, but it's for all messages sent by the selected users)"
     },
     notificationSound: {
         type: OptionType.BOOLEAN,
         description: "Whether the notification sound should be played",
         default: true,
+    },
+    statusToUse: {
+        type: OptionType.SELECT,
+        description: "Status to use for whitelist",
+        options: [
+            {
+                label: "Online",
+                value: "online",
+            },
+            {
+                label: "Idle",
+                value: "idle",
+            },
+            {
+                label: "Do Not Disturb",
+                value: "dnd",
+                default: true
+            },
+            {
+                label: "Invisible",
+                value: "invisible",
+            }
+        ]
     }
 });
 
+migratePluginSettings("BypassStatus", "BypassDND");
 export default definePlugin({
-    name: "BypassDND",
+    name: "BypassStatus",
     description: "Still get notifications from specific sources when in do not disturb mode. Right-click on users/channels/guilds to set them to bypass do not disturb mode.",
     authors: [Devs.Inbestigator],
     flux: {
@@ -132,7 +156,7 @@ export default definePlugin({
                 const currentUser = UserStore.getCurrentUser();
                 const userStatus = await PresenceStore.getStatus(currentUser.id);
                 const currentChannelId = getCurrentChannel()?.id ?? "0";
-                if (message.state === "SENDING" || message.content === "" || message.author.id === currentUser.id || (channelId === currentChannelId && WindowStore.isFocused()) || userStatus !== "dnd") {
+                if (message.state === "SENDING" || message.content === "" || message.author.id === currentUser.id || (channelId === currentChannelId && WindowStore.isFocused()) || userStatus !== settings.store.statusToUse) {
                     return;
                 }
                 const mentioned = MessageStore.getMessage(channelId, message.id)?.mentioned;
@@ -145,7 +169,7 @@ export default definePlugin({
                     }
                 }
             } catch (error) {
-                new Logger("BypassDND").error("Failed to handle message: ", error);
+                new Logger("BypassStatus").error("Failed to handle message: ", error);
             }
         }
     },

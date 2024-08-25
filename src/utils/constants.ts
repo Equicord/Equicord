@@ -522,7 +522,7 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     },
     nyx: {
         name: "verticalsync",
-        id: 328165170536775680n
+        id: 1207087393929171095n
     },
     nekohaxx: {
         name: "nekohaxx",
@@ -548,16 +548,24 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "Lumap",
         id: 585278686291427338n,
     },
+    llytz: {
+        name: "llytz",
+        id: 1271128098301022240n
+    },
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
+    nobody: {
+        name: "nobody",
+        id: 0n
+    },
     thororen: {
         name: "thororen",
         id: 848339671629299742n
     },
     nyx: {
         name: "verticalsync",
-        id: 328165170536775680n,
+        id: 1207087393929171095n,
     },
     Cortex: {
         name: "Cortex",

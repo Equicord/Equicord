@@ -4,8 +4,6 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 
 ![image](https://github.com/Equicord/Equicord/assets/78185467/81707ad9-3a04-4f76-88a0-60ee70684f81)
 
-## WOMP WOMP
-
 ## Features
 
 -   Third-party plugins implemented into the main build.
@@ -23,7 +21,7 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 -   Request for plugins from Discord.
 
 <details>
-<summary>Extra included plugins (122 additional plugins)</summary>
+<summary>Extra included plugins (123 additional plugins)</summary>
 
 - AllCallTimers by MaxHerbold and D3SOX
 - AltKrispSwitch by newwares
@@ -37,7 +35,7 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - BetterUserArea by Samwich
 - BlockKeywords by catcraft
 - BlockKrsip by D3SOX
-- BypassDND by Inbestigator
+- BypassStatus by Inbestigator and thororen
 - ChannelTabs by TheSun, TheKodeToad, keifufu, Nickyux
 - CleanChannelName by AutumnVN
 - ClientSideBlock by Samwich
@@ -50,7 +48,6 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - CutePats by thororen
 - DeadMembers by Kyuuhachi
 - Demonstration by Samwich
-- DiscordColorways by DaBluLite
 - DNDWhilePlaying by thororen
 - DoNotLeak by Perny
 - DontFilterMe by Samwich
@@ -129,6 +126,7 @@ An enhanced version of [Vencord](https://github.com/Vendicated/Vencord) by [Vend
 - TeX by Kyuuhachi
 - TextToSpeech by Samwich
 - ThemeLibrary by Fafa
+- Timezones by Aria
 - Title by Kyuuhachi
 - TosuRPC by AutumnVN
 - Translate+ by Prince527 (Using Translate by Ven)
