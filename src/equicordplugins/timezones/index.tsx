@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import * as DataStore from "@api/DataStore";
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { openModal } from "@utils/modal";
@@ -137,9 +137,9 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: {
 
 };
 
-
+migratePluginSettings("Timezones", "Timezone");
 export default definePlugin({
-    name: "Timezone",
+    name: "Timezones",
     authors: [Devs.Aria],
     description: "Shows the local time of users in profiles and message headers",
     contextMenus: {
