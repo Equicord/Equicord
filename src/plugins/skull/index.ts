@@ -59,14 +59,14 @@ const skull_URL_HD =
 
 const settings = definePluginSettings({
     volume: {
-        description: "Volume of the 💀💀💀",
+        description: "Volume of the Sound",
         type: OptionType.SLIDER,
         markers: makeRange(0, 1, 0.1),
         default: 0.5,
         stickToMarkers: false
     },
     quality: {
-        description: "Quality of the 💀💀💀",
+        description: "Quality of the Sound",
         type: OptionType.SELECT,
         options: [
             { label: "Normal", value: "Normal", default: true },
@@ -74,9 +74,9 @@ const settings = definePluginSettings({
         ],
     },
     triggerWhenUnfocused: {
-        description: "Trigger the 💀 even when the window is unfocused",
+        description: "Trigger the sound even when Discord is not in focus.",
         type: OptionType.BOOLEAN,
-        default: true
+        default: false
     },
     ignoreBots: {
         description: "Ignore bots",
@@ -93,7 +93,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "Skull",
     authors: [Devs.falcon],
-    description: "💀💀💀💀💀",
+    description: "Plays the vine boom sound effect when a 💀 is sent to a chat",
     settings,
 
     flux: {
