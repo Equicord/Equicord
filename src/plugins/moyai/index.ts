@@ -51,22 +51,22 @@ interface IVoiceChannelEffectSendEvent {
     animationId: number;
 }
 
-const MOYAI = "🗿";
-const MOYAI_URL =
-    "https://github.com/Equicord/Equibored/raw/main/sounds/moyai/moyai.mp3";
-const MOYAI_URL_HD =
-    "https://github.com/Equicord/Equibored/raw/main/sounds/moyai/moyai.wav";
+const skull = "💀";
+const skull_URL =
+    "https://raw.githubusercontent.com/MeguminSama/VencordPlugins/main/plugins/moyai/moyai.mp3";
+const skull_URL_HD =
+    "https://raw.githubusercontent.com/MeguminSama/VencordPlugins/main/plugins/moyai/moyai_hd.wav";
 
 const settings = definePluginSettings({
     volume: {
-        description: "Volume of the 🗿🗿🗿",
+        description: "Volume of the 💀💀💀",
         type: OptionType.SLIDER,
         markers: makeRange(0, 1, 0.1),
         default: 0.5,
         stickToMarkers: false
     },
     quality: {
-        description: "Quality of the 🗿🗿🗿",
+        description: "Quality of the 💀💀💀",
         type: OptionType.SELECT,
         options: [
             { label: "Normal", value: "Normal", default: true },
@@ -74,7 +74,7 @@ const settings = definePluginSettings({
         ],
     },
     triggerWhenUnfocused: {
-        description: "Trigger the 🗿 even when the window is unfocused",
+        description: "Trigger the 💀 even when the window is unfocused",
         type: OptionType.BOOLEAN,
         default: true
     },
@@ -91,9 +91,9 @@ const settings = definePluginSettings({
 });
 
 export default definePlugin({
-    name: "Moyai",
-    authors: [Devs.Megu, Devs.Nuckyz],
-    description: "🗿🗿🗿🗿🗿🗿🗿🗿",
+    name: "Skull",
+    authors: [Devs.falcon.69],
+    description: "💀💀💀💀💀",
     settings,
 
     flux: {
@@ -105,9 +105,9 @@ export default definePlugin({
             if (!message.content) return;
             if (channelId !== SelectedChannelStore.getChannelId()) return;
 
-            const moyaiCount = getMoyaiCount(message.content);
+            const skullCount = getskullCount(message.content);
 
-            for (let i = 0; i < moyaiCount; i++) {
+            for (let i = 0; i < skullCount; i++) {
                 boom();
                 await sleep(300);
             }
@@ -120,7 +120,7 @@ export default definePlugin({
             if (channelId !== SelectedChannelStore.getChannelId()) return;
 
             const name = emoji.name.toLowerCase();
-            if (name !== MOYAI && !name.includes("moyai") && !name.includes("moai")) return;
+            if (name !== skull && !name.includes("skull") && !name.includes("skeleton")) return;
 
             boom();
         },
@@ -128,7 +128,7 @@ export default definePlugin({
         VOICE_CHANNEL_EFFECT_SEND({ emoji }: IVoiceChannelEffectSendEvent) {
             if (!emoji?.name) return;
             const name = emoji.name.toLowerCase();
-            if (name !== MOYAI && !name.includes("moyai") && !name.includes("moai")) return;
+            if (name !== skull && !name.includes("skull") && !name.includes("skeleton")) return;
 
             boom();
         }
@@ -155,11 +155,11 @@ function countMatches(sourceString: string, pattern: RegExp) {
     return i;
 }
 
-const customMoyaiRe = /<a?:\w*moy?ai\w*:\d{17,20}>/gi;
+const customskullRe = /<a?:\w*skull\w*:\d{17,20}>/gi;
 
-function getMoyaiCount(message: string) {
-    const count = countOccurrences(message, MOYAI)
-        + countMatches(message, customMoyaiRe);
+function getskullCount(message: string) {
+    const count = countOccurrences(message, skull)
+        + countMatches(message, customskullRe);
 
     return Math.min(count, 10);
 }
@@ -169,8 +169,8 @@ function boom() {
     const audioElement = document.createElement("audio");
 
     audioElement.src = settings.store.quality === "HD"
-        ? MOYAI_URL_HD
-        : MOYAI_URL;
+        ? skull_URL_HD
+        : skull_URL;
 
     audioElement.volume = settings.store.volume;
     audioElement.play();
