@@ -96,7 +96,7 @@ export default definePlugin({
         return [
             {
                 section: SectionTypes.HEADER,
-                label: "Equicord",
+                label: "Falcord",
                 className: "vc-settings-header"
             },
             {
