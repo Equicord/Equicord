@@ -93,7 +93,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "Skull",
     authors: [Devs.falcon],
-    description: "Plays the vine boom sound effect when a 💀 is sent to a chat",
+    description: "Plays the vine boom sound effect when the skull emoji is sent to the chat",
     settings,
 
     flux: {
