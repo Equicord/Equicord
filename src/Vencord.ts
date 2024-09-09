@@ -100,7 +100,7 @@ async function init() {
                 await update();
                 if (Settings.autoUpdateNotification)
                     setTimeout(() => showNotification({
-                        title: "Equicord has been updated!",
+                        title: "Falcord has been updated!",
                         body: "Click here to restart",
                         permanent: true,
                         noPersist: true,
@@ -110,7 +110,7 @@ async function init() {
             }
 
             setTimeout(() => showNotification({
-                title: "A Equicord update is available!",
+                title: "A Falcord update is available!",
                 body: "Click here to view the update",
                 permanent: true,
                 noPersist: true,
