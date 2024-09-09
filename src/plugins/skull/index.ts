@@ -87,6 +87,11 @@ const settings = definePluginSettings({
         description: "Ignore blocked users",
         type: OptionType.BOOLEAN,
         default: true
+    },
+    playOnReaction: {  // New setting to control whether or not the sound is played on a reaction
+        description: "Play the sound effect when someone reacts with the skull emoji",
+        type: OptionType.BOOLEAN,
+        default: true
     }
 });
 
@@ -109,7 +114,7 @@ export default definePlugin({
 
             for (let i = 0; i < skullCount; i++) {
                 boom();
-                await sleep(300);
+                await sleep(250);
             }
         },
 
@@ -122,7 +127,9 @@ export default definePlugin({
             const name = emoji.name.toLowerCase();
             if (name !== skull && !name.includes("skull") && !name.includes("skeleton")) return;
 
-            boom();
+            if (settings.store.playOnReaction) {  // Check if the sound should play on reaction
+                boom();
+            }
         },
 
         VOICE_CHANNEL_EFFECT_SEND({ emoji }: IVoiceChannelEffectSendEvent) {
@@ -166,6 +173,8 @@ function getskullCount(message: string) {
 
 function boom() {
     if (!settings.store.triggerWhenUnfocused && !document.hasFocus()) return;
+    if (!settings.store.playOnReaction) return;
+
     const audioElement = document.createElement("audio");
 
     audioElement.src = settings.store.quality === "HD"
