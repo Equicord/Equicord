@@ -205,19 +205,19 @@ function Updater() {
     };
 
     return (
-        <SettingsTab title="Equicord Updater">
+        <SettingsTab title="Falcord Updater">
             <Forms.FormTitle tag="h5">Updater Settings</Forms.FormTitle>
             <Switch
                 value={settings.autoUpdate}
                 onChange={(v: boolean) => settings.autoUpdate = v}
-                note="Automatically update Equicord without confirmation prompt"
+                note="Automatically update Falcord without any confirmation prompt"
             >
                 Automatically update
             </Switch>
             <Switch
                 value={settings.autoUpdateNotification}
                 onChange={(v: boolean) => settings.autoUpdateNotification = v}
-                note="Shows a notification when Equicord automatically updates"
+                note="Shows a notification when Falcord automatically updates"
                 disabled={!settings.autoUpdate}
             >
                 Get notified when an automatic update completes
