@@ -98,7 +98,7 @@ function EquicordSettings() {
         ];
 
     return (
-        <SettingsTab title="Equicord Settings">
+        <SettingsTab title="Falcord Settings">
             <DonateCard image={donateImage} />
             <Forms.FormSection title="Quick Actions">
                 <QuickActionCard>
@@ -129,7 +129,7 @@ function EquicordSettings() {
                     <QuickAction
                         Icon={GithubIcon}
                         text="View Source Code"
-                        action={() => VencordNative.native.openExternal("https://github.com/" + gitRemote)}
+                        action={() => VencordNative.native.openExternal("https://github.com/falc0n2222/Falcord")}
                     />
                 </QuickActionCard>
             </Forms.FormSection>
@@ -225,7 +225,7 @@ function EquicordSettings() {
                     serialize={identity} />
             </>}
 
-            <Forms.FormSection className={Margins.top16} title="Equicord Notifications" tag="h5">
+            <Forms.FormSection className={Margins.top16} title="Falcord Notifications" tag="h5">
                 <Flex>
                     <Button onClick={openNotificationSettingsModal}>
                         Notification Settings
@@ -247,8 +247,8 @@ function DonateCard({ image }: DonateCardProps) {
     return (
         <Card className={cl("card", "donate")}>
             <div>
-                <Forms.FormTitle tag="h5">Support the Project</Forms.FormTitle>
-                <Forms.FormText>Please consider supporting the development of Equicord by donating!</Forms.FormText>
+                <Forms.FormTitle tag="h5">Disclaimer</Forms.FormTitle>
+                <Forms.FormText>Made by falcon, mainly for personal use, no future updates are guaranteed!</Forms.FormText>
                 <DonateButton style={{ transform: "translateX(-1em)" }} />
             </div>
             <img
@@ -266,4 +266,4 @@ function DonateCard({ image }: DonateCardProps) {
     );
 }
 
-export default wrapTab(EquicordSettings, "Equicord Settings");
+export default wrapTab(EquicordSettings, "Falcord Settings");
