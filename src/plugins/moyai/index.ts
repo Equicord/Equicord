@@ -92,7 +92,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Skull",
-    authors: [Devs.falcon.69],
+    authors: [Devs.falcon],
     description: "💀💀💀💀💀",
     settings,
 
