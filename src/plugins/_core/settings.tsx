@@ -35,7 +35,7 @@ type SectionTypes = Record<SectionType, SectionType>;
 export default definePlugin({
     name: "Settings",
     description: "Adds Settings UI and debug info",
-    authors: [Devs.Ven, Devs.Megu],
+    authors: [Devs.Ven, Devs.Megu, Devs.Falcon],
     required: true,
 
     patches: [
@@ -101,7 +101,7 @@ export default definePlugin({
             },
             {
                 section: "EquicordSettings",
-                label: "Equicord",
+                label: "Falcord",
                 element: VencordTab,
                 className: "vc-settings"
             },
@@ -130,13 +130,13 @@ export default definePlugin({
                 className: "vc-cloud"
             },
             {
-                section: "EquicordSettingsSync",
+                section: "SettingsSync",
                 label: "Backup & Restore",
                 element: BackupAndRestoreTab,
                 className: "vc-backup-restore"
             },
             {
-                section: "EquicordPatchHelper",
+                section: "PatchHelper",
                 label: "Patch Helper",
                 element: PatchHelperTab,
                 className: "vc-patch-helper"
