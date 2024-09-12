@@ -41,7 +41,8 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     },
     Arjix: {
         name: "ArjixWasTaken",
-        id: 674710789138939916n
+        id: 674710789138939916n,
+        badge: false
     },
     Cyn: {
         name: "Cynosphere",
@@ -320,8 +321,8 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "amia",
         id: 142007603549962240n
     },
-    philhk: {
-        name: "philhk",
+    phil: {
+        name: "phil",
         id: 305288513941667851n
     },
     ImLvna: {
@@ -556,9 +557,9 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "Lumap",
         id: 585278686291427338n,
     },
-    llytz: {
-        name: "llytz",
-        id: 1271128098301022240n
+    Obsidian: {
+        name: "Obsidian",
+        id: 683171006717755446n,
     },
     SerStars: {
         name: "SerStars",
@@ -568,9 +569,9 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "niko",
         id: 341377368075796483n,
     },
-    Obsidian: {
-        name: "Obsidian",
-        id: 683171006717755446n,
+    relitrix: {
+        name: "Relitrix",
+        id: 423165393901715456n,
     },
     RamziAH: {
         name: "RamziAH",
@@ -790,7 +791,11 @@ export const EquicordDevs = Object.freeze({
     bep: {
         name: "bep",
         id: 0n,
-    }
+    },
+    llytz: {
+        name: "llytz",
+        id: 1271128098301022240n
+    },
 } satisfies Record<string, Dev>);
 
 // iife so #__PURE__ works correctly

@@ -132,6 +132,9 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             option?.onChange?.(value);
             if (option?.restartNeeded) restartNeeded = true;
         }
+        if (plugin.afterSave) {
+            plugin.afterSave();
+        }
         if (restartNeeded) onRestartNeeded();
         onClose();
     }
