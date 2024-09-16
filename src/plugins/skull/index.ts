@@ -74,7 +74,7 @@ const settings = definePluginSettings({
         ],
     },
     triggerWhenUnfocused: {
-        description: "Trigger the sound even when Discord is not in focus.",
+        description: "Trigger the sound even when Discord is not in focus",
         type: OptionType.BOOLEAN,
         default: false
     },
@@ -89,7 +89,7 @@ const settings = definePluginSettings({
         default: true
     },
     playOnReaction: {  // New setting to control whether or not the sound is played on a reaction
-        description: "Play the sound effect when someone reacts with the skull emoji",
+        description: "Play the sound effect when someone reacts with the Skull emoji to a message",
         type: OptionType.BOOLEAN,
         default: true
     }
