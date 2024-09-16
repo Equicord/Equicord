@@ -33,7 +33,7 @@ export class Logger {
 
     private _log(level: "log" | "error" | "warn" | "info" | "debug", levelColor: string, args: any[], customFmt = "") {
         if (IS_REPORTER && IS_WEB) {
-            console[level]("[Equicord]", this.name + ":", ...args);
+            console[level]("[Falcord]", this.name + ":", ...args);
             return;
         }
 
