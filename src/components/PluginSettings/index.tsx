@@ -66,7 +66,7 @@ function ReloadRequiredCard({ required }: { required: boolean; }) {
                 <>
                     <Forms.FormTitle tag="h5">Restart required!</Forms.FormTitle>
                     <Forms.FormText className={cl("dep-text")}>
-                        Restart now to apply new plugins and their settings
+                        You must restart Falcord to apply the newly installed plugins.
                     </Forms.FormText>
                     <Button onClick={() => location.reload()}>
                         Restart
@@ -75,8 +75,8 @@ function ReloadRequiredCard({ required }: { required: boolean; }) {
             ) : (
                 <>
                     <Forms.FormTitle tag="h5">Plugin Management</Forms.FormTitle>
-                    <Forms.FormText>Press the cog wheel or info icon to get more info on a plugin</Forms.FormText>
-                    <Forms.FormText>Plugins with a cog wheel have settings you can modify!</Forms.FormText>
+                    <Forms.FormText>Press the cog wheel or info icon to get more info on a plugin.</Forms.FormText>
+                    <Forms.FormText>Plugins with a cog wheel contain Settings that you can modify!</Forms.FormText>
                 </>
             )}
         </Card>
@@ -198,7 +198,7 @@ function ExcludedPluginsList({ search }: { search: string; }) {
                         ))}
                     </ul>
                 </>
-                : "No plugins meet the search criteria."
+                : "No plugins found."
             }
         </Text>
     );
@@ -213,7 +213,7 @@ export default function PluginSettings() {
             title: "Restart required",
             body: (
                 <>
-                    <p>The following plugins require a restart:</p>
+                    <p>The following plugins require a restart in order to function:</p>
                     <div>{changes.map((s, i) => (
                         <>
                             {i > 0 && ", "}
@@ -222,7 +222,7 @@ export default function PluginSettings() {
                     ))}</div>
                 </>
             ),
-            confirmText: "Restart now",
+            confirmText: "Restart now!",
             cancelText: "Later!",
             onConfirm: () => location.reload()
         }));
@@ -379,7 +379,7 @@ export default function PluginSettings() {
                     <div className={cl("grid")}>
                         {plugins.length
                             ? plugins
-                            : <Text variant="text-md/normal">No plugins meet the search criteria.</Text>
+                            : <Text variant="text-md/normal">No plugins found.</Text>
                         }
                     </div>
                 )
@@ -395,7 +395,7 @@ export default function PluginSettings() {
             <div className={cl("grid")}>
                 {requiredPlugins.length
                     ? requiredPlugins
-                    : <Text variant="text-md/normal">No plugins meet the search criteria.</Text>
+                    : <Text variant="text-md/normal">No plugins found.</Text>
                 }
             </div>
         </SettingsTab >
