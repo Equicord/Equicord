@@ -12,7 +12,7 @@
         "url": "git+https://github.com/falc0n2222/Falcord.git"
     },
     "license": "GPL-3.0-or-later",
-    "author": "Falcon",
+    "author": "falcon",
     "scripts": {
         "build": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
         "buildStandalone": "pnpm build --standalone",
