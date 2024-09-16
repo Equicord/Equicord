@@ -59,12 +59,12 @@ export default definePlugin({
             replacement: [
                 // override URL
                 {
-                    match: /(?<=new Audio;\i\.src=)\i\([0-9]+\)\("\.\/"\.concat\(this\.name,"\.mp3"\)/,
+                    match: /(?<=new Audio;\i\.src=)\i\([0-9]+\)\(.{0,20}\(this\.name,"\.mp3"\)/,
                     replace: "$self.findOverride(this.name)?.url || $&"
                 },
                 // override volume
                 {
-                    match: /Math.min\(\i\.\i\.getOutputVolume\(\)\/100\*this\._volume/,
+                    match: /Math.min\(\i\.\i\.getOutputVolume\(\).{0,20}volume/,
                     replace: "$& * ($self.findOverride(this.name)?.volume ?? 100) / 100"
                 }
             ]

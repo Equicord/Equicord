@@ -10,7 +10,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 
 ### Extra included plugins
 <details>
-<summary>Extra included plugins (124 additional plugins)</summary>
+<summary>124 additional plugins</summary>
 
 - AllCallTimers by MaxHerbold and D3SOX
 - AltKrispSwitch by newwares
@@ -37,6 +37,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - CutePats by thororen
 - DeadMembers by Kyuuhachi
 - Demonstration by Samwich
+- DisableCameras by Joona
 - DNDWhilePlaying by thororen
 - DoNotLeak by Perny
 - DontFilterMe by Samwich
@@ -72,7 +73,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - Jumpscare by Surgedevs
 - JumpToStart by Samwich
 - KeyboardSounds by HypedDomi
-- KeywordNotify by camila314 (maintained by thororen)
+- KeywordNotify by camila314 and x3rt
 - LoginWithQR by nexpid
 - MediaDownloader by Colorman
 - MediaPlaybackSpeed by D3SOX
@@ -129,7 +130,9 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - VencordRPC by AutumnVN
 - VideoSpeed by Samwich
 - ViewRaw2 by Kyuuhachi
+- VoiceChannelLog by Sqaaakoi (maintained by thororen)
 - VoiceChatUtilities by D3SOX
+- VoiceJoinMessages by Sqaaakoi (maintained by thororen)
 - WebpackTarball by Kyuuhachi
 - WhosWatching by fres
 - WigglyText by nexpid
