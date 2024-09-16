@@ -1,12 +1,12 @@
-# Equicord [<img src="./browser/icon.png" width="225" align="left" alt="Equicord">](https://github.com/Equicord/Equicord)
+# Falcord [<img src="./browser/icon.png" width="225" align="left" alt="Falcord">](https://github.com/falc0n2222/Falcord)
 
 [![Equibop](https://img.shields.io/badge/Equibop-grey?style=flat)](https://github.com/Equicord/Equibop)
 [![Tests](https://github.com/Equicord/Equicord/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Equicord/Equicord/actions/workflows/test.yml)
 [![Discord](https://img.shields.io/discord/1207691698386501634.svg?color=768AD4&label=Discord&logo=discord&logoColor=white)](https://discord.gg/5Xh2W87egW)
 
-Equicord is a fork of [Vencord](https://github.com/Vendicated/Vencord), with over 300+ plugins.
+Falcord is a fork of [Vencord](https://github.com/Vendicated/Vencord), & [Equicord](https://github.com/Equicord/Equicord), with over 300+ plugins.
 
-You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, changes, chat or even support.<br><br></br>
+Currently, Falcord is a personal project, & thus no updates or support is guaranteed. However, if you wish to do so, you can join Equicord's [discord server](https://discord.gg/5Xh2W87egW).<br><br></br>
 
 ### Extra included plugins
 <details>
@@ -215,14 +215,14 @@ Mentioning it does not imply any affiliation with or endorsement by Discord Inc.
 Vencord is not connected to Equicord and as such, all donation links go to Vendicated's donation link.
 
 <details>
-<summary>Using Equicord violates Discord's terms of service</summary>
+<summary>Using Falcord, Equicord or Vencord violates Discord's Terms of Service</summary>
 
 Client modifications are against Discord’s Terms of Service.
 
 However, Discord is pretty indifferent about them and there are no known cases of users getting banned for using client mods! So you should generally be fine if you don’t use plugins that implement abusive behaviour. But no worries, all inbuilt plugins are safe to use!
 
-Regardless, if your account is essential to you and getting disabled would be a disaster for you, you should probably not use any client mods (not exclusive to Equicord), just to be safe
+Regardless, if your account is essential to you and getting disabled would be a disaster for you, you should probably not use any client mods (not exclusive to Falcord), just to be safe
 
-Additionally, make sure not to post screenshots with Equicord in a server where you might get banned for it
+Additionally, make sure not to post screenshots with Falcord in a server where you might get banned for it
 
 </details>
