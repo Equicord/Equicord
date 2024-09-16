@@ -6,7 +6,7 @@
 
 Falcord is a fork of [Vencord](https://github.com/Vendicated/Vencord), & [Equicord](https://github.com/Equicord/Equicord), with over 300+ plugins.
 
-Currently, Falcord is a personal project, & thus no updates or support is guaranteed. However, you can join Equicord's [Discord Server](https://discord.gg/5Xh2W87egW), if you wish to do so.<br><br></br>
+Currently, Falcord is a personal project, & thus future updates or support are *NOT* guaranteed. However, you can join Equicord's [Discord Server](https://discord.gg/5Xh2W87egW), if you wish to do so.<br><br></br>
 
 ### Extra included plugins
 <details>
