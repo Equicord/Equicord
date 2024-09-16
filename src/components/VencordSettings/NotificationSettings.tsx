@@ -36,7 +36,7 @@ export function NotificationSettings() {
                 options={[
                     { label: "Only use Desktop notifications when Discord is not focused", value: "not-focused", default: true },
                     { label: "Always use Desktop notifications", value: "always" },
-                    { label: "Always use Equicord notifications", value: "never" },
+                    { label: "Always use Falcord notifications", value: "never" },
                 ] satisfies Array<{ value: typeof settings["useNative"]; } & Record<string, any>>}
                 closeOnSelect={true}
                 select={v => settings.useNative = v}
