@@ -202,9 +202,9 @@ Thank you to [Vendicated](https://github.com/Vendicated) for creating [Vencord](
 
 <a href="https://star-history.com/#falc0n2222/Falcord&Timeline">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Equicord/Equicord&type=Timeline&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Equicord/Equicord&type=Timeline" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Equicord/Equicord&type=Timeline" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=falc0n2222/Falcord&type=Timeline&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=falc0n2222/Falcord&type=Timeline" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=falc0n2222/Falcord&type=Timeline" />
   </picture>
 </a>
 
