@@ -24,12 +24,12 @@ import { initIpc } from "./ipcMain";
 import { RendererSettings } from "./settings";
 import { IS_VANILLA } from "./utils/constants";
 
-console.log("[Equicord] Starting up...");
+console.log("[Falcord] Starting up...");
 
 // FIXME: remove at some point
 const isLegacyNonAsarVencord = IS_STANDALONE && !__dirname.endsWith(".asar");
 if (isLegacyNonAsarVencord) {
-    console.warn("This is a legacy non asar install! Migrating to asar and restarting...");
+    console.warn("This is a legacy non Asar install! Migrating to Asar and restarting...");
     require("./updater/http").migrateLegacyToAsar();
 }
 
@@ -163,6 +163,6 @@ if (!IS_VANILLA && !isLegacyNonAsarVencord) {
 }
 
 if (!isLegacyNonAsarVencord) {
-    console.log("[Equicord] Loading original Discord app.asar");
+    console.log("[Falcord] Loading original Discord app.asar");
     require(require.main!.filename);
 }
