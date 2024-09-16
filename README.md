@@ -142,7 +142,7 @@ Currently, Falcord is a personal project, & thus no updates or support is guaran
 </details>
 
 
-## Installing / Uninstalling
+## Installing / Uninstalling Equicord
 
 Windows
 - [GUI](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl.exe)
