@@ -10,7 +10,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 
 ### Extra included plugins
 <details>
-<summary>127 additional plugins</summary>
+<summary>126 additional plugins</summary>
 
 - AllCallTimers by MaxHerbold & D3SOX
 - AltKrispSwitch by newwares
@@ -28,7 +28,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - ChannelTabs by TheSun, TheKodeToad, keifufu, Nickyux
 - CleanChannelName by AutumnVN
 - ClientSideBlock by Samwich
-- ColorMessage by Kyuuhachi
 - CommandPalette by Ethan
 - CopyUserMention by Cortex & castdrian
 - CustomSounds by TheKodeToad & SpikeHD
@@ -43,7 +42,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - DoubleCounterBypass by nyx
 - EmojiDumper by Cortex, Samwich, Woosh
 - Encryptcord by Inbestigator
-- EquicordCSS by thororen, Dablulite, Coolesding, MiniDiscordThemes, LuckFire
+- EquicordCSS by thororen, Panniku, Dablulite, Coolesding, MiniDiscordThemes, LuckFire, gold_me
 - ExportContacts by dat_insanity
 - FindReply by newwares
 - FrequentQuickSwitcher by Samwich
@@ -131,7 +130,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - VencordRPC by AutumnVN
 - VideoSpeed by Samwich
 - ViewRaw2 by Kyuuhachi
-- VoiceChannelLog by Sqaaakoi (Maintained by thororen & Dev build only)
+- VoiceChannelLog by Sqaaakoi (Maintained by thororen)
 - VoiceChatUtilities by D3SOX
 - VoiceJoinMessages by Sqaaakoi (Maintained by thororen & Dev build only)
 - WebpackTarball by Kyuuhachi
