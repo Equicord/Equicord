@@ -63,6 +63,7 @@
     height: 8em;
     display: flex;
     flex-direction: column;
+    background-color: var(--background-secondary-alt);
 }
 
 .vc-plugins-info-card div {
