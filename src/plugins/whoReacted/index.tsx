@@ -111,7 +111,7 @@ export default definePlugin({
     name: "WhoReacted",
     description: "Renders the avatars of users who reacted to a message",
     authors: [Devs.Ven, Devs.KannaDev, Devs.newwares],
-    settings: settings,
+    settings,
     patches: [
         {
             find: ",reactionRef:",
