@@ -67,6 +67,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - InRole by nin0dev
 - IrcColors by Grzesiek11
 - IRememberYou by zoodogood
+- ImagePreview by Creation's
 - Jumpscare by Surgedevs
 - JumpToStart by Samwich
 - KeyboardSounds by HypedDomi
