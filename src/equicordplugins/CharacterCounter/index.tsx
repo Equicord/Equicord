@@ -54,7 +54,7 @@ export default definePlugin({
 
     start() {
         const currentUser = UserStore.getCurrentUser();
-        const charMax = currentUser?.premiumType === undefined || currentUser?.premiumType === 0 || currentUser?.premiumType === 3 ? 2000 : 4000;
+        const charMax = currentUser?.premiumType === 2 ? 4000 : 2000;
 
         shouldShowColorEffects = settings.store.colorEffects;
         position = settings.store.position;
