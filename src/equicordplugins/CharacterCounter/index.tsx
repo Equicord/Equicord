@@ -90,11 +90,10 @@ export default definePlugin({
             const updateCharCount = () => {
                 const text = chatInput?.textContent?.replace(/[\uFEFF\xA0]/g, "") || "";
                 const charCount = text.trim().length;
-                if (charCount !== 0) {
-                    charCounterDiv.style.opacity = "1";
-                } else {
-                    charCounterDiv.style.opacity = "0";
-                }
+
+                if (charCount !== 0) charCounterDiv.style.opacity = "1";
+                else charCounterDiv.style.opacity = "0";
+
                 const charCountSpan: HTMLElement | null = charCounterDiv!.querySelector(".vc-char-count");
                 charCountSpan!.textContent = `${charCount}`;
 
