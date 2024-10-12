@@ -1,0 +1,55 @@
+.badge {
+    margin-left: auto;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: inline-block;
+    color: white;
+
+    margin-left: 0.2rem;
+}
+
+.text-badge {
+    background-color: #4caf50;
+}
+
+.dm-badge {
+    background-color: #2196f3;
+}
+
+.voice-badge {
+    background-color: #ff9800;
+}
+
+.category-badge {
+    background-color: #9c27b0;
+}
+
+.announcement-badge {
+    background-color: #ff5722;
+}
+
+.thread-badge {
+    background-color: #3f51b5;
+}
+
+.stage-badge {
+    background-color: #673ab7;
+}
+
+.directory-badge {
+    background-color: #009688;
+}
+
+.forum-badge {
+    background-color: #607d8b;
+}
+
+.nsfw-badge {
+    background-color: #f44336;
+}
+
+.locked-badge {
+    background-color: #000000;
+}
