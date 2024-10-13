@@ -1,55 +1,87 @@
-.badge {
-    margin-left: auto;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
+.channel-badge {
+    margin-left: 0.2rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 12px;
     font-weight: bold;
     display: inline-block;
-    color: white;
+    color: var(--white);
+
+    order: 2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.badge-container {
+    display: flex;
+    gap: 0.1rem;
+    align-items: center;
 
     margin-left: 0.2rem;
+    order: 2;
 }
 
-.text-badge {
-    background-color: #4caf50;
+.channel-badge-text {
+    background-color: #5865F2;
 }
 
-.dm-badge {
-    background-color: #2196f3;
+.channel-badge-dm {
+    background-color: #7289DA;
 }
 
-.voice-badge {
-    background-color: #ff9800;
+.channel-badge-voice {
+    background-color: #3BA55D;
 }
 
-.category-badge {
-    background-color: #9c27b0;
+.channel-badge-group_dm {
+    background-color: #5E81AC;
 }
 
-.announcement-badge {
-    background-color: #ff5722;
+.channel-badge-category {
+    background-color: #4F545C;
 }
 
-.thread-badge {
-    background-color: #3f51b5;
+.channel-badge-directory {
+    background-color: #FAA61A;
 }
 
-.stage-badge {
-    background-color: #673ab7;
+.channel-badge-thread,
+.channel-badge-public_thread,
+.channel-badge-private_thread,
+.channel-badge-news_thread {
+    background-color: #7289DA;
 }
 
-.directory-badge {
-    background-color: #009688;
+.channel-badge-stage {
+    background-color: #ED4245;
 }
 
-.forum-badge {
-    background-color: #607d8b;
+.channel-badge-announcement {
+    background-color: #FAA61A;
 }
 
-.nsfw-badge {
-    background-color: #f44336;
+.channel-badge-announcement_channel {
+    background-color: #FF4500;
 }
 
-.locked-badge {
-    background-color: #000000;
+.channel-badge-forum {
+    background-color: #5865F2;
+}
+
+.channel-badge-store {
+    background-color: #FF9900;
+}
+
+.channel-badge-nsfw {
+    background-color: #E91E63;
+}
+
+.channel-badge-locked {
+    background-color: #B9BBBE;
+}
+
+.channel-badge-unknown {
+    background-color: #747F8D;
 }

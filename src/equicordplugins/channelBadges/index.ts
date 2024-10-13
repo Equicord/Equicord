@@ -1,140 +1,149 @@
-/*
- * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
 import "./styles.css";
 
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { Channel, Guild } from "discord-types/general";
+import { ChannelStore, SelectedGuildStore } from "@webpack/common";
 import { getCurrentGuild } from "@utils/discord";
-import { SelectedGuildStore, ChannelStore } from "@webpack/common";
-
-import { settings } from "./settings";
+import { isEnabled, returnChannelBadge, settings } from "./settings";
 
 let observer: MutationObserver | null = null;
+let currentGuild: Guild | undefined | null = null;
 
-const channelTypes = {
-    0: "Text Channel",
-    1: "DM",
-    2: "Voice Channel",
-    3: "Group DM",
-    4: "Category",
-    5: "Announcement Channel",
-    10: "Announcement Thread",
-    11: "Public Thread",
-    12: "Private Thread",
-    13: "Stage Channel",
-    14: "Directory Channel",
-    15: "Forum Channel"
-};
-
-const channelCategories = {
-    0: "Text",
-    1: "DM",
-    2: "Voice",
-    3: "DM",
-    4: "Category",
-    5: "Announcement",
-    10: "Thread",
-    11: "Thread",
-    12: "Thread",
-    13: "Stage",
-    14: "Directory",
-    15: "Forum"
-};
-
-function createBadge(label: string, className: string): HTMLElement {
-    const badge = document.createElement("span");
-    badge.classList.add(className);
-    badge.classList.add("badge");
-    badge.textContent = label;
-    return badge;
-}
-
-function addBadgesToChannel(element: Element, category: string, nsfw: boolean, locked: boolean) {
-    const parentContainer = element.querySelector('[class*="linkTop"]');
+function addBadgesToChannel(element: HTMLElement, channelId: string) {
+    const parentContainer: HTMLElement | null = element.querySelector('[class*="linkTop"]');
 
     if (parentContainer) {
-        const oldBadges = parentContainer.querySelectorAll(".badge");
-        oldBadges.forEach(badge => badge.remove());
+        const channel: Channel | undefined = ChannelStore.getChannel(channelId);
+        if (!channel) return;
 
-        if (nsfw) {
-            parentContainer.appendChild(createBadge("NSFW", "nsfw-badge"));
+        const { type, nsfw, threadMetadata } = channel;
+        const isEnabledBoolean: boolean = isEnabled(type);
+
+        if (!isEnabledBoolean) return;
+
+        const isRules: boolean = currentGuild?.rulesChannelId === channel.id;
+        const isPrivate: boolean = channel.isPrivate() || threadMetadata?.locked || channel.isArchivedThread();
+        const isNSFW: boolean = nsfw || channel.isNSFW();
+
+        let badgeContainer: HTMLElement | null = parentContainer.querySelector(".badge-container");
+        if (!badgeContainer) {
+            badgeContainer = document.createElement("div");
+            badgeContainer.classList.add("badge-container");
+            parentContainer.appendChild(badgeContainer);
         }
 
-        if (locked) {
-            parentContainer.appendChild(createBadge("LOCKED", "locked-badge"));
+        if (isPrivate && isEnabled(6101)) {
+            const { css, label } = returnChannelBadge(6101);
+            const privateBadge = document.createElement("div");
+            privateBadge.classList.add("channel-badge", `channel-badge-${css}`);
+            privateBadge.textContent = label;
+            privateBadge.title = "This channel is locked.";
+            badgeContainer.appendChild(privateBadge);
         }
 
-        parentContainer.appendChild(createBadge(category, `${category.toLowerCase()}-badge`));
+        if (isNSFW && isEnabled(6100)) {
+            const { css, label } = returnChannelBadge(6100);
+            const nsfwBadge = document.createElement("div");
+            nsfwBadge.classList.add("channel-badge", `channel-badge-${css}`);
+            nsfwBadge.textContent = label;
+            nsfwBadge.title = "This channel is marked as NSFW.";
+            badgeContainer.appendChild(nsfwBadge);
+        }
+
+        if (isRules && isEnabled(6102)) {
+            const { css, label } = returnChannelBadge(6102);
+            const rulesBadge = document.createElement("div");
+            rulesBadge.classList.add("channel-badge", `channel-badge-${css}`);
+            rulesBadge.textContent = label;
+            rulesBadge.title = "This channel is the rules channel.";
+            badgeContainer.appendChild(rulesBadge);
+        }
+
+        const { css, label } = returnChannelBadge(type);
+        const typeBadge = document.createElement("div");
+        typeBadge.classList.add("channel-badge", `channel-badge-${css}`);
+        typeBadge.textContent = label;
+        typeBadge.title = label;
+        badgeContainer.appendChild(typeBadge);
     }
 }
 
-function categorizeChannels(channelId: string) {
-    const channel = ChannelStore.getChannel(channelId);
-    if (!channel) return { category: "Unknown", nsfw: false, locked: false };
+function deleteAllBadges() {
+    document.querySelectorAll(".channel-badge").forEach(badge => badge.remove());
 
-    const category = channelCategories[channel.type] || "Unknown";
-    const nsfw = channel.nsfw || channel.isNSFW();
-    const locked = channel.threadMetadata?.locked || channel.isPrivate();
+    document.querySelectorAll('[data-list-item-id^="channels___"][data-scanned]').forEach(element => {
+        element.removeAttribute("data-scanned");
+    });
+}
 
-    return { category, nsfw, locked };
+export function reloadBadges() {
+    deleteAllBadges();
+
+    document.querySelectorAll('[data-list-item-id^="channels___"]').forEach(element => {
+        const channelId = element.getAttribute("data-list-item-id")?.split("___")[1];
+        if (channelId && /^\d+$/.test(channelId)) {
+            addBadgesToChannel(element as HTMLElement, channelId);
+            element.setAttribute("data-scanned", "true");
+        }
+    });
 }
 
 function observeDomChanges() {
-    if (observer) {
-        observer.disconnect();
-    }
+    if (observer) observer.disconnect();
 
-    observer = new MutationObserver((mutationsList) => {
-        for (const mutation of mutationsList) {
-            if (mutation.addedNodes.length > 0) {
-                const textChannels = document.querySelectorAll('[data-list-item-id^="channels___"]:not([data-scanned])');
+    observer = new MutationObserver(mutations => {
+        const addedElements: Set<Element> = new Set();
 
-                textChannels.forEach((element: Element) => {
-                    const channelId = element.getAttribute("data-list-item-id")?.split("___")[1];
-
-                    if (channelId && /^\d+$/.test(channelId)) {
-                        const { category, nsfw, locked } = categorizeChannels(channelId);
-                        addBadgesToChannel(element, category, nsfw, locked);
-
-                        element.setAttribute("data-scanned", "true");
+        mutations.forEach(mutation => {
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    const element = node;
+                    if (element instanceof Element) {
+                        element.querySelectorAll('[data-list-item-id^="channels___"]:not([data-scanned])').forEach(child => {
+                            addedElements.add(child);
+                        });
                     }
-                });
+                }
+            });
+        });
+
+        addedElements.forEach(element => {
+            const channelId = element.getAttribute("data-list-item-id")?.split("___")[1];
+            if (channelId && /^\d+$/.test(channelId)) {
+                addBadgesToChannel(element as HTMLElement, channelId);
+                element.setAttribute("data-scanned", "true");
             }
-        }
+        });
     });
 
-    const targetNode = document.body;
-    observer.observe(targetNode, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, subtree: true });
 }
 
-function onGuildSwitch() {
-    const guild = getCurrentGuild();
-    if (!guild) return;
-
-    console.log(`Switched to guild: ${guild.name}`);
-    observeDomChanges();
+function onGuildChange() {
+    const newGuild: Guild | undefined | null = getCurrentGuild();
+    if (newGuild !== currentGuild) {
+        currentGuild = newGuild;
+        console.log(newGuild);
+    }
 }
 
 export default definePlugin({
     name: "ChannelBadges",
     description: "Adds badges to channels based on their type",
     authors: [EquicordDevs.creations],
-    settings: settings,
+    settings,
 
     async start() {
+        currentGuild = getCurrentGuild();
         observeDomChanges();
-        SelectedGuildStore.addChangeListener(onGuildSwitch);
+        reloadBadges();
+        SelectedGuildStore.addChangeListener(onGuildChange);
     },
 
     stop() {
-        if (observer) {
-            observer.disconnect();
-            observer = null;
-        }
-        SelectedGuildStore.removeChangeListener(onGuildSwitch);
-    }
+        if (observer) observer.disconnect();
+        deleteAllBadges();
+        SelectedGuildStore.removeChangeListener(onGuildChange);
+    },
 });
