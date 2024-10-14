@@ -1,3 +1,9 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2024 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import { definePluginSettings } from "@api/Settings";
 import { OptionType } from "@utils/types";
 
@@ -8,18 +14,6 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: false,
         description: "Show only one badge per channel",
-        onChange: reloadBadges,
-    },
-    showNSFWBadge: {
-        type: OptionType.BOOLEAN,
-        default: true,
-        description: "Show NSFW badge",
-        onChange: reloadBadges,
-    },
-    showLockedBadge: {
-        type: OptionType.BOOLEAN,
-        default: true,
-        description: "Show Locked badge",
         onChange: reloadBadges,
     },
     showTextBadge: {
@@ -46,10 +40,16 @@ const settings = definePluginSettings({
         description: "Show Directory badge",
         onChange: reloadBadges,
     },
-    showThreadBadge: {
+    showAnnouncementThreadBadge: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Show Thread badge",
+        description: "Show Announcement Thread badge",
+        onChange: reloadBadges,
+    },
+    showPublicThreadBadge: {
+        type: OptionType.BOOLEAN,
+        default: true,
+        description: "Show Public Thread badge",
         onChange: reloadBadges,
     },
     showPrivateThreadBadge: {
@@ -76,43 +76,37 @@ const settings = definePluginSettings({
         description: "Show Forum badge",
         onChange: reloadBadges,
     },
+    showMediaBadge: {
+        type: OptionType.BOOLEAN,
+        default: true,
+        description: "Show Media badge",
+        onChange: reloadBadges,
+    },
+    showNSFWBadge: {
+        type: OptionType.BOOLEAN,
+        default: true,
+        description: "Show NSFW badge",
+        onChange: reloadBadges,
+    },
+    showLockedBadge: {
+        type: OptionType.BOOLEAN,
+        default: true,
+        description: "Show Locked badge",
+        onChange: reloadBadges,
+    },
+    showRulesBadge: {
+        type: OptionType.BOOLEAN,
+        default: true,
+        description: "Show Rules badge",
+        onChange: reloadBadges,
+    },
     showUnknownBadge: {
         type: OptionType.BOOLEAN,
         default: true,
         description: "Show Unknown badge",
         onChange: reloadBadges,
     },
-    showRulesThreadBadge: {
-        type: OptionType.BOOLEAN,
-        default: true,
-        description: "Show Rules Thread badge",
-        onChange: reloadBadges,
-    },
-    showPublicThreadBadge: {
-        type: OptionType.BOOLEAN,
-        default: true,
-        description: "Show Public Thread badge",
-        onChange: reloadBadges,
-    },
-    showAnnouncementChannelBadge: {
-        type: OptionType.BOOLEAN,
-        default: true,
-        description: "Show Announcement Channel badge",
-        onChange: reloadBadges,
-    },
 
-    nsfwBadgeLabel: {
-        type: OptionType.STRING,
-        default: "NSFW",
-        description: "NSFW badge label",
-        onChange: reloadBadges,
-    },
-    lockedBadgeLabel: {
-        type: OptionType.STRING,
-        default: "Locked",
-        description: "Locked badge label",
-        onChange: reloadBadges,
-    },
     textBadgeLabel: {
         type: OptionType.STRING,
         default: "Text",
@@ -131,16 +125,22 @@ const settings = definePluginSettings({
         description: "Category badge label",
         onChange: reloadBadges,
     },
-    directoryBadgeLabel: {
+    announcementBadgeLabel: {
         type: OptionType.STRING,
-        default: "Directory",
-        description: "Directory badge label",
+        default: "News",
+        description: "Announcement badge label",
         onChange: reloadBadges,
     },
-    threadBadgeLabel: {
+    announcementThreadBadgeLabel: {
+        type: OptionType.STRING,
+        default: "News Thread",
+        description: "Announcement Thread badge label",
+        onChange: reloadBadges,
+    },
+    publicThreadBadgeLabel: {
         type: OptionType.STRING,
         default: "Thread",
-        description: "Thread badge label",
+        description: "Public Thread badge label",
         onChange: reloadBadges,
     },
     privateThreadBadgeLabel: {
@@ -155,10 +155,10 @@ const settings = definePluginSettings({
         description: "Stage badge label",
         onChange: reloadBadges,
     },
-    announcementBadgeLabel: {
+    directoryBadgeLabel: {
         type: OptionType.STRING,
-        default: "Ads",
-        description: "Announcement badge label",
+        default: "Directory",
+        description: "Directory badge label",
         onChange: reloadBadges,
     },
     forumBadgeLabel: {
@@ -167,40 +167,38 @@ const settings = definePluginSettings({
         description: "Forum badge label",
         onChange: reloadBadges,
     },
+    mediaBadgeLabel: {
+        type: OptionType.STRING,
+        default: "Media",
+        description: "Media badge label",
+        onChange: reloadBadges,
+    },
+    nsfwBadgeLabel: {
+        type: OptionType.STRING,
+        default: "NSFW",
+        description: "NSFW badge label",
+        onChange: reloadBadges,
+    },
+    lockedBadgeLabel: {
+        type: OptionType.STRING,
+        default: "Locked",
+        description: "Locked badge label",
+        onChange: reloadBadges,
+    },
+    rulesBadgeLabel: {
+        type: OptionType.STRING,
+        default: "Rules",
+        description: "Rules badge label",
+        onChange: reloadBadges,
+    },
     unknownBadgeLabel: {
         type: OptionType.STRING,
         default: "Unknown",
         description: "Unknown badge label",
         onChange: reloadBadges,
     },
-    rulesThreadBadgeLabel: {
-        type: OptionType.STRING,
-        default: "Rules",
-        description: "Rules Thread badge label",
-        onChange: reloadBadges,
-    },
-    publicThreadBadgeLabel: {
-        type: OptionType.STRING,
-        default: "Thread",
-        description: "Public Thread badge label",
-        onChange: reloadBadges,
-    },
-    announcementChannelBadgeLabel: {
-        type: OptionType.STRING,
-        default: "Announcement",
-        description: "Announcement Channel badge label",
-        onChange: reloadBadges,
-    },
-    nsfwBadgeColor: {
-        type: OptionType.STRING,
-        description: "NSFW badge color",
-        onChange: reloadBadges,
-    },
-    lockedBadgeColor: {
-        type: OptionType.STRING,
-        description: "Locked badge color",
-        onChange: reloadBadges,
-    },
+
+
     textBadgeColor: {
         type: OptionType.STRING,
         description: "Text badge color",
@@ -216,14 +214,19 @@ const settings = definePluginSettings({
         description: "Category badge color",
         onChange: reloadBadges,
     },
-    directoryBadgeColor: {
+    announcementBadgeColor: {
         type: OptionType.STRING,
-        description: "Directory badge color",
+        description: "Announcement badge color",
         onChange: reloadBadges,
     },
-    threadBadgeColor: {
+    announcementThreadBadgeColor: {
         type: OptionType.STRING,
-        description: "Thread badge color",
+        description: "Announcement Thread badge color",
+        onChange: reloadBadges,
+    },
+    publicThreadBadgeColor: {
+        type: OptionType.STRING,
+        description: "Public Thread badge color",
         onChange: reloadBadges,
     },
     privateThreadBadgeColor: {
@@ -236,9 +239,9 @@ const settings = definePluginSettings({
         description: "Stage badge color",
         onChange: reloadBadges,
     },
-    announcementBadgeColor: {
+    directoryBadgeColor: {
         type: OptionType.STRING,
-        description: "Announcement badge color",
+        description: "Directory badge color",
         onChange: reloadBadges,
     },
     forumBadgeColor: {
@@ -246,57 +249,66 @@ const settings = definePluginSettings({
         description: "Forum badge color",
         onChange: reloadBadges,
     },
+    mediaBadgeColor: {
+        type: OptionType.STRING,
+        description: "Media badge color",
+        onChange: reloadBadges,
+    },
+    nsfwBadgeColor: {
+        type: OptionType.STRING,
+        description: "NSFW badge color",
+        onChange: reloadBadges,
+    },
+    lockedBadgeColor: {
+        type: OptionType.STRING,
+        description: "Locked badge color",
+        onChange: reloadBadges,
+    },
+    rulesBadgeColor: {
+        type: OptionType.STRING,
+        description: "Rules badge color",
+        onChange: reloadBadges,
+    },
     unknownBadgeColor: {
         type: OptionType.STRING,
         description: "Unknown badge color",
         onChange: reloadBadges,
     },
-    rulesThreadBadgeColor: {
-        type: OptionType.STRING,
-        description: "Rules Thread badge color",
-        onChange: reloadBadges,
-    },
-    publicThreadBadgeColor: {
-        type: OptionType.STRING,
-        description: "Public Thread badge color",
-        onChange: reloadBadges,
-    },
-    announcementChannelBadgeColor: {
-        type: OptionType.STRING,
-        description: "Announcement Channel badge color",
-        onChange: reloadBadges,
-    },
 });
 
 const defaultValues = {
-    showNSFWBadge: true,
-    showLockedBadge: true,
     showTextBadge: true,
     showVoiceBadge: true,
     showCategoryBadge: true,
-    showDirectoryBadge: true,
-    showThreadBadge: true,
+    showAnnouncementBadge: true,
+    showAnnouncementThreadBadge: true,
+    showPublicThreadBadge: true,
     showPrivateThreadBadge: true,
     showStageBadge: true,
-    showAnnouncementBadge: true,
+    showDirectoryBadge: true,
     showForumBadge: true,
+    showMediaBadge: true,
+    showNSFWBadge: true,
+    showLockedBadge: true,
+    showRulesBadge: true,
     showUnknownBadge: true,
-    showRulesThreadBadge: true,
-    showPublicThreadBadge: true,
 
     channelBadges: {
         text: "Text",
         voice: "Voice",
-        stage: "Stage",
-        announcement: "Ads",
-        forum: "Forum",
+        category: "Category",
+        announcement: "News",
+        announcement_thread: "News Thread",
         public_thread: "Thread",
         private_thread: "Private Thread",
-        rules: "Rules",
-        category: "Category",
+        stage: "Stage",
         directory: "Directory",
+        forum: "Forum",
+        media: "Media",
         nsfw: "NSFW",
         locked: "Locked",
+        rules: "Rules",
+        unknown: "Unknown"
     },
     lockedBadgeTooltip: "This channel is locked.",
     nsfwBadgeTooltip: "This channel is marked as NSFW.",
@@ -315,23 +327,25 @@ function isEnabled(type: number) {
         case 5:
             return fromValues.showAnnouncementBadge;
         case 10:
-            return fromValues.showPublicThreadBadge;
+            return fromValues.showAnnouncementThreadBadge;
         case 11:
-            return fromValues.showPrivateThreadBadge;
+            return fromValues.showPublicThreadBadge;
         case 12:
-            return fromValues.showStageBadge;
+            return fromValues.showPrivateThreadBadge;
         case 13:
-            return fromValues.showAnnouncementChannelBadge;
+            return fromValues.showStageBadge;
         case 14:
             return fromValues.showDirectoryBadge;
         case 15:
             return fromValues.showForumBadge;
+        case 16:
+            return fromValues.showMediaBadge;
         case 6100:
             return fromValues.showNSFWBadge;
         case 6101:
             return fromValues.showLockedBadge;
         case 6102:
-            return fromValues.showRulesThreadBadge;
+            return fromValues.showRulesBadge;
         default:
             return fromValues.showUnknownBadge;
     }
@@ -348,8 +362,10 @@ function returnChannelBadge(type: number) {
         case 5:
             return { css: "announcement", label: settings.store.announcementBadgeLabel, color: settings.store.announcementBadgeColor };
         case 10:
-            return { css: "thread", label: settings.store.publicThreadBadgeLabel, color: settings.store.publicThreadBadgeColor };
+            return { css: "announcement-thread", label: settings.store.announcementThreadBadgeLabel, color: settings.store.announcementThreadBadgeColor };
         case 11:
+            return { css: "thread", label: settings.store.publicThreadBadgeLabel, color: settings.store.publicThreadBadgeColor };
+        case 12:
             return { css: "private-thread", label: settings.store.privateThreadBadgeLabel, color: settings.store.privateThreadBadgeColor };
         case 13:
             return { css: "stage", label: settings.store.stageBadgeLabel, color: settings.store.stageBadgeColor };
@@ -357,15 +373,17 @@ function returnChannelBadge(type: number) {
             return { css: "directory", label: settings.store.directoryBadgeLabel, color: settings.store.directoryBadgeColor };
         case 15:
             return { css: "forum", label: settings.store.forumBadgeLabel, color: settings.store.forumBadgeColor };
+        case 16:
+            return { css: "media", label: settings.store.mediaBadgeLabel, color: settings.store.mediaBadgeColor };
         case 6100:
             return { css: "nsfw", label: settings.store.nsfwBadgeLabel, color: settings.store.nsfwBadgeColor };
         case 6101:
             return { css: "locked", label: settings.store.lockedBadgeLabel, color: settings.store.lockedBadgeColor };
         case 6102:
-            return { css: "rules", label: settings.store.rulesThreadBadgeLabel, color: settings.store.rulesThreadBadgeColor };
+            return { css: "rules", label: settings.store.rulesBadgeLabel, color: settings.store.rulesBadgeColor };
         default:
             return { css: "unknown", label: settings.store.unknownBadgeLabel, color: settings.store.unknownBadgeColor };
     }
 }
 
-export { settings, defaultValues, isEnabled, returnChannelBadge };
+export { defaultValues, isEnabled, returnChannelBadge, settings };

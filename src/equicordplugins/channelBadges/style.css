@@ -39,23 +39,19 @@
 
 .channel-badge-thread,
 .channel-badge-public-thread,
-.channel-badge-private-thread,
-.channel-badge-rules {
+.channel-badge-announcement-thread,
+.channel-badge-private-thread {
     background-color: #7289DA;
 }
 
-.channel-badge-stage {
-    background-color: #ED4245;
-}
-
-.channel-badge-announcement {
+.channel-badge-announcement,
+.channel-badge-announcement-channel {
     background-color: #FAA61A;
 }
 
-.channel-badge-announcement-channel {
-    background-color: #FF4500;
-}
-
+.channel-badge-rules,
+.channel-badge-stage,
+.channel-badge-media,
 .channel-badge-forum {
     background-color: #5865F2;
 }

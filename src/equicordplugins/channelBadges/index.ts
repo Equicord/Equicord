@@ -1,9 +1,17 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2024 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import "./style.css";
+
 import { EquicordDevs } from "@utils/constants";
-import definePlugin from "@utils/types";
-import { Channel, Guild } from "discord-types/general";
-import { ChannelStore, SelectedGuildStore } from "@webpack/common";
 import { getCurrentGuild } from "@utils/discord";
+import definePlugin from "@utils/types";
+import { ChannelStore, SelectedGuildStore } from "@webpack/common";
+import { Channel, Guild } from "discord-types/general";
+
 import { isEnabled, returnChannelBadge, settings } from "./settings";
 
 let observer: MutationObserver | null = null;
