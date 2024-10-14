@@ -84,12 +84,13 @@ export default definePlugin({
             ],
             predicate: () => settings.store.billing,
         },
-        { // Gift button
-            find: 'Messages.PREMIUM_GIFT_BUTTON_LABEL,"aria-haspopup":"dialog",onClick:',
+        { // Gift buttons
+            find: "GIFT_BUTTON)",
             replacement: {
                 match: /if\(\i\)return null;/,
                 replace: "return null;",
             },
+            all: true,
             predicate: () => settings.store.gift,
         },
         { // Emoji list
