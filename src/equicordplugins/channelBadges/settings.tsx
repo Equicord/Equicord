@@ -350,7 +350,7 @@ function returnChannelBadge(type: number) {
         case 10:
             return { css: "thread", label: settings.store.publicThreadBadgeLabel, color: settings.store.publicThreadBadgeColor };
         case 11:
-            return { css: "private_thread", label: settings.store.privateThreadBadgeLabel, color: settings.store.privateThreadBadgeColor };
+            return { css: "private-thread", label: settings.store.privateThreadBadgeLabel, color: settings.store.privateThreadBadgeColor };
         case 13:
             return { css: "stage", label: settings.store.stageBadgeLabel, color: settings.store.stageBadgeColor };
         case 14:

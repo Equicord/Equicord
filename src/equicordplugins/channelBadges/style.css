@@ -6,7 +6,6 @@
     font-weight: bold;
     display: inline-block;
     color: var(--white);
-
     order: 2;
     white-space: nowrap;
     overflow: hidden;
@@ -18,7 +17,6 @@
     display: flex;
     gap: 0.1rem;
     align-items: center;
-
     margin-left: 0.2rem;
     order: 2;
 }
@@ -35,7 +33,7 @@
     background-color: #3BA55D;
 }
 
-.channel-badge-group_dm {
+.channel-badge-group-dm {
     background-color: #5E81AC;
 }
 
@@ -48,8 +46,8 @@
 }
 
 .channel-badge-thread,
-.channel-badge-public_thread,
-.channel-badge-private_thread,
+.channel-badge-public-thread,
+.channel-badge-private-thread,
 .channel-badge-rules {
     background-color: #7289DA;
 }
@@ -62,7 +60,7 @@
     background-color: #FAA61A;
 }
 
-.channel-badge-announcement_channel {
+.channel-badge-announcement-channel {
     background-color: #FF4500;
 }
 
