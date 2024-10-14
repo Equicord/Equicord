@@ -50,7 +50,7 @@
 .channel-badge-thread,
 .channel-badge-public_thread,
 .channel-badge-private_thread,
-.channel-badge-news_thread {
+.channel-badge-rules {
     background-color: #7289DA;
 }
 
@@ -68,10 +68,6 @@
 
 .channel-badge-forum {
     background-color: #5865F2;
-}
-
-.channel-badge-store {
-    background-color: #FF9900;
 }
 
 .channel-badge-nsfw {
