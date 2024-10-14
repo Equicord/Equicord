@@ -1,4 +1,4 @@
-import "./styles.css";
+import "./style.css";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Channel, Guild } from "discord-types/general";
