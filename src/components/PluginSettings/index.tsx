@@ -431,9 +431,7 @@ export default function PluginSettings() {
                     size={Button.Sizes.SMALL}
                     style={{ backgroundColor: "var(--button-danger-background)", margin: "20px 0" }}
                     onClick={() => {
-                        if (Settings.ignoreResetWarning) {
-                            return resetCheckAndDo();
-                        }
+                        if (Settings.ignoreResetWarning) return resetCheckAndDo();
 
                         return Alerts.show({
                             title: "Disable All Plugins",
