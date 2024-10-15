@@ -412,9 +412,9 @@ export function openWarningModal(plugin: Plugin, pluginModalProps: ModalProps, o
                 <Forms.FormSection>
                     <Flex className="vc-warning-info" style={{ gap: "15px", flexDirection: "column", userSelect: "none" }}>
                         <img
-                            src="https://media.tenor.com/PYBWVjvUuU8AAAAi/no-entry-not-allowed.gif"
+                            src="https://media.tenor.com/Y6DXKZiBCs8AAAAi/stavario-josefbenes.gif"
                             alt="Warning"
-                            style={{ width: "100%", height: "auto", marginBottom: "10px" }}
+                            style={{ width: "60%", height: "auto", marginBottom: "10px", display: "block", margin: "auto" }}
                         />
                         <Text style={{ fontSize: "1.2rem", color: "var(--text-normal)" }}>
                             You are about to reset all settings for <strong>{plugin.name}</strong> to their default values.

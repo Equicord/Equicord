@@ -396,9 +396,9 @@ export default function PluginSettings() {
                             body: (
                                 <>
                                     <img
-                                        src="https://media.tenor.com/PYBWVjvUuU8AAAAi/no-entry-not-allowed.gif"
+                                        src="https://media.tenor.com/Y6DXKZiBCs8AAAAi/stavario-josefbenes.gif"
                                         alt="Warning"
-                                        style={{ width: "100%", height: "auto", marginBottom: "10px" }}
+                                        style={{ width: "60%", height: "auto", marginBottom: "10px", display: "block", margin: "auto" }}
                                     />
                                     <p style={{ fontSize: "1.2rem", color: "var(--text-danger)", fontWeight: "bold" }}>
                                         WARNING: You are about to disable <span style={{ textDecoration: "underline" }}>{enabledPlugins.length}</span> plugins!
