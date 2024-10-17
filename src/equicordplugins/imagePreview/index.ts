@@ -29,9 +29,11 @@ let lastMouseEvent: MouseEvent | null = null;
 let observer: MutationObserver | null = null;
 
 function deleteCurrentPreview() {
-    if (!currentPreview || !currentPreviewFile || !currentPreviewFileSize || !currentPreviewType) return;
+    if (!currentPreview || !currentPreviewFile || !currentPreviewFileSize || !currentPreviewType || !loadingSpinner) return;
 
     currentPreview.remove();
+    loadingSpinner = null;
+    lastMouseEvent = null;
     currentPreview = null;
     currentPreviewFile = null;
     currentPreviewFileSize = null;
@@ -214,19 +216,21 @@ function loadImagePreview(url: string) {
     fileInfo.appendChild(fileSize);
     preview.appendChild(fileInfo);
 
-    currentPreviewFile.addEventListener("mouseover", () => {
-        if (currentPreview && !isCtrlHeld) {
-            shouldKeepPreviewOpen = true;
-            currentPreview.classList.add("allow-zoom-and-drag");
-        }
-    });
+    if (settings.store.mouseOnlyMode) {
+        currentPreviewFile.addEventListener("mouseover", () => {
+            if (currentPreview && !isCtrlHeld) {
+                shouldKeepPreviewOpen = true;
+                currentPreview.classList.add("allow-zoom-and-drag");
+            }
+        });
 
-    currentPreviewFile.addEventListener("mouseout", () => {
-        if (currentPreview && !isCtrlHeld && shouldKeepPreviewOpen) {
-            deleteCurrentPreview();
-            shouldKeepPreviewOpen = false;
-        }
-    });
+        currentPreviewFile.addEventListener("mouseout", () => {
+            if (currentPreview && !isCtrlHeld && shouldKeepPreviewOpen) {
+                deleteCurrentPreview();
+                shouldKeepPreviewOpen = false;
+            }
+        });
+    }
 
     currentPreview.addEventListener("wheel", (event: WheelEvent) => {
         const [{ zoomFactor }, zoomSpeed] = [settings.store, 0.0005];
@@ -234,10 +238,8 @@ function loadImagePreview(url: string) {
         if (isCtrlHeld || event.target === currentPreview || event.target === currentPreviewFile) {
             event.preventDefault();
 
-            // Adjust zoomLevel based on zoomFactor from settings
             zoomLevel += event.deltaY * -zoomSpeed * zoomFactor;
 
-            // Ensure zoomLevel stays within a reasonable range
             zoomLevel = Math.min(Math.max(zoomLevel, 0.5), 10);
 
             const previewMedia = currentPreviewFile as HTMLImageElement | HTMLVideoElement | null;
@@ -246,11 +248,9 @@ function loadImagePreview(url: string) {
                 let offsetX = (event.clientX - rect.left) / rect.width;
                 let offsetY = (event.clientY - rect.top) / rect.height;
 
-                // Clamp offsetX and offsetY to prevent zooming too close to the edges
                 offsetX = Math.min(Math.max(offsetX, 0.1), 0.9);
                 offsetY = Math.min(Math.max(offsetY, 0.1), 0.9);
 
-                // Apply zoom and transformation based on the calculated offsets
                 previewMedia.style.transformOrigin = `${offsetX * 100}% ${offsetY * 100}%`;
                 previewMedia.style.transform = `scale(${zoomLevel})`;
             }
@@ -315,7 +315,7 @@ function addHoverListener(element: Element) {
     element.setAttribute("data-processed", "true");
 
     element.addEventListener("mouseover", event => {
-        if (currentPreview) {
+        if (currentPreview || loadingSpinner) {
             if (isCtrlHeld) return;
 
             deleteCurrentPreview();
