@@ -44,7 +44,6 @@
 .file-size {
     display: flex;
     flex-direction: row;
-
     gap: 5px;
 }
 
