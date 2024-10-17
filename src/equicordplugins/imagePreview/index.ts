@@ -229,12 +229,15 @@ function loadImagePreview(url: string) {
     });
 
     currentPreview.addEventListener("wheel", (event: WheelEvent) => {
-        const zoomSpeed = 0.0005;
+        const [{ zoomFactor }, zoomSpeed] = [settings.store, 0.0005];
 
         if (isCtrlHeld || event.target === currentPreview || event.target === currentPreviewFile) {
             event.preventDefault();
-            zoomLevel += event.deltaY * -zoomSpeed;
 
+            // Adjust zoomLevel based on zoomFactor from settings
+            zoomLevel += event.deltaY * -zoomSpeed * zoomFactor;
+
+            // Ensure zoomLevel stays within a reasonable range
             zoomLevel = Math.min(Math.max(zoomLevel, 0.5), 10);
 
             const previewMedia = currentPreviewFile as HTMLImageElement | HTMLVideoElement | null;
@@ -243,14 +246,17 @@ function loadImagePreview(url: string) {
                 let offsetX = (event.clientX - rect.left) / rect.width;
                 let offsetY = (event.clientY - rect.top) / rect.height;
 
+                // Clamp offsetX and offsetY to prevent zooming too close to the edges
                 offsetX = Math.min(Math.max(offsetX, 0.1), 0.9);
                 offsetY = Math.min(Math.max(offsetY, 0.1), 0.9);
 
+                // Apply zoom and transformation based on the calculated offsets
                 previewMedia.style.transformOrigin = `${offsetX * 100}% ${offsetY * 100}%`;
                 previewMedia.style.transform = `scale(${zoomLevel})`;
             }
         }
     });
+
 
     currentPreview.addEventListener("mousedown", (event: MouseEvent) => {
         if ((isCtrlHeld || shouldKeepPreviewOpen) && currentPreview) {
