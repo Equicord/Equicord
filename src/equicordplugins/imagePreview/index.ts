@@ -265,23 +265,17 @@ function loadImagePreview(url: string) {
 
             zoomLevel += event.deltaY * -zoomSpeed * zoomFactor;
 
-            zoomLevel = Math.min(Math.max(zoomLevel, 0.5), 10);
-
             const previewMedia = currentPreviewFile as HTMLImageElement | HTMLVideoElement | null;
             if (previewMedia) {
                 const rect = previewMedia.getBoundingClientRect();
-                let offsetX = (event.clientX - rect.left) / rect.width;
-                let offsetY = (event.clientY - rect.top) / rect.height;
-
-                offsetX = Math.min(Math.max(offsetX, 0.1), 0.9);
-                offsetY = Math.min(Math.max(offsetY, 0.1), 0.9);
+                const offsetX = (event.clientX - rect.left) / rect.width;
+                const offsetY = (event.clientY - rect.top) / rect.height;
 
                 previewMedia.style.transformOrigin = `${offsetX * 100}% ${offsetY * 100}%`;
                 previewMedia.style.transform = `scale(${zoomLevel})`;
             }
         }
     });
-
 
     currentPreview.addEventListener("mousedown", (event: MouseEvent) => {
         if ((isCtrlHeld || shouldKeepPreviewOpen) && currentPreview) {
@@ -340,7 +334,6 @@ function updatePreviewPosition(mouseEvent: MouseEvent, element: HTMLElement) {
         }
     }
 }
-
 
 function addHoverListener(element: Element) {
     element.setAttribute("data-processed", "true");
