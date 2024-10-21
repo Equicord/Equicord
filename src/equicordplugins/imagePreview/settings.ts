@@ -77,6 +77,7 @@ const mimeTypes = {
     apng: "image/apng",
     gif: "image/gif",
     webp: "image/webp",
+    svg: "image/svg+xml",
     mp4: "video/mp4",
     webm: "video/webm",
     mov: "video/quicktime",
