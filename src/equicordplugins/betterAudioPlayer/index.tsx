@@ -4,8 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./style.css";
+
+import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
+import { showToast, Toasts } from "@webpack/common";
 
 const fileSizeLimit = 12e6;
 
@@ -38,19 +42,33 @@ function getMetadata(audioElement: HTMLElement) {
         return false;
     }
 
+    const elements = [metadataElement?.parentElement, audioElement.querySelector("[class^='audioControls_']")];
+
+    const computedStyle = getComputedStyle(audioElement);
+    const parentBorderRadius = computedStyle.borderRadius;
+
+    elements.forEach(element => {
+        if (element) {
+            (element as HTMLElement).style.zIndex = "2";
+        }
+    });
+
     return {
         name,
         size,
         url,
         audio: audioElementLink,
+        parentBorderRadius: parentBorderRadius,
     };
 }
 
-async function addListeners(audioElement: HTMLAudioElement, url: string) {
+async function addListeners(audioElement: HTMLAudioElement, url: string, parentBorderRadius: string) {
     const madeURL = new URL(url);
     madeURL.searchParams.set("t", Date.now().toString());
 
-    const response = await fetch(madeURL);
+    // thanks thororen :p
+    const corsProxyUrl = "https://cors.thororen.com/?url=" + encodeURIComponent(madeURL.href);
+    const response = await fetch(corsProxyUrl);
     const blob = await response.blob();
     const blobUrl = URL.createObjectURL(blob);
 
@@ -59,6 +77,7 @@ async function addListeners(audioElement: HTMLAudioElement, url: string) {
     analyser.fftSize = 2048;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
+    const frequencyData = new Uint8Array(bufferLength);
 
     const source = audioContext.createMediaElementSource(audioElement);
     source.connect(analyser);
@@ -68,13 +87,11 @@ async function addListeners(audioElement: HTMLAudioElement, url: string) {
     const canvasContext = canvas.getContext("2d");
     if (!canvasContext) return;
 
-    canvas.style.position = "absolute";
-    canvas.style.top = "0";
-    canvas.style.left = "0";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    canvas.style.pointerEvents = "none";
+    canvas.classList.add("better-audio-visualizer");
     audioElement.parentElement?.appendChild(canvas);
+
+    console.log(parentBorderRadius);
+    if (parentBorderRadius) canvas.style.borderRadius = parentBorderRadius;
 
     function drawVisualizer() {
         if (!audioElement.paused) {
@@ -82,35 +99,16 @@ async function addListeners(audioElement: HTMLAudioElement, url: string) {
         }
 
         analyser.getByteTimeDomainData(dataArray);
+        analyser.getByteFrequencyData(frequencyData);
 
         if (!canvasContext) return;
         canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
-        canvasContext.lineWidth = 2;
-        canvasContext.strokeStyle = "#00ff00";
-
-        canvasContext.beginPath();
-
-        const sliceWidth = (canvas.width * 1.0) / bufferLength;
-        let x = 0;
-
-        for (let i = 0; i < bufferLength; i++) {
-            const v = dataArray[i] / 128.0;
-            const y = (v * canvas.height) / 2;
-
-            if (i === 0) {
-                canvasContext.moveTo(x, y);
-            } else {
-                canvasContext.lineTo(x, y);
-            }
-
-            x += sliceWidth;
-        }
-
-        canvasContext.lineTo(canvas.width, canvas.height / 2);
-        canvasContext.stroke();
+        if (settings.store.oscilloscope) drawOscilloscope(canvasContext, canvas, dataArray, bufferLength);
+        if (settings.store.spectrograph) drawSpectrograph(canvasContext, canvas, frequencyData, bufferLength);
     }
 
+    audioElement.src = blobUrl;
     audioElement.addEventListener("play", () => {
         if (audioContext.state === "suspended") {
             audioContext.resume();
@@ -121,16 +119,83 @@ async function addListeners(audioElement: HTMLAudioElement, url: string) {
     audioElement.addEventListener("pause", () => {
         audioContext.suspend();
     });
-
-    const visualizerAudioElement = new Audio(blobUrl);
-    visualizerAudioElement.addEventListener("play", () => {
-        if (audioContext.state === "suspended") {
-            audioContext.resume();
-        }
-        drawVisualizer();
-    });
 }
 
+function drawOscilloscope(canvasContext, canvas, dataArray, bufferLength) {
+    const sliceWidth = canvas.width / bufferLength;
+    let x = 0;
+
+    const { oscilloscopeSolidColor, oscilloscopeColor } = settings.store;
+
+    const [r, g, b] = oscilloscopeColor.split(",").map(Number);
+
+    canvasContext.lineWidth = 2;
+    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    canvasContext.beginPath();
+
+    for (let i = 0; i < bufferLength; i++) {
+        const v = dataArray[i] / 128.0;
+        const y = (v * canvas.height) / 2;
+
+        if (oscilloscopeSolidColor) {
+            canvasContext.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+        } else {
+            const red = Math.min(r + (v * 100) + (i / bufferLength) * 155, 255);
+            const green = Math.min(g + (v * 50) + (i / bufferLength) * 155, 255);
+            const blue = Math.min(b + (v * 150) + (i / bufferLength) * 155, 255);
+
+            canvasContext.strokeStyle = `rgb(${red}, ${green}, ${blue})`;
+        }
+
+        if (i === 0) {
+            canvasContext.moveTo(x, y);
+        } else {
+            canvasContext.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+    }
+
+    canvasContext.stroke();
+}
+
+function drawSpectrograph(canvasContext, canvas, frequencyData, bufferLength) {
+    const { spectrographSolidColor, spectrographColor } = settings.store;
+    const maxHeight = canvas.height;
+    const barWidth = (canvas.width / bufferLength) * 0.8;
+    let x = 0;
+
+    const maxFrequencyValue = Math.max(...frequencyData);
+
+    if (maxFrequencyValue === 0 || !isFinite(maxFrequencyValue)) {
+        return;
+    }
+
+    for (let i = 0; i < bufferLength; i++) {
+        const normalizedHeight = (frequencyData[i] / maxFrequencyValue) * maxHeight;
+
+        if (spectrographSolidColor) {
+            canvasContext.fillStyle = `rgb(${spectrographColor})`;
+        } else {
+            const [r, g, b] = spectrographColor.split(",").map(Number);
+
+            const red = Math.min(r + (i / bufferLength) * 155, 255);
+            const green = Math.min(g + (i / bufferLength) * 155, 255);
+            const blue = Math.min(b + (i / bufferLength) * 155, 255);
+
+            const gradient = canvasContext.createLinearGradient(x, canvas.height - normalizedHeight, x, canvas.height);
+            gradient.addColorStop(0, `rgb(${red}, ${green}, ${blue})`);
+
+            const darkerColor = `rgb(${Math.max(red - 50, 0)},${Math.max(green - 50, 0)},${Math.max(blue - 50, 0)})`;
+
+            gradient.addColorStop(1, darkerColor);
+            canvasContext.fillStyle = gradient;
+        }
+
+        canvasContext.fillRect(x, canvas.height - normalizedHeight, barWidth, normalizedHeight);
+        x += barWidth + 0.5;
+    }
+}
 
 function scanForAudioElements(element: HTMLElement) {
     element.querySelectorAll("[class^='wrapperAudio_']:not([data-better-audio-processed])").forEach(audioElement => {
@@ -142,10 +207,9 @@ function scanForAudioElements(element: HTMLElement) {
         console.log(audioElement);
         console.log(metadata);
 
-        addListeners(metadata.audio, metadata.url);
+        addListeners(metadata.audio, metadata.url, metadata.parentBorderRadius);
     });
 }
-
 
 function createObserver(targetNode: HTMLElement) {
     const observer = new MutationObserver(mutations => {
@@ -165,10 +229,74 @@ function createObserver(targetNode: HTMLElement) {
     });
 }
 
+function tryHexToRgb(hex) {
+    if (hex.startsWith("#")) {
+        const hexMatch = hex.match(/\w\w/g);
+        if (hexMatch) {
+            const [r, g, b] = hexMatch.map(x => parseInt(x, 16));
+            return `${r}, ${g}, ${b}`;
+        }
+    }
+    return hex;
+}
+
+function handleColorChange(value, settingKey, defaultValue) {
+    const rgbPattern = /^(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})$/;
+
+    if (!value.match(rgbPattern)) {
+        const rgb = tryHexToRgb(value);
+
+        if (rgb.match(rgbPattern)) {
+            settings.store[settingKey] = rgb;
+        } else {
+            showToast(`Invalid color format for ${settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'`, Toasts.Type.FAILURE);
+            settings.store[settingKey] = defaultValue;
+        }
+    } else {
+        settings.store[settingKey] = value;
+    }
+}
+
+const settings = definePluginSettings({
+    oscilloscope: {
+        type: OptionType.BOOLEAN,
+        description: "Enable oscilloscope visualizer",
+        default: true,
+    },
+    spectrograph: {
+        type: OptionType.BOOLEAN,
+        description: "Enable spectrograph visualizer",
+        default: true,
+    },
+    oscilloscopeSolidColor: {
+        type: OptionType.BOOLEAN,
+        description: "Use solid color for oscilloscope",
+        default: false,
+    },
+    oscilloscopeColor: {
+        type: OptionType.STRING,
+        description: "Color for oscilloscope",
+        default: "255, 255, 255",
+        onChange: value => handleColorChange(value, "oscilloscopeColor", "255, 255, 255"),
+    },
+    spectrographSolidColor: {
+        type: OptionType.BOOLEAN,
+        description: "Use solid color for spectrograph",
+        default: false,
+    },
+    spectrographColor: {
+        type: OptionType.STRING,
+        description: "Color for spectrograph",
+        default: "33, 150, 243",
+        onChange: value => handleColorChange(value, "spectrographColor", "33, 150, 243"),
+    },
+});
+
 export default definePlugin({
     name: "BetterAudioPlayer",
     description: "Adds a spectrograph and oscilloscope visualizer to audio attachment players",
     authors: [EquicordDevs.creations],
+    settings,
     start() {
         const waitForContent = () => {
             const targetNode = document.querySelector("[class^='content_']");
