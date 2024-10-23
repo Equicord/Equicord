@@ -31,10 +31,11 @@ import { proxyLazy } from "@utils/lazy";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes, isObjectEmpty } from "@utils/misc";
+import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { useAwaiter } from "@utils/react";
 import { Plugin } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { Alerts, Button, Card, Forms, lodash, Parser, React, Select, Text, TextInput, Toasts, Tooltip, useMemo } from "@webpack/common";
+import { Alerts, Button, Card, Flex, Forms, lodash, Parser, React, Select, Text, TextInput, Toasts, Tooltip, useMemo } from "@webpack/common";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
 
@@ -368,6 +369,79 @@ export default function PluginSettings() {
         }
     }
 
+    function openDisablePluginsModal(enabledPlugins: String[], resetCheckAndDo: () => void) {
+        if (Settings.ignoreResetWarning) return resetCheckAndDo();
+
+        openModal(warningModalProps => (
+            <ModalRoot
+                {...warningModalProps}
+                size={ModalSize.SMALL}
+                className="vc-text-selectable"
+                transitionState={warningModalProps.transitionState}
+            >
+                <ModalHeader separator={false}>
+                    <Text className="text-danger">Dangerous Action</Text>
+                    <ModalCloseButton onClick={warningModalProps.onClose} className="vc-modal-close-button" />
+                </ModalHeader>
+                <ModalContent>
+                    <Forms.FormSection>
+                        <Flex className="vc-warning-info">
+                            <img
+                                src="https://media.tenor.com/Y6DXKZiBCs8AAAAi/stavario-josefbenes.gif"
+                                alt="Warning"
+                            />
+                            <Text className="warning-text">
+                                WARNING: You are about to disable <span>{enabledPlugins.length}</span> plugins!
+                            </Text>
+                            <Text className="text-normal margin-bottom">
+                                Are you absolutely sure you want to proceed? You can always enable them back later.
+                            </Text>
+                        </Flex>
+                    </Forms.FormSection>
+                </ModalContent>
+                <ModalFooter className="modal-footer">
+                    <Flex className="button-container">
+                        <Button
+                            size={Button.Sizes.SMALL}
+                            color={Button.Colors.PRIMARY}
+                            onClick={warningModalProps.onClose}
+                            look={Button.Looks.LINK}
+                        >
+                            Cancel
+                        </Button>
+                        <Flex className="button-group">
+                            {!Settings.ignoreResetWarning && (
+                                <Button
+                                    size={Button.Sizes.SMALL}
+                                    className="button-danger-background"
+                                    onClick={() => {
+                                        Settings.ignoreResetWarning = true;
+                                    }}
+                                >
+                                    Disable Warning Forever
+                                </Button>
+                            )}
+                            <Tooltip text="This action cannot be undone. Are you sure?" shouldShow={true}>
+                                {({ onMouseEnter, onMouseLeave }) => (
+                                    <Button
+                                        size={Button.Sizes.SMALL}
+                                        className="button-danger-background-no-margin"
+                                        onClick={resetCheckAndDo}
+                                        onMouseEnter={onMouseEnter}
+                                        onMouseLeave={onMouseLeave}
+                                    >
+                                        Disable All
+                                    </Button>
+                                )}
+                            </Tooltip>
+                        </Flex>
+                    </Flex>
+                </ModalFooter>
+            </ModalRoot>
+        ));
+    }
+
+
     // Code directly taken from supportHelper.tsx
     const isApiPlugin = (plugin: string) => plugin.endsWith("API") || Plugins[plugin].required;
 
@@ -433,36 +507,7 @@ export default function PluginSettings() {
                     onClick={() => {
                         if (Settings.ignoreResetWarning) return resetCheckAndDo();
 
-                        return Alerts.show({
-                            title: "Disable All Plugins",
-                            body: (
-                                <div className="alert-body">
-                                    <img
-                                        src="https://media.tenor.com/Y6DXKZiBCs8AAAAi/stavario-josefbenes.gif"
-                                        alt="Warning"
-                                    />
-                                    <p className="warning-text">
-                                        WARNING: You are about to disable <span>{enabledPlugins.length}</span> plugins!
-                                    </p>
-                                    <p>
-                                        Are you absolutely sure you want to proceed? You can always enable them back later.
-                                    </p>
-                                    {!Settings.ignoreResetWarning && (
-                                        <Button className="disable-warning" onClick={() => {
-                                            Settings.ignoreResetWarning = true;
-                                        }}>
-                                            Disable this warning forever
-                                        </Button>
-                                    )}
-                                </div>
-                            ),
-                            confirmText: "Disable All",
-                            confirmColor: "button-danger-background-no-margin",
-                            cancelText: "Cancel",
-                            onConfirm: () => {
-                                resetCheckAndDo();
-                            }
-                        });
+                        return openDisablePluginsModal(enabledPlugins, resetCheckAndDo);
                     }}
                 >
                     Disable All Plugins
