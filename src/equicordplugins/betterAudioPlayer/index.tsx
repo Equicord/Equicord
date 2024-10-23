@@ -162,7 +162,7 @@ function drawOscilloscope(canvasContext, canvas, dataArray, bufferLength) {
 function drawSpectrograph(canvasContext, canvas, frequencyData, bufferLength) {
     const { spectrographSolidColor, spectrographColor } = settings.store;
     const maxHeight = canvas.height;
-    const barWidth = (canvas.width / bufferLength) * 0.8;
+    const barWidth = canvas.width / bufferLength;
     let x = 0;
 
     const maxFrequencyValue = Math.max(...frequencyData);
