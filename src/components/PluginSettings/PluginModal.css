@@ -21,9 +21,8 @@
 .vc-warning-info img {
     width: 70%;
     height: auto;
-    margin-bottom: 10px;
     display: block;
-    margin: auto;
+    margin: auto auto 10px auto;
 }
 
 .vc-warning-info strong {

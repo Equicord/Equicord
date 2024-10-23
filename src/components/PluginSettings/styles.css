@@ -148,9 +148,8 @@
 .alert-body img {
     width: 60%;
     height: auto;
-    margin-bottom: 10px;
     display: block;
-    margin: auto;
+    margin: auto auto 10px auto;
     border-radius: 8px;
 }
 
