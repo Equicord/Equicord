@@ -83,7 +83,7 @@
 }
 
 .button-danger-background-no-margin:hover{
-    background-color: var(--button-outline-danger-background-hover) !important;
+    background-color: var(--button-danger-background-hover) !important;
     filter: saturate(75%);
 }
 
