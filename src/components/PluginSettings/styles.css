@@ -134,7 +134,6 @@
 
 .button-danger-background-no-margin {
     background-color: var(--button-danger-background) !important;
-
     color: var(--header-primary);
 }
 
@@ -183,17 +182,9 @@
 .disable-warning:hover {
     color: var(--text-danger);
     background-color: transparent;
+    opacity: 0.8;
 }
 
 .disable-warning:active {
     background-color: transparent;
-}
-
-.disable-warning:hover {
-    color: var(--text-danger);
-}
-
-.disable-warning:active {
-    color: var(--text-danger);
-    opacity: 0.8;
 }
