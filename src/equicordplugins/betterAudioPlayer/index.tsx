@@ -47,11 +47,11 @@ function getMetadata(audioElement: HTMLElement) {
     const computedStyle = getComputedStyle(audioElement);
     const parentBorderRadius = computedStyle.borderRadius;
 
-    elements.forEach(element => {
-        if (element) {
-            (element as HTMLElement).style.zIndex = "2";
-        }
-    });
+    if (settings.store.forceMoveBelow) {
+        elements.forEach(element => {
+            if (element) (element as HTMLElement).style.zIndex = "2";
+        });
+    }
 
     return {
         name,
@@ -289,6 +289,11 @@ const settings = definePluginSettings({
         description: "Color for spectrograph",
         default: "33, 150, 243",
         onChange: value => handleColorChange(value, "spectrographColor", "33, 150, 243"),
+    },
+    forceMoveBelow: {
+        type: OptionType.BOOLEAN,
+        description: "Force the visualizer below the audio player",
+        default: true,
     },
 });
 
