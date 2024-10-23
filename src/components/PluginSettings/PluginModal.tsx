@@ -430,7 +430,7 @@ export function openWarningModal(plugin: Plugin, pluginModalProps: ModalProps, o
                             <Button className="disable-warning" onClick={() => {
                                 Settings.ignoreResetWarning = true;
                             }}>
-                                Disable this warning forever
+                                DISABLE THIS WARNING FOREVER
                             </Button>
                         )}
                     </Flex>
