@@ -393,6 +393,9 @@ export default function PluginSettings() {
                             <Text className="warning-text">
                                 WARNING: You are about to disable <span>{enabledPlugins.length}</span> plugins!
                             </Text>
+                            <Text className="warning-text">
+                            ⚠THIS ACTION IS IRREVERSIBLE⚠
+                            </Text>
                             <Text className="text-normal margin-bottom">
                                 Are you absolutely sure you want to proceed? You can always enable them back later.
                             </Text>
