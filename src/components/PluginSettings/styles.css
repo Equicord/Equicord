@@ -153,8 +153,6 @@
     color: var(--text-danger);
     font-size: 1.2rem;
     font-weight: bold;
-    display: flex;
-    justify-content: center;
 }
 
 .text-normal {
