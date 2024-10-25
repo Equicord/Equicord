@@ -60,7 +60,7 @@
 
 .vc-plugins-info-card {
     padding: 1em;
-    height: 8em;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     background-color: var(--background-secondary-alt) !important;
@@ -171,6 +171,10 @@
     border-color: var(--button-outline-danger-border) !important;
 }
 
+.button-danger-background.top-margin {
+    margin-top: 10px;
+}
+
 .button-danger-background:hover {
     background-color: var(--button-outline-danger-background-hover) !important;
     border-style: solid;
@@ -223,4 +227,11 @@
 .warning-text span {
     font-weight: bold;
     text-decoration: underline;
+}
+
+.disable-all-button {
+    color: var(--header-primary);
+    width: 150px;
+    margin-left: auto;
+    margin-right: 4.5px !important;
 }
