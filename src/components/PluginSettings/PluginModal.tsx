@@ -421,7 +421,7 @@ export function openWarningModal(plugin: Plugin, pluginModalProps: ModalProps, o
                             You are about to reset all settings for <strong>{plugin.name}</strong> to their default values.
                         </Text>
                         <Text className="text-danger">
-                            ⚠THIS ACTION IS IRREVERSIBLE⚠
+                            THIS ACTION IS IRREVERSIBLE
                         </Text>
                         <Text className="text-normal margin-bottom">
                             If you are certain you want to proceed, click <strong>Confirm Reset</strong>. Otherwise, click <strong>Cancel</strong>.
