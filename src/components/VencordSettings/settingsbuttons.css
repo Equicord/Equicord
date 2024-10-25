@@ -1,0 +1,33 @@
+.vc-donatebutton{
+    background-color: var(--background-color) !important;
+    border-color: #ffc1cbc2;
+    filter: brightness(1);
+    border-width: .1rem;
+    border-style: solid;
+}
+
+.vc-donatebutton:hover{
+    background-color: #ffc1cbc2 !important;
+    border-color: transparent !important;
+}
+
+
+.vc-joindiscordbutton{
+    background-color: var(--button-secondary-background) !important;
+}
+
+.vc-joindiscordbutton:hover{
+    background-color: var(--button-secondary-background-hover) !important;
+}
+
+.vc-settings-card-buttons{
+    display: flex;
+    gap: 1em !important;
+    margin-left: .2rem;
+    margin-bottom: .2rem;
+}
+
+.vc-settingbuttons{
+    border-radius: 5px !important;
+}
+
