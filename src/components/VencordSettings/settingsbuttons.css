@@ -1,13 +1,18 @@
+:root{
+    --vc-donatebutton: #ffc1cbc2;
+    --vc-donatebutton-secondary: #f7536fe5;
+}
+
 .vc-donatebutton{
     background-color: var(--background-color) !important;
-    border-color: #ffc1cbc2;
+    border-color: var(--vc-donatebutton);
     filter: brightness(1);
     border-width: .1rem;
     border-style: solid;
 }
 
 .vc-donatebutton:hover{
-    background-color: #ffc1cbc2 !important;
+    background-color: var(--vc-donatebutton) !important;
     border-color: transparent !important;
 }
 

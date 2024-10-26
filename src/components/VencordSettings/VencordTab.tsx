@@ -253,8 +253,7 @@ function DiscordInviteCard({ invite, image }: DiscordInviteProps) {
         <Card className={cl("card", "discordinvite")}>
             <div>
                 <Forms.FormTitle tag="h5">Join the discord!</Forms.FormTitle>
-                <Forms.FormText>Please consider joining the discord for any news on breaking changes, </Forms.FormText>
-                <Forms.FormText>or new bigger updates! </Forms.FormText>
+                <Forms.FormText>Please consider joining the discord for any news on breaking changes, or new bigger updates!</Forms.FormText>
                 <Forms.FormText>You can also donate to me if you'd like to support this project. <Heart /></Forms.FormText>
 
                 <div className={cl("card-buttons")}>
