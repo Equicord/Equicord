@@ -65,6 +65,8 @@ export const addToCollection = async (name: string, gif: Gif): Promise<void> => 
     collections[collectionIndex].format = getFormat(gif.src);
     collections[collectionIndex].lastUpdated = Date.now();
 
+    gif.addedAt = Date.now();
+
     await DataStore.set(DATA_COLLECTION_NAME, collections);
     return await refreshCacheCollection();
 };
@@ -127,4 +129,38 @@ export const getItemCollectionNameFromId = (id: string): string | undefined => {
     const collections = cache_collections;
     const collection = collections.find(c => c.gifs.some(g => g.id === id));
     return collection?.name;
+};
+
+export const getGifById = (id: string): Gif | undefined => {
+    const collections = cache_collections;
+    const gif = collections.flatMap(c => c.gifs).find(g => g.id === id);
+    return gif;
+};
+
+export const moveGifToCollection = async (gifId: string, fromCollection: string, toCollection: string): Promise<void> => {
+    const collections = await getCollections();
+    const fromCollectionIndex = collections.findIndex(c => c.name === fromCollection);
+    const toCollectionIndex = collections.findIndex(c => c.name === toCollection);
+    if (fromCollectionIndex === -1 || toCollectionIndex === -1) return console.warn("collection not found");
+
+    const gifIndex = collections[fromCollectionIndex].gifs.findIndex(g => g.id === gifId);
+    if (gifIndex === -1) return console.warn("gif not found");
+
+    const gif = collections[fromCollectionIndex].gifs[gifIndex];
+    gif.addedAt = Date.now();
+    collections[fromCollectionIndex].gifs.splice(gifIndex, 1);
+    collections[toCollectionIndex].gifs.push(gif);
+
+    const fromCollectionLatestGifSrc = collections[fromCollectionIndex].gifs.length ? collections[fromCollectionIndex].gifs[collections[fromCollectionIndex].gifs.length - 1].src : settings.store.defaultEmptyCollectionImage;
+    collections[fromCollectionIndex].src = fromCollectionLatestGifSrc;
+    collections[fromCollectionIndex].format = getFormat(fromCollectionLatestGifSrc);
+    collections[fromCollectionIndex].lastUpdated = Date.now();
+
+    const toCollectionLatestGifSrc = collections[toCollectionIndex].gifs.length ? collections[toCollectionIndex].gifs[collections[toCollectionIndex].gifs.length - 1].src : settings.store.defaultEmptyCollectionImage;
+    collections[toCollectionIndex].src = toCollectionLatestGifSrc;
+    collections[toCollectionIndex].format = getFormat(toCollectionLatestGifSrc);
+    collections[toCollectionIndex].lastUpdated = Date.now();
+
+    await DataStore.set(DATA_COLLECTION_NAME, collections);
+    return await refreshCacheCollection();
 };

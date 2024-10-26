@@ -13,16 +13,16 @@ import { Flex } from "@components/Flex";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { Alerts, Button, ContextMenuApi, FluxDispatcher, Forms, Menu, React, TextInput, useCallback, useState } from "@webpack/common";
+import { Alerts, Button, Clipboard, ContextMenuApi, FluxDispatcher, Forms, Menu, React, showToast, TextInput, Toasts, useCallback, useState } from "@webpack/common";
 
-import { addToCollection, cache_collections, createCollection, DATA_COLLECTION_NAME, deleteCollection, fixPrefix, getCollections, getItemCollectionNameFromId, refreshCacheCollection, removeFromCollection, renameCollection } from "./utils/collectionManager";
+import { addToCollection, cache_collections, createCollection, DATA_COLLECTION_NAME, deleteCollection, fixPrefix, getCollections, getGifById, getItemCollectionNameFromId, moveGifToCollection, refreshCacheCollection, removeFromCollection, renameCollection } from "./utils/collectionManager";
 import { getFormat } from "./utils/getFormat";
 import { getGif } from "./utils/getGif";
 import { downloadCollections, uploadGifCollections } from "./utils/settingsUtils";
 import { uuidv4 } from "./utils/uuidv4";
 
-let GIF_COLLECTION_PREFIX;
-let GIF_ITEM_PREFIX;
+let GIF_COLLECTION_PREFIX: string;
+let GIF_ITEM_PREFIX: string;
 
 export const SortingOptions = {
     NAME: 1,
@@ -475,6 +475,117 @@ const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
                         />
                     ))}
                 />
+            </>
+        )}
+        {type === "gif" && (
+            <>
+                <Menu.MenuItem
+                    key="gif-information"
+                    id="gif-information"
+                    label="Information"
+                    action={() => {
+                        const gifInfo = getGifById(nameOrId);
+                        if (!gifInfo) return;
+                        openModal(modalProps => (
+                            <ModalRoot
+                                {...modalProps}
+                                size={ModalSize.SMALL}
+                                transitionState={modalProps.transitionState}
+                                className="custom-modal"
+                            >
+                                <ModalHeader separator={false} className="custom-modal-header">
+                                    <Forms.FormText className="custom-modal-title">Information</Forms.FormText>
+                                </ModalHeader>
+                                <ModalContent className="custom-modal-content">
+                                    <Forms.FormSection>
+                                        <Flex className="gif-info">
+                                            <Forms.FormTitle tag="h5" className="gif-info-title">Added At</Forms.FormTitle>
+                                            <Forms.FormText className="gif-info-text">{gifInfo.addedAt ? new Date(gifInfo.addedAt).toLocaleString() : "Unknown"}</Forms.FormText>
+                                        </Flex>
+                                        <Flex className="gif-info">
+                                            <Forms.FormTitle tag="h5" className="gif-info-title">Width</Forms.FormTitle>
+                                            <Forms.FormText className="gif-info-text">{gifInfo.width}</Forms.FormText>
+                                        </Flex>
+                                        <Flex className="gif-info">
+                                            <Forms.FormTitle tag="h5" className="gif-info-title">Height</Forms.FormTitle>
+                                            <Forms.FormText className="gif-info-text">{gifInfo.height}</Forms.FormText>
+                                        </Flex>
+                                    </Forms.FormSection>
+                                </ModalContent>
+                                <ModalFooter className="custom-modal-footer">
+                                    <Button onClick={modalProps.onClose} className="custom-modal-button">Close</Button>
+                                </ModalFooter>
+                            </ModalRoot>
+                        ));
+                    }}
+                />
+                <Menu.MenuSeparator />
+                <Menu.MenuItem
+                    key="copy-url"
+                    id="copy-url"
+                    label="Copy URL"
+                    action={() => {
+                        const gifInfo = getGifById(nameOrId);
+                        if (!gifInfo) return;
+                        Clipboard.copy(gifInfo.url);
+                        showToast("URL copied to clipboard", Toasts.Type.SUCCESS);
+                    }}
+                />
+                <Menu.MenuItem
+                    key="move-to-collection"
+                    id="move-to-collection"
+                    label="Move To Collection"
+                    action={() => {
+                        openModal(modalProps => (
+                            <ModalRoot
+                                {...modalProps}
+                                size={ModalSize.SMALL}
+                                transitionState={modalProps.transitionState}
+                                className="custom-modal"
+                            >
+                                <ModalHeader separator={false} className="custom-modal-header">
+                                    <Forms.FormText className="custom-modal-title">Move To Collection</Forms.FormText>
+                                </ModalHeader>
+                                <ModalContent className="custom-modal-content">
+                                    <Forms.FormTitle tag="h5" className="custom-modal-text">
+                                        Select a collection to move the item to
+                                    </Forms.FormTitle>
+                                    <div className="collection-buttons">
+                                        {cache_collections
+                                            .filter(col => col.name !== getItemCollectionNameFromId(nameOrId))
+                                            .map(col => (
+                                                <Button
+                                                    key={col.name}
+                                                    id={col.name}
+                                                    onClick={async () => {
+                                                        const fromCollection = getItemCollectionNameFromId(nameOrId);
+                                                        if (!fromCollection) return;
+                                                        await moveGifToCollection(nameOrId, fromCollection, col.name);
+                                                        FluxDispatcher.dispatch({
+                                                            type: "GIF_PICKER_QUERY",
+                                                            query: `${fromCollection} `
+                                                        });
+                                                        FluxDispatcher.dispatch({
+                                                            type: "GIF_PICKER_QUERY",
+                                                            query: `${fromCollection}`
+                                                        });
+                                                        modalProps.onClose();
+                                                    }}
+                                                    className="collection-button"
+                                                >
+                                                    {col.name.replace(/.+?:/, "")}
+                                                </Button>
+                                            ))}
+                                    </div>
+                                </ModalContent>
+                                <ModalFooter className="custom-modal-footer">
+                                    <Button onClick={modalProps.onClose} className="custom-modal-button">Close</Button>
+                                </ModalFooter>
+                            </ModalRoot>
+                        ));
+                    }}
+                />
+                <Menu.MenuSeparator />
             </>
         )}
         <Menu.MenuItem

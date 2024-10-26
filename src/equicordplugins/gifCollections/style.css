@@ -79,6 +79,7 @@
     gap: 16px;
 }
 
+.gif-info,
 .collection-info {
     display: flex;
     justify-content: space-between;
@@ -154,4 +155,34 @@
     margin-top: 16px;
     font-size: 14px;
     color: var(--text-danger);
+}
+
+.collection-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+    max-height: 200px;
+}
+
+/* e */
+.search-bar {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--background-secondary);
+    color: var(--text-normal);
+    outline: none;
+}
+
+.collection-button {
+    text-align: center;
+    padding: 8px;
+    background-color: var(--background-tertiary);
+    color: var(--text-normal);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
