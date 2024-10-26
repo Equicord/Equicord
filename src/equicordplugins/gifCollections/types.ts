@@ -22,7 +22,7 @@ export interface Gif {
     url: string;
     height: number,
     width: number;
-    addedAt: number;
+    addedAt?: number;
 }
 
 export interface Props {
