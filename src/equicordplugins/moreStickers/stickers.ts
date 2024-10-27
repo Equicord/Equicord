@@ -11,7 +11,7 @@ import { StickerPack, StickerPackMeta } from "./types";
 import { Mutex } from "./utils";
 const mutex = new Mutex();
 
-const PACKS_KEY = "Vencord-MoreStickers-Packs";
+const PACKS_KEY = "MoreStickers:Packs";
 
 /**
   * Convert StickerPack to StickerPackMeta

@@ -100,6 +100,7 @@ export enum SettingsTabsKey {
     ADD_STICKER_PACK_URL = "Add from URL",
     ADD_STICKER_PACK_HTML = "Add from HTML",
     ADD_STICKER_PACK_FILE = "Add from File",
+    EXPORT_STICKER_PACKS = "Export Sticker Packs",
 }
 
 export interface SidebarProps {
