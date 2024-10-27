@@ -15,7 +15,7 @@ import { MessagePeekProps } from "./types";
 export default definePlugin({
     name: "MessagePeek",
     description: "See the last message in a Channel like on mobile",
-    authors: [EquicordDevs.HypedDomi, EquicordDevs.creations],
+    authors: [EquicordDevs.HypedDomi],
 
     settings: settings,
 
