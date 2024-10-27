@@ -11,6 +11,7 @@ import { Button, Forms, React, TabBar, Text, TextArea, Toasts } from "@webpack/c
 
 import { convert as convertLineEP, getIdFromUrl as getLineEmojiPackIdFromUrl, getStickerPackById as getLineEmojiPackById, isLineEmojiPackHtml, parseHtml as getLineEPFromHtml } from "../lineEmojis";
 import { convert as convertLineSP, getIdFromUrl as getLineStickerPackIdFromUrl, getStickerPackById as getLineStickerPackById, isLineStickerPackHtml, parseHtml as getLineSPFromHtml } from "../lineStickers";
+import { migrate } from "../migrate-v1";
 import { deleteStickerPack, getStickerPack, getStickerPackMetas, saveStickerPack } from "../stickers";
 import { SettingsTabsKey, Sticker, StickerPack, StickerPackMeta } from "../types";
 import { cl, clPicker, Mutex } from "../utils";
@@ -358,39 +359,48 @@ export const Settings = () => {
                 </div>
             }
             {
-                tab === SettingsTabsKey.EXPORT_STICKER_PACKS &&
+                tab === SettingsTabsKey.MISC &&
                 <div className="section">
-                    <Forms.FormTitle tag="h5">Export Sticker Packs</Forms.FormTitle>
+                    <Forms.FormTitle tag="h5">Misc tools</Forms.FormTitle>
 
-                    <Button
-                        size={Button.Sizes.SMALL}
-                        onClick={async e => {
-                            const result: StickerPack[] = [];
-                            const stickerPacks = await getStickerPackMetas();
-                            for (const stickerPack of stickerPacks) {
-                                const sp = await getStickerPack(stickerPack.id);
-                                if (sp) {
-                                    result.push(sp);
+                    <Flex flexDirection="row" style={{
+                        alignItems: "center",
+                        justifyContent: "center"
+                    }} >
+                        <Button
+                            size={Button.Sizes.SMALL}
+                            onClick={async e => {
+                                const result: StickerPack[] = [];
+                                const stickerPacks = await getStickerPackMetas();
+                                for (const stickerPack of stickerPacks) {
+                                    const sp = await getStickerPack(stickerPack.id);
+                                    if (sp) {
+                                        result.push(sp);
+                                    }
                                 }
-                            }
 
-                            const a = document.createElement("a");
-                            a.href = URL.createObjectURL(new Blob([JSON.stringify(result)], { type: "application/json" }));
-                            a.download = "MoreStickers.stickerpacks";
-                            a.click();
+                                const a = document.createElement("a");
+                                a.href = URL.createObjectURL(new Blob([JSON.stringify(result)], { type: "application/json" }));
+                                a.download = "MoreStickers.stickerpacks";
+                                a.click();
 
-                            Toasts.show({
-                                message: "Sticker Packs exported",
-                                type: Toasts.Type.SUCCESS,
-                                id: Toasts.genId(),
-                                options: {
-                                    duration: 1000
-                                }
-                            });
-                        }}
-                    >
-                        Export Sticker Packs
-                    </Button>
+                                Toasts.show({
+                                    message: "Sticker Packs exported",
+                                    type: Toasts.Type.SUCCESS,
+                                    id: Toasts.genId(),
+                                    options: {
+                                        duration: 1000
+                                    }
+                                });
+                            }}
+                        >Export Sticker Packs</Button>
+                        <Button
+                            size={Button.Sizes.SMALL}
+                            onClick={async e => {
+                                await migrate();
+                            }}
+                        >Migrate from v1</Button>
+                    </Flex>
                 </div>
             }
             <Forms.FormDivider style={{
@@ -445,14 +455,14 @@ export function Wrapper(props: { children: JSX.Element | JSX.Element[]; }) {
     );
 }
 
-export async function getRecentStickers(): Promise<Sticker[]> {
-    return (await DataStore.get(KEY)) ?? [];
+export async function getRecentStickers(key: string = KEY): Promise<Sticker[]> {
+    return (await DataStore.get(key)) ?? [];
 }
 
-export async function setRecentStickers(stickers: Sticker[]): Promise<void> {
+export async function setRecentStickers(stickers: Sticker[], key: string = KEY): Promise<void> {
     const unlock = await mutex.lock();
     try {
-        await DataStore.set(KEY, stickers);
+        await DataStore.set(key, stickers);
     } finally {
         unlock();
     }
