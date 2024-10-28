@@ -6,6 +6,7 @@
 
 import { ChatBarButton } from "@api/ChatButtons";
 import { definePluginSettings } from "@api/Settings";
+import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { useMemo, useState } from "@webpack/common";
 import { MouseEventHandler } from "react";
@@ -87,7 +88,7 @@ export default definePlugin({
     name: "hideChatButtons",
     description: "able to hide the chat buttons",
     settings: settings,
-    authors: [{ name: "i am me", id: 984392761929256980n }],
+    authors: [EquicordDevs.iamme],
     patches: [
         {
             find: '"sticker")',
