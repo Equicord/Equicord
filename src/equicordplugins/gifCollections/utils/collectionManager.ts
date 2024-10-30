@@ -9,6 +9,7 @@ import { Toasts } from "@webpack/common";
 
 import { settings } from "../index";
 import { Collection, Gif } from "../types";
+import { cleanUrl } from "./cleanUrl";
 import { getFormat } from "./getFormat";
 
 export const DATA_COLLECTION_NAME = "gif-collections-collections";
@@ -60,12 +61,12 @@ export const addToCollection = async (name: string, gif: Gif): Promise<void> => 
     const collectionIndex = collections.findIndex(c => c.name === name);
     if (collectionIndex === -1) return console.warn("collection not found");
 
+    gif = { ...gif, addedAt: Date.now(), url: cleanUrl(gif.url) };
+
     collections[collectionIndex].gifs.push(gif);
     collections[collectionIndex].src = gif.src;
     collections[collectionIndex].format = getFormat(gif.src);
     collections[collectionIndex].lastUpdated = Date.now();
-
-    gif.addedAt = Date.now();
 
     await DataStore.set(DATA_COLLECTION_NAME, collections);
     return await refreshCacheCollection();

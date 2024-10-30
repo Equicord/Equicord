@@ -13,8 +13,9 @@ import { Flex } from "@components/Flex";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { Alerts, Button, Clipboard, ContextMenuApi, FluxDispatcher, Forms, Menu, React, showToast, TextInput, Toasts, useCallback, useState } from "@webpack/common";
+import { Alerts, Button, Clipboard, ContextMenuApi, FluxDispatcher, Forms, Menu, showToast, TextInput, Toasts, useCallback, useState } from "@webpack/common";
 
+import { cleanUrl } from "./utils/cleanUrl";
 import { addToCollection, cache_collections, createCollection, DATA_COLLECTION_NAME, deleteCollection, fixPrefix, getCollections, getGifById, getItemCollectionNameFromId, moveGifToCollection, refreshCacheCollection, removeFromCollection, renameCollection } from "./utils/collectionManager";
 import { getFormat } from "./utils/getFormat";
 import { getGif } from "./utils/getGif";
@@ -71,7 +72,6 @@ const addCollectionContextMenuPatch: NavContextMenuPatchCallback = (children, pr
         );
     }
 };
-
 
 export const settings = definePluginSettings({
     itemPrefix: {
@@ -271,6 +271,25 @@ export const settings = definePluginSettings({
                 })}>
                 Reset Collections
             </Button>
+    },
+    fixCollections: {
+        // for every collection, check every gif and run CleanUrl on it and update the collection with the new url
+        type: OptionType.COMPONENT,
+        description: "Fix Collections",
+        component: () =>
+            <Button onClick={async () => {
+                const collections = await getCollections();
+                for (const collection of collections) {
+                    for (const gif of collection.gifs) {
+                        gif.url = cleanUrl(gif.url);
+                        gif.src = cleanUrl(gif.src);
+                    }
+                }
+                await DataStore.set(DATA_COLLECTION_NAME, collections);
+                refreshCacheCollection();
+            }}>
+                Fix Collections
+            </Button>
     }
 });
 
@@ -365,6 +384,7 @@ export default definePlugin({
         return name.split(":".length > 1) ? name.replace(/.+?:/, "") : name;
     },
     insertCollections(instance) {
+        console.log(instance.props.favorites);
         const shouldRemoveAll = settings.store.onlyShowCollections;
         try {
             if (instance.props.trendingCategories.length && instance.props.trendingCategories[0].type === "Trending") {
@@ -547,36 +567,44 @@ const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
                                     <Forms.FormText className="custom-modal-title">Move To Collection</Forms.FormText>
                                 </ModalHeader>
                                 <ModalContent className="custom-modal-content">
-                                    <Forms.FormTitle tag="h5" className="custom-modal-text">
-                                        Select a collection to move the item to
-                                    </Forms.FormTitle>
-                                    <div className="collection-buttons">
-                                        {cache_collections
-                                            .filter(col => col.name !== getItemCollectionNameFromId(nameOrId))
-                                            .map(col => (
-                                                <Button
-                                                    key={col.name}
-                                                    id={col.name}
-                                                    onClick={async () => {
-                                                        const fromCollection = getItemCollectionNameFromId(nameOrId);
-                                                        if (!fromCollection) return;
-                                                        await moveGifToCollection(nameOrId, fromCollection, col.name);
-                                                        FluxDispatcher.dispatch({
-                                                            type: "GIF_PICKER_QUERY",
-                                                            query: `${fromCollection} `
-                                                        });
-                                                        FluxDispatcher.dispatch({
-                                                            type: "GIF_PICKER_QUERY",
-                                                            query: `${fromCollection}`
-                                                        });
-                                                        modalProps.onClose();
-                                                    }}
-                                                    className="collection-button"
-                                                >
-                                                    {col.name.replace(/.+?:/, "")}
-                                                </Button>
-                                            ))}
-                                    </div>
+                                    {cache_collections.length === 1 ? (
+                                        <Forms.FormTitle tag="h5" className="custom-modal-text">
+                                            You have no collections to move this item to
+                                        </Forms.FormTitle>
+                                    ) : (
+                                        <>
+                                            <Forms.FormTitle tag="h5" className="custom-modal-text">
+                                                Select a collection to move the item to
+                                            </Forms.FormTitle>
+                                            <div className="collection-buttons">
+                                                {cache_collections
+                                                    .filter(col => col.name !== getItemCollectionNameFromId(nameOrId))
+                                                    .map(col => (
+                                                        <Button
+                                                            key={col.name}
+                                                            id={col.name}
+                                                            onClick={async () => {
+                                                                const fromCollection = getItemCollectionNameFromId(nameOrId);
+                                                                if (!fromCollection) return;
+                                                                await moveGifToCollection(nameOrId, fromCollection, col.name);
+                                                                FluxDispatcher.dispatch({
+                                                                    type: "GIF_PICKER_QUERY",
+                                                                    query: `${fromCollection} `
+                                                                });
+                                                                FluxDispatcher.dispatch({
+                                                                    type: "GIF_PICKER_QUERY",
+                                                                    query: `${fromCollection}`
+                                                                });
+                                                                modalProps.onClose();
+                                                            }}
+                                                            className="collection-button"
+                                                        >
+                                                            {col.name.replace(/.+?:/, "")}
+                                                        </Button>
+                                                    ))}
+                                            </div>
+                                        </>
+                                    )}
                                 </ModalContent>
                                 <ModalFooter className="custom-modal-footer">
                                     <Button onClick={modalProps.onClose} className="custom-modal-button">Close</Button>
