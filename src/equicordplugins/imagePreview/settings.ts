@@ -38,6 +38,11 @@ const settings = definePluginSettings({
         description: "Allows you to skip having to hold control to zoom in and move images",
         default: false
     },
+    fileInformation: {
+        type: OptionType.BOOLEAN,
+        description: "Show file information on hover",
+        default: true
+    },
     fixedImage: {
         type: OptionType.BOOLEAN,
         description: "Fixes the image preview to the initial point of hover",
