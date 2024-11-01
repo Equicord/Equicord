@@ -20,13 +20,18 @@ import { Dirent, readdirSync, readFileSync, writeFileSync } from "fs";
 import { access, readFile } from "fs/promises";
 import { join, sep } from "path";
 import { normalize as posixNormalize, sep as posixSep } from "path/posix";
-import { BigIntLiteral, createSourceFile, Identifier, isArrayLiteralExpression, isCallExpression, isExportAssignment, isIdentifier, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSatisfiesExpression, isStringLiteral, isVariableStatement, NamedDeclaration, NodeArray, ObjectLiteralExpression, ScriptTarget, StringLiteral, SyntaxKind } from "typescript";
+import { BigIntLiteral, createSourceFile, Identifier, isArrayLiteralExpression, isCallExpression, isExportAssignment, isIdentifier, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSatisfiesExpression, isStringLiteral, isVariableStatement, NamedDeclaration, NodeArray, ObjectLiteralExpression, PropertyAssignment, ScriptTarget, StringLiteral, SyntaxKind } from "typescript";
 
 import { getPluginTarget } from "./utils.mjs";
 
 interface Dev {
     name: string;
     id: string;
+}
+
+interface Command {
+    name: string;
+    description: string;
 }
 
 interface PluginData {
@@ -37,6 +42,7 @@ interface PluginData {
     dependencies: string[];
     hasPatches: boolean;
     hasCommands: boolean;
+    commands: Command[];
     required: boolean;
     enabledByDefault: boolean;
     target: "discordDesktop" | "vencordDesktop" | "equicordDesktop" | "desktop" | "web" | "dev";
@@ -161,6 +167,20 @@ async function parseFile(fileName: string) {
                     break;
                 case "commands":
                     data.hasCommands = true;
+                    if (!isArrayLiteralExpression(value)) throw fail("commands is not an array literal");
+                    data.commands = value.elements.map((e) => {
+                        if (!isObjectLiteralExpression(e)) throw fail("commands array contains non-object literals");
+                        const nameProperty = e.properties.find((p): p is PropertyAssignment => {
+                            return isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === 'name';
+                        });
+                        const descriptionProperty = e.properties.find((p): p is PropertyAssignment => {
+                            return isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === 'description';
+                        });
+                        if (!nameProperty || !descriptionProperty) throw fail("Command missing required properties");
+                        const name = isStringLiteral(nameProperty.initializer) ? nameProperty.initializer.text : '';
+                        const description = isStringLiteral(descriptionProperty.initializer) ? descriptionProperty.initializer.text : '';
+                        return { name, description };
+                    });
                     break;
                 case "authors":
                     if (!isArrayLiteralExpression(value)) throw fail("authors is not an array literal");
@@ -205,11 +225,7 @@ async function parseFile(fileName: string) {
             .replace(/\/index\.([jt]sx?)$/, "")
             .replace(/^src\/plugins\//, "");
 
-        let readme = "";
-        try {
-            readme = readFileSync(join(fileName, "..", "README.md"), "utf-8");
-        } catch { }
-        return [data, readme] as const;
+        return [data] as const;
     }
 
     throw fail("no default export called 'definePlugin' found");
@@ -240,23 +256,20 @@ function isPluginFile({ name }: { name: string; }) {
     parseEquicordDevs();
 
     const plugins = [] as PluginData[];
-    const readmes = {} as Record<string, string>;
 
     await Promise.all(["src/plugins", "src/plugins/_core", "src/equicordplugins"].flatMap(dir =>
         readdirSync(dir, { withFileTypes: true })
             .filter(isPluginFile)
             .map(async dirent => {
-                const [data, readme] = await parseFile(await getEntryPoint(dir, dirent));
+                const [data] = await parseFile(await getEntryPoint(dir, dirent));
                 plugins.sort().push(data);
-                if (readme) readmes[data.name] = readme;
             })
     ));
 
     const data = JSON.stringify(plugins);
 
-    if (process.argv.length > 3) {
+    if (process.argv.length > 2) {
         writeFileSync(process.argv[2], data);
-        writeFileSync(process.argv[3], JSON.stringify(readmes));
     } else {
         console.log(data);
     }
