@@ -183,6 +183,7 @@ MacOS
 
 Linux
 - [CLI](https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli-Linux)
+- [Bash Script](https://raw.githubusercontent.com/PhoenixAceVFX/Equicord/refs/heads/main/Equicord%20Install.sh)
 
 
 ## Installing Equicord Devbuild
