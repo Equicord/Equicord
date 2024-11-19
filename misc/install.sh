@@ -6,7 +6,7 @@ if [ "$(id -u)" -eq 0 ]; then
     exit 1
 fi
 
-installer_path="$HOME/equilotl"
+installer_path="$HOME/.equilotl"
 github_url="https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli-Linux"
 
 echo "Checking if the installer needs updating..."
