@@ -103,11 +103,13 @@ export default definePlugin({
     start: () => {
         if (settings.store.isEnabled) true;
         addChatBarButton("Signature", SignatureToggle);
+        // @ts-ignore
         MessageEvents.addPreSendListener(handleMessage);
     },
     stop: () => {
         if (settings.store.isEnabled) false;
         removeChatBarButton("Signature");
+        // @ts-ignore
         MessageEvents.removePreSendListener(handleMessage);
 
     },
