@@ -185,8 +185,14 @@ MacOS
 Linux
 - [CLI](https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli-Linux)
 ```shell
-sh -c "$(curl -sS https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/misc/install.sh)"
+sh -c "$(curl -sS https://c0dera.in/equicord.sh)"
 ```
+```shell
+sh -c "$(curl -sS https://ballpa.in/equicord.sh)"
+```
+Note: The SH Script is identical to the one on the main repo, I just wanted a shorter url  
+Loading the url into your browser will download the SH script because thats how my server works  
+You can examine it freely, It's just me being bored with my own server and domains  
 ## Installing Equicord Devbuild
 
 ### Dependencies
