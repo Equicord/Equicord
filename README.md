@@ -121,6 +121,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - SekaiStickers by MaiKokain
 - ServerSearch by camila314
 - ShowBadgesInChat by Inbestigator & KrystalSkull
+- Signature by KrystalSkull
 - SidebarChat by Joona
 - Slap by Korbo
 - SoundBoardLogger by Moxxie, fres, echo, maintained by thororen
@@ -184,7 +185,7 @@ MacOS
 Linux
 - [CLI](https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli-Linux)
 ```shell
-sh -c "$(curl -sS https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/misc/installer.sh)"
+sh -c "$(curl -sS https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/misc/install.sh)"
 ```
 ## Installing Equicord Devbuild
 
