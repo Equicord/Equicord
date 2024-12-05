@@ -27,7 +27,7 @@ import { classes } from "@utils/misc";
 import { ModalProps, openModalLazy } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
-import { extractAndLoadChunksLazy, findByPropsLazy, findComponentByCodeLazy, findModuleFactory } from "@webpack";
+import { extractAndLoadChunksLazy, findByPropsLazy, findComponentByCodeLazy, findModuleId, wreq } from "@webpack";
 import { Button, Clickable, Icons, Menu, Toasts, UserStore, useState } from "@webpack/common";
 import { FunctionComponent } from "react";
 
@@ -61,13 +61,16 @@ const PMenu = findComponentByCodeLazy(".menuItemLabel", ".menuItemInner");
 const EmojiComponent = findComponentByCodeLazy(/\.translateSurrogatesToInlineEmoji\(\i.\i\),/);
 
 const CustomStatusSettings = getUserSettingLazy("status", "customStatus")!;
-const { default: OpenCustomStatusModal }: { default: FunctionComponent<ModalProps>; } = proxyLazy(() => findModuleFactory("this.renderCustomStatusInput()"));
+const StatsModule: { default: FunctionComponent<ModalProps>; } = proxyLazy(() => {
+    const id = findModuleId("this.renderCustomStatusInput()");
+    return wreq(Number(id));
+});
+
 const requireCustomStatusModal = extractAndLoadChunksLazy(["action:\"PRESS_ADD_CUSTOM_STATUS\"", ".openModalLazy"]);
 
 const openCustomStatusModalLazy = () => openModalLazy(async () => {
-    console.log("OCSM", OpenCustomStatusModal);
     await requireCustomStatusModal();
-    return props => <OpenCustomStatusModal {...props} />;
+    return props => <StatsModule.default {...props} />;
 });
 
 function getExpirationMs(expiration: "TODAY" | number) {
@@ -161,15 +164,13 @@ export default definePlugin({
     ],
     render() {
         const status = CustomStatusSettings.getSetting();
-        console.log("custom settings status:", CustomStatusSettings.getSetting());
-        const openCustomStatusModal = openCustomStatusModalLazy || (() => null);
         return <ErrorBoundary>
             <div className={StatusStyles.menuDivider} />
             {status == null ?
                 <PMenu
                     id="sp-custom/presets-status"
                     action="PRESS_SET_STATUS"
-                    onClick={openCustomStatusModal}
+                    onClick={openCustomStatusModalLazy}
                     icon={() => <div className={StatusStyles.customEmojiPlaceholder} />}
                     label="Set Custom Status" renderSubmenu={StatusSubMenuComponent}
                 />
@@ -177,7 +178,7 @@ export default definePlugin({
                 <PMenu
                     id="sp-edit/presets-status"
                     action="PRESS_EDIT_CUSTOM_STATUS"
-                    onClick={openCustomStatusModal}
+                    onClick={openCustomStatusModalLazy}
                     hint={<ClearStatusButton />}
                     icon={() => status.emoji != null ? <EmojiComponent emoji={status.emoji} animate={false} hideTooltip={false} /> : null}
                     label="Edit Custom Status" renderSubmenu={StatusSubMenuComponent}
