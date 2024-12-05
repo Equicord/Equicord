@@ -22,11 +22,15 @@ import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
+import { proxyLazy } from "@utils/lazy";
 import { classes } from "@utils/misc";
+import { ModalProps, openModalLazy } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
-import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { extractAndLoadChunksLazy, findByPropsLazy, findComponentByCodeLazy, findModuleFactory } from "@webpack";
 import { Button, Clickable, Icons, Menu, Toasts, UserStore, useState } from "@webpack/common";
+import { FunctionComponent } from "react";
+
 
 const settings = definePluginSettings({
     StatusPresets: {
@@ -51,11 +55,20 @@ interface DiscordStatus {
 }
 
 const StatusStyles = findByPropsLazy("statusItem");
+// TODO: find clearCustomStatusHint original css/svg or replace
 
 const PMenu = findComponentByCodeLazy(".menuItemLabel", ".menuItemInner");
-const EmojiComponent = findComponentByCodeLazy(".translateSurrogatesToInlineEmoji(");
+const EmojiComponent = findComponentByCodeLazy(/\.translateSurrogatesToInlineEmoji\(\i.\i\),/);
 
 const CustomStatusSettings = getUserSettingLazy("status", "customStatus")!;
+const { default: OpenCustomStatusModal }: { default: FunctionComponent<ModalProps>; } = proxyLazy(() => findModuleFactory("this.renderCustomStatusInput()"));
+const requireCustomStatusModal = extractAndLoadChunksLazy(["action:\"PRESS_ADD_CUSTOM_STATUS\"", ".openModalLazy"]);
+
+const openCustomStatusModalLazy = () => openModalLazy(async () => {
+    console.log("OCSM", OpenCustomStatusModal);
+    await requireCustomStatusModal();
+    return props => <OpenCustomStatusModal {...props} />;
+});
 
 function getExpirationMs(expiration: "TODAY" | number) {
     if (expiration !== "TODAY") return Date.now() + expiration;
@@ -140,13 +153,16 @@ export default definePlugin({
         {
             find: "#{intl::STATUS_MENU_LABEL}",
             replacement: {
-                match: /!\i\i&&(.{0,20}\i\.Fragment.{0,100}null==(\i).{0,200}customEmojiPlaceholder\}\),onClick:(.*?}))/,
-                replace: "$self.render($2, $3),false&&$1"
+                match: /"set-status-submenu-mobile-web".{150,165}void 0\}\)/,
+                replace: "$&,$self.render()"
             },
             all: true
         }
     ],
-    render(status: null | { emoji: Emoji | null; }, openCustomStatusModal: () => void) {
+    render() {
+        const status = CustomStatusSettings.getSetting();
+        console.log("custom settings status:", CustomStatusSettings.getSetting());
+        const openCustomStatusModal = openCustomStatusModalLazy || (() => null);
         return <ErrorBoundary>
             <div className={StatusStyles.menuDivider} />
             {status == null ?
