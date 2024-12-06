@@ -18,7 +18,7 @@
 
 import { Settings } from "@api/Settings";
 import { ErrorCard } from "@components/ErrorCard";
-import { EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { wordsToTitle } from "@utils/text";
@@ -34,6 +34,7 @@ import {
     ChannelStore,
     Forms,
     GuildMemberStore,
+    React,
     SelectedChannelStore,
     SelectedGuildStore,
     useMemo,
