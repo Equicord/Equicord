@@ -6,10 +6,8 @@
 import { definePluginSettings, Settings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { MessageStore } from "@webpack/common";
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { Menu, React } from "@webpack/common";
 import { addChatBarButton, ChatBarButton, removeChatBarButton } from "@api/ChatButtons";
 import { addPreSendListener, removePreSendListener, SendListener } from "@api/MessageEvents";
 import { transferMessage } from "./native";
@@ -17,7 +15,7 @@ import { ErrorCard } from "@components/ErrorCard";
 import { Link } from "@components/Link";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
-import { Forms } from "@webpack/common";
+import { MessageStore, Menu, React, Forms } from "@webpack/common";
 
 const furudosettings = definePluginSettings(
     {
