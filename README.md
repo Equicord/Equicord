@@ -58,7 +58,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - FriendshipRanks by Samwich
 - FriendTags by Samwich
 - FullUserInChatbox by sadan
-- FurudoSpeak by example-git
 - GensokyoRadioRPC by RyanCaoDev & Prince527
 - GifCollections by Aria & Creations
 - GifRoulette by Samwich
@@ -169,6 +168,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - StatusWhilePlaying by thororen
 
 ### Equicord Devbuilds Only
+- FurudoSpeak by example-git
 - Shakespearean by vmohammad
 - VoiceJoinMessages by Sqaaakoi & maintained by thororen
 
