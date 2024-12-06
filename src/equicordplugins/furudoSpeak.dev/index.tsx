@@ -179,7 +179,7 @@ const presendObject: SendListener = async (channelId, msg, extra) => {
     msg.content = await transferMessage(msg, model, apikey, charactername, characterdescription, extracharacterdescription, extrainstructions, exampleone, exampletwo, examplethree, repliedMessage);
 };
 
-const furudoplugin = definePlugin({
+export default definePlugin({
     name: "FurudoSpeak",
     description: "Makes every message you send FurudoSpeak. Modification of the shakespearean plugin to use OpenAI models with an OpenAI API key.",
     authors: [EquicordDevs.vmohammad, EquicordDevs.examplegit],
@@ -244,4 +244,3 @@ const furudoplugin = definePlugin({
         removePreSendListener(presendObject);
     }
 });
-export default furudoplugin;
