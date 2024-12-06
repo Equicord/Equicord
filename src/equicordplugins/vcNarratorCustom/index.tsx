@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Settings } from "@api/Settings";
+import { definePluginSettings, Settings } from "@api/Settings";
 import { ErrorCard } from "@components/ErrorCard";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
@@ -27,7 +27,6 @@ import definePlugin, {
     PluginOptionsItem,
     ReporterTestable,
 } from "@utils/types";
-import { definePluginSettings } from "@api/Settings";
 import { findByPropsLazy } from "@webpack";
 import {
     Button,
