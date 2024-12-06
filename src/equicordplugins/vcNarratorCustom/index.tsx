@@ -18,7 +18,7 @@
 
 import { Settings } from "@api/Settings";
 import { ErrorCard } from "@components/ErrorCard";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { wordsToTitle } from "@utils/text";
@@ -227,7 +227,7 @@ export default definePlugin({
     name: "VcNarratorCustom",
     description:
         "Announces when users join, leave, or move voice channels via narrator. TikTok TTS version; speechSynthesis is pretty boring. Ported from https://github.com/Loukious/Vencord",
-    authors: [Devs.Ven, Devs.Nyako, Devs.Loukios, EquicordDevs.examplegit],
+    authors: [Devs.Ven, Devs.Nyako, EquicordDevs.Loukios, EquicordDevs.examplegit],
 
     flux: {
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
