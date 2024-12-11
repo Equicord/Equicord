@@ -107,6 +107,7 @@ function Updatable(props: CommonProps) {
     const [isChecking, setIsChecking] = React.useState(false);
     const [isUpdating, setIsUpdating] = React.useState(false);
 
+    const settings = useSettings(["updateRelaunch"]);
     const isOutdated = (updates?.length ?? 0) > 0;
 
     return (
@@ -118,7 +119,8 @@ function Updatable(props: CommonProps) {
                     onClick={withDispatcher(setIsUpdating, async () => {
                         if (await update()) {
                             setUpdates([]);
-                            await new Promise<void>(r => {
+                            if (settings.updateRelaunch) return relaunch();
+                            return await new Promise<void>(r => {
                                 Alerts.show({
                                     title: "Update Success!",
                                     body: "Successfully updated. Restart now to apply the changes?",
@@ -189,7 +191,7 @@ function Newer(props: CommonProps) {
 }
 
 function Updater() {
-    const settings = useSettings(["autoUpdate", "autoUpdateNotification"]);
+    const settings = useSettings(["autoUpdate", "updateRelaunch", "autoUpdateNotification"]);
 
     const [repo, err, repoPending] = useAwaiter(getRepo, { fallbackValue: "Loading..." });
 
@@ -215,11 +217,29 @@ function Updater() {
             </Switch>
             <Switch
                 value={settings.autoUpdateNotification}
-                onChange={(v: boolean) => settings.autoUpdateNotification = v}
+                onChange={(v: boolean) => {
+                    settings.autoUpdateNotification = v;
+                    if (settings.updateRelaunch) {
+                        settings.updateRelaunch = !v;
+                    }
+                }}
                 note="Shows a notification when Equicord automatically updates"
                 disabled={!settings.autoUpdate}
             >
                 Get notified when an automatic update completes
+            </Switch>
+            <Switch
+                value={settings.updateRelaunch}
+                onChange={(v: boolean) => {
+                    settings.updateRelaunch = v;
+                    if (settings.autoUpdateNotification) {
+                        settings.autoUpdateNotification = !v;
+                    }
+                }}
+                note="Relaunches the app after updating with no prompt"
+                disabled={!settings.autoUpdate}
+            >
+                Automatically relaunch after updating
             </Switch>
 
             <Forms.FormTitle tag="h5">Repo</Forms.FormTitle>
@@ -243,7 +263,7 @@ function Updater() {
             <Forms.FormTitle tag="h5">Updates</Forms.FormTitle>
 
             {isNewer ? <Newer {...commonProps} /> : <Updatable {...commonProps} />}
-        </SettingsTab>
+        </SettingsTab >
     );
 }
 

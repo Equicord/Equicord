@@ -100,6 +100,7 @@ async function init() {
 
             if (Settings.autoUpdate) {
                 await update();
+                if (Settings.updateRelaunch) return relaunch;
                 if (Settings.autoUpdateNotification)
                     setTimeout(() => showNotification({
                         title: "Equicord has been updated!",

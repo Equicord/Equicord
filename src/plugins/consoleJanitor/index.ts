@@ -67,6 +67,13 @@ export default definePlugin({
 
     patches: [
         {
+            find: "https://github.com/highlightjs/highlight.js/issues/2277",
+            replacement: {
+                match: /(?<=&&\()console.log\(`Deprecated.+?`\),/,
+                replace: ""
+            }
+        },
+        {
             find: 'react-spring: The "interpolate" function',
             replacement: {
                 match: /,console.warn\('react-spring: The "interpolate" function is deprecated in v10 \(use "to" instead\)'\)/,
@@ -120,13 +127,6 @@ export default definePlugin({
             find: "failed to send analytics events",
             replacement: {
                 match: /console\.error\("\[analytics\] failed to send analytics events query: "\.concat\(\i\)\)/,
-                replace: ""
-            }
-        },
-        {
-            find: "ProductCatalog",
-            replacement: {
-                match: /\i\.warn\("Cannot find the corresponding SKU to the user's premium type "\.concat\(\i\.premiumType\)\),/,
                 replace: ""
             }
         },

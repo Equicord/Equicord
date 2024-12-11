@@ -10,7 +10,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 
 ### Extra included plugins
 <details>
-<summary>147 additional plugins</summary>
+<summary>150 additional plugins</summary>
 
 ### All Platforms
 - AllCallTimers by MaxHerbold & D3SOX
@@ -46,7 +46,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - DisableCameras by Joona
 - DoNotLeak by Perny
 - DontFilterMe by Samwich
-- DoubleCounterBypass by nyx
 - EmojiDumper by Cortex, Samwich, Woosh
 - Encryptcord by Inbestigator
 - EquicordCSS by thororen, Panniku, Dablulite, Coolesding, MiniDiscordThemes, LuckFire, gold_me
@@ -77,6 +76,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - Identity by Samwich
 - IgnoreTerms by D3SOX
 - ImagePreview by Creations
+- ImgToGif by zyqunix
 - InRole by nin0dev
 - IrcColors by Grzesiek11
 - IRememberYou by zoodogood
@@ -110,6 +110,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - PolishWording (Grammar) by Samwich
 - PlatformSpoofer by Drag
 - PurgeMessages by bhop & nyx
+- QuestCompleter by HappyEnderman, SerStars, maintained by thororen
 - QuestionMarkReplacement by nyx
 - Quoter by Samwich
 - RemixMe by kvba
@@ -142,6 +143,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - UserPFP by nexpid & thororen
 - UwUifier by echo
 - VCSupport by thororen
+- VCNarratorCustom by Loukios, ported by example-git
 - VencordRPC by AutumnVN
 - VideoSpeed by Samwich
 - ViewRawVariant (ViewRaw2) by Kyuuhachi
@@ -163,10 +165,10 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 
 ### Discord Desktop Only
 - MediaDownloader by Colorman
-- QuestCompleter by HappyEnderman, SerStars, maintained by thororen
 - StatusWhilePlaying by thororen
 
 ### Equicord Devbuilds Only
+- FurudoSpeak by example-git
 - Shakespearean by vmohammad
 - VoiceJoinMessages by Sqaaakoi & maintained by thororen
 
