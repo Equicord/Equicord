@@ -21,7 +21,6 @@ import definePlugin from "@utils/types";
 import { findAll } from "@webpack";
 
 export default definePlugin({
-
     name: "DisableAnimations",
     description: "Disables most of Discord's animations.",
     authors: [EquicordDevs.seth],
