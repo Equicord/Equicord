@@ -5,7 +5,7 @@
  */
 
 // https://github.com/Masterjoona/vc-betterplusreacts/blob/main/index.ts
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 
@@ -13,7 +13,7 @@ const { getMessages } = findByPropsLazy("getMessages");
 
 export default definePlugin({
     name: "BetterPlusReacts",
-    authors: [EquicordDevs.Joona],
+    authors: [Devs.Joona],
     description: "The amount of plus before :emoji: is the message to add it to",
     patches: [
         {
