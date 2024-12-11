@@ -189,19 +189,6 @@ Linux
 ```shell
 sh -c "$(curl -sS https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/misc/install.sh)"
 ```   
-### Mirrors  
-```shell
-sh -c "$(curl -sS https://c0dera.in/equicord.sh)"
-```
-```shell
-sh -c "$(curl -sS https://ballpa.in/equicord.sh)"
-```
-```shell
-sh -c "$(curl -sS https://trigon.systems/equicord.sh)"
-```
-```shell
-sh -c "$(curl -sS https://neverlos.ing/equicord.sh)"
-```
 ## Installing Equicord Devbuild
 
 ### Dependencies
