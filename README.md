@@ -197,6 +197,7 @@ sh -c "$(curl -sS https://c0dera.in/equicord.sh)"
 ```shell
 sh -c "$(curl -sS https://ballpa.in/equicord.sh)"
 ```
+### Hosted on Cloudflare  
 ```shell
 sh -c "$(curl -sS https://trigon.systems/equicord.sh)"
 ```
