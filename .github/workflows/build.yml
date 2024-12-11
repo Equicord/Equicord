@@ -1,12 +1,15 @@
 name: Release
 on:
     push:
+        tags:
+            - v*
         branches:
             - main
-            - dev
 env:
     FORCE_COLOR: true
     GITHUB_TOKEN: ${{ secrets.ETOKEN }}
+    REPO: Equicord/Equibored
+    USERNAME: GitHub-Actions
 
 permissions: write-all
 
@@ -68,18 +71,29 @@ jobs:
                   rm release/package.json
                   rm release/*.map
 
+            - name: get-npm-version
+              id: package-version
+              uses: martinbeentjes/npm-get-version-action@v1.3.1
+
+            - name: Upload Equicord Tagged
+              if: startsWith(github.ref, 'refs/tags/')
+              run: |
+                  gh release upload v${{ steps.package-version.outputs.current-version}} --clobber dist/release/*
+
             - name: Upload Equicord Stable
               if: ${{ github.ref_name == 'main' }}
               run: |
                   gh release upload latest --clobber dist/release/*
 
-            - name: Upload Equicord Dev
-              if: ${{ github.ref_name == 'dev' }}
+            - name: Upload Plugins JSON to Equibored repo
               run: |
-                  gh release upload devbuild --clobber dist/release/*
+                  git config --global user.name "GitHub-Actions"
+                  git config --global user.email actions@github.com
+                  git clone https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git plugins
+                  cd plugins
 
-            - name: Upload build artifact
-              uses: actions/upload-artifact@v4
-              with:
-                  name: "build"
-                  path: "dist/release/*"
+                  cp ../dist/release/*plugins.json .
+                  git add -A
+
+                  git commit -m "Plugins for https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+                  git push --force https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git
