@@ -190,6 +190,7 @@ Linux
 sh -c "$(curl -sS https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/misc/install.sh)"
 ```   
 ### Mirrors  
+These mirrors are hosted by me and me only  
 ```shell
 sh -c "$(curl -sS https://c0dera.in/equicord.sh)"
 ```
