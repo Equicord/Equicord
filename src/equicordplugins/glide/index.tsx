@@ -145,11 +145,7 @@ const settings = definePluginSettings({
     colorsEnabled: {
         type: OptionType.BOOLEAN,
         description: "Whether or not to enable theming",
-        onChange: () => {
-            if (Settings.plugins.Glide.enabled) {
-                injectCSS();
-            }
-        }
+        onChange: () => injectCSS()
     },
     ColorPreset: {
         type: OptionType.SELECT,
@@ -653,7 +649,7 @@ function getCSS(fontName) {
                 }
 
                 /*Hide icon on file uploading status*/
-                .icon_b52bef
+                .icon_f46c86
                 {
                     display: none;
                 }
