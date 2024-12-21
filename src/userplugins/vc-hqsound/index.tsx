@@ -6,6 +6,7 @@
 
 import definePlugin from "@utils/types";
 import { useEffect } from "@webpack/common";
+import { Devs } from "@utils/constants";
 
 const hookSetTransceiverEncodingParameters = () => {
     const originalSetParameters = UnifiedConnection.prototype.setTransceiverEncodingParameters;
@@ -40,7 +41,7 @@ const init = () => {
 window.addEventListener('load', init);
 
 export default definePlugin({
-    name: "HQ Sound and Stereo",
+    name: "HQ Stereo Mic",
     description: "This plugin allows stereo mic and enforcing a higher bitrate.",
-    authors: ["Chaython"],
+    authors: [Devs.Chaython],
 });
