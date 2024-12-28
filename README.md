@@ -10,7 +10,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 
 ### Extra included plugins
 <details>
-<summary>150 additional plugins</summary>
+<summary>152 additional plugins</summary>
 
 ### All Platforms
 - AllCallTimers by MaxHerbold & D3SOX
@@ -25,6 +25,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - BetterInvites by iamme
 - BetterQuickReact by Ven & Sqaaakoi
 - BetterUserArea by Samwich
+- BetterPlusReacts by Joona
 - BlockKeywords by catcraft
 - BlockKrsip by D3SOX
 - BypassStatus by Inbestigator & thororen
@@ -43,6 +44,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - DecodeBase64 by ThePirateStoner
 - DeadMembers by Kyuuhachi
 - Demonstration by Samwich
+- DisableAnimations by S€th
 - DisableCameras by Joona
 - DoNotLeak by Perny
 - DontFilterMe by Samwich
@@ -65,9 +67,10 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - GodMode by Tolgchu
 - GoodPerson by nin0dev & mantikafasi
 - GoogleThat by Samwich
-- GrammarFix by unstream
+- GrammarFix by S€th
 - HideChatButtons by iamme
 - HideMessage by Hanzy
+- HideScreenShare by thororen
 - HideServers by bepvte
 - HolyNotes by Wolfie
 - HomeTyping by Samwich
@@ -95,7 +98,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - MessageTranslate by Samwich
 - ModalFade by Kyuuhachi
 - MoreStickers by Leko & Arjix
-- MoreThemes by Kyuuhachi
+- NeverPausePreviews by vappstar
 - NewPluginsManager by Sqaaakoi
 - NoAppsAllowed by kvba
 - NoBulletPoints by Samwich
@@ -204,6 +207,7 @@ sh -c "$(curl -sS https://trigon.systems/equicord.sh)"
 ```shell
 sh -c "$(curl -sS https://neverlos.ing/equicord.sh)"
 ```
+
 ## Installing Equicord Devbuild
 
 ### Dependencies
