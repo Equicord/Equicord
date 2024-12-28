@@ -195,19 +195,17 @@ sh -c "$(curl -sS https://raw.githubusercontent.com/Equicord/Equicord/refs/heads
 ### Mirrors  
 These mirrors are hosted by me and me only  
 ```shell
-sh -c "$(curl -sS https://c0dera.in/equicord.sh)"
-```
-```shell
-sh -c "$(curl -sS https://ballpa.in/equicord.sh)"
-```
-### Hosted on Cloudflare  
-```shell
 sh -c "$(curl -sS https://trigon.systems/equicord.sh)"
 ```
 ```shell
 sh -c "$(curl -sS https://neverlos.ing/equicord.sh)"
 ```
-
+```shell
+sh -c "$(curl -sS https://neverlos.ing/equicord.sh)"
+```
+```shell
+sh -c "$(curl -sS https://arch-linux.pro/equicord.sh)"
+```
 ## Installing Equicord Devbuild
 
 ### Dependencies
