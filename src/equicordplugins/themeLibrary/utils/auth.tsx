@@ -18,9 +18,9 @@ export async function authorizeUser(triggerModal: boolean = true) {
         if (!triggerModal) return false;
         openModal((props: any) => <OAuth2AuthorizeModal
             {...props}
-            scopes={["identify"]}
+            scopes={["identify", "connections"]}
             responseType="code"
-            redirectUri="https://themes-delta.vercel.app/api/user/auth"
+            redirectUri="https://discord-themes.com/api/user/auth"
             permissions={0n}
             clientId="1257819493422465235"
             cancelCompletesFlow={false}
