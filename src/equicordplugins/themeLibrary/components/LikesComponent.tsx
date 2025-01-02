@@ -44,9 +44,9 @@ export const LikesComponent = ({ themeId, likedThemes: initialLikedThemes }: { t
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    token,
                     themeId: themeId,
                 }),
             });
@@ -55,7 +55,12 @@ export const LikesComponent = ({ themeId, likedThemes: initialLikedThemes }: { t
 
             const fetchLikes = async () => {
                 try {
-                    const response = await themeRequest("/likes/get");
+                    const token = await DataStore.get("ThemeLibrary_uniqueToken");
+                    const response = await themeRequest("/likes/get", {
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                        },
+                    });
                     const data = await response.json();
                     setLikedThemes(data);
                 } catch (err) {

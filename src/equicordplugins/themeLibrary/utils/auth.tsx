@@ -79,9 +79,10 @@ export async function deauthorizeUser() {
     const res = await themeRequest("/user/revoke", {
         method: "DELETE",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${uniqueToken}`
         },
-        body: JSON.stringify({ token: uniqueToken, userId: UserStore.getCurrentUser().id })
+        body: JSON.stringify({ userId: UserStore.getCurrentUser().id })
     });
 
     if (res.ok) {
@@ -112,11 +113,10 @@ export async function getAuthorization() {
     } else {
         // check if valid
         const res = await themeRequest("/user/findUserByToken", {
-            method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${uniqueToken}`
             },
-            body: JSON.stringify({ token: uniqueToken })
         });
 
         if (res.status === 400 || res.status === 500) {
