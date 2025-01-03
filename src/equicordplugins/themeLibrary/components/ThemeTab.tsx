@@ -68,7 +68,6 @@ function ThemeTab() {
 
     const themeFilter = (theme: Theme) => {
         const enabled = themeLinks.includes(`${apiUrl}/${theme.name}`);
-        console.log(theme.name, theme.tags);
 
         const tags = new Set(theme.tags.map(tag => tag?.toLowerCase()));
 

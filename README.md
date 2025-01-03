@@ -69,7 +69,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - GrammarFix by S€th
 - HideChatButtons by iamme
 - HideMessage by Hanzy
-- HideScreenShare by thororen
 - HideServers by bepvte
 - HolyNotes by Wolfie
 - HomeTyping by Samwich
