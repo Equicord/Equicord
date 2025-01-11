@@ -16,10 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { ApplicationCommandInputType, findOption, OptionalMessageOption, RequiredMessageOption, sendBotMessage } from "@api/Commands";
+import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, OptionalMessageOption, RequiredMessageOption, sendBotMessage } from "@api/Commands";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import axios from "axios";
 
 function mock(input: string): string {
     let output = "";
@@ -32,7 +31,7 @@ function mock(input: string): string {
 export default definePlugin({
     name: "MoreCommands",
     description: "Echo, Lenny, Mock, and More",
-    authors: [Devs.Arjix, Devs.echo, Devs.Samu],
+    authors: [Devs.Arjix, Devs.echo, Devs.Samu, Devs.ExoDev],
     commands: [
         {
             name: "echo",
@@ -86,52 +85,15 @@ export default definePlugin({
         },
         {
             name: "wordcount",
-            description: "Counts the number of words in the message",
+            description: "Counts the number of words in a message",
             options: [RequiredMessageOption],
-            execute: opts => {
+            inputType: ApplicationCommandInputType.BOT,
+            execute: (opts, ctx) => {
                 const message = findOption(opts, "message", "");
                 const wordCount = message.trim().split(/\s+/).length;
-                return {
+                sendBotMessage(ctx.channel.id, {
                     content: `The message contains ${wordCount} words.`
-                };
-            },
-        },
-        {
-            name: "shrinkurl",
-            description: "Shrinks a long URL",
-            options: [RequiredMessageOption],
-            execute: async opts => {
-                const url = findOption(opts, "message", "");
-                try {
-                    const response = await axios.post("https://api.shrtco.de/v2/shorten", {
-                        url: url
-                    });
-                    return {
-                        content: `Shortened URL: ${response.data.result.full_short_link}`
-                    };
-                } catch (error) {
-                    return {
-                        content: "There was an error shortening the URL."
-                    };
-                }
-            },
-        },
-        {
-            name: "joke",
-            description: "Tells a random joke",
-            options: [],
-            execute: async () => {
-                try {
-                    const response = await axios.get("https://official-joke-api.appspot.com/jokes/random");
-                    const joke = response.data[0];
-                    return {
-                        content: `${joke.setup} - ${joke.punchline}`
-                    };
-                } catch (error) {
-                    return {
-                        content: "Sorry, I couldn't fetch a joke right now."
-                    };
-                }
+                });
             },
         },
         {
@@ -149,9 +111,12 @@ export default definePlugin({
             name: "ping",
             description: "Pings the bot to check if it's responding",
             options: [],
-            execute: () => ({
-                content: "Pong!"
-            }),
+            inputType: ApplicationCommandInputType.BOT,
+            execute: (opts, ctx) => {
+                sendBotMessage(ctx.channel.id, {
+                    content: "Pong!"
+                });
+            },
         },
         {
             name: "rolldice",
@@ -191,6 +156,84 @@ export default definePlugin({
                 };
             },
         },
+        {
+            name: "randomnumber",
+            description: "Generates a random number between two values",
+            options: [
+                {
+                    name: "min",
+                    description: "Minimum value",
+                    type: ApplicationCommandOptionType.INTEGER,
+                    required: true
+                },
+                {
+                    name: "max",
+                    description: "Maximum value",
+                    type: ApplicationCommandOptionType.INTEGER,
+                    required: true
+                }
+            ],
+            execute: opts => {
+                const min = parseInt(findOption(opts, "min", "0"));
+                const max = parseInt(findOption(opts, "max", "100"));
+                const number = Math.floor(Math.random() * (max - min + 1)) + min;
+                return {
+                    content: `Random number between ${min} and ${max}: ${number}`
+                };
+            }
+        },
+        {
+            name: "countdown",
+            description: "Starts a countdown from a specified number",
+            options: [
+                {
+                    name: "number",
+                    description: "Number to countdown from (max 10)",
+                    type: ApplicationCommandOptionType.INTEGER,
+                    required: true
+                }
+            ],
+            inputType: ApplicationCommandInputType.BOT,
+            execute: async (opts, ctx) => {
+                const number = Math.min(parseInt(findOption(opts, "number", "5")), 10);
+                
+                if (isNaN(number) || number < 1) {
+                    sendBotMessage(ctx.channel.id, {
+                        content: "Please provide a valid number between 1 and 10!"
+                    });
+                    return;
+                }
+        
+                sendBotMessage(ctx.channel.id, {
+                    content: `Starting countdown from ${number}...`
+                });
+        
+                for (let i = number; i >= 0; i--) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    sendBotMessage(ctx.channel.id, {
+                        content: i === 0 ? "🎉 Go! 🎉" : `${i}...`
+                    });
+                }
+            },
+        },
+        {
+            name: "choose",
+            description: "Randomly chooses from provided options",
+            options: [
+                {
+                    name: "choices",
+                    description: "Comma-separated list of choices",
+                    type: ApplicationCommandOptionType.STRING,
+                    required: true
+                }
+            ],
+            execute: opts => {
+                const choices = findOption(opts, "choices", "").split(",").map(c => c.trim());
+                const choice = choices[Math.floor(Math.random() * choices.length)];
+                return {
+                    content: `I choose: ${choice}`
+                };
+            }
+        }
     ]
 });
-
