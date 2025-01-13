@@ -1,0 +1,54 @@
+.password-manager-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+}
+
+.password-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5em;
+    border: 1px solid var(--background-modifier-accent);
+    border-radius: 4px;
+}
+
+.password-actions {
+    display: flex;
+    gap: 0.5em;
+}
+
+.password-field {
+    -webkit-text-security: disc;
+}
+
+.password-modal-content {
+    padding: 16px;
+}
+
+.password-modal-section {
+    margin-bottom: 16px;
+}
+
+.password-modal-separator {
+    margin: 16px 0;
+    height: 1px;
+    background-color: var(--background-modifier-accent);
+}
+
+.password-modal-footer {
+    padding: 16px;
+    background-color: var(--background-secondary);
+    border-top: 1px solid var(--background-modifier-accent);
+}
+
+.password-view-section {
+    background: var(--background-secondary);
+    padding: 12px;
+    border-radius: 4px;
+}
+
+.password-view-section .text {
+    word-break: break-all;
+}
