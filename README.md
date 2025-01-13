@@ -65,7 +65,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - GodMode by Tolgchu
 - GoodPerson by nin0dev & mantikafasi
 - GoogleThat by Samwich
-- GrammarFix by S€th
 - HideChatButtons by iamme
 - HideMessage by Hanzy
 - HideServers by bepvte
