@@ -112,6 +112,105 @@ export default definePlugin({
             execute: opts => ({
                 content: findOption(opts, "message", "") + " " + "o(≧▽≦)o",
             }),
+        },
+        /*
+        even more kaomoji
+        */
+        {
+            name: "giving",
+            description: "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
+            }),
+        },
+        {
+            name: "peace",
+            description: "✌(◕‿-)✌",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "✌(◕‿-)✌",
+            }),
+        },
+        {
+            name: "ending1",
+            description: "Ꮺ ָ࣪ ۰ ͙⊹",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "Ꮺ ָ࣪ ۰ ͙⊹",
+            }),
+        },
+        {
+            name: "uwu",
+            description: "(>⩊<)",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "(>⩊<)",
+            }),
+        },
+        {
+            name: "comfy",
+            description: "(─‿‿─)♡",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "(─‿‿─)♡",
+            }),
+        },
+        {
+            name: "lovehappy",
+            description: "(*≧ω≦*)",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "(*≧ω≦*)",
+            }),
+        },
+        {
+            name: "loveee",
+            description: "(⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "(⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)",
+            }),
+        },
+        {
+            name: "give",
+            description: "(ノ= ⩊ = )ノ",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "(ノ= ⩊ = )ノ",
+            }),
+        },
+        {
+            name: "lovegive",
+            description: "ღゝ◡╹)ノ♡",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "ღゝ◡╹)ノ♡",
+            }),
+        },
+        {
+            name: "music",
+            description: "(￣▽￣)/♫•¨•.¸¸♪",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "(￣▽￣)/♫•¨•.¸¸♪",
+            }),
+        },
+        {
+            name: "stars",
+            description: ".𖥔 ݁ ˖๋ ࣭ ⭑",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + ".𖥔 ݁ ˖๋ ࣭ ⭑",
+            }),
+        },
+        {
+            name: "lovegiving",
+            description: "⸜(｡˃ ᵕ ˂ )⸝♡",
+            options: [OptionalMessageOption],
+            execute: opts => ({
+                content: findOption(opts, "message", "") + " " + "⸜(｡˃ ᵕ ˂ )⸝♡",
+            }),
         }
     ]
 });
