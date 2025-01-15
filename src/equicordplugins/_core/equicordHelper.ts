@@ -1,6 +1,6 @@
 /*
  * Vencord, a modification for Discord's desktop app
- * Copyright (c) 2022 Vendicated and contributors
+ * Copyright (c) 2022 Vendicated and Megumin
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,30 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
-    name: "HideScreenShare",
-    description: "Hide your screen share by default",
-    authors: [EquicordDevs.thororen],
+    name: "EquicordHelper",
+    description: "Fixes some misc issues with discord",
+    authors: [EquicordDevs.thororen, EquicordDevs.nyx],
+    required: true,
     patches: [
         {
-            find: '"self-stream-hide"',
+            find: "Unknown resolution:",
+            replacement: [
+                {
+                    match: /throw Error\("Unknown resolution: ".concat\((\i)\)\)/,
+                    replace: "return $1;"
+                },
+                {
+                    match: /throw Error\("Unknown frame rate: ".concat\((\i)\)\)/,
+                    replace: "return $1;"
+                }
+            ]
+        },
+        {
+            find: '"Slate: Unable to find syntax characters"',
             replacement: {
-                match: /return (\i)?(.*?onConfirm:\(\)=>((\i)\(!\i\)))/,
-                replace: "let $4 = null; if ($4 !== null) return $3; return $1$2"
+                match: /((let )(\i)=\i\.indexOf\(\i,(\i)\)),/,
+                replace: "$1;if ($3 === -1) {return $4;}$2"
             }
         }
-    ],
+    ]
 });
