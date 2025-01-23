@@ -190,17 +190,8 @@ Linux
 ```shell
 sh -c "$(curl -sS https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/misc/install.sh)"
 ```   
-### Mirrors  
-These mirrors are hosted by me and me only  
-```shell
-sh -c "$(curl -sS https://trigon.systems/equicord.sh)"
-```
-```shell
-sh -c "$(curl -sS https://neverlos.ing/equicord.sh)"
-```
-```shell
-sh -c "$(curl -sS https://neverlos.ing/equicord.sh)"
-```
+### Mirror  
+This mirror is hosted by RunaXR  
 ```shell
 sh -c "$(curl -sS https://arch-linux.pro/equicord.sh)"
 ```
