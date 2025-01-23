@@ -190,11 +190,6 @@ Linux
 ```shell
 sh -c "$(curl -sS https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/misc/install.sh)"
 ```   
-### Mirror  
-This mirror is hosted by RunaXR  
-```shell
-sh -c "$(curl -sS https://arch-linux.pro/equicord.sh)"
-```
 ## Installing Equicord Devbuild
 
 ### Dependencies
