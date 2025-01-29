@@ -13,7 +13,6 @@ import {
     ChannelRouter,
     ChannelStore,
     FluxDispatcher,
-    Icons,
     Menu,
     MessageActions,
     PermissionsBits,
@@ -45,6 +44,8 @@ interface ContextMenuProps {
     user: User;
 }
 
+const ArrowsLeftRightIcon = findComponentByCodeLazy("18.58V3a1");
+const XSmallIcon = findComponentByCodeLazy("13.42l5.3");
 
 function MakeContextCallback(name: "user" | "channel"): NavContextMenuPatchCallback {
     return (children, { user, channel, guildId }: ContextMenuProps) => {
@@ -122,7 +123,7 @@ export default definePlugin({
                     toolbar={
                         <>
                             <HeaderBarIcon
-                                icon={Icons.ArrowsLeftRightIcon}
+                                icon={() => <ArrowsLeftRightIcon style={{ transform: "rotate(90deg)" }} />}
                                 tooltip="Switch channels"
                                 onClick={() => {
                                     const currentChannel = ChannelStore.getChannel(SelectedChannelStore.getChannelId());
@@ -137,7 +138,7 @@ export default definePlugin({
                                 }}
                             />
                             <HeaderBarIcon
-                                icon={Icons.XSmallIcon}
+                                icon={XSmallIcon}
                                 tooltip="Close Sidebar Chat"
                                 onClick={() => {
                                     FluxDispatcher.dispatch({

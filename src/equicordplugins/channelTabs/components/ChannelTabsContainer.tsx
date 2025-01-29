@@ -6,7 +6,7 @@
 
 import { classNameFactory } from "@api/Styles";
 import { useForceUpdater } from "@utils/react";
-import { findByPropsLazy } from "@webpack";
+import { findComponentByCodeLazy } from "@webpack";
 import { Button, ContextMenuApi, Flex, FluxDispatcher, Forms, useCallback, useEffect, useRef, UserStore, useState } from "@webpack/common";
 
 import { BasicChannelTabsProps, ChannelTabsProps, createTab, handleChannelSwitch, openedTabs, openStartupTabs, saveTabs, settings, setUpdaterFunction, useGhostTabs } from "../util";
@@ -16,7 +16,8 @@ import { BasicContextMenu } from "./ContextMenus";
 
 type TabSet = Record<string, ChannelTabsProps[]>;
 
-const { PlusSmallIcon } = findByPropsLazy("PlusSmallIcon");
+const PlusSmallIcon = findComponentByCodeLazy("0v-5h5a1");
+
 const cl = classNameFactory("vc-channeltabs-");
 
 export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
@@ -75,7 +76,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                     onClick={() => createTab(props, true)}
                     className={cl("button", "new-button", "hoverable")}
                 >
-                    <PlusSmallIcon height={20} width={20} />
+                    <PlusSmallIcon />
                 </button>
 
                 {GhostTabs}
