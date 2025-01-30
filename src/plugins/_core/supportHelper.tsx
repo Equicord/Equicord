@@ -83,7 +83,7 @@ async function generateDebugInfoMessage() {
     })();
 
     const info = {
-        Equicord:
+        Suncord:
             `v${VERSION} • [${gitHash}](<https://github.com/Equicord/Equicord/commit/${gitHash}>)` +
             `${SettingsPlugin.additionalInfo} - ${Intl.DateTimeFormat("en-GB", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
         Client: `${RELEASE_CHANNEL} ~ ${client}`,
@@ -91,20 +91,20 @@ async function generateDebugInfoMessage() {
     };
 
     if (IS_DISCORD_DESKTOP) {
-        info["Last Crash Reason"] = (await tryOrElse(() => DiscordNative.processUtils.getLastCrash(), undefined))?.rendererCrashReason ?? "N/A";
+        info[":rocketcrash: LCR"] = (await tryOrElse(() => DiscordNative.processUtils.getLastCrash(), undefined))?.rendererCrashReason ?? "N/A";
     }
 
     const commonIssues = {
         "NoRPC enabled": Vencord.Plugins.isPluginEnabled("NoRPC"),
         "Activity Sharing disabled": tryOrElse(() => !ShowCurrentGame.getSetting(), false),
-        "Equicord DevBuild": !IS_STANDALONE,
-        "Has UserPlugins": Object.values(PluginMeta).some(m => m.userPlugin),
+        ":suncord: Suncord Dev Build": !IS_STANDALONE,
+        ":electric_plug: Has Userplugins": Object.values(PluginMeta).some(m => m.userPlugin),
         "More than two weeks out of date": BUILD_TIMESTAMP < Date.now() - 12096e5,
     };
 
     let content = `>>> ${Object.entries(info).map(([k, v]) => `**${k}**: ${v}`).join("\n")}`;
     content += "\n" + Object.entries(commonIssues)
-        .filter(([, v]) => v).map(([k]) => `⚠️ ${k}`)
+        .filter(([, v]) => v).map(([k]) => `${k}`)
         .join("\n");
 
     return content.trim();
