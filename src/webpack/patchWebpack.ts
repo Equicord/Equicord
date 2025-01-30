@@ -16,16 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { patches } from "@plugins";
 import { WEBPACK_CHUNK } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { canonicalizeReplacement } from "@utils/patches";
 import { PatchReplacement } from "@utils/types";
-import { reporterData } from "debug/reporterData";
 import { WebpackInstance } from "discord-types/other";
 
 import { traceFunction } from "../debug/Tracer";
-import { _initWebpack, beforeInitListeners, factoryListeners, moduleListeners, subscriptions, wreq } from ".";
+import { patches } from "../plugins";
+import { _initWebpack, _shouldIgnoreModule, beforeInitListeners, factoryListeners, moduleListeners, subscriptions, wreq } from ".";
 
 const logger = new Logger("WebpackInterceptor", "#8caaee");
 
@@ -174,35 +173,9 @@ function patchFactories(factories: Record<string, (module: any, exports: any, re
             if (!exports) return;
 
             if (require.c) {
-                let shouldMakeNonEnumerable = false;
+                const shouldIgnoreModule = _shouldIgnoreModule(exports);
 
-                nonEnumerableChecking: {
-                    // There are (at the time of writing) 11 modules exporting the window,
-                    // and also modules exporting DOMTokenList, which breaks webpack finding
-                    // Make these non enumerable to improve search performance and avoid erros
-                    if (exports === window || exports[Symbol.toStringTag] === "DOMTokenList") {
-                        shouldMakeNonEnumerable = true;
-                        break nonEnumerableChecking;
-                    }
-
-                    if (typeof exports !== "object") {
-                        break nonEnumerableChecking;
-                    }
-
-                    if (exports.default === window || exports.default?.[Symbol.toStringTag] === "DOMTokenList") {
-                        shouldMakeNonEnumerable = true;
-                        break nonEnumerableChecking;
-                    }
-
-                    for (const nested in exports) {
-                        if (exports[nested] === window || exports[nested]?.[Symbol.toStringTag] === "DOMTokenList") {
-                            shouldMakeNonEnumerable = true;
-                            break nonEnumerableChecking;
-                        }
-                    }
-                }
-
-                if (shouldMakeNonEnumerable) {
+                if (shouldIgnoreModule) {
                     Object.defineProperty(require.c, id, {
                         value: require.c[id],
                         enumerable: false,
@@ -227,17 +200,16 @@ function patchFactories(factories: Record<string, (module: any, exports: any, re
                     if (exports && filter(exports)) {
                         subscriptions.delete(filter);
                         callback(exports, id);
-                    } else if (typeof exports === "object") {
-                        if (exports.default && filter(exports.default)) {
+                    }
+
+                    if (typeof exports !== "object") {
+                        continue;
+                    }
+
+                    for (const exportKey in exports) {
+                        if (exports[exportKey] && filter(exports[exportKey])) {
                             subscriptions.delete(filter);
-                            callback(exports.default, id);
-                        } else {
-                            for (const nested in exports) {
-                                if (exports[nested] && filter(exports[nested])) {
-                                    subscriptions.delete(filter);
-                                    callback(exports[nested], id);
-                                }
-                            }
+                            callback(exports[exportKey], id);
                         }
                     }
                 } catch (err) {
@@ -298,11 +270,6 @@ function patchFactories(factories: Record<string, (module: any, exports: any, re
                             if (IS_DEV) {
                                 logger.debug("Function Source:\n", code);
                             }
-                            if (IS_COMPANION_TEST)
-                                reporterData.failedPatches.hadNoEffect.push({
-                                    ...patch,
-                                    id
-                                });
                         }
 
                         if (patch.group) {
@@ -310,11 +277,6 @@ function patchFactories(factories: Record<string, (module: any, exports: any, re
                             mod = previousMod;
                             code = previousCode;
                             patchedBy.delete(patch.plugin);
-                            if (IS_COMPANION_TEST)
-                                reporterData.failedPatches.undoingPatchGroup.push({
-                                    ...patch,
-                                    id
-                                });
                             break;
                         }
 
@@ -325,13 +287,7 @@ function patchFactories(factories: Record<string, (module: any, exports: any, re
                     mod = (0, eval)(`// Webpack Module ${id} - Patched by ${[...patchedBy].join(", ")}\n${newCode}\n//# sourceURL=WebpackModule${id}`);
                 } catch (err) {
                     logger.error(`Patch by ${patch.plugin} errored (Module id is ${id}): ${replacement.match}\n`, err);
-                    if (IS_COMPANION_TEST)
-                        reporterData.failedPatches.erroredPatch.push({
-                            ...patch,
-                            oldModule: lastCode,
-                            newModule: code,
-                            id
-                        });
+
                     if (IS_DEV) {
                         const changeSize = code.length - lastCode.length;
                         const match = lastCode.match(replacement.match)!;
@@ -369,11 +325,6 @@ function patchFactories(factories: Record<string, (module: any, exports: any, re
 
                     if (patch.group) {
                         logger.warn(`Undoing patch group ${patch.find} by ${patch.plugin} because replacement ${replacement.match} errored`);
-                        if (IS_COMPANION_TEST)
-                            reporterData.failedPatches.undoingPatchGroup.push({
-                                ...patch,
-                                id
-                            });
                         mod = previousMod;
                         code = previousCode;
                         break;
