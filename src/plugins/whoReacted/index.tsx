@@ -16,13 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { sleep } from "@utils/misc";
 import { Queue } from "@utils/Queue";
 import { useForceUpdater } from "@utils/react";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { ChannelStore, Constants, FluxDispatcher, React, RestAPI, Tooltip, useEffect, useLayoutEffect } from "@webpack/common";
 import { CustomEmoji } from "@webpack/types";
@@ -94,24 +93,15 @@ function makeRenderMoreUsers(users: User[]) {
     };
 }
 
-function handleClickAvatar(event: React.MouseEvent<HTMLElement, MouseEvent>) {
+function handleClickAvatar(event: React.UIEvent<HTMLElement, Event>) {
     event.stopPropagation();
 }
-
-const settings = definePluginSettings({
-    avatarClick: {
-        description: "Toggle clicking avatars in reactions",
-        type: OptionType.BOOLEAN,
-        default: false,
-        restartNeeded: true
-    }
-});
 
 export default definePlugin({
     name: "WhoReacted",
     description: "Renders the avatars of users who reacted to a message",
     authors: [Devs.Ven, Devs.KannaDev, Devs.newwares],
-    settings,
+
     patches: [
         {
             find: ",reactionRef:",
@@ -175,31 +165,17 @@ export default definePlugin({
             <div
                 style={{ marginLeft: "0.5em", transform: "scale(0.9)" }}
             >
-                {settings.store.avatarClick ? (
-                    <div onClick={handleClickAvatar}>
-                        <UserSummaryItem
-                            users={users}
-                            guildId={ChannelStore.getChannel(message.channel_id)?.guild_id}
-                            renderIcon={false}
-                            max={5}
-                            showDefaultAvatarsForNullUsers
-                            showUserPopout
-                            renderMoreUsers={makeRenderMoreUsers(users)}
-                        />
-                    </div>
-                ) : (
-                    <div>
-                        <UserSummaryItem
-                            users={users}
-                            guildId={ChannelStore.getChannel(message.channel_id)?.guild_id}
-                            renderIcon={false}
-                            max={5}
-                            showDefaultAvatarsForNullUsers
-                            showUserPopout={false}
-                            renderMoreUsers={makeRenderMoreUsers(users)}
-                        />
-                    </div>
-                )}
+                <div onClick={handleClickAvatar} onKeyPress={handleClickAvatar}>
+                    <UserSummaryItem
+                        users={users}
+                        guildId={ChannelStore.getChannel(message.channel_id)?.guild_id}
+                        renderIcon={false}
+                        max={5}
+                        showDefaultAvatarsForNullUsers
+                        showUserPopout
+                        renderMoreUsers={makeRenderMoreUsers(users)}
+                    />
+                </div>
             </div>
         );
     },
