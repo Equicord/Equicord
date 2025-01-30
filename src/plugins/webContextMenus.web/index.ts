@@ -20,9 +20,13 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
-import { findByPropsLazy } from "@webpack";
+import { filters, mapMangledModuleLazy } from "@webpack";
 import { Clipboard, ComponentDispatch } from "@webpack/common";
-const ctxMenuCallbacks = findByPropsLazy("contextMenuCallbackNative");
+
+const ctxMenuCallbacks = mapMangledModuleLazy('.tagName)==="TEXTAREA"||', {
+    contextMenuCallbackWeb: filters.byCode('.tagName)==="INPUT"||'),
+    contextMenuCallbackNative: filters.byCode('.tagName)==="TEXTAREA"||')
+});
 
 async function fetchImage(url: string) {
     const res = await fetch(url);
@@ -33,8 +37,7 @@ async function fetchImage(url: string) {
 
 let result;
 switch (true) {
-    case IS_VESKTOP:
-    case IS_EQUIBOP:
+    case IS_VESKTOP || IS_EQUIBOP:
     case "legcord" in window:
     case "goofcord" in window:
         result = true;

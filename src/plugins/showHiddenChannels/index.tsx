@@ -102,7 +102,7 @@ export default definePlugin({
                 },
                 // Make channels we dont have access to be the same level as normal ones
                 {
-                    match: /(activeJoinedRelevantThreads:.{0,50}VIEW_CHANNEL.+?renderLevel:(.+?),threadIds.+?renderLevel:).+?(?=,threadIds)/g,
+                    match: /(this\.record\)\?{renderLevel:(.+?),threadIds.+?renderLevel:).+?(?=,threadIds)/g,
                     replace: (_, rest, defaultRenderLevel) => `${rest}${defaultRenderLevel}`
                 },
                 // Remove permission checking for getRenderLevel function
@@ -122,8 +122,10 @@ export default definePlugin({
                 },
                 {
                     // Prevent Discord from trying to connect to hidden voice channels
-                    match: /(?=&&\i\.\i\.selectVoiceChannel\((\i)\.id\))/,
-                    replace: (_, channel) => `&&!$self.isHiddenChannel(${channel})`
+                    match: /(?=(\|\||&&)\i\.\i\.selectVoiceChannel\((\i)\.id\))/,
+                    replace: (_, condition, channel) => condition === "||"
+                        ? `||$self.isHiddenChannel(${channel})`
+                        : `&&!$self.isHiddenChannel(${channel})`
                 },
                 {
                     // Make Discord show inside the channel if clicking on a hidden or locked channel
@@ -136,8 +138,10 @@ export default definePlugin({
         {
             find: ".AUDIENCE),{isSubscriptionGated",
             replacement: {
-                match: /!(\i)\.isRoleSubscriptionTemplatePreviewChannel\(\)/,
-                replace: (m, channel) => `${m}&&!$self.isHiddenChannel(${channel})`
+                match: /(!)?(\i)\.isRoleSubscriptionTemplatePreviewChannel\(\)/,
+                replace: (m, not, channel) => not
+                    ? `${m}&&!$self.isHiddenChannel(${channel})`
+                    : `${m}||$self.isHiddenChannel(${channel})`
             }
         },
         {
@@ -200,14 +204,16 @@ export default definePlugin({
                 },
                 // Make voice channels also appear as muted if they are muted
                 {
-                    match: /(?<=\.wrapper:\i\.notInteractive,)(.+?)if\((\i)\)return (\i\.MUTED);/,
-                    replace: (_, otherClasses, isMuted, mutedClassExpression) => `${isMuted}?${mutedClassExpression}:"",${otherClasses}if(${isMuted})return "";`
+                    match: /(?<=\.wrapper:\i\.notInteractive,)(.+?)(if\()?(\i)(?:\)return |\?)(\i\.MUTED)/,
+                    replace: (_, otherClasses, isIf, isMuted, mutedClassExpression) => isIf
+                        ? `${isMuted}?${mutedClassExpression}:"",${otherClasses}if(${isMuted})return ""`
+                        : `${isMuted}?${mutedClassExpression}:"",${otherClasses}${isMuted}?""`
                 },
                 {
                     // Make muted channels also appear as unread if hide unreads is false and the channel is hidden
                     predicate: () => settings.store.channelStyle === ChannelStyle.MutedUnread || settings.store.channelStyle === ChannelStyle.Unread,
-                    match: /\.LOCKED;if\((?<={channel:(\i).+?)/,
-                    replace: (m, channel) => `${m}!$self.isHiddenChannel(${channel})&&`
+                    match: /(?<=\.LOCKED(?:;if\(|:))(?<={channel:(\i).+?)/,
+                    replace: (_, channel) => `!$self.isHiddenChannel(${channel})&&`
                 }
             ]
         },
@@ -215,6 +221,10 @@ export default definePlugin({
             find: "UNREAD_IMPORTANT:",
             predicate: () => settings.store.channelStyle !== ChannelStyle.Unread && settings.store.channelStyle !== ChannelStyle.MutedUnread,
             replacement: [
+                {
+                    match: /(?<=\.LOCKED(?:;if\(|:))(?<={channel:(\i).+?)/,
+                    replace: (_, channel) => `!$self.isHiddenChannel(${channel})&&`
+                },
                 {
                     // Hide unreads
                     match: /{channel:(\i),name:\i,.+?unread:(\i).+?;/,
@@ -251,12 +261,12 @@ export default definePlugin({
             find: "Missing channel in Channel.renderHeaderToolbar",
             replacement: [
                 {
-                    match: /(?<="renderHeaderToolbar",\(\)=>{.+?case \i\.\i\.GUILD_TEXT:)(?=.+?(\i\.push.{0,50}channel:(\i)},"notifications"\)\)))(?<=isLurking:(\i).+?)/,
-                    replace: (_, pushNotificationButtonExpression, channel, isLurking) => `if(!${isLurking}&&$self.isHiddenChannel(${channel})){${pushNotificationButtonExpression};break;}`
+                    match: /"renderHeaderToolbar",\(\)=>{.+?case \i\.\i\.GUILD_TEXT:(?=.+?(\i\.push.{0,50}channel:(\i)},"notifications"\)\)))(?<=isLurking:(\i).+?)/,
+                    replace: (m, pushNotificationButtonExpression, channel, isLurking) => `${m}if(!${isLurking}&&$self.isHiddenChannel(${channel})){${pushNotificationButtonExpression};break;}`
                 },
                 {
-                    match: /(?<="renderHeaderToolbar",\(\)=>{.+?case \i\.\i\.GUILD_MEDIA:)(?=.+?(\i\.push.{0,40}channel:(\i)},"notifications"\)\)))(?<=isLurking:(\i).+?)/,
-                    replace: (_, pushNotificationButtonExpression, channel, isLurking) => `if(!${isLurking}&&$self.isHiddenChannel(${channel})){${pushNotificationButtonExpression};break;}`
+                    match: /"renderHeaderToolbar",\(\)=>{.+?case \i\.\i\.GUILD_MEDIA:(?=.+?(\i\.push.{0,40}channel:(\i)},"notifications"\)\)))(?<=isLurking:(\i).+?)/,
+                    replace: (m, pushNotificationButtonExpression, channel, isLurking) => `${m}if(!${isLurking}&&$self.isHiddenChannel(${channel})){${pushNotificationButtonExpression};break;}`
                 },
                 {
                     match: /"renderMobileToolbar",\(\)=>{.+?case \i\.\i\.GUILD_DIRECTORY:(?<=let{channel:(\i).+?)/,

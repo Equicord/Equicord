@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { classNameFactory } from "@api/Styles";
 import { proxyLazy } from "@utils/lazy";
-import { findByPropsLazy } from "@webpack";
+import { findComponentByCodeLazy } from "@webpack";
 import { Forms } from "@webpack/common";
 import { ComponentType, HTMLAttributes } from "react";
 
@@ -37,9 +37,6 @@ export const { Spinner } = proxyLazy(() => Forms as any as {
     SpinnerTypes: typeof SpinnerTypes;
 });
 
-const icons = findByPropsLazy("PencilIcon");
-export const QrCodeIcon = proxyLazy(() => icons.QrCodeCameraIcon ?? icons.QrCodeIcon) as ComponentType<{
-    size: number;
-}>;
+export const QrCodeIcon = findComponentByCodeLazy("0v3ZM20");
 
 export const cl = classNameFactory("qrlogin-");

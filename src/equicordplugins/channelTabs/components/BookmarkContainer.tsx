@@ -8,7 +8,7 @@ import { classNameFactory } from "@api/Styles";
 import { getIntlMessage } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { closeModal, openModal } from "@utils/modal";
-import { findByPropsLazy } from "@webpack";
+import { findComponentByCodeLazy } from "@webpack";
 import { Avatar, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, ReadStateStore, ReadStateUtils, Text, Tooltip, useDrag, useDrop, useEffect, useRef, UserStore } from "@webpack/common";
 
 import { BasicChannelTabsProps, Bookmark, BookmarkFolder, BookmarkProps, CircleQuestionIcon, isBookmarkFolder, settings, switchChannel, useBookmarks } from "../util";
@@ -17,7 +17,7 @@ import { BookmarkContextMenu, EditModal } from "./ContextMenus";
 
 const cl = classNameFactory("vc-channeltabs-");
 
-const { StarIcon } = findByPropsLazy("StarIcon");
+const StarIcon = findComponentByCodeLazy(".73-2.25h6.12l1.9-5.83Z");
 
 function FolderIcon({ fill }: { fill: string; }) {
     return (
@@ -291,8 +291,7 @@ export default function BookmarkContainer(props: BasicChannelTabsProps & { userI
                     <StarIcon
                         height={20}
                         width={20}
-                        colorClass={isCurrentChannelBookmarked ? cl("bookmark-star-checked") : cl("bookmark-star")}
-                    />
+                        colorClass={isCurrentChannelBookmarked ? cl("bookmark-star-checked") : cl("bookmark-star")} />
                 </button>}
             </Tooltip>
         </div>

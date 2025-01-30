@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ChatBarButton } from "@api/ChatButtons";
+import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { classes } from "@utils/misc";
-import { Button, ButtonLooks, ButtonWrapperClasses, Tooltip } from "@webpack/common";
+import { Button, ButtonWrapperClasses, Tooltip } from "@webpack/common";
 
 import { cl } from "../utils";
 import { openSoundBoardLog } from "./SoundBoardLog";
@@ -42,7 +42,7 @@ export function IconWithTooltip({ text, icon, onClick }) {
                     aria-haspopup="dialog"
                     aria-label={text}
                     size=""
-                    look={ButtonLooks.BLANK}
+                    look={Button.Looks.BLANK}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     innerClassName={ButtonWrapperClasses.button}
@@ -58,7 +58,7 @@ export function IconWithTooltip({ text, icon, onClick }) {
     </Tooltip>;
 }
 
-export const ChatBarIcon: ChatBarButton = () => {
+export const ChatBarIcon: ChatBarButtonFactory = () => {
     return (
         <ChatBarButton tooltip="Open SoundBoard Log"
             onClick={openSoundBoardLog}>

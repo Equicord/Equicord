@@ -28,7 +28,7 @@ import { ModalProps, openModalLazy } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { extractAndLoadChunksLazy, findByPropsLazy, findComponentByCodeLazy, findModuleId, wreq } from "@webpack";
-import { Button, Clickable, Icons, Menu, Toasts, UserStore, useState } from "@webpack/common";
+import { Button, Clickable, Menu, Toasts, UserStore, useState } from "@webpack/common";
 import { FunctionComponent } from "react";
 
 
@@ -47,6 +47,8 @@ interface Emoji {
     name: string;
 }
 
+const CircleXIcon = findComponentByCodeLazy("22Zm4.7-15.7a1");
+
 interface DiscordStatus {
     emojiInfo: Emoji | null;
     text: string;
@@ -56,7 +58,6 @@ interface DiscordStatus {
 
 const StatusStyles = findByPropsLazy("statusItem");
 // TODO: find clearCustomStatusHint original css/svg or replace
-
 const PMenu = findComponentByCodeLazy(".menuItemLabel", ".menuItemInner");
 const EmojiComponent = findComponentByCodeLazy(/\.translateSurrogatesToInlineEmoji\(\i.\i\),/);
 
@@ -66,7 +67,7 @@ const StatsModule: { default: FunctionComponent<ModalProps>; } = proxyLazy(() =>
     return wreq(Number(id));
 });
 
-const requireCustomStatusModal = extractAndLoadChunksLazy(["action:\"PRESS_ADD_CUSTOM_STATUS\"", ".openModalLazy"]);
+const requireCustomStatusModal = extractAndLoadChunksLazy(["action:\"PRESS_ADD_CUSTOM_STATUS\"", /\i\.\i\i\)/]);
 
 const openCustomStatusModalLazy = () => openModalLazy(async () => {
     await requireCustomStatusModal();
@@ -90,11 +91,11 @@ function setStatus(status: DiscordStatus) {
     });
 }
 
-const ClearStatusButton = () => <Clickable className={StatusStyles.clearCustomStatusHint} onClick={e => { e.stopPropagation(); CustomStatusSettings?.updateSetting(null); }}><Icons.CircleXIcon size="sm" /></Clickable>;
+const ClearStatusButton = () => <Clickable className={StatusStyles.clearCustomStatusHint} onClick={e => { e.stopPropagation(); CustomStatusSettings?.updateSetting(null); }}><CircleXIcon /></Clickable>;
 
 function StatusIcon({ isHovering, status }: { isHovering: boolean; status: DiscordStatus; }) {
     return <div className={StatusStyles.status}>{isHovering ?
-        <Icons.CircleXIcon size="sm" />
+        <CircleXIcon />
         : (status.emojiInfo != null ? <EmojiComponent emoji={status.emojiInfo} animate={false} hideTooltip={false} /> : <div className={StatusStyles.customEmojiPlaceholder} />)}</div>;
 }
 
@@ -157,7 +158,7 @@ export default definePlugin({
         {
             find: "#{intl::CUSTOM_STATUS_SET_CUSTOM_STATUS}",
             replacement: {
-                match: /\.ModalFooter,.{0,70}\i\.\i\.string\(\i\.\i#{intl::SAVE}\)\}\)/,
+                match: /\.\i\i,children:.{0,70}\i\.\i\.string\(\i\.\i#{intl::SAVE}\)\}\)/,
                 replace: "$&,$self.renderRememberButton(this.state)"
             }
         },
