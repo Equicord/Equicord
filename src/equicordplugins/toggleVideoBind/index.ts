@@ -28,17 +28,17 @@ const settings = definePluginSettings({
         isValid: (value: string) => validKeycodes.includes(value),
     },
     reqCtrl: {
-        description: "Require control to be pressed.",
+        description: "Require control to be held.",
         type: OptionType.BOOLEAN,
         default: true,
     },
     reqShift: {
-        description: "Require shift to be pressed.",
+        description: "Require shift to be held.",
         type: OptionType.BOOLEAN,
         default: true,
     },
     reqAlt: {
-        description: "Require alt to be pressed.",
+        description: "Require alt to be held.",
         type: OptionType.BOOLEAN,
         default: false,
     },
