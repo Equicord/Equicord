@@ -10,7 +10,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 
 ### Extra included plugins
 <details>
-<summary>149 additional plugins</summary>
+<summary>150 additional plugins</summary>
 
 ### All Platforms
 - AllCallTimers by MaxHerbold & D3SOX
@@ -56,6 +56,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - FixFileExtensions by thororen
 - FrequentQuickSwitcher by Samwich
 - FriendshipRanks by Samwich
+- FullVcPfp by mochie
 - FriendTags by Samwich
 - GensokyoRadioRPC by RyanCaoDev & Prince527
 - GifCollections by Aria & Creations
@@ -148,6 +149,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - VideoSpeed by Samwich
 - ViewRawVariant (ViewRaw2) by Kyuuhachi
 - VoiceChatUtilities by D3SOX
+- VoiceJoinMessages by Sqaaakoi & maintained by thororen
 - WebpackTarball by Kyuuhachi
 - WhitelistedEmojis by Creations
 - WhosWatching by fres
@@ -170,7 +172,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - FurudoSpeak by example-git
 - Shakespearean by vmohammad
 - VoiceChannelLog by Sqaaakoi & maintained by thororen
-- VoiceJoinMessages by Sqaaakoi & maintained by thororen
 
 </details>
 
