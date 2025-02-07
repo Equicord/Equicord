@@ -98,16 +98,16 @@ async function generateDebugInfoMessage() {
     }
 
     const commonIssues = {
-        ":warning: NoRPC enabled": Vencord.Plugins.isPluginEnabled("NoRPC"),
-        ":warning: Activity Sharing disabled": tryOrElse(() => !ShowCurrentGame.getSetting(), false),
-        ":warning: Equicord Dev Build": !IS_STANDALONE,
-        ":warning: Has Userplugins": Object.values(PluginMeta).some(m => m.userPlugin),
-        ":warning: More than two weeks out of date": BUILD_TIMESTAMP < Date.now() - 12096e5,
+        "NoRPC enabled": Vencord.Plugins.isPluginEnabled("NoRPC"),
+        "Activity Sharing disabled": tryOrElse(() => !ShowCurrentGame.getSetting(), false),
+        "Equicord Dev Build": !IS_STANDALONE,
+        "Has Userplugins": Object.values(PluginMeta).some(m => m.userPlugin),
+        "More than two weeks out of date": BUILD_TIMESTAMP < Date.now() - 12096e5,
     };
 
     let content = `>>> ${Object.entries(info).map(([k, v]) => `**${k}**: ${v}`).join("\n")}`;
     content += "\n" + Object.entries(commonIssues)
-        .filter(([, v]) => v).map(([k]) => `${k}`)
+        .filter(([, v]) => v).map(([k]) => `⚠️ ${k}`)
         .join("\n");
 
     return content.trim();
