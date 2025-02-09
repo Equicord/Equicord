@@ -62,8 +62,6 @@ export default definePlugin({
 
         const { should, content } = shouldEdit(channel, lastMessage as Message, this.settings.store.timePeriod);
 
-        console.log(should, content, this.settings.store.timePeriod);
-
         if (should) {
             MessageActions.editMessage(channelId, lastMessageId, {
                 content: `${content}\n${message.content}`
