@@ -23,6 +23,10 @@ function shouldEdit(channel: Channel, message: Message, timePeriod: number) {
         should = false;
     }
 
+    if (document.querySelector('[class^="replyBar__"]')) {
+        should = false;
+    }
+
     // @ts-ignore
     const timestamp = new Date(message.timestamp);
     const now = new Date();
