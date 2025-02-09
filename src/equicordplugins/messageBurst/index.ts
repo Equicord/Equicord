@@ -10,7 +10,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, MessageActions, MessageStore, UserStore } from "@webpack/common";
 import { Channel, Message } from "discord-types/general";
 
-function shouldEdit(channel: Channel, message: Message) {
+function shouldEdit(channel: Channel, message: Message, timePeriod: number) {
     let should = true;
 
     if (channel.isGroupDM()) {
@@ -19,7 +19,15 @@ function shouldEdit(channel: Channel, message: Message) {
         }
     }
 
-    if (message.author.id === UserStore.getCurrentUser().id) {
+    if (message.author.id !== UserStore.getCurrentUser().id) {
+        should = false;
+    }
+
+    // @ts-ignore
+    const timestamp = new Date(message.timestamp);
+    const now = new Date();
+
+    if ((now.getTime() - timestamp.getTime()) > (timePeriod * 1000)) {
         should = false;
     }
 
@@ -52,7 +60,9 @@ export default definePlugin({
 
         const channel = ChannelStore.getChannel(channelId);
 
-        const { should, content } = shouldEdit(channel, lastMessage as Message);
+        const { should, content } = shouldEdit(channel, lastMessage as Message, this.settings.store.timePeriod);
+
+        console.log(should, content, this.settings.store.timePeriod);
 
         if (should) {
             MessageActions.editMessage(channelId, lastMessageId, {
