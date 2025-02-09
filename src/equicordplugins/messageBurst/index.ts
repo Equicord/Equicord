@@ -39,7 +39,7 @@ function shouldEdit(channel: Channel, message: Message, timePeriod: number) {
 
 export default definePlugin({
     name: "MessageBurst",
-    description: "Merges messages sent within a cooldown with your previous sent message if no one else has sent a message before you.",
+    description: "Merges messages sent within a time period with your previous sent message if no one else sends a message before you.",
     authors: [EquicordDevs.port22exposed],
     settings: definePluginSettings({
         timePeriod: {
