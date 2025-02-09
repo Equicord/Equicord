@@ -30,10 +30,16 @@ function shouldEdit(channel: Channel, message: Message) {
 }
 
 export default definePlugin({
-    name: "MessageMerger",
-    description: "Merges new messages into the previous message if no one else has sent a message after you.",
+    name: "MessageBurst",
+    description: "Merges messages sent within a cooldown with your previous sent message if no one else has sent a message before you.",
     authors: [EquicordDevs.port22exposed],
-    dependencies: [],
+    settings: definePluginSettings({
+        timePeriod: {
+            type: OptionType.NUMBER,
+            description: "The duration of bursts (in seconds).",
+            default: 3
+        }
+    }),
     onBeforeMessageSend(channelId, message) {
         const messages = MessageStore.getMessages(channelId)._map;
 
