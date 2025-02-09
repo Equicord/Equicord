@@ -34,10 +34,10 @@ export default definePlugin({
         }
 
         const entries = Object.entries(messages);
-        const [lastMessageId, lastMessageContent] = entries[entries.length - 1];
-        if (isMessage(lastMessageContent) && lastMessageContent.author.id === UserStore.getCurrentUser().id) {
+        const [lastMessageId, lastMessage] = entries[entries.length - 1];
+        if (isMessage(lastMessage) && lastMessage.author.id === UserStore.getCurrentUser().id) {
             MessageActions.editMessage(channelId, lastMessageId, {
-                content: `${lastMessageContent.content}\n${message.content}`
+                content: `${lastMessage.content}\n${message.content}`
             });
             message.content = "";
         }
