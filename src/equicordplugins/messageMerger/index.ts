@@ -4,21 +4,29 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin from "@utils/types";
-import { MessageActions, MessageStore, UserStore } from "@webpack/common";
+import definePlugin, { OptionType } from "@utils/types";
+import { ChannelStore, MessageActions, MessageStore, UserStore } from "@webpack/common";
+import { Channel, Message } from "discord-types/general";
 
-function isMessage(obj: unknown): obj is { author: { id: string; }; content: string; } {
-    return (
-        typeof obj === "object" &&
-        obj !== null &&
-        "author" in obj &&
-        typeof (obj as any).author === "object" &&
-        "id" in (obj as any).author &&
-        typeof (obj as any).author.id === "string" &&
-        "content" in obj &&
-        typeof (obj as any).content === "string"
-    );
+function shouldEdit(channel: Channel, message: Message) {
+    let should = true;
+
+    if (channel.isGroupDM()) {
+        if (channel.name === message.content) {
+            should = false;
+        }
+    }
+
+    if (message.author.id === UserStore.getCurrentUser().id) {
+        should = false;
+    }
+
+    return {
+        should: should,
+        content: message.content
+    };
 }
 
 export default definePlugin({
@@ -35,9 +43,14 @@ export default definePlugin({
 
         const entries = Object.entries(messages);
         const [lastMessageId, lastMessage] = entries[entries.length - 1];
-        if (isMessage(lastMessage) && lastMessage.author.id === UserStore.getCurrentUser().id) {
+
+        const channel = ChannelStore.getChannel(channelId);
+
+        const { should, content } = shouldEdit(channel, lastMessage as Message);
+
+        if (should) {
             MessageActions.editMessage(channelId, lastMessageId, {
-                content: `${lastMessage.content}\n${message.content}`
+                content: `${content}\n${message.content}`
             });
             message.content = "";
         }
