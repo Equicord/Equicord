@@ -24,7 +24,7 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByCodeLazy } from "@webpack";
 import { ChannelStore, GuildMemberStore, GuildStore } from "@webpack/common";
-import { getCustomColorString } from "equicordplugins/customUserColors";
+import { getCustomColorString } from "@equicordplugins/customUserColors";
 
 const useMessageAuthor = findByCodeLazy('"Result cannot be null because the message is not null"');
 
