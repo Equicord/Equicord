@@ -23,6 +23,7 @@ import { openUserProfile } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import { Avatar, GuildMemberStore, React, RelationshipStore } from "@webpack/common";
 import { User } from "discord-types/general";
+import { getCustomColorString } from "equicordplugins/customUserColors";
 import { PropsWithChildren } from "react";
 
 const settings = definePluginSettings({
@@ -68,7 +69,7 @@ const TypingUser = ErrorBoundary.wrap(function ({ user, guildId }: Props) {
                 display: "grid",
                 gridAutoFlow: "column",
                 gap: "4px",
-                color: settings.store.showRoleColors ? GuildMemberStore.getMember(guildId, user.id)?.colorString : undefined,
+                color: settings.store.showRoleColors ? getCustomColorString(user.id, true) ?? GuildMemberStore.getMember(guildId, user.id)?.colorString : undefined,
                 cursor: "pointer"
             }}
         >
