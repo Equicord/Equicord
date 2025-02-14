@@ -38,6 +38,11 @@ export function SetColorModal({ userId, modalProps }: { userId: string, modalPro
         setColorPickerColor(color);
     }
 
+    function handleKey(e: KeyboardEvent) {
+        if (e.key === "Enter")
+            saveUserColor();
+    }
+
     async function saveUserColor() {
         colors[userId] = colorPickerColor.toString(16).padStart(6, "0");
         await set(DATASTORE_KEY, colors);
@@ -52,40 +57,39 @@ export function SetColorModal({ userId, modalProps }: { userId: string, modalPro
 
     return (
         <ModalRoot {...modalProps}>
-            <ModalHeader className={cl("modal-header")}>
-                <Forms.FormTitle tag="h2">
-                    Custom Color
-                </Forms.FormTitle>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-
-            <ModalContent className={cl("modal-content")}>
-                <section className={Margins.bottom16}>
-                    <Forms.FormTitle tag="h3">
-                        Pick a color
+                <ModalHeader className={cl("modal-header")}>
+                    <Forms.FormTitle tag="h2">
+                        Custom Color
                     </Forms.FormTitle>
-                    <ColorPicker
-                        color={colorPickerColor}
-                        onChange={setUserColor}
-                        showEyeDropper={false}
-                    />
-                </section>
-            </ModalContent>
+                    <ModalCloseButton onClick={modalProps.onClose} />
+                </ModalHeader>
+                <ModalContent className={cl("modal-content")} onKeyDown={handleKey}>
+                    <section className={Margins.bottom16}>
+                        <Forms.FormTitle tag="h3">
+                            Pick a color
+                        </Forms.FormTitle>
+                        <ColorPicker
+                            color={colorPickerColor}
+                            onChange={setUserColor}
+                            showEyeDropper={false}
+                        />
+                    </section>
+                </ModalContent>
 
-            <ModalFooter className={cl("modal-footer")}>
-                <Button
-                    color={Button.Colors.RED}
-                    onClick={deleteUserColor}
-                >
-                    Delete Entry
-                </Button>
-                <Button
-                    color={Button.Colors.BRAND}
-                    onClick={saveUserColor}
-                >
-                    Save
-                </Button>
-            </ModalFooter>
+                <ModalFooter className={cl("modal-footer")}>
+                    <Button
+                        color={Button.Colors.RED}
+                        onClick={deleteUserColor}
+                    >
+                        Delete Entry
+                    </Button>
+                    <Button
+                        color={Button.Colors.BRAND}
+                        onClick={saveUserColor}
+                    >
+                        Save
+                    </Button>
+                </ModalFooter>
         </ModalRoot>
     );
 }
