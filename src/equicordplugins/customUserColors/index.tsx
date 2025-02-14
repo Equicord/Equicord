@@ -97,7 +97,9 @@ export default definePlugin({
 
     colorDMList(a: any): string | undefined {
         try {
-            const { id } = UserStore.findByTag(a.avatar?.props["aria-label"]);
+            // eslint-disable-next-line @stylistic/spaced-comment
+            //@ts-ignore
+            const { id } = UserStore.findByTag(a.avatar.props["aria-label"]);
             // get user id by props on avatars having username as aria label
             const colorString = getCustomColorString(id, true);
             if (colorString)
