@@ -91,11 +91,7 @@ const applyFont = async (fontFamily: string) => {
                 --font-primary: '${fontFamily}', sans-serif !important;
                 --font-display: '${fontFamily}', sans-serif !important;
                 --font-headline: '${fontFamily}', sans-serif !important;
-<<<<<<< HEAD:src/equicordplugins/FontLoader/index.tsx
                 ${settings.store.applyOnClodeBlocks ? "--font-code: '${fontFamily}', monospace !important;" : ""}
-=======
-                --font-code: '${fontFamily}', monospace !important;
->>>>>>> 8ae70c490c61c5c2e86893dee2db2ef4edd0bc2e:src/equicordplugins/fontLoader/index.tsx
             }
         `;
     } catch (err) {
