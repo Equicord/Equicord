@@ -18,28 +18,15 @@ import { JSX } from "react";
 const UserGuildSettingsStore = findStoreLazy("UserGuildSettingsStore");
 const JoinedThreadsStore = findStoreLazy("JoinedThreadsStore");
 
-function NumberBadge({ color, className, count }) {
-    return <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
+function NumberBadge({ className, count, width }) {
+    // To whoever used svgs here,
+    // Please. svgs bad and buggy unless used as an icon
+    return <div
         className={className}
+        style={{ width: width }}
     >
-        <circle cx="12" cy="12" r="10" fill={color} />
-        <text
-            x="50%"
-            y="50%"
-            textAnchor="middle"
-            fontSize="10"
-            fill="white"
-            fontWeight="bold"
-            dy=".3em"
-        >
-            {count}
-        </text>
-    </svg>;
+        {count}
+    </div>;
 }
 
 const settings = definePluginSettings({
@@ -109,15 +96,19 @@ export default definePlugin({
 
         if (!settings.store.showOnMutedChannels && (UserGuildSettingsStore.isChannelMuted(channel.guild_id, channel.id) || JoinedThreadsStore.isMuted(channel.id)))
             return null;
+
+        // Im not sure if the "dot" ever appends, hence why the css is almost left unmodified for these classes
         const className = `vc-unreadCountBadge${whiteDot ? "-dot" : ""}${channel.threadMetadata ? "-thread" : ""}`;
         return (
             <NumberBadge
-                color="var(--brand-500)"
-                className={className}
+                className={"vc-unreadCountBadge " + className}
                 count={
                     unreadCount > 99 && settings.store.notificationCountLimit
                         ? "+99"
                         : unreadCount
+                }
+                width={
+                    unreadCount > 10 ? 22 : 16
                 }
             />
         );
