@@ -102,9 +102,9 @@ export default definePlugin({
         const className = `vc-unreadCountBadge${whiteDot ? "-dot" : ""}${channel.threadMetadata ? "-thread" : ""}`;
 
         let paddingValue: Number = 0;
-        if (unreadCount < 10) { paddingValue = 0; } else
+        if (unreadCount >= 100) { paddingValue = 4; } else
             if (unreadCount >= 10) { paddingValue = 2; } else
-                if (unreadCount >= 100) { paddingValue = 4; }
+                paddingValue = 0;
 
         return (
             <NumberBadge
