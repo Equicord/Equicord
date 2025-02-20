@@ -21,6 +21,7 @@ import BackupAndRestoreTab from "@components/VencordSettings/BackupAndRestoreTab
 import CloudTab from "@components/VencordSettings/CloudTab";
 import PatchHelperTab from "@components/VencordSettings/PatchHelperTab";
 import PluginsTab from "@components/VencordSettings/PluginsTab";
+import ThemesTab from "@components/VencordSettings/ThemesTab";
 import UpdaterTab from "@components/VencordSettings/UpdaterTab";
 import VencordTab from "@components/VencordSettings/VencordTab";
 import { Devs } from "@utils/constants";
@@ -64,6 +65,7 @@ export default definePlugin({
                     replace: (_, sectionTypes, commaOrSemi, elements, element) => `${commaOrSemi} $self.addSettings(${elements}, ${element}, ${sectionTypes}) ${commaOrSemi}`
                 },
                 {
+                    // FIXME(Bundler change related): Remove old compatiblity once enough time has passed
                     match: /({(?=.+?function (\i).{0,160}(\i)=\i\.useMemo.{0,140}return \i\.useMemo\(\(\)=>\i\(\3).+?(?:function\(\){return |\(\)=>))\2/,
                     replace: (_, rest, settingsHook) => `${rest}$self.wrapSettingsHook(${settingsHook})`
                 }
@@ -105,7 +107,7 @@ export default definePlugin({
                 section: "EquicordThemes",
                 label: "Themes",
                 searchableTitles: ["Themes"],
-                element: require("@components/ThemeSettings/ThemesTab").default,
+                element: ThemesTab,
                 className: "vc-themes"
             },
             !IS_UPDATER_DISABLED && {
@@ -162,6 +164,9 @@ export default definePlugin({
                 belowNitro: getIntlMessage("APP_SETTINGS"),
                 aboveActivity: getIntlMessage("ACTIVITY_SETTINGS")
             };
+
+            if (!names[settingsLocation] || names[settingsLocation].endsWith("_SETTINGS"))
+                return firstChild === "PREMIUM";
 
             return header === names[settingsLocation];
         } catch {
@@ -228,6 +233,7 @@ export default definePlugin({
         if (IS_DEV) return " (Dev)";
         if (IS_WEB) return " (Web)";
         if (IS_VESKTOP) return ` (Vesktop v${VesktopNative.app.getVersion()})`;
+        if (IS_EQUIBOP) return ` (Equibop v${VesktopNative.app.getVersion()})`;
         if (IS_STANDALONE) return " (Standalone)";
         return "";
     },

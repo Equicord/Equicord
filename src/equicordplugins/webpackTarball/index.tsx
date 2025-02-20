@@ -5,12 +5,13 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { Devs, WEBPACK_CHUNK } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { makeLazy } from "@utils/lazy";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByProps, wreq } from "@webpack";
 import { Button, Flex, Forms, Switch, Text, Timestamp, useState } from "@webpack/common";
+import __webpack_require__ from "discord-types/other/WebpackInstance";
 
 import TarFile from "./tar";
 import * as Webpack from "./webpack";
@@ -58,7 +59,7 @@ async function saveTar(patched: boolean) {
     const { buildNumber, builtAt } = getBuildNumber();
     const mtime = (builtAt.getTime() / 1000) | 0;
 
-    const root = patched ? `vencord-${buildNumber}` : `discord-${buildNumber}`;
+    const root = patched ? `equicord-${buildNumber}` : `discord-${buildNumber}`;
 
     for (const [id, module] of Object.entries(wreq.m)) {
         const patchedSrc = Function.toString.call(module);
@@ -79,18 +80,20 @@ async function saveTar(patched: boolean) {
 }
 
 function TarModal({ modalProps, close }: { modalProps: ModalProps; close(): void; }) {
+    const webpackRequire = wreq as unknown as __webpack_require__;
     const { buildNumber, builtAt } = getBuildNumber();
     const [, rerender] = useState({});
     const [isLoading, setLoading] = useState(false);
-    const paths = Webpack.getChunkPaths(wreq);
-    const status = Object.entries(Webpack.getLoadedChunks(wreq))
-        .filter(([k]) => wreq.o(paths, k))
+    const paths = Webpack.getChunkPaths(webpackRequire);
+    const status = Object.entries(Webpack.getLoadedChunks(webpackRequire))
+        .filter(([k]) => webpackRequire.o(paths, k))
         .map(([, v]) => v);
     const loading = status.length;
     const loaded = status.filter(v => v === 0 || v === undefined).length;
     const errored = status.filter(v => v === undefined).length;
     const all = Object.keys(paths).length;
     const { patched } = settings.use(["patched"]);
+    const WEBPACK_CHUNK = "webpackChunkdiscord_app";
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader>
@@ -125,7 +128,7 @@ function TarModal({ modalProps, close }: { modalProps: ModalProps; close(): void
                                 setLoading(true);
                                 // @ts-ignore
                                 await Webpack.protectWebpack(window[WEBPACK_CHUNK], async () => {
-                                    await Webpack.forceLoadAll(wreq, rerender);
+                                    await Webpack.forceLoadAll(webpackRequire, rerender);
                                 });
                             }}
                         >

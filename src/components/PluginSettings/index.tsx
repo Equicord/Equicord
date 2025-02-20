@@ -71,10 +71,7 @@ function ReloadRequiredCard({ required, enabledPlugins, openDisablePluginsModal,
                     <Forms.FormText className={cl("dep-text")}>
                         Restart now to apply new plugins and their settings
                     </Forms.FormText>
-                    <Button
-                        className="vc-restart-button"
-                        onClick={() => location.reload()}
-                    >
+                    <Button className={cl("restart-button")} onClick={() => location.reload()}>
                         Restart
                     </Button>
                 </>
@@ -176,8 +173,8 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
                     className={classes(ButtonClasses.button, cl("info-button"))}
                 >
                     {plugin.options && !isObjectEmpty(plugin.options)
-                        ? <CogWheel />
-                        : <InfoIcon />}
+                        ? <CogWheel className={cl("info-icon")} />
+                        : <InfoIcon className={cl("info-icon")} />}
                 </button>
             }
         />

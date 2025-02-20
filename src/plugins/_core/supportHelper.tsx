@@ -22,7 +22,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { Link } from "@components/Link";
 import { openUpdaterModal } from "@components/VencordSettings/UpdaterTab";
-import { Devs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_GUILD_ID, VC_SUPPORT_CHANNEL_ID } from "@utils/constants";
+import { CONTRIB_ROLE_ID, Devs, DONOR_ROLE_ID, EQUIBOP_CONTRIB_ROLE_ID, EQUICORD_TEAM, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_CONTRIB_ROLE_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID, VC_KNOWN_ISSUES_CHANNEL_ID, VC_REGULAR_ROLE_ID, VC_SUPPORT_CHANNEL_ID, VENBOT_USER_ID, VENCORD_CONTRIB_ROLE_ID } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
@@ -40,18 +40,17 @@ import plugins, { PluginMeta } from "~plugins";
 
 import SettingsPlugin from "./settings";
 
-const VENBOT_USER_ID = "1017176847865352332";
-const KNOWN_ISSUES_CHANNEL_ID = "1222936386626129920";
 const CodeBlockRe = /```js\n(.+?)```/s;
 
 const TrustedRolesIds = [
-    "1026534353167208489", // contributor
-    "1026504932959977532", // regular
-    "1042507929485586532", // donor
-    "1173520023239786538", // Equicord Team
-    "1222677964760682556", // Equicord Contributor
-    "1287079931645263968", // Equibop Contributor
-    "1173343399470964856", // Vencord Contributor
+    VC_CONTRIB_ROLE_ID, // Vencord Contributor
+    VC_REGULAR_ROLE_ID, // Vencord Regular
+    VC_DONOR_ROLE_ID, // Vencord Donor
+    EQUICORD_TEAM, // Equicord Team
+    DONOR_ROLE_ID, // Equicord Donor
+    CONTRIB_ROLE_ID, // Equicord Contributor
+    EQUIBOP_CONTRIB_ROLE_ID, // Equibop Contributor
+    VENCORD_CONTRIB_ROLE_ID, // Vencord Contributor
 ];
 
 const AsyncFunction = async function () { }.constructor;
@@ -87,7 +86,11 @@ async function generateDebugInfoMessage() {
             `v${VERSION} • [${gitHash}](<https://github.com/Equicord/Equicord/commit/${gitHash}>)` +
             `${SettingsPlugin.additionalInfo} - ${Intl.DateTimeFormat("en-GB", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
         Client: `${RELEASE_CHANNEL} ~ ${client}`,
-        Platform: window.navigator.platform
+        Platform: `${DiscordNative.process.platform === "darwin" ?
+            (DiscordNative.process.arch === "arm64" ? "MacSilicon" : "MacIntel") :
+            DiscordNative.process.platform === "win32" && DiscordNative.process.arch === "x64" ?
+                "Windows" :
+                `${DiscordNative.process.platform} ${DiscordNative.process.arch}`}`
     };
 
     if (IS_DISCORD_DESKTOP) {
@@ -97,8 +100,8 @@ async function generateDebugInfoMessage() {
     const commonIssues = {
         "NoRPC enabled": Vencord.Plugins.isPluginEnabled("NoRPC"),
         "Activity Sharing disabled": tryOrElse(() => !ShowCurrentGame.getSetting(), false),
-        "Equicord DevBuild": !IS_STANDALONE,
-        "Has UserPlugins": Object.values(PluginMeta).some(m => m.userPlugin),
+        "Equicord Dev Build": !IS_STANDALONE,
+        "Has Userplugins": Object.values(PluginMeta).some(m => m.userPlugin),
         "More than two weeks out of date": BUILD_TIMESTAMP < Date.now() - 12096e5,
     };
 
@@ -261,8 +264,8 @@ export default definePlugin({
         const shouldAddUpdateButton =
             !IS_UPDATER_DISABLED
             && (
-                (props.channel.id === KNOWN_ISSUES_CHANNEL_ID) ||
-                (props.channel.id === SUPPORT_CHANNEL_ID && props.message.author.id === VENBOT_USER_ID)
+                (props.channel.id === VC_KNOWN_ISSUES_CHANNEL_ID) ||
+                (props.channel.id === VC_SUPPORT_CHANNEL_ID && props.message.author.id === VENBOT_USER_ID)
             )
             && props.message.content?.includes("update");
 

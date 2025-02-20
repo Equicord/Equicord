@@ -17,7 +17,7 @@ export const settings = definePluginSettings({
     showWithoutHover: {
         type: OptionType.BOOLEAN,
         description: "Always show the timer without needing to hover",
-        restartNeeded: false,
+        restartNeeded: true,
         default: true
     },
     showRoleColor: {
@@ -105,20 +105,22 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: "renderPrioritySpeaker",
+            find: ".usernameSpeaking]",
+            predicate: () => !settings.store.showWithoutHover,
             replacement: [
                 {
-                    match: /(render\(\)\{.+\}\),children:)\[(.+renderName\(\),)/,
-                    replace: "$&,$self.showClockInjection(this),"
-                }
+                    match: /(?<=user:(\i).*?)iconGroup,children:\[/,
+                    replace: "$&$self.renderTimer($1.id),"
+                },
             ]
         },
         {
-            find: "renderPrioritySpeaker",
+            find: ".usernameSpeaking]",
+            predicate: () => settings.store.showWithoutHover,
             replacement: [
                 {
-                    match: /(renderName\(\)\{.+:"")/,
-                    replace: "$&,$self.showTextInjection(this),"
+                    match: /function\(\)\{.+:""(?=.*?userId:(\i))/,
+                    replace: "$&,$self.renderTimer($1.id),"
                 }
             ]
         }
@@ -223,25 +225,6 @@ export default definePlugin({
         if (settings.store.watchLargeGuilds) {
             this.subscribeToAllGuilds();
         }
-    },
-
-    showClockInjection(property: { props: { user: { id: string; }; }; }) {
-        if (settings.store.showWithoutHover) {
-            return "";
-        }
-        return this.showInjection(property);
-    },
-
-    showTextInjection(property: { props: { user: { id: string; }; }; }) {
-        if (!settings.store.showWithoutHover) {
-            return "";
-        }
-        return this.showInjection(property);
-    },
-
-    showInjection(property: { props: { user: { id: string; }; }; }) {
-        const userId = property.props.user.id;
-        return this.renderTimer(userId);
     },
 
     renderTimer(userId: string) {

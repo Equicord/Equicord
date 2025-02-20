@@ -16,20 +16,50 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Button } from "@webpack/common";
+import { openInviteModal } from "@utils/discord";
+import { Button, showToast } from "@webpack/common";
+import { ButtonProps } from "@webpack/types";
 
 import { Heart } from "./Heart";
 
-export default function DonateButton(props: any) {
+export default function DonateButton({
+    look = Button.Looks.LINK,
+    color = Button.Colors.TRANSPARENT,
+    ...props
+}: Partial<ButtonProps>) {
     return (
         <Button
             {...props}
-            look={Button.Looks.LINK}
-            color={Button.Colors.TRANSPARENT}
+            look={look}
+            color={color}
             onClick={() => VencordNative.native.openExternal("https://github.com/sponsors/verticalsync")}
+            innerClassName="vc-donate-button"
         >
             <Heart />
             Donate
+        </Button>
+    );
+}
+
+export function InviteButton({
+    look = Button.Looks.LINK,
+    color = Button.Colors.TRANSPARENT,
+    ...props
+}: Partial<ButtonProps>) {
+    return (
+        <Button
+            {...props}
+            look={look}
+            color={color}
+            onClick={async e => {
+                e.preventDefault();
+                openInviteModal("5Xh2W87egW").catch(() =>
+                    showToast("Invalid or expired invite"),
+                );
+            }}
+            innerClassName="vc-donate-button"
+        >
+            Invite
         </Button>
     );
 }

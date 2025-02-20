@@ -16,13 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { definePluginSettings } from "@api/Settings";
-import { enableStyle } from "@api/Styles";
+import { definePluginSettings, Settings } from "@api/Settings";
 import { Link } from "@components/Link";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-
-import style from "./index.css?managed";
 
 const API_URL = "https://usrbg.is-hardly.online/users";
 
@@ -66,7 +63,7 @@ export default definePlugin({
         },
         {
             find: "\"data-selenium-video-tile\":",
-            predicate: () => settings.store.voiceBackground,
+            predicate: () => !Settings.plugins.FullVCPFP.enabled && settings.store.voiceBackground,
             replacement: [
                 {
                     match: /(?<=function\((\i),\i\)\{)(?=let.{20,40},style:)/,
@@ -87,6 +84,9 @@ export default definePlugin({
     getVoiceBackgroundStyles({ className, participantUserId }: any) {
         if (className.includes("tile_")) {
             if (this.userHasBackground(participantUserId)) {
+                document.querySelectorAll('[class*="background_"]').forEach(element => {
+                    (element as HTMLElement).style.backgroundColor = "transparent";
+                });
                 return {
                     backgroundImage: `url(${this.getImageUrl(participantUserId)})`,
                     backgroundSize: "cover",
@@ -115,8 +115,6 @@ export default definePlugin({
     },
 
     async start() {
-        enableStyle(style);
-
         const res = await fetch(API_URL);
         if (res.ok) {
             this.data = await res.json();

@@ -12,7 +12,7 @@ import { Devs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
-import { Button, Forms, showToast, TextInput, Toasts, Tooltip, useEffect, useState } from "webpack/common";
+import { Button, Forms, showToast, TextInput, Toasts, Tooltip, useEffect, useState } from "@webpack/common";
 
 const enum ActivitiesTypes {
     Game,
@@ -242,7 +242,7 @@ export default definePlugin({
             find: '"LocalActivityStore"',
             replacement: [
                 {
-                    match: /HANG_STATUS.+?(?=!?\i\(\)\(\i,\i\))(?<=(\i)\.push.+?)/,
+                    match: /\.LISTENING.+?(?=!?\i\(\)\(\i,\i\))(?<=(\i)\.push.+?)/,
                     replace: (m, activities) => `${m}${activities}=${activities}.filter($self.isActivityNotIgnored);`
                 }
             ]

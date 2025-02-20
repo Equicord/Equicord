@@ -51,7 +51,7 @@ function Watching({ userIds, guildId }: WatchingProps): JSX.Element {
                     <Flex flexDirection="column" style={{ gap: 6 }} >
                         {users.map(user => (
                             <Flex key={user.id} flexDirection="row" style={{ gap: 6, alignContent: "center" }} className={cl("user")} >
-                                <img src={user.getAvatarURL(guildId)} style={{ borderRadius: 8, width: 16, height: 16 }} />
+                                <img src={user.getAvatarURL(guildId)} style={{ borderRadius: 8, width: 16, height: 16 }} alt="" />
                                 {getUsername(user)}
                             </Flex>
                         ))}
@@ -121,7 +121,7 @@ export default definePlugin({
                 <div className={classes(cl("spectators_panel"), Margins.top8)}>
                     {users.length ?
                         <>
-                            <Forms.FormTitle tag="h3" style={{ marginTop: 8, marginBottom: 0, textTransform: "uppercase" }}>
+                            <Forms.FormTitle tag="h3" style={{ marginTop: 8, marginBottom: 0, marginLeft: 8, textTransform: "uppercase" }}>
                                 {getIntlMessage("SPECTATORS", { numViewers: userIds.length })}
                             </Forms.FormTitle>
                             <UserSummaryItem
@@ -141,12 +141,13 @@ export default definePlugin({
                                             src={user.getAvatarURL(void 0, 80, true)}
                                             alt={user.username}
                                             title={user.username}
+                                            style={{ marginLeft: 8 }}
                                         />
                                     </Clickable>
                                 )}
                             />
                         </>
-                        : <Forms.FormText>No spectators</Forms.FormText>
+                        : <Forms.FormText style={{ marginLeft: 8 }}>No spectators</Forms.FormText>
                     }
                 </div>
             </>
