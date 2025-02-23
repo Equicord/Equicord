@@ -10,7 +10,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 
 ### Extra included plugins
 <details>
-<summary>152 additional plugins</summary>
+<summary>151 additional plugins</summary>
 
 ### All Platforms
 - AllCallTimers by MaxHerbold & D3SOX
@@ -90,7 +90,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - MessageColors by Hen
 - MessageLinkTooltip by Kyuuhachi
 - MessageLoggerEnhanced by Aria
-- MessagePeek by HypedDomi
 - MessageTranslate by Samwich
 - ModalFade by Kyuuhachi
 - MoreStickers by Leko & Arjix
@@ -110,7 +109,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - PolishWording (Grammar) by Samwich
 - PlatformSpoofer by Drag
 - PurgeMessages by bhop & nyx
-- QuestCompleter by HappyEnderman, SerStars, maintained by thororen
+- QuestCompleter by Amia
 - QuestionMarkReplacement by nyx
 - Quoter by Samwich
 - RemixMe by kvba
@@ -122,7 +121,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - SekaiStickers by MaiKokain
 - ServerSearch by camila314
 - ShowBadgesInChat by Inbestigator & KrystalSkull
-- Signature by KrystalSkull
+- Signature by Ven, Rini, ImBanana, KrystalSkull
 - SidebarChat by Joona
 - StatsfmRPC by Crxaw & vmohammad
 - Slap by Korbo
