@@ -86,11 +86,7 @@ async function generateDebugInfoMessage() {
             `v${VERSION} • [${gitHash}](<https://github.com/Equicord/Equicord/commit/${gitHash}>)` +
             `${SettingsPlugin.additionalInfo} - ${Intl.DateTimeFormat("en-GB", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
         Client: `${RELEASE_CHANNEL} ~ ${client}`,
-        Platform: `${DiscordNative.process.platform === "darwin" ?
-            (DiscordNative.process.arch === "arm64" ? "MacSilicon" : "MacIntel") :
-            DiscordNative.process.platform === "win32" && DiscordNative.process.arch === "x64" ?
-                "Windows" :
-                `${DiscordNative.process.platform} ${DiscordNative.process.arch}`}`
+        Platform: window.navigator.platform
     };
 
     if (IS_DISCORD_DESKTOP) {
@@ -100,8 +96,8 @@ async function generateDebugInfoMessage() {
     const commonIssues = {
         "NoRPC enabled": Vencord.Plugins.isPluginEnabled("NoRPC"),
         "Activity Sharing disabled": tryOrElse(() => !ShowCurrentGame.getSetting(), false),
-        "Equicord Dev Build": !IS_STANDALONE,
-        "Has Userplugins": Object.values(PluginMeta).some(m => m.userPlugin),
+        "Equicord DevBuild": !IS_STANDALONE,
+        "Has UserPlugins": Object.values(PluginMeta).some(m => m.userPlugin),
         "More than two weeks out of date": BUILD_TIMESTAMP < Date.now() - 12096e5,
     };
 
@@ -292,19 +288,19 @@ export default definePlugin({
         }
 
         if (props.channel.id === SUPPORT_CHANNEL_ID) {
-            if (props.message.content.includes("/vencord-debug") || props.message.content.includes("/vencord-plugins")) {
+            if (props.message.content.includes("/equicord-debug") || props.message.content.includes("/equicord-plugins")) {
                 buttons.push(
                     <Button
                         key="vc-dbg"
                         onClick={async () => sendMessage(props.channel.id, { content: await generateDebugInfoMessage() })}
                     >
-                        Run /vencord-debug
+                        Run /equicord-debug
                     </Button>,
                     <Button
                         key="vc-plg-list"
                         onClick={async () => sendMessage(props.channel.id, { content: generatePluginList() })}
                     >
-                        Run /vencord-plugins
+                        Run /equicord-plugins
                     </Button>
                 );
             }
