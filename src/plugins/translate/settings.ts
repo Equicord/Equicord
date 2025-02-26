@@ -78,6 +78,13 @@ export const settings = definePluginSettings({
         description: "Show a tooltip on the ChatBar button whenever a message is automatically translated",
         default: true
     },
+    amountToAutoTranslate: {
+        type: OptionType.SLIDER,
+        description: "How many messages to auto-translate when you switch channels (only works for channels with Auto Translate Received enabled)",
+        markers: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+        stickToMarkers: true,
+        default: 5,
+    }
 }).withPrivateSettings<{
     showAutoTranslateAlert: boolean;
 }>();

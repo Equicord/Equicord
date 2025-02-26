@@ -19,9 +19,12 @@
 import "./styles.css";
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { Devs } from "@utils/constants";
+import { DataStore } from "@api/index";
+import { Devs, EquicordDevs } from "@utils/constants";
+import { getCurrentChannel } from "@utils/discord";
 import definePlugin from "@utils/types";
-import { ChannelStore, Menu } from "@webpack/common";
+import { ChannelStore, Menu, MessageStore, UserStore } from "@webpack/common";
+import { Message } from "discord-types/general";
 
 import { settings } from "./settings";
 import { setShouldShowTranslateEnabledTooltip, TranslateChatBarIcon, TranslateIcon } from "./TranslateIcon";
@@ -52,7 +55,7 @@ let tooltipTimeout: any;
 export default definePlugin({
     name: "Translate",
     description: "Translate messages with Google Translate or DeepL",
-    authors: [Devs.Ven, Devs.AshtonMemer],
+    authors: [Devs.Ven, Devs.AshtonMemer, EquicordDevs.MrDiamond],
     settings,
     contextMenus: {
         "message": messageCtxPatch
@@ -89,5 +92,44 @@ export default definePlugin({
 
         const trans = await translate("sent", message.content);
         message.content = trans.text;
+    },
+
+    flux: {
+        MESSAGE_CREATE: async event => {
+            try {
+                const currentChannel = getCurrentChannel()?.id;
+                if (!currentChannel) return;
+
+                const autoTranslate = (await DataStore.get("autoTranslateReceived"))[currentChannel];
+                if (!autoTranslate) return;
+
+                if (event.channelId !== currentChannel) return;
+                if (event.message.author.id === UserStore.getCurrentUser().id) return;
+
+                const trans = await translate("received", event.message.content);
+                handleTranslate(event.message.id, trans);
+            } catch (e) { }
+        },
+        CHANNEL_SELECT: async () => {
+            try {
+                const currentChannel = getCurrentChannel()?.id;
+                if (!currentChannel) return;
+
+                const autoTranslate = (await DataStore.get("autoTranslateReceived"))[currentChannel];
+                if (!autoTranslate) return;
+
+                const { amountToAutoTranslate } = settings.store;
+
+                const messages: Message[] = await MessageStore.getMessages(currentChannel)._array.reverse();
+
+                for (let i = 0; i < amountToAutoTranslate; i++) {
+                    const message = messages[i];
+                    if (!message) return;
+
+                    const trans = await translate("received", message.content);
+                    handleTranslate(message.id, trans);
+                }
+            } catch (e) { }
+        }
     }
 });
