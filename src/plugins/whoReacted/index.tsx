@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import { sleep } from "@utils/misc";
 import { Queue } from "@utils/Queue";
 import { useForceUpdater } from "@utils/react";
@@ -171,12 +172,14 @@ export default definePlugin({
         const reactions = getReactionsWithQueue(message, emoji, type);
         const users = Object.values(reactions).filter(Boolean) as User[];
 
+        new Logger("WhoReacted").log(settings.store.avatarClick);
+
         return (
             <div
                 style={{ marginLeft: "0.5em", transform: "scale(0.9)" }}
             >
                 {settings.store.avatarClick ? (
-                    <div onClick={handleClickAvatar} onKeyPress={handleClickAvatar}>
+                    <div onClick={handleClickAvatar}>
                         <UserSummaryItem
                             users={users}
                             guildId={ChannelStore.getChannel(message.channel_id)?.guild_id}
@@ -188,7 +191,7 @@ export default definePlugin({
                         />
                     </div>
                 ) : (
-                    <div>
+                    <div style={{ pointerEvents: "none" }}>
                         <UserSummaryItem
                             users={users}
                             guildId={ChannelStore.getChannel(message.channel_id)?.guild_id}
