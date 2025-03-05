@@ -63,7 +63,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - GifRoulette by Samwich
 - Glide by Samwich
 - GlobalBadges by HypedDomi & Hosted by Wolfie
-- GodMode by Tolgchu
 - GoogleThat by Samwich
 - HideChatButtons by iamme
 - HideMessage by Hanzy
@@ -73,6 +72,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - HopOn by ImLvna
 - Husk by nin0dev
 - Identity by Samwich
+- IgnoreCalls by TheArmagan
 - IgnoreTerms by D3SOX
 - ImagePreview by Creations
 - ImgToGif by zyqunix
