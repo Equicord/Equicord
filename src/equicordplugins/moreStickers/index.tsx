@@ -64,7 +64,7 @@ export default definePlugin({
             }
         },
         {
-            find: 'navList,role:"tablist"',
+            find: "#{intl::EXPRESSION_PICKER_CATEGORIES_A11Y_LABEL}",
             replacement: {
                 match: /role:"tablist",.*?,?"aria-label":.+?\),children:(\[.*?\)\]}\)}\):null,)(.*?closePopout:\w.*?:null)/s,
                 replace: m => {
