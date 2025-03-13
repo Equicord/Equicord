@@ -19,7 +19,6 @@
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
-import { Logger } from "@utils/Logger";
 import { sleep } from "@utils/misc";
 import { Queue } from "@utils/Queue";
 import { useForceUpdater } from "@utils/react";
@@ -171,8 +170,6 @@ export default definePlugin({
 
         const reactions = getReactionsWithQueue(message, emoji, type);
         const users = Object.values(reactions).filter(Boolean) as User[];
-
-        new Logger("WhoReacted").log(settings.store.avatarClick);
 
         return (
             <div
