@@ -25,12 +25,13 @@ import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { Menu, Popout, useState } from "@webpack/common";
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
 
 function VencordPopout(onClose: () => void) {
     const { useQuickCss } = useSettings(["useQuickCss"]);
+    const [demonstrationToggled, setToggled] = useState(false);
 
     const pluginEntries = [] as ReactNode[];
 
@@ -43,6 +44,19 @@ function VencordPopout(onClose: () => void) {
                 >
                     {Object.entries(plugin.toolboxActions).map(([text, action]) => {
                         const key = `vc-toolbox-${plugin.name}-${text}`;
+
+                        // For certain plugins :trolleyzoom:
+                        if (plugin.name === "Demonstration") {
+                            return (
+                                <Menu.MenuCheckboxItem
+                                    id="vc-toolbox-demonstration-toggle"
+                                    key={key}
+                                    checked={!!demonstrationToggled}
+                                    label={text}
+                                    action={() => { action(); setToggled(!demonstrationToggled); }}
+                                />
+                            );
+                        }
 
                         return (
                             <Menu.MenuItem

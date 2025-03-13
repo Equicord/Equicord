@@ -71,6 +71,11 @@ function ToggleModal() {
     );
 }
 
+function isToggled() {
+    const style = document.getElementById("DemonstrationStyle");
+    if (style != null) { return true; } else { return false; }
+}
+
 function handleToggle() {
     const style = document.getElementById("DemonstrationStyle");
     if (style != null) {
@@ -133,7 +138,7 @@ export default definePlugin({
     authors: [Devs.Samwich, EquicordDevs.Panniku],
     settings,
     toolboxActions: {
-        "Toggle Demonstration": (() => handleToggle())
+        "Toggle Demonstration": (() => { handleToggle(); })
     },
     settingsAboutComponent: () => {
         return (
@@ -147,6 +152,5 @@ export default definePlugin({
     },
     stop() {
         document.removeEventListener("keydown", handleKeydown);
-    },
-
+    }
 });
