@@ -129,6 +129,10 @@ function generatePluginList() {
         content += `**Enabled UserPlugins (${enabledUserPlugins.length}):**\n${makeCodeblock(enabledUserPlugins.join(", "))}`;
     }
 
+    if (enabledPlugins.length > 100 && !(isPluginDev(UserStore.getCurrentUser()?.id) || isEquicordPluginDev(UserStore.getCurrentUser()?.id))) {
+        content = "We don't support users with more than 100 plugins enabled. Please disable some and try again.";
+    }
+
     return content;
 }
 
