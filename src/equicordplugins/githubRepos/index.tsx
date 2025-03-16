@@ -1,20 +1,20 @@
 /*
-* Vencord, a Discord client mod
-* Copyright (c) 2025 Vendicated and contributors*
-* SPDX-License-Identifier: GPL-3.0-or-later
-*/
+ * Vencord, a Discord client mod
+ * Copyright (c) 2025 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
+import definePlugin from "@utils/types";
 import { findByCodeLazy } from "@webpack";
 import { React } from "@webpack/common";
-import definePlugin from "@utils/types";
 
-import { Logger } from "@utils/Logger";
-import { settings } from "./utils/settings";
 import { GitHubReposComponent } from "./components/GitHubReposComponent";
-import { Devs } from "@utils/constants";
+import { settings } from "./utils/settings";
 
 const getProfileThemeProps = findByCodeLazy(".getPreviewThemeColors", "primaryColor:");
 
@@ -33,7 +33,7 @@ const profilePopoutComponent = ErrorBoundary.wrap(
     },
     {
         noop: true,
-        onError: (err) => {
+        onError: err => {
             logger.error("Error in profile popout component", err);
             return null;
         }
@@ -43,7 +43,7 @@ const profilePopoutComponent = ErrorBoundary.wrap(
 export default definePlugin({
     name: "GitHubRepos",
     description: "Displays a user's public GitHub repositories in their profile",
-    authors: [Devs.talhakf],
+    authors: [EquicordDevs.talhakf],
     settings,
 
     patches: [
@@ -65,19 +65,19 @@ export default definePlugin({
                         const originalReturn = ${returnStatement};
                         const user = this.props.user;
                         if (!user) return originalReturn;
-                        
+
                         try {
-                            const component = $self.profilePopoutComponent({ 
-                                user: user, 
-                                displayProfile: this.props.displayProfile 
+                            const component = $self.profilePopoutComponent({
+                                user: user,
+                                displayProfile: this.props.displayProfile
                             });
-                            
+
                             if (!originalReturn) return component;
-                            
+
                             return React.createElement(
-                                React.Fragment, 
-                                null, 
-                                originalReturn, 
+                                React.Fragment,
+                                null,
+                                originalReturn,
                                 component
                             );
                         } catch (err) {
@@ -99,4 +99,4 @@ export default definePlugin({
     },
 
     profilePopoutComponent
-}); 
+});
