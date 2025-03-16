@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import "./style.css";
+import "@equicordplugins/_misc/styles.css";
 
 import { showNotification } from "@api/Notifications";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -229,7 +229,7 @@ export default definePlugin({
     description: "A plugin to complete quests without having the game installed.",
     authors: [Devs.amia],
     settingsAboutComponent: () => <>
-        <Forms.FormText className="quests-warning">
+        <Forms.FormText className="plugin-warning">
             Game Quests do not work on Equibop/Web Platforms. Only Video Quests do.
         </Forms.FormText>
     </>,
@@ -237,8 +237,8 @@ export default definePlugin({
         {
             find: "\"invite-button\"",
             replacement: {
-                match: /(\i\.Fragment,{children:)(\i\i)/,
-                replace: "$1[$self.renderQuestButton(),...$2]"
+                match: /\i&&(\i\i\.push).{0,50}"current-speaker"/,
+                replace: "$1($self.renderQuestButton()),$&"
             }
         },
         {

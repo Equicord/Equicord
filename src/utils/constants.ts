@@ -621,7 +621,7 @@ export const EquicordDevs = Object.freeze({
     },
     Cortex: {
         name: "Cortex",
-        id: 825069530376044594n
+        id: 913205935319691335n
     },
     KrystalSkull: {
         name: "krystalskullofficial",
@@ -1007,6 +1007,18 @@ export const EquicordDevs = Object.freeze({
     port22exposed: {
         name: "port",
         id: 1318383159645311009n,
+    },
+    PhoenixAceVFX: {
+        name: "PhoenixAceVFX",
+        id: 1016895892055396484n,
+    },
+    TheArmagan: {
+        name: "TheArmagan",
+        id: 707309693449535599n
+    },
+    seth: {
+        name: "S€th",
+        id: 1273447359417942128n
     },
 } satisfies Record<string, Dev>);
 

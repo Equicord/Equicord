@@ -92,16 +92,30 @@ export default definePlugin({
         },
         {
             predicate: () => settings.store.dmList,
-            find: "!1,wrapContent",
+            find: "PrivateChannel.renderAvatar",
             replacement: {
-                match: /(nameAndDecorators,)/,
-                replace: "$1style:{color:$self.colorDMList(arguments[0])},"
+                match: /(highlighted:\i,)/,
+                replace: "$1style:{color:`${$self.colorDMList(arguments[0])}`},"
             },
+        },
+        {
+            predicate: () => settings.store.dmList,
+            find: "!1,wrapContent",
+            replacement: [
+                {
+                    match: /(\}=\i)/,
+                    replace: ",style$1"
+                },
+                {
+                    match: /(?<=nameAndDecorators,)/,
+                    replace: "style:style||{},"
+                },
+            ],
         },
     ],
 
     colorDMList(a: any): string | undefined {
-        const userId = a?.subText?.props?.user?.id;
+        const userId = a?.user?.id;
         if (!userId) return;
         const colorString = getCustomColorString(userId, true);
         if (colorString) return colorString;
@@ -109,11 +123,11 @@ export default definePlugin({
     },
 
     colorIfServer(a: any): string | undefined {
-        const roleColor = a.author?.colorString ?? "inherit";
+        const roleColor = a.author?.colorString;
 
         if (a?.channel?.guild_id && !settings.store.colorInServers) return roleColor;
 
         const color = getCustomColorString(a.message.author.id, true);
-        return color ?? roleColor;
+        return color ?? roleColor ?? undefined;
     }
 });

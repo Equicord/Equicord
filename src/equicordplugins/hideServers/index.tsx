@@ -113,6 +113,7 @@ export default definePlugin({
     useFilteredGuilds(guilds: guildsNode[]): guildsNode[] {
         const hiddenGuilds = useStateFromStores([HiddenServersStore], () => HiddenServersStore.hiddenGuilds, undefined, (old, newer) => old.size === newer.size);
         return guilds.flatMap(guild => {
+            if (!(hiddenGuilds instanceof Set)) return [guild];
             if (hiddenGuilds.has(guild.id.toString())) {
                 return [];
             }

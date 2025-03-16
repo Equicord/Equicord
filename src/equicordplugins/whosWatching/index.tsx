@@ -118,12 +118,12 @@ export default definePlugin({
         return (
             <>
                 <div {...props}>{props.children}</div>
-                <div className={classes(cl("spectators_panel"), Margins.top8)}>
+                <div className={classes(cl("spectators_panel"), Margins.top8)} style={{ marginLeft: 8 }}>
+                    <Forms.FormTitle tag="h3" style={{ marginTop: 8, marginBottom: 0, textTransform: "uppercase" }}>
+                        {getIntlMessage("SPECTATORS", { numViewers: userIds.length })}
+                    </Forms.FormTitle>
                     {users.length ?
                         <>
-                            <Forms.FormTitle tag="h3" style={{ marginTop: 8, marginBottom: 0, marginLeft: 8, textTransform: "uppercase" }}>
-                                {getIntlMessage("SPECTATORS", { numViewers: userIds.length })}
-                            </Forms.FormTitle>
                             <UserSummaryItem
                                 users={users}
                                 count={userIds.length}
@@ -131,8 +131,9 @@ export default definePlugin({
                                 max={12}
                                 showDefaultAvatarsForNullUsers
                                 renderMoreUsers={renderMoreUsers}
-                                renderUser={(user: User) => (
+                                renderUser={(user: User, index: number) => (
                                     <Clickable
+                                        key={index}
                                         className={AvatarStyles.clickableAvatar}
                                         onClick={() => openUserProfile(user.id)}
                                     >
@@ -141,13 +142,12 @@ export default definePlugin({
                                             src={user.getAvatarURL(void 0, 80, true)}
                                             alt={user.username}
                                             title={user.username}
-                                            style={{ marginLeft: 8 }}
                                         />
                                     </Clickable>
                                 )}
                             />
                         </>
-                        : <Forms.FormText style={{ marginLeft: 8 }}>No spectators</Forms.FormText>
+                        : <Forms.FormText>No spectators</Forms.FormText>
                     }
                 </div>
             </>

@@ -10,7 +10,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 
 ### Extra included plugins
 <details>
-<summary>151 additional plugins</summary>
+<summary>157 additional plugins</summary>
 
 ### All Platforms
 - AllCallTimers by MaxHerbold & D3SOX
@@ -34,6 +34,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - CharacterCounter by Creations & Panniku
 - CleanChannelName by AutumnVN
 - ClientSideBlock by Samwich
+- ClipsEnhancements by niko
 - CommandPalette by Ethan
 - CopyUserMention by Cortex & castdrian
 - CustomSounds by TheKodeToad & SpikeHD
@@ -44,8 +45,8 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - DecodeBase64 by ThePirateStoner
 - DeadMembers by Kyuuhachi
 - Demonstration by Samwich
+- DisableAnimations by S€th
 - DisableCameras by Joona
-- DoNotLeak by Perny
 - DontFilterMe by Samwich
 - EmojiDumper by Cortex, Samwich, Woosh
 - Encryptcord by Inbestigator
@@ -54,7 +55,9 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - FakeProfileThemesAndEffects by ryan
 - FindReply by newwares
 - FixFileExtensions by thororen
+- FollowVoiceUser by TheArmagan
 - FrequentQuickSwitcher by Samwich
+- FriendCodes by HypedDomi
 - FriendshipRanks by Samwich
 - FullVcPfp by mochie
 - FriendTags by Samwich
@@ -63,16 +66,16 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - GifRoulette by Samwich
 - Glide by Samwich
 - GlobalBadges by HypedDomi & Hosted by Wolfie
-- GodMode by Tolgchu
 - GoogleThat by Samwich
 - HideChatButtons by iamme
-- HideMessage by Hanzy
 - HideServers by bepvte
 - HolyNotes by Wolfie
 - HomeTyping by Samwich
 - HopOn by ImLvna
 - Husk by nin0dev
+- IconViewer by iamme
 - Identity by Samwich
+- IgnoreCalls by TheArmagan
 - IgnoreTerms by D3SOX
 - ImagePreview by Creations
 - ImgToGif by zyqunix
@@ -112,6 +115,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - QuestCompleter by Amia
 - QuestionMarkReplacement by nyx
 - Quoter by Samwich
+- Remix by MrDiamond
 - RemixMe by kvba
 - RepeatMessage by Tolgchu
 - ReplyPingControl by ant0n & MrDiamond
@@ -126,6 +130,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - StatsfmRPC by Crxaw & vmohammad
 - Slap by Korbo
 - SoundBoardLogger by Moxxie, fres, echo, maintained by thororen
+- SpotifyLyrics by Joona
 - StatusPresets by iamme
 - SteamStatusSync by niko
 - StickerBlocker by Samwich
@@ -145,6 +150,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - UwUifier by echo
 - VCSupport by thororen
 - VCNarratorCustom by Loukios, ported by example-git
+- VCPanelSettings by nin0dev
 - VencordRPC by AutumnVN
 - VideoSpeed by Samwich
 - ViewRawVariant (ViewRaw2) by Kyuuhachi
@@ -186,6 +192,8 @@ MacOS
 - [GUI](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl.MacOS.zip)
 
 Linux
+- [GUI-X11](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl-x11)
+- [GUI-Wayland](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl-wayland)
 - [CLI](https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli-Linux)
 - [AUR](https://aur.archlinux.org/packages?O=0&K=equicord)
 ```shell
@@ -216,7 +224,7 @@ cd Equicord
 Install dependencies:
 
 ```shell
-pnpm install --frozen-lockfile
+pnpm install --no-frozen-lockfile
 ```
 
 Build Equicord:
