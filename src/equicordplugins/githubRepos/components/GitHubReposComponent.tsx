@@ -1,6 +1,13 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2025 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import { Flex } from "@components/Flex";
 import { openModal } from "@utils/modal";
-import { UserProfileStore, React, useEffect, useState } from "@webpack/common";
+import { React, useEffect, UserProfileStore, useState } from "@webpack/common";
+
 import { fetchReposByUserId, fetchReposByUsername, fetchUserInfo, GitHubUserInfo } from "../services/githubApi";
 import { GitHubRepo } from "../types";
 import { settings } from "../utils/settings";
@@ -95,6 +102,7 @@ export function GitHubReposComponent({ id, theme }: { id: string, theme: string;
             <Flex className="vc-github-repos-list" flexDirection="column">
                 {topRepos.map(repo => (
                     <RepoCard
+                        key={repo.id}
                         repo={repo}
                         theme={theme}
                         showStars={settings.store.showStars}
@@ -112,4 +120,4 @@ export function GitHubReposComponent({ id, theme }: { id: string, theme: string;
             </div>
         </div>
     );
-} 
+}
