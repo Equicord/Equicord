@@ -1,0 +1,289 @@
+.console-viewer-btn {
+    cursor: pointer;
+    color: var(--interactive-normal);
+    margin: 0 8px;
+}
+
+.console-viewer-btn:hover {
+    color: var(--interactive-hover);
+}
+
+.console-viewer-root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+}
+
+.console-viewer-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.console-viewer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0 0 0 / 85%);
+    z-index: 1000;
+}
+
+.console-viewer-modal {
+    width: 800px;
+    height: 600px;
+    max-width: 90vw;
+    max-height: 90vh;
+    background-color: var(--background-primary);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgb(0 0 0 / 50%);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10001;
+    animation: console-viewer-slide-in 250ms ease;
+}
+
+body.console-viewer-open {
+    overflow: hidden;
+}
+
+.console-viewer-close-button {
+    background: none;
+    border: none;
+    color: var(--interactive-normal);
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-left: 8px;
+}
+
+.console-viewer-close-button:hover {
+    background-color: var(--background-modifier-hover);
+    color: var(--interactive-hover);
+}
+
+.console-viewer-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--background-modifier-accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.console-viewer-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.console-viewer-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.console-viewer-toolbar {
+    padding: 8px;
+    border-bottom: 1px solid var(--background-modifier-accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.console-viewer-filters {
+    display: flex;
+    gap: 4px;
+}
+
+.console-viewer-search {
+    width: 200px;
+    position: relative;
+}
+
+.console-viewer-search-input {
+    width: 100%;
+    background-color: var(--background-tertiary);
+    border: none;
+    border-radius: 4px;
+    padding: 8px 10px;
+    color: var(--text-normal);
+    font-size: 14px;
+    outline: none;
+}
+
+.console-viewer-search-input:focus {
+    box-shadow: 0 0 0 1px var(--brand-experiment);
+}
+
+.console-viewer-search-clear {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--interactive-normal);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.console-viewer-search-clear:hover {
+    color: var(--interactive-hover);
+}
+
+.console-viewer-logs {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 14px;
+    background-color: var(--background-secondary);
+}
+
+.console-viewer-log-entry {
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: flex-start;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+.console-viewer-log-time {
+    color: var(--text-muted);
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.console-viewer-log-badge {
+    margin-right: 8px;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    min-width: 50px;
+    text-align: center;
+}
+
+.console-viewer-log-content {
+    flex: 1;
+    font-family: Consolas, 'Courier New', monospace;
+    overflow-wrap: break-word;
+}
+
+.console-viewer-log-log {
+    background-color: var(--background-tertiary);
+}
+
+.console-viewer-log-log .console-viewer-log-badge {
+    background-color: var(--interactive-normal);
+    color: var(--interactive-active);
+}
+
+.console-viewer-log-info {
+    background-color: var(--info-warning-background);
+}
+
+.console-viewer-log-info .console-viewer-log-badge {
+    background-color: var(--info-positive-foreground);
+    color: var(--info-positive-text);
+}
+
+.console-viewer-log-warn {
+    background-color: var(--info-warning-background);
+}
+
+.console-viewer-log-warn .console-viewer-log-badge {
+    background-color: var(--info-warning-foreground);
+    color: var(--info-warning-text);
+}
+
+.console-viewer-log-error {
+    background-color: var(--info-danger-background);
+}
+
+.console-viewer-log-error .console-viewer-log-badge {
+    background-color: var(--info-danger-foreground);
+    color: var(--info-danger-text);
+}
+
+.console-viewer-arg {
+    margin-right: 6px;
+}
+
+.console-viewer-no-logs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.console-viewer-status {
+    padding: 8px;
+    border-top: 1px solid var(--background-modifier-accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.console-viewer-count {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.console-viewer-auto-scroll {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.console-viewer-error {
+    padding: 16px;
+    color: var(--text-danger);
+    text-align: center;
+    font-size: 16px;
+    background-color: var(--background-primary);
+    border-radius: 8px;
+}
+
+@keyframes console-viewer-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes console-viewer-slide-in {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
