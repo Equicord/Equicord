@@ -1,6 +1,6 @@
 /*
- * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Equicord, a Discord client mod
+ * Copyright (c) 2025 Equicord and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -39,3 +39,4 @@ export default definePlugin({
     start: () => addChatBarButton("Freakcord", ChatBarIcon),
     stop: () => removeChatBarButton("Freakcord")
 });
+
