@@ -8,9 +8,9 @@ import { Flex } from "@components/Flex";
 import { openModal } from "@utils/modal";
 import { React, useEffect, UserProfileStore, useState } from "@webpack/common";
 
-import { fetchReposByUserId, fetchReposByUsername, fetchUserInfo, GitHubUserInfo } from "../services/githubApi";
+import { settings } from "..";
+import { fetchReposByUserId, fetchReposByUsername, fetchUserInfo, GitHubUserInfo } from "../githubApi";
 import { GitHubRepo } from "../types";
-import { settings } from "../utils/settings";
 import { RepoCard } from "./RepoCard";
 import { ReposModal } from "./ReposModal";
 
@@ -19,6 +19,7 @@ export function GitHubReposComponent({ id, theme }: { id: string, theme: string;
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [userInfo, setUserInfo] = useState<GitHubUserInfo | null>(null);
+    const [returnJustButton, setReturnJustButton] = useState(false);
 
     const openReposModal = () => {
         if (!userInfo) return;
@@ -62,6 +63,8 @@ export function GitHubReposComponent({ id, theme }: { id: string, theme: string;
 
                 const githubId = githubConnection.id;
 
+                if (!settings.store.showInMiniProfile) setReturnJustButton(true);
+
                 // Try to fetch by ID first, fall back to username
                 const reposById = await fetchReposByUserId(githubId);
                 if (reposById) {
@@ -86,6 +89,17 @@ export function GitHubReposComponent({ id, theme }: { id: string, theme: string;
     if (loading) return <div className="vc-github-repos-loading">Loading repositories...</div>;
     if (error) return <div className="vc-github-repos-error">Error: {error}</div>;
     if (!repos.length) return null;
+
+    if (returnJustButton) {
+        return (
+            <button
+                className="vc-github-button"
+                onClick={openReposModal}
+            >
+                Show GitHub Repositories
+            </button>
+        );
+    }
 
     const topRepos = repos.slice(0, 3);
 

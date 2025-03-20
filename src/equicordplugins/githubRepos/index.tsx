@@ -6,23 +6,43 @@
 
 import "./styles.css";
 
+import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { findByCodeLazy } from "@webpack";
 import { React } from "@webpack/common";
+import { User } from "discord-types/general";
 
 import { GitHubReposComponent } from "./components/GitHubReposComponent";
-import { settings } from "./utils/settings";
+
+export const settings = definePluginSettings({
+    showStars: {
+        type: OptionType.BOOLEAN,
+        description: "Show repository stars",
+        default: true
+    },
+    showLanguage: {
+        type: OptionType.BOOLEAN,
+        description: "Show repository language",
+        default: true
+    },
+    showInMiniProfile: {
+        type: OptionType.BOOLEAN,
+        description: "Only show a button in the mini profile",
+        default: true
+    },
+});
+
 
 const getProfileThemeProps = findByCodeLazy(".getPreviewThemeColors", "primaryColor:");
 
 const logger = new Logger("GitHubRepos");
 logger.info("Plugin loaded");
 
-const profilePopoutComponent = ErrorBoundary.wrap(
-    (props: { user: any; displayProfile?: any; }) => {
+const ProfilePopoutComponent = ErrorBoundary.wrap(
+    (props: { user: User; displayProfile?: any; }) => {
         return (
             <GitHubReposComponent
                 {...props}
@@ -50,53 +70,17 @@ export default definePlugin({
         {
             find: ".hasAvatarForGuild(null==",
             replacement: {
-                match: /currentUser:\i,guild:\i}\)(?<=user:(\i),bio:null==(\i)\?.+?)/,
-                replace: (m, user, profile) => {
-                    return `${m},$self.profilePopoutComponent({ user: ${user}, displayProfile: ${profile} })`;
-                }
+                match: /(?<=user:(\i),bio:null==(\i)\?.+?currentUser:\i,guild:\i}\))/,
+                replace: ",$self.ProfilePopoutComponent({ user: $1, displayProfile: $2 })"
             }
         },
         {
-            find: "renderBio",
+            find: "action:\"PRESS_APP_CONNECTION\"",
             replacement: {
-                match: /renderBio\(\){.+?return (.*?)}/s,
-                replace: (m, returnStatement) => {
-                    return `renderBio(){
-                        const originalReturn = ${returnStatement};
-                        const user = this.props.user;
-                        if (!user) return originalReturn;
-
-                        try {
-                            const component = $self.profilePopoutComponent({
-                                user: user,
-                                displayProfile: this.props.displayProfile
-                            });
-
-                            if (!originalReturn) return component;
-
-                            return React.createElement(
-                                React.Fragment,
-                                null,
-                                originalReturn,
-                                component
-                            );
-                        } catch (err) {
-                            console.error("[GitHubRepos] Error in bio patch:", err);
-                            return originalReturn;
-                        }
-                    }`;
-                }
+                match: /(?<=user:(\i).{0,15}displayProfile:(\i).*?CONNECTIONS.{0,100}\}\)\}\))/,
+                replace: ",$self.ProfilePopoutComponent({ user: $1, displayProfile: $2 })"
             }
         }
     ],
-
-    start() {
-        logger.info("Plugin started");
-    },
-
-    stop() {
-        logger.info("Plugin stopped");
-    },
-
-    profilePopoutComponent
+    ProfilePopoutComponent
 });
