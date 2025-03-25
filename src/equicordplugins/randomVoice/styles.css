@@ -3,6 +3,6 @@
     margin-left: -15px;
 }
 
-[class^="micButtonParent"] {
+[class^="micButtonParent__"] {
     width: 16px;
 }

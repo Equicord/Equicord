@@ -14,7 +14,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, ContextMenuApi, GuildStore, Menu, NavigationRouter, PermissionStore, React, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
 
-import style from "./styles.css";
+import style from "./styles.css?managed";
 
 const ChatVoiceIcon = findComponentByCodeLazy("22H12Zm2-5.26c0");
 const Button = findComponentByCodeLazy(".NONE,disabled:", ".PANEL_BUTTON");
