@@ -18,7 +18,6 @@
 
 import type { Channel } from "discord-types/general";
 
-// eslint-disable-next-line path-alias/no-relative
 import { _resolveReady, filters, findByCodeLazy, findByPropsLazy, findLazy, mapMangledModuleLazy, waitFor } from "../webpack";
 import type * as t from "./types/utils";
 
@@ -48,6 +47,10 @@ export const RestAPI: t.RestAPI = findLazy(m => typeof m === "object" && m.del &
 export const moment: typeof import("moment") = findByPropsLazy("parseTwoDigitYear");
 
 export const hljs: typeof import("highlight.js").default = findByPropsLazy("highlight", "registerLanguage");
+
+export const useDrag = findByCodeLazy("useDrag::spec.begin was deprecated");
+// you cant make a better finder i love that they remove display names sm
+export const useDrop = findByCodeLazy(".options);return", ".collect,");
 
 export const { match, P }: Pick<typeof import("ts-pattern"), "match" | "P"> = mapMangledModuleLazy("@ts-pattern/matcher", {
     match: filters.byCode("return new"),
@@ -125,7 +128,6 @@ waitFor("showToast", m => {
     Toasts.create = m.createToast;
 });
 
-
 /**
  * Show a simple toast. If you need more options, use Toasts.show manually
  */
@@ -184,6 +186,10 @@ export const UserProfileActions = findByPropsLazy("openUserProfileModal", "close
 export const InviteActions = findByPropsLazy("resolveInvite");
 
 export const IconUtils: t.IconUtils = findByPropsLazy("getGuildBannerURL", "getUserAvatarURL");
+
+export const ReadStateUtils = mapMangledModuleLazy('type:"ENABLE_AUTOMATIC_ACK",', {
+    ackChannel: filters.byCode(".isForumLikeChannel(")
+});
 
 export const ExpressionPickerStore: t.ExpressionPickerStore = mapMangledModuleLazy("expression-picker-last-active-view", {
     openExpressionPicker: filters.byCode(/setState\({activeView:(?:(?!null)\i),activeViewType:/),

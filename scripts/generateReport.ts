@@ -41,7 +41,7 @@ let metaData = {
 const browser = await pup.launch({
     headless: true,
     executablePath: process.env.CHROMIUM_BIN,
-    args: ["--no-sandbox"]
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
 });
 
 const page = await browser.newPage();
@@ -93,7 +93,7 @@ function toCodeBlock(s: string, indentation = 0, isDiscord = false) {
 async function printReport() {
     console.log();
 
-    console.log("# Vencord Report" + (CANARY ? " (Canary)" : ""));
+    console.log("# Equicord Report" + (CANARY ? " (Canary)" : ""));
 
     console.log();
 
@@ -188,13 +188,13 @@ async function printReport() {
         if (embeds.length === 1) {
             embeds.push({
                 title: "No issues found",
-                description: "Seems like everything is working fine (for now) <:shipit:1330992641466433556>",
+                description: "Seems like everything is working fine (for now)",
                 color: 0x00ff00
             });
         }
 
         const body = JSON.stringify({
-            username: "Vencord Reporter" + (CANARY ? " (Canary)" : ""),
+            username: "Equicord Reporter" + (CANARY ? " (Canary)" : ""),
             embeds
         });
 
@@ -241,7 +241,7 @@ page.on("console", async e => {
 
     const firstArg = await rawArgs[0]?.jsonValue();
 
-    const isVencord = firstArg === "[Vencord]";
+    const isEquicord = firstArg === "[Equicord]";
     const isDebug = firstArg === "[PUP_DEBUG]";
     const isReporterMeta = firstArg === "[REPORTER_META]";
 
@@ -251,7 +251,7 @@ page.on("console", async e => {
     }
 
     outer:
-    if (isVencord) {
+    if (isEquicord) {
         try {
             var args = await Promise.all(e.args().map(a => a.jsonValue()));
         } catch {
@@ -315,9 +315,11 @@ page.on("console", async e => {
                         report.badWebpackFinds.push(otherMessage);
                         break;
                     case "Finished test":
-                        await browser.close();
                         await printReport();
-                        process.exit();
+                        setTimeout(async () => {
+                            await browser.close();
+                            process.exit();
+                        }, 10000);
                 }
         }
     }
@@ -352,7 +354,7 @@ page.on("pageerror", e => {
 
 await page.evaluateOnNewDocument(`
     if (location.host.endsWith("discord.com")) {
-        ${readFileSync("./dist/browser.js", "utf-8")};
+        ${readFileSync("./dist/browser/browser.js", "utf-8")};
     }
 `);
 

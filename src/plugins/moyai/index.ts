@@ -53,9 +53,9 @@ interface IVoiceChannelEffectSendEvent {
 
 const MOYAI = "🗿";
 const MOYAI_URL =
-    "https://raw.githubusercontent.com/MeguminSama/VencordPlugins/main/plugins/moyai/moyai.mp3";
+    "https://github.com/Equicord/Equibored/raw/main/sounds/moyai/moyai.mp3";
 const MOYAI_URL_HD =
-    "https://raw.githubusercontent.com/MeguminSama/VencordPlugins/main/plugins/moyai/moyai_hd.wav";
+    "https://github.com/Equicord/Equibored/raw/main/sounds/moyai/moyai.wav";
 
 const settings = definePluginSettings({
     volume: {

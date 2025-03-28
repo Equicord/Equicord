@@ -34,7 +34,7 @@ function BackupRestoreTab() {
                 </Flex>
             </Card>
             <Text variant="text-md/normal" className={Margins.bottom8}>
-                You can import and export your Vencord settings as a JSON file.
+                You can import and export your Equicord settings as a JSON file.
                 This allows you to easily transfer your settings to another device,
                 or recover your settings after reinstalling Vencord or Discord.
             </Text>
@@ -44,6 +44,7 @@ function BackupRestoreTab() {
                     <li>&mdash; Custom QuickCSS</li>
                     <li>&mdash; Theme Links</li>
                     <li>&mdash; Plugin Settings</li>
+                    <li>&mdash; Plugin DataStores (e.g. Timezones or IRememberYou)</li>
                 </ul>
             </Text>
             <Flex>

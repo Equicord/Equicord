@@ -107,25 +107,11 @@ function Updatable(props: CommonProps) {
     const [isChecking, setIsChecking] = React.useState(false);
     const [isUpdating, setIsUpdating] = React.useState(false);
 
+    const settings = useSettings(["updateRelaunch"]);
     const isOutdated = (updates?.length ?? 0) > 0;
 
     return (
         <>
-            {!updates && updateError ? (
-                <>
-                    <Forms.FormText>Failed to check updates. Check the console for more info</Forms.FormText>
-                    <ErrorCard style={{ padding: "1em" }}>
-                        <p>{updateError.stderr || updateError.stdout || "An unknown error occurred"}</p>
-                    </ErrorCard>
-                </>
-            ) : (
-                <Forms.FormText className={Margins.bottom8}>
-                    {isOutdated ? (updates.length === 1 ? "There is 1 Update" : `There are ${updates.length} Updates`) : "Up to Date!"}
-                </Forms.FormText>
-            )}
-
-            {isOutdated && <Changes updates={updates} {...props} />}
-
             <Flex className={classes(Margins.bottom8, Margins.top8)}>
                 {isOutdated && <Button
                     size={Button.Sizes.SMALL}
@@ -133,7 +119,8 @@ function Updatable(props: CommonProps) {
                     onClick={withDispatcher(setIsUpdating, async () => {
                         if (await update()) {
                             setUpdates([]);
-                            await new Promise<void>(r => {
+                            if (settings.updateRelaunch) return relaunch();
+                            return await new Promise<void>(r => {
                                 Alerts.show({
                                     title: "Update Success!",
                                     body: "Successfully updated. Restart now to apply the changes?",
@@ -174,6 +161,20 @@ function Updatable(props: CommonProps) {
                     Check for Updates
                 </Button>
             </Flex>
+            {!updates && updateError ? (
+                <>
+                    <Forms.FormText>Failed to check updates. Check the console for more info</Forms.FormText>
+                    <ErrorCard style={{ padding: "1em" }}>
+                        <p>{updateError.stderr || updateError.stdout || "An unknown error occurred"}</p>
+                    </ErrorCard>
+                </>
+            ) : (
+                <Forms.FormText className={Margins.bottom8}>
+                    {isOutdated ? (updates.length === 1 ? "There is 1 Update" : `There are ${updates.length} Updates`) : "Up to Date!"}
+                </Forms.FormText>
+            )}
+
+            {isOutdated && <Changes updates={updates} {...props} />}
         </>
     );
 }
@@ -190,7 +191,7 @@ function Newer(props: CommonProps) {
 }
 
 function Updater() {
-    const settings = useSettings(["autoUpdate", "autoUpdateNotification"]);
+    const settings = useSettings(["autoUpdate", "updateRelaunch", "autoUpdateNotification"]);
 
     const [repo, err, repoPending] = useAwaiter(getRepo, { fallbackValue: "Loading..." });
 
@@ -205,22 +206,40 @@ function Updater() {
     };
 
     return (
-        <SettingsTab title="Vencord Updater">
+        <SettingsTab title="Equicord Updater">
             <Forms.FormTitle tag="h5">Updater Settings</Forms.FormTitle>
             <Switch
                 value={settings.autoUpdate}
                 onChange={(v: boolean) => settings.autoUpdate = v}
-                note="Automatically update Vencord without confirmation prompt"
+                note="Automatically update Equicord without confirmation prompt"
             >
                 Automatically update
             </Switch>
             <Switch
                 value={settings.autoUpdateNotification}
-                onChange={(v: boolean) => settings.autoUpdateNotification = v}
-                note="Shows a notification when Vencord automatically updates"
+                onChange={(v: boolean) => {
+                    settings.autoUpdateNotification = v;
+                    if (settings.updateRelaunch) {
+                        settings.updateRelaunch = !v;
+                    }
+                }}
+                note="Shows a notification when Equicord automatically updates"
                 disabled={!settings.autoUpdate}
             >
                 Get notified when an automatic update completes
+            </Switch>
+            <Switch
+                value={settings.updateRelaunch}
+                onChange={(v: boolean) => {
+                    settings.updateRelaunch = v;
+                    if (settings.autoUpdateNotification) {
+                        settings.autoUpdateNotification = !v;
+                    }
+                }}
+                note="Relaunches the app after updating with no prompt"
+                disabled={!settings.autoUpdate}
+            >
+                Automatically relaunch after updating
             </Switch>
 
             <Forms.FormTitle tag="h5">Repo</Forms.FormTitle>
@@ -244,7 +263,7 @@ function Updater() {
             <Forms.FormTitle tag="h5">Updates</Forms.FormTitle>
 
             {isNewer ? <Newer {...commonProps} /> : <Updatable {...commonProps} />}
-        </SettingsTab>
+        </SettingsTab >
     );
 }
 

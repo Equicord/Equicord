@@ -85,19 +85,22 @@ export default definePlugin({
         {
             find: "this.renderArtisanalHack()",
             replacement: [
-                { // Fade in on layer
+                {
+                    // Fade in on layer
                     match: /(?<=\((\i),"contextType",\i\.\i\);)/,
                     replace: "$1=$self.Layer;",
                     predicate: () => settings.store.disableFade
                 },
-                { // Lazy-load contents
+                {
+                    // Lazy-load contents
                     match: /createPromise:\(\)=>([^:}]*?),webpackId:"?\d+"?,name:(?!="CollectiblesShop")"[^"]+"/g,
                     replace: "$&,_:$1",
                     predicate: () => settings.store.eagerLoad
                 }
             ]
         },
-        { // For some reason standardSidebarView also has a small fade-in
+        {
+            // For some reason standardSidebarView also has a small fade-in
             find: 'minimal:"contentColumnMinimal"',
             replacement: [
                 {

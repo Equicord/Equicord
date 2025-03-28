@@ -35,6 +35,17 @@ async function fetchImage(url: string) {
     return await res.blob();
 }
 
+let result;
+switch (true) {
+    case IS_VESKTOP || IS_EQUIBOP:
+    case "legcord" in window:
+    case "goofcord" in window:
+        result = true;
+        break;
+    default:
+        result = false;
+}
+
 
 const settings = definePluginSettings({
     // This needs to be all in one setting because to enable any of these, we need to make Discord use their desktop context
@@ -44,7 +55,7 @@ const settings = definePluginSettings({
         description: "Add back the Discord context menus for images, links and the chat input bar",
         // Web slate menu has proper spellcheck suggestions and image context menu is also pretty good,
         // so disable this by default. Vesktop just doesn't, so enable by default
-        default: IS_VESKTOP,
+        default: result,
         restartNeeded: true
     }
 });
@@ -76,7 +87,7 @@ export default definePlugin({
     description: "Re-adds context menus missing in the web version of Discord: Links & Images (Copy/Open Link/Image), Text Area (Copy, Cut, Paste, SpellCheck)",
     authors: [Devs.Ven],
     enabledByDefault: true,
-    required: IS_VESKTOP,
+    required: result,
 
     settings,
 
@@ -257,7 +268,7 @@ export default definePlugin({
             });
         }
 
-        if (IS_VESKTOP && VesktopNative.clipboard) {
+        if (IS_VESKTOP && VesktopNative.clipboard || IS_EQUIBOP && VesktopNative.clipboard) {
             VesktopNative.clipboard.copyImage(await imageData.arrayBuffer(), url);
             return;
         } else {

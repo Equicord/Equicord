@@ -357,7 +357,7 @@ function sendOtherNotif(content: string, titleString: string) {
         content: content,
         useBase64Icon: false,
         icon: "default",
-        sourceApp: "Vencord"
+        sourceApp: "Equicord"
     };
     sendToOverlay(msgData);
 }

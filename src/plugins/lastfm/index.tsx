@@ -17,6 +17,7 @@
 */
 
 import { definePluginSettings } from "@api/Settings";
+import { getUserSettingLazy } from "@api/UserSettings";
 import { Link } from "@components/Link";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
@@ -81,6 +82,8 @@ const enum NameFormat {
     AlbumName = "album"
 }
 
+const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;
+
 const applicationId = "1108588077900898414";
 const placeholderId = "2a96cbd8b46e442fc41c2b86b821562f";
 
@@ -126,6 +129,11 @@ const settings = definePluginSettings({
     },
     hideWithActivity: {
         description: "Hide Last.fm presence if you have any other presence",
+        type: OptionType.BOOLEAN,
+        default: false,
+    },
+    enableGameActivity: {
+        description: "Enable game activity for last.fm",
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -189,6 +197,11 @@ const settings = definePluginSettings({
         description: "show the Last.fm logo by the album cover",
         type: OptionType.BOOLEAN,
         default: true,
+    },
+    alwaysHideArt: {
+        description: "Disable downloading album art",
+        type: OptionType.BOOLEAN,
+        default: false,
     }
 });
 
@@ -271,7 +284,7 @@ export default definePlugin({
     },
 
     getLargeImage(track: TrackData): string | undefined {
-        if (track.imageUrl && !track.imageUrl.includes(placeholderId))
+        if (!settings.store.alwaysHideArt && track.imageUrl && !track.imageUrl.includes(placeholderId))
             return track.imageUrl;
 
         if (settings.store.missingArt === "placeholder")
@@ -293,6 +306,11 @@ export default definePlugin({
         }
 
         const trackData = await this.fetchTrackData();
+        if (settings.store.enableGameActivity && trackData) {
+            ShowCurrentGame.updateSetting(true);
+        } else if (settings.store.enableGameActivity) {
+            ShowCurrentGame.updateSetting(false);
+        }
         if (!trackData) return null;
 
         const largeImage = this.getLargeImage(trackData);

@@ -17,7 +17,7 @@
 */
 
 // This plugin is a port from Alyxia's Vendetta plugin
-import "./index.css";
+import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -254,3 +254,4 @@ export default definePlugin({
         </Button >;
     }, { noop: true }),
 });
+

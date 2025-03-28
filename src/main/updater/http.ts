@@ -19,17 +19,17 @@
 import { get } from "@main/utils/simpleGet";
 import { IpcEvents } from "@shared/IpcEvents";
 import { VENCORD_USER_AGENT } from "@shared/vencordUserAgent";
-import { ipcMain } from "electron";
-import { writeFile } from "fs/promises";
+import { app, dialog, ipcMain } from "electron";
+import { writeFileSync as originalWriteFileSync } from "original-fs";
 import { join } from "path";
 
 import gitHash from "~git-hash";
 import gitRemote from "~git-remote";
 
-import { serializeErrors, VENCORD_FILES } from "./common";
+import { ASAR_FILE, serializeErrors } from "./common";
 
 const API_BASE = `https://api.github.com/repos/${gitRemote}`;
-let PendingUpdates = [] as [string, string][];
+let PendingUpdate: string | null = null;
 
 async function githubGet(endpoint: string) {
     return get(API_BASE + endpoint, {
@@ -65,22 +65,21 @@ async function fetchUpdates() {
     if (hash === gitHash)
         return false;
 
-    data.assets.forEach(({ name, browser_download_url }) => {
-        if (VENCORD_FILES.some(s => name.startsWith(s))) {
-            PendingUpdates.push([name, browser_download_url]);
-        }
-    });
+
+    const asset = data.assets.find(a => a.name === ASAR_FILE);
+    PendingUpdate = asset.browser_download_url;
+
     return true;
 }
 
 async function applyUpdates() {
-    await Promise.all(PendingUpdates.map(
-        async ([name, data]) => writeFile(
-            join(__dirname, name),
-            await get(data)
-        )
-    ));
-    PendingUpdates = [];
+    if (!PendingUpdate) return true;
+
+    const data = await get(PendingUpdate);
+    originalWriteFileSync(__dirname, data);
+
+    PendingUpdate = null;
+
     return true;
 }
 
@@ -88,3 +87,28 @@ ipcMain.handle(IpcEvents.GET_REPO, serializeErrors(() => `https://github.com/${g
 ipcMain.handle(IpcEvents.GET_UPDATES, serializeErrors(calculateGitChanges));
 ipcMain.handle(IpcEvents.UPDATE, serializeErrors(fetchUpdates));
 ipcMain.handle(IpcEvents.BUILD, serializeErrors(applyUpdates));
+
+export async function migrateLegacyToAsar() {
+    try {
+        const isFlatpak = process.platform === "linux" && !!process.env.FLATPAK_ID;
+        if (isFlatpak) throw "Flatpak Discord can't automatically be migrated.";
+
+        const data = await get(`https://github.com/${gitRemote}/releases/latest/download/desktop.asar`);
+
+        originalWriteFileSync(join(__dirname, "../equicord.asar"), data);
+        originalWriteFileSync(__filename, '// Legacy shim for new asar\n\nrequire("../equicord.asar");');
+
+        app.relaunch();
+        app.exit();
+    } catch (e) {
+        console.error("Failed to migrate to asar", e);
+
+        app.whenReady().then(() => {
+            dialog.showErrorBox(
+                "Legacy Install",
+                "The way Equicord loaded was changed and the updater failed to migrate. Please reinstall using the Equicord Installer!"
+            );
+            app.exit(1);
+        });
+    }
+}

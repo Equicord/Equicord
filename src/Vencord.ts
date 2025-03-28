@@ -30,6 +30,7 @@ import "./utils/quickCss";
 import "./webpack/patchWebpack";
 
 import { openUpdaterModal } from "@components/VencordSettings/UpdaterTab";
+import { Logger } from "@utils/Logger";
 import { StartAt } from "@utils/types";
 
 import { get as dsGet } from "./api/DataStore";
@@ -45,6 +46,38 @@ import { SettingsRouter } from "./webpack/common";
 
 if (IS_REPORTER) {
     require("./debug/runReporter");
+    Settings.plugins.CharacterCounter.enabled = false;
+}
+
+const logger = new Logger("Debug", "#a6d189");
+
+let isFrozen = true;
+const checkInterval = 5000;
+const freezeChecker = setInterval(() => {
+    if (isFrozen) {
+        location.reload();
+    }
+    isFrozen = true;
+}, checkInterval);
+
+function safeInit() {
+    try {
+        startAllPlugins(StartAt.Init);
+        init();
+
+        const originalLoggerInfo = logger.info.bind(logger);
+        logger.info = function (message) {
+            originalLoggerInfo(message);
+            if (message.includes("Completed Equicord initialization.")) {
+                isFrozen = false;
+                clearInterval(freezeChecker);
+            }
+        };
+    } catch (error) {
+        logger.error("Failed to initialize Equicord, reloading in 5 seconds...", error);
+        clearInterval(freezeChecker);
+        setTimeout(() => location.reload(), 5000);
+    }
 }
 
 async function syncSettings() {
@@ -59,7 +92,7 @@ async function syncSettings() {
             body: "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will " +
                 "need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
             color: "var(--yellow-360)",
-            onClick: () => SettingsRouter.open("VencordCloud")
+            onClick: () => SettingsRouter.open("EquicordCloud")
         });
         return;
     }
@@ -71,7 +104,8 @@ async function syncSettings() {
         if (localStorage.Vencord_settingsDirty) {
             await putCloudSettings();
             delete localStorage.Vencord_settingsDirty;
-        } else if (await getCloudSettings(false)) { // if we synchronized something (false means no sync)
+        } else if (await getCloudSettings(false)) {
+            // if we synchronized something (false means no sync)
             // we show a notification here instead of allowing getCloudSettings() to show one to declutter the amount of
             // potential notifications that might occur. getCloudSettings() will always send a notification regardless if
             // there was an error to notify the user, but besides that we only want to show one notification instead of all
@@ -92,6 +126,8 @@ async function init() {
 
     syncSettings();
 
+    logger.info("Completed Equicord initialization.");
+
     if (!IS_WEB && !IS_UPDATER_DISABLED) {
         try {
             const isOutdated = await checkForUpdates();
@@ -99,9 +135,10 @@ async function init() {
 
             if (Settings.autoUpdate) {
                 await update();
+                if (Settings.updateRelaunch) return relaunch;
                 if (Settings.autoUpdateNotification)
                     setTimeout(() => showNotification({
-                        title: "Vencord has been updated!",
+                        title: "Equicord has been updated!",
                         body: "Click here to restart",
                         permanent: true,
                         noPersist: true,
@@ -111,7 +148,7 @@ async function init() {
             }
 
             setTimeout(() => showNotification({
-                title: "A Vencord update is available!",
+                title: "A Equicord update is available!",
                 body: "Click here to view the update",
                 permanent: true,
                 noPersist: true,
@@ -136,16 +173,25 @@ async function init() {
     }
 }
 
-startAllPlugins(StartAt.Init);
-init();
+safeInit();
 
 document.addEventListener("DOMContentLoaded", () => {
-    startAllPlugins(StartAt.DOMContentLoaded);
+    try {
+        startAllPlugins(StartAt.DOMContentLoaded);
 
-    if (IS_DISCORD_DESKTOP && Settings.winNativeTitleBar && navigator.platform.toLowerCase().startsWith("win")) {
-        document.head.append(Object.assign(document.createElement("style"), {
-            id: "vencord-native-titlebar-style",
-            textContent: "[class*=titleBar]{display: none!important}"
-        }));
+        if (IS_DISCORD_DESKTOP && Settings.winNativeTitleBar && navigator.platform.toLowerCase().startsWith("win")) {
+            document.head.append(Object.assign(document.createElement("style"), {
+                id: "vencord-native-titlebar-style",
+                textContent: "[class*=titleBar]{display: none!important}"
+            }));
+        }
+
+        isFrozen = false;
+        clearInterval(freezeChecker);
+        logger.info("DOMContentLoaded event handled successfully.");
+    } catch (error) {
+        logger.error("Error during DOMContentLoaded event, reloading in 5 seconds...", error);
+        clearInterval(freezeChecker);
+        setTimeout(() => location.reload(), 5000);
     }
 }, { once: true });

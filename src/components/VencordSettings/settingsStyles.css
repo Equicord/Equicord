@@ -15,15 +15,26 @@
     flex-direction: row;
 }
 
+.vc-settings-discordinvite {
+    display: flex;
+    flex-direction: row;
+}
+
 .vc-settings-card {
     padding: 1em;
     margin-bottom: 1em;
 }
 
+.vc-settings-card-buttons {
+    display: flex;
+    margin-top: 1.5em;
+    gap: 0.5em;
+}
+
 .vc-backup-restore-card {
-    background-color: var(--info-warning-background);
-    border-color: var(--info-warning-foreground);
-    color: var(--info-warning-text);
+    background-color: var(--info-warning-background) !important;
+    border-color: var(--info-warning-foreground) !important;
+    color: var(--info-warning-text) !important;
 }
 
 .vc-settings-theme-links {

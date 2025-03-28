@@ -43,11 +43,34 @@ if (IS_VESKTOP || !IS_VANILLA) {
             }
             switch (url) {
                 case "renderer.js.map":
-                case "vencordDesktopRenderer.js.map":
                 case "preload.js.map":
-                case "vencordDesktopPreload.js.map":
                 case "patcher.js.map":
-                case "vencordDesktopMain.js.map":
+                case "main.js.map":
+                    cb(join(__dirname, url));
+                    break;
+                default:
+                    cb({ statusCode: 403 });
+            }
+        });
+
+        protocol.registerFileProtocol("equicord", ({ url: unsafeUrl }, cb) => {
+            let url = unsafeUrl.slice("equicord://".length);
+            if (url.endsWith("/")) url = url.slice(0, -1);
+            if (url.startsWith("/themes/")) {
+                const theme = url.slice("/themes/".length);
+                const safeUrl = ensureSafePath(THEMES_DIR, theme);
+                if (!safeUrl) {
+                    cb({ statusCode: 403 });
+                    return;
+                }
+                cb(safeUrl.replace(/\?v=\d+$/, ""));
+                return;
+            }
+            switch (url) {
+                case "renderer.js.map":
+                case "preload.js.map":
+                case "patcher.js.map":
+                case "main.js.map":
                     cb(join(__dirname, url));
                     break;
                 default:
@@ -58,8 +81,8 @@ if (IS_VESKTOP || !IS_VANILLA) {
         try {
             if (RendererSettings.store.enableReactDevtools)
                 installExt("fmkadmapgofadopljbjfkapdkoienihi")
-                    .then(() => console.info("[Vencord] Installed React Developer Tools"))
-                    .catch(err => console.error("[Vencord] Failed to install React Developer Tools", err));
+                    .then(() => console.info("[Equicord] Installed React Developer Tools"))
+                    .catch(err => console.error("[Equicord] Failed to install React Developer Tools", err));
         } catch { }
 
 

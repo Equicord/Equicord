@@ -20,5 +20,8 @@ export * from "./classes";
 export * from "./components";
 export * from "./fluxEvents";
 export * from "./menu";
+export * from "./passiveupdatestate";
 export * from "./stores";
 export * from "./utils";
+export * from "./voicestate";
+

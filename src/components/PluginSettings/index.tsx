@@ -31,13 +31,16 @@ import { proxyLazy } from "@utils/lazy";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes, isObjectEmpty } from "@utils/misc";
+import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { useAwaiter } from "@utils/react";
 import { Plugin } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { Alerts, Button, Card, Forms, lodash, Parser, React, Select, Text, TextInput, Toasts, Tooltip, useMemo } from "@webpack/common";
+import { Alerts, Button, Card, Flex, Forms, lodash, Parser, React, Select, Text, TextInput, Toasts, Tooltip, useMemo } from "@webpack/common";
 import { JSX } from "react";
 
-import Plugins, { ExcludedPlugins } from "~plugins";
+import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
+
+import { StockPluginsCard, UserPluginsCard } from "./PluginStatCards";
 
 // Avoid circular dependency
 const { startDependenciesRecursive, startPlugin, stopPlugin } = proxyLazy(() => require("../../plugins"));
@@ -47,7 +50,6 @@ const logger = new Logger("PluginSettings", "#a6d189");
 
 const InputStyles = findByPropsLazy("inputWrapper", "inputDefault", "error");
 const ButtonClasses = findByPropsLazy("button", "disabled", "enabled");
-
 
 function showErrorToast(message: string) {
     Toasts.show({
@@ -60,7 +62,7 @@ function showErrorToast(message: string) {
     });
 }
 
-function ReloadRequiredCard({ required }: { required: boolean; }) {
+function ReloadRequiredCard({ required, enabledPlugins, openDisablePluginsModal, resetCheckAndDo }) {
     return (
         <Card className={cl("info-card", { "restart-card": required })}>
             {required ? (
@@ -69,7 +71,7 @@ function ReloadRequiredCard({ required }: { required: boolean; }) {
                     <Forms.FormText className={cl("dep-text")}>
                         Restart now to apply new plugins and their settings
                     </Forms.FormText>
-                    <Button onClick={() => location.reload()} className={cl("restart-button")}>
+                    <Button className={cl("restart-button")} onClick={() => location.reload()}>
                         Restart
                     </Button>
                 </>
@@ -79,6 +81,19 @@ function ReloadRequiredCard({ required }: { required: boolean; }) {
                     <Forms.FormText>Press the cog wheel or info icon to get more info on a plugin</Forms.FormText>
                     <Forms.FormText>Plugins with a cog wheel have settings you can modify!</Forms.FormText>
                 </>
+            )}
+            {enabledPlugins.length > 0 && !required && (
+                <Button
+                    size={Button.Sizes.SMALL}
+                    className="button-danger-background disable-all-button"
+                    onClick={() => {
+                        if (Settings.ignoreResetWarning) return resetCheckAndDo();
+
+                        return openDisablePluginsModal(enabledPlugins, resetCheckAndDo);
+                    }}
+                >
+                    Disable All Plugins
+                </Button>
             )}
         </Card>
     );
@@ -177,12 +192,13 @@ function ExcludedPluginsList({ search }: { search: string; }) {
     const matchingExcludedPlugins = Object.entries(ExcludedPlugins)
         .filter(([name]) => name.toLowerCase().includes(search));
 
-    const ExcludedReasons: Record<"web" | "discordDesktop" | "vencordDesktop" | "desktop" | "dev", string> = {
+    const ExcludedReasons: Record<"web" | "discordDesktop" | "vencordDesktop" | "equicordDesktop" | "desktop" | "dev", string> = {
         desktop: "Discord Desktop app or Vesktop",
         discordDesktop: "Discord Desktop app",
-        vencordDesktop: "Vesktop app",
-        web: "Vesktop app and the Web version of Discord",
-        dev: "Developer version of Vencord"
+        vencordDesktop: "Vesktop Equibop apps",
+        equicordDesktop: "Vesktop & Equibop apps",
+        web: "Vesktop & Equibop apps as well as the Web version of Discord",
+        dev: "Developer version of Equicord"
     };
 
     return (
@@ -260,7 +276,7 @@ export default function PluginSettings() {
         if (!search.length) return true;
 
         return (
-            plugin.name.toLowerCase().includes(search) ||
+            plugin.name.toLowerCase().includes(search.replace(/\s+/g, "")) ||
             plugin.description.toLowerCase().includes(search) ||
             plugin.tags?.some(t => t.toLowerCase().includes(search))
         );
@@ -297,7 +313,7 @@ export default function PluginSettings() {
 
         if (isRequired) {
             const tooltipText = p.required || !depMap[p.name]
-                ? "This plugin is required for Vencord to function."
+                ? "This plugin is required for Equicord to function."
                 : makeDependencyList(depMap[p.name]?.filter(d => settings.plugins[d].enabled));
 
             requiredPlugins.push(
@@ -327,9 +343,154 @@ export default function PluginSettings() {
         }
     }
 
+    function resetCheckAndDo() {
+        let restartNeeded = false;
+
+        for (const plugin of enabledPlugins) {
+            const pluginSettings = settings.plugins[plugin];
+
+            if (Plugins[plugin].patches?.length) {
+                pluginSettings.enabled = false;
+                changes.handleChange(plugin);
+                restartNeeded = true;
+                continue;
+            }
+
+            const result = stopPlugin(Plugins[plugin]);
+
+            if (!result) {
+                logger.error(`Error while stopping plugin ${plugin}`);
+                showErrorToast(`Error while stopping plugin ${plugin}`);
+                continue;
+            }
+
+            pluginSettings.enabled = false;
+        }
+
+        if (restartNeeded) {
+            Alerts.show({
+                title: "Restart Required",
+                body: (
+                    <>
+                        <p style={{ textAlign: "center" }}>Some plugins require a restart to fully disable.</p>
+                        <p style={{ textAlign: "center" }}>Would you like to restart now?</p>
+                    </>
+                ),
+                confirmText: "Restart Now",
+                cancelText: "Later",
+                onConfirm: () => location.reload()
+            });
+        }
+    }
+
+    function openDisablePluginsModal(enabledPlugins: String[], resetCheckAndDo: () => void) {
+        if (Settings.ignoreResetWarning) return resetCheckAndDo();
+
+        openModal(warningModalProps => (
+            <ModalRoot
+                {...warningModalProps}
+                size={ModalSize.SMALL}
+                className="vc-text-selectable"
+                transitionState={warningModalProps.transitionState}
+            >
+                <ModalHeader separator={false}>
+                    <Text className="text-danger">Dangerous Action</Text>
+                    <ModalCloseButton onClick={warningModalProps.onClose} className="vc-modal-close-button" />
+                </ModalHeader>
+                <ModalContent>
+                    <Forms.FormSection>
+                        <Flex className="vc-warning-info">
+                            <img
+                                src="https://media.tenor.com/hapjxf8y50YAAAAi/stop-sign.gif"
+                                alt="Warning"
+                            />
+                            <Text className="warning-text">
+                                WARNING: You are about to disable <span>{enabledPlugins.length}</span> plugins!
+                            </Text>
+                            <Text className="warning-text">
+                                THIS ACTION IS IRREVERSIBLE!
+                            </Text>
+                            <Text className="text-normal margin-bottom">
+                                Are you absolutely sure you want to proceed? You can always enable them back later.
+                            </Text>
+                        </Flex>
+                    </Forms.FormSection>
+                </ModalContent>
+                <ModalFooter className="modal-footer">
+                    <Flex className="button-container">
+                        <Button
+                            size={Button.Sizes.SMALL}
+                            color={Button.Colors.PRIMARY}
+                            onClick={warningModalProps.onClose}
+                            look={Button.Looks.LINK}
+                        >
+                            Cancel
+                        </Button>
+                        <Flex className="button-group">
+                            {!Settings.ignoreResetWarning && (
+                                <Button
+                                    size={Button.Sizes.SMALL}
+                                    className="button-danger-background"
+                                    onClick={() => {
+                                        Settings.ignoreResetWarning = true;
+                                    }}
+                                >
+                                    Disable Warning Forever
+                                </Button>
+                            )}
+                            <Tooltip text="This action cannot be undone. Are you sure?" shouldShow={true}>
+                                {({ onMouseEnter, onMouseLeave }) => (
+                                    <Button
+                                        size={Button.Sizes.SMALL}
+                                        className="button-danger-background-no-margin"
+                                        onClick={resetCheckAndDo}
+                                        onMouseEnter={onMouseEnter}
+                                        onMouseLeave={onMouseLeave}
+                                    >
+                                        Disable All
+                                    </Button>
+                                )}
+                            </Tooltip>
+                        </Flex>
+                    </Flex>
+                </ModalFooter>
+            </ModalRoot>
+        ));
+    }
+
+
+    // Code directly taken from supportHelper.tsx
+    const isApiPlugin = (plugin: string) => plugin.endsWith("API") || Plugins[plugin].required;
+
+    const totalPlugins = Object.keys(Plugins).filter(p => !isApiPlugin(p));
+    const enabledPlugins = Object.keys(Plugins).filter(p => Vencord.Plugins.isPluginEnabled(p) && !isApiPlugin(p));
+
+    const totalStockPlugins = totalPlugins.filter(p => !PluginMeta[p].userPlugin).length;
+    const totalUserPlugins = totalPlugins.filter(p => PluginMeta[p].userPlugin).length;
+    const enabledStockPlugins = enabledPlugins.filter(p => !PluginMeta[p].userPlugin).length;
+    const enabledUserPlugins = enabledPlugins.filter(p => PluginMeta[p].userPlugin).length;
+
     return (
         <SettingsTab title="Plugins">
-            <ReloadRequiredCard required={changes.hasChanges} />
+
+            <ReloadRequiredCard required={changes.hasChanges} enabledPlugins={enabledPlugins} openDisablePluginsModal={openDisablePluginsModal} resetCheckAndDo={resetCheckAndDo} />
+
+            <div className={cl("stats-container")} style={{
+                marginTop: "16px",
+                gap: "16px",
+                display: "flex",
+                flexDirection: "row",
+                width: "100%"
+            }}>
+                <StockPluginsCard
+                    totalStockPlugins={totalStockPlugins}
+                    enabledStockPlugins={enabledStockPlugins}
+                />
+                <UserPluginsCard
+                    totalUserPlugins={totalUserPlugins}
+                    enabledUserPlugins={enabledUserPlugins}
+                />
+            </div>
 
             <Forms.FormTitle tag="h5" className={classes(Margins.top20, Margins.bottom8)}>
                 Filters

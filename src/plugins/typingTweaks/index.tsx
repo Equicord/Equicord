@@ -16,8 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, Settings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { getCustomColorString } from "@equicordplugins/customUserColors";
 import { Devs } from "@utils/constants";
 import { openUserProfile } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
@@ -57,6 +58,12 @@ interface Props {
     guildId: string;
 }
 
+function typingUserColor(guildId: string, userId: string) {
+    if (!settings.store.showRoleColors) return;
+    const customColor = Settings.plugins.CustomUserColors.enabled ? getCustomColorString(userId, true) : null;
+    return customColor ?? GuildMemberStore.getMember(guildId, userId)?.colorString;
+}
+
 const TypingUser = ErrorBoundary.wrap(function ({ user, guildId }: Props) {
     return (
         <strong
@@ -65,15 +72,15 @@ const TypingUser = ErrorBoundary.wrap(function ({ user, guildId }: Props) {
                 openUserProfile(user.id);
             }}
             style={{
-                display: "grid",
-                gridAutoFlow: "column",
+                display: "flex",
+                alignItems: "center",
                 gap: "4px",
-                color: settings.store.showRoleColors ? GuildMemberStore.getMember(guildId, user.id)?.colorString : undefined,
+                color: typingUserColor(guildId, user.id),
                 cursor: "pointer"
             }}
         >
             {settings.store.showAvatars && (
-                <div style={{ marginTop: "4px" }}>
+                <div>
                     <Avatar
                         size="SIZE_16"
                         src={user.getAvatarURL(guildId, 128)} />

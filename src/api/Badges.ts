@@ -91,7 +91,9 @@ export function _getBadges(args: BadgeUserArgs) {
         }
     }
     const donorBadges = (Plugins.BadgeAPI as unknown as typeof import("../plugins/_api/badges").default).getDonorBadges(args.userId);
+    const equicordDonorBadges = (Plugins.BadgeAPI as unknown as typeof import("../plugins/_api/badges").default).getEquicordDonorBadges(args.userId);
     if (donorBadges) badges.unshift(...donorBadges);
+    if (equicordDonorBadges) badges.unshift(...equicordDonorBadges);
 
     return badges;
 }

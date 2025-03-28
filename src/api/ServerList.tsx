@@ -22,13 +22,22 @@ import { ComponentType } from "react";
 export const enum ServerListRenderPosition {
     Above,
     In,
+    Below,
 }
 
+const componentsIn = new Set<ComponentType>();
 const componentsAbove = new Set<ComponentType>();
 const componentsBelow = new Set<ComponentType>();
 
 function getRenderFunctions(position: ServerListRenderPosition) {
-    return position === ServerListRenderPosition.Above ? componentsAbove : componentsBelow;
+    switch (position) {
+        case ServerListRenderPosition.Above:
+            return componentsAbove;
+        case ServerListRenderPosition.In:
+            return componentsIn;
+        case ServerListRenderPosition.Below:
+            return componentsBelow;
+    }
 }
 
 export function addServerListElement(position: ServerListRenderPosition, renderFunction: ComponentType) {

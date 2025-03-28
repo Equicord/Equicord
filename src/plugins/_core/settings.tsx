@@ -17,11 +17,11 @@
 */
 
 import { Settings } from "@api/Settings";
+import ThemesTab from "@components/ThemeSettings/ThemesTab";
 import BackupAndRestoreTab from "@components/VencordSettings/BackupAndRestoreTab";
 import CloudTab from "@components/VencordSettings/CloudTab";
 import PatchHelperTab from "@components/VencordSettings/PatchHelperTab";
 import PluginsTab from "@components/VencordSettings/PluginsTab";
-import ThemesTab from "@components/VencordSettings/ThemesTab";
 import UpdaterTab from "@components/VencordSettings/UpdaterTab";
 import VencordTab from "@components/VencordSettings/VencordTab";
 import { Devs } from "@utils/constants";
@@ -86,48 +86,55 @@ export default definePlugin({
         return [
             {
                 section: SectionTypes.HEADER,
-                label: "Vencord",
+                label: "Equicord",
                 className: "vc-settings-header"
             },
             {
-                section: "VencordSettings",
-                label: "Vencord",
+                section: "EquicordSettings",
+                label: "Equicord",
+                searchableTitles: ["Equicord", "Settings", "Equicord Settings"],
                 element: VencordTab,
                 className: "vc-settings"
             },
             {
-                section: "VencordPlugins",
+                section: "EquicordPlugins",
                 label: "Plugins",
+                searchableTitles: ["Plugins"],
                 element: PluginsTab,
                 className: "vc-plugins"
             },
             {
-                section: "VencordThemes",
+                section: "EquicordThemes",
                 label: "Themes",
+                searchableTitles: ["Themes"],
                 element: ThemesTab,
                 className: "vc-themes"
             },
             !IS_UPDATER_DISABLED && {
-                section: "VencordUpdater",
+                section: "EquicordUpdater",
                 label: "Updater",
+                searchableTitles: ["Updater"],
                 element: UpdaterTab,
                 className: "vc-updater"
             },
             {
-                section: "VencordCloud",
+                section: "EquicordCloud",
                 label: "Cloud",
+                searchableTitles: ["Cloud"],
                 element: CloudTab,
                 className: "vc-cloud"
             },
             {
-                section: "VencordSettingsSync",
+                section: "EquicordSettingsSync",
                 label: "Backup & Restore",
+                searchableTitles: ["Backup & Restore"],
                 element: BackupAndRestoreTab,
                 className: "vc-backup-restore"
             },
             IS_DEV && {
-                section: "VencordPatchHelper",
+                section: "EquicordPatchHelper",
                 label: "Patch Helper",
+                searchableTitles: ["Patch Helper"],
                 element: PatchHelperTab,
                 className: "vc-patch-helper"
             },
@@ -194,7 +201,7 @@ export default definePlugin({
     options: {
         settingsLocation: {
             type: OptionType.SELECT,
-            description: "Where to put the Vencord settings section",
+            description: "Where to put the Equicord settings section",
             options: [
                 { label: "At the very top", value: "top" },
                 { label: "Above the Nitro section", value: "aboveNitro", default: true },
@@ -216,7 +223,8 @@ export default definePlugin({
                 // @ts-ignore Typescript will add userAgentData IMMEDIATELY
                 || navigator.userAgentData?.brands?.find(b => b.brand === "Chromium" || b.brand === "Google Chrome")?.version
                 || null;
-        } catch { // inb4 some stupid browser throws unsupported error for navigator.userAgentData, it's only in chromium
+        } catch {
+            // inb4 some stupid browser throws unsupported error for navigator.userAgentData, it's only in chromium
             return null;
         }
     },
@@ -225,6 +233,7 @@ export default definePlugin({
         if (IS_DEV) return " (Dev)";
         if (IS_WEB) return " (Web)";
         if (IS_VESKTOP) return ` (Vesktop v${VesktopNative.app.getVersion()})`;
+        if (IS_EQUIBOP) return ` (Equibop v${VesktopNative.app.getVersion()})`;
         if (IS_STANDALONE) return " (Standalone)";
         return "";
     },
@@ -232,7 +241,7 @@ export default definePlugin({
     getInfoRows() {
         const { electronVersion, chromiumVersion, additionalInfo } = this;
 
-        const rows = [`Vencord ${gitHash}${additionalInfo}`];
+        const rows = [`Equicord ${gitHash}${additionalInfo}`];
 
         if (electronVersion) rows.push(`Electron ${electronVersion}`);
         if (chromiumVersion) rows.push(`Chromium ${chromiumVersion}`);
