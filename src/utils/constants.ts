@@ -603,10 +603,6 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     samsam: {
         name: "samsam",
         id: 836452332387565589n,
-    },
-    WKoA: {
-        name: "WKoA",
-        id: 724416180097384498n
     }
 } satisfies Record<string, Dev>);
 
@@ -1027,6 +1023,10 @@ export const EquicordDevs = Object.freeze({
     omaw: {
         name: "omaw",
         id: 1155026301791514655n
+    },
+    WKoA: {
+        name: "WKoA",
+        id: 724416180097384498n
     },
 } satisfies Record<string, Dev>);
 

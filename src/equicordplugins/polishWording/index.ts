@@ -14,7 +14,7 @@ import {
     Settings,
 } from "@api/Settings";
 import { makeRange } from "@components/PluginSettings/components";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 const presendObject: MessageSendListener = (channelId, msg) => {
@@ -68,7 +68,7 @@ export default definePlugin({
     name: "PolishWording",
     description:
         "Tweaks your messages to make them look nicer and have better grammar. See settings.",
-    authors: [Devs.Samwich, Devs.WKoA],
+    authors: [Devs.Samwich, EquicordDevs.WKoA],
     dependencies: ["MessageEventsAPI"],
     start() {
         addMessagePreSendListener(presendObject);
