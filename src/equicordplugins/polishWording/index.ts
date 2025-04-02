@@ -66,24 +66,17 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PolishWording",
-    description:
-        "Tweaks your messages to make them look nicer and have better grammar. See settings.",
+    description: "Tweaks your messages to make them look nicer and have better grammar. See settings",
     authors: [Devs.Samwich, EquicordDevs.WKoA],
     dependencies: ["MessageEventsAPI"],
-    start() {
-        addMessagePreSendListener(presendObject);
-    },
-    stop() {
-        removeMessagePreSendListener(presendObject);
-    },
+    start: () => addMessagePreSendListener(presendObject),
+    stop: () => removeMessagePreSendListener(presendObject),
     settings,
 });
 
 function textProcessing(input: string) {
-    const pSettings = Settings.plugins.PolishWording;
-
     // Quick disable, without having to reload the client
-    if (pSettings.quickDisable) return input;
+    if (settings.store.quickDisable) return input;
 
     let text = input;
 
@@ -96,10 +89,10 @@ function textProcessing(input: string) {
     });
 
     // Run message through formatters.
-    if (pSettings.fixApostrophes || pSettings.expandContractions) text = ensureApostrophe(text); // Note: if expanding contractions, fix them first.
-    if (pSettings.fixCapitalization) text = capitalize(text);
-    if (pSettings.fixPunctuation && (Math.random() * 100 < pSettings.fixPunctuationFrequency)) text = addPeriods(text);
-    if (pSettings.expandContractions) text = expandContractions(text);
+    if (settings.store.fixApostrophes || settings.store.expandContractions) text = ensureApostrophe(text); // Note: if expanding contractions, fix them first.
+    if (settings.store.fixCapitalization) text = capitalize(text);
+    if (settings.store.fixPunctuation && (Math.random() * 100 < settings.store.fixPunctuationFrequency)) text = addPeriods(text);
+    if (settings.store.expandContractions) text = expandContractions(text);
 
     text = text.replace(/__CODE_BLOCK_(\d+)__/g, (_, index) => codeBlocks[parseInt(index)]);
 
@@ -170,8 +163,6 @@ function getCapData(str: string) {
 }
 
 function restoreCap(str: string, data: boolean[]): string {
-    debugger;
-
     let resultString = "";
     let dataIndex = 0;
 
