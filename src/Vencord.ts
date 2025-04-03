@@ -30,7 +30,6 @@ import "./utils/quickCss";
 import "./webpack/patchWebpack";
 
 import { openUpdaterModal } from "@components/VencordSettings/UpdaterTab";
-import { Logger } from "@utils/Logger";
 import { StartAt } from "@utils/types";
 
 import { get as dsGet } from "./api/DataStore";
@@ -49,42 +48,28 @@ if (IS_REPORTER) {
     Settings.plugins.CharacterCounter.enabled = false;
 }
 
-const logger = new Logger("Debug", "#a6d189");
-
-let isFrozen = true;
-const checkInterval = 5000;
-const freezeChecker = setInterval(() => {
-    if (isFrozen) {
-        location.reload();
-    }
-    isFrozen = true;
-}, checkInterval);
-
-function safeInit() {
-    try {
-        startAllPlugins(StartAt.Init);
-        init();
-
-        const originalLoggerInfo = logger.info.bind(logger);
-        logger.info = function (message) {
-            originalLoggerInfo(message);
-            if (message.includes("Completed Equicord initialization.")) {
-                isFrozen = false;
-                clearInterval(freezeChecker);
-            }
-        };
-    } catch (error) {
-        logger.error("Failed to initialize Equicord, reloading in 5 seconds...", error);
-        clearInterval(freezeChecker);
-        setTimeout(() => location.reload(), 5000);
-    }
-}
-
 async function syncSettings() {
+    // Check if cloud auth exists for current user before attempting sync
+    const hasCloudAuth = await dsGet("Vencord_cloudSecret");
+    if (!hasCloudAuth) {
+        if (Settings.cloud.authenticated) {
+            // User switched to an account that isn't connected to cloud
+            showNotification({
+                title: "Cloud Settings",
+                body: "Cloud sync was disabled because this account isn't connected to the Vencloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
+                color: "var(--yellow-360)",
+                onClick: () => SettingsRouter.open("VencordCloud")
+            });
+            // Disable cloud sync globally
+            Settings.cloud.authenticated = false;
+        }
+        return;
+    }
+
     // pre-check for local shared settings
     if (
         Settings.cloud.authenticated &&
-        !await dsGet("Vencord_cloudSecret") // this has been enabled due to local settings share or some other bug
+        !hasCloudAuth // this has been enabled due to local settings share or some other bug
     ) {
         // show a notification letting them know and tell them how to fix it
         showNotification({
@@ -125,8 +110,6 @@ async function init() {
     startAllPlugins(StartAt.WebpackReady);
 
     syncSettings();
-
-    logger.info("Completed Equicord initialization.");
 
     if (!IS_WEB && !IS_UPDATER_DISABLED) {
         try {
@@ -173,25 +156,15 @@ async function init() {
     }
 }
 
-safeInit();
+startAllPlugins(StartAt.Init);
+init();
 
 document.addEventListener("DOMContentLoaded", () => {
-    try {
-        startAllPlugins(StartAt.DOMContentLoaded);
-
-        if (IS_DISCORD_DESKTOP && Settings.winNativeTitleBar && navigator.platform.toLowerCase().startsWith("win")) {
-            document.head.append(Object.assign(document.createElement("style"), {
-                id: "vencord-native-titlebar-style",
-                textContent: "[class*=titleBar]{display: none!important}"
-            }));
-        }
-
-        isFrozen = false;
-        clearInterval(freezeChecker);
-        logger.info("DOMContentLoaded event handled successfully.");
-    } catch (error) {
-        logger.error("Error during DOMContentLoaded event, reloading in 5 seconds...", error);
-        clearInterval(freezeChecker);
-        setTimeout(() => location.reload(), 5000);
+    startAllPlugins(StartAt.DOMContentLoaded);
+    if (IS_DISCORD_DESKTOP && Settings.winNativeTitleBar && navigator.platform.toLowerCase().startsWith("win")) {
+        document.head.append(Object.assign(document.createElement("style"), {
+            id: "vencord-native-titlebar-style",
+            textContent: "[class*=titleBar]{display: none!important}"
+        }));
     }
 }, { once: true });

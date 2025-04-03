@@ -26,13 +26,6 @@ import { IS_VANILLA } from "./utils/constants";
 
 console.log("[Equicord] Starting up...");
 
-// FIXME: remove at some point
-const isLegacyNonAsarVencord = IS_STANDALONE && !__dirname.endsWith(".asar");
-if (isLegacyNonAsarVencord) {
-    console.warn("This is a legacy non asar install! Migrating to asar and restarting...");
-    require("./updater/http").migrateLegacyToAsar();
-}
-
 // Our injector file at app/index.js
 const injectorPath = require.main!.filename;
 
@@ -46,7 +39,7 @@ if (IS_VESKTOP || IS_EQUIBOP) require.main!.filename = join(dirname(injectorPath
 // @ts-ignore Untyped method? Dies from cringe
 app.setAppPath(asarPath);
 
-if (!IS_VANILLA && !isLegacyNonAsarVencord) {
+if (!IS_VANILLA) {
     const settings = RendererSettings.store;
     // Repatch after host updates on Windows
     if (process.platform === "win32") {
@@ -92,6 +85,11 @@ if (!IS_VANILLA && !isLegacyNonAsarVencord) {
                     options.backgroundColor = "#00000000";
                 }
 
+                if (settings.disableMinSize) {
+                    options.minWidth = 0;
+                    options.minHeight = 0;
+                }
+
                 const needsVibrancy = process.platform === "darwin" && settings.macosVibrancyStyle;
 
                 if (needsVibrancy) {
@@ -104,6 +102,12 @@ if (!IS_VANILLA && !isLegacyNonAsarVencord) {
                 process.env.DISCORD_PRELOAD = original;
 
                 super(options);
+
+                if (settings.disableMinSize) {
+                    // Disable the Electron call entirely so that Discord can't override it
+                    this.setMinimumSize = () => { };
+                }
+
                 initIpc(this);
             } else super(options);
         }
@@ -122,16 +126,9 @@ if (!IS_VANILLA && !isLegacyNonAsarVencord) {
         BrowserWindow
     };
 
-    // Patch appSettings to force enable devtools and optionally disable min size
+    // Patch appSettings to force enable devtools
     onceDefined(global, "appSettings", s => {
         s.set("DANGEROUS_ENABLE_DEVTOOLS_ONLY_ENABLE_IF_YOU_KNOW_WHAT_YOURE_DOING", true);
-        if (settings.disableMinSize) {
-            s.set("MIN_WIDTH", 0);
-            s.set("MIN_HEIGHT", 0);
-        } else {
-            s.set("MIN_WIDTH", 940);
-            s.set("MIN_HEIGHT", 500);
-        }
     });
 
     process.env.DATA_DIR = join(app.getPath("userData"), "..", "Equicord");
@@ -162,7 +159,5 @@ if (!IS_VANILLA && !isLegacyNonAsarVencord) {
     console.log("[Equicord] Running in vanilla mode. Not loading Equicord");
 }
 
-if (!isLegacyNonAsarVencord) {
-    console.log("[Equicord] Loading original Discord app.asar");
-    require(require.main!.filename);
-}
+console.log("[Equicord] Loading original Discord app.asar");
+require(require.main!.filename);

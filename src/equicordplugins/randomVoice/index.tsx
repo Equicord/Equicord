@@ -16,7 +16,7 @@ import { ChannelStore, ContextMenuApi, GuildStore, Menu, NavigationRouter, Permi
 
 import style from "./styles.css?managed";
 
-const ChatVoiceIcon = findComponentByCodeLazy("22H12Zm2-5.26c0");
+const ChatVoiceIcon = findComponentByCodeLazy("0l1.8-1.8c.17");
 const Button = findComponentByCodeLazy(".NONE,disabled:", ".PANEL_BUTTON");
 const VoiceStateStore = findStoreLazy("VoiceStateStore");
 const MediaEngineStore = findStoreLazy("MediaEngineStore");
@@ -141,7 +141,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "RandomVoice",
     description: "Adds a Button near the Mute button to join a random voice call.",
-    authors: [EquicordDevs.omaw],
+    authors: [EquicordDevs.xijexo, EquicordDevs.omaw],
     patches: [
         {
             find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
@@ -276,10 +276,9 @@ function ContextMenu() {
                                 <svg
                                     className={"reset-icon"}
                                     role="img"
-                                    width={"18"}
-                                    height={"18"}
+                                    width={"22"}
+                                    height={"22"}
                                     viewBox={"0 0 26 26"}
-
                                 >
                                     <g fill={"#b5bac1"}
                                     >
@@ -485,7 +484,7 @@ function ContextMenu() {
             <Menu.MenuSeparator />
 
             <Menu.MenuGroup
-                label="Voice LIMIT"
+                label="VOICE LIMIT"
             >
 
                 <Menu.MenuControlItem
