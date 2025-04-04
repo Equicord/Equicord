@@ -108,6 +108,8 @@ export default definePlugin({
         };
 
         FluxDispatcher.subscribe("MESSAGE_CREATE", handler);
-        return () => FluxDispatcher.unsubscribe("MESSAGE_CREATE", handler);
+    },
+    stop() {
+        FluxDispatcher.unsubscribe("MESSAGE_CREATE", handler);
     }
 });
