@@ -48,22 +48,21 @@ const settings = definePluginSettings({
     }
 });
 
+function formatContent(message: any) {
+    let content = message.content || "";
+    message.mentions?.forEach(user => {
+        content = content.replace(new RegExp(`<@!?${user.id}>`, "g"), `@${user.username}`);
+    });
+    return content.slice(0, 200) + (content.length > 200 ? "..." : "");
+}
+
 export default definePlugin({
     name: "PingNotifications",
     description: "Customizable notifications with improved mention formatting",
     authors: [EquicordDevs.smuki],
     settings,
-
-    start() {
-        const formatContent = (message: any) => {
-            let content = message.content || "";
-            message.mentions?.forEach(user => {
-                content = content.replace(new RegExp(`<@!?${user.id}>`, "g"), `@${user.username}`);
-            });
-            return content.slice(0, 200) + (content.length > 200 ? "..." : "");
-        };
-
-        const handler = ({ message }) => {
+    flux: {
+        async MESSAGE_CREATE({ message }) {
             try {
                 if (!message?.channel_id || message.state === "SENDING") return;
 
@@ -105,11 +104,6 @@ export default definePlugin({
             } catch (err) {
                 console.error("[PingNotifications] Error:", err);
             }
-        };
-
-        FluxDispatcher.subscribe("MESSAGE_CREATE", handler);
-    },
-    stop() {
-        FluxDispatcher.unsubscribe("MESSAGE_CREATE", handler);
+        }
     }
 });
