@@ -7,18 +7,15 @@
 import { addChatBarButton, ChatBarButton, ChatBarButtonFactory, removeChatBarButton } from "@api/ChatButtons";
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
+import { addMessagePreSendListener, removeMessagePreSendListener, Upload } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import {findComponentByCode, findByPropsLazy} from "@webpack"
 import { Menu, React } from "@webpack/common";
-import { Upload } from "@api/MessageEvents";
 
 // thnx signature / anonymize code
 type SpoilUpload = Upload & { anonymise?: boolean; };
-const UploadStore = findByPropsLazy("getUploads");
-const tarExtMatcher = /\.tar\.\w+$/;
 const settings = definePluginSettings(
     {
         spoilerWords: {
@@ -165,7 +162,6 @@ export default definePlugin({
         },
     }],
 });
-
 
 // text processing injection processor
 function textProcessing(input: string) {
