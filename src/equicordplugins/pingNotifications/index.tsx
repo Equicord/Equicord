@@ -25,8 +25,8 @@ const UserGuildSettingsStore = findStoreLazy("UserGuildSettingsStore");
 const settings = definePluginSettings({
     friends: {
         type: OptionType.BOOLEAN,
-        default: true,
-        description: "Notify when friends message you (non-@ mentions)"
+        default: false,
+        description: "Notify when friends send messages."
     },
     mentions: {
         type: OptionType.BOOLEAN,
@@ -51,7 +51,7 @@ const settings = definePluginSettings({
     ignoreMuted: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Skip notifications from anything muted (servers, channels, users)"
+        description: "Skip notifications from anything muted (servers, channels, users)" // dosent work in muted gcs for now and probably forever
     }
 });
 
