@@ -45,7 +45,7 @@ interface PluginData {
     commands: Command[];
     required: boolean;
     enabledByDefault: boolean;
-    target: "discordDesktop" | "vencordDesktop" | "equicordDesktop" | "desktop" | "web" | "dev";
+    target: "discordDesktop" | "vencordDesktop" | "equibop" | "desktop" | "web" | "dev";
     filePath: string;
 }
 
@@ -169,17 +169,24 @@ async function parseFile(fileName: string) {
                     data.hasCommands = true;
                     if (!isArrayLiteralExpression(value)) throw fail("commands is not an array literal");
                     data.commands = value.elements.map((e) => {
-                        if (!isObjectLiteralExpression(e)) throw fail("commands array contains non-object literals");
-                        const nameProperty = e.properties.find((p): p is PropertyAssignment => {
-                            return isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === 'name';
-                        });
-                        const descriptionProperty = e.properties.find((p): p is PropertyAssignment => {
-                            return isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === 'description';
-                        });
-                        if (!nameProperty || !descriptionProperty) throw fail("Command missing required properties");
-                        const name = isStringLiteral(nameProperty.initializer) ? nameProperty.initializer.text : '';
-                        const description = isStringLiteral(descriptionProperty.initializer) ? descriptionProperty.initializer.text : '';
-                        return { name, description };
+                        if (isObjectLiteralExpression(e)) {
+                            const nameProperty = e.properties.find((p): p is PropertyAssignment => {
+                                return isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === 'name';
+                            });
+                            const descriptionProperty = e.properties.find((p): p is PropertyAssignment => {
+                                return isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === 'description';
+                            });
+                            if (!nameProperty || !descriptionProperty) throw fail("command missing required properties");
+                            const name = isStringLiteral(nameProperty.initializer) ? nameProperty.initializer.text : '';
+                            const description = isStringLiteral(descriptionProperty.initializer) ? descriptionProperty.initializer.text : '';
+                            return { name, description };
+                        } else if (isCallExpression(e) && isIdentifier(e.expression)) {
+                            const [nameArg] = e.arguments;
+                            if (!isStringLiteral(nameArg)) throw fail("first argument must be a string");
+                            const name = nameArg.text;
+                            return { name, description: "" };
+                        }
+                        throw fail("commands array contains invalid elements");
                     });
                     break;
                 case "authors":
@@ -215,7 +222,7 @@ async function parseFile(fileName: string) {
 
         const target = getPluginTarget(fileName);
         if (target) {
-            if (!["web", "discordDesktop", "vencordDesktop", "equicordDesktop", "desktop", "dev"].includes(target)) throw fail(`invalid target ${target}`);
+            if (!["web", "discordDesktop", "vencordDesktop", "equibop", "desktop", "dev"].includes(target)) throw fail(`invalid target ${target}`);
             data.target = target as any;
         }
 
