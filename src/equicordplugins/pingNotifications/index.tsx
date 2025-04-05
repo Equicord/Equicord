@@ -12,7 +12,6 @@ import { findStoreLazy } from "@webpack";
 import {
     ChannelStore,
     GuildStore,
-    MessageStore,
     NavigationRouter,
     PresenceStore,
     RelationshipStore,
@@ -26,17 +25,12 @@ const settings = definePluginSettings({
     friends: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Notify when friends send messages."
+        description: "Notify when friends send messages in servers"
     },
     mentions: {
         type: OptionType.BOOLEAN,
         default: true,
         description: "Notify when someone @mentions you directly"
-    },
-    replies: {
-        type: OptionType.BOOLEAN,
-        default: true,
-        description: "Notify when someone replies to your messages"
     },
     dms: {
         type: OptionType.BOOLEAN,
@@ -46,12 +40,12 @@ const settings = definePluginSettings({
     showInActive: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Show notifications even for current active channel"
+        description: "Show notifications even for currently active channel"
     },
     ignoreMuted: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Skip notifications from anything muted (servers, channels, users)" // dosent work in muted gcs for now and probably forever
+        description: "Skip notifications from muted servers, channels, or users"
     }
 });
 
@@ -95,24 +89,9 @@ function isUserBlocked(userId) {
     return settings.store.ignoreMuted && RelationshipStore.isBlocked?.(userId);
 }
 
-function isReplyToMe(message) {
-    if (!message.message_reference) return false;
-
-    const currentUser = UserStore.getCurrentUser();
-    if (!currentUser) return false;
-
-    const refMsg = MessageStore.getMessage(
-        message.message_reference.channel_id || message.channel_id,
-        message.message_reference.message_id
-    );
-
-    if (!refMsg) return false;
-    return refMsg.author.id === currentUser.id;
-}
-
 export default definePlugin({
     name: "PingNotifications",
-    description: "Customizable notifications with improved mention formatting",
+    description: "A lightweight EquiCord plugin to display in-app notifications that focuses on simplicity and efficiency.",
     authors: [EquicordDevs.smuki],
     settings,
 
@@ -129,10 +108,7 @@ export default definePlugin({
 
                 const isDM = [1, 3].includes(channel.type);
 
-                if (checkIfMuted(channel)) {
-                    return;
-                }
-
+                if (checkIfMuted(channel)) return;
                 if (isUserBlocked(message.author.id)) return;
                 if (!settings.store.showInActive && channel.id === SelectedChannelStore.getChannelId()) return;
                 if (PresenceStore.getStatus(currentUser.id) === "dnd") return;
@@ -145,13 +121,6 @@ export default definePlugin({
 
                 if (settings.store.mentions && message.mentions?.some(u => u.id === currentUser.id)) {
                     shouldNotify = true;
-                } else if (settings.store.replies && message.message_reference) {
-                    const isForMe = isReplyToMe(message);
-                    if (isForMe) {
-                        shouldNotify = true;
-                    } else {
-                        shouldNotify = false;
-                    }
                 } else if (settings.store.friends && RelationshipStore.isFriend(message.author.id) && !isDM) {
                     shouldNotify = true;
                 } else if (isDM && settings.store.dms) {
