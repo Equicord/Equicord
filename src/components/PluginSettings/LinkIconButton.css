@@ -1,9 +1,8 @@
 .vc-settings-modal-link-icon {
-    height: 32px;
-    width: 32px;
-    border-radius: 50%;
-    border: 4px solid var(--background-tertiary);
-    box-sizing: border-box
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    border: 0px solid var(--background-tertiary);
 }
 
 .vc-settings-modal-links {

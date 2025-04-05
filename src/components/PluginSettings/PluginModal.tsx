@@ -219,9 +219,9 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
     const pluginMeta = PluginMeta[plugin.name];
 
     return (
-        <ModalRoot transitionState={transitionState} size={ModalSize.MEDIUM} className="vc-text-selectable">
+        <ModalRoot transitionState={transitionState} size={ModalSize.SMALL} className="vc-text-selectable">
             <ModalHeader separator={false}>
-                <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }}>{plugin.name}</Text>
+                <Text variant="heading-lg/semibold" style={{ flexGrow: 1, width:"15px" }}>{plugin.name}</Text>
 
                 {/*
                 <Button look={Button.Looks.BLANK} onClick={switchToPopout}>
@@ -237,13 +237,13 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                         {!pluginMeta.userPlugin && (
                             <div className="vc-settings-modal-links">
                                 <GithubButton
-                                    text="View source code"
+                                    text="View Source code"
                                     href={`https://github.com/${gitRemote}/tree/main/${pluginMeta.folderName}`}
                                 />
                             </div>
                         )}
                     </Flex>
-                    <Forms.FormTitle tag="h3" style={{ marginTop: 8, marginBottom: 0 }}>Authors</Forms.FormTitle>
+                    <Forms.FormTitle tag="h3" style={{ fontSize: "20px", fontWeight: "bold", marginTop: 8, marginBottom: 0 }}>Authors:</Forms.FormTitle>
                     <div style={{ width: "fit-content", marginBottom: 8 }}>
                         <UserSummaryItem
                             users={authors}
@@ -280,7 +280,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                     </div>
                 )}
                 <Forms.FormSection className={Margins.bottom16}>
-                    <Forms.FormTitle tag="h3">Settings</Forms.FormTitle>
+                    <Forms.FormTitle style={{width: "fit-content", fontSize: "20px", fontWeight: "bold", marginTop: 8, marginBottom: 0 }} tag="h3">Settings:</Forms.FormTitle>
                     {renderSettings()}
                 </Forms.FormSection>
             </ModalContent>
@@ -288,16 +288,16 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 <Flex flexDirection="column" style={{ width: "100%" }}>
                     <Flex style={{ justifyContent: "space-between" }}>
                         <Tooltip text="Reset to default settings" shouldShow={!isObjectEmpty(tempSettings)}>
-                            {({ onMouseEnter, onMouseLeave }) => (
+                            {({onMouseEnter, onMouseLeave }) => (
                                 <Button
-                                    className="button-danger-background"
+                                    className="button-danger-background-no-margin"
                                     size={Button.Sizes.SMALL}
                                     color={Button.Colors.BRAND}
                                     onClick={handleResetClick}
                                     onMouseEnter={onMouseEnter}
                                     onMouseLeave={onMouseLeave}
                                 >
-                                    Reset
+                                    Reset Settings
                                 </Button>
                             )}
                         </Tooltip>
@@ -408,50 +408,39 @@ export function openWarningModal(plugin: Plugin, pluginModalProps: ModalProps, o
             size={ModalSize.SMALL}
             className="vc-text-selectable"
             transitionState={warningModalProps.transitionState}
-        >
+        >   
             <ModalHeader separator={false}>
-                <Text className="text-danger">Dangerous Action</Text>
+                <Text className="text-danger">Reset all Settings for <strong>{plugin.name}</strong> to their default values?</Text>
                 <ModalCloseButton onClick={warningModalProps.onClose} className="vc-modal-close-button" />
             </ModalHeader>
             <ModalContent>
                 <Forms.FormSection>
                     <Flex className="vc-warning-info">
-                        <img
-                            src="https://media.tenor.com/hapjxf8y50YAAAAi/stop-sign.gif"
-                            alt="Warning"
-                        />
                         <Text className="text-normal">
-                            You are about to reset all settings for <strong>{plugin.name}</strong> to their default values.
-                        </Text>
-                        <Text className="warning-text">
-                            THIS ACTION IS IRREVERSIBLE!
-                        </Text>
-                        <Text className="text-normal margin-bottom">
-                            If you are certain you want to proceed, click <strong>Confirm Reset</strong>. Otherwise, click <strong>Cancel</strong>.
+                            Clicking Confirm Reset will reset all your settings for <strong>{plugin.name}</strong>. Click Cancel/Close button to exit this operation.
                         </Text>
                     </Flex>
                 </Forms.FormSection>
             </ModalContent>
             <ModalFooter className="modal-footer">
                 <Flex className="button-container">
-                    <Button
-                        size={Button.Sizes.SMALL}
-                        color={Button.Colors.PRIMARY}
-                        onClick={warningModalProps.onClose}
-                        look={Button.Looks.LINK}
-                    >
-                        Cancel
-                    </Button>
                     <Flex className="button-group">
+                        <Button
+                            size={Button.Sizes.SMALL}
+                            color={Button.Colors.PRIMARY}
+                            onClick={warningModalProps.onClose}
+                        >
+                            Cancel
+                        </Button>
                         {!Settings.ignoreResetWarning && (
                             <Button
                                 size={Button.Sizes.SMALL}
-                                className="button-danger-background"
+                                className="button-danger-background-no-margin"
                                 onClick={() => {
                                     Settings.ignoreResetWarning = true;
                                 }}
                             >
-                                Disable Warning Forever
+                                Disable Warning
                             </Button>
                         )}
                         <Tooltip text="This action cannot be undone. Are you sure?" shouldShow={true}>

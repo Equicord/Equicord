@@ -64,7 +64,9 @@ function showErrorToast(message: string) {
 
 function ReloadRequiredCard({ required, enabledPlugins, openDisablePluginsModal, resetCheckAndDo }) {
     return (
-        <Card className={cl("info-card", { "restart-card": required })}>
+        <Card 
+            className={cl("info-card", { "restart-card": required })} 
+            >
             {required ? (
                 <>
                     <Forms.FormTitle tag="h5">Restart required!</Forms.FormTitle>
@@ -77,9 +79,9 @@ function ReloadRequiredCard({ required, enabledPlugins, openDisablePluginsModal,
                 </>
             ) : (
                 <>
-                    <Forms.FormTitle tag="h5">Plugin Management</Forms.FormTitle>
-                    <Forms.FormText>Press the cog wheel or info icon to get more info on a plugin</Forms.FormText>
-                    <Forms.FormText>Plugins with a cog wheel have settings you can modify!</Forms.FormText>
+                    <Forms.FormTitle tag="h5" style={{ fontSize: "20px",fontWeight: "bold"}}>Help Section</Forms.FormTitle>
+                    <Forms.FormText>Click <CogWheel className="info-icon" style={{ width: "16px", verticalAlign: "middle"}} /> <span style={{ fontWeight: "bold" }}>cog wheel</span> for settings for a plugin. Or click <InfoIcon className="info-icon" style={{ width: "16px", verticalAlign: "middle"}} /> to get more information on a plugin.</Forms.FormText>
+                    {/* <Forms.FormText>Plugins with <span style={{ fontWeight: "bold" }}>cog wheel</span> lets you modify their settings.</Forms.FormText> */}
                 </>
             )}
             {enabledPlugins.length > 0 && !required && (
@@ -90,6 +92,9 @@ function ReloadRequiredCard({ required, enabledPlugins, openDisablePluginsModal,
                         if (Settings.ignoreResetWarning) return resetCheckAndDo();
 
                         return openDisablePluginsModal(enabledPlugins, resetCheckAndDo);
+                    }}
+                    style={{
+                        width: "35%"
                     }}
                 >
                     Disable All Plugins
@@ -394,24 +399,14 @@ export default function PluginSettings() {
                 transitionState={warningModalProps.transitionState}
             >
                 <ModalHeader separator={false}>
-                    <Text className="text-danger">Dangerous Action</Text>
+                    <Text className="text-danger">WARNING: You are about to disable <span>{enabledPlugins.length}</span> plugins!</Text>
                     <ModalCloseButton onClick={warningModalProps.onClose} className="vc-modal-close-button" />
                 </ModalHeader>
                 <ModalContent>
                     <Forms.FormSection>
                         <Flex className="vc-warning-info">
-                            <img
-                                src="https://media.tenor.com/hapjxf8y50YAAAAi/stop-sign.gif"
-                                alt="Warning"
-                            />
-                            <Text className="warning-text">
-                                WARNING: You are about to disable <span>{enabledPlugins.length}</span> plugins!
-                            </Text>
-                            <Text className="warning-text">
-                                THIS ACTION IS IRREVERSIBLE!
-                            </Text>
                             <Text className="text-normal margin-bottom">
-                                Are you absolutely sure you want to proceed? You can always enable them back later.
+                                You can create a Backup in Backup & Restore to easily restore your enabled plugins.
                             </Text>
                         </Flex>
                     </Forms.FormSection>
@@ -430,7 +425,7 @@ export default function PluginSettings() {
                             {!Settings.ignoreResetWarning && (
                                 <Button
                                     size={Button.Sizes.SMALL}
-                                    className="button-danger-background"
+                                    className="button-danger-background-no-margin"
                                     onClick={() => {
                                         Settings.ignoreResetWarning = true;
                                     }}
@@ -477,7 +472,7 @@ export default function PluginSettings() {
 
             <div className={cl("stats-container")} style={{
                 marginTop: "16px",
-                gap: "16px",
+                gap: "3px",
                 display: "flex",
                 flexDirection: "row",
                 width: "100%"
@@ -493,7 +488,7 @@ export default function PluginSettings() {
             </div>
 
             <Forms.FormTitle tag="h5" className={classes(Margins.top20, Margins.bottom8)}>
-                Filters
+                Search / Filters
             </Forms.FormTitle>
 
             <div className={classes(Margins.bottom20, cl("filter-controls"))}>
