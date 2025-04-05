@@ -103,7 +103,7 @@ const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
 export default definePlugin({
     name: "SpoilerMessages",
     description: "Automatically turn all your messages / attachments into a spoiler.",
-    authors: [EquicordDevs.omaw],
+    authors: [Devs.Ven, Devs.Rini, Devs.ImBanana, Devs.fawn, EquicordDevs.KrystalSkull, EquicordDevs.omaw],
     dependencies: ["MessageEventsAPI", "ChatInputButtonAPI"],
     patches: [
         {
@@ -167,3 +167,5 @@ export default definePlugin({
 function textProcessing(input: string) {
     return `||${input}||`;
 }
+
+
