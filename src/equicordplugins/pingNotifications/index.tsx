@@ -91,7 +91,7 @@ function isUserBlocked(userId) {
 
 export default definePlugin({
     name: "PingNotifications",
-    description: "A lightweight EquiCord plugin to display in-app notifications that focuses on simplicity and efficiency.",
+    description: "Customizable notifications with improved mention formatting",
     authors: [EquicordDevs.smuki],
     settings,
 
