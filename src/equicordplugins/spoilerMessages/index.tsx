@@ -8,10 +8,11 @@ import { addChatBarButton, ChatBarButton, ChatBarButtonFactory, removeChatBarBut
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { addMessagePreSendListener, removeMessagePreSendListener, Upload } from "@api/MessageEvents";
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, Settings } from "@api/Settings";
+import { reverseExtensionMap } from "@equicordplugins/fixFileExtensions";
+import { tarExtMatcher } from "@plugins/anonymiseFileNames";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import {findComponentByCode, findByPropsLazy} from "@webpack"
 import { Menu, React } from "@webpack/common";
 
 // thnx signature / anonymize code
@@ -66,7 +67,7 @@ const SpoilerToggle: ChatBarButtonFactory = ({ isMainChat }) => {
                 )}
             </svg>
         </ChatBarButton>
-    );    
+    );
 };
 
 const handleMessage = (channelId, msg) => {
@@ -100,6 +101,19 @@ const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
     );
 };
 
+export function spoiler(upload: SpoilUpload) {
+    const file = upload.filename;
+    const tarMatch = tarExtMatcher.exec(file);
+    const extIdx = tarMatch?.index ?? file.lastIndexOf(".");
+    const fileName = extIdx !== -1 ? file.substring(0, extIdx) : "";
+    let ext = extIdx !== -1 ? file.slice(extIdx) : "";
+    if (Settings.plugins.FixFileExtensions.enabled) {
+        ext = reverseExtensionMap[ext] || ext;
+    }
+    if (settings.store.isEnabled) return "SPOILER_" + fileName + ext;
+    return file;
+}
+
 export default definePlugin({
     name: "SpoilerMessages",
     description: "Automatically turn all your messages / attachments into a spoiler.",
@@ -113,20 +127,18 @@ export default definePlugin({
                 replace:
                     "uploadFiles:(...args)=>(args[0].uploads.forEach(f=>f.filename=$self.spoiler(f)),$1(...args)),",
             },
+            predicate: () => !Settings.plugins.AnonymiseFileNames.enabled && !Settings.plugins.FixFileExtensions,
         },
         {
             find: 'addFilesTo:"message.attachments"',
             replacement: {
                 match: /(\i.uploadFiles\((\i),)/,
                 replace: "$2.forEach(f=>f.filename=$self.spoiler(f)),$1"
-            }
+            },
+            predicate: () => !Settings.plugins.AnonymiseFileNames.enabled && !Settings.plugins.FixFileExtensions,
         },
     ],
-    spoiler(upload: SpoilUpload) {
-        const file_name = upload.filename;
-        if ((settings.store.isEnabled) === false) return file_name
-        if (settings.store.isEnabled) return "SPOILER_" + file_name;
-    },
+    spoiler,
     start: () => {
         if (settings.store.isEnabled) true;
         addChatBarButton("Spoiler", SpoilerToggle);
