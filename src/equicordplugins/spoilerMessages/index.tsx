@@ -15,7 +15,7 @@ import {findComponentByCode, findByPropsLazy} from "@webpack"
 import { Menu, React } from "@webpack/common";
 
 // thnx signature / anonymize code
-type SpoilUpload = Upload & { anonymise?: boolean; };
+type SpoilUpload = Upload;
 const settings = definePluginSettings(
     {
         spoilerWords: {
@@ -167,5 +167,3 @@ export default definePlugin({
 function textProcessing(input: string) {
     return `||${input}||`;
 }
-
-
