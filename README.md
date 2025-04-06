@@ -142,6 +142,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - StatusPresets by iamme
 - SteamStatusSync by niko
 - StickerBlocker by Samwich
+- SpoilerMessages by omaw
 - TalkInReverse by Tolgchu
 - TeX by Kyuuhachi
 - TextToSpeech by Samwich
