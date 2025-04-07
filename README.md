@@ -88,6 +88,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - ImagePreview by Creations
 - ImgToGif by zyqunix
 - InRole by nin0dev
+- InstantScreenshare by HAHALOSAH & thororen
 - IRememberYou by zoodogood
 - Jumpscare by Surgedevs
 - JumpToStart by Samwich
@@ -139,6 +140,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - Slap by Korbo
 - SoundBoardLogger by Moxxie, fres, echo, maintained by thororen
 - SpotifyLyrics by Joona
+- StatsfmPresence by Crxa
 - StatusPresets by iamme
 - SteamStatusSync by niko
 - StickerBlocker by Samwich
