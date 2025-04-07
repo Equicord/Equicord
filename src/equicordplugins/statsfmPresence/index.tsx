@@ -1,25 +1,12 @@
 /*
- * Vencord, a modification for Discord's desktop app
- * Copyright (c) 2022 Sofia Lima
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * Vencord, a Discord client mod
+ * Copyright (c) 2025 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
-import { Link } from "@components/Link";
-import { Devs } from "@utils/constants";
+import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
@@ -57,8 +44,8 @@ interface Activity {
 
 interface TrackData {
     name: string;
-    album: string;
-    artist: string;
+    albums: string;
+    artists: string;
     url: string;
     imageUrl?: string;
 }
@@ -79,15 +66,60 @@ const enum NameFormat {
     SongFirst = "song-first",
     ArtistOnly = "artist",
     SongOnly = "song",
-    AlbumName = "album"
+    albumsName = "albums"
+}
+
+
+
+interface Albums {
+    id: number;
+    image: string;
+    name: string;
+}
+
+interface Artists {
+    id: number;
+    name: string;
+    image: string;
+}
+
+interface ExternalIds {
+    spotify: string[];
+    appleMusic: string[];
+}
+
+interface Track {
+    albums: Albums[];
+    artists: Artists[];
+    durationMs: number;
+    explicit: boolean;
+    externalIds: ExternalIds;
+    id: number;
+    name: string;
+    spotifyPopularity: number;
+    spotifyPreview: string;
+    appleMusicPreview: string;
+}
+
+interface Item {
+    date: string;
+    isPlaying: boolean;
+    progressMs: number;
+    deviceName: string;
+    track: Track;
+    platform: string;
+}
+
+interface SFMR {
+    item: Item;
 }
 
 const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;
 
-const applicationId = "1108588077900898414";
+const applicationId = "1325126169179197500";
 const placeholderId = "2a96cbd8b46e442fc41c2b86b821562f";
 
-const logger = new Logger("LastFMRichPresence");
+const logger = new Logger("StatsfmPresence");
 
 const PresenceStore = findByPropsLazy("getLocalPresence");
 
@@ -99,48 +131,44 @@ function setActivity(activity: Activity | null) {
     FluxDispatcher.dispatch({
         type: "LOCAL_ACTIVITY_UPDATE",
         activity,
-        socketId: "LastFM",
+        socketId: "StatsfmPresence",
     });
 }
 
 const settings = definePluginSettings({
     username: {
-        description: "last.fm username",
-        type: OptionType.STRING,
-    },
-    apiKey: {
-        description: "last.fm api key",
+        description: "Stats.fm username",
         type: OptionType.STRING,
     },
     shareUsername: {
-        description: "show link to last.fm profile",
+        description: "Show link to stats.fm profile",
         type: OptionType.BOOLEAN,
         default: false,
     },
     shareSong: {
-        description: "show link to song on last.fm",
+        description: "Show link to song on stats.fm",
         type: OptionType.BOOLEAN,
         default: true,
     },
     hideWithSpotify: {
-        description: "hide last.fm presence if spotify is running",
+        description: "Hide stats.fm presence if spotify is running",
         type: OptionType.BOOLEAN,
-        default: true,
+        default: false,
     },
-    hideWithActivity: {
-        description: "Hide Last.fm presence if you have any other presence",
+    hideWithExternalRPC: {
+        description: "Hides stats.fm presence if an external RPC is running",
         type: OptionType.BOOLEAN,
         default: false,
     },
     enableGameActivity: {
-        description: "Enable game activity for last.fm",
+        description: "Enable game activity for Stats.fm", // Credit to LastfmPresence for this setting
         type: OptionType.BOOLEAN,
         default: false,
     },
     statusName: {
-        description: "custom status text",
+        description: "Custom status text",
         type: OptionType.STRING,
-        default: "some music",
+        default: "Stats.fm",
     },
     nameFormat: {
         description: "Show name of song and artist in status name",
@@ -168,23 +196,23 @@ const settings = definePluginSettings({
                 value: NameFormat.SongOnly
             },
             {
-                label: "Use album name (falls back to custom status text if song has no album)",
-                value: NameFormat.AlbumName
+                label: "Use albums name (falls back to custom status text if song has no albums)",
+                value: NameFormat.albumsName
             }
         ],
     },
     useListeningStatus: {
-        description: 'show "Listening to" status instead of "Playing"',
+        description: 'Show "Listening to" status instead of "Playing"',
         type: OptionType.BOOLEAN,
-        default: false,
+        default: true,
     },
     missingArt: {
-        description: "When album or album art is missing",
+        description: "When albums or albums art is missing",
         type: OptionType.SELECT,
         options: [
             {
-                label: "Use large Last.fm logo",
-                value: "lastfmLogo",
+                label: "Use large Stats.fm logo",
+                value: "StatsFmLogo",
                 default: true
             },
             {
@@ -193,8 +221,8 @@ const settings = definePluginSettings({
             }
         ],
     },
-    showLastFmLogo: {
-        description: "show the Last.fm logo by the album cover",
+    showStatsFmLogo: {
+        description: "Show the Stats.fm next to the albums cover",
         type: OptionType.BOOLEAN,
         default: true,
     },
@@ -206,22 +234,15 @@ const settings = definePluginSettings({
 });
 
 export default definePlugin({
-    name: "LastFMRichPresence",
-    description: "Little plugin for Last.fm rich presence",
-    authors: [Devs.dzshn, Devs.RuiNtD, Devs.blahajZip, Devs.archeruwu],
+    name: "StatsfmPresence",
+    description: "Statsfm presence to track your music",
+    authors: [EquicordDevs.Crxa],
 
     settingsAboutComponent: () => (
         <>
-            <Forms.FormTitle tag="h3">How to get an API key</Forms.FormTitle>
+            <Forms.FormTitle tag="h3">How does this work?</Forms.FormTitle>
             <Forms.FormText>
-                An API key is required to fetch your current track. To get one, you can
-                visit <Link href="https://www.last.fm/api/account/create">this page</Link> and
-                fill in the following information: <br /> <br />
-
-                Application name: Discord Rich Presence <br />
-                Application description: (personal use) <br /> <br />
-
-                And copy the API key (not the shared secret!)
+                Hey this is just here to explain how this works. By putting your stats.fm username in the settings, it will show what you're currently listening to on your discord profile. (this doesnt require an api but requires you to have your listening history public)
             </Forms.FormText>
         </>
     ),
@@ -238,42 +259,37 @@ export default definePlugin({
     },
 
     async fetchTrackData(): Promise<TrackData | null> {
-        if (!settings.store.username || !settings.store.apiKey)
+        if (!settings.store.username)
             return null;
 
         try {
-            const params = new URLSearchParams({
-                method: "user.getrecenttracks",
-                api_key: settings.store.apiKey,
-                user: settings.store.username,
-                limit: "1",
-                format: "json"
-            });
 
-            const res = await fetch(`https://ws.audioscrobbler.com/2.0/?${params}`);
+            const res = await fetch(`https://api.stats.fm/api/v1/users/${settings.store.username}/streams/current`);
             if (!res.ok) throw `${res.status} ${res.statusText}`;
 
-            const json = await res.json();
-            if (json.error) {
-                logger.error("Error from Last.fm API", `${json.error}: ${json.message}`);
+
+            const json = await res.json() as SFMR;
+            if (!json.item) {
+                logger.error("Error from Stats.fm API", json);
                 return null;
             }
 
-            const trackData = json.recenttracks?.track[0];
-
-            if (!trackData?.["@attr"]?.nowplaying)
-                return null;
-
-            // why does the json api have xml structure
+            const trackData = json.item.track;
+            if (settings.store.enableGameActivity && trackData) {
+                ShowCurrentGame.updateSetting(true);
+            } else if (settings.store.enableGameActivity) {
+                ShowCurrentGame.updateSetting(false);
+            }
+            if (!trackData) return null;
             return {
                 name: trackData.name || "Unknown",
-                album: trackData.album["#text"],
-                artist: trackData.artist["#text"] || "Unknown",
-                url: trackData.url,
-                imageUrl: trackData.image?.find((x: any) => x.size === "large")?.["#text"]
+                albums: trackData.albums.map(a => a.name).join(", ") ?? "Unknown",
+                artists: trackData.artists[0].name ?? "Unknown",
+                url: `https://stats.fm/track/${trackData.id}`, // https://stats.fm/track/665906 / https://twirl.cx/dj2gL.png reminder of what the id looks like to fetch track
+                imageUrl: trackData.albums[0].image
             };
         } catch (e) {
-            logger.error("Failed to query Last.fm API", e);
+            logger.error("Failed to query Stats.fm API", e);
             // will clear the rich presence if API fails
             return null;
         }
@@ -292,7 +308,7 @@ export default definePlugin({
     },
 
     async getActivity(): Promise<Activity | null> {
-        if (settings.store.hideWithActivity) {
+        if (settings.store.hideWithExternalRPC) {
             if (PresenceStore.getActivities().some(a => a.application_id !== applicationId)) {
                 return null;
             }
@@ -306,33 +322,28 @@ export default definePlugin({
         }
 
         const trackData = await this.fetchTrackData();
-        if (settings.store.enableGameActivity && trackData) {
-            ShowCurrentGame.updateSetting(true);
-        } else if (settings.store.enableGameActivity) {
-            ShowCurrentGame.updateSetting(false);
-        }
         if (!trackData) return null;
 
         const largeImage = this.getLargeImage(trackData);
         const assets: ActivityAssets = largeImage ?
             {
                 large_image: await getApplicationAsset(largeImage),
-                large_text: trackData.album || undefined,
-                ...(settings.store.showLastFmLogo && {
-                    small_image: await getApplicationAsset("lastfm-small"),
-                    small_text: "Last.fm"
+                large_text: trackData.albums || undefined,
+                ...(settings.store.showStatsFmLogo && {
+                    small_image: await getApplicationAsset("statsfm-large"),
+                    small_text: "Stats.fm"
                 }),
             } : {
-                large_image: await getApplicationAsset("lastfm-large"),
-                large_text: trackData.album || undefined,
+                large_image: await getApplicationAsset("statsfm-large"),
+                large_text: trackData.albums || undefined,
             };
 
         const buttons: ActivityButton[] = [];
 
         if (settings.store.shareUsername)
             buttons.push({
-                label: "Last.fm Profile",
-                url: `https://www.last.fm/user/${settings.store.username}`,
+                label: "Stats.fm Profile",
+                url: `https://stats.fm/${settings.store.username}`,
             });
 
         if (settings.store.shareSong)
@@ -344,15 +355,15 @@ export default definePlugin({
         const statusName = (() => {
             switch (settings.store.nameFormat) {
                 case NameFormat.ArtistFirst:
-                    return trackData.artist + " - " + trackData.name;
+                    return trackData.artists + " - " + trackData.name;
                 case NameFormat.SongFirst:
-                    return trackData.name + " - " + trackData.artist;
+                    return trackData.name + " - " + trackData.artists;
                 case NameFormat.ArtistOnly:
-                    return trackData.artist;
+                    return trackData.artists;
                 case NameFormat.SongOnly:
                     return trackData.name;
-                case NameFormat.AlbumName:
-                    return trackData.album || settings.store.statusName;
+                case NameFormat.albumsName:
+                    return trackData.albums || settings.store.statusName;
                 default:
                     return settings.store.statusName;
             }
@@ -363,7 +374,7 @@ export default definePlugin({
             name: statusName,
 
             details: trackData.name,
-            state: trackData.artist,
+            state: trackData.artists,
             assets,
 
             buttons: buttons.length ? buttons.map(v => v.label) : undefined,
