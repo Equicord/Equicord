@@ -127,7 +127,7 @@ function VoiceChannelTooltip({ channel, isLocked }: VoiceChannelTooltipProps) {
                             borderRadius: '0 8px 0 0',
                         }}
                     >
-                        {channel.userLimit > 0 && users.length < 10 ? `0${users.length}` : channel.userLimit > 0 && users.length}
+                        {users.length < 10 ? `0${users.length}` : users.length}
                     </Text>
                     <Text 
                         style={{ 
@@ -139,7 +139,7 @@ function VoiceChannelTooltip({ channel, isLocked }: VoiceChannelTooltipProps) {
                             borderRadius: '0 8px 0 0',
                         }}
                     >
-                        {channel.userLimit > 0 && (channel.userLimit < 10 ? `0${channel.userLimit}` : channel.userLimit)}
+                        {(channel.userLimit < 10 ? `0${channel.userLimit}` : channel.userLimit)}
                     </Text>
                 </div>
             </div>
