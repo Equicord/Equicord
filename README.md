@@ -11,7 +11,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 ### Extra included plugins
 
 <details>
-<summary>163 additional plugins</summary>
+<summary>164 additional plugins</summary>
 
 ### All Platforms
 
