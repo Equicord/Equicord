@@ -173,6 +173,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - Woof by Samwich
 - WriteUpperCase by Samwich & KrystalSkull
 - YoutubeDescription by arHSM
+- LastActive by Crxa
 
 ### Web Only
 
