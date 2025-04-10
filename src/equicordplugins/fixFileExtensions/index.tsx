@@ -6,6 +6,7 @@
 
 import { Upload } from "@api/MessageEvents";
 import { Settings } from "@api/Settings";
+import { tarExtMatcher } from "@plugins/anonymiseFileNames";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { ReporterTestable } from "@utils/types";
 
@@ -34,26 +35,27 @@ export default definePlugin({
         // Taken from AnonymiseFileNames
         {
             find: "instantBatchUpload:",
-            predicate: () => !Settings.plugins.AnonymiseFileNames.enabled,
             replacement: {
                 match: /uploadFiles:(\i),/,
                 replace:
                     "uploadFiles:(...args)=>(args[0].uploads.forEach(f=>f.filename=$self.fixExt(f)),$1(...args)),",
             },
+            predicate: () => !Settings.plugins.AnonymiseFileNames.enabled,
         },
         // Also taken from AnonymiseFileNames
         {
             find: 'addFilesTo:"message.attachments"',
-            predicate: () => !Settings.plugins.AnonymiseFileNames.enabled,
             replacement: {
                 match: /(\i.uploadFiles\((\i),)/,
                 replace: "$2.forEach(f=>f.filename=$self.fixExt(f)),$1",
             },
+            predicate: () => !Settings.plugins.AnonymiseFileNames.enabled,
         }
     ],
     fixExt(upload: ExtUpload) {
         const file = upload.filename;
-        const extIdx = file.lastIndexOf(".");
+        const tarMatch = tarExtMatcher.exec(file);
+        const extIdx = tarMatch?.index ?? file.lastIndexOf(".");
         const fileName = extIdx !== -1 ? file.substring(0, extIdx) : "";
         const ext = extIdx !== -1 ? file.slice(extIdx) : "";
         const newExt = reverseExtensionMap[ext] || ext;

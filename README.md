@@ -11,7 +11,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 ### Extra included plugins
 
 <details>
-<summary>161 additional plugins</summary>
+<summary>164 additional plugins</summary>
 
 ### All Platforms
 
@@ -37,7 +37,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - CharacterCounter by Creations & Panniku
 - CleanChannelName by AutumnVN
 - ClientSideBlock by Samwich
-- ClipsEnhancements by niko
 - CommandPalette by Ethan
 - CopyUserMention by Cortex & castdrian
 - CustomSounds by TheKodeToad & SpikeHD
@@ -173,6 +172,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - Woof by Samwich
 - WriteUpperCase by Samwich & KrystalSkull
 - YoutubeDescription by arHSM
+- LastActive by Crxa
 
 ### Web Only
 
@@ -184,6 +184,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 
 ### Discord Desktop Only
 
+- ClipsEnhancements by niko
 - MediaDownloader by Colorman
 - StatusWhilePlaying by thororen
 
