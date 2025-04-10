@@ -41,6 +41,7 @@ const fromMorse = (text: string) => {
     return raw.charAt(0).toUpperCase() + raw.slice(1);
 };
 
+// boo regex
 const isMorse = (text: string) => /^[.\-/ ]+$/.test(text);
 
 export default definePlugin({
