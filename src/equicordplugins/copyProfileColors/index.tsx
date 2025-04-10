@@ -7,9 +7,7 @@
 import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatch } from "@api/ContextMenu";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { findByPropsLazy } from "@webpack";
-import { Clipboard, Menu, Toasts } from "@webpack/common";
-const UserProfileStore = findByPropsLazy("getUserProfile");
+import { Clipboard, Menu, Toasts, UserProfileStore } from "@webpack/common";
 
 function getProfileColors(userId) {
     try {
