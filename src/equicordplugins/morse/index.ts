@@ -45,7 +45,7 @@ const fromMorse = (text: string) => {
 const isMorse = (text: string) => /^[.\-/ ]+$/.test(text);
 
 export default definePlugin({
-    name: "morse",
+    name: "Morse",
     description: "A slash command to translate to/from morse code.",
     authors: [EquicordDevs.zyqunix],
     commands: [
