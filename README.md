@@ -11,7 +11,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 ### Extra included plugins
 
 <details>
-<summary>164 additional plugins</summary>
+<summary>166 additional plugins</summary>
 
 ### All Platforms
 
@@ -57,6 +57,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - Equissant by SomeAspy & thororen
 - ExportContacts by dat_insanity
 - FakeProfileThemesAndEffects by ryan
+- CopyProfileColors by Crxa
 - FindReply by newwares
 - FixFileExtensions by thororen
 - FollowVoiceUser by TheArmagan
@@ -104,6 +105,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - MessageTranslate by Samwich
 - ModalFade by Kyuuhachi
 - MoreStickers by Leko & Arjix
+- Morse by zyqunix
 - NeverPausePreviews by vappstar
 - NewPluginsManager by Sqaaakoi
 - NoAppsAllowed by kvba
