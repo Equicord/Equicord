@@ -106,13 +106,13 @@ export default definePlugin({
         {
             find: "PrivateChannel.renderAvatar",
             replacement: {
-                match: /(highlighted:\i,)/,
+                match: /(subText:\i\(\),)/,
                 replace: "$1style:{color:`${$self.colorDMList(arguments[0])}`},"
             },
             predicate: () => settings.store.dmList,
         },
         {
-            find: "!1,wrapContent",
+            find: '"AvatarWithText"',
             replacement: [
                 {
                     match: /(\}=\i)/,
@@ -124,6 +124,13 @@ export default definePlugin({
                 },
             ],
             predicate: () => settings.store.dmList,
+        },
+        {
+            find: '"Reply Chain Nudge")',
+            replacement: {
+                match: /(,color:)(\i),/,
+                replace: "$1$self.colorInReplyingTo(arguments[0]) ?? $2,",
+            },
         },
     ],
 
@@ -142,5 +149,10 @@ export default definePlugin({
 
         const color = getCustomColorString(a.message.author.id, true);
         return color ?? roleColor ?? undefined;
-    }
+    },
+
+    colorInReplyingTo(a: any) {
+        const { id } = a.reply.message.author;
+        return getCustomColorString(id, true);
+    },
 });
