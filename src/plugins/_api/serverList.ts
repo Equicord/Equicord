@@ -37,6 +37,10 @@ export default definePlugin({
                 {
                     match: /(?<=#{intl::SERVERS}\),children:)\i\.map\(\i\)/,
                     replace: "Vencord.Api.ServerList.renderAll(Vencord.Api.ServerList.ServerListRenderPosition.In).concat($&)"
+                },
+                {
+                    match: /children:\i\}\)\]/,
+                    replace: "$&.concat(Vencord.Api.ServerList.renderAll(Vencord.Api.ServerList.ServerListRenderPosition.Below))"
                 }
             ]
         }
