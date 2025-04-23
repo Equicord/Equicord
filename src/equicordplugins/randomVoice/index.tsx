@@ -101,6 +101,11 @@ const settings = definePluginSettings({
         description: "Automatically deafems your mic when joining voice-channel.",
         default: false,
     },
+    leaveEmpty: { 
+        type: OptionType.BOOLEAN,
+        description: "Finds a random-call, when the voice chat is empty.",
+        default: false, 
+    },
     avoidStages: {
         type: OptionType.BOOLEAN,
         description: "Avoids joining stage voice-channels.",
@@ -143,6 +148,20 @@ const settings = definePluginSettings({
     },
 });
 
+interface VoiceState {
+    userId: string;
+    channelId?: string;
+    oldChannelId?: string;
+    deaf: boolean;
+    mute: boolean;
+    selfDeaf: boolean;
+    selfMute: boolean;
+    selfStream: boolean;
+    selfVideo: boolean;
+    sessionId: string;
+    suppress: boolean;
+    requestToSpeakTimestamp: string | null;
+}
 
 export default definePlugin({
     name: "RandomVoice",
@@ -157,6 +176,22 @@ export default definePlugin({
             }
         }
     ],
+    flux: {
+        VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[] }) {
+            const currentUserId = UserStore.getCurrentUser().id;
+            const myChannelId = VoiceStateStore.getVoiceStateForUser(currentUserId)?.channelId;
+            if (!myChannelId || !settings.store.leaveEmpty) return;
+    
+            const voiceStatesMap = VoiceStateStore.getVoiceStates() as Record<string, VoiceState>;
+            const othersInChannel = Object.values(voiceStatesMap).filter(vs =>
+                vs.channelId === myChannelId && vs.userId !== currentUserId
+            );
+    
+            if (othersInChannel.length === 0) {
+                randomVoice()
+            }
+        },
+    },    
     start() {
         enableStyle(style);
     },
@@ -210,6 +245,7 @@ function ContextMenu() {
     const [afk, setAfk] = React.useState(settings.store.avoidAfk);
     const [camera, setCamera] = React.useState(settings.store.autoCamera);
     const [stream, setStream] = React.useState(settings.store.autoStream);
+    const [empty, setEmpty] = React.useState(settings.store.leaveEmpty);
     const [muteself, setSelfMute] = React.useState(settings.store.selfMute);
     const [deafenself, setSelfDeafen] = React.useState(settings.store.selfDeafen);
     const [mute, setMute] = React.useState(settings.store.mute);
@@ -593,6 +629,15 @@ function ContextMenu() {
                                 settings.store.autoStream = !stream;
                             }}
                             checked={stream} />
+                        <Menu.MenuCheckboxItem
+                            key="leaveEmpty"
+                            id="leaveEmpty"
+                            label="Leave when Empty"
+                            action={() => {
+                                setEmpty(!empty);
+                                settings.store.leaveEmpty = !empty;
+                            }}
+                            checked={empty} />
                     </>
                 </Menu.MenuItem>
 
@@ -738,6 +783,7 @@ async function autoStream() {
     const sources = await getDesktopSources(mediaEngine, ["screen"], null);
     if (!sources || sources.length === 0) return;
     const source = sources[0];
+    if (channel.type === 13 || !PermissionStore.can(PermissionsBits.STREAM, channel)) return;
     startStream(channel.guild_id, selected, {
         "pid": null,
         "sourceId": source.id,
