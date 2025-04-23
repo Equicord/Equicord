@@ -49,10 +49,8 @@ export default definePlugin({
                 RestAPI.post({
                     url: `/guilds/${guild_id}/onboarding-responses`,
                     body: payload
-                }).then(() => {
-                    console.log("Completed Onboarding");
-                }).catch(err => console.error("Failed to complete onboarding:", err));
-            }).catch(err => console.error("Failed to get onboarding data:", err));
+                }).catch(() => {});
+            }).catch(() => {});
         }             
     });    
 
