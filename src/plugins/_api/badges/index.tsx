@@ -19,7 +19,7 @@
 import "./fixDiscordBadgePadding.css";
 
 import { _getBadges, BadgePosition, BadgeUserArgs, ProfileBadge } from "@api/Badges";
-import DonateButton from "@components/DonateButton";
+import DonateButton, { VCDonateButton } from "@components/DonateButton";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { Heart } from "@components/Heart";
@@ -91,7 +91,7 @@ export default definePlugin({
     required: true,
     patches: [
         {
-            find: ".FULL_SIZE]:26",
+            find: ".MODAL]:26",
             replacement: {
                 match: /(?=;return 0===(\i)\.length\?)(?<=(\i)\.useMemo.+?)/,
                 replace: ";$1=$2.useMemo(()=>[...$self.getBadges(arguments[0].displayProfile),...$1],[$1])"
@@ -213,7 +213,7 @@ export default definePlugin({
                             </ModalContent>
                             <ModalFooter>
                                 <Flex style={{ width: "100%", justifyContent: "center" }}>
-                                    <DonateButton />
+                                    <VCDonateButton />
                                 </Flex>
                             </ModalFooter>
                         </ModalRoot>
