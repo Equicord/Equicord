@@ -15,6 +15,7 @@ import { Message } from "discord-types/general";
 
 import { QuoteIcon } from "./components";
 import { canvasToBlob, fetchImageAsBlob, FixUpQuote, wrapText } from "./utils";
+import { readFileSync } from "fs";
 
 enum ImageStyle {
     inspirational
@@ -58,15 +59,15 @@ enum userIDOptions {
 }
 const settings = definePluginSettings({
     userIdentifier:
-    {
-        type: OptionType.SELECT,
-        description: "What the author's name should be displayed as",
-        options: [
-            { label: "Display Name", value: userIDOptions.displayName, default: true },
-            { label: "Username", value: userIDOptions.userName },
-            { label: "User ID", value: userIDOptions.userId }
-        ]
-    }
+        {
+            type: OptionType.SELECT,
+            description: "What the author's name should be displayed as",
+            options: [
+                { label: "Display Name", value: userIDOptions.displayName, default: true },
+                { label: "Username", value: userIDOptions.userName },
+                { label: "User ID", value: userIDOptions.userId }
+            ]
+        }
 });
 
 export default definePlugin({
@@ -141,7 +142,6 @@ async function createQuoteImage(avatarUrl: string, quoteOld: string, grayScale: 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             const avatarBlob = await fetchImageAsBlob(avatarUrl);
-            const fadeBlob = await fetchImageAsBlob("https://github.com/Equicord/Equibored/raw/main/misc/quoter.png");
 
             const avatar = new Image();
             const fade = new Image();
@@ -153,7 +153,7 @@ async function createQuoteImage(avatarUrl: string, quoteOld: string, grayScale: 
 
             const fadePromise = new Promise<void>(resolve => {
                 fade.onload = () => resolve();
-                fade.src = URL.createObjectURL(fadeBlob);
+                fade.src = readFileSync("quoter.png", "utf-8");
             });
 
             await Promise.all([avatarPromise, fadePromise]);
@@ -235,12 +235,12 @@ function QuoteModal(props: ModalProps) {
                     )}
                 <Switch value={gray} onChange={setGray}>Grayscale</Switch>
                 <Select look={1}
-                    options={Object.keys(ImageStyle).filter(key => isNaN(parseInt(key, 10))).map(key => ({
-                        label: key.charAt(0).toUpperCase() + key.slice(1),
-                        value: ImageStyle[key as keyof typeof ImageStyle]
-                    }))}
-                    select={v => registerStyleChange(v)} isSelected={v => v === setStyle}
-                    serialize={v => v}></Select>
+                        options={Object.keys(ImageStyle).filter(key => isNaN(parseInt(key, 10))).map(key => ({
+                            label: key.charAt(0).toUpperCase() + key.slice(1),
+                            value: ImageStyle[key as keyof typeof ImageStyle]
+                        }))}
+                        select={v => registerStyleChange(v)} isSelected={v => v === setStyle}
+                        serialize={v => v}></Select>
                 <br />
                 <Button color={Button.Colors.BRAND_NEW} size={Button.Sizes.SMALL} onClick={() => Export()} style={{ display: "inline-block", marginRight: "5px" }}>Export</Button>
                 <Button color={Button.Colors.BRAND_NEW} size={Button.Sizes.SMALL} onClick={() => SendInChat(props.onClose)} style={{ display: "inline-block" }}>Send</Button>
