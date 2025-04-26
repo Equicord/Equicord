@@ -98,8 +98,8 @@ export default definePlugin({
             // this also affects name headers in chats outside of servers
             find: '="SYSTEM_TAG"',
             replacement: {
-                match: /\i.gradientClassName]\),style:/,
-                replace: "$&{color:$self.colorIfServer(arguments[0])},_style:"
+                match: /(?<=\.username.{0,50}?)style:/,
+                replace: "style:{color:$self.colorIfServer(arguments[0])},_style:"
             },
             predicate: () => !Settings.plugins.IrcColors.enabled
         },
@@ -112,7 +112,7 @@ export default definePlugin({
             predicate: () => settings.store.dmList,
         },
         {
-            find: "!1,wrapContent",
+            find: '"AvatarWithText"',
             replacement: [
                 {
                     match: /(\}=\i)/,
@@ -124,6 +124,13 @@ export default definePlugin({
                 },
             ],
             predicate: () => settings.store.dmList,
+        },
+        {
+            find: '"Reply Chain Nudge")',
+            replacement: {
+                match: /(,color:)(\i),/,
+                replace: "$1$self.colorInReplyingTo(arguments[0]) ?? $2,",
+            },
         },
     ],
 
@@ -142,5 +149,10 @@ export default definePlugin({
 
         const color = getCustomColorString(a.message.author.id, true);
         return color ?? roleColor ?? undefined;
-    }
+    },
+
+    colorInReplyingTo(a: any) {
+        const { id } = a.reply.message.author;
+        return getCustomColorString(id, true);
+    },
 });

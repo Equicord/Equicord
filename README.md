@@ -11,7 +11,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 ### Extra included plugins
 
 <details>
-<summary>166 additional plugins</summary>
+<summary>167 additional plugins</summary>
 
 ### All Platforms
 
@@ -38,6 +38,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - CleanChannelName by AutumnVN
 - ClientSideBlock by Samwich
 - CommandPalette by Ethan
+- CopyStickerLinks by Byeoon
 - CopyUserMention by Cortex & castdrian
 - CustomSounds by TheKodeToad & SpikeHD
 - CustomTimestamps by Rini & nvhrr
@@ -114,9 +115,9 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - NoMirroredCamera by Nyx
 - NoModalAnimation by AutumnVN
 - NoNitroUpsell by thororen
+- NoOnboarding by omaw & Glitch
 - NoRoleHeaders by Samwich
 - NotificationTitle by Kyuuhachi
-- OnePingPerDM by ProffDea
 - PingNotifications by smuki
 - PinIcon by iamme
 - PlatformSpoofer by Drag
@@ -125,7 +126,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - QuestCompleter by Amia
 - QuestionMarkReplacement by nyx
 - Quoter by Samwich
-- RandomVoice by xijexo & omaw
+- RandomVoice by xijexo, omaw, thororen
 - Remix by MrDiamond
 - RemixMe by kvba
 - RepeatMessage by Tolgchu
@@ -212,7 +213,6 @@ MacOS
 Linux
 
 - [GUI-X11](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl-x11)
-- [GUI-Wayland](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl-wayland)
 - [CLI](https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli-Linux)
 - [AUR](https://aur.archlinux.org/packages?O=0&K=equicord)
 
