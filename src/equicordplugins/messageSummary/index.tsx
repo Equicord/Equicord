@@ -50,7 +50,7 @@ async function summaryMessage(props) {
 
     if (message.content === "" && message.attachments.length === 0 && message.embeds.length > 0) {
         const embed = message.embeds[0];
-        if ((embed.rawDescription && embed.rawDescription ! === "") || embed.image?.url) {
+        if ((embed.rawDescription && embed.rawDescription !== "") || embed.image?.url) {
             message.content = `${embed.rawTitle} ${embed.rawDescription}`;
             image_url = embed.image?.url || '';
         }
