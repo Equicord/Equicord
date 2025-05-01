@@ -76,26 +76,27 @@ export default definePlugin({
     },
 
     patches: [
+        // In the user popout. eg: when clicking the name in chat
         {
-            find: ".BITE_SIZE,user:",
+            find: ".POPOUT,user:",
             replacement: {
-                match: /{profileType:\i\.\i\.BITE_SIZE,children:\[/,
-                replace: "$&$self.BiteSizeReviewsButton({user:arguments[0].user}),"
+                match: /(children:\[)([^[]+shouldShowTooltip:)/,
+                replace: "$1$self.BiteSizeReviewsButton({user:arguments[0].user}),$2"
             }
         },
         {
-            find: ".FULL_SIZE,user:",
+            find: ".MODAL,user:",
             replacement: {
-                match: /{profileType:\i\.\i\.FULL_SIZE,children:\[/,
-                replace: "$&$self.BiteSizeReviewsButton({user:arguments[0].user}),"
+                match: /(children:\[)([^[]+shouldShowTooltip:)/,
+                replace: "$1$self.BiteSizeReviewsButton({user:arguments[0].user}),$2"
             }
         },
+        // places like the user profile on the right in dms
         {
-            // location: "UserProfileSiebar"
-            find: ".PANEL,children:[",
+            find: 'location:"UserProfileSiebar"',
             replacement: {
-                match: /{profileType:\i\.\i\.PANEL,children:\[/,
-                replace: "$&$self.BiteSizeReviewsButton({user:arguments[0].user}),"
+                match: /(children:\[)([^[]+shouldShowTooltip:)/,
+                replace: "$1$self.BiteSizeReviewsButton({user:arguments[0].user}),$2"
             }
         }
     ],
