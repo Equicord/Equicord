@@ -82,37 +82,37 @@ function EquicordSettings() {
             (!IS_DISCORD_DESKTOP || !isWindows
                 ? {
                     key: "frameless",
-                    title: "Disable the window frame",
+                    title: "Disable the Window Frame",
                     note: "Requires a full restart",
                     warning: { enabled: false },
                 }
                 : {
                     key: "winNativeTitleBar",
                     title:
-                        "Use Windows' native title bar instead of Discord's custom one",
+                        "Use Windows Style Title Bar",
                     note: "Requires a full restart",
                     warning: { enabled: false },
                 }),
             !IS_WEB && {
                 key: "transparent",
-                title: "Enable window transparency.",
+                title: "Enable Window Transparency",
                 note: "You need a theme that supports transparency or this will do nothing. Requires a full restart!",
                 warning: {
                     enabled: isWindows,
-                    message: "Enabling this will prevent you from snapping this window.",
+                    message: "This will disable snapping and docking features for this window.",
                 },
             },
             !IS_WEB &&
             isWindows && {
                 key: "winCtrlQ",
                 title:
-                    "Register Ctrl+Q as shortcut to close Discord (Alternative to Alt+F4)",
+                    "Ctrl+Q Keybind for Closing Discord",
                 note: "Requires a full restart",
                 warning: { enabled: false },
             },
             IS_DISCORD_DESKTOP && {
                 key: "disableMinSize",
-                title: "Disable minimum window size",
+                title: "Disable Minimum Window Size",
                 note: "Requires a full restart",
                 warning: { enabled: false },
             },
