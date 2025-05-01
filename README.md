@@ -178,6 +178,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - WriteUpperCase by Samwich & KrystalSkull
 - YoutubeDescription by arHSM
 - LastActive by Crxa
+- SplitLargeMessages by Reycko
 
 ### Web Only
 
