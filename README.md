@@ -11,7 +11,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 ### Extra included plugins
 
 <details>
-<summary>169 additional plugins</summary>
+<summary>170 additional plugins</summary>
 
 ### All Platforms
 
@@ -53,7 +53,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - DontFilterMe by Samwich
 - EmojiDumper by Cortex, Samwich, Woosh
 - Encryptcord by Inbestigator
-- EquicordCSS by thororen, Panniku, Dablulite, Coolesding, MiniDiscordThemes, LuckFire, gold_me
 - EquicordHelper by thororen & nyx
 - Equissant by SomeAspy & thororen
 - ExportContacts by dat_insanity
@@ -96,6 +95,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - JumpToStart by Samwich
 - KeyboardSounds by HypedDomi
 - KeywordNotify by camila314 & x3rt
+- - LastActive by Crxa
 - LimitMiddleClickPaste by no dev listed
 - LoginWithQR by nexpid
 - MediaPlaybackSpeed by D3SOX
@@ -107,6 +107,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - MessageTranslate by Samwich
 - ModalFade by Kyuuhachi
 - MoreStickers by Leko & Arjix
+- MoreUserTags by Cyn, TheSun, RyanCaoDev, LordElias, AutumnVN, hen
 - Morse by zyqunix
 - NeverPausePreviews by vappstar
 - NewPluginsManager by Sqaaakoi
@@ -142,6 +143,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - Signature by Ven, Rini, ImBanana, KrystalSkull
 - Slap by Korbo
 - SoundBoardLogger by Moxxie, fres, echo, maintained by thororen
+- - SplitLargeMessages by Reycko
 - SpotifyLyrics by Joona
 - StatsfmPresence by Crxa
 - StatusPresets by iamme
@@ -177,7 +179,6 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - Woof by Samwich
 - WriteUpperCase by Samwich & KrystalSkull
 - YoutubeDescription by arHSM
-- LastActive by Crxa
 
 ### Web Only
 

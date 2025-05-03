@@ -59,22 +59,21 @@ function renderClickableGDMs(mutualDms: Channel[], onClose: () => void) {
     return mutualDms.map(c => (
         <Clickable
             key={c.id}
+            className={MutualsListClasses.row}
             onClick={() => {
                 onClose();
                 SelectedChannelActionCreators.selectPrivateChannel(c.id);
             }}
         >
-            <div className={MutualsListClasses.row}>
-                <Avatar
-                    src={IconUtils.getChannelIconURL({ id: c.id, icon: c.icon, size: 32 })}
-                    size="SIZE_40"
-                    className={MutualsListClasses.icon}
-                >
-                </Avatar>
-                <div className={MutualsListClasses.details}>
-                    <div className={MutualsListClasses.name}>{getGroupDMName(c)}</div>
-                    <div className={MutualsListClasses.nick}>{c.recipients.length + 1} Members</div>
-                </div>
+            <Avatar
+                src={IconUtils.getChannelIconURL({ id: c.id, icon: c.icon, size: 32 })}
+                size="SIZE_40"
+                className={MutualsListClasses.icon}
+            >
+            </Avatar>
+            <div className={MutualsListClasses.details}>
+                <div className={MutualsListClasses.name}>{getGroupDMName(c)}</div>
+                <div className={MutualsListClasses.nick}>{c.recipients.length + 1} Members</div>
             </div>
         </Clickable>
     ));
@@ -89,7 +88,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: ".MUTUAL_FRIENDS?(",
+            find: ".BOT_DATA_ACCESS?(",
             replacement: [
                 {
                     match: /\i\.useEffect.{0,100}(\i)\[0\]\.section/,
