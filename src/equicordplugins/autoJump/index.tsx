@@ -5,8 +5,9 @@
  */
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, Menu, MessageActions, NavigationRouter } from "@webpack/common";
 
 interface ChannelSelectEvent {
@@ -37,19 +38,27 @@ const MenuPatch: NavContextMenuPatchCallback = (children, { channel }) => {
     );
 };
 
+const settings = definePluginSettings({
+    autoJumpingAutomatically: {
+        type: OptionType.BOOLEAN,
+        description: "Automatically jump to the last message in the channel when switching channels",
+        default: false
+    }
+});
+
 export default definePlugin({
-    name: "autoJump",
-    description: "Jumps to Last Message in Channel when switching channel(s) & adds an option in context-menu.",
+    name: "AutoJump",
+    description: "Jumps to Last Message in Channel",
     authors: [EquicordDevs.omaw],
-    contextMenus:
-    {
+    settings,
+    contextMenus: {
         "channel-context": MenuPatch,
         "user-context": MenuPatch,
         "thread-context": MenuPatch
     },
     flux: {
         async CHANNEL_SELECT({ guildId, channelId }: ChannelSelectEvent) {
-            if (!channelId) return;
+            if (!settings.store.autoJumpingAutomatically || !channelId) return;
 
             const channel = ChannelStore.getChannel(channelId);
             if (!channel || channel.id === lastChannelId) return;
