@@ -39,7 +39,7 @@ const MenuPatch: NavContextMenuPatchCallback = (children, { channel }) => {
 };
 
 const settings = definePluginSettings({
-    autoJumpingAutomatically: {
+    autoJumping: {
         type: OptionType.BOOLEAN,
         description: "Automatically jump to the last message in the channel when switching channels",
         default: false
@@ -58,7 +58,7 @@ export default definePlugin({
     },
     flux: {
         async CHANNEL_SELECT({ guildId, channelId }: ChannelSelectEvent) {
-            if (!settings.store.autoJumpingAutomatically || !channelId) return;
+            if (!settings.store.autoJumping || !channelId) return;
 
             const channel = ChannelStore.getChannel(channelId);
             if (!channel || channel.id === lastChannelId) return;
