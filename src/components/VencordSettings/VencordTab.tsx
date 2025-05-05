@@ -89,7 +89,7 @@ function EquicordSettings() {
                 : {
                     key: "winNativeTitleBar",
                     title:
-                        "Use Windows Style Title Bar",
+                        "Use Windows' native title bar instead of Discord's custom one",
                     note: "Requires a full restart",
                     warning: { enabled: false },
                 }),
@@ -99,14 +99,14 @@ function EquicordSettings() {
                 note: "You need a theme that supports transparency or this will do nothing. Requires a full restart!",
                 warning: {
                     enabled: isWindows,
-                    message: "This will disable snapping and docking features for this window.",
+                    message: "Enabling this will prevent you from snapping this window.",
                 },
             },
             !IS_WEB &&
             isWindows && {
                 key: "winCtrlQ",
                 title:
-                    "Ctrl+Q Keybind for Closing Discord",
+                    "Register Ctrl+Q as shortcut to close Discord (Alternative to Alt+F4)",
                 note: "Requires a full restart",
                 warning: { enabled: false },
             },
