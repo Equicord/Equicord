@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { React, ReactDOM } from "@webpack/common";
+import { createRoot, React } from "@webpack/common";
 import type { JSX, ReactNode } from "react";
 import type { Root } from "react-dom/client";
 
@@ -27,17 +27,12 @@ let NotificationQueue: JSX.Element[] = [];
 let notificationID = 0;
 let RootContainer: Root;
 
-/**
- * getNotificationContainer()
- * Gets the root container for the notifications, creating it if it doesn't exist.
- * @returns {Root} The root DOM container.
- */
 function getNotificationContainer() {
     if (!RootContainer) {
         const container = document.createElement("div");
         container.id = "toastnotifications-container";
         document.body.append(container);
-        RootContainer = ReactDOM.createRoot(container);
+        RootContainer = createRoot(container);
     }
 
     return RootContainer;
