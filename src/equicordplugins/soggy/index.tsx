@@ -6,7 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Devs } from "@utils/constants";
+import { EquicordDevs } from "@utils/constants";
 import { ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
@@ -58,7 +58,7 @@ function SoggyModal(props: ModalProps) {
     );
 }
 
-export function buildSoggyModall(): any {
+function buildSoggyModal(): any {
     openModal(props => <SoggyModal {...props} />);
 }
 
@@ -69,6 +69,7 @@ function SoggyButton() {
             tooltip={settings.store.tooltipText}
             icon={() => (
                 <img
+                    alt=""
                     src={settings.store.imageLink}
                     width={24}
                     height={24}
@@ -76,7 +77,7 @@ function SoggyButton() {
                     style={{ pointerEvents: "none" }}
                 />
             )}
-            onClick={() => buildSoggyModall()}
+            onClick={() => buildSoggyModal()}
             selected={false}
         />
     );
@@ -118,9 +119,8 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "Soggy",
     description: "Adds a soggy button to the toolbox",
-    authors: [Devs.sliwka],
+    authors: [EquicordDevs.sliwka],
     settings,
-
     patches: [
         {
             find: "toolbar:function",
