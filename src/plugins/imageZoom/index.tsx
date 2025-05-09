@@ -39,7 +39,6 @@ interface ImageMetadata {
     fetching?: boolean;
 }
 
-
 const imageMetadataCache = new Map<string, ImageMetadata>();
 
 export const settings = definePluginSettings({
@@ -172,7 +171,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
                         maxValue={5}
                         value={settings.store.zoomSpeed}
                         onChange={debounce((value: number) => settings.store.zoomSpeed = value, 100)}
-                        renderValue={(value: number) => `${value.toFixed(1)}x`}
+                        renderValue={(value: number) => `${value.toFixed(3)}x`}
                     />
                 )}
             />
@@ -305,7 +304,7 @@ function formatFileSize(bytes: number): string {
 
 export default definePlugin({
     name: "ImageZoom",
-    description: "Lets you zoom in to images and gifs, and displays image metadata. Use scroll wheel to zoom in and shift + scroll wheel to increase lens radius.",
+    description: "Lets you zoom in to images and gifs as well as displays image metadata. Use scroll wheel to zoom in and shift + scroll wheel to increase lens radius.",
     authors: [Devs.Aria, EquicordDevs.Campfire],
     tags: ["ImageUtilities"],
 
