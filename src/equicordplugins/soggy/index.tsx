@@ -7,25 +7,14 @@
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
-import {
-    ModalProps,
-    ModalRoot,
-    openModal,
-} from "@utils/modal";
+import { ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { React } from "@webpack/common";
 
-
 const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
 
-
-// note: this code is probably abysmal dogshit i am new to typescript and react and shit
-
-
-
 function SoggyModal(props: ModalProps) {
-
     if (settings.store.enableSong) {
         React.useEffect(() => {
             const song = document.createElement("audio");
@@ -69,25 +58,9 @@ function SoggyModal(props: ModalProps) {
     );
 }
 
-// visualising the boop box left it in cause yea
-/*
-<div
-                style={{
-                    position: "absolute",
-                    top: 220,
-                    left: 155,
-                    width: 70,
-                    height: 70,
-                    backgroundColor: "rgba(255, 0, 0, 0.3)",
-                    pointerEvents: "none", // So it doesn't block clicks
-                }}
-            />
-*/
-
 export function buildSoggyModall(): any {
     openModal(props => <SoggyModal {...props} />);
 }
-
 
 function SoggyButton() {
     return (
@@ -109,7 +82,6 @@ function SoggyButton() {
     );
 }
 
-// overkill customization but who cares
 const settings = definePluginSettings({
     enableSong: {
         description: "Enable the song that plays after clicking the button",
@@ -141,7 +113,6 @@ const settings = definePluginSettings({
         type: OptionType.STRING,
         default: "https://github.com/Capeling/soggy-mod/raw/refs/heads/main/resources/honk.wav",
     }
-
 });
 
 export default definePlugin({
@@ -154,7 +125,7 @@ export default definePlugin({
         {
             find: "toolbar:function",
             replacement: {
-                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,100}mobileToolbar)/,
+                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,450}mobileToolbar)/,
                 replace: "$1$self.addIconToToolBar(arguments[0]);$2"
             }
         }
