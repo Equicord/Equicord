@@ -41,6 +41,9 @@ interface ImageMetadata {
 
 const imageMetadataCache = new Map<string, ImageMetadata>();
 
+let lastClickTime = 0;
+const DOUBLE_CLICK_THRESHOLD = 300;
+
 export const settings = definePluginSettings({
     saveZoomValues: {
         type: OptionType.BOOLEAN,
@@ -88,20 +91,11 @@ export const settings = definePluginSettings({
         default: 0.5,
         stickToMarkers: false,
     },
+
     showMetadata: {
         type: OptionType.BOOLEAN,
-        description: "Show image metadata when clicking on images",
+        description: "Show image metadata when double clicking on selected image",
         default: true,
-    },
-
-    metadataPosition: {
-        type: OptionType.SELECT,
-        description: "Position of the metadata display",
-        options: [
-            { label: "Above", value: "above" },
-            { label: "Below", value: "below" }
-        ],
-        default: "above"
     }
 });
 
@@ -112,7 +106,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
     // emojis in user statuses
     if (props.target?.classList?.contains("emoji")) return;
 
-    const { square, nearestNeighbour, showMetadata, metadataPosition } = settings.use(["square", "nearestNeighbour", "showMetadata", "metadataPosition"]);
+    const { square, nearestNeighbour, showMetadata } = settings.use(["square", "nearestNeighbour", "showMetadata"]);
 
     children.push(
         <Menu.MenuGroup id="image-zoom">
@@ -219,6 +213,11 @@ function createMetadataDisplay(imgElement: HTMLImageElement) {
     const parent = imgElement.parentElement;
     if (!parent) return;
 
+    const wrapper = document.createElement("div");
+    wrapper.className = "vc-image-wrapper";
+    parent.insertBefore(wrapper, imgElement);
+    wrapper.appendChild(imgElement);
+
     let metadata = imageMetadataCache.get(src);
 
     if (!metadata) {
@@ -266,11 +265,7 @@ function createMetadataDisplay(imgElement: HTMLImageElement) {
         </div>
     `;
 
-    if (settings.store.metadataPosition === "above") {
-        parent.insertBefore(container, imgElement);
-    } else {
-        parent.appendChild(container);
-    }
+    wrapper.appendChild(container);
 
     return container;
 }
@@ -355,13 +350,6 @@ export default definePlugin({
                     replace: "$&$self.updateMagnifier(this);"
                 }
             ]
-        },
-        {
-            find: "onClick:function",
-            replacement: {
-                match: /onClick:function\(\i\)\{([^}]+)\}/,
-                replace: "onClick:function(e){$self.handleImageClick(e,this);$1}"
-            }
         }
     ],
 
@@ -388,9 +376,14 @@ export default definePlugin({
 
     handleImageClick(e: React.MouseEvent | MouseEvent, instance: any) {
         if (!settings.store.showMetadata) return;
+
         const target = e.target as HTMLImageElement;
         if (target && target.tagName === "IMG" && target.src) {
-            toggleMetadata(target);
+            const currentTime = new Date().getTime();
+            if (currentTime - lastClickTime < DOUBLE_CLICK_THRESHOLD) {
+                toggleMetadata(target);
+            }
+            lastClickTime = currentTime;
         }
     },
 
