@@ -6,12 +6,8 @@
 
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Devs } from "@utils/constants";
-import {
-    ModalProps,
-    ModalRoot,
-    openModal,
-} from "@utils/modal";
+import { EquicordDevs } from "@utils/constants";
+import { ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { React } from "@webpack/common";
@@ -19,17 +15,12 @@ import { React } from "@webpack/common";
 
 const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
 
-
-// note: this code is probably abysmal dogshit i am new to typescript and react and shit
-
-
-
 function SoggyModal(props: ModalProps) {
 
-    if (settings.store.enableSong) {
+    if (settings.store.songVolume !== 0) {
         React.useEffect(() => {
-            const song = document.createElement("audio");
-            song.src = settings.store.songLink;
+            const song = new Audio(settings.store.songLink);
+            song.volume = settings.store.songVolume;
             song.play();
 
             return () => {
@@ -46,13 +37,14 @@ function SoggyModal(props: ModalProps) {
         const region = { x: 155, y: 220, width: 70, height: 70 };
 
         if (
-            settings.store.enableBoop &&
+            settings.store.boopVolume !== 0 &&
             offsetX >= region.x &&
             offsetX <= region.x + region.width &&
             offsetY >= region.y &&
             offsetY <= region.y + region.height
         ) {
             const boopSound = new Audio(settings.store.boopLink);
+            boopSound.volume = settings.store.boopVolume;
             boopSound.play();
         }
     };
@@ -68,21 +60,6 @@ function SoggyModal(props: ModalProps) {
         </ModalRoot >
     );
 }
-
-// visualising the boop box left it in cause yea
-/*
-<div
-                style={{
-                    position: "absolute",
-                    top: 220,
-                    left: 155,
-                    width: 70,
-                    height: 70,
-                    backgroundColor: "rgba(255, 0, 0, 0.3)",
-                    pointerEvents: "none", // So it doesn't block clicks
-                }}
-            />
-*/
 
 export function buildSoggyModall(): any {
     openModal(props => <SoggyModal {...props} />);
@@ -109,17 +86,22 @@ function SoggyButton() {
     );
 }
 
-// overkill customization but who cares
 const settings = definePluginSettings({
-    enableSong: {
-        description: "Enable the song that plays after clicking the button",
-        type: OptionType.BOOLEAN,
-        default: true,
+    songVolume: {
+        description: "Volume of the song. 0 to disable",
+        type: OptionType.SLIDER,
+        default: 0.75,
+        markers: [0, 0.25, 0.5, 0.75, 1],
+        stickToMarkers: false,
+
     },
-    enableBoop: {
-        description: "Let's you boop soggy's nose",
-        type: OptionType.BOOLEAN,
-        default: true,
+    boopVolume: {
+        description: "Volume of the boop sound",
+        type: OptionType.SLIDER,
+        default: 0.3,
+        markers: [0, 0.25, 0.5, 0.75, 1],
+        stickToMarkers: false,
+
     },
     tooltipText: {
         description: "The text shown when hovering over the button",
@@ -147,14 +129,14 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "Soggy",
     description: "Adds a soggy button to the toolbox",
-    authors: [Devs.sliwka],
+    authors: [EquicordDevs.sliwka],
     settings,
 
     patches: [
         {
             find: "toolbar:function",
             replacement: {
-                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,100}mobileToolbar)/,
+                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,450}mobileToolbar)/,
                 replace: "$1$self.addIconToToolBar(arguments[0]);$2"
             }
         }
