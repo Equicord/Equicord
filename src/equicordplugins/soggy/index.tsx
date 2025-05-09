@@ -12,7 +12,6 @@ import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { React } from "@webpack/common";
 
-
 const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
 
 function SoggyModal(props: ModalProps) {
@@ -61,7 +60,8 @@ function SoggyModal(props: ModalProps) {
     );
 }
 
-export function buildSoggyModall(): any {
+
+function buildSoggyModal(): any {
     openModal(props => <SoggyModal {...props} />);
 }
 
@@ -73,6 +73,7 @@ function SoggyButton() {
             tooltip={settings.store.tooltipText}
             icon={() => (
                 <img
+                    alt=""
                     src={settings.store.imageLink}
                     width={24}
                     height={24}
@@ -80,7 +81,7 @@ function SoggyButton() {
                     style={{ pointerEvents: "none" }}
                 />
             )}
-            onClick={() => buildSoggyModall()}
+            onClick={() => buildSoggyModal()}
             selected={false}
         />
     );
@@ -101,7 +102,6 @@ const settings = definePluginSettings({
         default: 0.3,
         markers: [0, 0.25, 0.5, 0.75, 1],
         stickToMarkers: false,
-
     },
     tooltipText: {
         description: "The text shown when hovering over the button",
@@ -124,6 +124,7 @@ const settings = definePluginSettings({
         default: "https://github.com/Capeling/soggy-mod/raw/refs/heads/main/resources/honk.wav",
     }
 
+        
 });
 
 export default definePlugin({
