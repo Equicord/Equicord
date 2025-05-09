@@ -91,7 +91,7 @@ const settings = definePluginSettings({
     songVolume: {
         description: "Volume of the song. 0 to disable",
         type: OptionType.SLIDER,
-        default: 0.75,
+        default: 0.25,
         markers: [0, 0.25, 0.5, 0.75, 1],
         stickToMarkers: false,
 
@@ -99,7 +99,7 @@ const settings = definePluginSettings({
     boopVolume: {
         description: "Volume of the boop sound",
         type: OptionType.SLIDER,
-        default: 0.3,
+        default: 0.2,
         markers: [0, 0.25, 0.5, 0.75, 1],
         stickToMarkers: false,
     },
