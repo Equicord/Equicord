@@ -8,22 +8,25 @@ import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/Me
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
-const handleMessage = (channelId: string, message: { content: string }) => {
+
+const isLegal = (word: string) => word.startsWith("<@") || /^https?:\/\//i.test(word);
+const handleMessage = (channelId: string, message: { content: string; }) => {
     const words = message.content.trim().split(/\s+/);
     if (words.length === 0) return;
 
     let index = -1;
+    let attempts = 0;
     do {
         index = Math.floor(Math.random() * words.length);
-    } while (words[index].startsWith("<@") && words.length > 1);
+        attempts++;
+    } while (isLegal(words[index]) && attempts < words.length * 2);
 
-    const word = words[index];
-    if (!word.startsWith("<@")) {
+    if (!isLegal(words[index])) {
+        const word = words[index];
         words[index] = word === word.toUpperCase() ? word + "INGTON" : word + "ington";
     }
     message.content = words.join(" ");
 };
-
 export default definePlugin({
     name: "Plugington",
     description: "Suffixes 'ington' to a random word in your message",
