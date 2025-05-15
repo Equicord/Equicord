@@ -16,6 +16,9 @@ const isLegal = (word: string, message: { attachments?: any[]; }) => {
 };
 
 const handleMessage = (channelId: string, message: { content: string; attachments?: any[]; }) => {
+    if (message.attachments && message.attachments.length > 0) return;
+    if (!message.content || !message.content.trim()) return;
+
     const words = message.content.trim().split(/\s+/);
     if (words.length === 0) return;
 
