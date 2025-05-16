@@ -98,7 +98,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - JumpToStart by Samwich
 - KeyboardSounds by HypedDomi
 - KeywordNotify by camila314 & x3rt
-- - LastActive by Crxa
+- LastActive by Crxa
 - LimitMiddleClickPaste by no dev listed
 - LoginWithQR by nexpid
 - MediaPlaybackSpeed by D3SOX
@@ -183,6 +183,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - WigglyText by nexpid
 - Woof by Samwich
 - WriteUpperCase by Samwich & KrystalSkull
+- wallpaperFree by Joona
 - YoutubeDescription by arHSM
 
 ### Web Only
