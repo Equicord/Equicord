@@ -177,13 +177,13 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - ViewRawVariant by Kyuuhachi
 - VoiceChatUtilities by D3SOX
 - VoiceJoinMessages by Sqaaakoi & maintained by thororen
+- WallpaperFree by Joona
 - WebpackTarball by Kyuuhachi
 - WhitelistedEmojis by Creations
 - WhosWatching by fres
 - WigglyText by nexpid
 - Woof by Samwich
 - WriteUpperCase by Samwich & KrystalSkull
-- wallpaperFree by Joona
 - YoutubeDescription by arHSM
 
 ### Web Only
