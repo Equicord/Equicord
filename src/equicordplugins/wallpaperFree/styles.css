@@ -1,7 +1,7 @@
 .vc-wpfree-discord-wp-modal {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 24;
+    gap: 24px;
     padding: 8px 0;
 }
 
