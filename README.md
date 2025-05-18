@@ -21,6 +21,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - AmITyping by MrDiamond
 - Anammox by Kyuuhachi
 - AtSomeone by Joona
+- AutoReact by Greyxp1
 - BannersEverywhere by ImLvna & AutumnVN
 - BetterActivities by D3SOX, Arjix, AutumnVN
 - BetterAudioPlayer by Creations
