@@ -1,0 +1,196 @@
+/* Main container styles */
+.auto-react-container {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    position: relative;
+}
+
+/* Emoji picker styles */
+.auto-react-emoji-picker {
+    position: fixed;
+    z-index: 999999;
+    background-color: var(--background-secondary);
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 20%);
+    width: 320px;
+    max-height: 50vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: auto hidden;
+    box-sizing: border-box;
+    padding: 6px;
+}
+
+.auto-react-emoji-picker em-emoji-picker {
+    width: 100%;
+
+    --em-rgb-background: var(--background-secondary);
+    --em-rgb-input: var(--background-primary);
+    --em-rgb-color: var(--text-normal);
+    --em-rgb-accent: var(--brand-experiment);
+}
+
+.auto-react-emoji-search {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.auto-react-emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.auto-react-emoji-button {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.auto-react-emoji-button:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+/* Emoji display button style */
+.auto-react-emoji-display-button {
+    background: none;
+    border: none;
+    color: var(--text-normal);
+    cursor: pointer;
+    height: 30px;
+    width: 44px;
+    max-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border-radius: 3px;
+    padding: 0;
+    transition: transform 0.1s ease;
+}
+
+.auto-react-emoji-display-button:hover {
+    transform: scale(1.1);
+}
+
+/* Settings layout */
+.auto-react-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 4px 0;
+}
+
+.auto-react-settings-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2px;
+    min-height: 20px;
+    padding: 2px 0;
+}
+
+.auto-react-settings-label {
+    font-size: 14px;
+    color: var(--text-normal);
+    white-space: nowrap;
+}
+
+/* Blacklist styles */
+.auto-react-blacklist {
+    margin-top: 8px;
+}
+
+.auto-react-blacklist ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.auto-react-blacklist-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-top: 1px solid var(--background-modifier-accent);
+    gap: 16px;
+}
+
+.auto-react-blacklist-item:last-child {
+    border-bottom: 1px solid var(--background-modifier-accent);
+}
+
+.auto-react-blacklist-loading {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-style: italic;
+}
+
+.auto-react-blacklist-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.auto-react-blacklist-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-grow: 1;
+}
+
+.auto-react-blacklist-displayname {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-normal);
+}
+
+.auto-react-blacklist-username-only {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.auto-react-remove-button {
+    background-color: var(--button-secondary-background);
+    border: none;
+    color: var(--status-danger);
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auto-react-remove-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.auto-react-remove-button:hover {
+    background-color: var(--button-secondary-background-hover);
+}
+
+.auto-react-remove-button:active {
+    background-color: var(--button-secondary-background-active);
+}
+
+/* Channel styles */
+.auto-react-channel-id {
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Slider styles */
+.auto-react-slider {
+    width: 200px;
+}
