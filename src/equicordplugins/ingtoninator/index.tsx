@@ -34,7 +34,7 @@ const isLegal = (word: string) => {
 };
 
 const ingtonize = (word: string) => {
-    return word.endsWith("ing") ? word + "ton" : word;
+    return word.endsWith("ton") ? word + "ton" : word + "ington";
 };
 
 const handleMessage = ((channelId, message) => {
