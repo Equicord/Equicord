@@ -87,7 +87,7 @@ const IngtoninatorButton: ChatBarButtonFactory = ({ isMainChat }) => {
 
 export default definePlugin({
     name: "Ingtoninator",
-    description: "Suffixes 'ington' to a random word in your message... FULCRUM COME INNN YUPPP.. YODIE GANG YOU FEEL ME",
+    description: "Suffixes 'ington' to a random word in your message",
     authors: [EquicordDevs.zyqunix],
     settings,
     start() {
