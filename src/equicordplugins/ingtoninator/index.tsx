@@ -91,12 +91,10 @@ export default definePlugin({
     authors: [EquicordDevs.zyqunix],
     settings,
     start() {
-        if (settings.store.isEnabled) true;
         addChatBarButton("Ingtoninator", IngtoninatorButton);
         addMessagePreSendListener(handleMessage);
     },
     stop() {
-        if (settings.store.isEnabled) false;
         removeChatBarButton("Ingtoninator");
         removeMessagePreSendListener(handleMessage);
     }
