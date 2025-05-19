@@ -11,7 +11,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 ### Extra included plugins
 
 <details>
-<summary>172 additional plugins</summary>
+<summary>175 additional plugins</summary>
 
 ### All Platforms
 
@@ -90,6 +90,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - IgnoreTerms by D3SOX
 - ImagePreview by Creations
 - ImgToGif by zyqunix
+- Ingtoninator by zyqunix
 - InRole by nin0dev
 - InstantScreenshare by HAHALOSAH & thororen
 - IRememberYou by zoodogood
@@ -97,7 +98,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - JumpToStart by Samwich
 - KeyboardSounds by HypedDomi
 - KeywordNotify by camila314 & x3rt
-- - LastActive by Crxa
+- LastActive by Crxa
 - LimitMiddleClickPaste by no dev listed
 - LoginWithQR by nexpid
 - MediaPlaybackSpeed by D3SOX
@@ -176,6 +177,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - ViewRawVariant by Kyuuhachi
 - VoiceChatUtilities by D3SOX
 - VoiceJoinMessages by Sqaaakoi & maintained by thororen
+- WallpaperFree by Joona
 - WebpackTarball by Kyuuhachi
 - WhitelistedEmojis by Creations
 - WhosWatching by fres
