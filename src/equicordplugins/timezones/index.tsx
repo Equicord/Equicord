@@ -202,11 +202,9 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: {
                         const timezone = await getTimezone(user.id);
                         setUserDatabaseTimezone(user.id, timezone);
                         timezones[user.id] = timezone;
-                        // toast.update({ content: "Timezone refreshed successfully!", type: Toasts.Type.SUCCESS });
                         showToast("Timezone refreshed successfully!", Toasts.Type.SUCCESS);
                     } catch (error) {
                         console.error("Failed to refresh timezone:", error);
-                        // toast.update({ content: "Failed to refresh timezone.", type: Toasts.Type.ERROR });
                         showToast("Failed to refresh timezone.", Toasts.Type.FAILURE);
                     }
                 }}
