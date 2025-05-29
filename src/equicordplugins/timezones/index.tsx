@@ -255,9 +255,7 @@ export default definePlugin({
         if (settings.store.useDatabase) {
             await loadDatabaseTimezones();
 
-            const userSysTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-            if (!settings.store.askedTimezone && userSysTimezone) {
+            if (!settings.store.askedTimezone) {
                 showToast(
                     "",
                     Toasts.Type.MESSAGE,
