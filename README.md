@@ -11,7 +11,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 ### Extra included plugins
 
 <details>
-<summary>175 additional plugins</summary>
+<summary>181 additional plugins</summary>
 
 ### All Platforms
 
@@ -109,9 +109,11 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - MessageLoggerEnhanced by Aria
 - MessageTranslate by Samwich
 - ModalFade by Kyuuhachi
+- MoreKaomoji by JacobTm & voidbbg
 - MoreStickers by Leko & Arjix
 - MoreUserTags by Cyn, TheSun, RyanCaoDev, LordElias, AutumnVN, hen
 - Morse by zyqunix
+- Moyai by Megu & Nuckyz
 - NeverPausePreviews by vappstar
 - NewPluginsManager by Sqaaakoi
 - NoAppsAllowed by kvba
@@ -123,6 +125,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - NoOnboarding by omaw & Glitch
 - NoRoleHeaders by Samwich
 - NotificationTitle by Kyuuhachi
+- PartyMode by UwUDev
 - PingNotifications by smuki
 - PinIcon by iamme
 - PlatformSpoofer by Drag
@@ -198,6 +201,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 
 - ClipsEnhancements by niko
 - MediaDownloader by Colorman
+- NoRPC by Cyn
 - StatusWhilePlaying by thororen
 
 ### Equicord Devbuilds Only
