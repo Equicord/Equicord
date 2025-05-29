@@ -24,19 +24,14 @@ export function SetTimezoneModal({ userId, modalProps, database }: { userId: str
     const [currentValue, setCurrentValue] = useState<string | null>(timezones[userId] ?? null);
 
     useEffect(() => {
-        if (!database) return;
-
         const localTimezone = timezones[userId];
         const shouldUseDatabase =
             settings.store.useDatabase &&
             (settings.store.preferDatabaseOverLocal || !localTimezone);
 
-        if (shouldUseDatabase) {
-            getTimezone(userId).then(e => setCurrentValue(e ?? localTimezone));
-        } else {
-            setCurrentValue(localTimezone);
-        }
-    }, [userId, settings.store.useDatabase, settings.store.preferDatabaseOverLocal, database]);
+        setCurrentValue(shouldUseDatabase ? getTimezone(userId) ?? localTimezone : localTimezone);
+    }, [userId, settings.store.useDatabase, settings.store.preferDatabaseOverLocal]);
+
 
     const options = useMemo(() => {
         return Intl.supportedValuesOf("timeZone").map(timezone => {
