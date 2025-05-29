@@ -27,6 +27,12 @@ const classes = findByPropsLazy("timestamp", "compact", "contentOnly");
 const locale = findByPropsLazy("getLocale");
 
 export const settings = definePluginSettings({
+    "Show Own Timezone": {
+        type: OptionType.BOOLEAN,
+        description: "Show your own timezone in profiles and message headers",
+        default: true
+    },
+
     "24h Time": {
         type: OptionType.BOOLEAN,
         description: "Show time in 24h format",
@@ -250,12 +256,14 @@ export default definePlugin({
 
     renderProfileTimezone: (props?: { user?: User; }) => {
         if (!settings.store.showProfileTime || !props?.user?.id) return null;
+        if (props.user.id === UserStore.getCurrentUser().id && !settings.store["Show Own Timezone"]) return null;
 
         return <TimestampComponent userId={props.user.id} type="profile" />;
     },
 
     renderMessageTimezone: (props?: { message?: Message; }) => {
         if (!settings.store.showMessageHeaderTime || !props?.message) return null;
+        if (props.message.author.id === UserStore.getCurrentUser().id && !settings.store["Show Own Timezone"]) return null;
 
         return <TimestampComponent userId={props.message.author.id} timestamp={props.message.timestamp.toISOString()} type="message" />;
     }
