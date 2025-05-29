@@ -93,6 +93,13 @@ export const settings = definePluginSettings({
                 Reset Database Timezones
             </Button>
         )
+    },
+
+    askedTimezone: {
+        type: OptionType.BOOLEAN,
+        description: "Whether the user has been asked to set their timezone",
+        hidden: true,
+        default: false
     }
 });
 
@@ -181,10 +188,9 @@ const TimestampComponent = ErrorBoundary.wrap(({ userId, timestamp, type }: Prop
 const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: { user: User; }) => {
     if (user?.id == null) return;
 
-    const label = settings.store.useDatabase ? "Set Local Timezone" : "Set Timezone";
     const setTimezoneItem = (
         <Menu.MenuItem
-            label={label}
+            label="Set Local Timezone"
             id="set-timezone"
             action={() => openModal(modalProps => <SetTimezoneModal userId={user.id} modalProps={modalProps} />)}
         />
@@ -248,6 +254,32 @@ export default definePlugin({
 
         if (settings.store.useDatabase) {
             await loadDatabaseTimezones();
+
+            const userSysTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+            if (!settings.store.askedTimezone && userSysTimezone) {
+                showToast(
+                    "",
+                    Toasts.Type.MESSAGE,
+                    {
+                        duration: 10000,
+                        component: (
+                            <Button
+                                color={Button.Colors.GREEN}
+                                onClick={() => {
+                                    authModal(async () => {
+                                        openModal(modalProps => <SetTimezoneModal userId={UserStore.getCurrentUser().id} modalProps={modalProps} database={true} />);
+                                    });
+                                }}
+                            >
+                                Want to save your timezone to the database? Click here to set it.
+                            </Button>
+                        ),
+                        position: Toasts.Position.BOTTOM
+                    }
+                );
+                settings.store.askedTimezone = true;
+            }
         }
     },
 

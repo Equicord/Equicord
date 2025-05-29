@@ -29,9 +29,12 @@ export function SetTimezoneModal({ userId, modalProps, database }: { userId: str
             settings.store.useDatabase &&
             (settings.store.preferDatabaseOverLocal || !localTimezone);
 
-        setCurrentValue(shouldUseDatabase ? getTimezone(userId) ?? localTimezone : localTimezone);
-    }, [userId, settings.store.useDatabase, settings.store.preferDatabaseOverLocal]);
+        const value = shouldUseDatabase
+            ? getTimezone(userId) ?? localTimezone
+            : localTimezone;
 
+        setCurrentValue(value ?? Intl.DateTimeFormat().resolvedOptions().timeZone);
+    }, [userId, settings.store.useDatabase, settings.store.preferDatabaseOverLocal]);
 
     const options = useMemo(() => {
         return Intl.supportedValuesOf("timeZone").map(timezone => {

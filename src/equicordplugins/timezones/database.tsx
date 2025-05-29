@@ -82,6 +82,8 @@ export function authModal(callback?: () => void) {
             permissions={0n}
             cancelCompletesFlow={false}
             callback={async (res: any) => {
+                if (!res || !res.location) return;
+
                 try {
                     const url = new URL(res.location);
 
@@ -99,6 +101,7 @@ export function authModal(callback?: () => void) {
                     showToast("Authorization successful!", Toasts.Type.SUCCESS);
                     callback?.();
                 } catch (e) {
+                    console.error("Error during authorization:", e);
                     showToast("Unexpected error during authorization", Toasts.Type.FAILURE);
                 }
             }}
