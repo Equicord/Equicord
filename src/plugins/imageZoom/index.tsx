@@ -300,7 +300,7 @@ function formatFileSize(bytes: number): string {
 export default definePlugin({
     name: "ImageZoom",
     description: "Lets you zoom in to images and gifs as well as displays image metadata. Use scroll wheel to zoom in and shift + scroll wheel to increase lens radius.",
-    authors: [Devs.Aria, EquicordDevs.Campfire],
+    authors: [Devs.Aria, EquicordDevs.interia],
     tags: ["ImageUtilities"],
 
     managedStyle,
