@@ -8,14 +8,14 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 import { makeContextItem } from "./components";
-import settings, { folderIconsData } from "./settings";
+import { folderIconsData, settings } from "./settings";
 import { folderProp, int2rgba } from "./util";
 
 export default definePlugin({
-    settings,
     name: "CustomFolderIcons",
     description: "Customize folder icons with any png",
     authors: [EquicordDevs.sadan],
+    settings,
     patches: [
         {
             find: ".folderButtonInner",
@@ -49,7 +49,7 @@ export default definePlugin({
                         height: "100%"
                     }}
                 >
-                    <img src={data!.url} width={`${data!.size ?? 100}%`} height={`${data!.size ?? 100}%`}
+                    <img alt="" src={data!.url} width={`${data!.size ?? 100}%`} height={`${data!.size ?? 100}%`}
                     />
                 </div>
             );

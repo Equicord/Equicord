@@ -7,7 +7,7 @@
 import { closeModal, ModalContent, ModalHeader, ModalRoot, openModalLazy } from "@utils/modal";
 import { Button, Menu, Slider, TextInput, useState } from "@webpack/common";
 
-import settings, { folderIconsData } from "./settings";
+import { folderIconsData, settings } from "./settings";
 import { folderProp, int2rgba, setFolderData } from "./util";
 
 export function ImageModal(folderProps: folderProp) {
@@ -81,7 +81,7 @@ export function RenderPreview({ folderProps, url, size }: { folderProps: folderP
             justifyContent: "center",
             alignItems: "center"
         }}>
-            <img src={url} width={`${size}%`} height={`${size}%`} />
+            <img alt="" src={url} width={`${size}%`} height={`${size}%`} />
         </div>
     );
 }
@@ -93,18 +93,18 @@ export function makeContextItem(a: folderProp) {
             key="custom-folder-icons"
             label="Change Icon"
             action={() => {
-                openModalLazy(async() => {
+                openModalLazy(async () => {
                     return props => (
                         <ModalRoot {...props}>
                             <ModalHeader >
                                 <div style={{
                                     color: "white"
                                 }}>
-                            Set a New Icon.
+                                    Set a New Icon.
                                 </div>
                             </ModalHeader>
                             <ModalContent>
-                                <ImageModal folderId={a.folderId} folderColor={a.folderColor}/>
+                                <ImageModal folderId={a.folderId} folderColor={a.folderColor} />
                             </ModalContent>
                             <div style={{
                                 color: "white",
@@ -116,9 +116,9 @@ export function makeContextItem(a: folderProp) {
                         </ModalRoot>
                     );
                 },
-                {
-                    modalKey: "custom-folder-icon"
-                });
-            }}/>
+                    {
+                        modalKey: "custom-folder-icon"
+                    });
+            }} />
     );
 }

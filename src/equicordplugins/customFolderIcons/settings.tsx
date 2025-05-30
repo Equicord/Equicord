@@ -7,13 +7,13 @@
 import { definePluginSettings } from "@api/Settings";
 import { OptionType } from "@utils/types";
 
-export interface folderIcon{
+export interface folderIcon {
     url: string,
     size: number,
 }
 export type folderIconsData = Record<string, folderIcon | null>;
 
-const settings = definePluginSettings({
+export const settings = definePluginSettings({
     solidIcon: {
         type: OptionType.BOOLEAN,
         default: false,
@@ -26,4 +26,3 @@ const settings = definePluginSettings({
         component: () => <></>
     }
 });
-export default settings;
