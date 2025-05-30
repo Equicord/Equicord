@@ -20,8 +20,8 @@ export default definePlugin({
         {
             find: ".folderButtonInner",
             replacement: {
-                match: /(\(0,r\.jsx\)\("div",\{className:f\.folderButtonInner,children:null!=O\?\(0,r\.jsx\)\("div",\{className:f\.folderIconWrapper,children:O\}\):)(\(0,r\.jsx\)\(m,\{folderNode:l,hovered:I,sorting:s\}\))/,
-                replace: "$1($self.shouldReplace({folderNode:l})?$self.replace({folderNode:l}):$2)"
+                match: /(\(0,r\.jsx\)\(m,\{folderNode:l,hovered:I,sorting:s\}\))/,
+                replace: "($self.shouldReplace({folderNode:l})?$self.replace({folderNode:l}):$1)"
             }
         },
     ],
