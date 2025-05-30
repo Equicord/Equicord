@@ -17,7 +17,7 @@ const connectedAccountClasses = findByPropsLazy("connectedAccount");
 export default definePlugin({
     name: "MoreConnectionButtons",
     description: "Adds buttons to connections that don't normally have it.",
-    authors: [EquicordDevs.Campfire],
+    authors: [EquicordDevs.interia],
 
     start() {
         this.addOpenButtons();
