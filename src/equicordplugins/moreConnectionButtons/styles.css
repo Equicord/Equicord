@@ -1,0 +1,25 @@
+.xbox-open-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    padding: 2px;
+    background: none;
+    border: none;
+    color: var(--interactive-normal);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.xbox-open-button:hover {
+    color: var(--interactive-hover);
+}
+
+.xbox-open-icon {
+    display: block;
+    color: inherit;
+}
+
+[class*='connectedAccounts'] .xbox-open-button {
+    z-index: 100;
+}
