@@ -113,6 +113,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - MoreCommands by Arjix, echo, Samu
 - MoreKaomoji by JacobTm & voidbbg
 - MoreStickers by Leko & Arjix
+- MoreConnectionButtons by interia
 - MoreUserTags by Cyn, TheSun, RyanCaoDev, LordElias, AutumnVN, hen
 - Morse by zyqunix
 - Moyai by Megu & Nuckyz
