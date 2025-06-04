@@ -56,7 +56,7 @@ jobs:
                   export PATH="$PWD/node_modules/.bin:$PATH"
                   export CHROMIUM_BIN=${{ steps.setup-chrome.outputs.chrome-path }}
 
-                  bun build scripts/generateReport.ts --outfile dist/report.mjs
+                  bun build scripts/generateReport.ts --outfile dist/report.mjs --target bun
 
                   stable_output_file=$(mktemp)
                   canary_output_file=$(mktemp)
