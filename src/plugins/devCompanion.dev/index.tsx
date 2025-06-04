@@ -61,7 +61,7 @@ export default definePlugin({
 
     start() {
         // if we're running the reporter, we need to initws in the reporter file to avoid a race condition
-        if (!IS_DEV) throw new Error("This plugin requires dev mode to run, please build with bun build --dev");
+        if (!IS_DEV) throw new Error("This plugin requires dev mode to run, please build with bun run build --dev");
         initWs();
     },
 
