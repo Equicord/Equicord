@@ -245,16 +245,6 @@ sh -c "$(curl -sS https://raw.githubusercontent.com/Equicord/Equicord/refs/heads
 Install Bun:
 > :exclamation: This next command may need to be run as admin/root depending on your system, and you may need to close and reopen your terminal for Bun to be in your PATH.
 
-**On macOS and Linux:**
-```shell
-curl -fsSL https://bun.sh/install | bash
-```
-
-**On Windows:**
-```shell
-powershell -c "irm bun.sh/install.ps1 | iex"
-```
-
 > :exclamation: **IMPORTANT** Make sure you aren't using an admin/root terminal from here onwards. It **will** mess up your Discord/Equicord instance and you **will** most likely have to reinstall.
 
 Clone Equicord:
