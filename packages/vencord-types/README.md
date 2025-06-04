@@ -7,5 +7,5 @@ npm i @vencord/types
 
 yarn add @vencord/types
 
-pnpm add @vencord/types
+bun add @vencord/types
 ```
