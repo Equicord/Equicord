@@ -41,15 +41,6 @@ export default definePlugin({
             },
             predicate: () => !Settings.plugins.AnonymiseFileNames.enabled,
         },
-        // Also taken from AnonymiseFileNames
-        {
-            find: 'addFilesTo:"message.attachments"',
-            replacement: {
-                match: /(\i.uploadFiles\((\i),)/,
-                replace: "$2.forEach(f=>f.filename=$self.fixExt(f)),$1",
-            },
-            predicate: () => !Settings.plugins.AnonymiseFileNames.enabled,
-        }
     ],
     fixExt(upload: ExtUpload) {
         const file = upload.filename;
