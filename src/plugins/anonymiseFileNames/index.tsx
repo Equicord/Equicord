@@ -86,13 +86,6 @@ export default definePlugin({
             },
         },
         {
-            find: 'addFilesTo:"message.attachments"',
-            replacement: {
-                match: /\i.uploadFiles\((\i),/,
-                replace: "$1.forEach($self.anonymise),$&"
-            }
-        },
-        {
             find: "#{intl::ATTACHMENT_UTILITIES_SPOILER}",
             replacement: {
                 match: /(?<=children:\[)(?=.{10,80}tooltip:.{0,100}#{intl::ATTACHMENT_UTILITIES_SPOILER})/,
