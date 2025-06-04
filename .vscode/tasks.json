@@ -1,63 +1,44 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Build",
-            "type": "shell",
-            "command": "pnpm build",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            // for use with the vencord companion extension
-            "label": "Build Companion Reporter",
-            "type": "shell",
-            "command": "pnpm build --dev --reporter --companion-test",
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            }
-        },
-        {
-            "label": "Build Dev",
-            "type": "shell",
-            "command": "pnpm build --dev",
-            "group": "build"
-        },
-        {
-            // for use with the vencord companion extension
-            "label": "Build Companion Reporter",
-            "type": "shell",
-            "command": "pnpm build --dev --reporter --companion-test",
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            }
-        },
-        {
-            "label": "Build Dev",
-            "type": "shell",
-            "command": "pnpm build --dev",
-            "group": "build"
-        },
-        {
-            "label": "Watch",
-            "type": "shell",
-            "command": "pnpm watch",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
-        }
-    ]
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build",
+			"type": "shell",
+			"command": "bun run build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			// for use with the vencord companion extension
+			"label": "Build Companion Reporter",
+			"type": "shell",
+			"command": "bun run build --dev --reporter --companion-test",
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true
+			}
+		},
+		{
+			"label": "Build Dev",
+			"type": "shell",
+			"command": "bun run build --dev",
+			"group": "build"
+		},
+		{
+			"label": "Watch",
+			"type": "shell",
+			"command": "bun run watch",
+			"problemMatcher": [],
+			"group": {
+				"kind": "build"
+			}
+		}
+	]
 }

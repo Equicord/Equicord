@@ -10,76 +10,58 @@ env:
     GITHUB_TOKEN: ${{ secrets.ETOKEN }}
     REPO: Equicord/Equibored
     USERNAME: GitHub-Actions
-
 permissions: write-all
-
 jobs:
     Build:
         name: Build Equicord
         runs-on: ubuntu-latest
-
         steps:
             - uses: actions/checkout@v4
-
-            - uses: pnpm/action-setup@v3
-
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: latest
             - name: Use Node.js 20
               uses: actions/setup-node@v4
               with:
                   node-version: 20
-                  cache: "pnpm"
-
             - name: Install dependencies
-              run: pnpm install --no-frozen-lockfile
-
+              run: bun install
             - name: Build web
-              run: pnpm buildWebStandalone
-
+              run: bun run buildWebStandalone
             - name: Build
-              run: pnpm buildStandalone
-
+              run: bun run buildStandalone
             - name: Generate plugin list
-              run: pnpm generatePluginJson dist/plugins.json
-
+              run: bun run generatePluginJson dist/plugins.json
             - name: Generate Equicord plugin list
-              run: pnpm generateEquicordPluginJson dist/equicordplugins.json
-
+              run: bun run generateEquicordPluginJson dist/equicordplugins.json
             - name: Collect files to be released
               run: |
                   cd dist
                   mkdir release
-
                   cp browser/browser.* release
                   cp Vencord.user.{js,js.LEGAL.txt} release
-
                   # copy the plugin data jsons, the extension zips and the desktop/vesktop asars
                   cp *.{json,zip,asar} release
-
                   # legacy un-asared files
                   cp desktop/* release
                   for file in equibop/*; do
                     filename=$(basename "$file")
                     cp "$file" "release/equibop${filename^}"
                   done
-
                   find release -size 0 -delete
                   rm release/package.json
                   rm release/*.map
-
             - name: Upload Equicord Stable
               if: ${{ github.ref_name == 'main' }}
               run: |
                   gh release upload latest --clobber dist/release/*
-
             - name: Upload Plugins JSON to Equibored repo
               run: |
                   git config --global user.name "GitHub-Actions"
                   git config --global user.email actions@github.com
                   git clone https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git plugins
                   cd plugins
-
                   cp ../dist/release/*plugins.json .
                   git add -A
-
                   git commit -m "Plugins for https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
                   git push --force https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git
