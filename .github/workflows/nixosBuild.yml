@@ -16,56 +16,39 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
-
-            - uses: pnpm/action-setup@v3
-
-            - name: Use Node.js 20
-              uses: actions/setup-node@v4
+            - uses: oven-sh/setup-bun@v2
               with:
-                  node-version: 20
-                  cache: "pnpm"
-
+                  bun-version: latest
             - name: Install dependencies
-              run: pnpm install --no-frozen-lockfile
-
+              run: bun install
             - name: Build web
-              run: pnpm buildWebStandalone
-
+              run: bun run buildWebStandalone
             - name: Build
-              run: pnpm buildStandalone
-
+              run: bun run buildStandalone
             - name: Generate plugin list
-              run: pnpm generatePluginJson dist/vencordplugins.json
-
+              run: bun run generatePluginJson dist/vencordplugins.json
             - name: Generate Equicord plugin list
-              run: pnpm generateEquicordPluginJson dist/equicordplugins.json
-
+              run: bun run generateEquicordPluginJson dist/equicordplugins.json
             - name: Collect files to be released
               run: |
                   cd dist
                   mkdir release
-
                   cp browser/browser.* release
                   cp Vencord.user.{js,js.LEGAL.txt} release
-
                   # copy the plugin data jsons, the extension zips and the desktop/vesktop asars
                   cp *.{json,zip,asar} release
-
                   # legacy un-asared files
                   cp desktop/* release
                   for file in equibop/*; do
                     filename=$(basename "$file")
                     cp "$file" "release/equibop${filename^}"
                   done
-
                   find release -size 0 -delete
                   rm release/package.json
                   rm release/*.map
-
             - name: Get current date
               id: date
-              run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-
+              run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
             - name: Upload Equicord Stable
               run: |
                   gh release create ${{ steps.date.outputs.date }} --latest=false
