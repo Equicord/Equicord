@@ -95,6 +95,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - InRole by nin0dev
 - InstantScreenshare by HAHALOSAH & thororen
 - IRememberYou by zoodogood
+- JellyfinRichPresence by vMohammad
 - Jumpscare by Surgedevs
 - JumpToStart by Samwich
 - KeyboardSounds by HypedDomi
