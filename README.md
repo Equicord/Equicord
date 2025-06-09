@@ -20,6 +20,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - AlwaysExpandProfile by thororen
 - AmITyping by MrDiamond
 - Anammox by Kyuuhachi
+- AudiobookShelfRPC by vMohammad
 - AtSomeone by Joona
 - BannersEverywhere by ImLvna & AutumnVN
 - BetterActivities by D3SOX, Arjix, AutumnVN
