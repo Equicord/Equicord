@@ -22,13 +22,9 @@ export default definePlugin({
             }
         }
     ],
-    filterEmbeds(message) {
-        if (!message.embeds) return [];
-        return message.embeds.filter(embed => embed.provider?.name !== "TIDAL");
-    },
 
     renderMessageAccessory({ message }) {
-        const tidalEmbed = this.getEmbed(message);
+        const tidalEmbed = message.embeds?.find(embed => embed.provider?.name === "TIDAL");
         if (!tidalEmbed) return null;
         const songId = tidalEmbed?.url?.split("/").pop().split("?")[0];
         if (!songId) {
@@ -47,11 +43,5 @@ export default definePlugin({
                 />
             </div>
         );
-    },
-
-
-    getEmbed(message) {
-        return message.embeds?.find(embed => embed.provider?.name === "TIDAL");
     }
-
 });
