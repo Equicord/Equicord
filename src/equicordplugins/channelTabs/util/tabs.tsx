@@ -128,11 +128,31 @@ export function closeTabsToTheLeft(id: number) {
     else update();
 }
 
-export function handleChannelSwitch(ch: BasicChannelTabsProps) {
-    const tab = openTabs.find(c => c.id === currentlyOpenTab);
-    if (tab === undefined) return logger.error("Couldn't find the currently open channel " + currentlyOpenTab, openTabs);
+let lastNavigationTime = 0;
 
-    if (tab.channelId !== ch.channelId) openTabs[openTabs.indexOf(tab)] = { id: tab.id, compact: tab.compact, ...ch };
+export function handleChannelSwitch(ch: BasicChannelTabsProps) {
+    const existingTab = openTabs.find(tab => tab.channelId === ch.channelId && tab.guildId === ch.guildId);
+
+    if (existingTab) {
+        moveToTab(existingTab.id);
+        return;
+    }
+
+    const now = Date.now();
+    const isRapidNavigation = now - lastNavigationTime < settings.store.rapidNavigationThreshold;
+    lastNavigationTime = now;
+
+    if (isRapidNavigation) {
+        const currentTab = openTabs.find(t => t.id === currentlyOpenTab);
+        if (currentTab) {
+            currentTab.channelId = ch.channelId;
+            currentTab.guildId = ch.guildId;
+            update();
+            return;
+        }
+    }
+
+    createTab(ch, true);
 }
 
 export function hasClosedTabs() {
