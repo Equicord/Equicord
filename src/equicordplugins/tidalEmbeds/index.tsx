@@ -13,13 +13,15 @@ export default definePlugin({
     description: "Embeds TIDAL songs to make them playable in Discord.",
     authors: [EquicordDevs.vmohammad],
     dependencies: ["MessageUpdaterAPI"],
-    patches: [{
-        find: "renderEmbeds(e){",
-        replacement: {
-            match: /(return 0!==e\.embeds\.length&&t\?)(e\.embeds\.map)/,
-            replace: "$1($self.filterEmbeds(e)).map"
+    patches: [
+        {
+            find: "}renderEmbeds(",
+            replacement: {
+                match: /(?<=renderEmbeds\(\i\){.+?embeds\.map\(\((\i),\i\)?=>{)/,
+                replace: '$&if($1?.provider?.name === "TIDAL")return null;'
+            }
         }
-    }],
+    ],
     filterEmbeds(message) {
         if (!message.embeds) return [];
         return message.embeds.filter(embed => embed.provider?.name !== "TIDAL");
