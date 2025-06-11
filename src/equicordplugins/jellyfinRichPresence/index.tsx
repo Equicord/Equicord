@@ -68,11 +68,10 @@ const settings = definePluginSettings({
     overrideRichPresenceType: {
         description: "Override the rich presence type",
         type: OptionType.SELECT,
-        default: null,
         options: [
             {
                 label: "Off",
-                value: null,
+                value: false,
             },
             {
                 label: "Listening",
@@ -89,6 +88,7 @@ const settings = definePluginSettings({
             {
                 label: "Watching",
                 value: 3,
+                default: true
             },
         ],
     },
@@ -201,7 +201,7 @@ export default definePlugin({
         const mediaData = await this.fetchMediaData();
         if (!mediaData) return null;
 
-        if (settings.store.overrideRichPresenceType !== null) {
+        if (settings.store.overrideRichPresenceType) {
             richPresenceType = settings.store.overrideRichPresenceType;
         } else {
             switch (mediaData.type) {
