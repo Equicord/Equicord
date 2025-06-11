@@ -1,0 +1,70 @@
+.vc-ms-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+}
+
+.vc-ms-modal-title {
+    margin: 0;
+}
+
+.vc-ms-modal-content {
+    padding: 16px;
+}
+
+.vc-ms-message-input {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.vc-ms-datetime-input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--background-modifier-accent);
+    background: var(--background-primary);
+    color: var(--text-normal);
+}
+
+.vc-ms-error-text {
+    color: var(--text-danger);
+    margin-top: 8px;
+}
+
+.vc-ms-scheduled-messages {
+    margin-top: 16px;
+}
+
+.vc-ms-scheduled-message {
+    background: var(--background-secondary);
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+.vc-ms-message-content {
+    margin-bottom: 8px;
+    word-break: break-all;
+}
+
+.vc-ms-message-time {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.vc-ms-message-channel {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.vc-ms-filter-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.vc-ms-filter-buttons button {
+    flex: 1;
+}
