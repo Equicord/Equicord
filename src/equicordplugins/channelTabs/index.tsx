@@ -56,8 +56,8 @@ export default definePlugin({
         {
             find: "transitionToGuild",
             replacement: {
-                match: /(transitionToGuild\()([^,]+),([^)]+)\)/,
-                replace: "$1$2,$3);$self.handleNavigation($2,$3)"
+                match: /transitionToGuild\(([^,]+),([^)]+)\)/,
+                replace: "$&;$self.handleNavigation($1,$2)"
             }
         },
         // ctrl click to open in new tab in inbox unread
