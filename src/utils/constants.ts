@@ -60,6 +60,10 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "V",
         id: 343383572805058560n
     },
+    eyadmkv: {
+        name: "eyadmkv",
+        id: 1080943463073329307n,
+    },
     Arjix: {
         name: "ArjixWasTaken",
         id: 674710789138939916n,
