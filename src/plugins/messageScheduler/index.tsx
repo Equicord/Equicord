@@ -176,7 +176,6 @@ export default definePlugin({
     renderChatBarButton: ChatBarIcon,
 
     start() {
-        // Check for scheduled messages every minute
         setInterval(() => {
             const now = Date.now();
             const messages = settings.store.scheduledMessages as ScheduledMessage[];
@@ -184,21 +183,19 @@ export default definePlugin({
 
             messages.forEach((msg, index) => {
                 if (msg.scheduledTime <= now && msg.channelId === currentChannelId) {
-                    // Send the message
                     const message = {
                         content: msg.content,
                         channelId: msg.channelId,
                     };
-                    // @ts-ignore
+
                     window.DiscordNative?.window?.sendMessage?.(message);
 
-                    // Remove the sent message from the list
                     const updatedMessages = [...messages];
                     updatedMessages.splice(index, 1);
                     settings.store.scheduledMessages = updatedMessages;
                 }
             });
-        }, 60000); // Check every minute
+        }, 60000);
     },
 
     settingsAboutComponent() {
