@@ -72,6 +72,7 @@ const settings = definePluginSettings({
             {
                 label: "Off",
                 value: false,
+                default: true,
             },
             {
                 label: "Listening",
@@ -87,8 +88,7 @@ const settings = definePluginSettings({
             },
             {
                 label: "Watching",
-                value: 3,
-                default: true
+                value: 3
             },
         ],
     },
