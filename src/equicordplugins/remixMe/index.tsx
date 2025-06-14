@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { MessageEvents } from "@api/index";
-import type { MessageExtra, MessageObject, MessageSendListener } from "@api/MessageEvents";
+import { addMessagePreSendListener, type MessageExtra, type MessageObject, type MessageSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
@@ -19,6 +18,6 @@ export default definePlugin({
     name: "RemixMe",
     description: "Turns every single message with attachment to have remix tag",
     authors: [EquicordDevs.meowabyte],
-    start: () => MessageEvents.addMessagePreSendListener(handleMessage),
-    stop: () => MessageEvents.addMessagePreSendListener(handleMessage)
+    start: () => addMessagePreSendListener(handleMessage),
+    stop: () => removeMessagePreSendListener(handleMessage)
 });
