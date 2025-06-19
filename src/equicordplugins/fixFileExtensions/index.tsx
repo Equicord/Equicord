@@ -35,11 +35,7 @@ export default definePlugin({
             find: "async uploadFiles(",
             replacement: [
                 {
-                    match: /async uploadFiles\((\i),\i\){/,
-                    replace: "$&$1.forEach($self.fixExt);"
-                },
-                {
-                    match: /async uploadFilesSimple\((\i)\){/,
+                    match: /async uploadFiles\((\i)\){/,
                     replace: "$&$1.forEach($self.fixExt);"
                 }
             ],

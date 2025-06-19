@@ -11,7 +11,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 ### Extra included plugins
 
 <details>
-<summary>187 additional plugins</summary>
+<summary>188 additional plugins</summary>
 
 ### All Platforms
 
@@ -68,6 +68,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - ForwardAnywhere by thororen
 - Freaky by nyx
 - FrequentQuickSwitcher by Samwich
+- FriendCloud by Fafa
 - FriendCodes by HypedDomi
 - FriendshipRanks by Samwich
 - FriendTags by Samwich
@@ -121,7 +122,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - Moyai by Megu & Nuckyz
 - NeverPausePreviews by vappstar
 - NewPluginsManager by Sqaaakoi
-- NoAppsAllowed by kvba
+- NoAppsAllowed by meowabyte
 - NoBulletPoints by Samwich
 - NoDeleteSafety by Samwich
 - NoMirroredCamera by Nyx
@@ -141,7 +142,7 @@ You can join our [discord server](https://discord.gg/5Xh2W87egW) for commits, ch
 - Quoter by Samwich
 - RandomVoice by xijexo, omaw, thororen
 - Remix by MrDiamond
-- RemixMe by kvba
+- RemixMe by meowabyte
 - RepeatMessage by Tolgchu
 - ReplyPingControl by ant0n & MrDiamond
 - RPCEditor by Nyako & nin0dev

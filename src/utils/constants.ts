@@ -627,7 +627,7 @@ export const EquicordDevs = Object.freeze({
     },
     Cortex: {
         name: "Cortex",
-        id: 400111022901559298n
+        id: 913205935319691335n
     },
     KrystalSkull: {
         name: "krystalskullofficial",
@@ -745,8 +745,8 @@ export const EquicordDevs = Object.freeze({
         name: "DaBluLite",
         id: 582170007505731594n
     },
-    kvba: {
-        name: "kvba",
+    meowabyte: {
+        name: "meowabyte",
         id: 105170831130234880n
     },
     Fafa: {

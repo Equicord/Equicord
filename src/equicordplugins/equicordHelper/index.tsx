@@ -50,6 +50,7 @@ export default definePlugin({
     settings,
     required: true,
     patches: [
+        // Fixes Unknown Resolution/FPS Crashing
         {
             find: "Unknown resolution:",
             replacement: [
