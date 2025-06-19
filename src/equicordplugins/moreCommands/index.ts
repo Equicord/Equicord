@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { ApplicationCommandInputType, findOption, OptionalMessageOption, RequiredMessageOption, sendBotMessage } from "@api/Commands";
-import { Devs } from "@utils/constants";
+import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, OptionalMessageOption, RequiredMessageOption, sendBotMessage } from "@api/Commands";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 
@@ -32,7 +32,7 @@ function mock(input: string): string {
 export default definePlugin({
     name: "MoreCommands",
     description: "echo, lenny, mock",
-    authors: [Devs.Arjix, Devs.echo, Devs.Samu],
+    authors: [Devs.Arjix, Devs.echo, Devs.Samu, EquicordDevs.zyqunix],
     commands: [
         {
             name: "echo",
@@ -60,6 +60,115 @@ export default definePlugin({
             execute: opts => ({
                 content: mock(findOption(opts, "message", ""))
             }),
+        },
+        {
+            name: "toLowerCase",
+            description: "all text will be lowercase",
+            options: [
+                {
+                    name: "text",
+                    description: "text to lowercase",
+                    type: ApplicationCommandOptionType.STRING,
+                    required: true
+                }
+            ],
+            execute: opts => {
+                const input = opts.find(o => o.name === "text")?.value as string;
+                const content = input.toLowerCase();
+                return { content: content };
+            },
+        },
+        {
+            name: "toUpperCase",
+            description: "ALL TEXT WILL BE UPPERCASE",
+            options: [
+                {
+                    name: "text",
+                    description: "TEXT TO UPPERCASE",
+                    type: ApplicationCommandOptionType.STRING,
+                    required: true
+                }
+            ],
+            execute: opts => {
+                const input = opts.find(o => o.name === "text")?.value as string;
+                const content = input.toUpperCase();
+                return { content: content };
+            },
+        },
+        {
+            name: "toLocaleLowerCase",
+            description: "all text will be locale lowercase",
+            options: [
+                {
+                    name: "text",
+                    description: "text to lowercase",
+                    type: ApplicationCommandOptionType.STRING,
+                    required: true
+                }
+            ],
+            execute: opts => {
+                const input = opts.find(o => o.name === "text")?.value as string;
+                const content = input.toLocaleLowerCase();
+                return { content: content };
+            },
+        },
+        {
+            name: "toLocaleUpperCase",
+            description: "ALL TEXT WILL BE LOCALE UPPERCASE",
+            options: [
+                {
+                    name: "text",
+                    description: "TEXT TO UPPERCASE",
+                    type: ApplicationCommandOptionType.STRING,
+                    required: true
+                }
+            ],
+            execute: opts => {
+                const input = opts.find(o => o.name === "text")?.value as string;
+                const content = input.toLocaleUpperCase();
+                return { content: content };
+            },
+        },
+        {
+            name: "normalize",
+            description: "Returns Unicode Normalization Form of string",
+            options: [
+                {
+                    name: "text",
+                    description: "Text to normalize",
+                    type: ApplicationCommandOptionType.STRING,
+                    required: true
+                }
+            ],
+            execute: opts => {
+                const input = opts.find(o => o.name === "text")?.value as string;
+                const content = input.normalize();
+                return { content: content };
+            },
+        },
+        {
+            name: "repeat",
+            description: "Repeats the string count times",
+            options: [
+                {
+                    name: "text",
+                    description: "Text to repeat",
+                    type: ApplicationCommandOptionType.STRING,
+                    required: true
+                },
+                {
+                    name: "count",
+                    description: "Amount of repetitions",
+                    type: ApplicationCommandOptionType.INTEGER,
+                    required: true
+                }
+            ],
+            execute: opts => {
+                const text = opts.find(o => o.name === "text")?.value as string;
+                const count = (opts.find(o => o.name === "count")?.value ?? 1) as number;
+                const content = text.repeat(count);
+                return { content: content };
+            },
         },
     ]
 });
