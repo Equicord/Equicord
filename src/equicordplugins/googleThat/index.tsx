@@ -42,12 +42,12 @@ const searchEngines = {
 const settings = definePluginSettings({
     hyperlink: {
         type: OptionType.BOOLEAN,
-        description: "If the sent link should hyperlink with the query as the label.",
+        description: "If the sent link should hyperlink with the query as the label",
         default: false
     },
     defaultEngine: {
         type: OptionType.SELECT,
-        description: "The search engine to use.",
+        description: "The search engine to use",
         options: Object.keys(searchEngines).map((key, index) => ({
             label: key,
             value: key,
@@ -55,7 +55,7 @@ const settings = definePluginSettings({
         }))
     },
     customEngineURL: {
-        description: "The URL of the Engine you wish to use.",
+        description: "The URL of the Engine you wish to use",
         type: OptionType.STRING,
         placeholder: "https://search.vmohammad.dev/?q="
     }
@@ -63,7 +63,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "GoogleThat",
-    description: "Adds a command to send a internet search link.",
+    description: "Adds a command to send a internet search link",
     authors: [
         Devs.Samwich,
         EquicordDevs.KrystalSkull,
