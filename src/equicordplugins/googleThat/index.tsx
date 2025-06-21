@@ -9,7 +9,6 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
-
 function getMessage(opts) {
     const inputOption = findOption(opts, "input", "");
 
