@@ -70,13 +70,13 @@ async function openCompleteQuestUI() {
 
         const applicationId = quest.config.application.id;
         const applicationName = quest.config.application.name;
-        const taskName = ["WATCH_VIDEO", "PLAY_ON_DESKTOP", "STREAM_ON_DESKTOP", "PLAY_ACTIVITY"].find(x => quest.config.taskConfig.tasks[x] != null);
+        const taskName = ["WATCH_VIDEO", "PLAY_ON_DESKTOP", "STREAM_ON_DESKTOP", "PLAY_ACTIVITY", "WATCH_VIDEO_ON_MOBILE"].find(x => quest.config.taskConfig.tasks[x] != null);
         const icon = `https://cdn.discordapp.com/quests/${quest.id}/${theme}/${quest.config.assets.gameTile}`;
         // @ts-ignore
         const secondsNeeded = quest.config.taskConfig.tasks[taskName].target;
         // @ts-ignore
         let secondsDone = quest.userStatus?.progress?.[taskName]?.value ?? 0;
-        if (taskName === "WATCH_VIDEO") {
+        if (taskName === "WATCH_VIDEO" || taskName === "WATCH_VIDEO_ON_MOBILE") {
             const maxFuture = 10, speed = 7, interval = 1;
             const enrolledAt = new Date(quest.userStatus.enrolledAt).getTime();
             const fn = async () => {
