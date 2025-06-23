@@ -200,7 +200,7 @@ export default definePlugin({
         {
             find: "getFriendIDs(){",
             replacement: {
-                match: /\i.FRIEND\)/,
+                match: /return \i\.friends/,
                 replace: "$&.filter(id => !$self.shouldHideUser(id))"
             }
         },
