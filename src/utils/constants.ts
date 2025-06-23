@@ -613,10 +613,6 @@ export const Devs = /* #__PURE__*/ Object.freeze({
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
-    galpt: {
-        name: "galpt",
-        id: 631418827841863712n
-    },
     nobody: {
         name: "nobody",
         id: 0n
