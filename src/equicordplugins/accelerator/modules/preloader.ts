@@ -6,6 +6,7 @@
 
 import { FluxDispatcher, ChannelStore, GuildChannelStore, ChannelActionCreators, MessageActions } from "@webpack/common";
 import { Logger } from "@utils/Logger";
+import { scheduleMessageFetch, RequestPriority } from "./scheduler";
 
 const logger = new Logger("Accelerator:Preloader");
 
@@ -167,10 +168,13 @@ class ChannelPreloader {
 
             // Only preload messages for non-DM channels, and with smaller batch size
             if (channel.type !== 1 && channel.type !== 3 && !this.isScrolling) {
-                await MessageActions.fetchMessages({
-                    channelId,
-                    limit: 25 // Reduced from 50 to 25
-                });
+                await scheduleMessageFetch(
+                    {
+                        channelId,
+                        limit: 25 // Reduced from 50 to 25
+                    },
+                    RequestPriority.LOW
+                );
             }
 
             this.preloadedChannels.set(channelId, {

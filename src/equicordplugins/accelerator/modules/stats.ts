@@ -258,9 +258,19 @@ class StatsTracker {
 
     getFormattedUptime(): string {
         const uptime = Date.now() - this.stats.startTime;
-        const minutes = Math.floor(uptime / 60000);
-        const seconds = Math.floor((uptime % 60000) / 1000);
-        return `${minutes}m ${seconds}s`;
+
+        const days = Math.floor(uptime / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((uptime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((uptime % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((uptime % (1000 * 60)) / 1000);
+
+        const parts: string[] = [];
+        if (days > 0) parts.push(`${days}d`);
+        if (hours > 0) parts.push(`${hours}h`);
+        if (minutes > 0) parts.push(`${minutes}m`);
+        if (seconds > 0 || parts.length === 0) parts.push(`${seconds}s`);
+
+        return parts.join(' ');
     }
 
     getCacheHitRate(): number {

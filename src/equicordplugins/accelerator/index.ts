@@ -16,10 +16,17 @@ import { intersectionOptimizer } from "./modules/intersection";
 import { imagePreloader } from "./modules/imagepreloader";
 import { CacheIndicatorAccessory } from "./modules/messageAccessory";
 import { statsTracker, FloatingStats } from "./modules/stats";
+import { requestScheduler } from "./modules/scheduler";
 
 const logger = new Logger("Accelerator");
 
 const settings = definePluginSettings({
+    enableRequestScheduling: {
+        type: OptionType.BOOLEAN,
+        description: "Enable smart request scheduling to reduce network congestion (Experimental)",
+        default: false,
+        restartNeeded: true
+    },
     enablePreloading: {
         type: OptionType.BOOLEAN,
         description: "Preload adjacent channels and recent DMs for instant switching",
@@ -177,6 +184,11 @@ export default definePlugin({
         // Initialize performance tracking
         statsTracker.init();
 
+        // Start scheduler first if enabled
+        if (settings.store.enableRequestScheduling) {
+            requestScheduler.start();
+        }
+
         // Initialize thread-safe cache system first
         if (settings.store.enableFastCache) {
             await fastCache.init(settings.store.cacheSize * 1024 * 1024); // Convert MB to bytes
@@ -222,6 +234,7 @@ export default definePlugin({
 
     stop() {
         // Clean shutdown of all systems
+        requestScheduler.stop();
         channelPreloader.cleanup();
         fastCache.cleanup();
         intersectionOptimizer.cleanup();
