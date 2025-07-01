@@ -38,8 +38,10 @@ export let PermissionStore: GenericStore;
 export let GuildChannelStore: GenericStore;
 export let ReadStateStore: GenericStore;
 export let PresenceStore: GenericStore;
+export let VoiceStateStore: GenericStore;
 
 export let GuildStore: t.GuildStore;
+export let GuildRoleStore: t.GuildRoleStore;
 export let UserStore: Stores.UserStore & t.FluxStore;
 export let UserProfileStore: GenericStore;
 export let SelectedChannelStore: Stores.SelectedChannelStore & t.FluxStore;
@@ -50,7 +52,7 @@ export let GuildMemberStore: Stores.GuildMemberStore & t.FluxStore;
 export let RelationshipStore: t.RelationshipStore;
 
 export let EmojiStore: t.EmojiStore;
-export let StickersStore: t.StickersStore;
+export let StickerStore: t.StickerStore;
 export let ThemeStore: t.ThemeStore;
 export let WindowStore: t.WindowStore;
 export let DraftStore: t.DraftStore;
@@ -74,6 +76,7 @@ waitForStore("ChannelStore", m => ChannelStore = m);
 waitForStore("SelectedChannelStore", m => SelectedChannelStore = m);
 waitForStore("SelectedGuildStore", m => SelectedGuildStore = m);
 waitForStore("GuildStore", m => GuildStore = m);
+waitForStore("GuildRoleStore", m => GuildRoleStore = m);
 waitForStore("GuildMemberStore", m => GuildMemberStore = m);
 waitForStore("RelationshipStore", m => RelationshipStore = m);
 waitForStore("PermissionStore", m => PermissionStore = m);
@@ -83,10 +86,11 @@ waitForStore("GuildChannelStore", m => GuildChannelStore = m);
 waitForStore("MessageStore", m => MessageStore = m);
 waitForStore("WindowStore", m => WindowStore = m);
 waitForStore("EmojiStore", m => EmojiStore = m);
-waitForStore("StickersStore", m => StickersStore = m);
+waitForStore("StickersStore", m => StickerStore = m);
 waitForStore("TypingStore", m => TypingStore = m);
 waitForStore("ThemeStore", m => {
     ThemeStore = m;
     // Importing this directly can easily cause circular imports. For this reason, use a non import access here.
     Vencord.QuickCss.initQuickCssThemeStore();
 });
+waitForStore("VoiceStateStore", m => VoiceStateStore = m);

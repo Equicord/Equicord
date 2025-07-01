@@ -8,8 +8,7 @@ import { definePluginSettings, Settings } from "@api/Settings";
 import { copyToClipboard } from "@utils/clipboard";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
-import { findComponentByCodeLazy } from "@webpack";
-import { Button, Forms, TextInput, Toasts, useState } from "@webpack/common";
+import { Button, ColorPicker, Forms, TextInput, Toasts, useState } from "@webpack/common";
 
 import { darkenColorHex, generateRandomColorHex, saturateColorHex } from "./generateTheme";
 import { themes } from "./themeDefinitions";
@@ -85,8 +84,6 @@ function CopyPresetComponent() {
         </>
     );
 }
-
-const ColorPicker = findComponentByCodeLazy("#{intl::USER_SETTINGS_PROFILE_COLOR_SELECT_COLOR}", ".BACKGROUND_PRIMARY)");
 
 export function generateAndApplyProceduralTheme() {
 
@@ -214,7 +211,7 @@ export function ColorPick({ propertyname }: { propertyname: string; }) {
             <ColorPicker
                 color={parseInt(settings.store[propertyname], 16)}
                 onChange={color => {
-                    const hexColor = color.toString(16).padStart(6, "0");
+                    const hexColor = (color ?? 0).toString(16).padStart(6, "0");
                     settings.store[propertyname] = hexColor;
                     injectCSS();
                 }
@@ -424,7 +421,7 @@ function getCSS(fontName) {
             --header-primary: var(--text);
             --header-secondary: var(--text);
             --font-display: var(--text);
-            --text-normal: var(--text);
+            --text-default: var(--text);
             --text-muted: var(--mutedtext);
             --channels-default: var(--mutedtext);
             --interactive-normal: var(--text) !important;

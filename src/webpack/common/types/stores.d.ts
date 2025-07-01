@@ -177,7 +177,7 @@ export class EmojiStore extends FluxStore {
     };
 }
 
-export class StickersStore extends FluxStore {
+export class StickerStore extends FluxStore {
     getStickerById(id: string): Sticker | undefined;
     getStickerPack(id: string): StickerPack | undefined;
     getPremiumPacks(): StickerPack[];
@@ -253,6 +253,9 @@ export class GuildStore extends FluxStore {
     getGuildCount(): number;
     getGuilds(): Record<string, Guild>;
     getGuildIds(): string[];
+}
+
+export class GuildRoleStore extends FluxStore {
     getRole(guildId: string, roleId: string): Role;
     getRoles(guildId: string): Record<string, Role>;
     getAllGuildRoles(): Record<string, Record<string, Role>>;

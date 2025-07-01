@@ -8,18 +8,9 @@ import { set } from "@api/DataStore";
 import { classNameFactory } from "@api/Styles";
 import { Margins } from "@utils/margins";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
-import { findComponentByCodeLazy } from "@webpack";
-import { Button, Forms, useState } from "@webpack/common";
+import { Button, ColorPicker, Forms, useState } from "@webpack/common";
 
 import { colors, DATASTORE_KEY } from "./index";
-
-interface ColorPickerProps {
-    color: number;
-    showEyeDropper?: boolean;
-    suggestedColors?: string[];
-    onChange(value: number | null): void;
-}
-const ColorPicker = findComponentByCodeLazy<ColorPickerProps>("#{intl::USER_SETTINGS_PROFILE_COLOR_SELECT_COLOR}", ".BACKGROUND_PRIMARY)");
 
 const cl = classNameFactory("vc-customColors-");
 
