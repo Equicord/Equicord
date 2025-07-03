@@ -63,7 +63,7 @@
     height: fit-content;
     display: flex;
     flex-direction: column;
-    background-color: var(--background-secondary-alt) !important;
+    background-color: var(--background-base-lower-alt) !important;
     transition: 0.1s ease-out;
     transition-property: box-shadow, transform, background, opacity;
     gap: 0.25em;
@@ -71,9 +71,9 @@
 
 .vc-plugins-restart-card {
     padding: 1em;
-    background: var(--background-feedback-warning);
-    border: inherit !important;
-    color: var(--text-feedback-warning);
+    background: var(--info-warning-background);
+    border: 1px solid var(--info-warning-foreground);
+    color: var(--info-warning-foreground);
 }
 
 .vc-plugins-info-icon:not(:hover, :focus) {
@@ -91,7 +91,7 @@
 }
 
 .vc-plugin-stats {
-    background-color: var(--background-secondary-alt);
+    background-color: var(--background-base-lower-alt);
     border-radius: 8px;
     padding: 12px;
     box-sizing: border-box;
