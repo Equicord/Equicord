@@ -1,3 +1,4 @@
+/* Blocked tab in Friends tab bar: match Pending tab style */
 .vc-blocked-tab {
     font-size: 16px;
     font-weight: 500;
@@ -15,30 +16,23 @@
     z-index: 1;
 }
 
-/* stylelint-disable selector-class-pattern */
 [class*="user-profile-modal"], [class*="root-"], [class*="profile-modal"] {
     .vc-blocked-tab {
         display: none !important;
     }
 }
-/* stylelint-enable selector-class-pattern */
 
-/* stylelint-disable selector-class-pattern */
-.vc-blocked-tab.selected_b3f026 {
+.vc-blocked-tab.selected {
     background: var(--background-tertiary);
     color: var(--interactive-active);
     font-weight: 600;
 }
-/* stylelint-enable selector-class-pattern */
 
-/* stylelint-disable selector-class-pattern */
-.vc-blocked-tab:hover:not(.selected_b3f026) {
+.vc-blocked-tab:hover:not(.selected) {
     background: var(--background-modifier-hover);
     color: var(--interactive-hover);
 }
-/* stylelint-enable selector-class-pattern */
 
-/* Blocked user list: match Pending tab row style */
 #vc-blocked-tab-mount {
     padding: 0;
 }
