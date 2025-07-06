@@ -1,0 +1,132 @@
+.vc-blocked-tab {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0 20px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    color: var(--interactive-normal);
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    transition: background 0.15s, color 0.15s;
+    position: relative;
+    z-index: 1;
+}
+
+/* stylelint-disable selector-class-pattern */
+[class*="user-profile-modal"], [class*="root-"], [class*="profile-modal"] {
+    .vc-blocked-tab {
+        display: none !important;
+    }
+}
+/* stylelint-enable selector-class-pattern */
+
+/* stylelint-disable selector-class-pattern */
+.vc-blocked-tab.selected_b3f026 {
+    background: var(--background-tertiary);
+    color: var(--interactive-active);
+    font-weight: 600;
+}
+/* stylelint-enable selector-class-pattern */
+
+/* stylelint-disable selector-class-pattern */
+.vc-blocked-tab:hover:not(.selected_b3f026) {
+    background: var(--background-modifier-hover);
+    color: var(--interactive-hover);
+}
+/* stylelint-enable selector-class-pattern */
+
+/* Blocked user list: match Pending tab row style */
+#vc-blocked-tab-mount {
+    padding: 0;
+}
+
+.vc-blocked-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 56px;
+    border-bottom: 1px solid var(--background-modifier-accent);
+    background: none;
+    transition: background 0.15s;
+    gap: 0;
+}
+
+.vc-blocked-row:hover {
+    background: var(--background-modifier-hover);
+}
+
+.vc-blocked-user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.vc-blocked-user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.vc-blocked-username {
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--header-primary);
+}
+
+.vc-blocked-tag {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-left: 4px;
+}
+
+.vc-blocked-unblock-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-left: 8px;
+}
+
+.vc-blocked-unblock-btn:hover {
+    background: var(--button-danger-background);
+}
+
+.vc-blocked-unblock-icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    fill: var(--interactive-normal);
+    pointer-events: none;
+    transition: fill 0.15s;
+}
+
+.vc-blocked-unblock-btn:hover .vc-blocked-unblock-icon {
+    fill: var(--button-danger-foreground);
+}
+
+#vc-blocked-tab-mount h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--header-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 16px 0 8px 16px;
+    padding: 0;
+}
+
+#vc-blocked-tab-mount > div:not(.vc-blocked-row) {
+    color: var(--text-muted);
+    font-size: 16px;
+    padding: 24px 0 0 16px;
+}
