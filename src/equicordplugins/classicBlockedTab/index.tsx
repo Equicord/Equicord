@@ -10,6 +10,7 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Constants, FluxDispatcher, React, RelationshipStore, UserStore, useStateFromStores } from "@webpack/common";
+
 const FriendsNavBar = findByPropsLazy("PENDING", "ADD_FRIEND");
 const FriendRow = findComponentByCodeLazy("discriminatorClass:", ".isMobileOnline", "getAvatarURL");
 
@@ -113,66 +114,70 @@ export default definePlugin({
         if (!Constants.FriendsSections.BLOCKED) {
             Constants.FriendsSections.BLOCKED = "BLOCKED";
         }
-        this._observer = new MutationObserver(() => {
+        const addBlockedTab = () => {
             if (!location.pathname.startsWith("/channels/@me")) return;
+
             const navBar = document.querySelector('[role="tablist"]');
-            if (!navBar) return;
-            if (navBar.querySelector(".vc-blocked-tab")) return;
-            const addFriendTab = navBar.lastElementChild;
-            if (!addFriendTab) return;
+            if (!navBar || navBar.querySelector(".vc-blocked-tab")) return;
+
             const pendingTab = navBar.children[2];
             if (!pendingTab) return;
+
             const blockedTab = pendingTab.cloneNode(true) as HTMLElement;
-            blockedTab.classList.remove("selected_b3f026", "lookFilled__9c1ef", "colorBrand__27d57");
             blockedTab.className = (pendingTab as HTMLElement).className;
             blockedTab.classList.add("vc-blocked-tab");
             blockedTab.setAttribute("aria-label", "Blocked");
-            blockedTab.setAttribute("tabindex", "-1");
             blockedTab.textContent = "Blocked";
+
             blockedTab.addEventListener("click", () => {
-                Array.from(navBar.children).forEach(tab => (tab as HTMLElement).classList.remove("selected_b3f026"));
-                blockedTab.classList.add("selected_b3f026");
+                Array.from(navBar.children).forEach(tab => (tab as HTMLElement).classList.remove("selected"));
+                blockedTab.classList.add("selected");
+
                 const content = document.querySelector('[class*="peopleColumn"]');
                 if (content) {
                     const userList = content.querySelector('[class*="scroller"]');
-                    if (userList) {
-                        (userList as HTMLElement).style.display = "none";
-                    }
+                    if (userList) (userList as HTMLElement).style.display = "none";
+
                     let blockedMount = document.getElementById("vc-blocked-tab-mount");
                     if (!blockedMount) {
                         blockedMount = document.createElement("div");
                         blockedMount.id = "vc-blocked-tab-mount";
                         content.appendChild(blockedMount);
                     }
-                    if (window.__vcBlockedTabRoot && window.__vcBlockedTabRoot.unmount) window.__vcBlockedTabRoot.unmount();
+
+                    if (window.__vcBlockedTabRoot && window.__vcBlockedTabRoot.unmount) {
+                        window.__vcBlockedTabRoot.unmount();
+                    }
                     window.__vcBlockedTabRoot = require("@webpack/common").createRoot(blockedMount);
                     window.__vcBlockedTabRoot.render(React.createElement(BlockedTabPanel));
                 }
             });
-            navBar.insertBefore(blockedTab, addFriendTab);
+
+            navBar.insertBefore(blockedTab, navBar.lastElementChild);
             Array.from(navBar.children).forEach(tab => {
                 if (tab === blockedTab) return;
-                (tab as HTMLElement).addEventListener("click", () => {
+                tab.addEventListener("click", () => {
                     const content = document.querySelector('[class*="peopleColumn"]');
                     const blockedMount = document.getElementById("vc-blocked-tab-mount");
                     if (blockedMount) {
-                        if (window.__vcBlockedTabRoot && window.__vcBlockedTabRoot.unmount) window.__vcBlockedTabRoot.unmount();
+                        if (window.__vcBlockedTabRoot && window.__vcBlockedTabRoot.unmount) {
+                            window.__vcBlockedTabRoot.unmount();
+                        }
                         blockedMount.remove();
                     }
                     if (content) {
                         const userList = content.querySelector('[class*="scroller"]');
-                        if (userList) {
-                            (userList as HTMLElement).style.display = "";
-                        }
+                        if (userList) (userList as HTMLElement).style.display = "";
                     }
                 });
             });
-        });
-        this._observer.observe(document.body, { childList: true, subtree: true });
+        };
+        addBlockedTab();
+        this._interval = setInterval(addBlockedTab, 1000);
     },
     stop() {
         if (window.__classicBlockedTabPanel) delete window.__classicBlockedTabPanel;
-        if (this._observer) this._observer.disconnect();
+        if (this._interval) clearInterval(this._interval);
         const tab = document.querySelector(".vc-blocked-tab");
         if (tab) tab.remove();
         const content = document.querySelector('[class*="peopleColumn"]');
