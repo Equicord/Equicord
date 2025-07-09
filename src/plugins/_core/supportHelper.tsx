@@ -22,7 +22,8 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { Link } from "@components/Link";
 import { openUpdaterModal } from "@components/VencordSettings/UpdaterTab";
-import { CONTRIB_ROLE_ID, Devs, DONOR_ROLE_ID, EQUCORD_HELPERS, EQUIBOP_CONTRIB_ROLE_ID, EQUICORD_TEAM, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_CONTRIB_ROLE_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID, VC_REGULAR_ROLE_ID, VC_SUPPORT_CHANNEL_ID, VENCORD_CONTRIB_ROLE_ID } from "@utils/constants";
+import { toggleEnabled } from "@equicordplugins/equicordHelper/utils";
+import { CONTRIB_ROLE_ID, Devs, DONOR_ROLE_ID, EQUCORD_HELPERS, EQUIBOP_CONTRIB_ROLE_ID, EQUICORD_TEAM, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_CONTRIB_ROLE_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID, VC_REGULAR_ROLE_ID, VC_SUPPORT_CHANNEL_IDS, VENCORD_CONTRIB_ROLE_ID } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
@@ -136,7 +137,9 @@ function generatePluginList() {
                 <style>
                     {'[class*="backdrop_"][style*="backdrop-filter"]{backdrop-filter:blur(16px) brightness(0.25) !important;}'}
                 </style>
-                <img src="https://media.tenor.com/QtGqjwBpRzwAAAAi/wumpus-dancing.gif" />
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
+                    <img src="https://media.tenor.com/QtGqjwBpRzwAAAAi/wumpus-dancing.gif" />
+                </div>
                 <Forms.FormText>Before you ask for help,</Forms.FormText>
                 <Forms.FormText>We do not handle support for users who use 100+ plugins</Forms.FormText>
                 <Forms.FormText>issue could be plugin confliction</Forms.FormText>
@@ -201,14 +204,16 @@ export default definePlugin({
 
             const selfId = UserStore.getCurrentUser()?.id;
             if (!selfId || isPluginDev(selfId) || isEquicordPluginDev(selfId)) return;
-            if (channelId === VC_SUPPORT_CHANNEL_ID && Vencord.Plugins.isPluginEnabled("VCSupport") && !clicked) {
+            if (VC_SUPPORT_CHANNEL_IDS.includes(channelId) && Vencord.Plugins.isPluginEnabled("VCSupport") && !clicked) {
                 return Alerts.show({
                     title: "You are entering the support channel!",
                     body: <div>
                         <style>
                             {'[class*="backdrop_"][style*="backdrop-filter"]{backdrop-filter:blur(16px) brightness(0.25) !important;}'}
                         </style>
-                        <img src="https://media.tenor.com/QtGqjwBpRzwAAAAi/wumpus-dancing.gif" />
+                        <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
+                            <img src="https://media.tenor.com/QtGqjwBpRzwAAAAi/wumpus-dancing.gif" />
+                        </div>
                         <Forms.FormText>Before you ask for help,</Forms.FormText>
                         <Forms.FormText>Check for updates and if this</Forms.FormText>
                         <Forms.FormText>issue could be caused by Equicord!</Forms.FormText>
@@ -291,10 +296,13 @@ export default definePlugin({
 
         const shouldAddUpdateButton =
             !IS_UPDATER_DISABLED
-            && (
-                (props.channel.id === SUPPORT_CHANNEL_ID && equicordSupport)
-            )
+            && ((props.channel.id === SUPPORT_CHANNEL_ID && equicordSupport))
             && props.message.content?.includes("update");
+
+        const matchedPlugins = Object.keys(Vencord.Plugins.plugins).filter(name => (props.message.content?.toLowerCase() ?? "").includes(name.toLowerCase()));
+        const matchedPlugin = matchedPlugins.sort((a, b) => b.length - a.length)[0];
+        const equicordGuild = ChannelStore.getChannel(props.channel.id)?.guild_id === GUILD_ID;
+        const shouldAddPluginButtons = equicordGuild && equicordSupport && matchedPlugin;
 
         if (shouldAddUpdateButton) {
             buttons.push(
@@ -314,6 +322,28 @@ export default definePlugin({
                     }}
                 >
                     Update Now
+                </Button>
+            );
+        }
+
+        if (shouldAddPluginButtons && matchedPlugin) {
+            const isEnabled = Vencord.Plugins.isPluginEnabled(matchedPlugin);
+
+            buttons.push(
+                <Button
+                    key="vc-plugin-toggle"
+                    color={isEnabled ? Button.Colors.RED : Button.Colors.GREEN}
+                    onClick={async () => {
+                        try {
+                            const success = await toggleEnabled(matchedPlugin);
+                            if (success) showToast(`${isEnabled ? "Disabled" : "Enabled"} ${matchedPlugin}`, Toasts.Type.SUCCESS);
+                        } catch (e) {
+                            new Logger(this.name).error("Error while toggling:", e);
+                            showToast(`Failed to toggle ${matchedPlugin}`, Toasts.Type.FAILURE);
+                        }
+                    }}
+                >
+                    {`${isEnabled ? "Disable" : "Enable"} ${matchedPlugin}`}
                 </Button>
             );
         }
@@ -378,7 +408,7 @@ export default definePlugin({
             <Card className={`vc-plugins-restart-card ${Margins.top8}`}>
                 Please do not private message plugin developers for support!
                 <br />
-                Instead, use the support channel: {Parser.parse("https://discord.com/channels/1173279886065029291/1173342942858055721")}
+                Instead, use the support channel: {Parser.parse("https://discord.com/channels/1173279886065029291/1297590739911573585")}
                 {!ChannelStore.getChannel(SUPPORT_CHANNEL_ID) && " (Click the link to join)"}
             </Card>
         );
