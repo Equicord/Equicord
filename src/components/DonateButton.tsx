@@ -17,8 +17,8 @@
 */
 
 import { openInviteModal } from "@utils/discord";
+import { ButtonProps } from "@vencord/discord-types";
 import { Button, showToast } from "@webpack/common";
-import { ButtonProps } from "@webpack/types";
 
 import { Heart } from "./Heart";
 
@@ -72,7 +72,7 @@ export function InviteButton({
             color={color}
             onClick={async e => {
                 e.preventDefault();
-                openInviteModal("5Xh2W87egW").catch(() =>
+                openInviteModal("equicord-1173279886065029291").catch(() =>
                     showToast("Invalid or expired invite"),
                 );
             }}

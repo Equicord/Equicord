@@ -68,6 +68,34 @@ async function forceUpdate() {
     return outdated;
 }
 
+function getWindowsName(release: string) {
+    const build = parseInt(release.split(".")[2]);
+    if (build >= 22000) return "Windows 11";
+    if (build >= 10240) return "Windows 10";
+    if (build >= 9200) return "Windows 8.1";
+    if (build >= 7600) return "Windows 7";
+    return `Windows (${release})`;
+}
+
+function getMacOSName(release: string) {
+    const major = parseInt(release.split(".")[0]);
+    if (major === 24) return "MacOS 15 (Sequoia)";
+    if (major === 23) return "MacOS 14 (Sonoma)";
+    if (major === 22) return "MacOS 13 (Ventura)";
+    if (major === 21) return "MacOS 12 (Monterey)";
+    if (major === 20) return "MacOS 11 (Big Sur)";
+    if (major === 19) return "MacOS 10.15 (Catalina)";
+    return `MacOS (${release})`;
+}
+
+function platformName() {
+    if (typeof DiscordNative === "undefined") return window.navigator.platform;
+    if (DiscordNative.process.platform === "win32") return `${getWindowsName(DiscordNative.os.release)}`;
+    if (DiscordNative.process.platform === "darwin") return `${getMacOSName(DiscordNative.os.release)} (${DiscordNative.process.arch === "arm64" ? "Apple Silicon" : "Intel Silicon"})`;
+    if (DiscordNative.process.platform === "linux") return `Linux (${DiscordNative.os.release})`;
+    return DiscordNative.process.platform;
+}
+
 async function generateDebugInfoMessage() {
     const { RELEASE_CHANNEL } = window.GLOBAL_ENV;
 
@@ -87,11 +115,7 @@ async function generateDebugInfoMessage() {
             `v${VERSION} • [${gitHash}](<https://github.com/Equicord/Equicord/commit/${gitHash}>)` +
             `${SettingsPlugin.additionalInfo} - ${Intl.DateTimeFormat("en-GB", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
         Client: `${RELEASE_CHANNEL} ~ ${client}`,
-        Platform: typeof DiscordNative !== "undefined" ?
-            `${DiscordNative.process.platform === "darwin" ?
-                (DiscordNative.process.arch === "arm64" ? "MacSilicon" : "MacIntel") :
-                (DiscordNative.process.platform === "win32" && DiscordNative.process.arch === "x64" ? "Windows" : DiscordNative.process.platform)}` :
-            window.navigator.platform
+        Platform: platformName()
     };
 
     if (IS_DISCORD_DESKTOP) {
@@ -221,7 +245,7 @@ export default definePlugin({
                     confirmText: "Go to Equicord Support",
                     onConfirm() {
                         clicked = true;
-                        VencordNative.native.openExternal("https://discord.gg/5Xh2W87egW");
+                        VencordNative.native.openExternal("https://discord.gg/equicord-1173279886065029291");
                     },
                     cancelText: "Okay continue",
                     onCancel() {
@@ -251,7 +275,6 @@ export default definePlugin({
                 }
             }
 
-            // @ts-ignore outdated type
             const roles = GuildMemberStore.getSelfMember(VC_GUILD_ID)?.roles || GuildMemberStore.getSelfMember(GUILD_ID)?.roles;
             if (!roles || TrustedRolesIds.some(id => roles.includes(id))) return;
 
@@ -261,7 +284,7 @@ export default definePlugin({
                     body: <div>
                         <Forms.FormText>You are using an externally updated Equicord version, the ability to help you here may be limited.</Forms.FormText>
                         <Forms.FormText className={Margins.top8}>
-                            Please join the <Link href="https://discord.gg/5Xh2W87egW">Equicord Server</Link> for support,
+                            Please join the <Link href="https://discord.gg/equicord-1173279886065029291">Equicord Server</Link> for support,
                             or if this issue persists on Vencord, continue on.
                         </Forms.FormText>
                     </div>
@@ -299,8 +322,10 @@ export default definePlugin({
             && ((props.channel.id === SUPPORT_CHANNEL_ID && equicordSupport))
             && props.message.content?.includes("update");
 
-        const matchedPlugins = Object.keys(Vencord.Plugins.plugins).filter(name => (props.message.content?.toLowerCase() ?? "").includes(name.toLowerCase()));
+        const contentWords = (props.message.content?.toLowerCase().match(/`\w+`/g) ?? []).map(e => e.slice(1, -1));
+        const matchedPlugins = Object.keys(Vencord.Plugins.plugins).filter(name => contentWords.includes(name.toLowerCase()));
         const matchedPlugin = matchedPlugins.sort((a, b) => b.length - a.length)[0];
+        const pluginData = matchedPlugin && Vencord.Plugins.plugins[matchedPlugin];
         const equicordGuild = ChannelStore.getChannel(props.channel.id)?.guild_id === GUILD_ID;
         const shouldAddPluginButtons = equicordGuild && equicordSupport && matchedPlugin;
 
@@ -326,9 +351,9 @@ export default definePlugin({
             );
         }
 
-        if (shouldAddPluginButtons && matchedPlugin) {
+        if (shouldAddPluginButtons && matchedPlugin && pluginData) {
+            if (pluginData.required || pluginData.name.endsWith("API")) return;
             const isEnabled = Vencord.Plugins.isPluginEnabled(matchedPlugin);
-
             buttons.push(
                 <Button
                     key="vc-plugin-toggle"

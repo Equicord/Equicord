@@ -9,15 +9,9 @@ import { Link } from "@components/Link";
 import { Devs } from "@utils/constants";
 import { ModalAPI } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
+import { Activity, SelectOption } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
 import { PresenceStore, UserStore } from "@webpack/common";
-import { SelectOption } from "@webpack/types";
-
-interface Activity {
-    name: string;
-    application_id?: string;
-    type: number;
-}
 
 const settings = definePluginSettings({
     richPresenceTagging: {

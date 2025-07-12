@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-export const VERSION = "4.0.0";
-
 export const Native = getNative();
 
 import "./styles.css";
@@ -58,6 +56,7 @@ async function messageDeleteHandler(payload: MessageDeletePayload & { isBulk: bo
     try {
         handledMessageIds.add(payload.id);
 
+        // @ts-ignore
         let message: LoggedMessage | LoggedMessageJSON | null =
             oldGetMessage?.(payload.channelId, payload.id);
         if (message == null) {
@@ -154,6 +153,7 @@ async function messageUpdateHandler(payload: MessageUpdatePayload) {
                 ]
             };
 
+            // @ts-ignore
             cacheSentMessages.set(`${payload.message.channel_id},${payload.message.id}`, message);
         }
     }
@@ -217,7 +217,7 @@ async function processMessageFetch(response: FetchMessagesResponse) {
 
             for (let j = 0, len2 = message.mentions.length; j < len2; j++) {
                 const user = message.mentions[j];
-                const cachedUser = fetchUser((user as any).id || user);
+                const cachedUser = fetchUser(user);
                 if (cachedUser) (message.mentions[j] as any) = cleanupUserObject(cachedUser);
             }
 
@@ -318,7 +318,7 @@ export default definePlugin({
 
     addIconToToolBar(e: { toolbar: React.ReactNode[] | React.ReactNode; }) {
         if (Array.isArray(e.toolbar))
-            return e.toolbar.push(
+            return e.toolbar.unshift(
                 <ErrorBoundary noop={true}>
                     <OpenLogsButton />
                 </ErrorBoundary>

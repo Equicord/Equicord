@@ -10,8 +10,8 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { Channel, Message } from "@vencord/discord-types";
 import { ChannelStore, Menu } from "@webpack/common";
-import { Channel, Message } from "discord-types/general";
 import { JSX } from "react";
 
 import ChannelsTabsContainer from "./components/ChannelTabsContainer";
@@ -48,8 +48,8 @@ export default definePlugin({
         {
             find: ".COLLECTIBLES_SHOP_FULLSCREEN))",
             replacement: {
-                match: /(?<=\?void 0:(\i)\.channelId.{0,500}return)((.{0,15})"div",{.*?\])(?=\}\)\}\)\}\)\})/,
-                replace: "$3$self.render,{currentChannel:$1,children:$2})"
+                match: /(\?void 0:(\i)\.channelId.{0,300})"div",{/,
+                replace: "$1$self.render,{currentChannel:$2,"
             }
         },
         // intercept channel navigation to switch/create tabs
