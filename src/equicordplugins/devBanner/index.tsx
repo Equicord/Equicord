@@ -14,7 +14,7 @@ import removeCloseButton from "./removeClose.css?managed";
 const settings = definePluginSettings({
     removeCloseButton: {
         type: OptionType.BOOLEAN,
-        default: false,
+        default: true,
         description: "Remove redundant close button, which might actually break plugin if accidentally pressed",
         restartNeeded: true,
     }
