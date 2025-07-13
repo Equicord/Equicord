@@ -11,7 +11,7 @@ You can join our [discord server](https://discord.gg/equicord-117327988606502929
 ### Extra included plugins
 
 <details>
-<summary>193 additional plugins</summary>
+<summary>194 additional plugins</summary>
 
 ### All Platforms
 
