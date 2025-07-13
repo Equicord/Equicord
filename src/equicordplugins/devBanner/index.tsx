@@ -34,21 +34,23 @@ migratePluginSettings("DiscordDevBanner", "devBanner");
 export default definePlugin({
     name: "DiscordDevBanner",
     description: "Enables the Discord developer banner, in which displays the build-ID",
-    authors: [ EquicordDevs.KrystalSkull ],
+    authors: [EquicordDevs.KrystalSkull],
 
     settings,
 
     patches: [
         {
             find: ".devBanner,",
-            replacement: [{
-                match: '"staging"===window.GLOBAL_ENV.RELEASE_CHANNEL',
-                replace: "true"
-            },
-            {
-                match: /.\.intl\.format\(.+?,{buildNumber:(.+?)}\)/,
-                replace: (_, buildNumber) => `$self.transform(${buildNumber})`
-            }]
+            replacement: [
+                {
+                    match: '"staging"===window.GLOBAL_ENV.RELEASE_CHANNEL',
+                    replace: "true"
+                },
+                {
+                    match: /\i\.\i\.format\(.{0,15},{buildNumber:(.{0,10})}\)/,
+                    replace: "$self.transform($1)"
+                }
+            ]
         }
     ],
 
