@@ -4,21 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings, migratePluginSettings } from "@api/Settings";
-import { disableStyle, enableStyle } from "@api/Styles";
+import { migratePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
-
-import removeCloseButton from "./removeClose.css?managed";
-
-const settings = definePluginSettings({
-    removeCloseButton: {
-        type: OptionType.BOOLEAN,
-        default: true,
-        description: "Remove redundant close button, which might actually break plugin if accidentally pressed",
-        restartNeeded: true,
-    }
-});
+import definePlugin from "@utils/types";
 
 // By default Discord only seems to only display 'Staging' so we map the names ourself
 const names: Record<string, string> = {
@@ -36,8 +24,6 @@ export default definePlugin({
     description: "Enables the Discord developer banner, in which displays the build-ID",
     authors: [EquicordDevs.KrystalSkull],
 
-    settings,
-
     patches: [
         {
             find: ".devBanner,",
@@ -47,9 +33,13 @@ export default definePlugin({
                     replace: "true"
                 },
                 {
+                    match: /(\i=\(\)=>)\(.*?\}\);/,
+                    replace: "$1null;"
+                },
+                {
                     match: /\i\.\i\.format\(.{0,15},{buildNumber:(.{0,10})}\)/,
                     replace: "$self.transform($1)"
-                }
+                },
             ]
         }
     ],
@@ -63,11 +53,4 @@ export default definePlugin({
             return `${releaseChannel.charAt(0).toUpperCase() + releaseChannel.slice(1)} ${buildNumber}`;
         }
     },
-
-    start() {
-        if (settings.store.removeCloseButton) enableStyle(removeCloseButton);
-    },
-    stop() {
-        if (settings.store.removeCloseButton) disableStyle(removeCloseButton);
-    }
 });
