@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "@equicordplugins/_misc/styles.css";
+
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Forms } from "@webpack/common";
