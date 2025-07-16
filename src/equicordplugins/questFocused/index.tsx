@@ -24,15 +24,15 @@ export default definePlugin({
         {
             find: "[QV] | updatePlayerState | playerState",
             replacement: {
-                match: /(case \w+\.rq\.PAUSED:.*?)\w+\.current\.pause\(\),/,
-                replace: "$1"
+                match: /(?<=case \i\.\i\.PAUSED:.{0,25})\i\.current\.pause\(\),/,
+                replace: ""
             }
         },
         {
             find: "[QV] | updatePlayerState | playerState:",
             replacement: {
-                match: /(case \w+\.rq\.PLAYING:)\w+\.current\.paused/,
-                replace: "$1!1"
+                match: /(?<=case \i\.\i\.PLAYING:)\i\.current\.paused/,
+                replace: "false"
             }
         },
     ],
