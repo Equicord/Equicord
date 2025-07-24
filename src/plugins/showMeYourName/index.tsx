@@ -14,12 +14,11 @@ import { Message, User } from "@vencord/discord-types";
 import { GuildMemberStore, RelationshipStore } from "@webpack/common";
 
 interface UsernameProps {
-    author: { nick: string; };
+    author: { nick: string; guildId: string; };
     message: Message;
     withMentionPrefix?: boolean;
     isRepliedMessage: boolean;
     userOverride?: User;
-    guildId: string;
 }
 
 const settings = definePluginSettings({
@@ -97,8 +96,9 @@ export default definePlugin({
         {
             find: '="SYSTEM_TAG"',
             replacement: {
-                match: /(?<=onContextMenu:\i,children:)\i/,
-                replace: "$self.renderUsername(arguments[0])"
+                // The field is named "userName", but as this is unusual casing, the regex also matches username, in case they change it
+                match: /(?<=onContextMenu:\i,children:)\i\?(?=.{0,100}?user[Nn]ame:)/,
+                replace: "$self.renderUsername(arguments[0]),_oldChildren:$&"
             }
         },
         {
@@ -148,10 +148,10 @@ export default definePlugin({
     ],
     settings,
     getUsername,
-    renderUsername: ErrorBoundary.wrap(({ author, message, isRepliedMessage, withMentionPrefix, userOverride, guildId }: UsernameProps) => {
+    renderUsername: ErrorBoundary.wrap(({ author, message, isRepliedMessage, withMentionPrefix, userOverride }: UsernameProps) => {
         try {
             const user = userOverride ?? message.author;
-            const username = getUsername(user, guildId);
+            const username = getUsername(user, author.guildId);
 
             const { nick } = author;
             const prefix = withMentionPrefix ? "@" : "";

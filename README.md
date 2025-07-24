@@ -11,7 +11,7 @@ You can join our [discord server](https://discord.gg/equicord-117327988606502929
 ### Extra included plugins
 
 <details>
-<summary>195 additional plugins</summary>
+<summary>194 additional plugins</summary>
 
 ### All Platforms
 
@@ -52,14 +52,12 @@ You can join our [discord server](https://discord.gg/equicord-117327988606502929
 - CutePats by thororen
 - DecodeBase64 by ThePirateStoner
 - Demonstration by Samwich
-- DisableAnimations by S€th
 - DiscordDevBanner by KrystalSkull
 - DisableCameras by Joona
 - DontFilterMe by Samwich
 - Encryptcord by Inbestigator
 - EquicordHelper by thororen & nyx
 - Equissant by SomeAspy & thororen
-- ExpandedUserTags by Cyn, TheSun, RyanCaoDev, LordElias, AutumnVN, hen
 - ExportContacts by dat_insanity
 - ExportMessages by veygax
 - FakeProfileThemesAndEffects by ryan
@@ -122,6 +120,7 @@ You can join our [discord server](https://discord.gg/equicord-117327988606502929
 - MoreCommands by Arjix, echo, Samu
 - MoreKaomoji by JacobTm & voidbbg
 - MoreStickers by Leko & Arjix
+- MoreUserTags by Cyn, TheSun, RyanCaoDev, LordElias, AutumnVN, hen
 - Morse by zyqunix
 - Moyai by Megu & Nuckyz
 - NeverPausePreviews by vappstar
@@ -142,6 +141,7 @@ You can join our [discord server](https://discord.gg/equicord-117327988606502929
 - PlatformSpoofer by Drag
 - PolishWording by Samwich
 - PurgeMessages by bhop & nyx
+- QuestFocused by secp192k1
 - QuestionMarkReplacement by nyx
 - Quoter by Samwich
 - RandomVoice by xijexo, omaw, thororen
