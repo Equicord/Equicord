@@ -617,6 +617,10 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "Cootshk",
         id: 921605971577548820n
     },
+    HPsaucii: {
+        name: "HPsaucii",
+        id: 578110568209055756n
+    },
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
