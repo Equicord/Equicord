@@ -20,13 +20,18 @@ import { Dirent, readdirSync, readFileSync, writeFileSync } from "fs";
 import { access, readFile } from "fs/promises";
 import { join, sep } from "path";
 import { normalize as posixNormalize, sep as posixSep } from "path/posix";
-import { BigIntLiteral, createSourceFile, Identifier, isArrayLiteralExpression, isCallExpression, isExportAssignment, isIdentifier, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSatisfiesExpression, isStringLiteral, isVariableStatement, NamedDeclaration, NodeArray, ObjectLiteralExpression, ScriptTarget, StringLiteral, SyntaxKind } from "typescript";
+import { BigIntLiteral, createSourceFile, Identifier, isArrayLiteralExpression, isCallExpression, isExportAssignment, isIdentifier, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSatisfiesExpression, isStringLiteral, isVariableStatement, NamedDeclaration, NodeArray, ObjectLiteralExpression, PropertyAssignment, ScriptTarget, StringLiteral, SyntaxKind } from "typescript";
 
 import { getPluginTarget } from "./utils.mjs";
 
 interface Dev {
     name: string;
     id: string;
+}
+
+interface Command {
+    name: string;
+    description: string;
 }
 
 interface PluginData {
@@ -37,13 +42,15 @@ interface PluginData {
     dependencies: string[];
     hasPatches: boolean;
     hasCommands: boolean;
+    commands: Command[];
     required: boolean;
     enabledByDefault: boolean;
-    target: "discordDesktop" | "vesktop" | "desktop" | "web" | "dev";
+    target: "discordDesktop" | "vesktop" | "equibop" | "desktop" | "web" | "dev";
     filePath: string;
 }
 
 const devs = {} as Record<string, Dev>;
+const equicordDevs = {} as Record<string, Dev>;
 
 function getName(node: NamedDeclaration) {
     return node.name && isIdentifier(node.name) ? node.name.text : undefined;
@@ -90,6 +97,37 @@ function parseDevs() {
     throw new Error("Could not find Devs constant");
 }
 
+function parseEquicordDevs() {
+    const file = createSourceFile("constants.ts", readFileSync("src/utils/constants.ts", "utf8"), ScriptTarget.Latest);
+
+    for (const child of file.getChildAt(0).getChildren()) {
+        if (!isVariableStatement(child)) continue;
+
+        const devsDeclaration = child.declarationList.declarations.find(d => hasName(d, "EquicordDevs"));
+        if (!devsDeclaration?.initializer || !isCallExpression(devsDeclaration.initializer)) continue;
+
+        const value = devsDeclaration.initializer.arguments[0];
+
+        if (!isSatisfiesExpression(value) || !isObjectLiteralExpression(value.expression)) throw new Error("Failed to parse EquicordDevs: not an object literal");
+
+        for (const prop of value.expression.properties) {
+            const name = (prop.name as Identifier).text;
+            const value = isPropertyAssignment(prop) ? prop.initializer : prop;
+
+            if (!isObjectLiteralExpression(value)) throw new Error(`Failed to parse EquicordDevs: ${name} is not an object literal`);
+
+            equicordDevs[name] = {
+                name: (getObjectProp(value, "name") as StringLiteral).text,
+                id: (getObjectProp(value, "id") as BigIntLiteral).text.slice(0, -1)
+            };
+        }
+
+        return;
+    }
+
+    throw new Error("Could not find EquicordDevs constant");
+}
+
 async function parseFile(fileName: string) {
     const file = createSourceFile(fileName, await readFile(fileName, "utf8"), ScriptTarget.Latest);
 
@@ -129,12 +167,33 @@ async function parseFile(fileName: string) {
                     break;
                 case "commands":
                     data.hasCommands = true;
+                    if (!isArrayLiteralExpression(value)) throw fail("commands is not an array literal");
+                    data.commands = value.elements.map((e) => {
+                        if (isObjectLiteralExpression(e)) {
+                            const nameProperty = e.properties.find((p): p is PropertyAssignment => {
+                                return isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === 'name';
+                            });
+                            const descriptionProperty = e.properties.find((p): p is PropertyAssignment => {
+                                return isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === 'description';
+                            });
+                            if (!nameProperty || !descriptionProperty) throw fail("command missing required properties");
+                            const name = isStringLiteral(nameProperty.initializer) ? nameProperty.initializer.text : '';
+                            const description = isStringLiteral(descriptionProperty.initializer) ? descriptionProperty.initializer.text : '';
+                            return { name, description };
+                        } else if (isCallExpression(e) && isIdentifier(e.expression)) {
+                            const [nameArg] = e.arguments;
+                            if (!isStringLiteral(nameArg)) throw fail("first argument must be a string");
+                            const name = nameArg.text;
+                            return { name, description: "" };
+                        }
+                        throw fail("commands array contains invalid elements");
+                    });
                     break;
                 case "authors":
                     if (!isArrayLiteralExpression(value)) throw fail("authors is not an array literal");
                     data.authors = value.elements.map(e => {
                         if (!isPropertyAccessExpression(e)) throw fail("authors array contains non-property access expressions");
-                        const d = devs[getName(e)!];
+                        const d = devs[getName(e)!] || equicordDevs[getName(e)!];
                         if (!d) throw fail(`couldn't look up author ${getName(e)}`);
                         return d;
                     });
@@ -163,21 +222,16 @@ async function parseFile(fileName: string) {
 
         const target = getPluginTarget(fileName);
         if (target) {
-            if (!["web", "discordDesktop", "vesktop", "desktop", "dev"].includes(target)) throw fail(`invalid target ${target}`);
+            if (!["web", "discordDesktop", "vesktop", "equibop", "desktop", "dev"].includes(target)) throw fail(`invalid target ${target}`);
             data.target = target as any;
         }
 
         data.filePath = posixNormalize(fileName)
             .split(sep)
             .join(posixSep)
-            .replace(/\/index\.([jt]sx?)$/, "")
-            .replace(/^src\/plugins\//, "");
+            .replace(/\/index\.([jt]sx?)$/, "");
 
-        let readme = "";
-        try {
-            readme = readFileSync(join(fileName, "..", "README.md"), "utf-8");
-        } catch { }
-        return [data, readme] as const;
+        return [data] as const;
     }
 
     throw fail("no default export called 'definePlugin' found");
@@ -205,25 +259,23 @@ function isPluginFile({ name }: { name: string; }) {
 
 (async () => {
     parseDevs();
+    parseEquicordDevs();
 
     const plugins = [] as PluginData[];
-    const readmes = {} as Record<string, string>;
 
-    await Promise.all(["src/plugins", "src/plugins/_core"].flatMap(dir =>
+    await Promise.all(["src/plugins", "src/plugins/_core", "src/equicordplugins"].flatMap(dir =>
         readdirSync(dir, { withFileTypes: true })
             .filter(isPluginFile)
             .map(async dirent => {
-                const [data, readme] = await parseFile(await getEntryPoint(dir, dirent));
-                plugins.push(data);
-                if (readme) readmes[data.name] = readme;
+                const [data] = await parseFile(await getEntryPoint(dir, dirent));
+                plugins.sort().push(data);
             })
     ));
 
     const data = JSON.stringify(plugins);
 
-    if (process.argv.length > 3) {
+    if (process.argv.length > 2) {
         writeFileSync(process.argv[2], data);
-        writeFileSync(process.argv[3], JSON.stringify(readmes));
     } else {
         console.log(data);
     }

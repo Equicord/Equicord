@@ -76,6 +76,7 @@ export default definePlugin({
     },
 
     patches: [
+        // In the user popout. eg: when clicking the name in chat
         {
             find: ".POPOUT,user:",
             replacement: {
@@ -90,6 +91,7 @@ export default definePlugin({
                 replace: "$&$self.BiteSizeReviewsButton({user:arguments[0].user}),"
             }
         },
+        // places like the user profile on the right in dms
         {
             find: ".SIDEBAR,shouldShowTooltip:",
             replacement: {

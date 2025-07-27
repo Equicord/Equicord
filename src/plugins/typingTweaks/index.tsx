@@ -16,8 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, Settings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { getCustomColorString } from "@equicordplugins/customUserColors";
 import { Devs } from "@utils/constants";
 import { openUserProfile } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
@@ -62,6 +63,17 @@ interface Props {
     guildId: string;
 }
 
+function typingUserColor(guildId: string, userId: string): string | undefined {
+    if (!settings.store.showRoleColors) return;
+
+    if (Settings.plugins.CustomUserColors.enabled) {
+        const customColor = getCustomColorString(userId, true);
+        if (customColor) return customColor;
+    }
+
+    return GuildMemberStore.getMember(guildId, userId)?.colorString;
+}
+
 const TypingUser = ErrorBoundary.wrap(function ({ user, guildId }: Props) {
     return (
         <strong
@@ -71,7 +83,7 @@ const TypingUser = ErrorBoundary.wrap(function ({ user, guildId }: Props) {
                 openUserProfile(user.id);
             }}
             style={{
-                color: settings.store.showRoleColors ? GuildMemberStore.getMember(guildId, user.id)?.colorString : undefined,
+                color: settings.store.showRoleColors ? typingUserColor(guildId, user.id) : undefined,
             }}
         >
             {settings.store.showAvatars && (

@@ -1,3 +1,4 @@
+import { Moment } from "moment";
 import type { ComponentClass, ComponentPropsWithRef, ComponentType, CSSProperties, FunctionComponent, HtmlHTMLAttributes, HTMLProps, JSX, KeyboardEvent, MouseEvent, PointerEvent, PropsWithChildren, ReactNode, Ref, RefObject } from "react";
 
 // copy(find(m => Array.isArray(m) && m.includes("heading-sm/normal")).map(JSON.stringify).join("|"))
@@ -210,7 +211,7 @@ export type Checkbox = ComponentType<PropsWithChildren<{
 };
 
 export type Timestamp = ComponentType<PropsWithChildren<{
-    timestamp: Date;
+    timestamp: Date | Moment;
     isEdited?: boolean;
 
     className?: string;
@@ -250,7 +251,7 @@ export type TextArea = ComponentType<Omit<HTMLProps<HTMLTextAreaElement>, "onCha
     inputRef?: Ref<HTMLTextAreaElement>;
 }>;
 
-interface SelectOption {
+export interface SelectOption {
     disabled?: boolean;
     value: any;
     label: string;
@@ -300,7 +301,7 @@ export type Select = ComponentType<PropsWithChildren<{
 export type SearchableSelect = ComponentType<PropsWithChildren<{
     placeholder?: string;
     options: ReadonlyArray<SelectOption>; // TODO
-    value?: SelectOption;
+    value?: SelectOption | string[];
 
     /**
      * - 0 ~ Filled
@@ -457,6 +458,7 @@ export type Paginator = ComponentType<{
     pageSize: number;
     totalCount: number;
 
+    className?: string;
     onPageChange?(page: number): void;
     hideMaxPage?: boolean;
 }>;
@@ -497,6 +499,7 @@ export type Avatar = ComponentType<PropsWithChildren<{
     src?: string;
     size?: "SIZE_16" | "SIZE_20" | "SIZE_24" | "SIZE_32" | "SIZE_40" | "SIZE_48" | "SIZE_56" | "SIZE_80" | "SIZE_120";
 
+    status?: string;
     statusColor?: string;
     statusTooltip?: string;
     statusBackdropColor?: string;
@@ -513,6 +516,12 @@ export type Avatar = ComponentType<PropsWithChildren<{
 
 type FocusLock = ComponentType<PropsWithChildren<{
     containerRef: Ref<HTMLElement>;
+}>>;
+
+export type Dots = ComponentType<PropsWithChildren<{
+    dotRadius: number;
+    themed?: boolean;
+    className?: string;
 }>>;
 
 export type Icon = ComponentType<JSX.IntrinsicElements["svg"] & {

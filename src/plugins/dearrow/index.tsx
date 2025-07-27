@@ -59,7 +59,7 @@ async function embedDidMount(this: Component<Props>) {
         const { titles, thumbnails } = await res.json();
 
         const hasTitle = titles[0]?.votes >= 0;
-        const hasThumb = thumbnails[0]?.votes >= 0 && !thumbnails[0].original;
+        const hasThumb = thumbnails[0]?.votes >= 0;
 
         if (!hasTitle && !hasThumb) return;
 

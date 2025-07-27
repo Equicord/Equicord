@@ -11,9 +11,10 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
+import { GuildMemberStore, RelationshipStore } from "@webpack/common";
 
 interface UsernameProps {
-    author: { nick: string; };
+    author: { nick: string; guildId: string; };
     message: Message;
     withMentionPrefix?: boolean;
     isRepliedMessage: boolean;
@@ -27,6 +28,7 @@ const settings = definePluginSettings({
         options: [
             { label: "Username then nickname", value: "user-nick", default: true },
             { label: "Nickname then username", value: "nick-user" },
+            { label: "Nickname only", value: "nick" },
             { label: "Username only", value: "user" },
         ],
     },
@@ -40,12 +42,56 @@ const settings = definePluginSettings({
         default: false,
         description: "Also apply functionality to reply previews",
     },
+    preferFriend: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Use friend names in place of usernames (overrides Display Names option if applicable)"
+    },
+    showGradient: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Whether to show gradient for suffix",
+    },
+    memberList: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Show usernames in member list",
+        restartNeeded: true
+    },
+    voiceChannelList: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Show usernames in voice channel list",
+        restartNeeded: true
+    },
+    emojiReactions: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Show usernames in emoji reactions",
+        restartNeeded: true
+    },
+    userProfilePopout: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Show usernames in user profile popout",
+        restartNeeded: true
+    },
 });
+
+function getUsername(user: any, guildId: string): string {
+    const friendName = RelationshipStore.getNickname(user.id);
+    const guildNick = GuildMemberStore.getNick(guildId, user.id);
+
+    if (settings.store.preferFriend && friendName) return friendName;
+    if (settings.store.mode === "nick" && guildNick) return guildNick;
+    if (settings.store.displayNames) return user.globalName || user.username;
+    return user.username;
+}
 
 export default definePlugin({
     name: "ShowMeYourName",
     description: "Display usernames next to nicks, or no nicks at all",
-    authors: [Devs.Rini, Devs.TheKodeToad],
+    authors: [Devs.Rini, Devs.TheKodeToad, Devs.nyx],
     patches: [
         {
             find: '="SYSTEM_TAG"',
@@ -55,27 +101,71 @@ export default definePlugin({
                 replace: "$self.renderUsername(arguments[0]),_oldChildren:$&"
             }
         },
+        {
+            find: "#{intl::REACTION_TOOLTIP_1}",
+            predicate: () => settings.store.emojiReactions,
+            replacement: [
+                {
+                    match: /\i\.\i\.getName\((\i),null==.{0,15},(\i)\)/,
+                    replace: "$self.getUsername($2,$1)"
+                },
+            ]
+        },
+        {
+            find: "._areActivitiesExperimentallyHidden=(",
+            predicate: () => settings.store.memberList,
+            replacement: {
+                match: /(?<=user:(\i),currentUser:\i,nick:)\i(?=.*?guildId:(\i))/,
+                replace: "$self.getUsername($1,$2)"
+            },
+        },
+        {
+            find: ".usernameSpeaking]",
+            predicate: () => settings.store.voiceChannelList,
+            replacement: [
+                {
+                    match: /null!=\i\?\i:\i\.\i\.getName\((\i)\)(?=.*?contextGuildId:(\i))/,
+                    replace: "$self.getUsername($1,$2)"
+                },
+            ]
+        },
+        {
+            find: ".hasAvatarForGuild(null==",
+            predicate: () => settings.store.userProfilePopout,
+            replacement: {
+                match: /(?<=user:(\i).{0,15}\}\),nickname:)\i(?=.*?guildId:(null==\i\?void 0:\i\.id))/,
+                replace: "$self.getUsername($1,$2)"
+            }
+        },
+        {
+            find: "friendRequestBanner})",
+            predicate: () => settings.store.userProfilePopout,
+            replacement: {
+                match: /(?<=user:(\i).{0,15}guildId:(\i).*?nickname:)\i/,
+                replace: "$self.getUsername($1,$2)"
+            }
+        }
     ],
     settings,
-
+    getUsername,
     renderUsername: ErrorBoundary.wrap(({ author, message, isRepliedMessage, withMentionPrefix, userOverride }: UsernameProps) => {
         try {
             const user = userOverride ?? message.author;
-            let { username } = user;
-            if (settings.store.displayNames)
-                username = user.globalName || username;
+            const username = getUsername(user, author.guildId);
 
             const { nick } = author;
             const prefix = withMentionPrefix ? "@" : "";
+
+            const classes = settings.store.showGradient ? "vc-smyn-suffix" : "vc-smyn-suffix vc-smyn-hide-gradient";
 
             if (isRepliedMessage && !settings.store.inReplies || username.toLowerCase() === nick.toLowerCase())
                 return <>{prefix}{nick}</>;
 
             if (settings.store.mode === "user-nick")
-                return <>{prefix}{username} <span className="vc-smyn-suffix">{nick}</span></>;
+                return <>{prefix}{username} <span className={classes}>{nick}</span></>;
 
             if (settings.store.mode === "nick-user")
-                return <>{prefix}{nick} <span className="vc-smyn-suffix">{username}</span></>;
+                return <>{prefix}{nick} <span className={classes}>{username}</span></>;
 
             return <>{prefix}{username}</>;
         } catch {
