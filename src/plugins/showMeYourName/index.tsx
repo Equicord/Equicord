@@ -8,7 +8,7 @@ import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember, Message, User } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
@@ -759,7 +759,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "ShowMeYourName",
     description: "Display any permutation of nicknames, display names, and usernames in chat.",
-    authors: [Devs.Rini, Devs.TheKodeToad, Devs.Etorix, Devs.sadan],
+    authors: [Devs.Rini, Devs.TheKodeToad, EquicordDevs.Etorix, Devs.sadan],
     settings,
 
     patches: [
