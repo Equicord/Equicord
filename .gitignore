@@ -1,8 +1,10 @@
 dist
 node_modules
+.VSCodeCounter
 
 *.exe
 vencord_installer
+equicord_installer
 
 .idea
 .DS_Store
@@ -23,3 +25,6 @@ src/userplugins
 
 ExtensionCache/
 /settings
+
+# vencord companion module cache
+.modules

@@ -36,13 +36,21 @@ async function lookupApp(applicationId: string): Promise<string> {
     return socket.application;
 }
 
+let hideSetting = false;
+
+if (IS_VESKTOP || IS_EQUIBOP || "legcord" in window) {
+    hideSetting = true;
+} else if ("goofcord" in window) {
+    hideSetting = false;
+}
+
 let ws: WebSocket;
 export default definePlugin({
     name: "WebRichPresence (arRPC)",
     description: "Client plugin for arRPC to enable RPC on Discord Web (experimental)",
     authors: [Devs.Ducko],
     reporterTestable: ReporterTestable.None,
-    hidden: IS_VESKTOP || "legcord" in window,
+    hidden: hideSetting,
 
     settingsAboutComponent: () => (
         <>
@@ -81,14 +89,16 @@ export default definePlugin({
 
         const connectionSuccessful = await new Promise(res => setTimeout(() => res(ws.readyState === WebSocket.OPEN), 1000)); // check if open after 1s
         if (!connectionSuccessful) {
-            showNotice("Failed to connect to arRPC, is it running?", "Retry", () => { // show notice about failure to connect, with retry/ignore
+            showNotice("Failed to connect to arRPC, is it running?", "Retry", () => {
+                // show notice about failure to connect, with retry/ignore
                 popNotice();
                 this.start();
             });
             return;
         }
 
-        Toasts.show({ // show toast on success
+        Toasts.show({
+            // show toast on success
             message: "Connected to arRPC",
             type: Toasts.Type.SUCCESS,
             id: Toasts.genId(),

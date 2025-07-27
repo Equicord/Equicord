@@ -22,7 +22,7 @@ import { runtimeHashMessageKey } from "@utils/intlHash";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { i18n, RelationshipStore } from "@webpack/common";
+import { i18n, MessageStore, RelationshipStore } from "@webpack/common";
 
 interface MessageDeleteProps {
     // Internal intl message for BLOCKED_MESSAGE_COUNT
@@ -30,13 +30,19 @@ interface MessageDeleteProps {
 }
 
 // Remove this migration once enough time has passed
-migratePluginSetting("NoBlockedMessages", "ignoreBlockedMessages", "ignoreMessages");
+migratePluginSetting("NoBlockedMessages", "ignoreMessages", "ignoreBlockedMessages");
 const settings = definePluginSettings({
     ignoreMessages: {
         description: "Completely ignores incoming messages from blocked and ignored (if enabled) users",
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true
+    },
+    hideRepliesToBlockedMessages: {
+        description: "Hides replies to blocked messages.",
+        type: OptionType.BOOLEAN,
+        default: false,
+        restartNeeded: false,
     },
     applyToIgnoredUsers: {
         description: "Additionally apply to 'ignored' users",
@@ -71,10 +77,19 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(?<=function (\i)\((\i)\){)(?=.*MESSAGE_CREATE:\1)/,
-                    replace: (_, _funcName, props) => `if($self.shouldIgnoreMessage(${props}.message))return;`
+                    replace: (_, _funcName, props) => `if($self.shouldIgnoreMessage(${props}.message)||$self.isReplyToBlocked(${props}.message))return;`
                 }
             ]
-        }))
+        })),
+        {
+            find: "referencedUsernameProfile,referencedAvatarProfile",
+            replacement: [
+                {
+                    match: /CUSTOM_GIFT.*?=(?=\(0,\i.jsx\)\(\i.\i\i)/,
+                    replace: "$&!$self.isReplyToBlocked(arguments[0].message)&&",
+                }
+            ],
+        },
     ],
 
     shouldIgnoreMessage(message: Message) {
@@ -101,6 +116,20 @@ export default definePlugin({
         } catch (e) {
             console.error(e);
             return false;
+        }
+    },
+
+    isReplyToBlocked(message: Message) {
+        if (!settings.store.hideRepliesToBlockedMessages) return false;
+        try {
+            const { messageReference } = message;
+            if (!messageReference) return false;
+
+            const replyMessage = MessageStore.getMessage(messageReference.channel_id, messageReference.message_id);
+
+            return replyMessage ? this.isBlocked(replyMessage) : false;
+        } catch (e) {
+            new Logger("NoBlockedMessages").error("Failed to check if referenced message is blocked:", e);
         }
     }
 });

@@ -5,8 +5,9 @@
  */
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { Devs } from "@utils/constants";
-import definePlugin from "@utils/types";
+import { definePluginSettings } from "@api/Settings";
+import { Devs, EquicordDevs } from "@utils/constants";
+import definePlugin, { OptionType } from "@utils/types";
 import { Guild } from "@vencord/discord-types";
 import { Menu } from "@webpack/common";
 
@@ -24,15 +25,37 @@ const Patch: NavContextMenuPatchCallback = (children, { guild }: { guild: Guild;
     );
 };
 
+export const settings = definePluginSettings({
+    sorting: {
+        type: OptionType.SELECT,
+        description: "Username or if applicable Display Name",
+        options: [
+            {
+                label: "Username",
+                value: "username"
+            },
+            {
+                label: "Display Name",
+                value: "displayname",
+                default: true
+            },
+            {
+                label: "Dont Sort",
+                value: "none",
+            }
+        ]
+    }
+});
+
 export default definePlugin({
     name: "ServerInfo",
     description: "Allows you to view info about a server",
-    authors: [Devs.Ven, Devs.Nuckyz],
+    authors: [Devs.Ven, Devs.Nuckyz, EquicordDevs.Z1xus],
     dependencies: ["DynamicImageModalAPI"],
     tags: ["guild", "info", "ServerProfile"],
-
     contextMenus: {
         "guild-context": Patch,
         "guild-header-popout": Patch
-    }
+    },
+    settings
 });

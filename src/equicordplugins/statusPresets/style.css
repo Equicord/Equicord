@@ -1,0 +1,13 @@
+.vc-sp-disabled {
+    opacity: 0.5;
+}
+
+.vc-sp-item:hover {
+    background-color: var(--menu-item-default-hover-bg) !important;
+    color: var(--white) !important;
+}
+
+.vc-sp-icon {
+    transform: rotate(45deg);
+    margin-top: 4px;
+}

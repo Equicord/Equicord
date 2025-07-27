@@ -16,9 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { migratePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
+import { disableStyle, enableStyle } from "@api/Styles";
 import { Devs } from "@utils/constants";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
+
+import style from "./style.css?managed";
+
+const settings = definePluginSettings({
+    hideArrow: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Hide Arrow",
+        restartNeeded: true
+    },
+});
 
 migratePluginSettings("AlwaysExpandRoles", "ShowAllRoles");
 export default definePlugin({
@@ -41,5 +53,12 @@ export default definePlugin({
                 }
             ]
         }
-    ]
+    ],
+    settings,
+    start() {
+        if (settings.store.hideArrow) enableStyle(style);
+    },
+    stop() {
+        if (settings.store.hideArrow) disableStyle(style);
+    }
 });

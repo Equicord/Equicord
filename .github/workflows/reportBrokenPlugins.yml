@@ -14,13 +14,19 @@ on:
                 type: string
                 description: "Webhook URL that the report will be posted to. This will be visible for everyone, so DO NOT pass sensitive webhooks like discord webhook. This is meant to be used by Venbot."
                 required: false
-    # schedule:
-    #   # Every day at midnight
-    #   - cron: 0 0 * * *
+    schedule:
+        #   # Every day at midnight
+        - cron: 0 0 * * *
+
+env:
+    FORCE_COLOR: true
+    GITHUB_TOKEN: ${{ secrets.ETOKEN }}
+    REPO: Equicord/Equibored
+    USERNAME: GitHub-Actions
 
 jobs:
     TestPlugins:
-        if: github.repository == 'Vendicated/Vencord'
+        name: Test Patches
         runs-on: ubuntu-latest
 
         steps:
@@ -42,7 +48,7 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  pnpm install --frozen-lockfile
+                  pnpm install --no-frozen-lockfile
 
             - name: Install Google Chrome
               id: setup-chrome
@@ -50,7 +56,7 @@ jobs:
               with:
                   chrome-version: stable
 
-            - name: Build Vencord Reporter Version
+            - name: Build Equicord Reporter Version
               run: pnpm buildReporter
 
             - name: Run Reporter
@@ -89,7 +95,24 @@ jobs:
                   done
 
                   cat "$stable_output_file" "$canary_output_file" >> $GITHUB_STEP_SUMMARY
+
+                  git config --global user.name "GitHub-Actions"
+                  git config --global user.email actions@github.com
+                  git clone https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git report
+                  cd report
+
+                  cp ../dist/reporter*.json .
+                  git add -A
+
+                  if git diff --cached --quiet; then
+                    echo "Nothing to commit"
+                    exit 0
+                  else
+                    git commit -m "Reporter Results"
+                    git push --force https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git
+                  fi
+
                   exit $exit_code
               env:
-                  WEBHOOK_URL: ${{ inputs.webhook_url || secrets.DISCORD_WEBHOOK }}
+                  WEBHOOK_URL: ${{ inputs.webhook_url || secrets.WEBHOOK_URL }}
                   WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}

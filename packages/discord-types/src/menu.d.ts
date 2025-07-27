@@ -48,10 +48,10 @@ export interface Menu {
         interactive?: boolean;
     }>;
     MenuSliderControl: RC<{
-        minValue: number,
-        maxValue: number,
-        value: number,
-        onChange(value: number): void,
+        minValue?: number,
+        maxValue?: number,
+        value?: number,
+        onChange?(value: number): void,
         renderValue?(value: number): string,
     }>;
     MenuSearchControl: RC<{
@@ -75,4 +75,3 @@ export interface ContextMenuApi {
         options?: { enableSpellCheck?: boolean; }
     ): void;
 }
-
