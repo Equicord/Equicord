@@ -65,6 +65,7 @@ function GameActivityToggleButton() {
 
     return (
         <Button
+            className="vc-game-activity"
             tooltipText={showCurrentGame ? "Disable Game Activity" : "Enable Game Activity"}
             icon={makeIcon(showCurrentGame)}
             role="switch"

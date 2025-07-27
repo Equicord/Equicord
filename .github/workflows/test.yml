@@ -1,12 +1,17 @@
-name: test
+name: Test
 on:
     push:
+        branches:
+            - main
+            - dev
     pull_request:
         branches:
             - main
             - dev
+
 jobs:
-    test:
+    Test:
+        name: Test
         runs-on: ubuntu-latest
 
         steps:
@@ -20,7 +25,7 @@ jobs:
                   cache: "pnpm"
 
             - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+              run: pnpm install --no-frozen-lockfile
 
             - name: Lint & Test if desktop version compiles
               run: pnpm test

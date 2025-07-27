@@ -22,8 +22,7 @@ import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { wordsToTitle } from "@utils/text";
 import definePlugin, { ReporterTestable } from "@utils/types";
-import { findByPropsLazy } from "@webpack";
-import { Button, ChannelStore, Forms, GuildMemberStore, SelectedChannelStore, SelectedGuildStore, useMemo, UserStore } from "@webpack/common";
+import { Button, ChannelStore, Forms, GuildMemberStore, SelectedChannelStore, SelectedGuildStore, useMemo, UserStore, VoiceStateStore } from "@webpack/common";
 import { ReactElement } from "react";
 
 import { getCurrentVoice, settings } from "./settings";
@@ -37,8 +36,6 @@ interface VoiceState {
     selfDeaf: boolean;
     selfMute: boolean;
 }
-
-const VoiceStateStore = findByPropsLazy("getVoiceStatesForChannel", "getCurrentClientVoiceChannelId");
 
 // Mute/Deaf for other people than you is commented out, because otherwise someone can spam it and it will be annoying
 // Filtering out events is not as simple as just dropping duplicates, as otherwise mute, unmute, mute would
@@ -76,13 +73,6 @@ function formatText(str: string, user: string, channel: string, displayName: str
         .replaceAll("{{NICKNAME}}", clean(nickname) || (nickname ? "Someone" : ""));
 }
 
-/*
-let StatusMap = {} as Record<string, {
-    mute: boolean;
-    deaf: boolean;
-}>;
-*/
-
 // For every user, channelId and oldChannelId will differ when moving channel.
 // Only for the local user, channelId and oldChannelId will be the same when moving channel,
 // for some ungodly reason
@@ -98,15 +88,7 @@ function getTypeAndChannelId({ channelId, oldChannelId }: VoiceState, isMe: bool
         if (channelId) return [oldChannelId ? "move" : "join", channelId];
         if (oldChannelId) return ["leave", oldChannelId];
     }
-    /*
-    if (channelId) {
-        if (deaf || selfDeaf) return ["deafen", channelId];
-        if (mute || selfMute) return ["mute", channelId];
-        const oldStatus = StatusMap[userId];
-        if (oldStatus.deaf) return ["undeafen", channelId];
-        if (oldStatus.mute) return ["unmute", channelId];
-    }
-    */
+
     return ["", ""];
 }
 

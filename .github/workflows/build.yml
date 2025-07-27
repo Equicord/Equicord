@@ -1,26 +1,27 @@
-name: Build DevBuild
+name: Release
 on:
     push:
+        tags:
+            - v*
         branches:
             - main
-        paths:
-            - .github/workflows/build.yml
-            - src/**
-            - browser/**
-            - scripts/build/**
-            - package.json
-            - pnpm-lock.yaml
 env:
     FORCE_COLOR: true
+    GITHUB_TOKEN: ${{ secrets.ETOKEN }}
+    REPO: Equicord/Equibored
+    USERNAME: GitHub-Actions
+
+permissions: write-all
 
 jobs:
     Build:
+        name: Build Equicord
         runs-on: ubuntu-latest
 
         steps:
             - uses: actions/checkout@v4
 
-            - uses: pnpm/action-setup@v3 # Install pnpm using packageManager key in package.json
+            - uses: pnpm/action-setup@v3
 
             - name: Use Node.js 20
               uses: actions/setup-node@v4
@@ -29,52 +30,56 @@ jobs:
                   cache: "pnpm"
 
             - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+              run: pnpm install --no-frozen-lockfile
 
             - name: Build web
               run: pnpm buildWebStandalone
 
             - name: Build
-              run: pnpm build --standalone
+              run: pnpm buildStandalone
 
-            - name: Generate plugin list
-              run: pnpm generatePluginJson dist/plugins.json dist/plugin-readmes.json
-
-            - name: Clean up obsolete files
+            - name: Generate plugin lists
               run: |
-                  rm -rf dist/*-unpacked dist/vendor Vencord.user.css vencordDesktopRenderer.css vencordDesktopRenderer.css.map
+                pnpm generatePluginJson dist/plugins.json
+                pnpm generateEquicordPluginJson dist/equicordplugins.json
+                pnpm generateVencordPluginJson dist/vencordplugins.json
 
-            - name: Get some values needed for the release
-              id: release_values
+            - name: Collect files to be released
               run: |
-                  echo "release_tag=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+                  cd dist
+                  mkdir release
 
-            - name: Upload DevBuild as release
-              if: github.repository == 'Vendicated/Vencord'
-              run: |
-                  gh release upload devbuild --clobber dist/*
-                  gh release edit devbuild --title "DevBuild $RELEASE_TAG"
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  RELEASE_TAG: ${{ env.release_tag }}
+                  cp browser/browser.* release
+                  cp Vencord.user.{js,js.LEGAL.txt} release
 
-            - name: Upload DevBuild to builds repo
-              if: github.repository == 'Vendicated/Vencord'
+                  # copy the plugin data jsons, the extension zips and the desktop/vesktop asars
+                  cp *.{json,zip,asar} release
+
+                  # legacy un-asared files
+                  cp desktop/* release
+                  for file in equibop/*; do
+                    filename=$(basename "$file")
+                    cp "$file" "release/equibop${filename^}"
+                  done
+
+                  find release -size 0 -delete
+                  rm release/package.json
+                  rm release/*.map
+
+            - name: Upload Equicord Stable
+              if: ${{ github.ref_name == 'main' }}
               run: |
-                  git config --global user.name "$USERNAME"
+                  gh release upload latest --clobber dist/release/*
+
+            - name: Upload Plugin JSONs to Equibored repo
+              run: |
+                  git config --global user.name "GitHub-Actions"
                   git config --global user.email actions@github.com
+                  git clone https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git plugins
+                  cd plugins
 
-                  git clone https://$USERNAME:$API_TOKEN@github.com/$GH_REPO.git upload
-                  cd upload
-
-                  GLOBIGNORE=.git:.gitignore:README.md:LICENSE
-                  rm -rf *
-                  cp -r ../dist/* .
-
+                  cp ../dist/release/*plugins.json .
                   git add -A
-                  git commit -m "Builds for https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
-                  git push --force https://$USERNAME:$API_TOKEN@github.com/$GH_REPO.git
-              env:
-                  API_TOKEN: ${{ secrets.BUILDS_TOKEN }}
-                  GH_REPO: Vencord/builds
-                  USERNAME: GitHub-Actions
+
+                  git commit -m "Plugins for https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+                  git push --force https://$USERNAME:$GITHUB_TOKEN@github.com/$REPO.git

@@ -19,7 +19,7 @@
 import "./PluginModal.css";
 
 import { generateId } from "@api/Commands";
-import { useSettings } from "@api/Settings";
+import { Settings, useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
@@ -28,18 +28,18 @@ import { gitRemote } from "@shared/vencordUserAgent";
 import { proxyLazy } from "@utils/lazy";
 import { Margins } from "@utils/margins";
 import { classes, isObjectEmpty } from "@utils/misc";
-import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { OptionType, Plugin } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { Clickable, FluxDispatcher, Forms, React, Text, Tooltip, useEffect, UserStore, UserSummaryItem, UserUtils, useState } from "@webpack/common";
+import { Button, Clickable, FluxDispatcher, Forms, React, Text, Toasts, Tooltip, useEffect, UserStore, UserSummaryItem, UserUtils, useState } from "@webpack/common";
 import { Constructor } from "type-fest";
 
 import { PluginMeta } from "~plugins";
 
 import { OptionComponentMap } from "./components";
 import { openContributorModal } from "./ContributorModal";
-import { GithubButton, WebsiteButton } from "./LinkIconButton";
+import { GithubButton } from "./LinkIconButton";
 
 const cl = classNameFactory("vc-plugin-modal-");
 
@@ -51,7 +51,7 @@ interface PluginModalProps extends ModalProps {
     onRestartNeeded(key: string): void;
 }
 
-function makeDummyUser(user: { username: string; id?: string; avatar?: string; }) {
+export function makeDummyUser(user: { username: string; id?: string; avatar?: string; }) {
     const newUser = new UserRecord({
         username: user.username,
         id: user.id ?? generateId(),
@@ -86,6 +86,10 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             }
         })();
     }, [plugin.authors]);
+
+    function handleResetClick() {
+        openWarningModal(plugin, { onClose, transitionState }, onRestartNeeded);
+    }
 
     function renderSettings() {
         if (!hasSettings || !plugin.options)
@@ -123,20 +127,18 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
         );
     }
 
-    function renderMoreUsers(_label: string, count: number) {
-        const sliceCount = plugin.authors.length - count;
-        const sliceStart = plugin.authors.length - sliceCount;
-        const sliceEnd = sliceStart + plugin.authors.length - count;
+    function renderMoreUsers(_label: string) {
+        const remainingAuthors = plugin.authors.slice(6);
 
         return (
-            <Tooltip text={plugin.authors.slice(sliceStart, sliceEnd).map(u => u.name).join(", ")}>
+            <Tooltip text={remainingAuthors.map(u => u.name).join(", ")}>
                 {({ onMouseEnter, onMouseLeave }) => (
                     <div
                         className={AvatarStyles.moreUsers}
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
                     >
-                        +{sliceCount}
+                        +{remainingAuthors.length}
                     </div>
                 )}
             </Tooltip>
@@ -158,13 +160,9 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                         <Forms.FormText className={cl("description")}>{plugin.description}</Forms.FormText>
                         {!pluginMeta.userPlugin && (
                             <div className="vc-settings-modal-links">
-                                <WebsiteButton
-                                    text="View more info"
-                                    href={`https://vencord.dev/plugins/${plugin.name}`}
-                                />
                                 <GithubButton
                                     text="View source code"
-                                    href={`https://github.com/${gitRemote}/tree/main/src/plugins/${pluginMeta.folderName}`}
+                                    href={`https://github.com/${gitRemote}/tree/main/${pluginMeta.folderName}`}
                                 />
                             </div>
                         )}
@@ -175,7 +173,6 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                             users={authors}
                             guildId={undefined}
                             renderIcon={false}
-                            max={6}
                             showDefaultAvatarsForNullUsers
                             renderMoreUsers={renderMoreUsers}
                             renderUser={(user: User) => (
@@ -210,7 +207,29 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                     {renderSettings()}
                 </Forms.FormSection>
             </ModalContent>
-        </ModalRoot>
+            {
+                hasSettings && <ModalFooter>
+                    <Flex flexDirection="column" style={{ width: "100%" }}>
+                        <Flex style={{ justifyContent: "space-between" }}>
+                            <Tooltip text="Reset to default settings" shouldShow={!isObjectEmpty(pluginSettings)}>
+                                {({ onMouseEnter, onMouseLeave }) => (
+                                    <Button
+                                        className="button-danger-background"
+                                        size={Button.Sizes.SMALL}
+                                        color={Button.Colors.BRAND}
+                                        onClick={handleResetClick}
+                                        onMouseEnter={onMouseEnter}
+                                        onMouseLeave={onMouseLeave}
+                                    >
+                                        Reset
+                                    </Button>
+                                )}
+                            </Tooltip>
+                        </Flex>
+                    </Flex>
+                </ModalFooter>
+            }
+        </ModalRoot >
     );
 }
 
@@ -221,5 +240,134 @@ export function openPluginModal(plugin: Plugin, onRestartNeeded?: (pluginName: s
             plugin={plugin}
             onRestartNeeded={(key: string) => onRestartNeeded?.(plugin.name, key)}
         />
+    ));
+}
+
+function resetSettings(plugin: Plugin, warningModalProps?: ModalProps, pluginModalProps?: ModalProps, onRestartNeeded?: (pluginName: string) => void) {
+    const defaultSettings = plugin.settings?.def;
+    const pluginName = plugin.name;
+
+    if (!defaultSettings) {
+        console.error(`No default settings found for ${pluginName}`);
+        return;
+    }
+
+    const newSettings: Record<string, any> = {};
+    let restartNeeded = false;
+
+    for (const key in defaultSettings) {
+        if (key === "enabled") continue;
+
+        const setting = defaultSettings[key];
+        setting.type = setting.type ?? OptionType.STRING;
+
+        if (setting.type === OptionType.STRING) {
+            newSettings[key] = setting.default !== undefined && setting.default !== "" ? setting.default : "";
+        } else if ("default" in setting && setting.default !== undefined) {
+            newSettings[key] = setting.default;
+        }
+
+        if (setting?.restartNeeded) {
+            restartNeeded = true;
+        }
+    }
+
+
+    const currentSettings = plugin.settings?.store;
+    if (currentSettings) {
+        Object.assign(currentSettings, newSettings);
+    }
+
+    if (restartNeeded) {
+        onRestartNeeded?.(plugin.name);
+    }
+
+    Toasts.show({
+        message: `Settings for ${pluginName} have been reset.`,
+        id: Toasts.genId(),
+        type: Toasts.Type.SUCCESS,
+        options: {
+            position: Toasts.Position.TOP
+        }
+    });
+
+    warningModalProps?.onClose();
+    pluginModalProps?.onClose();
+}
+
+export function openWarningModal(plugin: Plugin, pluginModalProps: ModalProps, onRestartNeeded?: (pluginName: string) => void) {
+    if (Settings.ignoreResetWarning) return resetSettings(plugin, pluginModalProps, pluginModalProps, onRestartNeeded);
+
+    openModal(warningModalProps => (
+        <ModalRoot
+            {...warningModalProps}
+            size={ModalSize.SMALL}
+            className="vc-text-selectable"
+            transitionState={warningModalProps.transitionState}
+        >
+            <ModalHeader separator={false}>
+                <Text className="text-danger">Dangerous Action</Text>
+                <ModalCloseButton onClick={warningModalProps.onClose} className="vc-modal-close-button" />
+            </ModalHeader>
+            <ModalContent>
+                <Forms.FormSection>
+                    <Flex className="vc-warning-info">
+                        <img
+                            src="https://media.tenor.com/hapjxf8y50YAAAAi/stop-sign.gif"
+                            alt="Warning"
+                        />
+                        <Text className="text-normal">
+                            You are about to reset all settings for <strong>{plugin.name}</strong> to their default values.
+                        </Text>
+                        <Text className="warning-text">
+                            THIS ACTION IS IRREVERSIBLE!
+                        </Text>
+                        <Text className="text-normal margin-bottom">
+                            If you are certain you want to proceed, click <strong>Confirm Reset</strong>. Otherwise, click <strong>Cancel</strong>.
+                        </Text>
+                    </Flex>
+                </Forms.FormSection>
+            </ModalContent>
+            <ModalFooter className="modal-footer">
+                <Flex className="button-container">
+                    <Button
+                        size={Button.Sizes.SMALL}
+                        color={Button.Colors.PRIMARY}
+                        onClick={warningModalProps.onClose}
+                        look={Button.Looks.LINK}
+                    >
+                        Cancel
+                    </Button>
+                    <Flex className="button-group">
+                        {!Settings.ignoreResetWarning && (
+                            <Button
+                                size={Button.Sizes.SMALL}
+                                className="button-danger-background"
+                                onClick={() => {
+                                    Settings.ignoreResetWarning = true;
+                                }}
+                            >
+                                Disable Warning Forever
+                            </Button>
+                        )}
+                        <Tooltip text="This action cannot be undone. Are you sure?" shouldShow={true}>
+                            {({ onMouseEnter, onMouseLeave }) => (
+                                <Button
+                                    size={Button.Sizes.SMALL}
+                                    onClick={() => {
+                                        resetSettings(plugin, pluginModalProps, pluginModalProps, onRestartNeeded);
+                                    }}
+                                    onMouseEnter={onMouseEnter}
+                                    onMouseLeave={onMouseLeave}
+                                    className="button-danger-background-no-margin"
+                                >
+                                    Confirm Reset
+                                </Button>
+                            )}
+                        </Tooltip>
+                    </Flex>
+                </Flex>
+            </ModalFooter>
+        </ModalRoot>
     ));
 }

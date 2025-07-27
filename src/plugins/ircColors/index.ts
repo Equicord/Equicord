@@ -16,7 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, Settings } from "@api/Settings";
+import { getCustomColorString } from "@equicordplugins/customUserColors";
 import { hash as h64 } from "@intrnl/xxhash64";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -108,7 +109,11 @@ export default definePlugin({
         const colorString = context?.author?.colorString;
         const color = calculateNameColorForUser(userId);
 
-        // Color preview in role settings
+        if (Settings.plugins.CustomUserColors.enabled) {
+            const customColor = getCustomColorString(userId, true);
+            if (customColor) return customColor;
+        }
+
         if (context?.message?.channel_id === "1337" && userId === "313337")
             return colorString;
 
@@ -126,6 +131,11 @@ export default definePlugin({
             const id = context?.user?.id;
             const colorString = context?.colorString;
             const color = calculateNameColorForUser(id);
+
+            if (Settings.plugins.CustomUserColors.enabled) {
+                const customColor = getCustomColorString(id, true);
+                if (customColor) return customColor;
+            }
 
             if (settings.store.applyColorOnlyInDms && !context?.channel?.isPrivate()) {
                 return colorString;

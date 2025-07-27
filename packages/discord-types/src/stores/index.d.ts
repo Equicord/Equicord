@@ -14,6 +14,7 @@ export * from "./ThemeStore";
 export * from "./UserProfileStore";
 export * from "./UserStore";
 export * from "./WindowStore";
+export * from "./StickerStore";
 
 /**
  * React hook that returns stateful data for one or more stores

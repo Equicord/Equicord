@@ -29,7 +29,6 @@ import { open, readdir, readFile } from "fs/promises";
 import { join, normalize } from "path";
 
 import { registerCspIpcHandlers } from "./csp/manager";
-import { getThemeInfo, stripBOM, UserThemeHeader } from "./themes";
 import { ALLOWED_PROTOCOLS, QUICKCSS_PATH, SETTINGS_DIR, THEMES_DIR } from "./utils/constants";
 import { makeLinksOpenExternally } from "./utils/externalLinks";
 
@@ -48,21 +47,11 @@ function readCss() {
     return readFile(QUICKCSS_PATH, "utf-8").catch(() => "");
 }
 
-async function listThemes(): Promise<UserThemeHeader[]> {
-    const files = await readdir(THEMES_DIR).catch(() => []);
-
-    const themeInfo: UserThemeHeader[] = [];
-
-    for (const fileName of files) {
-        if (!fileName.endsWith(".css")) continue;
-
-        const data = await getThemeData(fileName).then(stripBOM).catch(() => null);
-        if (data == null) continue;
-
-        themeInfo.push(getThemeInfo(data, fileName));
-    }
-
-    return themeInfo;
+function listThemes(): Promise<{ fileName: string; content: string; }[]> {
+    return readdir(THEMES_DIR)
+        .then(files =>
+            Promise.all(files.map(async fileName => ({ fileName, content: await getThemeData(fileName) }))))
+        .catch(() => []);
 }
 
 function getThemeData(fileName: string) {
@@ -86,12 +75,12 @@ ipcMain.handle(IpcEvents.OPEN_EXTERNAL, (_, url) => {
     shell.openExternal(url);
 });
 
-
 ipcMain.handle(IpcEvents.GET_QUICK_CSS, () => readCss());
 ipcMain.handle(IpcEvents.SET_QUICK_CSS, (_, css) =>
     writeFileSync(QUICKCSS_PATH, css)
 );
 
+ipcMain.handle(IpcEvents.GET_THEMES_DIR, () => THEMES_DIR);
 ipcMain.handle(IpcEvents.GET_THEMES_LIST, () => listThemes());
 ipcMain.handle(IpcEvents.GET_THEME_DATA, (_, fileName) => getThemeData(fileName));
 ipcMain.handle(IpcEvents.GET_THEME_SYSTEM_VALUES, () => ({
@@ -123,7 +112,7 @@ export function initIpc(mainWindow: BrowserWindow) {
 }
 
 ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
-    const title = "Vencord QuickCSS Editor";
+    const title = "Equicord QuickCSS Editor";
     const existingWindow = BrowserWindow.getAllWindows().find(w => w.title === title);
     if (existingWindow && !existingWindow.isDestroyed()) {
         existingWindow.focus();
@@ -135,7 +124,7 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
         autoHideMenuBar: true,
         darkTheme: true,
         webPreferences: {
-            preload: join(__dirname, IS_DISCORD_DESKTOP ? "preload.js" : "vencordDesktopPreload.js"),
+            preload: join(__dirname, "preload.js"),
             contextIsolation: true,
             nodeIntegration: false,
             sandbox: false
