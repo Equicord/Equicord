@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import { ErrorBoundary, openPluginModal } from "@components/index";
-import { Devs } from "@utils/constants";
+import { EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/index";
 import definePlugin, { StartAt } from "@utils/types";
 import { ContextMenuApi, Menu, NavigationRouter } from "@webpack/common";
@@ -737,7 +737,7 @@ function getVideoQuestAcceptedButtonText(quest: Quest): string {
 export default definePlugin({
     name: "Questify",
     description: "Enhance your Quest experience with a suite of features, or disable them entirely if they're not your thing.",
-    authors: [Devs.Etorix],
+    authors: [EquicordDevs.Etorix],
     dependencies: ["ServerListAPI"],
     startAt: StartAt.Init, // Needed in order to beat Read All Messages to inserting above the server list.
     settings,
