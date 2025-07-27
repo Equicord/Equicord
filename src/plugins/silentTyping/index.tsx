@@ -21,7 +21,7 @@ import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { openPluginModal } from "@components/index";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { ChannelStore, FluxDispatcher, Menu, React } from "@webpack/common";
@@ -286,7 +286,7 @@ function shouldHideMembersListTypingIndicators(): boolean {
 
 export default definePlugin({
     name: "SilentTyping",
-    authors: [Devs.Ven, Devs.Rini, Devs.ImBanana, Devs.Etorix],
+    authors: [Devs.Ven, Devs.Rini, Devs.ImBanana, EquicordDevs.Etorix],
     description: "Hide your typing indicator from chat.",
     dependencies: ["ChatInputButtonAPI"],
     settings,
