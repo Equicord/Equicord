@@ -24,6 +24,7 @@ import { MessageAccessoryFactory } from "@api/MessageAccessories";
 import { MessageDecorationFactory } from "@api/MessageDecorations";
 import { MessageClickListener, MessageEditListener, MessageSendListener } from "@api/MessageEvents";
 import { MessagePopoverButtonFactory } from "@api/MessagePopover";
+import { NicknameIconFactory } from "@api/NicknameIcons";
 import { Command, FluxEvents } from "@vencord/discord-types";
 import { ReactNode } from "react";
 
@@ -170,7 +171,7 @@ export interface PluginDef {
      */
     managedStyle?: string;
 
-    userProfileBadge?: ProfileBadge;
+    userProfileBadges?: ProfileBadge[];
 
     onMessageClick?: MessageClickListener;
     onBeforeMessageSend?: MessageSendListener;
@@ -181,6 +182,7 @@ export interface PluginDef {
     renderMessageDecoration?: MessageDecorationFactory;
 
     renderMemberListDecorator?: MemberListDecoratorFactory;
+    renderNicknameIcon?: NicknameIconFactory;
 
     renderChatBarButton?: ChatBarButtonFactory;
 }
@@ -223,7 +225,7 @@ export type SettingsChecks<D extends SettingsDefinition> = {
 };
 
 export type PluginSettingDef =
-    (PluginSettingCustomDef & Pick<PluginSettingCommon, "onChange">) |
+    (PluginSettingCommon & PluginSettingCustomDef & Pick<PluginSettingCommon, "onChange">) |
     (PluginSettingComponentDef & Omit<PluginSettingCommon, "description" | "placeholder">) | ((
         | PluginSettingStringDef
         | PluginSettingNumberDef

@@ -16,9 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { DataStore } from "@api/index";
 import { showNotification } from "@api/Notifications";
 import { PlainSettings, Settings } from "@api/Settings";
-import { moment, Toasts } from "@webpack/common";
+import { moment, SettingsRouter, Toasts } from "@webpack/common";
 import { deflateSync, inflateSync } from "fflate";
 
 import { checkCloudUrlCsp, getCloudAuth, getCloudUrl } from "./cloud";
@@ -38,18 +39,20 @@ export async function importSettings(data: string) {
         Object.assign(PlainSettings, parsed.settings);
         await VencordNative.settings.set(parsed.settings);
         await VencordNative.quickCss.set(parsed.quickCss);
+        if (parsed.dataStore) await DataStore.setMany(parsed.dataStore);
     } else
-        throw new Error("Invalid Settings. Is this even a Vencord Settings file?");
+        throw new Error("Invalid Settings. Is this even an Equicord Settings file?");
 }
 
 export async function exportSettings({ minify }: { minify?: boolean; } = {}) {
     const settings = VencordNative.settings.get();
     const quickCss = await VencordNative.quickCss.get();
-    return JSON.stringify({ settings, quickCss }, null, minify ? undefined : 4);
+    const dataStore = await DataStore.entries();
+    return JSON.stringify({ settings, quickCss, dataStore }, null, minify ? undefined : 4);
 }
 
 export async function downloadSettingsBackup() {
-    const filename = `vencord-settings-backup-${moment().format("YYYY-MM-DD")}.json`;
+    const filename = `equicord-settings-backup-${moment().format("YYYY-MM-DD")}.json`;
     const backup = await exportSettings();
     const data = new TextEncoder().encode(backup);
 
@@ -77,7 +80,7 @@ export async function uploadSettingsBackup(showToast = true): Promise<void> {
     if (IS_DISCORD_DESKTOP) {
         const [file] = await DiscordNative.fileManager.openFiles({
             filters: [
-                { name: "Vencord Settings Backup", extensions: ["json"] },
+                { name: "Equicord Settings Backup", extensions: ["json"] },
                 { name: "all", extensions: ["*"] }
             ]
         });
@@ -172,6 +175,19 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
                 "If-None-Match": Settings.cloud.settingsSyncVersion.toString()
             },
         });
+
+        if (res.status === 401) {
+            // User switched to an account that isn't connected to cloud
+            showNotification({
+                title: "Cloud Settings",
+                body: "Cloud sync was disabled because this account isn't connected to the Vencloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
+                color: "var(--yellow-360)",
+                onClick: () => SettingsRouter.open("VencordCloud")
+            });
+            // Disable cloud sync globally
+            Settings.cloud.authenticated = false;
+            return false;
+        }
 
         if (res.status === 404) {
             cloudSettingsLogger.info("No settings on the cloud");

@@ -20,16 +20,15 @@ import { fetchBuffer, fetchJson } from "@main/utils/http";
 import { IpcEvents } from "@shared/IpcEvents";
 import { VENCORD_USER_AGENT } from "@shared/vencordUserAgent";
 import { ipcMain } from "electron";
-import { writeFile } from "fs/promises";
-import { join } from "path";
+import { writeFileSync as originalWriteFileSync } from "original-fs";
 
 import gitHash from "~git-hash";
 import gitRemote from "~git-remote";
 
-import { serializeErrors, VENCORD_FILES } from "./common";
+import { ASAR_FILE, serializeErrors } from "./common";
 
 const API_BASE = `https://api.github.com/repos/${gitRemote}`;
-let PendingUpdates = [] as [string, string][];
+let PendingUpdate: string | null = null;
 
 async function githubGet<T = any>(endpoint: string) {
     return fetchJson<T>(API_BASE + endpoint, {
@@ -63,26 +62,21 @@ async function fetchUpdates() {
     if (hash === gitHash)
         return false;
 
-    data.assets.forEach(({ name, browser_download_url }) => {
-        if (VENCORD_FILES.some(s => name.startsWith(s))) {
-            PendingUpdates.push([name, browser_download_url]);
-        }
-    });
+
+    const asset = data.assets.find(a => a.name === ASAR_FILE);
+    PendingUpdate = asset.browser_download_url;
 
     return true;
 }
 
 async function applyUpdates() {
-    const fileContents = await Promise.all(PendingUpdates.map(async ([name, url]) => {
-        const contents = await fetchBuffer(url);
-        return [join(__dirname, name), contents] as const;
-    }));
+    if (!PendingUpdate) return true;
 
-    await Promise.all(fileContents.map(async ([filename, contents]) =>
-        writeFile(filename, contents))
-    );
+    const data = await fetchBuffer(PendingUpdate);
+    originalWriteFileSync(__dirname, data);
 
-    PendingUpdates = [];
+    PendingUpdate = null;
+
     return true;
 }
 

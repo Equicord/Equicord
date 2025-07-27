@@ -57,15 +57,16 @@ async function toggle(isEnabled: boolean) {
 async function initThemes() {
     themesStyle ??= createStyle("vencord-themes");
 
-    const { themeLinks, enabledThemes } = Settings;
+    const { enabledThemeLinks, enabledThemes } = Settings;
 
+    const enabledlinks: string[] = [...enabledThemeLinks];
     // "darker" and "midnight" both count as dark
     // This function is first called on DOMContentLoaded, so ThemeStore may not have been loaded yet
     const activeTheme = ThemeStore == null
         ? undefined
         : ThemeStore.theme === "light" ? "light" : "dark";
 
-    const links = themeLinks
+    const links = enabledlinks
         .map(rawLink => {
             const match = /^@(light|dark) (.*)/.exec(rawLink);
             if (!match) return rawLink;
@@ -99,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggle(Settings.useQuickCss);
     SettingsStore.addChangeListener("useQuickCss", toggle);
 
-    SettingsStore.addChangeListener("themeLinks", initThemes);
+    SettingsStore.addChangeListener("enabledThemeLinks", initThemes);
     SettingsStore.addChangeListener("enabledThemes", initThemes);
 
     if (!IS_WEB) {
