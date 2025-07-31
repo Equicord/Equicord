@@ -1116,6 +1116,10 @@ export const EquicordDevs = Object.freeze({
     VillainsRule: {
         name: "VillainsRule",
         id: 0n
+    },
+    Johannes7k75: {
+        name: "Johannes7k75",
+        id: 587701169103699994n
     }
 } satisfies Record<string, Dev>);
 

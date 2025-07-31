@@ -1,0 +1,83 @@
+.visual-refresh {
+    #vc-ytm-player {
+        padding: 12px;
+        background: var(--bg-overlay-floating, var(--background-base-low, var(--background-base-lower-alt)));
+        margin: 0;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .vc-ytm-song-info-prefix {
+        display: none;
+    }
+
+    .vc-ytm-artist,
+    .vc-ytm-album {
+        color: var(--header-primary);
+    }
+
+    .vc-ytm-secondary-song-info {
+        font-size: 12px;
+    }
+
+    #vc-ytm-progress-bar {
+        position: relative;
+        color: var(--text-default);
+        width: 100%;
+    }
+
+    #vc-ytm-progress-bar>[class^="slider"] {
+        flex-grow: 1;
+        width: 100%;
+        padding: 0 !important;
+    }
+
+    #vc-ytm-progress-bar>[class^="slider"] [class^="bar"] {
+        height: 3px !important;
+        top: calc(12px - 4px / 2 + var(--bar-offset));
+    }
+
+    #vc-ytm-progress-bar>[class^="slider"] [class^="barFill"] {
+        background-image: var(--vc-ytm-slider-gradient);
+    }
+
+    #vc-ytm-progress-bar>[class^="slider"]:hover [class^="barFill"] {
+        background-image: var(--vc-ytm-slider-gradient);
+    }
+
+    #vc-ytm-progress-bar>[class^="slider"] [class^="grabber"] {
+        background-color: var(--vc-ytm-slider-grabber);
+        /* background-color: var(--interactive-active); */
+        width: 12px !important;
+        height: 12px !important;
+        margin-top: calc(13px/-2 + var(--bar-offset)/2);
+        margin-left: -0.5px;
+        border: unset;
+    }
+
+    .vc-ytm-progress-time {
+        margin-top: 8px;
+        font-family: var(--font-code);
+    }
+
+    .vc-ytm-button-row {
+        margin-top: 14px;
+    }
+
+    .vc-ytm-button {
+        margin: 0 2px;
+        border-radius: var(--radius-sm);
+    }
+
+    .vc-ytm-repeat-context,
+    .vc-ytm-repeat-track,
+    .vc-ytm-shuffle-on {
+        background-color: var(--vc-ytm-red-90);
+    }
+
+    .vc-ytm-repeat-context:hover,
+    .vc-ytm-repeat-track:hover,
+    .vc-ytm-shuffle-on:hover {
+        background-color: var(--vc-spotify-red-80);
+    }
+}
