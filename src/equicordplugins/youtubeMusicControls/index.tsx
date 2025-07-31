@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Settings } from "@api/Settings";
+import { definePluginSettings, Settings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 import definePlugin, { OptionType } from "@utils/types";
@@ -29,47 +29,43 @@ function toggleHoverControls(value: boolean) {
     (value ? enableStyle : disableStyle)(hoverOnlyStyle);
 }
 
+function isUrlValid(value: string) {
+    try {
+        const url = new URL(value);
+        return url.protocol !== "" && url.host !== "";
+    } catch (e) {
+        return false;
+    }
+}
+
+const settings = definePluginSettings({
+    hoverControls: {
+        description: "Show controls on hover",
+        type: OptionType.BOOLEAN,
+        default: false,
+        onChange: v => toggleHoverControls(v)
+    },
+    websocketUrl: {
+        description: "The websocket url",
+        type: OptionType.STRING,
+        placeholder: "ws://localhost:26539",
+        default: "ws://localhost:26539",
+        isValid: isUrlValid,
+    },
+    apiServerUrl: {
+        description: "The api server url",
+        type: OptionType.STRING,
+        placeholder: "http://localhost:26538",
+        default: "http://localhost:26538",
+        isValid: isUrlValid,
+    }
+});
+
 export default definePlugin({
     name: "YouTubeMusicControls",
     description: "Adds a YouTube Music player above the account panel",
     authors: [EquicordDevs.Johannes7k75],
-    options: {
-        hoverControls: {
-            description: "Show controls on hover",
-            type: OptionType.BOOLEAN,
-            default: false,
-            onChange: v => toggleHoverControls(v)
-        },
-        websocketUrl: {
-            description: "The websocket url",
-            type: OptionType.STRING,
-            placeholder: "ws://localhost:26539",
-            default: "ws://localhost:26539",
-            isValid(value) {
-                try {
-                    const url = new URL(value);
-                    return url.protocol !== "" && url.host !== "";
-                } catch (e) {
-                    return false;
-                }
-            },
-        },
-        apiServerUrl: {
-            description: "The api server url",
-            type: OptionType.STRING,
-            placeholder: "http://localhost:26538",
-            default: "http://localhost:26538",
-            isValid(value) {
-                if (value == "") return true;
-                try {
-                    const url = new URL(value);
-                    return url.protocol !== "" && url.host !== "";
-                } catch (e) {
-                    return false;
-                }
-            },
-        }
-    },
+    settings,
     patches: [
         {
             find: "this.isCopiedStreakGodlike",
