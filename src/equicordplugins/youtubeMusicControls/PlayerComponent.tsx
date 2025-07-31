@@ -17,7 +17,6 @@
 */
 
 import "./ytmStyles.css";
-import "./visualRefreshYtmStyles.css";
 
 import { ImageIcon, LinkIcon, OpenExternalIcon } from "@components/Icons";
 import { debounce } from "@shared/debounce";
