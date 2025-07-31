@@ -6,7 +6,8 @@
     border-top-right-radius: 10px;
 
     --vc-ytm-slider-gradient: linear-gradient(to right, #f03 80%, #ff2791 100%);
-    --vc-ytm-slider-grabber: #ff0033;
+    --vc-ytm-slider-grabber: #f03;
+    
     /* so custom themes can easily change it */
     --vc-ytm-red-90: color-mix(in hsl, var(--vc-ytm-slider-grabber), transparent 90%);
     --vc-ytm-red-80: color-mix(in hsl, var(--vc-ytm-slider-grabber), transparent 80%);
@@ -54,6 +55,7 @@
 
 #vc-ytm-progress-bar>[class^="slider"] [class^="grabber"] {
     background-color: var(--vc-ytm-slider-grabber);
+    
     /* background-color: var(--interactive-active); */
     width: 12px !important;
     height: 12px !important;
@@ -174,13 +176,6 @@
     text-overflow: ellipsis;
 }
 
-.vc-ytm-artist,
-.vc-ytm-album {
-    font-size: 12px;
-    text-decoration: none;
-    color: var(--header-secondary);
-}
-
 .vc-ytm-artist[role="link"]:hover,
 #vc-ytm-album-title[role="link"]:hover,
 #vc-ytm-song-title[role="link"]:hover {
@@ -200,12 +195,6 @@
 
 #vc-ytm-progress-text {
     margin: 0;
-}
-
-.vc-ytm-progress-time {
-    font-size: 12px;
-    top: 10px;
-    position: absolute;
 }
 
 .vc-ytm-time-left {
