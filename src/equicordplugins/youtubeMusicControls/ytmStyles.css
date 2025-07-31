@@ -73,6 +73,9 @@
 .vc-ytm-progress-time {
     margin-top: 8px;
     font-family: var(--font-code);
+    font-size: 12px;
+    top: 10px;
+    position: absolute;
 }
 
 .vc-ytm-button-row {
@@ -194,12 +197,6 @@
 
 #vc-ytm-progress-text {
     margin: 0;
-}
-
-.vc-ytm-progress-time {
-    font-size: 12px;
-    top: 10px;
-    position: absolute;
 }
 
 .vc-ytm-time-left {
