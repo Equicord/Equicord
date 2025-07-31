@@ -60,7 +60,7 @@ export default definePlugin({
             placeholder: "http://localhost:26538",
             default: "http://localhost:26538",
             isValid(value) {
-                if (value == "") return true;
+                if (value === "") return true;
                 try {
                     const url = new URL(value);
                     return url.protocol !== "" && url.host !== "";
