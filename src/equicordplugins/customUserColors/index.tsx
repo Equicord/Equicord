@@ -127,7 +127,7 @@ export default definePlugin({
         {
             find: '"Reply Chain Nudge")',
             replacement: {
-                match: /(,color:)(\i),/,
+                match: /(className:.{0,15},colorString:)(\i),/,
                 replace: "$1$self.colorInReplyingTo(arguments[0]) ?? $2,",
             },
         },
