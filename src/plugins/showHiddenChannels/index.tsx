@@ -188,13 +188,13 @@ export default definePlugin({
                 // Add the hidden eye icon if the channel is hidden
                 {
                     predicate: () => settings.store.showMode === ShowMode.EyeIconRight,
-                    match: /\.name,{.{0,140}\.children.+?:null(?<=,channel:(\i).+?)/,
+                    match: /\.Children\.count.+?:null(?<=,channel:(\i).+?)/,
                     replace: (m, channel) => `${m},$self.isHiddenChannel(${channel})?$self.EyeRightIcon():null`
                 },
                 // Add the hidden lock icon if the channel is hidden
                 {
                     predicate: () => settings.store.showMode === ShowMode.LockIconRight,
-                    match: /\.name,{.{0,140}\.children.+?:null(?<=,channel:(\i).+?)/,
+                    match: /\.Children\.count.+?:null(?<=,channel:(\i).+?)/,
                     replace: (m, channel) => `${m},$self.isHiddenChannel(${channel})?$self.LockRightIcon():null`
                 },
             ]
@@ -334,8 +334,8 @@ export default definePlugin({
                 },
                 {
                     // Include the @everyone role in the allowed roles list for Hidden Channels
-                    match: /sortBy.{0,30}?\.filter\(\i=>(?<=channel:(\i).+?)/,
-                    replace: (m, channel) => `${m}$self.isHiddenChannel(${channel})?true:`
+                    match: /getSortedRoles.+?\.filter\(\i=>(?=!)/,
+                    replace: m => `${m}$self.isHiddenChannel(arguments[0].channel)?true:`
                 },
                 {
                     // If the @everyone role has the required permissions, make the array only contain it
