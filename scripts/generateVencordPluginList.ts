@@ -48,7 +48,6 @@ interface PluginData {
     target: "discordDesktop" | "vesktop" | "equibop" | "desktop" | "web" | "dev";
     filePath: string;
 }
-
 const devs = {} as Record<string, Dev>;
 const equicordDevs = {} as Record<string, Dev>;
 
@@ -222,7 +221,7 @@ async function parseFile(fileName: string) {
 
         const target = getPluginTarget(fileName);
         if (target) {
-            if (!["web", "discordDesktop", "vencordDesktop", "equibop", "desktop", "dev"].includes(target)) throw fail(`invalid target ${target}`);
+            if (!["web", "discordDesktop", "vesktop", "equibop", "desktop", "dev"].includes(target)) throw fail(`invalid target ${target}`);
             data.target = target as any;
         }
 
@@ -230,7 +229,7 @@ async function parseFile(fileName: string) {
             .split(sep)
             .join(posixSep)
             .replace(/\/index\.([jt]sx?)$/, "")
-            .replace(/^src\/equicordplugins\//, "");
+            .replace(/^src\/plugins\//, "");
 
         return [data] as const;
     }
@@ -264,7 +263,7 @@ function isPluginFile({ name }: { name: string; }) {
 
     const plugins = [] as PluginData[];
 
-    await Promise.all(["src/equicordplugins"].flatMap(dir =>
+    await Promise.all(["src/plugins", "src/plugins/_core"].flatMap(dir =>
         readdirSync(dir, { withFileTypes: true })
             .filter(isPluginFile)
             .map(async dirent => {
