@@ -65,7 +65,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "YouTubeMusicControls",
-    description: "Adds a YouTube Music player above the account panel",
+    description: "Adds a YouTube Music player above the account panel, requires `https://github.com/th-ch/youtube-music` with an custom websocket plugin. See Readme of ths Plugin for instructions",
     authors: [EquicordDevs.Johannes7k75],
     settings,
     patches: [
