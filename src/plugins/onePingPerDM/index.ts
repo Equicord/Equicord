@@ -43,15 +43,6 @@ const settings = definePluginSettings({
     }
 });
 
-
-let _ignoreList: string[] | null = null;
-function getIgnoreList(): string[] {
-    if (_ignoreList) return _ignoreList;
-    _ignoreList = settings.store.ignoreUsers.split(", ").filter(Boolean);
-    return _ignoreList;
-}
-
-
 export default definePlugin({
     name: "OnePingPerDM",
     description: "If unread messages are sent by a user in DMs multiple times, you'll only receive one audio ping. Read the messages to reset the limit",
@@ -69,7 +60,8 @@ export default definePlugin({
         }]
     }],
     isPrivateChannelRead(message: MessageJSON) {
-        if (getIgnoreList().includes(message.author.id)) return true;
+        const ignoreList = settings.store.ignoreUsers.split(", ").filter(Boolean)
+        if (ignoreList.includes(message.author.id)) return true;
         const channelType = ChannelStore.getChannel(message.channel_id)?.type;
         if (
             (channelType !== ChannelType.DM && channelType !== ChannelType.GROUP_DM) ||
