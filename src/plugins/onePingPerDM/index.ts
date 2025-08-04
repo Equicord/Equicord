@@ -1,3 +1,9 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2023 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -9,9 +15,6 @@ const enum ChannelType {
     GROUP_DM = 3
 }
 
-// ------------------------------------------------------------------
-// 1.  Add the new setting
-// ------------------------------------------------------------------
 const settings = definePluginSettings({
     channelToAffect: {
         type: OptionType.SELECT,
