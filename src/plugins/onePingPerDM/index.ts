@@ -1,9 +1,3 @@
-/*
- * Vencord, a Discord client mod
- * Copyright (c) 2023 Vendicated and contributors
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -15,6 +9,9 @@ const enum ChannelType {
     GROUP_DM = 3
 }
 
+// ------------------------------------------------------------------
+// 1.  Add the new setting
+// ------------------------------------------------------------------
 const settings = definePluginSettings({
     channelToAffect: {
         type: OptionType.SELECT,
@@ -35,7 +32,22 @@ const settings = definePluginSettings({
         description: "Receive audio pings for @everyone and @here in group DMs",
         default: false,
     },
+    ignoreUsers: {
+        type: OptionType.STRING,
+        description: "User IDs (comma + space) whose pings should NEVER be throttled",
+        restartNeeded: true,
+        default: ""
+    }
 });
+
+
+let _ignoreList: string[] | null = null;
+function getIgnoreList(): string[] {
+    if (_ignoreList) return _ignoreList;
+    _ignoreList = settings.store.ignoreUsers.split(", ").filter(Boolean);
+    return _ignoreList;
+}
+
 
 export default definePlugin({
     name: "OnePingPerDM",
@@ -54,6 +66,7 @@ export default definePlugin({
         }]
     }],
     isPrivateChannelRead(message: MessageJSON) {
+        if (getIgnoreList().includes(message.author.id)) return true;
         const channelType = ChannelStore.getChannel(message.channel_id)?.type;
         if (
             (channelType !== ChannelType.DM && channelType !== ChannelType.GROUP_DM) ||
