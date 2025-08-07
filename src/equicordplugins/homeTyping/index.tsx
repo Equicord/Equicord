@@ -7,7 +7,6 @@
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
-import { UserStore, useStateFromStores } from "@webpack/common";
 import { TypingStore, UserStore, useStateFromStores } from "@webpack/common";
 
 const ThreeDots = findComponentByCodeLazy(".dots,", "dotRadius:");
