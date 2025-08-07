@@ -7,7 +7,7 @@
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
-import { useStateFromStores } from "@webpack/common";
+import { UserStore, useStateFromStores } from "@webpack/common";
 
 const ThreeDots = findComponentByCodeLazy(".dots,", "dotRadius:");
 
@@ -23,7 +23,11 @@ export default definePlugin({
         return <ThreeDots dotRadius={3} themed={true} />;
     },
     isTyping() {
-        return useStateFromStores([TypingStore], () => PrivateChannelSortStore.getPrivateChannelIds().some(id => Object.keys(TypingStore.getTypingUsers(id)).length > 0));
+        return useStateFromStores([TypingStore], () =>
+            PrivateChannelSortStore.getPrivateChannelIds().some(id =>
+                Object.keys(TypingStore.getTypingUsers(id)).some(userId => userId !== UserStore.getCurrentUser().id)
+            )
+        );
     },
     patches: [
         {
