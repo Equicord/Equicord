@@ -1032,13 +1032,8 @@ export default definePlugin({
             group: true,
             replacement: [
                 {
-                    // Initial select drop down for picking a platform.
-                    match: /(platformSelectorPrimary.{0,130}?select:)(\i)(,serialize:\i=>{)/,
-                    replace: "$1(platform)=>{$self.processQuestForAutoComplete(arguments[0].quest),$2(platform)}$3"
-                },
-                {
-                    // Subsequent select drop down for changing the platform.
-                    match: /(platformSelectorSecondary.{0,260}?select:)(\i)(,serialize:\i=>{)/,
+                    // Initial and subsequent select drop down for picking or changing a platform.
+                    match: /(#{intl::QUEST_MULTIPLATFORM_SELECT_SUBTITLE}.{0,50}select:)(\i)(,serialize:\i=>{)/g,
                     replace: "$1(platform)=>{$self.processQuestForAutoComplete(arguments[0].quest),$2(platform)}$3"
                 },
                 {
