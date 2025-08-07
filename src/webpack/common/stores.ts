@@ -31,8 +31,6 @@ export let MessageStore: Omit<t.MessageStore, "getMessages"> & GenericStore & {
     getMessages(chanId: string): any;
 };
 
-// TODO: The correct name for this is ChannelActionCreators and it has already been exported again from utils. Remove this export once enough time has passed
-export const PrivateChannelsStore = findByPropsLazy("openPrivateChannel");
 export let PermissionStore: GenericStore;
 export let GuildChannelStore: GenericStore;
 export let ReadStateStore: GenericStore;
@@ -43,12 +41,13 @@ export let GuildStore: t.GuildStore;
 export let GuildRoleStore: t.GuildRoleStore;
 export let GuildMemberStore: t.GuildMemberStore;
 export let UserStore: t.UserStore;
+export let AuthenticationStore: t.AuthenticationStore;
 export let UserProfileStore: t.UserProfileStore;
 export let SelectedChannelStore: t.SelectedChannelStore;
 export let SelectedGuildStore: t.SelectedGuildStore;
 export let ChannelStore: t.ChannelStore;
+export let TypingStore: t.TypingStore;
 export let RelationshipStore: t.RelationshipStore;
-export let TypingStore: GenericStore;
 
 export let EmojiStore: t.EmojiStore;
 export let StickerStore: t.StickerStore;
@@ -56,11 +55,13 @@ export let ThemeStore: t.ThemeStore;
 export let WindowStore: t.WindowStore;
 export let DraftStore: t.DraftStore;
 
+
 /**
  * @see jsdoc of {@link t.useStateFromStores}
  */
 export const useStateFromStores: t.useStateFromStores = findByCodeLazy("useStateFromStores");
 
+waitForStore("AuthenticationStore", s => AuthenticationStore = s);
 waitForStore("DraftStore", s => DraftStore = s);
 waitForStore("UserStore", s => UserStore = s);
 waitForStore("UserProfileStore", m => UserProfileStore = m);

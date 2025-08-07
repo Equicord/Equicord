@@ -85,7 +85,7 @@ export default definePlugin({
             find: "referencedUsernameProfile,referencedAvatarProfile",
             replacement: [
                 {
-                    match: /CUSTOM_GIFT.*?=(?=\(0,\i.jsx\)\(\i.\i\i)/,
+                    match: /(?=\(0,\i.jsx\)\(\i.\i,\{offset)/,
                     replace: "$&!$self.isReplyToBlocked(arguments[0].message)&&",
                 }
             ],
@@ -127,7 +127,7 @@ export default definePlugin({
 
             const replyMessage = MessageStore.getMessage(messageReference.channel_id, messageReference.message_id);
 
-            return replyMessage ? this.isBlocked(replyMessage) : false;
+            return replyMessage ? this.shouldIgnoreMessage(replyMessage) : false;
         } catch (e) {
             new Logger("NoBlockedMessages").error("Failed to check if referenced message is blocked:", e);
         }

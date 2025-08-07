@@ -36,8 +36,8 @@ export default definePlugin({
             find: "#{intl::MESSAGE_UTILITIES_A11Y_LABEL}",
             replacement: [
                 {
-                    match: /isExpanded:\i&&(.+?),/,
-                    replace: "isExpanded:$1,"
+                    match: /(?<=(\i)=)\i(?=&&.+?isExpanded:\1)/,
+                    replace: "true"
                 },
                 {
                     predicate: () => settings.store.noShiftDelete,
