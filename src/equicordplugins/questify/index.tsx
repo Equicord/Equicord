@@ -1019,7 +1019,7 @@ export default definePlugin({
                 },
                 {
                     // Start Quest
-                    match: /(onClick:.{0,10}?{)(.{0,5}0,\i.\i\)\((\i))/,
+                    match: /(onClick:.{0,10}?{)(.{0,5}?0,\i.\i\)\((\i))/,
                     replace: "$1const questifyContinue=$self.processQuestForAutoComplete($3);$2"
                 },
                 {
