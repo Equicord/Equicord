@@ -5,7 +5,7 @@
  */
 
 import { showNotification } from "@api/Notifications";
-import { TidalStore } from "@equicordplugins/tidalContorls/TidalStore";
+import { TidalStore } from "@equicordplugins/tidalControls/TidalStore";
 import { proxyLazyWebpack } from "@webpack";
 import { Flux, FluxDispatcher } from "@webpack/common";
 

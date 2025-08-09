@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { TidalStore, Track as TidalTrack } from "@equicordplugins/tidalContorls/TidalStore";
+import { TidalStore, Track as TidalTrack } from "@equicordplugins/tidalControls/TidalStore";
 import { ModalContent, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
 import { Text } from "@webpack/common";
 

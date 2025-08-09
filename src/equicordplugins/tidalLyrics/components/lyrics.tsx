@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { TidalStore } from "@equicordplugins/tidalContorls/TidalStore";
+import { TidalStore } from "@equicordplugins/tidalControls/TidalStore";
 import { openModal } from "@utils/modal";
 import { ContextMenuApi, Text, TooltipContainer, useEffect, useState, useStateFromStores } from "@webpack/common";
 

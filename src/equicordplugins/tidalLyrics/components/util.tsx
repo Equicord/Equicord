@@ -5,7 +5,7 @@
  */
 
 import { classNameFactory } from "@api/Styles";
-import { TidalStore } from "@equicordplugins/tidalContorls/TidalStore";
+import { TidalStore } from "@equicordplugins/tidalControls/TidalStore";
 import { findByPropsLazy } from "@webpack";
 import { React, useEffect, useState, useStateFromStores } from "@webpack/common";
 

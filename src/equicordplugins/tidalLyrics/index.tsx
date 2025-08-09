@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { Settings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { TidalPlayer } from "@equicordplugins/tidalContorls/TidalPlayer";
+import { TidalPlayer } from "@equicordplugins/tidalControls/TidalPlayer";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
