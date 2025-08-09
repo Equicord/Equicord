@@ -306,7 +306,7 @@ function getMemberListProfilesReactionsVoiceNameElement(props: memberListProfile
 function getMessageName(props: messageProps): [string | null, JSX.Element | null, string | null] {
     const { hideDefaultAtSign, replies } = settings.use();
     const { message, userOverride, isRepliedMessage, withMentionPrefix } = props;
-    const isWebhook = message.webhookId !== null && !message.interaction;
+    const isWebhook = !!message.webhookId && !message.interaction;
     const channel = ChannelStore.getChannel(message.channel_id) || {};
     const target = userOverride || message.author;
     const user = isWebhook ? target : UserStore.getUser(target.id);
