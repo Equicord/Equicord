@@ -17,6 +17,7 @@ export interface Track {
     elapsedSeconds?: number;
     url?: string;
     album?: string | null;
+    vibrantColor?: string | null;
 }
 
 export interface PlayerState {
@@ -47,6 +48,7 @@ function mapApiResponseToTrack(apiData: any): Track | null {
         url: track.url || null,
         album: track.album?.title || null,
         id: track.id?.toString() || "0",
+        vibrantColor: track.album.vibrantColor || null,
     };
 }
 
@@ -147,7 +149,7 @@ export const TidalStore = proxyLazyWebpack(() => {
         public repeat: Repeat = 0;
         public shuffle = false;
         public volume = 100;
-
+        private playerElement: HTMLElement | null = null;
         public socket = new TidalSocket((message: Message) => {
             if (message.type === "update" && message.all && message.fields) {
                 const apiData = message.fields;
@@ -157,6 +159,15 @@ export const TidalStore = proxyLazyWebpack(() => {
                 if (track) {
                     store.track = { ...track };
                     store.position = (apiData.currentTime || 0);
+                    if (track.vibrantColor) {
+                        if (this.playerElement) {
+                            this.playerElement.style.setProperty("--eq-tdl-slider-gradient", `linear-gradient(to right, ${track.vibrantColor} 80%, #E5E5E5 100%)`);
+                            this.playerElement.style.setProperty("--eq-tdl-slider-grabber", track.vibrantColor);
+                        } else {
+                            this.playerElement = document.querySelector("#eq-tdl-player");
+                            logger.info(this.playerElement ? "Player element found" : "Player element not found");
+                        }
+                    }
                 }
 
                 if (apiData.playing !== undefined) store.isPlaying = apiData.playing;
