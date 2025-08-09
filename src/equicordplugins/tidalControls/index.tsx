@@ -23,6 +23,8 @@ import { Lyrics } from "@equicordplugins/spotifyLyrics/components/lyrics";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Forms, MaskedLink } from "@webpack/common";
+import { Player as SpotifyPlayer } from "@plugins/spotifyControls/PlayerComponent";
+import { Player as YTMPlayer } from "@equicordplugins/youtubeMusicControls/PlayerComponent";
 
 import hoverOnlyStyle from "./hoverOnly.css?managed";
 import { TidalPlayer } from "./TidalPlayer";
@@ -105,7 +107,8 @@ export default definePlugin({
     start: () => toggleHoverControls(Settings.plugins.YouTubeMusicControls.hoverControls),
 
     PanelWrapper({ VencordOriginal, ...props }) {
-        const showTidalControls = Settings.plugins.TidalControls.enabled;
+        const showYTMPlayer = Settings.plugins.YouTubeMusicControls.enabled;
+        const showSpotifyControls = Settings.plugins.SpotifyControls.enabled;
         const showSpotifyLyrics = Settings.plugins.SpotifyLyrics.enabled;
         const LyricsPosition = showSpotifyLyrics ? Settings.plugins.SpotifyLyrics.LyricsPosition : null;
         return (
@@ -118,9 +121,11 @@ export default definePlugin({
                         </div>
                     )}
                 >
-
+                    <TidalPlayer />
+                    
+                    {showYTMPlayer && <YTMPlayer /> }
                     {showSpotifyLyrics && LyricsPosition === "above" && <Lyrics />}
-                    {showTidalControls && <TidalPlayer />}
+                    {showSpotifyControls && <SpotifyPlayer />}
                     {showSpotifyLyrics && LyricsPosition === "below" && <Lyrics />}
                 </ErrorBoundary>
 
