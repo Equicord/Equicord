@@ -8,7 +8,7 @@ import { Logger } from "@utils/Logger";
 import { proxyLazyWebpack } from "@webpack";
 import { Flux, FluxDispatcher } from "@webpack/common";
 
-interface Track {
+export interface Track {
     id: string;
     name: string;
     artist: string;

@@ -1,0 +1,28 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2024 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+import { Track } from "equicordplugins/tidalContorls/TidalStore";
+
+import { EnhancedLyric } from "./types";
+
+
+
+
+export async function getLyrics(track: Track | null): Promise<EnhancedLyric[] | null> {
+    if (!track) return null;
+    if (!track.id) return null;
+    const res = await fetch("https://api.vmohammad.dev/lyrics?tidal_id=" + track.id);
+    if (!res.ok) {
+        console.error("Failed to fetch lyrics", res.status, res.statusText);
+        return null;
+    }
+    const data = await res.json();
+    if (!data || !data.enhancedLyrics || !Array.isArray(data.enhancedLyrics)) {
+        console.error("Invalid lyrics data", data);
+        return null;
+    }
+    return data.enhancedLyrics;
+}
