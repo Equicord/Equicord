@@ -40,7 +40,7 @@ export default definePlugin({
         const showYTMPlayer = Settings.plugins.YouTubeMusicControls.enabled;
         const showSpotifyControls = Settings.plugins.SpotifyControls.enabled;
         const showSpotifyLyrics = Settings.plugins.SpotifyLyrics.enabled;
-        const LyricsPosition = showSpotifyLyrics ? Settings.plugins.SpotifyLyrics.LyricsPosition : null;
+        const SpotifyLyricsPosition = showSpotifyLyrics ? Settings.plugins.SpotifyLyrics.LyricsPosition : null;
         return (
             <>
                 <ErrorBoundary
@@ -56,9 +56,9 @@ export default definePlugin({
                     {LyricsPosition === "below" && <Lyrics />}
 
                     {showYTMPlayer && <YTMPlayer /> }
-                    {showSpotifyLyrics && LyricsPosition === "above" && <SpotifyLyrics />}
+                    {showSpotifyLyrics && SpotifyLyricsPosition === "above" && <SpotifyLyrics />}
                     {showSpotifyControls && <SpotifyPlayer />}
-                    {showSpotifyLyrics && LyricsPosition === "below" && <SpotifyLyrics />}
+                    {showSpotifyLyrics && SpotifyLyricsPosition === "below" && <SpotifyLyrics />}
                 </ErrorBoundary>
 
                 <VencordOriginal {...props} />
