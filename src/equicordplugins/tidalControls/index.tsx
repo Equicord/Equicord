@@ -19,12 +19,12 @@
 import { definePluginSettings, Settings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Lyrics } from "@equicordplugins/spotifyLyrics/components/lyrics";
+import { Lyrics as SpotifyLyrics } from "@equicordplugins/spotifyLyrics/components/lyrics";
+import { Player as SpotifyPlayer } from "@plugins/spotifyControls/PlayerComponent";
+import { Player as YTMPlayer } from "@equicordplugins/youtubeMusicControls/PlayerComponent";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Forms, MaskedLink } from "@webpack/common";
-import { Player as SpotifyPlayer } from "@plugins/spotifyControls/PlayerComponent";
-import { Player as YTMPlayer } from "@equicordplugins/youtubeMusicControls/PlayerComponent";
 
 import hoverOnlyStyle from "./hoverOnly.css?managed";
 import { TidalPlayer } from "./TidalPlayer";
@@ -124,9 +124,9 @@ export default definePlugin({
                     <TidalPlayer />
                     
                     {showYTMPlayer && <YTMPlayer /> }
-                    {showSpotifyLyrics && LyricsPosition === "above" && <Lyrics />}
+                    {showSpotifyLyrics && LyricsPosition === "above" && <SpotifyLyrics />}
                     {showSpotifyControls && <SpotifyPlayer />}
-                    {showSpotifyLyrics && LyricsPosition === "below" && <Lyrics />}
+                    {showSpotifyLyrics && LyricsPosition === "below" && <SpotifyLyrics />}
                 </ErrorBoundary>
 
                 <VencordOriginal {...props} />
