@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { SliderSetting } from "@components/settings/tabs/plugins/components/SliderSetting";
 import { makeRange, OptionType } from "@utils/types";
+import { showToast, Toasts } from "@webpack/common";
 
 import { Lyrics } from "./components/lyrics";
 
@@ -34,6 +35,23 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: true,
     },
+    CustomUrl: {
+        description: "Custom URL for fetching lyrics",
+        type: OptionType.STRING,
+        default: "https://api.vmohammad.dev/",
+        placeholder: "https://api.vmohammad.dev/",
+        onChange: (value: string) => {
+            if (!value.endsWith("/")) {
+                value += "/";
+            }
+            if (URL.canParse(value)) {
+                settings.store.CustomUrl = value;
+            } else {
+                showToast("Invalid URL format for CustomUrl: " + value, Toasts.Type.FAILURE);
+                settings.store.CustomUrl = "https://api.vmohammad.dev/";
+            }
+        }
+    },
     LyricDelay: {
         description: "",
         type: OptionType.SLIDER,
@@ -46,8 +64,8 @@ const settings = definePluginSettings({
         type: OptionType.SELECT,
         options: [
             { value: "line", label: "Line" },
-            { value: "word", label: "Word" },
-            { value: "character", label: "Character", default: true },
+            { value: "word", label: "Word", default: true },
+            { value: "character", label: "Character" },
         ],
         default: "word",
     },

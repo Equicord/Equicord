@@ -6,6 +6,7 @@
 
 import { Track } from "equicordplugins/tidalControls/TidalStore";
 
+import settings from "./settings";
 import { EnhancedLyric } from "./types";
 
 
@@ -14,7 +15,8 @@ import { EnhancedLyric } from "./types";
 export async function getLyrics(track: Track | null): Promise<EnhancedLyric[] | null> {
     if (!track) return null;
     if (!track.id) return null;
-    const res = await fetch("https://api.vmohammad.dev/lyrics?tidal_id=" + track.id);
+    const { CustomUrl } = settings.store;
+    const res = await fetch(CustomUrl + "lyrics?tidal_id=" + track.id);
     if (!res.ok) {
         console.error("Failed to fetch lyrics", res.status, res.statusText);
         return null;
