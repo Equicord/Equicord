@@ -8,7 +8,10 @@ import "./styles.css";
 
 import { Settings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Lyrics as SpotifyLyrics } from "@equicordplugins/spotifyLyrics/components/lyrics";
 import { TidalPlayer } from "@equicordplugins/tidalControls/TidalPlayer";
+import { Player as SpotifyPlayer } from "@plugins/spotifyControls/PlayerComponent";
+import { Player as YTMPlayer } from "@equicordplugins/youtubeMusicControls/PlayerComponent";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
@@ -34,6 +37,10 @@ export default definePlugin({
     ],
     FakePanelWrapper({ VencordOriginal, ...props }) {
         const { LyricsPosition } = settings.use(["LyricsPosition"]);
+        const showYTMPlayer = Settings.plugins.YouTubeMusicControls.enabled;
+        const showSpotifyControls = Settings.plugins.SpotifyControls.enabled;
+        const showSpotifyLyrics = Settings.plugins.SpotifyLyrics.enabled;
+        const LyricsPosition = showSpotifyLyrics ? Settings.plugins.SpotifyLyrics.LyricsPosition : null;
         return (
             <>
                 <ErrorBoundary
@@ -47,6 +54,11 @@ export default definePlugin({
                     {LyricsPosition === "above" && <Lyrics />}
                     <TidalPlayer />
                     {LyricsPosition === "below" && <Lyrics />}
+
+                    {showYTMPlayer && <YTMPlayer /> }
+                    {showSpotifyLyrics && LyricsPosition === "above" && <SpotifyLyrics />}
+                    {showSpotifyControls && <SpotifyPlayer />}
+                    {showSpotifyLyrics && LyricsPosition === "below" && <SpotifyLyrics />}
                 </ErrorBoundary>
 
                 <VencordOriginal {...props} />
