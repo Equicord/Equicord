@@ -153,6 +153,16 @@ export const settings = definePluginSettings({
             }
         }
     },
+    TidalSyncMode: {
+        description: "Lyrics sync mode",
+        type: OptionType.SELECT,
+        options: [
+            { value: "line", label: "Line", default: true },
+            { value: "word", label: "Word" },
+            { value: "character", label: "Character" },
+        ],
+        default: "line",
+    },
     LyricDelay: {
         description: "",
         type: OptionType.SLIDER,
