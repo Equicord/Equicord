@@ -56,45 +56,11 @@ function InstallInstructions() {
 }
 
 export const settings = definePluginSettings({
-    showSpotifyControls: {
-        description: "Show Spotify Controls",
-        type: OptionType.BOOLEAN,
-        default: false,
-    },
-    showSpotifyLyrics: {
-        description: "Show Spotify Lyrics",
-        type: OptionType.BOOLEAN,
-        default: false,
-    },
-    installTidalWithWS: {
-        type: OptionType.COMPONENT,
-        component: () => <InstallInstructions />
-    },
-    showTidalControls: {
-        description: "Show Tidal Player",
-        type: OptionType.BOOLEAN,
-        default: false,
-    },
-    showTidalLyrics: {
-        description: "Show Tidal Controls",
-        type: OptionType.BOOLEAN,
-        default: false,
-    },
     hoverControls: {
         description: "Show controls on hover",
         type: OptionType.BOOLEAN,
         default: false,
         onChange: v => toggleHoverControls(v)
-    },
-    useSpotifyUris: {
-        type: OptionType.BOOLEAN,
-        description: "Open Spotify URIs instead of Spotify URLs. Will only work if you have Spotify installed and might not work on all platforms",
-        default: false
-    },
-    previousButtonRestartsTrack: {
-        type: OptionType.BOOLEAN,
-        description: "Restart currently playing track when pressing the previous button if playtime is >3s",
-        default: true
     },
     ShowMusicNoteOnNoLyrics: {
         description: "Show a music note icon when no lyrics are found",
@@ -136,6 +102,78 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: true,
     },
+    LyricDelay: {
+        description: "",
+        type: OptionType.SLIDER,
+        default: 0,
+        ...sliderOptions
+    },
+    PurgeLyricsCache: {
+        description: "Purge the lyrics cache",
+        type: OptionType.COMPONENT,
+        component: () => (
+            <Button
+                color={Button.Colors.RED}
+                onClick={() => {
+                    clearLyricsCache();
+                    showToast("Lyrics cache purged", Toasts.Type.SUCCESS);
+                }}
+            >
+                Purge Cache
+            </Button>
+        ),
+    },
+    SpotifySectionTitle: {
+        type: OptionType.COMPONENT,
+        component: () => (
+            <Forms.FormSection>
+                <Forms.FormTitle tag="h3">Spotify</Forms.FormTitle>
+            </Forms.FormSection>
+        )
+    },
+    showSpotifyControls: {
+        description: "Show Spotify Controls",
+        type: OptionType.BOOLEAN,
+        default: false,
+    },
+    showSpotifyLyrics: {
+        description: "Show Spotify Lyrics",
+        type: OptionType.BOOLEAN,
+        default: false,
+    },
+    useSpotifyUris: {
+        type: OptionType.BOOLEAN,
+        description: "Open Spotify URIs instead of Spotify URLs. Will only work if you have Spotify installed and might not work on all platforms",
+        default: false
+    },
+    previousButtonRestartsTrack: {
+        type: OptionType.BOOLEAN,
+        description: "Restart currently playing track when pressing the previous button if playtime is >3s",
+        default: true
+    },
+
+    TidalSectionTitle: {
+        type: OptionType.COMPONENT,
+        component: () => (
+            <Forms.FormSection>
+                <Forms.FormTitle tag="h3">Tidal</Forms.FormTitle>
+            </Forms.FormSection>
+        )
+    },
+    installTidalWithWS: {
+        type: OptionType.COMPONENT,
+        component: () => <InstallInstructions />
+    },
+    showTidalControls: {
+        description: "Show Tidal Player",
+        type: OptionType.BOOLEAN,
+        default: false,
+    },
+    showTidalLyrics: {
+        description: "Show Tidal Controls",
+        type: OptionType.BOOLEAN,
+        default: false,
+    },
     TidalLyricFetch: {
         description: "Custom URL for fetching lyrics",
         type: OptionType.STRING,
@@ -162,26 +200,5 @@ export const settings = definePluginSettings({
             { value: "character", label: "Character" },
         ],
         default: "line",
-    },
-    LyricDelay: {
-        description: "",
-        type: OptionType.SLIDER,
-        default: 0,
-        ...sliderOptions
-    },
-    PurgeLyricsCache: {
-        description: "Purge the lyrics cache",
-        type: OptionType.COMPONENT,
-        component: () => (
-            <Button
-                color={Button.Colors.RED}
-                onClick={() => {
-                    clearLyricsCache();
-                    showToast("Lyrics cache purged", Toasts.Type.SUCCESS);
-                }}
-            >
-                Purge Cache
-            </Button>
-        ),
     },
 });
