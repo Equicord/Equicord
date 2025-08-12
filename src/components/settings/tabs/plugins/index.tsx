@@ -25,13 +25,14 @@ import { classNameFactory } from "@api/Styles";
 import { CogWheel, InfoIcon } from "@components/Icons";
 import { openPluginModal, SettingsTab } from "@components/settings";
 import { AddonCard } from "@components/settings/AddonCard";
+import { debounce } from "@shared/debounce";
 import { ChangeList } from "@utils/ChangeList";
 import { proxyLazy } from "@utils/lazy";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes, isObjectEmpty } from "@utils/misc";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { useAwaiter } from "@utils/react";
+import { useAwaiter, useIntersection } from "@utils/react";
 import { Plugin } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { Alerts, Button, Card, Flex, Forms, lodash, Parser, React, Select, Text, TextInput, Toasts, Tooltip, useMemo } from "@webpack/common";
@@ -263,8 +264,12 @@ export default function PluginSettings() {
     const [searchValue, setSearchValue] = React.useState({ value: "", status: SearchStatus.ALL });
 
     const search = searchValue.value.toLowerCase();
-    const onSearch = (query: string) => setSearchValue(prev => ({ ...prev, value: query }));
-    const onStatusChange = (status: SearchStatus) => setSearchValue(prev => ({ ...prev, status }));
+    const onSearch = (query: string) => {
+        setSearchValue(prev => ({ ...prev, value: query }));
+    };
+    const onStatusChange = (status: SearchStatus) => {
+        setSearchValue(prev => ({ ...prev, status }));
+    };
 
     const pluginFilter = (plugin: typeof Plugins[keyof typeof Plugins]) => {
         const { status } = searchValue;
@@ -468,6 +473,22 @@ export default function PluginSettings() {
     const totalUserPlugins = totalPlugins.filter(p => PluginMeta[p].userPlugin).length;
     const enabledStockPlugins = enabledPlugins.filter(p => !PluginMeta[p].userPlugin).length;
     const enabledUserPlugins = enabledPlugins.filter(p => PluginMeta[p].userPlugin).length;
+    const pluginsToLoad = Math.min(36, plugins.length);
+    const [visibleCount, setVisibleCount] = React.useState(pluginsToLoad);
+    const loadMore = React.useCallback(() => {
+        setVisibleCount(v => Math.min(v + pluginsToLoad, plugins.length));
+    }, [plugins.length]);
+
+    const dLoadMore = useMemo(() => debounce(loadMore, 100), [loadMore]);
+
+    const [sentinelRef, isSentinelVisible] = useIntersection();
+    React.useEffect(() => {
+        if (isSentinelVisible && visibleCount < plugins.length) {
+            dLoadMore();
+        }
+    }, [isSentinelVisible, visibleCount, plugins.length, dLoadMore]);
+
+    const visiblePlugins = plugins.slice(0, visibleCount);
 
     return (
         <SettingsTab title="Plugins">
@@ -518,16 +539,20 @@ export default function PluginSettings() {
 
             {plugins.length || requiredPlugins.length
                 ? (
-                    <div className={cl("grid")}>
-                        {plugins.length
-                            ? plugins
-                            : <Text variant="text-md/normal">No plugins meet the search criteria.</Text>
-                        }
-                    </div>
+                    <>
+                        <div className={cl("grid")}>
+                            {visiblePlugins.length
+                                ? visiblePlugins
+                                : <Text variant="text-md/normal">No plugins meet the search criteria.</Text>
+                            }
+                        </div>
+                        {visibleCount < plugins.length && (
+                            <div ref={sentinelRef} style={{ height: 32 }} />
+                        )}
+                    </>
                 )
                 : <ExcludedPluginsList search={search} />
             }
-
 
             <Forms.FormDivider className={Margins.top20} />
 

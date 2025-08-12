@@ -11,11 +11,10 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember, Message, User } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, GuildMemberStore, MessageStore, RelationshipStore, UserStore } from "@webpack/common";
+import { ChannelStore, GuildMemberStore, MessageStore, RelationshipStore, StreamerModeStore, UserStore } from "@webpack/common";
 import { JSX } from "react";
 
-const wrapEmojis = findByCodeLazy(/"span",\{className:\i\.emoji,children:/);
-const StreamerModeStore = findStoreLazy("StreamerModeStore");
+const wrapEmojis = findByCodeLazy("lastIndex;return");
 const AccessibilityStore = findStoreLazy("AccessibilityStore");
 const colorPattern = /^#(?:[\da-f]{3}){1,2}$|^#(?:[\da-f]{4}){1,2}$|(rgb|hsl)a?\((\s*-?\d+%?\s*,){2}(\s*-?\d+%?\s*)\)|(rgb|hsl)a?\((\s*-?\d+%?\s*,){3}\s*(0|(0?\.\d+)|1)\)$/iu;
 const roleColorPattern = /^role((?:\+|-)\d{0,4})?$/iu;
@@ -307,10 +306,11 @@ function getMemberListProfilesReactionsVoiceNameElement(props: memberListProfile
 function getMessageName(props: messageProps): [string | null, JSX.Element | null, string | null] {
     const { hideDefaultAtSign, replies } = settings.use();
     const { message, userOverride, isRepliedMessage, withMentionPrefix } = props;
+    const isWebhook = !!message.webhookId && !message.interaction;
     const channel = ChannelStore.getChannel(message.channel_id) || {};
     const target = userOverride || message.author;
-    const user = UserStore.getUser(target.id);
-    const member = GuildMemberStore.getMember(channel.guild_id, target.id);
+    const user = isWebhook ? target : UserStore.getUser(target.id);
+    const member = isWebhook ? null : GuildMemberStore.getMember(channel.guild_id, target.id);
     const author = user && member ? { ...user, ...member } : user || member || null;
     const mentionSymbol = hideDefaultAtSign && (!isRepliedMessage || replies) ? "" : withMentionPrefix ? "@" : "";
     return renderUsername(author, channel.id, message.id, isRepliedMessage ? "replies" : "messages", mentionSymbol);
