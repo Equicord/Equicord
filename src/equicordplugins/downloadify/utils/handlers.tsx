@@ -276,7 +276,15 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
 
         const targetEmbed = (embedImage || embedVideo || embedThumbnail || embedAuthor || embedFooter);
         const targetEmbedItem = (embedImage?.image || embedVideo?.video || embedThumbnail?.thumbnail || embedAuthor?.author || embedFooter?.footer);
-        const labelEmbedMedia = targetEmbed?.type === "rich" || !!targetEmbed?.provider;
+        const labelEmbedMedia = embedFooter?.footer
+            ? "Footer Icon"
+            : embedAuthor?.author
+                ? "Author Icon"
+                : embedThumbnail?.thumbnail
+                    ? "Thumbnail Image"
+                    : targetEmbed?.type === "rich" || !!targetEmbed?.provider
+                        ? "Embed Media"
+                        : "Media";
 
         let srcIsAnimated = !!(targetEmbedItem as any)?.srcIsAnimated;
         let aliasBasename: string | null = null;
@@ -315,8 +323,8 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
         downloadifyItems.push(
             <Menu.MenuItem
                 id="downloadify-attachment"
-                label={isTenor ? "Download Tenor GIF" : labelEmbedMedia ? "Download Embed Media" : "Download Media"}
-                submenuItemLabel={isTenor ? "Tenor GIF" : labelEmbedMedia ? "Embed Media" : "Media"}
+                label={isTenor ? "Download Tenor GIF" : `Download ${labelEmbedMedia}`}
+                submenuItemLabel={isTenor ? "Tenor GIF" : labelEmbedMedia}
                 icon={() => ImageIcon({ width: 20, height: 20 })}
                 action={async () => {
                     await handleDownload(
