@@ -253,28 +253,62 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
 
         const embedImage = message.embeds?.find(embed => {
             const images = (embed as any).images ? (embed as any).images : embed.image ? [embed.image] : [];
-            return images.some(image => image.url === targetURL || image.proxyURL === targetURL);
-        });
+            return images.some(image => targetURL.startsWith(image.url) || targetURL.startsWith(image.proxyURL));
+        })?.image;
 
         const embedVideo = embedImage ? undefined : message.embeds?.find(embed => {
             isTenor = embed.provider?.name === "Tenor";
             const videos = (embed as any).videos ? (embed as any).videos : embed.video ? [embed.video] : [];
-            return videos.some(video => video.url === targetURL || video.proxyURL === targetURL);
-        });
+            return videos.some(video => targetURL.startsWith(video.url) || targetURL.startsWith(video.proxyURL));
+        })?.video;
 
         const embedThumbnail = message.embeds?.find(embed => {
-            return embed.thumbnail?.url === targetURL || embed.thumbnail?.proxyURL === targetURL;
-        });
+            return (embed.thumbnail?.url && targetURL.startsWith(embed.thumbnail.url)) || (embed.thumbnail?.proxyURL && targetURL.startsWith(embed.thumbnail.proxyURL));
+        })?.thumbnail;
 
         const embedAuthor = message.embeds?.find(embed => {
-            return embed.author?.iconURL === targetURL || embed.author?.iconProxyURL === targetURL;
-        });
+            return (embed.author?.iconURL && targetURL.startsWith(embed.author.iconURL)) || (embed.author?.iconProxyURL && targetURL.startsWith(embed.author.iconProxyURL));
+        })?.author;
 
-        const embedFooter = message.embeds?.find(embed => {
-            return (embed as any).footer?.iconURL === targetURL || (embed as any).footer?.iconProxyURL === targetURL;
-        });
+        const embedFooter = (message.embeds?.find(embed => {
+            return ((embed as any).footer?.iconURL && targetURL.startsWith((embed as any).footer.iconURL)) || ((embed as any).footer?.iconProxyURL && targetURL.startsWith((embed as any).footer.iconProxyURL));
+        }) as any)?.footer;
 
         const targetEmbedItem = (embedImage || embedVideo || embedThumbnail || embedAuthor || embedFooter);
+
+        let srcIsAnimated = !!(targetEmbedItem as any)?.srcIsAnimated;
+        let aliasBasename: string | null = null;
+        let assetInfo: any;
+
+        const contentType = ((targetEmbedItem as any)?.contentType || "");
+        const isMediaProxy = targetURL?.startsWith(MEDIA_PROXY_BASE);
+        const isPrimaryDomain = targetURL?.startsWith(PRIMARY_DOMAIN_BASE);
+        const isCDN = targetURL?.startsWith(CDN_BASE);
+        const isImageExt1 = targetURL?.startsWith(IMAGE_EXT_1_DOMAIN_BASE);
+        const isImageExt2 = targetURL?.startsWith(IMAGE_EXT_2_DOMAIN_BASE);
+        const isImageExt = isImageExt1 || isImageExt2;
+
+        if (isTenor && !!targetEmbedItem?.video) {
+            targetURL = targetEmbedItem.video.url ?? targetURL;
+        }
+
+        const parsedURL = parseURL(targetURL);
+
+        if (isTenor) {
+            assetInfo = assetAvailability.tenor;
+            srcIsAnimated = true;
+        } else if (isImageExt) {
+            assetInfo = assetAvailability.attachment[contentType]
+                ?? assetAvailability.external[contentType]
+                ?? unknownExternalImageProxy;
+        } else if (isMediaProxy || isCDN) {
+            const guestimate = guesstimateAsset(parsedURL, contentType);
+            assetInfo = guestimate.assetInfo ?? (isCDN ? unknownCDN : (isImageExt ? unknownExternalImageProxy : unknownExternal));
+            aliasBasename = guestimate.aliasBasename ?? aliasBasename;
+            srcIsAnimated = guestimate.srcIsAnimated ?? srcIsAnimated;
+        } else {
+            assetInfo = isPrimaryDomain ? unknownPrimaryDomain : unknownExternal;
+        }
 
         downloadifyItems.push(
             <Menu.MenuItem
@@ -283,40 +317,6 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
                 submenuItemLabel="Media"
                 icon={() => ImageIcon({ width: 20, height: 20 })}
                 action={async () => {
-                    let srcIsAnimated = !!(targetEmbedItem as any)?.srcIsAnimated;
-                    let aliasBasename: string | null = null;
-                    let assetInfo: any;
-
-                    const contentType = (await DownloadifyNative.queryURL(targetURL) || "");
-                    const isMediaProxy = targetURL?.startsWith(MEDIA_PROXY_BASE);
-                    const isPrimaryDomain = targetURL?.startsWith(PRIMARY_DOMAIN_BASE);
-                    const isCDN = targetURL?.startsWith(CDN_BASE);
-                    const isImageExt1 = targetURL?.startsWith(IMAGE_EXT_1_DOMAIN_BASE);
-                    const isImageExt2 = targetURL?.startsWith(IMAGE_EXT_2_DOMAIN_BASE);
-                    const isImageExt = isImageExt1 || isImageExt2;
-
-                    if (isTenor && !!targetEmbedItem?.video) {
-                        targetURL = targetEmbedItem.video.url ?? targetURL;
-                    }
-
-                    const parsedURL = parseURL(targetURL);
-
-                    if (isTenor) {
-                        assetInfo = assetAvailability.tenor;
-                        srcIsAnimated = true;
-                    } else if (isImageExt) {
-                        assetInfo = assetAvailability.attachment[contentType]
-                            ?? assetAvailability.external[contentType]
-                            ?? unknownExternalImageProxy;
-                    } else if (isMediaProxy || isCDN) {
-                        const guestimate = guesstimateAsset(parsedURL, contentType);
-                        assetInfo = guestimate.assetInfo ?? (isCDN ? unknownCDN : (isImageExt ? unknownExternalImageProxy : unknownExternal));
-                        aliasBasename = guestimate.aliasBasename ?? aliasBasename;
-                        srcIsAnimated = guestimate.srcIsAnimated ?? srcIsAnimated;
-                    } else {
-                        assetInfo = isPrimaryDomain ? unknownPrimaryDomain : unknownExternal;
-                    }
-
                     await handleDownload(
                         parsedURL,
                         aliasBasename,
