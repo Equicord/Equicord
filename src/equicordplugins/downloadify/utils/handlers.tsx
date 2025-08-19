@@ -288,8 +288,8 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
         const isImageExt2 = targetURL?.startsWith(IMAGE_EXT_2_DOMAIN_BASE);
         const isImageExt = isImageExt1 || isImageExt2;
 
-        if (isTenor && !!targetEmbedItem?.video) {
-            targetURL = targetEmbedItem.video.url ?? targetURL;
+        if (isTenor && embedVideo) {
+            targetURL = embedVideo.url ?? targetURL;
         }
 
         const parsedURL = parseURL(targetURL);
