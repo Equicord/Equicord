@@ -12,11 +12,12 @@ import { findByPropsLazy } from "@webpack";
 import { JSX } from "react";
 
 export const d = classNameFactory("downloadify-");
-export const CDN_BASE = "https://cdn.discordapp.com";
-export const MEDIA_PROXY_BASE = "https://media.discordapp.net";
-export const PRIMARY_DOMAIN_BASE = "https://discord.com";
-export const IMAGE_EXT_1_DOMAIN_BASE = "https://images-ext-1.discordapp.net";
-export const IMAGE_EXT_2_DOMAIN_BASE = "https://images-ext-2.discordapp.net";
+export const CDN_BASE = window.GLOBAL_ENV.API_PROTOCOL + "//" + window.GLOBAL_ENV.CDN_HOST;
+export const MEDIA_PROXY_BASE = window.GLOBAL_ENV.API_PROTOCOL + window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT;
+export const PRIMARY_DOMAIN_BASE = window.GLOBAL_ENV.API_PROTOCOL + window.GLOBAL_ENV.ASSET_ENDPOINT;
+export const [IMAGE_PROXY_EXT1, IMAGE_PROXY_EXT2] = window.GLOBAL_ENV.IMAGE_PROXY_ENDPOINTS.split(",");
+export const IMAGE_EXT_1_DOMAIN_BASE = window.GLOBAL_ENV.API_PROTOCOL + IMAGE_PROXY_EXT1;
+export const IMAGE_EXT_2_DOMAIN_BASE = window.GLOBAL_ENV.API_PROTOCOL + IMAGE_PROXY_EXT2;
 export const TENOR_BASE = "https://c.tenor.com";
 export const TENOR_GIF_ID = "Ad";
 export const TENOR_MP4_ID = "Po";
