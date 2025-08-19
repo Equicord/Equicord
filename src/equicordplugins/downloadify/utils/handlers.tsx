@@ -313,8 +313,8 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
         downloadifyItems.push(
             <Menu.MenuItem
                 id="downloadify-attachment"
-                label={!isTenor ? "Download Media" : "Download Tenor GIF"}
-                submenuItemLabel="Media"
+                label={isTenor ? "Download Tenor GIF" : targetEmbedItem ? "Download Embed Media" : "Download Media"}
+                submenuItemLabel={isTenor ? "Tenor GIF" : targetEmbedItem ? "Embed Media" : "Media"}
                 icon={() => ImageIcon({ width: 20, height: 20 })}
                 action={async () => {
                     await handleDownload(
