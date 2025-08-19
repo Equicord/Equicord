@@ -57,6 +57,16 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
                 ? target.firstChild.firstChild
                 : null;
 
+    if (target.tagName === "VIDEO" && !!target.src) {
+        targetURL = contextMenuAPIArguments[0].target.src;
+    } else if (target.parentElement?.parentElement?.firstChild?.tagName === "VIDEO" && !!target.parentElement?.parentElement?.firstChild?.src) {
+        targetURL = contextMenuAPIArguments[0].target.parentElement.parentElement.firstChild.src;
+    } else if (target.parentElement?.parentElement?.parentElement?.firstChild?.tagName === "VIDEO" && !!target.parentElement?.parentElement?.parentElement?.firstChild?.src) {
+        targetURL = contextMenuAPIArguments[0].target.parentElement.parentElement.parentElement.firstChild.src;
+    } else if (target.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.firstChild?.tagName === "VIDEO" && !!target.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.firstChild?.src) {
+        targetURL = contextMenuAPIArguments[0].target.parentElement.parentElement.parentElement.parentElement.parentElement.firstChild.src;
+    }
+
     const isRoleIcon = !!roleIconTarget;
     const isCustomEmoji = favoriteableType === "emoji" && !!favoriteableId;
     const isUnicodeEmoji = favoriteableType === "emoji" && !favoriteableId;
@@ -241,40 +251,32 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
     } else if (targetURL) {
         let isTenor = false;
 
-        if (target.tagName === "VIDEO" && !!target.src) {
-            targetURL = contextMenuAPIArguments[0].target.src;
-        } else if (target.parentElement?.parentElement?.firstChild?.tagName === "VIDEO" && !!target.parentElement?.parentElement?.firstChild?.src) {
-            targetURL = contextMenuAPIArguments[0].target.parentElement.parentElement.firstChild.src;
-        } else if (target.parentElement?.parentElement?.parentElement?.firstChild?.tagName === "VIDEO" && !!target.parentElement?.parentElement?.parentElement?.firstChild?.src) {
-            targetURL = contextMenuAPIArguments[0].target.parentElement.parentElement.parentElement.firstChild.src;
-        } else if (target.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.firstChild?.tagName === "VIDEO" && !!target.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.firstChild?.src) {
-            targetURL = contextMenuAPIArguments[0].target.parentElement.parentElement.parentElement.parentElement.parentElement.firstChild.src;
-        }
-
         const embedImage = message.embeds?.find(embed => {
             const images = (embed as any).images ? (embed as any).images : embed.image ? [embed.image] : [];
             return images.some(image => targetURL.startsWith(image.url) || targetURL.startsWith(image.proxyURL));
-        })?.image;
+        });
 
         const embedVideo = embedImage ? undefined : message.embeds?.find(embed => {
             isTenor = embed.provider?.name === "Tenor";
             const videos = (embed as any).videos ? (embed as any).videos : embed.video ? [embed.video] : [];
             return videos.some(video => targetURL.startsWith(video.url) || targetURL.startsWith(video.proxyURL));
-        })?.video;
+        });
 
         const embedThumbnail = message.embeds?.find(embed => {
             return (embed.thumbnail?.url && targetURL.startsWith(embed.thumbnail.url)) || (embed.thumbnail?.proxyURL && targetURL.startsWith(embed.thumbnail.proxyURL));
-        })?.thumbnail;
+        });
 
         const embedAuthor = message.embeds?.find(embed => {
             return (embed.author?.iconURL && targetURL.startsWith(embed.author.iconURL)) || (embed.author?.iconProxyURL && targetURL.startsWith(embed.author.iconProxyURL));
-        })?.author;
+        });
 
         const embedFooter = (message.embeds?.find(embed => {
             return ((embed as any).footer?.iconURL && targetURL.startsWith((embed as any).footer.iconURL)) || ((embed as any).footer?.iconProxyURL && targetURL.startsWith((embed as any).footer.iconProxyURL));
-        }) as any)?.footer;
+        }) as any);
 
-        const targetEmbedItem = (embedImage || embedVideo || embedThumbnail || embedAuthor || embedFooter);
+        const targetEmbed = (embedImage || embedVideo || embedThumbnail || embedAuthor || embedFooter);
+        const targetEmbedItem = (embedImage?.image || embedVideo?.video || embedThumbnail?.thumbnail || embedAuthor?.author || embedFooter?.footer);
+        const labelEmbedMedia = targetEmbed?.type === "rich" || !!targetEmbed?.provider;
 
         let srcIsAnimated = !!(targetEmbedItem as any)?.srcIsAnimated;
         let aliasBasename: string | null = null;
@@ -313,8 +315,8 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
         downloadifyItems.push(
             <Menu.MenuItem
                 id="downloadify-attachment"
-                label={isTenor ? "Download Tenor GIF" : targetEmbedItem ? "Download Embed Media" : "Download Media"}
-                submenuItemLabel={isTenor ? "Tenor GIF" : targetEmbedItem ? "Embed Media" : "Media"}
+                label={isTenor ? "Download Tenor GIF" : labelEmbedMedia ? "Download Embed Media" : "Download Media"}
+                submenuItemLabel={isTenor ? "Tenor GIF" : labelEmbedMedia ? "Embed Media" : "Media"}
                 icon={() => ImageIcon({ width: 20, height: 20 })}
                 action={async () => {
                     await handleDownload(
