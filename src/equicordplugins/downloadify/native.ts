@@ -6,7 +6,6 @@
 
 import { dialog } from "electron";
 import fs from "fs";
-import path from "path";
 import { Readable } from "stream";
 import { finished } from "stream/promises";
 
@@ -23,19 +22,7 @@ export async function fileExists(_: Electron.IpcMainInvokeEvent, filePath: strin
 }
 
 /**
- * Check if a given directory exists and is accessible by the user.
- */
-export async function canAccessDirectory(_: Electron.IpcMainInvokeEvent, dirPath: string): Promise<boolean> {
-    try {
-        await fs.promises.access(dirPath, fs.constants.R_OK | fs.constants.W_OK);
-        return (await fs.promises.stat(dirPath)).isDirectory();
-    } catch {
-        return false;
-    }
-}
-
-/**
- * Get a directory to save files.
+ * Ask the user to select a directory to save files.
  */
 export async function getDirectory(_: Electron.IpcMainInvokeEvent): Promise<string | null> {
     const result = await dialog.showOpenDialog({
@@ -97,7 +84,6 @@ export async function downloadURL(_: Electron.IpcMainInvokeEvent, url: string, f
     if (!response.body) {
         return false;
     }
-    const parsedPath = path.parse(filePath);
 
     const readableStream = Readable.fromWeb(response.body as any);
     const fileWriteStream = fs.createWriteStream(filePath);
