@@ -14,7 +14,13 @@ import { InsertGroup, ParsedFile, ParsedURL } from "./definitions";
  */
 export function parseFile(filePath: string): ParsedFile {
     const parts = filePath.split(/[\\/]/);
-    const fileNameWithExtra = parts.pop() as string;
+    let fileNameWithExtra = parts.pop() as string;
+
+    while (fileNameWithExtra.includes("%25")) {
+        fileNameWithExtra = decodeURIComponent(fileNameWithExtra);
+    }
+
+    fileNameWithExtra = decodeURIComponent(fileNameWithExtra);
 
     const posColon = fileNameWithExtra.indexOf(":");
     const fileNameWithoutExtra = posColon === -1 ? fileNameWithExtra : fileNameWithExtra.slice(0, posColon);
@@ -44,13 +50,6 @@ export function parseFile(filePath: string): ParsedFile {
  * Retrieve information about a URL by parsing its parts.
  */
 export function parseURL(url: string): ParsedURL {
-    const original = url;
-
-    while (url.includes("%25")) {
-        url = decodeURIComponent(url);
-    }
-
-    url = decodeURIComponent(url);
     const parsed = new URL(url);
     const { path, baseName, extension, twitterExtra } = parseFile(parsed.pathname);
     const params = Array.from(parsed.searchParams.entries()).reduce(
@@ -67,7 +66,6 @@ export function parseURL(url: string): ParsedURL {
 
     return {
         url: url,
-        original: original,
         host: parsed.origin.toLowerCase(),
         path,
         baseName,

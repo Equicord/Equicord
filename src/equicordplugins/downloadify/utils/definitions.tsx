@@ -155,7 +155,8 @@ export const assetAvailability = {
         "GIF": {
             source: AssetSource.ASSET_MEDIA_PROXY,
             static: [],
-            animated: ["gif", "awebp", "png", "webp", "jpg"]
+            animated: ["gif", "awebp", "png", "webp", "jpg"],
+            forceAnimated: true
         },
         "LOTTIE": {
             source: AssetSource.CDN,
@@ -222,7 +223,8 @@ export const assetAvailability = {
         "image/gif": {
             source: AssetSource.ATTACHMENT_MEDIA_PROXY,
             static: [],
-            animated: ["gif", "awebp", "png", "webp", "jpg"]
+            animated: ["gif", "awebp", "png", "webp", "jpg"],
+            forceAnimated: true
         },
     }
 };
@@ -253,7 +255,6 @@ export interface ParsedFile {
 
 export interface ParsedURL {
     url: string;
-    original: string;
     host: string;
     path: string;
     baseName: string;

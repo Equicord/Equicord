@@ -286,40 +286,6 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
                         ? "Embed Media"
                         : "Media";
 
-        let srcIsAnimated = !!(targetEmbedItem as any)?.srcIsAnimated;
-        let aliasBasename: string | null = null;
-        let assetInfo: any;
-
-        const contentType = ((targetEmbedItem as any)?.contentType || "");
-        const isMediaProxy = targetURL?.startsWith(MEDIA_PROXY_BASE);
-        const isPrimaryDomain = targetURL?.startsWith(PRIMARY_DOMAIN_BASE);
-        const isCDN = targetURL?.startsWith(CDN_BASE);
-        const isImageExt1 = targetURL?.startsWith(IMAGE_EXT_1_DOMAIN_BASE);
-        const isImageExt2 = targetURL?.startsWith(IMAGE_EXT_2_DOMAIN_BASE);
-        const isImageExt = isImageExt1 || isImageExt2;
-
-        if (isTenor && embedVideo) {
-            targetURL = embedVideo.url ?? targetURL;
-        }
-
-        const parsedURL = parseURL(targetURL);
-
-        if (isTenor) {
-            assetInfo = assetAvailability.tenor;
-            srcIsAnimated = true;
-        } else if (isImageExt) {
-            assetInfo = assetAvailability.attachment[contentType]
-                ?? assetAvailability.external[contentType]
-                ?? unknownExternalImageProxy;
-        } else if (isMediaProxy || isCDN) {
-            const guestimate = guesstimateAsset(parsedURL, contentType);
-            assetInfo = guestimate.assetInfo ?? (isCDN ? unknownCDN : (isImageExt ? unknownExternalImageProxy : unknownExternal));
-            aliasBasename = guestimate.aliasBasename ?? aliasBasename;
-            srcIsAnimated = guestimate.srcIsAnimated ?? srcIsAnimated;
-        } else {
-            assetInfo = isPrimaryDomain ? unknownPrimaryDomain : unknownExternal;
-        }
-
         downloadifyItems.push(
             <Menu.MenuItem
                 id="downloadify-attachment"
@@ -327,6 +293,40 @@ export function MessageContextMenu(children: Array<any>, props: MessageContextMe
                 submenuItemLabel={isTenor ? "Tenor GIF" : labelEmbedMedia}
                 icon={() => ImageIcon({ width: 20, height: 20 })}
                 action={async () => {
+                    let srcIsAnimated = !!(targetEmbedItem as any)?.srcIsAnimated;
+                    let aliasBasename: string | null = null;
+                    let assetInfo: any;
+
+                    const contentType = ((targetEmbedItem as any)?.contentType || await DownloadifyNative.queryURL(itemSrc));
+                    const isMediaProxy = targetURL?.startsWith(MEDIA_PROXY_BASE);
+                    const isPrimaryDomain = targetURL?.startsWith(PRIMARY_DOMAIN_BASE);
+                    const isCDN = targetURL?.startsWith(CDN_BASE);
+                    const isImageExt1 = targetURL?.startsWith(IMAGE_EXT_1_DOMAIN_BASE);
+                    const isImageExt2 = targetURL?.startsWith(IMAGE_EXT_2_DOMAIN_BASE);
+                    const isImageExt = isImageExt1 || isImageExt2;
+
+                    if (isTenor && embedVideo) {
+                        targetURL = embedVideo.url ?? targetURL;
+                    }
+
+                    const parsedURL = parseURL(targetURL);
+
+                    if (isTenor) {
+                        assetInfo = assetAvailability.tenor;
+                        srcIsAnimated = true;
+                    } else if (isImageExt) {
+                        assetInfo = assetAvailability.attachment[contentType]
+                            ?? assetAvailability.external[contentType]
+                            ?? unknownExternalImageProxy;
+                    } else if (isMediaProxy || isCDN) {
+                        const guestimate = guesstimateAsset(parsedURL, contentType);
+                        assetInfo = guestimate.assetInfo ?? (isCDN ? unknownCDN : (isImageExt ? unknownExternalImageProxy : unknownExternal));
+                        aliasBasename = guestimate.aliasBasename ?? aliasBasename;
+                        srcIsAnimated = guestimate.srcIsAnimated ?? srcIsAnimated;
+                    } else {
+                        assetInfo = isPrimaryDomain ? unknownPrimaryDomain : unknownExternal;
+                    }
+
                     await handleDownload(
                         parsedURL,
                         aliasBasename,
@@ -879,7 +879,7 @@ async function handleDownload(
     let chosenExtension = extensions[0] ?? "";
     let resolvedExtension = (chosenExtension).replace("apng", "png").replace("awebp", "webp");
     let resolvedPath: string | null = null;
-    let resolvedURL = url.original;
+    let resolvedURL = url.url;
 
     if (defaultDirectory) {
         const resolvedDirectory = defaultDirectory.trim().replace(/^["']|["']$/g, "").replace(/[/\\]+$/, "").replace(/\\/g, "/");
@@ -971,7 +971,7 @@ async function handleDownload(
                 );
             } else {
                 // Currently only the LOTTIE sticker.
-                resolvedURL = url.original;
+                resolvedURL = url.url;
             }
         } else if (asset.source === AssetSource.TENOR) {
             const tenorID = url.path.replaceAll("/", "").slice(0, -2);
@@ -986,7 +986,7 @@ async function handleDownload(
                 return;
             }
         } else if ([AssetSource.EXTERNAL, AssetSource.PRIMARY_DOMAIN].includes(asset.source)) {
-            resolvedURL = url.original;
+            resolvedURL = url.url;
         }
 
         DownloadifyLogger.info(`[${getFormattedNow()}] [STARTING DOWNLOAD]\n${resolvedPath}\n${resolvedURL}`);
