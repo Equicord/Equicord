@@ -10,7 +10,29 @@ export interface DiffPart {
 }
 
 export function createWordDiff(oldText: string, newText: string): DiffPart[] {
-    // checks for suffixes, so if "this this" the suffix is checked so it doesn't log wrong, LCS algorithm breaks without this lol
+    // Handle simple prefix addition: "watch" -> "watch this again"
+    if (oldText.length < newText.length && newText.startsWith(oldText)) {
+        const added = newText.slice(oldText.length);
+        const parts: DiffPart[] = [];
+        if (oldText.length > 0) {
+            parts.push({ type: "unchanged", text: oldText });
+        }
+        parts.push({ type: "added", text: added });
+        return parts;
+    }
+
+    // Handle simple suffix addition: "watch" -> "prefix watch"
+    if (oldText.length < newText.length && newText.endsWith(oldText)) {
+        const added = newText.slice(0, newText.length - oldText.length);
+        const parts: DiffPart[] = [];
+        parts.push({ type: "added", text: added });
+        if (oldText.length > 0) {
+            parts.push({ type: "unchanged", text: oldText });
+        }
+        return parts;
+    }
+
+    // Handle simple prefix removal: "watch this" -> "watch"
     if (newText.length < oldText.length && oldText.startsWith(newText)) {
         const removed = oldText.slice(newText.length);
         const parts: DiffPart[] = [];
@@ -21,7 +43,7 @@ export function createWordDiff(oldText: string, newText: string): DiffPart[] {
         return parts;
     }
 
-    // same thing as above
+    // Handle simple suffix removal: "prefix watch" -> "watch"
     if (newText.length < oldText.length && oldText.endsWith(newText)) {
         const removed = oldText.slice(0, oldText.length - newText.length);
         const parts: DiffPart[] = [];
@@ -32,7 +54,7 @@ export function createWordDiff(oldText: string, newText: string): DiffPart[] {
         return parts;
     }
 
-    // Fall back to LCS for complex cases
+    // For complex cases, fall back to LCS algorithm
     const oldChars = oldText.split("");
     const newChars = newText.split("");
 
