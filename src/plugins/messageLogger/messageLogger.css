@@ -48,3 +48,19 @@
     flex-wrap: wrap;
     gap: 16px;
 }
+
+.messagelogger-diff-added {
+    color: #85E89D;
+}
+
+.messagelogger-diff-removed {
+    color: #F47068;
+}
+
+.theme-light .messagelogger-diff-added {
+    color: #85E89D;
+}
+
+.theme-light .messagelogger-diff-removed {
+    color: #F47068;
+}

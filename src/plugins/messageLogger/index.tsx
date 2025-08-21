@@ -21,10 +21,11 @@ import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { ChannelStore, FluxDispatcher, Menu, MessageStore, Parser, SelectedChannelStore, Timestamp, UserStore, useStateFromStores } from "@webpack/common";
+import { ChannelStore, FluxDispatcher, Menu, MessageStore, Parser, React, SelectedChannelStore, Timestamp, UserStore, useStateFromStores } from "@webpack/common";
 
 import overlayStyle from "./deleteStyleOverlay.css?managed";
 import textStyle from "./deleteStyleText.css?managed";
+import { createMessageDiff, DiffPart } from "./diffUtils";
 import { openHistoryModal } from "./HistoryModal";
 
 interface MLMessage extends Message {
@@ -137,7 +138,31 @@ const patchChannelContextMenu: NavContextMenuPatchCallback = (
     );
 };
 
-export function parseEditContent(content: string, message: Message) {
+function renderDiffParts(diffParts: DiffPart[]) {
+    return diffParts.map((part, index) => {
+        if (part.type === "unchanged") {
+            return React.createElement("span", { key: index }, part.text);
+        } else if (part.type === "added") {
+            return React.createElement("span", {
+                key: index,
+                className: "messagelogger-diff-added"
+            }, part.text);
+        } else if (part.type === "removed") {
+            return React.createElement("span", {
+                key: index,
+                className: "messagelogger-diff-removed"
+            }, part.text);
+        }
+        return React.createElement("span", { key: index }, part.text);
+    });
+}
+
+export function parseEditContent(content: string, message: Message, previousContent?: string) {
+    if (previousContent && content !== previousContent) {
+        const diffParts = createMessageDiff(content, previousContent);
+        return renderDiffParts(diffParts);
+    }
+
     return Parser.parse(content, true, {
         channelId: message.channel_id,
         messageId: message.id,
@@ -182,18 +207,24 @@ export default definePlugin({
 
             return Settings.plugins.MessageLogger.inlineEdits && (
                 <>
-                    {message.editHistory?.map((edit, idx) => (
-                        <div key={idx} className="messagelogger-edited">
-                            {parseEditContent(edit.content, message)}
-                            <Timestamp
-                                timestamp={edit.timestamp}
-                                isEdited={true}
-                                isInline={false}
-                            >
-                                <span className={styles.edited}>{" "}({getIntlMessage("MESSAGE_EDITED")})</span>
-                            </Timestamp>
-                        </div>
-                    ))}
+                    {message.editHistory?.map((edit, idx) => {
+                        const nextContent = idx === (message.editHistory?.length ?? 0) - 1
+                            ? message.content
+                            : message.editHistory?.[idx + 1]?.content;
+
+                        return (
+                            <div key={idx} className="messagelogger-edited">
+                                {parseEditContent(edit.content, message, nextContent)}
+                                <Timestamp
+                                    timestamp={edit.timestamp}
+                                    isEdited={true}
+                                    isInline={false}
+                                >
+                                    <span className={styles.edited}>{" "}({getIntlMessage("MESSAGE_EDITED")})</span>
+                                </Timestamp>
+                            </div>
+                        );
+                    })}
                 </>
             );
         }, { noop: true }),
@@ -327,7 +358,7 @@ export default definePlugin({
             ) ||
             (isEdit ? !logEdits : !logDeletes) ||
             ignoreGuilds.includes(ChannelStore.getChannel(message.channel_id)?.guild_id) ||
-            // Ignore Venbot in the support channels
+            // Ignore Venbot in the support channels (love you venbot!!!)
             (message.author?.id === VENBOT_USER_ID && ChannelStore.getChannel(message.channel_id)?.parent_id === VC_SUPPORT_CATEGORY_ID));
     },
 
