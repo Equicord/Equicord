@@ -2,15 +2,12 @@
     display: none;
 }
 
-.messagelogger-deleted
-:is(
-    .messagelogger-deleted-attachment,
+.messagelogger-deleted:is(.messagelogger-deleted-attachment,
     .emoji,
     [data-type="sticker"],
     [class*="embedIframe"],
     [class*="embedSpotify"],
-    [class*="imageContainer"]
-) {
+    [class*="imageContainer"]) {
     filter: grayscale(1) !important;
     transition: 150ms filter ease-in-out;
 
@@ -54,13 +51,5 @@
 }
 
 .messagelogger-diff-removed {
-    color: #F47068;
-}
-
-.theme-light .messagelogger-diff-added {
-    color: #85E89D;
-}
-
-.theme-light .messagelogger-diff-removed {
     color: #F47068;
 }
