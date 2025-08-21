@@ -10,7 +10,7 @@ export interface DiffPart {
 }
 
 export function createWordDiff(oldText: string, newText: string): DiffPart[] {
-    // Handle simple prefix addition: "watch" -> "watch this again"
+    // suffix shit, if oldText is shorter than newText and newText starts with oldText
     if (oldText.length < newText.length && newText.startsWith(oldText)) {
         const added = newText.slice(oldText.length);
         const parts: DiffPart[] = [];
@@ -21,7 +21,7 @@ export function createWordDiff(oldText: string, newText: string): DiffPart[] {
         return parts;
     }
 
-    // Handle simple suffix addition: "watch" -> "prefix watch"
+    // same as above
     if (oldText.length < newText.length && newText.endsWith(oldText)) {
         const added = newText.slice(0, newText.length - oldText.length);
         const parts: DiffPart[] = [];
