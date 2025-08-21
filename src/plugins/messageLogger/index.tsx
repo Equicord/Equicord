@@ -158,7 +158,7 @@ function renderDiffParts(diffParts: DiffPart[]) {
 }
 
 export function parseEditContent(content: string, message: Message, previousContent?: string) {
-    if (previousContent && content !== previousContent) {
+    if (previousContent && content !== previousContent && Settings.plugins.MessageLogger.showEditDiffs) {
         const diffParts = createMessageDiff(content, previousContent);
         return renderDiffParts(diffParts);
     }
@@ -292,6 +292,11 @@ export default definePlugin({
             type: OptionType.STRING,
             description: "Comma-separated list of guild IDs to ignore",
             default: "",
+        },
+        showEditDiffs: {
+            type: OptionType.BOOLEAN,
+            description: "Show visual differences between edited message versions",
+            default: true,
         },
     },
 
