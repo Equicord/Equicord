@@ -59,10 +59,10 @@ Enhance your Quest experience with a suite of features, or disable them entirely
     - Asset Preload
         - Load All Quest Assets On Page Load — As soon as the Quest page is opened, load all Quest assets on the page.
         - Load Quest Assets During Page Scroll — Keep the default behavior of loading Quest assets as they come into view.
-    - Ignored Quest Profile
-        - Share ignored quests between accounts on a single client or keep them separate.
-        - Ignore Quests by opening their context menu and selecting `Mark as Ignored`.
 5. Reorder Quests
     - Sort Quests by their status.
     - Comma-separated list must contain all of: `UNCLAIMED, CLAIMED, IGNORED, EXPIRED`.
     - Subsort status groups by Quest added date, expiring date, or claimed date.
+    - Ignored Quest Profile
+        - Share ignored quests between accounts on a single client or keep them separate.
+        - Ignore Quests by opening their context menu and selecting `Mark as Ignored`.
