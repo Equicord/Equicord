@@ -51,7 +51,7 @@ const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "What to do when left clicking the chat icon.",
         options: [
-            { label: "Toggle Plugin Functionality", value: "global" },
+            { label: "Toggle Typing Globally", value: "global" },
             { label: "Toggle Typing in Channel", value: "channel", default: true },
             { label: "Toggle Typing in Guild", value: "guild" },
             { label: "Open Plugin Settings", value: "settings" }
@@ -61,7 +61,7 @@ const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "What to do when middle clicking the chat icon.",
         options: [
-            { label: "Toggle Plugin Functionality", value: "global" },
+            { label: "Toggle Typing Globally", value: "global" },
             { label: "Toggle Typing in Channel", value: "channel" },
             { label: "Toggle Typing in Guild", value: "guild" },
             { label: "Open Plugin Settings", value: "settings", default: true }
@@ -71,7 +71,7 @@ const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "What to do when right clicking the chat icon.",
         options: [
-            { label: "Toggle Plugin Functionality", value: "global", default: true },
+            { label: "Toggle Typing Globally", value: "global", default: true },
             { label: "Toggle Typing in Channel", value: "channel" },
             { label: "Toggle Typing in Guild", value: "guild" },
             { label: "Open Plugin Settings", value: "settings" }
