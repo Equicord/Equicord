@@ -32,9 +32,13 @@ interface MLMessage extends Message {
     deleted?: boolean;
     editHistory?: { timestamp: Date; content: string; }[];
     firstEditTimestamp?: Date;
+    diffViewDisabled?: boolean;
 }
 
 const styles = findByPropsLazy("edited", "communicationDisabled", "isSystemMessage");
+
+// track messages where the user disabled diffs for this session
+const disabledDiffMessages = new Set<string>();
 
 function addDeleteStyle() {
     if (Settings.plugins.MessageLogger.deleteStyle === "text") {
@@ -48,6 +52,7 @@ function addDeleteStyle() {
 
 const REMOVE_HISTORY_ID = "ml-remove-history";
 const TOGGLE_DELETE_STYLE_ID = "ml-toggle-style";
+const TOGGLE_DIFF_VIEW_ID = "ml-toggle-diff";
 const patchMessageContextMenu: NavContextMenuPatchCallback = (
     children,
     props,
@@ -71,6 +76,28 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
                 key={TOGGLE_DELETE_STYLE_ID}
                 label="Toggle Deleted Highlight"
                 action={() => domElement.classList.toggle("messagelogger-deleted")}
+            />,
+        );
+    }
+
+    // toggle per-message diff rendering when the message has an edit history
+    if (editHistory?.length) {
+        const isDisabled = disabledDiffMessages.has(id);
+        children.push(
+            <Menu.MenuItem
+                id={TOGGLE_DIFF_VIEW_ID}
+                key={TOGGLE_DIFF_VIEW_ID}
+                label={isDisabled ? "Enable Diff View" : "Disable Diff View"}
+                color="danger"
+                action={() => {
+                    if (isDisabled) disabledDiffMessages.delete(id);
+                    else disabledDiffMessages.add(id);
+                    // also toggle a CSS class on the message element for an immediate visual effect (basically shows things work lol)
+                    const domElement = document.getElementById(`chat-messages-${channel_id}-${id}`);
+                    domElement?.classList.toggle("messagelogger-diff-disabled", disabledDiffMessages.has(id));
+                    // force a re-render without mutating message fields
+                    updateMessage(channel_id, id);
+                }}
             />,
         );
     }
@@ -158,7 +185,8 @@ function renderDiffParts(diffParts: DiffPart[]) {
 }
 
 export function parseEditContent(content: string, message: Message, previousContent?: string) {
-    if (previousContent && content !== previousContent && Settings.plugins.MessageLogger.showEditDiffs) {
+    const perMessageDiffEnabled = !disabledDiffMessages.has(message.id);
+    if (previousContent && content !== previousContent && Settings.plugins.MessageLogger.showEditDiffs && perMessageDiffEnabled) {
         const diffParts = createMessageDiff(content, previousContent);
         return renderDiffParts(diffParts);
     }
@@ -202,11 +230,14 @@ export default definePlugin({
                 [MessageStore],
                 () => MessageStore.getMessage(channelId, messageId) as MLMessage,
                 null,
-                (oldMsg, newMsg) => oldMsg?.editHistory === newMsg?.editHistory,
+                (oldMsg, newMsg) =>
+                    oldMsg?.editHistory === newMsg?.editHistory &&
+                    oldMsg?.diffViewDisabled === newMsg?.diffViewDisabled &&
+                    oldMsg === newMsg,
             );
 
             return Settings.plugins.MessageLogger.inlineEdits && (
-                <>
+                <React.Fragment key={disabledDiffMessages.has(messageId) ? `diff-off-${messageId}` : `diff-on-${messageId}`}>
                     {message.editHistory?.map((edit, idx) => {
                         const nextContent = idx === (message.editHistory?.length ?? 0) - 1
                             ? message.content
@@ -225,7 +256,7 @@ export default definePlugin({
                             </div>
                         );
                     })}
-                </>
+                </React.Fragment>
             );
         }, { noop: true }),
 
@@ -464,7 +495,8 @@ export default definePlugin({
                         "this.customRenderedContent = $1.customRenderedContent," +
                         "this.deleted = $1.deleted || false," +
                         "this.editHistory = $1.editHistory || []," +
-                        "this.firstEditTimestamp = $1.firstEditTimestamp || this.editedTimestamp || this.timestamp,",
+                        "this.firstEditTimestamp = $1.firstEditTimestamp || this.editedTimestamp || this.timestamp," +
+                        "this.diffViewDisabled = $1.diffViewDisabled || false,",
                 },
             ],
         },
@@ -478,7 +510,7 @@ export default definePlugin({
                     match:
                         /(?<=null!=\i\.edited_timestamp\)return )\i\(\i,\{reactions:(\i)\.reactions.{0,50}\}\)/,
                     replace:
-                        "Object.assign($&,{ deleted:$1.deleted, editHistory:$1.editHistory, firstEditTimestamp:$1.firstEditTimestamp })",
+                        "Object.assign($&,{ deleted:$1.deleted, editHistory:$1.editHistory, firstEditTimestamp:$1.firstEditTimestamp, diffViewDisabled:$1.diffViewDisabled })",
                 },
 
                 {
@@ -498,7 +530,8 @@ export default definePlugin({
                         "})())," +
                         "deleted: arguments[1]?.deleted," +
                         "editHistory: arguments[1]?.editHistory," +
-                        "firstEditTimestamp: new Date(arguments[1]?.firstEditTimestamp ?? $2.editedTimestamp ?? $2.timestamp)",
+                        "firstEditTimestamp: new Date(arguments[1]?.firstEditTimestamp ?? $2.editedTimestamp ?? $2.timestamp)," +
+                        "diffViewDisabled: arguments[1]?.diffViewDisabled",
                 },
                 {
                     // Preserve deleted attribute on attachments

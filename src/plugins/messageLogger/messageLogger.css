@@ -53,3 +53,9 @@
 .messagelogger-diff-removed {
     color: #F47068;
 }
+
+/* when diffs are disabled for a specific message, remove diff colors */
+.messagelogger-diff-disabled .messagelogger-diff-added,
+.messagelogger-diff-disabled .messagelogger-diff-removed {
+    color: inherit;
+}
