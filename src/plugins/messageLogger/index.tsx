@@ -327,7 +327,8 @@ export default definePlugin({
         showEditDiffs: {
             type: OptionType.BOOLEAN,
             description: "Show visual differences between edited message versions",
-            default: false,
+            default: true,
+            restartNeeded: true,
         },
     },
 
