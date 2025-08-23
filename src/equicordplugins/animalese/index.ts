@@ -149,9 +149,7 @@ async function playSound(buffer: AudioBuffer, volume: number) {
 export default definePlugin({
     name: "Animalese",
     description: "Plays animalese (they yap a lot) on message sent",
-    authors: [
-        { name: "ryanamay", id: 1262793452236570667n },
-        { name: "communistkittycat", id: 808802000224518264n }],
+    authors: [EquicordDevs.ryanamay, EquicordDevs.Mocha],
     settings,
 
     start() {
