@@ -1,39 +1,4 @@
-# [<img src="./browser/icon.png" width="40" align="left" alt="Equicord">](https://github.com/Equicord/Equicord) Equicord
-
-[![Equibop](https://img.shields.io/badge/Equibop-grey?style=flat)](https://github.com/Equicord/Equibop)
-[![Tests](https://github.com/Equicord/Equicord/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Equicord/Equicord/actions/workflows/test.yml)
-[![Discord](https://img.shields.io/discord/1173279886065029291.svg?color=768AD4&label=Discord&logo=discord&logoColor=white)](https://equicord.org/discord)
-
-Equicord is a fork of [Vencord](https://github.com/Vendicated/Vencord), with over 300+ plugins.
-
-You can join our [discord server](https://equicord.org/discord) for commits, changes, chat or even support.
-
-### Included Plugins
-
-Our included plugins can be found [here](https://equicord.org/plugins)
-
-## Installing / Uninstalling
-
-Windows
-
-- [GUI](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl.exe)
-- [CLI](https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli.exe)
-
-MacOS
-
-- [GUI](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl.MacOS.zip)
-
-Linux
-
-- [GUI-X11](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl-x11)
-- [CLI](https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli-Linux)
-- [AUR](https://aur.archlinux.org/packages?O=0&K=equicord)
-
-```shell
-sh -c "$(curl -sS https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/misc/install.sh)"
-```
-
-## Installing Equicord Devbuild
+## Installing Equicord (7xeh's)Devbuild
 
 ### Dependencies
 
@@ -52,7 +17,7 @@ npm i -g pnpm
 Clone Equicord:
 
 ```shell
-git clone https://github.com/Equicord/Equicord
+git clone https://github.com/7xeh/Equicord
 cd Equicord
 ```
 
@@ -73,21 +38,6 @@ Inject Equicord into your client:
 ```shell
 pnpm inject
 ```
-
-## Credits
-
-Thank you to [Vendicated](https://github.com/Vendicated) for creating [Vencord](https://github.com/Vendicated/Vencord) & [Suncord](https://github.com/verticalsync/Suncord) by [verticalsync](https://github.com/verticalsync) for helping when needed.
-
-## Star History
-
-<a href="https://star-history.com/#Equicord/Equicord&Timeline">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Equicord/Equicord&type=Timeline&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Equicord/Equicord&type=Timeline" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Equicord/Equicord&type=Timeline" />
-  </picture>
-</a>
-
 ## Disclaimer
 
 Discord is trademark of Discord Inc. and solely mentioned for the sake of descriptivity.
