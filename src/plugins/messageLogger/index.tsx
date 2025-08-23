@@ -80,7 +80,8 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
         );
     }
 
-    // toggle per-message diff rendering when the message has an edit history
+    // toggle per-message diff rendering when the message
+    // has an edit history and the setting is enabled
     if (editHistory?.length && settings.store.showEditDiffs) {
         const isDisabled = disabledDiffMessages.has(id);
         children.push(
@@ -92,10 +93,10 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
                 action={() => {
                     if (isDisabled) disabledDiffMessages.delete(id);
                     else disabledDiffMessages.add(id);
-                    // also toggle a CSS class on the message element for an immediate visual effect (basically shows things work lol)
+                    // Also toggle a CSS class on the message element for immediate visual effect
                     const domElement = document.getElementById(`chat-messages-${channel_id}-${id}`);
                     domElement?.classList.toggle("messagelogger-diff-disabled", disabledDiffMessages.has(id));
-                    // force a re-render without mutating message fields
+                    // Force a re-render without mutating message fields
                     updateMessage(channel_id, id);
                 }}
             />,
