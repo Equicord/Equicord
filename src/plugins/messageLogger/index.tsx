@@ -80,8 +80,9 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
         );
     }
 
-    // toggle per-message diff rendering when the message has an edit history
-    if (editHistory?.length) {
+    // Toggle per-message diff rendering when the message has an edit history
+    // and global diff rendering is enabled
+    if (editHistory?.length && Settings.plugins.MessageLogger.showEditDiffs) {
         const isDisabled = disabledDiffMessages.has(id);
         children.push(
             <Menu.MenuItem
@@ -92,10 +93,10 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
                 action={() => {
                     if (isDisabled) disabledDiffMessages.delete(id);
                     else disabledDiffMessages.add(id);
-                    // also toggle a CSS class on the message element for an immediate visual effect (basically shows things work lol)
+                    // Also toggle a CSS class on the message element for immediate visual effect
                     const domElement = document.getElementById(`chat-messages-${channel_id}-${id}`);
                     domElement?.classList.toggle("messagelogger-diff-disabled", disabledDiffMessages.has(id));
-                    // force a re-render without mutating message fields
+                    // Force a re-render without mutating message fields
                     updateMessage(channel_id, id);
                 }}
             />,
@@ -327,8 +328,7 @@ export default definePlugin({
         showEditDiffs: {
             type: OptionType.BOOLEAN,
             description: "Show visual differences between edited message versions",
-            default: true,
-            restartNeeded: true,
+            default: false,
         },
     },
 
