@@ -45,12 +45,9 @@ const highSounds = Array.from(
 );
 const soundBuffers: Record<string, AudioBuffer> = {};
 
-
-
 // todo implement other pitch sounds but theoretically plugging this in from said repo should work, right?
 const BASE_URL_HIGH =
     "https://github.com/Equicord/Equibored/raw/main/sounds/animalese/high";
-
 
 async function initSoundBuffers() {
     if (!audioContext) audioContext = new AudioContext();
