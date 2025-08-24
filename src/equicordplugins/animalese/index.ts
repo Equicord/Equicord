@@ -72,9 +72,7 @@ const highSounds = Array.from(
 );
 const soundBuffers: Record<string, AudioBuffer> = {};
 
-// todo: replace /sounds/high/ with just /sounds/
-const BASE_URL_HIGH =
-    "https://raw.githubusercontent.com/Equicord/Equibored/main/sounds/animalese";
+const BASE_URL_HIGH = "https://raw.githubusercontent.com/Equicord/Equibored/main/sounds/animalese";
 
 async function initSoundBuffers() {
     if (!audioContext) audioContext = new AudioContext();
