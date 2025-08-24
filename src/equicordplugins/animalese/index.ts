@@ -50,7 +50,7 @@ const soundBuffers: Record<string, AudioBuffer> = {};
 // todo implement other pitch sounds but theoretically plugging this in from said repo should work, right?
 const BASE_URL_HIGH =
     "https://github.com/Equicord/Equibored/raw/main/sounds/animalese/high";
-    
+
 
 async function initSoundBuffers() {
     if (!audioContext) audioContext = new AudioContext();
@@ -198,21 +198,21 @@ export default definePlugin({
             // Check if the message content is a URL
             const urlPattern = /https?:\/\/[^\s]+/;
             if (urlPattern.test(message.content)) {
-                //console.log("Message is a URL, ignoring:", message.content); // Debug log for URL messages
+                // console.log("Message is a URL, ignoring:", message.content); // Debug log for URL messages
                 return;
             }
 
             // Check if the message content is too long
             const maxLength = this.userPreferences?.messageLengthLimit || 100; // Use user preference for max length
             if (message.content.length > maxLength) {
-                //console.log("Message is too long, ignoring:", message.content); // Debug log for long messages
+                // console.log("Message is too long, ignoring:", message.content); // Debug log for long messages
                 return;
             }
 
             // Check if the message is from the user and if processing own messages is disabled
             const processOwnMessages = this.userPreferences?.processOwnMessages ?? true;
             if (String(message.author.id) === String(UserStore.getCurrentUser().id)) {
-                //console.log("Ignoring own message:", message.content); // Debug log for own messages
+                // console.log("Ignoring own message:", message.content); // Debug log for own messages
                 return;
             }
 
