@@ -11,7 +11,7 @@ import { FluxDispatcher, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     volume: {
-        type: OptionType.NUMBER,
+        type: OptionType.SLIDER,
         description: "Volume of the animalese sound",
         default: 0.5,
         markers: [0, 0.1, 0.25, 0.5, 0.6, 0.75, 1],
