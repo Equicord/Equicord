@@ -174,10 +174,8 @@ async function generateAnimalese(text: string): Promise<AudioBuffer | null> {
         offset += Math.floor(baseLetterDuration);
     }
 
-
     return outputBuffer;
 }
-
 
 async function playSound(buffer: AudioBuffer, volume: number) {
     if (!audioContext) audioContext = new AudioContext();
