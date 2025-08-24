@@ -7,20 +7,31 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { FluxDispatcher } from "@webpack/common";
+import { FluxDispatcher, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     volume: {
         type: OptionType.SLIDER,
         description: "Volume of the animalese sound",
         default: 0.5,
-        markers: [0, 0.25, 0.5, 0.75, 1],
+        markers: [0, 0.1, 0.25, 0.5, 0.6, 0.75, 1],
     },
     speed: {
         type: OptionType.SLIDER,
         description: "Speed of the animalese sound",
         default: 1,
         markers: [0.5, 0.75, 1, 1.25, 1.5],
+    },
+    messageLengthLimit: {
+        type: OptionType.SLIDER,
+        description: "Maximum length of message to process",
+        default: 50,
+        markers: [25, 50, 75, 100, 150, 200],
+    },
+    processOwnMessages: {
+        type: OptionType.BOOLEAN,
+        description: "Enable to yap your own messages too",
+        default: true,
     },
 });
 
@@ -34,9 +45,12 @@ const highSounds = Array.from(
 );
 const soundBuffers: Record<string, AudioBuffer> = {};
 
+
+
 // todo implement other pitch sounds but theoretically plugging this in from said repo should work, right?
 const BASE_URL_HIGH =
     "https://github.com/Equicord/Equibored/raw/main/sounds/animalese/high";
+    
 
 async function initSoundBuffers() {
     if (!audioContext) audioContext = new AudioContext();
@@ -149,7 +163,7 @@ async function playSound(buffer: AudioBuffer, volume: number) {
 
 export default definePlugin({
     name: "Animalese",
-    description: "Plays animalese (they yap a lot) on message sent",
+    description: "Plays animal crossing animalese for every message sent (they yap a lot)",
     authors: [EquicordDevs.ryanamay, EquicordDevs.Mocha],
     settings,
 
@@ -170,7 +184,7 @@ export default definePlugin({
         FluxDispatcher.subscribe("CHANNEL_SELECT", this.channelSelectListener);
 
         this.messageCreateListener = async ({ optimistic, type, message }) => {
-            // DO NOT REMOVE THIS OR EELSE IT WILL BE YAP CENTRAL
+            // DO NOT REMOVE THIS OR ELSE IT WILL BE YAP CENTRAL
             if (optimistic || type !== "MESSAGE_CREATE") return;
 
             if (
@@ -181,9 +195,30 @@ export default definePlugin({
                 return;
             }
 
+            // Check if the message content is a URL
+            const urlPattern = /https?:\/\/[^\s]+/;
+            if (urlPattern.test(message.content)) {
+                //console.log("Message is a URL, ignoring:", message.content); // Debug log for URL messages
+                return;
+            }
+
+            // Check if the message content is too long
+            const maxLength = this.userPreferences?.messageLengthLimit || 100; // Use user preference for max length
+            if (message.content.length > maxLength) {
+                //console.log("Message is too long, ignoring:", message.content); // Debug log for long messages
+                return;
+            }
+
+            // Check if the message is from the user and if processing own messages is disabled
+            const processOwnMessages = this.userPreferences?.processOwnMessages ?? true;
+            if (String(message.author.id) === String(UserStore.getCurrentUser().id)) {
+                //console.log("Ignoring own message:", message.content); // Debug log for own messages
+                return;
+            }
+
             try {
                 const buffer = await generateAnimalese(message.content);
-                if (buffer) await playSound(buffer, settings.store.volume);
+                await playSound(buffer, settings.store.volume);
             } catch (err) {
                 console.error("[Animalese]", err);
             }
