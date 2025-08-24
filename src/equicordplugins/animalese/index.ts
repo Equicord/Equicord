@@ -11,7 +11,7 @@ import { FluxDispatcher, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     volume: {
-        type: OptionType.SLIDER,
+        type: OptionType.NUMBER,
         description: "Volume of the animalese sound",
         default: 0.5,
         markers: [0, 0.1, 0.25, 0.5, 0.6, 0.75, 1],
@@ -22,11 +22,16 @@ const settings = definePluginSettings({
         default: 1,
         markers: [0.5, 0.75, 1, 1.25, 1.5],
     },
-    messageLengthLimit: {
+    pitch: {
         type: OptionType.SLIDER,
+        description: "Pitch multiplier",
+        default: 1,
+        markers: [0.75, 0.8, 0.85, 1, 1.15, 1.25, 1.35, 1.5],
+    },
+    messageLengthLimit: {
+        type: OptionType.NUMBER,
         description: "Maximum length of message to process",
         default: 50,
-        markers: [25, 50, 75, 100, 150, 200],
     },
     processOwnMessages: {
         type: OptionType.BOOLEAN,
@@ -45,9 +50,12 @@ const highSounds = Array.from(
 );
 const soundBuffers: Record<string, AudioBuffer> = {};
 
-// todo implement other pitch sounds but theoretically plugging this in from said repo should work, right?
+
+
+// todo: replace /sounds/high/ with just /sounds/
 const BASE_URL_HIGH =
-    "https://github.com/Equicord/Equibored/raw/main/sounds/animalese/high";
+    "https://raw.githubusercontent.com/rynmx/vencord-animalese/main/sounds/high";
+
 
 async function initSoundBuffers() {
     if (!audioContext) audioContext = new AudioContext();
@@ -112,33 +120,40 @@ async function generateAnimalese(text: string): Promise<AudioBuffer | null> {
     const outputData = outputBuffer.getChannelData(0);
 
     let offset = 0;
-    for (let i = 0; i < soundIndices.length; i++) {
-        const soundIndex = soundIndices[i];
-        const buffer = soundBuffers[soundIndex];
-        if (!buffer) continue;
+    const baseLetterDuration = audioContext.sampleRate * (0.09 / settings.store.speed);
+// ~90ms per letter at 1x speed (tweakable!)
 
-        const variation = 0.15;
-        let pitchShift = 2.8 + Math.random() * variation;
+for (let i = 0; i < soundIndices.length; i++) {
+    const buffer = soundBuffers[soundIndices[i]];
+    if (!buffer) continue;
 
-        const isQuestion = text_lower.endsWith("?");
-        if (isQuestion && i >= soundIndices.length * 0.8) {
-            const progress =
-                (i - soundIndices.length * 0.8) / (soundIndices.length * 0.2);
-            pitchShift += progress * 0.1 + 0.1;
-        }
+    const variation = 0.15;
+    let pitchShift = (2.8 * settings.store.pitch) + (Math.random() * variation);
 
-        const inputData = buffer.getChannelData(0);
-        const inputLength = inputData.length;
-        const outputLength = Math.floor(inputLength / pitchShift);
-
-        for (let j = 0; j < outputLength; j++) {
-            const inputIndex = Math.floor(j * pitchShift);
-            if (inputIndex < inputLength && offset + j < outputData.length) {
-                outputData[offset + j] = inputData[inputIndex];
-            }
-        }
-        offset += outputLength;
+    const isQuestion = text_lower.endsWith("?");
+    if (isQuestion && i >= soundIndices.length * 0.8) {
+        const progress =
+            (i - soundIndices.length * 0.8) / (soundIndices.length * 0.2);
+        pitchShift += progress * 0.1 + 0.1;
     }
+
+    const inputData = buffer.getChannelData(0);
+    const inputLength = inputData.length;
+    const outputLength = Math.floor(inputLength / pitchShift);
+
+    // copy sound into the slot
+    for (let j = 0; j < outputLength; j++) {
+        const inputIndex = Math.floor(j * pitchShift);
+        const targetIndex = offset + j;
+        if (inputIndex < inputLength && targetIndex < outputData.length) {
+            outputData[targetIndex] = inputData[inputIndex];
+        }
+    }
+
+    // instead of stacking lengths, jump forward a *fixed slot* per character
+    offset += Math.floor(baseLetterDuration);
+}
+
 
     return outputBuffer;
 }
@@ -150,6 +165,7 @@ async function playSound(buffer: AudioBuffer, volume: number) {
     const gainNode = audioContext.createGain();
 
     source.buffer = buffer;
+    source.playbackRate.value = settings.store.pitch;
     gainNode.gain.value = volume;
 
     source.connect(gainNode);
@@ -171,9 +187,9 @@ export default definePlugin({
                 audioContext = new AudioContext();
                 await initSoundBuffers();
             }
-            document.removeEventListener("click", init);
+            init();
         };
-        document.addEventListener("click", init);
+        init();
 
         this.channelSelectListener = ({ channelId }) => {
             currentChannelId = channelId;
@@ -200,15 +216,15 @@ export default definePlugin({
             }
 
             // Check if the message content is too long
-            const maxLength = this.userPreferences?.messageLengthLimit || 100; // Use user preference for max length
+            const maxLength = settings.store.messageLengthLimit || 100; // Use user preference for max length
             if (message.content.length > maxLength) {
                 // console.log("Message is too long, ignoring:", message.content); // Debug log for long messages
                 return;
             }
 
             // Check if the message is from the user and if processing own messages is disabled
-            const processOwnMessages = this.userPreferences?.processOwnMessages ?? true;
-            if (String(message.author.id) === String(UserStore.getCurrentUser().id)) {
+            const processOwnMessages = settings.store.processOwnMessages ?? true;
+            if (processOwnMessages && String(message.author.id) != String(UserStore.getCurrentUser().id)) {
                 // console.log("Ignoring own message:", message.content); // Debug log for own messages
                 return;
             }
