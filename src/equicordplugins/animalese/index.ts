@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { FluxDispatcher, UserStore } from "@webpack/common";
+import { SelectedChannelStore, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     volume: {
@@ -38,10 +38,32 @@ const settings = definePluginSettings({
         description: "Enable to yap your own messages too",
         default: true,
     },
+    soundQuality: {
+        type: OptionType.SELECT,
+        description: "Quality of sound to use",
+        options: [
+            {
+                label: "High",
+                value: "high",
+                default: true
+            },
+            {
+                label: "Medium",
+                value: "med"
+            },
+            {
+                label: "Low",
+                value: "low"
+            },
+            {
+                label: "Lowest",
+                value: "low"
+            }
+        ]
+    }
 });
 
 let audioContext: AudioContext | null = null;
-let currentChannelId: string | null = null;
 
 // better than my old hardcoded garbage
 const highSounds = Array.from(
@@ -50,19 +72,17 @@ const highSounds = Array.from(
 );
 const soundBuffers: Record<string, AudioBuffer> = {};
 
-
-
 // todo: replace /sounds/high/ with just /sounds/
 const BASE_URL_HIGH =
-    "https://raw.githubusercontent.com/rynmx/vencord-animalese/main/sounds/high";
-
+    "https://raw.githubusercontent.com/Equicord/Equibored/main/sounds/animalese";
 
 async function initSoundBuffers() {
     if (!audioContext) audioContext = new AudioContext();
+    const quality = settings.store.soundQuality;
     for (const file of highSounds) {
         const nameWithoutExt = file.replace(".wav", "");
         soundBuffers[nameWithoutExt] = await loadSound(
-            `${BASE_URL_HIGH}/${file}`
+            `${BASE_URL_HIGH}/${quality}/${file}`
         );
     }
 }
@@ -121,38 +141,38 @@ async function generateAnimalese(text: string): Promise<AudioBuffer | null> {
 
     let offset = 0;
     const baseLetterDuration = audioContext.sampleRate * (0.09 / settings.store.speed);
-// ~90ms per letter at 1x speed (tweakable!)
+    // ~90ms per letter at 1x speed (tweakable!)
 
-for (let i = 0; i < soundIndices.length; i++) {
-    const buffer = soundBuffers[soundIndices[i]];
-    if (!buffer) continue;
+    for (let i = 0; i < soundIndices.length; i++) {
+        const buffer = soundBuffers[soundIndices[i]];
+        if (!buffer) continue;
 
-    const variation = 0.15;
-    let pitchShift = (2.8 * settings.store.pitch) + (Math.random() * variation);
+        const variation = 0.15;
+        let pitchShift = (2.8 * settings.store.pitch) + (Math.random() * variation);
 
-    const isQuestion = text_lower.endsWith("?");
-    if (isQuestion && i >= soundIndices.length * 0.8) {
-        const progress =
-            (i - soundIndices.length * 0.8) / (soundIndices.length * 0.2);
-        pitchShift += progress * 0.1 + 0.1;
-    }
-
-    const inputData = buffer.getChannelData(0);
-    const inputLength = inputData.length;
-    const outputLength = Math.floor(inputLength / pitchShift);
-
-    // copy sound into the slot
-    for (let j = 0; j < outputLength; j++) {
-        const inputIndex = Math.floor(j * pitchShift);
-        const targetIndex = offset + j;
-        if (inputIndex < inputLength && targetIndex < outputData.length) {
-            outputData[targetIndex] = inputData[inputIndex];
+        const isQuestion = text_lower.endsWith("?");
+        if (isQuestion && i >= soundIndices.length * 0.8) {
+            const progress =
+                (i - soundIndices.length * 0.8) / (soundIndices.length * 0.2);
+            pitchShift += progress * 0.1 + 0.1;
         }
-    }
 
-    // instead of stacking lengths, jump forward a *fixed slot* per character
-    offset += Math.floor(baseLetterDuration);
-}
+        const inputData = buffer.getChannelData(0);
+        const inputLength = inputData.length;
+        const outputLength = Math.floor(inputLength / pitchShift);
+
+        // copy sound into the slot
+        for (let j = 0; j < outputLength; j++) {
+            const inputIndex = Math.floor(j * pitchShift);
+            const targetIndex = offset + j;
+            if (inputIndex < inputLength && targetIndex < outputData.length) {
+                outputData[targetIndex] = inputData[inputIndex];
+            }
+        }
+
+        // instead of stacking lengths, jump forward a *fixed slot* per character
+        offset += Math.floor(baseLetterDuration);
+    }
 
 
     return outputBuffer;
@@ -180,6 +200,32 @@ export default definePlugin({
     authors: [EquicordDevs.ryanamay, EquicordDevs.Mocha],
     settings,
 
+    flux: {
+        async MESSAGE_CREATE({ optimistic, type, message, channelId }) {
+            if (optimistic || type !== "MESSAGE_CREATE") return;
+            if (message.state === "SENDING") return;
+            if (!message.content || message.author?.bot || channelId !== SelectedChannelStore.getChannelId()) return;
+
+            const urlPattern = /https?:\/\/[^\s]+/;
+            const maxLength = settings.store.messageLengthLimit || 100;
+            const processOwnMessages = settings.store.processOwnMessages ?? true;
+
+            if (
+                urlPattern.test(message.content)
+                || message.content.length > maxLength
+                || !processOwnMessages
+                && String(message.author.id) === String(UserStore.getCurrentUser().id)
+            ) return;
+
+            try {
+                const buffer = await generateAnimalese(message.content);
+                if (buffer) await playSound(buffer, settings.store.volume);
+            } catch (err) {
+                console.error("[Animalese]", err);
+            }
+        }
+    },
+
     start() {
         // Only subscribe once!
         const init = async () => {
@@ -190,68 +236,12 @@ export default definePlugin({
             init();
         };
         init();
-
-        this.channelSelectListener = ({ channelId }) => {
-            currentChannelId = channelId;
-        };
-        FluxDispatcher.subscribe("CHANNEL_SELECT", this.channelSelectListener);
-
-        this.messageCreateListener = async ({ optimistic, type, message }) => {
-            // DO NOT REMOVE THIS OR ELSE IT WILL BE YAP CENTRAL
-            if (optimistic || type !== "MESSAGE_CREATE") return;
-
-            if (
-                !message?.content ||
-                message.author?.bot ||
-                message.channel_id !== currentChannelId
-            ) {
-                return;
-            }
-
-            // Check if the message content is a URL
-            const urlPattern = /https?:\/\/[^\s]+/;
-            if (urlPattern.test(message.content)) {
-                // console.log("Message is a URL, ignoring:", message.content); // Debug log for URL messages
-                return;
-            }
-
-            // Check if the message content is too long
-            const maxLength = settings.store.messageLengthLimit || 100; // Use user preference for max length
-            if (message.content.length > maxLength) {
-                // console.log("Message is too long, ignoring:", message.content); // Debug log for long messages
-                return;
-            }
-
-            // Check if the message is from the user and if processing own messages is disabled
-            const processOwnMessages = settings.store.processOwnMessages ?? true;
-            if (processOwnMessages && String(message.author.id) != String(UserStore.getCurrentUser().id)) {
-                // console.log("Ignoring own message:", message.content); // Debug log for own messages
-                return;
-            }
-
-            try {
-                const buffer = await generateAnimalese(message.content);
-                if (buffer) await playSound(buffer, settings.store.volume);
-            } catch (err) {
-                console.error("[Animalese]", err);
-            }
-        };
-        FluxDispatcher.subscribe("MESSAGE_CREATE", this.messageCreateListener);
     },
 
     stop() {
-        FluxDispatcher.unsubscribe(
-            "CHANNEL_SELECT",
-            this.channelSelectListener
-        );
-        FluxDispatcher.unsubscribe(
-            "MESSAGE_CREATE",
-            this.messageCreateListener
-        );
         if (audioContext) {
             audioContext.close();
             audioContext = null;
         }
-        currentChannelId = null;
     },
 });
