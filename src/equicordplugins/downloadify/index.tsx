@@ -91,18 +91,8 @@ export default definePlugin({
             replacement: [
                 {
                     // Make use of the download function.
-                    match: /(let{item:\i}=(\i).{0,450}?)let \i=(await \i.\i.saveImage\(\i,\i.contentType,\i.\i\)).{0,110}?&&/,
+                    match: /(let{item:\i}=(\i).{0,450}?)(try{let.{0,400}?finally{\i\(!1\)})/,
                     replace: "$1await $self.handleExpandedModalDownloadButtonClicked($2,async()=>{$3});",
-                },
-                {
-                    // Disable default success toast.
-                    match: /\(\(0,.{0,85}?ToastType.SUCCESS\)\)\)/,
-                    replace: "",
-                },
-                {
-                    // Disable default failure toast.
-                    match: /(\(0,.{0,85}?ToastType.FAILURE\)\))/,
-                    replace: "",
                 },
                 {
                     // Prevent videos from opening in browser.
