@@ -11,7 +11,7 @@ import {
     NavContextMenuPatchCallback,
 } from "@api/ContextMenu";
 import { updateMessage } from "@api/MessageUpdater";
-import { Settings } from "@api/Settings";
+import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, VC_SUPPORT_CATEGORY_ID, VENBOT_USER_ID } from "@utils/constants";
@@ -21,22 +21,27 @@ import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import { ChannelStore, FluxDispatcher, Menu, MessageStore, Parser, SelectedChannelStore, Timestamp, UserStore, useStateFromStores } from "@webpack/common";
+import { ChannelStore, FluxDispatcher, Menu, MessageStore, Parser, React, SelectedChannelStore, Timestamp, UserStore, useStateFromStores } from "@webpack/common";
 
 import overlayStyle from "./deleteStyleOverlay.css?managed";
 import textStyle from "./deleteStyleText.css?managed";
+import { createMessageDiff, DiffPart } from "./diffUtils";
 import { openHistoryModal } from "./HistoryModal";
 
 interface MLMessage extends Message {
     deleted?: boolean;
     editHistory?: { timestamp: Date; content: string; }[];
     firstEditTimestamp?: Date;
+    diffViewDisabled?: boolean;
 }
 
 const styles = findByPropsLazy("edited", "communicationDisabled", "isSystemMessage");
 
+// track messages where the user disabled diffs for this session
+const disabledDiffMessages = new Set<string>();
+
 function addDeleteStyle() {
-    if (Settings.plugins.MessageLogger.deleteStyle === "text") {
+    if (settings.store.deleteStyle === "text") {
         enableStyle(textStyle);
         disableStyle(overlayStyle);
     } else {
@@ -47,6 +52,7 @@ function addDeleteStyle() {
 
 const REMOVE_HISTORY_ID = "ml-remove-history";
 const TOGGLE_DELETE_STYLE_ID = "ml-toggle-style";
+const TOGGLE_DIFF_VIEW_ID = "ml-toggle-diff";
 const patchMessageContextMenu: NavContextMenuPatchCallback = (
     children,
     props,
@@ -70,6 +76,29 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
                 key={TOGGLE_DELETE_STYLE_ID}
                 label="Toggle Deleted Highlight"
                 action={() => domElement.classList.toggle("messagelogger-deleted")}
+            />,
+        );
+    }
+
+    // toggle per-message diff rendering when the message
+    // has an edit history and the setting is enabled
+    if (editHistory?.length && settings.store.showEditDiffs) {
+        const isDisabled = disabledDiffMessages.has(id);
+        children.push(
+            <Menu.MenuItem
+                id={TOGGLE_DIFF_VIEW_ID}
+                key={TOGGLE_DIFF_VIEW_ID}
+                label={isDisabled ? "Enable Diff View" : "Disable Diff View"}
+                color="danger"
+                action={() => {
+                    if (isDisabled) disabledDiffMessages.delete(id);
+                    else disabledDiffMessages.add(id);
+                    // Also toggle a CSS class on the message element for immediate visual effect
+                    const domElement = document.getElementById(`chat-messages-${channel_id}-${id}`);
+                    domElement?.classList.toggle("messagelogger-diff-disabled", disabledDiffMessages.has(id));
+                    // Force a re-render without mutating message fields
+                    updateMessage(channel_id, id);
+                }}
             />,
         );
     }
@@ -137,7 +166,32 @@ const patchChannelContextMenu: NavContextMenuPatchCallback = (
     );
 };
 
-export function parseEditContent(content: string, message: Message) {
+function renderDiffParts(diffParts: DiffPart[]) {
+    return diffParts.map((part, index) => {
+        if (part.type === "unchanged") {
+            return React.createElement("span", { key: index }, part.text);
+        } else if (part.type === "added") {
+            return React.createElement("span", {
+                key: index,
+                className: "messagelogger-diff-added"
+            }, part.text);
+        } else if (part.type === "removed") {
+            return React.createElement("span", {
+                key: index,
+                className: "messagelogger-diff-removed"
+            }, part.text);
+        }
+        return React.createElement("span", { key: index }, part.text);
+    });
+}
+
+export function parseEditContent(content: string, message: Message, previousContent?: string) {
+    const perMessageDiffEnabled = !disabledDiffMessages.has(message.id);
+    if (previousContent && content !== previousContent && settings.store.showEditDiffs && perMessageDiffEnabled) {
+        const diffParts = createMessageDiff(content, previousContent);
+        return renderDiffParts(diffParts);
+    }
+
     return Parser.parse(content, true, {
         channelId: message.channel_id,
         messageId: message.id,
@@ -149,11 +203,76 @@ export function parseEditContent(content: string, message: Message) {
     });
 }
 
+const settings = definePluginSettings({
+    deleteStyle: {
+        type: OptionType.SELECT,
+        description: "The style of deleted messages",
+        default: "text",
+        options: [
+            { label: "Red text", value: "text", default: true },
+            { label: "Red overlay", value: "overlay" },
+        ],
+        onChange: () => addDeleteStyle(),
+    },
+    logDeletes: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to log deleted messages",
+        default: true,
+    },
+    collapseDeleted: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to collapse deleted messages, similar to blocked messages",
+        default: false,
+        restartNeeded: true,
+    },
+    logEdits: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to log edited messages",
+        default: true,
+    },
+    inlineEdits: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to display edit history as part of message content",
+        default: true,
+    },
+    ignoreBots: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to ignore messages by bots",
+        default: false,
+    },
+    ignoreSelf: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to ignore messages by yourself",
+        default: false,
+    },
+    ignoreUsers: {
+        type: OptionType.STRING,
+        description: "Comma-separated list of user IDs to ignore",
+        default: "",
+    },
+    ignoreChannels: {
+        type: OptionType.STRING,
+        description: "Comma-separated list of channel IDs to ignore",
+        default: "",
+    },
+    ignoreGuilds: {
+        type: OptionType.STRING,
+        description: "Comma-separated list of guild IDs to ignore",
+        default: "",
+    },
+    showEditDiffs: {
+        type: OptionType.BOOLEAN,
+        description: "Show visual differences between edited message versions",
+        default: false,
+    },
+});
+
 export default definePlugin({
     name: "MessageLogger",
     description: "Temporarily logs deleted and edited messages.",
     authors: [Devs.rushii, Devs.Ven, Devs.AutumnVN, Devs.Nickyux, Devs.Kyuuhachi],
     dependencies: ["MessageUpdaterAPI"],
+    settings,
 
     contextMenus: {
         message: patchMessageContextMenu,
@@ -177,24 +296,35 @@ export default definePlugin({
                 [MessageStore],
                 () => MessageStore.getMessage(channelId, messageId) as MLMessage,
                 null,
-                (oldMsg, newMsg) => oldMsg?.editHistory === newMsg?.editHistory,
+                (oldMsg, newMsg) =>
+                    oldMsg?.editHistory === newMsg?.editHistory &&
+                    oldMsg?.diffViewDisabled === newMsg?.diffViewDisabled &&
+                    oldMsg === newMsg,
             );
 
-            return Settings.plugins.MessageLogger.inlineEdits && (
-                <>
-                    {message.editHistory?.map((edit, idx) => (
-                        <div key={idx} className="messagelogger-edited">
-                            {parseEditContent(edit.content, message)}
-                            <Timestamp
-                                timestamp={edit.timestamp}
-                                isEdited={true}
-                                isInline={false}
-                            >
-                                <span className={styles.edited}>{" "}({getIntlMessage("MESSAGE_EDITED")})</span>
-                            </Timestamp>
-                        </div>
-                    ))}
-                </>
+            const { showEditDiffs, inlineEdits } = settings.use(["showEditDiffs", "inlineEdits"]);
+
+            return inlineEdits && (
+                <React.Fragment key={disabledDiffMessages.has(messageId) ? `diff-off-${messageId}` : `diff-on-${messageId}`}>
+                    {message.editHistory?.map((edit, idx) => {
+                        const nextContent = idx === (message.editHistory?.length ?? 0) - 1
+                            ? message.content
+                            : message.editHistory?.[idx + 1]?.content;
+
+                        return (
+                            <div key={idx} className="messagelogger-edited">
+                                {parseEditContent(edit.content, message, nextContent)}
+                                <Timestamp
+                                    timestamp={edit.timestamp}
+                                    isEdited={true}
+                                    isInline={false}
+                                >
+                                    <span className={styles.edited}>{" "}({getIntlMessage("MESSAGE_EDITED")})</span>
+                                </Timestamp>
+                            </div>
+                        );
+                    })}
+                </React.Fragment>
             );
         }, { noop: true }),
 
@@ -203,65 +333,6 @@ export default definePlugin({
             timestamp: new Date(newMessage.edited_timestamp),
             content: oldMessage.content,
         };
-    },
-
-    options: {
-        deleteStyle: {
-            type: OptionType.SELECT,
-            description: "The style of deleted messages",
-            default: "text",
-            options: [
-                { label: "Red text", value: "text", default: true },
-                { label: "Red overlay", value: "overlay" },
-            ],
-            onChange: () => addDeleteStyle(),
-        },
-        logDeletes: {
-            type: OptionType.BOOLEAN,
-            description: "Whether to log deleted messages",
-            default: true,
-        },
-        collapseDeleted: {
-            type: OptionType.BOOLEAN,
-            description: "Whether to collapse deleted messages, similar to blocked messages",
-            default: false,
-            restartNeeded: true,
-        },
-        logEdits: {
-            type: OptionType.BOOLEAN,
-            description: "Whether to log edited messages",
-            default: true,
-        },
-        inlineEdits: {
-            type: OptionType.BOOLEAN,
-            description: "Whether to display edit history as part of message content",
-            default: true,
-        },
-        ignoreBots: {
-            type: OptionType.BOOLEAN,
-            description: "Whether to ignore messages by bots",
-            default: false,
-        },
-        ignoreSelf: {
-            type: OptionType.BOOLEAN,
-            description: "Whether to ignore messages by yourself",
-            default: false,
-        },
-        ignoreUsers: {
-            type: OptionType.STRING,
-            description: "Comma-separated list of user IDs to ignore",
-            default: "",
-        },
-        ignoreChannels: {
-            type: OptionType.STRING,
-            description: "Comma-separated list of channel IDs to ignore",
-            default: "",
-        },
-        ignoreGuilds: {
-            type: OptionType.STRING,
-            description: "Comma-separated list of guild IDs to ignore",
-            default: "",
-        },
     },
 
     handleDelete(
@@ -314,7 +385,7 @@ export default definePlugin({
             ignoreGuilds,
             logEdits,
             logDeletes,
-        } = Settings.plugins.MessageLogger;
+        } = settings.store;
         const myId = UserStore.getCurrentUser().id;
 
         return (
@@ -327,7 +398,7 @@ export default definePlugin({
             ) ||
             (isEdit ? !logEdits : !logDeletes) ||
             ignoreGuilds.includes(ChannelStore.getChannel(message.channel_id)?.guild_id) ||
-            // Ignore Venbot in the support channels
+            // Ignore Venbot in the support channels (love you venbot!!!)
             (message.author?.id === VENBOT_USER_ID && ChannelStore.getChannel(message.channel_id)?.parent_id === VC_SUPPORT_CATEGORY_ID));
     },
 
@@ -427,7 +498,8 @@ export default definePlugin({
                         "this.customRenderedContent = $1.customRenderedContent," +
                         "this.deleted = $1.deleted || false," +
                         "this.editHistory = $1.editHistory || []," +
-                        "this.firstEditTimestamp = $1.firstEditTimestamp || this.editedTimestamp || this.timestamp,",
+                        "this.firstEditTimestamp = $1.firstEditTimestamp || this.editedTimestamp || this.timestamp," +
+                        "this.diffViewDisabled = $1.diffViewDisabled || false,",
                 },
             ],
         },
@@ -441,7 +513,7 @@ export default definePlugin({
                     match:
                         /(?<=null!=\i\.edited_timestamp\)return )\i\(\i,\{reactions:(\i)\.reactions.{0,50}\}\)/,
                     replace:
-                        "Object.assign($&,{ deleted:$1.deleted, editHistory:$1.editHistory, firstEditTimestamp:$1.firstEditTimestamp })",
+                        "Object.assign($&,{ deleted:$1.deleted, editHistory:$1.editHistory, firstEditTimestamp:$1.firstEditTimestamp, diffViewDisabled:$1.diffViewDisabled })",
                 },
 
                 {
@@ -461,7 +533,8 @@ export default definePlugin({
                         "})())," +
                         "deleted: arguments[1]?.deleted," +
                         "editHistory: arguments[1]?.editHistory," +
-                        "firstEditTimestamp: new Date(arguments[1]?.firstEditTimestamp ?? $2.editedTimestamp ?? $2.timestamp)",
+                        "firstEditTimestamp: new Date(arguments[1]?.firstEditTimestamp ?? $2.editedTimestamp ?? $2.timestamp)," +
+                        "diffViewDisabled: arguments[1]?.diffViewDisabled",
                 },
                 {
                     // Preserve deleted attribute on attachments
@@ -547,7 +620,7 @@ export default definePlugin({
                 match: /if\((\i)\.blocked\)return \i\.\i\.MESSAGE_GROUP_BLOCKED;/,
                 replace: '$&else if($1.deleted) return"MESSAGE_GROUP_DELETED";',
             },
-            predicate: () => Settings.plugins.MessageLogger.collapseDeleted,
+            predicate: () => settings.store.collapseDeleted,
         },
         {
             // Message group rendering
@@ -562,7 +635,7 @@ export default definePlugin({
                     replace: '$&$1.type==="MESSAGE_GROUP_DELETED"?$self.DELETED_MESSAGE_COUNT:',
                 },
             ],
-            predicate: () => Settings.plugins.MessageLogger.collapseDeleted,
+            predicate: () => settings.store.collapseDeleted,
         },
     ],
 });
