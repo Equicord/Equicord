@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./style.css";
+import "./styles.css";
 
 import { ChatBarButton } from "@api/ChatButtons";
 import { DataStore } from "@api/index";
