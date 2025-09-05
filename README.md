@@ -1,4 +1,4 @@
-## Installing Equicord (7xeh's)Devbuild
+## Installing Equicord
 
 ### Dependencies
 
