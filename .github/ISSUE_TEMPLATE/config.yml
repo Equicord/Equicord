@@ -1,8 +1,0 @@
-blank_issues_enabled: false
-contact_links:
-    - name: Equicord Support Server
-      url: https://equicord.org/discord
-      about: If you need help regarding Equicord, please join our support server!
-    - name: Equicord Installer
-      url: https://github.com/Equicord/Equilotl
-      about: You can find the Equicord Installer here
