@@ -8,9 +8,23 @@ import { classNameFactory } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
-import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import {
+    ModalCloseButton,
+    ModalContent,
+    ModalHeader,
+    ModalProps,
+    ModalRoot,
+    ModalSize,
+    openModal,
+} from "@utils/modal";
 import { findByPropsLazy } from "@webpack";
-import { TabBar, Text, Timestamp, TooltipContainer, useState } from "@webpack/common";
+import {
+    TabBar,
+    Text,
+    Timestamp,
+    TooltipContainer,
+    useState,
+} from "@webpack/common";
 
 import { parseEditContent } from ".";
 
@@ -20,25 +34,36 @@ const MiscClasses = findByPropsLazy("messageContent", "markupRtl");
 const cl = classNameFactory("vc-ml-modal-");
 
 export function openHistoryModal(message: any) {
-    openModal(props =>
+    openModal((props) => (
         <ErrorBoundary>
-            <HistoryModal
-                modalProps={props}
-                message={message}
-            />
+            <HistoryModal modalProps={props} message={message} />
         </ErrorBoundary>
-    );
+    ));
 }
 
-export function HistoryModal({ modalProps, message }: { modalProps: ModalProps; message: any; }) {
+export function HistoryModal({
+    modalProps,
+    message,
+}: {
+    modalProps: ModalProps;
+    message: any;
+}) {
     const [currentTab, setCurrentTab] = useState(message.editHistory.length);
-    const timestamps = [message.firstEditTimestamp, ...message.editHistory.map(m => m.timestamp)];
-    const contents = [...message.editHistory.map(m => m.content), message.content];
+    const timestamps = [
+        message.firstEditTimestamp,
+        ...message.editHistory.map((m) => m.timestamp),
+    ];
+    const contents = [
+        ...message.editHistory.map((m) => m.content),
+        message.content,
+    ];
 
     return (
         <ModalRoot {...modalProps} size={ModalSize.LARGE}>
             <ModalHeader className={cl("head")}>
-                <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }}>Message Edit History</Text>
+                <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }}>
+                    Message Edit History
+                </Text>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
@@ -50,7 +75,8 @@ export function HistoryModal({ modalProps, message }: { modalProps: ModalProps; 
                     selectedItem={currentTab}
                     onItemSelect={setCurrentTab}
                 >
-                    {message.firstEditTimestamp.getTime() !== message.timestamp.getTime() && (
+                    {message.firstEditTimestamp.getTime() !==
+                        message.timestamp.getTime() && (
                         <TooltipContainer text="This edit state was not logged so it can't be displayed.">
                             <TabBar.Item
                                 className="vc-settings-tab-bar-item"
@@ -83,8 +109,20 @@ export function HistoryModal({ modalProps, message }: { modalProps: ModalProps; 
                     ))}
                 </TabBar>
 
-                <div className={classes(CodeContainerClasses.markup, MiscClasses.messageContent, Margins.top20)}>
-                    {parseEditContent(contents[currentTab], message, currentTab === contents.length - 1 ? undefined : contents[contents.length - 1])}
+                <div
+                    className={classes(
+                        CodeContainerClasses.markup,
+                        MiscClasses.messageContent,
+                        Margins.top20,
+                    )}
+                >
+                    {parseEditContent(
+                        contents[currentTab],
+                        message,
+                        currentTab === contents.length - 1
+                            ? undefined
+                            : contents[contents.length - 1],
+                    )}
                 </div>
             </ModalContent>
         </ModalRoot>
