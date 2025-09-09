@@ -178,22 +178,32 @@ const patchChannelContextMenu: NavContextMenuPatchCallback = (
     );
 };
 
-function renderDiffParts(diffParts: DiffPart[]) {
+function renderDiffParts(diffParts: DiffPart[], message: Message) {
     return diffParts.map((part, index) => {
+        const parsedContent = Parser.parse(part.text, true, {
+            channelId: message.channel_id,
+            messageId: message.id,
+            allowLinks: true,
+            allowHeading: true,
+            allowList: true,
+            allowEmojiLinks: true,
+            viewingChannelId: SelectedChannelStore.getChannelId(),
+        });
+
         if (part.type === "unchanged") {
-            return React.createElement("span", { key: index }, part.text);
+            return React.createElement("span", { key: index }, parsedContent);
         } else if (part.type === "added") {
             return React.createElement("span", {
                 key: index,
                 className: "messagelogger-diff-added"
-            }, part.text);
+            }, parsedContent);
         } else if (part.type === "removed") {
             return React.createElement("span", {
                 key: index,
                 className: "messagelogger-diff-removed"
-            }, part.text);
+            }, parsedContent);
         }
-        return React.createElement("span", { key: index }, part.text);
+        return React.createElement("span", { key: index }, parsedContent);
     });
 }
 
@@ -205,7 +215,7 @@ export function parseEditContent(content: string, message: Message, previousCont
     if (previousContent && content !== previousContent && settings.store.showEditDiffs && perMessageDiffEnabled) {
 >>>>>>> 01b903c067ac5819de75955dab2c1c50e1707af9
         const diffParts = createMessageDiff(content, previousContent);
-        return renderDiffParts(diffParts);
+        return renderDiffParts(diffParts, message);
     }
 
     return Parser.parse(content, true, {
