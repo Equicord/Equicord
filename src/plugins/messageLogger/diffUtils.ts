@@ -15,11 +15,7 @@ function tokenizeMessage(text: string): string[] {
 
     while (i < text.length) {
         // handle Discord custom emojis: <:name:id> or <a:name:id>
-        if (
-            text[i] === "<" &&
-            (text.slice(i + 1, i + 3) === ":" ||
-                text.slice(i + 1, i + 3) === "a:")
-        ) {
+        if (text[i] === "<" && (text.slice(i + 1, i + 3) === ":" || text.slice(i + 1, i + 3) === "a:")) {
             const endIndex = text.indexOf(">", i);
             if (endIndex !== -1) {
                 tokens.push(text.slice(i, endIndex + 1));
@@ -29,10 +25,8 @@ function tokenizeMessage(text: string): string[] {
         }
 
         // handle mentions: <@id>, <@!id>, <@&id>, <#id>
-        if (
-            (text[i] === "<" && text[i + 1] === "@") ||
-            (text[i] === "<" && text[i + 1] === "#")
-        ) {
+        if (text[i] === "<" && text[i + 1] === "@" ||
+            (text[i] === "<" && text[i + 1] === "#")) {
             const endIndex = text.indexOf(">", i);
             if (endIndex !== -1) {
                 tokens.push(text.slice(i, endIndex + 1));
@@ -151,9 +145,6 @@ export function createWordDiff(oldText: string, newText: string): DiffPart[] {
     return groupedParts;
 }
 
-export function createMessageDiff(
-    previousContent: string,
-    currentContent: string,
-): DiffPart[] {
+export function createMessageDiff(previousContent: string, currentContent: string): DiffPart[] {
     return createWordDiff(previousContent, currentContent);
 }
