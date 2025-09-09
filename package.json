@@ -1,7 +1,7 @@
 {
     "name": "equicord",
     "private": "true",
-    "version": "1.12.12",
+    "version": "1.12.13",
     "description": "The other cutest Discord client mod",
     "homepage": "https://github.com/Equicord/Equicord#readme",
     "bugs": {
@@ -23,6 +23,7 @@
         "watch": "pnpm build --watch",
         "dev": "pnpm watch",
         "watchWeb": "pnpm buildWeb --watch",
+        "generateDevsList": "tsx scripts/generateDevsList.ts",
         "generatePluginJson": "tsx scripts/generatePluginList.ts",
         "generateEquicordPluginJson": "tsx scripts/generateEquicordPluginList.ts",
         "generateVencordPluginJson": "tsx scripts/generateVencordPluginList.ts",

@@ -42,6 +42,7 @@ jobs:
                 pnpm generatePluginJson dist/plugins.json
                 pnpm generateEquicordPluginJson dist/equicordplugins.json
                 pnpm generateVencordPluginJson dist/vencordplugins.json
+                pnpm generateDevsList dist/devs.json
 
             - name: Collect files to be released
               run: |
@@ -68,13 +69,6 @@ jobs:
             - name: Upload Equicord Stable
               run: |
                   gh release upload latest --clobber dist/release/*
-
-            - name: Create Tag
-              uses: butlerlogic/action-autotag@1.1.2
-              env:
-                GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-              with:
-                tag_prefix: "v"
 
             - name: Upload Plugin JSONs to Equibored repo
               run: |
