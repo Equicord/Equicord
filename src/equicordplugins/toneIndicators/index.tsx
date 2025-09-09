@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import indicatorsDefault from "./indicators";
 import ToneIndicator from "./ToneIndicator";
@@ -112,18 +112,15 @@ function splitTextWithIndicators(text: string): ReactNode[] {
 }
 
 function patchChildrenTree(children: any): any {
-    // Walk the render tree and replace text nodes that contain tone indicators
     const transform = (node: any): any => {
         if (node == null) return node;
 
-        // If it's a plain string, split it
         if (typeof node === "string") {
             if (!/\/[a-z]+/i.test(node)) return node;
             const parts = splitTextWithIndicators(node);
             return parts.length === 1 ? parts[0] : parts;
         }
 
-        // If it's a React element with children, recurse
         if (node?.props?.children != null) {
             const c = node.props.children;
             if (Array.isArray(c)) {
@@ -144,17 +141,15 @@ function patchChildrenTree(children: any): any {
 export default definePlugin({
     name: "ToneIndicators",
     description:
-        "Show tooltips for tone indicators like /srs, /jk, etc. in sent messages.",
+        "Show tooltips for tone indicators like /srs, /gen, etc. in sent messages.",
     authors: [{ name: "justjxke", id: 852558183087472640n }],
     settings,
 
     patches: [
         {
-            // Hook into markdown render like FakeNitro does and mutate content tree
             find: '["strong","em","u","text","inlineCode","s","spoiler"]',
             replacement: [
                 {
-                    // Inject our transformation before returning the content
                     match: /(?=return\{hasSpoilerEmbeds:\i,content:(\i)\})/,
                     replace: (_: any, content: string) =>
                         `${content}=$self.patchToneIndicators(${content});`,

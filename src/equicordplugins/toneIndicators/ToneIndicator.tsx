@@ -5,7 +5,7 @@
  */
 
 import { Tooltip } from "@webpack/common";
-import type { ReactElement } from "@vencord/discord-types";
+import type { ReactElement } from "react";
 
 export interface ToneIndicatorProps {
     indicator: string;
