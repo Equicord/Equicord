@@ -5,6 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 import { type ReactNode } from "react";
@@ -48,7 +49,7 @@ function getIndicator(text: string): string | null {
 
 function extractToneIndicators(
     content: string,
-): Array<{ indicator: string; desc: string; position: number }> {
+): Array<{ indicator: string; desc: string; position: number; }> {
     const indicators: Array<{
         indicator: string;
         desc: string;
@@ -142,7 +143,7 @@ export default definePlugin({
     name: "ToneIndicators",
     description:
         "Show tooltips for tone indicators like /srs, /gen, etc. in sent messages.",
-    authors: [{ name: "justjxke", id: 852558183087472640n }],
+    authors: [Devs.justjxke],
     settings,
 
     patches: [
