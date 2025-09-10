@@ -194,8 +194,7 @@ export default definePlugin({
 
             return settings.store.alsoHideIgnoredUsers && RelationshipStore.isIgnored(message.author.id);
         } catch (e) {
-            new Logger("NoBlockedMessages").error("Failed to check if user is blocked or ignored:", e);
-            return false;
+            new Logger("NoBlockedMessages").error("Failed to filter whitelisted messages:", e);
         }
     },
 });
