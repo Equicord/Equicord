@@ -15,7 +15,7 @@ interface ChannelSelectEvent {
     guildId: string | null;
 }
 
-let lastChan = "1155026301791514655";
+let lastChan = "0";
 
 function jumpToPresent(channelId, { limit }: { limit?: number } = {}) {
     MessageActions.trackJump(channelId, null, "Present");
