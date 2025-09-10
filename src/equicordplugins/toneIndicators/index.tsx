@@ -16,8 +16,8 @@ import ToneIndicator from "./ToneIndicator";
 const settings = definePluginSettings({
     customIndicators: {
         type: OptionType.STRING,
-        description: 'Custom tone indicators (JSON: {"jk": "Joking"})',
-        default: "{}",
+        description: "Custom tone indicators (format: jk=Joking; srs=Serious)",
+        default: "",
     },
     maxIndicators: {
         type: OptionType.NUMBER,
@@ -27,11 +27,17 @@ const settings = definePluginSettings({
 });
 
 function getCustomIndicators(): Record<string, string> {
-    try {
-        return JSON.parse(settings.store.customIndicators);
-    } catch {
-        return {};
-    }
+    const raw = settings.store.customIndicators || "";
+    const result: Record<string, string> = {};
+
+    raw.split("; ").forEach(entry => {
+        const [key, ...rest] = entry.split("=");
+        if (key && rest.length > 0) {
+            result[key.trim().toLowerCase()] = rest.join("=").trim();
+        }
+    });
+
+    return result;
 }
 
 function getIndicator(text: string): string | null {
@@ -45,38 +51,6 @@ function getIndicator(text: string): string | null {
         indicatorsDefault.get(`_${text}`) ||
         null
     );
-}
-
-function extractToneIndicators(
-    content: string,
-): Array<{ indicator: string; desc: string; position: number; }> {
-    const indicators: Array<{
-        indicator: string;
-        desc: string;
-        position: number;
-    }> = [];
-    const regex = /\/([a-z]{1,20})(?=\s|$|[^\w])/gi;
-    let match;
-    let count = 0;
-
-    while (
-        (match = regex.exec(content)) !== null &&
-        count < settings.store.maxIndicators
-    ) {
-        const indicator = match[1];
-        const desc = getIndicator(indicator);
-
-        if (desc) {
-            indicators.push({
-                indicator,
-                desc,
-                position: match.index,
-            });
-            count++;
-        }
-    }
-
-    return indicators;
 }
 
 function splitTextWithIndicators(text: string): ReactNode[] {
