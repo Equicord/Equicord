@@ -25,16 +25,16 @@ export interface ButtonAction {
 }
 
 export const actions: ButtonAction[] = [
-    { id: "openEquicordSettings", label: "Open Equicord tab", callback: async () => await SettingsRouter.open("EquicordSettings"), registrar: "Equicord" },
-    { id: "openPluginSettings", label: "Open Plugin tab", callback: () => SettingsRouter.open("EquicordPlugins"), registrar: "Equicord" },
-    { id: "openThemesSettings", label: "Open Themes tab", callback: () => SettingsRouter.open("EquicordThemes"), registrar: "Equicord" },
-    { id: "openUpdaterSettings", label: "Open Updater tab", callback: () => SettingsRouter.open("EquicordUpdater"), registrar: "Equicord" },
-    { id: "openEquicordCloudSettings", label: "Open Cloud tab", callback: () => SettingsRouter.open("EquicordCloud"), registrar: "Equicord" },
-    { id: "openBackupSettings", label: "Open Backup & Restore tab", callback: () => SettingsRouter.open("EquicordSettingsSync"), registrar: "Equicord" },
-    { id: "restartClient", label: "Restart Client", callback: () => relaunch(), registrar: "Equicord" },
-    { id: "openQuickCSSFile", label: "Open Quick CSS File", callback: () => VencordNative.quickCss.openEditor(), registrar: "Equicord" },
-    { id: "openSettingsFolder", label: "Open Settings Folder", callback: async () => showItemInFolder(await VencordNative.settings.getSettingsDir()), registrar: "Equicord" },
-    { id: "openInGithub", label: "Open in Github", callback: async () => VencordNative.native.openExternal(await getRepo()), registrar: "Equicord" },
+    { id: "openEquicordSettings", label: "Open Xehcord tab", callback: async () => await SettingsRouter.open("XehcordSettings"), registrar: "Xehcord" },
+    { id: "openPluginSettings", label: "Open Plugin tab", callback: () => SettingsRouter.open("XehcordPlugins"), registrar: "Xehcord" },
+    { id: "openThemesSettings", label: "Open Themes tab", callback: () => SettingsRouter.open("XehcordThemes"), registrar: "Xehcord" },
+    { id: "openUpdaterSettings", label: "Open Updater tab", callback: () => SettingsRouter.open("XehcordUpdater"), registrar: "Xehcord" },
+    { id: "openEquicordCloudSettings", label: "Open Cloud tab", callback: () => SettingsRouter.open("XehcordCloud"), registrar: "Xehcord" },
+    { id: "openBackupSettings", label: "Open Backup & Restore tab", callback: () => SettingsRouter.open("XehcordSettingsSync"), registrar: "Xehcord" },
+    { id: "restartClient", label: "Restart Client", callback: () => relaunch(), registrar: "Xehcord" },
+    { id: "openQuickCSSFile", label: "Open Quick CSS File", callback: () => VencordNative.quickCss.openEditor(), registrar: "Xehcord" },
+    { id: "openSettingsFolder", label: "Open Settings Folder", callback: async () => showItemInFolder(await VencordNative.settings.getSettingsDir()), registrar: "Xehcord" },
+    { id: "openInGithub", label: "Open in Github", callback: async () => VencordNative.native.openExternal(await getRepo()), registrar: "Xehcord" },
 
     {
         id: "openInBrowser", label: "Open in Browser", callback: async () => {
@@ -54,7 +54,7 @@ export const actions: ButtonAction[] = [
                     }
                 });
             }
-        }, registrar: "Equicord"
+        }, registrar: "Xehcord"
     },
 
     {
@@ -79,7 +79,7 @@ export const actions: ButtonAction[] = [
             if (choice && enabled) {
                 return togglePlugin(choice, enabled.id === "enable");
             }
-        }, registrar: "Equicord"
+        }, registrar: "Xehcord"
     },
 
     {
@@ -110,7 +110,7 @@ export const actions: ButtonAction[] = [
                     }
                 });
             }
-        }, registrar: "Equicord"
+        }, registrar: "Xehcord"
     },
 
     {
@@ -125,7 +125,7 @@ export const actions: ButtonAction[] = [
                     position: Toasts.Position.BOTTOM
                 }
             });
-        }, registrar: "Equicord"
+        }, registrar: "Xehcord"
     },
 
     {
@@ -134,12 +134,12 @@ export const actions: ButtonAction[] = [
 
             if (isOutdated) {
                 setTimeout(() => showNotification({
-                    title: "A Equicord update is available!",
+                    title: "A Xehcord update is available!",
                     body: "Click here to view the update",
                     permanent: true,
                     noPersist: true,
                     onClick() {
-                        SettingsRouter.open("EquicordUpdater");
+                        SettingsRouter.open("XehcordUpdater");
                     }
                 }), 10_000);
             } else {
@@ -152,7 +152,7 @@ export const actions: ButtonAction[] = [
                     }
                 });
             }
-        }, registrar: "Equicord"
+        }, registrar: "Xehcord"
     },
 
     {
@@ -172,7 +172,7 @@ export const actions: ButtonAction[] = [
             if (choice) {
                 NavigationRouter.transitionToGuild(choice.id);
             }
-        }, registrar: "Equicord"
+        }, registrar: "Xehcord"
     }
 ];
 

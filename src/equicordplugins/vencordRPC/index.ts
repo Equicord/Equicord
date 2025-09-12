@@ -250,7 +250,7 @@ async function createActivity(): Promise<Activity | undefined> {
 
     let { type } = settings.store;
 
-    let appName = "Equicord";
+    let appName = "Xehcord";
     let details = "";
     let state = "";
     let imageBig = "";

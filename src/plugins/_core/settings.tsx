@@ -80,38 +80,38 @@ export default definePlugin({
         return [
             {
                 section: SectionTypes.HEADER,
-                label: "Equicord",
+                label: "Xehcord",
                 className: "vc-settings-header"
             },
             {
-                section: "EquicordSettings",
-                label: "Equicord",
+                section: "XehcordSettings",
+                label: "Xehcord",
                 element: VencordTab,
                 className: "vc-settings"
             },
             {
-                section: "EquicordPlugins",
+                section: "XehcordPlugins",
                 label: "Plugins",
                 searchableTitles: ["Plugins"],
                 element: PluginsTab,
                 className: "vc-plugins"
             },
             {
-                section: "EquicordThemes",
+                section: "XehcordThemes",
                 label: "Themes",
                 searchableTitles: ["Themes"],
                 element: ThemesTab,
                 className: "vc-themes"
             },
             !IS_UPDATER_DISABLED && {
-                section: "EquicordUpdater",
+                section: "XehcordUpdater",
                 label: "Updater",
                 searchableTitles: ["Updater"],
                 element: UpdaterTab,
                 className: "vc-updater"
             },
             {
-                section: "EquicordCloud",
+                section: "XehcordCloud",
                 label: "Cloud",
                 searchableTitles: ["Cloud"],
                 element: CloudTab,
@@ -125,7 +125,7 @@ export default definePlugin({
                 className: "vc-backup-restore"
             },
             IS_DEV && {
-                section: "EquicordPatchHelper",
+                section: "XehcordPatchHelper",
                 label: "Patch Helper",
                 searchableTitles: ["Patch Helper"],
                 element: PatchHelperTab,
@@ -194,7 +194,7 @@ export default definePlugin({
     options: {
         settingsLocation: {
             type: OptionType.SELECT,
-            description: "Where to put the Equicord settings section",
+            description: "Where to put the Xehcord settings section",
             options: [
                 { label: "At the very top", value: "top" },
                 { label: "Above the Nitro section", value: "aboveNitro", default: true },
@@ -237,7 +237,7 @@ export default definePlugin({
     getInfoRows() {
         const { electronVersion, chromiumVersion, getVersionInfo } = this;
 
-        const rows = [`Equicord ${shortGitHash()}${getVersionInfo()}`];
+        const rows = [`Xehcord ${shortGitHash()}${getVersionInfo()}`];
 
         if (electronVersion) rows.push(`Electron ${electronVersion}`);
         if (chromiumVersion) rows.push(`Chromium ${chromiumVersion}`);

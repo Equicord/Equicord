@@ -46,9 +46,9 @@ const TrustedRolesIds = [
     VC_CONTRIB_ROLE_ID, // Vencord Contributor
     VC_REGULAR_ROLE_ID, // Vencord Regular
     VC_DONOR_ROLE_ID, // Vencord Donor
-    EQUICORD_TEAM, // Equicord Team
-    DONOR_ROLE_ID, // Equicord Donor
-    CONTRIB_ROLE_ID, // Equicord Contributor
+    EQUICORD_TEAM, // Xehcord Team
+    DONOR_ROLE_ID, // Xehcord Donor
+    CONTRIB_ROLE_ID, // Xehcord Contributor
     EQUIBOP_CONTRIB_ROLE_ID, // Equibop Contributor
     VENCORD_CONTRIB_ROLE_ID, // Vencord Contributor
 ];
@@ -111,8 +111,8 @@ async function generateDebugInfoMessage() {
     })();
 
     const info = {
-        Equicord:
-            `v${VERSION} • [${shortGitHash()}](<https://github.com/Equicord/Equicord/commit/${gitHash}>)` +
+        Xehcord:
+            `v${VERSION} • [${shortGitHash()}](<https://github.com/7xeh/Equicord/commit/${gitHash}>)` +
             `${SettingsPlugin.getVersionInfo()} - ${Intl.DateTimeFormat("en-GB", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
         Client: `${RELEASE_CHANNEL} ~ ${client}`,
         Platform: platformName()
@@ -134,7 +134,7 @@ async function generateDebugInfoMessage() {
     const commonIssues = {
         "Activity Sharing Disabled": tryOrElse(() => !ShowCurrentGame.getSetting(), false),
         "Link Embeds Disabled": tryOrElse(() => !ShowEmbeds.getSetting(), false),
-        "Equicord DevBuild": !IS_STANDALONE,
+        "Xehcord DevBuild": !IS_STANDALONE,
         "Has UserPlugins": Object.values(PluginMeta).some(m => m.userPlugin),
         ">2 Weeks Outdated": BUILD_TIMESTAMP < Date.now() - 12096e5,
         [`Potentially Problematic Plugins: ${potentiallyProblematicPlugins.join(", ")}`]: potentiallyProblematicPlugins.length
@@ -251,9 +251,9 @@ export default definePlugin({
                         </div>
                         <Forms.FormText>Before you ask for help,</Forms.FormText>
                         <Forms.FormText>Check for updates and if this</Forms.FormText>
-                        <Forms.FormText>issue could be caused by Equicord!</Forms.FormText>
+                        <Forms.FormText>issue could be caused by Xehcord!</Forms.FormText>
                     </div>,
-                    confirmText: "Go to Equicord Support",
+                    confirmText: "Go to Xehcord Support",
                     onConfirm() {
                         clicked = true;
                         VencordNative.native.openExternal("https://equicord.org/discord");
@@ -272,7 +272,7 @@ export default definePlugin({
                     return Alerts.show({
                         title: "Hold on!",
                         body: <div>
-                            <Forms.FormText>You are using an outdated version of Equicord! Chances are, your issue is already fixed.</Forms.FormText>
+                            <Forms.FormText>You are using an outdated version of Xehcord! Chances are, your issue is already fixed.</Forms.FormText>
                             <Forms.FormText className={Margins.top8}>
                                 Please first update before asking for support!
                             </Forms.FormText>
@@ -293,9 +293,9 @@ export default definePlugin({
                 return Alerts.show({
                     title: "Hold on!",
                     body: <div>
-                        <Forms.FormText>You are using an externally updated Equicord version, the ability to help you here may be limited.</Forms.FormText>
+                        <Forms.FormText>You are using an externally updated Xehcord version, the ability to help you here may be limited.</Forms.FormText>
                         <Forms.FormText className={Margins.top8}>
-                            Please join the <Link href="https://equicord.org/discord">Equicord Server</Link> for support,
+                            Please join the <Link href="https://equicord.org/discord">Xehcord Server</Link> for support,
                             or if this issue persists on Vencord, continue on.
                         </Forms.FormText>
                     </div>
@@ -306,10 +306,10 @@ export default definePlugin({
                 return Alerts.show({
                     title: "Hold on!",
                     body: <div>
-                        <Forms.FormText>You are using a custom build of Equicord, which we do not provide support for!</Forms.FormText>
+                        <Forms.FormText>You are using a custom build of Xehcord, which we do not provide support for!</Forms.FormText>
 
                         <Forms.FormText className={Margins.top8}>
-                            We only provide support for <Link href="https://github.com/Equicord/Equicord">official builds</Link>.
+                            We only provide support for <Link href="https://github.com/7xeh/Equicord">official builds</Link>.
                             Either <Link href="https://github.com/Equicord/Equilotl">switch to an official build</Link> or figure your issue out yourself.
                         </Forms.FormText>
 

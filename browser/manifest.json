@@ -1,10 +1,10 @@
 {
     "manifest_version": 3,
     "minimum_chrome_version": "111",
-    "name": "Equicord Web",
+    "name": "Xehcord Web",
     "description": "The other cutest Discord mod now in your browser",
     "author": "Thororen",
-    "homepage_url": "https://github.com/Equicord/Equicord",
+    "homepage_url": "https://github.com/7xeh/Equicord",
     "icons": {
         "128": "icon.png"
     },

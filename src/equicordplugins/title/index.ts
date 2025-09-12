@@ -15,7 +15,7 @@ const rootTitle = { base: null as string | null };
 export const settings = definePluginSettings({
     title: {
         type: OptionType.STRING,
-        default: "Equicord",
+        default: "Xehcord",
         description: "Window title prefix",
         onChange: setTitle,
     },

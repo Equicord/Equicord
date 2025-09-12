@@ -97,8 +97,8 @@ export default definePlugin({
         registerAction({
             id: "openDevSettings",
             label: "Open Dev tab",
-            callback: () => SettingsRouter.open("EquicordPatchHelper"),
-            registrar: "Equicord"
+            callback: () => SettingsRouter.open("XehcordPatchHelper"),
+            registrar: "Xehcord"
         });
     },
 

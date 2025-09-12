@@ -41,7 +41,7 @@ export async function importSettings(data: string) {
         await VencordNative.quickCss.set(parsed.quickCss);
         if (parsed.dataStore) await DataStore.setMany(parsed.dataStore);
     } else
-        throw new Error("Invalid Settings. Is this even an Equicord Settings file?");
+        throw new Error("Invalid Settings. Is this even an Xehcord Settings file?");
 }
 
 export async function exportSettings({ minify }: { minify?: boolean; } = {}) {
@@ -52,7 +52,7 @@ export async function exportSettings({ minify }: { minify?: boolean; } = {}) {
 }
 
 export async function downloadSettingsBackup() {
-    const filename = `equicord-settings-backup-${moment().format("YYYY-MM-DD")}.json`;
+    const filename = `xehcord-settings-backup-${moment().format("YYYY-MM-DD")}.json`;
     const backup = await exportSettings();
     const data = new TextEncoder().encode(backup);
 
@@ -80,7 +80,7 @@ export async function uploadSettingsBackup(showToast = true): Promise<void> {
     if (IS_DISCORD_DESKTOP) {
         const [file] = await DiscordNative.fileManager.openFiles({
             filters: [
-                { name: "Equicord Settings Backup", extensions: ["json"] },
+                { name: "Xehcord Settings Backup", extensions: ["json"] },
                 { name: "all", extensions: ["*"] }
             ]
         });
@@ -127,7 +127,12 @@ export async function putCloudSettings(manual?: boolean) {
                 Authorization: await getCloudAuth(),
                 "Content-Type": "application/octet-stream"
             },
-            body: deflateSync(new TextEncoder().encode(settings))
+            body: (() => {
+                const deflated = deflateSync(new TextEncoder().encode(settings));
+                const array = new Uint8Array(deflated);
+                const buf = array.buffer.slice(array.byteOffset, array.byteOffset + array.byteLength) as ArrayBuffer;
+                return new Blob([buf], { type: "application/octet-stream" });
+            })()
         });
 
         if (!res.ok) {

@@ -3,13 +3,13 @@
     "private": "true",
     "version": "1.12.13",
     "description": "The other cutest Discord client mod",
-    "homepage": "https://github.com/Equicord/Equicord#readme",
+    "homepage": "https://github.com/7xeh/Equicord#readme",
     "bugs": {
-        "url": "https://github.com/Equicord/Equicord/issues"
+        "url": "https://github.com/7xeh/Equicord/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Equicord/Equicord.git"
+        "url": "git+https://github.com/7xeh/Equicord.git"
     },
     "license": "GPL-3.0-or-later",
     "author": "Equicord",

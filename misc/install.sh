@@ -116,7 +116,7 @@ main() {
     echo -e "\n${GREEN}Installation completed successfully!${NC}"
     echo -e "\nCredits:"
     echo "Original script forked from Vencord"
-    echo "Modified by PhoenixAceVFX for Equicord Updater"
+    echo "Modified by PhoenixAceVFX for Xehcord Updater"
     echo "Rewrite by PhoenixAceVFX"
 }
 

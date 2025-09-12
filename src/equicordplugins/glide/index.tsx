@@ -744,7 +744,7 @@ function getCSS(fontName) {
                 /*pfp uploader crosshair*/
                 .overlayAvatar_ba5b9e
                 {
-                    background-image: url(https://raw.githubusercontent.com/Equicord/Equicord/main/src/equicordplugins/glide/crosshair.png);
+                    background-image: url(https://raw.githubusercontent.com/7xeh/Equicord/main/src/equicordplugins/glide/crosshair.png);
                     background-repeat: no-repeat;
                     background-position-x: 50%;
                     background-position-y: 50%;

@@ -44,7 +44,7 @@ const ContributorBadge: ProfileBadge = {
 };
 
 const EquicordContributorBadge: ProfileBadge = {
-    description: "Equicord Contributor",
+    description: "Xehcord Contributor",
     image: EQUICORD_CONTRIBUTOR_BADGE,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => shouldShowEquicordContributorBadge(userId),
@@ -52,7 +52,7 @@ const EquicordContributorBadge: ProfileBadge = {
 };
 
 const EquicordDonorBadge: ProfileBadge = {
-    description: "Equicord Donor",
+    description: "Xehcord Donor",
     image: EQUICORD_DONOR_BADGE,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => {
