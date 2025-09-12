@@ -1,9 +1,12 @@
 import definePlugin from "@utils/types";
 
-const SELECTORS = [".name__2ea32", ".name__29444"].join(", ");
+const SELECTORS = [
+    '[class^="name_"]',
+    '[class*=" name_"]'
+].join(", ");
 
 const OPTIONS = {
-    enforceLowerCase: true as const,
+    enforceLowerCase: false as const,
     sepText: " " as const,
     sepCategoryOrVoice: " " as const,
 };
@@ -15,29 +18,17 @@ const SMALL_CAPS_MAP: Record<string, string> = {
     "Ⅰ":"I","Ⅱ":"II","Ⅲ":"III","Ⅳ":"IV","Ⅴ":"V","Ⅵ":"VI","Ⅶ":"VII","Ⅷ":"VIII","Ⅸ":"IX","Ⅹ":"X"
 };
 
-function foldWeirdLetters(s: string): string {
-    let out = s.normalize("NFKD").replace(/\p{M}+/gu, "");
-    out = out.replace(
-        /[\u{1D400}-\u{1D7FF}ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢℍℌℭⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ𝙷𝖍𝖈𝖆𝖊𝖔𝖘𝖙]/gu,
-        m => SMALL_CAPS_MAP[m] ?? m
-    );
-    return out;
-}
-
-function stripAllEmoji(s: string): string {
-    return s.replace(/\p{Extended_Pictographic}/gu, "").replace(/[\uFE0F\u200D]/g, "");
-}
-
 function escapeRegExp(s: string) {
     return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function collapseSeparators(s: string, sep: string): string {
-    let out = s.replace(/^[\p{Punctuation}\s]+|[\p{Punctuation}\s]+$/gu, "");
-    out = out.replace(/-?[^\p{Letter}\p{Number}\u0020-\u007E]-?/gu, sep);
-    out = out.replace(/[\s\-]+/g, sep).replace(new RegExp(`${escapeRegExp(sep)}+`, "g"), sep);
-    out = out.trim();
-    return out;
+function foldWeirdLetters(s: string): string {
+    return s
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .split("")
+        .map(ch => SMALL_CAPS_MAP[ch] ?? ch)
+        .join("");
 }
 
 function looksCleanEnough(s: string): boolean {
@@ -50,37 +41,26 @@ function capitalizeFirst(s: string): string {
 }
 
 function sanitizeLabel(text: string, isCategory: boolean): string {
-    const sep = isCategory ? OPTIONS.sepCategoryOrVoice : OPTIONS.sepText;
+    // Minimal: replace dashes with space and capitalize only the first character. Keep emojis and other characters.
     let n = text;
-
-    if (!looksCleanEnough(n)) {
-        n = foldWeirdLetters(n);
-        n = stripAllEmoji(n);
-        n = n.replace(/[^\u0020-\u007E]/g, "");
-    }
-    n = collapseSeparators(n, sep);
-
-    if (OPTIONS.enforceLowerCase) n = n.toLowerCase();
-
+    // Replace hyphens with spaces
+    n = n.replace(/-/g, " ");
+    // Trim excessive spaces
+    n = n.replace(/\s+/g, " ").trim();
     n = capitalizeFirst(n);
-
     if (!n) n = "Channel";
     return n;
 }
 
 let observer: MutationObserver | null = null;
 const pending = new Set<HTMLElement>();
-let rafScheduled = false;
+let rafHandle: number | null = null;
 
 function scheduleFlush() {
-    if (rafScheduled) return;
-    rafScheduled = true;
-    requestAnimationFrame(() => {
-        rafScheduled = false;
-        for (const el of pending) {
-            pending.delete(el);
-            tryClean(el);
-        }
+    if (rafHandle != null) return;
+    rafHandle = requestAnimationFrame(() => {
+        rafHandle = null;
+        flush();
     });
 }
 
@@ -106,6 +86,15 @@ function tryClean(el: HTMLElement) {
     }
 }
 
+function flush() {
+    for (const el of pending) {
+        try {
+            tryClean(el);
+        } catch {}
+    }
+    pending.clear();
+}
+
 function scanExisting() {
     document.querySelectorAll<HTMLElement>(SELECTORS).forEach(el => queue(el));
 }
@@ -113,7 +102,7 @@ function scanExisting() {
 export default definePlugin({
     name: "CleanerChannelNames",
     authors: [{ name: "7xeh", id: 785035260852830219n }],
-    description: "Cleans channel & category labels: strips fancy text/emoji, replaces dashes with spaces, and capitalizes the first letter",
+    description: "Replace hyphens with spaces and capitalize only the first letter; leaves emojis intact",
     start() {
         scanExisting();
         observer = new MutationObserver(muts => {
@@ -123,13 +112,12 @@ export default definePlugin({
                     if (node.matches?.(SELECTORS)) queue(node);
                     node.querySelectorAll?.(SELECTORS).forEach(el => queue(el as HTMLElement));
                 }
-                if (m.type === "characterData" && m.target instanceof CharacterData) {
-                    const host = m.target.parentElement;
-                    if (host && host.matches(SELECTORS)) queue(host);
-                }
             }
         });
-        observer.observe(document.body, { subtree: true, childList: true, characterData: true });
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     },
     stop() {
         observer?.disconnect();
