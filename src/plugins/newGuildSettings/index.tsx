@@ -26,7 +26,7 @@ import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Guild } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy, mapMangledModuleLazy } from "@webpack";
-import { Menu } from "@webpack/common";
+import { FluxDispatcher, GuildChannelStore, Menu } from "@webpack/common";
 
 const { updateGuildNotificationSettings } = findByPropsLazy("updateGuildNotificationSettings");
 const { toggleShowAllChannels } = mapMangledModuleLazy(".onboardExistingMember(", {
@@ -82,6 +82,11 @@ const settings = definePluginSettings({
         description: "Mute Mobile Push Notifications automatically",
         type: OptionType.BOOLEAN,
         default: true
+    },
+    voiceChannels: {
+        description: "Hide names in Voice channels automatically",
+        type: OptionType.BOOLEAN,
+        default: true
     }
 });
 
@@ -99,8 +104,32 @@ const makeContextMenuPatch: (shouldAddIcon: boolean) => NavContextMenuPatchCallb
     );
 };
 
+// Voice channel hiding using Discord's native CHANNEL_COLLAPSE dispatcher
+function applyVoiceNameHidingToGuild(guildId: string) {
+    if (!settings.store.voiceChannels) return;
+
+    try {
+        const channels = GuildChannelStore.getChannels(guildId);
+        if (!channels?.VOCAL) return;
+
+        // Apply hiding to all voice channels in the guild
+        channels.VOCAL.forEach(({ channel }: { channel: { id: string; type: number; }; }) => {
+            if (channel.type === 2) { // Voice channel type
+                FluxDispatcher.dispatch({
+                    type: "CHANNEL_COLLAPSE",
+                    channelId: channel.id,
+                    collapsed: true
+                });
+            }
+        });
+    } catch (error) {
+        console.warn("[NewGuildSettings] Error applying voice name hiding:", error);
+    }
+}
+
 function applyDefaultSettings(guildId: string | null) {
     if (guildId === "@me" || guildId === "null" || guildId == null) return;
+
     updateGuildNotificationSettings(guildId,
         {
             muted: settings.store.guild,
@@ -110,14 +139,21 @@ function applyDefaultSettings(guildId: string | null) {
             mute_scheduled_events: settings.store.events,
             notify_highlights: settings.store.highlights ? 1 : 0
         });
+
     if (settings.store.messages !== 3) {
         updateGuildNotificationSettings(guildId,
             {
                 message_notifications: settings.store.messages,
             });
     }
+
     if (settings.store.showAllChannels && isOptInEnabledForGuild(guildId)) {
         toggleShowAllChannels(guildId);
+    }
+
+    // Apply voice channel name hiding
+    if (settings.store.voiceChannels) {
+        applyVoiceNameHidingToGuild(guildId);
     }
 }
 
