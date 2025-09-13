@@ -104,7 +104,6 @@ const makeContextMenuPatch: (shouldAddIcon: boolean) => NavContextMenuPatchCallb
     );
 };
 
-// Voice channel hiding using Discord's native CHANNEL_COLLAPSE dispatcher
 function applyVoiceNameHidingToGuild(guildId: string) {
     if (!settings.store.voiceChannels) return;
 
@@ -112,9 +111,8 @@ function applyVoiceNameHidingToGuild(guildId: string) {
         const channels = GuildChannelStore.getChannels(guildId);
         if (!channels?.VOCAL) return;
 
-        // Apply hiding to all voice channels in the guild
         channels.VOCAL.forEach(({ channel }: { channel: { id: string; type: number; }; }) => {
-            if (channel.type === 2) { // Voice channel type
+            if (channel.type === 2) {
                 FluxDispatcher.dispatch({
                     type: "CHANNEL_COLLAPSE",
                     channelId: channel.id,
@@ -151,7 +149,6 @@ function applyDefaultSettings(guildId: string | null) {
         toggleShowAllChannels(guildId);
     }
 
-    // Apply voice channel name hiding
     if (settings.store.voiceChannels) {
         applyVoiceNameHidingToGuild(guildId);
     }
