@@ -86,7 +86,7 @@ const settings = definePluginSettings({
     voiceChannels: {
         description: "Hide names in Voice channels automatically",
         type: OptionType.BOOLEAN,
-        default: true
+        default: false
     }
 });
 
