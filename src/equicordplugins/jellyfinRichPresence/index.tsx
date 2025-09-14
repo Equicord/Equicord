@@ -119,10 +119,21 @@ export default definePlugin({
         <>
             <Forms.FormTitle tag="h3">How to get an API key</Forms.FormTitle>
             <Forms.FormText>
-                An API key is required to fetch your current media. To get one, go to your
-                Jellyfin dashboard, navigate to Administration {">"} API Keys and
-                create a new API key. <br /> <br />
-
+                Auth token can be found by following these steps:
+                <ol style={{ marginTop: 8, marginBottom: 8, paddingLeft: 20 }}>
+                    <li>1. Log into your Jellyfin instance</li>
+                    <li>2. Open your browser's Developer Tools (usually F12 or right-click then Inspect)</li>
+                    <li>3. Go to the <b>Network</b> tab in Developer Tools</li>
+                    <li>4. Look for requests to your Jellyfin server</li>
+                    <li>
+                        5. In the request headers, find <code>X-MediaBrowser-Token</code> or <code>Authorization</code>
+                        <br />
+                        <i>
+                            Easiest way: press <b>Ctrl+F</b> in the Developer Tools and search for <code>X-MediaBrowser-Token</code>
+                        </i>
+                    </li>
+                </ol>
+                <br />
                 You'll also need your User ID, which can be found in the url of your user profile page.
             </Forms.FormText>
         </>
