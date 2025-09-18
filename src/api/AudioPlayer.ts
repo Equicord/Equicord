@@ -28,6 +28,7 @@ export enum AudioType {
 
 export interface PreprocessAudioData {
     audio: string;
+    readonly type: AudioType;
     volume: number;
     speed: number;
 }
