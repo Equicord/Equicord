@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { AudioPlayerInterface, createAudioPlayer } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
@@ -13,19 +14,16 @@ import { findComponentByCodeLazy } from "@webpack";
 import { React } from "@webpack/common";
 
 const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
-
-let preloadSong, preloadBoopSound, song, boopSound;
+let boopSound: AudioPlayerInterface;
+let song: AudioPlayerInterface;
 
 function SoggyModal(props: ModalProps) {
     if (settings.store.songVolume !== 0) {
         React.useEffect(() => {
-            song = new Audio(preloadSong.src);
-            song.volume = settings.store.songVolume;
-            song.play();
+            song?.loop();
 
             return () => {
-                song.pause();
-                song.remove();
+                song?.stop();
             };
         }, []);
     }
@@ -42,9 +40,7 @@ function SoggyModal(props: ModalProps) {
             offsetY >= region.y &&
             offsetY <= region.y + region.height
         ) {
-            boopSound = new Audio(preloadBoopSound.src);
-            boopSound.volume = settings.store.boopVolume;
-            boopSound.play();
+            boopSound?.play();
         }
     };
 
@@ -115,16 +111,20 @@ const settings = definePluginSettings({
         description: "URL for the song to play",
         type: OptionType.STRING,
         default: "https://github.com/Equicord/Equibored/raw/main/sounds/soggy/song.mp3?raw=true",
-        onChange: (value: string) => {
-            song = new Audio(value);
-        }
+        onChange(newValue) {
+            song?.stop();
+            song = createAudioPlayer(newValue, { volume: settings.store.songVolume * 100, persistent: true });
+            song.load();
+        },
     },
     boopLink: {
         description: "URL for the boop sound",
         type: OptionType.STRING,
         default: "https://github.com/Equicord/Equibored/raw/main/sounds/soggy/honk.wav?raw=true",
-        onChange: (value: string) => {
-            boopSound = new Audio(value);
+        onChange(newValue) {
+            boopSound?.stop();
+            boopSound = createAudioPlayer(newValue, { volume: settings.store.boopVolume * 100, persistent: true });
+            boopSound.load();
         }
     }
 });
@@ -134,6 +134,7 @@ export default definePlugin({
     description: "Adds a soggy button to the toolbox",
     authors: [EquicordDevs.sliwka],
     settings,
+    dependencies: ["AudioPlayerAPI"],
     patches: [
         {
             find: ".controlButtonWrapper,",
@@ -144,9 +145,14 @@ export default definePlugin({
         }
     ],
 
-    start: () => {
-        preloadSong = new Audio(settings.store.songLink);
-        preloadBoopSound = new Audio(settings.store.boopLink);
+    start() {
+        boopSound = createAudioPlayer(settings.store.boopLink, { volume: settings.store.boopVolume * 100, persistent: true });
+        song = createAudioPlayer(settings.store.songLink, { volume: settings.store.songVolume * 100, persistent: true });
+    },
+
+    stop() {
+        boopSound?.delete();
+        song?.delete();
     },
 
     // taken from message logger lol

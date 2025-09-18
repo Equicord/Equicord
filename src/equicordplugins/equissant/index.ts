@@ -16,17 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { AudioPlayerInterface, createAudioPlayer } from "@api/AudioPlayer";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 let clickCount = 0;
+let croissant: AudioPlayerInterface | null = null;
 
 function play() {
+    croissant ??= createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/equissant/croissant.mp3");
     clickCount++;
 
     if (clickCount % 10 === 0) {
-        const audio = new Audio("https://github.com/Equicord/Equibored/raw/main/sounds/equissant/croissant.mp3");
-        audio.play();
+        croissant.play();
     }
 }
 
@@ -34,6 +36,7 @@ export default definePlugin({
     name: "Equissant",
     description: "Crossant every 10 clicks :trolley:",
     authors: [EquicordDevs.SomeAspy, Devs.thororen],
+    dependencies: ["AudioPlayerAPI"],
     start() {
         document.addEventListener("click", play);
     },
