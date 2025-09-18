@@ -45,10 +45,10 @@ const keydown = (e: KeyboardEvent) => {
 };
 
 function assignSounds(volume: number) {
-    click1 = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click1.wav", { volume, persistent: true });
-    click2 = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click2.wav", { volume, persistent: true });
-    click3 = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click3.wav", { volume, persistent: true });
-    backspace = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/backspace.wav", { volume, persistent: true });
+    click1 = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click1.wav", { volume, preload: true, persistent: true });
+    click2 = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click2.wav", { volume, preload: true, persistent: true });
+    click3 = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click3.wav", { volume, preload: true, persistent: true });
+    backspace = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/backspace.wav", { volume, preload: true, persistent: true });
     sounds = {
         click1,
         click2,

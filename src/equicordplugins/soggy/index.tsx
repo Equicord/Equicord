@@ -17,6 +17,18 @@ const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBa
 let boopSound: AudioPlayerInterface;
 let song: AudioPlayerInterface;
 
+function assignSong(url: string, volume: number) {
+    song?.delete();
+    song = createAudioPlayer(url, { volume, preload: true, persistent: true });
+    song.load();
+}
+
+function assignBoop(url: string, volume: number) {
+    boopSound?.delete();
+    boopSound = createAudioPlayer(url, { volume, preload: true, persistent: true });
+    boopSound.load();
+}
+
 function SoggyModal(props: ModalProps) {
     if (settings.store.songVolume !== 0) {
         React.useEffect(() => {
@@ -112,9 +124,7 @@ const settings = definePluginSettings({
         type: OptionType.STRING,
         default: "https://github.com/Equicord/Equibored/raw/main/sounds/soggy/song.mp3?raw=true",
         onChange(newValue) {
-            song?.stop();
-            song = createAudioPlayer(newValue, { volume: settings.store.songVolume * 100, persistent: true });
-            song.load();
+            assignSong(newValue, settings.store.songVolume * 100);
         },
     },
     boopLink: {
@@ -122,9 +132,7 @@ const settings = definePluginSettings({
         type: OptionType.STRING,
         default: "https://github.com/Equicord/Equibored/raw/main/sounds/soggy/honk.wav?raw=true",
         onChange(newValue) {
-            boopSound?.stop();
-            boopSound = createAudioPlayer(newValue, { volume: settings.store.boopVolume * 100, persistent: true });
-            boopSound.load();
+            assignBoop(newValue, settings.store.boopVolume * 100);
         }
     }
 });
@@ -146,8 +154,8 @@ export default definePlugin({
     ],
 
     start() {
-        boopSound = createAudioPlayer(settings.store.boopLink, { volume: settings.store.boopVolume * 100, persistent: true });
-        song = createAudioPlayer(settings.store.songLink, { volume: settings.store.songVolume * 100, persistent: true });
+        assignBoop(settings.store.boopLink, settings.store.boopVolume * 100);
+        assignSong(settings.store.songLink, settings.store.songVolume * 100);
     },
 
     stop() {

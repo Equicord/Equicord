@@ -42,6 +42,7 @@ export interface AudioPlayerInternal {
     _speed: number;
     outputChannel: string;
     type: AudioType;
+    preload: boolean;
     persistent: boolean;
     onEnded?: AudioCallback;
     onError?: AudioErrorHandler;
@@ -71,7 +72,9 @@ export interface AudioPlayerInterface {
     volume: number;
     /** The playback speed of the audio between 0.0625 and 16. */
     speed: number;
-    /** Whether the audio element is persistent and not automatically deleted after playback. If persistent is true, the audio element will be preloaded. */
+    /** Whether to load the audio immediately. If persistent is false, this will only apply until the first playback. */
+    preload?: boolean;
+    /** Whether the audio element is persistent and not recreated for every playback. */
     persistent: boolean;
     /** Preloads the audio before playback. Automatically called when persistent is true. */
     load(): void;
@@ -98,6 +101,7 @@ export interface AudioPlayerInterface {
 export interface AudioPlayerOptions {
     volume?: number;
     speed?: number;
+    preload?: boolean;
     persistent?: boolean;
     onEnded?: AudioCallback;
     onError?: AudioErrorHandler;
@@ -151,7 +155,8 @@ class AudioPlayerWrapper implements AudioPlayerInterface {
  * @param options Additional options for the audio player.
  * @param options.volume The volume of the audio, between 0 and 100, defaulting to 100.
  * @param options.speed The playback speed of the audio, between 0.0625 and 16, defaulting to 1.
- * @param options.persistent Whether the audio element should be deleted at the end of each playback and recreated during the next playback. If persistent, the audio will be preloaded and you must call delete() to free the memory. Defaults to false.
+ * @param options.preload Whether to load the audio immediately. If persistent is false, this will only apply until the first playback.
+ * @param options.persistent Whether the audio element is persistent and not recreated for every playback. If persistent, you must call delete() to free the memory. Defaults to false.
  * @param options.onEnded An optional callback that is called every time the audio finishes playing.
  * @param options.onError An optional error handler that is passed an Error object when an error occurs during audio playback.
  * @return The created audio player.
@@ -177,7 +182,8 @@ export function createAudioPlayer(
  * @param options Additional options for the audio player.
  * @param options.volume The volume of the audio, between 0 and 100, defaulting to 100.
  * @param options.speed The playback speed of the audio, between 0.0625 and 16, defaulting to 1.
- * @param options.persistent Whether the audio element should be deleted at the end of each playback and recreated during the next playback. If persistent, the audio will be preloaded and you must call delete() to free the memory. Defaults to false.
+ * @param options.preload Whether to load the audio immediately. If persistent is false, this will only apply until the first playback.
+ * @param options.persistent Whether the audio element is persistent and not recreated for every playback. If persistent, you must call delete() to free the memory. Defaults to false.
  * @param options.onEnded An optional callback that is called every time the audio finishes playing.
  * @param options.onError An optional error handler that is passed an Error object when an error occurs during audio playback.
  * @return The created audio player.

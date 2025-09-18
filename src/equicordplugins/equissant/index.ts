@@ -13,13 +13,11 @@ let clickCount = 0;
 let croissant: AudioPlayerInterface | null = null;
 
 function play() {
-    croissant ??= createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/equissant/croissant.mp3");
+    const triggerAmount = settings.store.amount;
     clickCount++;
 
-    const triggerAmount = settings.store.amount;
-
     if (clickCount % triggerAmount === 0) {
-        croissant.play();
+        croissant?.play();
         clickCount = 0;
     }
 }
@@ -39,9 +37,11 @@ export default definePlugin({
     dependencies: ["AudioPlayerAPI"],
     settings,
     start() {
+        croissant = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/equissant/croissant.mp3", { persistent: true });
         document.addEventListener("click", play);
     },
     stop() {
+        croissant?.delete();
         document.removeEventListener("click", play);
     }
 });

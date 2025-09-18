@@ -149,6 +149,7 @@ export default definePlugin({
         player._audio = null;
         player._volume = player.preprocessDataOriginal.volume;
         player._speed = player.preprocessDataOriginal.speed;
+        player.preload = options.preload ?? false;
         player.persistent = options.persistent ?? false;
         player.type = identifyAudioType(audio);
         player.outputChannel = channel;
@@ -157,6 +158,6 @@ export default definePlugin({
 
         player.processAudio = () => this.processAudio(player);
         player.processAudio();
-        player.persistent && player.ensureAudio();
+        player.preload && player.ensureAudio();
     }
 });
