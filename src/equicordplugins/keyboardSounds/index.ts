@@ -21,9 +21,10 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
-let click1: AudioPlayerInterface, click2: AudioPlayerInterface, click3: AudioPlayerInterface, backspace: AudioPlayerInterface;
-let sounds: Record<string, AudioPlayerInterface> = {};
+let backspace: AudioPlayerInterface;
+let clicks: Array<{ playing: boolean; player: AudioPlayerInterface; }> = [];
 const keysCurrentlyPressed = new Set<string>();
+let previousSoundIndex = 0;
 
 const ignoredKeys = ["CapsLock", "ShiftLeft", "ShiftRight", "ControlLeft", "ControlRight", "AltLeft", "AltRight", "MetaLeft", "MetaRight", "ArrowUp", "ArrowRight", "ArrowLeft", "ArrowDown", "MediaPlayPause", "MediaStop", "MediaTrackNext", "MediaTrackPrevious", "MediaSelect", "MediaEject", "MediaVolumeUp", "MediaVolumeDown", "AudioVolumeUp", "AudioVolumeDown"];
 
@@ -31,30 +32,32 @@ const keyup = (e: KeyboardEvent) => { keysCurrentlyPressed.delete(e.code); };
 
 const keydown = (e: KeyboardEvent) => {
     if (ignoredKeys.includes(e.code)) return;
-    if (!Object.keys(sounds).length) return;
-    if (!click1 || !click2 || !click3 || !backspace) return;
+    if (!clicks.length || !backspace) return;
     if (keysCurrentlyPressed.has(e.code)) return;
     keysCurrentlyPressed.add(e.code);
 
     if (e.code === "Backspace") {
-        sounds.backspace.restart();
+        backspace.restart();
     } else {
-        const click = sounds[`click${Math.floor(Math.random() * 3) + 1}`];
-        click.restart();
+        const nonplayingClicks = clicks.filter(click => !click.playing);
+        const randomIndex = Math.floor(Math.random() * nonplayingClicks.length);
+        const chosenClick = nonplayingClicks.length ? nonplayingClicks[randomIndex] : clicks[previousSoundIndex];
+        previousSoundIndex = randomIndex;
+        chosenClick.playing = true;
+        chosenClick.player.restart();
     }
 };
 
 function assignSounds(volume: number) {
-    click1 = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click1.wav", { volume, preload: true, persistent: true });
-    click2 = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click2.wav", { volume, preload: true, persistent: true });
-    click3 = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click3.wav", { volume, preload: true, persistent: true });
     backspace = createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/backspace.wav", { volume, preload: true, persistent: true });
-    sounds = {
-        click1,
-        click2,
-        click3,
-        backspace,
-    };
+    clicks = [];
+
+    for (let i = 0; i < 3; i++) {
+        const baseIndex = i * 3;
+        clicks.push({ playing: false, player: createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click1.wav", { volume, preload: true, persistent: true, onEnded: () => { clicks[baseIndex].playing = false; } }) });
+        clicks.push({ playing: false, player: createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click2.wav", { volume, preload: true, persistent: true, onEnded: () => { clicks[baseIndex + 1].playing = false; } }) });
+        clicks.push({ playing: false, player: createAudioPlayer("https://github.com/Equicord/Equibored/raw/main/sounds/keyboard/click3.wav", { volume, preload: true, persistent: true, onEnded: () => { clicks[baseIndex + 2].playing = false; } }) });
+    }
 }
 
 const settings = definePluginSettings({
@@ -80,7 +83,7 @@ export default definePlugin({
         document.addEventListener("keydown", keydown);
     },
     stop: () => {
-        Object.values(sounds).forEach(sound => sound.delete());
+        [...clicks, { player: backspace }].forEach(sound => sound.player.delete());
         document.removeEventListener("keyup", keyup);
         document.removeEventListener("keydown", keydown);
     },
