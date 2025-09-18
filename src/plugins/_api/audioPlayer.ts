@@ -84,25 +84,22 @@ export default definePlugin({
     ],
 
     stopAudio(player: AudioPlayerInternal, restart?: boolean) {
-        if (!player.persistent) {
-            if (restart) {
-                player.ensureAudio().then(audio => {
-                    audio.currentTime = 0;
-                    audio.play();
-                });
-            } else {
+        if (restart) {
+            player.ensureAudio().then(audio => {
+                audio.currentTime = 0;
+                audio.play();
+            });
+        } else {
+            if (!player.persistent) {
                 player.destroyAudio();
-            }
-        } else if (player._audio) {
-            player._audio.then(audio => {
-                if (!restart) {
+            } else {
+                // Use _audio instead of ensureAudio() to avoid
+                // loading the audio if there is none loaded.
+                player._audio?.then(audio => {
                     audio.pause();
                     audio.currentTime = 0;
-                } else {
-                    audio.currentTime = 0;
-                    audio.play();
-                }
-            });
+                });
+            }
         }
     },
 
