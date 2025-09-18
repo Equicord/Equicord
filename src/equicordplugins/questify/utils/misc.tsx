@@ -20,10 +20,22 @@ export const PlayAudio = findByCodeLazy("Unable to find sound for pack name:");
 const AudioPlayerConstructor = findByCodeLazy("sound has no duration");
 export function AudioPlayer(name: string, volume: number = 1, callback?: () => void): any { return new AudioPlayerConstructor(name, null, volume, "default", callback ?? (() => { })); }
 export const QuestsStore = findStoreLazy("QuestsStore");
-export const questPath = "/discovery/quests";
 export const leftClick = 0;
 export const middleClick = 1;
 export const rightClick = 2;
+
+export function getQuestPath(): string {
+    try {
+        const experimentStore = findStoreLazy("ExperimentStore");
+        if (experimentStore?.getUserExperimentBucket("2025-08-quest-home-v2-entrypoint-relocation") === 1) {
+            return "/discovery/quests";
+        }
+    } catch (err) {
+        // log the error
+        console.warn("Failed to get ExperimentStore for questPath:", err);
+    }
+    return "/quest-home"; // fallback
+}
 
 export function setIgnoredQuestIDs(questIDs: string[], userId?: string): void {
     const currentUserID = userId ?? UserStore.getCurrentUser()?.id;

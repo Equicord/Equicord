@@ -25,7 +25,7 @@ import { ErrorBoundary } from "@components/index";
 import { Devs } from "@utils/constants";
 import { getTheme, Theme } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
-import { findByProps, findComponentByCodeLazy } from "@webpack";
+import { findByProps, findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { Button, ChannelStore, FluxDispatcher, GuildChannelStore, NavigationRouter, RestAPI, Tooltip, UserStore } from "@webpack/common";
 
 const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
@@ -60,7 +60,7 @@ async function openCompleteQuestUI() {
             title: "Quest Completer",
             body: "No Quests To Complete. Click to navigate to the quests tab",
             onClick() {
-                NavigationRouter.transitionTo("/discovery/quests");
+                NavigationRouter.transitionTo(findStoreLazy("ExperimentStore").getUserExperimentBucket("2025-08-quest-home-v2-entrypoint-relocation") === 1 ? "/discovery/quests" : "/quest-home");
             },
         });
     } else {

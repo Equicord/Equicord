@@ -17,7 +17,7 @@ import { JSX } from "react";
 
 import { addIgnoredQuest, autoFetchCompatible, fetchAndAlertQuests, maximumAutoFetchIntervalValue, minimumAutoFetchIntervalValue, questIsIgnored, removeIgnoredQuest, rerenderQuests, settings, startAutoFetchingQuests, stopAutoFetchingQuests, validateAndOverwriteIgnoredQuests } from "./settings";
 import { ExcludedQuestMap, GuildlessServerListItem, Quest, QuestIcon, QuestMap, QuestStatus, RGB } from "./utils/components";
-import { adjustRGB, decimalToRGB, fetchAndDispatchQuests, formatLowerBadge, getFormattedNow, getIgnoredQuestIDs, getQuestStatus, isDarkish, leftClick, middleClick, normalizeQuestName, q, QuestifyLogger, questPath, QuestsStore, refreshQuest, reportPlayGameQuestProgress, reportVideoQuestProgress, rightClick, setIgnoredQuestIDs, waitUntilEnrolled } from "./utils/misc";
+import { adjustRGB, decimalToRGB, fetchAndDispatchQuests, formatLowerBadge, getFormattedNow, getIgnoredQuestIDs, getQuestPath, getQuestStatus, isDarkish, leftClick, middleClick, normalizeQuestName, q, QuestifyLogger, QuestsStore, refreshQuest, reportPlayGameQuestProgress, reportVideoQuestProgress, rightClick, setIgnoredQuestIDs, waitUntilEnrolled } from "./utils/misc";
 
 const patchedMobileQuests = new Set<string>();
 export const activeQuestIntervals = new Map<string, { progressTimeout: NodeJS.Timeout; rerenderTimeout: NodeJS.Timeout; progress: number; duration: number, type: string; }>();
@@ -82,7 +82,7 @@ export function QuestButton(): JSX.Element {
         }
 
         if (todo === "open-quests") {
-            NavigationRouter.transitionTo(questPath);
+            NavigationRouter.transitionTo(getQuestPath());
         } else if (todo === "plugin-settings") {
             openPluginModal(Vencord.Plugins.plugins.Questify);
         } else if (todo === "context-menu") {
@@ -1083,7 +1083,7 @@ export default definePlugin({
 
     flux: {
         CHANNEL_SELECT(data) {
-            settings.store.onQuestsPage = (window.location.pathname === questPath);
+            settings.store.onQuestsPage = (window.location.pathname === getQuestPath());
         },
 
         QUESTS_FETCH_CURRENT_QUESTS_SUCCESS(data) {
