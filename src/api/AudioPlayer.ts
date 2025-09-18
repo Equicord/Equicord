@@ -52,7 +52,7 @@ export interface AudioPlayerInternal {
     loop(): void;
     play(): void;
     pause(): void;
-    stop(): void;
+    stop(restart?: boolean): void;
 }
 
 export interface AudioPlayerInterface {
@@ -141,8 +141,8 @@ class AudioPlayerWrapper implements AudioPlayerInterface {
     loop(): void { this.internalPlayer.loop(); }
     play(): void { this.internalPlayer.play(); }
     pause(): void { this.internalPlayer.pause(); }
-    stop(): void { this.internalPlayer.stop(); }
-    restart(): void { this.internalPlayer.stop(); this.internalPlayer.play(); }
+    stop(restart?: boolean): void { this.internalPlayer.stop(restart); }
+    restart(): void { this.internalPlayer.stop(true); }
     seek(time: number): void { this.internalPlayer.ensureAudio().then(audio => audio.currentTime = time); }
     mute(): void { this.internalPlayer.ensureAudio().then(audio => audio.muted = true); }
     unmute(): void { this.internalPlayer.ensureAudio().then(audio => audio.muted = false); }

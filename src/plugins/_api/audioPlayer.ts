@@ -55,8 +55,8 @@ export default definePlugin({
                 },
                 {
                     // Makes use of the callback and persists flag once the audio is stopped.
-                    match: /(?<=stop\(\){)(this.destroyAudio\(\))/,
-                    replace: "$self.stopAudio(this);"
+                    match: /(stop\()(\){)this.destroyAudio\(\)/,
+                    replace: "$1restart$2$self.stopAudio(this,restart);"
                 }
             ]
         },
@@ -83,13 +83,25 @@ export default definePlugin({
         }
     ],
 
-    stopAudio(player: AudioPlayerInternal) {
+    stopAudio(player: AudioPlayerInternal, restart?: boolean) {
         if (!player.persistent) {
-            player.destroyAudio();
+            if (restart) {
+                player.ensureAudio().then(audio => {
+                    audio.currentTime = 0;
+                    audio.play();
+                });
+            } else {
+                player.destroyAudio();
+            }
         } else if (player._audio) {
             player._audio.then(audio => {
-                audio.pause();
-                audio.currentTime = 0;
+                if (!restart) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                } else {
+                    audio.currentTime = 0;
+                    audio.play();
+                }
             });
         }
     },
