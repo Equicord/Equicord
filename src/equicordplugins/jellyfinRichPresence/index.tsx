@@ -6,7 +6,7 @@
 
 // alot of the code is from LastFMRichPresence
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { ApplicationAssetUtils, FluxDispatcher, Forms, showToast } from "@webpack/common";
@@ -19,6 +19,11 @@ interface ActivityAssets {
     small_text?: string;
 }
 
+interface ActivityButton {
+    label: string;
+    url: string;
+}
+
 interface Activity {
     state: string;
     details?: string;
@@ -26,6 +31,7 @@ interface Activity {
         start?: number;
     };
     assets?: ActivityAssets;
+    buttons?: Array<string>;
     name: string;
     application_id: string;
     metadata?: {
@@ -49,8 +55,6 @@ interface MediaData {
     duration?: number;
     position?: number;
 }
-
-
 
 const settings = definePluginSettings({
     serverUrl: {
@@ -77,6 +81,11 @@ const settings = definePluginSettings({
     customName: {
         description: "Custom Rich Presence name (only used if 'Custom' is selected).\nOptions: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
         type: OptionType.STRING,
+    },
+    showTMDBButton: {
+        description: "Show TheMovieDB button in Rich Presence",
+        type: OptionType.BOOLEAN,
+        default: true,
     },
     overrideRichPresenceType: {
         description: "Override the rich presence type",
@@ -123,10 +132,31 @@ function setActivity(activity: Activity | null) {
     });
 }
 
+async function fetchTmdbData(query: string) {
+    try {
+        const res = await fetch(`https://api.vmohammad.dev/tmdb/search/multi?q=${encodeURIComponent(query)}`);
+        if (!res.ok) throw `${res.status} ${res.statusText}`;
+        const data = await res.json();
+        if (data.results && data.results.length > 0) {
+            const topResult = data.results[0];
+            return {
+                url: `https://www.themoviedb.org/${topResult.media_type}/${topResult.id}`,
+                posterPath: topResult.poster_path
+                    ? `https://image.tmdb.org/t/p/original${topResult.poster_path}`
+                    : null
+            };
+        }
+        return null;
+    } catch (e) {
+        console.error("Failed to fetch TMDb data:", e);
+        return null;
+    }
+}
+
 export default definePlugin({
     name: "JellyfinRichPresence",
     description: "Rich presence for Jellyfin media server",
-    authors: [EquicordDevs.vmohammad, EquicordDevs.SerStars],
+    authors: [EquicordDevs.vmohammad, Devs.SerStars],
 
     settingsAboutComponent: () => (
         <>
@@ -241,48 +271,62 @@ export default definePlugin({
         }
 
         const templateReplace = (template: string) => {
-        return template
-            .replace(/\{name\}/g, mediaData.name || "")
-            .replace(/\{series\}/g, mediaData.seriesName || "")
-            .replace(/\{season\}/g, mediaData.seasonNumber?.toString() || "")
-            .replace(/\{episode\}/g, mediaData.episodeNumber?.toString() || "")
-            .replace(/\{artist\}/g, mediaData.artist || "")
-            .replace(/\{album\}/g, mediaData.album || "")
-            .replace(/\{year\}/g, mediaData.year?.toString() || "");
-    };
-
-    switch (nameSetting) {
-        case "full":
-            if (mediaData.type === "Episode" && mediaData.seriesName) {
-                appName = `${mediaData.seriesName} - ${mediaData.name}`;
-            } else if (mediaData.type === "Audio") {
-                appName = `${mediaData.artist || "Unknown Artist"} - ${mediaData.name}`;
-            } else {
-                appName = mediaData.name || "Jellyfin";
-            }
-            break;
-        case "custom":
-            appName = templateReplace(settings.store.customName || "{name} on Jellyfish");
-            break;
-        case "default":
-        default:
-            if (mediaData.type === "Episode" && mediaData.seriesName) {
-                appName = mediaData.seriesName;
-            } else {
-                appName = mediaData.name || "Jellyfin";
-            }
-            break;
-    }
-
-        const largeImage = mediaData.imageUrl;
-        const assets: ActivityAssets = {
-            large_image: largeImage ? await getApplicationAsset(largeImage) : await getApplicationAsset("jellyfin"),
-            large_text: mediaData.album || mediaData.seriesName || undefined,
+            return template
+                .replace(/\{name\}/g, mediaData.name || "")
+                .replace(/\{series\}/g, mediaData.seriesName || "")
+                .replace(/\{season\}/g, mediaData.seasonNumber?.toString() || "")
+                .replace(/\{episode\}/g, mediaData.episodeNumber?.toString() || "")
+                .replace(/\{artist\}/g, mediaData.artist || "")
+                .replace(/\{album\}/g, mediaData.album || "")
+                .replace(/\{year\}/g, mediaData.year?.toString() || "");
         };
+
+        switch (nameSetting) {
+            case "full":
+                if (mediaData.type === "Episode" && mediaData.seriesName) {
+                    appName = `${mediaData.seriesName} - ${mediaData.name}`;
+                } else if (mediaData.type === "Audio") {
+                    appName = `${mediaData.artist || "Unknown Artist"} - ${mediaData.name}`;
+                } else {
+                    appName = mediaData.name || "Jellyfin";
+                }
+                break;
+            case "custom":
+                appName = templateReplace(settings.store.customName || "{name} on Jellyfish");
+                break;
+            case "default":
+            default:
+                if (mediaData.type === "Episode" && mediaData.seriesName) {
+                    appName = mediaData.seriesName;
+                } else {
+                    appName = mediaData.name || "Jellyfin";
+                }
+                break;
+        }
+
+        let tmdbData: { url: string; posterPath?: string | null } | null = null;
+        if (settings.store.showTMDBButton) {
+            tmdbData = await fetchTmdbData(mediaData.seriesName || mediaData.name);
+        }
+
+        const assets: ActivityAssets = {
+            large_image: tmdbData?.posterPath ? await getApplicationAsset(tmdbData.posterPath) : mediaData.imageUrl ? await getApplicationAsset(mediaData.imageUrl) : undefined,
+            large_text: mediaData.seriesName || mediaData.album || undefined,
+        };
+
+        const buttons: ActivityButton[] = [];
+        if (settings.store.showTMDBButton) {
+            const result = await fetchTmdbData(mediaData.seriesName || mediaData.name);
+            if (result?.url) tmdbData = { url: result.url };
+            buttons.push({
+                label: "View on TheMovieDB",
+                url: `${tmdbData?.url}`
+            });
+        }
 
         const getDetails = () => {
             if (mediaData.type === "Episode" && mediaData.seriesName) {
-                return mediaData.name;
+                return mediaData.seriesName;
             }
             return mediaData.name;
         };
@@ -291,7 +335,7 @@ export default definePlugin({
             if (mediaData.type === "Episode" && mediaData.seriesName) {
                 const season = mediaData.seasonNumber ? `S${mediaData.seasonNumber}` : "";
                 const episode = mediaData.episodeNumber ? `E${mediaData.episodeNumber}` : "";
-                return `${mediaData.seriesName} ${season}${episode}`.trim();
+                return `${mediaData.name} (${season} - ${episode})`.trim();
             }
             return mediaData.artist || (mediaData.year ? `(${mediaData.year})` : undefined);
         };
@@ -309,8 +353,12 @@ export default definePlugin({
             assets,
             timestamps,
 
+            buttons: buttons.length ? buttons.map(v => v.label) : undefined,
+            metadata: {
+                button_urls: buttons.map(v => v.url),
+            },
             type: richPresenceType,
-            flags: 1,
+            flags: 1
         };
     }
 });
