@@ -1385,7 +1385,7 @@ function FetchingQuestsSetting(): JSX.Element {
                                         if (activePlayer.current) {
                                             clearActivePlayer();
                                         } else {
-                                            activePlayer.current = playAudio(currentAlertSelection.value as string, 100, clearActivePlayer);
+                                            activePlayer.current = playAudio(currentAlertSelection.value as string, { onEnded: clearActivePlayer });
                                             setIsPlaying(true);
                                         }
                                     }
