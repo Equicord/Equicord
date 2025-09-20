@@ -9,11 +9,10 @@ import "./styles.css";
 import { openPrivateChannel } from "@utils/discord";
 import { User } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
-import { Button, Tooltip, UserStore, VoiceActions } from "@webpack/common";
+import { Button, MediaEngineStore, Tooltip, UserStore, VoiceActions } from "@webpack/common";
 
 import { settings } from ".";
 
-const MediaEngineStore = findStoreLazy("MediaEngineStore");
 const SoundboardStore = findStoreLazy("SoundboardStore");
 
 export function UserChatButton({ user }: { user: User; }) {
