@@ -50,14 +50,19 @@ export default definePlugin({
                     replace: "$1error$2{this.onError?.(error);$3;},"
                 },
                 {
-                    // Makes use of the callback and persists flag once the audio ends.
+                    // Makes use of the onEnded callback and persists flag once the audio ends.
                     match: /(?<=onended=\(\)=>)(.{0,40}?),/,
                     replace: "{$self.stopAudio(this);this.onEnded?.();},"
                 },
                 {
-                    // Makes use of the callback and persists flag once the audio is stopped.
+                    // Makes use of the persists flag once the audio is stopped.
                     match: /(stop\()(\){)this.destroyAudio\(\)/,
                     replace: "$1restart$2$self.stopAudio(this,restart);"
+                },
+                {
+                    // Use our playAudio function in place of the default playGiftSound.
+                    match: /let \i=new Audio\((\(0,\i.\i\)\(\i\)).{0,35}?play\(\)/,
+                    replace: "$self.playAudio($1)"
                 }
             ]
         },
@@ -81,14 +86,6 @@ export default definePlugin({
                     replace: ";"
                 }
             ]
-        },
-        {
-            // Use our playAudio function in place of the default playGiftSound.
-            find: "=>\"audiooutput\"",
-            replacement: {
-                match: /let \i=new Audio\((\(0,\i.\i\)\(\i\)).{0,35}?play\(\)/,
-                replace: "$self.playAudio($1)"
-            }
         }
     ],
 
