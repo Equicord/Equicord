@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { AudioPlayerAPILogger, AudioPlayerInternal, AudioPlayerOptions, audioProcessorFunctions, AudioType, identifyAudioType } from "@api/AudioPlayer";
+import { AudioPlayerAPILogger, AudioPlayerInternal, AudioPlayerOptions, audioProcessorFunctions, AudioType, identifyAudioType, playAudio } from "@api/AudioPlayer";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
@@ -13,6 +13,7 @@ export default definePlugin({
     description: "API to play internal Discord audio files or external audio links.",
     authors: [EquicordDevs.Etorix],
     AudioType,
+    playAudio,
 
     patches: [
         {
@@ -80,6 +81,14 @@ export default definePlugin({
                     replace: ";"
                 }
             ]
+        },
+        {
+            // Use our playAudio function in place of the default playGiftSound.
+            find: "=>\"audiooutput\"",
+            replacement: {
+                match: /let \i=new Audio\((\(0,\i.\i\)\(\i\)).{0,35}?play\(\)/,
+                replace: "$self.playAudio($1)"
+            }
         }
     ],
 
