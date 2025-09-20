@@ -5,22 +5,18 @@
  */
 
 import "./UserChatButton.css";
+
 import { openPrivateChannel } from "@utils/discord";
-import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { User } from "@vencord/discord-types";
-import { Button, Tooltip, UserStore } from "@webpack/common";
+import { findStoreLazy } from "@webpack";
+import { Button, Tooltip, UserStore, VoiceActions } from "@webpack/common";
+
 import { settings } from "..";
 
 const MediaEngineStore = findStoreLazy("MediaEngineStore");
 const SoundboardStore = findStoreLazy("SoundboardStore");
-const ClientActions: {
-    toggleSelfMute: () => void;
-    toggleLocalMute: (userId: string) => void;
-    toggleLocalSoundboardMute: (userId: string) => void;
-    setDisableLocalVideo : (userId: string, state: string, def: string) => void;
-} = findByPropsLazy("toggleSelfMute", "toggleLocalMute", "toggleLocalSoundboardMute", "setDisableLocalVideo");
 
-export function UserChatButton({ user }: { user: User }) {
+export function UserChatButton({ user }: { user: User; }) {
     if (user.id === UserStore.getCurrentUser().id) return null;
     return (
         <div className="click-to-chat-container">
@@ -30,7 +26,7 @@ export function UserChatButton({ user }: { user: User }) {
                         size={Button.Sizes.MIN}
                         color={Button.Colors.TRANSPARENT}
                         look={Button.Looks.BLANK}
-                        onClick={(e) => {
+                        onClick={e => {
                             e.preventDefault();
                             e.stopPropagation();
                             openPrivateChannel({ recipientIds: [user.id] } as any);
@@ -56,7 +52,7 @@ export function UserChatButton({ user }: { user: User }) {
     );
 }
 
-export function UserMuteButton({ user }: { user: User }) {
+export function UserMuteButton({ user }: { user: User; }) {
     if (user.id === UserStore.getCurrentUser().id) return null;
     return (
         <div className="click-to-chat-container">
@@ -66,10 +62,10 @@ export function UserMuteButton({ user }: { user: User }) {
                         size={Button.Sizes.MIN}
                         color={Button.Colors.TRANSPARENT}
                         look={Button.Looks.BLANK}
-                        onClick={(e) => {
+                        onClick={e => {
                             e.preventDefault();
                             e.stopPropagation();
-                            ClientActions.toggleLocalMute(user.id);
+                            VoiceActions.toggleLocalMute(user.id);
                         }}
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
@@ -97,7 +93,7 @@ export function UserMuteButton({ user }: { user: User }) {
     );
 }
 
-function DeafenIcon({ user, ... props }) {
+function DeafenIcon({ user, ...props }) {
     const isDeafened =
         MediaEngineStore.isLocalMute(user.id) &&
         SoundboardStore.isLocalSoundboardMuted(user.id) &&
@@ -139,7 +135,7 @@ function DeafenIcon({ user, ... props }) {
     );
 }
 
-export function UserDeafenButton({ user }: { user: User }) {
+export function UserDeafenButton({ user }: { user: User; }) {
     if (user.id === UserStore.getCurrentUser().id) return null;
     const isDeafened =
         MediaEngineStore.isLocalMute(user.id) &&
@@ -153,15 +149,15 @@ export function UserDeafenButton({ user }: { user: User }) {
                         size={Button.Sizes.MIN}
                         color={Button.Colors.TRANSPARENT}
                         look={Button.Looks.BLANK}
-                        onClick={(e) => {
+                        onClick={e => {
                             e.preventDefault();
                             e.stopPropagation();
-                            ClientActions.toggleLocalMute(user.id);
+                            VoiceActions.toggleLocalMute(user.id);
                             if (settings.store.muteSoundboard) {
-                                ClientActions.toggleLocalSoundboardMute(user.id);
+                                VoiceActions.toggleLocalSoundboardMute(user.id);
                             }
                             if (settings.store.disableVideo) {
-                                ClientActions.setDisableLocalVideo(
+                                VoiceActions.setDisableLocalVideo(
                                     user.id,
                                     MediaEngineStore.isLocalVideoDisabled(user.id) ? "ENABLED" : "DISABLED",
                                     "default"

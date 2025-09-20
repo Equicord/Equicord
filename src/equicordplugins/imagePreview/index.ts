@@ -376,25 +376,23 @@ function updatePreviewPosition(mouseEvent: MouseEvent, element: HTMLElement) {
     }
 }
 
-let previewCheckInterval
+let previewCheckInterval;
 
 function watchSourceElement(el: Element) {
     if (previewCheckInterval) {
-        clearInterval(previewCheckInterval)
-        previewCheckInterval = null
+        clearInterval(previewCheckInterval);
+        previewCheckInterval = null;
     }
 
     previewCheckInterval = setInterval(() => {
-        const node = el as HTMLElement
+        const node = el as HTMLElement;
         if (!document.body.contains(node) || !node.offsetParent) {
-            deleteCurrentPreview()
-            clearInterval(previewCheckInterval)
-            previewCheckInterval = null
+            deleteCurrentPreview();
+            clearInterval(previewCheckInterval);
+            previewCheckInterval = null;
         }
-    }, 300)
+    }, 300);
 }
-
-
 
 function addHoverListener(element: Element, sticker: boolean = false) {
     element.setAttribute("data-processed", "true");
@@ -463,7 +461,6 @@ function addHoverListener(element: Element, sticker: boolean = false) {
     });
 }
 
-
 function handleKeydown(event: KeyboardEvent) {
     if (event.key === "Control" && currentPreview) {
         isCtrlHeld = true;
@@ -509,7 +506,7 @@ function removeHoverListeners() {
 export default definePlugin({
     name: "ImagePreview",
     description: "Hover on message images, avatars, links, and message stickers to show a full preview.",
-    authors: [EquicordDevs.creations, EquicordDevs.omaw],
+    authors: [EquicordDevs.creations],
     settings: settings,
 
     start() {

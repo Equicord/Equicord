@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import definePlugin, {OptionType} from "@utils/types";
-import { definePluginSettings, Settings } from "@api/Settings";
-import { UserChatButton, UserMuteButton, UserDeafenButton } from "./components/UserChatButtons";
+import { definePluginSettings } from "@api/Settings";
+import { EquicordDevs } from "@utils/constants";
+import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { React } from "@webpack/common";
-import { EquicordDevs } from "@utils/constants";
+
+import { UserChatButton, UserDeafenButton, UserMuteButton } from "./components/UserChatButtons";
 
 export const settings = definePluginSettings({
     showChatButton: {
@@ -47,9 +48,10 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "VoiceButtons",
     description: "Quickly DM, mute, or deafen any user right from the voice-call panel.",
-    authors: [{name: "nicola02nb",id: 257900031351193600n}, EquicordDevs.omaw],
+    authors: [EquicordDevs.nicola02nb, EquicordDevs.omaw],
     settings,
-    patches: [ // CREDITS TO THROROEN FOR THIS patch!!
+    patches: [
+        // CREDITS TO THROROEN FOR THIS patch!!
         {
             find: "\"avatarContainerClass\",\"userNameClassName\"",
             replacement: [
