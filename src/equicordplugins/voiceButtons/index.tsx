@@ -51,7 +51,6 @@ export default definePlugin({
     authors: [EquicordDevs.nicola02nb, EquicordDevs.omaw],
     settings,
     patches: [
-        // CREDITS TO THROROEN FOR THIS patch!!
         {
             find: "\"avatarContainerClass\",\"userNameClassName\"",
             replacement: [
