@@ -21,7 +21,6 @@ const allSounds = {
 
 let chosenPack: typeof packs[keyof typeof packs];
 const keysCurrentlyPressed = new Set<string>();
-let previousSoundIndex = 0;
 
 const keyup = (e: KeyboardEvent) => { keysCurrentlyPressed.delete(e.code); };
 
@@ -33,11 +32,21 @@ const keydown = (e: KeyboardEvent) => {
 
     function getRandomSound(soundsArray: { playing: boolean; player: AudioPlayerInterface; }[]) {
         const nonplayingSounds = soundsArray.filter(sound => !sound?.playing);
-        const randomIndex = Math.floor(Math.random() * nonplayingSounds.length);
-        const chosenSound = nonplayingSounds.length ? nonplayingSounds[randomIndex] : soundsArray[previousSoundIndex];
-        previousSoundIndex = randomIndex;
-        chosenSound.playing = true;
-        chosenSound.player.restart();
+        let randomIndex;
+        let chosenSound;
+
+        if (nonplayingSounds.length) {
+            randomIndex = Math.floor(Math.random() * nonplayingSounds.length);
+            chosenSound = nonplayingSounds[randomIndex];
+        } else {
+            randomIndex = Math.floor(Math.random() * soundsArray.length);
+            chosenSound = soundsArray[randomIndex];
+        }
+
+        if (chosenSound) {
+            chosenSound.playing = true;
+            chosenSound.player.restart();
+        }
     }
 
     if (e.code === "Backspace" && allSounds.backspaces.length) {
@@ -61,7 +70,6 @@ function clearSounds() {
 function assignSounds(volume: number, pack: "operagx" | "osu") {
     clearSounds();
     chosenPack = packs[pack];
-    let soundIndex = 0;
 
     if (!chosenPack) {
         return;
@@ -69,11 +77,21 @@ function assignSounds(volume: number, pack: "operagx" | "osu") {
 
     function addSounds(key: keyof typeof allSounds) {
         if (!chosenPack[key]) return;
+        let soundIndex = -1;
 
         for (let i = 0; i < 3; i++) {
             for (const url of chosenPack[key]) {
-                allSounds[key].push({ playing: false, player: createAudioPlayer(url, { volume, preload: true, persistent: true, onEnded: () => { allSounds[key][soundIndex].playing = false; } }) });
                 soundIndex++;
+
+                allSounds[key].push({
+                    playing: false,
+                    player: createAudioPlayer(url, {
+                        volume,
+                        preload: true,
+                        persistent: true,
+                        onEnded: () => { allSounds[key][soundIndex].playing = false; }
+                    })
+                });
             }
         }
     }
