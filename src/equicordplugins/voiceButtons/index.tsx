@@ -10,7 +10,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { React } from "@webpack/common";
 
-import { UserChatButton, UserDeafenButton, UserMuteButton } from "./UserChatButtons";
+import { UserChatButton, UserDeafenButton, UserMuteButton } from "./utils";
 
 export const settings = definePluginSettings({
     showChatButton: {
