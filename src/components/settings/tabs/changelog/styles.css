@@ -161,8 +161,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.75em;
-    max-height: 70vh;
-    overflow-y: auto;
+    max-height: 100vh;
+    min-height: 800px;
+    overflow: hidden auto;
     padding-right: 0.5em;
 }
 
@@ -224,6 +225,8 @@
     padding: 0 1em 1em;
     border-top: 1px solid var(--background-base-lowest);
     animation: expand-content 0.2s ease-out;
+    max-height: 60vh;
+    overflow: hidden auto;
 }
 
 .vc-changelog-session-plugins {
@@ -251,22 +254,26 @@
     gap: 0.5em;
 }
 
-/* Scrollbar styling for history list */
-.vc-changelog-history-list::-webkit-scrollbar {
+/* Scrollbar styling for history list and session content */
+.vc-changelog-history-list::-webkit-scrollbar,
+.vc-changelog-session-content::-webkit-scrollbar {
     width: 6px;
 }
 
-.vc-changelog-history-list::-webkit-scrollbar-track {
+.vc-changelog-history-list::-webkit-scrollbar-track,
+.vc-changelog-session-content::-webkit-scrollbar-track {
     background: var(--background-base-lower-alt);
     border-radius: 3px;
 }
 
-.vc-changelog-history-list::-webkit-scrollbar-thumb {
+.vc-changelog-history-list::-webkit-scrollbar-thumb,
+.vc-changelog-session-content::-webkit-scrollbar-thumb {
     background: var(--text-muted);
     border-radius: 3px;
 }
 
-.vc-changelog-history-list::-webkit-scrollbar-thumb:hover {
+.vc-changelog-history-list::-webkit-scrollbar-thumb:hover,
+.vc-changelog-session-content::-webkit-scrollbar-thumb:hover {
     background: var(--text-default);
 }
 

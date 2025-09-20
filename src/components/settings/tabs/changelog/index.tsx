@@ -22,6 +22,7 @@ import {
     formatTimestamp,
     getChangelogHistory,
     getNewPlugins,
+    getNewSettings,
     getUpdatedPlugins,
     initializeChangelog,
     saveUpdateSession,
@@ -114,6 +115,9 @@ function UpdateSessionCard({
                             ` • ${session.newPlugins.length} new plugins`}
                         {session.updatedPlugins.length > 0 &&
                             ` • ${session.updatedPlugins.length} updated plugins`}
+                        {session.newSettings &&
+                            session.newSettings.size > 0 &&
+                            ` • ${Array.from(session.newSettings.values()).reduce((sum, arr) => sum + arr.length, 0)} new settings`}
                     </div>
                 </div>
                 <div
@@ -152,6 +156,32 @@ function UpdateSessionCard({
                                 newPlugins={session.updatedPlugins}
                                 maxDisplay={10}
                             />
+                        </div>
+                    )}
+
+                    {session.newSettings && session.newSettings.size > 0 && (
+                        <div className="vc-changelog-session-plugins">
+                            <Forms.FormTitle
+                                tag="h6"
+                                className={Margins.bottom8}
+                            >
+                                New Settings
+                            </Forms.FormTitle>
+                            <div className="vc-changelog-new-plugins-list">
+                                {Array.from(
+                                    session.newSettings?.entries() || [],
+                                ).map(([pluginName, settings]) =>
+                                    settings.map((setting) => (
+                                        <span
+                                            key={`${pluginName}-${setting}`}
+                                            className="vc-changelog-new-plugin-tag"
+                                            title={`New setting in ${pluginName}`}
+                                        >
+                                            {pluginName}.{setting}
+                                        </span>
+                                    )),
+                                )}
+                            </div>
                         </div>
                     )}
 
@@ -250,14 +280,20 @@ function ChangelogContent() {
             if (updates.ok && updates.value && updates.value.length > 0) {
                 setChangelog(updates.value);
 
-                // Load current new/updated plugins
+                // Load current new/updated plugins and settings
                 const newPlgs = await getNewPlugins();
                 const updatedPlgs = await getUpdatedPlugins();
+                const newSettings = await getNewSettings();
                 setNewPlugins(newPlgs);
                 setUpdatedPlugins(updatedPlgs);
 
                 // Save this update session to history
-                await saveUpdateSession(updates.value, newPlgs, updatedPlgs);
+                await saveUpdateSession(
+                    updates.value,
+                    newPlgs,
+                    updatedPlgs,
+                    newSettings,
+                );
                 await loadChangelogHistory();
 
                 Toasts.show({

@@ -24,6 +24,7 @@ export interface UpdateSession {
     commits: ChangelogEntry[];
     newPlugins: string[];
     updatedPlugins: string[];
+    newSettings?: Map<string, string[]>;
 }
 
 export type ChangelogHistory = UpdateSession[];
@@ -31,6 +32,9 @@ export type ChangelogHistory = UpdateSession[];
 const CHANGELOG_HISTORY_KEY = "EquicordChangelog_History";
 const LAST_SEEN_HASH_KEY = "EquicordChangelog_LastSeenHash";
 const KNOWN_PLUGINS_KEY = "EquicordChangelog_KnownPlugins";
+const KNOWN_SETTINGS_KEY = "EquicordChangelog_KnownSettings";
+
+type KnownPluginSettingsMap = Map<string, Set<string>>;
 
 export async function getChangelogHistory(): Promise<ChangelogHistory> {
     const history = (await DataStore.get(
@@ -43,6 +47,7 @@ export async function saveUpdateSession(
     commits: ChangelogEntry[],
     newPlugins: string[],
     updatedPlugins: string[],
+    newSettings: Map<string, string[]>,
 ): Promise<void> {
     const history = await getChangelogHistory();
     const lastSeenHash = await getLastSeenHash();
@@ -52,7 +57,8 @@ export async function saveUpdateSession(
     if (
         commits.length === 0 &&
         newPlugins.length === 0 &&
-        updatedPlugins.length === 0
+        updatedPlugins.length === 0 &&
+        newSettings.size === 0
     ) {
         return;
     }
@@ -65,6 +71,7 @@ export async function saveUpdateSession(
         commits,
         newPlugins,
         updatedPlugins,
+        newSettings,
     };
 
     // Add to beginning of history (most recent first)
@@ -78,6 +85,7 @@ export async function saveUpdateSession(
     await DataStore.set(CHANGELOG_HISTORY_KEY, history);
     await setLastSeenHash(currentHash);
     await updateKnownPlugins();
+    await updateKnownSettings();
 }
 
 export async function getLastSeenHash(): Promise<string | null> {
@@ -96,6 +104,69 @@ export async function getKnownPlugins(): Promise<Set<string>> {
 export async function updateKnownPlugins(): Promise<void> {
     const currentPlugins = Object.keys(plugins);
     await DataStore.set(KNOWN_PLUGINS_KEY, currentPlugins);
+}
+
+function getSettingsSetForPlugin(plugin: string): Set<string> {
+    const settings = plugins[plugin]?.settings?.def || {};
+    return new Set(
+        Object.keys(settings).filter((setting) => setting !== "enabled"),
+    );
+}
+
+function getCurrentSettings(pluginList: string[]): KnownPluginSettingsMap {
+    return new Map(
+        pluginList.map((name) => [name, getSettingsSetForPlugin(name)]),
+    );
+}
+
+export async function getKnownSettings(): Promise<KnownPluginSettingsMap> {
+    let map = (await DataStore.get(
+        KNOWN_SETTINGS_KEY,
+    )) as KnownPluginSettingsMap;
+    if (map === undefined) {
+        const knownPlugins = await getKnownPlugins();
+        const Plugins = [...Object.keys(plugins), ...Array.from(knownPlugins)];
+        map = getCurrentSettings(Plugins);
+        await DataStore.set(KNOWN_SETTINGS_KEY, map);
+    }
+    return map;
+}
+
+export async function getNewSettings(): Promise<Map<string, string[]>> {
+    const map = getCurrentSettings(Object.keys(plugins));
+    const knownSettings = await getKnownSettings();
+    const newSettings = new Map<string, string[]>();
+
+    map.forEach((settings, plugin) => {
+        const filteredSettings = [...settings].filter(
+            (setting) => !knownSettings.get(plugin)?.has(setting),
+        );
+        if (filteredSettings.length > 0) {
+            newSettings.set(plugin, filteredSettings);
+        }
+    });
+
+    return newSettings;
+}
+
+export async function updateKnownSettings(): Promise<void> {
+    const currentSettings = getCurrentSettings(Object.keys(plugins));
+    const knownSettings = await getKnownSettings();
+    const allSettings = new Map();
+
+    new Set([...currentSettings.keys(), ...knownSettings.keys()]).forEach(
+        (plugin) => {
+            allSettings.set(
+                plugin,
+                new Set([
+                    ...(currentSettings.get(plugin) || []),
+                    ...(knownSettings.get(plugin) || []),
+                ]),
+            );
+        },
+    );
+
+    await DataStore.set(KNOWN_SETTINGS_KEY, allSettings);
 }
 
 export async function getNewPlugins(): Promise<string[]> {
@@ -119,6 +190,7 @@ export async function getUpdatedPlugins(): Promise<string[]> {
 export async function clearChangelogHistory(): Promise<void> {
     await DataStore.del(CHANGELOG_HISTORY_KEY);
     await DataStore.del(LAST_SEEN_HASH_KEY);
+    await DataStore.del(KNOWN_SETTINGS_KEY);
 }
 
 export async function initializeChangelog(): Promise<void> {
@@ -127,6 +199,7 @@ export async function initializeChangelog(): Promise<void> {
     if (!lastSeenHash) {
         await setLastSeenHash(gitHash);
         await updateKnownPlugins();
+        await updateKnownSettings();
     }
 }
 
@@ -154,6 +227,7 @@ export async function debugClearAllData(): Promise<void> {
     await DataStore.del(CHANGELOG_HISTORY_KEY);
     await DataStore.del(LAST_SEEN_HASH_KEY);
     await DataStore.del(KNOWN_PLUGINS_KEY);
+    await DataStore.del(KNOWN_SETTINGS_KEY);
 }
 
 export async function debugAddMockUpdateSession(): Promise<void> {
@@ -178,6 +252,10 @@ export async function debugAddMockUpdateSession(): Promise<void> {
         ],
         newPlugins: ["TestPlugin", "AnotherNewPlugin"],
         updatedPlugins: ["ExistingPlugin"],
+        newSettings: new Map([
+            ["ExistingPlugin", ["newSetting1", "newSetting2"]],
+            ["AnotherPlugin", ["coolFeature"]],
+        ]),
     };
 
     const history = await getChangelogHistory();
@@ -215,6 +293,27 @@ export const ChangelogDebug = {
         return newPlugins;
     },
 
+    async showNewSettings() {
+        const newSettings = await getNewSettings();
+        console.log(
+            "[ChangelogDebug] New settings:",
+            Object.fromEntries(newSettings),
+        );
+        return newSettings;
+    },
+
+    async showKnownSettings() {
+        const knownSettings = await getKnownSettings();
+        const obj = Object.fromEntries(
+            Array.from(knownSettings.entries()).map(([key, value]) => [
+                key,
+                Array.from(value),
+            ]),
+        );
+        console.log("[ChangelogDebug] Known settings:", obj);
+        return knownSettings;
+    },
+
     async reset() {
         await this.clearAll();
         await initializeChangelog();
@@ -227,12 +326,14 @@ export const ChangelogDebug = {
         const history = await getChangelogHistory();
         const knownPlugins = await getKnownPlugins();
         const newPlugins = await getNewPlugins();
+        const newSettings = await getNewSettings();
         const lastSeenHash = await getLastSeenHash();
 
         console.log("[ChangelogDebug] Status:", {
             historyCount: history.length,
             knownPluginsCount: knownPlugins.size,
             newPluginsCount: newPlugins.length,
+            newSettingsCount: newSettings.size,
             lastSeenHash,
             currentHash: gitHash.slice(0, 7),
         });
@@ -241,6 +342,7 @@ export const ChangelogDebug = {
             history,
             knownPlugins,
             newPlugins,
+            newSettings,
             lastSeenHash,
             currentHash: gitHash,
         };
