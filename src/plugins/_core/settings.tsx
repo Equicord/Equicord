@@ -126,18 +126,18 @@ export default definePlugin({
                 className: "vc-updater",
             },
             {
-                section: "EquicordCloud",
-                label: "Cloud",
-                searchableTitles: ["Cloud"],
-                element: CloudTab,
-                className: "vc-cloud",
-            },
-            {
                 section: "EquicordChangelog",
                 label: "Changelog",
                 searchableTitles: ["Changelog"],
                 element: ChangelogTab,
                 className: "vc-changelog",
+            },
+            {
+                section: "EquicordCloud",
+                label: "Cloud",
+                searchableTitles: ["Cloud"],
+                element: CloudTab,
+                className: "vc-cloud",
             },
             {
                 section: "settings/tabsSync",
