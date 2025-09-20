@@ -20,7 +20,7 @@ export const PlayAudio = findByCodeLazy("Unable to find sound for pack name:");
 const AudioPlayerConstructor = findByCodeLazy("sound has no duration");
 export function AudioPlayer(name: string, volume: number = 1, callback?: () => void): any { return new AudioPlayerConstructor(name, null, volume, "default", callback ?? (() => { })); }
 export const QuestsStore = findStoreLazy("QuestsStore");
-export const questPath = "/discovery/quests";
+export const questPath = "/quest-home";
 export const leftClick = 0;
 export const middleClick = 1;
 export const rightClick = 2;
