@@ -233,8 +233,9 @@
 }
 
 .vc-changelog-session-content {
-    padding: 0 1em 1em 1em;
+    padding: 0 1em 1em;
     border-top: 1px solid var(--background-base-lowest);
+    animation: expand-content 0.2s ease-out;
 }
 
 .vc-changelog-session-plugins {
@@ -289,7 +290,7 @@
 
 .visual-refresh .vc-changelog-entry:hover {
     background-color: var(--card-primary-bg);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
 .visual-refresh .vc-changelog-empty {
@@ -333,7 +334,7 @@
 }
 
 /* Responsive design */
-@media (max-width: 768px) {
+@media (width <= 768px) {
     .vc-changelog-new-plugins-grid {
         grid-template-columns: 1fr;
     }
@@ -357,15 +358,14 @@
 }
 
 /* Animation for expanding/collapsing sessions */
-.vc-changelog-session-content {
-    animation: expandContent 0.2s ease-out;
-}
 
-@keyframes expandContent {
+
+@keyframes expand-content {
     from {
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
