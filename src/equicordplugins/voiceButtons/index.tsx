@@ -49,13 +49,15 @@ export default definePlugin({
     description: "Quickly DM, mute, or deafen any user right from the voice-call panel.",
     authors: [{name: "nicola02nb",id: 257900031351193600n}, EquicordDevs.omaw],
     settings,
-    patches: [
+    patches: [ // CREDITS TO THROROEN FOR THIS patch!!
         {
             find: "\"avatarContainerClass\",\"userNameClassName\"",
-            replacement: {
-                match: /(\((\i),\i\){?=.{0,850}\.flipped])(:\i}\),children:\[)/,
-                replace: "$1$3$self.renderPing($2?.user),"
-            }
+            replacement: [
+                {
+                    match: /:(\i)\.username.*?flipped\]:\i\}\),children:\[/,
+                    replace: "$&$self.renderButtons($1),"
+                }
+            ]
         }
     ],
     renderPing(user?: User) {
