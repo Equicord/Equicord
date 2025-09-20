@@ -84,53 +84,50 @@ function ChangelogCard({
     );
 }
 
-function UpdateSessionCard({
-    session,
+function UpdateLogCard({
+    log,
     repo,
     repoPending,
     isExpanded,
     onToggleExpand,
 }: {
-    session: UpdateSession;
+    log: UpdateSession;
     repo: string;
     repoPending: boolean;
     isExpanded: boolean;
     onToggleExpand: () => void;
 }) {
     return (
-        <Card className="vc-changelog-session">
-            <div
-                className="vc-changelog-session-header"
-                onClick={onToggleExpand}
-            >
-                <div className="vc-changelog-session-info">
-                    <div className="vc-changelog-session-title">
-                        Update from {session.fromHash.slice(0, 7)} →{" "}
-                        {session.toHash.slice(0, 7)}
+        <Card className="vc-changelog-log">
+            <div className="vc-changelog-log-header" onClick={onToggleExpand}>
+                <div className="vc-changelog-log-info">
+                    <div className="vc-changelog-log-title">
+                        Update from {log.fromHash.slice(0, 7)} →{" "}
+                        {log.toHash.slice(0, 7)}
                     </div>
-                    <div className="vc-changelog-session-meta">
-                        {formatTimestamp(session.timestamp)} •{" "}
-                        {session.commits.length} commits
-                        {session.newPlugins.length > 0 &&
-                            ` • ${session.newPlugins.length} new plugins`}
-                        {session.updatedPlugins.length > 0 &&
-                            ` • ${session.updatedPlugins.length} updated plugins`}
-                        {session.newSettings &&
-                            session.newSettings.size > 0 &&
-                            ` • ${Array.from(session.newSettings.values()).reduce((sum, arr) => sum + arr.length, 0)} new settings`}
+                    <div className="vc-changelog-log-meta">
+                        {formatTimestamp(log.timestamp)} • {log.commits.length}{" "}
+                        commits
+                        {log.newPlugins.length > 0 &&
+                            ` • ${log.newPlugins.length} new plugins`}
+                        {log.updatedPlugins.length > 0 &&
+                            ` • ${log.updatedPlugins.length} updated plugins`}
+                        {log.newSettings &&
+                            log.newSettings.size > 0 &&
+                            ` • ${Array.from(log.newSettings.values()).reduce((sum, arr) => sum + arr.length, 0)} new settings`}
                     </div>
                 </div>
                 <div
-                    className={`vc-changelog-session-toggle ${isExpanded ? "expanded" : ""}`}
+                    className={`vc-changelog-log-toggle ${isExpanded ? "expanded" : ""}`}
                 >
                     ▼
                 </div>
             </div>
 
             {isExpanded && (
-                <div className="vc-changelog-session-content">
-                    {session.newPlugins.length > 0 && (
-                        <div className="vc-changelog-session-plugins">
+                <div className="vc-changelog-log-content">
+                    {log.newPlugins.length > 0 && (
+                        <div className="vc-changelog-log-plugins">
                             <Forms.FormTitle
                                 tag="h6"
                                 className={Margins.bottom8}
@@ -138,14 +135,14 @@ function UpdateSessionCard({
                                 New Plugins
                             </Forms.FormTitle>
                             <NewPluginsCompact
-                                newPlugins={session.newPlugins}
+                                newPlugins={log.newPlugins}
                                 maxDisplay={10}
                             />
                         </div>
                     )}
 
-                    {session.updatedPlugins.length > 0 && (
-                        <div className="vc-changelog-session-plugins">
+                    {log.updatedPlugins.length > 0 && (
+                        <div className="vc-changelog-log-plugins">
                             <Forms.FormTitle
                                 tag="h6"
                                 className={Margins.bottom8}
@@ -153,14 +150,14 @@ function UpdateSessionCard({
                                 Updated Plugins
                             </Forms.FormTitle>
                             <NewPluginsCompact
-                                newPlugins={session.updatedPlugins}
+                                newPlugins={log.updatedPlugins}
                                 maxDisplay={10}
                             />
                         </div>
                     )}
 
-                    {session.newSettings && session.newSettings.size > 0 && (
-                        <div className="vc-changelog-session-plugins">
+                    {log.newSettings && log.newSettings.size > 0 && (
+                        <div className="vc-changelog-log-plugins">
                             <Forms.FormTitle
                                 tag="h6"
                                 className={Margins.bottom8}
@@ -169,7 +166,7 @@ function UpdateSessionCard({
                             </Forms.FormTitle>
                             <div className="vc-changelog-new-plugins-list">
                                 {Array.from(
-                                    session.newSettings?.entries() || [],
+                                    log.newSettings?.entries() || [],
                                 ).map(([pluginName, settings]) =>
                                     settings.map((setting) => (
                                         <span
@@ -185,16 +182,16 @@ function UpdateSessionCard({
                         </div>
                     )}
 
-                    {session.commits.length > 0 && (
-                        <div className="vc-changelog-session-commits">
+                    {log.commits.length > 0 && (
+                        <div className="vc-changelog-log-commits">
                             <Forms.FormTitle
                                 tag="h6"
                                 className={Margins.bottom8}
                             >
                                 Code Changes
                             </Forms.FormTitle>
-                            <div className="vc-changelog-session-commits-list">
-                                {session.commits.map((entry) => (
+                            <div className="vc-changelog-log-commits-list">
+                                {log.commits.map((entry) => (
                                     <ChangelogCard
                                         key={entry.hash}
                                         entry={entry}
@@ -222,7 +219,7 @@ function ChangelogContent() {
     const [updatedPlugins, setUpdatedPlugins] = React.useState<string[]>([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
-    const [expandedSessions, setExpandedSessions] = React.useState<Set<string>>(
+    const [expandedLogs, setExpandedLogs] = React.useState<Set<string>>(
         new Set(),
     );
     const [showHistory, setShowHistory] = React.useState(false);
@@ -329,14 +326,14 @@ function ChangelogContent() {
         }
     }, [repoPending, repoErr]);
 
-    const toggleSessionExpanded = (sessionId: string) => {
-        const newExpanded = new Set(expandedSessions);
-        if (newExpanded.has(sessionId)) {
-            newExpanded.delete(sessionId);
+    const toggleLogExpanded = (logId: string) => {
+        const newExpanded = new Set(expandedLogs);
+        if (newExpanded.has(logId)) {
+            newExpanded.delete(logId);
         } else {
-            newExpanded.add(sessionId);
+            newExpanded.add(logId);
         }
-        setExpandedSessions(newExpanded);
+        setExpandedLogs(newExpanded);
     };
 
     const hasCurrentChanges =
@@ -389,7 +386,7 @@ function ChangelogContent() {
                         onClick={() => setShowHistory(!showHistory)}
                         style={{ marginLeft: "8px" }}
                     >
-                        {showHistory ? "Hide History" : "Show History"}
+                        {showHistory ? "Hide Logs" : "Show Logs"}
                     </Button>
                 )}
             </div>
@@ -477,25 +474,22 @@ function ChangelogContent() {
                         style={{ marginBottom: "1em" }}
                     />
                     <Forms.FormTitle tag="h5" className={Margins.bottom8}>
-                        Update History ({changelogHistory.length}{" "}
-                        {changelogHistory.length === 1 ? "session" : "sessions"}
-                        )
+                        Update Logs ({changelogHistory.length}{" "}
+                        {changelogHistory.length === 1 ? "log" : "logs"})
                     </Forms.FormTitle>
                     <Forms.FormText className={Margins.bottom16}>
                         View past updates and changes to Equicord.
                     </Forms.FormText>
 
                     <div className="vc-changelog-history-list">
-                        {changelogHistory.map((session) => (
-                            <UpdateSessionCard
-                                key={session.id}
-                                session={session}
+                        {changelogHistory.map((log) => (
+                            <UpdateLogCard
+                                key={log.id}
+                                log={log}
                                 repo={repo}
                                 repoPending={repoPending}
-                                isExpanded={expandedSessions.has(session.id)}
-                                onToggleExpand={() =>
-                                    toggleSessionExpanded(session.id)
-                                }
+                                isExpanded={expandedLogs.has(log.id)}
+                                onToggleExpand={() => toggleLogExpanded(log.id)}
                             />
                         ))}
                     </div>

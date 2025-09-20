@@ -109,6 +109,16 @@
     box-shadow: var(--elevation-medium);
 }
 
+.vc-changelog-new-plugin-card.required {
+    border-left: 4px solid var(--status-warning);
+    background-color: var(--background-base-lower-alt);
+}
+
+.vc-changelog-new-plugin-card.required:hover {
+    background-color: var(--background-tertiary);
+    border-left-color: var(--status-warning-foreground);
+}
+
 .vc-changelog-new-plugins-compact {
     display: flex;
     flex-wrap: wrap;
@@ -144,6 +154,16 @@
     color: var(--text-muted);
 }
 
+.vc-changelog-new-plugin-tag.required {
+    background-color: var(--status-warning);
+    color: var(--white);
+    border: 1px solid var(--status-warning-foreground);
+}
+
+.vc-changelog-new-plugin-tag.required:hover {
+    background-color: var(--status-warning-foreground);
+}
+
 .vc-changelog-restart-notice {
     margin-top: 1em;
     padding: 0.75em;
@@ -152,7 +172,7 @@
     border-left: 4px solid var(--status-warning);
 }
 
-/* Update History Styles */
+/* Update Logs Styles */
 .vc-changelog-history {
     margin-top: 1.5em;
 }
@@ -167,18 +187,18 @@
     padding-right: 0.5em;
 }
 
-.vc-changelog-session {
+.vc-changelog-log {
     background-color: var(--background-base-lower-alt);
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.1s ease-out;
 }
 
-.vc-changelog-session:hover {
+.vc-changelog-log:hover {
     box-shadow: var(--elevation-medium);
 }
 
-.vc-changelog-session-header {
+.vc-changelog-log-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -188,15 +208,15 @@
     user-select: none;
 }
 
-.vc-changelog-session-header:hover {
+.vc-changelog-log-header:hover {
     background-color: var(--background-tertiary);
 }
 
-.vc-changelog-session-info {
+.vc-changelog-log-info {
     flex: 1;
 }
 
-.vc-changelog-session-title {
+.vc-changelog-log-title {
     font-weight: 600;
     font-size: 0.95em;
     color: var(--text-default);
@@ -204,24 +224,24 @@
     font-family: var(--font-code);
 }
 
-.vc-changelog-session-meta {
+.vc-changelog-log-meta {
     font-size: 0.875em;
     color: var(--text-muted);
     line-height: 1.3;
 }
 
-.vc-changelog-session-toggle {
+.vc-changelog-log-toggle {
     transition: transform 0.2s ease;
     color: var(--text-muted);
     font-size: 0.75em;
     margin-left: 0.5em;
 }
 
-.vc-changelog-session-toggle.expanded {
+.vc-changelog-log-toggle.expanded {
     transform: rotate(180deg);
 }
 
-.vc-changelog-session-content {
+.vc-changelog-log-content {
     padding: 0 1em 1em;
     border-top: 1px solid var(--background-base-lowest);
     animation: expand-content 0.2s ease-out;
@@ -229,15 +249,15 @@
     overflow: hidden auto;
 }
 
-.vc-changelog-session-plugins {
+.vc-changelog-log-plugins {
     margin-bottom: 1em;
 }
 
-.vc-changelog-session-commits {
+.vc-changelog-log-commits {
     margin-top: 0.5em;
 }
 
-.vc-changelog-session-commits-list {
+.vc-changelog-log-commits-list {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
@@ -254,26 +274,26 @@
     gap: 0.5em;
 }
 
-/* Scrollbar styling for history list and session content */
+/* Scrollbar styling for history list and log content */
 .vc-changelog-history-list::-webkit-scrollbar,
-.vc-changelog-session-content::-webkit-scrollbar {
+.vc-changelog-log-content::-webkit-scrollbar {
     width: 6px;
 }
 
 .vc-changelog-history-list::-webkit-scrollbar-track,
-.vc-changelog-session-content::-webkit-scrollbar-track {
+.vc-changelog-log-content::-webkit-scrollbar-track {
     background: var(--background-base-lower-alt);
     border-radius: 3px;
 }
 
 .vc-changelog-history-list::-webkit-scrollbar-thumb,
-.vc-changelog-session-content::-webkit-scrollbar-thumb {
+.vc-changelog-log-content::-webkit-scrollbar-thumb {
     background: var(--text-muted);
     border-radius: 3px;
 }
 
 .vc-changelog-history-list::-webkit-scrollbar-thumb:hover,
-.vc-changelog-session-content::-webkit-scrollbar-thumb:hover {
+.vc-changelog-log-content::-webkit-scrollbar-thumb:hover {
     background: var(--text-default);
 }
 
@@ -309,16 +329,16 @@
     border: 1px solid var(--border-subtle);
 }
 
-.visual-refresh .vc-changelog-session {
+.visual-refresh .vc-changelog-log {
     background-color: var(--card-primary-bg);
     border: 1px solid var(--border-subtle);
 }
 
-.visual-refresh .vc-changelog-session-header:hover {
+.visual-refresh .vc-changelog-log-header:hover {
     background-color: var(--card-secondary-bg);
 }
 
-.visual-refresh .vc-changelog-session-content {
+.visual-refresh .vc-changelog-log-content {
     border-top: 1px solid var(--border-subtle);
 }
 
@@ -345,14 +365,14 @@
         gap: 0.5em;
     }
 
-    .vc-changelog-session-toggle {
+    .vc-changelog-log-toggle {
         align-self: flex-end;
         margin-left: 0;
         margin-top: -1.5em;
     }
 }
 
-/* Animation for expanding/collapsing sessions */
+/* Animation for expanding/collapsing logs */
 
 @keyframes expand-content {
     from {
@@ -385,4 +405,23 @@
 
 .vc-changelog-badge.success {
     background-color: var(--status-positive);
+}
+
+/* Required plugin styling */
+.vc-changelog-dep-text {
+    font-size: 0.875em;
+    color: var(--text-muted);
+    margin-left: 1em;
+    font-style: italic;
+}
+
+/* Visual refresh support for required plugins */
+.visual-refresh .vc-changelog-new-plugin-tag.required {
+    background-color: var(--status-warning);
+    border: 1px solid var(--status-warning-foreground);
+}
+
+.visual-refresh .vc-changelog-new-plugin-card.required {
+    border-left: 4px solid var(--status-warning);
+    background-color: var(--card-secondary-bg);
 }
