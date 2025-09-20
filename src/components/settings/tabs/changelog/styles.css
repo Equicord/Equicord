@@ -1,0 +1,110 @@
+/*
+ * Vencord, a modification for Discord's desktop app
+ * Copyright (c) 2022 Vendicated and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+.vc-changelog-entry {
+    padding: 0.75em;
+    margin-bottom: 0.5em;
+    background-color: var(--background-base-lower-alt);
+    border-radius: 8px;
+    transition: 0.1s ease-out;
+    transition-property: box-shadow, transform, background, opacity;
+}
+
+.vc-changelog-entry:hover {
+    background-color: var(--background-tertiary);
+    transform: translateY(-1px);
+    box-shadow: var(--elevation-high);
+}
+
+.vc-changelog-entry-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 0.25em;
+}
+
+.vc-changelog-entry-hash {
+    font-size: 0.875em;
+    font-family: var(--font-code);
+}
+
+.vc-changelog-entry-author {
+    font-size: 0.875em;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.vc-changelog-entry-message {
+    color: var(--text-default);
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+.vc-changelog-loading {
+    text-align: center;
+    padding: 2em;
+    color: var(--text-muted);
+}
+
+.vc-changelog-empty {
+    text-align: center;
+    padding: 2em;
+    background-color: var(--background-base-lower-alt);
+    border-radius: 8px;
+    color: var(--text-muted);
+}
+
+.vc-changelog-refresh-btn {
+    margin-bottom: 1em;
+}
+
+.vc-changelog-repo-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 1em;
+}
+
+.vc-changelog-current-hash {
+    font-family: var(--font-code);
+    background-color: var(--background-base-lowest);
+    padding: 0.125em 0.25em;
+    border-radius: 3px;
+    font-size: 0.875em;
+}
+
+/* Visual refresh support */
+.visual-refresh .vc-changelog-entry {
+    background-color: var(--card-primary-bg);
+    border: 1px solid var(--border-subtle);
+}
+
+.visual-refresh .vc-changelog-entry:hover {
+    background-color: var(--card-primary-bg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.visual-refresh .vc-changelog-empty {
+    background-color: var(--card-primary-bg);
+    border: 1px solid var(--border-subtle);
+}
+
+.visual-refresh .vc-changelog-current-hash {
+    background-color: var(--input-background);
+    border: 1px solid var(--border-subtle);
+}
