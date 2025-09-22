@@ -45,8 +45,8 @@ export function NewPluginsSection({
 
     const mapPlugins = (array: string[]) =>
         array
-            .map(pn => Plugins[pn])
-            .filter(p => p && !p.hidden)
+            .map((pn) => Plugins[pn])
+            .filter((p) => p && !p.hidden)
             .sort((a, b) => a.name.localeCompare(b.name));
 
     const sortedPlugins = React.useMemo(
@@ -83,19 +83,19 @@ export function NewPluginsSection({
             </Forms.FormText>
 
             <div className={cl("new-plugins-grid")}>
-                {sortedPlugins.map(plugin => {
+                {sortedPlugins.map((plugin) => {
                     const isRequired =
                         plugin.required ||
                         depMap[plugin.name]?.some(
-                            d => settings.plugins[d].enabled,
+                            (d) => settings.plugins[d].enabled,
                         );
                     const tooltipText = plugin.required
                         ? "This plugin is required for Equicord to function."
                         : makeDependencyList(
-                            depMap[plugin.name]?.filter(
-                                d => settings.plugins[d].enabled,
-                            ),
-                        );
+                              depMap[plugin.name]?.filter(
+                                  (d) => settings.plugins[d].enabled,
+                              ),
+                          );
 
                     if (isRequired) {
                         return (
@@ -110,7 +110,7 @@ export function NewPluginsSection({
                                         <PluginCard
                                             onMouseLeave={onMouseLeave}
                                             onMouseEnter={onMouseEnter}
-                                            onRestartNeeded={name => {
+                                            onRestartNeeded={(name) => {
                                                 changes.handleChange(name);
                                                 forceUpdate();
                                             }}
@@ -130,7 +130,7 @@ export function NewPluginsSection({
                             className={cl("new-plugin-card")}
                         >
                             <PluginCard
-                                onRestartNeeded={name => {
+                                onRestartNeeded={(name) => {
                                     changes.handleChange(name);
                                     forceUpdate();
                                 }}
@@ -151,14 +151,14 @@ export function NewPluginsSection({
                                 The following plugins require a restart:
                                 <div className={Margins.bottom8} />
                                 <ul>
-                                    {changes.map(p => (
+                                    {changes.map((p) => (
                                         <li key={p}>{p}</li>
                                     ))}
                                 </ul>
                             </>
                         }
                     >
-                        {tooltipProps => (
+                        {(tooltipProps) => (
                             <Button
                                 {...tooltipProps}
                                 color={Button.Colors.YELLOW}
@@ -181,9 +181,54 @@ interface NewPluginsCompactProps {
     maxDisplay?: number;
 }
 
+function CompactPluginCard({
+    pluginName,
+    depMap,
+    settings,
+}: {
+    pluginName: string;
+    depMap: Record<string, string[]>;
+    settings: any;
+}) {
+    const plugin = Plugins[pluginName];
+    if (!plugin || plugin.hidden) return null;
+
+    const isRequired =
+        plugin.required ||
+        depMap[plugin.name]?.some((d) => settings.plugins[d].enabled);
+
+    const tooltipText = plugin.required
+        ? "This plugin is required for Equicord to function."
+        : depMap[plugin.name]?.length > 0
+          ? `This plugin is required by: ${depMap[plugin.name]
+                ?.filter((d) => settings.plugins[d].enabled)
+                .join(", ")}`
+          : null;
+
+    return (
+        <div className={`vc-changelog-entry ${isRequired ? "required" : ""}`}>
+            <div className="vc-changelog-entry-header">
+                <span className="vc-changelog-entry-hash">
+                    {plugin.name}
+                    {isRequired && " *"}
+                </span>
+                <span className="vc-changelog-entry-author">
+                    {plugin.authors?.[0]?.name || "Unknown"}
+                </span>
+            </div>
+            <div className="vc-changelog-entry-message">
+                {plugin.description || "No description available"}
+            </div>
+            {tooltipText && (
+                <div className="vc-changelog-dep-text">{tooltipText}</div>
+            )}
+        </div>
+    );
+}
+
 export function NewPluginsCompact({
     newPlugins,
-    maxDisplay = 5,
+    maxDisplay = 20,
 }: NewPluginsCompactProps) {
     const settings = useSettings();
 
@@ -210,57 +255,22 @@ export function NewPluginsCompact({
 
     return (
         <div className={cl("new-plugins-compact")}>
-            <div className={cl("new-plugins-list")}>
-                {displayPlugins
-                    .map(pluginName => {
-                        const plugin = Plugins[pluginName];
-                        if (!plugin || plugin.hidden) return null;
-
-                        const isRequired =
-                            plugin.required ||
-                            depMap[plugin.name]?.some(
-                                d => settings.plugins[d].enabled,
-                            );
-
-                        const tooltipText = plugin.required
-                            ? "This plugin is required for Equicord to function."
-                            : depMap[plugin.name]?.length > 0
-                                ? `This plugin is required by: ${depMap[
-                                    plugin.name
-                                ]
-                                    ?.filter(d => settings.plugins[d].enabled)
-                                    .join(", ")}`
-                                : null;
-
-                        return (
-                            <Tooltip
-                                text={tooltipText}
-                                key={pluginName}
-                                shouldShow={isRequired}
-                            >
-                                {tooltipProps => (
-                                    <span
-                                        {...tooltipProps}
-                                        className={`${cl("new-plugin-tag")}${isRequired ? ` ${cl("new-plugin-tag", "required")}` : ""}`}
-                                        title={
-                                            isRequired
-                                                ? "Required plugin"
-                                                : undefined
-                                        }
-                                    >
-                                        {plugin.name}
-                                        {isRequired && " *"}
-                                    </span>
-                                )}
-                            </Tooltip>
-                        );
-                    })
-                    .filter(Boolean)}
+            <div className="vc-changelog-plugins-list">
+                {displayPlugins.map((pluginName) => (
+                    <CompactPluginCard
+                        key={pluginName}
+                        pluginName={pluginName}
+                        depMap={depMap}
+                        settings={settings}
+                    />
+                ))}
 
                 {hasMore && (
-                    <span className={cl("new-plugin-tag", "more")}>
-                        +{newPlugins.length - maxDisplay} more
-                    </span>
+                    <div className="vc-changelog-entry">
+                        <div className="vc-changelog-entry-message">
+                            +{newPlugins.length - maxDisplay} more plugins
+                        </div>
+                    </div>
                 )}
             </div>
         </div>

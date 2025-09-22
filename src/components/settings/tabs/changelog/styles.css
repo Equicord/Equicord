@@ -20,6 +20,19 @@
     box-shadow: var(--elevation-high);
 }
 
+.vc-changelog-entry.required {
+    border-left: 4px solid var(--status-warning);
+    background-color: var(--background-base-lower-alt);
+    padding-left: calc(
+        0.75em - 4px
+    );
+}
+
+.vc-changelog-entry.required:hover {
+    background-color: var(--background-tertiary);
+    border-left-color: var(--status-warning-foreground);
+}
+
 .vc-changelog-entry-header {
     display: flex;
     align-items: center;
@@ -30,6 +43,7 @@
 .vc-changelog-entry-hash {
     font-size: 0.875em;
     font-family: var(--font-code);
+    color: var(--text-muted);
 }
 
 .vc-changelog-entry-author {
@@ -42,6 +56,11 @@
     color: var(--text-default);
     font-size: 0.95em;
     line-height: 1.4;
+}
+
+.vc-changelog-entry.required .vc-changelog-entry-hash {
+    color: var(--text-muted);
+    font-weight: 600;
 }
 
 .vc-changelog-loading {
@@ -123,7 +142,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.5em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0;
+    padding-top: 0;
 }
 
 .vc-changelog-new-plugins-list {
@@ -181,10 +201,11 @@
     display: flex;
     flex-direction: column;
     gap: 0.75em;
-    max-height: 100vh;
-    min-height: 800px;
-    overflow: hidden auto;
     padding-right: 0.5em;
+
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
 }
 
 .vc-changelog-log {
@@ -206,6 +227,7 @@
     cursor: pointer;
     transition: background-color 0.1s ease;
     user-select: none;
+    gap: 0.5em;
 }
 
 .vc-changelog-log-header:hover {
@@ -222,6 +244,10 @@
     color: var(--text-default);
     margin-bottom: 0.25em;
     font-family: var(--font-code);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
 }
 
 .vc-changelog-log-meta {
@@ -234,7 +260,7 @@
     transition: transform 0.2s ease;
     color: var(--text-muted);
     font-size: 0.75em;
-    margin-left: 0.5em;
+    flex-shrink: 0; /* prevent toggle from shrinking */
 }
 
 .vc-changelog-log-toggle.expanded {
@@ -245,22 +271,87 @@
     padding: 0 1em 1em;
     border-top: 1px solid var(--background-base-lowest);
     animation: expand-content 0.2s ease-out;
-    max-height: 60vh;
-    overflow: hidden auto;
+
+    /* allow content to expand naturally (fixes cramming of elements) */
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
 }
 
 .vc-changelog-log-plugins {
     margin-bottom: 1em;
+    padding-top: 0.75em;
+}
+
+.vc-changelog-log-plugins:last-child {
+    margin-bottom: 0;
 }
 
 .vc-changelog-log-commits {
-    margin-top: 0.5em;
+    margin-bottom: 1em;
+    padding-top: 0.75em;
+}
+
+.vc-changelog-log-commits:last-child {
+    margin-bottom: 0;
 }
 
 .vc-changelog-log-commits-list {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0;
+}
+
+.vc-changelog-log-commits-list .vc-changelog-entry:last-child {
+    margin-bottom: 0;
+}
+
+.vc-changelog-plugins-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0;
+}
+
+/* fix plugin entry padding to match commit entries (this took 3 different tries bro) */
+.vc-changelog-plugins-list .vc-changelog-entry {
+    padding: 0.75em;
+    margin-bottom: 0.5em;
+}
+
+.vc-changelog-plugins-list .vc-changelog-entry:last-child {
+    margin-bottom: 0;
+}
+
+/* consistent padding for required plugin entries in logs */
+.vc-changelog-plugins-list .vc-changelog-entry.required {
+    padding-left: calc(0.75em - 4px);
+    margin-bottom: 0.5em;
+}
+
+.vc-changelog-plugins-list .vc-changelog-entry.required:last-child {
+    margin-bottom: 0;
+}
+
+.vc-changelog-log-commits-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.vc-changelog-log-commits-list::-webkit-scrollbar-track {
+    background: var(--background-base-lower-alt);
+    border-radius: 3px;
+}
+
+.vc-changelog-log-commits-list::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 3px;
+}
+
+.vc-changelog-log-commits-list::-webkit-scrollbar-thumb:hover {
+    background: var(--text-default);
 }
 
 /* Current changes section */
@@ -367,8 +458,16 @@
 
     .vc-changelog-log-toggle {
         align-self: flex-end;
-        margin-left: 0;
         margin-top: -1.5em;
+    }
+
+    .vc-changelog-log-title {
+        flex-wrap: wrap;
+        gap: 4px; /* Smaller gap on mobile */
+    }
+
+    .vc-changelog-delete-button {
+        order: 1; /* Move trash icon after text on mobile */
     }
 }
 
@@ -424,4 +523,58 @@
 .visual-refresh .vc-changelog-new-plugin-card.required {
     border-left: 4px solid var(--status-warning);
     background-color: var(--card-secondary-bg);
+}
+
+/* Global overrides for changelog in settings modal */
+.vc-settings-tab [class*="changelog"] {
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+/* Ensure Forms.FormSection doesn't constrain changelog */
+.vc-settings-tab .vc-changelog-history,
+.vc-settings-tab .vc-changelog-history-list,
+.vc-settings-tab .vc-changelog-log-content {
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+
+.visual-refresh .vc-changelog-entry.required {
+    border-left: 4px solid var(--status-warning);
+    background-color: var(--card-primary-bg);
+    border: 1px solid var(--border-subtle);
+    padding-left: calc(
+        0.75em - 4px
+    ); /* Compensate for border-left to maintain consistent inner spacing */
+}
+
+.visual-refresh .vc-changelog-entry.required:hover {
+    background-color: var(--card-secondary-bg);
+}
+
+/* Trash icon styling */
+.vc-changelog-delete-button {
+    transition:
+        opacity 0.2s ease,
+        color 0.2s ease,
+        background-color 0.2s ease;
+    border-radius: 4px;
+    flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+.vc-changelog-delete-button:hover {
+    opacity: 1 !important;
+    color: var(--status-danger) !important;
+    background-color: var(--background-modifier-hover);
+}
+
+.vc-changelog-log-header:hover .vc-changelog-delete-button {
+    opacity: 0.8;
+}
+
+.vc-changelog-log-header {
+    position: relative;
 }

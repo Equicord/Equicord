@@ -25,6 +25,7 @@ export interface UpdateSession {
     newPlugins: string[];
     updatedPlugins: string[];
     newSettings?: Map<string, string[]>;
+    type: "update" | "repository_fetch";
 }
 
 export type ChangelogHistory = UpdateSession[];
@@ -33,6 +34,7 @@ const CHANGELOG_HISTORY_KEY = "EquicordChangelog_History";
 const LAST_SEEN_HASH_KEY = "EquicordChangelog_LastSeenHash";
 const KNOWN_PLUGINS_KEY = "EquicordChangelog_KnownPlugins";
 const KNOWN_SETTINGS_KEY = "EquicordChangelog_KnownSettings";
+const LAST_REPO_CHECK_KEY = "EquicordChangelog_LastRepoCheck";
 
 type KnownPluginSettingsMap = Map<string, Set<string>>;
 
@@ -48,13 +50,27 @@ export async function saveUpdateSession(
     newPlugins: string[],
     updatedPlugins: string[],
     newSettings: Map<string, string[]>,
+    forceLog: boolean = false,
 ): Promise<void> {
     const history = await getChangelogHistory();
     const lastSeenHash = await getLastSeenHash();
     const currentHash = gitHash;
 
-    // Don't save if no changes
+    // For repository fetches, check if we already have this exact state logged (to prevent duplicate logs)
+    if (forceLog) {
+        const lastRepoCheck = await getLastRepositoryCheckHash();
+        const latestRepoHash =
+            commits.length > 0 ? commits[0].hash : currentHash;
+
+        if (lastRepoCheck === latestRepoHash) {
+            // if the state hasn't changed last check, do NOT make a new log
+            return;
+        }
+    }
+
+    // Don't save if no changes, unless explicitly forcing the log (for example repository fetch)
     if (
+        !forceLog &&
         commits.length === 0 &&
         newPlugins.length === 0 &&
         updatedPlugins.length === 0 &&
@@ -63,15 +79,35 @@ export async function saveUpdateSession(
         return;
     }
 
+    // Determine session type and hash logic
+    const sessionType = forceLog ? "repository_fetch" : "update";
+    let fromHash = currentHash;
+    let toHash = currentHash;
+
+    if (forceLog) {
+        // This is a repository fetch - show current vs repository state
+        if (commits.length > 0) {
+            // Repository has newer commits
+            toHash = commits[0].hash; // Latest repository hash
+        }
+        // If no commits, fromHash === toHash (up to date)
+    } else {
+        // This is an actual update session
+        // Is there a better way to do this?
+        fromHash = lastSeenHash || "unknown";
+        toHash = currentHash;
+    }
+
     const session: UpdateSession = {
         id: crypto.randomUUID(),
         timestamp: Date.now(),
-        fromHash: lastSeenHash || "unknown",
-        toHash: currentHash,
+        fromHash: fromHash,
+        toHash: toHash,
         commits,
         newPlugins,
         updatedPlugins,
         newSettings,
+        type: sessionType,
     };
 
     // Add to beginning of history (most recent first)
@@ -83,7 +119,16 @@ export async function saveUpdateSession(
     }
 
     await DataStore.set(CHANGELOG_HISTORY_KEY, history);
-    await setLastSeenHash(currentHash);
+
+    if (!forceLog) {
+        await setLastSeenHash(currentHash);
+    } else {
+        // for fetches, check the latest repo hash to make sure its not the same
+        const latestRepoHash =
+            commits.length > 0 ? commits[0].hash : currentHash;
+        await setLastRepositoryCheckHash(latestRepoHash);
+    }
+
     await updateKnownPlugins();
     await updateKnownSettings();
 }
@@ -109,13 +154,13 @@ export async function updateKnownPlugins(): Promise<void> {
 function getSettingsSetForPlugin(plugin: string): Set<string> {
     const settings = plugins[plugin]?.settings?.def || {};
     return new Set(
-        Object.keys(settings).filter(setting => setting !== "enabled"),
+        Object.keys(settings).filter((setting) => setting !== "enabled"),
     );
 }
 
 function getCurrentSettings(pluginList: string[]): KnownPluginSettingsMap {
     return new Map(
-        pluginList.map(name => [name, getSettingsSetForPlugin(name)]),
+        pluginList.map((name) => [name, getSettingsSetForPlugin(name)]),
     );
 }
 
@@ -139,7 +184,7 @@ export async function getNewSettings(): Promise<Map<string, string[]>> {
 
     map.forEach((settings, plugin) => {
         const filteredSettings = [...settings].filter(
-            setting => !knownSettings.get(plugin)?.has(setting),
+            (setting) => !knownSettings.get(plugin)?.has(setting),
         );
         if (filteredSettings.length > 0) {
             newSettings.set(plugin, filteredSettings);
@@ -155,7 +200,7 @@ export async function updateKnownSettings(): Promise<void> {
     const allSettings = new Map();
 
     new Set([...currentSettings.keys(), ...knownSettings.keys()]).forEach(
-        plugin => {
+        (plugin) => {
             allSettings.set(
                 plugin,
                 new Set([
@@ -174,7 +219,7 @@ export async function getNewPlugins(): Promise<string[]> {
     const knownPlugins = await getKnownPlugins();
 
     return currentPlugins.filter(
-        plugin =>
+        (plugin) =>
             !knownPlugins.has(plugin) &&
             !plugins[plugin].hidden &&
             !plugins[plugin].required,
@@ -193,6 +238,12 @@ export async function clearChangelogHistory(): Promise<void> {
     await DataStore.del(KNOWN_SETTINGS_KEY);
 }
 
+export async function clearIndividualLog(logId: string): Promise<void> {
+    const history = await getChangelogHistory();
+    const filteredHistory = history.filter((log) => log.id !== logId);
+    await DataStore.set(CHANGELOG_HISTORY_KEY, filteredHistory);
+}
+
 export async function initializeChangelog(): Promise<void> {
     // Initialize with current state if first time
     const lastSeenHash = await getLastSeenHash();
@@ -201,6 +252,14 @@ export async function initializeChangelog(): Promise<void> {
         await updateKnownPlugins();
         await updateKnownSettings();
     }
+}
+
+export async function getLastRepositoryCheckHash(): Promise<string | null> {
+    return (await DataStore.get(LAST_REPO_CHECK_KEY)) as string | null;
+}
+
+export async function setLastRepositoryCheckHash(hash: string): Promise<void> {
+    await DataStore.set(LAST_REPO_CHECK_KEY, hash);
 }
 
 export function formatTimestamp(timestamp: number): string {
