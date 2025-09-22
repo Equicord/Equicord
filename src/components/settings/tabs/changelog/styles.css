@@ -23,9 +23,7 @@
 .vc-changelog-entry.required {
     border-left: 4px solid var(--status-warning);
     background-color: var(--background-base-lower-alt);
-    padding-left: calc(
-        0.75em - 4px
-    );
+    padding-left: calc(0.75em - 4px);
 }
 
 .vc-changelog-entry.required:hover {
@@ -202,7 +200,6 @@
     flex-direction: column;
     gap: 0.75em;
     padding-right: 0.5em;
-
     min-height: auto !important;
     max-height: none !important;
     height: auto !important;
@@ -260,7 +257,7 @@
     transition: transform 0.2s ease;
     color: var(--text-muted);
     font-size: 0.75em;
-    flex-shrink: 0; /* prevent toggle from shrinking */
+    flex-shrink: 0;
 }
 
 .vc-changelog-log-toggle.expanded {
@@ -304,6 +301,18 @@
     padding-top: 0;
 }
 
+/* fix plugin entry padding to match commit entries (this took 3 different tries bro) */
+.vc-changelog-plugins-list .vc-changelog-entry {
+    padding: 0.75em;
+    margin-bottom: 0.5em;
+}
+
+/* Visual refresh support */
+.visual-refresh .vc-changelog-entry {
+    background-color: var(--card-primary-bg);
+    border: 1px solid var(--border-subtle);
+}
+
 .vc-changelog-log-commits-list .vc-changelog-entry:last-child {
     margin-bottom: 0;
 }
@@ -316,10 +325,11 @@
     padding-top: 0;
 }
 
-/* fix plugin entry padding to match commit entries (this took 3 different tries bro) */
-.vc-changelog-plugins-list .vc-changelog-entry {
-    padding: 0.75em;
-    margin-bottom: 0.5em;
+.visual-refresh .vc-changelog-entry.required {
+    border-left: 4px solid var(--status-warning);
+    background-color: var(--card-primary-bg);
+    border: 1px solid var(--border-subtle);
+    padding-left: calc(0.75em - 4px);
 }
 
 .vc-changelog-plugins-list .vc-changelog-entry:last-child {
@@ -386,12 +396,6 @@
 .vc-changelog-history-list::-webkit-scrollbar-thumb:hover,
 .vc-changelog-log-content::-webkit-scrollbar-thumb:hover {
     background: var(--text-default);
-}
-
-/* Visual refresh support */
-.visual-refresh .vc-changelog-entry {
-    background-color: var(--card-primary-bg);
-    border: 1px solid var(--border-subtle);
 }
 
 .visual-refresh .vc-changelog-entry:hover {
@@ -463,11 +467,11 @@
 
     .vc-changelog-log-title {
         flex-wrap: wrap;
-        gap: 4px; /* Smaller gap on mobile */
+        gap: 4px;
     }
 
     .vc-changelog-delete-button {
-        order: 1; /* Move trash icon after text on mobile */
+        order: 1;
     }
 }
 
@@ -542,15 +546,6 @@
     overflow: visible !important;
 }
 
-.visual-refresh .vc-changelog-entry.required {
-    border-left: 4px solid var(--status-warning);
-    background-color: var(--card-primary-bg);
-    border: 1px solid var(--border-subtle);
-    padding-left: calc(
-        0.75em - 4px
-    ); /* Compensate for border-left to maintain consistent inner spacing */
-}
-
 .visual-refresh .vc-changelog-entry.required:hover {
     background-color: var(--card-secondary-bg);
 }
@@ -562,7 +557,7 @@
         color 0.2s ease,
         background-color 0.2s ease;
     border-radius: 4px;
-    flex-shrink: 0; /* Prevent icon from shrinking */
+    flex-shrink: 0;
 }
 
 .vc-changelog-delete-button:hover {
@@ -573,8 +568,4 @@
 
 .vc-changelog-log-header:hover .vc-changelog-delete-button {
     opacity: 0.8;
-}
-
-.vc-changelog-log-header {
-    position: relative;
 }

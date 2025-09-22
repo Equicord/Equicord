@@ -45,8 +45,8 @@ export function NewPluginsSection({
 
     const mapPlugins = (array: string[]) =>
         array
-            .map((pn) => Plugins[pn])
-            .filter((p) => p && !p.hidden)
+            .map(pn => Plugins[pn])
+            .filter(p => p && !p.hidden)
             .sort((a, b) => a.name.localeCompare(b.name));
 
     const sortedPlugins = React.useMemo(
@@ -83,19 +83,19 @@ export function NewPluginsSection({
             </Forms.FormText>
 
             <div className={cl("new-plugins-grid")}>
-                {sortedPlugins.map((plugin) => {
+                {sortedPlugins.map(plugin => {
                     const isRequired =
                         plugin.required ||
                         depMap[plugin.name]?.some(
-                            (d) => settings.plugins[d].enabled,
+                            d => settings.plugins[d].enabled,
                         );
                     const tooltipText = plugin.required
                         ? "This plugin is required for Equicord to function."
                         : makeDependencyList(
-                              depMap[plugin.name]?.filter(
-                                  (d) => settings.plugins[d].enabled,
-                              ),
-                          );
+                            depMap[plugin.name]?.filter(
+                                d => settings.plugins[d].enabled,
+                            ),
+                        );
 
                     if (isRequired) {
                         return (
@@ -110,7 +110,7 @@ export function NewPluginsSection({
                                         <PluginCard
                                             onMouseLeave={onMouseLeave}
                                             onMouseEnter={onMouseEnter}
-                                            onRestartNeeded={(name) => {
+                                            onRestartNeeded={name => {
                                                 changes.handleChange(name);
                                                 forceUpdate();
                                             }}
@@ -130,7 +130,7 @@ export function NewPluginsSection({
                             className={cl("new-plugin-card")}
                         >
                             <PluginCard
-                                onRestartNeeded={(name) => {
+                                onRestartNeeded={name => {
                                     changes.handleChange(name);
                                     forceUpdate();
                                 }}
@@ -151,14 +151,14 @@ export function NewPluginsSection({
                                 The following plugins require a restart:
                                 <div className={Margins.bottom8} />
                                 <ul>
-                                    {changes.map((p) => (
+                                    {changes.map(p => (
                                         <li key={p}>{p}</li>
                                     ))}
                                 </ul>
                             </>
                         }
                     >
-                        {(tooltipProps) => (
+                        {tooltipProps => (
                             <Button
                                 {...tooltipProps}
                                 color={Button.Colors.YELLOW}
@@ -195,15 +195,15 @@ function CompactPluginCard({
 
     const isRequired =
         plugin.required ||
-        depMap[plugin.name]?.some((d) => settings.plugins[d].enabled);
+        depMap[plugin.name]?.some(d => settings.plugins[d].enabled);
 
     const tooltipText = plugin.required
         ? "This plugin is required for Equicord to function."
         : depMap[plugin.name]?.length > 0
-          ? `This plugin is required by: ${depMap[plugin.name]
-                ?.filter((d) => settings.plugins[d].enabled)
+            ? `This plugin is required by: ${depMap[plugin.name]
+                ?.filter(d => settings.plugins[d].enabled)
                 .join(", ")}`
-          : null;
+            : null;
 
     return (
         <div className={`vc-changelog-entry ${isRequired ? "required" : ""}`}>
@@ -256,7 +256,7 @@ export function NewPluginsCompact({
     return (
         <div className={cl("new-plugins-compact")}>
             <div className="vc-changelog-plugins-list">
-                {displayPlugins.map((pluginName) => (
+                {displayPlugins.map(pluginName => (
                     <CompactPluginCard
                         key={pluginName}
                         pluginName={pluginName}
