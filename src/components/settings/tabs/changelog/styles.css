@@ -225,6 +225,7 @@
     transition: background-color 0.1s ease;
     user-select: none;
     gap: 0.5em;
+    position: relative;
 }
 
 .vc-changelog-log-header:hover {
