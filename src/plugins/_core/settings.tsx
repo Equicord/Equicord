@@ -141,7 +141,7 @@ export default definePlugin({
                 element: PatchHelperTab,
                 className: "vc-patch-helper",
             },
-            ...this.customSections.map((func) => func(SectionTypes)),
+            ...this.customSections.map(func => func(SectionTypes)),
             {
                 section: SectionTypes.DIVIDER,
             },
@@ -192,7 +192,7 @@ export default definePlugin({
 
     addSettings(
         elements: any[],
-        element: { header?: string; settings: string[] },
+        element: { header?: string; settings: string[]; },
         sectionTypes: SectionTypes,
     ) {
         if (this.patchedSettings.has(elements) || !this.isRightSpot(element))
@@ -227,11 +227,7 @@ export default definePlugin({
             description: "Where to put the Equicord settings section",
             options: [
                 { label: "At the very top", value: "top" },
-                {
-                    label: "Above the Nitro section",
-                    value: "aboveNitro",
-                    default: true,
-                },
+                { label: "Above the Nitro section", value: "aboveNitro", default: true },
                 { label: "Below the Nitro section", value: "belowNitro" },
                 { label: "Above Activity Settings", value: "aboveActivity" },
                 { label: "Below Activity Settings", value: "belowActivity" },
@@ -254,7 +250,7 @@ export default definePlugin({
                 VencordNative.native.getVersions().chrome ||
                 // @ts-expect-error Typescript will add userAgentData IMMEDIATELY
                 navigator.userAgentData?.brands?.find(
-                    (b) =>
+                    b =>
                         b.brand === "Chromium" || b.brand === "Google Chrome",
                 )?.version ||
                 null

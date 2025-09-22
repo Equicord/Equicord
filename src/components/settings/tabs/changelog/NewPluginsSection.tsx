@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Settings, useSettings } from "@api/Settings";
+import { useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
 import { PluginCard } from "@components/settings/tabs/plugins/PluginCard";
 import { ChangeList } from "@utils/ChangeList";
 import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
-import { Button, Card, Forms, React, Text, Tooltip } from "@webpack/common";
+import { Button, Card, Forms, React, Tooltip } from "@webpack/common";
 
 import Plugins from "~plugins";
 
@@ -45,8 +45,8 @@ export function NewPluginsSection({
 
     const mapPlugins = (array: string[]) =>
         array
-            .map((pn) => Plugins[pn])
-            .filter((p) => p && !p.hidden)
+            .map(pn => Plugins[pn])
+            .filter(p => p && !p.hidden)
             .sort((a, b) => a.name.localeCompare(b.name));
 
     const sortedPlugins = React.useMemo(
@@ -58,11 +58,8 @@ export function NewPluginsSection({
         return null;
     }
 
-    const handlePluginToggle = (pluginName: string, enabled: boolean) => {
-        onPluginToggle?.(pluginName, enabled);
-    };
-
     const makeDependencyList = (deps: string[]) => {
+        if (!deps) return null;
         return (
             <React.Fragment>
                 <Forms.FormText>This plugin is required by:</Forms.FormText>
@@ -86,19 +83,19 @@ export function NewPluginsSection({
             </Forms.FormText>
 
             <div className={cl("new-plugins-grid")}>
-                {sortedPlugins.map((plugin) => {
+                {sortedPlugins.map(plugin => {
                     const isRequired =
                         plugin.required ||
                         depMap[plugin.name]?.some(
-                            (d) => settings.plugins[d].enabled,
+                            d => settings.plugins[d].enabled,
                         );
                     const tooltipText = plugin.required
-                        ? "This plugin is required for Vencord to function."
+                        ? "This plugin is required for Equicord to function."
                         : makeDependencyList(
-                              depMap[plugin.name]?.filter(
-                                  (d) => settings.plugins[d].enabled,
-                              ),
-                          );
+                            depMap[plugin.name]?.filter(
+                                d => settings.plugins[d].enabled,
+                            ),
+                        );
 
                     if (isRequired) {
                         return (
@@ -113,7 +110,7 @@ export function NewPluginsSection({
                                         <PluginCard
                                             onMouseLeave={onMouseLeave}
                                             onMouseEnter={onMouseEnter}
-                                            onRestartNeeded={(name) => {
+                                            onRestartNeeded={name => {
                                                 changes.handleChange(name);
                                                 forceUpdate();
                                             }}
@@ -133,7 +130,7 @@ export function NewPluginsSection({
                             className={cl("new-plugin-card")}
                         >
                             <PluginCard
-                                onRestartNeeded={(name) => {
+                                onRestartNeeded={name => {
                                     changes.handleChange(name);
                                     forceUpdate();
                                 }}
@@ -154,14 +151,14 @@ export function NewPluginsSection({
                                 The following plugins require a restart:
                                 <div className={Margins.bottom8} />
                                 <ul>
-                                    {changes.map((p) => (
+                                    {changes.map(p => (
                                         <li key={p}>{p}</li>
                                     ))}
                                 </ul>
                             </>
                         }
                     >
-                        {(tooltipProps) => (
+                        {tooltipProps => (
                             <Button
                                 {...tooltipProps}
                                 color={Button.Colors.YELLOW}
@@ -215,25 +212,25 @@ export function NewPluginsCompact({
         <div className={cl("new-plugins-compact")}>
             <div className={cl("new-plugins-list")}>
                 {displayPlugins
-                    .map((pluginName) => {
+                    .map(pluginName => {
                         const plugin = Plugins[pluginName];
                         if (!plugin || plugin.hidden) return null;
 
                         const isRequired =
                             plugin.required ||
                             depMap[plugin.name]?.some(
-                                (d) => settings.plugins[d].enabled,
+                                d => settings.plugins[d].enabled,
                             );
 
                         const tooltipText = plugin.required
-                            ? "This plugin is required for Vencord to function."
+                            ? "This plugin is required for Equicord to function."
                             : depMap[plugin.name]?.length > 0
-                              ? `This plugin is required by: ${depMap[
+                                ? `This plugin is required by: ${depMap[
                                     plugin.name
                                 ]
-                                    ?.filter((d) => settings.plugins[d].enabled)
+                                    ?.filter(d => settings.plugins[d].enabled)
                                     .join(", ")}`
-                              : null;
+                                : null;
 
                         return (
                             <Tooltip
@@ -241,7 +238,7 @@ export function NewPluginsCompact({
                                 key={pluginName}
                                 shouldShow={isRequired}
                             >
-                                {(tooltipProps) => (
+                                {tooltipProps => (
                                     <span
                                         {...tooltipProps}
                                         className={`${cl("new-plugin-tag")}${isRequired ? ` ${cl("new-plugin-tag", "required")}` : ""}`}

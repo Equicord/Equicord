@@ -6,8 +6,8 @@
 
 import { DataStore } from "@api/index";
 
-import plugins from "~plugins";
 import gitHash from "~git-hash";
+import plugins from "~plugins";
 
 export interface ChangelogEntry {
     hash: string;
@@ -109,13 +109,13 @@ export async function updateKnownPlugins(): Promise<void> {
 function getSettingsSetForPlugin(plugin: string): Set<string> {
     const settings = plugins[plugin]?.settings?.def || {};
     return new Set(
-        Object.keys(settings).filter((setting) => setting !== "enabled"),
+        Object.keys(settings).filter(setting => setting !== "enabled"),
     );
 }
 
 function getCurrentSettings(pluginList: string[]): KnownPluginSettingsMap {
     return new Map(
-        pluginList.map((name) => [name, getSettingsSetForPlugin(name)]),
+        pluginList.map(name => [name, getSettingsSetForPlugin(name)]),
     );
 }
 
@@ -139,7 +139,7 @@ export async function getNewSettings(): Promise<Map<string, string[]>> {
 
     map.forEach((settings, plugin) => {
         const filteredSettings = [...settings].filter(
-            (setting) => !knownSettings.get(plugin)?.has(setting),
+            setting => !knownSettings.get(plugin)?.has(setting),
         );
         if (filteredSettings.length > 0) {
             newSettings.set(plugin, filteredSettings);
@@ -155,7 +155,7 @@ export async function updateKnownSettings(): Promise<void> {
     const allSettings = new Map();
 
     new Set([...currentSettings.keys(), ...knownSettings.keys()]).forEach(
-        (plugin) => {
+        plugin => {
             allSettings.set(
                 plugin,
                 new Set([
@@ -174,7 +174,7 @@ export async function getNewPlugins(): Promise<string[]> {
     const knownPlugins = await getKnownPlugins();
 
     return currentPlugins.filter(
-        (plugin) =>
+        plugin =>
             !knownPlugins.has(plugin) &&
             !plugins[plugin].hidden &&
             !plugins[plugin].required,

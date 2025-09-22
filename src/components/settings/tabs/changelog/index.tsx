@@ -11,10 +11,8 @@ import { Link } from "@components/Link";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
 import { Margins } from "@utils/margins";
 import { useAwaiter } from "@utils/react";
-import { changes, getRepo, UpdateLogger } from "@utils/updater";
+import { changes, getRepo, shortGitHash, UpdateLogger } from "@utils/updater";
 import { Button, Card, Forms, React, Toasts } from "@webpack/common";
-
-import gitHash from "~git-hash";
 
 import {
     ChangelogEntry,
@@ -168,7 +166,7 @@ function UpdateLogCard({
                                 {Array.from(
                                     log.newSettings?.entries() || [],
                                 ).map(([pluginName, settings]) =>
-                                    settings.map((setting) => (
+                                    settings.map(setting => (
                                         <span
                                             key={`${pluginName}-${setting}`}
                                             className="vc-changelog-new-plugin-tag"
@@ -191,7 +189,7 @@ function UpdateLogCard({
                                 Code Changes
                             </Forms.FormTitle>
                             <div className="vc-changelog-log-commits-list">
-                                {log.commits.map((entry) => (
+                                {log.commits.map(entry => (
                                     <ChangelogCard
                                         key={entry.hash}
                                         entry={entry}
@@ -361,7 +359,7 @@ function ChangelogContent() {
                 )}{" "}
                 (Current:{" "}
                 <span className="vc-changelog-current-hash">
-                    {gitHash.slice(0, 7)}
+                    {shortGitHash()}
                 </span>
                 )
             </Forms.FormText>
@@ -442,7 +440,7 @@ function ChangelogContent() {
                                 {changelog.length === 1 ? "commit" : "commits"})
                             </Forms.FormTitle>
                             <div className="vc-changelog-commits-list">
-                                {changelog.map((entry) => (
+                                {changelog.map(entry => (
                                     <ChangelogCard
                                         key={entry.hash}
                                         entry={entry}
@@ -482,7 +480,7 @@ function ChangelogContent() {
                     </Forms.FormText>
 
                     <div className="vc-changelog-history-list">
-                        {changelogHistory.map((log) => (
+                        {changelogHistory.map(log => (
                             <UpdateLogCard
                                 key={log.id}
                                 log={log}
