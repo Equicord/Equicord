@@ -88,7 +88,8 @@ export function NewPluginsSection({
                         plugin.required ||
                         depMap[plugin.name]?.some(
                             d => settings.plugins[d].enabled,
-                        );
+                        ) ||
+                        plugin.name.endsWith("API");
                     const tooltipText = plugin.required
                         ? "This plugin is required for Equicord to function."
                         : makeDependencyList(
