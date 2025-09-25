@@ -40,8 +40,8 @@ interface PluginCardProps {
 export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, onMouseLeave, isNew }: PluginCardProps) {
     const settings = Settings.plugins[plugin.name];
     const pluginMeta = PluginMeta[plugin.name];
-    const isEquicordPlugin = pluginMeta?.folderName?.startsWith("src/equicordplugins/") ?? false;
-    const isUserplugin = pluginMeta?.userPlugin ?? false;
+    const isEquicordPlugin = pluginMeta.folderName.startsWith("src/equicordplugins/") ?? false;
+    const isUserplugin = pluginMeta.userPlugin ?? false;
 
     const isEnabled = () => isPluginEnabled(plugin.name);
 
