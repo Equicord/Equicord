@@ -16,11 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, useSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
+import { WarningIcon } from "@components/Icons";
 import { Link } from "@components/Link";
+import { AddonCard } from "@components/settings";
+import { ExcludedReasons, PluginDependencyList } from "@components/settings/tabs/plugins";
+import { PluginCard } from "@components/settings/tabs/plugins/PluginCard";
 import { openUpdaterModal } from "@components/settings/tabs/updater";
 import { CONTRIB_ROLE_ID, Devs, DONOR_ROLE_ID, EQUIBOP_CONTRIB_ROLE_ID, EQUICORD_TEAM, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_CONTRIB_ROLE_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID, VC_REGULAR_ROLE_ID, VC_SUPPORT_CHANNEL_IDS, VENCORD_CONTRIB_ROLE_ID } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
@@ -32,11 +36,12 @@ import { onlyOnce } from "@utils/onlyOnce";
 import { makeCodeblock } from "@utils/text";
 import definePlugin from "@utils/types";
 import { checkForUpdates, isOutdated, shortGitHash, update } from "@utils/updater";
-import { Alerts, Button, Card, ChannelStore, Forms, GuildMemberStore, Parser, PermissionsBits, PermissionStore, RelationshipStore, showToast, Text, Toasts, UserStore } from "@webpack/common";
+import { Message } from "@vencord/discord-types";
+import { Alerts, Button, Card, ChannelStore, Forms, GuildMemberStore, Parser, PermissionsBits, PermissionStore, RelationshipStore, showToast, Text, Toasts, Tooltip, TooltipContainer, UserStore } from "@webpack/common";
 import { JSX } from "react";
 
 import gitHash from "~git-hash";
-import plugins, { PluginMeta } from "~plugins";
+import plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
 
 import SettingsPlugin from "./settings";
 
@@ -403,9 +408,12 @@ export default definePlugin({
             }
         }
 
-        return buttons.length
-            ? <Flex>{buttons}</Flex>
-            : null;
+        return (
+            <>
+                {buttons.length > 0 && <Flex>{buttons}</Flex>}
+                <PluginCards message={props.message} />
+            </>
+        );
     },
 
     renderContributorDmWarningCard: ErrorBoundary.wrap(({ channel }) => {
@@ -423,3 +431,135 @@ export default definePlugin({
         );
     }, { noop: true }),
 });
+
+function ChatPluginCard({ url, description }: { url: string, description: string; }) {
+    const pluginNameFromUrl = new URL(url).pathname.split("/")[2];
+
+    const actualPluginName = Object.keys(plugins).find(name =>
+        name.toLowerCase() === pluginNameFromUrl?.toLowerCase()
+    );
+
+    const pluginName = actualPluginName || pluginNameFromUrl;
+
+    useSettings([`plugins.${pluginName ?? ""}.enabled`]);
+
+    if (!pluginName) return null;
+
+    const p = plugins[pluginName];
+    const excludedPlugin = ExcludedPlugins[pluginName];
+
+    if (excludedPlugin || !p) {
+        const toolTipText = !p
+            ? `${pluginName} is only available on the ${ExcludedReasons[ExcludedPlugins[pluginName]]}`
+            : "This plugin is not on this version of Equicord. Try updating!";
+
+        const card = (
+            <AddonCard
+                name={pluginName}
+                description={description || toolTipText}
+                enabled={false}
+                setEnabled={() => { }}
+                disabled={true}
+                infoButton={<WarningIcon />}
+            />
+        );
+
+        return description
+            ? <TooltipContainer text={toolTipText}>{card}</TooltipContainer>
+            : card;
+    }
+
+    const onRestartNeeded = () => showToast("A restart is required for the change to take effect!");
+
+    const required = Vencord.Plugins.isPluginRequired(pluginName);
+    const dependents = Vencord.Plugins.calculatePluginDependencyMap()[p.name]?.filter(d => Vencord.Plugins.isPluginEnabled(d));
+
+    if (required) {
+        const tooltipText = p.required || !dependents.length
+            ? "This plugin is required for Equicord to function."
+            : <PluginDependencyList deps={dependents} />;
+
+        return (
+            <Tooltip text={tooltipText} key={p.name}>
+                {({ onMouseLeave, onMouseEnter }) =>
+                    <PluginCard
+                        key={p.name}
+                        onMouseLeave={onMouseLeave}
+                        onMouseEnter={onMouseEnter}
+                        onRestartNeeded={onRestartNeeded}
+                        plugin={p}
+                        disabled
+                    />
+                }
+            </Tooltip>
+        );
+    }
+
+    return (
+        <PluginCard
+            key={p.name}
+            onRestartNeeded={onRestartNeeded}
+            plugin={p}
+        />
+    );
+}
+
+const PluginCards = ErrorBoundary.wrap(function PluginCards({ message }: { message: Message; }) {
+    const seenPlugins = new Set<string>();
+    const pluginCards: JSX.Element[] = [];
+
+    // Process embeds
+    message.embeds?.forEach(embed => {
+        if (!embed.url?.startsWith("https://equicord.org/plugins/")) return;
+
+        const pluginNameFromUrl = new URL(embed.url).pathname.split("/")[2];
+        const actualPluginName = Object.keys(plugins).find(name =>
+            name.toLowerCase() === pluginNameFromUrl?.toLowerCase()
+        );
+        const pluginName = actualPluginName || pluginNameFromUrl;
+
+        if (!pluginName || seenPlugins.has(pluginName)) return;
+        seenPlugins.add(pluginName);
+
+        pluginCards.push(
+            <ChatPluginCard
+                key={embed.url}
+                url={embed.url}
+                description={embed.rawDescription}
+            />
+        );
+    });
+
+    // Process components
+    const components = (message.components?.[0] as any)?.components;
+    if (components?.length >= 5) {
+        const description = components[1]?.content;
+        const pluginUrl = components.find((c: any) => c?.components)?.components[0]?.url;
+        if (pluginUrl?.startsWith("https://equicord.org/plugins/")) {
+            const pluginNameFromUrl = new URL(pluginUrl).pathname.split("/")[2];
+            const actualPluginName = Object.keys(plugins).find(name =>
+                name.toLowerCase() === pluginNameFromUrl?.toLowerCase()
+            );
+            const pluginName = actualPluginName || pluginNameFromUrl;
+
+            if (pluginName && !seenPlugins.has(pluginName)) {
+                seenPlugins.add(pluginName);
+                pluginCards.push(
+                    <ChatPluginCard
+                        key={pluginUrl}
+                        url={pluginUrl}
+                        description={description}
+                    />
+                );
+            }
+        }
+    }
+
+    if (pluginCards.length === 0) return null;
+
+    return (
+        <div className="vc-plugins-grid" style={{ marginTop: "0px" }}>
+            {pluginCards}
+        </div>
+    );
+}, { noop: true });
