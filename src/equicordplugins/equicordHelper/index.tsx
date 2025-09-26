@@ -239,8 +239,7 @@ const PluginCards = ErrorBoundary.wrap(function PluginCards({ message }: { messa
 
     // Process components
     const components = (message.components?.[0] as any)?.components;
-    const isEquicord = isEquicordGuild(message.channel_id) && isEquicordSupport(message.author.id) || message.author.id === EQUIBOT_USER_ID;
-    if (isEquicord && components?.length >= 5) {
+    if (message.author.id === EQUIBOT_USER_ID && components?.length >= 4) {
         const description = components[1]?.content;
         const pluginUrl = components.find((c: any) => c?.components)?.components[0]?.url;
         if (pluginUrl?.startsWith("https://equicord.org/plugins/") || pluginUrl?.startsWith("https://vencord.dev/plugins/")) {
