@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "@equicordplugins/_misc/styles.css";
-
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Logger } from "@utils/Logger";
 import { isEquicordGuild, isEquicordSupport } from "@utils/misc";
