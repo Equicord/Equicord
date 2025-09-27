@@ -68,7 +68,7 @@ export async function getChangelogHistory(): Promise<ChangelogHistory> {
     )) as ChangelogHistory;
 
     if (history) {
-        history.forEach((session) => {
+        history.forEach(session => {
             if (session.newSettings && !(session.newSettings instanceof Map)) {
                 session.newSettings = new Map(
                     Object.entries(session.newSettings),
@@ -192,18 +192,18 @@ export async function updateKnownPlugins(): Promise<void> {
 function getSettingsSetForPlugin(plugin: string): Set<string> {
     const settings = plugins[plugin]?.settings?.def || {};
     return new Set(
-        Object.keys(settings).filter((setting) => setting !== "enabled"),
+        Object.keys(settings).filter(setting => setting !== "enabled"),
     );
 }
 
 function getCurrentSettings(pluginList: string[]): KnownPluginSettingsMap {
     return new Map(
-        pluginList.map((name) => [name, getSettingsSetForPlugin(name)]),
+        pluginList.map(name => [name, getSettingsSetForPlugin(name)]),
     );
 }
 
 export async function getKnownSettings(): Promise<KnownPluginSettingsMap> {
-    let mapData = (await DataStore.get(KNOWN_SETTINGS_KEY)) as any;
+    const mapData = (await DataStore.get(KNOWN_SETTINGS_KEY)) as any;
     let map: KnownPluginSettingsMap;
 
     if (mapData === undefined) {
@@ -235,7 +235,7 @@ export async function getNewSettings(): Promise<Map<string, string[]>> {
 
     map.forEach((settings, plugin) => {
         const filteredSettings = [...settings].filter(
-            (setting) => !knownSettings.get(plugin)?.has(setting),
+            setting => !knownSettings.get(plugin)?.has(setting),
         );
         if (filteredSettings.length > 0) {
             newSettings.set(plugin, filteredSettings);
@@ -251,7 +251,7 @@ export async function updateKnownSettings(): Promise<void> {
     const allSettings = new Map();
 
     new Set([...currentSettings.keys(), ...knownSettings.keys()]).forEach(
-        (plugin) => {
+        plugin => {
             allSettings.set(
                 plugin,
                 new Set([
@@ -278,7 +278,7 @@ export async function getNewPlugins(): Promise<string[]> {
     const knownPlugins = await getKnownPlugins();
 
     return currentPlugins.filter(
-        (plugin) =>
+        plugin =>
             !knownPlugins.has(plugin) &&
             !plugins[plugin].hidden &&
             !plugins[plugin].required,
@@ -299,7 +299,7 @@ export async function clearChangelogHistory(): Promise<void> {
 
 export async function clearIndividualLog(logId: string): Promise<void> {
     const history = await getChangelogHistory();
-    const filteredHistory = history.filter((log) => log.id !== logId);
+    const filteredHistory = history.filter(log => log.id !== logId);
     await DataStore.set(CHANGELOG_HISTORY_KEY, filteredHistory);
 }
 
