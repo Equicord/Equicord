@@ -24,7 +24,7 @@ export interface UpdateSession {
     commits: ChangelogEntry[];
     newPlugins: string[];
     updatedPlugins: string[];
-    newSettings?: Map<string, string[]>;
+    newSettings?: Map<string, string[]> | Record<string, string[]>;
     type: "update" | "repository_fetch";
 }
 
@@ -38,10 +38,45 @@ const LAST_REPO_CHECK_KEY = "EquicordChangelog_LastRepoCheck";
 
 type KnownPluginSettingsMap = Map<string, Set<string>>;
 
+function isMapLike(value: any): value is Map<string, string[]> {
+    return (
+        value &&
+        typeof value.get === "function" &&
+        typeof value.size === "number"
+    );
+}
+
+export function getNewSettingsSize(
+    newSettings: Map<string, string[]> | Record<string, string[]> | undefined,
+): number {
+    if (!newSettings) return 0;
+    if (isMapLike(newSettings)) return newSettings.size;
+    return Object.keys(newSettings).length;
+}
+
+export function getNewSettingsEntries(
+    newSettings: Map<string, string[]> | Record<string, string[]> | undefined,
+): [string, string[]][] {
+    if (!newSettings) return [];
+    if (isMapLike(newSettings)) return Array.from(newSettings.entries());
+    return Object.entries(newSettings);
+}
+
 export async function getChangelogHistory(): Promise<ChangelogHistory> {
     const history = (await DataStore.get(
         CHANGELOG_HISTORY_KEY,
     )) as ChangelogHistory;
+
+    if (history) {
+        history.forEach((session) => {
+            if (session.newSettings && !(session.newSettings instanceof Map)) {
+                session.newSettings = new Map(
+                    Object.entries(session.newSettings),
+                );
+            }
+        });
+    }
+
     return history || [];
 }
 
@@ -74,7 +109,7 @@ export async function saveUpdateSession(
         commits.length === 0 &&
         newPlugins.length === 0 &&
         updatedPlugins.length === 0 &&
-        newSettings.size === 0
+        getNewSettingsSize(newSettings) === 0
     ) {
         return;
     }
@@ -106,7 +141,10 @@ export async function saveUpdateSession(
         commits,
         newPlugins,
         updatedPlugins,
-        newSettings,
+        newSettings:
+            getNewSettingsSize(newSettings) > 0
+                ? Object.fromEntries(newSettings)
+                : undefined,
         type: sessionType,
     };
 
@@ -154,25 +192,38 @@ export async function updateKnownPlugins(): Promise<void> {
 function getSettingsSetForPlugin(plugin: string): Set<string> {
     const settings = plugins[plugin]?.settings?.def || {};
     return new Set(
-        Object.keys(settings).filter(setting => setting !== "enabled"),
+        Object.keys(settings).filter((setting) => setting !== "enabled"),
     );
 }
 
 function getCurrentSettings(pluginList: string[]): KnownPluginSettingsMap {
     return new Map(
-        pluginList.map(name => [name, getSettingsSetForPlugin(name)]),
+        pluginList.map((name) => [name, getSettingsSetForPlugin(name)]),
     );
 }
 
 export async function getKnownSettings(): Promise<KnownPluginSettingsMap> {
-    let map = (await DataStore.get(
-        KNOWN_SETTINGS_KEY,
-    )) as KnownPluginSettingsMap;
-    if (map === undefined) {
+    let mapData = (await DataStore.get(KNOWN_SETTINGS_KEY)) as any;
+    let map: KnownPluginSettingsMap;
+
+    if (mapData === undefined) {
         const knownPlugins = await getKnownPlugins();
         const Plugins = [...Object.keys(plugins), ...Array.from(knownPlugins)];
         map = getCurrentSettings(Plugins);
         await DataStore.set(KNOWN_SETTINGS_KEY, map);
+    } else {
+        // convert the plain object back to a map with set value(s)
+        map = new Map();
+        if (mapData && typeof mapData === "object") {
+            for (const [plugin, settings] of Object.entries(mapData)) {
+                if (Array.isArray(settings)) {
+                    map.set(plugin, new Set(settings));
+                } else if (settings && typeof settings === "object") {
+                    // should fix serialization issues
+                    map.set(plugin, new Set(Object.values(settings)));
+                }
+            }
+        }
     }
     return map;
 }
@@ -184,7 +235,7 @@ export async function getNewSettings(): Promise<Map<string, string[]>> {
 
     map.forEach((settings, plugin) => {
         const filteredSettings = [...settings].filter(
-            setting => !knownSettings.get(plugin)?.has(setting),
+            (setting) => !knownSettings.get(plugin)?.has(setting),
         );
         if (filteredSettings.length > 0) {
             newSettings.set(plugin, filteredSettings);
@@ -200,7 +251,7 @@ export async function updateKnownSettings(): Promise<void> {
     const allSettings = new Map();
 
     new Set([...currentSettings.keys(), ...knownSettings.keys()]).forEach(
-        plugin => {
+        (plugin) => {
             allSettings.set(
                 plugin,
                 new Set([
@@ -211,7 +262,15 @@ export async function updateKnownSettings(): Promise<void> {
         },
     );
 
-    await DataStore.set(KNOWN_SETTINGS_KEY, allSettings);
+    // convert map to serialized storage format
+    const serializableSettings = Object.fromEntries(
+        Array.from(allSettings.entries()).map(([plugin, settings]) => [
+            plugin,
+            Array.from(settings),
+        ]),
+    );
+
+    await DataStore.set(KNOWN_SETTINGS_KEY, serializableSettings);
 }
 
 export async function getNewPlugins(): Promise<string[]> {
@@ -219,7 +278,7 @@ export async function getNewPlugins(): Promise<string[]> {
     const knownPlugins = await getKnownPlugins();
 
     return currentPlugins.filter(
-        plugin =>
+        (plugin) =>
             !knownPlugins.has(plugin) &&
             !plugins[plugin].hidden &&
             !plugins[plugin].required,
@@ -240,7 +299,7 @@ export async function clearChangelogHistory(): Promise<void> {
 
 export async function clearIndividualLog(logId: string): Promise<void> {
     const history = await getChangelogHistory();
-    const filteredHistory = history.filter(log => log.id !== logId);
+    const filteredHistory = history.filter((log) => log.id !== logId);
     await DataStore.set(CHANGELOG_HISTORY_KEY, filteredHistory);
 }
 

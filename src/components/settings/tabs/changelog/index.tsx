@@ -27,6 +27,8 @@ import {
     getLastRepositoryCheckHash,
     getNewPlugins,
     getNewSettings,
+    getNewSettingsEntries,
+    getNewSettingsSize,
     getUpdatedPlugins,
     initializeChangelog,
     saveUpdateSession,
@@ -136,7 +138,7 @@ function UpdateLogCard({
                                 alignItems: "center",
                                 justifyContent: "center",
                             }}
-                            onClick={e => {
+                            onClick={(e) => {
                                 e.stopPropagation();
                                 onClearLog(log.id);
                             }}
@@ -154,8 +156,8 @@ function UpdateLogCard({
                         {log.updatedPlugins.length > 0 &&
                             ` • ${log.updatedPlugins.length} updated plugins`}
                         {log.newSettings &&
-                            log.newSettings.size > 0 &&
-                            ` • ${Array.from(log.newSettings.values()).reduce((sum, arr) => sum + arr.length, 0)} new settings`}
+                            getNewSettingsSize(log.newSettings) > 0 &&
+                            ` • ${getNewSettingsEntries(log.newSettings).reduce((sum, [, arr]) => sum + arr.length, 0)} new settings`}
                     </div>
                 </div>
                 <div
@@ -191,36 +193,36 @@ function UpdateLogCard({
                         </div>
                     )}
 
-                    {log.newSettings && log.newSettings.size > 0 && (
-                        <div className="vc-changelog-log-plugins">
-                            <Forms.FormTitle
-                                tag="h6"
-                                className={Margins.bottom8}
-                            >
-                                New Settings
-                            </Forms.FormTitle>
-                            <div className="vc-changelog-new-plugins-list">
-                                {Array.from(
-                                    log.newSettings?.entries() || [],
-                                ).map(([pluginName, settings]) =>
-                                    settings.map(setting => (
-                                        <span
-                                            key={`${pluginName}-${setting}`}
-                                            className="vc-changelog-new-plugin-tag"
-                                            title={`New setting in ${pluginName}`}
-                                        >
-                                            {pluginName}.{setting}
-                                        </span>
-                                    )),
-                                )}
+                    {log.newSettings &&
+                        getNewSettingsSize(log.newSettings) > 0 && (
+                            <div className="vc-changelog-log-plugins">
+                                <Forms.FormTitle
+                                    tag="h6"
+                                    className={Margins.bottom8}
+                                >
+                                    New Settings
+                                </Forms.FormTitle>
+                                <div className="vc-changelog-new-plugins-list">
+                                    {getNewSettingsEntries(log.newSettings).map(
+                                        ([pluginName, settings]) =>
+                                            settings.map((setting) => (
+                                                <span
+                                                    key={`${pluginName}-${setting}`}
+                                                    className="vc-changelog-new-plugin-tag"
+                                                    title={`New setting in ${pluginName}`}
+                                                >
+                                                    {pluginName}.{setting}
+                                                </span>
+                                            )),
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
                     {log.commits.length > 0 && (
                         <div className="vc-changelog-log-commits">
                             <div className="vc-changelog-log-commits-list">
-                                {log.commits.map(entry => (
+                                {log.commits.map((entry) => (
                                     <ChangelogCard
                                         key={entry.hash}
                                         entry={entry}
@@ -347,7 +349,6 @@ function ChangelogContent() {
                 });
                 return;
             }
-
 
             if (updates.ok && updates.value) {
                 setChangelog(updates.value);
@@ -480,8 +481,8 @@ function ChangelogContent() {
                     {isLoading
                         ? "Loading..."
                         : recentlyChecked
-                            ? "Repository Up to Date"
-                            : "Fetch from Repository"}
+                          ? "Repository Up to Date"
+                          : "Fetch from Repository"}
                 </Button>
 
                 {changelogHistory.length > 0 && (
@@ -592,7 +593,7 @@ function ChangelogContent() {
                                 {changelog.length === 1 ? "commit" : "commits"})
                             </Forms.FormTitle>
                             <div className="vc-changelog-commits-list">
-                                {changelog.map(entry => (
+                                {changelog.map((entry) => (
                                     <ChangelogCard
                                         key={entry.hash}
                                         entry={entry}
@@ -634,7 +635,7 @@ function ChangelogContent() {
                     </Forms.FormText>
 
                     <div className="vc-changelog-history-list">
-                        {changelogHistory.map(log => (
+                        {changelogHistory.map((log) => (
                             <UpdateLogCard
                                 key={log.id}
                                 log={log}
@@ -642,7 +643,7 @@ function ChangelogContent() {
                                 repoPending={repoPending}
                                 isExpanded={expandedLogs.has(log.id)}
                                 onToggleExpand={() => toggleLogExpanded(log.id)}
-                                onClearLog={logId => {
+                                onClearLog={(logId) => {
                                     Alerts.show({
                                         title: "Clear Log",
                                         body: "Are you sure you would like to clear this log? This can't be undone.",
@@ -657,7 +658,7 @@ function ChangelogContent() {
                                                     Array.from(
                                                         expandedLogs,
                                                     ).filter(
-                                                        id => id !== logId,
+                                                        (id) => id !== logId,
                                                     ),
                                                 ),
                                             );
