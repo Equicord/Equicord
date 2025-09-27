@@ -323,7 +323,7 @@ const settings = definePluginSettings({
         description: "Separate addition and removals in diffs for a more readable differential",
         default: false,
         disabled() {
-            return settings.store.showEditDiffs;
+            return !settings.store.showEditDiffs;
         },
     },
 });
