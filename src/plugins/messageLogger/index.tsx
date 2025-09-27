@@ -322,11 +322,8 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Separate addition and removals in diffs for a more readable differential",
         default: false,
-    },
-}, {
-    separatedDiffs: {
         disabled() {
-            return !this.store.showEditDiffs;
+            return settings.store.showEditDiffs;
         },
     },
 });
