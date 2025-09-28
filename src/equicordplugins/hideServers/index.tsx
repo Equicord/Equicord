@@ -40,7 +40,7 @@ type qsResult = {
 
 const Patch: NavContextMenuPatchCallback = (
     children,
-    { guild }: { guild: Guild }
+    { guild }: { guild: Guild; }
 ) => {
     const group = findGroupChildrenByChildId("privacy", children);
     if (!group) return;
@@ -51,12 +51,10 @@ const Patch: NavContextMenuPatchCallback = (
         <Menu.MenuItem
             id="vc-hide-server"
             label={isHidden ? "Unhide Server" : "Hide Server"}
-            action={() => HiddenServersStore.addHidden(guild) }
+            action={() => HiddenServersStore.addHidden(guild)}
         />
     );
 };
-
-
 
 export function addIndicator() {
     addServerListElement(ServerListRenderPosition.Below, hiddenServersButton);
@@ -81,7 +79,7 @@ export default definePlugin({
             }
 
             if ("folderId" in props) {
-                const folderId = props.folderId;
+                const { folderId } = props;
                 const key = "folder-" + folderId;
                 const isHidden = HiddenServersStore.hiddenGuilds.has(key);
 
