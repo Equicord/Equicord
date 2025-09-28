@@ -40,18 +40,23 @@ type qsResult = {
 
 const Patch: NavContextMenuPatchCallback = (
     children,
-    { guild }: { guild: Guild; }
+    { guild }: { guild: Guild }
 ) => {
     const group = findGroupChildrenByChildId("privacy", children);
+    if (!group) return;
 
-    group?.push(
+    const isHidden = HiddenServersStore.hiddenGuilds.has(guild.id.toString());
+
+    group.push(
         <Menu.MenuItem
             id="vc-hide-server"
-            label="Hide Server"
-            action={() => HiddenServersStore.addHidden(guild)}
+            label={isHidden ? "Unhide Server" : "Hide Server"}
+            action={() => HiddenServersStore.addHidden(guild) }
         />
     );
 };
+
+
 
 export function addIndicator() {
     addServerListElement(ServerListRenderPosition.Below, hiddenServersButton);
@@ -69,8 +74,32 @@ export default definePlugin({
 
     dependencies: ["ServerListAPI"],
     contextMenus: {
-        "guild-context": Patch,
         "guild-header-popout": Patch,
+        "guild-context": (menuItems, props: any) => {
+            if ("guild" in props) {
+                Patch(menuItems, props);
+            }
+
+            if ("folderId" in props) {
+                const folderId = props.folderId;
+                const key = "folder-" + folderId;
+                const isHidden = HiddenServersStore.hiddenGuilds.has(key);
+
+                menuItems.push(
+                    <Menu.MenuItem
+                        id="vc-hide-folder"
+                        label={isHidden ? "Unhide Folder" : "Hide Folder"}
+                        action={() => {
+                            if (isHidden) {
+                                HiddenServersStore.removeHidden(key);
+                            } else {
+                                HiddenServersStore.addHidden({ id: key } as any);
+                            }
+                        }}
+                    />
+                );
+            }
+        },
     },
     patches: [
         {
@@ -80,7 +109,6 @@ export default definePlugin({
                     match: /(\i)(\.map\(.{0,30}\}\),\i)/,
                     replace: "$self.useFilteredGuilds($1)$2"
                 },
-                // despite my best efforts, the above doesnt trigger a rerender
                 {
                     match: /let{disableAppDownload.{0,10}isPlatformEmbedded/,
                     replace: "$self.useStore();$&",
@@ -111,15 +139,28 @@ export default definePlugin({
     },
 
     useFilteredGuilds(guilds: guildsNode[]): guildsNode[] {
-        const hiddenGuilds = useStateFromStores([HiddenServersStore], () => HiddenServersStore.hiddenGuilds, undefined, (old, newer) => old.size === newer.size);
+        const hiddenGuilds = useStateFromStores(
+            [HiddenServersStore],
+            () => HiddenServersStore.hiddenGuilds,
+            undefined,
+            (old, newer) => old.size === newer.size
+        );
+
         return guilds.flatMap(guild => {
             if (!(hiddenGuilds instanceof Set)) return [guild];
-            if (hiddenGuilds.has(guild.id.toString())) {
+            if (guild.type === "guild" && hiddenGuilds.has(guild.id.toString())) {
                 return [];
             }
+
+            if (guild.type === "folder" && hiddenGuilds.has("folder-" + guild.id.toString())) {
+                return [];
+            }
+
             const newGuild = Object.assign({}, guild);
             newGuild.children = guild.children.filter(
-                child => !hiddenGuilds.has(child.id.toString())
+                child =>
+                    !hiddenGuilds.has(child.id.toString()) &&
+                    !(child.type === "folder" && hiddenGuilds.has("folder-" + child.id.toString()))
             );
 
             return [newGuild];
@@ -127,7 +168,6 @@ export default definePlugin({
     },
 
     filteredGuildResults(results: qsResult[]): qsResult[] {
-        // not used in a component so no useStateFromStore
         const { hiddenGuilds } = HiddenServersStore;
         return results.filter(result => {
             if (result?.record?.guild_id && hiddenGuilds.has(result.record.guild_id)) {
