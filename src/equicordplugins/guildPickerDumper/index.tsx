@@ -38,22 +38,21 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
         return console.log("Server not found!");
     }
 
+    const getProxyEndpoint = () => {
+        const rawEndpoint = window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT;
+        return rawEndpoint.startsWith("//") ? rawEndpoint.slice(2) : rawEndpoint;
+    };
+
     const fetchAsset = async (e: any) => {
         let ext: string;
         let url: string;
+        const endpoint = getProxyEndpoint();
 
         if (isEmojis) {
             ext = e.animated ? ".gif" : ".png";
-            const endpoint = window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT.startsWith("//")
-                ? window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT.slice(2)
-                : window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT;
             url = `https://${endpoint}/emojis/${e.id}${ext}?size=512&quality=lossless`;
         } else {
             ext = "." + StickerExt[e.format_type];
-            const rawEndpoint = window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT;
-            const endpoint = rawEndpoint.startsWith("//")
-                ? rawEndpoint.slice(2)
-                : rawEndpoint;
             const urlExt = e.format_type === 2 ? ".png" : ext;
             url = `https://${endpoint}/stickers/${e.id}${urlExt}?size=4096&lossless=true`;
         }
@@ -64,11 +63,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
         let response = await fetch(url);
 
         if (!isEmojis && e.format_type === 2 && (!response.ok || response.headers.get("content-type")?.includes("text"))) {
-            const rawGifEndpoint = window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT;
-            const gifEndpoint = rawGifEndpoint.startsWith("//")
-                ? rawGifEndpoint.slice(2)
-                : rawGifEndpoint;
-            const gifUrl = `https://${gifEndpoint}/stickers/${e.id}.gif?size=4096&lossless=true`;
+            const gifUrl = `https://${endpoint}/stickers/${e.id}.gif?size=4096&lossless=true`;
             const gifResponse = await fetch(gifUrl);
 
             if (gifResponse.ok && !gifResponse.headers.get("content-type")?.includes("text")) {
