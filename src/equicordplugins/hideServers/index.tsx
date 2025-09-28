@@ -18,6 +18,7 @@ import {
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Guild } from "@vencord/discord-types";
+import { findStoreLazy } from "@webpack";
 import { Menu, React, useStateFromStores } from "@webpack/common";
 
 import hiddenServersButton from "./components/HiddenServersButton";
@@ -38,6 +39,8 @@ type qsResult = {
     };
 };
 
+export const SortedGuildStore = findStoreLazy("SortedGuildStore");
+
 const Patch: NavContextMenuPatchCallback = (
     children,
     { guild }: { guild: Guild; }
@@ -51,7 +54,13 @@ const Patch: NavContextMenuPatchCallback = (
         <Menu.MenuItem
             id="vc-hide-server"
             label={isHidden ? "Unhide Server" : "Hide Server"}
-            action={() => HiddenServersStore.addHidden(guild)}
+            action={() => {
+                if (isHidden) {
+                    HiddenServersStore.removeHiddenGuild(guild.id);
+                } else {
+                    HiddenServersStore.addHiddenGuild(guild.id);
+                }
+            }}
         />
     );
 };
@@ -68,7 +77,7 @@ export default definePlugin({
     name: "HideServers",
     description: "Allows you to hide servers from the guild list and quick switcher by right clicking them",
     authors: [EquicordDevs.bep],
-    tags: ["guild", "server", "hide"],
+    tags: ["guild", "server", "hide", "folder"],
 
     dependencies: ["ServerListAPI"],
     contextMenus: {
@@ -80,8 +89,9 @@ export default definePlugin({
 
             if ("folderId" in props) {
                 const { folderId } = props;
-                const key = "folder-" + folderId;
-                const isHidden = HiddenServersStore.hiddenGuilds.has(key);
+                const folder = SortedGuildStore.getGuildFolderById(folderId);
+                const { guildIds } = folder;
+                const isHidden = guildIds.every(id => HiddenServersStore.hiddenGuilds.has(id));
 
                 menuItems.push(
                     <Menu.MenuItem
@@ -89,9 +99,9 @@ export default definePlugin({
                         label={isHidden ? "Unhide Folder" : "Hide Folder"}
                         action={() => {
                             if (isHidden) {
-                                HiddenServersStore.removeHidden(key);
+                                HiddenServersStore.removeHiddenFolder(folderId, guildIds);
                             } else {
-                                HiddenServersStore.addHidden({ id: key } as any);
+                                HiddenServersStore.addHiddenFolder(folderId, guildIds);
                             }
                         }}
                     />
