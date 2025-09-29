@@ -38,6 +38,81 @@ const LAST_REPO_CHECK_KEY = "EquicordChangelog_LastRepoCheck";
 
 type KnownPluginSettingsMap = Map<string, Set<string>>;
 
+function toStringSet(value: unknown): Set<string> {
+    const result = new Set<string>();
+
+    const addValue = (entry: unknown) => {
+        if (entry === undefined || entry === null) return;
+        result.add(typeof entry === "string" ? entry : String(entry));
+    };
+
+    if (value instanceof Set) {
+        value.forEach(addValue);
+    } else if (value instanceof Map) {
+        value.forEach(addValue);
+    } else if (Array.isArray(value)) {
+        value.forEach(addValue);
+    } else if (typeof value === "string") {
+        addValue(value);
+    } else if (value && typeof value === "object") {
+        Object.values(value as Record<string, unknown>).forEach(addValue);
+    }
+
+    return result;
+}
+
+function normalizeKnownSettings(value: unknown): KnownPluginSettingsMap {
+    const map: KnownPluginSettingsMap = new Map();
+
+    const assign = (plugin: unknown, settings: unknown) => {
+        if (plugin === undefined || plugin === null) return;
+        map.set(String(plugin), toStringSet(settings));
+    };
+
+    if (!value) {
+        return map;
+    }
+
+    if (value instanceof Map) {
+        value.forEach((settings, plugin) => assign(plugin, settings));
+        return map;
+    }
+
+    if (Array.isArray(value)) {
+        value.forEach(entry => {
+            if (Array.isArray(entry) && entry.length > 0) {
+                assign(entry[0], entry[1]);
+            }
+        });
+        return map;
+    }
+
+    if (typeof value === "object") {
+        Object.entries(value as Record<string, unknown>).forEach(
+            ([plugin, settings]) => assign(plugin, settings),
+        );
+    }
+
+    return map;
+}
+
+function serializeKnownSettings(
+    map: KnownPluginSettingsMap,
+): Record<string, string[]> {
+    return Object.fromEntries(
+        Array.from(map.entries()).map(([plugin, settings]) => [
+            plugin,
+            Array.from(settings),
+        ]),
+    );
+}
+
+async function persistKnownSettings(
+    map: KnownPluginSettingsMap,
+): Promise<void> {
+    await DataStore.set(KNOWN_SETTINGS_KEY, serializeKnownSettings(map));
+}
+
 function isMapLike(value: any): value is Map<string, string[]> {
     return (
         value &&
@@ -204,28 +279,34 @@ function getCurrentSettings(pluginList: string[]): KnownPluginSettingsMap {
 
 export async function getKnownSettings(): Promise<KnownPluginSettingsMap> {
     const mapData = (await DataStore.get(KNOWN_SETTINGS_KEY)) as any;
-    let map: KnownPluginSettingsMap;
-
     if (mapData === undefined) {
         const knownPlugins = await getKnownPlugins();
-        const Plugins = [...Object.keys(plugins), ...Array.from(knownPlugins)];
-        map = getCurrentSettings(Plugins);
-        await DataStore.set(KNOWN_SETTINGS_KEY, map);
-    } else {
-        // convert the plain object back to a map with set value(s)
-        map = new Map();
-        if (mapData && typeof mapData === "object") {
-            for (const [plugin, settings] of Object.entries(mapData)) {
-                if (Array.isArray(settings)) {
-                    map.set(plugin, new Set(settings));
-                } else if (settings && typeof settings === "object") {
-                    // should fix serialization issues
-                    map.set(plugin, new Set(Object.values(settings)));
-                }
-            }
-        }
+        const pluginNames = [
+            ...new Set([
+                ...Object.keys(plugins),
+                ...Array.from(knownPlugins),
+            ]),
+        ];
+        const initialMap = getCurrentSettings(pluginNames);
+        await persistKnownSettings(initialMap);
+        return initialMap;
     }
-    return map;
+
+    const normalized = normalizeKnownSettings(mapData);
+
+    if (
+        mapData instanceof Map ||
+        Array.isArray(mapData) ||
+        (mapData &&
+            typeof mapData === "object" &&
+            Object.values(mapData).some(value =>
+                value instanceof Set || value instanceof Map,
+            ))
+    ) {
+        await persistKnownSettings(normalized);
+    }
+
+    return normalized;
 }
 
 export async function getNewSettings(): Promise<Map<string, string[]>> {
@@ -234,8 +315,11 @@ export async function getNewSettings(): Promise<Map<string, string[]>> {
     const newSettings = new Map<string, string[]>();
 
     map.forEach((settings, plugin) => {
+        const known = knownSettings.get(plugin);
+        if (!known) return;
+
         const filteredSettings = [...settings].filter(
-            setting => !knownSettings.get(plugin)?.has(setting),
+            setting => !known.has(setting),
         );
         if (filteredSettings.length > 0) {
             newSettings.set(plugin, filteredSettings);
@@ -248,29 +332,21 @@ export async function getNewSettings(): Promise<Map<string, string[]>> {
 export async function updateKnownSettings(): Promise<void> {
     const currentSettings = getCurrentSettings(Object.keys(plugins));
     const knownSettings = await getKnownSettings();
-    const allSettings = new Map();
+    const mergedSettings: KnownPluginSettingsMap = new Map();
 
     new Set([...currentSettings.keys(), ...knownSettings.keys()]).forEach(
         plugin => {
-            allSettings.set(
+            mergedSettings.set(
                 plugin,
                 new Set([
-                    ...(currentSettings.get(plugin) || []),
                     ...(knownSettings.get(plugin) || []),
+                    ...(currentSettings.get(plugin) || []),
                 ]),
             );
         },
     );
 
-    // convert map to serialized storage format
-    const serializableSettings = Object.fromEntries(
-        Array.from(allSettings.entries()).map(([plugin, settings]) => [
-            plugin,
-            Array.from(settings),
-        ]),
-    );
-
-    await DataStore.set(KNOWN_SETTINGS_KEY, serializableSettings);
+    await persistKnownSettings(mergedSettings);
 }
 
 export async function getNewPlugins(): Promise<string[]> {
