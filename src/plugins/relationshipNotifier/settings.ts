@@ -25,6 +25,11 @@ export default definePluginSettings({
         description: "Also show a notice at the top of your screen when removed (use this if you don't want to miss any notifications).",
         default: false
     },
+    highlightRemovals: {
+        type: OptionType.BOOLEAN,
+        description: "Highlight removal entries inside Relationship Notifier logs.",
+        default: false
+    },
     offlineRemovals: {
         type: OptionType.BOOLEAN,
         description: "Notify you when starting discord if you were removed while offline.",
