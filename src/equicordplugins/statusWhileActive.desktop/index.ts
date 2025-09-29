@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -70,6 +70,7 @@ function setStatus(preq, status) {
     }
 }
 
+migratePluginSettings("StatusWhileActive", "StatusWhilePlaying");
 export default definePlugin({
     name: "StatusWhileActive",
     description: "Automatically updates your online status when playing games or in a voice channel.",
