@@ -8,7 +8,8 @@ import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { FluxDispatcher, PresenceStore, UserStore, VoiceStateStore } from "@webpack/common";
+import { VoiceState } from "@vencord/discord-types";
+import { PresenceStore, UserStore } from "@webpack/common";
 
 let savedStatus = "";
 const StatusSettings = getUserSettingLazy("status", "status");
@@ -57,63 +58,47 @@ const settings = definePluginSettings({
     }
 });
 
-let isActive = false;
-
-function updateStatus() {
-    const userId = UserStore.getCurrentUser()?.id;
-    if (!userId) return;
-
-    const currentStatus = PresenceStore.getStatus(userId);
-    const trigger = settings.store.trigger;
-    const newStatusToSet = settings.store.statusToSet;
-
-    const isPlaying = PresenceStore.getActivities(userId).some(a => a.type === 0);
-    const isInVC = !!VoiceStateStore.getVoiceStateForUser(userId)?.channelId;
-
-    let shouldBeActive = false;
-    if (trigger === "game") {
-        shouldBeActive = isPlaying;
-    } else if (trigger === "vc") {
-        shouldBeActive = isInVC;
-    } else if (trigger === "either") {
-        shouldBeActive = isPlaying || isInVC;
-    }
-
-    if (shouldBeActive !== isActive) {
-        isActive = shouldBeActive;
-
-        if (isActive) {
-            if (currentStatus !== newStatusToSet) {
-                savedStatus = currentStatus;
-            }
-            StatusSettings?.updateSetting(newStatusToSet);
-        } else {
-            if (savedStatus && savedStatus !== newStatusToSet) {
-                StatusSettings?.updateSetting(savedStatus);
-            }
-            savedStatus = "";
+function setStatus(preq, status) {
+    if (preq) {
+        if (status !== settings.store.statusToSet) {
+            savedStatus = status;
+            StatusSettings?.updateSetting(settings.store.statusToSet);
         }
+    } else if (savedStatus && savedStatus !== settings.store.statusToSet) {
+        StatusSettings?.updateSetting(savedStatus);
     }
 }
-
-const debouncedUpdate = () => setTimeout(updateStatus, 250);
 
 export default definePlugin({
     name: "StatusWhileActive",
     description: "Automatically updates your online status when playing games or in a voice channel.",
     authors: [Devs.thororen, EquicordDevs.smuki],
     settings,
+    flux: {
+        RUNNING_GAMES_CHANGE({ games }) {
+            const { trigger } = settings.store;
+            if (trigger === "vc") return;
 
-    start() {
-        FluxDispatcher.subscribe("RUNNING_GAMES_CHANGE", debouncedUpdate);
-        FluxDispatcher.subscribe("VOICE_STATE_UPDATES", debouncedUpdate);
-        debouncedUpdate();
+            const userId = UserStore.getCurrentUser().id;
+            const status = PresenceStore.getStatus(userId);
+
+            setStatus(games.length > 0, status);
+        },
+        VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
+            const { trigger } = settings.store;
+            if (trigger === "game") return;
+
+            const myId = UserStore.getCurrentUser().id;
+            const status = PresenceStore.getStatus(myId);
+
+            for (const state of voiceStates) {
+                const { userId } = state;
+                setStatus(userId === myId, status);
+            }
+        }
     },
 
     stop() {
-        FluxDispatcher.unsubscribe("RUNNING_GAMES_CHANGE", debouncedUpdate);
-        FluxDispatcher.unsubscribe("VOICE_STATE_UPDATES", debouncedUpdate);
-
         if (savedStatus) {
             StatusSettings?.updateSetting(savedStatus);
             savedStatus = "";
