@@ -35,8 +35,68 @@ const LAST_SEEN_HASH_KEY = "EquicordChangelog_LastSeenHash";
 const KNOWN_PLUGINS_KEY = "EquicordChangelog_KnownPlugins";
 const KNOWN_SETTINGS_KEY = "EquicordChangelog_KnownSettings";
 const LAST_REPO_CHECK_KEY = "EquicordChangelog_LastRepoCheck";
+const GITHUB_COMPARE_ENDPOINT = "https://api.github.com/repos";
 
 type KnownPluginSettingsMap = Map<string, Set<string>>;
+
+function normalizeRepoUrl(repoUrl: string | null | undefined): string | null {
+    if (!repoUrl) return null;
+    try {
+        const normalized = repoUrl.replace(/^git\+/, "");
+        const url = new URL(normalized);
+        if (!url.hostname.endsWith("github.com")) return null;
+        const segments = url.pathname.replace(/\.git$/, "").split("/").filter(Boolean);
+        if (segments.length < 2) return null;
+        return `${segments[0]}/${segments[1]}`;
+    } catch {
+        return null;
+    }
+}
+
+async function fetchCommitsBetween(
+    repoSlug: string,
+    fromHash: string,
+    toHash: string,
+): Promise<ChangelogEntry[]> {
+    if (!repoSlug || typeof fetch !== "function") return [];
+    try {
+        const res = await fetch(
+            `${GITHUB_COMPARE_ENDPOINT}/${repoSlug}/compare/${fromHash}...${toHash}`,
+            {
+                headers: {
+                    Accept: "application/vnd.github+json",
+                    "Cache-Control": "no-cache",
+                },
+            },
+        );
+
+        if (!res.ok) return [];
+        const data = await res.json();
+        if (!data || !Array.isArray(data.commits)) return [];
+
+        return data.commits.map((commit: any) => {
+            const message: string = commit?.commit?.message ?? "";
+            const summary = message.split("\n")[0] || "No message";
+            const authorName =
+                commit?.commit?.author?.name ||
+                commit?.author?.login ||
+                "Unknown";
+            const timestamp = commit?.commit?.author?.date
+                ? Date.parse(commit.commit.author.date)
+                : undefined;
+
+            return {
+                hash: commit?.sha || "",
+                author: authorName,
+                message: summary,
+                timestamp: Number.isNaN(timestamp) ? undefined : timestamp,
+            } as ChangelogEntry;
+        });
+    } catch (err) {
+        console.warn("Failed to fetch commits between hashes", err);
+        return [];
+    }
+}
 
 function toStringSet(value: unknown): Set<string> {
     const result = new Set<string>();
@@ -327,6 +387,19 @@ export async function getNewSettings(): Promise<Map<string, string[]>> {
     });
 
     return newSettings;
+}
+
+export async function getCommitsSinceLastSeen(
+    repoUrl: string,
+): Promise<ChangelogEntry[]> {
+    const lastSeenHash = await getLastSeenHash();
+    if (!lastSeenHash || lastSeenHash === "unknown" || lastSeenHash === gitHash)
+        return [];
+
+    const repoSlug = normalizeRepoUrl(repoUrl);
+    if (!repoSlug) return [];
+
+    return fetchCommitsBetween(repoSlug, lastSeenHash, gitHash);
 }
 
 export async function updateKnownSettings(): Promise<void> {
