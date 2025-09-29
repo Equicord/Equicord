@@ -9,9 +9,9 @@ import { getUserSettingLazy } from "@api/UserSettings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { VoiceState } from "@vencord/discord-types";
-import { PresenceStore, UserStore } from "@webpack/common";
+import { PresenceStore, UserStore, VoiceStateStore } from "@webpack/common";
 
-let savedStatus = "";
+let savedStatus: string | null = null;
 const StatusSettings = getUserSettingLazy("status", "status");
 const settings = definePluginSettings({
     trigger: {
@@ -21,6 +21,7 @@ const settings = definePluginSettings({
             {
                 label: "While playing a game",
                 value: "game",
+                default: true,
             },
             {
                 label: "While in a voice channel",
@@ -29,7 +30,6 @@ const settings = definePluginSettings({
             {
                 label: "While playing or in a voice channel",
                 value: "either",
-                default: true
             },
         ]
     },
@@ -48,7 +48,7 @@ const settings = definePluginSettings({
             {
                 label: "Do Not Disturb",
                 value: "dnd",
-                default: true
+                default: true,
             },
             {
                 label: "Invisible",
@@ -66,6 +66,7 @@ function setStatus(preq, status) {
         }
     } else if (savedStatus && savedStatus !== settings.store.statusToSet) {
         StatusSettings?.updateSetting(savedStatus);
+        savedStatus = null;
     }
 }
 
@@ -88,13 +89,24 @@ export default definePlugin({
             const { trigger } = settings.store;
             if (trigger === "game") return;
 
-            const myId = UserStore.getCurrentUser().id;
-            const status = PresenceStore.getStatus(myId);
+            const userId = UserStore.getCurrentUser().id;
+            const myState = voiceStates.find(state => state.userId === userId);
+            if (!myState) return;
 
-            for (const state of voiceStates) {
-                const { userId } = state;
-                setStatus(userId === myId, status);
-            }
+            const status = PresenceStore.getStatus(userId);
+            const inVoiceChannel = !!VoiceStateStore.getVoiceStateForUser(userId)?.channelId;
+
+            setStatus(inVoiceChannel, status);
+        },
+        VOICE_CHANNEL_STATUS_UPDATE() {
+            const { trigger } = settings.store;
+            if (trigger === "game") return;
+
+            const userId = UserStore.getCurrentUser().id;
+            const status = PresenceStore.getStatus(userId);
+            const inVoiceChannel = !!VoiceStateStore.getVoiceStateForUser(userId)?.channelId;
+
+            setStatus(inVoiceChannel, status);
         }
     },
 
