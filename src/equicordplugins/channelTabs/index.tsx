@@ -26,7 +26,7 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props: { channe
             label="Open in New Tab"
             id="open-link-in-tab"
             action={() => createTab({
-                guildId: channel.guild_id,
+                guildId: channel.guild_id || "@me", // Normalize for DMs/Group Chats
                 channelId: channel.id
             }, settings.store.openInNewTabAutoSwitch, messageId)}
         />

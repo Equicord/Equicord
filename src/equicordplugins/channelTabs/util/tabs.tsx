@@ -132,7 +132,13 @@ let lastNavigationTime = 0;
 
 export function handleChannelSwitch(ch: BasicChannelTabsProps) {
     const tab = openTabs.find(c => c.id === currentlyOpenTab);
-    const existingTab = openTabs.find(tab => tab.channelId === ch.channelId && tab.guildId === ch.guildId);
+
+    // Normalize guildId for DMs/Group Chats to ensure consistent comparison
+    const normalizedGuildId = ch.guildId || "@me";
+    const existingTab = openTabs.find(tab => {
+        const tabGuildId = tab.guildId || "@me";
+        return tab.channelId === ch.channelId && tabGuildId === normalizedGuildId;
+    });
 
     // First check: switch to existing tab if setting enabled and tab exists
     if (settings.store.switchToExistingTab && existingTab) {
