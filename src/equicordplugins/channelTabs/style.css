@@ -658,6 +658,24 @@
     animation: none !important;
 }
 
+/* Selected tab border - disable if setting is off */
+.vc-channeltabs-container.vc-channeltabs-no-selected-border .vc-channeltabs-tab-selected {
+    border: 1px solid var(--background-modifier-accent) !important;
+    border-bottom: 1px solid var(--background-modifier-accent) !important;
+}
+
+/* Selected tab background - disable if setting is off */
+.vc-channeltabs-container.vc-channeltabs-no-selected-background .vc-channeltabs-tab-selected {
+    background-color: transparent !important;
+}
+
+/* Tab shadows - disable if setting is off */
+.vc-channeltabs-container.vc-channeltabs-no-tab-shadows .vc-channeltabs-tab,
+.vc-channeltabs-container.vc-channeltabs-no-tab-shadows .vc-channeltabs-tab-selected,
+.vc-channeltabs-container.vc-channeltabs-no-tab-shadows .vc-channeltabs-tab:hover {
+    box-shadow: none !important;
+}
+
 /* Close button rotation - disable if setting is off */
 .vc-channeltabs-container.vc-channeltabs-no-close-rotation .vc-channeltabs-tab-selected .vc-channeltabs-close-button:hover {
     transform: none !important;

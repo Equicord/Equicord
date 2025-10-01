@@ -39,6 +39,9 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         animationPlusPulse,
         animationMentionGlow,
         animationCompactExpand,
+        animationSelectedBorder,
+        animationSelectedBackground,
+        animationTabShadows,
         compactAutoExpandSelected
     } = settings.use([
         "showBookmarkBar",
@@ -55,6 +58,9 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         "animationPlusPulse",
         "animationMentionGlow",
         "animationCompactExpand",
+        "animationSelectedBorder",
+        "animationSelectedBackground",
+        "animationTabShadows",
         "compactAutoExpandSelected"
     ]);
     const GhostTabs = useGhostTabs();
@@ -152,6 +158,9 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 !animationPlusPulse && cl("no-plus-animation"),
                 !animationMentionGlow && cl("no-mention-glow"),
                 !animationCompactExpand && cl("no-compact-animation"),
+                !animationSelectedBorder && cl("no-selected-border"),
+                !animationSelectedBackground && cl("no-selected-background"),
+                !animationTabShadows && cl("no-tab-shadows"),
                 !compactAutoExpandSelected && cl("no-compact-auto-expand")
             )}
             ref={ref}

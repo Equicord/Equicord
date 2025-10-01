@@ -22,14 +22,17 @@ interface DynamicDropdownSettingOption {
 function AnimationSettings(): JSX.Element {
     const animationOptions: DynamicDropdownSettingOption[] = [
         { label: "Tab Hover Effects (lift + scale)", value: "hover", selected: settings.store.animationHover },
-        { label: "Tab Selection Effects (border glow + lift)", value: "selection", selected: settings.store.animationSelection },
+        { label: "Selected Tab Lift Animation", value: "selection", selected: settings.store.animationSelection },
         { label: "Tab Drag & Drop (ghost + reorder)", value: "drag-drop", selected: settings.store.animationDragDrop },
         { label: "Tab Enter/Exit Slides (creation + closing)", value: "enter-exit", selected: settings.store.animationEnterExit },
         { label: "Icon Pop on Selection (icon scale-up)", value: "icon-pop", selected: settings.store.animationIconPop },
         { label: "Close Button Rotation", value: "close-rotation", selected: settings.store.animationCloseRotation },
         { label: "Plus Button Pulse", value: "plus-pulse", selected: settings.store.animationPlusPulse },
         { label: "Mention Badge Glow", value: "mention-glow", selected: settings.store.animationMentionGlow },
-        { label: "Compact Mode Expansion", value: "compact-expand", selected: settings.store.animationCompactExpand }
+        { label: "Compact Mode Expansion", value: "compact-expand", selected: settings.store.animationCompactExpand },
+        { label: "Selected Tab Blue Border", value: "selected-border", selected: settings.store.animationSelectedBorder },
+        { label: "Selected Tab Background Color", value: "selected-background", selected: settings.store.animationSelectedBackground },
+        { label: "Tab Shadow Effects", value: "tab-shadows", selected: settings.store.animationTabShadows }
     ];
 
     const [currentValue, setCurrentValue] = useState(animationOptions.filter(option => option.selected));
@@ -50,6 +53,9 @@ function AnimationSettings(): JSX.Element {
         settings.store.animationPlusPulse = enabledValues.includes("plus-pulse");
         settings.store.animationMentionGlow = enabledValues.includes("mention-glow");
         settings.store.animationCompactExpand = enabledValues.includes("compact-expand");
+        settings.store.animationSelectedBorder = enabledValues.includes("selected-border");
+        settings.store.animationSelectedBackground = enabledValues.includes("selected-background");
+        settings.store.animationTabShadows = enabledValues.includes("tab-shadows");
 
         setCurrentValue(enabled);
     }
@@ -80,7 +86,7 @@ function AnimationSettings(): JSX.Element {
             <div style={{ marginTop: "8px" }}>
                 <SearchableSelect
                     placeholder="Select which animations to enable..."
-                    maxVisibleItems={9}
+                    maxVisibleItems={12}
                     clearable={true}
                     multi={true}
                     value={currentValue as any}
@@ -256,6 +262,24 @@ export const settings = definePluginSettings({
     animationCompactExpand: {
         type: OptionType.BOOLEAN,
         description: "Enable smooth expansion for compact tabs",
+        default: true,
+        hidden: true
+    },
+    animationSelectedBorder: {
+        type: OptionType.BOOLEAN,
+        description: "Enable border and glow styling for selected tabs",
+        default: true,
+        hidden: true
+    },
+    animationSelectedBackground: {
+        type: OptionType.BOOLEAN,
+        description: "Enable background color change for selected tabs",
+        default: true,
+        hidden: true
+    },
+    animationTabShadows: {
+        type: OptionType.BOOLEAN,
+        description: "Enable shadow effects on tabs",
         default: true,
         hidden: true
     },
