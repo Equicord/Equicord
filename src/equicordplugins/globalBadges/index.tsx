@@ -106,17 +106,12 @@ const GlobalBadges = ({ userId }: { userId: string; }) => {
         badges[mod].forEach(badge => {
             if (!badge || !badge.tooltip || !badge.badge) return;
 
-            let displayName = badge.tooltip;
-            const prefix = settings.store.showPrefix ? mod : "";
+            const prefix = settings.store.showPrefix ? `(${mod})` : "";
+            const suffix = settings.store.showSuffix ? `(${mod})` : "";
+            const displayName = `${prefix} ${badge.tooltip} ${suffix}`;
 
             if (mod.toLowerCase() === "badgevault") {
                 badge.custom = true;
-            }
-
-            if (badge.custom && prefix) {
-                displayName = `${badge.tooltip} (${prefix})`;
-            } else if (!badge.custom && prefix) {
-                displayName = `${prefix} ${badge.tooltip}`;
             }
 
             globalBadges.push(<BadgeComponent name={displayName} img={badge.badge} />);
@@ -147,6 +142,12 @@ const settings = definePluginSettings({
     showPrefix: {
         type: OptionType.BOOLEAN,
         description: "Shows the Mod as Prefix",
+        default: false,
+        restartNeeded: false
+    },
+    showSuffix: {
+        type: OptionType.BOOLEAN,
+        description: "Shows the Mod as Suffix",
         default: true,
         restartNeeded: false
     },
