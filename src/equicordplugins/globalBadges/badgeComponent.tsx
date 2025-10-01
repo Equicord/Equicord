@@ -21,65 +21,10 @@ import { JSX } from "react";
 
 import { BadgeModalComponent, openBadgeModal } from "./badgeModal";
 import { settings } from "./settings";
-
-type CustomBadge = {
-    tooltip: string;
-    badge: string;
-    custom?: boolean;
-};
-
-interface BadgeCache {
-    badges: { [mod: string]: CustomBadge[]; };
-    expires: number;
-}
+import { BadgeCache } from "./types";
+import { fetchBadges, serviceMap } from "./utils";
 
 export let badgeImages;
-const API_URL = "https://badges.equicord.org/";
-const cache = new Map<string, BadgeCache>();
-const EXPIRES = 1000 * 60 * 15;
-
-export const serviceMap = {
-    "nekocord": "Nekocord",
-    "reviewdb": "ReviewDB",
-    "aero": "Aero",
-    "aliucord": "Aliucord",
-    "ra1ncord": "Ra1ncord",
-    "velocity": "Velocity",
-    "enmity": "Enmity",
-    "replugged": "Replugged",
-    "badgevault": "BadgeVault"
-};
-
-export const fetchBadges = (id: string): BadgeCache["badges"] | undefined => {
-    const cachedValue = cache.get(id);
-    if (!cache.has(id) || (cachedValue && cachedValue.expires < Date.now())) {
-        const services: string[] = [];
-        if (settings.store.showNekocord) services.push("nekocord");
-        if (settings.store.showReviewDB) services.push("reviewdb");
-        if (settings.store.showAero) services.push("aero");
-        if (settings.store.showAliucord) services.push("aliucord");
-        if (settings.store.showRa1ncord) services.push("ra1ncord");
-        if (settings.store.showVelocity) services.push("velocity");
-        if (settings.store.showEnmity) services.push("enmity");
-        if (settings.store.showReplugged) services.push("replugged");
-        if (settings.store.showCustom) services.push("badgevault");
-
-        if (services.length === 0) {
-            cache.set(id, { badges: {}, expires: Date.now() + EXPIRES });
-            return {};
-        }
-
-        fetch(`${API_URL}${id}?seperated=true&services=${services.join(",")}`)
-            .then(res => res.json() as Promise<{ status: number; badges: BadgeCache["badges"]; }>)
-            .then(body => {
-                cache.set(id, { badges: body.badges, expires: Date.now() + EXPIRES });
-                return body.badges;
-            })
-            .catch(() => null);
-    } else if (cachedValue) {
-        return cachedValue.badges;
-    }
-};
 
 export const BadgeComponent = ({ name, img }: { name: string, img: string; }) => {
     return (
