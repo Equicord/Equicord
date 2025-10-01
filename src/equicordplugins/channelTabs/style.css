@@ -59,7 +59,7 @@
     --channeltabs-orange: #e67e22;
     --channeltabs-pink: #ff73fa;
 
-    padding: 4px 0 4px 80px;
+    padding: 4px;
     display: flex;
     flex-direction: column-reverse;
     -webkit-app-region: no-drag;
@@ -68,6 +68,7 @@
 }
 
 .vc-channeltabs-container-top {
+    padding-left: 80px;
     box-shadow: inset 0 -1px 0 var(--background-tertiary);
 }
 

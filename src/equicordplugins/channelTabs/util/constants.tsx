@@ -192,6 +192,7 @@ export const settings = definePluginSettings({
             { label: "Top", value: "top", default: true },
             { label: "Bottom", value: "bottom" }
         ],
+        restartNeeded: true
     },
     enableHotkeys: {
         type: OptionType.BOOLEAN,
