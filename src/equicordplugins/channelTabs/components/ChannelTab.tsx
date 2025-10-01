@@ -68,7 +68,7 @@ export const NotificationDot = ({ channelIds }: { channelIds: string[]; }) => {
     return unreadCount > 0 ?
         <div
             data-has-mention={!!mentionCount}
-            className={classes(dotStyles.numberBadge, dotStyles.baseShapeRound)}
+            className={classes(cl("notification-badge"), dotStyles.numberBadge, dotStyles.baseShapeRound)}
             style={{
                 width: "16px"
             }}
