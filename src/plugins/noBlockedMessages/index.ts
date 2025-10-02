@@ -172,8 +172,9 @@ export default definePlugin({
         channelStream.forEach(item => {
             const isBlockedGroup = item.type === "MESSAGE_GROUP_BLOCKED";
             const isIgnoredGroup = item.type === "MESSAGE_GROUP_IGNORED";
+            const isThreadStarter = item.type === "THREAD_STARTER_MESSAGE";
             const hasThreadStarter = (isBlockedGroup || isIgnoredGroup) && item.content?.[0]?.type === "THREAD_STARTER_MESSAGE";
-            const threadCreatorMessage = (hasThreadStarter && (item.content?.[0]?.content as Message)) || null;
+            const threadCreatorMessage = (isThreadStarter && (item.content as Message)) || (hasThreadStarter && (item.content?.[0]?.content as Message)) || null;
             const actualStarterMessage = (threadCreatorMessage?.messageReference && ReferencedMessageStore.getMessageByReference(threadCreatorMessage.messageReference)?.message) || null;
             let skipStarter = false;
 
@@ -206,7 +207,6 @@ export default definePlugin({
                 shouldKeep && newChannelStream.push({ ...item, content: filteredContent });
             } else {
                 const isMessage = ["MESSAGE", "THREAD_STARTER_MESSAGE"].includes(item.type);
-                const isThreadStarter = item.type === "THREAD_STARTER_MESSAGE";
                 const message = (isMessage && (isThreadStarter ? actualStarterMessage : item.content)) || null;
                 const shouldKeep = !isMessage || this.shouldKeepMessage(message)[0];
                 shouldKeep && newChannelStream.push(item);
