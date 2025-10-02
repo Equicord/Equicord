@@ -206,7 +206,9 @@ export default definePlugin({
                 shouldKeep && newChannelStream.push({ ...item, content: filteredContent });
             } else {
                 const isMessage = ["MESSAGE", "THREAD_STARTER_MESSAGE"].includes(item.type);
-                const shouldKeep = !isMessage || this.shouldKeepMessage(item.content)[0];
+                const isThreadStarter = item.type === "THREAD_STARTER_MESSAGE";
+                const message = (isMessage && (isThreadStarter ? actualStarterMessage : item.content)) || null;
+                const shouldKeep = !isMessage || this.shouldKeepMessage(message)[0];
                 shouldKeep && newChannelStream.push(item);
             }
         });
