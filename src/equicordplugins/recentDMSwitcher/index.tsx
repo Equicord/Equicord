@@ -4,21 +4,26 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
+import { classNameFactory } from "@api/Styles";
 import { EquicordDevs, IS_MAC } from "@utils/constants";
-import { closeModal, ModalRoot, openModal } from "@utils/modal";
+import { closeModal, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, ChannelRouter, ChannelStore, IconUtils, React, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
 
-const STORAGE_KEY = "DmMruSwitch_history";
+const STORAGE_KEY = "RDMSwitch_history";
 const MAX_HISTORY = 50;
 
-let mruDmChannelIds: string[] = [];
+let rmdsDmChannelIds: string[] = [];
 let isCyclingSessionActive = false;
-let suppressMruWhileCycling = false;
+let suppressRdmsWhileCycling = false;
 let cycleSnapshot: string[] = [];
 let cycleIndex = -1;
+
+const cl = classNameFactory("vc-rdms-");
 
 const settings = definePluginSettings({
     visualStyle: {
@@ -55,27 +60,22 @@ const settings = definePluginSettings({
         markers: [300, 500, 600, 800, 1000, 1500, 2000],
         default: 600
     },
-    instantSwitch: {
-        type: OptionType.BOOLEAN,
-        description: "Switch immediately on Tab instead of on Ctrl release",
-        default: true
-    },
-    clearMru: {
+    clearRdms: {
         type: OptionType.COMPONENT,
-        description: "Testing utility: Clear MRU list",
+        description: "Testing utility: Clear RDMS list",
         component: () => React.createElement(
             Button,
             {
                 color: Button.Colors.RED,
                 onClick: async () => {
-                    mruDmChannelIds = [];
+                    rmdsDmChannelIds = [];
                     cycleSnapshot = [];
                     cycleIndex = -1;
                     await DataStore.set(STORAGE_KEY, []);
-                    Toasts.show({ id: Toasts.genId(), type: Toasts.Type.SUCCESS, message: "Cleared DM MRU history" });
+                    Toasts.show({ id: Toasts.genId(), type: Toasts.Type.SUCCESS, message: "Cleared RDMS history" });
                 }
             },
-            "Clear MRU History"
+            "Clear RDMS History"
         )
     }
 });
@@ -90,17 +90,17 @@ function isDirectMessageChannel(channelId: string | null | undefined): boolean {
     if (!channel) return false;
     try {
         // Include 1:1 DMs and Group DMs
-        return Boolean(channel.isDM?.() || channel.isGroupDM?.());
+        return Boolean(channel.isDM() || channel.isGroupDM());
     } catch {
         return false;
     }
 }
 
 function pushChannelToFront(channelId: string) {
-    mruDmChannelIds = mruDmChannelIds.filter(id => id !== channelId);
-    mruDmChannelIds.unshift(channelId);
-    if (mruDmChannelIds.length > MAX_HISTORY) mruDmChannelIds.length = MAX_HISTORY;
-    void DataStore.set(STORAGE_KEY, mruDmChannelIds);
+    rmdsDmChannelIds = rmdsDmChannelIds.filter(id => id !== channelId);
+    rmdsDmChannelIds.unshift(channelId);
+    if (rmdsDmChannelIds.length > MAX_HISTORY) rmdsDmChannelIds.length = MAX_HISTORY;
+    void DataStore.set(STORAGE_KEY, rmdsDmChannelIds);
 }
 
 function sanitizeHistory(ids: string[]): string[] {
@@ -120,12 +120,12 @@ function sanitizeHistory(ids: string[]): string[] {
 function beginCycleSession() {
     if (isCyclingSessionActive) return;
     isCyclingSessionActive = true;
-    suppressMruWhileCycling = true;
+    suppressRdmsWhileCycling = true;
 
     const currentId = SelectedChannelStore.getChannelId();
     cycleSnapshot = sanitizeHistory([
         ...(isDirectMessageChannel(currentId) ? [currentId!] : []),
-        ...mruDmChannelIds
+        ...rmdsDmChannelIds
     ]);
 
     cycleIndex = 0;
@@ -139,7 +139,7 @@ function stepCycle(direction: 1 | -1) {
     cycleIndex = (cycleIndex + direction + total) % total;
     const targetId = cycleSnapshot[cycleIndex];
     if (!targetId || !ChannelStore.hasChannel(targetId)) return;
-    if (settings.store.instantSwitch) ChannelRouter.transitionToChannel(targetId);
+
     const vis = (settings as any).store?.visualStyle;
     if (vis === "overlay") renderOverlay();
     else if (vis === "toast") showCycleToast();
@@ -148,12 +148,14 @@ function stepCycle(direction: 1 | -1) {
 function endCycleSession() {
     if (!isCyclingSessionActive) return;
     isCyclingSessionActive = false;
-    suppressMruWhileCycling = false;
+    suppressRdmsWhileCycling = false;
 
     if (cycleIndex >= 0 && cycleIndex < cycleSnapshot.length) {
         const selected = cycleSnapshot[cycleIndex];
-        if (selected && !settings.store.instantSwitch) ChannelRouter.transitionToChannel(selected);
-        if (selected) pushChannelToFront(selected);
+        if (selected) {
+            ChannelRouter.transitionToChannel(selected);
+            pushChannelToFront(selected);
+        }
     }
 
     cycleSnapshot = [];
@@ -193,21 +195,27 @@ function onKeyUp(e: KeyboardEvent) {
 
 function getDisplayForChannel(id: string) {
     const ch = ChannelStore.getChannel(id);
-    if (!ch) return { name: "Unknown", avatar: "" };
-    if (ch.isDM?.()) {
+    if (!ch) return {
+        name: "Unknown",
+        avatar: ""
+    };
+
+    if (ch.isDM()) {
         const uid = ch.recipients?.[0];
         const user = uid ? UserStore.getUser(uid) : null;
         return { name: user?.globalName ?? user?.username ?? "DM", avatar: user ? IconUtils.getUserAvatarURL(user, true, 64) : "" };
     }
-    if (ch.isGroupDM?.()) {
+
+    if (ch.isGroupDM()) {
         return { name: ch.name ?? "Group DM", avatar: IconUtils.getChannelIconURL?.(ch) ?? "" } as any;
     }
+
     return { name: ch.name ?? "Channel", avatar: "" };
 }
 
 function openOverlayModal() {
     if (overlayModalKey) return;
-    overlayModalKey = openModal(props => React.createElement(ModalRoot, { ...props }, React.createElement(OverlayContent)));
+    overlayModalKey = openModal(() => <OverlayContent />);
 }
 
 function renderOverlay() {
@@ -251,92 +259,55 @@ function OverlayContent(): any {
     const end = Math.min(start + pageSize, visibleList.length);
     const pageItems = visibleList.slice(start, end);
 
-    const cardW = 168;
-    const cardH = Math.round(cardW * 9 / 16);
-
     const cards = pageItems.map(id => {
         const { name, avatar } = getDisplayForChannel(id!);
         const isActive = id === cycleSnapshot[cycleIndex];
-        return React.createElement(
-            "div",
-            {
-                style: {
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 6,
-                    width: `${cardW}px`,
-                    height: `${cardH}px`,
-                    borderRadius: 10,
-                    background: "var(--background-floating)",
+
+        return (
+            <div
+                key={id}
+                className={cl("background")}
+                style={{
                     boxShadow: isActive
                         ? "0 0 0 2px var(--brand-500) inset, 0 4px 12px rgba(0,0,0,0.25)"
-                        : "0 2px 8px rgba(0,0,0,0.15)"
-                }
-            },
-            showAvatars && avatar && React.createElement("img", {
-                src: avatar,
-                style: {
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    outline: isActive ? "2px solid var(--brand-500)" : undefined,
-                    opacity: isActive ? 1 : 0.8
-                }
-            }),
-            React.createElement("div", {
-                style: {
-                    marginTop: 8,
-                    color: "var(--header-primary)",
-                    fontSize: 12,
-                    maxWidth: `${cardW - 16}px`,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    textAlign: "center"
-                }
-            }, name)
+                        : "0 2px 8px rgba(0,0,0,0.15)",
+                }}
+            >
+                {showAvatars && avatar && (
+                    <img alt="" src={avatar} className={cl("avatar")} />
+                )}
+                <div className={cl("name")}>{name}</div>
+            </div>
         );
     });
 
-    const dots = pageCount > 1
-        ? React.createElement(
-            "div",
-            { style: { display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginTop: 10 } },
-            ...Array.from({ length: pageCount }).map((_, i) => React.createElement("div", {
-                style: {
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    background: i === currentPage ? "var(--brand-500)" : "var(--interactive-muted)",
-                    opacity: i === currentPage ? 1 : 0.6
-                }
-            }))
-        )
-        : null;
+    const dots =
+        pageCount > 1 ? (
+            <div className={cl("page-indicator-container")}>
+                {Array.from({ length: pageCount }).map((_, i) => (
+                    <div
+                        key={i}
+                        className={cl("page-indicator")}
+                        style={{
+                            background: i === currentPage ? "var(--brand-500)" : "var(--interactive-muted)",
+                            opacity: i === currentPage ? 1 : 0.6,
+                        }}
+                    />
+                ))}
+            </div>
+        ) : null;
 
-    return React.createElement(
-        "div",
-        {
-            style: {
-                display: "grid",
-                placeItems: "center",
-                position: "fixed",
-                inset: 0,
-                background: "rgba(0,0,0,0.38)",
-                backdropFilter: "blur(2px)",
-                pointerEvents: "none"
-            }
-        },
-        React.createElement(
-            "div",
-            { style: { display: "flex", flexDirection: "column", gap: 8, alignItems: "center", justifyContent: "center", padding: "12px 16px", borderRadius: 12, background: "color-mix(in oklab, var(--background-floating) 85%, transparent)", backdropFilter: "saturate(120%)", boxShadow: "0 6px 24px rgba(0,0,0,0.25)" } },
-            React.createElement("div", { style: { display: "flex", gap: 12, alignItems: "center", justifyContent: "center" } }, ...cards),
-            dots
-        )
+    return (
+        <div className={cl("overlay-container")}>
+            <div className={cl("cards-container")}>
+                <div className={cl("cards")}>
+                    {cards}
+                </div>
+                {dots}
+            </div>
+        </div>
     );
+
 }
 
 function showCycleToast() {
@@ -354,10 +325,9 @@ function showCycleToast() {
 }
 
 export default definePlugin({
-    name: "DmMruSwitch",
+    name: "RecentDMSwitcher",
     description: "Ctrl+Tab between most recently used DMs (Ctrl+Shift+Tab reverse)",
     authors: [EquicordDevs.mmeta],
-    enabledByDefault: true,
     settings,
 
     flux: {
@@ -369,7 +339,7 @@ export default definePlugin({
             }
         },
         async CHANNEL_SELECT({ channelId }: { channelId: string | null; }) {
-            if (suppressMruWhileCycling) return;
+            if (suppressRdmsWhileCycling) return;
             if (!channelId) return;
             if (!isDirectMessageChannel(channelId)) return;
             pushChannelToFront(channelId);
@@ -378,28 +348,20 @@ export default definePlugin({
 
     async start() {
         const saved = await DataStore.get<string[]>(STORAGE_KEY);
-        mruDmChannelIds = Array.isArray(saved) ? sanitizeHistory(saved) : [];
+        rmdsDmChannelIds = Array.isArray(saved) ? sanitizeHistory(saved) : [];
 
         const current = SelectedChannelStore.getChannelId();
         if (isDirectMessageChannel(current)) pushChannelToFront(current!);
 
         document.addEventListener("keydown", onKeyDown, true);
         document.addEventListener("keyup", onKeyUp, true);
-        document.addEventListener("keydown", onKeyDown);
-        document.addEventListener("keyup", onKeyUp);
-        window.addEventListener("keydown", onKeyDown, true);
-        window.addEventListener("keyup", onKeyUp, true);
     },
 
     stop() {
         document.removeEventListener("keydown", onKeyDown, true);
         document.removeEventListener("keyup", onKeyUp, true);
-        document.removeEventListener("keydown", onKeyDown);
-        document.removeEventListener("keyup", onKeyUp);
-        window.removeEventListener("keydown", onKeyDown, true);
-        window.removeEventListener("keyup", onKeyUp, true);
         isCyclingSessionActive = false;
-        suppressMruWhileCycling = false;
+        suppressRdmsWhileCycling = false;
         cycleSnapshot = [];
         cycleIndex = -1;
         activeToastId = null;
