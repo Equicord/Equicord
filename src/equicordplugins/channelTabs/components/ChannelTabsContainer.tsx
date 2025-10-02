@@ -5,6 +5,7 @@
  */
 
 import { classNameFactory } from "@api/Styles";
+import { IS_WINDOWS } from "@utils/constants";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
@@ -149,6 +150,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             className={classes(
                 cl("container"),
                 tabBarPosition === "top" && cl("container-top"),
+                IS_WINDOWS && tabBarPosition === "top" && cl("container-top-windows"),
                 !animationHover && cl("no-hover-animation"),
                 !animationSelection && cl("no-selection-animation"),
                 !animationDragDrop && cl("no-drag-animation"),

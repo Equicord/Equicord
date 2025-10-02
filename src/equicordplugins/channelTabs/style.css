@@ -72,6 +72,10 @@
     box-shadow: inset 0 -1px 0 var(--background-tertiary);
 }
 
+.vc-channeltabs-container-top-windows {
+    padding-left: 4px !important;
+}
+
 .vc-channeltabs-separator {
     width: 98%;
     height: 1px;
