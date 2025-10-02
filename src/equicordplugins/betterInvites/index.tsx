@@ -30,11 +30,10 @@ function lurk(id: string) {
         .catch(() => { throw new Error("Guild is not lurkable"); });
 }
 
-
 export default definePlugin({
     name: "BetterInvites",
     description: "See invites expiration date, view inviter profile and preview discoverable servers before joining by clicking their name",
-    authors: [EquicordDevs.iamme],
+    authors: [EquicordDevs.iamme, EquicordDevs.thororen],
     patches: [
         {
             find: ".hideDetailsButtonContainer,",
@@ -50,7 +49,7 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(?=children:\i\.name\}\)\):)/,
-                    replace: "onClick:$self.Lurkable(arguments[0].invite.guild.id,arguments[0].invite.guild.features),"
+                    replace: "onClick:$self.Lurkable(arguments[0].invite?.guild?.id,arguments[0].invite?.guild?.features),"
                 },
                 {
                     match: /\),\{profile:\i,disableGuildNameClick:\i/,
@@ -58,23 +57,23 @@ export default definePlugin({
                 },
                 {
                     match: /\}\)\)\}\),\i/,
-                    replace: "$&,$self.RenderTip(arguments[0].invite.expires_at)"
+                    replace: "$&,$self.RenderTip(arguments[0].invite?.expires_at)"
                 },
                 {
                     match: /(?<=text:(\i\.name).*?\]\}\))/,
-                    replace: "$&,$self.Header(arguments[0].invite.inviter,$1)"
+                    replace: "$&,$self.Header(arguments[0].invite?.inviter,$1)"
                 }
             ]
         },
     ],
     RenderTip(expires_at: string) {
+        if (!expires_at) return null;
         const timestamp = <>{Parser.parse(`<t:${Math.round(new Date(expires_at).getTime() / 1000)}:R>`)}</>;
         const tooltipText = (
             <>
                 This invite will {expires_at ? <>expire {timestamp}</> : <>not expire</>}
             </>
         );
-
 
         return (
             <Tooltip text={tooltipText}>
@@ -91,8 +90,8 @@ export default definePlugin({
         );
     },
     Header(inviter: User | undefined, guildName: string) {
-        const currentUserId = UserStore.getCurrentUser().id;
-        if (!inviter || currentUserId === inviter.id) return null;
+        const userId = UserStore.getCurrentUser().id;
+        if (!inviter || userId === inviter.id) return null;
         return (
             <div className="vc-bi-header-inner">
                 <img
@@ -110,6 +109,7 @@ export default definePlugin({
         );
     },
     Lurkable: (id: string, features: Iterable<string> | undefined) => {
+        if (!id || !features) return null;
         return new Set(features).has("DISCOVERABLE") ? () => lurk(id) : null;
     },
     startAt: StartAt.WebpackReady
