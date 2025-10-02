@@ -44,7 +44,8 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         animationSelectedBorder,
         animationSelectedBackground,
         animationTabShadows,
-        compactAutoExpandSelected
+        compactAutoExpandSelected,
+        compactAutoExpandOnHover
     } = settings.use([
         "showBookmarkBar",
         "widerTabsAndBookmarks",
@@ -64,7 +65,8 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         "animationSelectedBorder",
         "animationSelectedBackground",
         "animationTabShadows",
-        "compactAutoExpandSelected"
+        "compactAutoExpandSelected",
+        "compactAutoExpandOnHover"
     ]);
     const GhostTabs = useGhostTabs();
     const isFullscreen = useStateFromStores([ChannelRTCStore], () => ChannelRTCStore.isFullscreenInContext() ?? false);
@@ -165,7 +167,8 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 !animationSelectedBorder && cl("no-selected-border"),
                 !animationSelectedBackground && cl("no-selected-background"),
                 !animationTabShadows && cl("no-tab-shadows"),
-                !compactAutoExpandSelected && cl("no-compact-auto-expand")
+                !compactAutoExpandSelected && cl("no-compact-auto-expand"),
+                !compactAutoExpandOnHover && cl("no-compact-hover-expand")
             )}
             ref={ref}
             style={{ "--tab-width-scale": tabWidthScale / 100 } as React.CSSProperties}

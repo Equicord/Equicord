@@ -783,6 +783,23 @@
     pointer-events: none;
 }
 
+/* Compact hover expansion - disable if setting is off */
+.vc-channeltabs-container.vc-channeltabs-no-compact-hover-expand .vc-channeltabs-tab-compact:hover .vc-channeltabs-tab-inner {
+    padding-right: 0 !important;
+}
+
+.vc-channeltabs-container.vc-channeltabs-no-compact-hover-expand .vc-channeltabs-tab-compact:hover .vc-channeltabs-name-text {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    transform: translateX(-20px) !important;
+}
+
+/* Hide close button on hover for compact tabs when hover-expand is disabled */
+.vc-channeltabs-container.vc-channeltabs-no-compact-hover-expand .vc-channeltabs-tab-compact:hover .vc-channeltabs-close-button-compact {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
 /* Enhanced caching mode - smoother transitions */
 [class*="chat_"] {
     transition: opacity 0.1s ease;

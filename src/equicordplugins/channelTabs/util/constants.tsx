@@ -303,6 +303,12 @@ export const settings = definePluginSettings({
         default: true,
         restartNeeded: false
     },
+    compactAutoExpandOnHover: {
+        type: OptionType.BOOLEAN,
+        description: "Automatically expand compact tabs on hover to show the full channel name",
+        default: true,
+        restartNeeded: false
+    },
     openInNewTabAutoSwitch: {
         type: OptionType.BOOLEAN,
         description: "Automatically switch to new tabs opened from 'Open in New Tab' context menu",
