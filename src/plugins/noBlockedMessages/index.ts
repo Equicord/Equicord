@@ -55,7 +55,7 @@ const settings = definePluginSettings({
         restartNeeded: false
     },
     disableNotifications: {
-        description: "Hide new message notifications for blocked/ignored users. Always true if \"Default Hide Users\" is enabled below and the user triggering the notification is not exempted in \"Override Users\".",
+        description: "Hide new message notifications for blocked users. Always true if \"Default Hide Users\" is enabled below and the user triggering the notification is not exempted in \"Override Users\".",
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: false
@@ -67,14 +67,14 @@ const settings = definePluginSettings({
         restartNeeded: false,
     },
     hideBlockedUserReplies: {
-        description: "Hide replies to blocked/ignored users.",
+        description: "Hide replies to blocked users.",
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: false,
     },
     defaultHideUsers: {
         type: OptionType.BOOLEAN,
-        description: "If enabled, messages from blocked/ignored users will be completely hidden and any messages from user IDs in the override list will be collapsed (default Discord behavior) instead. If disabled, messages from blocked/ignored users will be collapsed and any messages from user IDs in the override list will be completely hidden instead.",
+        description: "If enabled, messages from blocked users will be completely hidden and any messages from user IDs in the override list will be collapsed (default Discord behavior) instead. If disabled, messages from blocked users will be collapsed and any messages from user IDs in the override list will be completely hidden instead.",
         default: true,
         restartNeeded: false,
     },
@@ -115,7 +115,7 @@ export default definePlugin({
         },
     ],
 
-    hideBlockedMessage(userId: string) {
+    hideSuppressedMessage(userId: string) {
         const overrideUsers = settings.store.overrideUsers.split(",").map(id => id.trim()).filter(id => id.length > 0);
 
         if (settings.store.defaultHideUsers) {
@@ -128,12 +128,12 @@ export default definePlugin({
     },
 
     shouldKeepMessage(message: Message) {
-        const blocked = this.isSuppressed(message);
-        const replyToBlocked = this.isReplyToSuppressed(message);
+        const suppressed = this.isSuppressed(message);
+        const replyToSuppressed = this.isReplyToSuppressed(message);
 
-        if (message.type === 24 && settings.store.allowAutoModMessages) return [true, blocked];
-        if (blocked) return [this.hideBlockedMessage(message.author.id), true];
-        if (replyToBlocked) return [this.hideBlockedMessage(replyToBlocked.author.id), true];
+        if (message.type === 24 && settings.store.allowAutoModMessages) return [true, suppressed];
+        if (suppressed) return [this.hideSuppressedMessage(message.author.id), true];
+        if (replyToSuppressed) return [this.hideSuppressedMessage(replyToSuppressed.author.id), true];
 
         // [Message Visible, Author Blocked/Ignored]
         return [true, false];
@@ -143,11 +143,11 @@ export default definePlugin({
         if (!message) return false;
         const messageFilteredData = this.shouldKeepMessage(message);
         const messageHidden = !messageFilteredData[0];
-        const messageBlocked = messageFilteredData[1];
+        const messageSuppressed = messageFilteredData[1];
         // Always disable notifications for completely hidden messages as not doing so will
         // cause the client to scroll up into the loaded messages in search of an
         // unread message which it can't find because it was filtered.
-        return messageHidden || (messageBlocked && settings.store.disableNotifications);
+        return messageHidden || (messageSuppressed && settings.store.disableNotifications);
     },
 
     filterStream(channelStream: [ChannelStreamGroupProps | ChannelStreamMessageProps | ChannelStreamDividerProps]) {
