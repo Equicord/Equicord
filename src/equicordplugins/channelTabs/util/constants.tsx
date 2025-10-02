@@ -160,6 +160,19 @@ export const settings = definePluginSettings({
         default: false,
         restartNeeded: false
     },
+    tabWidthScale: {
+        type: OptionType.NUMBER,
+        description: "Tab width scale (percentage) - adjustable by dragging tab edges",
+        default: 100,
+        hidden: true,
+        restartNeeded: false
+    },
+    renderAllTabs: {
+        type: OptionType.BOOLEAN,
+        description: "Keep all tabs cached in memory for faster switching (caches scroll position and state)",
+        default: false,
+        restartNeeded: false
+    },
     switchToExistingTab: {
         type: OptionType.BOOLEAN,
         description: "Switch to tab if it already exists for the channel you're navigating to",

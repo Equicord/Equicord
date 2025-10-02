@@ -29,6 +29,13 @@ let currentlyOpenTab: number;
 const openTabHistory: number[] = [];
 let persistedTabs: Promise<PersistedTabs | undefined>;
 
+// cache for the tab state (so like scroll pos etc)
+interface TabStateCache {
+    scrollPosition: number;
+    timestamp: number;
+}
+const tabStateCache = new Map<number, TabStateCache>();
+
 // horror
 const _ = {
     get openedTabs() {
@@ -62,6 +69,9 @@ export function closeTab(id: number) {
 
     const closed = openTabs.splice(i, 1);
     closedTabs.push(...closed);
+
+    // the memory leak preventer
+    tabStateCache.delete(id);
 
     if (id === currentlyOpenTab) {
         if (openTabHistory.length) {
@@ -197,17 +207,57 @@ export function moveDraggedTabs(index1: number, index2: number) {
     update();
 }
 
+function getScrollContainer(): HTMLElement | null {
+    // discord's main chat scroller
+    return document.querySelector('[class*="scrollerInner_"]') as HTMLElement;
+}
+
+function cacheCurrentTabState() {
+    if (!settings.store.renderAllTabs) return;
+
+    const scrollContainer = getScrollContainer();
+    if (scrollContainer && currentlyOpenTab !== undefined) {
+        tabStateCache.set(currentlyOpenTab, {
+            scrollPosition: scrollContainer.scrollTop,
+            timestamp: Date.now()
+        });
+    }
+}
+
+function restoreTabState(tabId: number) {
+    if (!settings.store.renderAllTabs) return;
+
+    const cached = tabStateCache.get(tabId);
+    if (!cached) return;
+
+    // restore scroll pos after delay to make sure content loaded
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            const scrollContainer = getScrollContainer();
+            if (scrollContainer) {
+                scrollContainer.scrollTop = cached.scrollPosition;
+            }
+        }, 50);
+    });
+}
+
 export function moveToTab(id: number) {
     const tab = openTabs.find(v => v.id === id);
     if (tab === undefined) return logger.error("Couldn't find channel tab with ID " + id, openTabs);
+
+    // cache current tab state before switching to it
+    cacheCurrentTabState();
 
     setOpenTab(id);
     if (tab.messageId) {
         NavigationRouter.transitionTo(`/channels/${tab.guildId}/${tab.channelId}/${tab.messageId}`);
         delete openTabs[openTabs.indexOf(tab)].messageId;
     }
-    else if (tab.channelId !== SelectedChannelStore.getChannelId() || tab.guildId !== SelectedGuildStore.getGuildId())
+    else if (tab.channelId !== SelectedChannelStore.getChannelId() || tab.guildId !== SelectedGuildStore.getGuildId()) {
         NavigationRouter.transitionToGuild(tab.guildId, tab.channelId);
+        // restore cached state for the new tab
+        restoreTabState(id);
+    }
     else update();
 }
 

@@ -220,6 +220,38 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
     const lastSwapTimeRef = useRef(0);
     const SWAP_THROTTLE_MS = 100;
 
+    const handleResizeStart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const startX = e.clientX;
+        const startWidth = ref.current?.getBoundingClientRect().width || 0;
+        const baseWidth = 192; // 12rem in pixels (assuming 16px base font)
+
+        document.body.style.cursor = "ew-resize";
+        document.body.style.userSelect = "none";
+
+        const handleMouseMove = (moveEvent: MouseEvent) => {
+            const deltaX = moveEvent.clientX - startX;
+            const newWidth = startWidth + deltaX;
+            const newScale = newWidth / baseWidth;
+
+            // 50% and 200% scale
+            const clampedScale = Math.max(0.5, Math.min(2, newScale));
+            settings.store.tabWidthScale = Math.round(clampedScale * 100);
+        };
+
+        const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+            document.body.style.cursor = "";
+            document.body.style.userSelect = "";
+        };
+
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+    };
+
     const [, drag] = useDrag(() => ({
         type: "vc_ChannelTab",
         item: () => {
@@ -334,6 +366,11 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
         >
             <XIcon size={16} fill="var(--interactive-normal)" />
         </button>}
+
+        {!compact && <div
+            className={cl("tab-resize-handle")}
+            onMouseDown={handleResizeStart}
+        />}
     </div>;
 }
 

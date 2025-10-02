@@ -72,7 +72,7 @@
     box-shadow: inset 0 -1px 0 var(--background-tertiary);
 }
 
-.vc-channeltabs-container-top-windows {
+.vc-channeltabs-container-top-no-titlebar {
     padding-left: 4px !important;
 }
 
@@ -125,14 +125,14 @@
 .vc-channeltabs-bookmark {
     display: flex;
     flex-direction: row;
-    max-width: 8rem;
+    max-width: calc(8rem * var(--tab-width-scale, 1));
     padding: 4px 8px;
     border-radius: 4px;
     align-items: center;
 }
 
 .vc-channeltabs-bookmark.vc-channeltabs-wider {
-    max-width: 12rem;
+    max-width: calc(12rem * var(--tab-width-scale, 1));
 }
 
 .vc-channeltabs-bookmark .vc-channeltabs-name-text {
@@ -164,7 +164,7 @@
     justify-content: space-between;
     align-items: center;
     border-radius: 12px;
-    width: 12rem;
+    width: calc(12rem * var(--tab-width-scale, 1));
     min-width: 0;
     margin: 0 4px;
     background-color: transparent;
@@ -184,8 +184,40 @@
     cursor: grabbing;
 }
 
+.vc-channeltabs-tab-resize-handle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    cursor: ew-resize;
+    z-index: 10;
+    opacity: 0;
+    background: var(--brand-500);
+    border-radius: 0 12px 12px 0;
+    transition: opacity 0.2s ease;
+}
+
+.vc-channeltabs-tab:hover .vc-channeltabs-tab-resize-handle {
+    opacity: 0.3;
+}
+
+.vc-channeltabs-tab-resize-handle:hover {
+    opacity: 0.7 !important;
+}
+
+.vc-channeltabs-tab-resizing {
+    pointer-events: none;
+    user-select: none;
+}
+
+.vc-channeltabs-tab-resizing * {
+    pointer-events: none;
+    user-select: none;
+}
+
 .vc-channeltabs-tab.vc-channeltabs-wider:not(.vc-channeltabs-tab-compact) {
-    width: 16rem;
+    width: calc(16rem * var(--tab-width-scale, 1));
 }
 
 .vc-channeltabs-tab-compact {
@@ -433,7 +465,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 12rem;
+    width: calc(12rem * var(--tab-width-scale, 1));
     padding: 0.125rem 0;
     min-width: 0;
     border-radius: 0.25rem;
@@ -749,4 +781,14 @@
 .vc-channeltabs-container.vc-channeltabs-no-compact-auto-expand .vc-channeltabs-tab-compact.vc-channeltabs-tab-selected .vc-channeltabs-close-button-compact {
     opacity: 0 !important;
     pointer-events: none;
+}
+
+/* Enhanced caching mode - smoother transitions */
+[class*="chat_"] {
+    transition: opacity 0.1s ease;
+}
+
+/* Prevent flash when switching tabs with cache enabled */
+[class*="scrollerInner_"] {
+    scroll-behavior: auto;
 }

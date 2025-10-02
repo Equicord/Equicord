@@ -5,7 +5,7 @@
  */
 
 import { classNameFactory } from "@api/Styles";
-import { IS_WINDOWS } from "@utils/constants";
+import { IS_LINUX, IS_WINDOWS } from "@utils/constants";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
@@ -28,6 +28,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     const {
         showBookmarkBar,
         widerTabsAndBookmarks,
+        tabWidthScale,
         enableHotkeys,
         hotkeyCount,
         tabBarPosition,
@@ -47,6 +48,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     } = settings.use([
         "showBookmarkBar",
         "widerTabsAndBookmarks",
+        "tabWidthScale",
         "enableHotkeys",
         "hotkeyCount",
         "tabBarPosition",
@@ -150,7 +152,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             className={classes(
                 cl("container"),
                 tabBarPosition === "top" && cl("container-top"),
-                IS_WINDOWS && tabBarPosition === "top" && cl("container-top-windows"),
+                (IS_WINDOWS || IS_LINUX) && tabBarPosition === "top" && cl("container-top-no-titlebar"),
                 !animationHover && cl("no-hover-animation"),
                 !animationSelection && cl("no-selection-animation"),
                 !animationDragDrop && cl("no-drag-animation"),
@@ -166,6 +168,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 !compactAutoExpandSelected && cl("no-compact-auto-expand")
             )}
             ref={ref}
+            style={{ "--tab-width-scale": tabWidthScale / 100 } as React.CSSProperties}
             onContextMenu={e => ContextMenuApi.openContextMenu(e, () => <BasicContextMenu />)}
         >
             {showBookmarkBar && <>
