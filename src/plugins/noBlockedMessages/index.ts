@@ -128,8 +128,8 @@ export default definePlugin({
     },
 
     shouldKeepMessage(message: Message) {
-        const blocked = this.isNegative(message);
-        const replyToBlocked = this.isReplyToNegative(message);
+        const blocked = this.isSuppressed(message);
+        const replyToBlocked = this.isReplyToSuppressed(message);
 
         if (message.type === 24 && settings.store.allowAutoModMessages) return [true, blocked];
         if (blocked) return [this.hideBlockedMessage(message.author.id), true];
@@ -187,9 +187,9 @@ export default definePlugin({
                 // is not blocked or ignored, Discord incorrectly groups the message with the others. To fix this, we render the
                 // message on its own and skip rendering it as part of the group.
                 const relationship = this.getRelationshipStatus(actualStarterMessage.author);
-                const isNegativeRelationship = relationship.ignored || relationship.blocked;
+                const isSuppressedRelationship = relationship.ignored || relationship.blocked;
 
-                if (!isNegativeRelationship) {
+                if (!isSuppressedRelationship) {
                     newChannelStream.push(item.content[0]);
                     skipStarter = true;
                 }
@@ -225,7 +225,7 @@ export default definePlugin({
         return newChannelStream;
     },
 
-    isReplyToNegative(message: Message) {
+    isReplyToSuppressed(message: Message) {
         if (!settings.store.hideBlockedUserReplies) return false;
 
         try {
@@ -237,13 +237,13 @@ export default definePlugin({
                 repliedMessage = messageReference ? MessageStore.getMessage(messageReference.channel_id, messageReference.message_id) : null;
             }
 
-            return repliedMessage && this.isNegative(repliedMessage) ? repliedMessage : false;
+            return repliedMessage && this.isSuppressed(repliedMessage) ? repliedMessage : false;
         } catch (e) {
             new Logger("NoBlockedMessages").error("Failed to check if referenced message is blocked or ignored:", e);
         }
     },
 
-    isNegative(message: Message) {
+    isSuppressed(message: Message) {
         try {
             const { BlockKeywords } = Settings.plugins;
             const blockedContent = BlockKeywords?.enabled && BlockKeywords?.ignoreBlockedMessages && containsBlockedKeywords(message);
