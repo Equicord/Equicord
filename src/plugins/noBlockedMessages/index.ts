@@ -21,8 +21,11 @@ import { containsBlockedKeywords } from "@equicordplugins/blockKeywords";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import { Message } from "@vencord/discord-types";
+import { Message, User } from "@vencord/discord-types";
+import { findStoreLazy } from "@webpack";
 import { MessageStore, RelationshipStore } from "@webpack/common";
+
+const ReferencedMessageStore = findStoreLazy("ReferencedMessageStore");
 
 interface ChannelStreamDividerProps {
     type: "DIVIDER",
@@ -32,7 +35,7 @@ interface ChannelStreamDividerProps {
 }
 
 interface ChannelStreamMessageProps {
-    type: "MESSAGE",
+    type: "MESSAGE" | "THREAD_STARTER_MESSAGE",
     content: Message,
 }
 
@@ -105,8 +108,8 @@ export default definePlugin({
             find: '"forum-post-action-bar-"',
             replacement: [
                 {
-                    match: /(\i).map\(/,
-                    replace: "$self.filterStream($1).map("
+                    match: /(?<=\);)(let \i=null,\i=\[\],\i=(\i))/,
+                    replace: "$2=$self.filterStream($2);$1"
                 }
             ]
         },
@@ -125,8 +128,8 @@ export default definePlugin({
     },
 
     shouldKeepMessage(message: Message) {
-        const blocked = this.isBlocked(message);
-        const replyToBlocked = this.isReplyToBlocked(message);
+        const blocked = this.isNegative(message);
+        const replyToBlocked = this.isReplyToNegative(message);
 
         if (message.type === 24 && settings.store.allowAutoModMessages) return [true, blocked];
         if (blocked) return [this.hideBlockedMessage(message.author.id), true];
@@ -148,21 +151,65 @@ export default definePlugin({
     },
 
     filterStream(channelStream: [ChannelStreamGroupProps | ChannelStreamMessageProps | ChannelStreamDividerProps]) {
-        const { alsoHideIgnoredUsers, disableNotifications, hideBlockedUserReplies, allowAutoModMessages, defaultHideUsers, overrideUsers } = settings.use();
+        const {
+            alsoHideIgnoredUsers,
+            disableNotifications,
+            hideBlockedUserReplies,
+            allowAutoModMessages,
+            defaultHideUsers,
+            overrideUsers
+        } = settings.use([
+            "alsoHideIgnoredUsers",
+            "disableNotifications",
+            "hideBlockedUserReplies",
+            "allowAutoModMessages",
+            "defaultHideUsers",
+            "overrideUsers"
+        ]);
 
-        const newChannelStream = channelStream.map(item => {
-            if (item.type === "MESSAGE_GROUP_BLOCKED" || (item.type === "MESSAGE_GROUP_IGNORED" && alsoHideIgnoredUsers)) {
-                const groupItem = item as ChannelStreamGroupProps;
+        const newChannelStream: [ChannelStreamGroupProps | ChannelStreamMessageProps | ChannelStreamDividerProps] = [] as any;
 
-                const filteredContent = groupItem.content.filter((item: ChannelStreamMessageProps) => {
-                    return item.type !== "MESSAGE" || this.shouldKeepMessage(item.content)[0];
-                });
+        channelStream.forEach(item => {
+            const isBlockedGroup = item.type === "MESSAGE_GROUP_BLOCKED";
+            const isIgnoredGroup = item.type === "MESSAGE_GROUP_IGNORED";
+            const hasThreadStarter = (isBlockedGroup || isIgnoredGroup) && item.content?.[0]?.type === "THREAD_STARTER_MESSAGE";
+            const threadCreatorMessage = (hasThreadStarter && (item.content?.[0]?.content as Message)) || null;
+            const actualStarterMessage = (threadCreatorMessage?.messageReference && ReferencedMessageStore.getMessageByReference(threadCreatorMessage.messageReference)?.message) || null;
+            let skipStarter = false;
 
-                return filteredContent.some(item => item.type === "MESSAGE") ? { ...groupItem, content: filteredContent } : null;
+            if (hasThreadStarter && threadCreatorMessage && actualStarterMessage) {
+                // Discord attributes the thread starter message to whoever starts the thread, even if the thread was
+                // started with a different user's message. To ensure the correct message is used when determining whether
+                // to show or hide, we get the reference and use that.
+                //
+                // Additionally, if a blocked or ignored user is the one that started the thread, but the actual message author
+                // is not blocked or ignored, Discord incorrectly groups the message with the others. To fix this, we render the
+                // message on its own and skip rendering it as part of the group.
+                const relationship = this.getRelationshipStatus(actualStarterMessage.author);
+                const isNegativeRelationship = relationship.ignored || relationship.blocked;
+
+                if (!isNegativeRelationship) {
+                    newChannelStream.push(item.content[0]);
+                    skipStarter = true;
+                }
             }
 
-            return (item.type !== "MESSAGE" || this.shouldKeepMessage((item as ChannelStreamMessageProps).content)[0]) ? item : null;
-        }).filter(item => item !== null);
+            if (isBlockedGroup || (isIgnoredGroup && alsoHideIgnoredUsers)) {
+                const filteredContent: [Message | ChannelStreamDividerProps] = item.content.filter((subItem, index) => {
+                    const isMessage = ["MESSAGE", "THREAD_STARTER_MESSAGE"].includes(subItem.type);
+                    const isThreadStarter = index === 0 && subItem.type === "THREAD_STARTER_MESSAGE";
+                    const message = (isMessage && (isThreadStarter ? actualStarterMessage : subItem.content)) || null;
+                    return !(isThreadStarter && skipStarter) && (!message || this.shouldKeepMessage(message)[0]);
+                });
+
+                const shouldKeep = filteredContent.length;
+                shouldKeep && newChannelStream.push({ ...item, content: filteredContent });
+            } else {
+                const isMessage = ["MESSAGE", "THREAD_STARTER_MESSAGE"].includes(item.type);
+                const shouldKeep = !isMessage || this.shouldKeepMessage(item.content)[0];
+                shouldKeep && newChannelStream.push(item);
+            }
+        });
 
         let lastItem = newChannelStream[newChannelStream.length - 1];
 
@@ -176,7 +223,7 @@ export default definePlugin({
         return newChannelStream;
     },
 
-    isReplyToBlocked(message: Message) {
+    isReplyToNegative(message: Message) {
         if (!settings.store.hideBlockedUserReplies) return false;
 
         try {
@@ -188,29 +235,26 @@ export default definePlugin({
                 repliedMessage = messageReference ? MessageStore.getMessage(messageReference.channel_id, messageReference.message_id) : null;
             }
 
-            return repliedMessage && this.isBlocked(repliedMessage) ? repliedMessage : false;
+            return repliedMessage && this.isNegative(repliedMessage) ? repliedMessage : false;
         } catch (e) {
             new Logger("NoBlockedMessages").error("Failed to check if referenced message is blocked or ignored:", e);
         }
     },
 
-    isBlocked(message: Message) {
+    isNegative(message: Message) {
         try {
-            if (RelationshipStore.isBlocked(message.author.id)) return true;
-
             const { BlockKeywords } = Settings.plugins;
-            if (
-                BlockKeywords &&
-                BlockKeywords.enabled &&
-                BlockKeywords.ignoreBlockedMessages &&
-                containsBlockedKeywords(message)
-            ) {
-                return true;
-            }
-
-            return settings.store.alsoHideIgnoredUsers && RelationshipStore.isIgnored(message.author.id);
+            const blockedContent = BlockKeywords?.enabled && BlockKeywords?.ignoreBlockedMessages && containsBlockedKeywords(message);
+            const relationship = this.getRelationshipStatus(message.author);
+            return blockedContent || relationship.blocked || (relationship.ignored && settings.store.alsoHideIgnoredUsers);
         } catch (e) {
             new Logger("NoBlockedMessages").error("Failed to check if message is blocked or ignored:", e);
         }
     },
+
+    getRelationshipStatus(user: User): { ignored: boolean, blocked: boolean; } {
+        const isBlocked = RelationshipStore.isBlocked(user.id);
+        const isIgnored = RelationshipStore.isIgnored(user.id);
+        return { ignored: isIgnored, blocked: isBlocked };
+    }
 });
