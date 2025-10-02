@@ -7,6 +7,7 @@
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs, IS_MAC } from "@utils/constants";
+import { closeModal, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, ChannelRouter, ChannelStore, IconUtils, React, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
 
@@ -80,7 +81,8 @@ const settings = definePluginSettings({
 });
 
 let activeToastId: string | null = null;
-let overlayRoot: HTMLDivElement | null = null;
+let overlayModalKey: string | null = null;
+let overlayRerender: (() => void) | null = null;
 
 function isDirectMessageChannel(channelId: string | null | undefined): boolean {
     if (!channelId) return false;
@@ -203,42 +205,37 @@ function getDisplayForChannel(id: string) {
     return { name: ch.name ?? "Channel", avatar: "" };
 }
 
-function ensureOverlayRoot() {
-    if (!overlayRoot) {
-        overlayRoot = document.createElement("div");
-        overlayRoot.id = "vc-dm-mru-overlay";
-        overlayRoot.style.position = "fixed";
-        overlayRoot.style.zIndex = "99999";
-        overlayRoot.style.pointerEvents = "none";
-        overlayRoot.style.opacity = "0";
-        overlayRoot.style.transition = "opacity 150ms ease";
-        overlayRoot.style.inset = "0";
-        document.body.appendChild(overlayRoot);
-    }
-}
-
-function positionOverlay() {
-    if (!overlayRoot) return;
-    overlayRoot.style.inset = "0";
-    overlayRoot.style.display = "grid";
-    overlayRoot.style.placeItems = "center";
-    overlayRoot.style.background = "rgba(0,0,0,0.38)";
-    overlayRoot.style.backdropFilter = "blur(2px)";
+function openOverlayModal() {
+    if (overlayModalKey) return;
+    overlayModalKey = openModal(props => React.createElement(ModalRoot, { ...props }, React.createElement(OverlayContent)));
 }
 
 function renderOverlay() {
     if (settings.store.visualStyle !== "overlay") return;
     if (!isCyclingSessionActive) return;
-    ensureOverlayRoot();
-    positionOverlay();
-    if (!overlayRoot) return;
+    openOverlayModal();
+    overlayRerender?.();
+}
+
+function unmountOverlay() {
+    if (!overlayModalKey) return;
+    closeModal(overlayModalKey);
+    overlayModalKey = null;
+}
+
+function OverlayContent(): any {
+    const [, setTick] = React.useState(0);
+    React.useEffect(() => {
+        overlayRerender = () => setTick(t => t + 1);
+        return () => { overlayRerender = null; };
+    }, []);
 
     const mode = settings.store.overlayMode;
     const showAvatars = settings.store.overlayShowAvatars;
     const maxCount = Math.max(3, Math.min(7, settings.store.overlayRowLength));
 
     const pageSize = mode === "current" ? 1 : maxCount;
-    const totalSlots = mode === "current" ? 1 : pageSize * 2; // target 10 when pageSize=5
+    const totalSlots = mode === "current" ? 1 : pageSize * 2;
     const visibleList = mode === "current"
         ? [cycleSnapshot[cycleIndex]]
         : cycleSnapshot.slice(0, totalSlots);
@@ -253,37 +250,93 @@ function renderOverlay() {
     const start = currentPage * pageSize;
     const end = Math.min(start + pageSize, visibleList.length);
     const pageItems = visibleList.slice(start, end);
+
+    const cardW = 168;
+    const cardH = Math.round(cardW * 9 / 16);
+
     const cards = pageItems.map(id => {
         const { name, avatar } = getDisplayForChannel(id!);
         const isActive = id === cycleSnapshot[cycleIndex];
-        const cardW = 168; // 16:9 = 94.5px height
-        const cardH = Math.round(cardW * 9 / 16);
-        const img = showAvatars && avatar ? `<img src="${avatar}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;${isActive ? "outline:2px solid var(--brand-500);" : "opacity:0.8;"}"/>` : "";
-        const label = `<div style="margin-top:8px;color:var(--header-primary);font-size:12px;max-width:${cardW - 16}px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;">${name}</div>`;
-        const shadow = isActive ? "box-shadow:0 0 0 2px var(--brand-500) inset, 0 4px 12px rgba(0,0,0,0.25);" : "box-shadow:0 2px 8px rgba(0,0,0,0.15);";
-        return `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:${cardW}px;height:${cardH}px;border-radius:10px;background:var(--background-floating);${shadow}">${img}${label}</div>`;
-    }).join("");
+        return React.createElement(
+            "div",
+            {
+                style: {
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 6,
+                    width: `${cardW}px`,
+                    height: `${cardH}px`,
+                    borderRadius: 10,
+                    background: "var(--background-floating)",
+                    boxShadow: isActive
+                        ? "0 0 0 2px var(--brand-500) inset, 0 4px 12px rgba(0,0,0,0.25)"
+                        : "0 2px 8px rgba(0,0,0,0.15)"
+                }
+            },
+            showAvatars && avatar && React.createElement("img", {
+                src: avatar,
+                style: {
+                    width: 48,
+                    height: 48,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    outline: isActive ? "2px solid var(--brand-500)" : undefined,
+                    opacity: isActive ? 1 : 0.8
+                }
+            }),
+            React.createElement("div", {
+                style: {
+                    marginTop: 8,
+                    color: "var(--header-primary)",
+                    fontSize: 12,
+                    maxWidth: `${cardW - 16}px`,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    textAlign: "center"
+                }
+            }, name)
+        );
+    });
 
     const dots = pageCount > 1
-        ? `<div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-top:10px;">
-                ${Array.from({ length: pageCount }).map((_, i) => `<div style="width:8px;height:8px;border-radius:50%;background:${i === currentPage ? "var(--brand-500)" : "var(--interactive-muted)"};opacity:${i === currentPage ? "1" : "0.6"}"></div>`).join("")}
-           </div>`
-        : "";
+        ? React.createElement(
+            "div",
+            { style: { display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginTop: 10 } },
+            ...Array.from({ length: pageCount }).map((_, i) => React.createElement("div", {
+                style: {
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    background: i === currentPage ? "var(--brand-500)" : "var(--interactive-muted)",
+                    opacity: i === currentPage ? 1 : 0.6
+                }
+            }))
+        )
+        : null;
 
-    overlayRoot.innerHTML = `<div style="display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;padding:12px 16px;border-radius:12px;background:color-mix(in oklab, var(--background-floating) 85%, transparent);backdrop-filter:saturate(120%); box-shadow:0 6px 24px rgba(0,0,0,0.25);">
-            <div style="display:flex;gap:12px;align-items:center;justify-content:center;">${cards}</div>
-            ${dots}
-        </div>`;
-    // fade in
-    requestAnimationFrame(() => { if (overlayRoot) overlayRoot.style.opacity = "1"; });
-}
-
-function unmountOverlay() {
-    if (!overlayRoot) return;
-    overlayRoot.style.opacity = "0";
-    const node = overlayRoot;
-    overlayRoot = null;
-    setTimeout(() => node.remove(), 180);
+    return React.createElement(
+        "div",
+        {
+            style: {
+                display: "grid",
+                placeItems: "center",
+                position: "fixed",
+                inset: 0,
+                background: "rgba(0,0,0,0.38)",
+                backdropFilter: "blur(2px)",
+                pointerEvents: "none"
+            }
+        },
+        React.createElement(
+            "div",
+            { style: { display: "flex", flexDirection: "column", gap: 8, alignItems: "center", justifyContent: "center", padding: "12px 16px", borderRadius: 12, background: "color-mix(in oklab, var(--background-floating) 85%, transparent)", backdropFilter: "saturate(120%)", boxShadow: "0 6px 24px rgba(0,0,0,0.25)" } },
+            React.createElement("div", { style: { display: "flex", gap: 12, alignItems: "center", justifyContent: "center" } }, ...cards),
+            dots
+        )
+    );
 }
 
 function showCycleToast() {
