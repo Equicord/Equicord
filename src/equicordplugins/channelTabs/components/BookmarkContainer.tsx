@@ -19,6 +19,26 @@ const cl = classNameFactory("vc-channeltabs-");
 
 const StarIcon = findComponentByCodeLazy(".73-2.25h6.12l1.9-5.83Z");
 
+// Special page icons
+const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
+const ShopIcon = findComponentByCodeLazy("M2.63 4.19A3");
+const EnvelopeIcon = findComponentByCodeLazy("M1.16 5.02c-.1.28");
+const DiscoveryIcon = findComponentByCodeLazy("M7.74 9.3A2 2 0 0 1 9.3 7.75l7.22");
+const FriendsIcon = findComponentByCodeLazy("12h1a8");
+
+function LibraryIcon({ height = 16, width = 16 }: { height?: number; width?: number; }) {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            height={height}
+            width={width}
+            fill="none"
+        >
+            <path fill="currentColor" d="M3 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3zm2 1v16h10V4H5zm13-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-2V3zm0 2v12h1V5h-1z" />
+        </svg>
+    );
+}
+
 function FolderIcon({ fill }: { fill: string; }) {
     return (
         <path
@@ -38,6 +58,28 @@ function BookmarkIcon({ bookmark }: { bookmark: Bookmark | BookmarkFolder; }) {
             <FolderIcon fill={bookmark.iconColor} />
         </svg>
     );
+
+    // Handle special synthetic pages
+    const { channelId } = bookmark;
+    if (channelId?.startsWith("__")) {
+        const specialIconsMap: Record<string, React.ComponentType<any>> = {
+            "__quests__": QuestIcon,
+            "__message-requests__": EnvelopeIcon,
+            "__friends__": FriendsIcon,
+            "__shop__": ShopIcon,
+            "__library__": () => <LibraryIcon height={16} width={16} />,
+            "__discovery__": DiscoveryIcon
+        };
+
+        const IconComponent = specialIconsMap[channelId];
+        if (IconComponent) {
+            // LibraryIcon is a function that returns JSX, others are webpack components
+            if (channelId === "__library__") {
+                return <LibraryIcon height={16} width={16} />;
+            }
+            return <IconComponent height={16} width={16} />;
+        }
+    }
 
     const channel = ChannelStore.getChannel(bookmark.channelId);
     const guild = GuildStore.getGuild(bookmark.guildId);

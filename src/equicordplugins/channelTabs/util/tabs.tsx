@@ -334,7 +334,8 @@ export function moveToTab(id: number) {
             "__message-requests__": "/message-requests",
             "__friends__": "/channels/@me",
             "__shop__": "/shop",
-            "__library__": "/library"
+            "__library__": "/library",
+            "__discovery__": "/discovery"
         };
 
         const route = routeMap[tab.channelId];
@@ -452,6 +453,26 @@ export function navigateToBookmark(ch: BasicChannelTabsProps) {
 
         // set navigation context BEFORE navigating
         setNavigationSource(ch.guildId, ch.channelId, "bookmark");
+
+        // Handle special pages with synthetic channelIds
+        if (ch.channelId && ch.channelId.startsWith("__")) {
+            const routeMap: Record<string, string> = {
+                "__quests__": "/quest-home",
+                "__message-requests__": "/message-requests",
+                "__friends__": "/channels/@me",
+                "__shop__": "/shop",
+                "__library__": "/library",
+                "__discovery__": "/discovery"
+            };
+
+            const route = routeMap[ch.channelId];
+            if (route) {
+                NavigationRouter.transitionTo(route);
+                // trigger update to reflect tab deselection
+                update();
+                return;
+            }
+        }
 
         // navigate directly without affecting tab state
         NavigationRouter.transitionToGuild(ch.guildId, ch.channelId);

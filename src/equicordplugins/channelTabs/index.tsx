@@ -135,6 +135,9 @@ export default definePlugin({
                 } else if (path.includes("/library")) {
                     channelId = "__library__";
                     guildId = "@me";
+                } else if (path.includes("/discovery")) {
+                    channelId = "__discovery__";
+                    guildId = "@me";
                 } else {
                     // Unknown page without channelId - ignore
                     return;
