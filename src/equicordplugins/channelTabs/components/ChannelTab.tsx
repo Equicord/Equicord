@@ -5,6 +5,7 @@
  */
 
 import { classNameFactory } from "@api/Styles";
+import { activeQuestIntervals } from "@equicordplugins/questify"; // sorry murphy!
 import { getGuildAcronym, getIntlMessage, getUniqueUsername } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { Channel, Guild, User } from "@vencord/discord-types";
@@ -384,6 +385,9 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
     }), []);
     drag(drop(ref));
 
+    // check if quests running (questify momentLet)
+    const hasActiveQuests = activeQuestIntervals.size > 0;
+
     return <div
         className={cl("tab", {
             "tab-compact": compact,
@@ -393,6 +397,7 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
             "tab-dragging": isDragging,
             "tab-drop-target": isDropTarget,
             "tab-nitro": channelId === "__nitro__",
+            "tab-quests-active": channelId === "__quests__" && hasActiveQuests,
             wider: settings.store.widerTabsAndBookmarks
         })}
         key={index}

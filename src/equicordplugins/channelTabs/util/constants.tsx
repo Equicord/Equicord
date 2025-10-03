@@ -34,7 +34,8 @@ function AnimationSettings(): JSX.Element {
         { label: "Selected Tab Background Color", value: "selected-background", selected: settings.store.animationSelectedBackground },
         { label: "Tab Shadow Effects", value: "tab-shadows", selected: settings.store.animationTabShadows },
         { label: "Tab Repositioning (smooth position changes)", value: "tab-positioning", selected: settings.store.animationTabPositioning },
-        { label: "Resize Handle Fade", value: "resize-handle", selected: settings.store.animationResizeHandle }
+        { label: "Resize Handle Fade", value: "resize-handle", selected: settings.store.animationResizeHandle },
+        { label: "Active Quests Gradient", value: "quests-active", selected: settings.store.animationQuestsActive }
     ];
 
     const [currentValue, setCurrentValue] = useState(animationOptions.filter(option => option.selected));
@@ -60,6 +61,7 @@ function AnimationSettings(): JSX.Element {
         settings.store.animationTabShadows = enabledValues.includes("tab-shadows");
         settings.store.animationTabPositioning = enabledValues.includes("tab-positioning");
         settings.store.animationResizeHandle = enabledValues.includes("resize-handle");
+        settings.store.animationQuestsActive = enabledValues.includes("quests-active");
 
         setCurrentValue(enabled);
     }
@@ -310,6 +312,12 @@ export const settings = definePluginSettings({
     animationResizeHandle: {
         type: OptionType.BOOLEAN,
         description: "Enable fade animation for resize handle",
+        default: true,
+        hidden: true
+    },
+    animationQuestsActive: {
+        type: OptionType.BOOLEAN,
+        description: "Enable gradient animations on Quests tab when quests are actively running",
         default: true,
         hidden: true
     },

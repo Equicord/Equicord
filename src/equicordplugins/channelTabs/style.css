@@ -564,6 +564,133 @@
         0 0 32px rgb(255 115 250 / 60%);
 }
 
+/* Nitro icon gradient animation */
+.vc-channeltabs-tab-nitro .vc-channeltabs-tab-inner svg {
+    filter: drop-shadow(0 0 2px rgb(255 115 250 / 80%));
+}
+
+.vc-channeltabs-tab-nitro .vc-channeltabs-tab-inner svg path {
+    fill: rgb(255 115 250) !important;
+    animation: vc-channeltabs-nitro-icon-gradient 3s ease-in-out infinite;
+}
+
+@keyframes vc-channeltabs-nitro-icon-gradient {
+    0%,
+    100% {
+        fill: rgb(255 115 250);
+    }
+
+    50% {
+        fill: rgb(255 180 250);
+    }
+}
+
+/* Quests active gradient (blue+pink) when quests are running */
+.vc-channeltabs-tab-quests-active {
+    position: relative;
+    overflow: visible;
+}
+
+.vc-channeltabs-tab-quests-active::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 11px;
+    background: linear-gradient(135deg,
+        transparent,
+        transparent 25%,
+        rgb(0 200 255) 40%,
+        rgb(88 101 242) 50%,
+        rgb(220 104 255) 60%,
+        transparent 75%,
+        transparent);
+    background-size: 300% 300%;
+    animation: vc-channeltabs-quests-diagonal 5s linear infinite;
+    opacity: 0.8;
+    filter: blur(2px);
+    pointer-events: none;
+}
+
+.vc-channeltabs-tab-quests-active::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 11px;
+    animation: vc-channeltabs-quests-glow 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes vc-channeltabs-quests-diagonal {
+    0%,
+    40% {
+        background-position: 100% 0;
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    60%,
+    100% {
+        background-position: 0 100%;
+        opacity: 0;
+    }
+}
+
+@keyframes vc-channeltabs-quests-glow {
+    0% {
+        box-shadow: 0 0 8px 1px rgb(0 200 255 / 60%);
+    }
+
+    33% {
+        box-shadow: 0 0 8px 1px rgb(88 101 242 / 60%);
+    }
+
+    66% {
+        box-shadow: 0 0 8px 1px rgb(220 104 255 / 60%);
+    }
+
+    100% {
+        box-shadow: 0 0 8px 1px rgb(0 200 255 / 60%);
+    }
+}
+
+/* Enhanced gradient for selected Quests tab with active quests */
+.vc-channeltabs-tab-selected.vc-channeltabs-tab-quests-active::before {
+    opacity: 1;
+    filter: blur(3px);
+}
+
+.vc-channeltabs-tab-selected.vc-channeltabs-tab-quests-active::after {
+    animation: vc-channeltabs-quests-glow-selected 3s ease-in-out infinite;
+}
+
+@keyframes vc-channeltabs-quests-glow-selected {
+    0% {
+        box-shadow: 0 0 12px 2px rgb(0 200 255 / 80%);
+    }
+
+    33% {
+        box-shadow: 0 0 12px 2px rgb(88 101 242 / 80%);
+    }
+
+    66% {
+        box-shadow: 0 0 12px 2px rgb(220 104 255 / 80%);
+    }
+
+    100% {
+        box-shadow: 0 0 12px 2px rgb(0 200 255 / 80%);
+    }
+}
+
+/* Disable Quests active animations when setting is off */
+.vc-channeltabs-container.vc-channeltabs-no-quests-active-animation .vc-channeltabs-tab-quests-active::before,
+.vc-channeltabs-container.vc-channeltabs-no-quests-active-animation .vc-channeltabs-tab-quests-active::after {
+    animation: none !important;
+    opacity: 0 !important;
+}
+
 /* Tab closing animation */
 @keyframes vc-channeltabs-tab-close {
     0% {
