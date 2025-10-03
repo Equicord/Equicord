@@ -13,21 +13,14 @@ import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Avatar, ChannelStore, ContextMenuApi, GuildStore, PresenceStore, ReadStateStore, Text, TypingStore, useDrag, useDrop, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
 import { JSX } from "react";
 
-import { ChannelTabsProps, CircleQuestionIcon, closeTab, isTabSelected, moveDraggedTabs, moveToTab, openedTabs, settings } from "../util";
+import { ChannelTabsProps, closeTab, isTabSelected, moveDraggedTabs, moveToTab, openedTabs, settings } from "../util";
+import { CircleQuestionIcon, DiscoveryIcon, EnvelopeIcon, FriendsIcon, NitroIcon, QuestIcon, ShopIcon } from "../util/icons";
 import { TabContextMenu } from "./ContextMenus";
 
 const ThreeDots = findComponentByCodeLazy(".dots,", "dotRadius:");
 const dotStyles = findByPropsLazy("numberBadge", "textBadge");
 
-const FriendsIcon = findComponentByCodeLazy("12h1a8");
 const ChannelTypeIcon = findComponentByCodeLazy(".iconContainerWithGuildIcon,");
-
-// Special page icons
-const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
-const ShopIcon = findComponentByCodeLazy("M2.63 4.19A3");
-const EnvelopeIcon = findComponentByCodeLazy("M1.16 5.02c-.1.28");
-const DiscoveryIcon = findComponentByCodeLazy("M7.74 9.3A2 2 0 0 1 9.3 7.75l7.22");
-const NitroIcon = findComponentByCodeLazy("M16.23 12c0 1.29-.95 2.25");
 
 // Custom SVG icons for pages that don't have findable components
 

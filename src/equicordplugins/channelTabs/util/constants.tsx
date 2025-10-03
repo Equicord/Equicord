@@ -7,7 +7,6 @@
 import { definePluginSettings } from "@api/Settings";
 import { Logger } from "@utils/Logger";
 import { OptionType } from "@utils/types";
-import { findComponentByCodeLazy } from "@webpack";
 import { Forms, SearchableSelect, useState } from "@webpack/common";
 import { JSX } from "react";
 
@@ -352,5 +351,3 @@ export const settings = definePluginSettings({
         restartNeeded: false
     }
 });
-
-export const CircleQuestionIcon = findComponentByCodeLazy("10.58l-3.3-3.3a1");

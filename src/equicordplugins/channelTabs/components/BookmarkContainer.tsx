@@ -11,21 +11,14 @@ import { closeModal, openModal } from "@utils/modal";
 import { findComponentByCodeLazy } from "@webpack";
 import { Avatar, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, React, ReadStateStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, Text, Tooltip, useDrag, useDrop, useEffect, useRef, UserStore, useState } from "@webpack/common";
 
-import { BasicChannelTabsProps, Bookmark, BookmarkFolder, BookmarkProps, CircleQuestionIcon, isBookmarkFolder, isTabSelected, navigateToBookmark, openedTabs, settings, switchChannel, useBookmarks } from "../util";
+import { BasicChannelTabsProps, Bookmark, BookmarkFolder, BookmarkProps, isBookmarkFolder, isTabSelected, navigateToBookmark, openedTabs, settings, switchChannel, useBookmarks } from "../util";
+import { CircleQuestionIcon, DiscoveryIcon, EnvelopeIcon, FriendsIcon, NitroIcon, QuestIcon, ShopIcon } from "../util/icons";
 import { NotificationDot } from "./ChannelTab";
 import { BookmarkContextMenu, EditModal } from "./ContextMenus";
 
 const cl = classNameFactory("vc-channeltabs-");
 
 const StarIcon = findComponentByCodeLazy(".73-2.25h6.12l1.9-5.83Z");
-
-// Special page icons
-const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
-const ShopIcon = findComponentByCodeLazy("M2.63 4.19A3");
-const EnvelopeIcon = findComponentByCodeLazy("M1.16 5.02c-.1.28");
-const DiscoveryIcon = findComponentByCodeLazy("M7.74 9.3A2 2 0 0 1 9.3 7.75l7.22");
-const FriendsIcon = findComponentByCodeLazy("12h1a8");
-const NitroIcon = findComponentByCodeLazy("M16.23 12c0 1.29-.95 2.25");
 
 function LibraryIcon({ height = 16, width = 16 }: { height?: number; width?: number; }) {
     return (
