@@ -99,14 +99,18 @@ export default definePlugin({
 
     flux: {
         CHANNEL_SELECT(data: { channelId: string | null, guildId: string | null; }) {
-            // Skip if viewing via bookmarks in independent mode
-            if (ChannelTabsUtils.isViewingViaBookmarkMode()) {
-                return;
-            }
-
             // Skip if this navigation was triggered by us (clicking a tab)
             if (ChannelTabsUtils.isNavigatingViaTab()) {
                 return;
+            }
+
+            // Check if we're in bookmark viewing mode
+            const wasViewingViaBookmark = ChannelTabsUtils.isViewingViaBookmarkMode();
+            
+            // Clear bookmark viewing mode when ANY navigation occurs
+            // This allows subsequent channel switches to work normally
+            if (wasViewingViaBookmark) {
+                ChannelTabsUtils.clearBookmarkViewingMode();
             }
 
             let { channelId } = data;
@@ -190,6 +194,9 @@ export default definePlugin({
         if (ChannelTabsUtils.isViewingViaBookmarkMode()) {
             return;
         }
+
+        // Clear bookmark viewing mode when navigating to a regular channel
+        ChannelTabsUtils.clearBookmarkViewingMode();
 
         // wait for discord to update channel data
         requestAnimationFrame(() => {

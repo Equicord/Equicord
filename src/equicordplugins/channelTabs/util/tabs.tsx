@@ -34,6 +34,10 @@ export function isNavigatingViaTab() {
     return isNavigatingViaTabFlag;
 }
 
+export function clearBookmarkViewingMode() {
+    isViewingViaBookmark = false;
+}
+
 export function setNavigationSource(guildId: string, channelId: string, source: "bookmark" | "tab") {
     lastNavigationContext = {
         guildId: guildId || "@me",
