@@ -24,6 +24,7 @@ const ChannelTypeIcon = findComponentByCodeLazy(".iconContainerWithGuildIcon,");
 // Special page icons
 const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
 const ShopIcon = findComponentByCodeLazy("M2.63 4.19A3");
+const EnvelopeIcon = findComponentByCodeLazy("M1.16 5.02c-.1.28");
 
 // Custom SVG icons for pages that don't have findable components
 
@@ -201,7 +202,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
     if (channelId && channelId.startsWith("__")) {
         const specialPagesConfig: Record<string, { label: string, Icon: React.ComponentType<any>; }> = {
             "__quests__": { label: "Quests", Icon: QuestIcon },
-            "__message-requests__": { label: "Message Requests", Icon: FriendsIcon },
+            "__message-requests__": { label: "Message Requests", Icon: EnvelopeIcon },
             "__friends__": { label: getIntlMessage("FRIENDS"), Icon: FriendsIcon },
             "__shop__": { label: "Shop", Icon: ShopIcon },
             "__library__": { label: "Library", Icon: () => LibraryIcon(20, 20) }
