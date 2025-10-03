@@ -24,9 +24,14 @@ interface NavigationContext {
 
 let lastNavigationContext: NavigationContext | null = null;
 let isViewingViaBookmark = false;
+let isNavigatingViaTabFlag = false;
 
 export function isViewingViaBookmarkMode() {
     return settings.store.bookmarksIndependentFromTabs && isViewingViaBookmark;
+}
+
+export function isNavigatingViaTab() {
+    return isNavigatingViaTabFlag;
 }
 
 export function setNavigationSource(guildId: string, channelId: string, source: "bookmark" | "tab") {
@@ -315,18 +320,25 @@ export function moveToTab(id: number) {
 
     setOpenTab(id);
 
+    // SET FLAG: We're initiating navigation
+    isNavigatingViaTabFlag = true;
+
     // handle special pages with synthetic channelIds
     if (tab.channelId && tab.channelId.startsWith("__")) {
         const routeMap: Record<string, string> = {
             "__quests__": "/quest-home",
             "__message-requests__": "/message-requests",
-            "__friends__": "/channels/@me"
+            "__friends__": "/channels/@me",
+            "__shop__": "/shop",
+            "__library__": "/library"
         };
 
         const route = routeMap[tab.channelId];
         if (route) {
             setNavigationSource(tab.guildId, tab.channelId, "tab");
             NavigationRouter.transitionTo(route);
+            // Clear flag after navigation completes
+            setTimeout(() => { isNavigatingViaTabFlag = false; }, 100);
             return;
         }
     }
@@ -344,6 +356,9 @@ export function moveToTab(id: number) {
         restoreTabState(id);
     }
     else update();
+
+    // Clear flag after navigation
+    setTimeout(() => { isNavigatingViaTabFlag = false; }, 100);
 }
 
 export function openStartupTabs(props: BasicChannelTabsProps & { userId: string; }, setUserId: (id: string) => void) {

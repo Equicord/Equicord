@@ -20,6 +20,26 @@ const dotStyles = findByPropsLazy("numberBadge", "textBadge");
 const FriendsIcon = findComponentByCodeLazy("12h1a8");
 const ChannelTypeIcon = findComponentByCodeLazy(".iconContainerWithGuildIcon,");
 
+// Special page icons
+const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
+
+// Custom SVG icons for pages that don't have findable components
+function ShopIcon() {
+    return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21.707 13.707L21 13V11a1 1 0 0 0-1-1h-2v-.5a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1V10H4a1 1 0 0 0-1 1v2l-.707.707a1 1 0 0 0 0 1.414L3 16v4a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-4l.707-.707a1 1 0 0 0 0-1.414zM8 10.5h8V12H8v-1.5zM5 13h14v1H5v-1zm1 6v-3h12v3H6z" />
+        </svg>
+    );
+}
+
+function LibraryIcon() {
+    return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3zm2 1v16h10V4H5zm13-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-2V3zm0 2v12h1V5h-1z" />
+        </svg>
+    );
+}
+
 const cl = classNameFactory("vc-channeltabs-");
 
 function XIcon({ size, fill }: { size: number, fill: string; }) {
@@ -178,18 +198,21 @@ function ChannelTabContent(props: ChannelTabsProps & {
 
     // handle special synthetic pages
     if (channelId && channelId.startsWith("__")) {
-        const specialPages: Record<string, string> = {
-            "__quests__": getIntlMessage("QUESTS"),
-            "__message-requests__": getIntlMessage("MESSAGE_REQUESTS"),
-            "__friends__": getIntlMessage("FRIENDS")
+        const specialPagesConfig: Record<string, { label: string, Icon: React.ComponentType<any>; }> = {
+            "__quests__": { label: "Quests", Icon: QuestIcon },
+            "__message-requests__": { label: "Message Requests", Icon: FriendsIcon },
+            "__friends__": { label: getIntlMessage("FRIENDS"), Icon: FriendsIcon },
+            "__shop__": { label: "Shop", Icon: ShopIcon },
+            "__library__": { label: "Library", Icon: LibraryIcon }
         };
 
-        const pageLabel = specialPages[channelId];
-        if (pageLabel) {
+        const pageConfig = specialPagesConfig[channelId];
+        if (pageConfig) {
+            const { label, Icon } = pageConfig;
             return (
                 <>
-                    <FriendsIcon />
-                    <Text className={cl("name-text")}>{pageLabel}</Text>
+                    <Icon />
+                    <Text className={cl("name-text")}>{label}</Text>
                 </>
             );
         }
