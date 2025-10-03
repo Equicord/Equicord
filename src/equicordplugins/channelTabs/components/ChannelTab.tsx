@@ -177,7 +177,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
     }
 
     // handle special synthetic pages
-    if (channelId.startsWith("__")) {
+    if (channelId && channelId.startsWith("__")) {
         const specialPages: Record<string, string> = {
             "__quests__": getIntlMessage("QUESTS"),
             "__message-requests__": getIntlMessage("MESSAGE_REQUESTS"),

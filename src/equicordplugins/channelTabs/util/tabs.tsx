@@ -316,7 +316,7 @@ export function moveToTab(id: number) {
     setOpenTab(id);
 
     // handle special pages with synthetic channelIds
-    if (tab.channelId.startsWith("__")) {
+    if (tab.channelId && tab.channelId.startsWith("__")) {
         const routeMap: Record<string, string> = {
             "__quests__": "/quest-home",
             "__message-requests__": "/message-requests",
