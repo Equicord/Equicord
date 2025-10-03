@@ -14,6 +14,11 @@ import indicatorsDefault from "./indicators";
 import ToneIndicator from "./ToneIndicator";
 
 const settings = definePluginSettings({
+    prefix: {
+        type: OptionType.STRING,
+        description: "Prefix character(s) for tone indicators (avoid *, _, ~, `, | as they conflict with Discord markdown)",
+        default: "/",
+    },
     customIndicators: {
         type: OptionType.STRING,
         description: "Custom tone indicators (format: jk=Joking; srs=Serious)",
@@ -69,7 +74,10 @@ function buildIndicatorRegex(): RegExp {
         .map(ind => ind.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
         .sort((a, b) => b.length - a.length); // longest first to avoid partial matches (should fix some edge cases)
 
-    const pattern = `(?:^|\\s)\\/(${escaped.join("|")})(?=\\s|$|\\p{P})`;
+    const prefix = settings.store.prefix || "/";
+    const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    // Exclude forward slash from punctuation to prevent sed syntax conflicts (s/find/replace)
+    const pattern = `(?:^|\\s)${escapedPrefix}(${escaped.join("|")})(?=\\s|$|[^\\s\\w/])`;
     return new RegExp(pattern, "giu"); // 'i' = case-insensitive, 'u' = unicode
 }
 
@@ -78,6 +86,7 @@ function splitTextWithIndicators(text: string): ReactNode[] {
     let lastIndex = 0;
     let count = 0;
     const regex = buildIndicatorRegex();
+    const prefix = settings.store.prefix || "/";
     let match: RegExpExecArray | null;
 
     while ((match = regex.exec(text)) && count < settings.store.maxIndicators) {
@@ -95,6 +104,7 @@ function splitTextWithIndicators(text: string): ReactNode[] {
             nodes.push(
                 <ToneIndicator
                     key={`ti-${matchStart}`}
+                    prefix={prefix}
                     indicator={indicator}
                     desc={desc}
                 />,
@@ -115,7 +125,9 @@ function patchChildrenTree(children: any): any {
         if (node == null) return node;
 
         if (typeof node === "string") {
-            if (!/\/[a-z]+/i.test(node)) return node;
+            const prefix = settings.store.prefix || "/";
+            const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            if (!new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node)) return node;
             const parts = splitTextWithIndicators(node);
             return parts.length === 1 ? parts[0] : parts;
         }
