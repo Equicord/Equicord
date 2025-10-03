@@ -191,10 +191,10 @@ export function closeTabsToTheLeft(id: number) {
 let lastNavigationTime = 0;
 
 export function handleChannelSwitch(ch: BasicChannelTabsProps) {
-    // Ignore invalid navigation (no valid channelId)
+    // only require channelId to allow synthetic IDs for special pages
     if (!ch.channelId) return;
 
-    // Don't modify tabs when viewing via bookmarks in independent mode
+    // don't modify tabs when viewing via bookmarks in independent mode
     if (isViewingViaBookmarkMode()) {
         return;
     }
@@ -314,6 +314,24 @@ export function moveToTab(id: number) {
     cacheCurrentTabState();
 
     setOpenTab(id);
+
+    // handle special pages with synthetic channelIds
+    if (tab.channelId && tab.channelId.startsWith("__")) {
+        const routeMap: Record<string, string> = {
+            "__quests__": "/quest-home",
+            "__message-requests__": "/message-requests",
+            "__friends__": "/channels/@me"
+        };
+
+        const route = routeMap[tab.channelId];
+        if (route) {
+            setNavigationSource(tab.guildId, tab.channelId, "tab");
+            NavigationRouter.transitionTo(route);
+            return;
+        }
+    }
+
+    // regular channel nav
     if (tab.messageId) {
         setNavigationSource(tab.guildId, tab.channelId, "tab");
         NavigationRouter.transitionTo(`/channels/${tab.guildId}/${tab.channelId}/${tab.messageId}`);

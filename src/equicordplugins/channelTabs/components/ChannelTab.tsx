@@ -176,6 +176,25 @@ function ChannelTabContent(props: ChannelTabsProps & {
         }
     }
 
+    // handle special synthetic pages
+    if (channelId && channelId.startsWith("__")) {
+        const specialPages: Record<string, string> = {
+            "__quests__": getIntlMessage("QUESTS"),
+            "__message-requests__": getIntlMessage("MESSAGE_REQUESTS"),
+            "__friends__": getIntlMessage("FRIENDS")
+        };
+
+        const pageLabel = specialPages[channelId];
+        if (pageLabel) {
+            return (
+                <>
+                    <FriendsIcon />
+                    <Text className={cl("name-text")}>{pageLabel}</Text>
+                </>
+            );
+        }
+    }
+
     if (guildId === "@me" || guildId === undefined) {
         return (
             <>
