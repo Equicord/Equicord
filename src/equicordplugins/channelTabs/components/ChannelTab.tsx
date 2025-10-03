@@ -176,25 +176,6 @@ function ChannelTabContent(props: ChannelTabsProps & {
         }
     }
 
-    // handle special synthetic pages
-    if (channelId.startsWith("__")) {
-        const specialPages: Record<string, string> = {
-            "__quests__": "Quests",
-            "__message-requests__": "Message Requests",
-            "__friends__": getIntlMessage("FRIENDS")
-        };
-
-        const pageLabel = specialPages[channelId];
-        if (pageLabel) {
-            return (
-                <>
-                    <FriendsIcon />
-                    <Text className={cl("name-text")}>{pageLabel}</Text>
-                </>
-            );
-        }
-    }
-
     if (guildId === "@me" || guildId === undefined) {
         return (
             <>
