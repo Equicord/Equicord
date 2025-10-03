@@ -28,7 +28,8 @@ export function bookmarkPlaceholderName(bookmark: Omit<Bookmark | BookmarkFolder
             "__friends__": "Friends",
             "__shop__": "Shop",
             "__library__": "Library",
-            "__discovery__": "Discovery"
+            "__discovery__": "Discovery",
+            "__nitro__": "Nitro"
         };
 
         return specialPagesMap[channelId] || "Special Page";

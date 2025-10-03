@@ -25,6 +25,7 @@ const ShopIcon = findComponentByCodeLazy("M2.63 4.19A3");
 const EnvelopeIcon = findComponentByCodeLazy("M1.16 5.02c-.1.28");
 const DiscoveryIcon = findComponentByCodeLazy("M7.74 9.3A2 2 0 0 1 9.3 7.75l7.22");
 const FriendsIcon = findComponentByCodeLazy("12h1a8");
+const NitroIcon = findComponentByCodeLazy("M16.23 12c0 1.29-.95 2.25");
 
 function LibraryIcon({ height = 16, width = 16 }: { height?: number; width?: number; }) {
     return (
@@ -68,7 +69,8 @@ function BookmarkIcon({ bookmark }: { bookmark: Bookmark | BookmarkFolder; }) {
             "__friends__": FriendsIcon,
             "__shop__": ShopIcon,
             "__library__": () => <LibraryIcon height={16} width={16} />,
-            "__discovery__": DiscoveryIcon
+            "__discovery__": DiscoveryIcon,
+            "__nitro__": NitroIcon
         };
 
         const IconComponent = specialIconsMap[channelId];

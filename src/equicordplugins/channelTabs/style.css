@@ -537,6 +537,33 @@
         0 0 24px rgb(242 63 66 / 50%);
 }
 
+/* Pink Nitro glow effect (easter egg) */
+.vc-channeltabs-tab-nitro {
+    animation: vc-channeltabs-nitro-pulse 3s ease-in-out infinite;
+    box-shadow: 0 0 10px rgb(255 115 250 / 70%), 0 0 20px rgb(255 115 250 / 40%);
+}
+
+@keyframes vc-channeltabs-nitro-pulse {
+
+    /* stylelint-disable-next-line rule-empty-line-before */
+    0%,
+    100% {
+        box-shadow: 0 0 10px rgb(255 115 250 / 70%), 0 0 20px rgb(255 115 250 / 40%);
+    }
+
+    50% {
+        box-shadow: 0 0 16px rgb(255 115 250 / 90%), 0 0 32px rgb(255 115 250 / 60%);
+    }
+}
+
+/* Enhanced Nitro glow for selected tab */
+.vc-channeltabs-tab-selected.vc-channeltabs-tab-nitro {
+    box-shadow:
+        0 1px 3px rgb(0 0 0 / 20%),
+        0 0 16px rgb(255 115 250 / 90%),
+        0 0 32px rgb(255 115 250 / 60%);
+}
+
 /* Tab closing animation */
 @keyframes vc-channeltabs-tab-close {
     0% {

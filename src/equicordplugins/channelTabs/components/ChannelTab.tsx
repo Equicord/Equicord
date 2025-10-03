@@ -26,6 +26,7 @@ const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
 const ShopIcon = findComponentByCodeLazy("M2.63 4.19A3");
 const EnvelopeIcon = findComponentByCodeLazy("M1.16 5.02c-.1.28");
 const DiscoveryIcon = findComponentByCodeLazy("M7.74 9.3A2 2 0 0 1 9.3 7.75l7.22");
+const NitroIcon = findComponentByCodeLazy("M16.23 12c0 1.29-.95 2.25");
 
 // Custom SVG icons for pages that don't have findable components
 
@@ -207,7 +208,8 @@ function ChannelTabContent(props: ChannelTabsProps & {
             "__friends__": { label: getIntlMessage("FRIENDS"), Icon: FriendsIcon },
             "__shop__": { label: "Shop", Icon: ShopIcon },
             "__library__": { label: "Library", Icon: () => LibraryIcon(20, 20) },
-            "__discovery__": { label: "Discovery", Icon: DiscoveryIcon }
+            "__discovery__": { label: "Discovery", Icon: DiscoveryIcon },
+            "__nitro__": { label: "Nitro", Icon: NitroIcon }
         };
 
         const pageConfig = specialPagesConfig[channelId];
@@ -390,6 +392,7 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
             "tab-closing": isClosing,
             "tab-dragging": isDragging,
             "tab-drop-target": isDropTarget,
+            "tab-nitro": channelId === "__nitro__",
             wider: settings.store.widerTabsAndBookmarks
         })}
         key={index}

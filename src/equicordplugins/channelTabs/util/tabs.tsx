@@ -335,7 +335,8 @@ export function moveToTab(id: number) {
             "__friends__": "/channels/@me",
             "__shop__": "/shop",
             "__library__": "/library",
-            "__discovery__": "/discovery"
+            "__discovery__": "/discovery",
+            "__nitro__": "/store"
         };
 
         const route = routeMap[tab.channelId];
@@ -462,7 +463,8 @@ export function navigateToBookmark(ch: BasicChannelTabsProps) {
                 "__friends__": "/channels/@me",
                 "__shop__": "/shop",
                 "__library__": "/library",
-                "__discovery__": "/discovery"
+                "__discovery__": "/discovery",
+                "__nitro__": "/store"
             };
 
             const route = routeMap[ch.channelId];
