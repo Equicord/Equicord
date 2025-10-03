@@ -16,7 +16,7 @@ import ToneIndicator from "./ToneIndicator";
 const settings = definePluginSettings({
     prefix: {
         type: OptionType.STRING,
-        description: "Prefix character(s) for tone indicators (avoid *, _, ~, `, | as they conflict with Discord markdown)",
+        description: "Prefix character(s) for tone indicators.",
         default: "/",
     },
     customIndicators: {
@@ -75,8 +75,15 @@ function buildIndicatorRegex(): RegExp {
         .sort((a, b) => b.length - a.length); // longest first to avoid partial matches (should fix some edge cases)
 
     const prefix = settings.store.prefix || "/";
-    const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    // Exclude forward slash from punctuation to prevent sed syntax conflicts (s/find/replace)
+    let escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    // if prefix is a markdown character, also match escaped version
+    const isMarkdown = /[*_~`|]/.test(prefix);
+    if (isMarkdown) {
+        escapedPrefix = `(?:\\\\${escapedPrefix}|${escapedPrefix})`;
+    }
+
+    // exclude forward slash from punctuation to prevent sed syntax conflicts (s/find/replace)
     const pattern = `(?:^|\\s)${escapedPrefix}(${escaped.join("|")})(?=\\s|$|[^\\s\\w/])`;
     return new RegExp(pattern, "giu"); // 'i' = case-insensitive, 'u' = unicode
 }
@@ -126,7 +133,14 @@ function patchChildrenTree(children: any): any {
 
         if (typeof node === "string") {
             const prefix = settings.store.prefix || "/";
-            const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            let escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+            // if prefix is markdown character, also check for escaped version
+            const isMarkdown = /[*_~`|]/.test(prefix);
+            if (isMarkdown) {
+                escapedPrefix = `(?:\\\\${escapedPrefix}|${escapedPrefix})`;
+            }
+
             if (!new RegExp(`${escapedPrefix}[\\p{L}_]+`, "iu").test(node)) return node;
             const parts = splitTextWithIndicators(node);
             return parts.length === 1 ? parts[0] : parts;
