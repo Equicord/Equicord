@@ -10,6 +10,7 @@ import { classes } from "@utils/misc";
 import { Channel, Guild, User } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Avatar, ChannelStore, ContextMenuApi, GuildStore, PresenceStore, ReadStateStore, Text, TypingStore, useDrag, useDrop, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
+import { JSX } from "react";
 
 import { ChannelTabsProps, CircleQuestionIcon, closeTab, isTabSelected, moveDraggedTabs, moveToTab, openedTabs, settings } from "../util";
 import { TabContextMenu } from "./ContextMenus";
@@ -22,20 +23,20 @@ const ChannelTypeIcon = findComponentByCodeLazy(".iconContainerWithGuildIcon,");
 
 // Special page icons
 const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
+const ShopIcon = findComponentByCodeLazy("M2.63 4.19A3");
 
 // Custom SVG icons for pages that don't have findable components
-function ShopIcon() {
-    return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M21.707 13.707L21 13V11a1 1 0 0 0-1-1h-2v-.5a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1V10H4a1 1 0 0 0-1 1v2l-.707.707a1 1 0 0 0 0 1.414L3 16v4a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-4l.707-.707a1 1 0 0 0 0-1.414zM8 10.5h8V12H8v-1.5zM5 13h14v1H5v-1zm1 6v-3h12v3H6z" />
-        </svg>
-    );
-}
 
-function LibraryIcon() {
+function LibraryIcon(height: number = 20, width: number = 20, className?: string): JSX.Element {
     return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3zm2 1v16h10V4H5zm13-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-2V3zm0 2v12h1V5h-1z" />
+        <svg
+            viewBox="0 0 24 24"
+            height={height}
+            width={width}
+            fill="none"
+            className={className}
+        >
+            <path fill="currentColor" d="M3 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3zm2 1v16h10V4H5zm13-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-2V3zm0 2v12h1V5h-1z" />
         </svg>
     );
 }
@@ -203,7 +204,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
             "__message-requests__": { label: "Message Requests", Icon: FriendsIcon },
             "__friends__": { label: getIntlMessage("FRIENDS"), Icon: FriendsIcon },
             "__shop__": { label: "Shop", Icon: ShopIcon },
-            "__library__": { label: "Library", Icon: LibraryIcon }
+            "__library__": { label: "Library", Icon: () => LibraryIcon(20, 20) }
         };
 
         const pageConfig = specialPagesConfig[channelId];
