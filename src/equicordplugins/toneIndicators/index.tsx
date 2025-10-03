@@ -53,11 +53,31 @@ function getIndicator(text: string): string | null {
     );
 }
 
+function buildIndicatorRegex(): RegExp {
+    const customIndicators = getCustomIndicators();
+    const allIndicators = new Set<string>();
+
+    indicatorsDefault.forEach((_, key) => {
+        allIndicators.add(key.replace(/^_/, "")); // remove underscore prefix for aliases
+    });
+    Object.keys(customIndicators).forEach(key => {
+        allIndicators.add(key.replace(/^_/, "")); // remove underscore prefix for aliases
+    });
+
+    // escape special regex characters and sort by length (longest first)
+    const escaped = Array.from(allIndicators)
+        .map(ind => ind.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+        .sort((a, b) => b.length - a.length); // longest first to avoid partial matches (should fix some edge cases)
+
+    const pattern = `(?:^|\\s)\\/(${escaped.join("|")})(?=\\s|$|\\p{P})`;
+    return new RegExp(pattern, "giu"); // 'i' = case-insensitive, 'u' = unicode
+}
+
 function splitTextWithIndicators(text: string): ReactNode[] {
     const nodes: ReactNode[] = [];
     let lastIndex = 0;
     let count = 0;
-    const regex = /(?:^|\s)\/([^/\s]+)(?=\s|$|\p{P})/giu;
+    const regex = buildIndicatorRegex();
     let match: RegExpExecArray | null;
 
     while ((match = regex.exec(text)) && count < settings.store.maxIndicators) {
@@ -82,7 +102,6 @@ function splitTextWithIndicators(text: string): ReactNode[] {
             count++;
         }
 
-        // always advance lastIndex to avoid skipping consecutive indicators
         lastIndex = matchEnd;
     }
 
