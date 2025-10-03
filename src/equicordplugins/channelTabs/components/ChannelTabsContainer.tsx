@@ -45,6 +45,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         animationSelectedBackground,
         animationTabShadows,
         animationTabPositioning,
+        animationResizeHandle,
         compactAutoExpandSelected,
         compactAutoExpandOnHover
     } = settings.use([
@@ -67,6 +68,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         "animationSelectedBackground",
         "animationTabShadows",
         "animationTabPositioning",
+        "animationResizeHandle",
         "compactAutoExpandSelected",
         "compactAutoExpandOnHover"
     ]);
@@ -180,6 +182,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 !animationSelectedBackground && cl("no-selected-background"),
                 !animationTabShadows && cl("no-tab-shadows"),
                 !animationTabPositioning && cl("no-tab-positioning"),
+                !animationResizeHandle && cl("no-resize-handle-animation"),
                 !compactAutoExpandSelected && cl("no-compact-auto-expand"),
                 !compactAutoExpandOnHover && cl("no-compact-hover-expand")
             )}

@@ -33,7 +33,8 @@ function AnimationSettings(): JSX.Element {
         { label: "Selected Tab Blue Border", value: "selected-border", selected: settings.store.animationSelectedBorder },
         { label: "Selected Tab Background Color", value: "selected-background", selected: settings.store.animationSelectedBackground },
         { label: "Tab Shadow Effects", value: "tab-shadows", selected: settings.store.animationTabShadows },
-        { label: "Tab Repositioning (smooth position changes)", value: "tab-positioning", selected: settings.store.animationTabPositioning }
+        { label: "Tab Repositioning (smooth position changes)", value: "tab-positioning", selected: settings.store.animationTabPositioning },
+        { label: "Resize Handle Fade", value: "resize-handle", selected: settings.store.animationResizeHandle }
     ];
 
     const [currentValue, setCurrentValue] = useState(animationOptions.filter(option => option.selected));
@@ -58,6 +59,7 @@ function AnimationSettings(): JSX.Element {
         settings.store.animationSelectedBackground = enabledValues.includes("selected-background");
         settings.store.animationTabShadows = enabledValues.includes("tab-shadows");
         settings.store.animationTabPositioning = enabledValues.includes("tab-positioning");
+        settings.store.animationResizeHandle = enabledValues.includes("resize-handle");
 
         setCurrentValue(enabled);
     }
@@ -305,6 +307,12 @@ export const settings = definePluginSettings({
         default: true,
         hidden: true
     },
+    animationResizeHandle: {
+        type: OptionType.BOOLEAN,
+        description: "Enable fade animation for resize handle",
+        default: true,
+        hidden: true
+    },
     compactAutoExpandSelected: {
         type: OptionType.BOOLEAN,
         description: "Automatically expand compact tabs when selected to show the full channel name",
@@ -326,6 +334,12 @@ export const settings = definePluginSettings({
     bookmarksIndependentFromTabs: {
         type: OptionType.BOOLEAN,
         description: "Bookmarks navigate independently without affecting the active tabs bar",
+        default: true,
+        restartNeeded: false
+    },
+    showResizeHandle: {
+        type: OptionType.BOOLEAN,
+        description: "Show resize handle when hovering over tabs to adjust tab width",
         default: true,
         restartNeeded: false
     }

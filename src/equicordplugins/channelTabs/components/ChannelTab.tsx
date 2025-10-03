@@ -419,7 +419,7 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
             <XIcon size={16} fill="var(--interactive-normal)" />
         </button>}
 
-        {!compact && <div
+        {!compact && settings.store.showResizeHandle && <div
             className={cl("tab-resize-handle")}
             onMouseDown={handleResizeStart}
         />}

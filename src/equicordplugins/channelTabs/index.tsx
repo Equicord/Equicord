@@ -106,7 +106,7 @@ export default definePlugin({
 
             // Check if we're in bookmark viewing mode
             const wasViewingViaBookmark = ChannelTabsUtils.isViewingViaBookmarkMode();
-            
+
             // Clear bookmark viewing mode when ANY navigation occurs
             // This allows subsequent channel switches to work normally
             if (wasViewingViaBookmark) {

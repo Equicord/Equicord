@@ -199,7 +199,7 @@
     z-index: 10;
     opacity: 0;
     background: var(--brand-500);
-    border-radius: 0 12px 12px 0;
+    border-radius: 0 11px 11px 0;
     transition: opacity 0.2s ease;
 }
 
@@ -209,6 +209,10 @@
 
 .vc-channeltabs-tab:hover .vc-channeltabs-tab-resize-handle {
     opacity: 0.3;
+}
+
+.vc-channeltabs-no-resize-handle-animation .vc-channeltabs-tab-resize-handle {
+    transition: none !important;
 }
 
 .vc-channeltabs-tab-resizing {
