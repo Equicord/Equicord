@@ -77,7 +77,7 @@ export default definePlugin({
 
         if (should) {
             MessageActions.editMessage(channelId, lastMessageId, {
-                content: `${content}\n${message.content}`
+                content: `${content} ${message.content}`
             });
             message.content = "";
         }
