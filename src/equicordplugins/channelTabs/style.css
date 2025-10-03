@@ -207,12 +207,12 @@
     opacity: 0.7 !important;
 }
 
-.vc-channeltabs-tab:hover .vc-channeltabs-tab-resize-handle {
-    opacity: 0.3;
-}
-
 .vc-channeltabs-no-resize-handle-animation .vc-channeltabs-tab-resize-handle {
     transition: none !important;
+}
+
+.vc-channeltabs-tab:hover .vc-channeltabs-tab-resize-handle {
+    opacity: 0.3;
 }
 
 .vc-channeltabs-tab-resizing {
