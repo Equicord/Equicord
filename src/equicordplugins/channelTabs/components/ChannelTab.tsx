@@ -26,8 +26,8 @@ const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
 // Custom SVG icons for pages that don't have findable components
 function ShopIcon() {
     return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M21.707 13.707L21 13V11a1 1 0 0 0-1-1h-2v-.5a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1V10H4a1 1 0 0 0-1 1v2l-.707.707a1 1 0 0 0 0 1.414L3 16v4a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-4l.707-.707a1 1 0 0 0 0-1.414zM8 10.5h8V12H8v-1.5zM5 13h14v1H5v-1zm1 6v-3h12v3H6z" />
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M4 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4zm0 9v5a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-5H4zm2-2h8V8H6v1z" />
         </svg>
     );
 }
