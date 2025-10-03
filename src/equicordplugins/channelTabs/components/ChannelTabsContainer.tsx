@@ -11,7 +11,7 @@ import { useForceUpdater } from "@utils/react";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { Button, ContextMenuApi, Flex, FluxDispatcher, Forms, useCallback, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
 
-import { BasicChannelTabsProps, ChannelTabsProps, createTab, handleChannelSwitch, moveToTab, openedTabs, openStartupTabs, saveTabs, settings, setUpdaterFunction, useGhostTabs } from "../util";
+import { BasicChannelTabsProps, ChannelTabsProps, clearStaleNavigationContext, createTab, handleChannelSwitch, isNavigationFromSource, moveToTab, openedTabs, openStartupTabs, saveTabs, settings, setUpdaterFunction, useGhostTabs } from "../util";
 import BookmarkContainer from "./BookmarkContainer";
 import ChannelTab, { PreviewTab } from "./ChannelTab";
 import { BasicContextMenu } from "./ContextMenus";
@@ -44,6 +44,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         animationSelectedBorder,
         animationSelectedBackground,
         animationTabShadows,
+        animationTabPositioning,
         compactAutoExpandSelected,
         compactAutoExpandOnHover
     } = settings.use([
@@ -65,6 +66,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         "animationSelectedBorder",
         "animationSelectedBackground",
         "animationTabShadows",
+        "animationTabPositioning",
         "compactAutoExpandSelected",
         "compactAutoExpandOnHover"
     ]);
@@ -140,8 +142,18 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
 
     useEffect(() => {
         if (userId) {
-            handleChannelSwitch(props);
+            // Normalize guildId for comparison
+            const normalizedGuildId = props.guildId || "@me";
+
+            // Skip if this navigation came from a bookmark
+            if (!isNavigationFromSource(normalizedGuildId, props.channelId, "bookmark")) {
+                handleChannelSwitch(props);
+            }
+
             saveTabs(userId);
+
+            // Clean up any stale navigation contexts
+            clearStaleNavigationContext();
         }
     }, [userId, props.channelId, props.guildId]);
 
@@ -167,6 +179,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 !animationSelectedBorder && cl("no-selected-border"),
                 !animationSelectedBackground && cl("no-selected-background"),
                 !animationTabShadows && cl("no-tab-shadows"),
+                !animationTabPositioning && cl("no-tab-positioning"),
                 !compactAutoExpandSelected && cl("no-compact-auto-expand"),
                 !compactAutoExpandOnHover && cl("no-compact-hover-expand")
             )}

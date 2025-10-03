@@ -176,13 +176,33 @@ function ChannelTabContent(props: ChannelTabsProps & {
         }
     }
 
-    if (guildId === "@me" || guildId === undefined)
+    // handle special synthetic pages
+    if (channelId.startsWith("__")) {
+        const specialPages: Record<string, string> = {
+            "__quests__": "Quests",
+            "__message-requests__": "Message Requests",
+            "__friends__": getIntlMessage("FRIENDS")
+        };
+
+        const pageLabel = specialPages[channelId];
+        if (pageLabel) {
+            return (
+                <>
+                    <FriendsIcon />
+                    <Text className={cl("name-text")}>{pageLabel}</Text>
+                </>
+            );
+        }
+    }
+
+    if (guildId === "@me" || guildId === undefined) {
         return (
             <>
                 <FriendsIcon />
                 <Text className={cl("name-text")}>{getIntlMessage("FRIENDS")}</Text>
             </>
         );
+    }
 
     return (
         <>
@@ -257,7 +277,15 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
         item: () => {
             setIsDragging(true);
             lastSwapTimeRef.current = Date.now() - SWAP_THROTTLE_MS;
-            return { id };
+
+            // get fresh tab data dynamically to avoid stale closures
+            const tab = openedTabs.find(t => t.id === id);
+
+            return {
+                id,
+                channelId: tab?.channelId || channelId,
+                guildId: tab?.guildId || guildId
+            };
         },
         collect: monitor => ({
             isDragging: !!monitor.isDragging()
@@ -267,7 +295,7 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
             setIsDropTarget(false);
             lastSwapTimeRef.current = 0;
         }
-    }));
+    }), [id, channelId, guildId]);
     const [, drop] = useDrop(() => ({
         accept: "vc_ChannelTab",
         hover: (item, monitor) => {
@@ -299,7 +327,7 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
             const hoverWidth = hoverBoundingRect.right - hoverBoundingRect.left;
             const hoverMiddleX = hoverWidth / 2;
 
-            // Get tab width
+            // get tab width
             const draggedElement = document.querySelector(".vc-channeltabs-tab-dragging") as HTMLElement;
             const draggedWidth = draggedElement?.getBoundingClientRect().width || hoverWidth;
             const halfDraggedWidth = draggedWidth / 2;

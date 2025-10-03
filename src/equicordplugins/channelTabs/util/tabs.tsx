@@ -14,6 +14,56 @@ import { BasicChannelTabsProps, ChannelTabsProps, PersistedTabs } from "./types"
 
 const cl = classNameFactory("vc-channeltabs-");
 
+// Navigation context tracking system
+interface NavigationContext {
+    guildId: string;
+    channelId: string;
+    timestamp: number;
+    source: "bookmark" | "tab" | "unknown";
+}
+
+let lastNavigationContext: NavigationContext | null = null;
+let isViewingViaBookmark = false;
+
+export function isViewingViaBookmarkMode() {
+    return settings.store.bookmarksIndependentFromTabs && isViewingViaBookmark;
+}
+
+export function setNavigationSource(guildId: string, channelId: string, source: "bookmark" | "tab") {
+    lastNavigationContext = {
+        guildId: guildId || "@me",
+        channelId,
+        timestamp: Date.now(),
+        source
+    };
+}
+
+export function isNavigationFromSource(guildId: string | null | undefined, channelId: string, source: "bookmark"): boolean {
+    if (!lastNavigationContext) return false;
+
+    // Normalize both sides for comparison (handles null/undefined/"" for DMs)
+    const normalizedGuildId = guildId || "@me";
+    const normalizedContextGuildId = lastNavigationContext.guildId || "@me";
+
+    // Check if this navigation matches the tracked source
+    const matches =
+        normalizedContextGuildId === normalizedGuildId &&
+        lastNavigationContext.channelId === channelId &&
+        lastNavigationContext.source === source;
+
+    // Don't clear immediately - allow multiple React updates to check
+    // Context will be cleared by clearStaleNavigationContext() after 2 seconds
+
+    return matches;
+}
+
+// Clean up old contexts (safety mechanism)
+export function clearStaleNavigationContext() {
+    if (lastNavigationContext && Date.now() - lastNavigationContext.timestamp > 2000) {
+        lastNavigationContext = null;
+    }
+}
+
 function replaceArray<T>(array: T[], ...values: T[]) {
     const len = array.length;
     for (let i = 0; i < len; i++) array.pop();
@@ -141,6 +191,14 @@ export function closeTabsToTheLeft(id: number) {
 let lastNavigationTime = 0;
 
 export function handleChannelSwitch(ch: BasicChannelTabsProps) {
+    // only require channelId to allow synthetic IDs for special pages
+    if (!ch.channelId) return;
+
+    // don't modify tabs when viewing via bookmarks in independent mode
+    if (isViewingViaBookmarkMode()) {
+        return;
+    }
+
     const tab = openTabs.find(c => c.id === currentlyOpenTab);
 
     // Normalize guildId for DMs/Group Chats to ensure consistent comparison
@@ -193,6 +251,10 @@ export function hasClosedTabs() {
 }
 
 export function isTabSelected(id: number) {
+    // don't show any tab as selected when viewing via bookmark in independent mode
+    if (isViewingViaBookmark && settings.store.bookmarksIndependentFromTabs) {
+        return false;
+    }
     return id === currentlyOpenTab;
 }
 
@@ -245,15 +307,38 @@ export function moveToTab(id: number) {
     const tab = openTabs.find(v => v.id === id);
     if (tab === undefined) return logger.error("Couldn't find channel tab with ID " + id, openTabs);
 
+    // clear bookmark viewing mode when switching to a tab
+    isViewingViaBookmark = false;
+
     // cache current tab state before switching to it
     cacheCurrentTabState();
 
     setOpenTab(id);
+
+    // handle special pages with synthetic channelIds
+    if (tab.channelId.startsWith("__")) {
+        const routeMap: Record<string, string> = {
+            "__quests__": "/quest-home",
+            "__message-requests__": "/message-requests",
+            "__friends__": "/channels/@me"
+        };
+
+        const route = routeMap[tab.channelId];
+        if (route) {
+            setNavigationSource(tab.guildId, tab.channelId, "tab");
+            NavigationRouter.transitionTo(route);
+            return;
+        }
+    }
+
+    // regular channel nav
     if (tab.messageId) {
+        setNavigationSource(tab.guildId, tab.channelId, "tab");
         NavigationRouter.transitionTo(`/channels/${tab.guildId}/${tab.channelId}/${tab.messageId}`);
         delete openTabs[openTabs.indexOf(tab)].messageId;
     }
     else if (tab.channelId !== SelectedChannelStore.getChannelId() || tab.guildId !== SelectedGuildStore.getGuildId()) {
+        setNavigationSource(tab.guildId, tab.channelId, "tab");
         NavigationRouter.transitionToGuild(tab.guildId, tab.channelId);
         // restore cached state for the new tab
         restoreTabState(id);
@@ -338,6 +423,27 @@ export function setUpdaterFunction(fn: () => void) {
 export function switchChannel(ch: BasicChannelTabsProps) {
     handleChannelSwitch(ch);
     moveToTab(openTabs.find(t => t.id === currentlyOpenTab)!.id);
+}
+
+export function navigateToBookmark(ch: BasicChannelTabsProps) {
+    // check if independent mode is enabled
+    if (settings.store.bookmarksIndependentFromTabs) {
+        // set flag that we're viewing via bookmark
+        isViewingViaBookmark = true;
+
+        // set navigation context BEFORE navigating
+        setNavigationSource(ch.guildId, ch.channelId, "bookmark");
+
+        // navigate directly without affecting tab state
+        NavigationRouter.transitionToGuild(ch.guildId, ch.channelId);
+
+        // trigger update to reflect tab deselection
+        update();
+    } else {
+        // use old behavior - affects tabs
+        // sorry for all the comments im losing it here
+        switchChannel(ch);
+    }
 }
 
 export function toggleCompactTab(id: number) {

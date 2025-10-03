@@ -98,7 +98,12 @@
 .vc-channeltabs-bookmarks {
     flex-grow: 1;
     overflow: hidden;
-    padding: 2px 0;
+    padding: 2px 0 2px 8px;
+}
+
+/* Add spacing between bookmark items */
+.vc-channeltabs-bookmarks > [class*="scroller"] {
+    gap: 4px;
 }
 
 .vc-channeltabs-bookmark-placeholder-text {
@@ -198,12 +203,12 @@
     transition: opacity 0.2s ease;
 }
 
-.vc-channeltabs-tab:hover .vc-channeltabs-tab-resize-handle {
-    opacity: 0.3;
-}
-
 .vc-channeltabs-tab-resize-handle:hover {
     opacity: 0.7 !important;
+}
+
+.vc-channeltabs-tab:hover .vc-channeltabs-tab-resize-handle {
+    opacity: 0.3;
 }
 
 .vc-channeltabs-tab-resizing {
@@ -683,6 +688,13 @@
     animation: none !important;
 }
 
+/* Also disable closing animation for instant disappear */
+.vc-channeltabs-container.vc-channeltabs-no-enter-exit-animation .vc-channeltabs-tab-closing {
+    animation: none !important;
+    opacity: 0 !important;
+    display: none !important;
+}
+
 .vc-channeltabs-container.vc-channeltabs-no-enter-exit-animation .vc-channeltabs-tab {
     transition: opacity 0.2s ease-out,
         transform 0.2s ease-in-out,
@@ -766,6 +778,31 @@
     transition: none !important;
 }
 
+/* Also disable tab-inner padding transition */
+.vc-channeltabs-container.vc-channeltabs-no-compact-animation .vc-channeltabs-tab-compact .vc-channeltabs-tab-inner {
+    transition: none !important;
+}
+
+/* Make close button appear instantly with more specificity */
+.vc-channeltabs-container.vc-channeltabs-no-compact-animation .vc-channeltabs-tab-compact:hover .vc-channeltabs-close-button-compact,
+.vc-channeltabs-container.vc-channeltabs-no-compact-animation .vc-channeltabs-tab-compact.vc-channeltabs-tab-selected .vc-channeltabs-close-button-compact {
+    transition: none !important;
+    transition-delay: 0s !important;
+}
+
+/* Tab positioning - disable if setting is off for INSTANT position changes */
+.vc-channeltabs-container.vc-channeltabs-no-tab-positioning .vc-channeltabs-tab-container {
+    transition: none !important;
+}
+
+.vc-channeltabs-container.vc-channeltabs-no-tab-positioning .vc-channeltabs-tab {
+    transition: none !important;
+}
+
+.vc-channeltabs-container.vc-channeltabs-no-tab-positioning .vc-channeltabs-tab-container:has(.vc-channeltabs-tab-dragging) .vc-channeltabs-tab:not(.vc-channeltabs-tab-dragging) {
+    transition: none !important;
+}
+
 /* Compact auto-expand selected - disable if setting is off */
 .vc-channeltabs-container.vc-channeltabs-no-compact-auto-expand .vc-channeltabs-tab-compact.vc-channeltabs-tab-selected .vc-channeltabs-tab-inner {
     padding-right: 0 !important;
@@ -808,4 +845,48 @@
 /* Prevent flash when switching tabs with cache enabled */
 [class*="scrollerInner_"] {
     scroll-behavior: auto;
+}
+
+/* Drag and drop visual feedback */
+.vc-channeltabs-bookmarks-drop-target {
+    background-color: color-mix(in srgb, var(--brand-500) 20%, transparent);
+    border: 2px dashed var(--brand-500);
+    border-radius: 4px;
+}
+
+.vc-channeltabs-bookmark.vc-channeltabs-folder-drop-target {
+    background-color: color-mix(in srgb, var(--brand-500) 30%, transparent);
+    border: 2px solid var(--brand-500);
+    transform: scale(1.05);
+    box-shadow: 0 0 8px var(--brand-500);
+}
+
+/* Folder expansion */
+.vc-channeltabs-bookmark.vc-channeltabs-folder-expanded {
+    background-color: var(--background-modifier-selected);
+}
+
+/* Folder item styling - indented and visually connected to folder */
+.vc-channeltabs-bookmark.vc-channeltabs-folder-item {
+    margin-left: 0.5rem;
+    border-left: 2px solid var(--background-modifier-accent);
+    padding-left: 0.5rem;
+    opacity: 0.9;
+    background-color: var(--background-secondary-alt);
+}
+
+.vc-channeltabs-bookmark.vc-channeltabs-folder-item:hover {
+    opacity: 1;
+    background-color: var(--background-modifier-hover);
+}
+
+/* Active bookmark visual indicator */
+.vc-channeltabs-bookmark.vc-channeltabs-bookmark-active {
+    border: 1px solid var(--brand-500);
+    box-shadow: 0 0 4px var(--brand-500);
+    background-color: color-mix(in srgb, var(--brand-500) 15%, transparent);
+}
+
+.vc-channeltabs-bookmark.vc-channeltabs-bookmark-active:hover {
+    box-shadow: 0 0 6px var(--brand-500);
 }

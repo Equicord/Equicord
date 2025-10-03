@@ -32,7 +32,8 @@ function AnimationSettings(): JSX.Element {
         { label: "Compact Mode Expansion", value: "compact-expand", selected: settings.store.animationCompactExpand },
         { label: "Selected Tab Blue Border", value: "selected-border", selected: settings.store.animationSelectedBorder },
         { label: "Selected Tab Background Color", value: "selected-background", selected: settings.store.animationSelectedBackground },
-        { label: "Tab Shadow Effects", value: "tab-shadows", selected: settings.store.animationTabShadows }
+        { label: "Tab Shadow Effects", value: "tab-shadows", selected: settings.store.animationTabShadows },
+        { label: "Tab Repositioning (smooth position changes)", value: "tab-positioning", selected: settings.store.animationTabPositioning }
     ];
 
     const [currentValue, setCurrentValue] = useState(animationOptions.filter(option => option.selected));
@@ -56,6 +57,7 @@ function AnimationSettings(): JSX.Element {
         settings.store.animationSelectedBorder = enabledValues.includes("selected-border");
         settings.store.animationSelectedBackground = enabledValues.includes("selected-background");
         settings.store.animationTabShadows = enabledValues.includes("tab-shadows");
+        settings.store.animationTabPositioning = enabledValues.includes("tab-positioning");
 
         setCurrentValue(enabled);
     }
@@ -297,6 +299,12 @@ export const settings = definePluginSettings({
         default: true,
         hidden: true
     },
+    animationTabPositioning: {
+        type: OptionType.BOOLEAN,
+        description: "Enable smooth transitions when tabs move positions",
+        default: true,
+        hidden: true
+    },
     compactAutoExpandSelected: {
         type: OptionType.BOOLEAN,
         description: "Automatically expand compact tabs when selected to show the full channel name",
@@ -312,6 +320,12 @@ export const settings = definePluginSettings({
     openInNewTabAutoSwitch: {
         type: OptionType.BOOLEAN,
         description: "Automatically switch to new tabs opened from 'Open in New Tab' context menu",
+        default: true,
+        restartNeeded: false
+    },
+    bookmarksIndependentFromTabs: {
+        type: OptionType.BOOLEAN,
+        description: "Bookmarks navigate independently without affecting the active tabs bar",
         default: true,
         restartNeeded: false
     }

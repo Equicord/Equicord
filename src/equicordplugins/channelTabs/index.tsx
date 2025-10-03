@@ -134,7 +134,27 @@ export default definePlugin({
     },
 
     handleNavigation(guildId: string, channelId: string) {
-        if (!guildId || !channelId) return;
+        // detect special pages by checking route when theres no channel id
+        if (!channelId && (!guildId || guildId === "@me")) {
+            const currentPath = window.location.pathname;
+
+            // something special
+            if (currentPath.includes("/quest-home")) {
+                channelId = "__quests__";
+                guildId = "@me";
+            } else if (currentPath.includes("/message-requests")) {
+                channelId = "__message-requests__";
+                guildId = "@me";
+            } else if (currentPath === "/channels/@me") {
+                channelId = "__friends__";
+                guildId = "@me";
+            }
+        }
+
+        // skip if we're viewing via bookmarks in independent mode (prob a better way to do this)
+        if (ChannelTabsUtils.isViewingViaBookmarkMode()) {
+            return;
+        }
 
         // wait for discord to update channel data
         requestAnimationFrame(() => {
