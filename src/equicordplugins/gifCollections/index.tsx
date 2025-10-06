@@ -132,6 +132,11 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: false,
     },
+    preventDuplicates: {
+        description: "Prevent adding the same GIF to a collection multiple times",
+        type: OptionType.BOOLEAN,
+        default: false,
+    },
     defaultEmptyCollectionImage: {
         description: "The image / gif that will be shown when a collection has no images / gifs",
         type: OptionType.STRING,

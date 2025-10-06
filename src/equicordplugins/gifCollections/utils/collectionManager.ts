@@ -60,6 +60,21 @@ export const addToCollection = async (name: string, gif: Gif): Promise<void> => 
     const collectionIndex = collections.findIndex(c => c.name === name);
     if (collectionIndex === -1) return console.warn("collection not found");
 
+    if (settings.store.preventDuplicates) {
+        const isDuplicate = collections[collectionIndex].gifs.some(g => g.url === gif.url);
+        if (isDuplicate) {
+            return Toasts.show({
+                message: "This GIF is already in the collection",
+                type: Toasts.Type.FAILURE,
+                id: Toasts.genId(),
+                options: {
+                    duration: 3000,
+                    position: Toasts.Position.BOTTOM
+                }
+            });
+        }
+    }
+
     collections[collectionIndex].gifs.push(gif);
     collections[collectionIndex].src = gif.src;
     collections[collectionIndex].format = getFormat(gif.src);
