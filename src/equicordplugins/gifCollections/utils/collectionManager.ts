@@ -164,3 +164,18 @@ export const moveGifToCollection = async (gifId: string, fromCollection: string,
     await DataStore.set(DATA_COLLECTION_NAME, collections);
     return await refreshCacheCollection();
 };
+
+export const updateGif = async (gifId: string, updatedGif: Gif): Promise<void> => {
+    const collections = await getCollections();
+    const collectionIndex = collections.findIndex(c => c.gifs.some(g => g.id === gifId));
+    if (collectionIndex === -1) return console.warn("collection not found");
+
+    const gifIndex = collections[collectionIndex].gifs.findIndex(g => g.id === gifId);
+    if (gifIndex === -1) return console.warn("gif not found");
+
+    collections[collectionIndex].gifs[gifIndex] = updatedGif;
+    collections[collectionIndex].lastUpdated = Date.now();
+
+    await DataStore.set(DATA_COLLECTION_NAME, collections);
+    return await refreshCacheCollection();
+};
