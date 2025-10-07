@@ -15,7 +15,7 @@ import ZipPreview from "./ZipPreview";
 
 async function fetchBlobWithDebug(url: string) {
     try {
-        const res = await fetch(url, { credentials: "include" });
+        const res = await fetch(url);
         if (!res.ok) {
             console.error("ZipPreview: fetch failed", url, res.status, res.statusText);
             return null;
