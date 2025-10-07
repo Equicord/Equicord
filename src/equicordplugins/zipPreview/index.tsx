@@ -9,9 +9,13 @@ import "./styles.css";
 import { EquicordDevs } from "@utils/constants";
 import { openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
+import { findByPropsLazy } from "@webpack";
 import { ContextMenuApi, createRoot, Menu, React, showToast, useEffect, useState } from "@webpack/common";
 
 import ZipPreview from "./ZipPreview";
+
+// Get file attachment classes dynamically - try common attachment module props
+const FileClasses = findByPropsLazy("file", "fileInner", "filenameLinkWrapper");
 
 async function fetchBlobWithDebug(url: string) {
     try {
@@ -180,7 +184,8 @@ export default definePlugin({
     start() {
         // use mutationobserver to inject preview into file attachments
         const observer = new MutationObserver(() => {
-            document.querySelectorAll(".file__0ccae").forEach((fileEl: any) => {
+            const selector = FileClasses.file ? `.${FileClasses.file}` : ".file__0ccae";
+            document.querySelectorAll(selector).forEach((fileEl: any) => {
                 if (fileEl.dataset.zpProcessed) return;
 
                 // find the filename anchor

@@ -361,9 +361,6 @@ export default function openFilePreview(name: string, blob: Blob, buffer: ArrayB
                 height: 1080,
             });
         };
-        reader.onerror = e => {
-            console.error("[ZipPreview] FileReader error:", e);
-        };
         reader.readAsDataURL(blob);
     } else {
         // open text file modal
