@@ -9,13 +9,9 @@ import "./styles.css";
 import { EquicordDevs } from "@utils/constants";
 import { openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
-import { findByPropsLazy } from "@webpack";
-import { ContextMenuApi, createRoot, Menu, React, showToast, useEffect, useState } from "@webpack/common";
+import { Menu, React, showToast, useEffect, useState } from "@webpack/common";
 
 import ZipPreview from "./ZipPreview";
-
-// Get file attachment classes dynamically - try common attachment module props
-const FileClasses = findByPropsLazy("file", "fileInner", "filenameLinkWrapper");
 
 async function fetchBlobWithDebug(url: string) {
     try {
@@ -66,8 +62,6 @@ async function tryNativeDownloadAttachment(attachment: any) {
         return null;
     }
 }
-
-let handler: ((e: MouseEvent) => void) | null = null;
 
 function MessageContextMenu(children: Array<any>, props: any) {
     try {
@@ -175,124 +169,19 @@ export default definePlugin({
     description: "Preview and navigate inside zip files without extracting.",
     authors: [EquicordDevs.justjxke],
 
-    patches: [],
+    patches: [
+        {
+            find: "#{intl::ATTACHMENT_PROCESSING}",
+            replacement: {
+                match: /null!=\i&&\i\(\)(?<=renderAdjacentContent.*?\}=(\i);.*?)/,
+                replace: "$self.ZipAttachmentPreview({ attachment: $1 })"
+            }
+        }
+    ],
 
     contextMenus: {
         "message": MessageContextMenu
     },
 
-    start() {
-        // use mutationobserver to inject preview into file attachments
-        const observer = new MutationObserver(() => {
-            const selector = FileClasses.file ? `.${FileClasses.file}` : ".file__0ccae";
-            document.querySelectorAll(selector).forEach((fileEl: any) => {
-                if (fileEl.dataset.zpProcessed) return;
-
-                // find the filename anchor
-                const anchor = fileEl.querySelector("a[href*=\".zip\"]");
-                if (!anchor) return;
-
-                const { href } = anchor;
-                if (!href.toLowerCase().includes(".zip")) return;
-
-                const wrapEl = document.createElement("div");
-                wrapEl.className = "zp-wrap";
-
-                const contentEl = document.createElement("div");
-                contentEl.className = "zp-content";
-
-                while (fileEl.firstChild) {
-                    contentEl.appendChild(fileEl.firstChild);
-                }
-
-                wrapEl.appendChild(contentEl);
-
-                // create and inject preview element
-                const container = document.createElement("div");
-                container.className = "zp-injected-preview";
-                wrapEl.appendChild(container);
-
-                fileEl.appendChild(wrapEl);
-                fileEl.classList.add("zp-file-wrapper");
-                fileEl.dataset.zpProcessed = "true";
-
-                // extract attachment ID from the URL or use href as fallback
-                const urlParts = href.split("/");
-                const attachmentId = urlParts[urlParts.length - 2] || href;
-
-                // render React component into it
-                const attachment = {
-                    url: href,
-                    proxy_url: href,
-                    filename: anchor.textContent || "archive.zip",
-                    id: attachmentId
-                };
-
-                const root = createRoot(container);
-                root.render(React.createElement(ZipAttachmentPreview, { attachment }));
-            });
-        });
-
-        observer.observe(document.body, { childList: true, subtree: true });
-        (this as any)._observer = observer;
-
-        handler = (e: MouseEvent) => {
-            try {
-                const target = e.target as HTMLElement;
-                const a = target.closest ? (target.closest("a") as HTMLAnchorElement | null) : null;
-                const href = a?.href ?? (target.getAttribute ? target.getAttribute("href") : null);
-                if (!href) return;
-                // quick check for zip
-                if (!href.toLowerCase().endsWith(".zip")) return;
-
-                e.preventDefault();
-                ContextMenuApi.openContextMenu(e as any, () => (
-                    <Menu.Menu
-                        navId="zippreview"
-                        onClose={() => (window as any).FluxDispatcher?.dispatch({ type: "CONTEXT_MENU_CLOSE" })}
-                        aria-label="Zip Preview"
-                    >
-                        <Menu.MenuItem id="zippreview-open" label="Preview zip" action={async () => {
-                            try {
-                                // try native download first (if this is an attachment-like link)
-                                let blob: Blob | null = null;
-                                try {
-                                    // attempt to construct minimal attachment info from href
-                                    const maybe = { url: href } as any;
-                                    blob = await tryNativeDownloadAttachment(maybe);
-                                } catch (e) {
-                                    blob = null;
-                                }
-                                if (!blob) blob = await fetchBlobWithDebug(href);
-                                if (!blob || blob.size === 0) {
-                                    console.error("ZipPreview: fetched empty blob for", href);
-                                    showToast("Failed to fetch attachment for preview (empty response). Try Download.");
-                                    return;
-                                }
-                                // extract name from href
-                                const urlParts = href.split("/");
-                                const inferred = urlParts[urlParts.length - 1] || "archive.zip";
-                                openModal(props => <ZipPreview blob={blob} name={inferred} /> as any);
-                            } catch (err) {
-                                console.error("ZipPreview: failed to open", err);
-                            }
-                        }} />
-                    </Menu.Menu>
-                ));
-            } catch (err) {
-                // ignore
-            }
-        };
-
-        document.addEventListener("contextmenu", handler, true);
-    },
-
-    stop() {
-        const observer = (this as any)._observer;
-        if (observer) observer.disconnect();
-        if (handler) document.removeEventListener("contextmenu", handler, true);
-        handler = null;
-    }
+    ZipAttachmentPreview,
 });
-
-export { MessageContextMenu };
