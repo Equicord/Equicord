@@ -20,10 +20,13 @@ import "./themesStyles.css";
 
 import { Settings, useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
+import { Divider } from "@components/Divider";
 import { ErrorCard } from "@components/ErrorCard";
 import { Flex } from "@components/Flex";
+import { Heading } from "@components/Heading";
 import { CogWheel, DeleteIcon, FolderIcon, PaintbrushIcon, PencilIcon, PluginIcon, PlusIcon, RestartIcon } from "@components/Icons";
 import { Link } from "@components/Link";
+import { Paragraph } from "@components/Paragraph";
 import { AddonCard, openPluginModal, QuickAction, QuickActionCard, SettingsTab, wrapTab } from "@components/settings";
 import { OnlineThemeCard } from "@components/settings/OnlineThemeCard";
 import { CspBlockedUrls, useCspErrors } from "@utils/cspViolations";
@@ -321,7 +324,7 @@ function ThemesTab() {
         return (
             <>
                 <Card className="vc-settings-card">
-                    <Forms.FormTitle tag="h5">Find Themes:</Forms.FormTitle>
+                    <Heading>Find Themes:</Heading>
                     <div style={{ marginBottom: ".5em", display: "flex", flexDirection: "column" }}>
                         <Link style={{ marginRight: ".5em" }} href="https://betterdiscord.app/themes">
                             BetterDiscord Themes
@@ -331,7 +334,8 @@ function ThemesTab() {
                     <Forms.FormText>If using the BD site, click on "Download" and place the downloaded .theme.css file into your themes folder.</Forms.FormText>
                 </Card>
 
-                <Forms.FormSection title="Local Themes">
+                <section>
+                    <Heading>Local Themes</Heading>
                     <QuickActionCard>
                         <>
                             {IS_WEB ?
@@ -408,7 +412,7 @@ function ThemesTab() {
                                 />
                             )))}
                     </div>
-                </Forms.FormSection>
+                </section>
             </>
         );
     }
@@ -463,9 +467,10 @@ function ThemesTab() {
 
         return (
             <>;
-                <Forms.FormSection title="Online Themes" tag="h5">
+                <section>
+                    <Heading>Online Themes</Heading>
                     <Card className="vc-settings-theme-add-card">
-                        <Forms.FormText>Make sure to use direct links to files (raw or github.io)!</Forms.FormText>
+                        <Paragraph>Make sure to use direct links to files (raw or github.io)!</Paragraph>
                         <Flex flexDirection="row">
                             <TextInput placeholder="Theme Link" className="vc-settings-theme-link-input" value={currentThemeLink} onChange={setCurrentThemeLink} />
                             <Button onClick={() => addThemeLink(currentThemeLink)} disabled={!themeLinkValid}>Add</Button>
@@ -506,7 +511,7 @@ function ThemesTab() {
                             );
                         })}
                     </div>
-                </Forms.FormSection>
+                </section>
             </>
         );
     }
@@ -578,18 +583,18 @@ export function CspErrorCard() {
 
     return (
         <ErrorCard className="vc-settings-card">
-            <Forms.FormTitle tag="h5">Blocked Resources</Forms.FormTitle>
-            <Forms.FormText>Some images, styles, or fonts were blocked because they come from disallowed domains.</Forms.FormText>
-            <Forms.FormText>It is highly recommended to move them to GitHub or Imgur. But you may also allow domains if you fully trust them.</Forms.FormText>
-            <Forms.FormText>
+            <Heading>Blocked Resources</Heading>
+            <Paragraph>Some images, styles, or fonts were blocked because they come from disallowed domains.</Paragraph>
+            <Paragraph>It is highly recommended to move them to GitHub or Imgur. But you may also allow domains if you fully trust them.</Paragraph>
+            <Paragraph>
                 After allowing a domain, you have to fully close (from tray / task manager) and restart {IS_DISCORD_DESKTOP ? "Discord" : IS_EQUIBOP ? "Equibop" : "Vesktop"} to apply the change.
-            </Forms.FormText>
+            </Paragraph>
 
-            <Forms.FormTitle tag="h5" className={classes(Margins.top16, Margins.bottom8)}>Blocked URLs</Forms.FormTitle>
+            <Heading className={classes(Margins.top16, Margins.bottom8)}>Blocked URLs</Heading>
             <div className="vc-settings-csp-list">
                 {errors.map((url, i) => (
                     <div key={url}>
-                        {i !== 0 && <Forms.FormDivider className={Margins.bottom8} />}
+                        {i !== 0 && <Divider className={Margins.bottom8} />}
                         <div className="vc-settings-csp-row">
                             <Link href={url}>{url}</Link>
                             <Button color={Button.Colors.PRIMARY} onClick={() => allowUrl(url)} disabled={isImgurHtmlDomain(url)}>
@@ -602,11 +607,11 @@ export function CspErrorCard() {
 
             {hasImgurHtmlDomain && (
                 <>
-                    <Forms.FormDivider className={classes(Margins.top8, Margins.bottom16)} />
-                    <Forms.FormText>
+                    <Divider className={classes(Margins.top8, Margins.bottom16)} />
+                    <Paragraph>
                         Imgur links should be direct links in the form of <code>https://i.imgur.com/...</code>
-                    </Forms.FormText>
-                    <Forms.FormText>To obtain a direct link, right-click the image and select "Copy image address".</Forms.FormText>
+                    </Paragraph>
+                    <Paragraph>To obtain a direct link, right-click the image and select "Copy image address".</Paragraph>
                 </>
             )}
         </ErrorCard>
@@ -617,11 +622,11 @@ function UserscriptThemesTab() {
     return (
         <SettingsTab title="Themes">
             <Card className="vc-settings-card">
-                <Forms.FormTitle tag="h5">Themes are not supported on the Userscript!</Forms.FormTitle>
+                <Heading>Themes are not supported on the Userscript!</Heading>
 
-                <Forms.FormText>
+                <Paragraph>
                     You can instead install themes with the <Link href={getStylusWebStoreUrl()}>Stylus extension</Link>!
-                </Forms.FormText>
+                </Paragraph>
             </Card>
         </SettingsTab>
     );

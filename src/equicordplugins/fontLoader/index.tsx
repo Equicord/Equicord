@@ -7,6 +7,7 @@
 import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
+import { HeadingSecondary, HeadingTertiary } from "@components/Heading";
 import { debounce } from "@shared/debounce";
 import { EquicordDevs } from "@utils/constants";
 import { Margins } from "@utils/margins";
@@ -130,8 +131,8 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
     };
 
     return (
-        <Forms.FormSection>
-            <Forms.FormTitle tag="h3">Search Google Fonts</Forms.FormTitle>
+        <section>
+            <HeadingSecondary>Search Google Fonts</HeadingSecondary>
             <Forms.FormText>Click on any font to apply it.</Forms.FormText>
 
             <TextInput
@@ -151,7 +152,7 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
                             onClick={() => onSelect(font)}
                         >
                             <div className="eq-googlefonts-preview" style={{ fontFamily: font.family }}>
-                                <Forms.FormTitle tag="h4">{font.displayName}</Forms.FormTitle>
+                                <HeadingTertiary>{font.displayName}</HeadingTertiary>
                                 <Forms.FormText>The quick brown fox jumps over the lazy dog</Forms.FormText>
                             </div>
                             {font.authors?.length && (
@@ -163,7 +164,7 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
                     ))}
                 </div>
             )}
-        </Forms.FormSection>
+        </section>
     );
 }
 

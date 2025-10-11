@@ -17,6 +17,7 @@
 */
 
 import { ErrorCard } from "@components/ErrorCard";
+import { HeadingSecondary } from "@components/Heading";
 import { Devs, IS_LINUX } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
@@ -227,7 +228,7 @@ export default definePlugin({
         }
 
         return (
-            <Forms.FormSection>
+            <section>
                 <Forms.FormText>
                     You can customise the spoken messages below. You can disable specific messages by setting them to nothing
                 </Forms.FormText>
@@ -237,7 +238,7 @@ export default definePlugin({
                 </Forms.FormText>
                 {hasEnglishVoices && (
                     <>
-                        <Forms.FormTitle className={Margins.top20} tag="h3">Play Example Sounds</Forms.FormTitle>
+                        <HeadingSecondary className={Margins.top20}>Play Example Sounds</HeadingSecondary>
                         <div
                             style={{
                                 display: "grid",
@@ -255,7 +256,7 @@ export default definePlugin({
                     </>
                 )}
                 {errorComponent}
-            </Forms.FormSection>
+            </section>
         );
     }
 });

@@ -9,6 +9,7 @@ import "styles.css?managed";
 import { DataStore } from "@api/index";
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { Heart } from "@components/Heart";
+import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { openUserProfile } from "@utils/discord";
 import * as Modal from "@utils/modal";
@@ -245,13 +246,13 @@ class DataUI {
                     {this.renderUserAvatar(user)}
                     <Tooltip text={this.userTooltipText(user)}>
                         {props =>
-                            <Text {...props} selectable>{user.tag} {allowExtra.owner && user.extra?.isOwner && "(owner)"}</Text>
+                            <Paragraph {...props}>{user.tag} {allowExtra.owner && user.extra?.isOwner && "(owner)"}</Paragraph>
                         }
                     </Tooltip>
                 </Flex>
             </span>
 
-            <span style={{ height: "min-content" }}><Text selectable variant="code" style={{ opacity: 0.75 }}>{user.id}</Text></span>
+            <span style={{ height: "min-content" }}><Paragraph style={{ opacity: 0.75 }}>{user.id}</Paragraph></span>
         </Flex>;
     }
 
@@ -279,7 +280,7 @@ class DataUI {
                         <TextArea value={JSON.stringify(usersCollection, null, "\t")} onChange={() => { }} rows={20} />
                     </Modal.ModalContent>
                 </Modal.ModalRoot>)}>
-                    <Text variant="eyebrow" style={{ cursor: "pointer" }} >Open editor</Text>
+                    <Paragraph style={{ cursor: "pointer" }}>Open editor</Paragraph>
                 </Clickable>
 
                 <Clickable onClick={

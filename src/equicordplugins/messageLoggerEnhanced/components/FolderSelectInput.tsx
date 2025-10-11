@@ -17,8 +17,9 @@
 */
 
 import { classNameFactory } from "@api/Styles";
+import { Heading } from "@components/Heading";
 import { copyWithToast } from "@utils/misc";
-import { Button, Forms, Toasts } from "@webpack/common";
+import { Button, Toasts } from "@webpack/common";
 
 import { Native, settings } from "..";
 import { DEFAULT_IMAGE_CACHE_DIR } from "../utils/constants";
@@ -30,13 +31,13 @@ function createDirSelector(settingKey: "logsDir" | "imageCacheDir", successMessa
         if (IS_WEB) return null;
 
         return (
-            <Forms.FormSection>
-                <Forms.FormTitle>{option.description}</Forms.FormTitle>
+            <section>
+                <Heading>{option.description}</Heading>
                 <SelectFolderInput
                     settingsKey={settingKey}
                     successMessage={successMessage}
                 />
-            </Forms.FormSection>
+            </section>
         );
     };
 }

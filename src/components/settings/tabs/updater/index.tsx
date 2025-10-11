@@ -17,9 +17,11 @@
 */
 
 import { useSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
 import { ErrorCard } from "@components/ErrorCard";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
+import { Heading } from "@components/Heading";
 import { Link } from "@components/Link";
 import { handleSettingsTabError, SettingsTab, wrapTab } from "@components/settings";
 import { Margins } from "@utils/margins";
@@ -204,7 +206,7 @@ function Updater() {
 
     return (
         <SettingsTab title="Equicord Updater">
-            <Forms.FormTitle tag="h5">Updater Settings</Forms.FormTitle>
+            <Heading>Updater Settings</Heading>
             <FormSwitch
                 title="Automatically update"
                 description="Automatically update Equicord without confirmation prompt"
@@ -219,7 +221,7 @@ function Updater() {
                 disabled={!settings.autoUpdate}
             />
 
-            <Forms.FormTitle tag="h5">Repo</Forms.FormTitle>
+            <Heading>Repo</Heading>
 
             <Forms.FormText>
                 {repoPending
@@ -235,9 +237,9 @@ function Updater() {
                 {" "}(<HashLink hash={shortGitHash()} repo={repo} disabled={repoPending} longHash={gitHash} />)
             </Forms.FormText>
 
-            <Forms.FormDivider className={Margins.top8 + " " + Margins.bottom8} />
+            <Divider className={Margins.top8 + " " + Margins.bottom8} />
 
-            <Forms.FormTitle tag="h5">Updates</Forms.FormTitle>
+            <Heading>Updates</Heading>
 
             {isNewer ? <Newer {...commonProps} /> : <Updatable {...commonProps} />}
         </SettingsTab >

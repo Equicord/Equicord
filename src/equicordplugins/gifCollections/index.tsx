@@ -9,7 +9,9 @@ import "./style.css";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
+import { Heading } from "@components/Heading";
 import { copyToClipboard } from "@utils/clipboard";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
@@ -173,12 +175,12 @@ export const settings = definePluginSettings({
 
             return (
                 <div className="collections-sort-container">
-                    <Forms.FormTitle className="collections-sort-title">Sort Collections</Forms.FormTitle>
-                    <Forms.FormDivider className="collections-sort-divider" />
+                    <Heading className="collections-sort-title">Sort Collections</Heading>
+                    <Divider className="collections-sort-divider" />
                     <Forms.FormText className="collections-sort-description">
                         Choose a sorting criteria for your collections
                     </Forms.FormText>
-                    <Forms.FormDivider className="collections-sort-divider" />
+                    <Divider className="collections-sort-divider" />
                     <div className="collections-sort-section">
                         <Forms.FormText className="collections-sort-section-title">Sort By</Forms.FormText>
                         <div className="collections-sort-option">
@@ -221,7 +223,7 @@ export const settings = definePluginSettings({
                             </label>
                         </div>
                     </div>
-                    <Forms.FormDivider className="collections-sort-divider" />
+                    <Divider className="collections-sort-divider" />
                     <div className="collections-sort-section">
                         <Forms.FormText className="collections-sort-section-title">Order</Forms.FormText>
                         <div className="collections-sort-option">
@@ -461,24 +463,24 @@ const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
                                     <Forms.FormText className="custom-modal-title">Collection Information</Forms.FormText>
                                 </ModalHeader>
                                 <ModalContent className="custom-modal-content">
-                                    <Forms.FormSection>
+                                    <section>
                                         <Flex className="collection-info">
-                                            <Forms.FormTitle tag="h5" className="collection-info-title">Name</Forms.FormTitle>
+                                            <Heading className="collection-info-title">Name</Heading>
                                             <Forms.FormText className="collection-info-text">{collection.name.replace(/.+?:/, "")}</Forms.FormText>
                                         </Flex>
                                         <Flex className="collection-info">
-                                            <Forms.FormTitle tag="h5" className="collection-info-title">Gifs</Forms.FormTitle>
+                                            <Heading className="collection-info-title">Gifs</Heading>
                                             <Forms.FormText className="collection-info-text">{collection.gifs.length}</Forms.FormText>
                                         </Flex>
                                         <Flex className="collection-info">
-                                            <Forms.FormTitle tag="h5" className="collection-info-title">Created At</Forms.FormTitle>
+                                            <Heading className="collection-info-title">Created At</Heading>
                                             <Forms.FormText className="collection-info-text">{collection.createdAt ? new Date(collection.createdAt).toLocaleString() : "Unknown"}</Forms.FormText>
                                         </Flex>
                                         <Flex className="collection-info">
-                                            <Forms.FormTitle tag="h5" className="collection-info-title">Last Updated</Forms.FormTitle>
+                                            <Heading className="collection-info-title">Last Updated</Heading>
                                             <Forms.FormText className="collection-info-text">{collection.lastUpdated ? new Date(collection.lastUpdated).toLocaleString() : "Unknown"}</Forms.FormText>
                                         </Flex>
-                                    </Forms.FormSection>
+                                    </section>
                                 </ModalContent>
                                 <ModalFooter className="custom-modal-footer">
                                     <Button onClick={modalProps.onClose} className="custom-modal-button">Close</Button>
@@ -522,20 +524,20 @@ const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
                                     <Forms.FormText className="custom-modal-title">Information</Forms.FormText>
                                 </ModalHeader>
                                 <ModalContent className="custom-modal-content">
-                                    <Forms.FormSection>
+                                    <section>
                                         <Flex className="gif-info">
-                                            <Forms.FormTitle tag="h5" className="gif-info-title">Added At</Forms.FormTitle>
+                                            <Heading className="gif-info-title">Added At</Heading>
                                             <Forms.FormText className="gif-info-text">{gifInfo.addedAt ? new Date(gifInfo.addedAt).toLocaleString() : "Unknown"}</Forms.FormText>
                                         </Flex>
                                         <Flex className="gif-info">
-                                            <Forms.FormTitle tag="h5" className="gif-info-title">Width</Forms.FormTitle>
+                                            <Heading className="gif-info-title">Width</Heading>
                                             <Forms.FormText className="gif-info-text">{gifInfo.width}</Forms.FormText>
                                         </Flex>
                                         <Flex className="gif-info">
-                                            <Forms.FormTitle tag="h5" className="gif-info-title">Height</Forms.FormTitle>
+                                            <Heading className="gif-info-title">Height</Heading>
                                             <Forms.FormText className="gif-info-text">{gifInfo.height}</Forms.FormText>
                                         </Flex>
-                                    </Forms.FormSection>
+                                    </section>
                                 </ModalContent>
                                 <ModalFooter className="custom-modal-footer">
                                     <Button onClick={modalProps.onClose} className="custom-modal-button">Close</Button>
@@ -606,9 +608,9 @@ const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
                                     <Forms.FormText className="custom-modal-title">Move To Collection</Forms.FormText>
                                 </ModalHeader>
                                 <ModalContent className="custom-modal-content">
-                                    <Forms.FormTitle tag="h5" className="custom-modal-text">
+                                    <Heading className="custom-modal-text">
                                         Select a collection to move the item to
-                                    </Forms.FormTitle>
+                                    </Heading>
                                     <div className="collection-buttons">
                                         {cache_collections
                                             .filter(col => col.name !== getItemCollectionNameFromId(nameOrId))
@@ -758,7 +760,7 @@ function CreateCollectionModal({ gif, onClose, modalProps }) {
                     <Forms.FormText>Create Collection</Forms.FormText>
                 </ModalHeader>
                 <ModalContent>
-                    <Forms.FormTitle tag="h5" style={{ marginTop: "10px" }}>Collection Name</Forms.FormTitle>
+                    <Heading style={{ marginTop: "10px" }}>Collection Name</Heading>
                     <TextInput onChange={e => setName(e)} />
                 </ModalContent>
                 <div style={{ marginTop: "1rem" }}>

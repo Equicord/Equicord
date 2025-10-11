@@ -16,7 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { HeadingTertiary } from "@components/Heading";
 import { getIntlMessage } from "@utils/discord";
 import { classes } from "@utils/misc";
 import type { Guild, GuildMember } from "@vencord/discord-types";
@@ -61,12 +63,13 @@ function FakeRole({ text, color, ...props }: FakeRoleProps) {
                 />
             </div>
             <div className={RoleClasses.roleName}>
-                <Text
+                <BaseText
+                    size="xs"
+                    weight="medium"
                     className={RoleClasses.roleNameOverflow}
-                    variant="text-xs/medium"
                 >
                     {text}
-                </Text>
+                </BaseText>
             </div>
         </div>
     );
@@ -140,7 +143,7 @@ function UserPermissionsComponent({ guild, guildMember, closePopout }: { guild: 
 
     return <div>
         <div className={cl("user-header-container")}>
-            <Text variant="eyebrow">Permissions</Text>
+            <HeadingTertiary>Permissions</HeadingTertiary>
             <div className={cl("user-header-btns")}>
                 <Tooltip text={`Sorting by ${permissionsSortOrder === PermissionsSortOrder.HighestRole ? "Highest Role" : "Lowest Role"}`}>
                     {tooltipProps => (

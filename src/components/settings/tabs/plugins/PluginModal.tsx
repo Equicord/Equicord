@@ -77,12 +77,16 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
     useEffect(() => {
         (async () => {
             for (const user of plugin.authors.slice(0, 6)) {
-                const author = user.id
-                    ? await UserUtils.getUser(`${user.id}`)
-                        .catch(() => makeDummyUser({ username: user.name }))
-                    : makeDummyUser({ username: user.name });
+                try {
+                    const author = user.id
+                        ? await UserUtils.getUser(String(user.id))
+                            .catch(() => makeDummyUser({ username: user.name }))
+                        : makeDummyUser({ username: user.name });
 
-                setAuthors(a => [...a, author]);
+                    setAuthors(a => [...a, author]);
+                } catch (e) {
+                    continue;
+                }
             }
         })();
     }, [plugin.authors]);
@@ -109,14 +113,15 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
 
             const Component = OptionComponentMap[setting.type];
             return (
-                <Component
-                    id={key}
-                    key={key}
-                    option={setting}
-                    onChange={debounce(onChange)}
-                    pluginSettings={pluginSettings}
-                    definedSettings={plugin.settings}
-                />
+                <ErrorBoundary noop key={key}>
+                    <Component
+                        id={key}
+                        option={setting}
+                        onChange={debounce(onChange)}
+                        pluginSettings={pluginSettings}
+                        definedSettings={plugin.settings}
+                    />
+                </ErrorBoundary>
             );
         });
 
@@ -156,7 +161,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             </ModalHeader>
 
             <ModalContent className={Margins.bottom16}>
-                <Forms.FormSection>
+                <section>
                     <Flex className={cl("info")}>
                         <Forms.FormText className={cl("description")}>{plugin.description}</Forms.FormText>
                         {!pluginMeta.userPlugin && (
@@ -174,43 +179,45 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                     </Flex>
                     <Text variant="heading-lg/semibold" className={classes(Margins.top8, Margins.bottom8)}>Authors</Text>
                     <div style={{ width: "fit-content" }}>
-                        <UserSummaryItem
-                            users={authors}
-                            guildId={undefined}
-                            renderIcon={false}
-                            showDefaultAvatarsForNullUsers
-                            renderMoreUsers={renderMoreUsers}
-                            renderUser={(user: User) => (
-                                <Clickable
-                                    className={AvatarStyles.clickableAvatar}
-                                    onClick={() => openContributorModal(user)}
-                                >
-                                    <img
-                                        className={AvatarStyles.avatar}
-                                        src={user.getAvatarURL(void 0, 80, true)}
-                                        alt={user.username}
-                                        title={user.username}
-                                    />
-                                </Clickable>
-                            )}
-                        />
+                        <ErrorBoundary noop>
+                            <UserSummaryItem
+                                users={authors}
+                                guildId={undefined}
+                                renderIcon={false}
+                                showDefaultAvatarsForNullUsers
+                                renderMoreUsers={renderMoreUsers}
+                                renderUser={(user: User) => (
+                                    <Clickable
+                                        className={AvatarStyles.clickableAvatar}
+                                        onClick={() => openContributorModal(user)}
+                                    >
+                                        <img
+                                            className={AvatarStyles.avatar}
+                                            src={user.getAvatarURL(void 0, 80, true)}
+                                            alt={user.username}
+                                            title={user.username}
+                                        />
+                                    </Clickable>
+                                )}
+                            />
+                        </ErrorBoundary>
                     </div>
-                </Forms.FormSection>
+                </section>
 
                 {!!plugin.settingsAboutComponent && (
                     <div className={Margins.top16}>
-                        <Forms.FormSection>
+                        <section>
                             <ErrorBoundary message="An error occurred while rendering this plugin's custom Info Component">
                                 <plugin.settingsAboutComponent />
                             </ErrorBoundary>
-                        </Forms.FormSection>
+                        </section>
                     </div>
                 )}
 
-                <Forms.FormSection>
+                <section>
                     <Text variant="heading-lg/semibold" className={classes(Margins.top16, Margins.bottom8)}>Settings</Text>
                     {renderSettings()}
-                </Forms.FormSection>
+                </section>
             </ModalContent>
             {
                 hasSettings && <ModalFooter>
@@ -324,7 +331,7 @@ export function openWarningModal(plugin?: Plugin | null, pluginModalProps?: Moda
                 <ModalCloseButton onClick={warningModalProps.onClose} className="vc-modal-close-button" />
             </ModalHeader>
             <ModalContent>
-                <Forms.FormSection>
+                <section>
                     <Flex className="vc-warning-info">
                         <Text className="text-normal">
                             {text}
@@ -336,7 +343,7 @@ export function openWarningModal(plugin?: Plugin | null, pluginModalProps?: Moda
                             If you are certain you want to proceed, click <strong>Confirm Reset</strong>. Otherwise, click <strong>Cancel</strong>.
                         </Text>
                     </Flex>
-                </Forms.FormSection>
+                </section>
             </ModalContent>
             <ModalFooter className="vc-modal-footer">
                 <Flex className="vc-button-container">

@@ -1036,7 +1036,22 @@ export default definePlugin({
             ]
         },
         {
-            // Sorts the "All Quests" tab.
+            // Adds the "Questify" sort option to the sort enum.
+            find: "SUGGESTED=\"suggested\",",
+            replacement: {
+                match: /return ((\i).SUGGESTED="suggested",)/,
+                replace: "return $2.QUESTIFY=\"questify\",$1"
+            }
+        },
+        {
+            // Adds the "Questify" sort option to the sort dropdown.
+            find: "NOT_SHAREABLE}",
+            replacement: {
+                match: /(?=case (\i.\i).SUGGESTED)/,
+                replace: "case $1.QUESTIFY:return \"Questify\";"
+            },
+        },
+        {
             find: "CLAIMED=\"claimed\",",
             group: true,
             replacement: [
@@ -1065,28 +1080,9 @@ export default definePlugin({
             ]
         },
         {
-            // Adds the "Questify" sort option to the sort enum.
-            find: "SUGGESTED=\"suggested\",",
-            replacement: {
-                match: /return ((\i).SUGGESTED="suggested",)/,
-                replace: "return $2.QUESTIFY=\"questify\",$1"
-            }
-        },
-        {
-            // Adds the "Questify" sort option to the sort dropdown.
-            find: "radioItemTitle,options",
-            group: true,
-            replacement: [
-                {
-                    match: /(?=case (\i.\i).SUGGESTED)/,
-                    replace: "case $1.QUESTIFY:return \"Questify\";"
-                }
-            ]
-        },
-        {
             // Loads the last used sort method and filter choices.
             // Defaults to sorting by "Questify" and no filters.
-            find: "QUEST_HOME_SORT_METHOD_CHANGED,",
+            find: "filterSortOption,selectedFilters",
             group: true,
             replacement: [
                 {

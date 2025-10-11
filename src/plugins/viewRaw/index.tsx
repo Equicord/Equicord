@@ -19,8 +19,10 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { CodeBlock } from "@components/CodeBlock";
+import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
+import { Heading } from "@components/Heading";
 import { Devs } from "@utils/constants";
 import { getCurrentGuild, getIntlMessage } from "@utils/discord";
 import { Margins } from "@utils/margins";
@@ -28,7 +30,7 @@ import { copyWithToast } from "@utils/misc";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { Button, ChannelStore, Forms, GuildRoleStore, Menu, Text } from "@webpack/common";
+import { Button, ChannelStore, GuildRoleStore, Menu, Text } from "@webpack/common";
 
 
 const CopyIcon = () => {
@@ -73,13 +75,13 @@ function openViewRawModal(json: string, type: string, msgContent?: string) {
                     <div style={{ padding: "16px 0" }}>
                         {!!msgContent && (
                             <>
-                                <Forms.FormTitle tag="h5">Content</Forms.FormTitle>
+                                <Heading>Content</Heading>
                                 <CodeBlock content={msgContent} lang="" />
-                                <Forms.FormDivider className={Margins.bottom20} />
+                                <Divider className={Margins.bottom20} />
                             </>
                         )}
 
-                        <Forms.FormTitle tag="h5">{type} Data</Forms.FormTitle>
+                        <Heading>{type} Data</Heading>
                         <CodeBlock content={json} lang="json" />
                     </div>
                 </ModalContent >

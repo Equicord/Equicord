@@ -5,9 +5,11 @@
  */
 
 import { classNameFactory } from "@api/Styles";
+import { Divider } from "@components/Divider";
+import { Heading } from "@components/Heading";
 import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModalLazy } from "@utils/modal";
 import { extractAndLoadChunksLazy, findComponentByCodeLazy } from "@webpack";
-import { Button, ColorPicker, Forms, Text, TextInput, Toasts, useMemo, useState } from "@webpack/common";
+import { Button, ColorPicker, Text, TextInput, Toasts, useMemo, useState } from "@webpack/common";
 
 import { DEFAULT_COLOR, SWATCHES } from "../constants";
 import { categoryLen, createCategory, getCategory } from "../data";
@@ -81,16 +83,16 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
             {/* form is here so when you press enter while in the text input it submits */}
             <form onSubmit={onSave}>
                 <ModalContent className={cl("content")}>
-                    <Forms.FormSection>
-                        <Forms.FormTitle>Name</Forms.FormTitle>
+                    <section>
+                        <Heading>Name</Heading>
                         <TextInput
                             value={name}
                             onChange={e => setName(e)}
                         />
-                    </Forms.FormSection>
-                    <Forms.FormDivider />
-                    <Forms.FormSection>
-                        <Forms.FormTitle>Color</Forms.FormTitle>
+                    </section>
+                    <Divider />
+                    <section>
+                        <Heading>Color</Heading>
                         <ColorPickerWithSwatches
                             key={category.id}
                             defaultColor={DEFAULT_COLOR}
@@ -107,7 +109,7 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
                                 />
                             )}
                         />
-                    </Forms.FormSection>
+                    </section>
                 </ModalContent>
                 <ModalFooter>
                     <Button type="submit" onClick={onSave} disabled={!name}>{categoryId ? "Save" : "Create"}</Button>

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Heading } from "@components/Heading";
 import { Forms, SearchableSelect, useMemo, useState } from "@webpack/common";
 
 import { getCurrentVoice, settings } from "./settings";
@@ -83,7 +84,7 @@ function ComplexPicker({ voice, voices }: PickerProps) {
 
     return (
         <>
-            <Forms.FormTitle>Language</Forms.FormTitle>
+            <Heading>Language</Heading>
             <SearchableSelect
                 placeholder="Select a language"
                 options={languageOptions}
@@ -92,7 +93,7 @@ function ComplexPicker({ voice, voices }: PickerProps) {
                 maxVisibleItems={5}
                 closeOnSelect
             />
-            <Forms.FormTitle>Voice</Forms.FormTitle>
+            <Heading>Voice</Heading>
             <SimplePicker
                 voice={voice}
                 voices={voicesForLanguage}
@@ -117,9 +118,9 @@ function VoiceSetting() {
 
 export function VoiceSettingSection() {
     return (
-        <Forms.FormSection>
-            <Forms.FormTitle>Voice</Forms.FormTitle>
+        <section>
+            <Heading>Voice</Heading>
             <VoiceSetting />
-        </Forms.FormSection>
+        </section>
     );
 }

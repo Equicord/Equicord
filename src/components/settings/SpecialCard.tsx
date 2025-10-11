@@ -19,6 +19,8 @@
 import "./SpecialCard.css";
 
 import { classNameFactory } from "@api/Styles";
+import { Divider } from "@components/Divider";
+import { Heading } from "@components/Heading";
 import { Card, Clickable, Forms, React } from "@webpack/common";
 import type { PropsWithChildren } from "react";
 
@@ -45,7 +47,7 @@ export function SpecialCard({ title, subtitle, description, cardImage, backgroun
         <Card className={cl("card", "card-special")} style={cardStyle}>
             <div className={cl("card-flex")}>
                 <div className={cl("card-flex-main")}>
-                    <Forms.FormTitle className={cl("title")} tag="h5">{title}</Forms.FormTitle>
+                    <Heading className={cl("title")} tag="h5">{title}</Heading>
                     <Forms.FormText className={cl("subtitle")}>{subtitle}</Forms.FormText>
                     <Forms.FormText className={cl("text")}>{description}</Forms.FormText>
 
@@ -64,6 +66,7 @@ export function SpecialCard({ title, subtitle, description, cardImage, backgroun
             </div>
             {buttonTitle && (
                 <>
+                    <Divider className={cl("seperator")} />
                     <Clickable onClick={onClick} className={cl("hyperlink")}>
                         <Forms.FormText className={cl("hyperlink-text")}>
                             {buttonTitle}
