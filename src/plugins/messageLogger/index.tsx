@@ -267,8 +267,9 @@ export function parseEditContent(content: string, message: Message, previousCont
             const highlightCurrent = previousContent === message.content;
 
             if (highlightCurrent) {
-                if (aggregatedState) applyAggregatedCustomContent(message, aggregatedState.key, aggregatedState.aggregatedNodes);
-                else {
+                if (aggregatedState) {
+                    applyAggregatedCustomContent(message, aggregatedState.key, aggregatedState.aggregatedNodes);
+                } else {
                     const diffKey = `${message.id}:current:${message.content}:${message.editedTimestamp?.valueOf?.() ?? 0}`;
                     applyAggregatedCustomContent(message, diffKey, renderDiffParts(updatedSegments, message));
                 }
