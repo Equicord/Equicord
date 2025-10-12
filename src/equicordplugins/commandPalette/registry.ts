@@ -71,7 +71,7 @@ const chatBarCommandStates = new Map<string, ChatBarCommandState>();
 const chatBarCommandStatesById = new Map<string, ChatBarCommandState>();
 let chatBarInjectionPatched = false;
 const getChatButtonsComponentLazy = findComponentByCodeLazy(
-    "type:O,disabled:A,channel:N",
+    /type:\i,disabled:\i,channel:\i/,
     "showAllButtons"
 );
 let chatButtonsPatchTarget: ChatButtonsPatchTarget | null = null;
