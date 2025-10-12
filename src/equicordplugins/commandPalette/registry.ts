@@ -10,9 +10,12 @@ import { getUserSettingLazy } from "@api/UserSettings";
 import { openPluginModal } from "@components/settings/tabs";
 import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
-import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { Alerts, ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, SettingsRouter, StreamerModeStore, Toasts, UserStore, VoiceActions } from "@webpack/common";
+import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
+import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, React, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, SettingsRouter, StreamerModeStore, Toasts, UserStore, VoiceActions } from "@webpack/common";
+import type { FC, ReactElement, ReactNode } from "react";
 import { Settings } from "Vencord";
+
+import { toggleEnabled } from "../equicordHelper/utils";
 
 type CommandHandler = () => void | Promise<void>;
 
@@ -51,10 +54,29 @@ interface ClosedDmSnapshot {
     isGroupDm?: boolean;
 }
 
-const CHATBAR_BUTTON_SELECTOR = ".vc-chatbar-button button[aria-label]";
-let chatBarObserver: MutationObserver | null = null;
-const chatBarCommandIds = new Set<string>();
-let chatBarCommandCounter = 0;
+interface ChatBarCommandState {
+    commandId: string;
+    label: string;
+    getters: Set<() => HTMLElement | null>;
+}
+
+type ChatButtonsRenderer = (props: unknown) => ReactElement | null;
+
+interface ChatButtonsPatchTarget {
+    carrier: { type: ChatButtonsRenderer; } & Record<string, unknown>;
+    original: ChatButtonsRenderer;
+}
+
+const chatBarCommandStates = new Map<string, ChatBarCommandState>();
+const chatBarCommandStatesById = new Map<string, ChatBarCommandState>();
+let chatBarInjectionPatched = false;
+const getChatButtonsComponentLazy = findComponentByCodeLazy(
+    "type:O,disabled:A,channel:N",
+    "showAllButtons"
+);
+let chatButtonsPatchTarget: ChatButtonsPatchTarget | null = null;
+let chatBarBridgeRetryTimeout: number | null = null;
+let chatBarBridgeRetryDelay = 200;
 const CHATBAR_DATASET_KEY = "vcCommandPaletteId";
 const CHATBAR_DATA_ATTRIBUTE = "data-vc-command-palette-id";
 
@@ -99,101 +121,360 @@ const TAG_SESSION = "Session";
 const TAG_CONTEXT = "Context";
 const TAG_CUSTOM = "Custom";
 
+const debugLogs: Array<unknown[]> = [];
+function debugLog(...args: unknown[]) {
+    debugLogs.push(args);
+    if (debugLogs.length > 100) debugLogs.shift();
+    (window as unknown as Record<string, unknown>).__CommandPaletteDebug = debugLogs;
+    console.debug("CommandPalette", ...args);
+}
+
+type ChatButtonsComponent = {
+    type?: (props: unknown) => ReactElement | null;
+    compare?: (prev: unknown, next: unknown) => boolean;
+};
+
 export function normalizeTag(tag: string): string {
     return tag.trim().toLowerCase();
 }
 
-function ensureChatBarMonitoring() {
-    if (typeof MutationObserver === "undefined") return;
-    if (chatBarObserver) return;
-    const root = document.body;
-    if (!root) {
-        window.addEventListener("DOMContentLoaded", ensureChatBarMonitoring, { once: true });
-        return;
+function resolveChatButtonsModule(): ChatButtonsPatchTarget | null {
+    if (chatButtonsPatchTarget) return chatButtonsPatchTarget;
+
+    try {
+        const factory = getChatButtonsComponentLazy as unknown as (() => ReactElement | null) | null | undefined;
+        const element = factory?.();
+        if (!element) return null;
+
+        const typeCandidate = element.type as unknown;
+        if (typeCandidate && typeof typeCandidate === "object" && typeof (typeCandidate as { type?: unknown; }).type === "function") {
+            const memoCarrier = typeCandidate as { type: ChatButtonsRenderer; } & Record<string, unknown>;
+            chatButtonsPatchTarget = {
+                carrier: memoCarrier,
+                original: memoCarrier.type
+            };
+            return chatButtonsPatchTarget;
+        }
+    } catch (error) {
+        debugLog("Failed to resolve chat buttons component", error);
+        return null;
     }
 
-    chatBarObserver = new MutationObserver(() => scanChatBarButtons());
-    chatBarObserver.observe(root, { childList: true, subtree: true });
+    return null;
+}
 
-    runtimeCleanupCallbacks.push(() => {
-        chatBarObserver?.disconnect();
-        chatBarObserver = null;
-        for (const id of Array.from(chatBarCommandIds)) {
-            removeCommand(id);
-        }
-        chatBarCommandIds.clear();
+function wrapChatBarChildren(element: ReactElement | null | undefined): ReactElement | null {
+    if (!element || !React.isValidElement(element)) return element ?? null;
+
+    const { children } = element.props as { children?: ReactNode; };
+    if (!Array.isArray(children) || children.length === 0) return element;
+
+    let hasChanges = false;
+    const wrappedChildren = children.map((child, index) => {
+        if (!React.isValidElement(child)) return child;
+        const childElement = child as ReactElement;
+        if (childElement.type === ChatBarCommandBridge) return child;
+
+        const existingKey = typeof childElement.key === "string" && childElement.key.length > 0
+            ? childElement.key
+            : undefined;
+        const buttonKey = existingKey ?? `chatbar-${index}`;
+
+        hasChanges = true;
+        const bridgeProps: ChatBarCommandBridgeElementProps = {
+            element: childElement,
+            buttonKey,
+            key: existingKey ?? buttonKey
+        };
+
+        return React.createElement(ChatBarCommandBridge, bridgeProps);
     });
 
-    scanChatBarButtons();
+    if (!hasChanges) return element;
+
+    const cloneElement = React.cloneElement as unknown as (el: ReactElement, props: unknown, children: ReactNode[]) => ReactElement;
+    return cloneElement(element, element.props, wrappedChildren);
 }
 
-function scanChatBarButtons() {
-    const seenIds = new Set<string>();
-    try {
-        const buttons = document.querySelectorAll<HTMLButtonElement>(CHATBAR_BUTTON_SELECTOR);
-        for (const button of buttons) {
-            const label = button.getAttribute("aria-label")?.trim();
-            if (!label) continue;
+function ensureChatBarBridge() {
+    debugLog("ensureChatBarBridge invoked", { patched: chatBarInjectionPatched });
+    if (chatBarInjectionPatched) return;
 
-            let commandId = button.dataset[CHATBAR_DATASET_KEY];
-            if (!commandId) {
-                const baseSlug = slugifyActionLabel(label) || "chat-action";
-                do {
-                    commandId = `chatbar-${baseSlug}-${chatBarCommandCounter++}`;
-                } while (chatBarCommandIds.has(commandId) || seenIds.has(commandId));
+    const patchTarget = resolveChatButtonsModule();
+    debugLog("chatButtonsComponent resolved", Boolean(patchTarget));
+    const originalRenderer = patchTarget?.original;
+
+    if (!patchTarget || typeof originalRenderer !== "function") {
+        debugLog("chatButtonsComponent missing or invalid");
+        scheduleChatBarBridgeRetry();
+        return;
+    }
+
+    clearChatBarBridgeRetry();
+    debugLog("Patching chat bar component");
+    patchTarget.carrier.type = function patchedChatButtonsType(this: unknown, props: unknown) {
+        const result = originalRenderer.call(this, props);
+        return wrapChatBarChildren(result);
+    };
+
+    chatBarInjectionPatched = true;
+
+    runtimeCleanupCallbacks.push(() => {
+        patchTarget.carrier.type = originalRenderer;
+        chatButtonsPatchTarget = null;
+        chatBarInjectionPatched = false;
+        chatBarBridgeRetryDelay = 200;
+
+        for (const state of chatBarCommandStates.values()) {
+            removeCommand(state.commandId);
+        }
+        chatBarCommandStates.clear();
+        chatBarCommandStatesById.clear();
+    });
+}
+
+function scheduleChatBarBridgeRetry() {
+    if (chatBarInjectionPatched) return;
+    if (chatBarBridgeRetryTimeout != null) return;
+    const delay = chatBarBridgeRetryDelay;
+    chatBarBridgeRetryDelay = Math.min(chatBarBridgeRetryDelay * 2, 5000);
+    chatBarBridgeRetryTimeout = window.setTimeout(() => {
+        chatBarBridgeRetryTimeout = null;
+        ensureChatBarBridge();
+    }, delay);
+}
+
+function clearChatBarBridgeRetry() {
+    if (chatBarBridgeRetryTimeout != null) {
+        window.clearTimeout(chatBarBridgeRetryTimeout);
+        chatBarBridgeRetryTimeout = null;
+    }
+    chatBarBridgeRetryDelay = 200;
+}
+
+interface ChatBarCommandBridgeProps {
+    element: ReactElement;
+    buttonKey: string;
+}
+
+type ChatBarCommandBridgeElementProps = ChatBarCommandBridgeProps & { key?: string; };
+
+const ChatBarCommandBridge: FC<ChatBarCommandBridgeProps> = ({ element, buttonKey }) => {
+    const containerRef = React.useRef<HTMLDivElement | null>(null);
+    const latestElementRef = React.useRef(element);
+    latestElementRef.current = element;
+
+    React.useEffect(() => {
+        let cancelled = false;
+        let cleanup: (() => void) | null = null;
+        let timeoutId: number | null = null;
+        let delay = 16;
+
+        const attachToChatBar = () => {
+            if (cancelled) return;
+            const container = containerRef.current;
+            if (!container) {
+                scheduleRetry();
+                return;
             }
 
-            button.dataset[CHATBAR_DATASET_KEY] = commandId;
-            button.setAttribute(CHATBAR_DATA_ATTRIBUTE, commandId);
+            const target = resolveChatBarElementFromContainer(container);
+            if (!target) {
+                scheduleRetry();
+                return;
+            }
 
-            seenIds.add(commandId);
-            chatBarCommandIds.add(commandId);
+            const label = extractChatBarLabel(target, latestElementRef.current, buttonKey);
+            cleanup = attachChatBarInstance(buttonKey, label, container, target);
+            delay = 16;
+        };
 
-            registerCommand({
-                id: commandId,
-                label,
-                keywords: [label.toLowerCase(), "chat", "button"],
-                categoryId: CHATBAR_ACTIONS_CATEGORY_ID,
-                tags: [TAG_PLUGINS, TAG_UTILITY],
-                handler: () => triggerChatBarButton(commandId, label)
-            });
-        }
-    } catch (error) {
-        console.error("CommandPalette", "Failed to enumerate chat bar buttons", error);
-    }
+        const scheduleRetry = () => {
+            if (cancelled) return;
+            const currentDelay = delay;
+            delay = Math.min(delay * 2, 1000);
+            timeoutId = window.setTimeout(attachToChatBar, currentDelay);
+        };
 
-    for (const existingId of Array.from(chatBarCommandIds)) {
-        if (!seenIds.has(existingId)) {
-            chatBarCommandIds.delete(existingId);
-            removeCommand(existingId);
-        }
-    }
+        attachToChatBar();
+
+        return () => {
+            cancelled = true;
+            if (timeoutId != null) window.clearTimeout(timeoutId);
+            cleanup?.();
+        };
+    }, [buttonKey]);
+
+    React.useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+        const state = chatBarCommandStates.get(buttonKey);
+        if (!state) return;
+        const target = resolveChatBarElement(state);
+        if (!target) return;
+        const label = extractChatBarLabel(target, latestElementRef.current, buttonKey);
+        ensureChatBarCommandState(buttonKey, label);
+    }, [element, buttonKey]);
+
+    return React.createElement("div", {
+        ref: containerRef,
+        style: { display: "contents" }
+    }, element);
+};
+
+function resolveChatBarElementFromContainer(container: HTMLElement): HTMLElement | null {
+    if (container.hasAttribute("aria-label")) return container;
+    const labelled = container.querySelector<HTMLElement>("[aria-label]");
+    return labelled ?? null;
 }
 
-function triggerChatBarButton(commandId: string, label: string) {
-    const buttons = document.querySelectorAll<HTMLButtonElement>(CHATBAR_BUTTON_SELECTOR);
-    let target: HTMLButtonElement | null = null;
-    for (const button of buttons) {
-        if (button.dataset[CHATBAR_DATASET_KEY] === commandId) {
-            target = button;
-            break;
+function attachChatBarInstance(buttonKey: string, label: string, container: HTMLElement, element: HTMLElement): () => void {
+    const state = ensureChatBarCommandState(buttonKey, label);
+    const { commandId } = state;
+
+    element.dataset[CHATBAR_DATASET_KEY] = commandId;
+    element.setAttribute(CHATBAR_DATA_ATTRIBUTE, commandId);
+
+    const getter = () => {
+        if (element.isConnected) return element;
+        const scoped = container.querySelector<HTMLElement>(`[${CHATBAR_DATA_ATTRIBUTE}="${commandId}"]`);
+        if (scoped) return scoped;
+        return document.querySelector<HTMLElement>(`[${CHATBAR_DATA_ATTRIBUTE}="${commandId}"]`);
+    };
+
+    state.getters.add(getter);
+
+    return () => {
+        state.getters.delete(getter);
+        if (state.getters.size === 0) {
+            removeCommand(state.commandId);
+            chatBarCommandStates.delete(buttonKey);
+            chatBarCommandStatesById.delete(state.commandId);
         }
+        element.removeAttribute(CHATBAR_DATA_ATTRIBUTE);
+        delete (element.dataset as Record<string, string | undefined>)[CHATBAR_DATASET_KEY];
+    };
+}
+
+function extractChatBarLabel(element: HTMLElement | null, reactElement: ReactElement | null, fallback: string): string {
+    const aria = element?.getAttribute("aria-label")?.trim();
+    if (aria) return aria;
+    const fromElement = readLabelFromElement(reactElement);
+    if (fromElement) return fromElement;
+    return fallback;
+}
+
+function readLabelFromElement(element: ReactElement | null): string | null {
+    if (!element) return null;
+
+    const props = (element.props ?? {}) as Record<string, unknown>;
+
+    const tooltip = typeof props.tooltip === "string" ? (props.tooltip as string).trim() : "";
+    if (tooltip) return tooltip;
+
+    const aria = typeof props.ariaLabel === "string" ? (props.ariaLabel as string).trim() : "";
+    if (aria) return aria;
+
+    const children = props.children as ReactNode | undefined;
+    return readLabelFromChildren(children);
+}
+
+function readLabelFromChildren(children: ReactNode | undefined): string | null {
+    if (children == null || typeof children === "boolean") return null;
+    if (typeof children === "string") return children.trim() || null;
+    if (typeof children === "number") return children.toString();
+    if (Array.isArray(children)) {
+        for (const child of children) {
+            const label = readLabelFromChildren(child);
+            if (label) return label;
+        }
+        return null;
+    }
+    if (React.isValidElement(children)) {
+        return readLabelFromElement(children);
+    }
+    return null;
+}
+
+function ensureChatBarCommandState(buttonKey: string, label: string): ChatBarCommandState {
+    const normalizedLabel = label.trim() || buttonKey;
+    const existing = chatBarCommandStates.get(buttonKey);
+    if (existing) {
+        if (existing.label !== normalizedLabel) {
+            existing.label = normalizedLabel;
+            registerCommand(buildChatBarCommand(existing));
+        }
+        return existing;
     }
 
-    if (!target) {
-        showToast(`Unable to find the "${label}" chat button.`, Toasts.Type.FAILURE);
+    const commandId = createUniqueChatBarCommandId(normalizedLabel, buttonKey);
+    const state: ChatBarCommandState = {
+        commandId,
+        label: normalizedLabel,
+        getters: new Set()
+    };
+
+    chatBarCommandStates.set(buttonKey, state);
+    chatBarCommandStatesById.set(commandId, state);
+    registerCommand(buildChatBarCommand(state));
+    return state;
+}
+
+function createUniqueChatBarCommandId(label: string, buttonKey: string): string {
+    const baseSlug = slugifyActionLabel(label) || slugifyActionLabel(buttonKey) || "chat-button";
+    let candidate = `chatbar-${baseSlug}`;
+    let suffix = 2;
+    while (registry.has(candidate) || chatBarCommandStatesById.has(candidate)) {
+        candidate = `chatbar-${baseSlug}-${suffix++}`;
+    }
+    return candidate;
+}
+
+function buildChatBarCommand(state: ChatBarCommandState): CommandEntry {
+    const keywords = Array.from(new Set([
+        ...state.label.toLowerCase().split(/\s+/).filter(Boolean),
+        "chat",
+        "button"
+    ]));
+
+    return {
+        id: state.commandId,
+        label: state.label,
+        keywords,
+        categoryId: CHATBAR_ACTIONS_CATEGORY_ID,
+        tags: [TAG_PLUGINS, TAG_UTILITY],
+        handler: () => activateChatBarCommand(state)
+    } satisfies CommandEntry;
+}
+
+function activateChatBarCommand(state: ChatBarCommandState) {
+    const element = resolveChatBarElement(state);
+    if (!element) {
+        showToast(`Unable to find the "${state.label}" chat button.`, Toasts.Type.FAILURE);
         return;
     }
 
     try {
-        target.click();
+        element.click();
     } catch (error) {
-        console.error("CommandPalette", "Failed to click chat bar button", label, error);
-        showToast(`Failed to trigger ${label}.`, Toasts.Type.FAILURE);
+        console.error("CommandPalette", "Failed to click chat bar button", state.label, error);
+        showToast(`Failed to trigger ${state.label}.`, Toasts.Type.FAILURE);
         return;
     }
 
-    showToast(`${label} activated.`, Toasts.Type.SUCCESS);
+    showToast(`${state.label} activated.`, Toasts.Type.SUCCESS);
+}
+
+function resolveChatBarElement(state: ChatBarCommandState): HTMLElement | null {
+    for (const getter of Array.from(state.getters)) {
+        try {
+            const candidate = getter();
+            if (candidate && candidate.isConnected) return candidate;
+        } catch (error) {
+            console.error("CommandPalette", "Failed to resolve chat bar button", error);
+        }
+    }
+    return document.querySelector<HTMLElement>(`[${CHATBAR_DATA_ATTRIBUTE}="${state.commandId}"]`);
 }
 
 function incrementTagMetadata(tagId: string, label: string) {
@@ -377,8 +658,18 @@ function trackClosedRecipient(recipientId: string | null | undefined, fallbackCh
 
     if (lastClosedDm?.isGroupDm) return;
 
+    let dmChannelId: string | null = null;
+    const getDmFromUserId = (ChannelStore as { getDMFromUserId?: (id: string) => string | null; }).getDMFromUserId;
+    if (typeof getDmFromUserId === "function") {
+        try {
+            dmChannelId = getDmFromUserId(recipientId) ?? null;
+        } catch (error) {
+            console.error("CommandPalette", "Failed to resolve DM channel", error);
+        }
+    }
+
     lastClosedDm = {
-        channelId: fallbackChannelId ?? ChannelStore.getDMFromUserId?.(recipientId) ?? null,
+        channelId: fallbackChannelId ?? dmChannelId ?? null,
         recipientId,
         isGroupDm: false
     };
@@ -1371,19 +1662,6 @@ function showToast(message: string, type: ToastKind) {
     });
 }
 
-async function promptRestart(): Promise<boolean> {
-    return new Promise(resolve => {
-        Alerts.show({
-            title: "Restart Required",
-            body: "A restart is required to apply this plugin change. Restart now?",
-            confirmText: "Restart Now",
-            cancelText: "Later",
-            onConfirm: () => resolve(true),
-            onCancel: () => resolve(false)
-        });
-    });
-}
-
 function createPluginKeywords(plugin: Plugin): string[] {
     const base = [plugin.name.toLowerCase(), "plugin"];
     if (plugin.description) {
@@ -1409,92 +1687,24 @@ function buildPluginToggleCommand(plugin: Plugin): CommandEntry {
         categoryId: enabled ? "plugins-disable" : "plugins-enable",
         searchGroup: `plugin-${plugin.name.toLowerCase()}`,
         tags: [TAG_PLUGINS, TAG_UTILITY],
-        handler: () => {
-            const currentEnabled = Vencord.Plugins.isPluginEnabled(plugin.name);
-            return setPluginEnabled(plugin, !currentEnabled);
+        handler: async () => {
+            const before = Vencord.Plugins.isPluginEnabled(plugin.name);
+            const result = await toggleEnabled(plugin.name);
+            const after = Vencord.Plugins.isPluginEnabled(plugin.name);
+
+            if (result && before !== after) {
+                showToast(`${after ? "Enabled" : "Disabled"} ${plugin.name}.`, Toasts.Type.SUCCESS);
+            } else if (!result) {
+                showToast(`Failed to toggle ${plugin.name}.`, Toasts.Type.FAILURE);
+            }
+
+            refreshPluginToggleCommand(plugin);
         }
     } satisfies CommandEntry;
 }
 
 function refreshPluginToggleCommand(plugin: Plugin) {
     registerCommand(buildPluginToggleCommand(plugin));
-}
-
-async function setPluginEnabled(plugin: Plugin, enabled: boolean, notify = true) {
-    const { Plugins } = Vencord;
-    const { name } = plugin;
-
-    const notifyToast = (message: string, type: ToastKind) => {
-        if (notify) showToast(message, type);
-    };
-
-    if (!enabled && Plugins.isPluginRequired(name)) {
-        notifyToast("This plugin is required and cannot be disabled.", Toasts.Type.FAILURE);
-        return;
-    }
-
-    const settings = Settings.plugins[name];
-    if (!settings) {
-        notifyToast("Failed to locate settings for this plugin.", Toasts.Type.FAILURE);
-        return;
-    }
-
-    const currentlyEnabled = Plugins.isPluginEnabled(name);
-    if (currentlyEnabled === enabled) {
-        notifyToast(`${name} is already ${enabled ? "enabled" : "disabled"}.`, Toasts.Type.MESSAGE);
-        return;
-    }
-
-    if (enabled) {
-        const { restartNeeded, failures } = Plugins.startDependenciesRecursive(plugin);
-        if (failures.length) {
-            notifyToast(`Failed to enable dependencies: ${failures.join(", ")}`, Toasts.Type.FAILURE);
-            return;
-        }
-
-        if (restartNeeded) {
-            settings.enabled = true;
-            const restart = await promptRestart();
-            if (restart) {
-                location.reload();
-            } else {
-                notifyToast("Restart Discord later to finish enabling this plugin.", Toasts.Type.MESSAGE);
-            }
-            return;
-        }
-    }
-
-    if (plugin.patches?.length) {
-        settings.enabled = enabled;
-        const restart = await promptRestart();
-        if (restart) {
-            location.reload();
-        } else {
-            notifyToast("Restart Discord later to apply this change.", Toasts.Type.MESSAGE);
-        }
-        refreshPluginToggleCommand(plugin);
-        return;
-    }
-
-    if (!enabled && !plugin.started) {
-        settings.enabled = false;
-        notifyToast(`Disabled ${name}.`, Toasts.Type.SUCCESS);
-        refreshPluginToggleCommand(plugin);
-        return;
-    }
-
-    const result = enabled ? Plugins.startPlugin(plugin) : Plugins.stopPlugin(plugin);
-
-    if (!result) {
-        settings.enabled = Plugins.isPluginEnabled(name);
-        notifyToast(`Failed to ${enabled ? "enable" : "disable"} ${name}.`, Toasts.Type.FAILURE);
-        refreshPluginToggleCommand(plugin);
-        return;
-    }
-
-    settings.enabled = enabled;
-    notifyToast(`${enabled ? "Enabled" : "Disabled"} ${name}.`, Toasts.Type.SUCCESS);
-    refreshPluginToggleCommand(plugin);
 }
 
 function registerPluginToggleCommands() {
@@ -1539,7 +1749,6 @@ function registerPluginSettingsCommands() {
             keywords,
             categoryId: "plugins-settings",
             handler: () => openPluginModal(plugin),
-            hiddenInSearch: true,
             tags: [TAG_PLUGINS, TAG_NAVIGATION],
             searchGroup: `plugin-${plugin.name.toLowerCase()}`
         });
@@ -2409,12 +2618,19 @@ async function setAllPluginsEnabled(enabled: boolean) {
     const { plugins } = Vencord.Plugins;
     let changed = 0;
     for (const plugin of Object.values(plugins) as Plugin[]) {
-        if (enabled && Vencord.Plugins.isPluginEnabled(plugin.name)) continue;
-        if (!enabled && (Vencord.Plugins.isPluginRequired(plugin.name) || !Vencord.Plugins.isPluginEnabled(plugin.name))) continue;
+        const currentlyEnabled = Vencord.Plugins.isPluginEnabled(plugin.name);
+        if (enabled && currentlyEnabled) continue;
+        if (!enabled) {
+            if (Vencord.Plugins.isPluginRequired(plugin.name)) continue;
+            if (!currentlyEnabled) continue;
+        }
         if (plugin.patches?.length) continue;
 
-        await setPluginEnabled(plugin, enabled, false);
-        changed += 1;
+        const result = await toggleEnabled(plugin.name);
+        if (result) {
+            const nowEnabled = Vencord.Plugins.isPluginEnabled(plugin.name);
+            if (nowEnabled === enabled) changed += 1;
+        }
     }
 
     showToast(changed ? `${enabled ? "Enabled" : "Disabled"} ${changed} plugin${changed === 1 ? "" : "s"}.` : "No plugins changed state.", Toasts.Type.SUCCESS);
@@ -2595,7 +2811,7 @@ export function registerBuiltInCommands() {
     registerPluginChangeCommands();
     registerPluginToolboxProvider();
     registerCustomizationCommands();
-    ensureChatBarMonitoring();
+    ensureChatBarBridge();
     registerContextualCommands();
     registerCustomCommandProvider();
     registerSessionCommands();
