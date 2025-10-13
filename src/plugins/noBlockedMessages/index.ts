@@ -247,8 +247,24 @@ export default definePlugin({
         try {
             const { BlockKeywords } = Settings.plugins;
             const blockedContent = BlockKeywords?.enabled && BlockKeywords?.ignoreBlockedMessages && containsBlockedKeywords(message);
-            const relationship = this.getRelationshipStatus(message.author);
-            return blockedContent || relationship.blocked || (relationship.ignored && settings.store.alsoHideIgnoredUsers);
+            const authorRelationship = this.getRelationshipStatus(message.author);
+            const interactionUserRelationship = message.interaction && this.getRelationshipStatus((message.interaction as any).user);
+            const prefixCMDReferenceData = message.author.bot && (message.messageReference || (message as any).message_reference);
+            const prefixCMDReference = prefixCMDReferenceData && MessageStore.getMessage(prefixCMDReferenceData.channel_id, prefixCMDReferenceData.message_id);
+            const prefixCMDUserRelationship = prefixCMDReference && this.getRelationshipStatus(prefixCMDReference.author);
+            return (
+                blockedContent || authorRelationship.blocked || (
+                    authorRelationship.ignored && settings.store.alsoHideIgnoredUsers
+                ) || (
+                    interactionUserRelationship && (interactionUserRelationship.blocked || (
+                        interactionUserRelationship.ignored && settings.store.alsoHideIgnoredUsers
+                    ))
+                ) || (
+                    prefixCMDUserRelationship && (prefixCMDUserRelationship.blocked || (
+                        prefixCMDUserRelationship.ignored && settings.store.alsoHideIgnoredUsers
+                    ))
+                )
+            );
         } catch (e) {
             new Logger("NoBlockedMessages").error("Failed to check if message is blocked or ignored:", e);
         }
