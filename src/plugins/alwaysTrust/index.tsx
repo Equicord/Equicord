@@ -61,6 +61,7 @@ export default definePlugin({
     name: "AlwaysTrust",
     description: "Removes the annoying untrusted domain and suspicious file popup",
     authors: [Devs.zt, Devs.Trwy],
+    isModified: true,
     settings,
     patches: [
         {
@@ -82,7 +83,7 @@ export default definePlugin({
         {
             find: ".DELETE,onClick(){let",
             replacement: {
-                match: /let\{name:\i\}=\i\.guild/,
+                match: /let\{name:\i\}=(\i)\.guild/,
                 replace: "$self.HandleGuildDeleteModal($1);$&"
             },
             predicate: () => settings.store.noDeleteSafety
