@@ -135,7 +135,7 @@ export default definePlugin({
 
         if (message.type === 24 && settings.store.allowAutoModMessages) return [true, suppressed];
         if (suppressed.suppressed) return [!suppressed.hide, true];
-        if (replyToSuppressed) return [this.keepSuppressedMessage(replyToSuppressed.author.id), true];
+        if (replyToSuppressed.suppressed) return [!replyToSuppressed.hide, true];
 
         // [Message Visible, Author Blocked/Ignored]
         return [true, false];
@@ -227,8 +227,8 @@ export default definePlugin({
         return newChannelStream;
     },
 
-    isReplyToSuppressed(message: Message) {
-        if (!settings.store.hideBlockedUserReplies) return false;
+    isReplyToSuppressed(message: Message): { suppressed: boolean, hide: boolean; } {
+        if (!settings.store.hideBlockedUserReplies) return { suppressed: false, hide: false };
 
         try {
             // Messages received from the non-focused channel may have a referenced_message property.
@@ -239,9 +239,10 @@ export default definePlugin({
                 repliedMessage = messageReference ? MessageStore.getMessage(messageReference.channel_id, messageReference.message_id) : null;
             }
 
-            return repliedMessage && this.isSuppressed(repliedMessage).suppressed ? repliedMessage : false;
+            return repliedMessage ? this.isSuppressed(repliedMessage) : { suppressed: false, hide: false };
         } catch (e) {
             new Logger("NoBlockedMessages").error("Failed to check if referenced message is blocked or ignored:", e);
+            return { suppressed: false, hide: false };
         }
     },
 
