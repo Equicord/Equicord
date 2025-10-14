@@ -49,10 +49,12 @@ const settings = definePluginSettings({
 });
 
 function getConfiguredHotkey() {
-    const raw = settings.store.hotkey?.trim();
-    if (!raw) return DEFAULT_KEYS;
+    const raw = settings.store.hotkey;
+    const hotkeyString = typeof raw === "string" ? raw.trim() : "";
 
-    const parts = raw
+    if (!hotkeyString) return DEFAULT_KEYS;
+
+    const parts = hotkeyString
         .split("+")
         .map(part => part.trim())
         .filter(Boolean);
