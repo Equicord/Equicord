@@ -70,10 +70,7 @@ interface ChatButtonsPatchTarget {
 const chatBarCommandStates = new Map<string, ChatBarCommandState>();
 const chatBarCommandStatesById = new Map<string, ChatBarCommandState>();
 let chatBarInjectionPatched = false;
-const getChatButtonsComponentLazy = findComponentByCodeLazy(
-    /type:\i,disabled:\i,channel:\i/,
-    "showAllButtons"
-);
+const getChatButtonsComponentLazy = findComponentByCodeLazy(/isEmpty:\i,showAllButtons:\i/);
 let chatButtonsPatchTarget: ChatButtonsPatchTarget | null = null;
 let chatBarBridgeRetryTimeout: number | null = null;
 let chatBarBridgeRetryDelay = 200;
@@ -128,11 +125,6 @@ function debugLog(...args: unknown[]) {
     (window as unknown as Record<string, unknown>).__CommandPaletteDebug = debugLogs;
     console.debug("CommandPalette", ...args);
 }
-
-type ChatButtonsComponent = {
-    type?: (props: unknown) => ReactElement | null;
-    compare?: (prev: unknown, next: unknown) => boolean;
-};
 
 export function normalizeTag(tag: string): string {
     return tag.trim().toLowerCase();

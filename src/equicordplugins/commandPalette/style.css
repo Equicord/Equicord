@@ -97,12 +97,13 @@
 .vc-command-palette-search input {
     flex: 1;
     background: transparent;
-    border: none;
     color: var(--text-normal);
     font-size: 16px;
     padding: 12px 0;
     outline: none;
     box-shadow: none;
+    width: 464px;
+    border: none !important
 }
 
 .vc-command-picker-search input {
@@ -167,6 +168,7 @@
     max-height: 460px;
     overflow-y: auto;
     border-radius: 8px;
+    scrollbar-width: none;
 }
 
 .vc-command-palette-section {
