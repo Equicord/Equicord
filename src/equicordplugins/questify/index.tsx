@@ -835,6 +835,8 @@ function getQuestAcceptedButtonProps(quest: Quest, text: string) {
         text: getQuestAcceptedButtonText(quest) ?? text,
         onClick: () => { processQuestForAutoComplete(quest); },
         icon: () => { }
+        onClick: () => { processQuestForAutoComplete(quest); },
+        icon: () => { }
     };
 }
 
@@ -1062,6 +1064,7 @@ export default definePlugin({
                     // early if not applicable. If the sort method is set to "Questify", replace the
                     // quests with the sorted ones. Also, setup a trigger to rerender the memo.
                     match: /(?<=function \i\((\i),\i\){let \i=\i.useRef.{0,100}?;)(return \i.useMemo\(\(\)=>{)/,
+                    match: /(?<=function \i\((\i),\i\){let \i=\i.useRef.{0,100}?;)(return \i.useMemo\(\(\)=>{)/,
                     replace: "const questRerenderTrigger=$self.useQuestRerender();const questifySorted=$self.sortQuests($1,arguments[1].sortMethod!==\"questify\");$2if(arguments[1].sortMethod===\"questify\"){$1=questifySorted;};"
                 },
                 {
@@ -1076,6 +1079,7 @@ export default definePlugin({
                 },
                 {
                     // Add the trigger to the memo for rerendering Quests order due to progress changes, etc.
+                    match: /(?<=id\);.{0,100}?,\i},\[\i,\i)/,
                     match: /(?<=id\);.{0,100}?,\i},\[\i,\i)/,
                     replace: ",questRerenderTrigger,questifySorted"
                 }
@@ -1205,6 +1209,7 @@ export default definePlugin({
                     // The "Quest Accepted" text is changed to "Resume" if the Quest is in progress but not active.
                     // Then, when the Quest Accepted button is clicked, resume the automatic completion of the
                     // Quest and disable the button again.
+                    match: /(?<=fullWidth:!0}\)}\):.{0,200}?secondary",)disabled:!0,text:(.{0,30}?\["9KoPyM"\]\)),/,
                     match: /(?<=fullWidth:!0}\)}\):.{0,200}?secondary",)disabled:!0,text:(.{0,30}?\["9KoPyM"\]\)),/,
                     replace: "...$self.getQuestAcceptedButtonProps(arguments[0].quest,$1),"
                 },
