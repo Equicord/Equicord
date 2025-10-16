@@ -529,5 +529,3 @@ export function CommandPaletteSettingsPanel() {
         </section>
     );
 }
-
-export default CommandPaletteSettingsPanel;

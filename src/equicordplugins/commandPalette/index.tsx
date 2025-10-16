@@ -9,7 +9,7 @@ import { EquicordDevs, IS_MAC } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 import { cleanupCommandPaletteRuntime, registerBuiltInCommands, wrapChatBarChildren } from "./registry";
-import CommandPaletteSettingsPanel from "./settingsPanel";
+import { CommandPaletteSettingsPanel } from "./settingsPanel";
 import { openCommandPalette } from "./ui";
 
 const DEFAULT_KEYS = IS_MAC ? ["Meta", "Shift", "P"] : ["Control", "Shift", "P"];
@@ -17,7 +17,7 @@ const DEFAULT_HOTKEY = DEFAULT_KEYS.join("+");
 
 let openScheduled = false;
 
-const settings = definePluginSettings({
+export const settings = definePluginSettings({
     hotkey: {
         description: "Hotkey used to open the command palette (format: Ctrl+Shift+P)",
         type: OptionType.STRING,
@@ -153,8 +153,5 @@ export default definePlugin({
         });
     },
 
-    wrapChatBarChildren: wrapChatBarChildren,
+    wrapChatBarChildren,
 });
-
-export { registerCommand } from "./registry";
-export { settings };

@@ -489,7 +489,7 @@
 .vc-command-palette-style-classic.vc-command-palette-root {
     background: rgb(32 34 37 / 96%);
     border: 1px solid rgb(79 84 92 / 40%);
-    box-shadow: 0 32px 64px rgb(0 0 0 / 45%);
+    box-shadow: 0 0 32px rgb(0 0 0 / 45%);
     backdrop-filter: blur(18px);
 }
 
