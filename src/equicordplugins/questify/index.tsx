@@ -9,7 +9,7 @@ import "./styles.css";
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import { ErrorBoundary, openPluginModal } from "@components/index";
 import { EquicordDevs } from "@utils/constants";
-import { getIntlMessage } from "@utils/discord";
+import { getIntlMessage } from "@utils/index";
 import definePlugin, { StartAt } from "@utils/types";
 import { onceReady } from "@webpack";
 import { ContextMenuApi, Menu, NavigationRouter, useEffect, useState } from "@webpack/common";
