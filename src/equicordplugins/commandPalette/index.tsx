@@ -8,7 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs, IS_MAC } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
-import { cleanupCommandPaletteRuntime, registerBuiltInCommands } from "./registry";
+import { cleanupCommandPaletteRuntime, registerBuiltInCommands, wrapChatBarChildren } from "./registry";
 import CommandPaletteSettingsPanel from "./settingsPanel";
 import { openCommandPalette } from "./ui";
 
@@ -120,6 +120,15 @@ export default definePlugin({
     description: "Quickly run actions through a searchable command palette",
     authors: [EquicordDevs.justjxke],
     settings,
+    patches: [
+        {
+            find: '"sticker")',
+            replacement: {
+                match: /(.buttons,children:)(\i)\}/,
+                replace: "$1$self.wrapChatBarChildren($2)}"
+            }
+        }
+    ],
 
     start() {
         registerBuiltInCommands();
@@ -143,6 +152,8 @@ export default definePlugin({
             openCommandPalette();
         });
     },
+
+    wrapChatBarChildren: wrapChatBarChildren,
 });
 
 export { registerCommand } from "./registry";

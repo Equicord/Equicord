@@ -10,7 +10,7 @@ import { getUserSettingLazy } from "@api/UserSettings";
 import { openPluginModal } from "@components/settings/tabs";
 import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
-import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
+import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, React, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, SettingsRouter, StreamerModeStore, Toasts, UserStore, VoiceActions } from "@webpack/common";
 import type { FC, ReactElement, ReactNode } from "react";
 import { Settings } from "Vencord";
@@ -60,20 +60,12 @@ interface ChatBarCommandState {
     getters: Set<() => HTMLElement | null>;
 }
 
-type ChatButtonsRenderer = (props: unknown) => ReactElement | null;
 
-interface ChatButtonsPatchTarget {
-    carrier: { type: ChatButtonsRenderer; } & Record<string, unknown>;
-    original: ChatButtonsRenderer;
-}
 
-const chatBarCommandStates = new Map<string, ChatBarCommandState>();
-const chatBarCommandStatesById = new Map<string, ChatBarCommandState>();
-let chatBarInjectionPatched = false;
-const getChatButtonsComponentLazy = findComponentByCodeLazy(/isEmpty:\i,showAllButtons:\i/);
-let chatButtonsPatchTarget: ChatButtonsPatchTarget | null = null;
-let chatBarBridgeRetryTimeout: number | null = null;
-let chatBarBridgeRetryDelay = 200;
+
+
+export const chatBarCommandStates = new Map<string, ChatBarCommandState>();
+export const chatBarCommandStatesById = new Map<string, ChatBarCommandState>();
 const CHATBAR_DATASET_KEY = "vcCommandPaletteId";
 const CHATBAR_DATA_ATTRIBUTE = "data-vc-command-palette-id";
 
@@ -130,36 +122,10 @@ export function normalizeTag(tag: string): string {
     return tag.trim().toLowerCase();
 }
 
-function resolveChatButtonsModule(): ChatButtonsPatchTarget | null {
-    if (chatButtonsPatchTarget) return chatButtonsPatchTarget;
 
-    try {
-        const factory = getChatButtonsComponentLazy as unknown as (() => ReactElement | null) | null | undefined;
-        const element = factory?.();
-        if (!element) return null;
 
-        const typeCandidate = element.type as unknown;
-        if (typeCandidate && typeof typeCandidate === "object" && typeof (typeCandidate as { type?: unknown; }).type === "function") {
-            const memoCarrier = typeCandidate as { type: ChatButtonsRenderer; } & Record<string, unknown>;
-            chatButtonsPatchTarget = {
-                carrier: memoCarrier,
-                original: memoCarrier.type
-            };
-            return chatButtonsPatchTarget;
-        }
-    } catch (error) {
-        debugLog("Failed to resolve chat buttons component", error);
-        return null;
-    }
-
-    return null;
-}
-
-function wrapChatBarChildren(element: ReactElement | null | undefined): ReactElement | null {
-    if (!element || !React.isValidElement(element)) return element ?? null;
-
-    const { children } = element.props as { children?: ReactNode; };
-    if (!Array.isArray(children) || children.length === 0) return element;
+export function wrapChatBarChildren(children: ReactNode): ReactNode {
+    if (!Array.isArray(children) || children.length === 0) return children;
 
     let hasChanges = false;
     const wrappedChildren = children.map((child, index) => {
@@ -182,67 +148,16 @@ function wrapChatBarChildren(element: ReactElement | null | undefined): ReactEle
         return React.createElement(ChatBarCommandBridge, bridgeProps);
     });
 
-    if (!hasChanges) return element;
+    if (!hasChanges) return children;
 
-    const cloneElement = React.cloneElement as unknown as (el: ReactElement, props: unknown, children: ReactNode[]) => ReactElement;
-    return cloneElement(element, element.props, wrappedChildren);
+    return wrappedChildren;
 }
 
-function ensureChatBarBridge() {
-    debugLog("ensureChatBarBridge invoked", { patched: chatBarInjectionPatched });
-    if (chatBarInjectionPatched) return;
 
-    const patchTarget = resolveChatButtonsModule();
-    debugLog("chatButtonsComponent resolved", Boolean(patchTarget));
-    const originalRenderer = patchTarget?.original;
 
-    if (!patchTarget || typeof originalRenderer !== "function") {
-        debugLog("chatButtonsComponent missing or invalid");
-        scheduleChatBarBridgeRetry();
-        return;
-    }
 
-    clearChatBarBridgeRetry();
-    debugLog("Patching chat bar component");
-    patchTarget.carrier.type = function patchedChatButtonsType(this: unknown, props: unknown) {
-        const result = originalRenderer.call(this, props);
-        return wrapChatBarChildren(result);
-    };
 
-    chatBarInjectionPatched = true;
 
-    runtimeCleanupCallbacks.push(() => {
-        patchTarget.carrier.type = originalRenderer;
-        chatButtonsPatchTarget = null;
-        chatBarInjectionPatched = false;
-        chatBarBridgeRetryDelay = 200;
-
-        for (const state of chatBarCommandStates.values()) {
-            removeCommand(state.commandId);
-        }
-        chatBarCommandStates.clear();
-        chatBarCommandStatesById.clear();
-    });
-}
-
-function scheduleChatBarBridgeRetry() {
-    if (chatBarInjectionPatched) return;
-    if (chatBarBridgeRetryTimeout != null) return;
-    const delay = chatBarBridgeRetryDelay;
-    chatBarBridgeRetryDelay = Math.min(chatBarBridgeRetryDelay * 2, 5000);
-    chatBarBridgeRetryTimeout = window.setTimeout(() => {
-        chatBarBridgeRetryTimeout = null;
-        ensureChatBarBridge();
-    }, delay);
-}
-
-function clearChatBarBridgeRetry() {
-    if (chatBarBridgeRetryTimeout != null) {
-        window.clearTimeout(chatBarBridgeRetryTimeout);
-        chatBarBridgeRetryTimeout = null;
-    }
-    chatBarBridgeRetryDelay = 200;
-}
 
 interface ChatBarCommandBridgeProps {
     element: ReactElement;
@@ -251,7 +166,7 @@ interface ChatBarCommandBridgeProps {
 
 type ChatBarCommandBridgeElementProps = ChatBarCommandBridgeProps & { key?: string; };
 
-const ChatBarCommandBridge: FC<ChatBarCommandBridgeProps> = ({ element, buttonKey }) => {
+export const ChatBarCommandBridge: FC<ChatBarCommandBridgeProps> = ({ element, buttonKey }) => {
     const containerRef = React.useRef<HTMLDivElement | null>(null);
     const latestElementRef = React.useRef(element);
     latestElementRef.current = element;
@@ -314,13 +229,13 @@ const ChatBarCommandBridge: FC<ChatBarCommandBridgeProps> = ({ element, buttonKe
     }, element);
 };
 
-function resolveChatBarElementFromContainer(container: HTMLElement): HTMLElement | null {
+export function resolveChatBarElementFromContainer(container: HTMLElement): HTMLElement | null {
     if (container.hasAttribute("aria-label")) return container;
     const labelled = container.querySelector<HTMLElement>("[aria-label]");
     return labelled ?? null;
 }
 
-function attachChatBarInstance(buttonKey: string, label: string, container: HTMLElement, element: HTMLElement): () => void {
+export function attachChatBarInstance(buttonKey: string, label: string, container: HTMLElement, element: HTMLElement): () => void {
     const state = ensureChatBarCommandState(buttonKey, label);
     const { commandId } = state;
 
@@ -348,7 +263,7 @@ function attachChatBarInstance(buttonKey: string, label: string, container: HTML
     };
 }
 
-function extractChatBarLabel(element: HTMLElement | null, reactElement: ReactElement | null, fallback: string): string {
+export function extractChatBarLabel(element: HTMLElement | null, reactElement: ReactElement | null, fallback: string): string {
     const aria = element?.getAttribute("aria-label")?.trim();
     if (aria) return aria;
     const fromElement = readLabelFromElement(reactElement);
@@ -356,7 +271,7 @@ function extractChatBarLabel(element: HTMLElement | null, reactElement: ReactEle
     return fallback;
 }
 
-function readLabelFromElement(element: ReactElement | null): string | null {
+export function readLabelFromElement(element: ReactElement | null): string | null {
     if (!element) return null;
 
     const props = (element.props ?? {}) as Record<string, unknown>;
@@ -371,7 +286,7 @@ function readLabelFromElement(element: ReactElement | null): string | null {
     return readLabelFromChildren(children);
 }
 
-function readLabelFromChildren(children: ReactNode | undefined): string | null {
+export function readLabelFromChildren(children: ReactNode | undefined): string | null {
     if (children == null || typeof children === "boolean") return null;
     if (typeof children === "string") return children.trim() || null;
     if (typeof children === "number") return children.toString();
@@ -388,7 +303,7 @@ function readLabelFromChildren(children: ReactNode | undefined): string | null {
     return null;
 }
 
-function ensureChatBarCommandState(buttonKey: string, label: string): ChatBarCommandState {
+export function ensureChatBarCommandState(buttonKey: string, label: string): ChatBarCommandState {
     const normalizedLabel = label.trim() || buttonKey;
     const existing = chatBarCommandStates.get(buttonKey);
     if (existing) {
@@ -439,7 +354,7 @@ function buildChatBarCommand(state: ChatBarCommandState): CommandEntry {
     } satisfies CommandEntry;
 }
 
-function activateChatBarCommand(state: ChatBarCommandState) {
+export function activateChatBarCommand(state: ChatBarCommandState) {
     const element = resolveChatBarElement(state);
     if (!element) {
         showToast(`Unable to find the "${state.label}" chat button.`, Toasts.Type.FAILURE);
@@ -457,7 +372,7 @@ function activateChatBarCommand(state: ChatBarCommandState) {
     showToast(`${state.label} activated.`, Toasts.Type.SUCCESS);
 }
 
-function resolveChatBarElement(state: ChatBarCommandState): HTMLElement | null {
+export function resolveChatBarElement(state: ChatBarCommandState): HTMLElement | null {
     for (const getter of Array.from(state.getters)) {
         try {
             const candidate = getter();
@@ -2803,7 +2718,6 @@ export function registerBuiltInCommands() {
     registerPluginChangeCommands();
     registerPluginToolboxProvider();
     registerCustomizationCommands();
-    ensureChatBarBridge();
     registerContextualCommands();
     registerCustomCommandProvider();
     registerSessionCommands();
