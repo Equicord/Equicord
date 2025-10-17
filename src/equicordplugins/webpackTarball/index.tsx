@@ -5,13 +5,15 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { BaseText } from "@components/BaseText";
 import { FormSwitch } from "@components/FormSwitch";
+import { Heading, HeadingPrimary } from "@components/Heading";
 import { Devs } from "@utils/constants";
 import { makeLazy } from "@utils/lazy";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByProps, wreq } from "@webpack";
-import { Button, Flex, Forms, Text, Timestamp, useState } from "@webpack/common";
+import { Button, Flex, Timestamp, useState } from "@webpack/common";
 
 import TarFile from "./tar";
 import * as Webpack from "./webpack";
@@ -97,31 +99,31 @@ function TarModal({ modalProps, close }: { modalProps: ModalProps; close(): void
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader>
-                <Forms.FormTitle tag="h2">
+                <HeadingPrimary>
                     Webpack Tarball
-                </Forms.FormTitle>
-                <Text variant="text-md/normal">
+                </HeadingPrimary>
+                <BaseText size="md">
                     <Timestamp timestamp={new Date(builtAt)} isInline={false}>
                         {"Build number "}
                         {buildNumber}
                     </Timestamp>
-                </Text>
+                </BaseText>
                 <ModalCloseButton onClick={close} />
             </ModalHeader>
 
             <ModalContent>
                 <div style={{ marginTop: "8px", marginBottom: "24px" }}>
-                    <Forms.FormTitle>
+                    <Heading>
                         Lazy chunks
-                    </Forms.FormTitle>
+                    </Heading>
                     <Flex align={Flex.Align.CENTER}>
-                        <Text
-                            variant="text-md/normal"
+                        <BaseText
+                            size="md"
                             style={{ flexGrow: 1 }}
                         >
                             {loaded}/{all}
                             {errored ? ` (${errored} errors)` : null}
-                        </Text>
+                        </BaseText>
                         <Button
                             disabled={loading === all || isLoading}
                             onClick={async () => {

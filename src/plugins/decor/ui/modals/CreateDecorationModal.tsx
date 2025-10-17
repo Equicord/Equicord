@@ -4,13 +4,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Heading } from "@components/Heading";
 import { Link } from "@components/Link";
+import { Paragraph } from "@components/Paragraph";
 import { openInviteModal } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { closeAllModals, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { filters, findComponentByCodeLazy, mapMangledModuleLazy } from "@webpack";
-import { Button, FluxDispatcher, Forms, GuildStore, NavigationRouter, Text, TextInput, useEffect, useMemo, UserStore, useState } from "@webpack/common";
+import { Button, FluxDispatcher, GuildStore, NavigationRouter, TextInput, useEffect, useMemo, UserStore, useState } from "@webpack/common";
 
 import { GUILD_ID, INVITE_KEY, RAW_SKU_ID } from "../../lib/constants";
 import { useCurrentUserDecorationsStore } from "../../lib/stores/CurrentUserDecorationsStore";
@@ -64,14 +67,15 @@ function CreateDecorationModal(props: ModalProps) {
         className={DecorationModalStyles.modal}
     >
         <ModalHeader separator={false} className={cl("modal-header")}>
-            <Text
+            <BaseText
+                size="lg"
+                weight="semibold"
                 color="header-primary"
-                variant="heading-lg/semibold"
                 tag="h1"
                 style={{ flexGrow: 1 }}
             >
                 Create Decoration
-            </Text>
+            </BaseText>
             <ModalCloseButton onClick={props.onClose} />
         </ModalHeader>
         <ModalContent
@@ -88,8 +92,9 @@ function CreateDecorationModal(props: ModalProps) {
                 </HelpMessage>
                 <div className={cl("create-decoration-modal-form-preview-container")}>
                     <div className={cl("create-decoration-modal-form")}>
-                        {error !== null && <Text color="text-danger" variant="text-xs/normal">{error.message}</Text>}
-                        <Forms.FormSection title="File">
+                        {error !== null && <BaseText size="xs" color="text-danger">{error.message}</BaseText>}
+                        <section>
+                            <Heading>File</Heading>
                             <FileUpload
                                 filename={file?.name}
                                 placeholder="Choose a file"
@@ -97,20 +102,21 @@ function CreateDecorationModal(props: ModalProps) {
                                 filters={[{ name: "Decoration file", extensions: ["png", "apng"] }]}
                                 onFileSelect={setFile}
                             />
-                            <Forms.FormText className={Margins.top8}>
+                            <Paragraph className={Margins.top8}>
                                 File should be APNG or PNG.
-                            </Forms.FormText>
-                        </Forms.FormSection>
-                        <Forms.FormSection title="Name">
+                            </Paragraph>
+                        </section>
+                        <section>
+                            <Heading>Name</Heading>
                             <TextInput
                                 placeholder="Companion Cube"
                                 value={name}
                                 onChange={setName}
                             />
-                            <Forms.FormText className={Margins.top8}>
+                            <Paragraph className={Margins.top8}>
                                 This name will be used when referring to this decoration.
-                            </Forms.FormText>
-                        </Forms.FormSection>
+                            </Paragraph>
+                        </section>
                     </div>
                     <div>
                         <AvatarDecorationModalPreview
@@ -143,24 +149,24 @@ function CreateDecorationModal(props: ModalProps) {
             </ErrorBoundary>
         </ModalContent>
         <ModalFooter className={cl("modal-footer")}>
-            <Button
-                onClick={() => {
-                    setSubmitting(true);
-                    createDecoration({ alt: name, file: file! })
-                        .then(props.onClose).catch(e => { setSubmitting(false); setError(e); });
-                }}
-                disabled={!file || !name}
-                submitting={submitting}
-            >
-                Submit for Review
-            </Button>
-            <Button
-                onClick={props.onClose}
-                color={Button.Colors.PRIMARY}
-                look={Button.Looks.LINK}
-            >
-                Cancel
-            </Button>
+            <div className={cl("modal-footer-btn-container")}>
+                <Button
+                    onClick={props.onClose}
+                    color={Button.Colors.PRIMARY}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    onClick={() => {
+                        setSubmitting(true);
+                        createDecoration({ alt: name, file: file! })
+                            .then(props.onClose).catch(e => { setSubmitting(false); setError(e); });
+                    }}
+                    disabled={!file || !name || submitting}
+                >
+                    Submit for Review
+                </Button>
+            </div>
         </ModalFooter>
     </ModalRoot>;
 }

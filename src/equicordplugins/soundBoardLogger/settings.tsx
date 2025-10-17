@@ -5,8 +5,10 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { OptionType } from "@utils/types";
-import { Button, Forms, TextInput, useState } from "@webpack/common";
+import { Button, TextInput, useState } from "@webpack/common";
 
 import { openSoundBoardLog } from "./components/SoundBoardLog";
 
@@ -46,8 +48,8 @@ const settings = definePluginSettings({
 
 
             return (
-                <Forms.FormSection>
-                    <Forms.FormTitle>The amount of soundboard ids you want to save at a time (0 lets you save infinite)</Forms.FormTitle>
+                <section>
+                    <Heading>The amount of soundboard ids you want to save at a time (0 lets you save infinite)</Heading>
                     <TextInput
                         type="number"
                         pattern="-?[0-9]+"
@@ -55,9 +57,9 @@ const settings = definePluginSettings({
                         onChange={handleChange}
                         placeholder={"Enter a number"}
                     />
-                    {shouldShowWarning && <Forms.FormText style={{ color: "var(--text-danger)" }}>Warning! Setting the number to a lower value will reset the log!</Forms.FormText>}
-                    {errorMessage && <Forms.FormText style={{ color: "var(--text-danger)" }}>{errorMessage}</Forms.FormText>}
-                </Forms.FormSection>
+                    {shouldShowWarning && <Paragraph style={{ color: "var(--text-danger)" }}>Warning! Setting the number to a lower value will reset the log!</Paragraph>}
+                    {errorMessage && <Paragraph style={{ color: "var(--text-danger)" }}>{errorMessage}</Paragraph>}
+                </section>
             );
         }
 

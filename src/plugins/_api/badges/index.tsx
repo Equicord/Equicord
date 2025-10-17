@@ -33,7 +33,7 @@ import { EquicordDonorModal, VencordDonorModal } from "./modals";
 
 const CONTRIBUTOR_BADGE = "https://cdn.discordapp.com/emojis/1092089799109775453.png?size=64";
 const EQUICORD_CONTRIBUTOR_BADGE = "https://equicord.org/assets/favicon.png";
-const EQUICORD_DONOR_BADGE = "https://cdn.nest.rip/uploads/78cb1e77-b7a6-4242-9089-e91f866159bf.png";
+const EQUICORD_DONOR_BADGE = "https://images.equicord.org/api/v1/files/raw/0199e71a-5555-7000-aafb-a07a355d9b28";
 
 const ContributorBadge: ProfileBadge = {
     description: "Vencord Contributor",
@@ -48,7 +48,13 @@ const EquicordContributorBadge: ProfileBadge = {
     image: EQUICORD_CONTRIBUTOR_BADGE,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => shouldShowEquicordContributorBadge(userId),
-    onClick: (_, { userId }) => openContributorModal(UserStore.getUser(userId))
+    onClick: (_, { userId }) => openContributorModal(UserStore.getUser(userId)),
+    props: {
+        style: {
+            borderRadius: "50%",
+            transform: "scale(0.9)"
+        }
+    },
 };
 
 const EquicordDonorBadge: ProfileBadge = {
@@ -57,7 +63,7 @@ const EquicordDonorBadge: ProfileBadge = {
     position: BadgePosition.START,
     shouldShow: ({ userId }) => {
         const donorBadges = EquicordDonorBadges[userId]?.map(badge => badge.badge);
-        const hasDonorBadge = donorBadges?.includes("https://cdn.nest.rip/uploads/78cb1e77-b7a6-4242-9089-e91f866159bf.png");
+        const hasDonorBadge = donorBadges?.includes(EQUICORD_DONOR_BADGE);
         return isEquicordDonor(userId) && !hasDonorBadge;
     },
     onClick: () => {

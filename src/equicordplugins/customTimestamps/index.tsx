@@ -7,14 +7,17 @@
 import "./style.css";
 
 import { definePluginSettings, useSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Heading, HeadingPrimary } from "@components/Heading";
 import { Link } from "@components/Link";
+import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByCodeLazy, findComponentByCodeLazy } from "@webpack";
-import { Forms, moment, TextInput, useEffect, useRef, UserStore, useState } from "@webpack/common";
+import { moment, TextInput, useEffect, useRef, UserStore, useState } from "@webpack/common";
 
 type TimeFormat = {
     name: string;
@@ -112,8 +115,8 @@ const TimeRow = (props: TimeRowProps) => {
 
     return (
         <>
-            <Forms.FormTitle tag="h5">{props.format.name}</Forms.FormTitle>
-            <Forms.FormText>{props.format.description}</Forms.FormText>
+            <Heading>{props.format.name}</Heading>
+            <Paragraph>{props.format.description}</Paragraph>
             <TextInput value={state} onChange={handleChange} />
         </>
     );
@@ -149,10 +152,10 @@ const DemoMessage = (props: { msgId, compact, message, date: Date | undefined, i
             />
         </div>
     ) : <div className="vc-cmt-demo-message">
-        <Forms.FormText>
+        <Paragraph>
             {/* @ts-ignore */}
             <b>Preview:</b> {Vencord.Plugins.plugins.CustomTimestamps.renderTimestamp(date, "cozy")}
-        </Forms.FormText>
+        </Paragraph>
     </div>;
 };
 
@@ -195,14 +198,14 @@ const settings = definePluginSettings({
                 <>
                     <DemoMessageContainer />
                     {Object.entries(timeFormats).map(([key, value]) => (
-                        <Forms.FormSection key={key}>
+                        <section key={key}>
                             {key === "sameDayFormat" && (
                                 <div className={Margins.bottom20}>
-                                    <Forms.FormDivider style={{ marginBottom: "10px" }} />
-                                    <Forms.FormTitle tag="h1">Calendar formats</Forms.FormTitle>
-                                    <Forms.FormText>
+                                    <Divider style={{ marginBottom: "10px" }} />
+                                    <Heading tag="h1">Calendar formats</Heading>
+                                    <Paragraph>
                                         How to format the [calendar] value if used in the above timestamps.
-                                    </Forms.FormText>
+                                    </Paragraph>
                                 </div>
                             )}
                             <TimeRow
@@ -211,7 +214,7 @@ const settings = definePluginSettings({
                                 onChange={setNewValue}
                                 pluginSettings={settingsState}
                             />
-                        </Forms.FormSection>
+                        </section>
                     ))}
                 </>);
         }
@@ -236,8 +239,8 @@ export default definePlugin({
     settings,
     settingsAboutComponent: () => (
         <div className={"vc-cmt-info-card"}>
-            <Forms.FormTitle tag="h2">How to use:</Forms.FormTitle>
-            <Forms.FormText>
+            <HeadingPrimary>How to use:</HeadingPrimary>
+            <Paragraph>
                 <Link href="https://momentjs.com/docs/#/displaying/format/">Moment.js formatting documentation</Link>
                 <div className={Margins.top8}>
                     Additionally you can use these in your inputs:<br />
@@ -245,7 +248,7 @@ export default definePlugin({
                     as &quot;Today&quot; or &quot;Yesterday&quot;.<br />
                     <b>[relative]</b> gives you times such as &quot;4 hours ago&quot;.<br />
                 </div>
-            </Forms.FormText>
+            </Paragraph>
         </div>
     ),
     patches: [

@@ -21,19 +21,22 @@ import { Channel, CloudUpload, Guild, GuildFeatures, Message, User } from "@venc
 import { ChannelActionCreators, ChannelStore, ComponentDispatch, Constants, FluxDispatcher, GuildStore, i18n, IconUtils, InviteActions, MessageActions, RestAPI, SelectedChannelStore, SelectedGuildStore, UserProfileActions, UserProfileStore, UserSettingsActionCreators, UserUtils } from "@webpack/common";
 import { Except } from "type-fest";
 
-import { runtimeHashMessageKey } from "./intlHash";
+import { runtimeHashMessageKey, runtimeHashMessageKeyLegacy } from "./intlHash";
 import { Logger } from "./Logger";
 import { MediaModalItem, MediaModalProps, openMediaModal } from "./modal";
 
 const IntlManagerLogger = new Logger("IntlManager");
+
+// TODO: remove legacy hashing function once Discord ships new one everywhere for a while
 
 /**
  * Get an internationalized message from a non hashed key
  * @param key The plain message key
  * @param values The values to interpolate, if it's a rich message
  */
-export function getIntlMessage(key: string, values?: Record<PropertyKey, any>): any {
-    return getIntlMessageFromHash(runtimeHashMessageKey(key), values, key);
+export function getIntlMessage(key: string, values?: Record<PropertyKey, any>, legacy?: boolean): any {
+    if (legacy) return getIntlMessageFromHash(runtimeHashMessageKeyLegacy(key), values, key);
+    return getIntlMessageFromHash(runtimeHashMessageKey(key), values, key) || getIntlMessageFromHash(runtimeHashMessageKeyLegacy(key), values, key);
 }
 
 /**
@@ -100,7 +103,11 @@ export const enum Theme {
 }
 
 export function getTheme(): Theme {
-    return UserSettingsActionCreators.PreloadedUserSettingsActionCreators.getCurrentValue()?.appearance?.theme;
+    try {
+        return UserSettingsActionCreators.PreloadedUserSettingsActionCreators.getCurrentValue()?.appearance?.theme;
+    } catch {
+        return Theme.Dark;
+    }
 }
 
 export function insertTextIntoChatInputBox(text: string) {

@@ -9,14 +9,16 @@ import "./style.css";
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Link } from "@components/Link";
+import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { openModal } from "@utils/modal";
 import definePlugin, { OptionType, PluginNative, ReporterTestable } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { Button, DraftType, FluxDispatcher, Forms, UploadHandler, UploadManager, UserStore } from "@webpack/common";
+import { Button, DraftType, FluxDispatcher, UploadHandler, UploadManager, UserStore } from "@webpack/common";
 
 import { DependencyModal } from "./DependencyModal";
 
@@ -146,14 +148,14 @@ const settings = definePluginSettings({
         default: "none",
         component: () => (
             <>
-                <Forms.FormText>
+                <Paragraph>
                     <Link href="https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md" className="media-downloader-link">
                         <Button role="link" style={{ width: "100%" }}>
                             Click to see supported websites.
                         </Button>
                     </Link>
-                </Forms.FormText>
-                <Forms.FormDivider />
+                </Paragraph>
+                <Divider />
             </>
         )
     },

@@ -5,9 +5,11 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { Logger } from "@utils/Logger";
 import { OptionType } from "@utils/types";
-import { Forms, SearchableSelect, useState } from "@webpack/common";
+import { SearchableSelect, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import { ChannelTabsPreview } from "../components/ChannelTabsContainer";
@@ -83,11 +85,11 @@ function AnimationSettings(): JSX.Element {
     }
 
     return (
-        <Forms.FormSection>
-            <Forms.FormTitle>Animation Controls</Forms.FormTitle>
-            <Forms.FormText>
+        <section>
+            <Heading>Animation Controls</Heading>
+            <Paragraph>
                 Enable or disable specific animations for channel tabs. Each option can be toggled independently.
-            </Forms.FormText>
+            </Paragraph>
             <div style={{ marginTop: "8px" }}>
                 <SearchableSelect
                     placeholder="Select which animations to enable..."
@@ -100,7 +102,7 @@ function AnimationSettings(): JSX.Element {
                     closeOnSelect={false}
                 />
             </div>
-        </Forms.FormSection>
+        </section>
     );
 }
 

@@ -6,12 +6,14 @@
 
 import { generateId } from "@api/Commands";
 import { Settings } from "@api/Settings";
+import { HeadingPrimary, HeadingTertiary } from "@components/Heading";
 import { OpenExternalIcon } from "@components/Icons";
+import { Paragraph } from "@components/Paragraph";
 import { proxyLazy } from "@utils/lazy";
 import { Margins } from "@utils/margins";
 import { ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { User } from "@vencord/discord-types";
-import { Button, Card, FluxDispatcher, Forms, Parser, React, UserStore, UserUtils } from "@webpack/common";
+import { Button, Card, FluxDispatcher, Parser, React, UserStore, UserUtils } from "@webpack/common";
 import { Constructor } from "type-fest";
 
 import type { Theme, ThemeLikeProps } from "../types";
@@ -64,13 +66,13 @@ export const ThemeCard: React.FC<ThemeCardProps> = ({ theme, themeLinks, likedTh
             openModal(modalProps => (
                 <ModalRoot {...modalProps} size={ModalSize.SMALL}>
                     <ModalHeader>
-                        <Forms.FormTitle tag="h4">Hold on!</Forms.FormTitle>
+                        <HeadingTertiary>Hold on!</HeadingTertiary>
                     </ModalHeader>
                     <ModalContent>
-                        <Forms.FormText style={{ padding: "8px" }}>
+                        <Paragraph style={{ padding: "8px" }}>
                             <p>This theme requires the <b>ThemeAttributes</b> plugin to work properly!</p>
                             <p>Do you want to enable it?</p>
-                        </Forms.FormText>
+                        </Paragraph>
                     </ModalContent>
                     <ModalFooter>
                         <Button
@@ -114,25 +116,25 @@ export const ThemeCard: React.FC<ThemeCardProps> = ({ theme, themeLinks, likedTh
 
     return (
         <Card style={{ padding: ".5rem", marginBottom: ".5em", marginTop: ".5em", display: "flex", flexDirection: "column", backgroundColor: "var(--background-base-lower-alt)" }} key={theme.id}>
-            <Forms.FormTitle tag="h2" style={{ overflowWrap: "break-word", marginTop: 8 }} className="vce-theme-text">
+            <HeadingPrimary style={{ overflowWrap: "break-word", marginTop: 8 }} className="vce-theme-text">
                 {theme.name}
-            </Forms.FormTitle>
-            <Forms.FormText className="vce-theme-text">
+            </HeadingPrimary>
+            <Paragraph className="vce-theme-text">
                 {Parser.parse(theme.description)}
-            </Forms.FormText>
+            </Paragraph>
             {!removePreview && (
                 <img role="presentation" src={theme.thumbnail_url} loading="lazy" alt={theme.name} className="vce-theme-info-preview" />
             )}
             <div className="vce-theme-info">
                 <div style={{ justifyContent: "flex-start", flexDirection: "column" }}>
                     {theme.tags && (
-                        <Forms.FormText>
+                        <Paragraph>
                             {theme.tags.map(tag => (
                                 <span className="vce-theme-info-tag" key={tag}>
                                     {tag}
                                 </span>
                             ))}
-                        </Forms.FormText>
+                        </Paragraph>
                     )}
                     {!removeButtons && (
                         <div style={{ marginTop: "8px", display: "flex", flexDirection: "row" }}>

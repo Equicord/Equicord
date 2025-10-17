@@ -7,6 +7,7 @@
 import { BadgeUserArgs, ProfileBadge } from "@api/Badges";
 import { Badges } from "@api/index";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
@@ -100,9 +101,9 @@ function openRankModal(rank: rankInfo) {
                 <ModalContent>
                     <div style={{ padding: "1em", textAlign: "center" }}>
                         <rank.assetSVG height="150px"></rank.assetSVG>
-                        <Forms.FormText className={Margins.top16}>
+                        <Paragraph className={Margins.top16}>
                             {rank.description}
-                        </Forms.FormText>
+                        </Paragraph>
                     </div>
                 </ModalContent>
             </ModalRoot>
@@ -114,7 +115,7 @@ function getBadgeComponent(rank,) {
     // there may be a better button component to do this with
     return (
         <div style={{ transform: "scale(0.80)" }}>
-            <Button onClick={() => openRankModal(rank)} width={"21.69px"} height={"21.69px"} size={Button.Sizes.NONE} look={Button.Looks.BLANK}>
+            <Button onClick={() => openRankModal(rank)} width={"21.69px"} height={"21.69px"} size={Button.Sizes.NONE} look={Button.Looks.LINK}>
                 <rank.assetSVG height={"21.69px"} />
             </Button>
         </div>

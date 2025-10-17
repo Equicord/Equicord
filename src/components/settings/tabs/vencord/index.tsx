@@ -8,8 +8,11 @@ import "./VencordTab.css";
 
 import { openNotificationLogModal } from "@api/Notifications/notificationLog";
 import { useSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
 import { FormSwitch } from "@components/FormSwitch";
+import { Heading } from "@components/Heading";
 import { FolderIcon, GithubIcon, LogIcon, PaintbrushIcon, RestartIcon } from "@components/Icons";
+import { Paragraph } from "@components/Paragraph";
 import { openContributorModal, openPluginModal, SettingsTab, wrapTab } from "@components/settings";
 import { DonateButton, InviteButton } from "@components/settings/DonateButton";
 import { QuickAction, QuickActionCard } from "@components/settings/QuickAction";
@@ -19,7 +22,7 @@ import { DONOR_ROLE_ID, GUILD_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/c
 import { Margins } from "@utils/margins";
 import { identity, isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
-import { Button, Flex, Forms, GuildMemberStore, React, Select, UserStore } from "@webpack/common";
+import { Button, Flex, GuildMemberStore, React, Select, UserStore } from "@webpack/common";
 import BadgeAPI from "plugins/_api/badges";
 
 import { openNotificationSettingsModal } from "./NotificationSettings";
@@ -49,25 +52,26 @@ function EquicordSettings() {
     const isMac = navigator.platform.toLowerCase().startsWith("mac");
     const needsVibrancySettings = IS_DISCORD_DESKTOP && isMac;
 
-    const user = UserStore.getCurrentUser();
+    const user = UserStore?.getCurrentUser();
 
     const Switches: Array<false | {
         key: KeysOfType<typeof settings, boolean>;
         title: string;
-        note: string;
+        description?: string;
+        restartRequired?: boolean;
         warning: { enabled: boolean; message?: string; };
     }
     > = [
             {
                 key: "useQuickCss",
                 title: "Enable Custom CSS",
-                note: "Loads your Custom CSS",
+                restartRequired: true,
                 warning: { enabled: false },
             },
             !IS_WEB && {
                 key: "enableReactDevtools",
                 title: "Enable React Developer Tools",
-                note: "Requires a full restart",
+                restartRequired: true,
                 warning: { enabled: false },
             },
             !IS_WEB &&
@@ -75,37 +79,38 @@ function EquicordSettings() {
                 ? {
                     key: "frameless",
                     title: "Disable the Window Frame",
-                    note: "Requires a full restart",
+                    restartRequired: true,
                     warning: { enabled: false },
                 }
                 : {
                     key: "winNativeTitleBar",
                     title:
                         "Use Windows' native title bar instead of Discord's custom one",
-                    note: "Requires a full restart",
+                    restartRequired: true,
                     warning: { enabled: false },
                 }),
             !IS_WEB && {
                 key: "transparent",
                 title: "Enable Window Transparency",
-                note: "You need a theme that supports transparency or this will do nothing. Requires a full restart!",
+                description: "A theme that supports transparency is required or this will do nothing. Stops the window from being resizable as a side effect",
+                restartRequired: true,
                 warning: {
                     enabled: isWindows,
                     message: "Enabling this will prevent you from snapping this window.",
                 },
+            },
+            IS_DISCORD_DESKTOP && {
+                key: "disableMinSize",
+                title: "Disable Minimum Window Size",
+                restartRequired: true,
+                warning: { enabled: false },
             },
             !IS_WEB &&
             isWindows && {
                 key: "winCtrlQ",
                 title:
                     "Register Ctrl+Q as shortcut to close Discord (Alternative to Alt+F4)",
-                note: "Requires a full restart",
-                warning: { enabled: false },
-            },
-            IS_DISCORD_DESKTOP && {
-                key: "disableMinSize",
-                title: "Disable Minimum Window Size",
-                note: "Requires a full restart",
+                restartRequired: true,
                 warning: { enabled: false },
             },
         ];
@@ -152,7 +157,10 @@ function EquicordSettings() {
                     buttonOnClick={() => openContributorModal(user)}
                 />
             )}
-            <Forms.FormSection title="Quick Actions">
+
+            <section>
+                <Heading>Quick Actions</Heading>
+
                 <QuickActionCard>
                     <QuickAction
                         Icon={LogIcon}
@@ -188,25 +196,23 @@ function EquicordSettings() {
                         }
                     />
                 </QuickActionCard>
-            </Forms.FormSection>
+            </section>
 
-            <Forms.FormDivider />
+            <Divider />
 
-            <Forms.FormSection className={Margins.top16} title="Settings" tag="h5">
-                <Forms.FormText
-                    className={Margins.bottom20}
-                    style={{ color: "var(--text-muted)" }}
-                >
+            <section className={Margins.top16}>
+                <Heading>Settings</Heading>
+                <Paragraph className={Margins.bottom20} style={{ color: "var(--text-muted)" }}>
                     Hint: You can change the position of this settings section in the{" "}
                     <Button
-                        look={Button.Looks.BLANK}
+                        look={Button.Looks.LINK}
                         style={{ color: "var(--text-link)", display: "inline-block" }}
                         onClick={() => openPluginModal(Vencord.Plugins.plugins.Settings)}
                     >
                         settings of the Settings plugin
                     </Button>
                     !
-                </Forms.FormText>
+                </Paragraph>
 
                 {Switches.map(
                     s =>
@@ -219,25 +225,25 @@ function EquicordSettings() {
                                 description={
                                     s.warning.enabled ? (
                                         <>
-                                            {s.note}
+                                            {s.description}
                                             <div className="form-switch-warning">
                                                 {s.warning.message}
                                             </div>
                                         </>
                                     ) : (
-                                        s.note
+                                        s.description
                                     )
                                 }
                             />
                         ),
                 )}
-            </Forms.FormSection>
+            </section>
 
             {needsVibrancySettings && (
                 <>
-                    <Forms.FormTitle tag="h5">
+                    <Heading>
                         Window vibrancy style (requires restart)
-                    </Forms.FormTitle>
+                    </Heading>
                     <Select
                         className={Margins.bottom20}
                         placeholder="Window vibrancy style"
@@ -303,10 +309,9 @@ function EquicordSettings() {
                 </>
             )}
 
-            <Forms.FormSection
+            <section
                 className={Margins.top16}
                 title="Equicord Notifications"
-                tag="h5"
             >
                 <Flex>
                     <Button onClick={openNotificationSettingsModal}>
@@ -316,7 +321,7 @@ function EquicordSettings() {
                         View Notification Log
                     </Button>
                 </Flex>
-            </Forms.FormSection>
+            </section>
         </SettingsTab>
     );
 }

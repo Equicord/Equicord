@@ -5,9 +5,11 @@
  */
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { HeadingPrimary } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { ModalContent, ModalRoot, openModal } from "@utils/modal";
 import { User } from "@vencord/discord-types";
-import { Forms, React, Tooltip } from "@webpack/common";
+import { React, Tooltip } from "@webpack/common";
 
 import { badgeImages } from "./badgeComponent";
 import { cl } from "./utils";
@@ -35,16 +37,16 @@ export function BadgeModal({ user }: { user: User; }) {
                     src={user.getAvatarURL(void 0, 512, true)}
                     alt=""
                 />
-                <Forms.FormTitle tag="h2" className={cl("name")}>{user.username}</Forms.FormTitle>
+                <HeadingPrimary className={cl("name")}>{user.username}</HeadingPrimary>
             </div>
             {badgeImages.length ? (
-                <Forms.FormText>
+                <Paragraph>
                     {user.username} has {badgeImages.length} global badges.
-                </Forms.FormText>
+                </Paragraph>
             ) : (
-                <Forms.FormText>
+                <Paragraph>
                     {user.username} has no global badges.
-                </Forms.FormText>
+                </Paragraph>
             )}
             {!!badgeImages.length && (
                 <div className={cl("badges")}>

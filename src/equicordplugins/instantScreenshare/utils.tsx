@@ -5,10 +5,12 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { Logger } from "@utils/Logger";
 import { OptionType } from "@utils/types";
 import { findByCodeLazy } from "@webpack";
-import { Forms, MediaEngineStore, SearchableSelect, useEffect, useState } from "@webpack/common";
+import { MediaEngineStore, SearchableSelect, useEffect, useState } from "@webpack/common";
 
 interface PickerProps {
     streamMediaSelection: any[];
@@ -84,18 +86,18 @@ function ScreenSetting() {
         return () => { active = false; };
     }, []);
 
-    if (loading) return <Forms.FormText>Loading media sources...</Forms.FormText>;
-    if (!streamMediaSelection.length) return <Forms.FormText>No Media found.</Forms.FormText>;
+    if (loading) return <Paragraph>Loading media sources...</Paragraph>;
+    if (!streamMediaSelection.length) return <Paragraph>No Media found.</Paragraph>;
 
     return <StreamSimplePicker streamMediaSelection={streamMediaSelection} streamMedia={streamMedia} />;
 }
 
 function SettingSection() {
     return (
-        <Forms.FormSection>
-            <Forms.FormTitle>Media source to stream</Forms.FormTitle>
-            <Forms.FormText>Resets to main screen if not found</Forms.FormText>
+        <section>
+            <Heading>Media source to stream</Heading>
+            <Paragraph>Resets to main screen if not found</Paragraph>
             <ScreenSetting />
-        </Forms.FormSection>
+        </section>
     );
 }

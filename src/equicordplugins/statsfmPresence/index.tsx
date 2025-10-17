@@ -6,12 +6,14 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
+import { HeadingSecondary } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
-import { ApplicationAssetUtils, FluxDispatcher, Forms } from "@webpack/common";
+import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
 
 interface ActivityAssets {
     large_image?: string;
@@ -224,10 +226,10 @@ export default definePlugin({
 
     settingsAboutComponent: () => (
         <>
-            <Forms.FormTitle tag="h3">How does this work?</Forms.FormTitle>
-            <Forms.FormText>
+            <HeadingSecondary>How does this work?</HeadingSecondary>
+            <Paragraph>
                 Hey this is just here to explain how this works. By putting your stats.fm username in the settings, it will show what you're currently listening to on your discord profile. (this doesnt require an api but requires you to have your listening history public)
-            </Forms.FormText>
+            </Paragraph>
         </>
     ),
 

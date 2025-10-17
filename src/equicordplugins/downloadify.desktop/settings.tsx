@@ -8,8 +8,10 @@ import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { OptionType } from "@utils/types";
-import { Button, Forms, showToast, Toasts, useState } from "@webpack/common";
+import { Button, showToast, Toasts, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import { d, DownloadifyLogger, DownloadifyNative } from "./utils/definitions";
@@ -38,17 +40,17 @@ function DefaultDirectorySetting(): JSX.Element {
 
     return (
         <ErrorBoundary>
-            <Forms.FormSection>
-                <Forms.FormTitle className={d("form-title")}>
+            <section>
+                <Heading className={d("form-title")}>
                     Default Directory
-                </Forms.FormTitle>
-                <Forms.FormText className={d("form-description")}>
+                </Heading>
+                <Paragraph className={d("form-description")}>
                     Default download location. If set, the file will always be downloaded in its original format even if alternatives are available. Leave empty to pick a folder and file type each time.
-                </Forms.FormText>
+                </Paragraph>
                 <div className={d("directory-container")}>
-                    <Forms.FormText className={d("directory-display")}>
+                    <Paragraph className={d("directory-display")}>
                         {defaultDirectory || "No Directory Set"}
-                    </Forms.FormText>
+                    </Paragraph>
                     <div className={d("directory-buttons")}>
                         <Button
                             disabled={isDialogueOpen}
@@ -68,7 +70,7 @@ function DefaultDirectorySetting(): JSX.Element {
                         </Button>
                     </div>
                 </div>
-            </Forms.FormSection>
+            </section>
         </ErrorBoundary>
     );
 }

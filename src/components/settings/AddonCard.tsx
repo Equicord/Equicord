@@ -19,9 +19,10 @@
 import "./AddonCard.css";
 
 import { classNameFactory } from "@api/Styles";
+import { BaseText } from "@components/BaseText";
 import { AddonBadge } from "@components/settings/PluginBadge";
 import { Switch } from "@components/Switch";
-import { Text, useRef } from "@webpack/common";
+import { Tooltip, useRef } from "@webpack/common";
 import type { MouseEventHandler, ReactNode } from "react";
 
 import { useTruncatedText } from "./tabs/plugins/components/truncateText";
@@ -36,6 +37,7 @@ interface Props {
     disabled?: boolean;
     isNew?: boolean;
     sourceBadge?: ReactNode;
+    tooltip?: string;
     onMouseEnter?: MouseEventHandler<HTMLDivElement>;
     onMouseLeave?: MouseEventHandler<HTMLDivElement>;
 
@@ -44,7 +46,7 @@ interface Props {
     author?: ReactNode;
 }
 
-export function AddonCard({ disabled, isNew, sourceBadge, name, infoButton, footer, author, enabled, setEnabled, description, onMouseEnter, onMouseLeave }: Props) {
+export function AddonCard({ disabled, isNew, sourceBadge, tooltip, name, infoButton, footer, author, enabled, setEnabled, description, onMouseEnter, onMouseLeave }: Props) {
     const titleRef = useRef<HTMLDivElement>(null);
     const titleContainerRef = useRef<HTMLDivElement>(null);
     const { truncated, containerRef } = useTruncatedText(description ? description.toString() : "");
@@ -57,7 +59,7 @@ export function AddonCard({ disabled, isNew, sourceBadge, name, infoButton, foot
         >
             <div className={cl("header")}>
                 <div className={cl("name-author")}>
-                    <Text variant="text-md/bold" className={cl("name")}>
+                    <BaseText size="md" weight="bold" className={cl("name")}>
                         <div ref={titleContainerRef} className={cl("title-container")}>
                             <div
                                 ref={titleRef}
@@ -74,15 +76,26 @@ export function AddonCard({ disabled, isNew, sourceBadge, name, infoButton, foot
                             </div>
                         </div>
                         {isNew && <AddonBadge text="NEW" color="#ED4245" />}
-                        {sourceBadge}
-                    </Text>
+                    </BaseText>
 
                     {!!author && (
-                        <Text variant="text-md/normal" className={cl("author")}>
+                        <BaseText size="md" className={cl("author")}>
                             {author}
-                        </Text>
+                        </BaseText>
                     )}
                 </div>
+
+                <Tooltip text={tooltip}>
+                    {({ onMouseEnter, onMouseLeave }) => (
+                        <div
+                            className={cl("source")}
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
+                        >
+                            {sourceBadge}
+                        </div>
+                    )}
+                </Tooltip>
 
                 {infoButton}
 

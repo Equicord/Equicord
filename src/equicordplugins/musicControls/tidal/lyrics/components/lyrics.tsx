@@ -1,11 +1,12 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Copyright (c) 2025 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { BaseText } from "@components/BaseText";
 import { openModal } from "@utils/modal";
-import { ContextMenuApi, Text, TooltipContainer, useEffect, useState, useStateFromStores } from "@webpack/common";
+import { ContextMenuApi, TooltipContainer, useEffect, useState, useStateFromStores } from "@webpack/common";
 
 import { settings } from "../../../settings";
 import { TidalStore } from "../../TidalStore";
@@ -15,16 +16,23 @@ import { LyricsModal } from "./modal";
 import { cl, NoteSvg, useLyrics } from "./util";
 
 function LyricsDisplay({ scroll = true }: { scroll?: boolean; }) {
-    const { ShowMusicNoteOnNoLyrics, TidalSyncMode: SyncMode } = settings.use(["ShowMusicNoteOnNoLyrics", "TidalSyncMode"]);
-    const { lyrics, lyricRefs, currLrcIndex } = useLyrics({ scroll });
+    const { ShowMusicNoteOnNoLyrics } = settings.use(["ShowMusicNoteOnNoLyrics"]);
+    const { lyrics, lyricRefs } = useLyrics({ scroll });
     const currentLyrics = lyrics || null;
     const NoteElement = NoteSvg(cl("music-note"));
-    const position = useStateFromStores([TidalStore], () => TidalStore.mPosition);
-    const makeClassName = (index: number): string => {
+    const position = useStateFromStores([TidalStore], () => TidalStore.mPosition / 1000);
+
+    const currLrcIndex = currentLyrics
+        ? currentLyrics.findIndex((line, i) => {
+            const nextLineTime = currentLyrics[i + 1]?.time ?? Infinity;
+            return position >= line.time && position < nextLineTime;
+        })
+        : null;
+
+    const makeClassName = (index: number) => {
         if (currLrcIndex === null) return "";
         const diff = index - currLrcIndex;
-        if (diff === 0) return cl("current");
-        return cl(diff > 0 ? "next" : "prev");
+        return cl(diff === 0 ? "current" : diff > 0 ? "next" : "prev");
     };
 
     if (!currentLyrics) {
@@ -32,7 +40,7 @@ function LyricsDisplay({ scroll = true }: { scroll?: boolean; }) {
             <div className="eq-tidal-lyrics"
                 onContextMenu={e => ContextMenuApi.openContextMenu(e, () => <LyricsContextMenu />)}
             >
-                <TooltipContainer text="No synced lyrics found">
+                <TooltipContainer text="No lyrics found">
                     {NoteElement}
                 </TooltipContainer>
             </div>
@@ -47,58 +55,9 @@ function LyricsDisplay({ scroll = true }: { scroll?: boolean; }) {
         >
             {currentLyrics.map((line, i) => (
                 <div ref={lyricRefs[i]} key={i}>
-                    <Text
-                        variant={currLrcIndex === i ? "text-sm/normal" : "text-xs/normal"}
-                        className={makeClassName(i)}
-                    >
-                        {SyncMode === "character" && line.characters && line.characters.length > 0 && line.words && line.words.length > 0 ? (
-                            line.words.map((word, wIdx) => (
-                                <span key={wIdx}>
-                                    {word.characters.map((char, j) => {
-                                        const charActive = position / 1000 >= char.time && position / 1000 < char.endTime;
-                                        return (
-                                            <span
-                                                key={j}
-                                                className={charActive ? "eq-tidal-lyrics-char-active" : "eq-tidal-lyrics-char"}
-                                                style={{ opacity: charActive ? 1 : 0.5 }}
-                                            >
-                                                {char.char}
-                                            </span>
-                                        );
-                                    })}
-                                    {wIdx < line.words.length - 1 && <span> </span>}
-                                </span>
-                            ))
-                        ) : SyncMode === "character" && line.characters && line.characters.length > 0 ? (
-                            line.characters.map((char, j) => {
-                                const charActive = position / 1000 >= char.time && position / 1000 < char.endTime;
-                                return (
-                                    <span
-                                        key={j}
-                                        className={charActive ? "eq-tidal-lyrics-char-active" : "eq-tidal-lyrics-char"}
-                                        style={{ opacity: charActive ? 1 : 0.5 }}
-                                    >
-                                        {char.char}
-                                    </span>
-                                );
-                            })
-                        ) : SyncMode === "word" && line.words && line.words.length > 0 ? (
-                            line.words.map((word, j) => {
-                                const wordActive = position / 1000 >= word.time && position / 1000 < word.endTime;
-                                return (
-                                    <span
-                                        key={j}
-                                        className={wordActive ? "eq-tidal-lyrics-word-active" : "eq-tidal-lyrics-word"}
-                                        style={{ opacity: wordActive ? 1 : 0.5 }}
-                                    >
-                                        {word.word}
-                                    </span>
-                                );
-                            })
-                        ) : (
-                            line.text || NoteElement
-                        )}
-                    </Text>
+                    <BaseText size={currLrcIndex === i ? "sm" : "xs"} className={makeClassName(i)}>
+                        {line.text || NoteElement}
+                    </BaseText>
                 </div>
             ))}
         </div>

@@ -6,11 +6,13 @@
 
 import { CheckedTextInput } from "@components/CheckedTextInput";
 import { FormSwitch } from "@components/FormSwitch";
+import { Heading, HeadingSecondary } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { Margins } from "@utils/margins";
 import { identity } from "@utils/misc";
 import { Activity } from "@vencord/discord-types";
 import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
-import { Card, Forms, PresenceStore, React, Select, SnowflakeUtils, TextInput, UserStore } from "@webpack/common";
+import { Card, PresenceStore, React, Select, SnowflakeUtils, TextInput, UserStore } from "@webpack/common";
 
 import { AppIdSetting, makeEmptyAppId } from ".";
 
@@ -29,34 +31,34 @@ export function ReplaceTutorial() {
     const activities: Activity[] = PresenceStore.getActivities(UserStore.getCurrentUser().id);
     return (
         <>
-            <Forms.FormTitle tag="h3">IDs of currently running activities</Forms.FormTitle>
+            <HeadingSecondary>IDs of currently running activities</HeadingSecondary>
             {
                 activities.length === 0
-                    ? <Forms.FormText>No running activities</Forms.FormText>
+                    ? <Paragraph>No running activities</Paragraph>
                     : activities.map(activity => {
                         const isSpotify = (activity.flags & (ActivityFlags.SYNC | ActivityFlags.PLAY)) === (ActivityFlags.SYNC | ActivityFlags.PLAY);
                         return !isSpotify
-                            ? <Forms.FormText>{activity.name}: {activity.application_id}</Forms.FormText>
+                            ? <Paragraph>{activity.name}: {activity.application_id}</Paragraph>
                             : null;
                     })
             }
-            <Forms.FormTitle tag="h3" className={Margins.top8}>Available variables</Forms.FormTitle>
-            <Forms.FormText>
+            <HeadingSecondary className={Margins.top8}>Available variables</HeadingSecondary>
+            <Paragraph>
                 In all fields (except stream URL), you can put in variables that'll automatically be replaced by their original content:
                 <pre style={{ fontFamily: "monospace" }}>
                     :name:, :details:, :state:
                     <br />
                     :large_image:, :large_text:, :small_image:, :small_text:
                 </pre>
-            </Forms.FormText>
-            <Forms.FormTitle tag="h3" className={Margins.top8}>More details</Forms.FormTitle>
-            <Forms.FormText>
+            </Paragraph>
+            <HeadingSecondary className={Margins.top8}>More details</HeadingSecondary>
+            <Paragraph>
                 Leave a field empty to leave it as is.
                 <br />
                 Set a field to "null" to hide it on the presence.
                 <br />
                 You may need to reload Discord for changes to apply.
-            </Forms.FormText>
+            </Paragraph>
         </>
     );
 }
@@ -87,9 +89,9 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                                     }}
                                     className={Margins.bottom8}
                                     hideBorder={true}
-                                /> : <Forms.FormTitle tag="h3">Add new application</Forms.FormTitle>
+                                /> : <HeadingSecondary>Add new application</HeadingSecondary>
                         }
-                        <Forms.FormTitle className={`${Margins.top8} ${Margins.bottom8}`}>Application ID</Forms.FormTitle>
+                        <Heading className={`${Margins.top8} ${Margins.bottom8}`}>Application ID</Heading>
                         <CheckedTextInput
                             value={setting.appId}
                             onChange={async v => {
@@ -101,7 +103,7 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                         />
                         {
                             isValidSnowflake(setting.appId) && <>
-                                <Forms.FormTitle className={Margins.top8}>New activity type</Forms.FormTitle>
+                                <Heading className={Margins.top8}>New activity type</Heading>
                                 <Select
                                     options={[
                                         { label: "Playing", value: ActivityType.PLAYING },
@@ -120,7 +122,7 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                                 {
                                     setting.newActivityType === ActivityType.STREAMING &&
                                     <>
-                                        <Forms.FormTitle className={`${Margins.top8} ${Margins.bottom8}`}>Stream URL (must be YouTube or Twitch)</Forms.FormTitle>
+                                        <Heading className={`${Margins.top8} ${Margins.bottom8}`}>Stream URL (must be YouTube or Twitch)</Heading>
                                         <CheckedTextInput
                                             value={setting.newStreamUrl}
                                             onChange={async v => {
@@ -136,7 +138,7 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                                 {
                                     setting.newActivityType !== ActivityType.STREAMING &&
                                     <>
-                                        <Forms.FormTitle className={Margins.top8}>New name {setting.newActivityType === ActivityType.PLAYING && "(first line)"}</Forms.FormTitle>
+                                        <Heading className={Margins.top8}>New name {setting.newActivityType === ActivityType.PLAYING && "(first line)"}</Heading>
                                         <TextInput
                                             className={Margins.top8}
                                             value={setting.newName}
@@ -146,7 +148,7 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                                         />
                                     </>
                                 }
-                                <Forms.FormTitle className={Margins.top8}>New details {setting.newActivityType === ActivityType.PLAYING ? "(second line)" : "(first line)"}</Forms.FormTitle>
+                                <Heading className={Margins.top8}>New details {setting.newActivityType === ActivityType.PLAYING ? "(second line)" : "(first line)"}</Heading>
                                 <TextInput
                                     className={Margins.top8}
                                     value={setting.newDetails}
@@ -154,7 +156,7 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                                         onChange(v, i, "newDetails");
                                     }}
                                 />
-                                <Forms.FormTitle className={Margins.top8}>New state {setting.newActivityType === ActivityType.PLAYING ? "(third line)" : "(second line)"}</Forms.FormTitle>
+                                <Heading className={Margins.top8}>New state {setting.newActivityType === ActivityType.PLAYING ? "(third line)" : "(second line)"}</Heading>
                                 <TextInput
                                     className={Margins.top8}
                                     value={setting.newState}
@@ -165,8 +167,8 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                                 {
                                     !setting.disableAssets &&
                                     <>
-                                        <Forms.FormText style={{ fontSize: "1.05rem", fontWeight: "500" }} className={Margins.top8}>Large image</Forms.FormText>
-                                        <Forms.FormTitle className={Margins.top8}>Text {setting.newActivityType !== ActivityType.PLAYING && "(also third line)"}</Forms.FormTitle>
+                                        <Paragraph style={{ fontSize: "1.05rem", fontWeight: "500" }} className={Margins.top8}>Large image</Paragraph>
+                                        <Heading className={Margins.top8}>Text {setting.newActivityType !== ActivityType.PLAYING && "(also third line)"}</Heading>
                                         <TextInput
                                             className={Margins.top8}
                                             value={setting.newLargeImageText}
@@ -174,7 +176,7 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                                                 onChange(v, i, "newLargeImageText");
                                             }}
                                         />
-                                        <Forms.FormTitle className={Margins.top8}>URL</Forms.FormTitle>
+                                        <Heading className={Margins.top8}>URL</Heading>
                                         <TextInput
                                             className={Margins.top8}
                                             value={setting.newLargeImageUrl}
@@ -182,8 +184,8 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                                                 onChange(v, i, "newLargeImageUrl");
                                             }}
                                         />
-                                        <Forms.FormText style={{ fontSize: "1.05rem", fontWeight: "500" }} className={Margins.top8}>Small image</Forms.FormText>
-                                        <Forms.FormTitle className={Margins.top8}>Text</Forms.FormTitle>
+                                        <Paragraph style={{ fontSize: "1.05rem", fontWeight: "500" }} className={Margins.top8}>Small image</Paragraph>
+                                        <Heading className={Margins.top8}>Text</Heading>
                                         <TextInput
                                             className={Margins.top8}
                                             value={setting.newSmallImageText}
@@ -191,7 +193,7 @@ export function ReplaceSettings({ appIds, update, save }: SettingsProps) {
                                                 onChange(v, i, "newSmallImageText");
                                             }}
                                         />
-                                        <Forms.FormTitle className={Margins.top8}>URL</Forms.FormTitle>
+                                        <Heading className={Margins.top8}>URL</Heading>
                                         <TextInput
                                             className={Margins.top8}
                                             value={setting.newSmallImageUrl}
