@@ -80,6 +80,14 @@ const settings = definePluginSettings({
             { label: "Custom", value: "custom" },
         ],
     },
+    coverType: {
+        description: "Choose which cover to display when watching a TV show",
+        type: OptionType.SELECT,
+        options: [
+            { label: "Series Cover", value: "series", default: true },
+            { label: "Episode Cover", value: "episode" },
+        ],
+    },
     customName: {
         description: "Custom Rich Presence name (only used if 'Custom' is selected).\nOptions: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
         type: OptionType.STRING,
@@ -137,7 +145,7 @@ function setActivity(activity: Activity | null) {
 export default definePlugin({
     name: "JellyfinRichPresence",
     description: "Rich presence for Jellyfin media server",
-    authors: [EquicordDevs.vmohammad, Devs.SerStars],
+    authors: [EquicordDevs.vmohammad, Devs.SerStars, Devs.ZcraftElite],
 
     settingsAboutComponent: () => (
         <>
@@ -203,7 +211,13 @@ export default definePlugin({
             if (playState?.IsPaused) return null;
 
             const imageUrl = item.ImageTags?.Primary
-                ? `${baseUrl}/Items/${item.Id}/Images/Primary`
+                ? `${baseUrl}/Items/${
+                    item.Type === "Episode" &&
+                    item.SeriesId &&
+                    settings.store.coverType === "series"
+                        ? item.SeriesId
+                        : item.Id
+                }/Images/Primary`
                 : undefined;
 
             return {
