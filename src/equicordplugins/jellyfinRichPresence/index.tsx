@@ -144,6 +144,11 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: true,
     },
+    privacyMode: {
+        description: "Privacy Mode (Hide media details like Episode/Song Name)",
+        type: OptionType.BOOLEAN,
+        default: false,
+    },
 });
 
 const applicationId = "1381368130164625469";
@@ -300,22 +305,38 @@ export default definePlugin({
         switch (nameSetting) {
             case "full":
                 if (mediaData.type === "Episode" && mediaData.seriesName) {
-                    appName = `${mediaData.seriesName} - ${mediaData.name}`;
+                    appName = settings.store.privacyMode
+                        ? `${mediaData.seriesName} - [Episode Hidden]`
+                        : `${mediaData.seriesName} - ${mediaData.name}`;
                 } else if (mediaData.type === "Audio") {
-                    appName = `${mediaData.artist || "Unknown Artist"} - ${mediaData.name}`;
+                    appName = settings.store.privacyMode
+                        ? "[Track Hidden]"
+                        : `${mediaData.artist || "Unknown Artist"} - ${mediaData.name}`;
                 } else {
-                    appName = mediaData.name || "Jellyfin";
+                    appName = settings.store.privacyMode
+                        ? "[Movie Hidden]"
+                        : mediaData.name || "Jellyfin";
                 }
                 break;
             case "custom":
                 appName = templateReplace(settings.store.customName || "{name} on Jellyfish");
+                // Apply spoiler protection to custom name if it contains sensitive fields
+                if (settings.store.privacyMode) {
+                    appName = appName
+                        .replace(mediaData.name || "", "[Title Hidden]")
+                        .replace(mediaData.seriesName || "", "[Series Hidden]")
+                        .replace(mediaData.artist || "", "[Artist Hidden]")
+                        .replace(mediaData.album || "", "[Album Hidden]");
+                }
                 break;
             case "default":
             default:
                 if (mediaData.type === "Episode" && mediaData.seriesName) {
                     appName = mediaData.seriesName;
                 } else {
-                    appName = mediaData.name || "Jellyfin";
+                    appName = settings.store.privacyMode
+                        ? "[Media Hidden]"
+                        : mediaData.name || "Jellyfin";
                 }
                 break;
         }
@@ -331,9 +352,9 @@ export default definePlugin({
 
         const getDetails = () => {
             if (mediaData.type === "Episode" && mediaData.seriesName) {
-                return mediaData.seriesName;
+                return settings.store.privacyMode ? "Watching a TV Show" : mediaData.seriesName;
             }
-            return mediaData.name;
+            return settings.store.privacyMode ? "Watching Something" : mediaData.name;
         };
 
         const getState = () => {
@@ -364,10 +385,13 @@ export default definePlugin({
                     episodeFormat = format === "fulltext" ? `Episode ${episode}` : `E${episode.toString().padStart(2, "0")}`;
                 }
 
-                if (settings.store.showEpisodeName && mediaData.name) {
+                if (settings.store.showEpisodeName && mediaData.name && !settings.store.privacyMode) {
                     return `${episodeFormat} - ${mediaData.name}`;
                 }
                 return episodeFormat;
+            }
+            if (settings.store.privacyMode) {
+                return mediaData.type === "Audio" ? "Listening to music" : (mediaData.year ? `(????)` : undefined);
             }
             return mediaData.artist || (mediaData.year ? `(${mediaData.year})` : undefined);
         };
