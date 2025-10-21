@@ -56,6 +56,7 @@ interface MediaData {
     imageUrl?: string;
     duration?: number;
     position?: number;
+    isPaused?: boolean;
 }
 
 const settings = definePluginSettings({
@@ -137,6 +138,11 @@ const settings = definePluginSettings({
                 value: 3
             },
         ],
+    },
+    showPausedState: {
+        description: "Show Rich Presence when media is paused",
+        type: OptionType.BOOLEAN,
+        default: true,
     },
 });
 
@@ -222,7 +228,7 @@ export default definePlugin({
             const item = userSession.NowPlayingItem;
             const playState = userSession.PlayState;
 
-            if (playState?.IsPaused) return null;
+            if (playState?.IsPaused && !settings.store.showPausedState) return null;
 
             const imageUrl = item.ImageTags?.Primary
                 ? `${baseUrl}/Items/${
@@ -246,7 +252,8 @@ export default definePlugin({
                 url: `${baseUrl}/web/#!/details?id=${item.Id}`,
                 imageUrl,
                 duration: item.RunTimeTicks ? Math.floor(item.RunTimeTicks / 10000000) : undefined,
-                position: playState?.PositionTicks ? Math.floor(playState.PositionTicks / 10000000) : undefined
+                position: playState?.PositionTicks ? Math.floor(playState.PositionTicks / 10000000) : undefined,
+                isPaused: !!playState?.IsPaused,
             };
         } catch (e) {
             logger.error("Failed to query Jellyfin API", e);
@@ -330,6 +337,9 @@ export default definePlugin({
         };
 
         const getState = () => {
+            if (mediaData.isPaused) {
+                return "Paused";
+            }
             if (mediaData.type === "Episode" && mediaData.seriesName) {
                 let episodeFormat = "";
                 const season = mediaData.seasonNumber;
@@ -362,7 +372,7 @@ export default definePlugin({
             return mediaData.artist || (mediaData.year ? `(${mediaData.year})` : undefined);
         };
 
-        const timestamps = mediaData.position && mediaData.duration ? {
+        const timestamps = (!mediaData.isPaused && mediaData.position != null && mediaData.duration != null) ? {
             start: Date.now() - (mediaData.position * 1000),
             end: Date.now() + ((mediaData.duration - mediaData.position) * 1000)
         } : undefined;
