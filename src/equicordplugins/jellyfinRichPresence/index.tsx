@@ -80,6 +80,10 @@ const settings = definePluginSettings({
             { label: "Custom", value: "custom" },
         ],
     },
+    customName: {
+        description: "Custom Rich Presence name (only used if 'Custom' is selected).\nOptions: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
+        type: OptionType.STRING,
+    },
     coverType: {
         description: "Choose which cover to display when watching a TV show",
         type: OptionType.SELECT,
@@ -88,9 +92,19 @@ const settings = definePluginSettings({
             { label: "Episode Cover", value: "episode" },
         ],
     },
-    customName: {
-        description: "Custom Rich Presence name (only used if 'Custom' is selected).\nOptions: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
-        type: OptionType.STRING,
+    episodeFormat: {
+        description: "Episode number format",
+        type: OptionType.SELECT,
+        options: [
+            { label: "S01E01", value: "long", default: true },
+            { label: "1x01", value: "short" },
+            { label: "Season 1 Episode 1", value: "fulltext" },
+        ],
+    },
+    showEpisodeName: {
+        description: "Show episode name after season/episode info",
+        type: OptionType.BOOLEAN,
+        default: false,
     },
     showTMDBButton: {
         description: "Show TheMovieDB button in Rich Presence",
@@ -145,7 +159,7 @@ function setActivity(activity: Activity | null) {
 export default definePlugin({
     name: "JellyfinRichPresence",
     description: "Rich presence for Jellyfin media server",
-    authors: [EquicordDevs.vmohammad, Devs.SerStars, Devs.ZcraftElite],
+    authors: [EquicordDevs.vmohammad, Devs.SerStars, EquicordDevs.ZcraftElite],
 
     settingsAboutComponent: () => (
         <>
@@ -317,9 +331,33 @@ export default definePlugin({
 
         const getState = () => {
             if (mediaData.type === "Episode" && mediaData.seriesName) {
-                const season = mediaData.seasonNumber ? `S${mediaData.seasonNumber}` : "";
-                const episode = mediaData.episodeNumber ? `E${mediaData.episodeNumber}` : "";
-                return `${mediaData.name} (${season} - ${episode})`.trim();
+                let episodeFormat = "";
+                const season = mediaData.seasonNumber;
+                const episode = mediaData.episodeNumber;
+                const format = settings.store.episodeFormat || "long";
+
+                if (season != null && episode != null) {
+                    switch (format) {
+                        case "long":
+                            episodeFormat = `S${season.toString().padStart(2, "0")}E${episode.toString().padStart(2, "0")}`;
+                            break;
+                        case "short":
+                            episodeFormat = `${season}x${episode.toString().padStart(2, "0")}`;
+                            break;
+                        case "fulltext":
+                            episodeFormat = `Season ${season} Episode ${episode}`;
+                            break;
+                    }
+                } else if (season != null) {
+                    episodeFormat = format === "fulltext" ? `Season ${season}` : `S${season.toString().padStart(2, "0")}`;
+                } else if (episode != null) {
+                    episodeFormat = format === "fulltext" ? `Episode ${episode}` : `E${episode.toString().padStart(2, "0")}`;
+                }
+
+                if (settings.store.showEpisodeName && mediaData.name) {
+                    return `${episodeFormat} - ${mediaData.name}`;
+                }
+                return episodeFormat;
             }
             return mediaData.artist || (mediaData.year ? `(${mediaData.year})` : undefined);
         };
