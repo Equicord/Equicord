@@ -319,7 +319,7 @@ export default definePlugin({
                 }
                 break;
             case "custom":
-                appName = templateReplace(settings.store.customName || "{name} on Jellyfish");
+                appName = templateReplace(settings.store.customName || "{name} on Jellyfin");
                 if (settings.store.privacyMode) {
                     appName = appName
                         .replace(mediaData.name || "", "[Title Hidden]")
