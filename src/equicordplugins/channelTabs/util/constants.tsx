@@ -358,6 +358,12 @@ export const settings = definePluginSettings({
         default: false,
         restartNeeded: false
     },
+    oneTabPerServer: {
+        type: OptionType.BOOLEAN,
+        description: "Limit to one tab per server, so opening a new channel in that server will use the existing tab.",
+        default: false,
+        restartNeeded: false
+    },
     maxOpenTabs: {
         type: OptionType.SLIDER,
         description: "Maximum number of open tabs (0 = unlimited)",
