@@ -142,7 +142,7 @@ const settings = definePluginSettings({
     showPausedState: {
         description: "Show Rich Presence when media is paused",
         type: OptionType.BOOLEAN,
-        default: false,
+        default: true,
     },
     privacyMode: {
         description: "Privacy Mode (Hide media details like Episode/Song Name)",
@@ -342,13 +342,15 @@ export default definePlugin({
         }
 
         const assets: ActivityAssets = {
-            large_image: (settings.store.privacyMode
-                ? undefined
-                : mediaData.imageUrl
-                    ? await getApplicationAsset(mediaData.imageUrl)
-                    : undefined),
+            large_image: (mediaData.imageUrl
+                ? await getApplicationAsset(mediaData.imageUrl)
+                : undefined),
             large_text: mediaData.seriesName || mediaData.album || undefined,
         };
+
+        if (settings.store.privacyMode) {
+            assets.large_image = undefined;
+        }
 
         const buttons: ActivityButton[] = [];
 
