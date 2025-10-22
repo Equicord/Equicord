@@ -113,9 +113,9 @@ let clearGhostTabs = () => {
     logger.warn("Clear ghost tab function not set");
 };
 
-export function createTab(props: BasicChannelTabsProps | ChannelTabsProps, switchToTab?: boolean, messageId?: string, save = true) {
+export function createTab(props: BasicChannelTabsProps | ChannelTabsProps, switchToTab?: boolean, messageId?: string, save = true, bypassOneTabPerServer = false) {
     // Important for the "One tab per server" feature, has to be before the maxOpenTabs check!
-    if (settings.store.oneTabPerServer && props.guildId && props.guildId !== "@me") {
+    if (!bypassOneTabPerServer && settings.store.oneTabPerServer && props.guildId && props.guildId !== "@me") {
         const existingTab = openTabs.find(tab => tab.guildId === props.guildId);
         if (existingTab) {
             existingTab.channelId = props.channelId;
