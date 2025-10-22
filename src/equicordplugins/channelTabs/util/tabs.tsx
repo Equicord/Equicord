@@ -114,6 +114,26 @@ let clearGhostTabs = () => {
 };
 
 export function createTab(props: BasicChannelTabsProps | ChannelTabsProps, switchToTab?: boolean, messageId?: string, save = true) {
+    const maxTabs = settings.store.maxOpenTabs;
+    const isLimitEnabled = maxTabs > 0;
+    const wouldExceedLimit = isLimitEnabled && openTabs.length >= maxTabs;
+
+    if (wouldExceedLimit) {
+        const currentTab = openTabs.find(t => t.id === currentlyOpenTab);
+        if (currentTab) {
+            currentTab.channelId = props.channelId;
+            currentTab.guildId = props.guildId;
+            currentTab.messageId = messageId;
+            currentTab.compact = "compact" in props ? props.compact : settings.store.openNewTabsInCompactMode;
+            if (switchToTab) {
+                update(save);
+            } else {
+                moveToTab(currentTab.id);
+            }
+        }
+        return;
+    }
+
     const id = genId();
     openTabs.push({ ...props, id, messageId, compact: "compact" in props ? props.compact : settings.store.openNewTabsInCompactMode });
     if (switchToTab) moveToTab(id);

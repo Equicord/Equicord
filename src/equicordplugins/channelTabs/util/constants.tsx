@@ -357,5 +357,13 @@ export const settings = definePluginSettings({
         description: "Open all newly created tabs in compact mode by default",
         default: false,
         restartNeeded: false
+    },
+    maxOpenTabs: {
+        type: OptionType.SLIDER,
+        description: "Maximum number of open tabs (0 = unlimited)",
+        markers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20],
+        default: 0,
+        stickToMarkers: true,
+        restartNeeded: false
     }
 });
