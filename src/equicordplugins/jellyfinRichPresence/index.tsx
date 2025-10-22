@@ -342,9 +342,11 @@ export default definePlugin({
         }
 
         const assets: ActivityAssets = {
-            large_image: (mediaData.imageUrl
-                ? await getApplicationAsset(mediaData.imageUrl)
-                : undefined),
+            large_image: (settings.store.privacyMode
+                ? undefined
+                : mediaData.imageUrl
+                    ? await getApplicationAsset(mediaData.imageUrl)
+                    : undefined),
             large_text: mediaData.seriesName || mediaData.album || undefined,
         };
 
@@ -391,7 +393,7 @@ export default definePlugin({
                 return episodeFormat;
             }
             if (settings.store.privacyMode) {
-                return mediaData.type === "Audio" ? "Listening to music" : (mediaData.year ? `(????)` : undefined);
+                return mediaData.type === "Audio" ? "Listening to music" : (mediaData.year ? "(????)" : undefined);
             }
             return mediaData.artist || (mediaData.year ? `(${mediaData.year})` : undefined);
         };
