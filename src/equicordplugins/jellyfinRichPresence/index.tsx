@@ -142,7 +142,7 @@ const settings = definePluginSettings({
     showPausedState: {
         description: "Show Rich Presence when media is paused",
         type: OptionType.BOOLEAN,
-        default: true,
+        default: false,
     },
     privacyMode: {
         description: "Privacy Mode (Hide media details like Episode/Song Name)",
