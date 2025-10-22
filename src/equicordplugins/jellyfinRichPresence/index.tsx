@@ -320,7 +320,6 @@ export default definePlugin({
                 break;
             case "custom":
                 appName = templateReplace(settings.store.customName || "{name} on Jellyfish");
-                // Apply spoiler protection to custom name if it contains sensitive fields
                 if (settings.store.privacyMode) {
                     appName = appName
                         .replace(mediaData.name || "", "[Title Hidden]")
