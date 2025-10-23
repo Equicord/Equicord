@@ -220,13 +220,11 @@ export default definePlugin({
 
         document.addEventListener("drop", handleDrop, true);
         document.addEventListener("paste", handlePaste, true);
-        logger.info("AutoZipper event listeners attached");
     },
 
     stop() {
         document.removeEventListener("drop", handleDrop, true);
         document.removeEventListener("paste", handlePaste, true);
         interceptingEvents = false;
-        logger.info("AutoZipper event listeners removed");
     }
 });
