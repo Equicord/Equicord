@@ -201,7 +201,7 @@ export const settings = definePluginSettings({
     rapidNavigationThreshold: {
         type: OptionType.SLIDER,
         description: "Time window (in seconds) for rapid navigation. Within this time, new channels replace the current tab instead of creating new ones.",
-        markers: [1, 2, 3, 5, 10, 20, 30, 40, 50, 60], // Will not switch to makeRange because the steps are purposely irregular for visual clarity
+        markers: [1, 2, 3, 5, 10, 20, 30, 40, 50, 60],
         default: 3,
         stickToMarkers: false,
     },
