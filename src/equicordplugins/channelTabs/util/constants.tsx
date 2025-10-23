@@ -8,7 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { Logger } from "@utils/Logger";
-import { OptionType } from "@utils/types";
+import { makeRange, OptionType } from "@utils/types";
 import { SearchableSelect, useState } from "@webpack/common";
 import { JSX } from "react";
 
@@ -201,7 +201,7 @@ export const settings = definePluginSettings({
     rapidNavigationThreshold: {
         type: OptionType.SLIDER,
         description: "Time window (in seconds) for rapid navigation. Within this time, new channels replace the current tab instead of creating new ones.",
-        markers: [1, 2, 3, 5, 10, 20, 30, 40, 50, 60],
+        markers: [1, 2, 3, 5, 10, 20, 30, 40, 50, 60], // Will not switch to makeRange because the steps are purposely irregular for visual clarity
         default: 3,
         stickToMarkers: false,
     },
@@ -223,7 +223,7 @@ export const settings = definePluginSettings({
     hotkeyCount: {
         type: OptionType.SLIDER,
         description: "Number of tabs accessible via keyboard shortcuts",
-        markers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        markers: makeRange(1, 9, 1),
         default: 3,
         stickToMarkers: true,
     },
@@ -367,7 +367,7 @@ export const settings = definePluginSettings({
     maxOpenTabs: {
         type: OptionType.SLIDER,
         description: "Maximum number of open tabs (0 = unlimited)",
-        markers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20],
+        markers: makeRange(0, 20, 1),
         default: 0,
         stickToMarkers: true,
         restartNeeded: false
