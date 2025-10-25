@@ -9,6 +9,7 @@
 }
 
 .vc-rdb-input {
+    padding-left: 12px;
     margin-top: 6px;
     margin-bottom: 12px;
     resize: none;
@@ -72,8 +73,8 @@
 .vc-rdb-review-comment {
     overflow-y: hidden;
     margin-top: 1px;
-    margin-bottom: var(--vc-rdb-spacing-size);
-    color: var(--text-normal);
+    margin-bottom: 8px;
+    color: var(--text-default);
     font-size: 15px;
 }
 
@@ -124,7 +125,7 @@
     display: block;
     width: 100%;
     height: 100%;
-    background-color: var(--background-modifier-accent);
+    background-color: var(--border-subtle);
 }
 
 .vc-rdb-block-modal-username {
@@ -133,46 +134,4 @@
 
 .vc-rdb-block-modal-unblock {
     cursor: pointer;
-}
-
-.vc-rdb-avatar {
-    z-index: 1 !important;
-}
-
-.vc-rdb-white-line {
-    position: absolute;
-    left: calc(var(--vc-rdb-avatar-size) / 2);
-    top: calc(var(--vc-rdb-avatar-size) + 2 * var(--vc-rdb-spacing-size));
-    width: 2px;
-    height: calc(100% - var(--vc-rdb-avatar-size) - 4 * var(--vc-rdb-spacing-size) - 2px);
-    ;
-    border-left: 3px solid gray;
-}
-
-.vc-rdb-reply-line {
-    position: relative;
-    border: 3px solid gray;
-    border-top: none;
-    border-right: none;
-    border-bottom-left-radius: 20px;
-    height: calc(8px);
-    width: calc(24px);
-    top: calc(var(--vc-rdb-avatar-size) / 2 + 4px);
-    left: calc(var(--vc-rdb-avatar-size) * -2 - 4px);
-}
-
-.vc-rdb-profile-photo-container {
-    position: relative;
-}
-
-.vc-rdb-buttons {
-    opacity: 0;
-}
-
-.vc-rdb-reply:hover>.vc-rdb-buttons {
-    opacity: 1;
-}
-
-.vc-rdb-review:hover>.vc-rdb-buttons {
-    opacity: 1;
 }

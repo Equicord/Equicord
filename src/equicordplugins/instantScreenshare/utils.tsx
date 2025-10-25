@@ -5,17 +5,18 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { Logger } from "@utils/Logger";
 import { OptionType } from "@utils/types";
-import { findByCodeLazy, findByPropsLazy } from "@webpack";
-import { Forms, SearchableSelect, useEffect, useState } from "@webpack/common";
+import { findByCodeLazy } from "@webpack";
+import { MediaEngineStore, SearchableSelect, useEffect, useState } from "@webpack/common";
 
 interface PickerProps {
     streamMediaSelection: any[];
     streamMedia: any[];
 }
 
-const mediaEngine = findByPropsLazy("getMediaEngine");
 const getDesktopSources = findByCodeLazy("desktop sources");
 
 export const settings = definePluginSettings({
@@ -26,7 +27,7 @@ export const settings = definePluginSettings({
 });
 
 export async function getCurrentMedia() {
-    const media = mediaEngine.getMediaEngine();
+    const media = MediaEngineStore.getMediaEngine();
     const sources = [
         ...(await getDesktopSources(media, ["screen"], null) ?? []),
         ...(await getDesktopSources(media, ["window", "application"], null) ?? [])
@@ -63,7 +64,7 @@ function StreamSimplePicker({ streamMediaSelection, streamMedia }: PickerProps) 
 
 function ScreenSetting() {
     const { streamMedia } = settings.use(["streamMedia"]);
-    const media = mediaEngine.getMediaEngine();
+    const media = MediaEngineStore.getMediaEngine();
     const [streamMediaSelection, setStreamMediaSelection] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -85,18 +86,18 @@ function ScreenSetting() {
         return () => { active = false; };
     }, []);
 
-    if (loading) return <Forms.FormText>Loading media sources...</Forms.FormText>;
-    if (!streamMediaSelection.length) return <Forms.FormText>No Media found.</Forms.FormText>;
+    if (loading) return <Paragraph>Loading media sources...</Paragraph>;
+    if (!streamMediaSelection.length) return <Paragraph>No Media found.</Paragraph>;
 
     return <StreamSimplePicker streamMediaSelection={streamMediaSelection} streamMedia={streamMedia} />;
 }
 
 function SettingSection() {
     return (
-        <Forms.FormSection>
-            <Forms.FormTitle>Media source to stream</Forms.FormTitle>
-            <Forms.FormText type={Forms.FormText.Types.DESCRIPTION}>Resets to main screen if not found</Forms.FormText>
+        <section>
+            <Heading>Media source to stream</Heading>
+            <Paragraph>Resets to main screen if not found</Paragraph>
             <ScreenSetting />
-        </Forms.FormSection>
+        </section>
     );
 }

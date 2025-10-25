@@ -4,11 +4,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { BaseText } from "@components/BaseText";
+import { HeadingSecondary } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { copyToClipboard } from "@utils/clipboard";
 import { getIntlMessage } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
-import { Clickable, ContextMenuApi, FluxDispatcher, Forms, Menu, Text, TooltipContainer, useState } from "@webpack/common";
+import { Clickable, ContextMenuApi, FluxDispatcher, Menu, TooltipContainer, useState } from "@webpack/common";
 import type { ComponentPropsWithRef, PropsWithChildren } from "react";
 
 import { _cssColors, cssColors } from "./utils";
@@ -34,7 +37,7 @@ export function IconTooltip({ children, copy, className, ...props }: ClickablePr
 }
 
 export const ModalHeaderTitle = ({ iconName, color, name }: { iconName: string; color: number; name: string; }) => {
-    return <Text variant="heading-lg/semibold"
+    return <BaseText size="lg" weight="semibold"
         style={{ flexGrow: 1, display: "flex" }}
         className={classes("vc-ic-modal-header-title", `vc-ic-${name}-modal-header-title`)}>
         <IconTooltip copy={iconName} className={classes(Margins.right8, "vc-icon-modal-color-tooltip")}>
@@ -85,14 +88,14 @@ export const ModalHeaderTitle = ({ iconName, color, name }: { iconName: string; 
             }}>
             {cssColors[color]?.name}
         </IconTooltip>
-    </Text >;
+    </BaseText >;
 };
 
 export function SettingsAbout() {
     return <>
-        <Forms.FormTitle tag="h3">Features</Forms.FormTitle>
-        <Forms.FormText>
-            <Text variant="heading-sm/normal">
+        <HeadingSecondary>Features</HeadingSecondary>
+        <Paragraph>
+            <BaseText size="sm">
                 <ul className="vc-ic-unordered-list">
                     <li>Preview icons</li>
                     <li>Copy icon names and CSS variables</li>
@@ -101,18 +104,18 @@ export function SettingsAbout() {
                     <li>Find icons by function context (helpful when creating finds)</li>
                     <li>Search for colors by right-clicking the color name in the modal title</li>
                 </ul>
-            </Text>
-        </Forms.FormText>
-        <Forms.FormTitle tag="h3">Special thanks</Forms.FormTitle>
-        <Forms.FormText>
-            <Text variant="heading-sm/normal" className="vc-ic-unordered-list">
+            </BaseText>
+        </Paragraph>
+        <HeadingSecondary>Special thanks</HeadingSecondary>
+        <Paragraph>
+            <BaseText size="sm" className="vc-ic-unordered-list">
                 <ul>
                     <li>krystalskullofficial._.</li>
                     <li>davr1</li>
                     <li>suffocate</li>
                 </ul>
-            </Text>
-        </Forms.FormText>
+            </BaseText>
+        </Paragraph>
     </>;
 }
 

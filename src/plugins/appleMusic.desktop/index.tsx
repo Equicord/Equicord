@@ -5,50 +5,14 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { Devs } from "@utils/constants";
+import { Paragraph } from "@components/Paragraph";
+import { Devs, IS_MAC } from "@utils/constants";
 import definePlugin, { OptionType, PluginNative, ReporterTestable } from "@utils/types";
-import { ApplicationAssetUtils, FluxDispatcher, Forms } from "@webpack/common";
+import { Activity, ActivityAssets, ActivityButton } from "@vencord/discord-types";
+import { ActivityFlags, ActivityStatusDisplayType, ActivityType } from "@vencord/discord-types/enums";
+import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
 
 const Native = VencordNative.pluginHelpers.AppleMusicRichPresence as PluginNative<typeof import("./native")>;
-
-interface ActivityAssets {
-    large_image?: string;
-    large_text?: string;
-    small_image?: string;
-    small_text?: string;
-}
-
-interface ActivityButton {
-    label: string;
-    url: string;
-}
-
-interface Activity {
-    state?: string;
-    details?: string;
-    timestamps?: {
-        start?: number;
-        end?: number;
-    };
-    assets?: ActivityAssets;
-    buttons?: Array<string>;
-    name: string;
-    application_id: string;
-    metadata?: {
-        button_urls?: Array<string>;
-    };
-    type: number;
-    flags: number;
-}
-
-const enum ActivityType {
-    PLAYING = 0,
-    LISTENING = 2,
-}
-
-const enum ActivityFlag {
-    INSTANCE = 1 << 0,
-}
 
 export interface TrackData {
     name: string;
@@ -89,6 +53,25 @@ const settings = definePluginSettings({
             { label: "Playing", value: ActivityType.PLAYING, default: true },
             { label: "Listening", value: ActivityType.LISTENING }
         ],
+    },
+    statusDisplayType: {
+        description: "Show the track / artist name in the member list",
+        type: OptionType.SELECT,
+        options: [
+            {
+                label: "Don't show (shows generic listening message)",
+                value: "off",
+                default: true
+            },
+            {
+                label: "Show artist name",
+                value: "artist"
+            },
+            {
+                label: "Show track name",
+                value: "track"
+            }
+        ]
     },
     refreshInterval: {
         type: OptionType.SLIDER,
@@ -173,15 +156,15 @@ export default definePlugin({
     name: "AppleMusicRichPresence",
     description: "Discord rich presence for your Apple Music!",
     authors: [Devs.RyanCaoDev],
-    hidden: !navigator.platform.startsWith("Mac"),
+    hidden: !IS_MAC,
     reporterTestable: ReporterTestable.None,
 
     settingsAboutComponent() {
         return <>
-            <Forms.FormText>
+            <Paragraph>
                 For the customizable activity format strings, you can use several special strings to include track data in activities!{" "}
                 <code>{"{name}"}</code> is replaced with the track name; <code>{"{artist}"}</code> is replaced with the artist(s)' name(s); and <code>{"{album}"}</code> is replaced with the album name.
-            </Forms.FormText>
+            </Paragraph>
         </>;
     },
 
@@ -258,7 +241,12 @@ export default definePlugin({
             metadata: !isRadio && buttons.length ? { button_urls: buttons.map(v => v.url) } : undefined,
 
             type: settings.store.activityType,
-            flags: ActivityFlag.INSTANCE,
+            status_display_type: {
+                "off": ActivityStatusDisplayType.NAME,
+                "artist": ActivityStatusDisplayType.STATE,
+                "track": ActivityStatusDisplayType.DETAILS
+            }[settings.store.statusDisplayType],
+            flags: ActivityFlags.INSTANCE,
         };
     }
 });

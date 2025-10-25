@@ -20,13 +20,13 @@ import { getListeners } from "./utils";
 
 export default definePlugin({
     name: "SoundBoardLogger",
-    authors: [Devs.Moxxie, EquicordDevs.Fres, Devs.echo, EquicordDevs.thororen],
+    authors: [Devs.Moxxie, EquicordDevs.Fres, Devs.amy, Devs.thororen],
     description: "Logs all soundboards that are played in a voice chat and allows you to download them",
-    dependencies: ["ChatInputButtonAPI"],
+    dependencies: ["AudioPlayerAPI", "ChatInputButtonAPI"],
     patches: [
         {
             predicate: () => settings.store.IconLocation === "toolbar",
-            find: "toolbar:function",
+            find: ".controlButtonWrapper,",
             replacement: {
                 match: /(function \i\(\i\){)(.{1,500}toolbar.{1,500}mobileToolbar)/,
                 replace: "$1$self.addSBIconToToolBar(arguments[0]);$2"
@@ -36,7 +36,7 @@ export default definePlugin({
     settings,
     addSBIconToToolBar(e: { toolbar: React.ReactNode[] | React.ReactNode; }) {
         if (Array.isArray(e.toolbar))
-            return e.toolbar.push(
+            return e.toolbar.unshift(
                 <ErrorBoundary noop={true}>
                     <OpenSBLogsButton />
                 </ErrorBoundary>

@@ -5,10 +5,11 @@
  */
 
 import { classNameFactory } from "@api/Styles";
+import { Activity, Application } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
 
 import { settings } from "./settings";
-import { Activity, ActivityViewProps, Application, ApplicationIcon } from "./types";
+import { ActivityViewProps, ApplicationIcon } from "./types";
 
 const ApplicationStore: {
     getApplication: (id: string) => Application | null;
@@ -43,7 +44,7 @@ export function getApplicationIcons(activities: Activity[], preferSmall = false)
 
     for (const activity of applications) {
         const { assets, application_id, platform, id } = activity;
-        if (!application_id && !platform && !id.startsWith("spotify:")) continue;
+        if (!application_id && !platform && !id?.startsWith("spotify:")) continue;
 
         if (assets) {
             const { small_image, small_text, large_image, large_text } = assets;

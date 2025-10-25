@@ -8,8 +8,8 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { Guild } from "@vencord/discord-types";
 import { Menu } from "@webpack/common";
-import { Guild } from "discord-types/general";
 
 import { openGuildInfoModal } from "./GuildInfoModal";
 
@@ -53,6 +53,7 @@ export default definePlugin({
     authors: [Devs.Ven, Devs.Nuckyz, EquicordDevs.Z1xus],
     dependencies: ["DynamicImageModalAPI"],
     tags: ["guild", "info", "ServerProfile"],
+    isModified: true,
     contextMenus: {
         "guild-context": Patch,
         "guild-header-popout": Patch

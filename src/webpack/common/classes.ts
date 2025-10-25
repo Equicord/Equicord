@@ -16,8 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import * as t from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-
-import * as t from "./types/classes";
 
 export const ButtonWrapperClasses: t.ButtonWrapperClasses = findByPropsLazy("buttonWrapper", "buttonContent");

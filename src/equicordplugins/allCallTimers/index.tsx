@@ -8,8 +8,8 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { PassiveUpdateState, VoiceState } from "@vencord/discord-types";
 import { FluxDispatcher, GuildStore, UserStore } from "@webpack/common";
-import { PassiveUpdateState, VoiceState } from "@webpack/types";
 
 import { Timer } from "./Timer";
 
@@ -109,7 +109,7 @@ export default definePlugin({
             predicate: () => !settings.store.showWithoutHover,
             replacement: [
                 {
-                    match: /(?<=user:(\i).*?)iconGroup,children:\[/,
+                    match: /(?<=user:(\i).*?)iconGroup,.{0,200}children:\[/,
                     replace: "$&$self.renderTimer($1.id),"
                 },
             ]
@@ -119,7 +119,7 @@ export default definePlugin({
             predicate: () => settings.store.showWithoutHover,
             replacement: [
                 {
-                    match: /function\(\)\{.+:""(?=.*?userId:(\i))/,
+                    match: /function \i\(\)\{.+:""(?=.*?userId:(\i))/,
                     replace: "$&,$self.renderTimer($1.id),"
                 }
             ]
@@ -149,7 +149,7 @@ export default definePlugin({
                 let { oldChannelId } = state;
                 if (isMe && channelId !== myLastChannelId) {
                     oldChannelId = myLastChannelId;
-                    myLastChannelId = channelId;
+                    myLastChannelId = channelId ?? undefined;
                 }
 
                 if (channelId !== oldChannelId) {

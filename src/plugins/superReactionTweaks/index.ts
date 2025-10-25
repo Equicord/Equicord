@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { UserStore } from "@webpack/common";
+import { OverridePremiumTypeStore } from "@webpack/common";
 
 export const settings = definePluginSettings({
     superReactByDefault: {
@@ -41,16 +41,30 @@ export default definePlugin({
     patches: [
         {
             find: ",BURST_REACTION_EFFECT_PLAY",
-            replacement: {
-                match: /(BURST_REACTION_EFFECT_PLAY:\i=>{.{50,100})(\i\(\i,\i\))>=\d+/,
-                replace: "$1!$self.shouldPlayBurstReaction($2)"
-            }
+            replacement: [
+                // FIXME(Bundler minifier change related): Remove the non used compability once enough time has passed
+                {
+                    // if (inlinedCalculatePlayingCount(a,b) >= limit) return;
+                    match: /(BURST_REACTION_EFFECT_PLAY:\i=>{.+?if\()(\(\(\i,\i\)=>.+?\(\i,\i\))>=5+?(?=\))/,
+                    replace: (_, rest, playingCount) => `${rest}!$self.shouldPlayBurstReaction(${playingCount})`,
+                    noWarn: true,
+                },
+                {
+                    /*
+                     * var limit = 5
+                     * ...
+                     * if (calculatePlayingCount(a,b) >= limit) return;
+                     */
+                    match: /((\i)=5.+?)if\((.{0,20}?)>=\2\)return;/,
+                    replace: (_, rest, playingCount) => `${rest}if(!$self.shouldPlayBurstReaction(${playingCount}))return;`
+                }
+            ]
         },
         {
             find: ".EMOJI_PICKER_CONSTANTS_EMOJI_CONTAINER_PADDING_HORIZONTAL)",
             replacement: {
                 match: /(openPopoutType:void 0(?=.+?isBurstReaction:(\i).+?(\i===\i\.\i.REACTION)).+?\[\2,\i\]=\i\.useState\().+?\)/,
-                replace: (_, rest, isBurstReactionVariable, isReactionIntention) => `${rest}$self.shouldSuperReactByDefault&&${isReactionIntention})`
+                replace: (_, rest, _isBurstReactionVariable, isReactionIntention) => `${rest}$self.shouldSuperReactByDefault&&${isReactionIntention})`
             }
         }
     ],
@@ -58,13 +72,11 @@ export default definePlugin({
 
     shouldPlayBurstReaction(playingCount: number) {
         if (settings.store.unlimitedSuperReactionPlaying) return true;
-        if (settings.store.superReactionPlayingLimit === 0) return false;
-        if (playingCount <= settings.store.superReactionPlayingLimit) return true;
+        if (settings.store.superReactionPlayingLimit > playingCount) return true;
         return false;
     },
 
     get shouldSuperReactByDefault() {
-        // @ts-ignore
-        return settings.store.superReactByDefault && (UserStore.getCurrentUser()?._realPremiumType ?? UserStore.getCurrentUser().premiumType != null);
+        return settings.store.superReactByDefault && (OverridePremiumTypeStore.getState().premiumTypeActual != null);
     }
 });

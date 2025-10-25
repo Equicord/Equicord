@@ -9,15 +9,9 @@ import { Link } from "@components/Link";
 import { Devs } from "@utils/constants";
 import { ModalAPI } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
+import { Activity, SelectOption } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
 import { PresenceStore, UserStore } from "@webpack/common";
-import { SelectOption } from "@webpack/types";
-
-interface Activity {
-    name: string;
-    application_id?: string;
-    type: number;
-}
 
 const settings = definePluginSettings({
     richPresenceTagging: {
@@ -59,11 +53,11 @@ export default definePlugin({
             find: "clips_recording_settings",
             replacement: [
                 {
-                    match: /\[\{.{0,10}\i.\i.FPS_15.{0,250}\}\]/,
+                    match: /\[\{.{0,25}\i.\i.FPS_15.{0,500}\}\]/,
                     replace: "$self.patchFramerates($&)"
                 },
                 {
-                    match: /\[\{.{0,10}\i.\i.SECONDS_30.{0,250}\}\]/,
+                    match: /\[\{.{0,25}\i.\i.SECONDS_30.{0,500}\}\]/,
                     replace: "$self.patchTimeslots($&)"
                 },
             ]

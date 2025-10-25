@@ -16,8 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { Heading, HeadingTertiary } from "@components/Heading";
 import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
-import { Button, Forms, React, TextInput } from "@webpack/common";
+import { Button, React, TextInput } from "@webpack/common";
 import { KeyboardEvent } from "react";
 
 import { SessionInfo } from "../types";
@@ -42,11 +43,11 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
     return (
         <ModalRoot {...props}>
             <ModalHeader>
-                <Forms.FormTitle tag="h4">Rename</Forms.FormTitle>
+                <HeadingTertiary>Rename</HeadingTertiary>
             </ModalHeader>
 
             <ModalContent>
-                <Forms.FormTitle tag="h5" style={{ marginTop: "10px" }}>New device name</Forms.FormTitle>
+                <Heading style={{ marginTop: "10px" }}>New device name</Heading>
                 <TextInput
                     style={{ marginBottom: "10px" }}
                     placeholder={getDefaultName(session.client_info)}
@@ -75,19 +76,20 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
             </ModalContent>
 
             <ModalFooter>
-                <Button
-                    color={Button.Colors.BRAND}
-                    onClick={onSaveClick}
-                >
-                    Save
-                </Button>
-                <Button
-                    color={Button.Colors.TRANSPARENT}
-                    look={Button.Looks.LINK}
-                    onClick={() => props.onClose()}
-                >
-                    Cancel
-                </Button>
+                <div className="vc-betterSessions-footer-buttons">
+                    <Button
+                        color={Button.Colors.PRIMARY}
+                        onClick={() => props.onClose()}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        color={Button.Colors.BRAND}
+                        onClick={onSaveClick}
+                    >
+                        Save
+                    </Button>
+                </div>
             </ModalFooter>
         </ModalRoot >
     );

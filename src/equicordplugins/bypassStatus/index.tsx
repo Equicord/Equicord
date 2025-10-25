@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { playAudio } from "@api/AudioPlayer";
 import { type NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { Notifications } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
@@ -11,8 +12,8 @@ import { Devs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import { ChannelStore, Menu, MessageStore, NavigationRouter, PresenceStore, PrivateChannelsStore, UserStore, WindowStore } from "@webpack/common";
-import type { Message } from "discord-types/general";
+import type { Message } from "@vencord/discord-types";
+import { ChannelActionCreators, ChannelStore, Menu, MessageStore, NavigationRouter, PresenceStore, UserStore, WindowStore } from "@webpack/common";
 import { JSX } from "react";
 
 interface IMessageCreate {
@@ -59,7 +60,7 @@ async function showNotification(message: Message, guildId: string | undefined): 
         });
 
         if (settings.store.notificationSound) {
-            new Audio("https://discord.com/assets/9422aef94aa931248105.mp3").play();
+            playAudio("message1");
         }
     } catch (error) {
         new Logger("BypassStatus").error("Failed to notify user: ", error);
@@ -150,6 +151,7 @@ export default definePlugin({
     name: "BypassStatus",
     description: "Still get notifications from specific sources when in do not disturb mode. Right-click on users/channels/guilds to set them to bypass do not disturb mode.",
     authors: [Devs.Inbestigator],
+    dependencies: ["AudioPlayerAPI"],
     flux: {
         async MESSAGE_CREATE({ message, guildId, channelId }: IMessageCreate): Promise<void> {
             try {
@@ -163,7 +165,7 @@ export default definePlugin({
                 if ((settings.store.guilds.split(", ").includes(guildId) || settings.store.channels.split(", ").includes(channelId)) && mentioned) {
                     await showNotification(message, guildId);
                 } else if (settings.store.users.split(", ").includes(message.author.id)) {
-                    const userChannelId = await PrivateChannelsStore.getOrEnsurePrivateChannel(message.author.id);
+                    const userChannelId = await ChannelActionCreators.getOrEnsurePrivateChannel(message.author.id);
                     if (channelId === userChannelId || (mentioned && settings.store.allowOutsideOfDms === true)) {
                         await showNotification(message, guildId);
                     }

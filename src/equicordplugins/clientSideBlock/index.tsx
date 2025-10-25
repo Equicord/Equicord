@@ -5,10 +5,11 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { ChannelStore, GuildMemberStore, GuildStore, RelationshipStore, Text, UserStore } from "@webpack/common";
-import { GuildMember } from "discord-types/general";
+import { GuildMember } from "@vencord/discord-types";
+import { ChannelStore, GuildMemberStore, GuildRoleStore, RelationshipStore, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings(
     {
@@ -36,14 +37,6 @@ const settings = definePluginSettings(
             restartNeeded: true,
             default: true
         },
-        /*
-            hideNewUsers: {
-                type: OptionType.BOOLEAN,
-                description: "Should content from users with the \"I'm new here, say hi!\" badge be blocked\"",
-                restartNeeded: true,
-                default: true
-            },
-        */
         blockedReplyDisplay: {
             type: OptionType.SELECT,
             description: "What should display instead of the message when someone replies to someone you have hidden",
@@ -99,7 +92,7 @@ function shouldHideUser(userId: string, channelId?: string) {
 
 // This is really horror
 function isRoleAllBlockedMembers(roleId, guildId) {
-    const role = GuildStore.getRole(guildId, roleId);
+    const role = GuildRoleStore.getRole(guildId, roleId);
     if (!role) return false;
 
     const membersWithRole: GuildMember[] = GuildMemberStore.getMembers(guildId).filter(member => member.roles.includes(roleId));
@@ -116,7 +109,7 @@ function isRoleAllBlockedMembers(roleId, guildId) {
 function hiddenReplyComponent() {
     switch (settings.store.blockedReplyDisplay) {
         case "displayText":
-            return <Text tag="p" selectable={false} variant="text-sm/normal" style={{ marginTop: "0px", marginBottom: "0px" }}><i>↓ Replying to blocked message</i></Text>;
+            return <Paragraph style={{ marginTop: "0px", marginBottom: "0px" }}><i>↓ Replying to blocked message</i></Paragraph>;
         case "hideReply":
             return null;
     }
@@ -169,7 +162,7 @@ export default definePlugin({
         {
             find: "#{intl::BLOCKED_MESSAGE_COUNT}}",
             replacement: {
-                match: /\i.memo\(function\(\i\){/,
+                match: /1:\i\.content.length;/,
                 replace: "$&return null;"
             },
             predicate: () => settings.store.hideBlockedMessages
@@ -200,16 +193,16 @@ export default definePlugin({
         {
             find: "getFriendIDs(){",
             replacement: {
-                match: /\i.FRIEND\)/,
+                match: /return \i\.friends/,
                 replace: "$&.filter(id => !$self.shouldHideUser(id))"
             }
         },
         // active now list
         {
-            find: "getUserAffinitiesUserIds(){",
+            find: "ACTIVE_NOW_COLUMN)",
             replacement: {
-                match: /return (\i.affinityUserIds)/,
-                replace: "return new Set(Array.from($1).filter(id => !$self.shouldHideUser(id)))"
+                match: /(\i\.\i),\{\}\)\]/,
+                replace: '"div",{children:$self.activeNowView($1())})]'
             }
         },
         // mutual friends list in user profile
@@ -220,5 +213,14 @@ export default definePlugin({
                 replace: "$1if($2 != undefined) return $2.filter(u => !$self.shouldHideUser(u.key))"
             }
         }
-    ]
+    ],
+    activeNowView(cards) {
+        if (!Array.isArray(cards)) return cards;
+
+        return cards.filter(card => {
+            if (!card?.key) return false;
+            const newKey = card.key.match(/(?:user-|party-spotify:)(.+)/)?.[1];
+            return this.shouldHideUser(newKey) ? null : card;
+        });
+    }
 });

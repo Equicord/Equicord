@@ -25,21 +25,24 @@ import { ImageInvisible, ImageVisible } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
 import definePlugin from "@utils/types";
+import { Message } from "@vencord/discord-types";
 import { ChannelStore } from "@webpack/common";
-import { MessageSnapshot } from "@webpack/types";
 
-const KEY = "HideAttachments_HiddenIds";
+const KEY = "HideMedia_HiddenIds";
 
 let hiddenMessages = new Set<string>();
 
 async function getHiddenMessages() {
-    hiddenMessages = await get(KEY) ?? new Set();
+    const stored = await get(KEY);
+    hiddenMessages = new Set(stored ?? []);
     return hiddenMessages;
 }
 
-const saveHiddenMessages = (ids: Set<string>) => set(KEY, ids);
+const saveHiddenMessages = (ids: Set<string>) => set(KEY, [...ids]);
 
 migratePluginSettings("HideMedia", "HideAttachments");
+
+const hasMedia = (msg: Message) => msg.attachments.length > 0 || msg.embeds.length > 0 || msg.stickerItems.length > 0;
 
 export default definePlugin({
     name: "HideMedia",
@@ -56,14 +59,9 @@ export default definePlugin({
     }],
 
     renderMessagePopoverButton(msg) {
-        // @ts-ignore - discord-types lags behind discord.
-        const hasAttachmentsInShapshots = msg.messageSnapshots.some(
-            (snapshot: MessageSnapshot) => snapshot?.message.attachments.length
-        );
+        if (!hasMedia(msg) && !msg.messageSnapshots.some(s => hasMedia(s.message))) return null;
 
-        if (!msg.attachments.length && !msg.embeds.length && !msg.stickerItems.length && !hasAttachmentsInShapshots) return null;
-
-        const isHidden = hiddenMessages instanceof Set ? hiddenMessages.has(msg.id) : false;
+        const isHidden = hiddenMessages.has(msg.id);
 
         return {
             label: isHidden ? "Show Media" : "Hide Media",
@@ -93,7 +91,7 @@ export default definePlugin({
     },
 
     shouldHide(messageId: string) {
-        return hiddenMessages instanceof Set ? hiddenMessages.has(messageId) : false;
+        return hiddenMessages.has(messageId);
     },
 
     async toggleHide(channelId: string, messageId: string) {

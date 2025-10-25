@@ -9,8 +9,8 @@ import "./style.css";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { Channel } from "@vencord/discord-types";
 import { React } from "@webpack/common";
-import { Channel } from "discord-types/general";
 
 import { PickerContent, PickerHeader, PickerSidebar, Settings, Wrapper } from "./components";
 import { getStickerPack, getStickerPackMetas } from "./stickers";
@@ -32,13 +32,13 @@ export default definePlugin({
 
     patches: [
         {
-            find: "ChannelStickerPickerButton",
+            find: ".stickerButton)},",
             replacement: [{
-                match: /(children:\(0,\i\.jsx\)\()(.{0,10})({innerClassName.{10,30}\.stickerButton)/,
+                match: /(children:\(0,\i\.jsx\)\()(.{0,10})({(className|innerClassName).{10,30}\.stickerButton)/,
                 replace: "$1arguments[0]?.stickersType?$self.stickerButton:$2$3"
             }, {
-                match: /(\i=)((\i\.useCallback\(\(\)=>\{\(.*?\)\().*?\.STICKER,(\i.{0,10}));/,
-                replace: '$1arguments[0]?.stickersType?$3"stickers+",$4:$2;'
+                match: /(\i=)((\i\.useCallback\(\(\)=>\{\(.*?\)\().*?\.STICKER,(\i.{0,25}\]\)))/,
+                replace: '$1arguments[0]?.stickersType?$3"stickers+",$4:$2'
             }, {
                 match: /(\i)=((\i)===\i\.\i\.STICKER)/,
                 replace: "$1=arguments[0].stickersType?($3===arguments[0].stickersType):($2)"

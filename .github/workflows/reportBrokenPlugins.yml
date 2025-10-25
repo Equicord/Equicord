@@ -18,6 +18,9 @@ on:
         #   # Every day at midnight
         - cron: 0 0 * * *
 
+env:
+    FORCE_COLOR: true
+
 jobs:
     TestPlugins:
         name: Test Patches

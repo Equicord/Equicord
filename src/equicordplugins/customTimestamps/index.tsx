@@ -1,100 +1,312 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Copyright (c) 2025 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
-import { Link } from "@components/Link";
-import { Devs, EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
-import { Forms, moment } from "@webpack/common";
+import "./style.css";
 
-const settings = definePluginSettings({
+import { definePluginSettings, useSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { Heading, HeadingPrimary } from "@components/Heading";
+import { Link } from "@components/Link";
+import { Paragraph } from "@components/Paragraph";
+import { Devs, EquicordDevs } from "@utils/constants";
+import { Margins } from "@utils/margins";
+import { useForceUpdater } from "@utils/react";
+import definePlugin, { OptionType } from "@utils/types";
+import { findByCodeLazy, findComponentByCodeLazy } from "@webpack";
+import { moment, TextInput, useEffect, useRef, UserStore, useState } from "@webpack/common";
+
+type TimeFormat = {
+    name: string;
+    description: string;
+    default: string;
+    offset: number;
+};
+type TimeRowProps = {
+    id: string;
+    format: TimeFormat;
+    onChange: (key: string, value: string) => void;
+    pluginSettings: any;
+};
+
+const timeFormats: Record<string, TimeFormat> = {
     cozyFormat: {
-        type: OptionType.STRING,
+        name: "Cozy mode",
+        description: "Time format to use in messages on cozy mode",
         default: "[calendar]",
-        description: "time format to use in messages on cozy mode",
+        offset: 0,
     },
     compactFormat: {
-        type: OptionType.STRING,
+        name: "Compact mode",
+        description: "Time format on compact mode and hovering messages",
         default: "LT",
-        description: "time format on compact mode and hovering messages",
+        offset: 0,
     },
     tooltipFormat: {
-        type: OptionType.STRING,
+        name: "Tooltip",
+        description: "Time format to use on tooltips",
         default: "LLLL • [relative]",
-        description: "time format to use on tooltips",
+        offset: 0,
+    },
+    ariaLabelFormat: {
+        name: "Aria label",
+        description: "Time format to use on aria labels",
+        default: "[calendar]",
+        offset: 0,
     },
     sameDayFormat: {
-        type: OptionType.STRING,
-        default: "HH:mm:ss",
-        description: "[calendar] format for today"
+        name: "Same day",
+        description: "[calendar] format for today",
+        default: "[Today at] HH:mm:ss",
+        offset: 0,
     },
     lastDayFormat: {
-        type: OptionType.STRING,
-        default: "[yesterday] HH:mm:ss",
-        description: "[calendar] format for yesterday"
+        name: "Last day",
+        description: "[calendar] format for yesterday",
+        default: "[Yesterday at] HH:mm:ss",
+        offset: -1000 * 60 * 60 * 24,
     },
     lastWeekFormat: {
-        type: OptionType.STRING,
+        name: "Last week",
+        description: "[calendar] format for within the last week",
         default: "ddd DD.MM.YYYY HH:mm:ss",
-        description: "[calendar] format for last week"
+        offset: -1000 * 60 * 60 * 24 * 6, // setting an offset of a week exactly pushes it into "older date" territory as soon as a second passes
     },
     sameElseFormat: {
-        type: OptionType.STRING,
+        name: "Older date",
+        description: "[calendar] format for older dates",
         default: "ddd DD.MM.YYYY HH:mm:ss",
-        description: "[calendar] format for older dates"
-    },
-});
+        offset: -1000 * 60 * 60 * 24 * 31,
+    }
+};
+
+const format = (date: Date, formatTemplate: string): string => {
+    const mmt = moment(date);
+
+    moment.relativeTimeThreshold("s", 60);
+    moment.relativeTimeThreshold("ss", -1);
+    moment.relativeTimeThreshold("m", 60);
+
+    const sameDayFormat = settings.store?.formats?.sameDayFormat || timeFormats.sameDayFormat.default;
+    const lastDayFormat = settings.store?.formats?.lastDayFormat || timeFormats.lastDayFormat.default;
+    const lastWeekFormat = settings.store?.formats?.lastWeekFormat || timeFormats.lastWeekFormat.default;
+    const sameElseFormat = settings.store?.formats?.sameElseFormat || timeFormats.sameElseFormat.default;
+
+    return mmt.format(formatTemplate)
+        .replace("calendar", () => mmt.calendar(null, {
+            sameDay: sameDayFormat,
+            lastDay: lastDayFormat,
+            lastWeek: lastWeekFormat,
+            sameElse: sameElseFormat
+        }))
+        .replace("relative", () => mmt.fromNow());
+};
+
+const TimeRow = (props: TimeRowProps) => {
+    const [state, setState] = useState(props.pluginSettings?.[props.id] || props.format.default);
+
+    const handleChange = (value: string) => {
+        setState(value);
+        props.onChange(props.id, value);
+    };
+
+    return (
+        <>
+            <Heading>{props.format.name}</Heading>
+            <Paragraph>{props.format.description}</Paragraph>
+            <TextInput value={state} onChange={handleChange} />
+        </>
+    );
+};
+
+const MessagePreview = findComponentByCodeLazy<{
+    author: any,
+    message: any,
+    compact: boolean,
+    isGroupStart: boolean,
+    className: string,
+    hideSimpleEmbedContent: boolean;
+}>(/previewGuildId:\i,preview:\i,/);
+const createBotMessage = findByCodeLazy('username:"Clyde"');
+const populateMessagePrototype = findByCodeLazy("isProbablyAValidSnowflake", "messageReference:");
+
+const DemoMessage = (props: { msgId, compact, message, date: Date | undefined, isGroupStart?: boolean; }) => {
+    const message = createBotMessage({ content: props.message, channelId: "1337", embeds: [] });
+    message.author = UserStore.getCurrentUser();
+    message.id = props.msgId;
+    message.timestamp = moment(props.date ?? new Date());
+    const user = UserStore.getCurrentUser();
+    const populatedMessage = message && populateMessagePrototype(message);
+    return populatedMessage ? (
+        <div className="vc-cmt-demo-message">
+            <MessagePreview
+                author={{ ...user, nick: user.globalName || user.username }}
+                message={populatedMessage}
+                compact={props.compact}
+                isGroupStart={props.isGroupStart || false}
+                className="vc-cmt-demo-message-preview"
+                hideSimpleEmbedContent={true}
+            />
+        </div>
+    ) : <div className="vc-cmt-demo-message">
+        <Paragraph>
+            {/* @ts-ignore */}
+            <b>Preview:</b> {Vencord.Plugins.plugins.CustomTimestamps.renderTimestamp(date, "cozy")}
+        </Paragraph>
+    </div>;
+};
+
+const DemoMessageContainer = ErrorBoundary.wrap(() => {
+    const [isCompact, setIsCompact] = useState(false);
+    const today = useRef<Date>(new Date());
+    const yesterday = useRef<Date>(new Date(Date.now() + timeFormats.lastDayFormat.offset));
+    const lastWeek = useRef<Date>(new Date(Date.now() + timeFormats.lastWeekFormat.offset));
+    const aMonthAgo = useRef<Date>(new Date(Date.now() + timeFormats.sameElseFormat.offset));
+
+    return (
+        <div className={"vc-cmt-demo-message-container"} onClick={() => setIsCompact(!isCompact)}>
+            <DemoMessage compact={isCompact} msgId={"1337"}
+                message={`Click me to switch to ${isCompact ? "cozy" : "compact"} mode`} isGroupStart={true}
+                date={aMonthAgo.current} />
+            <DemoMessage compact={isCompact} msgId={"1338"} message={"This message was sent in the last week"}
+                isGroupStart={true} date={lastWeek.current} />
+            <DemoMessage compact={isCompact} msgId={"1339"} message={"Hover over timestamps to see tooltip formats"}
+                isGroupStart={true} date={yesterday.current} />
+            <DemoMessage compact={isCompact} msgId={"1340"} message={"Edit the formats below to see them live update here"} isGroupStart={true}
+                date={today.current} />
+        </div>
+    );
+}, { noop: true });
+
+const settings = definePluginSettings({
+    formats: {
+        type: OptionType.COMPONENT,
+        description: "Customize the timestamp formats",
+        component: componentProps => {
+            const [settingsState, setSettingsState] = useState(useSettings().plugins?.CustomTimestamps?.formats ?? {});
+
+            const setNewValue = (key: string, value: string) => {
+                const newSettings = { ...settingsState, [key]: value };
+                setSettingsState(newSettings);
+                componentProps.setValue(newSettings);
+            };
+
+            return (
+                <>
+                    <DemoMessageContainer />
+                    {Object.entries(timeFormats).map(([key, value]) => (
+                        <section key={key}>
+                            {key === "sameDayFormat" && (
+                                <div className={Margins.bottom20}>
+                                    <Divider style={{ marginBottom: "10px" }} />
+                                    <Heading tag="h1">Calendar formats</Heading>
+                                    <Paragraph>
+                                        How to format the [calendar] value if used in the above timestamps.
+                                    </Paragraph>
+                                </div>
+                            )}
+                            <TimeRow
+                                id={key}
+                                format={value}
+                                onChange={setNewValue}
+                                pluginSettings={settingsState}
+                            />
+                        </section>
+                    ))}
+                </>);
+        }
+    }
+}).withPrivateSettings<{
+    formats: {
+        cozyFormat: string;
+        compactFormat: string;
+        tooltipFormat: string;
+        ariaLabelFormat: string;
+        sameDayFormat: string;
+        lastDayFormat: string;
+        lastWeekFormat: string;
+        sameElseFormat: string;
+    };
+}>();
 
 export default definePlugin({
     name: "CustomTimestamps",
     description: "Custom timestamps on messages and tooltips",
-    authors: [Devs.Rini, EquicordDevs.nvhhr],
+    authors: [Devs.Rini, EquicordDevs.nvhhr, EquicordDevs.Suffocate, Devs.Obsidian],
     settings,
     settingsAboutComponent: () => (
-        <>
-            <Forms.FormTitle tag="h3">How to use:</Forms.FormTitle>
-            <Forms.FormText>
+        <div className={"vc-cmt-info-card"}>
+            <HeadingPrimary>How to use:</HeadingPrimary>
+            <Paragraph>
                 <Link href="https://momentjs.com/docs/#/displaying/format/">Moment.js formatting documentation</Link>
-                <p>
+                <div className={Margins.top8}>
                     Additionally you can use these in your inputs:<br />
-                    <b>[calendar]</b> enables dynamic date formatting (see options below),<br />
+                    <b>[calendar]</b> enables dynamic date formatting such
+                    as &quot;Today&quot; or &quot;Yesterday&quot;.<br />
                     <b>[relative]</b> gives you times such as &quot;4 hours ago&quot;.<br />
-                </p>
-            </Forms.FormText>
-        </>
+                </div>
+            </Paragraph>
+        </div>
     ),
     patches: [
         {
             find: "#{intl::MESSAGE_EDITED_TIMESTAMP_A11Y_LABEL}",
             replacement: [
                 {
-                    match: /(?<=null!=\i\?).{0,25}\((\i),"LT"\):\(0,\i\.\i\)\(\i,!0\)/,
-                    replace: '$self.format($1,"compactFormat","[calendar]"):$self.format($1,"cozyFormat","LT")',
+                    // Aria label on timestamps
+                    match: /\i.useMemo\(.{0,10}\i\.\i\)\(.{0,10}\]\)/,
+                    replace: "$self.renderTimestamp(arguments[0].timestamp,'ariaLabel')"
                 },
                 {
-                    match: /(?<=text:)\(\)=>\(0,\i.\i\)\((\i),"LLLL"\)(?=,)/,
-                    replace: '$self.format($1,"tooltipFormat","LLLL")',
+                    // Timestamps on messages
+                    match: /\i\.useMemo\(.{0,50}"LT".{0,30}\]\)/,
+                    replace: "$self.renderTimestamp(arguments[0].timestamp,arguments[0].compact?'compact':'cozy')",
+                },
+                {
+                    // Tooltips when hovering over message timestamps
+                    match: /(__unsupportedReactNodeAsText:).{0,25}"LLLL"\)/,
+                    replace: "$1$self.renderTimestamp(arguments[0].timestamp,'tooltip')",
                 },
             ]
+        },
+        {
+            find: ".full,children:",
+            replacement: {
+                // Tooltips for timestamp markdown (e.g. <t:1234567890>)
+                match: /(__unsupportedReactNodeAsText:)\i.full/,
+                replace: "$1$self.renderTimestamp(new Date(arguments[0].node.timestamp*1000),'tooltip')"
+            }
         }
     ],
 
-    format(date: Date, key: string, fallback: string) {
-        const t = moment(date);
-        const sameDayFormat = settings.store.sameDayFormat || "HH:mm:ss";
-        const lastDayFormat = settings.store.lastDayFormat || "[yesterday] HH:mm:ss";
-        const lastWeekFormat = settings.store.lastWeekFormat || "ddd DD.MM.YYYY HH:mm:ss";
-        const sameElseFormat = settings.store.sameElseFormat || "ddd DD.MM.YYYY HH:mm:ss";
-        return t.format(settings.store[key] || fallback)
-            .replace("relative", () => t.fromNow())
-            .replace("calendar", () => t.calendar(null, {
-                sameDay: sameDayFormat,
-                lastDay: lastDayFormat,
-                lastWeek: lastWeekFormat,
-                sameElse: sameElseFormat
-            }));
-    },
+    renderTimestamp: (date: Date, type: "cozy" | "compact" | "tooltip" | "ariaLabel") => {
+        const forceUpdater = useForceUpdater();
+        let formatTemplate: string;
+
+        switch (type) {
+            case "cozy":
+                formatTemplate = settings.store.formats?.cozyFormat || timeFormats.cozyFormat.default;
+                break;
+            case "compact":
+                formatTemplate = settings.store.formats?.compactFormat || timeFormats.compactFormat.default;
+                break;
+            case "tooltip":
+                formatTemplate = settings.store.formats?.tooltipFormat || timeFormats.tooltipFormat.default;
+                break;
+            case "ariaLabel":
+                formatTemplate = settings.store.formats?.ariaLabelFormat || timeFormats.ariaLabelFormat.default;
+        }
+
+        useEffect(() => {
+            if (formatTemplate.includes("calendar") || formatTemplate.includes("relative")) {
+                const interval = setInterval(forceUpdater, 1000);
+                return () => clearInterval(interval);
+            }
+        }, []);
+
+        return format(date, formatTemplate);
+    }
 });

@@ -20,12 +20,14 @@ yarn-error.log*
 lerna-debug.log*
 *.tsbuildinfo
 
+.modules/
 src/userplugins
 
 ExtensionCache/
-settings/
-
-src/equicordplugins/usrpe
+/settings
 
 # vencord companion module cache
 .modules
+
+# wakatime related stuff
+.wakatime-project

@@ -21,16 +21,18 @@ const DefaultActivityIcon = findComponentByCodeLazy("M5 2a3 3 0 0 0-3 3v14a3 3 0
 export function patchActivityList({ activities, user, hideTooltip }: ActivityListProps): JSX.Element | null {
     const icons: ActivityListIcon[] = [];
 
-    if (user.bot || hideTooltip) return null;
+    if (user.bot || settings.store.hideTooltip && hideTooltip) return null;
 
     const applicationIcons = getApplicationIcons(activities);
     if (applicationIcons.length) {
         const compareImageSource = (a: ApplicationIcon, b: ApplicationIcon) => {
-            return a.image.src === b.image.src;
+            return a.image?.src === b.image?.src;
         };
+
         const uniqueIcons = applicationIcons.filter((element, index, array) => {
             return array.findIndex(el => compareImageSource(el, element)) === index;
         });
+
         for (const appIcon of uniqueIcons) {
             icons.push({
                 iconElement: <img {...appIcon.image} />,

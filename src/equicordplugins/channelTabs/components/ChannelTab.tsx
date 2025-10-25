@@ -5,20 +5,39 @@
  */
 
 import { classNameFactory } from "@api/Styles";
-import { getIntlMessage, getUniqueUsername } from "@utils/discord";
+import { BaseText } from "@components/BaseText";
+import { activeQuestIntervals } from "@equicordplugins/questify"; // sorry murphy!
+import { getGuildAcronym, getIntlMessage, getUniqueUsername } from "@utils/discord";
 import { classes } from "@utils/misc";
+import { Channel, Guild, User } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { Avatar, ChannelStore, ContextMenuApi, GuildStore, PresenceStore, ReadStateStore, Text, TypingStore, useDrag, useDrop, useRef, UserStore, useStateFromStores } from "@webpack/common";
-import { Channel, Guild, User } from "discord-types/general";
+import { Avatar, ChannelStore, ContextMenuApi, GuildStore, PresenceStore, ReadStateStore, TypingStore, useDrag, useDrop, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
+import { JSX } from "react";
 
-import { ChannelTabsProps, CircleQuestionIcon, closeTab, isTabSelected, moveDraggedTabs, moveToTab, openedTabs, settings } from "../util";
+import { ChannelTabsProps, closeTab, isTabSelected, moveDraggedTabs, moveToTab, openedTabs, settings } from "../util";
+import { CircleQuestionIcon, DiscoveryIcon, EnvelopeIcon, FriendsIcon, NitroIcon, QuestIcon, ShopIcon } from "../util/icons";
 import { TabContextMenu } from "./ContextMenus";
 
 const ThreeDots = findComponentByCodeLazy(".dots,", "dotRadius:");
 const dotStyles = findByPropsLazy("numberBadge", "textBadge");
 
-const FriendsIcon = findComponentByCodeLazy("12h1a8");
 const ChannelTypeIcon = findComponentByCodeLazy(".iconContainerWithGuildIcon,");
+
+// Custom SVG icons for pages that don't have findable components
+
+function LibraryIcon(height: number = 20, width: number = 20, className?: string): JSX.Element {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            height={height}
+            width={width}
+            fill="none"
+            className={className}
+        >
+            <path fill="currentColor" d="M3 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3zm2 1v16h10V4H5zm13-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-2V3zm0 2v12h1V5h-1z" />
+        </svg>
+    );
+}
 
 const cl = classNameFactory("vc-channeltabs-");
 
@@ -37,7 +56,7 @@ const GuildIcon = ({ guild }: { guild: Guild; }) => {
             className={cl("icon")}
         />
         : <div className={cl("guild-acronym-icon")}>
-            <Text variant="text-xs/semibold" tag="span">{guild.acronym}</Text>
+            <BaseText size="xs" weight="semibold" tag="span">{getGuildAcronym(guild)}</BaseText>
         </div>;
 };
 
@@ -68,7 +87,7 @@ export const NotificationDot = ({ channelIds }: { channelIds: string[]; }) => {
     return unreadCount > 0 ?
         <div
             data-has-mention={!!mentionCount}
-            className={classes(dotStyles.numberBadge, dotStyles.baseShapeRound)}
+            className={classes(cl("notification-badge"), dotStyles.numberBadge, dotStyles.baseShapeRound)}
             style={{
                 width: "16px"
             }}
@@ -107,7 +126,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
                 <>
                     <GuildIcon guild={guild} />
                     <ChannelTypeIcon channel={channel} guild={guild} />
-                    {!compact && <Text className={cl("name-text")}>{channel.name}</Text>}
+                    <BaseText className={cl("name-text")}>{channel.name}</BaseText>
                     <NotificationDot channelIds={[channel.id]} />
                     <TypingIndicator isTyping={isTyping} />
                 </>
@@ -134,7 +153,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
             return (
                 <>
                     <GuildIcon guild={guild} />
-                    {!compact && <Text className={cl("name-text")}>{name}</Text>}
+                    <BaseText className={cl("name-text")}>{name}</BaseText>
                 </>
             );
         }
@@ -142,7 +161,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
 
     if (channel && recipients?.length) {
         if (recipients.length === 1) {
-            const user = UserStore.getUser(recipients[0]) as User & { globalName: string, isPomelo(): boolean; };
+            const user = UserStore.getUser(recipients[0]) as User & { globalName: string; };
             const username = noPomeloNames
                 ? user.globalName || user.username
                 : getUniqueUsername(user);
@@ -156,9 +175,9 @@ function ChannelTabContent(props: ChannelTabsProps & {
                         isTyping={isTyping}
                         isMobile={isMobile}
                     />
-                    {!compact && <Text className={cl("name-text")} data-pomelo={user.isPomelo()}>
+                    <BaseText className={cl("name-text")}>
                         {username}
-                    </Text>}
+                    </BaseText>
                     <NotificationDot channelIds={[channel.id]} />
                     {!showStatusIndicators && <TypingIndicator isTyping={isTyping} />}
                 </>
@@ -168,7 +187,7 @@ function ChannelTabContent(props: ChannelTabsProps & {
             return (
                 <>
                     <ChannelIcon channel={channel} />
-                    {!compact && <Text className={cl("name-text")}>{channel?.name || getIntlMessage("GROUP_DM")}</Text>}
+                    <BaseText className={cl("name-text")}>{channel?.name || getIntlMessage("GROUP_DM")}</BaseText>
                     <NotificationDot channelIds={[channel.id]} />
                     <TypingIndicator isTyping={isTyping} />
                 </>
@@ -176,18 +195,43 @@ function ChannelTabContent(props: ChannelTabsProps & {
         }
     }
 
-    if (guildId === "@me" || guildId === undefined)
+    // handle special synthetic pages
+    if (channelId && channelId.startsWith("__")) {
+        const specialPagesConfig: Record<string, { label: string, Icon: React.ComponentType<any>; }> = {
+            "__quests__": { label: "Quests", Icon: QuestIcon },
+            "__message-requests__": { label: "Message Requests", Icon: EnvelopeIcon },
+            "__friends__": { label: getIntlMessage("FRIENDS"), Icon: FriendsIcon },
+            "__shop__": { label: "Shop", Icon: ShopIcon },
+            "__library__": { label: "Library", Icon: () => LibraryIcon(20, 20) },
+            "__discovery__": { label: "Discovery", Icon: DiscoveryIcon },
+            "__nitro__": { label: "Nitro", Icon: NitroIcon }
+        };
+
+        const pageConfig = specialPagesConfig[channelId];
+        if (pageConfig) {
+            const { label, Icon } = pageConfig;
+            return (
+                <>
+                    <Icon />
+                    <BaseText className={cl("name-text")}>{label}</BaseText>
+                </>
+            );
+        }
+    }
+
+    if (guildId === "@me" || guildId === undefined) {
         return (
             <>
                 <FriendsIcon />
-                {!compact && <Text className={cl("name-text")}>{getIntlMessage("FRIENDS")}</Text>}
+                <BaseText className={cl("name-text")}>{getIntlMessage("FRIENDS")}</BaseText>
             </>
         );
+    }
 
     return (
         <>
             <CircleQuestionIcon />
-            {!compact && <Text className={cl("name-text")}>{getIntlMessage("UNKNOWN_CHANNEL")}</Text>}
+            <BaseText className={cl("name-text")}>{getIntlMessage("UNKNOWN_CHANNEL")}</BaseText>
         </>
     );
 }
@@ -197,43 +241,159 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
     const guild = GuildStore.getGuild(guildId);
     const channel = ChannelStore.getChannel(channelId);
 
+    const [isEntering, setIsEntering] = useState(true);
+    const [isClosing, setIsClosing] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const [isDropTarget, setIsDropTarget] = useState(false);
+
+    useEffect(() => {
+        if (isEntering) {
+            const timer = setTimeout(() => setIsEntering(false), 300);
+            return () => clearTimeout(timer);
+        }
+    }, [isEntering]);
+
+    useEffect(() => {
+        if (isDropTarget && !isDragging) {
+            const timer = setTimeout(() => setIsDropTarget(false), 100);
+            return () => clearTimeout(timer);
+        }
+    }, [isDropTarget, isDragging]);
+
     const ref = useRef<HTMLDivElement>(null);
+    const lastSwapTimeRef = useRef(0);
+    const SWAP_THROTTLE_MS = 100;
+
+    const handleResizeStart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const startX = e.clientX;
+        const startWidth = ref.current?.getBoundingClientRect().width || 0;
+        const baseWidth = 192; // 12rem in pixels (assuming 16px base font)
+
+        document.body.style.cursor = "ew-resize";
+        document.body.style.userSelect = "none";
+
+        const handleMouseMove = (moveEvent: MouseEvent) => {
+            const deltaX = moveEvent.clientX - startX;
+            const newWidth = startWidth + deltaX;
+            const newScale = newWidth / baseWidth;
+
+            // 50% and 200% scale
+            const clampedScale = Math.max(0.5, Math.min(2, newScale));
+            settings.store.tabWidthScale = Math.round(clampedScale * 100);
+        };
+
+        const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+            document.body.style.cursor = "";
+            document.body.style.userSelect = "";
+        };
+
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+    };
+
     const [, drag] = useDrag(() => ({
         type: "vc_ChannelTab",
         item: () => {
-            return { id, index };
+            setIsDragging(true);
+            lastSwapTimeRef.current = Date.now() - SWAP_THROTTLE_MS;
+
+            // get fresh tab data dynamically to avoid stale closures
+            const tab = openedTabs.find(t => t.id === id);
+
+            return {
+                id,
+                channelId: tab?.channelId || channelId,
+                guildId: tab?.guildId || guildId
+            };
         },
         collect: monitor => ({
             isDragging: !!monitor.isDragging()
         }),
-    }));
+        end: () => {
+            setIsDragging(false);
+            setIsDropTarget(false);
+            lastSwapTimeRef.current = 0;
+        }
+    }), [id, channelId, guildId]);
     const [, drop] = useDrop(() => ({
         accept: "vc_ChannelTab",
         hover: (item, monitor) => {
             if (!ref.current) return;
 
-            const dragIndex = item.index;
-            const hoverIndex = index;
-            if (dragIndex === hoverIndex) return;
+            const now = Date.now();
+            const draggedId = item.id;
+            const hoveredId = id;
 
-            const hoverBoundingRect = ref.current?.getBoundingClientRect();
-            const hoverMiddleX =
-                (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
-            const clientOffset = monitor.getClientOffset();
-            const hoverClientX = clientOffset.x - hoverBoundingRect.left;
-            if (dragIndex < hoverIndex && hoverClientX < hoverMiddleX
-                || dragIndex > hoverIndex && hoverClientX > hoverMiddleX) {
+            if (draggedId === hoveredId) return;
+
+            const dragIndex = openedTabs.findIndex(t => t.id === draggedId);
+            const hoverIndex = openedTabs.findIndex(t => t.id === hoveredId);
+
+            if (dragIndex === -1 || hoverIndex === -1) return;
+
+            const isOver = monitor.isOver({ shallow: true });
+            setIsDropTarget(isOver);
+
+            if (now - lastSwapTimeRef.current < SWAP_THROTTLE_MS) {
                 return;
             }
 
+            const hoverBoundingRect = ref.current.getBoundingClientRect();
+            const clientOffset = monitor.getClientOffset();
+            if (!clientOffset) return;
+
+            const hoverClientX = clientOffset.x - hoverBoundingRect.left;
+            const hoverWidth = hoverBoundingRect.right - hoverBoundingRect.left;
+            const hoverMiddleX = hoverWidth / 2;
+
+            // get tab width
+            const draggedElement = document.querySelector(".vc-channeltabs-tab-dragging") as HTMLElement;
+            const draggedWidth = draggedElement?.getBoundingClientRect().width || hoverWidth;
+            const halfDraggedWidth = draggedWidth / 2;
+
+            const hysteresis = hoverWidth * 0.05;
+
+            // When dragging RIGHT: check if right edge of dragged tab has crossed midpoint
+            if (dragIndex < hoverIndex) {
+                const draggedRightEdge = hoverClientX + halfDraggedWidth;
+                if (draggedRightEdge < hoverMiddleX + hysteresis) return;
+            }
+
+            // When dragging LEFT: check if left edge of dragged tab has crossed midpoint
+            if (dragIndex > hoverIndex) {
+                const draggedLeftEdge = hoverClientX - halfDraggedWidth;
+                if (draggedLeftEdge > hoverMiddleX - hysteresis) return;
+            }
+
+            lastSwapTimeRef.current = now;
             moveDraggedTabs(dragIndex, hoverIndex);
-            item.index = hoverIndex;
         },
+        drop: () => {
+            setIsDropTarget(false);
+        }
     }), []);
     drag(drop(ref));
 
+    // check if quests running (questify momentLet)
+    const hasActiveQuests = activeQuestIntervals.size > 0;
+
     return <div
-        className={cl("tab", { "tab-compact": compact, "tab-selected": isTabSelected(id), wider: settings.store.widerTabsAndBookmarks })}
+        className={cl("tab", {
+            "tab-compact": compact,
+            "tab-selected": isTabSelected(id),
+            "tab-entering": isEntering,
+            "tab-closing": isClosing,
+            "tab-dragging": isDragging,
+            "tab-drop-target": isDropTarget,
+            "tab-nitro": channelId === "__nitro__",
+            "tab-quests-active": channelId === "__quests__" && hasActiveQuests,
+            wider: settings.store.widerTabsAndBookmarks
+        })}
         key={index}
         ref={ref}
         onAuxClick={e => {
@@ -254,12 +414,20 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
             </div>
         </button>
 
-        {openedTabs.length > 1 && (compact ? isTabSelected(id) : true) && <button
+        {openedTabs.length > 1 && <button
             className={cl("button", "close-button", { "close-button-compact": compact, "hoverable": !compact })}
-            onClick={() => closeTab(id)}
+            onClick={() => {
+                setIsClosing(true);
+                setTimeout(() => closeTab(id), 150);
+            }}
         >
             <XIcon size={16} fill="var(--interactive-normal)" />
         </button>}
+
+        {!compact && settings.store.showResizeHandle && <div
+            className={cl("tab-resize-handle")}
+            onMouseDown={handleResizeStart}
+        />}
     </div>;
 }
 

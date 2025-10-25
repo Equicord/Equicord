@@ -18,11 +18,10 @@
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
-import { makeRange } from "@components/PluginSettings/components";
 import { debounce } from "@shared/debounce";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { createRoot, Menu } from "@webpack/common";
 import { JSX } from "react";
 import type { Root } from "react-dom/client";
@@ -314,13 +313,9 @@ export default definePlugin({
                     replace: `id:"${ELEMENT_ID}",$&`
                 },
                 {
-                    match: /\.zoomed]:.+?,(?=children:)/,
-                    replace: "$&onClick:()=>{},"
-                },
-                {
-                    match: /className:\i\(\)\(\i\.wrapper,.+?}\),/,
-                    replace: ""
-                },
+                    match: /(?<=null!=(\i)\?.{0,20})\i\.\i,{children:\1/,
+                    replace: "'div',{onClick:e=>e.stopPropagation(),children:$1"
+                }
             ]
         },
         {
@@ -390,11 +385,12 @@ export default definePlugin({
     renderMagnifier(instance) {
         try {
             if (instance.props.id === ELEMENT_ID) {
-                if (!this.currentMagnifierElement) {
-                    this.currentMagnifierElement = <Magnifier size={settings.store.size} zoom={settings.store.zoom} instance={instance} />;
+                if (!this.root) {
                     this.root = createRoot(this.element!);
-                    this.root.render(this.currentMagnifierElement);
                 }
+
+                this.currentMagnifierElement = <Magnifier size={settings.store.size} zoom={settings.store.zoom} instance={instance} />;
+                this.root.render(this.currentMagnifierElement);
             }
         } catch (error) {
             new Logger("ImageZoom").error("Failed to render magnifier:", error);
@@ -402,7 +398,6 @@ export default definePlugin({
     },
 
     updateMagnifier(instance) {
-        this.unMountMagnifier();
         this.renderMagnifier(instance);
     },
 
@@ -440,7 +435,7 @@ export default definePlugin({
                 background-color: var(--background-secondary);
                 border-radius: 4px;
                 font-size: 14px;
-                color: var(--text-normal);
+                color: var(--text-default);
                 display: flex;
                 flex-direction: column;
                 gap: 4px;

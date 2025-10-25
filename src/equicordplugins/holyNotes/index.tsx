@@ -26,14 +26,16 @@ import { EquicordDevs } from "@utils/constants";
 import { classes } from "@utils/misc";
 import { openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
-import { findByProps, findComponentByCodeLazy } from "@webpack";
+import { Message } from "@vencord/discord-types";
+import { findByCodeLazy, findByProps, findComponentByCodeLazy } from "@webpack";
 import { ChannelStore, Menu } from "@webpack/common";
-import { Message } from "discord-types/general";
 
 import { Popover as NoteButtonPopover, Popover } from "./components/icons/NoteButton";
 import { NoteModal } from "./components/modals/Notebook";
-import noteHandler, { noteHandlerCache } from "./NoteHandler";
+import { noteHandler, noteHandlerCache } from "./NoteHandler";
 import { DataStoreToCache, HolyNoteStore } from "./utils";
+
+export const MessageType = findByCodeLazy("isEdited(){");
 
 const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
 
@@ -77,7 +79,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "toolbar:function",
+            find: ".controlButtonWrapper,",
             replacement: {
                 match: /(function \i\(\i\){)(.{1,200}toolbar.{1,100}mobileToolbar)/,
                 replace: "$1$self.toolbarAction(arguments[0]);$2"
@@ -97,7 +99,7 @@ export default definePlugin({
 
     toolbarAction(e) {
         if (Array.isArray(e.toolbar))
-            return e.toolbar.push(
+            return e.toolbar.unshift(
                 <ErrorBoundary noop={true}>
                     <ToolBarHeader />
                 </ErrorBoundary>

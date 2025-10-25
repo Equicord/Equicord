@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Forms, TextInput } from "@webpack/common";
+import { Heading } from "@components/Heading";
+import { TextInput } from "@webpack/common";
 
 interface Props {
     label: string;
@@ -18,8 +19,8 @@ export function SettingNumberComponent({ label, name, themeSettings }: Props) {
     }
 
     return (
-        <Forms.FormSection>
-            <Forms.FormTitle tag="h5">{label}</Forms.FormTitle>
+        <section>
+            <Heading>{label}</Heading>
             <TextInput
                 type="number"
                 pattern="-?[0-9]+"
@@ -27,6 +28,6 @@ export function SettingNumberComponent({ label, name, themeSettings }: Props) {
                 value={themeSettings[name]}
                 onChange={handleChange}
             />
-        </Forms.FormSection>
+        </section>
     );
 }

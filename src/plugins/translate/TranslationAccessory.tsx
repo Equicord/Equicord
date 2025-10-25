@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { Message } from "@vencord/discord-types";
 import { Parser, useEffect, useState } from "@webpack/common";
-import { Message } from "discord-types/general";
 
 import { TranslateIcon } from "./TranslateIcon";
 import { cl, TranslationValue } from "./utils";
 
-const TranslationSetters = new Map<string, (v: TranslationValue) => void>();
+const TranslationSetters = new Map<string,(v: TranslationValue) => void>();
 
 export function handleTranslate(messageId: string, data: TranslationValue) {
     TranslationSetters.get(messageId)!(data);

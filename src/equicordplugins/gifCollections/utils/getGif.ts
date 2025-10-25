@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Message } from "@vencord/discord-types";
 import { MessageStore, SnowflakeUtils } from "@webpack/common";
-import { Message } from "discord-types/general";
 
 import { settings } from "../index";
 import { Gif } from "../types";
@@ -93,7 +93,10 @@ export function getGifByMessageAndUrl(url: string, message: Message): Gif | null
         height: attachment.height ?? 50,
         width: attachment.width ?? 50,
         src: attachment.proxy_url,
-        url: attachment.url
+        url: attachment.url,
+        channelId: message.channel_id,
+        messageId: message.id,
+        attachmentId: attachment.id
     };
 
     return null;

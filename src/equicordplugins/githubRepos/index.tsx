@@ -7,13 +7,13 @@
 import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
+import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
-import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import { User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
-import { React, Text } from "@webpack/common";
-import { User } from "discord-types/general";
+import { React } from "@webpack/common";
 
 import { GitHubReposComponent } from "./components/GitHubReposComponent";
 
@@ -38,9 +38,6 @@ export const settings = definePluginSettings({
 
 const getProfileThemeProps = findByCodeLazy(".getPreviewThemeColors", "primaryColor:");
 
-const logger = new Logger("GitHubRepos");
-logger.info("Plugin loaded");
-
 const ProfilePopoutComponent = ErrorBoundary.wrap(
     (props: { user: User; displayProfile?: any; }) => {
         return (
@@ -53,11 +50,9 @@ const ProfilePopoutComponent = ErrorBoundary.wrap(
     },
     {
         noop: true,
-        onError: err => {
-            logger.error("Error in profile popout component", err);
-            return <Text variant="text-xs/semibold" className="vc-github-repos-error" style={{ color: "var(--text-danger)" }}>
-                Error, Failed to render GithubRepos</Text>;
-        }
+        fallback: () => <BaseText size="xs" weight="semibold" className="vc-github-repos-error" style={{ color: "var(--text-danger)" }}>
+            Error, Failed to render GithubRepos
+        </BaseText>
     }
 );
 
@@ -76,9 +71,9 @@ export default definePlugin({
             }
         },
         {
-            find: "#{intl::CONNECTIONS}),scrollIntoView",
+            find: "appsConnections,applicationRoleConnection",
             replacement: {
-                match: /(?<=user:(\i).{0,15}displayProfile:(\i).*?CONNECTIONS.{0,100}\}\)\}\))/,
+                match: /(?<=user:(\i).{0,15}displayProfile:(\i).*?application\.id\)\)\}\))/,
                 replace: ",$self.ProfilePopoutComponent({ user: $1, displayProfile: $2 })"
             }
         }

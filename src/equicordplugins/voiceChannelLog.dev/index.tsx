@@ -9,9 +9,9 @@ import { definePluginSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { Message, User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
 import { FluxDispatcher, Menu, MessageActions, MessageStore, RelationshipStore, SelectedChannelStore, UserStore } from "@webpack/common";
-import { Message, User } from "discord-types/general";
 
 import { openVoiceChannelLog } from "./components/VoiceChannelLogModal";
 import { addLogEntry } from "./logs";
@@ -108,7 +108,7 @@ let clientOldChannelId: string | undefined;
 export default definePlugin({
     name: "VoiceChannelLog",
     description: "Logs who joins and leaves voice channels",
-    authors: [Devs.Sqaaakoi, EquicordDevs.thororen, EquicordDevs.nyx],
+    authors: [Devs.Sqaaakoi, Devs.thororen, EquicordDevs.nyx],
     contextMenus: {
         "channel-context": patchChannelContextMenu
     },

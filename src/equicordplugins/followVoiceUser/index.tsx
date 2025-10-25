@@ -8,12 +8,12 @@ import "@equicordplugins/_misc/styles.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
+import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { Channel, User, VoiceState } from "@vencord/discord-types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { Forms, Menu, React } from "@webpack/common";
-import { VoiceState } from "@webpack/types";
-import { Channel, User } from "discord-types/general";
+import { Menu, React, VoiceStateStore } from "@webpack/common";
 
 type TFollowedUserInfo = {
     lastChannelId: string;
@@ -29,7 +29,6 @@ interface UserContextProps {
 let followedUserInfo: TFollowedUserInfo = null;
 
 const voiceChannelAction = findByPropsLazy("selectVoiceChannel");
-const VoiceStateStore = findStoreLazy("VoiceStateStore");
 const UserStore = findStoreLazy("UserStore");
 const RelationshipStore = findStoreLazy("RelationshipStore");
 
@@ -81,9 +80,9 @@ export default definePlugin({
     authors: [EquicordDevs.TheArmagan],
     settings,
     settingsAboutComponent: () => <>
-        <Forms.FormText className="plugin-warning">
+        <Paragraph className="plugin-warning">
             This Plugin is used to follow a Friend/Friends into voice chat(s).
-        </Forms.FormText>
+        </Paragraph>
     </>,
     flux: {
         async VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {

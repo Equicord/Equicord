@@ -19,11 +19,7 @@ migratePluginSettings("BetterActivities", "MemberListActivities");
 export default definePlugin({
     name: "BetterActivities",
     description: "Shows activity icons in the member list and allows showing all activities",
-    authors: [
-        Devs.D3SOX,
-        Devs.Arjix,
-        Devs.AutumnVN
-    ],
+    authors: [Devs.D3SOX, Devs.Arjix, Devs.AutumnVN, Devs.thororen],
     tags: ["activity"],
 
     settings,
@@ -35,20 +31,27 @@ export default definePlugin({
     patches: [
         {
             // Patch activity icons
-            find: '"ActivityStatus"',
-            replacement: {
-                match: /(?<=hideTooltip:.{0,4}}=(\i).*?{}\))\]/,
-                replace: ",$self.patchActivityList($1)]"
-            },
-            predicate: () => settings.store.memberList,
+            find: "isBlockedOrIgnored(null",
+            replacement: [
+                {
+                    match: /(?<=className:\i,children:\[).*?(?=\i\(\),\i&&)/,
+                    replace: "",
+                    predicate: () => settings.store.removeGameActivityStatus,
+                },
+                {
+                    match: /(?<=hideTooltip:.{0,4}}=(\i).*?{}\))\]/,
+                    replace: ",$self.patchActivityList($1)]",
+                    predicate: () => settings.store.memberList,
+                }
+            ],
             all: true
         },
         {
             // Show all activities in the user popout/sidebar
             find: '"UserProfilePopoutBody"',
             replacement: {
-                match: /(?<=(\i)\.id\)\}\)\),(\i).*?)\(0,.{0,100}\i\.id,onClose:\i\}\)/,
-                replace: "$self.showAllActivitiesComponent({ activity: $2, user: $1 })"
+                match: /((\i)=.{0,10}(\i)\.id\).*?,)\i\?.{0,250}onClose:\i\}\)/,
+                replace: "$1$self.showAllActivitiesComponent({ activity: $2, user: $3 })"
             },
             predicate: () => settings.store.userPopout
         },

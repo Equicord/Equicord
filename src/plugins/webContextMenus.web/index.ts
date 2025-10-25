@@ -53,7 +53,7 @@ const settings = definePluginSettings({
     addBack: {
         type: OptionType.BOOLEAN,
         description: "Add back the Discord context menus for images, links and the chat input bar",
-        default: true,
+        default: hideSetting,
         restartNeeded: true,
         // Web slate menu has proper spellcheck suggestions and image context menu is also pretty good,
         // so disable this by default. Vesktop just doesn't, so we force enable it there
@@ -138,8 +138,8 @@ export default definePlugin({
                     replace: "false"
                 },
                 {
-                    match: /canCopyImage\(.+?(?=return"function"==typeof \i\.clipboard\.copyImage)/,
-                    replace: "$&return true;"
+                    match: /(?<=canCopyImage\(.+?)typeof \i\.clipboard\.copyImage/,
+                    replace: '"function"'
                 }
             ]
         },
@@ -151,10 +151,6 @@ export default definePlugin({
                     // if (!IS_WEB || null ==
                     match: /!\i\.isPlatformEmbedded/,
                     replace: "false"
-                },
-                {
-                    match: /return\s*?\[.{0,50}?(?=\?\(0,\i\.jsxs?.{0,100}?id:"copy-image")/,
-                    replace: "return [true"
                 },
                 {
                     match: /(?<=#{intl::COPY_IMAGE_MENU_ITEM}\),)action:/,

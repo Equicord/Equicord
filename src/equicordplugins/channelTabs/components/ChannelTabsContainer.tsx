@@ -5,11 +5,15 @@
  */
 
 import { classNameFactory } from "@api/Styles";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
+import { IS_MAC } from "@utils/constants";
+import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
-import { findComponentByCodeLazy } from "@webpack";
-import { Button, ContextMenuApi, Flex, FluxDispatcher, Forms, useCallback, useEffect, useRef, UserStore, useState } from "@webpack/common";
+import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
+import { Button, ContextMenuApi, Flex, FluxDispatcher, useCallback, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
 
-import { BasicChannelTabsProps, ChannelTabsProps, createTab, handleChannelSwitch, openedTabs, openStartupTabs, saveTabs, settings, setUpdaterFunction, useGhostTabs } from "../util";
+import { BasicChannelTabsProps, ChannelTabsProps, clearStaleNavigationContext, createTab, handleChannelSwitch, isNavigationFromSource, moveToTab, openedTabs, openStartupTabs, saveTabs, settings, setUpdaterFunction, useGhostTabs } from "../util";
 import BookmarkContainer from "./BookmarkContainer";
 import ChannelTab, { PreviewTab } from "./ChannelTab";
 import { BasicContextMenu } from "./ContextMenus";
@@ -17,15 +21,63 @@ import { BasicContextMenu } from "./ContextMenus";
 type TabSet = Record<string, ChannelTabsProps[]>;
 
 const PlusSmallIcon = findComponentByCodeLazy("0v-5h5a1");
+const ChannelRTCStore = findStoreLazy("ChannelRTCStore");
 
 const cl = classNameFactory("vc-channeltabs-");
 
-const isMac = navigator.platform.toLowerCase().startsWith("mac");
-
 export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     const [userId, setUserId] = useState("");
-    const { showBookmarkBar, widerTabsAndBookmarks } = settings.use(["showBookmarkBar", "widerTabsAndBookmarks"]);
+    const {
+        showBookmarkBar,
+        widerTabsAndBookmarks,
+        tabWidthScale,
+        enableHotkeys,
+        hotkeyCount,
+        tabBarPosition,
+        animationHover,
+        animationSelection,
+        animationDragDrop,
+        animationEnterExit,
+        animationIconPop,
+        animationCloseRotation,
+        animationPlusPulse,
+        animationMentionGlow,
+        animationCompactExpand,
+        animationSelectedBorder,
+        animationSelectedBackground,
+        animationTabShadows,
+        animationTabPositioning,
+        animationResizeHandle,
+        animationQuestsActive,
+        compactAutoExpandSelected,
+        compactAutoExpandOnHover
+    } = settings.use([
+        "showBookmarkBar",
+        "widerTabsAndBookmarks",
+        "tabWidthScale",
+        "enableHotkeys",
+        "hotkeyCount",
+        "tabBarPosition",
+        "animationHover",
+        "animationSelection",
+        "animationDragDrop",
+        "animationEnterExit",
+        "animationIconPop",
+        "animationCloseRotation",
+        "animationPlusPulse",
+        "animationMentionGlow",
+        "animationCompactExpand",
+        "animationSelectedBorder",
+        "animationSelectedBackground",
+        "animationTabShadows",
+        "animationTabPositioning",
+        "animationResizeHandle",
+        "animationQuestsActive",
+        "compactAutoExpandSelected",
+        "compactAutoExpandOnHover"
+    ]);
     const GhostTabs = useGhostTabs();
+    const isFullscreen = useStateFromStores([ChannelRTCStore], () => ChannelRTCStore.isFullscreenInContext() ?? false);
 
     const _update = useForceUpdater();
     const update = useCallback((save = true) => {
@@ -52,27 +104,104 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     }, []);
 
     useEffect(() => {
-        (Vencord.Plugins.plugins.ChannelTabs as any).containerHeight = ref.current?.clientHeight;
-    }, [userId, showBookmarkBar]);
+        if (ref.current) {
+            try {
+                (Vencord.Plugins.plugins.ChannelTabs as any).containerHeight = ref.current.clientHeight;
+            } catch { }
+        }
+    }, [userId, showBookmarkBar, tabBarPosition]);
 
     useEffect(() => {
         _update();
     }, [widerTabsAndBookmarks]);
+    useEffect(() => {
+        if (!enableHotkeys) return;
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const target = event.target as HTMLElement;
+
+            if (
+                target.tagName === "INPUT" ||
+                target.tagName === "TEXTAREA" ||
+                target.isContentEditable
+            ) {
+                return;
+            }
+
+            const keyNumber = parseInt(event.key, 10);
+
+            if (!isNaN(keyNumber) && keyNumber >= 1 && keyNumber <= hotkeyCount) {
+                const tabIndex = keyNumber - 1;
+                if (openedTabs[tabIndex]) {
+                    event.preventDefault();
+                    moveToTab(openedTabs[tabIndex].id);
+                }
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [enableHotkeys, hotkeyCount]);
+
+    useEffect(() => {
+        if (userId) {
+            // Normalize guildId for comparison
+            const normalizedGuildId = props.guildId || "@me";
+
+            // Skip if this navigation came from a bookmark
+            if (!isNavigationFromSource(normalizedGuildId, props.channelId, "bookmark")) {
+                handleChannelSwitch(props);
+            }
+
+            saveTabs(userId);
+
+            // Clean up any stale navigation contexts
+            clearStaleNavigationContext();
+        }
+    }, [userId, props.channelId, props.guildId]);
 
     if (!userId) return null;
-    handleChannelSwitch(props);
-    saveTabs(userId);
+
+    if (isFullscreen) return null;
 
     return (
         <div
-            className={cl("container")}
+            className={classes(
+                cl("container"),
+                tabBarPosition === "top" && cl("container-top"),
+                IS_MAC && tabBarPosition === "top" && cl("container-top-macos"),
+                !animationHover && cl("no-hover-animation"),
+                !animationSelection && cl("no-selection-animation"),
+                !animationDragDrop && cl("no-drag-animation"),
+                !animationEnterExit && cl("no-enter-exit-animation"),
+                !animationIconPop && cl("no-icon-pop-animation"),
+                !animationCloseRotation && cl("no-close-rotation"),
+                !animationPlusPulse && cl("no-plus-animation"),
+                !animationMentionGlow && cl("no-mention-glow"),
+                !animationCompactExpand && cl("no-compact-animation"),
+                !animationSelectedBorder && cl("no-selected-border"),
+                !animationSelectedBackground && cl("no-selected-background"),
+                !animationTabShadows && cl("no-tab-shadows"),
+                !animationTabPositioning && cl("no-tab-positioning"),
+                !animationResizeHandle && cl("no-resize-handle-animation"),
+                !animationQuestsActive && cl("no-quests-active-animation"),
+                !compactAutoExpandSelected && cl("no-compact-auto-expand"),
+                !compactAutoExpandOnHover && cl("no-compact-hover-expand")
+            )}
             ref={ref}
+            style={{ "--tab-width-scale": tabWidthScale / 100 } as React.CSSProperties}
             onContextMenu={e => ContextMenuApi.openContextMenu(e, () => <BasicContextMenu />)}
-            style={{ marginTop: isMac ? "28px" : "0" }}
         >
+            {showBookmarkBar && <>
+                <BookmarkContainer {...props} userId={userId} />
+                <div className={cl("separator")} />
+            </>}
             <div className={cl("tab-container")}>
-                {openedTabs.map((tab, i) =>
-                    <ChannelTab {...tab} index={i} key={i} />
+                {openedTabs.filter(tab => tab != null).map((tab, i) =>
+                    <ChannelTab {...tab} index={i} key={tab.id} />
                 )}
 
                 <button
@@ -84,10 +213,6 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
 
                 {GhostTabs}
             </div >
-            {showBookmarkBar && <>
-                <div className={cl("separator")} />
-                <BookmarkContainer {...props} userId={userId} />
-            </>}
 
         </div>
     );
@@ -95,7 +220,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
 
 export function ChannelTabsPreview(p) {
     const id = UserStore.getCurrentUser()?.id;
-    if (!id) return <Forms.FormText>there's no logged in account?????</Forms.FormText>;
+    if (!id) return <Paragraph>there's no logged in account?????</Paragraph>;
 
     const { setValue }: { setValue: (v: TabSet) => void; } = p;
     const { tabSet }: { tabSet: TabSet; } = settings.use(["tabSet"]);
@@ -105,7 +230,7 @@ export function ChannelTabsPreview(p) {
 
     return (
         <>
-            <Forms.FormTitle>Startup tabs</Forms.FormTitle>
+            <Heading>Startup tabs</Heading>
             <Flex flexDirection="row" style={{ gap: "2px" }}>
                 {currentTabs.map(t => <>
                     <PreviewTab {...t} />

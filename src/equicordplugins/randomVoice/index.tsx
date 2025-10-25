@@ -7,22 +7,20 @@
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { makeRange } from "@components/PluginSettings/components";
 import { debounce } from "@shared/debounce";
-import { EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
-import { findByCode, findByProps, findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
-import { ChannelRouter, ChannelStore, ContextMenuApi, GuildStore, Menu, PermissionsBits, PermissionStore, React, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
+import { Devs, EquicordDevs } from "@utils/constants";
+import definePlugin, { makeRange, OptionType } from "@utils/types";
+import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { ChannelRouter, ChannelStore, ContextMenuApi, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, SelectedChannelStore, Toasts, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
 
 import style from "./styles.css?managed";
 
 const ChatVoiceIcon = findComponentByCodeLazy("0l1.8-1.8c.17");
 const Button = findComponentByCodeLazy(".NONE,disabled:", ".PANEL_BUTTON");
-const VoiceStateStore = findStoreLazy("VoiceStateStore");
-const MediaEngineStore = findStoreLazy("MediaEngineStore");
 const ChannelActions = findByPropsLazy("selectChannel", "selectVoiceChannel");
-const { toggleSelfMute } = findByPropsLazy("toggleSelfMute");
-const { toggleSelfDeaf } = findByPropsLazy("toggleSelfDeaf");
+const startStream = findByCodeLazy('type:"STREAM_START"');
+const getDesktopSources = findByCodeLazy("desktop sources");
+
 const valueOperation = [
     { label: "More than", value: "<", default: false },
     { label: "Less than", value: ">", default: false },
@@ -166,7 +164,7 @@ interface VoiceState {
 export default definePlugin({
     name: "RandomVoice",
     description: "Adds a Button near the Mute button to join a random voice call.",
-    authors: [EquicordDevs.xijexo, EquicordDevs.omaw, EquicordDevs.thororen],
+    authors: [EquicordDevs.xijexo, EquicordDevs.omaw, Devs.thororen],
     patches: [
         {
             find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
@@ -769,14 +767,12 @@ function JoinVc(channelID) {
     if (settings.store.autoNavigate) ChannelRouter.transitionToChannel(channel.id);
     if (settings.store.autoCamera && PermissionStore.can(VIDEO, channel)) autoCamera();
     if (settings.store.autoStream && PermissionStore.can(STREAM, channel)) autoStream();
-    if (settings.store.selfMute && !MediaEngineStore.isSelfMute() && SelectedChannelStore.getVoiceChannelId()) toggleSelfMute();
-    if (settings.store.selfDeafen && !MediaEngineStore.isSelfDeaf() && SelectedChannelStore.getVoiceChannelId()) toggleSelfDeaf();
+    if (settings.store.selfMute && !MediaEngineStore.isSelfMute() && SelectedChannelStore.getVoiceChannelId()) VoiceActions.toggleSelfMute();
+    if (settings.store.selfDeafen && !MediaEngineStore.isSelfDeaf() && SelectedChannelStore.getVoiceChannelId()) VoiceActions.toggleSelfDeaf();
 }
 
 async function autoStream() {
-    const startStream = findByCode('type:"STREAM_START"');
-    const mediaEngine = findByProps("getMediaEngine").getMediaEngine();
-    const getDesktopSources = findByCode("desktop sources");
+    const mediaEngine = MediaEngineStore.getMediaEngine();
     const selected = SelectedChannelStore.getVoiceChannelId();
     if (!selected) return;
     const channel = ChannelStore.getChannel(selected);

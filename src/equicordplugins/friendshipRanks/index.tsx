@@ -5,7 +5,9 @@
  */
 
 import { BadgeUserArgs, ProfileBadge } from "@api/Badges";
+import { Badges } from "@api/index";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
@@ -99,9 +101,9 @@ function openRankModal(rank: rankInfo) {
                 <ModalContent>
                     <div style={{ padding: "1em", textAlign: "center" }}>
                         <rank.assetSVG height="150px"></rank.assetSVG>
-                        <Forms.FormText className={Margins.top16}>
+                        <Paragraph className={Margins.top16}>
                             {rank.description}
-                        </Forms.FormText>
+                        </Paragraph>
                     </div>
                 </ModalContent>
             </ModalRoot>
@@ -113,30 +115,30 @@ function getBadgeComponent(rank,) {
     // there may be a better button component to do this with
     return (
         <div style={{ transform: "scale(0.80)" }}>
-            <Button onClick={() => openRankModal(rank)} width={"21.69px"} height={"21.69px"} size={Button.Sizes.NONE} look={Button.Looks.BLANK}>
+            <Button onClick={() => openRankModal(rank)} width={"21.69px"} height={"21.69px"} size={Button.Sizes.NONE} look={Button.Looks.LINK}>
                 <rank.assetSVG height={"21.69px"} />
             </Button>
         </div>
     );
 }
 
+function shouldShowBadge(userId: string, requirement: number, index: number) {
+    if (!RelationshipStore.isFriend(userId)) return false;
+
+    const days = daysSince(RelationshipStore.getSince(userId));
+
+    if (ranks[index + 1] == null) return days > requirement;
+
+    return (days > requirement && days < ranks[index + 1].requirement);
+}
+
 function getBadgesToApply() {
-    const badgesToApply: ProfileBadge[] = ranks.map((rank, index, self) => {
+    const badgesToApply: ProfileBadge[] = ranks.map((rank, index) => {
         return (
             {
                 description: rank.title,
                 component: () => getBadgeComponent(rank),
-                shouldShow: (info: BadgeUserArgs) => {
-                    if (!RelationshipStore.isFriend(info.userId)) { return false; }
-
-                    const days = daysSince(RelationshipStore.getSince(info.userId));
-
-                    if (self[index + 1] == null) {
-                        return days > rank.requirement;
-                    }
-
-                    return (days > rank.requirement && days < self[index + 1].requirement);
-                },
+                shouldShow: (info: BadgeUserArgs) => shouldShowBadge(info.userId, rank.requirement, index),
             });
     });
 
@@ -148,10 +150,10 @@ export default definePlugin({
     description: "Adds badges showcasing how long you have been friends with a user for",
     authors: [Devs.Samwich],
     start() {
-        getBadgesToApply().forEach(thing => Vencord.Api.Badges.addProfileBadge(thing));
+        getBadgesToApply().forEach(b => Badges.addProfileBadge(b));
 
     },
     stop() {
-        getBadgesToApply().forEach(thing => Vencord.Api.Badges.removeProfileBadge(thing));
+        getBadgesToApply().forEach(b => Badges.removeProfileBadge(b));
     },
 });

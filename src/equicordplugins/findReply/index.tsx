@@ -20,9 +20,9 @@ import { addMessagePopoverButton, removeMessagePopoverButton } from "@api/Messag
 import { disableStyle, enableStyle } from "@api/Styles";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { Message } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
 import { ChannelStore, createRoot, MessageStore, Toasts } from "@webpack/common";
-import Message from "discord-types/general/Message";
 import { Root } from "react-dom/client";
 
 import ReplyNavigator from "./ReplyNavigator";
@@ -97,10 +97,20 @@ export default definePlugin({
                                 message: "Use the bottom panel to navigate between replies.",
                                 type: Toasts.Type.MESSAGE
                             });
+                            const container = document.querySelector("[class^=channelBottomBarArea_]");
+                            if (!container) {
+                                Toasts.show({
+                                    id: Toasts.genId(),
+                                    message: "Couldn't find the container element.",
+                                    type: Toasts.Type.FAILURE
+                                });
+                                return;
+                            }
+
                             if (!madeComponent) {
                                 madeComponent = true;
                                 element = document.createElement("div");
-                                document.querySelector("[class^=base_]")!.appendChild(element);
+                                container.appendChild(element);
                                 root = createRoot(element);
                             }
                             root!.render(<ReplyNavigator replies={replies} />);

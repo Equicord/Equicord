@@ -1,55 +1,51 @@
 /*
- * Vencord, a modification for Discord's desktop app
- * Copyright (c) 2022 Vendicated and Megumin
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * Vencord, a Discord client mod
+ * Copyright (c) 2025 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 import "@equicordplugins/_misc/styles.css";
 
 import { definePluginSettings } from "@api/Settings";
-import { disableStyle, enableStyle } from "@api/Styles";
-import { EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { Forms } from "@webpack/common";
 
-import clanBadges from "../_misc/clanBadges.css?managed";
+import { PluginButtons } from "./pluginButtons";
+import { PluginCards } from "./pluginCards";
 
 const settings = definePluginSettings({
-    hideClanBadges: {
+    disableCreateDMButton: {
         type: OptionType.BOOLEAN,
-        description: "Hide clan badges",
+        description: "Disables the create dm button",
+        restartNeeded: true,
         default: false,
-        onChange: value => {
-            if (value) enableStyle(clanBadges);
-            else disableStyle(clanBadges);
-        }
+    },
+    disableDMContextMenu: {
+        type: OptionType.BOOLEAN,
+        description: "Disables the DM list context menu in favor of the x button",
+        restartNeeded: true,
+        default: false
+    },
+    noMirroredCamera: {
+        type: OptionType.BOOLEAN,
+        description: "Prevents the camera from being mirrored on your screen",
+        default: false,
+    },
+    removeActivitySection: {
+        type: OptionType.BOOLEAN,
+        description: "Removes the activity section above member list",
+        default: false,
     }
 });
 
 export default definePlugin({
     name: "EquicordHelper",
-    description: "Fixes some misc issues with discord",
-    authors: [EquicordDevs.thororen, EquicordDevs.nyx],
-    settingsAboutComponent: () => <>
-        <Forms.FormText className="plugin-warning">
-            This Plugin is used for fixing misc issues with discord such as some crashes
-        </Forms.FormText>
-    </>,
-    settings,
+    description: "Used to provide support, fix discord caused crashes, and other misc features.",
+    authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu],
     required: true,
+    settings,
     patches: [
+        // Fixes Unknown Resolution/FPS Crashing
         {
             find: "Unknown resolution:",
             replacement: [
@@ -62,12 +58,81 @@ export default definePlugin({
                     replace: "return $1;"
                 }
             ]
-        }
+        },
+        // Disable Giant Create DM Button
+        {
+            find: ".createDMButtonContainer,",
+            predicate: () => settings.store.disableCreateDMButton,
+            replacement: {
+                match: /"create-dm"\)/,
+                replace: "$&&&false"
+            },
+        },
+        // Remove DM Context Menu
+        {
+            find: "#{intl::DM_OPTIONS}",
+            predicate: () => settings.store.disableDMContextMenu,
+
+            replacement: {
+                match: /\{dotsInsteadOfCloseButton:(\i),rearrangeContextMenu:(\i).*?autoTrackExposure:!0\}\)/,
+                replace: "$1=false,$2=false"
+            },
+        },
+        // When focused on voice channel or group chat voice call
+        {
+            find: /\i\?\i.\i.SELF_VIDEO/,
+            predicate: () => settings.store.noMirroredCamera,
+            replacement: {
+                match: /mirror:\i/,
+                replace: "mirror:!1"
+            },
+        },
+        // Popout camera when not focused on voice channel
+        {
+            find: ".mirror]:",
+            all: true,
+            predicate: () => settings.store.noMirroredCamera,
+            replacement: {
+                match: /\[(\i).mirror]:\i/,
+                replace: "[$1.mirror]:!1"
+            },
+        },
+        // Overriding css on Preview Camera/Change Video Background popup
+        {
+            find: ".cameraPreview,",
+            replacement: {
+                match: /className:\i.camera,/,
+                replace: "$&style:{transform: \"scalex(1)\"},"
+            },
+            predicate: () => settings.store.noMirroredCamera
+        },
+        {
+            find: ".MEMBERLIST_CONTENT_FEED_TOGGLED,",
+            predicate: () => settings.store.removeActivitySection,
+            replacement: {
+                match: /null==\i\|\|/,
+                replace: "true||$&"
+            },
+        },
+        ...[
+            ".DEVELOPER_SECTION,",
+            '"LegacySettingsSidebarItem"'
+        ].map(find => ({
+            find,
+            replacement: [
+                {
+                    match: /\i\.\i\.isDeveloper/,
+                    replace: "true"
+                },
+            ]
+        })),
     ],
-    start() {
-        if (settings.store.hideClanBadges) enableStyle(clanBadges);
-    },
-    stop() {
-        if (settings.store.hideClanBadges) disableStyle(clanBadges);
+    renderMessageAccessory(props) {
+        return (
+            <>
+                <PluginButtons message={props.message} />
+                <PluginCards message={props.message} />
+            </>
+        );
     }
 });

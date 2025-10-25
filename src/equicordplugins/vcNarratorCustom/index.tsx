@@ -4,24 +4,26 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { playAudio } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { wordsToTitle } from "@utils/text";
 import definePlugin, {
     OptionType,
 } from "@utils/types";
-import { findByPropsLazy } from "@webpack";
 import {
     Button,
     ChannelStore,
-    Forms,
     GuildMemberStore,
     React,
     SelectedChannelStore,
     SelectedGuildStore,
     useMemo,
     UserStore,
+    VoiceStateStore,
 } from "@webpack/common";
 
 // Create an in-memory cache (temporary, lost on restart)
@@ -77,11 +79,6 @@ interface VoiceState {
     selfMute: boolean;
 }
 
-const VoiceStateStore = findByPropsLazy(
-    "getVoiceStatesForChannel",
-    "getCurrentClientVoiceChannelId"
-);
-
 // Mute/Deaf for other people than you is commented out, because otherwise someone can spam it and it will be annoying
 // Filtering out events is not as simple as just dropping duplicates, as otherwise mute, unmute, mute would
 // not say the second mute, which would lead you to believe they're unmuted
@@ -95,10 +92,7 @@ async function speak(text: string, { volume, rate, customVoice } = settings.stor
     // 1. Check the in-memory cache (fast check)
     if (ttsCache.has(cacheKey)) {
         const cachedUrl = ttsCache.get(cacheKey)!;
-        const audio = new Audio(cachedUrl);
-        audio.volume = volume;
-        audio.playbackRate = rate;
-        audio.play();
+        playAudio(cachedUrl, { volume: volume * 100, speed: rate });
         return;
     }
 
@@ -110,10 +104,7 @@ async function speak(text: string, { volume, rate, customVoice } = settings.stor
             const url = URL.createObjectURL(cachedBlob);
             // Save it in the in-memory cache for next time.
             ttsCache.set(cacheKey, url);
-            const audio = new Audio(url);
-            audio.volume = volume;
-            audio.playbackRate = rate;
-            audio.play();
+            playAudio(url, { volume: volume * 100, speed: rate });
             return;
         }
     } catch (err) {
@@ -160,10 +151,7 @@ async function speak(text: string, { volume, rate, customVoice } = settings.stor
         console.error("Error storing in IndexedDB:", err);
     }
 
-    const audio = new Audio(url);
-    audio.volume = volume;
-    audio.playbackRate = rate;
-    audio.play();
+    playAudio(url, { volume: volume * 100, speed: rate });
 }
 
 function clean(str: string) {
@@ -219,21 +207,19 @@ function getTypeAndChannelId(
     return ["", ""];
 }
 
-function playSample(tempSettings: any, type: string) {
-    const s = Object.assign({}, settings.plain, tempSettings);
+function playSample(type: string) {
     const currentUser = UserStore.getCurrentUser();
-    const myGuildId = SelectedGuildStore.getGuildId();
+    const myGuildId = SelectedGuildStore.getGuildId()!;
 
     speak(
         formatText(
-            s[type + "Message"],
+            settings.store[type + "Message"],
             currentUser.username,
             "general",
             (currentUser as any).globalName ?? currentUser.username,
             GuildMemberStore.getNick(myGuildId, currentUser.id) ??
             currentUser.username
         ),
-        s
     );
 }
 
@@ -317,7 +303,7 @@ export default definePlugin({
     settings,
     flux: {
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
-            const myGuildId = SelectedGuildStore.getGuildId();
+            const myGuildId = SelectedGuildStore.getGuildId()!;
             const myChanId = SelectedChannelStore.getVoiceChannelId();
             const myId = UserStore.getCurrentUser().id;
 
@@ -376,7 +362,7 @@ export default definePlugin({
         },
     },
 
-    settingsAboutComponent({ tempSettings: s }) {
+    settingsAboutComponent() {
         const types = useMemo(
             () =>
                 Object.keys(settings.def)
@@ -388,12 +374,12 @@ export default definePlugin({
         const errorComponent: React.ReactElement | null = null;
 
         return (
-            <Forms.FormSection>
-                <Forms.FormText>
+            <section>
+                <Paragraph>
                     You can customise the spoken messages below. You can disable
                     specific messages by setting them to nothing
-                </Forms.FormText>
-                <Forms.FormText>
+                </Paragraph>
+                <Paragraph>
                     The special placeholders <code>{"{{USER}}"}</code>,{" "}
                     <code>{"{{DISPLAY_NAME}}"}</code>,{" "}
                     <code>{"{{NICKNAME}}"}</code> and{" "}
@@ -401,8 +387,8 @@ export default definePlugin({
                     user's name (nothing if it's yourself), the user's display
                     name, the user's nickname on current server and the
                     channel's name respectively
-                </Forms.FormText>
-                <Forms.FormText>
+                </Paragraph>
+                <Paragraph>
                     You can find a list of custom voices (tiktok only for now){" "}
                     <a
                         href="https://github.com/oscie57/tiktok-voice/wiki/Voice-Codes"
@@ -411,10 +397,10 @@ export default definePlugin({
                     >
                         here
                     </a>
-                </Forms.FormText>
-                <Forms.FormTitle className={Margins.top20} tag="h3">
+                </Paragraph>
+                <Heading className={Margins.top20} tag="h3">
                     Play Example Sounds
-                </Forms.FormTitle>
+                </Heading>
                 <div
                     style={{
                         display: "grid",
@@ -424,13 +410,13 @@ export default definePlugin({
                     className={"vc-narrator-buttons"}
                 >
                     {types.map(t => (
-                        <Button key={t} onClick={() => playSample(s, t)}>
+                        <Button key={t} onClick={() => playSample(t)}>
                             {wordsToTitle([t])}
                         </Button>
                     ))}
                 </div>
                 {errorComponent}
-            </Forms.FormSection>
+            </section>
         );
     },
 });

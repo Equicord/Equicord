@@ -4,12 +4,22 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
+import { isAnyPluginDev } from "@utils/misc";
 import definePlugin from "@utils/types";
+import { UserStore } from "@webpack/common";
 
 export default definePlugin({
     name: "VCSupport",
     description: "Wumpus Dance + Support Warnings",
-    authors: [EquicordDevs.thororen, EquicordDevs.coolesding],
-    enabledByDefault: true
+    authors: [Devs.thororen, EquicordDevs.coolesding],
+    required: true,
+    start() {
+        const selfId = UserStore.getCurrentUser()?.id;
+        if (isAnyPluginDev(selfId)) {
+            Vencord.Settings.plugins.VCSupport.enabled = false;
+        } else {
+            Vencord.Settings.plugins.VCSupport.enabled = true;
+        }
+    }
 });

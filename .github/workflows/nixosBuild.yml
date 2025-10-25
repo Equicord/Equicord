@@ -5,9 +5,10 @@ on:
         - cron: 0 0 * * *
 env:
     FORCE_COLOR: true
-    GITHUB_TOKEN: ${{ secrets.ETOKEN }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-permissions: write-all
+permissions:
+    contents: write
 
 jobs:
     Build:
@@ -25,10 +26,14 @@ jobs:
               run: bun run buildWebStandalone
             - name: Build
               run: bun run buildStandalone
-            - name: Generate plugin list
-              run: bun run generatePluginJson dist/vencordplugins.json
-            - name: Generate Equicord plugin list
-              run: bun run generateEquicordPluginJson dist/equicordplugins.json
+
+            - name: Generate plugin lists
+              run: |
+                  pnpm generatePluginJson dist/plugins.json
+                  pnpm generateEquicordPluginJson dist/equicordplugins.json
+                  pnpm generateVencordPluginJson dist/vencordplugins.json
+                  pnpm generateDevsList dist/devs.json
+
             - name: Collect files to be released
               run: |
                   cd dist

@@ -12,9 +12,9 @@ import { definePluginSettings, Settings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
+import { Channel, User } from "@vencord/discord-types";
 import { extractAndLoadChunksLazy } from "@webpack";
-import { Menu } from "@webpack/common";
-import { User } from "discord-types/general";
+import { ChannelStore, Menu, SelectedChannelStore } from "@webpack/common";
 
 import { SetColorModal } from "./SetColorModal";
 
@@ -52,19 +52,37 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: {
             icon={ColorIcon}
             action={async () => {
                 await requireSettingsMenu();
-                openModal(modalProps => <SetColorModal userId={user.id} modalProps={modalProps} />);
+                openModal(modalProps => <SetColorModal id={user.id} modalProps={modalProps} />);
             }}
         />
     );
 
     children.push(<Menu.MenuSeparator />, setCustomColorItem);
-
 };
 
-export function getCustomColorString(userId: string, withHash?: boolean): string | undefined {
-    if (!colors[userId] || !Settings.plugins.CustomUserColors.enabled) return;
-    if (withHash) return `#${colors[userId]}`;
-    return colors[userId];
+const channelContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { channel: Channel; }) => {
+    if (channel?.id == null) return;
+
+    const setCustomColorItem = (
+        <Menu.MenuItem
+            label="Set Color"
+            id="set-color"
+            icon={ColorIcon}
+            action={async () => {
+                await requireSettingsMenu();
+                openModal(modalProps => <SetColorModal id={channel.id} modalProps={modalProps} />);
+            }}
+        />
+    );
+
+    children.push(<Menu.MenuSeparator />, setCustomColorItem);
+};
+
+export function getCustomColorString(id: string | undefined, withHash?: boolean): string | undefined {
+    if (!id) return;
+    if (!colors[id] || !Settings.plugins.CustomUserColors.enabled) return;
+    if (withHash) return `#${colors[id]}`;
+    return colors[id];
 }
 
 const settings = definePluginSettings({
@@ -84,7 +102,10 @@ export default definePlugin({
     name: "CustomUserColors",
     description: "Lets you add a custom color to any user, anywhere! Highly recommend to use with typingTweaks and roleColorEverywhere",
     authors: [EquicordDevs.mochienya],
-    contextMenus: { "user-context": userContextMenuPatch },
+    contextMenus: {
+        "user-context": userContextMenuPatch,
+        "gdm-context": channelContextMenuPatch,
+    },
     settings,
     requireSettingsMenu,
     getCustomColorString,
@@ -95,16 +116,16 @@ export default definePlugin({
             find: '="SYSTEM_TAG"',
             replacement: {
                 // Override colorString with our custom color and disable gradients if applying the custom color.
-                match: /&&null!=\i\.secondaryColor,(?<=colorString:(\i).+?(\i)=.+?)/,
-                replace: (m, colorString, hasGradientColors) => `${m}` +
-                    `vcCustomUserColorsDummy=[${colorString},${hasGradientColors}]=$self.getMessageColorsVariables(arguments[0],${hasGradientColors}),`
+                match: /(?<=colorString:\i,colorStrings:\i,colorRoleName:\i.*?}=)(\i),/,
+                replace: "$self.wrapMessageColorProps($1, arguments[0]),"
             },
-            predicate: () => !Settings.plugins.IrcColors.enabled
+            predicate: () => !Settings.plugins.IrcColors.enabled,
+            noWarn: true
         },
         {
             find: "PrivateChannel.renderAvatar",
             replacement: {
-                match: /(subText:\i\(\),)/,
+                match: /(withDisplayNameStyles\]:\i\}\),children:\i\}\),)/,
                 replace: "$1style:{color:`${$self.colorDMList(arguments[0])}`},"
             },
             predicate: () => settings.store.dmList,
@@ -126,28 +147,48 @@ export default definePlugin({
         {
             find: '"Reply Chain Nudge")',
             replacement: {
-                match: /(,color:)(\i),/,
+                match: /(className:.{0,15},colorString:)(\i),/,
                 replace: "$1$self.colorInReplyingTo(arguments[0]) ?? $2,",
             },
         },
     ],
 
-    getMessageColorsVariables(context: any, hasGradientColors: boolean) {
-        const colorString = this.colorIfServer(context);
-        const originalColorString = context?.author?.colorString;
+    wrapMessageColorProps(colorProps: { colorString: string, colorStrings?: Record<"primaryColor" | "secondaryColor" | "tertiaryColor", string>; }, context: any) {
+        try {
+            const channelId = SelectedChannelStore.getChannelId();
+            const channel = ChannelStore.getChannel(channelId);
+            const isDM = channel.isDM() || channel.isMultiUserDM();
+            const colorString = this.colorIfServer(context);
+            if (colorString === colorProps.colorString) return colorProps;
+            if (!settings.store.colorInServers && !isDM) return colorProps;
 
-        return [colorString, hasGradientColors && colorString === originalColorString];
+            return {
+                ...colorProps,
+                colorString,
+                colorStrings: colorProps.colorStrings && {
+                    primaryColor: colorString,
+                    secondaryColor: undefined,
+                    tertiaryColor: undefined
+                }
+            };
+        } catch (e) {
+            console.error("Failed to calculate message color strings:", e);
+            return colorProps;
+        }
     },
 
     colorDMList(context: any): string | undefined {
-        const userId = context?.user?.id;
-        const colorString = getCustomColorString(userId, true);
+        const id = context?.user?.id ?? context?.channel?.id;
+        const colorString = getCustomColorString(id, true);
+
         return colorString ?? "inherit";
     },
 
     colorIfServer(context: any): string | undefined {
         const userId = context?.message?.author?.id;
         const colorString = context?.author?.colorString;
+
+        if (context?.message?.channel_id === "1337" && userId === "313337") return colorString;
 
         if (context?.channel?.guild_id && !settings.store.colorInServers) return colorString;
 

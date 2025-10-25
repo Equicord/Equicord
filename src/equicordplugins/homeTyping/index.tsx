@@ -7,11 +7,9 @@
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
-import { useStateFromStores } from "@webpack/common";
+import { TypingStore, UserStore, useStateFromStores } from "@webpack/common";
 
 const ThreeDots = findComponentByCodeLazy(".dots,", "dotRadius:");
-
-const TypingStore = findStoreLazy("TypingStore");
 
 const PrivateChannelSortStore = findStoreLazy("PrivateChannelSortStore") as { getPrivateChannelIds: () => string[]; };
 
@@ -23,7 +21,11 @@ export default definePlugin({
         return <ThreeDots dotRadius={3} themed={true} />;
     },
     isTyping() {
-        return useStateFromStores([TypingStore], () => PrivateChannelSortStore.getPrivateChannelIds().some(id => Object.keys(TypingStore.getTypingUsers(id)).length > 0));
+        return useStateFromStores([TypingStore], () =>
+            PrivateChannelSortStore.getPrivateChannelIds().some(id =>
+                Object.keys(TypingStore.getTypingUsers(id)).some(userId => userId !== UserStore.getCurrentUser().id)
+            )
+        );
     },
     patches: [
         {
@@ -36,8 +38,8 @@ export default definePlugin({
                     },
                     // define isTyping earlier in the function so i dont bReAk ThE rUlEs Of HoOkS
                     {
-                        match: /(clearTimeout\(\i\)};)if\(null==\i\)return null;/,
-                        replace: "$1 let vcIsTyping = $self.isTyping();"
+                        match: /if\(null==\i\)return null;/,
+                        replace: "let vcIsTyping = $self.isTyping();$&"
                     }
                 ],
             group: true

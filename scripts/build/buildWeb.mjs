@@ -21,10 +21,10 @@
 
 import { readFileSync } from "fs";
 import { appendFile, mkdir, readdir, readFile, rm, writeFile } from "fs/promises";
-import { join } from "path";
-import Zip from "zip-local";
+import path, { join } from "path";
 
-import { BUILD_TIMESTAMP, commonOpts, globPlugins, IS_DEV, IS_REPORTER, IS_COMPANION_TEST, VERSION, commonRendererPlugins, buildOrWatchAll, stringifyValues } from "./common.mjs";
+import { BUILD_TIMESTAMP, commonOpts, globPlugins, IS_DEV, IS_REPORTER, IS_COMPANION_TEST, VERSION, commonRendererPlugins, buildOrWatchAll, stringifyValues, IS_ANTI_CRASH_TEST } from "./common.mjs";
+import AdmZip from "adm-zip";
 
 /**
  * @type {import("esbuild").BuildOptions}
@@ -48,6 +48,7 @@ const commonOptions = {
         IS_DEV,
         IS_REPORTER,
         IS_COMPANION_TEST,
+        IS_ANTI_CRASH_TEST,
         IS_DISCORD_DESKTOP: false,
         IS_VESKTOP: false,
         IS_EQUIBOP: false,
@@ -61,14 +62,6 @@ const MonacoWorkerEntryPoints = [
     "vs/language/css/css.worker.js",
     "vs/editor/editor.worker.js"
 ];
-
-const RnNoiseFiles = [
-    "dist/rnnoise.wasm",
-    "dist/rnnoise_simd.wasm",
-    "dist/rnnoise/workletProcessor.js",
-    "LICENSE"
-];
-
 
 /** @type {import("esbuild").BuildOptions[]} */
 const buildConfigs = [
@@ -165,9 +158,6 @@ async function buildExtension(target, files) {
         "dist/Vencord.js": await readFile("dist/browser/extension.js"),
         "dist/Vencord.css": await readFile("dist/browser/extension.css"),
         ...await loadDir("dist/browser/vendor/monaco", "dist/browser/"),
-        ...Object.fromEntries(await Promise.all(RnNoiseFiles.map(async file =>
-            [`third-party/rnnoise/${file.replace(/^dist\//, "")}`, await readFile(`node_modules/@sapphi-red/web-noise-suppressor/${file}`)]
-        ))),
         ...Object.fromEntries(await Promise.all(files.map(async f => {
             let content = await readFile(join("browser", f));
             if (f.startsWith("manifest")) {
@@ -196,7 +186,7 @@ async function buildExtension(target, files) {
 
 const appendCssRuntime = readFile("dist/Vencord.user.css", "utf-8").then(content => {
     const cssRuntime = `
-;document.addEventListener("DOMContentLoaded", () => document.documentElement.appendChild(
+;document.addEventListener("DOMContentLoaded", () => document.body.insertAdjacentElement("afterend",
     Object.assign(document.createElement("style"), {
         textContent: \`${content.replaceAll("`", "\\`")}\`,
         id: "vencord-css-core"
@@ -214,14 +204,15 @@ if (!process.argv.includes("--skip-extension")) {
         buildExtension("firefox-unpacked", ["background.js", "content.js", "manifestv2.json", "icon.png"]),
     ]);
 
-    Zip.zip("dist/browser/chromium-unpacked", (_err, zip) => {
-        zip.compress().save("dist/extension-chrome.zip");
-        console.info("Packed Chromium Extension written to dist/extension-chrome.zip");
-    });
-    Zip.zip("dist/browser/firefox-unpacked", (_err, zip) => {
-        zip.compress().save("dist/extension-firefox.zip");
-        console.info("Packed Firefox Extension written to dist/extension-firefox.zip");
-    });
+    const chromiumZip = new AdmZip();
+    chromiumZip.addLocalFolder("dist/browser/chromium-unpacked");
+    chromiumZip.writeZip(path.resolve("dist/extension-chrome.zip"));
+    console.info("Packed Chromium Extension written to dist/extension-chrome.zip");
+
+    const firefoxZip = new AdmZip();
+    firefoxZip.addLocalFolder("dist/browser/firefox-unpacked");
+    firefoxZip.writeZip(path.resolve("dist/extension-firefox.zip"));
+    console.info("Packed Firefox Extension written to dist/extension-firefox.zip");
 } else {
     await appendCssRuntime;
 }

@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { playAudio } from "@api/AudioPlayer";
 import { classNameFactory } from "@api/Styles";
 import { proxyLazy } from "@utils/lazy";
 import { LazyComponent } from "@utils/react";
 import { saveFile } from "@utils/web";
+import type { User } from "@vencord/discord-types";
 import { findByCode, findByProps, findByPropsLazy } from "@webpack";
-import type { User } from "discord-types/general";
 
 import settings from "./settings";
 
@@ -40,20 +41,18 @@ export function getEmojiUrl(emoji) {
 }
 
 export const playSound = id => {
-    const audio = new Audio(`https://cdn.discordapp.com/soundboard-sounds/${id}`);
-    audio.volume = settings.store.soundVolume;
-    audio.play();
+    playAudio(`https://cdn.discordapp.com/soundboard-sounds/${id}`, { volume: settings.store.soundVolume * 100 });
 };
 
 export async function downloadAudio(id: string): Promise<void> {
     const filename = id + settings.store.FileType;
-    const data = await fetch(`https://cdn.discordapp.com/soundboard-sounds/${id}`).then(e => e.arrayBuffer());
-
+    const original = await fetch(`https://cdn.discordapp.com/soundboard-sounds/${id}`).then(res => res.arrayBuffer());
 
     if (IS_DISCORD_DESKTOP) {
+        const data = new Uint8Array(original);
         DiscordNative.fileManager.saveWithDialog(data, filename);
     } else {
-        saveFile(new File([data], filename, { type: "audio/ogg" }));
+        saveFile(new File([original], filename, { type: "audio/ogg" }));
     }
 }
 

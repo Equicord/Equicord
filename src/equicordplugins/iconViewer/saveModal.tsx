@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Paragraph } from "@components/Paragraph";
 import {
     ModalCloseButton,
     ModalContent,
@@ -14,8 +15,8 @@ import {
     ModalSize,
     openModal
 } from "@utils/modal";
-import { Button, Forms, Select, TextInput, useCallback, useEffect, useState } from "@webpack/common";
-import * as t from "@webpack/types";
+import * as t from "@vencord/discord-types";
+import { Button, Select, TextInput, useCallback, useEffect, useState } from "@webpack/common";
 
 import { ModalHeaderTitle } from "./subComponents";
 import { convertComponentToHtml, cssColors, iconSizesInPx, saveIcon } from "./utils";
@@ -68,7 +69,7 @@ export function SelectComponent({ option, onChange, onError, className }: IDivEl
             isSelected={v => v === state}
             serialize={v => String(v)}
         />
-        {error && <Forms.FormText style={{ color: "var(--text-danger)" }}>{error}</Forms.FormText>}
+        {error && <Paragraph style={{ color: "var(--text-danger)" }}>{error}</Paragraph>}
     </div>);
 }
 

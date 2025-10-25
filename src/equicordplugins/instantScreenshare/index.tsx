@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Devs, EquicordDevs } from "@utils/constants";
+import { HeadingSecondary } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { VoiceState } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
 import { ChannelStore, PermissionsBits, PermissionStore, SelectedChannelStore, UserStore } from "@webpack/common";
-import { VoiceState } from "@webpack/types";
 
 import { getCurrentMedia, settings } from "./utils";
 
@@ -38,8 +40,19 @@ async function autoStartStream() {
 export default definePlugin({
     name: "InstantScreenshare",
     description: "Instantly screenshare when joining a voice channel",
-    authors: [Devs.HAHALOSAH, EquicordDevs.thororen],
+    authors: [Devs.HAHALOSAH, Devs.thororen],
+    getCurrentMedia,
     settings,
+    settingsAboutComponent: () => (
+        <>
+            <HeadingSecondary>For Linux</HeadingSecondary>
+            <Paragraph>
+                For Wayland it only pops up the screenshare select
+                <br />
+                For X11 it may or may not work :shrug:
+            </Paragraph>
+        </>
+    ),
     flux: {
         async VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
             const myId = UserStore.getCurrentUser().id;
@@ -61,4 +74,3 @@ export default definePlugin({
         }
     },
 });
-

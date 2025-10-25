@@ -9,11 +9,12 @@ import "./style.css";
 import { ApplicationCommandInputType, ApplicationCommandOptionType, sendBotMessage } from "@api/Commands";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { InfoIcon } from "@components/Icons";
+import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { getCurrentChannel, getCurrentGuild } from "@utils/discord";
 import definePlugin from "@utils/types";
-import { Forms, GuildMemberStore, GuildStore, Menu, Parser } from "@webpack/common";
-import { GuildMember } from "discord-types/general";
+import { GuildMember } from "@vencord/discord-types";
+import { GuildMemberStore, GuildRoleStore, Menu, Parser } from "@webpack/common";
 
 import { showInRoleModal } from "./RoleMembersModal";
 
@@ -42,11 +43,11 @@ export default definePlugin({
     settingsAboutComponent: () => {
         return (
             <>
-                <Forms.FormText style={{ fontSize: "1.2rem", marginTop: "15px", fontWeight: "bold" }}>{Parser.parse(":warning:")} Limitations</Forms.FormText>
-                <Forms.FormText style={{ marginTop: "10px", fontWeight: "500" }} >If you don't have mod permissions on the server, and that server is large (over 100 members), the plugin may be limited in the following ways:</Forms.FormText>
-                <Forms.FormText>• Offline members won't be listed</Forms.FormText>
-                <Forms.FormText>• Up to 100 members will be listed by default. To get more, scroll down in the member list to load more members.</Forms.FormText>
-                <Forms.FormText>• However, friends will always be shown regardless of their status.</Forms.FormText>
+                <Paragraph style={{ fontSize: "1.2rem", marginTop: "15px", fontWeight: "bold" }}>{Parser.parse(":warning:")} Limitations</Paragraph>
+                <Paragraph style={{ marginTop: "10px", fontWeight: "500" }} >If you don't have mod permissions on the server, and that server is large (over 100 members), the plugin may be limited in the following ways:</Paragraph>
+                <Paragraph>• Offline members won't be listed</Paragraph>
+                <Paragraph>• Up to 100 members will be listed by default. To get more, scroll down in the member list to load more members.</Paragraph>
+                <Paragraph>• However, friends will always be shown regardless of their status.</Paragraph>
             </>
         );
     },
@@ -82,7 +83,7 @@ export default definePlugin({
             const channel = getCurrentChannel();
             if (!channel) return;
 
-            const role = GuildStore.getRole(guild.id, id);
+            const role = GuildRoleStore.getRole(guild.id, id);
             if (!role) return;
 
             children.push(
@@ -108,7 +109,7 @@ export default definePlugin({
 
             const roleIds = roleMentions.map(mention => mention.match(/<@&(\d+)>/)![1]);
 
-            const role = GuildStore.getRole(guild.id, roleIds);
+            const role = GuildRoleStore.getRole(guild.id, roleIds);
             if (!role) return;
 
             children.push(

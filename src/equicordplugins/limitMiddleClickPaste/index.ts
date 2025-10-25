@@ -17,9 +17,8 @@
 */
 
 import { definePluginSettings } from "@api/Settings";
-import { makeRange } from "@components/PluginSettings/components";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin, { makeRange, OptionType } from "@utils/types";
 
 
 const settings = definePluginSettings({
@@ -35,6 +34,10 @@ const settings = definePluginSettings({
             {
                 label: "Only when clicking on a text box",
                 value: "direct"
+            },
+            {
+                label: "Never",
+                value: "never"
             }
         ]
     },
@@ -88,16 +91,22 @@ function blockPastePropogation(e: ClipboardEvent) {
 
 function disablePasteOnMousedown(e: MouseEvent) {
     if (e.button !== 1) return;
-    let testEl;
+    let testEl: HTMLElement | null = null;
+
     switch (settings.store.limitTo) {
         case "active":
-            testEl = document.activeElement;
+            testEl = document.activeElement as HTMLElement;
             break;
         case "direct":
-            testEl = e.target;
+            testEl = e.target as HTMLElement;
+            break;
+        case "never":
+            testEl = null;
             break;
     }
-    if (maybeEditable(testEl as HTMLElement | null)) return;
+
+    if (settings.store.limitTo !== "never" && maybeEditable(testEl)) return;
+
     window.clearTimeout(timeoutID);
     pasteDisabled = true;
     timeoutID = window.setTimeout(() => {

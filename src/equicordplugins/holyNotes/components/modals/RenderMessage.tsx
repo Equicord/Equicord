@@ -4,15 +4,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { makeDummyUser } from "@components/settings/tabs/plugins/PluginModal";
+import { MessageType } from "@equicordplugins/holyNotes";
 import { copyToClipboard } from "@utils/clipboard";
 import { classes } from "@utils/misc";
 import { ModalProps } from "@utils/modal";
-import { findByCode, findByCodeLazy, findByProps, findComponentByCodeLazy } from "@webpack";
+import { findByCodeLazy, findByProps, findComponentByCodeLazy } from "@webpack";
 import { ContextMenuApi, FluxDispatcher, Menu, NavigationRouter, React } from "@webpack/common";
 
-import noteHandler from "../../NoteHandler";
+import { noteHandler } from "../../NoteHandler";
 import { HolyNotes } from "../../types";
-
 
 export const RenderMessage = ({
     note,
@@ -27,11 +28,9 @@ export const RenderMessage = ({
     fromDeleteModal: boolean;
     closeModal?: () => void;
 }) => {
-    const ChannelMessage = findComponentByCodeLazy("Message must not be a thread");
     const { message, groupStart, cozyMessage } = findByProps("cozyMessage");
-    const User = findByCode("isClyde(){");
-    const Message = findByCode("isEdited(){");
-    const Channel = findByCodeLazy("computeLurkerPermissionsAllowList");
+    const Channel = findByCodeLazy("computeLurkerPermissionsAllowList(){");
+    const ChannelMessage = findComponentByCodeLazy("Message must not be a thread");
 
     const [isHoldingDelete, setHoldingDelete] = React.useState(false);
 
@@ -90,11 +89,11 @@ export const RenderMessage = ({
                 // @ts-ignore
                 channel={new Channel({ id: "holy-notes" })}
                 message={
-                    new Message(
+                    new MessageType(
                         Object.assign(
                             { ...note },
                             {
-                                author: new User({ ...note?.author }),
+                                author: makeDummyUser(note?.author),
                                 timestamp: new Date(note?.timestamp),
                                 // @ts-ignore
                                 embeds: note?.embeds?.map((embed: { timestamp: string | number | Date; }) =>

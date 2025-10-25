@@ -10,34 +10,33 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { Channel, Message } from "@vencord/discord-types";
 import { ChannelStore, Menu } from "@webpack/common";
-import { Channel, Message } from "discord-types/general";
 import { JSX } from "react";
 
 import ChannelsTabsContainer from "./components/ChannelTabsContainer";
-import { BasicChannelTabsProps, createTab, settings } from "./util";
+import { BasicChannelTabsProps, createTab, handleChannelSwitch, settings } from "./util";
 import * as ChannelTabsUtils from "./util";
 
-const contextMenuPatch: NavContextMenuPatchCallback = (children, props: { channel: Channel, messageId?: string; }) =>
-    () => {
-        const { channel, messageId } = props;
-        const group = findGroupChildrenByChildId("channel-copy-link", children);
-        group?.push(
-            <Menu.MenuItem
-                label="Open in New Tab"
-                id="open-link-in-tab"
-                action={() => createTab({
-                    guildId: channel.guild_id,
-                    channelId: channel.id
-                }, true, messageId)}
-            />
-        );
-    };
+const contextMenuPatch: NavContextMenuPatchCallback = (children, props: { channel: Channel, messageId?: string; }) => {
+    const { channel, messageId } = props;
+    const group = findGroupChildrenByChildId("channel-copy-link", children);
+    group?.push(
+        <Menu.MenuItem
+            label="Open in New Tab"
+            id="open-link-in-tab"
+            action={() => createTab({
+                guildId: channel.guild_id || "@me", // Normalize for DMs/Group Chats
+                channelId: channel.id
+            }, settings.store.openInNewTabAutoSwitch, messageId, true, true)} // The true values are important for bypassing tab limits
+        />
+    );
+};
 
 export default definePlugin({
     name: "ChannelTabs",
     description: "Group your commonly visited channels in tabs, like a browser",
-    authors: [Devs.TheSun, Devs.TheKodeToad, EquicordDevs.keifufu, Devs.Nickyux],
+    authors: [Devs.TheSun, Devs.TheKodeToad, EquicordDevs.keifufu, Devs.Nickyux, EquicordDevs.DiabeloDEV, EquicordDevs.justjxke],
     dependencies: ["ContextMenuAPI"],
     contextMenus: {
         "channel-mention-context": contextMenuPatch,
@@ -46,10 +45,18 @@ export default definePlugin({
     patches: [
         // add the channel tab container at the top
         {
-            find: ".COLLECTIBLES_SHOP_FULLSCREEN))",
+            find: '"AppView"',
             replacement: {
-                match: /(\?void 0:(\i)\.channelId.{0,500}return)((.{0,15})"div",{.*?\])(\}\)\}\})/,
-                replace: "$1$4$self.render,{currentChannel:$2,children:$3})$5"
+                match: /(\?void 0:(\i)\.channelId.{0,300})"div",{/,
+                replace: "$1$self.render,{currentChannel:$2,"
+            }
+        },
+        // intercept channel navigation to switch/create tabs
+        {
+            find: "sourceLocationStack,null",
+            replacement: {
+                match: /(\i\((\i),(\i),\i,\i\)\{)(.{0,25}"transitionToGuild)/,
+                replace: "$1$self.handleNavigation($2,$3);$4"
             }
         },
         // ctrl click to open in new tab in inbox unread
@@ -72,13 +79,13 @@ export default definePlugin({
         {
             find: "(this,\"handleMessageClick\"",
             replacement: {
-                match: /(?<=(\i)\.isSearchHit\));(?=null!=(\i))/,
-                replace: ";if ($1.ctrlKey) return $self.open($2);"
+                match: /(\i)\.stopPropagation.{0,50}(?=null!=(\i))/,
+                replace: "$&if ($1.ctrlKey) return $self.open($2);"
             }
         },
         // prevent issues with the pins/inbox popouts being too tall
         {
-            find: ".messagesPopoutWrap",
+            find: ".messagesPopoutWrap),style",
             replacement: {
                 match: /\i&&\((\i).maxHeight.{0,5}\)/,
                 replace: "$&;$1.maxHeight-=$self.containerHeight"
@@ -90,16 +97,89 @@ export default definePlugin({
 
     containerHeight: 0,
 
+    flux: {
+        CHANNEL_SELECT(data: { channelId: string | null, guildId: string | null; }) {
+            // Skip if this navigation was triggered by us (clicking a tab)
+            if (ChannelTabsUtils.isNavigatingViaTab()) {
+                return;
+            }
+
+            const isViewingViaBookmark = ChannelTabsUtils.isViewingViaBookmarkMode();
+
+            let { channelId } = data;
+            let { guildId } = data;
+
+            // Detect special pages by pathname when no channelId
+            if (!channelId) {
+                const path = window.location.pathname;
+
+                if (path === "/quest-home" || path.includes("quest-home")) {
+                    channelId = "__quests__";
+                    guildId = "@me";
+                } else if (path.includes("/message-requests")) {
+                    channelId = "__message-requests__";
+                    guildId = "@me";
+                } else if (path === "/channels/@me") {
+                    channelId = "__friends__";
+                    guildId = "@me";
+                } else if (path.includes("/shop")) {
+                    channelId = "__shop__";
+                    guildId = "@me";
+                } else if (path.includes("/library")) {
+                    channelId = "__library__";
+                    guildId = "@me";
+                } else if (path.includes("/discovery")) {
+                    channelId = "__discovery__";
+                    guildId = "@me";
+                } else if (path.includes("/store")) {
+                    channelId = "__nitro__";
+                    guildId = "@me";
+                } else {
+                    // Unknown page without channelId - ignore
+                    return;
+                }
+            }
+
+            // if bookmark independent mode setting is on, navigate
+            if (isViewingViaBookmark) {
+                // dont modify tabs, just let that bookmark action happen
+                return;
+            }
+
+            // clear bookmark viewing mode only when this is NOT a bookmark navigation
+            // this happens when someone manually navigates to a channel (channel list)
+            ChannelTabsUtils.clearBookmarkViewingMode();
+
+            // At this point, channelId is guaranteed to be non-null
+            if (channelId && guildId) {
+                handleChannelSwitch({ guildId, channelId });
+            }
+        }
+    },
+
     render({ currentChannel, children }: {
         currentChannel: BasicChannelTabsProps,
         children: JSX.Element;
     }) {
+        const tabsContainer = (
+            <ErrorBoundary>
+                <ChannelsTabsContainer {...currentChannel} />
+            </ErrorBoundary>
+        );
+
+        if (settings.store.tabBarPosition === "top") {
+            return (
+                <>
+                    {tabsContainer}
+                    {children}
+                </>
+            );
+        }
+
         return (
             <>
-                <ErrorBoundary>
-                    <ChannelsTabsContainer {...currentChannel} />
-                </ErrorBoundary>
                 {children}
+                {tabsContainer}
             </>
         );
     },
@@ -111,6 +191,26 @@ export default definePlugin({
             compact: false
         };
         createTab(tab, false, message.id);
+    },
+
+    handleNavigation(guildId: string, channelId: string) {
+        // Skip if we initiated this navigation
+        if (ChannelTabsUtils.isNavigatingViaTab()) {
+            return;
+        }
+
+        // Skip if we're viewing via bookmarks in independent mode
+        if (ChannelTabsUtils.isViewingViaBookmarkMode()) {
+            return;
+        }
+
+        // Clear bookmark viewing mode when navigating to a regular channel
+        ChannelTabsUtils.clearBookmarkViewingMode();
+
+        // wait for discord to update channel data
+        requestAnimationFrame(() => {
+            handleChannelSwitch({ guildId, channelId });
+        });
     },
 
     util: ChannelTabsUtils,

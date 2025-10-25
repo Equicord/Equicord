@@ -19,8 +19,9 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { MessageFlags } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
-import { FluxDispatcher, PermissionsBits, PermissionStore, UserStore, WindowStore } from "@webpack/common";
+import { FluxDispatcher, MessageTypeSets, PermissionsBits, PermissionStore, UserStore, WindowStore } from "@webpack/common";
 import NoReplyMentionPlugin from "plugins/noReplyMention";
 
 const MessageActions = findByPropsLazy("deleteMessage", "startEditMessage");
@@ -73,39 +74,12 @@ export default definePlugin({
         WindowStore.removeChangeListener(focusChanged);
     },
 
-    onMessageClick(msg: any, channel, event) {
+    onMessageClick(msg, channel, event) {
         const isMe = msg.author.id === UserStore.getCurrentUser().id;
-        if (!isDeletePressed) {
-            if (event.detail < 2) return;
-            if (settings.store.requireModifier && !event.ctrlKey && !event.shiftKey) return;
-            if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
-            if (msg.deleted === true) return;
 
-            if (isMe) {
-                if (!settings.store.enableDoubleClickToEdit || EditStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
+        if (isDeletePressed) {
+            if (!settings.store.enableDeleteOnClick || !(isMe || PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel))) return;
 
-                MessageActions.startEditMessage(channel.id, msg.id, msg.content);
-                event.preventDefault();
-            } else {
-                if (!settings.store.enableDoubleClickToReply) return;
-
-                const EPHEMERAL = 64;
-                if (msg.hasFlag(EPHEMERAL)) return;
-
-                const isShiftPress = event.shiftKey && !settings.store.requireModifier;
-                const shouldMention = Vencord.Plugins.isPluginEnabled(NoReplyMentionPlugin.name)
-                    ? NoReplyMentionPlugin.shouldMention(msg, isShiftPress)
-                    : !isShiftPress;
-
-                FluxDispatcher.dispatch({
-                    type: "CREATE_PENDING_REPLY",
-                    channel,
-                    message: msg,
-                    shouldMention,
-                    showMentionToggle: channel.guild_id !== null
-                });
-            }
-        } else if (settings.store.enableDeleteOnClick && (isMe || PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel))) {
             if (msg.deleted) {
                 FluxDispatcher.dispatch({
                     type: "MESSAGE_DELETE",
@@ -116,7 +90,40 @@ export default definePlugin({
             } else {
                 MessageActions.deleteMessage(channel.id, msg.id);
             }
+
             event.preventDefault();
+            return;
+        }
+
+        if (event.detail !== 2) return;
+        if (settings.store.requireModifier && !event.ctrlKey && !event.shiftKey) return;
+        if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
+        if (msg.deleted === true) return;
+
+        if (isMe) {
+            if (!settings.store.enableDoubleClickToEdit || EditStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
+
+            MessageActions.startEditMessage(channel.id, msg.id, msg.content);
+            event.preventDefault();
+            return;
+        } else {
+            if (!settings.store.enableDoubleClickToReply) return;
+            if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) return;
+
+            const isShiftPress = event.shiftKey && !settings.store.requireModifier;
+            const shouldMention = Vencord.Plugins.isPluginEnabled(NoReplyMentionPlugin.name)
+                ? NoReplyMentionPlugin.shouldMention(msg, isShiftPress)
+                : !isShiftPress;
+
+            FluxDispatcher.dispatch({
+                type: "CREATE_PENDING_REPLY",
+                channel,
+                message: msg,
+                shouldMention,
+                showMentionToggle: channel.guild_id !== null
+            });
+            event.preventDefault();
+            return;
         }
     },
 });

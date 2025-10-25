@@ -2,15 +2,12 @@
     display: none;
 }
 
-.messagelogger-deleted
-:is(
-    .messagelogger-deleted-attachment,
+.messagelogger-deleted :is(.messagelogger-deleted-attachment,
     .emoji,
     [data-type="sticker"],
     [class*="embedIframe"],
     [class*="embedSpotify"],
-    [class*="imageContainer"]
-) {
+    [class*="imageContainer"]) {
     filter: grayscale(1) !important;
     transition: 150ms filter ease-in-out;
 
@@ -47,4 +44,67 @@
 .vc-ml-modal-tab-bar {
     flex-wrap: wrap;
     gap: 16px;
+}
+
+.messagelogger-diff-added {
+    color: #85E89D;
+}
+
+.messagelogger-diff-removed {
+    color: #F47068;
+}
+
+.messagelogger-diff-added [class*="emojiContainer"],
+.messagelogger-diff-added img.emoji {
+    position: relative;
+}
+
+.messagelogger-diff-added [class*="emojiContainer"]::after,
+.messagelogger-diff-added img.emoji::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgb(133 232 157 / 60%);
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+.messagelogger-diff-removed [class*="emojiContainer"],
+.messagelogger-diff-removed img.emoji {
+    position: relative;
+}
+
+.messagelogger-diff-removed [class*="emojiContainer"]::after,
+.messagelogger-diff-removed img.emoji::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgb(244 112 104 / 60%);
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+.messagelogger-diff-view {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.messagelogger-diff-original,
+.messagelogger-diff-updated {
+    display: block;
+    white-space: pre-wrap;
+}
+
+/* when diffs are disabled for a specific message, remove diff colors */
+.messagelogger-diff-disabled .messagelogger-diff-added,
+.messagelogger-diff-disabled .messagelogger-diff-removed {
+    color: inherit;
+}
+
+.messagelogger-diff-disabled .messagelogger-diff-added [class*="emojiContainer"]::after,
+.messagelogger-diff-disabled .messagelogger-diff-added img.emoji::after,
+.messagelogger-diff-disabled .messagelogger-diff-removed [class*="emojiContainer"]::after,
+.messagelogger-diff-disabled .messagelogger-diff-removed img.emoji::after {
+    display: none !important;
 }

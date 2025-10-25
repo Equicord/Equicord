@@ -19,30 +19,25 @@
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { migratePluginSettings } from "@api/Settings";
 import { CheckedTextInput } from "@components/CheckedTextInput";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
+import { getGuildAcronym } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { ModalContent, ModalHeader, ModalRoot, openModalLazy } from "@utils/modal";
 import definePlugin from "@utils/types";
-import { findByCodeLazy, findStoreLazy } from "@webpack";
-import { Constants, EmojiStore, FluxDispatcher, Forms, GuildStore, Menu, PermissionsBits, PermissionStore, React, RestAPI, Toasts, Tooltip, UserStore } from "@webpack/common";
-import { Guild } from "discord-types/general";
+import { Guild, GuildSticker } from "@vencord/discord-types";
+import { findByCodeLazy } from "@webpack";
+import { Constants, EmojiStore, FluxDispatcher, GuildStore, IconUtils, Menu, PermissionsBits, PermissionStore, React, RestAPI, StickersStore, Toasts, Tooltip, UserStore } from "@webpack/common";
 import { Promisable } from "type-fest";
 
-const StickersStore = findStoreLazy("StickersStore");
 const uploadEmoji = findByCodeLazy(".GUILD_EMOJIS(", "EMOJI_UPLOAD_START");
 
 const getGuildMaxEmojiSlots = findByCodeLazy(".additionalEmojiSlots") as (guild: Guild) => number;
 
-interface Sticker {
+interface Sticker extends GuildSticker {
     t: "Sticker";
-    description: string;
-    format_type: number;
-    guild_id: string;
-    id: string;
-    name: string;
-    tags: string;
-    type: number;
 }
 
 interface Emoji {
@@ -193,7 +188,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
 
     return (
         <>
-            <Forms.FormTitle className={Margins.top20}>Custom Name</Forms.FormTitle>
+            <Heading className={Margins.top20}>Custom Name</Heading>
             <CheckedTextInput
                 value={name}
                 onChange={v => {
@@ -225,7 +220,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
                                 aria-disabled={isCloning}
                                 style={{
                                     borderRadius: "50%",
-                                    backgroundColor: "var(--background-secondary)",
+                                    backgroundColor: "var(--background-base-lower)",
                                     display: "inline-flex",
                                     justifyContent: "center",
                                     alignItems: "center",
@@ -250,13 +245,18 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
                                             width: "100%",
                                             height: "100%",
                                         }}
-                                        src={g.getIconURL(512, true)}
+                                        src={IconUtils.getGuildIconURL({
+                                            id: g.id,
+                                            icon: g.icon,
+                                            canAnimate: true,
+                                            size: 512
+                                        })}
                                         alt={g.name}
                                     />
                                 ) : (
-                                    <Forms.FormText
+                                    <Paragraph
                                         style={{
-                                            fontSize: getFontSize(g.acronym),
+                                            fontSize: getFontSize(getGuildAcronym(g)),
                                             width: "100%",
                                             overflow: "hidden",
                                             whiteSpace: "nowrap",
@@ -264,8 +264,8 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
                                             cursor: isCloning ? "not-allowed" : "pointer",
                                         }}
                                     >
-                                        {g.acronym}
-                                    </Forms.FormText>
+                                        {getGuildAcronym(g)}
+                                    </Paragraph>
                                 )}
                             </div>
                         )}
@@ -300,7 +300,7 @@ function buildMenuItem(type: "Emoji" | "Sticker", fetchData: () => Promisable<Om
                                     width={24}
                                     style={{ marginRight: "0.5em" }}
                                 />
-                                <Forms.FormText>Clone {data.name}</Forms.FormText>
+                                <Paragraph>Clone {data.name}</Paragraph>
                             </ModalHeader>
                             <ModalContent>
                                 <CloneModal data={data} />
