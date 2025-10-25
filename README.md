@@ -54,6 +54,13 @@ cd Equicord
 Install dependencies:
 
 ```shell
+cd packages/vencord-types
+bun link @vencord/types
+
+cd ../discord-types
+bun link @vencord/discord-types
+cd ../..
+
 bun install
 ```
 
