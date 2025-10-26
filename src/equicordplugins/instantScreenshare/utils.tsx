@@ -12,16 +12,13 @@ import { OptionType } from "@utils/types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
 import { MediaEngineStore, SearchableSelect, useEffect, useState } from "@webpack/common";
 
-
 interface PickerProps {
     streamMediaSelection: any[];
     streamMedia: any[];
 }
 
-
 const getDesktopSources = findByCodeLazy("desktop sources");
 const configModule = findByPropsLazy("getOutputVolume");
-
 
 export const settings = definePluginSettings({
     streamMedia: {
@@ -31,7 +28,7 @@ export const settings = definePluginSettings({
     includeVideoDevices: {
         type: OptionType.BOOLEAN,
         description: "Include video input devices (cameras, capture cards) in the source list",
-        default: true,
+        default: false,
     },
     autoMute: {
         type: OptionType.BOOLEAN,
@@ -45,15 +42,13 @@ export const settings = definePluginSettings({
     },
 });
 
-
 export async function getCurrentMedia() {
     const media = MediaEngineStore.getMediaEngine();
     const sources = [
         ...(await getDesktopSources(media, ["screen"], null) ?? []),
         ...(await getDesktopSources(media, ["window", "application"], null) ?? []),
-        ...(await getDesktopSources(media, ["devices"], null) ?? []), // Probably not needed but if they ever add more
     ];
-    // Add video input devices if enabled
+
     if (settings.store.includeVideoDevices) {
         try {
             const videoDevices = Object.values(configModule.getVideoDevices() || {});
@@ -68,22 +63,12 @@ export async function getCurrentMedia() {
         }
     }
 
-
     const streamMedia = sources.find(screen => screen.id === settings.store.streamMedia);
-    console.log("Available sources:", sources);
-    console.log("Selected source:", streamMedia);
-
-
     if (streamMedia) return streamMedia;
-
-
-    new Logger("InstantScreenShare").error(`Stream Media "${settings.store.streamMedia}" not found. Resetting to default.`);
-
 
     settings.store.streamMedia = sources[0];
     return sources[0];
 }
-
 
 function StreamSimplePicker({ streamMediaSelection, streamMedia }: PickerProps) {
     const options = streamMediaSelection.map(screen => ({
@@ -91,7 +76,6 @@ function StreamSimplePicker({ streamMediaSelection, streamMedia }: PickerProps) 
         value: screen.id,
         default: streamMediaSelection[0],
     }));
-
 
     return (
         <SearchableSelect
@@ -105,13 +89,11 @@ function StreamSimplePicker({ streamMediaSelection, streamMedia }: PickerProps) 
     );
 }
 
-
 function ScreenSetting() {
     const { streamMedia, includeVideoDevices } = settings.use(["streamMedia", "includeVideoDevices"]);
     const media = MediaEngineStore.getMediaEngine();
     const [streamMediaSelection, setStreamMediaSelection] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-
 
     useEffect(() => {
         let active = true;
@@ -120,11 +102,8 @@ function ScreenSetting() {
             const sources = [
                 ...(await getDesktopSources(media, ["screen"], null) ?? []),
                 ...(await getDesktopSources(media, ["window", "application"], null) ?? []),
-                ...(await getDesktopSources(media, ["devices"], null) ?? []),
             ];
 
-
-            // Add video input devices if enabled
             if (includeVideoDevices) {
                 try {
                     const videoDevices = Object.values(configModule.getVideoDevices() || {});
@@ -139,7 +118,6 @@ function ScreenSetting() {
                 }
             }
 
-
             if (active) {
                 setStreamMediaSelection(sources);
                 setLoading(false);
@@ -149,14 +127,11 @@ function ScreenSetting() {
         return () => { active = false; };
     }, [includeVideoDevices]);
 
-
     if (loading) return <Paragraph>Loading media sources...</Paragraph>;
     if (!streamMediaSelection.length) return <Paragraph>No Media found.</Paragraph>;
 
-
     return <StreamSimplePicker streamMediaSelection={streamMediaSelection} streamMedia={streamMedia} />;
 }
-
 
 function SettingSection() {
     return (
