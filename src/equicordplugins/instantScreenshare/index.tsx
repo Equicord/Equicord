@@ -66,9 +66,15 @@ export default definePlugin({
                 <br />
                 For X11 it may or may not work :shrug:
             </Paragraph>
+            <br />
             <HeadingSecondary>Video Devices</HeadingSecondary>
             <Paragraph>
                 Supports cameras and capture cards (like Elgato HD60X) when enabled in settings
+            </Paragraph>
+            <br />
+            <HeadingSecondary>Regarding Sound & Preview Settings</HeadingSecondary>
+            <Paragraph>
+                We use the settings set and used by discord to decide if stream preview and sound should be enabled or not
             </Paragraph>
         </>
     ),
