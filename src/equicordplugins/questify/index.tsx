@@ -17,7 +17,7 @@ import { JSX } from "react";
 
 import { addIgnoredQuest, addRerenderCallback, autoFetchCompatible, fetchAndAlertQuests, maximumAutoFetchIntervalValue, minimumAutoFetchIntervalValue, questIsIgnored, removeIgnoredQuest, rerenderQuests, settings, startAutoFetchingQuests, stopAutoFetchingQuests, validateAndOverwriteIgnoredQuests } from "./settings";
 import { ExcludedQuestMap, GuildlessServerListItem, Quest, QuestIcon, QuestMap, QuestStatus, RGB } from "./utils/components";
-import { adjustRGB, decimalToRGB, fetchAndDispatchQuests, formatLowerBadge, getFormattedNow, getIgnoredQuestIDs, getIntlMessageQuestify, getQuestStatus, isDarkish, leftClick, middleClick, normalizeQuestName, q, QuestifyLogger, questPath, QuestsStore, refreshQuest, reportPlayGameQuestProgress, reportVideoQuestProgress, rightClick, setIgnoredQuestIDs, waitUntilEnrolled } from "./utils/misc";
+import { adjustRGB, decimalToRGB, directMessagesPath, fetchAndDispatchQuests, formatLowerBadge, getFormattedNow, getIgnoredQuestIDs, getIntlMessageQuestify, getQuestStatus, isDarkish, leftClick, middleClick, normalizeQuestName, q, QuestifyLogger, questPath, QuestsStore, refreshQuest, reportPlayGameQuestProgress, reportVideoQuestProgress, rightClick, setIgnoredQuestIDs, waitUntilEnrolled } from "./utils/misc";
 
 const patchedMobileQuests = new Set<string>();
 export const activeQuestIntervals = new Map<string, { progressTimeout: NodeJS.Timeout; rerenderTimeout: NodeJS.Timeout; progress: number; duration: number, type: string; }>();
@@ -68,16 +68,37 @@ export function QuestButton(): JSX.Element {
             return;
         }
 
+        if (!event.isTrusted) {
+            return;
+        }
+
+        const button = event.type === "contextmenu" ? rightClick : event.button;
+        const leftClickAction = settings.store.questButtonLeftClickAction;
+
+        if (event.type === "click" && button === leftClick) {
+            if (leftClickAction === "open-quests") {
+                if (event.detail > 1 || onQuestsPage) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    NavigationRouter.transitionTo(directMessagesPath);
+                    settings.store.onQuestsPage = false;
+                    return;
+                }
+            } else if (event.detail > 1) {
+                return;
+            }
+        }
+
         event.preventDefault();
         event.stopPropagation();
 
         let todo: string | null = null;
 
-        if (event.button === middleClick) {
+        if (button === middleClick) {
             todo = settings.store.questButtonMiddleClickAction;
-        } else if (event.button === rightClick) {
+        } else if (button === rightClick) {
             todo = settings.store.questButtonRightClickAction;
-        } else if (event.button === leftClick) {
+        } else if (button === leftClick) {
             todo = settings.store.questButtonLeftClickAction;
         }
 
