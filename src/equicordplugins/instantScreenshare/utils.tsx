@@ -19,7 +19,7 @@ interface PickerProps {
 
 const getDesktopSources = findByCodeLazy("desktop sources");
 const configModule = findByPropsLazy("getOutputVolume");
-
+const log = new Logger("InstantScreenShare");
 export const settings = definePluginSettings({
     streamMedia: {
         type: OptionType.COMPONENT,
@@ -56,12 +56,14 @@ export async function getCurrentMedia() {
             }));
             sources.push(...videoSources);
         } catch (e) {
-            new Logger("InstantScreenShare").warn("Failed to get video devices:", e);
+            new log.warn("Failed to get video devices:", e);
         }
     }
 
     const streamMedia = sources.find(screen => screen.id === settings.store.streamMedia);
     if (streamMedia) return streamMedia;
+
+    log.error(`Stream Media "${settings.store.streamMedia}" not found. Resetting to default.`);
 
     settings.store.streamMedia = sources[0];
     return sources[0];
@@ -108,7 +110,7 @@ function ScreenSetting() {
                     }));
                     sources.push(...videoSources);
                 } catch (e) {
-                    new Logger("InstantScreenShare").warn("Failed to get video devices:", e);
+                    log.warn("Failed to get video devices:", e);
                 }
             }
 
