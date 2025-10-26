@@ -44,10 +44,7 @@ export const settings = definePluginSettings({
 
 export async function getCurrentMedia() {
     const media = MediaEngineStore.getMediaEngine();
-    const sources = [
-        ...(await getDesktopSources(media, ["screen"], null) ?? []),
-        ...(await getDesktopSources(media, ["window", "application"], null) ?? []),
-    ];
+    const sources = await getDesktopSources(media, ["screen", "window"], null) ?? [];
 
     if (settings.store.includeVideoDevices) {
         try {
@@ -58,8 +55,8 @@ export async function getCurrentMedia() {
                 type: "video_device"
             }));
             sources.push(...videoSources);
-        } catch (error) {
-            new Logger("InstantScreenShare").warn("Failed to get video devices:", error);
+        } catch (e) {
+            new Logger("InstantScreenShare").warn("Failed to get video devices:", e);
         }
     }
 
@@ -99,10 +96,7 @@ function ScreenSetting() {
         let active = true;
         async function fetchMedia() {
             setLoading(true);
-            const sources = [
-                ...(await getDesktopSources(media, ["screen"], null) ?? []),
-                ...(await getDesktopSources(media, ["window", "application"], null) ?? []),
-            ];
+            const sources = await getDesktopSources(media, ["screen", "window"], null) ?? [];
 
             if (includeVideoDevices) {
                 try {
@@ -113,8 +107,8 @@ function ScreenSetting() {
                         type: "video_device"
                     }));
                     sources.push(...videoSources);
-                } catch (error) {
-                    new Logger("InstantScreenShare").warn("Failed to get video devices:", error);
+                } catch (e) {
+                    new Logger("InstantScreenShare").warn("Failed to get video devices:", e);
                 }
             }
 

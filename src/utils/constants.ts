@@ -626,10 +626,6 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "thororen",
         id: 848339671629299742n
     },
-    mart: {
-        name: "mja00",
-        id: 108698087769260032n
-    }
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
@@ -1177,6 +1173,10 @@ export const EquicordDevs = Object.freeze({
     ZcraftElite: {
         name: "ZcraftElite",
         id: 926788037785047050n
+    },
+    mart: {
+        name: "mja00",
+        id: 108698087769260032n
     },
 } satisfies Record<string, Dev>);
 

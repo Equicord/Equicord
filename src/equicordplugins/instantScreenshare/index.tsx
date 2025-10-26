@@ -4,18 +4,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { getUserSettingLazy } from "@api/UserSettings";
 import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { VoiceState } from "@vencord/discord-types";
-import { findByCodeLazy } from "@webpack";
+import { findByCodeLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, MediaEngineStore, PermissionsBits, PermissionStore, SelectedChannelStore, UserStore, VoiceActions } from "@webpack/common";
 
 import { getCurrentMedia, settings } from "./utils";
 
 let hasStreamed;
 const startStream = findByCodeLazy('type:"STREAM_START"');
+const StreamPreviewSettings = getUserSettingLazy("voiceAndVideo", "disableStreamPreviews")!;
+const ApplicationStreamingSettingsStore = findStoreLazy("ApplicationStreamingSettingsStore");
 
 async function autoStartStream() {
     const selected = SelectedChannelStore.getVoiceChannelId();
@@ -33,36 +36,25 @@ async function autoStartStream() {
     }
 
     const streamMedia = await getCurrentMedia();
+    const preview = StreamPreviewSettings.getSetting();
+    const { soundshareEnabled } = ApplicationStreamingSettingsStore.getState();
+    let sourceId = streamMedia.id;
+    if (streamMedia.type === "video_device") sourceId = `camera:${streamMedia.id}`;
 
-    if (streamMedia.type === "video_device") {
-        // For video devices, Discord expects:
-        // 1. sourceId prefixed with "camera:"
-        // 2. sourceName without the emoji prefix
-        // 3. audioSourceId set to the device name (for audio from capture card)
-        startStream(channel.guild_id ?? null, selected, {
-            "pid": null,
-            "sourceId": `camera:${streamMedia.id}`,
-            "sourceName": streamMedia.name,
-            "audioSourceId": streamMedia.name,
-            "sound": true,
-            "previewDisabled": true
-        });
-    } else {
-        startStream(channel.guild_id ?? null, selected, {
-            "pid": null,
-            "sourceId": streamMedia.id,
-            "sourceName": streamMedia.name,
-            "audioSourceId": null,
-            "sound": true,
-            "previewDisabled": true
-        });
-    }
+    startStream(channel.guild_id ?? null, selected, {
+        "pid": null,
+        "sourceId": sourceId,
+        "sourceName": streamMedia.name,
+        "audioSourceId": streamMedia.name,
+        "sound": soundshareEnabled,
+        "previewDisabled": preview
+    });
 }
 
 export default definePlugin({
     name: "InstantScreenshare",
     description: "Instantly screenshare when joining a voice channel with support for desktop sources, windows, and video input devices (cameras, capture cards)",
-    authors: [Devs.HAHALOSAH, Devs.thororen, Devs.mart],
+    authors: [Devs.HAHALOSAH, Devs.thororen, EquicordDevs.mart],
     getCurrentMedia,
     settings,
 
