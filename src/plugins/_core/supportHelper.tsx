@@ -163,7 +163,10 @@ async function generateDebugInfoMessage() {
         let arrpcMessage = "";
 
         if (arrpcStatus.running) {
-            arrpcMessage = `Running (ProcessID: ${arrpcStatus.pid})`;
+            const connection = arrpcStatus.host && arrpcStatus.port
+                ? `${arrpcStatus.host}:${arrpcStatus.port}`
+                : "Unknown address";
+            arrpcMessage = `Running on ${connection}`;
         } else if (arrpcStatus.enabled) {
             if (arrpcStatus.lastError) {
                 arrpcMessage = `Enabled but not running - ${arrpcStatus.lastError}`;
