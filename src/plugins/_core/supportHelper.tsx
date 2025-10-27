@@ -105,7 +105,14 @@ async function generateDebugInfoMessage() {
     const client = (() => {
         if (IS_DISCORD_DESKTOP) return `Discord Desktop v${DiscordNative.app.getVersion()}`;
         if (IS_VESKTOP) return `Vesktop v${VesktopNative.app.getVersion()}`;
-        if (IS_EQUIBOP) return `Equibop v${VesktopNative.app.getVersion()}`;
+        if (IS_EQUIBOP) {
+            const equibopGitHash = tryOrElse(() => VesktopNative.app.getGitHash?.(), undefined);
+            if (equibopGitHash) {
+                const shortHash = equibopGitHash.slice(0, 7);
+                return `Equibop v${VesktopNative.app.getVersion()} • [${shortHash}](<https://github.com/Equicord/Equibop/commit/${equibopGitHash}>)`;
+            }
+            return `Equibop v${VesktopNative.app.getVersion()}`;
+        }
         if ("legcord" in window) return `LegCord v${window.legcord.version}`;
 
         // @ts-expect-error
@@ -138,6 +145,7 @@ async function generateDebugInfoMessage() {
         "Activity Sharing Disabled": tryOrElse(() => !ShowCurrentGame.getSetting(), false),
         "Link Embeds Disabled": tryOrElse(() => !ShowEmbeds.getSetting(), false),
         "Equicord DevBuild": !IS_STANDALONE,
+        "Equibop DevBuild": IS_EQUIBOP && !IS_STANDALONE,
         "Has UserPlugins": Object.values(PluginMeta).some(m => m.userPlugin),
         ">2 Weeks Outdated": BUILD_TIMESTAMP < Date.now() - 12096e5,
         [`Potentially Problematic Plugins: ${potentiallyProblematicPlugins.join(", ")}`]: potentiallyProblematicPlugins.length
