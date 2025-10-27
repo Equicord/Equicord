@@ -14,7 +14,7 @@ import { findByCodeLazy } from "@webpack";
 import { ApplicationAssetUtils, FluxDispatcher, Toasts, UserStore } from "@webpack/common";
 
 const fetchApplicationsRPC = findByCodeLazy('"Invalid Origin"', ".application");
-const logger = new Logger("arRPC-bun");
+const logger = new Logger("arRPCBun");
 
 async function lookupAsset(applicationId: string, key: string): Promise<string> {
     return (await ApplicationAssetUtils.fetchAssetIds(applicationId, [key]))[0];
@@ -29,12 +29,16 @@ async function lookupApp(applicationId: string): Promise<string> {
 
 let ws: WebSocket;
 
-console.log("[arRPC-bun] Plugin module loaded");
-
 export const settings = definePluginSettings({
+    oldVerNotice: {
+        type: OptionType.BOOLEAN,
+        description: "old version notice for why arrpc bun doesnt work",
+        default: false,
+        hidden: true
+    },
     oneTimeNotice: {
         type: OptionType.BOOLEAN,
-        description: "One time notice check for showing arrpc disabled",
+        description: "One time notice for showing arrpc disabled",
         default: false,
         hidden: true
     },
@@ -42,27 +46,23 @@ export const settings = definePluginSettings({
 
 
 export default definePlugin({
-    name: "arRPC-bun",
-    description: "arRPC-bun integration - connects to bridge on port 1337",
+    name: "arRPCBun",
+    description: "arRPCBun integration",
     authors: [EquicordDevs.creations],
     reporterTestable: ReporterTestable.None,
     enabledByDefault: IS_EQUIBOP,
-    hidden: !IS_EQUIBOP && !IS_VESKTOP && !("legcord" in window),
     settings,
 
     commands: [
         {
             name: "arrpc-debug",
-            description: "Show arRPC-bun debug information",
+            description: "Show arRPCBun debug information",
             predicate: ctx => {
                 const result = isAnyPluginDev(UserStore.getCurrentUser()?.id) || isEquicordGuild(ctx?.guild?.id, true);
-                console.log("[arRPC-bun] predicate check:", result, "user:", UserStore.getCurrentUser()?.id, "guild:", ctx?.guild?.id);
                 return result;
             },
             execute: () => {
-                console.log("[arRPC-bun] execute called!");
                 const arrpcStatus = IS_EQUIBOP ? VesktopNative.arrpc?.getStatus?.() : null;
-                console.log("[arRPC-bun] arrpcStatus:", arrpcStatus);
 
                 let content = "";
 
@@ -113,14 +113,13 @@ export default definePlugin({
                 } else {
                     if (ws) {
                         content += ws.readyState === WebSocket.OPEN
-                            ? "WebSocket: Connected to external arRPC-bun server\n"
+                            ? "WebSocket: Connected to external arRPCBun server\n"
                             : `WebSocket: ${["Connecting", "Open", "Closing", "Closed"][ws.readyState]}\n`;
                     } else {
                         content += "WebSocket: Not connected\n";
                     }
                 }
 
-                console.log("[arRPC-bun] returning:", { content });
                 return { content };
             },
         },
@@ -147,16 +146,15 @@ export default definePlugin({
     },
 
     async start() {
-        console.log("[arRPC-bun] Plugin starting...");
         // only works on 3.0.8+
         if (IS_EQUIBOP) {
             const version = VesktopNative.app.getVersion();
             const [major, minor, patch] = version.split(".").map(Number);
-            console.log("[arRPC-bun] Equibop version:", version);
 
-            if (major < 3 || (major === 3 && minor === 0 && patch < 8)) {
-                logger.error(`Equibop ${version} is too old. Requires 3.0.8+ for arRPC-bun fix.`);
-                showNotice(`arRPC-bun requires Equibop 3.0.8+. You have ${version}. Update Equibop to use this plugin.`, "OK", () => {
+            if (major < 3 || (major === 3 && minor === 0 && patch < 8) && !settings.store.oldVerNotice) {
+                logger.error(`Equibop ${version} is too old. Requires 3.0.8+ for arRPCBun fix.`);
+                showNotice(`arRPCBun requires Equibop 3.0.8+. You have ${version}. Update Equibop to use this plugin.`, "OK", () => {
+                    settings.store.oldVerNotice = true;
                     popNotice();
                 });
                 return;
@@ -172,15 +170,14 @@ export default definePlugin({
 
         // get arRPC status from Equibop if available, otherwise use defaults
         const arrpcStatus = IS_EQUIBOP ? VesktopNative.arrpc?.getStatus?.() : null;
-        console.log("[arRPC-bun] Got arRPC status:", arrpcStatus);
 
         // if on Equibop and arRPC is disabled AND not running, warn user
         if (IS_EQUIBOP && !arrpcStatus?.enabled && !arrpcStatus?.running && !settings.store.oneTimeNotice) {
             logger.warn("Equibop's built-in arRPC is disabled and not running");
-            showNotice("arRPC is not running. Enable it in Equibop settings, or run your own arRPC-bun server.", "OK", () => {
+            showNotice("arRPC is not running. Enable it in Equibop settings, or run your own arRPCBun server.", "OK", () => {
+                settings.store.oneTimeNotice = true;
                 popNotice();
             });
-            console.log("[arRPC-bun] Early return due to arRPC not enabled/running");
             return;
         }
 
@@ -188,8 +185,7 @@ export default definePlugin({
         const port = arrpcStatus?.port || 1337;
 
         const wsUrl = `ws://${host}:${port}`;
-        logger.info(`Connecting to arRPC-bun at ${wsUrl}${arrpcStatus?.host ? "" : " (using defaults)"}`);
-        console.log("[arRPC-bun] Creating WebSocket connection to:", wsUrl);
+        logger.info(`Connecting to arRPCBun at ${wsUrl}${arrpcStatus?.host ? "" : " (using defaults)"}`);
 
         if (ws) ws.close();
         ws = new WebSocket(wsUrl);
@@ -206,18 +202,17 @@ export default definePlugin({
 
         const connectionSuccessful = await new Promise(res => setTimeout(() => res(ws.readyState === WebSocket.OPEN), 5000));
         if (!connectionSuccessful) {
-            logger.error("Failed to connect to arRPC-bun");
-            showNotice("Failed to connect to arRPC-bun, is it running?", "Retry", () => {
+            logger.error("Failed to connect to arRPCBun");
+            showNotice("Failed to connect to arRPCBun, is it running?", "Retry", () => {
                 popNotice();
                 this.start();
             });
             return;
         }
 
-        logger.info("Successfully connected to arRPC-bun");
-        console.log("[arRPC-bun] Successfully connected to arRPC-bun");
+        logger.info("Successfully connected to arRPCBun");
         Toasts.show({
-            message: "Connected to arRPC-bun",
+            message: "Connected to arRPCBun",
             type: Toasts.Type.SUCCESS,
             id: Toasts.genId(),
             options: {
@@ -225,12 +220,11 @@ export default definePlugin({
                 position: Toasts.Position.BOTTOM
             }
         });
-        console.log("[arRPC-bun] Plugin start() completed successfully");
     },
 
     stop() {
         FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity: null });
         ws?.close();
-        logger.info("Stopped arRPC-bun connection");
+        logger.info("Stopped arRPCBun connection");
     }
 });

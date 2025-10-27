@@ -46,7 +46,7 @@ export const ALLOWED_PROTOCOLS = [
 
 export const IS_VANILLA = /* @__PURE__ */ process.argv.includes("--vanilla");
 
-if (IS_DEV) {
+if (IS_DEV && IS_STANDALONE) {
     const prodDir = join(DATA_DIR, "..");
     const settings = join(prodDir, "settings", "settings.json");
     const quickCss = join(prodDir, "settings", "quickCss.css");
