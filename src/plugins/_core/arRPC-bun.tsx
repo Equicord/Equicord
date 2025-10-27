@@ -5,10 +5,11 @@
  */
 
 import { popNotice, showNotice } from "@api/Notices";
+import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { isAnyPluginDev, isEquicordGuild } from "@utils/misc";
-import definePlugin, { ReporterTestable } from "@utils/types";
+import definePlugin, { OptionType, ReporterTestable } from "@utils/types";
 import { findByCodeLazy } from "@webpack";
 import { ApplicationAssetUtils, FluxDispatcher, Toasts, UserStore } from "@webpack/common";
 
@@ -30,20 +31,30 @@ let ws: WebSocket;
 
 console.log("[arRPC-bun] Plugin module loaded");
 
+export const settings = definePluginSettings({
+    oneTimeNotice: {
+        type: OptionType.BOOLEAN,
+        description: "One time notice check for showing arrpc disabled",
+        default: false,
+        hidden: true
+    },
+});
+
+
 export default definePlugin({
     name: "arRPC-bun",
     description: "arRPC-bun integration - connects to bridge on port 1337",
     authors: [EquicordDevs.creations],
     reporterTestable: ReporterTestable.None,
     enabledByDefault: IS_EQUIBOP,
-    hidden: !IS_EQUIBOP && !IS_VESKTOP,
+    hidden: !IS_EQUIBOP && !IS_VESKTOP && !("legcord" in window),
+    settings,
 
     commands: [
         {
             name: "arrpc-debug",
             description: "Show arRPC-bun debug information",
             predicate: ctx => {
-                // @ts-ignore ctx?.guild?.id
                 const result = isAnyPluginDev(UserStore.getCurrentUser()?.id) || isEquicordGuild(ctx?.guild?.id, true);
                 console.log("[arRPC-bun] predicate check:", result, "user:", UserStore.getCurrentUser()?.id, "guild:", ctx?.guild?.id);
                 return result;
@@ -90,36 +101,25 @@ export default definePlugin({
                         }
                     }
 
-                    if (arrpcStatus.restartCount > 0) {
-                        content += `Restarts: ${arrpcStatus.restartCount}\n`;
-                    }
+                    const info = [
+                        arrpcStatus.restartCount > 0 && ["Restarts", arrpcStatus.restartCount],
+                        arrpcStatus.bunPath && ["Bun", arrpcStatus.bunPath],
+                        arrpcStatus.warnings?.length && ["Warnings", arrpcStatus.warnings.join(", ")],
+                        arrpcStatus.lastError && ["Last Error", arrpcStatus.lastError],
+                        arrpcStatus.lastExitCode && arrpcStatus.lastExitCode !== 0 && ["Exit Code", arrpcStatus.lastExitCode]
+                    ].filter(Boolean);
 
-                    if (arrpcStatus.bunPath) {
-                        content += `Bun: ${arrpcStatus.bunPath}\n`;
-                    }
-
-                    if (arrpcStatus.warnings && arrpcStatus.warnings.length > 0) {
-                        content += `Warnings: ${arrpcStatus.warnings.join(", ")}\n`;
-                    }
-
-                    if (arrpcStatus.lastError) {
-                        content += `Last Error: ${arrpcStatus.lastError}\n`;
-                    }
-
-                    if (arrpcStatus.lastExitCode != null && arrpcStatus.lastExitCode !== 0) {
-                        content += `Exit Code: ${arrpcStatus.lastExitCode}\n`;
-                    }
+                    content += info.map(([type, value]) => `${type}: ${value}`).join("\n");
                 } else {
-                    if (ws && ws.readyState === WebSocket.OPEN) {
-                        content += "Connected to external arRPC-bun server\n";
-                    } else if (ws) {
-                        content += `WebSocket: ${["Connecting", "Open", "Closing", "Closed"][ws.readyState]}\n`;
+                    if (ws) {
+                        content += ws.readyState === WebSocket.OPEN
+                            ? "WebSocket: Connected to external arRPC-bun server\n"
+                            : `WebSocket: ${["Connecting", "Open", "Closing", "Closed"][ws.readyState]}\n`;
                     } else {
-                        content += "Not connected\n";
+                        content += "WebSocket: Not connected\n";
                     }
                 }
 
-                console.log("[arRPC-bun] content built:", content);
                 console.log("[arRPC-bun] returning:", { content });
                 return { content };
             },
@@ -169,14 +169,13 @@ export default definePlugin({
             logger.info("Disabling WebRichPresence to avoid conflicts");
             Vencord.Plugins.stopPlugin(webRPC);
         }
-        console.log("[arRPC-bun] WebRichPresence check complete");
 
         // get arRPC status from Equibop if available, otherwise use defaults
         const arrpcStatus = IS_EQUIBOP ? VesktopNative.arrpc?.getStatus?.() : null;
         console.log("[arRPC-bun] Got arRPC status:", arrpcStatus);
 
-        // if on equibop and arRPC is disabled AND not running, warn user
-        if (IS_EQUIBOP && !arrpcStatus?.enabled && !arrpcStatus?.running) {
+        // if on Equibop and arRPC is disabled AND not running, warn user
+        if (IS_EQUIBOP && !arrpcStatus?.enabled && !arrpcStatus?.running && !settings.store.oneTimeNotice) {
             logger.warn("Equibop's built-in arRPC is disabled and not running");
             showNotice("arRPC is not running. Enable it in Equibop settings, or run your own arRPC-bun server.", "OK", () => {
                 popNotice();
