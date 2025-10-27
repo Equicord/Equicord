@@ -123,7 +123,7 @@ async function generateDebugInfoMessage() {
     const info = {
         Equicord:
             `v${VERSION} • [${shortGitHash()}](<https://github.com/Equicord/Equicord/commit/${gitHash}>)` +
-            `${IS_EQUIBOP ? "" : SettingsPlugin.getVersionInfo()} - ${Intl.DateTimeFormat("en-GB", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
+            `${SettingsPlugin.getVersionInfo()} - ${Intl.DateTimeFormat("en-GB", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
         Client: `${RELEASE_CHANNEL} ~ ${client}`,
         Platform: platformName()
     };
@@ -131,8 +131,6 @@ async function generateDebugInfoMessage() {
     if (IS_DISCORD_DESKTOP) {
         info["Last Crash Reason"] = (await tryOrElse(() => DiscordNative.processUtils.getLastCrash(), undefined))?.rendererCrashReason ?? "N/A";
     }
-
-    const arrpcStatus = IS_EQUIBOP ? tryOrElse(() => VesktopNative.arrpc.getStatus?.(), undefined) : undefined;
 
     const potentiallyProblematicPlugins = ([
         "NoRPC", "NoProfileThemes", "NoMosaic", "NoRoleHeaders", "NoSystemBadge",
@@ -154,31 +152,9 @@ async function generateDebugInfoMessage() {
     };
 
     let content = `>>> ${Object.entries(info).map(([k, v]) => `**${k}**: ${v}`).join("\n")}`;
-
     content += "\n" + Object.entries(commonIssues)
         .filter(([, v]) => v).map(([k]) => `⚠️ ${k}`)
         .join("\n");
-
-    if (arrpcStatus) {
-        let arrpcMessage = "";
-
-        if (arrpcStatus.running) {
-            const connection = arrpcStatus.host && arrpcStatus.port
-                ? `${arrpcStatus.host}:${arrpcStatus.port}`
-                : "Unknown address";
-            arrpcMessage = `Running on ${connection}`;
-        } else if (arrpcStatus.enabled) {
-            if (arrpcStatus.lastError) {
-                arrpcMessage = `Enabled but not running - ${arrpcStatus.lastError}`;
-            } else {
-                arrpcMessage = "Enabled but not running";
-            }
-        } else {
-            arrpcMessage = "Disabled";
-        }
-
-        content += `\n\n**arRPC-bun:** ${arrpcMessage}`;
-    }
 
     return content.trim();
 }
