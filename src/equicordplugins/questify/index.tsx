@@ -564,9 +564,10 @@ async function startVideoProgressTracking(quest: Quest, questDuration: number): 
                 showNotification({
                     title: "Quest Completed!",
                     body: `The ${questName} Quest has completed.`,
+                    dismissOnClick: true,
                     onClick: () => NavigationRouter.transitionTo(`/quest-home#${quest.id}`)
                 });
-            }  
+            }
         } else {
             QuestifyLogger.error(`[${getFormattedNow()}] Failed to complete Quest ${questName}.`);
         }
@@ -656,6 +657,7 @@ async function startPlayGameProgressTracking(quest: Quest, questDuration: number
                         title: "Quest Completed!",
                         body: `You've completed the quest: "${questName}"`,
                         dismissOnClick: true,
+                        onClick: () => NavigationRouter.transitionTo(`/quest-home#${quest.id}`),
                     });
                 }
             } else {
@@ -676,6 +678,7 @@ async function startPlayGameProgressTracking(quest: Quest, questDuration: number
                             title: "Quest Completed!",
                             body: `You've completed the quest: "${questName}"`,
                             dismissOnClick: true,
+                            onClick: () => NavigationRouter.transitionTo(`/quest-home#${quest.id}`),
                         });
                     }
                 } else {
