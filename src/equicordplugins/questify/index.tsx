@@ -1142,14 +1142,6 @@ export default definePlugin({
             ]
         },
         {
-            // Prevent scrolling to a sponsored Quest.
-            find: "Id(\"quest-tile-\".concat",
-            replacement: {
-                match: /(?=document.getElementById)/,
-                replace: "null&&"
-            }
-        },
-        {
             // Whether preloading assets is enabled or not, the placeholders loading
             // before the assets causes a lot of element shifting, whereas if
             // the elements load immediately instead, it doesn't.
