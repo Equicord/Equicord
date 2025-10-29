@@ -559,13 +559,14 @@ async function startVideoProgressTracking(quest: Quest, questDuration: number): 
 
         if (success) {
             QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
+
             if (settings.store.notifyOnQuestComplete) {
                 showNotification({
                     title: "Quest Completed!",
-                    body: `You've completed the quest: "${questName}"`,
-                    dismissOnClick: true,
+                    body: `The ${questName} Quest has completed.`,
+                    onClick: () => NavigationRouter.transitionTo(`/quest-home#${quest.id}`)
                 });
-            }
+            }  
         } else {
             QuestifyLogger.error(`[${getFormattedNow()}] Failed to complete Quest ${questName}.`);
         }
