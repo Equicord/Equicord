@@ -656,7 +656,7 @@ async function startPlayGameProgressTracking(quest: Quest, questDuration: number
                 if (settings.store.notifyOnQuestComplete) {
                     showNotification({
                         title: "Quest Completed!",
-                        body: `You've completed the quest: "${questName}"`,
+                        body: `The ${questName} Quest has completed.`,
                         dismissOnClick: true,
                         onClick: () => NavigationRouter.transitionTo(`${questPath}#${quest.id}`),
                     });
@@ -678,7 +678,7 @@ async function startPlayGameProgressTracking(quest: Quest, questDuration: number
                     if (settings.store.notifyOnQuestComplete) {
                         showNotification({
                             title: "Quest Completed!",
-                            body: `You've completed the quest: "${questName}"`,
+                            body: `The ${questName} Quest has completed.`,
                             dismissOnClick: true,
                             onClick: () => NavigationRouter.transitionTo(`${questPath}#${quest.id}`),
                         });
