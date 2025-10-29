@@ -652,6 +652,7 @@ async function startPlayGameProgressTracking(quest: Quest, questDuration: number
 
             if (success) {
                 QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
+
                 if (settings.store.notifyOnQuestComplete) {
                     showNotification({
                         title: "Quest Completed!",
@@ -673,6 +674,7 @@ async function startPlayGameProgressTracking(quest: Quest, questDuration: number
 
                 if (success) {
                     QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
+
                     if (settings.store.notifyOnQuestComplete) {
                         showNotification({
                             title: "Quest Completed!",
