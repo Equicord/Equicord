@@ -1,0 +1,30 @@
+[data-quickleave-selected="true"],
+.ec-quickleave-selected {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+[data-quickleave-selected="true"]::after,
+.ec-quickleave-selected::after {
+    content: "";
+    position: absolute;
+    width: 1.4rem;
+    height: 1.4rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateZ(0);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23e91e63' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    pointer-events: none;
+    z-index: 1;
+    will-change: transform, opacity;
+}
+
+[data-quickleave-selected="true"] img[aria-hidden="true"],
+.ec-quickleave-selected img[aria-hidden="true"] {
+    filter: blur(2px) contrast(1.05) saturate(1.05);
+    transition: filter 60ms ease-out;
+}
