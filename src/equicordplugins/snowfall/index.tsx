@@ -28,7 +28,7 @@ const SnowfallCSS = `
 }
 .snowflake-solid {
     border-radius: 50%;
-    background: #fff;
+    background: #ffffff;
 }
 `;
 
@@ -144,7 +144,7 @@ class CopleSnow {
                     ? content
                     : content[Math.floor(Math.random() * cntLength)];
             }
-            // if type === "solid", leave empty
+            // if type is solid we don't need to set content
         }
 
         snowflake.className = `snowflake snowflake-${type}`;
@@ -284,8 +284,7 @@ let container: HTMLDivElement | null = null;
 export default definePlugin({
     name: "Snowfall",
     description: "Let it snow on Discord! Ported from the BetterDiscord plugin by square.",
-    authors: [EquicordDevs.ZcraftElite, { name: "square", id: 219363409097916416n }],
-    version: "1.1.1",
+    authors: [EquicordDevs.ZcraftElite, EquicordDevs.square],
 
     start() {
         container = document.createElement("div");
