@@ -32,19 +32,18 @@ export default definePlugin({
     patches: [
         {
             find: "queryChannelUsers({channelId:",
-            replacement: {
-                match: /filter:(\i)=>(\i)\.isPrivate\(\)\|\|(\i)\.BT\({permission:(\i)\.Plq\.VIEW_CHANNEL,user:\1,context:\2}\)/,
-                replace: "filter:$1=>true",
-            },
+            replacement: [
+                {
+                    match: /filter:(\i)=>.{0,75}context:\i\}\)/,
+                    replace: "filter:$1=>true",
+                },
+                {
+                    match: /(?<=(\i\.\i\.getUsers\(\)).*?)\i\.\i\.getMembers\(.{0,25}\)\.filter\(\i\)/,
+                    replace: "Object.values($1)",
+                    predicate: () => settings.store.globalMention,
+                }
+            ],
         },
-        {
-            find: "queryChannelUsers({channelId:",
-            predicate: () => settings.store.globalMention,
-            replacement: {
-                match: /(t=)(\i)\.ZP\.getMembers\((\i)\.guild_id\)\.filter\((\i)\)/,
-                replace: "$1Object.values(X.default.getUsers())"
-            }
-        }
     ],
 });
 
