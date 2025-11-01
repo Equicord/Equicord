@@ -31,7 +31,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "queryChannelUsers({channelId:",
+            find: ",queryMentionResults(",
             replacement: [
                 {
                     match: /filter:(\i)=>.{0,75}context:\i\}\)/,
