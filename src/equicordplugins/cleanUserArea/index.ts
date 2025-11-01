@@ -15,13 +15,9 @@ export default definePlugin({
         {
             find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
             replacement: {
-                match: /nameplate:(\i),hovered/,
-                replace: "nameplate:$self.hideNameplate($1),hovered",
+                match: /nameplate:\i,hovered/,
+                replace: "nameplate:null,hovered",
             },
         },
     ],
-
-    hideNameplate() {
-        return null;
-    },
 });
