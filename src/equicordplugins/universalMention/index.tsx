@@ -46,18 +46,18 @@ export default definePlugin({
                     replace: "$1=>true",
                 },
                 {
-                    match: /\i\.\i\.getMembers\(.{0,25}\)\.filter\(\i\)/g,
-                    replace: "$self.userFilter()",
+                    match: /(?<=\i=)\i\.\i\.getMembers\(.{0,25}\)\.filter\(\i\)/g,
+                    replace: "$self.useFilter()",
                     predicate: () => settings.store.globalMention || settings.store.onlyDMUsers,
                 },
                 {
-                    match: /\i\.recipients\.map\(.{0,100}:null\}\}\)/g,
-                    replace: "$self.userFilter(true)",
+                    match: /(?<=\i=)\i\.recipients\.map\(.{0,100}:null\}\}\)/,
+                    replace: "$self.useFilter(true)",
                 }
             ],
         },
     ],
-    userFilter(map: boolean = false) {
+    useFilter(map: boolean = false) {
         const foundUsers = Object.values(UserStore.getUsers()) as User[];
         const users = settings.store.onlyDMUsers ? foundUsers.filter(user => ChannelStore.getDMFromUserId(user.id)) : foundUsers;
         return map ? users.map(user => ({ userId: user.id, nick: null })) : users;
