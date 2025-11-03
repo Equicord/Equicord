@@ -6,11 +6,7 @@
 
 import "./styles.css";
 
-import {
-    addServerListElement,
-    removeServerListElement,
-    ServerListRenderPosition,
-} from "@api/ServerList";
+import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import { classNameFactory } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
@@ -60,8 +56,8 @@ export default definePlugin({
             find: "interactiveSelected]",
             replacement: {
                 match: /interactiveSelected.{0,50}children:\[/,
-                replace: "$&$self.renderBoo(arguments[0]),",
-            },
+                replace: "$&$self.renderBoo(arguments[0]),"
+            }
         },
     ],
 
