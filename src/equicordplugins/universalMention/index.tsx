@@ -46,7 +46,7 @@ export default definePlugin({
                     replace: "$1=>true",
                 },
                 {
-                    match: /\i\.\i\.getMembers\(.{0,25}\)\.filter\(\i\)/,
+                    match: /\i\.\i\.getMembers\(.{0,25}\)\.filter\(\i\)/g,
                     replace: "$self.userFilter()",
                     predicate: () => settings.store.globalMention || settings.store.onlyDMUsers,
                 },
