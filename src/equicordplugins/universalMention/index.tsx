@@ -15,6 +15,12 @@ const settings = definePluginSettings({
         description: "Mention users from any server, not just the current one",
         default: false,
         restartNeeded: true
+    },
+    onlyDMUsers: {
+        type: OptionType.BOOLEAN,
+        description: "Only show users you've had DMs with",
+        default: false,
+        restartNeeded: true
     }
 });
 
@@ -39,8 +45,17 @@ export default definePlugin({
                 },
                 {
                     match: /(?<=(\i\.\i\.getUsers\(\)).*?)\i\.\i\.getMembers\(.{0,25}\)\.filter\(\i\)/,
-                    replace: "Object.values($1)",
-                    predicate: () => settings.store.globalMention,
+                    replace: "(()=>{const allUsers=Object.values($1);const dmUsers=Vencord.Settings.plugins.UniversalMention?.onlyDMUsers?allUsers.filter(u=>Vencord.Webpack.Common.ChannelStore.getDMFromUserId(u.id)!=null):allUsers;return dmUsers})()",
+                    predicate: () => settings.store.globalMention || settings.store.onlyDMUsers,
+                }
+            ],
+        },
+        {
+            find: "queryChannelUsers(",
+            replacement: [
+                {
+                    match: /t=u\.recipients\.map\(e=>\{var t;return\{userId:e,nick:null!=\(t=K\.Z\.getNickname\(e\)\)\?t:null\}\}\)/,
+                    replace: "t=(()=>{const allUsers=Object.values(X.default.getUsers());const dmUsers=Vencord.Settings.plugins.UniversalMention?.onlyDMUsers?allUsers.filter(u=>Vencord.Webpack.Common.ChannelStore.getDMFromUserId(u.id)!=null):allUsers;return dmUsers.map(e=>({userId:e.id,nick:null}))})()",
                 }
             ],
         },
