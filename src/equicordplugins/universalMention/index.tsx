@@ -8,6 +8,8 @@ import { definePluginSettings } from "@api/Settings";
 import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { User } from "@vencord/discord-types";
+import { ChannelStore, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     globalMention: {
@@ -40,27 +42,24 @@ export default definePlugin({
             find: ",queryMentionResults(",
             replacement: [
                 {
-                    match: /filter:(\i)=>.{0,75}context:\i\}\)/,
-                    replace: "filter:$1=>true",
+                    match: /(filter:\i).{0,75}context:\i\}\)(?=,allowSnowflake)/,
+                    replace: "$1=>true",
                 },
                 {
-                    match: /(?<=(\i\.\i\.getUsers\(\)).*?)\i\.\i\.getMembers\(.{0,25}\)\.filter\(\i\)/,
-                    replace: "(()=>{const allUsers=Object.values($1);const dmUsers=Vencord.Settings.plugins.UniversalMention?.onlyDMUsers?allUsers.filter(u=>Vencord.Webpack.Common.ChannelStore.getDMFromUserId(u.id)!=null):allUsers;return dmUsers})()",
+                    match: /\i\.\i\.getMembers\(.{0,25}\)\.filter\(\i\)/,
+                    replace: "$self.userFilter()",
                     predicate: () => settings.store.globalMention || settings.store.onlyDMUsers,
-                }
-            ],
-        },
-        {
-            find: "queryChannelUsers(",
-            replacement: [
+                },
                 {
-                    match: /t=u\.recipients\.map\(e=>\{var t;return\{userId:e,nick:null!=\(t=K\.Z\.getNickname\(e\)\)\?t:null\}\}\)/,
-                    replace: "t=(()=>{const allUsers=Object.values(X.default.getUsers());const dmUsers=Vencord.Settings.plugins.UniversalMention?.onlyDMUsers?allUsers.filter(u=>Vencord.Webpack.Common.ChannelStore.getDMFromUserId(u.id)!=null):allUsers;return dmUsers.map(e=>({userId:e.id,nick:null}))})()",
+                    match: /\i\.recipients\.map\(.{0,100}:null\}\}\)/g,
+                    replace: "$self.userFilter(true)",
                 }
             ],
         },
     ],
+    userFilter(map: boolean = false) {
+        const foundUsers = Object.values(UserStore.getUsers()) as User[];
+        const users = settings.store.onlyDMUsers ? foundUsers.filter(user => ChannelStore.getDMFromUserId(user.id)) : foundUsers;
+        return map ? users.map(user => ({ userId: user.id, nick: null })) : users;
+    }
 });
-
-// holy shit, a simple justjxke plugin? can't be real!
-// well, not so simple anymore lmfao
