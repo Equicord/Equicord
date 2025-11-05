@@ -14,3 +14,82 @@
     color: var(--text-default);
     fill: var(--text-default);
 }
+
+.vc-boo-clickable {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.vc-boo-clickable:hover {
+    opacity: 0.8;
+}
+
+.vc-boo-clickable:active {
+    opacity: 0.6;
+}
+
+/* job application */
+@keyframes boo-jumpscare-fade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes boo-jumpscare-fade-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes boo-jumpscare-shake {
+
+    /* stylelint-disable-next-line rule-empty-line-before */
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-5px, -5px) rotate(-2deg);
+    }
+
+    20% {
+        transform: translate(5px, 5px) rotate(2deg);
+    }
+
+    30% {
+        transform: translate(-5px, 5px) rotate(-1deg);
+    }
+
+    40% {
+        transform: translate(5px, -5px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-3px, -3px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(3px, 3px) rotate(1deg);
+    }
+
+    70% {
+        transform: translate(-3px, 3px) rotate(-0.5deg);
+    }
+
+    80% {
+        transform: translate(3px, -3px) rotate(0.5deg);
+    }
+
+    90% {
+        transform: translate(-2px, -2px) rotate(-0.5deg);
+    }
+}
