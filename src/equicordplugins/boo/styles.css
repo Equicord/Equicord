@@ -52,6 +52,27 @@
     gap: 2px;
 }
 
+/* Jumpscare overlay styling */
+.vc-boo-jumpscare-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(0 0 0 / 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    cursor: pointer;
+}
+
+.vc-boo-jumpscare-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
 /* job application */
 @keyframes boo-jumpscare-fade {
     from {

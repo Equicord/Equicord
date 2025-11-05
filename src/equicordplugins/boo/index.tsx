@@ -81,7 +81,7 @@ export const settings = definePluginSettings({
     },
     Boo: {
         type: OptionType.BOOLEAN,
-        description: "",
+        description: "Something might happen if you ignore someone for too long...",
         default: true,
         restartNeeded: false
     }

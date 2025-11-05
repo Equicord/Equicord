@@ -5,7 +5,10 @@
  */
 
 import { createAudioPlayer } from "@api/AudioPlayer";
+import { classNameFactory } from "@api/Styles";
 import { React } from "@webpack/common";
+
+const cl = classNameFactory("vc-boo-");
 
 // GitHub raw URLs for hosted assets (from Equibored repository)
 const JUMPSCARE_IMAGE_URL = "https://raw.githubusercontent.com/Equicord/Equibored/03e4650cc71591796d60c40d6105c31fce9bb481/icons/boo/job.png";
@@ -51,18 +54,8 @@ export function JumpscareOverlay({ onClose }: JumpscareOverlayProps) {
     return (
         <div
             onClick={handleClick}
+            className={cl("jumpscare-overlay")}
             style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100vw",
-                height: "100vh",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 9999,
-                cursor: "pointer",
                 animation: isClosing
                     ? "boo-jumpscare-fade-out 0.5s ease-out forwards"
                     : "boo-jumpscare-fade 0.2s ease-in forwards"
@@ -71,11 +64,7 @@ export function JumpscareOverlay({ onClose }: JumpscareOverlayProps) {
             <img
                 src={JUMPSCARE_IMAGE_URL}
                 alt="Jumpscare"
-                style={{
-                    maxWidth: "90%",
-                    maxHeight: "90%",
-                    objectFit: "contain"
-                }}
+                className={cl("jumpscare-image")}
             />
         </div>
     );
