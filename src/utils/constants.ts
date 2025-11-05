@@ -1178,6 +1178,14 @@ export const EquicordDevs = Object.freeze({
         name: "mja00",
         id: 108698087769260032n
     },
+    vei: {
+        name: "Vei",
+        id: 239414094799699968n
+    },
+    Prism: {
+        name: "Prism",
+        id: 390884143749136386n
+    },
     square: {
         name: "square",
         id: 219363409097916416n
