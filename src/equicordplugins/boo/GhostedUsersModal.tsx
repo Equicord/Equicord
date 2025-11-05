@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { classNameFactory } from "@api/Styles";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, ModalSize } from "@utils/modal";
 import { findByPropsLazy } from "@webpack";
 import { Avatar, Button, ChannelStore, MessageStore, React, Text, UserStore } from "@webpack/common";
 
-const DEFAULT_GROUP_ICON = "https://discord.com/assets/c6851bd0b03f1cca5a8c1e720ea6ea17.png";
+const cl = classNameFactory("vc-boo-");
 
 function formatMessageDate(timestamp: string | Date): string {
     const date = new Date(timestamp);
@@ -89,30 +90,14 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                                 <div
                                     key={channelId}
                                     onClick={() => handleChannelClick(channelId)}
-                                    style={{
-                                        padding: "12px",
-                                        cursor: "pointer",
-                                        borderRadius: "8px",
-                                        marginBottom: "8px",
-                                        backgroundColor: "var(--background-secondary)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "8px",
-                                        transition: "background-color 0.1s ease"
-                                    }}
-                                    onMouseEnter={e => {
-                                        e.currentTarget.style.backgroundColor = "var(--background-modifier-hover)";
-                                    }}
-                                    onMouseLeave={e => {
-                                        e.currentTarget.style.backgroundColor = "var(--background-secondary)";
-                                    }}
+                                    className={cl("ghosted-entry")}
                                 >
                                     <Avatar
                                         src={avatarSrc}
                                         size="SIZE_40"
                                         aria-label={displayName}
                                     />
-                                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "2px" }}>
+                                    <div className={cl("user-info")}>
                                         <Text variant="text-md/normal">
                                             {displayName}
                                         </Text>
