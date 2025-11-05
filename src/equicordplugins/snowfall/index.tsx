@@ -40,7 +40,7 @@ class CopleSnow {
         minSize: 10,
         maxSize: 30,
         type: "text" as "text" | "solid" | "image",
-        content: "&#10052;" as string | string[],
+        content: "❄" as string | string[],
         fadeOut: true,
         autoplay: true,
         interval: 200
@@ -134,15 +134,18 @@ class CopleSnow {
 
         if (type === "image") {
             snowflake = document.createElement("img");
-            (snowflake as HTMLImageElement).src = typeof content === "string"
+            const src = typeof content === "string"
                 ? content
                 : content[Math.floor(Math.random() * cntLength)];
+            (snowflake as HTMLImageElement).src = src;
+            snowflake.setAttribute("draggable", "false");
         } else {
             snowflake = document.createElement("div");
             if (type === "text") {
-                snowflake.innerHTML = typeof content === "string"
+                const textContent = typeof content === "string"
                     ? content
                     : content[Math.floor(Math.random() * cntLength)];
+                snowflake.textContent = textContent;
             }
             // if type is solid we don't need to set content
         }
@@ -166,9 +169,22 @@ class CopleSnow {
 
         let snowflake: HTMLElement;
         if (this.queue.length > 0) {
-            snowflake = this.queue.shift()!;
-            if ((snowflake.dataset.type as string) !== this.options.type) {
+            const reused = this.queue.shift()!;
+            if ((reused.dataset.type as string) !== this.options.type) {
                 snowflake = this.createSnowflake();
+            } else {
+                snowflake = reused;
+                if (this.options.type === "text") {
+                    const { content } = this.options;
+                    if (Array.isArray(content)) {
+                        snowflake.textContent = content[Math.floor(Math.random() * content.length)];
+                    }
+                } else if (this.options.type === "image") {
+                    const { content } = this.options;
+                    if (Array.isArray(content)) {
+                        (snowflake as HTMLImageElement).src = content[Math.floor(Math.random() * content.length)];
+                    }
+                }
             }
         } else {
             snowflake = this.createSnowflake();
@@ -190,7 +206,7 @@ class CopleSnow {
                 styleRules.fontSize = `${size}px`;
                 break;
             case "image":
-                styleRules.width = `${size}px`;
+                styleRules.height = "auto";
                 break;
         }
 
