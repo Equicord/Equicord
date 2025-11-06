@@ -302,6 +302,7 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
         const startX = e.clientX;
         const startWidth = ref.current?.getBoundingClientRect().width || 0;
         const baseWidth = 192; // 12rem in pixels (assuming 16px base font)
+        let pendingScale = settings.store.tabWidthScale;
 
         document.body.style.cursor = "ew-resize";
         document.body.style.userSelect = "none";
@@ -313,7 +314,12 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
 
             // 50% and 200% scale
             const clampedScale = Math.max(0.5, Math.min(2, newScale));
-            settings.store.tabWidthScale = Math.round(clampedScale * 100);
+            pendingScale = Math.round(clampedScale * 100);
+
+            // update CSS variable immediately for visual feedback
+            if (ref.current) {
+                ref.current.style.setProperty("--tab-width-scale", String(pendingScale / 100));
+            }
         };
 
         const handleMouseUp = () => {
@@ -321,6 +327,12 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
             document.removeEventListener("mouseup", handleMouseUp);
             document.body.style.cursor = "";
             document.body.style.userSelect = "";
+
+            settings.store.tabWidthScale = pendingScale;
+
+            if (ref.current) {
+                ref.current.style.removeProperty("--tab-width-scale");
+            }
         };
 
         document.addEventListener("mousemove", handleMouseMove);

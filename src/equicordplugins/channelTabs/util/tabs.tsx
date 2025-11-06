@@ -6,7 +6,7 @@
 
 import { DataStore } from "@api/index";
 import { classNameFactory } from "@api/Styles";
-import { NavigationRouter, SelectedChannelStore, SelectedGuildStore, showToast, Toasts, useState } from "@webpack/common";
+import { NavigationRouter, SelectedChannelStore, SelectedGuildStore, showToast, Toasts, useEffect, useRef, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import { logger, settings } from "./constants";
@@ -25,6 +25,8 @@ interface NavigationContext {
 let lastNavigationContext: NavigationContext | null = null;
 let isViewingViaBookmark = false;
 let isNavigatingViaTabFlag = false;
+let navigationTimeoutId: NodeJS.Timeout | undefined;
+const NAVIGATION_TIMEOUT_MS = 1000;
 
 export function isViewingViaBookmarkMode() {
     return settings.store.bookmarksIndependentFromTabs && isViewingViaBookmark;
@@ -32,6 +34,11 @@ export function isViewingViaBookmarkMode() {
 
 export function isNavigatingViaTab() {
     return isNavigatingViaTabFlag;
+}
+
+export function clearNavigationFlag() {
+    clearTimeout(navigationTimeoutId);
+    isNavigatingViaTabFlag = false;
 }
 
 export function clearBookmarkViewingMode() {
@@ -94,6 +101,8 @@ interface TabStateCache {
     timestamp: number;
 }
 const tabStateCache = new Map<number, TabStateCache>();
+const MAX_CACHE_SIZE = 50;
+const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 // horror
 const _ = {
@@ -329,11 +338,33 @@ function getScrollContainer(): HTMLElement | null {
     return document.querySelector('[class*="scrollerInner_"]') as HTMLElement;
 }
 
+function evictStaleCache() {
+    const now = Date.now();
+
+    for (const [tabId, cache] of tabStateCache.entries()) {
+        if (now - cache.timestamp > CACHE_TTL_MS) {
+            tabStateCache.delete(tabId);
+        }
+    }
+
+    if (tabStateCache.size > MAX_CACHE_SIZE) {
+        const entries = Array.from(tabStateCache.entries())
+            .sort((a, b) => a[1].timestamp - b[1].timestamp);
+
+        const entriesToRemove = entries.slice(0, tabStateCache.size - MAX_CACHE_SIZE);
+        for (const [tabId] of entriesToRemove) {
+            tabStateCache.delete(tabId);
+        }
+    }
+}
+
 function cacheCurrentTabState() {
     if (!settings.store.renderAllTabs) return;
 
     const scrollContainer = getScrollContainer();
     if (scrollContainer && currentlyOpenTab !== undefined) {
+        evictStaleCache();
+
         tabStateCache.set(currentlyOpenTab, {
             scrollPosition: scrollContainer.scrollTop,
             timestamp: Date.now()
@@ -371,6 +402,7 @@ export function moveToTab(id: number) {
     setOpenTab(id);
 
     // SET FLAG: We're initiating navigation
+    clearTimeout(navigationTimeoutId);
     isNavigatingViaTabFlag = true;
 
     // handle special pages with synthetic channelIds
@@ -391,8 +423,10 @@ export function moveToTab(id: number) {
         if (route) {
             setNavigationSource(tab.guildId, tab.channelId, "tab");
             NavigationRouter.transitionTo(route);
-            // Clear flag after navigation completes
-            setTimeout(() => { isNavigatingViaTabFlag = false; }, 100);
+            // Clear flag after navigation with safety timeout
+            navigationTimeoutId = setTimeout(() => {
+                isNavigatingViaTabFlag = false;
+            }, NAVIGATION_TIMEOUT_MS);
             return;
         }
     }
@@ -411,8 +445,10 @@ export function moveToTab(id: number) {
     }
     else update();
 
-    // Clear flag after navigation
-    setTimeout(() => { isNavigatingViaTabFlag = false; }, 100);
+    // Clear flag after navigation with safety timeout
+    navigationTimeoutId = setTimeout(() => {
+        isNavigatingViaTabFlag = false;
+    }, NAVIGATION_TIMEOUT_MS);
 }
 
 export function openStartupTabs(props: BasicChannelTabsProps & { userId: string; }, setUserId: (id: string) => void) {
@@ -427,19 +463,26 @@ export function openStartupTabs(props: BasicChannelTabsProps & { userId: string;
 
     switch (settings.store.onStartup) {
         case "remember": {
-            persistedTabs.then(tabs => {
-                const t = tabs?.[userId];
-                if (!t) {
-                    createTab({ channelId: props.channelId, guildId: props.guildId }, true);
-                    return showToast("Failed to restore tabs", Toasts.Type.FAILURE);
-                }
-                replaceArray(openTabs); // empty the array
-                t.openTabs.forEach(tab => createTab(tab));
-                currentlyOpenTab = openTabs[t.openTabIndex]?.id ?? 0;
+            persistedTabs
+                .then(tabs => {
+                    const t = tabs?.[userId];
+                    if (!t) {
+                        createTab({ channelId: props.channelId, guildId: props.guildId }, true);
+                        return showToast("Failed to restore tabs", Toasts.Type.FAILURE);
+                    }
+                    replaceArray(openTabs); // empty the array
+                    t.openTabs.forEach(tab => createTab(tab));
+                    currentlyOpenTab = openTabs[t.openTabIndex]?.id ?? 0;
 
-                setUserId(userId);
-                moveToTab(currentlyOpenTab);
-            });
+                    setUserId(userId);
+                    moveToTab(currentlyOpenTab);
+                })
+                .catch(error => {
+                    logger.error("Failed to load persisted tabs from DataStore", error);
+                    showToast("Failed to load saved tabs", Toasts.Type.FAILURE);
+                    createTab({ channelId: props.channelId, guildId: props.guildId }, true);
+                    setUserId(userId);
+                });
             break;
         }
         case "preset": {
@@ -550,18 +593,28 @@ export function toggleCompactTab(id: number) {
 }
 
 export function useGhostTabs() {
-    let timeout;
+    const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
     const [count, setCount] = useState(0);
+
     bumpGhostTabCount = () => {
-        setCount(count + 1);
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
+        setCount(prev => prev + 1);
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
             setCount(0);
         }, 3000);
     };
+
     clearGhostTabs = () => {
-        clearTimeout(timeout);
+        clearTimeout(timeoutRef.current);
         setCount(0);
     };
+
+    // cleanup timeout on unmount
+    useEffect(() => {
+        return () => {
+            clearTimeout(timeoutRef.current);
+        };
+    }, []);
+
     return new Array<JSX.Element>(count).fill(<div className={cl("tab", "ghost-tab")} />);
 }

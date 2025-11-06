@@ -131,6 +131,7 @@ export default definePlugin({
         CHANNEL_SELECT(data: { channelId: string | null, guildId: string | null; }) {
             // Skip if this navigation was triggered by us (clicking a tab)
             if (ChannelTabsUtils.isNavigatingViaTab()) {
+                ChannelTabsUtils.clearNavigationFlag();
                 return;
             }
 
