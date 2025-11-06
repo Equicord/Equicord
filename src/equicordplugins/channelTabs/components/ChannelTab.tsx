@@ -99,6 +99,32 @@ export const NotificationDot = ({ channelIds }: { channelIds: string[]; }) => {
         </div> : null;
 };
 
+interface TabNumberBadgeProps {
+    number: number;
+    position: "left" | "right";
+    isSelected: boolean;
+    isCompact: boolean;
+    isHovered: boolean;
+}
+
+export const TabNumberBadge = ({ number, position, isSelected, isCompact, isHovered }: TabNumberBadgeProps) => {
+    // hide badge if:
+    // 1. tab is currently selected
+    // 2. tab is compact AND not hovered
+    const shouldHide = isSelected || (isCompact && !isHovered);
+
+    if (shouldHide) return null;
+
+    return (
+        <div
+            className={cl("tab-number-badge", `position-${position}`)}
+            data-position={position}
+        >
+            {number}
+        </div>
+    );
+};
+
 function ChannelTabContent(props: ChannelTabsProps & {
     guild?: Guild,
     channel?: Channel;
@@ -247,6 +273,9 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
     const [isClosing, setIsClosing] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [isDropTarget, setIsDropTarget] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+
+    const { showTabNumbers, tabNumberPosition } = settings.use(["showTabNumbers", "tabNumberPosition"]);
 
     useEffect(() => {
         if (isEntering) {
@@ -398,6 +427,8 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
         })}
         key={index}
         ref={ref}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         onAuxClick={e => {
             if (e.button === 1 /* middle click */)
                 closeTab(id);
@@ -412,7 +443,29 @@ export default function ChannelTab(props: ChannelTabsProps & { index: number; })
                 className={cl("tab-inner")}
                 data-compact={compact}
             >
+                {/* left position badge */}
+                {showTabNumbers && tabNumberPosition === "left" && (
+                    <TabNumberBadge
+                        number={index + 1}
+                        position="left"
+                        isSelected={isTabSelected(id)}
+                        isCompact={compact}
+                        isHovered={isHovered}
+                    />
+                )}
+
                 <ChannelTabContent {...props} guild={guild} channel={channel} />
+
+                {/* right position badge */}
+                {showTabNumbers && tabNumberPosition === "right" && (
+                    <TabNumberBadge
+                        number={index + 1}
+                        position="right"
+                        isSelected={isTabSelected(id)}
+                        isCompact={compact}
+                        isHovered={isHovered}
+                    />
+                )}
             </div>
         </button>
 

@@ -170,22 +170,32 @@ export function closeTab(id: number) {
 
     if (id === currentlyOpenTab) {
         if (openTabHistory.length) {
+            // use tab history to find most recently used tab
             openTabHistory.pop();
             let newTab: ChannelTabsProps | undefined = undefined;
             while (!newTab) {
                 const maybeNewTabId = openTabHistory.at(-1);
                 openTabHistory.pop();
                 if (!maybeNewTabId) {
-                    moveToTab(openTabs[Math.max(i - 1, 0)].id);
+                    // fallback: go to tab on the right, or leftmost if closing last tab
+                    const fallbackIndex = i < openTabs.length ? i : 0;
+                    moveToTab(openTabs[fallbackIndex].id);
+                    break;
                 }
                 const maybeNewTab = openTabs.find(t => t.id === maybeNewTabId);
                 if (maybeNewTab) newTab = maybeNewTab;
             }
 
-            moveToTab(newTab.id);
-            openTabHistory.pop();
+            if (newTab) {
+                moveToTab(newTab.id);
+                openTabHistory.pop();
+            }
         }
-        else moveToTab(openTabs[Math.max(i - 1, 0)].id);
+        else {
+            // no history: go to tab on the right, or leftmost if closing last tab
+            const fallbackIndex = i < openTabs.length ? i : 0;
+            moveToTab(openTabs[fallbackIndex].id);
+        }
     }
     if (i !== openTabs.length) bumpGhostTabCount();
     else clearGhostTabs();
