@@ -28,14 +28,11 @@ function formatKeybind(keybind: string | string[]): string {
         return keybindStr;
     }
 
-    if (keybindStr.includes("CONTROL+TAB") || keybindStr.includes("CONTROL+SHIFT+TAB")) {
-        return keybindStr.replace(/CONTROL/g, "^").replace(/META/g, "⌘");
-    }
 
     return keybindStr
-        .replace(/CONTROL/g, "⌘")
-        .replace(/CTRL/g, "⌘")
-        .replace(/META/g, "⌘");
+        .replace(/CONTROL/g, "^") // Actual Control key → ^
+        .replace(/CTRL/g, "⌘") // Command/Ctrl key → ⌘
+        .replace(/META/g, "⌘"); // Meta/Command key → ⌘
 }
 
 function KeybindRecorder() {
@@ -56,7 +53,17 @@ function KeybindRecorder() {
             }
 
             const keys: string[] = [];
-            if (event.ctrlKey || event.metaKey) keys.push("CTRL");
+            // On Mac: distinguish between Control (^) and Command (⌘)
+            // event.ctrlKey = true when Control is pressed
+            // event.metaKey = true when Command is pressed
+            if (event.ctrlKey && !event.metaKey) {
+                // user pressed actual Control key (not Command)
+                keys.push("CONTROL");
+            } else if (event.metaKey || event.ctrlKey) {
+                // user pressed Command on Mac, or Ctrl on Windows/Linux
+                // better way to do this? dont care lolz
+                keys.push("CTRL");
+            }
             if (event.shiftKey) keys.push("SHIFT");
             if (event.altKey) keys.push("ALT");
 
@@ -66,7 +73,6 @@ function KeybindRecorder() {
 
             keys.push(mainKey);
 
-            const keybindString = keys.join("+");
             settings.store.hotkey = keys.map(k => k.toLowerCase());
             setError(null);
             setIsListening(false);
