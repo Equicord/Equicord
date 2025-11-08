@@ -8,8 +8,8 @@ import { defaultAudioNames, playAudio } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
 import { Divider, ErrorBoundary, Heading, Paragraph } from "@components/index";
 import { Logger } from "@utils/Logger";
-import { OptionType } from "@utils/types";
-import { Button, ColorPicker, ContextMenuApi, Menu, Select, TextInput, useEffect, useRef, useState } from "@webpack/common";
+import { makeRange, OptionType } from "@utils/types";
+import { Button, ColorPicker, ContextMenuApi, Menu, Select, Slider, TextInput, useEffect, useRef, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import { activeQuestIntervals, getQuestTileClasses, getQuestTileStyle } from "./index";
@@ -72,7 +72,7 @@ export function fetchAndAlertQuests(source: string, logger: Logger): void {
 
                 if (shouldAlert && newOnlyFiltered.length > 0) {
                     logger.info(`[${getFormattedNow()}] New Quests detected. Playing alert sound.`);
-                    playAudio(shouldAlert);
+                    playAudio(shouldAlert, { volume: settings.store.fetchingQuestsAlertVolume });
                 } else {
                     logger.info(`[${getFormattedNow()}] New Quests detected.`);
                 }
@@ -1559,7 +1559,7 @@ function FetchingQuestsSetting(): JSX.Element {
                                         if (activePlayer.current) {
                                             clearActivePlayer();
                                         } else {
-                                            activePlayer.current = playAudio(currentAlertSelection.value as string, { onEnded: clearActivePlayer });
+                                            activePlayer.current = playAudio(currentAlertSelection.value as string, { onEnded: clearActivePlayer, volume: settings.store.fetchingQuestsAlertVolume });
                                             setIsPlaying(true);
                                         }
                                     }
@@ -1567,6 +1567,16 @@ function FetchingQuestsSetting(): JSX.Element {
                                 style={{ cursor: currentAlertSelection && currentAlertSelection.value ? "pointer" : "default" }}
                             >
                                 {SoundIcon(24, 24)}
+                            </div>
+                        </div>
+                        <div className={q("sub-inline-group")}>
+                            <div className={q("inline-group-item", "volume-slider-container")}>
+                                <Slider
+                                    markers={makeRange(0, 100, 10)}
+                                    initialValue={settings.store.fetchingQuestsAlertVolume}
+                                    onValueChange={val => { settings.store.fetchingQuestsAlertVolume = val; }}
+                                    className={q("volume-slider")}
+                                />
                             </div>
                         </div>
                     </div>
@@ -1627,7 +1637,7 @@ export const settings = definePluginSettings({
     disableMembersListActivelyPlayingIcon: {
         type: OptionType.BOOLEAN,
         description: "Disable the actively playing icon in members list items.",
-        default: false,
+        default: true,
         hidden: true
     },
     makeMobileQuestsDesktopCompatible: {
@@ -1766,6 +1776,12 @@ export const settings = definePluginSettings({
         type: OptionType.STRING | OptionType.CUSTOM,
         description: "The sound to play when new Quests are detected.",
         default: defaultFetchQuestsAlert, // Item from predefined list or a URL to CSP valid audio file.
+        hidden: true
+    },
+    fetchingQuestsAlertVolume: {
+        type: OptionType.NUMBER,
+        description: "The volume for the new Quest alert sound.",
+        default: 100, // 0 - 100
         hidden: true
     },
     restyleQuests: {
