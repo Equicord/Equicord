@@ -32,6 +32,30 @@ let reconnectTimer: NodeJS.Timeout | null = null;
 const RECONNECT_INTERVAL = 5000;
 
 export const settings = definePluginSettings({
+    customHost: {
+        type: OptionType.STRING,
+        description: "Custom host for arRPC server (leave empty to use default/Equibop's built-in)",
+        placeholder: "127.0.0.1",
+        default: "",
+        restartNeeded: true
+    },
+    customPort: {
+        type: OptionType.NUMBER,
+        description: "Custom port for arRPC server (leave 0 to use default/Equibop's built-in)",
+        default: 0,
+        restartNeeded: true
+    },
+    autoReconnect: {
+        type: OptionType.BOOLEAN,
+        description: "Automatically reconnect when connection is lost",
+        default: true
+    },
+    reconnectInterval: {
+        type: OptionType.NUMBER,
+        description: "Reconnection interval in milliseconds",
+        default: 5000,
+        disabled: () => !settings.store.autoReconnect
+    },
     oldVerNotice: {
         type: OptionType.BOOLEAN,
         description: "old version notice for why arrpc bun doesnt work",
@@ -49,7 +73,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "arRPCBun",
-    description: "arRPCBun integration",
+    description: "Discord Rich Presence bridge using arRPC-Bun. Enables Discord Rich Presence (game activity) for games and applications on your system, https://github.com/Creationsss/arrpc-bun",
     authors: [EquicordDevs.creations],
     reporterTestable: ReporterTestable.None,
     enabledByDefault: IS_EQUIBOP,
@@ -149,11 +173,13 @@ export default definePlugin({
 
     connect() {
         const arrpcStatus = IS_EQUIBOP ? VesktopNative.arrpc?.getStatus?.() : null;
-        const host = arrpcStatus?.host || "127.0.0.1";
-        const port = arrpcStatus?.port || 1337;
+
+        const host = settings.store.customHost || arrpcStatus?.host || "127.0.0.1";
+        const port = settings.store.customPort || arrpcStatus?.port || 1337;
 
         const wsUrl = `ws://${host}:${port}`;
-        logger.info(`Connecting to arRPCBun at ${wsUrl}${arrpcStatus?.host ? "" : " (using defaults)"}`);
+        const isCustom = settings.store.customHost || settings.store.customPort;
+        logger.info(`Connecting to arRPCBun at ${wsUrl}${isCustom ? " (custom)" : arrpcStatus?.host ? "" : " (using defaults)"}`);
 
         if (ws) ws.close();
         ws = new WebSocket(wsUrl);
@@ -165,14 +191,18 @@ export default definePlugin({
         };
 
         ws.onclose = () => {
-            logger.info("WebSocket closed, will attempt reconnect in 5s");
+            const interval = settings.store.reconnectInterval || RECONNECT_INTERVAL;
+            logger.info(`WebSocket closed${settings.store.autoReconnect ? `, will attempt reconnect in ${interval}ms` : ""}`);
             FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity: null });
 
             if (reconnectTimer) clearTimeout(reconnectTimer);
-            reconnectTimer = setTimeout(() => {
-                logger.info("Attempting to reconnect...");
-                this.connect();
-            }, RECONNECT_INTERVAL);
+
+            if (settings.store.autoReconnect) {
+                reconnectTimer = setTimeout(() => {
+                    logger.info("Attempting to reconnect...");
+                    this.connect();
+                }, interval);
+            }
         };
 
         ws.onopen = () => {
