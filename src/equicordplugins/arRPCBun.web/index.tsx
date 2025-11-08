@@ -6,6 +6,9 @@
 
 import { popNotice, showNotice } from "@api/Notices";
 import { definePluginSettings } from "@api/Settings";
+import { HeadingSecondary } from "@components/Heading";
+import { Link } from "@components/Link";
+import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { isAnyPluginDev, isEquicordGuild } from "@utils/misc";
@@ -73,11 +76,21 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "arRPCBun",
-    description: "Discord Rich Presence bridge using arRPC-Bun. Enables Discord Rich Presence (game activity) for games and applications on your system, https://github.com/Creationsss/arrpc-bun",
+    description: "Discord Rich Presence bridge using arRPC-Bun. Enables Discord Rich Presence (game activity) for games and applications",
     authors: [EquicordDevs.creations],
     reporterTestable: ReporterTestable.None,
     enabledByDefault: IS_EQUIBOP,
     settings,
+
+    settingsAboutComponent: () => (
+        <>
+            <HeadingSecondary>Learn More</HeadingSecondary>
+            <Paragraph>
+                <Link href="https://github.com/Creationsss/arrpc-bun">View the arRPC-Bun repository on GitHub</Link> for documentation,
+                setup instructions, and source code.
+            </Paragraph>
+        </>
+    ),
 
     commands: [
         {
