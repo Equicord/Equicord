@@ -961,11 +961,11 @@ export default definePlugin({
             group: true,
             replacement: [
                 {
-                    match: /(?=if\(\(0,)/,
+                    match: /(?=if\(\(0,.{0,30}?isBlockedOrIgnored)/,
                     replace: "const shouldHideMembersListActivelyPlayingIcon=$self.shouldHideMembersListActivelyPlayingIcon();"
                 },
                 {
-                    match: /(?<=\i\(\),\i&&)/,
+                    match: /(?<=}\),\i\(\),\i&&)/,
                     replace: "!shouldHideMembersListActivelyPlayingIcon&&"
                 }
             ]
@@ -977,11 +977,11 @@ export default definePlugin({
             group: true,
             replacement: [
                 {
-                    match: /(?=if\(\i\))/,
+                    match: /(?=if\(\i\)return null;let \i=function)/,
                     replace: "const shouldHideMembersListActivelyPlayingIcon=$self.shouldHideMembersListActivelyPlayingIcon();"
                 },
                 {
-                    match: /(?<=\i\(\),\i&&)/,
+                    match: /(?<=}\),\i\(\),\i&&)/,
                     replace: "!shouldHideMembersListActivelyPlayingIcon&&"
                 }
             ]
