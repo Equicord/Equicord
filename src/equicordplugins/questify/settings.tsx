@@ -370,7 +370,8 @@ function validateDisableQuestSetting() {
         disableQuestsPopupAboveAccountPanel,
         disableQuestsBadgeOnUserProfiles,
         disableQuestsGiftInventoryRelocationNotice,
-        disableFriendsListActiveNowPromotion
+        disableFriendsListActiveNowPromotion,
+        disableMembersListActivelyPlayingIcon
     } = settings.use([
         "disableQuestsEverything",
         "disableQuestsDiscoveryTab",
@@ -378,10 +379,11 @@ function validateDisableQuestSetting() {
         "disableQuestsPopupAboveAccountPanel",
         "disableQuestsBadgeOnUserProfiles",
         "disableQuestsGiftInventoryRelocationNotice",
-        "disableFriendsListActiveNowPromotion"
+        "disableFriendsListActiveNowPromotion",
+        "disableMembersListActivelyPlayingIcon"
     ]);
 
-    if (disableQuestsDiscoveryTab || disableQuestsFetchingQuests || disableQuestsPopupAboveAccountPanel || disableQuestsBadgeOnUserProfiles || disableQuestsGiftInventoryRelocationNotice || disableFriendsListActiveNowPromotion) {
+    if (disableQuestsDiscoveryTab || disableQuestsFetchingQuests || disableQuestsPopupAboveAccountPanel || disableQuestsBadgeOnUserProfiles || disableQuestsGiftInventoryRelocationNotice || disableFriendsListActiveNowPromotion || disableMembersListActivelyPlayingIcon) {
         settings.store.disableQuestsEverything = false;
     }
 }
@@ -672,6 +674,7 @@ function DisableQuestsSetting(): JSX.Element {
         disableQuestsBadgeOnUserProfiles,
         disableQuestsGiftInventoryRelocationNotice,
         disableFriendsListActiveNowPromotion,
+        disableMembersListActivelyPlayingIcon,
         makeMobileQuestsDesktopCompatible,
         completeVideoQuestsInBackground,
         completeGameQuestsInBackground,
@@ -684,6 +687,7 @@ function DisableQuestsSetting(): JSX.Element {
         "disableQuestsBadgeOnUserProfiles",
         "disableQuestsGiftInventoryRelocationNotice",
         "disableFriendsListActiveNowPromotion",
+        "disableMembersListActivelyPlayingIcon",
         "makeMobileQuestsDesktopCompatible",
         "completeVideoQuestsInBackground",
         "completeGameQuestsInBackground",
@@ -693,11 +697,12 @@ function DisableQuestsSetting(): JSX.Element {
     const options: DynamicDropdownSettingOption[] = [
         { label: "Disable Everything", value: "everything", selected: disableQuestsEverything, type: "disable" },
         { label: "Disable Fetching Quests", value: "fetching", selected: disableQuestsFetchingQuests, type: "disable" },
-        { label: "Disable Discovery Quests Tab", value: "discovery", selected: disableQuestsDiscoveryTab, type: "disable" },
+        { label: "Disable Quests Tab in DMs", value: "discovery", selected: disableQuestsDiscoveryTab, type: "disable" },
         { label: "Disable Badge on User Profiles", value: "badge", selected: disableQuestsBadgeOnUserProfiles, type: "disable" },
         { label: "Disable Popup Above User Panel", value: "popup", selected: disableQuestsPopupAboveAccountPanel, type: "disable" },
         { label: "Disable Gift Inventory Relocation Notice", value: "inventory", selected: disableQuestsGiftInventoryRelocationNotice, type: "disable" },
         { label: "Disable Friends List Active Now Promotion", value: "friends-list", selected: disableFriendsListActiveNowPromotion, type: "disable" },
+        { label: "Disable Members List Actively Playing Icon", value: "members-list", selected: disableMembersListActivelyPlayingIcon, type: "disable" },
         { label: "Make Mobile Quests Desktop Compatible", value: "mobile-desktop-compatible", selected: makeMobileQuestsDesktopCompatible, type: "modification" },
         { label: "Complete Game Quests in Background", value: "game-quests-background", selected: completeGameQuestsInBackground, type: "modification" },
         { label: "Complete Video Quests in Background", value: "video-quests-background", selected: completeVideoQuestsInBackground, type: "modification" },
@@ -728,6 +733,7 @@ function DisableQuestsSetting(): JSX.Element {
         settings.store.disableQuestsBadgeOnUserProfiles = enabledValues.includes("badge");
         settings.store.disableQuestsGiftInventoryRelocationNotice = enabledValues.includes("inventory");
         settings.store.disableFriendsListActiveNowPromotion = enabledValues.includes("friends-list");
+        settings.store.disableMembersListActivelyPlayingIcon = enabledValues.includes("members-list");
         settings.store.makeMobileQuestsDesktopCompatible = enabledValues.includes("mobile-desktop-compatible");
         settings.store.completeGameQuestsInBackground = enabledValues.includes("game-quests-background");
         settings.store.completeVideoQuestsInBackground = enabledValues.includes("video-quests-background");
@@ -1616,6 +1622,12 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Disable the promotion of Quests for games played by friends.",
         default: true,
+        hidden: true
+    },
+    disableMembersListActivelyPlayingIcon: {
+        type: OptionType.BOOLEAN,
+        description: "Disable the actively playing icon in members list items.",
+        default: false,
         hidden: true
     },
     makeMobileQuestsDesktopCompatible: {
