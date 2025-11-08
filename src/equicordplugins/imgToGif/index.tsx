@@ -78,7 +78,7 @@ async function resolveImage(options: CommandArgument[], ctx: CommandContext): Pr
 export default definePlugin({
     name: "ImgToGif",
     description: "Adds a /imgtogif slash command to create a gif from any image",
-    authors: [EquicordDevs.zyqunix, EquicordDevs.neoarz],
+    authors: [EquicordDevs.zyqunix],
     commands: [
         {
             inputType: ApplicationCommandInputType.BUILT_IN,
