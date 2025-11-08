@@ -934,7 +934,6 @@ export default definePlugin({
         {
             // Hides Quests tab in the DMs tab list.
             find: "QUEST_HOME_V2):",
-            group: true,
             replacement: [
                 {
                     match: /(?<="family-center"\):null,\i)/,
@@ -962,6 +961,7 @@ export default definePlugin({
             // Same as above, probably? Not sure when
             // each function is used, so patching both.
             find: "iconOnly)},",
+            group: true,
             replacement: [
                 {
                     match: /(?=if\(\i\))/,
