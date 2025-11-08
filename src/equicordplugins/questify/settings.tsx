@@ -367,6 +367,7 @@ function validateDisableQuestSetting() {
         disableQuestsEverything,
         disableQuestsDiscoveryTab,
         disableQuestsFetchingQuests,
+        disableQuestsDirectMessagesTab,
         disableQuestsPopupAboveAccountPanel,
         disableQuestsBadgeOnUserProfiles,
         disableQuestsGiftInventoryRelocationNotice,
@@ -376,6 +377,7 @@ function validateDisableQuestSetting() {
         "disableQuestsEverything",
         "disableQuestsDiscoveryTab",
         "disableQuestsFetchingQuests",
+        "disableQuestsDirectMessagesTab",
         "disableQuestsPopupAboveAccountPanel",
         "disableQuestsBadgeOnUserProfiles",
         "disableQuestsGiftInventoryRelocationNotice",
@@ -383,7 +385,7 @@ function validateDisableQuestSetting() {
         "disableMembersListActivelyPlayingIcon"
     ]);
 
-    if (disableQuestsDiscoveryTab || disableQuestsFetchingQuests || disableQuestsPopupAboveAccountPanel || disableQuestsBadgeOnUserProfiles || disableQuestsGiftInventoryRelocationNotice || disableFriendsListActiveNowPromotion || disableMembersListActivelyPlayingIcon) {
+    if (disableQuestsDiscoveryTab || disableQuestsDirectMessagesTab || disableQuestsFetchingQuests || disableQuestsPopupAboveAccountPanel || disableQuestsBadgeOnUserProfiles || disableQuestsGiftInventoryRelocationNotice || disableFriendsListActiveNowPromotion || disableMembersListActivelyPlayingIcon) {
         settings.store.disableQuestsEverything = false;
     }
 }
@@ -670,6 +672,7 @@ function DisableQuestsSetting(): JSX.Element {
         disableQuestsEverything,
         disableQuestsDiscoveryTab,
         disableQuestsFetchingQuests,
+        disableQuestsDirectMessagesTab,
         disableQuestsPopupAboveAccountPanel,
         disableQuestsBadgeOnUserProfiles,
         disableQuestsGiftInventoryRelocationNotice,
@@ -683,6 +686,7 @@ function DisableQuestsSetting(): JSX.Element {
         "disableQuestsEverything",
         "disableQuestsDiscoveryTab",
         "disableQuestsFetchingQuests",
+        "disableQuestsDirectMessagesTab",
         "disableQuestsPopupAboveAccountPanel",
         "disableQuestsBadgeOnUserProfiles",
         "disableQuestsGiftInventoryRelocationNotice",
@@ -697,9 +701,10 @@ function DisableQuestsSetting(): JSX.Element {
     const options: DynamicDropdownSettingOption[] = [
         { label: "Disable Everything", value: "everything", selected: disableQuestsEverything, type: "disable" },
         { label: "Disable Fetching Quests", value: "fetching", selected: disableQuestsFetchingQuests, type: "disable" },
-        { label: "Disable Quests Tab in DMs", value: "discovery", selected: disableQuestsDiscoveryTab, type: "disable" },
+        { label: "Disable Quests Tab in DMs", value: "dms", selected: disableQuestsDirectMessagesTab, type: "disable" },
         { label: "Disable Badge on User Profiles", value: "badge", selected: disableQuestsBadgeOnUserProfiles, type: "disable" },
         { label: "Disable Popup Above User Panel", value: "popup", selected: disableQuestsPopupAboveAccountPanel, type: "disable" },
+        { label: "Disable Discovery Tab Relocation Notice", value: "discovery", selected: disableQuestsDiscoveryTab, type: "disable" },
         { label: "Disable Gift Inventory Relocation Notice", value: "inventory", selected: disableQuestsGiftInventoryRelocationNotice, type: "disable" },
         { label: "Disable Friends List Active Now Promotion", value: "friends-list", selected: disableFriendsListActiveNowPromotion, type: "disable" },
         { label: "Disable Members List Actively Playing Icon", value: "members-list", selected: disableMembersListActivelyPlayingIcon, type: "disable" },
@@ -729,6 +734,7 @@ function DisableQuestsSetting(): JSX.Element {
         settings.store.disableQuestsEverything = enabledValues.includes("everything");
         settings.store.disableQuestsDiscoveryTab = enabledValues.includes("discovery");
         settings.store.disableQuestsFetchingQuests = enabledValues.includes("fetching");
+        settings.store.disableQuestsDirectMessagesTab = enabledValues.includes("dms");
         settings.store.disableQuestsPopupAboveAccountPanel = enabledValues.includes("popup");
         settings.store.disableQuestsBadgeOnUserProfiles = enabledValues.includes("badge");
         settings.store.disableQuestsGiftInventoryRelocationNotice = enabledValues.includes("inventory");
@@ -1607,6 +1613,12 @@ export const settings = definePluginSettings({
     disableQuestsDiscoveryTab: {
         type: OptionType.BOOLEAN,
         description: "Disable Quest tab in the Discovery page.",
+        default: false,
+        hidden: true
+    },
+    disableQuestsDirectMessagesTab: {
+        type: OptionType.BOOLEAN,
+        description: "Disable Quest tab in Direct Messages.",
         default: false,
         hidden: true
     },
