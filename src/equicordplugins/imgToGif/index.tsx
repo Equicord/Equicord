@@ -78,7 +78,7 @@ async function resolveImage(options: CommandArgument[], ctx: CommandContext): Pr
 export default definePlugin({
     name: "ImgToGif",
     description: "Adds a /imgtogif slash command to create a gif from any image",
-    authors: [EquicordDevs.zyqunix],
+    authors: [EquicordDevs.zyqunix, EquicordDevs.neoarz],
     commands: [
         {
             inputType: ApplicationCommandInputType.BUILT_IN,
@@ -108,8 +108,22 @@ export default definePlugin({
 
                     const avatar = await loadImage(image);
 
-                    const gifHeight = height ?? DEFAULT_RESOLUTION;
-                    const gifWidth = width ?? DEFAULT_RESOLUTION;
+                    let gifWidth: number;
+                    let gifHeight: number;
+
+                    if (width && height) {
+                        gifWidth = width;
+                        gifHeight = height;
+                    } else if (width) {
+                        gifWidth = width;
+                        gifHeight = Math.round((avatar.height / avatar.width) * width);
+                    } else if (height) {
+                        gifHeight = height;
+                        gifWidth = Math.round((avatar.width / avatar.height) * height);
+                    } else {
+                        gifWidth = avatar.width;
+                        gifHeight = avatar.height;
+                    }
 
                     const gif = GIFEncoder();
                     const canvas = document.createElement("canvas");
@@ -134,7 +148,8 @@ export default definePlugin({
                     }
 
                     gif.finish();
-                    const file = new File([gif.bytesView()], "converted.gif", { type: "image/gif" });
+                    const originalName = image.name ? image.name.replace(/\.[^/.]+$/, "") : "converted";
+                    const file = new File([new Uint8Array(gif.bytesView())], `${originalName}.gif`, { type: "image/gif" });
                     setTimeout(() => UploadHandler.promptToUpload([file], cmdCtx.channel, DraftType.ChannelMessage), 10);
                 } catch (err) {
                     UploadManager.clearAll(cmdCtx.channel.id, DraftType.SlashCommand);
