@@ -199,8 +199,7 @@ export function closeTab(id: number) {
                 moveToTab(newTab.id);
                 openTabHistory.pop();
             }
-        }
-        else {
+        } else {
             // no history: go to tab on the right, or leftmost if closing last tab
             const fallbackIndex = i < openTabs.length ? i : 0;
             moveToTab(openTabs[fallbackIndex].id);
