@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings, Settings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
+import { EquicordDevs, IS_MAC } from "@utils/constants";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
 
@@ -163,14 +163,16 @@ async function reloadThemes() {
     showToast(`Reloaded ${themeList.length} themes`, Toasts.Type.SUCCESS);
 }
 
+const isCtrl = (e: KeyboardEvent) => IS_MAC ? e.metaKey : e.ctrlKey;
+
 function handleKeyDown(e: KeyboardEvent) {
-    if (e.ctrlKey && e.shiftKey && e.altKey) {
+    if (isCtrl(e) && e.shiftKey && e.altKey) {
         e.preventDefault();
         reloadThemes();
         return;
     }
 
-    if (!e.ctrlKey || !e.shiftKey) return;
+    if (!isCtrl(e) || !e.shiftKey) return;
 
     if (e.key === "ArrowRight") {
         e.preventDefault();
@@ -189,7 +191,7 @@ function handleKeyDown(e: KeyboardEvent) {
 
 export default definePlugin({
     name: "QuickThemeSwitcher",
-    description: "Quickly switch between themes using keyboard shortcuts. Use Ctrl+Shift+Arrows to navigate (Left/Right: cycle themes, Up: enable, Down: disable). Press Ctrl+Shift+Alt to reload the theme list.",
+    description: "Quickly switch between themes using keyboard shortcuts. Use Ctrl/Cmd+Shift+Arrows to navigate (Left/Right: cycle themes, Up: enable, Down: disable). Press Ctrl/Cmd+Shift+Alt to reload the theme list.",
     authors: [EquicordDevs.Prism],
     settings,
     startAt: StartAt.DOMContentLoaded,
