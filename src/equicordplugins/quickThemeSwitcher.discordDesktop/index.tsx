@@ -5,6 +5,8 @@
  */
 
 import { definePluginSettings, Settings } from "@api/Settings";
+import { HeadingSecondary } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs, IS_MAC } from "@utils/constants";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
@@ -100,7 +102,7 @@ async function getAllThemes(): Promise<ThemeItem[]> {
 }
 
 function switchTheme(direction: "next" | "prev") {
-    if (themeList.length === 0) return;
+    if (!themeList) return;
 
     currentIndex = direction === "next"
         ? (currentIndex + 1) % themeList.length
@@ -133,7 +135,7 @@ function findCurrentThemeIndex() {
 }
 
 function toggleCurrentTheme(enable: boolean) {
-    if (themeList.length === 0) return;
+    if (!themeList) return;
 
     const theme = themeList[currentIndex];
     const isLocal = theme.type === "local";
@@ -172,7 +174,7 @@ function handleKeyDown(e: KeyboardEvent) {
         return;
     }
 
-    if (!isCtrl(e) || !e.shiftKey) return;
+    if (!(isCtrl(e) && e.shiftKey)) return;
 
     if (e.key === "ArrowRight") {
         e.preventDefault();
@@ -191,10 +193,20 @@ function handleKeyDown(e: KeyboardEvent) {
 
 export default definePlugin({
     name: "QuickThemeSwitcher",
-    description: "Quickly switch between themes using keyboard shortcuts. Use Ctrl/Cmd+Shift+Arrows to navigate (Left/Right: cycle themes, Up: enable, Down: disable). Press Ctrl/Cmd+Shift+Alt to reload the theme list.",
+    description: "Quickly switch between themes using keyboard shortcuts.",
     authors: [EquicordDevs.Prism],
     settings,
     startAt: StartAt.DOMContentLoaded,
+    settingsAboutComponent: () => (
+        <>
+            <HeadingSecondary>Bindings</HeadingSecondary>
+            <Paragraph>
+                Use Ctrl/Cmd+Shift+Arrows to navigate (Left/Right: cycle themes, Up: enable, Down: disable).
+                <br />
+                Press Ctrl/Cmd+Shift+Alt to reload the theme list.
+            </Paragraph>
+        </>
+    ),
 
     async start() {
         themeList = await getAllThemes();
