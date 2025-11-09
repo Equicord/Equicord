@@ -8,6 +8,7 @@ import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
+import { IS_MAC } from "@utils/constants";
 import { Button, React, Text, useEffect, useRef, useState } from "@webpack/common";
 import { JSX } from "react";
 
@@ -41,7 +42,12 @@ function KeybindInput({ label, description, settingKey, enabledKey }: KeybindInp
 
             // Build keybind string
             const keys: string[] = [];
-            if (event.ctrlKey || event.metaKey) keys.push("CTRL");
+            if (IS_MAC && event.ctrlKey) {
+                if (event.ctrlKey) keys.push("CONTROL");
+                if (event.metaKey) keys.push("CTRL");
+            } else if (event.ctrlKey) {
+                keys.push("CTRL");
+            }
             if (event.shiftKey) keys.push("SHIFT");
             if (event.altKey) keys.push("ALT");
 
