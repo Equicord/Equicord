@@ -28,7 +28,6 @@ function formatKeybind(keybind: string | string[]): string {
         return keybindStr;
     }
 
-
     return keybindStr
         .replace(/CONTROL/g, "^") // Actual Control key → ^
         .replace(/CTRL/g, "⌘") // Command/Ctrl key → ⌘
@@ -53,15 +52,10 @@ function KeybindRecorder() {
             }
 
             const keys: string[] = [];
-            // On Mac: distinguish between Control (^) and Command (⌘)
-            // event.ctrlKey = true when Control is pressed
-            // event.metaKey = true when Command is pressed
-            if (event.ctrlKey && !event.metaKey) {
-                // user pressed actual Control key (not Command)
-                keys.push("CONTROL");
-            } else if (event.metaKey || event.ctrlKey) {
-                // user pressed Command on Mac, or Ctrl on Windows/Linux
-                // better way to do this? dont care lolz
+            if (IS_MAC && event.ctrlKey) {
+                if (event.ctrlKey) keys.push("CONTROL");
+                if (event.metaKey) keys.push("CTRL");
+            } else if (event.ctrlKey) {
                 keys.push("CTRL");
             }
             if (event.shiftKey) keys.push("SHIFT");
