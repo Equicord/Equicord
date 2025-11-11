@@ -654,18 +654,6 @@ function handleHoveringMessage(message: any, isHovering: boolean) {
     }, [messageId, groupId, isHovering]);
 }
 
-function handleHoveringMessageMentions(message: any, animate: boolean) {
-    if (!message) return;
-
-    if (animate) {
-        addHoveringMessage(message.id);
-        addHoveringMessage(message.showMeYourNameGroupId);
-    } else {
-        removeHoveringMessage(message.id);
-        removeHoveringMessage(message.showMeYourNameGroupId);
-    }
-}
-
 function addHoveringMessage(id: string) {
     if (!id) return;
 
@@ -979,7 +967,6 @@ export default definePlugin({
 
     addHoveringMessage,
     removeHoveringMessage,
-    handleHoveringMessageMentions,
     handleHoveringMessage,
     addHoveringReactionPopout,
     removeHoveringReactionPopout,
