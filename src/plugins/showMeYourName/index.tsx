@@ -670,8 +670,7 @@ function addHoveringMessage(id: string) {
     if (!id) return;
 
     const currentCount = hoveringMessageMap.get(id) || 0;
-    const newCount = currentCount + 1;
-    hoveringMessageMap.set(id, newCount);
+    hoveringMessageMap.set(id, currentCount + 1);
 
     if (currentCount === 0) {
         settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
@@ -685,10 +684,7 @@ function removeHoveringMessage(id: string) {
 
     if (currentCount <= 1) {
         hoveringMessageMap.delete(id);
-
-        if (currentCount === 1) {
-            settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
-        }
+        settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
     } else {
         hoveringMessageMap.set(id, currentCount - 1);
     }
