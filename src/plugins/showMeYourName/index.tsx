@@ -361,7 +361,7 @@ function renderUsername(
     const resolvedDisplayNameColor = author ? resolveColor(author, displayNameColor.trim(), "", canUseGradient) : null;
     const resolvedNicknameColor = author ? resolveColor(author, nicknameColor.trim(), "", canUseGradient) : null;
     const resolvedFriendNameColor = author ? resolveColor(author, friendNameColor.trim(), "", canUseGradient) : null;
-    const affixColor = { color: textMutedValue, "-webkit-text-fill-color": textMutedValue, isolation: "isolate", "white-space": "pre", "font-family": "gg sans" };
+    const affixColor = { color: textMutedValue, "-webkit-text-fill-color": textMutedValue, isolation: "isolate", "white-space": "pre", "font-family": "var(--font-primary)" };
     const [username, display, nick, friend] = getProcessedNames(author, truncateAllNamesWithStreamerMode, discriminators);
 
     const names: Record<string, [string | null, object | null]> = {
@@ -487,7 +487,7 @@ function renderUsername(
     const groupId = !(message as any)?.showMeYourNameGroupId ? "" : `g-${(message as any).showMeYourNameGroupId}`;
 
     const isHovering = (isMessage || isReply || isMention)
-        ? ((messageId && hoveringMessageAuthorMap.has(messageId)) || (groupId && hoveringMessageAuthorMap.has(groupId)))
+        ? ((messageId && hoveringMessageMap.has(messageId)) || (groupId && hoveringMessageMap.has(groupId)))
         : isReactionsPopout
             ? hoveringReactionPopoutSet.has((author as User).id)
             : false;
@@ -562,7 +562,7 @@ function renderUsername(
                         // On non-primary names, allow disabling the gradients completely, or just their animation & glow.
                         className={secondNameClasses}
                         style={{
-                            ...(ignoreFonts ? { "font-family": "gg sans" } : {}),
+                            ...(ignoreFonts ? { "font-family": "var(--font-primary)" } : {}),
                             ...(ignoreGradients
                                 ? second.style.normal.adjusted
                                 : shouldAnimateGradients && shouldAnimateSecondaryNames && second.style.gradient
@@ -588,7 +588,7 @@ function renderUsername(
                     <span
                         className={thirdNameClasses}
                         style={{
-                            ...(ignoreFonts ? { "font-family": "gg sans" } : {}),
+                            ...(ignoreFonts ? { "font-family": "var(--font-primary)" } : {}),
                             ...(ignoreGradients
                                 ? third.style.normal.adjusted
                                 : shouldAnimateGradients && shouldAnimateSecondaryNames && third.style.gradient
@@ -614,7 +614,7 @@ function renderUsername(
                     <span
                         className={fourthNameClasses}
                         style={{
-                            ...(ignoreFonts ? { "font-family": "gg sans" } : {}),
+                            ...(ignoreFonts ? { "font-family": "var(--font-primary)" } : {}),
                             ...(ignoreGradients
                                 ? fourth.style.normal.adjusted
                                 : shouldAnimateGradients && shouldAnimateSecondaryNames && fourth.style.gradient
@@ -634,7 +634,7 @@ function renderUsername(
     return [allDataText, nameElement, first.name];
 }
 
-const hoveringMessageAuthorMap = new Map<string, number>();
+const hoveringMessageMap = new Map<string, number>();
 const hoveringReactionPopoutSet = new Set<string>();
 
 function handleHoveringMessageAuthor(message: any, isHovering: boolean) {
@@ -669,9 +669,9 @@ function handleHoveringMessageMentions(message: any, animate: boolean) {
 function addHoveringMessage(id: string) {
     if (!id) return;
 
-    const currentCount = hoveringMessageAuthorMap.get(id) || 0;
+    const currentCount = hoveringMessageMap.get(id) || 0;
     const newCount = currentCount + 1;
-    hoveringMessageAuthorMap.set(id, newCount);
+    hoveringMessageMap.set(id, newCount);
 
     if (currentCount === 0) {
         settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
@@ -681,16 +681,16 @@ function addHoveringMessage(id: string) {
 function removeHoveringMessage(id: string) {
     if (!id) return;
 
-    const currentCount = hoveringMessageAuthorMap.get(id) || 0;
+    const currentCount = hoveringMessageMap.get(id) || 0;
 
     if (currentCount <= 1) {
-        hoveringMessageAuthorMap.delete(id);
+        hoveringMessageMap.delete(id);
 
         if (currentCount === 1) {
             settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
         }
     } else {
-        hoveringMessageAuthorMap.set(id, currentCount - 1);
+        hoveringMessageMap.set(id, currentCount - 1);
     }
 }
 
