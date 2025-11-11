@@ -85,7 +85,7 @@ export function _injectButtons(buttons: ReactNode[], props: ChatBarProps) {
 
     for (const [key, Button] of buttonFactories) {
         buttons.push({
-            key: "vcbuttons",
+            key: key,
             // @ts-ignore custom property to know if its an equicord button
             isCustom: true,
             node: <ErrorBoundary noop key={key} onError={e => logger.error(`Failed to render ${key}`, e.error)}>
