@@ -839,6 +839,7 @@ export default definePlugin({
             ]
         },
         {
+            // Track hovering on messages to animate mentions.
             // Attach the group ID to their messages to allow animating mentions within a group.
             find: "CUSTOM_GIFT?\"\":",
             replacement: {
