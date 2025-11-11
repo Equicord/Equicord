@@ -48,12 +48,10 @@ export default definePlugin({
         },
         {
             find: ".gifts)",
-            replacement: [
-                {
-                    match: /(?<=,.{0,5}\(null==\(\i=\i\.stickers\)\?void 0.*?(\i)\.push\(\{.{0,15}node:(.{0,15}{disabled:\i,type:\i)},"sticker"\)\}\))/,
-                    replace: ",arguments[0].type?.submit?.button&&$1.push({key:\"stickers+\",isCustom:true,node:$2,stickersType:\"stickers+\"},\"stickers+\")})"
-                },
-            ]
+            replacement: {
+                match: /(?<=,.{0,5}\(null==\(\i=\i\.stickers\)\?void 0.*?(\i)\.push\(\{.{0,15}node:(.{0,15}{disabled:\i,type:\i)},"sticker"\)\}\))/,
+                replace: ",arguments[0].type?.submit?.button&&$1.push({key:\"stickers+\",isCustom:true,node:$2,stickersType:\"stickers+\"},\"stickers+\")})"
+            }
         },
         {
             find: "#{intl::EXPRESSION_PICKER_CATEGORIES_A11Y_LABEL}",
