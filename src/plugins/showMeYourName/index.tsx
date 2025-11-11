@@ -637,7 +637,7 @@ function renderUsername(
 const hoveringMessageMap = new Map<string, number>();
 const hoveringReactionPopoutSet = new Set<string>();
 
-function handleHoveringMessageAuthor(message: any, isHovering: boolean) {
+function handleHoveringMessage(message: any, isHovering: boolean) {
     const messageId = message?.id;
     const groupId = !message?.showMeYourNameGroupId ? "" : `g-${message.showMeYourNameGroupId}`;
 
@@ -847,7 +847,7 @@ export default definePlugin({
             find: "CUSTOM_GIFT?\"\":",
             replacement: {
                 match: /(\(\i,\i,\i\);)(let \i=\i.id===\i(?:.{0,500}?)hovering:(\i))/,
-                replace: "$1arguments[0].message.showMeYourNameGroupId=arguments[0].groupId;$self.handleHoveringMessageAuthor(arguments[0].message,$3);$2"
+                replace: "$1arguments[0].message.showMeYourNameGroupId=arguments[0].groupId;$self.handleHoveringMessage(arguments[0].message,$3);$2"
             },
         },
         {
@@ -983,7 +983,7 @@ export default definePlugin({
     addHoveringMessage,
     removeHoveringMessage,
     handleHoveringMessageMentions,
-    handleHoveringMessageAuthor,
+    handleHoveringMessage,
     addHoveringReactionPopout,
     removeHoveringReactionPopout,
     getMessageNameText,
