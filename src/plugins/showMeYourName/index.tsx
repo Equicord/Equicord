@@ -839,8 +839,8 @@ export default definePlugin({
             ]
         },
         {
-            // Track hovering on messages to animate mentions.
-            // Attach the group ID to their messages to allow animating mentions within a group.
+            // Track hovering on messages to animate gradients.
+            // Attach the group ID to their messages to allow animating gradients within a group.
             find: "CUSTOM_GIFT?\"\":",
             replacement: {
                 match: /(\(\i,\i,\i\);)(let \i=\i.id===\i(?:.{0,500}?)hovering:(\i))/,
