@@ -48,10 +48,23 @@ export default definePlugin({
         },
         {
             find: ".gifts)",
+<<<<<<< HEAD
             replacement: {
                 match: /(?<=,.{0,5}\(null==\(\i=\i\.stickers\)\?void 0.*?(\i)\.push\(\{.{0,15}node:(.{0,15}{disabled:\i,type:\i)},"sticker"\)\}\))/,
                 replace: ",arguments[0].type?.submit?.button&&$1.push({key:\"stickers+\",isCustom:true,node:$2,stickersType:\"stickers+\"},\"stickers+\")})"
             }
+=======
+            replacement: [
+                {
+                    match: /(?<="submit"\)\}\);)(?=.{0,50}null!=(\i))/,
+                    replace: '$1["stickers+"]=3;'
+                },
+                {
+                    match: /(?<=,.{0,5}\(null==\(\i=\i\.stickers\)\?void 0.*?(\i)\.push\(\{.{0,15}node:(.{0,15}{disabled:\i,type:\i)},"sticker"\)\}\))/,
+                    replace: ",arguments[0].type?.submit?.button&&$1.push({key:\"stickers+\",node:$2,stickersType:\"stickers+\"},\"stickers+\")})"
+                }
+            ]
+>>>>>>> equicord/dev
         },
         {
             find: "#{intl::EXPRESSION_PICKER_CATEGORIES_A11Y_LABEL}",
