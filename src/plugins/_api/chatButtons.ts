@@ -15,10 +15,16 @@ export default definePlugin({
     patches: [
         {
             find: '"sticker")',
-            replacement: {
-                match: /return\(\i\.\i\|\|(?=\(.+?(\i)\.push)/,
-                replace: "$&(Vencord.Api.ChatButtons._injectButtons($1,arguments[0]),false)||"
-            }
+            replacement: [
+                {
+                    match: /(?=\i&&(\i)\.push.{0,15}"submit")/,
+                    replace: "Vencord.Api.ChatButtons._injectButtons($1,arguments[0]),"
+                },
+                {
+                    match: /(?<=\(\i\).filter\((\i)=>)(null!=.{0,5}key\])(\).sortBy\((\i)=>)(.{0,5}\.key\])/,
+                    replace: "$1.isCustom||$2$3[$4.isCustom?0:1,$5]"
+                }
+            ]
         }
     ]
 });
