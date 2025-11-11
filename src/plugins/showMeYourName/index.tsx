@@ -484,7 +484,7 @@ function renderUsername(
     const topRoleStyle = resolveColor(author, "Role", "", canUseGradient);
     const hasGradient = !!topRoleStyle?.gradient && Object.keys(topRoleStyle.gradient).length > 0;
     const message = channelId && messageId ? MessageStore.getMessage(channelId, messageId) : null;
-    const groupId = !(message as any)?.showMeYourNameGroupId ? "" : `g-${(message as any).showMeYourNameGroupId}`;
+    const groupId = (message as any)?.showMeYourNameGroupId || null;
 
     const isHovering = (isMessage || isReply || isMention)
         ? ((messageId && hoveringMessageMap.has(messageId)) || (groupId && hoveringMessageMap.has(groupId)))
@@ -639,7 +639,7 @@ const hoveringReactionPopoutSet = new Set<string>();
 
 function handleHoveringMessage(message: any, isHovering: boolean) {
     const messageId = message?.id;
-    const groupId = !message?.showMeYourNameGroupId ? "" : `g-${message.showMeYourNameGroupId}`;
+    const groupId = message?.showMeYourNameGroupId ?? "";
 
     useEffect(() => {
         if (!message) return;
@@ -847,7 +847,7 @@ export default definePlugin({
             find: "CUSTOM_GIFT?\"\":",
             replacement: {
                 match: /(\(\i,\i,\i\);)(let \i=\i.id===\i(?:.{0,500}?)hovering:(\i))/,
-                replace: "$1arguments[0].message.showMeYourNameGroupId=arguments[0].groupId;$self.handleHoveringMessage(arguments[0].message,$3);$2"
+                replace: "$1arguments[0].message.showMeYourNameGroupId=`g-${arguments[0].groupId}`;$self.handleHoveringMessage(arguments[0].message,$3);$2"
             },
         },
         {
