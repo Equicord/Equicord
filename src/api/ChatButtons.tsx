@@ -87,19 +87,12 @@ export function _injectButtons(buttons: { key: string, node: ReactNode; }[], ord
     let currentOrder = anchorIndex - 1;
 
     for (const [key, Button] of buttonFactories) {
-<<<<<<< HEAD
-        buttons.push({
-            key: key,
-            // @ts-ignore custom property to know if its an equicord button
-            isCustom: true,
-=======
         order[key] = anchorIndex;
         order.submit && (order.submit = ++currentOrder);
         anchorIndex = currentOrder + 1;
 
         buttons.push({
             key,
->>>>>>> equicord/dev
             node: <ErrorBoundary noop key={key} onError={e => logger.error(`Failed to render ${key}`, e.error)}>
                 <Button {...props} isMainChat={props.type.analyticsName === "normal"} />
             </ErrorBoundary>
