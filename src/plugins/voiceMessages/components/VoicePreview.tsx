@@ -19,7 +19,10 @@
 import { useTimer } from "@utils/react";
 import { findComponentByCodeLazy } from "@webpack";
 
-import { cl } from "./utils";
+import { cl } from "..";
+
+const PREVIEW_IDLE_LABEL = "----";
+const PREVIEW_RECORDING_LABEL = "RECORDING";
 
 interface VoiceMessageProps {
     src: string;
@@ -51,7 +54,7 @@ export const VoicePreview = ({
         <div className={cl("preview", recording ? "preview-recording" : [])}>
             <div className={cl("preview-indicator")} />
             <div className={cl("preview-time")}>{durationDisplay}</div>
-            <div className={cl("preview-label")}>{recording ? "RECORDING" : "----"}</div>
+            <div className={cl("preview-label")}>{recording ? PREVIEW_RECORDING_LABEL : PREVIEW_IDLE_LABEL}</div>
         </div>
     );
 };
