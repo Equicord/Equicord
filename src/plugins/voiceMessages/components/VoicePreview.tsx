@@ -35,6 +35,7 @@ export type VoicePreviewOptions = {
     waveform: string;
     recording?: boolean;
 };
+
 export const VoicePreview = ({
     src,
     waveform,

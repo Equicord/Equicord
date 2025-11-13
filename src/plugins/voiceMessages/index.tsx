@@ -71,8 +71,6 @@ type AudioMetadata = {
     duration: number,
 };
 
-
-
 function generateWaveform(audioBuffer: AudioBuffer): string {
     const channelData = audioBuffer.getChannelData(0);
     const binCount = lodash.clamp(
@@ -84,26 +82,25 @@ function generateWaveform(audioBuffer: AudioBuffer): string {
     const bins = new Uint8Array(binCount);
     const samplesPerBin = Math.floor(channelData.length / binCount);
 
-    for (let i = 0; i < binCount; i++) {
-        const offset = i * samplesPerBin;
+    for (let binIdx = 0; binIdx < binCount; binIdx++) {
         let sum = 0;
-        for (let j = 0; j < samplesPerBin; j++) {
-            sum += channelData[offset + j] ** 2;
+        for (let sampleIdx = 0; sampleIdx < samplesPerBin; sampleIdx++) {
+            const offset = binIdx * samplesPerBin + sampleIdx;
+            sum += channelData[offset + sampleIdx] ** 2;
         }
-        bins[i] = Math.floor(Math.sqrt(sum / samplesPerBin) * WAVEFORM_MAX_VALUE);
+        bins[binIdx] = Math.floor(Math.sqrt(sum / samplesPerBin) * WAVEFORM_MAX_VALUE);
     }
 
     const maxBin = Math.max(...bins);
     if (maxBin) {
-        const scale = WAVEFORM_MAX_VALUE / maxBin;
         const easing = Math.min(1, 100 * (maxBin / WAVEFORM_MAX_VALUE) ** 3);
-        const ratio = 1 + (scale - 1) * easing;
+        const ratio = 1 + (WAVEFORM_MAX_VALUE / maxBin - 1) * easing;
         for (let i = 0; i < binCount; i++) {
             bins[i] = Math.min(WAVEFORM_MAX_VALUE, Math.floor(bins[i] * ratio));
         }
     }
 
-    return btoa(String.fromCharCode(...bins));
+    return window.btoa(String.fromCharCode(...bins));
 }
 
 function sendAudio(blob: Blob, meta: AudioMetadata) {
@@ -154,9 +151,8 @@ function useObjectUrl() {
 }
 
 const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
-    const hasPermission = !props.channel.guild_id ||
-        (PermissionStore.can(PermissionsBits.SEND_VOICE_MESSAGES, props.channel) &&
-            PermissionStore.can(PermissionsBits.SEND_MESSAGES, props.channel));
+    const hasPermission = !props.channel.guild_id
+        || (PermissionStore.can(PermissionsBits.SEND_VOICE_MESSAGES, props.channel) && PermissionStore.can(PermissionsBits.SEND_MESSAGES, props.channel));
 
     children.push(
         <Menu.MenuItem
@@ -166,11 +162,11 @@ const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
                     <Microphone className={OptionClasses.optionIcon} height={24} width={24} />
                     <div className={OptionClasses.optionName}>
                         Send Voice Message
-                        {!hasPermission && <span style={{ fontSize: "smaller", opacity: 0.6 }}> (No permission)</span>}
+                        {!hasPermission && <span style={{ fontSize: "smaller", opacity: 0.6 }}> (Missing Permissions)</span>}
                     </div>
                 </div>
             }
-            action={hasPermission ? () => openModal(modalProps => <Modal modalProps={modalProps} />) : undefined}
+            action={() => openModal(modalProps => <Modal modalProps={modalProps} />)}
             disabled={!hasPermission}
         />
     );
@@ -256,12 +252,13 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
             </ModalContent>
 
             <ModalFooter>
-                <Button disabled={!blob} onClick={() => {
-                    if (!blob) return;
-                    sendAudio(blob, meta ?? EMPTY_META);
-                    modalProps.onClose();
-                    showToast("Now sending voice message... Please be patient", Toasts.Type.MESSAGE);
-                }}>
+                <Button
+                    disabled={!blob}
+                    onClick={() => {
+                        sendAudio(blob!, meta ?? EMPTY_META);
+                        modalProps.onClose();
+                        showToast("Now sending voice message... Please be patient", Toasts.Type.MESSAGE);
+                    }}>
                     Send
                 </Button>
             </ModalFooter>
