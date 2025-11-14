@@ -140,8 +140,8 @@ export default definePlugin({
             find: "#{intl::PROFILE_USER_BADGES}",
             replacement: [
                 {
-                    match: /(alt:" ","aria-hidden":!0,src:)(.+?)(?=,)(?<=href:(\i)\.link.+?)/,
-                    replace: (_, rest, originalSrc, badge) => `...${badge}.props,${rest}${badge}.image??(${originalSrc})`
+                    match: /src:null!=\((\i)=(\i)\.iconSrc\)\?\1:(\(0,\i\.\i\)\(\2\.icon\))/,
+                    replace: "...$2.props,src:$2.image??(null!=($1=$2.iconSrc)?$1:$3)"
                 },
                 {
                     match: /(?<="aria-label":(\i)\.description,.{0,200})children:/,
@@ -149,8 +149,8 @@ export default definePlugin({
                 },
                 // handle onClick and onContextMenu
                 {
-                    match: /href:(\i)\.link/,
-                    replace: "...$self.getBadgeMouseEventHandlers($1),$&"
+                    match: /(\{onClick:\i,onMouseEnter:\i),href:(\i)\.link/,
+                    replace: "$1,...$self.getBadgeMouseEventHandlers($2),href:$2.link"
                 }
             ]
         },
