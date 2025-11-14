@@ -1,0 +1,27 @@
+.message-shuffler-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--interactive-normal);
+    transform: scale(1.25);
+    transform-origin: center;
+    transition: color 0.2s ease;
+}
+
+.message-shuffler-icon--active {
+    color: var(--status-green-500);
+    animation: message-shuffler-wiggle 1s ease-in-out infinite;
+}
+
+@keyframes message-shuffler-wiggle {
+    0% {
+        transform: scale(1.25) rotate(-8deg);
+    }
+
+    50% {
+        transform: scale(1.25) rotate(8deg);
+    }
+
+    100% {
+        transform: scale(1.25) rotate(-8deg);
+    }
+}
