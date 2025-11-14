@@ -149,7 +149,7 @@ export default definePlugin({
                 },
                 // handle onClick and onContextMenu
                 {
-                    match: /(\{onClick:\i,onMouseEnter:\i),href:(\i)\.link/,
+                    match: /(\{onClick:\i,onMouseEnter:\i).{0,20},href:(\i)\.link/,
                     replace: "$1,...$self.getBadgeMouseEventHandlers($2),href:$2.link"
                 }
             ]
