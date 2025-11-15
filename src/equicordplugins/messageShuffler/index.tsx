@@ -24,6 +24,7 @@ const RANGE_SCALE = 1000n;
 const DEPTH_MARKERS = [10, 80, 200, 400, 650, 900];
 const COVERAGE_BUCKETS = 200;
 const WIDE_WINDOW_TRIGGER = 4;
+const VISITED_HISTORY_LIMIT = 500;
 
 const SUPPORTED_CHANNEL_TYPES = new Set([
     ChannelType.GUILD_TEXT,
@@ -126,8 +127,15 @@ type ChannelBounds = {
     pendingOldest?: Promise<string>;
 };
 
+type VisitTracker = {
+    ids: Set<string>;
+    order: string[];
+    head: number;
+};
+
 const channelBounds = new Map<string, ChannelBounds>();
 const coverageTracker = new Map<string, Set<number>>();
+const channelVisits = new Map<string, VisitTracker>();
 
 function ensureBoundsEntry(channelId: string) {
     let entry = channelBounds.get(channelId);
@@ -146,6 +154,48 @@ function ensureCoverageSet(channelId: string) {
         coverageTracker.set(channelId, tracker);
     }
     return tracker;
+}
+
+function ensureVisitTracker(channelId: string) {
+    let tracker = channelVisits.get(channelId);
+    if (!tracker) {
+        tracker = { ids: new Set(), order: [], head: 0 };
+        channelVisits.set(channelId, tracker);
+    }
+    return tracker;
+}
+
+function pruneVisitTracker(tracker: VisitTracker) {
+    while (tracker.order.length - tracker.head > VISITED_HISTORY_LIMIT) {
+        const oldest = tracker.order[tracker.head++];
+        if (oldest) tracker.ids.delete(oldest);
+    }
+
+    if (tracker.head > VISITED_HISTORY_LIMIT) {
+        tracker.order = tracker.order.slice(tracker.head);
+        tracker.head = 0;
+    }
+}
+
+function markChannelVisited(channelId: string, messageId: string) {
+    const tracker = ensureVisitTracker(channelId);
+    if (tracker.ids.has(messageId)) return;
+
+    tracker.order.push(messageId);
+    tracker.ids.add(messageId);
+    pruneVisitTracker(tracker);
+}
+
+function hasChannelVisited(channelId: string, messageId: string) {
+    return channelVisits.get(channelId)?.ids.has(messageId) ?? false;
+}
+
+function clearChannelVisits(channelId?: string) {
+    if (channelId) {
+        channelVisits.delete(channelId);
+    } else {
+        channelVisits.clear();
+    }
 }
 
 function rangeBucket(min: bigint, max: bigint, snowflake: bigint) {
@@ -376,6 +426,28 @@ function pickRandomMatching(messages: Message[]): Message | null {
     return filtered[Math.floor(Math.random() * filtered.length)];
 }
 
+function selectCandidate(channel: Channel, messages: Message[]) {
+    const candidate = pickRandomMatching(messages);
+    return applyVisitedPolicy(channel, candidate);
+}
+
+function applyVisitedPolicy(channel: Channel, candidate: Message | null) {
+    if (!candidate) return null;
+    if (channel.type !== ChannelType.GROUP_DM) return candidate;
+
+    if (hasChannelVisited(channel.id, candidate.id)) {
+        logger.info(`Skipping already visited message ${candidate.id} in channel ${channel.id}`);
+        return null;
+    }
+
+    markChannelVisited(channel.id, candidate.id);
+    return candidate;
+}
+
+function buildNoResultsError(channel: Channel) {
+    return new Error("You've already shuffled through every matching message in this channel. Switch channels to reset the history.");
+}
+
 function pivotFromMarker(min: bigint, max: bigint, marker: number) {
     if (min >= max) return min.toString();
     const range = max - min;
@@ -393,18 +465,20 @@ async function findShuffledMessage(channel: Channel): Promise<Message> {
     if (min === max) {
         const sole = await fetchLatestMessage(channel.id);
         if (!sole) throw new Error("Could not locate the only message in this channel.");
-        return sole;
+        const candidate = applyVisitedPolicy(channel, sole);
+        if (candidate) return candidate;
+        throw buildNoResultsError(channel);
     }
 
     for (let attempt = 0; attempt < RANDOM_ATTEMPTS; attempt++) {
         const pivot = pickCoverageAwarePivot(channel.id, min, max).toString();
         const batch = await fetchAround(channel.id, pivot);
-        let candidate = pickRandomMatching(batch);
+        let candidate = selectCandidate(channel, batch);
         if (candidate) return candidate;
 
         if (attempt >= WIDE_WINDOW_TRIGGER) {
             const expanded = await fetchWideWindow(channel.id, pivot, batch);
-            candidate = pickRandomMatching(expanded);
+            candidate = selectCandidate(channel, expanded);
             if (candidate) return candidate;
         }
     }
@@ -412,24 +486,27 @@ async function findShuffledMessage(channel: Channel): Promise<Message> {
     for (const marker of DEPTH_MARKERS) {
         const pivot = pivotFromMarker(min, max, marker);
         const batch = await fetchAround(channel.id, pivot);
-        const candidate = pickRandomMatching(batch);
+        const candidate = selectCandidate(channel, batch);
         if (candidate) return candidate;
     }
 
     const oldestBatch = await fetchEarliestBatch(channel.id);
-    const oldestCandidate = pickRandomMatching(oldestBatch);
+    const oldestCandidate = selectCandidate(channel, oldestBatch);
     if (oldestCandidate) return oldestCandidate;
 
     // fallback to newest message honoring filters
     const newestBatch = await fetchAround(channel.id, max.toString());
-    const newestCandidate = pickRandomMatching(newestBatch);
+    const newestCandidate = selectCandidate(channel, newestBatch);
     if (newestCandidate) return newestCandidate;
 
     const fallback = await fetchLatestMessage(channel.id);
     if (!fallback || !messageMatchesFilters(fallback)) {
-        throw new Error("Could not find any messages matching the current filters.");
+        throw buildNoResultsError(channel);
     }
-    return fallback;
+
+    const finalCandidate = applyVisitedPolicy(channel, fallback);
+    if (finalCandidate) return finalCandidate;
+    throw buildNoResultsError(channel);
 }
 
 function useCurrentChannel(): Channel | null {
@@ -493,6 +570,7 @@ function MessageShufflerButton() {
     const [isFetching, setIsFetching] = React.useState(false);
     const [failed, setFailed] = React.useState(false);
     const failResetTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+    const previousChannelRef = React.useRef<Channel | null>(null);
 
     const tooltip = React.useMemo(() => {
         if (!channel) return "Open a text channel to unlock random jumps";
@@ -508,6 +586,23 @@ function MessageShufflerButton() {
 
     React.useEffect(() => () => {
         if (failResetTimer.current) clearTimeout(failResetTimer.current);
+    }, []);
+
+    React.useEffect(() => {
+        const previous = previousChannelRef.current;
+        if (previous && (!channel || channel.id !== previous.id)) {
+            clearChannelVisits(previous.id);
+        }
+
+        previousChannelRef.current = channel ?? null;
+    }, [channel]);
+
+    React.useEffect(() => () => {
+        const previous = previousChannelRef.current;
+        if (previous) {
+            clearChannelVisits(previous.id);
+        }
+        previousChannelRef.current = null;
     }, []);
 
     const handleClick = React.useCallback(async () => {
@@ -587,5 +682,6 @@ export default definePlugin({
     stop() {
         channelBounds.clear();
         coverageTracker.clear();
+        clearChannelVisits();
     }
 });
