@@ -32,11 +32,6 @@ interface QuoteImageOptions {
 }
 
 const settings = definePluginSettings({
-    showWatermark: {
-        type: OptionType.BOOLEAN,
-        description: "Show watermark on quote images",
-        default: false
-    },
     watermark: {
         type: OptionType.STRING,
         description: "Custom watermark text (max 32 characters)",
@@ -74,8 +69,30 @@ function sizeUpgrade(url: string) {
     return u.toString();
 }
 
+async function ensureFontLoaded(): Promise<void> {
+    const fontName = "M PLUS Rounded 1c";
+
+    if (document.fonts.check(`300 12px "${fontName}"`)) {
+        return;
+    }
+
+    try {
+        const font = new FontFace(
+            fontName,
+            'url(https://fonts.gstatic.com/s/mplusrounded1c/v15/VdGCAYIAV6gnpUpoWwNkYvrugw9RuM3ixLsg6-av1x0.woff2) format("woff2")',
+            { weight: "300", style: "normal" }
+        );
+        await font.load();
+        document.fonts.add(font);
+    } catch (error) {
+        console.warn("[Quoter] Font loading failed:", error);
+    }
+}
+
 async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
     const { avatarUrl, quoteOld, grayScale, author, watermark, showWatermark } = options;
+
+    await ensureFontLoaded();
 
     const quote = FixUpQuote(quoteOld);
     const canvas = document.createElement("canvas");
@@ -121,7 +138,7 @@ async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
     const maxContentHeight = cardHeight * 0.8;
 
     const calculateLines = (text: string, fontSize: number): string[] => {
-        ctx.font = `300 ${fontSize}px 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, sans-serif`;
+        ctx.font = `300 ${fontSize}px 'M PLUS Rounded 1c', sans-serif`;
         const words = text.split(" ");
         const lines: string[] = [];
         let currentLine: string[] = [];
@@ -166,7 +183,7 @@ async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
     }
 
     ctx.fillStyle = "#fff";
-    ctx.font = `300 ${fontSize}px 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.font = `300 ${fontSize}px 'M PLUS Rounded 1c', sans-serif`;
 
     let quoteY = (cardHeight - totalHeight) / 2;
 
@@ -176,14 +193,14 @@ async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
         ctx.fillText(line, quoteX + xOffset, quoteY);
     });
 
-    ctx.font = `italic 300 ${authorFontSize}px 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.font = `italic 300 ${authorFontSize}px 'M PLUS Rounded 1c', sans-serif`;
     const authorText = `- ${name}`;
     const authorNameX = quoteX + (quoteWidth - ctx.measureText(authorText).width) / 2;
     const authorNameY = quoteY + 40;
     ctx.fillText(authorText, authorNameX, authorNameY);
 
     const username = `@${author.username}`;
-    ctx.font = `300 ${usernameFontSize}px 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.font = `300 ${usernameFontSize}px 'M PLUS Rounded 1c', sans-serif`;
     ctx.fillStyle = "#888";
     const usernameX = quoteX + (quoteWidth - ctx.measureText(username).width) / 2;
     const usernameY = authorNameY + 8 + usernameFontSize;
@@ -191,7 +208,7 @@ async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
 
     if (showWatermark && watermark) {
         ctx.fillStyle = "#888";
-        ctx.font = "300 14px 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, sans-serif";
+        ctx.font = "300 14px 'M PLUS Rounded 1c', sans-serif";
         const watermarkText = watermark.slice(0, 32);
         const watermarkX = cardWidth - ctx.measureText(watermarkText).width - 20;
         const watermarkY = cardHeight - 20;
@@ -208,8 +225,9 @@ function generateFileNamePreview(message: string) {
 
 function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
     const [gray, setGray] = useState(true);
+    const [showWatermark, setShowWatermark] = useState(false);
     const [quoteImage, setQuoteImage] = useState<Blob | null>(null);
-    const { watermark, showWatermark } = settings.store;
+    const { watermark } = settings.store;
     const safeContent = message.content ? message.content : "";
 
     const generateImage = async () => {
@@ -225,7 +243,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
         document.getElementById("quoterPreview")?.setAttribute("src", URL.createObjectURL(image));
     };
 
-    useEffect(() => { generateImage(); }, [gray, safeContent, watermark, showWatermark]);
+    useEffect(() => { generateImage(); }, [gray, showWatermark, safeContent, watermark]);
 
     const Export = () => {
         if (!quoteImage) return;
@@ -259,6 +277,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
                 <br /><br />
                 <br /><br />
                 <FormSwitch title="Grayscale" value={gray} onChange={setGray} />
+                <FormSwitch title="Watermark" value={showWatermark} onChange={setShowWatermark} description="Customize watermark text in plugin settings" />
                 <br />
                 <Button color={Button.Colors.BRAND} size={Button.Sizes.SMALL} onClick={async () => await Export()} style={{ display: "inline-block", marginRight: "5px" }}>Export</Button>
                 <Button color={Button.Colors.BRAND} size={Button.Sizes.SMALL} onClick={async () => await SendInChat()} style={{ display: "inline-block" }}>Send</Button>
