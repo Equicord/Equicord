@@ -31,9 +31,14 @@ const settings = definePluginSettings({
         ],
     },
     preventReconnectIfCallEnded: {
-        type: OptionType.BOOLEAN,
+        type: OptionType.SELECT,
         description: "Do not reconnect if the call has ended or the voice channel is empty or does not exist.",
-        default: true,
+        options: [
+            { label: "None", value: "none", default: false },
+            { label: "DMs only", value: "dms", default: false },
+            { label: "Servers only", value: "servers", default: false },
+            { label: "DMs and Servers", value: "both", default: true },
+        ],
     },
 });
 
@@ -73,7 +78,9 @@ export default definePlugin({
             setTimeout(async () => {
                 const saved = await DataStore.get<SavedVoiceChannel>(DATASTORE_KEY);
                 if (!saved?.channelId) return;
-                 if (settings.store.preventReconnectIfCallEnded) { // credits to miamlya for this fix
+                
+                const preventionMode = settings.store.preventReconnectIfCallEnded;
+                if (preventionMode !== "none") {
                     const channel = ChannelStore.getChannel(saved.channelId);
 
                     if (!channel) {
@@ -81,16 +88,25 @@ export default definePlugin({
                         return;
                     }
 
-                    const connectedUsers = VoiceStateStore.getVoiceStatesForChannel(saved.channelId);
-                    const othersInCall = Object.values(connectedUsers).filter(
-                        (vs: any) => vs.userId !== UserStore.getCurrentUser().id
-                    );
+                    const isDM = !saved.guildId;
+                    const shouldPrevent = 
+                        preventionMode === "both" ||
+                        (preventionMode === "dms" && isDM) ||
+                        (preventionMode === "servers" && !isDM);
 
-                    if (othersInCall.length === 0) {
-                        DataStore.set(DATASTORE_SESSION_KEY, false);
-                        return;
+                    if (shouldPrevent) {
+                        const connectedUsers = VoiceStateStore.getVoiceStatesForChannel(saved.channelId);
+                        const othersInCall = Object.values(connectedUsers).filter(
+                            (vs: any) => vs.userId !== UserStore.getCurrentUser().id
+                        );
+
+                        if (othersInCall.length === 0) {
+                            DataStore.set(DATASTORE_SESSION_KEY, false);
+                            return;
+                        }
                     }
                 }
+                
                 FluxDispatcher.dispatch({
                     type: "VOICE_CHANNEL_SELECT",
                     guildId: saved.guildId,
