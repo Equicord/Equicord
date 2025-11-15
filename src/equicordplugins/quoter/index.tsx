@@ -38,6 +38,21 @@ const settings = definePluginSettings({
         type: OptionType.STRING,
         description: "Custom watermark text (max 32 characters)",
         default: "Made with Equicord"
+    },
+    grayscale: {
+        type: OptionType.BOOLEAN,
+        description: "Enable grayscale by default",
+        default: true
+    },
+    showWatermark: {
+        type: OptionType.BOOLEAN,
+        description: "Show watermark by default",
+        default: false
+    },
+    saveAsGif: {
+        type: OptionType.BOOLEAN,
+        description: "Save as GIF by default",
+        default: false
     }
 });
 
@@ -255,12 +270,24 @@ function generateFileNamePreview(message: string) {
 }
 
 function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
-    const [gray, setGray] = useState(true);
-    const [showWatermark, setShowWatermark] = useState(false);
-    const [saveAsGif, setSaveAsGif] = useState(false);
+    const [gray, setGray] = useState(settings.store.grayscale);
+    const [showWatermark, setShowWatermark] = useState(settings.store.showWatermark);
+    const [saveAsGif, setSaveAsGif] = useState(settings.store.saveAsGif);
     const [quoteImage, setQuoteImage] = useState<Blob | null>(null);
     const { watermark } = settings.store;
     const safeContent = message.content ? message.content : "";
+
+    useEffect(() => {
+        settings.store.grayscale = gray;
+    }, [gray]);
+
+    useEffect(() => {
+        settings.store.showWatermark = showWatermark;
+    }, [showWatermark]);
+
+    useEffect(() => {
+        settings.store.saveAsGif = saveAsGif;
+    }, [saveAsGif]);
 
     const generateImage = async () => {
         const image = await createQuoteImage({
