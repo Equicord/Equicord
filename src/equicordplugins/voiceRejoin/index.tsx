@@ -4,31 +4,22 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
-import { FluxDispatcher, UserStore, ChannelStore, VoiceStateStore } from "@webpack/common";
+import definePlugin, { makeRange, OptionType } from "@utils/types";
+import { ChannelStore, FluxDispatcher, UserStore, VoiceStateStore } from "@webpack/common";
 
 const DATASTORE_KEY = "VCLastVoiceChannel";
 const DATASTORE_SESSION_KEY = "VCLastVoiceChannelSession";
 
-interface SavedVoiceChannel {
-    guildId: string | null;
-    channelId: string;
-}
-
 const settings = definePluginSettings({
     rejoinDelay: {
-        type: OptionType.SELECT,
+        type: OptionType.SLIDER,
         description: "Set Delay before rejoining voice channel.",
-        options: [
-            { label: "1 Second", value: 1000, default: false },
-            { label: "2 Seconds", value: 2000, default: true },
-            { label: "3 Seconds", value: 3000, default: false },
-            { label: "5 Seconds", value: 5000, default: false },
-        ],
+        markers: makeRange(1, 10, 1),
+        default: 2,
+        stickToMarkers: true,
     },
     preventReconnectIfCallEnded: {
         type: OptionType.SELECT,
@@ -57,7 +48,7 @@ export default definePlugin({
             if (!myState) return;
 
             if (myState.channelId) {
-                const saved: SavedVoiceChannel = {
+                const saved = {
                     guildId: myState.guildId ?? null,
                     channelId: myState.channelId,
                 };
@@ -69,16 +60,16 @@ export default definePlugin({
         },
 
         async CONNECTION_OPEN() {
-            const wasInVC = await DataStore.get<boolean>(DATASTORE_SESSION_KEY);
+            const wasInVC = await DataStore.get(DATASTORE_SESSION_KEY);
             if (wasInVC === false) {
                 DataStore.del(DATASTORE_KEY);
                 return;
             }
 
             setTimeout(async () => {
-                const saved = await DataStore.get<SavedVoiceChannel>(DATASTORE_KEY);
+                const saved = await DataStore.get(DATASTORE_KEY);
                 if (!saved?.channelId) return;
-                
+
                 const preventionMode = settings.store.preventReconnectIfCallEnded;
                 if (preventionMode !== "none") {
                     const channel = ChannelStore.getChannel(saved.channelId);
@@ -89,7 +80,7 @@ export default definePlugin({
                     }
 
                     const isDM = !saved.guildId;
-                    const shouldPrevent = 
+                    const shouldPrevent =
                         preventionMode === "both" ||
                         (preventionMode === "dms" && isDM) ||
                         (preventionMode === "servers" && !isDM);
@@ -106,7 +97,7 @@ export default definePlugin({
                         }
                     }
                 }
-                
+
                 FluxDispatcher.dispatch({
                     type: "VOICE_CHANNEL_SELECT",
                     guildId: saved.guildId,
@@ -114,7 +105,7 @@ export default definePlugin({
                 });
 
                 DataStore.set(DATASTORE_SESSION_KEY, true);
-            }, settings.store.rejoinDelay);
+            }, settings.store.rejoinDelay * 1000);
         },
     },
 });
