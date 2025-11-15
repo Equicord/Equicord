@@ -38,17 +38,20 @@ const settings = definePluginSettings({
     grayscale: {
         type: OptionType.BOOLEAN,
         description: "Enable grayscale by default",
-        default: true
+        default: true,
+        hidden: true
     },
     showWatermark: {
         type: OptionType.BOOLEAN,
         description: "Show watermark by default",
-        default: false
+        default: false,
+        hidden: true
     },
     saveAsGif: {
         type: OptionType.BOOLEAN,
         description: "Save as GIF by default",
-        default: false
+        default: false,
+        hidden: true
     }
 });
 
