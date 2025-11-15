@@ -14,6 +14,7 @@ import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, Mod
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { Button, Menu, UploadHandler, useEffect, useState } from "@webpack/common";
+import { applyPalette, GIFEncoder, quantize } from "gifenc";
 
 import { QuoteIcon } from "./components";
 import { canvasToBlob, fetchImageAsBlob, FixUpQuote } from "./utils";
@@ -29,6 +30,7 @@ interface QuoteImageOptions {
     };
     watermark?: string;
     showWatermark?: boolean;
+    saveAsGif?: boolean;
 }
 
 const settings = definePluginSettings({
@@ -89,8 +91,24 @@ async function ensureFontLoaded(): Promise<void> {
     }
 }
 
+async function canvasToGif(canvas: HTMLCanvasElement): Promise<Blob> {
+    const gif = GIFEncoder();
+    const ctx = canvas.getContext("2d")!;
+    const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const palette = quantize(data, 256);
+    const index = applyPalette(data, palette);
+
+    gif.writeFrame(index, canvas.width, canvas.height, {
+        transparent: false,
+        palette,
+    });
+
+    gif.finish();
+    return new Blob([new Uint8Array(gif.bytesView())], { type: "image/gif" });
+}
+
 async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
-    const { avatarUrl, quoteOld, grayScale, author, watermark, showWatermark } = options;
+    const { avatarUrl, quoteOld, grayScale, author, watermark, showWatermark, saveAsGif } = options;
 
     await ensureFontLoaded();
 
@@ -215,7 +233,7 @@ async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
         ctx.fillText(watermarkText, watermarkX, watermarkY);
     }
 
-    return await canvasToBlob(canvas);
+    return saveAsGif ? await canvasToGif(canvas) : await canvasToBlob(canvas);
 }
 
 function generateFileNamePreview(message: string) {
@@ -226,6 +244,7 @@ function generateFileNamePreview(message: string) {
 function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
     const [gray, setGray] = useState(true);
     const [showWatermark, setShowWatermark] = useState(false);
+    const [saveAsGif, setSaveAsGif] = useState(false);
     const [quoteImage, setQuoteImage] = useState<Blob | null>(null);
     const { watermark } = settings.store;
     const safeContent = message.content ? message.content : "";
@@ -237,20 +256,22 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
             grayScale: gray,
             author: message.author,
             watermark,
-            showWatermark
+            showWatermark,
+            saveAsGif
         });
         setQuoteImage(image);
         document.getElementById("quoterPreview")?.setAttribute("src", URL.createObjectURL(image));
     };
 
-    useEffect(() => { generateImage(); }, [gray, showWatermark, safeContent, watermark]);
+    useEffect(() => { generateImage(); }, [gray, showWatermark, saveAsGif, safeContent, watermark]);
 
     const Export = () => {
         if (!quoteImage) return;
         const link = document.createElement("a");
         const preview = generateFileNamePreview(safeContent);
+        const extension = saveAsGif ? "gif" : "png";
         link.href = URL.createObjectURL(quoteImage);
-        link.download = `${preview} - ${message.author.username}.png`;
+        link.download = `${preview} - ${message.author.username}.${extension}`;
         link.click();
         link.remove();
     };
@@ -258,7 +279,9 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
     const SendInChat = () => {
         if (!quoteImage) return;
         const preview = generateFileNamePreview(safeContent);
-        const file = new File([quoteImage], `${preview} - ${message.author.username}.png`, { type: "image/png" });
+        const extension = saveAsGif ? "gif" : "png";
+        const mimeType = saveAsGif ? "image/gif" : "image/png";
+        const file = new File([quoteImage], `${preview} - ${message.author.username}.${extension}`, { type: mimeType });
         // @ts-expect-error typing issue
         UploadHandler.promptToUpload([file], getCurrentChannel(), 0);
         props.onClose?.();
@@ -278,6 +301,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
                 <br /><br />
                 <FormSwitch title="Grayscale" value={gray} onChange={setGray} />
                 <FormSwitch title="Watermark" value={showWatermark} onChange={setShowWatermark} description="Customize watermark text in plugin settings" />
+                <FormSwitch title="Save as GIF" value={saveAsGif} onChange={setSaveAsGif} description="Saves/Sends the image as a GIF instead of a PNG" />
                 <br />
                 <Button color={Button.Colors.BRAND} size={Button.Sizes.SMALL} onClick={async () => await Export()} style={{ display: "inline-block", marginRight: "5px" }}>Export</Button>
                 <Button color={Button.Colors.BRAND} size={Button.Sizes.SMALL} onClick={async () => await SendInChat()} style={{ display: "inline-block" }}>Send</Button>
