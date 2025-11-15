@@ -14,26 +14,6 @@ export function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
     });
 }
 
-export function wrapText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number, preparingSentence: string[], lines: string[]) {
-    text.split(" ").forEach(word => {
-        const workSentence = preparingSentence.join(" ") + " " + word;
-        if (ctx.measureText(workSentence).width > maxWidth) {
-            lines.push(preparingSentence.join(" "));
-            preparingSentence = [word];
-        } else {
-            preparingSentence.push(word);
-        }
-    });
-
-    lines.push(preparingSentence.join(" "));
-
-    lines.forEach(line => {
-        const xOffset = (maxWidth - ctx.measureText(line).width) / 2;
-        y += lineHeight;
-        ctx.fillText(line, x + xOffset, y);
-    });
-}
-
 export async function fetchImageAsBlob(url: string): Promise<Blob> {
     if (!url) throw new Error("Invalid URL: URL is empty or undefined");
     try {
