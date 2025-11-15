@@ -114,6 +114,8 @@ const logger = new Logger("StatsfmPresence");
 
 const PresenceStore = findByPropsLazy("getLocalPresence");
 
+let updateInterval: NodeJS.Timeout | null = null;
+
 async function getApplicationAsset(key: string): Promise<string> {
     return (await ApplicationAssetUtils.fetchAssetIds(applicationId, [key]))[0];
 }
@@ -237,11 +239,14 @@ export default definePlugin({
 
     start() {
         this.updatePresence();
-        this.updateInterval = setInterval(() => { this.updatePresence(); }, 16000);
+        updateInterval = setInterval(() => { this.updatePresence(); }, 16000);
     },
 
     stop() {
-        clearInterval(this.updateInterval);
+        if (updateInterval) {
+            clearInterval(updateInterval);
+            updateInterval = null;
+        }
     },
 
     async fetchTrackData(): Promise<TrackData | null> {
