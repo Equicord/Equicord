@@ -232,17 +232,17 @@ async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
     let fontSize = 50;
     let lineHeight = fontSize * 1.25;
     let lines: string[] = [];
-    let authorFontSize = 24;
-    let usernameFontSize = 18;
+    let authorFontSize = 30;
+    let usernameFontSize = 22;
     let totalHeight = 0;
 
     while (fontSize >= 18) {
         lines = calculateLines(quote, fontSize);
         lineHeight = fontSize * 1.25;
-        authorFontSize = Math.max(18, fontSize * 0.48);
-        usernameFontSize = Math.max(14, fontSize * 0.36);
-        const spacing = 40;
-        const usernameSpacing = 8;
+        authorFontSize = Math.max(22, fontSize * 0.60);
+        usernameFontSize = Math.max(18, fontSize * 0.45);
+        const spacing = 60;
+        const usernameSpacing = 10;
         totalHeight = (lines.length * lineHeight) + spacing + authorFontSize + usernameSpacing + usernameFontSize;
 
         if (totalHeight <= maxContentHeight) {
@@ -265,19 +265,19 @@ async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
     ctx.font = `italic 300 ${authorFontSize}px 'M PLUS Rounded 1c', sans-serif`;
     const authorText = `- ${name}`;
     const authorNameX = quoteX + (quoteWidth - ctx.measureText(authorText).width) / 2;
-    const authorNameY = quoteY + 40;
+    const authorNameY = quoteY + 50;
     ctx.fillText(authorText, authorNameX, authorNameY);
 
     const username = `@${author.username}`;
     ctx.font = `300 ${usernameFontSize}px 'M PLUS Rounded 1c', sans-serif`;
     ctx.fillStyle = "#888";
     const usernameX = quoteX + (quoteWidth - ctx.measureText(username).width) / 2;
-    const usernameY = authorNameY + 8 + usernameFontSize;
+    const usernameY = authorNameY + 10 + usernameFontSize;
     ctx.fillText(username, usernameX, usernameY);
 
     if (showWatermark && watermark) {
         ctx.fillStyle = "#888";
-        ctx.font = "300 14px 'M PLUS Rounded 1c', sans-serif";
+        ctx.font = "300 18px 'M PLUS Rounded 1c', sans-serif";
         const watermarkText = watermark.slice(0, 32);
         const watermarkX = cardWidth - ctx.measureText(watermarkText).width - 20;
         const watermarkY = cardHeight - 20;
