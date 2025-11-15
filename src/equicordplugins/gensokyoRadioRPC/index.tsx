@@ -39,7 +39,7 @@ const settings = definePluginSettings({
     }
 });
 
-let updateInterval: NodeJS.Timeout | null = null;
+let updateInterval: NodeJS.Timeout | undefined;
 
 export default definePlugin({
     name: "GensokyoRadioRPC",
@@ -63,10 +63,8 @@ export default definePlugin({
     },
 
     stop() {
-        if (updateInterval) {
-            clearInterval(updateInterval);
-            updateInterval = null;
-        }
+        clearInterval(updateInterval);
+        updateInterval = undefined;
         FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity: null });
     },
 

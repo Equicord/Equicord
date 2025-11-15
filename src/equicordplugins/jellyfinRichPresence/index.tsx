@@ -155,7 +155,7 @@ const applicationId = "1381368130164625469";
 
 const logger = new Logger("JellyfinRichPresence");
 
-let updateInterval: NodeJS.Timeout | null = null;
+let updateInterval: NodeJS.Timeout | undefined;
 
 async function getApplicationAsset(key: string): Promise<string> {
     return (await ApplicationAssetUtils.fetchAssetIds(applicationId, [key]))[0];
@@ -206,10 +206,8 @@ export default definePlugin({
     },
 
     stop() {
-        if (updateInterval) {
-            clearInterval(updateInterval);
-            updateInterval = null;
-        }
+        clearInterval(updateInterval);
+        updateInterval = undefined;
     },
 
     async fetchMediaData(): Promise<MediaData | null> {

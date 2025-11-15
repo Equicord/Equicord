@@ -48,7 +48,7 @@ const LASTFM_PLACEHOLDER_IMAGE_HASH = "2a96cbd8b46e442fc41c2b86b821562f";
 
 const logger = new Logger("LastFMRichPresence");
 
-let updateInterval: NodeJS.Timeout | null = null;
+let updateInterval: NodeJS.Timeout | undefined;
 
 async function getApplicationAsset(key: string): Promise<string> {
     return (await ApplicationAssetUtils.fetchAssetIds(DISCORD_APP_ID, [key]))[0];
@@ -191,10 +191,8 @@ export default definePlugin({
     },
 
     stop() {
-        if (updateInterval) {
-            clearInterval(updateInterval);
-            updateInterval = null;
-        }
+        clearInterval(updateInterval);
+        updateInterval = undefined;
     },
 
     async fetchTrackData(): Promise<TrackData | null> {
