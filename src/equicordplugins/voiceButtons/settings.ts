@@ -72,4 +72,15 @@ export const settings = definePluginSettings({
             { label: "Both", value: "both" },
         ],
     }
+}, {
+    useServer: {
+        disabled() {
+            return !this.store.showMuteButton && !this.store.showDeafenButton;
+        },
+    },
+    serverSelf: {
+        disabled() {
+            return !this.store.useServer && !this.store.showMuteButton && !this.store.showDeafenButton;
+        },
+    }
 });

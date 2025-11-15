@@ -7,7 +7,7 @@
 import "./styles.css";
 
 import { Icon, User } from "@vencord/discord-types";
-import { findComponentByCodeLazy, findByPropsLazy, findStoreLazy } from "@webpack";
+import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { Button, ChannelStore, MediaEngineStore, NavigationRouter, PermissionsBits, PermissionStore, Tooltip, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
 import { JSX } from "react";
 
@@ -64,7 +64,7 @@ function getUserName(user: User) {
 
 function canServerMuteDeafen(userId: string) {
     if (!settings.store.useServer) return { canMute: false, canDeafen: false };
-    
+
     const voiceState = VoiceStateStore.getVoiceStateForUser(userId);
     const channel = voiceState?.channelId ? ChannelStore.getChannel(voiceState.channelId) : null;
     if (!channel?.guild_id) return { canMute: false, canDeafen: false };
@@ -108,14 +108,14 @@ export function UserMuteButton({ user }: { user: User; }) {
     const isCurrent = (user.id === UserStore.getCurrentUser().id);
     const { canMute: canServerMute } = canServerMuteDeafen(user.id);
     const { isServerMuted } = getServerMuteDeafenState(user.id);
-    
+
     const isLocalMuted = (isCurrent && MediaEngineStore.isSelfMute()) || MediaEngineStore.isLocalMute(user.id);
     const isMuted = canServerMute ? isServerMuted : isLocalMuted;
     const color = isMuted ? "var(--status-danger)" : "var(--channels-default)";
-    
+
     const muteAction = canServerMute ? "Server Mute" : "Mute";
     const tooltipAction = isMuted ? (canServerMute ? "Unserver Mute" : "Unmute") : muteAction;
-    
+
     return (
         <VoiceUserButton
             user={user}
@@ -144,20 +144,20 @@ export function UserDeafenButton({ user }: { user: User; }) {
     const isCurrent = (user.id === UserStore.getCurrentUser().id);
     const { canDeafen: canServerDeafen } = canServerMuteDeafen(user.id);
     const { isServerDeafened } = getServerMuteDeafenState(user.id);
-    
+
     const useServerDeafenForSelf = isCurrent && settings.store.serverSelf && canServerDeafen;
-    
+
     const isMuted = MediaEngineStore.isLocalMute(user.id);
     const isSoundboardMuted = SoundboardStore.isLocalSoundboardMuted(user.id);
     const isVideoDisabled = MediaEngineStore.isLocalVideoDisabled(user.id);
     const isLocalDeafened = isCurrent && MediaEngineStore.isSelfDeaf() || isMuted && isSoundboardMuted && isVideoDisabled;
-    
+
     const isDeafened = (canServerDeafen && !isCurrent) || useServerDeafenForSelf ? isServerDeafened : isLocalDeafened;
     const color = isDeafened ? "var(--status-danger)" : "var(--channels-default)";
-    
+
     const deafenAction = (canServerDeafen && !isCurrent) || useServerDeafenForSelf ? "Server Deafen" : "Deafen";
     const tooltipAction = isDeafened ? (((canServerDeafen && !isCurrent) || useServerDeafenForSelf) ? "Unserver Deafen" : "Undeafen") : deafenAction;
-    
+
     return (
         <VoiceUserButton
             user={user}
