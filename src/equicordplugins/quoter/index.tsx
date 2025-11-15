@@ -46,6 +46,17 @@ export default definePlugin({
     description: "Adds the ability to create an inspirational quote image from a message",
     authors: [Devs.Samwich, Devs.thororen],
     settings,
+
+    async start() {
+        await ensureFontLoaded();
+    },
+
+    stop() {
+        const style = document.getElementById("quoter-font-style");
+        if (style) style.remove();
+        fontLoadingPromise = null;
+    },
+
     contextMenus: {
         "message": (children, { message }) => {
             if (!message.content) return;
@@ -71,24 +82,26 @@ function sizeUpgrade(url: string) {
     return u.toString();
 }
 
+let fontLoadingPromise: Promise<void> | null = null;
+
 async function ensureFontLoaded(): Promise<void> {
-    const fontName = "M PLUS Rounded 1c";
+    if (fontLoadingPromise) return fontLoadingPromise;
 
-    if (document.fonts.check(`300 12px "${fontName}"`)) {
-        return;
-    }
+    fontLoadingPromise = (async () => {
+        const fontName = "M PLUS Rounded 1c";
 
-    try {
-        const font = new FontFace(
-            fontName,
-            'url(https://fonts.gstatic.com/s/mplusrounded1c/v15/VdGCAYIAV6gnpUpoWwNkYvrugw9RuM3ixLsg6-av1x0.woff2) format("woff2")',
-            { weight: "300", style: "normal" }
-        );
-        await font.load();
-        document.fonts.add(font);
-    } catch (error) {
-        console.warn("[Quoter] Font loading failed:", error);
-    }
+        if (!document.getElementById("quoter-font-style")) {
+            const style = document.createElement("style");
+            style.id = "quoter-font-style";
+            style.textContent = `
+                @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300&display=swap');
+            `;
+            document.head.appendChild(style);
+            await new Promise(resolve => setTimeout(resolve, 200));
+        }
+    })();
+
+    return fontLoadingPromise;
 }
 
 async function canvasToGif(canvas: HTMLCanvasElement): Promise<Blob> {
