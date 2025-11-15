@@ -7,6 +7,10 @@
     transition: color 0.2s ease;
 }
 
+.message-shuffler-icon--toast {
+    transform: scale(1.1);
+}
+
 .message-shuffler-icon--active {
     color: var(--status-green-500);
     animation: message-shuffler-wiggle 1s ease-in-out infinite;
