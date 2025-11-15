@@ -19,6 +19,14 @@ import { applyPalette, GIFEncoder, quantize } from "gifenc";
 import { QuoteIcon } from "./components";
 import { canvasToBlob, fetchImageAsBlob, FixUpQuote } from "./utils";
 
+enum QuoteFont {
+    MPlusRounded = "M PLUS Rounded 1c",
+    OpenSans = "Open Sans",
+    MomoSignature = "Momo Signature",
+    Lora = "Lora",
+    Merriweather = "Merriweather"
+}
+
 interface QuoteImageOptions {
     avatarUrl: string;
     quoteOld: string;
@@ -31,9 +39,21 @@ interface QuoteImageOptions {
     watermark?: string;
     showWatermark?: boolean;
     saveAsGif?: boolean;
+    quoteFont?: QuoteFont;
 }
 
 const settings = definePluginSettings({
+    quoteFont: {
+        type: OptionType.SELECT,
+        description: "Font for quote text (author/username always use M PLUS Rounded 1c)",
+        options: [
+            { label: "M PLUS Rounded 1c", value: QuoteFont.MPlusRounded, default: true },
+            { label: "Open Sans", value: QuoteFont.OpenSans },
+            { label: "Momo Signature", value: QuoteFont.MomoSignature },
+            { label: "Lora", value: QuoteFont.Lora },
+            { label: "Merriweather", value: QuoteFont.Merriweather }
+        ]
+    },
     watermark: {
         type: OptionType.STRING,
         description: "Custom watermark text (max 32 characters)",
@@ -103,16 +123,18 @@ async function ensureFontLoaded(): Promise<void> {
     if (fontLoadingPromise) return fontLoadingPromise;
 
     fontLoadingPromise = (async () => {
-        const fontName = "M PLUS Rounded 1c";
-
         if (!document.getElementById("quoter-font-style")) {
             const style = document.createElement("style");
             style.id = "quoter-font-style";
             style.textContent = `
                 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Momo+Signature&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
             `;
             document.head.appendChild(style);
-            await new Promise(resolve => setTimeout(resolve, 200));
+            await new Promise(resolve => setTimeout(resolve, 300));
         }
     })();
 
@@ -136,7 +158,7 @@ async function canvasToGif(canvas: HTMLCanvasElement): Promise<Blob> {
 }
 
 async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
-    const { avatarUrl, quoteOld, grayScale, author, watermark, showWatermark, saveAsGif } = options;
+    const { avatarUrl, quoteOld, grayScale, author, watermark, showWatermark, saveAsGif, quoteFont } = options;
 
     await ensureFontLoaded();
 
@@ -146,6 +168,7 @@ async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
     if (!ctx) throw new Error("Cant get 2d rendering context :(");
 
     const name = author.globalName || author.username;
+    const selectedQuoteFont = quoteFont || QuoteFont.MPlusRounded;
 
     const cardWidth = 1200;
     const cardHeight = 600;
@@ -184,7 +207,7 @@ async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
     const maxContentHeight = cardHeight * 0.8;
 
     const calculateLines = (text: string, fontSize: number): string[] => {
-        ctx.font = `300 ${fontSize}px 'M PLUS Rounded 1c', sans-serif`;
+        ctx.font = `300 ${fontSize}px '${selectedQuoteFont}', sans-serif`;
         const words = text.split(" ");
         const lines: string[] = [];
         let currentLine: string[] = [];
@@ -229,7 +252,7 @@ async function createQuoteImage(options: QuoteImageOptions): Promise<Blob> {
     }
 
     ctx.fillStyle = "#fff";
-    ctx.font = `300 ${fontSize}px 'M PLUS Rounded 1c', sans-serif`;
+    ctx.font = `300 ${fontSize}px '${selectedQuoteFont}', sans-serif`;
 
     let quoteY = (cardHeight - totalHeight) / 2;
 
@@ -274,7 +297,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
     const [showWatermark, setShowWatermark] = useState(settings.store.showWatermark);
     const [saveAsGif, setSaveAsGif] = useState(settings.store.saveAsGif);
     const [quoteImage, setQuoteImage] = useState<Blob | null>(null);
-    const { watermark } = settings.store;
+    const { watermark, quoteFont } = settings.store;
     const safeContent = message.content ? message.content : "";
 
     useEffect(() => {
@@ -297,13 +320,14 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
             author: message.author,
             watermark,
             showWatermark,
-            saveAsGif
+            saveAsGif,
+            quoteFont
         });
         setQuoteImage(image);
         document.getElementById("quoterPreview")?.setAttribute("src", URL.createObjectURL(image));
     };
 
-    useEffect(() => { generateImage(); }, [gray, showWatermark, saveAsGif, safeContent, watermark]);
+    useEffect(() => { generateImage(); }, [gray, showWatermark, saveAsGif, safeContent, watermark, quoteFont]);
 
     const Export = () => {
         if (!quoteImage) return;
