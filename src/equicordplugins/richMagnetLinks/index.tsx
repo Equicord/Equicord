@@ -15,14 +15,14 @@ export default definePlugin({
     description: "Renders magnet links like message links",
     patches: [
         {
-            find: "mention:{order:",
+            find: "AUTO_MODERATION_SYSTEM_MESSAGE_RULES:",
             replacement: {
                 match: /mention:\{order:(\i\.\i\.order)/,
                 replace: "magnet:$self.magnetLink($1),$&"
             }
         },
         {
-            find: "Unknown markdown rule:",
+            find: '"flattenMarkdown"',
             replacement: {
                 match: /mention:{type:/,
                 replace: "magnet:{type:\"inlineObject\"},$&",
