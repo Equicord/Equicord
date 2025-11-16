@@ -109,12 +109,14 @@ export function UserMuteButton({ user }: { user: User; }) {
     const { canMute: canServerMute } = canServerMuteDeafen(user.id);
     const { isServerMuted } = getServerMuteDeafenState(user.id);
 
+    const useServerMuteForSelf = isCurrent && settings.store.serverSelf && canServerMute;
+
     const isLocalMuted = (isCurrent && MediaEngineStore.isSelfMute()) || MediaEngineStore.isLocalMute(user.id);
     const isMuted = canServerMute ? isServerMuted : isLocalMuted;
     const color = isMuted ? "var(--status-danger)" : "var(--channels-default)";
 
-    const muteAction = canServerMute ? "Server Mute" : "Mute";
-    const tooltipAction = isMuted ? (canServerMute ? "Unserver Mute" : "Unmute") : muteAction;
+    const muteAction = canServerMute && (useServerMuteForSelf || !isCurrent) ? "Server Mute" : "Mute";
+    const tooltipAction = isMuted ? (canServerMute && (useServerMuteForSelf || !isCurrent) ? "Unserver Mute" : "Unmute") : muteAction;
 
     return (
         <VoiceUserButton
@@ -152,11 +154,11 @@ export function UserDeafenButton({ user }: { user: User; }) {
     const isVideoDisabled = MediaEngineStore.isLocalVideoDisabled(user.id);
     const isLocalDeafened = isCurrent && MediaEngineStore.isSelfDeaf() || isMuted && isSoundboardMuted && isVideoDisabled;
 
-    const isDeafened = (canServerDeafen && !isCurrent) || useServerDeafenForSelf ? isServerDeafened : isLocalDeafened;
+    const isDeafened = canServerDeafen && (useServerDeafenForSelf || !isCurrent) ? isServerDeafened : isLocalDeafened;
     const color = isDeafened ? "var(--status-danger)" : "var(--channels-default)";
 
-    const deafenAction = (canServerDeafen && !isCurrent) || useServerDeafenForSelf ? "Server Deafen" : "Deafen";
-    const tooltipAction = isDeafened ? (((canServerDeafen && !isCurrent) || useServerDeafenForSelf) ? "Unserver Deafen" : "Undeafen") : deafenAction;
+    const deafenAction = canServerDeafen && (useServerDeafenForSelf || !isCurrent) ? "Server Deafen" : "Deafen";
+    const tooltipAction = isDeafened ? (canServerDeafen && (useServerDeafenForSelf || !isCurrent) ? "Unserver Deafen" : "Undeafen") : deafenAction;
 
     return (
         <VoiceUserButton
