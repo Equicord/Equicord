@@ -169,7 +169,10 @@ export async function createQuoteImage(options: QuoteImageOptions): Promise<Blob
 
     const gradient = ctx.createLinearGradient(cardHeight - 400, 0, cardHeight, 0);
     gradient.addColorStop(0, "rgba(0, 0, 0, 0)");
-    gradient.addColorStop(0.5, "rgba(0, 0, 0, 0.7)");
+    gradient.addColorStop(0.2, "rgba(0, 0, 0, 0.3)");
+    gradient.addColorStop(0.4, "rgba(0, 0, 0, 0.5)");
+    gradient.addColorStop(0.6, "rgba(0, 0, 0, 0.7)");
+    gradient.addColorStop(0.8, "rgba(0, 0, 0, 0.85)");
     gradient.addColorStop(1, "rgba(0, 0, 0, 1)");
     ctx.fillStyle = gradient;
     ctx.fillRect(cardHeight - 400, 0, 400, cardHeight);
