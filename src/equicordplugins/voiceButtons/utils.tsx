@@ -7,14 +7,13 @@
 import "./styles.css";
 
 import { Icon, User } from "@vencord/discord-types";
-import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
-import { Button, ChannelStore, MediaEngineStore, NavigationRouter, PermissionsBits, PermissionStore, Tooltip, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
+import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
+import { Button, ChannelStore, GuildActions, MediaEngineStore, NavigationRouter, PermissionsBits, PermissionStore, Tooltip, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
 import { JSX } from "react";
 
 import { settings } from "./settings";
 
 const SoundboardStore = findStoreLazy("SoundboardStore");
-const GuildActions = findByPropsLazy("setServerMute", "setServerDeaf");
 const DeafenIconSelf = findComponentByCodeLazy("M22.7 2.7a1", "1.4l20-20ZM17") as Icon;
 const DeafenIconOther = findComponentByCodeLazy("M21.76.83a5.02", "M12.38") as Icon;
 const ChatIcon = findComponentByCodeLazy(".css,d:\"M12 22a10") as Icon;
