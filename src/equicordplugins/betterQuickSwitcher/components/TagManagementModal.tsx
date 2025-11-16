@@ -6,7 +6,7 @@
 
 import { BaseText } from "@components/BaseText";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { Button, Forms, showToast, TextInput, Toasts, useCallback, useState } from "@webpack/common";
+import { Button, ColorPicker, Forms, showToast, TextInput, Toasts, useCallback, useState } from "@webpack/common";
 
 import { addTagToEntity, createTag, deleteTag, type EntityType, getAllTags, getEntityTags, removeTagFromEntity, type Tag, updateTag } from "../utils/tagData";
 import { openTagDeleteConfirmationModal } from "./TagDeleteConfirmationModal";
@@ -21,7 +21,6 @@ interface TagManagementModalProps {
 
 function ColorPickerWrapper({ color, onChange }: { color: number; onChange: (color: number) => void; }) {
     try {
-        const { ColorPicker } = require("@webpack/common");
         return (
             <ColorPicker
                 color={color}

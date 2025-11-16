@@ -7,7 +7,7 @@
 import { BaseText } from "@components/BaseText";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
-import { Button, Forms, showToast, TextInput, Toasts, useState } from "@webpack/common";
+import { Button, ColorPicker, Forms, showToast, TextInput, Toasts, useState } from "@webpack/common";
 
 import { getEntityTypeName, type ResolvedEntity, resolveEntityName } from "../utils/entityResolver";
 import { deleteTag, getEntitiesWithTag, getUserTagData, removeTagFromEntity, type Tag, updateTag } from "../utils/tagData";
@@ -17,7 +17,6 @@ const { FormTitle, FormText } = Forms;
 
 function ColorPickerWrapper({ color, onChange }: { color: number; onChange: (color: number) => void; }) {
     try {
-        const { ColorPicker } = require("@webpack/common");
         return (
             <ColorPicker
                 color={color}
