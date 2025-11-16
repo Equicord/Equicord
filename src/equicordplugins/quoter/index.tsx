@@ -8,12 +8,12 @@ import { findGroupChildrenByChildId } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import { FormSwitch } from "@components/FormSwitch";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { Button, Menu, UploadHandler, useEffect, useState } from "@webpack/common";
+import { Button, Menu, TextInput, UploadHandler, useEffect, useState } from "@webpack/common";
 
 import { QuoteIcon } from "./components";
 import { createQuoteImage, ensureFontLoaded, generateFileNamePreview, QuoteFont, resetFontLoading, sizeUpgrade } from "./utils";
@@ -58,7 +58,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "Quoter",
     description: "Adds the ability to create an inspirational quote image from a message",
-    authors: [Devs.Samwich, Devs.thororen],
+    authors: [Devs.Samwich, Devs.thororen, EquicordDevs.neoarz],
     settings,
 
     async start() {
@@ -94,8 +94,9 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
     const [gray, setGray] = useState(settings.store.grayscale);
     const [showWatermark, setShowWatermark] = useState(settings.store.showWatermark);
     const [saveAsGif, setSaveAsGif] = useState(settings.store.saveAsGif);
+    const [watermarkText, setWatermarkText] = useState(settings.store.watermark);
     const [quoteImage, setQuoteImage] = useState<Blob | null>(null);
-    const { watermark, quoteFont } = settings.store;
+    const { quoteFont } = settings.store;
     const safeContent = message.content ? message.content : "";
 
     useEffect(() => {
@@ -116,7 +117,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
             quoteOld: safeContent,
             grayScale: gray,
             author: message.author,
-            watermark,
+            watermark: watermarkText,
             showWatermark,
             saveAsGif,
             quoteFont
@@ -125,7 +126,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
         document.getElementById("quoterPreview")?.setAttribute("src", URL.createObjectURL(image));
     };
 
-    useEffect(() => { generateImage(); }, [gray, showWatermark, saveAsGif, safeContent, watermark, quoteFont]);
+    useEffect(() => { generateImage(); }, [gray, showWatermark, saveAsGif, safeContent, watermarkText, quoteFont]);
 
     const Export = () => {
         if (!quoteImage) return;
@@ -162,11 +163,36 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
                 <br /><br />
                 <br /><br />
                 <FormSwitch title="Grayscale" value={gray} onChange={setGray} />
-                <FormSwitch title="Watermark" value={showWatermark} onChange={setShowWatermark} description="Customize watermark text in plugin settings" />
                 <FormSwitch title="Save as GIF" value={saveAsGif} onChange={setSaveAsGif} description="Saves/Sends the image as a GIF instead of a PNG" />
+                {!showWatermark ? (
+                    <FormSwitch
+                        title="Show Watermark"
+                        value={showWatermark}
+                        onChange={setShowWatermark}
+                    />
+                ) : (
+                    <>
+                        <FormSwitch
+                            title="Show Watermark"
+                            value={showWatermark}
+                            onChange={setShowWatermark}
+                            hideBorder
+                        />
+                        <div style={{ marginTop: "8px", marginBottom: "20px" }}>
+                            <TextInput
+                                value={watermarkText}
+                                onChange={setWatermarkText}
+                                placeholder="Watermark text (max 32 characters)"
+                                maxLength={32}
+                            />
+                        </div>
+                    </>
+                )}
                 <br />
-                <Button color={Button.Colors.BRAND} size={Button.Sizes.SMALL} onClick={async () => await Export()} style={{ display: "inline-block", marginRight: "5px" }}>Export</Button>
-                <Button color={Button.Colors.BRAND} size={Button.Sizes.SMALL} onClick={async () => await SendInChat()} style={{ display: "inline-block" }}>Send</Button>
+                <div style={{ display: "flex", gap: "5px" }}>
+                    <Button color={Button.Colors.BRAND} size={Button.Sizes.SMALL} onClick={async () => await Export()}>Export</Button>
+                    <Button color={Button.Colors.BRAND} size={Button.Sizes.SMALL} onClick={async () => await SendInChat()}>Send</Button>
+                </div>
             </ModalContent>
             <br />
         </ModalRoot>
