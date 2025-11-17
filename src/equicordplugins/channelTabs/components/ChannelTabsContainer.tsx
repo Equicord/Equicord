@@ -141,7 +141,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 setTabsOverflow(true);
                 return;
             }
-            const overflow = scroller.scrollWidth + 32 > scroller.clientWidth;
+            const overflow = scroller.scrollWidth > scroller.clientWidth;
             setTabsOverflow(overflow);
         };
 
@@ -321,7 +321,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             </>}
             <div className={cl("tab-container")}>
                 <HorizontalScroller
-                    customRef={node => { if (node) scrollerRef.current = node; }}
+                    customRef={node => { scrollerRef.current = node; }}
                     className={cl("tab-scroller", newTabButtonBehavior && !tabsOverflow && "tab-scroller-following")}
                 >
                     {openedTabs.filter(tab => tab != null).map((tab, i) =>
