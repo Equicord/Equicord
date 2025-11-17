@@ -321,7 +321,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             </>}
             <div className={cl("tab-container")}>
                 <HorizontalScroller
-                    ref={scrollerRef}
+                    customRef={node => { if (node) scrollerRef.current = node; }}
                     className={cl("tab-scroller", newTabButtonBehavior && !tabsOverflow && "tab-scroller-following")}
                 >
                     {openedTabs.filter(tab => tab != null).map((tab, i) =>
