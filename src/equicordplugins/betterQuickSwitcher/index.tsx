@@ -195,14 +195,14 @@ function addTagPillsToResults(results: any[], searchQuery?: any) {
 
 function normalizeSearchResults(results: any[]): any[] {
     return results.map(result => {
-        if (result.channelId !== undefined) {
-            return result;
+        if (!result.channelId) {
+            return {
+                ...result,
+                channelId: result.record?.id,
+            };
         }
 
-        return {
-            ...result,
-            channelId: result.record?.id,
-        };
+        return result;
     });
 }
 

@@ -35,7 +35,7 @@ export function calculateTagBoost(entityId: string, searchQuery: ParsedQuery): n
 
     const entityTags = getEntityTags(entityId);
 
-    if (entityTags.length === 0) {
+    if (!entityTags.length) {
         return 0;
     }
 

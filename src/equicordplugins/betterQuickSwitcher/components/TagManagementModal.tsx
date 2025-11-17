@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { Button, ColorPicker, Forms, showToast, TextInput, Toasts, useCallback, useState } from "@webpack/common";
@@ -12,6 +13,7 @@ import { addTagToEntity, createTag, deleteTag, type EntityType, getAllTags, getE
 import { openTagDeleteConfirmationModal } from "./TagDeleteConfirmationModal";
 
 const { FormTitle, FormText } = Forms;
+const cl = classNameFactory("vc-bqs-");
 
 interface TagManagementModalProps {
     entityId: string;
@@ -169,22 +171,22 @@ function TagManagementModalComponent({ entityId, entityType, entityName, ...moda
     return (
         <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
             <ModalHeader>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px", flexGrow: 1 }}>
+                <div className={cl("flex-col")} style={{ flexGrow: 1, gap: "4px" }}>
                     <BaseText tag="h2">Manage Tags</BaseText>
-                    <FormText style={{ color: "var(--text-muted)", fontSize: "14px" }}>
+                    <FormText className={cl("text-small-muted")}>
                         Managing tags for: <strong>{entityName}</strong>
                     </FormText>
                 </div>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
-            <ModalContent style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "16px" }}>
+            <ModalContent className="vc-better-quick-switcher-modal-content">
                 {/* Create New Tag Section */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <div className={cl("flex-col")}>
                     <FormTitle tag="h3">Create New Tag</FormTitle>
-                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                    <div className={cl("flex-row")}>
                         <div style={{ flex: 1 }}>
-                            <FormText style={{ marginBottom: "4px", fontSize: "12px" }}>Tag Name (max 20 chars)</FormText>
+                            <FormText className={cl("text-small-muted")} style={{ marginBottom: "4px" }}>Tag Name (max 20 chars)</FormText>
                             <TextInput
                                 placeholder="Enter tag name..."
                                 value={newTagName}
@@ -207,24 +209,14 @@ function TagManagementModalComponent({ entityId, entityType, entityName, ...moda
                 </div>
 
                 {/* Existing Tags Section */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <div className={cl("flex-col")}>
                     <FormTitle tag="h3">All Tags ({allTags.length})</FormTitle>
                     {allTags.length === 0 ? (
-                        <FormText style={{ color: "var(--text-muted)", fontStyle: "italic" }}>
+                        <FormText className="vc-better-quick-switcher-empty-state">
                             No tags created yet. Create one above!
                         </FormText>
                     ) : (
-                        <div style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "8px",
-                            maxHeight: "240px",
-                            overflowY: "auto",
-                            overflowX: "hidden",
-                            paddingRight: "4px",
-                            scrollbarWidth: "thin",
-                            scrollbarColor: "var(--scrollbar-thin-thumb) var(--scrollbar-thin-track)"
-                        }}>
+                        <div className="vc-better-quick-switcher-tag-list">
                             {allTags.map(tag => {
                                 const isEditing = editingTagId === tag.id;
                                 const isAssigned = assignedTagIds.has(tag.id);
@@ -232,15 +224,7 @@ function TagManagementModalComponent({ entityId, entityType, entityName, ...moda
                                 return (
                                     <div
                                         key={tag.id}
-                                        style={{
-                                            display: "flex",
-                                            gap: "8px",
-                                            alignItems: "center",
-                                            padding: "8px",
-                                            borderRadius: "4px",
-                                            backgroundColor: isAssigned ? "var(--background-modifier-selected)" : "var(--background-secondary)",
-                                            border: isAssigned ? "2px solid var(--brand-experiment)" : "1px solid var(--background-modifier-accent)"
-                                        }}
+                                        className={`vc-better-quick-switcher-tag-item ${isAssigned ? "vc-better-quick-switcher-tag-assigned" : ""}`}
                                     >
                                         {isEditing ? (
                                             <>
@@ -264,14 +248,12 @@ function TagManagementModalComponent({ entityId, entityType, entityName, ...moda
                                         ) : (
                                             <>
                                                 <div
+                                                    className="vc-better-quick-switcher-tag-color-preview"
                                                     style={{
-                                                        width: "24px",
-                                                        height: "24px",
-                                                        borderRadius: "4px",
                                                         backgroundColor: `rgb(${(tag.color >> 16) & 0xFF}, ${(tag.color >> 8) & 0xFF}, ${tag.color & 0xFF})`
                                                     }}
                                                 />
-                                                <BaseText style={{ flex: 1, fontWeight: 500 }}>{tag.name}</BaseText>
+                                                <BaseText style={{ flex: 1 }} className={cl("text-bold")}>{tag.name}</BaseText>
                                                 <Button
                                                     size={Button.Sizes.SMALL}
                                                     color={isAssigned ? Button.Colors.RED : Button.Colors.GREEN}

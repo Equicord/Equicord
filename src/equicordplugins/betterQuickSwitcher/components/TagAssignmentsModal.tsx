@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
@@ -14,6 +15,7 @@ import { deleteTag, getEntitiesWithTag, getUserTagData, removeTagFromEntity, typ
 import { openTagDeleteConfirmationModal } from "./TagDeleteConfirmationModal";
 
 const { FormTitle, FormText } = Forms;
+const cl = classNameFactory("vc-bqs-");
 
 function ColorPickerWrapper({ color, onChange }: { color: number; onChange: (color: number) => void; }) {
     try {
@@ -61,10 +63,10 @@ function AssignmentRow({ entity, tagId, onRemove }: AssignmentRowProps) {
                 </div>
             )}
             <div className="vc-bqs-assignment-info">
-                <BaseText style={{ fontWeight: 500 }}>
+                <BaseText className={cl("text-bold")}>
                     {entity.name}
                 </BaseText>
-                <FormText style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                <FormText className={cl("text-small-muted")}>
                     {getEntityTypeName(entity.type)}
                 </FormText>
             </div>
@@ -153,7 +155,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
     return (
         <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
             <ModalHeader>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", flexGrow: 1 }}>
+                <div className={cl("flex-row")} style={{ flexGrow: 1 }}>
                     <div
                         className="vc-better-quick-switcher-tag-color-preview"
                         style={{
@@ -165,14 +167,14 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
-            <ModalContent style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "20px" }}>
+            <ModalContent className={cl("modal-content-large")}>
                 {/* Tag Edit Section */}
                 <div className="vc-bqs-section">
                     <FormTitle tag="h3">Tag Details</FormTitle>
                     {isEditing ? (
-                        <div style={{ display: "flex", gap: "8px", alignItems: "flex-end" }}>
+                        <div className={cl("flex-row")}>
                             <div style={{ flex: 1 }}>
-                                <FormText style={{ marginBottom: "4px", fontSize: "12px" }}>Name</FormText>
+                                <FormText className={cl("text-small-muted")} style={{ marginBottom: "4px" }}>Name</FormText>
                                 <TextInput
                                     value={tagName}
                                     onChange={setTagName}
@@ -190,7 +192,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                             </Button>
                         </div>
                     ) : (
-                        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                        <div className={cl("flex-row")}>
                             <BaseText style={{ flex: 1 }}>
                                 Name: <strong>{tag.name}</strong>
                             </BaseText>
@@ -214,7 +216,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                             {/* Text Channels */}
                             {grouped.channel.length > 0 && (
                                 <div className="vc-bqs-assignment-group">
-                                    <FormTitle tag="h5" style={{ marginBottom: "8px" }}>
+                                    <FormTitle tag="h5" className={cl("entity-header")}>
                                         Text Channels ({grouped.channel.length})
                                     </FormTitle>
                                     {grouped.channel.map(entity => (
@@ -231,7 +233,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                             {/* Voice Channels */}
                             {grouped.voice.length > 0 && (
                                 <div className="vc-bqs-assignment-group">
-                                    <FormTitle tag="h5" style={{ marginBottom: "8px" }}>
+                                    <FormTitle tag="h5" className={cl("entity-header")}>
                                         Voice Channels ({grouped.voice.length})
                                     </FormTitle>
                                     {grouped.voice.map(entity => (
@@ -248,7 +250,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                             {/* Threads */}
                             {grouped.thread.length > 0 && (
                                 <div className="vc-bqs-assignment-group">
-                                    <FormTitle tag="h5" style={{ marginBottom: "8px" }}>
+                                    <FormTitle tag="h5" className={cl("entity-header")}>
                                         Threads ({grouped.thread.length})
                                     </FormTitle>
                                     {grouped.thread.map(entity => (
@@ -265,7 +267,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                             {/* Forums */}
                             {grouped.forum.length > 0 && (
                                 <div className="vc-bqs-assignment-group">
-                                    <FormTitle tag="h5" style={{ marginBottom: "8px" }}>
+                                    <FormTitle tag="h5" className={cl("entity-header")}>
                                         Forums ({grouped.forum.length})
                                     </FormTitle>
                                     {grouped.forum.map(entity => (
@@ -282,7 +284,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                             {/* Forum Posts */}
                             {grouped.forumPost.length > 0 && (
                                 <div className="vc-bqs-assignment-group">
-                                    <FormTitle tag="h5" style={{ marginBottom: "8px" }}>
+                                    <FormTitle tag="h5" className={cl("entity-header")}>
                                         Forum Posts ({grouped.forumPost.length})
                                     </FormTitle>
                                     {grouped.forumPost.map(entity => (
@@ -299,7 +301,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                             {/* DMs */}
                             {grouped.dm.length > 0 && (
                                 <div className="vc-bqs-assignment-group">
-                                    <FormTitle tag="h5" style={{ marginBottom: "8px" }}>
+                                    <FormTitle tag="h5" className={cl("entity-header")}>
                                         Direct Messages ({grouped.dm.length})
                                     </FormTitle>
                                     {grouped.dm.map(entity => (
@@ -316,7 +318,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                             {/* Group DMs */}
                             {grouped.groupDm.length > 0 && (
                                 <div className="vc-bqs-assignment-group">
-                                    <FormTitle tag="h5" style={{ marginBottom: "8px" }}>
+                                    <FormTitle tag="h5" className={cl("entity-header")}>
                                         Group DMs ({grouped.groupDm.length})
                                     </FormTitle>
                                     {grouped.groupDm.map(entity => (
@@ -333,7 +335,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                             {/* Members */}
                             {grouped.member.length > 0 && (
                                 <div className="vc-bqs-assignment-group">
-                                    <FormTitle tag="h5" style={{ marginBottom: "8px" }}>
+                                    <FormTitle tag="h5" className={cl("entity-header")}>
                                         Members ({grouped.member.length})
                                     </FormTitle>
                                     {grouped.member.map(entity => (
@@ -350,7 +352,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                             {/* Guilds */}
                             {grouped.guild.length > 0 && (
                                 <div className="vc-bqs-assignment-group">
-                                    <FormTitle tag="h5" style={{ marginBottom: "8px" }}>
+                                    <FormTitle tag="h5" className={cl("entity-header")}>
                                         Servers ({grouped.guild.length})
                                     </FormTitle>
                                     {grouped.guild.map(entity => (
@@ -375,7 +377,7 @@ function TagAssignmentsModalComponent({ tag, ...modalProps }: TagAssignmentsModa
                     >
                         Delete Tag
                     </Button>
-                    <FormText style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>
+                    <FormText className={cl("text-small-muted")} style={{ marginTop: "4px" }}>
                         This will remove the tag from all {entityIds.length} assignments.
                     </FormText>
                 </div>

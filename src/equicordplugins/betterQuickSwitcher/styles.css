@@ -105,6 +105,7 @@
     font-style: italic;
     text-align: center;
     padding: 16px;
+    margin-top: 16px;
 }
 
 /* Tag Settings Component */
@@ -217,4 +218,84 @@
 
 .vc-bqs-assignments-list::-webkit-scrollbar-thumb:hover {
     background: var(--background-modifier-hover);
+}
+
+/* Additional text styling classes */
+.vc-bqs-text-bold {
+    font-weight: 600;
+}
+
+.vc-bqs-text-small-muted {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.vc-bqs-text-muted {
+    color: var(--text-muted);
+}
+
+/* Modal content variations */
+.vc-bqs-modal-content-large {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.vc-bqs-modal-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Flex layouts */
+.vc-bqs-flex-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.vc-bqs-flex-row-centered {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.vc-bqs-flex-row-spread {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vc-bqs-flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vc-bqs-flex-col-large {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Button groups */
+.vc-bqs-button-group {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+/* Entity type headers */
+.vc-bqs-entity-header {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--header-primary);
+    margin-top: 8px;
+}
+
+.vc-bqs-entity-header:first-child {
+    margin-top: 0;
 }

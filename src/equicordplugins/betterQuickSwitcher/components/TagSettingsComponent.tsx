@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { useForceUpdater } from "@utils/react";
 import { Button, Forms, showToast, Toasts } from "@webpack/common";
@@ -13,6 +14,7 @@ import { openTagAssignmentsModal } from "./TagAssignmentsModal";
 import { openTagDeleteConfirmationModal } from "./TagDeleteConfirmationModal";
 
 const { FormTitle, FormText } = Forms;
+const cl = classNameFactory("vc-bqs-");
 
 interface TagCardProps {
     tag: Tag;
@@ -41,8 +43,8 @@ function TagCard({ tag, onUpdate }: TagCardProps) {
                 }}
             />
             <div className="vc-bqs-tag-card-info">
-                <BaseText style={{ fontWeight: 600 }}>{tag.name}</BaseText>
-                <FormText style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                <BaseText className={cl("text-bold")}>{tag.name}</BaseText>
+                <FormText className={cl("text-small-muted")}>
                     {assignmentCount} {assignmentCount === 1 ? "assignment" : "assignments"}
                 </FormText>
             </div>
@@ -78,7 +80,7 @@ export function TagSettingsComponent() {
             </FormText>
 
             {allTags.length === 0 ? (
-                <FormText className="vc-better-quick-switcher-empty-state" style={{ marginTop: "16px" }}>
+                <FormText className="vc-better-quick-switcher-empty-state">
                     No tags created yet. Right-click a channel, voice channel, or member to create and assign tags!
                 </FormText>
             ) : (

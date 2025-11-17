@@ -30,18 +30,8 @@ function TagPillComponent({ tag, maxLength = 15 }: TagPillProps) {
         <span
             className={cl("tag-pill")}
             style={{
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "2px 6px",
-                marginLeft: "4px",
-                borderRadius: "8px",
                 backgroundColor,
-                color: textColor,
-                fontSize: "0.75rem",
-                fontWeight: 500,
-                lineHeight: "1",
-                whiteSpace: "nowrap",
-                verticalAlign: "middle"
+                color: textColor
             }}
             title={tag.name} // show full name on hover if truncated
         >
@@ -72,7 +62,7 @@ export function TagPillList({ tags, maxLength = 15 }: TagPillListProps) {
 
     return (
         <ErrorBoundary noop>
-            <span className={cl("tag-pill-list")} style={{ display: "inline-flex", gap: "2px" }}>
+            <span className={cl("tag-pill-list")}>
                 {tags.map(tag => (
                     <TagPillComponent key={tag.id} tag={tag} maxLength={maxLength} />
                 ))}

@@ -36,11 +36,9 @@ export interface EntityTags {
 export interface TagData {
     tags: Record<string, Tag>;
     entityTags: EntityTags;
-    version: number;
 }
 
 const TAG_NAME_MAX_LENGTH = 20;
-const CURRENT_VERSION = 1;
 
 // get current user's tag data
 export function getUserTagData(): TagData {
@@ -80,8 +78,7 @@ function saveUserTagData(tagData: TagData): void {
 function getEmptyTagData(): TagData {
     return {
         tags: {},
-        entityTags: {},
-        version: CURRENT_VERSION
+        entityTags: {}
     };
 }
 
@@ -123,7 +120,7 @@ export function updateTag(tagId: string, updates: Partial<Omit<Tag, "id">>): boo
 
     if (!tag) return false;
 
-    if (updates.name !== undefined) {
+    if (updates.name) {
         const trimmedName = updates.name.trim();
         if (!trimmedName || trimmedName.length > TAG_NAME_MAX_LENGTH) {
             throw new Error(`Tag name must be 1-${TAG_NAME_MAX_LENGTH} characters`);
@@ -131,7 +128,7 @@ export function updateTag(tagId: string, updates: Partial<Omit<Tag, "id">>): boo
         tag.name = trimmedName;
     }
 
-    if (updates.color !== undefined) {
+    if (updates.color) {
         tag.color = updates.color;
     }
 
