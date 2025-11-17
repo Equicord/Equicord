@@ -46,6 +46,13 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
         setGhostedChannels(prev => prev.filter(id => id !== channelId));
     };
 
+    const handleClearAll = () => {
+        for (const channelId of initialChannels) {
+            onClearGhost(channelId);
+        }
+        setGhostedChannels([]);
+    };
+
     return (
         <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
             <ModalHeader>
@@ -55,6 +62,16 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                 >
                     Ghosted Users ({ghostedChannels.length})
                 </Text>
+                {ghostedChannels.length > 0 && (
+                    <Button
+                        size={Button.Sizes.SMALL}
+                        color={Button.Colors.PRIMARY}
+                        onClick={handleClearAll}
+                        style={{ marginRight: "16px" }}
+                    >
+                        Clear All
+                    </Button>
+                )}
                 <ModalCloseButton onClick={onClose} />
             </ModalHeader>
             <ModalContent>
