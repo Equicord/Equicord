@@ -8,6 +8,7 @@ import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
+import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import {
@@ -577,49 +578,6 @@ function searchThreads(guildId: string, searchTerm: string) {
     return applySorting(resultsWithPills);
 }
 
-function searchForums(guildId: string, searchTerm: string) {
-    const channels = Object.values(
-        ChannelStore.getMutableGuildChannelsForGuild(guildId) || {},
-    );
-
-    const parsedQuery = settings.store.enableTags
-        ? parseSearchQuery(searchTerm)
-        : {
-            rawQuery: searchTerm,
-            searchTerm: searchTerm.toLowerCase(),
-            tagFilters: [],
-            isExplicitTagSearch: false,
-        };
-
-    const results = channels
-        .filter(channel => {
-            if (channel.type === 15) return true;
-            if (channel.type === 11 || channel.type === 12) {
-                const parent = channel.parent_id
-                    ? ChannelStore.getChannel(channel.parent_id)
-                    : null;
-                return parent?.type === 15;
-            }
-            return false;
-        })
-        .map(channel => ({
-            type: "TEXT_CHANNEL",
-            record: channel,
-            channelId: channel.id,
-            score: 20,
-            comparator: channel.name,
-            sortable: channel.name,
-        }));
-
-    const filteredResults = settings.store.enableTags
-        ? applyTagFiltering(results, parsedQuery)
-        : results;
-
-    const resultsWithPills = addTagPillsToResults(filteredResults, parsedQuery);
-
-    return applySorting(resultsWithPills);
-}
-
 function searchAllByTags(searchTerm: string) {
     const currentGuildId = SelectedGuildStore.getGuildId();
 
@@ -932,11 +890,17 @@ function sortByFrequency(results: any[]) {
 
 export default definePlugin({
     name: "BetterQuickSwitcher",
-    description: "Enhances Quick Switcher with guild-scoped filtering (##, !!, @@) and a powerful tagging system. Tag any channel, voice channel, thread, forum, member, or guild, then search with tag:name to instantly find them across all servers.",
+    description: "Enhances Quick Switcher with guild-scoped filtering (##, !!, @@) and a powerful tagging system",
     authors: [EquicordDevs.justjxke],
-
     settings,
     contextMenus,
+    settingsAboutComponent() {
+        return (
+            <Paragraph>
+                You can tag any channel, thread, forum, member, or guild and search with tag:name to instantly find them across all servers.
+            </Paragraph>
+        );
+    },
     flux: {
         CHANNEL_SELECT(data: { channelId: string; }) {
             if (data.channelId) {
