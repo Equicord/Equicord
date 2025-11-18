@@ -5,6 +5,7 @@
  */
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { Guild, User } from "@vencord/discord-types";
 import { ChannelStore, Menu } from "@webpack/common";
 
 import { settings } from "..";
@@ -34,7 +35,7 @@ function createManageTagsMenuItem(
 /**
  * Channel Context Menu (text channels, DMs, group DMs, threads, forums)
  */
-const ChannelContext: NavContextMenuPatchCallback = (children, props) => {
+export const ChannelContext: NavContextMenuPatchCallback = (children, props) => {
     if (!settings.store.enableTags) return;
 
     const { channel } = props;
@@ -82,66 +83,39 @@ const ChannelContext: NavContextMenuPatchCallback = (children, props) => {
             return;
     }
 
-    let container = findGroupChildrenByChildId("mark-channel-read", children);
-    if (!container) {
-        container = findGroupChildrenByChildId("devmode-copy-id", children);
-    }
-    if (!container) {
-        container = findGroupChildrenByChildId("notifications", children);
-    }
+    const group = findGroupChildrenByChildId("mark-channel-read", children) ?? children;
 
-    if (container) {
-        container.push(createManageTagsMenuItem(
-            channel.id,
-            entityType,
-            entityName
-        ));
-    }
+    group.push(createManageTagsMenuItem(
+        channel.id,
+        entityType,
+        entityName
+    ));
 };
 
 /**
  * User Context Menu (guild members and DMs)
  */
-const UserContext: NavContextMenuPatchCallback = (children, props) => {
-    if (!settings.store.enableTags) return;
+export const UserContext: NavContextMenuPatchCallback = (children, { user }: { user: User; }) => {
+    if (!settings.store.enableTags || !user) return;
 
-    const { user } = props;
-    if (!user) return;
-
-    let container = findGroupChildrenByChildId("user-profile-actions", children);
-    if (!container) {
-        container = findGroupChildrenByChildId("devmode-copy-id", children);
-    }
-    if (!container) {
-        container = findGroupChildrenByChildId("roles", children);
-    }
-
-    if (container) {
-        container.push(createManageTagsMenuItem(
-            user.id,
-            "member",
-            user.globalName || user.username || "Unknown User"
-        ));
-    }
+    children.push(createManageTagsMenuItem(
+        user.id,
+        "member",
+        user.globalName || user.username || "Unknown User"
+    ));
 };
 
 /**
  * Guild Context Menu
  */
-const GuildContext: NavContextMenuPatchCallback = (children, props) => {
-    if (!settings.store.enableTags) return;
+export const GuildContext: NavContextMenuPatchCallback = (children, { guild }: { guild: Guild; }) => {
+    if (!settings.store.enableTags || !guild) return;
 
-    const { guild } = props;
-    if (!guild) return;
-
-    const container = findGroupChildrenByChildId("privacy", children);
-    if (container) {
-        container.push(createManageTagsMenuItem(
-            guild.id,
-            "guild",
-            guild.name || "Unknown Guild"
-        ));
-    }
+    children.push(createManageTagsMenuItem(
+        guild.id,
+        "guild",
+        guild.name || "Unknown Guild"
+    ));
 };
 
 /**

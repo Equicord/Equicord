@@ -12,7 +12,6 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import {
     ChannelStore,
-    FluxDispatcher,
     GuildMemberStore,
     GuildStore,
     ReadStateStore,
@@ -67,7 +66,6 @@ export const settings = definePluginSettings({
 
 const channelAccessTimes = new Map<string, number>();
 const channelAccessOrder: string[] = [];
-let fluxUnsubscribe: (() => void) | null = null;
 
 interface SearchCacheEntry {
     results: any[];
@@ -137,29 +135,6 @@ function setCachedSearchResults(
         if (oldestKey) {
             searchResultsCache.delete(oldestKey);
             cacheAccessTimes.delete(oldestKey);
-        }
-    }
-}
-
-function handleChannelSelect(data: { channelId: string; }) {
-    if (data.channelId) {
-        const now = Date.now();
-
-        if (channelAccessTimes.has(data.channelId)) {
-            const index = channelAccessOrder.indexOf(data.channelId);
-            if (index > -1) {
-                channelAccessOrder.splice(index, 1);
-            }
-        }
-
-        channelAccessTimes.set(data.channelId, now);
-        channelAccessOrder.push(data.channelId);
-
-        if (channelAccessTimes.size > MAX_CHANNEL_HISTORY) {
-            const oldestKey = channelAccessOrder.shift();
-            if (oldestKey) {
-                channelAccessTimes.delete(oldestKey);
-            }
         }
     }
 }
@@ -956,24 +931,37 @@ function sortByFrequency(results: any[]) {
 
 export default definePlugin({
     name: "BetterQuickSwitcher",
-    description:
-        "Enhances Quick Switcher with guild-scoped filtering (##, !!, @@) and a powerful tagging system. Tag any channel, voice channel, thread, forum, member, or guild, then search with tag:name to instantly find them across all servers.",
+    description: "Enhances Quick Switcher with guild-scoped filtering (##, !!, @@) and a powerful tagging system. Tag any channel, voice channel, thread, forum, member, or guild, then search with tag:name to instantly find them across all servers.",
     authors: [EquicordDevs.justjxke],
 
     settings,
     contextMenus,
+    flux: {
+        CHANNEL_SELECT(data: { channelId: string; }) {
+            if (data.channelId) {
+                const now = Date.now();
 
-    start() {
-        FluxDispatcher.subscribe("CHANNEL_SELECT", handleChannelSelect);
-        fluxUnsubscribe = () =>
-            FluxDispatcher.unsubscribe("CHANNEL_SELECT", handleChannelSelect);
+                if (channelAccessTimes.has(data.channelId)) {
+                    const index = channelAccessOrder.indexOf(data.channelId);
+                    if (index > -1) {
+                        channelAccessOrder.splice(index, 1);
+                    }
+                }
+
+                channelAccessTimes.set(data.channelId, now);
+                channelAccessOrder.push(data.channelId);
+
+                if (channelAccessTimes.size > MAX_CHANNEL_HISTORY) {
+                    const oldestKey = channelAccessOrder.shift();
+                    if (oldestKey) {
+                        channelAccessTimes.delete(oldestKey);
+                    }
+                }
+            }
+        }
     },
 
     stop() {
-        if (fluxUnsubscribe) {
-            fluxUnsubscribe();
-            fluxUnsubscribe = null;
-        }
         channelAccessTimes.clear();
         channelAccessOrder.length = 0; // clear order array
         clearSearchCache();
@@ -984,8 +972,7 @@ export default definePlugin({
             find: "#{intl::QUICKSWITCHER_PLACEHOLDER}",
             replacement: {
                 match: /let{selectedIndex:\i,results:\i}/,
-                replace:
-                    "const customResults = $self.generateCustomResults(this.state.query); if(customResults !== null) { this.props.results = customResults; } else { this.props.results = $self.normalizeAndFilterResults(this.props.results, this.state.query); } $&",
+                replace: "$self.customResults(this.props, this.state);$&",
             },
         },
         {
@@ -1019,6 +1006,15 @@ export default definePlugin({
             },
         },
     ],
+
+    customResults(props, state) {
+        const customResults = generateCustomResults(state.query);
+        if (!customResults) {
+            props.results = customResults;
+        } else {
+            props.results = normalizeAndFilterResults(props.results, state.query);
+        }
+    },
 
     generateCustomResults,
     getTagPillsForChannel,
