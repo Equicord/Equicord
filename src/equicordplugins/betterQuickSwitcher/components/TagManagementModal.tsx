@@ -4,16 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { Button, ColorPicker, Forms, showToast, TextInput, Toasts, useCallback, useState } from "@webpack/common";
 
+import { cl } from "..";
 import { addTagToEntity, createTag, deleteTag, type EntityType, getAllTags, getEntityTags, removeTagFromEntity, type Tag, updateTag } from "../utils/tagData";
 import { openTagDeleteConfirmationModal } from "./TagDeleteConfirmationModal";
 
 const { FormTitle, FormText } = Forms;
-const cl = classNameFactory("vc-bqs-");
 
 interface TagManagementModalProps {
     entityId: string;
@@ -180,7 +179,7 @@ function TagManagementModalComponent({ entityId, entityType, entityName, ...moda
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
-            <ModalContent className="vc-better-quick-switcher-modal-content">
+            <ModalContent className={cl("modal-content")}>
                 {/* Create New Tag Section */}
                 <div className={cl("flex-col")}>
                     <FormTitle tag="h3">Create New Tag</FormTitle>
@@ -212,11 +211,11 @@ function TagManagementModalComponent({ entityId, entityType, entityName, ...moda
                 <div className={cl("flex-col")}>
                     <FormTitle tag="h3">All Tags ({allTags.length})</FormTitle>
                     {allTags.length === 0 ? (
-                        <FormText className="vc-better-quick-switcher-empty-state">
+                        <FormText className={cl("empty-state")}>
                             No tags created yet. Create one above!
                         </FormText>
                     ) : (
-                        <div className="vc-better-quick-switcher-tag-list">
+                        <div className={cl("tag-list")}>
                             {allTags.map(tag => {
                                 const isEditing = editingTagId === tag.id;
                                 const isAssigned = assignedTagIds.has(tag.id);
@@ -224,7 +223,7 @@ function TagManagementModalComponent({ entityId, entityType, entityName, ...moda
                                 return (
                                     <div
                                         key={tag.id}
-                                        className={`vc-better-quick-switcher-tag-item ${isAssigned ? "vc-better-quick-switcher-tag-assigned" : ""}`}
+                                        className={cl("tag-item", isAssigned ? "tag-assigned" : "")}
                                     >
                                         {isEditing ? (
                                             <>
@@ -248,7 +247,7 @@ function TagManagementModalComponent({ entityId, entityType, entityName, ...moda
                                         ) : (
                                             <>
                                                 <div
-                                                    className="vc-better-quick-switcher-tag-color-preview"
+                                                    className={cl("tag-color-preview")}
                                                     style={{
                                                         backgroundColor: `rgb(${(tag.color >> 16) & 0xFF}, ${(tag.color >> 8) & 0xFF}, ${tag.color & 0xFF})`
                                                     }}

@@ -4,12 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 
+import { cl } from "..";
 import { colorToRgb, type Tag, truncateTagName } from "../utils/tagData";
-
-const cl = classNameFactory("vc-better-quick-switcher-");
 
 interface TagPillProps {
     tag: Tag;

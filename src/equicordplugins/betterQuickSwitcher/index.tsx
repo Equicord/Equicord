@@ -7,6 +7,7 @@
 import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
+import { classNameFactory } from "@api/Styles";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import {
@@ -27,6 +28,7 @@ import { getEntityTags, getUserTagData, type TagData } from "./utils/tagData";
 import { applyTagFiltering } from "./utils/tagScoring";
 import { getRelevantTags, parseSearchQuery } from "./utils/tagSearch";
 
+export const cl = classNameFactory("vc-bqs-");
 export const settings = definePluginSettings({
     enableTags: {
         type: OptionType.BOOLEAN,

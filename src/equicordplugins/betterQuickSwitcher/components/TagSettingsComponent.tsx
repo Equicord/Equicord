@@ -4,17 +4,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { useForceUpdater } from "@utils/react";
 import { Button, Forms, showToast, Toasts } from "@webpack/common";
 
+import { cl } from "..";
 import { deleteTag, getAllTags, getEntitiesWithTag, type Tag } from "../utils/tagData";
 import { openTagAssignmentsModal } from "./TagAssignmentsModal";
 import { openTagDeleteConfirmationModal } from "./TagDeleteConfirmationModal";
 
 const { FormTitle, FormText } = Forms;
-const cl = classNameFactory("vc-bqs-");
 
 interface TagCardProps {
     tag: Tag;
@@ -35,20 +34,20 @@ function TagCard({ tag, onUpdate }: TagCardProps) {
     }
 
     return (
-        <div className="vc-bqs-tag-card">
+        <div className={cl("tag-card")}>
             <div
-                className="vc-better-quick-switcher-tag-color-preview"
+                className={cl("tag-color-preview")}
                 style={{
                     backgroundColor: `rgb(${(tag.color >> 16) & 0xFF}, ${(tag.color >> 8) & 0xFF}, ${tag.color & 0xFF})`
                 }}
             />
-            <div className="vc-bqs-tag-card-info">
+            <div className={cl("tag-card-info")}>
                 <BaseText className={cl("text-bold")}>{tag.name}</BaseText>
                 <FormText className={cl("text-small-muted")}>
                     {assignmentCount} {assignmentCount === 1 ? "assignment" : "assignments"}
                 </FormText>
             </div>
-            <div className="vc-bqs-tag-card-actions">
+            <div className={cl("tag-card-actions")}>
                 <Button
                     size={Button.Sizes.SMALL}
                     color={Button.Colors.PRIMARY}
@@ -80,11 +79,11 @@ export function TagSettingsComponent() {
             </FormText>
 
             {allTags.length === 0 ? (
-                <FormText className="vc-better-quick-switcher-empty-state">
+                <FormText className={cl("empty-state")}>
                     No tags created yet. Right-click a channel, voice channel, or member to create and assign tags!
                 </FormText>
             ) : (
-                <div className="vc-bqs-tag-cards-list">
+                <div className={cl("tag-cards-list")}>
                     {allTags.map(tag => (
                         <TagCard
                             key={tag.id}

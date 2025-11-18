@@ -4,16 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { Button, Forms } from "@webpack/common";
 
+import { cl } from "..";
 import { resolveEntityName } from "../utils/entityResolver";
 import { getEntitiesWithTag, getUserTagData, type Tag } from "../utils/tagData";
 
 const { FormTitle, FormText } = Forms;
-const cl = classNameFactory("vc-bqs-");
 
 interface TagDeleteConfirmationModalProps {
     tag: Tag;
@@ -57,10 +56,10 @@ function TagDeleteConfirmationModalComponent({ tag, onConfirm, ...modalProps }: 
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
-            <ModalContent className="vc-better-quick-switcher-modal-content">
+            <ModalContent className={cl("modal-content")}>
                 <div className={cl("flex-row")}>
                     <div
-                        className="vc-better-quick-switcher-tag-color-preview"
+                        className={cl("tag-color-preview")}
                         style={{
                             backgroundColor: `rgb(${(tag.color >> 16) & 0xFF}, ${(tag.color >> 8) & 0xFF}, ${tag.color & 0xFF})`
                         }}

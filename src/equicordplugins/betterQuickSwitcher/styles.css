@@ -1,5 +1,5 @@
 /* Tag Pill Base Styles */
-.vc-better-quick-switcher-tag-pill {
+.vc-bqs-tag-pill {
     display: inline-flex;
     align-items: center;
     padding: 2px 6px;
@@ -13,26 +13,26 @@
     transition: opacity 0.1s ease;
 }
 
-.vc-better-quick-switcher-tag-pill:hover {
+.vc-bqs-tag-pill:hover {
     opacity: 0.9;
 }
 
 /* Tag Pill List Container */
-.vc-better-quick-switcher-tag-pill-list {
+.vc-bqs-tag-pill-list {
     display: inline-flex;
     gap: 2px;
     flex-wrap: wrap;
 }
 
 /* Tag Management Modal Specific Styles */
-.vc-better-quick-switcher-modal-content {
+.vc-bqsmodal-content {
     padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.vc-better-quick-switcher-tag-item {
+.vc-bqs-tag-item {
     display: flex;
     gap: 8px;
     align-items: center;
@@ -41,11 +41,11 @@
     transition: background-color 0.1s ease;
 }
 
-.vc-better-quick-switcher-tag-item:hover {
+.vc-bqs-tag-item:hover {
     background-color: var(--background-modifier-hover);
 }
 
-.vc-better-quick-switcher-tag-color-preview {
+.vc-bqs-tag-color-preview {
     width: 24px;
     height: 24px;
     border-radius: 4px;
@@ -53,20 +53,20 @@
     border: 1px solid var(--background-modifier-accent);
 }
 
-.vc-better-quick-switcher-tag-form {
+.vc-bqs-tag-form {
     display: flex;
     gap: 8px;
     align-items: flex-end;
 }
 
-.vc-better-quick-switcher-tag-form-field {
+.vc-bqs-tag-form-field {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.vc-better-quick-switcher-tag-list {
+.vc-bqs-tag-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -75,32 +75,32 @@
 }
 
 /* Scrollbar styling for tag list */
-.vc-better-quick-switcher-tag-list::-webkit-scrollbar {
+.vc-bqs-tag-list::-webkit-scrollbar {
     width: 8px;
 }
 
-.vc-better-quick-switcher-tag-list::-webkit-scrollbar-track {
+.vc-bqs-tag-list::-webkit-scrollbar-track {
     background: var(--background-secondary);
     border-radius: 4px;
 }
 
-.vc-better-quick-switcher-tag-list::-webkit-scrollbar-thumb {
+.vc-bqs-tag-list::-webkit-scrollbar-thumb {
     background: var(--background-modifier-accent);
     border-radius: 4px;
 }
 
-.vc-better-quick-switcher-tag-list::-webkit-scrollbar-thumb:hover {
+.vc-bqstag-list::-webkit-scrollbar-thumb:hover {
     background: var(--background-modifier-hover);
 }
 
 /* Assigned tag highlight */
-.vc-better-quick-switcher-tag-assigned {
+.vc-bqs-tag-assigned {
     background-color: var(--background-modifier-selected);
     border: 2px solid var(--brand-experiment);
 }
 
 /* Empty state */
-.vc-better-quick-switcher-empty-state {
+.vc-bqs-empty-state {
     color: var(--text-muted);
     font-style: italic;
     text-align: center;
@@ -298,4 +298,8 @@
 
 .vc-bqs-entity-header:first-child {
     margin-top: 0;
+}
+
+.vc-bqs-remove-all {
+    margin-top: 4px;
 }
