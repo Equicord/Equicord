@@ -58,7 +58,7 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
             <ModalHeader>
                 <Text
                     variant="heading-lg/semibold"
-                    style={{ flexGrow: 1 }}
+                    className={cl("modal-header")}
                 >
                     Ghosted Users ({ghostedChannels.length})
                 </Text>
@@ -67,7 +67,7 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                         size={Button.Sizes.SMALL}
                         color={Button.Colors.PRIMARY}
                         onClick={handleClearAll}
-                        style={{ marginRight: "16px" }}
+                        className={cl("clear")}
                     >
                         Clear All
                     </Button>
@@ -75,7 +75,7 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                 <ModalCloseButton onClick={onClose} />
             </ModalHeader>
             <ModalContent>
-                <div style={{ padding: "16px 0" }}>
+                <div className={cl("modal-content")}>
                     {ghostedChannels.length === 0 ? (
                         <Text variant="text-md/normal">No ghosts here!</Text>
                     ) : (
@@ -119,7 +119,7 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                                             {displayName}
                                         </Text>
                                         {lastMessageDate && (
-                                            <Text variant="text-xs/normal" style={{ color: "var(--text-muted)" }}>
+                                            <Text variant="text-xs/normal" className={cl("modal-text")}>
                                                 {lastMessageDate}
                                             </Text>
                                         )}
