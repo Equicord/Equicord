@@ -259,7 +259,6 @@ function getTagPillsForChannel(channel: any) {
 }
 
 function generateCustomResults(query: string) {
-
     const doublePrefix = query.match(/^(##|!!|@@)/)?.[1];
 
     if (doublePrefix) {
@@ -587,6 +586,7 @@ function searchAllByTags(searchTerm: string) {
     }
 
     const tagData = getUserTagData();
+    console.log(tagData);
     const entityIds = Object.keys(tagData.entityTags);
 
     const taggedChannels = entityIds.filter(id => {
@@ -964,15 +964,15 @@ export default definePlugin({
     ],
 
     customResults(results, query) {
-        const customResults = this.generateCustomResults(query);
+        console.log(query);
+        const customResults = generateCustomResults(query);
+        console.log(customResults);
         if (customResults !== null) {
             results = customResults;
         } else {
-            results = this.normalizeAndFilterResults(results, query);
+            results = normalizeAndFilterResults(results, query);
         }
     },
 
-    generateCustomResults,
     getTagPillsForChannel,
-    normalizeAndFilterResults,
 });
