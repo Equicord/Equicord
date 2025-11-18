@@ -139,6 +139,7 @@ function setCachedSearchResults(
     }
 }
 
+
 function addTagPillsToResults(results: any[], searchQuery?: any) {
     if (!settings.store.enableTags) {
         return results;
@@ -971,50 +972,33 @@ export default definePlugin({
         {
             find: "#{intl::QUICKSWITCHER_PLACEHOLDER}",
             replacement: {
-                match: /let{selectedIndex:\i,results:\i}/,
-                replace: "$self.customResults(this.props, this.state);$&",
-            },
-        },
-        {
-            find: "voiceSummaryContainer,guildId:",
-            replacement: {
-                match: /(,this\.renderVoiceStates\(\),(\i))\]\}\)/,
+                match: /(results:(\i).{0,15}query:(\i).{0,15}this.state),/,
                 replace:
-                    "$1,$self.getTagPillsForChannel(this.props.channel)]})",
+                    "$1;const customResults = $self.generateCustomResults($3); if(customResults !== null) { $2 = customResults; } else { $2 = $self.normalizeAndFilterResults($2, $3); }let ",
             },
         },
         {
-            find: "className:I.dmIconContainer",
-            replacement: {
-                match: /(children:\[.*?,e)\]\}(?=\))/,
-                replace: "$1,$self.getTagPillsForChannel(this.props.channel)]}",
-            },
-        },
-        {
-            find: "getDisplayNickname(){",
-            replacement: {
-                match: /(,\(0,\i\.jsx\)\("span",\{className:\i\.username,children:\i\.\i\.getUserTag\(\i\)\}\))\]\}\)/,
-                replace: "$1,$self.getTagPillsForChannel(this.props.user)]})",
-            },
-        },
-        {
-            find: "getAccessibilityLabel(){let{guild:",
-            replacement: {
-                match: /(className:\i\.name,children:)\(0,\i\.jsx\)\("span",\{className:\i\.match,children:(\i)\.name\}\)/,
-                replace:
-                    '$1[(0,i.jsx)("span",{className:I.match,children:$2.name}),$self.getTagPillsForChannel(this.props.guild)]',
-            },
+            find: '"QuickSwitcherResults"',
+            replacement: [
+                {
+                    match: /,this\.renderVoiceStates\(\),\i/,
+                    replace: "$&,$self.getTagPillsForChannel(this.props.channel)",
+                },
+                {
+                    match: /\i\.\i\)\}\),\i(?=.{0,25}\}renderContent\(\)\{)/,
+                    replace: "$&,$self.getTagPillsForChannel(this.props.channel)",
+                },
+                {
+                    match: /children:\i\.\i\.getUserTag\(\i\)\}\)/,
+                    replace: "$&,$self.getTagPillsForChannel(this.props.user)",
+                },
+                {
+                    match: /(className:\i\.name,children:)(.{0,80}children:\i\.name\}\))/,
+                    replace: "$1[$2,$self.getTagPillsForChannel(this.props.guild)]",
+                },
+            ],
         },
     ],
-
-    customResults(props, state) {
-        const customResults = generateCustomResults(state.query);
-        if (!customResults) {
-            props.results = customResults;
-        } else {
-            props.results = normalizeAndFilterResults(props.results, state.query);
-        }
-    },
 
     generateCustomResults,
     getTagPillsForChannel,
