@@ -936,9 +936,8 @@ export default definePlugin({
         {
             find: "#{intl::QUICKSWITCHER_PLACEHOLDER}",
             replacement: {
-                match: /(results:(\i).{0,15}query:(\i).{0,15}this.state),/,
-                replace:
-                    "$1;const customResults = $self.generateCustomResults($3); if(customResults !== null) { $2 = customResults; } else { $2 = $self.normalizeAndFilterResults($2, $3); }let ",
+                match: /\}renderInput\(\)\{/,
+                replace: "$&$self.customResults(this.props.results,this.state.query);",
             },
         },
         {
@@ -963,6 +962,15 @@ export default definePlugin({
             ],
         },
     ],
+
+    customResults(results, query) {
+        const customResults = this.generateCustomResults(query);
+        if (customResults !== null) {
+            results = customResults;
+        } else {
+            results = this.normalizeAndFilterResults(results, query);
+        }
+    },
 
     generateCustomResults,
     getTagPillsForChannel,
