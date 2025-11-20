@@ -1200,7 +1200,7 @@ export default definePlugin({
                 {
                     // Update the last used sort and filter choices when the toggle setting for either is changed.
                     match: /(?<=ALL,\i.useMemo\(\(\)=>\()({sortMethod:(\i),filters:(\i))/,
-                    replace: "console.log($2,$3),$self.setLastSortChoice($2),$self.setLastFilterChoices($3),$1"
+                    replace: "$self.setLastSortChoice($2),$self.setLastFilterChoices($3),$1"
                 }
             ]
         },
