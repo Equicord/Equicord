@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings, SettingsStore } from "@api/Settings";
+import { definePluginSettings } from "@api/Settings";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
-import { createAndAppendStyle } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember } from "@vencord/discord-types";
-import { ChannelStore, FluxDispatcher, GuildMemberStore, GuildRoleStore, RelationshipStore, UserStore } from "@webpack/common";
+import { ChannelStore, GuildMemberStore, GuildRoleStore, RelationshipStore, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings(
     {
@@ -116,52 +115,6 @@ function hiddenReplyComponent() {
     }
 }
 
-
-function getAllBlockedUserIds(): string[] {
-    const blockedIds = new Set<string>();
-
-
-    settings.store.usersToBlock?.split(",")?.forEach(id => {
-        const trimmed = id.trim();
-        if (trimmed) blockedIds.add(trimmed);
-    });
-
-
-    if (settings.store.hideBlockedUsers) {
-        const relationshipBlockedIds = (RelationshipStore)?.getBlockedIDs() ?? [];
-        relationshipBlockedIds.forEach(id => blockedIds.add(id));
-    }
-
-    return [...blockedIds];
-}
-
-
-function generateCSS() {
-    const blockedIds = getAllBlockedUserIds();
-    if (blockedIds.length === 0) return "";
-
-    return blockedIds
-        .map(userId => {
-            const selectors = [
-                `[class*="nowPlayingColumn"] > aside > div > div:nth-child(1) > div > div:has(img[src*="${userId}"])`,
-                `#channels > ul > li:has(div[style*="${userId}"])`,
-                `[class*="listItemTooltipContent"]:has(img[src*="${userId}"]) > div:not(:first-child)`
-            ];
-            return `${selectors.join(", ")} { display: none !important; }`;
-        })
-        .join("\n");
-}
-
-
-let styleElement: HTMLStyleElement | null = null;
-
-function updateCSS() {
-    if (!styleElement) return;
-    styleElement.textContent = generateCSS();
-}
-
-
-
 export default definePlugin({
     name: "ClientSideBlock",
     description: "Allows you to locally hide almost all content from any user",
@@ -259,44 +212,33 @@ export default definePlugin({
                 match: /(getMutualFriends\(\i\){)return (\i\.get\(\i\))/,
                 replace: "$1if($2 != undefined) return $2.filter(u => !$self.shouldHideUser(u.key))"
             }
-        }
+        },
+        // voice channel
+        // {
+        // find: '"should_show_in_recents"',
+        // replacement: {
+        //     match: /"should_show_in_recents"/,
+        //     replace: "$&; console.log(\"UNREAD_IMPORTANT hit:\", $self);"
+        // }
+        // }
+
     ],
     activeNowView(cards) {
         if (!Array.isArray(cards)) return cards;
 
         return cards.filter(card => {
             if (!card?.key) return false;
+
             const newKey = card.key.match(/(?:user-|party-spotify:)(.+)/)?.[1];
-            return this.shouldHideUser(newKey) ? null : card;
+
+            if (newKey) {
+                return this.shouldHideUser(newKey) ? null : card;
+            }
+
+            if (card.key.startsWith("channel-")) {
+                const members = card.props?.party?.voiceChannels?.[0]?.members ?? [];
+                return members.some(member => this.shouldHideUser(member.id)) ? null : card;
+            }
         });
-    },
-      start() {
-        styleElement = createAndAppendStyle("clientSideBlock");
-
-        updateCSS();
-
-        const handleChange = () => updateCSS();
-
-        SettingsStore.addChangeListener("plugins.ClientSideBlock.usersToBlock", handleChange);
-        SettingsStore.addChangeListener("plugins.ClientSideBlock.hideBlockedUsers", handleChange);
-        FluxDispatcher.subscribe("RELATIONSHIP_UPDATE", handleChange);
-        FluxDispatcher.subscribe("RELATIONSHIP_REMOVE", handleChange);
-
-        this._cleanup = [
-            () => SettingsStore.removeChangeListener("plugins.ClientSideBlock.usersToBlock", handleChange),
-            () => SettingsStore.removeChangeListener("plugins.ClientSideBlock.hideBlockedUsers", handleChange),
-            () => FluxDispatcher.unsubscribe("RELATIONSHIP_UPDATE", handleChange),
-            () => FluxDispatcher.unsubscribe("RELATIONSHIP_REMOVE", handleChange)
-        ];
-    },
-    stop() {
-        if (styleElement) {
-            styleElement.remove();
-            styleElement = null;
-        }
-        if (this._cleanup) {
-            this._cleanup.forEach((fn: () => void) => fn());
-            this._cleanup = null;
-        }
     }
 });
