@@ -74,7 +74,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
 
         const blob = await response.blob();
         const arrayBuffer = await blob.arrayBuffer();
-        return { file: new Uint8Array(arrayBuffer), filename };
+        return { file: Buffer.from(new Uint8Array(arrayBuffer as ArrayBuffer)), filename };
     };
 
     const assetPromises = items.map(e => fetchAsset(e));
@@ -82,7 +82,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
     Promise.all(assetPromises)
         .then(results => {
             const zipped = zipSync(Object.fromEntries(results.map(({ file, filename }) => [filename, file])));
-            const blob = new Blob([zipped], { type: "application/zip" });
+            const blob = new Blob([Buffer.from(zipped)], { type: "application/zip" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = `${guild.name}-${type}.zip`;

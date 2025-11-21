@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import SettingsPlugin from "@plugins/_core/settings";
 import { gitHashShort } from "@shared/vencordUserAgent";
 import { React } from "@webpack/common";
-import SettingsPlugin from "plugins/_core/settings";
 import { JSX } from "react";
 
 import { ChromiumIcon, DevBannerIcon, DiscordIcon, ElectronIcon, EquicordIcon } from "../icons";

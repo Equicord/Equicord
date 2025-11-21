@@ -6,13 +6,13 @@
 
 import { popNotice, showNotice } from "@api/Notices";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { loadLazyChunks } from "@debug/loadLazyChunks";
+import { reporterData } from "@debug/reporterData";
 import { getIntlMessageFromHash } from "@utils/discord";
 import { canonicalizeMatch, canonicalizeReplace } from "@utils/patches";
+import { Settings } from "@Vencord";
 import { filters, findAll, search, wreq } from "@webpack";
 import { React, Toasts, useState } from "@webpack/common";
-import { loadLazyChunks } from "debug/loadLazyChunks";
-import { reporterData } from "debug/reporterData";
-import { Settings } from "Vencord";
 
 import { CLIENT_VERSION, logger, PORT, settings } from ".";
 import { Recieve } from "./types";

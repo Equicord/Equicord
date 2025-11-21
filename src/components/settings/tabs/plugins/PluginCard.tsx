@@ -12,8 +12,8 @@ import { proxyLazy } from "@utils/lazy";
 import { Logger } from "@utils/Logger";
 import { isObjectEmpty } from "@utils/misc";
 import { Plugin } from "@utils/types";
+import { Settings } from "@Vencord";
 import { React, showToast, Toasts } from "@webpack/common";
-import { Settings } from "Vencord";
 
 import { PluginMeta } from "~plugins";
 
@@ -23,7 +23,7 @@ const logger = new Logger("PluginCard");
 const cl = classNameFactory("vc-plugins-");
 
 // Avoid circular dependency
-const { startDependenciesRecursive, startPlugin, stopPlugin, isPluginEnabled } = proxyLazy(() => require("plugins") as typeof import("plugins"));
+const { startDependenciesRecursive, startPlugin, stopPlugin, isPluginEnabled } = proxyLazy(() => require("@plugins") as typeof import("@plugins"));
 
 interface PluginCardProps extends React.HTMLProps<HTMLDivElement> {
     plugin: Plugin;

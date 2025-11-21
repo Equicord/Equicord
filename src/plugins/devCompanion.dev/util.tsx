@@ -7,9 +7,9 @@
 import { showNotice } from "@api/Notices";
 import { Settings } from "@api/Settings";
 import { canonicalizeMatch } from "@utils/patches";
+import { WebpackPatcher } from "@Vencord";
 import { CodeFilter, stringMatches, wreq } from "@webpack";
 import { Toasts } from "@webpack/common";
-import { WebpackPatcher } from "Vencord";
 
 import { logger, settings as companionSettings } from ".";
 import { FindNode } from "./types/recieve";

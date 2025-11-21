@@ -88,7 +88,7 @@ async function toGIF(url: string, ffmpeg: FFmpeg): Promise<File> {
     if (typeof data === "string") {
         throw new Error("Could not read file");
     }
-    return new File([new Uint8Array(data.buffer)], outputFilename, { type: "image/gif" });
+    return new File([Buffer.from(new Uint8Array(data.buffer))], outputFilename, { type: "image/gif" });
 }
 
 export async function sendSticker({

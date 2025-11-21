@@ -130,6 +130,13 @@ export default definePlugin({
                 replace: "this.props.results = $self.filteredGuildResults(this.props.results);$&",
             },
         },
+        {
+            find: "if (channel.guild_id) {",
+            replacement: {
+                match: /if \(channel\.guild_id\) \{/,
+                replace: "if (channel.guild_id && !$self.isHidden(channel.guild_id)) {"
+            }
+        }
     ],
     settings,
     useStore: () => { useStateFromStores([HiddenServersStore], () => HiddenServersStore.hiddenGuilds, undefined, (old, newer) => old.size === newer.size); },
@@ -187,4 +194,8 @@ export default definePlugin({
             return true;
         });
     },
+
+    isHidden(guildId: string) {
+        return HiddenServersStore.hiddenGuilds.has(guildId);
+    }
 });

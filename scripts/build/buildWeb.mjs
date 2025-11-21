@@ -178,7 +178,8 @@ async function buildExtension(target, files) {
         const dest = join("dist/browser", target, file);
         const parentDirectory = join(dest, "..");
         await mkdir(parentDirectory, { recursive: true });
-        await writeFile(dest, content);
+        const validContent = Buffer.isBuffer(content) || typeof content === 'string' ? content : Buffer.from(typeof content === 'object' ? JSON.stringify(content) : String(content));
+        await writeFile(dest, validContent);
     }));
 
     console.info("Unpacked Extension written to dist/browser/" + target);

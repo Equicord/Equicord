@@ -7,7 +7,7 @@
 import { initWs } from "@plugins/devCompanion.dev/initWs";
 import { Logger } from "@utils/Logger";
 import * as Webpack from "@webpack";
-import { getBuildNumber, patchTimings } from "webpack/patchWebpack";
+import { getBuildNumber, patchTimings } from "@webpack/patchWebpack";
 
 import { addPatch, patches } from "../plugins";
 import { loadLazyChunks } from "./loadLazyChunks";

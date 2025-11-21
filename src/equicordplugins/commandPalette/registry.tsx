@@ -10,10 +10,10 @@ import { getUserSettingLazy } from "@api/UserSettings";
 import { openPluginModal } from "@components/settings/tabs";
 import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
+import { Settings } from "@Vencord";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, React, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, SettingsRouter, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
 import type { FC, ReactElement, ReactNode } from "react";
-import { Settings } from "Vencord";
 
 import { toggleEnabled } from "../equicordHelper/utils";
 

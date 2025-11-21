@@ -7,9 +7,9 @@
 import "./VoiceChannelLogEntryComponent.css";
 
 import { classes } from "@utils/misc";
+import { Util } from "@Vencord";
 import { Channel } from "@vencord/discord-types";
 import { React, Timestamp, Tooltip, UserStore } from "@webpack/common";
-import { Util } from "Vencord";
 
 import { cl } from "..";
 import { VoiceChannelLogEntry } from "../logs";

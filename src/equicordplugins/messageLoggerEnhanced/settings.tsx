@@ -7,8 +7,8 @@
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { OptionType } from "@utils/types";
+import { Settings } from "@Vencord";
 import { Alerts, Button } from "@webpack/common";
-import { Settings } from "Vencord";
 
 import { Native } from ".";
 import { ImageCacheDir, LogsDir } from "./components/FolderSelectInput";

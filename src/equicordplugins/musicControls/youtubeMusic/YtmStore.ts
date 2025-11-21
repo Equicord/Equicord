@@ -5,9 +5,9 @@
  */
 
 import { Logger } from "@utils/Logger";
+import { Settings } from "@Vencord";
 import { proxyLazyWebpack } from "@webpack";
 import { Flux, FluxDispatcher } from "@webpack/common";
-import { Settings } from "Vencord";
 
 enum MediaType {
     /**
