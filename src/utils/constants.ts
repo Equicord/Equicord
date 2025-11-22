@@ -68,8 +68,8 @@ export interface Dev {
  */
 export const Devs = /* #__PURE__*/ Object.freeze({
     KamiRu:{
-        id: 819191621676695563n,
-        name: "KamiRu"
+        name: "KamiRu",
+        id: 819191621676695563n
     },
     Ven: {
         name: "V",
