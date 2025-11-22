@@ -5,15 +5,16 @@
  */
 
 import { classNameFactory } from "@api/Styles";
+import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
+import { BasicChannelTabsProps, ChannelTabsProps, clearStaleNavigationContext, closeTab, createTab, handleChannelSwitch, isNavigationFromSource, isTabSelected, moveToTab, openedTabs, openStartupTabs, saveTabs, settings, setUpdaterFunction, useGhostTabs } from "@equicordplugins/channelTabs/util";
 import { IS_MAC } from "@utils/constants";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
-import { Button, ContextMenuApi, Flex, FluxDispatcher, useCallback, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
+import { Button, ContextMenuApi, FluxDispatcher, useCallback, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
 
-import { BasicChannelTabsProps, ChannelTabsProps, clearStaleNavigationContext, closeTab, createTab, handleChannelSwitch, isNavigationFromSource, isTabSelected, moveToTab, openedTabs, openStartupTabs, saveTabs, settings, setUpdaterFunction, useGhostTabs } from "../util";
 import BookmarkContainer, { HorizontalScroller } from "./BookmarkContainer";
 import ChannelTab, { PreviewTab } from "./ChannelTab";
 import { BasicContextMenu } from "./ContextMenus";
@@ -27,6 +28,7 @@ const cl = classNameFactory("vc-channeltabs-");
 
 export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     const [userId, setUserId] = useState("");
+    const [tabsOverflow, setTabsOverflow] = useState(false);
     const {
         showBookmarkBar,
         widerTabsAndBookmarks,
@@ -57,7 +59,8 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         animationResizeHandle,
         animationQuestsActive,
         compactAutoExpandSelected,
-        compactAutoExpandOnHover
+        compactAutoExpandOnHover,
+        newTabButtonBehavior
     } = settings.use([
         "showBookmarkBar",
         "widerTabsAndBookmarks",
@@ -88,7 +91,8 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
         "animationResizeHandle",
         "animationQuestsActive",
         "compactAutoExpandSelected",
-        "compactAutoExpandOnHover"
+        "compactAutoExpandOnHover",
+        "newTabButtonBehavior"
     ]);
     const GhostTabs = useGhostTabs();
     const isFullscreen = useStateFromStores([ChannelRTCStore], () => ChannelRTCStore.isFullscreenInContext() ?? false);
@@ -100,6 +104,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     }, [userId]);
 
     const ref = useRef<HTMLDivElement>(null);
+    const scrollerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setUpdaterFunction(update);
@@ -128,6 +133,27 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     useEffect(() => {
         _update();
     }, [widerTabsAndBookmarks]);
+    useEffect(() => {
+        const scroller = scrollerRef.current;
+        if (!scroller) return;
+
+        const checkOverflow = () => {
+            if (!newTabButtonBehavior) {
+                setTabsOverflow(true);
+                return;
+            }
+            const overflow = scroller.scrollWidth > scroller.clientWidth;
+            setTabsOverflow(overflow);
+        };
+
+        checkOverflow();
+
+        const observer = new ResizeObserver(checkOverflow);
+        observer.observe(scroller);
+
+        return () => observer.disconnect();
+    }, [openedTabs.length, newTabButtonBehavior]);
+
     useEffect(() => {
         const matchesKeybind = (event: KeyboardEvent, keybindString: string): boolean => {
             const parts = keybindString.split("+");
@@ -295,7 +321,10 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 <div className={cl("separator")} />
             </>}
             <div className={cl("tab-container")}>
-                <HorizontalScroller className={cl("tab-scroller")}>
+                <HorizontalScroller
+                    customRef={node => { scrollerRef.current = node; }}
+                    className={cl("tab-scroller", newTabButtonBehavior && !tabsOverflow && "tab-scroller-following")}
+                >
                     {openedTabs.filter(tab => tab != null).map((tab, i) =>
                         <ChannelTab {...tab} index={i} key={tab.id} />
                     )}

@@ -22,8 +22,9 @@ import { _resolveReady, filters, findByCodeLazy, findByPropsLazy, findLazy, mapM
 export let FluxDispatcher: t.FluxDispatcher;
 waitFor(["dispatch", "subscribe"], m => {
     FluxDispatcher = m;
-    // Non import access to avoid circular dependency
-    Vencord.Plugins.subscribeAllPluginsFluxEvents(m);
+    // Importing this directly causes all webpack commons to be imported, which can easily cause circular dependencies.
+    // For this reason, use a non import access here.
+    Vencord.Api.PluginManager.subscribeAllPluginsFluxEvents(m);
 
     const cb = () => {
         m.unsubscribe("CONNECTION_OPEN", cb);
@@ -180,6 +181,7 @@ export const InviteActions = findByPropsLazy("resolveInvite");
 export const ChannelActionCreators = findByPropsLazy("openPrivateChannel");
 
 export const VoiceActions = findByPropsLazy("toggleSelfMute");
+export const GuildActions = findByPropsLazy("setServerMute", "setServerDeaf");
 
 export const IconUtils: t.IconUtils = findByPropsLazy("getGuildBannerURL", "getUserAvatarURL");
 
