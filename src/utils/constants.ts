@@ -67,10 +67,6 @@ export interface Dev {
  * If you are fine with attribution but don't want the badge, add badge: false
  */
 export const Devs = /* #__PURE__*/ Object.freeze({
-    KamiRu:{
-        name: "KamiRu",
-        id: 819191621676695563n
-    },
     Ven: {
         name: "V",
         id: 343383572805058560n
@@ -640,6 +636,10 @@ export const Devs = /* #__PURE__*/ Object.freeze({
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
+    KamiRu:{
+        name: "KamiRu",
+        id: 819191621676695563n
+    },
     nobody: {
         name: "nobody",
         id: 0n

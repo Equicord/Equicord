@@ -6,7 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Paragraph } from "@components/Paragraph";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember } from "@vencord/discord-types";
 import { ChannelStore, GuildMemberStore, GuildRoleStore, RelationshipStore, UserStore } from "@webpack/common";
@@ -118,7 +118,7 @@ export default definePlugin({
     name: "ClientSideBlock",
     description: "Allows you to locally hide almost all content from any user",
     tags: ["blocked", "block", "hide", "hidden", "noblockedmessages"],
-    authors: [Devs.Samwich, Devs.KamiRu],
+    authors: [Devs.Samwich, EquicordDevs.KamiRu],
     settings,
     shouldHideUser: shouldHideUser,
     hiddenReplyComponent: hiddenReplyComponent,
