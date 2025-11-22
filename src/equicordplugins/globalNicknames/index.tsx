@@ -28,8 +28,8 @@ interface MessageProps {
     };
 }
 
+let nicknames: NicknamesData = {};
 const UserBoxIcon = findComponentByCodeLazy("0-3-3H5Zm10 6a3");
-
 const settings = definePluginSettings({
     enableMessages: {
         type: OptionType.BOOLEAN,
@@ -56,17 +56,6 @@ const settings = definePluginSettings({
         restartNeeded: true
     }
 });
-
-let nicknames: NicknamesData = {};
-
-const load = async (): Promise<void> => {
-    const data = await DataStore.get<NicknamesData>("GlobalNicknames");
-    nicknames = data ?? {};
-};
-
-const save = async (): Promise<void> => {
-    await DataStore.set("GlobalNicknames", nicknames);
-};
 
 function NicknameModal({ modalProps, user }: { modalProps: ModalProps; user: User; }) {
     const [value, setValue] = React.useState(nicknames[user.id] ?? "");
@@ -102,7 +91,7 @@ function NicknameModal({ modalProps, user }: { modalProps: ModalProps; user: Use
                         } else {
                             delete nicknames[user.id];
                         }
-                        await save();
+                        await DataStore.set("GlobalNicknames", nicknames);
                         modalProps.onClose();
                     }}
                 >
@@ -136,7 +125,7 @@ const userContextPatch: NavContextMenuPatchCallback = (children, { user }) => {
                 icon={UserBoxIcon}
                 action={async () => {
                     delete nicknames[user.id];
-                    await save();
+                    await DataStore.set("GlobalNicknames", nicknames);
                 }}
             />
         ) : (
@@ -175,7 +164,7 @@ export default definePlugin({
             predicate: () => settings.store.enableMemberList,
             replacement: {
                 match: /name:(null!=\i\?\i:\i),colorStrings/,
-                replace: "name:($self.patchMemberName($1,arguments[0].user)||($1)),colorStrings"
+                replace: "name:$self.patchMemberName($1,arguments[0].user)||$1,colorStrings"
             }
         },
         {
@@ -190,17 +179,20 @@ export default definePlugin({
             find: "#{intl::THREE_USERS_TYPING}",
             predicate: () => settings.store.enableTypingIndicator,
             replacement: {
-                match: /\.map\((\i)=>(\i\.\i)\.getName\((\i)\.guild_id,\3\.id,\1\)\)/,
-                replace: ".map($1=>$2.getName($3.guild_id,$3.id,$self.patchTypingName($1)))"
+                match: /(?<=\i\.\i\.getName\(\i\.guild_id,\i\.id,)(\i)\)\)/,
+                replace: "$self.patchTypingName($1)))"
             }
         }
     ],
 
-    start: load,
+    async start() {
+        const data = await DataStore.get<NicknamesData>("GlobalNicknames");
+        nicknames = data ?? {};
+    },
 
     patchMessageName: (props: MessageProps): string | null => {
         const userId = props?.message?.author?.id;
-        return userId ? (nicknames[userId] ?? null) : null;
+        return userId ? nicknames[userId] ?? null : null;
     },
 
     patchMemberName: (_: string, user: User): string | null => {
