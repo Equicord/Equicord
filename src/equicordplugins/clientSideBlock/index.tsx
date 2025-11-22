@@ -6,7 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Paragraph } from "@components/Paragraph";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember } from "@vencord/discord-types";
 import { ChannelStore, GuildMemberStore, GuildRoleStore, RelationshipStore, UserStore } from "@webpack/common";
@@ -114,12 +114,11 @@ function hiddenReplyComponent() {
             return null;
     }
 }
-
 export default definePlugin({
     name: "ClientSideBlock",
     description: "Allows you to locally hide almost all content from any user",
     tags: ["blocked", "block", "hide", "hidden", "noblockedmessages"],
-    authors: [Devs.Samwich],
+    authors: [Devs.Samwich, EquicordDevs.KamiRu],
     settings,
     shouldHideUser: shouldHideUser,
     hiddenReplyComponent: hiddenReplyComponent,
@@ -186,7 +185,6 @@ export default definePlugin({
                 replace: "$1if($2.rawRecipients[0] != null){if($2.rawRecipients[0].id != null){if($self.shouldHideUser($2.rawRecipients[0].id)) return null;}}$3"
             }
         },
-
         // thank nick (644298972420374528) for these patches :3
 
         // filter relationships
@@ -212,15 +210,25 @@ export default definePlugin({
                 match: /(getMutualFriends\(\i\){)return (\i\.get\(\i\))/,
                 replace: "$1if($2 != undefined) return $2.filter(u => !$self.shouldHideUser(u.key))"
             }
-        }
+        },
+
     ],
     activeNowView(cards) {
         if (!Array.isArray(cards)) return cards;
 
         return cards.filter(card => {
             if (!card?.key) return false;
+
             const newKey = card.key.match(/(?:user-|party-spotify:)(.+)/)?.[1];
-            return this.shouldHideUser(newKey) ? null : card;
+
+            if (newKey) {
+                return this.shouldHideUser(newKey) ? null : card;
+            }
+
+            if (card.key.startsWith("channel-")) {
+                const members = card.props?.party?.voiceChannels?.[0]?.members ?? [];
+                return members.some(member => this.shouldHideUser(member.id)) ? null : card;
+            }
         });
     }
 });
