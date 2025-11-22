@@ -114,7 +114,6 @@ function hiddenReplyComponent() {
             return null;
     }
 }
-
 export default definePlugin({
     name: "ClientSideBlock",
     description: "Allows you to locally hide almost all content from any user",
@@ -186,7 +185,6 @@ export default definePlugin({
                 replace: "$1if($2.rawRecipients[0] != null){if($2.rawRecipients[0].id != null){if($self.shouldHideUser($2.rawRecipients[0].id)) return null;}}$3"
             }
         },
-
         // thank nick (644298972420374528) for these patches :3
 
         // filter relationships
@@ -213,14 +211,7 @@ export default definePlugin({
                 replace: "$1if($2 != undefined) return $2.filter(u => !$self.shouldHideUser(u.key))"
             }
         },
-        // voice channel
-        // {
-        // find: '"should_show_in_recents"',
-        // replacement: {
-        //     match: /"should_show_in_recents"/,
-        //     replace: "$&; console.log(\"UNREAD_IMPORTANT hit:\", $self);"
-        // }
-        // }
+        // TODO: voice channel,server-tooltip
 
     ],
     activeNowView(cards) {
