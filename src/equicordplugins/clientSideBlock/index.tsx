@@ -211,7 +211,6 @@ export default definePlugin({
                 replace: "$1if($2 != undefined) return $2.filter(u => !$self.shouldHideUser(u.key))"
             }
         },
-        // TODO: voice channel,server-tooltip
 
     ],
     activeNowView(cards) {
