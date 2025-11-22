@@ -23,7 +23,7 @@ import { disableStyle, enableStyle } from "@api/Styles";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
-import clanBadges from "../_misc/clanBadges.css?managed";
+import clanBadges from "./styles.css?managed";
 
 const settings = definePluginSettings({
     hideTags: {

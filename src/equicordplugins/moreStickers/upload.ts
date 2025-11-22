@@ -9,6 +9,7 @@ import { fetchFile } from "@ffmpeg/util";
 import { findByPropsLazy } from "@webpack";
 import { ChannelStore, UploadHandler } from "@webpack/common";
 
+import moreStickers from ".";
 import { FFmpegState, Sticker } from "./types";
 
 const PendingReplyStore = findByPropsLazy("getPendingReply");
@@ -88,7 +89,13 @@ async function toGIF(url: string, ffmpeg: FFmpeg): Promise<File> {
     if (typeof data === "string") {
         throw new Error("Could not read file");
     }
-    return new File([new Uint8Array(data.buffer)], outputFilename, { type: "image/gif" });
+
+    const uint8 = new Uint8Array(data.length);
+    uint8.set(data);
+
+    return new File([uint8], outputFilename, {
+        type: "image/gif",
+    });
 }
 
 export async function sendSticker({
@@ -101,7 +108,7 @@ export async function sendSticker({
 }: { channelId: string; sticker: Sticker; sendAsLink?: boolean; ctrlKey: boolean; shiftKey: boolean; ffmpegState?: FFmpegState; }) {
 
     let messageContent = "";
-    const { textEditor } = Vencord.Plugins.plugins.MoreStickers as any;
+    const { textEditor } = moreStickers;
     if (DraftStore) {
         messageContent = DraftStore.getDraft(channelId, 0);
     }
