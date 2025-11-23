@@ -13,23 +13,16 @@ import { Heading } from "@components/Heading";
 import { EquicordDevs } from "@utils/constants";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { User } from "@vencord/discord-types";
+import { Message, User } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
 import { Menu, React, TextInput, UserStore } from "@webpack/common";
 
-interface NicknamesData {
-    [userId: string]: string;
-}
+const UserBoxIcon = findComponentByCodeLazy("0-3-3H5Zm10 6a3");
 
-interface MessageProps {
-    message: {
-        author: User;
-        content: string;
-    };
-}
+type NicknamesData = Record<string, string>;
 
 let nicknames: NicknamesData = {};
-const UserBoxIcon = findComponentByCodeLazy("0-3-3H5Zm10 6a3");
+
 const settings = definePluginSettings({
     enableMessages: {
         type: OptionType.BOOLEAN,
@@ -76,7 +69,7 @@ function NicknameModal({ modalProps, user }: { modalProps: ModalProps; user: Use
                     <TextInput
                         value={value}
                         onChange={setValue}
-                        placeholder={user.globalName || user.username}
+                        placeholder={user.globalName ?? user.username}
                         style={{ width: "100%" }}
                     />
                 </div>
@@ -190,19 +183,19 @@ export default definePlugin({
         nicknames = data ?? {};
     },
 
-    patchMessageName: (props: MessageProps) => {
+    patchMessageName(props: { message: Message; }): string | null {
         const userId = props?.message?.author?.id;
         return userId ? nicknames[userId] ?? null : null;
     },
 
-    patchName: (_: string, user: User) => {
+    patchName(_: string, user: User): string | null {
         return nicknames[user.id] ?? null;
     },
 
-    patchTypingName: (user: User) => {
+    patchTypingName(user: User): User {
         const nickname = nicknames[user.id];
         if (!nickname) return user;
-        return { ...user, globalName: nickname, username: nickname };
+        return { ...user, globalName: nickname, username: nickname } as User;
     },
 
     contextMenus: {
