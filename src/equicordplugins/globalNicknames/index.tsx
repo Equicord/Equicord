@@ -155,16 +155,16 @@ export default definePlugin({
             find: '="SYSTEM_TAG"',
             predicate: () => settings.store.enableMessages,
             replacement: {
-                match: /(?<=onContextMenu:\i,children:)(.{0,250}?)(?=,"data-text":)/,
-                replace: "$self.patchMessageName(arguments[0])??($1)"
+                match: /children:(.+?),"data-text":/,
+                replace: 'children:$self.patchMessageName(arguments[0])??($1),"data-text":'
             }
         },
         {
             find: "let{colorRoleName:",
             predicate: () => settings.store.enableMemberList,
             replacement: {
-                match: /name:(null!=\i\?\i:\i),colorStrings/,
-                replace: "name:$self.patchMemberName($1,arguments[0].user)||$1,colorStrings"
+                match: /,name:(null!=\i\?\i:\i),colorStrings/,
+                replace: ",name:$self.patchName($1,arguments[0].user)||($1),colorStrings"
             }
         },
         {
@@ -172,15 +172,15 @@ export default definePlugin({
             predicate: () => settings.store.enableVoiceChannels,
             replacement: {
                 match: /nick:(\i),collapsed/,
-                replace: "nick:$self.patchVoiceName($1,arguments[0].user)||$1,collapsed"
+                replace: "nick:$self.patchName($1,arguments[0].user)||$1,collapsed"
             }
         },
         {
             find: "#{intl::THREE_USERS_TYPING}",
             predicate: () => settings.store.enableTypingIndicator,
             replacement: {
-                match: /(?<=\i\.\i\.getName\(\i\.guild_id,\i\.id,)(\i)\)\)/,
-                replace: "$self.patchTypingName($1)))"
+                match: /(\i\.\i\.getName\(\i\.guild_id,\i\.id),(\i)\)\)/,
+                replace: "$1,$self.patchTypingName($2)))"
             }
         }
     ],
@@ -190,16 +190,12 @@ export default definePlugin({
         nicknames = data ?? {};
     },
 
-    patchMessageName: (props: MessageProps): string | null => {
+    patchMessageName: (props: MessageProps) => {
         const userId = props?.message?.author?.id;
         return userId ? nicknames[userId] ?? null : null;
     },
 
-    patchMemberName: (_: string, user: User): string | null => {
-        return nicknames[user.id] ?? null;
-    },
-
-    patchVoiceName: (_: string, user: User): string | null => {
+    patchName: (_: string, user: User) => {
         return nicknames[user.id] ?? null;
     },
 
