@@ -188,8 +188,8 @@ export default definePlugin({
             find: ".GUILD_APPLICATION_PREMIUM_SUBSCRIPTION||",
             replacement: [
                 {
-                    match: /let \i,\{repliedAuthor:/,
-                    replace: "if(arguments[0] != null && arguments[0].referencedMessage.message != null) { if($self.shouldHideUser(arguments[0].referencedMessage.message.author.id, arguments[0].baseMessage.messageReference.channel_id)) { return $self.hiddenReplyComponent(); } }$&"
+                    match: /(?=let \i,\{repliedAuthor:)/,
+                    replace: "if($self.shouldHideUser(arguments[0].referencedMessage.message.author.id, arguments[0].baseMessage.messageReference.channel_id)) { return $self.hiddenReplyComponent(); }"
                 }
             ]
         },
@@ -198,8 +198,8 @@ export default definePlugin({
             find: "PrivateChannel.renderAvatar",
             replacement: {
                 // horror but it works
-                match: /(function\(\i,(\i),\i\){.*)(return \i\.isMultiUserDM\(\))/,
-                replace: "$1if($2.rawRecipients[0] != null){if($2.rawRecipients[0].id != null){if($self.shouldHideUser($2.rawRecipients[0].id)) return null;}}$3"
+                match: /(return \i\.isMultiUserDM\(\))(?<=function\(\i,(\i),\i\){.*)/,
+                replace: "if($2.rawRecipients[0] && $2.rawRecipients[0]?.id){if($self.shouldHideUser($2.rawRecipients[0].id)) return null;}$1"
             }
         },
         // thank nick (644298972420374528) for these patches :3
@@ -216,8 +216,8 @@ export default definePlugin({
         {
             find: "ACTIVE_NOW_COLUMN)",
             replacement: {
-                match: /(\i\.\i),\{\}\)\]/,
-                replace: '"div",{children:$self.activeNowView($1())})]'
+                match: /(\i\.\i),\{(?=\}\)\])/,
+                replace: '"div",{children:$self.activeNowView($1())'
             }
         },
         // mutual friends list in user profile
@@ -225,7 +225,7 @@ export default definePlugin({
             find: "}getMutualFriends(",
             replacement: {
                 match: /(getMutualFriends\(\i\){)return (\i\.get\(\i\))/,
-                replace: "$1if($2 != undefined) return $2.filter(u => !$self.shouldHideUser(u.key))"
+                replace: "$1if($2) return $2.filter(u => !$self.shouldHideUser(u.key))"
             }
         },
     ]
