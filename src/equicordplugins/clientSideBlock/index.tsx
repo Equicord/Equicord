@@ -12,6 +12,12 @@ import { GuildMember } from "@vencord/discord-types";
 import { ChannelStore, GuildMemberStore, GuildRoleStore, React, RelationshipStore, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
+    hideVc: {
+        type: OptionType.BOOLEAN,
+        description: "Hide voice channels containing blocked users.",
+        default: false,
+        restartNeeded: true
+    },
     usersToBlock: {
         type: OptionType.STRING,
         description: "User IDs seperated by a comma and a space",
@@ -108,7 +114,7 @@ function activeNowView(cards) {
         const newKey = card.key.match(/(?:user-|party-spotify:)(.+)/)?.[1];
         if (newKey) return !shouldHideUser(newKey);
 
-        if (card.key.startsWith("channel-")) {
+        if (card.key.startsWith("channel-") && settings.store.hideVc) {
             const { party } = card.props;
             if (!party) return true;
 
