@@ -53,8 +53,10 @@ export default definePlugin({
 
             Notifications.showNotification({
                 title: `${username} sent a message`,
-                body: `click to jump to ${locationName}`,
-                onClick() { NavigationRouter.transitionTo(`/channels/${guild?.id ?? "@me"}/${channel.id}/${message.id}`); },
+                body: `Click to jump to ${locationName}`,
+                onClick() { 
+                    NavigationRouter.transitionTo(`/channels/${guild?.id ?? "@me"}/${channel.id}/${message.id}`);
+                },
             });
         },
     },
