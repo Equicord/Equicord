@@ -218,24 +218,29 @@ export default definePlugin({
             if (!card?.key) return false;
 
             const newKey = card.key.match(/(?:user-|party-spotify:)(.+)/)?.[1];
-            if (newKey) return this.shouldHideUser(newKey) ? null : card;
+            if (newKey) {
+                return !this.shouldHideUser(newKey);
+            }
 
             if (card.key.startsWith("channel-")) {
                 const { party } = card.props;
-                if (!party) return card;
+                if (!party) return true;
 
-                let { partiedMembers, voiceChannels } = party;
-                const voiceChannel = voiceChannels?.[0];
-                if (!voiceChannel && !partiedMembers) return card;
+                const { applicationStreams, partiedMembers, priorityMembers, voiceChannels } = party;
+                voiceChannels?.forEach(vc => vc.members = vc.members?.filter(m => !this.shouldHideUser(m.id)) ?? []);
+                party.applicationStreams = (applicationStreams ?? []).filter(applicationStream => !this.shouldHideUser(applicationStream.streamUser.id));
+                party.priorityMembers = priorityMembers?.filter(m => !this.shouldHideUser(m.user.id)) ?? [];
+                party.partiedMembers = partiedMembers?.filter(m => !this.shouldHideUser(m.id)) ?? [];
 
-                const filteredVoiceMembers = voiceChannel?.members?.filter(m => !this.shouldHideUser(m.id)) ?? [];
-                const filteredPartiedMembers = partiedMembers?.filter(m => !this.shouldHideUser(m.id)) ?? [];
-                if (!filteredVoiceMembers.length && !filteredPartiedMembers.length) return null;
+                const hasMembers = (voiceChannels?.some(vc => vc.members?.length) ?? false) ||
+                    (party.partiedMembers?.length ?? 0) ||
+                    (party.priorityMembers?.length ?? 0) ||
+                    (party.applicationStreams?.length ?? 0);
 
-                voiceChannel.members = filteredVoiceMembers;
-                partiedMembers = filteredPartiedMembers;
-                return card;
+                return hasMembers;
             }
+
+            return true;
         });
     }
 });
