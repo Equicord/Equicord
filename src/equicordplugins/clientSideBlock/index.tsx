@@ -9,8 +9,7 @@ import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember } from "@vencord/discord-types";
-import { ChannelStore, GuildMemberStore, GuildRoleStore, RelationshipStore, UserStore } from "@webpack/common";
-
+import { ChannelStore, GuildMemberStore, GuildRoleStore, React, RelationshipStore, UserStore } from "@webpack/common";
 const settings = definePluginSettings(
     {
         usersToBlock: {
@@ -211,7 +210,6 @@ export default definePlugin({
                 replace: "$1if($2 != undefined) return $2.filter(u => !$self.shouldHideUser(u.key))"
             }
         },
-
     ],
     activeNowView(cards) {
         if (!Array.isArray(cards)) return cards;
@@ -220,14 +218,17 @@ export default definePlugin({
             if (!card?.key) return false;
 
             const newKey = card.key.match(/(?:user-|party-spotify:)(.+)/)?.[1];
-
-            if (newKey) {
-                return this.shouldHideUser(newKey) ? null : card;
-            }
+            if (newKey) return this.shouldHideUser(newKey) ? null : card;
 
             if (card.key.startsWith("channel-")) {
-                const members = card.props?.party?.voiceChannels?.[0]?.members ?? [];
-                return members.some(member => this.shouldHideUser(member.id)) ? null : card;
+                const vc = card.props?.party?.voiceChannels?.[0];
+                if (!vc) return card;
+
+                const filtered = vc.members?.filter(m => !this.shouldHideUser(m.id)) ?? [];
+                if (!filtered.length) return null;
+
+                vc.members = filtered;
+                return card;
             }
         });
     }
