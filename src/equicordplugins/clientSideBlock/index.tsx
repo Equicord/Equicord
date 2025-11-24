@@ -46,7 +46,10 @@ const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "What should display instead of the message when someone replies to someone you have hidden",
         restartNeeded: true,
-        options: [{ value: "displayText", label: "Display text saying a hidden message was replied to", default: true }, { value: "hideReply", label: "Literally nothing" }]
+        options: [
+            { value: "displayText", label: "Display text saying a hidden message was replied to", default: true },
+            { value: "hideReply", label: "Literally nothing" }
+        ]
     },
     guildBlackList: {
         type: OptionType.STRING,
