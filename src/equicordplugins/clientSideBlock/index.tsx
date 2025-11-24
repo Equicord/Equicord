@@ -221,13 +221,19 @@ export default definePlugin({
             if (newKey) return this.shouldHideUser(newKey) ? null : card;
 
             if (card.key.startsWith("channel-")) {
-                const vc = card.props?.party?.voiceChannels?.[0];
-                if (!vc) return card;
+                const { party } = card.props;
+                if (!party) return card;
 
-                const filtered = vc.members?.filter(m => !this.shouldHideUser(m.id)) ?? [];
-                if (!filtered.length) return null;
+                let { partiedMembers, voiceChannels } = party;
+                const voiceChannel = voiceChannels?.[0];
+                if (!voiceChannel && !partiedMembers) return card;
 
-                vc.members = filtered;
+                const filteredVoiceMembers = voiceChannel?.members?.filter(m => !this.shouldHideUser(m.id)) ?? [];
+                const filteredPartiedMembers = partiedMembers?.filter(m => !this.shouldHideUser(m.id)) ?? [];
+                if (!filteredVoiceMembers.length && !filteredPartiedMembers.length) return null;
+
+                voiceChannel.members = filteredVoiceMembers;
+                partiedMembers = filteredPartiedMembers;
                 return card;
             }
         });
