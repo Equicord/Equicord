@@ -189,7 +189,7 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(?=let \i,\{repliedAuthor:)/,
-                    replace: "if($self.shouldHideUser(arguments[0].referencedMessage.message.author.id, arguments[0].baseMessage.messageReference.channel_id)) { return $self.hiddenReplyComponent(); }"
+                    replace: "if(arguments[0]?.referencedMessage?.message && $self.shouldHideUser(arguments[0].referencedMessage.message.author.id, arguments[0].baseMessage.messageReference.channel_id)) { return $self.hiddenReplyComponent(); }"
                 }
             ]
         },
