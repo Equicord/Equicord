@@ -26,7 +26,7 @@ const settings = definePluginSettings({
         default: "",
         isValid(value: string) {
             if (value === "") return true;
-            const userIds = value.split(",").map(ext => ext.trim());
+            const userIds = value.split(",").map(id => id.trim());
             for (const id of userIds)
                 if (!/\d+/.test(id)) return `${id} isn't a valid user id`;
             return true;
