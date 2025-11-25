@@ -11,33 +11,30 @@ import { Button } from "@components/Button";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { Constants, GuildStore, IconUtils, MediaEngineStore, Menu, RestAPI, SearchableSelect, SelectedChannelStore, TextInput, Toasts, useState } from "@webpack/common";
+import { Constants, GuildStore, IconUtils, MediaEngineStore, Menu, RestAPI, SearchableSelect, SelectedChannelStore, TextInput, Toasts } from "@webpack/common";
 
 const ChannelActions = findByPropsLazy("selectChannel", "selectVoiceChannel");
 const PlayIcon = findComponentByCodeLazy("4.96v14.08c0");
 
 function GuildSelector() {
     const { soundGuildId } = settings.use(["soundGuildId"]);
-    const [value, setValue] = useState(soundGuildId);
-    const guilds = Object.values(GuildStore.getGuilds());
-    const options = guilds.map(g => ({ value: g.id, label: g.name }));
+    const options = Object.values(GuildStore.getGuilds()).map(g => ({
+        value: g.id,
+        label: g.name
+    }));
 
     return (
         <SearchableSelect
             options={options}
-            value={options.find(o => o.value === value)}
+            value={options.find(o => o.value === soundGuildId)}
             placeholder="Select a server..."
             maxVisibleItems={6}
             closeOnSelect={true}
-            onChange={(v: string) => {
-                setValue(v);
-                settings.store.soundGuildId = v;
-            }}
+            onChange={v => settings.store.soundGuildId = v}
             renderOptionPrefix={o => {
-                if (!o) return null;
-                const guild = guilds.find(g => g.id === o.value);
+                const guild = GuildStore.getGuild(o?.value);
                 if (!guild?.icon) return null;
-                return <img src={IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 })!} style={{ width: 20, height: 20, borderRadius: 4, marginRight: 8 }} />;
+                return <img src={IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 })!} style={{ width: 24, height: 24, borderRadius: 4, marginRight: 8, verticalAlign: "middle" }} />;
             }}
         />
     );
@@ -45,23 +42,19 @@ function GuildSelector() {
 
 function SoundIdInput() {
     const { soundId } = settings.use(["soundId"]);
-    const [value, setValue] = useState(soundId);
 
     return (
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <div style={{ flex: 1 }}>
                 <TextInput
-                    value={value}
-                    onChange={v => {
-                        setValue(v);
-                        settings.store.soundId = v;
-                    }}
+                    value={soundId}
+                    onChange={v => settings.store.soundId = v}
                     placeholder="Enter sound ID..."
                 />
             </div>
             <Button
-                onClick={() => playAudio(`https://cdn.discordapp.com/soundboard-sounds/${value}`, { volume: 50 })}
-                disabled={!value}
+                onClick={() => playAudio(`https://${window.GLOBAL_ENV.CDN_HOST}/soundboard-sounds/${soundId}`, { volume: 50 })}
+                disabled={!soundId}
             >
                 <PlayIcon color="currentColor" />
             </Button>
