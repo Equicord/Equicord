@@ -13,12 +13,11 @@ import { classNameFactory } from "@api/Styles";
 import { Button } from "@components/Button";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { Constants, GuildStore, IconUtils, MediaEngineStore, Menu, RestAPI, SearchableSelect, SelectedChannelStore, TextInput, Toasts } from "@webpack/common";
+import { findComponentByCodeLazy } from "@webpack";
+import { ChannelActions, Constants, GuildStore, IconUtils, MediaEngineStore, Menu, RestAPI, SearchableSelect, SelectedChannelStore, TextInput, Toasts } from "@webpack/common";
 
 const cl = classNameFactory("vc-exitsounds-");
 
-const ChannelActions = findByPropsLazy("selectChannel", "selectVoiceChannel");
 const PlayIcon = findComponentByCodeLazy("4.96v14.08c0");
 
 function GuildSelector() {
@@ -39,7 +38,12 @@ function GuildSelector() {
             renderOptionPrefix={o => {
                 const guild = GuildStore.getGuild(o?.value);
                 if (!guild?.icon) return null;
-                return <img src={IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 })!} className={cl("guild-icon")} />;
+                return (
+                    <img
+                        className={cl("guild-icon")}
+                        src={IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 })!}
+                    />
+                );
             }}
         />
     );
@@ -114,11 +118,14 @@ export default definePlugin({
             const { soundGuildId, soundId } = settings.store;
             const voiceId = SelectedChannelStore.getVoiceChannelId();
 
-            if (voiceId && voiceId !== id && soundGuildId && soundId && !MediaEngineStore.isMute()) {
+            if (soundGuildId && soundId && voiceId !== id && !MediaEngineStore.isDeaf()) {
                 try {
                     await RestAPI.post({
                         url: Constants.Endpoints.SEND_SOUNDBOARD_SOUND(voiceId),
-                        body: { sound_id: soundId, source_guild_id: soundGuildId }
+                        body: {
+                            sound_id: soundId,
+                            source_guild_id: soundGuildId
+                        }
                     });
                     await new Promise(r => setTimeout(r, 500));
                 } catch {
