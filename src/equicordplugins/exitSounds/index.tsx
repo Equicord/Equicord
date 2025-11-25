@@ -66,7 +66,6 @@ function SoundIdInput() {
         </div>
     );
 }
-
 const settings = definePluginSettings({
     soundGuildId: {
         type: OptionType.COMPONENT,
@@ -101,6 +100,7 @@ export default definePlugin({
     name: "ExitSounds",
     description: "Play soundboard sounds when you disconnect from voice.",
     authors: [EquicordDevs.Prism],
+    dependencies: ["AudioPlayerAPI"],
     settings,
 
     contextMenus: {
