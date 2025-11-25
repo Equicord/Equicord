@@ -1,0 +1,141 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2024 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+import { playAudio } from "@api/AudioPlayer";
+import { NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
+import { EquicordDevs } from "@utils/constants";
+import definePlugin, { OptionType } from "@utils/types";
+import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { Constants, GuildStore, IconUtils, MediaEngineStore, Menu, RestAPI, SearchableSelect, SelectedChannelStore, TextInput, Toasts, useState } from "@webpack/common";
+
+const ChannelActions = findByPropsLazy("selectChannel", "selectVoiceChannel");
+const PlayIcon = findComponentByCodeLazy("4.96v14.08c0");
+
+function GuildSelector() {
+    const { soundGuildId } = settings.use(["soundGuildId"]);
+    const [value, setValue] = useState(soundGuildId);
+    const guilds = Object.values(GuildStore.getGuilds());
+    const options = guilds.map(g => ({ value: g.id, label: g.name }));
+
+    return (
+        <SearchableSelect
+            options={options}
+            value={options.find(o => o.value === value)}
+            placeholder="Select a server..."
+            maxVisibleItems={6}
+            closeOnSelect={true}
+            onChange={(v: string) => {
+                setValue(v);
+                settings.store.soundGuildId = v;
+            }}
+            renderOptionPrefix={o => {
+                if (!o) return null;
+                const guild = guilds.find(g => g.id === o.value);
+                if (!guild?.icon) return null;
+                return <img src={IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 })!} style={{ width: 20, height: 20, borderRadius: 4, marginRight: 8 }} />;
+            }}
+        />
+    );
+}
+
+function SoundIdInput() {
+    const { soundId } = settings.use(["soundId"]);
+    const [value, setValue] = useState(soundId);
+
+    return (
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <div style={{ flex: 1 }}>
+                <TextInput
+                    value={value}
+                    onChange={v => {
+                        setValue(v);
+                        settings.store.soundId = v;
+                    }}
+                    placeholder="Enter sound ID..."
+                />
+            </div>
+            <Button
+                onClick={() => playAudio(`https://cdn.discordapp.com/soundboard-sounds/${value}`, { volume: 50 })}
+                disabled={!value}
+            >
+                <PlayIcon color="currentColor" />
+            </Button>
+        </div>
+    );
+}
+
+const settings = definePluginSettings({
+    soundGuildId: {
+        type: OptionType.COMPONENT,
+        description: "Select the server containing the sound.",
+        component: GuildSelector
+    },
+    soundId: {
+        type: OptionType.COMPONENT,
+        description: "Enter the ID of the sound you want to play.",
+        component: SoundIdInput
+    }
+});
+
+const SoundButtonContext: NavContextMenuPatchCallback = (children, { sound }: { sound: { soundId: string; guildId: string; }; }) => {
+    children.splice(1, 0,
+        <Menu.MenuGroup>
+            <Menu.MenuItem
+                id="set-global-exit-sound"
+                label="Set as global exit sound"
+                action={() => {
+                    settings.store.soundGuildId = sound.guildId;
+                    settings.store.soundId = sound.soundId;
+                }}
+            />
+        </Menu.MenuGroup>
+    );
+};
+
+let original: typeof ChannelActions.selectVoiceChannel;
+
+export default definePlugin({
+    name: "ExitSounds",
+    description: "Play soundboard sounds when you disconnect from voice.",
+    authors: [EquicordDevs.Prism],
+    settings,
+
+    contextMenus: {
+        "sound-button-context": SoundButtonContext
+    },
+
+    start() {
+        original = ChannelActions.selectVoiceChannel;
+        ChannelActions.selectVoiceChannel = async (id: string | null, ...args: unknown[]) => {
+            const { soundGuildId, soundId } = settings.store;
+            const voiceId = SelectedChannelStore.getVoiceChannelId();
+
+            if (voiceId && voiceId !== id && soundGuildId && soundId && !MediaEngineStore.isMute()) {
+                try {
+                    await RestAPI.post({
+                        url: Constants.Endpoints.SEND_SOUNDBOARD_SOUND(voiceId),
+                        body: { sound_id: soundId, source_guild_id: soundGuildId }
+                    });
+                    await new Promise(r => setTimeout(r, 500));
+                } catch {
+                    Toasts.show({
+                        message: "Oops! Something went wrong.",
+                        id: Toasts.genId(),
+                        type: Toasts.Type.FAILURE
+                    });
+                }
+            }
+
+            return original(id, ...args);
+        };
+    },
+
+    stop() {
+        ChannelActions.selectVoiceChannel = original;
+    }
+});
