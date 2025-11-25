@@ -224,7 +224,7 @@ export async function reportVideoQuestProgress(quest: Quest, currentProgress: nu
             });
 
             if (!response || !response.body) {
-                logger?.warn(`[${getFormattedNow()}] No response body received while reporting video progress for Quest ${questName}. Attempt ${attempt}/${maxAttempts}.`);
+                logger?.warn(`[${getFormattedNow()}] No response body received while reporting video progress for Quest ${questName} on attempt ${attempt}/${maxAttempts}.`);
 
                 if (attempt < maxAttempts) {
                     await new Promise(resolve => setTimeout(resolve, delay));
@@ -272,7 +272,7 @@ export async function reportPlayGameQuestProgress(quest: Quest, terminal: boolea
             });
 
             if (!response || !response.body) {
-                logger?.warn(`[${getFormattedNow()}] No response body received while sending heartbeat for Quest ${questName}. Attempt ${attempt}/${maxAttempts}.`);
+                logger?.warn(`[${getFormattedNow()}] No response body received while sending heartbeat for Quest ${questName} on attempt ${attempt}/${maxAttempts}.`);
 
                 if (attempt < maxAttempts) {
                     await new Promise(resolve => setTimeout(resolve, delay));
