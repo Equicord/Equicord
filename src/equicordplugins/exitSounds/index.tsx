@@ -4,14 +4,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { playAudio } from "@api/AudioPlayer";
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
+import { classNameFactory } from "@api/Styles";
 import { Button } from "@components/Button";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Constants, GuildStore, IconUtils, MediaEngineStore, Menu, RestAPI, SearchableSelect, SelectedChannelStore, TextInput, Toasts } from "@webpack/common";
+
+const cl = classNameFactory("vc-exitsounds-");
 
 const ChannelActions = findByPropsLazy("selectChannel", "selectVoiceChannel");
 const PlayIcon = findComponentByCodeLazy("4.96v14.08c0");
@@ -34,7 +39,7 @@ function GuildSelector() {
             renderOptionPrefix={o => {
                 const guild = GuildStore.getGuild(o?.value);
                 if (!guild?.icon) return null;
-                return <img src={IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 })!} style={{ width: 24, height: 24, borderRadius: 4, marginRight: 8, verticalAlign: "middle" }} />;
+                return <img src={IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 32 })!} className={cl("guild-icon")} />;
             }}
         />
     );
@@ -44,8 +49,8 @@ function SoundIdInput() {
     const { soundId } = settings.use(["soundId"]);
 
     return (
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <div style={{ flex: 1 }}>
+        <div className={cl("input-row")}>
+            <div className={cl("input-wrapper")}>
                 <TextInput
                     value={soundId}
                     onChange={v => settings.store.soundId = v}
