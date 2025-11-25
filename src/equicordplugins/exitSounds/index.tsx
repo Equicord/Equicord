@@ -66,6 +66,7 @@ function SoundIdInput() {
         </div>
     );
 }
+
 const settings = definePluginSettings({
     soundGuildId: {
         type: OptionType.COMPONENT,
