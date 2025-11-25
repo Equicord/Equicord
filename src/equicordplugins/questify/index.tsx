@@ -934,7 +934,7 @@ export default definePlugin({
         },
         {
             // Hides Quests tab in the Discovery page.
-            find: "GLOBAL_DISCOVERY_TABS.map",
+            find: "GLOBAL_DISCOVERY_SIDEBAR},",
             replacement: [
                 {
                     match: /(GLOBAL_DISCOVERY_TABS).map/,
