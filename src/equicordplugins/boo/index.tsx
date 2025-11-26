@@ -199,7 +199,7 @@ migratePluginSettings("Ghosted", "Boo");
 export default definePlugin({
     name: "Ghosted",
     description: "A cute ghost will appear if you don't answer their DMs",
-    authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke, EquicordDevs.Foobryy],
+    authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke],
     settings,
     dependencies: ["AudioPlayerAPI"],
 
