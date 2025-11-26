@@ -7,6 +7,7 @@
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Alerts, ChannelStore, PermissionsBits, PermissionStore } from "@webpack/common";
 
@@ -29,7 +30,7 @@ function warningEmbedNotice(trigger) {
                 </Paragraph>
             </div>,
             confirmText: "Send Anyway",
-            cancelText: "Cancel",
+            cancelText: t("vencord.cancel"),
             onConfirm: () => resolve(true),
             onCloseCallback: () => setImmediate(() => resolve(false)),
         });

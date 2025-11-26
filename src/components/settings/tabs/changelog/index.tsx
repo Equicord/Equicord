@@ -669,7 +669,7 @@ function ChangelogContent() {
                                         body: t("vencord.logs.clearLogConfirmation"),
                                         confirmText: t("vencord.logs.clearLog"),
                                         confirmColor: "danger",
-                                        cancelText: t("vencord.logs.cancel"),
+                                        cancelText: t("vencord.cancel"),
                                         onConfirm: async () => {
                                             await clearIndividualLog(logId);
                                             await loadChangelogHistory();

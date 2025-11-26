@@ -2,13 +2,15 @@
     "donate": "Donate",
     "invite": "Invite",
     "loading": "Loading...",
+    "cancel": "Cancel",
     "logs": {
-        "cancel": "Cancel",
         "clearLog": "Clear Log",
         "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
         "logCleared": "Log has been cleared",
         "clearLogs": "Clear Logs",
         "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
+        "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
+        "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
         "logsCleared": "Selected logs have been cleared",
         "hideLogs": "Hide Logs",
         "showLogs": "Show Logs",
@@ -87,7 +89,7 @@
             },
             "requiredToFunction": "This plugin is required for Equicord to function",
             "pluginRequiredBy": "This plugin is required by: {pluginNames}",
-            "noDescription": "No description available",
+            "noDescription": "No description available"
         },
         "changelog": {
             "manager": {

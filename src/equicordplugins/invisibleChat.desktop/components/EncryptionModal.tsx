@@ -27,6 +27,7 @@ import {
     ModalRoot,
     openModal,
 } from "@utils/modal";
+import { t } from "@utils/translation";
 import { Button, React, TextInput } from "@webpack/common";
 
 import { encrypt } from "../index";
@@ -101,7 +102,7 @@ function EncModal(props: ModalProps) {
                         props.onClose();
                     }}
                 >
-                    Cancel
+                    {t("vencord.cancel")}
                 </Button>
             </ModalFooter>
         </ModalRoot>

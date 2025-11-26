@@ -18,6 +18,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { Alerts, Button, GuildStore } from "@webpack/common";
@@ -97,7 +98,7 @@ export default definePlugin({
                 confirmColor: Button.Colors.RED,
                 confirmText: "Delete",
                 onConfirm: () => GetPropsAndDeleteGuild(server.id),
-                cancelText: "Cancel"
+                cancelText: t("vencord.cancel")
             });
         } else {
             return GetPropsAndDeleteGuild(server.id);

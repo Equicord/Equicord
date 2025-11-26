@@ -24,6 +24,7 @@ import {
     ModalRoot,
     openModal,
 } from "@utils/modal";
+import { t } from "@utils/translation";
 import { Button, React, TextInput } from "@webpack/common";
 
 import { buildEmbed, decrypt } from "../index";
@@ -65,7 +66,7 @@ export function DecModal(props: any) {
                     style={{ left: 15, position: "absolute" }}
                     onClick={props.onClose}
                 >
-                    Cancel
+                    {t("vencord.cancel")}
                 </Button>
             </ModalFooter>
         </ModalRoot>

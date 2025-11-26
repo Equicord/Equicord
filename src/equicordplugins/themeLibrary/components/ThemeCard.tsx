@@ -14,6 +14,7 @@ import type { Theme, ThemeLikeProps } from "@equicordplugins/themeLibrary/types"
 import { proxyLazy } from "@utils/lazy";
 import { Margins } from "@utils/margins";
 import { ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import { User } from "@vencord/discord-types";
 import { Button, FluxDispatcher, Parser, React, UserStore, UserUtils } from "@webpack/common";
 import { Constructor } from "type-fest";
@@ -93,7 +94,7 @@ export const ThemeCard: React.FC<ThemeCardProps> = ({ theme, themeLinks, likedTh
                             className={Margins.right8}
                             onClick={() => modalProps.onClose()}
                         >
-                            Cancel
+                            {t("vencord.cancel")}
                         </Button>
                     </ModalFooter>
                 </ModalRoot>

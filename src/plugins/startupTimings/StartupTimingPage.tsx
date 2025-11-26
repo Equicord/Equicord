@@ -19,6 +19,7 @@
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
+import { t } from "@utils/translation";
 import { findByPropsLazy } from "@webpack";
 import { React } from "@webpack/common";
 
@@ -133,7 +134,7 @@ function ServerTrace({ trace }: ServerTraceProps) {
 }
 
 function StartupTimingPage() {
-    if (!AppStartPerformance?.logs) return <div>Loading...</div>;
+    if (!AppStartPerformance?.logs) return <div>{t("vencord.loading")}</div>;
 
     const serverTrace = AppStartPerformance.logGroups.find(g => g.serverTrace)?.serverTrace;
 

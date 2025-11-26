@@ -31,6 +31,7 @@ import { proxyLazy } from "@utils/lazy";
 import { Margins } from "@utils/margins";
 import { classes, isObjectEmpty } from "@utils/misc";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import { OptionType, Plugin } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
@@ -356,7 +357,7 @@ export function openWarningModal(plugin?: Plugin | null, pluginModalProps?: Moda
                             onClick={warningModalProps.onClose}
                             look={Button.Looks.FILLED}
                         >
-                            Cancel
+                            {t("vencord.cancel")}
                         </Button>
                         {!Settings.ignoreResetWarning && (
                             <Button
