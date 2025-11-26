@@ -755,18 +755,17 @@ const userContextPatch: NavContextMenuPatchCallback = (children, { user }) => {
 
     const group = findGroupChildrenByChildId("user-profile", children);
 
+    !group && children.push(<Menu.MenuSeparator />);
     (group || children).push(
-        ...([
-            (!group ? <Menu.MenuSeparator /> : null),
-            <Menu.MenuItem
-                id="smyn-custom-nickname"
-                label={customNicknames[user.id] ? "Change SMYN Nickname" : "Add SMYN Nickname"}
-                action={() => openModal(props => (
-                    <ErrorBoundary>
-                        <CustomNicknameModal modalProps={props} user={user} />
-                    </ErrorBoundary>
-                ))}
-            />].filter(Boolean))
+        <Menu.MenuItem
+            id="smyn-custom-nickname"
+            label={customNicknames[user.id] ? "Change SMYN Nickname" : "Add SMYN Nickname"}
+            action={() => openModal(props => (
+                <ErrorBoundary>
+                    <CustomNicknameModal modalProps={props} user={user} />
+                </ErrorBoundary>
+            ))}
+        />
     );
 };
 
