@@ -94,7 +94,7 @@
         "typescript-transform-paths": "^3.5.5",
         "zip-local": "^0.3.5"
     },
-    "packageManager": "pnpm@10.22.0",
+    "packageManager": "pnpm@10.23.0",
     "pnpm": {
         "patchedDependencies": {
             "@types/less@3.0.8": "patches/@types__less@3.0.8.patch"
