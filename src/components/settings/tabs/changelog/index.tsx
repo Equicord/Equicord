@@ -15,13 +15,12 @@ import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
 import { HashLink } from "@components/settings/tabs/updater/Components";
-import { gitHashShort } from "@shared/vencordUserAgent";
+import { gitHash, gitHashShort } from "@shared/vencordUserAgent";
 import { Margins } from "@utils/margins";
 import { useAwaiter } from "@utils/react";
+import { t } from "@utils/translation";
 import { getRepo, UpdateLogger } from "@utils/updater";
 import { Alerts, Button, React, Toasts } from "@webpack/common";
-
-import gitHash from "~git-hash";
 
 import {
     ChangelogEntry,
@@ -111,9 +110,10 @@ function UpdateLogCard({
                         <span>
                             {isRepositoryFetch
                                 ? isUpToDate
-                                    ? `Repository check: ${log.fromHash.slice(0, 7)} (up to date)`
-                                    : `Repository check: ${log.fromHash.slice(0, 7)} → ${log.toHash.slice(0, 7)}`
-                                : `Update: ${log.fromHash.slice(0, 7)} → ${log.toHash.slice(0, 7)}`}
+                                    ? t("vencord.settings.changelog.updateCard.upToDate", { fromHash: log.fromHash.slice(0, 7) })
+                                    : t("vencord.settings.changelog.updateCard.outOfDate", { fromHash: log.fromHash.slice(0, 7), toHash: log.toHash.slice(0, 7) })
+                                : t("vencord.settings.changelog.updateCard.update", { fromHash: log.fromHash.slice(0, 7), toHash: log.toHash.slice(0, 7) })
+                            }
                         </span>
                         <Button
                             size={Button.Sizes.NONE}
@@ -139,16 +139,14 @@ function UpdateLogCard({
                     </div>
                     <div className="vc-changelog-log-meta">
                         {formatTimestamp(log.timestamp)}
-                        {log.commits.length > 0 &&
-                            ` • ${log.commits.length} commits available`}
-                        {log.commits.length === 0 && " • No new commits"}
-                        {log.newPlugins.length > 0 &&
-                            ` • ${log.newPlugins.length} new plugins`}
-                        {log.updatedPlugins.length > 0 &&
-                            ` • ${log.updatedPlugins.length} updated plugins`}
+                        {t("vencord.settings.changelog.updateCard.commits", { count: log.commits.length })}
+                        {log.newPlugins.length > 0 && t("vencord.settings.changelog.updateCard.newPluginsCount", { plugins: log.newPlugins.length })}
+                        {log.updatedPlugins.length > 0 && t("vencord.settings.changelog.updateCard.updatedPluginsCount", { plugins: log.updatedPlugins.length })}
                         {log.newSettings &&
                             getNewSettingsSize(log.newSettings) > 0 &&
-                            ` • ${getNewSettingsEntries(log.newSettings).reduce((sum, [, arr]) => sum + arr.length, 0)} new settings`}
+                            t("vencord.settings.changelog.updateCard.newSettingsCount", {
+                                settings: getNewSettingsEntries(log.newSettings).reduce((sum, [, arr]) => sum + arr.length, 0)
+                            })}
                     </div>
                 </div>
                 <div
@@ -172,7 +170,7 @@ function UpdateLogCard({
                     {log.updatedPlugins.length > 0 && (
                         <div className="vc-changelog-log-plugins">
                             <Heading className={Margins.bottom8}>
-                                Updated Plugins
+                                {t("vencord.settings.changelog.updateCard.updatedPlugins")}
                             </Heading>
                             <NewPluginsCompact
                                 newPlugins={log.updatedPlugins}
@@ -185,7 +183,7 @@ function UpdateLogCard({
                         getNewSettingsSize(log.newSettings) > 0 && (
                             <div className="vc-changelog-log-plugins">
                                 <Heading className={Margins.bottom8}>
-                                    New Settings
+                                    {t("vencord.settings.changelog.updateCard.newSettings")}
                                 </Heading>
                                 <div className="vc-changelog-new-plugins-list">
                                     {getNewSettingsEntries(log.newSettings).map(
@@ -194,7 +192,7 @@ function UpdateLogCard({
                                                 <span
                                                     key={`${pluginName}-${setting}`}
                                                     className="vc-changelog-new-plugin-tag"
-                                                    title={`New setting in ${pluginName}`}
+                                                    title={t("vencord.settings.changelog.updateCard.newSettingInPlugin", { pluginName: pluginName })}
                                                 >
                                                     {pluginName}.{setting}
                                                 </span>
@@ -226,7 +224,7 @@ function UpdateLogCard({
 
 function ChangelogContent() {
     const [repo, repoErr, repoPending] = useAwaiter(getRepo, {
-        fallbackValue: "Loading...",
+        fallbackValue: t("vencord.loading"),
     });
     const [changelog, setChangelog] = React.useState<ChangelogEntry[]>([]);
     const [changelogHistory, setChangelogHistory] =
@@ -256,7 +254,7 @@ function ChangelogContent() {
     React.useEffect(() => {
         if (repoErr) {
             UpdateLogger.error("Failed to retrieve repo", repoErr);
-            setError("Failed to retrieve repository information");
+            setError(t("vencord.settings.changelog.missingRepoInfo"));
         }
     }, [repoErr]);
 
@@ -354,7 +352,7 @@ function ChangelogContent() {
                 if (!logged) {
                     setChangelog([]);
                     Toasts.show({
-                        message: "Already up to date with repository",
+                        message: t("vencord.settings.changelog.alreadyUpToDate"),
                         id: Toasts.genId(),
                         type: Toasts.Type.MESSAGE,
                         options: {
@@ -386,7 +384,7 @@ function ChangelogContent() {
                     setRecentlyChecked(true);
 
                     Toasts.show({
-                        message: `Found ${updates.value.length} commit${updates.value.length === 1 ? "" : "s"} from repository`,
+                        message: t("vencord.settings.changelog.foundCommits", { count: updates.value.length }),
                         id: Toasts.genId(),
                         type: Toasts.Type.SUCCESS,
                         options: {
@@ -398,8 +396,8 @@ function ChangelogContent() {
                     setRecentlyChecked(true);
                     Toasts.show({
                         message: logged
-                            ? "Logged commits from your latest update"
-                            : "Repository is up to date with your local copy",
+                            ? t("vencord.settings.changelog.loggedCommits")
+                            : t("vencord.settings.changelog.upToDateLocalCopy"),
                         id: Toasts.genId(),
                         type: logged ? Toasts.Type.SUCCESS : Toasts.Type.MESSAGE,
                         options: {
@@ -412,19 +410,19 @@ function ChangelogContent() {
                 }
             } else if (!updates.ok) {
                 throw new Error(
-                    updates.error?.message || "Failed to fetch from repository",
+                    updates.error?.message || t("vencord.settings.changelog.missingRepoInfo"),
                 );
             }
         } catch (err: any) {
             UpdateLogger.error("Failed to fetch commits from repository", err);
             const errorMessage =
                 err?.message ||
-                "Failed to connect to repository. Check your internet connection.";
+                t("vencord.settings.changelog.checkYourConnection");
             setError(errorMessage);
 
             // funny little error toast hopefully doesn't happen!
             Toasts.show({
-                message: "Could not fetch commits from repository",
+                message: t("vencord.settings.changelog.failedtoFetchCommits"),
                 id: Toasts.genId(),
                 type: Toasts.Type.FAILURE,
                 options: {
@@ -479,16 +477,15 @@ function ChangelogContent() {
     return (
         <>
             <Paragraph className={Margins.bottom16}>
-                View the most recent changes to Equicord. This fetches commits
-                directly from the repository to show you what's new.
+                {t("vencord.settings.changelog.viewRecentChanges")}
             </Paragraph>
 
-            <Heading>Repository</Heading>
+            <Heading>{t("vencord.settings.changelog.repository")}</Heading>
             <Paragraph className={Margins.bottom16}>
                 {repoPending ? (
                     repo
                 ) : repoErr ? (
-                    "Failed to retrieve - check console"
+                    t("vencord.settings.changelog.failedToRetrieve")
                 ) : (
                     <Link href={repo}>
                         {repo.split("/").slice(-2).join("/")}
@@ -513,10 +510,11 @@ function ChangelogContent() {
                     }
                 >
                     {isLoading
-                        ? "Loading..."
+                        ? t("vencord.loading")
                         : recentlyChecked
-                            ? "Repository Up to Date"
-                            : "Fetch from Repository"}
+                            ? t("vencord.settings.changelog.upToDate")
+                            : t("vencord.settings.changelog.fetchRepo")
+                    }
                 </Button>
 
                 {changelogHistory.length > 0 && (
@@ -531,25 +529,24 @@ function ChangelogContent() {
                             onClick={() => setShowHistory(!showHistory)}
                             style={{ marginLeft: "8px" }}
                         >
-                            {showHistory ? "Hide Logs" : "Show Logs"}
+                            {showHistory ? t("vencord.logs.hideLogs") : t("vencord.logs.showLogs")}
                         </Button>
                         <Button
                             size={Button.Sizes.SMALL}
                             color={Button.Colors.RED}
                             onClick={() => {
                                 Alerts.show({
-                                    title: "Clear All Logs",
-                                    body: "Are you sure you would like to clear all logs? This can't be undone.",
-                                    confirmText: "Clear All",
+                                    title: t("vencord.logs.clearAllLogs"),
+                                    body: t("vencord.logs.clearAllLogsConfirmation"),
+                                    confirmText: t("vencord.logs.clearAll"),
                                     confirmColor: "danger",
-                                    cancelText: "Cancel",
+                                    cancelText: t("vencord.cancel"),
                                     onConfirm: async () => {
                                         await clearChangelogHistory();
                                         await loadChangelogHistory();
                                         setShowHistory(false);
                                         Toasts.show({
-                                            message:
-                                                "All logs have been cleared",
+                                            message: t("vencord.logs.allLogsCleared"),
                                             id: Toasts.genId(),
                                             type: Toasts.Type.SUCCESS,
                                             options: {
@@ -562,7 +559,7 @@ function ChangelogContent() {
                             }}
                             style={{ marginLeft: "8px" }}
                         >
-                            Clear All Logs
+                            {t("vencord.logs.clearAll")}
                         </Button>
                     </>
                 )}
@@ -577,7 +574,7 @@ function ChangelogContent() {
                             color: "var(--text-muted)",
                         }}
                     >
-                        Make sure you have an internet connection and try again.
+                        {t("vencord.settings.changelog.checkYourInternet")}
                     </Paragraph>
                 </ErrorCard>
             )}
@@ -588,7 +585,7 @@ function ChangelogContent() {
             {hasCurrentChanges ? (
                 <div className="vc-changelog-current">
                     <Heading className={Margins.bottom8}>
-                        Recent Changes
+                        {t("vencord.settings.changelog.recentChanges")}
                     </Heading>
 
                     {/* New Plugins Section */}
@@ -607,7 +604,7 @@ function ChangelogContent() {
                     {updatedPlugins.length > 0 && (
                         <div className={Margins.bottom16}>
                             <Heading className={Margins.bottom8}>
-                                Updated Plugins ({updatedPlugins.length})
+                                {t("vencord.settings.changelog.updatedPluginsCount", { plugins: updatedPlugins.length })}
                             </Heading>
                             <NewPluginsCompact newPlugins={updatedPlugins} />
                         </div>
@@ -617,8 +614,7 @@ function ChangelogContent() {
                     {changelog.length > 0 && (
                         <div>
                             <Heading className={Margins.bottom8}>
-                                Code Changes ({changelog.length}{" "}
-                                {changelog.length === 1 ? "commit" : "commits"})
+                                {t("vencord.settings.changelog.codeChanges", { count: changelog.length })}
                             </Heading>
                             <div className="vc-changelog-commits-list">
                                 {changelog.map(entry => (
@@ -638,9 +634,7 @@ function ChangelogContent() {
                 !error && (
                     <Card className="vc-changelog-empty">
                         <Paragraph>
-                            No commits available ahead of your current version.
-                            Click "Fetch from Repository" to check for new
-                            changes.
+                            {t("vencord.settings.changelog.emptyChangelog")}
                         </Paragraph>
                     </Card>
                 )
@@ -654,12 +648,10 @@ function ChangelogContent() {
                         style={{ marginBottom: "1em" }}
                     />
                     <Heading className={Margins.bottom8}>
-                        Update Logs ({changelogHistory.length}{" "}
-                        {changelogHistory.length === 1 ? "log" : "logs"})
+                        {t("vencord.settings.changelog.updateLogs", { count: changelogHistory.length })}
                     </Heading>
                     <Paragraph className={Margins.bottom16}>
-                        Previous update sessions with their commit history and
-                        plugin changes.
+                        {t("vencord.settings.changelog.previousSessions")}
                     </Paragraph>
 
                     <div className="vc-changelog-history-list">
@@ -673,11 +665,11 @@ function ChangelogContent() {
                                 onToggleExpand={() => toggleLogExpanded(log.id)}
                                 onClearLog={logId => {
                                     Alerts.show({
-                                        title: "Clear Log",
-                                        body: "Are you sure you would like to clear this log? This can't be undone.",
-                                        confirmText: "Clear Log",
+                                        title: t("vencord.logs.clearLog"),
+                                        body: t("vencord.logs.clearLogConfirmation"),
+                                        confirmText: t("vencord.logs.clearLog"),
                                         confirmColor: "danger",
-                                        cancelText: "Cancel",
+                                        cancelText: t("vencord.logs.cancel"),
                                         onConfirm: async () => {
                                             await clearIndividualLog(logId);
                                             await loadChangelogHistory();
@@ -691,7 +683,7 @@ function ChangelogContent() {
                                                 ),
                                             );
                                             Toasts.show({
-                                                message: "Log has been cleared",
+                                                message: t("vencord.logs.logCleared"),
                                                 id: Toasts.genId(),
                                                 type: Toasts.Type.SUCCESS,
                                                 options: {
@@ -713,10 +705,10 @@ function ChangelogContent() {
 
 function ChangelogTab() {
     return (
-        <SettingsTab title="Changelog">
+        <SettingsTab title={t("vencord.settings.changelog.title")}>
             <ChangelogContent />
         </SettingsTab>
     );
 }
 
-export default wrapTab(ChangelogTab, "Changelog");
+export default wrapTab(ChangelogTab, t("vencord.settings.changelog.title"));

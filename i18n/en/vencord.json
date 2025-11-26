@@ -1,4 +1,22 @@
 {
+    "donate": "Donate",
+    "invite": "Invite",
+    "loading": "Loading...",
+    "logs": {
+        "cancel": "Cancel",
+        "clearLog": "Clear Log",
+        "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
+        "logCleared": "Log has been cleared",
+        "clearLogs": "Clear Logs",
+        "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
+        "logsCleared": "Selected logs have been cleared",
+        "hideLogs": "Hide Logs",
+        "showLogs": "Show Logs",
+        "clearAllLogs": "Clear All Logs",
+        "clearAll": "Clear All",
+        "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
+        "allLogsCleared": "All logs have been cleared"
+    },
     "addonCard": {
         "new": "NEW"
     },
@@ -18,8 +36,6 @@
         "subtitle": "Thank you for contributing!",
         "title": "Contributions"
     },
-    "donate": "Donate",
-    "invite": "Invite",
     "donorCard": {
         "donated": {
             "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
@@ -68,13 +84,74 @@
                     "plugins_one": "This person has <0>contributed</0> to {count} plugin!",
                     "plugins_other": "This person has <0>contributed</0> to {count} plugins!"
                 }
-            }
+            },
+            "requiredToFunction": "This plugin is required for Equicord to function",
+            "pluginRequiredBy": "This plugin is required by: {pluginNames}",
+            "noDescription": "No description available",
+        },
+        "changelog": {
+            "manager": {
+                "minutes_one": "{count} minute ago",
+                "minutes_other": "{count} minutes ago",
+                "hours_one": "{count} hour ago",
+                "hours_other": "{count} hours ago",
+                "days_one": "{count} day ago",
+                "days_other": "{count} days ago"
+            },
+            "updateCard": {
+                "upToDate": "Repository check: {fromHash} (up to date)",
+                "outOfDate": "Repository check: {fromHash} → {toHash}",
+                "update": "Update: {fromHash} → {toHash}",
+                "commits_zero": " • No new commits",
+                "commits_one": " • {count} commit available",
+                "commits_other": " • {count} commits available",
+                "newPluginsCount": " • {plugins} new plugins",
+                "updatedPluginsCount": " • {plugins} updated plugins",
+                "newSettingsCount": " • {settings} new settings",
+                "updatedPlugins": "Updated Plugins",
+                "newSettings": "New Settings",
+                "newSettingInPlugin": "New setting in {pluginName}"
+            },
+            "newPluginsSection": {
+                "newPluginsCount": "New Plugins ({count})",
+                "recentlyAddedPlugins": "The following plugins have been added in recent updates:",
+                "numMorePlugins_one": "+{count} more plugin",
+                "numMorePlugins_other": "+{count} more plugins"
+            },
+            "missingRepoInfo": "Failed to retrieve repository information",
+            "alreadyUpToDate": "Already up todate with repository",
+            "foundCommits_zero": "No new commits",
+            "foundCommits_one": "Found {count} commit from repository",
+            "foundCommits_other": "Found {count} commits from repository",
+            "loggedCommits": "Logged commits from your latest update",
+            "upToDateLocalCopy": "Repository is up to date with your local copy",
+            "failedToFetchRepo": "Failed to fetch from repository",
+            "checkYourConnection": "Failed to connect to repository. Check your internet connection",
+            "failedtoFetchCommits": "Could not fetch commits from repository",
+            "repository": "Repository",
+            "viewRecentChanges": "View the most recent changes to Equicord. This fetches commits directly from the repository to show you what's new",
+            "failedToRetrieve": "Failed to retrieve - check console",
+            "upToDate": "Repository Up To Date",
+            "fetchRepo": "Fetch from Repository",
+            "checkYourInternet": "Make sure you have an internet connection and try again",
+            "recentChanges": "Recent Changes",
+            "updatedPluginsCount": "Updated Plugins ({plugins})",
+            "codeChanges_zero": "No Code Changes",
+            "codeChanges_one": "Code Changes ({count} commit)",
+            "codeChanges_other": "Code Changes ({count} commits)",
+            "emptyChangelog": "No commits available ahead of your current version. Click \"Fetch from Repository\" to check for new changes",
+            "updateLogs_zero": "No Update Logs",
+            "updateLogs_one": "Update Logs ({count} log)",
+            "updateLogs_other": "Update Logs ({count} logs)",
+            "previousSessions": "Previous update sessions with their commit history and plugin changes",
+            "title": "Changelog"
         },
         "restartRequired": {
             "body": "A restart is required to apply this change",
             "cancel": "Later!",
             "confirm": "Restart now",
-            "title": "Restart Required"
+            "title": "Restart Required",
+            "plugins": "The following plugins require a restart:"
         },
         "title": "Settings",
         "transparent": {

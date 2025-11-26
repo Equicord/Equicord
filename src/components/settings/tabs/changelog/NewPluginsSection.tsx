@@ -13,6 +13,7 @@ import { PluginCard } from "@components/settings/tabs/plugins/PluginCard";
 import { ChangeList } from "@utils/ChangeList";
 import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
+import { t } from "@utils/translation";
 import { Button, React, Tooltip } from "@webpack/common";
 
 import Plugins from "~plugins";
@@ -78,11 +79,11 @@ export function NewPluginsSection({
     return (
         <div className={cl("new-plugins-section")}>
             <Heading className={Margins.bottom8}>
-                New Plugins ({sortedPlugins.length})
+                {t("vencord.settings.changelog.newPluginsSection.newPluginsCount", { count: sortedPlugins.length })}
             </Heading>
 
             <Paragraph className={Margins.bottom16}>
-                The following plugins have been added in recent updates:
+                {t("vencord.settings.changelog.newPluginsSection.recentlyAddedPlugins")}
             </Paragraph>
 
             <div className={cl("new-plugins-grid")}>
@@ -94,7 +95,7 @@ export function NewPluginsSection({
                         ) ||
                         plugin.name.endsWith("API");
                     const tooltipText = plugin.required
-                        ? "This plugin is required for Equicord to function."
+                        ? t("vencord.settings.plugins.requiredToFunction")
                         : makeDependencyList(
                             depMap[plugin.name]?.filter(
                                 d => settings.plugins[d].enabled,
@@ -152,7 +153,7 @@ export function NewPluginsSection({
                     <Tooltip
                         text={
                             <>
-                                The following plugins require a restart:
+                                {t("vencord.settings.restartRequired.plugins")}
                                 <div className={Margins.bottom8} />
                                 <ul>
                                     {changes.map(p => (
@@ -170,7 +171,7 @@ export function NewPluginsSection({
                                 onClick={() => location.reload()}
                                 className={Margins.top16}
                             >
-                                Restart Required
+                                {t("vencord.settings.restartRequired.title")}
                             </Button>
                         )}
                     </Tooltip>
@@ -202,11 +203,9 @@ function CompactPluginCard({
         depMap[plugin.name]?.some(d => settings.plugins[d].enabled);
 
     const tooltipText = plugin.required
-        ? "This plugin is required for Equicord to function."
+        ? t("vencord.settings.plugins.requiredToFunction")
         : depMap[plugin.name]?.length > 0
-            ? `This plugin is required by: ${depMap[plugin.name]
-                ?.filter(d => settings.plugins[d].enabled)
-                .join(", ")}`
+            ? t("vencord.settings.plugins.pluginRequiredBy", { pluginNames: depMap[plugin.name]?.filter(d => settings.plugins[d].enabled).join(", ") })
             : null;
 
     return (
@@ -221,7 +220,7 @@ function CompactPluginCard({
                 </span>
             </div>
             <div className="vc-changelog-entry-message">
-                {plugin.description || "No description available"}
+                {plugin.description || t("vencord.settings.plugins.noDescription")}
             </div>
             {tooltipText && (
                 <div className="vc-changelog-dep-text">{tooltipText}</div>
@@ -272,7 +271,7 @@ export function NewPluginsCompact({
                 {hasMore && (
                     <div className="vc-changelog-entry">
                         <div className="vc-changelog-entry-message">
-                            +{newPlugins.length - maxDisplay} more plugins
+                            {t("vencord.settings.changelog.newPluginsSection.numMorePlugins", { count: newPlugins.length - maxDisplay })}
                         </div>
                     </div>
                 )}

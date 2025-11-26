@@ -11,6 +11,7 @@ import { classNameFactory } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingPrimary } from "@components/Heading";
 import { Link } from "@components/Link";
+import { Paragraph } from "@components/Paragraph";
 import { EquicordDevsById, VencordDevsById } from "@utils/constants";
 import { fetchUserProfile } from "@utils/discord";
 import { classes } from "@utils/misc";
@@ -94,16 +95,20 @@ function ContributorModal({ user }: { user: User; }) {
             </div>
 
             {plugins.length ? (
-                <Translate
-                    i18nKey="vencord.settings.plugins.contributorModal.contributorInfo.plugins"
-                    variables={{ count: plugins.length }}>
-                    This person has {ContributedHyperLink} to some plugins!
-                </Translate>
+                <Paragraph>
+                    <Translate
+                        i18nKey="vencord.settings.plugins.contributorModal.contributorInfo.plugins"
+                        variables={{ count: plugins.length }}>
+                        This person has {ContributedHyperLink} to some plugins!
+                    </Translate>
+                </Paragraph>
             ) : (
-                <Translate i18nKey="vencord.settings.plugins.contributorModal.contributorInfo.noPlugins">
-                    This person has not made any plugins. They likely {ContributedHyperLink}
-                    to Vencord in other ways!
-                </Translate>
+                <Paragraph >
+                    <Translate i18nKey="vencord.settings.plugins.contributorModal.contributorInfo.noPlugins">
+                        This person has not made any plugins. They likely {ContributedHyperLink}
+                        to Equicord in other ways!
+                    </Translate>
+                </Paragraph >
             )}
 
             {!!plugins.length && (
