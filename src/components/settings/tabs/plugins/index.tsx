@@ -35,6 +35,7 @@ import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useAwaiter, useIntersection } from "@utils/react";
+import { t } from "@utils/translation";
 import { Alerts, Button, lodash, Parser, React, Select, TextInput, Toasts, Tooltip, useMemo, useState } from "@webpack/common";
 import { JSX } from "react";
 
@@ -153,7 +154,7 @@ export default function PluginSettings() {
             const remainingCount = allChanges.length - displayed.length;
 
             Alerts.show({
-                title: "Restart required",
+                title: t("vencord.settings.restartRequired.title"),
                 body: (
                     <div>
                         {displayed.map((s, i) => (
@@ -165,8 +166,8 @@ export default function PluginSettings() {
                         {remainingCount > 0 && <span> and {remainingCount} more</span>}
                     </div>
                 ),
-                confirmText: "Restart now",
-                cancelText: "Later!",
+                confirmText: t("vencord.settings.restartRequired.confirm"),
+                cancelText: t("vencord.settings.restartRequired.cancel"),
                 onConfirm: () => location.reload()
             });
         };
@@ -325,15 +326,15 @@ export default function PluginSettings() {
 
         if (restartNeeded) {
             Alerts.show({
-                title: "Restart Required",
+                title: t("vencord.settings.restartRequired.title"),
                 body: (
                     <>
                         <p style={{ textAlign: "center" }}>Some plugins require a restart to fully disable.</p>
                         <p style={{ textAlign: "center" }}>Would you like to restart now?</p>
                     </>
                 ),
-                confirmText: "Restart Now",
-                cancelText: "Later",
+                confirmText: t("vencord.settings.restartRequired.confirm"),
+                cancelText: t("vencord.settings.restartRequired.cancel"),
                 onConfirm: () => location.reload()
             });
         }
