@@ -19,6 +19,7 @@
         "title": "Contributions"
     },
     "donate": "Donate",
+    "invite": "Invite",
     "donorCard": {
         "donated": {
             "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",

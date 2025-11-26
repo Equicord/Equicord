@@ -60,7 +60,7 @@ export function InviteButton({
             }}
             className="vc-donate-button"
         >
-            {t("vencord.donate")}
+            {t("vencord.invite")}
         </Button>
     );
 }
