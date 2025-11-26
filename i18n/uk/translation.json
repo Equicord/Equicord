@@ -1,8 +1,8 @@
 {
-    "description": "Assists with translating Vencord",
+    "description": "Assists with translating Equicord",
     "settings": {
         "forceLocale": {
-            "description": "Force a different locale for Vencord to use",
+            "description": "Force a different locale for Equicord to use",
             "followDiscord": "Default (follow Discord)"
         },
         "showMissingKeys": "If the current locale is missing translations, show the keys instead of falling back to English"
