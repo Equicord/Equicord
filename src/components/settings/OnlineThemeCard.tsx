@@ -22,6 +22,7 @@ import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { Switch } from "@components/settings";
 import { AddonBadge } from "@components/settings/PluginBadge";
+import { t } from "@utils/translation";
 import { useRef } from "@webpack/common";
 import type { MouseEventHandler, ReactNode } from "react";
 
@@ -101,7 +102,7 @@ export function OnlineThemeCard({
                                 )}
                             </div>
                         </div>
-                        {isNew && <AddonBadge text="NEW" color="#ED4245" />}
+                        {isNew && <AddonBadge text={t("vencord.addonCard.new")} color="#ED4245" />}
                     </BaseText>
 
                     {!!author && (

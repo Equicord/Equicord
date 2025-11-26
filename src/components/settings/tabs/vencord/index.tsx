@@ -159,7 +159,7 @@ function EquicordSettings() {
             )}
 
             <section>
-                <Heading>Quick Actions</Heading>
+                <Heading>{t("vencord.quickActions.title")}</Heading>
 
                 <QuickActionCard>
                     <QuickAction
