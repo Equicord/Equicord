@@ -35,6 +35,18 @@ declare module "~git-remote" {
     export default remote;
 }
 
+declare module "~translations" {
+    type BaseTranslation = string | { [key: string]: BaseTranslation; };
+    export type TranslationBundle = {
+        [namespace: string]: Record<string, BaseTranslation>;
+    };
+
+    const translations: {
+        [locale: string]: TranslationBundle;
+    };
+    export default translations;
+}
+
 declare module "file://*" {
     const content: string;
     export default content;

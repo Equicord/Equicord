@@ -22,6 +22,7 @@ import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { AddonBadge } from "@components/settings/PluginBadge";
 import { Switch } from "@components/Switch";
+import { t } from "@utils/translation";
 import { Tooltip, useRef } from "@webpack/common";
 import type { MouseEventHandler, ReactNode } from "react";
 
@@ -75,7 +76,7 @@ export function AddonCard({ disabled, isNew, sourceBadge, tooltip, name, infoBut
                                 {name}
                             </div>
                         </div>
-                        {isNew && <AddonBadge text="NEW" color="#ED4245" />}
+                        {isNew && <AddonBadge text={t("vencord.addonCard.new")} color="#ED4245" />}
                     </BaseText>
 
                     {!!author && (

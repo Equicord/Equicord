@@ -11,11 +11,11 @@ import { classNameFactory } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingPrimary } from "@components/Heading";
 import { Link } from "@components/Link";
-import { Paragraph } from "@components/Paragraph";
 import { EquicordDevsById, VencordDevsById } from "@utils/constants";
 import { fetchUserProfile } from "@utils/discord";
-import { classes, pluralise } from "@utils/misc";
+import { classes } from "@utils/misc";
 import { ModalContent, ModalRoot, openModal } from "@utils/modal";
+import { Translate } from "@utils/translation";
 import { User } from "@vencord/discord-types";
 import { showToast, useEffect, useMemo, UserProfileStore, useStateFromStores } from "@webpack/common";
 
@@ -65,7 +65,7 @@ function ContributorModal({ user }: { user: User; }) {
             .sort((a, b) => Number(a.required ?? false) - Number(b.required ?? false));
     }, [user.id, user.username]);
 
-    const ContributedHyperLink = <Link href="https://github.com/Equicord/Equicord">contributed</Link>;
+    const ContributedHyperLink = <Link href="https://equicord.org/projects">contributed</Link>;
 
     return (
         <>
@@ -94,13 +94,16 @@ function ContributorModal({ user }: { user: User; }) {
             </div>
 
             {plugins.length ? (
-                <Paragraph>
-                    {user.username} has {ContributedHyperLink} to {pluralise(plugins.length, "plugin")}!
-                </Paragraph>
+                <Translate
+                    i18nKey="vencord.settings.plugins.contributorModal.contributorInfo.plugins"
+                    variables={{ count: plugins.length }}>
+                    This person has {ContributedHyperLink} to some plugins!
+                </Translate>
             ) : (
-                <Paragraph>
-                    {user.username} has not made any plugins. They likely {ContributedHyperLink} in other ways!
-                </Paragraph>
+                <Translate i18nKey="vencord.settings.plugins.contributorModal.contributorInfo.noPlugins">
+                    This person has not made any plugins. They likely {ContributedHyperLink}
+                    to Vencord in other ways!
+                </Translate>
             )}
 
             {!!plugins.length && (

@@ -15,6 +15,7 @@ import { Paragraph } from "@components/Paragraph";
 import { Margins } from "@utils/margins";
 import { identity } from "@utils/misc";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import { Button, Select, Slider } from "@webpack/common";
 
 export function NotificationSection() {
@@ -27,10 +28,10 @@ export function NotificationSection() {
             </Paragraph>
             <Flex>
                 <Button onClick={openNotificationSettingsModal}>
-                    Notification Settings
+                    {t("vencord.settings.notification.settingsButton")}
                 </Button>
                 <Button onClick={openNotificationLogModal}>
-                    View Notification Log
+                    {t("vencord.settings.notification.logButton")}
                 </Button>
             </Flex>
         </section>

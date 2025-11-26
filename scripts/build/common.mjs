@@ -344,6 +344,41 @@ export const stylePlugin = {
 };
 
 /**
+ * @type {import("esbuild").Plugin}
+ */
+export const translationPlugin = {
+    name: "translation-plugin",
+    setup: ({ onResolve, onLoad }) => {
+        const filter = /^~translations$/;
+
+        onResolve({ filter }, ({ path }) => ({
+            namespace: "translations", path
+        }));
+        onLoad({ filter, namespace: "translations" }, async () => {
+            const translations = {};
+            const locales = await readdir("./i18n");
+
+            for (const locale of locales) {
+                const translationBundles = await readdir(`./i18n/${locale}`);
+
+                for (const bundle of translationBundles) {
+                    const name = bundle.replace(/\.json$/, "");
+
+                    translations[locale] ??= {};
+                    translations[locale][name] = JSON.parse(
+                        await readFile(`./i18n/${locale}/${bundle}`, "utf-8")
+                    );
+                }
+            }
+
+            return {
+                contents: `export default ${JSON.stringify(translations)}`,
+            };
+        });
+    }
+};
+
+/**
  * @type {import("esbuild").BuildOptions}
  */
 export const commonOpts = {
@@ -353,8 +388,20 @@ export const commonOpts = {
     sourcemap: watch ? "inline" : "external",
     legalComments: "linked",
     banner,
-    plugins: [fileUrlPlugin, gitHashPlugin, gitRemotePlugin, stylePlugin],
-    external: ["~plugins", "~git-hash", "~git-remote", "/assets/*"],
+    plugins: [
+        fileUrlPlugin,
+        gitHashPlugin,
+        gitRemotePlugin,
+        stylePlugin,
+        translationPlugin,
+    ],
+    external: [
+        "~plugins",
+        "~git-hash",
+        "~git-remote",
+        "~translations",
+        "/assets/*",
+    ],
     inject: [join(dirname(fileURLToPath(import.meta.url)), "inject/react.mjs")],
     jsx: "transform",
     jsxFactory: "VencordCreateElement",

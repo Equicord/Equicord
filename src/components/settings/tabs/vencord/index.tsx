@@ -22,6 +22,7 @@ import { DONOR_ROLE_ID, GUILD_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/c
 import { Margins } from "@utils/margins";
 import { identity, isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
+import { t, Translate } from "@utils/translation";
 import { Button, GuildMemberStore, React, Select, UserStore } from "@webpack/common";
 import BadgeAPI from "plugins/_api/badges";
 
@@ -64,13 +65,14 @@ function EquicordSettings() {
     > = [
             {
                 key: "useQuickCss",
-                title: "Enable Custom CSS",
+                title: t("vencord.settings.useQuickCss.title"),
+                description: t("vencord.settings.useQuickCss.description"),
                 restartRequired: true,
                 warning: { enabled: false },
             },
             !IS_WEB && {
                 key: "enableReactDevtools",
-                title: "Enable React Developer Tools",
+                title: t("vencord.settings.enableReactDevtools.title"),
                 restartRequired: true,
                 warning: { enabled: false },
             },
@@ -78,21 +80,20 @@ function EquicordSettings() {
             (!IS_DISCORD_DESKTOP || !isWindows
                 ? {
                     key: "frameless",
-                    title: "Disable the Window Frame",
+                    title: t("vencord.settings.frameless.title"),
                     restartRequired: true,
                     warning: { enabled: false },
                 }
                 : {
                     key: "winNativeTitleBar",
-                    title:
-                        "Use Windows' native title bar instead of Discord's custom one",
+                    title: t("vencord.settings.winNativeTitleBar.title"),
                     restartRequired: true,
                     warning: { enabled: false },
                 }),
             !IS_WEB && {
                 key: "transparent",
-                title: "Enable Window Transparency",
-                description: "A theme that supports transparency is required or this will do nothing. Stops the window from being resizable as a side effect",
+                title: t("vencord.settings.transparent.title"),
+                description: t("vencord.settings.transparent.description"),
                 restartRequired: true,
                 warning: {
                     enabled: isWindows,
@@ -101,32 +102,31 @@ function EquicordSettings() {
             },
             IS_DISCORD_DESKTOP && {
                 key: "disableMinSize",
-                title: "Disable Minimum Window Size",
+                title: t("vencord.settings.disableMinSize.title"),
                 restartRequired: true,
                 warning: { enabled: false },
             },
             !IS_WEB &&
             isWindows && {
                 key: "winCtrlQ",
-                title:
-                    "Register Ctrl+Q as shortcut to close Discord (Alternative to Alt+F4)",
+                title: t("vencord.settings.winCtrlQ.title"),
                 restartRequired: true,
                 warning: { enabled: false },
             },
         ];
 
     return (
-        <SettingsTab title="Equicord Settings">
+        <SettingsTab title={t("vencord.tabs.settings")}>
             {(isEquicordDonor(user?.id) || isVencordDonor(user?.id)) ? (
                 <SpecialCard
-                    title="Donations"
-                    subtitle="Thank you for donating!"
+                    title={t("vencord.donorCard.donated.title")}
+                    subtitle={t("vencord.donorCard.donated.subtitle")}
                     description={
                         isEquicordDonor(user?.id) && isVencordDonor(user?.id)
-                            ? "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server."
+                            ? t("vencord.donorCard.donated.description")
                             : isVencordDonor(user?.id)
-                                ? "All Vencord users can see your badge! You can manage your perks by messaging @vending.machine."
-                                : "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server."
+                                ? t("vencord.donorCard.donated.vencordDescription", { v: "vending.machine" })
+                                : t("vencord.donorCard.donated.equicordDescription")
                     }
                     cardImage={VENNIE_DONATOR_IMAGE}
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
@@ -136,8 +136,8 @@ function EquicordSettings() {
                 </SpecialCard>
             ) : (
                 <SpecialCard
-                    title="Support the Project"
-                    description="Please consider supporting the development of Equicord by donating!"
+                    title={t("vencord.donorCard.notDonated.title")}
+                    description={t("vencord.donorCard.notDonated.description")}
                     cardImage={donateImage}
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
                     backgroundColor="#c3a3ce"
@@ -147,13 +147,13 @@ function EquicordSettings() {
             )}
             {isAnyPluginDev(user?.id) && (
                 <SpecialCard
-                    title="Contributions"
-                    subtitle="Thank you for contributing!"
-                    description="Since you've contributed to Equicord you now have a cool new badge!"
+                    title={t("vencord.contributorCard.title")}
+                    subtitle={t("vencord.contributorCard.subtitle")}
+                    description={t("vencord.contributorCard.description")}
                     cardImage={COZY_CONTRIB_IMAGE}
                     backgroundImage={CONTRIB_BACKGROUND_IMAGE}
                     backgroundColor="#EDCC87"
-                    buttonTitle="See what you've contributed to"
+                    buttonTitle={t("vencord.contributorCard.contributionsButton")}
                     buttonOnClick={() => openContributorModal(user)}
                 />
             )}
@@ -164,31 +164,31 @@ function EquicordSettings() {
                 <QuickActionCard>
                     <QuickAction
                         Icon={LogIcon}
-                        text="Notification Log"
+                        text={t("vencord.quickActions.notificationLog")}
                         action={openNotificationLogModal}
                     />
                     <QuickAction
                         Icon={PaintbrushIcon}
-                        text="Edit QuickCSS"
+                        text={t("vencord.quickActions.editQuickCSS")}
                         action={() => VencordNative.quickCss.openEditor()}
                     />
                     {!IS_WEB && (
                         <QuickAction
                             Icon={RestartIcon}
-                            text="Relaunch Discord"
+                            text={t("vencord.quickActions.relaunchDiscord")}
                             action={relaunch}
                         />
                     )}
                     {!IS_WEB && (
                         <QuickAction
                             Icon={FolderIcon}
-                            text="Open Settings Folder"
+                            text={t("vencord.quickActions.openSettings")}
                             action={() => VencordNative.settings.openFolder()}
                         />
                     )}
                     <QuickAction
                         Icon={GithubIcon}
-                        text="View Source Code"
+                        text={t("vencord.quickActions.viewSource")}
                         action={() =>
                             VencordNative.native.openExternal(
                                 "https://github.com/" + gitRemote,
@@ -201,17 +201,19 @@ function EquicordSettings() {
             <Divider />
 
             <section className={Margins.top16}>
-                <Heading>Settings</Heading>
+                <Heading>{t("vencord.settings.title")}</Heading>
                 <Paragraph className={Margins.bottom20} style={{ color: "var(--text-muted)" }}>
-                    Hint: You can change the position of this settings section in the{" "}
-                    <Button
-                        look={Button.Looks.LINK}
-                        style={{ color: "var(--text-link)", display: "inline-block" }}
-                        onClick={() => openPluginModal(Vencord.Plugins.plugins.Settings)}
-                    >
-                        settings of the Settings plugin
-                    </Button>
-                    !
+                    <Translate i18nKey="vencord.settings.hint">
+                        Hint: You can change the position of this settings section in the
+                        <Button
+                            look={Button.Looks.LINK}
+                            style={{ color: "var(--text-link)", display: "inline-block" }}
+                            onClick={() => openPluginModal(Vencord.Plugins.plugins.Settings)}
+                        >
+                            settings of the Settings plugin
+                        </Button>
+                        !
+                    </Translate>
                 </Paragraph>
 
                 {Switches.map(
@@ -341,7 +343,7 @@ function DonateButtonComponent() {
     );
 }
 
-export default wrapTab(EquicordSettings, "Equicord Settings");
+export default wrapTab(EquicordSettings, t("vencord.tabs.settings"));
 
 export function isEquicordDonor(userId: string): boolean {
     const donorBadges = BadgeAPI.getEquicordDonorBadges(userId);

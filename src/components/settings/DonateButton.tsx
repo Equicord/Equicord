@@ -18,43 +18,26 @@
 
 import { Heart } from "@components/Heart";
 import { openInviteModal } from "@utils/discord";
+import { t } from "@utils/translation";
 import { ButtonProps } from "@vencord/discord-types";
 import { Button, showToast } from "@webpack/common";
-
-export function VCDonateButton({
-    look = Button.Looks.LINK,
-    color = Button.Colors.TRANSPARENT,
-    ...props
-}: Partial<ButtonProps>) {
-    return (
-        <Button
-            {...props}
-            look={look}
-            color={color}
-            onClick={() => VencordNative.native.openExternal("https://github.com/sponsors/Vendicated")}
-            className="vc-donate-button"
-        >
-            <Heart />
-            Donate
-        </Button>
-    );
-}
 
 export function DonateButton({
     look = Button.Looks.LINK,
     color = Button.Colors.TRANSPARENT,
+    link,
     ...props
-}: Partial<ButtonProps>) {
+}: Partial<ButtonProps> & { link: string; }) {
     return (
         <Button
             {...props}
             look={look}
             color={color}
-            onClick={() => VencordNative.native.openExternal("https://github.com/sponsors/thororen1234")}
+            onClick={() => VencordNative.native.openExternal(link)}
             className="vc-donate-button"
         >
             <Heart />
-            Donate
+            {t("vencord.donate")}
         </Button>
     );
 }
@@ -77,7 +60,7 @@ export function InviteButton({
             }}
             className="vc-donate-button"
         >
-            Invite
+            {t("vencord.donate")}
         </Button>
     );
 }

@@ -41,6 +41,7 @@ import { useAwaiter, useForceUpdater } from "@utils/react";
 import type { ThemeHeader } from "@utils/themes";
 import { getThemeInfo, stripBOM, type UserThemeHeader } from "@utils/themes/bd";
 import { usercssParse } from "@utils/themes/usercss";
+import { t } from "@utils/translation";
 import { getStylusWebStoreUrl } from "@utils/web";
 import { findLazy } from "@webpack";
 import { Alerts, Button, React, showToast, TabBar, TextInput, Tooltip, useEffect, useMemo, useRef, useState } from "@webpack/common";
@@ -573,10 +574,10 @@ export function CspErrorCard() {
         forceUpdate();
 
         Alerts.show({
-            title: "Restart Required",
-            body: "A restart is required to apply this change",
-            confirmText: "Restart now",
-            cancelText: "Later!",
+            title: t("vencord.settings.restartRequired.title"),
+            body: t("vencord.settings.restartRequired.body"),
+            confirmText: t("vencord.settings.restartRequired.confirm"),
+            cancelText: t("vencord.settings.restartRequired.cancel"),
             onConfirm: relaunch
         });
     };

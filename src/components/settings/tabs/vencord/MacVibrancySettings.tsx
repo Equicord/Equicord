@@ -9,6 +9,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import { Margins } from "@utils/margins";
 import { identity } from "@utils/misc";
+import { t } from "@utils/translation";
 import { Select } from "@webpack/common";
 
 export function VibrancySettings() {
@@ -16,11 +17,11 @@ export function VibrancySettings() {
 
     return (
         <>
-            <Heading>Window vibrancy style (requires restart)</Heading>
+            <Heading>{t("vencord.settings.macosVibrancyStyle.title")}</Heading>
             <ErrorBoundary noop>
                 <Select
                     className={Margins.bottom20}
-                    placeholder="Window vibrancy style"
+                    placeholder={t("vencord.settings.macosVibrancyStyle.placeholder")}
                     options={[
                         // Sorted from most opaque to most transparent
                         {

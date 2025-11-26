@@ -22,6 +22,9 @@ importers:
       '@ffmpeg/util':
         specifier: ^0.12.1
         version: 0.12.1
+      '@fluent/langneg':
+        specifier: ^0.7.0
+        version: 0.7.0
       '@intrnl/xxhash64':
         specifier: ^0.1.2
         version: 0.1.2
@@ -629,6 +632,10 @@ packages:
   '@ffmpeg/util@0.12.1':
     resolution: {integrity: sha512-10jjfAKWaDyb8+nAkijcsi9wgz/y26LOc1NKJradNMyCIl6usQcBbhkjX5qhALrSBcOy6TOeksunTYa+a03qNQ==}
     engines: {node: '>=18.x'}
+
+  '@fluent/langneg@0.7.0':
+    resolution: {integrity: sha512-StAM0vgsD1QK+nFikaKs9Rxe3JGNipiXrpmemNGwM4gWERBXPe9gjzsBoKjgBgq1Vyiy+xy/C652QIWY+MPyYw==}
+    engines: {node: '>=14.0.0', npm: '>=7.0.0'}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2888,6 +2895,8 @@ snapshots:
   '@ffmpeg/types@0.12.2': {}
 
   '@ffmpeg/util@0.12.1': {}
+
+  '@fluent/langneg@0.7.0': {}
 
   '@humanfs/core@0.19.1': {}
 

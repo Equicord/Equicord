@@ -41,6 +41,7 @@
     "dependencies": {
         "@ffmpeg/ffmpeg": "^0.12.10",
         "@ffmpeg/util": "^0.12.1",
+        "@fluent/langneg": "^0.7.0",
         "@intrnl/xxhash64": "^0.1.2",
         "@types/less": "^3.0.8",
         "@types/stylus": "^0.48.42",
