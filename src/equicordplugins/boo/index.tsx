@@ -84,6 +84,12 @@ export const settings = definePluginSettings({
         description: "Something might happen if you ignore someone for too long...",
         default: false,
         restartNeeded: false
+    },
+    ignoreBots: {
+        type: OptionType.BOOLEAN,
+        description: "Ignore DMs from bots",
+        default: true,
+        restartNeeded: false
     }
 });
 
@@ -193,7 +199,7 @@ migratePluginSettings("Ghosted", "Boo");
 export default definePlugin({
     name: "Ghosted",
     description: "A cute ghost will appear if you don't answer their DMs",
-    authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke],
+    authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke, EquicordDevs.Foobryy],
     settings,
     dependencies: ["AudioPlayerAPI"],
 
