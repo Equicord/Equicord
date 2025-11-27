@@ -84,7 +84,7 @@
                 "contributorInfo": {
                     "noPlugins": "This person has not made any plugins. They likely <0>contributed</0> to Equicord in other ways!",
                     "plugins_one": "This person has <0>contributed</0> to {count} plugin!",
-                    "plugins_other": "This person has <0>contributed</0> to {count} plugins!"
+                    "plugins_other": "この人は {count} 個のプラグインに<0>貢献しました</0> ！"
                 }
             },
             "requiredToFunction": "This plugin is required for Equicord to function",
