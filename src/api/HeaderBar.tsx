@@ -10,7 +10,12 @@ import type { JSX } from "react";
 
 export type HeaderBarButtonFactory = () => JSX.Element | null;
 
-export const buttons = new Map<string, HeaderBarButtonFactory>();
+interface HeaderBarButton {
+    render: HeaderBarButtonFactory;
+    priority: number;
+}
+
+export const buttons = new Map<string, HeaderBarButton>();
 
 const listeners = new Set<() => void>();
 
@@ -18,9 +23,10 @@ const listeners = new Set<() => void>();
  * Add a button to the header bar.
  * @param id Unique identifier for the button.
  * @param render Function that renders the button component.
+ * @param priority Higher priority = more to the right. Default is 0.
  */
-export function addHeaderBarButton(id: string, render: HeaderBarButtonFactory) {
-    buttons.set(id, render);
+export function addHeaderBarButton(id: string, render: HeaderBarButtonFactory, priority = 0) {
+    buttons.set(id, { render, priority });
     listeners.forEach(l => l());
 }
 
@@ -42,7 +48,9 @@ function HeaderBarButtons() {
         return () => { listeners.delete(listener); };
     }, []);
 
-    return Array.from(buttons, ([id, Button]) => (
+    const sorted = Array.from(buttons).sort(([, a], [, b]) => a.priority - b.priority);
+
+    return sorted.map(([id, { render: Button }]) => (
         <ErrorBoundary noop key={id}>
             <Button />
         </ErrorBoundary>

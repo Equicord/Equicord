@@ -86,8 +86,7 @@ export default definePlugin({
     settings,
 
     start() {
-        // priority prism
-        addHeaderBarButton("EquicordToolbox", VencordPopoutButton);
+        addHeaderBarButton("EquicordToolbox", VencordPopoutButton, 1000);
     },
 
     stop() {
