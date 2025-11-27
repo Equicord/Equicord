@@ -7,41 +7,41 @@
         "clearLog": "Borrar registro",
         "clearLogConfirmation": "¿Estás seguro de que quieres borrar este registro? Esto no se puede deshacer.",
         "logCleared": "El registro ha sido borrado",
-        "clearLogs": "Clear Logs",
-        "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
-        "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
-        "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
-        "logsCleared": "Selected logs have been cleared",
-        "hideLogs": "Hide Logs",
-        "showLogs": "Show Logs",
-        "clearAllLogs": "Clear All Logs",
-        "clearAll": "Clear All",
-        "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
-        "allLogsCleared": "All logs have been cleared"
+        "clearLogs": "Registros vacíos",
+        "clearLogsConfirmation": "¿Estás seguro de que quieres borrar estos registros? Esto no se puede deshacer.",
+        "clearLogsConfirmationNum_one": "¿Estás seguro de que quieres borrar el registros {count}",
+        "clearLogsConfirmationNum_other": "¿Estás seguro de que quieres borrar los registros {count}",
+        "logsCleared": "Los registros seleccionados han sido borrados",
+        "hideLogs": "Ocultar registros",
+        "showLogs": "Mostrar registros",
+        "clearAllLogs": "Borrar todos los registros",
+        "clearAll": "Limpiar Todo",
+        "clearAllLogsConfirmation": "¿Estás seguro de que quieres borrar todos los registros? Esto no se puede deshacer.",
+        "allLogsCleared": "Todos los registros han sido borrados"
     },
     "addonCard": {
-        "new": "NEW"
+        "new": "NUEVO"
     },
     "cloud": {
         "integrations": {
-            "header": "Cloud Integrations",
-            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!"
+            "header": "Integraciones de nube",
+            "reauthenticateOtherClient": "¡Nos hemos dado cuenta de que tienes integraciones en la nube activadas en otro cliente! Debido a las limitaciones, tendrás que volver a autenticarte para seguir utilizándolas. Haz clic aquí para ir a la página de configuración para hacerlo!"
         },
         "settings": {
-            "header": "Cloud Settings",
-            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!"
+            "header": "Configuración de la nube",
+            "updatedRemote": "¡Su configuración ha sido actualizada! ¡Haga clic aquí para reiniciarlo completamente para aplicar los cambios!"
         }
     },
     "contributorCard": {
-        "contributionsButton": "See what you've contributed to",
-        "description": "Since you've contributed to Equicord you now have a cool new badge!",
-        "subtitle": "Thank you for contributing!",
-        "title": "Contributions"
+        "contributionsButton": "Mira en qué has contribuido",
+        "description": "¡Desde que has contribuido a Equicord ahora tienes una nueva insignia genial!",
+        "subtitle": "¡Gracias por contribuir!",
+        "title": "Contribuciones"
     },
     "donorCard": {
         "donated": {
-            "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
-            "equicordDescription": "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
+            "vencordDescription": "¡Todos los usuarios de Vencord pueden ver tu insignia! Puedes administrar tus beneficios enviando mensajes @{v}.",
+            "equicordDescription": "¡Todos los usuarios de Equicord pueden ver tu insignia! Puedes gestionar tus beneficios haciendo un ticket en el servidor de Equicord.",
             "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server..",
             "subtitle": "Thank you for donating!",
             "title": "Donations"
@@ -72,29 +72,29 @@
         },
         "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
         "macosVibrancyStyle": {
-            "placeholder": "Window vibrancy style",
-            "title": "Window vibrancy style (requires restart)"
+            "placeholder": "Estilo de vibración de ventana",
+            "title": "Estilo de vibración de ventana (requiere reiniciar)"
         },
         "notification": {
-            "logButton": "View Notification Log",
-            "settingsButton": "Notification Settings"
+            "logButton": "Ver Registro de Notificaciones",
+            "settingsButton": "Configurar notificaciones"
         },
         "plugins": {
             "contributorModal": {
                 "contributorInfo": {
-                    "noPlugins": "This person has not made any plugins. They likely <0>contributed</0> to Equicord in other ways!",
-                    "plugins_one": "This person has <0>contributed</0> to {count} plugin!",
-                    "plugins_other": "This person has <0>contributed</0> to {count} plugins!"
+                    "noPlugins": "Esta persona no ha hecho ningún plugin. Probablemente <0>contribuyó</0> a Equicord de otras maneras!",
+                    "plugins_one": "¡Esta persona ha <0>contribuido</0> a un {count} plugin!",
+                    "plugins_other": "¡Esta persona ha <0>contribuido</0> a {count} plugins!"
                 }
             },
-            "requiredToFunction": "This plugin is required for Equicord to function",
-            "pluginRequiredBy": "This plugin is required by: {pluginNames}",
-            "noDescription": "No description available"
+            "requiredToFunction": "Este complemento es requerido para que Equicord funcione",
+            "pluginRequiredBy": "Este complemento es requerido por: {pluginNames}",
+            "noDescription": "Descripción no disponible"
         },
         "changelog": {
             "manager": {
-                "minutes_one": "{count} minute ago",
-                "minutes_other": "{count} minutes ago",
+                "minutes_one": "Hace {count} minuto",
+                "minutes_other": "Hace {count} minutos",
                 "hours_one": "{count} hour ago",
                 "hours_other": "{count} hours ago",
                 "days_one": "{count} day ago",
