@@ -18,6 +18,7 @@
 
 import "./styles.css";
 
+import { addHeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -84,5 +85,12 @@ export default definePlugin({
 
     settings,
 
-    renderHeaderBarButton: VencordPopoutButton,
+    start() {
+        // priority prism
+        addHeaderBarButton("EquicordToolbox", VencordPopoutButton);
+    },
+
+    stop() {
+        removeHeaderBarButton("EquicordToolbox");
+    }
 });

@@ -253,14 +253,7 @@ export const startPlugin = traceFunction("startPlugin", function startPlugin(p: 
 
     // Custom
     if (renderNicknameIcon) addNicknameIcon(name, renderNicknameIcon);
-    if (renderHeaderBarButton) {
-        if (p.name === "EquicordToolbox") {
-            // prism edit here
-            addHeaderBarButton(name, renderHeaderBarButton);
-        } else {
-            addHeaderBarButton(name, renderHeaderBarButton);
-        }
-    }
+    if (renderHeaderBarButton) addHeaderBarButton(name, renderHeaderBarButton);
     if (onAudioProcessor) addAudioProcessor(name, onAudioProcessor);
 
     return true;
