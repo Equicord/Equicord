@@ -1,130 +1,130 @@
 {
-    "donate": "Donate",
-    "invite": "Invite",
-    "loading": "Loading...",
-    "cancel": "Cancel",
+    "donate": "寄付する",
+    "invite": "招待する",
+    "loading": "読み込み中…",
+    "cancel": "キャンセル",
     "logs": {
-        "clearLog": "Clear Log",
-        "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
-        "logCleared": "Log has been cleared",
-        "clearLogs": "Clear Logs",
-        "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
-        "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
-        "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
-        "logsCleared": "Selected logs have been cleared",
-        "hideLogs": "Hide Logs",
-        "showLogs": "Show Logs",
-        "clearAllLogs": "Clear All Logs",
-        "clearAll": "Clear All",
+        "clearLog": "ログを消去",
+        "clearLogConfirmation": "本当にこのログを消去してもよろしいですか？この操作は取り消せません。",
+        "logCleared": "ログがク消去されました",
+        "clearLogs": "ログを消去",
+        "clearLogsConfirmation": "本当にこのログを消去してもよろしいですか？この操作は取り消せません。",
+        "clearLogsConfirmationNum_one": "{count} 件のログを消去してもよろしいですか？",
+        "clearLogsConfirmationNum_other": "{count} 件のログを消去してもよろしいですか？",
+        "logsCleared": "選択したログを消去しました",
+        "hideLogs": "ログを隠す",
+        "showLogs": "ログを表示する",
+        "clearAllLogs": "全てのログを消去",
+        "clearAll": "全て消去",
         "clearAllLogsConfirmation": "本当に全てのログを消去してもよろしいですか？この操作は取り消せません。",
         "allLogsCleared": "全てのログを消去しました"
     },
     "addonCard": {
-        "new": "NEW"
+        "new": "新着"
     },
     "cloud": {
         "integrations": {
-            "header": "Cloud Integrations",
-            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!"
+            "header": "クラウド連携",
+            "reauthenticateOtherClient": "他のクライアントでクラウド連携が有効になっているようです！制限により、引き続き利用するには再認証が必要です。ここをクリックして設定ページへ移動し、再認証を行ってください！"
         },
         "settings": {
-            "header": "Cloud Settings",
-            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!"
+            "header": "クラウド設定",
+            "updatedRemote": "設定が更新されました！変更を完全に適用するには、ここをクリックして再起動してください！"
         }
     },
     "contributorCard": {
-        "contributionsButton": "See what you've contributed to",
-        "description": "Since you've contributed to Equicord you now have a cool new badge!",
-        "subtitle": "Thank you for contributing!",
-        "title": "Contributions"
+        "contributionsButton": "貢献先を確認する",
+        "description": "Equicordへの貢献により、素敵で新しいバッジが付与されました！",
+        "subtitle": "貢献に感謝します！",
+        "title": "貢献"
     },
     "donorCard": {
         "donated": {
-            "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
-            "equicordDescription": "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
-            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server..",
-            "subtitle": "Thank you for donating!",
-            "title": "Donations"
+            "vencordDescription": "あなたのバッジはすべてのVencordユーザーに表示されます！特典を管理するには @{v} にメッセージを送ってください。",
+            "equicordDescription": "すべてのEquicordユーザーにあなたのバッジが表示されるようになりました！特典を管理したい場合は、Equicordのサーバーでチケットを作成してください。",
+            "description": "VencordユーザーにはあなたのVencordドナーバッジが、EquicordユーザーにはEquicordドナーバッジが表示されます。Vencordバッジを変更するには、@vending.machine に連絡してください。Equicordドナーバッジについては、Equicordサーバーでチケットを作成してください。",
+            "subtitle": "寄付に感謝します！",
+            "title": "寄付"
         },
         "notDonated": {
-            "description": "Please consider supporting the development of Equicord by donating!",
-            "title": "Support the Project"
+            "description": "Equicordの開発を応援したい場合は、寄付していただけると嬉しいです！",
+            "title": "このプロジェクトを支援する"
         }
     },
-    "failedToRender": "Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!",
+    "failedToRender": "{tab}タブを表示できませんでした。この問題が続く場合は、もう一度インストーラーでインストールすることをお試しください！",
     "quickActions": {
-        "editQuickCSS": "Edit QuickCSS",
-        "notificationLog": "Notification Log",
-        "openSettings": "Open Settings Folder",
-        "relaunchDiscord": "Relaunch Discord",
-        "title": "Quick Actions",
-        "viewSource": "View Source Code"
+        "editQuickCSS": "QuickCSSを編集",
+        "notificationLog": "通知ログ",
+        "openSettings": "設定フォルダを開く",
+        "relaunchDiscord": "Discordを再起動",
+        "title": "クイックアクション",
+        "viewSource": "ソースコードを見る"
     },
     "settings": {
         "disableMinSize": {
-            "title": "Disable minimum window size"
+            "title": "ウィンドウの最小サイズ制限を無効化"
         },
         "enableReactDevtools": {
-            "title": "Enable React Developer Tools"
+            "title": "React Developer Toolsを有効化"
         },
         "frameless": {
-            "title": "Disable the window frame"
+            "title": "ウィンドウの枠を無効化"
         },
-        "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
+        "hint": "ヒント: この設定項目の表示位置は、<0>Settingsプラグインの設定</0>で変更できます！",
         "macosVibrancyStyle": {
-            "placeholder": "Window vibrancy style",
-            "title": "Window vibrancy style (requires restart)"
+            "placeholder": "ウィンドウの透過スタイル",
+            "title": "ウィンドウの透過スタイル (再起動が必要)"
         },
         "notification": {
-            "logButton": "View Notification Log",
-            "settingsButton": "Notification Settings"
+            "logButton": "通知ログを表示",
+            "settingsButton": "通知設定"
         },
         "plugins": {
             "contributorModal": {
                 "contributorInfo": {
-                    "noPlugins": "This person has not made any plugins. They likely <0>contributed</0> to Equicord in other ways!",
-                    "plugins_one": "This person has <0>contributed</0> to {count} plugin!",
+                    "noPlugins": "この人はプラグインを作成していません。おそらく他の方法で Equicord に<0>貢献した</0>のでしょう！",
+                    "plugins_one": "この人は {count} 個のプラグインに<0>貢献しました</0> ！",
                     "plugins_other": "この人は {count} 個のプラグインに<0>貢献しました</0> ！"
                 }
             },
-            "requiredToFunction": "This plugin is required for Equicord to function",
-            "pluginRequiredBy": "This plugin is required by: {pluginNames}",
-            "noDescription": "No description available"
+            "requiredToFunction": "このプラグインはEquicordの動作に必須です",
+            "pluginRequiredBy": "このプラグインは{pluginNames}に必須です",
+            "noDescription": "説明がありません"
         },
         "changelog": {
             "manager": {
-                "minutes_one": "{count} minute ago",
-                "minutes_other": "{count} minutes ago",
-                "hours_one": "{count} hour ago",
-                "hours_other": "{count} hours ago",
-                "days_one": "{count} day ago",
-                "days_other": "{count} days ago"
+                "minutes_one": "{count}分前",
+                "minutes_other": "{count}分前",
+                "hours_one": "{count}時間前",
+                "hours_other": "{count}時間前",
+                "days_one": "{count}日前",
+                "days_other": "{count}日前"
             },
             "updateCard": {
-                "upToDate": "Repository check: {fromHash} (up to date)",
-                "outOfDate": "Repository check: {fromHash} → {toHash}",
-                "update": "Update: {fromHash} → {toHash}",
-                "commits_zero": " • No new commits",
-                "commits_one": " • {count} commit available",
-                "commits_other": " • {count} commits available",
-                "newPluginsCount": " • {plugins} new plugins",
-                "updatedPluginsCount": " • {plugins} updated plugins",
-                "newSettingsCount": " • {settings} new settings",
-                "updatedPlugins": "Updated Plugins",
-                "newSettings": "New Settings",
-                "newSettingInPlugin": "New setting in {pluginName}"
+                "upToDate": "リポジトリチェック: {fromHash} (最新)",
+                "outOfDate": "リポジトリチェック: {fromHash} → {toHash}",
+                "update": "アップデート: {fromHash} → {toHash}",
+                "commits_zero": " • 新しいコミットはありません",
+                "commits_one": " • {count} 個のコミットが利用可能",
+                "commits_other": " • {count}件のコミットが利用可能",
+                "newPluginsCount": " • 新着プラグイン: {plugins}個",
+                "updatedPluginsCount": " • アップデートされたプラグイン: {plugins}個",
+                "newSettingsCount": " • 新着設定: {settings}個",
+                "updatedPlugins": "アップデートされたプラグイン",
+                "newSettings": "新着設定",
+                "newSettingInPlugin": "{pluginName}の新しい設定"
             },
             "newPluginsSection": {
-                "newPluginsCount": "New Plugins ({count})",
-                "recentlyAddedPlugins": "The following plugins have been added in recent updates:",
-                "numMorePlugins_one": "+{count} more plugin",
-                "numMorePlugins_other": "+{count} more plugins"
+                "newPluginsCount": "新着プラグイン ({count}個)",
+                "recentlyAddedPlugins": "最近追加されたプラグイン:",
+                "numMorePlugins_one": "+{count}個のプラグイン",
+                "numMorePlugins_other": "+{count}個のプラグイン"
             },
-            "missingRepoInfo": "Failed to retrieve repository information",
-            "alreadyUpToDate": "Already up todate with repository",
-            "foundCommits_zero": "No new commits",
-            "foundCommits_one": "Found {count} commit from repository",
-            "foundCommits_other": "Found {count} commits from repository",
+            "missingRepoInfo": "リポジトリ情報の取得に失敗しました",
+            "alreadyUpToDate": "既に最新の状態です",
+            "foundCommits_zero": "新しいコミットはありません",
+            "foundCommits_one": "リポジトリから{count}件のコミットを取得しました",
+            "foundCommits_other": "リポジトリから{count}件のコミットを取得しました",
             "loggedCommits": "Logged commits from your latest update",
             "upToDateLocalCopy": "Repository is up to date with your local copy",
             "failedToFetchRepo": "Failed to fetch from repository",
