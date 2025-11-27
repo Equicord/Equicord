@@ -16,8 +16,8 @@
         "showLogs": "Show Logs",
         "clearAllLogs": "Clear All Logs",
         "clearAll": "Clear All",
-        "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
-        "allLogsCleared": "All logs have been cleared"
+        "clearAllLogsConfirmation": "本当に全てのログを消去してもよろしいですか？この操作は取り消せません。",
+        "allLogsCleared": "全てのログを消去しました"
     },
     "addonCard": {
         "new": "NEW"
