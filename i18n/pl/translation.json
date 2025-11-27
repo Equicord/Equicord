@@ -1,10 +1,10 @@
 {
-    "description": "Assists with translating Equicord",
+    "description": "Pomaga w tłumaczeniu Equicord",
     "settings": {
         "forceLocale": {
-            "description": "Force a different locale for Equicord to use",
-            "followDiscord": "Default (follow Discord)"
+            "description": "Wymuś użycie innego locale przez Equicord",
+            "followDiscord": "Domyślne (zgodne z Discordem)"
         },
-        "showMissingKeys": "If the current locale is missing translations, show the keys instead of falling back to English"
+        "showMissingKeys": "Jeśli w bieżącym locale brakuje tłumaczeń, pokaż klucze zamiast wracać do angielskiego"
     }
 }
