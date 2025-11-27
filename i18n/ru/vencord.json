@@ -5,10 +5,10 @@
     "cancel": "Отменить",
     "logs": {
         "clearLog": "Очистить журнал",
-        "clearLogConfirmation": "Вы уверены, что хотите очистить этот журнал? Это действие невозможно отменить",
+        "clearLogConfirmation": "Вы уверены, что хотите очистить этот журнал? Это действие невозможно отменить.",
         "logCleared": "Журнал очищен",
         "clearLogs": "Очистить журналы",
-        "clearLogsConfirmation": "Вы уверены, что хотите очистить эти журналы? Это действие невозможно отменить",
+        "clearLogsConfirmation": "Вы уверены, что хотите очистить эти журналы? Это действие невозможно отменить.",
         "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
         "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
         "logsCleared": "Selected logs have been cleared",
