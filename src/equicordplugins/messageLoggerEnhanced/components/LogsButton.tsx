@@ -21,7 +21,7 @@ import { findComponentByCodeLazy } from "@webpack";
 import { openLogModal } from "./LogsModal";
 
 const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
-const ChatWarningIcon = findComponentByCodeLazy(".54.5H2.2a1");
+const Icon = findComponentByCodeLazy("0-1.27-.97l-2.5.7a3");
 
 export function OpenLogsButton() {
     return (
@@ -29,7 +29,7 @@ export function OpenLogsButton() {
             className="vc-log-toolbox-btn"
             onClick={() => openLogModal()}
             tooltip={"Open Logs"}
-            icon={ChatWarningIcon}
+            icon={Icon}
         />
     );
 }
