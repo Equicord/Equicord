@@ -231,7 +231,7 @@ export default definePlugin({
     name: "MessageLoggerEnhanced",
     authors: [Devs.Aria],
     description: "G'day",
-    dependencies: ["MessageLogger", "HeaderBarAPI"],
+    dependencies: ["MessageLogger"],
 
     patches: [
         {

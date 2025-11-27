@@ -219,7 +219,6 @@ export default definePlugin({
     name: "QuestCompleter",
     description: "A plugin to complete quests without having the game installed.",
     authors: [Devs.amia],
-    dependencies: ["HeaderBarAPI"],
     settings,
     patches: [
         {
