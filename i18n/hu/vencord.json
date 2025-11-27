@@ -1,10 +1,10 @@
 {
-    "donate": "Donate",
-    "invite": "Invite",
-    "loading": "Loading...",
-    "cancel": "Cancel",
+    "donate": "Támogatás",
+    "invite": "Meghívás",
+    "loading": "Betöltés...",
+    "cancel": "Mégse",
     "logs": {
-        "clearLog": "Clear Log",
+        "clearLog": "Napló Törlése",
         "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
         "logCleared": "Log has been cleared",
         "clearLogs": "Clear Logs",
