@@ -5,8 +5,8 @@
  */
 
 import { addChatBarButton, removeChatBarButton } from "@api/ChatButtons";
+import { addHeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { disableStyle, enableStyle } from "@api/Styles";
-import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
@@ -22,33 +22,8 @@ export default definePlugin({
     name: "SoundBoardLogger",
     authors: [Devs.Moxxie, EquicordDevs.Fres, Devs.amy, Devs.thororen],
     description: "Logs all soundboards that are played in a voice chat and allows you to download them",
-    dependencies: ["AudioPlayerAPI", "ChatInputButtonAPI"],
-    patches: [
-        {
-            predicate: () => settings.store.IconLocation === "toolbar",
-            find: ".controlButtonWrapper,",
-            replacement: {
-                match: /(function \i\(\i\){)(.{1,500}toolbar.{1,500}mobileToolbar)/,
-                replace: "$1$self.addSBIconToToolBar(arguments[0]);$2"
-            }
-        }
-    ],
+    dependencies: ["AudioPlayerAPI", "ChatInputButtonAPI", "HeaderBarAPI"],
     settings,
-    addSBIconToToolBar(e: { toolbar: React.ReactNode[] | React.ReactNode; }) {
-        if (Array.isArray(e.toolbar))
-            return e.toolbar.unshift(
-                <ErrorBoundary noop={true}>
-                    <OpenSBLogsButton />
-                </ErrorBoundary>
-            );
-
-        e.toolbar = [
-            <ErrorBoundary noop={true} key={"SoundBoardLogger"} >
-                <OpenSBLogsButton />
-            </ErrorBoundary>,
-            e.toolbar,
-        ];
-    },
     start() {
         enableStyle(styles);
         FluxDispatcher.subscribe("VOICE_CHANNEL_EFFECT_SEND", async sound => {
@@ -56,10 +31,15 @@ export default definePlugin({
             await updateLoggedSounds(sound);
             getListeners().forEach(cb => cb());
         });
-        if (settings.store.IconLocation === "chat") addChatBarButton("vc-soundlog-button", CharBarButton, ChatBarIcon);
+        if (settings.store.IconLocation === "toolbar") {
+            addHeaderBarButton("SoundBoardLogger", OpenSBLogsButton);
+        } else {
+            addChatBarButton("vc-soundlog-button", CharBarButton, ChatBarIcon);
+        }
     },
     stop() {
         disableStyle(styles);
-        if (settings.store.IconLocation === "chat") removeChatBarButton("vc-soundlog-button");
+        removeHeaderBarButton("SoundBoardLogger");
+        removeChatBarButton("vc-soundlog-button");
     }
 });

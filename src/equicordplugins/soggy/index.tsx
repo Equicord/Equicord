@@ -5,8 +5,8 @@
  */
 
 import { AudioPlayerInterface, createAudioPlayer } from "@api/AudioPlayer";
+import { addHeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings } from "@api/Settings";
-import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
@@ -142,41 +142,17 @@ export default definePlugin({
     description: "Adds a soggy button to the toolbox",
     authors: [EquicordDevs.sliwka],
     settings,
-    dependencies: ["AudioPlayerAPI"],
-    patches: [
-        {
-            find: ".controlButtonWrapper,",
-            replacement: {
-                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,450}mobileToolbar)/,
-                replace: "$1$self.addIconToToolBar(arguments[0]);$2"
-            }
-        }
-    ],
+    dependencies: ["AudioPlayerAPI", "HeaderBarAPI"],
 
     start() {
         assignBoop(settings.store.boopLink, settings.store.boopVolume * 100);
         assignSong(settings.store.songLink, settings.store.songVolume * 100);
+        addHeaderBarButton("Soggy", SoggyButton);
     },
 
     stop() {
+        removeHeaderBarButton("Soggy");
         boopSound?.delete();
         song?.delete();
-    },
-
-    // taken from message logger lol
-    addIconToToolBar(e: { toolbar: React.ReactNode[] | React.ReactNode; }) {
-        if (Array.isArray(e.toolbar))
-            return e.toolbar.unshift(
-                <ErrorBoundary noop={true}>
-                    <SoggyButton />
-                </ErrorBoundary>
-            );
-
-        e.toolbar = [
-            <ErrorBoundary noop={true} key={"MessageLoggerEnhanced"} >
-                <SoggyButton />
-            </ErrorBoundary>,
-            e.toolbar,
-        ];
     },
 });

@@ -8,12 +8,12 @@ export const Native = getNative();
 
 import "./styles.css";
 
-import ErrorBoundary from "@components/ErrorBoundary";
+import { addHeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { FluxDispatcher, MessageStore, React, UserStore } from "@webpack/common";
+import { FluxDispatcher, MessageStore, UserStore } from "@webpack/common";
 
 import { OpenLogsButton } from "./components/LogsButton";
 import { openLogModal } from "./components/LogsModal";
@@ -232,7 +232,7 @@ export default definePlugin({
     name: "MessageLoggerEnhanced",
     authors: [Devs.Aria],
     description: "G'day",
-    dependencies: ["MessageLogger"],
+    dependencies: ["MessageLogger", "HeaderBarAPI"],
 
     patches: [
         {
@@ -256,15 +256,6 @@ export default definePlugin({
                 replace: "deleted:$self.getDeleted(...arguments), editHistory:$self.getEdited(...arguments),"
             }
         },
-        {
-            find: ".controlButtonWrapper,",
-            predicate: () => settings.store.ShowLogsButton,
-            replacement: {
-                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,100}mobileToolbar)/,
-                replace: "$1$self.addIconToToolBar(arguments[0]);$2"
-            }
-        },
-
         {
             find: "childrenMessageContent:null",
             replacement: {
@@ -309,22 +300,6 @@ export default definePlugin({
         "Message Logger"() {
             openLogModal();
         }
-    },
-
-    addIconToToolBar(e: { toolbar: React.ReactNode[] | React.ReactNode; }) {
-        if (Array.isArray(e.toolbar))
-            return e.toolbar.unshift(
-                <ErrorBoundary noop={true}>
-                    <OpenLogsButton />
-                </ErrorBoundary>
-            );
-
-        e.toolbar = [
-            <ErrorBoundary noop={true} key={"MessageLoggerEnhanced"} >
-                <OpenLogsButton />
-            </ErrorBoundary>,
-            e.toolbar,
-        ];
     },
 
     processMessageFetch,
@@ -389,10 +364,15 @@ export default definePlugin({
         settings.store.logsDir = logsDir;
 
         setupContextMenuPatches();
+
+        if (settings.store.ShowLogsButton) {
+            addHeaderBarButton("MessageLoggerEnhanced", OpenLogsButton);
+        }
     },
 
     stop() {
         removeContextMenuBindings();
+        removeHeaderBarButton("MessageLoggerEnhanced");
         MessageStore.getMessage = this.oldGetMessage;
     }
 });
