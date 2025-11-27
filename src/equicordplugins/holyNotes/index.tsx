@@ -19,9 +19,7 @@
 import "./style.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { addHeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { DataStore } from "@api/index";
-import { removeMessagePopoverButton } from "@api/MessagePopover";
 import { EquicordDevs } from "@utils/constants";
 import { classes } from "@utils/misc";
 import { openModal } from "@utils/modal";
@@ -73,7 +71,6 @@ export default definePlugin({
     name: "HolyNotes",
     description: "Holy Notes allows you to save messages",
     authors: [EquicordDevs.Wolfie],
-    dependencies: ["MessagePopoverAPI", "ChatInputButtonAPI", "HeaderBarAPI"],
 
     toolboxActions: {
         async "Open Notes"() {
@@ -84,6 +81,8 @@ export default definePlugin({
     contextMenus: {
         "message": messageContextMenuPatch
     },
+
+    renderHeaderBarButton: ToolBarHeader,
 
     messagePopoverButton: {
         icon: NoteButtonPopover,
@@ -99,13 +98,7 @@ export default definePlugin({
         }
     },
     async start() {
-        addHeaderBarButton("HolyNotes", ToolBarHeader);
         if (await DataStore.keys(HolyNoteStore).then(keys => !keys.includes("Main"))) return noteHandler.newNoteBook("Main");
         if (!noteHandlerCache.has("Main")) await DataStoreToCache();
     },
-
-    stop() {
-        removeHeaderBarButton("HolyNotes");
-        removeMessagePopoverButton("HolyNotes");
-    }
 });

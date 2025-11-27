@@ -5,7 +5,6 @@
  */
 
 import { AudioPlayerInterface, createAudioPlayer } from "@api/AudioPlayer";
-import { addHeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { ModalProps, ModalRoot, openModal } from "@utils/modal";
@@ -142,16 +141,15 @@ export default definePlugin({
     description: "Adds a soggy button to the toolbox",
     authors: [EquicordDevs.sliwka],
     settings,
-    dependencies: ["AudioPlayerAPI", "HeaderBarAPI"],
+    dependencies: ["AudioPlayerAPI"],
+    renderHeaderBarButton: SoggyButton,
 
     start() {
         assignBoop(settings.store.boopLink, settings.store.boopVolume * 100);
         assignSong(settings.store.songLink, settings.store.songVolume * 100);
-        addHeaderBarButton("Soggy", SoggyButton);
     },
 
     stop() {
-        removeHeaderBarButton("Soggy");
         boopSound?.delete();
         song?.delete();
     },

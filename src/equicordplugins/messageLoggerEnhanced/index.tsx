@@ -8,7 +8,6 @@ export const Native = getNative();
 
 import "./styles.css";
 
-import { addHeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
@@ -301,6 +300,10 @@ export default definePlugin({
             openLogModal();
         }
     },
+    renderHeaderBarButton() {
+        if (!settings.store.ShowLogsButton) return null;
+        return OpenLogsButton();
+    },
 
     processMessageFetch,
     openLogModal,
@@ -364,15 +367,10 @@ export default definePlugin({
         settings.store.logsDir = logsDir;
 
         setupContextMenuPatches();
-
-        if (settings.store.ShowLogsButton) {
-            addHeaderBarButton("MessageLoggerEnhanced", OpenLogsButton);
-        }
     },
 
     stop() {
         removeContextMenuBindings();
-        removeHeaderBarButton("MessageLoggerEnhanced");
         MessageStore.getMessage = this.oldGetMessage;
     }
 });

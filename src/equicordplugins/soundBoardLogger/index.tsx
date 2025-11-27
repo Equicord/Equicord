@@ -4,14 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { addChatBarButton, removeChatBarButton } from "@api/ChatButtons";
-import { addHeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { disableStyle, enableStyle } from "@api/Styles";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
 
-import { CharBarButton, ChatBarIcon } from "./components/Icons";
 import { OpenSBLogsButton } from "./components/SoundBoardLog";
 import settings from "./settings";
 import { updateLoggedSounds } from "./store";
@@ -22,8 +19,9 @@ export default definePlugin({
     name: "SoundBoardLogger",
     authors: [Devs.Moxxie, EquicordDevs.Fres, Devs.amy, Devs.thororen],
     description: "Logs all soundboards that are played in a voice chat and allows you to download them",
-    dependencies: ["AudioPlayerAPI", "ChatInputButtonAPI", "HeaderBarAPI"],
+    dependencies: ["AudioPlayerAPI"],
     settings,
+    renderHeaderBarButton: OpenSBLogsButton,
     start() {
         enableStyle(styles);
         FluxDispatcher.subscribe("VOICE_CHANNEL_EFFECT_SEND", async sound => {
@@ -31,15 +29,8 @@ export default definePlugin({
             await updateLoggedSounds(sound);
             getListeners().forEach(cb => cb());
         });
-        if (settings.store.IconLocation === "toolbar") {
-            addHeaderBarButton("SoundBoardLogger", OpenSBLogsButton);
-        } else {
-            addChatBarButton("vc-soundlog-button", CharBarButton, ChatBarIcon);
-        }
     },
     stop() {
         disableStyle(styles);
-        removeHeaderBarButton("SoundBoardLogger");
-        removeChatBarButton("vc-soundlog-button");
     }
 });

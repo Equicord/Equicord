@@ -18,7 +18,6 @@
 
 import "./style.css";
 
-import { addHeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
@@ -241,10 +240,5 @@ export default definePlugin({
             }
         });
     },
-    start() {
-        addHeaderBarButton("QuestCompleter", ToolBarHeader);
-    },
-    stop() {
-        removeHeaderBarButton("QuestCompleter");
-    }
+    renderHeaderBarButton: ToolBarHeader
 });
