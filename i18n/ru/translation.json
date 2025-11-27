@@ -3,7 +3,7 @@
     "settings": {
         "forceLocale": {
             "description": "Force a different locale for Equicord to use",
-            "followDiscord": "Default (follow Discord)"
+            "followDiscord": "По умолчанию (тоже что и дискорд)"
         },
         "showMissingKeys": "If the current locale is missing translations, show the keys instead of falling back to English"
     }
