@@ -5,6 +5,7 @@
  */
 
 import { DataStore } from "@api/index";
+import { t } from "@utils/translation";
 
 import gitHash from "~git-hash";
 import plugins from "~plugins";
@@ -479,11 +480,11 @@ export function formatTimestamp(timestamp: number): string {
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
     if (diffMinutes < 60) {
-        return `${diffMinutes} minute${diffMinutes !== 1 ? "s" : ""} ago`;
+        return t("vencord.settings.changelog.manager.minutes", { count: diffMinutes });
     } else if (diffHours < 24) {
-        return `${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`;
+        return t("vencord.settings.changelog.manager.hours", { count: diffHours });
     } else if (diffDays < 7) {
-        return `${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
+        return t("vencord.settings.changelog.manager.days", { count: diffDays });
     } else {
         return date.toLocaleDateString();
     }

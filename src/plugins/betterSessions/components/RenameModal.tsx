@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Heading,HeadingTertiary } from "@components/Heading";
+import { Heading, HeadingTertiary } from "@components/Heading";
 import { SessionInfo } from "@plugins/betterSessions/types";
 import { getDefaultName, savedSessionsCache, saveSessionsToDataStore } from "@plugins/betterSessions/utils";
 import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
+import { t } from "@utils/translation";
 import { Button, React, TextInput } from "@webpack/common";
 import { KeyboardEvent } from "react";
 
@@ -80,7 +81,7 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
                         color={Button.Colors.PRIMARY}
                         onClick={() => props.onClose()}
                     >
-                        Cancel
+                        {t("vencord.cancel")}
                     </Button>
                     <Button
                         color={Button.Colors.BRAND}

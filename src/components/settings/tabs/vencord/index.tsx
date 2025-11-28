@@ -159,7 +159,7 @@ function EquicordSettings() {
             )}
 
             <section>
-                <Heading>Quick Actions</Heading>
+                <Heading>{t("vencord.quickActions.title")}</Heading>
 
                 <QuickActionCard>
                     <QuickAction
@@ -334,11 +334,14 @@ function DonateButtonComponent() {
             <DonateButton
                 look={Button.Looks.FILLED}
                 color={Button.Colors.TRANSPARENT}
-                style={{ marginTop: "1em" }} />
+                style={{ marginTop: "1em" }}
+                link="https://github.com/sponsors/thororen1234"
+            />
             <InviteButton
                 look={Button.Looks.FILLED}
                 color={Button.Colors.TRANSPARENT}
-                style={{ marginTop: "1em" }} />
+                style={{ marginTop: "1em" }}
+            />
         </Flex>
     );
 }

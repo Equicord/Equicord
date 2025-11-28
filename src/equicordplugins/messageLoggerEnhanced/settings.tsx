@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { t } from "@utils/translation";
 import { OptionType } from "@utils/types";
 import { Alerts, Button } from "@webpack/common";
 import { Settings } from "Vencord";
@@ -233,22 +234,22 @@ export const settings = definePluginSettings({
 
     clearLogs: {
         type: OptionType.COMPONENT,
-        description: "Clear Logs",
+        description: t("vencord.logs.clearAllLogs"),
         component: () =>
             <Button
                 color={Button.Colors.RED}
                 onClick={() => Alerts.show({
-                    title: "Clear Logs",
-                    body: "Are you sure you want to clear all logs?",
+                    title: t("vencord.logs.clearAllLogs"),
+                    body: t("vencord.logs.clearAllLogsConfirmation"),
                     confirmColor: Button.Colors.RED,
                     confirmText: "Clear",
-                    cancelText: "Cancel",
+                    cancelText: t("vencord.cancel"),
                     onConfirm: () => {
                         clearMessagesIDB();
                     },
                 })}
             >
-                Clear Logs
+                {t("vencord.logs.clearAllLogs")}
             </Button>
     },
 

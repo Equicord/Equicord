@@ -371,7 +371,7 @@ function ThemesTab() {
                                 Icon={RestartIcon}
                             />
                             <QuickAction
-                                text="Edit QuickCSS"
+                                text={t("vencord.quickActions.editQuickCSS")}
                                 action={() => VencordNative.quickCss.openEditor()}
                                 Icon={PaintbrushIcon}
                             />

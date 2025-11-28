@@ -26,6 +26,7 @@ import { copyWithToast, openInviteModal } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { closeAllModals, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { Queue } from "@utils/Queue";
+import { t } from "@utils/translation";
 import { User } from "@vencord/discord-types";
 import { Alerts, Button, FluxDispatcher, Forms, GuildStore, NavigationRouter, Parser, Tooltip, useEffect, UserStore, UserSummaryItem, UserUtils, useState } from "@webpack/common";
 
@@ -233,7 +234,7 @@ function ChangeDecorationModal(props: ModalProps) {
                     onClick={props.onClose}
                     color={Button.Colors.PRIMARY}
                 >
-                    Cancel
+                    {t("vencord.cancel")}
                 </Button>
                 <Button
                     onClick={() => {
@@ -272,7 +273,7 @@ function ChangeDecorationModal(props: ModalProps) {
                         body: "Are you sure you want to log out of Decor?",
                         confirmText: "Log Out",
                         confirmColor: cl("danger-btn"),
-                        cancelText: "Cancel",
+                        cancelText: t("vencord.cancel"),
                         onConfirm() {
                             useAuthorizationStore.getState().remove(UserStore.getCurrentUser().id);
                             props.onClose();

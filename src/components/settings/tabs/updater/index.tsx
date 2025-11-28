@@ -29,6 +29,7 @@ import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { relaunch } from "@utils/native";
 import { useAwaiter } from "@utils/react";
+import { t } from "@utils/translation";
 import { changes, checkForUpdates, getRepo, isNewer, update, updateError, UpdateLogger } from "@utils/updater";
 import { Alerts, Button, Parser, React, Toasts } from "@webpack/common";
 
@@ -169,7 +170,7 @@ function Newer(props: CommonProps) {
 function Updater() {
     const settings = useSettings(["autoUpdate", "autoUpdateNotification"]);
 
-    const [repo, err, repoPending] = useAwaiter(getRepo, { fallbackValue: "Loading..." });
+    const [repo, err, repoPending] = useAwaiter(getRepo, { fallbackValue: t("vencord.loading") });
 
     React.useEffect(() => {
         if (err)

@@ -17,6 +17,7 @@
 */
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { t } from "@utils/translation";
 import { Channel, Message } from "@vencord/discord-types";
 import { JSX } from "react";
 
@@ -62,7 +63,7 @@ export function __addDecorationsToMessage(props: MessageDecorationProps): JSX.El
     const decorations = Array.from(
         decorationsFactories.entries(),
         ([key, Decoration]) => (
-            <ErrorBoundary noop message={`Failed to render ${key} Message Decoration`} key={key}>
+            <ErrorBoundary noop message={t("api.messageDecorations.fallback", { key: key })} key={key}>
                 <Decoration {...props} />
             </ErrorBoundary>
         )

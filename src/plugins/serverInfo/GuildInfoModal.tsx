@@ -13,6 +13,7 @@ import { getGuildAcronym, openImageModal, openUserProfile } from "@utils/discord
 import { classes } from "@utils/misc";
 import { ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { useAwaiter } from "@utils/react";
+import { t } from "@utils/translation";
 import { Guild, User } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { FluxDispatcher, GuildChannelStore, GuildMemberStore, GuildRoleStore, GuildStore, IconUtils, Parser, PresenceStore, RelationshipStore, ScrollerThin, SnowflakeUtils, TabBar, Timestamp, useEffect, UserStore, UserUtils, useState, useStateFromStores } from "@webpack/common";
@@ -229,7 +230,7 @@ function ServerInfoTab({ guild }: GuildProps) {
     });
 
     const Fields = {
-        "Server Owner": owner ? Owner(guild.id, owner) : "Loading...",
+        "Server Owner": owner ? Owner(guild.id, owner) : t("vencord.loading"),
         "Created At": renderTimestamp(SnowflakeUtils.extractTimestamp(guild.id)),
         "Joined At": guild.joinedAt ? renderTimestamp(guild.joinedAt.getTime()) : "-", // Not available in lurked guild
         "Vanity Link": guild.vanityURLCode ? (<a>{`discord.gg/${guild.vanityURLCode}`}</a>) : "-", // Making the anchor href valid would cause Discord to reload

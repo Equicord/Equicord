@@ -10,6 +10,7 @@ import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatc
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { CustomEmoji, UnicodeEmoji } from "@vencord/discord-types";
 import { Alerts, Button, EmojiStore, GuildStore, Menu, Toasts, useEffect, useState } from "@webpack/common";
@@ -566,7 +567,7 @@ const settings = definePluginSettings({
                     body: "This will overwrite your current whitelist.",
                     confirmText: "Import",
                     confirmColor: Button.Colors.RED,
-                    cancelText: "Cancel",
+                    cancelText: t("vencord.cancel"),
                     onConfirm: async () => {
                         await DataStore.set(DATA_COLLECTION_NAME, []);
                         await uploadEmojis();
@@ -586,7 +587,7 @@ const settings = definePluginSettings({
                     body: "This will remove all emojis from your whitelist.",
                     confirmText: "Reset",
                     confirmColor: Button.Colors.RED,
-                    cancelText: "Cancel",
+                    cancelText: t("vencord.cancel"),
                     onConfirm: resetEmojis
                 })}>
                 Reset Emojis

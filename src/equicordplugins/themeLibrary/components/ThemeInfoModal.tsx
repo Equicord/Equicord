@@ -15,6 +15,7 @@ import { openInviteModal } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import type { PluginNative } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { Button, Parser, React, showToast, Toasts } from "@webpack/common";
@@ -86,14 +87,14 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
                         </Paragraph>
                         {donate && (
                             <>
-                                <Heading style={{ marginTop: "10px" }}>Donate</Heading>
+                                <Heading style={{ marginTop: "10px" }}>{t("vencord.donate")}</Heading>
                                 <Paragraph>
                                     You can support the author by donating below!
                                 </Paragraph>
                                 <Paragraph style={{ marginTop: "10px" }}>
                                     <Button onClick={() => VencordNative.native.openExternal(donate)}>
                                         <Heart />
-                                        Donate
+                                        {t("vencord.donate")}
                                     </Button>
                                 </Paragraph>
                             </>

@@ -16,6 +16,7 @@ import { AvatarDecorationModalPreview } from "@plugins/decor/ui/components";
 import { openInviteModal } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { closeAllModals, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import { filters, findComponentByCodeLazy, mapMangledModuleLazy } from "@webpack";
 import { Button, FluxDispatcher, GuildStore, NavigationRouter, TextInput, useEffect, useMemo, UserStore, useState } from "@webpack/common";
 
@@ -153,7 +154,7 @@ function CreateDecorationModal(props: ModalProps) {
                     onClick={props.onClose}
                     color={Button.Colors.PRIMARY}
                 >
-                    Cancel
+                    {t("vencord.cancel")}
                 </Button>
                 <Button
                     onClick={() => {

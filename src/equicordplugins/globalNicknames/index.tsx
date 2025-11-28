@@ -12,6 +12,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import { EquicordDevs } from "@utils/constants";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
@@ -95,7 +96,7 @@ function NicknameModal({ modalProps, user }: { modalProps: ModalProps; user: Use
                     style={{ marginRight: "8px" }}
                     onClick={modalProps.onClose}
                 >
-                    Cancel
+                    {t("vencord.cancel")}
                 </Button>
             </ModalFooter>
         </ModalRoot>

@@ -16,6 +16,7 @@ import { importLogs } from "@equicordplugins/messageLoggerEnhanced/utils/setting
 import { copyWithToast, openUserProfile } from "@utils/discord";
 import { closeAllModals, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { LazyComponent } from "@utils/react";
+import { t } from "@utils/translation";
 import { User } from "@vencord/discord-types";
 import { find, findByCode, findByCodeLazy } from "@webpack";
 import { Alerts, Button, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, NavigationRouter, React, TabBar, TextInput, Tooltip, useMemo, useRef, useState } from "@webpack/common";
@@ -142,11 +143,11 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                 <Button
                     color={Button.Colors.RED}
                     onClick={() => Alerts.show({
-                        title: "Clear Logs",
-                        body: "Are you sure you want to clear all the logs",
+                        title: t("vencord.logs.clearAllLogs"),
+                        body: t("vencord.logs.clearAllLogsConfirmation"),
                         confirmText: "Clear",
                         confirmColor: Button.Colors.RED,
-                        cancelText: "Cancel",
+                        cancelText: t("vencord.cancel"),
                         onConfirm: async () => {
                             await clearMessagesIDB();
                             reset();
@@ -161,11 +162,11 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                     color={Button.Colors.BRAND}
                     disabled={messages?.length === 0}
                     onClick={() => Alerts.show({
-                        title: "Clear Logs",
-                        body: `Are you sure you want to clear ${messages.length} logs`,
+                        title: t("vencord.logs.clearLogs"),
+                        body: t("vencord.logs.clearLogsConfirmationNum", { count: messages.length }),
                         confirmText: "Clear",
                         confirmColor: Button.Colors.RED,
-                        cancelText: "Cancel",
+                        cancelText: t("vencord.cancel"),
                         onConfirm: async () => {
                             await deleteMessagesBulkIDB(messages.map(e => e.message_id));
                             reset();

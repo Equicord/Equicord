@@ -12,6 +12,7 @@ import { Bookmark, BookmarkFolder, Bookmarks, ChannelTabsProps, UseBookmarkMetho
 import { getIntlMessage } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { closeModal, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import { Button, ChannelStore, FluxDispatcher, Menu, ReadStateStore, ReadStateUtils, Select, TextInput, useState } from "@webpack/common";
 
 export function BasicContextMenu() {
@@ -83,7 +84,9 @@ export function EditModal({ modalProps, modalKey, bookmark, onSave }: {
                     color={Button.Colors.TRANSPARENT}
                     look={Button.Looks.FILLED}
                     onClick={() => closeModal(modalKey)}
-                >Cancel</Button>
+                >
+                    {t("vencord.cancel")}
+                </Button>
             </ModalFooter>
         </ModalRoot>
     );
@@ -129,7 +132,9 @@ function AddToFolderModal({ modalProps, modalKey, bookmarks, onSave }: {
                     color={Button.Colors.TRANSPARENT}
                     look={Button.Looks.FILLED}
                     onClick={() => closeModal(modalKey)}
-                >Cancel</Button>
+                >
+                    {t("vencord.cancel")}
+                </Button>
             </ModalFooter>
         </ModalRoot>
     );
@@ -158,7 +163,7 @@ function DeleteFolderConfirmationModal({ modalProps, modalKey, onConfirm }) {
                     look={Button.Looks.FILLED}
                     onClick={() => closeModal(modalKey)}
                 >
-                    Cancel
+                    {t("vencord.cancel")}
                 </Button>
             </ModalFooter>
         </ModalRoot>

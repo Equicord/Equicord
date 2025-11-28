@@ -23,6 +23,7 @@ import { ApngBlendOp, ApngDisposeOp, parseAPNG } from "@utils/apng";
 import { Devs } from "@utils/constants";
 import { getCurrentGuild, getEmojiURL } from "@utils/discord";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, Patch } from "@utils/types";
 import type { Emoji, Message } from "@vencord/discord-types";
 import { StickerFormatType } from "@vencord/discord-types/enums";
@@ -811,7 +812,7 @@ export default definePlugin({
                         </Paragraph>
                     </div>,
                     confirmText: "Send Anyway",
-                    cancelText: "Cancel",
+                    cancelText: t("vencord.cancel"),
                     secondaryConfirmText: "Do not show again",
                     onConfirm: () => resolve(true),
                     onCloseCallback: () => setImmediate(() => resolve(false)),

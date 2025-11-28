@@ -10,6 +10,7 @@ import { BaseText } from "@components/BaseText";
 import { Flex } from "@components/Flex";
 import { HeadingTertiary } from "@components/Heading";
 import { copyToClipboard } from "@utils/clipboard";
+import { t } from "@utils/translation";
 import { findByPropsLazy } from "@webpack";
 import { Button, Forms, Parser, useEffect, useState } from "@webpack/common";
 
@@ -115,7 +116,7 @@ export default function FriendCodesPanel() {
                     weight="semibold"
                     className="vc-friend-codes-text"
                 >
-                    Loading...
+                    {t("vencord.loading")}
                 </BaseText>
             ) : invites.length === 0 ? (
                 <BaseText
