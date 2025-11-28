@@ -9,6 +9,7 @@ import { showNotification } from "@api/Notifications";
 import { Settings } from "@api/Settings";
 import { Logger } from "@utils/Logger";
 import { openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import { OAuth2AuthorizeModal, UserStore } from "@webpack/common";
 
 export const logger = new Logger("SettingsSync:CloudSetup", "#39b7e0");
@@ -71,8 +72,8 @@ export async function authorizeCloud() {
         var { clientId, redirectUri } = await oauthConfiguration.json();
     } catch {
         showNotification({
-            title: "Cloud Integration",
-            body: "Setup failed (couldn't retrieve OAuth configuration)."
+            title: t("vencord.cloud.integrations.header"),
+            body: t("vencord.cloud.integrations.failedToRetrieveOAuth")
         });
         Settings.cloud.authenticated = false;
         return;
@@ -101,22 +102,22 @@ export async function authorizeCloud() {
                     logger.info("Authorized with secret");
                     await setAuthorization(secret);
                     showNotification({
-                        title: "Cloud Integration",
-                        body: "Cloud integrations enabled!"
+                        title: t("vencord.cloud.integrations.header"),
+                        body: t("vencord.cloud.integrations.enabled")
                     });
                     Settings.cloud.authenticated = true;
                 } else {
                     showNotification({
-                        title: "Cloud Integration",
-                        body: "Setup failed (no secret returned?)."
+                        title: t("vencord.cloud.integrations.header"),
+                        body: t("vencord.cloud.integrations.noSecret")
                     });
                     Settings.cloud.authenticated = false;
                 }
             } catch (e: any) {
                 logger.error("Failed to authorize", e);
                 showNotification({
-                    title: "Cloud Integration",
-                    body: `Setup failed (${e.toString()}).`
+                    title: t("vencord.cloud.integrations.header"),
+                    body: t("vencord.cloud.integrations.error", { e: e.toString() })
                 });
                 Settings.cloud.authenticated = false;
             }

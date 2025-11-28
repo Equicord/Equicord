@@ -25,6 +25,7 @@ import { Paragraph } from "@components/Paragraph";
 import { openNotificationSettingsModal } from "@components/settings/tabs/vencord/NotificationSettings";
 import { closeModal, ModalCloseButton, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { useAwaiter } from "@utils/react";
+import { t } from "@utils/translation";
 import { Alerts, Button, ListScrollerThin, React, Timestamp, useEffect, useReducer, useState } from "@webpack/common";
 import { nanoid } from "nanoid";
 import type { DispatchWithoutAction } from "react";
@@ -135,7 +136,7 @@ export function NotificationLog({ log, pending }: { log: PersistentNotificationD
             <div className={cl("container")}>
                 <div className={cl("empty")} />
                 <Paragraph style={{ textAlign: "center" }}>
-                    No notifications yet
+                    {t("api.notifications.noNotifications")}
                 </Paragraph>
             </div>
         );
@@ -158,7 +159,7 @@ function LogModal({ modalProps, close }: { modalProps: ModalProps; close(): void
     return (
         <ModalRoot {...modalProps} size={ModalSize.LARGE} className={cl("modal")}>
             <ModalHeader>
-                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>Notification Log</BaseText>
+                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("api.notifications.notificationLog")}</BaseText>
                 <ModalCloseButton onClick={close} />
             </ModalHeader>
 
@@ -169,7 +170,7 @@ function LogModal({ modalProps, close }: { modalProps: ModalProps; close(): void
             <ModalFooter>
                 <Flex>
                     <Button onClick={openNotificationSettingsModal}>
-                        Notification Settings
+                        {t("api.notifications.notificationSettings")}
                     </Button>
 
                     <Button
@@ -177,19 +178,19 @@ function LogModal({ modalProps, close }: { modalProps: ModalProps; close(): void
                         color={Button.Colors.RED}
                         onClick={() => {
                             Alerts.show({
-                                title: "Are you sure?",
-                                body: `This will permanently remove ${log.length} notification${log.length === 1 ? "" : "s"}. This action cannot be undone.`,
+                                title: t("api.notifications.logs.title"),
+                                body: t("api.notifications.logs.body", { count: log.length }),
                                 async onConfirm() {
                                     await DataStore.set(KEY, []);
                                     signals.forEach(x => x());
                                 },
-                                confirmText: "Do it!",
+                                confirmText: t("api.notifications.logs.confirm"),
                                 confirmColor: "vc-notification-log-danger-btn",
-                                cancelText: "Nevermind"
+                                cancelText: t("api.notifications.cancel")
                             });
                         }}
                     >
-                        Clear Notification Log
+                        {t("api.notifications.clearNotificationLog")}
                     </Button>
                 </Flex>
             </ModalFooter>

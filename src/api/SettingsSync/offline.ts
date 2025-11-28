@@ -6,6 +6,7 @@
 
 import { PlainSettings } from "@api/Settings";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import { chooseFile, saveFile } from "@utils/web";
 import { moment, Toasts } from "@webpack/common";
 
@@ -19,10 +20,10 @@ const toast = (type: string, message: string) =>
     });
 
 const toastSuccess = () =>
-    toast(Toasts.Type.SUCCESS, "Settings successfully imported. Restart to apply changes!");
+    toast(Toasts.Type.SUCCESS, t("vencord.settingsSync.imported"));
 
 const toastFailure = (err: any) =>
-    toast(Toasts.Type.FAILURE, `Failed to import settings: ${String(err)}`);
+    toast(Toasts.Type.FAILURE, t("vencord.settingsSync.failedToImport", { e: String(err) }));
 
 const logger = new Logger("SettingsSync:Offline", "#39b7e0");
 

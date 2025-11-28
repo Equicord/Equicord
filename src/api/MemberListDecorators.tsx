@@ -17,6 +17,7 @@
 */
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { t } from "@utils/translation";
 import { Channel, User } from "@vencord/discord-types";
 import { JSX } from "react";
 
@@ -50,7 +51,7 @@ export function __getDecorators(props: DecoratorProps, type: "guild" | "dm"): JS
                 return null;
 
             return (
-                <ErrorBoundary noop key={key} message={`Failed to render ${key} Member List Decorator`}>
+                <ErrorBoundary noop key={key} message={t("api.memberListDecorators.fallback", { key: key })}>
                     <Decorator {...props} type={type} />
                 </ErrorBoundary>
             );

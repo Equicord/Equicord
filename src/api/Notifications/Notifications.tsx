@@ -18,6 +18,7 @@
 
 import { Settings } from "@api/Settings";
 import { Queue } from "@utils/Queue";
+import { t } from "@utils/translation";
 import { createRoot, WindowStore } from "@webpack/common";
 import type { ReactNode } from "react";
 import type { Root } from "react-dom/client";
@@ -36,8 +37,8 @@ window.addEventListener("focus", () => {
     if (!missed) return;
     if (missedCount > 0 && timeout > 0 && useNative === "never") {
         showNotification({
-            title: "While you were away",
-            body: `${missedCount} notifications received`,
+            title: t("api.notifications.missedNotifications.title"),
+            body: t("api.notifications.missedNotifications.body", { count: missedCount }),
             onClick: () => openNotificationLogModal(),
         });
         missedCount = 0;

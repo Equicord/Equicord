@@ -18,6 +18,7 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { isPrimitiveReactNode } from "@utils/react";
+import { t } from "@utils/translation";
 import { waitFor } from "@webpack";
 import { ReactNode } from "react";
 
@@ -42,7 +43,7 @@ export function nextNotice() {
 export function showNotice(message: ReactNode, buttonText: string, onOkClick: () => void) {
     const notice = isPrimitiveReactNode(message)
         ? message
-        : <ErrorBoundary fallback={() => "Error Showing Notice"}>{message}</ErrorBoundary>;
+        : <ErrorBoundary fallback={() => t("api.notices.fallback")}>{message}</ErrorBoundary>;
 
     noticesQueue.push(["GENERIC", notice, buttonText, onOkClick]);
     if (!currentNotice) nextNotice();

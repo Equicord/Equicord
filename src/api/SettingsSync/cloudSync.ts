@@ -34,7 +34,7 @@ export async function putCloudSettings(manual?: boolean) {
             logger.error(`Failed to sync up, API returned ${res.status}`);
             showNotification({
                 title: t("vencord.cloud.settings.header"),
-                body: `Could not synchronize settings to cloud (API returned ${res.status}).`,
+                body: t("vencord.cloud.settings.apiReject", { e: res.status }),
                 color: "var(--red-360)"
             });
             return;
@@ -49,7 +49,7 @@ export async function putCloudSettings(manual?: boolean) {
         if (manual) {
             showNotification({
                 title: t("vencord.cloud.settings.header"),
-                body: "Synchronized settings to the cloud!",
+                body: t("vencord.cloud.settings.success"),
                 noPersist: true,
             });
         }
@@ -57,7 +57,7 @@ export async function putCloudSettings(manual?: boolean) {
         logger.error("Failed to sync up", e);
         showNotification({
             title: t("vencord.cloud.settings.header"),
-            body: `Could not synchronize settings to the cloud (${e.toString()}).`,
+            body: t("vencord.cloud.settings.faildToSync", { e: e.toString() }),
             color: "var(--red-360)"
         });
     }
@@ -78,7 +78,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
             // User switched to an account that isn't connected to cloud
             showNotification({
                 title: t("vencord.cloud.settings.header"),
-                body: "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
+                body: t("vencord.cloud.settings.accountChanged"),
                 color: "var(--yellow-360)",
                 onClick: () => SettingsRouter.open("VencordCloud")
             });
@@ -92,7 +92,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
             if (shouldNotify)
                 showNotification({
                     title: t("vencord.cloud.settings.header"),
-                    body: "There are no settings in the cloud.",
+                    body: t("vencord.cloud.settings.noSettings"),
                     noPersist: true
                 });
             return false;
@@ -103,7 +103,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
             if (shouldNotify)
                 showNotification({
                     title: t("vencord.cloud.settings.header"),
-                    body: "Your settings are up to date.",
+                    body: t("vencord.cloud.settings.upToDate"),
                     noPersist: true
                 });
             return false;
@@ -113,7 +113,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
             logger.error(`Failed to sync down, API returned ${res.status}`);
             showNotification({
                 title: t("vencord.cloud.settings.header"),
-                body: `Could not synchronize settings from the cloud (API returned ${res.status}).`,
+                body: t("vencord.cloud.settings.apiReject", { e: res.status }),
                 color: "var(--red-360)"
             });
             return false;
@@ -127,7 +127,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
             if (shouldNotify)
                 showNotification({
                     title: t("vencord.cloud.settings.header"),
-                    body: "Your local settings are newer than the cloud ones.",
+                    body: t("vencord.cloud.settings.newerThanCloud"),
                     noPersist: true,
                 });
             return;
@@ -146,7 +146,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
         if (shouldNotify)
             showNotification({
                 title: t("vencord.cloud.settings.header"),
-                body: "Your settings have been updated! Click here to restart to fully apply changes!",
+                body: t("vencord.cloud.settings.updated"),
                 color: "var(--green-360)",
                 onClick: IS_WEB ? () => location.reload() : relaunch,
                 noPersist: true
@@ -157,7 +157,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
         logger.error("Failed to sync down", e);
         showNotification({
             title: t("vencord.cloud.settings.header"),
-            body: `Could not synchronize settings from the cloud (${e.toString()}).`,
+            body: t("vencord.cloud.settings.syncFromCloud", { e: e.toString() }),
             color: "var(--red-360)"
         });
 
@@ -176,7 +176,7 @@ export async function deleteCloudSettings() {
             logger.error(`Failed to delete, API returned ${res.status}`);
             showNotification({
                 title: t("vencord.cloud.settings.header"),
-                body: `Could not delete settings (API returned ${res.status}).`,
+                body: t("vencord.cloud.settings.apiDelete", { e: res.status }),
                 color: "var(--red-360)"
             });
             return;
@@ -185,14 +185,14 @@ export async function deleteCloudSettings() {
         logger.info("Settings deleted from cloud successfully");
         showNotification({
             title: t("vencord.cloud.settings.header"),
-            body: "Settings deleted from cloud!",
+            body: t("vencord.cloud.settings.deleted"),
             color: "var(--green-360)"
         });
     } catch (e: any) {
         logger.error("Failed to delete", e);
         showNotification({
             title: t("vencord.cloud.settings.header"),
-            body: `Could not delete settings (${e.toString()}).`,
+            body: t("vencord.cloud.settings.failedToDelete", { e: e.toString() }),
             color: "var(--red-360)"
         });
     }
@@ -208,7 +208,7 @@ export async function eraseAllCloudData() {
         logger.error(`Failed to erase data, API returned ${res.status}`);
         showNotification({
             title: t("vencord.cloud.integrations.header"),
-            body: `Could not erase all data (API returned ${res.status}), please contact support.`,
+            body: t("vencord.cloud.settings.apiEraseAll", { e: res.status }),
             color: "var(--red-360)"
         });
         return;
@@ -219,7 +219,7 @@ export async function eraseAllCloudData() {
 
     showNotification({
         title: t("vencord.cloud.integrations.header"),
-        body: "Successfully erased all data.",
+        body: t("vencord.cloud.settings.erased"),
         color: "var(--green-360)"
     });
 }
