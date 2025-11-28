@@ -10,7 +10,8 @@ import { DataStore } from "@api/index";
 import { EquicordDevs } from "@utils/constants";
 import * as Modal from "@utils/modal";
 import definePlugin from "@utils/types";
-import { Button, Flex, React, Text, TextInput } from "@webpack/common";
+// REMOVED "Flex" from the import below
+import { Button, React, Text, TextInput } from "@webpack/common";
 
 const loginWithToken = (token: string) => {
     const iframe = document.createElement("iframe");
@@ -89,7 +90,8 @@ const AddAccountModal = ({ manager, onClose, ...props }: Modal.ModalProps & {
                 </div>
             </Modal.ModalContent>
             <Modal.ModalFooter className="token-login-footer">
-                <Flex justify={Flex.Justify.END} gap={10}>
+                {/* Replaced Flex with div */}
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
                     <Button
                         color={Button.Colors.BRAND}
                         disabled={!username || !token}
@@ -106,7 +108,7 @@ const AddAccountModal = ({ manager, onClose, ...props }: Modal.ModalProps & {
                     >
                         Cancel
                     </Button>
-                </Flex>
+                </div>
             </Modal.ModalFooter>
         </Modal.ModalRoot>
     );
@@ -169,7 +171,8 @@ class TokenLoginManagerUI {
 
         return (
             <div className="token-login-container">
-                <Flex justify={Flex.Justify.BETWEEN} align={Flex.Align.CENTER}>
+                {/* Replaced Flex with div */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <Text variant="heading-lg/semibold">Token Login Manager</Text>
                     <Button
                         onClick={() => {
@@ -187,7 +190,7 @@ class TokenLoginManagerUI {
                     >
                         Add Account
                     </Button>
-                </Flex>
+                </div>
                 {Object.values(this.manager.accounts).map(account => (
                     <AccountEntryComponent
                         key={account.id}

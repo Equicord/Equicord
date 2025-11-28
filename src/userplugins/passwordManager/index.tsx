@@ -10,7 +10,8 @@ import { DataStore } from "@api/index";
 import { EquicordDevs } from "@utils/constants";
 import * as Modal from "@utils/modal";
 import definePlugin from "@utils/types";
-import { Button, Flex, React, Text, TextInput } from "@webpack/common";
+// REMOVED "Flex" from the import below
+import { Button, React, Text, TextInput } from "@webpack/common";
 
 interface PasswordEntry {
     id: string;
@@ -224,7 +225,8 @@ const AddPasswordModal = ({ manager, onClose, ...props }: Modal.ModalProps & {
                 <div className="password-modal-separator" />
                 <div className="password-modal-section">
                     <Text variant="heading-sm/medium" style={{ marginBottom: "8px" }}>Login Details</Text>
-                    <Flex direction={Flex.Direction.VERTICAL} gap={10}>
+                    {/* Replaced Flex with div */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                         <TextInput
                             placeholder="Username or Email"
                             value={username}
@@ -236,7 +238,7 @@ const AddPasswordModal = ({ manager, onClose, ...props }: Modal.ModalProps & {
                             onChange={e => setPassword(e)}
                             type="password"
                         />
-                    </Flex>
+                    </div>
                 </div>
                 <div className="password-modal-separator" />
                 <div className="password-modal-section">
@@ -249,7 +251,8 @@ const AddPasswordModal = ({ manager, onClose, ...props }: Modal.ModalProps & {
                 </div>
             </Modal.ModalContent>
             <Modal.ModalFooter className="password-modal-footer">
-                <Flex justify={Flex.Justify.END} gap={10}>
+                {/* Replaced Flex with div */}
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
                     <Button
                         color={Button.Colors.BRAND}
                         disabled={!title || !username || !password}
@@ -272,7 +275,7 @@ const AddPasswordModal = ({ manager, onClose, ...props }: Modal.ModalProps & {
                     >
                         Cancel
                     </Button>
-                </Flex>
+                </div>
             </Modal.ModalFooter>
         </Modal.ModalRoot>
     );
@@ -293,7 +296,8 @@ const SetMasterPasswordModal = ({ manager, onSuccess, ...props }: Modal.ModalPro
             </Modal.ModalHeader>
             <Modal.ModalContent className="password-modal-content">
                 <div className="password-modal-section">
-                    <Flex direction={Flex.Direction.VERTICAL} gap={10}>
+                    {/* Replaced Flex with div */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                         <TextInput
                             placeholder="Master Password"
                             value={password}
@@ -307,11 +311,12 @@ const SetMasterPasswordModal = ({ manager, onSuccess, ...props }: Modal.ModalPro
                             type="password"
                         />
                         {error && <Text color="danger">{error}</Text>}
-                    </Flex>
+                    </div>
                 </div>
             </Modal.ModalContent>
             <Modal.ModalFooter className="password-modal-footer">
-                <Flex justify={Flex.Justify.END} gap={10}>
+                {/* Replaced Flex with div */}
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
                     <Button
                         color={Button.Colors.BRAND}
                         disabled={!password || !confirmPassword}
@@ -333,7 +338,7 @@ const SetMasterPasswordModal = ({ manager, onSuccess, ...props }: Modal.ModalPro
                     >
                         Cancel
                     </Button>
-                </Flex>
+                </div>
             </Modal.ModalFooter>
         </Modal.ModalRoot>
     );
@@ -373,7 +378,8 @@ const DeletePasswordModal = ({
                 </div>
             </Modal.ModalContent>
             <Modal.ModalFooter className="password-modal-footer">
-                <Flex justify={Flex.Justify.END} gap={10}>
+                {/* Replaced Flex with div */}
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
                     <Button
                         color={Button.Colors.RED}
                         disabled={!masterPassword}
@@ -395,7 +401,7 @@ const DeletePasswordModal = ({
                     >
                         Cancel
                     </Button>
-                </Flex>
+                </div>
             </Modal.ModalFooter>
         </Modal.ModalRoot>
     );
@@ -441,7 +447,8 @@ const ViewPasswordModal = ({
                             {error && <Text color="danger">{error}</Text>}
                         </>
                     ) : (
-                        <Flex direction={Flex.Direction.VERTICAL} gap={10}>
+                        /* Replaced Flex with div */
+                        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                             <div className="password-view-section">
                                 <Text variant="heading-sm/medium">Username</Text>
                                 <Text selectable>{entry.username}</Text>
@@ -456,12 +463,13 @@ const ViewPasswordModal = ({
                                     <Text selectable>{entry.twoFactorSecret}</Text>
                                 </div>
                             )}
-                        </Flex>
+                        </div>
                     )}
                 </div>
             </Modal.ModalContent>
             <Modal.ModalFooter className="password-modal-footer">
-                <Flex justify={Flex.Justify.END} gap={10}>
+                {/* Replaced Flex with div */}
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
                     {!showPassword ? (
                         <Button
                             color={Button.Colors.BRAND}
@@ -484,7 +492,7 @@ const ViewPasswordModal = ({
                     >
                         Cancel
                     </Button>
-                </Flex>
+                </div>
             </Modal.ModalFooter>
         </Modal.ModalRoot>
     );
@@ -598,7 +606,8 @@ class PasswordManagerUI {
         if (!this.hasMasterPassword) {
             return (
                 <div className="password-manager-container">
-                    <Flex direction={Flex.Direction.VERTICAL} gap={10}>
+                    {/* Replaced Flex with div */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                         <Text variant="heading-lg/semibold">Password Manager Setup</Text>
                         <Text>Please set a master password to start using the password manager.</Text>
                         <Button
@@ -617,14 +626,15 @@ class PasswordManagerUI {
                         >
                             Set Master Password
                         </Button>
-                    </Flex>
+                    </div>
                 </div>
             );
         }
 
         return (
             <div className="password-manager-container">
-                <Flex justify={Flex.Justify.BETWEEN} align={Flex.Align.CENTER}>
+                {/* Replaced Flex with div */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <Text variant="heading-lg/semibold">Password Manager</Text>
                     <Button
                         onClick={() => {
@@ -642,7 +652,7 @@ class PasswordManagerUI {
                     >
                         Add Password
                     </Button>
-                </Flex>
+                </div>
                 {Object.values(this.manager.passwords).map(entry => (
                     <PasswordEntryComponent
                         key={entry.id}
