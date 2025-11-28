@@ -1,0 +1,199 @@
+{
+    "donate": "Donate",
+    "invite": "Invite",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "logs": {
+        "clearLog": "Clear Log",
+        "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
+        "logCleared": "Log has been cleared",
+        "clearLogs": "Clear Logs",
+        "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
+        "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
+        "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
+        "logsCleared": "Selected logs have been cleared",
+        "hideLogs": "Hide Logs",
+        "showLogs": "Show Logs",
+        "clearAllLogs": "Clear All Logs",
+        "clearAll": "Clear All",
+        "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
+        "allLogsCleared": "All logs have been cleared"
+    },
+    "addonCard": {
+        "new": "NEW"
+    },
+    "cloud": {
+        "integrations": {
+            "header": "Cloud Integrations",
+            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
+            "failedToRetrieveOAuth": "Setup failed (couldn't retrieve OAuth configuration).",
+            "enabled": "Cloud integrations enabled!",
+            "noSecret": "Setup failed (no secret returned?).",
+            "error": "Setup failed ({e})"
+        },
+        "settings": {
+            "header": "Cloud Settings",
+            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!",
+            "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
+            "success": "Synchronized settings to the cloud!",
+            "failedToSync": "Could not synchronize settings to the cloud ({e}).",
+            "accountChanged": "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
+            "noSettings": "There are no settings in the cloud.",
+            "upToDate": "Your settings are up to date.",
+            "newerThanCloud": "Your local settings are newer than the cloud ones.",
+            "updated": "Your settings have been updated! Click here to restart to fully apply changes!",
+            "syncFromCloud": "Could not synchronize settings from the cloud ({e}).",
+            "apiDelete": "Could not delete settings (API returned {e}).",
+            "deleted": "Settings deleted from cloud!",
+            "failedToDelete": "Could not delete settings ({e}).",
+            "apiEraseAll": "Could not erase all data (API returned {e}), please contact support.",
+            "erased": "Successfully erased all data."
+        }
+    },
+    "settingsSync": {
+        "imported": "Settings successfully imported. Restart to apply changes!",
+        "failedToImport": "Failed to import settings: {e}"
+    },
+    "contributorCard": {
+        "contributionsButton": "See what you've contributed to",
+        "description": "Since you've contributed to Equicord you now have a cool new badge!",
+        "subtitle": "Thank you for contributing!",
+        "title": "Contributions"
+    },
+    "donorCard": {
+        "donated": {
+            "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
+            "equicordDescription": "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
+            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server.",
+            "subtitle": "Thank you for donating!",
+            "title": "Donations"
+        },
+        "notDonated": {
+            "description": "Please consider supporting the development of Equicord by donating!",
+            "title": "Support the Project"
+        }
+    },
+    "failedToRender": "Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!",
+    "quickActions": {
+        "editQuickCSS": "Edit QuickCSS",
+        "notificationLog": "Notification Log",
+        "openSettings": "Open Settings Folder",
+        "relaunchDiscord": "Relaunch Discord",
+        "title": "Quick Actions",
+        "viewSource": "View Source Code"
+    },
+    "settings": {
+        "disableMinSize": {
+            "title": "Disable minimum window size"
+        },
+        "enableReactDevtools": {
+            "title": "Enable React Developer Tools"
+        },
+        "frameless": {
+            "title": "Disable the window frame"
+        },
+        "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
+        "macosVibrancyStyle": {
+            "placeholder": "Window vibrancy style",
+            "title": "Window vibrancy style (requires restart)"
+        },
+        "notification": {
+            "logButton": "View Notification Log",
+            "settingsButton": "Notification Settings"
+        },
+        "plugins": {
+            "contributorModal": {
+                "contributorInfo": {
+                    "noPlugins": "This person has not made any plugins. They likely <0>contributed</0> to Equicord in other ways!",
+                    "plugins_one": "This person has <0>contributed</0> to {count} plugin!",
+                    "plugins_other": "This person has <0>contributed</0> to {count} plugins!"
+                }
+            },
+            "requiredToFunction": "This plugin is required for Equicord to function",
+            "pluginRequiredBy": "This plugin is required by: {pluginNames}",
+            "noDescription": "No description available"
+        },
+        "changelog": {
+            "manager": {
+                "minutes_one": "{count} minute ago",
+                "minutes_other": "{count} minutes ago",
+                "hours_one": "{count} hour ago",
+                "hours_other": "{count} hours ago",
+                "days_one": "{count} day ago",
+                "days_other": "{count} days ago"
+            },
+            "updateCard": {
+                "upToDate": "Repository check: {fromHash} (up to date)",
+                "outOfDate": "Repository check: {fromHash} → {toHash}",
+                "update": "Update: {fromHash} → {toHash}",
+                "commits_zero": " • No new commits",
+                "commits_one": " • {count} commit available",
+                "commits_other": " • {count} commits available",
+                "newPluginsCount": " • {plugins} new plugins",
+                "updatedPluginsCount": " • {plugins} updated plugins",
+                "newSettingsCount": " • {settings} new settings",
+                "updatedPlugins": "Updated Plugins",
+                "newSettings": "New Settings",
+                "newSettingInPlugin": "New setting in {pluginName}"
+            },
+            "newPluginsSection": {
+                "newPluginsCount": "New Plugins ({count})",
+                "recentlyAddedPlugins": "The following plugins have been added in recent updates:",
+                "numMorePlugins_one": "+{count} more plugin",
+                "numMorePlugins_other": "+{count} more plugins"
+            },
+            "missingRepoInfo": "Failed to retrieve repository information",
+            "alreadyUpToDate": "Already up todate with repository",
+            "foundCommits_zero": "No new commits",
+            "foundCommits_one": "Found {count} commit from repository",
+            "foundCommits_other": "Found {count} commits from repository",
+            "loggedCommits": "Logged commits from your latest update",
+            "upToDateLocalCopy": "Repository is up to date with your local copy",
+            "failedToFetchRepo": "Failed to fetch from repository",
+            "checkYourConnection": "Failed to connect to repository. Check your internet connection",
+            "failedtoFetchCommits": "Could not fetch commits from repository",
+            "repository": "Repository",
+            "viewRecentChanges": "View the most recent changes to Equicord. This fetches commits directly from the repository to show you what's new",
+            "failedToRetrieve": "Failed to retrieve - check console",
+            "upToDate": "Repository Up To Date",
+            "fetchRepo": "Fetch from Repository",
+            "checkYourInternet": "Make sure you have an internet connection and try again",
+            "recentChanges": "Recent Changes",
+            "updatedPluginsCount": "Updated Plugins ({plugins})",
+            "codeChanges_zero": "No Code Changes",
+            "codeChanges_one": "Code Changes ({count} commit)",
+            "codeChanges_other": "Code Changes ({count} commits)",
+            "emptyChangelog": "No commits available ahead of your current version. Click \"Fetch from Repository\" to check for new changes",
+            "updateLogs_zero": "No Update Logs",
+            "updateLogs_one": "Update Logs ({count} log)",
+            "updateLogs_other": "Update Logs ({count} logs)",
+            "previousSessions": "Previous update sessions with their commit history and plugin changes",
+            "title": "Changelog"
+        },
+        "restartRequired": {
+            "body": "A restart is required to apply this change",
+            "cancel": "Later!",
+            "confirm": "Restart now",
+            "title": "Restart Required",
+            "plugins": "The following plugins require a restart:"
+        },
+        "title": "Settings",
+        "transparent": {
+            "description": "You need a theme that supports transparency or this will do nothing. WILL STOP THE WINDOW FROM BEING RESIZABLE!! Requires a full restart",
+            "title": "Enable window transparency"
+        },
+        "useQuickCss": {
+            "description": "Loads your Custom CSS",
+            "title": "Enable Custom CSS"
+        },
+        "winCtrlQ": {
+            "title": "Register Ctrl+Q as shortcut to close Discord (alternative to Alt+F4)"
+        },
+        "winNativeTitleBar": {
+            "title": "Use Windows' native title bar instead of Discord's custom one"
+        }
+    },
+    "tabs": {
+        "settings": "Equicord Settings"
+    }
+}
