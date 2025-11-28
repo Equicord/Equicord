@@ -1,10 +1,10 @@
 {
-    "donate": "Támogatás",
-    "invite": "Meghívás",
-    "loading": "Betöltés...",
-    "cancel": "Mégse",
+    "donate": "Donate",
+    "invite": "Invite",
+    "loading": "Loading...",
+    "cancel": "Cancel",
     "logs": {
-        "clearLog": "Napló Törlése",
+        "clearLog": "Clear Log",
         "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
         "logCleared": "Log has been cleared",
         "clearLogs": "Clear Logs",
@@ -25,12 +25,34 @@
     "cloud": {
         "integrations": {
             "header": "Cloud Integrations",
-            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!"
+            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
+            "failedToRetrieveOAuth": "Setup failed (couldn't retrieve OAuth configuration).",
+            "enabled": "Cloud integrations enabled!",
+            "noSecret": "Setup failed (no secret returned?).",
+            "error": "Setup failed ({e})"
         },
         "settings": {
             "header": "Cloud Settings",
-            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!"
+            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!",
+            "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
+            "success": "Synchronized settings to the cloud!",
+            "failedToSync": "Could not synchronize settings to the cloud ({e}).",
+            "accountChanged": "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
+            "noSettings": "There are no settings in the cloud.",
+            "upToDate": "Your settings are up to date.",
+            "newerThanCloud": "Your local settings are newer than the cloud ones.",
+            "updated": "Your settings have been updated! Click here to restart to fully apply changes!",
+            "syncFromCloud": "Could not synchronize settings from the cloud ({e}).",
+            "apiDelete": "Could not delete settings (API returned {e}).",
+            "deleted": "Settings deleted from cloud!",
+            "failedToDelete": "Could not delete settings ({e}).",
+            "apiEraseAll": "Could not erase all data (API returned {e}), please contact support.",
+            "erased": "Successfully erased all data."
         }
+    },
+    "settingsSync": {
+        "imported": "Settings successfully imported. Restart to apply changes!",
+        "failedToImport": "Failed to import settings: {e}"
     },
     "contributorCard": {
         "contributionsButton": "See what you've contributed to",
@@ -42,7 +64,7 @@
         "donated": {
             "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
             "equicordDescription": "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
-            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server..",
+            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server.",
             "subtitle": "Thank you for donating!",
             "title": "Donations"
         },
