@@ -257,7 +257,7 @@ export default definePlugin({
                     </ErrorCard>
                 )}
 
-                <Flex flexDirection="column" style={{ gap: ".5em" }} className={Margins.top16}>
+                <Flex flexDirection="column" gap=".5em" className={Margins.top16}>
                     <Paragraph>
                         Go to the <Link href="https://discord.com/developers/applications">Discord Developer Portal</Link> to create an application and
                         get the application ID.

@@ -172,7 +172,7 @@ function OtherThemeCard({ theme, enabled, onChange, onDelete, showDeleteButton, 
                 )
             }
             footer={
-                <Flex flexDirection="row" style={{ gap: "0.2em" }}>
+                <Flex flexDirection="row" gap="0.2em">
                     {!!theme.website && <Link href={theme.website}>Website</Link>}
                     {!!(theme.website && theme.invite) && " • "}
                     {!!theme.invite && (
@@ -561,7 +561,7 @@ export function CspErrorCard() {
     const allowUrl = async (url: string) => {
         const { origin: baseUrl, host } = new URL(url);
 
-        const result = await VencordNative.csp.requestAddOverride(baseUrl, ["connect-src", "img-src", "style-src", "font-src"], "Vencord Themes");
+        const result = await VencordNative.csp.requestAddOverride(baseUrl, ["connect-src", "img-src", "style-src", "font-src"], "Equicord Themes");
         if (result !== "ok") return;
 
         CspBlockedUrls.forEach(url => {

@@ -12,13 +12,23 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Shows the Mod as Prefix",
         default: true,
-        restartNeeded: false
+        restartNeeded: false,
+        onChange: (e => {
+            if (e && settings.store.showSuffix) {
+                settings.store.showSuffix = false;
+            }
+        })
     },
     showSuffix: {
         type: OptionType.BOOLEAN,
         description: "Shows the Mod as Suffix",
         default: false,
-        restartNeeded: false
+        restartNeeded: false,
+        onChange: (e => {
+            if (e && settings.store.showPrefix) {
+                settings.store.showPrefix = false;
+            }
+        })
     },
     showCustom: {
         type: OptionType.BOOLEAN,
@@ -68,20 +78,14 @@ export const settings = definePluginSettings({
         default: true,
         restartNeeded: false
     },
-    showReplugged: {
-        type: OptionType.BOOLEAN,
-        description: "Show Replugged Badges",
-        default: true,
-        restartNeeded: false
-    },
     apiUrl: {
         type: OptionType.STRING,
         description: "API to use",
         default: "https://badges.equicord.org/",
         restartNeeded: false,
-        onChange: (e => {
-            if (!e) return settings.store.apiUrl = "https://badges.equicord.org/";
-            return e;
+        isValid: (value => {
+            if (!value) return false;
+            return true;
         })
     }
 });

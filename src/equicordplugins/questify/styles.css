@@ -229,9 +229,9 @@
     position: relative;
 }
 
-/* Background of bottom half of Quest tile. */
+/* Background of Quest tile. */
 .questify-quest-item-restyle > div {
-    background-color: var(--questify-color);
+    background-color: var(--questify-color) !important; /* Necessary !important */
 }
 
 /* Normal button text + SVG button text color. */
@@ -252,7 +252,7 @@
 }
 
 /* Quest name color. */
-.questify-quest-item-restyle > div > div[class^="rewardDescriptionContainer"] > div[class^="textContainer"] > h2[class^="eyebrow"] {
+.questify-quest-item-restyle > div > div[class^="rewardDescriptionContainer"] > div[class^="textContainer"] > [class^="eyebrow"] {
     color: var(--questify-quest-name) !important; /* Necessary !important */
 }
 
