@@ -1,63 +1,85 @@
 {
-    "donate": "Doneer",
-    "invite": "Uitnodiging",
-    "loading": "Laden...",
-    "cancel": "Annuleren",
+    "donate": "Donate",
+    "invite": "Invite",
+    "loading": "Loading...",
+    "cancel": "Cancel",
     "logs": {
-        "clearLog": "Log Wissen",
-        "clearLogConfirmation": "Weet je zeker dat je deze log wilt wissen? Dit kan niet ongedaan worden gemaakt.",
-        "logCleared": "Log is gewist",
-        "clearLogs": "Logs Wissen",
-        "clearLogsConfirmation": "Weet je zeker dat je deze logs wilt wissen? Dit kan niet ongedaan worden gemaakt.",
-        "clearLogsConfirmationNum_one": "Weet je zeker dat je {count} log wilt wissen",
-        "clearLogsConfirmationNum_other": "Weet je zeker dat je {count} logs wilt wissen",
-        "logsCleared": "De geselecteerde logs zijn gewist",
-        "hideLogs": "Verberg Logs",
-        "showLogs": "Logs Weergeven",
-        "clearAllLogs": "Alle Logs Wissen",
-        "clearAll": "Wis Alles",
-        "clearAllLogsConfirmation": "Weet je zeker dat je alle logs wilt wissen? Dit kan niet ongedaan worden gemaakt.",
-        "allLogsCleared": "Alle logs zijn gewist"
+        "clearLog": "Clear Log",
+        "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
+        "logCleared": "Log has been cleared",
+        "clearLogs": "Clear Logs",
+        "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
+        "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
+        "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
+        "logsCleared": "Selected logs have been cleared",
+        "hideLogs": "Hide Logs",
+        "showLogs": "Show Logs",
+        "clearAllLogs": "Clear All Logs",
+        "clearAll": "Clear All",
+        "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
+        "allLogsCleared": "All logs have been cleared"
     },
     "addonCard": {
-        "new": "NIEUW"
+        "new": "NEW"
     },
     "cloud": {
         "integrations": {
-            "header": "Cloud Integraties",
-            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!"
+            "header": "Cloud Integrations",
+            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
+            "failedToRetrieveOAuth": "Setup failed (couldn't retrieve OAuth configuration).",
+            "enabled": "Cloud integrations enabled!",
+            "noSecret": "Setup failed (no secret returned?).",
+            "error": "Setup failed ({e})"
         },
         "settings": {
-            "header": "Cloudinstellingen",
-            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!"
+            "header": "Cloud Settings",
+            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!",
+            "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
+            "success": "Synchronized settings to the cloud!",
+            "failedToSync": "Could not synchronize settings to the cloud ({e}).",
+            "accountChanged": "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
+            "noSettings": "There are no settings in the cloud.",
+            "upToDate": "Your settings are up to date.",
+            "newerThanCloud": "Your local settings are newer than the cloud ones.",
+            "updated": "Your settings have been updated! Click here to restart to fully apply changes!",
+            "syncFromCloud": "Could not synchronize settings from the cloud ({e}).",
+            "apiDelete": "Could not delete settings (API returned {e}).",
+            "deleted": "Settings deleted from cloud!",
+            "failedToDelete": "Could not delete settings ({e}).",
+            "apiEraseAll": "Could not erase all data (API returned {e}), please contact support.",
+            "erased": "Successfully erased all data."
         }
     },
+    "settingsSync": {
+        "imported": "Settings successfully imported. Restart to apply changes!",
+        "failedToImport": "Failed to import settings: {e}"
+    },
     "contributorCard": {
-        "contributionsButton": "Bekijk waar je aan hebt bijgedragen",
-        "description": "Omdat je bijgedragen hebt aan Equicord heb je nu een coole nieuwe badge!",
-        "subtitle": "Bedankt voor je bijdrage!",
-        "title": "Bijdragen"
+        "contributionsButton": "See what you've contributed to",
+        "description": "Since you've contributed to Equicord you now have a cool new badge!",
+        "subtitle": "Thank you for contributing!",
+        "title": "Contributions"
     },
     "donorCard": {
         "donated": {
-            "vencordDescription": "Alle Vencord gebruikers kunnen je badge zien! Je kunt je voordelen beheren door een bericht aan @{v} te versturen.",
-            "equicordDescription": "Alle Equicord gebruikers kunnen je badge zien! Je kunt je voordelen beheren door een ticket te maken in de Equicord server.",
-            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server..",
-            "subtitle": "Bedankt voor het doneren!",
-            "title": "Donaties"
+            "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
+            "equicordDescription": "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
+            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server.",
+            "subtitle": "Thank you for donating!",
+            "title": "Donations"
         },
         "notDonated": {
             "description": "Please consider supporting the development of Equicord by donating!",
-            "title": "Steun het Project"
+            "title": "Support the Project"
         }
     },
     "failedToRender": "Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!",
     "quickActions": {
-        "editQuickCSS": "Bewerk QuickCSS",
-        "notificationLog": "Meldingslogboek",
-        "openSettings": "Open Instellingen Map",
-        "relaunchDiscord": "Herstart Discord",
-        "title": "Snelle Acties",
+        "editQuickCSS": "Edit QuickCSS",
+        "notificationLog": "Notification Log",
+        "openSettings": "Open Settings Folder",
+        "relaunchDiscord": "Relaunch Discord",
+        "title": "Quick Actions",
         "viewSource": "View Source Code"
     },
     "settings": {
