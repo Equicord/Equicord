@@ -1,10 +1,10 @@
 {
-    "description": "Geholpen met het vertalen van Equicord",
+    "description": "Assists with translating Equicord",
     "settings": {
         "forceLocale": {
-            "description": "Forceer een andere taal voor Equicord om te gebruiken",
-            "followDiscord": "Standaardinstelling (volg Discord)"
+            "description": "Force a different locale for Equicord to use",
+            "followDiscord": "Default (follow Discord)"
         },
-        "showMissingKeys": "Als de huidige taal vertalingen ontbreekt, toon dan de sleutels in plaats van terug te vallen op het Engels"
+        "showMissingKeys": "If the current locale is missing translations, show the keys instead of falling back to English"
     }
 }
