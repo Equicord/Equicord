@@ -9,7 +9,7 @@ import "./VencordTab.css";
 import { openNotificationLogModal } from "@api/Notifications/notificationLog";
 import { useSettings } from "@api/Settings";
 import { Alert } from "@components/Alert";
-import { Button, TextButton } from "@components/Button";
+import { Button as VcButton } from "@components/Button";
 import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
@@ -24,7 +24,7 @@ import { DONOR_ROLE_ID, GUILD_ID, IS_MAC, IS_WINDOWS, VC_DONOR_ROLE_ID, VC_GUILD
 import { Margins } from "@utils/margins";
 import { identity, isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
-import { GuildMemberStore, React, Select, UserStore } from "@webpack/common";
+import { Button, GuildMemberStore, React, Select, UserStore } from "@webpack/common";
 import BadgeAPI from "plugins/_api/badges";
 
 import { openNotificationSettingsModal } from "./NotificationSettings";
@@ -204,13 +204,13 @@ function EquicordSettings() {
                 <Heading>Settings</Heading>
                 <Paragraph className={Margins.bottom20} style={{ color: "var(--text-muted)" }}>
                     Hint: You can change the position of this settings section in the{" "}
-                    <TextButton
-                        variant="link"
+                    <Button
+                        look={Button.Looks.LINK}
                         style={{ color: "var(--text-link)", display: "inline-block" }}
                         onClick={() => openPluginModal(Vencord.Plugins.plugins.Settings)}
                     >
                         settings of the Settings plugin
-                    </TextButton>
+                    </Button>
                     !
                 </Paragraph>
 
@@ -314,12 +314,12 @@ function EquicordSettings() {
                 title="Equicord Notifications"
             >
                 <Flex>
-                    <Button onClick={openNotificationSettingsModal}>
+                    <VcButton onClick={openNotificationSettingsModal}>
                         Notification Settings
-                    </Button>
-                    <Button onClick={openNotificationLogModal} style={{ marginLeft: 16 }}>
+                    </VcButton>
+                    <VcButton onClick={openNotificationLogModal} style={{ marginLeft: 16 }}>
                         View Notification Log
-                    </Button>
+                    </VcButton>
                 </Flex>
             </section>
         </SettingsTab>
@@ -328,9 +328,15 @@ function EquicordSettings() {
 
 function DonateButtonComponent() {
     return (
-        <Flex style={{ marginTop: "1em" }}>
-            <DonateButton />
-            <InviteButton />
+        <Flex>
+            <DonateButton
+                look={Button.Looks.FILLED}
+                color={Button.Colors.TRANSPARENT}
+                style={{ marginTop: "1em" }} />
+            <InviteButton
+                look={Button.Looks.FILLED}
+                color={Button.Colors.TRANSPARENT}
+                style={{ marginTop: "1em" }} />
         </Flex>
     );
 }

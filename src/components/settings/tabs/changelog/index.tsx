@@ -519,7 +519,7 @@ function ChangelogContent() {
                     <>
                         <Button
                             size="small"
-                            variant={showHistory ? "secondary" : "primary"}
+                            variant={showHistory ? "primary" : "secondary"}
                             onClick={() => setShowHistory(!showHistory)}
                             style={{ marginLeft: "8px" }}
                         >

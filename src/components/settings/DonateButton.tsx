@@ -16,44 +16,59 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { TextButton, TextButtonProps } from "@components/Button";
 import { Heart } from "@components/Heart";
 import { openInviteModal } from "@utils/discord";
-import { showToast } from "@webpack/common";
+import { ButtonProps } from "@vencord/discord-types";
+import { Button, showToast } from "@webpack/common";
 
-export function VCDonateButton(props: Omit<TextButtonProps, "onClick" | "variant">) {
+export function VCDonateButton({
+    look = Button.Looks.LINK,
+    color = Button.Colors.TRANSPARENT,
+    ...props
+}: Partial<ButtonProps>) {
     return (
-        <TextButton
+        <Button
             {...props}
-            variant="secondary"
+            look={look}
+            color={color}
             onClick={() => VencordNative.native.openExternal("https://github.com/sponsors/Vendicated")}
             className="vc-donate-button"
         >
             <Heart />
             Donate
-        </TextButton>
+        </Button>
     );
 }
 
-export function DonateButton(props: Omit<TextButtonProps, "onClick" | "variant">) {
+export function DonateButton({
+    look = Button.Looks.LINK,
+    color = Button.Colors.TRANSPARENT,
+    ...props
+}: Partial<ButtonProps>) {
     return (
-        <TextButton
+        <Button
             {...props}
-            variant="secondary"
+            look={look}
+            color={color}
             onClick={() => VencordNative.native.openExternal("https://github.com/sponsors/thororen1234")}
             className="vc-donate-button"
         >
             <Heart />
             Donate
-        </TextButton>
+        </Button>
     );
 }
 
-export function InviteButton(props: Omit<TextButtonProps, "onClick" | "variant">) {
+export function InviteButton({
+    look = Button.Looks.LINK,
+    color = Button.Colors.TRANSPARENT,
+    ...props
+}: Partial<ButtonProps>) {
     return (
-        <TextButton
+        <Button
             {...props}
-            variant="secondary"
+            look={look}
+            color={color}
             onClick={async e => {
                 e.preventDefault();
                 openInviteModal("equicord-1173279886065029291").catch(() =>
@@ -63,6 +78,6 @@ export function InviteButton(props: Omit<TextButtonProps, "onClick" | "variant">
             className="vc-donate-button"
         >
             Invite
-        </TextButton>
+        </Button>
     );
 }

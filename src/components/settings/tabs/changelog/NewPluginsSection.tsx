@@ -6,7 +6,7 @@
 
 import { useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
-import { TextButton } from "@components/Button";
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
@@ -164,14 +164,15 @@ export function NewPluginsSection({
                         }
                     >
                         {tooltipProps => (
-                            <TextButton
+                            <Button
                                 {...tooltipProps}
                                 variant="link"
+                                size="small"
                                 onClick={() => location.reload()}
                                 className={Margins.top16}
                             >
                                 Restart Required
-                            </TextButton>
+                            </Button>
                         )}
                     </Tooltip>
                 </div>
