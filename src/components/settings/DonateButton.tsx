@@ -21,10 +21,11 @@ import { Heart } from "@components/Heart";
 import { openInviteModal } from "@utils/discord";
 import { showToast } from "@webpack/common";
 
-export function VCDonateButton(props: Omit<TextButtonProps, "onClick">) {
+export function VCDonateButton(props: Omit<TextButtonProps, "onClick" | "variant">) {
     return (
         <TextButton
             {...props}
+            variant="secondary"
             onClick={() => VencordNative.native.openExternal("https://github.com/sponsors/Vendicated")}
             className="vc-donate-button"
         >
@@ -34,10 +35,11 @@ export function VCDonateButton(props: Omit<TextButtonProps, "onClick">) {
     );
 }
 
-export function DonateButton(props: Omit<TextButtonProps, "onClick">) {
+export function DonateButton(props: Omit<TextButtonProps, "onClick" | "variant">) {
     return (
         <TextButton
             {...props}
+            variant="secondary"
             onClick={() => VencordNative.native.openExternal("https://github.com/sponsors/thororen1234")}
             className="vc-donate-button"
         >
@@ -47,10 +49,11 @@ export function DonateButton(props: Omit<TextButtonProps, "onClick">) {
     );
 }
 
-export function InviteButton(props: Omit<TextButtonProps, "onClick">) {
+export function InviteButton(props: Omit<TextButtonProps, "onClick" | "variant">) {
     return (
         <TextButton
             {...props}
+            variant="secondary"
             onClick={async e => {
                 e.preventDefault();
                 openInviteModal("equicord-1173279886065029291").catch(() =>

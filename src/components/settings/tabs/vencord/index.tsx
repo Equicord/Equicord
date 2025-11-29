@@ -226,7 +226,7 @@ function EquicordSettings() {
                                     s.warning.enabled ? (
                                         <>
                                             {s.description}
-                                            <Alert.Warning className={Margins.top8}>
+                                            <Alert.Warning className={Margins.top8} style={{ width: "100%" }}>
                                                 {s.warning.message}
                                             </Alert.Warning>
                                         </>
