@@ -87,14 +87,30 @@
     color: var(--text-muted);
 }
 
-.vc-plugins-restart-button {
-    background-color: var(--background-color) !important;
-    border: 1px solid var(--info-warning-foreground) !important;
-    margin-top: 0.5em;
+.vc-plugins-restart-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
-.vc-plugins-restart-button:hover {
+.vc-plugins-restart-card-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.vc-plugins-restart-button {
     background-color: var(--info-warning-foreground) !important;
+    border: 1px solid var(--info-warning-foreground) !important;
+    color: var(--white-500) !important;
+    flex-shrink: 0;
+}
+
+.vc-plugins-restart-button-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
 }
 
 .vc-plugin-stats {

@@ -22,6 +22,7 @@ import * as DataStore from "@api/DataStore";
 import { isPluginEnabled, stopPlugin } from "@api/PluginManager";
 import { useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
+import { Alert } from "@components/Alert";
 import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { Divider } from "@components/Divider";
@@ -60,27 +61,53 @@ function showErrorToast(message: string) {
     });
 }
 
-function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetCheckAndDo }) {
+function RestartIcon(props: { className?: string; color?: string; width?: number; height?: number; style?: React.CSSProperties; }) {
     return (
-        <Card className={classes(cl("info-card"), required && "vc-warning-card")}>
-            {required ? (
-                <>
-                    <HeadingTertiary>Restart required!</HeadingTertiary>
-                    <Paragraph className={cl("dep-text")}>
-                        Restart now to apply new plugins and their settings
-                    </Paragraph>
-                    <Button className={cl("restart-button")} onClick={() => location.reload()}>
-                        Restart
+        <svg
+            className={props.className}
+            style={props.style}
+            width={props.width ?? 24}
+            height={props.height ?? 24}
+            viewBox="0 0 24 24"
+            fill="none"
+        >
+            <path
+                fill={props.color ?? "currentColor"}
+                d="M3 2a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 0-2H5.07a8 8 0 1 1 13.29 8.86l-.01.01a7.97 7.97 0 0 1-1.9 1.78 1 1 0 0 0 1.1 1.67c.19-.12.36-.25.53-.38.7-.54 1.32-1.16 1.85-1.85l.01-.01A9.95 9.95 0 0 0 22 12 10 10 0 0 0 4 6V3a1 1 0 0 0-1-1ZM3.18 14.06a1 1 0 0 0-.61 1.27c.11.33.24.64.4.95a1 1 0 0 0 1.8-.86c-.12-.24-.22-.5-.32-.75a1 1 0 0 0-1.27-.61ZM5.33 18.12a1 1 0 0 0 .09 1.41c.51.45 1.07.85 1.67 1.18a1 1 0 0 0 .98-1.74 8.02 8.02 0 0 1-1.33-.95 1 1 0 0 0-1.41.1ZM14.17 20.8a1 1 0 0 0-1.12-.87 8.08 8.08 0 0 1-1.87.03 1 1 0 1 0-.2 1.99 10.1 10.1 0 0 0 2.32-.03 1 1 0 0 0 .87-1.13Z"
+            />
+        </svg>
+    );
+}
+
+function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetCheckAndDo }) {
+    if (required) {
+        return (
+            <Alert.Warning>
+                <div className={cl("restart-card-content")}>
+                    <div className={cl("restart-card-text")}>
+                        <HeadingTertiary>Restart Required!</HeadingTertiary>
+                        <Paragraph className={cl("dep-text")}>
+                            Restart now to apply new plugins and their settings
+                        </Paragraph>
+                    </div>
+                    <Button
+                        size="small"
+                        className={cl("restart-button")}
+                        onClick={() => location.reload()}
+                    >
+                        <RestartIcon className={cl("restart-button-icon")} /> Restart
                     </Button>
-                </>
-            ) : (
-                <>
-                    <HeadingTertiary>Plugin Management</HeadingTertiary>
-                    <Paragraph>Press the cog wheel or info icon to get more info on a plugin</Paragraph>
-                    <Paragraph>Plugins with a cog wheel have settings you can modify!</Paragraph>
-                </>
-            )}
-            {enabledPlugins.length > 0 && !required && (
+                </div>
+            </Alert.Warning>
+        );
+    }
+
+    return (
+        <Card className={cl("info-card")}>
+            <HeadingTertiary>Plugin Management</HeadingTertiary>
+            <Paragraph>Press the cog wheel or info icon to get more info on a plugin</Paragraph>
+            <Paragraph>Plugins with a cog wheel have settings you can modify!</Paragraph>
+            {enabledPlugins.length > 0 && (
                 <Button
                     size="small"
                     className={"vc-plugins-disable-warning vc-modal-align-reset"}
