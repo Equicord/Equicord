@@ -1,105 +1,105 @@
 {
-    "donate": "Donate",
-    "invite": "Invite",
-    "loading": "Loading...",
-    "cancel": "Cancel",
+    "donate": "Spenden",
+    "invite": "Einladen",
+    "loading": "Laden...",
+    "cancel": "Abbrechen",
     "logs": {
-        "clearLog": "Clear Log",
-        "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
-        "logCleared": "Log has been cleared",
-        "clearLogs": "Clear Logs",
-        "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
-        "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
-        "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
-        "logsCleared": "Selected logs have been cleared",
-        "hideLogs": "Hide Logs",
-        "showLogs": "Show Logs",
-        "clearAllLogs": "Clear All Logs",
-        "clearAll": "Clear All",
-        "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
-        "allLogsCleared": "All logs have been cleared"
+        "clearLog": "Protokoll löschen",
+        "clearLogConfirmation": "Sind Sie sicher, dass Sie dieses Log löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+        "logCleared": "Log wurde gelöscht",
+        "clearLogs": "Protokolle leeren",
+        "clearLogsConfirmation": "Sind Sie sicher, dass Sie diese Logs löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+        "clearLogsConfirmationNum_one": "Sind Sie sicher, dass Sie {count} Log löschen möchten",
+        "clearLogsConfirmationNum_other": "Sind Sie sicher, dass Sie {count} Logs löschen möchten",
+        "logsCleared": "Ausgewählte Logs wurden gelöscht",
+        "hideLogs": "Logs ausblenden",
+        "showLogs": "Logs anzeigen",
+        "clearAllLogs": "Alle Logs löschen",
+        "clearAll": "Alles löschen",
+        "clearAllLogsConfirmation": "Sind Sie sicher, dass Sie alle Logs löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+        "allLogsCleared": "Alle Logs wurden gelöscht"
     },
     "addonCard": {
-        "new": "NEW"
+        "new": "NEU"
     },
     "cloud": {
         "integrations": {
-            "header": "Cloud Integrations",
-            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
-            "failedToRetrieveOAuth": "Setup failed (couldn't retrieve OAuth configuration).",
-            "enabled": "Cloud integrations enabled!",
+            "header": "Cloud-Integration",
+            "reauthenticateOtherClient": "Wir haben festgestellt, dass Cloud-Integrationen in einem anderen Client aktiviert sind! Aufgrund von Einschränkungen müssen Sie sich erneut authentifizieren, um sie weiterhin nutzen zu können. Klicken Sie hier, um zur Einstellungsseite zu gehen!",
+            "failedToRetrieveOAuth": "Setup fehlgeschlagen (OAuth Konfiguration konnte nicht abgerufen werden).",
+            "enabled": "Cloud-Integrationen aktiviert!",
             "noSecret": "Setup failed (no secret returned?).",
-            "error": "Setup failed ({e})"
+            "error": "Setup fehlgeschlagen ({e})"
         },
         "settings": {
-            "header": "Cloud Settings",
-            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!",
-            "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
-            "success": "Synchronized settings to the cloud!",
-            "failedToSync": "Could not synchronize settings to the cloud ({e}).",
-            "accountChanged": "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
-            "noSettings": "There are no settings in the cloud.",
-            "upToDate": "Your settings are up to date.",
-            "newerThanCloud": "Your local settings are newer than the cloud ones.",
-            "updated": "Your settings have been updated! Click here to restart to fully apply changes!",
-            "syncFromCloud": "Could not synchronize settings from the cloud ({e}).",
-            "apiDelete": "Could not delete settings (API returned {e}).",
-            "deleted": "Settings deleted from cloud!",
-            "failedToDelete": "Could not delete settings ({e}).",
-            "apiEraseAll": "Could not erase all data (API returned {e}), please contact support.",
-            "erased": "Successfully erased all data."
+            "header": "Cloud Einstellungen",
+            "updatedRemote": "Deine Einstellungen wurden aktualisiert! Klicke hier, um neu zu Starten und die Änderungen vollständig zu bestätigen!",
+            "apiReject": "Einstellungen zur Cloud konnten nicht synchronisiert werden ({e}).",
+            "success": "Synchronisierte Einstellungen zur Cloud!",
+            "failedToSync": "Einstellungen zur Cloud konnten nicht synchronisiert werden ({e}).",
+            "accountChanged": "Cloud-Sync wurde deaktiviert, da dieses Konto nicht mit der Cloud-App verbunden ist. Sie können es erneut aktivieren, indem Sie dieses Konto in den Cloud-Einstellungen verbinden. (Hinweis: Ihre Einstellungen werden separat gespeichert)",
+            "noSettings": "Es gibt keine Einstellungen in der Cloud.",
+            "upToDate": "Ihre Einstellungen sind aktuell.",
+            "newerThanCloud": "Ihre lokalen Einstellungen sind neuer, als die in der Cloud.",
+            "updated": "Deine Einstellungen wurden aktualisiert! Klicke hier, um neu zu Starten und die Änderungen vollständig zu bestätigen!",
+            "syncFromCloud": "Einstellungen aus der Cloud konnten nicht synchronisiert werden ({e}).",
+            "apiDelete": "Einstellungen konnten nicht gelöscht werden (API zurückgegeben {e}).",
+            "deleted": "Einstellungen aus der Cloud gelöscht!",
+            "failedToDelete": "Einstellungen konnten nicht gelöscht werden ({e}).",
+            "apiEraseAll": "Konnte nicht alle Daten löschen (API lieferte {e}), bitte kontaktieren Sie den Support.",
+            "erased": "Alle Daten erfolgreich gelöscht."
         }
     },
     "settingsSync": {
-        "imported": "Settings successfully imported. Restart to apply changes!",
-        "failedToImport": "Failed to import settings: {e}"
+        "imported": "Einstellungen erfolgreich importiert. Starten Sie neu, um die Änderungen anzuwenden!",
+        "failedToImport": "Fehler beim Importieren der Einstellungen: {e}"
     },
     "contributorCard": {
-        "contributionsButton": "See what you've contributed to",
-        "description": "Since you've contributed to Equicord you now have a cool new badge!",
-        "subtitle": "Thank you for contributing!",
-        "title": "Contributions"
+        "contributionsButton": "Sehen Sie, zu was Sie beigetragen haben",
+        "description": "Da du bei Equicord mitgeholfen hast, hast du jetzt ein cooles neues Abzeichen!",
+        "subtitle": "Vielen Dank für deinen Beitrag!",
+        "title": "Mitwirkung"
     },
     "donorCard": {
         "donated": {
-            "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
-            "equicordDescription": "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
-            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server.",
-            "subtitle": "Thank you for donating!",
-            "title": "Donations"
+            "vencordDescription": "Alle Vencord Nutzer können Ihr Abzeichen sehen! Sie können Ihre Vorteile verwalten, indem Sie auf die Nachricht @{v} klicken.",
+            "equicordDescription": "Alle Equicord Nutzer können Ihr Abzeichen sehen! Sie können Ihre Vorteile verwalten, indem Sie ein Ticket auf dem Equicord Server erstellen.",
+            "description": "Alle Vencord Nutzer können Ihr Vencord Spender Abzeichen sehen, und Equicord Nutzer können Ihr Equicord Spender Abzeichen sehen. Um Ihr Vencord Spender-Abzeichen zu ändern, kontaktieren Sie @vending.machine. Für Ihr Equicord Spender Abzeichen erstellen Sie ein Ticket auf dem Equicord Server.",
+            "subtitle": "Vielen Dank für Ihre Spende!",
+            "title": "Spenden"
         },
         "notDonated": {
-            "description": "Please consider supporting the development of Equicord by donating!",
-            "title": "Support the Project"
+            "description": "Bitte unterstützen Sie die Entwicklung von Equicord durch Spenden!",
+            "title": "Unterstütze das Projekt!"
         }
     },
-    "failedToRender": "Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!",
+    "failedToRender": "Fehler beim Rendern der Registerkarte {tab}. Wenn dieses Problem weiterhin besteht, versuchen Sie den Installer zu benutzen, um es neu zu installieren!",
     "quickActions": {
-        "editQuickCSS": "Edit QuickCSS",
-        "notificationLog": "Notification Log",
-        "openSettings": "Open Settings Folder",
-        "relaunchDiscord": "Relaunch Discord",
-        "title": "Quick Actions",
-        "viewSource": "View Source Code"
+        "editQuickCSS": "QuickCSS bearbeiten",
+        "notificationLog": "Benachrichtigungsprotokoll",
+        "openSettings": "Einstellungsordner öffnen",
+        "relaunchDiscord": "Discord neu starten",
+        "title": "Schnellaktionen",
+        "viewSource": "Quellcode anzeigen"
     },
     "settings": {
         "disableMinSize": {
-            "title": "Disable minimum window size"
+            "title": "Minimale Fenstergröße deaktivieren"
         },
         "enableReactDevtools": {
-            "title": "Enable React Developer Tools"
+            "title": "React Developer Tools aktivieren"
         },
         "frameless": {
-            "title": "Disable the window frame"
+            "title": "Fensterrahmen deaktivieren"
         },
-        "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
+        "hint": "Hinweis: Sie können die Position dieses Einstellungsbereichs in den <0>Einstellungen des Einstellungen Plugin</0> ändern!",
         "macosVibrancyStyle": {
-            "placeholder": "Window vibrancy style",
-            "title": "Window vibrancy style (requires restart)"
+            "placeholder": "Stil des Fensters",
+            "title": "Stil des Fensters (Neustart erforderlich)"
         },
         "notification": {
-            "logButton": "View Notification Log",
-            "settingsButton": "Notification Settings"
+            "logButton": "Benachrichtigungsprotokoll anzeigen",
+            "settingsButton": "Benachrichtigungseinstellungen"
         },
         "plugins": {
             "contributorModal": {
@@ -109,91 +109,91 @@
                     "plugins_other": "This person has <0>contributed</0> to {count} plugins!"
                 }
             },
-            "requiredToFunction": "This plugin is required for Equicord to function",
-            "pluginRequiredBy": "This plugin is required by: {pluginNames}",
-            "noDescription": "No description available"
+            "requiredToFunction": "Dieses Plugin wird benötigt, damit Equicord funktioniert",
+            "pluginRequiredBy": "Dieses Plugin wird benötigt von: {pluginNames}",
+            "noDescription": "Keine Beschreibung verfügbar"
         },
         "changelog": {
             "manager": {
-                "minutes_one": "{count} minute ago",
-                "minutes_other": "{count} minutes ago",
-                "hours_one": "{count} hour ago",
-                "hours_other": "{count} hours ago",
-                "days_one": "{count} day ago",
-                "days_other": "{count} days ago"
+                "minutes_one": "Vor {count} Minute",
+                "minutes_other": "Vor {count} Minuten",
+                "hours_one": "Vor {count} Stunde",
+                "hours_other": "Vor {count} Stunden",
+                "days_one": "{count} Tag her",
+                "days_other": "{count} Tage her"
             },
             "updateCard": {
-                "upToDate": "Repository check: {fromHash} (up to date)",
-                "outOfDate": "Repository check: {fromHash} → {toHash}",
-                "update": "Update: {fromHash} → {toHash}",
-                "commits_zero": " • No new commits",
-                "commits_one": " • {count} commit available",
-                "commits_other": " • {count} commits available",
-                "newPluginsCount": " • {plugins} new plugins",
-                "updatedPluginsCount": " • {plugins} updated plugins",
-                "newSettingsCount": " • {settings} new settings",
-                "updatedPlugins": "Updated Plugins",
-                "newSettings": "New Settings",
-                "newSettingInPlugin": "New setting in {pluginName}"
+                "upToDate": "Repository Prüfung: {fromHash} (aktuell)",
+                "outOfDate": "Repository Prüfung: {fromHash} → {toHash}",
+                "update": "Aktualisierung: {fromHash} → {toHash}",
+                "commits_zero": " • Keine neuen Commits",
+                "commits_one": " • {count} Commit verfügbar",
+                "commits_other": " • {count} Commits verfügbar",
+                "newPluginsCount": " • {plugins} neue Plugins",
+                "updatedPluginsCount": " • {plugins} aktualisierte Plugins",
+                "newSettingsCount": " • {settings} neue Einstellungen",
+                "updatedPlugins": "Aktualisierte Plugins",
+                "newSettings": "Neue Einstellungen",
+                "newSettingInPlugin": "Neue Einstellung in {pluginName}"
             },
             "newPluginsSection": {
-                "newPluginsCount": "New Plugins ({count})",
-                "recentlyAddedPlugins": "The following plugins have been added in recent updates:",
-                "numMorePlugins_one": "+{count} more plugin",
-                "numMorePlugins_other": "+{count} more plugins"
+                "newPluginsCount": "Neue Plugins ({count})",
+                "recentlyAddedPlugins": "Die folgenden Plugins wurden in den letzten Updates hinzugefügt:",
+                "numMorePlugins_one": "+{count} mehr Plugin",
+                "numMorePlugins_other": "+{count} mehr Plugins"
             },
-            "missingRepoInfo": "Failed to retrieve repository information",
+            "missingRepoInfo": "Fehler beim Abrufen der Repository Informationen",
             "alreadyUpToDate": "Already up todate with repository",
-            "foundCommits_zero": "No new commits",
-            "foundCommits_one": "Found {count} commit from repository",
-            "foundCommits_other": "Found {count} commits from repository",
-            "loggedCommits": "Logged commits from your latest update",
-            "upToDateLocalCopy": "Repository is up to date with your local copy",
-            "failedToFetchRepo": "Failed to fetch from repository",
-            "checkYourConnection": "Failed to connect to repository. Check your internet connection",
-            "failedtoFetchCommits": "Could not fetch commits from repository",
+            "foundCommits_zero": "Keine neuen Commits",
+            "foundCommits_one": "{count} Commit aus dem Repository gefunden",
+            "foundCommits_other": "{count} Commits aus dem Repository gefunden",
+            "loggedCommits": "Protokollierte Commits von Ihrem letzten Update",
+            "upToDateLocalCopy": "Das Projektarchiv ist mit Ihrer lokalen Kopie aktualisiert",
+            "failedToFetchRepo": "Fehler beim Abrufen aus dem Repository",
+            "checkYourConnection": "Verbindung zum Repository fehlgeschlagen. Überprüfen Sie Ihre Internetverbindung",
+            "failedtoFetchCommits": "Konnte Commits nicht aus dem Repository holen",
             "repository": "Repository",
-            "viewRecentChanges": "View the most recent changes to Equicord. This fetches commits directly from the repository to show you what's new",
-            "failedToRetrieve": "Failed to retrieve - check console",
-            "upToDate": "Repository Up To Date",
-            "fetchRepo": "Fetch from Repository",
-            "checkYourInternet": "Make sure you have an internet connection and try again",
-            "recentChanges": "Recent Changes",
-            "updatedPluginsCount": "Updated Plugins ({plugins})",
-            "codeChanges_zero": "No Code Changes",
-            "codeChanges_one": "Code Changes ({count} commit)",
-            "codeChanges_other": "Code Changes ({count} commits)",
+            "viewRecentChanges": "Zeige die letzten Änderungen an Equicord. Dies wird direkt aus dem Repository geladen um dir anzuzeigen, was neu ist",
+            "failedToRetrieve": "Fehler beim Abrufen - Überprüfe die Konsole",
+            "upToDate": "Das Repository ist aktuell",
+            "fetchRepo": "Aus Repository abrufen",
+            "checkYourInternet": "Stellen Sie sicher, dass Sie eine Internetverbindung haben, und versuchen Sie es erneut.",
+            "recentChanges": "Letzte Änderungen",
+            "updatedPluginsCount": "Aktualisierte Plugins ({plugins})",
+            "codeChanges_zero": "Keine Code Änderungen",
+            "codeChanges_one": "Code Änderungen ({count} Commit)",
+            "codeChanges_other": "Code Änderungen ({count} Commits)",
             "emptyChangelog": "No commits available ahead of your current version. Click \"Fetch from Repository\" to check for new changes",
-            "updateLogs_zero": "No Update Logs",
-            "updateLogs_one": "Update Logs ({count} log)",
-            "updateLogs_other": "Update Logs ({count} logs)",
+            "updateLogs_zero": "Keine Aktualisierungsprotokolle",
+            "updateLogs_one": "Aktualisierungsprotokolle ({count} Log)",
+            "updateLogs_other": "Aktualisierungsprotokolle ({count} Logs)",
             "previousSessions": "Previous update sessions with their commit history and plugin changes",
-            "title": "Changelog"
+            "title": "Änderungsprotokoll"
         },
         "restartRequired": {
-            "body": "A restart is required to apply this change",
-            "cancel": "Later!",
-            "confirm": "Restart now",
-            "title": "Restart Required",
-            "plugins": "The following plugins require a restart:"
+            "body": "Ein Neustart ist erforderlich, um diese Änderung zu übernehmen",
+            "cancel": "Später!",
+            "confirm": "Jetzt neu starten",
+            "title": "Neustart erforderlich",
+            "plugins": "Die folgenden Plugins erfordern einen Neustart:"
         },
-        "title": "Settings",
+        "title": "Einstellungen",
         "transparent": {
             "description": "You need a theme that supports transparency or this will do nothing. WILL STOP THE WINDOW FROM BEING RESIZABLE!! Requires a full restart",
-            "title": "Enable window transparency"
+            "title": "Fenstertransparenz aktivieren"
         },
         "useQuickCss": {
-            "description": "Loads your Custom CSS",
-            "title": "Enable Custom CSS"
+            "description": "Lädt dein eigenes CSS",
+            "title": "Eigene CSS aktivieren"
         },
         "winCtrlQ": {
-            "title": "Register Ctrl+Q as shortcut to close Discord (alternative to Alt+F4)"
+            "title": "Registriere Strg+Q als Tastenkürzel um Discord zu schließen (Alternative zu Alt+F4)"
         },
         "winNativeTitleBar": {
-            "title": "Use Windows' native title bar instead of Discord's custom one"
+            "title": "Benutze die native Titelleiste von Windows anstelle von Discords benutzerdefiniertem"
         }
     },
     "tabs": {
-        "settings": "Equicord Settings"
+        "settings": "Equicord Einstellungen"
     }
 }
