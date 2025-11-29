@@ -1,37 +1,37 @@
 {
     "commands": {
-        "errorExecuting": "An Error occurred while executing command \"{name}\""
+        "errorExecuting": "Ocorreu um erro ao executar o comando “{name}”"
     },
     "notifications": {
-        "dismissNotification": "Dismiss Notification",
-        "noNotifications": "No notifications yet",
-        "notificationLog": "Notification Log",
-        "notificationSettings": "Notification Settings",
+        "dismissNotification": "Ignorar notificação",
+        "noNotifications": "Nenhuma notificação ainda",
+        "notificationLog": "Registro de notificações",
+        "notificationSettings": "Configurações de Notificação",
         "logs": {
-            "title": "Are you sure?",
-            "body_zero": "No notification selected.",
-            "body_one": "This will permanently remove {count} notification. This action cannot be undone.",
-            "body_other": "This will permanently remove {count} notifications. This action cannot be undone.",
-            "confirm": "Do it!",
-            "cancel": "Nevermind",
-            "clearNotificationLog": "Clear Notification Log"
+            "title": "Você tem certeza?",
+            "body_zero": "Nenhuma notificação selecionada.",
+            "body_one": "Isso removerá permanentemente {count} notificação. Esta ação não pode ser desfeita.",
+            "body_other": "Isso removerá permanentemente {count} notificações. Esta ação não pode ser desfeita.",
+            "confirm": "Vai em frente!",
+            "cancel": "Deixa para lá",
+            "clearNotificationLog": "Limpar registro de notificações"
         },
         "missedNotifications": {
-            "title": "While you were away",
-            "body_one": "{count} notification received",
-            "body_other": "{count} notifications received"
+            "title": "Enquanto você estava fora",
+            "body_one": "{count} Notificação recebidas",
+            "body_other": "{count} Notificações recebidas"
         }
     },
     "memberListDecorators": {
-        "fallback": "Failed to render {key} Member List Decorator"
+        "fallback": "Falha ao renderizar {key} Decorador da lista de membros"
     },
     "messageAccessories": {
-        "fallback": "Failed to render {key} Message Accessory"
+        "fallback": "Falha ao renderizar {key} Acessório de mensagem"
     },
     "messageDecorations": {
-        "fallback": "Failed to render {key} Message Decoration"
+        "fallback": "Falha ao renderizar {key} Decoração da mensagem"
     },
     "notices": {
-        "fallback": "Error Showing Notice"
+        "fallback": "Erro ao exibir aviso"
     }
 }
