@@ -1,0 +1,50 @@
+.urlhighlight-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    min-height: 200px;
+}
+
+.urlhighlight-entry-row {
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.urlhighlight-color-wrapper {
+    width: 52px !important;
+    height: 52px !important;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    overflow: hidden;
+    transform: scale(0.35) !important;
+    transform-origin: top left !important;
+}
+
+.urlhighlight-color-wrapper > * {
+    pointer-events: auto !important;
+    transform: scale(2.86) !important;
+
+    /* 1/0.35 */
+}
+
+.urlhighlight-delete {
+    flex-shrink: 0;
+    min-width: 28px;
+    min-height: 28px;
+}
+
+.urlhighlight-delete svg,
+.urlhighlight-delete path {
+    fill: var(--text-muted) !important;
+}
+
+.urlhighlight-add-button {
+    margin-top: 16px;
+    align-self: flex-start;
+    width: fit-content;
+}
