@@ -22,6 +22,7 @@ import * as DataStore from "@api/DataStore";
 import { isPluginEnabled, stopPlugin } from "@api/PluginManager";
 import { useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -35,7 +36,7 @@ import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useAwaiter, useIntersection } from "@utils/react";
-import { Alerts, Button, lodash, Parser, React, Select, TextInput, Toasts, Tooltip, useMemo, useState } from "@webpack/common";
+import { Alerts, lodash, Parser, React, Select, TextInput, Toasts, Tooltip, useMemo, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
@@ -81,7 +82,7 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
             )}
             {enabledPlugins.length > 0 && !required && (
                 <Button
-                    size={Button.Sizes.SMALL}
+                    size="small"
                     className={"vc-plugins-disable-warning vc-modal-align-reset"}
                     onClick={() => {
                         return openWarningModal(null, null, null, false, enabledPlugins.length, resetCheckAndDo);

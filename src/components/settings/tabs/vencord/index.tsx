@@ -8,6 +8,8 @@ import "./VencordTab.css";
 
 import { openNotificationLogModal } from "@api/Notifications/notificationLog";
 import { useSettings } from "@api/Settings";
+import { Alert } from "@components/Alert";
+import { Button, TextButton } from "@components/Button";
 import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
@@ -18,11 +20,11 @@ import { DonateButton, InviteButton, openContributorModal, openPluginModal, Sett
 import { QuickAction, QuickActionCard } from "@components/settings/QuickAction";
 import { SpecialCard } from "@components/settings/SpecialCard";
 import { gitRemote } from "@shared/vencordUserAgent";
-import { DONOR_ROLE_ID, GUILD_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/constants";
+import { DONOR_ROLE_ID, GUILD_ID, IS_MAC, IS_WINDOWS, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { identity, isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
-import { Button, GuildMemberStore, React, Select, UserStore } from "@webpack/common";
+import { GuildMemberStore, React, Select, UserStore } from "@webpack/common";
 import BadgeAPI from "plugins/_api/badges";
 
 import { openNotificationSettingsModal } from "./NotificationSettings";
@@ -48,9 +50,7 @@ function EquicordSettings() {
         [],
     );
 
-    const isWindows = navigator.platform.toLowerCase().startsWith("win");
-    const isMac = navigator.platform.toLowerCase().startsWith("mac");
-    const needsVibrancySettings = IS_DISCORD_DESKTOP && isMac;
+    const needsVibrancySettings = IS_DISCORD_DESKTOP && IS_MAC;
 
     const user = UserStore?.getCurrentUser();
 
@@ -75,7 +75,7 @@ function EquicordSettings() {
                 warning: { enabled: false },
             },
             !IS_WEB &&
-            (!IS_DISCORD_DESKTOP || !isWindows
+            (!IS_DISCORD_DESKTOP || !IS_WINDOWS
                 ? {
                     key: "frameless",
                     title: "Disable the Window Frame",
@@ -95,7 +95,7 @@ function EquicordSettings() {
                 description: "A theme that supports transparency is required or this will do nothing. Stops the window from being resizable as a side effect",
                 restartRequired: true,
                 warning: {
-                    enabled: isWindows,
+                    enabled: IS_WINDOWS,
                     message: "Enabling this will prevent you from snapping this window.",
                 },
             },
@@ -106,7 +106,7 @@ function EquicordSettings() {
                 warning: { enabled: false },
             },
             !IS_WEB &&
-            isWindows && {
+            IS_WINDOWS && {
                 key: "winCtrlQ",
                 title:
                     "Register Ctrl+Q as shortcut to close Discord (Alternative to Alt+F4)",
@@ -204,13 +204,13 @@ function EquicordSettings() {
                 <Heading>Settings</Heading>
                 <Paragraph className={Margins.bottom20} style={{ color: "var(--text-muted)" }}>
                     Hint: You can change the position of this settings section in the{" "}
-                    <Button
-                        look={Button.Looks.LINK}
+                    <TextButton
+                        variant="link"
                         style={{ color: "var(--text-link)", display: "inline-block" }}
                         onClick={() => openPluginModal(Vencord.Plugins.plugins.Settings)}
                     >
                         settings of the Settings plugin
-                    </Button>
+                    </TextButton>
                     !
                 </Paragraph>
 
@@ -226,9 +226,9 @@ function EquicordSettings() {
                                     s.warning.enabled ? (
                                         <>
                                             {s.description}
-                                            <div className="form-switch-warning">
+                                            <Alert.Warning className={Margins.top8}>
                                                 {s.warning.message}
-                                            </div>
+                                            </Alert.Warning>
                                         </>
                                     ) : (
                                         s.description
@@ -328,15 +328,9 @@ function EquicordSettings() {
 
 function DonateButtonComponent() {
     return (
-        <Flex>
-            <DonateButton
-                look={Button.Looks.FILLED}
-                color={Button.Colors.TRANSPARENT}
-                style={{ marginTop: "1em" }} />
-            <InviteButton
-                look={Button.Looks.FILLED}
-                color={Button.Colors.TRANSPARENT}
-                style={{ marginTop: "1em" }} />
+        <Flex style={{ marginTop: "1em" }}>
+            <DonateButton />
+            <InviteButton />
         </Flex>
     );
 }

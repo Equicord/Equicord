@@ -6,6 +6,7 @@
 
 import { useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
+import { TextButton } from "@components/Button";
 import { Card } from "@components/Card";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
@@ -13,7 +14,7 @@ import { PluginCard } from "@components/settings/tabs/plugins/PluginCard";
 import { ChangeList } from "@utils/ChangeList";
 import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
-import { Button, React, Tooltip } from "@webpack/common";
+import { React, Tooltip } from "@webpack/common";
 
 import Plugins from "~plugins";
 
@@ -163,15 +164,14 @@ export function NewPluginsSection({
                         }
                     >
                         {tooltipProps => (
-                            <Button
+                            <TextButton
                                 {...tooltipProps}
-                                color={Button.Colors.LINK}
-                                size={Button.Sizes.SMALL}
+                                variant="link"
                                 onClick={() => location.reload()}
                                 className={Margins.top16}
                             >
                                 Restart Required
-                            </Button>
+                            </TextButton>
                         )}
                     </Tooltip>
                 </div>

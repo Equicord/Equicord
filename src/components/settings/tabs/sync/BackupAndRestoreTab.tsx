@@ -17,13 +17,14 @@
 */
 
 import { downloadSettingsBackup, uploadSettingsBackup } from "@api/SettingsSync/offline";
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
 import { Margins } from "@utils/margins";
-import { Button, Text } from "@webpack/common";
+import { Text } from "@webpack/common";
 
 function BackupAndRestoreTab() {
     return (
@@ -52,31 +53,31 @@ function BackupAndRestoreTab() {
                 <Flex>
                     <Button
                         onClick={() => uploadSettingsBackup()}
-                        size={Button.Sizes.SMALL}
+                        size="small"
                     >
                         Import Settings
                     </Button>
                     <Button
                         onClick={() => downloadSettingsBackup("settings")}
-                        size={Button.Sizes.SMALL}
+                        size="small"
                     >
                         Export Settings
                     </Button>
                     <Button
                         onClick={() => downloadSettingsBackup("plugins")}
-                        size={Button.Sizes.SMALL}
+                        size="small"
                     >
                         Export Plugins
                     </Button>
                     <Button
                         onClick={() => downloadSettingsBackup("css")}
-                        size={Button.Sizes.SMALL}
+                        size="small"
                     >
                         Export CSS
                     </Button>
                     <Button
                         onClick={() => downloadSettingsBackup("datastore")}
-                        size={Button.Sizes.SMALL}
+                        size="small"
                     >
                         Export DataStores
                     </Button>

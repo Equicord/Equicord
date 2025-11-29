@@ -20,13 +20,9 @@ import "./Switch.css";
 
 import { classNameFactory } from "@api/Styles";
 import { classes } from "@utils/misc";
+import { findComponentByCodeLazy } from "@webpack";
 import { useState } from "@webpack/common";
 import type { FocusEvent } from "react";
-
-const switchCls = classNameFactory("vc-switch-");
-
-const SWITCH_ON = "var(--brand-500)";
-const SWITCH_OFF = "var(--primary-400)";
 
 export interface SwitchProps {
     disabled?: boolean;
@@ -34,7 +30,14 @@ export interface SwitchProps {
     onChange: (checked: boolean) => void;
 }
 
-export function Switch({ checked, onChange, disabled }: SwitchProps) {
+const DiscordSwitchLazy = findComponentByCodeLazy<SwitchProps>('data-toggleable-component":"switch"');
+
+const switchCls = classNameFactory("vc-switch-");
+
+const SWITCH_ON = "var(--brand-500)";
+const SWITCH_OFF = "var(--primary-400)";
+
+function FallbackSwitch({ checked, onChange, disabled }: SwitchProps) {
     const [focusVisible, setFocusVisible] = useState(false);
 
     // Due to how we wrap the invisible input, there is no good way to do this with css.
@@ -88,4 +91,12 @@ export function Switch({ checked, onChange, disabled }: SwitchProps) {
             </div>
         </div>
     );
+}
+
+export function Switch(props: SwitchProps) {
+    const DiscordSwitch = DiscordSwitchLazy.$$vencordGetWrappedComponent();
+    if (DiscordSwitch) {
+        return <DiscordSwitch {...props} />;
+    }
+    return <FallbackSwitch {...props} />;
 }
