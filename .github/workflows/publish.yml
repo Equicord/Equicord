@@ -77,9 +77,13 @@ jobs:
               if: steps.check.outputs.release == 'true'
               run: pnpm buildWebStandalone
 
+            - name: Create sources zip
+              if: steps.check.outputs.release == 'true'
+              run: zip -r dist/sources.zip . -x "node_modules/*" -x "dist/*" -x ".git/*"
+
             - name: Publish extension
               if: steps.check.outputs.release == 'true'
-              run: pnpx publish-browser-extension@latest --chrome-zip dist/extension-chrome.zip --firefox-zip dist/extension-firefox.zip
+              run: pnpx publish-browser-extension@latest --chrome-zip dist/extension-chrome.zip --firefox-zip dist/extension-firefox.zip --firefox-sources-zip dist/sources.zip
               env:
                   CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
                   CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
