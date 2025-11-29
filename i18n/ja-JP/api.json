@@ -1,37 +1,37 @@
 {
     "commands": {
-        "errorExecuting": "An Error occurred while executing command \"{name}\""
+        "errorExecuting": "コマンド\"{name}\"の実行中にエラーが発生しました"
     },
     "notifications": {
-        "dismissNotification": "Dismiss Notification",
-        "noNotifications": "No notifications yet",
-        "notificationLog": "Notification Log",
-        "notificationSettings": "Notification Settings",
+        "dismissNotification": "通知を非表示",
+        "noNotifications": "まだ通知はありません",
+        "notificationLog": "通知ログ",
+        "notificationSettings": "通知設定",
         "logs": {
-            "title": "Are you sure?",
-            "body_zero": "No notification selected.",
-            "body_one": "This will permanently remove {count} notification. This action cannot be undone.",
-            "body_other": "This will permanently remove {count} notifications. This action cannot be undone.",
-            "confirm": "Do it!",
-            "cancel": "Nevermind",
-            "clearNotificationLog": "Clear Notification Log"
+            "title": "よろしいですか？",
+            "body_zero": "通知が選択されていません。",
+            "body_one": "{count} の通知を完全に削除します。この操作は元に戻せません。",
+            "body_other": "{count} の通知を完全に削除します。この操作は元に戻せません。",
+            "confirm": "続行！",
+            "cancel": "結構です",
+            "clearNotificationLog": "通知ログを削除"
         },
         "missedNotifications": {
-            "title": "While you were away",
-            "body_one": "{count} notification received",
-            "body_other": "{count} notifications received"
+            "title": "あなたがいない間に",
+            "body_one": "{count}件の通知を受け取りました",
+            "body_other": "{count}件の通知を受け取りました"
         }
     },
     "memberListDecorators": {
-        "fallback": "Failed to render {key} Member List Decorator"
+        "fallback": "{key}メンバーリスト装飾の描画に失敗しました"
     },
     "messageAccessories": {
-        "fallback": "Failed to render {key} Message Accessory"
+        "fallback": "{key}のメッセージアクセサリを読み込めませんでした"
     },
     "messageDecorations": {
-        "fallback": "Failed to render {key} Message Decoration"
+        "fallback": "{key}のメッセージの装飾を読み込めませんでした"
     },
     "notices": {
-        "fallback": "Error Showing Notice"
+        "fallback": "通知を表示できませんでした"
     }
 }
