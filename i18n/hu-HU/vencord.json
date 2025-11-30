@@ -33,7 +33,7 @@
         },
         "settings": {
             "header": "Cloud Settings",
-            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!",
+            "updatedRemote": "A beállításaid frissültek! Kattints ide az újraindításhoz, hogy a módosítások életbe lépjenek!",
             "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
             "success": "Synchronized settings to the cloud!",
             "failedToSync": "Could not synchronize settings to the cloud ({e}).",
