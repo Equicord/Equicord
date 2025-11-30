@@ -24,7 +24,6 @@ import { useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
 import { Alert } from "@components/Alert";
 import { Button } from "@components/Button";
-import { Card } from "@components/Card";
 import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingTertiary } from "@components/Heading";
@@ -37,7 +36,7 @@ import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useAwaiter, useIntersection } from "@utils/react";
-import { Alerts, lodash, Parser, React, Select, TextInput, Toasts, Tooltip, useMemo, useState } from "@webpack/common";
+import { Alerts, Button as DeprecatedButton, lodash, Parser, React, Select, TextInput, Toasts, Tooltip, useMemo, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
@@ -103,22 +102,28 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
     }
 
     return (
-        <Card className={cl("info-card")}>
-            <HeadingTertiary>Plugin Management</HeadingTertiary>
-            <Paragraph>Press the cog wheel or info icon to get more info on a plugin</Paragraph>
-            <Paragraph>Plugins with a cog wheel have settings you can modify!</Paragraph>
-            {enabledPlugins.length > 0 && (
-                <Button
-                    size="small"
-                    className={"vc-plugins-disable-warning vc-modal-align-reset"}
-                    onClick={() => {
-                        return openWarningModal(null, null, null, false, enabledPlugins.length, resetCheckAndDo);
-                    }}
-                >
-                    Disable All Plugins
-                </Button>
-            )}
-        </Card>
+        <Alert.Info>
+            <div className={cl("info-card-content")}>
+                <div className={cl("info-card-text")}>
+                    <HeadingTertiary>Plugin Management</HeadingTertiary>
+                    <Paragraph>• Click the cog or info icon to learn more about a plugin</Paragraph>
+                    <Paragraph>• Plugins with a cog icon have configurable settings</Paragraph>
+                </div>
+                {enabledPlugins.length > 0 && (
+                    <DeprecatedButton
+                        look={DeprecatedButton.Looks.FILLED}
+                        color={DeprecatedButton.Colors.TRANSPARENT}
+                        size={DeprecatedButton.Sizes.SMALL}
+                        className={cl("disable-all-button")}
+                        onClick={() => {
+                            return openWarningModal(null, null, null, false, enabledPlugins.length, resetCheckAndDo);
+                        }}
+                    >
+                        Disable All Plugins
+                    </DeprecatedButton>
+                )}
+            </div>
+        </Alert.Info>
     );
 }
 
