@@ -1,199 +1,199 @@
 {
-    "donate": "Donate",
-    "invite": "Invite",
-    "loading": "Loading...",
-    "cancel": "Cancel",
+    "donate": "Támogatás",
+    "invite": "Meghívás",
+    "loading": "Betöltés...",
+    "cancel": "Mégse",
     "logs": {
-        "clearLog": "Clear Log",
-        "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
-        "logCleared": "Log has been cleared",
-        "clearLogs": "Clear Logs",
-        "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
-        "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
-        "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
-        "logsCleared": "Selected logs have been cleared",
-        "hideLogs": "Hide Logs",
-        "showLogs": "Show Logs",
-        "clearAllLogs": "Clear All Logs",
-        "clearAll": "Clear All",
-        "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
-        "allLogsCleared": "All logs have been cleared"
+        "clearLog": "Napló Törlése",
+        "clearLogConfirmation": "Biztos törölni akarod ezt a naplót? Ezt nem vonhatod vissza.",
+        "logCleared": "Naplók törölve lettek",
+        "clearLogs": "Naplók törlése",
+        "clearLogsConfirmation": "Biztosan törölni akarod ezeket a naplókat? Ezt nem vonhatod vissza.",
+        "clearLogsConfirmationNum_one": "Biztosan törölni akarod mind a(z) {count} naplót?",
+        "clearLogsConfirmationNum_other": "Biztosan törölni akarod mind a(z) {count} naplót?",
+        "logsCleared": "A kiválasztott naplók törölve lettek",
+        "hideLogs": "Naplók Elrejtése",
+        "showLogs": "Naplók Mutatása",
+        "clearAllLogs": "Összes Napló Törlése",
+        "clearAll": "Összes Törlése",
+        "clearAllLogsConfirmation": "Biztosan törölni akarod az összes naplót? Ezt nem vonhatod vissza.",
+        "allLogsCleared": "Minden napló törölve lett"
     },
     "addonCard": {
-        "new": "NEW"
+        "new": "ÚJ"
     },
     "cloud": {
         "integrations": {
-            "header": "Cloud Integrations",
-            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
-            "failedToRetrieveOAuth": "Setup failed (couldn't retrieve OAuth configuration).",
-            "enabled": "Cloud integrations enabled!",
-            "noSecret": "Setup failed (no secret returned?).",
-            "error": "Setup failed ({e})"
+            "header": "Felhőintegrációk",
+            "reauthenticateOtherClient": "Észleltük, hogy egy másik kliensben engedélyezve vannak a felhőintegrációk! Korlátozások miatt újra be kell jelentkezned hogy tovább használhasd őket. Kattints ide, hogy a beállítások oldalra ugorj!",
+            "failedToRetrieveOAuth": "Telepítés sikertelen volt (nem sikerült lekérni az OAuth konfigurációt).",
+            "enabled": "Felhőintegrációk engedélyezve lettek!",
+            "noSecret": "Telepítés sikertelen volt (nem érkezett titkos kulcs?).",
+            "error": "Telepítés sikertelen volt ({e})"
         },
         "settings": {
-            "header": "Cloud Settings",
+            "header": "Felhő Beállításai",
             "updatedRemote": "A beállításaid frissültek! Kattints ide az újraindításhoz, hogy a módosítások életbe lépjenek!",
-            "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
-            "success": "Synchronized settings to the cloud!",
-            "failedToSync": "Could not synchronize settings to the cloud ({e}).",
-            "accountChanged": "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
-            "noSettings": "There are no settings in the cloud.",
-            "upToDate": "Your settings are up to date.",
-            "newerThanCloud": "Your local settings are newer than the cloud ones.",
-            "updated": "Your settings have been updated! Click here to restart to fully apply changes!",
-            "syncFromCloud": "Could not synchronize settings from the cloud ({e}).",
-            "apiDelete": "Could not delete settings (API returned {e}).",
-            "deleted": "Settings deleted from cloud!",
-            "failedToDelete": "Could not delete settings ({e}).",
-            "apiEraseAll": "Could not erase all data (API returned {e}), please contact support.",
-            "erased": "Successfully erased all data."
+            "apiReject": "Nem sikerült szinkronizálni a beállításokat a felhőbe (az API ezt adta vissza: {e}).",
+            "success": "Beállítások szinkronizálva a felhőbe!",
+            "failedToSync": "Nem sikerült szinkronizálni a beállításokat a felhőbe ({e}).",
+            "accountChanged": "A felhőszinkronizálás ki lett kapcsolva, mert ez a fiók nincs összekapcsolva a felhőalkalmazással. Újra engedélyezheted, ha összekapcsolod ezt a fiókot a Felhőbeállításokban. (ui: a beállításaidat külön fogja tárolni)",
+            "noSettings": "Nincsenek beállítások a felhőben.",
+            "upToDate": "A beállításaid naprakészek.",
+            "newerThanCloud": "A helyi beállításaid újabbak, mint a felhőben lévők.",
+            "updated": "A beállításaid frissültek! Kattints ide az újraindításhoz, hogy a változtatások teljesen érvénybe lépjenek!",
+            "syncFromCloud": "Nem sikerült szinkronizálni a beállításokat a felhőből ({e}).",
+            "apiDelete": "Nem sikerült törölni a beállításokat (az API ezt adta vissza: {e}).",
+            "deleted": "Beállítások törölve lettek a felhőből!",
+            "failedToDelete": "Nem sikerült törölni a beállításokat ({e}).",
+            "apiEraseAll": "Nem sikerült minden adatot törölni (az API ezt adta vissza: {e}), kérlek lépj kapcsolatba velünk.",
+            "erased": "Minden adat sikeresen törölve."
         }
     },
     "settingsSync": {
-        "imported": "Settings successfully imported. Restart to apply changes!",
-        "failedToImport": "Failed to import settings: {e}"
+        "imported": "Beállítások sikeresen importálva. Indítsd újra a Discordot a változtatások alkalmazásához!",
+        "failedToImport": "Nem sikerült importálni a beállításokat: {e}"
     },
     "contributorCard": {
-        "contributionsButton": "See what you've contributed to",
-        "description": "Since you've contributed to Equicord you now have a cool new badge!",
-        "subtitle": "Thank you for contributing!",
-        "title": "Contributions"
+        "contributionsButton": "Nézd meg mihez járultál hozzá",
+        "description": "Mivel hozzájárultál az Equicordhoz, most már van egy menő új jelvényed!",
+        "subtitle": "Köszönjük a hozzájárulást!",
+        "title": "Hozzájárulások"
     },
     "donorCard": {
         "donated": {
-            "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
-            "equicordDescription": "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
-            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server.",
-            "subtitle": "Thank you for donating!",
-            "title": "Donations"
+            "vencordDescription": "Minden Vencord felhasználó láthatja a jelvényedet! A perkjeid kezeléséhez írj @{v}-nek.",
+            "equicordDescription": "Minden Equicord felhasználó láthatja a jelvényedet! A perkjeidet az Equicord szerverén nyitott tickettel kezelheted.",
+            "description": "Minden Vencord felhasználó láthatja a Vencord támogatói jelvényedet, és az Equicord felhasználók láthatják az Equicord támogatói jelvényedet. A Vencord támogatói jelvényed módosításához lépj kapcsolatba @vending.machine-nel. Az Equicord támogatói jelvényedhez nyiss egy ticketet az Equicord szerverén.",
+            "subtitle": "Köszönjük a támogatást!",
+            "title": "Támogatások"
         },
         "notDonated": {
-            "description": "Please consider supporting the development of Equicord by donating!",
-            "title": "Support the Project"
+            "description": "Kérlek, gondold át, hogy támogatod az Equicord fejlesztését!",
+            "title": "Támogasd a Projektet"
         }
     },
-    "failedToRender": "Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!",
+    "failedToRender": "A {tab} fül megjelenítése sikertelen volt. Ha a probléma továbbra is fennáll, próbáld meg a telepítővel újratelepíteni!",
     "quickActions": {
-        "editQuickCSS": "Edit QuickCSS",
-        "notificationLog": "Notification Log",
-        "openSettings": "Open Settings Folder",
-        "relaunchDiscord": "Relaunch Discord",
-        "title": "Quick Actions",
-        "viewSource": "View Source Code"
+        "editQuickCSS": "QuickCSS Szerkeztése",
+        "notificationLog": "Értesítési Napló",
+        "openSettings": "Beállítások Mappa Megnyitása",
+        "relaunchDiscord": "Discord Újraindítása",
+        "title": "Gyors Műveletek",
+        "viewSource": "Forráskód Megtekintése"
     },
     "settings": {
         "disableMinSize": {
-            "title": "Disable minimum window size"
+            "title": "Minimális ablakméret kikapcsolása"
         },
         "enableReactDevtools": {
-            "title": "Enable React Developer Tools"
+            "title": "React Fejlesztői Eszközök Engedélyezése"
         },
         "frameless": {
-            "title": "Disable the window frame"
+            "title": "Ablakkeret kikapcsolása"
         },
-        "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
+        "hint": "Tipp: Megváltoztathatod ennek a beállítási szakasznak a helyét a <0>Beállítások plugin beállításaiban</0>!",
         "macosVibrancyStyle": {
-            "placeholder": "Window vibrancy style",
-            "title": "Window vibrancy style (requires restart)"
+            "placeholder": "Ablak átlátszósági stílus",
+            "title": "Ablak átlátszósági stílus (újraindítást igényel)"
         },
         "notification": {
-            "logButton": "View Notification Log",
-            "settingsButton": "Notification Settings"
+            "logButton": "Értesítési Napló Megnézése",
+            "settingsButton": "Értesítési Beállítások"
         },
         "plugins": {
             "contributorModal": {
                 "contributorInfo": {
-                    "noPlugins": "This person has not made any plugins. They likely <0>contributed</0> to Equicord in other ways!",
-                    "plugins_one": "This person has <0>contributed</0> to {count} plugin!",
-                    "plugins_other": "This person has <0>contributed</0> to {count} plugins!"
+                    "noPlugins": "Ez a személy nem készített plugint. Valószínűleg más módon <0>járult hozzá</0> az Equicordhoz!",
+                    "plugins_one": "Ez a személy <0>hozzájárult</0> {count} pluginhoz!",
+                    "plugins_other": "Ez a személy <0>hozzájárult</0> {count} pluginhoz!"
                 }
             },
-            "requiredToFunction": "This plugin is required for Equicord to function",
-            "pluginRequiredBy": "This plugin is required by: {pluginNames}",
-            "noDescription": "No description available"
+            "requiredToFunction": "Ez a plugin szükséges az Equicord működéséhez",
+            "pluginRequiredBy": "Ezt a plugint igényli: {pluginNames}",
+            "noDescription": "Nincs elérhető leírás"
         },
         "changelog": {
             "manager": {
-                "minutes_one": "{count} minute ago",
-                "minutes_other": "{count} minutes ago",
-                "hours_one": "{count} hour ago",
-                "hours_other": "{count} hours ago",
-                "days_one": "{count} day ago",
-                "days_other": "{count} days ago"
+                "minutes_one": "{count} perce",
+                "minutes_other": "{count} perce",
+                "hours_one": "{count} órája",
+                "hours_other": "{count} órával ezelőtt",
+                "days_one": "{count} napja",
+                "days_other": "{count} napja"
             },
             "updateCard": {
-                "upToDate": "Repository check: {fromHash} (up to date)",
-                "outOfDate": "Repository check: {fromHash} → {toHash}",
-                "update": "Update: {fromHash} → {toHash}",
-                "commits_zero": " • No new commits",
-                "commits_one": " • {count} commit available",
-                "commits_other": " • {count} commits available",
-                "newPluginsCount": " • {plugins} new plugins",
-                "updatedPluginsCount": " • {plugins} updated plugins",
-                "newSettingsCount": " • {settings} new settings",
-                "updatedPlugins": "Updated Plugins",
-                "newSettings": "New Settings",
-                "newSettingInPlugin": "New setting in {pluginName}"
+                "upToDate": "Tároló ellenőrzés: {fromHash} (naprakész)",
+                "outOfDate": "Tároló ellenőrzés: {fromHash} → {toHash}",
+                "update": "Frissítés: {fromHash} → {toHash}",
+                "commits_zero": "• Nincsenek új commitok",
+                "commits_one": "• {count} elérhető commit",
+                "commits_other": "• {count} elérhető commit",
+                "newPluginsCount": "• {plugins} új plugin",
+                "updatedPluginsCount": "• {plugins} frissített plugin",
+                "newSettingsCount": "• {settings} új beállítás",
+                "updatedPlugins": "Frissített Pluginok",
+                "newSettings": "Új Beállítások",
+                "newSettingInPlugin": "Új beállítás a(z) {pluginName} pluginban"
             },
             "newPluginsSection": {
-                "newPluginsCount": "New Plugins ({count})",
-                "recentlyAddedPlugins": "The following plugins have been added in recent updates:",
-                "numMorePlugins_one": "+{count} more plugin",
-                "numMorePlugins_other": "+{count} more plugins"
+                "newPluginsCount": "Új Pluginok ({count})",
+                "recentlyAddedPlugins": "A következő pluginok lettek hozzáadva a legutóbbi frissítésekben:",
+                "numMorePlugins_one": "+{count} további plugin",
+                "numMorePlugins_other": "+{count} további plugin"
             },
-            "missingRepoInfo": "Failed to retrieve repository information",
-            "alreadyUpToDate": "Already up todate with repository",
-            "foundCommits_zero": "No new commits",
-            "foundCommits_one": "Found {count} commit from repository",
-            "foundCommits_other": "Found {count} commits from repository",
-            "loggedCommits": "Logged commits from your latest update",
-            "upToDateLocalCopy": "Repository is up to date with your local copy",
-            "failedToFetchRepo": "Failed to fetch from repository",
-            "checkYourConnection": "Failed to connect to repository. Check your internet connection",
-            "failedtoFetchCommits": "Could not fetch commits from repository",
-            "repository": "Repository",
-            "viewRecentChanges": "View the most recent changes to Equicord. This fetches commits directly from the repository to show you what's new",
-            "failedToRetrieve": "Failed to retrieve - check console",
-            "upToDate": "Repository Up To Date",
-            "fetchRepo": "Fetch from Repository",
-            "checkYourInternet": "Make sure you have an internet connection and try again",
-            "recentChanges": "Recent Changes",
-            "updatedPluginsCount": "Updated Plugins ({plugins})",
-            "codeChanges_zero": "No Code Changes",
-            "codeChanges_one": "Code Changes ({count} commit)",
-            "codeChanges_other": "Code Changes ({count} commits)",
-            "emptyChangelog": "No commits available ahead of your current version. Click \"Fetch from Repository\" to check for new changes",
-            "updateLogs_zero": "No Update Logs",
-            "updateLogs_one": "Update Logs ({count} log)",
-            "updateLogs_other": "Update Logs ({count} logs)",
-            "previousSessions": "Previous update sessions with their commit history and plugin changes",
+            "missingRepoInfo": "Nem sikerült lekérni a tároló információit",
+            "alreadyUpToDate": "Már naprakész a tárolóval",
+            "foundCommits_zero": "Nincsenek új commitok",
+            "foundCommits_one": "{count} commit található a tárolóból",
+            "foundCommits_other": "{count} commit található a tárolóból",
+            "loggedCommits": "Naplózott commitok a legutóbbi frissítésedből",
+            "upToDateLocalCopy": "A tároló naprakész a helyi másolatoddal",
+            "failedToFetchRepo": "Nem sikerült lekérni a tárolóból",
+            "checkYourConnection": "Nem sikerült csatlakozni a tárolóhoz. Ellenőrizd az internetkapcsolatodat",
+            "failedtoFetchCommits": "Nem sikerült lekérni a commitokat a tárolóból",
+            "repository": "Tároló",
+            "viewRecentChanges": "Tekintsd meg az Equicord legutóbbi változásait. Ez közvetlenül a tárolóból kéri le a commitokat, hogy megmutassa az újdonságokat",
+            "failedToRetrieve": "Lekérés sikertelen - ellenőrizd a konzolt",
+            "upToDate": "A Tároló Naprakész",
+            "fetchRepo": "Lekérés a Tárolóból",
+            "checkYourInternet": "Ellenőrizd, hogy van internetkapcsolatod, majd próbáld meg újra",
+            "recentChanges": "Legutóbbi Változások",
+            "updatedPluginsCount": "Frissített Pluginok ({plugins})",
+            "codeChanges_zero": "Nincsenek Kódváltozások",
+            "codeChanges_one": "Kódváltozások ({count} commit)",
+            "codeChanges_other": "Kódváltozások ({count} commit)",
+            "emptyChangelog": "Nincs elérhető commit a jelenlegi verziód előtt. Kattints a \"Lekérés a tárolóból\" gombra az új változások ellenőrzéséhez",
+            "updateLogs_zero": "Nincsenek Frissítési Naplók",
+            "updateLogs_one": "Frissítési Naplók ({count} napló)",
+            "updateLogs_other": "Frissítési Naplók ({count} napló)",
+            "previousSessions": "Korábbi frissítési munkamenetek a commit előzményeikkel és pluginváltozásaikkal",
             "title": "Changelog"
         },
         "restartRequired": {
-            "body": "A restart is required to apply this change",
-            "cancel": "Later!",
-            "confirm": "Restart now",
-            "title": "Restart Required",
-            "plugins": "The following plugins require a restart:"
+            "body": "Újraindítás szükséges a változtatás alkalmazásához",
+            "cancel": "Később!",
+            "confirm": "Újraindítás most",
+            "title": "Újraindítás Szükséges",
+            "plugins": "A következő bővítmények újraindítást igényelnek:"
         },
-        "title": "Settings",
+        "title": "Beállítások",
         "transparent": {
-            "description": "You need a theme that supports transparency or this will do nothing. WILL STOP THE WINDOW FROM BEING RESIZABLE!! Requires a full restart",
-            "title": "Enable window transparency"
+            "description": "Olyan témára van szükséged, ami támogatja az átlátszóságot, különben nem csinál semmit. AZ ABLAK NEM LESZ ÁTMÉRETEZHETŐ!! Teljes újraindítás szükséges",
+            "title": "Ablakátlátszóság engedélyezése"
         },
         "useQuickCss": {
-            "description": "Loads your Custom CSS",
-            "title": "Enable Custom CSS"
+            "description": "Betölti az Egyéni CSS-edet",
+            "title": "Egyéni CSS Engedélyezése"
         },
         "winCtrlQ": {
-            "title": "Register Ctrl+Q as shortcut to close Discord (alternative to Alt+F4)"
+            "title": "Regisztráld a Ctrl+Q billentyűkombinációt a Discord bezárásához (Alt+F4 alternatíva)"
         },
         "winNativeTitleBar": {
-            "title": "Use Windows' native title bar instead of Discord's custom one"
+            "title": "Használd a Windows natív címsorát a Discord egyedi címsora helyett"
         }
     },
     "tabs": {
-        "settings": "Equicord Settings"
+        "settings": "Equicord Beállítások"
     }
 }
