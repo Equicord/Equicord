@@ -1,5 +1,5 @@
 {
-    "description": "Assists with translating Equicord",
+    "description": "Segít az Equicord fordításában",
     "settings": {
         "forceLocale": {
             "description": "Force a different locale for Equicord to use",
