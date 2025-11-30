@@ -2,9 +2,9 @@
     "description": "Segít az Equicord fordításában",
     "settings": {
         "forceLocale": {
-            "description": "Force a different locale for Equicord to use",
-            "followDiscord": "Default (follow Discord)"
+            "description": "Kényszeríts egy másik nyelvi beállítást az Equicord számára",
+            "followDiscord": "Alapértelmezett (Discord követése)"
         },
-        "showMissingKeys": "If the current locale is missing translations, show the keys instead of falling back to English"
+        "showMissingKeys": "Ha a jelenlegi nyelvi beállítás hiányos fordításokat tartalmaz, mutassa a kulcsokat az angolra való visszaállás helyett"
     }
 }
