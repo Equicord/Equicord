@@ -2,7 +2,7 @@
     "description": "Ajuda com a tradução do Equicord",
     "settings": {
         "forceLocale": {
-            "description": "Forçar uma localidade diferente para o Equicord usar",
+            "description": "Forçar um idioma diferente para o Equicord usar",
             "followDiscord": "Padrão (usar o idioma do Discord)"
         },
         "showMissingKeys": "Se o idioma atual não tiver traduções, mostrar as chaves em vez de usar o inglês"
