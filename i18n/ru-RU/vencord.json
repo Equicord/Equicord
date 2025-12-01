@@ -1,19 +1,19 @@
 {
-    "donate": "Donate",
-    "invite": "Invite",
-    "loading": "Loading...",
+    "donate": "Пожертвовать",
+    "invite": "Пригласить",
+    "loading": "Загрузка...",
     "cancel": "Cancel",
     "logs": {
         "clearLog": "Clear Log",
         "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
-        "logCleared": "Log has been cleared",
+        "logCleared": "Журнал очищен",
         "clearLogs": "Clear Logs",
         "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
         "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
         "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
         "logsCleared": "Selected logs have been cleared",
-        "hideLogs": "Hide Logs",
-        "showLogs": "Show Logs",
+        "hideLogs": "Скрыть логи",
+        "showLogs": "Показать логи",
         "clearAllLogs": "Clear All Logs",
         "clearAll": "Clear All",
         "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
@@ -52,18 +52,18 @@
     },
     "settingsSync": {
         "imported": "Settings successfully imported. Restart to apply changes!",
-        "failedToImport": "Failed to import settings: {e}"
+        "failedToImport": "Не удалось импортировать настройки: {e}"
     },
     "contributorCard": {
         "contributionsButton": "See what you've contributed to",
         "description": "Since you've contributed to Equicord you now have a cool new badge!",
-        "subtitle": "Thank you for contributing!",
+        "subtitle": "Спасибо за ваш вклад!",
         "title": "Contributions"
     },
     "donorCard": {
         "donated": {
-            "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
-            "equicordDescription": "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
+            "vencordDescription": "Все пользователи Vencord могут видеть ваш значок! Вы можете управлять вашими навыками, отправив @{v}.",
+            "equicordDescription": "Все пользователи Equicord могут видеть ваш значок! Вы можете управлять вашими привилегиями, создав билет на сервере Equicord.",
             "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server.",
             "subtitle": "Thank you for donating!",
             "title": "Donations"
