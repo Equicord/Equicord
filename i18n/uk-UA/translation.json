@@ -1,9 +1,9 @@
 {
-    "description": "Assists with translating Equicord",
+    "description": "Допомогти з перекладом Equicord",
     "settings": {
         "forceLocale": {
-            "description": "Force a different locale for Equicord to use",
-            "followDiscord": "Default (follow Discord)"
+            "description": "Примусово використовувати іншу локалізацію для Equicord",
+            "followDiscord": "За замовчуванням (як в Discord)"
         },
         "showMissingKeys": "Якщо в поточній локалізації відсутні переклади, показувати ключі замість повернення до англійської"
     }
