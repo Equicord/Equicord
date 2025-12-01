@@ -2,198 +2,198 @@
     "donate": "Пожертвовать",
     "invite": "Пригласить",
     "loading": "Загрузка...",
-    "cancel": "Cancel",
+    "cancel": "Отменить",
     "logs": {
-        "clearLog": "Clear Log",
-        "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
+        "clearLog": "Очистить лог",
+        "clearLogConfirmation": "Вы уверены, что хотите очистить этот лог? Это действие невозможно отменить.",
         "logCleared": "Журнал очищен",
-        "clearLogs": "Clear Logs",
-        "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
-        "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
-        "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
-        "logsCleared": "Selected logs have been cleared",
+        "clearLogs": "Очистить логи",
+        "clearLogsConfirmation": "Вы уверены, что хотите очистить эти логи? Это действие невозможно отменить.",
+        "clearLogsConfirmationNum_one": "Вы уверены, что хотите очистить {count} журнал",
+        "clearLogsConfirmationNum_other": "Вы уверены, что хотите очистить {count} журналов",
+        "logsCleared": "Выбранные логи были очищены",
         "hideLogs": "Скрыть логи",
         "showLogs": "Показать логи",
-        "clearAllLogs": "Clear All Logs",
-        "clearAll": "Clear All",
-        "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
-        "allLogsCleared": "All logs have been cleared"
+        "clearAllLogs": "Очистить все логи",
+        "clearAll": "Очистить всё",
+        "clearAllLogsConfirmation": "Вы уверены, что хотите очистить все логи? Это действие невозможно отменить.",
+        "allLogsCleared": "Все логи были очищены"
     },
     "addonCard": {
-        "new": "NEW"
+        "new": "НОВЫЙ"
     },
     "cloud": {
         "integrations": {
-            "header": "Cloud Integrations",
-            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
-            "failedToRetrieveOAuth": "Setup failed (couldn't retrieve OAuth configuration).",
-            "enabled": "Cloud integrations enabled!",
-            "noSecret": "Setup failed (no secret returned?).",
-            "error": "Setup failed ({e})"
+            "header": "Облачная интеграция",
+            "reauthenticateOtherClient": "Мы заметили, что у вас включена облачная интеграция в другом клиенте! В связи с ограничениями, вам нужно будет повторно авторизоваться для их использования. Нажмите здесь, чтобы перейти на страницу настроек, чтобы сделать это!",
+            "failedToRetrieveOAuth": "Ошибка настройки (невозможно получить конфигурацию OAuth).",
+            "enabled": "Облачная интеграция включена!",
+            "noSecret": "Ошибка настройки (секрет не возвращен?).",
+            "error": "Ошибка настройки ({e})"
         },
         "settings": {
-            "header": "Cloud Settings",
-            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!",
-            "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
-            "success": "Synchronized settings to the cloud!",
-            "failedToSync": "Could not synchronize settings to the cloud ({e}).",
-            "accountChanged": "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
-            "noSettings": "There are no settings in the cloud.",
-            "upToDate": "Your settings are up to date.",
-            "newerThanCloud": "Your local settings are newer than the cloud ones.",
-            "updated": "Your settings have been updated! Click here to restart to fully apply changes!",
-            "syncFromCloud": "Could not synchronize settings from the cloud ({e}).",
-            "apiDelete": "Could not delete settings (API returned {e}).",
-            "deleted": "Settings deleted from cloud!",
-            "failedToDelete": "Could not delete settings ({e}).",
-            "apiEraseAll": "Could not erase all data (API returned {e}), please contact support.",
-            "erased": "Successfully erased all data."
+            "header": "Облачные настройки",
+            "updatedRemote": "Ваши настройки были обновлены! Нажмите здесь, чтобы перезапустить, чтобы применить изменения!",
+            "apiReject": "Не удалось синхронизировать настройки с облаком (API вернул {e}).",
+            "success": "Настройки были синхронизированы с облаком!",
+            "failedToSync": "Не удалось синхронизировать настройки с облаком ({e}).",
+            "accountChanged": "Облачная синхронизация отключена, потому что эта учетная запись не подключена к Облаку. Вы можете снова включить его, подключив эту учетную запись в настройках Облака. (Примечание: ваши настройки будут храниться отдельно)",
+            "noSettings": "В облаке нет настроек.",
+            "upToDate": "Ваши настройки актуальны.",
+            "newerThanCloud": "Ваши локальные настройки новее, чем облачные.",
+            "updated": "Ваши настройки были обновлены! Нажмите здесь, чтобы перезапустить, чтобы применить изменения!",
+            "syncFromCloud": "Не удалось синхронизировать настройки с облаком ({e}).",
+            "apiDelete": "Не удалось удалить настройки ({e}).",
+            "deleted": "Настройки удалены из облака!",
+            "failedToDelete": "Не удалось удалить настройки ({e}).",
+            "apiEraseAll": "Не удалось удалить все данные (API вернул {e}), пожалуйста, обратитесь в службу поддержки.",
+            "erased": "Все данные успешно удалены."
         }
     },
     "settingsSync": {
-        "imported": "Settings successfully imported. Restart to apply changes!",
+        "imported": "Настройки успешно импортированы. Перезапустите, чтобы применить изменения!",
         "failedToImport": "Не удалось импортировать настройки: {e}"
     },
     "contributorCard": {
-        "contributionsButton": "See what you've contributed to",
-        "description": "Since you've contributed to Equicord you now have a cool new badge!",
+        "contributionsButton": "Посмотрите, куда вы внесли вклад",
+        "description": "Так как вы вносили вклад в Equicord, у вас теперь есть новый классный значок!",
         "subtitle": "Спасибо за ваш вклад!",
-        "title": "Contributions"
+        "title": "Вклад"
     },
     "donorCard": {
         "donated": {
             "vencordDescription": "Все пользователи Vencord могут видеть ваш значок! Вы можете управлять вашими навыками, отправив @{v}.",
             "equicordDescription": "Все пользователи Equicord могут видеть ваш значок! Вы можете управлять вашими привилегиями, создав билет на сервере Equicord.",
-            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server.",
-            "subtitle": "Thank you for donating!",
-            "title": "Donations"
+            "description": "Все пользователи Vencord могут видеть ваш значок донатера Vencord, а пользователи Equicord — ваш значок донатера Equicord. Чтобы изменить значок донатера Vencord, свяжитесь с @vending.machine. Для изменения значок донатера Equicord создайте тикет на сервере Equicord.",
+            "subtitle": "Благодарим за поддержку!",
+            "title": "Пожертвования"
         },
         "notDonated": {
-            "description": "Please consider supporting the development of Equicord by donating!",
-            "title": "Support the Project"
+            "description": "Пожалуйста, поддержите развитие Equicord пожертвованием!",
+            "title": "Поддержать проект"
         }
     },
-    "failedToRender": "Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!",
+    "failedToRender": "Не удалось отобразить вкладку {tab}. Если проблема повторится, попробуйте использовать программу установки для переустановки!",
     "quickActions": {
-        "editQuickCSS": "Edit QuickCSS",
-        "notificationLog": "Notification Log",
-        "openSettings": "Open Settings Folder",
-        "relaunchDiscord": "Relaunch Discord",
-        "title": "Quick Actions",
-        "viewSource": "View Source Code"
+        "editQuickCSS": "Редактировать QuickCSS",
+        "notificationLog": "Журнал уведомлений",
+        "openSettings": "Открыть папку настроек",
+        "relaunchDiscord": "Перезапустить Discord",
+        "title": "Быстрые действия",
+        "viewSource": "Просмотреть исходный код"
     },
     "settings": {
         "disableMinSize": {
-            "title": "Disable minimum window size"
+            "title": "Отключить минимальный размер окна"
         },
         "enableReactDevtools": {
-            "title": "Enable React Developer Tools"
+            "title": "Включить инструменты React для разработчиков"
         },
         "frameless": {
-            "title": "Disable the window frame"
+            "title": "Отключить границу окна"
         },
-        "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
+        "hint": "Подсказка: Вы можете изменить положение этого раздела настроек в <0>настройках плагина</0>!",
         "macosVibrancyStyle": {
-            "placeholder": "Window vibrancy style",
-            "title": "Window vibrancy style (requires restart)"
+            "placeholder": "Стиль размытия окна",
+            "title": "Стиль размытия окна (требуется перезапуск)"
         },
         "notification": {
-            "logButton": "View Notification Log",
-            "settingsButton": "Notification Settings"
+            "logButton": "Посмотреть журнал уведомлений",
+            "settingsButton": "Настройки уведомлений"
         },
         "plugins": {
             "contributorModal": {
                 "contributorInfo": {
-                    "noPlugins": "This person has not made any plugins. They likely <0>contributed</0> to Equicord in other ways!",
-                    "plugins_one": "This person has <0>contributed</0> to {count} plugin!",
-                    "plugins_other": "This person has <0>contributed</0> to {count} plugins!"
+                    "noPlugins": "Этот человек не создавал плагины. Скорее всего, <0>сделал вклад</0> в Equicord другими способами!",
+                    "plugins_one": "Этот человек <0>сделал вклад</0> в {count} плагин!",
+                    "plugins_other": "Этот человек <0>сделал вклад</0> в {count} плагинов!"
                 }
             },
-            "requiredToFunction": "This plugin is required for Equicord to function",
-            "pluginRequiredBy": "This plugin is required by: {pluginNames}",
-            "noDescription": "No description available"
+            "requiredToFunction": "Этот плагин необходим для работы Equicord",
+            "pluginRequiredBy": "Этот плагин требуется: {pluginNames}",
+            "noDescription": "Нет описания"
         },
         "changelog": {
             "manager": {
-                "minutes_one": "{count} minute ago",
-                "minutes_other": "{count} minutes ago",
-                "hours_one": "{count} hour ago",
-                "hours_other": "{count} hours ago",
-                "days_one": "{count} day ago",
-                "days_other": "{count} days ago"
+                "minutes_one": "{count} минуту назад",
+                "minutes_other": "{count} минут назад",
+                "hours_one": "{count} час назад",
+                "hours_other": "{count} часов назад",
+                "days_one": "{count} день назад",
+                "days_other": "{count} дней назад"
             },
             "updateCard": {
-                "upToDate": "Repository check: {fromHash} (up to date)",
-                "outOfDate": "Repository check: {fromHash} → {toHash}",
-                "update": "Update: {fromHash} → {toHash}",
-                "commits_zero": " • No new commits",
-                "commits_one": " • {count} commit available",
-                "commits_other": " • {count} commits available",
-                "newPluginsCount": " • {plugins} new plugins",
-                "updatedPluginsCount": " • {plugins} updated plugins",
-                "newSettingsCount": " • {settings} new settings",
-                "updatedPlugins": "Updated Plugins",
-                "newSettings": "New Settings",
-                "newSettingInPlugin": "New setting in {pluginName}"
+                "upToDate": "Проверка репозитория: {fromHash} (актуально)",
+                "outOfDate": "Проверка репозитория: {fromHash} → {toHash}",
+                "update": "Обновление: {fromHash} → {toHash}",
+                "commits_zero": " • Новых коммитов нет",
+                "commits_one": " • Доступен {count} коммит",
+                "commits_other": " • Доступно {count} коммитов",
+                "newPluginsCount": " • {plugins} новых плагинов",
+                "updatedPluginsCount": " • {plugins} обновленных плагинов",
+                "newSettingsCount": " • {settings} новых настроек",
+                "updatedPlugins": "Обновленные плагины",
+                "newSettings": "Новые настройки",
+                "newSettingInPlugin": "Новая настройка в {pluginName}"
             },
             "newPluginsSection": {
-                "newPluginsCount": "New Plugins ({count})",
-                "recentlyAddedPlugins": "The following plugins have been added in recent updates:",
-                "numMorePlugins_one": "+{count} more plugin",
-                "numMorePlugins_other": "+{count} more plugins"
+                "newPluginsCount": "Новые плагины ({count})",
+                "recentlyAddedPlugins": "Следующие плагины были добавлены в недавних обновлениях:",
+                "numMorePlugins_one": "+ Еще {count} плагин",
+                "numMorePlugins_other": "+ Еще {count} плагинов"
             },
-            "missingRepoInfo": "Failed to retrieve repository information",
-            "alreadyUpToDate": "Already up todate with repository",
-            "foundCommits_zero": "No new commits",
-            "foundCommits_one": "Found {count} commit from repository",
-            "foundCommits_other": "Found {count} commits from repository",
-            "loggedCommits": "Logged commits from your latest update",
-            "upToDateLocalCopy": "Repository is up to date with your local copy",
-            "failedToFetchRepo": "Failed to fetch from repository",
-            "checkYourConnection": "Failed to connect to repository. Check your internet connection",
-            "failedtoFetchCommits": "Could not fetch commits from repository",
-            "repository": "Repository",
-            "viewRecentChanges": "View the most recent changes to Equicord. This fetches commits directly from the repository to show you what's new",
-            "failedToRetrieve": "Failed to retrieve - check console",
-            "upToDate": "Repository Up To Date",
-            "fetchRepo": "Fetch from Repository",
-            "checkYourInternet": "Make sure you have an internet connection and try again",
-            "recentChanges": "Recent Changes",
-            "updatedPluginsCount": "Updated Plugins ({plugins})",
-            "codeChanges_zero": "No Code Changes",
-            "codeChanges_one": "Code Changes ({count} commit)",
-            "codeChanges_other": "Code Changes ({count} commits)",
-            "emptyChangelog": "No commits available ahead of your current version. Click \"Fetch from Repository\" to check for new changes",
-            "updateLogs_zero": "No Update Logs",
-            "updateLogs_one": "Update Logs ({count} log)",
-            "updateLogs_other": "Update Logs ({count} logs)",
-            "previousSessions": "Previous update sessions with their commit history and plugin changes",
-            "title": "Changelog"
+            "missingRepoInfo": "Не удалось получить информацию о репозитории",
+            "alreadyUpToDate": "Уже обновлено до актуальной версии репозитория",
+            "foundCommits_zero": "Новых коммитов нет",
+            "foundCommits_one": "Найдено {count} коммит из репозитория",
+            "foundCommits_other": "Найдено {count} коммитов из репозитория",
+            "loggedCommits": "Отмеченные изменения из вашего последнего обновления",
+            "upToDateLocalCopy": "Репозиторий соответствует вашей локальной копии",
+            "failedToFetchRepo": "Не удалось получить из репозитория",
+            "checkYourConnection": "Не удалось подключиться к репозиторию. Проверьте подключение к Интернету",
+            "failedtoFetchCommits": "Не удалось получить коммиты из репозитория",
+            "repository": "Репозиторий",
+            "viewRecentChanges": "Просмотреть последние изменения в Equicord. Получает коммиты из репозитория, чтобы показать вам, что нового",
+            "failedToRetrieve": "Не удалось получить - проверьте консоль",
+            "upToDate": "Репозиторий обновлён",
+            "fetchRepo": "Загрузить из репозитория",
+            "checkYourInternet": "Убедитесь, что интернет подключен, и попробуйте снова",
+            "recentChanges": "Недавние изменения",
+            "updatedPluginsCount": "Обновлены плагины ({plugins})",
+            "codeChanges_zero": "Нет изменений кода",
+            "codeChanges_one": "Изменения кода ({count} коммит)",
+            "codeChanges_other": "Изменения кода ({count} коммитов)",
+            "emptyChangelog": "Нет коммитов перед вашей текущей версией. Нажмите \"Получить из репозитория\", чтобы проверить новые изменения",
+            "updateLogs_zero": "Нет журналов обновления",
+            "updateLogs_one": "Журналы обновления ({count} журнал)",
+            "updateLogs_other": "Журналы обновления ({count} журналов)",
+            "previousSessions": "Предыдущие сессии с историей коммитов и изменениями плагинов",
+            "title": "Список изменений"
         },
         "restartRequired": {
-            "body": "A restart is required to apply this change",
-            "cancel": "Later!",
-            "confirm": "Restart now",
-            "title": "Restart Required",
-            "plugins": "The following plugins require a restart:"
+            "body": "Для применения этого изменения требуется перезапуск",
+            "cancel": "Позже!",
+            "confirm": "Перезапустить сейчас",
+            "title": "Требуется перезапуск",
+            "plugins": "Следующие плагины требуют перезагрузки:"
         },
-        "title": "Settings",
+        "title": "Настройки",
         "transparent": {
-            "description": "You need a theme that supports transparency or this will do nothing. WILL STOP THE WINDOW FROM BEING RESIZABLE!! Requires a full restart",
-            "title": "Enable window transparency"
+            "description": "Вам нужна тема, которая поддерживает прозрачность либо это не будет работать. НЕ ДАСТ РАЗМЕРУ ОКНА БЫТЬ ИЗМЕНЯЕМЫМ!! Требуется полный перезапуск",
+            "title": "Включить прозрачность окна"
         },
         "useQuickCss": {
-            "description": "Loads your Custom CSS",
-            "title": "Enable Custom CSS"
+            "description": "Загружает пользовательский CSS",
+            "title": "Включить пользовательский CSS"
         },
         "winCtrlQ": {
-            "title": "Register Ctrl+Q as shortcut to close Discord (alternative to Alt+F4)"
+            "title": "Зарегистрировать Ctrl+Q как комбинацию клавиш для закрытия Discord (альтернатива Alt+F4)"
         },
         "winNativeTitleBar": {
-            "title": "Use Windows' native title bar instead of Discord's custom one"
+            "title": "Использовать строку заголовка Windows вместо пользовательской строки Discord"
         }
     },
     "tabs": {
-        "settings": "Equicord Settings"
+        "settings": "Настройки Equicord"
     }
 }
