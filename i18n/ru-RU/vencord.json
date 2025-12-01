@@ -62,7 +62,7 @@
     },
     "donorCard": {
         "donated": {
-            "vencordDescription": "Все пользователи Vencord могут видеть ваш значок! Вы можете управлять вашими навыками, отправив @{v}.",
+            "vencordDescription": "Все пользователи Vencord могут видеть ваш значок! Вы можете управлять вашими привилегиями, отправив @{v}.",
             "equicordDescription": "Все пользователи Equicord могут видеть ваш значок! Вы можете управлять вашими привилегиями, создав билет на сервере Equicord.",
             "description": "Все пользователи Vencord могут видеть ваш значок донатера Vencord, а пользователи Equicord — ваш значок донатера Equicord. Чтобы изменить значок донатера Vencord, свяжитесь с @vending.machine. Для изменения значок донатера Equicord создайте тикет на сервере Equicord.",
             "subtitle": "Благодарим за поддержку!",
@@ -70,24 +70,24 @@
         },
         "notDonated": {
             "description": "Пожалуйста, поддержите развитие Equicord пожертвованием!",
-            "title": "Поддержать проект"
+            "title": "Поддержать Проект"
         }
     },
     "failedToRender": "Не удалось отобразить вкладку {tab}. Если проблема повторится, попробуйте использовать программу установки для переустановки!",
     "quickActions": {
         "editQuickCSS": "Редактировать QuickCSS",
-        "notificationLog": "Журнал уведомлений",
-        "openSettings": "Открыть папку настроек",
+        "notificationLog": "Журнал Уведомлений",
+        "openSettings": "Открыть Папку Настроек",
         "relaunchDiscord": "Перезапустить Discord",
-        "title": "Быстрые действия",
-        "viewSource": "Просмотреть исходный код"
+        "title": "Быстрые Действия",
+        "viewSource": "Просмотреть Исходный Код"
     },
     "settings": {
         "disableMinSize": {
             "title": "Отключить минимальный размер окна"
         },
         "enableReactDevtools": {
-            "title": "Включить инструменты React для разработчиков"
+            "title": "Включить Инструменты React Для Разработчиков"
         },
         "frameless": {
             "title": "Отключить границу окна"
@@ -98,8 +98,8 @@
             "title": "Стиль размытия окна (требуется перезапуск)"
         },
         "notification": {
-            "logButton": "Посмотреть журнал уведомлений",
-            "settingsButton": "Настройки уведомлений"
+            "logButton": "Посмотреть Журнал Уведомлений",
+            "settingsButton": "Настройки Уведомлений"
         },
         "plugins": {
             "contributorModal": {
@@ -132,12 +132,12 @@
                 "newPluginsCount": " • {plugins} новых плагинов",
                 "updatedPluginsCount": " • {plugins} обновленных плагинов",
                 "newSettingsCount": " • {settings} новых настроек",
-                "updatedPlugins": "Обновленные плагины",
-                "newSettings": "Новые настройки",
+                "updatedPlugins": "Обновленные Плагины",
+                "newSettings": "Новые Настройки",
                 "newSettingInPlugin": "Новая настройка в {pluginName}"
             },
             "newPluginsSection": {
-                "newPluginsCount": "Новые плагины ({count})",
+                "newPluginsCount": "Новые Плагины ({count})",
                 "recentlyAddedPlugins": "Следующие плагины были добавлены в недавних обновлениях:",
                 "numMorePlugins_one": "+ Еще {count} плагин",
                 "numMorePlugins_other": "+ Еще {count} плагинов"
@@ -155,18 +155,18 @@
             "repository": "Репозиторий",
             "viewRecentChanges": "Просмотреть последние изменения в Equicord. Получает коммиты из репозитория, чтобы показать вам, что нового",
             "failedToRetrieve": "Не удалось получить - проверьте консоль",
-            "upToDate": "Репозиторий обновлён",
-            "fetchRepo": "Загрузить из репозитория",
+            "upToDate": "Репозиторий Обновлён",
+            "fetchRepo": "Загрузить из Репозитория",
             "checkYourInternet": "Убедитесь, что интернет подключен, и попробуйте снова",
             "recentChanges": "Недавние изменения",
-            "updatedPluginsCount": "Обновлены плагины ({plugins})",
-            "codeChanges_zero": "Нет изменений кода",
-            "codeChanges_one": "Изменения кода ({count} коммит)",
-            "codeChanges_other": "Изменения кода ({count} коммитов)",
+            "updatedPluginsCount": "Обновлены Плагины ({plugins})",
+            "codeChanges_zero": "Нет Изменений Кода",
+            "codeChanges_one": "Изменения Кода ({count} коммит)",
+            "codeChanges_other": "Изменения Кода ({count} коммитов)",
             "emptyChangelog": "Нет коммитов перед вашей текущей версией. Нажмите \"Получить из репозитория\", чтобы проверить новые изменения",
-            "updateLogs_zero": "Нет журналов обновления",
-            "updateLogs_one": "Журналы обновления ({count} журнал)",
-            "updateLogs_other": "Журналы обновления ({count} журналов)",
+            "updateLogs_zero": "Нет Журналов Обновления",
+            "updateLogs_one": "Журналы Обновления ({count} журнал)",
+            "updateLogs_other": "Журналы Обновления ({count} журналов)",
             "previousSessions": "Предыдущие сессии с историей коммитов и изменениями плагинов",
             "title": "Список изменений"
         },
@@ -174,7 +174,7 @@
             "body": "Для применения этого изменения требуется перезапуск",
             "cancel": "Позже!",
             "confirm": "Перезапустить сейчас",
-            "title": "Требуется перезапуск",
+            "title": "Требуется Перезапуск",
             "plugins": "Следующие плагины требуют перезагрузки:"
         },
         "title": "Настройки",
@@ -183,8 +183,8 @@
             "title": "Включить прозрачность окна"
         },
         "useQuickCss": {
-            "description": "Загружает пользовательский CSS",
-            "title": "Включить пользовательский CSS"
+            "description": "Загружает Пользовательский CSS",
+            "title": "Включить Пользовательский CSS"
         },
         "winCtrlQ": {
             "title": "Зарегистрировать Ctrl+Q как комбинацию клавиш для закрытия Discord (альтернатива Alt+F4)"
