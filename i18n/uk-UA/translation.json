@@ -5,6 +5,6 @@
             "description": "Force a different locale for Equicord to use",
             "followDiscord": "Default (follow Discord)"
         },
-        "showMissingKeys": "If the current locale is missing translations, show the keys instead of falling back to English"
+        "showMissingKeys": "Якщо в поточній локалізації відсутні переклади, показувати ключі замість повернення до англійської"
     }
 }
