@@ -1,143 +1,143 @@
 {
-    "donate": "Donate",
-    "invite": "Invite",
-    "loading": "Loading...",
-    "cancel": "Cancel",
+    "donate": "Пожертвувати",
+    "invite": "Запросити",
+    "loading": "Завантаження...",
+    "cancel": "Скасувати",
     "logs": {
-        "clearLog": "Clear Log",
-        "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
-        "logCleared": "Log has been cleared",
-        "clearLogs": "Clear Logs",
-        "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
-        "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
-        "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
-        "logsCleared": "Selected logs have been cleared",
-        "hideLogs": "Hide Logs",
-        "showLogs": "Show Logs",
-        "clearAllLogs": "Clear All Logs",
-        "clearAll": "Clear All",
-        "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
-        "allLogsCleared": "All logs have been cleared"
+        "clearLog": "Очистити Журнал",
+        "clearLogConfirmation": "Ви впевнені, що хочете очистити цей журнал? Це неможливо скасувати.",
+        "logCleared": "Журнал очищено",
+        "clearLogs": "Очистити Журнал",
+        "clearLogsConfirmation": "Ви впевнені, що хочете очистити ці журнали? Це неможливо скасувати.",
+        "clearLogsConfirmationNum_one": "Ви впевнені, що хочете очистити {count} журнал",
+        "clearLogsConfirmationNum_other": "Ви впевнені, що хочете очистити {count} журнали",
+        "logsCleared": "Вибрані журнали очищено",
+        "hideLogs": "Приховати Журнали",
+        "showLogs": "Показати Журнали",
+        "clearAllLogs": "Очистити Всі Журнали",
+        "clearAll": "Очистити Все",
+        "clearAllLogsConfirmation": "Ви впевнені, що ви хотіли б очистити всі журнали? Це неможливо скасувати.",
+        "allLogsCleared": "Всі журнали очищено"
     },
     "addonCard": {
-        "new": "NEW"
+        "new": "НОВЕ"
     },
     "cloud": {
         "integrations": {
-            "header": "Cloud Integrations",
-            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
-            "failedToRetrieveOAuth": "Setup failed (couldn't retrieve OAuth configuration).",
-            "enabled": "Cloud integrations enabled!",
-            "noSecret": "Setup failed (no secret returned?).",
-            "error": "Setup failed ({e})"
+            "header": "Хмарна Інтеграція",
+            "reauthenticateOtherClient": "Ми помітили, що у вас включена хмарна інтеграція в іншому клієнті! У зв'язку з обмеженнями, Вам необхідно буде повторно автентифікуватись для продовження їх використання. Натисніть тут, щоб перейти до сторінки налаштувань для цього!",
+            "failedToRetrieveOAuth": "Спроба встановлення зазнала невдачі (неможливо отримати конфігурацію OAuth).",
+            "enabled": "Хмарна інтеграція увімкнена!",
+            "noSecret": "Помилка встановлення (не було повернуто секрет?).",
+            "error": "Встановлення не вдалося ({e})"
         },
         "settings": {
-            "header": "Cloud Settings",
-            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!",
-            "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
-            "success": "Synchronized settings to the cloud!",
-            "failedToSync": "Could not synchronize settings to the cloud ({e}).",
-            "accountChanged": "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
-            "noSettings": "There are no settings in the cloud.",
-            "upToDate": "Your settings are up to date.",
-            "newerThanCloud": "Your local settings are newer than the cloud ones.",
-            "updated": "Your settings have been updated! Click here to restart to fully apply changes!",
-            "syncFromCloud": "Could not synchronize settings from the cloud ({e}).",
-            "apiDelete": "Could not delete settings (API returned {e}).",
-            "deleted": "Settings deleted from cloud!",
-            "failedToDelete": "Could not delete settings ({e}).",
-            "apiEraseAll": "Could not erase all data (API returned {e}), please contact support.",
-            "erased": "Successfully erased all data."
+            "header": "Налаштування Хмари",
+            "updatedRemote": "Ваші налаштування оновлено! Натисніть тут, щоб перезавантажитись, щоб повністю застосувати зміни!",
+            "apiReject": "Не вдалося синхронізувати налаштування з хмарою (API повернув {e}).",
+            "success": "Налаштування успішно синхронізовані з хмарою!",
+            "failedToSync": "Не вдалося синхронізувати налаштування з хмарою ({e}).",
+            "accountChanged": "Синхронізація з хмаркою була вимкнена, оскільки цей обліковий запис не підключений до Хмари. Ви зможете знову увімкнути його, під'єднавши цей обліковий запис в налаштуваннях Хмари. (Примітка: Ваші налаштування будуть зберігатися окремо)",
+            "noSettings": "У хмарі немає налаштувань.",
+            "upToDate": "Ваші налаштування є найновішими.",
+            "newerThanCloud": "Ваші локальні налаштування новіші за хмарні.",
+            "updated": "Ваші налаштування оновлено! Натисніть тут, щоб перезавантажитись, щоб повністю застосувати зміни!",
+            "syncFromCloud": "Не вдалося синхронізувати налаштування з хмари ({e}).",
+            "apiDelete": "Не вдалося видалити налаштування (API повернув {e}).",
+            "deleted": "Налаштування видалені з хмари!",
+            "failedToDelete": "Не вдалося видалити налаштування ({e}).",
+            "apiEraseAll": "Не вдалося стерти всі дані (API повернув {e}), будь ласка, зверніться до служби підтримки.",
+            "erased": "Успішно стерто всі дані."
         }
     },
     "settingsSync": {
-        "imported": "Settings successfully imported. Restart to apply changes!",
-        "failedToImport": "Failed to import settings: {e}"
+        "imported": "Налаштування успішно імпортовано. Перезапустіть програму, щоб застосувати зміни!",
+        "failedToImport": "Не вдалося імпортувати налаштування: {e}"
     },
     "contributorCard": {
-        "contributionsButton": "See what you've contributed to",
-        "description": "Since you've contributed to Equicord you now have a cool new badge!",
-        "subtitle": "Thank you for contributing!",
-        "title": "Contributions"
+        "contributionsButton": "Погляньте, на що ви внесли свій внесок",
+        "description": "Оскільки ти зробив внесок у Equicord, тепер у тебе з’явився новий крутий бейдж!",
+        "subtitle": "Дякуємо за ваш внесок!",
+        "title": "Внески"
     },
     "donorCard": {
         "donated": {
-            "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
-            "equicordDescription": "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
-            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server.",
-            "subtitle": "Thank you for donating!",
-            "title": "Donations"
+            "vencordDescription": "Усі користувачі Vencord можуть бачити ваш бейдж! Ви можете керувати своїми перевагами, надіславши повідомлення @{v}.",
+            "equicordDescription": "Усі користувачі Vencord можуть бачити ваш бейдж! Ви можете керувати своїми перевагами, створивши квиток на сервері Equicord.",
+            "description": "Всі користувачі Vencord можуть бачити ваш донорський бейдж Vencord і Equicord користувачі можуть бачити ваш донорський бейдж. Щоб змінити значок донора Vencord зв'яжіться з допомогою @vending.machine. Щоб змінити бейдж донора Equicord, зробіть квиток на сервері Equicord.",
+            "subtitle": "Дякуємо вам за пожертву!",
+            "title": "Пожертвування"
         },
         "notDonated": {
-            "description": "Please consider supporting the development of Equicord by donating!",
-            "title": "Support the Project"
+            "description": "Будь ласка, підтримайте розробку Equicord пожертвуванням!",
+            "title": "Підтримка Проєкту"
         }
     },
-    "failedToRender": "Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!",
+    "failedToRender": "Не вдалося відобразити вкладку {tab}. Якщо ця проблема повторюватиметься, спробуйте перевстановити!",
     "quickActions": {
-        "editQuickCSS": "Edit QuickCSS",
-        "notificationLog": "Notification Log",
-        "openSettings": "Open Settings Folder",
-        "relaunchDiscord": "Relaunch Discord",
-        "title": "Quick Actions",
-        "viewSource": "View Source Code"
+        "editQuickCSS": "Редагувати QuickCSS",
+        "notificationLog": "Журнал Сповіщень",
+        "openSettings": "Відкрити Теку Налаштувань",
+        "relaunchDiscord": "Перезапустити Discord",
+        "title": "Швидкі Дії",
+        "viewSource": "Переглянути Вихідний Код"
     },
     "settings": {
         "disableMinSize": {
-            "title": "Disable minimum window size"
+            "title": "Вимкнути мінімальний розмір вікна"
         },
         "enableReactDevtools": {
-            "title": "Enable React Developer Tools"
+            "title": "Увімкнути Інструменти Розробника React"
         },
         "frameless": {
-            "title": "Disable the window frame"
+            "title": "Вимкнути рамки вікна"
         },
-        "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
+        "hint": "Підказка: Ви можете змінити позицію секції цих налаштувань в <0>налаштуваннях плагіну</0>!",
         "macosVibrancyStyle": {
-            "placeholder": "Window vibrancy style",
-            "title": "Window vibrancy style (requires restart)"
+            "placeholder": "Стиль вібрації вікна",
+            "title": "Стиль вібрації вікна (вимагає перезавантаження)"
         },
         "notification": {
-            "logButton": "View Notification Log",
-            "settingsButton": "Notification Settings"
+            "logButton": "Журнал Сповіщень",
+            "settingsButton": "Налаштування Сповіщень"
         },
         "plugins": {
             "contributorModal": {
                 "contributorInfo": {
-                    "noPlugins": "This person has not made any plugins. They likely <0>contributed</0> to Equicord in other ways!",
-                    "plugins_one": "This person has <0>contributed</0> to {count} plugin!",
-                    "plugins_other": "This person has <0>contributed</0> to {count} plugins!"
+                    "noPlugins": "Ця людина не створила жодних плагінів. Швидше за все, <0>зробив внесок </0> до Equicord іншими шляхами!",
+                    "plugins_one": "Ця людина <0>зробила внесок</0> у {count} плагін!",
+                    "plugins_other": "Ця людина <0>зробила внесок</0> до {count} плагінів!"
                 }
             },
-            "requiredToFunction": "This plugin is required for Equicord to function",
-            "pluginRequiredBy": "This plugin is required by: {pluginNames}",
-            "noDescription": "No description available"
+            "requiredToFunction": "Цей плагін необхідний для функціонування Equicord",
+            "pluginRequiredBy": "Цей плагін необхідний: {pluginNames}",
+            "noDescription": "Опис відсутній"
         },
         "changelog": {
             "manager": {
-                "minutes_one": "{count} minute ago",
-                "minutes_other": "{count} minutes ago",
-                "hours_one": "{count} hour ago",
-                "hours_other": "{count} hours ago",
-                "days_one": "{count} day ago",
-                "days_other": "{count} days ago"
+                "minutes_one": "{count} хв тому",
+                "minutes_other": "{count} хв тому",
+                "hours_one": "{count} год тому",
+                "hours_other": "{count} год тому",
+                "days_one": "{count} день тому",
+                "days_other": "{count} дн тому"
             },
             "updateCard": {
-                "upToDate": "Repository check: {fromHash} (up to date)",
-                "outOfDate": "Repository check: {fromHash} → {toHash}",
-                "update": "Update: {fromHash} → {toHash}",
-                "commits_zero": " • No new commits",
-                "commits_one": " • {count} commit available",
-                "commits_other": " • {count} commits available",
-                "newPluginsCount": " • {plugins} new plugins",
-                "updatedPluginsCount": " • {plugins} updated plugins",
-                "newSettingsCount": " • {settings} new settings",
-                "updatedPlugins": "Updated Plugins",
-                "newSettings": "New Settings",
-                "newSettingInPlugin": "New setting in {pluginName}"
+                "upToDate": "Перевірка репозиторію: {fromHash} (актуальна)",
+                "outOfDate": "Перевірка репозиторію: {fromHash} → {toHash}",
+                "update": "Оновлення: {fromHash} → {toHash}",
+                "commits_zero": " • Нема нових комітів",
+                "commits_one": " • доступний {count} коміт",
+                "commits_other": " • Доступні {count} коміти",
+                "newPluginsCount": " • {plugins} нових плагінів",
+                "updatedPluginsCount": " • Оновлені плагіни {plugins}",
+                "newSettingsCount": " • {settings} нових налаштувань",
+                "updatedPlugins": "Оновлені Плагіни",
+                "newSettings": "Нові Налаштування",
+                "newSettingInPlugin": "Нові налаштування в {pluginName}"
             },
             "newPluginsSection": {
-                "newPluginsCount": "New Plugins ({count})",
+                "newPluginsCount": "Нові плагіни ({count})",
                 "recentlyAddedPlugins": "The following plugins have been added in recent updates:",
                 "numMorePlugins_one": "+{count} more plugin",
                 "numMorePlugins_other": "+{count} more plugins"
