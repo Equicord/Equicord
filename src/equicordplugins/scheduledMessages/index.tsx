@@ -9,6 +9,7 @@ import "./styles.css";
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
+import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { EquicordDevs } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
@@ -17,7 +18,7 @@ import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, M
 import definePlugin, { OptionType } from "@utils/types";
 import { CloudUpload } from "@vencord/discord-types";
 import { findLazy } from "@webpack";
-import { Button, ChannelStore, ComponentDispatch, Constants, DraftType, FluxDispatcher, GuildStore, IconUtils, MessageActions, MessageStore, React, RelationshipStore, RestAPI, showToast, SnowflakeUtils, TextInput, Toasts, UploadManager, UserStore, useState } from "@webpack/common";
+import { ChannelStore, ComponentDispatch, Constants, DraftType, FluxDispatcher, GuildStore, IconUtils, MessageActions, MessageStore, React, RelationshipStore, RestAPI, showToast, SnowflakeUtils, TextInput, Toasts, UploadManager, UserStore, useState } from "@webpack/common";
 
 import { CalendarIcon, isScheduleModeEnabled, ScheduledMessagesButton, setScheduleModeEnabled, TimerIcon } from "./components";
 
@@ -550,8 +551,8 @@ function ScheduleTimeModal({ channelId, content, attachments, rootProps, close }
 
                 <Heading tag="h5" className={cl("field-label")}>Schedule Type</Heading>
                 <div className={cl("schedule-type-buttons")}>
-                    <Button size={Button.Sizes.SMALL} color={scheduleType === "delay" ? Button.Colors.BRAND : Button.Colors.PRIMARY} onClick={() => setScheduleType("delay")}>Delay</Button>
-                    <Button size={Button.Sizes.SMALL} color={scheduleType === "time" ? Button.Colors.BRAND : Button.Colors.PRIMARY} onClick={() => setScheduleType("time")}>Specific Time</Button>
+                    <Button size="small" variant={scheduleType === "delay" ? "primary" : "secondary"} onClick={() => setScheduleType("delay")}>Delay</Button>
+                    <Button size="small" variant={scheduleType === "time" ? "primary" : "secondary"} onClick={() => setScheduleType("time")}>Specific Time</Button>
                 </div>
 
                 {scheduleType === "delay" ? (
@@ -575,8 +576,8 @@ function ScheduleTimeModal({ channelId, content, attachments, rootProps, close }
             </ModalContent>
 
             <ModalFooter separator className={cl("modal-footer")}>
-                <Button onClick={handleSchedule} color={Button.Colors.GREEN}>Schedule</Button>
-                <Button color={Button.Colors.TRANSPARENT} look={Button.Looks.LINK} onClick={close}>Cancel</Button>
+                <Button onClick={handleSchedule} variant="positive">Schedule</Button>
+                <Button variant="secondary" onClick={close}>Cancel</Button>
             </ModalFooter>
         </ModalRoot>
     );
@@ -630,7 +631,7 @@ function ViewScheduledModal({ rootProps, close }: { rootProps: ModalProps; close
                                         <div className={cl("message-time")}><TimerIcon width={14} height={14} /><span>{new Date(msg.scheduledTime).toLocaleString()}</span></div>
                                         <div className={cl("message-content")}>{msg.content.length > 200 ? msg.content.slice(0, 200) + "..." : msg.content}</div>
                                     </div>
-                                    <Button size={Button.Sizes.SMALL} color={Button.Colors.RED} onClick={() => handleDelete(msg.id)}>Delete</Button>
+                                    <Button size="small" variant="dangerPrimary" onClick={() => handleDelete(msg.id)}>Delete</Button>
                                 </div>
                             );
                         })}
@@ -639,7 +640,7 @@ function ViewScheduledModal({ rootProps, close }: { rootProps: ModalProps; close
             </ModalContent>
 
             <ModalFooter separator className={cl("modal-footer")}>
-                <Button onClick={close} color={Button.Colors.PRIMARY}>Close</Button>
+                <Button onClick={close} variant="secondary">Close</Button>
             </ModalFooter>
         </ModalRoot>
     );
