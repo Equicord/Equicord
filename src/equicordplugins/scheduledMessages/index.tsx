@@ -7,7 +7,6 @@
 import "./styles.css";
 
 import * as DataStore from "@api/DataStore";
-import { addMessagePreSendListener, MessageSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
 import { Heading } from "@components/Heading";
@@ -18,7 +17,7 @@ import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, M
 import definePlugin, { OptionType } from "@utils/types";
 import { CloudUpload } from "@vencord/discord-types";
 import { findLazy } from "@webpack";
-import { Button, ChannelStore, ComponentDispatch, Constants, DraftType, FluxDispatcher, IconUtils, MessageActions, MessageStore, React, RelationshipStore, RestAPI, showToast, SnowflakeUtils, TextInput, Toasts, UploadManager, UserStore, useState } from "@webpack/common";
+import { Button, ChannelStore, ComponentDispatch, Constants, DraftType, FluxDispatcher, GuildStore, IconUtils, MessageActions, MessageStore, React, RelationshipStore, RestAPI, showToast, SnowflakeUtils, TextInput, Toasts, UploadManager, UserStore, useState } from "@webpack/common";
 
 import { CalendarIcon, isScheduleModeEnabled, ScheduledMessagesButton, setScheduleModeEnabled, TimerIcon } from "./components";
 
@@ -59,7 +58,6 @@ let isProcessingMessages = false;
 let reactionInterceptor: ((event: any) => any) | null = null;
 let originalRestAPIPut: typeof RestAPI.put | null = null;
 let originalRestAPIGet: typeof RestAPI.get | null = null;
-let preSendListener: MessageSendListener | null = null;
 
 export const phantomMessageMap = new Map<string, { scheduledTime: number; messageId: string; channelId: string; }>();
 const pendingReactions = new Map<string, ScheduledReaction[]>();
@@ -118,7 +116,7 @@ function getChannelDisplayInfo(channelId: string): { name: string; avatar: strin
     const channel = ChannelStore.getChannel(channelId);
     if (!channel) return { name: "Unknown", avatar: "" };
 
-    if (channel.isDM?.()) {
+    if (channel.isDM() || channel.isMultiUserDM()) {
         const recipientId = channel.recipients?.[0];
         const user = recipientId ? UserStore.getUser(recipientId) : null;
         if (user) {
@@ -130,14 +128,30 @@ function getChannelDisplayInfo(channelId: string): { name: string; avatar: strin
         return { name: "DM", avatar: "" };
     }
 
-    if (channel.isGroupDM?.()) {
+    if (channel.isGroupDM()) {
         return {
             name: channel.name || "Group DM",
-            avatar: IconUtils.getChannelIconURL?.(channel) || ""
+            avatar: IconUtils.getChannelIconURL(channel) || ""
         };
     }
 
-    return { name: channel.name || "Channel", avatar: "" };
+    const guild = GuildStore.getGuild(channel.guild_id);
+    if (guild) {
+        return {
+            name: channel.name || "Channel",
+            avatar: IconUtils.getGuildIconURL({
+                id: guild?.id,
+                icon: guild?.icon,
+                canAnimate: true,
+                size: 512
+            }) || ""
+        };
+    }
+
+    return {
+        name: channel.name || "Channel",
+        avatar: ""
+    };
 }
 
 function createPhantomMessage(msg: ScheduledMessage): void {
@@ -300,7 +314,7 @@ async function addReactionsToMessage(channelId: string, messageId: string, react
                     url: `/channels/${channelId}/messages/${messageId}/reactions/${emojiStr}/@me`
                 });
 
-                if (result.ok !== false) {
+                if (result.ok) {
                     success = true;
                     break;
                 }
@@ -346,7 +360,10 @@ async function uploadAttachment(channelId: string, attachment: ScheduledAttachme
         }, channelId);
 
         upload.on("complete", () => {
-            resolve({ filename: upload.filename, uploaded_filename: upload.uploadedFilename });
+            resolve({
+                filename: upload.filename,
+                uploaded_filename: upload.uploadedFilename
+            });
         });
         upload.on("error", () => {
             logger.error(`Failed to upload attachment ${attachment.filename}`);
@@ -482,7 +499,8 @@ function ScheduleTimeModal({ channelId, content, attachments, rootProps, close }
 
     const { name, avatar } = getChannelDisplayInfo(channelId);
     const channel = ChannelStore.getChannel(channelId);
-    const isDM = channel?.isDM?.() || channel?.isGroupDM?.();
+    if (!channel) return null;
+    const isDM = channel.isDM() || channel.isGroupDM() || channel.isMultiUserDM();
 
     const handleSchedule = async () => {
         let scheduledTime: number;
@@ -600,7 +618,8 @@ function ViewScheduledModal({ rootProps, close }: { rootProps: ModalProps; close
                         {messages.map(msg => {
                             const { name, avatar } = getChannelDisplayInfo(msg.channelId);
                             const channel = ChannelStore.getChannel(msg.channelId);
-                            const isDM = channel?.isDM?.() || channel?.isGroupDM?.();
+                            if (!channel) return null;
+                            const isDM = channel.isDM() || channel.isGroupDM() || channel.isMultiUserDM();
                             return (
                                 <div key={msg.id} className={cl("message-item")}>
                                     <div className={cl("message-info")}>
@@ -671,7 +690,11 @@ function createReactionInterceptor() {
                         reactions[existingIdx].count++;
                     } else {
                         reactions.push({
-                            emoji: { id: emoji.id, name: emoji.name, animated: emoji.animated },
+                            emoji: {
+                                id: emoji.id,
+                                name: emoji.name,
+                                animated: emoji.animated
+                            },
                             count: 1
                         });
                     }
@@ -734,10 +757,7 @@ export default definePlugin({
         "View Scheduled Messages": openViewScheduledModal
     },
 
-    patches: [],
-
-    renderMessageAccessory(props: any) {
-        const { message } = props;
+    renderMessageAccessory({ message }) {
         const data = phantomMessageMap.get(message?.id) || message?.scheduledMessageData;
         if (!data) return null;
 
@@ -761,51 +781,50 @@ export default definePlugin({
             </div>
         );
     },
+    async onBeforeMessageSend(channelId, messageObj, options) {
+        if (isScheduleModeEnabled && (messageObj.content.trim() || options.uploads?.length)) {
+            setScheduleModeEnabled(false);
+
+            let attachments: ScheduledAttachment[] | undefined;
+
+            if (options.uploads?.length) {
+                attachments = [];
+                for (const upload of options.uploads) {
+                    try {
+                        const file = upload.item?.file;
+                        if (file) {
+                            const base64 = await new Promise<string>((resolve, reject) => {
+                                const reader = new FileReader();
+                                reader.onload = () => {
+                                    const result = reader.result as string;
+                                    // Remove the data URL prefix (e.g., "data:image/png;base64,")
+                                    const base64Data = result.split(",")[1] || result;
+                                    resolve(base64Data);
+                                };
+                                reader.onerror = () => reject(reader.error);
+                                reader.readAsDataURL(file);
+                            });
+                            attachments.push({
+                                filename: upload.filename,
+                                data: base64,
+                                type: file.type
+                            });
+                        }
+                    } catch (e) {
+                        logger.error("Failed to read attachment:", e);
+                    }
+                }
+            }
+
+            openScheduleTimeModal(channelId, messageObj.content, attachments);
+            return { cancel: true };
+        }
+    },
 
     async start() {
         await loadScheduledMessages();
         startScheduler();
         recreatePhantomMessages();
-
-        preSendListener = addMessagePreSendListener(async (channelId, messageObj, options) => {
-            if (isScheduleModeEnabled && (messageObj.content.trim() || options.uploads?.length)) {
-                setScheduleModeEnabled(false);
-
-                let attachments: ScheduledAttachment[] | undefined;
-
-                if (options.uploads?.length) {
-                    attachments = [];
-                    for (const upload of options.uploads) {
-                        try {
-                            const file = upload.item?.file;
-                            if (file) {
-                                const base64 = await new Promise<string>((resolve, reject) => {
-                                    const reader = new FileReader();
-                                    reader.onload = () => {
-                                        const result = reader.result as string;
-                                        // Remove the data URL prefix (e.g., "data:image/png;base64,")
-                                        const base64Data = result.split(",")[1] || result;
-                                        resolve(base64Data);
-                                    };
-                                    reader.onerror = () => reject(reader.error);
-                                    reader.readAsDataURL(file);
-                                });
-                                attachments.push({
-                                    filename: upload.filename,
-                                    data: base64,
-                                    type: file.type
-                                });
-                            }
-                        } catch (e) {
-                            logger.error("Failed to read attachment:", e);
-                        }
-                    }
-                }
-
-                openScheduleTimeModal(channelId, messageObj.content, attachments);
-                return { cancel: true };
-            }
-        });
 
         reactionInterceptor = createReactionInterceptor();
         FluxDispatcher.addInterceptor(reactionInterceptor);
@@ -837,11 +856,6 @@ export default definePlugin({
             removePhantomMessage(msg);
         }
 
-        if (preSendListener) {
-            removeMessagePreSendListener(preSendListener);
-            preSendListener = null;
-        }
-
         if (reactionInterceptor) {
             const index = (FluxDispatcher as any)._interceptors?.indexOf(reactionInterceptor);
             if (index > -1) {
@@ -854,6 +868,7 @@ export default definePlugin({
             RestAPI.put = originalRestAPIPut;
             originalRestAPIPut = null;
         }
+
         if (originalRestAPIGet) {
             RestAPI.get = originalRestAPIGet;
             originalRestAPIGet = null;

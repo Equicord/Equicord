@@ -8,7 +8,7 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { IconComponent } from "@utils/types";
 import { React } from "@webpack/common";
 
-import { openViewScheduledModal } from "./index";
+import { openViewScheduledModal } from ".";
 
 export let isScheduleModeEnabled = false;
 export let setScheduleModeEnabled: (enabled: boolean) => void = () => { };
