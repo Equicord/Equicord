@@ -138,62 +138,62 @@
             },
             "newPluginsSection": {
                 "newPluginsCount": "Нові плагіни ({count})",
-                "recentlyAddedPlugins": "The following plugins have been added in recent updates:",
-                "numMorePlugins_one": "+{count} more plugin",
-                "numMorePlugins_other": "+{count} more plugins"
+                "recentlyAddedPlugins": "Наступні плагіни були додані в останніх оновленнях:",
+                "numMorePlugins_one": "+{count} більше плагін",
+                "numMorePlugins_other": "+{count} більше плагінів"
             },
-            "missingRepoInfo": "Failed to retrieve repository information",
-            "alreadyUpToDate": "Already up todate with repository",
-            "foundCommits_zero": "No new commits",
-            "foundCommits_one": "Found {count} commit from repository",
-            "foundCommits_other": "Found {count} commits from repository",
-            "loggedCommits": "Logged commits from your latest update",
-            "upToDateLocalCopy": "Repository is up to date with your local copy",
-            "failedToFetchRepo": "Failed to fetch from repository",
-            "checkYourConnection": "Failed to connect to repository. Check your internet connection",
-            "failedtoFetchCommits": "Could not fetch commits from repository",
-            "repository": "Repository",
-            "viewRecentChanges": "View the most recent changes to Equicord. This fetches commits directly from the repository to show you what's new",
-            "failedToRetrieve": "Failed to retrieve - check console",
-            "upToDate": "Repository Up To Date",
-            "fetchRepo": "Fetch from Repository",
-            "checkYourInternet": "Make sure you have an internet connection and try again",
-            "recentChanges": "Recent Changes",
-            "updatedPluginsCount": "Updated Plugins ({plugins})",
-            "codeChanges_zero": "No Code Changes",
-            "codeChanges_one": "Code Changes ({count} commit)",
-            "codeChanges_other": "Code Changes ({count} commits)",
-            "emptyChangelog": "No commits available ahead of your current version. Click \"Fetch from Repository\" to check for new changes",
-            "updateLogs_zero": "No Update Logs",
-            "updateLogs_one": "Update Logs ({count} log)",
-            "updateLogs_other": "Update Logs ({count} logs)",
-            "previousSessions": "Previous update sessions with their commit history and plugin changes",
-            "title": "Changelog"
+            "missingRepoInfo": "Не вдалося отримати інформацію про репозиторій",
+            "alreadyUpToDate": "Вже оновлено до актуальної версії репозиторія",
+            "foundCommits_zero": "Немає нових комітів",
+            "foundCommits_one": "Знайдено {count} коміт із репозиторію",
+            "foundCommits_other": "Знайдено {count} коміти із репозиторію",
+            "loggedCommits": "Записані коміти з вашого останнього оновлення",
+            "upToDateLocalCopy": "Репозиторій відповідає вашій локальній копії",
+            "failedToFetchRepo": "Не вдалося отримати з репозиторію",
+            "checkYourConnection": "Не вдалося підключитися до репозиторію. Перевірте підключення до Інтернету",
+            "failedtoFetchCommits": "Не вдалося отримати коміти з репозиторію",
+            "repository": "Репозиторій",
+            "viewRecentChanges": "Перегляньте останні зміни оновлено. Ця вибірка коміти прямо з репозиторію, щоб показати вам, що нового",
+            "failedToRetrieve": "Не вдалося отримати - перевірте консоль",
+            "upToDate": "Репозиторій Оновлено",
+            "fetchRepo": "Отримати з Репозиторію",
+            "checkYourInternet": "Переконайтеся, що у вас є підключення до Інтернету і повторіть спробу",
+            "recentChanges": "Нещодавні Зміни",
+            "updatedPluginsCount": "Оновлені Плагіни ({plugins})",
+            "codeChanges_zero": "Немає Змін Коду",
+            "codeChanges_one": "Зміна Коду ({count} коміт)",
+            "codeChanges_other": "Зміна Коду ({count} комітів)",
+            "emptyChangelog": "Відсутні коміти перед поточною версією. Натисніть кнопку \"Отримати з репозиторію\", щоб перевірити нові зміни",
+            "updateLogs_zero": "Журнал оновлень відсутній",
+            "updateLogs_one": "Оновити журнал ({count} log)",
+            "updateLogs_other": "Оновити журнал ({count} logs)",
+            "previousSessions": "Попередні оновлення сесій зі своєю історією комітів та зміною плагінів",
+            "title": "Журнал змін"
         },
         "restartRequired": {
-            "body": "A restart is required to apply this change",
-            "cancel": "Later!",
-            "confirm": "Restart now",
-            "title": "Restart Required",
-            "plugins": "The following plugins require a restart:"
+            "body": "Для застосування змін необхідне перезавантаження",
+            "cancel": "Пізніше!",
+            "confirm": "Перезапустити зараз",
+            "title": "Потрібен Перезапуск",
+            "plugins": "Для наступних плагінів необхідно перезапустити застосунок:"
         },
-        "title": "Settings",
+        "title": "Налаштування",
         "transparent": {
-            "description": "You need a theme that supports transparency or this will do nothing. WILL STOP THE WINDOW FROM BEING RESIZABLE!! Requires a full restart",
-            "title": "Enable window transparency"
+            "description": "Вам потрібна тема, яка підтримує прозорість, інакше це не спрацює. ЗАБОРОНЯЄ ЗМІНУ РОЗМІРУ ВІКНА! Потрібен повний перезапуск",
+            "title": "Увімкнути прозорість вікна"
         },
         "useQuickCss": {
-            "description": "Loads your Custom CSS",
-            "title": "Enable Custom CSS"
+            "description": "Завантажує Користувацький CSS",
+            "title": "Увімкнути Користувацький CSS"
         },
         "winCtrlQ": {
-            "title": "Register Ctrl+Q as shortcut to close Discord (alternative to Alt+F4)"
+            "title": "Зареєструвати Ctrl+Q як ярлик, щоб закрити Discord (альтернатива Alt+F4)"
         },
         "winNativeTitleBar": {
-            "title": "Use Windows' native title bar instead of Discord's custom one"
+            "title": "Використовувати нативну панель вікна Windows замість користувацької Discord"
         }
     },
     "tabs": {
-        "settings": "Equicord Settings"
+        "settings": "Налаштування Equicord"
     }
 }
