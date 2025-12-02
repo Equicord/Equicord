@@ -155,30 +155,119 @@ function getChannelDisplayInfo(channelId: string): { name: string; avatar: strin
     };
 }
 
-function createPhantomMessage(msg: ScheduledMessage): void {
+function getImageDimensions(dataUrl: string): Promise<{ width: number; height: number; }> {
+    return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight });
+        img.onerror = () => resolve({ width: 400, height: 300 }); // fallback res
+        img.src = dataUrl;
+    });
+}
+
+function getVideoPreview(dataUrl: string): Promise<{ width: number; height: number; previewUrl: string; } | null> {
+    return new Promise(resolve => {
+        const video = document.createElement("video");
+        video.preload = "metadata";
+        video.muted = true;
+        video.playsInline = true;
+
+        const timeout = setTimeout(() => {
+            video.src = "";
+            resolve(null);
+        }, 5000);
+
+        video.onloadeddata = () => {
+            clearTimeout(timeout);
+            video.currentTime = 0;
+        };
+
+        video.onseeked = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext("2d");
+            if (ctx) {
+                ctx.drawImage(video, 0, 0);
+                const size = Math.min(canvas.width, canvas.height) * 0.2;
+                const cx = canvas.width / 2;
+                const cy = canvas.height / 2;
+                ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+                ctx.beginPath();
+                ctx.arc(cx, cy, size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "white";
+                ctx.beginPath();
+                ctx.moveTo(cx - size * 0.3, cy - size * 0.4);
+                ctx.lineTo(cx - size * 0.3, cy + size * 0.4);
+                ctx.lineTo(cx + size * 0.5, cy);
+                ctx.closePath();
+                ctx.fill();
+
+                resolve({
+                    width: video.videoWidth,
+                    height: video.videoHeight,
+                    previewUrl: canvas.toDataURL("image/png")
+                });
+            } else {
+                resolve(null);
+            }
+            video.src = "";
+        };
+
+        video.onerror = () => {
+            clearTimeout(timeout);
+            resolve(null);
+        };
+
+        video.src = dataUrl;
+    });
+}
+
+async function createPhantomMessage(msg: ScheduledMessage): Promise<void> {
     if (!settings.store.showPhantomMessages) return;
 
     const currentUser = UserStore.getCurrentUser();
     if (!currentUser) return;
 
     const messageId = `scheduled-${msg.id}`;
+    const phantomAttachments: any[] = [];
+    const supportedVideoTypes = ["video/mp4", "video/webm", "video/ogg"];
 
-    const phantomAttachments = (msg.attachments || []).map((att, idx) => {
-        const dataUrl = `data:${att.type};base64,${att.data}`;
+    for (let idx = 0; idx < (msg.attachments || []).length; idx++) {
+        const att = msg.attachments![idx];
         const isImage = att.type.startsWith("image/");
-        return {
+        const isVideo = att.type.startsWith("video/");
+        const isSupportedVideo = supportedVideoTypes.includes(att.type);
+
+        const attachment: any = {
             id: String(idx),
             filename: att.filename,
             size: Math.ceil(att.data.length * 0.75),
-            url: dataUrl,
-            proxy_url: dataUrl,
-            content_type: att.type,
-            ...(isImage && {
-                width: 400,
-                height: 300
-            })
+            content_type: att.type
         };
-    });
+
+        if (isImage) {
+            const dataUrl = `data:${att.type};base64,${att.data}`;
+            const dims = await getImageDimensions(dataUrl);
+            attachment.url = dataUrl;
+            attachment.proxy_url = dataUrl;
+            attachment.width = dims.width;
+            attachment.height = dims.height;
+        } else if (isVideo && isSupportedVideo) {
+            const dataUrl = `data:${att.type};base64,${att.data}`;
+            const preview = await getVideoPreview(dataUrl);
+            if (preview) {
+                attachment.content_type = "image/png";
+                attachment.url = preview.previewUrl;
+                attachment.proxy_url = preview.previewUrl;
+                attachment.width = preview.width;
+                attachment.height = preview.height;
+                attachment.filename = att.filename.replace(/\.[^.]+$/, "_preview.png");
+            }
+        }
+
+        phantomAttachments.push(attachment);
+    }
 
     const rawMessage = {
         id: messageId,
@@ -309,7 +398,7 @@ async function addReactionsToMessage(channelId: string, messageId: string, react
             : encodeURIComponent(reaction.emoji.name);
 
         let success = false;
-        for (let attempt = 0; attempt < 3; attempt++) {
+        for (let attempt = 0; attempt < 5; attempt++) {
             try {
                 const result: any = await RestAPI.put({
                     url: `/channels/${channelId}/messages/${messageId}/reactions/${emojiStr}/@me`
@@ -320,6 +409,12 @@ async function addReactionsToMessage(channelId: string, messageId: string, react
                     break;
                 }
 
+                if (result.status === 429) {
+                    const retryAfter = result.body?.retry_after || 1;
+                    await new Promise(resolve => setTimeout(resolve, retryAfter * 1000 + 100));
+                    continue;
+                }
+
                 if (result.status === 404) {
                     await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
                     continue;
@@ -328,6 +423,11 @@ async function addReactionsToMessage(channelId: string, messageId: string, react
                 logger.error(`Failed to add reaction ${reaction.emoji.name}:`, result);
                 break;
             } catch (e: any) {
+                if (e?.status === 429 || e?.body?.retry_after) {
+                    const retryAfter = e?.body?.retry_after || 1;
+                    await new Promise(resolve => setTimeout(resolve, retryAfter * 1000 + 100));
+                    continue;
+                }
                 if (e?.status === 404 || e?.body?.code === 10008) {
                     await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
                     continue;
@@ -341,7 +441,7 @@ async function addReactionsToMessage(channelId: string, messageId: string, react
             logger.warn(`Could not add reaction ${reaction.emoji.name} after retries`);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 250));
+        await new Promise(resolve => setTimeout(resolve, 350));
     }
 }
 
@@ -480,9 +580,9 @@ function stopScheduler(): void {
     }
 }
 
-function recreatePhantomMessages(): void {
+async function recreatePhantomMessages(): Promise<void> {
     for (const msg of scheduledMessages) {
-        createPhantomMessage(msg);
+        await createPhantomMessage(msg);
     }
 }
 
@@ -758,6 +858,20 @@ export default definePlugin({
         "View Scheduled Messages": openViewScheduledModal
     },
 
+    patches: [
+        {
+            find: "}addReaction(",
+            replacement: {
+                match: /this\.customRenderedContent=(\i)\.customRenderedContent,/,
+                replace: "$&this.scheduledMessageData=$1.scheduledMessageData,"
+            }
+        }
+    ],
+
+    isScheduledMessage(message: any) {
+        return message?.scheduledMessageData != null || phantomMessageMap.has(message?.id);
+    },
+
     renderMessageAccessory({ message }) {
         const data = phantomMessageMap.get(message?.id) || message?.scheduledMessageData;
         if (!data) return null;
@@ -771,7 +885,9 @@ export default definePlugin({
         if (timeLeft > 0) {
             const minutes = Math.floor(timeLeft / 60000);
             const hours = Math.floor(minutes / 60);
-            if (hours > 0) timeLeftStr = ` (${hours}h ${minutes % 60}m remaining)`;
+            const days = Math.floor(hours / 24);
+            if (days > 0) timeLeftStr = ` (${days}d ${hours % 24}h remaining)`;
+            else if (hours > 0) timeLeftStr = ` (${hours}h ${minutes % 60}m remaining)`;
             else timeLeftStr = ` (${minutes}m remaining)`;
         }
 
@@ -798,7 +914,6 @@ export default definePlugin({
                                 const reader = new FileReader();
                                 reader.onload = () => {
                                     const result = reader.result as string;
-                                    // Remove the data URL prefix (e.g., "data:image/png;base64,")
                                     const base64Data = result.split(",")[1] || result;
                                     resolve(base64Data);
                                 };
@@ -834,7 +949,7 @@ export default definePlugin({
         RestAPI.put = (options: any) => {
             const url = options?.url || "";
             const reactionMatch = url.match(/\/channels\/(\d+)\/messages\/([^/]+)\/reactions\//);
-            if (reactionMatch && phantomMessageMap.has(reactionMatch[2])) {
+            if (reactionMatch && (reactionMatch[2].startsWith("scheduled-") || phantomMessageMap.has(reactionMatch[2]))) {
                 return Promise.resolve({ ok: true, body: {} });
             }
             return originalRestAPIPut!(options);
@@ -844,7 +959,7 @@ export default definePlugin({
         RestAPI.get = (options: any) => {
             const url = options?.url || "";
             const reactionMatch = url.match(/\/channels\/(\d+)\/messages\/([^/]+)\/reactions\//);
-            if (reactionMatch && phantomMessageMap.has(reactionMatch[2])) {
+            if (reactionMatch && (reactionMatch[2].startsWith("scheduled-") || phantomMessageMap.has(reactionMatch[2]))) {
                 return Promise.resolve({ ok: true, body: [] });
             }
             return originalRestAPIGet!(options);
