@@ -6,6 +6,7 @@
 
 import "./styles.css";
 
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { Divider } from "@components/Divider";
 import { ErrorCard } from "@components/ErrorCard";
@@ -20,7 +21,7 @@ import { Margins } from "@utils/margins";
 import { useAwaiter } from "@utils/react";
 import { t } from "@utils/translation";
 import { getRepo, UpdateLogger } from "@utils/updater";
-import { Alerts, Button, React, Toasts } from "@webpack/common";
+import { Alerts, React, Toasts } from "@webpack/common";
 
 import {
     ChangelogEntry,
@@ -116,9 +117,8 @@ function UpdateLogCard({
                             }
                         </span>
                         <Button
-                            size={Button.Sizes.NONE}
-                            color={Button.Colors.TRANSPARENT}
-                            look={Button.Looks.FILLED}
+                            size="min"
+                            variant="secondary"
                             className="vc-changelog-delete-button"
                             style={{
                                 padding: "4px",
@@ -500,14 +500,10 @@ function ChangelogContent() {
 
             <div className="vc-changelog-controls">
                 <Button
-                    size={Button.Sizes.SMALL}
+                    size="small"
                     disabled={isLoading || repoPending || !!repoErr}
                     onClick={fetchChangelog}
-                    color={
-                        recentlyChecked
-                            ? Button.Colors.GREEN
-                            : Button.Colors.BRAND
-                    }
+                    variant={recentlyChecked ? "positive" : "primary"}
                 >
                     {isLoading
                         ? t("vencord.loading")
@@ -520,20 +516,16 @@ function ChangelogContent() {
                 {changelogHistory.length > 0 && (
                     <>
                         <Button
-                            size={Button.Sizes.SMALL}
-                            color={
-                                showHistory
-                                    ? Button.Colors.PRIMARY
-                                    : Button.Colors.BRAND
-                            }
+                            size="small"
+                            variant={showHistory ? "primary" : "secondary"}
                             onClick={() => setShowHistory(!showHistory)}
                             style={{ marginLeft: "8px" }}
                         >
                             {showHistory ? t("vencord.logs.hideLogs") : t("vencord.logs.showLogs")}
                         </Button>
                         <Button
-                            size={Button.Sizes.SMALL}
-                            color={Button.Colors.RED}
+                            size="small"
+                            variant="dangerPrimary"
                             onClick={() => {
                                 Alerts.show({
                                     title: t("vencord.logs.clearAllLogs"),

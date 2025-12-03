@@ -6,23 +6,19 @@
 
 import "./styles.css";
 
-import { addProfileBadge, BadgePosition, ProfileBadge, removeProfileBadge } from "@api/Badges";
+import { BadgePosition, ProfileBadge } from "@api/Badges";
 import { Button } from "@components/Button";
+import { BadgeContextMenu } from "@plugins/_api/badges";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { openInviteModal } from "@utils/discord";
 import definePlugin from "@utils/types";
-import { React } from "@webpack/common";
+import { ContextMenuApi, React, Toasts, UserStore } from "@webpack/common";
 
-import { GlobalBadges } from "./badgeComponent";
+import { openBadgeModal } from "./badgeModal";
 import { settings } from "./settings";
-import { cl, fetchBadges, INVITE_LINK } from "./utils";
+import { cl, GlobalBadges, INVITE_LINK, loadBadges } from "./utils";
 
-const Badge: ProfileBadge = {
-    component: b => <GlobalBadges {...b} />,
-    position: BadgePosition.START,
-    shouldShow: userInfo => !!Object.keys(fetchBadges(userInfo.userId) ?? {}).length,
-    key: "GlobalBadges"
-};
+let intervalId: any;
 
 export default definePlugin({
     name: "GlobalBadges",
@@ -40,6 +36,44 @@ export default definePlugin({
             </Button>
         </>
     ),
-    start: () => addProfileBadge(Badge),
-    stop: () => removeProfileBadge(Badge),
+    async start() {
+        await loadBadges();
+        clearInterval(intervalId);
+        intervalId = setInterval(loadBadges, 1000 * 60 * 30);
+    },
+    async stop() {
+        clearInterval(intervalId);
+    },
+    toolboxActions: {
+        async "Refetch Global Badges"() {
+            await loadBadges();
+            Toasts.show({
+                id: Toasts.genId(),
+                message: "Successfully refetched global badges!",
+                type: Toasts.Type.SUCCESS
+            });
+        }
+    },
+    get GlobalBadges() {
+        return GlobalBadges;
+    },
+    getGlobalBadges(userId: string) {
+        return GlobalBadges[userId]?.map(badge => ({
+            iconSrc: badge.badge,
+            description: badge.tooltip,
+            position: BadgePosition.START,
+            props: {
+                style: {
+                    borderRadius: "50%",
+                    transform: "scale(0.9)"
+                }
+            },
+            onContextMenu(event, badge) {
+                ContextMenuApi.openContextMenu(event, () => <BadgeContextMenu badge={badge} />);
+            },
+            onClick() {
+                return openBadgeModal(UserStore.getUser(userId));
+            },
+        } satisfies ProfileBadge));
+    }
 });

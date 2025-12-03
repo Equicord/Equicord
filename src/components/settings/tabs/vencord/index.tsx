@@ -8,6 +8,9 @@ import "./VencordTab.css";
 
 import { openNotificationLogModal } from "@api/Notifications/notificationLog";
 import { useSettings } from "@api/Settings";
+import { classNameFactory } from "@api/Styles";
+import { Alert } from "@components/Alert";
+import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
@@ -18,12 +21,12 @@ import { DonateButton, InviteButton, openContributorModal, openPluginModal, Sett
 import { QuickAction, QuickActionCard } from "@components/settings/QuickAction";
 import { SpecialCard } from "@components/settings/SpecialCard";
 import { gitRemote } from "@shared/vencordUserAgent";
-import { DONOR_ROLE_ID, GUILD_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/constants";
+import { DONOR_ROLE_ID, GUILD_ID, IS_MAC, IS_WINDOWS, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { identity, isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
 import { t, Translate } from "@utils/translation";
-import { Button, GuildMemberStore, React, Select, UserStore } from "@webpack/common";
+import { GuildMemberStore, React, Select, UserStore } from "@webpack/common";
 import BadgeAPI from "plugins/_api/badges";
 
 import { openNotificationSettingsModal } from "./NotificationSettings";
@@ -37,6 +40,8 @@ const COZY_CONTRIB_IMAGE = "https://cdn.discordapp.com/emojis/102653307095587233
 const DONOR_BACKGROUND_IMAGE = "https://media.discordapp.net/stickers/1311070116305436712.png?size=2048";
 const CONTRIB_BACKGROUND_IMAGE = "https://media.discordapp.net/stickers/1311070166481895484.png?size=2048";
 
+const cl = classNameFactory("vc-vencord-tab-");
+
 type KeysOfType<Object, Type> = {
     [K in keyof Object]: Object[K] extends Type ? K : never;
 }[keyof Object];
@@ -49,9 +54,7 @@ function EquicordSettings() {
         [],
     );
 
-    const isWindows = navigator.platform.toLowerCase().startsWith("win");
-    const isMac = navigator.platform.toLowerCase().startsWith("mac");
-    const needsVibrancySettings = IS_DISCORD_DESKTOP && isMac;
+    const needsVibrancySettings = IS_DISCORD_DESKTOP && IS_MAC;
 
     const user = UserStore?.getCurrentUser();
 
@@ -77,7 +80,7 @@ function EquicordSettings() {
                 warning: { enabled: false },
             },
             !IS_WEB &&
-            (!IS_DISCORD_DESKTOP || !isWindows
+            (!IS_DISCORD_DESKTOP || !IS_WINDOWS
                 ? {
                     key: "frameless",
                     title: t("vencord.settings.frameless.title"),
@@ -96,7 +99,7 @@ function EquicordSettings() {
                 description: t("vencord.settings.transparent.description"),
                 restartRequired: true,
                 warning: {
-                    enabled: isWindows,
+                    enabled: IS_WINDOWS,
                     message: "Enabling this will prevent you from snapping this window.",
                 },
             },
@@ -107,7 +110,7 @@ function EquicordSettings() {
                 warning: { enabled: false },
             },
             !IS_WEB &&
-            isWindows && {
+            IS_WINDOWS && {
                 key: "winCtrlQ",
                 title: t("vencord.settings.winCtrlQ.title"),
                 restartRequired: true,
@@ -206,8 +209,9 @@ function EquicordSettings() {
                     <Translate i18nKey="vencord.settings.hint">
                         Hint: You can change the position of this settings section in the
                         <Button
-                            look={Button.Looks.LINK}
-                            style={{ color: "var(--text-link)", display: "inline-block" }}
+                            variant="none"
+                            size="small"
+                            className={cl("settings-link")}
                             onClick={() => openPluginModal(Vencord.Plugins.plugins.Settings)}
                         >
                             settings of the Settings plugin
@@ -228,9 +232,9 @@ function EquicordSettings() {
                                     s.warning.enabled ? (
                                         <>
                                             {s.description}
-                                            <div className="form-switch-warning">
+                                            <Alert.Warning className={Margins.top8} style={{ width: "100%" }}>
                                                 {s.warning.message}
-                                            </div>
+                                            </Alert.Warning>
                                         </>
                                     ) : (
                                         s.description
@@ -332,16 +336,10 @@ function DonateButtonComponent() {
     return (
         <Flex>
             <DonateButton
-                look={Button.Looks.FILLED}
-                color={Button.Colors.TRANSPARENT}
-                style={{ marginTop: "1em" }}
-                link="https://github.com/sponsors/thororen1234"
-            />
+                equicord={true}
+                style={{ marginTop: "1em" }} />
             <InviteButton
-                look={Button.Looks.FILLED}
-                color={Button.Colors.TRANSPARENT}
-                style={{ marginTop: "1em" }}
-            />
+                style={{ marginTop: "1em" }} />
         </Flex>
     );
 }

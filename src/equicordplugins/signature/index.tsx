@@ -7,7 +7,6 @@
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -70,13 +69,13 @@ const SignatureToggle: ChatBarButtonFactory = ({ isMainChat }) => {
     );
 };
 
-const handleMessage = ((channelId, msg) => {
-    if (!settings.store.isEnabled) {
-        msg.content = msg.content;
-    } else {
-        msg.content = textProcessing(msg.content);
-    }
-});
+function SignatureIcon() {
+    return (
+        <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 21.333">
+            <path fill="currentColor" d="M2 4.621a.5.5 0 0 1 .854-.353l6.01 6.01c.126.126.17.31.15.487a2 2 0 1 0 1.751-1.751a.59.59 0 0 1-.487-.15l-6.01-6.01A.5.5 0 0 1 4.62 2H11a9 9 0 0 1 8.468 12.054l2.24 2.239a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.415 0l-2.239-2.239A9 9 0 0 1 2 11z" />
+        </svg>
+    );
+}
 
 const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
     const { isEnabled, contextMenu } = settings.use(["isEnabled", "contextMenu"]);
@@ -102,17 +101,23 @@ export default definePlugin({
     name: "Signature",
     description: "Automated fingerprint/end text",
     authors: [Devs.Ven, Devs.Rini, Devs.ImBanana, EquicordDevs.KrystalSkull],
-    dependencies: ["MessageEventsAPI", "ChatInputButtonAPI"],
-    renderChatBarButton: SignatureToggle,
-
+    onBeforeMessageSend(channelId, msg) {
+        if (!settings.store.isEnabled) {
+            msg.content = msg.content;
+        } else {
+            msg.content = textProcessing(msg.content);
+        }
+    },
     start: () => {
         if (settings.store.isEnabled) true;
-        addMessagePreSendListener(handleMessage);
     },
     stop: () => {
         if (settings.store.isEnabled) false;
-        removeMessagePreSendListener(handleMessage);
+    },
 
+    chatBarButton: {
+        icon: SignatureIcon,
+        render: SignatureToggle
     },
 
     settings,
