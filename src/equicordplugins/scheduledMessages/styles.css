@@ -1,5 +1,3 @@
-/* Scheduled Messages Plugin Styles */
-
 /* Modal Header */
 .vc-scheduled-msg-modal-header {
     display: flex;
@@ -22,6 +20,16 @@
     padding: 0 16px 16px;
 }
 
+/* Modal Footer */
+.vc-scheduled-msg-modal-footer {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+}
+
 /* Channel Info */
 .vc-scheduled-msg-channel-info {
     display: flex;
@@ -41,7 +49,7 @@
     flex-shrink: 0;
 }
 
-/* Dark theme */
+/* Dark theme channel text */
 .theme-dark .vc-scheduled-msg-channel-text {
     color: #dbdee1 !important;
 }
@@ -50,7 +58,7 @@
     color: #f2f3f5 !important;
 }
 
-/* Light theme */
+/* Light theme channel text */
 .theme-light .vc-scheduled-msg-channel-text {
     color: #313338 !important;
 }
@@ -62,11 +70,20 @@
 /* Field Labels */
 .vc-scheduled-msg-field-label {
     margin: 16px 0 8px !important;
-    color: var(--header-secondary);
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+}
+
+/* Dark theme field labels */
+.theme-dark .vc-scheduled-msg-field-label {
+    color: #b5bac1 !important;
+}
+
+/* Light theme field labels */
+.theme-light .vc-scheduled-msg-field-label {
+    color: #4e5058 !important;
 }
 
 /* Schedule Type Buttons */
@@ -149,16 +166,6 @@
 .vc-scheduled-msg-error svg {
     flex-shrink: 0;
     color: var(--status-danger);
-}
-
-/* Modal Footer */
-.vc-scheduled-msg-modal-footer {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 8px;
-    padding: 16px;
 }
 
 /* Empty State */
@@ -244,7 +251,6 @@
     color: #313338 !important;
 }
 
-
 /* Phantom Message Styles */
 .vc-scheduled-msg-phantom {
     opacity: 0.5 !important;
@@ -254,7 +260,7 @@
     opacity: 0.7 !important;
 }
 
-/* Scheduled message accessory (the footer text that tells you when it sends) */
+/* Scheduled message accessory */
 .vc-scheduled-msg-accessory {
     display: flex;
     align-items: center;
