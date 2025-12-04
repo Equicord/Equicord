@@ -50,12 +50,11 @@ export function getChannelDisplayInfo(channelId: string): { name: string; avatar
     const channel = ChannelStore.getChannel(channelId);
     if (!channel) return { name: "Unknown", avatar: "" };
 
-    if (channel.isDM() || channel.isMultiUserDM()) {
+    if (channel.isDM()) {
         const user = channel.recipients?.[0] ? UserStore.getUser(channel.recipients[0]) : null;
-        if (user) {
-            return { name: user.globalName ?? user.username, avatar: IconUtils.getUserAvatarURL(user, true, 64) };
-        }
-        return { name: "DM", avatar: "" };
+        return user
+            ? { name: user.globalName ?? user.username, avatar: IconUtils.getUserAvatarURL(user, true, 64) }
+            : { name: "DM", avatar: "" };
     }
 
     if (channel.isGroupDM()) {

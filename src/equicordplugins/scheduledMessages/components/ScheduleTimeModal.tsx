@@ -35,7 +35,7 @@ function ScheduleTimeModalInner({ channelId, content, attachments, rootProps, cl
     const channel = ChannelStore.getChannel(channelId);
     if (!channel) return null;
 
-    const isDM = channel.isDM() || channel.isGroupDM() || channel.isMultiUserDM();
+    const isDM = channel.isPrivate();
 
     const handleSchedule = async () => {
         let scheduledTime: number;

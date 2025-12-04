@@ -61,7 +61,7 @@ function ViewScheduledModalInner({ rootProps, close }: ViewScheduledModalProps) 
                             const channel = ChannelStore.getChannel(msg.channelId);
                             if (!channel) return null;
 
-                            const isDM = channel.isDM() || channel.isGroupDM() || channel.isMultiUserDM();
+                            const isDM = channel.isPrivate();
                             const displayContent = msg.content.length > 200
                                 ? msg.content.slice(0, 200) + "..."
                                 : msg.content;
