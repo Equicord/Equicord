@@ -128,8 +128,8 @@ export default definePlugin({
         {
             find: '"messageId","channelId"',
             replacement: {
-                match: /(href:\i,onClick:\i,onAuxClick:\i,children:null!=\i\?\i:\i)(?=\}\)\))/,
-                replace: "$1,...$self.getProps(arguments[0])"
+                match: /,children:null!=\i\?\i:\i/,
+                replace: "$&,...$self.getProps(arguments[0])"
             }
         }
     ],
