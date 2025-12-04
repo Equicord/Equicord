@@ -9,11 +9,11 @@
         "logCleared": "El registro ha sido borrado",
         "clearLogs": "Registros vacíos",
         "clearLogsConfirmation": "¿Estás seguro de que quieres borrar estos registros? Esto no se puede deshacer.",
-        "clearLogsConfirmationNum_one": "¿Estás seguro de que quieres borrar el registro {count}",
-        "clearLogsConfirmationNum_other": "¿Estás seguro de que quieres borrar los registros {count}",
+        "clearLogsConfirmationNum_one": "Estás seguro de que quieres borrar {count} registro",
+        "clearLogsConfirmationNum_other": "Estás seguro de que quieres borrar {count} registros",
         "logsCleared": "Los registros seleccionados han sido borrados",
         "hideLogs": "Ocultar registros",
-        "showLogs": "Mostrar registrosregistros",
+        "showLogs": "Mostrar registros",
         "clearAllLogs": "Borrar todos los registros",
         "clearAll": "Limpiar Todo",
         "clearAllLogsConfirmation": "¿Estás seguro de que quieres borrar todos los registros? Esto no se puede deshacer.",
@@ -26,33 +26,33 @@
         "integrations": {
             "header": "Integraciones de nube",
             "reauthenticateOtherClient": "¡Nos hemos dado cuenta de que tienes integraciones en la nube activadas en otro cliente! Debido a las limitaciones, tendrás que volver a autenticarte para seguir utilizándolas. Haz clic aquí para ir a la página de configuración para hacerlo!",
-            "failedToRetrieveOAuth": "Setup failed (couldn't retrieve OAuth configuration).",
-            "enabled": "Cloud integrations enabled!",
-            "noSecret": "Setup failed (no secret returned?).",
-            "error": "Setup failed ({e})"
+            "failedToRetrieveOAuth": "La instalación falló (no se pudo conseguir la configuración de OAuth).",
+            "enabled": "¡Integraciones de la nube activadas!",
+            "noSecret": "La instalación falló (¿no devolvió secreto?).",
+            "error": "La instalación falló ({e})"
         },
         "settings": {
             "header": "Configuración de la nube",
             "updatedRemote": "¡Su configuración ha sido actualizada! ¡Haga clic aquí para reiniciarlo completamente para aplicar los cambios!",
-            "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
-            "success": "Synchronized settings to the cloud!",
-            "failedToSync": "Could not synchronize settings to the cloud ({e}).",
-            "accountChanged": "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
-            "noSettings": "There are no settings in the cloud.",
-            "upToDate": "Your settings are up to date.",
-            "newerThanCloud": "Your local settings are newer than the cloud ones.",
+            "apiReject": "No se pudo sincronizar los ajustes a la nube (API devolvió {e}).",
+            "success": "¡Ajustes sincronizados a la nube!",
+            "failedToSync": "No se pudo sincronizar los ajustes a la nube ({e}).",
+            "accountChanged": "La sincronización con la nube fue desactivada porque esta cuenta no está conectada la app de la nube. Puedes activarla otra vez conectando esta cuenta en la configuración de la nube. (nota: guardará tus preferencias separadamente)",
+            "noSettings": "No hay ajustes en la nube.",
+            "upToDate": "Tus ajustes están actualizados.",
+            "newerThanCloud": "Tus ajustes locales son más recientes que los de la nube.",
             "updated": "¡Su configuración ha sido actualizada! ¡Haga clic aquí para reiniciarlo completamente para aplicar los cambios!",
-            "syncFromCloud": "Could not synchronize settings from the cloud ({e}).",
-            "apiDelete": "Could not delete settings (API returned {e}).",
-            "deleted": "Settings deleted from cloud!",
-            "failedToDelete": "Could not delete settings ({e}).",
-            "apiEraseAll": "Could not erase all data (API returned {e}), please contact support.",
-            "erased": "Successfully erased all data."
+            "syncFromCloud": "No se pudieron sincronizar los ajustes desde la nube ({e}).",
+            "apiDelete": "No se pudieron borrar los ajustes (API devolvió {e}).",
+            "deleted": "¡Ajustes borrados de la nube!",
+            "failedToDelete": "No se pudieron borrar los ajustes ({e}).",
+            "apiEraseAll": "No se pudo borrar todos los datos (API devolvió {e}), por favor contacte a soporte.",
+            "erased": "Se han borrado exitosamente todos los datos."
         }
     },
     "settingsSync": {
-        "imported": "Settings successfully imported. Restart to apply changes!",
-        "failedToImport": "Failed to import settings: {e}"
+        "imported": "Ajustes importados exitosamente. ¡Reinicie para aplicar los cambios!",
+        "failedToImport": "Fallo al importar los ajustes: {e}"
     },
     "contributorCard": {
         "contributionsButton": "Mira en qué has contribuido",
@@ -64,7 +64,7 @@
         "donated": {
             "vencordDescription": "¡Todos los usuarios de Vencord pueden ver tu insignia! Puedes administrar tus beneficios enviando mensajes @{v}.",
             "equicordDescription": "¡Todos los usuarios de Equicord pueden ver tu insignia! Puedes gestionar tus beneficios haciendo un ticket en el servidor de Equicord.",
-            "description": "Todos los usuarios de Vencord pueden ver tu insignia de donantes de Vencord, y los usuarios de Equicord pueden ver tu insignia de donantes de Equicord. Para cambiar tu insignia de donacion de Vencord, contacta con @vending.machine. Para tu insignia de donante de Equicord, haz un ticket en el servidor de Equicord.",
+            "description": "Todos los usuarios de Vencord pueden ver tu insignia de donantes de Vencord, y los usuarios de Equicord pueden ver tu insignia de donantes de Equicord. Para cambiar tu insignia de donación de Vencord, contacta con @vending.machine. Para tu insignia de donante de Equicord, haz un ticket en el servidor de Equicord.",
             "subtitle": "¡Gracias por donar!",
             "title": "Donaciones"
         },
