@@ -23,13 +23,13 @@
         }
     },
     "memberListDecorators": {
-        "fallback": ""
+        "fallback": "Fallo al renderizar el Decorador de Lista de Miembros {key}"
     },
     "messageAccessories": {
-        "fallback": "Failed to render {key} Message Accessory"
+        "fallback": "Fallo al renderizar el Accesorio de Mensaje {key}"
     },
     "messageDecorations": {
-        "fallback": "Failed to render {key} Message Decoration"
+        "fallback": "Fallo al renderizar la Decoración de Mensaje {key}"
     },
     "notices": {
         "fallback": "Error al mostrar aviso"
