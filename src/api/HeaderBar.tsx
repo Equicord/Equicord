@@ -6,7 +6,7 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Logger } from "@utils/Logger";
-import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { findComponentByCodeLazy } from "@webpack";
 import { useEffect, useState } from "@webpack/common";
 import type { ComponentType, JSX, MouseEventHandler, ReactNode, RefObject } from "react";
 
@@ -43,8 +43,6 @@ export interface HeaderBarButtonProps {
     badgePosition?: "top" | "bottom";
     ref?: RefObject<any>;
 }
-
-const iconClasses = findByPropsLazy("iconWrapper", "clickable");
 
 export const HeaderBarButton = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"') as ComponentType<HeaderBarButtonProps>;
 
@@ -89,5 +87,3 @@ function HeaderBarButtons() {
 export function _addButtons() {
     return [<HeaderBarButtons key="vc-header-bar-buttons" />];
 }
-
-export { iconClasses as HeaderBarIconClasses };
