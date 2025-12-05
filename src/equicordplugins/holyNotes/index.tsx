@@ -25,8 +25,10 @@ import { classes } from "@utils/misc";
 import { openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { findByCodeLazy, findByProps, findComponentByCodeLazy } from "@webpack";
+import { findByCodeLazy, findByProps } from "@webpack";
 import { ChannelStore, Menu } from "@webpack/common";
+
+import { HeaderBarButton } from "@api/HeaderBar";
 
 import { Popover as NoteButtonPopover, Popover } from "./components/icons/NoteButton";
 import { NoteModal } from "./components/modals/Notebook";
@@ -34,8 +36,6 @@ import { noteHandler, noteHandlerCache } from "./NoteHandler";
 import { DataStoreToCache, HolyNoteStore } from "./utils";
 
 export const MessageType = findByCodeLazy("isEdited(){");
-
-const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = async (children, { message }: { message: Message; }) => {
     children.push(
@@ -56,7 +56,7 @@ function ToolBarHeader() {
     const iconClasses = findByProps("iconWrapper", "clickable");
 
     return (
-        <HeaderBarIcon
+        <HeaderBarButton
             tooltip="Holy Notes"
             position="bottom"
             className={classes("vc-note-button", iconClasses.iconWrapper, iconClasses.clickable)}
@@ -82,7 +82,10 @@ export default definePlugin({
         "message": messageContextMenuPatch
     },
 
-    renderHeaderBarButton: ToolBarHeader,
+    headerBarButton: {
+        icon: Popover,
+        render: ToolBarHeader
+    },
 
     messagePopoverButton: {
         icon: NoteButtonPopover,
