@@ -4,7 +4,7 @@
 }
 
 .vc-donatebutton {
-    background-color: var(--background-color) !important;
+    background-color: var(--background-base-low) !important;
     border-color: var(--vc-donatebutton) !important;
     filter: brightness(1);
     border-width: .1rem !important;
@@ -46,4 +46,9 @@
     padding: 6px 10px;
     text-align: center;
     margin-top: 10px;
+}
+
+.vc-vencord-tab-settings-link {
+    color: var(--text-link);
+    display: inline-block;
 }
