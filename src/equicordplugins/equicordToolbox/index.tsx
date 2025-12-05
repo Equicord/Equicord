@@ -45,7 +45,7 @@ function Icon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 function VencordPopoutButton() {
-    const buttonRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef(null);
     const [show, setShow] = useState(false);
 
     return (

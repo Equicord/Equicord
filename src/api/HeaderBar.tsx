@@ -42,7 +42,7 @@ export interface HeaderBarButtonProps {
     disabled?: boolean;
     showBadge?: boolean;
     badgePosition?: "top" | "bottom";
-    ref?: RefObject<HTMLDivElement | null>;
+    ref?: RefObject<any>;
 }
 
 const iconClasses = findByPropsLazy("iconWrapper", "clickable");
