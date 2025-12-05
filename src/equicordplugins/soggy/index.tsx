@@ -5,13 +5,12 @@
  */
 
 import { AudioPlayerInterface, createAudioPlayer } from "@api/AudioPlayer";
+import { HeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
-
-import { HeaderBarButton } from "@api/HeaderBar";
 let boopSound: AudioPlayerInterface;
 let song: AudioPlayerInterface;
 

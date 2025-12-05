@@ -19,6 +19,7 @@
 import "./style.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { HeaderBarButton } from "@api/HeaderBar";
 import { DataStore } from "@api/index";
 import { EquicordDevs } from "@utils/constants";
 import { classes } from "@utils/misc";
@@ -27,8 +28,6 @@ import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByCodeLazy, findByProps } from "@webpack";
 import { ChannelStore, Menu } from "@webpack/common";
-
-import { HeaderBarButton } from "@api/HeaderBar";
 
 import { Popover as NoteButtonPopover, Popover } from "./components/icons/NoteButton";
 import { NoteModal } from "./components/modals/Notebook";

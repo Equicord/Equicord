@@ -8,8 +8,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Logger } from "@utils/Logger";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { useEffect, useState } from "@webpack/common";
-import type { ComponentType, MouseEventHandler, ReactNode, RefObject } from "react";
-import type { JSX } from "react";
+import type { ComponentType, JSX, MouseEventHandler, ReactNode, RefObject } from "react";
 
 const logger = new Logger("HeaderBarAPI");
 

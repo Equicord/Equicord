@@ -18,6 +18,7 @@
 
 import "./style.css";
 
+import { HeaderBarButton } from "@api/HeaderBar";
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
@@ -25,8 +26,6 @@ import { getTheme, Theme } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, FluxDispatcher, GuildChannelStore, NavigationRouter, RestAPI, UserStore } from "@webpack/common";
-
-import { HeaderBarButton } from "@api/HeaderBar";
 
 const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
 const ApplicationStreamingStore = findStoreLazy("ApplicationStreamingStore");
