@@ -57,7 +57,7 @@ export function getChannelDisplayInfo(channelId: string): { name: string; avatar
             : { name: "DM", avatar: "" };
     }
 
-    if (channel.isGroupDM()) {
+    if (channel.isGroupDM() || channel.isMultiUserDM()) {
         return { name: channel.name || "Group DM", avatar: IconUtils.getChannelIconURL(channel) ?? "" };
     }
 
