@@ -1,0 +1,16 @@
+.vc-cp-no-hover *:hover {
+    background-color: inherit !important;
+    color: inherit !important;
+    opacity: 1 !important;
+}
+
+.vc-cp-no-hover button:hover,
+.vc-cp-no-hover [role="button"]:hover {
+    background-color: inherit !important;
+    opacity: 1 !important;
+}
+
+.vc-cp-no-hover *:hover::before,
+.vc-cp-no-hover *:hover::after {
+    opacity: 0 !important;
+}
