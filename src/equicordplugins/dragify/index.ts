@@ -547,10 +547,6 @@ export default definePlugin({
     globalDragOver: (event: DragEvent) => {
         const inst = pluginInstance;
         if (!inst) return;
-        const types = event.dataTransfer?.types ?? [];
-        const hasDragify = types.includes("application/dragify");
-        const parsed = inst.parseFromStrings(inst.extractStrings(event.dataTransfer as DataTransfer));
-        if (!hasDragify && !parsed) return;
         event.preventDefault();
         event.stopPropagation();
         if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
