@@ -162,30 +162,17 @@ export const ChannelRouter: t.ChannelRouter = mapMangledModuleLazy('"Thread must
     transitionToThread: filters.byCode('"Thread must have a parent ID."')
 });
 
-export const UserSettingsModal: {
-    openUserSettings: (target?: string, options?: { section?: string; subsection?: string; }) => Promise<void>;
-} = findByPropsLazy("openUserSettings", "USER_SETTINGS_MODAL_KEY");
+export const UserSettingsModal = findByPropsLazy("openUserSettings", "USER_SETTINGS_MODAL_KEY");
 
-let RawSettingsRouter: any;
-waitFor(["open", "saveAccountChanges"], m => RawSettingsRouter = m);
-
-export const SettingsRouter = {
-    open(section?: string, subsection?: string | null, options?: any) {
-        if (section && UserSettingsModal?.openUserSettings) {
+export let SettingsRouter: any;
+waitFor(["open", "saveAccountChanges"], m => {
+    SettingsRouter = { ...m };
+    SettingsRouter.open = (section?: string, subsection?: string | null, options?: any) => {
+        if (section && UserSettingsModal?.openUserSettings)
             return UserSettingsModal.openUserSettings(section + "_panel", { section, subsection: subsection ?? undefined });
-        }
-        RawSettingsRouter?.open(section, subsection, options);
-    },
-    close() {
-        RawSettingsRouter?.close();
-    },
-    setSection(section?: string, subsection?: string | null, options?: any) {
-        RawSettingsRouter?.setSection(section, subsection, options);
-    },
-    get saveAccountChanges() {
-        return RawSettingsRouter?.saveAccountChanges;
-    }
-};
+        m.open(section, subsection, options);
+    };
+});
 
 export const PermissionsBits: t.PermissionsBits = findLazy(m => typeof m.ADMINISTRATOR === "bigint");
 
