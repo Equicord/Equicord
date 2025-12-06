@@ -164,12 +164,19 @@ export const ChannelRouter: t.ChannelRouter = mapMangledModuleLazy('"Thread must
 
 export const UserSettingsModal = findByPropsLazy("openUserSettings", "USER_SETTINGS_MODAL_KEY");
 
+const ModalAPI = mapMangledModuleLazy(".modalKey?", {
+    closeModal: filters.byCode(".onCloseCallback()"),
+});
+
 export let SettingsRouter: any;
 waitFor(["open", "saveAccountChanges"], m => {
     SettingsRouter = { ...m };
-    SettingsRouter.open = (section?: string, subsection?: string | null, options?: any) => {
-        if (section && UserSettingsModal?.openUserSettings)
-            return UserSettingsModal.openUserSettings(section + "_panel", { section, subsection: subsection ?? undefined });
+    SettingsRouter.open = async (section?: string, subsection?: string | null, options?: any) => {
+        if (section && UserSettingsModal?.openUserSettings) {
+            ModalAPI?.closeModal?.(UserSettingsModal.USER_SETTINGS_MODAL_KEY);
+            await new Promise(r => setTimeout(r, 0));
+            return UserSettingsModal.openUserSettings(section + "_panel", { section, subsection });
+        }
         m.open(section, subsection, options);
     };
 });
