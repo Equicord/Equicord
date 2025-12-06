@@ -175,6 +175,18 @@ function shouldHideDirectMessagesTab(): boolean {
     return disableQuestsDirectMessagesTab || disableQuestsEverything;
 }
 
+function shouldHideSponsoredQuestBanner(): boolean {
+    const {
+        disableQuestsPageSponsoredBanner,
+        disableQuestsEverything
+    } = settings.use([
+        "disableQuestsPageSponsoredBanner",
+        "disableQuestsEverything"
+    ]);
+
+    return disableQuestsPageSponsoredBanner || disableQuestsEverything;
+}
+
 function shouldHideBadgeOnUserProfiles(): boolean {
     const {
         disableQuestsBadgeOnUserProfiles,
@@ -816,7 +828,7 @@ function getQuestPanelOverride(): Quest | null {
         const timeRemaining = interval.duration - interval.progress;
 
         // 3 second buffer to account for per-second rerendering
-        // which could cause flickering if multiple quests were
+        // which could cause flickering if multiple Quests were
         // started at the same time.
         if (timeRemaining < (closestTimeRemaining - 3)) {
             closestTimeRemaining = timeRemaining;
@@ -908,6 +920,7 @@ export default definePlugin({
     shouldHideDirectMessagesTab,
     shouldPreventFetchingQuests,
     shouldHideBadgeOnUserProfiles,
+    shouldHideSponsoredQuestBanner,
     shouldHideGiftInventoryRelocationNotice,
     shouldHideFriendsListActiveNowPromotion,
     shouldHideMembersListActivelyPlayingIcon,
@@ -951,6 +964,14 @@ export default definePlugin({
                     replace: "$self.shouldHideDirectMessagesTab()||$1"
                 }
             ]
+        },
+        {
+            // Hides the sponsored banner on the Quests page.
+            find: "assetSponsorImage.url,",
+            replacement: {
+                match: /(?<=campaignId]\),)/,
+                replace: "$self.shouldHideSponsoredQuestBanner()?null:"
+            }
         },
         {
             // Hides the Quest icon from members list items when
@@ -1150,7 +1171,7 @@ export default definePlugin({
                 {
                     // Run Questify's sort function every time due to hook requirements but return
                     // early if not applicable. If the sort method is set to "Questify", replace the
-                    // quests with the sorted ones. Also, setup a trigger to rerender the memo.
+                    // Quests with the sorted ones. Also, setup a trigger to rerender the memo.
                     match: /(?<=function \i\((\i),\i\){let \i=\i.useRef.{0,100}?;)(return \i.useMemo\(\(\)=>{)/,
                     replace: "const questRerenderTrigger=$self.useQuestRerender();const questifySorted=$self.sortQuests($1,arguments[1].sortMethod!==\"questify\");$2if(arguments[1].sortMethod===\"questify\"){$1=questifySorted;};"
                 },
