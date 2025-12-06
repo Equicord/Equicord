@@ -1066,7 +1066,7 @@ export default definePlugin({
                 },
                 {
                     // Makes use of the custom prop if provided, otherwise assume default behavior.
-                    match: /(?<=variant:.{0,20}?,children:)([^\]]+\]\))/,
+                    match: /(?<=variant:.{0,20}?,children:)(.{0,30}?\]\))/,
                     replace: "arguments[0]?.feedback??$1"
                 }
             ]
@@ -1287,7 +1287,7 @@ export default definePlugin({
                     // The "Quest Accepted" text is changed to "Resume" if the Quest is in progress but not active.
                     // Then, when the Quest Accepted button is clicked, resume the automatic completion of the
                     // Quest and disable the button again.
-                    match: /(?<=secondary",)disabled:!0,text:([^\]]+\]\)),/,
+                    match: /(?<=secondary",)disabled:!0,text:(.{0,30}?\]\)),/,
                     replace: "...$self.getQuestAcceptedButtonProps(arguments[0].quest,$1),"
                 },
                 {
