@@ -19,7 +19,7 @@ export default definePlugin({
     settings,
     toolboxActions: {
         "Open Theme Library": () => {
-            SettingsRouter.open("ThemeLibrary");
+            SettingsRouter.open("theme_library");
         },
     },
 

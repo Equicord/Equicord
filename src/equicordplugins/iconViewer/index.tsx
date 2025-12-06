@@ -22,7 +22,7 @@ export default definePlugin({
     startAt: StartAt.WebpackReady,
     toolboxActions: {
         "Open Icons Tab"() {
-            SettingsRouter.open("VencordDiscordIcons");
+            SettingsRouter.open("icon_viewer");
         },
     },
     settingsAboutComponent: SettingsAbout,
