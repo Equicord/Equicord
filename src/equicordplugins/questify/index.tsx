@@ -1066,7 +1066,7 @@ export default definePlugin({
                 },
                 {
                     // Makes use of the custom prop if provided, otherwise assume default behavior.
-                    match: /(\i.intl.string\(\i.\i#{intl::NO_RESULTS_FOUND}\))/,
+                    match: /(?<=variant:.{0,20}?,children:)([^\]]+\]\))/,
                     replace: "arguments[0]?.feedback??$1"
                 }
             ]
@@ -1251,7 +1251,7 @@ export default definePlugin({
                 },
                 {
                     // Add the trigger to the memo for rerendering the progress label.
-                    match: /(\i\.intl\.string\(\i\.\i#{intl::QUESTS_SEE_CODE}\)\}\)\}\},\[|\)\}\}\},\[)/,
+                    match: /(\)}}},\[)/,
                     replace: "$1questRerenderTrigger,"
                 },
                 {
@@ -1278,7 +1278,7 @@ export default definePlugin({
             replacement: [
                 {
                     // Initial and subsequent select drop down for picking or changing a platform.
-                    match: /(#{intl::QUEST_MULTIPLATFORM_SELECT_SUBTITLE}.{0,50}select:)(\i)(,serialize:\i=>{)/g,
+                    match: /(select:)(\i)(,serialize:\i=>{)/g,
                     replace: "$1(platform)=>{$self.processQuestForAutoComplete(arguments[0].quest),$2(platform)}$3"
                 },
                 {
@@ -1287,7 +1287,7 @@ export default definePlugin({
                     // The "Quest Accepted" text is changed to "Resume" if the Quest is in progress but not active.
                     // Then, when the Quest Accepted button is clicked, resume the automatic completion of the
                     // Quest and disable the button again.
-                    match: /(?<=fullWidth:!0}\)}\):.{0,200}?secondary",)disabled:!0,text:(.{0,30}?#{intl::QUEST_ACCEPTED}\)),/,
+                    match: /(?<=secondary",)disabled:!0,text:([^\]]+\]\)),/,
                     replace: "...$self.getQuestAcceptedButtonProps(arguments[0].quest,$1),"
                 },
                 {
