@@ -166,26 +166,20 @@ export const UserSettingsModal: {
     openUserSettings: (target?: string, options?: { section?: string; subsection?: string; }) => Promise<void>;
 } = findByPropsLazy("openUserSettings", "USER_SETTINGS_MODAL_KEY");
 
-let RawSettingsRouter: {
-    open(section?: string, subsection?: string | null, options?: Record<string, unknown>): void;
-    close(): void;
-    setSection(section?: string, subsection?: string | null, options?: Record<string, unknown>): void;
-    saveAccountChanges(): void;
-};
+let RawSettingsRouter: any;
 waitFor(["open", "saveAccountChanges"], m => RawSettingsRouter = m);
 
 export const SettingsRouter = {
-    open(section?: string, subsection?: string | null, options?: Record<string, unknown>) {
+    open(section?: string, subsection?: string | null, options?: any) {
         if (section && UserSettingsModal?.openUserSettings) {
-            UserSettingsModal.openUserSettings(section + "_panel", { section, subsection: subsection ?? undefined });
-        } else {
-            RawSettingsRouter?.open(section, subsection, options);
+            return UserSettingsModal.openUserSettings(section + "_panel", { section, subsection: subsection ?? undefined });
         }
+        RawSettingsRouter?.open(section, subsection, options);
     },
     close() {
         RawSettingsRouter?.close();
     },
-    setSection(section?: string, subsection?: string | null, options?: Record<string, unknown>) {
+    setSection(section?: string, subsection?: string | null, options?: any) {
         RawSettingsRouter?.setSection(section, subsection, options);
     },
     get saveAccountChanges() {
