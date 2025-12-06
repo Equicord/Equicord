@@ -7,6 +7,7 @@
 import "./styles.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { HeaderBarButton } from "@api/HeaderBar";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
@@ -49,8 +50,6 @@ import { settings, SidebarStore } from "./store";
 const { HeaderBar } = mapMangledModuleLazy(".themedMobile]:", {
     HeaderBar: filters.byCode(".themedMobile]:"),
 });
-
-import { HeaderBarButton } from "@api/HeaderBar";
 
 const { ForumView } = mapMangledModuleLazy("forum-grid-header-section-", {
     ForumView: filters.byCode("sidebarState")
