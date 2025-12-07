@@ -36,15 +36,15 @@ export const TextWeights = {
 
 export const TextColors = {
     "header-primary": "var(--header-primary)",
-    "header-secondary": "var(--header-secondary)",
     "text-default": "var(--text-default)",
     "text-muted": "var(--text-muted)",
-    "text-normal": "var(--text-normal)",
     "text-link": "var(--text-link)",
-    "text-danger": "var(--text-danger)",
-    "text-warning": "var(--text-warning)",
-    "text-positive": "var(--text-positive)",
+    "text-danger": "var(--text-feedback-critical)",
     "text-brand": "var(--text-brand)",
+    "text-strong": "var(--text-strong)",
+    "text-subtle": "var(--text-subtle)",
+    "control-text-critical": "var(--control-text-critical-secondary-default)",
+    "control-text-primary": "var(--control-text-primary-default)",
 } as const;
 
 export function generateTextCss() {
