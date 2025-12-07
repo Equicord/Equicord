@@ -54,16 +54,9 @@ export async function importSettings(data: string, type: BackupType = "all") {
     if (!isSafeObject(parsed))
         throw new Error("Unsafe Settings");
 
-    const types = ["settings", "quickCss", "dataStore"];
-
-    for (const key of types) {
-        if (key !== "dataStore" && !(key in parsed)) {
-            throw new Error(`Invalid Settings. Missing ${key}. Is this even a Vencord Settings file?`);
-        }
-    }
-
     switch (type) {
         case "all": {
+            if (!("settings" in parsed) && !("quickCss" in parsed)) throw new Error("Invalid Settings. Missing one or more required keys.");
             Object.assign(PlainSettings, parsed.settings);
             await VencordNative.settings.set(parsed.settings);
             await VencordNative.quickCss.set(parsed.quickCss);
@@ -71,20 +64,20 @@ export async function importSettings(data: string, type: BackupType = "all") {
             break;
         }
         case "plugins": {
-            if (!parsed.settings) throw new Error("Missing settings for plugin import");
+            if (!parsed.settings) throw new Error("Plugin settings missing");
 
             Object.assign(PlainSettings, parsed.settings);
             await VencordNative.settings.set(parsed.settings);
             break;
         }
         case "css": {
-            if (!parsed.quickCss) throw new Error("Missing quickCss for css import");
+            if (!parsed.quickCss) throw new Error("CSS missing");
 
             await VencordNative.quickCss.set(parsed.quickCss);
             break;
         }
         case "datastore": {
-            if (!parsed.dataStore) throw new Error("Missing dataStore for datastore import");
+            if (!parsed.dataStore) throw new Error("DataStore data missing");
 
             await DataStore.setMany(parsed.dataStore);
             break;

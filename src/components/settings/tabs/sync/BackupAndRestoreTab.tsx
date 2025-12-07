@@ -59,7 +59,7 @@ function BackupAndRestoreTab() {
                     size="small"
                     variant="secondary"
                 >
-                    Import Settings
+                    Import All Settings
                 </Button>
                 <Button
                     onClick={() => uploadSettingsBackup("plugins")}
