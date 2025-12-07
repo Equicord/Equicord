@@ -2311,7 +2311,6 @@ function registerFriendCommands() {
             tags: [TAG_FRIENDS, TAG_NAVIGATION],
             handler: () => {
                 const channelId = ChannelStore.getDMFromUserId(user.id);
-                console.log("transitioning to: /@me/" + channelId);
                 NavigationRouter.transitionTo(`/channels/@me/${channelId}`);
             }
         } satisfies CommandEntry);
