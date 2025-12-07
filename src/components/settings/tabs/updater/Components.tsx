@@ -46,7 +46,7 @@ export function Changes({ updates, repo, repoPending }: CommonProps & { updates:
                         <code style={{ color: "var(--text-link)" }}>
                             <HashLink {...{ repo, hash }} disabled={repoPending} />
                         </code>
-                        <Span size="sm" color="text-normal">
+                        <Span size="sm" color="text-default">
                             {message}
                         </Span>
                         <Span size="sm" color="text-muted">
