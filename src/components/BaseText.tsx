@@ -13,7 +13,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 const textCls = classNameFactory("vc-text-");
 
-const Sizes = {
+export const TextSizes = {
     xxs: "0.625rem",
     xs: "0.75rem",
     sm: "0.875rem",
@@ -23,7 +23,7 @@ const Sizes = {
     xxl: "2rem"
 } as const;
 
-const Weights = {
+export const TextWeights = {
     thin: "100",
     extralight: "200",
     light: "300",
@@ -34,27 +34,42 @@ const Weights = {
     extrabold: "800",
 } as const;
 
+export const TextColors = {
+    "header-primary": "var(--header-primary)",
+    "header-secondary": "var(--header-secondary)",
+    "text-default": "var(--text-default)",
+    "text-muted": "var(--text-muted)",
+    "text-normal": "var(--text-normal)",
+    "text-link": "var(--text-link)",
+    "text-danger": "var(--text-danger)",
+    "text-warning": "var(--text-warning)",
+    "text-positive": "var(--text-positive)",
+    "text-brand": "var(--text-brand)",
+} as const;
+
 export function generateTextCss() {
     let css = "";
 
-    for (const [size, value] of Object.entries(Sizes)) {
+    for (const [size, value] of Object.entries(TextSizes)) {
         css += `.${textCls(size)}{font-size:${value};}`;
     }
 
-    for (const [weight, value] of Object.entries(Weights)) {
+    for (const [weight, value] of Object.entries(TextWeights)) {
         css += `.${textCls(weight)}{font-weight:${value};}`;
     }
 
     return css;
 }
 
-export type TextSize = keyof typeof Sizes;
-export type TextWeight = keyof typeof Weights;
+export type TextSize = keyof typeof TextSizes;
+export type TextWeight = keyof typeof TextWeights;
+export type TextColor = keyof typeof TextColors;
 export type TextTag = "div" | "span" | "p" | `h${1 | 2 | 3 | 4 | 5 | 6}`;
 
 export type BaseTextProps<Tag extends TextTag = "div"> = ComponentPropsWithoutRef<Tag> & {
     size?: TextSize;
     weight?: TextWeight;
+    color?: TextColor;
     tag?: Tag;
 };
 
@@ -62,6 +77,7 @@ export function BaseText<T extends TextTag = "div">(props: BaseTextProps<T>): Re
     const {
         size = "md",
         weight = "normal",
+        color,
         tag: Tag = "div",
         children,
         className,
@@ -72,7 +88,10 @@ export function BaseText<T extends TextTag = "div">(props: BaseTextProps<T>): Re
     return (
         <Tag
             className={classes(textCls("base", size, weight), className)}
-            style={style}
+            style={{
+                ...style,
+                ...(color && { color: TextColors[color] })
+            }}
             {...restProps}
         >
             {children}
@@ -81,7 +100,7 @@ export function BaseText<T extends TextTag = "div">(props: BaseTextProps<T>): Re
 }
 
 
-// #region Old compability
+// #region Old compatibility
 
 export const TextCompat: DiscordText = function TextCompat({ color, variant, ...restProps }) {
     const newBaseTextProps = restProps as BaseTextProps;
