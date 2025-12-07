@@ -54,21 +54,24 @@ export async function importSettings(data: string, type: BackupType = "all", clo
     if (!isSafeObject(parsed))
         throw new Error("Unsafe Settings");
 
-    if (!parsed || !("settings" in parsed) || !("quickCss" in parsed) || !("dataStore" in parsed) && !cloud) throw new Error("Invalid Settings. Missing one or more required keys.");
-
     switch (type) {
         case "all": {
-            Object.assign(PlainSettings, parsed.settings);
-            if (parsed.settings) await VencordNative.settings.set(parsed.settings);
+            if (!cloud && (!("settings" in parsed) || !("quickCss" in parsed) || !("dataStore" in parsed)))
+                throw new Error("Invalid Settings. Missing one or more required keys.");
+
+            if (parsed.settings) {
+                Object.assign(PlainSettings, parsed.settings);
+                await VencordNative.settings.set(parsed.settings);
+            }
             if (parsed.quickCss) await VencordNative.quickCss.set(parsed.quickCss);
             if (parsed.dataStore) await DataStore.setMany(parsed.dataStore);
             break;
         }
         case "plugins": {
-            if (!parsed.settings) throw new Error("Plugin settings missing");
+            if (!parsed.settings?.settings) throw new Error("Plugin settings missing");
 
-            Object.assign(PlainSettings, parsed.settings);
-            await VencordNative.settings.set(parsed.settings);
+            Object.assign(PlainSettings, parsed.settings.settings);
+            await VencordNative.settings.set(parsed.settings.settings);
             break;
         }
         case "css": {
