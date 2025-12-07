@@ -18,12 +18,14 @@
 
 import { Button } from "@components/Button";
 import { Heart } from "@components/Heart";
+import { OpenExternalIcon } from "@components/Icons";
 import { openInviteModal } from "@utils/discord";
 import { ButtonProps } from "@vencord/discord-types";
 import { showToast } from "@webpack/common";
 
 export function DonateButton({
     equicord = false,
+    className,
     ...props
 }: Partial<ButtonProps> & { equicord?: boolean; }) {
     const link = equicord ? "https://github.com/sponsors/thororen1234" : "https://github.com/sponsors/Vendicated";
@@ -34,7 +36,7 @@ export function DonateButton({
             size="medium"
             type="button"
             onClick={() => VencordNative.native.openExternal(link)}
-            className="vc-donate-button"
+            className={className || "vc-donate-button"}
         >
             <Heart />
             Donate
@@ -43,12 +45,13 @@ export function DonateButton({
 }
 
 export function InviteButton({
+    className,
     ...props
 }: Partial<ButtonProps>) {
     return (
         <Button
             {...props}
-            variant="link"
+            variant="none"
             size="medium"
             type="button"
             onClick={async e => {
@@ -57,9 +60,10 @@ export function InviteButton({
                     showToast("Invalid or expired invite"),
                 );
             }}
-            className="vc-donate-button"
+            className={className || "vc-donate-button"}
         >
             Invite
+            <OpenExternalIcon className="vc-invite-link" />
         </Button>
     );
 }

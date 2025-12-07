@@ -82,7 +82,7 @@ function Validator({ link, onValidate }: { link: string; onValidate: (valid: boo
             : "Valid!";
 
     return <Paragraph style={{
-        color: pending ? "var(--text-muted)" : err ? "var(--text-danger)" : "var(--status-positive)"
+        color: pending ? "var(--text-muted)" : err ? "var(--text-feedback-critical)" : "var(--status-positive)"
     }}>{text}</Paragraph>;
 }
 
@@ -469,7 +469,7 @@ function ThemesTab() {
         }));
 
         return (
-            <>;
+            <>
                 <section>
                     <Heading>Online Themes</Heading>
                     <Card className="vc-settings-theme-add-card">
@@ -520,7 +520,7 @@ function ThemesTab() {
     }
 
     return (
-        <SettingsTab title="Themes">
+        <SettingsTab>
             <TabBar
                 type="top"
                 look="brand"
@@ -623,7 +623,7 @@ export function CspErrorCard() {
 
 function UserscriptThemesTab() {
     return (
-        <SettingsTab title="Themes">
+        <SettingsTab>
             <Card className="vc-settings-card">
                 <Heading>Themes are not supported on the Userscript!</Heading>
 

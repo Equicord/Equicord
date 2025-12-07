@@ -8,7 +8,7 @@ import { showNotification } from "@api/Notifications";
 import { PlainSettings, Settings } from "@api/Settings";
 import { Logger } from "@utils/Logger";
 import { relaunch } from "@utils/native";
-import { SettingsRouter } from "@webpack/common";
+import { openUserSettingsPanel } from "@webpack/common";
 import { deflateSync, inflateSync } from "fflate";
 
 import { deauthorizeCloud, getCloudAuth, getCloudUrl } from "./cloudSetup";
@@ -79,7 +79,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
                 title: "Cloud Settings",
                 body: "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
                 color: "var(--yellow-360)",
-                onClick: () => SettingsRouter.open("VencordCloud")
+                onClick: () => openUserSettingsPanel("equicord_cloud")
             });
             // Disable cloud sync globally
             Settings.cloud.authenticated = false;
@@ -135,7 +135,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
         const data = await res.arrayBuffer();
 
         const settings = new TextDecoder().decode(inflateSync(new Uint8Array(data)));
-        await importSettings(settings);
+        await importSettings(settings, "all", true);
 
         // sync with server timestamp instead of local one
         PlainSettings.cloud.settingsSyncVersion = written;
