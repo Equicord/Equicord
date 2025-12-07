@@ -552,7 +552,7 @@ function ChangelogContent() {
 
             <Heading className={Margins.top20}>Repository</Heading>
             <Paragraph className={Margins.bottom8}>
-                This is the GitHub repository where Equicord fetches updates from. Click the link to view the source code, report issues, or contribute to the project.
+                This is the GitHub repository where Equicord fetches updates from.
             </Paragraph>
             <Paragraph color="text-muted">
                 {repoPending ? (
