@@ -64,10 +64,10 @@ export async function importSettings(data: string, type: BackupType = "all") {
             break;
         }
         case "plugins": {
-            if (!parsed.settings?.settings) throw new Error("Plugin settings missing");
+            if (!parsed.settings) throw new Error("Plugin settings missing");
 
-            Object.assign(PlainSettings, parsed.settings.settings);
-            await VencordNative.settings.set(parsed.settings.settings);
+            Object.assign(PlainSettings, parsed.settings);
+            await VencordNative.settings.set(parsed.settings);
             break;
         }
         case "css": {
