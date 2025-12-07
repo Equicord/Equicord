@@ -53,11 +53,11 @@ function BackupAndRestoreTab() {
                 Select a previously exported settings file to restore your configuration. This will replace all your current settings with the ones from the backup.
             </Paragraph>
 
-            <Flex gap="8px" style={{ flexWrap: "wrap" }}>
+            <Flex gap="8px" className={Margins.bottom20} style={{ flexWrap: "wrap" }}>
                 <Button
                     onClick={() => uploadSettingsBackup("all")}
                     size="small"
-                    className={Margins.bottom20}
+                    variant="secondary"
                 >
                     Import Settings
                 </Button>
@@ -92,7 +92,7 @@ function BackupAndRestoreTab() {
                 <Button
                     onClick={() => downloadSettingsBackup("all")}
                     size="small"
-                    variant="primary"
+                    variant="secondary"
                 >
                     Export All Settings
                 </Button>
