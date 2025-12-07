@@ -104,7 +104,7 @@ function EquicordSettings() {
                 warning: {
                     enabled: true,
                     message: IS_WINDOWS
-                        ? "This will stop the window from being resizable and prevent you from snapping the window to screen edges."
+                        ? "This will stop the window from being resizable and prevents you from snapping the window to screen edges."
                         : "This will stop the window from being resizable.",
                 },
             },
