@@ -43,7 +43,7 @@ function isSafeObject(obj: any) {
     return true;
 }
 
-export async function importSettings(data: string, type: BackupType = "all") {
+export async function importSettings(data: string, type: BackupType = "all", cloud = false) {
     try {
         var parsed = JSON.parse(data);
     } catch (err) {
@@ -54,12 +54,13 @@ export async function importSettings(data: string, type: BackupType = "all") {
     if (!isSafeObject(parsed))
         throw new Error("Unsafe Settings");
 
+    if (!parsed || !("settings" in parsed) || !("quickCss" in parsed) || !("dataStore" in parsed) && !cloud) throw new Error("Invalid Settings. Missing one or more required keys.");
+
     switch (type) {
         case "all": {
-            if (!("settings" in parsed) && !("quickCss" in parsed)) throw new Error("Invalid Settings. Missing one or more required keys.");
             Object.assign(PlainSettings, parsed.settings);
-            await VencordNative.settings.set(parsed.settings);
-            await VencordNative.quickCss.set(parsed.quickCss);
+            if (parsed.settings) await VencordNative.settings.set(parsed.settings);
+            if (parsed.quickCss) await VencordNative.quickCss.set(parsed.quickCss);
             if (parsed.dataStore) await DataStore.setMany(parsed.dataStore);
             break;
         }
