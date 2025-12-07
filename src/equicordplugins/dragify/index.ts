@@ -23,10 +23,6 @@ type DraftActions = {
     setDraft?: (channelId: string, draft: string, draftType: number) => void;
 };
 
-const DraftActions = findByPropsLazy("saveDraft", "changeDraft") as DraftActions;
-let pluginInstance: any = null;
-let activeGuildDragId: string | null = null;
-
 const settings = definePluginSettings({
     userOutput: {
         type: OptionType.SELECT,
@@ -75,8 +71,17 @@ const settings = definePluginSettings({
         default: false,
         description: "Grant temporary membership.",
     },
+    reuseExistingInvites: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Reuse existing invite instead of creating a new one.",
+    },
 });
 
+const DraftActions = findByPropsLazy("saveDraft", "changeDraft") as DraftActions;
+let pluginInstance: any = null;
+let activeGuildDragId: string | null = null;
+const inviteCache = new Map<string, { code: string; expiresAt: number | null; maxUses: number | null; uses: number | null }>();
 const userMentionRegex = /<@!?(\d{17,20})>/;
 const userProfileUrlRegex = /discord(?:(?:app)?\.com|:\/\/-?)\/users\/(\d{17,20})/;
 const userAvatarRegex = /cdn\.discordapp\.com\/(?:avatars|users)\/(\d{17,20})\//;
@@ -408,6 +413,15 @@ export default definePlugin({
 
     async createInvite(guildId: string, currentChannel: Channel): Promise<string | null> {
         const inviteChannel = this.findInviteChannel(guildId, currentChannel);
+
+        const cached = inviteCache.get(guildId);
+        if (cached && !this.isInviteExpired(cached)) return `https://discord.gg/${cached.code}`;
+
+        if (settings.store.reuseExistingInvites) {
+            const reused = await this.fetchReusableInvite(guildId, inviteChannel ?? null);
+            if (reused) return `https://discord.gg/${reused}`;
+        }
+
         if (!inviteChannel) {
             showToast("No channel available for invites.", Toasts.Type.FAILURE);
             return null;
@@ -429,6 +443,12 @@ export default definePlugin({
             });
             const code = typeof body === "object" && body ? (body as { code?: string; }).code : null;
             if (!code) throw new Error("Invite response missing code");
+            inviteCache.set(guildId, {
+                code,
+                expiresAt: settings.store.inviteExpireAfter > 0 ? Date.now() + settings.store.inviteExpireAfter * 1000 : null,
+                maxUses: settings.store.inviteMaxUses === 0 ? null : settings.store.inviteMaxUses ?? null,
+                uses: 0,
+            });
             showToast("Invite created.", Toasts.Type.SUCCESS);
             return `https://discord.gg/${code}`;
         } catch (error) {
@@ -436,6 +456,52 @@ export default definePlugin({
             showToast("Unable to create invite.", Toasts.Type.FAILURE); // uh oh!
             return null;
         }
+    },
+
+    async fetchReusableInvite(guildId: string, inviteChannel: Channel | null): Promise<string | null> {
+        const cached = inviteCache.get(guildId);
+        if (cached && !this.isInviteExpired(cached)) return cached.code;
+
+        try {
+            const channelId = inviteChannel?.id ?? null;
+            const url = channelId ? `/channels/${channelId}/invites` : `/guilds/${guildId}/invites`;
+
+            const { body } = await RestAPI.get({ url });
+            if (!Array.isArray(body)) return null;
+
+            const now = Date.now();
+            const invite = (body as Array<any>).find(inv => {
+                const expiresAt = inv.expires_at ? Date.parse(inv.expires_at) : null;
+                const maxUsesRaw = inv.max_uses ?? null;
+                const maxUses = maxUsesRaw === 0 ? null : maxUsesRaw;
+                const uses = inv.uses ?? null;
+                const notExpired = expiresAt === null || expiresAt > now;
+                const usesLeft = maxUses === null || uses === null || uses < maxUses;
+                return notExpired && usesLeft && typeof inv.code === "string";
+            });
+
+            if (invite?.code) {
+                inviteCache.set(guildId, {
+                    code: invite.code,
+                    expiresAt: invite.expires_at ? Date.parse(invite.expires_at) : null,
+                    maxUses: invite.max_uses === 0 ? null : invite.max_uses ?? null,
+                    uses: invite.uses ?? null,
+                });
+                return invite.code;
+            }
+        } catch {
+            // If we cannot list invites (permissions/403), fall back silently.
+            return null;
+        }
+
+        return null;
+    },
+
+    isInviteExpired(invite: { expiresAt: number | null; maxUses: number | null; uses: number | null; }): boolean {
+        const now = Date.now();
+        const expired = invite.expiresAt !== null && invite.expiresAt <= now;
+        const exhausted = invite.maxUses !== null && invite.maxUses !== 0 && invite.uses !== null && invite.uses >= invite.maxUses;
+        return expired || exhausted;
     },
 
     findInviteChannel(guildId: string, currentChannel: Channel): Channel | null {
