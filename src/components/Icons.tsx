@@ -686,33 +686,3 @@ export function MagnifyingGlassIcon(props: IconProps) {
         </Icon>
     );
 }
-
-export function DownloadIcon(props: IconProps) {
-    return (
-        <Icon
-            {...props}
-            className={classes(props.className, "vc-download-icon")}
-            viewBox="0 0 24 24"
-        >
-            <path
-                fill="currentColor"
-                d="M12 2a1 1 0 0 1 1 1v10.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V3a1 1 0 0 1 1-1ZM3 20a1 1 0 1 0 0 2h18a1 1 0 1 0 0-2H3Z"
-            />
-        </Icon>
-    );
-}
-
-export function RefreshIcon(props: IconProps) {
-    return (
-        <Icon
-            {...props}
-            className={classes(props.className, "vc-refresh-icon")}
-            viewBox="0 0 24 24"
-        >
-            <path
-                fill="currentColor"
-                d="M21 2a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-6a1 1 0 1 1 0-2h3.93A8 8 0 0 0 6.97 5.78a1 1 0 0 1-1.26-1.56A9.98 9.98 0 0 1 20 6V3a1 1 0 0 1 1-1ZM3 22a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H5.07a8 8 0 0 0 11.96 2.22 1 1 0 1 1 1.26 1.56A9.99 9.99 0 0 1 4 18v3a1 1 0 0 1-1 1Z"
-            />
-        </Icon>
-    );
-}
