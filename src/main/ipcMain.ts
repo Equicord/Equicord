@@ -25,7 +25,7 @@ import { IpcEvents } from "@shared/IpcEvents";
 import { BrowserWindow, ipcMain, shell, systemPreferences } from "electron";
 import monacoHtml from "file://monacoWin.html?minify&base64";
 import { FSWatcher, mkdirSync, watch, writeFileSync } from "fs";
-import { open, readdir, readFile, unlink } from "fs/promises";
+import { open, readdir, readFile } from "fs/promises";
 import { join, normalize } from "path";
 
 import { registerCspIpcHandlers } from "./csp/manager";
@@ -83,11 +83,6 @@ ipcMain.handle(IpcEvents.SET_QUICK_CSS, (_, css) =>
 ipcMain.handle(IpcEvents.GET_THEMES_DIR, () => THEMES_DIR);
 ipcMain.handle(IpcEvents.GET_THEMES_LIST, () => listThemes());
 ipcMain.handle(IpcEvents.GET_THEME_DATA, (_, fileName) => getThemeData(fileName));
-ipcMain.handle(IpcEvents.DELETE_THEME, (_, fileName) => {
-    const safePath = ensureSafePath(THEMES_DIR, fileName);
-    if (!safePath) return Promise.reject(`Unsafe path ${fileName}`);
-    return unlink(safePath);
-});
 ipcMain.handle(IpcEvents.GET_THEME_SYSTEM_VALUES, () => ({
     // win & mac only
     "os-accent-color": `#${systemPreferences.getAccentColor?.() || ""}`
