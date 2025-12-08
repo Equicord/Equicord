@@ -15,7 +15,7 @@ import { Paragraph } from "@components/Paragraph";
 import { EquicordDevsById, VencordDevsById } from "@utils/constants";
 import { fetchUserProfile } from "@utils/discord";
 import { classes, pluralise } from "@utils/misc";
-import { ModalContent, ModalRoot, openModal } from "@utils/modal";
+import { closeModal, ModalContent, ModalRoot, openModal } from "@utils/modal";
 import { User } from "@vencord/discord-types";
 import { showToast, useEffect, useMemo, UserProfileStore, useStateFromStores } from "@webpack/common";
 
@@ -26,7 +26,10 @@ import { PluginCard } from "./PluginCard";
 
 const cl = classNameFactory("vc-author-modal-");
 
+const CONTRIBUTOR_MODAL_KEY = "vc-contributor-modal";
+
 export function openContributorModal(user: User) {
+    closeModal(CONTRIBUTOR_MODAL_KEY);
     openModal(modalProps =>
         <ModalRoot {...modalProps}>
             <ErrorBoundary>
@@ -35,7 +38,7 @@ export function openContributorModal(user: User) {
                 </ModalContent>
             </ErrorBoundary>
         </ModalRoot>
-    );
+        , { modalKey: CONTRIBUTOR_MODAL_KEY });
 }
 
 function ContributorModal({ user }: { user: User; }) {
