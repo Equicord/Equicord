@@ -22,7 +22,6 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { Settings, useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
 import { Button } from "@components/Button";
-import { Card } from "@components/Card";
 import { Divider } from "@components/Divider";
 import { ErrorCard } from "@components/ErrorCard";
 import { Flex } from "@components/Flex";
@@ -326,68 +325,74 @@ function ThemesTab() {
     function LocalThemes() {
         return (
             <>
-                <Card className="vc-settings-card">
-                    <Heading>Find Themes:</Heading>
-                    <div style={{ marginBottom: ".5em", display: "flex", flexDirection: "column" }}>
-                        <Link style={{ marginRight: ".5em" }} href="https://betterdiscord.app/themes">
-                            BetterDiscord Themes
-                        </Link>
-                        <Link href="https://github.com/search?q=discord+theme">GitHub</Link>
-                    </div>
-                    <Paragraph>If using the BD site, click on "Download" and place the downloaded .theme.css file into your themes folder.</Paragraph>
-                </Card>
+                <Heading className={Margins.top16}>Quick Actions</Heading>
+                <Paragraph className={Margins.bottom16}>
+                    Shortcuts for managing your themes. Open your themes folder to add new themes, use QuickCSS for quick style tweaks, or reload themes after making changes.
+                </Paragraph>
 
-                <section>
-                    <Heading>Local Themes</Heading>
-                    <QuickActionCard>
-                        <>
-                            {IS_WEB ?
-                                (
-                                    <QuickAction
-                                        text={
-                                            <span style={{ position: "relative" }}>
-                                                Upload Theme
-                                                <FileInput
-                                                    ref={fileInputRef}
-                                                    onChange={onFileUpload}
-                                                    multiple={true}
-                                                    filters={[{ extensions: ["css"] }]}
-                                                />
-                                            </span>
-                                        }
-                                        Icon={PlusIcon}
+                <QuickActionCard>
+                    {IS_WEB ? (
+                        <QuickAction
+                            text={
+                                <span style={{ position: "relative" }}>
+                                    Upload Theme
+                                    <FileInput
+                                        ref={fileInputRef}
+                                        onChange={onFileUpload}
+                                        multiple={true}
+                                        filters={[{ extensions: ["css"] }]}
                                     />
-                                ) : (
-                                    <QuickAction
-                                        text="Open Themes Folder"
-                                        action={() => showItemInFolder(themeDir!)}
-                                        disabled={themeDirPending}
-                                        Icon={FolderIcon}
-                                    />
-                                )}
-                            <QuickAction
-                                text="Load missing Themes"
-                                action={refreshLocalThemes}
-                                Icon={RestartIcon}
-                            />
-                            <QuickAction
-                                text="Edit QuickCSS"
-                                action={() => VencordNative.quickCss.openEditor()}
-                                Icon={PaintbrushIcon}
-                            />
+                                </span>
+                            }
+                            Icon={PlusIcon}
+                        />
+                    ) : (
+                        <QuickAction
+                            text="Open Themes Folder"
+                            action={() => showItemInFolder(themeDir!)}
+                            disabled={themeDirPending}
+                            Icon={FolderIcon}
+                        />
+                    )}
+                    <QuickAction
+                        text="Load missing Themes"
+                        action={refreshLocalThemes}
+                        Icon={RestartIcon}
+                    />
+                    <QuickAction
+                        text="Edit QuickCSS"
+                        action={() => VencordNative.quickCss.openEditor()}
+                        Icon={PaintbrushIcon}
+                    />
+                    {Settings.plugins.ClientTheme.enabled && (
+                        <QuickAction
+                            text="Edit ClientTheme"
+                            action={() => openPluginModal(Plugins.ClientTheme)}
+                            Icon={PencilIcon}
+                        />
+                    )}
+                </QuickActionCard>
 
-                            {Settings.plugins.ClientTheme.enabled && (
-                                <QuickAction
-                                    text="Edit ClientTheme"
-                                    action={() => openPluginModal(Plugins.ClientTheme)}
-                                    Icon={PencilIcon}
-                                />
-                            )}
-                        </>
-                    </QuickActionCard>
+                <Divider className={Margins.top20} />
 
+                <Heading className={Margins.top20}>Find Themes</Heading>
+                <Paragraph className={Margins.bottom8}>
+                    Looking for themes? Check out community resources like <Link href="https://betterdiscord.app/themes">BetterDiscord Themes</Link> or search on <Link href="https://github.com/search?q=discord+theme">GitHub</Link>. When downloading from BetterDiscord, click "Download" and place the .theme.css file into your themes folder.
+                </Paragraph>
+
+                <Divider className={Margins.top20} />
+
+                <Heading className={Margins.top20}>Installed Themes</Heading>
+                <Paragraph className={Margins.bottom16}>
+                    {userThemes?.length
+                        ? "These are the themes you have installed locally. Toggle them on or off, and click the settings icon on UserCSS themes to customize their options."
+                        : "You don't have any themes installed yet. Add .css or .user.css files to your themes folder, or use the quick actions above to get started."
+                    }
+                </Paragraph>
+
+                {userThemes && userThemes.length > 0 && (
                     <div className={cl("grid")}>
-                        {userThemes?.map(({ type, header: theme }: ThemeHeader) => (
+                        {userThemes.map(({ type, header: theme }: ThemeHeader) => (
                             type === "other" ? (
                                 <OtherThemeCard
                                     key={theme.fileName}
@@ -398,6 +403,7 @@ function ThemesTab() {
                                         await VencordNative.themes.deleteTheme(theme.fileName);
                                         refreshLocalThemes();
                                     }}
+                                    showDeleteButton
                                     theme={theme as UserThemeHeader}
                                 />
                             ) : (
@@ -413,9 +419,10 @@ function ThemesTab() {
                                     onSettingsReset={refreshLocalThemes}
                                     theme={theme as UserstyleHeader}
                                 />
-                            )))}
+                            )
+                        ))}
                     </div>
-                </section>
+                )}
             </>
         );
     }
@@ -462,7 +469,6 @@ function ThemesTab() {
     }
 
     function OnlineThemes() {
-
         const themes = (onlineThemes ?? []).map(theme => ({
             ...theme,
             customName: themeNames[theme.link] ?? null,
@@ -470,51 +476,59 @@ function ThemesTab() {
 
         return (
             <>
-                <section>
-                    <Heading>Online Themes</Heading>
-                    <Card className="vc-settings-theme-add-card">
-                        <Paragraph>Make sure to use direct links to files (raw or github.io)!</Paragraph>
-                        <Flex flexDirection="row">
-                            <TextInput placeholder="Theme Link" className="vc-settings-theme-link-input" value={currentThemeLink} onChange={setCurrentThemeLink} />
-                            <Button onClick={() => addThemeLink(currentThemeLink)} disabled={!themeLinkValid}>Add</Button>
-                        </Flex>
-                        {currentThemeLink && <Validator link={currentThemeLink} onValidate={setThemeLinkValid} />}
-                    </Card>
+                <Heading className={Margins.top16}>Add Theme Link</Heading>
+                <Paragraph className={Margins.bottom16}>
+                    Want to load a theme from a URL instead of downloading it? Paste a direct link to a CSS file below. Make sure you're using the raw file URL (like raw.githubusercontent.com) and not the GitHub page itself.
+                </Paragraph>
 
+                <Flex flexDirection="row" gap="8px" className={Margins.bottom8}>
+                    <TextInput
+                        placeholder="https://example.com/theme.css"
+                        className={cl("link-input")}
+                        value={currentThemeLink}
+                        onChange={setCurrentThemeLink}
+                    />
+                    <Button onClick={() => addThemeLink(currentThemeLink)} disabled={!themeLinkValid}>
+                        Add
+                    </Button>
+                </Flex>
+                {currentThemeLink && <Validator link={currentThemeLink} onValidate={setThemeLinkValid} />}
+
+                <Divider className={Margins.top20} />
+
+                <Heading className={Margins.top20}>Online Themes</Heading>
+                <Paragraph className={Margins.bottom16}>
+                    {themes.length
+                        ? "These themes are loaded directly from their URLs. They'll automatically update when the source changes, so you'll always have the latest version."
+                        : "You haven't added any online themes yet. Paste a theme URL above to load it directly without downloading."
+                    }
+                </Paragraph>
+
+                {themes.length > 0 && (
                     <div className={cl("grid")}>
-                        {themes.map(theme => {
-                            const { label, link } = (() => {
-                                const match = /^@(light|dark) (.*)/.exec(theme.link);
-                                if (!match) return { label: theme, link: theme };
-
-                                const [, mode, link] = match;
-                                return { label: `[${mode} mode only] ${link}`, link };
-                            })();
-
-                            return (
-                                <OtherThemeCard
-                                    key={theme.fileName}
-                                    theme={theme}
-                                    enabled={settings.enabledThemeLinks.includes(theme.link)}
-                                    onChange={enabled => onThemeLinkEnabledChange(theme.link, enabled)}
-                                    onDelete={async () => {
-                                        onThemeLinkEnabledChange(theme.link, false);
-                                        deleteThemeLink(theme.link);
-                                    }}
-                                    showDeleteButton
-                                    onEditName={newName => {
-                                        const updatedNames = { ...themeNames, [theme.link]: newName };
-                                        setThemeNames(updatedNames);
-                                        settings.themeNames = {
-                                            ...settings.themeNames,
-                                            [theme.link]: newName,
-                                        };
-                                    }}
-                                />
-                            );
-                        })}
+                        {themes.map(theme => (
+                            <OtherThemeCard
+                                key={theme.fileName}
+                                theme={theme}
+                                enabled={settings.enabledThemeLinks.includes(theme.link)}
+                                onChange={enabled => onThemeLinkEnabledChange(theme.link, enabled)}
+                                onDelete={() => {
+                                    onThemeLinkEnabledChange(theme.link, false);
+                                    deleteThemeLink(theme.link);
+                                }}
+                                showDeleteButton
+                                onEditName={newName => {
+                                    const updatedNames = { ...themeNames, [theme.link]: newName };
+                                    setThemeNames(updatedNames);
+                                    settings.themeNames = {
+                                        ...settings.themeNames,
+                                        [theme.link]: newName,
+                                    };
+                                }}
+                            />
+                        ))}
                     </div>
-                </section>
+                )}
             </>
         );
     }
@@ -585,37 +599,25 @@ export function CspErrorCard() {
     const hasImgurHtmlDomain = errors.some(isImgurHtmlDomain);
 
     return (
-        <ErrorCard className="vc-settings-card">
-            <Heading>Blocked Resources</Heading>
-            <Paragraph>Some images, styles, or fonts were blocked because they come from disallowed domains.</Paragraph>
-            <Paragraph>It is highly recommended to move them to GitHub or Imgur. But you may also allow domains if you fully trust them.</Paragraph>
-            <Paragraph>
-                After allowing a domain, you have to fully close (from tray / task manager) and restart {IS_DISCORD_DESKTOP ? "Discord" : IS_EQUIBOP ? "Equibop" : "Vesktop"} to apply the change.
+        <ErrorCard className={classes(cl("error-card"), Margins.top16)}>
+            <Heading className={Margins.bottom8}>Blocked Resources</Heading>
+            <Paragraph className={Margins.bottom8}>
+                Some resources were blocked from disallowed domains. Move them to GitHub or Imgur, or allow trusted domains below.
             </Paragraph>
 
-            <Heading className={classes(Margins.top16, Margins.bottom8)}>Blocked URLs</Heading>
-            <div className="vc-settings-csp-list">
-                {errors.map((url, i) => (
-                    <div key={url}>
-                        {i !== 0 && <Divider className={Margins.bottom8} />}
-                        <div className="vc-settings-csp-row">
-                            <Link href={url}>{url}</Link>
-                            <Button variant="secondary" onClick={() => allowUrl(url)} disabled={isImgurHtmlDomain(url)}>
-                                Allow
-                            </Button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            {errors.map((url, i) => (
+                <div key={url} className={cl("csp-row")}>
+                    <Link href={url}>{url}</Link>
+                    <Button size="small" variant="secondary" onClick={() => allowUrl(url)} disabled={isImgurHtmlDomain(url)}>
+                        Allow
+                    </Button>
+                </div>
+            ))}
 
             {hasImgurHtmlDomain && (
-                <>
-                    <Divider className={classes(Margins.top8, Margins.bottom16)} />
-                    <Paragraph>
-                        Imgur links should be direct links in the form of <code>https://i.imgur.com/...</code>
-                    </Paragraph>
-                    <Paragraph>To obtain a direct link, right-click the image and select "Copy image address".</Paragraph>
-                </>
+                <Paragraph color="text-subtle" className={Margins.top8}>
+                    Imgur links should be direct links like <code>https://i.imgur.com/...</code>
+                </Paragraph>
             )}
         </ErrorCard>
     );
@@ -624,13 +626,13 @@ export function CspErrorCard() {
 function UserscriptThemesTab() {
     return (
         <SettingsTab>
-            <Card className="vc-settings-card">
-                <Heading>Themes are not supported on the Userscript!</Heading>
-
-                <Paragraph>
-                    You can instead install themes with the <Link href={getStylusWebStoreUrl()}>Stylus extension</Link>!
-                </Paragraph>
-            </Card>
+            <Heading className={Margins.top16}>Themes Not Supported</Heading>
+            <Paragraph className={Margins.bottom8}>
+                Themes are not available on the Userscript version.
+            </Paragraph>
+            <Paragraph color="text-subtle">
+                You can install themes using the <Link href={getStylusWebStoreUrl()}>Stylus extension</Link> instead.
+            </Paragraph>
         </SettingsTab>
     );
 }
