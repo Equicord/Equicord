@@ -52,11 +52,11 @@ function KeybindRecorder() {
             }
 
             const keys: string[] = [];
-            if (IS_MAC && event.ctrlKey) {
-                if (event.ctrlKey) keys.push("CONTROL");
-                if (event.metaKey) keys.push("CTRL");
-            } else if (event.ctrlKey) {
-                keys.push("CTRL");
+            if (event.metaKey) {
+                keys.push("META");
+            }
+            if (event.ctrlKey) {
+                keys.push(IS_MAC ? "CONTROL" : "CTRL");
             }
             if (event.shiftKey) keys.push("SHIFT");
             if (event.altKey) keys.push("ALT");
