@@ -26,6 +26,7 @@ import { getTheme, Theme } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, FluxDispatcher, GuildChannelStore, NavigationRouter, RestAPI, UserStore } from "@webpack/common";
+import { Alert } from "@components/Alert";
 
 const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
 const ApplicationStreamingStore = findStoreLazy("ApplicationStreamingStore");
@@ -215,9 +216,14 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "QuestCompleter",
-    description: "Adds a button to the header bar to complete quests easily.",
+    description: "Adds a button to the header bar to complete quests without having the game installed.",
     authors: [Devs.amia],
     settings,
+    settingsAboutComponent: () => (
+        <Alert.Info>
+            You must accept the quest first before clicking the button.
+        </Alert.Info>
+    ),
     headerBarButton: {
         icon: QuestIcon,
         render: ToolBarHeader
