@@ -221,7 +221,7 @@ export default definePlugin({
     settings,
     settingsAboutComponent: () => (
         <Alert.Info>
-            You must accept the quest first before clicking the button.
+            You must manually accept the quest first before clicking the button.
         </Alert.Info>
     ),
     headerBarButton: {
