@@ -215,7 +215,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "QuestCompleter",
-    description: "A plugin to complete quests without having the game installed.",
+    description: "Adds a button to the header bar to complete quests easily.",
     authors: [Devs.amia],
     settings,
     headerBarButton: {
