@@ -37,6 +37,7 @@ import { Alerts, useState } from "@webpack/common";
 const UploadIcon = findComponentByCodeLazy("M12.7 3.3a1 1 0 0 0-1.4 0l-5 5a1 1 0 0 0 1.4 1.4L11 6.42V20");
 const DownloadIcon = findComponentByCodeLazy("M12.7 20.7a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4l3.3 3.29V4");
 const TrashIcon = findComponentByCodeLazy("2.81h8.36a3");
+const SkullIcon = findComponentByCodeLazy("m13.47 1 .07.04c.45.06");
 
 function validateUrl(url: string) {
     try {
@@ -157,7 +158,7 @@ function CloudTab() {
             />
 
             {isAuthenticated && (
-                <QuickActionCard>
+                <QuickActionCard columns={2}>
                     <QuickAction
                         Icon={UploadIcon}
                         text="Sync to Cloud"
@@ -168,12 +169,6 @@ function CloudTab() {
                         Icon={DownloadIcon}
                         text="Sync from Cloud"
                         action={() => getCloudSettings(true, true)}
-                        disabled={!syncEnabled}
-                    />
-                    <QuickAction
-                        Icon={TrashIcon}
-                        text="Delete Cloud Settings"
-                        action={() => deleteCloudSettings()}
                         disabled={!syncEnabled}
                     />
                 </QuickActionCard>
@@ -192,20 +187,31 @@ function CloudTab() {
                 Permanently delete all your data from the cloud. This action cannot be undone and will remove all synced settings and any other data stored on the cloud backend.
             </Paragraph>
 
-            <Button
-                variant="dangerPrimary"
-                disabled={!isAuthenticated}
-                onClick={() => Alerts.show({
-                    title: "Erase All Cloud Data",
-                    body: "Are you sure you want to permanently delete all your cloud data? This action cannot be undone.",
-                    onConfirm: eraseAllCloudData,
-                    confirmText: "Erase All Data",
-                    confirmColor: "vc-cloud-erase-data-danger-btn",
-                    cancelText: "Cancel"
-                })}
-            >
-                Erase All Cloud Data
-            </Button>
+            <Flex gap="8px" flexWrap="wrap">
+                <Button
+                    variant="dangerPrimary"
+                    disabled={!syncEnabled}
+                    onClick={() => deleteCloudSettings()}
+                >
+                    <TrashIcon color="currentColor" style={{ marginRight: "8px" }} />
+                    Delete Cloud Settings
+                </Button>
+                <Button
+                    variant="dangerPrimary"
+                    disabled={!isAuthenticated}
+                    onClick={() => Alerts.show({
+                        title: "Erase All Cloud Data",
+                        body: "Are you sure you want to permanently delete all your cloud data? This action cannot be undone.",
+                        onConfirm: eraseAllCloudData,
+                        confirmText: "Erase All Data",
+                        confirmColor: "vc-cloud-erase-data-danger-btn",
+                        cancelText: "Cancel"
+                    })}
+                >
+                    <SkullIcon color="currentColor" style={{ marginRight: "8px" }} />
+                    Erase All Cloud Data
+                </Button>
+            </Flex>
         </SettingsTab>
     );
 }
