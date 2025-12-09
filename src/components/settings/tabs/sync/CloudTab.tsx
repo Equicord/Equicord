@@ -93,51 +93,6 @@ function CloudTab() {
 
             <Divider className={Margins.top20} />
 
-            <Heading className={Margins.top20}>Settings Sync</Heading>
-            <Paragraph className={Margins.bottom16}>
-                Synchronize your Equicord settings to the cloud. This makes it easy to keep your configuration consistent across multiple devices without manual import/export.
-            </Paragraph>
-
-            <FormSwitch
-                title="Enable Settings Sync"
-                description="When enabled, your settings can be synced to and from the cloud. Use the actions below to manually sync."
-                value={cloud.settingsSync}
-                onChange={v => { cloud.settingsSync = v; }}
-                disabled={!isAuthenticated}
-                hideBorder
-            />
-
-            {isAuthenticated && (
-                <QuickActionCard>
-                    <QuickAction
-                        Icon={UploadIcon}
-                        text="Sync to Cloud"
-                        action={() => putCloudSettings(true)}
-                        disabled={!syncEnabled}
-                    />
-                    <QuickAction
-                        Icon={DownloadIcon}
-                        text="Sync from Cloud"
-                        action={() => getCloudSettings(true, true)}
-                        disabled={!syncEnabled}
-                    />
-                    <QuickAction
-                        Icon={TrashIcon}
-                        text="Delete Cloud Settings"
-                        action={() => deleteCloudSettings()}
-                        disabled={!syncEnabled}
-                    />
-                </QuickActionCard>
-            )}
-
-            {!isAuthenticated && (
-                <Alert.Warning className={Margins.top8} style={{ width: "100%" }}>
-                    Enable cloud integration above to use settings sync features.
-                </Alert.Warning>
-            )}
-
-            <Divider className={Margins.top20} />
-
             <Heading className={Margins.top20}>Cloud Backend</Heading>
             <Paragraph className={Margins.bottom8}>
                 Choose which cloud backend to use for storing your settings. You can switch between Equicord's and Vencord's cloud services, or use a self-hosted instance.
@@ -184,6 +139,51 @@ function CloudTab() {
                     Reauthorize
                 </Button>
             </Flex>
+
+            <Divider className={Margins.top20} />
+
+            <Heading className={Margins.top20}>Settings Sync</Heading>
+            <Paragraph className={Margins.bottom16}>
+                Synchronize your Equicord settings to the cloud. This makes it easy to keep your configuration consistent across multiple devices without manual import/export.
+            </Paragraph>
+
+            <FormSwitch
+                title="Enable Settings Sync"
+                description="When enabled, your settings can be synced to and from the cloud. Use the actions below to manually sync."
+                value={cloud.settingsSync}
+                onChange={v => { cloud.settingsSync = v; }}
+                disabled={!isAuthenticated}
+                hideBorder
+            />
+
+            {isAuthenticated && (
+                <QuickActionCard>
+                    <QuickAction
+                        Icon={UploadIcon}
+                        text="Sync to Cloud"
+                        action={() => putCloudSettings(true)}
+                        disabled={!syncEnabled}
+                    />
+                    <QuickAction
+                        Icon={DownloadIcon}
+                        text="Sync from Cloud"
+                        action={() => getCloudSettings(true, true)}
+                        disabled={!syncEnabled}
+                    />
+                    <QuickAction
+                        Icon={TrashIcon}
+                        text="Delete Cloud Settings"
+                        action={() => deleteCloudSettings()}
+                        disabled={!syncEnabled}
+                    />
+                </QuickActionCard>
+            )}
+
+            {!isAuthenticated && (
+                <Alert.Warning className={Margins.top8} style={{ width: "100%" }}>
+                    Enable cloud integration above to use settings sync features.
+                </Alert.Warning>
+            )}
 
             <Divider className={Margins.top20} />
 
