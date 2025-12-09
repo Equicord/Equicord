@@ -116,6 +116,18 @@ function CloudTab() {
             <Flex gap="8px" className={Margins.top16} flexWrap="wrap">
                 <Button
                     size="small"
+                    disabled={!isAuthenticated}
+                    onClick={async () => {
+                        cloud.authenticated = false;
+                        await deauthorizeCloud();
+                        await authorizeCloud();
+                    }}
+                >
+                    Reauthorize
+                </Button>
+                <Button
+                    size="small"
+                    variant="secondary"
                     onClick={() => changeUrl("https://cloud.equicord.org/")}
                 >
                     Use Equicord Cloud
@@ -126,18 +138,6 @@ function CloudTab() {
                     onClick={() => changeUrl("https://api.vencord.dev/")}
                 >
                     Use Vencord Cloud
-                </Button>
-                <Button
-                    size="small"
-                    variant="secondary"
-                    disabled={!isAuthenticated}
-                    onClick={async () => {
-                        cloud.authenticated = false;
-                        await deauthorizeCloud();
-                        await authorizeCloud();
-                    }}
-                >
-                    Reauthorize
                 </Button>
             </Flex>
 
