@@ -192,6 +192,7 @@ function CloudTab() {
                     variant="dangerPrimary"
                     disabled={!syncEnabled}
                     onClick={() => deleteCloudSettings()}
+                    style={{ display: "flex", alignItems: "center" }}
                 >
                     <TrashIcon color="currentColor" style={{ marginRight: "8px" }} />
                     Delete Cloud Settings
@@ -207,6 +208,7 @@ function CloudTab() {
                         confirmColor: "vc-cloud-erase-data-danger-btn",
                         cancelText: "Cancel"
                     })}
+                    style={{ display: "flex", alignItems: "center" }}
                 >
                     <SkullIcon color="currentColor" style={{ marginRight: "8px" }} />
                     Erase All Cloud Data

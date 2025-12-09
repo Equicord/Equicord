@@ -18,6 +18,7 @@
     color: var(--text-default);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5em;
     padding: 8px 9px;
     border-radius: 8px;
