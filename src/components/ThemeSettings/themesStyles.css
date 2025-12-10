@@ -29,14 +29,14 @@
 }
 
 .vc-settings-usercss-ie-buttons>div {
-    color: var(--interactive-normal);
+    color: var(--interactive-icon-default, var(--interactive-normal));
     opacity: 0.5;
     padding: 4px;
     cursor: pointer;
 }
 
 .vc-settings-usercss-ie-buttons>div:hover {
-    color: var(--interactive-hover);
+    color: var(--interactive-icon-hover, var(--interactive-hover));
     opacity: 1;
 }
 
@@ -58,14 +58,14 @@
 
 .vc-settings-theme-menu-button {
     cursor: pointer;
-    color: var(--interactive-normal);
+    color: var(--interactive-icon-default, var(--interactive-normal));
     display: flex;
     align-items: center;
     height: 24px;
 }
 
 .vc-settings-theme-menu-button:hover {
-    color: var(--interactive-hover);
+    color: var(--interactive-icon-hover, var(--interactive-hover));
 }
 
 .vc-settings-theme-footer-pin-icon {
