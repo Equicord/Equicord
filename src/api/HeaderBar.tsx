@@ -6,14 +6,11 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Logger } from "@utils/Logger";
-import { classes } from "@utils/misc";
-import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { findComponentByCodeLazy } from "@webpack";
 import { useEffect, useState } from "@webpack/common";
 import type { ComponentType, JSX, MouseEventHandler, ReactNode } from "react";
 
 const logger = new Logger("HeaderBarAPI");
-
-const ToolbarClasses: Record<string, string> = findByPropsLazy("iconWrapper", "selected");
 
 const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"') as ComponentType<HeaderBarButtonProps>;
 
@@ -88,14 +85,8 @@ export const HeaderBarButton = HeaderBarIcon;
  *     selected={isOpen}
  * />
  */
-export function ChannelToolbarButton({ className, selected, ...props }: HeaderBarButtonProps) {
-    return (
-        <HeaderBarIcon
-            {...props}
-            selected={selected}
-            className={classes(className, selected && ToolbarClasses.selected)}
-        />
-    );
+export function ChannelToolbarButton(props: HeaderBarButtonProps) {
+    return <HeaderBarIcon {...props} />;
 }
 
 const headerBarButtons = new Map<string, ButtonEntry>();
