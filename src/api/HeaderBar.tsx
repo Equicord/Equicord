@@ -46,6 +46,8 @@ export interface HeaderBarButtonProps {
 
 export type HeaderBarButtonFactory = () => JSX.Element | null;
 
+export type HeaderBarButtonLocation = "headerbar" | "channeltoolbar";
+
 export interface HeaderBarButtonData {
     /** Function that renders the button component */
     render: HeaderBarButtonFactory;
@@ -54,7 +56,7 @@ export interface HeaderBarButtonData {
     /** Higher priority buttons appear further right. Default: 0 */
     priority?: number;
     /** Where to render the button. Default: "headerbar" */
-    location?: "headerbar" | "channeltoolbar";
+    location?: HeaderBarButtonLocation;
 }
 
 interface ButtonEntry {
@@ -200,12 +202,12 @@ function ChannelToolbarButtons() {
         ));
 }
 
-/** @internal Injected by HeaderBarAPI patch (do NOT call directly) */
+/** @internal Injected by HeaderBarAPI patch - do not call directly */
 export function _addHeaderBarButtons() {
     return [<HeaderBarButtons key="vc-header-bar-buttons" />];
 }
 
-/** @internal Injected by HeaderBarAPI patch (do NOT call directly) */
+/** @internal Injected by HeaderBarAPI patch - do not call directly */
 export function _addChannelToolbarButtons(toolbar: ReactNode[]) {
     toolbar.push(<ChannelToolbarButtons key="vc-channel-toolbar-buttons" />);
 }

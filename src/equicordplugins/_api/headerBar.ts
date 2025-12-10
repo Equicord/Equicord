@@ -26,6 +26,13 @@ export default definePlugin({
                 match: /(?<=renderHeaderToolbar",\(\)=>\{.{1,200}let (\i)=\[\];)/,
                 replace: "Vencord.Api.HeaderBar._addChannelToolbarButtons($1);"
             }
+        },
+        {
+            find: "Missing channel in Channel.renderHeaderToolbar",
+            replacement: {
+                match: /(?<=renderHeaderToolbar",\(\)=>\{.{1,200}let (\i)=\[\];)/,
+                replace: "Vencord.Api.HeaderBar._addChannelToolbarButtons($1);"
+            }
         }
     ]
 });
