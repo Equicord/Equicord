@@ -52,11 +52,13 @@ interface SettingsLayoutNode {
     type: number;
     key?: string;
     legacySearchKey?: string;
+    getLegacySearchKey?(): string;
     useLabel?(): string;
     useTitle?(): string;
     buildLayout?(): SettingsLayoutNode[];
     icon?(): ReactNode;
     render?(): ReactNode;
+    StronglyDiscouragedCustomComponent?(): ReactNode;
 }
 
 interface EntryOptions {
@@ -175,7 +177,9 @@ export default definePlugin({
         return ({
             key,
             type: LayoutTypes.SIDEBAR_ITEM,
+            // FIXME
             legacySearchKey: title.toUpperCase(),
+            getLegacySearchKey: () => title.toUpperCase(),
             useTitle: () => title,
             icon: () => <Icon width={20} height={20} />,
             buildLayout: () => [
@@ -188,6 +192,8 @@ export default definePlugin({
                             key: key + "_pane",
                             type: LayoutTypes.PANE,
                             buildLayout: () => [],
+                            // FIXME
+                            StronglyDiscouragedCustomComponent: () => <Component />,
                             render: () => <Component />,
                             useTitle: () => panelTitle
                         }
@@ -207,7 +213,7 @@ export default definePlugin({
             ["EquicordCloud", "equicord_cloud_panel"],
             ["EquicordBackupAndRestore", "equicord_backup_restore_panel"],
             ["EquicordPatchHelper", "equicord_patch_helper_panel"],
-            ["Equibop", "EquibopSettings", "equicord_equibop_settings_panel"],
+            ["EquibopSettings", "equicord_equibop_settings_panel"],
             ["EquicordDiscordIcons", "equicord_icon_viewer"],
             ["EquicordThemeLibrary", "equicord_theme_library"],
             ["EquicordIRememberYou", "equicord_i_remember_you"],
