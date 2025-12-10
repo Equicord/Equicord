@@ -62,7 +62,6 @@ interface ButtonEntry {
     priority: number;
 }
 
-
 /**
  * Button component for the top header bar (title bar area).
  *
