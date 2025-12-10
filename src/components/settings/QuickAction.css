@@ -25,6 +25,7 @@
     transition: 0.1s ease-out;
     box-sizing: border-box;
     line-height: 1;
+    cursor: pointer;
 }
 
 .vc-settings-quickActions-pill:hover {
