@@ -42,11 +42,11 @@ export interface HeaderBarButtonProps {
     badgePosition?: "top" | "bottom";
     /** Size of the icon in pixels */
     iconSize?: number;
+    /** Ref to the button element */
+    ref?: React.RefObject<any>;
 }
 
 export type HeaderBarButtonFactory = () => JSX.Element | null;
-
-export type HeaderBarButtonLocation = "headerbar" | "channeltoolbar";
 
 export interface HeaderBarButtonData {
     /** Function that renders the button component */
@@ -56,7 +56,7 @@ export interface HeaderBarButtonData {
     /** Higher priority buttons appear further right. Default: 0 */
     priority?: number;
     /** Where to render the button. Default: "headerbar" */
-    location?: HeaderBarButtonLocation;
+    location?: "headerbar" | "channeltoolbar";
 }
 
 interface ButtonEntry {
@@ -202,12 +202,12 @@ function ChannelToolbarButtons() {
         ));
 }
 
-/** @internal Injected by HeaderBarAPI patch - do not call directly */
+/** @internal Injected by HeaderBarAPI patch (do NOT call directly) */
 export function _addHeaderBarButtons() {
     return [<HeaderBarButtons key="vc-header-bar-buttons" />];
 }
 
-/** @internal Injected by HeaderBarAPI patch - do not call directly */
+/** @internal Injected by HeaderBarAPI patch (do NOT call directly) */
 export function _addChannelToolbarButtons(toolbar: ReactNode[]) {
     toolbar.push(<ChannelToolbarButtons key="vc-channel-toolbar-buttons" />);
 }
