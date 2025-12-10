@@ -89,11 +89,6 @@ ipcMain.handle(IpcEvents.SET_QUICK_CSS, (_, css) =>
 ipcMain.handle(IpcEvents.GET_THEMES_DIR, () => THEMES_DIR);
 ipcMain.handle(IpcEvents.GET_THEMES_LIST, () => listThemes());
 ipcMain.handle(IpcEvents.GET_THEME_DATA, (_, fileName) => getThemeData(fileName));
-ipcMain.handle(IpcEvents.UPLOAD_THEME, (_, fileName, fileData) => {
-    const safePath = ensureSafePath(THEMES_DIR, fileName);
-    if (!safePath) return Promise.reject(`Unsafe path ${fileName}`);
-    return writeFile(safePath, fileData);
-});
 ipcMain.handle(IpcEvents.DELETE_THEME, (_, fileName) => {
     const safePath = ensureSafePath(THEMES_DIR, fileName);
     if (!safePath) return Promise.reject(`Unsafe path ${fileName}`);
