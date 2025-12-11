@@ -53,10 +53,9 @@ import type { UserstyleHeader } from "usercss-meta";
 import Plugins from "~plugins";
 
 const PinIcon = findComponentByCodeLazy("1-.06-.63L6.16");
-const VerticalDotsIcon = findComponentByCodeLazy("M10 4a2 2 0 1 0 4 0");
 const HomeIcon = findComponentByCodeLazy("m2.4 8.4 8.38-6.46a2");
 const RefreshIcon = findComponentByCodeLazy("M21 2a1 1 0 0 1 1 1v6");
-const CopyIcon = findComponentByCodeLazy("M4 5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v.18");
+const LinkIcon = findComponentByCodeLazy("M16.32 14.72a1 1 0 0 1 0-1.41l2.51-2.51");
 const DiscordIcon = findComponentByCodeLazy("1.6 5.64-2.87");
 const DownloadIcon = findComponentByCodeLazy("1.42l3.3 3.3V3a1");
 
@@ -247,7 +246,7 @@ function OtherThemeCard({ theme, enabled, onChange, onDelete, showDeleteButton, 
                     <Menu.MenuItem
                         id="copy-url"
                         label="Copy URL"
-                        icon={CopyIcon}
+                        icon={LinkIcon}
                         action={onCopyUrl}
                     />
                 )}
