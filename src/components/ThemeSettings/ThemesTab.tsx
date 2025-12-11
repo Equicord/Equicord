@@ -306,7 +306,7 @@ function OtherThemeCard({ theme, enabled, onChange, onDelete, showDeleteButton, 
                         className={cl("menu-button")}
                         onClick={openThemeMenu}
                     >
-                        <VerticalDotsIcon />
+                        <CogWheel />
                     </div>
                 )
             }

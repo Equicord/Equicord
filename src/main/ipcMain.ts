@@ -25,7 +25,7 @@ import { IpcEvents } from "@shared/IpcEvents";
 import { BrowserWindow, ipcMain, shell, systemPreferences } from "electron";
 import monacoHtml from "file://monacoWin.html?minify&base64";
 import { FSWatcher, mkdirSync, watch, writeFileSync } from "fs";
-import { open, readdir, readFile, unlink, writeFile } from "fs/promises";
+import { open, readdir, readFile, unlink } from "fs/promises";
 import { join, normalize } from "path";
 
 import { registerCspIpcHandlers } from "./csp/manager";
