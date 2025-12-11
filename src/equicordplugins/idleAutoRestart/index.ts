@@ -17,7 +17,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
@@ -88,7 +88,7 @@ export default definePlugin({
     name: "IdleAutoRestart",
     description:
         "Automatically restarts the client after being idle for a configurable amount of time.",
-    authors: [Devs.Ven],
+    authors: [EquicordDevs.SteelTech],
     settings,
 
     start() {
