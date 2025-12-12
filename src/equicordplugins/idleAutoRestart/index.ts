@@ -42,9 +42,8 @@ export default definePlugin({
     name: "IdleAutoRestart",
     description:
         "Automatically restarts the client after being idle for a configurable amount of time, but avoids restarting while you are in VC.",
-    authors: [EquicordDevs.SteelTech ?? Devs.Ven],
+    authors: [EquicordDevs.SteelTech],
     settings,
-
 
     start() {
         lastActivity = Date.now();
