@@ -5,12 +5,14 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import { VoiceStateStore, UserStore } from "@webpack/common";
+import { Menu, VoiceStateStore } from "@webpack/common";
 
 const logger = new Logger("IdleAutoRestart");
+let lastActivity = 0;
+let intervalId: ReturnType<typeof setInterval> | null = null;
 
 const settings = definePluginSettings({
     isEnabled: {
@@ -27,9 +29,6 @@ const settings = definePluginSettings({
     },
 });
 
-let lastActivity = 0;
-let intervalId: ReturnType<typeof setInterval> | null = null;
-
 function onActivity() {
     lastActivity = Date.now();
 }
@@ -39,6 +38,18 @@ export default definePlugin({
     description: "Automatically restarts the client after being idle for a configurable amount of time, but avoids restarting while you are in VC.",
     authors: [EquicordDevs.SteelTech],
     settings,
+
+    toolboxActions() {
+        return (
+            <Menu.MenuItem
+                id="auto-idle-restart-toggle-toolbox"
+                label={settings.store.isEnabled ? "Disable Auto Idle Restart" : "Enable Auto Idle Restart"}
+                action={() => {
+                    settings.store.isEnabled = !settings.store.isEnabled;
+                }}
+            />
+        );
+    },
 
     start() {
         lastActivity = Date.now();
@@ -50,11 +61,7 @@ export default definePlugin({
 
         if (intervalId) clearInterval(intervalId);
         intervalId = setInterval(() => {
-            if (!settings.store.isEnabled) return;
-
-            if (VoiceStateStore.isCurrentClientInVoiceChannel()) {
-                return;
-            }
+            if (!settings.store.isEnabled || VoiceStateStore.isCurrentClientInVoiceChannel()) return;
 
             const idleMs = settings.store.idleMinutes * 60_000;
             if (Date.now() - lastActivity >= idleMs) {
@@ -73,6 +80,6 @@ export default definePlugin({
         document.removeEventListener("mousemove", onActivity);
         document.removeEventListener("keydown", onActivity);
         document.removeEventListener("mousedown", onActivity);
-        document.removeEventListener("wheel", onActivity as any);
+        document.removeEventListener("wheel", onActivity);
     },
 });
