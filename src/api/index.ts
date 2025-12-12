@@ -33,6 +33,7 @@ import * as $NicknameIcons from "./NicknameIcons";
 import * as $Notices from "./Notices";
 import * as $Notifications from "./Notifications";
 export * as PluginManager from "./PluginManager";
+import * as $Quests from "./Quests";
 import * as $ServerList from "./ServerList";
 import * as $Settings from "./Settings";
 import * as $Styles from "./Styles";
@@ -159,6 +160,11 @@ export const NicknameIcons = $NicknameIcons;
  * An API allowing you to play internal Discord audio files or external audio URLs/URIs.
  */
 export const AudioPlayer = $AudioPlayer;
+
+/**
+ * An API for interacting with Discord Quests.
+ */
+export const Quests = $Quests;
 
 /**
  * Just used to identify if user is on Equicord as Vencord doesn't have this.
