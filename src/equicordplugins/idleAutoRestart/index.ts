@@ -13,7 +13,7 @@ import { SelectedChannelStore, UserStore } from "@webpack/common";
 const logger = new Logger("IdleAutoRestart");
 
 const settings = definePluginSettings({
-    enabled: {
+    isEnabled: {
         description: "Enable automatic restart after idle",
         type: OptionType.BOOLEAN,
         default: true,
@@ -55,7 +55,7 @@ export default definePlugin({
 
         if (intervalId) clearInterval(intervalId);
         intervalId = setInterval(() => {
-            if (!settings.store.enabled) return;
+            if (!settings.store.isEnabled) return;
 
             if (isInVoice()) {
                 return;
