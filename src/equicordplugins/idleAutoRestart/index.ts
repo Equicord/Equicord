@@ -8,7 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import { SelectedChannelStore, UserStore } from "@webpack/common";
+import { VoiceStateStore, UserStore } from "@webpack/common";
 
 const logger = new Logger("IdleAutoRestart");
 
@@ -34,14 +34,9 @@ function onActivity() {
     lastActivity = Date.now();
 }
 
-function isInVoice(): boolean {
-    return !!SelectedChannelStore.getVoiceChannelId();
-}
-
 export default definePlugin({
     name: "IdleAutoRestart",
-    description:
-        "Automatically restarts the client after being idle for a configurable amount of time, but avoids restarting while you are in VC.",
+    description: "Automatically restarts the client after being idle for a configurable amount of time, but avoids restarting while you are in VC.",
     authors: [EquicordDevs.SteelTech],
     settings,
 
@@ -57,7 +52,7 @@ export default definePlugin({
         intervalId = setInterval(() => {
             if (!settings.store.isEnabled) return;
 
-            if (isInVoice()) {
+            if (VoiceStateStore.isCurrentClientInVoiceChannel()) {
                 return;
             }
 
