@@ -1,24 +1,16 @@
 /*
- * Vencord, a modification for Discord's desktop app
- * Copyright (c) 2022 Vendicated and contributors
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Vencord, a Discord client mod
+ * Copyright (c) 2025 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import { SelectedChannelStore, UserStore } from "@webpack/common";
+
+const logger = new Logger("IdleAutoRestart");
 
 const settings = definePluginSettings({
     enabled: {
@@ -27,7 +19,7 @@ const settings = definePluginSettings({
         default: true,
     },
     idleMinutes: {
-        description: "Minutes of no input before restart",
+        description: "Minutes of inactivity before restarting (when not in VC)",
         type: OptionType.SLIDER,
         markers: [5, 10, 15, 30, 60, 120],
         default: 30,
@@ -35,70 +27,58 @@ const settings = definePluginSettings({
     },
 });
 
-let lastActivity = Date.now();
-let intervalId: number | null = null;
-let listenersAttached = false;
+let lastActivity = 0;
+let intervalId: ReturnType<typeof setInterval> | null = null;
 
-function updateActivity() {
+function onActivity() {
     lastActivity = Date.now();
 }
 
-function attachListeners() {
-    if (listenersAttached) return;
-    listenersAttached = true;
-
-    window.addEventListener("mousemove", updateActivity);
-    window.addEventListener("keydown", updateActivity);
-    window.addEventListener("mousedown", updateActivity);
-    window.addEventListener("wheel", updateActivity, { passive: true });
-}
-
-function detachListeners() {
-    if (!listenersAttached) return;
-    listenersAttached = false;
-
-    window.removeEventListener("mousemove", updateActivity);
-    window.removeEventListener("keydown", updateActivity);
-    window.removeEventListener("mousedown", updateActivity);
-    window.removeEventListener("wheel", updateActivity as any);
-}
-
-function startTimer() {
-    if (intervalId != null) return;
-
-    intervalId = window.setInterval(() => {
-        if (!settings.store.enabled) return;
-
-        const idleMs = settings.store.idleMinutes * 60 * 1000;
-        const sinceActivity = Date.now() - lastActivity;
-
-        if (sinceActivity >= idleMs) {
-            location.reload();
-        }
-    }, 30 * 1000);
-}
-
-function stopTimer() {
-    if (intervalId == null) return;
-    window.clearInterval(intervalId);
-    intervalId = null;
+function isInVoice(): boolean {
+    return !!SelectedChannelStore.getVoiceChannelId();
 }
 
 export default definePlugin({
     name: "IdleAutoRestart",
     description:
-        "Automatically restarts the client after being idle for a configurable amount of time.",
-    authors: [EquicordDevs.SteelTech],
+        "Automatically restarts the client after being idle for a configurable amount of time, but avoids restarting while you are in VC.",
+    authors: [EquicordDevs.SteelTech ?? Devs.Ven],
     settings,
+
 
     start() {
         lastActivity = Date.now();
-        attachListeners();
-        startTimer();
+
+        document.addEventListener("mousemove", onActivity);
+        document.addEventListener("keydown", onActivity);
+        document.addEventListener("mousedown", onActivity);
+        document.addEventListener("wheel", onActivity, { passive: true });
+
+        if (intervalId) clearInterval(intervalId);
+        intervalId = setInterval(() => {
+            if (!settings.store.enabled) return;
+
+            if (isInVoice()) {
+                return;
+            }
+
+            const idleMs = settings.store.idleMinutes * 60_000;
+            if (Date.now() - lastActivity >= idleMs) {
+                logger.info("Idle timeout reached, reloading client");
+                location.reload();
+            }
+        }, 30_000);
     },
 
     stop() {
-        stopTimer();
-        detachListeners();
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+
+        document.removeEventListener("mousemove", onActivity);
+        document.removeEventListener("keydown", onActivity);
+        document.removeEventListener("mousedown", onActivity);
+        document.removeEventListener("wheel", onActivity as any);
     },
 });
