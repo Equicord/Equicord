@@ -5,8 +5,8 @@
  */
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Logger } from "@utils/Logger";
 import { findComponentByCodeLazy } from "@webpack";
-import { useEffect, useState } from "@webpack/common";
 import type { ComponentType, MouseEventHandler, ReactNode } from "react";
 
 const PanelButton = findComponentByCodeLazy(".NONE,disabled:", ".PANEL_BUTTON") as ComponentType<UserAreaButtonProps>;
@@ -47,41 +47,30 @@ interface ButtonEntry {
 
 export const UserAreaButton = PanelButton;
 
-const buttons = new Map<string, ButtonEntry>();
-const listeners = new Set<() => void>();
+const logger = new Logger("UserArea");
+
+export const buttons = new Map<string, ButtonEntry>();
 
 export function addUserAreaButton(id: string, render: UserAreaButtonFactory, priority = 0) {
     buttons.set(id, { render, priority });
-    updateSortedButtons();
-    listeners.forEach(l => l());
 }
 
 export function removeUserAreaButton(id: string) {
     buttons.delete(id);
-    updateSortedButtons();
-    listeners.forEach(l => l());
-}
-
-let sortedButtons: [string, ButtonEntry][] = [];
-
-function updateSortedButtons() {
-    sortedButtons = Array.from(buttons).sort(([, a], [, b]) => a.priority - b.priority);
 }
 
 function UserAreaButtons({ props }: { props: UserAreaRenderProps; }) {
-    const [, forceUpdate] = useState(0);
-
-    useEffect(() => {
-        const listener = () => forceUpdate(n => n + 1);
-        listeners.add(listener);
-        return () => { listeners.delete(listener); };
-    }, []);
-
-    return sortedButtons.map(([id, { render }]) => (
-        <ErrorBoundary noop key={id}>
-            {render(props)}
-        </ErrorBoundary>
-    ));
+    return (
+        <>
+            {Array.from(buttons)
+                .sort(([, a], [, b]) => a.priority - b.priority)
+                .map(([id, { render: Button }]) => (
+                    <ErrorBoundary noop key={id} onError={e => logger.error(`Failed to render ${id}`, e.error)}>
+                        <Button {...props} />
+                    </ErrorBoundary>
+                ))}
+        </>
+    );
 }
 
 export function _renderButtons(props: UserAreaRenderProps) {
