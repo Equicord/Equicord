@@ -22,7 +22,6 @@ export default definePlugin({
     authors: [Devs.Samwich, EquicordDevs.justjxke],
     settings,
     closeSuppressCount: 0,
-    scrollSuppressCount: 0,
     patches: [
         {
             find: '"state",{resultType:',
@@ -32,10 +31,10 @@ export default definePlugin({
             }]
         },
         {
-            find: '"handleSelectGIF",',
+            find: "gifId:e.id",
             replacement: {
-                match: /"handleSelectGIF",(\i)=>\{/,
-                replace: "$&$self.onGifSelect();"
+                match: /null!=\i&&\i\(\i\),/,
+                replace: "$self.onGifSelect(),$&"
             }
         },
         {
@@ -48,9 +47,17 @@ export default definePlugin({
         {
             find: "desiredItemWidth:200,maxColumns:8",
             replacement: {
-                match: /(\i)\.scrollIntoViewRect\(\{start:(\i)\.top-10,end:\2\.top\+\2\.height\+10\}\)/,
-                replace: "$self.consumeScrollSuppress()||$&"
+                match: /((?:[A-Za-z_$][\w$]*))\.scrollIntoViewRect\(\{start:((?:[A-Za-z_$][\w$]*))\.top-10,end:\2\.top\+\2\.height\+10\}\)/,
+                replace: "$self.shouldSuppressGifFocusScroll()||$&"
             }
+        },
+        {
+            find: "tabIndex:-1,innerRef:",
+            replacement: {
+                match: /tabIndex:-1,/,
+                replace: "tabIndex:-1,onMouseDown:e=>{$self.shouldSuppressGifFocusScroll()&&e.preventDefault()},"
+            },
+            predicate: () => settings.store.keepOpen
         }
     ],
 
@@ -58,13 +65,11 @@ export default definePlugin({
         if (!settings.store.keepOpen) return;
 
         this.closeSuppressCount = 2;
-        this.scrollSuppressCount = 2;
     },
 
     consumeCloseSuppress() {
         if (!settings.store.keepOpen) {
             this.closeSuppressCount = 0;
-            this.scrollSuppressCount = 0;
             return false;
         }
 
@@ -73,14 +78,7 @@ export default definePlugin({
         return true;
     },
 
-    consumeScrollSuppress() {
-        if (!settings.store.keepOpen) {
-            this.scrollSuppressCount = 0;
-            return false;
-        }
-
-        if (this.scrollSuppressCount <= 0) return false;
-        this.scrollSuppressCount--;
-        return true;
+    shouldSuppressGifFocusScroll() {
+        return settings.store.keepOpen;
     }
 });
