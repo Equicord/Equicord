@@ -6,7 +6,7 @@
 
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import { UserAreaButton } from "@api/UserArea";
+import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import equicordToolbox from "@equicordplugins/equicordToolbox";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -39,7 +39,7 @@ function SpotifyIcon({ className, enabled }: { className?: string; enabled: bool
     );
 }
 
-function SpotifyActivityToggleButton() {
+function SpotifyActivityToggleButton({ iconForeground, hideTooltips, nameplate }: UserAreaRenderProps) {
     const { location } = settings.use(["location"]);
     const [, rerender] = useState(0);
 
@@ -52,11 +52,12 @@ function SpotifyActivityToggleButton() {
 
     return (
         <UserAreaButton
-            tooltipText={showActivity ? "Turn off Spotify activity" : "Turn on Spotify activity"}
-            icon={<SpotifyIcon enabled={showActivity} />}
+            tooltipText={hideTooltips ? void 0 : showActivity ? "Turn off Spotify activity" : "Turn on Spotify activity"}
+            icon={<SpotifyIcon className={iconForeground} enabled={showActivity} />}
             role="switch"
             aria-checked={showActivity}
             redGlow={!showActivity}
+            plated={nameplate != null}
             onClick={async () => {
                 showActivity = !showActivity;
                 forceUpdate?.();

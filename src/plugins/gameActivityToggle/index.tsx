@@ -16,9 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import "./style.css";
+
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import { UserAreaButton } from "@api/UserArea";
+import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import { getUserSettingLazy } from "@api/UserSettings";
 import equicordToolbox from "@equicordplugins/equicordToolbox";
 import { Devs } from "@utils/constants";
@@ -76,7 +78,7 @@ function Icon({ className }: { className?: string; }) {
     );
 }
 
-function GameActivityToggleButton() {
+function GameActivityToggleButton({ iconForeground, hideTooltips, nameplate }: UserAreaRenderProps) {
     const { location } = settings.use(["location"]);
     const showCurrentGame = ShowCurrentGame.useSetting();
 
@@ -84,11 +86,12 @@ function GameActivityToggleButton() {
 
     return (
         <UserAreaButton
-            tooltipText={showCurrentGame ? "Disable Game Activity" : "Enable Game Activity"}
-            icon={<Icon />}
+            tooltipText={hideTooltips ? void 0 : showCurrentGame ? "Disable Game Activity" : "Enable Game Activity"}
+            icon={<Icon className={iconForeground} />}
             role="switch"
             aria-checked={!showCurrentGame}
             redGlow={!showCurrentGame}
+            plated={nameplate != null}
             onClick={() => ShowCurrentGame.updateSetting(old => !old)}
         />
     );

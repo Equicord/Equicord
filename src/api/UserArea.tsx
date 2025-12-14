@@ -6,7 +6,7 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { findComponentByCodeLazy } from "@webpack";
-import { React, useEffect, useState } from "@webpack/common";
+import { useEffect, useState } from "@webpack/common";
 import type { ComponentType, MouseEventHandler, ReactNode } from "react";
 
 const PanelButton = findComponentByCodeLazy(".NONE,disabled:", ".PANEL_BUTTON") as ComponentType<UserAreaButtonProps>;
@@ -32,11 +32,11 @@ export interface UserAreaRenderProps {
     hideTooltips?: boolean;
 }
 
-export type UserAreaButtonFactory = () => ReactNode;
+export type UserAreaButtonFactory = (props: UserAreaRenderProps) => ReactNode;
 
 export interface UserAreaButtonData {
     render: UserAreaButtonFactory;
-    icon: ComponentType<any>;
+    icon: ComponentType<{ className?: string; }>;
     priority?: number;
 }
 
@@ -68,52 +68,6 @@ function updateSortedButtons() {
     sortedButtons = Array.from(buttons).sort(([, a], [, b]) => a.priority - b.priority);
 }
 
-function addIconClassName(icon: ReactNode, className?: string) {
-    if (!className) return icon;
-    if (typeof icon === "function") {
-        const Icon = icon as ComponentType<{ className?: string; }>;
-        return <Icon className={className} />;
-    }
-    if (!React.isValidElement(icon)) return icon;
-    return React.cloneElement(icon as React.ReactElement<{ className?: string; }>, { className });
-}
-
-function processElement(element: ReactNode, props: UserAreaRenderProps): ReactNode {
-    if (!React.isValidElement(element)) return element;
-
-    const elementProps = element.props as UserAreaButtonProps & { children?: ReactNode; };
-
-    if (elementProps.icon !== undefined) {
-        const newProps: Partial<UserAreaButtonProps> = {};
-
-        if (props.iconForeground && elementProps.icon) {
-            newProps.icon = addIconClassName(elementProps.icon, props.iconForeground);
-        }
-
-        if (props.hideTooltips) {
-            newProps.tooltipText = void 0;
-        }
-
-        if (props.nameplate != null) {
-            newProps.plated = true;
-        }
-
-        return Object.keys(newProps).length ? React.cloneElement(element as React.ReactElement, newProps) : element;
-    }
-
-    if (elementProps.children) {
-        const children = React.Children.map(elementProps.children, child => processElement(child, props));
-        return React.cloneElement(element as React.ReactElement<{ children?: ReactNode; }>, { children });
-    }
-
-    return element;
-}
-
-function ButtonWrapper({ render, props }: { render: UserAreaButtonFactory; props: UserAreaRenderProps; }) {
-    const result = render();
-    return <>{processElement(result, props)}</>;
-}
-
 function UserAreaButtons({ props }: { props: UserAreaRenderProps; }) {
     const [, forceUpdate] = useState(0);
 
@@ -125,7 +79,7 @@ function UserAreaButtons({ props }: { props: UserAreaRenderProps; }) {
 
     return sortedButtons.map(([id, { render }]) => (
         <ErrorBoundary noop key={id}>
-            <ButtonWrapper render={render} props={props} />
+            {render(props)}
         </ErrorBoundary>
     ));
 }

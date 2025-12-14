@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { definePluginSettings } from "@api/Settings";
-import { UserAreaButton } from "@api/UserArea";
+import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import { debounce } from "@shared/debounce";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
@@ -196,14 +198,15 @@ export default definePlugin({
     settings,
 });
 
-function RandomVoiceButton() {
+function RandomVoiceButton({ iconForeground, hideTooltips, nameplate }: UserAreaRenderProps) {
     return (
         <UserAreaButton
             onContextMenu={e => ContextMenuApi.openContextMenu(e, () => <ContextMenu />)}
             onClick={() => getChannels()}
             role="switch"
-            tooltipText="Random Voice"
-            icon={<RandomVoiceIcon />}
+            tooltipText={hideTooltips ? void 0 : "Random Voice"}
+            icon={<RandomVoiceIcon className={iconForeground} />}
+            plated={nameplate != null}
         />
     );
 }
