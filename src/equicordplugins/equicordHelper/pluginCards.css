@@ -1,10 +1,14 @@
 .vc-plugins-management-cards.vc-plugins-grid {
-    grid-template-columns: repeat(auto-fill, minmax(max-content, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.vc-plugins-management-cards .vc-addon-card {
+    width: auto;
 }
 
 .vc-plugins-management-cards .vc-addon-title-container {
     width: max-content;
-    max-width: 100%;
 }
 
 .vc-plugins-management-cards .vc-addon-title {
