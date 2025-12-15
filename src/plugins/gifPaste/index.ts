@@ -16,7 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Settings } from "@api/Settings";
+import { isPluginEnabled } from "@api/PluginManager";
+import betterGifPicker from "@plugins/betterGifPicker";
 import { Devs } from "@utils/constants";
 import { insertTextIntoChatInputBox } from "@utils/discord";
 import definePlugin from "@utils/types";
@@ -39,7 +40,7 @@ export default definePlugin({
         if (gif) {
             insertTextIntoChatInputBox(gif.url + " ");
 
-            if (!(Settings.plugins.BetterGifPicker?.enabled && Settings.plugins.BetterGifPicker.keepOpen)) {
+            if (!(isPluginEnabled(betterGifPicker.name) && betterGifPicker.settings.store.keepOpen)) {
                 ExpressionPickerStore.closeExpressionPicker();
             }
         }
