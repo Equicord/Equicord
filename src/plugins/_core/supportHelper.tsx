@@ -64,7 +64,7 @@ const AsyncFunction = async function () { }.constructor;
 const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;
 const ShowEmbeds = getUserSettingLazy<boolean>("textAndImages", "renderEmbeds")!;
 
-export interface clientData {
+interface clientData {
     Name: string,
     Version?: string,
     Additional?: string
@@ -80,7 +80,7 @@ async function forceUpdate() {
     return outdated;
 }
 
-export function detectClient(): clientData {
+function detectClient(): clientData {
     if (IS_DISCORD_DESKTOP) return {Version: DiscordNative.app.getVersion(), Name: "Discord"};
     if (IS_VESKTOP) return {Version: VesktopNative.app.getVersion(), Name: "Vesktop"};
 
