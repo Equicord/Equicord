@@ -35,7 +35,7 @@ import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, M
 import { OptionType, Plugin } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { Clickable, FluxDispatcher, React, Text, Toasts, Tooltip, useEffect, UserStore, UserSummaryItem, UserUtils, useState } from "@webpack/common";
+import { Clickable, FluxDispatcher, React, Toasts, Tooltip, useEffect, UserStore, UserSummaryItem, UserUtils, useState } from "@webpack/common";
 import { Constructor } from "type-fest";
 
 import { PluginMeta } from "~plugins";
@@ -161,8 +161,8 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
         <ModalRoot transitionState={transitionState} size={ModalSize.MEDIUM}>
             <ModalHeader separator={false} className={cl("header")}>
                 <div className={cl("header-content")}>
-                    <Text variant="heading-lg/semibold" className={cl("title")}>{plugin.name}</Text>
-                    <Text variant="text-md/normal" className={cl("description")}>{plugin.description}</Text>
+                    <BaseText size="lg" weight="semibold" className={cl("title")}>{plugin.name}</BaseText>
+                    <BaseText size="sm" className={cl("description")}>{plugin.description}</BaseText>
                     {!!plugin.settingsAboutComponent && (
                         <div className={Margins.top8}>
                             <ErrorBoundary message="An error occurred while rendering this plugin's custom Info Component">
