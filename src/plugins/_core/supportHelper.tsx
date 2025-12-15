@@ -64,6 +64,12 @@ const AsyncFunction = async function () { }.constructor;
 const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;
 const ShowEmbeds = getUserSettingLazy<boolean>("textAndImages", "renderEmbeds")!;
 
+export interface clientData {
+    Name: string,
+    Version?: string,
+    Additional?: string
+}
+
 async function forceUpdate() {
     const outdated = await checkForUpdates();
     if (outdated) {
@@ -74,26 +80,32 @@ async function forceUpdate() {
     return outdated;
 }
 
+export function detectClient(): clientData {
+    if (IS_DISCORD_DESKTOP) return {Version: DiscordNative.app.getVersion(), Name: "Discord"};
+    if (IS_VESKTOP) return {Version: VesktopNative.app.getVersion(), Name: "Vesktop"};
+
+    if (IS_EQUIBOP) {
+        const equibopGitHash = tryOrElse(() => VesktopNative.app.getGitHash?.(), null);
+        if (equibopGitHash) {
+            const shortHash = equibopGitHash.slice(0, 7);
+            return { Version: VesktopNative.app.getVersion(), Name: "Equibop", Additional: `[${shortHash}](<https://github.com/Equicord/Equibop/commit/${equibopGitHash}>)` }
+        }
+        return { Version: VesktopNative.app.getVersion(), Name: "Equibop" }
+    }
+
+    if ("legcord" in window)  return {Version: window.legcord.version, Name: "LegCord"};
+    if ("goofcord" in window) return {Version: window.goofcord.version, Name: "GoofCord"};
+
+    // @ts-expect-error
+    const name = typeof unsafeWindow !== "undefined" ? "UserScript" : "Web";
+    return {Name: name, Additional: navigator.userAgent}
+}
+
 async function generateDebugInfoMessage() {
     const { RELEASE_CHANNEL } = window.GLOBAL_ENV;
 
-    const client = (() => {
-        if (IS_DISCORD_DESKTOP) return `Discord Desktop v${DiscordNative.app.getVersion()}`;
-        if (IS_VESKTOP) return `Vesktop v${VesktopNative.app.getVersion()}`;
-        if (IS_EQUIBOP) {
-            const equibopGitHash = tryOrElse(() => VesktopNative.app.getGitHash?.(), null);
-            if (equibopGitHash) {
-                const shortHash = equibopGitHash.slice(0, 7);
-                return `Equibop v${VesktopNative.app.getVersion()} • [${shortHash}](<https://github.com/Equicord/Equibop/commit/${equibopGitHash}>)`;
-            }
-            return `Equibop v${VesktopNative.app.getVersion()}`;
-        }
-        if ("legcord" in window) return `LegCord v${window.legcord.version}`;
-
-        // @ts-expect-error
-        const name = typeof unsafeWindow !== "undefined" ? "UserScript" : "Web";
-        return `${name} (${navigator.userAgent})`;
-    })();
+    const clientInfo = detectClient();
+    let clientString = `${clientInfo.Name} ${clientInfo.Version ? "" : `v${clientInfo.Version}`} ${clientInfo.Additional ? "" : `• ${clientInfo.Additional}`}`
 
     const spoofInfo = IS_EQUIBOP ? tryOrElse(() => VesktopNative.app.getPlatformSpoofInfo?.(), null) : null;
     const platformDisplay = spoofInfo?.spoofed
@@ -104,7 +116,7 @@ async function generateDebugInfoMessage() {
         Equicord:
             `v${VERSION} • [${gitHashShort}](<https://github.com/Equicord/Equicord/commit/${gitHash}>)` +
             `${IS_EQUIBOP ? "" : SettingsPlugin.getVersionInfo()} - ${Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
-        Client: `${RELEASE_CHANNEL} ~ ${client}`,
+        Client: `${RELEASE_CHANNEL} ~ ${clientString}`,
         Platform: platformDisplay
     };
 
