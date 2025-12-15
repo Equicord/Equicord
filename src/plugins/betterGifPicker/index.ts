@@ -20,6 +20,7 @@ export default definePlugin({
     name: "BetterGifPicker",
     description: "Makes the gif picker open the favourite category by default",
     authors: [Devs.Samwich, EquicordDevs.justjxke],
+    isModified: true,
     settings,
     closeSuppressCount: 0,
     patches: [
@@ -31,34 +32,30 @@ export default definePlugin({
             }]
         },
         {
-            find: "gifId:e.id",
-            replacement: {
-                match: /null!=\i&&\i\(\i\),/,
-                replace: "$self.onGifSelect(),$&"
-            }
+            find: "#{intl::NO_GIF_FAVORITES_HOW_TO_FAVORITE}",
+            predicate: () => settings.store.keepOpen,
+            replacement: [
+                {
+                    match: /null!=\i&&\i\(\i\),/,
+                    replace: "$self.onGifSelect(),$&"
+                },
+                {
+                    match: /\i\.scrollIntoViewRect\(\{/,
+                    replace: "$self.shouldSuppressGifFocusScroll()||$&"
+                },
+                {
+                    match: /this.renderGIF\(\).{0,50}\]/,
+                    replace: "$&,onMouseDown:e=>{$self.shouldSuppressGifFocusScroll()&&e.preventDefault()}"
+                }
+            ]
         },
         {
             find: "expression-picker-last-active-view",
             replacement: {
-                match: /(\i)\.setState\(\{activeView:null/,
-                replace: "$self.consumeCloseSuppress()||$1.setState({activeView:null"
+                match: /\i\.setState\(\{activeView:null/,
+                replace: "$self.consumeCloseSuppress()||$&"
             }
         },
-        {
-            find: "desiredItemWidth:200,maxColumns:8",
-            replacement: {
-                match: /((?:[A-Za-z_$][\w$]*))\.scrollIntoViewRect\(\{start:((?:[A-Za-z_$][\w$]*))\.top-10,end:\2\.top\+\2\.height\+10\}\)/,
-                replace: "$self.shouldSuppressGifFocusScroll()||$&"
-            }
-        },
-        {
-            find: "tabIndex:-1,innerRef:",
-            replacement: {
-                match: /tabIndex:-1,/,
-                replace: "tabIndex:-1,onMouseDown:e=>{$self.shouldSuppressGifFocusScroll()&&e.preventDefault()},"
-            },
-            predicate: () => settings.store.keepOpen
-        }
     ],
 
     onGifSelect() {
