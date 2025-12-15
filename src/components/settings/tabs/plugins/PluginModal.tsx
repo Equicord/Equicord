@@ -234,7 +234,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                         {!pluginMeta.userPlugin && (
                             <div className={cl("links")}>
                                 <WebsiteButton
-                                    text="More Info"
+                                    text="Website"
                                     href={isEquicordPlugin ? `https://equicord.org/plugins/${plugin.name}` : `https://vencord.dev/plugins/${plugin.name}`}
                                 />
                                 <GithubButton
