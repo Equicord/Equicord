@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
+let closeSuppressCount = 0;
 const settings = definePluginSettings({
     keepOpen: {
         description: "Keeps the gif picker open after selecting a gif",
@@ -22,7 +23,6 @@ export default definePlugin({
     authors: [Devs.Samwich, EquicordDevs.justjxke],
     isModified: true,
     settings,
-    closeSuppressCount: 0,
     patches: [
         {
             find: '"state",{resultType:',
@@ -61,17 +61,17 @@ export default definePlugin({
     onGifSelect() {
         if (!settings.store.keepOpen) return;
 
-        this.closeSuppressCount = 2;
+        closeSuppressCount = 2;
     },
 
     consumeCloseSuppress() {
         if (!settings.store.keepOpen) {
-            this.closeSuppressCount = 0;
+            closeSuppressCount = 0;
             return false;
         }
 
-        if (this.closeSuppressCount <= 0) return false;
-        this.closeSuppressCount--;
+        if (closeSuppressCount <= 0) return false;
+        closeSuppressCount--;
         return true;
     },
 
