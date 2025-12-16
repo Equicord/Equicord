@@ -107,17 +107,21 @@ export function getWindowsName(release: string) {
     if (build >= 10240) return "Windows 10";
     if (build >= 9200) return "Windows 8.1";
     if (build >= 7600) return "Windows 7";
+    if (build >= 6000) return "Windows Vista";
     return `Windows (${release})`;
 }
 
 export function getMacOSName(release: string) {
     const major = parseInt(release.split(".")[0]);
+    if (major === 25) return "MacOS 26 (Tahoe)";
     if (major === 24) return "MacOS 15 (Sequoia)";
     if (major === 23) return "MacOS 14 (Sonoma)";
     if (major === 22) return "MacOS 13 (Ventura)";
     if (major === 21) return "MacOS 12 (Monterey)";
     if (major === 20) return "MacOS 11 (Big Sur)";
     if (major === 19) return "MacOS 10.15 (Catalina)";
+    if (major === 18) return "MacOS 10.14 (Mojave)";
+    if (major === 17) return "MacOS 10.13 (High Sierra)";
     return `MacOS (${release})`;
 }
 

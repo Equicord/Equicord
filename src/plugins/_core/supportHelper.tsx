@@ -87,7 +87,7 @@ async function forceUpdate() {
 export function detectClient(): clientData {
     if (IS_DISCORD_DESKTOP) {
         return {
-            name: "Discord",
+            name: "Discord Desktop",
             version: DiscordNative.app.getVersion(),
         };
     }
