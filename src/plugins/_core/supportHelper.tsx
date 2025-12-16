@@ -135,9 +135,6 @@ async function generateDebugInfoMessage() {
     let clientString = `${clientInfo.name}`;
     clientString += `${clientInfo.version ? ` v${clientInfo.version}` : ""}`;
     clientString += `${clientInfo.info ? ` • ${clientInfo.info}` : ""}`;
-
-    clientString += `${clientInfo.spoofed ? ` • Spoofed Platform: ${clientInfo.spoofed}` : ""}`;
-    clientString += `${clientInfo.dev ? " • Dev Build" : ""}`;
     clientString += `${clientInfo.shortHash ? ` • [${clientInfo.shortHash}](${clientInfo.hash})` : ""}`;
 
     const spoofInfo = IS_EQUIBOP ? tryOrElse(() => VesktopNative.app.getPlatformSpoofInfo?.(), null) : null;
