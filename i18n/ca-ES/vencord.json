@@ -35,7 +35,7 @@
             "header": "Cloud Settings",
             "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!",
             "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
-            "success": "Synchronized settings to the cloud!",
+            "success": "Sincronitzat configuració a la nube!",
             "failedToSync": "Could not synchronize settings to the cloud ({e}).",
             "accountChanged": "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
             "noSettings": "There are no settings in the cloud.",
