@@ -20,7 +20,8 @@ import { fetchBuffer, fetchJson } from "@main/utils/http";
 import { IpcEvents } from "@shared/IpcEvents";
 import { VENCORD_USER_AGENT } from "@shared/vencordUserAgent";
 import { ipcMain } from "electron";
-import { closeSync, fsyncSync, openSync, writeFileSync as originalWriteFileSync } from "original-fs";
+import { writeFileSync } from "original-fs";
+import { join } from "path";
 
 import gitHash from "~git-hash";
 import gitRemote from "~git-remote";
@@ -72,11 +73,7 @@ async function applyUpdates() {
     if (!PendingUpdate) return true;
 
     const data = await fetchBuffer(PendingUpdate);
-    originalWriteFileSync(__dirname, data);
-
-    const fd = openSync(__dirname, "r");
-    fsyncSync(fd);
-    closeSync(fd);
+    writeFileSync(join(__dirname, ASAR_FILE), data, { flush: true });
 
     PendingUpdate = null;
 
