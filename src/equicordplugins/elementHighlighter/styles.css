@@ -1,9 +1,3 @@
-/*
- * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
 .vc-element-highlight-active {
     cursor: crosshair !important;
 }
@@ -26,9 +20,9 @@
     top: 0;
     left: 0;
     z-index: 999999;
-    background: rgb(0 0 0 / 0.7);
+    background: rgb(0 0 0 / 70%);
     backdrop-filter: blur(12px);
-    border: 1px solid rgb(255 255 255 / 0.1);
+    border: 1px solid rgb(255 255 255 / 10%);
     border-radius: 6px;
     padding: 6px 10px;
     font-family: var(--font-code);
@@ -59,12 +53,12 @@
     width: 10px;
     height: 10px;
     border-radius: 2px;
-    border: 1px solid rgb(255 255 255 / 0.2);
+    border: 1px solid rgb(255 255 255 / 20%);
     vertical-align: middle;
     margin-right: 6px;
     background:
         linear-gradient(var(--c), var(--c)),
-        repeating-conic-gradient(rgb(255 255 255 / 0.2) 0% 25%, transparent 0% 50%) 0 0 / 4px 4px;
+        repeating-conic-gradient(rgb(255 255 255 / 20%) 0% 25%, transparent 0% 50%) 0 0 / 4px 4px;
 }
 
 .vc-element-highlight-hex {
