@@ -1,9 +1,9 @@
 {
     "commands": {
-        "errorExecuting": "An Error occurred while executing command \"{name}\""
+        "errorExecuting": "Un Error ocorregut mentre executant el command \"{name}\""
     },
     "notifications": {
-        "dismissNotification": "Dismiss Notification",
+        "dismissNotification": "Descartar Notificació",
         "noNotifications": "No notifications yet",
         "notificationLog": "Notification Log",
         "notificationSettings": "Notification Settings",
