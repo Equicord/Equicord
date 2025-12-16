@@ -21,7 +21,6 @@ import { IpcEvents } from "@shared/IpcEvents";
 import { VENCORD_USER_AGENT } from "@shared/vencordUserAgent";
 import { ipcMain } from "electron";
 import { writeFileSync } from "original-fs";
-import { join } from "path";
 
 import gitHash from "~git-hash";
 import gitRemote from "~git-remote";
