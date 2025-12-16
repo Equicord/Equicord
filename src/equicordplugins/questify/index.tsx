@@ -1261,7 +1261,7 @@ export default definePlugin({
             }
         },
         {
-            // Sets intervals to progress Video Quests and Play Game Quests in the background.
+            // Sets intervals to progress Play Game Quests in the background and patches some common click handlers.
             find: "IN_PROGRESS:if(",
             group: true,
             replacement: [
@@ -1271,14 +1271,10 @@ export default definePlugin({
                     replace: "$1$self.processQuestForAutoComplete($3)&&$2"
                 },
                 {
-                    // Start Video & Play Game Quests.
+                    // Start Play Game Quests.
+                    // Video Quests are handled in the next patch group.
                     match: /(?<=onClick:async\(\)=>{)/,
-                    replace: "const startingAutoComplete=$self.processQuestForAutoComplete(arguments[0].quest);"
-                },
-                {
-                    // Prevent the new Video Quest entry point.
-                    match: /(?<=QUEST_HOME_DESKTOP\))/,
-                    replace: "&&false"
+                    replace: "const startingAutoComplete=!arguments[0].isVideoQuest&&$self.processQuestForAutoComplete(arguments[0].quest);"
                 },
                 {
                     // Conditionally open the Video Quest modal.
@@ -1307,15 +1303,14 @@ export default definePlugin({
                 }
             ]
         },
-        // This patch covers the new entry point blocked in the above group.
-        // If the old entry point gets removed in the future, this will be useful.
-        // {
-        //     find: "CAPTCHA_FAILED:",
-        //     replacement: {
-        //         match: /(?<=SUCCESS:)(\i\({)/,
-        //         replace: "$self.processQuestForAutoComplete(arguments[0])&&$1"
-        //     }
-        // },
+        {
+            // Sets intervals to progress Video Quests in the background.
+            find: "CAPTCHA_FAILED:",
+            replacement: {
+                match: /(?<=SUCCESS:)(\i\({)/,
+                replace: "$self.processQuestForAutoComplete(arguments[0])&&$1"
+            }
+        },
         {
             // Sets intervals to progress Play Game Quests in the background.
             // Triggers if a Quest has already been started but was interrupted, such as by a reload.
