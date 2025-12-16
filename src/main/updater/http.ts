@@ -73,7 +73,7 @@ async function applyUpdates() {
     if (!PendingUpdate) return true;
 
     const data = await fetchBuffer(PendingUpdate);
-    writeFileSync(join(__dirname, ASAR_FILE), data, { flush: true });
+    writeFileSync(__dirname, data, { flush: true });
 
     PendingUpdate = null;
 
