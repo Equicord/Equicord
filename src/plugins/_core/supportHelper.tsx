@@ -132,7 +132,13 @@ async function generateDebugInfoMessage() {
     const { RELEASE_CHANNEL } = window.GLOBAL_ENV;
 
     const clientInfo = detectClient();
-    const clientString = `${clientInfo.name} ${clientInfo.version ? "" : `v${clientInfo.version}`} ${clientInfo.info ? "" : `• ${clientInfo.info}`}`;
+    let clientString = `${clientInfo.name}`;
+    clientString += `${clientInfo.version ? `v${clientInfo.version}` : ""}`;
+    clientString += `${clientInfo.info ? `• ${clientInfo.info}` : ""}`;
+
+    clientString += `${clientInfo.spoofed ? `• Spoofed Platform: ${clientInfo.spoofed}` : ""}`;
+    clientString += `${clientInfo.dev ? "• Dev Build" : ""}`;
+    clientString += `${clientInfo.shortHash ? `• [${clientInfo.shortHash}](${clientInfo.hash})` : ""}`;
 
     const spoofInfo = IS_EQUIBOP ? tryOrElse(() => VesktopNative.app.getPlatformSpoofInfo?.(), null) : null;
     const platformDisplay = spoofInfo?.spoofed
