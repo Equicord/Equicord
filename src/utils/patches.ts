@@ -23,11 +23,10 @@ export function canonicalizeMatch<T extends RegExp | string>(match: T): T {
     let partialCanon = typeof match === "string" ? match : match.source;
     partialCanon = partialCanon.replaceAll(/#{intl::([\w$+/]*)(?:::(\w+))?}/g, (_, key, modifier) => {
         const hashed = modifier === "raw" ? key : runtimeHashMessageKey(key);
+        if (modifier === "hash") return hashed;
 
         const isString = typeof match === "string";
         const hasSpecialChars = !Number.isNaN(Number(hashed[0])) || hashed.includes("+") || hashed.includes("/");
-
-        if (modifier === "hash") return hashed;
 
         if (hasSpecialChars) {
             return isString

@@ -7,7 +7,7 @@
 import "./styles.css";
 
 import { migratePluginSettings } from "@api/Settings";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 import { patchActivityList } from "./patch-helpers/activityList";
@@ -19,12 +19,7 @@ migratePluginSettings("BetterActivities", "MemberListActivities");
 export default definePlugin({
     name: "BetterActivities",
     description: "Shows activity icons in the member list and allows showing all activities",
-    authors: [
-        Devs.D3SOX,
-        Devs.Arjix,
-        Devs.AutumnVN,
-        EquicordDevs.thororen
-    ],
+    authors: [Devs.D3SOX, Devs.Arjix, Devs.AutumnVN, Devs.thororen],
     tags: ["activity"],
 
     settings,
@@ -55,28 +50,10 @@ export default definePlugin({
             // Show all activities in the user popout/sidebar
             find: '"UserProfilePopoutBody"',
             replacement: {
-                match: /(?<=(\i)\.id\)\}\)\),(\i).*?,)\i\?.{0,250}onClose:\i\}\)/,
-                replace: "$self.showAllActivitiesComponent({ activity: $2, user: $1 })"
+                match: /((\i)=.{0,10}(\i)\.id\).*?,)\i\?.{0,250}onClose:\i\}\)/,
+                replace: "$1$self.showAllActivitiesComponent({ activity: $2, user: $3 })"
             },
             predicate: () => settings.store.userPopout
         },
-        // DM Sidebar
-        {
-            find: ".SIDEBAR}),nicknameIcons",
-            replacement: {
-                match: /(?<=(\i)\.id\)\}\)\),(\i).*?,)\i\?.{0,250}\i\.card\}\)/,
-                replace: "$self.showAllActivitiesComponent({ activity: $2, user: $1 })"
-            },
-            predicate: () => settings.store.userPopout
-        },
-        // User Panel
-        {
-            find: "#{intl::STATUS_MENU_LABEL}",
-            replacement: {
-                match: /(?<=,(\i)=.{0,10}\i\.id.{0,150}userId:(\i).*?,)\i\?.{0,250}onClose:\i\}\)/,
-                replace: "$self.showAllActivitiesComponent({ activity: $1, user: $2 })"
-            },
-            predicate: () => settings.store.userPopout
-        }
     ],
 });

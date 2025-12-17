@@ -16,25 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { addMessagePopoverButton, removeMessagePopoverButton } from "@api/MessagePopover";
 import { definePluginSettings } from "@api/Settings";
+import { BaseText } from "@components/BaseText";
 import { CodeBlock } from "@components/CodeBlock";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
+import { Heading } from "@components/Heading";
 import { EquicordDevs } from "@utils/constants";
-import { copyWithToast } from "@utils/misc";
+import { copyWithToast } from "@utils/discord";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, ChannelStore, Forms, Text } from "@webpack/common";
+import { Button, ChannelStore } from "@webpack/common";
 
-const DecodeIcon = () => {
+function DecodeIcon() {
     return (
         <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6.5 9.50026H14.0385C15.4063 9.50026 16.0902 9.50026 16.5859 9.82073C16.8235 9.97438 17.0259 10.1767 17.1795 10.4144C17.5 10.91 17.5 11.5939 17.5 12.9618C17.5 14.3297 17.5 15.0136 17.1795 15.5092C17.0259 15.7469 16.8235 15.9492 16.5859 16.1029C16.0902 16.4233 15.4063 16.4233 14.0385 16.4233H9.5M6.5 9.50026L8.75 7.42334M6.5 9.50026L8.75 11.5772" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M6.5 9.50026H14.0385C15.4063 9.50026 16.0902 9.50026 16.5859 9.82073C16.8235 9.97438 17.0259 10.1767 17.1795 10.4144C17.5 10.91 17.5 11.5939 17.5 12.9618C17.5 14.3297 17.5 15.0136 17.1795 15.5092C17.0259 15.7469 16.8235 15.9492 16.5859 16.1029C16.0902 16.4233 15.4063 16.4233 14.0385 16.4233H9.5M6.5 9.50026L8.75 7.42334M6.5 9.50026L8.75 11.5772" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
         </svg>
     );
-};
+}
 
 
 function isValidUtf8String(str) {
@@ -70,19 +70,19 @@ function openDecodedBase64Modal(decodedContent) {
         <ErrorBoundary>
             <ModalRoot {...props} size={ModalSize.LARGE}>
                 <ModalHeader>
-                    <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }}>Decoded Base64 Content</Text>
+                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>Decoded Base64 Content</BaseText>
                     <ModalCloseButton onClick={() => closeModal(key)} />
                 </ModalHeader>
                 <ModalContent>
                     <div style={{ padding: "16px 0" }}>
-                        <Forms.FormTitle tag="h5">Decoded Content</Forms.FormTitle>
+                        <Heading>Decoded Content</Heading>
                         {decodedContent.map((content, index) => (
                             <CodeBlock key={index} content={content} lang="" />
                         ))}
                     </div>
                 </ModalContent >
                 <ModalFooter>
-                    <Flex cellSpacing={10}>
+                    <Flex gap={10}>
                         {decodedContent.map((content, index) => (
                             <Button key={index} onClick={() => copyWithToast(content, "Decoded content copied to clipboard!")}>
                                 Copy Decoded Content {index + 1}
@@ -110,11 +110,10 @@ export default definePlugin({
     name: "DecodeBase64",
     description: "Decode base64 content of any message and copy the decoded content.",
     authors: [EquicordDevs.ThePirateStoner],
-    dependencies: ["MessagePopoverAPI"],
     settings,
-
-    start() {
-        addMessagePopoverButton("DecodeBase64", msg => {
+    messagePopoverButton: {
+        icon: DecodeIcon,
+        render(msg) {
             const handleClick = () => {
                 const base64Strings = findBase64Strings(msg.content);
                 const decodedContent = decodeBase64Strings(base64Strings);
@@ -151,10 +150,6 @@ export default definePlugin({
                 onClick: handleClick,
                 onContextMenu: handleContextMenu
             };
-        });
-    },
-
-    stop() {
-        removeMessagePopoverButton("DecodeBase64");
+        }
     }
 });

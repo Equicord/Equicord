@@ -7,9 +7,9 @@
 import "./style.css";
 
 import { classNameFactory } from "@api/Styles";
+import { HiddenServersStore } from "@equicordplugins/hideServers/HiddenServersStore";
 import { Button, GuildStore, useStateFromStores } from "@webpack/common";
 
-import { HiddenServersStore } from "../HiddenServersStore";
 import { openHiddenServersModal } from "./HiddenServersMenu";
 
 const cl = classNameFactory("vc-hideservers-");
@@ -23,7 +23,7 @@ function HiddenServersButton() {
             {actuallyHidden > 0 ? (
                 <Button
                     className={cl("button")}
-                    look={Button.Looks.BLANK}
+                    look={Button.Looks.FILLED}
                     size={Button.Sizes.MIN}
                     onClick={() => openHiddenServersModal()}
                 >

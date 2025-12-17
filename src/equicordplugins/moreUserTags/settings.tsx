@@ -5,16 +5,21 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Card } from "@components/Card";
+import { Flex } from "@components/Flex";
+import { FormSwitch } from "@components/FormSwitch";
+import { Paragraph } from "@components/Paragraph";
 import { Margins } from "@utils/margins";
 import { OptionType } from "@utils/types";
-import { Card, Flex, Forms, Switch, TextInput, Tooltip } from "@webpack/common";
+import { Forms, TextInput, Tooltip } from "@webpack/common";
 
+import moreUserTags from ".";
 import { Tag, tags } from "./consts";
 import { TagSettings } from "./types";
 
 function SettingsComponent() {
     const tagSettings = (settings.store.tagSettings ??= {} as TagSettings);
-    const { localTags } = Vencord.Plugins.plugins.MoreUserTags as any;
+    const { localTags } = moreUserTags;
 
     tags.forEach(t => {
         if (!tagSettings[t.name]) {
@@ -54,9 +59,9 @@ function SettingsComponent() {
                         </Forms.FormTitle>
 
                         <div style={{ marginBottom: "10px" }}>
-                            <Forms.FormText style={{ fontSize: "13px" }}>
+                            <Paragraph style={{ fontSize: "13px" }}>
                                 Example:
-                            </Forms.FormText>
+                            </Paragraph>
                             <Tag type={localTags[t.name]} />
                         </div>
 
@@ -68,21 +73,19 @@ function SettingsComponent() {
                             className={Margins.bottom16}
                         />
 
-                        <Switch
+                        <FormSwitch
+                            title="Show in messages"
                             value={tagSettings[t.name]?.showInChat ?? true}
                             onChange={v => tagSettings[t.name].showInChat = v}
                             hideBorder
-                        >
-                            Show in messages
-                        </Switch>
+                        />
 
-                        <Switch
+                        <FormSwitch
+                            title="Show in member list and profiles"
                             value={tagSettings[t.name]?.showInNotChat ?? true}
                             onChange={v => tagSettings[t.name].showInNotChat = v}
                             hideBorder
-                        >
-                            Show in member list and profiles
-                        </Switch>
+                        />
                     </Card>
                 ))}
             </div>

@@ -5,17 +5,17 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, Forms, Menu } from "@webpack/common";
+import { Button, Menu } from "@webpack/common";
 import { ReactElement } from "react";
 
 import { preload, unload } from "./images";
 import { cl } from "./ui";
 import openQrModal from "./ui/modals/QrModal";
 
-const qrModalOpen = false;
 export default definePlugin({
     name: "LoginWithQR",
     description: "Allows you to login to another device by scanning a login QR code, just like on mobile!",
@@ -28,9 +28,9 @@ export default definePlugin({
             component() {
                 if (!Vencord.Plugins.plugins.LoginWithQR.started)
                     return (
-                        <Forms.FormText>
+                        <Paragraph>
                             Enable the plugin and restart your client to scan a login QR code
-                        </Forms.FormText>
+                        </Paragraph>
                     );
 
                 return (
@@ -52,6 +52,7 @@ export default definePlugin({
             },
         },
         // Insert a Scan QR Code button in the My Account tab
+        /* broken
         {
             find: "UserSettingsAccountProfileCard",
             replacement: {
@@ -61,6 +62,7 @@ export default definePlugin({
                 replace: ",$self.insertScanQrButton($1)",
             },
         },
+        */
         // Insert a Scan QR Code MenuItem in the Swith Accounts popout
         {
             find: 'id:"manage-accounts"',
@@ -88,7 +90,7 @@ export default definePlugin({
         }
     ],
 
-    qrModalOpen,
+    qrModalOpen: false,
 
     insertScanQrButton: (button: ReactElement) => (
         <div className={cl("settings-btns")}>

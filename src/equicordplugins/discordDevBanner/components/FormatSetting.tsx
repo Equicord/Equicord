@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Forms, useState } from "@webpack/common";
+import { Paragraph } from "@components/Paragraph";
+import { useState } from "@webpack/common";
 
-import { chromiumVariables, discordVariables, electronVariables, equicordVariables, makeDevBanner, miscVariables, settings } from ".";
+import { makeDevBanner, settings, settingVariables } from ".";
 
 
 export function FormatSetting(setValue) {
@@ -27,24 +28,15 @@ export function FormatSetting(setValue) {
     const preview = makeDevBanner(state);
 
     return (
-        <Forms.FormSection>
-            <Forms.FormText className={"vc-discord-dev-banner-text"}>
+        <section>
+            <Paragraph className={"vc-discord-dev-banner-text"}>
                 The format for the Discord Dev Banner. You can use the following variables:
                 {"\n\n"}
-                {discordVariables.join("\n")}
-                {"\n\n"}
-                {equicordVariables.join("\n")}
-                {"\n\n"}
-                {electronVariables.join("\n")}
-                {"\n\n"}
-                {chromiumVariables.join("\n")}
-                {"\n\n"}
-                {miscVariables.join("\n")}
-                {"\n\n"}
-            </Forms.FormText>
+                {settingVariables.join("\n")}
+            </Paragraph>
 
-            <Forms.FormText className="vc-discord-dev-banner-text">Preview:</Forms.FormText>
-            <Forms.FormText style={{ padding: "2px" }}>{preview}</Forms.FormText>
+            <Paragraph className="vc-discord-dev-banner-text">Preview:</Paragraph>
+            <Paragraph style={{ padding: "2px" }}>{preview}</Paragraph>
             <textarea
                 className="vc-discord-dev-banner-input"
                 value={state}
@@ -65,8 +57,8 @@ export function FormatSetting(setValue) {
             />
 
             {error && (
-                <Forms.FormText className={"vc-discord-dev-banner-error"}>{error}</Forms.FormText>
+                <Paragraph className={"vc-discord-dev-banner-error"}>{error}</Paragraph>
             )}
-        </Forms.FormSection>
+        </section>
     );
 }

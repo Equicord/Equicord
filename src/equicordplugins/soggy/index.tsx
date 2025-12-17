@@ -4,28 +4,35 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { AudioPlayerInterface, createAudioPlayer } from "@api/AudioPlayer";
+import { HeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings } from "@api/Settings";
-import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { findComponentByCodeLazy } from "@webpack";
 import { React } from "@webpack/common";
+let boopSound: AudioPlayerInterface;
+let song: AudioPlayerInterface;
 
-const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
+function assignSong(url: string, volume: number) {
+    song?.delete();
+    song = createAudioPlayer(url, { volume, preload: true, persistent: true });
+    song.load();
+}
 
-let preloadSong, preloadBoopSound, song, boopSound;
+function assignBoop(url: string, volume: number) {
+    boopSound?.delete();
+    boopSound = createAudioPlayer(url, { volume, preload: true, persistent: true });
+    boopSound.load();
+}
 
 function SoggyModal(props: ModalProps) {
     if (settings.store.songVolume !== 0) {
         React.useEffect(() => {
-            song = new Audio(preloadSong.src);
-            song.volume = settings.store.songVolume;
-            song.play();
+            song?.loop();
 
             return () => {
-                song.pause();
-                song.remove();
+                song?.stop();
             };
         }, []);
     }
@@ -42,9 +49,7 @@ function SoggyModal(props: ModalProps) {
             offsetY >= region.y &&
             offsetY <= region.y + region.height
         ) {
-            boopSound = new Audio(preloadBoopSound.src);
-            boopSound.volume = settings.store.boopVolume;
-            boopSound.play();
+            boopSound?.play();
         }
     };
 
@@ -66,7 +71,7 @@ function buildSoggyModal(): any {
 
 function SoggyButton() {
     return (
-        <HeaderBarIcon
+        <HeaderBarButton
             className="soggy-button"
             tooltip={settings.store.tooltipText}
             icon={() => (
@@ -109,22 +114,22 @@ const settings = definePluginSettings({
     imageLink: {
         description: "URL for the image (button and modal)",
         type: OptionType.STRING,
-        default: "https://soggy.cat/assets/images/soggycat.webp",
+        default: "https://images.equicord.org/api/files/raw/0199e730-70d5-7000-a44f-d1acb42064cc",
     },
     songLink: {
         description: "URL for the song to play",
         type: OptionType.STRING,
         default: "https://github.com/Equicord/Equibored/raw/main/sounds/soggy/song.mp3?raw=true",
-        onChange: (value: string) => {
-            song = new Audio(value);
-        }
+        onChange(newValue) {
+            assignSong(newValue, settings.store.songVolume * 100);
+        },
     },
     boopLink: {
         description: "URL for the boop sound",
         type: OptionType.STRING,
         default: "https://github.com/Equicord/Equibored/raw/main/sounds/soggy/honk.wav?raw=true",
-        onChange: (value: string) => {
-            boopSound = new Audio(value);
+        onChange(newValue) {
+            assignBoop(newValue, settings.store.boopVolume * 100);
         }
     }
 });
@@ -134,35 +139,29 @@ export default definePlugin({
     description: "Adds a soggy button to the toolbox",
     authors: [EquicordDevs.sliwka],
     settings,
-    patches: [
-        {
-            find: ".controlButtonWrapper,",
-            replacement: {
-                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,450}mobileToolbar)/,
-                replace: "$1$self.addIconToToolBar(arguments[0]);$2"
-            }
-        }
-    ],
+    dependencies: ["AudioPlayerAPI"],
 
-    start: () => {
-        preloadSong = new Audio(settings.store.songLink);
-        preloadBoopSound = new Audio(settings.store.boopLink);
+    headerBarButton: {
+        icon: () => (
+            <img
+                alt=""
+                src={settings.store.imageLink}
+                width={24}
+                height={24}
+                draggable={false}
+                style={{ pointerEvents: "none" }}
+            />
+        ),
+        render: SoggyButton
     },
 
-    // taken from message logger lol
-    addIconToToolBar(e: { toolbar: React.ReactNode[] | React.ReactNode; }) {
-        if (Array.isArray(e.toolbar))
-            return e.toolbar.unshift(
-                <ErrorBoundary noop={true}>
-                    <SoggyButton />
-                </ErrorBoundary>
-            );
+    start() {
+        assignBoop(settings.store.boopLink, settings.store.boopVolume * 100);
+        assignSong(settings.store.songLink, settings.store.songVolume * 100);
+    },
 
-        e.toolbar = [
-            <ErrorBoundary noop={true} key={"MessageLoggerEnhanced"} >
-                <SoggyButton />
-            </ErrorBoundary>,
-            e.toolbar,
-        ];
+    stop() {
+        boopSound?.delete();
+        song?.delete();
     },
 });

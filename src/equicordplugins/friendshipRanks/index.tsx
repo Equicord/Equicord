@@ -7,11 +7,13 @@
 import { BadgeUserArgs, ProfileBadge } from "@api/Badges";
 import { Badges } from "@api/index";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Flex } from "@components/Flex";
+import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
-import { Button, Flex, Forms, RelationshipStore } from "@webpack/common";
+import { Button, Forms, RelationshipStore } from "@webpack/common";
 
 import { bestiesIcon, bloomingIcon, burningIcon, fighterIcon, royalIcon, sproutIcon, starIcon } from "./icons";
 
@@ -100,9 +102,9 @@ function openRankModal(rank: rankInfo) {
                 <ModalContent>
                     <div style={{ padding: "1em", textAlign: "center" }}>
                         <rank.assetSVG height="150px"></rank.assetSVG>
-                        <Forms.FormText className={Margins.top16}>
+                        <Paragraph className={Margins.top16}>
                             {rank.description}
-                        </Forms.FormText>
+                        </Paragraph>
                     </div>
                 </ModalContent>
             </ModalRoot>
@@ -110,12 +112,12 @@ function openRankModal(rank: rankInfo) {
     ));
 }
 
-function getBadgeComponent(rank,) {
+function getBadgeComponent(rank) {
     // there may be a better button component to do this with
     return (
-        <div style={{ transform: "scale(0.80)" }}>
-            <Button onClick={() => openRankModal(rank)} width={"21.69px"} height={"21.69px"} size={Button.Sizes.NONE} look={Button.Looks.BLANK}>
-                <rank.assetSVG height={"21.69px"} />
+        <div style={{ transform: "scale(0.80)", marginTop: "3px" }}>
+            <Button onClick={() => openRankModal(rank)} width={"22px"} height={"22px"} size={Button.Sizes.NONE} look={Button.Looks.LINK}>
+                <rank.assetSVG />
             </Button>
         </div>
     );

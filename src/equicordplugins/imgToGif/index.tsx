@@ -20,14 +20,10 @@ import { ApplicationCommandInputType, ApplicationCommandOptionType, sendBotMessa
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { CommandArgument, CommandContext } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
-import { DraftType, UploadHandler, UploadManager } from "@webpack/common";
+import { DraftType, UploadAttachmentStore, UploadHandler, UploadManager } from "@webpack/common";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
 
-const DEFAULT_RESOLUTION = 512;
 const FRAMES = 1;
-
-const UploadStore = findByPropsLazy("getUploads");
 
 function loadImage(source: File | string) {
     const isFile = source instanceof File;
@@ -53,7 +49,7 @@ async function resolveImage(options: CommandArgument[], ctx: CommandContext): Pr
     for (const opt of options) {
         switch (opt.name) {
             case "image":
-                const upload = UploadStore.getUpload(ctx.channel.id, opt.name, DraftType.SlashCommand);
+                const upload = UploadAttachmentStore.getUpload(ctx.channel.id, opt.name, DraftType.SlashCommand);
                 if (upload) {
                     if (!upload.isImage) {
                         UploadManager.clearAll(ctx.channel.id, DraftType.SlashCommand);
@@ -108,8 +104,22 @@ export default definePlugin({
 
                     const avatar = await loadImage(image);
 
-                    const gifHeight = height ?? DEFAULT_RESOLUTION;
-                    const gifWidth = width ?? DEFAULT_RESOLUTION;
+                    let gifWidth: number;
+                    let gifHeight: number;
+
+                    if (width && height) {
+                        gifWidth = width;
+                        gifHeight = height;
+                    } else if (width) {
+                        gifWidth = width;
+                        gifHeight = Math.round((avatar.height / avatar.width) * width);
+                    } else if (height) {
+                        gifHeight = height;
+                        gifWidth = Math.round((avatar.width / avatar.height) * height);
+                    } else {
+                        gifWidth = avatar.width;
+                        gifHeight = avatar.height;
+                    }
 
                     const gif = GIFEncoder();
                     const canvas = document.createElement("canvas");
@@ -134,7 +144,8 @@ export default definePlugin({
                     }
 
                     gif.finish();
-                    const file = new File([gif.bytesView()], "converted.gif", { type: "image/gif" });
+                    const originalName = image.name ? image.name.replace(/\.[^/.]+$/, "") : "converted";
+                    const file = new File([new Uint8Array(gif.bytesView())], `${originalName}.gif`, { type: "image/gif" });
                     setTimeout(() => UploadHandler.promptToUpload([file], cmdCtx.channel, DraftType.ChannelMessage), 10);
                 } catch (err) {
                     UploadManager.clearAll(cmdCtx.channel.id, DraftType.SlashCommand);

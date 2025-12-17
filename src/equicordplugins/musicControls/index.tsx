@@ -18,7 +18,7 @@
 
 import "./styles.css";
 
-import { Settings } from "@api/Settings";
+import { migratePluginToSetting } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
@@ -29,12 +29,30 @@ import { SpotifyLyrics } from "./spotify/lyrics/components/lyrics";
 import { SpotifyPlayer } from "./spotify/PlayerComponent";
 import { TidalLyrics } from "./tidal/lyrics/components/lyrics";
 import { TidalPlayer } from "./tidal/TidalPlayer";
+import { YtmPlayer } from "./youtubeMusic/PlayerComponent";
 
+migratePluginToSetting("MusicControls", "SpotifyControls", "showSpotifyControls");
+migratePluginToSetting("MusicControls", "SpotifyLyrics", "showSpotifyLyrics");
 export default definePlugin({
     name: "MusicControls",
     description: "Music Controls and Lyrics for multiple services ",
-    authors: [Devs.Ven, Devs.afn, Devs.KraXen72, Devs.Av32000, Devs.nin0dev, EquicordDevs.thororen, EquicordDevs.vmohammad, Devs.Joona],
+    authors: [Devs.Ven, Devs.afn, Devs.KraXen72, Devs.Av32000, Devs.nin0dev, Devs.thororen, EquicordDevs.vmohammad, Devs.Joona],
     settings,
+    tags: [
+        // Spotify
+        "Spotify",
+        "SpotifyControls",
+        "SpotifyLyrics",
+        // Tidal
+        "Tidal",
+        "TidalControls",
+        "TidalLyrics",
+        // Youtube
+        "Youtube",
+        "YoutubeMusic",
+        "YoutubeMusicControls"
+    ],
+
     patches: [
         {
             find: "this.isCopiedStreakGodlike",
@@ -77,7 +95,7 @@ export default definePlugin({
 
 
     PanelWrapper({ VencordOriginal, ...props }) {
-        const { showTidalControls, showTidalLyrics, showSpotifyLyrics, showSpotifyControls, LyricsPosition } = settings.store;
+        const { showTidalControls, showTidalLyrics, showSpotifyLyrics, showSpotifyControls, LyricsPosition, showYoutubeMusicControls } = settings.store;
         return (
             <>
                 <ErrorBoundary
@@ -94,6 +112,7 @@ export default definePlugin({
                     {showSpotifyLyrics && LyricsPosition === "above" && <SpotifyLyrics />}
                     {showSpotifyControls && <SpotifyPlayer />}
                     {showSpotifyLyrics && LyricsPosition === "below" && <SpotifyLyrics />}
+                    {showYoutubeMusicControls && <YtmPlayer />}
                 </ErrorBoundary>
 
                 <VencordOriginal {...props} />
@@ -103,6 +122,6 @@ export default definePlugin({
 
     async start() {
         await migrateOldLyrics();
-        toggleHoverControls(Settings.plugins.MusicControls.hoverControls);
+        toggleHoverControls(settings.store.hoverControls);
     },
 });

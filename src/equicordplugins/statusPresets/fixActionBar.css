@@ -1,0 +1,3 @@
+[class*="outerContainer"] [class*="container"] [class*="actionBar"] {
+    gap: 0;
+}

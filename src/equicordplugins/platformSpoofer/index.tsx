@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "@equicordplugins/_misc/styles.css";
-
 import { definePluginSettings } from "@api/Settings";
+import { Alert } from "@components/Alert";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { Forms, UserStore } from "@webpack/common";
+import { UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     platform: {
@@ -50,11 +49,11 @@ export default definePlugin({
     name: "PlatformSpoofer",
     description: "Spoof what platform or device you're on",
     authors: [EquicordDevs.Drag],
-    settingsAboutComponent: () => <>
-        <Forms.FormText className="plugin-warning">
+    settingsAboutComponent: () => (
+        <Alert.Warning>
             We can't guarantee this plugin won't get you warned or banned.
-        </Forms.FormText>
-    </>,
+        </Alert.Warning>
+    ),
     settings: settings,
     patches: [
         {
@@ -67,8 +66,8 @@ export default definePlugin({
         {
             find: "voiceChannelEffect]:",
             replacement: {
-                match: /(?<=participantUserId:(\i).{0,2000}participantType:\i,platform:)(\i)(?=,className:\i\(\))/,
-                replace: "$self.getPlatform(false, $1)?.vcIcon||$2"
+                match: /(?<=CallTile.{0,15}\.memo\((\i)=>\{)/,
+                replace: "$1.platform = $self.getPlatform(false, $1?.participantUserId)?.vcIcon || $1?.platform;"
             }
         }
     ],

@@ -5,9 +5,9 @@
  */
 
 import { DataStore } from "@api/index";
+import { settings } from "@equicordplugins/musicControls/settings";
+import { Track } from "@equicordplugins/musicControls/spotify/SpotifyStore";
 
-import { settings } from "../../settings";
-import { Track } from "../SpotifyStore";
 import { getLyricsLrclib } from "./providers/lrclibAPI";
 import { getLyricsSpotify } from "./providers/SpotifyAPI";
 import { LyricsData, Provider, SyncedLyric } from "./providers/types";
@@ -29,8 +29,7 @@ export const lyricFetchers = {
 export const providers = Object.keys(lyricFetchers) as Provider[];
 
 export async function getLyrics(track: Track | null): Promise<LyricsData | null> {
-    if (!track) return null;
-    if (!track.id) return null;
+    if (!track || !track.id) return null;
 
     const cacheKey = track.id;
     const cached = await DataStore.get(LyricsCacheKey) as Record<string, LyricsData | null>;
@@ -76,7 +75,7 @@ export async function clearLyricsCache() {
 
 export async function getLyricsCount(): Promise<number> {
     const cache = await DataStore.get(LyricsCacheKey) as Record<string, LyricsData | null>;
-    return Object.keys(cache).length;
+    return Object.keys(cache ?? {}).length;
 }
 
 export async function updateLyrics(trackId: string, newLyrics: SyncedLyric[], provider: Provider) {

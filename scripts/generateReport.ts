@@ -87,14 +87,17 @@ const IGNORED_DISCORD_ERRORS = [
 function toCodeBlock(s: string, indentation = 0, isDiscord = false) {
     s = s.replace(/```/g, "`\u200B`\u200B`");
 
-    const indentationStr = Array(!isDiscord ? indentation : 0).fill(" ").join("");
-    return `\`\`\`\n${s.split("\n").map(s => indentationStr + s).join("\n")}\n${indentationStr}\`\`\``;
+    s = s.replace(/\\x([0-9A-Fa-f]{2})/g, (_, hex) =>
+        String.fromCharCode(parseInt(hex, 16))
+    );
+
+    const indentationStr = " ".repeat(!isDiscord ? indentation : 0);
+    const content = s.split("\n").map(s => indentationStr + s).join("\n");
+
+    return `\`\`\`\n${content}\n${indentationStr}\`\`\``;
 }
 
 async function printReport() {
-    const filePath = join("dist", (CANARY ? "reporter-canary.json" : "reporter-stable.json"));
-    writeFileSync(filePath, JSON.stringify(report, null, 2));
-
     console.log();
 
     console.log("# Equicord Report" + (CANARY ? " (Canary)" : ""));
@@ -343,7 +346,7 @@ page.on("console", async e => {
 });
 
 page.on("error", e => logStderr("[Error]", e.message));
-page.on("pageerror", e => {
+page.on("pageerror", (e: any) => {
     if (e.message.includes("Sentry successfully disabled")) return;
 
     if (!e.message.startsWith("Object") && !e.message.includes("Cannot find module") && !/^.{1,2}$/.test(e.message)) {

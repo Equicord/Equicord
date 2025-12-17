@@ -5,11 +5,11 @@
  */
 
 import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatch } from "@api/ContextMenu";
-import { FluxDispatcher, Menu, React, Toasts } from "@webpack/common";
+import { openLogModal } from "@equicordplugins/messageLoggerEnhanced/components/LogsModal";
+import { deleteMessageIDB } from "@equicordplugins/messageLoggerEnhanced/db";
+import { settings } from "@equicordplugins/messageLoggerEnhanced/index";
+import { FluxDispatcher, Menu, MessageActions, React, Toasts, UserStore } from "@webpack/common";
 
-import { openLogModal } from "../components/LogsModal";
-import { deleteMessageIDB } from "../db";
-import { settings } from "../index";
 import { addToXAndRemoveFromOpposite, ListType, removeFromX } from ".";
 
 const idFunctions = {
@@ -114,6 +114,33 @@ export const contextMenuPath: NavContextMenuPatchCallback = (children, props) =>
                         {renderListOption("whitelistedIds", IdType as idKeys, props)}
                     </React.Fragment>
                 ))}
+                {
+                    settings.store.hideMessageFromMessageLoggers
+                    && props.navId === "message"
+                    && props.message?.author?.id === UserStore.getCurrentUser().id
+                    && props.message?.deleted === false
+                    && (
+                        <>
+                            <Menu.MenuSeparator />
+                            <Menu.MenuItem
+                                id="hide-from-message-loggers"
+                                label="Delete Message (Hide From Message Loggers)"
+                                color="danger"
+
+                                action={async () => {
+                                    await MessageActions.deleteMessage(props.message.channel_id, props.message.id);
+                                    MessageActions._sendMessage(props.message.channel_id, {
+                                        "content": settings.store.hideMessageFromMessageLoggersDeletedMessage,
+                                        "tts": false,
+                                        "invalidEmojis": [],
+                                        "validNonShortcutEmojis": []
+                                    }, { nonce: props.message.id });
+                                }}
+
+                            />
+                        </>
+                    )
+                }
             </Menu.MenuItem>
         );
     }

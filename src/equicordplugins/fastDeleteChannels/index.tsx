@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Constants, PermissionsBits, PermissionStore, React, RestAPI, useCallback, useEffect, useState } from "@webpack/common";
 
@@ -74,10 +74,11 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "FastDeleteChannels",
     description: "Adds a trash icon to delete channels",
-    authors: [EquicordDevs.thororen],
+    authors: [Devs.thororen],
     settings,
     patches: [
         // TY TypingIndicator
+        // Normal Channels
         {
             find: "UNREAD_IMPORTANT:",
             replacement: {
@@ -85,6 +86,7 @@ export default definePlugin({
                 replace: "$&,$self.TrashIcon($1)"
             }
         },
+        // Threads
         {
             find: "spineWithGuildIcon]:",
             replacement: {

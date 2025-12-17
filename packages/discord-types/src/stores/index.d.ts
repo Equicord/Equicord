@@ -8,6 +8,7 @@ export * from "./GuildMemberStore";
 export * from "./GuildRoleStore";
 export * from "./GuildStore";
 export * from "./MessageStore";
+export * from "./PresenceStore";
 export * from "./RelationshipStore";
 export * from "./MediaEngineStore";
 export * from "./StreamerModeStore";
@@ -15,10 +16,12 @@ export * from "./SpellCheckStore";
 export * from "./SelectedChannelStore";
 export * from "./SelectedGuildStore";
 export * from "./StickersStore";
+export * from "./StreamerModeStore";
 export * from "./ThemeStore";
 export * from "./TypingStore";
 export * from "./UserProfileStore";
 export * from "./UserStore";
+export * from "./VoiceStateStore";
 export * from "./WindowStore";
 
 /**

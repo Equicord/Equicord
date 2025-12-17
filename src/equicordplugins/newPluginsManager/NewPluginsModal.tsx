@@ -4,49 +4,46 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { useSettings } from "@api/Settings";
+import "./styles.css";
+
+import { Settings, useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
+import { BaseText } from "@components/BaseText";
+import { Button } from "@components/Button";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { Flex } from "@components/Flex";
+import { PluginDependencyList } from "@components/settings/tabs/plugins";
 import { PluginCard } from "@components/settings/tabs/plugins/PluginCard";
 import { ChangeList } from "@utils/ChangeList";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { Alerts, Button, Flex, Forms, Parser, React, Text, Tooltip, useMemo } from "@webpack/common";
-import { JSX } from "react";
+import { closeModal, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { useForceUpdater } from "@utils/react";
+import { findComponentByCodeLazy } from "@webpack";
+import { Tooltip, useMemo } from "@webpack/common";
+import { ReactNode } from "react";
 
 import Plugins from "~plugins";
 
-import { getNewPlugins, writeKnownPlugins } from "./knownPlugins";
+import { getNewPlugins, getNewSettings, KnownPluginSettingsMap, writeKnownSettings } from "./knownSettings";
 
-const cl = classNameFactory("vc-plugins-");
+const cl = classNameFactory("vc-new-plugins-");
+
+const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
+const Checkbox = findComponentByCodeLazy(".checkboxWrapperDisabled:");
 
 let hasSeen = false;
 
-// Most of this was stolen from PluginSettings directly.
+interface ModalComponentProps {
+    modalProps: ModalProps;
+    newPlugins: Set<string>;
+    newSettings: KnownPluginSettingsMap;
+}
 
-export function NewPluginsModal({ modalProps, newPlugins }: { modalProps: ModalProps; newPlugins: Set<string>; }) {
+function NewPluginsModal({ modalProps, newPlugins, newSettings }: ModalComponentProps) {
     const settings = useSettings();
-    const changes = React.useMemo(() => new ChangeList<string>(), []);
+    const changes = useMemo(() => new ChangeList<string>(), []);
+    const forceUpdate = useForceUpdater();
 
-    React.useEffect(() => {
-        return () => void (changes.hasChanges && Alerts.show({
-            title: "Restart required",
-            body: (
-                <>
-                    <p>The following plugins require a restart:</p>
-                    <div>{changes.map((s, i) => (
-                        <>
-                            {i > 0 && ", "}
-                            {Parser.parse("`" + s + "`")}
-                        </>
-                    ))}</div>
-                </>
-            ),
-            confirmText: "Restart now",
-            cancelText: "Later!",
-            onConfirm: () => location.reload()
-        }));
-    }, []);
-
-    const depMap = React.useMemo(() => {
+    const depMap = useMemo(() => {
         const o = {} as Record<string, string[]>;
         for (const plugin in Plugins) {
             const deps = Plugins[plugin].dependencies;
@@ -60,94 +57,144 @@ export function NewPluginsModal({ modalProps, newPlugins }: { modalProps: ModalP
         return o;
     }, []);
 
-    const sortedPlugins = useMemo(() => [...newPlugins].map(pn => Plugins[pn])
-        .sort((a, b) => a.name.localeCompare(b.name)), []);
+    const sortedPlugins = useMemo(() => {
+        const mapPlugins = (array: string[]) => array.map(pn => Plugins[pn]).sort((a, b) => a.name.localeCompare(b.name));
+        return [
+            ...mapPlugins([...newPlugins]),
+            ...mapPlugins([...newSettings.keys()].filter(p => !newPlugins.has(p)))
+        ];
+    }, []);
 
-    const plugins = [] as JSX.Element[];
-    const requiredPlugins = [] as JSX.Element[];
+    const onRestartNeeded = (name: string) => {
+        changes.handleChange(name);
+        forceUpdate();
+    };
+
+    const pluginCards: ReactNode[] = [];
+    const requiredPluginCards: ReactNode[] = [];
 
     for (const p of sortedPlugins) {
-        if (p.hidden)
-            continue;
+        if (p.hidden) continue;
 
         const isRequired = p.required || depMap[p.name]?.some(d => settings.plugins[d].enabled);
 
         if (isRequired) {
             const tooltipText = p.required
-                ? "This plugin is required for Vencord to function."
-                : makeDependencyList(depMap[p.name]?.filter(d => settings.plugins[d].enabled));
+                ? "This plugin is required for Equicord to function."
+                : <PluginDependencyList deps={depMap[p.name]?.filter(d => settings.plugins[d].enabled)} />;
 
-            requiredPlugins.push(
+            requiredPluginCards.push(
                 <Tooltip text={tooltipText} key={p.name}>
                     {({ onMouseLeave, onMouseEnter }) => (
                         <PluginCard
                             onMouseLeave={onMouseLeave}
                             onMouseEnter={onMouseEnter}
-                            onRestartNeeded={name => changes.handleChange(name)}
+                            onRestartNeeded={onRestartNeeded}
                             disabled={true}
                             plugin={p}
-                            key={p.name}
+                            isNew={newPlugins.has(p.name)}
                         />
                     )}
                 </Tooltip>
             );
         } else {
-            plugins.push(
+            pluginCards.push(
                 <PluginCard
-                    onRestartNeeded={name => changes.handleChange(name)}
+                    onRestartNeeded={onRestartNeeded}
                     disabled={false}
                     plugin={p}
                     key={p.name}
+                    isNew={newPlugins.has(p.name)}
                 />
             );
         }
     }
 
+    const totalCount = pluginCards.length + requiredPluginCards.length;
 
-    return <ModalRoot {...modalProps} size={ModalSize.MEDIUM} >
-        <ModalHeader>
-            <Text variant="heading-lg/semibold">New Plugins ({[...plugins, ...requiredPlugins].length})</Text>
-        </ModalHeader>
-        <ModalContent>
-            <div className={cl("grid")}>
-                {[...plugins, ...requiredPlugins]}
-            </div>
-        </ModalContent>
-        <ModalFooter>
-            <Flex direction={Flex.Direction.HORIZONTAL_REVERSE}>
-                <Button
-                    color={Button.Colors.GREEN}
-                    onClick={async () => {
-                        await writeKnownPlugins();
-                        modalProps.onClose();
-                    }}
-                >
-                    Continue
-                </Button>
-            </Flex>
-        </ModalFooter>
-    </ModalRoot>;
-}
+    const handleContinue = async () => {
+        await writeKnownSettings();
+        if (changes.hasChanges) {
+            location.reload();
+        } else {
+            modalProps.onClose();
+        }
+    };
 
-
-function makeDependencyList(deps: string[]) {
     return (
-        <React.Fragment>
-            <Forms.FormText>This plugin is required by:</Forms.FormText>
-            {deps.map((dep: string) => <Forms.FormText key={cl("dep-text")} className={cl("dep-text")}>{dep}</Forms.FormText>)}
-        </React.Fragment>
+        <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
+            <ModalHeader separator={false} className={cl("header")}>
+                <div className={cl("header-content")}>
+                    <BaseText size="lg" weight="semibold" className={cl("title")}>
+                        New Plugins and Settings ({totalCount})
+                    </BaseText>
+                    <BaseText size="sm" className={cl("description")}>
+                        New plugins have been added since your last visit. Enable any you'd like or continue to dismiss.
+                    </BaseText>
+                </div>
+                <div className={cl("header-trailing")}>
+                    <CloseButton onClick={modalProps.onClose} />
+                </div>
+            </ModalHeader>
+
+            <ModalContent>
+                <div className={cl("grid")}>
+                    {pluginCards}
+                    {requiredPluginCards}
+                </div>
+            </ModalContent>
+
+            <ModalFooter>
+                <Flex className={cl("footer")}>
+                    <Tooltip
+                        text={
+                            <>
+                                The following plugins require a restart:
+                                <ul className={cl("restart-list")}>
+                                    {changes.map(p => <li key={p}>{p}</li>)}
+                                </ul>
+                            </>
+                        }
+                        shouldShow={changes.hasChanges}
+                    >
+                        {tooltipProps => (
+                            <Button
+                                {...tooltipProps}
+                                onClick={handleContinue}
+                            >
+                                {changes.hasChanges ? "Restart" : "Continue"}
+                            </Button>
+                        )}
+                    </Tooltip>
+
+                    <Checkbox
+                        type="inverted"
+                        value={!settings?.plugins?.NewPluginsManager?.enabled}
+                        onChange={() => {
+                            Settings.plugins.NewPluginsManager.enabled = !settings?.plugins?.NewPluginsManager?.enabled;
+                        }}
+                    >
+                        Don't show this again
+                    </Checkbox>
+                </Flex>
+            </ModalFooter>
+        </ModalRoot>
     );
 }
 
 export async function openNewPluginsModal() {
     const newPlugins = await getNewPlugins();
-    if (newPlugins.size && !hasSeen) {
+    const newSettings = await getNewSettings();
+    if ((newPlugins.size || newSettings.size) && !hasSeen) {
         hasSeen = true;
-        openModal(modalProps => (
-            <NewPluginsModal
-                modalProps={modalProps}
-                newPlugins={newPlugins}
-            />
+        const modalKey = openModal(modalProps => (
+            <ErrorBoundary noop onError={() => closeModal(modalKey)}>
+                <NewPluginsModal
+                    modalProps={modalProps}
+                    newPlugins={newPlugins}
+                    newSettings={newSettings}
+                />
+            </ErrorBoundary>
         ));
     }
 }

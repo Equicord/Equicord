@@ -6,10 +6,11 @@
 
 import "./styles.css";
 
+import { createAudioPlayer } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { createRoot, FluxDispatcher, useEffect, useState } from "@webpack/common";
+import { createRoot, FluxDispatcher, useCallback, useEffect, useState } from "@webpack/common";
 import { Root } from "react-dom/client";
 
 let jumpscareRoot: Root | undefined;
@@ -48,6 +49,7 @@ export default definePlugin({
     name: "Jumpscare",
     description: "Adds a configurable chance of jumpscaring you whenever you open a channel. Inspired by Geometry Dash Mega Hack",
     authors: [Devs.surgedevs],
+    dependencies: ["AudioPlayerAPI"],
     settings,
 
     start() {
@@ -63,24 +65,17 @@ export default definePlugin({
 
     JumpscareComponent() {
         const [isPlaying, setIsPlaying] = useState(false);
+        const jumpscareAudio = createAudioPlayer(settings.store.audioSource, { volume: 100, onEnded: () => { setIsPlaying(false); } });
 
-        const audio = new Audio(settings.store.audioSource);
-
-        const jumpscare = event => {
+        const jumpscare = useCallback(event => {
             if (isPlaying) return;
 
             const chance = 1 / settings.store.chance;
             if (Math.random() > chance) return;
 
             setIsPlaying(true);
-            audio.play();
-
-            console.log(isPlaying);
-
-            setTimeout(() => {
-                setIsPlaying(false);
-            }, 1000);
-        };
+            jumpscareAudio.play();
+        }, [isPlaying]);
 
         useEffect(() => {
             FluxDispatcher.subscribe("CHANNEL_SELECT", jumpscare);
@@ -88,7 +83,7 @@ export default definePlugin({
             return () => {
                 FluxDispatcher.unsubscribe("CHANNEL_SELECT", jumpscare);
             };
-        });
+        }, [jumpscare]);
 
         return <img className={`jumpscare-img ${isPlaying ? "jumpscare-animate" : ""}`} src={settings.store.imageSource} />;
     }

@@ -7,12 +7,17 @@
 import "./style.css";
 
 import { definePluginSettings, useSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { Heading, HeadingPrimary } from "@components/Heading";
 import { Link } from "@components/Link";
+import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
-import { Forms, moment, TextInput, useEffect, useState } from "@webpack/common";
+import { findByCodeLazy, findComponentByCodeLazy } from "@webpack";
+import { moment, TextInput, useEffect, useRef, UserStore, useState } from "@webpack/common";
 
 type TimeFormat = {
     name: string;
@@ -55,20 +60,20 @@ const timeFormats: Record<string, TimeFormat> = {
     sameDayFormat: {
         name: "Same day",
         description: "[calendar] format for today",
-        default: "[Today at ] HH:mm:ss",
+        default: "[Today at] HH:mm:ss",
         offset: 0,
     },
     lastDayFormat: {
         name: "Last day",
         description: "[calendar] format for yesterday",
-        default: "[Yesterday at ] HH:mm:ss",
+        default: "[Yesterday at] HH:mm:ss",
         offset: -1000 * 60 * 60 * 24,
     },
     lastWeekFormat: {
         name: "Last week",
-        description: "[calendar] format for last week",
+        description: "[calendar] format for within the last week",
         default: "ddd DD.MM.YYYY HH:mm:ss",
-        offset: -1000 * 60 * 60 * 24 * 7,
+        offset: -1000 * 60 * 60 * 24 * 6, // setting an offset of a week exactly pushes it into "older date" territory as soon as a second passes
     },
     sameElseFormat: {
         name: "Older date",
@@ -102,30 +107,79 @@ const format = (date: Date, formatTemplate: string): string => {
 
 const TimeRow = (props: TimeRowProps) => {
     const [state, setState] = useState(props.pluginSettings?.[props.id] || props.format.default);
-    const [preview, setPreview] = useState("");
 
     const handleChange = (value: string) => {
         setState(value);
         props.onChange(props.id, value);
     };
 
-    const updatePreview = () => setPreview(format(new Date(Date.now() + props.format.offset), state || props.format.default));
-
-    useEffect(() => {
-        updatePreview();
-        const interval = setInterval(updatePreview, 1000);
-        return () => clearInterval(interval);
-    }, [state]);
-
     return (
         <>
-            <Forms.FormTitle tag="h5">{props.format.name}</Forms.FormTitle>
-            <Forms.FormText>{props.format.description}</Forms.FormText>
+            <Heading>{props.format.name}</Heading>
+            <Paragraph>{props.format.description}</Paragraph>
             <TextInput value={state} onChange={handleChange} />
-            <Forms.FormText className={"vc-cmt-preview-text"}>{preview}</Forms.FormText>
         </>
     );
 };
+
+const MessagePreview = findComponentByCodeLazy<{
+    author: any,
+    message: any,
+    compact: boolean,
+    isGroupStart: boolean,
+    className: string,
+    hideSimpleEmbedContent: boolean;
+}>(/previewGuildId:\i,preview:\i,/);
+const createBotMessage = findByCodeLazy('username:"Clyde"');
+const populateMessagePrototype = findByCodeLazy("isProbablyAValidSnowflake", "messageReference:");
+
+const DemoMessage = (props: { msgId, compact, message, date: Date | undefined, isGroupStart?: boolean; }) => {
+    const message = createBotMessage({ content: props.message, channelId: "1337", embeds: [] });
+    message.author = UserStore.getCurrentUser();
+    message.id = props.msgId;
+    message.timestamp = moment(props.date ?? new Date());
+    const user = UserStore.getCurrentUser();
+    const populatedMessage = message && populateMessagePrototype(message);
+    return populatedMessage ? (
+        <div className="vc-cmt-demo-message">
+            <MessagePreview
+                author={{ ...user, nick: user.globalName || user.username }}
+                message={populatedMessage}
+                compact={props.compact}
+                isGroupStart={props.isGroupStart || false}
+                className="vc-cmt-demo-message-preview"
+                hideSimpleEmbedContent={true}
+            />
+        </div>
+    ) : <div className="vc-cmt-demo-message">
+        <Paragraph>
+            {/* @ts-ignore */}
+            <b>Preview:</b> {Vencord.Plugins.plugins.CustomTimestamps.renderTimestamp(date, "cozy")}
+        </Paragraph>
+    </div>;
+};
+
+const DemoMessageContainer = ErrorBoundary.wrap(() => {
+    const [isCompact, setIsCompact] = useState(false);
+    const today = useRef<Date>(new Date());
+    const yesterday = useRef<Date>(new Date(Date.now() + timeFormats.lastDayFormat.offset));
+    const lastWeek = useRef<Date>(new Date(Date.now() + timeFormats.lastWeekFormat.offset));
+    const aMonthAgo = useRef<Date>(new Date(Date.now() + timeFormats.sameElseFormat.offset));
+
+    return (
+        <div className={"vc-cmt-demo-message-container"} onClick={() => setIsCompact(!isCompact)}>
+            <DemoMessage compact={isCompact} msgId={"1337"}
+                message={`Click me to switch to ${isCompact ? "cozy" : "compact"} mode`} isGroupStart={true}
+                date={aMonthAgo.current} />
+            <DemoMessage compact={isCompact} msgId={"1338"} message={"This message was sent in the last week"}
+                isGroupStart={true} date={lastWeek.current} />
+            <DemoMessage compact={isCompact} msgId={"1339"} message={"Hover over timestamps to see tooltip formats"}
+                isGroupStart={true} date={yesterday.current} />
+            <DemoMessage compact={isCompact} msgId={"1340"} message={"Edit the formats below to see them live update here"} isGroupStart={true}
+                date={today.current} />
+        </div>
+    );
+}, { noop: true });
 
 const settings = definePluginSettings({
     formats: {
@@ -140,25 +194,29 @@ const settings = definePluginSettings({
                 componentProps.setValue(newSettings);
             };
 
-            return Object.entries(timeFormats).map(([key, value]) => (
-                <Forms.FormSection key={key}>
-                    {key === "sameDayFormat" && (
-                        <div className={Margins.bottom20}>
-                            <Forms.FormDivider style={{ marginBottom: "10px" }} />
-                            <Forms.FormTitle tag="h1">Calendar formats</Forms.FormTitle>
-                            <Forms.FormText>
-                                How to format the [calendar] value if used in the above timestamps.
-                            </Forms.FormText>
-                        </div>
-                    )}
-                    <TimeRow
-                        id={key}
-                        format={value}
-                        onChange={setNewValue}
-                        pluginSettings={settingsState}
-                    />
-                </Forms.FormSection>
-            ));
+            return (
+                <>
+                    <DemoMessageContainer />
+                    {Object.entries(timeFormats).map(([key, value]) => (
+                        <section key={key}>
+                            {key === "sameDayFormat" && (
+                                <div className={Margins.bottom20}>
+                                    <Divider style={{ marginBottom: "10px" }} />
+                                    <Heading tag="h1">Calendar formats</Heading>
+                                    <Paragraph>
+                                        How to format the [calendar] value if used in the above timestamps.
+                                    </Paragraph>
+                                </div>
+                            )}
+                            <TimeRow
+                                id={key}
+                                format={value}
+                                onChange={setNewValue}
+                                pluginSettings={settingsState}
+                            />
+                        </section>
+                    ))}
+                </>);
         }
     }
 }).withPrivateSettings<{
@@ -181,8 +239,8 @@ export default definePlugin({
     settings,
     settingsAboutComponent: () => (
         <div className={"vc-cmt-info-card"}>
-            <Forms.FormTitle tag="h2">How to use:</Forms.FormTitle>
-            <Forms.FormText>
+            <HeadingPrimary>How to use:</HeadingPrimary>
+            <Paragraph>
                 <Link href="https://momentjs.com/docs/#/displaying/format/">Moment.js formatting documentation</Link>
                 <div className={Margins.top8}>
                     Additionally you can use these in your inputs:<br />
@@ -190,7 +248,7 @@ export default definePlugin({
                     as &quot;Today&quot; or &quot;Yesterday&quot;.<br />
                     <b>[relative]</b> gives you times such as &quot;4 hours ago&quot;.<br />
                 </div>
-            </Forms.FormText>
+            </Paragraph>
         </div>
     ),
     patches: [
@@ -199,27 +257,27 @@ export default definePlugin({
             replacement: [
                 {
                     // Aria label on timestamps
-                    match: /\i.useMemo\(\(\)=>\(0,\i\.\i\)\((\i)\),\[\i]\),/,
-                    replace: "$self.renderTimestamp($1,'ariaLabel'),"
+                    match: /\i.useMemo\(.{0,10}\i\.\i\)\(.{0,10}\]\)/,
+                    replace: "$self.renderTimestamp(arguments[0].timestamp,'ariaLabel')"
                 },
                 {
                     // Timestamps on messages
-                    match: /\i\.useMemo\(\(\)=>null!=\i\?\(0,\i\.\i\)\(\i,\i\):(\i)\?\(0,\i\.\i\)\((\i),"LT"\):\(0,\i\.\i\)\(\i,!0\),\[\i,\i,\i]\)/,
-                    replace: "$self.renderTimestamp($2,$1?'compact':'cozy')",
+                    match: /\i\.useMemo\(.{0,50}"LT".{0,30}\]\)/,
+                    replace: "$self.renderTimestamp(arguments[0].timestamp,arguments[0].compact?'compact':'cozy')",
                 },
                 {
                     // Tooltips when hovering over message timestamps
-                    match: /(?<=text:)\(\)=>\(0,\i.\i\)\((\i),"LLLL"\)(?=,)/,
-                    replace: "$self.renderTimestamp($1,'tooltip')",
+                    match: /(__unsupportedReactNodeAsText:).{0,25}"LLLL"\)/,
+                    replace: "$1$self.renderTimestamp(arguments[0].timestamp,'tooltip')",
                 },
             ]
         },
         {
-            find: ".full,tooltipClassName:",
+            find: /.full,.{0,15}children:/,
             replacement: {
                 // Tooltips for timestamp markdown (e.g. <t:1234567890>)
-                match: /text:(\i).full,/,
-                replace: "text: $self.renderTimestamp(new Date($1.timestamp*1000),'tooltip'),"
+                match: /(__unsupportedReactNodeAsText:)\i.full/,
+                replace: "$1$self.renderTimestamp(new Date(arguments[0].node.timestamp*1000),'tooltip')"
             }
         }
     ],
@@ -230,16 +288,16 @@ export default definePlugin({
 
         switch (type) {
             case "cozy":
-                formatTemplate = settings.use(["formats"]).formats?.cozyFormat || timeFormats.cozyFormat.default;
+                formatTemplate = settings.store.formats?.cozyFormat || timeFormats.cozyFormat.default;
                 break;
             case "compact":
-                formatTemplate = settings.use(["formats"]).formats?.compactFormat || timeFormats.compactFormat.default;
+                formatTemplate = settings.store.formats?.compactFormat || timeFormats.compactFormat.default;
                 break;
             case "tooltip":
-                formatTemplate = settings.use(["formats"]).formats?.tooltipFormat || timeFormats.tooltipFormat.default;
+                formatTemplate = settings.store.formats?.tooltipFormat || timeFormats.tooltipFormat.default;
                 break;
             case "ariaLabel":
-                formatTemplate = settings.use(["formats"]).formats?.ariaLabelFormat || timeFormats.ariaLabelFormat.default;
+                formatTemplate = settings.store.formats?.ariaLabelFormat || timeFormats.ariaLabelFormat.default;
         }
 
         useEffect(() => {

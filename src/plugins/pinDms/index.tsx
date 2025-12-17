@@ -61,7 +61,7 @@ export const settings = definePluginSettings({
         type: OptionType.CUSTOM,
         default: {} as Record<string, Category[]>,
         description: "",
-    }
+    },
 });
 
 export default definePlugin({

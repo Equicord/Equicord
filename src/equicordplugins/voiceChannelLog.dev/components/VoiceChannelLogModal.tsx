@@ -4,14 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { BaseText } from "@components/BaseText";
+import { getVcLogs, vcLogSubscribe } from "@equicordplugins/voiceChannelLog.dev/logs";
 import { classes } from "@utils/misc";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { Channel } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
-import { React, ScrollerThin, Text } from "@webpack/common";
+import { React, ScrollerThin } from "@webpack/common";
 
 import { cl } from "..";
-import { getVcLogs, vcLogSubscribe } from "../logs";
 import { VoiceChannelLogEntryComponent } from "./VoiceChannelLogEntryComponent";
 
 const AccessibilityStore = findStoreLazy("AccessibilityStore");
@@ -53,7 +54,7 @@ export function VoiceChannelLogModal({ channel, props }: { channel: Channel; pro
             size={ModalSize.LARGE}
         >
             <ModalHeader>
-                <Text className={cl("header")} variant="heading-lg/semibold" style={{ flexGrow: 1 }}>{channel.name} logs</Text>
+                <BaseText size="lg" weight="semibold" className={cl("header")} style={{ flexGrow: 1 }}>{channel.name} logs</BaseText>
                 <ModalCloseButton onClick={props.onClose} />
             </ModalHeader>
 

@@ -16,16 +16,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { showNotification } from "@api/Notifications";
-import { Settings, useSettings } from "@api/Settings";
+import { useSettings } from "@api/Settings";
+import { authorizeCloud, deauthorizeCloud } from "@api/SettingsSync/cloudSetup";
+import { deleteCloudSettings, eraseAllCloudData, getCloudSettings, putCloudSettings } from "@api/SettingsSync/cloudSync";
+import { Alert } from "@components/Alert";
+import { Button } from "@components/Button";
 import { CheckedTextInput } from "@components/CheckedTextInput";
-import { Grid } from "@components/Grid";
+import { Divider } from "@components/Divider";
+import { Flex } from "@components/Flex";
+import { FormSwitch } from "@components/FormSwitch";
+import { Heading } from "@components/Heading";
 import { Link } from "@components/Link";
+import { Paragraph } from "@components/Paragraph";
+import { QuickAction, QuickActionCard } from "@components/settings/QuickAction";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
-import { authorizeCloud, checkCloudUrlCsp, cloudLogger, deauthorizeCloud, getCloudAuth, getCloudUrl } from "@utils/cloud";
 import { Margins } from "@utils/margins";
-import { deleteCloudSettings, getCloudSettings, putCloudSettings } from "@utils/settingsSync";
-import { Alerts, Button, Forms, Switch, Tooltip } from "@webpack/common";
+import { findComponentByCodeLazy } from "@webpack";
+import { Alerts, useState } from "@webpack/common";
+
+const UploadIcon = findComponentByCodeLazy("M12.7 3.3a1 1 0 0 0-1.4 0l-5 5a1 1 0 0 0 1.4 1.4L11 6.42V20");
+const DownloadIcon = findComponentByCodeLazy("M12.7 20.7a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4l3.3 3.29V4");
+const TrashIcon = findComponentByCodeLazy("2.81h8.36a3");
+const SkullIcon = findComponentByCodeLazy("m13.47 1 .07.04c.45.06");
 
 function validateUrl(url: string) {
     try {
@@ -36,159 +48,172 @@ function validateUrl(url: string) {
     }
 }
 
-async function eraseAllData() {
-    if (!await checkCloudUrlCsp()) return;
+function CloudTab() {
+    const settings = useSettings(["cloud.authenticated", "cloud.url", "cloud.settingsSync"]);
+    const [inputKey, setInputKey] = useState(0);
 
-    const res = await fetch(new URL("/v1/", getCloudUrl()), {
-        method: "DELETE",
-        headers: { Authorization: await getCloudAuth() }
-    });
+    const { cloud } = settings;
+    const isAuthenticated = cloud.authenticated;
+    const syncEnabled = isAuthenticated && cloud.settingsSync;
 
-    if (!res.ok) {
-        cloudLogger.error(`Failed to erase data, API returned ${res.status}`);
-        showNotification({
-            title: "Cloud Integrations",
-            body: `Could not erase all data (API returned ${res.status}), please contact support.`,
-            color: "var(--red-360)"
-        });
-        return;
+    async function changeUrl(url: string) {
+        cloud.url = url;
+        cloud.authenticated = false;
+
+        await deauthorizeCloud();
+        await authorizeCloud();
+
+        setInputKey(prev => prev + 1);
     }
 
-    Settings.cloud.authenticated = false;
-    await deauthorizeCloud();
-
-    showNotification({
-        title: "Cloud Integrations",
-        body: "Successfully erased all data.",
-        color: "var(--green-360)"
-    });
-}
-
-function SettingsSyncSection() {
-    const { cloud } = useSettings(["cloud.authenticated", "cloud.settingsSync"]);
-    const sectionEnabled = cloud.authenticated && cloud.settingsSync;
-
     return (
-        <Forms.FormSection title="Settings Sync" className={Margins.top16}>
-            <Forms.FormText variant="text-md/normal" className={Margins.bottom20}>
-                Synchronize your settings to the cloud. This allows easy synchronization across multiple devices with
-                minimal effort.
-            </Forms.FormText>
-            <Switch
-                key="cloud-sync"
-                disabled={!cloud.authenticated}
+        <SettingsTab>
+            <Heading className={Margins.top16}>Cloud Integration</Heading>
+            <Paragraph className={Margins.bottom16}>
+                Equicord's cloud integration allows you to sync your settings across multiple devices and Discord installations. Your data is securely stored and can be easily restored at any time.
+            </Paragraph>
+
+            <Alert.Info className={Margins.bottom16} style={{ width: "100%" }}>
+                We use our own <Link href="https://github.com/Equicord/Equicloud">Equicloud backend</Link> with enhanced features.
+                View our <Link href="https://equicord.org/cloud/policy">privacy policy</Link> to see what we store and how we use your data.
+                Equicloud is BSD 3.0 licensed, so you can self-host if preferred.
+            </Alert.Info>
+
+            <FormSwitch
+                title="Enable Cloud Integration"
+                description="Connect to the cloud backend for settings synchronization. This will request authorization if you haven't set up cloud integration yet."
+                value={isAuthenticated}
+                onChange={v => {
+                    if (v)
+                        authorizeCloud();
+                    else
+                        cloud.authenticated = v;
+                }}
+                hideBorder
+            />
+
+            <Divider className={Margins.top20} />
+
+            <Heading className={Margins.top20}>Cloud Backend</Heading>
+            <Paragraph className={Margins.bottom8}>
+                Choose which cloud backend to use for storing your settings. You can switch between Equicord's and Vencord's cloud services, or use a self-hosted instance.
+            </Paragraph>
+            <Paragraph color="text-subtle" className={Margins.bottom16}>
+                Current: <Link href={cloud.url}>{cloud.url}</Link>
+            </Paragraph>
+
+            <CheckedTextInput
+                key={`backendUrl-${inputKey}`}
+                value={cloud.url}
+                onChange={async v => {
+                    cloud.url = v;
+                    cloud.authenticated = false;
+                    await deauthorizeCloud();
+                }}
+                validate={validateUrl}
+            />
+
+            <Flex gap="8px" className={Margins.top16} flexWrap="wrap">
+                <Button
+                    size="small"
+                    disabled={!isAuthenticated}
+                    onClick={async () => {
+                        cloud.authenticated = false;
+                        await deauthorizeCloud();
+                        await authorizeCloud();
+                    }}
+                >
+                    Reauthorize
+                </Button>
+                <Button
+                    size="small"
+                    variant="secondary"
+                    onClick={() => changeUrl("https://cloud.equicord.org/")}
+                >
+                    Use Equicord Cloud
+                </Button>
+                <Button
+                    size="small"
+                    variant="secondary"
+                    onClick={() => changeUrl("https://api.vencord.dev/")}
+                >
+                    Use Vencord Cloud
+                </Button>
+            </Flex>
+
+            <Divider className={Margins.top20} />
+
+            <Heading className={Margins.top20}>Settings Sync</Heading>
+            <Paragraph className={Margins.bottom16}>
+                Synchronize your Equicord settings to the cloud. This makes it easy to keep your configuration consistent across multiple devices without manual import/export.
+            </Paragraph>
+
+            <FormSwitch
+                title="Enable Settings Sync"
+                description="When enabled, your settings can be synced to and from the cloud. Use the actions below to manually sync."
                 value={cloud.settingsSync}
                 onChange={v => { cloud.settingsSync = v; }}
-            >
-                Settings Sync
-            </Switch>
-            <div className="vc-cloud-settings-sync-grid">
+                disabled={!isAuthenticated}
+                hideBorder
+            />
+
+            {isAuthenticated && (
+                <QuickActionCard columns={2}>
+                    <QuickAction
+                        Icon={UploadIcon}
+                        text="Sync to Cloud"
+                        action={() => putCloudSettings(true)}
+                        disabled={!syncEnabled}
+                    />
+                    <QuickAction
+                        Icon={DownloadIcon}
+                        text="Sync from Cloud"
+                        action={() => getCloudSettings(true, true)}
+                        disabled={!syncEnabled}
+                    />
+                </QuickActionCard>
+            )}
+
+            {!isAuthenticated && (
+                <Alert.Warning className={Margins.top8} style={{ width: "100%" }}>
+                    Enable cloud integration above to use settings sync features.
+                </Alert.Warning>
+            )}
+
+            <Divider className={Margins.top20} />
+
+            <Heading className={Margins.top20}>Danger Zone</Heading>
+            <Paragraph className={Margins.bottom16}>
+                Permanently delete all your data from the cloud. This action cannot be undone and will remove all synced settings and any other data stored on the cloud backend.
+            </Paragraph>
+
+            <Flex gap="8px" flexWrap="wrap">
                 <Button
-                    size={Button.Sizes.SMALL}
-                    disabled={!sectionEnabled}
-                    onClick={() => putCloudSettings(true)}
-                >
-                    Sync to Cloud
-                </Button>
-                <Tooltip text="This will overwrite your local settings with the ones on the cloud. Use wisely!">
-                    {({ onMouseLeave, onMouseEnter }) => (
-                        <Button
-                            onMouseLeave={onMouseLeave}
-                            onMouseEnter={onMouseEnter}
-                            size={Button.Sizes.SMALL}
-                            color={Button.Colors.RED}
-                            disabled={!sectionEnabled}
-                            onClick={() => getCloudSettings(true, true)}
-                        >
-                            Sync from Cloud
-                        </Button>
-                    )}
-                </Tooltip>
-                <Button
-                    size={Button.Sizes.SMALL}
-                    color={Button.Colors.RED}
-                    disabled={!sectionEnabled}
+                    variant="dangerPrimary"
+                    disabled={!syncEnabled}
                     onClick={() => deleteCloudSettings()}
+                    style={{ display: "flex", alignItems: "center" }}
                 >
+                    <TrashIcon color="currentColor" style={{ marginRight: "8px" }} />
                     Delete Cloud Settings
                 </Button>
-            </div>
-        </Forms.FormSection>
-    );
-}
-
-function CloudTab() {
-    const settings = useSettings(["cloud.authenticated", "cloud.url"]);
-
-    return (
-        <SettingsTab title="Equicord Cloud">
-            <Forms.FormSection title="Cloud Settings" className={Margins.top16}>
-                <Forms.FormText variant="text-md/normal" className={Margins.bottom20}>
-                    Equicord comes with the Vencord cloud integration that adds goodies like settings sync across devices.
-                    It <Link href="https://vencord.dev/cloud/privacy">respects your privacy</Link>, and
-                    the <Link href="https://github.com/Vencord/Backend">source code</Link> is AGPL 3.0 licensed so you
-                    can host it yourself.
-                </Forms.FormText>
-                <Switch
-                    key="backend"
-                    value={settings.cloud.authenticated}
-                    onChange={v => {
-                        if (v)
-                            authorizeCloud();
-                        else
-                            settings.cloud.authenticated = v;
-                    }}
-                    note="This will request authorization if you have not yet set up cloud integrations."
+                <Button
+                    variant="dangerPrimary"
+                    disabled={!isAuthenticated}
+                    onClick={() => Alerts.show({
+                        title: "Erase All Cloud Data",
+                        body: "Are you sure you want to permanently delete all your cloud data? This action cannot be undone.",
+                        onConfirm: eraseAllCloudData,
+                        confirmText: "Erase All Data",
+                        confirmColor: "vc-cloud-erase-data-danger-btn",
+                        cancelText: "Cancel"
+                    })}
+                    style={{ display: "flex", alignItems: "center" }}
                 >
-                    Enable Cloud Integrations
-                </Switch>
-                <Forms.FormTitle tag="h5">Backend URL</Forms.FormTitle>
-                <Forms.FormText className={Margins.bottom8}>
-                    Which backend to use when using cloud integrations.
-                </Forms.FormText>
-                <CheckedTextInput
-                    key="backendUrl"
-                    value={settings.cloud.url}
-                    onChange={async v => {
-                        settings.cloud.url = v;
-                        settings.cloud.authenticated = false;
-                        deauthorizeCloud();
-                    }}
-                    validate={validateUrl}
-                />
-
-                <Grid columns={2} gap="1em" className={Margins.top8}>
-                    <Button
-                        size={Button.Sizes.MEDIUM}
-                        disabled={!settings.cloud.authenticated}
-                        onClick={async () => {
-                            await deauthorizeCloud();
-                            settings.cloud.authenticated = false;
-                            await authorizeCloud();
-                        }}
-                    >
-                        Reauthorize
-                    </Button>
-                    <Button
-                        size={Button.Sizes.MEDIUM}
-                        color={Button.Colors.RED}
-                        disabled={!settings.cloud.authenticated}
-                        onClick={() => Alerts.show({
-                            title: "Are you sure?",
-                            body: "Once your data is erased, we cannot recover it. There's no going back!",
-                            onConfirm: eraseAllData,
-                            confirmText: "Erase it!",
-                            confirmColor: "vc-cloud-erase-data-danger-btn",
-                            cancelText: "Nevermind"
-                        })}
-                    >
-                        Erase All Data
-                    </Button>
-                </Grid>
-
-                <Forms.FormDivider className={Margins.top16} />
-            </Forms.FormSection >
-            <SettingsSyncSection />
+                    <SkullIcon color="currentColor" style={{ marginRight: "8px" }} />
+                    Erase All Cloud Data
+                </Button>
+            </Flex>
         </SettingsTab>
     );
 }

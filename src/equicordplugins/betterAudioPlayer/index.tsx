@@ -27,9 +27,9 @@ function parseFileSize(size: string) {
 }
 
 function getMetadata(audioElement: HTMLElement) {
-    const metadataElement = audioElement.querySelector("[class^='metadataContent_']");
+    const metadataElement = audioElement.querySelector("[class*='metadataContent']");
     const nameElement = metadataElement?.querySelector("a");
-    const sizeElement = audioElement.querySelector("[class^='metadataContent_'] [class^='metadataSize_']");
+    const sizeElement = audioElement.querySelector("[class*='metadataContent'] [class*='metadataSize']");
     const url = nameElement?.getAttribute("href");
     const audioElementLink = audioElement.querySelector("audio");
 
@@ -42,7 +42,7 @@ function getMetadata(audioElement: HTMLElement) {
         return false;
     }
 
-    const elements = [metadataElement?.parentElement, audioElement.querySelector("[class^='audioControls_']")];
+    const elements = [metadataElement?.parentElement, audioElement.querySelector("[class*='audioControls']")];
 
     const computedStyle = getComputedStyle(audioElement);
     const parentBorderRadius = computedStyle.borderRadius;
@@ -196,7 +196,7 @@ function drawSpectrograph(canvasContext, canvas, frequencyData, bufferLength) {
 }
 
 function scanForAudioElements(element: HTMLElement) {
-    element.querySelectorAll("[class^='wrapperAudio_']:not([data-better-audio-processed])").forEach(audioElement => {
+    element.querySelectorAll("[class*='wrapperAudio']:not([data-better-audio-processed])").forEach(audioElement => {
         (audioElement as HTMLElement).dataset.betterAudioProcessed = "true";
         const metadata = getMetadata(audioElement as HTMLElement);
 
@@ -222,6 +222,7 @@ function createObserver(targetNode: HTMLElement) {
         childList: true,
         subtree: true,
     });
+    return observer;
 }
 
 function tryHexToRgb(hex) {
@@ -292,6 +293,8 @@ const settings = definePluginSettings({
     },
 });
 
+let observer: MutationObserver | null = null;
+
 export default definePlugin({
     name: "BetterAudioPlayer",
     description: "Adds a spectrograph and oscilloscope visualizer to audio attachment players",
@@ -299,14 +302,18 @@ export default definePlugin({
     settings,
     start() {
         const waitForContent = () => {
-            const targetNode = document.querySelector("[class^='content_']");
+            const targetNode = document.querySelector("[class*='content']");
             if (targetNode) {
                 scanForAudioElements(targetNode as HTMLElement);
-                createObserver(targetNode as HTMLElement);
+                observer = createObserver(targetNode as HTMLElement);
             } else {
                 requestAnimationFrame(waitForContent);
             }
         };
         waitForContent();
+    },
+    stop() {
+        observer?.disconnect();
+        observer = null;
     },
 });

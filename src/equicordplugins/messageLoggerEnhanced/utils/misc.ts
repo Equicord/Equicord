@@ -16,12 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { DBMessageStatus } from "@equicordplugins/messageLoggerEnhanced/db";
+import { LoggedMessageJSON } from "@equicordplugins/messageLoggerEnhanced/types";
 import { PluginNative } from "@utils/types";
 import { findByCodeLazy, findLazy } from "@webpack";
 import { ChannelStore, moment, UserStore } from "@webpack/common";
 
-import { DBMessageStatus } from "../db";
-import { LoggedMessageJSON } from "../types";
 import { DEFAULT_IMAGE_CACHE_DIR } from "./constants";
 import { DISCORD_EPOCH } from "./index";
 import { memoize } from "./memoize";
@@ -158,10 +158,6 @@ export function getNative(): PluginNative<typeof import("../native")> {
             messageLoggerEnhancedUniqueIdThingyIdkMan: async () => { },
             showItemInFolder: async () => { },
             writeImageNative: async () => { },
-            getCommitHash: async () => ({ ok: true, value: "" }),
-            getRepoInfo: async () => ({ ok: true, value: { repo: "", gitHash: "" } }),
-            getNewCommits: async () => ({ ok: true, value: [] }),
-            update: async () => ({ ok: true, value: "" }),
             chooseFile: async () => "",
             downloadAttachment: async () => ({ error: "web", path: null }),
         } satisfies PluginNative<typeof import("../native")>;

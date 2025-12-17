@@ -16,41 +16,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import "@equicordplugins/_misc/styles.css";
-
+import { Alert } from "@components/Alert";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { Forms } from "@webpack/common";
 
 export default definePlugin({
     name: "NeverPausePreviews",
     description: "Prevents in-call/PiP previews (screenshare, streams, etc) from pausing even if the client loses focus",
     authors: [EquicordDevs.vappstar],
-    settingsAboutComponent: () => <>
-        <Forms.FormText className="plugin-warning">
+    settingsAboutComponent: () => (
+        <Alert.Warning>
             This plugin will cause discord to use more resources than normal
-        </Forms.FormText>
-    </>,
+        </Alert.Warning>
+    ),
     patches: [
         {
             find: "streamerPaused()",
             replacement: {
-                match: /return null![^}]+/,
-                replace: "return false"
+                match: /streamerPaused\(\)\{/,
+                replace: "$&return false;"
             }
         },
         {
-            find: "emptyPreviewWrapper,children",
+            find: "StreamTile",
             replacement: {
-                match: /paused:\i([^=])/,
-                replace: "paused:false$1"
-            }
-        },
-        {
-            find: "let{mainText:",
-            replacement: {
-                match: /let{[^;]+/,
-                replace: "return"
+                match: /\i\.\i\.isFocused\(\)/,
+                replace: "true"
             }
         }
     ],

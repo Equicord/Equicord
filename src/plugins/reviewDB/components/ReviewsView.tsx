@@ -16,15 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { Paragraph } from "@components/Paragraph";
+import { Auth, authorize } from "@plugins/reviewDB/auth";
+import { Review, ReviewType } from "@plugins/reviewDB/entities";
+import { addReview, getReviews, Response, REVIEWS_PER_PAGE } from "@plugins/reviewDB/reviewDbApi";
+import { settings } from "@plugins/reviewDB/settings";
+import { cl, showToast } from "@plugins/reviewDB/utils";
 import { useAwaiter, useForceUpdater } from "@utils/react";
 import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { Forms, React, RelationshipStore, useRef, UserStore } from "@webpack/common";
+import { React, RelationshipStore, useRef, UserStore } from "@webpack/common";
 
-import { Auth, authorize } from "../auth";
-import { Review, ReviewType } from "../entities";
-import { addReview, getReviews, Response, REVIEWS_PER_PAGE } from "../reviewDbApi";
-import { settings } from "../settings";
-import { cl, showToast } from "../utils";
 import ReviewComponent from "./ReviewComponent";
 
 const Transforms = findByPropsLazy("insertNodes", "textToText");
@@ -113,9 +114,9 @@ function ReviewList({ refetch, reviews, hideOwnReview, profileId, type }: { refe
             )}
 
             {reviews?.length === 0 && (
-                <Forms.FormText className={cl("placeholder")}>
+                <Paragraph className={cl("placeholder")}>
                     Looks like nobody reviewed this {type === ReviewType.User ? "user" : "server"} yet. You could be the first!
-                </Forms.FormText>
+                </Paragraph>
             )}
         </div>
     );

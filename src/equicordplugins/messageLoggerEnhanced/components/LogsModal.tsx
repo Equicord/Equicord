@@ -5,21 +5,21 @@
  */
 
 import { classNameFactory } from "@api/Styles";
+import { BaseText } from "@components/BaseText";
 import { Flex } from "@components/Flex";
 import { InfoIcon } from "@components/Icons";
-import { openUserProfile } from "@utils/discord";
-import { copyWithToast } from "@utils/misc";
+import { clearMessagesIDB, DBMessageRecord, deleteMessageIDB, deleteMessagesBulkIDB } from "@equicordplugins/messageLoggerEnhanced/db";
+import { settings } from "@equicordplugins/messageLoggerEnhanced/index";
+import { LoggedMessage, LoggedMessageJSON } from "@equicordplugins/messageLoggerEnhanced/types";
+import { messageJsonToMessageClass } from "@equicordplugins/messageLoggerEnhanced/utils";
+import { importLogs } from "@equicordplugins/messageLoggerEnhanced/utils/settingsUtils";
+import { copyWithToast, openUserProfile } from "@utils/discord";
 import { closeAllModals, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { LazyComponent } from "@utils/react";
 import { User } from "@vencord/discord-types";
 import { find, findByCode, findByCodeLazy } from "@webpack";
-import { Alerts, Button, ChannelStore, ContextMenuApi, FluxDispatcher, Menu, NavigationRouter, React, TabBar, Text, TextInput, Tooltip, useMemo, useRef, useState } from "@webpack/common";
+import { Alerts, Button, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, NavigationRouter, React, TabBar, TextInput, Tooltip, useMemo, useRef, useState } from "@webpack/common";
 
-import { clearMessagesIDB, DBMessageRecord, deleteMessageIDB, deleteMessagesBulkIDB } from "../db";
-import { settings } from "../index";
-import { LoggedMessage, LoggedMessageJSON } from "../types";
-import { messageJsonToMessageClass } from "../utils";
-import { importLogs } from "../utils/settingsUtils";
 import { useMessages } from "./hooks";
 
 export interface MessagePreviewProps {
@@ -158,7 +158,7 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                 </Button>
                 <Button
                     style={{ marginRight: "16px" }}
-                    color={Button.Colors.YELLOW}
+                    color={Button.Colors.BRAND}
                     disabled={messages?.length === 0}
                     onClick={() => Alerts.show({
                         title: "Clear Logs",
@@ -175,7 +175,7 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                     Clear Visible Logs
                 </Button>
                 <Button
-                    look={Button.Looks.LINK}
+                    style={{ marginRight: "16px" }}
                     color={Button.Colors.PRIMARY}
                     onClick={() => {
                         setSortNewest(e => {
@@ -251,12 +251,12 @@ function NoResults({ tab }: { tab: LogTabs; }) {
 
     return (
         <div className={cl("empty-logs", "content-inner")} style={{ textAlign: "center" }}>
-            <Text variant="text-lg/normal">
+            <BaseText size="lg">
                 No results in <b>{tab}</b>.
-            </Text>
-            <Text variant="text-lg/normal" style={{ marginTop: "0.2rem" }}>
+            </BaseText>
+            <BaseText size="lg" style={{ marginTop: "0.2rem" }}>
                 Maybe try <b>{nextTab}</b> or <b>{lastTab}</b>
-            </Text>
+            </BaseText>
         </div>
     );
 }
@@ -266,9 +266,9 @@ function EmptyLogs({ hasQuery, reset: forceUpdate }: { hasQuery: boolean; reset:
         <div className={cl("empty-logs", "content-inner")} style={{ textAlign: "center" }}>
             <Flex flexDirection="column" style={{ position: "relative" }}>
 
-                <Text variant="text-lg/normal">
+                <BaseText size="lg">
                     Empty eh
-                </Text>
+                </BaseText>
 
                 {!hasQuery && (
                     <>
@@ -306,6 +306,9 @@ function LMessage({ log, isGroupStart, reset, }: LMessageProps) {
     // console.log(message);
 
     if (!message) return null;
+
+    const channel = ChannelStore.getChannel(message?.channel_id);
+    const guild = GuildStore.getGuild(channel?.guild_id);
 
     return (
         <div
@@ -415,8 +418,16 @@ function LMessage({ log, isGroupStart, reset, }: LMessageProps) {
                         isAutomodBlockedMessage={false}
                     />
                 }
-
             />
+            {settings.store.ShowWhereMessageIsFrom && channel?.isDM() && message?.author && (
+                <span className={`${cl("from")} ${message.deleted ? cl("from-deleted") : cl("from-edited")}`}>From {message.author.username}'s DMs</span>
+            )}
+            {settings.store.ShowWhereMessageIsFrom && channel?.isGroupDM() && channel?.name && (
+                <span className={`${cl("from")} ${message.deleted ? cl("from-deleted") : cl("from-edited")}`}>From {channel.name} Group DM</span>
+            )}
+            {settings.store.ShowWhereMessageIsFrom && !channel?.isDM() && !channel?.isGroupDM() && channel?.name && guild?.name && (
+                <span className={`${cl("from")} ${message.deleted ? cl("from-deleted") : cl("from-edited")}`}>From {channel.name} in {guild.name}</span>
+            )}
         </div>
     );
 }

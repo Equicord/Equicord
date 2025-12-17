@@ -19,12 +19,11 @@
 import "./AddonCard.css";
 
 import { classNameFactory } from "@api/Styles";
+import { BaseText } from "@components/BaseText";
 import { AddonBadge } from "@components/settings/PluginBadge";
-import { Switch } from "@components/settings/Switch";
-import { Text, useRef } from "@webpack/common";
+import { Switch } from "@components/Switch";
+import { Tooltip, useRef } from "@webpack/common";
 import type { MouseEventHandler, ReactNode } from "react";
-
-import { useTruncatedText } from "./tabs/plugins/components/truncateText";
 
 const cl = classNameFactory("vc-addon-");
 
@@ -35,6 +34,8 @@ interface Props {
     setEnabled: (enabled: boolean) => void;
     disabled?: boolean;
     isNew?: boolean;
+    sourceBadge?: ReactNode;
+    tooltip?: string;
     onMouseEnter?: MouseEventHandler<HTMLDivElement>;
     onMouseLeave?: MouseEventHandler<HTMLDivElement>;
 
@@ -43,10 +44,9 @@ interface Props {
     author?: ReactNode;
 }
 
-export function AddonCard({ disabled, isNew, name, infoButton, footer, author, enabled, setEnabled, description, onMouseEnter, onMouseLeave }: Props) {
+export function AddonCard({ disabled, isNew, sourceBadge, tooltip, name, infoButton, footer, author, enabled, setEnabled, description, onMouseEnter, onMouseLeave }: Props) {
     const titleRef = useRef<HTMLDivElement>(null);
     const titleContainerRef = useRef<HTMLDivElement>(null);
-    const { truncated, containerRef } = useTruncatedText(description ? description.toString() : "");
 
     return (
         <div
@@ -56,7 +56,7 @@ export function AddonCard({ disabled, isNew, name, infoButton, footer, author, e
         >
             <div className={cl("header")}>
                 <div className={cl("name-author")}>
-                    <Text variant="text-md/bold" className={cl("name")}>
+                    <BaseText size="md" weight="bold" className={cl("name")}>
                         <div ref={titleContainerRef} className={cl("title-container")}>
                             <div
                                 ref={titleRef}
@@ -73,14 +73,26 @@ export function AddonCard({ disabled, isNew, name, infoButton, footer, author, e
                             </div>
                         </div>
                         {isNew && <AddonBadge text="NEW" color="#ED4245" />}
-                    </Text>
+                    </BaseText>
 
                     {!!author && (
-                        <Text variant="text-md/normal" className={cl("author")}>
+                        <BaseText size="md" color="text-subtle" className={cl("author")}>
                             {author}
-                        </Text>
+                        </BaseText>
                     )}
                 </div>
+
+                <Tooltip text={tooltip}>
+                    {({ onMouseEnter, onMouseLeave }) => (
+                        <div
+                            className={cl("source")}
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
+                        >
+                            {sourceBadge}
+                        </div>
+                    )}
+                </Tooltip>
 
                 {infoButton}
 
@@ -92,15 +104,14 @@ export function AddonCard({ disabled, isNew, name, infoButton, footer, author, e
             </div>
 
             <div
-                ref={containerRef}
                 className={cl("note")}
                 style={{ lineHeight: "1.25em", fontSize: "small" }}
                 title={description ? description.toString() : ""}
             >
-                {truncated}
+                {description}
             </div>
 
-            {footer}
+            {footer && <div className={cl("footer")}>{footer}</div>}
         </div>
     );
 }

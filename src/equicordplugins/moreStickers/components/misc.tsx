@@ -5,17 +5,20 @@
  */
 
 import * as DataStore from "@api/DataStore";
+import { BaseText } from "@components/BaseText";
 import { CheckedTextInput } from "@components/CheckedTextInput";
+import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
-import { Button, Forms, React, TabBar, Text, TextArea, Toasts } from "@webpack/common";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
+import { convert as convertLineEP, getIdFromUrl as getLineEmojiPackIdFromUrl, getStickerPackById as getLineEmojiPackById, isLineEmojiPackHtml, parseHtml as getLineEPFromHtml } from "@equicordplugins/moreStickers/lineEmojis";
+import { convert as convertLineSP, getIdFromUrl as getLineStickerPackIdFromUrl, getStickerPackById as getLineStickerPackById, isLineStickerPackHtml, parseHtml as getLineSPFromHtml } from "@equicordplugins/moreStickers/lineStickers";
+import { isV1, migrate } from "@equicordplugins/moreStickers/migrate-v1";
+import { deleteStickerPack, getStickerPack, getStickerPackMetas, saveStickerPack } from "@equicordplugins/moreStickers/stickers";
+import { SettingsTabsKey, Sticker, StickerPack, StickerPackMeta } from "@equicordplugins/moreStickers/types";
+import { cl, clPicker, Mutex } from "@equicordplugins/moreStickers/utils";
+import { Button, React, TabBar, TextArea, Toasts } from "@webpack/common";
 import { JSX } from "react";
-
-import { convert as convertLineEP, getIdFromUrl as getLineEmojiPackIdFromUrl, getStickerPackById as getLineEmojiPackById, isLineEmojiPackHtml, parseHtml as getLineEPFromHtml } from "../lineEmojis";
-import { convert as convertLineSP, getIdFromUrl as getLineStickerPackIdFromUrl, getStickerPackById as getLineStickerPackById, isLineStickerPackHtml, parseHtml as getLineSPFromHtml } from "../lineStickers";
-import { isV1, migrate } from "../migrate-v1";
-import { deleteStickerPack, getStickerPack, getStickerPackMetas, saveStickerPack } from "../stickers";
-import { SettingsTabsKey, Sticker, StickerPack, StickerPackMeta } from "../types";
-import { cl, clPicker, Mutex } from "../utils";
 
 const mutex = new Mutex();
 
@@ -82,12 +85,12 @@ const StickerPackMetadata = ({ meta, hoveredStickerPackId, setHoveredStickerPack
                     <path d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z" />
                 </svg>
             </button>
-            <Text className={cl("pack-title")} tag="span">{meta.title}</Text>
+            <BaseText className={cl("pack-title")} tag="span">{meta.title}</BaseText>
         </div>
     );
 };
 
-export const Settings = () => {
+export const Packs = () => {
     const [stickerPackMetas, setstickerPackMetas] = React.useState<StickerPackMeta[]>([]);
     const [addStickerUrl, setAddStickerUrl] = React.useState<string>("");
     const [addStickerHtml, setAddStickerHtml] = React.useState<string>("");
@@ -125,14 +128,14 @@ export const Settings = () => {
 
             {tab === SettingsTabsKey.ADD_STICKER_PACK_URL &&
                 <div className="section">
-                    <Forms.FormTitle tag="h5">Add Sticker Pack from URL</Forms.FormTitle>
-                    <Forms.FormText>
+                    <Heading>Add Sticker Pack from URL</Heading>
+                    <Paragraph>
                         <p>
                             Currently LINE stickers/emojis supported only. <br />
 
                             Get Telegram stickers with <a href="#" onClick={() => VencordNative.native.openExternal("https://github.com/lekoOwO/MoreStickersConverter")}> MoreStickersConverter</a>.
                         </p>
-                    </Forms.FormText>
+                    </Paragraph>
                     <Flex flexDirection="row" style={{
                         alignItems: "center",
                         justifyContent: "center"
@@ -233,14 +236,14 @@ export const Settings = () => {
             }
             {tab === SettingsTabsKey.ADD_STICKER_PACK_HTML &&
                 <div className="section">
-                    <Forms.FormTitle tag="h5">Add Sticker Pack from HTML</Forms.FormTitle>
-                    <Forms.FormText>
+                    <Heading>Add Sticker Pack from HTML</Heading>
+                    <Paragraph>
                         <p>
                             When encountering errors while adding a sticker pack, you can try to add it using the HTML source code of the sticker pack page.<br />
                             This applies to stickers which are region locked / OS locked / etc.<br />
                             The region LINE recognized may vary from the region you are in due to the CORS proxy we're using.
                         </p>
-                    </Forms.FormText>
+                    </Paragraph>
                     <Flex flexDirection="row" style={{
                         alignItems: "center",
                         justifyContent: "center"
@@ -311,7 +314,7 @@ export const Settings = () => {
             {
                 tab === SettingsTabsKey.ADD_STICKER_PACK_FILE &&
                 <div className="section">
-                    <Forms.FormTitle tag="h5">Add Sticker Pack from File</Forms.FormTitle>
+                    <Heading>Add Sticker Pack from File</Heading>
 
                     <Button
                         size={Button.Sizes.SMALL}
@@ -367,7 +370,7 @@ export const Settings = () => {
             {
                 tab === SettingsTabsKey.MISC &&
                 <div className="section">
-                    <Forms.FormTitle tag="h5">Misc tools</Forms.FormTitle>
+                    <Heading>Misc tools</Heading>
 
                     <Flex flexDirection="row" style={{
                         alignItems: "center",
@@ -412,11 +415,11 @@ export const Settings = () => {
                     </Flex>
                 </div>
             }
-            <Forms.FormDivider style={{
+            <Divider style={{
                 marginTop: "8px",
                 marginBottom: "8px"
             }} />
-            <Forms.FormTitle tag="h5">Stickers Management</Forms.FormTitle>
+            <Heading>Stickers Management</Heading>
 
             <div className="section">
                 <div style={{

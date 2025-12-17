@@ -5,12 +5,12 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { humanFriendlyJoin } from "@utils/text";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
-import { ChannelStore, FluxDispatcher, MessageActions, MessageStore, RelationshipStore, SelectedChannelStore, UserStore, VoiceStateStore } from "@webpack/common";
+import { ChannelStore, FluxDispatcher, MessageActions, MessageStore, RelationshipStore, SelectedChannelStore, UserStore } from "@webpack/common";
 
 const createBotMessage = findByCodeLazy('username:"Clyde"');
 
@@ -104,7 +104,7 @@ let clientOldChannelId: string | undefined;
 export default definePlugin({
     name: "VoiceJoinMessages",
     description: "Recieve client-side ephemeral messages when your friends join voice channels",
-    authors: [Devs.Sqaaakoi, EquicordDevs.thororen],
+    authors: [Devs.Sqaaakoi, Devs.thororen],
     settings,
     flux: {
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
@@ -126,12 +126,12 @@ export default definePlugin({
                     const selfInChannel = SelectedChannelStore.getVoiceChannelId() === channelId;
                     let memberListContent = "";
                     if (settings.store.friendDirectMessagesShowMembers || settings.store.friendDirectMessagesShowMemberCount) {
-                        const voiceState = VoiceStateStore.getVoiceStatesForChannel(channelId);
-                        const sortedVoiceStates: User[] = Object.values(voiceState as { [key: string]: VoiceState; })
-                            .filter((voiceState: VoiceState) => { voiceState.user && voiceState.user.id !== userId; })
-                            .map((voiceState: VoiceState) => voiceState.user);
-                        console.log(sortedVoiceStates);
-                        const otherMembers = sortedVoiceStates.filter(s => s.id !== userId);
+                        const users = Object.values<any>(voiceStates)
+                            .filter(vs => vs.channelId === channelId)
+                            .map(vs => UserStore.getUser(vs.userId))
+                            .filter(user => user != null);
+
+                        const otherMembers = users.filter(s => s.id !== userId);
                         const otherMembersCount = otherMembers.length;
                         if (otherMembersCount <= 0) {
                             memberListContent += ", nobody else is in the voice channel";

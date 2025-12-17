@@ -5,8 +5,11 @@
  */
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { BaseText } from "@components/BaseText";
 import { CodeBlock } from "@components/CodeBlock";
+import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Heading } from "@components/Heading";
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import { Margins } from "@utils/margins";
@@ -21,7 +24,7 @@ import {
 } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { Forms, Menu, Text } from "@webpack/common";
+import { Menu } from "@webpack/common";
 
 type CustomMessage = Message & {
     editHistory?: any;
@@ -61,29 +64,27 @@ function openViewRawModal(obj: any, type: string, isMessage?: boolean) {
         <ErrorBoundary>
             <ModalRoot {...props} size={ModalSize.LARGE}>
                 <ModalHeader>
-                    <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }}>
+                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>
                         View Raw {type}
-                    </Text>
+                    </BaseText>
                     <ModalCloseButton onClick={() => closeModal(key)} />
                 </ModalHeader>
                 <ModalContent>
                     <div style={{ padding: "16px 0" }}>
                         {isMessage && (
                             <>
-                                <Forms.FormTitle tag="h5">
+                                <Heading>
                                     Content
-                                </Forms.FormTitle>
+                                </Heading>
                                 <CodeBlock
                                     content={obj.content}
                                     lang="markdown"
                                 />
-                                <Forms.FormDivider
-                                    className={Margins.bottom20}
-                                />
+                                <Divider className={Margins.bottom20} />
                             </>
                         )}
 
-                        <Forms.FormTitle tag="h5">{type} Data</Forms.FormTitle>
+                        <Heading>{type} Data</Heading>
                         <CodeBlock
                             content={JSON.stringify(obj, null, 4)}
                             lang="json"

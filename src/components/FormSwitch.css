@@ -1,0 +1,34 @@
+.vc-form-switch-container {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.vc-form-switch-no-border {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.vc-form-switch {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 16px;
+}
+
+.vc-form-switch-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.vc-form-switch-text {
+    flex: 1;
+    min-width: 0;
+    max-width: 80%;
+}
+
+.vc-form-switch-control {
+    flex-shrink: 0;
+    padding-top: 2px;
+}

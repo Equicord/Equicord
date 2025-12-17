@@ -1,0 +1,11 @@
+.voice-user-buttons {
+    flex: none !important;
+}
+
+.voice-user-button-container {
+    padding-right: 4px;
+}
+
+div[class*='list'][class*='collapsed'] .voice-user-buttons {
+    display: none;
+}

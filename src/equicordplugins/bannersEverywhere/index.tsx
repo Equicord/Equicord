@@ -5,19 +5,16 @@
  */
 
 import * as DataStore from "@api/DataStore";
+import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
+import usrbg from "@plugins/usrbg";
 import { Devs } from "@utils/constants";
-import definePlugin, { OptionType, Plugin } from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
 
 import style from "./style.css?managed";
-
-interface iUSRBG extends Plugin {
-    userHasBackground(userId: string);
-    getImageUrl(userId: string): string | null;
-}
 
 interface Nameplate {
     imgAlt: string;
@@ -116,19 +113,7 @@ export default definePlugin({
         );
     },
 
-    async checkImageExists(url: string): Promise<boolean> {
-        return new Promise(resolve => {
-            const img = new Image();
-            img.onload = () => resolve(true);
-            img.onerror = () => resolve(false);
-            img.src = url;
-        });
-    },
-
     async gifToPng(url: string): Promise<string> {
-        const exists = await this.checkImageExists(url);
-        if (!exists) return "";
-
         return new Promise((resolve, reject) => {
             const img = new Image();
             img.crossOrigin = "anonymous";
@@ -139,20 +124,19 @@ export default definePlugin({
                 const ctx = canvas.getContext("2d");
                 if (ctx) {
                     ctx.drawImage(img, 0, 0);
-                    const pngDataUrl = canvas.toDataURL("image/png");
-                    resolve(pngDataUrl);
+                    resolve(canvas.toDataURL("image/png"));
                 } else {
                     reject(new Error("Failed to get canvas context."));
                 }
             };
-            img.onerror = err => reject(err);
+            img.onerror = () => resolve("");
             img.src = url;
         });
     },
 
     getBanner(userId: string): string | undefined {
-        if (Vencord.Plugins.isPluginEnabled("USRBG") && (Vencord.Plugins.plugins.USRBG as iUSRBG).userHasBackground(userId)) {
-            let banner = (Vencord.Plugins.plugins.USRBG as iUSRBG).getImageUrl(userId);
+        if (isPluginEnabled(usrbg.name) && usrbg.userHasBackground(userId)) {
+            let banner = usrbg.getImageUrl(userId);
             if (banner === null) banner = "";
             return banner;
         }

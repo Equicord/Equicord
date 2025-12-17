@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { BaseText } from "@components/BaseText";
+import { Button, TextButton } from "@components/Button";
+import { images } from "@equicordplugins/loginWithQR/images";
 import { getIntlMessage } from "@utils/discord";
 import {
     ModalContent,
@@ -15,15 +18,12 @@ import {
 } from "@utils/modal";
 import { findByPropsLazy } from "@webpack";
 import {
-    Button,
     RestAPI,
-    Text,
     useEffect,
     useRef,
     useState,
 } from "@webpack/common";
 
-import { images } from "../../images";
 import { cl } from "..";
 
 const { Controller } = findByPropsLazy("Controller");
@@ -125,21 +125,23 @@ function VerifyModal({
                             key="img-success"
                             draggable={false}
                         />
-                        <Text
-                            variant="heading-xl/bold"
-                            color="header-primary"
+                        <BaseText
+                            size="xl"
+                            weight="bold"
+                            color="text-strong"
                             tag="h1"
                             className={cl("device-header")}
                         >
                             {getIntlMessage("QR_CODE_LOGIN_SUCCESS")}
-                        </Text>
-                        <Text
-                            variant="text-md/semibold"
-                            color="text-normal"
-                            style={{ width: "30rem" }}
+                        </BaseText>
+                        <BaseText
+                            size="md"
+                            weight="semibold"
+                            color="text-default"
+                            style={{ width: "30rem", textAlign: "center" }}
                         >
                             {getIntlMessage("QR_CODE_LOGIN_SUCCESS_FLAVOR")}
-                        </Text>
+                        </BaseText>
                     </>
                 ) : state === VerifyState.NotFound ? (
                     <>
@@ -149,21 +151,23 @@ function VerifyModal({
                             key="img-not_found"
                             draggable={false}
                         />
-                        <Text
-                            variant="heading-xl/bold"
-                            color="header-primary"
+                        <BaseText
+                            size="xl"
+                            weight="bold"
+                            color="text-strong"
                             tag="h1"
                             className={cl("device-header")}
                         >
                             {getIntlMessage("QR_CODE_NOT_FOUND")}
-                        </Text>
-                        <Text
-                            variant="text-md/semibold"
-                            color="text-normal"
+                        </BaseText>
+                        <BaseText
+                            size="md"
+                            weight="semibold"
+                            color="text-default"
                             style={{ width: "30rem" }}
                         >
                             {getIntlMessage("QR_CODE_NOT_FOUND_DESCRIPTION")}
-                        </Text>
+                        </BaseText>
                     </>
                 ) : (
                     <>
@@ -173,27 +177,28 @@ function VerifyModal({
                             key="img-loaded"
                             draggable={false}
                         />
-                        <Text
-                            variant="heading-xl/bold"
-                            color="header-primary"
+                        <BaseText
+                            size="xl"
+                            weight="bold"
+                            color="text-strong"
                             tag="h1"
                             className={cl("device-header")}
                         >
                             {getIntlMessage("QR_CODE_LOGIN_CONFIRM")}
-                        </Text>
-                        <Text variant="text-md/semibold" color="text-danger">
+                        </BaseText>
+                        <BaseText size="md" weight="semibold" color="text-danger">
                             Never scan a login QR code from another user or application.
-                        </Text>
+                        </BaseText>
                         <Button
-                            size={Button.Sizes.LARGE}
-                            color={Button.Colors.RED}
+                            size="medium"
+                            variant="dangerPrimary"
                             className={cl("device-confirm")}
                             style={{
                                 ["--duration" as any]: `${holdDuration}ms`,
                             }}
                             onPointerDown={startInput}
                             onPointerUp={endInput}
-                            buttonRef={buttonRef}
+                            ref={buttonRef}
                             disabled={inProgress}
                         >
                             Hold to confirm login
@@ -207,15 +212,14 @@ function VerifyModal({
                         {getIntlMessage("QR_CODE_LOGIN_FINISH_BUTTON")}
                     </Button>
                 ) : (
-                    <Button
-                        color={Button.Colors.LINK}
-                        look={Button.Looks.LINK}
+                    <TextButton
+                        variant="link"
                         onClick={props.onClose}
                     >
                         {state === VerifyState.NotFound
                             ? getIntlMessage("CLOSE")
                             : getIntlMessage("CANCEL")}
-                    </Button>
+                    </TextButton>
                 )}
             </ModalFooter>
         </ModalRoot>

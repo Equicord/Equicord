@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Track } from "../../../SpotifyStore";
-import { LyricsData, Provider } from "../types";
+import { LyricsData, Provider } from "@equicordplugins/musicControls/spotify/lyrics/providers/types";
+import { Track } from "@equicordplugins/musicControls/spotify/SpotifyStore";
 
 const baseUrlLrclib = "https://lrclib.net/api/get";
 
@@ -38,7 +38,7 @@ export async function getLyricsLrclib(track: Track): Promise<LyricsData | null> 
     const url = `${baseUrlLrclib}?${params.toString()}`;
     const response = await fetch(url, {
         headers: {
-            "User-Agent": "SpotifyLyrics for Vencord (https://github.com/Masterjoona/vc-spotifylyrics)"
+            "User-Agent": "SpotifyLyrics for Equicord (https://github.com/Masterjoona/vc-spotifylyrics)"
         }
     });
 

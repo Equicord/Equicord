@@ -6,9 +6,11 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { Activity } from "@vencord/discord-types";
+import { ActivityType } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
 
-import { Activity, ActivityType, BanchoStatusEnum, GameState, Modes, TosuApi, UserLoginStatus } from "./type";
+import { BanchoStatusEnum, GameState, Modes, TosuApi, UserLoginStatus } from "./type";
 
 const socketId = "tosu";
 const OSU_APP_ID = "367827983903490050";
@@ -22,22 +24,28 @@ const throttledOnMessage = throttle(onMessage, 3000, () => FluxDispatcher.dispat
 
 let ws: WebSocket;
 let wsReconnect: NodeJS.Timeout;
+let shouldReconnect = false;
 
 export default definePlugin({
     name: "TosuRPC",
     description: "osu! RPC with data from tosu",
     authors: [Devs.AutumnVN],
     start() {
+        shouldReconnect = true;
         (function connect() {
             ws = new WebSocket("ws://127.0.0.1:24050/websocket/v2");
             ws.addEventListener("error", () => ws.close());
-            ws.addEventListener("close", () => wsReconnect = setTimeout(connect, 5000));
+            ws.addEventListener("close", () => {
+                if (!shouldReconnect) return;
+                wsReconnect = setTimeout(connect, 5000);
+            });
             ws.addEventListener("message", ({ data }) => throttledOnMessage(data));
         })();
     },
     stop() {
-        ws.close();
-        clearTimeout(wsReconnect);
+        shouldReconnect = false;
+        if (wsReconnect) clearTimeout(wsReconnect);
+        if (ws) ws.close();
         FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity: null, socketId: "tosu" });
     }
 });
@@ -63,6 +71,8 @@ async function onMessage(data: string) {
         },
         flags: 1 << 0,
     };
+
+    activity.assets = {};
 
     switch (profile.mode.number) {
         case Modes.Osu:

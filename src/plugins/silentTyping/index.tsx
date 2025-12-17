@@ -27,7 +27,7 @@ import { Channel } from "@vencord/discord-types";
 import { ChannelStore, FluxDispatcher, Menu, React } from "@webpack/common";
 
 const settings = definePluginSettings({
-    enabled: {
+    enabledGlobally: {
         type: OptionType.BOOLEAN,
         description: "Toggle functionality of your own typing indicator globally.",
         default: true,
@@ -51,7 +51,7 @@ const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "What to do when left clicking the chat icon.",
         options: [
-            { label: "Toggle Plugin Functionality", value: "global" },
+            { label: "Toggle Typing Globally", value: "global" },
             { label: "Toggle Typing in Channel", value: "channel", default: true },
             { label: "Toggle Typing in Guild", value: "guild" },
             { label: "Open Plugin Settings", value: "settings" }
@@ -61,7 +61,7 @@ const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "What to do when middle clicking the chat icon.",
         options: [
-            { label: "Toggle Plugin Functionality", value: "global" },
+            { label: "Toggle Typing Globally", value: "global" },
             { label: "Toggle Typing in Channel", value: "channel" },
             { label: "Toggle Typing in Guild", value: "guild" },
             { label: "Open Plugin Settings", value: "settings", default: true }
@@ -71,7 +71,7 @@ const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "What to do when right clicking the chat icon.",
         options: [
-            { label: "Toggle Plugin Functionality", value: "global", default: true },
+            { label: "Toggle Typing Globally", value: "global", default: true },
             { label: "Toggle Typing in Channel", value: "channel" },
             { label: "Toggle Typing in Guild", value: "guild" },
             { label: "Open Plugin Settings", value: "settings" }
@@ -100,7 +100,7 @@ const settings = definePluginSettings({
 });
 
 function toggleGlobal(): void {
-    settings.store.enabled = !settings.store.enabled;
+    settings.store.enabledGlobally = !settings.store.enabledGlobally;
 }
 
 function toggleLocation(locationId: string, effectiveList: string[], defaultHidden: boolean): void {
@@ -119,7 +119,7 @@ function toggleLocation(locationId: string, effectiveList: string[], defaultHidd
 
 const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
     const {
-        enabled,
+        enabledGlobally,
         chatIcon,
         defaultHidden,
         enabledLocations,
@@ -128,7 +128,7 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
         chatIconMiddleClickAction,
         chatIconRightClickAction,
     } = settings.use([
-        "enabled",
+        "enabledGlobally",
         "chatIcon",
         "defaultHidden",
         "enabledLocations",
@@ -143,10 +143,10 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
     if (!validChat || !chatIcon) return null;
 
     const effectiveList = getEffectiveList();
-    const enabledLocally = enabled && checkEnabled(channel);
+    const enabledLocally = enabledGlobally && checkEnabled(channel);
     const location = channel.guild_id && effectiveList.includes(channel.guild_id) ? "Guild" : effectiveList.includes(channel.id) ? "Channel" : "Global";
 
-    const tooltip = enabled ? (
+    const tooltip = enabledGlobally ? (
         enabledLocally ? `Typing Hidden (${location})` : `Typing Visible (${location})`
     ) : "Typing Visible (Global)";
 
@@ -186,10 +186,10 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
                 }
             }}>
             <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style={{ scale: "1.2" }}>
-                <path fill="currentColor" mask="url(#silent-typing-msg-mask)" d="M18.333 15.556H1.667a1.667 1.667 0 0 1 -1.667 -1.667v-10a1.667 1.667 0 0 1 1.667 -1.667h16.667a1.667 1.667 0 0 1 1.667 1.667v10a1.667 1.667 0 0 1 -1.667 1.667M4.444 6.25V4.861a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333V8.194a0.417 0.417 0 0 0 -0.417 -0.417H4.306a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417H7.639a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m10 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h8.056a0.417 0.417 0 0 0 0.417 -0.417m3.333 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417" transform="translate(2, 3)" />
+                <path fill="currentColor" mask={`url(#silent-typing-msg-mask-${channel.id})`} d="M18.333 15.556H1.667a1.667 1.667 0 0 1 -1.667 -1.667v-10a1.667 1.667 0 0 1 1.667 -1.667h16.667a1.667 1.667 0 0 1 1.667 1.667v10a1.667 1.667 0 0 1 -1.667 1.667M4.444 6.25V4.861a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333V8.194a0.417 0.417 0 0 0 -0.417 -0.417H4.306a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417H7.639a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m10 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h8.056a0.417 0.417 0 0 0 0.417 -0.417m3.333 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417" transform="translate(2, 3)" />
                 {(enabledLocally) && (
                     <>
-                        <mask id="silent-typing-msg-mask">
+                        <mask id={`silent-typing-msg-mask-${channel.id}`}>
                             <path fill="#fff" d="M0 0h24v24H0Z"></path>
                             <path stroke="#000" strokeWidth="5.99068" d="M0 24 24 0" transform="translate(-2, -3)"></path>
                         </mask>
@@ -200,6 +200,14 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
         </ChatBarButton>
     );
 };
+
+function SilentTypingChatIcon() {
+    return (
+        <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style={{ scale: "1.2" }}>
+            <path fill="currentColor" d="M18.333 15.556H1.667a1.667 1.667 0 0 1 -1.667 -1.667v-10a1.667 1.667 0 0 1 1.667 -1.667h16.667a1.667 1.667 0 0 1 1.667 1.667v10a1.667 1.667 0 0 1 -1.667 1.667M4.444 6.25V4.861a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333V8.194a0.417 0.417 0 0 0 -0.417 -0.417H4.306a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417H7.639a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m10 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h8.056a0.417 0.417 0 0 0 0.417 -0.417m3.333 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417" transform="translate(2, 3)" />
+        </svg>
+    );
+}
 
 function getEffectiveList(): string[] {
     if (settings.store.defaultHidden) {
@@ -220,7 +228,7 @@ function getEffectiveList(): string[] {
 }
 
 function checkEnabled(channel: string | Channel): boolean {
-    if (!settings.store.enabled) return false;
+    if (!settings.store.enabledGlobally) return false;
 
     const channelId = typeof channel === "string" ? channel : channel.id;
     const guildId = typeof channel === "string" ? ChannelStore.getChannel(channelId)?.guild_id : channel.guild_id;
@@ -237,14 +245,14 @@ const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
     const {
         chatIcon,
         chatContextMenu,
-        enabled,
+        enabledGlobally,
         defaultHidden,
         hideChatBoxTypingIndicators,
         hideMembersListTypingIndicators
     } = settings.use([
         "chatIcon",
         "chatContextMenu",
-        "enabled",
+        "enabledGlobally",
         "defaultHidden",
         "hideChatBoxTypingIndicators",
         "hideMembersListTypingIndicators"
@@ -260,8 +268,8 @@ const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
 
     group.splice(idx >= 0 ? idx : 0, 0,
         <Menu.MenuItem id="vc-silent-typing" label="Silent Typing">
-            <Menu.MenuCheckboxItem id="vc-silent-typing-enabled" label="Enabled" checked={enabled}
-                action={() => settings.store.enabled = !settings.store.enabled} />
+            <Menu.MenuCheckboxItem id="vc-silent-typing-enabled" label="Enabled" checked={enabledGlobally}
+                action={() => settings.store.enabledGlobally = !settings.store.enabledGlobally} />
             <Menu.MenuCheckboxItem id="vc-silent-typing-chat-bar-indicators" label="Chat Bar Indicators" checked={settings.store.hideChatBoxTypingIndicators}
                 action={() => settings.store.hideChatBoxTypingIndicators = !settings.store.hideChatBoxTypingIndicators} />
             <Menu.MenuCheckboxItem id="vc-silent-typing-members-list-indicators" label="Members List Indicators" checked={settings.store.hideMembersListTypingIndicators}
@@ -288,7 +296,7 @@ export default definePlugin({
     name: "SilentTyping",
     authors: [Devs.Ven, Devs.Rini, Devs.ImBanana, EquicordDevs.Etorix],
     description: "Hide your typing indicator from chat.",
-    dependencies: ["ChatInputButtonAPI"],
+    isModified: true,
     settings,
 
     shouldHideChatBarTypingIndicators,
@@ -296,6 +304,10 @@ export default definePlugin({
 
     contextMenus: {
         "textarea-context": ChatBarContextCheckbox
+    },
+    chatBarButton: {
+        icon: SilentTypingChatIcon,
+        render: SilentTypingChatToggle
     },
 
     patches: [
@@ -424,6 +436,4 @@ export default definePlugin({
         if (checkEnabled(channelId)) return;
         FluxDispatcher.dispatch({ type: "TYPING_START_LOCAL", channelId });
     },
-
-    renderChatBarButton: SilentTypingChatToggle,
 });

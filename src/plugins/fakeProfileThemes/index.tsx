@@ -17,19 +17,24 @@
 */
 
 // This plugin is a port from Alyxia's Vendetta plugin
-import "./style.css";
+import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
+import { BaseText } from "@components/BaseText";
+import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Flex } from "@components/Flex";
+import { HeadingSecondary } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
-import { fetchUserProfile } from "@utils/discord";
+import { copyWithToast, fetchUserProfile } from "@utils/discord";
 import { Margins } from "@utils/margins";
-import { classes, copyWithToast } from "@utils/misc";
+import { classes } from "@utils/misc";
 import { useAwaiter } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { User, UserProfile } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
-import { Button, ColorPicker, Flex, Forms, React, Text, UserProfileStore, UserStore, useState } from "@webpack/common";
+import { Button, ColorPicker, Forms, React, UserProfileStore, UserStore, useState } from "@webpack/common";
 import virtualMerge from "virtual-merge";
 
 interface Colors {
@@ -94,10 +99,10 @@ interface ProfileModalProps {
     canUsePremiumCustomization: boolean;
     hideExampleButton: boolean;
     hideFakeActivity: boolean;
-    isTryItOutFlow: boolean;
+    isTryItOut: boolean;
 }
 
-const ProfileModal = findComponentByCodeLazy<ProfileModalProps>("isTryItOutFlow:", "pendingThemeColors:", "pendingAvatarDecoration:", "EDIT_PROFILE_BANNER");
+const ProfileModal = findComponentByCodeLazy<ProfileModalProps>("isTryItOut:", "pendingThemeColors:", "pendingAvatarDecoration:", "EDIT_PROFILE_BANNER");
 
 function SettingsAboutComponentWrapper() {
     const [, , userProfileLoading] = useAwaiter(() => fetchUserProfile(UserStore.getCurrentUser().id));
@@ -113,37 +118,33 @@ function SettingsAboutComponent() {
     const [color2, setColor2] = useState(existingColors[1]);
 
     return (
-        <Forms.FormSection>
-            <Forms.FormTitle tag="h3">Usage</Forms.FormTitle>
-            <Forms.FormText>
+        <section>
+            <HeadingSecondary>Usage</HeadingSecondary>
+            <Paragraph>
                 After enabling this plugin, you will see custom colors in
                 the profiles of other people using compatible plugins.{" "}
-                <br />
-                To set your own colors:
+            </Paragraph>
+            <Paragraph className={Margins.top8}>
+                <strong>To set your own profile theme colors:</strong>
                 <ul>
-                    <li>
-                        • use the color pickers below to choose your colors
-                    </li>
-                    <li>• click the "Copy 3y3" button</li>
-                    <li>• paste the invisible text anywhere in your bio</li>
-                </ul><br />
-                <Forms.FormDivider
+                    <li>&mdash; use the color pickers below to choose your colors</li>
+                    <li>&mdash; click the "Copy 3y3" button</li>
+                    <li>&mdash; paste the invisible text anywhere in your bio</li>
+                </ul>
+                <Divider
                     className={classes(Margins.top8, Margins.bottom8)}
                 />
                 <Forms.FormTitle tag="h3">Color pickers</Forms.FormTitle>
-                <Flex
-                    direction={Flex.Direction.HORIZONTAL}
-                    style={{ gap: "1rem" }}
-                >
+                <Flex gap="1em">
                     <ColorPicker
                         color={color1}
                         label={
-                            <Text
-                                variant={"text-xs/normal"}
+                            <BaseText
+                                size="xs"
                                 style={{ marginTop: "4px" }}
                             >
                                 Primary
-                            </Text>
+                            </BaseText>
                         }
                         onChange={(color: number) => {
                             setColor1(color);
@@ -152,12 +153,12 @@ function SettingsAboutComponent() {
                     <ColorPicker
                         color={color2}
                         label={
-                            <Text
-                                variant={"text-xs/normal"}
+                            <BaseText
+                                size="xs"
                                 style={{ marginTop: "4px" }}
                             >
                                 Accent
-                            </Text>
+                            </BaseText>
                         }
                         onChange={(color: number) => {
                             setColor2(color);
@@ -170,14 +171,15 @@ function SettingsAboutComponent() {
                         }}
                         color={Button.Colors.PRIMARY}
                         size={Button.Sizes.XLARGE}
+                        style={{ marginBottom: "auto" }}
                     >
                         Copy 3y3
                     </Button>
                 </Flex>
-                <Forms.FormDivider
+                <Divider
                     className={classes(Margins.top8, Margins.bottom8)}
                 />
-                <Forms.FormTitle tag="h3">Preview</Forms.FormTitle>
+                <HeadingSecondary>Preview</HeadingSecondary>
                 <div className="vc-fpt-preview">
                     <ProfileModal
                         user={UserStore.getCurrentUser()}
@@ -187,11 +189,12 @@ function SettingsAboutComponent() {
                         canUsePremiumCustomization={true}
                         hideExampleButton={true}
                         hideFakeActivity={true}
-                        isTryItOutFlow={true}
+                        isTryItOut={true}
                     />
                 </div>
-            </Forms.FormText>
-        </Forms.FormSection>);
+            </Paragraph>
+        </section>
+    );
 }
 
 export default definePlugin({

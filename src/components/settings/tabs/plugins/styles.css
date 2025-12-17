@@ -19,7 +19,7 @@
 .vc-plugins-grid {
     margin-top: 16px;
     display: grid;
-    grid-gap: 16px;
+    gap: 16px;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 
@@ -29,10 +29,16 @@
     padding: 0;
     background: transparent;
     margin-right: 8px;
+    color: var(--icon-muted);
+    transition: background-color .2s ease;
+
+    &:hover {
+        color: var(--interactive-icon-hover)
+    }
 }
 
 .vc-plugins-settings-button:hover {
-    color: var(--interactive-hover);
+    color: var(--interactive-icon-hover);
 }
 
 .vc-plugins-filter-controls {
@@ -52,6 +58,7 @@
     line-height: 16px;
     color: var(--white-500);
     text-align: center;
+    margin-right: 8px;
 }
 
 .vc-plugins-dep-name {
@@ -71,23 +78,23 @@
 
 .vc-plugins-restart-card {
     padding: 1em;
-    background: var(--info-warning-background);
-    border: 1px solid var(--info-warning-foreground);
-    color: var(--info-warning-foreground);
+    background: var(--icon-status-idle) !important;
+    border: 1px solid var(--icon-status-idle) !important;
+    color: var(--text-status-idle);
 }
 
 .vc-plugins-info-icon:not(:hover, :focus) {
-    color: var(--text-muted);
+    color: var(--text-subtle);
 }
 
 .vc-plugins-restart-button {
-    background-color: var(--background-color) !important;
-    border: 1px solid var(--info-warning-foreground) !important;
+    background-color: var(--background-base-low) !important;
+    border: 1px solid var(--text-status-idle) !important;
     margin-top: 0.5em;
 }
 
 .vc-plugins-restart-button:hover {
-    background-color: var(--info-warning-foreground) !important;
+    background-color: var(--text-status-idle) !important;
 }
 
 .vc-plugin-stats {
@@ -105,7 +112,7 @@
 
 .vc-plugins-info-card:hover,
 .vc-plugin-stats:hover {
-    background-color: var(--background-tertiary) !important;
+    background-color: var(--background-base-low) !important;
     transform: translateY(-1px);
     box-shadow: var(--elevation-high);
 }
@@ -152,7 +159,7 @@
 }
 
 .text-danger {
-    color: var(--text-danger) !important;
+    color: var(--text-feedback-critical) !important;
     font-size: 1.2rem;
     font-weight: bold;
 }
@@ -166,77 +173,64 @@
     margin-bottom: 10px;
 }
 
-.button-danger-background {
-    background-color: var(--background-color) !important;
+.vc-plugins-disable-warning,
+.vc-plugin-modal-disable-warning {
+    background-color: color-mix(in srgb, var(--redesign-button-danger-background) 10%, transparent) !important;
     border-style: solid !important;
     border-width: .1rem !important;
-    border-color: var(--button-outline-danger-border) !important;
+    border-color: color-mix(in srgb, var(--redesign-button-danger-background) 80%, transparent) !important;
     border-radius: 5px !important;
+    color: color-mix(in srgb, var(--redesign-button-danger-background) 100%, transparent) !important;
 }
 
-.button-danger-background.top-margin {
-    margin-top: 10px;
+.vc-plugins-disable-warning:hover,
+.vc-plugin-modal-disable-warning:hover {
+    background-color: color-mix(in srgb, var(--redesign-button-danger-background) 40%, transparent) !important;
 }
 
-.button-danger-background:hover {
-    background-color: var(--button-outline-danger-background-hover) !important;
-    border-style: solid;
-    border-width: .1rem;
-    border-color: var(--button-outline-danger-border) !important;
+.vc-plugins-confirm-reset,
+.vc-plugin-modal-confirm-reset {
+    background-color: var(--redesign-button-danger-background) !important;
+    color: var(--redesign-button-danger-pressed-text);
 }
 
-.button-danger-background-no-margin {
-    background-color: var(--button-danger-background) !important;
-    color: var(--header-primary);
-}
-
-.button-danger-background-no-margin:hover {
-    background-color: var(--button-danger-background-hover) !important;
-    filter: saturate(75%);
+.vc-plugins-confirm-reset:hover,
+.vc-plugin-modal-confirm-reset:hover {
+    background-color: var(--redesign-button-danger-pressed-background) !important;
+    color: var(--redesign-button-danger-pressed-text);
 }
 
 .vc-modal-close-button {
     margin-left: auto !important;
 }
 
-.modal-footer {
+.vc-modal-align-reset {
+    align-self: end;
+}
+
+.vc-modal-footer {
     display: flex;
     flex-direction: column;
     width: 100%;
     box-sizing: border-box;
 }
 
-.modal-footer .button-container {
-    display: flex !important;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-.button-group {
-    display: flex !important;
+.vc-modal-footer .vc-button-container {
     gap: 10px;
     align-items: center;
-    justify-content: end !important;
+    justify-content: space-between !important;
 }
 
 /* Specific to disable all modal */
 
 .warning-text {
-    color: var(--text-danger) !important;
+    color: var(--text-feedback-critical) !important;
     font-size: 1.2rem !important;
 }
 
 .warning-text span {
     font-weight: bold;
     text-decoration: underline;
-}
-
-.disable-all-button {
-    color: var(--header-primary);
-    width: 150px;
-    margin-left: auto;
-    margin-right: 4.5px !important;
 }
 
 .visual-refresh .button-danger-background {
@@ -248,7 +242,6 @@
     font-weight: 500;
     padding: 6px 10px;
     text-align: center;
-    margin-top: 10px;
 }
 
 .visual-refresh .button-danger-background:hover {
@@ -257,20 +250,20 @@
 }
 
 .visual-refresh .vc-plugins-info-card {
-    background-color: var(--card-primary-bg) !important;
+    background-color: var(--background-surface-high) !important;
     border: 1px solid var(--border-subtle) !important;
 
     &:hover {
-        background-color: var(--card-primary-bg) !important;
+        background-color: var(--background-surface-high) !important;
     }
 }
 
 .visual-refresh .vc-plugin-stats {
-    background-color: var(--card-primary-bg) !important;
+    background-color: var(--background-surface-high) !important;
     border: 1px solid var(--border-subtle) !important;
 
     &:hover {
-        background-color: var(--card-primary-bg) !important;
+        background-color: var(--background-surface-high) !important;
     }
 }
 
@@ -296,4 +289,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.vc-plugins-source {
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    margin-right: 8px;
+}
+
+.vc-plugins-stats-container {
+    margin-top: 16px;
+    gap: 16px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.vc-plugins-ui-elements {
+    margin-top: 16px;
 }

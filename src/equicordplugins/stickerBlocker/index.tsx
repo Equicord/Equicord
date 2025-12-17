@@ -45,7 +45,7 @@ function blockedComponentRender(sticker) {
 
     if (showGif) {
         elements.push(
-            <img key="gif" src="https://cdn.nest.rip/uploads/1af96132-86da-4482-b64d-204634d4ddf2.gif" style={{ width: "160px", borderRadius: "20px" }} />
+            <img key="gif" src="https://images.equicord.org/api/files/raw/0199e730-70cd-7001-ab3b-4c0ff258ec79" style={{ width: "160px", borderRadius: "20px" }} />
         );
     }
 

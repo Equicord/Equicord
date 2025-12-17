@@ -14,7 +14,7 @@ import { loadLazyChunks } from "debug/loadLazyChunks";
 import { reporterData } from "debug/reporterData";
 import { Settings } from "Vencord";
 
-import { logger, PORT, settings } from ".";
+import { CLIENT_VERSION, logger, PORT, settings } from ".";
 import { Recieve } from "./types";
 import { FullOutgoingMessage, OutgoingMessage } from "./types/send";
 import { extractModule, extractOrThrow, findModuleId, getModulePatchedBy, mkRegexFind, parseNode, toggleEnabled, } from "./util";
@@ -62,7 +62,6 @@ export function initWs(isManual = false) {
                 ok: true
             }));
         }
-
 
         try {
             if (settings.store.notifyOnAutoConnect || isManual) {
@@ -144,6 +143,7 @@ export function initWs(isManual = false) {
             case "disable": {
                 const m = d.data;
                 const settings = Settings.plugins[m.pluginName];
+                if (!settings) throw new Error("Plugin not found: " + m.pluginName);
                 if (m.enabled !== settings.enabled)
                     toggleEnabled(m.pluginName, reply);
                 break;
@@ -407,7 +407,6 @@ export function initWs(isManual = false) {
                         closed = true;
                         popNotice();
                     };
-                    // @ts-expect-error it accepts react components
                     showNotice(<AllModulesNoti done={promise} close={close} />, "OK", () => {
                         closed = true;
                         popNotice();
@@ -445,6 +444,16 @@ export function initWs(isManual = false) {
                     ok: true,
                     data: {
                         value: getIntlMessageFromHash(hashedKey)
+                    }
+                });
+                break;
+            }
+            case "version": {
+                replyData({
+                    type: "version",
+                    ok: true,
+                    data: {
+                        clientVersion: CLIENT_VERSION
                     }
                 });
                 break;

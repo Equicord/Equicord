@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Heading } from "@components/Heading";
 import { identity } from "@utils/misc";
 import { SelectOption } from "@vencord/discord-types";
-import { Forms, Select, useMemo } from "@webpack/common";
+import { Select, useMemo } from "@webpack/common";
 
 interface Props {
     label: string;
@@ -35,8 +36,8 @@ export function SettingSelectComponent({ label, name, options, default: def, the
     } satisfies SelectOption)), [options, def]);
 
     return (
-        <Forms.FormSection>
-            <Forms.FormTitle tag="h5">{label}</Forms.FormTitle>
+        <section>
+            <Heading>{label}</Heading>
             <Select
                 placeholder={label}
                 key={name}
@@ -47,6 +48,6 @@ export function SettingSelectComponent({ label, name, options, default: def, the
                 isSelected={v => v === themeSettings[name]}
                 serialize={identity}
             />
-        </Forms.FormSection>
+        </section>
     );
 }

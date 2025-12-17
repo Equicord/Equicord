@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Paragraph } from "@components/Paragraph";
+import { Auth } from "@plugins/reviewDB/auth";
+import { ReviewDBUser } from "@plugins/reviewDB/entities";
+import { fetchBlocks, unblockUser } from "@plugins/reviewDB/reviewDbApi";
+import { cl } from "@plugins/reviewDB/utils";
 import { Logger } from "@utils/Logger";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/modal";
 import { useAwaiter } from "@utils/react";
 import { Forms, Tooltip, useState } from "@webpack/common";
-
-import { Auth } from "../auth";
-import { ReviewDBUser } from "../entities";
-import { fetchBlocks, unblockUser } from "../reviewDbApi";
-import { cl } from "../utils";
 
 function UnblockButton(props: { onClick?(): void; }) {
     return (
@@ -40,7 +40,7 @@ function BlockedUser({ user, isBusy, setIsBusy }: { user: ReviewDBUser; isBusy: 
     return (
         <div className={cl("block-modal-row")}>
             <img className={cl("block-modal-avatar")} src={user.profilePhoto} alt="" />
-            <Forms.FormText className={cl("block-modal-username")}>{user.username}</Forms.FormText>
+            <Paragraph className={cl("block-modal-username")}>{user.username}</Paragraph>
             <UnblockButton
                 onClick={isBusy ? undefined : async () => {
                     setIsBusy(true);
@@ -66,9 +66,9 @@ function Modal() {
     if (pending)
         return null;
     if (error)
-        return <Forms.FormText>Failed to fetch blocks: ${String(error)}</Forms.FormText>;
+        return <Paragraph>Failed to fetch blocks: ${String(error)}</Paragraph>;
     if (!blocks.length)
-        return <Forms.FormText>No blocked users.</Forms.FormText>;
+        return <Paragraph>No blocked users.</Paragraph>;
 
     return (
         <>
@@ -92,7 +92,7 @@ export function openBlockModal() {
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
             <ModalContent className={cl("block-modal")}>
-                {Auth.token ? <Modal /> : <Forms.FormText>You are not logged into ReviewDB!</Forms.FormText>}
+                {Auth.token ? <Modal /> : <Paragraph>You are not logged into ReviewDB!</Paragraph>}
             </ModalContent>
         </ModalRoot>
     ));

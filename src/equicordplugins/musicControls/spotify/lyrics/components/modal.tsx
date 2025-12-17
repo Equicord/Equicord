@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { BaseText } from "@components/BaseText";
+import { SpotifyStore, Track } from "@equicordplugins/musicControls/spotify/SpotifyStore";
 import { openImageModal } from "@utils/discord";
 import { ModalContent, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
-import { React, Text } from "@webpack/common";
+import { React } from "@webpack/common";
 
-import { SpotifyStore, Track } from "../../SpotifyStore";
 import { cl, NoteSvg, scrollClasses, useLyrics } from "./util";
 
 const formatTime = (time: number) => {
@@ -17,7 +18,14 @@ const formatTime = (time: number) => {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };
 
-function ModalHeaderContent({ track }: { track: Track; }) {
+function ModalHeaderContent({ track }: { track: Track | null; }) {
+    if (!track) {
+        return (
+            <ModalHeader>
+                <BaseText size="sm" weight="semibold">No track playing</BaseText>
+            </ModalHeader>
+        );
+    }
     return (
         <ModalHeader>
             <div className={cl("header-content")}>
@@ -34,42 +42,45 @@ function ModalHeaderContent({ track }: { track: Track; }) {
                     />
                 )}
                 <div>
-                    <Text selectable variant="text-sm/semibold">{track.name}</Text>
-                    <Text selectable variant="text-sm/normal">by {track.artists.map(a => a.name).join(", ")}</Text>
-                    <Text selectable variant="text-sm/normal">on {track.album.name}</Text>
+                    <BaseText size="sm" weight="semibold">{track.name}</BaseText>
+                    <BaseText size="sm">by {track.artists.map(a => a.name).join(", ")}</BaseText>
+                    <BaseText size="sm">on {track.album.name}</BaseText>
                 </div>
             </div>
         </ModalHeader>
     );
 }
 
-export function LyricsModal({ rootProps }: { rootProps: ModalProps; }) {
+const modalCurrentLine = cl("modal-line-current");
+const modalLine = cl("modal-line");
+
+export function LyricsModal({ props }: { props: ModalProps; }) {
     const { track, lyricsInfo, currLrcIndex } = useLyrics({ scroll: false });
-    const currentLyrics = lyricsInfo?.lyricsVersions[lyricsInfo.useLyric] || null;
+    const currentLyrics = lyricsInfo?.lyricsVersions[lyricsInfo.useLyric];
 
     return (
-        <ModalRoot {...rootProps}>
-            <ModalHeaderContent track={track!} />
+        <ModalRoot {...props}>
+            <ModalHeaderContent track={track} />
             <ModalContent>
-                <div className={cl("lyrics-modal-container") + ` ${scrollClasses.auto}`}>
+                <div className={`${cl("lyrics-modal-container")} ${scrollClasses.auto}`}>
                     {currentLyrics ? (
                         currentLyrics.map((line, i) => (
-                            <Text
+                            <BaseText
                                 key={i}
-                                variant={currLrcIndex === i ? "text-md/semibold" : "text-sm/normal"}
-                                selectable
-                                className={currLrcIndex === i ? cl("modal-line-current") : cl("modal-line")}
+                                size={currLrcIndex === i ? "md" : "sm"}
+                                weight={currLrcIndex === i ? "semibold" : "normal"}
+                                className={currLrcIndex === i ? modalCurrentLine : modalLine}
                             >
                                 <span className={cl("modal-timestamp")} onClick={() => SpotifyStore.seek(line.time * 1000)}>
                                     {formatTime(line.time)}
                                 </span>
-                                {line.text || NoteSvg(cl("modal-note"))}
-                            </Text>
+                                {line.text || NoteSvg()}
+                            </BaseText>
                         ))
                     ) : (
-                        <Text variant="text-sm/normal" className={cl("modal-no-lyrics")}>
+                        <BaseText size="sm" className={cl("modal-no-lyrics")}>
                             No lyrics available :(
-                        </Text>
+                        </BaseText>
                     )}
                 </div>
             </ModalContent>

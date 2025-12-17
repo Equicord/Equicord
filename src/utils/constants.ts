@@ -24,9 +24,10 @@ export const GUILD_ID = "1173279886065029291";
 export const DONOR_ROLE_ID = "1173316879083896912";
 export const CONTRIB_ROLE_ID = "1222677964760682556";
 export const EQUICORD_TEAM = "1173520023239786538";
-export const EQUCORD_HELPERS = "1326406112144265257";
+export const EQUICORD_HELPERS = "1326406112144265257";
 export const EQUIBOP_CONTRIB_ROLE_ID = "1287079931645263968";
 export const VENCORD_CONTRIB_ROLE_ID = "1173343399470964856";
+export const EQUIBOT_USER_ID = "1243063117852835941";
 
 // Vencord
 export const VC_SUPPORT_CHANNEL_ID = "1026515880080842772";
@@ -49,6 +50,9 @@ const platform = navigator.platform.toLowerCase();
 export const IS_WINDOWS = platform.startsWith("win");
 export const IS_MAC = platform.startsWith("mac");
 export const IS_LINUX = platform.startsWith("linux");
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent#mobile_tablet_or_desktop
+// "In summary, we recommend looking for the string Mobi anywhere in the User Agent to detect a mobile device."
+export const IS_MOBILE = navigator.userAgent.includes("Mobi");
 
 export interface Dev {
     name: string;
@@ -66,6 +70,10 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     Ven: {
         name: "V",
         id: 343383572805058560n
+    },
+    Apexo: {
+        name: "Apexo",
+        id: 228548952687902720n
     },
     Arjix: {
         name: "ArjixWasTaken",
@@ -216,9 +224,9 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "sunnie",
         id: 406028027768733696n
     },
-    axyie: {
-        name: "'ax",
-        id: 929877747151548487n,
+    rae: {
+        name: "rae",
+        id: 1398136199503282277n
     },
     pointy: {
         name: "pointy",
@@ -617,6 +625,18 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "Cootshk",
         id: 921605971577548820n
     },
+    thororen: {
+        name: "thororen",
+        id: 848339671629299742n
+    },
+    alfred: {
+        name: "alfred",
+        id: 1038466644353232967n
+    },
+    vv: {
+        name: "VV",
+        id: 254866377087778816n
+    },
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
@@ -1009,6 +1029,10 @@ export const EquicordDevs = Object.freeze({
         name: "OIRNOIR",
         id: 720842469024989195n
     },
+    cassie: {
+        name: "cassie",
+        id: 280411966126948353n,
+    },
     mochienya: {
         name: "mochie",
         id: 1043599230247374869n,
@@ -1128,6 +1152,66 @@ export const EquicordDevs = Object.freeze({
     DiabeloDEV: {
         name: "DiabeloDEV",
         id: 1231342375465390100n
+    },
+    ryanamay: {
+        name: "ryanamay",
+        id: 1262793452236570667n
+    },
+    Mocha: {
+        name: "Mocha",
+        id: 808802000224518264n
+    },
+    justjxke: {
+        name: "justjxke",
+        id: 852558183087472640n
+    },
+    nicola02nb: {
+        name: "nicola02nb",
+        id: 257900031351193600n
+    },
+    qouesm: {
+        name: "qouesm",
+        id: 130388483494641664n,
+    },
+    CallMeGii: {
+        name: "gii",
+        id: 156481332652802048n,
+    },
+    mmeta: {
+        name: "mmeta",
+        id: 297075664530440192n
+    },
+    SSnowly: {
+        name: "Snowy",
+        id: 1183482753375809537n
+    },
+    ZcraftElite: {
+        name: "ZcraftElite",
+        id: 926788037785047050n
+    },
+    mart: {
+        name: "mja00",
+        id: 108698087769260032n
+    },
+    vei: {
+        name: "Vei",
+        id: 239414094799699968n
+    },
+    Prism: {
+        name: "Prism",
+        id: 390884143749136386n
+    },
+    square: {
+        name: "square",
+        id: 219363409097916416n
+    },
+    neoarz: {
+        name: "neoarz",
+        id: 1015372540937502851n
+    },
+    KamiRu: {
+        name: "KamiRu",
+        id: 819191621676695563n
     },
 } satisfies Record<string, Dev>);
 

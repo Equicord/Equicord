@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings, Settings } from "@api/Settings";
+import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { MessageJSON } from "@vencord/discord-types";
+import { Message } from "@vencord/discord-types";
 
 let blockedKeywords: Array<RegExp>;
 
@@ -38,6 +38,35 @@ const settings = definePluginSettings({
     },
 });
 
+export function containsBlockedKeywords(message: Message) {
+    if (!blockedKeywords || blockedKeywords.length === 0) { return false; }
+
+    // can't use forEach because we need to return from inside the loop
+    // message content loop
+    for (let wordIndex = 0; wordIndex < blockedKeywords.length; wordIndex++) {
+        if (blockedKeywords[wordIndex].test(message.content)) {
+            return true;
+        }
+    }
+
+    // embed content loop (e.g. twitter embeds)
+    for (let embedIndex = 0; embedIndex < message.embeds.length; embedIndex++) {
+        const embed = message.embeds[embedIndex];
+        for (let wordIndex = 0; wordIndex < blockedKeywords.length; wordIndex++) {
+            // doing this because undefined strings get converted to the string "undefined" in regex tests
+            // @ts-ignore
+            const descriptionHasKeywords = embed.rawDescription != null && blockedKeywords[wordIndex].test(embed.rawDescription);
+            // @ts-ignore
+            const titleHasKeywords = embed.rawTitle != null && blockedKeywords[wordIndex].test(embed.rawTitle);
+            if (descriptionHasKeywords || titleHasKeywords) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 export default definePlugin({
     name: "BlockKeywords",
     description: "Blocks messages containing specific user-defined keywords, as if the user sending them was blocked.",
@@ -45,16 +74,18 @@ export default definePlugin({
     patches: [
         {
             find: '"_channelMessages",{})',
+            predicate: () => settings.store.blockedWords.length > 0,
             replacement: {
                 match: /static commit\((.{1,2})\){/g,
                 replace: "$&$1=$self.blockMessagesWithKeywords($1);"
             }
         },
         ...[
+            '"MessageStore"',
             '"ReadStateStore"'
         ].map(find => ({
             find,
-            predicate: () => Settings.plugins.BlockKeywords.ignoreBlockedMessages && !Settings.plugins.NoBlockedMessages.ignoreBlockedMessages,
+            predicate: () => settings.store.ignoreBlockedMessages,
             replacement: [
                 {
                     match: /(?<=function (\i)\((\i)\){)(?=.*MESSAGE_CREATE:\1)/,
@@ -65,12 +96,13 @@ export default definePlugin({
     ],
 
     settings,
+    containsBlockedKeywords,
 
     start() {
-        const blockedWordsList: Array<string> = Settings.plugins.BlockKeywords.blockedWords.split(",");
-        const caseSensitiveFlag = Settings.plugins.BlockKeywords.caseSensitive ? "" : "i";
+        const blockedWordsList: Array<string> = settings.store.blockedWords.split(",");
+        const caseSensitiveFlag = settings.store.caseSensitive ? "" : "i";
 
-        if (Settings.plugins.BlockKeywords.useRegex) {
+        if (settings.store.useRegex) {
             blockedKeywords = blockedWordsList.map(word => {
                 return new RegExp(word, caseSensitiveFlag);
             });
@@ -81,36 +113,6 @@ export default definePlugin({
                 return new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, caseSensitiveFlag);
             });
         }
-        console.log(blockedKeywords);
-    },
-
-    containsBlockedKeywords(message: MessageJSON) {
-        if (blockedKeywords.length === 0) { return false; }
-
-        // can't use forEach because we need to return from inside the loop
-        // message content loop
-        for (let wordIndex = 0; wordIndex < blockedKeywords.length; wordIndex++) {
-            if (blockedKeywords[wordIndex].test(message.content)) {
-                return true;
-            }
-        }
-
-        // embed content loop (e.g. twitter embeds)
-        for (let embedIndex = 0; embedIndex < message.embeds.length; embedIndex++) {
-            const embed = message.embeds[embedIndex];
-            for (let wordIndex = 0; wordIndex < blockedKeywords.length; wordIndex++) {
-                // doing this because undefined strings get converted to the string "undefined" in regex tests
-                // @ts-ignore
-                const descriptionHasKeywords = embed.rawDescription != null && blockedKeywords[wordIndex].test(embed.rawDescription);
-                // @ts-ignore
-                const titleHasKeywords = embed.rawTitle != null && blockedKeywords[wordIndex].test(embed.rawTitle);
-                if (descriptionHasKeywords || titleHasKeywords) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     },
 
     blockMessagesWithKeywords(messageList: any) {

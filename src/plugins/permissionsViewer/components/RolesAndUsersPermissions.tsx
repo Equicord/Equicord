@@ -16,18 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { InfoIcon, OwnerCrownIcon } from "@components/Icons";
+import { cl, getGuildPermissionSpecMap } from "@plugins/permissionsViewer/utils";
 import { copyToClipboard } from "@utils/clipboard";
 import { getIntlMessage, getUniqueUsername } from "@utils/discord";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { Guild, Role, UnicodeEmoji, User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
-import { ContextMenuApi, FluxDispatcher, GuildMemberStore, GuildRoleStore, i18n, Menu, PermissionsBits, ScrollerThin, Text, Tooltip, useEffect, useMemo, UserStore, useState, useStateFromStores } from "@webpack/common";
+import { ContextMenuApi, FluxDispatcher, GuildMemberStore, GuildRoleStore, i18n, Menu, PermissionsBits, ScrollerThin, Tooltip, useEffect, useMemo, UserStore, useState, useStateFromStores } from "@webpack/common";
 
 import { settings } from "..";
-import { cl, getGuildPermissionSpecMap } from "../utils";
 import { PermissionAllowedIcon, PermissionDefaultIcon, PermissionDeniedIcon } from "./icons";
 
 export const enum PermissionType {
@@ -92,14 +93,14 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
             size={ModalSize.LARGE}
         >
             <ModalHeader>
-                <Text className={cl("modal-title")} variant="heading-lg/semibold">{header} permissions:</Text>
+                <BaseText size="lg" weight="semibold" className={cl("modal-title")}>{header} Permissions</BaseText>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
             <ModalContent className={cl("modal-content")}>
                 {!selectedItem && (
                     <div className={cl("modal-no-perms")}>
-                        <Text variant="heading-lg/normal">No permissions to display!</Text>
+                        <BaseText size="lg">No permissions to display!</BaseText>
                     </div>
                 )}
 
@@ -157,20 +158,20 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
                                                     src={user.getAvatarURL(void 0, void 0, false)}
                                                 />
                                             )}
-                                            <Text variant="text-md/normal" className={cl("modal-list-item-text")}>
+                                            <BaseText size="md" className={cl("modal-list-item-text")}>
                                                 {
                                                     permission.type === PermissionType.Role
                                                         ? role?.name ?? "Unknown Role"
                                                         : permission.type === PermissionType.User
                                                             ? (user != null && getUniqueUsername(user)) ?? "Unknown User"
                                                             : (
-                                                                <Flex style={{ gap: "0.2em", justifyItems: "center" }}>
+                                                                <Flex gap="0.2em">
                                                                     @owner
                                                                     <OwnerCrownIcon height={18} width={18} aria-hidden="true" />
                                                                 </Flex>
                                                             )
                                                 }
-                                            </Text>
+                                            </BaseText>
                                         </div>
                                     </div>
                                 );
@@ -197,7 +198,7 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
                                             return PermissionDefaultIcon();
                                         })()}
                                     </div>
-                                    <Text variant="text-md/normal">{guildPermissionSpecMap[String(bit)].title}</Text>
+                                    <BaseText size="md">{guildPermissionSpecMap[String(bit)].title}</BaseText>
 
                                     <Tooltip text={
                                         (() => {

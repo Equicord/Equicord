@@ -18,6 +18,7 @@
 
 import "./style.css";
 
+import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { isNonNullish } from "@utils/guards";
@@ -25,7 +26,7 @@ import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { Avatar, ChannelStore, Clickable, IconUtils, RelationshipStore, ScrollerThin, Text, useMemo, UserStore } from "@webpack/common";
+import { Avatar, ChannelStore, Clickable, IconUtils, RelationshipStore, ScrollerThin, useMemo, UserStore } from "@webpack/common";
 import { JSX } from "react";
 
 const SelectedChannelActionCreators = findByPropsLazy("selectPrivateChannel");
@@ -73,7 +74,7 @@ function renderClickableGDMs(mutualDms: Channel[], onClose: () => void) {
             </Avatar>
             <div className={MutualsListClasses.details}>
                 <div className={MutualsListClasses.name}>{getGroupDMName(c)}</div>
-                <Text variant="text-xs/medium">{c.recipients.length + 1} Members</Text>
+                <BaseText size="xs" weight="medium">{c.recipients.length + 1} Members</BaseText>
             </div>
         </Clickable>
     ));
@@ -109,14 +110,14 @@ export default definePlugin({
         },
         // User Profile Modal v2
         {
-            find: ".tabBarPanel,children:",
+            find: ".WIDGETS?",
             replacement: [
                 {
                     match: /items:(\i),.+?(?=return\(0,\i\.jsxs?\)\("div)/,
                     replace: "$&$self.pushSection($1,arguments[0].user);"
                 },
                 {
-                    match: /\.tabBarPanel,children:(?=.+?section:(\i))/,
+                    match: /\.tabBarPanel,.*?children:(?=.+?section:(\i))/,
                     replace: "$&$1==='MUTUAL_GDMS'?$self.renderMutualGDMs(arguments[0]):"
                 },
                 // Make the gap between each item smaller so our tab can fit.

@@ -5,8 +5,8 @@
  */
 
 import { showNotice } from "@api/Notices";
+import { Settings } from "@api/Settings";
 import { Alerts, Toasts } from "@webpack/common";
-import { Settings } from "Vencord";
 
 function showErrorToast(message: string) {
     Toasts.show({
@@ -99,4 +99,33 @@ export async function toggleEnabled(name: string) {
 
     settings.enabled = !wasEnabled;
     return await beforeReturn(settings, wasEnabled);
+}
+
+export function getWindowsName(release: string) {
+    const build = parseInt(release.split(".")[2]);
+    if (build >= 22000) return "Windows 11";
+    if (build >= 10240) return "Windows 10";
+    if (build >= 9200) return "Windows 8.1";
+    if (build >= 7600) return "Windows 7";
+    return `Windows (${release})`;
+}
+
+export function getMacOSName(release: string) {
+    const major = parseInt(release.split(".")[0]);
+    if (major === 25) return "MacOS 26 (Tahoe)";
+    if (major === 24) return "MacOS 15 (Sequoia)";
+    if (major === 23) return "MacOS 14 (Sonoma)";
+    if (major === 22) return "MacOS 13 (Ventura)";
+    if (major === 21) return "MacOS 12 (Monterey)";
+    if (major === 20) return "MacOS 11 (Big Sur)";
+    if (major === 19) return "MacOS 10.15 (Catalina)";
+    return `MacOS (${release})`;
+}
+
+export function platformName() {
+    if (typeof DiscordNative === "undefined") return navigator.platform;
+    if (DiscordNative.process.platform === "win32") return `${getWindowsName(DiscordNative.os.release)}`;
+    if (DiscordNative.process.platform === "darwin") return `${getMacOSName(DiscordNative.os.release)} (${DiscordNative.process.arch === "arm64" ? "Apple Silicon" : "Intel Silicon"})`;
+    if (DiscordNative.process.platform === "linux") return `${navigator.platform} (${DiscordNative.os.release})`;
+    return DiscordNative.process.platform;
 }

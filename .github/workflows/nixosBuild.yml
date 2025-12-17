@@ -7,7 +7,8 @@ env:
     FORCE_COLOR: true
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-permissions: write-all
+permissions:
+    contents: write
 
 jobs:
     Build:
@@ -36,9 +37,10 @@ jobs:
 
             - name: Generate plugin lists
               run: |
-                pnpm generatePluginJson dist/plugins.json
-                pnpm generateEquicordPluginJson dist/equicordplugins.json
-                pnpm generateVencordPluginJson dist/vencordplugins.json
+                  pnpm generatePluginJson dist/plugins.json
+                  pnpm generateEquicordPluginJson dist/equicordplugins.json
+                  pnpm generateVencordPluginJson dist/vencordplugins.json
+                  pnpm generateDevsList dist/devs.json
 
             - name: Collect files to be released
               run: |
@@ -46,7 +48,7 @@ jobs:
                   mkdir release
 
                   cp browser/browser.* release
-                  cp Vencord.user.{js,js.LEGAL.txt} release
+                  cp Equicord.user.{js,js.LEGAL.txt} release
 
                   # copy the plugin data jsons, the extension zips and the desktop/vesktop asars
                   cp *.{json,zip,asar} release

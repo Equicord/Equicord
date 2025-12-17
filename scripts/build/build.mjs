@@ -21,10 +21,10 @@
 
 import { createPackage } from "@electron/asar";
 import { readdir, writeFile } from "fs/promises";
-import { dirname, join } from "path";
+import { dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
 
-import { BUILD_TIMESTAMP, commonOpts, exists, globPlugins, IS_DEV, IS_REPORTER, IS_COMPANION_TEST, IS_STANDALONE, IS_UPDATER_DISABLED, resolvePluginName, VERSION, commonRendererPlugins, watch, buildOrWatchAll, stringifyValues } from "./common.mjs";
+import { BUILD_TIMESTAMP, commonOpts, exists, globPlugins, IS_DEV, IS_REPORTER, IS_COMPANION_TEST, IS_STANDALONE, IS_UPDATER_DISABLED, resolvePluginName, VERSION, commonRendererPlugins, watch, buildOrWatchAll, stringifyValues, IS_ANTI_CRASH_TEST } from "./common.mjs";
 
 const defines = stringifyValues({
     IS_STANDALONE,
@@ -32,6 +32,7 @@ const defines = stringifyValues({
     IS_REPORTER,
     IS_COMPANION_TEST,
     IS_UPDATER_DISABLED,
+    IS_ANTI_CRASH_TEST,
     IS_WEB: false,
     IS_EXTENSION: false,
     IS_USERSCRIPT: false,
@@ -80,6 +81,10 @@ const globNativesPlugin = {
             let code = "";
             let natives = "\n";
             let i = 0;
+            /**
+             * @type {string[]}
+             */
+            const watchFiles = [];
             for (const dir of pluginDirs) {
                 const dirPath = join("src", dir);
                 if (!await exists(dirPath)) continue;
@@ -88,6 +93,8 @@ const globNativesPlugin = {
                     const fileName = file.name;
                     const nativePath = join(dirPath, fileName, "native.ts");
                     const indexNativePath = join(dirPath, fileName, "native/index.ts");
+
+                    watchFiles.push(resolve(nativePath), resolve(indexNativePath));
 
                     if (!(await exists(nativePath)) && !(await exists(indexNativePath)))
                         continue;
@@ -103,7 +110,9 @@ const globNativesPlugin = {
             code += `export default {${natives}};`;
             return {
                 contents: code,
-                resolveDir: "./src"
+                resolveDir: "./src",
+                watchDirs: pluginDirs.map(d => resolve("src", d)),
+                watchFiles,
             };
         });
     }

@@ -19,7 +19,6 @@
 import "./style.css";
 
 import { addMessageAccessory } from "@api/MessageAccessories";
-import { addMessagePopoverButton } from "@api/MessagePopover";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -27,7 +26,6 @@ import { ChannelStore } from "@webpack/common";
 
 import { convert } from "./converter";
 import { conversions, ConverterAccessory, ConvertIcon } from "./ConverterAccessory";
-
 
 export const settings = definePluginSettings({
     myUnits: {
@@ -45,20 +43,15 @@ export const settings = definePluginSettings({
             }
         ]
     },
-    // invert: {
-    //     type: OptionType.BOOLEAN,
-    //     default: false,
-    //     // is there a better way to word this?
-    //     description: "If this option is set, ignore the units you set and invert every conversion."
-    // }
 });
+
 export default definePlugin({
     name: "UnitConverter",
     description: "Converts metric units to Imperal units and vice versa",
     authors: [Devs.sadan],
-    start() {
-        addMessageAccessory("vc-converter", props => <ConverterAccessory message={props.message} />);
-        addMessagePopoverButton("vc-converter", message => {
+    messagePopoverButton: {
+        icon: ConvertIcon,
+        render(message) {
             if (!message.content) return null;
             return {
                 label: "Convert Units",
@@ -71,7 +64,10 @@ export default definePlugin({
                     setConversion(convert(message.content));
                 }
             };
-        });
+        }
+    },
+    start() {
+        addMessageAccessory("vc-converter", props => <ConverterAccessory message={props.message} />);
     },
     settings,
 });

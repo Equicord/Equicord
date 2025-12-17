@@ -4,19 +4,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { defaultAudioNames, playAudio } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
-import { ErrorBoundary } from "@components/index";
+import { Divider, ErrorBoundary, Heading, Paragraph } from "@components/index";
 import { Logger } from "@utils/Logger";
-import { OptionType } from "@utils/types";
-import { findLazy } from "@webpack";
-import { Button, ColorPicker, ContextMenuApi, Forms, Menu, Select, TextInput, useEffect, useRef, useState } from "@webpack/common";
+import { makeRange, OptionType } from "@utils/types";
+import { Button, ColorPicker, ContextMenuApi, Menu, Select, Slider, TextInput, useEffect, useRef, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import { activeQuestIntervals, getQuestTileClasses, getQuestTileStyle } from "./index";
-import { DynamicDropdown, DynamicDropdownSettingOption, ExcludedQuest, GuildlessServerListItem, Quest, QuestIcon, QuestStatus, QuestTile, RadioGroup, RadioOption, SelectOption, SoundIcon } from "./utils/components";
-import { AudioPlayer, decimalToRGB, fetchAndDispatchQuests, getFormattedNow, getIgnoredQuestIDs, getQuestStatus, isDarkish, isSoundAllowed, leftClick, middleClick, q, QuestifyLogger, QuestsStore, rightClick, setIgnoredQuestIDs, validCommaSeparatedList } from "./utils/misc";
+import { DynamicDropdown, DynamicDropdownSettingOption, ExcludedQuest, GuildlessServerListItem, Quest, QuestIcon, QuestRewardType, QuestStatus, QuestTile, RadioGroup, RadioOption, SelectOption, SoundIcon } from "./utils/components";
+import { decimalToRGB, fetchAndDispatchQuests, getFormattedNow, getIgnoredQuestIDs, getQuestStatus, isDarkish, isSoundAllowed, leftClick, middleClick, q, QuestifyLogger, QuestsStore, rightClick, setIgnoredQuestIDs, validCommaSeparatedList } from "./utils/misc";
 
-let defaultSounds: string[] | null = null;
 let autoFetchInterval: null | ReturnType<typeof setInterval> = null;
 const defaultLeftClickAction = "open-quests";
 const defaultMiddleClickAction = "plugin-settings";
@@ -30,15 +29,32 @@ const defaultIgnoredColor = 8334124;
 const defaultExpiredColor = 2368553;
 const defaultRestyleQuestsGradient = "intense";
 const defaultFetchQuestsAlert = "discodo";
-const findDefaultSounds = findLazy(module => module.resolve && module.id && module.keys().some(key => key.endsWith(".mp3")), false);
 export const minimumAutoFetchIntervalValue = 30 * 60;
 export const maximumAutoFetchIntervalValue = 12 * 60 * 60;
 
+const rerenderCallbacks = new Set<() => void>();
+
+export function addRerenderCallback(callback: () => void): () => void {
+    rerenderCallbacks.add(callback);
+    return () => rerenderCallbacks.delete(callback);
+}
+
 export function rerenderQuests(): void {
     settings.store.triggerQuestsRerender = !settings.store.triggerQuestsRerender;
+    rerenderCallbacks.forEach(callback => callback());
 }
 
 export function fetchAndAlertQuests(source: string, logger: Logger): void {
+    const { questRewardIncludeRewardCode, questRewardIncludeNitroCode, questRewardIncludeCollectibles, questRewardIncludeInGame, questRewardIncludeOrbs } = settings.store;
+
+    const rewardTypeToSettingMap = {
+        [QuestRewardType.REWARD_CODE]: questRewardIncludeRewardCode,
+        [QuestRewardType.IN_GAME]: questRewardIncludeInGame,
+        [QuestRewardType.COLLECTIBLE]: questRewardIncludeCollectibles,
+        [QuestRewardType.VIRTUAL_CURRENCY]: questRewardIncludeOrbs,
+        [QuestRewardType.FRACTIONAL_PREMIUM]: questRewardIncludeNitroCode
+    };
+
     const currentQuests = Array.from(QuestsStore.quests.values()) as Quest[];
 
     fetchAndDispatchQuests(source, logger).then(newQuests => {
@@ -46,14 +62,19 @@ export function fetchAndAlertQuests(source: string, logger: Logger): void {
             const currentIds = new Set(currentQuests.map((q: Quest) => q.id));
             const newOnly = newQuests.filter((q: Quest) => !currentIds.has(q.id));
 
+            const newOnlyFiltered = newOnly.filter(quest => {
+                const rewardType = getQuestRewardType(quest);
+                return rewardType in rewardTypeToSettingMap && rewardTypeToSettingMap[rewardType];
+            });
+
             if (newOnly.length > 0) {
                 const shouldAlert = settings.store.fetchingQuestsAlert;
 
-                if (shouldAlert) {
-                    logger.info(`[${getFormattedNow()}] New quests detected. Playing alert sound.`);
-                    AudioPlayer(shouldAlert, 1).play();
+                if (shouldAlert && newOnlyFiltered.length > 0) {
+                    logger.info(`[${getFormattedNow()}] New Quests detected. Playing alert sound.`);
+                    playAudio(shouldAlert, { volume: settings.store.fetchingQuestsAlertVolume });
                 } else {
-                    logger.info(`[${getFormattedNow()}] New quests detected.`);
+                    logger.info(`[${getFormattedNow()}] New Quests detected.`);
                 }
             }
         }
@@ -75,13 +96,13 @@ export function startAutoFetchingQuests(seconds?: number): void {
     }
 
     const interval = seconds ? seconds * 1000 : settings.store.fetchingQuestsInterval * 1000;
-    QuestifyLogger.info(`[${getFormattedNow()}] Starting AutoFetch of quests every ${(interval / 60000).toFixed(2)} minutes.`);
+    QuestifyLogger.info(`[${getFormattedNow()}] Starting AutoFetch of Quests every ${(interval / 60000).toFixed(2)} minutes.`);
     autoFetchInterval = setInterval(() => { fetchAndAlertQuests("Questify-AutoFetch", QuestifyLogger); }, interval);
 }
 
 export function stopAutoFetchingQuests(): void {
     if (autoFetchInterval) {
-        QuestifyLogger.info(`[${getFormattedNow()}] Stopping AutoFetch of quests.`);
+        QuestifyLogger.info(`[${getFormattedNow()}] Stopping AutoFetch of Quests.`);
         clearInterval(autoFetchInterval);
         autoFetchInterval = null;
     }
@@ -146,7 +167,23 @@ export function questIsIgnored(questID: string): boolean {
     return ignoredQuests.includes(questID);
 }
 
+function getQuestRewardType(quest: Quest): QuestRewardType {
+    const reward = quest.config.rewardsConfig.rewards[0];
+    if (!(reward.type in QuestRewardType)) return QuestRewardType.UNKNOWN;
+    return reward.type as QuestRewardType;
+}
+
 export function validateIgnoredQuests(ignoredQuests?: string[], questsData?: Quest[]): [string[], number] {
+    const { questRewardIncludeRewardCode, questRewardIncludeNitroCode, questRewardIncludeCollectibles, questRewardIncludeInGame, questRewardIncludeOrbs } = settings.store;
+
+    const rewardTypeToSettingMap = {
+        [QuestRewardType.REWARD_CODE]: questRewardIncludeRewardCode,
+        [QuestRewardType.IN_GAME]: questRewardIncludeInGame,
+        [QuestRewardType.COLLECTIBLE]: questRewardIncludeCollectibles,
+        [QuestRewardType.VIRTUAL_CURRENCY]: questRewardIncludeOrbs,
+        [QuestRewardType.FRACTIONAL_PREMIUM]: questRewardIncludeNitroCode
+    };
+
     const quests = questsData ?? Array.from(QuestsStore.quests.values()) as Quest[];
     const excludedQuests = Array.from(QuestsStore.excludedQuests.values()) as ExcludedQuest[];
     const currentlyIgnored = ignoredQuests ? new Set(ignoredQuests) : new Set(getIgnoredQuestIDs(questsData?.[0]?.userStatus?.userId));
@@ -159,7 +196,11 @@ export function validateIgnoredQuests(ignoredQuests?: string[], questsData?: Que
         if (currentlyIgnored.has(quest.id)) {
             validIgnored.add(quest.id);
         } else if (questStatus === QuestStatus.Unclaimed) {
-            numUnclaimedUnignoredQuests++;
+            const rewardType = getQuestRewardType(quest);
+
+            if (rewardTypeToSettingMap[rewardType]) {
+                numUnclaimedUnignoredQuests++;
+            }
         }
     }
 
@@ -176,6 +217,7 @@ export function validateAndOverwriteIgnoredQuests(ignoredQuests?: string[], ques
     const [validIgnored, numUnclaimedUnignoredQuests] = validateIgnoredQuests(ignoredQuests, questsData);
     settings.store.unclaimedUnignoredQuests = numUnclaimedUnignoredQuests;
     setIgnoredQuestIDs(validIgnored, questsData?.[0]?.userStatus?.userId);
+    rerenderQuests();
     return validIgnored;
 }
 
@@ -325,21 +367,27 @@ function validateDisableQuestSetting() {
         disableQuestsEverything,
         disableQuestsDiscoveryTab,
         disableQuestsFetchingQuests,
+        disableQuestsDirectMessagesTab,
+        disableQuestsPageSponsoredBanner,
         disableQuestsPopupAboveAccountPanel,
         disableQuestsBadgeOnUserProfiles,
         disableQuestsGiftInventoryRelocationNotice,
-        disableFriendsListActiveNowPromotion
+        disableFriendsListActiveNowPromotion,
+        disableMembersListActivelyPlayingIcon
     } = settings.use([
         "disableQuestsEverything",
         "disableQuestsDiscoveryTab",
         "disableQuestsFetchingQuests",
+        "disableQuestsDirectMessagesTab",
+        "disableQuestsPageSponsoredBanner",
         "disableQuestsPopupAboveAccountPanel",
         "disableQuestsBadgeOnUserProfiles",
         "disableQuestsGiftInventoryRelocationNotice",
-        "disableFriendsListActiveNowPromotion"
+        "disableFriendsListActiveNowPromotion",
+        "disableMembersListActivelyPlayingIcon"
     ]);
 
-    if (disableQuestsDiscoveryTab || disableQuestsFetchingQuests || disableQuestsPopupAboveAccountPanel || disableQuestsBadgeOnUserProfiles || disableQuestsGiftInventoryRelocationNotice || disableFriendsListActiveNowPromotion) {
+    if (disableQuestsDiscoveryTab || disableQuestsDirectMessagesTab || disableQuestsPageSponsoredBanner || disableQuestsFetchingQuests || disableQuestsPopupAboveAccountPanel || disableQuestsBadgeOnUserProfiles || disableQuestsGiftInventoryRelocationNotice || disableFriendsListActiveNowPromotion || disableMembersListActivelyPlayingIcon) {
         settings.store.disableQuestsEverything = false;
     }
 }
@@ -349,6 +397,11 @@ function QuestButtonSettings(): JSX.Element {
 
     const {
         questButtonDisplay,
+        questRewardIncludeRewardCode,
+        questRewardIncludeNitroCode,
+        questRewardIncludeCollectibles,
+        questRewardIncludeInGame,
+        questRewardIncludeOrbs,
         questButtonUnclaimed,
         questButtonBadgeColor,
         questButtonLeftClickAction,
@@ -356,6 +409,11 @@ function QuestButtonSettings(): JSX.Element {
         questButtonRightClickAction
     } = settings.use([
         "questButtonDisplay",
+        "questRewardIncludeRewardCode",
+        "questRewardIncludeNitroCode",
+        "questRewardIncludeCollectibles",
+        "questRewardIncludeInGame",
+        "questRewardIncludeOrbs",
         "questButtonUnclaimed",
         "questButtonBadgeColor",
         "questButtonLeftClickAction",
@@ -383,6 +441,15 @@ function QuestButtonSettings(): JSX.Element {
         { label: "Nothing", value: "nothing" }
     ];
 
+    const questButtonRewardDisplayOptions: DynamicDropdownSettingOption[] = [
+        { label: "Orbs", value: "orbs", selected: questRewardIncludeOrbs },
+        { label: "Nitro Codes", value: "nitro-code", selected: questRewardIncludeNitroCode },
+        { label: "Reward Codes", value: "reward-code", selected: questRewardIncludeRewardCode },
+        { label: "In Game Items", value: "in-game", selected: questRewardIncludeInGame },
+        { label: "Profile Collectibles", value: "collectibles", selected: questRewardIncludeCollectibles },
+    ];
+
+    const [currentRewardsOptions, setCurrentRewardsOptions] = useState(questButtonRewardDisplayOptions.filter(option => option.selected));
     const [currentQuestButtonDisplay, setCurrentQuestButtonDisplay] = useState((questButtonDisplayOptions.find(option => option.value === questButtonDisplay) as RadioOption));
     const [currentQuestButtonUnclaimed, setCurrentQuestButtonUnclaimed] = useState((questButtonUnclaimedOptions.find(option => option.value === questButtonUnclaimed) as RadioOption));
     const [currentQuestButtonLeftClickAction, setCurrentQuestButtonLeftClickAction] = useState<"open-quests" | "plugin-settings" | "context-menu" | "nothing">(questButtonLeftClickAction as "open-quests" | "plugin-settings" | "context-menu" | "nothing");
@@ -390,6 +457,40 @@ function QuestButtonSettings(): JSX.Element {
     const [currentQuestButtonRightClickAction, setCurrentQuestButtonRightClickAction] = useState<"open-quests" | "plugin-settings" | "context-menu" | "nothing">(questButtonRightClickAction as "open-quests" | "plugin-settings" | "context-menu" | "nothing");
     const [currentBadgeColor, setCurrentBadgeColor] = useState((questButtonBadgeColor as number | null));
     const [dummySelected, setDummySelected] = useState(false);
+
+    function updateSettingsTruthy(enabled: DynamicDropdownSettingOption[]) {
+        const enabledValues = enabled.map(option => option.value);
+
+        questButtonRewardDisplayOptions.forEach(option => {
+            option.selected = enabledValues.includes(option.value);
+        });
+
+        settings.store.questRewardIncludeRewardCode = enabledValues.includes("reward-code");
+        settings.store.questRewardIncludeNitroCode = enabledValues.includes("nitro-code");
+        settings.store.questRewardIncludeCollectibles = enabledValues.includes("collectibles");
+        settings.store.questRewardIncludeInGame = enabledValues.includes("in-game");
+        settings.store.questRewardIncludeOrbs = enabledValues.includes("orbs");
+
+        setCurrentRewardsOptions(enabled);
+        validateAndOverwriteIgnoredQuests();
+    }
+
+    function handleQuestRewardDisplayChange(values: Array<DynamicDropdownSettingOption | string>) {
+        if (values.length === 0) {
+            updateSettingsTruthy([]);
+            return;
+        }
+
+        const stringlessValues = values.filter(v => typeof v !== "string") as DynamicDropdownSettingOption[];
+        const selectedOption = values.find(v => typeof v === "string") as string;
+        const option = questButtonRewardDisplayOptions.find(option => option.value === selectedOption) as DynamicDropdownSettingOption;
+
+        if (option.selected) {
+            updateSettingsTruthy(stringlessValues.filter(v => v.value !== selectedOption));
+        } else {
+            updateSettingsTruthy([...stringlessValues, option]);
+        }
+    }
 
     function handleQuestButtonDisplayChange(value: RadioOption) {
         setCurrentQuestButtonDisplay(value);
@@ -425,17 +526,17 @@ function QuestButtonSettings(): JSX.Element {
 
     return (
         <ErrorBoundary>
-            <Forms.FormDivider className={q("setting-divider")} />
+            <Divider className={q("setting-divider")} />
             <div className={q("setting", "quest-icon-setting")}>
-                <Forms.FormSection>
+                <section>
                     <div className={q("main-inline-group")}>
                         <div>
-                            <Forms.FormTitle className={q("form-title")}>
+                            <Heading className={q("form-title")}>
                                 Quest Button
-                            </Forms.FormTitle>
-                            <Forms.FormText className={q("form-description")}>
+                            </Heading>
+                            <Paragraph className={q("form-description")}>
                                 Show a Quest button in the server list with an optional indicator for unclaimed Quests.
-                            </Forms.FormText>
+                            </Paragraph>
                         </div>
                         <div className={q("dummy-quest-button")}>
                             <DummyQuestButton
@@ -453,17 +554,58 @@ function QuestButtonSettings(): JSX.Element {
                     </div>
                     <div className={q("main-inline-group")}>
                         <div className={q("inline-group-item")}>
-                            <Forms.FormTitle className={q("form-subtitle")}>
+                            <Heading className={q("form-subtitle", "form-subtitle-spacier")}>
+                                Left Click Action
+                            </Heading>
+                            <Select
+                                options={questButtonClickOptions}
+                                className={q("select")}
+                                popoutPosition="top"
+                                serialize={String}
+                                isSelected={(value: string) => value === currentQuestButtonLeftClickAction}
+                                select={handleLeftClickActionChange}
+                            />
+                        </div>
+                        <div className={q("inline-group-item")}>
+                            <Heading className={q("form-subtitle", "form-subtitle-spacier")}>
+                                Middle Click Action
+                            </Heading>
+                            <Select
+                                options={questButtonClickOptions}
+                                className={q("select")}
+                                popoutPosition="top"
+                                serialize={String}
+                                isSelected={(value: string) => value === currentQuestButtonMiddleClickAction}
+                                select={handleMiddleClickActionChange}
+                            />
+                        </div>
+                        <div className={q("inline-group-item")}>
+                            <Heading className={q("form-subtitle", "form-subtitle-spacier")}>
+                                Right Click Action
+                            </Heading>
+                            <Select
+                                options={questButtonClickOptions}
+                                className={q("select")}
+                                popoutPosition="top"
+                                serialize={String}
+                                isSelected={(value: string) => value === currentQuestButtonRightClickAction}
+                                select={handleRightClickActionChange}
+                            />
+                        </div>
+                    </div>
+                    <div className={q("main-inline-group")}>
+                        <div className={q("inline-group-item")}>
+                            <Heading className={q("form-subtitle")}>
                                 Button Visibility
-                            </Forms.FormTitle>
+                            </Heading>
                             <RadioGroup
                                 value={(currentQuestButtonDisplay as any).value}
                                 options={questButtonDisplayOptions}
                                 onChange={handleQuestButtonDisplayChange}
                             />
-                            <Forms.FormTitle className={q("form-subtitle")}>
+                            <Heading className={q("form-subtitle")}>
                                 Badge Color
-                            </Forms.FormTitle>
+                            </Heading>
                             <div className={q("sub-inline-group")}>
                                 <ColorPicker
                                     color={currentBadgeColor}
@@ -485,9 +627,9 @@ function QuestButtonSettings(): JSX.Element {
                             </div>
                         </div>
                         <div className={q("inline-group-item")}>
-                            <Forms.FormTitle className={q("form-subtitle")}>
+                            <Heading className={q("form-subtitle")}>
                                 Unclaimed Indicator
-                            </Forms.FormTitle>
+                            </Heading>
                             <RadioGroup
                                 value={(currentQuestButtonUnclaimed as any).value}
                                 options={questButtonUnclaimedOptions}
@@ -496,47 +638,30 @@ function QuestButtonSettings(): JSX.Element {
                         </div>
                     </div>
                     <div className={q("main-inline-group")}>
-                        <div className={q("inline-group-item")}>
-                            <Forms.FormTitle className={q("form-subtitle", "form-subtitle-spacier")}>
-                                Left Click Action
-                            </Forms.FormTitle>
-                            <Select
-                                options={questButtonClickOptions}
+                        <section>
+                            <Heading className={q("form-subtitle", "form-subtitle-spacier")}>
+                                Included Reward Types
+                            </Heading>
+                            <Paragraph className={q("form-description")}>
+                                Only count Quests with these reward types as unclaimed when determining button
+                                visibility, badge count, and when playing the alert sound.
+                            </Paragraph>
+                            <DynamicDropdown
+                                placeholder="Select which reward types to include in the unclaimed count..."
+                                feedback="There's no supported Quest feature by that name."
                                 className={q("select")}
-                                popoutPosition="top"
-                                serialize={String}
-                                isSelected={(value: string) => value === currentQuestButtonLeftClickAction}
-                                select={handleLeftClickActionChange}
-                            />
-                        </div>
-                        <div className={q("inline-group-item")}>
-                            <Forms.FormTitle className={q("form-subtitle", "form-subtitle-spacier")}>
-                                Middle Click Action
-                            </Forms.FormTitle>
-                            <Select
-                                options={questButtonClickOptions}
-                                className={q("select")}
-                                popoutPosition="top"
-                                serialize={String}
-                                isSelected={(value: string) => value === currentQuestButtonMiddleClickAction}
-                                select={handleMiddleClickActionChange}
-                            />
-                        </div>
-                        <div className={q("inline-group-item")}>
-                            <Forms.FormTitle className={q("form-subtitle", "form-subtitle-spacier")}>
-                                Right Click Action
-                            </Forms.FormTitle>
-                            <Select
-                                options={questButtonClickOptions}
-                                className={q("select")}
-                                popoutPosition="top"
-                                serialize={String}
-                                isSelected={(value: string) => value === currentQuestButtonRightClickAction}
-                                select={handleRightClickActionChange}
-                            />
-                        </div>
+                                maxVisibleItems={questButtonRewardDisplayOptions.length}
+                                clearable={true}
+                                multi={true}
+                                value={currentRewardsOptions as any}
+                                options={questButtonRewardDisplayOptions}
+                                onChange={handleQuestRewardDisplayChange}
+                                closeOnSelect={false}
+                            >
+                            </DynamicDropdown>
+                        </section>
                     </div>
-                </Forms.FormSection>
+                </section>
             </div>
         </ErrorBoundary>
     );
@@ -549,37 +674,49 @@ function DisableQuestsSetting(): JSX.Element {
         disableQuestsEverything,
         disableQuestsDiscoveryTab,
         disableQuestsFetchingQuests,
+        disableQuestsDirectMessagesTab,
+        disableQuestsPageSponsoredBanner,
         disableQuestsPopupAboveAccountPanel,
         disableQuestsBadgeOnUserProfiles,
         disableQuestsGiftInventoryRelocationNotice,
         disableFriendsListActiveNowPromotion,
+        disableMembersListActivelyPlayingIcon,
         makeMobileQuestsDesktopCompatible,
         completeVideoQuestsInBackground,
-        completeGameQuestsInBackground
+        completeGameQuestsInBackground,
+        notifyOnQuestComplete
     } = settings.use([
         "disableQuestsEverything",
         "disableQuestsDiscoveryTab",
         "disableQuestsFetchingQuests",
+        "disableQuestsDirectMessagesTab",
+        "disableQuestsPageSponsoredBanner",
         "disableQuestsPopupAboveAccountPanel",
         "disableQuestsBadgeOnUserProfiles",
         "disableQuestsGiftInventoryRelocationNotice",
         "disableFriendsListActiveNowPromotion",
+        "disableMembersListActivelyPlayingIcon",
         "makeMobileQuestsDesktopCompatible",
         "completeVideoQuestsInBackground",
-        "completeGameQuestsInBackground"
+        "completeGameQuestsInBackground",
+        "notifyOnQuestComplete"
     ]);
 
     const options: DynamicDropdownSettingOption[] = [
         { label: "Disable Everything", value: "everything", selected: disableQuestsEverything, type: "disable" },
         { label: "Disable Fetching Quests", value: "fetching", selected: disableQuestsFetchingQuests, type: "disable" },
-        { label: "Disable Discovery Quests Tab", value: "discovery", selected: disableQuestsDiscoveryTab, type: "disable" },
+        { label: "Disable Quests Tab in DMs", value: "dms", selected: disableQuestsDirectMessagesTab, type: "disable" },
         { label: "Disable Badge on User Profiles", value: "badge", selected: disableQuestsBadgeOnUserProfiles, type: "disable" },
         { label: "Disable Popup Above User Panel", value: "popup", selected: disableQuestsPopupAboveAccountPanel, type: "disable" },
+        { label: "Disable Discovery Tab Relocation Notice", value: "discovery", selected: disableQuestsDiscoveryTab, type: "disable" },
         { label: "Disable Gift Inventory Relocation Notice", value: "inventory", selected: disableQuestsGiftInventoryRelocationNotice, type: "disable" },
+        { label: "Disable Sponsored Banner on Quests Page", value: "sponsored-banner", selected: disableQuestsPageSponsoredBanner, type: "disable" },
         { label: "Disable Friends List Active Now Promotion", value: "friends-list", selected: disableFriendsListActiveNowPromotion, type: "disable" },
+        { label: "Disable Members List Actively Playing Icon", value: "members-list", selected: disableMembersListActivelyPlayingIcon, type: "disable" },
+        { label: "Make Mobile Quests Desktop Compatible", value: "mobile-desktop-compatible", selected: makeMobileQuestsDesktopCompatible, type: "modification" },
         { label: "Complete Game Quests in Background", value: "game-quests-background", selected: completeGameQuestsInBackground, type: "modification" },
         { label: "Complete Video Quests in Background", value: "video-quests-background", selected: completeVideoQuestsInBackground, type: "modification" },
-        { label: "Make Mobile Quests Desktop Compatible", value: "mobile-desktop-compatible", selected: makeMobileQuestsDesktopCompatible, type: "modification" }
+        { label: "Notify on Auto-Complete", value: "notify-on-complete", selected: notifyOnQuestComplete, type: "modification" },
     ];
 
     const disableOptions = options.filter(option => option.type === "disable");
@@ -602,13 +739,17 @@ function DisableQuestsSetting(): JSX.Element {
         settings.store.disableQuestsEverything = enabledValues.includes("everything");
         settings.store.disableQuestsDiscoveryTab = enabledValues.includes("discovery");
         settings.store.disableQuestsFetchingQuests = enabledValues.includes("fetching");
+        settings.store.disableQuestsDirectMessagesTab = enabledValues.includes("dms");
+        settings.store.disableQuestsPageSponsoredBanner = enabledValues.includes("sponsored-banner");
         settings.store.disableQuestsPopupAboveAccountPanel = enabledValues.includes("popup");
         settings.store.disableQuestsBadgeOnUserProfiles = enabledValues.includes("badge");
         settings.store.disableQuestsGiftInventoryRelocationNotice = enabledValues.includes("inventory");
         settings.store.disableFriendsListActiveNowPromotion = enabledValues.includes("friends-list");
+        settings.store.disableMembersListActivelyPlayingIcon = enabledValues.includes("members-list");
+        settings.store.makeMobileQuestsDesktopCompatible = enabledValues.includes("mobile-desktop-compatible");
         settings.store.completeGameQuestsInBackground = enabledValues.includes("game-quests-background");
         settings.store.completeVideoQuestsInBackground = enabledValues.includes("video-quests-background");
-        settings.store.makeMobileQuestsDesktopCompatible = enabledValues.includes("mobile-desktop-compatible");
+        settings.store.notifyOnQuestComplete = enabledValues.includes("notify-on-complete");
 
         redoAutoFetch ? checkAutoFetchInterval(settings.store.fetchingQuestsInterval) : null;
         setCurrentValue(enabled);
@@ -650,13 +791,13 @@ function DisableQuestsSetting(): JSX.Element {
 
     return (
         <ErrorBoundary>
-            <Forms.FormDivider className={q("setting-divider")} />
+            <Divider className={q("setting-divider")} />
             <div className={q("setting", "disable-quests-setting")}>
-                <Forms.FormSection>
-                    <Forms.FormTitle className={q("form-title")}>
+                <section>
+                    <Heading className={q("form-title")}>
                         Quest Features
-                    </Forms.FormTitle>
-                    <Forms.FormText className={q("form-description")}>
+                    </Heading>
+                    <Paragraph className={q("form-description")}>
                         Modify specific Quest features.
                         <br /><br />
                         The <span className={q("inline-code-block")}>Disable Quest Popup Above Account Panel</span> option
@@ -674,7 +815,7 @@ function DisableQuestsSetting(): JSX.Element {
                         can open the context menu on the Quest tile and select <span className={q("inline-code-block")}>Stop Auto-Complete</span>.
                         <br /><br />
                         Using either of those options is against Discord's TOS. Use at your own risk.
-                    </Forms.FormText>
+                    </Paragraph>
                     <DynamicDropdown
                         placeholder="Select which Quest features to modify."
                         feedback="There's no supported Quest feature by that name."
@@ -688,7 +829,7 @@ function DisableQuestsSetting(): JSX.Element {
                         closeOnSelect={false}
                     >
                     </DynamicDropdown>
-                </Forms.FormSection>
+                </section>
             </div>
         </ErrorBoundary>
     );
@@ -712,8 +853,7 @@ function RestyleQuestsSetting() {
         restyleQuestsIgnored,
         restyleQuestsExpired,
         restyleQuestsGradient,
-        restyleQuestsPreload,
-        ignoredQuestProfile
+        restyleQuestsPreload
     } = settings.use([
         "restyleQuestsUnclaimed",
         "restyleQuestsClaimed",
@@ -721,7 +861,6 @@ function RestyleQuestsSetting() {
         "restyleQuestsExpired",
         "restyleQuestsGradient",
         "restyleQuestsPreload",
-        "ignoredQuestProfile"
     ]);
 
     const [unclaimedColor, setUnclaimedColor] = useState<number | null>(restyleQuestsUnclaimed);
@@ -830,24 +969,24 @@ function RestyleQuestsSetting() {
 
     return (
         <ErrorBoundary>
-            <Forms.FormDivider className={q("setting-divider")} />
+            <Divider className={q("setting-divider")} />
             <div className={q("setting", "restyle-quests-setting")}>
-                <Forms.FormSection>
+                <section>
                     <div>
-                        <Forms.FormTitle className={q("form-title")}>
+                        <Heading className={q("form-title")}>
                             Restyle Quests
-                        </Forms.FormTitle>
-                        <Forms.FormText className={q("form-description")}>
+                        </Heading>
+                        <Paragraph className={q("form-description")}>
                             Highlight Quests with optional theme colors for visibility.
                             <br /><br />
                             Claimed and Expired Quest styles will take precedence even if a Quest is ignored.
-                        </Forms.FormText>
+                        </Paragraph>
                     </div>
                     <div className={q("main-inline-group")}>
                         <div className={q("gradient-setting-group", "inline-group-item", "flex-35")}>
-                            <Forms.FormTitle className={q("form-subtitle")}>
+                            <Heading className={q("form-subtitle")}>
                                 Gradient Style
-                            </Forms.FormTitle>
+                            </Heading>
                             <Select
                                 options={gradientOptions}
                                 className={q("select")}
@@ -858,9 +997,9 @@ function RestyleQuestsSetting() {
                             />
                         </div>
                         <div className={q("preload-setting-group", "inline-group-item", "flex-65")}>
-                            <Forms.FormTitle className={q("form-subtitle")}>
+                            <Heading className={q("form-subtitle")}>
                                 Asset Preload
-                            </Forms.FormTitle>
+                            </Heading>
                             <Select
                                 options={preloadOptions}
                                 className={q("select")}
@@ -871,35 +1010,15 @@ function RestyleQuestsSetting() {
                             />
                         </div>
                     </div>
-                    <div className={q("main-inline-group")}>
-                        <div className={q("inline-group-item")}>
-                            <Forms.FormTitle className={q("form-subtitle")}>
-                                Ignored Quest Profile
-                            </Forms.FormTitle>
-                            <Select
-                                options={[
-                                    { label: "Shared: All accounts on this client share ignores.", value: "shared" },
-                                    { label: "Private: All accounts on this client have separate ignores.", value: "private" }
-                                ]}
-                                className={q("select")}
-                                popoutPosition="bottom"
-                                serialize={String}
-                                isSelected={(value: string) => value === ignoredQuestProfile}
-                                select={(value: string) => {
-                                    settings.store.ignoredQuestProfile = value;
-                                }}
-                            />
-                        </div>
-                    </div>
                     <div className={q("color-picker-container")}>
                         {colorPickers.map(({ label, idx, defaultValue, value }) => (
                             <div
                                 key={label}
                                 className={q("inline-group-item", "color-picker-group")}
                             >
-                                <Forms.FormTitle className={q("form-subtitle")}>
+                                <Heading className={q("form-subtitle")}>
                                     {label}
-                                </Forms.FormTitle>
+                                </Heading>
                                 <div className={q("color-picker-with-buttons")}>
                                     <ColorPicker
                                         color={value}
@@ -929,7 +1048,7 @@ function RestyleQuestsSetting() {
                             <DummyQuestPreview quest={dummyQuest} dummyColor={dummyColor} dummyGradient={dummyGradient} />
                         )}
                     </div>
-                </Forms.FormSection>
+                </section>
             </div>
         </ErrorBoundary>
     );
@@ -942,12 +1061,18 @@ function ReorderQuestsSetting(): JSX.Element {
         unclaimedSubsort,
         claimedSubsort,
         ignoredSubsort,
-        expiredSubsort
+        expiredSubsort,
+        ignoredQuestProfile,
+        rememberQuestPageSort,
+        rememberQuestPageFilters
     } = settings.use([
         "unclaimedSubsort",
         "claimedSubsort",
         "ignoredSubsort",
-        "expiredSubsort"
+        "expiredSubsort",
+        "ignoredQuestProfile",
+        "rememberQuestPageSort",
+        "rememberQuestPageFilters"
     ]);
 
     const getSubsortOptions = (source: string): SelectOption[] => {
@@ -980,18 +1105,18 @@ function ReorderQuestsSetting(): JSX.Element {
 
     return (
         <ErrorBoundary>
-            <Forms.FormDivider className={q("setting-divider")} />
+            <Divider className={q("setting-divider")} />
             <div className={q("setting", "reorder-quests-setting")}>
-                <Forms.FormSection>
+                <section>
                     <div>
-                        <Forms.FormTitle className={q("form-title")}>
+                        <Heading className={q("form-title")}>
                             Reorder Quests
-                        </Forms.FormTitle>
-                        <Forms.FormText className={q("form-description")}>
-                            Sort Quests by their status. Leave empty for default sorting.
+                        </Heading>
+                        <Paragraph className={q("form-description")}>
+                            Sort Quests by their status. Applied when the "Questify" sort option is selected on the Quest page.
                             <br /><br />
                             Comma-separated list must contain all of: <span className={q("inline-code-block")}>UNCLAIMED, CLAIMED, IGNORED, EXPIRED</span>.
-                        </Forms.FormText>
+                        </Paragraph>
                     </div>
                     <div>
                         <TextInput
@@ -1010,9 +1135,9 @@ function ReorderQuestsSetting(): JSX.Element {
                                     settings.store.reorderQuests = cleaned;
                                 }
                             }}
-                            placeholder="Using Discord's default sorting."
+                            placeholder="You must include all of UNCLAIMED, CLAIMED, IGNORED, EXPIRED"
                             error={
-                                validCommaSeparatedList(reorderQuests, ["UNCLAIMED", "CLAIMED", "IGNORED", "EXPIRED"], true, true, true, false)
+                                validCommaSeparatedList(reorderQuests, ["UNCLAIMED", "CLAIMED", "IGNORED", "EXPIRED"], false, true, true, false)
                                     ? undefined
                                     : "Invalid format."
                             }
@@ -1021,9 +1146,9 @@ function ReorderQuestsSetting(): JSX.Element {
                     </div>
                     <div className={q("main-inline-group")}>
                         <div className={q("inline-group-item")}>
-                            <Forms.FormTitle className={q("form-subtitle")}>
+                            <Heading className={q("form-subtitle")}>
                                 Unclaimed Subsort
-                            </Forms.FormTitle>
+                            </Heading>
                             <Select
                                 options={getSubsortOptions("unclaimed")}
                                 className={q("select")}
@@ -1036,9 +1161,9 @@ function ReorderQuestsSetting(): JSX.Element {
                             />
                         </div>
                         <div className={q("inline-group-item")}>
-                            <Forms.FormTitle className={q("form-subtitle")}>
+                            <Heading className={q("form-subtitle")}>
                                 Claimed Subsort
-                            </Forms.FormTitle>
+                            </Heading>
                             <Select
                                 options={getSubsortOptions("claimed")}
                                 className={q("select")}
@@ -1053,9 +1178,9 @@ function ReorderQuestsSetting(): JSX.Element {
                     </div>
                     <div className={q("main-inline-group")}>
                         <div className={q("inline-group-item")}>
-                            <Forms.FormTitle className={q("form-subtitle")}>
+                            <Heading className={q("form-subtitle")}>
                                 Ignored Subsort
-                            </Forms.FormTitle>
+                            </Heading>
                             <Select
                                 options={getSubsortOptions("ignored")}
                                 className={q("select")}
@@ -1068,9 +1193,9 @@ function ReorderQuestsSetting(): JSX.Element {
                             />
                         </div>
                         <div className={q("inline-group-item")}>
-                            <Forms.FormTitle className={q("form-subtitle")}>
+                            <Heading className={q("form-subtitle")}>
                                 Expired Subsort
-                            </Forms.FormTitle>
+                            </Heading>
                             <Select
                                 options={getSubsortOptions("expired")}
                                 className={q("select")}
@@ -1083,7 +1208,66 @@ function ReorderQuestsSetting(): JSX.Element {
                             />
                         </div>
                     </div>
-                </Forms.FormSection>
+                    <div className={q("main-inline-group")}>
+                        <div className={q("inline-group-item")}>
+                            <Heading className={q("form-subtitle")}>
+                                Ignored Quest Profile
+                            </Heading>
+                            <Select
+                                options={[
+                                    { label: "Shared: All accounts on this client share ignores.", value: "shared" },
+                                    { label: "Private: All accounts on this client have separate ignores.", value: "private" }
+                                ]}
+                                className={q("select")}
+                                popoutPosition="bottom"
+                                serialize={String}
+                                isSelected={(value: string) => value === ignoredQuestProfile}
+                                select={(value: string) => { settings.store.ignoredQuestProfile = value; }}
+                            />
+                        </div>
+                    </div>
+                    <div className={q("main-inline-group")}>
+                        <div className={q("inline-group-item")}>
+                            <Heading className={q("form-subtitle")}>
+                                Remember Sort Choice
+                            </Heading>
+                            <Select
+                                options={[
+                                    { label: "Yes", value: true },
+                                    { label: "No", value: false }
+                                ]}
+                                className={q("select")}
+                                popoutPosition="bottom"
+                                serialize={String}
+                                isSelected={(value: boolean) => value === rememberQuestPageSort}
+                                select={(value: boolean) => { settings.store.rememberQuestPageSort = value; }}
+                            />
+                        </div>
+                        <div className={q("inline-group-item")}>
+                            <Heading className={q("form-subtitle")}>
+                                Remember Filter Choice
+                            </Heading>
+                            <Select
+                                options={[
+                                    { label: "Yes", value: true },
+                                    { label: "No", value: false }
+                                ]}
+                                className={q("select")}
+                                popoutPosition="bottom"
+                                serialize={String}
+                                isSelected={(value: boolean) => value === rememberQuestPageFilters}
+                                select={(value: boolean) => { settings.store.rememberQuestPageFilters = value; }}
+                            />
+                        </div>
+                    </div>
+                    <div className={q("main-inline-group")}>
+                        <Paragraph className={q("form-description")}>
+                            This sort and filter choice refers to the built-in sort and filter options on the Quest page.
+                            The custom sorting above is only applied when the "Questify" sort option is selected on the Quest page.
+                            If remembering is disabled, the sort or filter options will be reset each time you open the Quest page.
+                        </Paragraph>
+                    </div>
+                </section>
             </div>
         </ErrorBoundary>
     );
@@ -1112,12 +1296,7 @@ function FetchingQuestsSetting(): JSX.Element {
         { value: 60 * 60 * 6, label: "12 Hours" },
     ];
 
-    defaultSounds ??= (findDefaultSounds.keys() || []).map(key => {
-        const match = key.match(/((?:\w|-)+)\.mp3$/);
-        return match ? match[1] : null;
-    }).filter(Boolean) as string[];
-
-    const resolvedSounds: SelectOption[] = defaultSounds.map(sound => {
+    const resolvedSounds: SelectOption[] = defaultAudioNames().map(sound => {
         const label = sound.toUpperCase().replace(/_/g, " ").replace(/(\d+)/g, " $1");
         return { value: sound, label };
     });
@@ -1304,17 +1483,17 @@ function FetchingQuestsSetting(): JSX.Element {
 
     return (
         <ErrorBoundary>
-            <Forms.FormDivider className={q("setting-divider")} />
+            <Divider className={q("setting-divider")} />
             <div className={q("setting", "fetching-quests-setting")}>
-                <Forms.FormSection>
+                <section>
                     <div>
-                        <Forms.FormTitle className={q("form-title")}>
+                        <Heading className={q("form-title")}>
                             Fetching Quests
-                        </Forms.FormTitle>
-                        <Forms.FormText className={q("form-description")}>
+                        </Heading>
+                        <Paragraph className={q("form-description")}>
                             Configure how often to fetch Quests from Discord and set up alerts for new Quests.
                             <br /><br />
-                            By default, Discord only fetches quests on load and when visiting the Quests page.
+                            By default, Discord only fetches Quests on load and when visiting the Quests page.
                             This means that without a fetch interval defined below, this plugin will become unaware
                             of new Quests added throughout the day.
                             <br /><br />
@@ -1322,13 +1501,13 @@ function FetchingQuestsSetting(): JSX.Element {
                             unclaimed <span className={q("inline-code-block")}>Pill</span>, <span className={q("inline-code-block")}>Badge</span>, or <span className={q("inline-code-block")}>Both</span> indicators enabled. Otherwise, there is no reason to periodically fetch Quests.
                             <br /><br />
                             Also, if <span className={q("inline-code-block")}>Fetching Quests</span> is blocked in the <span className={q("inline-code-block")}>Quest Features</span> setting, this will not work.
-                        </Forms.FormText>
+                        </Paragraph>
                     </div>
                     <div>
                         <div>
-                            <Forms.FormTitle className={q("form-subtitle", "form-subtitle-spacier")}>
+                            <Heading className={q("form-subtitle", "form-subtitle-spacier")}>
                                 Fetch Interval
-                            </Forms.FormTitle>
+                            </Heading>
                         </div>
                         <div>
                             <DynamicDropdown
@@ -1357,9 +1536,9 @@ function FetchingQuestsSetting(): JSX.Element {
                     </div>
                     <div>
                         <div>
-                            <Forms.FormTitle className={q("form-subtitle", "form-subtitle-spacier")}>
+                            <Heading className={q("form-subtitle", "form-subtitle-spacier")}>
                                 Alert Sound
-                            </Forms.FormTitle>
+                            </Heading>
                         </div>
                         <div className={q("sub-inline-group")}>
                             <div className={q("inline-group-item")}>
@@ -1392,8 +1571,7 @@ function FetchingQuestsSetting(): JSX.Element {
                                         if (activePlayer.current) {
                                             clearActivePlayer();
                                         } else {
-                                            activePlayer.current = AudioPlayer(currentAlertSelection.value as string, 1, clearActivePlayer);
-                                            activePlayer.current?.play();
+                                            activePlayer.current = playAudio(currentAlertSelection.value as string, { onEnded: clearActivePlayer, volume: settings.store.fetchingQuestsAlertVolume });
                                             setIsPlaying(true);
                                         }
                                     }
@@ -1403,8 +1581,18 @@ function FetchingQuestsSetting(): JSX.Element {
                                 {SoundIcon(24, 24)}
                             </div>
                         </div>
+                        <div className={q("sub-inline-group")}>
+                            <div className={q("inline-group-item", "volume-slider-container")}>
+                                <Slider
+                                    markers={makeRange(0, 100, 10)}
+                                    initialValue={settings.store.fetchingQuestsAlertVolume}
+                                    onValueChange={val => { settings.store.fetchingQuestsAlertVolume = val; }}
+                                    className={q("volume-slider")}
+                                />
+                            </div>
+                        </div>
                     </div>
-                </Forms.FormSection>
+                </section>
             </div>
         </ErrorBoundary>
     );
@@ -1434,6 +1622,18 @@ export const settings = definePluginSettings({
         default: false,
         hidden: true
     },
+    disableQuestsDirectMessagesTab: {
+        type: OptionType.BOOLEAN,
+        description: "Disable Quest tab in Direct Messages.",
+        default: false,
+        hidden: true
+    },
+    disableQuestsPageSponsoredBanner: {
+        type: OptionType.BOOLEAN,
+        description: "Disable the sponsored banner on the Quest page.",
+        default: false,
+        hidden: true
+    },
     disableQuestsPopupAboveAccountPanel: {
         type: OptionType.BOOLEAN,
         description: "Disable the Quest popup above your account panel.",
@@ -1455,6 +1655,12 @@ export const settings = definePluginSettings({
     disableFriendsListActiveNowPromotion: {
         type: OptionType.BOOLEAN,
         description: "Disable the promotion of Quests for games played by friends.",
+        default: true,
+        hidden: true
+    },
+    disableMembersListActivelyPlayingIcon: {
+        type: OptionType.BOOLEAN,
+        description: "Disable the actively playing icon in members list items.",
         default: true,
         hidden: true
     },
@@ -1502,6 +1708,12 @@ export const settings = definePluginSettings({
             }
         },
     },
+    notifyOnQuestComplete: {
+        type: OptionType.BOOLEAN,
+        description: "Show a notification when a Quest is auto-completed.",
+        default: true,
+        hidden: true
+    },
     questButton: {
         type: OptionType.COMPONENT,
         component: QuestButtonSettings,
@@ -1511,6 +1723,36 @@ export const settings = definePluginSettings({
         type: OptionType.STRING,
         description: "Which display type to use for the Quest button in the server list.",
         default: defaultQuestButtonDisplay, // "always", "unclaimed", "never"
+        hidden: true,
+    },
+    questRewardIncludeRewardCode: {
+        type: OptionType.BOOLEAN,
+        description: "Include Quests with Reward Codes when displaying Quest counts.",
+        default: true,
+        hidden: true,
+    },
+    questRewardIncludeNitroCode: {
+        type: OptionType.BOOLEAN,
+        description: "Include Quests with Nitro Codes when displaying Quest counts.",
+        default: true,
+        hidden: true,
+    },
+    questRewardIncludeInGame: {
+        type: OptionType.BOOLEAN,
+        description: "Include Quests with In-Game rewards when displaying Quest counts.",
+        default: true,
+        hidden: true,
+    },
+    questRewardIncludeCollectibles: {
+        type: OptionType.BOOLEAN,
+        description: "Include Quests with Collectibles when displaying Quest counts.",
+        default: true,
+        hidden: true,
+    },
+    questRewardIncludeOrbs: {
+        type: OptionType.BOOLEAN,
+        description: "Include Quests with Orbs when displaying Quest counts.",
+        default: true,
         hidden: true,
     },
     questButtonUnclaimed: {
@@ -1558,6 +1800,12 @@ export const settings = definePluginSettings({
         type: OptionType.STRING | OptionType.CUSTOM,
         description: "The sound to play when new Quests are detected.",
         default: defaultFetchQuestsAlert, // Item from predefined list or a URL to CSP valid audio file.
+        hidden: true
+    },
+    fetchingQuestsAlertVolume: {
+        type: OptionType.NUMBER,
+        description: "The volume for the new Quest alert sound.",
+        default: 100, // 0 - 100
         hidden: true
     },
     restyleQuests: {
@@ -1609,25 +1857,25 @@ export const settings = definePluginSettings({
     },
     unclaimedSubsort: {
         type: OptionType.STRING,
-        description: "Subsort method for unclaimed quests.",
+        description: "Subsort method for unclaimed Quests.",
         default: "Expiring ASC", // "Recent ASC", "Recent DESC", "Expiring ASC", "Expiring DESC"
         hidden: true
     },
     claimedSubsort: {
         type: OptionType.STRING,
-        description: "Subsort method for claimed quests.",
+        description: "Subsort method for claimed Quests.",
         default: "Claimed DESC", // "Recent ASC", "Recent DESC", "Claimed ASC", "Claimed DESC"
         hidden: true
     },
     ignoredSubsort: {
         type: OptionType.STRING,
-        description: "Subsort method for ignored quests.",
+        description: "Subsort method for ignored Quests.",
         default: "Recent DESC", // "Recent ASC", "Recent DESC", "Expiring ASC", "Expiring DESC"
         hidden: true
     },
     expiredSubsort: {
         type: OptionType.STRING,
-        description: "Subsort method for expired quests.",
+        description: "Subsort method for expired Quests.",
         default: "Expiring DESC", // "Recent ASC", "Recent DESC", "Expiring ASC", "Expiring DESC"
         hidden: true
     },
@@ -1639,7 +1887,7 @@ export const settings = definePluginSettings({
     },
     onQuestsPage: {
         type: OptionType.BOOLEAN,
-        description: "Whether the user is currently on the quests page.",
+        description: "Whether the user is currently on the Quests page.",
         default: false,
         hidden: true
     },
@@ -1653,6 +1901,30 @@ export const settings = definePluginSettings({
         type: OptionType.STRING,
         description: "The profile used for ignored Quests.",
         default: "private", // "shared", "private"
+        hidden: true
+    },
+    rememberQuestPageSort: {
+        type: OptionType.BOOLEAN,
+        description: "Remember the last used sort on the Quests page.",
+        default: true,
+        hidden: true
+    },
+    rememberQuestPageFilters: {
+        type: OptionType.BOOLEAN,
+        description: "Remember the last used filters on the Quests page.",
+        default: true,
+        hidden: true
+    },
+    lastQuestPageSort: {
+        type: OptionType.STRING,
+        description: "Remember the last used sort on the Quests page.",
+        default: "questify" as string, // sort key
+        hidden: true
+    },
+    lastQuestPageFilters: {
+        type: OptionType.CUSTOM,
+        description: "Remember the last used filters on the Quests page.",
+        default: {} as { [filter: string]: { group: string, filter: string; }; }, // Array of filters
         hidden: true
     },
     ignoredQuestIDs: {

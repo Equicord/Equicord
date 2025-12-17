@@ -31,6 +31,8 @@ export interface UserThemeHeader {
     source?: string;
     website?: string;
     invite?: string;
+    content?: string;
+    customName?: string;
 }
 
 function makeHeader(fileName: string, opts: Partial<UserThemeHeader> = {}): UserThemeHeader {

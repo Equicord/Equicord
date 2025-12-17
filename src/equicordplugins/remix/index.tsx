@@ -5,15 +5,13 @@
  */
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import { PaintbrushIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
-import { getCurrentChannel } from "@utils/discord";
 import { closeModal, openModal } from "@utils/modal";
-import definePlugin, { OptionType } from "@utils/types";
-import { extractAndLoadChunksLazy, findLazy, findStoreLazy } from "@webpack";
-import { FluxDispatcher, Menu, MessageActions, RestAPI, showToast, SnowflakeUtils, Toasts } from "@webpack/common";
+import definePlugin from "@utils/types";
+import { extractAndLoadChunksLazy, findStoreLazy } from "@webpack";
+import { ChannelStore, DraftType, FluxDispatcher, Menu, SelectedChannelStore, UploadHandler } from "@webpack/common";
 
 import RemixModal from "./RemixModal";
 import css from "./styles.css?managed";
@@ -21,10 +19,7 @@ import css from "./styles.css?managed";
 const requireCreateStickerModal = extractAndLoadChunksLazy(["stickerInspected]:"]);
 const requireSettingsMenu = extractAndLoadChunksLazy(['name:"UserSettings"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/);
 
-const CloudUpload = findLazy(m => m.prototype?.trackUploadFinished);
 const PendingReplyStore = findStoreLazy("PendingReplyStore");
-
-
 const validMediaTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
 
 const UploadContextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
@@ -65,54 +60,19 @@ const MessageContextMenuPatch: NavContextMenuPatchCallback = (children, props) =
 };
 
 export function sendRemix(blob: Blob) {
-    const currentChannelId = getCurrentChannel()?.id;
+    const currentChannelId = SelectedChannelStore.getChannelId();
+    const channel = ChannelStore.getChannel(currentChannelId);
     const reply = PendingReplyStore.getPendingReply(currentChannelId);
     if (reply) FluxDispatcher.dispatch({ type: "DELETE_PENDING_REPLY", currentChannelId });
 
-    const upload = new CloudUpload({
-        file: new File([blob], "remix.png", { type: "image/png" }),
-        isClip: false,
-        isThumbnail: false,
-        platform: 1
-    }, currentChannelId, false, 0);
-
-    upload.on("complete", () => {
-        RestAPI.post({
-            url: `/channels/${currentChannelId}/messages`,
-            body: {
-                channel_id: currentChannelId,
-                content: "",
-                nonce: SnowflakeUtils.fromTimestamp(Date.now()),
-                sticker_ids: [],
-                attachments: [{
-                    id: "0",
-                    filename: upload.filename,
-                    uploaded_filename: upload.uploadedFilename,
-                    size: blob.size,
-                    is_remix: settings.store.remixTag
-                }],
-                message_reference: reply ? MessageActions.getSendMessageOptionsForReply(reply)?.messageReference : null,
-            },
-        });
-    });
-    upload.on("error", () => showToast("Failed to upload remix", Toasts.Type.FAILURE));
-
-    upload.upload();
+    const file = new File([blob], "remix.png", { type: "image/png" });
+    UploadHandler.promptToUpload([file], channel, DraftType.ChannelMessage);
 }
 
-const settings = definePluginSettings({
-    remixTag: {
-        description: "Include the remix tag in remixed messages",
-        type: OptionType.BOOLEAN,
-        default: true,
-    },
-});
-
 export default definePlugin({
-    name: "Remix",
-    description: "Adds Remix to Desktop",
-    authors: [EquicordDevs.MrDiamond],
-    settings,
+    name: "RemixRevived",
+    description: "Revives Remix and breings it to Desktop",
+    authors: [EquicordDevs.MrDiamond, EquicordDevs.meowabyte],
     contextMenus: {
         "channel-attach": UploadContextMenuPatch,
         "message": MessageContextMenuPatch,

@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
+import { HeadingPrimary } from "@components/Heading";
+import { cl, getEmojiUrl, SoundLogEntry, User } from "@equicordplugins/soundBoardLogger/utils";
 import { closeModal, ModalContent, ModalRoot, openModal } from "@utils/modal";
-import { Clickable, Forms } from "@webpack/common";
-
-import { cl, getEmojiUrl, SoundLogEntry, User } from "../utils";
+import { Clickable } from "@webpack/common";
 
 export function openMoreUsersModal(item: SoundLogEntry, users: User[], onClickUser: Function) {
     const key = openModal(props => (
@@ -30,7 +31,7 @@ export default function MoreUsersModal({ item, users, onClickUser, closeModal }:
                     src={getEmojiUrl(item.emoji)}
                     alt=""
                 />
-                <Forms.FormTitle tag="h2" className={cl("more-soundId")}>{item.soundId}</Forms.FormTitle>
+                <HeadingPrimary className={cl("more-soundId")}>{item.soundId}</HeadingPrimary>
             </div>
             <div className={cl("more-users")}>
                 {users.map(user => {
@@ -48,9 +49,9 @@ export default function MoreUsersModal({ item, users, onClickUser, closeModal }:
                                         alt=""
                                         style={{ cursor: "pointer" }}
                                     />
-                                    <Forms.FormText variant="text-xs/medium" style={{ cursor: "pointer" }}>{user.username}</Forms.FormText>
+                                    <BaseText size="xs" weight="medium" style={{ cursor: "pointer" }}>{user.username}</BaseText>
                                 </Flex>
-                                <Forms.FormText variant="text-xs/medium" style={{ cursor: "pointer" }}>Played {currentUser.plays.length} {currentUser.plays.length === 1 ? "time" : "times"}</Forms.FormText>
+                                <BaseText size="xs" weight="medium" style={{ cursor: "pointer" }}>Played {currentUser.plays.length} {currentUser.plays.length === 1 ? "time" : "times"}</BaseText>
                             </div>
                         </Clickable>
                     );

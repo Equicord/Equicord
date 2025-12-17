@@ -4,13 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { BaseText } from "@components/BaseText";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
+import { bookmarkFolderColors, bookmarkPlaceholderName, closeOtherTabs, closeTab, closeTabsToTheLeft, closeTabsToTheRight, createTab, hasClosedTabs, isBookmarkFolder, openedTabs, reopenClosedTab, settings, toggleCompactTab } from "@equicordplugins/channelTabs/util";
+import { Bookmark, BookmarkFolder, Bookmarks, ChannelTabsProps, UseBookmarkMethods } from "@equicordplugins/channelTabs/util/types";
 import { getIntlMessage } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { closeModal, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
-import { Button, ChannelStore, FluxDispatcher, Forms, Menu, ReadStateStore, ReadStateUtils, Select, Text, TextInput, useState } from "@webpack/common";
-
-import { bookmarkFolderColors, bookmarkPlaceholderName, closeOtherTabs, closeTab, closeTabsToTheLeft, closeTabsToTheRight, createTab, hasClosedTabs, isBookmarkFolder, openedTabs, reopenClosedTab, settings, toggleCompactTab } from "../util";
-import { Bookmark, BookmarkFolder, Bookmarks, ChannelTabsProps, UseBookmarkMethods } from "../util/types";
+import { Button, ChannelStore, FluxDispatcher, Menu, ReadStateStore, ReadStateUtils, Select, TextInput, useState } from "@webpack/common";
 
 export function BasicContextMenu() {
     const { showBookmarkBar } = settings.use(["showBookmarkBar"]);
@@ -48,17 +50,17 @@ export function EditModal({ modalProps, modalKey, bookmark, onSave }: {
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader>
-                <Text variant="heading-lg/semibold">Edit Bookmark</Text>
+                <BaseText size="lg" weight="semibold">Edit Bookmark</BaseText>
             </ModalHeader>
             <ModalContent>
-                <Forms.FormTitle className={Margins.top16}>Bookmark Name</Forms.FormTitle>
+                <Heading className={Margins.top16}>Bookmark Name</Heading>
                 <TextInput
                     value={name === placeholder ? undefined : name}
                     placeholder={placeholder}
                     onChange={v => setName(v)}
                 />
                 {isBookmarkFolder(bookmark) && <>
-                    <Forms.FormTitle className={Margins.top16}>Folder Color</Forms.FormTitle>
+                    <Heading className={Margins.top16}>Folder Color</Heading>
                     <Select
                         options={
                             Object.entries(bookmarkFolderColors).map(([name, value]) => ({
@@ -79,7 +81,7 @@ export function EditModal({ modalProps, modalKey, bookmark, onSave }: {
                 >Save</Button>
                 <Button
                     color={Button.Colors.TRANSPARENT}
-                    look={Button.Looks.LINK}
+                    look={Button.Looks.FILLED}
                     onClick={() => closeModal(modalKey)}
                 >Cancel</Button>
             </ModalFooter>
@@ -98,10 +100,10 @@ function AddToFolderModal({ modalProps, modalKey, bookmarks, onSave }: {
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader>
-                <Text variant="heading-lg/semibold">Add Bookmark to Folder</Text>
+                <BaseText size="lg" weight="semibold">Add Bookmark to Folder</BaseText>
             </ModalHeader>
             <ModalContent>
-                <Forms.FormTitle className={Margins.top16}>Select a folder</Forms.FormTitle>
+                <Heading className={Margins.top16}>Select a folder</Heading>
                 <Select
                     options={[...Object.entries(bookmarks)
                         .filter(([, bookmark]) => isBookmarkFolder(bookmark))
@@ -125,7 +127,7 @@ function AddToFolderModal({ modalProps, modalKey, bookmarks, onSave }: {
                 >Save</Button>
                 <Button
                     color={Button.Colors.TRANSPARENT}
-                    look={Button.Looks.LINK}
+                    look={Button.Looks.FILLED}
                     onClick={() => closeModal(modalKey)}
                 >Cancel</Button>
             </ModalFooter>
@@ -137,12 +139,12 @@ function DeleteFolderConfirmationModal({ modalProps, modalKey, onConfirm }) {
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader>
-                <Text variant="heading-lg/semibold">Are you sure?</Text>
+                <BaseText size="lg" weight="semibold">Are you sure?</BaseText>
             </ModalHeader>
             <ModalContent>
-                <Forms.FormText className={Margins.top16}>
+                <Paragraph className={Margins.top16}>
                     Deleting a bookmark folder will also delete all bookmarks within it.
-                </Forms.FormText>
+                </Paragraph>
             </ModalContent>
             <ModalFooter>
                 <Button
@@ -153,7 +155,7 @@ function DeleteFolderConfirmationModal({ modalProps, modalKey, onConfirm }) {
                 </Button>
                 <Button
                     color={Button.Colors.TRANSPARENT}
-                    look={Button.Looks.LINK}
+                    look={Button.Looks.FILLED}
                     onClick={() => closeModal(modalKey)}
                 >
                     Cancel

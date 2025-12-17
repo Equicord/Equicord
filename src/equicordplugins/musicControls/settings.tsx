@@ -6,13 +6,14 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
-import { useAwaiter } from "@utils/react";
+import { HeadingSecondary } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { makeRange, OptionType } from "@utils/types";
-import { Button, Forms, MaskedLink, showToast, Text, Toasts, useMemo } from "@webpack/common";
+import { Button, MaskedLink, showToast, Toasts } from "@webpack/common";
 
 import hoverOnlyStyle from "./hoverOnly.css?managed";
-import { clearLyricsCache, getLyricsCount } from "./spotify/lyrics/api";
-import { useLyrics } from "./spotify/lyrics/components/util";
+import { clearLyricsCache, removeTranslations } from "./spotify/lyrics/api";
+import languages from "./spotify/lyrics/providers/translator/languages";
 import { Provider } from "./spotify/lyrics/providers/types";
 
 const sliderOptions = {
@@ -24,34 +25,14 @@ export function toggleHoverControls(value: boolean) {
     (value ? enableStyle : disableStyle)(hoverOnlyStyle);
 }
 
-function Details() {
-    const { lyricsInfo } = useLyrics();
-
-    const [count, error, loading] = useAwaiter(
-        useMemo(() => getLyricsCount, []),
-        {
-            onError: () => console.error("Failed to get lyrics count"),
-            fallbackValue: null,
-        }
-    );
-
-    return (
-        <>
-            <Text>Current lyrics provider: {lyricsInfo?.useLyric || "None"}</Text>
-            {loading ? <Text>Loading lyrics count...</Text> : error ? <Text>Failed to get lyrics count</Text> : <Text>Lyrics count: {count}</Text>}
-        </>
-    );
-}
-
-
 function InstallInstructions() {
     return (
-        <Forms.FormSection>
-            <Forms.FormTitle tag="h3">How to install</Forms.FormTitle>
-            <Forms.FormText>
+        <section>
+            <HeadingSecondary>How to install</HeadingSecondary>
+            <Paragraph>
                 Install <MaskedLink href="https://github.com/Inrixia/TidaLuna#installation">TidaLuna</MaskedLink> from here, then go to TidalLuna settings &rarr; Plugin stores &rarr; Install <code>@vmohammad/api</code>
-            </Forms.FormText>
-        </Forms.FormSection>
+            </Paragraph>
+        </section>
     );
 }
 
@@ -82,6 +63,15 @@ export const settings = definePluginSettings({
             { value: Provider.Spotify, label: "Spotify (Musixmatch)", default: true },
             { value: Provider.Lrclib, label: "LRCLIB" },
         ],
+    },
+    TranslateTo: {
+        description: "Translate lyrics to - Changing this will clear existing translations",
+        type: OptionType.SELECT,
+        options: languages,
+        onChange: async () => {
+            await removeTranslations();
+            showToast("Translations cleared", Toasts.Type.SUCCESS);
+        }
     },
     LyricsConversion: {
         description: "Automatically translate or romanize lyrics",
@@ -126,9 +116,9 @@ export const settings = definePluginSettings({
     SpotifySectionTitle: {
         type: OptionType.COMPONENT,
         component: () => (
-            <Forms.FormSection>
-                <Forms.FormTitle tag="h3">Spotify</Forms.FormTitle>
-            </Forms.FormSection>
+            <section>
+                <HeadingSecondary>Spotify</HeadingSecondary>
+            </section>
         )
     },
     showSpotifyControls: {
@@ -155,9 +145,9 @@ export const settings = definePluginSettings({
     TidalSectionTitle: {
         type: OptionType.COMPONENT,
         component: () => (
-            <Forms.FormSection>
-                <Forms.FormTitle tag="h3">Tidal</Forms.FormTitle>
-            </Forms.FormSection>
+            <section>
+                <HeadingSecondary>Tidal</HeadingSecondary>
+            </section>
         )
     },
     installTidalWithWS: {
@@ -174,31 +164,33 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: false,
     },
-    TidalLyricFetch: {
-        description: "Custom URL for fetching lyrics",
+
+    YtmSectionTitle: {
+        type: OptionType.COMPONENT,
+        component: () => (
+            <section>
+                <HeadingSecondary>Youtube Music</HeadingSecondary>
+            </section>
+        )
+    },
+    showYoutubeMusicControls: {
+        description: "Show Youtube Music Controls",
+        type: OptionType.BOOLEAN,
+        default: false
+    },
+    YoutubeMusicApiUrl: {
+        description: "Custom URL for the Api Server plugin",
         type: OptionType.STRING,
-        default: "https://api.vmohammad.dev/",
-        placeholder: "https://api.vmohammad.dev/",
+        default: "http://localhost:26538",
+        placeholder: "http://localhost:26538",
         onChange: (value: string) => {
-            if (!value.endsWith("/")) {
-                value += "/";
-            }
             if (URL.canParse(value)) {
-                settings.store.TidalLyricFetch = value;
+                settings.store.YoutubeMusicApiUrl = value;
             } else {
-                showToast("Invalid URL format for CustomUrl: " + value, Toasts.Type.FAILURE);
-                settings.store.TidalLyricFetch = "https://api.vmohammad.dev/";
+                showToast("Invalid URL format for Custom Api Server URL: " + value, Toasts.Type.FAILURE);
+                settings.store.YoutubeMusicApiUrl = settings.def.YoutubeMusicApiUrl.default;
             }
         }
-    },
-    TidalSyncMode: {
-        description: "Lyrics sync mode",
-        type: OptionType.SELECT,
-        options: [
-            { value: "line", label: "Line", default: true },
-            { value: "word", label: "Word" },
-            { value: "character", label: "Character" },
-        ],
-        default: "line",
-    },
+    }
+
 });

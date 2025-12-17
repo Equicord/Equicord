@@ -4,7 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { playAudio } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { wordsToTitle } from "@utils/text";
@@ -14,7 +17,6 @@ import definePlugin, {
 import {
     Button,
     ChannelStore,
-    Forms,
     GuildMemberStore,
     React,
     SelectedChannelStore,
@@ -90,10 +92,7 @@ async function speak(text: string, { volume, rate, customVoice } = settings.stor
     // 1. Check the in-memory cache (fast check)
     if (ttsCache.has(cacheKey)) {
         const cachedUrl = ttsCache.get(cacheKey)!;
-        const audio = new Audio(cachedUrl);
-        audio.volume = volume;
-        audio.playbackRate = rate;
-        audio.play();
+        playAudio(cachedUrl, { volume: volume * 100, speed: rate });
         return;
     }
 
@@ -105,10 +104,7 @@ async function speak(text: string, { volume, rate, customVoice } = settings.stor
             const url = URL.createObjectURL(cachedBlob);
             // Save it in the in-memory cache for next time.
             ttsCache.set(cacheKey, url);
-            const audio = new Audio(url);
-            audio.volume = volume;
-            audio.playbackRate = rate;
-            audio.play();
+            playAudio(url, { volume: volume * 100, speed: rate });
             return;
         }
     } catch (err) {
@@ -155,10 +151,7 @@ async function speak(text: string, { volume, rate, customVoice } = settings.stor
         console.error("Error storing in IndexedDB:", err);
     }
 
-    const audio = new Audio(url);
-    audio.volume = volume;
-    audio.playbackRate = rate;
-    audio.play();
+    playAudio(url, { volume: volume * 100, speed: rate });
 }
 
 function clean(str: string) {
@@ -381,12 +374,12 @@ export default definePlugin({
         const errorComponent: React.ReactElement | null = null;
 
         return (
-            <Forms.FormSection>
-                <Forms.FormText>
+            <section>
+                <Paragraph>
                     You can customise the spoken messages below. You can disable
                     specific messages by setting them to nothing
-                </Forms.FormText>
-                <Forms.FormText>
+                </Paragraph>
+                <Paragraph>
                     The special placeholders <code>{"{{USER}}"}</code>,{" "}
                     <code>{"{{DISPLAY_NAME}}"}</code>,{" "}
                     <code>{"{{NICKNAME}}"}</code> and{" "}
@@ -394,8 +387,8 @@ export default definePlugin({
                     user's name (nothing if it's yourself), the user's display
                     name, the user's nickname on current server and the
                     channel's name respectively
-                </Forms.FormText>
-                <Forms.FormText>
+                </Paragraph>
+                <Paragraph>
                     You can find a list of custom voices (tiktok only for now){" "}
                     <a
                         href="https://github.com/oscie57/tiktok-voice/wiki/Voice-Codes"
@@ -404,10 +397,10 @@ export default definePlugin({
                     >
                         here
                     </a>
-                </Forms.FormText>
-                <Forms.FormTitle className={Margins.top20} tag="h3">
+                </Paragraph>
+                <Heading className={Margins.top20} tag="h3">
                     Play Example Sounds
-                </Forms.FormTitle>
+                </Heading>
                 <div
                     style={{
                         display: "grid",
@@ -423,7 +416,7 @@ export default definePlugin({
                     ))}
                 </div>
                 {errorComponent}
-            </Forms.FormSection>
+            </section>
         );
     },
 });

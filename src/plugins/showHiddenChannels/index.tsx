@@ -86,6 +86,7 @@ export default definePlugin({
     name: "ShowHiddenChannels",
     description: "Show channels that you do not have access to view.",
     authors: [Devs.BigDuck, Devs.AverageReactEnjoyer, Devs.D3SOX, Devs.Ven, Devs.Nuckyz, Devs.Nickyux, Devs.dzshn, EquicordDevs.Oggetto],
+    isModified: true,
     settings,
 
     patches: [
@@ -225,7 +226,7 @@ export default definePlugin({
         },
         {
             // Hide the new version of unreads box for hidden channels
-            find: '="ChannelListUnreadsStore",',
+            find: '"ChannelListUnreadsStore",',
             replacement: {
                 match: /(?<=\.id\)\))(?=&&\(0,\i\.\i\)\((\i)\))/,
                 replace: (_, channel) => `&&!$self.isHiddenChannel(${channel})`
@@ -264,7 +265,7 @@ export default definePlugin({
                     replace: (m, channel) => `${m}if($self.isHiddenChannel(${channel}))break;`
                 },
                 {
-                    match: /(?<="renderHeaderBar",\i=>{.+?hideSearch:(\i)\.isDirectory\(\))/,
+                    match: /(?<="renderHeaderBar",\(\)=>{.+?hideSearch:(\i)\.isDirectory\(\))/,
                     replace: (_, channel) => `||$self.isHiddenChannel(${channel})`
                 },
                 {
@@ -331,7 +332,7 @@ export default definePlugin({
                 },
                 {
                     // Export the channel for the users allowed component patch
-                    match: /maxUsers:\i,users:\i(?<=channel:(\i).+?)/,
+                    match: /maxUsers:\d+?,users:\i(?<=channel:(\i).+?)/,
                     replace: (m, channel) => `${m},shcChannel:${channel}`
                 },
                 {
@@ -342,7 +343,7 @@ export default definePlugin({
             ]
         },
         {
-            find: '="interactive-normal",overflowCountClassName:',
+            find: '="interactive-text-default",overflowCountClassName:',
             replacement: [
                 {
                     // Create a variable for the channel prop
@@ -482,11 +483,11 @@ export default definePlugin({
                     // Filter hidden channels from GuildChannelStore.getChannels unless told otherwise
                     match: /(?<=getChannels\(\i)(\){.*?)return (.+?)}/,
                     replace: (_, rest, channels) => `,shouldIncludeHidden${rest}return $self.resolveGuildChannels(${channels},shouldIncludeHidden??arguments[0]==="@favorites");}`
-                }
+                },
             ]
         },
         {
-            find: "#{intl::FORM_LABEL_MUTED}",
+            find: ".invitesDisabledTooltip",
             replacement: {
                 // Make GuildChannelStore.getChannels return hidden channels
                 match: /(?<=getChannels\(\i)(?=\))/,

@@ -19,6 +19,8 @@
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { migratePluginSettings } from "@api/Settings";
 import { CheckedTextInput } from "@components/CheckedTextInput";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { getGuildAcronym } from "@utils/discord";
 import { Logger } from "@utils/Logger";
@@ -26,8 +28,9 @@ import { Margins } from "@utils/margins";
 import { ModalContent, ModalHeader, ModalRoot, openModalLazy } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { Guild, GuildSticker } from "@vencord/discord-types";
+import { StickerFormatType } from "@vencord/discord-types/enums";
 import { findByCodeLazy } from "@webpack";
-import { Constants, EmojiStore, FluxDispatcher, Forms, GuildStore, IconUtils, Menu, PermissionsBits, PermissionStore, React, RestAPI, StickersStore, Toasts, Tooltip, UserStore } from "@webpack/common";
+import { Constants, EmojiStore, FluxDispatcher, GuildStore, IconUtils, Menu, PermissionsBits, PermissionStore, React, RestAPI, StickersStore, Toasts, Tooltip, UserStore } from "@webpack/common";
 import { Promisable } from "type-fest";
 
 const uploadEmoji = findByCodeLazy(".GUILD_EMOJIS(", "EMOJI_UPLOAD_START");
@@ -47,13 +50,32 @@ interface Emoji {
 
 type Data = Emoji | Sticker;
 
-const StickerExt = [, "png", "png", "json", "gif"] as const;
+const StickerExtMap = {
+    [StickerFormatType.PNG]: "png",
+    [StickerFormatType.APNG]: "png",
+    [StickerFormatType.LOTTIE]: "json",
+    [StickerFormatType.GIF]: "gif"
+} as const;
+
+const PremiumTierStickerLimitMap = {
+    0: 5,
+    1: 15,
+    2: 30,
+    3: 60
+} as const;
+
+function getGuildMaxStickerSlots(guild: Guild) {
+    if (guild.features.has("MORE_STICKERS") && guild.premiumTier === 3)
+        return 120;
+
+    return PremiumTierStickerLimitMap[guild.premiumTier] ?? PremiumTierStickerLimitMap[0];
+}
 
 function getUrl(data: Data) {
     if (data.t === "Emoji")
         return `${location.protocol}//${window.GLOBAL_ENV.CDN_HOST}/emojis/${data.id}.${data.isAnimated ? "gif" : "png"}?size=4096&lossless=true`;
 
-    return `${window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT}/stickers/${data.id}.${StickerExt[data.format_type]}?size=4096&lossless=true`;
+    return `${window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT}/stickers/${data.id}.${StickerExtMap[data.format_type]}?size=4096&lossless=true`;
 }
 
 async function fetchSticker(id: string) {
@@ -118,17 +140,25 @@ function getGuildCandidates(data: Data) {
             (PermissionStore.getGuildPermissions({ id: g.id }) & PermissionsBits.CREATE_GUILD_EXPRESSIONS) === PermissionsBits.CREATE_GUILD_EXPRESSIONS;
         if (!canCreate) return false;
 
-        if (data.t === "Sticker") return true;
+        if (data.t === "Sticker") {
+            const stickerSlots = getGuildMaxStickerSlots(g);
+            const stickers = StickersStore.getStickersByGuildId(g.id);
+
+            return !stickers || stickers.length < stickerSlots;
+        }
 
         const { isAnimated } = data as Emoji;
 
         const emojiSlots = getGuildMaxEmojiSlots(g);
-        const { emojis } = EmojiStore.getGuilds()[g.id];
+        const emojis = EmojiStore.getGuildEmoji(g.id);
 
         let count = 0;
-        for (const emoji of emojis)
-            if (emoji.animated === isAnimated && !emoji.managed)
+        for (const emoji of emojis) {
+            if (emoji.animated === isAnimated && !emoji.managed) {
                 count++;
+            }
+        }
+
         return count < emojiSlots;
     }).sort((a, b) => a.name.localeCompare(b.name));
 }
@@ -186,7 +216,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
 
     return (
         <>
-            <Forms.FormTitle className={Margins.top20}>Custom Name</Forms.FormTitle>
+            <Heading className={Margins.top20}>Custom Name</Heading>
             <CheckedTextInput
                 value={name}
                 onChange={v => {
@@ -252,7 +282,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
                                         alt={g.name}
                                     />
                                 ) : (
-                                    <Forms.FormText
+                                    <Paragraph
                                         style={{
                                             fontSize: getFontSize(getGuildAcronym(g)),
                                             width: "100%",
@@ -263,7 +293,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
                                         }}
                                     >
                                         {getGuildAcronym(g)}
-                                    </Forms.FormText>
+                                    </Paragraph>
                                 )}
                             </div>
                         )}
@@ -298,7 +328,7 @@ function buildMenuItem(type: "Emoji" | "Sticker", fetchData: () => Promisable<Om
                                     width={24}
                                     style={{ marginRight: "0.5em" }}
                                 />
-                                <Forms.FormText>Clone {data.name}</Forms.FormText>
+                                <Paragraph>Clone {data.name}</Paragraph>
                             </ModalHeader>
                             <ModalContent>
                                 <CloneModal data={data} />

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { LoDashStatic } from "lodash";
+import { Style } from "@api/Styles";
 
 declare global {
     /**
@@ -40,6 +40,7 @@ declare global {
     export var IS_DEV: boolean;
     export var IS_REPORTER: boolean;
     export var IS_COMPANION_TEST: boolean;
+    export var IS_ANTI_CRASH_TEST: boolean;
     export var IS_DISCORD_DESKTOP: boolean;
     export var IS_VESKTOP: boolean;
     export var IS_EQUIBOP: boolean;
@@ -48,12 +49,7 @@ declare global {
 
     export var VencordNative: typeof import("./VencordNative").default;
     export var Vencord: typeof import("./Vencord");
-    export var VencordStyles: Map<string, {
-        name: string;
-        source: string;
-        classNames: Record<string, string>;
-        dom: HTMLStyleElement | null;
-    }>;
+    export var VencordStyles: Map<string, Style>;
     export var appSettings: {
         set(setting: string, v: any): void;
     };
@@ -65,11 +61,11 @@ declare global {
      */
     export var DiscordNative: any;
     export var Vesktop: any;
+    export var Equibop: any;
     export var VesktopNative: any;
+    export var unsafeWindow: any;
 
-    interface Window extends Record<PropertyKey, any> {
-        _: LoDashStatic;
-    }
+    interface Window extends Record<PropertyKey, any> { }
 }
 
 export { };
