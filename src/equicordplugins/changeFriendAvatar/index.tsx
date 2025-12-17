@@ -7,6 +7,7 @@
 import { get } from "@api/DataStore";
 import { definePluginSettings, Settings } from "@api/Settings";
 import { PencilIcon } from "@components/Icons";
+import { EquicordDevs } from "@utils/constants";
 import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { extractAndLoadChunksLazy, findByProps } from "@webpack";
@@ -15,7 +16,8 @@ import { User } from "@vencord/discord-types";
 
 import { SetAvatarModal } from "./AvatarModal";
 
-export const KEY_DATASTORE = "vencord-customavatars";
+export const requireSettingsMenu = extractAndLoadChunksLazy(['name:"UserSettings"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/);
+export const KEY_DATASTORE = "vencord-custom-avatars";
 export let avatars: Record<string, string> = {};
 let Icons: any;
 let getGuildAvatarURL: any;
@@ -38,12 +40,7 @@ export function getCustomAvatar(userId: string, withHash?: boolean): string | un
 export default definePlugin({
     name: "ChangeFriendAvatar",
     description: "Set custom avatar URLs for any user",
-    authors: [
-        {
-            name: "soap phia",
-            id: 1012095822957133976n
-        }
-    ],
+    authors: [EquicordDevs.soapphia],
     settings,
     getCustomAvatar,
 
@@ -60,7 +57,7 @@ export default definePlugin({
                     id="set-avatar"
                     icon={PencilIcon}
                     action={async () => {
-                        await extractAndLoadChunksLazy(['name:"UserSettings"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/);
+                        await requireSettingsMenu();
                         openModal(modalProps => <SetAvatarModal userId={user.id} modalProps={modalProps} />);
                     }}
                 />

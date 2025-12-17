@@ -6,19 +6,18 @@
 
 import { set } from "@api/DataStore";
 import { classNameFactory } from "@api/Styles";
+import { Button } from "@components/Button";
+import { Heading } from "@components/Heading";
 import { Margins } from "@utils/margins";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
 import { TextInput, useState } from "@webpack/common";
-import { Button } from "@components/Button";
-import { Heading } from "@components/Heading";
 
-import { avatars, KEY_DATASTORE } from "./index";
-const cl = classNameFactory("vc-customavatars-");
+import { avatars, KEY_DATASTORE } from ".";
+const cl = classNameFactory("vc-custom-avatars-");
 
 export function SetAvatarModal({ userId, modalProps }: { userId: string, modalProps: ModalProps; }) {
     const initialAvatarUrl = avatars[userId] || "";
     const [url, setUrl] = useState(initialAvatarUrl);
-    const [showReloadModal, setShowReloadModal] = useState(false);
 
     function handleKey(e: KeyboardEvent) {
         if (e.key === "Enter") saveUserAvatar();
