@@ -84,13 +84,16 @@
     },
     "settings": {
         "disableMinSize": {
-            "title": "Disable minimum window size"
+            "title": "Disable minimum window size",
+            "description": "Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens."
         },
         "enableReactDevtools": {
-            "title": "Enable React Developer Tools"
+            "title": "Enable React Developer Tools",
+            "description": "Enable the React Developer Tools extension for debugging Discord's React components. Useful for plugin development."
         },
         "frameless": {
-            "title": "Disable the window frame"
+            "title": "Disable the window frame",
+            "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area."
         },
         "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
         "macosVibrancyStyle": {
@@ -153,7 +156,8 @@
             "checkYourConnection": "Failed to connect to repository. Check your internet connection",
             "failedtoFetchCommits": "Could not fetch commits from repository",
             "repository": "Repository",
-            "viewRecentChanges": "View the most recent changes to Equicord. This fetches commits directly from the repository to show you what's new",
+            "whereUpdatesFetch": "This is the GitHub repository where Equicord fetches updates from",
+            "viewRecentChanges": "These are the new commits and plugin updates since your last version. You can see what features were added, bugs were fixed, and which plugins received updates",
             "failedToRetrieve": "Failed to retrieve - check console",
             "upToDate": "Repository Up To Date",
             "fetchRepo": "Fetch from Repository",
@@ -167,7 +171,8 @@
             "updateLogs_zero": "No Update Logs",
             "updateLogs_one": "Update Logs ({count} log)",
             "updateLogs_other": "Update Logs ({count} logs)",
-            "previousSessions": "Previous update sessions with their commit history and plugin changes",
+            "previousSessions": "A history of your previous update sessions with their commit history and plugin changes. Click on a log to expand it and see the details",
+            "info": "Check the repository for new commits, plugin updates, and code changes. This will compare your current version with the latest available and show you what's new",
             "title": "Changelog"
         },
         "restartRequired": {
@@ -179,18 +184,22 @@
         },
         "title": "Settings",
         "transparent": {
-            "description": "You need a theme that supports transparency or this will do nothing. WILL STOP THE WINDOW FROM BEING RESIZABLE!! Requires a full restart",
-            "title": "Enable window transparency"
+            "description": "Make the Discord window transparent. A theme that supports transparency is required or this will do nothing.",
+            "title": "Enable window transparency",
+            "noteWindows": "This will stop the window from being resizable and prevents you from snapping the window to screen edges",
+            "note": "This will stop the window from being resizable."
         },
         "useQuickCss": {
-            "description": "Loads your Custom CSS",
+            "description": "Load custom CSS from the QuickCSS editor. This allows you to customize Discord's appearance with your own styles.",
             "title": "Enable Custom CSS"
         },
         "winCtrlQ": {
-            "title": "Register Ctrl+Q as shortcut to close Discord (alternative to Alt+F4)"
+            "title": "Register Ctrl+Q as shortcut to close Discord",
+            "description": "Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application."
         },
         "winNativeTitleBar": {
-            "title": "Use Windows' native title bar instead of Discord's custom one"
+            "title": "Use Windows' native title bar instead of Discord's custom one",
+            "description": "Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools."
         }
     },
     "tabs": {
