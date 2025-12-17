@@ -84,13 +84,16 @@
     },
     "settings": {
         "disableMinSize": {
-            "title": "Отключить минимальный размер окна"
+            "title": "Отключить минимальный размер окна",
+            "description": "Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens."
         },
         "enableReactDevtools": {
-            "title": "Включить Инструменты React Для Разработчиков"
+            "title": "Включить Инструменты React Для Разработчиков",
+            "description": "Enable the React Developer Tools extension for debugging Discord's React components. Useful for plugin development."
         },
         "frameless": {
-            "title": "Отключить границу окна"
+            "title": "Отключить границу окна",
+            "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area."
         },
         "hint": "Подсказка: Вы можете изменить положение этого раздела настроек в <0>настройках плагина</0>!",
         "macosVibrancyStyle": {
@@ -153,7 +156,8 @@
             "checkYourConnection": "Не удалось подключиться к репозиторию. Проверьте подключение к Интернету",
             "failedtoFetchCommits": "Не удалось получить коммиты из репозитория",
             "repository": "Репозиторий",
-            "viewRecentChanges": "Просмотреть последние изменения в Equicord. Получает коммиты из репозитория, чтобы показать вам, что нового",
+            "whereUpdatesFetch": "This is the GitHub repository where Equicord fetches updates from",
+            "viewRecentChanges": "These are the new commits and plugin updates since your last version. You can see what features were added, bugs were fixed, and which plugins received updates",
             "failedToRetrieve": "Не удалось получить - проверьте консоль",
             "upToDate": "Репозиторий Обновлён",
             "fetchRepo": "Загрузить из Репозитория",
@@ -167,7 +171,8 @@
             "updateLogs_zero": "Нет Журналов Обновления",
             "updateLogs_one": "Журналы Обновления ({count} журнал)",
             "updateLogs_other": "Журналы Обновления ({count} журналов)",
-            "previousSessions": "Предыдущие сессии с историей коммитов и изменениями плагинов",
+            "previousSessions": "A history of your previous update sessions with their commit history and plugin changes. Click on a log to expand it and see the details",
+            "info": "Check the repository for new commits, plugin updates, and code changes. This will compare your current version with the latest available and show you what's new",
             "title": "Список изменений"
         },
         "restartRequired": {
@@ -179,18 +184,22 @@
         },
         "title": "Настройки",
         "transparent": {
-            "description": "Вам нужна тема, которая поддерживает прозрачность либо это не будет работать. НЕ ДАСТ РАЗМЕРУ ОКНА БЫТЬ ИЗМЕНЯЕМЫМ!! Требуется полный перезапуск",
-            "title": "Включить прозрачность окна"
+            "description": "Make the Discord window transparent. A theme that supports transparency is required or this will do nothing.",
+            "title": "Включить прозрачность окна",
+            "noteWindows": "This will stop the window from being resizable and prevents you from snapping the window to screen edges",
+            "note": "This will stop the window from being resizable."
         },
         "useQuickCss": {
-            "description": "Загружает Пользовательский CSS",
+            "description": "Load custom CSS from the QuickCSS editor. This allows you to customize Discord's appearance with your own styles.",
             "title": "Включить Пользовательский CSS"
         },
         "winCtrlQ": {
-            "title": "Зарегистрировать Ctrl+Q как комбинацию клавиш для закрытия Discord (альтернатива Alt+F4)"
+            "title": "Register Ctrl+Q as shortcut to close Discord",
+            "description": "Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application."
         },
         "winNativeTitleBar": {
-            "title": "Использовать строку заголовка Windows вместо пользовательской строки Discord"
+            "title": "Использовать строку заголовка Windows вместо пользовательской строки Discord",
+            "description": "Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools."
         }
     },
     "tabs": {
