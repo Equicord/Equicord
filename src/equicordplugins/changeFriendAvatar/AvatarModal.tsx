@@ -11,38 +11,9 @@ import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, M
 import { TextInput, useState } from "@webpack/common";
 import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
-import { Paragraph } from "@components/Paragraph";
 
-import { avatars, KEY_DATASTORE, KEY_STYLESHEET, settings } from "./index";
-
+import { avatars, KEY_DATASTORE } from "./index";
 const cl = classNameFactory("vc-customavatars-");
-function ReloadWarningModal({ modalProps }: { modalProps: ModalProps; }) {
-    return (
-        <ModalRoot {...modalProps}>
-            <ModalHeader className={cl("modal-header")}>
-                <Heading tag="h2">Warning</Heading>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-            <ModalContent className={cl("modal-content")}>
-                <section className={Margins.bottom16}>
-                    <Heading tag="h3">
-                        Your avatar change was saved.
-                    </Heading>
-                    <Paragraph>
-                        A reload (<strong>Ctrl+R</strong>) may be required for it to apply everywhere.
-                    </Paragraph>
-                </section>
-            </ModalContent>
-            <ModalFooter className={cl("modal-footer")}>
-                <Button variant="primary" onClick={modalProps.onClose}>
-                    Got it
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
-    );
-}
-
-
 
 export function SetAvatarModal({ userId, modalProps }: { userId: string, modalProps: ModalProps; }) {
     const initialAvatarUrl = avatars[userId] || "";
@@ -54,47 +25,20 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string, modalPr
     }
 
     async function saveUserAvatar() {
-        avatars[userId] = url;
-        await set(KEY_DATASTORE, avatars);
-
-        const css = Object.entries(avatars)
-            .map(([id, url]) => `
-    img[src*="cdn.discordapp.com/avatars/${id}"] {
-        content: url("${url}") !important;
-    }`)
-            .join("\n");
-
-        await set(KEY_STYLESHEET, css);
-
-        if (settings.store.enableReloadWarning) {
-            setShowReloadModal(true);
-        } else {
-            modalProps.onClose();
+        if (!url.trim()) {
+            await deleteUserAvatar();
+            return;
         }
+
+        avatars[userId] = url.trim();
+        await set(KEY_DATASTORE, avatars);
+        modalProps.onClose();
     }
 
     async function deleteUserAvatar() {
         delete avatars[userId];
         await set(KEY_DATASTORE, avatars);
-
-        const css = Object.entries(avatars)
-            .map(([id, url]) => `
-    img[src*="cdn.discordapp.com/avatars/${id}"] {
-        content: url("${url}") !important;
-    }`)
-            .join("\n");
-
-        await set(KEY_STYLESHEET, css);
-
-        if (settings.store.enableReloadWarning) {
-            setShowReloadModal(true);
-        } else {
-            modalProps.onClose();
-        }
-    }
-
-    if (showReloadModal) {
-        return <ReloadWarningModal modalProps={modalProps} />;
+        modalProps.onClose();
     }
 
     return (

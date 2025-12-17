@@ -11,32 +11,18 @@ import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { extractAndLoadChunksLazy } from "@webpack";
 import { Menu } from "@webpack/common";
+import { User } from "@vencord/discord-types";
 
 import { SetAvatarModal } from "./AvatarModal";
+
 export const KEY_DATASTORE = "vencord-customavatars";
-export const KEY_STYLESHEET = "vencord-customavatars-style";
 export let avatars: Record<string, string> = {};
 
-let styleEl: HTMLStyleElement | null = null;
-
-(async () => {
-    avatars = await get<Record<string, string>>(KEY_DATASTORE) || {};
-})();
-
-const settings = definePluginSettings({
-    enableReloadWarning: {
-        type: OptionType.BOOLEAN,
-        description: "Enable or disable the reload warning modal after changing the avatar",
-        default: true
-    }
-});
-export { settings };
 export function getCustomAvatarString(userId: string, withHash?: boolean): string | undefined {
     if (!avatars[userId] || !Settings.plugins.ChangeFriendAvatar?.enabled)
         return;
     return avatars[userId];
 }
-
 
 export default definePlugin({
     name: "ChangeFriendAvatar",
@@ -47,11 +33,32 @@ export default definePlugin({
             id: 1012095822957133976n
         }
     ],
-
-    settings,
     getCustomAvatarString,
 
-    patches: [],
+    patches: [
+        {
+            find: "getUserAvatarURL:",
+            replacement: [
+                {
+                    match: /(getUserAvatarURL:)(\i),/,
+                    replace: "$1$self.getAvatarHook($2),"
+                }
+            ]
+        }
+    ],
+
+    getAvatarHook: (original: any) => (user: User, animated: boolean, size: number) => {
+        if (!avatars[user.id]) return original(user, animated, size);
+
+        const customUrl = avatars[user.id];
+        try {
+            const res = new URL(customUrl);
+            res.searchParams.set("size", size.toString());
+            return res.toString();
+        } catch {
+            return customUrl;
+        }
+    },
 
     contextMenus: {
         "user-context": (children, { user }) => {
@@ -73,19 +80,8 @@ export default definePlugin({
     },
 
     async start() {
-        const css = await get(KEY_STYLESHEET);
-        if (css) {
-            styleEl = document.createElement("style");
-            styleEl.id = "vc-custom-avatar-style";
-            styleEl.textContent = css;
-            document.head.appendChild(styleEl);
-        }
+        avatars = await get<Record<string, string>>(KEY_DATASTORE) || {};
     },
 
-    stop() {
-        if (styleEl) {
-            styleEl.remove();
-            styleEl = null;
-        }
-    }
+    stop() { }
 });
