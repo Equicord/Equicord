@@ -84,13 +84,16 @@
     },
     "settings": {
         "disableMinSize": {
-            "title": "Вимкнути мінімальний розмір вікна"
+            "title": "Вимкнути мінімальний розмір вікна",
+            "description": "Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens."
         },
         "enableReactDevtools": {
-            "title": "Увімкнути Інструменти Розробника React"
+            "title": "Увімкнути Інструменти Розробника React",
+            "description": "Enable the React Developer Tools extension for debugging Discord's React components. Useful for plugin development."
         },
         "frameless": {
-            "title": "Вимкнути рамки вікна"
+            "title": "Вимкнути рамки вікна",
+            "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area."
         },
         "hint": "Підказка: Ви можете змінити позицію секції цих налаштувань в <0>налаштуваннях плагіну</0>!",
         "macosVibrancyStyle": {
@@ -153,7 +156,8 @@
             "checkYourConnection": "Не вдалося підключитися до репозиторію. Перевірте підключення до Інтернету",
             "failedtoFetchCommits": "Не вдалося отримати коміти з репозиторію",
             "repository": "Репозиторій",
-            "viewRecentChanges": "Перегляньте останні зміни оновлено. Ця вибірка коміти прямо з репозиторію, щоб показати вам, що нового",
+            "whereUpdatesFetch": "This is the GitHub repository where Equicord fetches updates from",
+            "viewRecentChanges": "These are the new commits and plugin updates since your last version. You can see what features were added, bugs were fixed, and which plugins received updates",
             "failedToRetrieve": "Не вдалося отримати - перевірте консоль",
             "upToDate": "Репозиторій Оновлено",
             "fetchRepo": "Отримати з Репозиторію",
@@ -167,7 +171,8 @@
             "updateLogs_zero": "Журнал оновлень відсутній",
             "updateLogs_one": "Оновити журнал ({count} log)",
             "updateLogs_other": "Оновити журнал ({count} logs)",
-            "previousSessions": "Попередні оновлення сесій зі своєю історією комітів та зміною плагінів",
+            "previousSessions": "A history of your previous update sessions with their commit history and plugin changes. Click on a log to expand it and see the details",
+            "info": "Check the repository for new commits, plugin updates, and code changes. This will compare your current version with the latest available and show you what's new",
             "title": "Журнал змін"
         },
         "restartRequired": {
@@ -179,18 +184,22 @@
         },
         "title": "Налаштування",
         "transparent": {
-            "description": "Вам потрібна тема, яка підтримує прозорість, інакше це не спрацює. ЗАБОРОНЯЄ ЗМІНУ РОЗМІРУ ВІКНА! Потрібен повний перезапуск",
-            "title": "Увімкнути прозорість вікна"
+            "description": "Make the Discord window transparent. A theme that supports transparency is required or this will do nothing.",
+            "title": "Увімкнути прозорість вікна",
+            "noteWindows": "This will stop the window from being resizable and prevents you from snapping the window to screen edges",
+            "note": "This will stop the window from being resizable."
         },
         "useQuickCss": {
-            "description": "Завантажує Користувацький CSS",
+            "description": "Load custom CSS from the QuickCSS editor. This allows you to customize Discord's appearance with your own styles.",
             "title": "Увімкнути Користувацький CSS"
         },
         "winCtrlQ": {
-            "title": "Зареєструвати Ctrl+Q як ярлик, щоб закрити Discord (альтернатива Alt+F4)"
+            "title": "Register Ctrl+Q as shortcut to close Discord",
+            "description": "Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application."
         },
         "winNativeTitleBar": {
-            "title": "Використовувати нативну панель вікна Windows замість користувацької Discord"
+            "title": "Використовувати нативну панель вікна Windows замість користувацької Discord",
+            "description": "Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools."
         }
     },
     "tabs": {
