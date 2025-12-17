@@ -1,14 +1,71 @@
+.vc-invite-button,
 .vc-donate-button {
     overflow: visible !important;
-    color: var(--text-default)
+    color: black;
+    background-color: color-mix(in srgb, #ED87A9 25%, pink);
 }
 
-.vc-donate-button .vc-heart-icon {
+.vc-invite-button:hover,
+.vc-donate-button:hover {
+    overflow: visible !important;
+    color: black;
+    background-color: color-mix(in srgb, #ED87A9 50%, pink);
+}
+
+.vc-invite-support-button,
+.vc-donate-support-button {
+    overflow: visible !important;
+    color: black;
+    background-color: color-mix(in srgb, #c3a3ce 25%, rgb(240 178 240));
+}
+
+.vc-invite-support-button:hover,
+.vc-donate-support-button:hover {
+    overflow: visible !important;
+    color: black;
+    background-color: color-mix(in srgb, #c3a3ce 50%, rgb(240 178 240));
+}
+
+.vc-invite-link {
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.vc-contrib-button {
+    overflow: visible !important;
+    margin-top: 1em;
+    color: black;
+    background-color: color-mix(in srgb, #EDCC87 60%, lightyellow);
+}
+
+.vc-contrib-button:hover {
+    color: black;
+    background-color: color-mix(in srgb, #EDCC87 75%, lightyellow);
+}
+
+.vc-contrib-github {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    transition: transform 0.3s;
+}
+
+.vc-invite-button .vc-invite-link,
+.vc-contrib-button .vc-contrib-github,
+.vc-donate-button .vc-heart-icon,
+.vc-invite-support-button .vc-invite-link,
+.vc-donate-support-button .vc-heart-icon {
     transition: transform 0.3s;
     margin-right: 0.5em;
 }
 
-.vc-donate-button:hover .vc-heart-icon {
+.vc-invite-button:hover .vc-invite-link,
+.vc-contrib-button:hover .vc-contrib-github,
+.vc-donate-button:hover .vc-heart-icon,
+.vc-invite-support-button:hover .vc-invite-link,
+.vc-donate-support-button:hover .vc-heart-icon {
     transform: scale(1.1);
     z-index: 10;
     position: relative;

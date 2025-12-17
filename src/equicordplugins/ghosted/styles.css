@@ -34,7 +34,7 @@
     cursor: pointer;
     border-radius: 8px;
     margin-bottom: 8px;
-    background-color: var(--background-secondary);
+    background-color: var(--background-secondary-alt);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -42,7 +42,7 @@
 }
 
 .vc-boo-ghosted-entry:hover {
-    background-color: var(--background-modifier-hover);
+    background-color: var(--background-mod-subtle);
 }
 
 .vc-boo-user-info {

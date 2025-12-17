@@ -13,7 +13,7 @@
 .vc-custom-sounds-seasonal-title {
     margin-top: 16px;
     padding-top: 8px;
-    border-top: 1px solid var(--background-modifier-accent);
+    border-top: 1px solid var(--background-mod-muted);
 }
 
 .vc-custom-sounds-sound-section {
@@ -23,7 +23,7 @@
 .vc-custom-sounds-url-input {
     width: 100%;
     padding: 8px;
-    background: var(--input-background);
+    background: var(--input-background-default, var(--input-background));
     border: none;
     border-radius: 3px;
     color: var(--text-normal);
@@ -42,7 +42,7 @@
 .vc-custom-sounds-search input {
     width: 100%;
     padding: 8px;
-    background: var(--input-background);
+    background: var(--input-background-default, var(--input-background));
     border: none;
     border-radius: 3px;
     color: var(--text-normal);

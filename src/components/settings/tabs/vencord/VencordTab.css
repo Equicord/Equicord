@@ -4,7 +4,7 @@
 }
 
 .vc-donatebutton {
-    background-color: var(--background-color) !important;
+    background-color: var(--background-base-low) !important;
     border-color: var(--vc-donatebutton) !important;
     filter: brightness(1);
     border-width: .1rem !important;
@@ -18,11 +18,11 @@
 
 
 .vc-joindiscordbutton {
-    background-color: var(--button-secondary-background) !important;
+    background-color: var(--redesign-button-secondary-background) !important;
 }
 
 .vc-joindiscordbutton:hover {
-    background-color: var(--button-secondary-background-hover) !important;
+    background-color: var(--redesign-button-secondary-pressed-background) !important;
 }
 
 .vc-settings-card-buttons {

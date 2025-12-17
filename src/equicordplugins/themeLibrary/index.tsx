@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { ColorPaletteIcon } from "@components/Icons";
+import SettingsPlugin from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { SettingsRouter } from "@webpack/common";
+import { openUserSettingsPanel } from "@webpack/common";
 
 import { settings } from "./utils/settings";
 
@@ -17,39 +19,34 @@ export default definePlugin({
     settings,
     toolboxActions: {
         "Open Theme Library": () => {
-            SettingsRouter.open("ThemeLibrary");
+            openUserSettingsPanel("theme_library");
         },
     },
 
     start() {
-        const customSettingsSections = (
-            Vencord.Plugins.plugins.Settings as any as {
-                customSections: ((ID: Record<string, unknown>) => any)[];
-            }
-        ).customSections;
+        const { customEntries, customSections } = SettingsPlugin;
 
-        const ThemeSection = () => ({
-            section: "ThemeLibrary",
+        customEntries.push({
+            key: "equicord_theme_library",
+            title: "Theme Library",
+            Component: require("./components/ThemeTab").default,
+            Icon: ColorPaletteIcon
+        });
+
+        customSections.push(() => ({
+            section: "EquicordThemeLibrary",
             label: "Theme Library",
             searchableTitles: ["Theme Library"],
             element: require("./components/ThemeTab").default,
-            id: "ThemeSection",
-        });
-
-        customSettingsSections.push(ThemeSection);
+            id: "ThemeLibrary",
+        }));
     },
 
     stop() {
-        const customSettingsSections = (
-            Vencord.Plugins.plugins.Settings as any as {
-                customSections: ((ID: Record<string, unknown>) => any)[];
-            }
-        ).customSections;
-
-        const i = customSettingsSections.findIndex(
-            section => section({}).id === "ThemeSection"
-        );
-
-        if (i !== -1) customSettingsSections.splice(i, 1);
+        const { customEntries, customSections } = SettingsPlugin;
+        const entry = customEntries.findIndex(entry => entry.key === "equicord_theme_library");
+        const section = customSections.findIndex(section => section({} as any).id === "ThemeLibrary");
+        if (entry !== -1) customEntries.splice(entry, 1);
+        if (section !== -1) customSections.splice(section, 1);
     },
 });

@@ -9,7 +9,7 @@ import { PlainSettings, Settings } from "@api/Settings";
 import { Logger } from "@utils/Logger";
 import { relaunch } from "@utils/native";
 import { t } from "@utils/translation";
-import { SettingsRouter } from "@webpack/common";
+import { openUserSettingsPanel } from "@webpack/common";
 import { deflateSync, inflateSync } from "fflate";
 
 import { deauthorizeCloud, getCloudAuth, getCloudUrl } from "./cloudSetup";
@@ -18,7 +18,7 @@ import { exportSettings, importSettings } from "./offline";
 const logger = new Logger("SettingsSync:Cloud", "#39b7e0");
 
 export async function putCloudSettings(manual?: boolean) {
-    const settings = await exportSettings({ minify: true });
+    const settings = await exportSettings({ syncDataStore: false, minify: true });
 
     try {
         const res = await fetch(new URL("/v1/settings", getCloudUrl()), {
@@ -80,7 +80,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
                 title: t("vencord.cloud.settings.header"),
                 body: t("vencord.cloud.settings.accountChanged"),
                 color: "var(--yellow-360)",
-                onClick: () => SettingsRouter.open("VencordCloud")
+                onClick: () => openUserSettingsPanel("equicord_cloud")
             });
             // Disable cloud sync globally
             Settings.cloud.authenticated = false;
@@ -136,7 +136,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
         const data = await res.arrayBuffer();
 
         const settings = new TextDecoder().decode(inflateSync(new Uint8Array(data)));
-        await importSettings(settings);
+        await importSettings(settings, "all", true);
 
         // sync with server timestamp instead of local one
         PlainSettings.cloud.settingsSyncVersion = written;

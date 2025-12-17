@@ -45,7 +45,7 @@ import { localStorage } from "./utils/localStorage";
 import { relaunch } from "./utils/native";
 import { checkForUpdates, update, UpdateLogger } from "./utils/updater";
 import { onceReady } from "./webpack";
-import { SettingsRouter } from "./webpack/common";
+import { openUserSettingsPanel } from "./webpack/common";
 import { patches } from "./webpack/patchWebpack";
 
 if (IS_REPORTER) {
@@ -62,7 +62,7 @@ async function syncSettings() {
                 title: t("vencord.cloud.settings.header"),
                 body: "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
                 color: "var(--yellow-360)",
-                onClick: () => SettingsRouter.open("VencordCloud")
+                onClick: () => openUserSettingsPanel("equicord_cloud")
             });
             // Disable cloud sync globally
             Settings.cloud.authenticated = false;
@@ -80,7 +80,7 @@ async function syncSettings() {
             title: t("vencord.cloud.integrations.header"),
             body: t("vencord.cloud.integrations.reauthenticateOtherClient"),
             color: "var(--yellow-360)",
-            onClick: () => SettingsRouter.open("EquicordCloud")
+            onClick: () => openUserSettingsPanel("equicord_cloud")
         });
         return;
     }

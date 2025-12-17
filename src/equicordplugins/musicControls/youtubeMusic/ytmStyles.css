@@ -1,6 +1,6 @@
 #vc-ytm-player {
     padding: 12px;
-    background: var(--bg-overlay-floating, var(--background-base-low, var(--background-base-lower-alt)));
+    background: var(--background-base-low);
     margin: 0;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -19,7 +19,7 @@
 
 .vc-ytm-artist,
 .vc-ytm-album {
-    color: var(--header-primary);
+    color: var(--text-strong);
 }
 
 .vc-ytm-secondary-song-info {
@@ -34,38 +34,38 @@
     margin-bottom: 5px;
 }
 
-#vc-ytm-progress-bar > [class^="slider"] {
+#vc-ytm-progress-bar > [class*="slider"] {
     flex-grow: 1;
     width: 100%;
     padding: 0 !important;
 }
 
-#vc-ytm-progress-bar > [class^="slider"] [class^="bar"] {
+#vc-ytm-progress-bar > [class*="slider"] [class*="bar"] {
     height: 3px !important;
     top: calc(12px - 4px / 2 + var(--bar-offset));
 }
 
-#vc-ytm-progress-bar > [class^="slider"] [class^="barFill"] {
+#vc-ytm-progress-bar > [class*="slider"] [class*="barFill"] {
     background-image: var(--vc-ytm-slider-gradient);
 }
 
-#vc-ytm-progress-bar > [class^="slider"]:hover [class^="barFill"] {
+#vc-ytm-progress-bar > [class*="slider"]:hover [class*="barFill"] {
     background-image: var(--vc-ytm-slider-gradient);
 }
 
-#vc-ytm-progress-bar > [class^="slider"] [class^="grabber"] {
+#vc-ytm-progress-bar > [class*="slider"] [class*="grabber"] {
     background-color: var(--vc-ytm-slider-grabber);
     width: 12px !important;
     height: 12px !important;
     margin-top: calc(13px/-2 + var(--bar-offset)/2);
     margin-left: -0.5px;
     border: unset;
-    color: var(--interactive-normal);
+    color: var(--interactive-icon-default);
     opacity: 0;
     transition: opacity 0.1s;
 }
 
-#vc-ytm-progress-bar:hover > [class^="slider"] [class^="grabber"] {
+#vc-ytm-progress-bar:hover > [class*="slider"] [class*="grabber"] {
     opacity: 1;
 }
 
@@ -86,7 +86,7 @@
     margin: 0 2px;
     border-radius: var(--radius-sm);
     background: none;
-    color: var(--interactive-normal);
+    color: var(--interactive-icon-default);
     padding: 0;
     width: 32px;
     height: 32px;
@@ -97,8 +97,8 @@
 }
 
 .vc-ytm-button:hover {
-    color: var(--interactive-hover);
-    background-color: var(--background-modifier-selected);
+    color: var(--interactive-icon-hover);
+    background-color: var(--background-mod-strong);
 }
 
 .vc-ytm-button svg {
@@ -166,7 +166,7 @@
 }
 
 #vc-ytm-song-title {
-    color: var(--header-primary);
+    color: var(--text-strong);
     font-size: 14px;
     font-weight: 600;
 }

@@ -14,29 +14,33 @@
 
 .vc-settings-quickActions-pill {
     all: unset;
-    background: var(--button-secondary-background);
-    color: var(--header-secondary);
+    background: var(--redesign-button-secondary-background);
+    color: var(--text-default);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5em;
-    padding: 8px 9px;
+    padding: 8px 12px 8px 8px;
     border-radius: 8px;
     transition: 0.1s ease-out;
     box-sizing: border-box;
+    line-height: 1;
+    cursor: pointer;
 }
 
 .vc-settings-quickActions-pill:hover {
-    background: var(--button-secondary-background-hover);
+    background: var(--redesign-button-secondary-pressed-background);
     transform: translateY(-1px);
     box-shadow: var(--elevation-high);
 }
 
 .vc-settings-quickActions-pill:focus-visible {
-    outline: 2px solid var(--focus-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: 2px;
 }
 
 .vc-settings-quickActions-img {
     width: 24px;
     height: 24px;
+    flex-shrink: 0;
 }
