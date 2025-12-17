@@ -9,7 +9,7 @@ import { definePluginSettings, Settings } from "@api/Settings";
 import { PencilIcon } from "@components/Icons";
 import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { extractAndLoadChunksLazy, findStoreLazy } from "@webpack";
+import { extractAndLoadChunksLazy } from "@webpack";
 import { Menu } from "@webpack/common";
 
 import { SetAvatarModal } from "./AvatarModal";
@@ -22,8 +22,6 @@ let styleEl: HTMLStyleElement | null = null;
 (async () => {
     avatars = await get<Record<string, string>>(KEY_DATASTORE) || {};
 })();
-
-const UserStore = findStoreLazy("UserStore") as typeof import("@webpack/common").UserStore;
 
 const settings = definePluginSettings({
     enableReloadWarning: {
