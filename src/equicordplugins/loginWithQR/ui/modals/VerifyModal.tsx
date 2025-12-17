@@ -128,7 +128,7 @@ function VerifyModal({
                         <BaseText
                             size="xl"
                             weight="bold"
-                            color="header-primary"
+                            color="text-strong"
                             tag="h1"
                             className={cl("device-header")}
                         >
@@ -137,7 +137,7 @@ function VerifyModal({
                         <BaseText
                             size="md"
                             weight="semibold"
-                            color="text-normal"
+                            color="text-default"
                             style={{ width: "30rem", textAlign: "center" }}
                         >
                             {getIntlMessage("QR_CODE_LOGIN_SUCCESS_FLAVOR")}
@@ -154,7 +154,7 @@ function VerifyModal({
                         <BaseText
                             size="xl"
                             weight="bold"
-                            color="header-primary"
+                            color="text-strong"
                             tag="h1"
                             className={cl("device-header")}
                         >
@@ -163,7 +163,7 @@ function VerifyModal({
                         <BaseText
                             size="md"
                             weight="semibold"
-                            color="text-normal"
+                            color="text-default"
                             style={{ width: "30rem" }}
                         >
                             {getIntlMessage("QR_CODE_NOT_FOUND_DESCRIPTION")}
@@ -180,7 +180,7 @@ function VerifyModal({
                         <BaseText
                             size="xl"
                             weight="bold"
-                            color="header-primary"
+                            color="text-strong"
                             tag="h1"
                             className={cl("device-header")}
                         >

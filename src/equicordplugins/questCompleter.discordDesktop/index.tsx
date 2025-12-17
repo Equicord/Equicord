@@ -18,8 +18,10 @@
 
 import "./style.css";
 
+import { HeaderBarButton } from "@api/HeaderBar";
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
+import { Alert } from "@components/Alert";
 import { Devs } from "@utils/constants";
 import { getTheme, Theme } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
@@ -27,16 +29,13 @@ import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpac
 import { ChannelStore, FluxDispatcher, GuildChannelStore, NavigationRouter, RestAPI, UserStore } from "@webpack/common";
 
 const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
-const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
 const ApplicationStreamingStore = findStoreLazy("ApplicationStreamingStore");
 const RunningGameStore = findStoreLazy("RunningGameStore");
 const QuestsStore = findByPropsLazy("getQuest");
 
-let questIdCheck = 0;
-
 function ToolBarHeader() {
     return (
-        <HeaderBarIcon
+        <HeaderBarButton
             tooltip="Complete Quest"
             position="bottom"
             className="vc-quest-completer"
@@ -49,7 +48,7 @@ function ToolBarHeader() {
 async function openCompleteQuestUI() {
     const quest = [...QuestsStore.quests.values()].find(x => x.id !== "1412491570820812933" && x.userStatus?.enrolledAt && !x.userStatus?.completedAt && new Date(x.config.expiresAt).getTime() > Date.now());
 
-    if (!quest && !settings.store.disableNotifications) {
+    if (!quest) {
         showNotification({
             title: "Quest Completer",
             body: "No Quests To Complete. Click to navigate to the quests tab",
@@ -209,35 +208,24 @@ async function openCompleteQuestUI() {
 
 const settings = definePluginSettings({
     disableNotifications: {
-        description: "Disable notifications when no quests are available or when a quest is completed",
         type: OptionType.BOOLEAN,
+        description: "Disable notifications when no quests are available or when a quest is completed - still shows no quests notif",
         default: false,
     },
 });
 
 export default definePlugin({
     name: "QuestCompleter",
-    description: "A plugin to complete quests without having the game installed.",
+    description: "Adds a button to the header bar to complete quests without having the game installed.",
     authors: [Devs.amia],
     settings,
-    patches: [
-        {
-            find: ".platformSelectorPrimary,",
-            replacement: {
-                match: /(?<=questId:(\i\.id).*?"secondary",)disabled:!0/,
-                replace: "onClick:()=>$self.mobileQuestPatch($1)"
-            },
-        },
-    ],
-    mobileQuestPatch(questId) {
-        if (questId === questIdCheck) return;
-        questIdCheck = questId;
-        Vencord.Webpack.Common.RestAPI.post({
-            url: `/quests/${questId}/enroll`,
-            body: {
-                location: 11
-            }
-        });
-    },
-    renderHeaderBarButton: ToolBarHeader
+    settingsAboutComponent: () => (
+        <Alert.Info>
+            You must manually accept the quest first before clicking the button.
+        </Alert.Info>
+    ),
+    headerBarButton: {
+        icon: QuestIcon,
+        render: ToolBarHeader
+    }
 });

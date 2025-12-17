@@ -79,7 +79,7 @@ export interface ChatBarProps {
     };
 }
 
-export type ChatBarButtonFactory = (props: ChatBarProps & { isMainChat: boolean; }) => JSX.Element | null;
+export type ChatBarButtonFactory = (props: ChatBarProps & { isMainChat: boolean; isAnyChat: boolean; }) => JSX.Element | null;
 export type ChatBarButtonData = {
     render: ChatBarButtonFactory;
     /**
@@ -98,13 +98,14 @@ const logger = new Logger("ChatButtons");
 function VencordChatBarButtons(props: ChatBarProps) {
     const { chatBarButtons } = useSettings(["uiElements.chatBarButtons.*"]).uiElements;
 
+    const { analyticsName } = props.type;
     return (
         <>
             {Array.from(ChatBarButtonMap)
                 .filter(([key]) => chatBarButtons[key]?.enabled !== false)
                 .map(([key, { render: Button }]) => (
                     <ErrorBoundary noop key={key} onError={e => logger.error(`Failed to render ${key}`, e.error)}>
-                        <Button {...props} isMainChat={props.type.analyticsName === "normal"} />
+                        <Button {...props} isMainChat={analyticsName === "normal"} isAnyChat={["normal", "sidebar"].includes(analyticsName)} />
                     </ErrorBoundary>
                 ))}
         </>
@@ -173,7 +174,7 @@ addContextMenuPatch("textarea-context", (children, args) => {
     if (idx === -1) return;
 
     group.splice(idx, 0,
-        <Menu.MenuItem id="vc-chat-buttons" key="vencord-chat-buttons" label="Vencord Buttons">
+        <Menu.MenuItem id="vc-chat-buttons" key="vencord-chat-buttons" label="Equicord Buttons">
             {buttons.map(([id]) => (
                 <Menu.MenuCheckboxItem
                     label={id}
