@@ -5,35 +5,24 @@
  */
 
 import { get } from "@api/DataStore";
-import { definePluginSettings, Settings } from "@api/Settings";
 import { PencilIcon } from "@components/Icons";
+import { EquicordDevs } from "@utils/constants";
 import { openModal } from "@utils/modal";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin from "@utils/types";
+import { User } from "@vencord/discord-types";
 import { extractAndLoadChunksLazy } from "@webpack";
 import { Menu } from "@webpack/common";
-import { User } from "@vencord/discord-types";
 
 import { SetAvatarModal } from "./AvatarModal";
 
-export const KEY_DATASTORE = "vencord-customavatars";
+export const requireSettingsMenu = extractAndLoadChunksLazy(['name:"UserSettings"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/);
+export const KEY_DATASTORE = "vencord-custom-avatars";
 export let avatars: Record<string, string> = {};
-
-export function getCustomAvatarString(userId: string, withHash?: boolean): string | undefined {
-    if (!avatars[userId] || !Settings.plugins.ChangeFriendAvatar?.enabled)
-        return;
-    return avatars[userId];
-}
 
 export default definePlugin({
     name: "ChangeFriendAvatar",
     description: "Set custom avatar URLs for any user",
-    authors: [
-        {
-            name: "soap phia",
-            id: 1012095822957133976n
-        }
-    ],
-    getCustomAvatarString,
+    authors: [EquicordDevs.soapphia],
 
     patches: [
         {
@@ -71,7 +60,7 @@ export default definePlugin({
                     id="set-avatar"
                     icon={PencilIcon}
                     action={async () => {
-                        await extractAndLoadChunksLazy(['name:"UserSettings"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/);
+                        await requireSettingsMenu();
                         openModal(modalProps => <SetAvatarModal userId={user.id} modalProps={modalProps} />);
                     }}
                 />
