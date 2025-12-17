@@ -68,7 +68,6 @@
         "@types/react-dom": "^19.0.4",
         "@types/yazl": "^3.3.0",
         "@vencord/discord-types": "link:@vencord/discord-types",
-        "adm-zip": "^0.5.16",
         "diff": "^8.0.2",
         "esbuild": "^0.27.0",
         "eslint": "9.39.1",
