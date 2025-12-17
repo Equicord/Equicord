@@ -16,13 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
+import NoReplyMentionPlugin from "@plugins/noReplyMention";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { MessageFlags } from "@vencord/discord-types/enums";
+import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
-import { FluxDispatcher, MessageTypeSets, PermissionsBits, PermissionStore, UserStore, WindowStore } from "@webpack/common";
-import NoReplyMentionPlugin from "plugins/noReplyMention";
+import { AuthenticationStore, FluxDispatcher, MessageTypeSets, PermissionsBits, PermissionStore, WindowStore } from "@webpack/common";
 
 const MessageActions = findByPropsLazy("deleteMessage", "startEditMessage");
 const EditStore = findByPropsLazy("isEditing", "isEditingAny");
@@ -75,11 +76,39 @@ export default definePlugin({
     },
 
     onMessageClick(msg, channel, event) {
-        const isMe = msg.author.id === UserStore.getCurrentUser().id;
+        const myId = AuthenticationStore.getId();
+        const isMe = msg.author.id === myId;
+        const isSelfInvokedUserApp = msg.interactionMetadata?.authorizing_integration_owners[ApplicationIntegrationType.USER_INSTALL] === myId;
+        if (!isDeletePressed) {
+            if (event.detail < 2) return;
+            if (settings.store.requireModifier && !event.ctrlKey && !event.shiftKey) return;
+            if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
+            if (msg.deleted === true) return;
 
-        if (isDeletePressed) {
-            if (!settings.store.enableDeleteOnClick || !(isMe || PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel))) return;
+            if (isMe) {
+                if (!settings.store.enableDoubleClickToEdit || EditStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
 
+                MessageActions.startEditMessage(channel.id, msg.id, msg.content);
+                event.preventDefault();
+            } else {
+                if (!settings.store.enableDoubleClickToReply) return;
+
+                if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) return;
+
+                const isShiftPress = event.shiftKey && !settings.store.requireModifier;
+                const shouldMention = isPluginEnabled(NoReplyMentionPlugin.name)
+                    ? NoReplyMentionPlugin.shouldMention(msg, isShiftPress)
+                    : !isShiftPress;
+
+                FluxDispatcher.dispatch({
+                    type: "CREATE_PENDING_REPLY",
+                    channel,
+                    message: msg,
+                    shouldMention,
+                    showMentionToggle: channel.guild_id !== null
+                });
+            }
+        } else if (settings.store.enableDeleteOnClick && (isMe || PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) || isSelfInvokedUserApp)) {
             if (msg.deleted) {
                 FluxDispatcher.dispatch({
                     type: "MESSAGE_DELETE",
@@ -90,40 +119,7 @@ export default definePlugin({
             } else {
                 MessageActions.deleteMessage(channel.id, msg.id);
             }
-
             event.preventDefault();
-            return;
-        }
-
-        if (event.detail !== 2) return;
-        if (settings.store.requireModifier && !event.ctrlKey && !event.shiftKey) return;
-        if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
-        if (msg.deleted === true) return;
-
-        if (isMe) {
-            if (!settings.store.enableDoubleClickToEdit || EditStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
-
-            MessageActions.startEditMessage(channel.id, msg.id, msg.content);
-            event.preventDefault();
-            return;
-        } else {
-            if (!settings.store.enableDoubleClickToReply) return;
-            if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) return;
-
-            const isShiftPress = event.shiftKey && !settings.store.requireModifier;
-            const shouldMention = Vencord.Plugins.isPluginEnabled(NoReplyMentionPlugin.name)
-                ? NoReplyMentionPlugin.shouldMention(msg, isShiftPress)
-                : !isShiftPress;
-
-            FluxDispatcher.dispatch({
-                type: "CREATE_PENDING_REPLY",
-                channel,
-                message: msg,
-                shouldMention,
-                showMentionToggle: channel.guild_id !== null
-            });
-            event.preventDefault();
-            return;
         }
     },
 });

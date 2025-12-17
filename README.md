@@ -25,7 +25,7 @@ MacOS
 
 Linux
 
-- [GUI-X11](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl-x11)
+- [GUI](https://github.com/Equicord/Equilotl/releases/latest/download/Equilotl-x11)
 - [CLI](https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli-Linux)
 - [AUR](https://aur.archlinux.org/packages?O=0&K=equicord)
 
@@ -70,11 +70,21 @@ Build Equicord:
 bun run build
 ```
 
-Inject Equicord into your client:
+Inject Equicord into your desktop client:
 
 ```shell
 bun run inject
 ```
+
+Build Equicord for web:
+
+```shell
+pnpm buildWeb
+```
+
+After building Equicord's web extension, locate the appropriate ZIP file in the `dist` directory and follow your browser’s guide for installing custom extensions, if supported.
+
+Note: Firefox extension zip requires Firefox for developers
 
 ## Credits
 

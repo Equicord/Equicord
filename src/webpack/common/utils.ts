@@ -18,12 +18,14 @@
 
 import type * as t from "@vencord/discord-types";
 import { _resolveReady, filters, findByCodeLazy, findByPropsLazy, findLazy, mapMangledModuleLazy, waitFor } from "@webpack";
+import type * as TSPattern from "ts-pattern";
 
 export let FluxDispatcher: t.FluxDispatcher;
 waitFor(["dispatch", "subscribe"], m => {
     FluxDispatcher = m;
-    // Non import access to avoid circular dependency
-    Vencord.Plugins.subscribeAllPluginsFluxEvents(m);
+    // Importing this directly causes all webpack commons to be imported, which can easily cause circular dependencies.
+    // For this reason, use a non import access here.
+    Vencord.Api.PluginManager.subscribeAllPluginsFluxEvents(m);
 
     const cb = () => {
         m.unsubscribe("CONNECTION_OPEN", cb);
@@ -50,7 +52,7 @@ export const useDrag = findByCodeLazy("useDrag::spec.begin was deprecated");
 // you cant make a better finder i love that they remove display names sm
 export const useDrop = findByCodeLazy(".options);return", ".collect,");
 
-export const { match, P }: Pick<typeof import("ts-pattern"), "match" | "P"> = mapMangledModuleLazy("@ts-pattern/matcher", {
+export const { match, P }: { match: typeof TSPattern["match"], P: typeof TSPattern["P"]; } = mapMangledModuleLazy("@ts-pattern/matcher", {
     match: filters.byCode("return new"),
     P: filters.byProps("when")
 });
@@ -173,6 +175,11 @@ export const { zustandPersist } = mapMangledModuleLazy(".onRehydrateStorage)?", 
     zustandPersist: filters.byCode(/(\(\i,\i\))=>.+?\i\1/)
 });
 
+export const { openUserSettings } = findByPropsLazy("openUserSettings");
+export function openUserSettingsPanel(panel: string) {
+    openUserSettings(panel + "_panel");
+}
+
 export const MessageActions = findByPropsLazy("editMessage", "sendMessage");
 export const MessageCache = findByPropsLazy("clearCache", "_channelMessages");
 export const UserProfileActions = findByPropsLazy("openUserProfileModal", "closeUserProfileModal");
@@ -180,6 +187,8 @@ export const InviteActions = findByPropsLazy("resolveInvite");
 export const ChannelActionCreators = findByPropsLazy("openPrivateChannel");
 
 export const VoiceActions = findByPropsLazy("toggleSelfMute");
+export const GuildActions = findByPropsLazy("setServerMute", "setServerDeaf");
+export const ChannelActions = findByPropsLazy("selectChannel", "selectVoiceChannel");
 
 export const IconUtils: t.IconUtils = findByPropsLazy("getGuildBannerURL", "getUserAvatarURL");
 
@@ -212,9 +221,10 @@ export const DisplayProfileUtils: t.DisplayProfileUtils = mapMangledModuleLazy(/
 export const DateUtils: t.DateUtils = mapMangledModuleLazy("millisecondsInUnit:", {
     calendarFormat: filters.byCode("sameElse"),
     dateFormat: filters.byCode('":'),
-    // TODO: the +? are for compat with the old version - Remove them once no longer needed
-    isSameDay: filters.byCode(/Math\.abs\(\+?\i-\+?\i\)/),
+    isSameDay: filters.byCode(/Math\.abs\(\i-\i\)/),
     diffAsUnits: filters.byCode("days:0", "millisecondsInUnit")
 });
 
 export const MessageTypeSets: t.MessageTypeSets = findByPropsLazy("REPLYABLE", "FORWARDABLE");
+
+export const fetchApplicationsRPC = findByCodeLazy('"Invalid Origin"', ".application");

@@ -20,6 +20,7 @@ import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { InfoIcon, OwnerCrownIcon } from "@components/Icons";
+import { cl, getGuildPermissionSpecMap } from "@plugins/permissionsViewer/utils";
 import { copyToClipboard } from "@utils/clipboard";
 import { getIntlMessage, getUniqueUsername } from "@utils/discord";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
@@ -28,7 +29,6 @@ import { findByCodeLazy } from "@webpack";
 import { ContextMenuApi, FluxDispatcher, GuildMemberStore, GuildRoleStore, i18n, Menu, PermissionsBits, ScrollerThin, Tooltip, useEffect, useMemo, UserStore, useState, useStateFromStores } from "@webpack/common";
 
 import { settings } from "..";
-import { cl, getGuildPermissionSpecMap } from "../utils";
 import { PermissionAllowedIcon, PermissionDefaultIcon, PermissionDeniedIcon } from "./icons";
 
 export const enum PermissionType {
@@ -165,7 +165,7 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
                                                         : permission.type === PermissionType.User
                                                             ? (user != null && getUniqueUsername(user)) ?? "Unknown User"
                                                             : (
-                                                                <Flex style={{ gap: "0.2em", justifyItems: "center" }}>
+                                                                <Flex gap="0.2em">
                                                                     @owner
                                                                     <OwnerCrownIcon height={18} width={18} aria-hidden="true" />
                                                                 </Flex>

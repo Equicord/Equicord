@@ -6,14 +6,14 @@
 
 import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
+import { BasicChannelTabsProps, Bookmark, BookmarkFolder, BookmarkProps, isBookmarkFolder, isTabSelected, navigateToBookmark, openedTabs, settings, switchChannel, useBookmarks } from "@equicordplugins/channelTabs/util";
+import { CircleQuestionIcon, DiscoveryIcon, EnvelopeIcon, FriendsIcon, NitroIcon, QuestIcon, ShopIcon } from "@equicordplugins/channelTabs/util/icons";
 import { getGuildAcronym, getIntlMessage } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { closeModal, openModal } from "@utils/modal";
 import { findComponentByCodeLazy } from "@webpack";
 import { Avatar, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, React, ReadStateStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, Tooltip, useDrag, useDrop, useEffect, useRef, UserStore, useState } from "@webpack/common";
 
-import { BasicChannelTabsProps, Bookmark, BookmarkFolder, BookmarkProps, isBookmarkFolder, isTabSelected, navigateToBookmark, openedTabs, settings, switchChannel, useBookmarks } from "../util";
-import { CircleQuestionIcon, DiscoveryIcon, EnvelopeIcon, FriendsIcon, NitroIcon, QuestIcon, ShopIcon } from "../util/icons";
 import { NotificationDot } from "./ChannelTab";
 import { BookmarkContextMenu, EditModal } from "./ContextMenus";
 
@@ -452,7 +452,7 @@ function Bookmark(props: BookmarkProps & { isExpanded?: boolean; onToggleFolder?
     );
 }
 
-function HorizontalScroller({ children, className, customRef }: React.PropsWithChildren<{ className?: string; customRef?: (node: HTMLDivElement) => void; }>) {
+export function HorizontalScroller({ children, className, customRef }: React.PropsWithChildren<{ className?: string; customRef?: (node: HTMLDivElement) => void; }>) {
     const internalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -461,7 +461,7 @@ function HorizontalScroller({ children, className, customRef }: React.PropsWithC
 
         const handleWheel = (e: WheelEvent) => {
             e.preventDefault();
-            element.scrollLeft += e.deltaY;
+            element.scrollLeft += e.deltaX + e.deltaY;
         };
 
         element.addEventListener("wheel", handleWheel);

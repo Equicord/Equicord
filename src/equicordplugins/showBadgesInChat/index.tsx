@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { addMessageDecoration, removeMessageDecoration } from "@api/MessageDecorations";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { isEquicordPluginDev, isPluginDev } from "@utils/misc";
 import definePlugin from "@utils/types";
@@ -28,7 +27,6 @@ const discordBadges: readonly [number, string, string][] = Object.freeze([
     [8, "HypeSquad Balance", "3aa41de486fa12454c3761e8e223442e"],
     [3, "Discord Bug Hunter", "2717692c7dca7289b35297368a940dd0"],
     [14, "Discord Bug Hunter", "848f79194d4be5ff5f81505cbd0ce1e6"],
-    [22, "Active Developer", "6bdc42827a38498929a4920da12695d9"],
     [17, "Early Verified Bot Developer", "6df5892e0f35b051f8b61eace34f4967"],
     [9, "Early Supporter", "7060786766c9c840eb3019e725d2b358"],
     [18, "Moderator Programs Alumni", "fee1624003e2fee35cb398e125dc479b"]
@@ -38,18 +36,15 @@ function CheckBadge({ badge, author }: { badge: string; author: User; }): JSX.El
 
     switch (badge) {
         case "EquicordDonor":
-            const equicordDonorBadges = badges.getEquicordDonorBadges(author.id)?.slice(0, 12);
-            if (!equicordDonorBadges || equicordDonorBadges.length === 0) return null;
-
             return (
                 <span style={{ order: settings.store.EquicordDonorPosition }}>
-                    {equicordDonorBadges.map((badge: any) => (
+                    {badges.getEquicordDonorBadges(author.id)?.map(badge => (
                         <RoleIconComponent
                             key={author.id}
                             className={roleIconClassName}
                             name={badge.description}
                             size={20}
-                            src={badge.image}
+                            src={badge.iconSrc}
                         />
                     ))}
                 </span>
@@ -74,7 +69,7 @@ function CheckBadge({ badge, author }: { badge: string; author: User; }): JSX.El
                             className={roleIconClassName}
                             name={badge.description}
                             size={20}
-                            src={badge.image}
+                            src={badge.iconSrc}
                         />
                     ))}
                 </span>
@@ -145,12 +140,8 @@ export default definePlugin({
     name: "ShowBadgesInChat",
     authors: [Devs.Inbestigator, EquicordDevs.KrystalSkull],
     description: "Shows the message author's badges beside their name in chat.",
-    dependencies: ["MessageDecorationsAPI"],
     settings,
-    start: () => {
-        addMessageDecoration("vc-show-badges-in-chat", props => props.message?.author ? <ChatBadges author={props.message.author} /> : null);
-    },
-    stop: () => {
-        removeMessageDecoration("vc-show-badges-in-chat");
+    renderMessageDecoration(props) {
+        return props.message?.author ? <ChatBadges author={props.message.author} /> : null;
     }
 });

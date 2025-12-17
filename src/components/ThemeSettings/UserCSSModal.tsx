@@ -8,7 +8,7 @@ import { Settings, useSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import { Flex } from "@components/Flex";
 import { CopyIcon, PasteIcon, ResetIcon } from "@components/Icons";
-import { copyWithToast } from "@utils/misc";
+import { copyWithToast } from "@utils/discord";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
 import { showToast, Toasts, Tooltip } from "@webpack/common";
 import { type ReactNode } from "react";
@@ -90,8 +90,8 @@ function ResetButton({ themeSettings, themeId, close, onReset }: ResetButtonProp
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
 
-                onClick={async () => {
-                    await close(); // close the modal first to stop rendering
+                onClick={() => {
+                    close(); // close the modal first to stop rendering
                     delete themeSettings[themeId];
                     onReset();
                 }}>

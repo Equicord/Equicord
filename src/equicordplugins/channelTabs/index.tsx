@@ -20,8 +20,8 @@ import * as ChannelTabsUtils from "./util";
 
 const contextMenuPatch: NavContextMenuPatchCallback = (children, props: { channel: Channel, messageId?: string; }) => {
     const { channel, messageId } = props;
-    const group = findGroupChildrenByChildId("channel-copy-link", children);
-    group?.push(
+
+    const menuItem = (
         <Menu.MenuItem
             label="Open in New Tab"
             id="open-link-in-tab"
@@ -31,6 +31,17 @@ const contextMenuPatch: NavContextMenuPatchCallback = (children, props: { channe
             }, settings.store.openInNewTabAutoSwitch, messageId, true, true)} // The true values are important for bypassing tab limits
         />
     );
+
+    const group = findGroupChildrenByChildId("channel-copy-link", children);
+    if (group) {
+        group.push(menuItem);
+    } else {
+        children.splice(-1, 0, (
+            <Menu.MenuGroup>
+                {menuItem}
+            </Menu.MenuGroup>
+        ));
+    }
 };
 
 export default definePlugin({
@@ -40,7 +51,9 @@ export default definePlugin({
     dependencies: ["ContextMenuAPI"],
     contextMenus: {
         "channel-mention-context": contextMenuPatch,
-        "channel-context": contextMenuPatch
+        "channel-context": contextMenuPatch,
+        "user-context": contextMenuPatch,
+        "gdm-context": contextMenuPatch
     },
     patches: [
         // add the channel tab container at the top
@@ -95,12 +108,30 @@ export default definePlugin({
 
     settings,
 
+    start() {
+        // migrate old settings to new granular keybind settings
+        const store = settings.store as any;
+        if (store.enableHotkeys !== undefined) {
+            const oldValue = store.enableHotkeys;
+            settings.store.enableNumberKeySwitching = oldValue;
+            settings.store.enableCloseTabShortcut = oldValue;
+            settings.store.enableNewTabShortcut = oldValue;
+            settings.store.enableTabCycleShortcut = oldValue;
+            delete store.enableHotkeys;
+        }
+        if (store.hotkeyCount !== undefined) {
+            settings.store.numberKeySwitchCount = store.hotkeyCount;
+            delete store.hotkeyCount;
+        }
+    },
+
     containerHeight: 0,
 
     flux: {
         CHANNEL_SELECT(data: { channelId: string | null, guildId: string | null; }) {
             // Skip if this navigation was triggered by us (clicking a tab)
             if (ChannelTabsUtils.isNavigatingViaTab()) {
+                ChannelTabsUtils.clearNavigationFlag();
                 return;
             }
 
@@ -122,6 +153,9 @@ export default definePlugin({
                 } else if (path === "/channels/@me") {
                     channelId = "__friends__";
                     guildId = "@me";
+                } else if (path === "/channels/@me/activity") {
+                    channelId = "__activity__";
+                    guildId = "@me";
                 } else if (path.includes("/shop")) {
                     channelId = "__shop__";
                     guildId = "@me";
@@ -133,6 +167,9 @@ export default definePlugin({
                     guildId = "@me";
                 } else if (path.includes("/store")) {
                     channelId = "__nitro__";
+                    guildId = "@me";
+                } else if (path.includes("/icymi")) {
+                    channelId = "__icymi__";
                     guildId = "@me";
                 } else {
                     // Unknown page without channelId - ignore

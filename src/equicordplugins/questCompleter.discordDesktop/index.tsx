@@ -16,51 +16,44 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import "@equicordplugins/_misc/styles.css";
 import "./style.css";
 
+import { HeaderBarButton } from "@api/HeaderBar";
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
-import { ErrorBoundary } from "@components/index";
+import { Alert } from "@components/Alert";
 import { Devs } from "@utils/constants";
 import { getTheme, Theme } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
-import { findByProps, findComponentByCodeLazy } from "@webpack";
-import { Button, ChannelStore, FluxDispatcher, GuildChannelStore, NavigationRouter, RestAPI, Tooltip, UserStore } from "@webpack/common";
+import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
+import { ChannelStore, FluxDispatcher, GuildChannelStore, NavigationRouter, RestAPI, UserStore } from "@webpack/common";
 
 const QuestIcon = findComponentByCodeLazy("10.47a.76.76");
-const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
-
-let questIdCheck = 0;
+const ApplicationStreamingStore = findStoreLazy("ApplicationStreamingStore");
+const RunningGameStore = findStoreLazy("RunningGameStore");
+const QuestsStore = findByPropsLazy("getQuest");
 
 function ToolBarHeader() {
     return (
-        <ErrorBoundary noop={true}>
-            <HeaderBarIcon
-                tooltip="Complete Quest"
-                position="bottom"
-                className="vc-quest-completer"
-                icon={QuestIcon}
-                onClick={openCompleteQuestUI}
-            >
-            </HeaderBarIcon>
-        </ErrorBoundary>
+        <HeaderBarButton
+            tooltip="Complete Quest"
+            position="bottom"
+            className="vc-quest-completer"
+            icon={QuestIcon}
+            onClick={openCompleteQuestUI}
+        />
     );
 }
 
-
 async function openCompleteQuestUI() {
-    const ApplicationStreamingStore = findByProps("getStreamerActiveStreamMetadata");
-    const RunningGameStore = findByProps("getRunningGames");
-    const QuestsStore = findByProps("getQuest");
     const quest = [...QuestsStore.quests.values()].find(x => x.id !== "1412491570820812933" && x.userStatus?.enrolledAt && !x.userStatus?.completedAt && new Date(x.config.expiresAt).getTime() > Date.now());
 
-    if (!quest && !settings.store.disableNotifications) {
+    if (!quest) {
         showNotification({
             title: "Quest Completer",
             body: "No Quests To Complete. Click to navigate to the quests tab",
             onClick() {
-                NavigationRouter.transitionTo("/discovery/quests");
+                NavigationRouter.transitionTo("/quest-home");
             },
         });
     } else {
@@ -214,87 +207,25 @@ async function openCompleteQuestUI() {
 }
 
 const settings = definePluginSettings({
-    useNavBar: {
-        description: "Move quest button down to the server nav bar",
-        type: OptionType.BOOLEAN,
-        default: false,
-    },
     disableNotifications: {
-        description: "Disable notifications when no quests are available or when a quest is completed",
         type: OptionType.BOOLEAN,
+        description: "Disable notifications when no quests are available or when a quest is completed - still shows no quests notif",
         default: false,
     },
 });
 
 export default definePlugin({
     name: "QuestCompleter",
-    description: "A plugin to complete quests without having the game installed.",
+    description: "Adds a button to the header bar to complete quests without having the game installed.",
     authors: [Devs.amia],
     settings,
-    patches: [
-        {
-            find: ".platformSelectorPrimary,",
-            replacement: {
-                match: /(?<=questId:(\i\.id).*?"secondary",)disabled:!0/,
-                replace: "onClick: () => $self.mobileQuestPatch($1)"
-            },
-        },
-        {
-            find: '"BACK_FORWARD_NAVIGATION"',
-            replacement: {
-                match: /(?<=trailing:.{0,70}\(\i\.Fragment,{children:\[)/,
-                replace: "$self.renderQuestButton(),"
-            },
-            predicate: () => !settings.store.useNavBar
-        },
-        {
-            find: ".controlButtonWrapper,",
-            replacement: {
-                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,200}mobileToolbar)/,
-                replace: "$1$self.toolbarAction(arguments[0]);$2"
-            },
-            predicate: () => settings.store.useNavBar
-        }
-    ],
-    mobileQuestPatch(questId) {
-        if (questId === questIdCheck) return;
-        questIdCheck = questId;
-        Vencord.Webpack.Common.RestAPI.post({
-            url: `/quests/${questId}/enroll`,
-            body: {
-                location: 11
-            }
-        });
-    },
-    renderQuestButton() {
-        return (
-            <Tooltip text="Complete Quest">
-                {tooltipProps => (
-                    <Button style={{ backgroundColor: "transparent", border: "none" }}
-                        {...tooltipProps}
-                        size={Button.Sizes.SMALL}
-                        className={"vc-quest-completer-icon"}
-                        onClick={openCompleteQuestUI}
-                    >
-                        <QuestIcon width={20} height={20} size={Button.Sizes.SMALL} />
-                    </Button>
-                )}
-            </Tooltip>
-        );
-    },
-    toolbarAction(e) {
-        if (Array.isArray(e.toolbar))
-            return e.toolbar.unshift(
-                <ErrorBoundary noop={true}>
-                    <ToolBarHeader />
-                </ErrorBoundary>
-            );
-
-        e.toolbar = [
-            <ErrorBoundary noop={true} key={"QuestCompleter"}>
-                <ToolBarHeader />
-            </ErrorBoundary>,
-            e.toolbar,
-        ];
+    settingsAboutComponent: () => (
+        <Alert.Info>
+            You must manually accept the quest first before clicking the button.
+        </Alert.Info>
+    ),
+    headerBarButton: {
+        icon: QuestIcon,
+        render: ToolBarHeader
     }
 });

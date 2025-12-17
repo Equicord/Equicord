@@ -6,7 +6,6 @@
 
 import "./styles.css";
 
-import { migratePluginSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { getCurrentChannel, getIntlMessage } from "@utils/discord";
@@ -32,12 +31,10 @@ const genTagTypes = () => {
     return obj;
 };
 
-migratePluginSettings("MoreUserTags", "ExpandedUserTags");
 export default definePlugin({
     name: "MoreUserTags",
     description: "Adds tags for webhooks and moderative roles (owner, admin, etc.)",
     authors: [Devs.Cyn, Devs.TheSun, Devs.RyanCaoDev, Devs.LordElias, Devs.AutumnVN, EquicordDevs.Hen],
-    dependencies: ["MemberListDecoratorsAPI", "NicknameIconsAPI", "MessageDecorationsAPI"],
     settings,
     patches: [
         // Make discord actually use our tags
@@ -45,11 +42,11 @@ export default definePlugin({
             find: ".STAFF_ONLY_DM:",
             replacement: [
                 {
-                    match: /(?<=type:(\i).{10,1000}.REMIX.{10,100})default:(\i)=/,
+                    match: /(?<=type:(\i).*?\.BOT:.{0,25})default:(\i)=/,
                     replace: "default:$2=$self.getTagText($self.localTags[$1]);",
                 },
                 {
-                    match: /(?<=type:(\i).{10,1000}.REMIX.{10,100})\.BOT:(?=default:)/,
+                    match: /(?<=type:(\i).*?)\.BOT:(?=default:)/,
                     replace: "$&return null;",
                     predicate: () => settings.store.dontShowBotTag
                 },

@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
+import { Button, TextButton } from "@components/Button";
+import { fetchReposByUserId, fetchReposByUsername, fetchUserInfo, GitHubUserInfo } from "@equicordplugins/githubRepos/githubApi";
+import { GitHubRepo } from "@equicordplugins/githubRepos/types";
 import { openModal } from "@utils/modal";
-import { Button, React, useEffect, UserProfileStore, useState } from "@webpack/common";
+import { React, useEffect, UserProfileStore, useState } from "@webpack/common";
 
-import { settings } from "..";
-import { fetchReposByUserId, fetchReposByUsername, fetchUserInfo, GitHubUserInfo } from "../githubApi";
-import { GitHubRepo } from "../types";
+import { cl, settings } from "..";
 import { RepoCard } from "./RepoCard";
 import { ReposModal } from "./ReposModal";
 
@@ -21,8 +21,6 @@ export function GitHubReposComponent({ id, theme }: { id: string, theme: string;
     const [error, setError] = useState<string | null>(null);
     const [userInfo, setUserInfo] = useState<GitHubUserInfo | null>(null);
     const [returnJustButton, setReturnJustButton] = useState(false);
-
-    const cl = classNameFactory("vc-github-repos-");
 
     const openReposModal = () => {
         if (!userInfo) return;
@@ -89,10 +87,10 @@ export function GitHubReposComponent({ id, theme }: { id: string, theme: string;
         fetchData();
     }, [id]);
 
-    if (loading) return <BaseText size="xs" weight="semibold" className={cl("loading")} style={{ color: "var(--header-secondary)" }}>
+    if (loading) return <BaseText size="xs" weight="semibold" className={cl("loading")} >
         Loading repositories...</BaseText>;
 
-    if (error) return <BaseText size="xs" weight="semibold" className={cl("error")} style={{ color: "var(--text-danger)" }}>
+    if (error) return <BaseText size="xs" weight="semibold" className={cl("error")}>
         Error: {error}</BaseText>;
 
     if (!repos.length) return null;
@@ -101,9 +99,8 @@ export function GitHubReposComponent({ id, theme }: { id: string, theme: string;
         return (
             <Button
                 className={cl("button")}
-                size={Button.Sizes.SMALL}
-                look={Button.Looks.LINK}
-                color={Button.Colors.TRANSPARENT}
+                size="small"
+                variant="secondary"
                 onClick={openReposModal}
             >
                 Show GitHub Repositories
@@ -115,10 +112,10 @@ export function GitHubReposComponent({ id, theme }: { id: string, theme: string;
 
     return (
         <div className={cl("container")}>
-            <BaseText size="xs" weight="semibold" className={cl("header")} style={{ color: "var(--header-secondary)" }}>
+            <BaseText size="xs" weight="semibold" className={cl("header")}>
                 GitHub Repositories
                 {userInfo && (
-                    <span className={cl("count")} style={{ color: "var(--text-muted)" }}>
+                    <span className={cl("count")}>
                         {` (Showing only top ${topRepos.length}/${userInfo.totalRepos})`}
                     </span>
                 )}
@@ -134,15 +131,13 @@ export function GitHubReposComponent({ id, theme }: { id: string, theme: string;
                 }
             </div>
             <div className={cl("footer")}>
-                <Button
+                <TextButton
                     className={cl("show-more")}
-                    size={Button.Sizes.SMALL}
-                    look={Button.Looks.LINK}
-                    color={Button.Colors.TRANSPARENT}
+                    color="secondary"
                     onClick={openReposModal}
                 >
                     Show More
-                </Button>
+                </TextButton>
             </div>
         </div>
     );

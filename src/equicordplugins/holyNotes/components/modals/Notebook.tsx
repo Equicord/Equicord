@@ -6,14 +6,15 @@
 
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Flex } from "@components/Flex";
+import HelpIcon from "@equicordplugins/holyNotes/components/icons/HelpIcon";
+import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
+import { HolyNotes } from "@equicordplugins/holyNotes/types";
 import { classes } from "@utils/misc";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { findByProps } from "@webpack";
-import { ContextMenuApi, Flex, FluxDispatcher, Menu, React, TextInput } from "@webpack/common";
+import { ContextMenuApi, FluxDispatcher, Menu, React, TextInput } from "@webpack/common";
 
-import { noteHandler } from "../../NoteHandler";
-import { HolyNotes } from "../../types";
-import HelpIcon from "../icons/HelpIcon";
 import Errors from "./Error";
 import HelpModal from "./HelpModal";
 import ManageNotebookButton from "./ManageNotebookButton";
@@ -31,9 +32,28 @@ const renderNotebook = ({
     searchInput: string;
     closeModal: () => void;
 }) => {
-    const messageArray = Object.values(notes).map(note => (
+    let notesArray = Object.values(notes);
+
+    if (searchInput) {
+        const searchLower = searchInput.toLowerCase();
+        notesArray = notesArray.filter(note =>
+            note.content?.toLowerCase().includes(searchLower)
+        );
+    }
+
+    if (!notesArray.length) return <Errors />;
+
+    if (sortType) {
+        notesArray.sort((a, b) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        );
+    }
+
+    if (sortDirection) notesArray.reverse();
+
+    return notesArray.map(note => (
         <RenderMessage
-            key={notebook}
+            key={note.id || notebook}
             note={note}
             notebook={notebook}
             updateParent={updateParent}
@@ -41,20 +61,6 @@ const renderNotebook = ({
             closeModal={closeModal}
         />
     ));
-
-    if (sortType)
-        messageArray.sort(
-            (a, b) =>
-                new Date(b.props.note?.timestamp)?.getTime() - new Date(a.props.note?.timestamp)?.getTime(),
-        );
-
-    if (sortDirection) messageArray.reverse();
-
-    const filteredMessages = messageArray.filter(message =>
-        message.props.note?.content?.toLowerCase().includes(searchInput.toLowerCase()),
-    );
-
-    return filteredMessages.length > 0 ? filteredMessages : <Errors />;
 };
 
 
@@ -65,7 +71,7 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
     const [sortDirection, setSortDirection] = React.useState(true);
     const [currentNotebook, setCurrentNotebook] = React.useState("Main");
 
-    const { quickSelect, quickSelectLabel, quickSelectQuick, quickSelectValue, quickSelectArrow } = findByProps("quickSelect");
+    const { quickSelect, quickSelectLabel, quickSelectQuick, quickSelectValue, quickSelectArrow } = findByProps("quickSelect") || {};
 
     const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
 
@@ -77,7 +83,7 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
     return (
         <ErrorBoundary>
             <ModalRoot {...props} className={classes("vc-notebook")} size={ModalSize.LARGE}>
-                <Flex className={classes("vc-notebook-flex")} direction={Flex.Direction.VERTICAL} style={{ width: "100%" }}>
+                <Flex className={classes("vc-notebook-flex")} flexDirection="column" style={{ width: "100%" }}>
                     <div className={classes("vc-notebook-top-section")}>
                         <ModalHeader className={classes("vc-notebook-header-main")}>
                             <BaseText
@@ -121,7 +127,7 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
                     <ManageNotebookButton notebook={currentNotebook} setNotebook={setCurrentNotebook} />
                     <div className={classes("sort-button-container", "vc-notebook-display-left")}>
                         <Flex
-                            align={Flex.Align.CENTER}
+                            alignItems="center"
                             className={quickSelect}
                             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                                 ContextMenuApi.openContextMenu(event, () => (
@@ -161,7 +167,7 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
                             }}
                         >
                             <BaseText className={quickSelectLabel}>Change Sorting:</BaseText>
-                            <Flex grow={0} align={Flex.Align.CENTER} className={quickSelectQuick}>
+                            <Flex style={{ flexGrow: 0 }} alignItems="center" className={quickSelectQuick}>
                                 <BaseText className={quickSelectValue}>
                                     {sortDirection ? "Ascending" : "Descending"} /{" "}
                                     {sortType ? "Date Added" : "Message Date"}

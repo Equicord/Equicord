@@ -16,67 +16,103 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { BaseText } from "@components/BaseText";
+import { downloadSettingsBackup, uploadSettingsBackup } from "@api/SettingsSync/offline";
+import { Alert } from "@components/Alert";
+import { Button } from "@components/Button";
+import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
 import { Margins } from "@utils/margins";
-import { classes } from "@utils/misc";
-import { downloadSettingsBackup, uploadSettingsBackup } from "@utils/settingsSync";
-import { Button, Card } from "@webpack/common";
 
 function BackupAndRestoreTab() {
     return (
-        <SettingsTab title="Backup & Restore">
-            <Card className={classes("vc-settings-card", "vc-backup-restore-card")}>
-                <Flex flexDirection="column">
-                    <strong>Warning</strong>
-                    <span>Importing a settings file will overwrite your current settings.</span>
-                </Flex>
-            </Card>
-            <BaseText size="md" className={Margins.bottom8}>
-                You can import and export your Equicord settings as a JSON file.
-                This allows you to easily transfer your settings to another device,
-                or recover your settings after reinstalling Equicord or Discord.
-            </BaseText>
-            <BaseText size="md" className={Margins.bottom8}>
-                Settings Export contains:
-                <ul>
-                    <li>&mdash; Custom QuickCSS</li>
-                    <li>&mdash; Theme Links</li>
-                    <li>&mdash; Plugin Settings</li>
-                    <li>&mdash; Plugin DataStores (e.g. Timezones or IRememberYou)</li>
-                </ul>
-            </BaseText>
-            <Flex>
+        <SettingsTab>
+            <Heading className={Margins.top16}>Backup & Restore</Heading>
+            <Paragraph className={Margins.bottom20}>
+                Import and export your Equicord settings as a JSON file. This allows you to easily transfer your settings to another device, or recover them after reinstalling Equicord or Discord.
+            </Paragraph>
+
+            <Alert.Warning className={Margins.bottom20}>
+                Importing a settings file will overwrite your current settings. Make sure to export a backup first if you want to keep your current configuration.
+            </Alert.Warning>
+
+            <Heading>What's included in a backup</Heading>
+            <Paragraph className={Margins.bottom20}>
+                • Custom QuickCSS<br />
+                • Theme Links<br />
+                • Plugin Settings<br />
+                • DataStore Data
+            </Paragraph>
+
+            <Divider className={Margins.bottom20} />
+
+            <Heading>Import Settings</Heading>
+            <Paragraph className={Margins.bottom16}>
+                Select a previously exported settings file to restore your configuration. This will replace all your current settings with the ones from the backup.
+            </Paragraph>
+
+            <Flex gap="8px" className={Margins.bottom20} style={{ flexWrap: "wrap" }}>
                 <Button
-                    onClick={() => uploadSettingsBackup()}
-                    size={Button.Sizes.SMALL}
+                    onClick={() => uploadSettingsBackup("all")}
+                    size="small"
+                    variant="secondary"
                 >
-                    Import Settings
+                    Import All Settings
                 </Button>
                 <Button
-                    onClick={() => downloadSettingsBackup("settings")}
-                    size={Button.Sizes.SMALL}
+                    onClick={() => uploadSettingsBackup("plugins")}
+                    size="small"
                 >
-                    Export Settings
+                    Import Plugins
+                </Button>
+                <Button
+                    onClick={() => uploadSettingsBackup("css")}
+                    size="small"
+                >
+                    Import QuickCSS
+                </Button>
+                <Button
+                    onClick={() => uploadSettingsBackup("datastore")}
+                    size="small"
+                >
+                    Import DataStore
+                </Button>
+            </Flex>
+
+            <Divider className={Margins.bottom20} />
+
+            <Heading>Export Settings</Heading>
+            <Paragraph className={Margins.bottom16}>
+                Download your current settings as a backup file. You can export everything at once, or choose to export only specific parts of your configuration.
+            </Paragraph>
+
+            <Flex gap="8px" style={{ flexWrap: "wrap" }}>
+                <Button
+                    onClick={() => downloadSettingsBackup("all")}
+                    size="small"
+                    variant="secondary"
+                >
+                    Export All Settings
                 </Button>
                 <Button
                     onClick={() => downloadSettingsBackup("plugins")}
-                    size={Button.Sizes.SMALL}
+                    size="small"
                 >
                     Export Plugins
                 </Button>
                 <Button
                     onClick={() => downloadSettingsBackup("css")}
-                    size={Button.Sizes.SMALL}
+                    size="small"
                 >
-                    Export CSS
+                    Export QuickCSS
                 </Button>
                 <Button
                     onClick={() => downloadSettingsBackup("datastore")}
-                    size={Button.Sizes.SMALL}
+                    size="small"
                 >
-                    Export DataStores
+                    Export DataStore
                 </Button>
             </Flex>
         </SettingsTab>

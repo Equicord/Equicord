@@ -4,22 +4,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "@equicordplugins/_misc/styles.css";
-
+import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import { Devs, EquicordDevs } from "@utils/constants";
+import customRPC from "@plugins/customRPC";
+import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_SUPPORT_CHANNEL_IDS } from "@utils/constants";
+import { isAnyPluginDev } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
+import { Alerts, NavigationRouter, UserStore } from "@webpack/common";
 
 import { PluginButtons } from "./pluginButtons";
 import { PluginCards } from "./pluginCards";
 
+let clicked = false;
+
 const settings = definePluginSettings({
-    disableCreateDMButton: {
-        type: OptionType.BOOLEAN,
-        description: "Disables the create dm button",
-        restartNeeded: true,
-        default: false,
-    },
     disableDMContextMenu: {
         type: OptionType.BOOLEAN,
         description: "Disables the DM list context menu in favor of the x button",
@@ -29,11 +27,19 @@ const settings = definePluginSettings({
     noMirroredCamera: {
         type: OptionType.BOOLEAN,
         description: "Prevents the camera from being mirrored on your screen",
+        restartNeeded: true,
         default: false,
     },
     removeActivitySection: {
         type: OptionType.BOOLEAN,
         description: "Removes the activity section above member list",
+        restartNeeded: true,
+        default: false,
+    },
+    showYourOwnActivityButtons: {
+        type: OptionType.BOOLEAN,
+        description: "Discord hides your own activity buttons for some reason",
+        restartNeeded: true,
         default: false,
     }
 });
@@ -58,15 +64,6 @@ export default definePlugin({
                     replace: "return $1;"
                 }
             ]
-        },
-        // Disable Giant Create DM Button
-        {
-            find: ".createDMButtonContainer,",
-            predicate: () => settings.store.disableCreateDMButton,
-            replacement: {
-                match: /"create-dm"\)/,
-                replace: "$&&&false"
-            },
         },
         // Remove DM Context Menu
         {
@@ -106,6 +103,7 @@ export default definePlugin({
             },
             predicate: () => settings.store.noMirroredCamera
         },
+        // Remove Activity Section above Member List
         {
             find: ".MEMBERLIST_CONTENT_FEED_TOGGLED,",
             predicate: () => settings.store.removeActivitySection,
@@ -114,6 +112,15 @@ export default definePlugin({
                 replace: "true||$&"
             },
         },
+        {
+            find: ".buttons.length)>=1",
+            predicate: () => settings.store.showYourOwnActivityButtons && !isPluginEnabled(customRPC.name),
+            replacement: {
+                match: /.getId\(\)===\i.id/,
+                replace: "$& && false"
+            }
+        },
+        // Always show open legacy settings
         ...[
             ".DEVELOPER_SECTION,",
             '"LegacySettingsSidebarItem"'
@@ -134,5 +141,28 @@ export default definePlugin({
                 <PluginCards message={props.message} />
             </>
         );
+    },
+    flux: {
+        async CHANNEL_SELECT({ channelId }) {
+            const isSupportChannel = SUPPORT_CHANNEL_IDS.includes(channelId);
+            if (!isSupportChannel) return;
+
+            const selfId = UserStore.getCurrentUser()?.id;
+            if (!selfId || isAnyPluginDev(selfId)) return;
+            if (VC_SUPPORT_CHANNEL_IDS.includes(channelId) && !clicked) {
+                return Alerts.show({
+                    title: "Vencord Support Channel Warning",
+                    body: "Before asking for help. Check updates and if this issue is actually caused by Equicord!",
+                    confirmText: "Equicord Support",
+                    onConfirm() {
+                        NavigationRouter.transitionTo(`/channels/${GUILD_ID}/${SUPPORT_CHANNEL_ID}`);
+                    },
+                    cancelText: "Okay continue",
+                    onCancel() {
+                        clicked = true;
+                    },
+                });
+            }
+        },
     }
 });

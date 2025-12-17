@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { settings } from "@equicordplugins/gifCollections/index";
+import { Gif } from "@equicordplugins/gifCollections/types";
 import { Message } from "@vencord/discord-types";
 import { MessageStore, SnowflakeUtils } from "@webpack/common";
 
-import { settings } from "../index";
-import { Gif } from "../types";
 import { cleanUrl } from "./cleanUrl";
 import { isAudio } from "./isAudio";
 import { uuidv4 } from "./uuidv4";
@@ -29,7 +29,7 @@ export function getGifByTarget(url: string, target?: HTMLDivElement | null): Gif
 
 
 export function getGifByMessageAndTarget(target: HTMLDivElement, message: Message) {
-    const url = target.closest('[class^="imageWrapper"]')?.querySelector("video")?.src ?? target.closest('[class^="imageWrapper"]')?.querySelector("img")?.src;
+    const url = target.closest('[class*="imageWrapper"]')?.querySelector("video")?.src ?? target.closest('[class*="imageWrapper"]')?.querySelector("img")?.src;
 
     if (!url) return null;
 

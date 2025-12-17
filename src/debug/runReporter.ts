@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { addPatch } from "@api/PluginManager";
 import { initWs } from "@plugins/devCompanion.dev/initWs";
 import { Logger } from "@utils/Logger";
 import * as Webpack from "@webpack";
-import { getBuildNumber, patchTimings } from "webpack/patchWebpack";
+import { getBuildNumber, patches, patchTimings } from "@webpack/patcher";
 
-import { addPatch, patches } from "../plugins";
 import { loadLazyChunks } from "./loadLazyChunks";
 import { reporterData } from "./reporterData";
 
@@ -125,7 +125,7 @@ async function runReporter() {
 }
 
 // Imported in webpack for reporterData, wrap to avoid running reporter
-// Run after the Vencord object has been created.
-// We need to add extra properties to it, and it is only created after all of Vencord code has ran
+// Run after the Equicord object has been created.
+// We need to add extra properties to it, and it is only created after all of Equicord code has ran
 if (IS_REPORTER)
     setTimeout(runReporter, 0);

@@ -1,23 +1,23 @@
 /* stylelint-disable function-url-quotes */
 .vc-more-stickers-icon {
-    fill: var(--interactive-normal);
+    fill: var(--interactive-icon-default);
     margin-top: 20%;
 }
 
 .vc-more-stickers-icon:hover,
 .vc-more-stickers-icon:focus-visible,
 .vc-more-stickers-icon-active {
-    fill: var(--interactive-active);
+    fill: var(--interactive-icon-active);
 }
 
 .vc-more-stickers-picker-container {
-    background-color: var(--background-tertiary);
+    background-color: var(--background-base-low);
     overflow: hidden;
     border-radius: 4px;
     width: 100%;
 }
 
-.vc-more-stickers-picker-container>div:first-child {
+.vc-more-stickers-picker-container > div:first-child {
     display: flex;
     flex: 1 1 auto;
     flex-flow: wrap;
@@ -45,7 +45,7 @@
     margin-right: 8px;
 }
 
-.vc-more-stickers-foreign-object>img {
+.vc-more-stickers-foreign-object > img {
     text-indent: -9999px;
     align-items: center;
     background-color: var(--background-primary);
@@ -66,7 +66,7 @@
 }
 
 .vc-more-stickers-category-wrapper {
-    background-color: var(--background-tertiary);
+    background-color: var(--background-base-low);
     position: absolute;
     overflow: hidden;
     width: 48px;
@@ -99,13 +99,13 @@
     flex: 1 1 auto;
 }
 
-.vc-more-stickers-category-scroller> :first-child {
+.vc-more-stickers-category-scroller > :first-child {
     inset: 8px;
     contain: layout;
     position: absolute;
 }
 
-.vc-more-stickers-category-scroller> :last-child {
+.vc-more-stickers-category-scroller > :last-child {
     position: absolute;
     pointer-events: none;
     min-height: 0;
@@ -160,7 +160,7 @@
 
 .vc-more-stickers-sticker-category {
     border-radius: 4px;
-    color: var(--interactive-normal);
+    color: var(--interactive-icon-default);
     cursor: pointer;
     height: 32px;
     margin-bottom: 8px;
@@ -168,16 +168,16 @@
 
 .vc-more-stickers-sticker-category:hover,
 .vc-more-stickers-sticker-category-active {
-    background-color: var(--background-modifier-hover);
+    background-color: var(--background-mod-subtle);
 }
 
 .vc-more-stickers-clear-icon {
-    color: var(--interactive-normal);
+    color: var(--interactive-icon-default);
     cursor: pointer;
 }
 
 .vc-more-stickers-clear-icon:hover {
-    color: var(--interactive-hover);
+    color: var(--interactive-icon-hover);
 }
 
 .vc-more-stickers-picker-content-list-wrapper {
@@ -202,8 +202,8 @@
     position: relative;
     box-sizing: border-box;
     min-height: 0;
-    -webkit-box-flex: 1;
     flex: 1 1 auto;
+    flex-grow: 1;
 }
 
 .vc-more-stickers-picker-content-list-items {
@@ -215,10 +215,9 @@
 .vc-more-stickers-picker-content-header-wrapper {
     position: sticky;
     top: 0;
-    -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    background-color: var(--background-secondary);
+    background-color: var(--background-secondary-alt);
     box-sizing: border-box;
     display: flex;
     height: 32px;
@@ -227,12 +226,10 @@
 }
 
 .vc-more-stickers-picker-content-header-header {
-    color: var(--header-secondary);
+    color: var(--text-default);
     display: flex;
-    -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: start;
     -ms-flex-pack: start;
     justify-content: flex-start;
     font-size: 12px;
@@ -254,14 +251,12 @@
 .vc-more-stickers-picker-content-header-guild-icon,
 .vc-more-stickers-picker-content-inspector-graphic-secondary img {
     text-indent: -9999px;
-    -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
     background-color: var(--background-primary);
     color: var(--text-default);
     display: flex;
     height: 100%;
-    -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
     width: 100%;
@@ -277,7 +272,7 @@
 }
 
 .vc-more-stickers-picker-content-header-header:hover {
-    color: var(--interactive-active);
+    color: var(--interactive-icon-active);
     cursor: pointer;
 }
 
@@ -301,7 +296,6 @@
 }
 
 .vc-more-stickers-picker-content-row-grid-hidden-visually {
-    clip: rect(0 0 0 0);
     clip-path: inset(50%);
     height: 1px;
     overflow: hidden;
@@ -386,7 +380,7 @@
 }
 
 .vc-more-stickers-picker-content-inspector-title-secondary {
-    color: var(--interactive-normal);
+    color: var(--interactive-icon-default);
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -410,7 +404,7 @@
 .vc-more-stickers-picker-settings-cog-container {
     position: fixed;
     transform: translateY(-100%);
-    background-color: var(--background-tertiary);
+    background-color: var(--background-base-low);
     padding: 8px;
     padding-right: 4px;
     border-bottom-left-radius: 5px;
@@ -430,7 +424,7 @@
     background-color: var(--green-300);
 }
 
-.vc-more-stickers-picker-settings-cog>svg {
+.vc-more-stickers-picker-settings-cog > svg {
     color: var(--green-360) !important;
     width: 100%;
     height: 100%;
@@ -438,7 +432,7 @@
 }
 
 /* prettier-ignore */
-.vc-more-stickers-picker-settings-cog-active>svg {
+.vc-more-stickers-picker-settings-cog-active > svg {
     color: var(--white-360) !important;
 }
 
@@ -452,7 +446,7 @@
 
 .vc-more-stickers-settings .bg {
     border-radius: 8px;
-    background-color: var(--background-secondary);
+    background-color: var(--background-secondary-alt);
     padding: 16px;
     margin: 8px 16px 16px;
 }
@@ -468,7 +462,7 @@
     top: 0;
     right: 0;
     border-radius: 8px;
-    background: var(--background-secondary);
+    background: var(--background-secondary-alt);
     width: 26px;
     height: 0;
     align-items: center;
@@ -492,9 +486,8 @@
 }
 
 .vc-more-stickers-settings .tab-bar-item {
-    margin-right: 16px;
+    margin-right: 2px;
     padding-bottom: 4px;
-    margin-bottom: -4px;
 }
 
 .vc-more-stickers-pack-title {

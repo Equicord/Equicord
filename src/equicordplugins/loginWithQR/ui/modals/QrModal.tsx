@@ -5,6 +5,7 @@
  */
 
 import { BaseText } from "@components/BaseText";
+import { images } from "@equicordplugins/loginWithQR/images";
 import { getIntlMessage } from "@utils/discord";
 import {
     ModalContent,
@@ -25,7 +26,6 @@ import {
 import jsQR, { QRCode } from "jsqr";
 import { MutableRefObject, ReactElement } from "react";
 
-import { images } from "../../images";
 import { cl, QrCodeIcon, Spinner, SpinnerTypes } from "..";
 import openVerifyModal from "./VerifyModal";
 
@@ -375,7 +375,7 @@ function QrModal(props: ModalProps) {
                 <BaseText
                     size="lg"
                     weight="semibold"
-                    color="header-primary"
+                    color="text-strong"
                     tag="h1"
                     style={{ flexGrow: 1 }}
                 >
@@ -470,12 +470,12 @@ function QrModal(props: ModalProps) {
                             {error.current}
                         </BaseText>
                     ) : state === LoginStateType.Camera ? (
-                        <BaseText size="md" weight="semibold" color="header-primary">
+                        <BaseText size="md" weight="semibold" color="text-strong">
                             Scanning...
                         </BaseText>
                     ) : (
                         <>
-                            <BaseText size="md" weight="semibold" color="header-primary">
+                            <BaseText size="md" weight="semibold" color="text-strong">
                                 Drag and drop an image here, or click to select an image
                             </BaseText>
                             <BaseText size="sm" weight="medium" color="text-muted">

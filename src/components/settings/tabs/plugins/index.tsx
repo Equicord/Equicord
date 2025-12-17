@@ -19,8 +19,11 @@
 import "./styles.css";
 
 import * as DataStore from "@api/DataStore";
+import { isPluginEnabled, stopPlugin } from "@api/PluginManager";
 import { useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
+import { Button } from "@components/Button";
+import { Card } from "@components/Card";
 import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingTertiary } from "@components/Heading";
@@ -28,12 +31,12 @@ import { Paragraph } from "@components/Paragraph";
 import { SettingsTab } from "@components/settings";
 import { debounce } from "@shared/debounce";
 import { ChangeList } from "@utils/ChangeList";
-import { proxyLazy } from "@utils/lazy";
+import { isTruthy } from "@utils/guards";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useAwaiter, useIntersection } from "@utils/react";
-import { Alerts, Button, Card, lodash, Parser, React, Select, TextInput, Toasts, Tooltip, useMemo } from "@webpack/common";
+import { Alerts, lodash, Parser, React, Select, TextInput, Toasts, Tooltip, useCallback, useMemo, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
@@ -41,9 +44,7 @@ import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
 import { PluginCard } from "./PluginCard";
 import { openWarningModal } from "./PluginModal";
 import { StockPluginsCard, UserPluginsCard } from "./PluginStatCards";
-
-// Avoid circular dependency
-const { startDependenciesRecursive, startPlugin, stopPlugin } = proxyLazy(() => require("plugins"));
+import { UIElementsButton } from "./UIElements";
 
 export const cl = classNameFactory("vc-plugins-");
 export const logger = new Logger("PluginSettings", "#a6d189");
@@ -68,7 +69,7 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
                     <Paragraph className={cl("dep-text")}>
                         Restart now to apply new plugins and their settings
                     </Paragraph>
-                    <Button className={cl("restart-button")} onClick={() => location.reload()}>
+                    <Button variant="primary" className={cl("restart-button")} onClick={() => location.reload()}>
                         Restart
                     </Button>
                 </>
@@ -81,10 +82,11 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
             )}
             {enabledPlugins.length > 0 && !required && (
                 <Button
-                    size={Button.Sizes.SMALL}
+                    variant="secondary"
+                    size="small"
                     className={"vc-plugins-disable-warning vc-modal-align-reset"}
                     onClick={() => {
-                        return openWarningModal(null, null, null, false, enabledPlugins.length, resetCheckAndDo);
+                        return openWarningModal(null, undefined, false, enabledPlugins.length, resetCheckAndDo);
                     }}
                 >
                     Disable All Plugins
@@ -100,22 +102,25 @@ const enum SearchStatus {
     DISABLED,
     EQUICORD,
     VENCORD,
-    CUSTOM,
     NEW,
+    USER_PLUGINS,
+    API_PLUGINS
 }
 
 export const ExcludedReasons: Record<"web" | "discordDesktop" | "vesktop" | "equibop" | "desktop" | "dev", string> = {
-    desktop: "Discord Desktop app or Vesktop",
+    desktop: "Discord Desktop app or Vesktop/Equibop",
     discordDesktop: "Discord Desktop app",
-    vesktop: "Vesktop & Equibop apps",
-    equibop: "Vesktop & Equibop apps",
-    web: "Vesktop & Equibop apps as well as the Web version of Discord",
+    vesktop: "Vesktop/Equibop apps",
+    equibop: "Vesktop/Equibop apps",
+    web: "Vesktop/Equibop apps & Discord web",
     dev: "Developer version of Equicord"
 };
 
 function ExcludedPluginsList({ search }: { search: string; }) {
-    const matchingExcludedPlugins = Object.entries(ExcludedPlugins)
-        .filter(([name]) => name.toLowerCase().includes(search));
+    const matchingExcludedPlugins = search
+        ? Object.entries(ExcludedPlugins)
+            .filter(([name]) => name.toLowerCase().includes(search))
+        : [];
 
     return (
         <Paragraph className={Margins.top16}>
@@ -169,34 +174,70 @@ export default function PluginSettings() {
         };
     }, []);
 
-    const depMap = Vencord.Plugins.calculatePluginDependencyMap();
+    const depMap = useMemo(() => {
+        const o = {} as Record<string, string[]>;
+        for (const plugin in Plugins) {
+            const deps = Plugins[plugin].dependencies;
+            if (deps) {
+                for (const dep of deps) {
+                    o[dep] ??= [];
+                    o[dep].push(plugin);
+                }
+            }
+        }
+        return o;
+    }, []);
 
     const sortedPlugins = useMemo(() => Object.values(Plugins)
         .sort((a, b) => a.name.localeCompare(b.name)), []);
 
-    const [searchValue, setSearchValue] = React.useState({ value: "", status: SearchStatus.ALL });
+    const hasUserPlugins = useMemo(() => !IS_STANDALONE && Object.values(PluginMeta).some(m => m.userPlugin), []);
+
+    const [searchValue, setSearchValue] = useState({ value: "", status: SearchStatus.ALL });
+    const [searchInput, setSearchInput] = useState("");
+
+    const debouncedSetSearch = useMemo(
+        () => debounce((query: string) => setSearchValue(prev => ({ ...prev, value: query })), 150),
+        []
+    );
 
     const search = searchValue.value.toLowerCase();
-    const onSearch = (query: string) => {
-        setSearchValue(prev => ({ ...prev, value: query }));
-    };
-    const onStatusChange = (status: SearchStatus) => {
+    const onSearch = useCallback((query: string) => {
+        setSearchInput(query);
+        debouncedSetSearch(query);
+    }, [debouncedSetSearch]);
+    const onStatusChange = useCallback((status: SearchStatus) => {
         setSearchValue(prev => ({ ...prev, status }));
-    };
+    }, []);
 
-    const pluginFilter = (plugin: typeof Plugins[keyof typeof Plugins]) => {
+    const pluginFilter = useCallback((plugin: typeof Plugins[keyof typeof Plugins], newPluginsSet: Set<string> | null) => {
         const { status } = searchValue;
-        const enabled = Vencord.Plugins.isPluginEnabled(plugin.name);
-        const pluginMeta = PluginMeta[plugin.name];
-        const isEquicordPlugin = pluginMeta.folderName.startsWith("src/equicordplugins/") ?? false;
-        const isUserplugin = pluginMeta.userPlugin ?? false;
+        const enabled = isPluginEnabled(plugin.name);
 
-        if (enabled && status === SearchStatus.DISABLED) return false;
-        if (!enabled && status === SearchStatus.ENABLED) return false;
-        if (status === SearchStatus.NEW && !newPlugins?.includes(plugin.name)) return false;
-        if (status === SearchStatus.EQUICORD && !isEquicordPlugin) return false;
-        if (status === SearchStatus.VENCORD && isEquicordPlugin) return false;
-        if (status === SearchStatus.CUSTOM && !isUserplugin) return false;
+        switch (status) {
+            case SearchStatus.DISABLED:
+                if (enabled) return false;
+                break;
+            case SearchStatus.ENABLED:
+                if (!enabled) return false;
+                break;
+            case SearchStatus.EQUICORD:
+                if (!PluginMeta[plugin.name].folderName.startsWith("src/equicordplugins/")) return false;
+                break;
+            case SearchStatus.VENCORD:
+                if (!PluginMeta[plugin.name].folderName.startsWith("src/plugins/")) return false;
+                break;
+            case SearchStatus.NEW:
+                if (!newPluginsSet?.has(plugin.name)) return false;
+                break;
+            case SearchStatus.USER_PLUGINS:
+                if (!PluginMeta[plugin.name]?.userPlugin) return false;
+                break;
+            case SearchStatus.API_PLUGINS:
+                if (!plugin.name.endsWith("API")) return false;
+                break;
+        }
+
         if (!search.length) return true;
 
         return (
@@ -204,9 +245,9 @@ export default function PluginSettings() {
             plugin.description.toLowerCase().includes(search) ||
             plugin.tags?.some(t => t.toLowerCase().includes(search))
         );
-    };
+    }, [searchValue, search]);
 
-    const [newPlugins] = useAwaiter(() => DataStore.get("Vencord_existingPlugins").then((cachedPlugins: Record<string, number> | undefined) => {
+    const [newPluginsSet] = useAwaiter(() => DataStore.get("Vencord_existingPlugins").then((cachedPlugins: Record<string, number> | undefined) => {
         const now = Date.now() / 1000;
         const existingTimestamps: Record<string, number> = {};
         const sortedPluginNames = Object.values(sortedPlugins).map(plugin => plugin.name);
@@ -220,52 +261,56 @@ export default function PluginSettings() {
         }
         DataStore.set("Vencord_existingPlugins", existingTimestamps);
 
-        return lodash.isEqual(newPlugins, sortedPluginNames) ? [] : newPlugins;
+        return lodash.isEqual(newPlugins, sortedPluginNames) ? null : new Set(newPlugins);
     }));
 
-    const plugins = [] as JSX.Element[];
-    const requiredPlugins = [] as JSX.Element[];
+    const handleRestartNeeded = useCallback((name: string) => changes.handleChange(name), [changes]);
 
-    const showApi = searchValue.value.includes("API");
-    for (const p of sortedPlugins) {
-        if (p.hidden || (!p.options && p.name.endsWith("API") && !showApi))
-            continue;
+    const { plugins, requiredPlugins } = useMemo(() => {
+        const plugins = [] as JSX.Element[];
+        const requiredPlugins = [] as JSX.Element[];
 
-        if (!pluginFilter(p)) continue;
+        const showApi = searchValue.status === SearchStatus.API_PLUGINS;
+        for (const p of sortedPlugins) {
+            if (p.hidden || (!p.settings?.def && p.name.endsWith("API") && !showApi))
+                continue;
 
-        const isRequired = p.required || p.isDependency || depMap[p.name]?.some(d => settings.plugins[d].enabled);
+            if (!pluginFilter(p, newPluginsSet)) continue;
 
-        if (isRequired) {
-            const tooltipText = p.required || !depMap[p.name]
-                ? "This plugin is required for Equicord to function."
-                : <PluginDependencyList deps={depMap[p.name]?.filter(d => settings.plugins[d].enabled)} />;
+            const isRequired = p.required || p.isDependency || depMap[p.name]?.some(d => settings.plugins[d].enabled);
 
-            requiredPlugins.push(
-                <Tooltip text={tooltipText} key={p.name}>
-                    {({ onMouseLeave, onMouseEnter }) => (
-                        <PluginCard
-                            onMouseLeave={onMouseLeave}
-                            onMouseEnter={onMouseEnter}
-                            onRestartNeeded={name => changes.handleChange(name)}
-                            disabled={true}
-                            plugin={p}
-                            key={p.name}
-                        />
-                    )}
-                </Tooltip>
-            );
-        } else {
-            plugins.push(
-                <PluginCard
-                    onRestartNeeded={name => changes.handleChange(name)}
-                    disabled={false}
-                    plugin={p}
-                    isNew={newPlugins?.includes(p.name)}
-                    key={p.name}
-                />
-            );
+            if (isRequired) {
+                const tooltipText = p.required || !depMap[p.name]
+                    ? "This plugin is required for Equicord to function."
+                    : <PluginDependencyList deps={depMap[p.name]?.filter(d => settings.plugins[d].enabled)} />;
+
+                requiredPlugins.push(
+                    <Tooltip text={tooltipText} key={p.name}>
+                        {({ onMouseLeave, onMouseEnter }) => (
+                            <PluginCard
+                                onMouseLeave={onMouseLeave}
+                                onMouseEnter={onMouseEnter}
+                                onRestartNeeded={handleRestartNeeded}
+                                disabled={true}
+                                plugin={p}
+                            />
+                        )}
+                    </Tooltip>
+                );
+            } else {
+                plugins.push(
+                    <PluginCard
+                        onRestartNeeded={handleRestartNeeded}
+                        disabled={false}
+                        plugin={p}
+                        isNew={newPluginsSet?.has(p.name)}
+                        key={p.name}
+                    />
+                );
+            }
         }
-    }
+        return { plugins, requiredPlugins };
+    }, [sortedPlugins, searchValue, newPluginsSet, depMap, settings.plugins, pluginFilter, handleRestartNeeded]);
 
     function resetCheckAndDo() {
         let restartNeeded = false;
@@ -309,15 +354,18 @@ export default function PluginSettings() {
 
 
     // Code directly taken from supportHelper.tsx
-    const isApiPlugin = (plugin: string) => plugin.endsWith("API") || Plugins[plugin].required;
+    const { totalStockPlugins, totalUserPlugins, enabledStockPlugins, enabledUserPlugins, enabledPlugins } = useMemo(() => {
+        const isApiPlugin = (plugin: string) => plugin.endsWith("API") || Plugins[plugin].required;
 
-    const totalPlugins = Object.keys(Plugins).filter(p => !isApiPlugin(p));
-    const enabledPlugins = Object.keys(Plugins).filter(p => Vencord.Plugins.isPluginEnabled(p) && !isApiPlugin(p));
+        const totalPlugins = Object.keys(Plugins).filter(p => !isApiPlugin(p));
+        const enabledPlugins = Object.keys(Plugins).filter(p => Vencord.Plugins.isPluginEnabled(p) && !isApiPlugin(p));
 
-    const totalStockPlugins = totalPlugins.filter(p => !PluginMeta[p].userPlugin && !Plugins[p].hidden).length;
-    const totalUserPlugins = totalPlugins.filter(p => PluginMeta[p].userPlugin).length;
-    const enabledStockPlugins = enabledPlugins.filter(p => !PluginMeta[p].userPlugin).length;
-    const enabledUserPlugins = enabledPlugins.filter(p => PluginMeta[p].userPlugin).length;
+        const totalStockPlugins = totalPlugins.filter(p => !PluginMeta[p].userPlugin && !Plugins[p].hidden).length;
+        const totalUserPlugins = totalPlugins.filter(p => PluginMeta[p].userPlugin).length;
+        const enabledStockPlugins = enabledPlugins.filter(p => !PluginMeta[p].userPlugin).length;
+        const enabledUserPlugins = enabledPlugins.filter(p => PluginMeta[p].userPlugin).length;
+        return { totalStockPlugins, totalUserPlugins, enabledStockPlugins, enabledUserPlugins, enabledPlugins };
+    }, [settings.plugins]);
     const pluginsToLoad = Math.min(36, plugins.length);
     const [visibleCount, setVisibleCount] = React.useState(pluginsToLoad);
     const loadMore = React.useCallback(() => {
@@ -336,17 +384,10 @@ export default function PluginSettings() {
     const visiblePlugins = plugins.slice(0, visibleCount);
 
     return (
-        <SettingsTab title="Plugins">
-
+        <SettingsTab>
             <ReloadRequiredCard required={changes.hasChanges} enabledPlugins={enabledPlugins} openWarningModal={openWarningModal} resetCheckAndDo={resetCheckAndDo} />
 
-            <div className={cl("stats-container")} style={{
-                marginTop: "16px",
-                gap: "16px",
-                display: "flex",
-                flexDirection: "row",
-                width: "100%"
-            }}>
+            <div className={cl("stats-container")}>
                 <StockPluginsCard
                     totalStockPlugins={totalStockPlugins}
                     enabledStockPlugins={enabledStockPlugins}
@@ -357,13 +398,17 @@ export default function PluginSettings() {
                 />
             </div>
 
+            <div className={cl("ui-elements")}>
+                <UIElementsButton />
+            </div>
+
             <HeadingTertiary className={classes(Margins.top20, Margins.bottom8)}>
                 Filters
             </HeadingTertiary>
 
             <div className={classes(Margins.bottom20, cl("filter-controls"))}>
                 <ErrorBoundary noop>
-                    <TextInput autoFocus value={searchValue.value} placeholder="Search for a plugin..." onChange={onSearch} />
+                    <TextInput autoFocus value={searchInput} placeholder="Search for a plugin..." onChange={onSearch} />
                 </ErrorBoundary>
                 <div>
                     <ErrorBoundary noop>
@@ -374,9 +419,10 @@ export default function PluginSettings() {
                                 { label: "Show Disabled", value: SearchStatus.DISABLED },
                                 { label: "Show Equicord", value: SearchStatus.EQUICORD },
                                 { label: "Show Vencord", value: SearchStatus.VENCORD },
-                                ...(totalUserPlugins > 0 ? [{ label: "Show Custom", value: SearchStatus.CUSTOM }] : []),
                                 { label: "Show New", value: SearchStatus.NEW },
-                            ]}
+                                hasUserPlugins && { label: "Show UserPlugins", value: SearchStatus.USER_PLUGINS },
+                                { label: "Show API Plugins", value: SearchStatus.API_PLUGINS },
+                            ].filter(isTruthy)}
                             serialize={String}
                             select={onStatusChange}
                             isSelected={v => v === searchValue.status}

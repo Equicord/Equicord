@@ -14,7 +14,7 @@
     overflow: hidden;
 }
 
-.vc-channeltabs-tab [class^="wrapper_"] {
+.vc-channeltabs-tab [class*="wrapper"] {
     min-width: 1.5rem;
 }
 
@@ -44,7 +44,7 @@
 .vc-channeltabs-tab-container,
 .vc-channeltabs-bookmark-container {
     display: flex;
-    flex-direction: row;
+    flex-flow: row nowrap;
     align-items: center;
     padding: 0 4px;
 }
@@ -64,12 +64,12 @@
     flex-direction: column-reverse;
     -webkit-app-region: no-drag;
     background-color: var(--background-primary);
-    box-shadow: inset 0 1px 0 var(--background-tertiary);
+    box-shadow: inset 0 1px 0 var(--background-base-low);
 }
 
 .vc-channeltabs-container-top {
     padding-left: 4px;
-    box-shadow: inset 0 -1px 0 var(--background-tertiary);
+    box-shadow: inset 0 -1px 0 var(--background-base-low);
 }
 
 .vc-channeltabs-container-top-macos {
@@ -79,7 +79,7 @@
 .vc-channeltabs-separator {
     width: 98%;
     height: 1px;
-    background: var(--input-border);
+    background: var(--input-border-default, var(--input-border));
     margin: 4px auto;
 }
 
@@ -92,6 +92,27 @@
 }
 
 .vc-channeltabs-scroller::-webkit-scrollbar {
+    display: none;
+}
+
+/* tab scroller for horizontal overflow */
+.vc-channeltabs-tab-scroller {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+    padding-top: 1px;
+}
+
+.vc-channeltabs-tab-scroller-following {
+    width: fit-content;
+    flex: unset;
+}
+
+.vc-channeltabs-tab-scroller::-webkit-scrollbar {
     display: none;
 }
 
@@ -119,7 +140,7 @@
 }
 
 .vc-channeltabs-bookmark-star:hover {
-    stroke: var(--interactive-hover);
+    stroke: var(--interactive-icon-hover);
 }
 
 .vc-channeltabs-bookmark-star-checked {
@@ -173,7 +194,7 @@
     min-width: 0;
     margin: 0 4px;
     background-color: transparent;
-    border: 1px solid var(--background-modifier-accent);
+    border: 1px solid var(--background-mod-muted);
     transition:
         transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
         background-color 0.15s ease,
@@ -183,6 +204,7 @@
     padding: 6px 8px;
     position: relative;
     cursor: grab;
+    flex-shrink: 0;
 }
 
 .vc-channeltabs-tab:active {
@@ -266,7 +288,7 @@
 
 .vc-channeltabs-tab-selected {
     transform: translateY(-1px);
-    background-color: var(--background-secondary);
+    background-color: var(--background-base-low);
     border: 1px solid var(--brand-500);
     border-bottom: 2px solid var(--brand-500);
     box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
@@ -292,14 +314,14 @@
     fill: var(--white-500);
 }
 
-.vc-channeltabs-container [class^="iconContainer_"] {
+.vc-channeltabs-container [class*="iconContainer"] {
     margin: 0 -0.25rem 0 0;
     pointer-events: none;
     height: 1rem;
     transform: scale(0.8);
 }
 
-.vc-channeltabs-container [class^="numberBadge"] {
+.vc-channeltabs-container [class*="numberBadge"] {
     background-color: var(--channeltabs-red) !important;
     color: var(--channeltabs-white);
     border-radius: 50%;
@@ -321,7 +343,7 @@
 .vc-channeltabs-tab:hover:not(.vc-channeltabs-tab-selected) {
     transform: translateY(-1px) scale(1.02);
     background-color: var(--background-secondary-alt);
-    border-color: var(--background-modifier-accent);
+    border-color: var(--border-subtle);
     box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 }
 
@@ -339,12 +361,13 @@
     padding: 4px;
     margin: 0 4px;
     border-radius: 4px;
-    background-color: var(--background-secondary);
+    background-color: var(--background-base-low);
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .vc-channeltabs-new-button:hover {
-    background-color: var(--background-modifier-hover);
+    background-color: var(--background-mod-subtle);
     transform: scale(1.1);
 }
 
@@ -358,7 +381,7 @@
 }
 
 .vc-channeltabs-new-button:hover svg {
-    color: var(--interactive-hover);
+    color: var(--interactive-icon-hover);
     animation: vc-channeltabs-plus-spin 0.3s ease-in-out;
 }
 
@@ -386,7 +409,7 @@
 }
 
 .vc-channeltabs-close-button:hover {
-    background-color: var(--background-modifier-hover);
+    background-color: var(--background-mod-subtle);
     transform: rotate(90deg);
 }
 
@@ -432,7 +455,7 @@
 
 /* stylelint-disable-next-line no-descending-specificity */
 .vc-channeltabs-close-button.vc-channeltabs-close-button-compact:hover {
-    background-color: var(--background-modifier-hover);
+    background-color: var(--background-mod-subtle);
     transform: translateX(0) scale(1) rotate(90deg) !important;
     transition:
         opacity 0.3s ease-out 0.2s,
@@ -478,7 +501,7 @@
     padding: 0.125rem 0;
     min-width: 0;
     border-radius: 0.25rem;
-    border: 1px solid var(--input-border);
+    border: 1px solid var(--input-border-default, var(--input-border));
 }
 
 .vc-channeltabs-preview-tab-compact {
@@ -587,7 +610,7 @@
     }
 }
 
-/* Quests active gradient (blue+pink) when quests are running */
+/* quests active gradient when quests are running */
 .vc-channeltabs-tab-quests-active {
     position: relative;
     overflow: visible;
@@ -601,9 +624,9 @@
     background: linear-gradient(135deg,
             transparent,
             transparent 25%,
-            rgb(0 200 255) 40%,
+            rgb(114 137 218) 40%,
             rgb(88 101 242) 50%,
-            rgb(220 104 255) 60%,
+            rgb(71 82 196) 60%,
             transparent 75%,
             transparent);
     background-size: 300% 300%;
@@ -644,7 +667,7 @@
 
 @keyframes vc-channeltabs-quests-glow {
     0% {
-        box-shadow: 0 0 8px 1px rgb(0 200 255 / 60%);
+        box-shadow: 0 0 8px 1px rgb(114 137 218 / 60%);
     }
 
     33% {
@@ -652,11 +675,11 @@
     }
 
     66% {
-        box-shadow: 0 0 8px 1px rgb(220 104 255 / 60%);
+        box-shadow: 0 0 8px 1px rgb(71 82 196 / 60%);
     }
 
     100% {
-        box-shadow: 0 0 8px 1px rgb(0 200 255 / 60%);
+        box-shadow: 0 0 8px 1px rgb(114 137 218 / 60%);
     }
 }
 
@@ -672,7 +695,7 @@
 
 @keyframes vc-channeltabs-quests-glow-selected {
     0% {
-        box-shadow: 0 0 12px 2px rgb(0 200 255 / 80%);
+        box-shadow: 0 0 12px 2px rgb(114 137 218 / 80%);
     }
 
     33% {
@@ -680,11 +703,11 @@
     }
 
     66% {
-        box-shadow: 0 0 12px 2px rgb(220 104 255 / 80%);
+        box-shadow: 0 0 12px 2px rgb(71 82 196 / 80%);
     }
 
     100% {
-        box-shadow: 0 0 12px 2px rgb(0 200 255 / 80%);
+        box-shadow: 0 0 12px 2px rgb(114 137 218 / 80%);
     }
 }
 
@@ -841,7 +864,7 @@
 .vc-channeltabs-container.vc-channeltabs-no-drag-animation .vc-channeltabs-tab-drop-target {
     transform: none !important;
     background-color: transparent !important;
-    border-color: var(--background-modifier-accent) !important;
+    border-color: var(--background-mod-muted) !important;
     box-shadow: none !important;
 }
 
@@ -871,8 +894,8 @@
 
 /* Selected tab border - disable if setting is off */
 .vc-channeltabs-container.vc-channeltabs-no-selected-border .vc-channeltabs-tab-selected {
-    border: 1px solid var(--background-modifier-accent) !important;
-    border-bottom: 1px solid var(--background-modifier-accent) !important;
+    border: 1px solid var(--background-mod-muted) !important;
+    border-bottom: 1px solid var(--background-mod-muted) !important;
 }
 
 /* Selected tab background - disable if setting is off */
@@ -1000,12 +1023,12 @@
 }
 
 /* Enhanced caching mode - smoother transitions */
-[class*="chat_"] {
+[class*="chat"] {
     transition: opacity 0.1s ease;
 }
 
 /* Prevent flash when switching tabs with cache enabled */
-[class*="scrollerInner_"] {
+[class*="scrollerInner"] {
     scroll-behavior: auto;
 }
 
@@ -1025,13 +1048,13 @@
 
 /* Folder expansion */
 .vc-channeltabs-bookmark.vc-channeltabs-folder-expanded {
-    background-color: var(--background-modifier-selected);
+    background-color: var(--background-mod-strong);
 }
 
 /* Folder item styling - indented and visually connected to folder */
 .vc-channeltabs-bookmark.vc-channeltabs-folder-item {
     margin-left: 0.5rem;
-    border-left: 2px solid var(--background-modifier-accent);
+    border-left: 2px solid var(--background-mod-muted);
     padding-left: 0.5rem;
     opacity: 0.9;
     background-color: var(--background-secondary-alt);
@@ -1039,7 +1062,7 @@
 
 .vc-channeltabs-bookmark.vc-channeltabs-folder-item:hover {
     opacity: 1;
-    background-color: var(--background-modifier-hover);
+    background-color: var(--background-mod-subtle);
 }
 
 /* Active bookmark visual indicator */
@@ -1051,4 +1074,185 @@
 
 .vc-channeltabs-bookmark.vc-channeltabs-bookmark-active:hover {
     box-shadow: 0 0 6px var(--brand-500);
+}
+
+/* keybind Settings Styles */
+.channelTabs-keybind-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 8px 0;
+}
+
+.channelTabs-keybind-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px;
+    background-color: var(--background-secondary-alt);
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.channelTabs-keybind-input:hover {
+    background-color: var(--background-secondary-alt);
+}
+
+.channelTabs-keybind-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.channelTabs-keybind-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.channelTabs-keybind-button {
+    padding: 8px 16px;
+    background-color: var(--background-base-low);
+    border: 2px solid var(--input-border-default, var(--input-border));
+    border-radius: 8px;
+    cursor: pointer;
+    min-width: 140px;
+    text-align: center;
+    font-family: var(--font-code);
+    font-weight: 600;
+    color: var(--text-strong);
+    transition: all 0.2s ease;
+    outline: none;
+    box-shadow: 0 0 0 1px var(--background-mod-muted);
+}
+
+.channelTabs-keybind-button:hover:not(:disabled) {
+    background-color: var(--background-mod-subtle);
+    border-color: var(--brand-experiment);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
+}
+
+.channelTabs-keybind-button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
+}
+
+.channelTabs-keybind-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.channelTabs-keybind-button.listening {
+    background: linear-gradient(135deg, var(--brand-experiment) 0%, var(--brand-experiment-560) 100%);
+    color: var(--white);
+    border-color: var(--brand-experiment);
+    animation: keybind-pulse 1.5s ease-in-out infinite;
+    box-shadow: 0 0 12px var(--brand-experiment);
+}
+
+@keyframes keybind-pulse {
+
+    /* stylelint-disable-next-line rule-empty-line-before */
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.85;
+        transform: scale(1.02);
+    }
+}
+
+.channelTabs-keybind-conflict {
+    color: var(--text-feedback-critical);
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 2px;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+
+    /* stylelint-disable-next-line rule-empty-line-before */
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-4px);
+    }
+
+    75% {
+        transform: translateX(4px);
+    }
+}
+
+/* Tab Number Badge Styles */
+.vc-channeltabs-tab-number-badge {
+    background-color: rgb(0 0 0 / 25%);
+    color: var(--text-normal);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition:
+        opacity 0.4s ease-out 0.2s,
+        transform 0.4s ease-out 0.2s,
+        margin 0.4s ease-out;
+    flex-shrink: 0;
+}
+
+/* position: Left */
+.vc-channeltabs-tab-number-badge[data-position="left"] {
+    margin-right: 0.5rem;
+    transition:
+        opacity 0.4s ease-out,
+        transform 0.4s ease-out,
+        margin-right 0.4s ease-out;
+}
+
+/* position: Right */
+.vc-channeltabs-tab-number-badge[data-position="right"] {
+    margin-left: 0.5rem;
+    transition:
+        opacity 0.4s ease-out 0.2s,
+        transform 0.4s ease-out 0.2s,
+        margin-left 0.4s ease-out;
+}
+
+/* hover effect (slight scale up) */
+.vc-channeltabs-tab:hover .vc-channeltabs-tab-number-badge {
+    transform: scale(1.05);
+}
+
+/* directional slide animations for compact mode */
+.vc-channeltabs-tab-compact:not(:hover, .vc-channeltabs-tab-selected) .vc-channeltabs-tab-number-badge[data-position="right"] {
+    opacity: 0;
+    transform: translateX(-10px) scale(0.95);
+    pointer-events: none;
+}
+
+.vc-channeltabs-tab-compact:not(:hover, .vc-channeltabs-tab-selected) .vc-channeltabs-tab-number-badge[data-position="left"] {
+    opacity: 0;
+    transform: translateX(-15px) scale(0.9);
+    pointer-events: none;
+}
+
+/* disable transitions when compact expand animation is disabled */
+.vc-channeltabs-no-compact-animation .vc-channeltabs-tab-number-badge {
+    transition: none !important;
 }

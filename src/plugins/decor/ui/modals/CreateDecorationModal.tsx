@@ -9,16 +9,15 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
+import { GUILD_ID, INVITE_KEY, RAW_SKU_ID } from "@plugins/decor/lib/constants";
+import { useCurrentUserDecorationsStore } from "@plugins/decor/lib/stores/CurrentUserDecorationsStore";
+import { cl, DecorationModalStyles, requireAvatarDecorationModal, requireCreateStickerModal } from "@plugins/decor/ui";
+import { AvatarDecorationModalPreview } from "@plugins/decor/ui/components";
 import { openInviteModal } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { closeAllModals, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { filters, findComponentByCodeLazy, mapMangledModuleLazy } from "@webpack";
 import { Button, FluxDispatcher, GuildStore, NavigationRouter, TextInput, useEffect, useMemo, UserStore, useState } from "@webpack/common";
-
-import { GUILD_ID, INVITE_KEY, RAW_SKU_ID } from "../../lib/constants";
-import { useCurrentUserDecorationsStore } from "../../lib/stores/CurrentUserDecorationsStore";
-import { cl, DecorationModalStyles, requireAvatarDecorationModal, requireCreateStickerModal } from "../";
-import { AvatarDecorationModalPreview } from "../components";
 
 const FileUpload = findComponentByCodeLazy(".fileUpload),");
 
@@ -70,14 +69,14 @@ function CreateDecorationModal(props: ModalProps) {
             <BaseText
                 size="lg"
                 weight="semibold"
-                color="header-primary"
+                color="text-strong"
                 tag="h1"
                 style={{ flexGrow: 1 }}
             >
                 Create Decoration
             </BaseText>
             <ModalCloseButton onClick={props.onClose} />
-        </ModalHeader>
+        </ModalHeader >
         <ModalContent
             className={cl("create-decoration-modal-content")}
             scrollbarType="none"
@@ -120,7 +119,7 @@ function CreateDecorationModal(props: ModalProps) {
                     </div>
                     <div>
                         <AvatarDecorationModalPreview
-                            avatarDecorationOverride={decoration}
+                            avatarDecoration={decoration}
                             user={UserStore.getCurrentUser()}
                         />
                     </div>
@@ -168,7 +167,7 @@ function CreateDecorationModal(props: ModalProps) {
                 </Button>
             </div>
         </ModalFooter>
-    </ModalRoot>;
+    </ModalRoot >;
 }
 
 export const openCreateDecorationModal = () =>

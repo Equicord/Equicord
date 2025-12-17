@@ -13,13 +13,13 @@ import { HeadingPrimary, HeadingTertiary } from "@components/Heading";
 import { OpenExternalIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings";
+import { SearchStatus, TabItem, Theme, ThemeLikeProps } from "@equicordplugins/themeLibrary/types";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { findByPropsLazy } from "@webpack";
 import { Button, React, SearchableSelect, TabBar, TextInput, useEffect, useState } from "@webpack/common";
 
-import { SearchStatus, TabItem, Theme, ThemeLikeProps } from "../types";
 import { ThemeCard } from "./ThemeCard";
 
 const InputStyles = findByPropsLazy("inputWrapper", "inputError", "error");
@@ -275,12 +275,19 @@ function SubmitThemes() {
                 fontSize: "1.5em",
                 color: "var(--text-default)"
             }}>
-            <p> This tab was replaced in favour of the new website: </p>
-            <p><a href="https://discord-themes.com" target="_blank" rel="noreferrer">discord-themes.com</a></p>
+            <p>
+                This tab was replaced in favour of the new website:
+                {" "}
+                <a href="https://discord-themes.com" target="_blank" rel="noreferrer">
+                    discord-themes.com
+                </a>
+            </p>
             <p style={{
                 fontSize: ".75em",
                 color: "var(--text-muted)"
-            }}> Thank you for your understanding!</p>
+            }}>
+                Thank you for your understanding!
+            </p>
         </div>
     );
 }
@@ -290,7 +297,7 @@ function ThemeLibrary() {
     const [currentTab, setCurrentTab] = useState(TabItem.THEMES);
 
     return (
-        <SettingsTab title="Theme Library">
+        <SettingsTab>
             <TabBar
                 type="top"
                 look="brand"

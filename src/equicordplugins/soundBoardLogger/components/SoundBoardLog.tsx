@@ -4,24 +4,23 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { HeaderBarButton } from "@api/HeaderBar";
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
+import settings from "@equicordplugins/soundBoardLogger/settings";
+import { clearLoggedSounds, getLoggedSounds } from "@equicordplugins/soundBoardLogger/store";
+import { addListener, AvatarStyles, cl, downloadAudio, getEmojiUrl, playSound, removeListener, SoundLogEntry, UserSummaryItem } from "@equicordplugins/soundBoardLogger/utils";
+import { copyWithToast } from "@utils/discord";
 import { Margins } from "@utils/margins";
-import { classes, copyWithToast } from "@utils/misc";
+import { classes } from "@utils/misc";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { User } from "@vencord/discord-types";
-import { findComponentByCodeLazy } from "@webpack";
 import { Button, Clickable, Tooltip, useEffect, UserUtils, useState } from "@webpack/common";
 
-import settings from "../settings";
-import { clearLoggedSounds, getLoggedSounds } from "../store";
-import { addListener, AvatarStyles, cl, downloadAudio, getEmojiUrl, playSound, removeListener, SoundLogEntry, UserSummaryItem } from "../utils";
 import { LogIcon } from "./Icons";
 import { openMoreUsersModal } from "./MoreUsersModal";
 import { openUserModal } from "./UserModal";
-
-const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
 
 export async function openSoundBoardLog(): Promise<void> {
 
@@ -36,7 +35,7 @@ export async function openSoundBoardLog(): Promise<void> {
 
 export function OpenSBLogsButton() {
     return (
-        <HeaderBarIcon
+        <HeaderBarButton
             className="chatBarLogIcon"
             onClick={() => openSoundBoardLog()}
             tooltip={"Open SoundBoard Log"}

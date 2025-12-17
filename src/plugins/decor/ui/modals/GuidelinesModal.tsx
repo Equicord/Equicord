@@ -8,11 +8,11 @@ import { BaseText } from "@components/BaseText";
 import { Flex } from "@components/Flex";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
+import { settings } from "@plugins/decor/settings";
+import { cl, DecorationModalStyles, requireAvatarDecorationModal } from "@plugins/decor/ui";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { Button } from "@webpack/common";
 
-import { settings } from "../../settings";
-import { cl, DecorationModalStyles, requireAvatarDecorationModal } from "../";
 import { openCreateDecorationModal } from "./CreateDecorationModal";
 
 function GuidelinesModal(props: ModalProps) {
@@ -25,7 +25,7 @@ function GuidelinesModal(props: ModalProps) {
             <BaseText
                 size="lg"
                 weight="semibold"
-                color="header-primary"
+                color="text-strong"
                 tag="h1"
                 style={{ flexGrow: 1 }}
             >
@@ -45,7 +45,7 @@ function GuidelinesModal(props: ModalProps) {
             </Paragraph>
         </ModalContent>
         <ModalFooter className={cl("modal-footer")}>
-            <Flex style={{ gap: "4px" }}>
+            <Flex gap="4px">
                 <Button
                     onClick={() => {
                         settings.store.agreedToGuidelines = true;

@@ -107,11 +107,6 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: false,
     },
-    showTMDBButton: {
-        description: "Show TheMovieDB button in Rich Presence",
-        type: OptionType.BOOLEAN,
-        default: true,
-    },
     overrideRichPresenceType: {
         description: "Override the rich presence type",
         type: OptionType.SELECT,
@@ -154,6 +149,8 @@ const settings = definePluginSettings({
 const applicationId = "1381368130164625469";
 
 const logger = new Logger("JellyfinRichPresence");
+
+let updateInterval: NodeJS.Timeout | undefined;
 
 async function getApplicationAsset(key: string): Promise<string> {
     return (await ApplicationAssetUtils.fetchAssetIds(applicationId, [key]))[0];
@@ -200,11 +197,12 @@ export default definePlugin({
 
     start() {
         this.updatePresence();
-        this.updateInterval = setInterval(() => { this.updatePresence(); }, 10000);
+        updateInterval = setInterval(() => { this.updatePresence(); }, 10000);
     },
 
     stop() {
-        clearInterval(this.updateInterval);
+        clearInterval(updateInterval);
+        updateInterval = undefined;
     },
 
     async fetchMediaData(): Promise<MediaData | null> {
@@ -236,12 +234,11 @@ export default definePlugin({
             if (playState?.IsPaused && !settings.store.showPausedState) return null;
 
             const imageUrl = item.ImageTags?.Primary
-                ? `${baseUrl}/Items/${
-                    item.Type === "Episode" &&
+                ? `${baseUrl}/Items/${item.Type === "Episode" &&
                     item.SeriesId &&
                     settings.store.coverType === "series"
-                        ? item.SeriesId
-                        : item.Id
+                    ? item.SeriesId
+                    : item.Id
                 }/Images/Primary`
                 : undefined;
 

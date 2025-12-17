@@ -6,33 +6,31 @@
 
 import { BaseText } from "@components/BaseText";
 import { Paragraph } from "@components/Paragraph";
+import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
+import { downloadNotes, uploadNotes } from "@equicordplugins/holyNotes/utils";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
 import { findByProps } from "@webpack";
 import { Button } from "@webpack/common";
-
-import { noteHandler } from "../../NoteHandler";
-import { downloadNotes, uploadNotes } from "../../utils";
 
 export default ({ onClose, ...modalProps }: ModalProps & { onClose: () => void; }) => {
     const { statusTagGreen } = findByProps("statusTagGreen");
 
     return (
         <ModalRoot {...modalProps} className="vc-help-modal" size={ModalSize.MEDIUM}>
-            <ModalHeader className="notebook-header">
-                <BaseText tag="h3">Help Modal</BaseText>
+            <ModalHeader className="vc-help-modal-header">
+                <BaseText tag="h3" style={{ flexGrow: 1 }}>Help Modal</BaseText>
                 <ModalCloseButton onClick={onClose} />
             </ModalHeader>
             <ModalContent>
                 <div className="vc-help-markdown">
                     <BaseText>Adding Notes</BaseText>
                     <Paragraph>
-                        To add a note right click on a message then hover over the "Note Message" item and click
-                        <br />
-                        the button with the notebook name you would like to note the message to.
-                        <br />
-                        <span style={{ fontWeight: "bold" }} className={statusTagGreen}>
-                            Protip:
-                        </span>{" "}
+                        To add a note right click on a message then hover over the "Note Message" item and click the button with the notebook name you would like to note the message to.
+                    </Paragraph>
+                    <div style={{ marginTop: "12px" }}>
+                        <span className={statusTagGreen}>Protip:</span>
+                    </div>
+                    <Paragraph style={{ marginTop: "8px" }}>
                         Clicking the "Note Message" button by itself will note to Main by default!
                     </Paragraph>
                     <hr />
@@ -56,25 +54,22 @@ export default ({ onClose, ...modalProps }: ModalProps & { onClose: () => void; 
                 </div>
             </ModalContent>
             <ModalFooter>
-                <div className="vc-notebook-display-left">
+                <div className="vc-help-modal-footer">
                     <Button
                         look={Button.Looks.FILLED}
                         color={Button.Colors.GREEN}
-                        style={{ marginRight: "10px" }}
                         onClick={() => {
                             noteHandler.refreshAvatars();
                         }}>Refresh Avatars</Button>
                     <Button
                         look={Button.Looks.FILLED}
                         color={Button.Colors.GREEN}
-                        style={{ marginRight: "10px" }}
                         onClick={() => {
                             uploadNotes();
                         }}>Import Notes</Button>
                     <Button
                         look={Button.Looks.FILLED}
                         color={Button.Colors.GREEN}
-                        style={{ marginRight: "10px" }}
                         onClick={() => {
                             downloadNotes();
                         }}>Export Notes</Button>

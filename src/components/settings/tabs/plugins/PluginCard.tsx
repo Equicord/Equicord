@@ -5,10 +5,10 @@
  */
 
 import { showNotice } from "@api/Notices";
+import { isPluginEnabled, pluginRequiresRestart, startDependenciesRecursive, startPlugin, stopPlugin } from "@api/PluginManager";
 import { classNameFactory } from "@api/Styles";
 import { CogWheel, InfoIcon } from "@components/Icons";
 import { AddonCard } from "@components/settings/AddonCard";
-import { proxyLazy } from "@utils/lazy";
 import { Logger } from "@utils/Logger";
 import { isObjectEmpty } from "@utils/misc";
 import { Plugin } from "@utils/types";
@@ -21,10 +21,6 @@ import { openPluginModal } from "./PluginModal";
 
 const logger = new Logger("PluginCard");
 const cl = classNameFactory("vc-plugins-");
-
-// Avoid circular dependency
-const { startDependenciesRecursive, startPlugin, stopPlugin, isPluginEnabled } = proxyLazy(() => require("plugins") as typeof import("plugins"));
-
 interface PluginCardProps extends React.HTMLProps<HTMLDivElement> {
     plugin: Plugin;
     disabled?: boolean;
@@ -39,8 +35,8 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
     const pluginMeta = PluginMeta[plugin.name];
     const isEquicordPlugin = pluginMeta.folderName.startsWith("src/equicordplugins/") ?? false;
     const isVencordPlugin = pluginMeta.folderName.startsWith("src/plugins/") ?? false;
-    const isUserPlugin = pluginMeta.userPlugin ?? false;
-    const isModifiedPlugin = plugin?.isModified ?? false;
+    const isUserPlugin = pluginMeta?.userPlugin ?? false;
+    const isModifiedPlugin = plugin.isModified ?? false;
 
     const isEnabled = () => isPluginEnabled(plugin.name);
 
@@ -65,8 +61,8 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
             }
         }
 
-        // if the plugin has patches, dont use stopPlugin/startPlugin. Wait for restart to apply changes.
-        if (plugin.patches?.length) {
+        // if the plugin requires a restart, don't use stopPlugin/startPlugin. Wait for restart to apply changes.
+        if (pluginRequiresRestart(plugin)) {
             settings.enabled = !wasEnabled;
             onRestartNeeded(plugin.name, "enabled");
             return;
@@ -151,7 +147,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
                     onClick={() => openPluginModal(plugin, onRestartNeeded)}
                     className={cl("info-button")}
                 >
-                    {plugin.options && !isObjectEmpty(plugin.options)
+                    {plugin.settings?.def && !isObjectEmpty(plugin.settings.def)
                         ? <CogWheel className={cl("info-icon")} />
                         : <InfoIcon className={cl("info-icon")} />
                     }
