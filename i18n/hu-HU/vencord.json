@@ -84,13 +84,16 @@
     },
     "settings": {
         "disableMinSize": {
-            "title": "Minimális ablakméret kikapcsolása"
+            "title": "Minimális ablakméret kikapcsolása",
+            "description": "Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens."
         },
         "enableReactDevtools": {
-            "title": "React Fejlesztői Eszközök Engedélyezése"
+            "title": "React Fejlesztői Eszközök Engedélyezése",
+            "description": "Enable the React Developer Tools extension for debugging Discord's React components. Useful for plugin development."
         },
         "frameless": {
-            "title": "Ablakkeret kikapcsolása"
+            "title": "Ablakkeret kikapcsolása",
+            "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area."
         },
         "hint": "Tipp: Megváltoztathatod ennek a beállítási szakasznak a helyét a <0>Beállítások plugin beállításaiban</0>!",
         "macosVibrancyStyle": {
@@ -153,7 +156,8 @@
             "checkYourConnection": "Nem sikerült csatlakozni a tárolóhoz. Ellenőrizd az internetkapcsolatodat",
             "failedtoFetchCommits": "Nem sikerült lekérni a commitokat a tárolóból",
             "repository": "Tároló",
-            "viewRecentChanges": "Tekintsd meg az Equicord legutóbbi változásait. Ez közvetlenül a tárolóból kéri le a commitokat, hogy megmutassa az újdonságokat",
+            "whereUpdatesFetch": "This is the GitHub repository where Equicord fetches updates from",
+            "viewRecentChanges": "These are the new commits and plugin updates since your last version. You can see what features were added, bugs were fixed, and which plugins received updates",
             "failedToRetrieve": "Lekérés sikertelen - ellenőrizd a konzolt",
             "upToDate": "A Tároló Naprakész",
             "fetchRepo": "Lekérés a Tárolóból",
@@ -167,7 +171,8 @@
             "updateLogs_zero": "Nincsenek Frissítési Naplók",
             "updateLogs_one": "Frissítési Naplók ({count} napló)",
             "updateLogs_other": "Frissítési Naplók ({count} napló)",
-            "previousSessions": "Korábbi frissítési munkamenetek a commit előzményeikkel és pluginváltozásaikkal",
+            "previousSessions": "A history of your previous update sessions with their commit history and plugin changes. Click on a log to expand it and see the details",
+            "info": "Check the repository for new commits, plugin updates, and code changes. This will compare your current version with the latest available and show you what's new",
             "title": "Changelog"
         },
         "restartRequired": {
@@ -179,18 +184,22 @@
         },
         "title": "Beállítások",
         "transparent": {
-            "description": "Olyan témára van szükséged, ami támogatja az átlátszóságot, különben nem csinál semmit. AZ ABLAK NEM LESZ ÁTMÉRETEZHETŐ!! Teljes újraindítás szükséges",
-            "title": "Ablakátlátszóság engedélyezése"
+            "description": "Make the Discord window transparent. A theme that supports transparency is required or this will do nothing.",
+            "title": "Ablakátlátszóság engedélyezése",
+            "noteWindows": "This will stop the window from being resizable and prevents you from snapping the window to screen edges",
+            "note": "This will stop the window from being resizable."
         },
         "useQuickCss": {
-            "description": "Betölti az Egyéni CSS-edet",
+            "description": "Load custom CSS from the QuickCSS editor. This allows you to customize Discord's appearance with your own styles.",
             "title": "Egyéni CSS Engedélyezése"
         },
         "winCtrlQ": {
-            "title": "Regisztráld a Ctrl+Q billentyűkombinációt a Discord bezárásához (Alt+F4 alternatíva)"
+            "title": "Register Ctrl+Q as shortcut to close Discord",
+            "description": "Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application."
         },
         "winNativeTitleBar": {
-            "title": "Használd a Windows natív címsorát a Discord egyedi címsora helyett"
+            "title": "Használd a Windows natív címsorát a Discord egyedi címsora helyett",
+            "description": "Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools."
         }
     },
     "tabs": {
