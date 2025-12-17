@@ -84,13 +84,16 @@
     },
     "settings": {
         "disableMinSize": {
-            "title": "ウィンドウの最小サイズ制限を無効化"
+            "title": "ウィンドウの最小サイズ制限を無効化",
+            "description": "Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens."
         },
         "enableReactDevtools": {
-            "title": "React Developer Toolsを有効化"
+            "title": "React Developer Toolsを有効化",
+            "description": "Enable the React Developer Tools extension for debugging Discord's React components. Useful for plugin development."
         },
         "frameless": {
-            "title": "ウィンドウの枠を無効化"
+            "title": "ウィンドウの枠を無効化",
+            "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area."
         },
         "hint": "ヒント: この設定項目の表示位置は、<0>Settingsプラグインの設定</0>で変更できます！",
         "macosVibrancyStyle": {
@@ -153,7 +156,8 @@
             "checkYourConnection": "リポジトリへの接続に失敗しました。インターネット接続を確認してください",
             "failedtoFetchCommits": "リポジトリから{count}件のコミットを取得しました",
             "repository": "リポジトリ",
-            "viewRecentChanges": "Equicordの最新の変更を表示します。この機能は、リポジトリからコミットを直接取得して、何が新しく追加・変更されたかを表示します",
+            "whereUpdatesFetch": "This is the GitHub repository where Equicord fetches updates from",
+            "viewRecentChanges": "These are the new commits and plugin updates since your last version. You can see what features were added, bugs were fixed, and which plugins received updates",
             "failedToRetrieve": "取得に失敗しました - コンソールを確認してください",
             "upToDate": "最新のリポジトリ",
             "fetchRepo": "リポジトリから取得",
@@ -167,7 +171,8 @@
             "updateLogs_zero": "更新ログはありません",
             "updateLogs_one": "更新ログ（{count} ログ）",
             "updateLogs_other": "更新ログ（{count} ログ）",
-            "previousSessions": "過去の更新セッションとそのコミット履歴・プラグイン変更内容",
+            "previousSessions": "A history of your previous update sessions with their commit history and plugin changes. Click on a log to expand it and see the details",
+            "info": "Check the repository for new commits, plugin updates, and code changes. This will compare your current version with the latest available and show you what's new",
             "title": "変更履歴"
         },
         "restartRequired": {
@@ -179,18 +184,22 @@
         },
         "title": "設定",
         "transparent": {
-            "description": "透明効果に対応したテーマを使わないとこの設定は一切効果がありません。\nウィンドウのリサイズができなくなります！！\nまた、完全な再起動が必要です",
-            "title": "ウィンドウの透明化を有効にする"
+            "description": "Make the Discord window transparent. A theme that supports transparency is required or this will do nothing.",
+            "title": "ウィンドウの透明化を有効にする",
+            "noteWindows": "This will stop the window from being resizable and prevents you from snapping the window to screen edges",
+            "note": "This will stop the window from being resizable."
         },
         "useQuickCss": {
-            "description": "カスタム CSS を読み込む",
+            "description": "Load custom CSS from the QuickCSS editor. This allows you to customize Discord's appearance with your own styles.",
             "title": "カスタムCSSを可能にする"
         },
         "winCtrlQ": {
-            "title": "Discord を閉じるショートカットを Ctrl+Q にする（Alt+F4 の代わり）"
+            "title": "Register Ctrl+Q as shortcut to close Discord",
+            "description": "Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application."
         },
         "winNativeTitleBar": {
-            "title": "Discord のカスタムタイトルバーをオフにして Windows 標準のものを使用"
+            "title": "Discord のカスタムタイトルバーをオフにして Windows 標準のものを使用",
+            "description": "Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools."
         }
     },
     "tabs": {
