@@ -1,44 +1,38 @@
-/*
- * Vencord, a Discord client mod
- * Copyright (c) 2025 Vendicated and contributors
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
-import { get } from "@api/DataStore";
-import { definePluginSettings, Settings } from "@api/Settings";
+import { get, set } from "@api/DataStore";
+import { Settings } from "@api/Settings";
 import { PencilIcon } from "@components/Icons";
 import { openModal } from "@utils/modal";
-import definePlugin, { OptionType } from "@utils/types";
-import { extractAndLoadChunksLazy, findStoreLazy } from "@webpack";
+import definePlugin from "@utils/types";
+import { extractAndLoadChunksLazy } from "@webpack";
 import { Menu } from "@webpack/common";
 
 import { SetAvatarModal } from "./AvatarModal";
+
 export const KEY_DATASTORE = "vencord-customavatars";
-export const KEY_STYLESHEET = "vencord-customavatars-style";
 export let avatars: Record<string, string> = {};
 
 let styleEl: HTMLStyleElement | null = null;
 
-(async () => {
-    avatars = await get<Record<string, string>>(KEY_DATASTORE) || {};
-})();
-
-const UserStore = findStoreLazy("UserStore") as typeof import("@webpack/common").UserStore;
-
-const settings = definePluginSettings({
-    enableReloadWarning: {
-        type: OptionType.BOOLEAN,
-        description: "Enable or disable the reload warning modal after changing the avatar",
-        default: true
-    }
-});
-export { settings };
-export function getCustomAvatarString(userId: string, withHash?: boolean): string | undefined {
-    if (!avatars[userId] || !Settings.plugins.ChangeFriendAvatar?.enabled)
-        return;
+export function getCustomAvatarString(userId: string): string | undefined {
+    if (!Settings.plugins.ChangeFriendAvatar?.enabled) return;
     return avatars[userId];
 }
 
+export function updateStylesheet() {
+    if (!styleEl) return;
+
+    styleEl.textContent = Object.entries(avatars)
+        .filter(([, url]) => url)
+        .map(([id, url]) =>
+            `img[src*="cdn.discordapp.com/avatars/${id}"]{content:url("${url}")!important;}`
+        )
+        .join("");
+}
+
+export async function saveAvatars() {
+    await set(KEY_DATASTORE, avatars);
+    updateStylesheet();
+}
 
 export default definePlugin({
     name: "ChangeFriendAvatar",
@@ -50,9 +44,7 @@ export default definePlugin({
         }
     ],
 
-    settings,
     getCustomAvatarString,
-
     patches: [],
 
     contextMenus: {
@@ -66,7 +58,10 @@ export default definePlugin({
                     id="set-avatar"
                     icon={PencilIcon}
                     action={async () => {
-                        await extractAndLoadChunksLazy(['name:"UserSettings"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/);
+                        await extractAndLoadChunksLazy(
+                            ['name:"UserSettings"'],
+                            /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/
+                        );
                         openModal(modalProps => <SetAvatarModal userId={user.id} modalProps={modalProps} />);
                     }}
                 />
@@ -75,19 +70,16 @@ export default definePlugin({
     },
 
     async start() {
-        const css = await get(KEY_STYLESHEET);
-        if (css) {
-            styleEl = document.createElement("style");
-            styleEl.id = "vc-custom-avatar-style";
-            styleEl.textContent = css;
-            document.head.appendChild(styleEl);
-        }
+        avatars = await get<Record<string, string>>(KEY_DATASTORE) ?? {};
+
+        styleEl = document.createElement("style");
+        styleEl.id = "vc-custom-avatar-style";
+        document.head.appendChild(styleEl);
+        updateStylesheet();
     },
 
     stop() {
-        if (styleEl) {
-            styleEl.remove();
-            styleEl = null;
-        }
+        styleEl?.remove();
+        styleEl = null;
     }
 });
