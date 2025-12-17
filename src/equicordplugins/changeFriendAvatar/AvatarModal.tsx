@@ -8,6 +8,7 @@ import { set } from "@api/DataStore";
 import { classNameFactory } from "@api/Styles";
 import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
+import { Flex } from "@components/Flex";
 import { Margins } from "@utils/margins";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
 import { TextInput, useState } from "@webpack/common";
@@ -43,7 +44,7 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string, modalPr
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader className={cl("modal-header")}>
-                <span style={{ fontSize: "1.25rem", fontWeight: 600, color: "white" }}>Custom Avatar</span>
+                <Heading tag="h3">Custom Avatar</Heading>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
             <ModalContent className={cl("modal-content")} onKeyDown={handleKey}>
@@ -58,10 +59,10 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string, modalPr
                 </section>
             </ModalContent>
             <ModalFooter className={cl("modal-footer")}>
-                <div style={{ display: "flex", gap: "8px" }}>
+                <Flex gap="8px">
                     {avatars[userId] && (<Button variant="dangerPrimary" onClick={deleteUserAvatar}>Delete</Button>)}
                     <Button onClick={saveUserAvatar}>Save</Button>
-                </div>
+                </Flex>
             </ModalFooter>
         </ModalRoot>
     );
