@@ -1,7 +1,7 @@
 import { classNameFactory } from "@api/Styles";
 import { Margins } from "@utils/margins";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
-import { Button, TextInput, useState } from "@webpack/common";
+import { Button, FluxDispatcher, TextInput, useState } from "@webpack/common";
 
 import { avatars, saveAvatars } from "./index";
 
@@ -10,6 +10,10 @@ const cl = classNameFactory("vc-customavatars-");
 export function SetAvatarModal({ userId, modalProps }: { userId: string; modalProps: ModalProps; }) {
     const [url, setUrl] = useState(avatars[userId] ?? "");
 
+    const forceUpdate = () => {
+        FluxDispatcher.dispatch({ type: "USER_SETTINGS_ACCOUNT_SUBMIT_SUCCESS" });
+    };
+
     const handleSave = async () => {
         if (url.trim()) {
             avatars[userId] = url.trim();
@@ -17,12 +21,14 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
             delete avatars[userId];
         }
         await saveAvatars();
+        forceUpdate();
         modalProps.onClose();
     };
 
     const deleteUserAvatar = async () => {
         delete avatars[userId];
         await saveAvatars();
+        forceUpdate();
         modalProps.onClose();
     };
 

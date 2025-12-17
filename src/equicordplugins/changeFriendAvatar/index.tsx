@@ -11,41 +11,38 @@ import { SetAvatarModal } from "./AvatarModal";
 export const KEY_DATASTORE = "vencord-customavatars";
 export let avatars: Record<string, string> = {};
 
-let styleEl: HTMLStyleElement | null = null;
-
 export function getCustomAvatarString(userId: string): string | undefined {
     if (!Settings.plugins.ChangeFriendAvatar?.enabled) return;
     return avatars[userId];
 }
 
-export function updateStylesheet() {
-    if (!styleEl) return;
-
-    styleEl.textContent = Object.entries(avatars)
-        .filter(([, url]) => url)
-        .map(([id, url]) =>
-            `img[src*="cdn.discordapp.com/avatars/${id}"]{content:url("${url}")!important;}`
-        )
-        .join("");
-}
-
 export async function saveAvatars() {
     await set(KEY_DATASTORE, avatars);
-    updateStylesheet();
 }
 
 export default definePlugin({
     name: "ChangeFriendAvatar",
     description: "Set custom avatar URLs for any user",
-    authors: [
-        {
-            name: "soap phia",
-            id: 1012095822957133976n
-        }
-    ],
+    authors: [{ name: "soap phia", id: 1012095822957133976n }],
 
     getCustomAvatarString,
-    patches: [],
+
+    patches: [
+        {
+            find: "getUserAvatarURL:",
+            replacement: {
+                match: /getUserAvatarURL\((\i)\)\{/,
+                replace: "$&const customAvatar=$self.getCustomAvatarString($1.id);if(customAvatar)return customAvatar;"
+            }
+        },
+        {
+            find: ".getAvatarURL=function",
+            replacement: {
+                match: /\.getAvatarURL=function\((\i)(?:,\i)?\)\{/,
+                replace: "$&const customAvatar=$self.getCustomAvatarString(this.id);if(customAvatar)return customAvatar;"
+            }
+        }
+    ],
 
     contextMenus: {
         "user-context": (children, { user }) => {
@@ -71,15 +68,7 @@ export default definePlugin({
 
     async start() {
         avatars = await get<Record<string, string>>(KEY_DATASTORE) ?? {};
-
-        styleEl = document.createElement("style");
-        styleEl.id = "vc-custom-avatar-style";
-        document.head.appendChild(styleEl);
-        updateStylesheet();
     },
 
-    stop() {
-        styleEl?.remove();
-        styleEl = null;
-    }
+    stop() { }
 });
