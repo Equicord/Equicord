@@ -29,7 +29,7 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader className={cl("modal-header")}>
-                <span style={{ fontSize: "1.25rem", fontWeight: 600 }}>Custom Avatar</span>
+                <span style={{ fontSize: "1.25rem", fontWeight: 600, color: "white" }}>Custom Avatar</span>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
             <ModalContent className={cl("modal-content")}>
@@ -44,12 +44,14 @@ export function SetAvatarModal({ userId, modalProps }: { userId: string; modalPr
                 </section>
             </ModalContent>
             <ModalFooter className={cl("modal-footer")}>
-                {avatars[userId] && (
-                    <Button color={Button.Colors.RED} onClick={deleteUserAvatar}>
-                        Delete
-                    </Button>
-                )}
-                <Button onClick={handleSave}>Save</Button>
+                <div style={{ display: "flex", gap: "8px" }}>
+                    {avatars[userId] && (
+                        <Button color={Button.Colors.RED} onClick={deleteUserAvatar}>
+                            Delete
+                        </Button>
+                    )}
+                    <Button onClick={handleSave}>Save</Button>
+                </div>
             </ModalFooter>
         </ModalRoot>
     );
