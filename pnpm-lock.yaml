@@ -9,7 +9,7 @@ overrides:
 
 patchedDependencies:
   '@types/less@3.0.8':
-    hash: 641e6c93bb737bac7fc283416857bd095cd85bcbcba63becb7a8bbcc78f73076
+    hash: krcufrsfhsuxuoj7hocqugs6zi
     path: patches/@types__less@3.0.8.patch
 
 importers:
@@ -27,7 +27,7 @@ importers:
         version: 0.1.2
       '@types/less':
         specifier: ^3.0.8
-        version: 3.0.8(patch_hash=641e6c93bb737bac7fc283416857bd095cd85bcbcba63becb7a8bbcc78f73076)
+        version: 3.0.8(patch_hash=krcufrsfhsuxuoj7hocqugs6zi)
       '@types/stylus':
         specifier: ^0.48.42
         version: 0.48.42
@@ -3015,7 +3015,7 @@ snapshots:
     dependencies:
       '@types/node': 22.13.13
 
-  '@types/less@3.0.8(patch_hash=641e6c93bb737bac7fc283416857bd095cd85bcbcba63becb7a8bbcc78f73076)': {}
+  '@types/less@3.0.8(patch_hash=krcufrsfhsuxuoj7hocqugs6zi)': {}
 
   '@types/lodash@4.17.15': {}
 
