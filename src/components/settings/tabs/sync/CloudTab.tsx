@@ -28,16 +28,9 @@ import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
-import { QuickAction, QuickActionCard } from "@components/settings/QuickAction";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
 import { Margins } from "@utils/margins";
-import { findComponentByCodeLazy } from "@webpack";
 import { Alerts, useState } from "@webpack/common";
-
-const UploadIcon = findComponentByCodeLazy("M12.7 3.3a1 1 0 0 0-1.4 0l-5 5a1 1 0 0 0 1.4 1.4L11 6.42V20");
-const DownloadIcon = findComponentByCodeLazy("M12.7 20.7a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4l3.3 3.29V4");
-const TrashIcon = findComponentByCodeLazy("2.81h8.36a3");
-const SkullIcon = findComponentByCodeLazy("m13.47 1 .07.04c.45.06");
 
 function validateUrl(url: string) {
     try {
@@ -145,59 +138,51 @@ function CloudTab() {
 
             <Heading className={Margins.top20}>Settings Sync</Heading>
             <Paragraph className={Margins.bottom16}>
-                Synchronize your Equicord settings to the cloud. This makes it easy to keep your configuration consistent across multiple devices without manual import/export.
+                Keep your Equicord configuration in sync across all your devices. This makes it easy to maintain consistent settings without manual import/export.
             </Paragraph>
 
             <FormSwitch
                 title="Enable Settings Sync"
-                description="When enabled, your settings can be synced to and from the cloud. Use the actions below to manually sync."
+                description="When enabled, your settings can be synced to and from the cloud. Use the buttons below to manually sync your configuration."
                 value={cloud.settingsSync}
                 onChange={v => { cloud.settingsSync = v; }}
                 disabled={!isAuthenticated}
                 hideBorder
             />
 
-            {isAuthenticated && (
-                <QuickActionCard columns={2}>
-                    <QuickAction
-                        Icon={UploadIcon}
-                        text="Sync to Cloud"
-                        action={() => putCloudSettings(true)}
-                        disabled={!syncEnabled}
-                    />
-                    <QuickAction
-                        Icon={DownloadIcon}
-                        text="Sync from Cloud"
-                        action={() => getCloudSettings(true, true)}
-                        disabled={!syncEnabled}
-                    />
-                </QuickActionCard>
-            )}
+            <Flex gap="8px" flexWrap="wrap">
+                <Button
+                    size="small"
+                    disabled={!syncEnabled}
+                    onClick={() => getCloudSettings(true, true)}
+                >
+                    Sync from Cloud
+                </Button>
+                <Button
+                    size="small"
+                    variant="secondary"
+                    disabled={!syncEnabled}
+                    onClick={() => putCloudSettings(true)}
+                >
+                    Sync to Cloud
+                </Button>
+            </Flex>
 
             {!isAuthenticated && (
-                <Alert.Warning className={Margins.top8} style={{ width: "100%" }}>
+                <Alert.Warning className={Margins.top16} style={{ width: "100%" }}>
                     Enable cloud integration above to use settings sync features.
                 </Alert.Warning>
             )}
 
             <Divider className={Margins.top20} />
 
-            <Heading className={Margins.top20}>Danger Zone</Heading>
+            <Heading className={Margins.top20}>Data Removal</Heading>
             <Paragraph className={Margins.bottom16}>
-                Permanently delete all your data from the cloud. This action cannot be undone and will remove all synced settings and any other data stored on the cloud backend.
+                Delete your cloud settings to remove synced data, or erase all data to permanently wipe everything from the cloud.
             </Paragraph>
-
             <Flex gap="8px" flexWrap="wrap">
                 <Button
-                    variant="dangerPrimary"
-                    disabled={!syncEnabled}
-                    onClick={() => deleteCloudSettings()}
-                    style={{ display: "flex", alignItems: "center" }}
-                >
-                    <TrashIcon color="currentColor" style={{ marginRight: "8px" }} />
-                    Delete Cloud Settings
-                </Button>
-                <Button
+                    size="small"
                     variant="dangerPrimary"
                     disabled={!isAuthenticated}
                     onClick={() => Alerts.show({
@@ -208,10 +193,16 @@ function CloudTab() {
                         confirmColor: "vc-cloud-erase-data-danger-btn",
                         cancelText: "Cancel"
                     })}
-                    style={{ display: "flex", alignItems: "center" }}
                 >
-                    <SkullIcon color="currentColor" style={{ marginRight: "8px" }} />
                     Erase All Cloud Data
+                </Button>
+                <Button
+                    size="small"
+                    variant="dangerSecondary"
+                    disabled={!syncEnabled}
+                    onClick={() => deleteCloudSettings()}
+                >
+                    Delete Cloud Settings
                 </Button>
             </Flex>
         </SettingsTab>
