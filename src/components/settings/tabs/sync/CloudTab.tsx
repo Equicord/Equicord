@@ -176,7 +176,7 @@ function CloudTab() {
 
             <Divider className={Margins.top20} />
 
-            <Heading className={Margins.top20}>Data Removal</Heading>
+            <Heading className={Margins.top20}>Danger Zone</Heading>
             <Paragraph className={Margins.bottom16}>
                 Delete your cloud settings to remove synced data, or erase all data to permanently wipe everything from the cloud.
             </Paragraph>
