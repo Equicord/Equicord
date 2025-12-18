@@ -184,22 +184,22 @@
         },
         "title": "Einstellungen",
         "transparent": {
-            "description": "Make the Discord window transparent. A theme that supports transparency is required or this will do nothing.",
+            "description": "Machen Sie das Discord-Fenster transparent. Ein Design, das Transparenz unterstützt, wird benötigt oder dies wird nichts tun.",
             "title": "Fenstertransparenz aktivieren",
-            "noteWindows": "This will stop the window from being resizable and prevents you from snapping the window to screen edges",
-            "note": "This will stop the window from being resizable."
+            "noteWindows": "Dies verhindert, dass das Fenster skalierbar ist und verhindert das Einrasten des Fensters an die Bildschirmkanten",
+            "note": "Dies verhindert, dass das Fenster skalierbar ist."
         },
         "useQuickCss": {
             "description": "Load custom CSS from the QuickCSS editor. This allows you to customize Discord's appearance with your own styles.",
             "title": "Eigene CSS aktivieren"
         },
         "winCtrlQ": {
-            "title": "Register Ctrl+Q as shortcut to close Discord",
-            "description": "Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application."
+            "title": "Registriere Strg+Q als Shortcut um Discord zu schließen",
+            "description": "Fügen Sie Strg+Q als Tastaturkürzel hinzu, um Discord zu schließen. Dies bietet eine Alternative zu Alt+F4, um die Anwendung schnell zu schließen."
         },
         "winNativeTitleBar": {
             "title": "Benutze die native Titelleiste von Windows anstelle von Discords benutzerdefiniertem",
-            "description": "Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools."
+            "description": "Ersetzen Sie Discords benutzerdefinierte Titelleiste mit der Standard-Windows-Titelleiste. Dies kann die Kompatibilität mit einigen Fensterverwaltungswerkzeugen verbessern."
         }
     },
     "tabs": {
