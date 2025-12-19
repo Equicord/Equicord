@@ -60,7 +60,7 @@ async function runReporter() {
             }
         }
 
-        for (const [searchType, args] of Webpack.lazyWebpackSearchHistory) {
+        for (const [searchType, args, context] of Webpack.lazyWebpackSearchHistory) {
             let method = searchType;
 
             if (searchType === "findComponent") method = "find";
@@ -93,25 +93,35 @@ async function runReporter() {
 
                 if (result == null || (result.$$vencordGetWrappedComponent != null && result.$$vencordGetWrappedComponent() == null)) throw new Error("Webpack Find Fail");
             } catch (e) {
-                let logMessage = searchType;
+                let filterString = searchType;
                 if (method === "find" || method === "proxyLazyWebpack" || method === "LazyComponentWebpack") {
                     if (args[0].$$vencordProps != null) {
-                        logMessage += `(${args[0].$$vencordProps.map(arg => `"${arg}"`).join(", ")})`;
+                        filterString += `(${args[0].$$vencordProps.map(arg => `"${arg}"`).join(", ")})`;
                     } else {
-                        logMessage += `(${args[0].toString().slice(0, 147)}...)`;
+                        filterString += `(${args[0].toString().slice(0, 147)}...)`;
                     }
                 } else if (method === "extractAndLoadChunks") {
-                    logMessage += `([${args[0].map(arg => `"${arg}"`).join(", ")}], ${args[1].toString()})`;
+                    filterString += `([${args[0].map(arg => `"${arg}"`).join(", ")}], ${args[1].toString()})`;
                 } else if (method === "mapMangledModule") {
                     const failedMappings = Object.keys(args[1]).filter(key => result?.[key] == null);
 
-                    logMessage += `("${args[0]}", {\n${failedMappings.map(mapping => `\t${mapping}: ${args[1][mapping].toString().slice(0, 147)}...`).join(",\n")}\n})`;
+                    filterString += `("${args[0]}", {\n${failedMappings.map(mapping => `\t${mapping}: ${args[1][mapping].toString().slice(0, 147)}...`).join(",\n")}\n})`;
                 } else {
-                    logMessage += `(${args.map(arg => `"${arg}"`).join(", ")})`;
+                    filterString += `(${args.map(arg => `"${arg}"`).join(", ")})`;
                 }
-                if (IS_COMPANION_TEST)
-                    reporterData.failedWebpack[method].push(args.map(a => String(a)));
-                ReporterLogger.log("Webpack Find Fail:", logMessage);
+
+                const locationInfo = context.plugin !== "Unknown"
+                    ? ` [${context.plugin} @ ${context.file}:${context.line}]`
+                    : "";
+
+                if (IS_COMPANION_TEST) {
+                    reporterData.failedWebpack.push({
+                        method: searchType,
+                        filter: filterString,
+                        context
+                    });
+                }
+                ReporterLogger.log("Webpack Find Fail:", filterString + locationInfo);
             }
         }
 

@@ -373,9 +373,49 @@ export function findModuleFactory(...code: CodeFilter) {
     return wreq.m[id];
 }
 
-// FIXME: give this a better name
 export type TypeWebpackSearchHistory = "find" | "findByProps" | "findByCode" | "findStore" | "findComponent" | "findComponentByCode" | "findExportedComponent" | "waitFor" | "waitForComponent" | "waitForStore" | "proxyLazyWebpack" | "LazyComponentWebpack" | "extractAndLoadChunks" | "mapMangledModule";
-export const lazyWebpackSearchHistory = [] as Array<[TypeWebpackSearchHistory, any[]]>;
+
+export interface WebpackSearchContext {
+    plugin: string;
+    file: string;
+    line: number;
+}
+
+export const lazyWebpackSearchHistory = [] as Array<[TypeWebpackSearchHistory, any[], WebpackSearchContext]>;
+
+export function getSearchContext(): WebpackSearchContext {
+    const stack = new Error().stack ?? "";
+    const lines = stack.split("\n").slice(2);
+
+    for (const line of lines) {
+        const pluginMatch = line.match(/[/\\](equicordplugins|plugins)[/\\]([^/\\]+)/);
+        if (pluginMatch) {
+            const [, folder, plugin] = pluginMatch;
+            const fileMatch = line.match(/([^/\\]+\.[tj]sx?)/);
+            const lineMatch = line.match(/:(\d+):\d+\)?$/);
+
+            return {
+                plugin: `${folder === "equicordplugins" ? "E:" : "V:"}${plugin}`,
+                file: fileMatch?.[1] ?? "unknown",
+                line: lineMatch ? parseInt(lineMatch[1], 10) : 0
+            };
+        }
+
+        const apiMatch = line.match(/[/\\](api)[/\\]([^/\\]+\.[tj]sx?)/);
+        if (apiMatch) {
+            const fileMatch = line.match(/([^/\\]+\.[tj]sx?)/);
+            const lineMatch = line.match(/:(\d+):\d+\)?$/);
+
+            return {
+                plugin: `API:${apiMatch[2].replace(/\.[tj]sx?$/, "")}`,
+                file: fileMatch?.[1] ?? "unknown",
+                line: lineMatch ? parseInt(lineMatch[1], 10) : 0
+            };
+        }
+    }
+
+    return { plugin: "Unknown", file: "unknown", line: 0 };
+}
 
 /**
  * This is just a wrapper around {@link proxyLazy} to make our reporter test for your webpack finds.
@@ -390,7 +430,7 @@ export const lazyWebpackSearchHistory = [] as Array<[TypeWebpackSearchHistory, a
  * @example const mod = proxyLazy(() => findByProps("blah")); console.log(mod.blah);
  */
 export function proxyLazyWebpack<T = any>(factory: () => T, attempts?: number) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["proxyLazyWebpack", [factory]]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["proxyLazyWebpack", [factory], getSearchContext()]);
 
     return proxyLazy<T>(factory, attempts);
 }
@@ -404,7 +444,7 @@ export function proxyLazyWebpack<T = any>(factory: () => T, attempts?: number) {
  * @returns Result of factory function
  */
 export function LazyComponentWebpack<T extends object = any>(factory: () => any, attempts?: number) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["LazyComponentWebpack", [factory]]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["LazyComponentWebpack", [factory], getSearchContext()]);
 
     return LazyComponent<T>(factory, attempts);
 }
@@ -413,7 +453,7 @@ export function LazyComponentWebpack<T extends object = any>(factory: () => any,
  * Find the first module that matches the filter, lazily
  */
 export function findLazy(filter: FilterFn, warning: boolean = true) {
-    if (IS_REPORTER && warning) lazyWebpackSearchHistory.push(["find", [filter]]);
+    if (IS_REPORTER && warning) lazyWebpackSearchHistory.push(["find", [filter], getSearchContext()]);
 
     return proxyLazy(() => find(filter));
 }
@@ -432,7 +472,7 @@ export function findByProps(...props: PropsFilter) {
  * Find the first module that has the specified properties, lazily
  */
 export function findByPropsLazy(...props: PropsFilter) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findByProps", props]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findByProps", props, getSearchContext()]);
 
     return proxyLazy(() => findByProps(...props));
 }
@@ -451,7 +491,7 @@ export function findByCode(...code: CodeFilter) {
  * Find the first function that includes all the given code, lazily
  */
 export function findByCodeLazy(...code: CodeFilter) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findByCode", code]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findByCode", code, getSearchContext()]);
 
     return proxyLazy(() => findByCode(...code));
 }
@@ -506,7 +546,7 @@ export function findStore(name: StoreNameFilter) {
  * Find a store by its displayName, lazily
  */
 export function findStoreLazy(name: StoreNameFilter) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findStore", [name]]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findStore", [name], getSearchContext()]);
 
     return proxyLazy(() => findStore(name));
 }
@@ -525,8 +565,7 @@ export function findComponentByCode(...code: CodeFilter) {
  * Finds the first component that matches the filter, lazily.
  */
 export function findComponentLazy<T extends object = any>(filter: FilterFn) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findComponent", [filter]]);
-
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findComponent", [filter], getSearchContext()]);
 
     return LazyComponent<T>(() => {
         const res = find(filter, { isIndirect: true });
@@ -540,7 +579,7 @@ export function findComponentLazy<T extends object = any>(filter: FilterFn) {
  * Finds the first component that includes all the given code, lazily
  */
 export function findComponentByCodeLazy<T extends object = any>(...code: CodeFilter) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findComponentByCode", code]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findComponentByCode", code, getSearchContext()]);
 
     return LazyComponent<T>(() => {
         const res = find(filters.componentByCode(...code), { isIndirect: true });
@@ -554,7 +593,7 @@ export function findComponentByCodeLazy<T extends object = any>(...code: CodeFil
  * Finds the first component that is exported by the first prop name, lazily
  */
 export function findExportedComponentLazy<T extends object = any>(...props: PropsFilter) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findExportedComponent", props]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["findExportedComponent", props, getSearchContext()]);
 
     return LazyComponent<T>(() => {
         const res = find(filters.byProps(...props), { isIndirect: true });
@@ -623,7 +662,7 @@ export const mapMangledModule = traceFunction("mapMangledModule", function mapMa
   * @see {@link mapMangledModule}
  */
 export function mapMangledModuleLazy<S extends string>(code: string | RegExp | CodeFilter, mappers: Record<S, FilterFn>, includeBlacklistedExports = false): Record<S, any> {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["mapMangledModule", [code, mappers, includeBlacklistedExports]]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["mapMangledModule", [code, mappers, includeBlacklistedExports], getSearchContext()]);
 
     return proxyLazy(() => mapMangledModule(code, mappers, includeBlacklistedExports));
 }
@@ -713,7 +752,7 @@ export async function extractAndLoadChunks(code: CodeFilter, matcher = DefaultEx
  * @returns A function that returns a promise that resolves with a boolean whether the chunks were loaded, on first call
  */
 export function extractAndLoadChunksLazy(code: CodeFilter, matcher = DefaultExtractAndLoadChunksRegex) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["extractAndLoadChunks", [code, matcher]]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["extractAndLoadChunks", [code, matcher], getSearchContext()]);
 
     return makeLazy(() => extractAndLoadChunks(code, matcher));
 }
@@ -726,7 +765,7 @@ export function waitFor(filter: string | PropsFilter | FilterFn, callback: Callb
     // if react find fails then we are fully cooked
     if (IS_ANTI_CRASH_TEST && filter !== "useState") return;
 
-    if (IS_REPORTER && !isIndirect) lazyWebpackSearchHistory.push(["waitFor", Array.isArray(filter) ? filter : [filter]]);
+    if (IS_REPORTER && !isIndirect) lazyWebpackSearchHistory.push(["waitFor", Array.isArray(filter) ? filter : [filter], getSearchContext()]);
 
     if (typeof filter === "string")
         filter = filters.byProps(filter);

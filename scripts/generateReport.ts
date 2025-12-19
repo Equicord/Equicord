@@ -61,7 +61,14 @@ interface PatchInfo {
     id: string;
     match: string;
     error?: string;
-};
+}
+
+interface WebpackFindInfo {
+    filter: string;
+    plugin: string;
+    file: string;
+    line: number;
+}
 
 const report = {
     badPatches: [] as PatchInfo[],
@@ -72,8 +79,17 @@ const report = {
     }[],
     otherErrors: [] as string[],
     ignoredErrors: [] as string[],
-    badWebpackFinds: [] as string[]
+    badWebpackFinds: [] as WebpackFindInfo[]
 };
+
+function parseWebpackFindMessage(message: string): WebpackFindInfo {
+    const contextMatch = message.match(/^(.+?) \[([^\]]+) @ ([^:]+):(\d+)\]$/);
+    if (contextMatch) {
+        const [, filter, plugin, file, line] = contextMatch;
+        return { filter, plugin, file, line: parseInt(line, 10) };
+    }
+    return { filter: message, plugin: "Unknown", file: "unknown", line: 0 };
+}
 
 const IGNORED_DISCORD_ERRORS = [
     "KeybindStore: Looking for callback action",
@@ -115,7 +131,10 @@ async function printReport() {
     console.log();
 
     console.log("## Bad Webpack Finds");
-    report.badWebpackFinds.forEach(p => console.log("- " + toCodeBlock(p, "- ".length)));
+    report.badWebpackFinds.forEach(p => {
+        console.log(`- ${p.plugin} (${p.file}:${p.line})`);
+        console.log(`  - Filter: ${toCodeBlock(p.filter, "  - Filter: ".length)}`);
+    });
 
     console.log();
 
@@ -170,7 +189,23 @@ async function printReport() {
             report.slowPatches.length > 0 && patchesToEmbed("Slow Patches", report.slowPatches, 0xf0b232),
             report.badWebpackFinds.length > 0 && {
                 title: "Bad Webpack Finds",
-                description: report.badWebpackFinds.map(f => toCodeBlock(f, 0, true)).join("\n") || "None",
+                description: (() => {
+                    const byPlugin = new Map<string, WebpackFindInfo[]>();
+                    for (const find of report.badWebpackFinds) {
+                        const key = find.plugin;
+                        if (!byPlugin.has(key)) byPlugin.set(key, []);
+                        byPlugin.get(key)!.push(find);
+                    }
+
+                    return Array.from(byPlugin.entries()).map(([plugin, finds]) => {
+                        const lines = [`**__${plugin}:__**`];
+                        for (const find of finds) {
+                            lines.push(`\`${find.file}:${find.line}\``);
+                            lines.push(toCodeBlock(find.filter, 0, true));
+                        }
+                        return lines.join("\n");
+                    }).join("\n\n");
+                })() || "None",
                 color: 0xff0000
             },
             report.badStarts.length > 0 && {
@@ -319,7 +354,7 @@ page.on("console", async e => {
                         process.exit(1);
                     case "Webpack Find Fail:":
                         process.exitCode = 1;
-                        report.badWebpackFinds.push(otherMessage);
+                        report.badWebpackFinds.push(parseWebpackFindMessage(otherMessage));
                         break;
                     case "Finished test":
                         await browser.close();

@@ -925,7 +925,7 @@ function getQuestAcceptedButtonProps(quest: Quest, text: string, disabled: boole
 
 function isIncompatibleActivity(quest: Quest): boolean {
     return !!Object.keys(quest.config.taskConfigV2?.tasks || {}).some(taskType => {
-        return "ACHIEVEMENT_IN_ACTIVITY" === taskType;
+        return taskType === "ACHIEVEMENT_IN_ACTIVITY";
     });
 }
 
