@@ -969,7 +969,7 @@ export default definePlugin({
             // Tags *should* contain the guild ID nested in its structure, but on the first time
             // loading a guild member's preview profile, it will be undefined. This patch bypasses
             // that by passing the guild ID as its own prop.
-            find: "UserProfilePopoutBody\"}",
+            find: "\"UserProfilePopoutBody\"}",
             replacement: {
                 match: /(pronouns,tags:)/,
                 replace: "pronouns,guildId:arguments[0]?.guild?.id??null,tags:"
