@@ -18,12 +18,12 @@
 
 import { Logger } from "@utils/Logger";
 import { LazyComponent, LazyComponentWrapper } from "@utils/react";
-import { FilterFn, filters, getSearchContext, lazyWebpackSearchHistory, waitFor } from "@webpack";
+import { FilterFn, filters, lazyWebpackSearchHistory, waitFor } from "@webpack";
 
 const logger = new Logger("Webpack");
 
 export function waitForComponent<T extends React.ComponentType<any> = React.ComponentType<any> & Record<string, any>>(name: string, filter: FilterFn | string | string[]) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["waitForComponent", Array.isArray(filter) ? filter : [filter], getSearchContext()]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["waitForComponent", Array.isArray(filter) ? filter : [filter]]);
 
     let myValue: T = function () {
         const error = new Error(`Equicord could not find the ${name} Component`);
@@ -44,7 +44,7 @@ export function waitForComponent<T extends React.ComponentType<any> = React.Comp
 }
 
 export function waitForStore(name: string, cb: (v: any) => void) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["waitForStore", [name], getSearchContext()]);
+    if (IS_REPORTER) lazyWebpackSearchHistory.push(["waitForStore", [name]]);
 
     waitFor(filters.byStoreName(name), cb, { isIndirect: true });
 }

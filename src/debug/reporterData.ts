@@ -8,7 +8,7 @@
  * this file is needed to avoid an import of plugins in ./runReporter.ts
  */
 import { Patch } from "@utils/types";
-import { TypeWebpackSearchHistory, WebpackSearchContext } from "@webpack";
+import { TypeWebpackSearchHistory } from "@webpack";
 
 interface EvaledPatch extends Patch {
     id: PropertyKey;
@@ -17,13 +17,6 @@ interface ErroredPatch extends EvaledPatch {
     oldModule: string,
     newModule: string;
 }
-
-export interface FailedWebpackFind {
-    method: TypeWebpackSearchHistory;
-    filter: string;
-    context: WebpackSearchContext;
-}
-
 export interface ReporterData {
     failedPatches: {
         foundNoModule: Patch[];
@@ -31,9 +24,8 @@ export interface ReporterData {
         undoingPatchGroup: EvaledPatch[];
         erroredPatch: ErroredPatch[];
     };
-    failedWebpack: FailedWebpackFind[];
+    failedWebpack: Record<TypeWebpackSearchHistory, string[][]>;
 }
-
 export const reporterData: ReporterData = {
     failedPatches: {
         foundNoModule: [],
@@ -41,5 +33,20 @@ export const reporterData: ReporterData = {
         undoingPatchGroup: [],
         erroredPatch: []
     },
-    failedWebpack: []
+    failedWebpack: {
+        find: [],
+        findByProps: [],
+        findByCode: [],
+        findStore: [],
+        findComponent: [],
+        findComponentByCode: [],
+        findExportedComponent: [],
+        waitFor: [],
+        waitForComponent: [],
+        waitForStore: [],
+        proxyLazyWebpack: [],
+        LazyComponentWebpack: [],
+        extractAndLoadChunks: [],
+        mapMangledModule: []
+    }
 };
