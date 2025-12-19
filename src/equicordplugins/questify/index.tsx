@@ -1012,7 +1012,7 @@ export default definePlugin({
         {
             // Hides the Quest icon from members list items when
             // a user is playing a game tied to an active Quest.
-            find: "\),\"activity-\".concat",
+            find: "),\"activity-\".concat",
             group: true,
             replacement: [
                 {
