@@ -10,9 +10,9 @@ import { PencilIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { extractAndLoadChunksLazy, findByProps } from "@webpack";
-import { Menu, UserStore } from "@webpack/common";
 import { User } from "@vencord/discord-types";
+import { extractAndLoadChunksLazy } from "@webpack";
+import { IconUtils, Menu, UserStore } from "@webpack/common";
 
 import { SetAvatarModal } from "./AvatarModal";
 
@@ -44,7 +44,21 @@ export default definePlugin({
     settings,
     getCustomAvatar,
 
-    patches: [],
+    patches: [
+        {
+            find: "getUserAvatarURL:",
+            replacement: [
+                {
+                    match: /(getUserAvatarURL:)(\i),/,
+                    replace: "$1$self.getAvatarHook($2),"
+                },
+                {
+                    match: /(getGuildMemberAvatarURLSimple:)(\i),/,
+                    replace: "$1$self.getAvatarServerHook($2),"
+                }
+            ]
+        },
+    ],
 
     contextMenus: {
         "user-context": (children, { user }) => {
@@ -65,62 +79,45 @@ export default definePlugin({
         }
     },
 
-    async start() {
-        avatars = await get<Record<string, string>>(KEY_DATASTORE) || {};
-        Icons = findByProps("getUserAvatarURL", "getGuildMemberAvatarURLSimple");
-        if (Icons) {
-            getDefaultAvatarURL = Icons.getUserAvatarURL;
-            Icons.getUserAvatarURL = (user: User, animated?: boolean, size?: number) => {
-                if (avatars[user.id]) {
-                    const customUrl = avatars[user.id];
-                    try {
-                        const res = new URL(customUrl);
-                        if (size) res.searchParams.set("size", size.toString());
-                        return res.toString();
-                    } catch {
-                        return customUrl;
-                    }
-                }
-                return getDefaultAvatarURL(user, animated, size);
-            };
+    getAvatarHook: (original: any) => (user: User, animated: boolean, size: number) => {
+        if (!avatars[user.id]) return original(user, animated, size);
 
-            getGuildAvatarURL = Icons.getGuildMemberAvatarURLSimple;
-            Icons.getGuildMemberAvatarURLSimple = (config: any) => {
-                const { userId, avatar, size, canAnimate } = config;
-
-                if (!settings.store.overrideServerAvatars) {
-                    return getGuildAvatarURL(config);
-                }
-
-                if (avatars[userId]) {
-                    const customUrl = avatars[userId];
-                    try {
-                        const res = new URL(customUrl);
-                        if (size) res.searchParams.set("size", size.toString());
-                        return res.toString();
-                    } catch {
-                        return customUrl;
-                    }
-                }
-
-                if (avatar) {
-                    const user = UserStore.getUser(userId);
-                    if (user?.avatar) {
-                        return Icons.getUserAvatarURL(user, canAnimate, size);
-                    }
-                }
-
-                return getGuildAvatarURL(config);
-            };
+        const customUrl = avatars[user.id];
+        try {
+            const res = new URL(customUrl);
+            res.searchParams.set("size", size.toString());
+            return res.toString();
+        } catch {
+            return customUrl;
         }
     },
 
-    stop() {
-        if (Icons && getDefaultAvatarURL) {
-            Icons.getUserAvatarURL = getDefaultAvatarURL;
+    getAvatarServerHook: (original: any) => (config: any) => {
+        const { userId, avatar, size, canAnimate } = config;
+        if (!settings.store.overrideServerAvatars) return original(config);
+
+        if (avatars[userId]) {
+            const customUrl = avatars[userId];
+            try {
+                const res = new URL(customUrl);
+                if (size) res.searchParams.set("size", size.toString());
+                return res.toString();
+            } catch {
+                return customUrl;
+            }
         }
-        if (Icons && getGuildAvatarURL) {
-            Icons.getGuildMemberAvatarURLSimple = getGuildAvatarURL;
+
+        if (avatar) {
+            const user = UserStore.getUser(userId);
+            if (user?.avatar) {
+                return IconUtils.getUserAvatarURL(user, canAnimate, size);
+            }
         }
+
+        return original(config);
+    },
+
+    async start() {
+        avatars = await get<Record<string, string>>(KEY_DATASTORE) || {};
     }
 });
