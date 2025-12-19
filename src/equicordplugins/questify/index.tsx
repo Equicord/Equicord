@@ -925,7 +925,7 @@ function getQuestAcceptedButtonProps(quest: Quest, text: string, disabled: boole
 
 function isIncompatibleActivity(quest: Quest): boolean {
     return !!Object.keys(quest.config.taskConfigV2?.tasks || {}).some(taskType => {
-        return "ACHIEVEMENT_IN_ACTIVITY" === taskType;
+        return taskType === "ACHIEVEMENT_IN_ACTIVITY";
     });
 }
 
@@ -1012,27 +1012,11 @@ export default definePlugin({
         {
             // Hides the Quest icon from members list items when
             // a user is playing a game tied to an active Quest.
-            find: "HANG_STATUS});",
+            find: "),\"activity-\".concat",
             group: true,
             replacement: [
                 {
-                    match: /(?=if\(\(0,.{0,30}?isBlockedOrIgnored)/,
-                    replace: "const shouldHideMembersListActivelyPlayingIcon=$self.shouldHideMembersListActivelyPlayingIcon();"
-                },
-                {
-                    match: /(?<=\i\(\),\i&&)/,
-                    replace: "!shouldHideMembersListActivelyPlayingIcon&&"
-                }
-            ]
-        },
-        {
-            // Same as above, probably? Not sure when
-            // each function is used, so patching both.
-            find: '"StackedActivityStatus"})',
-            group: true,
-            replacement: [
-                {
-                    match: /(?=if\(\i\)return null;let \i=function)/,
+                    match: /(?<=voiceActivityChannel:\i\?\i:null}\);)/,
                     replace: "const shouldHideMembersListActivelyPlayingIcon=$self.shouldHideMembersListActivelyPlayingIcon();"
                 },
                 {
