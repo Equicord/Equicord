@@ -1012,11 +1012,11 @@ export default definePlugin({
         {
             // Hides the Quest icon from members list items when
             // a user is playing a game tied to an active Quest.
-            find: "CUSTOM_STATUS});if",
+            find: "\),\"activity-\".concat",
             group: true,
             replacement: [
                 {
-                    match: /(?=if\(\i\)return null;let \i=function\(\){)/,
+                    match: /(?<=voiceActivityChannel:\i\?\i:null}\);)/,
                     replace: "const shouldHideMembersListActivelyPlayingIcon=$self.shouldHideMembersListActivelyPlayingIcon();"
                 },
                 {
