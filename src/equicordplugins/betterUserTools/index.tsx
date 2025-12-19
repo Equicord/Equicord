@@ -11,15 +11,12 @@ import { getUserSettingLazy } from "@api/UserSettings";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import { findByPropsLazy } from "@webpack";
-import { FluxDispatcher, MediaEngineStore, React, showToast, Toasts, UserStore, VoiceStateStore } from "@webpack/common";
+import { FluxDispatcher, MediaEngineStore, React, showToast, Toasts, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
 
 type LoopbackActions = {
     setLoopback(tag: string, enabled: boolean): unknown;
     toggleSelfDeaf(): unknown;
 };
-
-const VoiceActions = findByPropsLazy("setLoopback", "toggleSelfDeaf") as unknown as LoopbackActions | null;
 
 const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;
 const StatusSetting = getUserSettingLazy<string>("status", "status")!;
@@ -54,13 +51,13 @@ interface OffTheRadarState {
 }
 let otrState: OffTheRadarState = { enabled: false };
 
-function notifyMic(msg: string, type: number) {
+function notifyMic(msg: string, type: string) {
     showToast(msg, type);
 }
 
 function getVoiceActions(): LoopbackActions | null {
     try {
-        const actions = VoiceActions as LoopbackActions | null;
+        const actions = VoiceActions;
         if (!actions?.setLoopback || !actions?.toggleSelfDeaf) {
             if (!missingModuleNotified) {
                 missingModuleNotified = true;
@@ -134,9 +131,9 @@ async function disableLoopback(silent = false) {
     }
 }
 
-function MicLoopbackIcon({ active, className }: { active: boolean; className?: string; }) {
+function MicLoopbackIcon({ active = false, className = "" }: { active: boolean; className?: string; }) {
     return (
-        <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
             <rect
                 x="9"
                 y="4"
@@ -196,12 +193,11 @@ function MicLoopbackButton({ iconForeground, hideTooltips, nameplate }: UserArea
         <UserAreaButton
             tooltipText={hideTooltips ? void 0 : "Mic Test Loopback"}
             icon={<MicLoopbackIcon active={loopbackActive} className={iconForeground} />}
-            selected={loopbackActive}
             role="switch"
-            aria-checked={loopbackActive}
-            onClick={handleToggle}
+            aria-checked={!loopbackActive}
+            redGlow={!loopbackActive}
             plated={nameplate != null}
-            className={`vc-betterusertools-btn${loopbackActive ? " danger" : ""}`}
+            onClick={handleToggle}
         />
     );
 }
@@ -213,14 +209,14 @@ function RadarIcon({ active, className }: { active: boolean; className?: string;
             width="20"
             height="20"
             viewBox="0 0 24 24"
-            fill="none"
+            fill="currentColor"
             stroke="currentColor"
             strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden
         >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path stroke="currentColor" d="M0 0h24v24H0z" fill="currentColor" />
             <path d="M11.291 11.295a1 1 0 0 0 .709 1.705v8c2.488 0 4.74 -1.01 6.37 -2.642m1.675 -2.319a8.962 8.962 0 0 0 .955 -4.039h-5" />
             <path d="M16 9a5 5 0 0 0 -5.063 -1.88m-2.466 1.347a5 5 0 0 0 .53 7.535" />
             <path d="M20.486 9a9 9 0 0 0 -12.525 -5.032m-2.317 1.675a9 9 0 0 0 3.36 14.852" />
@@ -279,7 +275,11 @@ function OffTheRadarButton({ iconForeground, hideTooltips, nameplate }: UserArea
             forceUpdate();
         } catch (err) {
             log.error("OffTheRadar toggle failed", err);
-            Toasts.open({ message: "OffTheRadar toggle failed", type: Toasts.Type.FAILURE });
+            Toasts.show({
+                message: "OffTheRadar toggle failed",
+                id: Toasts.genId(),
+                type: Toasts.Type.FAILURE
+            });
         }
     };
 
@@ -287,12 +287,11 @@ function OffTheRadarButton({ iconForeground, hideTooltips, nameplate }: UserArea
         <UserAreaButton
             tooltipText={hideTooltips ? void 0 : (otrState.enabled ? "Off The Radar (on)" : "Off The Radar (off)")}
             icon={<RadarIcon active={otrState.enabled} className={iconForeground} />}
-            selected={otrState.enabled}
             role="switch"
-            aria-checked={otrState.enabled}
-            onClick={toggle}
+            aria-checked={!otrState.enabled}
+            redGlow={!otrState.enabled}
             plated={nameplate != null}
-            className={`vc-betterusertools-btn${otrState.enabled ? " danger" : ""}`}
+            onClick={toggle}
         />
     );
 }
@@ -300,17 +299,12 @@ function OffTheRadarButton({ iconForeground, hideTooltips, nameplate }: UserArea
 const MicLoopbackUserAreaButton: UserAreaButtonFactory = props => <MicLoopbackButton {...props} />;
 const OffTheRadarUserAreaButton: UserAreaButtonFactory = props => <OffTheRadarButton {...props} />;
 
-const styles = `
-.vc-betterusertools-btn { color: var(--interactive-normal); }
-`;
-
 export default definePlugin({
     name: "BetterUserTools",
     description: "Adds mic test shortcut button and off-the-radar button to the user panel, both are toggles. MicTest Simply lets you test your mic without entering the settings page. OffTheRadar Enables idle status and hides activity while enabled.",
-    authors: [EquicordDevs.Benjii],
+    authors: [EquicordDevs.benjii],
     dependencies: ["UserSettingsAPI", "UserAreaAPI"],
     settings,
-    styles,
 
     async start() {
         await loadOtrState();
