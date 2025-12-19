@@ -206,7 +206,7 @@ function OtherContextMenu({ iconName, Icon, color, findCode }: { iconName: strin
                 />
                 <Menu.MenuItem
                     id="save-webp"
-                    label="WebP"
+                    label="WEBP"
                     action={() => handleSave("image/webp")}
                 />
                 <Menu.MenuItem
