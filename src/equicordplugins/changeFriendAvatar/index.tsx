@@ -19,9 +19,6 @@ import { SetAvatarModal } from "./AvatarModal";
 export const requireSettingsMenu = extractAndLoadChunksLazy(['name:"UserSettings"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/);
 export const KEY_DATASTORE = "vencord-custom-avatars";
 export let avatars: Record<string, string> = {};
-let Icons: any;
-let getGuildAvatarURL: any;
-let getDefaultAvatarURL: any;
 
 const settings = definePluginSettings({
     overrideServerAvatars: {
