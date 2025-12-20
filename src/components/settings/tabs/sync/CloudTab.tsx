@@ -33,7 +33,17 @@ import { localStorage } from "@utils/localStorage";
 import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
 import { findComponentByCodeLazy } from "@webpack";
-import { Alerts, Select, useState } from "@webpack/common";
+import { Alerts, SearchableSelect, Select, useState } from "@webpack/common";
+
+const ICON_STYLE: React.CSSProperties = { width: 20, height: 20, borderRadius: 4, verticalAlign: "middle" };
+
+function EquicordIcon() {
+    return <img src="https://equicord.org/assets/icons/equicord/icon.png" alt="Equicord" style={ICON_STYLE} />;
+}
+
+function VencordIcon() {
+    return <img src="https://equicord.org/assets/icons/vencord/icon-light.png" alt="Vencord" style={ICON_STYLE} />;
+}
 
 function CloudUploadIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
@@ -128,40 +138,42 @@ function CloudTab() {
                 Choose which cloud backend to use for storing your settings. You can switch between Equicord's and Vencord's cloud services, or use a self-hosted instance.
             </Paragraph>
 
-            <Select
+            <SearchableSelect
                 options={cloudBackendOptions}
-                isSelected={v => v === cloud.url}
-                select={v => changeUrl(v)}
-                serialize={v => v}
+                value={cloudBackendOptions.find(o => o.value === cloud.url)}
+                onChange={v => changeUrl(v)}
                 className={Margins.bottom16}
+                closeOnSelect={true}
+                renderOptionPrefix={o => o?.value?.includes("equicord") ? <EquicordIcon /> : <VencordIcon />}
             />
 
-            <CheckedTextInput
-                key={`backendUrl-${inputKey}`}
-                value={cloud.url}
-                onChange={async v => {
-                    cloud.url = v;
-                    cloud.authenticated = false;
-                    await deauthorizeCloud();
-                }}
-                validate={validateUrl}
-            />
-
-            <Button
-                className={Margins.top16}
-                style={{ width: "100%" }}
-                disabled={!isAuthenticated}
-                onClick={async () => {
-                    cloud.authenticated = false;
-                    await deauthorizeCloud();
-                    await authorizeCloud();
-                }}
-            >
-                <Flex gap="8px" alignItems="center">
-                    <RefreshIcon color="currentColor" />
-                    Reauthorize
-                </Flex>
-            </Button>
+            <Flex gap="8px" alignItems="center">
+                <div style={{ flex: 1 }}>
+                    <CheckedTextInput
+                        key={`backendUrl-${inputKey}`}
+                        value={cloud.url}
+                        onChange={async v => {
+                            cloud.url = v;
+                            cloud.authenticated = false;
+                            await deauthorizeCloud();
+                        }}
+                        validate={validateUrl}
+                    />
+                </div>
+                <Button
+                    disabled={!isAuthenticated}
+                    onClick={async () => {
+                        cloud.authenticated = false;
+                        await deauthorizeCloud();
+                        await authorizeCloud();
+                    }}
+                >
+                    <Flex gap="8px" alignItems="center">
+                        <RefreshIcon color="currentColor" />
+                        Reauthorize
+                    </Flex>
+                </Button>
+            </Flex>
 
             <Divider className={Margins.top20} />
 
@@ -233,9 +245,10 @@ function CloudTab() {
                 Permanently delete all your data from the cloud. This action cannot be undone and will remove all synced settings and any other data stored on the cloud backend.
             </Paragraph>
 
-            <Flex gap="8px" flexWrap="wrap">
+            <Flex gap="8px">
                 <Button
                     variant="dangerPrimary"
+                    size="medium"
                     disabled={!syncEnabled}
                     onClick={() => deleteCloudSettings()}
                 >
@@ -245,20 +258,21 @@ function CloudTab() {
                     </Flex>
                 </Button>
                 <Button
-                    variant="dangerPrimary"
+                    variant="dangerSecondary"
+                    size="medium"
                     disabled={!isAuthenticated}
                     onClick={() => Alerts.show({
-                        title: "Erase All Cloud Data",
-                        body: "Are you sure you want to permanently delete all your cloud data? This action cannot be undone.",
+                        title: "Delete Cloud Account",
+                        body: "Are you sure you want to permanently delete your cloud account and all associated data? This action cannot be undone.",
                         onConfirm: eraseAllCloudData,
-                        confirmText: "Erase All Data",
+                        confirmText: "Delete Account",
                         confirmColor: "vc-cloud-erase-data-danger-btn",
                         cancelText: "Cancel"
                     })}
                 >
                     <Flex gap="8px" alignItems="center">
                         <SkullIcon color="currentColor" />
-                        Erase All Cloud Data
+                        Delete Cloud Account
                     </Flex>
                 </Button>
             </Flex>
