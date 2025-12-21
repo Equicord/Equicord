@@ -234,7 +234,7 @@ export class MediaEngineStore extends FluxStore {
     getInputDevices(): Record<string, AudioDevice>;
     getInputVolume(): number;
     getKrispEnableStats(): boolean;
-    getKrispModelOverride(): string;
+    getKrispModelOverride(): string | undefined;
     getKrispModels(): string[];
     getKrispSuppressionLevel(): number;
     getKrispVadActivationThreshold(): number;
@@ -244,7 +244,7 @@ export class MediaEngineStore extends FluxStore {
     getLoopback(): boolean;
     getLoopbackReasons(): Set<string>;
     getMediaEngine(): MediaEngine;
-    getMLSSigningKey(): Promise<unknown>;
+    getMLSSigningKey(userId: string, guildId: string): Promise<unknown>;
     getMode(context?: string): string;
     getModeOptions(context?: string): ModeOptions;
     getMostRecentlyRequestedVoiceFilter(): string | null;
@@ -269,13 +269,13 @@ export class MediaEngineStore extends FluxStore {
         outputDevices: Record<string, AudioDevice>;
         appSupported: Record<string, boolean>;
         krispModuleLoaded: boolean;
-        krispVersion: string;
-        krispSuppressionLevel: number;
-        goLiveSource: GoLiveSource | null;
+        krispVersion: string | undefined;
+        krispSuppressionLevel: number | undefined;
+        goLiveSource: GoLiveSource | undefined;
         goLiveContext: string;
     };
     getSupportedSecureFramesProtocolVersion(): number;
-    getSystemMicrophoneMode(): boolean;
+    getSystemMicrophoneMode(): string | undefined;
     getUseGamescopeCapture(): boolean;
     getUseSystemScreensharePicker(): boolean;
     getUseVaapiEncoder(): boolean;
@@ -323,7 +323,7 @@ export class MediaEngineStore extends FluxStore {
     isVideoAvailable(): boolean;
     isVideoEnabled(): boolean;
 
-    notifyMuteUnmuteSoundWasSkipped(): boolean;
+    notifyMuteUnmuteSoundWasSkipped(): void;
     setCanHavePriority(userId: string, value: boolean): void;
     setHasActiveCallKitCall(active: boolean): void;
     shouldOfferManualSubsystemSelection(): boolean;
