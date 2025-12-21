@@ -194,8 +194,8 @@ function MicLoopbackButton({ iconForeground, hideTooltips, nameplate }: UserArea
             tooltipText={hideTooltips ? void 0 : "Mic Test Loopback"}
             icon={<MicLoopbackIcon active={loopbackActive} className={iconForeground} />}
             role="switch"
-            aria-checked={!loopbackActive}
-            redGlow={!loopbackActive}
+            aria-checked=!loopbackActive}
+            redGlow={loopbackActive}
             plated={nameplate != null}
             onClick={handleToggle}
         />
@@ -287,8 +287,8 @@ function OffTheRadarButton({ iconForeground, hideTooltips, nameplate }: UserArea
             tooltipText={hideTooltips ? void 0 : (otrState.enabled ? "Off The Radar (on)" : "Off The Radar (off)")}
             icon={<RadarIcon active={otrState.enabled} className={iconForeground} />}
             role="switch"
-            aria-checked={!otrState.enabled}
-            redGlow={!otrState.enabled}
+            aria-checked={otrState.enabled}
+            redGlow={otrState.enabled}
             plated={nameplate != null}
             onClick={toggle}
         />
