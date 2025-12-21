@@ -11,9 +11,9 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { VoiceState } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, MediaEngineStore, PermissionsBits, PermissionStore, SelectedChannelStore, showToast, Toasts, UserStore, VoiceActions } from "@webpack/common";
+import { ChannelStore, FluxDispatcher, MediaEngineStore, PermissionsBits, PermissionStore, SelectedChannelStore, showToast, Toasts, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
 
-import { getCurrentMedia, settings } from "./utils";
+import { getCurrentMedia, matchesKeybind, settings } from "./utils";
 
 let hasStreamed;
 const startStream = findByCodeLazy('type:"STREAM_START"');
@@ -80,9 +80,18 @@ export default definePlugin({
         </>
     ),
 
+    start() {
+        window.addEventListener("keydown", onKeyDown, true);
+    },
+
+    stop() {
+        window.removeEventListener("keydown", onKeyDown, true);
+    },
+
     flux: {
         async VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
             if (!settings.store.toolboxManagement) return;
+            if (!settings.store.autoOnJoin) return;
             const myId = UserStore.getCurrentUser().id;
             for (const state of voiceStates) {
                 const { userId, channelId } = state;
@@ -109,3 +118,67 @@ export default definePlugin({
         }
     }
 });
+
+function onKeyDown(e: KeyboardEvent) {
+    const kb = settings.store.keybind;
+    if (!kb) return;
+    if (matchesKeybind(e, kb)) {
+        const target = e.target as HTMLElement | null;
+        if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        toggleScreenShare();
+    }
+}
+
+async function toggleScreenShare() {
+    try {
+        const userId = UserStore.getCurrentUser().id;
+        const voiceState = VoiceStateStore.getVoiceStateForUser(userId);
+        const channelId = SelectedChannelStore.getVoiceChannelId?.() ?? voiceState?.channelId;
+        if (!channelId) {
+            showToast("Join a voice channel first", Toasts.Type.FAILURE);
+            return;
+        }
+        const channel = ChannelStore.getChannel(channelId);
+        if (!channel) {
+            showToast("Unable to resolve channel", Toasts.Type.FAILURE);
+            return;
+        }
+
+        if (voiceState?.selfStream) {
+            const streamKey = channel.guild_id
+                ? `guild:${channel.guild_id}:${channelId}:${userId}`
+                : `call:${channelId}:${userId}`;
+            FluxDispatcher.dispatch({ type: "STREAM_STOP", streamKey, appContext: "APP" });
+            showToast("Stopped screenshare", Toasts.Type.SUCCESS);
+            return;
+        }
+
+        const media = MediaEngineStore.getMediaEngine();
+        const sources = await findDesktopSources(media);
+        const screen = sources[0];
+        if (!screen) {
+            showToast("No desktop sources found", Toasts.Type.FAILURE);
+            return;
+        }
+
+        startStream(channel.guild_id ?? null, channelId, {
+            pid: null,
+            sourceId: screen.id,
+            sourceName: screen.name,
+            audioSourceId: screen.name,
+            sound: true,
+            previewDisabled: false
+        });
+        showToast(`Sharing: ${screen.name}`, Toasts.Type.SUCCESS);
+    } catch (err) {
+        console.error("InstantScreenshare hotkey toggle failed", err);
+        showToast("Failed to toggle screenshare (see console)", Toasts.Type.FAILURE);
+    }
+}
+
+async function findDesktopSources(media) {
+    const sources = await findByCodeLazy("desktop sources")(media, ["screen"], null) ?? [];
+    return sources;
+}
