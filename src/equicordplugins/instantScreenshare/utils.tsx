@@ -6,11 +6,12 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Heading } from "@components/Heading";
+import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { Logger } from "@utils/Logger";
 import { OptionType } from "@utils/types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
-import { MediaEngineStore, React, SearchableSelect, Text, useEffect, useState } from "@webpack/common";
+import { MediaEngineStore, SearchableSelect, useEffect, useState } from "@webpack/common";
 
 interface PickerProps {
     streamMediaSelection: any[];
@@ -41,28 +42,16 @@ export const settings = definePluginSettings({
         description: "Automatically deafen when joining a voice channel (also mutes you)",
         default: false,
     },
-    keybindInfo: {
-        description: "",
-        type: OptionType.COMPONENT,
-        component: KeybindDescription,
-        default: {},
-    },
-    keybind: {
-        description: "Keybind to toggle screenshare (set via recorder below)",
-        type: OptionType.STRING,
-        default: "CTRL+SHIFT+S",
-        hidden: true,
-    },
-    keybindRecorder: {
-        description: "Click then press a key combination for screenshare toggle (works independently of auto-join)",
-        type: OptionType.COMPONENT,
-        component: KeybindRecorder,
-        default: {},
-    },
-    autoOnJoin: {
+    instantScreenshare: {
         type: OptionType.BOOLEAN,
-        description: "Automatically screenshare when joining a voice channel",
+        description: "Enables automatic screenshare feature",
         default: true,
+    },
+    keybindScreenshare: {
+        type: OptionType.BOOLEAN,
+        description: "Screenshare by keybind in discord keybind settings",
+        restartNeeded: true,
+        default: false,
     },
     toolboxManagement: {
         type: OptionType.BOOLEAN,
@@ -118,91 +107,6 @@ function StreamSimplePicker({ streamMediaSelection, streamMedia }: PickerProps) 
     );
 }
 
-function normalizeKeybind(kb: string) {
-    return kb.toUpperCase().split("+").map(p => p.trim()).filter(Boolean).join("+");
-}
-
-function buildKeybindFromEvent(e: KeyboardEvent) {
-    const parts: string[] = [];
-    if (e.ctrlKey) parts.push("CTRL");
-    if (e.shiftKey) parts.push("SHIFT");
-    if (e.altKey) parts.push("ALT");
-    if (e.metaKey) parts.push("META");
-
-    let main = e.key?.toUpperCase?.() ?? "";
-    if (["SHIFT", "CONTROL", "CONTROLLEFT", "CONTROLRIGHT", "ALT", "META"].includes(main)) main = "";
-    if (main === " ") main = "SPACE";
-    if (main === "ESCAPE") main = "ESC";
-    if (e.code?.startsWith("Key")) main = e.code.replace("Key", "");
-    if (main) parts.push(main);
-
-    return parts.join("+");
-}
-
-export function matchesKeybind(e: KeyboardEvent, kb: string) {
-    const eventBind = normalizeKeybind(buildKeybindFromEvent(e));
-    const target = normalizeKeybind(kb);
-    return !!target && eventBind === target;
-}
-
-function KeybindRecorder() {
-    const [listening, setListening] = useState(false);
-    const { keybind } = settings.use(["keybind"]);
-    const [displayBind, setDisplayBind] = useState(keybind);
-
-    useEffect(() => {
-        if (!listening) return;
-        const handler = (e: KeyboardEvent) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (["Shift", "Control", "Alt", "Meta"].includes(e.key)) return;
-            const recorded = buildKeybindFromEvent(e);
-            if (!recorded) {
-                setListening(false);
-                return;
-            }
-            const normalized = normalizeKeybind(recorded);
-            settings.store.keybind = normalized;
-            setDisplayBind(normalized);
-            setListening(false);
-        };
-        const blur = () => setListening(false);
-        window.addEventListener("keydown", handler, true);
-        window.addEventListener("blur", blur);
-        return () => {
-            window.removeEventListener("keydown", handler, true);
-            window.removeEventListener("blur", blur);
-        };
-    }, [listening]);
-
-    return (
-        <button
-            type="button"
-            onClick={() => setListening(true)}
-            style={{
-                width: "100%",
-                padding: "8px",
-                borderRadius: "6px",
-                border: "1px solid var(--background-modifier-accent)",
-                background: listening ? "var(--background-secondary)" : "var(--background-tertiary)",
-                color: "var(--text-normal)",
-                cursor: "pointer",
-                textAlign: "left"
-            }}
-        >
-            {listening ? "Press any key combination..." : `Current: ${displayBind || "Not set"}`}
-        </button>
-    );
-}
-
-function KeybindDescription() {
-    return (
-        <Text variant="text-sm/normal" style={{ color: "var(--text-muted)" }}>
-            Click below to set a two key screenshare binding.
-        </Text>
-    );
-}
-
 function ScreenSetting() {
     const { streamMedia, includeVideoDevices } = settings.use(["streamMedia", "includeVideoDevices"]);
     const media = MediaEngineStore.getMediaEngine();
@@ -248,7 +152,7 @@ function SettingSection() {
     return (
         <section>
             <Heading>Media source to stream</Heading>
-            <Paragraph>Resets to main screen if not found</Paragraph>
+            <Paragraph className={Margins.bottom20}>Resets to main screen if not found</Paragraph>
             <ScreenSetting />
         </section>
     );
