@@ -156,7 +156,7 @@ export default definePlugin({
             ],
         },
         {
-            find: "\"user-settings-cog\"",
+            find: "#{intl::USER_SETTINGS_ACTIONS_MENU_LABEL}",
             replacement: {
                 match: /(?<=function\((\i),(\i),\i\)\{)(?=let \i=Object\.values\(\i\.\i\).+?(\(0,\i\.openUserSettings\))\()/,
                 replace: (_, settingsPanel, section, openUserSettings) => `${openUserSettings}(${settingsPanel},{section:${section}});return;`
@@ -316,10 +316,10 @@ export default definePlugin({
     customSections: [] as ((SectionTypes: Record<string, string>) => { section: string; element: ComponentType; label: string; id?: string; })[],
     customEntries: [] as EntryOptions[],
 
-    makeSettingsCategories(sectionTypes: Record<string, string>) {
+    makeSettingsCategories(SectionTypes: Record<string, string>) {
         return [
             {
-                section: sectionTypes.HEADER,
+                section: SectionTypes.HEADER,
                 label: "Equicord",
                 className: "vc-settings-header",
             },
@@ -378,9 +378,9 @@ export default definePlugin({
                 element: PatchHelperTab,
                 className: "vc-patch-helper",
             },
-            ...this.customSections.map(func => func(sectionTypes)),
+            ...this.customSections.map(func => func(SectionTypes)),
             {
-                section: sectionTypes.DIVIDER,
+                section: SectionTypes.DIVIDER,
             },
         ].filter(Boolean);
     },
@@ -418,12 +418,12 @@ export default definePlugin({
     addSettings(
         elements: any[],
         element: { header?: string; settings: string[]; },
-        sectionTypes: Record<string, string>,
+        SectionTypes: Record<string, string>,
     ) {
         if (this.patchedSettings.has(elements) || !this.isRightSpot(element)) return;
 
         this.patchedSettings.add(elements);
-        elements.push(...this.makeSettingsCategories(sectionTypes));
+        elements.push(...this.makeSettingsCategories(SectionTypes));
     },
 
     wrapSettingsHook(originalHook: (...args: any[]) => Record<string, unknown>[]) {
