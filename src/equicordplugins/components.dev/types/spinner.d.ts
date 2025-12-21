@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-export type SpinnerType = "wanderingCubes" | "chasingDots" | "pulsingEllipsis" | "spinningCircle" | "spinningCircleSimple" | "lowMotion";
+import type { SpinnerType } from "../constants";
+
+export type { SpinnerType };
 
 export interface SpinnerTypeEnum {
     WANDERING_CUBES: "wanderingCubes";

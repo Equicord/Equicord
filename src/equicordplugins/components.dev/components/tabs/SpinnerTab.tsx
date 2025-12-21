@@ -4,20 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Paragraph } from "@components/Paragraph";
-import { useState } from "@webpack/common";
-
-import { ManaButton, Spinner } from "..";
+import { ManaButton, Paragraph, Spinner, SpinnerTypes, useState } from "..";
 import { SectionWrapper } from "../SectionWrapper";
-
-const SPINNER_TYPES = [
-    "wanderingCubes",
-    "chasingDots",
-    "pulsingEllipsis",
-    "spinningCircle",
-    "spinningCircleSimple",
-    "lowMotion"
-] as const;
 
 export default function SpinnerTab() {
     const [animated, setAnimated] = useState(true);
@@ -29,7 +17,7 @@ export default function SpinnerTab() {
                     All available spinner variants.
                 </Paragraph>
                 <div className="vc-compfinder-grid">
-                    {SPINNER_TYPES.map(type => (
+                    {SpinnerTypes.map(type => (
                         <div key={type} style={{ textAlign: "center", padding: 16 }}>
                             <Spinner type={type} />
                             <Paragraph color="text-muted" style={{ fontSize: 10, marginTop: 8 }}>

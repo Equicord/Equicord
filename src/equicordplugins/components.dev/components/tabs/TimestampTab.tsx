@@ -4,25 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Paragraph } from "@components/Paragraph";
-
-import { Timestamp } from "..";
+import { Paragraph, Timestamp, TimestampDisplayFormats, TooltipPositions } from "..";
 import { SectionWrapper } from "../SectionWrapper";
-
-const TIMESTAMP_FORMATS = [
-    { format: "LT", description: "Time (e.g., 8:30 PM)" },
-    { format: "LTS", description: "Time with seconds (e.g., 8:30:25 PM)" },
-    { format: "L", description: "Date (e.g., 09/04/1986)" },
-    { format: "LL", description: "Date with month name (e.g., September 4, 1986)" },
-    { format: "LLL", description: "Date and time (e.g., September 4, 1986 8:30 PM)" },
-    { format: "LLLL", description: "Full date and time (e.g., Thursday, September 4, 1986 8:30 PM)" },
-    { format: "l", description: "Short date (e.g., 9/4/1986)" },
-    { format: "ll", description: "Short date with month (e.g., Sep 4, 1986)" },
-    { format: "lll", description: "Short date and time (e.g., Sep 4, 1986 8:30 PM)" },
-    { format: "llll", description: "Short full date and time (e.g., Thu, Sep 4, 1986 8:30 PM)" },
-] as const;
-
-const TOOLTIP_POSITIONS = ["top", "bottom", "left", "right"] as const;
 
 export default function TimestampTab() {
     const now = new Date();
@@ -34,7 +17,7 @@ export default function TimestampTab() {
                     All available timestamp format options using moment.js format strings.
                 </Paragraph>
                 <div className="vc-compfinder-grid">
-                    {TIMESTAMP_FORMATS.map(({ format, description }) => (
+                    {TimestampDisplayFormats.map(({ format, description }) => (
                         <div key={format} style={{ padding: 12, display: "flex", flexDirection: "column", gap: 4 }}>
                             <Timestamp timestamp={now} timestampFormat={format} />
                             <Paragraph color="text-muted" style={{ fontSize: 10 }}>
@@ -132,7 +115,7 @@ export default function TimestampTab() {
                     The tooltip showing full date can be positioned differently.
                 </Paragraph>
                 <div className="vc-compfinder-grid">
-                    {TOOLTIP_POSITIONS.map(position => (
+                    {TooltipPositions.map(position => (
                         <div key={position} style={{ padding: 12 }}>
                             <Timestamp timestamp={now} tooltipPosition={position} />
                             <Paragraph color="text-muted" style={{ fontSize: 10, marginTop: 4 }}>

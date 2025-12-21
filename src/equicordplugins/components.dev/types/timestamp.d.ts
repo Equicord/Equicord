@@ -6,9 +6,11 @@
 
 import type { Moment } from "moment";
 
-export type TimestampFormat = "LT" | "LTS" | "L" | "LL" | "LLL" | "LLLL" | "l" | "ll" | "lll" | "llll";
+import type { TimestampDisplayFormat, TooltipPosition } from "../constants";
 
-export type TooltipPosition = "top" | "bottom" | "left" | "right";
+export type TimestampFormat = TimestampDisplayFormat;
+
+export type { TooltipPosition };
 
 export interface TimestampProps {
     timestamp: Date | Moment;
