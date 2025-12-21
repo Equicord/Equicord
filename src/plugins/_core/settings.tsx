@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { BackupRestoreIcon, CloudIcon, LogIcon, MainSettingsIcon, PaintbrushIcon, PatchHelperIcon, PluginsIcon, UpdaterIcon, VesktopSettingsIcon } from "@components/Icons";
+import { BackupRestoreIcon, CloudIcon, LogIcon, MainSettingsIcon, PaintbrushIcon, PatchHelperIcon, PluginsIcon, UpdaterIcon } from "@components/Icons";
 import {
     BackupAndRestoreTab,
     ChangelogTab,
@@ -278,18 +278,7 @@ export default definePlugin({
                 Component: PatchHelperTab,
                 Icon: PatchHelperIcon
             }),
-            ...this.customEntries.map(buildEntry),
-            ...this.customSections.map((func, i) => {
-                const { section, element, label } = func({ HEADER: SectionType.HEADER, DIVIDER: SectionType.DIVIDER, CUSTOM: SectionType.CUSTOM });
-                if (section !== "Equibop") return null;
-
-                return buildEntry({
-                    key: `equicord_deprecated_custom_${section}`,
-                    title: label,
-                    Component: element,
-                    Icon: VesktopSettingsIcon
-                });
-            })
+            ...this.customEntries.map(buildEntry)
         ].filter(isTruthy);
 
         const equicordSection: SettingsLayoutNode = {
