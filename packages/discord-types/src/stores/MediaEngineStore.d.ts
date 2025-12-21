@@ -1,18 +1,25 @@
 import { FluxStore } from "..";
 
-type VideoDevice = {
-    containerId: string;
-    disabled: boolean;
-    effects: any;
-    facing: string;
-    guid: string;
-    hardwareId: string;
+export interface AudioDevice {
     id: string;
     index: number;
     name: string;
-};
+    disabled: boolean;
+    guid: string;
+    hardwareId: string;
+    containerId: string;
+}
 
-type GoLiveSource = {
+export interface VideoDevice {
+    id: string;
+    index: number;
+    name: string;
+    disabled: boolean;
+    facing: string;
+    guid: string;
+}
+
+export interface GoLiveSource {
     desktopSource: {
         id: string;
         sourcePid: number | null;
@@ -23,38 +30,116 @@ type GoLiveSource = {
         resolution: number;
         frameRate: number;
     };
-};
+}
 
-type CodecCapabilities = (codecs: string) => void;
+export interface VideoStreamParameter {
+    rid: string;
+    type: string;
+    quality: number;
+}
 
-interface MediaEngine {
+export interface LocalPan {
+    left: number;
+    right: number;
+}
+
+export interface ModeOptions {
+    threshold: number;
+    autoThreshold: boolean;
+    vadUseKrisp: boolean;
+    vadKrispActivationThreshold: number;
+    vadLeading: number;
+    vadTrailing: number;
+    delay: number;
+    shortcut: string[];
+    vadDuringPreProcess?: boolean;
+}
+
+export interface MediaEngine {
+    applyMediaFilterSettings(): void;
+    connect(): void;
     connectionsEmpty(): boolean;
-    getAudioLayer(): boolean;
-    getCodecCapabilities(callback: (CodecCapabilities: string) => void): string;
+    createReplayConnection(): void;
+    destroy(): void;
+    eachConnection(callback: (connection: unknown) => void): void;
+    enable(): void;
+    exportClip(): void;
+    fetchAsyncResources(options?: { fetchDave?: boolean; }): void;
+    getAudioInputDevices(callback: (devices: AudioDevice[]) => void): void;
+    getAudioLayer(): string;
+    getAudioOutputDevices(callback: (devices: AudioDevice[]) => void): void;
+    getAudioSubsystem(): string;
+    getCodecCapabilities(callback: (capabilities: string) => void): void;
+    getCodecSurvey(): Promise<unknown>;
     getDebugLogging(): boolean;
-
+    getDesktopSource(): Promise<unknown>;
+    getLoopback(): boolean;
+    getMLSSigningKey(): Promise<unknown>;
+    getNoiseCancellationStats(): unknown;
+    getScreenPreviews(): Promise<unknown>;
+    getSupportedBandwidthEstimationExperiments(): unknown;
+    getSupportedSecureFramesProtocolVersion(): number;
+    getSupportedVideoCodecs(callback: (codecs: string[]) => void): void;
+    getSystemMicrophoneMode(): boolean;
+    getVideoInputDeviceId(): string;
+    getVideoInputDevices(callback: (devices: VideoDevice[]) => void): void;
+    getWindowPreviews(): Promise<unknown>;
+    interact(): void;
+    presentNativeScreenSharePicker(): void;
+    queueAudioSubsystem(): void;
+    rankRtcRegions(regions: unknown[]): Promise<unknown>;
+    releaseNativeDesktopVideoSourcePickerStream(): void;
+    saveClip(): void;
+    saveClipForUser(): void;
+    saveScreenshot(): void;
     setAecDump(value: boolean): void;
+    setAsyncClipsSourceDeinit(callback: () => void): void;
+    setAsyncVideoInputDeviceInit(callback: () => void): void;
+    setAudioInputBypassSystemProcessing(value: boolean): void;
+    setAudioInputDevice(deviceId: string): void;
+    setAudioOutputDevice(deviceId: string): void;
+    setAudioSubsystem(subsystem: string): void;
     setAv1Enabled(value: boolean): void;
+    setClipBufferLength(length: number): void;
+    setClipsMLPipelineEnabled(value: boolean): void;
+    setClipsMLPipelineTypeEnabled(type: string, value: boolean): void;
+    setClipsQualitySettings(settings: unknown): void;
+    setClipsSource(source: unknown): void;
     setDebugLogging(value: boolean): void;
-    setH265Enabled(value: boolean): void;
+    setGoLiveSource(source: unknown): void;
     setH264Enabled(value: boolean): void;
+    setH265Enabled(value: boolean): void;
+    setHasFullbandPerformance(value: boolean): void;
     setInputVolume(volume: number): void;
     setLoopback(reason: string, enabled: boolean): void;
+    setMaxSyncDelayOverride(delay: number): void;
+    setMaybePreprocessMute(value: boolean): void;
+    setNativeDesktopVideoSourcePickerActive(value: boolean): void;
     setNoiseCancellationEnableStats(value: boolean): void;
+    setOffloadAdmControls(value: boolean): void;
+    setOnVideoContainerResized(callback: () => void): void;
     setOutputVolume(volume: number): void;
     setSidechainCompression(value: boolean): void;
     setSidechainCompressionStrength(strength: number): void;
+    setSoundshareSource(source: unknown): void;
     setVideoInputDevice(deviceId: string): void;
+    shouldConnectionBroadcastVideo(): boolean;
+    showSystemCaptureConfigurationUI(): void;
     startAecDump(): void;
+    startLocalAudioRecording(): void;
+    startRecordingRawSamples(): void;
     stopAecDump(): void;
     stopLocalAudioRecording(): void;
     stopRecordingRawSamples(): void;
     supported(): boolean;
-    supports(value: string): boolean;
-    writeAudioDebugState(): Promise<never>;
+    supports(feature: string): boolean;
+    updateClipMetadata(metadata: unknown): void;
+    watchdogTick(): void;
+    writeAudioDebugState(): Promise<void>;
 }
 
 export class MediaEngineStore extends FluxStore {
+    fetchAsyncResources(): void;
     getActiveInputProfile(): string;
     getActiveVoiceFilter(): string | null;
     getActiveVoiceFilterAppliedAt(): Date | null;
@@ -65,7 +150,7 @@ export class MediaEngineStore extends FluxStore {
     getAudioSubsystem(): string;
     getAutomaticGainControl(): boolean;
     getBypassSystemInputProcessing(): boolean;
-    getCameraComponent(): (e: any) => any;
+    getCameraComponent(): React.ComponentType;
     getDebugLogging(): boolean;
     getEchoCancellation(): boolean;
     getEnableSilenceWarning(): boolean;
@@ -78,7 +163,7 @@ export class MediaEngineStore extends FluxStore {
     getHardwareEncoding(): boolean;
     getInputDetected(): boolean | null;
     getInputDeviceId(): string;
-    getInputDevices(): Record<string, VideoDevice>;
+    getInputDevices(): Record<string, AudioDevice>;
     getInputVolume(): number;
     getKrispEnableStats(): boolean;
     getKrispModelOverride(): string;
@@ -86,47 +171,59 @@ export class MediaEngineStore extends FluxStore {
     getKrispSuppressionLevel(): number;
     getKrispVadActivationThreshold(): number;
     getLastAudioInputDeviceChangeTimestamp(): number;
-    getLocalPan(key: string): Record<string, number>;
-    getLocalVolume(): number;
+    getLocalPan(userId: string, context?: string): LocalPan;
+    getLocalVolume(userId: string, context?: string): number;
     getLoopback(): boolean;
     getLoopbackReasons(): Set<string>;
     getMediaEngine(): MediaEngine;
+    getMLSSigningKey(): Promise<unknown>;
     getMode(): string;
-    getModeOptions(): Record<string, number | boolean>;
+    getModeOptions(): ModeOptions;
     getMostRecentlyRequestedVoiceFilter(): string | null;
     getNoInputDetectedNotice(): boolean;
     getNoiseCancellation(): boolean;
     getNoiseSuppression(): boolean;
     getOutputDeviceId(): string;
-    getOutputDevices(): Record<string, VideoDevice>;
+    getOutputDevices(): Record<string, AudioDevice>;
     getOutputVolume(): number;
     getPacketDelay(): number;
     getPreviousVoiceFilter(): string | null;
     getPreviousVoiceFilterAppliedAt(): Date | null;
     getQoS(): boolean;
-    getSettings(): Record<string, any>;
-    getShortcuts(): Record<string, any>;
+    getSettings(): Record<string, unknown>;
+    getShortcuts(): Record<string, unknown>;
     getSidechainCompression(): boolean;
     getSidechainCompressionStrength(): number;
     getSpeakingWhileMuted(): boolean;
-    getSupportedSecureFramesProtocolVersion(): boolean;
+    getState(): {
+        settingsByContext: Record<string, unknown>;
+        inputDevices: Record<string, AudioDevice>;
+        outputDevices: Record<string, AudioDevice>;
+        appSupported: boolean;
+        krispModuleLoaded: boolean;
+        krispVersion: string;
+        krispSuppressionLevel: number;
+        goLiveSource: GoLiveSource | null;
+        goLiveContext: string;
+    };
+    getSupportedSecureFramesProtocolVersion(): number;
     getSystemMicrophoneMode(): boolean;
     getUseGamescopeCapture(): boolean;
     getUseSystemScreensharePicker(): boolean;
     getUseVaapiEncoder(): boolean;
-    getVideoComponent(): (e: any) => any;
+    getVideoComponent(): React.ComponentType;
     getVideoDeviceId(): string;
     getVideoDevices(): Record<string, VideoDevice>;
     getVideoHook(): boolean;
-    getVideoStreamParameters(): Record<string, string | number>;
-    getVideoToggleState(key: string): string;
+    getVideoStreamParameters(): VideoStreamParameter[];
+    getVideoToggleState(userId: string, context?: string): string;
     getVoiceFilterPlaybackEnabled(): boolean;
 
     goLiveSimulcastEnabled(): boolean;
 
     hasActiveCallKitCall(): boolean;
     hasClipsSource(): boolean;
-    hasContext(key: string): boolean;
+    hasContext(context: string): boolean;
     hasH265HardwareDecode(): boolean;
 
     isAdvancedVoiceActivitySupported(): boolean;
@@ -139,11 +236,9 @@ export class MediaEngineStore extends FluxStore {
     isHardwareMute(): boolean;
     isInputProfileCustom(): boolean;
     isInteractionRequired(): boolean;
-    isLocalMute(): boolean;
-    isLocalMute(userId: string): boolean;
+    isLocalMute(userId?: string): boolean;
     isLocalVideoAutoDisabled(userId: string): boolean;
-    isLocalVideoDisabled(userId: string): boolean;
-    isLocalVideoDisabled(): boolean;
+    isLocalVideoDisabled(userId?: string): boolean;
     isMediaFilterSettingLoading(): boolean;
     isMute(): boolean;
     isNativeAudioPermissionReady(): boolean;
@@ -169,7 +264,7 @@ export class MediaEngineStore extends FluxStore {
 
     startDavePreload(): void;
 
-    supports(e: string): boolean;
+    supports(feature: string): boolean;
     supportsDisableLocalVideo(): boolean;
     supportsExperimentalSoundshare(): boolean;
     supportsHookSoundshare(): boolean;
