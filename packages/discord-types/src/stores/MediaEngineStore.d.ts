@@ -5,11 +5,11 @@ export interface AudioDevice {
     index: number;
     name: string;
     disabled: boolean;
-    facing: string;
+    facing?: string;
     guid: string;
     hardwareId: string;
     containerId: string;
-    effects: unknown;
+    effects?: unknown;
 }
 
 export interface VideoDevice {
@@ -17,11 +17,11 @@ export interface VideoDevice {
     index: number;
     name: string;
     disabled: boolean;
-    facing: string;
+    facing?: string;
     guid: string;
-    hardwareId: string;
-    containerId: string;
-    effects: unknown;
+    hardwareId?: string;
+    containerId?: string;
+    effects?: unknown;
 }
 
 export interface ClipsSource {
