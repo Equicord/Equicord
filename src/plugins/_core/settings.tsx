@@ -92,7 +92,7 @@ interface SettingsLayoutBuilder {
 const settings = definePluginSettings({
     settingsLocation: {
         type: OptionType.SELECT,
-        description: "Where to put the Equicord settings section.",
+        description: "Where to put the Equicord settings section",
         options: [
             { label: "At the very top", value: "top" },
             { label: "Above the Nitro section", value: "aboveNitro", default: true },
@@ -106,7 +106,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Settings",
-    description: "Adds Settings UI and debug info.",
+    description: "Adds Settings UI and debug info",
     authors: [Devs.Ven, Devs.Megu],
     required: true,
 
