@@ -8,10 +8,12 @@ import { proxyLazy } from "@utils/lazy";
 import { findByCodeLazy, findComponentByCodeLazy, findLazy } from "@webpack";
 
 import {
+    AccordionProps,
     AnchorProps,
     AvatarProps,
     BadgeShapesType,
     CheckboxGroupOption,
+    ChipProps,
     CircleBadgeProps,
     ClickableProps,
     ColorPickerProps,
@@ -47,7 +49,9 @@ import {
     ProgressBarProps,
     RadioOption,
     SearchBarProps,
+    SkeletonProps,
     SliderProps,
+    SpinnerComponent,
     SpinnerProps,
     StandaloneRadioIndicatorProps,
     TabBarComponent,
@@ -55,14 +59,17 @@ import {
     TabBarItemProps,
     TabBarProps,
     TabBarSeparatorProps,
-    TextBadgeProps
+    TextBadgeProps,
+    TimestampProps
 } from "../types";
 
 export type {
+    AccordionProps,
     AnchorProps,
     AvatarProps,
     BadgeShapesType,
     CheckboxGroupOption,
+    ChipProps,
     CircleBadgeProps,
     ColorPickerProps,
     ColorPickerWithSwatchesProps,
@@ -97,6 +104,7 @@ export type {
     ProgressBarProps,
     RadioOption,
     SearchBarProps,
+    SkeletonProps,
     SliderProps,
     SpinnerProps,
     StandaloneRadioIndicatorProps,
@@ -105,7 +113,8 @@ export type {
     TabBarItemProps,
     TabBarProps,
     TabBarSeparatorProps,
-    TextBadgeProps
+    TextBadgeProps,
+    TimestampProps
 };
 
 export const Anchor = findComponentByCodeLazy("anchorUnderlineOnHover", "useDefaultUnderlineStyles") as React.ComponentType<AnchorProps>;
@@ -117,7 +126,7 @@ export const ManaTextInput = findComponentByCodeLazy('"data-mana-component":"tex
 export const ManaTextArea = findComponentByCodeLazy('"data-mana-component":"text-area"') as React.ComponentType<ManaTextAreaProps>;
 export const ManaCheckbox = findComponentByCodeLazy('"data-mana-component":"checkbox"') as React.ComponentType<ManaCheckboxProps>;
 export const ManaSelect = findComponentByCodeLazy('"data-mana-component":"select"') as React.ComponentType<ManaSelectProps>;
-export const ManaTooltip = findComponentByCodeLazy('"data-mana-component":"tooltip"') as React.ComponentType<ManaTooltipProps>;
+export const ManaTooltip = findComponentByCodeLazy("VoidTooltip cannot find DOM node") as React.ComponentType<ManaTooltipProps>;
 export const ManaCalendar = findComponentByCodeLazy('"data-mana-component":"calendar"') as React.ComponentType<ManaCalendarProps>;
 export const ManaDatePicker = findComponentByCodeLazy('"data-mana-component":"date-picker"') as React.ComponentType<ManaDatePickerProps>;
 export const ManaRichTooltip = findComponentByCodeLazy('"data-mana-component":"rich-tooltip"') as React.ComponentType<ManaRichTooltipProps>;
@@ -131,7 +140,7 @@ export const ManaPopover = findComponentByCodeLazy('"data-mana-component":"popov
 export const Slider = findComponentByCodeLazy("stickToMarkers", "onMarkerRender", "grabberClassName") as React.ComponentType<SliderProps>;
 export const Avatar = findComponentByCodeLazy("statusTooltip", "statusBackdropColor", "isSpeaking") as React.ComponentType<AvatarProps>;
 export const ProgressBar = findComponentByCodeLazy("progressContainer", "labelledBy", "aria-valuenow") as React.ComponentType<ProgressBarProps>;
-export const Spinner = findComponentByCodeLazy("spinningCircleSimple", "pulsingEllipsis", "wanderingCubes") as React.ComponentType<SpinnerProps>;
+export const Spinner = findComponentByCodeLazy("spinningCircleSimple", "pulsingEllipsis", "wanderingCubes") as unknown as SpinnerComponent;
 export const SearchBar = findComponentByCodeLazy("#{intl::SEARCH}", "clearable", "autoComplete") as React.ComponentType<SearchBarProps>;
 export const Paginator2 = findComponentByCodeLazy("#{intl::BACK}", "#{intl::NEXT}", "renderPageWrapper") as React.ComponentType<PaginatorProps>;
 export const Notice = findComponentByCodeLazy("messageType", "iconDiv", "actionContainer") as React.ComponentType<NoticeProps>;
@@ -187,3 +196,11 @@ export const BadgeShapes = proxyLazy(() => Object.values(BadgeModule).find(v => 
 export const TabBar = findByCodeLazy("this.tabBarRef", "renderChildren") as TabBarComponent;
 
 export const Clickable = findByCodeLazy("ignoreKeyPress", "renderNonInteractive") as React.ComponentType<ClickableProps>;
+
+export const Chip = findComponentByCodeLazy('variant:"eyebrow"', "chip,") as React.ComponentType<ChipProps>;
+
+export const Skeleton = findComponentByCodeLazy("productSkeletonCardContainer", "skipPulseAnimation") as React.ComponentType<SkeletonProps>;
+
+export const Accordion = findComponentByCodeLazy("accordionContainer", "onExpandedChange", "defaultExpanded") as React.ComponentType<AccordionProps>;
+
+export const Timestamp = findComponentByCodeLazy("isVisibleOnlyOnHover", "cozyAlt", "timestampFormat") as React.ComponentType<TimestampProps>;

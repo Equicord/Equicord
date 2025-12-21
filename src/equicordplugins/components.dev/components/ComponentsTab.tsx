@@ -11,6 +11,7 @@ import { SettingsTab, wrapTab } from "@components/settings";
 import { Margins } from "@utils/margins";
 import { TabBar, useState } from "@webpack/common";
 
+import AccordionTab from "./tabs/AccordionTab";
 import AnchorTab from "./tabs/AnchorTab";
 import AvatarTab from "./tabs/AvatarTab";
 import BadgeTab from "./tabs/BadgeTab";
@@ -18,6 +19,7 @@ import ButtonsTab from "./tabs/ButtonsTab";
 import CalendarTab from "./tabs/CalendarTab";
 import CheckboxGroupTab from "./tabs/CheckboxGroupTab";
 import CheckboxTab from "./tabs/CheckboxTab";
+import ChipTab from "./tabs/ChipTab";
 import ClickableTab from "./tabs/ClickableTab";
 import ColorPickerTab from "./tabs/ColorPickerTab";
 import ComboboxTab from "./tabs/ComboboxTab";
@@ -32,6 +34,7 @@ import RadioGroupTab from "./tabs/RadioGroupTab";
 import RichTooltipTab from "./tabs/RichTooltipTab";
 import SearchBarTab from "./tabs/SearchBarTab";
 import SelectTab from "./tabs/SelectTab";
+import SkeletonTab from "./tabs/SkeletonTab";
 import SliderTab from "./tabs/SliderTab";
 import SpinnerTab from "./tabs/SpinnerTab";
 import SwitchTab from "./tabs/SwitchTab";
@@ -39,15 +42,19 @@ import TabBarTab from "./tabs/TabBarTab";
 import TextAreaTab from "./tabs/TextAreaTab";
 import TextButtonTab from "./tabs/TextButtonTab";
 import TextInputTab from "./tabs/TextInputTab";
+import TimestampTab from "./tabs/TimestampTab";
 import TooltipTab from "./tabs/TooltipTab";
 import TypographyTab from "./tabs/TypographyTab";
 
+
 const TABS = [
+    { id: "accordion", label: "Accordion" },
     { id: "anchor", label: "Anchor" },
     { id: "avatar", label: "Avatar" },
     { id: "badge", label: "Badge" },
     { id: "buttons", label: "Buttons" },
     { id: "calendar", label: "Calendar" },
+    { id: "chip", label: "Chip" },
     { id: "checkbox", label: "Checkbox" },
     { id: "checkboxgroup", label: "CheckboxGroup" },
     { id: "clickable", label: "Clickable" },
@@ -64,6 +71,7 @@ const TABS = [
     { id: "richtooltip", label: "RichTooltip" },
     { id: "searchbar", label: "SearchBar" },
     { id: "select", label: "Select" },
+    { id: "skeleton", label: "Skeleton" },
     { id: "slider", label: "Slider" },
     { id: "spinner", label: "Spinner" },
     { id: "switch", label: "Switch" },
@@ -71,18 +79,22 @@ const TABS = [
     { id: "textarea", label: "TextArea" },
     { id: "textbutton", label: "TextButton" },
     { id: "textinput", label: "TextInput" },
+    { id: "timestamp", label: "Timestamp" },
     { id: "tooltip", label: "Tooltip" },
     { id: "typography", label: "Typography" },
+
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 type TabId = typeof TABS[number]["id"];
 
 const TAB_COMPONENTS: Record<TabId, React.ComponentType> = {
+    accordion: AccordionTab,
     anchor: AnchorTab,
     avatar: AvatarTab,
     badge: BadgeTab,
     buttons: ButtonsTab,
     calendar: CalendarTab,
+    chip: ChipTab,
     checkbox: CheckboxTab,
     checkboxgroup: CheckboxGroupTab,
     clickable: ClickableTab,
@@ -99,6 +111,7 @@ const TAB_COMPONENTS: Record<TabId, React.ComponentType> = {
     richtooltip: RichTooltipTab,
     searchbar: SearchBarTab,
     select: SelectTab,
+    skeleton: SkeletonTab,
     slider: SliderTab,
     spinner: SpinnerTab,
     switch: SwitchTab,
@@ -106,8 +119,10 @@ const TAB_COMPONENTS: Record<TabId, React.ComponentType> = {
     textarea: TextAreaTab,
     textbutton: TextButtonTab,
     textinput: TextInputTab,
+    timestamp: TimestampTab,
     tooltip: TooltipTab,
     typography: TypographyTab,
+
 };
 
 function ComponentsTab() {

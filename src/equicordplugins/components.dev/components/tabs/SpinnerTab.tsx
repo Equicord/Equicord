@@ -75,7 +75,7 @@ export default function SpinnerTab() {
 
             <SectionWrapper title="Props">
                 <Paragraph color="text-muted">
-                    • type?: "wanderingCubes" | "chasingDots" | "pulsingEllipsis" | "spinningCircle" | "spinningCircleSimple" | "lowMotion"
+                    • type?: SpinnerType - Spinner variant
                 </Paragraph>
                 <Paragraph color="text-muted">
                     • animated?: boolean - Enable/disable animation (default: true)
@@ -89,6 +89,15 @@ export default function SpinnerTab() {
                 <Paragraph color="text-muted">
                     • aria-label?: string - Accessibility label
                 </Paragraph>
+            </SectionWrapper>
+
+            <SectionWrapper title="Type Values">
+                <Paragraph color="text-muted">• "wanderingCubes"</Paragraph>
+                <Paragraph color="text-muted">• "chasingDots"</Paragraph>
+                <Paragraph color="text-muted">• "pulsingEllipsis"</Paragraph>
+                <Paragraph color="text-muted">• "spinningCircle"</Paragraph>
+                <Paragraph color="text-muted">• "spinningCircleSimple"</Paragraph>
+                <Paragraph color="text-muted">• "lowMotion"</Paragraph>
             </SectionWrapper>
         </div>
     );
