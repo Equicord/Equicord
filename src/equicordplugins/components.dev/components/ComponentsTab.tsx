@@ -140,7 +140,6 @@ const TAB_COMPONENTS: Record<TabId, React.ComponentType> = {
     toast: ToastTab,
     tooltip: TooltipTab,
     typography: TypographyTab,
-
 };
 
 function ComponentsTab() {
