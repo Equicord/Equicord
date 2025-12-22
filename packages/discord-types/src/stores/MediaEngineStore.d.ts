@@ -133,6 +133,7 @@ export interface MediaEngine {
     enable(): Promise<void>;
     exportClip(clipId: string, userId: string): Promise<Blob>;
     fetchAsyncResources(options: { fetchDave?: boolean; }): Promise<void>;
+
     getAudioInputDevices(): AudioDevice[];
     getAudioLayer(): string;
     getAudioOutputDevices(): AudioDevice[];
@@ -152,14 +153,17 @@ export interface MediaEngine {
     getVideoInputDeviceId(): string;
     getVideoInputDevices(): VideoDevice[];
     getWindowPreviews(width: number, height: number): Promise<unknown[]>;
+
     interact(): void;
     presentNativeScreenSharePicker(options?: string): void;
     queueAudioSubsystem(subsystem: string): void;
     rankRtcRegions(regions: string[]): Promise<string[]>;
     releaseNativeDesktopVideoSourcePickerStream(): void;
+
     saveClip(clipId: string, userId: string): Promise<unknown>;
     saveClipForUser(clipId: string, userId: string, options: unknown): Promise<unknown>;
     saveScreenshot(channelId: string, userId: string, width: number | null, height: number | null, options: unknown): Promise<unknown>;
+
     setAecDump(value: boolean): void;
     setAsyncClipsSourceDeinit(callback: () => void): void;
     setAsyncVideoInputDeviceInit(callback: () => void): void;
@@ -191,14 +195,17 @@ export interface MediaEngine {
     setSidechainCompressionStrength(strength: number): void;
     setSoundshareSource(soundshareId: number, enabled: boolean, context?: string): void;
     setVideoInputDevice(deviceId: string): Promise<void>;
+
     shouldConnectionBroadcastVideo(connection: unknown): boolean;
     showSystemCaptureConfigurationUI(options: unknown): void;
+
     startAecDump(): void;
     startLocalAudioRecording(options: unknown): Promise<void>;
     startRecordingRawSamples(options: unknown): void;
     stopAecDump(): void;
     stopLocalAudioRecording(callback: (success: boolean, data: unknown) => void): void;
     stopRecordingRawSamples(): void;
+
     supported(): boolean;
     supports(feature: string): boolean;
     updateClipMetadata(clipId: string, metadata: unknown): Promise<void>;
