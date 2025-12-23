@@ -59,7 +59,7 @@ const settings = definePluginSettings({
     },
     reactEmoji: {
         type: OptionType.STRING,
-        description: "The emoji to react with (Unicode emoji or custom emoji as name:id)",
+        description: "Emoji to react with (e.g. 💀 or pepe:123456789)",
         default: "💀"
     },
     requireModifier: {
@@ -73,7 +73,7 @@ async function react(channelId: string, messageId: string, emoji: string) {
     const trimmed = emoji.trim();
     if (!trimmed) return;
 
-    const customMatch = trimmed.match(/^:?([^:]+):(\d+)$/);
+    const customMatch = trimmed.match(/^:?([\w-]+):(\d+)$/);
     const emojiParam = customMatch
         ? `${customMatch[1]}:${customMatch[2]}`
         : encodeURIComponent(trimmed);
