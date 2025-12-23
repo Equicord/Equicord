@@ -130,7 +130,7 @@ export const ManaBaseRadioGroup = findComponentByCodeLazy('"data-mana-component"
 export const ManaCombobox = findComponentByCodeLazy("itemToString", "multiSelect", "maxVisibleItems") as React.ComponentType<ManaComboboxProps>;
 export const ManaTooltip = findComponentByCodeLazy("VoidTooltip cannot find DOM node") as React.ComponentType<ManaTooltipProps>;
 export const ManaRichTooltip = findComponentByCodeLazy('"data-mana-component":"rich-tooltip"') as React.ComponentType<ManaRichTooltipProps>;
-export const ManaPopover = findComponentByCodeLazy("custom-caret-edge-offset-horizontal") as React.ComponentType<ManaPopoverProps>;
+export const ManaPopover = findByCodeLazy("title", "body", "badge", "graphic", "actions", "textLink", "gradientColor", "popoverRef") as React.ComponentType<ManaPopoverProps>;
 export const StandaloneRadioIndicator = findComponentByCodeLazy("standaloneRadioIndicator", "animateIn", "animateOut") as React.ComponentType<StandaloneRadioIndicatorProps>;
 
 export const Slider = findComponentByCodeLazy("stickToMarkers", "onMarkerRender", "grabberClassName") as React.ComponentType<SliderProps>;
@@ -146,7 +146,7 @@ export const Accordion = findComponentByCodeLazy("accordionContainer", "onExpand
 export const Timestamp = findComponentByCodeLazy("#{intl::MESSAGE_EDITED_TIMESTAMP_A11Y_LABEL}", "isVisibleOnlyOnHover") as React.ComponentType<TimestampProps>;
 export const GuildIcon = findComponentByCodeLazy("Masks.CLAN_ICON", "guildIconImage") as React.ComponentType<GuildIconProps>;
 export const ColorPicker = findComponentByCodeLazy("#{intl::USER_SETTINGS_PROFILE_COLOR_SELECT_COLOR}", "showEyeDropper") as React.ComponentType<ColorPickerProps>;
-export const Popout = findComponentByCodeLazy("renderPopout:this.renderPopout,spacing:") as unknown as PopoutComponent;
+export const Popout: PopoutComponent = proxyLazy(() => findLazy(m => m?.y?.Animation && m.y.toString?.().includes("renderPopout")).y);
 export const FocusLock = findComponentByCodeLazy(".containerRef,{keyboardModeEnabled:") as React.ComponentType<FocusLockProps>;
 export const UserSummaryItem = findComponentByCodeLazy("popoutUserId") as React.ComponentType<UserSummaryItemProps>;
 
