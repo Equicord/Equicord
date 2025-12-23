@@ -174,8 +174,10 @@ export const ToastType = {
     CLIP: "clip",
     LINK: "link",
     FORWARD: "forward",
+    INVITE: "invite",
     BOOKMARK: "bookmark",
     CLOCK: "clock",
+    AI: "ai",
 } as const;
 
 export const ToastPosition = {
