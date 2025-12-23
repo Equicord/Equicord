@@ -9,21 +9,26 @@ import { Card } from "@components/Card";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { proxyLazy } from "@utils/lazy";
-import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findLazy } from "@webpack";
-
-import { ToastPosition, ToastType } from "../constants";
+import { filters, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findLazy, mapMangledModuleLazy } from "@webpack";
 import {
     GuildStore,
+    ListScrollerAuto,
+    ListScrollerNone,
+    ListScrollerThin,
+    OAuth2AuthorizeModal,
     ScrollerAuto,
     ScrollerNone,
     ScrollerThin,
+    SearchableSelect,
     TabBar,
+    TooltipContainer,
     useEffect,
     useRef,
     UserStore,
     useState,
 } from "@webpack/common";
 
+import { ToastPosition, ToastType } from "../constants";
 import type {
     AccordionProps,
     AnchorProps,
@@ -41,6 +46,7 @@ import type {
     DiscordHeadingProps,
     DiscordTextProps,
     ExpressiveModalProps,
+    FocusLockProps,
     GuildIconProps,
     IconBadgeProps,
     ManaBaseRadioGroupProps,
@@ -65,6 +71,7 @@ import type {
     NumberBadgeProps,
     OpenModalOptions,
     PaginatorProps,
+    PopoutComponent,
     ProgressBarProps,
     SearchBarProps,
     SkeletonProps,
@@ -77,21 +84,28 @@ import type {
     ToastOptions,
     ToastsModule,
     ToastTypeValue,
+    UserSummaryItemProps,
 } from "../types";
 
 export * from "../constants";
-export * from "../types";
+export type * from "../types";
 
 export {
     Button,
     Card,
     GuildStore,
     Heading,
+    ListScrollerAuto,
+    ListScrollerNone,
+    ListScrollerThin,
+    OAuth2AuthorizeModal,
     Paragraph,
     ScrollerAuto,
     ScrollerNone,
     ScrollerThin,
+    SearchableSelect,
     TabBar,
+    TooltipContainer,
     useEffect,
     useRef,
     UserStore,
@@ -132,6 +146,14 @@ export const Accordion = findComponentByCodeLazy("accordionContainer", "onExpand
 export const Timestamp = findComponentByCodeLazy("#{intl::MESSAGE_EDITED_TIMESTAMP_A11Y_LABEL}", "isVisibleOnlyOnHover") as React.ComponentType<TimestampProps>;
 export const GuildIcon = findComponentByCodeLazy("Masks.CLAN_ICON", "guildIconImage") as React.ComponentType<GuildIconProps>;
 export const ColorPicker = findComponentByCodeLazy("#{intl::USER_SETTINGS_PROFILE_COLOR_SELECT_COLOR}", "showEyeDropper") as React.ComponentType<ColorPickerProps>;
+export const Popout = findComponentByCodeLazy("renderPopout:this.renderPopout,spacing:") as unknown as PopoutComponent;
+export const FocusLock = findComponentByCodeLazy(".containerRef,{keyboardModeEnabled:") as React.ComponentType<FocusLockProps>;
+export const UserSummaryItem = findComponentByCodeLazy("popoutUserId") as React.ComponentType<UserSummaryItemProps>;
+
+export const Animations = mapMangledModuleLazy(".assign({colorNames:", {
+    Transition: filters.componentByCode('["items","children"]', ",null,"),
+    animated: filters.byProps("div", "text")
+});
 
 const ColorPickerModule = findLazy(m => {
     const values = Object.values(m);
