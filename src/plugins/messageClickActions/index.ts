@@ -78,9 +78,13 @@ async function react(channelId: string, messageId: string, emoji: string) {
         ? `${customMatch[1]}:${customMatch[2]}`
         : encodeURIComponent(trimmed);
 
-    await RestAPI.put({
-        url: `/channels/${channelId}/messages/${messageId}/reactions/${emojiParam}/@me`
-    });
+    try {
+        await RestAPI.put({
+            url: `/channels/${channelId}/messages/${messageId}/reactions/${emojiParam}/@me`
+        });
+    } catch (e) {
+        console.error("[MessageClickActions] Failed to add reaction:", e);
+    }
 }
 
 export default definePlugin({
