@@ -8,6 +8,7 @@ import "./styles.css";
 
 import { showNotification } from "@api/Notifications";
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
+import { migratePluginToSettings } from "@api/Settings";
 import { ErrorBoundary, openPluginModal } from "@components/index";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { PluginNative, StartAt } from "@utils/types";
@@ -1051,11 +1052,8 @@ function getQuestAcceptedButtonProps(quest: Quest, text: string, disabled: boole
     };
 }
 
-function isIncompatibleActivity(quest: Quest): boolean {
-    return !!Object.keys(quest.config.taskConfigV2?.tasks || {}).some(taskType => {
-        return taskType === "ACHIEVEMENT_IN_ACTIVITY";
-    });
-}
+// Drop support for QuestCompleter and migrate to Questify settings.
+migratePluginToSettings("Questify", "QuestCompleter", "completeVideoQuestsInBackground", "completeGameQuestsInBackground", "completeAchievementQuestsInBackground");
 
 export default definePlugin({
     name: "Questify",
@@ -1084,7 +1082,6 @@ export default definePlugin({
     processQuestForAutoComplete,
     getQuestAcceptedButtonProps,
     getQuestAcceptedButtonText,
-    isIncompatibleActivity,
     getQuestPanelOverride,
     setLastFilterChoices,
     getLastFilterChoices,
