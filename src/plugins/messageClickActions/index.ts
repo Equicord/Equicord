@@ -137,7 +137,6 @@ export default definePlugin({
             }
 
             if (settings.store.enableTripleClickToReact) {
-                window.getSelection()?.empty();
                 react(channel.id, msg.id, settings.store.reactEmoji);
                 event.preventDefault();
             }
