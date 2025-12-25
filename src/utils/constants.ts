@@ -1217,6 +1217,10 @@ export const EquicordDevs = Object.freeze({
         name: "soap phia",
         id: 1012095822957133976n
     },
+    benjii: {
+        name: "Benjii",
+        id: 463702169443368970n
+    },
     keircn: {
         name: "Key",
         id: 1230319937155760131n
