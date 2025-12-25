@@ -30,7 +30,7 @@ export const DATA_DIR = process.env.EQUICORD_USER_DATA_DIR ?? (
 
 export const SETTINGS_DIR = join(DATA_DIR, "settings");
 export const THEMES_DIR = join(DATA_DIR, "themes");
-export const QUICKCSS_PATH = join(SETTINGS_DIR, "quickCss.css");
+export const QUICK_CSS_PATH = join(SETTINGS_DIR, "quickCss.css");
 export const SETTINGS_FILE = join(SETTINGS_DIR, "settings.json");
 export const NATIVE_SETTINGS_FILE = join(SETTINGS_DIR, "native-settings.json");
 export const DEV_MIGRATED = join(SETTINGS_DIR, "migration");
@@ -61,7 +61,7 @@ if (IS_DEV) {
         setTimeout(() => {
             try {
                 if (existsSync(settings)) copyFileSync(settings, SETTINGS_FILE);
-                if (existsSync(quickCss)) copyFileSync(quickCss, QUICKCSS_PATH);
+                if (existsSync(quickCss)) copyFileSync(quickCss, QUICK_CSS_PATH);
                 writeFileSync(DEV_MIGRATED, "migrated");
                 app.relaunch();
                 app.exit(0);

@@ -923,6 +923,12 @@ function getQuestAcceptedButtonProps(quest: Quest, text: string, disabled: boole
     };
 }
 
+function isIncompatibleActivity(quest: Quest): boolean {
+    return !!Object.keys(quest.config.taskConfigV2?.tasks || {}).some(taskType => {
+        return taskType === "ACHIEVEMENT_IN_ACTIVITY";
+    });
+}
+
 export default definePlugin({
     name: "Questify",
     description: "Enhance your Quest experience with a suite of features, or disable them entirely if they're not your thing.",
@@ -949,6 +955,7 @@ export default definePlugin({
     processQuestForAutoComplete,
     getQuestAcceptedButtonProps,
     getQuestAcceptedButtonText,
+    isIncompatibleActivity,
     getQuestPanelOverride,
     setLastFilterChoices,
     getLastFilterChoices,
@@ -1005,27 +1012,11 @@ export default definePlugin({
         {
             // Hides the Quest icon from members list items when
             // a user is playing a game tied to an active Quest.
-            find: "HANG_STATUS});",
+            find: "),\"activity-\".concat",
             group: true,
             replacement: [
                 {
-                    match: /(?=if\(\(0,.{0,30}?isBlockedOrIgnored)/,
-                    replace: "const shouldHideMembersListActivelyPlayingIcon=$self.shouldHideMembersListActivelyPlayingIcon();"
-                },
-                {
-                    match: /(?<=\i\(\),\i&&)/,
-                    replace: "!shouldHideMembersListActivelyPlayingIcon&&"
-                }
-            ]
-        },
-        {
-            // Same as above, probably? Not sure when
-            // each function is used, so patching both.
-            find: '"StackedActivityStatus"})',
-            group: true,
-            replacement: [
-                {
-                    match: /(?=if\(\i\)return null;let \i=function)/,
+                    match: /(?<=voiceActivityChannel:\i\?\i:null}\);)/,
                     replace: "const shouldHideMembersListActivelyPlayingIcon=$self.shouldHideMembersListActivelyPlayingIcon();"
                 },
                 {
@@ -1278,7 +1269,7 @@ export default definePlugin({
                     // Start Play Game Quests.
                     // Video Quests are handled in the next patch group.
                     match: /(?<=onClick:async\(\)=>{)/,
-                    replace: "const startingAutoComplete=arguments[0].isVideoQuest?false:!$self.processQuestForAutoComplete(arguments[0].quest);"
+                    replace: "const startingAutoComplete=(arguments[0].isVideoQuest||$self.isIncompatibleActivity(arguments[0].quest))?false:!$self.processQuestForAutoComplete(arguments[0].quest);"
                 },
                 {
                     // The "Resume (XX:XX)" text is changed to "Watching (XX:XX)" if the Quest is active.

@@ -26,7 +26,6 @@ import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { shouldShowContributorBadge, shouldShowEquicordContributorBadge } from "@utils/misc";
 import definePlugin from "@utils/types";
-import { User } from "@vencord/discord-types";
 import { ContextMenuApi, Menu, Toasts, UserStore } from "@webpack/common";
 
 import Plugins, { PluginMeta } from "~plugins";
@@ -132,15 +131,12 @@ export default definePlugin({
     required: true,
     patches: [
         {
-            find: ".MODAL]:26",
-            replacement: {
-                match: /(?=;return 0===(\i)\.length\?)(?<=(\i)\.useMemo.+?)/,
-                replace: ";$1=$2.useMemo(()=>[...$self.getBadges(arguments[0].displayProfile),...$1],[$1])"
-            }
-        },
-        {
             find: "#{intl::PROFILE_USER_BADGES}",
             replacement: [
+                {
+                    match: /(?<=\{[^}]*?)badges:\i(?=[^}]*?}=(\i))/,
+                    replace: "_$&=$self.useBadges($1.displayProfile).concat($1.badges)"
+                },
                 {
                     match: /alt:" ","aria-hidden":!0,src:.{0,50}(\i).iconSrc/,
                     replace: "...$1.props,$&"
@@ -155,13 +151,6 @@ export default definePlugin({
                     replace: "...$self.getBadgeMouseEventHandlers($1),$&"
                 }
             ]
-        },
-        {
-            find: "profileCardUsernameRow,children:",
-            replacement: {
-                match: /badges:(\i)(?<=displayProfile:(\i).+?)/,
-                replace: "badges:[...$self.getBadges($2),...$1]"
-            }
         }
     ],
 
@@ -197,15 +186,14 @@ export default definePlugin({
         clearInterval(intervalId);
     },
 
-    getBadges(props: { userId: string; user?: User; guildId: string; }) {
-        if (!props) return [];
+    // doesn't use hooks itself, but some plugins might do so in their getBadges function
+    useBadges(profile: { userId: string; guildId: string; }) {
+        if (!profile) return [];
 
         try {
-            props.userId ??= props.user?.id!;
-
-            return _getBadges(props);
+            return _getBadges(profile);
         } catch (e) {
-            new Logger("BadgeAPI#hasBadges").error(e);
+            new Logger("BadgeAPI#useBadges").error(e);
             return [];
         }
     },
