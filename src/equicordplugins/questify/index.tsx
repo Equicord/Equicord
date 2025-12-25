@@ -1432,8 +1432,8 @@ export default definePlugin({
                     // Start Play Game and Play Activity Quests.
                     // Video Quests are handled in the next patch group.
                     // Also set the unaccepted button text to "Complete".
-                    match: /text:(\i,tooltipText:null,onClick:async\(\)=>{)/,
-                    replace: "icon:null,text:$self.getQuestUnacceptedButtonText(arguments[0].quest)??$1const startingAutoComplete=arguments[0].isVideoQuest?false:$self.processQuestForAutoComplete(arguments[0].quest);"
+                    match: /(\i,tooltipText:null,onClick:async\(\)=>{)/,
+                    replace: "$self.getQuestUnacceptedButtonText(arguments[0].quest)??$1const startingAutoComplete=arguments[0].isVideoQuest?false:$self.processQuestForAutoComplete(arguments[0].quest);"
                 },
                 {
                     // Set the accepted button text to "Complete", "Completing", or "Resume" based on progress.
