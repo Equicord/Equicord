@@ -253,17 +253,20 @@ export function useSettings(paths?: UseSettings<Settings>[]) {
 
 export function migratePluginToSettings(newName: string, oldName: string, ...settingNames: string[]) {
     const { plugins } = SettingsStore.plain;
-    const newPlugin = plugins[newName];
+    const oldPlugin = plugins[oldName];
 
-    if (!newPlugin) return;
+    if (!oldPlugin?.enabled) return;
+
+    const newPlugin = plugins[newName] ??= { enabled: false };
 
     for (const settingName of settingNames) {
-        logger.info(`Migrating plugin to setting from old name ${oldName} to ${newName} as ${settingName}`);
+        logger.info(`Migrating plugin ${oldName} to ${newName} setting ${settingName}`);
         newPlugin[settingName] = true;
-        newPlugin.enabled = true;
-        delete plugins[oldName];
-        SettingsStore.markAsChanged();
     }
+
+    newPlugin.enabled = true;
+    delete plugins[oldName];
+    SettingsStore.markAsChanged();
 }
 
 export function migratePluginSettings(name: string, ...oldNames: string[]) {
@@ -294,14 +297,14 @@ export function migratePluginSetting(pluginName: string, newSetting: string, old
 }
 
 export function migrateSettingFromPlugin(newPlugin: string, newSetting: string, oldPlugin: string, oldSetting: string) {
-    const newSettings = SettingsStore.plain.plugins[newPlugin];
-    const oldSettings = SettingsStore.plain.plugins[oldPlugin];
+    const { plugins } = SettingsStore.plain;
+    const oldSettings = plugins[oldPlugin];
+    const newSettings = plugins[newPlugin];
+
     if (!oldSettings || !Object.hasOwn(oldSettings, oldSetting)) return;
-    if (!newSettings || (Object.hasOwn(newSettings, newSetting))) return;
+    if (!newSettings || Object.hasOwn(newSettings, newSetting)) return;
 
-    if (Object.hasOwn(newSettings, newSetting)) return;
-
-    logger.info(`Migrating plugin setting from ${oldSetting} on ${oldPlugin} to ${newSetting} on ${newPlugin}`);
+    logger.info(`Migrating setting ${oldSetting} from ${oldPlugin} to ${newSetting} on ${newPlugin}`);
     newSettings[newSetting] = oldSettings[oldSetting];
     delete oldSettings[oldSetting];
     SettingsStore.markAsChanged();
