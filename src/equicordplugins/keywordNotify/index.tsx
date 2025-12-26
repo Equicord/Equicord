@@ -34,7 +34,7 @@ type KeywordEntry = {
     autoResponseEnabled?: boolean;
     cooldownSeconds?: number;
     triggerCount?: number;
-    lastTriggered?: { [channelId: string]: number };
+    lastTriggered?: { [channelId: string]: number; };
 };
 
 let keywordEntries: Array<KeywordEntry> = [];
@@ -480,7 +480,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "KeywordAutoResponder",
-    authors: [EquicordDevs.camila314, EquicordDevs.x3rt],
+    authors: [EquicordDevs.camila314, EquicordDevs.x3rt, EquicordDevs.luinbytes],
     description: "Sends notifications and automatic responses when messages match keywords or regexes",
     settings,
     patches: [
