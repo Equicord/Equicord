@@ -20,11 +20,22 @@ import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
+import { sendMessage } from "@utils/discord";
 import { Button, ChannelStore, FluxDispatcher, Select, SelectedChannelStore, TabBar, TextInput, Tooltip, UserStore, useState } from "@webpack/common";
 import type { JSX, PropsWithChildren } from "react";
 
 type IconProps = JSX.IntrinsicElements["svg"];
-type KeywordEntry = { regex: string, listIds: Array<string>, listType: ListType, ignoreCase: boolean; };
+type KeywordEntry = {
+    regex: string;
+    listIds: Array<string>;
+    listType: ListType;
+    ignoreCase: boolean;
+    autoResponse?: string;
+    autoResponseEnabled?: boolean;
+    cooldownSeconds?: number;
+    triggerCount?: number;
+    lastTriggered?: { [channelId: string]: number };
+};
 
 let keywordEntries: Array<KeywordEntry> = [];
 let keywordLog: Array<any> = [];
@@ -35,13 +46,23 @@ const tabClass = findByPropsLazy("inboxTitle", "tab");
 const buttonClass = findByPropsLazy("size36");
 const Popout = findByCodeLazy("getProTip", "canCloseAllMessages:");
 const createMessageRecord = findByCodeLazy(".createFromServer(", ".isBlockedForMessage", "messageReference:");
-const KEYWORD_ENTRIES_KEY = "KeywordNotify_keywordEntries";
-const KEYWORD_LOG_KEY = "KeywordNotify_log";
+const KEYWORD_ENTRIES_KEY = "KeywordAutoResponder_keywordEntries";
+const KEYWORD_LOG_KEY = "KeywordAutoResponder_log";
 
-const cl = classNameFactory("vc-keywordnotify-");
+const cl = classNameFactory("vc-keywordautoresponder-");
 
 async function addKeywordEntry(forceUpdate: () => void) {
-    keywordEntries.push({ regex: "", listIds: [], listType: ListType.BlackList, ignoreCase: false });
+    keywordEntries.push({
+        regex: "",
+        listIds: [],
+        listType: ListType.BlackList,
+        ignoreCase: false,
+        autoResponse: "",
+        autoResponseEnabled: false,
+        cooldownSeconds: 60,
+        triggerCount: 0,
+        lastTriggered: {}
+    });
     await DataStore.set(KEYWORD_ENTRIES_KEY, keywordEntries);
     forceUpdate();
 }
@@ -58,6 +79,75 @@ function safeMatchesRegex(str: string, regex: string, flags: string) {
     } catch {
         return false;
     }
+}
+
+function processTemplate(template: string, context: {
+    user: string;
+    keyword: string;
+    channel: string;
+    server: string;
+    message: string;
+    time: string;
+    date: string;
+    count: number;
+}) {
+    return template
+        .replace(/\{user\}/g, context.user)
+        .replace(/\{keyword\}/g, context.keyword)
+        .replace(/\{channel\}/g, context.channel)
+        .replace(/\{server\}/g, context.server)
+        .replace(/\{message\}/g, context.message)
+        .replace(/\{time\}/g, context.time)
+        .replace(/\{date\}/g, context.date)
+        .replace(/\{count\}/g, String(context.count));
+}
+
+async function sendAutoResponse(message: Message, entry: KeywordEntry, matchedKeyword: string) {
+    if (!entry.autoResponse || !entry.autoResponseEnabled) {
+        return;
+    }
+
+    // Check cooldown
+    const now = Date.now();
+    const lastTrigger = entry.lastTriggered?.[message.channel_id] || 0;
+    const cooldownMs = (entry.cooldownSeconds || 60) * 1000;
+
+    if (now - lastTrigger < cooldownMs) {
+        return; // Still on cooldown
+    }
+
+    // Update cooldown and trigger count
+    if (!entry.lastTriggered) entry.lastTriggered = {};
+    entry.lastTriggered[message.channel_id] = now;
+    entry.triggerCount = (entry.triggerCount || 0) + 1;
+    await DataStore.set(KEYWORD_ENTRIES_KEY, keywordEntries);
+
+    // Build context for template
+    const channel = ChannelStore.getChannel(message.channel_id);
+    const now_date = new Date();
+
+    const context = {
+        user: `<@${message.author.id}>`,
+        keyword: matchedKeyword,
+        channel: channel?.name || "Unknown",
+        server: channel?.guild_id ? ChannelStore.getChannel(message.channel_id)?.name || "DM" : "DM",
+        message: message.content,
+        time: now_date.toLocaleTimeString(),
+        date: now_date.toLocaleDateString(),
+        count: entry.triggerCount || 1
+    };
+
+    const responseText = processTemplate(entry.autoResponse, context);
+
+    // Add delay if configured
+    const delay = settings.store.responseDelay || 0;
+    setTimeout(() => {
+        sendMessage(message.channel_id, {
+            nonce: Date.now().toString(),
+            content: responseText,
+            validNonShortcutEmojis: []
+        });
+    }, delay * 1000);
 }
 
 enum ListType {
@@ -206,6 +296,24 @@ function KeywordEntries() {
         update();
     }
 
+    async function setAutoResponse(index: number, value: string) {
+        keywordEntries[index].autoResponse = value;
+        await DataStore.set(KEYWORD_ENTRIES_KEY, keywordEntries);
+        update();
+    }
+
+    async function setAutoResponseEnabled(index: number, value: boolean) {
+        keywordEntries[index].autoResponseEnabled = value;
+        await DataStore.set(KEYWORD_ENTRIES_KEY, keywordEntries);
+        update();
+    }
+
+    async function setCooldownSeconds(index: number, value: number) {
+        keywordEntries[index].cooldownSeconds = value;
+        await DataStore.set(KEYWORD_ENTRIES_KEY, keywordEntries);
+        update();
+    }
+
     const elements = keywordEntries.map((entry, i) => {
         return (
             <>
@@ -235,6 +343,48 @@ function KeywordEntries() {
                             setIgnoreCase(i, !values[i].ignoreCase);
                         }}
                     />
+
+                    <div className={[Margins.top8, Margins.bottom8].join(" ")} />
+                    <Heading>Auto-Response</Heading>
+                    <FormSwitch
+                        title="Enable Auto-Response"
+                        className={cl("switch")}
+                        value={values[i].autoResponseEnabled || false}
+                        onChange={() => {
+                            setAutoResponseEnabled(i, !values[i].autoResponseEnabled);
+                        }}
+                    />
+                    {values[i].autoResponseEnabled && (
+                        <>
+                            <div className={[Margins.top8, Margins.bottom8].join(" ")} />
+                            <TextInput
+                                placeholder="Response message (use {user}, {keyword}, {channel}, {server}, {message}, {time}, {date}, {count})"
+                                spellCheck={false}
+                                value={values[i].autoResponse || ""}
+                                onChange={e => setAutoResponse(i, e)}
+                            />
+                            <div style={{ marginTop: "8px", fontSize: "12px", color: "var(--text-muted)" }}>
+                                Available variables: {"{user}"}, {"{keyword}"}, {"{channel}"}, {"{server}"}, {"{message}"}, {"{time}"}, {"{date}"}, {"{count}"}
+                            </div>
+                            <div className={[Margins.top8, Margins.bottom8].join(" ")} />
+                            <Flex flexDirection="row" style={{ alignItems: "center" }}>
+                                <div style={{ marginRight: "8px", minWidth: "120px" }}>Cooldown (seconds):</div>
+                                <TextInput
+                                    type="number"
+                                    placeholder="60"
+                                    value={String(values[i].cooldownSeconds || 60)}
+                                    onChange={e => setCooldownSeconds(i, parseInt(e) || 60)}
+                                />
+                            </Flex>
+                            {values[i].triggerCount ? (
+                                <div style={{ marginTop: "8px", fontSize: "12px", color: "var(--text-muted)" }}>
+                                    Triggered {values[i].triggerCount} time(s)
+                                </div>
+                            ) : null}
+                        </>
+                    )}
+
+                    <div className={[Margins.top8, Margins.bottom8].join(" ")} />
                     <Heading>Whitelist/Blacklist</Heading>
                     <Flex flexDirection="row">
                         <div style={{ flexGrow: 1 }}>
@@ -311,6 +461,16 @@ const settings = definePluginSettings({
         description: "Amount of messages to keep in the log",
         default: 50
     },
+    enableAutoResponse: {
+        type: OptionType.BOOLEAN,
+        description: "Enable automatic responses to keyword matches (master switch)",
+        default: false
+    },
+    responseDelay: {
+        type: OptionType.NUMBER,
+        description: "Delay before sending auto-response (seconds, 0-10)",
+        default: 0
+    },
     keywords: {
         type: OptionType.COMPONENT,
         description: "Manage keywords",
@@ -319,9 +479,9 @@ const settings = definePluginSettings({
 });
 
 export default definePlugin({
-    name: "KeywordNotify",
+    name: "KeywordAutoResponder",
     authors: [EquicordDevs.camila314, EquicordDevs.x3rt],
-    description: "Sends a notification if a given message matches certain keywords or regexes",
+    description: "Sends notifications and automatic responses when messages match keywords or regexes",
     settings,
     patches: [
         {
@@ -362,7 +522,28 @@ export default definePlugin({
     async start() {
         this.onUpdate = () => null;
         keywordEntries = await DataStore.get(KEYWORD_ENTRIES_KEY) ?? [];
-        await DataStore.set(KEYWORD_ENTRIES_KEY, keywordEntries);
+
+        // Migrate existing entries to include new auto-response fields
+        let needsMigration = false;
+        keywordEntries = keywordEntries.map(entry => {
+            if (entry.autoResponse === undefined) {
+                needsMigration = true;
+                return {
+                    ...entry,
+                    autoResponse: "",
+                    autoResponseEnabled: false,
+                    cooldownSeconds: 60,
+                    triggerCount: 0,
+                    lastTriggered: {}
+                };
+            }
+            return entry;
+        });
+
+        if (needsMigration) {
+            await DataStore.set(KEYWORD_ENTRIES_KEY, keywordEntries);
+        }
+
         (await DataStore.get(KEYWORD_LOG_KEY) ?? []).map(e => JSON.parse(e)).forEach(e => {
             try {
                 this.addToLog(e);
@@ -386,6 +567,7 @@ export default definePlugin({
 
     applyKeywordEntries(m: Message) {
         let matches = false;
+        let matchedKeyword = "";
 
         for (const entry of keywordEntries) {
             if (entry.regex === "") {
@@ -414,21 +596,39 @@ export default definePlugin({
             }
 
             const flags = entry.ignoreCase ? "i" : "";
-            if (safeMatchesRegex(m.content, entry.regex, flags)) {
+            let entryMatched = false;
+            let keywordMatch: any = null;
+
+            if ((keywordMatch = safeMatchesRegex(m.content, entry.regex, flags))) {
                 matches = true;
+                entryMatched = true;
+                matchedKeyword = keywordMatch[0] || entry.regex;
             } else {
                 for (const embed of m.embeds as any) {
-                    if (safeMatchesRegex(embed.description, entry.regex, flags) || safeMatchesRegex(embed.title, entry.regex, flags)) {
+                    if ((keywordMatch = safeMatchesRegex(embed.description, entry.regex, flags)) || (keywordMatch = safeMatchesRegex(embed.title, entry.regex, flags))) {
                         matches = true;
+                        entryMatched = true;
+                        matchedKeyword = keywordMatch[0] || entry.regex;
                         break;
                     } else if (embed.fields != null) {
                         for (const field of embed.fields as Array<{ name: string, value: string; }>) {
-                            if (safeMatchesRegex(field.value, entry.regex, flags) || safeMatchesRegex(field.name, entry.regex, flags)) {
+                            if ((keywordMatch = safeMatchesRegex(field.value, entry.regex, flags)) || (keywordMatch = safeMatchesRegex(field.name, entry.regex, flags))) {
                                 matches = true;
+                                entryMatched = true;
+                                matchedKeyword = keywordMatch[0] || entry.regex;
                                 break;
                             }
                         }
                     }
+                }
+            }
+
+            // Trigger auto-response if this entry matched and global setting is enabled
+            if (entryMatched && settings.store.enableAutoResponse) {
+                const currentUserId = UserStore.getCurrentUser()?.id;
+                // Don't respond to our own messages
+                if (m.author.id !== currentUserId) {
+                    sendAutoResponse(m, entry, matchedKeyword);
                 }
             }
         }

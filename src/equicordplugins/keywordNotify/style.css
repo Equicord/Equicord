@@ -1,21 +1,21 @@
-.vc-keywordnotify-delete {
+.vc-keywordautoresponder-delete {
     padding: 0;
     color: var(--primary-400);
     transition: color 0.2s ease-in-out;
 }
 
-.vc-keywordnotify-delete:hover {
+.vc-keywordautoresponder-delete:hover {
     color: var(--status-danger);
 }
 
-.vc-keywordnotify-collapsible {
+.vc-keywordautoresponder-collapsible {
     display: flex;
     align-items: center;
     padding: 8px;
     cursor: pointer;
 }
 
-.vc-keywordnotify-switch {
+.vc-keywordautoresponder-switch {
     margin-top: 0.5em;
     margin-right: 40px;
 }
