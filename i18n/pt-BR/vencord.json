@@ -195,11 +195,11 @@
         },
         "winCtrlQ": {
             "title": "Registrar Ctrl+Q como atalho para fechar o Discord",
-            "description": "Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application."
+            "description": "Adicione Ctrl+Q como um atalho de teclado para fechar o Discord. Isso fornece uma alternativa ao Alt+F4 para fechar rapidamente o aplicativo."
         },
         "winNativeTitleBar": {
             "title": "Use a barra de título nativa do Windows em vez da barra personalizada do Discord",
-            "description": "Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools."
+            "description": "Substitua a barra de título personalizada do Discord pela barra de título padrão do Windows. Isso pode melhorar a compatibilidade com algumas ferramentas de gerenciamento de janelas."
         }
     },
     "tabs": {
