@@ -3,7 +3,7 @@ import "./style.css";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import definePlugin from "@utils/types";
 import { Menu } from "@webpack/common";
-
+import { Devs, EquicordDevs } from "@utils/constants";
 import { settings } from "./settings";
 import { Accessory, handleConvert } from "./accessory";
 import { Icon } from "./icon";
@@ -32,7 +32,7 @@ export default definePlugin({
     name: "Currency Converter",
     description: "Convert currencies found in messages and show the result under them.",
     settings,
-    authors: [957164619061932045],
+    authors: [EquicordDevs.xMimiez],
 
     contextMenus: {
         "message": messageCtxPatch
@@ -40,3 +40,4 @@ export default definePlugin({
 
     renderMessageAccessory: props => <Accessory message={props.message} />
 });
+
