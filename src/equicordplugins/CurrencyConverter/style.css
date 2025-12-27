@@ -1,0 +1,15 @@
+.eq-currency-accessory {
+    color: var(--text-muted);
+    margin-top: 0.5em;
+    font-style: italic;
+}
+
+.eq-currency-dismiss {
+    all: unset;
+    cursor: pointer;
+    color: var(--text-link);
+}
+
+.eq-currency-dismiss:hover {
+    text-decoration: underline;
+}
