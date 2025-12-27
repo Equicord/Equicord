@@ -85,15 +85,15 @@
     "settings": {
         "disableMinSize": {
             "title": "Desativar tamanho mínimo da janela",
-            "description": "Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens."
+            "description": "Permite que a janela do Discord seja redimensionada para um tamanho menor que o mínimo padrão. Útil para gerenciadores de janelas em mosaico ou telas pequenas."
         },
         "enableReactDevtools": {
             "title": "Habilitar as Ferramentas de Desenvolvedor React",
-            "description": "Enable the React Developer Tools extension for debugging Discord's React components. Useful for plugin development."
+            "description": "Ativar a extensão React Developer Tools para depurar os componentes React do Discord. Útil para o desenvolvimento de plugins."
         },
         "frameless": {
             "title": "Desativar a moldura da janela",
-            "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area."
+            "description": "Remover a moldura nativa da janela para uma aparência mais limpa. Você ainda poderá mover a janela arrastando a área da barra de título."
         },
         "hint": "Dica: você pode mudar a posição desta seção nas <0>configurações do plugin Configurações</0>!",
         "macosVibrancyStyle": {
@@ -156,8 +156,8 @@
             "checkYourConnection": "Falha ao conectar-se ao repositório. Verifique sua conexão com a Internet",
             "failedtoFetchCommits": "Não foi possível buscar commits do repositório",
             "repository": "Repositório",
-            "whereUpdatesFetch": "This is the GitHub repository where Equicord fetches updates from",
-            "viewRecentChanges": "These are the new commits and plugin updates since your last version. You can see what features were added, bugs were fixed, and which plugins received updates",
+            "whereUpdatesFetch": "Este é o repositório do GitHub de onde o Equicord busca atualizações",
+            "viewRecentChanges": "Estes são os novos commits e atualizações de plugins desde a sua última versão. Você pode ver quais recursos foram adicionados, erros corrigidos e quais plugins receberam atualizações",
             "failedToRetrieve": "Falha ao obter – verifique o console",
             "upToDate": "Repositório atualizado",
             "fetchRepo": "Buscar no repositório",
@@ -171,8 +171,8 @@
             "updateLogs_zero": "Nenhum registro de atualização",
             "updateLogs_one": "Registros de atualização ({count})",
             "updateLogs_other": "Atualizar registros ({count} registros)",
-            "previousSessions": "A history of your previous update sessions with their commit history and plugin changes. Click on a log to expand it and see the details",
-            "info": "Check the repository for new commits, plugin updates, and code changes. This will compare your current version with the latest available and show you what's new",
+            "previousSessions": "Um histórico de suas sessões de atualização anteriores com o histórico de commits e alterações de plugins. Clique em um registro para expandi-lo e ver os detalhes",
+            "info": "Verifque o repositório em busca de novos commits, atualizações de plugins e alterações de código. Isso comparará sua versão atual com a última disponível e mostrará o que há de novo",
             "title": "Registro de alterações"
         },
         "restartRequired": {
@@ -184,17 +184,17 @@
         },
         "title": "Configurações",
         "transparent": {
-            "description": "Make the Discord window transparent. A theme that supports transparency is required or this will do nothing.",
+            "description": "Torne a janela do Discord transparente. É necessário um tema que suporte transparência, caso contrário, esta opção não terá efeito.",
             "title": "Ativar transparência de janela",
-            "noteWindows": "This will stop the window from being resizable and prevents you from snapping the window to screen edges",
-            "note": "This will stop the window from being resizable."
+            "noteWindows": "Isso impedirá que a janela seja redimensionada e evitará que você a encaixe nas bordas da tela",
+            "note": "Isso impedirá que a janela seja redimensionada."
         },
         "useQuickCss": {
-            "description": "Load custom CSS from the QuickCSS editor. This allows you to customize Discord's appearance with your own styles.",
+            "description": "Carregue CSS personalizado do editor QuickCSS. Isso permite que você personalize a aparência do Discord com seus próprios estilos.",
             "title": "Habilitar CSS personalizado"
         },
         "winCtrlQ": {
-            "title": "Register Ctrl+Q as shortcut to close Discord",
+            "title": "Registrar Ctrl+Q como atalho para fechar o Discord",
             "description": "Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application."
         },
         "winNativeTitleBar": {
