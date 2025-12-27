@@ -929,7 +929,7 @@ function getQuestUnacceptedButtonText(quest: Quest): string | null {
     const targetFormatted = `${String(Math.floor(target / 60)).padStart(2, "0")}:${String(target % 60).padStart(2, "0")}`;
 
     if (target > 0) {
-        if ((playType && completeGameQuestsInBackground) || (watchType && completeVideoQuestsInBackground)) {
+        if ((playType && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (watchType && completeVideoQuestsInBackground)) {
             return `Complete (${targetFormatted})`;
         } else if (achievementType && completeAchievementQuestsInBackground) {
             return "Complete (Immediate)";
@@ -948,7 +948,7 @@ function getQuestAcceptedButtonText(quest: Quest): string | null {
     const intervalData = activeQuestIntervals.get(quest.id);
 
     if (questEnrolledAt) {
-        if (((playType && completeGameQuestsInBackground) || (watchType && completeVideoQuestsInBackground))) {
+        if (((playType && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (watchType && completeVideoQuestsInBackground))) {
             const taskType = playType || watchType;
             const duration = taskType?.target || 0;
             const durationWithLeeway = watchType ? duration - videoQuestLeeway : duration;
@@ -959,7 +959,7 @@ function getQuestAcceptedButtonText(quest: Quest): string | null {
 
             if (!!intervalData) {
                 return !canCompleteImmediately && timeRemaining ? `Completing (${progressFormatted})` : "Completing...";
-            } else if (watchType || (playType && IS_DISCORD_DESKTOP)) {
+            } else if (watchType || playType) {
                 return canCompleteImmediately ? "Complete (Immediate)" : timeRemaining === durationWithLeeway ? `Complete (${progressFormatted})` : `Resume (${progressFormatted})`;
             }
         } else if (achievementType && completeAchievementQuestsInBackground) {
