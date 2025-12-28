@@ -210,6 +210,9 @@ export const PopoutActions: t.PopoutActions = mapMangledModuleLazy('type:"POPOUT
     open: filters.byCode('type:"POPOUT_WINDOW_OPEN"'),
     close: filters.byCode('type:"POPOUT_WINDOW_CLOSE"'),
     setAlwaysOnTop: filters.byCode('type:"POPOUT_WINDOW_SET_ALWAYS_ON_TOP"'),
+    addStylesheet: filters.byCode('type:"POPOUT_WINDOW_ADD_STYLESHEET"'),
+    openChannelCallPopout: filters.byCode('type:"CHANNEL_CALL_POPOUT_WINDOW_OPEN"'),
+    openCallTilePopout: filters.byCode('type:"CALL_TILE_POPOUT_WINDOW_OPEN"'),
 });
 
 export const UsernameUtils: t.UsernameUtils = findByPropsLazy("useName", "getGlobalName");

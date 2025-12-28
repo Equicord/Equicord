@@ -19,6 +19,7 @@
 import { generateTextCss } from "@components/BaseText";
 import { generateMarginCss } from "@components/margins";
 import { classNameFactory as _classNameFactory, classNameToSelector, createAndAppendStyle } from "@utils/css";
+import type { PopoutWindowStore } from "@vencord/discord-types";
 
 // Backwards compat for Vesktop
 /** @deprecated Import this from `@utils/css` instead */
@@ -193,3 +194,77 @@ export const compileStyle = (style: Style) => {
             return className ? classNameToSelector(className) : match;
         });
 };
+
+const popoutStyleNodes = new Map<string, HTMLElement>();
+
+function injectStylesIntoWindow(windowKey: string, targetWindow: Window) {
+    if (popoutStyleNodes.has(windowKey)) return;
+
+    const clonedRoot = vencordRootNode.cloneNode(true) as HTMLElement;
+    clonedRoot.id = "vencord-popout-styles";
+    targetWindow.document.documentElement.append(clonedRoot);
+    popoutStyleNodes.set(windowKey, clonedRoot);
+
+    syncPopoutStyles(windowKey);
+}
+
+function syncPopoutStyles(windowKey: string) {
+    const clonedRoot = popoutStyleNodes.get(windowKey);
+    if (!clonedRoot) return;
+
+    const clonedCore = clonedRoot.querySelector("vencord-styles");
+    const clonedManaged = clonedRoot.querySelector("vencord-managed-styles");
+    const clonedUser = clonedRoot.querySelector("vencord-user-styles");
+
+    if (clonedCore) clonedCore.innerHTML = coreStyleRootNode.innerHTML;
+    if (clonedManaged) clonedManaged.innerHTML = managedStyleRootNode.innerHTML;
+    if (clonedUser) clonedUser.innerHTML = userStyleRootNode.innerHTML;
+}
+
+function removeStylesFromWindow(windowKey: string) {
+    const node = popoutStyleNodes.get(windowKey);
+    if (node) {
+        node.remove();
+        popoutStyleNodes.delete(windowKey);
+    }
+}
+
+/**
+ * Initializes style injection for popout windows.
+ * Clones vencord-root into each popout and keeps styles synced via MutationObserver.
+ * @param store PopoutWindowStore instance to listen for window changes
+ */
+export function initPopoutStyleInjection(store: PopoutWindowStore) {
+    const styleObserver = new MutationObserver(() => {
+        for (const windowKey of popoutStyleNodes.keys()) {
+            syncPopoutStyles(windowKey);
+        }
+    });
+
+    styleObserver.observe(vencordRootNode, {
+        childList: true,
+        subtree: true,
+        characterData: true
+    });
+
+    const processWindows = () => {
+        const currentKeys = store.getWindowKeys();
+
+        for (const key of currentKeys) {
+            if (!popoutStyleNodes.has(key) && store.isWindowFullyInitialized(key)) {
+                const win = store.getWindow(key);
+                if (win) injectStylesIntoWindow(key, win);
+            }
+        }
+
+        const currentKeySet = new Set(currentKeys);
+        for (const key of popoutStyleNodes.keys()) {
+            if (!currentKeySet.has(key)) {
+                removeStylesFromWindow(key);
+            }
+        }
+    };
+
+    store.addChangeListener(processWindows);
+    processWindows();
+}
