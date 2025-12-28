@@ -221,7 +221,6 @@ export default definePlugin({
         useEffect(() => {
             if (!channel) return;
 
-            // @ts-expect-error
             if (channel.isForumLikeChannel()) {
                 requireForumView().then(() => {
                     setViewComponent(
@@ -276,7 +275,7 @@ const Header = ({ guild, channel }: { guild: Guild; channel: Channel; }) => {
     }, [recipientId, channel.name]);
 
     const parentChannel = useStateFromStores(
-        [ChannelStore], () => ChannelStore.getChannel(channel?.parent_id),
+        [ChannelStore], () => channel?.parent_id ? ChannelStore.getChannel(channel.parent_id) : null,
         [channel?.parent_id]
     );
 
