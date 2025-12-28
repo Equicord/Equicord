@@ -165,7 +165,7 @@ export class Channel extends DiscordRecord {
     /** ISO timestamp of the last pinned message. */
     lastPinTimestamp: string | undefined;
     /** Linked lobby for voice channels. */
-    linkedLobby: unknown;
+    linkedLobby: any;
     /** Thread member info if user joined thread. Threads only. */
     member: ThreadMember | undefined;
     /** Approximate member count. Threads only. */
@@ -205,7 +205,7 @@ export class Channel extends DiscordRecord {
     /** RTC region for voice channels, null for automatic. Voice channels only. */
     rtcRegion: string | null;
     /** Safety warnings for DM spam detection. */
-    safetyWarnings: unknown[];
+    safetyWarnings: any[];
     /** Template string. */
     template: string | undefined;
     /** Theme color for group DMs. */
