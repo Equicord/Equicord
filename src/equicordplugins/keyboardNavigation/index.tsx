@@ -5,11 +5,11 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
 import { Devs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { closeAllModals } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { SettingsRouter, useState } from "@webpack/common";
+import { openUserSettingsPanel, useState } from "@webpack/common";
 
 import { registerAction } from "./commands";
 import { openCommandPalette } from "./components/CommandPalette";
@@ -84,7 +84,6 @@ export const settings = definePluginSettings({
     }
 });
 
-
 export default definePlugin({
     name: "KeyboardNavigation",
     description: "Allows you to navigate the UI with a keyboard.",
@@ -94,18 +93,19 @@ export default definePlugin({
     start() {
         document.addEventListener("keydown", this.event);
 
-        registerAction({
-            id: "openDevSettings",
-            label: "Open Dev tab",
-            callback: () => SettingsRouter.open("EquicordPatchHelper"),
-            registrar: "Equicord"
-        });
+        if (IS_DEV) {
+            registerAction({
+                id: "openDevSettings",
+                label: "Open Dev tab",
+                callback: () => openUserSettingsPanel("equicord_patch_helper"),
+                registrar: "Equicord"
+            });
+        }
     },
 
     stop() {
         document.removeEventListener("keydown", this.event);
     },
-
 
     event(e: KeyboardEvent) {
 

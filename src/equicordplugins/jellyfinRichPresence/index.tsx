@@ -13,7 +13,6 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { ApplicationAssetUtils, FluxDispatcher, showToast } from "@webpack/common";
 
-
 interface ActivityAssets {
     large_image?: string;
     large_text?: string;
@@ -106,11 +105,6 @@ const settings = definePluginSettings({
         description: "Show episode name after season/episode info",
         type: OptionType.BOOLEAN,
         default: false,
-    },
-    showTMDBButton: {
-        description: "Show TheMovieDB button in Rich Presence",
-        type: OptionType.BOOLEAN,
-        default: true,
     },
     overrideRichPresenceType: {
         description: "Override the rich presence type",

@@ -61,7 +61,6 @@ export const settings = definePluginSettings({
     }
 });
 
-
 // Save the join time of all users in a Map
 type userJoinData = { channelId: string, time: number; guildId: string; };
 const userJoinTimes = new Map<string, userJoinData>();
@@ -106,21 +105,16 @@ export default definePlugin({
     patches: [
         {
             find: ".usernameSpeaking]",
-            predicate: () => !settings.store.showWithoutHover,
             replacement: [
                 {
                     match: /(?<=user:(\i).*?)iconGroup,.{0,200}children:\[/,
-                    replace: "$&$self.renderTimer($1.id),"
+                    replace: "$&$self.renderTimer($1.id),",
+                    predicate: () => !settings.store.showWithoutHover,
                 },
-            ]
-        },
-        {
-            find: ".usernameSpeaking]",
-            predicate: () => settings.store.showWithoutHover,
-            replacement: [
                 {
                     match: /function \i\(\)\{.+:""(?=.*?userId:(\i))/,
-                    replace: "$&,$self.renderTimer($1.id),"
+                    replace: "$&,$self.renderTimer($1.id),",
+                    predicate: () => settings.store.showWithoutHover,
                 }
             ]
         }

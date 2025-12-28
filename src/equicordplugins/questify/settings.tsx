@@ -368,6 +368,7 @@ function validateDisableQuestSetting() {
         disableQuestsDiscoveryTab,
         disableQuestsFetchingQuests,
         disableQuestsDirectMessagesTab,
+        disableQuestsPageSponsoredBanner,
         disableQuestsPopupAboveAccountPanel,
         disableQuestsBadgeOnUserProfiles,
         disableQuestsGiftInventoryRelocationNotice,
@@ -378,6 +379,7 @@ function validateDisableQuestSetting() {
         "disableQuestsDiscoveryTab",
         "disableQuestsFetchingQuests",
         "disableQuestsDirectMessagesTab",
+        "disableQuestsPageSponsoredBanner",
         "disableQuestsPopupAboveAccountPanel",
         "disableQuestsBadgeOnUserProfiles",
         "disableQuestsGiftInventoryRelocationNotice",
@@ -385,7 +387,7 @@ function validateDisableQuestSetting() {
         "disableMembersListActivelyPlayingIcon"
     ]);
 
-    if (disableQuestsDiscoveryTab || disableQuestsDirectMessagesTab || disableQuestsFetchingQuests || disableQuestsPopupAboveAccountPanel || disableQuestsBadgeOnUserProfiles || disableQuestsGiftInventoryRelocationNotice || disableFriendsListActiveNowPromotion || disableMembersListActivelyPlayingIcon) {
+    if (disableQuestsDiscoveryTab || disableQuestsDirectMessagesTab || disableQuestsPageSponsoredBanner || disableQuestsFetchingQuests || disableQuestsPopupAboveAccountPanel || disableQuestsBadgeOnUserProfiles || disableQuestsGiftInventoryRelocationNotice || disableFriendsListActiveNowPromotion || disableMembersListActivelyPlayingIcon) {
         settings.store.disableQuestsEverything = false;
     }
 }
@@ -673,6 +675,7 @@ function DisableQuestsSetting(): JSX.Element {
         disableQuestsDiscoveryTab,
         disableQuestsFetchingQuests,
         disableQuestsDirectMessagesTab,
+        disableQuestsPageSponsoredBanner,
         disableQuestsPopupAboveAccountPanel,
         disableQuestsBadgeOnUserProfiles,
         disableQuestsGiftInventoryRelocationNotice,
@@ -681,12 +684,14 @@ function DisableQuestsSetting(): JSX.Element {
         makeMobileQuestsDesktopCompatible,
         completeVideoQuestsInBackground,
         completeGameQuestsInBackground,
+        completeAchievementQuestsInBackground,
         notifyOnQuestComplete
     } = settings.use([
         "disableQuestsEverything",
         "disableQuestsDiscoveryTab",
         "disableQuestsFetchingQuests",
         "disableQuestsDirectMessagesTab",
+        "disableQuestsPageSponsoredBanner",
         "disableQuestsPopupAboveAccountPanel",
         "disableQuestsBadgeOnUserProfiles",
         "disableQuestsGiftInventoryRelocationNotice",
@@ -695,7 +700,8 @@ function DisableQuestsSetting(): JSX.Element {
         "makeMobileQuestsDesktopCompatible",
         "completeVideoQuestsInBackground",
         "completeGameQuestsInBackground",
-        "notifyOnQuestComplete"
+        "completeAchievementQuestsInBackground",
+        "notifyOnQuestComplete",
     ]);
 
     const options: DynamicDropdownSettingOption[] = [
@@ -706,11 +712,13 @@ function DisableQuestsSetting(): JSX.Element {
         { label: "Disable Popup Above User Panel", value: "popup", selected: disableQuestsPopupAboveAccountPanel, type: "disable" },
         { label: "Disable Discovery Tab Relocation Notice", value: "discovery", selected: disableQuestsDiscoveryTab, type: "disable" },
         { label: "Disable Gift Inventory Relocation Notice", value: "inventory", selected: disableQuestsGiftInventoryRelocationNotice, type: "disable" },
+        { label: "Disable Sponsored Banner on Quests Page", value: "sponsored-banner", selected: disableQuestsPageSponsoredBanner, type: "disable" },
         { label: "Disable Friends List Active Now Promotion", value: "friends-list", selected: disableFriendsListActiveNowPromotion, type: "disable" },
         { label: "Disable Members List Actively Playing Icon", value: "members-list", selected: disableMembersListActivelyPlayingIcon, type: "disable" },
+        { label: "Complete Watch Video Quests in Background", value: "video-quests-background", selected: completeVideoQuestsInBackground, type: "modification" },
+        { label: "Complete Play Game/Activity Quests in Background", value: "game-quests-background", selected: completeGameQuestsInBackground, type: "modification" },
+        { label: "Complete Task in Activity Quests in Background", value: "achievement-quests-background", selected: completeAchievementQuestsInBackground, type: "modification" },
         { label: "Make Mobile Quests Desktop Compatible", value: "mobile-desktop-compatible", selected: makeMobileQuestsDesktopCompatible, type: "modification" },
-        { label: "Complete Game Quests in Background", value: "game-quests-background", selected: completeGameQuestsInBackground, type: "modification" },
-        { label: "Complete Video Quests in Background", value: "video-quests-background", selected: completeVideoQuestsInBackground, type: "modification" },
         { label: "Notify on Auto-Complete", value: "notify-on-complete", selected: notifyOnQuestComplete, type: "modification" },
     ];
 
@@ -735,14 +743,16 @@ function DisableQuestsSetting(): JSX.Element {
         settings.store.disableQuestsDiscoveryTab = enabledValues.includes("discovery");
         settings.store.disableQuestsFetchingQuests = enabledValues.includes("fetching");
         settings.store.disableQuestsDirectMessagesTab = enabledValues.includes("dms");
+        settings.store.disableQuestsPageSponsoredBanner = enabledValues.includes("sponsored-banner");
         settings.store.disableQuestsPopupAboveAccountPanel = enabledValues.includes("popup");
         settings.store.disableQuestsBadgeOnUserProfiles = enabledValues.includes("badge");
         settings.store.disableQuestsGiftInventoryRelocationNotice = enabledValues.includes("inventory");
         settings.store.disableFriendsListActiveNowPromotion = enabledValues.includes("friends-list");
         settings.store.disableMembersListActivelyPlayingIcon = enabledValues.includes("members-list");
         settings.store.makeMobileQuestsDesktopCompatible = enabledValues.includes("mobile-desktop-compatible");
-        settings.store.completeGameQuestsInBackground = enabledValues.includes("game-quests-background");
         settings.store.completeVideoQuestsInBackground = enabledValues.includes("video-quests-background");
+        settings.store.completeGameQuestsInBackground = enabledValues.includes("game-quests-background");
+        settings.store.completeAchievementQuestsInBackground = enabledValues.includes("achievement-quests-background");
         settings.store.notifyOnQuestComplete = enabledValues.includes("notify-on-complete");
 
         redoAutoFetch ? checkAutoFetchInterval(settings.store.fetchingQuestsInterval) : null;
@@ -800,15 +810,19 @@ function DisableQuestsSetting(): JSX.Element {
                         The <span className={q("inline-code-block")}>Complete Video Quests in Background</span> option
                         will wait for the duration of the Video Quest and mark it as completed automatically.
                         <br /><br />
-                        Similarly, the <span className={q("inline-code-block")}>Complete Play Game Quests in Background</span> option
+                        Similarly, the <span className={q("inline-code-block")}>Complete Play Game/Activity Quests in Background</span> option
                         will wait for the duration of the Game Quest and mark it as completed automatically. This option is only supported
                         on the official desktop client.
                         <br /><br />
-                        You still must start the Quests manually. The first click will start the Quests in the background.
-                        For Video Quests, subsequent clicks will open the video modal as normal. To abort the Quests, you
-                        can open the context menu on the Quest tile and select <span className={q("inline-code-block")}>Stop Auto-Complete</span>.
+                        The <span className={q("inline-code-block")}>Complete Task in Activity Quests in Background</span> option
+                        will immediately mark Task in Activity Quests as completed when started.
                         <br /><br />
-                        Using either of those options is against Discord's TOS. Use at your own risk.
+                        You still must start the Quests manually. The first click will start the Quests in the background.
+                        For Video Quests, subsequent clicks will open the video modal as normal. For Activity Quests, subsequent clicks
+                        will open the activity as normal. To abort the Quests, you can open the context menu on the Quest tile and
+                        select <span className={q("inline-code-block")}>Stop Auto-Complete</span>.
+                        <br /><br />
+                        Using any of the Auto-Complete options is against Discord's TOS. Use at your own risk.
                     </Paragraph>
                     <DynamicDropdown
                         placeholder="Select which Quest features to modify."
@@ -1622,6 +1636,12 @@ export const settings = definePluginSettings({
         default: false,
         hidden: true
     },
+    disableQuestsPageSponsoredBanner: {
+        type: OptionType.BOOLEAN,
+        description: "Disable the sponsored banner on the Quest page.",
+        default: false,
+        hidden: true
+    },
     disableQuestsPopupAboveAccountPanel: {
         type: OptionType.BOOLEAN,
         description: "Disable the Quest popup above your account panel.",
@@ -1672,9 +1692,9 @@ export const settings = definePluginSettings({
                         activeQuestIntervals.delete(questId);
                     }
                 });
-
-                rerenderQuests();
             }
+
+            rerenderQuests();
         }
     },
     completeGameQuestsInBackground: {
@@ -1691,10 +1711,29 @@ export const settings = definePluginSettings({
                         activeQuestIntervals.delete(questId);
                     }
                 });
-
-                rerenderQuests();
             }
+
+            rerenderQuests();
         },
+    },
+    completeAchievementQuestsInBackground: {
+        type: OptionType.BOOLEAN,
+        description: "Complete Achievement in Activity Quests in the background.",
+        default: false,
+        hidden: true,
+        onChange: (value: boolean) => {
+            if (!value) {
+                activeQuestIntervals.forEach((interval, questId) => {
+                    if (interval.type === "achievement") {
+                        clearTimeout(interval.progressTimeout);
+                        clearTimeout(interval.rerenderTimeout);
+                        activeQuestIntervals.delete(questId);
+                    }
+                });
+            }
+
+            rerenderQuests();
+        }
     },
     notifyOnQuestComplete: {
         type: OptionType.BOOLEAN,

@@ -12,8 +12,9 @@ import { openPluginModal } from "@components/settings/tabs";
 import { toggleEnabled } from "@equicordplugins/equicordHelper/utils";
 import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
+import { Guild } from "@vencord/discord-types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, React, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, SettingsRouter, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
+import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, NavigationRouter, openUserSettingsPanel, React, ReadStateUtils, RelationshipStore, SelectedChannelStore, SelectedGuildStore, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
 import type { FC, ReactElement, ReactNode } from "react";
 import { Settings } from "Vencord";
 
@@ -60,10 +61,6 @@ interface ChatBarCommandState {
     getters: Set<() => HTMLElement | null>;
 }
 
-
-
-
-
 export const chatBarCommandStates = new Map<string, ChatBarCommandState>();
 export const chatBarCommandStatesById = new Map<string, ChatBarCommandState>();
 const CHATBAR_DATASET_KEY = "vcCommandPaletteId";
@@ -96,6 +93,8 @@ const CUSTOM_PROVIDER_ID = "custom-commands";
 const TOOLBOX_ACTIONS_CATEGORY_ID = "plugins-actions";
 const TOOLBOX_ACTIONS_PROVIDER_ID = "plugin-toolbox-actions";
 const CHATBAR_ACTIONS_CATEGORY_ID = "chatbar-actions";
+const GUILD_CATEGORY_ID = "guilds-actions";
+const FRIENDS_CATEGORY_ID = "friends-actions";
 
 const commandTagIds = new Map<string, string[]>();
 const tagMetadata = new Map<string, { label: string; count: number; }>();
@@ -109,6 +108,8 @@ const TAG_PLUGINS = "Plugins";
 const TAG_SESSION = "Session";
 const TAG_CONTEXT = "Context";
 const TAG_CUSTOM = "Custom";
+const TAG_GUILDS = "Guilds";
+const TAG_FRIENDS = "Friends";
 
 export function normalizeTag(tag: string): string {
     return tag.trim().toLowerCase();
@@ -144,12 +145,6 @@ export function wrapChatBarChildren(children: ReactNode): ReactNode {
 
     return wrappedChildren;
 }
-
-
-
-
-
-
 
 interface ChatBarCommandBridgeProps {
     element: ReactElement;
@@ -662,6 +657,8 @@ const CATEGORY_WEIGHTS = new Map<string, number>([
     ["plugins-changes", 40],
     [TOOLBOX_ACTIONS_CATEGORY_ID, 45],
     [CHATBAR_ACTIONS_CATEGORY_ID, 45],
+    [GUILD_CATEGORY_ID, 40],
+    [FRIENDS_CATEGORY_ID, 40]
 ]);
 
 const CATEGORY_GROUP_LABELS = new Map<string | undefined, string>([
@@ -678,6 +675,8 @@ const CATEGORY_GROUP_LABELS = new Map<string | undefined, string>([
     ["plugins-changes", "Plugin Controls"],
     [TOOLBOX_ACTIONS_CATEGORY_ID, "Plugin Controls"],
     [CHATBAR_ACTIONS_CATEGORY_ID, "Plugin Controls"],
+    [GUILD_CATEGORY_ID, "Guilds"],
+    [FRIENDS_CATEGORY_ID, "Friends"]
 ]);
 
 const DEFAULT_CATEGORY_WEIGHT = 50;
@@ -695,7 +694,9 @@ const CATEGORY_DEFAULT_TAGS = new Map<string, string[]>([
     ["plugins-settings", [TAG_PLUGINS]],
     ["plugins-changes", [TAG_PLUGINS]],
     [TOOLBOX_ACTIONS_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
-    [CHATBAR_ACTIONS_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]]
+    [CHATBAR_ACTIONS_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
+    [GUILD_CATEGORY_ID, [TAG_GUILDS]],
+    [FRIENDS_CATEGORY_ID, [TAG_FRIENDS]]
 ]);
 
 const PINNED_STORAGE_KEY = "CommandPalettePinned";
@@ -1260,6 +1261,16 @@ const BUILT_IN_CATEGORIES: CommandCategory[] = [
         id: SESSION_TOOLS_CATEGORY_ID,
         label: "Session Tools",
         description: "Utilities for managing your Discord session"
+    },
+    {
+        id: GUILD_CATEGORY_ID,
+        label: "Guilds",
+        description: "Quickly navigate to your guilds"
+    },
+    {
+        id: FRIENDS_CATEGORY_ID,
+        label: "Friends",
+        description: "Quickly DM your friends"
     }
 ];
 
@@ -1270,7 +1281,7 @@ const BUILT_IN_COMMANDS: CommandEntry[] = [
         keywords: ["settings", "equicord"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_NAVIGATION, TAG_CORE],
-        handler: () => SettingsRouter.open("EquicordSettings")
+        handler: () => openUserSettingsPanel("equicord_main")
     },
     {
         id: "open-plugin-settings",
@@ -1278,7 +1289,7 @@ const BUILT_IN_COMMANDS: CommandEntry[] = [
         keywords: ["settings", "plugins"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_NAVIGATION, TAG_PLUGINS],
-        handler: () => SettingsRouter.open("EquicordPlugins")
+        handler: () => openUserSettingsPanel("equicord_plugins")
     },
     {
         id: "reload-windows",
@@ -1292,15 +1303,15 @@ const BUILT_IN_COMMANDS: CommandEntry[] = [
 ];
 
 const DISCORD_SETTINGS_COMMANDS: Array<{ id: string; label: string; route: string; keywords: string[]; description?: string; }> = [
-    { id: "settings-account", label: "Open My Account", route: "My Account", keywords: ["account", "profile"] },
-    { id: "settings-privacy", label: "Open Data & Privacy", route: "Data & Privacy", keywords: ["privacy", "safety", "data"] },
-    { id: "settings-notifications", label: "Open Notifications", route: "Notifications", keywords: ["notifications"] },
-    { id: "settings-voice", label: "Open Voice & Video", route: "Voice & Video", keywords: ["voice", "video", "audio"] },
-    { id: "settings-text", label: "Open Text & Images", route: "Text & Images", keywords: ["text", "images"] },
-    { id: "settings-appearance", label: "Open Appearance", route: "Appearance", keywords: ["appearance", "theme"] },
-    { id: "settings-accessibility", label: "Open Accessibility", route: "Accessibility", keywords: ["accessibility"] },
-    { id: "settings-keybinds", label: "Open Keybinds", route: "Keybinds", keywords: ["keybinds", "shortcuts"] },
-    { id: "settings-advanced", label: "Open Advanced", route: "Advanced", keywords: ["advanced"] }
+    { id: "settings-account", label: "Open My Account", route: "my_account", keywords: ["account", "profile"] },
+    { id: "settings-privacy", label: "Open Data & Privacy", route: "data_and_privacy", keywords: ["privacy", "safety", "data"] },
+    { id: "settings-notifications", label: "Open Notifications", route: "legacy_notifications_settings", keywords: ["notifications"] },
+    { id: "settings-voice", label: "Open Voice & Video", route: "voice_and_video", keywords: ["voice", "video", "audio"] },
+    { id: "settings-text", label: "Open Text & Images", route: "text_and_images", keywords: ["text", "images"] },
+    { id: "settings-appearance", label: "Open Appearance", route: "appearance", keywords: ["appearance", "theme"] },
+    { id: "settings-accessibility", label: "Open Accessibility", route: "accessibility", keywords: ["accessibility"] },
+    { id: "settings-keybinds", label: "Open Keybinds", route: "keybinds", keywords: ["keybinds", "shortcuts"] },
+    { id: "settings-advanced", label: "Open Advanced", route: "advanced", keywords: ["advanced"] }
 ];
 
 const settingsCommandsById = new Map<string, typeof DISCORD_SETTINGS_COMMANDS[number]>();
@@ -1686,7 +1697,7 @@ function registerUpdateCommands() {
         keywords: ["updates", "changelog"],
         categoryId: "updates",
         tags: [TAG_DEVELOPER, TAG_NAVIGATION],
-        handler: () => SettingsRouter.open("EquicordChangelog")
+        handler: () => openUserSettingsPanel("equicord_changelog")
     });
 }
 
@@ -1705,33 +1716,17 @@ function registerDiscordSettingsCommands() {
             categoryId: "discord-settings",
             tags: [TAG_NAVIGATION],
             handler: async () => {
-                const fallbackRoute = command.id === "settings-privacy" ? "Privacy & Safety" : null;
-
-                const attemptOpen = (route: string) => {
-                    const result = SettingsRouter.open(route);
-                    if (result && typeof (result as Promise<unknown>).then === "function") {
-                        return (result as Promise<unknown>).then(() => undefined);
-                    }
-                    return Promise.resolve();
-                };
+                const fallbackRoute = command.id === "settings-privacy" ? "privacy_and_safety" : null;
 
                 try {
-                    await new Promise<void>((resolve, reject) => {
-                        requestAnimationFrame(() => {
-                            attemptOpen(command.route)
-                                .catch(error => {
-                                    if (fallbackRoute) {
-                                        return attemptOpen(fallbackRoute);
-                                    }
-                                    throw error;
-                                })
-                                .then(() => resolve())
-                                .catch(reject);
-                        });
-                    });
+                    await openUserSettingsPanel(command.route);
                 } catch (error) {
-                    console.error("CommandPalette", "Failed to open Discord settings", command.route, error);
-                    showToast(`Unable to open ${command.label}.`, Toasts.Type.FAILURE);
+                    if (fallbackRoute) {
+                        await openUserSettingsPanel(fallbackRoute);
+                    } else {
+                        console.error("CommandPalette", "Failed to open Discord settings", command.route, error);
+                        showToast(`Unable to open ${command.label}.`, Toasts.Type.FAILURE);
+                    }
                 }
             }
         });
@@ -2022,7 +2017,7 @@ async function executeCustomCommand(command: CustomCommandDefinition) {
                 await runCommandById(action.commandId, new Set([command.id]));
                 break;
             case "settings":
-                SettingsRouter.open(action.route);
+                openUserSettingsPanel(action.route);
                 break;
             case "url": {
                 const external = (window as any)?.DiscordNative?.app?.openExternalURL;
@@ -2266,6 +2261,50 @@ function registerSessionCommands() {
     for (const command of commands) {
         registerCommand(command);
     }
+}
+
+function registerGuildCommands() {
+    const guilds = GuildStore.getGuilds?.() ?? {};
+
+    Object.values(guilds).forEach((guild: Guild) => {
+        registerCommand({
+            id: `open-guild-${guild.id}`,
+            label: `Navigate to ${guild.name}`,
+            keywords: ["guild", "server", guild.name.toLowerCase()],
+            categoryId: GUILD_CATEGORY_ID,
+            tags: [TAG_GUILDS, TAG_NAVIGATION],
+            handler: () => {
+                NavigationRouter.transitionToGuild(guild.id);
+            }
+        } satisfies CommandEntry);
+    });
+}
+
+function registerFriendCommands() {
+    const friendIds = RelationshipStore.getFriendIDs();
+
+    friendIds.forEach((userId: string) => {
+        const user = UserStore.getUser(userId);
+        if (!user) return;
+
+        const displayName = RelationshipStore.getNickname(userId) || user.globalName || null;
+
+        const username = displayName
+            ? `${displayName} (@${user.username})`
+            : user.username;
+
+        registerCommand({
+            id: `open-friend-${user.id}`,
+            label: `Open DM with ${username}`,
+            keywords: ["friend", "dm", username.toLowerCase()],
+            categoryId: FRIENDS_CATEGORY_ID,
+            tags: [TAG_FRIENDS, TAG_NAVIGATION],
+            handler: () => {
+                const channelId = ChannelStore.getDMFromUserId(user.id);
+                NavigationRouter.transitionTo(`/channels/@me/${channelId}`);
+            }
+        } satisfies CommandEntry);
+    });
 }
 
 function ensurePalettePlugin(): Plugin | null {
@@ -2687,7 +2726,7 @@ function registerCustomizationCommands() {
         keywords: ["theme", "library"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_CUSTOMIZATION, TAG_NAVIGATION],
-        handler: () => SettingsRouter.open("EquicordThemes")
+        handler: () => openUserSettingsPanel("equicord_themes")
     });
 }
 
@@ -2714,6 +2753,8 @@ export function registerBuiltInCommands() {
     registerContextualCommands();
     registerCustomCommandProvider();
     registerSessionCommands();
+    registerGuildCommands();
+    registerFriendCommands();
 
     void pinsReady.then(async () => {
         if (prunePinned()) {

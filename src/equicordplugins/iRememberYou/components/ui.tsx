@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
+import { Card } from "@components/Card";
 import { HeadingPrimary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
-import { openUserProfile } from "@utils/discord";
-import { Avatar, Clickable, React, TextInput, Tooltip, } from "@webpack/common";
+import { SettingsTab, wrapTab } from "@components/settings";
+import { classNameFactory } from "@utils/css";
+import { copyWithToast, openUserProfile } from "@utils/discord";
+import { Avatar, Clickable, ContextMenuApi, Menu, React, TextInput, Tooltip, UserStore } from "@webpack/common";
 
 import { Data, IStorageUser } from "./data";
 
@@ -19,14 +21,6 @@ function tooltipText(user: IStorageUser) {
     const { updatedAt } = user.extra || {};
     const updatedAtContent = updatedAt ? new Intl.DateTimeFormat().format(updatedAt) : null;
     return `${user.username ?? user.tag}, updated at ${updatedAtContent}`;
-}
-
-function SectionDescription() {
-    return (
-        <BaseText>
-            {"Provides a list of users you have mentioned or replied to, or those who own the servers you belong to (owner*), or are members of your guild"}
-        </BaseText>
-    );
 }
 
 function UsersCollectionRows({ usersCollection }: { usersCollection: Data["usersCollection"]; }) {
@@ -72,10 +66,38 @@ function UserRow({ user, allowOwner = true }: { user: IStorageUser, allowOwner?:
                             </Paragraph>
                         }
                     </Tooltip>
-                    <span className={cl("user-id")}>
-                        <Paragraph>
-                            {user.id}
-                        </Paragraph>
+                    <span
+                        className={cl("user-id")}
+                        onContextMenu={e => {
+                            e.preventDefault();
+                            const userObj = UserStore.getUser(user.id);
+                            if (userObj) {
+                                ContextMenuApi.openContextMenu(e, () => (
+                                    <Menu.Menu
+                                        navId="user-context-menu"
+                                        onClose={ContextMenuApi.closeContextMenu}
+                                        aria-label="User Options"
+                                    >
+                                        <Menu.MenuItem
+                                            id="copy-user-id"
+                                            label="Copy User ID"
+                                            action={() => copyWithToast(user.id, "User ID copied to clipboard")}
+                                        />
+                                        <Menu.MenuItem
+                                            id="view-profile"
+                                            label="View Profile"
+                                            action={() => openUserProfile(user.id)}
+                                        />
+                                    </Menu.Menu>
+                                ));
+                            }
+                        }}
+                    >
+                        <Clickable onClick={() => copyWithToast(user.id, "User ID copied to clipboard")}>
+                            <Paragraph>
+                                {user.id}
+                            </Paragraph>
+                        </Clickable>
                     </span>
                 </div>
             </div>
@@ -100,18 +122,20 @@ function SearchElement({ usersCollection }: { usersCollection: Data["usersCollec
     );
 }
 
-export function DataUI({ plugin, usersCollection }: { plugin: any; usersCollection: Data["usersCollection"]; }) {
+export function DataUI({ usersCollection }: { usersCollection: Data["usersCollection"]; }) {
     return (
-        <main className={cl("header")}>
-            <BaseText size="lg" weight="bold" tag="h1">
-                IRememberYou
-            </BaseText>
-
-            <SectionDescription />
-            <SearchElement usersCollection={usersCollection} />
+        <SettingsTab>
+            <Card>
+                <Paragraph>
+                    Provides a list of users you have mentioned or replied to, or those who own the servers you belong to (owner*), or are members of your guild
+                </Paragraph>
+                <SearchElement usersCollection={usersCollection} />
+            </Card>
             <div className={cl("rows")}>
                 <UsersCollectionRows usersCollection={usersCollection} />
             </div>
-        </main>
+        </SettingsTab>
     );
 }
+
+export default wrapTab(DataUI, "IRememberYouTab");

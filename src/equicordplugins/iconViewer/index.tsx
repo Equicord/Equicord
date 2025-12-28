@@ -1,55 +1,53 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Copyright (c) 2025 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import settings from "@plugins/_core/settings";
+import { MagnifyingGlassIcon } from "@components/Icons";
+import SettingsPlugin from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { StartAt } from "@utils/types";
-import { SettingsRouter } from "@webpack/common";
+import { openUserSettingsPanel } from "@webpack/common";
 
-import IconsTab from "./IconsTab";
-import { SettingsAbout } from "./subComponents";
-
+import IconsTab from "./components/IconsTab";
+import { SettingsAbout } from "./components/Modals";
 
 export default definePlugin({
     name: "IconViewer",
-    description: "Adds a new tab to settings, to preview all icons",
+    description: "Adds a new tab to settings to preview all icons.",
     authors: [EquicordDevs.iamme],
     dependencies: ["Settings"],
     startAt: StartAt.WebpackReady,
     toolboxActions: {
         "Open Icons Tab"() {
-            SettingsRouter.open("VencordDiscordIcons");
+            openUserSettingsPanel("equicord_icon_viewer");
         },
     },
     settingsAboutComponent: SettingsAbout,
     start() {
-        const customSettingsSections = (
-            settings as any as {
-                customSections: ((ID: Record<string, unknown>) => any)[];
-            }
-        ).customSections;
+        const { customEntries, customSections } = SettingsPlugin;
 
-        const IconViewerSection = () => ({
-            section: "VencordDiscordIcons",
-            label: "Icons",
+        customEntries.push({
+            key: "equicord_icon_viewer",
+            title: "Icon Finder",
+            Component: IconsTab,
+            Icon: MagnifyingGlassIcon
+        });
+
+        customSections.push(() => ({
+            section: "EquicordDiscordIcons",
+            label: "Icon Finder",
             element: IconsTab,
             className: "vc-discord-icons",
             id: "IconViewer"
-        });
-
-        customSettingsSections.push(IconViewerSection);
+        }));
     },
     stop() {
-        const customSettingsSections = (
-            settings as any as {
-                customSections: ((ID: Record<string, unknown>) => any)[];
-            }
-        ).customSections;
-
-        const i = customSettingsSections.findIndex(section => section({}).id === "IconViewer");
-        if (i !== -1) customSettingsSections.splice(i, 1);
+        const { customEntries, customSections } = SettingsPlugin;
+        const entryIdx = customEntries.findIndex(e => e.key === "equicord_icon_viewer");
+        const sectionIdx = customSections.findIndex(s => s({} as any).id === "IconViewer");
+        if (entryIdx !== -1) customEntries.splice(entryIdx, 1);
+        if (sectionIdx !== -1) customSections.splice(sectionIdx, 1);
     },
 });

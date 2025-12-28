@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { findGroupChildrenByChildId } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import { FormSwitch } from "@components/FormSwitch";
@@ -84,9 +83,7 @@ export default definePlugin({
                 />
             );
 
-            const group = findGroupChildrenByChildId("copy-text", children);
-            if (!group) children.push(buttonElement);
-            else group.splice(group.findIndex(c => c?.props?.id === "copy-text") + 1, 0, buttonElement);
+            children.push(buttonElement);
         }
     }
 });
@@ -170,7 +167,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
     return (
         <ModalRoot {...props} size={ModalSize.MEDIUM}>
             <ModalHeader separator={false}>
-                <BaseText color="header-primary" size="lg" weight="semibold" tag="h1" style={{ flexGrow: 1 }}>
+                <BaseText color="text-strong" size="lg" weight="semibold" tag="h1" style={{ flexGrow: 1 }}>
                     Catch Them In 4K.
                 </BaseText>
                 <ModalCloseButton onClick={props.onClose} />

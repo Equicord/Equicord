@@ -39,7 +39,6 @@ function restartPrompt(): Promise<boolean> {
     });
 }
 
-
 export async function toggleEnabled(name: string) {
     let restartNeeded = false;
     function onRestartNeeded() {
@@ -112,6 +111,7 @@ export function getWindowsName(release: string) {
 
 export function getMacOSName(release: string) {
     const major = parseInt(release.split(".")[0]);
+    if (major === 25) return "MacOS 26 (Tahoe)";
     if (major === 24) return "MacOS 15 (Sequoia)";
     if (major === 23) return "MacOS 14 (Sonoma)";
     if (major === 22) return "MacOS 13 (Ventura)";
@@ -125,6 +125,6 @@ export function platformName() {
     if (typeof DiscordNative === "undefined") return navigator.platform;
     if (DiscordNative.process.platform === "win32") return `${getWindowsName(DiscordNative.os.release)}`;
     if (DiscordNative.process.platform === "darwin") return `${getMacOSName(DiscordNative.os.release)} (${DiscordNative.process.arch === "arm64" ? "Apple Silicon" : "Intel Silicon"})`;
-    if (DiscordNative.process.platform === "linux") return `Linux (${DiscordNative.os.release})`;
+    if (DiscordNative.process.platform === "linux") return `${navigator.platform} (${DiscordNative.os.release})`;
     return DiscordNative.process.platform;
 }

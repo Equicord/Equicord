@@ -5,15 +5,12 @@
  */
 
 import { AudioPlayerInterface, createAudioPlayer } from "@api/AudioPlayer";
+import { HeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings } from "@api/Settings";
-import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { findComponentByCodeLazy } from "@webpack";
 import { React } from "@webpack/common";
-
-const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
 let boopSound: AudioPlayerInterface;
 let song: AudioPlayerInterface;
 
@@ -74,7 +71,7 @@ function buildSoggyModal(): any {
 
 function SoggyButton() {
     return (
-        <HeaderBarIcon
+        <HeaderBarButton
             className="soggy-button"
             tooltip={settings.store.tooltipText}
             icon={() => (
@@ -143,15 +140,20 @@ export default definePlugin({
     authors: [EquicordDevs.sliwka],
     settings,
     dependencies: ["AudioPlayerAPI"],
-    patches: [
-        {
-            find: ".controlButtonWrapper,",
-            replacement: {
-                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,450}mobileToolbar)/,
-                replace: "$1$self.addIconToToolBar(arguments[0]);$2"
-            }
-        }
-    ],
+
+    headerBarButton: {
+        icon: () => (
+            <img
+                alt=""
+                src={settings.store.imageLink}
+                width={24}
+                height={24}
+                draggable={false}
+                style={{ pointerEvents: "none" }}
+            />
+        ),
+        render: SoggyButton
+    },
 
     start() {
         assignBoop(settings.store.boopLink, settings.store.boopVolume * 100);
@@ -161,22 +163,5 @@ export default definePlugin({
     stop() {
         boopSound?.delete();
         song?.delete();
-    },
-
-    // taken from message logger lol
-    addIconToToolBar(e: { toolbar: React.ReactNode[] | React.ReactNode; }) {
-        if (Array.isArray(e.toolbar))
-            return e.toolbar.unshift(
-                <ErrorBoundary noop={true}>
-                    <SoggyButton />
-                </ErrorBoundary>
-            );
-
-        e.toolbar = [
-            <ErrorBoundary noop={true} key={"MessageLoggerEnhanced"} >
-                <SoggyButton />
-            </ErrorBoundary>,
-            e.toolbar,
-        ];
     },
 });

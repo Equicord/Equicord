@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { questIsIgnored, settings } from "@equicordplugins/questify/settings";
+import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import { findByPropsLazy } from "@webpack";
 import { FluxDispatcher, RestAPI, UserStore } from "@webpack/common";
@@ -16,6 +16,7 @@ export const q = classNameFactory("questify-");
 export const QuestifyLogger = new Logger("Questify");
 export const QuestsStore = findByPropsLazy("getQuest");
 export const questPath = "/quest-home";
+export const videoQuestLeeway = 24;
 export const leftClick = 0;
 export const middleClick = 1;
 export const rightClick = 2;

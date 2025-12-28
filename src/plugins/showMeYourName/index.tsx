@@ -4,19 +4,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { DataStore } from "@api/index";
 import "./style.css";
 
-import { definePluginSettings, Settings } from "@api/Settings";
+import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { DataStore } from "@api/index";
+import { isPluginEnabled } from "@api/PluginManager";
+import { definePluginSettings } from "@api/Settings";
+import { Button, ErrorBoundary, Heading, TextButton } from "@components/index";
+import mentionAvatars from "@plugins/mentionAvatars";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember, Message, User } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, GuildMemberStore, GuildStore, Menu, MessageStore, RelationshipStore, StreamerModeStore, TextInput, useEffect, UserStore, useState } from "@webpack/common";
 import { JSX } from "react";
-import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { Button, ErrorBoundary, Heading, TextButton } from "@components/index";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/index";
 
 const wrapEmojis = findByCodeLazy("lastIndex;return");
 const AccessibilityStore = findStoreLazy("AccessibilityStore");
@@ -689,7 +691,7 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; use
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
             <ModalContent>
-                <Heading tag="h3" style={{ marginBottom: 8, fontSize: "16px", fontWeight: "400", lineHeight: "1.25", color: "var(--text-secondary)" }}>
+                <Heading tag="h3" style={{ marginBottom: 8, fontSize: "16px", fontWeight: "400", lineHeight: "1.25", color: "var(--text-subtle)" }}>
                     {"Set a custom SMYN nickname for this user. Make use of it by specifying {custom} in the SMYN template settings."}
                 </Heading>
                 <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
@@ -934,7 +936,7 @@ export default definePlugin({
                 {
                     match: /(?<=onContextMenu:\i\},\i\),{children:)/,
                     replace: "showMeYourNameMention??",
-                    predicate: () => !Settings.plugins.MentionAvatars.enabled,
+                    predicate: () => !isPluginEnabled(mentionAvatars.name),
                 }
             ]
         },
@@ -967,7 +969,7 @@ export default definePlugin({
             // Tags *should* contain the guild ID nested in its structure, but on the first time
             // loading a guild member's preview profile, it will be undefined. This patch bypasses
             // that by passing the guild ID as its own prop.
-            find: ".hasAvatarForGuild(null==",
+            find: "\"UserProfilePopoutBody\"}",
             replacement: {
                 match: /(pronouns,tags:)/,
                 replace: "pronouns,guildId:arguments[0]?.guild?.id??null,tags:"
@@ -975,7 +977,7 @@ export default definePlugin({
         },
         {
             // Same as above, but for bot members.
-            find: "BotUserProfilePopoutBody\"}",
+            find: "popularApplicationCommandIds)!=null&&null",
             replacement: {
                 match: /(pronouns,tags:)/,
                 replace: "pronouns,guildId:arguments[0]?.guild?.id??null,tags:"
@@ -1016,7 +1018,7 @@ export default definePlugin({
                 },
                 {
                     // Track hovering over reaction popouts.
-                    match: /(return\(0,\i.\i\)\(\i.\i,{className:\i.reactorDefault,)(onContextMenu)/,
+                    match: /(return\(0,\i.\i\)\(\i.\i,{className:\i.reactor,)(onContextMenu)/,
                     replace: "$1onMouseEnter:()=>{$self.addHoveringReactionPopout(arguments[0].user.id)},onMouseLeave:()=>{$self.removeHoveringReactionPopout(arguments[0].user.id)},$2"
                 }
             ]

@@ -5,8 +5,8 @@
  */
 
 import { set } from "@api/DataStore";
-import { classNameFactory } from "@api/Styles";
 import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
+import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
 import { Button, ColorPicker, useState } from "@webpack/common";
@@ -21,7 +21,6 @@ export function SetColorModal({ id, modalProps }: { id: string, modalProps: Moda
 
     const [colorPickerColor, setColorPickerColor] = useState(initialColor);
     // hex color code as an int (NOT rgb 0-255)
-
 
     function setUserColor(color: number) {
         setColorPickerColor(color);

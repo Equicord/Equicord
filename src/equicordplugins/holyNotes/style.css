@@ -2,15 +2,15 @@
 /* stylelint-disable length-zero-no-unit */
 
 /*
-$modifier: var(--input-border);
+$modifier: var(--input-border-default, var(--input-border));
 */
 
 .vc-notebook-search {
     flex: auto;
     margin-right: 15px;
     margin-bottom: 6px;
-    background-color: var(--background-tertiary);
-    border: solid 2px var(--background-secondary);
+    background-color: var(--background-base-low);
+    border: solid 2px var(--background-secondary-alt);
 }
 
 .vc-notebook-header {
@@ -22,8 +22,8 @@ $modifier: var(--input-border);
     padding-top: 15px;
     padding-left: 10px;
     padding-bottom: 0px;
-    background-color: var(--background-tertiary);
-    box-shadow: 0 1px 0 0 var(--background-tertiary), 0 1px 2px 0 var(--background-tertiary) !important;
+    background-color: var(--background-base-low);
+    box-shadow: 0 1px 0 0 var(--background-base-low), 0 1px 2px 0 var(--background-base-low) !important;
 }
 
 .vc-notebook-heading {
@@ -44,7 +44,7 @@ $modifier: var(--input-border);
     cursor: pointer;
     padding-left: 0px;
     margin: 0px 14px 6px 0px;
-    color: var(--interactive-normal);
+    color: var(--interactive-icon-default);
     transition: opacity 0.2s ease-in-out;
 }
 
@@ -65,7 +65,7 @@ $modifier: var(--input-border);
     border: 0;
     height: 2px;
     margin: 12px 0px 16px 0px;
-    background-color: var(--input-border);
+    background-color: var(--input-border-default, var(--input-border));
 }
 
 .vc-holy-note [class*="buttonContainer"] {
@@ -77,8 +77,8 @@ $modifier: var(--input-border);
 }
 
 .vc-notebook-tabbar {
-    border-bottom: 1px solid var(--background-tertiary);
-    background-color: var(--background-tertiary);
+    border-bottom: 1px solid var(--background-base-low);
+    background-color: var(--background-base-low);
     white-space: nowrap;
     overflow: hidden;
     height: 36px;
@@ -115,7 +115,7 @@ $modifier: var(--input-border);
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    color: var(--interactive-normal);
+    color: var(--interactive-icon-default);
     border-bottom-width: 2px;
     border-bottom-style: solid;
     /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */

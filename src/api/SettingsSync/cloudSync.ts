@@ -6,9 +6,10 @@
 
 import { showNotification } from "@api/Notifications";
 import { PlainSettings, Settings } from "@api/Settings";
+import { localStorage } from "@utils/localStorage";
 import { Logger } from "@utils/Logger";
 import { relaunch } from "@utils/native";
-import { SettingsRouter } from "@webpack/common";
+import { openUserSettingsPanel } from "@webpack/common";
 import { deflateSync, inflateSync } from "fflate";
 
 import { deauthorizeCloud, getCloudAuth, getCloudUrl } from "./cloudSetup";
@@ -16,8 +17,14 @@ import { exportSettings, importSettings } from "./offline";
 
 const logger = new Logger("SettingsSync:Cloud", "#39b7e0");
 
+export function shouldCloudSync(direction: "push" | "pull") {
+    const localDirection = localStorage.Vencord_cloudSyncDirection;
+
+    return localDirection === direction || localDirection === "both";
+}
+
 export async function putCloudSettings(manual?: boolean) {
-    const settings = await exportSettings({ minify: true });
+    const settings = await exportSettings({ syncDataStore: false, minify: true });
 
     try {
         const res = await fetch(new URL("/v1/settings", getCloudUrl()), {
@@ -52,6 +59,8 @@ export async function putCloudSettings(manual?: boolean) {
                 noPersist: true,
             });
         }
+
+        delete localStorage.Vencord_settingsDirty;
     } catch (e: any) {
         logger.error("Failed to sync up", e);
         showNotification({
@@ -79,7 +88,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
                 title: "Cloud Settings",
                 body: "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
                 color: "var(--yellow-360)",
-                onClick: () => SettingsRouter.open("VencordCloud")
+                onClick: () => openUserSettingsPanel("equicord_cloud")
             });
             // Disable cloud sync globally
             Settings.cloud.authenticated = false;
@@ -135,7 +144,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
         const data = await res.arrayBuffer();
 
         const settings = new TextDecoder().decode(inflateSync(new Uint8Array(data)));
-        await importSettings(settings);
+        await importSettings(settings, "all", true);
 
         // sync with server timestamp instead of local one
         PlainSettings.cloud.settingsSyncVersion = written;
@@ -150,6 +159,8 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
                 onClick: IS_WEB ? () => location.reload() : relaunch,
                 noPersist: true
             });
+
+        delete localStorage.Vencord_settingsDirty;
 
         return true;
     } catch (e: any) {

@@ -1,7 +1,56 @@
-.vc-plugin-modal-info {
-    align-items: center;
+.vc-plugin-modal-header {
+    align-items: flex-start;
+    position: relative;
+    padding: 16px 16px 0 24px;
+}
+
+.vc-plugin-modal-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.vc-plugin-modal-header-trailing {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.vc-plugin-modal-title {
+    color: var(--text-strong);
+    padding-right: 32px;
 }
 
 .vc-plugin-modal-description {
-    flex-grow: 1;
+    color: var(--text-subtle);
+    padding-right: 60px;
+}
+
+.vc-plugin-modal-links {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.vc-plugin-modal-confirm [class*="footer"] {
+    flex-direction: row-reverse;
+    gap: var(--space-8, 8px);
+}
+
+.vc-plugin-modal-confirm [class*="footer"]>button {
+    flex: 1;
+    margin: 0;
+    width: 100%;
+}
+
+.vc-plugin-modal-warning {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-feedback-critical);
 }

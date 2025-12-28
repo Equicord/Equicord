@@ -5,9 +5,7 @@
  */
 
 import {
-    addMessagePreSendListener,
     MessageSendListener,
-    removeMessagePreSendListener,
 } from "@api/MessageEvents";
 import {
     definePluginSettings,
@@ -67,9 +65,7 @@ export default definePlugin({
     name: "PolishWording",
     description: "Tweaks your messages to make them look nicer and have better grammar. See settings",
     authors: [Devs.Samwich, EquicordDevs.WKoA],
-    dependencies: ["MessageEventsAPI"],
-    start: () => addMessagePreSendListener(presendObject),
-    stop: () => removeMessagePreSendListener(presendObject),
+    onBeforeMessageSend: presendObject,
     settings,
 });
 
@@ -279,8 +275,7 @@ function capitalize(textInput: string): string {
         }
     }
 
-    // We'll fix capitalization of I's
-    result = result.replace(/\bi[\b']/g, "I");
+    result = result.replace(/\bi\b(?!\s+is\b)(?=['\s]|$)/g, "I");
 
     return result;
 }

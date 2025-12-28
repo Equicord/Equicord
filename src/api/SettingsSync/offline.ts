@@ -11,6 +11,8 @@ import { moment, Toasts } from "@webpack/common";
 
 import { DataStore } from "..";
 
+type BackupType = "all" | "plugins" | "css" | "datastore";
+
 const toast = (type: string, message: string) =>
     Toasts.show({
         type,
@@ -26,7 +28,22 @@ const toastFailure = (err: any) =>
 
 const logger = new Logger("SettingsSync:Offline", "#39b7e0");
 
-export async function importSettings(data: string) {
+function isSafeObject(obj: any) {
+    if (obj == null || typeof obj !== "object") return true;
+
+    for (const key in obj) {
+        if (["__proto__", "constructor", "prototype"].includes(key)) {
+            return false;
+        }
+        if (!isSafeObject(obj[key])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+export async function importSettings(data: string, type: BackupType = "all", cloud = false) {
     try {
         var parsed = JSON.parse(data);
     } catch (err) {
@@ -34,58 +51,67 @@ export async function importSettings(data: string) {
         throw new Error("Failed to parse JSON: " + String(err));
     }
 
-    if ("settings" in parsed && "quickCss" in parsed) {
-        Object.assign(PlainSettings, parsed.settings);
-        await VencordNative.settings.set(parsed.settings);
-        await VencordNative.quickCss.set(parsed.quickCss);
-    } else
-        throw new Error("Invalid Settings. Is this even a Vencord Settings file?");
-}
-
-export async function exportSettings({ minify }: { minify?: boolean; } = {}) {
-    const settings = VencordNative.settings.get();
-    const quickCss = await VencordNative.quickCss.get();
-    const dataStore = await DataStore.entries();
-    return JSON.stringify({ settings, quickCss, dataStore }, null, minify ? undefined : 4);
-}
-
-export async function exportPlugins({ minify }: { minify?: boolean; } = {}) {
-    const { plugins } = VencordNative.settings.get();
-    return JSON.stringify({ settings: { plugins } }, null, minify ? undefined : 4);
-}
-
-export async function exportCSS({ minify }: { minify?: boolean; } = {}) {
-    const quickCss = await VencordNative.quickCss.get();
-    return JSON.stringify({ quickCss }, null, minify ? undefined : 4);
-}
-
-export async function exportDataStores({ minify }: { minify?: boolean; } = {}) {
-    const dataStore = await DataStore.entries();
-    return JSON.stringify({ dataStore }, null, minify ? undefined : 4);
-}
-
-type BackupType = "settings" | "plugins" | "css" | "datastore";
-
-export async function downloadSettingsBackup(type: BackupType, { minify }: { minify?: boolean; } = {}) {
-    let backup: string;
+    if (!isSafeObject(parsed))
+        throw new Error("Unsafe Settings");
 
     switch (type) {
-        case "settings":
-            backup = await exportSettings({ minify });
-            break;
-        case "plugins":
-            backup = await exportPlugins({ minify });
-            break;
-        case "css":
-            backup = await exportCSS({ minify });
-            break;
-        case "datastore":
-            backup = await exportDataStores({ minify });
-            break;
-        default:
-            throw new Error("Invalid backup type");
-    }
+        case "all": {
+            if (!cloud && (!("settings" in parsed)))
+                throw new Error("Invalid Settings. Plugin settings is required for this import try a different one.");
 
+            if (parsed.settings) {
+                Object.assign(PlainSettings, parsed.settings);
+                await VencordNative.settings.set(parsed.settings);
+            }
+            if (parsed.quickCss) await VencordNative.quickCss.set(parsed.quickCss);
+            if (parsed.dataStore) await DataStore.setMany(parsed.dataStore);
+            break;
+        }
+        case "plugins": {
+            if (!parsed.settings) throw new Error("Plugin settings missing");
+
+            Object.assign(PlainSettings, parsed.settings);
+            await VencordNative.settings.set(parsed.settings);
+            break;
+        }
+        case "css": {
+            if (!parsed.quickCss) throw new Error("CSS missing");
+
+            await VencordNative.quickCss.set(parsed.quickCss);
+            break;
+        }
+        case "datastore": {
+            if (!parsed.dataStore) throw new Error("DataStore data missing");
+
+            await DataStore.setMany(parsed.dataStore);
+            break;
+        }
+    }
+}
+
+export async function exportSettings({ syncDataStore = true, type = "all", minify }: { syncDataStore?: boolean; type?: BackupType; minify?: boolean; }) {
+    const settings = VencordNative.settings.get();
+    const quickCss = await VencordNative.quickCss.get();
+    const dataStore = syncDataStore ? await DataStore.entries() : undefined;
+
+    switch (type) {
+        case "all": {
+            return JSON.stringify({ settings, quickCss, ...(syncDataStore && { dataStore }) }, null, minify ? undefined : 4);
+        }
+        case "plugins": {
+            return JSON.stringify({ settings }, null, minify ? undefined : 4);
+        }
+        case "css": {
+            return JSON.stringify({ quickCss }, null, minify ? undefined : 4);
+        }
+        case "datastore": {
+            return JSON.stringify({ dataStore }, null, minify ? undefined : 4);
+        }
+    }
+}
+
+export async function downloadSettingsBackup(type: BackupType = "all", { minify }: { minify?: boolean; } = {}) {
+    const backup = await exportSettings({ minify, type });
     const filename = `equicord-${type}-backup-${moment().format("YYYY-MM-DD")}.json`;
     const data = new TextEncoder().encode(backup);
 
@@ -96,18 +122,18 @@ export async function downloadSettingsBackup(type: BackupType, { minify }: { min
     }
 }
 
-export async function uploadSettingsBackup(showToast = true): Promise<void> {
+export async function uploadSettingsBackup(type: BackupType = "all", showToast = true): Promise<void> {
     if (IS_DISCORD_DESKTOP) {
         const [file] = await DiscordNative.fileManager.openFiles({
             filters: [
-                { name: "Vencord Settings Backup", extensions: ["json"] },
+                { name: "Equicord Settings Backup", extensions: ["json"] },
                 { name: "all", extensions: ["*"] }
             ]
         });
 
         if (file) {
             try {
-                await importSettings(new TextDecoder().decode(file.data));
+                await importSettings(new TextDecoder().decode(file.data), type);
                 if (showToast) toastSuccess();
             } catch (err) {
                 logger.error(err);
@@ -121,7 +147,7 @@ export async function uploadSettingsBackup(showToast = true): Promise<void> {
         const reader = new FileReader();
         reader.onload = async () => {
             try {
-                await importSettings(reader.result as string);
+                await importSettings(reader.result as string, type);
                 if (showToast) toastSuccess();
             } catch (err) {
                 logger.error(err);

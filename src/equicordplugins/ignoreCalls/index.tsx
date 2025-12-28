@@ -8,10 +8,10 @@ import "./styles.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
 import { Button } from "@components/Button";
 import { ErrorBoundary } from "@components/index";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
@@ -64,7 +64,6 @@ const ContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { 
         </>
     );
 };
-
 
 const settings = definePluginSettings({
     permanentlyIgnoredUsers: {
@@ -139,7 +138,7 @@ export default definePlugin({
                                 });
                             }}
                         >
-                            <Deafen color={"var(--interactive-active)"} />
+                            <Deafen color={"var(--interactive-icon-active)"} />
                         </Button>
                     )}
                 </Tooltip>

@@ -44,6 +44,8 @@ export interface Settings {
     eagerPatches: boolean;
     enabledThemes: string[];
     enabledThemeLinks: string[];
+    enableOnlineThemes: boolean;
+    pinnedThemes: string[];
     themeNames: Record<string, string>;
     enableReactDevtools: boolean;
     themeLinks: string[];
@@ -110,6 +112,8 @@ const DefaultSettings: Settings = {
     eagerPatches: IS_REPORTER,
     enabledThemes: [],
     enabledThemeLinks: [],
+    enableOnlineThemes: true,
+    pinnedThemes: [],
     themeNames: {},
     enableReactDevtools: false,
     frameless: false,
@@ -247,17 +251,19 @@ export function useSettings(paths?: UseSettings<Settings>[]) {
     return SettingsStore.store;
 }
 
-export function migratePluginToSetting(newName: string, oldName: string, settingName: string) {
+export function migratePluginToSettings(newName: string, oldName: string, ...settingNames: string[]) {
     const { plugins } = SettingsStore.plain;
     const newPlugin = plugins[newName];
     const oldPlugin = plugins[oldName];
 
-    if (!newPlugin || !oldPlugin) return;
+    if (newPlugin && oldPlugin?.enabled) {
+        for (const settingName of settingNames) {
+            logger.info(`Migrating plugin to setting from old name ${oldName} to ${newName} as ${settingName}`);
+            newPlugin[settingName] = true;
+        }
 
-    if (oldPlugin?.enabled) {
-        newPlugin[settingName] = true;
-        oldPlugin.enabled = false;
-        if (!newPlugin?.enabled) newPlugin.enabled = true;
+        newPlugin.enabled = true;
+        delete plugins[oldName];
         SettingsStore.markAsChanged();
     }
 }
@@ -283,6 +289,7 @@ export function migratePluginSetting(pluginName: string, newSetting: string, old
 
     if (!Object.hasOwn(settings, oldSetting) || Object.hasOwn(settings, newSetting)) return;
 
+    logger.info(`Migrating plugin setting from ${oldSetting} to ${newSetting} on ${pluginName}`);
     settings[newSetting] = settings[oldSetting];
     delete settings[oldSetting];
     SettingsStore.markAsChanged();
@@ -296,6 +303,7 @@ export function migrateSettingFromPlugin(newPlugin: string, newSetting: string, 
 
     if (Object.hasOwn(newSettings, newSetting)) return;
 
+    logger.info(`Migrating plugin setting from ${oldSetting} on ${oldPlugin} to ${newSetting} on ${newPlugin}`);
     newSettings[newSetting] = oldSettings[oldSetting];
     delete oldSettings[oldSetting];
     SettingsStore.markAsChanged();

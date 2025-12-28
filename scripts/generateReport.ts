@@ -87,8 +87,14 @@ const IGNORED_DISCORD_ERRORS = [
 function toCodeBlock(s: string, indentation = 0, isDiscord = false) {
     s = s.replace(/```/g, "`\u200B`\u200B`");
 
-    const indentationStr = Array(!isDiscord ? indentation : 0).fill(" ").join("");
-    return `\`\`\`\n${s.split("\n").map(s => indentationStr + s).join("\n")}\n${indentationStr}\`\`\``;
+    s = s.replace(/\\x([0-9A-Fa-f]{2})/g, (_, hex) =>
+        String.fromCharCode(parseInt(hex, 16))
+    );
+
+    const indentationStr = " ".repeat(!isDiscord ? indentation : 0);
+    const content = s.split("\n").map(s => indentationStr + s).join("\n");
+
+    return `\`\`\`\n${content}\n${indentationStr}\`\`\``;
 }
 
 async function printReport() {

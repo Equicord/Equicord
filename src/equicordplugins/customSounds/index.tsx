@@ -6,12 +6,12 @@
 
 import "./styles.css";
 
-import { addAudioProcessor, AudioProcessor, PreprocessAudioData, removeAudioProcessor } from "@api/AudioPlayer";
+import { AudioProcessor, PreprocessAudioData } from "@api/AudioPlayer";
 import { get as getFromDataStore } from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
 import { Heading } from "@components/Heading";
 import { Devs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { Button, React, showToast, TextInput } from "@webpack/common";
 
@@ -394,15 +394,12 @@ export default definePlugin({
     name: "CustomSounds",
     description: "Customize Discord's sounds.",
     authors: [Devs.ScattrdBlade, Devs.TheKodeToad],
-    dependencies: ["AudioPlayerAPI"],
-
     settings,
-    getCustomSoundURL,
     startAt: StartAt.Init,
+    audioProcessor: getCustomSoundURL,
 
     async start() {
         console.log("[CustomSounds] Plugin starting...");
-        addAudioProcessor("CustomSounds", this.getCustomSoundURL);
 
         try {
             await preloadDataURIs();
@@ -413,7 +410,6 @@ export default definePlugin({
     },
 
     stop() {
-        removeAudioProcessor("CustomSounds");
         console.log("[CustomSounds] Plugin stopped");
     }
 });
