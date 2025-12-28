@@ -7,10 +7,13 @@
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { useTimer } from "@utils/react";
+import { formatDurationMs } from "@utils/text";
 import definePlugin, { OptionType } from "@utils/types";
 import { PassiveUpdateState, VoiceState } from "@vencord/discord-types";
-import { FluxDispatcher, GuildStore, UserStore } from "@webpack/common";
+import { FluxDispatcher, GuildStore, React, UserStore } from "@webpack/common";
 
+import alignedChatInputFix from "./alignedChatInputFix.css?managed";
 import { Timer } from "./Timer";
 
 export const settings = definePluginSettings({
@@ -18,7 +21,7 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Always show the timer without needing to hover",
         restartNeeded: true,
-        default: true
+        default: false
     },
     showRoleColor: {
         type: OptionType.BOOLEAN,
@@ -98,10 +101,15 @@ let myLastChannelId: string | undefined;
 let runOneTime = true;
 
 export default definePlugin({
-    name: "AllCallTimers",
-    description: "Add call timer to all users in a server voice channel.",
+    name: "CallTimer",
+    description: "Add call timers for all users in voice channels and in the connection status.",
     authors: [EquicordDevs.MaxHerbold, Devs.D3SOX],
+    managedStyle: alignedChatInputFix,
     settings,
+
+    startTime: 0,
+    interval: void 0 as NodeJS.Timeout | undefined,
+
     patches: [
         {
             find: ".usernameSpeaking]",
@@ -117,6 +125,13 @@ export default definePlugin({
                     predicate: () => settings.store.showWithoutHover,
                 }
             ]
+        },
+        {
+            find: "renderConnectionStatus(){",
+            replacement: {
+                match: /(lineClamp:1,children:)(\i)(?=,|}\))/,
+                replace: "$1[$2,$self.renderConnectionTimer(this.props.channel.id)]"
+            }
         }
     ],
 
@@ -239,4 +254,18 @@ export default definePlugin({
             </ErrorBoundary>
         );
     },
+
+    renderConnectionTimer(channelId: string) {
+        return <ErrorBoundary noop>
+            <this.ConnectionTimer channelId={channelId} />
+        </ErrorBoundary>;
+    },
+
+    ConnectionTimer({ channelId }: { channelId: string; }) {
+        const time = useTimer({
+            deps: [channelId]
+        });
+
+        return <p style={{ margin: 0, fontFamily: "var(--font-code)" }}>{formatDurationMs(time, settings.store.format === "human")}</p>;
+    }
 });
