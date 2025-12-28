@@ -195,76 +195,60 @@ export const compileStyle = (style: Style) => {
         });
 };
 
-const popoutStyleNodes = new Map<string, HTMLElement>();
+const popoutStyleRoots = new Map<string, HTMLElement>();
 
-function injectStylesIntoWindow(windowKey: string, targetWindow: Window) {
-    if (popoutStyleNodes.has(windowKey)) return;
-
-    const clonedRoot = vencordRootNode.cloneNode(true) as HTMLElement;
-    clonedRoot.id = "vencord-popout-styles";
-    targetWindow.document.documentElement.append(clonedRoot);
-    popoutStyleNodes.set(windowKey, clonedRoot);
-
-    syncPopoutStyles(windowKey);
+function createPopoutStyleRoot(): HTMLElement {
+    const root = document.createElement("vencord-root");
+    root.id = "vencord-popout-styles";
+    root.style.display = "none";
+    root.append(
+        document.createElement("vencord-styles"),
+        document.createElement("vencord-managed-styles"),
+        document.createElement("vencord-user-styles")
+    );
+    return root;
 }
 
-function syncPopoutStyles(windowKey: string) {
-    const clonedRoot = popoutStyleNodes.get(windowKey);
-    if (!clonedRoot) return;
-
-    const clonedCore = clonedRoot.querySelector("vencord-styles");
-    const clonedManaged = clonedRoot.querySelector("vencord-managed-styles");
-    const clonedUser = clonedRoot.querySelector("vencord-user-styles");
-
-    if (clonedCore) clonedCore.innerHTML = coreStyleRootNode.innerHTML;
-    if (clonedManaged) clonedManaged.innerHTML = managedStyleRootNode.innerHTML;
-    if (clonedUser) clonedUser.innerHTML = userStyleRootNode.innerHTML;
-}
-
-function removeStylesFromWindow(windowKey: string) {
-    const node = popoutStyleNodes.get(windowKey);
-    if (node) {
-        node.remove();
-        popoutStyleNodes.delete(windowKey);
+function syncAllPopouts() {
+    for (const root of popoutStyleRoots.values()) {
+        root.querySelector("vencord-styles")!.innerHTML = coreStyleRootNode.innerHTML;
+        root.querySelector("vencord-managed-styles")!.innerHTML = managedStyleRootNode.innerHTML;
+        root.querySelector("vencord-user-styles")!.innerHTML = userStyleRootNode.innerHTML;
     }
 }
 
 /**
  * Initializes style injection for popout windows.
- * Clones vencord-root into each popout and keeps styles synced via MutationObserver.
+ * Creates vencord-root in each popout and syncs styles via MutationObserver.
  * @param store PopoutWindowStore instance to listen for window changes
  */
 export function initPopoutStyleInjection(store: PopoutWindowStore) {
-    const styleObserver = new MutationObserver(() => {
-        for (const windowKey of popoutStyleNodes.keys()) {
-            syncPopoutStyles(windowKey);
-        }
-    });
-
-    styleObserver.observe(vencordRootNode, {
+    new MutationObserver(syncAllPopouts).observe(vencordRootNode, {
         childList: true,
-        subtree: true,
-        characterData: true
+        subtree: true
     });
 
-    const processWindows = () => {
-        const currentKeys = store.getWindowKeys();
+    store.addChangeListener(() => {
+        const currentKeys = new Set(store.getWindowKeys());
 
         for (const key of currentKeys) {
-            if (!popoutStyleNodes.has(key) && store.isWindowFullyInitialized(key)) {
+            if (!popoutStyleRoots.has(key) && store.isWindowFullyInitialized(key)) {
                 const win = store.getWindow(key);
-                if (win) injectStylesIntoWindow(key, win);
+                if (win) {
+                    const root = createPopoutStyleRoot();
+                    win.document.documentElement.append(root);
+                    popoutStyleRoots.set(key, root);
+                }
             }
         }
 
-        const currentKeySet = new Set(currentKeys);
-        for (const key of popoutStyleNodes.keys()) {
-            if (!currentKeySet.has(key)) {
-                removeStylesFromWindow(key);
+        for (const key of popoutStyleRoots.keys()) {
+            if (!currentKeys.has(key)) {
+                popoutStyleRoots.get(key)!.remove();
+                popoutStyleRoots.delete(key);
             }
         }
-    };
 
-    store.addChangeListener(processWindows);
-    processWindows();
+        syncAllPopouts();
+    });
 }
