@@ -1,4 +1,4 @@
-import { Channel, FluxStore } from "..";
+import { Channel, FluxStore, Guild } from "..";
 
 export interface MuteConfig {
     selected_time_window: number;
@@ -43,8 +43,8 @@ export class UserGuildSettingsStore extends FluxStore {
     get mentionOnAllMessages(): boolean;
     get useNewNotifications(): boolean;
 
-    allowAllMessages(guildId: string): boolean;
-    allowNoMessages(guildId: string): boolean;
+    allowAllMessages(channel: Channel): boolean;
+    allowNoMessages(channel: Channel): boolean;
     getAddedToMessages(): string[];
     // TODO: finish typing
     getAllSettings(): { userGuildSettings: Record<string, GuildSettings>; };
@@ -61,7 +61,7 @@ export class UserGuildSettingsStore extends FluxStore {
     getMessageNotifications(guildId: string): number;
     getMuteConfig(guildId: string): MuteConfig | null;
     getMutedChannels(guildId: string): string[];
-    getNewForumThreadsCreated(guildId: string): boolean;
+    getNewForumThreadsCreated(channel: Channel): boolean;
     getNotifyHighlights(guildId: string): number;
     getOptedInChannels(guildId: string): string[];
     // TODO: finish typing these
@@ -85,7 +85,7 @@ export class UserGuildSettingsStore extends FluxStore {
     isSuppressEveryoneEnabled(guildId: string): boolean;
     isSuppressRolesEnabled(guildId: string): boolean;
     isTemporarilyMuted(guildId: string): boolean;
-    resolveGuildUnreadSetting(guildId: string): number;
+    resolveGuildUnreadSetting(guild: Guild): number;
     resolveUnreadSetting(channel: Channel): number;
-    resolvedMessageNotifications(guildId: string): number;
+    resolvedMessageNotifications(channel: Channel): number;
 }
