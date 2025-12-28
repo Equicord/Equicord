@@ -104,6 +104,9 @@ let ghostRaf: number | null = null;
 let ghostPendingPos: { x: number; y: number; } | null = null;
 let ghostHideTimer: number | null = null;
 let lastHandledDrop: { at: number; key: string; } = { at: 0, key: "" };
+let lastDragEventAt = 0;
+let guildGhostCleanupTimer: number | null = null;
+let dragifyActive = false;
 
 type GhostState = {
     visible: boolean;
@@ -282,7 +285,7 @@ export default definePlugin({
             find: "editor:eR,channelId:k.id,guildId:k.guild_id",
             replacement: {
                 match: /className:\i\(\)\(\i,\i\.slateContainer\),/,
-                replace: "$&onDragOver:e=>$self.onDragOver(e),onDrop:e=>$self.onDrop(e),"
+                replace: "$&onDragOver:e=>$self.onDragOver(e),"
             }
         },
         // Chat input text area (drop handlers for contenteditable)
@@ -290,7 +293,14 @@ export default definePlugin({
             find: "editor:eR,channelId:k.id,guildId:k.guild_id",
             replacement: {
                 match: /className:\i\(\)\(\i\.slateTextArea,\i\),/,
-                replace: "$&onDragOver:e=>$self.onDragOver(e),onDrop:e=>$self.onDrop(e),"
+                replace: "$&onDragOver:e=>$self.onDragOver(e),"
+            }
+        },
+        {
+            find: "editor:eR,channelId:k.id,guildId:k.guild_id",
+            replacement: {
+                match: /onKeyDown:(\i),/,
+                replace: "onKeyDown:e=>{if($self.onEditorKeyDown(e))return;$1(e)},"
             }
         },
         // Voice user rows (voice channel sidebar)
@@ -417,7 +427,7 @@ export default definePlugin({
             find: "[aria-owns=folder-items-",
             replacement: {
                 match: /"data-dnd-name":(\i)\.name,"data-drop-hovering":(\i),children:\(0,(\i)\.jsx\)\((\i)\.LYs/,
-                replace: "\"data-dnd-name\":$1.name,draggable:!0,onMouseDown:e=>$self.rememberGuildId($1.id),onDragStart:e=>$self.onGuildDragStart(e,$1.id),\"data-drop-hovering\":$2,children:(0,$3.jsx)($4.LYs"
+                replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:e=>$self.onGuildDragStart(e,$1.id),\"data-drop-hovering\":$2,children:(0,$3.jsx)($4.LYs"
             }
         },
         // Chat avatars (popout)
@@ -448,7 +458,8 @@ export default definePlugin({
         if (!dataTransfer || dataTransfer.files?.length) return;
 
         const dragifyData = dataTransfer.getData("application/dragify");
-        if (dragifyData || activeUserDragId) {
+        const hasActiveEntity = Boolean(activeDragEntity || activeUserDragId || activeGuildDragId);
+        if (dragifyData || hasActiveEntity) {
             lastDropAt = Date.now();
             event.preventDefault();
             event.stopPropagation();
@@ -505,7 +516,13 @@ export default definePlugin({
     async handleDropEntity(entity: DropEntity, channel: Channel, payloads: string[] | string) {
         try {
             const text = await this.buildText(entity, channel);
-            if (!text) return;
+            if (!text) {
+                if (entity.kind === "guild") activeGuildDragId = null;
+                if (entity.kind === "user") activeUserDragId = null;
+                activeDragEntity = null;
+                dragifyActive = false;
+                return;
+            }
             if (entity.kind === "user") {
                 this.insertText(channel.id, text, { removeUnknownUser: true });
             } else {
@@ -514,6 +531,7 @@ export default definePlugin({
             if (entity.kind === "guild") activeGuildDragId = null;
             if (entity.kind === "user") activeUserDragId = null;
             activeDragEntity = null;
+            dragifyActive = false;
         } catch (error) {
             logger.error("Failed handling drop", error);
             showToast("Dragify failed to handle drop.", Toasts.Type.FAILURE);
@@ -640,7 +658,7 @@ export default definePlugin({
             case "channel":
                 return this.formatChannel(entity.id, entity.guildId);
             case "guild":
-                return (await this.createInvite(entity.id, currentChannel)) ?? entity.id;
+                return await this.createInvite(entity.id, currentChannel);
             default:
                 return null;
         }
@@ -888,15 +906,15 @@ export default definePlugin({
         this.showGhost({ kind: "channel", id: channelId, guildId }, event);
         const payload = JSON.stringify({ kind: "channel", id: channelId, guildId });
         activeDragEntity = { kind: "channel", id: channelId, guildId };
-        const text = this.formatChannel(channelId, guildId) ?? channelId;
-        const isMention = settings.store.channelOutput === "mention";
-        if (isMention && event.dataTransfer?.clearData) {
+        dragifyActive = true;
+        if (event.dataTransfer?.clearData) {
+            event.dataTransfer.clearData("text/plain");
             event.dataTransfer.clearData("text/uri-list");
             event.dataTransfer.clearData("text/html");
         }
-        event.dataTransfer?.setData("text/plain", text);
         event.dataTransfer?.setData("application/json", payload);
         event.dataTransfer?.setData("application/dragify", payload);
+        event.dataTransfer?.setData("text/plain", "");
     },
 
     onUserDragStart(event: DragEvent, user?: { id: string; }) {
@@ -939,12 +957,17 @@ export default definePlugin({
         event.stopPropagation();
         activeUserDragId = userId;
         activeDragEntity = { kind: "user", id: userId };
+        dragifyActive = true;
         this.showGhost({ kind: "user", id: userId }, event);
-        const text = settings.store.userOutput === "id" ? userId : `<@${userId}>`;
-        event.dataTransfer?.setData("text/plain", text);
+        if (event.dataTransfer?.clearData) {
+            event.dataTransfer.clearData("text/plain");
+            event.dataTransfer.clearData("text/uri-list");
+            event.dataTransfer.clearData("text/html");
+        }
         event.dataTransfer?.setData("data-user-id", userId);
         event.dataTransfer?.setData("application/json", payload);
         event.dataTransfer?.setData("application/dragify", payload);
+        event.dataTransfer?.setData("text/plain", "");
     },
 
     onDmDragStart(event: DragEvent, channel?: Channel | null) {
@@ -972,13 +995,15 @@ export default definePlugin({
         if (event.dataTransfer) event.dataTransfer.effectAllowed = "copyMove";
         activeGuildDragId = guildId;
         activeDragEntity = { kind: "guild", id: guildId };
+        dragifyActive = true;
+        if (event.dataTransfer?.clearData) {
+            event.dataTransfer.clearData("text/plain");
+            event.dataTransfer.clearData("text/uri-list");
+            event.dataTransfer.clearData("text/html");
+        }
         event.dataTransfer?.setData("application/json", payload);
         event.dataTransfer?.setData("application/dragify", payload);
-        event.dataTransfer?.setData("text/plain", guildId);
-    },
-
-    rememberGuildId(guildId: string) {
-        activeGuildDragId = guildId;
+        event.dataTransfer?.setData("text/plain", "");
     },
 
     start() {
@@ -1004,6 +1029,10 @@ export default definePlugin({
         activeUserDragId = null;
         activeGuildDragId = null;
         activeDragEntity = null;
+        if (guildGhostCleanupTimer !== null) {
+            clearTimeout(guildGhostCleanupTimer);
+            guildGhostCleanupTimer = null;
+        }
         this.unmountGhost();
         pluginInstance = null;
     },
@@ -1013,7 +1042,8 @@ export default definePlugin({
         if (!inst) return;
         if (!inst.isMessageInputEvent(event)) return;
         const hasActiveGuildDrag = activeGuildDragId !== null;
-        const shouldHandle = hasActiveGuildDrag || inst.shouldHandle(event.dataTransfer);
+        const hasActiveEntity = Boolean(activeDragEntity || activeUserDragId);
+        const shouldHandle = hasActiveGuildDrag || hasActiveEntity || dragifyActive || inst.shouldHandle(event.dataTransfer);
         if (!shouldHandle) return;
         event.preventDefault();
         event.stopPropagation();
@@ -1109,7 +1139,10 @@ export default definePlugin({
             activeGuildDragId = guildId;
             event.dataTransfer.setData("application/json", JSON.stringify({ kind: "guild", id: guildId }));
             event.dataTransfer.setData("application/dragify", JSON.stringify({ kind: "guild", id: guildId }));
-            event.dataTransfer.setData("text/plain", guildId);
+            event.dataTransfer.clearData("text/plain");
+            event.dataTransfer.clearData("text/uri-list");
+            event.dataTransfer.clearData("text/html");
+            event.dataTransfer.setData("text/plain", "");
             inst.showGhost({ kind: "guild", id: guildId }, event);
         }
     },
@@ -1120,12 +1153,25 @@ export default definePlugin({
             activeUserDragId = null;
             activeGuildDragId = null;
             activeDragEntity = null;
+            dragifyActive = false;
             hideGhost();
         }, 0);
     },
     globalDragMove: (event: DragEvent | MouseEvent) => {
         if (!ghostState.visible) return;
         if (typeof event.clientX !== "number" || typeof event.clientY !== "number") return;
+        if (event instanceof DragEvent) {
+            lastDragEventAt = Date.now();
+            if (activeGuildDragId !== null || activeDragEntity?.kind === "guild") {
+                if (guildGhostCleanupTimer !== null) clearTimeout(guildGhostCleanupTimer);
+                guildGhostCleanupTimer = window.setTimeout(() => {
+                    if (Date.now() - lastDragEventAt < 200) return;
+                    activeGuildDragId = null;
+                    if (activeDragEntity?.kind === "guild") activeDragEntity = null;
+                    hideGhost();
+                }, 300);
+            }
+        }
         scheduleGhostPosition(event.clientX + 16, event.clientY + 20);
     },
     isMessageInputEvent(event: DragEvent): boolean {
@@ -1150,6 +1196,44 @@ export default definePlugin({
         }
 
         return false;
+    },
+
+    resolveElementFromNode(node: Node | null): Element | null {
+        if (!node) return null;
+        if (node instanceof Element) return node;
+        return (node as ChildNode).parentElement ?? null;
+    },
+
+    applySelectAll(editor: HTMLElement): boolean {
+        editor.focus?.();
+        let handled = false;
+        try {
+            handled = Boolean(document.execCommand?.("selectAll"));
+        } catch {
+            handled = false;
+        }
+        if (!handled) {
+            const selection = document.getSelection?.();
+            if (!selection) return false;
+            const range = document.createRange();
+            range.selectNodeContents(editor);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            handled = true;
+        }
+        return handled;
+    },
+
+    onEditorKeyDown(event: KeyboardEvent): boolean {
+        if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "a") return false;
+        const target = this.resolveElementFromNode(event.currentTarget as Node | null);
+        const editor = (target as HTMLElement | null)?.closest?.("[data-slate-editor],[role=\"textbox\"],[contenteditable=\"true\"]") as HTMLElement | null;
+        if (!editor) return false;
+        if (!this.applySelectAll(editor)) return false;
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation?.();
+        return true;
     },
 
     isMessageInputElement(el: Element | null): boolean {
