@@ -20,7 +20,7 @@ import { Settings, SettingsStore } from "@api/Settings";
 import { createAndAppendStyle } from "@utils/css";
 import { ThemeStore } from "@vencord/discord-types";
 
-import { userStyleRootNode } from "./Styles";
+import { updatePopoutWindows, userStyleRootNode } from "./Styles";
 
 let style: HTMLStyleElement;
 let themesStyle: HTMLStyleElement;
@@ -33,11 +33,13 @@ async function toggle(isEnabled: boolean) {
                 style.textContent = css;
                 // At the time of writing this, changing textContent resets the disabled state
                 style.disabled = !Settings.useQuickCss;
+                updatePopoutWindows();
             });
             style.textContent = await VencordNative.quickCss.get();
         }
     } else
         style.disabled = !isEnabled;
+    updatePopoutWindows();
 }
 
 async function initThemes() {
@@ -76,6 +78,7 @@ async function initThemes() {
     }
 
     themesStyle.textContent = links.map(link => `@import url("${link.trim()}");`).join("\n");
+    updatePopoutWindows();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -195,60 +195,52 @@ export const compileStyle = (style: Style) => {
         });
 };
 
-const popoutStyleRoots = new Map<string, HTMLElement>();
+let popoutWindowStore: PopoutWindowStore | null = null;
+const appliedPopouts = new Set<string>();
 
-function createPopoutStyleRoot(): HTMLElement {
-    const root = document.createElement("vencord-root");
-    root.id = "vencord-popout-styles";
-    root.style.display = "none";
-    root.append(
-        document.createElement("vencord-styles"),
-        document.createElement("vencord-managed-styles"),
-        document.createElement("vencord-user-styles")
-    );
-    return root;
+function applyStylesToPopout(popoutWindow: Window) {
+    popoutWindow.document.querySelectorAll("vencord-root").forEach(e => e.remove());
+    popoutWindow.document.documentElement.append(vencordRootNode.cloneNode(true));
 }
 
-function syncAllPopouts() {
-    for (const root of popoutStyleRoots.values()) {
-        root.querySelector("vencord-styles")!.innerHTML = coreStyleRootNode.innerHTML;
-        root.querySelector("vencord-managed-styles")!.innerHTML = managedStyleRootNode.innerHTML;
-        root.querySelector("vencord-user-styles")!.innerHTML = userStyleRootNode.innerHTML;
+/**
+ * Updates all open popout windows with current styles.
+ * Call this when styles change (themes, quickcss, plugin styles).
+ */
+export function updatePopoutWindows() {
+    if (!popoutWindowStore) return;
+
+    for (const key of popoutWindowStore.getWindowKeys()) {
+        const win = popoutWindowStore.getWindow(key);
+        if (win) applyStylesToPopout(win);
     }
 }
 
 /**
  * Initializes style injection for popout windows.
- * Creates vencord-root in each popout and syncs styles via MutationObserver.
- * @param store PopoutWindowStore instance to listen for window changes
+ * Listens for store changes to detect new popouts and apply styles.
+ * @param store PopoutWindowStore instance
  */
 export function initPopoutStyleInjection(store: PopoutWindowStore) {
-    new MutationObserver(syncAllPopouts).observe(vencordRootNode, {
-        childList: true,
-        subtree: true
-    });
+    popoutWindowStore = store;
 
     store.addChangeListener(() => {
-        const currentKeys = new Set(store.getWindowKeys());
+        const currentKeys = store.getWindowKeys();
 
         for (const key of currentKeys) {
-            if (!popoutStyleRoots.has(key) && store.isWindowFullyInitialized(key)) {
+            if (!appliedPopouts.has(key) && store.isWindowFullyInitialized(key)) {
                 const win = store.getWindow(key);
                 if (win) {
-                    const root = createPopoutStyleRoot();
-                    win.document.documentElement.append(root);
-                    popoutStyleRoots.set(key, root);
+                    applyStylesToPopout(win);
+                    appliedPopouts.add(key);
                 }
             }
         }
 
-        for (const key of popoutStyleRoots.keys()) {
-            if (!currentKeys.has(key)) {
-                popoutStyleRoots.get(key)!.remove();
-                popoutStyleRoots.delete(key);
+        for (const key of appliedPopouts) {
+            if (!currentKeys.includes(key)) {
+                appliedPopouts.delete(key);
             }
         }
-
-        syncAllPopouts();
     });
 }
