@@ -11,6 +11,7 @@ import { addServerListElement, removeServerListElement, ServerListRenderPosition
 import { migratePluginToSettings } from "@api/Settings";
 import { ErrorBoundary, openPluginModal } from "@components/index";
 import { EquicordDevs } from "@utils/constants";
+import { copyToClipboard } from "@utils/index";
 import definePlugin, { PluginNative, StartAt } from "@utils/types";
 import { onceReady } from "@webpack";
 import { ContextMenuApi, Menu, NavigationRouter, RestAPI, useEffect, useState } from "@webpack/common";
@@ -283,6 +284,11 @@ function QuestTileContextMenu(children: React.ReactNode[], props: { quest: any; 
                     }}
                 />
             }
+            <Menu.MenuItem
+                id={q("copy-quest-id")}
+                label="Copy Quest ID"
+                action={() => { copyToClipboard(props.quest.id); }}
+            />
         </Menu.MenuGroup>
     ));
 }
@@ -576,6 +582,11 @@ async function startVideoProgressTracking(quest: Quest, questTarget: number): Pr
     activeQuestIntervals.set(quest.id, { progressTimeout: null as any, rerenderTimeout: null as any, progress: initialProgress, type: "watch" });
     // Max up to ~25 seconds into the future can be reported.
     const questTargetWithLeeway = questTarget - videoQuestLeeway;
+    let currentProgress = initialProgress;
+    let currentProgressScaled = initialProgress;
+    const timeRemaining = Math.max(0, questTargetWithLeeway - currentProgressScaled);
+
+    QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} will be completed in the background in ${timeRemaining} seconds.`);
 
     if (!questEnrolledAt) {
         const enrollmentTimeout = 60000;
@@ -595,15 +606,12 @@ async function startVideoProgressTracking(quest: Quest, questTarget: number): Pr
 
     const reportEverySec = 10;
     let progressIntervalId: NodeJS.Timeout;
-    let currentProgress = initialProgress;
-    let currentProgressScaled = initialProgress;
-    const timeRemaining = Math.max(0, questTargetWithLeeway - currentProgressScaled);
 
     async function handleSendComplete() {
         clearInterval(progressIntervalId);
         clearTimeout(renderIntervalId);
-        activeQuestIntervals.delete(quest.id);
         const success = await reportVideoQuestProgress(quest, questTarget, QuestifyLogger);
+        activeQuestIntervals.delete(quest.id);
 
         if (success) {
             QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
@@ -675,10 +683,6 @@ async function startVideoProgressTracking(quest: Quest, questTarget: number): Pr
         intervalData.progressTimeout = progressIntervalId;
         intervalData.rerenderTimeout = renderIntervalId;
     }
-
-    if (timeRemaining > 0) {
-        QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} will be completed in the background in ${timeRemaining} seconds.`);
-    }
 }
 
 async function startPlayGameProgressTracking(quest: Quest, questTarget: number): Promise<void> {
@@ -689,6 +693,8 @@ async function startPlayGameProgressTracking(quest: Quest, questTarget: number):
     const remaining = Math.max(0, questTarget - initialProgress);
     const heartbeatInterval = 20; // Heartbeats must be at most 2 minutes apart.
     activeQuestIntervals.set(quest.id, { progressTimeout: null as any, rerenderTimeout: null as any, progress: initialProgress, type: "play" });
+
+    QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} will be completed in the background in ${remaining} seconds.`);
 
     if (!questEnrolledAt) {
         const enrollmentTimeout = 60000;
@@ -726,8 +732,8 @@ async function startPlayGameProgressTracking(quest: Quest, questTarget: number):
         if (isComplete) {
             clearInterval(progressIntervalId);
             clearTimeout(renderIntervalId);
-            activeQuestIntervals.delete(quest.id);
             const success = await reportPlayGameQuestProgress(quest, true, QuestifyLogger, { attempts: 3, delay: 2500 });
+            activeQuestIntervals.delete(quest.id);
 
             if (success) {
                 QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
@@ -748,8 +754,8 @@ async function startPlayGameProgressTracking(quest: Quest, questTarget: number):
             clearTimeout(renderIntervalId);
 
             setTimeout(async () => {
-                activeQuestIntervals.delete(quest.id);
                 const success = await reportPlayGameQuestProgress(quest, true, QuestifyLogger, { attempts: 3, delay: 2500 });
+                activeQuestIntervals.delete(quest.id);
 
                 if (success) {
                     QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
@@ -788,10 +794,6 @@ async function startPlayGameProgressTracking(quest: Quest, questTarget: number):
         intervalData.progressTimeout = progressIntervalId;
         intervalData.rerenderTimeout = renderIntervalId;
     }
-
-    if (remaining > 0) {
-        QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} will be completed in the background in ${remaining} seconds.`);
-    }
 }
 
 async function startAchievementActivityProgressTracking(quest: Quest, questTarget: number): Promise<void> {
@@ -799,6 +801,8 @@ async function startAchievementActivityProgressTracking(quest: Quest, questTarge
     const questEnrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
     const achievementType = quest.config.taskConfigV2?.tasks.ACHIEVEMENT_IN_ACTIVITY;
     activeQuestIntervals.set(quest.id, { progressTimeout: null as any, rerenderTimeout: null as any, progress: 0, type: "achievement" });
+
+    QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} will be completed in the background.`);
 
     if (!questEnrolledAt) {
         const enrollmentTimeout = 60000;
@@ -850,11 +854,11 @@ async function startAchievementActivityProgressTracking(quest: Quest, questTarge
     }
 
     const result = await QuestifyNative.complete(appID, authCode!, questTarget);
+    activeQuestIntervals.delete(quest.id);
 
     if (!result.success) {
         const errorReason = result.error || "An error occurred while completing the Quest.";
         QuestifyLogger.error(`[${getFormattedNow()}] Failed to complete Quest ${questName}:`, errorReason);
-        activeQuestIntervals.delete(quest.id);
         return;
     } else {
         QuestifyLogger.info(`[${getFormattedNow()}] Quest ${questName} completed.`);
@@ -929,7 +933,7 @@ function getQuestUnacceptedButtonText(quest: Quest): string | null {
     const targetFormatted = `${String(Math.floor(target / 60)).padStart(2, "0")}:${String(target % 60).padStart(2, "0")}`;
 
     if (target > 0) {
-        if ((playType && completeGameQuestsInBackground) || (watchType && completeVideoQuestsInBackground)) {
+        if ((playType && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (watchType && completeVideoQuestsInBackground)) {
             return `Complete (${targetFormatted})`;
         } else if (achievementType && completeAchievementQuestsInBackground) {
             return "Complete (Immediate)";
@@ -948,7 +952,7 @@ function getQuestAcceptedButtonText(quest: Quest): string | null {
     const intervalData = activeQuestIntervals.get(quest.id);
 
     if (questEnrolledAt) {
-        if (((playType && completeGameQuestsInBackground) || (watchType && completeVideoQuestsInBackground))) {
+        if (((playType && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (watchType && completeVideoQuestsInBackground))) {
             const taskType = playType || watchType;
             const duration = taskType?.target || 0;
             const durationWithLeeway = watchType ? duration - videoQuestLeeway : duration;
@@ -959,7 +963,7 @@ function getQuestAcceptedButtonText(quest: Quest): string | null {
 
             if (!!intervalData) {
                 return !canCompleteImmediately && timeRemaining ? `Completing (${progressFormatted})` : "Completing...";
-            } else if (watchType || (playType && IS_DISCORD_DESKTOP)) {
+            } else if (watchType || playType) {
                 return canCompleteImmediately ? "Complete (Immediate)" : timeRemaining === durationWithLeeway ? `Complete (${progressFormatted})` : `Resume (${progressFormatted})`;
             }
         } else if (achievementType && completeAchievementQuestsInBackground) {
