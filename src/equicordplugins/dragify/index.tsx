@@ -81,6 +81,11 @@ const settings = definePluginSettings({
         default: false,
         description: "Reuse existing invite instead of creating a new one.",
     },
+    allowChatBodyDrop: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Allow dropping into the main chat body to insert text.",
+    },
 });
 
 const DraftActions = findByPropsLazy("saveDraft", "changeDraft") as DraftActions;
@@ -1177,10 +1182,13 @@ export default definePlugin({
     isMessageInputEvent(event: DragEvent): boolean {
         const target = event.target as Element | null;
         if (this.isMessageInputElement(target)) return true;
+        if (settings.store.allowChatBodyDrop && this.isChatBodyElement(target)) return true;
 
         const path = event.composedPath?.() ?? [];
         for (const entry of path) {
-            if (this.isMessageInputElement(entry as Element | null)) return true;
+            const el = entry as Element | null;
+            if (this.isMessageInputElement(el)) return true;
+            if (settings.store.allowChatBodyDrop && this.isChatBodyElement(el)) return true;
         }
 
         if (typeof document !== "undefined" && typeof event.clientX === "number" && typeof event.clientY === "number") {
@@ -1188,10 +1196,12 @@ export default definePlugin({
             if (elements && elements.length) {
                 for (const el of elements) {
                     if (this.isMessageInputElement(el)) return true;
+                    if (settings.store.allowChatBodyDrop && this.isChatBodyElement(el)) return true;
                 }
             } else {
                 const atPoint = document.elementFromPoint(event.clientX, event.clientY);
                 if (this.isMessageInputElement(atPoint)) return true;
+                if (settings.store.allowChatBodyDrop && this.isChatBodyElement(atPoint)) return true;
             }
         }
 
@@ -1239,6 +1249,12 @@ export default definePlugin({
     isMessageInputElement(el: Element | null): boolean {
         if (!el) return false;
         const selector = "[data-slate-editor],[role=\"textbox\"],[contenteditable=\"true\"],[aria-label^=\"Message \"]";
+        return Boolean((el as HTMLElement).closest?.(selector));
+    },
+
+    isChatBodyElement(el: Element | null): boolean {
+        if (!el) return false;
+        const selector = "[role=\"log\"],[data-list-id^=\"chat-messages\"]";
         return Boolean((el as HTMLElement).closest?.(selector));
     },
 
