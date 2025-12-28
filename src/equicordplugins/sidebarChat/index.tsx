@@ -275,7 +275,7 @@ const Header = ({ guild, channel }: { guild: Guild; channel: Channel; }) => {
     }, [recipientId, channel.name]);
 
     const parentChannel = useStateFromStores(
-        [ChannelStore], () => channel?.parent_id ? ChannelStore.getChannel(channel.parent_id) : null,
+        [ChannelStore], () => ChannelStore.getChannel(channel?.parent_id),
         [channel?.parent_id]
     );
 

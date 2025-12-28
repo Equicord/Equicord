@@ -112,8 +112,8 @@ export class Channel extends DiscordRecord {
     defaultThreadRateLimitPerUser?: number | undefined;
     /** Internal, use flags getter. */
     flags_: number;
-    /** Guild ID, null for DMs. */
-    guild_id: string | null;
+    /** Guild ID, empty string for DMs. */
+    guild_id: string;
     /** Icon hash for group DMs. */
     icon: string | undefined;
     /** Icon emoji for channels that support it. */
@@ -153,8 +153,8 @@ export class Channel extends DiscordRecord {
     nsfw_: boolean;
     /** Owner ID for group DMs and threads. */
     ownerId: string | undefined;
-    /** Parent category ID. Guild channels only. */
-    parent_id: string | undefined;
+    /** Parent category ID. */
+    parent_id: string;
     /** Internal, use permissionOverwrites getter. Guild channels only. */
     permissionOverwrites_: Record<string, PermissionOverwrite>;
     /** Internal, use position getter. Guild channels only. */
