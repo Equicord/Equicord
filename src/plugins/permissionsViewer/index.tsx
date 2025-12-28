@@ -96,7 +96,7 @@ function MenuItem(guildId: string, id?: string, type?: MenuItemParentType) {
                         const channel = ChannelStore.getChannel(id!);
 
                         const permissions = sortPermissionOverwrites(Object.values(channel.permissionOverwrites).map(({ id, allow, deny, type }) => ({
-                            type: type as PermissionType,
+                            type: type as number as PermissionType,
                             id,
                             overwriteAllow: allow,
                             overwriteDeny: deny
