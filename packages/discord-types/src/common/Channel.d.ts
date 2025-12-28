@@ -1,11 +1,11 @@
-import { ChannelType } from "../../enums";
+import { ChannelFlags, ChannelType, ForumLayout, PermissionOverwriteType, UserFlags, VideoQualityMode } from "../../enums";
 import { DiscordRecord } from "./Record";
 
 /** Permission overwrite for a role or member. */
 export interface PermissionOverwrite {
     id: string;
     /** 0 = role, 1 = member. */
-    type: number;
+    type: PermissionOverwriteType;
     deny: bigint;
     allow: bigint;
 }
@@ -59,7 +59,7 @@ export interface RawRecipient {
     display_name_styles: DisplayNameStyles | null;
     global_name: string | null;
     primary_guild: ClanData | null;
-    public_flags: number;
+    public_flags: UserFlags;
     username: string;
 }
 
@@ -81,24 +81,38 @@ export interface ChannelIconEmoji {
 
 /** Thread member info, present when user has joined a thread. */
 export interface ThreadMember {
-    /** Thread member ID (same as thread ID). */
     id: string;
-    /** User ID of the member. */
     userId: string;
-    /** Thread member flags. */
     flags: number;
-    /** ISO timestamp when the user joined the thread. */
     joinTimestamp: string;
-    /** Whether the thread is muted. */
     muted: boolean;
-    /** Mute configuration, null if not muted. */
     muteConfig: {
-        /** ISO timestamp when the mute expires, null for indefinite. */
         end_time: string | null;
-        /** Time window selected for muting. */
         selected_time_window: number;
     } | null;
 }
+
+/** Available tag for forum/media channels. */
+export interface ForumTag {
+    id: string;
+    name: string;
+    emojiId: string | undefined;
+    emojiName: string | null;
+    moderated: boolean;
+    color: number;
+}
+
+/** Default reaction emoji for forum/media channels. */
+export interface DefaultReactionEmoji {
+    emojiId: string | null;
+    emojiName: string;
+}
+
+/** Sort order for forum/media channels. */
+export type ForumSortOrder = 0 | 1;
+
+/** Tag setting for forum/media channels. */
+export type ForumTagSetting = "match_all" | "match_some";
 
 /** Discord channel object. */
 export class Channel extends DiscordRecord {
@@ -106,14 +120,34 @@ export class Channel extends DiscordRecord {
 
     /** Application ID for bot-created channels. */
     application_id: string | undefined;
+    /** Applied tag IDs. Threads in forum/media channels only. */
+    appliedTags: string[] | undefined;
+    /** Available tags for forum/media channels. */
+    availableTags: ForumTag[] | undefined;
+    /** Internal, use bitrate getter. Voice channels only. */
+    bitrate_: number | undefined;
+    /** Whether blocked user warning was dismissed. */
+    blockedUserWarningDismissed: boolean | undefined;
     /** Default auto-archive duration for threads in minutes. Guild text channels only. */
     defaultAutoArchiveDuration: number | undefined;
+    /** Default layout for forum/media channels. */
+    defaultForumLayout: ForumLayout | undefined;
+    /** Default reaction emoji for forum/media channels. */
+    defaultReactionEmoji: DefaultReactionEmoji | undefined;
+    /** Default sort order for forum/media channels. */
+    defaultSortOrder: ForumSortOrder | undefined;
+    /** Default tag setting for forum/media channels. */
+    defaultTagSetting: ForumTagSetting | undefined;
     /** Default slowmode for new threads. Guild text channels only. */
-    defaultThreadRateLimitPerUser?: number | undefined;
+    defaultThreadRateLimitPerUser: number | undefined;
     /** Internal, use flags getter. */
-    flags_: number;
-    /** Guild ID, empty string for DMs. */
+    flags_: ChannelFlags;
+    /** Guild ID. */
     guild_id: string;
+    /** User ID who purchased HD streaming. */
+    hdStreamingBuyerId: string | undefined;
+    /** HD streaming end timestamp. */
+    hdStreamingUntil: string | undefined;
     /** Icon hash for group DMs. */
     icon: string | undefined;
     /** Icon emoji for channels that support it. */
@@ -130,11 +164,8 @@ export class Channel extends DiscordRecord {
     lastMessageId: string | null;
     /** ISO timestamp of the last pinned message. */
     lastPinTimestamp: string | undefined;
-    /**
-     * Linked lobby for voice channels.
-     * @unfinished NEED PROPER TEST(lot of time :c).
-     */
-    linkedLobby: any;
+    /** Linked lobby for voice channels. */
+    linkedLobby: unknown;
     /** Thread member info if user joined thread. Threads only. */
     member: ThreadMember | undefined;
     /** Approximate member count. Threads only. */
@@ -151,10 +182,14 @@ export class Channel extends DiscordRecord {
     nicks: Record<string, string>;
     /** Internal, use nsfw getter. Guild channels only. */
     nsfw_: boolean;
+    /** Origin channel ID for crossposted messages. */
+    originChannelId: string | undefined;
     /** Owner ID for group DMs and threads. */
     ownerId: string | undefined;
-    /** Parent category ID. */
+    /** Parent category or channel ID. */
     parent_id: string;
+    /** Parent channel type for threads. */
+    parentChannelThreadType: ChannelType | undefined;
     /** Internal, use permissionOverwrites getter. Guild channels only. */
     permissionOverwrites_: Record<string, PermissionOverwrite>;
     /** Internal, use position getter. Guild channels only. */
@@ -169,36 +204,33 @@ export class Channel extends DiscordRecord {
     recipients: string[];
     /** RTC region for voice channels, null for automatic. Voice channels only. */
     rtcRegion: string | null;
-    /**
-     * Safety warnings for DM spam detection.
-     * @unfinished Finish me later.
-     */
-    safetyWarnings: any[];
-    /** Whether blocked user warning was dismissed. */
-    blockedUserWarningDismissed: boolean | undefined;
+    /** Safety warnings for DM spam detection. */
+    safetyWarnings: unknown[];
+    /** Template string. */
+    template: string | undefined;
     /** Theme color for group DMs. */
     themeColor: number | undefined;
     /** Thread metadata. Threads only. */
     threadMetadata: ThreadMetadata | undefined;
     /** Internal, use topic getter. */
     topic_: string | null;
+    /** Total messages sent in thread. Threads only. */
+    totalMessageSent: number | undefined;
     /** Channel type from ChannelType enum. */
     type: ChannelType;
+    /** Internal, use userLimit getter. Voice channels only. */
+    userLimit_: number | undefined;
     /** Channel version number. */
     version: number | undefined;
     /** Video quality mode for voice channels. Voice channels only. */
-    videoQualityMode: number | undefined;
-    /** HD streaming end timestamp. */
-    hdStreamingUntil: string | undefined;
-    /** User ID who purchased HD streaming. */
-    hdStreamingBuyerId: string | undefined;
+    videoQualityMode: VideoQualityMode | undefined;
 
     /** Computed access permissions for the current user. */
     get accessPermissions(): bigint;
     /** Bitrate in bits per second. Voice channels only. */
     get bitrate(): number;
     /** Channel flags bitmask. */
-    get flags(): number;
+    get flags(): ChannelFlags;
     /** Whether HD streaming splash is active. */
     get isHDStreamSplashed(): boolean;
     /** Whether the channel is marked as NSFW. */
@@ -214,28 +246,28 @@ export class Channel extends DiscordRecord {
     /** Maximum users allowed in voice channel. 0 = unlimited. */
     get userLimit(): number;
 
-    /**
-     * Computes allowed permissions for lurkers.
-     * @unfinished NEED BETTER TEST FOR ITS RETURN TYPE.
-     */
-    computeLurkerPermissionsAllowList(): any;
+    /** Computes allowed permissions for lurkers. */
+    computeLurkerPermissionsAllowList(): bigint | undefined;
     /** Gets the application ID for bot-created channels. */
     getApplicationId(): string | undefined;
     /** Gets the default layout for forum channels. */
-    getDefaultLayout(): number;
+    getDefaultLayout(): ForumLayout;
     /** Gets the default sort order for forum channels. */
-    getDefaultSortOrder(): number | null;
+    getDefaultSortOrder(): ForumSortOrder;
     /** Gets the default tag setting for forum channels. */
-    getDefaultTagSetting(): number;
+    getDefaultTagSetting(): ForumTagSetting;
     /** Gets the guild ID this channel belongs to. */
     getGuildId(): string;
     /** Gets the recipient user ID for DMs. */
     getRecipientId(): string | undefined;
-    /**
-     * Checks if the channel has a specific flag.
-     * @param flag Flag bitmask to check.
-     */
+    /** Checks if the channel has a specific flag. */
     hasFlag(flag: number): boolean;
+    /** Returns a new Channel with the given properties merged. */
+    merge(props: Record<string, unknown>): this;
+    /** Returns a new Channel with the given property set. */
+    set(key: string, value: unknown): this;
+    /** Converts the channel to a plain JavaScript object. */
+    toJS(): Record<string, unknown>;
     /** Whether this is an active (non-archived) thread. */
     isActiveThread(): boolean;
     /** Whether this is an announcement thread. */

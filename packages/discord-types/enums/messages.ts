@@ -1,3 +1,23 @@
+export type CodedLinkType =
+    | "INVITE"
+    | "TEMPLATE"
+    | "BUILD_OVERRIDE"
+    | "MANUAL_BUILD_OVERRIDE"
+    | "EXPERIMENT"
+    | "EVENT"
+    | "CHANNEL_LINK"
+    | "APP_DIRECTORY_PROFILE"
+    | "APP_DIRECTORY_STOREFRONT"
+    | "APP_DIRECTORY_STOREFRONT_SKU"
+    | "APP_OAUTH2_LINK"
+    | "ACTIVITY_BOOKMARK"
+    | "EMBEDDED_ACTIVITY_INVITE"
+    | "GUILD_PRODUCT"
+    | "SERVER_SHOP"
+    | "SOCIAL_LAYER_STOREFRONT"
+    | "QUESTS_EMBED"
+    | "COLLECTIBLES_SHOP";
+
 export const enum StickerType {
     /** an official sticker in a pack */
     STANDARD = 1,
@@ -302,6 +322,22 @@ export const enum MessageType {
      */
     GUILD_APPLICATION_PREMIUM_SUBSCRIPTION = 32,
     /**
+     * A message sent when an integration is added to a private channel
+     *
+     * Value: 33
+     * Name: PRIVATE_CHANNEL_INTEGRATION_ADDED
+     * Deletable: true
+     */
+    PRIVATE_CHANNEL_INTEGRATION_ADDED = 33,
+    /**
+     * A message sent when an integration is removed from a private channel
+     *
+     * Value: 34
+     * Name: PRIVATE_CHANNEL_INTEGRATION_REMOVED
+     * Deletable: true
+     */
+    PRIVATE_CHANNEL_INTEGRATION_REMOVED = 34,
+    /**
      * A message sent when a user gifts a premium (Nitro) referral
      *
      * Value: 35
@@ -380,6 +416,14 @@ export const enum MessageType {
      * Deletable: true
      */
     PURCHASE_NOTIFICATION = 44,
+    /**
+     * A message sent as a voice hangout invite
+     *
+     * Value: 45
+     * Name: VOICE_HANGOUT_INVITE
+     * Deletable: true
+     */
+    VOICE_HANGOUT_INVITE = 45,
     /**
      * A message sent when a poll is finalized
      *
@@ -471,6 +515,22 @@ export const enum MessageType {
      */
     HD_STREAMING_UPGRADED = 55,
     /**
+     * A message sent when a chat wallpaper is set
+     *
+     * Value: 56
+     * Name: CHAT_WALLPAPER_SET
+     * Deletable: true
+     */
+    CHAT_WALLPAPER_SET = 56,
+    /**
+     * A message sent when a chat wallpaper is removed
+     *
+     * Value: 57
+     * Name: CHAT_WALLPAPER_REMOVED
+     * Deletable: true
+     */
+    CHAT_WALLPAPER_REMOVED = 57,
+    /**
      * A message sent when a user resolves a moderation report by deleting the offending message
      *
      * Value: 58
@@ -524,6 +584,14 @@ export const enum MessageType {
      * Deletable: true
      */
     EMOJI_ADDED = 63,
+    /**
+     * A message sent as a premium group invite
+     *
+     * Value: 64
+     * Name: PREMIUM_GROUP_INVITE
+     * Deletable: true
+     */
+    PREMIUM_GROUP_INVITE = 64,
 }
 
 export const enum MessageFlags {

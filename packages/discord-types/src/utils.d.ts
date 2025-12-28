@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { LiteralUnion } from "type-fest";
 
 import type { FluxEvents } from "./fluxEvents";
+import { ApplicationCommandOptionType, ChannelType, PremiumType } from "../enums";
 
 export { FluxEvents };
 
@@ -292,7 +293,7 @@ export class DisplayProfile {
     canEditThemes: boolean;
     premiumGuildSince: Date | null;
     premiumSince: Date | null;
-    premiumType?: number;
+    premiumType?: PremiumType;
     primaryColor?: number;
 
     getBadges(): Array<{
@@ -324,7 +325,7 @@ export interface DateUtils {
 }
 
 export interface CommandOptions {
-    type: number;
+    type: ApplicationCommandOptionType;
     name: string;
     description: string;
     required?: boolean;
@@ -333,7 +334,7 @@ export interface CommandOptions {
         values: string | number;
     }[];
     options?: CommandOptions[];
-    channel_types?: number[];
+    channel_types?: ChannelType[];
     min_value?: number;
     max_value?: number;
     autocomplete?: boolean;

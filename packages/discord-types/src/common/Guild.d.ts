@@ -1,5 +1,14 @@
 import { Role } from './Role';
 import { DiscordRecord } from './Record';
+import {
+    GuildDefaultMessageNotifications,
+    GuildExplicitContentFilter,
+    GuildMFALevel,
+    GuildNSFWLevel,
+    GuildPremiumTier,
+    GuildVerificationLevel,
+    SystemChannelFlags,
+} from "../../enums";
 
 // copy(Object.keys(findByProps("CREATOR_MONETIZABLE")).map(JSON.stringify).join("|"))
 export type GuildFeatures =
@@ -18,10 +27,10 @@ export class Guild extends DiscordRecord {
     };
     application_id: unknown;
     banner: string | undefined;
-    defaultMessageNotifications: number;
+    defaultMessageNotifications: GuildDefaultMessageNotifications;
     description: string | undefined;
     discoverySplash: string | undefined;
-    explicitContentFilter: number;
+    explicitContentFilter: GuildExplicitContentFilter;
     features: Set<GuildFeatures>;
     homeHeader: string | undefined;
     hubType: unknown;
@@ -32,10 +41,10 @@ export class Guild extends DiscordRecord {
     maxMembers: number;
     maxStageVideoChannelUsers: number;
     maxVideoChannelUsers: number;
-    mfaLevel: number;
+    mfaLevel: GuildMFALevel;
     moderatorReporting: unknown;
     name: string;
-    nsfwLevel: number;
+    nsfwLevel: GuildNSFWLevel;
     ownerConfiguredContentLevel: number;
     ownerId: string;
     preferredLocale: string;
@@ -47,7 +56,7 @@ export class Guild extends DiscordRecord {
     };
     premiumProgressBarEnabled: boolean;
     premiumSubscriberCount: number;
-    premiumTier: 0 | 1 | 2 | 3;
+    premiumTier: GuildPremiumTier;
     profile: {
         badge: string | undefined;
         tag: string | undefined;
@@ -57,8 +66,8 @@ export class Guild extends DiscordRecord {
     rulesChannelId: string | undefined;
     safetyAlertsChannelId: string | undefined;
     splash: string | undefined;
-    systemChannelFlags: number;
+    systemChannelFlags: SystemChannelFlags;
     systemChannelId: string | undefined;
     vanityURLCode: string | undefined;
-    verificationLevel: number;
+    verificationLevel: GuildVerificationLevel;
 }

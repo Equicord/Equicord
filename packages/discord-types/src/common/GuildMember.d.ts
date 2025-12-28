@@ -1,3 +1,5 @@
+import { GuildMemberFlags } from "../../enums";
+
 export interface GuildMember {
     avatar: string | undefined;
     avatarDecoration: string | undefined;
@@ -11,7 +13,7 @@ export interface GuildMember {
         tertiaryColor: string | undefined;
     };
     communicationDisabledUntil: string | undefined;
-    flags: number;
+    flags: GuildMemberFlags;
     fullProfileLoadedTimestamp: number;
     guildId: string;
     highestRoleId: string;

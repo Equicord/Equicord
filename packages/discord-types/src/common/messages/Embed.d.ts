@@ -1,3 +1,24 @@
+export type EmbedType =
+    | "image"
+    | "video"
+    | "link"
+    | "article"
+    | "tweet"
+    | "rich"
+    | "gifv"
+    | "application_news"
+    | "auto_moderation_message"
+    | "auto_moderation_notification"
+    | "text"
+    | "post_preview"
+    | "gift"
+    | "safety_policy_notice"
+    | "safety_system_notification"
+    | "age_verification_system_notification"
+    | "voice_channel"
+    | "gaming_profile"
+    | "poll_result";
+
 export interface Embed {
     author?: {
         name: string;
@@ -28,7 +49,7 @@ export interface Embed {
         url: string;
         width: number;
     };
-    type: string;
+    type: EmbedType;
     url: string | undefined;
     video?: {
         height: number;
@@ -48,7 +69,7 @@ export interface EmbedJSON {
     title: string;
     color: string;
     description: string;
-    type: string;
+    type: EmbedType;
     url: string | undefined;
     provider?: {
         name: string;

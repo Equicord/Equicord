@@ -1,6 +1,7 @@
 // TODO: a lot of optional params can also be null, not just undef
 
 import { DiscordRecord } from "./Record";
+import { PremiumType, UserFlags } from "../../enums";
 
 export class User extends DiscordRecord {
     constructor(user: object);
@@ -12,7 +13,7 @@ export class User extends DiscordRecord {
     desktop: boolean;
     discriminator: string;
     email: string | undefined;
-    flags: number;
+    flags: UserFlags;
     globalName: string | undefined;
     guildMemberAvatars: Record<string, string>;
     id: string;
@@ -20,9 +21,9 @@ export class User extends DiscordRecord {
     mobile: boolean;
     nsfwAllowed: boolean | undefined;
     phone: string | undefined;
-    premiumType: number | undefined;
+    premiumType: PremiumType | undefined;
     premiumUsageFlags: number;
-    publicFlags: number;
+    publicFlags: UserFlags;
     purchasedFlags: number;
     system: boolean;
     username: string;
@@ -38,7 +39,7 @@ export class User extends DiscordRecord {
     getAvatarURL(guildId?: string | null, t?: unknown, canAnimate?: boolean): string;
     hasAvatarForGuild(guildId: string): boolean;
     hasDisabledPremium(): boolean;
-    hasFlag(flag: number): boolean;
+    hasFlag(flag: UserFlags): boolean;
     hasFreePremium(): boolean;
     hasHadSKU(e: unknown): boolean;
     hasPremiumUsageFlag(flag: number): boolean;
@@ -60,7 +61,7 @@ export interface UserJSON {
     avatarDecoration: unknown | undefined;
     discriminator: string;
     id: string;
-    publicFlags: number;
+    publicFlags: UserFlags;
     username: string;
     globalName: string | undefined;
 }

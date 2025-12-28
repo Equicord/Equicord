@@ -2,7 +2,9 @@ import { CommandOption } from './Commands';
 import { User, UserJSON } from '../User';
 import { Embed, EmbedJSON } from './Embed';
 import { DiscordRecord } from "../Record";
-import { ApplicationIntegrationType, MessageFlags, MessageType, StickerFormatType } from "../../../enums";
+import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, CodedLinkType, InteractionType, MessageFlags, MessageType, StickerFormatType } from "../../../enums";
+
+export type MessageState = "SENT" | "SENDING" | "SEND_FAILED";
 
 /*
  * TODO: looks like discord has moved over to Date instead of Moment;
@@ -27,7 +29,7 @@ export class Message extends DiscordRecord {
      */
     codedLinks: {
         code?: string;
-        type: string;
+        type: CodedLinkType;
     }[];
     colorString: unknown;
     components: unknown[];
@@ -41,7 +43,7 @@ export class Message extends DiscordRecord {
     interaction: {
         id: string;
         name: string;
-        type: number;
+        type: InteractionType;
         user: User;
     }[] | undefined;
     interactionData: {
@@ -55,7 +57,7 @@ export class Message extends DiscordRecord {
             name: string;
             options: CommandOption[];
             permissions: unknown[];
-            type: number;
+            type: ApplicationCommandType;
             version: string;
         };
         attachments: MessageAttachment[];
@@ -65,17 +67,17 @@ export class Message extends DiscordRecord {
         options: {
             focused: unknown;
             name: string;
-            type: number;
+            type: ApplicationCommandOptionType;
             value: string;
         }[];
-        type: number;
+        type: InteractionType;
         version: string;
     }[];
     interactionMetadata?: {
         id: string;
-        type: number;
+        type: InteractionType;
         name?: string;
-        command_type?: number;
+        command_type?: ApplicationCommandType;
         ephemerality_reason?: number;
         user: User;
         authorizing_integration_owners: Record<ApplicationIntegrationType, string>;
@@ -104,7 +106,7 @@ export class Message extends DiscordRecord {
     nonce: string | undefined;
     pinned: boolean;
     reactions: MessageReaction[];
-    state: string;
+    state: MessageState;
     stickerItems: {
         format_type: StickerFormatType;
         id: string;
@@ -152,7 +154,7 @@ export interface MessageJSON {
     content: string;
     edited_timestamp: string;
     embeds: EmbedJSON[];
-    flags: number;
+    flags: MessageFlags;
     guild_id: string | undefined;
     id: string;
     loggingName: unknown;
@@ -180,10 +182,10 @@ export interface MessageJSON {
     nonce: string | undefined;
     pinned: boolean;
     referenced_message: MessageJSON | undefined;
-    state: string;
+    state: MessageState;
     timestamp: string;
     tts: boolean;
-    type: number;
+    type: MessageType;
 }
 
 export interface MessageAttachment {

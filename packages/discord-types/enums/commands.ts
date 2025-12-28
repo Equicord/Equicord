@@ -24,9 +24,17 @@ export const enum ApplicationCommandType {
     CHAT_INPUT = 1,
     USER = 2,
     MESSAGE = 3,
+    PRIMARY_ENTRY_POINT = 4,
 }
 
 export const enum ApplicationIntegrationType {
     GUILD_INSTALL = 0,
-    USER_INSTALL = 1
+    USER_INSTALL = 1,
+}
+
+export const enum InteractionType {
+    APPLICATION_COMMAND = 2,
+    MESSAGE_COMPONENT = 3,
+    APPLICATION_COMMAND_AUTOCOMPLETE = 4,
+    MODAL_SUBMIT = 5,
 }

@@ -1,5 +1,35 @@
+import { ActivityLabelType, ApplicationFlags, ApplicationType, OrientationLockState } from "../../enums";
 import { Guild } from "./Guild";
 import { User } from "./User";
+
+export type EmbeddedActivityPlatform = "ios" | "android" | "web";
+
+export interface EmbeddedActivityPlatformConfig {
+    label_type: ActivityLabelType;
+    label_from: string | null;
+    label_until: string | null;
+    release_phase: string;
+    omit_badge_from_surfaces: string[];
+}
+
+export interface EmbeddedActivityConfig {
+    application_id: string;
+    activity_preview_video_asset_id: string | null;
+    supported_platforms: EmbeddedActivityPlatform[];
+    default_orientation_lock_state: OrientationLockState;
+    tablet_default_orientation_lock_state: OrientationLockState;
+    requires_age_gate: boolean;
+    legacy_responsive_aspect_ratio: boolean;
+    premium_tier_requirement: number | null;
+    free_period_starts_at: string | null;
+    free_period_ends_at: string | null;
+    client_platform_config: Partial<Record<EmbeddedActivityPlatform, EmbeddedActivityPlatformConfig>>;
+    shelf_rank: number;
+    has_csp_exception: boolean;
+    displays_advertisements: boolean;
+    blocked_locales: string[];
+    supported_locales: string[];
+}
 
 export interface ApplicationExecutable {
     os: "win32" | "darwin" | "linux";
@@ -23,12 +53,16 @@ export interface ApplicationInstallParams {
     scopes: string[];
 }
 
+export interface ApplicationIntegrationTypeConfig {
+    oauth2InstallParams: ApplicationInstallParams;
+}
+
 export interface Application {
     id: string;
     name: string;
     icon: string | null;
     description: string;
-    type: number | null;
+    type: ApplicationType | null;
     coverImage: string | null;
     primarySkuId: string | undefined;
     bot: User | null;
@@ -54,12 +88,12 @@ export interface Application {
     hashes: string[];
     eulaId: string | undefined;
     slug: string | undefined;
-    flags: number;
-    maxParticipants: number | undefined;
+    flags: ApplicationFlags;
+    maxParticipants: number | null;
     tags: string[];
-    embeddedActivityConfig: Record<string, unknown> | undefined;
+    embeddedActivityConfig: EmbeddedActivityConfig | undefined;
     team: ApplicationTeam | undefined;
-    integrationTypesConfig: Record<string, Record<string, unknown>>;
+    integrationTypesConfig: Record<string, ApplicationIntegrationTypeConfig>;
     storefront_available: boolean;
     termsOfServiceUrl: string | undefined;
     privacyPolicyUrl: string | undefined;

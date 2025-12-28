@@ -1,3 +1,5 @@
+import { RoleFlags } from "../../enums";
+
 export interface Role {
     color: number;
     colorString: string | undefined;
@@ -11,7 +13,7 @@ export interface Role {
         secondary_color: number | undefined;
         tertiary_color: number | undefined;
     };
-    flags: number;
+    flags: RoleFlags;
     hoist: boolean;
     icon: string | undefined;
     id: string;

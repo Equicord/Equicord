@@ -1,4 +1,5 @@
 import { FluxStore, GuildSticker, PremiumStickerPack, Sticker } from "..";
+import { LoadState } from "../../enums";
 
 export type StickerGuildMap = Map<string, GuildSticker[]>;
 export type StickerPackMap = Map<string, Sticker[]>;
@@ -38,7 +39,7 @@ export class StickersStore extends FluxStore {
     hasLoadedStickerPacks: boolean;
     isFetchingStickerPacks: boolean;
     isLoaded: boolean;
-    loadState: number;
+    loadState: LoadState;
 
     getAllGuildStickers(): StickerGuildMap;
     getAllPackStickers(): StickerPackMap;
