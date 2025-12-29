@@ -2,7 +2,13 @@ export const enum RelationshipType {
     NONE = 0,
     FRIEND = 1,
     BLOCKED = 2,
+    /**
+     * @remarks Discord API calls this PENDING_INCOMING
+     */
     INCOMING_REQUEST = 3,
+    /**
+     * @remarks Discord API calls this PENDING_OUTGOING
+     */
     OUTGOING_REQUEST = 4,
     IMPLICIT = 5,
     SUGGESTION = 6,
