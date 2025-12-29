@@ -106,11 +106,12 @@ let myLastChannelId: string | undefined;
 // Allow user updates on discord first load
 let runOneTime = true;
 
-migratePluginToSettings("CallTimer", "AllCallTimers", "allCallTimers");
+migratePluginToSettings(false, "CallTimer", "AllCallTimers", "allCallTimers");
+migrateSettingsFromPlugin("CallTimer", "AllCallTimers", "showWithoutHover", "showRoleColor", "trackSelf", "showSeconds", "watchLargeGuilds");
 export default definePlugin({
     name: "CallTimer",
     description: "Add call timers for all users in voice channels and in the connection status.",
-    authors: [EquicordDevs.MaxHerbold, Devs.D3SOX],
+    authors: [Devs.Ven, EquicordDevs.MaxHerbold, Devs.D3SOX],
     managedStyle: alignedChatInputFix,
     settings,
 
