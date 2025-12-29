@@ -21,6 +21,9 @@ export const enum ApplicationCommandInputType {
 }
 
 export const enum ApplicationCommandType {
+    /**
+     * @remarks Discord API calls this just CHAT
+     */
     CHAT_INPUT = 1,
     USER = 2,
     MESSAGE = 3,
