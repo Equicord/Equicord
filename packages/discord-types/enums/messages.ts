@@ -43,9 +43,10 @@ export const enum PollLayoutType {
 
 export const enum MessageActivityType {
     JOIN = 1,
-    SPECTATE = 2,
     LISTEN = 3,
-    JOIN_REQUEST = 5
+    WATCH = 4,
+    JOIN_REQUEST = 5,
+    STREAM_REQUEST = 6,
 }
 
 export const enum StickerType {
@@ -142,6 +143,8 @@ export const enum MessageType {
      * Name: PREMIUM_GUILD_SUBSCRIPTION
      * Rendered Content: "{author} just boosted the server{content ? " {content} times"}!"
      * Deletable: true
+     *
+     * @remarks Discord API calls this GUILD_BOOST
      */
     PREMIUM_GUILD_SUBSCRIPTION = 8,
     /**
@@ -151,6 +154,8 @@ export const enum MessageType {
      * Name: PREMIUM_GUILD_SUBSCRIPTION_TIER_1
      * Rendered Content: "{author} just boosted the server{content ? " {content} times"}! {guild} has achieved Level 1! "
      * Deletable: true
+     *
+     * @remarks Discord API calls this GUILD_BOOST_TIER_1
      */
     PREMIUM_GUILD_SUBSCRIPTION_TIER_1 = 9,
     /**
@@ -160,6 +165,8 @@ export const enum MessageType {
      * Name: PREMIUM_GUILD_SUBSCRIPTION_TIER_2
      * Rendered Content: "{author} just boosted the server{content ? " {content} times"}! {guild} has achieved Level 2! "
      * Deletable: true
+     *
+     * @remarks Discord API calls this GUILD_BOOST_TIER_2
      */
     PREMIUM_GUILD_SUBSCRIPTION_TIER_2 = 10,
     /**
@@ -169,6 +176,8 @@ export const enum MessageType {
      * Name: PREMIUM_GUILD_SUBSCRIPTION_TIER_3
      * Rendered Content: "{author} just boosted the server{content ? " {content} times"}! {guild} has achieved Level 3! "
      * Deletable: true
+     *
+     * @remarks Discord API calls this GUILD_BOOST_TIER_3
      */
     PREMIUM_GUILD_SUBSCRIPTION_TIER_3 = 11,
     /**
