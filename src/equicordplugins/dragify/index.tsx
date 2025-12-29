@@ -112,6 +112,7 @@ let lastHandledDrop: { at: number; key: string; } = { at: 0, key: "" };
 let lastDragEventAt = 0;
 let guildGhostCleanupTimer: number | null = null;
 let dragifyActive = false;
+let dragStateWatchdog: number | null = null;
 
 type GhostState = {
     visible: boolean;
@@ -912,6 +913,7 @@ export default definePlugin({
         const payload = JSON.stringify({ kind: "channel", id: channelId, guildId });
         activeDragEntity = { kind: "channel", id: channelId, guildId };
         dragifyActive = true;
+        lastDragEventAt = Date.now();
         if (event.dataTransfer?.clearData) {
             event.dataTransfer.clearData("text/plain");
             event.dataTransfer.clearData("text/uri-list");
@@ -963,6 +965,7 @@ export default definePlugin({
         activeUserDragId = userId;
         activeDragEntity = { kind: "user", id: userId };
         dragifyActive = true;
+        lastDragEventAt = Date.now();
         this.showGhost({ kind: "user", id: userId }, event);
         if (event.dataTransfer?.clearData) {
             event.dataTransfer.clearData("text/plain");
@@ -1001,6 +1004,7 @@ export default definePlugin({
         activeGuildDragId = guildId;
         activeDragEntity = { kind: "guild", id: guildId };
         dragifyActive = true;
+        lastDragEventAt = Date.now();
         if (event.dataTransfer?.clearData) {
             event.dataTransfer.clearData("text/plain");
             event.dataTransfer.clearData("text/uri-list");
@@ -1021,6 +1025,17 @@ export default definePlugin({
         window.addEventListener("drag", this.globalDragMove, true);
         window.addEventListener("dragover", this.globalDragMove, true);
         window.addEventListener("dragend", this.globalDragEnd, true);
+        if (dragStateWatchdog === null) {
+            dragStateWatchdog = window.setInterval(() => {
+                if (!dragifyActive) return;
+                if (Date.now() - lastDragEventAt < 1200) return;
+                activeUserDragId = null;
+                activeGuildDragId = null;
+                activeDragEntity = null;
+                dragifyActive = false;
+                hideGhost();
+            }, 500);
+        }
     },
 
     stop() {
@@ -1034,9 +1049,14 @@ export default definePlugin({
         activeUserDragId = null;
         activeGuildDragId = null;
         activeDragEntity = null;
+        dragifyActive = false;
         if (guildGhostCleanupTimer !== null) {
             clearTimeout(guildGhostCleanupTimer);
             guildGhostCleanupTimer = null;
+        }
+        if (dragStateWatchdog !== null) {
+            clearInterval(dragStateWatchdog);
+            dragStateWatchdog = null;
         }
         this.unmountGhost();
         pluginInstance = null;
@@ -1091,10 +1111,12 @@ export default definePlugin({
         if (!event.dataTransfer.types?.includes("application/dragify")) {
             if (typeof document !== "undefined" && typeof event.clientX === "number" && typeof event.clientY === "number") {
                 const atPoint = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement | null;
-                const voiceAtPoint = atPoint?.closest?.("[class*=\"voiceUser\"]") as HTMLElement | null;
-                if (voiceAtPoint) {
-                    const nestedUserId = voiceAtPoint.querySelector?.("[data-user-id]")?.getAttribute("data-user-id") ?? null;
-                    const userId = nestedUserId ?? inst.extractUserIdFromTarget(voiceAtPoint);
+                const userTarget = atPoint?.closest?.("[data-user-id]") as HTMLElement | null;
+                if (userTarget) {
+                    const nestedUserId = userTarget.getAttribute("data-user-id")
+                        ?? userTarget.querySelector?.("[data-user-id]")?.getAttribute("data-user-id")
+                        ?? null;
+                    const userId = nestedUserId ?? inst.extractUserIdFromTarget(userTarget);
                     if (userId) {
                         inst.onUserDragStart(event, { id: userId });
                         return;
@@ -1105,9 +1127,10 @@ export default definePlugin({
             const path = event.composedPath?.() ?? [];
             for (const entry of path) {
                 const el = entry as HTMLElement | null;
-                if (!el || typeof el.className !== "string") continue;
-                if (!el.className.includes("voiceUser")) continue;
-                const userId = inst.extractUserIdFromTarget(el);
+                if (!el) continue;
+                const userTarget = el.closest?.("[data-user-id]") as HTMLElement | null;
+                if (!userTarget) continue;
+                const userId = inst.extractUserIdFromTarget(userTarget);
                 if (userId) {
                     inst.onUserDragStart(event, { id: userId });
                 }
