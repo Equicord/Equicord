@@ -9,6 +9,13 @@ export const enum ForumLayout {
     GRID = 2,
 }
 
+export const enum SafetyWarningType {
+    STRANGER_DANGER = 1,
+    INAPPROPRIATE_CONVERSATION_TIER_1 = 2,
+    INAPPROPRIATE_CONVERSATION_TIER_2 = 3,
+    LIKELY_ATO = 4,
+}
+
 export const enum ChannelFlags {
     GUILD_FEED_REMOVED = 1,
     PINNED = 2,

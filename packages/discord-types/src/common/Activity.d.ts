@@ -20,8 +20,10 @@ export interface Activity {
     created_at?: number;
     id?: string;
     name: string;
-    application_id: string;
+    application_id?: string;
     type: ActivityType;
+    session_id?: string;
+    sync_id?: string;
     emoji?: {
         animated: boolean;
         id: string;

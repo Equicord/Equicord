@@ -1,4 +1,4 @@
-import { FluxStore, User, VoiceState } from "..";
+import { AvatarDecorationData, FluxStore, User, VoiceState } from "..";
 import { ActivityType, ParticipantType, RTCPlatform } from "../../enums";
 import { StreamType } from "./FriendsStore";
 
@@ -37,8 +37,7 @@ export interface UserParticipant extends BaseParticipant {
     soundsharing: boolean;
     ringing: boolean;
     userNick: string;
-    // TODO: type
-    userAvatarDecoration: any | null;
+    userAvatarDecoration: AvatarDecorationData | null;
     localVideoDisabled: boolean;
     userVideo?: boolean;
     streamId?: string;

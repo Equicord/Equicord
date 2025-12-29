@@ -1,4 +1,4 @@
-import { ChannelFlags, ChannelType, ForumLayout, PermissionOverwriteType, UserFlags, VideoQualityMode } from "../../enums";
+import { ChannelFlags, ChannelType, ForumLayout, PermissionOverwriteType, SafetyWarningType, UserFlags, VideoQualityMode } from "../../enums";
 import { DiscordRecord } from "./Record";
 
 /** Permission overwrite for a role or member. */
@@ -81,8 +81,6 @@ export interface ChannelIconEmoji {
 
 /** Thread member info, present when user has joined a thread. */
 export interface ThreadMember {
-    id: string;
-    userId: string;
     flags: number;
     joinTimestamp: string;
     muted: boolean;
@@ -96,16 +94,33 @@ export interface ThreadMember {
 export interface ForumTag {
     id: string;
     name: string;
-    emojiId: string | undefined;
+    emojiId: string | null;
     emojiName: string | null;
     moderated: boolean;
-    color: number;
+    color: number | null;
 }
 
 /** Default reaction emoji for forum/media channels. */
 export interface DefaultReactionEmoji {
     emojiId: string | null;
     emojiName: string;
+}
+
+/** Linked lobby for voice channels. */
+export interface LinkedLobby {
+    application_id: string;
+    lobby_id: string;
+    linked_by: string;
+    linked_at: string;
+    require_application_authorization: boolean;
+}
+
+/** Safety warning for DM spam detection. */
+export interface SafetyWarning {
+    id: string;
+    type: SafetyWarningType;
+    expiry: string;
+    dismiss_timestamp: string | null;
 }
 
 /** Sort order for forum/media channels. */
@@ -165,7 +180,7 @@ export class Channel extends DiscordRecord {
     /** ISO timestamp of the last pinned message. */
     lastPinTimestamp: string | undefined;
     /** Linked lobby for voice channels. */
-    linkedLobby: any;
+    linkedLobby: LinkedLobby | null;
     /** Thread member info if user joined thread. Threads only. */
     member: ThreadMember | undefined;
     /** Approximate member count. Threads only. */
@@ -205,7 +220,7 @@ export class Channel extends DiscordRecord {
     /** RTC region for voice channels, null for automatic. Voice channels only. */
     rtcRegion: string | null;
     /** Safety warnings for DM spam detection. */
-    safetyWarnings: any[];
+    safetyWarnings: SafetyWarning[];
     /** Template string. */
     template: string | undefined;
     /** Theme color for group DMs. */
@@ -341,8 +356,10 @@ export class Channel extends DiscordRecord {
     /**
      * Adds a recipient to a group DM.
      * @param userId User ID to add.
+     * @param nick Optional nickname for the user.
+     * @param currentUserId Current user's ID.
      */
-    addRecipient(userId: string): this;
+    addRecipient(userId: string, nick?: string | null, currentUserId?: string): this;
     /**
      * Removes a recipient from a group DM.
      * @param userId User ID to remove.

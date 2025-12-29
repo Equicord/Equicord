@@ -1,4 +1,4 @@
-import { ActivityLabelType, ApplicationFlags, ApplicationType, OrientationLockState } from "../../enums";
+import { ActivityLabelType, ApplicationFlags, ApplicationType, CarouselItemType, LinkedGameType, OrientationLockState } from "../../enums";
 import { Guild } from "./Guild";
 import { User } from "./User";
 
@@ -57,6 +57,13 @@ export interface ApplicationIntegrationTypeConfig {
     oauth2InstallParams: ApplicationInstallParams;
 }
 
+export interface ApplicationDirectoryEntry {
+    guild_count?: number;
+    detailed_description?: string;
+    supported_locales?: string[];
+    carousel_items?: { asset_id: string; type: CarouselItemType; }[];
+}
+
 export interface Application {
     id: string;
     name: string;
@@ -100,10 +107,16 @@ export interface Application {
     isDiscoverable: boolean;
     customInstallUrl: string | undefined;
     installParams: ApplicationInstallParams | undefined;
-    directoryEntry: Record<string, unknown> | undefined;
+    directoryEntry: ApplicationDirectoryEntry | undefined;
     categories: string[] | undefined;
-    linkedGames: string[] | undefined;
+    linkedGames: ApplicationLinkedGame[] | undefined;
     deepLinkUri: string | undefined;
+}
+
+export interface ApplicationLinkedGame {
+    id: string;
+    type: LinkedGameType;
+    application?: Application;
 }
 
 export interface ApplicationTeam {

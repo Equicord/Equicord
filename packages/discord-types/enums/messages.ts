@@ -1,22 +1,52 @@
-export type CodedLinkType =
-    | "INVITE"
-    | "TEMPLATE"
-    | "BUILD_OVERRIDE"
-    | "MANUAL_BUILD_OVERRIDE"
-    | "EXPERIMENT"
-    | "EVENT"
-    | "CHANNEL_LINK"
-    | "APP_DIRECTORY_PROFILE"
-    | "APP_DIRECTORY_STOREFRONT"
-    | "APP_DIRECTORY_STOREFRONT_SKU"
-    | "APP_OAUTH2_LINK"
-    | "ACTIVITY_BOOKMARK"
-    | "EMBEDDED_ACTIVITY_INVITE"
-    | "GUILD_PRODUCT"
-    | "SERVER_SHOP"
-    | "SOCIAL_LAYER_STOREFRONT"
-    | "QUESTS_EMBED"
-    | "COLLECTIBLES_SHOP";
+export const enum ComponentType {
+    UNKNOWN = -1,
+    ACTION_ROW = 1,
+    BUTTON = 2,
+    STRING_SELECT = 3,
+    TEXT_INPUT = 4,
+    USER_SELECT = 5,
+    ROLE_SELECT = 6,
+    MENTIONABLE_SELECT = 7,
+    CHANNEL_SELECT = 8,
+    SECTION = 9,
+    TEXT_DISPLAY = 10,
+    THUMBNAIL = 11,
+    MEDIA_GALLERY = 12,
+    FILE = 13,
+    SEPARATOR = 14,
+    CONTENT_INVENTORY_ENTRY = 16,
+    CONTAINER = 17,
+    LABEL = 18,
+    FILE_UPLOAD = 19,
+    CHECKPOINT_CARD = 20,
+}
+
+export const enum ButtonStyle {
+    PRIMARY = 1,
+    SECONDARY = 2,
+    SUCCESS = 3,
+    DESTRUCTIVE = 4,
+    LINK = 5,
+    PREMIUM = 6,
+}
+
+export const enum MessageReferenceType {
+    DEFAULT = 0,
+    FORWARD = 1,
+}
+
+export const enum PollLayoutType {
+    UNKNOWN = 0,
+    DEFAULT = 1,
+    IMAGE_ONLY_ANSWERS = 2
+}
+
+export const enum MessageActivityType {
+    JOIN = 1,
+    SPECTATE = 2,
+    LISTEN = 3,
+    JOIN_REQUEST = 5
+}
 
 export const enum StickerType {
     /** an official sticker in a pack */
@@ -150,6 +180,14 @@ export const enum MessageType {
      * Deletable: true
      */
     CHANNEL_FOLLOW_ADD = 12,
+    /**
+     * A message sent when a user starts a stream in a guild.
+     *
+     * Value: 13
+     * Name: GUILD_STREAM
+     * Deletable: true
+     */
+    GUILD_STREAM = 13,
     /**
      * A message sent when a guild is disqualified from discovery
      *

@@ -35,6 +35,11 @@ export interface StickerCategoryType {
     iconUrl?: string;
 }
 
+export interface StickerMetadataEntry {
+    type: number;
+    value: string;
+}
+
 export class StickersStore extends FluxStore {
     hasLoadedStickerPacks: boolean;
     isFetchingStickerPacks: boolean;
@@ -46,8 +51,7 @@ export class StickersStore extends FluxStore {
     getPremiumPacks(): PremiumStickerPack[];
     getRawStickersByGuild(): StickerGuildMap;
     getStickerById(id: string): Sticker | undefined;
-    // TODO: type
-    getStickerMetadataArrays(): any[];
+    getStickerMetadataArrays(): [Record<string, StickerMetadataEntry[]>, Record<string, StickerMetadataEntry[]>];
     getStickerPack(id: string): PremiumStickerPack | undefined;
     getStickersByGuildId(guildId: string): Sticker[] | undefined;
     isPremiumPack(id: string): boolean;
