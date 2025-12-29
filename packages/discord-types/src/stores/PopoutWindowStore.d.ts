@@ -7,6 +7,7 @@ import { FluxStore } from "..";
 export type PopoutWindowKey =
     | "DISCORD_CHANNEL_CALL_POPOUT"
     | "DISCORD_CALL_TILE_POPOUT"
+    | "DISCORD_SOUNDBOARD"
     | "DISCORD_RTC_DEBUG_POPOUT"
     | "DISCORD_CHANNEL_POPOUT"
     | "DISCORD_ACTIVITY_POPOUT"
