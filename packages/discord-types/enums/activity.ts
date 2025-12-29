@@ -11,10 +11,6 @@ export const enum ActivityType {
 export const enum ActivityFlags {
     INSTANCE = 1,
     JOIN = 2,
-    /** @deprecated */
-    SPECTATE = 4,
-    /** @deprecated */
-    JOIN_REQUEST = 8,
     SYNC = 16,
     PLAY = 32,
     PARTY_PRIVACY_FRIENDS = 64,
