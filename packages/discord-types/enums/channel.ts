@@ -4,6 +4,23 @@ export const enum PermissionOverwriteType {
     OWNER = 2
 }
 
+export const enum PermissionOverwriteRowType {
+    EMPTY_STATE = 0,
+    ADMINISTRATOR = 1,
+    ROLE = 2,
+    OWNER = 3,
+    MEMBER = 4,
+    USER = 5,
+    GUILD = 6,
+}
+
+export const enum PermissionOverwriteSectionType {
+    ROLES = 0,
+    MEMBERS = 1,
+    USERS = 2,
+    GUILDS = 3,
+}
+
 export const enum ForumLayout {
     DEFAULT = 0,
     LIST = 1,
