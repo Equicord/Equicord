@@ -207,39 +207,24 @@ function quoteMessage(channel: any, msg: any, event: MouseEvent) {
         return;
     }
 
-    const selection = window.getSelection();
-    const selectedText = selection?.toString().trim();
-
-    let content: string;
-    if (selectedText && event.target instanceof Node && (event.target as Node).textContent) {
-        const messageContent = msg.content || "";
-        if (messageContent.includes(selectedText)) {
-            content = selectedText;
-        } else {
-            content = msg.content || "";
-        }
-    } else {
-        content = msg.content || "";
-    }
-
-    const contentText = content ? `${content.replace(/\n/g, "\n")}` : "";
+    const selectedText = window.getSelection()?.toString().trim();
+    const content = selectedText && msg.content?.includes(selectedText) ? selectedText : msg.content || "";
 
     const now = Date.now();
+    const isRecentQuote = now - lastQuoteTime < QUOTE_TIMEOUT && lastQuotedMessageId;
     const isSameMessage = lastQuotedMessageId === msg.id;
-    const isRecentQuote = now - lastQuoteTime < QUOTE_TIMEOUT;
 
-    let quoteText: string;
-    if (!isRecentQuote) {
-        quoteText = contentText ? `> ${contentText}` : "";
-    } else if (isSameMessage) {
-        quoteText = `...${contentText}`;
+    let prefix = "";
+    if (isRecentQuote) {
+        prefix = isSameMessage ? "..." : "\n\n>";
     } else {
-        quoteText = `\n\n> ${contentText}`;
+        prefix = content ? "> " : "";
     }
 
     lastQuotedMessageId = msg.id;
     lastQuoteTime = now;
 
+    const quoteText = content ? `${prefix}${content}` : "";
     const insertAction = (Constants as any)?.CkL?.INSERT_TEXT ?? "INSERT_TEXT";
     (ComponentDispatch as any).dispatchToLastSubscribed(insertAction, { plainText: quoteText, rawText: quoteText });
 
