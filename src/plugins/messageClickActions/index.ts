@@ -24,7 +24,7 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
-import { AuthenticationStore, Constants, FluxDispatcher, MessageTypeSets, PermissionsBits, PermissionStore, RestAPI, WindowStore } from "@webpack/common";
+import { AuthenticationStore, Constants, FluxDispatcher, MessageTypeSets, PermissionsBits, PermissionStore, RestAPI, Toasts, WindowStore } from "@webpack/common";
 
 const MessageActions = findByPropsLazy("deleteMessage", "startEditMessage");
 const EditStore = findByPropsLazy("isEditing", "isEditingAny");
@@ -70,9 +70,26 @@ const settings = definePluginSettings({
     }
 });
 
-async function react(channelId: string, messageId: string, emoji: string) {
+function showPermissionWarning(action: string) {
+    if (!settings.store.showPermissionWarnings) return;
+    Toasts.show({
+        message: `Cannot ${action}: Missing permissions`,
+        type: Toasts.Type.FAILURE,
+        id: `message-click-actions-${action}`,
+        options: {
+            duration: 3000
+        }
+    });
+}
+
+async function react(channelId: string, messageId: string, emoji: string, channel: any) {
     const trimmed = emoji.trim();
     if (!trimmed) return;
+
+    if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
+        showPermissionWarning("add reaction");
+        return;
+    }
 
     const customMatch = trimmed.match(/^:?([\w-]+):(\d+)$/);
     const emojiParam = customMatch
@@ -120,7 +137,10 @@ export default definePlugin({
 
         if (isDeletePressed) {
             if (!settings.store.enableDeleteOnClick) return;
-            if (!(isMe || PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) || isSelfInvokedUserApp)) return;
+            if (!(isMe || PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) || isSelfInvokedUserApp)) {
+                showPermissionWarning("delete message");
+                return;
+            }
 
             if (msg.deleted) {
                 FluxDispatcher.dispatch({
@@ -144,7 +164,7 @@ export default definePlugin({
             }
 
             if (settings.store.enableTripleClickToReact) {
-                react(channel.id, msg.id, settings.store.reactEmoji);
+                react(channel.id, msg.id, settings.store.reactEmoji, channel);
                 event.preventDefault();
             }
             return;
@@ -152,16 +172,26 @@ export default definePlugin({
 
         if (event.detail !== 2) return;
         if (settings.store.requireModifier && !event.ctrlKey && !event.shiftKey) return;
-        if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
+        if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) {
+            showPermissionWarning("send message");
+            return;
+        }
         if (msg.deleted === true) return;
 
         const executeDoubleClick = () => {
             if (isMe) {
-                if (!settings.store.enableDoubleClickToEdit || EditStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
+                if (!settings.store.enableDoubleClickToEdit) {
+                    showPermissionWarning("edit message");
+                    return;
+                }
+                if (EditStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
                 MessageActions.startEditMessage(channel.id, msg.id, msg.content);
             } else {
                 if (!settings.store.enableDoubleClickToReply) return;
-                if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) return;
+                if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) {
+                    showPermissionWarning("reply to this message");
+                    return;
+                }
 
                 const isShiftPress = event.shiftKey && !settings.store.requireModifier;
                 const shouldMention = isPluginEnabled(NoReplyMentionPlugin.name)
