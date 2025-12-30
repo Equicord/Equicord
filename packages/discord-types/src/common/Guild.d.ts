@@ -6,6 +6,7 @@ import {
     GuildNSFWLevel,
     GuildPremiumTier,
     GuildVerificationLevel,
+    PermissionOverwriteType,
     SystemChannelFlags,
 } from "../../enums";
 
@@ -66,4 +67,12 @@ export class Guild extends DiscordRecord {
     systemChannelId: string | undefined;
     vanityURLCode: string | undefined;
     verificationLevel: GuildVerificationLevel;
+}
+
+export interface RoleOrUserPermission {
+    type: PermissionOverwriteType;
+    id?: string;
+    permissions?: bigint;
+    overwriteAllow?: bigint;
+    overwriteDeny?: bigint;
 }

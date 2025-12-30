@@ -1,6 +1,7 @@
 export const enum PermissionOverwriteType {
     ROLE = 0,
     MEMBER = 1,
+    OWNER = 2
 }
 
 export const enum ForumLayout {
