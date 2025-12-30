@@ -25,7 +25,7 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
-import { AuthenticationStore, Constants, FluxDispatcher, MessageTypeSets, PermissionsBits, PermissionStore, RestAPI, Toasts, WindowStore } from "@webpack/common";
+import { AuthenticationStore, ComponentDispatch, Constants, FluxDispatcher, MessageTypeSets, PermissionsBits, PermissionStore, RestAPI, Toasts, WindowStore } from "@webpack/common";
 
 const MessageActions = findByPropsLazy("deleteMessage", "startEditMessage");
 const PinActions = findByPropsLazy("pinMessage", "unpinMessage");
@@ -38,6 +38,9 @@ const focusChanged = () => !WindowStore.isFocused() && (isDeletePressed = false)
 
 let doubleClickTimeout: ReturnType<typeof setTimeout> | null = null;
 let pendingDoubleClickAction: (() => void) | null = null;
+let lastQuotedMessageId: string | null = null;
+let lastQuoteTime = 0;
+const QUOTE_TIMEOUT = 5000;
 
 enum ClickAction {
     NONE = "none",
@@ -46,6 +49,9 @@ enum ClickAction {
     REPLY = "reply",
     COPY_CONTENT = "copy_content",
     COPY_LINK = "copy_link",
+    COPY_MESSAGE_ID = "copy_message_id",
+    COPY_USER_ID = "copy_user_id",
+    QUOTE = "quote",
     REACT = "react",
     PIN = "pin"
 }
@@ -58,6 +64,8 @@ const settings = definePluginSettings({
             { label: "Delete Message", value: ClickAction.DELETE, default: true },
             { label: "Copy Content", value: ClickAction.COPY_CONTENT },
             { label: "Copy Link", value: ClickAction.COPY_LINK },
+            { label: "Copy Message ID", value: ClickAction.COPY_MESSAGE_ID },
+            { label: "Copy User ID", value: ClickAction.COPY_USER_ID },
             { label: "None (Disabled)", value: ClickAction.NONE }
         ]
     },
@@ -68,6 +76,8 @@ const settings = definePluginSettings({
             { label: "Edit Message", value: ClickAction.EDIT, default: true },
             { label: "Copy Content", value: ClickAction.COPY_CONTENT },
             { label: "Copy Link", value: ClickAction.COPY_LINK },
+            { label: "Copy Message ID", value: ClickAction.COPY_MESSAGE_ID },
+            { label: "Copy User ID", value: ClickAction.COPY_USER_ID },
             { label: "None (Disabled)", value: ClickAction.NONE }
         ]
     },
@@ -76,8 +86,11 @@ const settings = definePluginSettings({
         description: "Action on double-click (on others' messages)",
         options: [
             { label: "Reply", value: ClickAction.REPLY, default: true },
+            { label: "Quote", value: ClickAction.QUOTE },
             { label: "Copy Content", value: ClickAction.COPY_CONTENT },
             { label: "Copy Link", value: ClickAction.COPY_LINK },
+            { label: "Copy Message ID", value: ClickAction.COPY_MESSAGE_ID },
+            { label: "Copy User ID", value: ClickAction.COPY_USER_ID },
             { label: "React", value: ClickAction.REACT },
             { label: "Pin Message", value: ClickAction.PIN },
             { label: "None (Disabled)", value: ClickAction.NONE }
@@ -88,8 +101,11 @@ const settings = definePluginSettings({
         description: "Action on triple-click",
         options: [
             { label: "React", value: ClickAction.REACT, default: true },
+            { label: "Quote", value: ClickAction.QUOTE },
             { label: "Copy Content", value: ClickAction.COPY_CONTENT },
             { label: "Copy Link", value: ClickAction.COPY_LINK },
+            { label: "Copy Message ID", value: ClickAction.COPY_MESSAGE_ID },
+            { label: "Copy User ID", value: ClickAction.COPY_USER_ID },
             { label: "Pin Message", value: ClickAction.PIN },
             { label: "None (Disabled)", value: ClickAction.NONE }
         ]
@@ -113,6 +129,11 @@ const settings = definePluginSettings({
         type: OptionType.NUMBER,
         description: "Timeout in milliseconds to distinguish double/triple clicks",
         default: 300
+    },
+    quoteWithReply: {
+        type: OptionType.BOOLEAN,
+        description: "When quoting, reply to the original message instead of just inserting the quote",
+        default: true
     }
 });
 
@@ -180,6 +201,59 @@ async function togglePin(channelId: string, messageId: string, channel: any, msg
     }
 }
 
+function quoteMessage(channel: any, msg: any, event: MouseEvent) {
+    if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) {
+        showPermissionWarning("quote message");
+        return;
+    }
+
+    const selection = window.getSelection();
+    const selectedText = selection?.toString().trim();
+
+    let content: string;
+    if (selectedText && event.target instanceof Node && (event.target as Node).textContent) {
+        const messageContent = msg.content || "";
+        if (messageContent.includes(selectedText)) {
+            content = selectedText;
+        } else {
+            content = msg.content || "";
+        }
+    } else {
+        content = msg.content || "";
+    }
+
+    const contentText = content ? `${content.replace(/\n/g, "\n")}` : "";
+
+    const now = Date.now();
+    const isSameMessage = lastQuotedMessageId === msg.id;
+    const isRecentQuote = now - lastQuoteTime < QUOTE_TIMEOUT;
+
+    let quoteText: string;
+    if (!isRecentQuote) {
+        quoteText = contentText ? `> ${contentText}` : "";
+    } else if (isSameMessage) {
+        quoteText = `...${contentText}`;
+    } else {
+        quoteText = `\n\n> ${contentText}`;
+    }
+
+    lastQuotedMessageId = msg.id;
+    lastQuoteTime = now;
+
+    const insertAction = (Constants as any)?.CkL?.INSERT_TEXT ?? "INSERT_TEXT";
+    (ComponentDispatch as any).dispatchToLastSubscribed(insertAction, { plainText: quoteText, rawText: quoteText });
+
+    if (settings.store.quoteWithReply && !isRecentQuote) {
+        FluxDispatcher.dispatch({
+            type: "CREATE_PENDING_REPLY",
+            channel,
+            message: msg,
+            shouldMention: false,
+            showMentionToggle: channel.guild_id !== null
+        });
+    }
+}
+
 export default definePlugin({
     name: "MessageClickActions",
     description: "Customize message click actions - choose what happens when you click, double-click, or hold backspace",
@@ -212,7 +286,7 @@ export default definePlugin({
         const isDM = !channel.guild_id;
         const isSystemMessage = !MessageTypeSets.USER_MESSAGE.has(msg.type);
 
-        if (settings.store.disableInDMs && isDM) return;
+        if (settings.store.disableInDms && isDM) return;
         if (isSystemMessage) return;
 
         if (isDeletePressed) {
@@ -240,6 +314,10 @@ export default definePlugin({
             } else if (action === ClickAction.COPY_LINK) {
                 const link = `https://discord.com/channels/${channel.guild_id ?? "@me"}/${channel.id}/${msg.id}`;
                 copyWithToast(link, "Message link copied!");
+            } else if (action === ClickAction.COPY_MESSAGE_ID) {
+                copyWithToast(msg.id, "Message ID copied!");
+            } else if (action === ClickAction.COPY_USER_ID) {
+                copyWithToast(msg.author.id, "User ID copied!");
             }
             event.preventDefault();
             return;
@@ -266,6 +344,12 @@ export default definePlugin({
             } else if (action === ClickAction.COPY_LINK) {
                 const link = `https://discord.com/channels/${channel.guild_id ?? "@me"}/${channel.id}/${msg.id}`;
                 copyWithToast(link, "Message link copied!");
+            } else if (action === ClickAction.COPY_MESSAGE_ID) {
+                copyWithToast(msg.id, "Message ID copied!");
+            } else if (action === ClickAction.COPY_USER_ID) {
+                copyWithToast(msg.author.id, "User ID copied!");
+            } else if (action === ClickAction.QUOTE) {
+                quoteMessage(channel, msg, event);
             } else if (action === ClickAction.PIN) {
                 if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
                     showPermissionWarning("toggle pin");
@@ -317,6 +401,12 @@ export default definePlugin({
             } else if (action === ClickAction.COPY_LINK) {
                 const link = `https://discord.com/channels/${channel.guild_id ?? "@me"}/${channel.id}/${msg.id}`;
                 copyWithToast(link, "Message link copied!");
+            } else if (action === ClickAction.COPY_MESSAGE_ID) {
+                copyWithToast(msg.id, "Message ID copied!");
+            } else if (action === ClickAction.COPY_USER_ID) {
+                copyWithToast(msg.author.id, "User ID copied!");
+            } else if (action === ClickAction.QUOTE) {
+                quoteMessage(channel, msg, event);
             } else if (action === ClickAction.REACT) {
                 if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
                     showPermissionWarning("toggle reaction");
