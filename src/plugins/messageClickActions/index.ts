@@ -28,6 +28,7 @@ import { findByPropsLazy } from "@webpack";
 import { AuthenticationStore, Constants, FluxDispatcher, MessageTypeSets, PermissionsBits, PermissionStore, RestAPI, Toasts, WindowStore } from "@webpack/common";
 
 const MessageActions = findByPropsLazy("deleteMessage", "startEditMessage");
+const PinActions = findByPropsLazy("pinMessage", "unpinMessage");
 const EditStore = findByPropsLazy("isEditing", "isEditingAny");
 
 let isDeletePressed = false;
@@ -121,12 +122,12 @@ function showPermissionWarning(action: string) {
     });
 }
 
-async function react(channelId: string, messageId: string, emoji: string, channel: any) {
+async function toggleReaction(channelId: string, messageId: string, emoji: string, channel: any, msg: any) {
     const trimmed = emoji.trim();
     if (!trimmed) return;
 
     if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
-        showPermissionWarning("add reaction");
+        showPermissionWarning("toggle reaction");
         return;
     }
 
@@ -135,12 +136,42 @@ async function react(channelId: string, messageId: string, emoji: string, channe
         ? `${customMatch[1]}:${customMatch[2]}`
         : trimmed;
 
+    const hasReacted = msg.reactions?.some((r: any) => {
+        const reactionEmoji = r.emoji.id
+            ? `${r.emoji.name}:${r.emoji.id}`
+            : r.emoji.name;
+        return r.me && reactionEmoji === emojiParam;
+    });
+
     try {
-        await RestAPI.put({
-            url: Constants.Endpoints.REACTION(channelId, messageId, emojiParam, "@me")
-        });
+        if (hasReacted) {
+            await RestAPI.del({
+                url: Constants.Endpoints.REACTION(channelId, messageId, emojiParam, "@me")
+            });
+        } else {
+            await RestAPI.put({
+                url: Constants.Endpoints.REACTION(channelId, messageId, emojiParam, "@me")
+            });
+        }
     } catch (e) {
-        new Logger("MessageClickActions").error("Failed to add reaction:", e);
+        new Logger("MessageClickActions").error("Failed to toggle reaction:", e);
+    }
+}
+
+async function togglePin(channelId: string, messageId: string, channel: any, msg: any) {
+    if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
+        showPermissionWarning("toggle pin");
+        return;
+    }
+
+    try {
+        if (msg.pinned) {
+            PinActions.unpinMessage(channel, messageId);
+        } else {
+            PinActions.pinMessage(channel, messageId);
+        }
+    } catch (err) {
+        new Logger("MessageClickActions").error("Failed to toggle pin:", err);
     }
 }
 
@@ -221,10 +252,10 @@ export default definePlugin({
 
             if (action === ClickAction.REACT) {
                 if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
-                    showPermissionWarning("add reaction");
+                    showPermissionWarning("toggle reaction");
                     return;
                 }
-                react(channel.id, msg.id, settings.store.reactEmoji, channel);
+                toggleReaction(channel.id, msg.id, settings.store.reactEmoji, channel, msg);
             } else if (action === ClickAction.COPY_CONTENT) {
                 copyWithToast(msg.content || "", "Message content copied!");
             } else if (action === ClickAction.COPY_LINK) {
@@ -232,10 +263,10 @@ export default definePlugin({
                 copyWithToast(link, "Message link copied!");
             } else if (action === ClickAction.PIN) {
                 if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
-                    showPermissionWarning("pin message");
+                    showPermissionWarning("toggle pin");
                     return;
                 }
-                MessageActions.pinMessage(channel.id, msg.id);
+                togglePin(channel.id, msg.id, channel, msg);
             }
             event.preventDefault();
             return;
@@ -283,16 +314,16 @@ export default definePlugin({
                 copyWithToast(link, "Message link copied!");
             } else if (action === ClickAction.REACT) {
                 if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
-                    showPermissionWarning("add reaction");
+                    showPermissionWarning("toggle reaction");
                     return;
                 }
-                react(channel.id, msg.id, settings.store.reactEmoji, channel);
+                toggleReaction(channel.id, msg.id, settings.store.reactEmoji, channel, msg);
             } else if (action === ClickAction.PIN) {
                 if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
-                    showPermissionWarning("pin message");
+                    showPermissionWarning("toggle pin");
                     return;
                 }
-                MessageActions.pinMessage(channel.id, msg.id);
+                togglePin(channel.id, msg.id, channel, msg);
             }
         };
 
