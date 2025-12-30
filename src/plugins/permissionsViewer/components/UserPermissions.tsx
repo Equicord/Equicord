@@ -22,13 +22,13 @@ import { HeadingTertiary } from "@components/Heading";
 import { cl, getGuildPermissionSpecMap, getSortedRolesForMember, sortUserRoles } from "@plugins/permissionsViewer/utils";
 import { getIntlMessage } from "@utils/discord";
 import { classes } from "@utils/misc";
-import type { Guild, GuildMember } from "@vencord/discord-types";
+import type { Guild, GuildMember, RoleOrUserPermission } from "@vencord/discord-types";
 import { PermissionOverwriteType } from "@vencord/discord-types/enums";
 import { filters, findBulk, proxyLazyWebpack } from "@webpack";
 import { PermissionsBits, Tooltip, useMemo, UserStore } from "@webpack/common";
 
 import { PermissionsSortOrder, settings } from "..";
-import openRolesAndUsersPermissionsModal, { type RoleOrUserPermission } from "./RolesAndUsersPermissions";
+import openRolesAndUsersPermissionsModal from "./RolesAndUsersPermissions";
 
 interface UserPermission {
     permission: string;
