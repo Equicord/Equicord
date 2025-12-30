@@ -20,6 +20,7 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import NoReplyMentionPlugin from "@plugins/noReplyMention";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
@@ -37,41 +38,79 @@ const focusChanged = () => !WindowStore.isFocused() && (isDeletePressed = false)
 let doubleClickTimeout: ReturnType<typeof setTimeout> | null = null;
 let pendingDoubleClickAction: (() => void) | null = null;
 
+enum ClickAction {
+    NONE = "none",
+    DELETE = "delete",
+    EDIT = "edit",
+    REPLY = "reply",
+    COPY_CONTENT = "copy_content",
+    COPY_LINK = "copy_link",
+    REACT = "react",
+    PIN = "pin"
+}
+
 const settings = definePluginSettings({
-    enableDeleteOnClick: {
-        type: OptionType.BOOLEAN,
-        description: "Enable delete on click while holding backspace",
-        default: true
+    backspaceClickAction: {
+        type: OptionType.SELECT,
+        description: "Action when holding Backspace and clicking a message",
+        options: [
+            { label: "Delete Message", value: ClickAction.DELETE, default: true },
+            { label: "Copy Content", value: ClickAction.COPY_CONTENT },
+            { label: "Copy Link", value: ClickAction.COPY_LINK },
+            { label: "None (Disabled)", value: ClickAction.NONE }
+        ]
     },
-    enableDoubleClickToEdit: {
-        type: OptionType.BOOLEAN,
-        description: "Enable double click to edit",
-        default: true
+    doubleClickAction: {
+        type: OptionType.SELECT,
+        description: "Action on double-click (on your messages)",
+        options: [
+            { label: "Edit Message", value: ClickAction.EDIT, default: true },
+            { label: "Copy Content", value: ClickAction.COPY_CONTENT },
+            { label: "Copy Link", value: ClickAction.COPY_LINK },
+            { label: "None (Disabled)", value: ClickAction.NONE }
+        ]
     },
-    enableDoubleClickToReply: {
-        type: OptionType.BOOLEAN,
-        description: "Enable double click to reply",
-        default: true
+    doubleClickOthersAction: {
+        type: OptionType.SELECT,
+        description: "Action on double-click (on others' messages)",
+        options: [
+            { label: "Reply", value: ClickAction.REPLY, default: true },
+            { label: "Copy Content", value: ClickAction.COPY_CONTENT },
+            { label: "Copy Link", value: ClickAction.COPY_LINK },
+            { label: "React", value: ClickAction.REACT },
+            { label: "Pin Message", value: ClickAction.PIN },
+            { label: "None (Disabled)", value: ClickAction.NONE }
+        ]
     },
-    enableTripleClickToReact: {
-        type: OptionType.BOOLEAN,
-        description: "Enable triple click to react with an emoji",
-        default: false
+    tripleClickAction: {
+        type: OptionType.SELECT,
+        description: "Action on triple-click",
+        options: [
+            { label: "React", value: ClickAction.REACT, default: true },
+            { label: "Copy Content", value: ClickAction.COPY_CONTENT },
+            { label: "Copy Link", value: ClickAction.COPY_LINK },
+            { label: "Pin Message", value: ClickAction.PIN },
+            { label: "None (Disabled)", value: ClickAction.NONE }
+        ]
     },
     reactEmoji: {
         type: OptionType.STRING,
-        description: "Emoji to react with (e.g. 💀 or pepe:123456789)",
+        description: "Emoji to use for react actions (e.g. 💀 or pepe:123456789)",
         default: "💀"
     },
     requireModifier: {
         type: OptionType.BOOLEAN,
-        description: "Only do double click actions when shift/ctrl is held",
+        description: "Only perform click actions when shift or ctrl is held",
+        default: false
+    },
+    disableInDMs: {
+        type: OptionType.BOOLEAN,
+        description: "Disable all click actions in direct messages",
         default: false
     }
 });
 
 function showPermissionWarning(action: string) {
-    if (!settings.store.showPermissionWarnings) return;
     Toasts.show({
         message: `Cannot ${action}: Missing permissions`,
         type: Toasts.Type.FAILURE,
@@ -107,7 +146,7 @@ async function react(channelId: string, messageId: string, emoji: string, channe
 
 export default definePlugin({
     name: "MessageClickActions",
-    description: "Hold Backspace and click to delete, double click to edit/reply, triple click to react",
+    description: "Customize message click actions - choose what happens when you click, double-click, or hold backspace",
     authors: [Devs.Ven, EquicordDevs.keyages],
 
     settings,
@@ -134,23 +173,37 @@ export default definePlugin({
         const myId = AuthenticationStore.getId();
         const isMe = msg.author.id === myId;
         const isSelfInvokedUserApp = msg.interactionMetadata?.authorizing_integration_owners[ApplicationIntegrationType.USER_INSTALL] === myId;
+        const isDM = !channel.guild_id;
+        const isSystemMessage = !MessageTypeSets.USER_MESSAGE.has(msg.type);
+
+        if (settings.store.disableInDMs && isDM) return;
+        if (isSystemMessage) return;
 
         if (isDeletePressed) {
-            if (!settings.store.enableDeleteOnClick) return;
-            if (!(isMe || PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) || isSelfInvokedUserApp)) {
-                showPermissionWarning("delete message");
-                return;
-            }
+            const action = settings.store.backspaceClickAction;
+            if (action === ClickAction.NONE) return;
 
-            if (msg.deleted) {
-                FluxDispatcher.dispatch({
-                    type: "MESSAGE_DELETE",
-                    channelId: channel.id,
-                    id: msg.id,
-                    mlDeleted: true
-                });
-            } else {
-                MessageActions.deleteMessage(channel.id, msg.id);
+            if (action === ClickAction.DELETE) {
+                if (!(isMe || PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) || isSelfInvokedUserApp)) {
+                    showPermissionWarning("delete message");
+                    return;
+                }
+
+                if (msg.deleted) {
+                    FluxDispatcher.dispatch({
+                        type: "MESSAGE_DELETE",
+                        channelId: channel.id,
+                        id: msg.id,
+                        mlDeleted: true
+                    });
+                } else {
+                    MessageActions.deleteMessage(channel.id, msg.id);
+                }
+            } else if (action === ClickAction.COPY_CONTENT) {
+                copyWithToast(msg.content || "", "Message content copied!");
+            } else if (action === ClickAction.COPY_LINK) {
+                const link = `https://discord.com/channels/${channel.guild_id ?? "@me"}/${channel.id}/${msg.id}`;
+                copyWithToast(link, "Message link copied!");
             }
             event.preventDefault();
             return;
@@ -163,31 +216,49 @@ export default definePlugin({
                 pendingDoubleClickAction = null;
             }
 
-            if (settings.store.enableTripleClickToReact) {
+            const action = settings.store.tripleClickAction;
+            if (action === ClickAction.NONE) return;
+
+            if (action === ClickAction.REACT) {
+                if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
+                    showPermissionWarning("add reaction");
+                    return;
+                }
                 react(channel.id, msg.id, settings.store.reactEmoji, channel);
-                event.preventDefault();
+            } else if (action === ClickAction.COPY_CONTENT) {
+                copyWithToast(msg.content || "", "Message content copied!");
+            } else if (action === ClickAction.COPY_LINK) {
+                const link = `https://discord.com/channels/${channel.guild_id ?? "@me"}/${channel.id}/${msg.id}`;
+                copyWithToast(link, "Message link copied!");
+            } else if (action === ClickAction.PIN) {
+                if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
+                    showPermissionWarning("pin message");
+                    return;
+                }
+                MessageActions.pinMessage(channel.id, msg.id);
             }
+            event.preventDefault();
             return;
         }
 
         if (event.detail !== 2) return;
         if (settings.store.requireModifier && !event.ctrlKey && !event.shiftKey) return;
-        if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) {
-            showPermissionWarning("send message");
-            return;
-        }
         if (msg.deleted === true) return;
 
         const executeDoubleClick = () => {
-            if (isMe) {
-                if (!settings.store.enableDoubleClickToEdit) {
-                    showPermissionWarning("edit message");
-                    return;
-                }
+            const action = isMe ? settings.store.doubleClickAction : settings.store.doubleClickOthersAction;
+            if (action === ClickAction.NONE) return;
+
+            if (action === ClickAction.EDIT) {
+                if (!isMe) return;
                 if (EditStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
                 MessageActions.startEditMessage(channel.id, msg.id, msg.content);
-            } else {
-                if (!settings.store.enableDoubleClickToReply) return;
+            } else if (action === ClickAction.REPLY) {
+                if (isMe) return;
+                if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) {
+                    showPermissionWarning("send message");
+                    return;
+                }
                 if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) {
                     showPermissionWarning("reply to this message");
                     return;
@@ -205,10 +276,27 @@ export default definePlugin({
                     shouldMention,
                     showMentionToggle: channel.guild_id !== null
                 });
+            } else if (action === ClickAction.COPY_CONTENT) {
+                copyWithToast(msg.content || "", "Message content copied!");
+            } else if (action === ClickAction.COPY_LINK) {
+                const link = `https://discord.com/channels/${channel.guild_id ?? "@me"}/${channel.id}/${msg.id}`;
+                copyWithToast(link, "Message link copied!");
+            } else if (action === ClickAction.REACT) {
+                if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
+                    showPermissionWarning("add reaction");
+                    return;
+                }
+                react(channel.id, msg.id, settings.store.reactEmoji, channel);
+            } else if (action === ClickAction.PIN) {
+                if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
+                    showPermissionWarning("pin message");
+                    return;
+                }
+                MessageActions.pinMessage(channel.id, msg.id);
             }
         };
 
-        if (settings.store.enableTripleClickToReact) {
+        if (settings.store.tripleClickAction !== ClickAction.NONE) {
             if (doubleClickTimeout) {
                 clearTimeout(doubleClickTimeout);
             }
