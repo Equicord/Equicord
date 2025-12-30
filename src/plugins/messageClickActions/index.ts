@@ -104,10 +104,15 @@ const settings = definePluginSettings({
         description: "Only perform click actions when shift or ctrl is held",
         default: false
     },
-    disableInDMs: {
+    disableInDms: {
         type: OptionType.BOOLEAN,
         description: "Disable all click actions in direct messages",
         default: false
+    },
+    clickTimeout: {
+        type: OptionType.NUMBER,
+        description: "Timeout in milliseconds to distinguish double/triple clicks",
+        default: 300
     }
 });
 
@@ -336,7 +341,7 @@ export default definePlugin({
                 pendingDoubleClickAction?.();
                 pendingDoubleClickAction = null;
                 doubleClickTimeout = null;
-            }, 300);
+            }, settings.store.clickTimeout);
             event.preventDefault();
         } else {
             executeDoubleClick();
