@@ -23,6 +23,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import { Channel, Message } from "@vencord/discord-types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
 import { AuthenticationStore, ComponentDispatch, Constants, FluxDispatcher, MessageTypeSets, PermissionsBits, PermissionStore, RestAPI, Toasts, WindowStore } from "@webpack/common";
@@ -38,9 +39,6 @@ const focusChanged = () => !WindowStore.isFocused() && (isDeletePressed = false)
 
 let doubleClickTimeout: ReturnType<typeof setTimeout> | null = null;
 let pendingDoubleClickAction: (() => void) | null = null;
-let lastQuotedMessageId: string | null = null;
-let lastQuoteTime = 0;
-const QUOTE_TIMEOUT = 5000;
 
 enum ClickAction {
     NONE = "none",
@@ -148,7 +146,7 @@ function showPermissionWarning(action: string) {
     });
 }
 
-async function toggleReaction(channelId: string, messageId: string, emoji: string, channel: any, msg: any) {
+async function toggleReaction(channelId: string, messageId: string, emoji: string, channel: Channel, msg: Message) {
     const trimmed = emoji.trim();
     if (!trimmed) return;
 
@@ -162,7 +160,7 @@ async function toggleReaction(channelId: string, messageId: string, emoji: strin
         ? `${customMatch[1]}:${customMatch[2]}`
         : trimmed;
 
-    const hasReacted = msg.reactions?.some((r: any) => {
+    const hasReacted = msg.reactions?.some(r => {
         const reactionEmoji = r.emoji.id
             ? `${r.emoji.name}:${r.emoji.id}`
             : r.emoji.name;
@@ -184,7 +182,7 @@ async function toggleReaction(channelId: string, messageId: string, emoji: strin
     }
 }
 
-async function togglePin(channelId: string, messageId: string, channel: any, msg: any) {
+async function togglePin(channelId: string, messageId: string, channel: Channel, msg: Message) {
     if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
         showPermissionWarning("toggle pin");
         return;
@@ -201,34 +199,22 @@ async function togglePin(channelId: string, messageId: string, channel: any, msg
     }
 }
 
-function quoteMessage(channel: any, msg: any, event: MouseEvent) {
+function quoteMessage(channel: Channel, msg: Message) {
     if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) {
         showPermissionWarning("quote message");
         return;
     }
 
-    const selectedText = window.getSelection()?.toString().trim();
-    const content = selectedText && msg.content?.includes(selectedText) ? selectedText : msg.content || "";
+    const selection = window.getSelection()?.toString().trim();
+    const content = selection && msg.content?.includes(selection) ? selection : msg.content;
+    if (!content) return;
 
-    const now = Date.now();
-    const isRecentQuote = now - lastQuoteTime < QUOTE_TIMEOUT && lastQuotedMessageId;
-    const isSameMessage = lastQuotedMessageId === msg.id;
+    const quoteText = `> ${content.split("\n").join("\n> ")}\n`;
 
-    let prefix = "";
-    if (isRecentQuote) {
-        prefix = isSameMessage ? "..." : "\n\n>";
-    } else {
-        prefix = content ? "> " : "";
-    }
-
-    lastQuotedMessageId = msg.id;
-    lastQuoteTime = now;
-
-    const quoteText = content ? `${prefix}${content}` : "";
     const insertAction = (Constants as any)?.CkL?.INSERT_TEXT ?? "INSERT_TEXT";
     (ComponentDispatch as any).dispatchToLastSubscribed(insertAction, { plainText: quoteText, rawText: quoteText });
 
-    if (settings.store.quoteWithReply && !isRecentQuote) {
+    if (settings.store.quoteWithReply) {
         FluxDispatcher.dispatch({
             type: "CREATE_PENDING_REPLY",
             channel,
@@ -334,7 +320,7 @@ export default definePlugin({
             } else if (action === ClickAction.COPY_USER_ID) {
                 copyWithToast(msg.author.id, "User ID copied!");
             } else if (action === ClickAction.QUOTE) {
-                quoteMessage(channel, msg, event);
+                quoteMessage(channel, msg);
             } else if (action === ClickAction.PIN) {
                 if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
                     showPermissionWarning("toggle pin");
@@ -391,7 +377,7 @@ export default definePlugin({
             } else if (action === ClickAction.COPY_USER_ID) {
                 copyWithToast(msg.author.id, "User ID copied!");
             } else if (action === ClickAction.QUOTE) {
-                quoteMessage(channel, msg, event);
+                quoteMessage(channel, msg);
             } else if (action === ClickAction.REACT) {
                 if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
                     showPermissionWarning("toggle reaction");
