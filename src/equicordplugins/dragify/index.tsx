@@ -34,6 +34,7 @@ let lastDragEventAt = 0;
 let guildGhostCleanupTimer: number | null = null;
 let dragifyActive = false;
 let dragStateWatchdog: number | null = null;
+let dragSourceIsInput = false;
 
 const settings = definePluginSettings({
     userOutput: {
@@ -100,6 +101,7 @@ function clearDragState() {
     activeGuildDragId = null;
     activeDragEntity = null;
     dragifyActive = false;
+    dragSourceIsInput = false;
 }
 
 function setDragifyDataTransfer(dataTransfer: DataTransfer | null, payload: string) {
@@ -113,6 +115,10 @@ function setDragifyDataTransfer(dataTransfer: DataTransfer | null, payload: stri
     dataTransfer.setData("application/dragify", payload);
     dataTransfer.setData("text/plain", "");
 }
+
+function hasDragifyTransfer(dataTransfer?: DataTransfer | null) {
+    return Boolean(dataTransfer?.types?.includes("application/dragify"));
+}
 const inviteCache = new Map<string, { code: string; expiresAt: number | null; maxUses: number | null; uses: number | null; }>();
 
 export default definePlugin({
@@ -122,29 +128,6 @@ export default definePlugin({
     settings,
 
     patches: [
-        // Chat input form (wire drop handlers)
-        {
-            find: "editor:eR,channelId:k.id,guildId:k.guild_id",
-            replacement: {
-                match: /className:\i\(\)\(\i,\i\.slateContainer\),/,
-                replace: "$&onDragOver:e=>$self.onDragOver(e),"
-            }
-        },
-        // Chat input text area (drop handlers for contenteditable)
-        {
-            find: "editor:eR,channelId:k.id,guildId:k.guild_id",
-            replacement: {
-                match: /className:\i\(\)\(\i\.slateTextArea,\i\),/,
-                replace: "$&onDragOver:e=>$self.onDragOver(e),"
-            }
-        },
-        {
-            find: "editor:eR,channelId:k.id,guildId:k.guild_id",
-            replacement: {
-                match: /onKeyDown:(\i),/,
-                replace: "onKeyDown:e=>{if($self.onEditorKeyDown(e))return;$1(e)},"
-            }
-        },
         // Voice user rows (voice channel sidebar)
         {
             find: "avatarContainer,onContextMenu",
@@ -290,12 +273,8 @@ export default definePlugin({
         },
     ],
 
-    onDragOver(event: React.DragEvent) {
-        event.preventDefault();
-        if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
-    },
-
     async onDrop(event: React.DragEvent, channel?: Channel | null) {
+        if (dragSourceIsInput) return;
         const { dataTransfer } = event;
         if (!dataTransfer || dataTransfer.files?.length) return;
 
@@ -759,10 +738,12 @@ export default definePlugin({
     globalDragOver: (event: DragEvent) => {
         const inst = pluginInstance;
         if (!inst) return;
+        if (dragSourceIsInput) return;
+        if (event.dataTransfer?.files?.length) return;
         if (!inst.isMessageInputEvent(event)) return;
         const hasActiveGuildDrag = activeGuildDragId !== null;
         const hasActiveEntity = Boolean(activeDragEntity || activeUserDragId);
-        const shouldHandle = hasActiveGuildDrag || hasActiveEntity || dragifyActive || inst.shouldHandle(event.dataTransfer);
+        const shouldHandle = hasActiveGuildDrag || hasActiveEntity || dragifyActive || hasDragifyTransfer(event.dataTransfer);
         if (!shouldHandle) return;
         event.preventDefault();
         event.stopPropagation();
@@ -772,21 +753,23 @@ export default definePlugin({
     globalDrop: async (event: DragEvent) => {
         const inst = pluginInstance;
         if (!inst) return;
+        if (dragSourceIsInput) return;
         if (!inst.isMessageInputEvent(event)) return;
+        if (event.dataTransfer?.files?.length) {
+            clearDragState();
+            return;
+        }
         const channelId = SelectedChannelStore?.getChannelId?.();
         const channel = channelId ? ChannelStore.getChannel(channelId) : null;
         if (!channel) return;
 
         const types = event.dataTransfer?.types ?? [];
         const hasDragify = types.includes("application/dragify");
-        const likelyJson = types.includes("application/json");
         const hasActiveGuildDrag = activeGuildDragId !== null;
         const hasActiveUserDrag = activeUserDragId !== null;
         const hasActiveEntity = activeDragEntity !== null;
 
-        const payloads = await collectPayloadStrings(event.dataTransfer as DataTransfer);
-        const entity = parseFromStrings(payloads, { ChannelStore, GuildStore, UserStore });
-        if (!hasDragify && !entity && !likelyJson && !hasActiveGuildDrag && !hasActiveUserDrag && !hasActiveEntity) return;
+        if (!hasDragify && !hasActiveGuildDrag && !hasActiveUserDrag && !hasActiveEntity && !dragifyActive) return;
 
         lastDropAt = Date.now();
         event.preventDefault();
@@ -801,6 +784,21 @@ export default definePlugin({
 
         const target = event.target as HTMLElement | null;
         if (!target) return;
+        if (inst.isMessageInputElement(target)) {
+            clearDragState();
+            dragSourceIsInput = true;
+            return;
+        }
+        const inputPath = event.composedPath?.() ?? [];
+        for (const entry of inputPath) {
+            const el = entry as Element | null;
+            if (!el) continue;
+            if (inst.isMessageInputElement(el)) {
+                clearDragState();
+                dragSourceIsInput = true;
+                return;
+            }
+        }
 
         if (!event.dataTransfer.types?.includes("application/dragify")) {
             if (typeof document !== "undefined" && typeof event.clientX === "number" && typeof event.clientY === "number") {
@@ -941,18 +939,6 @@ export default definePlugin({
             handled = true;
         }
         return handled;
-    },
-
-    onEditorKeyDown(event: KeyboardEvent): boolean {
-        if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "a") return false;
-        const target = this.resolveElementFromNode(event.currentTarget as Node | null);
-        const editor = (target as HTMLElement | null)?.closest?.("[data-slate-editor],[role=\"textbox\"],[contenteditable=\"true\"]") as HTMLElement | null;
-        if (!editor) return false;
-        if (!this.applySelectAll(editor)) return false;
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation?.();
-        return true;
     },
 
     isMessageInputElement(el: Element | null): boolean {
