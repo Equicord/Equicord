@@ -1,0 +1,212 @@
+import ErrorBoundary from "@components/ErrorBoundary";
+import { findComponentByCodeLazy } from "@webpack";
+import { createRoot, React, useStateFromStores, VoiceStateStore } from "@webpack/common";
+
+export type GhostState = {
+    visible: boolean;
+    x: number;
+    y: number;
+    kind: "user" | "channel" | "guild";
+    title: string;
+    subtitle?: string;
+    iconUrl?: string;
+    symbol?: string;
+    badge?: string;
+    entityId?: string;
+    exiting: boolean;
+};
+
+const ScreenArrowIcon = findComponentByCodeLazy("3V5Zm16") as React.ComponentType<{
+    className?: string;
+    width?: number;
+    height?: number;
+    size?: number;
+    color?: any;
+    colorClass?: string;
+}>;
+
+let ghostRoot: ReturnType<typeof createRoot> | null = null;
+let ghostContainer: HTMLDivElement | null = null;
+let ghostRaf: number | null = null;
+let ghostPendingPos: { x: number; y: number; } | null = null;
+let ghostHideTimer: number | null = null;
+
+let ghostState: GhostState = {
+    visible: false,
+    x: 0,
+    y: 0,
+    kind: "channel",
+    title: "",
+    exiting: false
+};
+
+const ghostListeners = new Set<() => void>();
+
+function notifyGhost() {
+    ghostListeners.forEach(listener => listener());
+}
+
+function setGhostState(next: Partial<GhostState>) {
+    ghostState = { ...ghostState, ...next };
+    notifyGhost();
+}
+
+export function isGhostVisible(): boolean {
+    return ghostState.visible;
+}
+
+export function scheduleGhostPosition(x: number, y: number) {
+    ghostPendingPos = { x, y };
+    if (ghostRaf !== null) return;
+    setGhostState({ x, y });
+    ghostRaf = requestAnimationFrame(() => {
+        if (ghostPendingPos) setGhostState({ x: ghostPendingPos.x, y: ghostPendingPos.y });
+        ghostPendingPos = null;
+        ghostRaf = null;
+    });
+}
+
+export function hideGhost() {
+    if (!ghostState.visible) return;
+    if (ghostHideTimer !== null) {
+        clearTimeout(ghostHideTimer);
+        ghostHideTimer = null;
+    }
+    setGhostState({ exiting: true });
+    ghostHideTimer = window.setTimeout(() => {
+        ghostHideTimer = null;
+        setGhostState({ visible: false, exiting: false });
+    }, 200);
+}
+
+export function showGhost(next: Omit<GhostState, "visible" | "x" | "y">, position?: { x: number; y: number; }) {
+    if (ghostHideTimer !== null) {
+        clearTimeout(ghostHideTimer);
+        ghostHideTimer = null;
+    }
+    if (position) scheduleGhostPosition(position.x, position.y);
+    setGhostState({ ...next, visible: true, exiting: false });
+}
+
+export function mountGhost() {
+    if (ghostRoot || typeof document === "undefined") return;
+    ghostContainer = document.createElement("div");
+    ghostContainer.className = "vc-dragify-ghost-root";
+    document.body.appendChild(ghostContainer);
+    ghostRoot = createRoot(ghostContainer);
+    ghostRoot.render(
+        <ErrorBoundary>
+            <DragGhost />
+        </ErrorBoundary>
+    );
+}
+
+export function unmountGhost() {
+    if (ghostRoot) ghostRoot.unmount();
+    ghostRoot = null;
+    ghostContainer?.remove();
+    ghostContainer = null;
+    if (ghostHideTimer !== null) {
+        clearTimeout(ghostHideTimer);
+        ghostHideTimer = null;
+    }
+    setGhostState({ visible: false, exiting: false });
+}
+
+const DragGhost = () => {
+    const [state, setState] = React.useState(ghostState);
+    React.useEffect(() => {
+        const listener = () => setState({ ...ghostState });
+        ghostListeners.add(listener);
+        return () => {
+            ghostListeners.delete(listener);
+        };
+    }, []);
+
+    const voiceState = useStateFromStores(
+        [VoiceStateStore],
+        () => (state.kind === "user" && state.entityId
+            ? VoiceStateStore.getVoiceStateForUser(state.entityId)
+            : null)
+    );
+    const inVoice = Boolean(voiceState?.channelId);
+    const isMuted = Boolean(
+        voiceState
+        && (voiceState.selfMute || voiceState.mute || voiceState.selfDeaf || voiceState.deaf)
+    );
+    const isStreaming = Boolean(voiceState?.selfStream);
+
+    if (!state.visible) return null;
+
+    return (
+        <div
+            className={`vc-dragify-ghost${state.exiting ? " vc-dragify-ghost-exit" : ""}`}
+            style={{ transform: `translate3d(${state.x}px, ${state.y}px, 0)` }}
+        >
+            <div className="vc-dragify-card">
+                <div className="vc-dragify-icon">
+                    {state.iconUrl
+                        ? <img className="vc-dragify-icon-image" src={state.iconUrl} alt="" />
+                        : <span className="vc-dragify-icon-text">{state.symbol ?? "#"}</span>
+                    }
+                </div>
+                <div className="vc-dragify-body">
+                    <div className="vc-dragify-title-row">
+                        <div className="vc-dragify-title">{state.title}</div>
+                        {state.kind === "user" && inVoice
+                            ? (isMuted
+                                ? <VoiceMutedIcon className="vc-dragify-voice-icon vc-dragify-voice-icon-muted" />
+                                : <VoiceStateIcon className="vc-dragify-voice-icon" />)
+                            : null}
+                        {state.kind === "user" && inVoice && isStreaming
+                            ? <ScreenArrowIcon
+                                className="vc-dragify-voice-icon vc-dragify-voice-icon-stream"
+                                size={14}
+                                width={14}
+                                height={14}
+                            />
+                            : null}
+                    </div>
+                    {state.subtitle && <div className="vc-dragify-subtitle">{state.subtitle}</div>}
+                </div>
+                <div className="vc-dragify-badge">{state.badge ?? state.kind}</div>
+            </div>
+        </div>
+    );
+};
+
+function VoiceStateIcon({ className, size = 14 }: { className?: string; size?: number; }) {
+    return (
+        <svg
+            className={className}
+            xmlns="http://www.w3.org/2000/svg"
+            width={size}
+            height={size}
+            fill="none"
+            viewBox="0 0 24 24"
+        >
+            <path
+                fill="currentColor"
+                d="M7 2a1 1 0 0 0-1 1v18a1 1 0 1 0 2 0V3a1 1 0 0 0-1-1ZM11 6a1 1 0 1 1 2 0v12a1 1 0 1 1-2 0V6ZM1 8a1 1 0 0 1 2 0v8a1 1 0 1 1-2 0V8ZM16 5a1 1 0 1 1 2 0v14a1 1 0 1 1-2 0V5ZM22 8a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0V9a1 1 0 0 0-1-1Z"
+            />
+        </svg>
+    );
+}
+
+function VoiceMutedIcon({ className, size = 14 }: { className?: string; size?: number; }) {
+    return (
+        <svg
+            className={className}
+            xmlns="http://www.w3.org/2000/svg"
+            width={size}
+            height={size}
+            fill="none"
+            viewBox="0 0 24 24"
+        >
+            <path
+                fill="currentColor"
+                d="M22.7 2.7a1 1 0 0 0-1.4-1.4l-20 20a1 1 0 1 0 1.4 1.4l20-20ZM6.85 13.15a.5.5 0 0 1-.85-.36V3a1 1 0 0 1 2 0v8.8a.5.5 0 0 1-.15.35l-1 1ZM11 17.2v.8a1 1 0 1 0 2 0v-1.8a.5.5 0 0 0-.85-.35l-1 1a.5.5 0 0 0-.15.36ZM11 7.8V6a1 1 0 1 1 2 0v.8a.5.5 0 0 1-.15.35l-1 1a.5.5 0 0 1-.85-.36ZM17.15 10.85a.5.5 0 0 1 .85.36V19a1 1 0 1 1-2 0v-6.8a.5.5 0 0 1 .15-.35l1-1ZM2 7a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1ZM21 9a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0V9Z"
+            />
+        </svg>
+    );
+}
