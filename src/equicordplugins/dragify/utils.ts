@@ -1,3 +1,9 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2025 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import type { Channel } from "@vencord/discord-types";
 
 const userMentionRegex = /<@!?(\d{17,20})>/;
@@ -133,7 +139,7 @@ export function parseFromStrings(payloads: string[], stores: StoreSet): DropEnti
     return null;
 }
 
-export function extractChannelPath(value: string): { guildId?: string; channelId?: string } | null {
+export function extractChannelPath(value: string): { guildId?: string; channelId?: string; } | null {
     const channelPath = channelPathRegex.exec(value);
     if (!channelPath) return null;
     return {
@@ -142,7 +148,7 @@ export function extractChannelPath(value: string): { guildId?: string; channelId
     };
 }
 
-export function extractChannelFromUrl(value: string): { guildId?: string; channelId?: string } | null {
+export function extractChannelFromUrl(value: string): { guildId?: string; channelId?: string; } | null {
     const channelFromUrl = channelUrlRegex.exec(value);
     if (!channelFromUrl) return null;
     const guildId = channelFromUrl[1] ?? channelFromUrl[2];
@@ -158,4 +164,9 @@ export function extractUserFromAvatar(value: string): string | null {
     const userAvatar = userAvatarRegex.exec(value);
     if (userAvatar?.[1]) return userAvatar[1];
     return null;
+}
+
+export function extractUserFromProfile(value: string): string | null {
+    const match = userProfileUrlRegex.exec(value);
+    return match?.[1] ?? null;
 }
