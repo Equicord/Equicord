@@ -16,7 +16,7 @@ import { ChannelType } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
 import { ChannelStore, ComponentDispatch, Constants, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
 import { type GhostState, hideGhost as hideDragGhost, isGhostVisible, mountGhost as mountDragGhost, scheduleGhostPosition as scheduleDragGhostPosition, showGhost as showDragGhost, unmountGhost as unmountDragGhost } from "./ghost";
-import { collectPayloadStrings, extractChannelPath, extractSnowflakeFromString, extractStrings, parseFromStrings, tryParseJson } from "./utils";
+import { collectPayloadStrings, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractStrings, extractUserFromAvatar, parseFromStrings, tryParseJson } from "./utils";
 
 type DropEntity =
     | { kind: "user"; id: string; }
@@ -1015,16 +1015,16 @@ export default definePlugin({
             const href = el.getAttribute("href") ?? "";
             const isChannelContext = /(channel|thread|private|forum)/i.test(listId) || /(channel|thread|private|forum)/i.test(rawId);
 
-            const pathMatch = href.match(channelPathRegex);
-            if (pathMatch) {
-                const guildId = pathMatch[1] === "@me" ? undefined : pathMatch[1];
-                return { id: pathMatch[2], guildId };
+            const pathMatch = extractChannelPath(href);
+            if (pathMatch?.channelId) {
+                const guildId = pathMatch.guildId === "@me" ? undefined : pathMatch.guildId;
+                return { id: pathMatch.channelId, guildId };
             }
 
-            const fullMatch = href.match(channelUrlRegex);
-            if (fullMatch) {
-                const guildId = fullMatch[1] ?? fullMatch[2];
-                return { id: fullMatch[3], guildId: guildId === "@me" ? undefined : guildId };
+            const fullMatch = extractChannelFromUrl(href);
+            if (fullMatch?.channelId) {
+                const guildId = fullMatch.guildId === "@me" ? undefined : fullMatch.guildId;
+                return { id: fullMatch.channelId, guildId };
             }
 
             const candidate = isChannelContext
@@ -1078,9 +1078,8 @@ export default definePlugin({
 
             const styleAttr = el.getAttribute("style") ?? "";
             const bgImage = (el as HTMLElement).style?.backgroundImage ?? "";
-            const styleAvatar = (styleAttr + " " + bgImage).match(guildUserAvatarRegex)
-                ?? (styleAttr + " " + bgImage).match(userAvatarRegex);
-            if (styleAvatar?.[1]) return styleAvatar[1];
+            const styleAvatar = extractUserFromAvatar(styleAttr + " " + bgImage);
+            if (styleAvatar) return styleAvatar;
 
             const ariaMatch = extractSnowflakeFromString(aria);
             if (ariaMatch) return ariaMatch;
@@ -1116,11 +1115,6 @@ export default definePlugin({
         }
 
         return null;
-    },
-
-    extractSnowflakeFromString(value: string): string | null {
-        const match = value.match(/\d{17,20}/);
-        return match?.[0] ?? null;
     },
 
     mountGhost() {

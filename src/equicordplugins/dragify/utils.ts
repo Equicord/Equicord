@@ -141,3 +141,21 @@ export function extractChannelPath(value: string): { guildId?: string; channelId
         channelId: channelPath[2]
     };
 }
+
+export function extractChannelFromUrl(value: string): { guildId?: string; channelId?: string } | null {
+    const channelFromUrl = channelUrlRegex.exec(value);
+    if (!channelFromUrl) return null;
+    const guildId = channelFromUrl[1] ?? channelFromUrl[2];
+    return {
+        guildId: guildId === "@me" ? "@me" : guildId,
+        channelId: channelFromUrl[3]
+    };
+}
+
+export function extractUserFromAvatar(value: string): string | null {
+    const guildUserAvatar = guildUserAvatarRegex.exec(value);
+    if (guildUserAvatar?.[1]) return guildUserAvatar[1];
+    const userAvatar = userAvatarRegex.exec(value);
+    if (userAvatar?.[1]) return userAvatar[1];
+    return null;
+}
