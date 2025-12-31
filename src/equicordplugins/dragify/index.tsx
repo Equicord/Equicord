@@ -15,8 +15,9 @@ import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
 import { ChannelStore, ComponentDispatch, Constants, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
+
 import { type GhostState, hideGhost as hideDragGhost, isGhostVisible, mountGhost as mountDragGhost, scheduleGhostPosition as scheduleDragGhostPosition, showGhost as showDragGhost, unmountGhost as unmountDragGhost } from "./ghost";
-import { collectPayloadStrings, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractStrings, extractUserFromAvatar, parseFromStrings, tryParseJson } from "./utils";
+import { collectPayloadStrings, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractStrings, extractUserFromAvatar, extractUserFromProfile, parseFromStrings, tryParseJson } from "./utils";
 
 type DropEntity =
     | { kind: "user"; id: string; }
@@ -652,7 +653,7 @@ export default definePlugin({
             const chatMessage = searchTarget.closest("[data-author-id]") as HTMLElement | null;
             if (chatMessage) {
                 const authorId = chatMessage.getAttribute("data-author-id");
-        const parsed = authorId ? extractSnowflakeFromString(authorId) : null;
+                const parsed = authorId ? extractSnowflakeFromString(authorId) : null;
                 if (parsed) {
                     user = { id: parsed };
                 }
@@ -1070,11 +1071,11 @@ export default definePlugin({
                 }
             }
 
-            const profile = href.match(userProfileUrlRegex);
-            if (profile?.[1]) return profile[1];
+            const profile = extractUserFromProfile(href);
+            if (profile) return profile;
 
-            const avatar = src.match(guildUserAvatarRegex) ?? src.match(userAvatarRegex);
-            if (avatar?.[1]) return avatar[1];
+            const avatar = extractUserFromAvatar(src);
+            if (avatar) return avatar;
 
             const styleAttr = el.getAttribute("style") ?? "";
             const bgImage = (el as HTMLElement).style?.backgroundImage ?? "";
