@@ -7,15 +7,16 @@
 import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
-import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { getGuildAcronym } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
-import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
-import { ChannelStore, ComponentDispatch, Constants, createRoot, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore, useStateFromStores, VoiceStateStore } from "@webpack/common";
+import { findByPropsLazy } from "@webpack";
+import { ChannelStore, ComponentDispatch, Constants, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
+import { type GhostState, hideGhost as hideDragGhost, isGhostVisible, mountGhost as mountDragGhost, scheduleGhostPosition as scheduleDragGhostPosition, showGhost as showDragGhost, unmountGhost as unmountDragGhost } from "./ghost";
+import { collectPayloadStrings, extractChannelPath, extractSnowflakeFromString, extractStrings, parseFromStrings, tryParseJson } from "./utils";
 
 type DropEntity =
     | { kind: "user"; id: string; }
@@ -90,194 +91,36 @@ const settings = definePluginSettings({
 
 const DraftActions = findByPropsLazy("saveDraft", "changeDraft") as DraftActions;
 const logger = new Logger("Dragify");
-const ScreenArrowIcon = findComponentByCodeLazy("3V5Zm16") as React.ComponentType<{
-    className?: string;
-    width?: number;
-    height?: number;
-    size?: number;
-    color?: any;
-    colorClass?: string;
-}>;
 let pluginInstance: any = null;
 let activeGuildDragId: string | null = null;
 let activeUserDragId: string | null = null;
 let activeDragEntity: DropEntity | null = null;
 let lastDropAt = 0;
-let ghostRoot: ReturnType<typeof createRoot> | null = null;
-let ghostContainer: HTMLDivElement | null = null;
-let ghostRaf: number | null = null;
-let ghostPendingPos: { x: number; y: number; } | null = null;
-let ghostHideTimer: number | null = null;
 let lastHandledDrop: { at: number; key: string; } = { at: 0, key: "" };
 let lastDragEventAt = 0;
 let guildGhostCleanupTimer: number | null = null;
 let dragifyActive = false;
 let dragStateWatchdog: number | null = null;
 
-type GhostState = {
-    visible: boolean;
-    x: number;
-    y: number;
-    kind: DropEntity["kind"];
-    title: string;
-    subtitle?: string;
-    iconUrl?: string;
-    symbol?: string;
-    badge?: string;
-    entityId?: string;
-    exiting: boolean;
-};
-
-let ghostState: GhostState = {
-    visible: false,
-    x: 0,
-    y: 0,
-    kind: "channel",
-    title: "",
-    exiting: false
-};
-
-const ghostListeners = new Set<() => void>();
-
-function notifyGhost() {
-    ghostListeners.forEach(listener => listener());
+function clearDragState() {
+    activeUserDragId = null;
+    activeGuildDragId = null;
+    activeDragEntity = null;
+    dragifyActive = false;
 }
 
-function setGhostState(next: Partial<GhostState>) {
-    ghostState = { ...ghostState, ...next };
-    notifyGhost();
-}
-
-function scheduleGhostPosition(x: number, y: number) {
-    ghostPendingPos = { x, y };
-    if (ghostRaf !== null) return;
-    setGhostState({ x, y });
-    ghostRaf = requestAnimationFrame(() => {
-        if (ghostPendingPos) setGhostState({ x: ghostPendingPos.x, y: ghostPendingPos.y });
-        ghostPendingPos = null;
-        ghostRaf = null;
-    });
-}
-
-function hideGhost() {
-    if (!ghostState.visible) return;
-    if (ghostHideTimer !== null) {
-        clearTimeout(ghostHideTimer);
-        ghostHideTimer = null;
+function setDragifyDataTransfer(dataTransfer: DataTransfer | null, payload: string) {
+    if (!dataTransfer) return;
+    if (dataTransfer.clearData) {
+        dataTransfer.clearData("text/plain");
+        dataTransfer.clearData("text/uri-list");
+        dataTransfer.clearData("text/html");
     }
-    setGhostState({ exiting: true });
-    ghostHideTimer = window.setTimeout(() => {
-        ghostHideTimer = null;
-        setGhostState({ visible: false, exiting: false });
-    }, 200);
-}
-
-const DragGhost = () => {
-    const [state, setState] = React.useState(ghostState);
-    React.useEffect(() => {
-        const listener = () => setState({ ...ghostState });
-        ghostListeners.add(listener);
-        return () => {
-            ghostListeners.delete(listener);
-        };
-    }, []);
-
-    const voiceState = useStateFromStores(
-        [VoiceStateStore],
-        () => (state.kind === "user" && state.entityId
-            ? VoiceStateStore.getVoiceStateForUser(state.entityId)
-            : null)
-    );
-    const inVoice = Boolean(voiceState?.channelId);
-    const isMuted = Boolean(
-        voiceState
-        && (voiceState.selfMute || voiceState.mute || voiceState.selfDeaf || voiceState.deaf)
-    );
-    const isStreaming = Boolean(voiceState?.selfStream);
-
-    if (!state.visible) return null;
-
-    return (
-        <div
-            className={`vc-dragify-ghost${state.exiting ? " vc-dragify-ghost-exit" : ""}`}
-            style={{ transform: `translate3d(${state.x}px, ${state.y}px, 0)` }}
-        >
-            <div className="vc-dragify-card">
-                <div className="vc-dragify-icon">
-                    {state.iconUrl
-                        ? <img className="vc-dragify-icon-image" src={state.iconUrl} alt="" />
-                        : <span className="vc-dragify-icon-text">{state.symbol ?? "#"}</span>
-                    }
-                </div>
-                <div className="vc-dragify-body">
-                    <div className="vc-dragify-title-row">
-                        <div className="vc-dragify-title">{state.title}</div>
-                        {state.kind === "user" && inVoice
-                            ? (isMuted
-                                ? <VoiceMutedIcon className="vc-dragify-voice-icon vc-dragify-voice-icon-muted" />
-                                : <VoiceStateIcon className="vc-dragify-voice-icon" />)
-                            : null}
-                        {state.kind === "user" && inVoice && isStreaming
-                            ? <ScreenArrowIcon
-                                className="vc-dragify-voice-icon vc-dragify-voice-icon-stream"
-                                size={14}
-                                width={14}
-                                height={14}
-                            />
-                            : null}
-                    </div>
-                    {state.subtitle && <div className="vc-dragify-subtitle">{state.subtitle}</div>}
-                </div>
-                <div className="vc-dragify-badge">{state.badge ?? state.kind}</div>
-            </div>
-        </div>
-    );
-};
-
-function VoiceStateIcon({ className, size = 14 }: { className?: string; size?: number; }) {
-    return (
-        <svg
-            className={className}
-            xmlns="http://www.w3.org/2000/svg"
-            width={size}
-            height={size}
-            fill="none"
-            viewBox="0 0 24 24"
-        >
-            <path
-                fill="currentColor"
-                d="M7 2a1 1 0 0 0-1 1v18a1 1 0 1 0 2 0V3a1 1 0 0 0-1-1ZM11 6a1 1 0 1 1 2 0v12a1 1 0 1 1-2 0V6ZM1 8a1 1 0 0 1 2 0v8a1 1 0 1 1-2 0V8ZM16 5a1 1 0 1 1 2 0v14a1 1 0 1 1-2 0V5ZM22 8a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0V9a1 1 0 0 0-1-1Z"
-            />
-        </svg>
-    );
-}
-
-function VoiceMutedIcon({ className, size = 14 }: { className?: string; size?: number; }) {
-    return (
-        <svg
-            className={className}
-            xmlns="http://www.w3.org/2000/svg"
-            width={size}
-            height={size}
-            fill="none"
-            viewBox="0 0 24 24"
-        >
-            <path
-                fill="currentColor"
-                d="M22.7 2.7a1 1 0 0 0-1.4-1.4l-20 20a1 1 0 1 0 1.4 1.4l20-20ZM6.85 13.15a.5.5 0 0 1-.85-.36V3a1 1 0 0 1 2 0v8.8a.5.5 0 0 1-.15.35l-1 1ZM11 17.2v.8a1 1 0 1 0 2 0v-1.8a.5.5 0 0 0-.85-.35l-1 1a.5.5 0 0 0-.15.36ZM11 7.8V6a1 1 0 1 1 2 0v.8a.5.5 0 0 1-.15.35l-1 1a.5.5 0 0 1-.85-.36ZM17.15 10.85a.5.5 0 0 1 .85.36V19a1 1 0 1 1-2 0v-6.8a.5.5 0 0 1 .15-.35l1-1ZM2 7a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1ZM21 9a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0V9Z"
-            />
-        </svg>
-    );
+    dataTransfer.setData("application/json", payload);
+    dataTransfer.setData("application/dragify", payload);
+    dataTransfer.setData("text/plain", "");
 }
 const inviteCache = new Map<string, { code: string; expiresAt: number | null; maxUses: number | null; uses: number | null; }>();
-const userMentionRegex = /<@!?(\d{17,20})>/;
-const userProfileUrlRegex = /discord(?:(?:app)?\.com|:\/\/-?)\/users\/(\d{17,20})/;
-const userAvatarRegex = /cdn\.discordapp\.com\/(?:avatars|users)\/(\d{17,20})\//;
-const guildUserAvatarRegex = /cdn\.discordapp\.com\/guilds\/\d{17,20}\/users\/(\d{17,20})\/avatars\//;
-const channelMentionRegex = /<#(\d{17,20})>/;
-const channelUrlRegex = /discord(?:(?:app)?\.com|:\/\/-?)\/channels\/(?:(@me)|(\d{17,20}))\/(\d{17,20})/;
-const channelPathRegex = /\/channels\/(@me|\d{17,20})\/(\d{17,20})/;
-const guildIconRegex = /cdn\.discordapp\.com\/icons\/(\d{17,20})\//;
 
 export default definePlugin({
     name: "Dragify",
@@ -478,7 +321,7 @@ export default definePlugin({
         if (!resolvedChannel) return;
 
         if (dragifyData) {
-            const parsed = this.tryParseJson(dragifyData);
+            const parsed = tryParseJson(dragifyData);
             if (parsed?.kind && parsed.id) {
                 const fromDragify: DropEntity | null =
                     parsed.kind === "user"
@@ -499,8 +342,8 @@ export default definePlugin({
             }
         }
 
-        const payloads = await this.collectPayloadStrings(dataTransfer);
-        let entity = this.parseFromStrings(payloads);
+        const payloads = await collectPayloadStrings(dataTransfer);
+        let entity = parseFromStrings(payloads, { ChannelStore, GuildStore, UserStore });
         if (!entity && activeDragEntity) {
             entity = activeDragEntity;
         } else if (!entity && activeUserDragId) {
@@ -523,10 +366,7 @@ export default definePlugin({
         try {
             const text = await this.buildText(entity, channel);
             if (!text) {
-                if (entity.kind === "guild") activeGuildDragId = null;
-                if (entity.kind === "user") activeUserDragId = null;
-                activeDragEntity = null;
-                dragifyActive = false;
+                clearDragState();
                 return;
             }
             if (entity.kind === "user") {
@@ -534,127 +374,16 @@ export default definePlugin({
             } else {
                 this.insertText(channel.id, text);
             }
-            if (entity.kind === "guild") activeGuildDragId = null;
-            if (entity.kind === "user") activeUserDragId = null;
-            activeDragEntity = null;
-            dragifyActive = false;
+            clearDragState();
         } catch (error) {
             logger.error("Failed handling drop", error);
             showToast("Dragify failed to handle drop.", Toasts.Type.FAILURE);
         }
     },
 
-    parseFromStrings(payloads: string[]): DropEntity | null {
-        if (payloads.length === 0) return null;
-
-        for (const value of payloads) {
-            const parsed = this.tryParseJson(value);
-            if (parsed) {
-                const id = parsed.id ?? parsed.userId ?? parsed.channelId ?? parsed.guildId;
-                const type = (parsed.type ?? parsed.kind ?? parsed.itemType ?? "").toLowerCase();
-                if (id) {
-                    if (type.includes("user")) return { kind: "user", id };
-                    if (type.includes("channel")) return { kind: "channel", id, guildId: parsed.guildId };
-                    if (type.includes("guild") || type.includes("server")) return { kind: "guild", id };
-                }
-            }
-        }
-
-        for (const value of payloads) {
-            const trimmed = value.trim();
-            if (!trimmed) continue;
-            const userFromMention = userMentionRegex.exec(trimmed);
-            if (userFromMention) return { kind: "user", id: userFromMention[1] };
-            const userFromProfile = userProfileUrlRegex.exec(trimmed);
-            if (userFromProfile) return { kind: "user", id: userFromProfile[1] };
-            const guildUserAvatar = guildUserAvatarRegex.exec(trimmed);
-            if (guildUserAvatar) return { kind: "user", id: guildUserAvatar[1] };
-            const userFromAvatar = userAvatarRegex.exec(trimmed);
-            if (userFromAvatar) return { kind: "user", id: userFromAvatar[1] };
-        }
-
-        for (const value of payloads) {
-            const trimmed = value.trim();
-            if (!trimmed) continue;
-            const channelFromMention = channelMentionRegex.exec(trimmed);
-            if (channelFromMention) return { kind: "channel", id: channelFromMention[1] };
-            const channelFromUrl = channelUrlRegex.exec(trimmed);
-            if (channelFromUrl) {
-                const guildId = channelFromUrl[1] === "@me" ? "@me" : channelFromUrl[2];
-                return { kind: "channel", id: channelFromUrl[3], guildId: guildId ?? undefined };
-            }
-        }
-
-        for (const value of payloads) {
-            const trimmed = value.trim();
-            if (!trimmed) continue;
-            const guildFromIcon = guildIconRegex.exec(trimmed);
-            if (guildFromIcon) return { kind: "guild", id: guildFromIcon[1] };
-        }
-
-        const candidates = this.extractSnowflakes(payloads);
-        for (const candidate of candidates) {
-            if (ChannelStore.getChannel(candidate)) return { kind: "channel", id: candidate };
-            if (GuildStore.getGuild(candidate)) return { kind: "guild", id: candidate };
-            if (UserStore.getUser(candidate)) return { kind: "user", id: candidate };
-        }
-        return null;
-    },
-
-    tryParseJson(value: string): Record<string, any> | null {
-        if (!value || value.length < 2 || (value[0] !== "{" && value[0] !== "[")) return null;
-        try {
-            const parsed = JSON.parse(value);
-            return typeof parsed === "object" && parsed ? parsed : null;
-        } catch {
-            return null;
-        }
-    },
-
-    extractStrings(dataTransfer: DataTransfer): string[] {
-        const collected = new Set<string>();
-        const add = (v?: string) => v && collected.add(v);
-        add(dataTransfer.getData("text/plain"));
-        add(dataTransfer.getData("text/uri-list"));
-        add(dataTransfer.getData("text/html"));
-        add(dataTransfer.getData("text/x-moz-url"));
-        add(dataTransfer.getData("application/json"));
-        for (const type of dataTransfer.types ?? []) add(dataTransfer.getData(type));
-
-        const split: string[] = [];
-        for (const v of collected) {
-            split.push(v);
-            if (v.includes("\n")) split.push(...v.split(/\s+/).filter(Boolean));
-        }
-        return Array.from(new Set(split));
-    },
-
-    async collectPayloadStrings(dataTransfer: DataTransfer): Promise<string[]> {
-        const sync = this.extractStrings(dataTransfer);
-        const asyncValues: string[] = [];
-        const itemPromises = Array.from(dataTransfer.items ?? [])
-            .filter(item => item.kind === "string")
-            .map(item => new Promise<void>(resolve => item.getAsString(val => {
-                if (val) asyncValues.push(val);
-                resolve();
-            })));
-        await Promise.all(itemPromises);
-        return Array.from(new Set([...sync, ...asyncValues]));
-    },
-
-    extractSnowflakes(values: string[]): string[] {
-        const ids = new Set<string>();
-        const regex = /\d{17,20}/g;
-        for (const value of values) {
-            const matches = value.match(regex);
-            if (matches) matches.forEach(id => ids.add(id));
-        }
-        return Array.from(ids);
-    },
-
     shouldHandle(dataTransfer?: DataTransfer | null): boolean {
         if (!dataTransfer || dataTransfer.files?.length) return false;
-        return this.parseFromStrings(this.extractStrings(dataTransfer)) !== null;
+        return parseFromStrings(extractStrings(dataTransfer), { ChannelStore, GuildStore, UserStore }) !== null;
     },
 
     async buildText(entity: DropEntity, currentChannel: Channel): Promise<string | null> {
@@ -885,7 +614,7 @@ export default definePlugin({
         if (activeUserDragId) return;
         const existingDragify = event.dataTransfer?.getData("application/dragify") ?? "";
         if (existingDragify) {
-            const parsed = this.tryParseJson(existingDragify);
+            const parsed = tryParseJson(existingDragify);
             if (parsed?.kind === "user") return;
         }
         const targetEl = event.target as HTMLElement | null;
@@ -914,14 +643,7 @@ export default definePlugin({
         activeDragEntity = { kind: "channel", id: channelId, guildId };
         dragifyActive = true;
         lastDragEventAt = Date.now();
-        if (event.dataTransfer?.clearData) {
-            event.dataTransfer.clearData("text/plain");
-            event.dataTransfer.clearData("text/uri-list");
-            event.dataTransfer.clearData("text/html");
-        }
-        event.dataTransfer?.setData("application/json", payload);
-        event.dataTransfer?.setData("application/dragify", payload);
-        event.dataTransfer?.setData("text/plain", "");
+        setDragifyDataTransfer(event.dataTransfer ?? null, payload);
     },
 
     onUserDragStart(event: DragEvent, user?: { id: string; }) {
@@ -930,7 +652,7 @@ export default definePlugin({
             const chatMessage = searchTarget.closest("[data-author-id]") as HTMLElement | null;
             if (chatMessage) {
                 const authorId = chatMessage.getAttribute("data-author-id");
-                const parsed = authorId ? this.extractSnowflakeFromString(authorId) : null;
+        const parsed = authorId ? extractSnowflakeFromString(authorId) : null;
                 if (parsed) {
                     user = { id: parsed };
                 }
@@ -958,7 +680,7 @@ export default definePlugin({
             ?? userIdFromEvent
             ?? event.dataTransfer?.getData("data-user-id")
             ?? null;
-        const userId = rawUserId ? (this.extractSnowflakeFromString(rawUserId) ?? rawUserId) : null;
+        const userId = rawUserId ? (extractSnowflakeFromString(rawUserId) ?? rawUserId) : null;
         if (!userId || !/^\d{17,20}$/.test(userId)) return;
         const payload = JSON.stringify({ kind: "user", id: userId });
         event.stopPropagation();
@@ -967,15 +689,8 @@ export default definePlugin({
         dragifyActive = true;
         lastDragEventAt = Date.now();
         this.showGhost({ kind: "user", id: userId }, event);
-        if (event.dataTransfer?.clearData) {
-            event.dataTransfer.clearData("text/plain");
-            event.dataTransfer.clearData("text/uri-list");
-            event.dataTransfer.clearData("text/html");
-        }
+        setDragifyDataTransfer(event.dataTransfer ?? null, payload);
         event.dataTransfer?.setData("data-user-id", userId);
-        event.dataTransfer?.setData("application/json", payload);
-        event.dataTransfer?.setData("application/dragify", payload);
-        event.dataTransfer?.setData("text/plain", "");
     },
 
     onDmDragStart(event: DragEvent, channel?: Channel | null) {
@@ -1005,14 +720,7 @@ export default definePlugin({
         activeDragEntity = { kind: "guild", id: guildId };
         dragifyActive = true;
         lastDragEventAt = Date.now();
-        if (event.dataTransfer?.clearData) {
-            event.dataTransfer.clearData("text/plain");
-            event.dataTransfer.clearData("text/uri-list");
-            event.dataTransfer.clearData("text/html");
-        }
-        event.dataTransfer?.setData("application/json", payload);
-        event.dataTransfer?.setData("application/dragify", payload);
-        event.dataTransfer?.setData("text/plain", "");
+        setDragifyDataTransfer(event.dataTransfer ?? null, payload);
     },
 
     start() {
@@ -1033,7 +741,7 @@ export default definePlugin({
                 activeGuildDragId = null;
                 activeDragEntity = null;
                 dragifyActive = false;
-                hideGhost();
+                hideDragGhost();
             }, 500);
         }
     },
@@ -1046,10 +754,7 @@ export default definePlugin({
         window.removeEventListener("drag", this.globalDragMove, true);
         window.removeEventListener("dragover", this.globalDragMove, true);
         window.removeEventListener("dragend", this.globalDragEnd, true);
-        activeUserDragId = null;
-        activeGuildDragId = null;
-        activeDragEntity = null;
-        dragifyActive = false;
+        clearDragState();
         if (guildGhostCleanupTimer !== null) {
             clearTimeout(guildGhostCleanupTimer);
             guildGhostCleanupTimer = null;
@@ -1090,15 +795,15 @@ export default definePlugin({
         const hasActiveUserDrag = activeUserDragId !== null;
         const hasActiveEntity = activeDragEntity !== null;
 
-        const payloads = await inst.collectPayloadStrings(event.dataTransfer as DataTransfer);
-        const entity = inst.parseFromStrings(payloads);
+        const payloads = await collectPayloadStrings(event.dataTransfer as DataTransfer);
+        const entity = parseFromStrings(payloads, { ChannelStore, GuildStore, UserStore });
         if (!hasDragify && !entity && !likelyJson && !hasActiveGuildDrag && !hasActiveUserDrag && !hasActiveEntity) return;
 
         lastDropAt = Date.now();
         event.preventDefault();
         event.stopPropagation();
         inst.onDrop(event as unknown as React.DragEvent, channel);
-        hideGhost();
+        hideDragGhost();
     },
 
     globalDragStart: (event: DragEvent) => {
@@ -1165,12 +870,7 @@ export default definePlugin({
             event.stopPropagation();
             event.dataTransfer.effectAllowed = "copyMove";
             activeGuildDragId = guildId;
-            event.dataTransfer.setData("application/json", JSON.stringify({ kind: "guild", id: guildId }));
-            event.dataTransfer.setData("application/dragify", JSON.stringify({ kind: "guild", id: guildId }));
-            event.dataTransfer.clearData("text/plain");
-            event.dataTransfer.clearData("text/uri-list");
-            event.dataTransfer.clearData("text/html");
-            event.dataTransfer.setData("text/plain", "");
+            setDragifyDataTransfer(event.dataTransfer, JSON.stringify({ kind: "guild", id: guildId }));
             inst.showGhost({ kind: "guild", id: guildId }, event);
         }
     },
@@ -1178,15 +878,12 @@ export default definePlugin({
         const now = Date.now();
         setTimeout(() => {
             if (Date.now() - lastDropAt < 100) return;
-            activeUserDragId = null;
-            activeGuildDragId = null;
-            activeDragEntity = null;
-            dragifyActive = false;
-            hideGhost();
+            clearDragState();
+            hideDragGhost();
         }, 0);
     },
     globalDragMove: (event: DragEvent | MouseEvent) => {
-        if (!ghostState.visible) return;
+        if (!isGhostVisible()) return;
         if (typeof event.clientX !== "number" || typeof event.clientY !== "number") return;
         if (event instanceof DragEvent) {
             lastDragEventAt = Date.now();
@@ -1196,11 +893,11 @@ export default definePlugin({
                     if (Date.now() - lastDragEventAt < 200) return;
                     activeGuildDragId = null;
                     if (activeDragEntity?.kind === "guild") activeDragEntity = null;
-                    hideGhost();
+                    hideDragGhost();
                 }, 300);
             }
         }
-        scheduleGhostPosition(event.clientX + 16, event.clientY + 20);
+        scheduleDragGhostPosition(event.clientX + 16, event.clientY + 20);
     },
     isMessageInputEvent(event: DragEvent): boolean {
         const target = event.target as Element | null;
@@ -1298,9 +995,9 @@ export default definePlugin({
             if (/^\d{17,20}$/.test(candidate)) return candidate;
 
             const direct =
-                this.extractSnowflakeFromString(rawId) ??
-                this.extractSnowflakeFromString(listId ?? "") ??
-                this.extractSnowflakeFromString(el.getAttribute("data-guild-id") ?? "");
+                extractSnowflakeFromString(rawId) ??
+                extractSnowflakeFromString(listId ?? "") ??
+                extractSnowflakeFromString(el.getAttribute("data-guild-id") ?? "");
             if (direct) return direct;
 
             el = el.parentElement;
@@ -1331,13 +1028,13 @@ export default definePlugin({
             }
 
             const candidate = isChannelContext
-                ? (this.extractSnowflakeFromString(threadIdAttr)
-                    ?? this.extractSnowflakeFromString(channelIdAttr)
-                    ?? this.extractSnowflakeFromString(rawId)
-                    ?? this.extractSnowflakeFromString(listId))
+                ? (extractSnowflakeFromString(threadIdAttr)
+                    ?? extractSnowflakeFromString(channelIdAttr)
+                    ?? extractSnowflakeFromString(rawId)
+                    ?? extractSnowflakeFromString(listId))
                 : null;
             if (candidate) {
-                const guildId = this.extractSnowflakeFromString(el.getAttribute("data-guild-id") ?? "") ?? undefined;
+                const guildId = extractSnowflakeFromString(el.getAttribute("data-guild-id") ?? "") ?? undefined;
                 return { id: candidate, guildId };
             }
 
@@ -1360,11 +1057,11 @@ export default definePlugin({
             const src = el.getAttribute("src") ?? "";
             const aria = el.getAttribute("aria-label") ?? "";
 
-            const explicit = this.extractSnowflakeFromString(dataUserId)
-                ?? this.extractSnowflakeFromString(dataAuthorId);
+            const explicit = extractSnowflakeFromString(dataUserId)
+                ?? extractSnowflakeFromString(dataAuthorId);
             if (explicit) return explicit;
 
-            const listCandidate = this.extractSnowflakeFromString(listId);
+            const listCandidate = extractSnowflakeFromString(listId);
             if (listCandidate) {
                 if (UserStore.getUser(listCandidate)) return listCandidate;
                 const channel = ChannelStore.getChannel(listCandidate);
@@ -1385,7 +1082,7 @@ export default definePlugin({
                 ?? (styleAttr + " " + bgImage).match(userAvatarRegex);
             if (styleAvatar?.[1]) return styleAvatar[1];
 
-            const ariaMatch = this.extractSnowflakeFromString(aria);
+            const ariaMatch = extractSnowflakeFromString(aria);
             if (ariaMatch) return ariaMatch;
 
             el = el.parentElement;
@@ -1427,41 +1124,20 @@ export default definePlugin({
     },
 
     mountGhost() {
-        if (ghostRoot || typeof document === "undefined") return;
-        ghostContainer = document.createElement("div");
-        ghostContainer.className = "vc-dragify-ghost-root";
-        document.body.appendChild(ghostContainer);
-        ghostRoot = createRoot(ghostContainer);
-        ghostRoot.render(
-            <ErrorBoundary>
-                <DragGhost />
-            </ErrorBoundary>
-        );
+        mountDragGhost();
     },
 
     unmountGhost() {
-        if (ghostRoot) ghostRoot.unmount();
-        ghostRoot = null;
-        ghostContainer?.remove();
-        ghostContainer = null;
-        if (ghostHideTimer !== null) {
-            clearTimeout(ghostHideTimer);
-            ghostHideTimer = null;
-        }
-        hideGhost();
+        unmountDragGhost();
     },
 
     showGhost(entity: DropEntity, event?: DragEvent) {
         const ghost = this.buildGhost(entity);
         if (!ghost) return;
-        if (ghostHideTimer !== null) {
-            clearTimeout(ghostHideTimer);
-            ghostHideTimer = null;
-        }
-        if (event && typeof event.clientX === "number" && typeof event.clientY === "number") {
-            scheduleGhostPosition(event.clientX + 16, event.clientY + 20);
-        }
-        setGhostState({ ...ghost, entityId: entity.id, visible: true, exiting: false });
+        const position = event && typeof event.clientX === "number" && typeof event.clientY === "number"
+            ? { x: event.clientX + 16, y: event.clientY + 20 }
+            : undefined;
+        showDragGhost({ ...ghost, entityId: entity.id }, position);
     },
 
     buildGhost(entity: DropEntity): Omit<GhostState, "visible" | "x" | "y"> | null {

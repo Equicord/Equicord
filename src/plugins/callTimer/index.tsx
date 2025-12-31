@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings, migratePluginToSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginToSettings, migrateSettingsFromPlugin } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { useTimer } from "@utils/react";
