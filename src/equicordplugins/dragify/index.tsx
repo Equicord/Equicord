@@ -589,7 +589,7 @@ export default definePlugin({
 
         const emitChange = (DraftStore as any).emitChange as (() => void) | undefined;
 
-        if (true) {
+        if (!existing) {
             DraftActions.setDraft(channelId, nextValue, DraftType.ChannelMessage);
         } else {
             DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
