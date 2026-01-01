@@ -1,37 +1,37 @@
 {
     "commands": {
-        "errorExecuting": "An Error occurred while executing command \"{name}\""
+        "errorExecuting": "Сталася помилка під час виконання команди \"{name}\""
     },
     "notifications": {
-        "dismissNotification": "Dismiss Notification",
-        "noNotifications": "No notifications yet",
-        "notificationLog": "Notification Log",
-        "notificationSettings": "Notification Settings",
+        "dismissNotification": "Відхилити Сповіщення",
+        "noNotifications": "Жодних сповіщень наразі",
+        "notificationLog": "Журнал Сповіщень",
+        "notificationSettings": "Налаштування Сповіщень",
         "logs": {
-            "title": "Are you sure?",
-            "body_zero": "No notification selected.",
-            "body_one": "This will permanently remove {count} notification. This action cannot be undone.",
-            "body_other": "This will permanently remove {count} notifications. This action cannot be undone.",
-            "confirm": "Do it!",
-            "cancel": "Nevermind",
-            "clearNotificationLog": "Clear Notification Log"
+            "title": "Ви впевнені?",
+            "body_zero": "Сповіщення не вибрано.",
+            "body_one": "Це назавжди видалить {count} сповіщення. Цю дію не можна скасувати.",
+            "body_other": "Це остаточно видалить {count} сповіщення. Цю дію не можна скасувати.",
+            "confirm": "Виконати!",
+            "cancel": "Не зараз",
+            "clearNotificationLog": "Очистити Журнал Сповіщень"
         },
         "missedNotifications": {
-            "title": "While you were away",
-            "body_one": "{count} notification received",
-            "body_other": "{count} notifications received"
+            "title": "Поки вас не було",
+            "body_one": "Отримано {count} сповіщення",
+            "body_other": "Отримано сповіщення {count}"
         }
     },
     "memberListDecorators": {
-        "fallback": "Failed to render {key} Member List Decorator"
+        "fallback": "Не вдалося показати Декоратор Списку Членів {key}"
     },
     "messageAccessories": {
-        "fallback": "Failed to render {key} Message Accessory"
+        "fallback": "Не вдалося показати Аксесуар Повідомлення {key}"
     },
     "messageDecorations": {
-        "fallback": "Failed to render {key} Message Decoration"
+        "fallback": "Не вдалося показати Прикрасу Повідомлення {key}"
     },
     "notices": {
-        "fallback": "Error Showing Notice"
+        "fallback": "Помилка Під Час Показу Сповіщення"
     }
 }

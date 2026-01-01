@@ -1,199 +1,208 @@
 {
-    "donate": "Donate",
-    "invite": "Invite",
-    "loading": "Loading...",
-    "cancel": "Cancel",
+    "donate": "Пожертвувати",
+    "invite": "Запросити",
+    "loading": "Завантаження...",
+    "cancel": "Скасувати",
     "logs": {
-        "clearLog": "Clear Log",
-        "clearLogConfirmation": "Are you sure you would like to clear this log? This can't be undone.",
-        "logCleared": "Log has been cleared",
-        "clearLogs": "Clear Logs",
-        "clearLogsConfirmation": "Are you sure you would like to clear these logs? This can't be undone.",
-        "clearLogsConfirmationNum_one": "Are you sure you want to clear {count} log",
-        "clearLogsConfirmationNum_other": "Are you sure you want to clear {count} logs",
-        "logsCleared": "Selected logs have been cleared",
-        "hideLogs": "Hide Logs",
-        "showLogs": "Show Logs",
-        "clearAllLogs": "Clear All Logs",
-        "clearAll": "Clear All",
-        "clearAllLogsConfirmation": "Are you sure you would like to clear all logs? This can't be undone.",
-        "allLogsCleared": "All logs have been cleared"
+        "clearLog": "Очистити Журнал",
+        "clearLogConfirmation": "Ви впевнені, що хочете очистити цей журнал? Це неможливо скасувати.",
+        "logCleared": "Журнал очищено",
+        "clearLogs": "Очистити Журнал",
+        "clearLogsConfirmation": "Ви впевнені, що хочете очистити ці журнали? Це неможливо скасувати.",
+        "clearLogsConfirmationNum_one": "Ви впевнені, що хочете очистити {count} журнал",
+        "clearLogsConfirmationNum_other": "Ви впевнені, що хочете очистити {count} журнали",
+        "logsCleared": "Вибрані журнали очищено",
+        "hideLogs": "Приховати Журнали",
+        "showLogs": "Показати Журнали",
+        "clearAllLogs": "Очистити Всі Журнали",
+        "clearAll": "Очистити Все",
+        "clearAllLogsConfirmation": "Ви впевнені, що ви хотіли б очистити всі журнали? Це неможливо скасувати.",
+        "allLogsCleared": "Всі журнали очищено"
     },
     "addonCard": {
-        "new": "NEW"
+        "new": "НОВЕ"
     },
     "cloud": {
         "integrations": {
-            "header": "Cloud Integrations",
-            "reauthenticateOtherClient": "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
-            "failedToRetrieveOAuth": "Setup failed (couldn't retrieve OAuth configuration).",
-            "enabled": "Cloud integrations enabled!",
-            "noSecret": "Setup failed (no secret returned?).",
-            "error": "Setup failed ({e})"
+            "header": "Хмарна Інтеграція",
+            "reauthenticateOtherClient": "Ми помітили, що у вас включена хмарна інтеграція в іншому клієнті! У зв'язку з обмеженнями, Вам необхідно буде повторно автентифікуватись для продовження їх використання. Натисніть тут, щоб перейти до сторінки налаштувань для цього!",
+            "failedToRetrieveOAuth": "Спроба встановлення зазнала невдачі (неможливо отримати конфігурацію OAuth).",
+            "enabled": "Хмарна інтеграція увімкнена!",
+            "noSecret": "Помилка встановлення (не було повернуто секрет?).",
+            "error": "Встановлення не вдалося ({e})"
         },
         "settings": {
-            "header": "Cloud Settings",
-            "updatedRemote": "Your settings have been updated! Click here to restart to fully apply changes!",
-            "apiReject": "Could not synchronize settings to cloud (API returned {e}).",
-            "success": "Synchronized settings to the cloud!",
-            "failedToSync": "Could not synchronize settings to the cloud ({e}).",
-            "accountChanged": "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
-            "noSettings": "There are no settings in the cloud.",
-            "upToDate": "Your settings are up to date.",
-            "newerThanCloud": "Your local settings are newer than the cloud ones.",
-            "updated": "Your settings have been updated! Click here to restart to fully apply changes!",
-            "syncFromCloud": "Could not synchronize settings from the cloud ({e}).",
-            "apiDelete": "Could not delete settings (API returned {e}).",
-            "deleted": "Settings deleted from cloud!",
-            "failedToDelete": "Could not delete settings ({e}).",
-            "apiEraseAll": "Could not erase all data (API returned {e}), please contact support.",
-            "erased": "Successfully erased all data."
+            "header": "Налаштування Хмари",
+            "updatedRemote": "Ваші налаштування оновлено! Натисніть тут, щоб перезавантажитись, щоб повністю застосувати зміни!",
+            "apiReject": "Не вдалося синхронізувати налаштування з хмарою (API повернув {e}).",
+            "success": "Налаштування успішно синхронізовані з хмарою!",
+            "failedToSync": "Не вдалося синхронізувати налаштування з хмарою ({e}).",
+            "accountChanged": "Синхронізація з хмаркою була вимкнена, оскільки цей обліковий запис не підключений до Хмари. Ви зможете знову увімкнути його, під'єднавши цей обліковий запис в налаштуваннях Хмари. (Примітка: Ваші налаштування будуть зберігатися окремо)",
+            "noSettings": "У хмарі немає налаштувань.",
+            "upToDate": "Ваші налаштування є найновішими.",
+            "newerThanCloud": "Ваші локальні налаштування новіші за хмарні.",
+            "updated": "Ваші налаштування оновлено! Натисніть тут, щоб перезавантажитись, щоб повністю застосувати зміни!",
+            "syncFromCloud": "Не вдалося синхронізувати налаштування з хмари ({e}).",
+            "apiDelete": "Не вдалося видалити налаштування (API повернув {e}).",
+            "deleted": "Налаштування видалені з хмари!",
+            "failedToDelete": "Не вдалося видалити налаштування ({e}).",
+            "apiEraseAll": "Не вдалося стерти всі дані (API повернув {e}), будь ласка, зверніться до служби підтримки.",
+            "erased": "Успішно стерто всі дані."
         }
     },
     "settingsSync": {
-        "imported": "Settings successfully imported. Restart to apply changes!",
-        "failedToImport": "Failed to import settings: {e}"
+        "imported": "Налаштування успішно імпортовано. Перезапустіть програму, щоб застосувати зміни!",
+        "failedToImport": "Не вдалося імпортувати налаштування: {e}"
     },
     "contributorCard": {
-        "contributionsButton": "See what you've contributed to",
-        "description": "Since you've contributed to Equicord you now have a cool new badge!",
-        "subtitle": "Thank you for contributing!",
-        "title": "Contributions"
+        "contributionsButton": "Погляньте, на що ви внесли свій внесок",
+        "description": "Оскільки ти зробив внесок у Equicord, тепер у тебе з’явився новий крутий бейдж!",
+        "subtitle": "Дякуємо за ваш внесок!",
+        "title": "Внески"
     },
     "donorCard": {
         "donated": {
-            "vencordDescription": "All Vencord users can see your badge! You can manage your perks by messaging @{v}.",
-            "equicordDescription": "All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
-            "description": "All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server.",
-            "subtitle": "Thank you for donating!",
-            "title": "Donations"
+            "vencordDescription": "Усі користувачі Vencord можуть бачити ваш бейдж! Ви можете керувати своїми перевагами, надіславши повідомлення @{v}.",
+            "equicordDescription": "Усі користувачі Vencord можуть бачити ваш бейдж! Ви можете керувати своїми перевагами, створивши квиток на сервері Equicord.",
+            "description": "Всі користувачі Vencord можуть бачити ваш донорський бейдж Vencord і Equicord користувачі можуть бачити ваш донорський бейдж. Щоб змінити значок донора Vencord зв'яжіться з допомогою @vending.machine. Щоб змінити бейдж донора Equicord, зробіть квиток на сервері Equicord.",
+            "subtitle": "Дякуємо вам за пожертву!",
+            "title": "Пожертвування"
         },
         "notDonated": {
-            "description": "Please consider supporting the development of Equicord by donating!",
-            "title": "Support the Project"
+            "description": "Будь ласка, підтримайте розробку Equicord пожертвуванням!",
+            "title": "Підтримка Проєкту"
         }
     },
-    "failedToRender": "Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!",
+    "failedToRender": "Не вдалося відобразити вкладку {tab}. Якщо ця проблема повторюватиметься, спробуйте перевстановити!",
     "quickActions": {
-        "editQuickCSS": "Edit QuickCSS",
-        "notificationLog": "Notification Log",
-        "openSettings": "Open Settings Folder",
-        "relaunchDiscord": "Relaunch Discord",
-        "title": "Quick Actions",
-        "viewSource": "View Source Code"
+        "editQuickCSS": "Редагувати QuickCSS",
+        "notificationLog": "Журнал Сповіщень",
+        "openSettings": "Відкрити Теку Налаштувань",
+        "relaunchDiscord": "Перезапустити Discord",
+        "title": "Швидкі Дії",
+        "viewSource": "Переглянути Вихідний Код"
     },
     "settings": {
         "disableMinSize": {
-            "title": "Disable minimum window size"
+            "title": "Вимкнути мінімальний розмір вікна",
+            "description": "Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens."
         },
         "enableReactDevtools": {
-            "title": "Enable React Developer Tools"
+            "title": "Увімкнути Інструменти Розробника React",
+            "description": "Enable the React Developer Tools extension for debugging Discord's React components. Useful for plugin development."
         },
         "frameless": {
-            "title": "Disable the window frame"
+            "title": "Вимкнути рамки вікна",
+            "description": "Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area."
         },
-        "hint": "Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
+        "hint": "Підказка: Ви можете змінити позицію секції цих налаштувань в <0>налаштуваннях плагіну</0>!",
         "macosVibrancyStyle": {
-            "placeholder": "Window vibrancy style",
-            "title": "Window vibrancy style (requires restart)"
+            "placeholder": "Стиль вібрації вікна",
+            "title": "Стиль вібрації вікна (вимагає перезавантаження)"
         },
         "notification": {
-            "logButton": "View Notification Log",
-            "settingsButton": "Notification Settings"
+            "logButton": "Журнал Сповіщень",
+            "settingsButton": "Налаштування Сповіщень"
         },
         "plugins": {
             "contributorModal": {
                 "contributorInfo": {
-                    "noPlugins": "This person has not made any plugins. They likely <0>contributed</0> to Equicord in other ways!",
-                    "plugins_one": "This person has <0>contributed</0> to {count} plugin!",
-                    "plugins_other": "This person has <0>contributed</0> to {count} plugins!"
+                    "noPlugins": "Ця людина не створила жодних плагінів. Швидше за все, <0>зробив внесок </0> до Equicord іншими шляхами!",
+                    "plugins_one": "Ця людина <0>зробила внесок</0> у {count} плагін!",
+                    "plugins_other": "Ця людина <0>зробила внесок</0> до {count} плагінів!"
                 }
             },
-            "requiredToFunction": "This plugin is required for Equicord to function",
-            "pluginRequiredBy": "This plugin is required by: {pluginNames}",
-            "noDescription": "No description available"
+            "requiredToFunction": "Цей плагін необхідний для функціонування Equicord",
+            "pluginRequiredBy": "Цей плагін необхідний: {pluginNames}",
+            "noDescription": "Опис відсутній"
         },
         "changelog": {
             "manager": {
-                "minutes_one": "{count} minute ago",
-                "minutes_other": "{count} minutes ago",
-                "hours_one": "{count} hour ago",
-                "hours_other": "{count} hours ago",
-                "days_one": "{count} day ago",
-                "days_other": "{count} days ago"
+                "minutes_one": "{count} хв тому",
+                "minutes_other": "{count} хв тому",
+                "hours_one": "{count} год тому",
+                "hours_other": "{count} год тому",
+                "days_one": "{count} день тому",
+                "days_other": "{count} дн тому"
             },
             "updateCard": {
-                "upToDate": "Repository check: {fromHash} (up to date)",
-                "outOfDate": "Repository check: {fromHash} → {toHash}",
-                "update": "Update: {fromHash} → {toHash}",
-                "commits_zero": " • No new commits",
-                "commits_one": " • {count} commit available",
-                "commits_other": " • {count} commits available",
-                "newPluginsCount": " • {plugins} new plugins",
-                "updatedPluginsCount": " • {plugins} updated plugins",
-                "newSettingsCount": " • {settings} new settings",
-                "updatedPlugins": "Updated Plugins",
-                "newSettings": "New Settings",
-                "newSettingInPlugin": "New setting in {pluginName}"
+                "upToDate": "Перевірка репозиторію: {fromHash} (актуальна)",
+                "outOfDate": "Перевірка репозиторію: {fromHash} → {toHash}",
+                "update": "Оновлення: {fromHash} → {toHash}",
+                "commits_zero": " • Нема нових комітів",
+                "commits_one": " • доступний {count} коміт",
+                "commits_other": " • Доступні {count} коміти",
+                "newPluginsCount": " • {plugins} нових плагінів",
+                "updatedPluginsCount": " • Оновлені плагіни {plugins}",
+                "newSettingsCount": " • {settings} нових налаштувань",
+                "updatedPlugins": "Оновлені Плагіни",
+                "newSettings": "Нові Налаштування",
+                "newSettingInPlugin": "Нові налаштування в {pluginName}"
             },
             "newPluginsSection": {
-                "newPluginsCount": "New Plugins ({count})",
-                "recentlyAddedPlugins": "The following plugins have been added in recent updates:",
-                "numMorePlugins_one": "+{count} more plugin",
-                "numMorePlugins_other": "+{count} more plugins"
+                "newPluginsCount": "Нові плагіни ({count})",
+                "recentlyAddedPlugins": "Наступні плагіни були додані в останніх оновленнях:",
+                "numMorePlugins_one": "+{count} більше плагін",
+                "numMorePlugins_other": "+{count} більше плагінів"
             },
-            "missingRepoInfo": "Failed to retrieve repository information",
-            "alreadyUpToDate": "Already up todate with repository",
-            "foundCommits_zero": "No new commits",
-            "foundCommits_one": "Found {count} commit from repository",
-            "foundCommits_other": "Found {count} commits from repository",
-            "loggedCommits": "Logged commits from your latest update",
-            "upToDateLocalCopy": "Repository is up to date with your local copy",
-            "failedToFetchRepo": "Failed to fetch from repository",
-            "checkYourConnection": "Failed to connect to repository. Check your internet connection",
-            "failedtoFetchCommits": "Could not fetch commits from repository",
-            "repository": "Repository",
-            "viewRecentChanges": "View the most recent changes to Equicord. This fetches commits directly from the repository to show you what's new",
-            "failedToRetrieve": "Failed to retrieve - check console",
-            "upToDate": "Repository Up To Date",
-            "fetchRepo": "Fetch from Repository",
-            "checkYourInternet": "Make sure you have an internet connection and try again",
-            "recentChanges": "Recent Changes",
-            "updatedPluginsCount": "Updated Plugins ({plugins})",
-            "codeChanges_zero": "No Code Changes",
-            "codeChanges_one": "Code Changes ({count} commit)",
-            "codeChanges_other": "Code Changes ({count} commits)",
-            "emptyChangelog": "No commits available ahead of your current version. Click \"Fetch from Repository\" to check for new changes",
-            "updateLogs_zero": "No Update Logs",
-            "updateLogs_one": "Update Logs ({count} log)",
-            "updateLogs_other": "Update Logs ({count} logs)",
-            "previousSessions": "Previous update sessions with their commit history and plugin changes",
-            "title": "Changelog"
+            "missingRepoInfo": "Не вдалося отримати інформацію про репозиторій",
+            "alreadyUpToDate": "Вже оновлено до актуальної версії репозиторія",
+            "foundCommits_zero": "Немає нових комітів",
+            "foundCommits_one": "Знайдено {count} коміт із репозиторію",
+            "foundCommits_other": "Знайдено {count} коміти із репозиторію",
+            "loggedCommits": "Записані коміти з вашого останнього оновлення",
+            "upToDateLocalCopy": "Репозиторій відповідає вашій локальній копії",
+            "failedToFetchRepo": "Не вдалося отримати з репозиторію",
+            "checkYourConnection": "Не вдалося підключитися до репозиторію. Перевірте підключення до Інтернету",
+            "failedtoFetchCommits": "Не вдалося отримати коміти з репозиторію",
+            "repository": "Репозиторій",
+            "whereUpdatesFetch": "This is the GitHub repository where Equicord fetches updates from",
+            "viewRecentChanges": "These are the new commits and plugin updates since your last version. You can see what features were added, bugs were fixed, and which plugins received updates",
+            "failedToRetrieve": "Не вдалося отримати - перевірте консоль",
+            "upToDate": "Репозиторій Оновлено",
+            "fetchRepo": "Отримати з Репозиторію",
+            "checkYourInternet": "Переконайтеся, що у вас є підключення до Інтернету і повторіть спробу",
+            "recentChanges": "Нещодавні Зміни",
+            "updatedPluginsCount": "Оновлені Плагіни ({plugins})",
+            "codeChanges_zero": "Немає Змін Коду",
+            "codeChanges_one": "Зміна Коду ({count} коміт)",
+            "codeChanges_other": "Зміна Коду ({count} комітів)",
+            "emptyChangelog": "Відсутні коміти перед поточною версією. Натисніть кнопку \"Отримати з репозиторію\", щоб перевірити нові зміни",
+            "updateLogs_zero": "Журнал оновлень відсутній",
+            "updateLogs_one": "Оновити журнал ({count} log)",
+            "updateLogs_other": "Оновити журнал ({count} logs)",
+            "previousSessions": "A history of your previous update sessions with their commit history and plugin changes. Click on a log to expand it and see the details",
+            "info": "Check the repository for new commits, plugin updates, and code changes. This will compare your current version with the latest available and show you what's new",
+            "title": "Журнал змін"
         },
         "restartRequired": {
-            "body": "A restart is required to apply this change",
-            "cancel": "Later!",
-            "confirm": "Restart now",
-            "title": "Restart Required",
-            "plugins": "The following plugins require a restart:"
+            "body": "Для застосування змін необхідне перезавантаження",
+            "cancel": "Пізніше!",
+            "confirm": "Перезапустити зараз",
+            "title": "Потрібен Перезапуск",
+            "plugins": "Для наступних плагінів необхідно перезапустити застосунок:"
         },
-        "title": "Settings",
+        "title": "Налаштування",
         "transparent": {
-            "description": "You need a theme that supports transparency or this will do nothing. WILL STOP THE WINDOW FROM BEING RESIZABLE!! Requires a full restart",
-            "title": "Enable window transparency"
+            "description": "Make the Discord window transparent. A theme that supports transparency is required or this will do nothing.",
+            "title": "Увімкнути прозорість вікна",
+            "noteWindows": "This will stop the window from being resizable and prevents you from snapping the window to screen edges",
+            "note": "This will stop the window from being resizable."
         },
         "useQuickCss": {
-            "description": "Loads your Custom CSS",
-            "title": "Enable Custom CSS"
+            "description": "Load custom CSS from the QuickCSS editor. This allows you to customize Discord's appearance with your own styles.",
+            "title": "Увімкнути Користувацький CSS"
         },
         "winCtrlQ": {
-            "title": "Register Ctrl+Q as shortcut to close Discord (alternative to Alt+F4)"
+            "title": "Register Ctrl+Q as shortcut to close Discord",
+            "description": "Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application."
         },
         "winNativeTitleBar": {
-            "title": "Use Windows' native title bar instead of Discord's custom one"
+            "title": "Використовувати нативну панель вікна Windows замість користувацької Discord",
+            "description": "Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools."
         }
     },
     "tabs": {
-        "settings": "Equicord Settings"
+        "settings": "Налаштування Equicord"
     }
 }
