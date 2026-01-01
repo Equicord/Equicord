@@ -6,7 +6,7 @@
 
 import "./BaseText.css";
 
-import { classNameFactory } from "@api/Styles";
+import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import type { Text as DiscordText } from "@vencord/discord-types";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
@@ -97,7 +97,6 @@ export function BaseText<T extends TextTag = "div">(props: BaseTextProps<T>): Re
         </Tag>
     );
 }
-
 
 // #region Old compatibility
 

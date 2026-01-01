@@ -21,7 +21,6 @@ import "./styles.css";
 import * as DataStore from "@api/DataStore";
 import { isPluginEnabled, stopPlugin } from "@api/PluginManager";
 import { useSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
 import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { Divider } from "@components/Divider";
@@ -31,6 +30,7 @@ import { Paragraph } from "@components/Paragraph";
 import { SettingsTab } from "@components/settings";
 import { debounce } from "@shared/debounce";
 import { ChangeList } from "@utils/ChangeList";
+import { classNameFactory } from "@utils/css";
 import { isTruthy } from "@utils/guards";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
@@ -150,9 +150,10 @@ export default function PluginSettings() {
             if (!changes.hasChanges) return;
 
             const allChanges = [...changes.getChanges()];
+            const pluginNames = [...new Set(allChanges.map(s => s.split(":")[0]))];
             const maxDisplay = 15;
-            const displayed = allChanges.slice(0, maxDisplay);
-            const remainingCount = allChanges.length - displayed.length;
+            const displayed = pluginNames.slice(0, maxDisplay);
+            const remainingCount = pluginNames.length - displayed.length;
 
             Alerts.show({
                 title: "Restart required",
@@ -264,7 +265,7 @@ export default function PluginSettings() {
         return lodash.isEqual(newPlugins, sortedPluginNames) ? null : new Set(newPlugins);
     }));
 
-    const handleRestartNeeded = useCallback((name: string) => changes.handleChange(name), [changes]);
+    const handleRestartNeeded = useCallback((name: string, key: string) => changes.handleChange(`${name}:${key}`), [changes]);
 
     const { plugins, requiredPlugins } = useMemo(() => {
         const plugins = [] as JSX.Element[];
@@ -352,13 +353,12 @@ export default function PluginSettings() {
         }
     }
 
-
     // Code directly taken from supportHelper.tsx
     const { totalStockPlugins, totalUserPlugins, enabledStockPlugins, enabledUserPlugins, enabledPlugins } = useMemo(() => {
         const isApiPlugin = (plugin: string) => plugin.endsWith("API") || Plugins[plugin].required;
 
         const totalPlugins = Object.keys(Plugins).filter(p => !isApiPlugin(p));
-        const enabledPlugins = Object.keys(Plugins).filter(p => Vencord.Plugins.isPluginEnabled(p) && !isApiPlugin(p));
+        const enabledPlugins = Object.keys(Plugins).filter(p => isPluginEnabled(p) && !isApiPlugin(p));
 
         const totalStockPlugins = totalPlugins.filter(p => !PluginMeta[p].userPlugin && !Plugins[p].hidden).length;
         const totalUserPlugins = totalPlugins.filter(p => PluginMeta[p].userPlugin).length;
@@ -450,7 +450,6 @@ export default function PluginSettings() {
                 )
                 : <ExcludedPluginsList search={search} />
             }
-
 
             <Divider className={Margins.top20} />
 

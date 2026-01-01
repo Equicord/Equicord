@@ -52,7 +52,7 @@ const UrlReplacementRules: Record<string, URLReplacementRule> = {
         description: "Open Epic Games links in the Epic Games Launcher",
     },
     tidal: {
-        match: /^https:\/\/tidal\.com\/(?:browse\/)?(track|album|artist|playlist|user|video|mix)\/(.+)(?:\?.+?)?$/,
+        match: /^https:\/\/(?:listen\.)?tidal\.com\/(?:browse\/)?(track|album|artist|playlist|user|video|mix)\/([a-f0-9-]+).*/,
         replace: (_, type, id) => `tidal://${type}/${id}`,
         description: "Open Tidal links in the Tidal app",
     },
@@ -61,6 +61,11 @@ const UrlReplacementRules: Record<string, URLReplacementRule> = {
         replace: (_, lang, type, name, id) => id ? `itunes://music.apple.com/us/${type}/${name}/${id}` : `itunes://music.apple.com/us/${type}/${name}`,
         description: "Open Apple Music links in the iTunes app"
     },
+    vrcx: {
+        match: /^https:\/\/vrchat.com\/home\/(user|avatar|world|group)\/(.+)$/,
+        replace: (_, type, id) => `vrcx://${type}/${id}`,
+        description: "Open VRChat links in the VRCX app"
+    }
 };
 
 const pluginSettings = definePluginSettings(
@@ -73,7 +78,6 @@ const pluginSettings = definePluginSettings(
         return acc;
     }, {} as SettingsDefinition)
 );
-
 
 const Native = VencordNative.pluginHelpers.OpenInApp as PluginNative<typeof import("./native")>;
 
