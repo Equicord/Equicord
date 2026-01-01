@@ -6,12 +6,13 @@
 
 import { ApplicationCommandType } from "@api/Commands";
 import { showNotification } from "@api/Notifications";
+import { definePluginSettings } from "@api/Settings";
+import equicordToolbox from "@equicordplugins/equicordToolbox";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
 import { UserSettingsActionCreators } from "@webpack/common";
 
-// handle the file downloading
 async function saveContentToFile(content: string, filename: string) {
     try {
         if (IS_DISCORD_DESKTOP) {
@@ -37,12 +38,10 @@ async function saveContentToFile(content: string, filename: string) {
     }
 }
 
-// get current gif list
 function getGifUrls(): string[] {
     return Object.keys(UserSettingsActionCreators.FrecencyUserSettingsActionCreators.getCurrentValue().favoriteGifs.gifs);
 }
 
-// saving all gifs blindly
 async function saveAllGifs() {
     const filename = `favorite-gifs-${new Date().toISOString().split("T")[0]}.txt`;
     const gifUrls = getGifUrls();
@@ -56,39 +55,31 @@ async function saveAllGifs() {
     await saveContentToFile(content, filename);
 }
 
-// checking and saving only working gifs
 async function saveWorkingGifs() {
     const gifUrls = getGifUrls();
     
     if (gifUrls.length === 0) {
-        showNotification({ title: "Save Favorite GIFs", body: "No favorite GIFs found..?" });
+        showNotification({ title: "Save Favorite GIFs", body: "No favorite GIFs found?" });
         return;
     }
 
     showNotification({
         title: "Save Favorite GIFs",
-        body: `Testing ${gifUrls.length} GIFs.. This may take a moment......`,
+        body: `Testing ${gifUrls.length} GIFs.. This may take a moment...`,
         loading: true
     });
 
     const workingUrls: string[] = [];
 
-    // using promise dot all to check them concurrently for speed
     await Promise.all(gifUrls.map(async (url) => {
         try {
-            // using head to check existence without downloading the whole image
             const response = await fetch(url, { method: "HEAD" });
-            if (response.ok) {
-                workingUrls.push(url);
-            }
+            if (response.ok) workingUrls.push(url);
         } catch (e) {
-            // if head fails (some file hosts block it) try a standard get request
             try {
                 const response = await fetch(url);
                 if (response.ok) workingUrls.push(url);
-            } catch (err) {
-                // url is dead </3
-            }
+            } catch (err) { }
         }
     }));
 
@@ -109,21 +100,23 @@ async function saveWorkingGifs() {
     });
 }
 
+const settings = definePluginSettings({
+    showToolboxButton: {
+        description: "Show 'Save Favorite GIFs' button in Equicord Toolbox (Requires Reload)",
+        type: OptionType.BOOLEAN,
+        default: true,
+        restartNeeded: true,
+        get hidden() {
+            return !isPluginEnabled(equicordToolbox.name);
+        }
+    }
+});
+
 export default definePlugin({
     name: "SaveFavoriteGIFs",
     description: "Export favorited GIF urls",
     authors: [Devs.thororen],
-    dependencies: ["EquicordToolbox"],
-    
-    options: {
-        showToolboxButton: {
-            description: "Show 'Save Favorite GIFs' button in Equicord Toolbox (Requires Reload)",
-            type: OptionType.BOOLEAN,
-            default: true,
-            restartNeeded: true 
-        }
-    },
-
+    settings,
     commands: [
         {
             name: "savegifs",
@@ -138,12 +131,9 @@ export default definePlugin({
             action: saveWorkingGifs
         }
     ],
-
-    // using a get here so we can check the settings (even though equicord toolbox usually reads this on load i think)
-    get toolboxActions() {
-        if (this.settings.showToolboxButton === false) {
-            return {};
-        }
+    toolboxActions() {
+        const { showToolboxButton } = settings.use(["showToolboxButton"]);
+        if (!showToolboxButton) return null;
 
         return {
             "Save Favorite GIFs": () => {
