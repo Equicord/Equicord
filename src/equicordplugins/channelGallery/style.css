@@ -1,0 +1,368 @@
+/* Gallery scroll container */
+.vc-channel-gallery-scroll {
+    height: 100%;
+    overflow: auto;
+    padding: 14px;
+    box-sizing: border-box;
+    scrollbar-color: var(--interactive-normal) transparent;
+    flex: 1;
+}
+
+.vc-channel-gallery-scroll::-webkit-scrollbar {
+    width: 10px;
+}
+
+.vc-channel-gallery-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.vc-channel-gallery-scroll::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklab, var(--interactive-normal) 55%, transparent);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.vc-channel-gallery-scroll::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Modal styles */
+.vc-gallery-modal-root {
+    min-width: 1200px !important;
+    min-height: 800px !important;
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.vc-channel-gallery-modal {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.vc-gallery-modal-header {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.vc-gallery-modal-title {
+    flex: 1;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    line-height: 1.2;
+}
+
+/* Button styles */
+.vc-gallery-button {
+    margin-right: 8px;
+}
+
+.vc-gallery-icon-button {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--background-modifier-hover);
+    color: var(--interactive-icon-default);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.vc-gallery-icon-button:hover {
+    background: var(--background-modifier-active);
+    color: var(--interactive-icon-hover);
+}
+
+.vc-gallery-icon {
+    color: currentcolor;
+}
+
+/* Grid styles - CSS Grid layout */
+.vc-gallery-grid {
+    display: grid;
+    padding: 14px;
+    margin: 0;
+    gap: 10px;
+    grid-template-columns: repeat(var(--vc-gallery-columns, 1), var(--vc-gallery-cell, 120px));
+}
+
+.vc-gallery-thumbnail-button {
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.vc-gallery-thumbnail-wrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--background-secondary);
+    position: relative;
+}
+
+.vc-gallery-play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0 0 0 / 30%);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+}
+
+.vc-gallery-thumbnail-button:hover .vc-gallery-play-overlay {
+    opacity: 1;
+}
+
+.vc-gallery-play-icon {
+    filter: drop-shadow(0 2px 4px rgb(0 0 0 / 50%));
+}
+
+.vc-gallery-thumbnail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.vc-gallery-caption {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.vc-gallery-status {
+    padding: 10px 0 16px;
+    text-align: center;
+}
+
+.vc-gallery-status-error {
+    color: var(--text-danger);
+}
+
+.vc-gallery-status-muted {
+    color: var(--text-muted);
+}
+
+/* Lightbox viewer styles */
+.vc-gallery-lightbox {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background: var(--background-primary);
+}
+
+.vc-gallery-lightbox-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    user-select: none;
+}
+
+.vc-gallery-lightbox-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    background: var(--background-secondary);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Removed click zones - using buttons only */
+.vc-gallery-lightbox-zone {
+    display: none;
+}
+
+.vc-gallery-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: var(--background-modifier-hover);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+    margin: 0 8px;
+}
+
+.vc-gallery-nav-button:disabled {
+    background: transparent;
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
+.vc-gallery-nav-button:not(:disabled):hover {
+    background: var(--control-icon-only-background-hover);
+}
+
+.vc-gallery-nav-button-left {
+    left: 12px;
+}
+
+.vc-gallery-nav-button-right {
+    right: 12px;
+}
+
+.vc-gallery-nav-icon {
+    color: var(--interactive-icon-default);
+    transition: color 0.15s ease;
+}
+
+.vc-gallery-nav-button:disabled .vc-gallery-nav-icon {
+    color: var(--interactive-muted);
+}
+
+.vc-gallery-nav-button:not(:disabled):hover .vc-gallery-nav-icon {
+    color: var(--interactive-icon-hover);
+}
+
+.vc-gallery-lightbox-zone-disabled {
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Gallery view container */
+.vc-gallery-view-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Tabbar styles */
+.vc-gallery-tabbar {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0 16px;
+    justify-content: center;
+}
+
+/* Pagination styles */
+.vc-gallery-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    flex-shrink: 0;
+    border-top: 1px solid var(--background-modifier-accent);
+}
+
+.vc-gallery-pagination-button {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    border-radius: 4px;
+    border: none;
+    background: var(--background-modifier-hover);
+    color: var(--interactive-icon-default);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.vc-gallery-pagination-button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.vc-gallery-pagination-button:hover:not(:disabled) {
+    background: var(--background-modifier-active);
+    color: var(--interactive-icon-hover);
+}
+
+.vc-gallery-page-info {
+    padding: 0 12px;
+    font-size: 14px;
+    color: var(--text-normal);
+    font-weight: 500;
+}
+
+/* Embed styles */
+.vc-gallery-embed-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vc-gallery-embed-iframe {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    border: none;
+    border-radius: 12px;
+}
+
+.vc-gallery-embed-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vc-gallery-embed-placeholder {
+    text-align: center;
+    padding: 24px;
+}
+
+.vc-gallery-embed-link {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    background: var(--brand-500);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.15s ease;
+}
+
+.vc-gallery-embed-link:hover {
+    background: var(--brand-600);
+}
+
