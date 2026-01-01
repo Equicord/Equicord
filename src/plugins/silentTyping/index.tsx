@@ -19,6 +19,7 @@
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { plugins } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import { openPluginModal } from "@components/index";
 import { Devs, EquicordDevs } from "@utils/constants";
@@ -162,7 +163,7 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
                 channel.guild_id ? toggleLocation(channel.guild_id, effectiveList, defaultHidden) : null;
                 break;
             case "settings":
-                openPluginModal(Vencord.Plugins.plugins.SilentTyping);
+                openPluginModal(plugins.SilentTyping);
                 break;
         }
     }
@@ -200,6 +201,14 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
         </ChatBarButton>
     );
 };
+
+function SilentTypingChatIcon() {
+    return (
+        <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style={{ scale: "1.2" }}>
+            <path fill="currentColor" d="M18.333 15.556H1.667a1.667 1.667 0 0 1 -1.667 -1.667v-10a1.667 1.667 0 0 1 1.667 -1.667h16.667a1.667 1.667 0 0 1 1.667 1.667v10a1.667 1.667 0 0 1 -1.667 1.667M4.444 6.25V4.861a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V4.861a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V6.25a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333V8.194a0.417 0.417 0 0 0 -0.417 -0.417H4.306a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417H7.639a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m3.333 0V8.194a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V9.583a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m-11.667 3.333v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H2.639a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417m10 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417H5.973a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h8.056a0.417 0.417 0 0 0 0.417 -0.417m3.333 0v-1.389a0.417 0.417 0 0 0 -0.417 -0.417h-1.389a0.417 0.417 0 0 0 -0.417 0.417V12.917a0.417 0.417 0 0 0 0.417 0.417h1.389a0.417 0.417 0 0 0 0.417 -0.417" transform="translate(2, 3)" />
+        </svg>
+    );
+}
 
 function getEffectiveList(): string[] {
     if (settings.store.defaultHidden) {
@@ -288,7 +297,6 @@ export default definePlugin({
     name: "SilentTyping",
     authors: [Devs.Ven, Devs.Rini, Devs.ImBanana, EquicordDevs.Etorix],
     description: "Hide your typing indicator from chat.",
-    dependencies: ["ChatInputButtonAPI"],
     isModified: true,
     settings,
 
@@ -297,6 +305,10 @@ export default definePlugin({
 
     contextMenus: {
         "textarea-context": ChatBarContextCheckbox
+    },
+    chatBarButton: {
+        icon: SilentTypingChatIcon,
+        render: SilentTypingChatToggle
     },
 
     patches: [
@@ -330,101 +342,101 @@ export default definePlugin({
         },
     ],
 
-    commands: [{
-        name: "silent-typing",
-        description: "Hide your typing indicator from chat.",
-        inputType: ApplicationCommandInputType.BUILT_IN,
+    commands: [
+        {
+            name: "silent-typing",
+            description: "Hide your typing indicator from chat.",
+            inputType: ApplicationCommandInputType.BUILT_IN,
 
-        options: [
-            {
-                name: "toggle",
-                description: "Toggle functionality globally, for the channel, or for the guild.",
-                required: false,
-                type: ApplicationCommandOptionType.STRING,
-                choices: [
-                    { name: "Global", label: "Global", value: "global" },
-                    { name: "Channel", label: "Channel", value: "channel" },
-                    { name: "Guild", label: "Guild", value: "guild" },
-                ]
-            },
-            {
-                name: "chat-bar-indicators",
-                description: "Hide other users' typing indicators from above the chat bar.",
-                required: false,
-                type: ApplicationCommandOptionType.BOOLEAN,
-            },
-            {
-                name: "members-list-indicators",
-                description: "Hide other users' typing indicators from the members list.",
-                required: false,
-                type: ApplicationCommandOptionType.BOOLEAN,
-            },
-            {
-                name: "chat-icon",
-                description: "Show an icon in the chat bar for toggling the plugin on the go.",
-                required: false,
-                type: ApplicationCommandOptionType.BOOLEAN,
-            },
-            {
-                name: "chat-context-menu",
-                description: "Show a dropdown in the chat context menu to toggle plugin settings on the go.",
-                required: false,
-                type: ApplicationCommandOptionType.BOOLEAN,
-            },
-            {
-                name: "default-hidden",
-                description: "Whether to hide typing in DMs/channels/guilds by default or not.",
-                required: false,
-                type: ApplicationCommandOptionType.BOOLEAN,
-            }
-        ],
-
-        execute: async (args, ctx) => {
-            let updated = false;
-            const location = findOption(args, "toggle");
-
-            if (typeof location === "string") {
-                updated = true;
-
-                if (location === "global") {
-                    toggleGlobal();
-                } else {
-                    const locationId = location === "guild" ? ctx.channel.guild_id : ctx.channel.id;
-                    toggleLocation(locationId, getEffectiveList(), settings.store.defaultHidden);
+            options: [
+                {
+                    name: "toggle",
+                    description: "Toggle functionality globally, for the channel, or for the guild.",
+                    required: false,
+                    type: ApplicationCommandOptionType.STRING,
+                    choices: [
+                        { name: "Global", label: "Global", value: "global" },
+                        { name: "Channel", label: "Channel", value: "channel" },
+                        { name: "Guild", label: "Guild", value: "guild" },
+                    ]
+                },
+                {
+                    name: "chat-bar-indicators",
+                    description: "Hide other users' typing indicators from above the chat bar.",
+                    required: false,
+                    type: ApplicationCommandOptionType.BOOLEAN,
+                },
+                {
+                    name: "members-list-indicators",
+                    description: "Hide other users' typing indicators from the members list.",
+                    required: false,
+                    type: ApplicationCommandOptionType.BOOLEAN,
+                },
+                {
+                    name: "chat-icon",
+                    description: "Show an icon in the chat bar for toggling the plugin on the go.",
+                    required: false,
+                    type: ApplicationCommandOptionType.BOOLEAN,
+                },
+                {
+                    name: "chat-context-menu",
+                    description: "Show a dropdown in the chat context menu to toggle plugin settings on the go.",
+                    required: false,
+                    type: ApplicationCommandOptionType.BOOLEAN,
+                },
+                {
+                    name: "default-hidden",
+                    description: "Whether to hide typing in DMs/channels/guilds by default or not.",
+                    required: false,
+                    type: ApplicationCommandOptionType.BOOLEAN,
                 }
-            }
+            ],
 
-            const updateChatIcon = findOption(args, "chat-icon");
+            execute: async (args, ctx) => {
+                let updated = false;
+                const location = findOption(args, "toggle");
 
-            if (typeof updateChatIcon === "boolean") {
-                updated = true;
-                settings.store.chatIcon = !!updateChatIcon;
-            }
+                if (typeof location === "string") {
+                    updated = true;
 
-            const updateChatContextMenu = findOption(args, "chat-context-menu");
+                    if (location === "global") {
+                        toggleGlobal();
+                    } else {
+                        const locationId = location === "guild" ? ctx.channel.guild_id : ctx.channel.id;
+                        toggleLocation(locationId, getEffectiveList(), settings.store.defaultHidden);
+                    }
+                }
 
-            if (typeof updateChatContextMenu === "boolean") {
-                updated = true;
-                settings.store.chatContextMenu = !!updateChatContextMenu;
-            }
+                const updateChatIcon = findOption(args, "chat-icon");
 
-            const updateDefaultHidden = findOption(args, "default-hidden");
+                if (typeof updateChatIcon === "boolean") {
+                    updated = true;
+                    settings.store.chatIcon = !!updateChatIcon;
+                }
 
-            if (typeof updateDefaultHidden === "boolean") {
-                updated = true;
-                settings.store.defaultHidden = !!updateDefaultHidden;
-            }
+                const updateChatContextMenu = findOption(args, "chat-context-menu");
 
-            sendBotMessage(ctx.channel.id, {
-                content: updated ? "Silent typing settings updated." : "No changes made to silent typing settings.",
-            });
-        },
-    }],
+                if (typeof updateChatContextMenu === "boolean") {
+                    updated = true;
+                    settings.store.chatContextMenu = !!updateChatContextMenu;
+                }
+
+                const updateDefaultHidden = findOption(args, "default-hidden");
+
+                if (typeof updateDefaultHidden === "boolean") {
+                    updated = true;
+                    settings.store.defaultHidden = !!updateDefaultHidden;
+                }
+
+                sendBotMessage(ctx.channel.id, {
+                    content: updated ? "Silent typing settings updated." : "No changes made to silent typing settings.",
+                });
+            },
+        }
+    ],
 
     async startTyping(channelId: string) {
         if (checkEnabled(channelId)) return;
         FluxDispatcher.dispatch({ type: "TYPING_START_LOCAL", channelId });
     },
-
-    renderChatBarButton: SilentTypingChatToggle,
 });

@@ -7,10 +7,10 @@
 import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
@@ -38,7 +38,6 @@ export const settings = definePluginSettings({
     },
 });
 
-
 const getProfileThemeProps = findByCodeLazy(".getPreviewThemeColors", "primaryColor:");
 
 const ProfilePopoutComponent = ErrorBoundary.wrap(
@@ -53,7 +52,7 @@ const ProfilePopoutComponent = ErrorBoundary.wrap(
     },
     {
         noop: true,
-        fallback: () => <BaseText size="xs" weight="semibold" className="vc-github-repos-error" style={{ color: "var(--text-danger)" }}>
+        fallback: () => <BaseText size="xs" weight="semibold" className="vc-github-repos-error" style={{ color: "var(--text-feedback-critical)" }}>
             Error, Failed to render GithubRepos
         </BaseText>
     }

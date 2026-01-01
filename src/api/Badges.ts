@@ -17,8 +17,11 @@
 */
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import globalBadges from "@equicordplugins/globalBadges";
 import BadgeAPIPlugin from "@plugins/_api/badges";
 import { ComponentType, HTMLProps } from "react";
+
+import { isPluginEnabled } from "./PluginManager";
 
 export const enum BadgePosition {
     START,
@@ -47,7 +50,8 @@ export interface ProfileBadge {
     key?: string;
 
     /**
-     * Allows dynamically returning multiple badges
+     * Allows dynamically returning multiple badges.
+     * May call hooks but then you must not use shouldShow
      */
     getBadges?(userInfo: BadgeUserArgs): ProfileBadge[];
 }
@@ -99,6 +103,18 @@ export function _getBadges(args: BadgeUserArgs) {
 
     const donorBadges = BadgeAPIPlugin.getDonorBadges(args.userId);
     const equicordDonorBadges = BadgeAPIPlugin.getEquicordDonorBadges(args.userId);
+    const GlobalBadges = isPluginEnabled(globalBadges.name) ? globalBadges.getGlobalBadges(args.userId) : false;
+
+    // do globalbadges first so it shows before the contrib badges but after donor badges
+    if (GlobalBadges) {
+        badges.unshift(
+            ...GlobalBadges.map(badge => ({
+                ...args,
+                ...badge,
+            }))
+        );
+    }
+
     if (donorBadges) {
         badges.unshift(
             ...donorBadges.map(badge => ({

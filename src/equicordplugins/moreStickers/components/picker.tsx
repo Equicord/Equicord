@@ -42,7 +42,7 @@ export const PickerSidebar = ({ packMetas, onPackSelect }: SidebarProps) => {
                     }}
                 >
                     <RecentlyUsedIcon width={24} height={24} color={
-                        activePack === RecentPack ? " var(--interactive-active)" : "var(--interactive-normal)"
+                        activePack === RecentPack ? " var(--interactive-icon-active)" : "var(--interactive-icon-default)"
                     } />
                 </StickerCategory>
                 {
@@ -167,7 +167,6 @@ function PickerContentRow({ rowIndex, grid1, grid2, grid3, channelId }: PickerCo
         </div>
     );
 }
-
 
 function HeaderCollapseIcon({ isExpanded }: { isExpanded: boolean; }) {
     return (
@@ -433,7 +432,6 @@ export function PickerContent({ stickerPacks, selectedStickerPackId, setSelected
         </div>
     );
 }
-
 
 export const PickerHeader = ({ onQueryChange }: PickerHeaderProps) => {
     const [query, setQuery] = React.useState<string | undefined>();

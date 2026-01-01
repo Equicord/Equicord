@@ -16,15 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { AudioProcessor } from "@api/AudioPlayer";
 import type { ProfileBadge } from "@api/Badges";
 import type { ChatBarButtonData, ChatBarButtonFactory } from "@api/ChatButtons";
 import type { NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { HeaderBarButtonData } from "@api/HeaderBar";
 import type { MemberListDecoratorFactory } from "@api/MemberListDecorators";
 import type { MessageAccessoryFactory } from "@api/MessageAccessories";
 import type { MessageDecorationFactory } from "@api/MessageDecorations";
 import type { MessageClickListener, MessageEditListener, MessageSendListener } from "@api/MessageEvents";
 import type { MessagePopoverButtonData, MessagePopoverButtonFactory } from "@api/MessagePopover";
 import type { NicknameIconFactory } from "@api/NicknameIcons";
+import type { UserAreaButtonData } from "@api/UserArea";
 import type { Command, FluxEvents } from "@vencord/discord-types";
 import type { ReactNode } from "react";
 import type { LiteralUnion } from "type-fest";
@@ -128,6 +131,10 @@ export interface PluginDef {
      */
     enabledByDefault?: boolean;
     /**
+     * Whether enabling or disabling this plugin requires a restart. Defaults to true if the plugin has patches.
+     */
+    requiresRestart?: boolean;
+    /**
      * When to call the start() method
      * @default StartAt.WebpackReady
      */
@@ -195,7 +202,12 @@ export interface PluginDef {
     renderMessageDecoration?: MessageDecorationFactory;
 
     renderMemberListDecorator?: MemberListDecoratorFactory;
+
+    // Custom
     renderNicknameIcon?: NicknameIconFactory;
+    headerBarButton?: HeaderBarButtonData;
+    audioProcessor?: AudioProcessor;
+    userAreaButton?: UserAreaButtonData;
 
     // TODO: Remove eventually
     /**

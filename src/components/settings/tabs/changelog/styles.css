@@ -15,7 +15,7 @@
 }
 
 .vc-changelog-entry:hover {
-    background-color: var(--background-tertiary);
+    background-color: var(--background-base-low);
     transform: translateY(-1px);
     box-shadow: var(--elevation-high);
 }
@@ -27,8 +27,8 @@
 }
 
 .vc-changelog-entry.required:hover {
-    background-color: var(--background-tertiary);
-    border-left-color: var(--status-warning-foreground);
+    background-color: var(--background-base-low);
+    border-left-color: var(--status-warning-background);
 }
 
 .vc-changelog-entry-header {
@@ -41,12 +41,12 @@
 .vc-changelog-entry-hash {
     font-size: 0.875em;
     font-family: var(--font-code);
-    color: var(--text-muted);
+    color: var(--text-subtle);
 }
 
 .vc-changelog-entry-author {
     font-size: 0.875em;
-    color: var(--text-muted);
+    color: var(--text-subtle);
     font-weight: 500;
 }
 
@@ -57,14 +57,14 @@
 }
 
 .vc-changelog-entry.required .vc-changelog-entry-hash {
-    color: var(--text-muted);
+    color: var(--text-subtle);
     font-weight: 600;
 }
 
 .vc-changelog-loading {
     text-align: center;
     padding: 2em;
-    color: var(--text-muted);
+    color: var(--text-subtle);
 }
 
 .vc-changelog-empty {
@@ -72,11 +72,10 @@
     padding: 2em;
     background-color: var(--background-base-lower-alt);
     border-radius: 8px;
-    color: var(--text-muted);
+    color: var(--text-subtle);
 }
 
 .vc-changelog-controls {
-    margin-bottom: 1em;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -114,7 +113,7 @@
 }
 
 .vc-changelog-new-plugin-card {
-    background-color: var(--background-tertiary);
+    background-color: var(--background-base-low);
     border-radius: 6px;
     padding: 0.5em;
     transition: all 0.1s ease-out;
@@ -132,8 +131,8 @@
 }
 
 .vc-changelog-new-plugin-card.required:hover {
-    background-color: var(--background-tertiary);
-    border-left-color: var(--status-warning-foreground);
+    background-color: var(--background-base-low);
+    border-left-color: var(--status-warning-background);
 }
 
 .vc-changelog-new-plugins-compact {
@@ -169,23 +168,23 @@
 
 .vc-changelog-new-plugin-tag.more {
     background-color: var(--background-base-lower-alt);
-    color: var(--text-muted);
+    color: var(--text-subtle);
 }
 
 .vc-changelog-new-plugin-tag.required {
     background-color: var(--status-warning);
     color: var(--white);
-    border: 1px solid var(--status-warning-foreground);
+    border: 1px solid var(--status-warning-background);
 }
 
 .vc-changelog-new-plugin-tag.required:hover {
-    background-color: var(--status-warning-foreground);
+    background-color: var(--status-warning-background);
 }
 
 .vc-changelog-restart-notice {
     margin-top: 1em;
     padding: 0.75em;
-    background-color: var(--info-warning-background);
+    background-color: var(--background-feedback-warning);
     border-radius: 6px;
     border-left: 4px solid var(--status-warning);
 }
@@ -229,7 +228,7 @@
 }
 
 .vc-changelog-log-header:hover {
-    background-color: var(--background-tertiary);
+    background-color: var(--background-base-low);
 }
 
 .vc-changelog-log-info {
@@ -250,13 +249,13 @@
 
 .vc-changelog-log-meta {
     font-size: 0.875em;
-    color: var(--text-muted);
+    color: var(--text-subtle);
     line-height: 1.3;
 }
 
 .vc-changelog-log-toggle {
     transition: transform 0.2s ease;
-    color: var(--text-muted);
+    color: var(--text-subtle);
     font-size: 0.75em;
     flex-shrink: 0;
 }
@@ -310,7 +309,7 @@
 
 /* Visual refresh support */
 .visual-refresh .vc-changelog-entry {
-    background-color: var(--card-primary-bg);
+    background-color: var(--background-surface-high);
     border: 1px solid var(--border-subtle);
 }
 
@@ -328,7 +327,7 @@
 
 .visual-refresh .vc-changelog-entry.required {
     border-left: 4px solid var(--status-warning);
-    background-color: var(--card-primary-bg);
+    background-color: var(--background-surface-high);
     border: 1px solid var(--border-subtle);
     padding-left: calc(0.75em - 4px);
 }
@@ -357,7 +356,7 @@
 }
 
 .vc-changelog-log-commits-list::-webkit-scrollbar-thumb {
-    background: var(--text-muted);
+    background: var(--text-subtle);
     border-radius: 3px;
 }
 
@@ -390,7 +389,7 @@
 
 .vc-changelog-history-list::-webkit-scrollbar-thumb,
 .vc-changelog-log-content::-webkit-scrollbar-thumb {
-    background: var(--text-muted);
+    background: var(--text-subtle);
     border-radius: 3px;
 }
 
@@ -400,12 +399,12 @@
 }
 
 .visual-refresh .vc-changelog-entry:hover {
-    background-color: var(--card-primary-bg);
+    background-color: var(--background-surface-high);
     box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
 .visual-refresh .vc-changelog-empty {
-    background-color: var(--card-primary-bg);
+    background-color: var(--background-surface-high);
     border: 1px solid var(--border-subtle);
 }
 
@@ -415,7 +414,7 @@
 }
 
 .visual-refresh .vc-changelog-new-plugins-section {
-    background-color: var(--card-primary-bg);
+    background-color: var(--background-surface-high);
     border: 1px solid var(--border-subtle);
     border-left: 4px solid var(--brand);
 }
@@ -426,7 +425,7 @@
 }
 
 .visual-refresh .vc-changelog-log {
-    background-color: var(--card-primary-bg);
+    background-color: var(--background-surface-high);
     border: 1px solid var(--border-subtle);
 }
 
@@ -439,7 +438,7 @@
 }
 
 .visual-refresh .vc-changelog-restart-notice {
-    background-color: var(--card-primary-bg);
+    background-color: var(--background-surface-high);
     border: 1px solid var(--status-warning);
     border-left: 4px solid var(--status-warning);
 }
@@ -514,7 +513,7 @@
 /* Required plugin styling */
 .vc-changelog-dep-text {
     font-size: 0.875em;
-    color: var(--text-muted);
+    color: var(--text-subtle);
     margin-left: 1em;
     font-style: italic;
 }
@@ -522,7 +521,7 @@
 /* Visual refresh support for required plugins */
 .visual-refresh .vc-changelog-new-plugin-tag.required {
     background-color: var(--status-warning);
-    border: 1px solid var(--status-warning-foreground);
+    border: 1px solid var(--status-warning-background);
 }
 
 .visual-refresh .vc-changelog-new-plugin-card.required {
@@ -564,7 +563,7 @@
 .vc-changelog-delete-button:hover {
     opacity: 1 !important;
     color: var(--status-danger) !important;
-    background-color: var(--background-modifier-hover);
+    background-color: var(--background-mod-subtle);
 }
 
 .vc-changelog-log-header:hover .vc-changelog-delete-button {

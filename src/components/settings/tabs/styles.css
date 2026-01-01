@@ -33,15 +33,15 @@
 
 .vc-warning-card {
     padding: 1em;
-    background: var(--info-warning-background);
-    border: 1px solid var(--info-warning-foreground);
-    color: var(--info-warning-foreground);
+    background: var(--background-feedback-warning);
+    border: 1px solid var(--text-status-idle);
+    color: var(--text-status-idle);
 }
 
 .vc-backup-restore-card {
-    background-color: var(--info-warning-background);
-    border-color: var(--info-warning-foreground);
-    color: var(--info-warning-foreground);
+    background-color: var(--background-feedback-warning);
+    border-color: var(--text-status-idle);
+    color: var(--text-status-idle);
 }
 
 .vc-settings-theme-links {
@@ -49,7 +49,7 @@
     display: inline-block !important;
     color: var(--text-default) !important;
     padding: 0.5em 1em;
-    border: 1px solid var(--input-border);
+    border: 1px solid var(--input-border-default);
     max-height: unset;
     background-color: transparent;
     box-sizing: border-box;
@@ -61,7 +61,7 @@
 }
 
 .vc-settings-theme-links::placeholder {
-    color: var(--text-muted) !important;
+    color: var(--text-subtle) !important;
 }
 
 .vc-settings-theme-links:focus {
@@ -72,11 +72,22 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1em;
+    margin-top: 16px;
 }
 
 .vc-cloud-erase-data-danger-btn {
     color: var(--white-500);
-    background-color: var(--button-danger-background);
+    background-color: var(--redesign-button-danger-background);
+}
+
+.vc-cloud-icon-with-button {
+    display: flex;
+    gap: 0.5em;
+    padding-inline: 0.5em 1em;
+}
+
+.vc-cloud-button-icon {
+    height: 1.25em;
 }
 
 .vc-settings-modal {

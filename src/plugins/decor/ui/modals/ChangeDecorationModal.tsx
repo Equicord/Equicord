@@ -149,7 +149,7 @@ function ChangeDecorationModal(props: ModalProps) {
             <BaseText
                 size="lg"
                 weight="semibold"
-                color="header-primary"
+                color="text-strong"
                 tag="h1"
                 style={{ flexGrow: 1 }}
             >
@@ -210,7 +210,7 @@ function ChangeDecorationModal(props: ModalProps) {
                         <BaseText
                             size="sm"
                             weight="semibold"
-                            color="header-primary"
+                            color="text-strong"
                         >
                             {activeSelectedDecoration?.alt}
                         </BaseText>

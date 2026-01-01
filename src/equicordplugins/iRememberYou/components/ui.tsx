@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
-import { Flex } from "@components/Flex";
+import { Card } from "@components/Card";
+import { HeadingPrimary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
-import { openUserProfile } from "@utils/discord";
-import { Avatar, Clickable, React, TextInput, Tooltip, } from "@webpack/common";
+import { SettingsTab, wrapTab } from "@components/settings";
+import { classNameFactory } from "@utils/css";
+import { copyWithToast, openUserProfile } from "@utils/discord";
+import { Avatar, Clickable, ContextMenuApi, Menu, React, TextInput, Tooltip, UserStore } from "@webpack/common";
 
 import { Data, IStorageUser } from "./data";
 
@@ -19,14 +21,6 @@ function tooltipText(user: IStorageUser) {
     const { updatedAt } = user.extra || {};
     const updatedAtContent = updatedAt ? new Intl.DateTimeFormat().format(updatedAt) : null;
     return `${user.username ?? user.tag}, updated at ${updatedAtContent}`;
-}
-
-function SectionDescription() {
-    return (
-        <BaseText>
-            {"Provides a list of users you have mentioned or replied to, or those who own the servers you belong to (owner*), or are members of your guild"}
-        </BaseText>
-    );
 }
 
 function UsersCollectionRows({ usersCollection }: { usersCollection: Data["usersCollection"]; }) {
@@ -44,11 +38,9 @@ function UsersCollectionRows({ usersCollection }: { usersCollection: Data["users
                 .map(({ name, users }) => (
                     <aside key={name}>
                         <div className={cl("header-container")}>
-                            <BaseText>{name.toUpperCase()}</BaseText>
+                            <HeadingPrimary className={cl("header-name")}>{name}</HeadingPrimary>
                             <div className={cl("header-btns")}>
-                                <Flex>
-                                    {users.map(u => <UserRow key={u.id} user={u} />)}
-                                </Flex>
+                                {users.map(u => <UserRow key={u.id} user={u} />)}
                             </div>
                         </div>
                     </aside>
@@ -59,14 +51,14 @@ function UsersCollectionRows({ usersCollection }: { usersCollection: Data["users
 
 function UserRow({ user, allowOwner = true }: { user: IStorageUser, allowOwner?: boolean; }) {
     return (
-        <Flex key={user.id} className={cl("user-row")}>
-            <span className={cl("user")}>
-                <Flex>
-                    <Clickable onClick={() => openUserProfile(user.id)}>
-                        <span className={cl("user-avatar")}>
-                            <Avatar src={user.iconURL} size="SIZE_24" />
-                        </span>
-                    </Clickable>
+        <div key={user.id} className={cl("user-row")}>
+            <div className={cl("user")}>
+                <Clickable onClick={() => openUserProfile(user.id)}>
+                    <span className={cl("user-avatar")}>
+                        <Avatar src={user.iconURL} size="SIZE_24" />
+                    </span>
+                </Clickable>
+                <div className={cl("user-tooltip")}>
                     <Tooltip text={tooltipText(user)}>
                         {props =>
                             <Paragraph {...props} className={cl("user-username")}>
@@ -74,15 +66,42 @@ function UserRow({ user, allowOwner = true }: { user: IStorageUser, allowOwner?:
                             </Paragraph>
                         }
                     </Tooltip>
-                </Flex>
-            </span>
-
-            <span className={cl("user-id")}>
-                <Paragraph>
-                    {user.id}
-                </Paragraph>
-            </span>
-        </Flex>
+                    <span
+                        className={cl("user-id")}
+                        onContextMenu={e => {
+                            e.preventDefault();
+                            const userObj = UserStore.getUser(user.id);
+                            if (userObj) {
+                                ContextMenuApi.openContextMenu(e, () => (
+                                    <Menu.Menu
+                                        navId="user-context-menu"
+                                        onClose={ContextMenuApi.closeContextMenu}
+                                        aria-label="User Options"
+                                    >
+                                        <Menu.MenuItem
+                                            id="copy-user-id"
+                                            label="Copy User ID"
+                                            action={() => copyWithToast(user.id, "User ID copied to clipboard")}
+                                        />
+                                        <Menu.MenuItem
+                                            id="view-profile"
+                                            label="View Profile"
+                                            action={() => openUserProfile(user.id)}
+                                        />
+                                    </Menu.Menu>
+                                ));
+                            }
+                        }}
+                    >
+                        <Clickable onClick={() => copyWithToast(user.id, "User ID copied to clipboard")}>
+                            <Paragraph>
+                                {user.id}
+                            </Paragraph>
+                        </Clickable>
+                    </span>
+                </div>
+            </div>
+        </div>
     );
 }
 
@@ -94,27 +113,29 @@ function SearchElement({ usersCollection }: { usersCollection: Data["usersCollec
         <section className={cl("search")}>
             <TextInput placeholder="Filter by tag, username" name="Filter" onChange={setCurrent} />
             {current && (
-                <Flex className={cl("search-user")}>
+                <div className={cl("search-user")}>
                     {list.filter(user => user.tag.includes(current) || user.username.includes(current))
                         .map(user => <UserRow key={user.id} user={user} allowOwner={false} />)}
-                </Flex>
+                </div>
             )}
         </section>
     );
 }
 
-export function DataUI({ plugin, usersCollection }: { plugin: any; usersCollection: Data["usersCollection"]; }) {
+export function DataUI({ usersCollection }: { usersCollection: Data["usersCollection"]; }) {
     return (
-        <main className={cl("header")}>
-            <BaseText size="lg" weight="bold" tag="h1">
-                IRememberYou
-            </BaseText>
-
-            <SectionDescription />
-            <SearchElement usersCollection={usersCollection} />
-            <Flex className={cl("rows")}>
+        <SettingsTab>
+            <Card>
+                <Paragraph>
+                    Provides a list of users you have mentioned or replied to, or those who own the servers you belong to (owner*), or are members of your guild
+                </Paragraph>
+                <SearchElement usersCollection={usersCollection} />
+            </Card>
+            <div className={cl("rows")}>
                 <UsersCollectionRows usersCollection={usersCollection} />
-            </Flex>
-        </main>
+            </div>
+        </SettingsTab>
     );
 }
+
+export default wrapTab(DataUI, "IRememberYouTab");

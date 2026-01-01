@@ -7,25 +7,30 @@
 import "./VencordTab.css";
 
 import { openNotificationLogModal } from "@api/Notifications/notificationLog";
+import { plugins } from "@api/PluginManager";
 import { useSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
 import { FolderIcon, GithubIcon, LogIcon, PaintbrushIcon, RestartIcon } from "@components/Icons";
+import { Notice } from "@components/Notice";
 import { Paragraph } from "@components/Paragraph";
-import { DonateButton, InviteButton, openContributorModal, openPluginModal, SettingsTab, wrapTab } from "@components/settings";
+import { openContributorModal, openPluginModal, SettingsTab, wrapTab } from "@components/settings";
 import { QuickAction, QuickActionCard } from "@components/settings/QuickAction";
 import { SpecialCard } from "@components/settings/SpecialCard";
 import { gitRemote } from "@shared/vencordUserAgent";
-import { DONOR_ROLE_ID, GUILD_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/constants";
+import { DONOR_ROLE_ID, GUILD_ID, IS_MAC, IS_WINDOWS, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { identity, isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
-import { t, Translate } from "@utils/translation";
-import { Button, GuildMemberStore, React, Select, UserStore } from "@webpack/common";
+import { t } from "@utils/translation";
+import { GuildMemberStore, React, Select, UserStore } from "@webpack/common";
 import BadgeAPI from "plugins/_api/badges";
 
+import { DonateButtonComponent } from "./DonateButton";
 import { openNotificationSettingsModal } from "./NotificationSettings";
 
 const DEFAULT_DONATE_IMAGE = "https://cdn.discordapp.com/emojis/1026533090627174460.png";
@@ -36,6 +41,8 @@ const COZY_CONTRIB_IMAGE = "https://cdn.discordapp.com/emojis/102653307095587233
 
 const DONOR_BACKGROUND_IMAGE = "https://media.discordapp.net/stickers/1311070116305436712.png?size=2048";
 const CONTRIB_BACKGROUND_IMAGE = "https://media.discordapp.net/stickers/1311070166481895484.png?size=2048";
+
+const cl = classNameFactory("vc-vencord-tab-");
 
 type KeysOfType<Object, Type> = {
     [K in keyof Object]: Object[K] extends Type ? K : never;
@@ -49,9 +56,7 @@ function EquicordSettings() {
         [],
     );
 
-    const isWindows = navigator.platform.toLowerCase().startsWith("win");
-    const isMac = navigator.platform.toLowerCase().startsWith("mac");
-    const needsVibrancySettings = IS_DISCORD_DESKTOP && isMac;
+    const needsVibrancySettings = IS_DISCORD_DESKTOP && IS_MAC;
 
     const user = UserStore?.getCurrentUser();
 
@@ -73,20 +78,23 @@ function EquicordSettings() {
             !IS_WEB && {
                 key: "enableReactDevtools",
                 title: t("vencord.settings.enableReactDevtools.title"),
+                description: t("vencord.settings.enableReactDevtools.description"),
                 restartRequired: true,
                 warning: { enabled: false },
             },
             !IS_WEB &&
-            (!IS_DISCORD_DESKTOP || !isWindows
+            (!IS_DISCORD_DESKTOP || !IS_WINDOWS
                 ? {
                     key: "frameless",
                     title: t("vencord.settings.frameless.title"),
+                    description: t("vencord.settings.frameless.description"),
                     restartRequired: true,
                     warning: { enabled: false },
                 }
                 : {
                     key: "winNativeTitleBar",
                     title: t("vencord.settings.winNativeTitleBar.title"),
+                    description: t("vencord.settings.winNativeTitleBar.description"),
                     restartRequired: true,
                     warning: { enabled: false },
                 }),
@@ -96,27 +104,31 @@ function EquicordSettings() {
                 description: t("vencord.settings.transparent.description"),
                 restartRequired: true,
                 warning: {
-                    enabled: isWindows,
-                    message: "Enabling this will prevent you from snapping this window.",
+                    enabled: true,
+                    message: IS_WINDOWS
+                        ? t("vencord.settings.transparent.noteWindows")
+                        : t("vencord.settings.transparent.note"),
                 },
             },
             IS_DISCORD_DESKTOP && {
                 key: "disableMinSize",
                 title: t("vencord.settings.disableMinSize.title"),
+                description: t("vencord.settings.disableMinSize.description"),
                 restartRequired: true,
                 warning: { enabled: false },
             },
             !IS_WEB &&
-            isWindows && {
+            IS_WINDOWS && {
                 key: "winCtrlQ",
                 title: t("vencord.settings.winCtrlQ.title"),
+                description: t("vencord.settings.winCtrlQ.description"),
                 restartRequired: true,
                 warning: { enabled: false },
             },
         ];
 
     return (
-        <SettingsTab title={t("vencord.tabs.settings")}>
+        <SettingsTab>
             {(isEquicordDonor(user?.id) || isVencordDonor(user?.id)) ? (
                 <SpecialCard
                     title={t("vencord.donorCard.donated.title")}
@@ -132,7 +144,7 @@ function EquicordSettings() {
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
                     backgroundColor="#ED87A9"
                 >
-                    <DonateButtonComponent />
+                    <DonateButtonComponent donated={true} />
                 </SpecialCard>
             ) : (
                 <SpecialCard
@@ -153,99 +165,110 @@ function EquicordSettings() {
                     cardImage={COZY_CONTRIB_IMAGE}
                     backgroundImage={CONTRIB_BACKGROUND_IMAGE}
                     backgroundColor="#EDCC87"
-                    buttonTitle={t("vencord.contributorCard.contributionsButton")}
-                    buttonOnClick={() => openContributorModal(user)}
-                />
+                >
+                    <Button
+                        variant="none"
+                        size="medium"
+                        type="button"
+                        onClick={() => openContributorModal(user)}
+                        className="vc-contrib-button"
+                    >
+                        <GithubIcon aria-hidden fill={"#000000"} className={"vc-contrib-github"} />
+                        {t("vencord.contributorCard.contributionsButton")}
+                    </Button>
+                </SpecialCard>
             )}
 
-            <section>
-                <Heading>{t("vencord.quickActions.title")}</Heading>
+            <Heading className={Margins.top16}>Quick Actions</Heading>
+            <Paragraph className={Margins.bottom16}>
+                Common actions you might want to perform. These shortcuts give you quick access to frequently used features without navigating through menus.
+            </Paragraph>
 
-                <QuickActionCard>
+            <QuickActionCard>
+                <QuickAction
+                    Icon={LogIcon}
+                    text="Notification Log"
+                    action={openNotificationLogModal}
+                />
+                <QuickAction
+                    Icon={PaintbrushIcon}
+                    text="Edit QuickCSS"
+                    action={() => VencordNative.quickCss.openEditor()}
+                />
+                {!IS_WEB && (
                     <QuickAction
-                        Icon={LogIcon}
-                        text={t("vencord.quickActions.notificationLog")}
-                        action={openNotificationLogModal}
+                        Icon={RestartIcon}
+                        text="Relaunch Discord"
+                        action={relaunch}
                     />
+                )}
+                {!IS_WEB && (
                     <QuickAction
-                        Icon={PaintbrushIcon}
-                        text={t("vencord.quickActions.editQuickCSS")}
-                        action={() => VencordNative.quickCss.openEditor()}
+                        Icon={FolderIcon}
+                        text="Open Settings Folder"
+                        action={() => VencordNative.settings.openFolder()}
                     />
-                    {!IS_WEB && (
-                        <QuickAction
-                            Icon={RestartIcon}
-                            text={t("vencord.quickActions.relaunchDiscord")}
-                            action={relaunch}
-                        />
-                    )}
-                    {!IS_WEB && (
-                        <QuickAction
-                            Icon={FolderIcon}
-                            text={t("vencord.quickActions.openSettings")}
-                            action={() => VencordNative.settings.openFolder()}
-                        />
-                    )}
-                    <QuickAction
-                        Icon={GithubIcon}
-                        text={t("vencord.quickActions.viewSource")}
-                        action={() =>
-                            VencordNative.native.openExternal(
-                                "https://github.com/" + gitRemote,
+                )}
+                <QuickAction
+                    Icon={GithubIcon}
+                    text="View Source Code"
+                    action={() =>
+                        VencordNative.native.openExternal(
+                            "https://github.com/" + gitRemote,
+                        )
+                    }
+                />
+            </QuickActionCard>
+
+            <Divider className={Margins.top20} />
+
+            <Heading className={Margins.top20}>Client Settings</Heading>
+            <Paragraph className={Margins.bottom16}>
+                Configure how Equicord behaves and integrates with Discord. These settings affect the Discord client's appearance and behavior.
+            </Paragraph>
+            <Notice.Info className={Margins.bottom20} style={{ width: "100%" }}>
+                You can customize where this settings section appears in Discord's settings menu by configuring the{" "}
+                <a
+                    role="button"
+                    onClick={() => openPluginModal(plugins.Settings)}
+                    style={{ cursor: "pointer", color: "var(--text-link)" }}
+                >
+                    Settings Plugin
+                </a>.
+            </Notice.Info>
+
+            {Switches.filter((s): s is Exclude<typeof s, false> => !!s).map(
+                s => (
+                    <FormSwitch
+                        key={s.key}
+                        value={settings[s.key]}
+                        onChange={v => (settings[s.key] = v)}
+                        title={s.title}
+                        description={
+                            s.warning.enabled ? (
+                                <>
+                                    {s.description}
+                                    <Notice.Warning className={Margins.top8} style={{ width: "100%" }}>
+                                        {s.warning.message}
+                                    </Notice.Warning>
+                                </>
+                            ) : (
+                                s.description
                             )
                         }
+                        hideBorder
                     />
-                </QuickActionCard>
-            </section>
-
-            <Divider />
-
-            <section className={Margins.top16}>
-                <Heading>{t("vencord.settings.title")}</Heading>
-                <Paragraph className={Margins.bottom20} style={{ color: "var(--text-muted)" }}>
-                    <Translate i18nKey="vencord.settings.hint">
-                        Hint: You can change the position of this settings section in the
-                        <Button
-                            look={Button.Looks.LINK}
-                            style={{ color: "var(--text-link)", display: "inline-block" }}
-                            onClick={() => openPluginModal(Vencord.Plugins.plugins.Settings)}
-                        >
-                            settings of the Settings plugin
-                        </Button>
-                        !
-                    </Translate>
-                </Paragraph>
-
-                {Switches.map(
-                    s =>
-                        s && (
-                            <FormSwitch
-                                key={s.key}
-                                value={settings[s.key]}
-                                onChange={v => (settings[s.key] = v)}
-                                title={s.title}
-                                description={
-                                    s.warning.enabled ? (
-                                        <>
-                                            {s.description}
-                                            <div className="form-switch-warning">
-                                                {s.warning.message}
-                                            </div>
-                                        </>
-                                    ) : (
-                                        s.description
-                                    )
-                                }
-                            />
-                        ),
-                )}
-            </section>
+                ),
+            )}
 
             {needsVibrancySettings && (
                 <>
-                    <Heading>
-                        Window vibrancy style (requires restart)
-                    </Heading>
+                    <Divider className={Margins.top20} />
+
+                    <Heading className={Margins.top20}>Window Vibrancy</Heading>
+                    <Paragraph className={Margins.bottom16}>
+                        Customize the macOS window vibrancy effect. This controls the blur and transparency style of the Discord window. Changes require a restart to take effect.
+                    </Paragraph>
                     <Select
                         className={Margins.bottom20}
                         placeholder="Window vibrancy style"
@@ -311,38 +334,22 @@ function EquicordSettings() {
                 </>
             )}
 
-            <section
-                className={Margins.top16}
-                title="Equicord Notifications"
-            >
-                <Flex>
-                    <Button onClick={openNotificationSettingsModal}>
-                        Notification Settings
-                    </Button>
-                    <Button onClick={openNotificationLogModal} style={{ marginLeft: 16 }}>
-                        View Notification Log
-                    </Button>
-                </Flex>
-            </section>
-        </SettingsTab>
-    );
-}
+            <Divider className={Margins.top20} />
 
-function DonateButtonComponent() {
-    return (
-        <Flex>
-            <DonateButton
-                look={Button.Looks.FILLED}
-                color={Button.Colors.TRANSPARENT}
-                style={{ marginTop: "1em" }}
-                link="https://github.com/sponsors/thororen1234"
-            />
-            <InviteButton
-                look={Button.Looks.FILLED}
-                color={Button.Colors.TRANSPARENT}
-                style={{ marginTop: "1em" }}
-            />
-        </Flex>
+            <Heading className={Margins.top20}>Notifications</Heading>
+            <Paragraph className={Margins.bottom16}>
+                Configure how Equicord handles notifications. You can customize when and how you receive alerts, or view a history of past notifications.
+            </Paragraph>
+
+            <Flex gap="16px">
+                <Button onClick={openNotificationSettingsModal}>
+                    Notification Settings
+                </Button>
+                <Button variant="secondary" onClick={openNotificationLogModal}>
+                    View Notification Log
+                </Button>
+            </Flex>
+        </SettingsTab>
     );
 }
 

@@ -20,7 +20,6 @@ import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 
-
 const settings = definePluginSettings({
     limitTo: {
         type: OptionType.SELECT,
@@ -61,7 +60,7 @@ export default definePlugin({
     start() {
         // Discord adds it's paste listeners to #app-mount. We can intercept them
         // by attaching listeners a child element.
-        containerEl = document.querySelector("[class^=appAsidePanelWrapper]")!;
+        containerEl = document.querySelector("[class*=appAsidePanelWrapper]")!;
         containerEl?.addEventListener("paste", blockPastePropogation);
 
         // Also add them to body to intercept the event listeners on document

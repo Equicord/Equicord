@@ -59,7 +59,7 @@ const SearchTags = {
 function ThemeTab() {
     const [themes, setThemes] = useState<Theme[]>([]);
     const [filteredThemes, setFilteredThemes] = useState<Theme[]>([]);
-    const [themeLinks, setThemeLinks] = useState(Vencord.Settings.themeLinks);
+    const [themeLinks, setThemeLinks] = useState(Settings.themeLinks);
     const [likedThemes, setLikedThemes] = useState<ThemeLikeProps>();
     const [searchValue, setSearchValue] = useState({ value: "", status: SearchStatus.ALL });
     const [hideWarningCard, setHideWarningCard] = useState(Settings.plugins.ThemeLibrary.hideWarningCard);
@@ -123,7 +123,7 @@ function ThemeTab() {
     }, []);
 
     useEffect(() => {
-        setThemeLinks(Vencord.Settings.themeLinks);
+        setThemeLinks(Settings.themeLinks);
     }, []);
 
     useEffect(() => {
@@ -275,22 +275,28 @@ function SubmitThemes() {
                 fontSize: "1.5em",
                 color: "var(--text-default)"
             }}>
-            <p> This tab was replaced in favour of the new website: </p>
-            <p><a href="https://discord-themes.com" target="_blank" rel="noreferrer">discord-themes.com</a></p>
+            <p>
+                This tab was replaced in favour of the new website:
+                {" "}
+                <a href="https://discord-themes.com" target="_blank" rel="noreferrer">
+                    discord-themes.com
+                </a>
+            </p>
             <p style={{
                 fontSize: ".75em",
                 color: "var(--text-muted)"
-            }}> Thank you for your understanding!</p>
+            }}>
+                Thank you for your understanding!
+            </p>
         </div>
     );
 }
-
 
 function ThemeLibrary() {
     const [currentTab, setCurrentTab] = useState(TabItem.THEMES);
 
     return (
-        <SettingsTab title="Theme Library">
+        <SettingsTab>
             <TabBar
                 type="top"
                 look="brand"

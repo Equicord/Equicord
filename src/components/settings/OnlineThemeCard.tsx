@@ -18,11 +18,11 @@
 
 import "./AddonCard.css";
 
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { Switch } from "@components/settings";
 import { AddonBadge } from "@components/settings/PluginBadge";
 import { t } from "@utils/translation";
+import { classNameFactory } from "@utils/css";
 import { useRef } from "@webpack/common";
 import type { MouseEventHandler, ReactNode } from "react";
 
@@ -106,7 +106,7 @@ export function OnlineThemeCard({
                     </BaseText>
 
                     {!!author && (
-                        <BaseText size="md" className={cl("author")}>
+                        <BaseText size="md" color="text-subtle" className={cl("author")}>
                             {author}
                         </BaseText>
                     )}
@@ -130,7 +130,7 @@ export function OnlineThemeCard({
                 {truncated}
             </div>
 
-            {footer}
+            {footer && <div className={cl("footer")}>{footer}</div>}
         </div>
     );
 }

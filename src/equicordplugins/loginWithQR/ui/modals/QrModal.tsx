@@ -5,6 +5,7 @@
  */
 
 import { BaseText } from "@components/BaseText";
+import loginWithQR from "@equicordplugins/loginWithQR";
 import { images } from "@equicordplugins/loginWithQR/images";
 import { getIntlMessage } from "@utils/discord";
 import {
@@ -248,10 +249,8 @@ function QrModal(props: ModalProps) {
     });
 
     useEffect(() => {
-        const plugin = Vencord.Plugins.plugins.LoginWithQR as any;
-
-        plugin.qrModalOpen = true;
-        return () => void (plugin.qrModalOpen = false);
+        loginWithQR.qrModalOpen = true;
+        return () => void (loginWithQR.qrModalOpen = false);
     }, []);
 
     useEffect(() => {
@@ -375,7 +374,7 @@ function QrModal(props: ModalProps) {
                 <BaseText
                     size="lg"
                     weight="semibold"
-                    color="header-primary"
+                    color="text-strong"
                     tag="h1"
                     style={{ flexGrow: 1 }}
                 >
@@ -470,12 +469,12 @@ function QrModal(props: ModalProps) {
                             {error.current}
                         </BaseText>
                     ) : state === LoginStateType.Camera ? (
-                        <BaseText size="md" weight="semibold" color="header-primary">
+                        <BaseText size="md" weight="semibold" color="text-strong">
                             Scanning...
                         </BaseText>
                     ) : (
                         <>
-                            <BaseText size="md" weight="semibold" color="header-primary">
+                            <BaseText size="md" weight="semibold" color="text-strong">
                                 Drag and drop an image here, or click to select an image
                             </BaseText>
                             <BaseText size="sm" weight="medium" color="text-muted">

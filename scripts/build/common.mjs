@@ -31,7 +31,6 @@ import { fileURLToPath } from "url";
 import { promisify } from "util";
 
 import { getPluginTarget } from "../utils.mjs";
-import { builtinModules } from "module";
 
 const PackageJSON = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../../package.json"), "utf-8"));
 
@@ -261,7 +260,7 @@ export const fileUrlPlugin = {
         build.onLoad({ filter, namespace: "file-uri" }, async ({ pluginData: { path, uri } }) => {
             const { searchParams } = new URL(uri);
             const base64 = searchParams.has("base64");
-            const minify = IS_STANDALONE === true && searchParams.has("minify");
+            const minify = searchParams.has("minify");
             const noTrim = searchParams.get("trim") === "false";
 
             const encoding = base64 ? "base64" : "utf-8";
@@ -294,7 +293,7 @@ export const fileUrlPlugin = {
                     throw new Error(`Don't know how to minify file type: ${path}`);
                 }
 
-                if (base64)
+                if (base64 && !content.startsWith("data:"))
                     content = Buffer.from(content).toString("base64");
             }
 

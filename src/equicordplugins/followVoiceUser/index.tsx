@@ -4,11 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "@equicordplugins/_misc/styles.css";
-
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
-import { Paragraph } from "@components/Paragraph";
+import { Notice } from "@components/Notice";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User, VoiceState } from "@vencord/discord-types";
@@ -73,17 +71,16 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { channel, 
     );
 };
 
-
 export default definePlugin({
     name: "FollowVoiceUser",
     description: "Follow a friend in voice chat.",
     authors: [EquicordDevs.TheArmagan],
     settings,
-    settingsAboutComponent: () => <>
-        <Paragraph className="plugin-warning">
+    settingsAboutComponent: () => (
+        <Notice.Info>
             This Plugin is used to follow a Friend/Friends into voice chat(s).
-        </Paragraph>
-    </>,
+        </Notice.Info>
+    ),
     flux: {
         async VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
             if (!followedUserInfo) return;
@@ -91,7 +88,7 @@ export default definePlugin({
 
             if (
                 settings.store.onlyWhenInVoice
-                && VoiceStateStore.getVoiceStateForUser(UserStore.getCurrentUser().id) === null
+                && !VoiceStateStore.getVoiceStateForUser(UserStore.getCurrentUser().id)
             ) return;
 
             voiceStates.forEach(voiceState => {

@@ -8,14 +8,13 @@ export const Native = getNative();
 
 import "./styles.css";
 
-import ErrorBoundary from "@components/ErrorBoundary";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { FluxDispatcher, MessageStore, React, UserStore } from "@webpack/common";
+import { FluxDispatcher, MessageStore, SelectedChannelStore, UserStore } from "@webpack/common";
 
-import { OpenLogsButton } from "./components/LogsButton";
+import { LogsIcon, OpenLogsButton } from "./components/LogsButton";
 import { openLogModal } from "./components/LogsModal";
 import * as idb from "./db";
 import { addMessage } from "./LoggedMessageManager";
@@ -85,13 +84,13 @@ async function messageDeleteHandler(payload: MessageDeletePayload & { isBulk: bo
             });
         }
 
-
         if (message == null || message.channel_id == null || !message.deleted) return;
         // Flogger.log("ADDING MESSAGE (DELETED)", message);
         if (payload.isBulk)
             return message;
 
-        await addMessage(message, ghostPinged ? idb.DBMessageStatus.GHOST_PINGED : idb.DBMessageStatus.DELETED);
+        const currentChannelId = SelectedChannelStore.getChannelId();
+        await addMessage(message, ghostPinged ? idb.DBMessageStatus.GHOST_PINGED : idb.DBMessageStatus.DELETED, currentChannelId);
     }
     finally {
         handledMessageIds.delete(payload.id);
@@ -107,6 +106,17 @@ async function messageDeleteBulkHandler({ channelId, guildId, ids }: MessageDele
     }
 
     await idb.addMessagesBulkIDB(messages);
+
+    if (messages.length > 0 && settings.store.timeBasedCleanupMinutes > 0) {
+        const currentChannelId = SelectedChannelStore.getChannelId();
+        const cutoffTime = new Date(Date.now() - settings.store.timeBasedCleanupMinutes * 60 * 1000).toISOString();
+        const oldGuildMessages = await idb.getOlderThanTimestampForGuildsIDB(cutoffTime, currentChannelId, settings.store.preserveCurrentChannel);
+
+        if (oldGuildMessages.length > 0) {
+            Flogger.info(`Deleting ${oldGuildMessages.length} old server messages older than ${settings.store.timeBasedCleanupMinutes} minutes (bulk cleanup)`);
+            await idb.deleteMessagesBulkIDB(oldGuildMessages.map(m => m.message_id));
+        }
+    }
 }
 
 async function messageUpdateHandler(payload: MessageUpdatePayload) {
@@ -156,7 +166,8 @@ async function messageUpdateHandler(payload: MessageUpdatePayload) {
     if (message == null || message.channel_id == null || message.editHistory == null || message.editHistory.length === 0) return;
 
     // Flogger.log("ADDING MESSAGE (EDITED)", message, payload);
-    await addMessage(message, idb.DBMessageStatus.EDITED);
+    const currentChannelId = SelectedChannelStore.getChannelId();
+    await addMessage(message, idb.DBMessageStatus.EDITED, currentChannelId);
 }
 
 function messageCreateHandler(payload: MessageCreatePayload) {
@@ -230,7 +241,7 @@ async function processMessageFetch(response: FetchMessagesResponse) {
 
 export default definePlugin({
     name: "MessageLoggerEnhanced",
-    authors: [Devs.Aria],
+    authors: [Devs.Aria, EquicordDevs.keyages],
     description: "G'day",
     dependencies: ["MessageLogger"],
 
@@ -257,22 +268,12 @@ export default definePlugin({
             }
         },
         {
-            find: ".controlButtonWrapper,",
-            predicate: () => settings.store.ShowLogsButton,
-            replacement: {
-                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,100}mobileToolbar)/,
-                replace: "$1$self.addIconToToolBar(arguments[0]);$2"
-            }
-        },
-
-        {
             find: "childrenMessageContent:null",
             replacement: {
                 match: /(cozyMessage.{1,50},)childrenHeader:/,
                 replace: "$1childrenAccessories:arguments[0].childrenAccessories || null,childrenHeader:"
             }
         },
-
         // https://regex101.com/r/S3IVGm/1
         // fix vidoes failing because there are no thumbnails
         {
@@ -311,20 +312,12 @@ export default definePlugin({
         }
     },
 
-    addIconToToolBar(e: { toolbar: React.ReactNode[] | React.ReactNode; }) {
-        if (Array.isArray(e.toolbar))
-            return e.toolbar.unshift(
-                <ErrorBoundary noop={true}>
-                    <OpenLogsButton />
-                </ErrorBoundary>
-            );
-
-        e.toolbar = [
-            <ErrorBoundary noop={true} key={"MessageLoggerEnhanced"} >
-                <OpenLogsButton />
-            </ErrorBoundary>,
-            e.toolbar,
-        ];
+    headerBarButton: {
+        icon: LogsIcon,
+        render() {
+            if (!settings.store.ShowLogsButton) return null;
+            return OpenLogsButton();
+        }
     },
 
     processMessageFetch,

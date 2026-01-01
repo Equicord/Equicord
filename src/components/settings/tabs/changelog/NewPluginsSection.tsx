@@ -5,16 +5,17 @@
  */
 
 import { useSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { PluginCard } from "@components/settings/tabs/plugins/PluginCard";
 import { ChangeList } from "@utils/ChangeList";
+import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
 import { t } from "@utils/translation";
-import { Button, React, Tooltip } from "@webpack/common";
+import { React, Tooltip } from "@webpack/common";
 
 import Plugins from "~plugins";
 
@@ -166,8 +167,8 @@ export function NewPluginsSection({
                         {tooltipProps => (
                             <Button
                                 {...tooltipProps}
-                                color={Button.Colors.LINK}
-                                size={Button.Sizes.SMALL}
+                                variant="link"
+                                size="small"
                                 onClick={() => location.reload()}
                                 className={Margins.top16}
                             >

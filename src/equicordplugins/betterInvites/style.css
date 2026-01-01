@@ -1,8 +1,3 @@
-h3[class^="h5"]:has([class="vc-bi-header-inner"]) {
-    display: flex;
-    margin: 0 !important;
-}
-
 .vc-bi-inviter-avatar {
     margin: 0;
     height: 14px;
@@ -24,11 +19,12 @@ h3[class^="h5"]:has([class="vc-bi-header-inner"]) {
 .vc-bi-header-text {
     flex: 1;
     white-space: normal;
-    color: var(--text-secondary);
+    color: var(--text-subtle);
 }
 
 .vc-bi-tooltip-icon {
     color: var(--text-muted);
     width: 16px;
     height: 16px;
+    margin-top: 1px;
 }

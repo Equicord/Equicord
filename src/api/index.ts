@@ -22,6 +22,7 @@ import * as $ChatButtons from "./ChatButtons";
 import * as $Commands from "./Commands";
 import * as $ContextMenu from "./ContextMenu";
 import * as $DataStore from "./DataStore";
+import * as $HeaderBar from "./HeaderBar";
 import * as $MemberListDecorators from "./MemberListDecorators";
 import * as $MessageAccessories from "./MessageAccessories";
 import * as $MessageDecorations from "./MessageDecorations";
@@ -31,6 +32,7 @@ import * as $MessageUpdater from "./MessageUpdater";
 import * as $NicknameIcons from "./NicknameIcons";
 import * as $Notices from "./Notices";
 import * as $Notifications from "./Notifications";
+import * as $UserArea from "./UserArea";
 export * as PluginManager from "./PluginManager";
 import * as $ServerList from "./ServerList";
 import * as $Settings from "./Settings";
@@ -130,6 +132,11 @@ export const ContextMenu = $ContextMenu;
 export const ChatButtons = $ChatButtons;
 
 /**
+ * An API allowing you to add buttons to the header bar or channel toolbar.
+ */
+export const HeaderBar = $HeaderBar;
+
+/**
  * An API allowing you to update and re-render messages.
  */
 export const MessageUpdater = $MessageUpdater;
@@ -153,6 +160,11 @@ export const NicknameIcons = $NicknameIcons;
  * An API allowing you to play internal Discord audio files or external audio URLs/URIs.
  */
 export const AudioPlayer = $AudioPlayer;
+
+/**
+ * An API allowing you to add buttons to the user area panel.
+ */
+export const UserArea = $UserArea;
 
 /**
  * Just used to identify if user is on Equicord as Vencord doesn't have this.

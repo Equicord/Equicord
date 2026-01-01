@@ -19,15 +19,14 @@
 import "./style.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { HeaderBarButton } from "@api/HeaderBar";
 import { DataStore } from "@api/index";
-import { removeMessagePopoverButton } from "@api/MessagePopover";
-import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { classes } from "@utils/misc";
 import { openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { findByCodeLazy, findByProps, findComponentByCodeLazy } from "@webpack";
+import { findByCodeLazy, findByProps } from "@webpack";
 import { ChannelStore, Menu } from "@webpack/common";
 
 import { Popover as NoteButtonPopover, Popover } from "./components/icons/NoteButton";
@@ -36,8 +35,6 @@ import { noteHandler, noteHandlerCache } from "./NoteHandler";
 import { DataStoreToCache, HolyNoteStore } from "./utils";
 
 export const MessageType = findByCodeLazy("isEdited(){");
-
-const HeaderBarIcon = findComponentByCodeLazy(".HEADER_BAR_BADGE_TOP:", '.iconBadge,"top"');
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = async (children, { message }: { message: Message; }) => {
     children.push(
@@ -58,34 +55,20 @@ function ToolBarHeader() {
     const iconClasses = findByProps("iconWrapper", "clickable");
 
     return (
-        <ErrorBoundary noop={true}>
-            <HeaderBarIcon
-                tooltip="Holy Notes"
-                position="bottom"
-                className={classes("vc-note-button", iconClasses.iconWrapper, iconClasses.clickable)}
-                icon={e => Popover(e)}
-                onClick={() => openModal(props => <NoteModal {...props} />)}
-            />
-        </ErrorBoundary>
+        <HeaderBarButton
+            tooltip="Holy Notes"
+            position="bottom"
+            className={classes("vc-note-button", iconClasses.iconWrapper, iconClasses.clickable)}
+            icon={Popover}
+            onClick={() => openModal(props => <NoteModal {...props} />)}
+        />
     );
 }
-
 
 export default definePlugin({
     name: "HolyNotes",
     description: "Holy Notes allows you to save messages",
     authors: [EquicordDevs.Wolfie],
-    dependencies: ["MessagePopoverAPI", "ChatInputButtonAPI"],
-
-    patches: [
-        {
-            find: ".controlButtonWrapper,",
-            replacement: {
-                match: /(function \i\(\i\){)(.{1,200}toolbar.{1,100}mobileToolbar)/,
-                replace: "$1$self.toolbarAction(arguments[0]);$2"
-            }
-        }
-    ],
 
     toolboxActions: {
         async "Open Notes"() {
@@ -97,21 +80,11 @@ export default definePlugin({
         "message": messageContextMenuPatch
     },
 
-    toolbarAction(e) {
-        if (Array.isArray(e.toolbar))
-            return e.toolbar.unshift(
-                <ErrorBoundary noop={true}>
-                    <ToolBarHeader />
-                </ErrorBoundary>
-            );
-
-        e.toolbar = [
-            <ErrorBoundary noop={true} key={"HolyNotes"}>
-                <ToolBarHeader />
-            </ErrorBoundary>,
-            e.toolbar,
-        ];
+    headerBarButton: {
+        icon: Popover,
+        render: ToolBarHeader
     },
+
     messagePopoverButton: {
         icon: NoteButtonPopover,
         render(message) {
@@ -129,8 +102,4 @@ export default definePlugin({
         if (await DataStore.keys(HolyNoteStore).then(keys => !keys.includes("Main"))) return noteHandler.newNoteBook("Main");
         if (!noteHandlerCache.has("Main")) await DataStoreToCache();
     },
-
-    async stop() {
-        removeMessagePopoverButton("HolyNotes");
-    }
 });

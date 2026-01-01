@@ -21,13 +21,9 @@ import { generateId, sendBotMessage } from "@api/Commands";
 import { Devs } from "@utils/constants";
 import definePlugin, { IconComponent, StartAt } from "@utils/types";
 import { CloudUpload, MessageAttachment } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
-import { DraftStore, DraftType, SelectedChannelStore, UserStore, useStateFromStores } from "@webpack/common";
-
-const UploadStore = findByPropsLazy("getUploads");
+import { DraftStore, DraftType, UploadAttachmentStore, UserStore, useStateFromStores } from "@webpack/common";
 
 const getDraft = (channelId: string) => DraftStore.getDraft(channelId, DraftType.ChannelMessage);
-
 
 const getImageBox = (url: string): Promise<{ width: number, height: number; } | null> =>
     new Promise(res => {
@@ -41,10 +37,9 @@ const getImageBox = (url: string): Promise<{ width: number, height: number; } | 
         img.src = url;
     });
 
-
 const getAttachments = async (channelId: string) =>
     await Promise.all(
-        UploadStore.getUploads(channelId, DraftType.ChannelMessage)
+        UploadAttachmentStore.getUploads(channelId, DraftType.ChannelMessage)
             .map(async (upload: CloudUpload) => {
                 const { isImage, filename, spoiler, item: { file } } = upload;
                 const url = URL.createObjectURL(file);
@@ -72,7 +67,6 @@ const getAttachments = async (channelId: string) =>
             })
     );
 
-
 const PreviewIcon: IconComponent = ({ height = 20, width = 20, className }) => {
     return (
         <svg
@@ -89,13 +83,12 @@ const PreviewIcon: IconComponent = ({ height = 20, width = 20, className }) => {
     );
 };
 
-const PreviewButton: ChatBarButtonFactory = ({ isMainChat, isEmpty, type: { attachments } }) => {
-    const channelId = SelectedChannelStore.getChannelId();
+const PreviewButton: ChatBarButtonFactory = ({ isAnyChat, isEmpty, type: { attachments }, channel: { id: channelId } }) => {
     const draft = useStateFromStores([DraftStore], () => getDraft(channelId));
 
-    if (!isMainChat) return null;
+    if (!isAnyChat) return null;
 
-    const hasAttachments = attachments && UploadStore.getUploads(channelId, DraftType.ChannelMessage).length > 0;
+    const hasAttachments = attachments && UploadAttachmentStore.getUploads(channelId, DraftType.ChannelMessage).length > 0;
     const hasContent = !isEmpty && draft?.length > 0;
 
     if (!hasContent && !hasAttachments) return null;

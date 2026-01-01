@@ -3,12 +3,12 @@
 .vc-command-palette-root {
     border-radius: 10px;
     overflow: hidden;
-    background-color: var(--background-tertiary);
+    background-color: var(--background-base-low);
 }
 
 .vc-command-palette-option {
     padding: 5px;
-    background-color: var(--background-tertiary);
+    background-color: var(--background-base-low);
     color: var(--white-500);
     font-family: var(--font-display);
     text-align: left;
@@ -17,10 +17,10 @@
 
 .vc-command-palette-key-hover {
     padding: 5px;
-    background-color: var(--background-modifier-selected);
+    background-color: var(--background-mod-strong);
     border-radius: 3px;
     font-family: var(--font-display);
-    color: var(--interactive-hover);
+    color: var(--interactive-icon-hover);
     padding-left: 0.8rem;
 }
 
@@ -40,13 +40,13 @@
 }
 
 .vc-command-palette-simple-text {
-    background-color: var(--input-background);
+    background-color: var(--input-background-default, var(--input-background));
     width: 30vh;
 }
 
 .vc-command-palette-registrar {
     position: absolute;
-    color: var(--interactive-normal);
+    color: var(--interactive-icon-default);
     white-space: nowrap;
     text-overflow: ellipsis;
     right: 1.6rem;
@@ -65,7 +65,7 @@
     align-items: center;
     border-radius: 3px;
     background-color: hsl(var(--black-500-hsl) / 10%);
-    color: var(--header-primary);
+    color: var(--text-strong);
     line-height: 22px;
     font-weight: 600;
     padding: 10px 0 10px 10px;
@@ -102,11 +102,11 @@
     height: 30px;
     width: 128px;
     color: var(--white-500);
-    background-color: var(--button-secondary-background);
+    background-color: var(--redesign-button-secondary-background);
     border-radius: 10px;
     transition: background-color 0.15s ease;
 }
 
 .vc-command-palette-key-recorder-button:hover {
-    background-color: var(--button-secondary-background-hover);
+    background-color: var(--redesign-button-secondary-background);
 }

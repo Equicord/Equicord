@@ -6,6 +6,7 @@
 
 import "./styles.css";
 
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { Divider } from "@components/Divider";
 import { ErrorCard } from "@components/ErrorCard";
@@ -15,12 +16,12 @@ import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
 import { HashLink } from "@components/settings/tabs/updater/Components";
-import { gitHash, gitHashShort } from "@shared/vencordUserAgent";
+import { gitHash } from "@shared/vencordUserAgent";
 import { Margins } from "@utils/margins";
 import { useAwaiter } from "@utils/react";
 import { t } from "@utils/translation";
 import { getRepo, UpdateLogger } from "@utils/updater";
-import { Alerts, Button, React, Toasts } from "@webpack/common";
+import { Alerts, React, Toasts } from "@webpack/common";
 
 import {
     ChangelogEntry,
@@ -116,9 +117,8 @@ function UpdateLogCard({
                             }
                         </span>
                         <Button
-                            size={Button.Sizes.NONE}
-                            color={Button.Colors.TRANSPARENT}
-                            look={Button.Looks.FILLED}
+                            size="min"
+                            variant="secondary"
                             className="vc-changelog-delete-button"
                             style={{
                                 padding: "4px",
@@ -476,38 +476,17 @@ function ChangelogContent() {
 
     return (
         <>
+            <Heading className={Margins.top16}>Fetch Changes</Heading>
             <Paragraph className={Margins.bottom16}>
-                {t("vencord.settings.changelog.viewRecentChanges")}
-            </Paragraph>
-
-            <Heading>{t("vencord.settings.changelog.repository")}</Heading>
-            <Paragraph className={Margins.bottom16}>
-                {repoPending ? (
-                    repo
-                ) : repoErr ? (
-                    t("vencord.settings.changelog.failedToRetrieve")
-                ) : (
-                    <Link href={repo}>
-                        {repo.split("/").slice(-2).join("/")}
-                    </Link>
-                )}{" "}
-                (Current:{" "}
-                <span className="vc-changelog-current-hash">
-                    {gitHashShort}
-                </span>
-                )
+                {t("vencord.settings.changelog.info")}
             </Paragraph>
 
             <div className="vc-changelog-controls">
                 <Button
-                    size={Button.Sizes.SMALL}
+                    size="small"
                     disabled={isLoading || repoPending || !!repoErr}
                     onClick={fetchChangelog}
-                    color={
-                        recentlyChecked
-                            ? Button.Colors.GREEN
-                            : Button.Colors.BRAND
-                    }
+                    variant={recentlyChecked ? "positive" : "primary"}
                 >
                     {isLoading
                         ? t("vencord.loading")
@@ -520,20 +499,16 @@ function ChangelogContent() {
                 {changelogHistory.length > 0 && (
                     <>
                         <Button
-                            size={Button.Sizes.SMALL}
-                            color={
-                                showHistory
-                                    ? Button.Colors.PRIMARY
-                                    : Button.Colors.BRAND
-                            }
+                            size="small"
+                            variant={showHistory ? "primary" : "secondary"}
                             onClick={() => setShowHistory(!showHistory)}
                             style={{ marginLeft: "8px" }}
                         >
                             {showHistory ? t("vencord.logs.hideLogs") : t("vencord.logs.showLogs")}
                         </Button>
                         <Button
-                            size={Button.Sizes.SMALL}
-                            color={Button.Colors.RED}
+                            size="small"
+                            variant="dangerPrimary"
                             onClick={() => {
                                 Alerts.show({
                                     title: t("vencord.logs.clearAllLogs"),
@@ -550,8 +525,7 @@ function ChangelogContent() {
                                             id: Toasts.genId(),
                                             type: Toasts.Type.SUCCESS,
                                             options: {
-                                                position:
-                                                    Toasts.Position.BOTTOM,
+                                                position: Toasts.Position.BOTTOM,
                                             },
                                         });
                                     },
@@ -566,41 +540,51 @@ function ChangelogContent() {
             </div>
 
             {error && (
-                <ErrorCard style={{ padding: "1em", marginBottom: "1em" }}>
-                    <p>{error}</p>
-                    <Paragraph
-                        style={{
-                            marginTop: "0.5em",
-                            color: "var(--text-muted)",
-                        }}
-                    >
+                <ErrorCard style={{ padding: "1em", marginTop: "1em" }}>
+                    <Paragraph>{error}</Paragraph>
+                    <Paragraph color="text-subtle" style={{ marginTop: "0.5em" }}>
                         {t("vencord.settings.changelog.checkYourInternet")}
                     </Paragraph>
                 </ErrorCard>
             )}
 
-            <Divider className={Margins.bottom16} />
+            <Divider className={Margins.top20} />
 
-            {/* Current Changes Section */}
-            {hasCurrentChanges ? (
-                <div className="vc-changelog-current">
-                    <Heading className={Margins.bottom8}>
+            <Heading className={Margins.top20}>{t("vencord.settings.changelog.repository")}</Heading>
+            <Paragraph className={Margins.bottom8}>
+                {t("vencord.settings.changelog.whereUpdatesFetch")}
+            </Paragraph>
+            <Paragraph color="text-subtle">
+                {repoPending ? (
+                    repo
+                ) : repoErr ? (
+                    t("vencord.settings.changelog.failedToRetrieve")
+                ) : (
+                    <Link href={repo}>
+                        {repo.split("/").slice(-2).join("/")}
+                    </Link>
+                )}
+                {" "}(<HashLink repo={repo} hash={gitHash} disabled={repoPending} />)
+            </Paragraph>
+
+            {hasCurrentChanges && (
+                <>
+                    <Divider className={Margins.top20} />
+
+                    <Heading className={Margins.top20}>Recent Changes</Heading>
+                    <Paragraph className={Margins.bottom16}>
                         {t("vencord.settings.changelog.recentChanges")}
-                    </Heading>
+                    </Paragraph>
 
-                    {/* New Plugins Section */}
                     {newPlugins.length > 0 && (
                         <div className={Margins.bottom16}>
                             <NewPluginsSection
                                 newPlugins={newPlugins}
-                                onPluginToggle={(pluginName, enabled) => {
-                                    // Handle plugin toggle if needed
-                                }}
+                                onPluginToggle={() => { }}
                             />
                         </div>
                     )}
 
-                    {/* Updated Plugins Section */}
                     {updatedPlugins.length > 0 && (
                         <div className={Margins.bottom16}>
                             <Heading className={Margins.bottom8}>
@@ -610,7 +594,6 @@ function ChangelogContent() {
                         </div>
                     )}
 
-                    {/* Code Changes */}
                     {changelog.length > 0 && (
                         <div>
                             <Heading className={Margins.bottom8}>
@@ -628,26 +611,24 @@ function ChangelogContent() {
                             </div>
                         </div>
                     )}
-                </div>
-            ) : (
-                !isLoading &&
-                !error && (
-                    <Card className="vc-changelog-empty">
-                        <Paragraph>
-                            {t("vencord.settings.changelog.emptyChangelog")}
-                        </Paragraph>
-                    </Card>
-                )
+                </>
             )}
 
-            {/* History Section */}
+            {!hasCurrentChanges && !isLoading && !error && (
+                <>
+                    <Divider className={Margins.top20} />
+                    <Heading className={Margins.top20}>{t("vencord.settings.changelog.recentChanges")}</Heading>
+                    <Paragraph color="text-subtle">
+                        {t("vencord.settings.changelog.emptyChangelog")}
+                    </Paragraph>
+                </>
+            )}
+
             {showHistory && changelogHistory.length > 0 && (
-                <div className="vc-changelog-history">
-                    <Divider
-                        className={Margins.top16}
-                        style={{ marginBottom: "1em" }}
-                    />
-                    <Heading className={Margins.bottom8}>
+                <>
+                    <Divider className={Margins.top20} />
+
+                    <Heading className={Margins.top20}>
                         {t("vencord.settings.changelog.updateLogs", { count: changelogHistory.length })}
                     </Heading>
                     <Paragraph className={Margins.bottom16}>
@@ -675,11 +656,7 @@ function ChangelogContent() {
                                             await loadChangelogHistory();
                                             setExpandedLogs(
                                                 new Set(
-                                                    Array.from(
-                                                        expandedLogs,
-                                                    ).filter(
-                                                        id => id !== logId,
-                                                    ),
+                                                    Array.from(expandedLogs).filter(id => id !== logId),
                                                 ),
                                             );
                                             Toasts.show({
@@ -687,8 +664,7 @@ function ChangelogContent() {
                                                 id: Toasts.genId(),
                                                 type: Toasts.Type.SUCCESS,
                                                 options: {
-                                                    position:
-                                                        Toasts.Position.BOTTOM,
+                                                    position: Toasts.Position.BOTTOM,
                                                 },
                                             });
                                         },
@@ -697,7 +673,7 @@ function ChangelogContent() {
                             />
                         ))}
                     </div>
-                </div>
+                </>
             )}
         </>
     );
@@ -705,7 +681,7 @@ function ChangelogContent() {
 
 function ChangelogTab() {
     return (
-        <SettingsTab title={t("vencord.settings.changelog.title")}>
+        <SettingsTab>
             <ChangelogContent />
         </SettingsTab>
     );
