@@ -20,12 +20,11 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import fathorse from "file://fathorse.js";
+import oneko from "file://oneko.js";
 
-const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/c4ee66353b11a44e4a5b7e914a81f8d33111555e/oneko.gif";
-const ONEKO_SCRIPT = "https://raw.githubusercontent.com/adryd325/oneko.js/c4ee66353b11a44e4a5b7e914a81f8d33111555e/oneko.js";
-const FATASS_HORSE_SCRIPT = "https://raw.githubusercontent.com/nexpid/fatass-horse/351f158bfd8fafd44d9c17faad61f2a80bcd33e3/horse.js";
-const FATASS_HORSE_ORIGINAL_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/refs/heads/main/sheet.png";
-const FATASS_HORSE_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/351f158bfd8fafd44d9c17faad61f2a80bcd33e3/sheet.png";
+const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/46b0684f29694eaf3252835003f4d9d0258556e5/oneko.gif";
+const FATASS_HORSE_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/08bc4042750d5f995c55327f7b6c6710158f5263/sheet.png";
 
 const settings = definePluginSettings({
     buddy: {
@@ -45,14 +44,14 @@ const settings = definePluginSettings({
         onChange: load,
     },
     speed: {
-        description: "Speed of Da Cat :3",
+        description: "Speed of your buddy",
         type: OptionType.NUMBER,
         default: 10,
         isValid: (value: number) => value >= 0 || "Speed must be bigger than 0",
         onChange: load,
     },
     fps: {
-        description: "Framerate of the fatass horse",
+        description: "Framerate of your buddy",
         type: OptionType.NUMBER,
         default: 24,
         isValid: (value: number) => value > 0 || "Framerate must be bigger than 0",
@@ -84,9 +83,6 @@ const settings = definePluginSettings({
         onChange: load
     },
 }, {
-    fps: {
-        disabled() { return this.store.buddy !== "fathorse"; },
-    },
     size: {
         disabled() { return this.store.buddy !== "fathorse"; },
     },
@@ -112,26 +108,26 @@ function load() {
 
     switch (settings.store.buddy) {
         case "oneko": {
-            fetch(ONEKO_SCRIPT)
-                .then(x => x.text())
-                .then(s => s.replace("const nekoSpeed = 10;", `const nekoSpeed = ${settings.store.speed};`))
-                .then(s => s.replace("./oneko.gif", ONEKO_IMAGE)
-                    .replace("(isReducedMotion)", "(false)"))
-                .then(eval);
+            (0, eval)(
+                oneko
+                    .replace("(isReducedMotion)", "(false)")
+                    .replace("persistPosition = true;", "persistPosition = false;")
+                    .replace("./oneko.gif", ONEKO_IMAGE)
+                    .replace("nekoSpeed = 10;", `nekoSpeed = ${settings.store.speed};`)
+                    .replace(" > 100", ` > ${1000 / settings.store.fps}`)
+            );
             break;
         }
         case "fathorse": {
-            fetch(FATASS_HORSE_SCRIPT)
-                .then(x => x.text())
-                .then(s => s.replace(FATASS_HORSE_ORIGINAL_IMAGE, FATASS_HORSE_IMAGE))
-                .then(s => (0, eval)(s)({
-                    speed: settings.store.speed,
-                    fps: settings.store.fps,
-                    size: settings.store.size,
-                    fade: settings.store.fade,
-                    freeroam: settings.store.freeroam,
-                    shake: settings.store.shake
-                }));
+            (0, eval)(fathorse)({
+                speed: settings.store.speed,
+                fps: settings.store.fps,
+                size: settings.store.size,
+                fade: settings.store.fade,
+                freeroam: settings.store.freeroam,
+                shake: settings.store.shake,
+                image: FATASS_HORSE_IMAGE
+            });
         }
     }
 }
