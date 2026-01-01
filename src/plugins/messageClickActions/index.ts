@@ -141,6 +141,24 @@ function showWarning(message: string) {
     });
 }
 
+function executeCommonAction(action: ClickAction, channel: Channel, msg: Message): boolean {
+    switch (action) {
+        case ClickAction.COPY_CONTENT:
+            copyWithToast(msg.content || "", "Message content copied!");
+            return true;
+        case ClickAction.COPY_LINK:
+            copyWithToast(`https://discord.com/channels/${channel.guild_id ?? "@me"}/${channel.id}/${msg.id}`, "Message link copied!");
+            return true;
+        case ClickAction.COPY_MESSAGE_ID:
+            copyWithToast(msg.id, "Message ID copied!");
+            return true;
+        case ClickAction.COPY_USER_ID:
+            copyWithToast(msg.author.id, "User ID copied!");
+            return true;
+    }
+    return false;
+}
+
 function isMessageReplyable(msg: Message) {
     return MessageTypeSets.REPLYABLE.has(msg.type) && !msg.hasFlag(MessageFlags.EPHEMERAL);
 }
@@ -149,7 +167,7 @@ async function toggleReaction(channelId: string, messageId: string, emoji: strin
     const trimmed = emoji.trim();
     if (!trimmed) return;
 
-    if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
+    if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) || !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
         showWarning("Cannot react: Missing permissions");
         return;
     }
@@ -187,15 +205,11 @@ async function togglePin(channel: Channel, msg: Message) {
         return;
     }
 
-    try {
-        if (msg.pinned) {
+    if (msg.pinned) {
             PinActions.unpinMessage(channel, msg.id);
         } else {
             PinActions.pinMessage(channel, msg.id);
         }
-    } catch (err) {
-        new Logger("MessageClickActions").error("Failed to toggle pin:", err);
-    }
 }
 
 function quoteMessage(channel: Channel, msg: Message) {
@@ -277,18 +291,10 @@ export default definePlugin({
                 } else {
                     MessageActions.deleteMessage(channel.id, msg.id);
                 }
-            } else if (action === ClickAction.COPY_CONTENT) {
-                copyWithToast(msg.content || "", "Message content copied!");
-            } else if (action === ClickAction.COPY_LINK) {
-                const link = `https://discord.com/channels/${channel.guild_id ?? "@me"}/${channel.id}/${msg.id}`;
-                copyWithToast(link, "Message link copied!");
-            } else if (action === ClickAction.COPY_MESSAGE_ID) {
-                copyWithToast(msg.id, "Message ID copied!");
-            } else if (action === ClickAction.COPY_USER_ID) {
-                copyWithToast(msg.author.id, "User ID copied!");
+            } else if (executeCommonAction(action, channel, msg)) {
+                event.preventDefault();
+                return;
             }
-            event.preventDefault();
-            return;
         }
 
         if (event.detail === 3) {
@@ -302,27 +308,13 @@ export default definePlugin({
             if (action === ClickAction.NONE) return;
 
             if (action === ClickAction.REACT) {
-                if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
-                    showWarning("Cannot react: Missing permissions");
-                    return;
-                }
                 toggleReaction(channel.id, msg.id, settings.store.reactEmoji, channel, msg);
-            } else if (action === ClickAction.COPY_CONTENT) {
-                copyWithToast(msg.content || "", "Message content copied!");
-            } else if (action === ClickAction.COPY_LINK) {
-                const link = `https://discord.com/channels/${channel.guild_id ?? "@me"}/${channel.id}/${msg.id}`;
-                copyWithToast(link, "Message link copied!");
-            } else if (action === ClickAction.COPY_MESSAGE_ID) {
-                copyWithToast(msg.id, "Message ID copied!");
-            } else if (action === ClickAction.COPY_USER_ID) {
-                copyWithToast(msg.author.id, "User ID copied!");
+            } else if (executeCommonAction(action, channel, msg)) {
+                event.preventDefault();
+                return;
             } else if (action === ClickAction.QUOTE) {
                 quoteMessage(channel, msg);
             } else if (action === ClickAction.PIN) {
-                if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
-                    showWarning("Cannot pin: Missing permissions");
-                    return;
-                }
                 togglePin(channel, msg);
             }
             event.preventDefault();
@@ -364,28 +356,14 @@ export default definePlugin({
                     shouldMention,
                     showMentionToggle: !channel.isPrivate()
                 });
-            } else if (action === ClickAction.COPY_CONTENT) {
-                copyWithToast(msg.content || "", "Message content copied!");
-            } else if (action === ClickAction.COPY_LINK) {
-                const link = `https://discord.com/channels/${channel.guild_id ?? "@me"}/${channel.id}/${msg.id}`;
-                copyWithToast(link, "Message link copied!");
-            } else if (action === ClickAction.COPY_MESSAGE_ID) {
-                copyWithToast(msg.id, "Message ID copied!");
-            } else if (action === ClickAction.COPY_USER_ID) {
-                copyWithToast(msg.author.id, "User ID copied!");
+            } else if (executeCommonAction(action, channel, msg)) {
+                event.preventDefault();
+                return;
             } else if (action === ClickAction.QUOTE) {
                 quoteMessage(channel, msg);
             } else if (action === ClickAction.REACT) {
-                if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
-                    showWarning("Cannot react: Missing permissions");
-                    return;
-                }
                 toggleReaction(channel.id, msg.id, settings.store.reactEmoji, channel, msg);
             } else if (action === ClickAction.PIN) {
-                if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
-                    showWarning("Cannot pin: Missing permissions");
-                    return;
-                }
                 togglePin(channel, msg);
             }
         };
