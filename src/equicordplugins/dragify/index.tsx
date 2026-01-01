@@ -13,8 +13,7 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
-import { findByPropsLazy } from "@webpack";
-import { ChannelStore, ComponentDispatch, Constants, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
+import { ChannelStore, ComponentDispatch, Constants, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
 
 import { type GhostState, hideGhost as hideDragGhost, isGhostVisible, mountGhost as mountDragGhost, scheduleGhostPosition as scheduleDragGhostPosition, showGhost as showDragGhost, unmountGhost as unmountDragGhost } from "./ghost";
 import { collectPayloadStrings, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractStrings, extractUserFromAvatar, extractUserFromProfile, parseFromStrings, tryParseJson } from "./utils";
@@ -24,11 +23,17 @@ type DropEntity =
     | { kind: "channel"; id: string; guildId?: string; }
     | { kind: "guild"; id: string; };
 
-type DraftActions = {
-    saveDraft(channelId: string, draft: string, draftType: number): void;
-    changeDraft(channelId: string, draft: string, draftType: number): void;
-    setDraft?: (channelId: string, draft: string, draftType: number) => void;
-};
+const logger = new Logger("Dragify");
+let pluginInstance: any = null;
+let activeGuildDragId: string | null = null;
+let activeUserDragId: string | null = null;
+let activeDragEntity: DropEntity | null = null;
+let lastDropAt = 0;
+let lastHandledDrop: { at: number; key: string; } = { at: 0, key: "" };
+let lastDragEventAt = 0;
+let guildGhostCleanupTimer: number | null = null;
+let dragifyActive = false;
+let dragStateWatchdog: number | null = null;
 
 const settings = definePluginSettings({
     userOutput: {
@@ -89,19 +94,6 @@ const settings = definePluginSettings({
         description: "Allow dropping into the main chat body to insert text.",
     },
 });
-
-const DraftActions = findByPropsLazy("saveDraft", "changeDraft") as DraftActions;
-const logger = new Logger("Dragify");
-let pluginInstance: any = null;
-let activeGuildDragId: string | null = null;
-let activeUserDragId: string | null = null;
-let activeDragEntity: DropEntity | null = null;
-let lastDropAt = 0;
-let lastHandledDrop: { at: number; key: string; } = { at: 0, key: "" };
-let lastDragEventAt = 0;
-let guildGhostCleanupTimer: number | null = null;
-let dragifyActive = false;
-let dragStateWatchdog: number | null = null;
 
 function clearDragState() {
     activeUserDragId = null;
@@ -595,14 +587,10 @@ export default definePlugin({
         const needsSpace = existing.length > 0 && !existing.endsWith(" ");
         const nextValue = needsSpace ? `${existing} ${text}` : `${existing}${text}`;
 
-        const setDraftAction = (DraftActions as any).setDraft as DraftActions["setDraft"];
-        const setDraftStore = (DraftStore as any).setDraft as DraftActions["setDraft"];
         const emitChange = (DraftStore as any).emitChange as (() => void) | undefined;
 
-        if (setDraftAction) {
-            setDraftAction(channelId, nextValue, DraftType.ChannelMessage);
-        } else if (setDraftStore) {
-            setDraftStore.call(DraftStore, channelId, nextValue, DraftType.ChannelMessage);
+        if (true) {
+            DraftActions.setDraft(channelId, nextValue, DraftType.ChannelMessage);
         } else {
             DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
         }
