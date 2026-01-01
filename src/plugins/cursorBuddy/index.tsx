@@ -16,34 +16,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
-const buddies = {
-    oneko: {
-        label: "Oneko",
-        source: "https://raw.githubusercontent.com/adryd325/oneko.js/c4ee66353b11a44e4a5b7e914a81f8d33111555e/oneko.js",
-        image: "https://raw.githubusercontent.com/adryd325/oneko.js/c4ee66353b11a44e4a5b7e914a81f8d33111555e/oneko.gif"
-    },
-    fathorse: {
-        label: "Fatass Horse",
-        source: "https://raw.githubusercontent.com/nexpid/fatass-horse/351f158bfd8fafd44d9c17faad61f2a80bcd33e3/horse.js"
-    }
-} as const;
-
-type Buddy = keyof typeof buddies;
+const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/c4ee66353b11a44e4a5b7e914a81f8d33111555e/oneko.gif";
+const ONEKO_SCRIPT = "https://raw.githubusercontent.com/adryd325/oneko.js/c4ee66353b11a44e4a5b7e914a81f8d33111555e/oneko.js";
+const FATASS_HORSE = "https://raw.githubusercontent.com/nexpid/fatass-horse/351f158bfd8fafd44d9c17faad61f2a80bcd33e3/horse.js";
 
 const settings = definePluginSettings({
     buddy: {
         description: "Pick a cursor buddy",
         type: OptionType.SELECT,
-        options: Object.entries(buddies).map(([value, { label }], i) => ({
-            label,
-            value: value as Buddy,
-            default: i === 0
-        })),
+        options: [
+            {
+                label: "Oneko",
+                value: "oneko",
+                default: true
+            },
+            {
+                label: "Fatass Horse",
+                value: "fathorse"
+            }
+        ],
         onChange: load,
     },
     speed: {
@@ -104,26 +99,23 @@ const settings = definePluginSettings({
 });
 
 function unload() {
-    document.getElementById("oneko")?.remove();
-    document.getElementById("fathorse")?.remove();
+    if (settings.store.buddy === "oneko") document.getElementById("oneko")?.remove();
+    if (settings.store.buddy === "fathorse") document.getElementById("fathorse")?.remove();
 }
+
 function load() {
-    if (!isPluginEnabled("CursorBuddy")) return;
-
-    unload();
-
     switch (settings.store.buddy) {
         case "oneko": {
-            fetch(buddies.oneko.source)
+            fetch(ONEKO_SCRIPT)
                 .then(x => x.text())
                 .then(s => s.replace("const nekoSpeed = 10;", `const nekoSpeed = ${settings.store.speed};`))
-                .then(s => s.replace("./oneko.gif", buddies.oneko.image)
+                .then(s => s.replace("./oneko.gif", ONEKO_IMAGE)
                     .replace("(isReducedMotion)", "(false)"))
                 .then(eval);
             break;
         }
         case "fathorse": {
-            fetch(buddies.fathorse.source).then(x => x.text()).then(s => (0, eval)(s)({
+            fetch(FATASS_HORSE).then(x => x.text()).then(s => (0, eval)(s)({
                 speed: settings.store.speed,
                 fps: settings.store.fps,
                 size: settings.store.size,
@@ -139,7 +131,6 @@ migratePluginSettings("CursorBuddy", "Oneko", "oneko");
 export default definePlugin({
     name: "CursorBuddy",
     description: "only a slightly annoying plugin",
-    // Listing adryd here because this literally just evals her script
     authors: [Devs.Ven, Devs.adryd, EquicordDevs.nexpid],
     settings,
 
