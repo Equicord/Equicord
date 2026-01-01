@@ -26,11 +26,9 @@ import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
-import { AuthenticationStore, ComponentDispatch, Constants, FluxDispatcher, MessageTypeSets, PermissionsBits, PermissionStore, RestAPI, Toasts, WindowStore } from "@webpack/common";
+import { AuthenticationStore, ComponentDispatch, Constants, EditStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, RestAPI, Toasts, WindowStore } from "@webpack/common";
 
-const MessageActions = findByPropsLazy("deleteMessage", "startEditMessage");
 const PinActions = findByPropsLazy("pinMessage", "unpinMessage");
-const EditStore = findByPropsLazy("isEditing", "isEditingAny");
 
 let isDeletePressed = false;
 const keydown = (e: KeyboardEvent) => e.key === "Backspace" && (isDeletePressed = true);
@@ -182,7 +180,7 @@ async function toggleReaction(channelId: string, messageId: string, emoji: strin
     }
 }
 
-async function togglePin(channelId: string, messageId: string, channel: Channel, msg: Message) {
+async function togglePin(channel: Channel, msg: Message) {
     if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
         showPermissionWarning("toggle pin");
         return;
@@ -190,9 +188,9 @@ async function togglePin(channelId: string, messageId: string, channel: Channel,
 
     try {
         if (msg.pinned) {
-            PinActions.unpinMessage(channel, messageId);
+            PinActions.unpinMessage(channel, msg.id);
         } else {
-            PinActions.pinMessage(channel, messageId);
+            PinActions.pinMessage(channel, msg.id);
         }
     } catch (err) {
         new Logger("MessageClickActions").error("Failed to toggle pin:", err);
@@ -254,11 +252,10 @@ export default definePlugin({
         const myId = AuthenticationStore.getId();
         const isMe = msg.author.id === myId;
         const isSelfInvokedUserApp = msg.interactionMetadata?.authorizing_integration_owners[ApplicationIntegrationType.USER_INSTALL] === myId;
-        const isDM = !channel.guild_id;
-        const isSystemMessage = !MessageTypeSets.USER_MESSAGE.has(msg.type);
+        const isDM = channel.isDM();
+        const isSystemDM = channel.isSystemDM();
 
-        if (settings.store.disableInDms && isDM) return;
-        if (isSystemMessage) return;
+        if (settings.store.disableInDms && isDM || isSystemDM) return;
 
         if (isDeletePressed) {
             const action = settings.store.backspaceClickAction;
@@ -326,7 +323,7 @@ export default definePlugin({
                     showPermissionWarning("toggle pin");
                     return;
                 }
-                togglePin(channel.id, msg.id, channel, msg);
+                togglePin(channel, msg);
             }
             event.preventDefault();
             return;
@@ -389,7 +386,7 @@ export default definePlugin({
                     showPermissionWarning("toggle pin");
                     return;
                 }
-                togglePin(channel.id, msg.id, channel, msg);
+                togglePin(channel, msg);
             }
         };
 
