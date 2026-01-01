@@ -5,8 +5,8 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
 import { Devs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { closeAllModals } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { openUserSettingsPanel, useState } from "@webpack/common";
@@ -84,7 +84,6 @@ export const settings = definePluginSettings({
     }
 });
 
-
 export default definePlugin({
     name: "KeyboardNavigation",
     description: "Allows you to navigate the UI with a keyboard.",
@@ -107,7 +106,6 @@ export default definePlugin({
     stop() {
         document.removeEventListener("keydown", this.event);
     },
-
 
     event(e: KeyboardEvent) {
 

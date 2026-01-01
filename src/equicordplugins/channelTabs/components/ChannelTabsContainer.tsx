@@ -4,17 +4,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { BasicChannelTabsProps, ChannelTabsProps, clearStaleNavigationContext, closeTab, createTab, handleChannelSwitch, isNavigationFromSource, isTabSelected, moveToTab, openedTabs, openStartupTabs, saveTabs, settings, setUpdaterFunction, useGhostTabs } from "@equicordplugins/channelTabs/util";
 import { IS_MAC } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { Button, ContextMenuApi, FluxDispatcher, useCallback, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
 
+import channelTabs from "..";
 import BookmarkContainer, { HorizontalScroller } from "./BookmarkContainer";
 import ChannelTab, { PreviewTab } from "./ChannelTab";
 import { BasicContextMenu } from "./ContextMenus";
@@ -125,7 +126,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     useEffect(() => {
         if (ref.current) {
             try {
-                (Vencord.Plugins.plugins.ChannelTabs as any).containerHeight = ref.current.clientHeight;
+                channelTabs.containerHeight = ref.current.clientHeight;
             } catch { }
         }
     }, [userId, showBookmarkBar, tabBarPosition]);

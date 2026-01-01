@@ -18,11 +18,11 @@
 
 import "./AddonCard.css";
 
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { AddonBadge } from "@components/settings/PluginBadge";
 import { Switch } from "@components/Switch";
 import { t } from "@utils/translation";
+import { classNameFactory } from "@utils/css";
 import { Tooltip, useRef } from "@webpack/common";
 import type { MouseEventHandler, ReactNode } from "react";
 
