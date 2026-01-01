@@ -20,12 +20,12 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import NoReplyMentionPlugin from "@plugins/noReplyMention";
 import { Devs, EquicordDevs } from "@utils/constants";
-import { copyWithToast } from "@utils/discord";
+import { copyWithToast, insertTextIntoChatInputBox } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
-import { AuthenticationStore, ComponentDispatch, Constants, EditStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, PinActions, RestAPI, Toasts, WindowStore } from "@webpack/common";
+import { AuthenticationStore, Constants, EditStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, PinActions, RestAPI, Toasts, WindowStore } from "@webpack/common";
 
 let isDeletePressed = false;
 const keydown = (e: KeyboardEvent) => e.key === "Backspace" && (isDeletePressed = true);
@@ -130,15 +130,19 @@ const settings = definePluginSettings({
     }
 });
 
-function showPermissionWarning(action: string) {
+function showWarning(message: string) {
     Toasts.show({
-        message: `Cannot ${action}: Missing permissions`,
+        message,
         type: Toasts.Type.FAILURE,
-        id: `message-click-actions-${action}`,
+        id: Toasts.genId(),
         options: {
             duration: 3000
         }
     });
+}
+
+function isMessageReplyable(msg: Message) {
+    return MessageTypeSets.REPLYABLE.has(msg.type) && !msg.hasFlag(MessageFlags.EPHEMERAL);
 }
 
 async function toggleReaction(channelId: string, messageId: string, emoji: string, channel: Channel, msg: Message) {
@@ -146,7 +150,7 @@ async function toggleReaction(channelId: string, messageId: string, emoji: strin
     if (!trimmed) return;
 
     if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
-        showPermissionWarning("toggle reaction");
+        showWarning("Cannot react: Missing permissions");
         return;
     }
 
@@ -179,7 +183,7 @@ async function toggleReaction(channelId: string, messageId: string, emoji: strin
 
 async function togglePin(channel: Channel, msg: Message) {
     if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
-        showPermissionWarning("toggle pin");
+        showWarning("Cannot pin: Missing permissions");
         return;
     }
 
@@ -195,8 +199,8 @@ async function togglePin(channel: Channel, msg: Message) {
 }
 
 function quoteMessage(channel: Channel, msg: Message) {
-    if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) {
-        showPermissionWarning("quote message");
+    if (!isMessageReplyable(msg)) {
+        showWarning("Cannot quote this message type");
         return;
     }
 
@@ -204,10 +208,9 @@ function quoteMessage(channel: Channel, msg: Message) {
     const content = selection && msg.content?.includes(selection) ? selection : msg.content;
     if (!content) return;
 
-    const quoteText = `> ${content.split("\n").join("\n> ")}\n`;
+    const quoteText = content.split("\n").map(line => `> ${line}`).join("\n") + "\n";
 
-    const insertAction = (Constants as any)?.CkL?.INSERT_TEXT ?? "INSERT_TEXT";
-    (ComponentDispatch as any).dispatchToLastSubscribed(insertAction, { plainText: quoteText, rawText: quoteText });
+    insertTextIntoChatInputBox(quoteText);
 
     if (settings.store.quoteWithReply) {
         FluxDispatcher.dispatch({
@@ -215,7 +218,7 @@ function quoteMessage(channel: Channel, msg: Message) {
             channel,
             message: msg,
             shouldMention: false,
-            showMentionToggle: channel.guild_id !== null
+            showMentionToggle: !channel.isPrivate()
         });
     }
 }
@@ -260,7 +263,7 @@ export default definePlugin({
 
             if (action === ClickAction.DELETE) {
                 if (!(isMe || PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) || isSelfInvokedUserApp)) {
-                    showPermissionWarning("delete message");
+                    showWarning("Cannot delete: Missing permissions");
                     return;
                 }
 
@@ -300,7 +303,7 @@ export default definePlugin({
 
             if (action === ClickAction.REACT) {
                 if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
-                    showPermissionWarning("toggle reaction");
+                    showWarning("Cannot react: Missing permissions");
                     return;
                 }
                 toggleReaction(channel.id, msg.id, settings.store.reactEmoji, channel, msg);
@@ -317,7 +320,7 @@ export default definePlugin({
                 quoteMessage(channel, msg);
             } else if (action === ClickAction.PIN) {
                 if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
-                    showPermissionWarning("toggle pin");
+                    showWarning("Cannot pin: Missing permissions");
                     return;
                 }
                 togglePin(channel, msg);
@@ -341,11 +344,11 @@ export default definePlugin({
             } else if (action === ClickAction.REPLY) {
                 if (isMe) return;
                 if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) {
-                    showPermissionWarning("send message");
+                    showWarning("Cannot reply: Missing permissions");
                     return;
                 }
-                if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) {
-                    showPermissionWarning("reply to this message");
+                if (!isMessageReplyable(msg)) {
+                    showWarning("Cannot reply to this message type");
                     return;
                 }
 
@@ -359,7 +362,7 @@ export default definePlugin({
                     channel,
                     message: msg,
                     shouldMention,
-                    showMentionToggle: channel.guild_id !== null
+                    showMentionToggle: !channel.isPrivate()
                 });
             } else if (action === ClickAction.COPY_CONTENT) {
                 copyWithToast(msg.content || "", "Message content copied!");
@@ -374,13 +377,13 @@ export default definePlugin({
                 quoteMessage(channel, msg);
             } else if (action === ClickAction.REACT) {
                 if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) && !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
-                    showPermissionWarning("toggle reaction");
+                    showWarning("Cannot react: Missing permissions");
                     return;
                 }
                 toggleReaction(channel.id, msg.id, settings.store.reactEmoji, channel, msg);
             } else if (action === ClickAction.PIN) {
                 if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
-                    showPermissionWarning("toggle pin");
+                    showWarning("Cannot pin: Missing permissions");
                     return;
                 }
                 togglePin(channel, msg);
