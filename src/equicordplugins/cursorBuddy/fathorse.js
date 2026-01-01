@@ -167,4 +167,4 @@ const fathorse = function (cfg = {}) {
 
     return mousePos;
 };
-fathorse;
+export default fathorse;

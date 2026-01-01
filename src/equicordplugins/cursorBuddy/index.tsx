@@ -20,8 +20,9 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import fathorse from "file://fathorse.js";
 import oneko from "file://oneko.js";
+
+import fathorse from "./fathorse";
 
 const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/46b0684f29694eaf3252835003f4d9d0258556e5/oneko.gif";
 const FATASS_HORSE_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/08bc4042750d5f995c55327f7b6c6710158f5263/sheet.png";
@@ -119,7 +120,7 @@ function load() {
             break;
         }
         case "fathorse": {
-            (0, eval)(fathorse)({
+            fathorse({
                 speed: settings.store.speed,
                 fps: settings.store.fps,
                 size: settings.store.size,
