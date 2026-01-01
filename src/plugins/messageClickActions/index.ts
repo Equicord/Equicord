@@ -25,10 +25,7 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
-import { findByPropsLazy } from "@webpack";
-import { AuthenticationStore, ComponentDispatch, Constants, EditStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, RestAPI, Toasts, WindowStore } from "@webpack/common";
-
-const PinActions = findByPropsLazy("pinMessage", "unpinMessage");
+import { AuthenticationStore, ComponentDispatch, Constants, EditStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, PinActions, RestAPI, Toasts, WindowStore } from "@webpack/common";
 
 let isDeletePressed = false;
 const keydown = (e: KeyboardEvent) => e.key === "Backspace" && (isDeletePressed = true);
