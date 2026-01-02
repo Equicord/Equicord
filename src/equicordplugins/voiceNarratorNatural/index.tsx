@@ -20,8 +20,8 @@ let isSpeaking = false;
 
 const userStates = new Map<string, { mute: boolean; deaf: boolean; }>();
 const userSpamCount = new Map<string, { count: number; firstState: { mute: boolean; deaf: boolean; }; timeout: NodeJS.Timeout | null; }>();
-const SPAM_WINDOW_MS = 3000; // 3 seconds window to detect spam
-const SPAM_THRESHOLD = 5; // 5+ changes in window = spam
+const SPAM_WINDOW_MS = 3000;
+const SPAM_THRESHOLD = 5;
 
 async function speak(text: string) {
     if (!text) return;
@@ -29,20 +29,31 @@ async function speak(text: string) {
 
     isSpeaking = true;
 
-    if (ttsProvider === "sapi5" && sapi5Ready) {
-        const vol = Math.round(volume * 100);
-        const spd = Math.round((rate - 1) * 5);
-        await speakWithSAPI5(text, sapi5Voice || undefined, spd, vol);
-        isSpeaking = false;
-    } else {
-        const speech = new SpeechSynthesisUtterance(text);
-        speech.voice = getCurrentVoice()!;
-        speech.volume = volume;
-        speech.rate = rate;
-        speech.onend = () => { isSpeaking = false; };
-        speech.onerror = () => { isSpeaking = false; };
-        speechSynthesis.speak(speech);
+    if (ttsProvider === "sapi5") {
+        if (!sapi5Ready) {
+            const running = await isServerRunning();
+            if (running) {
+                sapi5Voices = await getSAPI5Voices();
+                sapi5Ready = sapi5Voices.length > 0;
+            }
+        }
+        
+        if (sapi5Ready) {
+            const vol = Math.round(volume * 100);
+            const spd = Math.round((rate - 1) * 5);
+            await speakWithSAPI5(text, sapi5Voice || undefined, spd, vol);
+            isSpeaking = false;
+            return;
+        }
     }
+    
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.voice = getCurrentVoice()!;
+    speech.volume = volume;
+    speech.rate = rate;
+    speech.onend = () => { isSpeaking = false; };
+    speech.onerror = () => { isSpeaking = false; };
+    speechSynthesis.speak(speech);
 }
 
 function stopSpeaking() {

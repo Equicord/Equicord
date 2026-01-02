@@ -19,9 +19,6 @@ export interface SAPI5Voice {
 let cachedVoices: SAPI5Voice[] = [];
 let serverReady = false;
 
-/**
- * Verifica se o servidor está rodando
- */
 export async function isServerRunning(): Promise<boolean> {
     try {
         const response = await fetch(`${TTS_URL}/ping`, { 
@@ -38,9 +35,6 @@ export async function isServerRunning(): Promise<boolean> {
     return false;
 }
 
-/**
- * Busca a lista de vozes SAPI5 do servidor
- */
 export async function getSAPI5Voices(): Promise<SAPI5Voice[]> {
     if (!serverReady) {
         const running = await isServerRunning();
@@ -60,9 +54,6 @@ export async function getSAPI5Voices(): Promise<SAPI5Voice[]> {
     return cachedVoices;
 }
 
-/**
- * Fala um texto usando SAPI5
- */
 export async function speakWithSAPI5(text: string, voiceId?: string, rate = 0, volume = 100): Promise<boolean> {
     if (!text.trim()) return true;
 
@@ -93,9 +84,6 @@ export async function speakWithSAPI5(text: string, voiceId?: string, rate = 0, v
     }
 }
 
-/**
- * Para a fala atual
- */
 export async function stopSAPI5(): Promise<void> {
     if (!serverReady) return;
 
@@ -106,9 +94,6 @@ export async function stopSAPI5(): Promise<void> {
     }
 }
 
-/**
- * Desliga o servidor
- */
 export async function shutdownServer(): Promise<void> {
     try {
         await fetch(`${TTS_URL}/shutdown`);
@@ -118,16 +103,10 @@ export async function shutdownServer(): Promise<void> {
     }
 }
 
-/**
- * Retorna as vozes em cache
- */
 export function getCachedVoices(): SAPI5Voice[] {
     return cachedVoices;
 }
 
-/**
- * Verifica se o servidor está pronto
- */
 export function isReady(): boolean {
     return serverReady;
 }

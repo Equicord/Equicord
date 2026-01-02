@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { OptionType } from "@utils/types";
 
-import { SAPI5Section, SystemVoiceSection } from "./VoiceSetting.tsx";
+import { SAPI5Section, SystemVoiceSection, TTSProviderSection } from "./VoiceSetting.tsx";
 
 export function getCurrentVoice(voices = window.speechSynthesis?.getVoices()) {
     if (!voices) return undefined;
@@ -20,21 +20,17 @@ export function getCurrentVoice(voices = window.speechSynthesis?.getVoices()) {
     return voice;
 }
 
-// Variáveis disponíveis:
-// {username} - Nome de usuário (ex: srmoon)
-// {display_name} - Nome de exibição (ex: SrMoon)
-// {nickname} - Apelido no servidor (ex: Moon)
-// {channel} - Nome do canal de voz
-// {server} - Nome do servidor
-
 export const settings = definePluginSettings({
+    ttsProviderSelect: {
+        type: OptionType.COMPONENT,
+        description: "",
+        component: TTSProviderSection
+    },
     ttsProvider: {
-        type: OptionType.SELECT,
+        type: OptionType.STRING,
         description: "TTS Provider",
-        options: [
-            { label: "System (Browser voices)", value: "system", default: true },
-            { label: "SAPI5 (Windows Natural Voices)", value: "sapi5" },
-        ],
+        default: "system",
+        hidden: true
     },
     systemVoice: {
         type: OptionType.COMPONENT,

@@ -33,9 +33,6 @@ function getServerScriptPath(): string {
     return join(getDataPath(), SERVER_SCRIPT);
 }
 
-/**
- * Verifica o status da instalação
- */
 export function checkSetupStatus(_: IpcMainInvokeEvent) {
     const pythonExe = getPythonExe();
     const pythonInstalled = existsSync(pythonExe);
@@ -52,9 +49,6 @@ export function checkSetupStatus(_: IpcMainInvokeEvent) {
     };
 }
 
-/**
- * Download de arquivo com suporte a redirect
- */
 function downloadFile(url: string, destPath: string): Promise<void> {
     return new Promise((resolve, reject) => {
         const file = createWriteStream(destPath);
@@ -80,9 +74,6 @@ function downloadFile(url: string, destPath: string): Promise<void> {
     });
 }
 
-/**
- * Executa comando e retorna output
- */
 function execCommand(cmd: string, cwd?: string): Promise<string> {
     return new Promise((resolve, reject) => {
         exec(cmd, { cwd, windowsHide: true }, (error, stdout, stderr) => {
@@ -95,28 +86,21 @@ function execCommand(cmd: string, cwd?: string): Promise<string> {
     });
 }
 
-/**
- * Faz o setup completo do Python + pywin32
- */
 export async function performSetup(_: IpcMainInvokeEvent): Promise<{ success: boolean; error?: string; }> {
     try {
         const dataPath = getDataPath();
         const pythonPath = getPythonPath();
 
-        // Cria diretórios
         mkdirSync(dataPath, { recursive: true });
         mkdirSync(pythonPath, { recursive: true });
 
-        // Download Python embeddable
         const pythonUrl = "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip";
         const pythonZipPath = join(dataPath, "python.zip");
 
         await downloadFile(pythonUrl, pythonZipPath);
 
-        // Extrai Python usando PowerShell
         await execCommand(`powershell -Command "Expand-Archive -Path '${pythonZipPath}' -DestinationPath '${pythonPath}' -Force"`);
 
-        // Configura o Python pra permitir imports
         const pthFile = join(pythonPath, "python311._pth");
         if (existsSync(pthFile)) {
             let content = readFileSync(pthFile, "utf8");
@@ -125,22 +109,17 @@ export async function performSetup(_: IpcMainInvokeEvent): Promise<{ success: bo
             writeFileSync(pthFile, content);
         }
 
-        // Cria pasta site-packages
         mkdirSync(join(pythonPath, "Lib", "site-packages"), { recursive: true });
 
-        // Instala pip
         const getPipUrl = "https://bootstrap.pypa.io/get-pip.py";
         const getPipPath = join(dataPath, "get-pip.py");
         await downloadFile(getPipUrl, getPipPath);
         await execCommand(`"${getPythonExe()}" "${getPipPath}"`, pythonPath);
 
-        // Instala pywin32
         await execCommand(`"${getPythonExe()}" -m pip install pywin32 --target "${join(pythonPath, "Lib", "site-packages")}"`, pythonPath);
 
-        // Cria o script do servidor
         writeFileSync(getServerScriptPath(), getServerScript());
 
-        // Limpa arquivos temporários
         try {
             unlinkSync(pythonZipPath);
             unlinkSync(getPipPath);
@@ -152,13 +131,10 @@ export async function performSetup(_: IpcMainInvokeEvent): Promise<{ success: bo
     }
 }
 
-/**
- * Inicia o servidor TTS
- */
 export function startServer(_: IpcMainInvokeEvent): { success: boolean; error?: string; } {
     try {
         if (serverProcess && !serverProcess.killed) {
-            return { success: true }; // Já está rodando
+            return { success: true };
         }
 
         const pythonExe = getPythonExe();
@@ -186,9 +162,6 @@ export function startServer(_: IpcMainInvokeEvent): { success: boolean; error?: 
     }
 }
 
-/**
- * Para o servidor TTS
- */
 export function stopServer(_: IpcMainInvokeEvent): { success: boolean; } {
     if (serverProcess) {
         try {
@@ -197,18 +170,9 @@ export function stopServer(_: IpcMainInvokeEvent): { success: boolean; } {
         serverProcess = null;
     }
 
-    // Também tenta matar via HTTP
-    try {
-        const http = require("http");
-        http.get(`http://127.0.0.1:${TTS_PORT}/shutdown`).on("error", () => { });
-    } catch { }
-
     return { success: true };
 }
 
-/**
- * Remove todos os arquivos do plugin
- */
 export function cleanupData(_: IpcMainInvokeEvent): { success: boolean; } {
     stopServer(_);
 
@@ -223,9 +187,6 @@ export function cleanupData(_: IpcMainInvokeEvent): { success: boolean; } {
     }
 }
 
-/**
- * Retorna o script do servidor Python
- */
 function getServerScript(): string {
     return `"""
 VcNarrator SAPI5 TTS Server
