@@ -19,6 +19,9 @@ let sapi5Ready = false;
 let isSpeaking = false;
 
 const userStates = new Map<string, { mute: boolean; deaf: boolean; }>();
+const userSpamCount = new Map<string, { count: number; firstState: { mute: boolean; deaf: boolean; }; timeout: NodeJS.Timeout | null; }>();
+const SPAM_WINDOW_MS = 3000; // 3 seconds window to detect spam
+const SPAM_THRESHOLD = 5; // 5+ changes in window = spam
 
 async function speak(text: string) {
     if (!text) return;
@@ -154,17 +157,42 @@ export default definePlugin({
 
     flux: {
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: any[]; }) {
-            const myGuildId = SelectedGuildStore.getGuildId();
             const myChanId = SelectedChannelStore.getVoiceChannelId();
             const myId = UserStore.getCurrentUser().id;
-            if (!myChanId) return;
-            if (ChannelStore.getChannel(myChanId)?.type === 13) return;
-
-            const serverName = GuildStore.getGuild(myGuildId!)?.name || "server";
-
+            
             for (const state of voiceStates) {
                 const { userId, channelId, oldChannelId } = state;
                 const isMe = userId === myId;
+                
+                // Handle my own leave (when I disconnect)
+                if (isMe && !channelId && oldChannelId) {
+                    const oldChannel = ChannelStore.getChannel(oldChannelId);
+                    if (oldChannel && oldChannel.type !== 13) {
+                        const myGuildId = oldChannel.guild_id;
+                        const serverName = GuildStore.getGuild(myGuildId)?.name || "server";
+                        const skipName = !settings.store.sayOwnName;
+                        const user = UserStore.getUser(userId);
+                        if (user) {
+                            const username = skipName ? "" : user.username;
+                            const displayName = skipName ? "" : ((user as any).globalName ?? user.username);
+                            const nickname = skipName ? "" : (GuildMemberStore.getNick(myGuildId!, userId) ?? displayName);
+                            const channelName = oldChannel.name || "channel";
+                            speak(formatText(settings.store.leaveMessage, {
+                                username, displayName, nickname, channel: channelName, server: serverName
+                            }));
+                        }
+                    }
+                    myLastChannelId = undefined;
+                    continue;
+                }
+                
+                if (!myChanId) continue;
+                const voiceChannel = ChannelStore.getChannel(myChanId);
+                if (!voiceChannel || voiceChannel.type === 13) continue;
+
+                // Get the guild from the voice channel, not from selected guild
+                const myGuildId = voiceChannel.guild_id;
+                const serverName = GuildStore.getGuild(myGuildId)?.name || "server";
 
                 if (!isMe && channelId !== myChanId && oldChannelId !== myChanId) continue;
 
@@ -201,18 +229,86 @@ export default definePlugin({
                     const channelName = ChannelStore.getChannel(myChanId)?.name || "channel";
 
                     if (prevState) {
-                        // Check deafen FIRST - when you deafen, Discord also mutes you
-                        // so we need to prioritize deafen detection
-                        if (prevState.deaf !== currentDeaf) {
-                            const msgType = currentDeaf ? "deafen" : "undeafen";
-                            speak(formatText(settings.store[msgType + "Message"], {
-                                username, displayName, nickname, channel: channelName, server: serverName
-                            }));
-                        } else if (prevState.mute !== currentMute) {
-                            const msgType = currentMute ? "mute" : "unmute";
-                            speak(formatText(settings.store[msgType + "Message"], {
-                                username, displayName, nickname, channel: channelName, server: serverName
-                            }));
+                        // Check if state actually changed
+                        const deafChanged = prevState.deaf !== currentDeaf;
+                        const muteChanged = prevState.mute !== currentMute;
+                        
+                        if (deafChanged || muteChanged) {
+                            let spamData = userSpamCount.get(userId);
+                            
+                            if (!spamData) {
+                                // First change - speak immediately and start tracking
+                                spamData = { count: 1, firstState: { ...prevState }, timeout: null };
+                                userSpamCount.set(userId, spamData);
+                                
+                                // Speak immediately for first change
+                                if (deafChanged) {
+                                    const msgType = currentDeaf ? "deafen" : "undeafen";
+                                    speak(formatText(settings.store[msgType + "Message"], {
+                                        username, displayName, nickname, channel: channelName, server: serverName
+                                    }));
+                                } else if (muteChanged) {
+                                    const msgType = currentMute ? "mute" : "unmute";
+                                    speak(formatText(settings.store[msgType + "Message"], {
+                                        username, displayName, nickname, channel: channelName, server: serverName
+                                    }));
+                                }
+                                
+                                // Set timeout to reset spam counter
+                                spamData.timeout = setTimeout(() => {
+                                    userSpamCount.delete(userId);
+                                }, SPAM_WINDOW_MS);
+                            } else {
+                                // Subsequent change within window
+                                spamData.count++;
+                                
+                                // Clear old timeout and set new one
+                                if (spamData.timeout) clearTimeout(spamData.timeout);
+                                
+                                if (spamData.count >= SPAM_THRESHOLD) {
+                                    // It's spam - wait for them to stop, then announce final state
+                                    spamData.timeout = setTimeout(() => {
+                                        const finalState = userStates.get(userId);
+                                        const firstState = spamData!.firstState;
+                                        if (!finalState) {
+                                            userSpamCount.delete(userId);
+                                            return;
+                                        }
+                                        
+                                        // Only announce if final state is different from first state
+                                        if (firstState.deaf !== finalState.deaf) {
+                                            const msgType = finalState.deaf ? "deafen" : "undeafen";
+                                            speak(formatText(settings.store[msgType + "Message"], {
+                                                username, displayName, nickname, channel: channelName, server: serverName
+                                            }));
+                                        } else if (firstState.mute !== finalState.mute) {
+                                            const msgType = finalState.mute ? "mute" : "unmute";
+                                            speak(formatText(settings.store[msgType + "Message"], {
+                                                username, displayName, nickname, channel: channelName, server: serverName
+                                            }));
+                                        }
+                                        
+                                        userSpamCount.delete(userId);
+                                    }, SPAM_WINDOW_MS);
+                                } else {
+                                    // Not spam yet - speak and reset timeout
+                                    if (deafChanged) {
+                                        const msgType = currentDeaf ? "deafen" : "undeafen";
+                                        speak(formatText(settings.store[msgType + "Message"], {
+                                            username, displayName, nickname, channel: channelName, server: serverName
+                                        }));
+                                    } else if (muteChanged) {
+                                        const msgType = currentMute ? "mute" : "unmute";
+                                        speak(formatText(settings.store[msgType + "Message"], {
+                                            username, displayName, nickname, channel: channelName, server: serverName
+                                        }));
+                                    }
+                                    
+                                    spamData.timeout = setTimeout(() => {
+                                        userSpamCount.delete(userId);
+                                    }, SPAM_WINDOW_MS);
+                                }
+                            }
                         }
                     }
 
@@ -252,5 +348,10 @@ export default definePlugin({
     stop() {
         stopSpeaking();
         userStates.clear();
+        // Clear all spam tracking
+        for (const data of userSpamCount.values()) {
+            if (data.timeout) clearTimeout(data.timeout);
+        }
+        userSpamCount.clear();
     }
 });
