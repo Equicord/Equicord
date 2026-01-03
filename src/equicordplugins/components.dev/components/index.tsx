@@ -156,10 +156,20 @@ export const Popout: PopoutComponent = proxyLazy(() => findLazy(m => m?.y?.Anima
 export const FocusLock = findComponentByCodeLazy(".containerRef,{keyboardModeEnabled:") as React.ComponentType<FocusLockProps>;
 export const UserSummaryItem = findComponentByCodeLazy("popoutUserId") as React.ComponentType<UserSummaryItemProps>;
 
-export const Animations = mapMangledModuleLazy(".assign({colorNames:", {
-    Transition: filters.componentByCode('["items","children"]', ",null,"),
-    animated: filters.byProps("div", "text")
-});
+export const Animations = findByPropsLazy("useSpring", "animated", "useTransition");
+
+export const SpringConfigs = proxyLazy(() => Animations.config) as {
+    default: object;
+    gentle: object;
+    wobbly: object;
+    stiff: object;
+    slow: object;
+    molasses: object;
+};
+
+export const useSpring = proxyLazy(() => Animations.useSpring) as (config: object) => object;
+export const useTransition = proxyLazy(() => Animations.useTransition) as <T>(items: T[], config: object) => (callback: (style: object, item: T) => React.ReactNode) => React.ReactNode[];
+export const useTrail = proxyLazy(() => Animations.useTrail) as (count: number, config: object) => object[];
 
 const ColorPickerModule = findLazy(m => {
     const values = Object.values(m);
