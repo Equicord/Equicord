@@ -263,3 +263,13 @@ export function DiscordText(props: DiscordTextProps) {
 export function Divider({ className, style, ...restProps }: React.ComponentPropsWithoutRef<"hr">) {
     return <hr className={`vc-divider${className ? ` ${className}` : ""}`} style={style} {...restProps} />;
 }
+
+const CodeContainerClasses = findByPropsLazy("markup", "codeContainer");
+
+export function InlineCode({ children }: { children: React.ReactNode; }) {
+    return (
+        <span className={CodeContainerClasses.markup}>
+            <code className="inline">{children}</code>
+        </span>
+    );
+}
