@@ -165,7 +165,7 @@ export default definePlugin({
             find: "Message Username",
             predicate: () => settings.store.forceRoleIcon,
             replacement: {
-                match: /(?<=\?2:)0(?=\})/,
+                match: /(?<=\.badgesContainer.{0,150}\?2:)0(?=\})/,
                 replace: "1"
             }
         },
