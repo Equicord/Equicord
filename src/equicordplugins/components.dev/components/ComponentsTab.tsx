@@ -13,6 +13,7 @@ import { TabBar, useMemo, useState } from "@webpack/common";
 
 import { SearchBar } from ".";
 import AccordionTab from "./tabs/AccordionTab";
+import AlertTab from "./tabs/AlertTab";
 import AnchorTab from "./tabs/AnchorTab";
 import AvatarTab from "./tabs/AvatarTab";
 import BadgeTab from "./tabs/BadgeTab";
@@ -60,6 +61,7 @@ import UserSummaryItemTab from "./tabs/UserSummaryItemTab";
 
 const TABS = [
     { id: "accordion", label: "Accordion" },
+    { id: "alert", label: "Alert" },
     { id: "anchor", label: "Anchor" },
     { id: "avatar", label: "Avatar" },
     { id: "badge", label: "Badge" },
@@ -111,6 +113,7 @@ type TabId = typeof TABS[number]["id"];
 
 const TAB_COMPONENTS: Record<TabId, React.ComponentType> = {
     accordion: AccordionTab,
+    alert: AlertTab,
     anchor: AnchorTab,
     avatar: AvatarTab,
     badge: BadgeTab,

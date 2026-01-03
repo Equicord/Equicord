@@ -91,3 +91,8 @@
     flex-direction: row-reverse;
     gap: 8px;
 }
+
+.vc-alert-danger-btn {
+    color: var(--white-500);
+    background-color: var(--button-danger-background);
+}

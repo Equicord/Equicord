@@ -31,6 +31,7 @@ import {
 import { ToastPosition, ToastType } from "../constants";
 import type {
     AccordionProps,
+    AlertsType,
     AnchorProps,
     AvatarProps,
     BadgeShapesType,
@@ -273,3 +274,11 @@ export function InlineCode({ children }: { children: React.ReactNode; }) {
         </span>
     );
 }
+
+const AlertsModule = findByPropsLazy("show", "close", "confirm");
+
+export const Alerts: AlertsType = {
+    show: options => AlertsModule.show(options),
+    close: () => AlertsModule.close(),
+    confirm: options => AlertsModule.confirm(options),
+};

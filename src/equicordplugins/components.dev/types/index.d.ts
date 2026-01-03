@@ -6,6 +6,7 @@
 
 export * from "../constants";
 export * from "./accordion";
+export * from "./alert";
 export * from "./anchor";
 export * from "./avatar";
 export * from "./badge";
