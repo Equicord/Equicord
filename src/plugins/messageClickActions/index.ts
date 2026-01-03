@@ -67,10 +67,13 @@ const settings = definePluginSettings({
         description: "Action on double-click (on your messages)",
         options: [
             { label: "Edit Message", value: ClickAction.EDIT, default: true },
+            { label: "Quote", value: ClickAction.QUOTE },
             { label: "Copy Content", value: ClickAction.COPY_CONTENT },
             { label: "Copy Link", value: ClickAction.COPY_LINK },
             { label: "Copy Message ID", value: ClickAction.COPY_MESSAGE_ID },
             { label: "Copy User ID", value: ClickAction.COPY_USER_ID },
+            { label: "React", value: ClickAction.REACT },
+            { label: "Pin Message", value: ClickAction.PIN },
             { label: "None (Disabled)", value: ClickAction.NONE }
         ]
     },
@@ -94,6 +97,8 @@ const settings = definePluginSettings({
         description: "Action on triple-click",
         options: [
             { label: "React", value: ClickAction.REACT, default: true },
+            { label: "Edit Message", value: ClickAction.EDIT },
+            { label: "Reply", value: ClickAction.REPLY },
             { label: "Quote", value: ClickAction.QUOTE },
             { label: "Copy Content", value: ClickAction.COPY_CONTENT },
             { label: "Copy Link", value: ClickAction.COPY_LINK },
@@ -118,6 +123,11 @@ const settings = definePluginSettings({
         description: "Disable all click actions in direct messages",
         default: false
     },
+    disableInSystemDms: {
+        type: OptionType.BOOLEAN,
+        description: "Disable all click actions in system DMs (e.g. Clyde, Discord)",
+        default: true
+    },
     clickTimeout: {
         type: OptionType.NUMBER,
         description: "Timeout in milliseconds to distinguish double/triple clicks",
@@ -125,8 +135,13 @@ const settings = definePluginSettings({
     },
     quoteWithReply: {
         type: OptionType.BOOLEAN,
-        description: "When quoting, reply to the original message instead of just inserting the quote",
+        description: "When quoting, also reply to the message",
         default: true
+    },
+    useSelectionForQuote: {
+        type: OptionType.BOOLEAN,
+        description: "When quoting, use selected text if available (otherwise quotes full message)",
+        default: false
     }
 });
 
@@ -199,17 +214,17 @@ async function toggleReaction(channelId: string, messageId: string, emoji: strin
     }
 }
 
-async function togglePin(channel: Channel, msg: Message) {
+function togglePin(channel: Channel, msg: Message) {
     if (!PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel)) {
         showWarning("Cannot pin: Missing permissions");
         return;
     }
 
     if (msg.pinned) {
-            PinActions.unpinMessage(channel, msg.id);
-        } else {
-            PinActions.pinMessage(channel, msg.id);
-        }
+        PinActions.unpinMessage(channel, msg.id);
+    } else {
+        PinActions.pinMessage(channel, msg.id);
+    }
 }
 
 function quoteMessage(channel: Channel, msg: Message) {
@@ -218,8 +233,13 @@ function quoteMessage(channel: Channel, msg: Message) {
         return;
     }
 
-    const selection = window.getSelection()?.toString().trim();
-    const content = selection && msg.content?.includes(selection) ? selection : msg.content;
+    let { content } = msg;
+    if (settings.store.useSelectionForQuote) {
+        const selection = window.getSelection()?.toString().trim();
+        if (selection && msg.content?.includes(selection)) {
+            content = selection;
+        }
+    }
     if (!content) return;
 
     const quoteText = content.split("\n").map(line => `> ${line}`).join("\n") + "\n";
@@ -269,7 +289,7 @@ export default definePlugin({
         const isDM = channel.isDM();
         const isSystemDM = channel.isSystemDM();
 
-        if (settings.store.disableInDms && isDM || isSystemDM) return;
+        if ((settings.store.disableInDms && isDM) || (settings.store.disableInSystemDms && isSystemDM)) return;
 
         if (isDeletePressed) {
             const action = settings.store.backspaceClickAction;
@@ -309,6 +329,27 @@ export default definePlugin({
 
             if (action === ClickAction.REACT) {
                 toggleReaction(channel.id, msg.id, settings.store.reactEmoji, channel, msg);
+            } else if (action === ClickAction.EDIT) {
+                if (!isMe) return;
+                if (EditStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
+                MessageActions.startEditMessage(channel.id, msg.id, msg.content);
+            } else if (action === ClickAction.REPLY) {
+                if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) {
+                    showWarning("Cannot reply: Missing permissions");
+                    return;
+                }
+                if (!isMessageReplyable(msg)) {
+                    showWarning("Cannot reply to this message type");
+                    return;
+                }
+
+                FluxDispatcher.dispatch({
+                    type: "CREATE_PENDING_REPLY",
+                    channel,
+                    message: msg,
+                    shouldMention: !isMe,
+                    showMentionToggle: !channel.isPrivate()
+                });
             } else if (executeCommonAction(action, channel, msg)) {
                 event.preventDefault();
                 return;
