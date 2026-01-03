@@ -10,7 +10,7 @@ import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { proxyLazy } from "@utils/lazy";
-import { filters, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findLazy, mapMangledModuleLazy } from "@webpack";
+import { filters, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findLazy, mapMangledModuleLazy, waitFor, wreq } from "@webpack";
 import {
     GuildStore,
     ListScrollerAuto,
@@ -42,14 +42,17 @@ import type {
     ColorPickerWithSwatchesProps,
     ColorSwatchProps,
     ConfirmModalProps,
+    ContextMenuApiType,
     CustomColorButtonProps,
     DefaultColorButtonProps,
     DiscordHeadingProps,
     DiscordTextProps,
+    ErrorBoundaryProps,
     ExpressiveModalProps,
     FocusLockProps,
     GuildIconProps,
     IconBadgeProps,
+    LocalErrorBoundaryProps,
     ManaBaseRadioGroupProps,
     ManaButtonProps,
     ManaCalendarProps,
@@ -66,6 +69,7 @@ import type {
     ManaTextButtonProps,
     ManaTextInputProps,
     ManaTooltipProps,
+    MenuType,
     ModalProps,
     ModalRenderFn,
     NoticeProps,
@@ -75,6 +79,7 @@ import type {
     PopoutComponent,
     ProgressBarProps,
     SearchBarProps,
+    SimpleErrorBoundaryProps,
     SkeletonProps,
     SliderProps,
     SpinnerComponent,
@@ -282,3 +287,60 @@ export const Alerts: AlertsType = {
     close: () => AlertsModule.close(),
     confirm: options => AlertsModule.confirm(options),
 };
+
+const MenuComponents: Record<string, React.ComponentType<any>> = {};
+
+waitFor(m => m.name === "MenuCheckboxItem", (_, id) => {
+    const exports = wreq(id);
+    for (const key in exports) {
+        try {
+            const value = exports[key];
+            if (typeof value === "function" && value.name?.startsWith("Menu")) {
+                MenuComponents[value.name] = value;
+            }
+        } catch { }
+    }
+});
+
+waitFor(filters.componentByCode('path:["empty"]'), m => { MenuComponents.Menu = m; });
+waitFor(filters.componentByCode("sliderContainer", "slider", "handleSize:16", "=100"), m => { MenuComponents.MenuSliderControl = m; });
+waitFor(filters.componentByCode(".SEARCH)", ".focus()", "query:"), m => { MenuComponents.MenuSearchControl = m; });
+
+waitFor(m => m.name === "MenuCheckboxItem", (_, id) => {
+    const exports = wreq(id);
+    for (const key in exports) {
+        try {
+            const value = exports[key];
+            if (typeof value !== "function") continue;
+            const str = value.toString();
+            if (str.length === 26 && str.endsWith("(e){return null}") && value.name === "l") {
+                Object.defineProperty(value, "name", { value: "MenuSwitchItem" });
+                MenuComponents.MenuSwitchItem = value;
+                break;
+            }
+        } catch { }
+    }
+});
+
+export const Menu: MenuType = proxyLazy(() => ({
+    Menu: MenuComponents.Menu,
+    MenuItem: MenuComponents.MenuItem,
+    MenuCheckboxItem: MenuComponents.MenuCheckboxItem,
+    MenuRadioItem: MenuComponents.MenuRadioItem,
+    MenuSwitchItem: MenuComponents.MenuSwitchItem,
+    MenuGroup: MenuComponents.MenuGroup,
+    MenuSeparator: MenuComponents.MenuSeparator,
+    MenuControlItem: MenuComponents.MenuControlItem,
+    MenuSliderControl: MenuComponents.MenuSliderControl,
+    MenuSearchControl: MenuComponents.MenuSearchControl,
+}));
+
+export const ContextMenuApi: ContextMenuApiType = mapMangledModuleLazy('type:"CONTEXT_MENU_OPEN', {
+    closeContextMenu: filters.byCode("CONTEXT_MENU_CLOSE"),
+    openContextMenu: filters.byCode("renderLazy:"),
+    openContextMenuLazy: e => typeof e === "function" && e.toString().length < 100
+});
+
+export const ErrorBoundary = findComponentByCodeLazy("this.resetErrorBoundary", "onReset", "FallbackComponent") as React.ComponentType<ErrorBoundaryProps>;
+export const SimpleErrorBoundary = findComponentByCodeLazy("getDerivedStateFromError", "this.props.fallback") as React.ComponentType<SimpleErrorBoundaryProps>;
+export const LocalErrorBoundary = findComponentByCodeLazy("LocalErrorBoundary", "text-feedback-critical") as React.ComponentType<LocalErrorBoundaryProps>;

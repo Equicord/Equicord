@@ -6,6 +6,7 @@
 
 import "../styles.css";
 
+import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import { SettingsTab, wrapTab } from "@components/settings";
 import { Margins } from "@utils/margins";
@@ -28,6 +29,7 @@ import CodeBlockTab from "./tabs/CodeBlockTab";
 import ColorPickerTab from "./tabs/ColorPickerTab";
 import ComboboxTab from "./tabs/ComboboxTab";
 import DividerTab from "./tabs/DividerTab";
+import ErrorBoundaryTab from "./tabs/ErrorBoundaryTab";
 import FocusLockTab from "./tabs/FocusLockTab";
 import GuildIconTab from "./tabs/GuildIconTab";
 import HeadingTab from "./tabs/HeadingTab";
@@ -76,6 +78,7 @@ const TABS = [
     { id: "colorpicker", label: "ColorPicker" },
     { id: "combobox", label: "Combobox" },
     { id: "divider", label: "Divider" },
+    { id: "errorboundary", label: "ErrorBoundary" },
     { id: "focuslock", label: "FocusLock" },
     { id: "guildicon", label: "GuildIcon" },
     { id: "heading", label: "Heading" },
@@ -128,6 +131,7 @@ const TAB_COMPONENTS: Record<TabId, React.ComponentType> = {
     colorpicker: ColorPickerTab,
     combobox: ComboboxTab,
     divider: DividerTab,
+    errorboundary: ErrorBoundaryTab,
     focuslock: FocusLockTab,
     guildicon: GuildIconTab,
     heading: HeadingTab,
@@ -196,7 +200,9 @@ function ComponentsTab() {
                 ))}
             </TabBar>
             <div className="vc-compfinder-content">
-                <TabComponent />
+                <ErrorBoundary message={`Failed to render ${currentTab} tab`}>
+                    <TabComponent />
+                </ErrorBoundary>
             </div>
         </SettingsTab>
     );
