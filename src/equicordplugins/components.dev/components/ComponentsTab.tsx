@@ -32,6 +32,7 @@ import GuildIconTab from "./tabs/GuildIconTab";
 import HeadingTab from "./tabs/HeadingTab";
 import LayerModalTab from "./tabs/LayerModalTab";
 import ListboxTab from "./tabs/ListboxTab";
+import MenuTab from "./tabs/MenuTab";
 import ModalTab from "./tabs/ModalTab";
 import NoticeTab from "./tabs/NoticeTab";
 import PaginatorTab from "./tabs/PaginatorTab";
@@ -78,6 +79,7 @@ const TABS = [
     { id: "heading", label: "Heading" },
     { id: "layermodal", label: "LayerModal" },
     { id: "listbox", label: "Listbox" },
+    { id: "menu", label: "Menu" },
     { id: "modal", label: "Modal" },
     { id: "notice", label: "Notice" },
     { id: "paginator", label: "Paginator" },
@@ -128,6 +130,7 @@ const TAB_COMPONENTS: Record<TabId, React.ComponentType> = {
     heading: HeadingTab,
     layermodal: LayerModalTab,
     listbox: ListboxTab,
+    menu: MenuTab,
     modal: ModalTab,
     notice: NoticeTab,
     paginator: PaginatorTab,
