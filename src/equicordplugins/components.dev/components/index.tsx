@@ -141,7 +141,7 @@ export const SearchBar = findComponentByCodeLazy("#{intl::SEARCH}", "clearable",
 export const Paginator = findComponentByCodeLazy("#{intl::BACK}", "#{intl::NEXT}", "renderPageWrapper") as React.ComponentType<PaginatorProps>;
 export const Notice = findComponentByCodeLazy("messageType", "iconDiv", "actionContainer") as React.ComponentType<NoticeProps>;
 export const Chip = findComponentByCodeLazy('variant:"eyebrow"', "chip,") as React.ComponentType<ChipProps>;
-export const Skeleton = findComponentByCodeLazy("productSkeletonCardContainer", "skipPulseAnimation") as React.ComponentType<SkeletonProps>;
+export const Skeleton = findComponentByCodeLazy("withHeader:t=!0,size:") as React.ComponentType<SkeletonProps>;
 export const Accordion = findComponentByCodeLazy("accordionContainer", "onExpandedChange", "defaultExpanded") as React.ComponentType<AccordionProps>;
 export const Timestamp = findComponentByCodeLazy("#{intl::MESSAGE_EDITED_TIMESTAMP_A11Y_LABEL}", "isVisibleOnlyOnHover") as React.ComponentType<TimestampProps>;
 export const GuildIcon = findComponentByCodeLazy("Masks.CLAN_ICON", "guildIconImage") as React.ComponentType<GuildIconProps>;
