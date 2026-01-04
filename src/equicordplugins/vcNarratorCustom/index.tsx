@@ -547,13 +547,13 @@ type StateActionType = "stream" | "mute" | "deaf";
 
 /**
  * State change narration format:
- * 
+ *
  * For mute/deaf: "{USER}" (non-interruptable) + "{ACTION}" (interruptable)
  * - "Username" + "myooted" / "un-myooted" / "deafind" / "un-deafind"
- * 
+ *
  * For streaming: "{USER}" (non-interruptable) + "{VERB} streaming" (interruptable)
  * - "Username" + "started streaming" / "stopped streaming"
- * 
+ *
  * The intro part (user name) plays through main queue and won't be interrupted.
  * The action part plays through state queue and can be interrupted by subsequent state changes.
  * Phonetic spellings used for muted/deafened to ensure clear pronunciation.
@@ -586,10 +586,10 @@ function buildStateSegments(
 
 /**
  * Queue a state change announcement with split intro/action.
- * 
+ *
  * - Intro ("{USER}") goes to main queue, non-interruptable
  * - Action goes to state queue, interruptable by same user
- * 
+ *
  * All actions for the same user share an interrupt key so rapid state changes
  * (e.g., mute->unmute->mute) only play the final state.
  */
@@ -897,22 +897,21 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
         <Menu.MenuItem
             id="vc-narrator-submenu"
             label="VC Narrator"
-            children={[
-                <Menu.MenuItem
-                    key="voice"
-                    id="vc-narrator-voice"
-                    label={`Voice: ${voiceLabel}`}
-                    action={() => openVoiceSelectModal(user)}
-                />,
-                <Menu.MenuItem
-                    key="filter"
-                    id="vc-narrator-state-filter"
-                    label={filterLabel}
-                    disabled={!filterEnabled}
-                    action={filterAction}
-                />,
-            ]}
-        />
+        >
+            <Menu.MenuItem
+                key="voice"
+                id="vc-narrator-voice"
+                label={`Voice: ${voiceLabel}`}
+                action={() => openVoiceSelectModal(user)}
+            />
+            <Menu.MenuItem
+                key="filter"
+                id="vc-narrator-state-filter"
+                label={filterLabel}
+                disabled={!filterEnabled}
+                action={filterAction}
+            />
+        </Menu.MenuItem>
     );
 };
 
