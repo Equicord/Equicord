@@ -121,9 +121,10 @@ function parseUserVoiceMap(input: string): Map<string, string> {
 
 // Get voice for a specific user, falling back to default
 function getVoiceForUser(userId?: string): string {
-    if (!userId) return settings.store.customVoice;
-    const map = parseUserVoiceMap(settings.store.userVoiceMap);
-    return map.get(userId) ?? settings.store.customVoice;
+    const defaultVoice = settings.store.customVoice ?? "en_us_001";
+    if (!userId) return defaultVoice;
+    const map = parseUserVoiceMap(settings.store.userVoiceMap ?? "");
+    return map.get(userId) ?? defaultVoice;
 }
 
 // Add or update a user's voice in the map
@@ -1058,7 +1059,7 @@ export default definePlugin({
         },
     },
 
-    settingsAboutComponent({ tempSettings: s }) {
+    settingsAboutComponent({ tempSettings: s }: { tempSettings?: any; }) {
         const types = useMemo(
             () =>
                 Object.keys(settings.store!)
@@ -1074,7 +1075,7 @@ export default definePlugin({
             return () => { onQueueChange = null; };
         }, []);
 
-        const authorUser = UserStore.getUser(EquicordDevs.examplegit.id);
+        const authorUser = UserStore.getUser(String(EquicordDevs.examplegit.id));
         const authorAvatar = authorUser ? IconUtils.getUserAvatarURL(authorUser, false, 64) : null;
 
         const errorComponent: React.ReactElement | null = null;
