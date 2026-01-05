@@ -6,6 +6,7 @@
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/constants";
@@ -25,7 +26,7 @@ import definePlugin, { OptionType } from "@utils/types";
 import type { User } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
 import {
-    Button,
+    Button as DiscordButton,
     ChannelStore,
     Forms,
     GuildMemberStore,
@@ -172,16 +173,15 @@ function removeUserFromStateChangeFilter(userId: string) {
     serializeStateChangeFilterList(set);
 }
 
-// Create an in-memory cache (temporary, lost on restart)
+// In-memory TTS audio cache (cleared on restart, persisted to IndexedDB)
 const ttsCache = new Map<string, string>();
 
-// Helper function to open (or create) an IndexedDB database.
+// Opens or creates the IndexedDB database for persistent TTS caching
 function openDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open("VcNarratorDB", 1);
         request.onupgradeneeded = () => {
             const db = request.result;
-            // Create an object store called "voices" if it doesn't already exist.
             if (!db.objectStoreNames.contains("voices")) {
                 db.createObjectStore("voices");
             }
@@ -191,7 +191,7 @@ function openDB(): Promise<IDBDatabase> {
     });
 }
 
-// Function to get a cached voice line from IndexedDB.
+// Retrieves a cached TTS audio blob from IndexedDB
 async function getCachedVoiceFromDB(cacheKey: string): Promise<Blob | null> {
     const db = await openDB();
     return new Promise((resolve, reject) => {
@@ -203,7 +203,7 @@ async function getCachedVoiceFromDB(cacheKey: string): Promise<Blob | null> {
     });
 }
 
-// Function to store a voice line in IndexedDB.
+// Stores a TTS audio blob in IndexedDB for persistence across sessions
 async function setCachedVoiceInDB(cacheKey: string, blob: Blob): Promise<void> {
     const db = await openDB();
     return new Promise((resolve, reject) => {
@@ -232,16 +232,15 @@ const VoiceStateStore = findByPropsLazy(
     "getCurrentClientVoiceChannelId"
 );
 
-// Mute/Deaf for other people than you is commented out, because otherwise someone can spam it and it will be annoying
-// Filtering out events is not as simple as just dropping duplicates, as otherwise mute, unmute, mute would
-// not say the second mute, which would lead you to believe they're unmuted
-
-// Queue system to prevent API spam and audio overlap
+// Two-queue system for TTS playback:
+// - mainQueue: Non-interruptable messages (user names, join/leave announcements)
+// - stateQueue: Interruptable messages (mute/deafen/stream state changes)
+// This allows rapid state changes to interrupt each other while preserving important announcements
 interface QueueItem {
     text: string;
     userId?: string;
     interruptKey?: string;
-    useDefaultVoice?: boolean; // Force default voice (for universal action words)
+    useDefaultVoice?: boolean;
 }
 const mainQueue: QueueItem[] = [];
 const stateQueue: QueueItem[] = [];
@@ -251,10 +250,10 @@ let currentAudio: HTMLAudioElement | null = null;
 let currentInterruptKey: string | undefined;
 let currentStop: (() => void) | null = null;
 
-// Pre-cache common action words in DEFAULT voice - these are universal across all users
-// Phonetic spellings used for muted/deafened to ensure clear pronunciation across voices
+// Pre-cache common state action phrases on plugin start for faster playback
+// Uses phonetic spellings for muted/deafened to ensure clear pronunciation across all voices
 const COMMON_ACTIONS = ["myooted", "un-myooted", "deafind", "un-deafind", "started streaming", "stopped streaming"];
-const DEFAULT_VOICE = "en_male_rocket";
+const DEFAULT_VOICE = "en_us_001";
 let preCacheInitialized = false;
 
 async function preCacheCommonActions() {
@@ -546,17 +545,14 @@ function shouldAnnounce(key: string): boolean {
 type StateActionType = "stream" | "mute" | "deaf";
 
 /**
- * State change narration format:
+ * Builds the intro and action segments for state change announcements.
  *
- * For mute/deaf: "{USER}" (non-interruptable) + "{ACTION}" (interruptable)
- * - "Username" + "myooted" / "un-myooted" / "deafind" / "un-deafind"
+ * Format: "{USERNAME}" + "{ACTION}"
+ * Examples:
+ * - "JohnDoe" + "myooted" / "un-myooted" / "deafind" / "un-deafind"
+ * - "JohnDoe" + "started streaming" / "stopped streaming"
  *
- * For streaming: "{USER}" (non-interruptable) + "{VERB} streaming" (interruptable)
- * - "Username" + "started streaming" / "stopped streaming"
- *
- * The intro part (user name) plays through main queue and won't be interrupted.
- * The action part plays through state queue and can be interrupted by subsequent state changes.
- * Phonetic spellings used for muted/deafened to ensure clear pronunciation.
+ * Uses phonetic spellings for muted/deafened to ensure clear pronunciation.
  */
 function buildStateSegments(
     type: StateActionType,
@@ -585,13 +581,12 @@ function buildStateSegments(
 }
 
 /**
- * Queue a state change announcement with split intro/action.
+ * Queues a state change announcement as two parts:
+ * - Intro (username) goes to mainQueue - won't be interrupted
+ * - Action (state) goes to stateQueue - can be interrupted by rapid state changes
  *
- * - Intro ("{USER}") goes to main queue, non-interruptable
- * - Action goes to state queue, interruptable by same user
- *
- * All actions for the same user share an interrupt key so rapid state changes
- * (e.g., mute->unmute->mute) only play the final state.
+ * Uses a shared interrupt key per user so rapid toggles (mute->unmute->mute)
+ * only announce the final state.
  */
 function queueStateSplitAnnouncement(
     userId: string,
@@ -618,7 +613,7 @@ function queueStateSplitAnnouncement(
     if (shouldQueueIntro) {
         mainQueue.push({ text: safeIntro, userId, interruptKey: undefined, useDefaultVoice: false });
     }
-    stateQueue.push({ text: actionText, userId, interruptKey, useDefaultVoice: true });
+    stateQueue.push({ text: actionText, userId, interruptKey, useDefaultVoice: false });
 
     onQueueChange?.();
     processQueue();
@@ -723,7 +718,7 @@ const settings = definePluginSettings({
     },
     joinMessage: {
         type: OptionType.STRING,
-        description: "Join Message",
+        description: "Placeholders: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
         default: "{{DISPLAY_NAME}} joined",
     },
     leaveMessage: {
@@ -737,17 +732,17 @@ const settings = definePluginSettings({
         default: "{{DISPLAY_NAME}} moved to {{CHANNEL}}",
     },
     announceOthersMute: {
-        description: "Announce other users muting/unmuting (your current VC only) (set to a static voice)",
+        description: "Announce when other users mute/unmute in your current VC",
         type: OptionType.BOOLEAN,
         default: false,
     },
     announceOthersDeafen: {
-        description: "Announce other users deafening/undeafening (your current VC only) (set to a static voice",
+        description: "Announce when other users deafen/undeafen in your current VC",
         type: OptionType.BOOLEAN,
         default: false,
     },
     announceOthersStream: {
-        description: "Announce other users starting/stopping stream (your current VC only) (set to a static voice",
+        description: "Announce when other users start/stop streaming in your current VC",
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -801,11 +796,48 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
     }, [settings.store.customVoice]);
 
     const [currentValue, setCurrentValue] = React.useState<string>(DEFAULT_VALUE);
+    const [busy, setBusy] = React.useState(false);
 
     React.useEffect(() => {
-        const map = parseUserVoiceMap(settings.store.userVoiceMap);
+        const map = parseUserVoiceMap(settings.store.userVoiceMap ?? "");
         setCurrentValue(map.get(user.id) ?? DEFAULT_VALUE);
     }, [user.id, settings.store.userVoiceMap]);
+
+    // Get the display name for preview
+    const displayName = (user as any).globalName ?? user.username;
+
+    // Preview function that speaks the user's name in the selected voice
+    const previewVoice = async (text: string) => {
+        setBusy(true);
+        const voice = currentValue === DEFAULT_VALUE
+            ? (settings.store.customVoice ?? "en_us_001")
+            : currentValue;
+        try {
+            const response = await fetch(`${API_BASE}/api/generate`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text, voice, base64: true }),
+            });
+            if (response.ok) {
+                const audioData = atob((await response.text()).trim());
+                const binaryData = new Uint8Array(audioData.length);
+                for (let i = 0; i < audioData.length; i++) {
+                    binaryData[i] = audioData.charCodeAt(i);
+                }
+                const blob = new Blob([binaryData], { type: "audio/mpeg" });
+                const audio = new Audio(URL.createObjectURL(blob));
+                audio.volume = settings.store.volume ?? 1;
+                audio.playbackRate = settings.store.rate ?? 1;
+                audio.onended = () => setBusy(false);
+                audio.onerror = () => setBusy(false);
+                await audio.play();
+                return;
+            }
+        } catch (e) {
+            console.error("Preview error:", e);
+        }
+        setBusy(false);
+    };
 
     return (
         <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
@@ -825,19 +857,50 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
                         closeOnSelect={true}
                         onChange={v => setCurrentValue(v as any)}
                     />
+
+                    {/* Preview buttons */}
+                    <Forms.FormText style={{ fontSize: "12px", opacity: 0.7, marginTop: "12px", marginBottom: "8px", textAlign: "center" }}>
+                        Preview how this voice sounds with their name:
+                    </Forms.FormText>
+                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", justifyContent: "center" }}>
+                        <Button
+                            variant="secondary"
+                            size="small"
+                            disabled={busy}
+                            onClick={() => previewVoice(clean(displayName) || "Someone")}
+                        >
+                            {busy ? "Playing..." : `"${clean(displayName) || "Someone"}"`}
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            size="small"
+                            disabled={busy}
+                            onClick={() => previewVoice(`${clean(displayName) || "Someone"} joined`)}
+                        >
+                            Joined
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            size="small"
+                            disabled={busy}
+                            onClick={() => previewVoice(`${clean(displayName) || "Someone"} left`)}
+                        >
+                            Left
+                        </Button>
+                    </div>
                 </section>
             </ModalContent>
 
             <ModalFooter>
                 <div style={{ display: "flex", justifyContent: "center", gap: "8px", width: "100%" }}>
-                    <Button
-                        color={Button.Colors.PRIMARY}
+                    <DiscordButton
+                        color={DiscordButton.Colors.PRIMARY}
                         onClick={modalProps.onClose}
                     >
                         Cancel
-                    </Button>
-                    <Button
-                        color={Button.Colors.BRAND}
+                    </DiscordButton>
+                    <DiscordButton
+                        color={DiscordButton.Colors.BRAND}
                         onClick={() => {
                             if (currentValue === DEFAULT_VALUE) {
                                 removeUserVoice(user.id);
@@ -848,7 +911,7 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
                         }}
                     >
                         Save
-                    </Button>
+                    </DiscordButton>
                 </div>
             </ModalFooter>
         </ModalRoot>
@@ -1059,13 +1122,7 @@ export default definePlugin({
     },
 
     settingsAboutComponent({ tempSettings: s }: { tempSettings?: any; }) {
-        const types = useMemo(
-            () =>
-                Object.keys(settings.store!)
-                    .filter(k => k.endsWith("Message"))
-                    .map(k => k.slice(0, -7)),
-            []
-        );
+        const allTypes = ["mute", "unmute", "deafen", "undeafen", "streamStart", "streamStop", "join", "leave", "move"];
 
         const [busy, setBusy] = React.useState(isQueueBusy());
 
@@ -1077,28 +1134,20 @@ export default definePlugin({
         const authorUser = UserStore.getUser(String(EquicordDevs.examplegit.id));
         const authorAvatar = authorUser ? IconUtils.getUserAvatarURL(authorUser, false, 64) : null;
 
-        const errorComponent: React.ReactElement | null = null;
-
         return (
             <>
-                <Forms.FormText>
-                    You can customise the spoken messages below. You can disable
-                    specific messages by setting them to nothing
-                </Forms.FormText>
-                <Forms.FormText style={{ fontSize: "12px", opacity: 0.85 }}>
-                    Placeholders: <code>{"{{USER}}"}</code>, <code>{"{{DISPLAY_NAME}}"}</code>, <code>{"{{NICKNAME}}"}</code>, <code>{"{{CHANNEL}}"}</code>
-                </Forms.FormText>
+                {/* Author note - pinned at top */}
                 <div
                     style={{
-                        marginTop: "10px",
                         padding: "10px 12px",
                         background: "var(--background-secondary-alt)",
-                        borderRadius: "10px",
+                        borderRadius: "8px",
                         border: "1px solid var(--background-tertiary)",
                         borderLeft: "3px solid var(--brand-experiment)",
                         display: "flex",
                         gap: "10px",
                         alignItems: "flex-start",
+                        marginBottom: "16px",
                     }}
                 >
                     {authorAvatar && (
@@ -1116,24 +1165,43 @@ export default definePlugin({
                         </Forms.FormText>
                     </div>
                 </div>
-                <Forms.FormTitle className={Margins.top20} tag="h3">
-                    Play Example Sounds {busy && "(playing...)"}
-                </Forms.FormTitle>
+
+                {/* Preview sounds section */}
                 <div
                     style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(4, 1fr)",
-                        gap: "1rem",
+                        padding: "12px 16px",
+                        background: "var(--background-secondary-alt)",
+                        borderRadius: "8px",
+                        border: "1px solid var(--background-tertiary)",
                     }}
-                    className={"vc-narrator-buttons"}
                 >
-                    {types.map(t => (
-                        <Button key={t} disabled={busy} onClick={() => playSample(s, t)}>
-                            {wordsToTitle([t])}
-                        </Button>
-                    ))}
+                    <Forms.FormTitle tag="h3" style={{ marginTop: 0 }}>
+                        Preview Sounds {busy && "(playing...)"}
+                    </Forms.FormTitle>
+                    <Forms.FormText style={{ fontSize: "12px", opacity: 0.7, marginBottom: "12px" }}>
+                        Uses your selected narrator voice
+                    </Forms.FormText>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "6px",
+                            justifyContent: "center",
+                        }}
+                    >
+                        {allTypes.map(t => (
+                            <Button
+                                key={t}
+                                variant="secondary"
+                                size="small"
+                                disabled={busy}
+                                onClick={() => playSample(s, t)}
+                            >
+                                {wordsToTitle([t])}
+                            </Button>
+                        ))}
+                    </div>
                 </div>
-                {errorComponent}
             </>
         );
     },
