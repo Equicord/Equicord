@@ -50,32 +50,32 @@ export default definePlugin({
             find: "#{intl::EMOJI_FAVORITE_TOOLTIP}",
             replacement: [
                 {
-                    match: /(data-animated.*?)(\(0,\i.jsx\)\(\i.\i)/,
+                    match: /(ref:\i,children:)(\(0,\i.jsx\)\(\i.\i)/,
                     replace: "$1arguments[0]?.collected?.isDragging?$self.dragItem():$2",
                 },
                 {
                     match: /\[(\i\.emojiItemSelected)\]/,
-                    replace: "[arguments[0].collected.isDragging?'':$1]",
+                    replace: '[arguments[0].collected.isDragging?"":$1]',
                 },
                 {
                     match: /(\[\i,\i\]=\i\.useState\(""\))/,
                     replace: "$1,[collected,drag]=$self.drag(arguments[0])",
                 },
                 {
-                    match: /(\(\i,{ref:)(\i),/,
-                    replace: "$1arguments[0]?.descriptor?.emoji?.category==='FAVORITES'?drag:$2,collected:collected,",
+                    match: /(onFocus".{0,50}\(\i,{ref:)(\i),/,
+                    replace: '$1arguments[0]?.descriptor?.emoji?.category==="FAVORITES"?drag:$2,collected:collected,',
                 },
                 {
-                    match: /(,\{key:\i,ref:\i)(?=\}\))/,
-                    replace: "$1,style:{position:'relative'}",
+                    match: /(,\{key:\i,ref:\i)(?=\}\),)/,
+                    replace: '$1,style:{position:"relative"}',
                 },
                 {
                     match: /(delay:200,children:)(\i)/,
                     replace: "$1[$2,$self.wrapper(arguments[0]?.descriptor?.emoji)]",
                 },
                 {
-                    match: /(#{intl::EMOJI_FAVORITE_TOOLTIP}.{0,150}\}\):)(\i)/,
-                    replace: "$1[$2,$self.wrapper(arguments[0]?.descriptor?.emoji)]",
+                    match: /(delay:200,children:.{0,100}\}\):)(\i)\)/,
+                    replace: "$1[$2,$self.wrapper(arguments[0]?.descriptor?.emoji)])",
                 },
             ],
         },
