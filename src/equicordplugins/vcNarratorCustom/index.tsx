@@ -25,7 +25,6 @@ import {
 import { wordsToTitle } from "@utils/text";
 import definePlugin, { OptionType } from "@utils/types";
 import type { User } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
 import {
     Button as DiscordButton,
     ChannelStore,
@@ -39,6 +38,7 @@ import {
     SelectedGuildStore,
     useMemo,
     UserStore,
+    VoiceStateStore,
 } from "@webpack/common";
 
 import {
@@ -184,10 +184,7 @@ interface VoiceState {
     stream?: boolean;
 }
 
-const VoiceStateStore = findByPropsLazy(
-    "getVoiceStatesForChannel",
-    "getCurrentClientVoiceChannelId"
-);
+
 
 // Two-queue system for TTS playback:
 // - mainQueue: Non-interruptable messages (user names, join/leave announcements)
