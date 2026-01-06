@@ -16,18 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import "./style.css";
+import "./styles.css";
 
 import { EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 import definePlugin from "@utils/types";
-import { findByPropsLazy, proxyLazyWebpack } from "@webpack";
+import { findByPropsLazy } from "@webpack";
 import { useDrag, useDrop, useLayoutEffect, useRef, UserSettingsActionCreators } from "@webpack/common";
 
 const UserSettingsDelay = findByPropsLazy("INFREQUENT_USER_ACTION");
 const imgCls = findByPropsLazy("image", "imageLoading");
 const dndCls = findByPropsLazy("wrapper", "target", "dragOver");
 
-const FrecencyUserSettingsActionCreators = proxyLazyWebpack(() => UserSettingsActionCreators.FrecencyUserSettingsActionCreators);
+const cl = classNameFactory("vc-drag-favorite-emotes-");
 
 type EmojiData = {
     uniqueName: string | undefined;
@@ -117,20 +119,20 @@ export default definePlugin({
                     e.emojis.splice(sourceIndex, 1);
                     e.emojis.splice(finalIndex, 0, this.source);
                 }
-                FrecencyUserSettingsActionCreators.updateAsync("favoriteEmojis", update.bind({ source, target }), UserSettingsDelay.INFREQUENT_USER_ACTION);
+                UserSettingsActionCreators.FrecencyUserSettingsActionCreators.updateAsync("favoriteEmojis", update.bind({ source, target }), UserSettingsDelay.INFREQUENT_USER_ACTION);
             }
         }), [emoji]);
     },
     dragItem() {
         return (
-            <span className={imgCls.imageLoading} style={{ backgroundSize: "40px", height: "40px", width: "40px", display: "block" }} />
+            <span className={classes(cl("item"), imgCls.imageLoading)} />
         );
     },
     wrapper(emoji: EmojiDescriptor) {
         const [collected, drop] = this.drop(emoji);
         const ref: React.RefObject<null | HTMLElement> = useRef(null);
         useLayoutEffect(() => {
-            if (emoji?.category !== "FAVORITES") { return; }
+            if (emoji?.category !== "FAVORITES") return;
             const frame = requestAnimationFrame(() => {
                 if (!ref.current) {
                     return;
@@ -144,10 +146,12 @@ export default definePlugin({
             );
             return () => cancelAnimationFrame(frame);
         }, [collected, ref]);
-        if (emoji?.category !== "FAVORITES") { return; }
+
+        if (emoji?.category !== "FAVORITES") return;
+
         return (
-            <div className={`${dndCls.wrapper} vc-dragging-wrapper`} aria-hidden="true">
-                <div className={`${dndCls.target} ${collected.isOver ? "vc-dragging-indicator" : ""}`}
+            <div className={classes(cl("wrapper"), dndCls.wrapper)} aria-hidden="true">
+                <div className={classes(collected.isOver ? cl("indicator") : "", dndCls.target)}
                     ref={e => {
                         ref.current = e;
                         drop(e);
