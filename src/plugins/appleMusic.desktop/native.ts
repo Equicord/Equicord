@@ -34,24 +34,21 @@ async function fetchRemoteData({ id, name, artist, album }: { id: string, name: 
 
     try {
         const dataUrl = new URL("https://itunes.apple.com/search");
+        dataUrl.searchParams.set("term", `${name} ${artist} ${album}`);
         dataUrl.searchParams.set("media", "music");
         dataUrl.searchParams.set("entity", "song");
 
-        dataUrl.searchParams.set("term", `${name} ${artist} ${album}`);
-        let data = await fetch(dataUrl, {
+        const fetchData = () => fetch(dataUrl, {
             headers: {
                 "user-agent": VENCORD_USER_AGENT,
             },
         }).then(r => r.json());
 
-        // fallback to simpler query (name + artist) if no results
+        let data = await fetchData();
+
         if (data.resultCount === 0) {
             dataUrl.searchParams.set("term", `${name} ${artist}`);
-            data = await fetch(dataUrl, {
-                headers: {
-                    "user-agent": VENCORD_USER_AGENT,
-                },
-            }).then(r => r.json());
+            data = await fetchData();
         }
 
         const songData = data.results.find(song => song.collectionName === album) || data.results[0];
