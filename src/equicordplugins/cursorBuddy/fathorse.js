@@ -8,7 +8,7 @@
 /* Sourced from https://raw.githubusercontent.com/nexpid/fatass-horse/5363cf9b5904211de79d2597200374340efac676/horse.js */
 
 // https://github.com/adryd325/oneko.js
-const fathorse = function (cfg = {}) {
+export default function fathorse(cfg = {}) {
     document.getElementById("fathorse")?.remove();
 
     // generated
@@ -167,4 +167,3 @@ const fathorse = function (cfg = {}) {
 
     return mousePos;
 };
-export default fathorse;
