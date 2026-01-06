@@ -8,7 +8,7 @@
 /* Sourced from https://raw.githubusercontent.com/nexpid/fatass-horse/5363cf9b5904211de79d2597200374340efac676/horse.js */
 
 // https://github.com/adryd325/oneko.js
-export default function fathorse(cfg = {}) {
+export default function fathorse(cfg) {
     document.getElementById("fathorse")?.remove();
 
     // generated
@@ -22,7 +22,7 @@ export default function fathorse(cfg = {}) {
         fade: cfg.fade ?? true,
         freeroam: cfg.freeroam ?? true,
         shake: cfg.shake || window._horseShake,
-        image: cfg.image ?? "https://nexpid.github.io/fatass-horse/sheet.png"
+        image: cfg.image
     };
     const horsePos = {
         x: config.size / 2,
