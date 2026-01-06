@@ -7,6 +7,7 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
+import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/constants";
@@ -40,6 +41,24 @@ import {
     UserStore,
 } from "@webpack/common";
 
+import {
+    addUserToStateChangeFilterList,
+    clean,
+    clearTtsCache,
+    formatText,
+    getCachedVoiceFromDB,
+    getPersistentTtsCacheStats,
+    getVoiceForUser,
+    parseStateChangeFilterList,
+    parseUserVoiceMap,
+    removeUserFromStateChangeFilterList,
+    removeUserVoiceFromMap,
+    setCachedVoiceInDB,
+    ttsCache,
+    upsertUserVoiceMap,
+    VOICE_OPTIONS,
+} from "./util";
+
 /*
  * TTS API maintained by example-git
  * The original TikTok TTS API went offline, so I set up a new working cloudflare worker.
@@ -48,171 +67,109 @@ import {
  */
 const API_BASE = "https://tiktok-tts-aio.exampleuser.workers.dev";
 
-const VOICE_OPTIONS = [
-    { label: "Asian: Indonesian Female (id_001)", value: "id_001" },
-    { label: "Asian: Japanese Female 1 (jp_001)", value: "jp_001" },
-    { label: "Asian: Japanese Female 2 (jp_003)", value: "jp_003" },
-    { label: "Asian: Japanese Female 3 (jp_005)", value: "jp_005" },
-    { label: "Asian: Japanese Male (jp_006)", value: "jp_006" },
-    { label: "Asian: Korean Female (kr_003)", value: "kr_003" },
-    { label: "Asian: Korean Male 1 (kr_002)", value: "kr_002" },
-    { label: "Asian: Korean Male 2 (kr_004)", value: "kr_004" },
-    { label: "English: AU Female (en_au_001)", value: "en_au_001" },
-    { label: "English: AU Male (en_au_002)", value: "en_au_002" },
-    { label: "English: Funny (en_male_funny)", value: "en_male_funny" },
-    { label: "English: Narrator (en_male_narration)", value: "en_male_narration" },
-    { label: "English: Peaceful (en_female_emotional)", value: "en_female_emotional" },
-    { label: "English: Serious (en_male_cody)", value: "en_male_cody" },
-    { label: "English: UK Male 1 (en_uk_001)", value: "en_uk_001" },
-    { label: "English: UK Male 2 (en_uk_003)", value: "en_uk_003" },
-    { label: "English: US Female 1 (en_us_001)", value: "en_us_001" },
-    { label: "English: US Female 2 (en_us_002)", value: "en_us_002" },
-    { label: "English: US Male 1 (en_us_006)", value: "en_us_006" },
-    { label: "English: US Male 2 (en_us_007)", value: "en_us_007" },
-    { label: "English: US Male 3 (en_us_009)", value: "en_us_009" },
-    { label: "English: US Male 4 (en_us_010)", value: "en_us_010" },
-    { label: "European: French Male 1 (fr_001)", value: "fr_001" },
-    { label: "European: French Male 2 (fr_002)", value: "fr_002" },
-    { label: "European: German Female (de_001)", value: "de_001" },
-    { label: "European: German Male (de_002)", value: "de_002" },
-    { label: "European: Italian Male (it_male_m18)", value: "it_male_m18" },
-    { label: "European: Spanish Male (es_002)", value: "es_002" },
-    { label: "Fun: C3PO (en_us_c3po)", value: "en_us_c3po" },
-    { label: "Fun: Chewbacca (en_us_chewbacca)", value: "en_us_chewbacca" },
-    { label: "Fun: Ghost Face (en_us_ghostface)", value: "en_us_ghostface" },
-    { label: "Fun: Ghost Host (en_male_ghosthost)", value: "en_male_ghosthost" },
-    { label: "Fun: Madame Leota (en_female_madam_leota)", value: "en_female_madam_leota" },
-    { label: "Fun: Pirate (en_male_pirate)", value: "en_male_pirate" },
-    { label: "Fun: Rocket (en_us_rocket)", value: "en_us_rocket" },
-    { label: "Fun: Stitch (en_us_stitch)", value: "en_us_stitch" },
-    { label: "Fun: Stormtrooper (en_us_stormtrooper)", value: "en_us_stormtrooper" },
-    { label: "Latin American: Portuguese BR Female 1 (br_001)", value: "br_001" },
-    { label: "Latin American: Portuguese BR Female 2 (br_003)", value: "br_003" },
-    { label: "Latin American: Portuguese BR Female 3 (br_004)", value: "br_004" },
-    { label: "Latin American: Portuguese BR Male (br_005)", value: "br_005" },
-    { label: "Latin American: Spanish MX Male (es_mx_002)", value: "es_mx_002" },
-] as const;
+type LastApiCallStatus = {
+    at: number;
+    message: string;
+    status?: number;
+};
 
-// User voice map formats supported:
-// - Preferred: "userId:voiceId,userId2:voiceId2" (comma-separated)
-// - Legacy: "userId,voiceId\nuserId2,voiceId2" (newline-separated)
-function parseUserVoiceMap(input: string): Map<string, string> {
-    const map = new Map<string, string>();
-    if (!input?.trim()) return map;
+const apiStatusListeners = new Set<(status: LastApiCallStatus) => void>();
+let lastApiCallStatus: LastApiCallStatus = { at: 0, message: "No API calls yet" };
 
-    const trimmed = input.trim();
+function setLastApiCallStatus(next: LastApiCallStatus) {
+    lastApiCallStatus = next;
+    for (const listener of apiStatusListeners) listener(next);
+}
 
-    // Preferred format (comma-separated pairs)
-    if (trimmed.includes(":") || trimmed.includes("=")) {
-        for (const entry of trimmed.split(",").map(s => s.trim()).filter(Boolean)) {
-            const [userId, voiceId] = entry.split(/[:=]/).map(s => s.trim());
-            if (userId && voiceId) map.set(userId, voiceId);
+function recordApiResponse(response: Response) {
+    setLastApiCallStatus({
+        at: Date.now(),
+        status: response.status,
+        message: response.ok ? `Success (${response.status})` : `HTTP ${response.status}`,
+    });
+}
+
+function recordApiError(error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    setLastApiCallStatus({
+        at: Date.now(),
+        message: message ? `Network error: ${message}` : "Network error",
+    });
+}
+
+function TroubleshootingSettings() {
+    const [cacheStats, setCacheStats] = React.useState<{ bytes: number; entries: number; } | null>(null);
+    const [cacheBusy, setCacheBusy] = React.useState(false);
+    const [apiStatus, setApiStatus] = React.useState<LastApiCallStatus>(lastApiCallStatus);
+
+    const refreshCacheStats = React.useCallback(async () => {
+        try {
+            setCacheStats(await getPersistentTtsCacheStats());
+        } catch {
+            setCacheStats(null);
         }
-        return map;
-    }
+    }, []);
 
-    // Legacy format (newline-separated "userId,voiceId")
-    for (const line of trimmed.split(/\n+/)) {
-        const [userId, voiceId] = line.split(",").map(s => s.trim());
-        if (userId && voiceId) map.set(userId, voiceId);
-    }
+    React.useEffect(() => {
+        refreshCacheStats();
+    }, [refreshCacheStats]);
 
-    return map;
-}
+    React.useEffect(() => {
+        apiStatusListeners.add(setApiStatus);
+        return () => void apiStatusListeners.delete(setApiStatus);
+    }, []);
 
-// Get voice for a specific user, falling back to default
-function getVoiceForUser(userId?: string): string {
-    const defaultVoice = settings.store.customVoice ?? "en_us_001";
-    if (!userId) return defaultVoice;
-    const map = parseUserVoiceMap(settings.store.userVoiceMap ?? "");
-    return map.get(userId) ?? defaultVoice;
-}
+    const onClearCache = React.useCallback(async () => {
+        setCacheBusy(true);
+        try {
+            await clearTtsCache();
+        } finally {
+            setCacheBusy(false);
+        }
+        await refreshCacheStats();
+    }, [refreshCacheStats]);
 
-// Add or update a user's voice in the map
-function setUserVoice(userId: string, voiceId: string) {
-    const map = parseUserVoiceMap(settings.store.userVoiceMap);
-    map.set(userId, voiceId);
-    settings.store.userVoiceMap = Array.from(map.entries())
-        .map(([uid, vid]) => `${uid}:${vid}`)
-        .join(",");
-}
+    const formatBytes = (bytes: number) => {
+        const mb = bytes / (1024 * 1024);
+        return `${mb.toFixed(mb >= 10 ? 0 : 1)} MB`;
+    };
 
-// Remove a user from the voice map
-function removeUserVoice(userId: string) {
-    const map = parseUserVoiceMap(settings.store.userVoiceMap);
-    map.delete(userId);
-    settings.store.userVoiceMap = Array.from(map.entries())
-        .map(([uid, vid]) => `${uid}:${vid}`)
-        .join(",");
-}
+    const lastApiAt = apiStatus.at ? new Date(apiStatus.at).toLocaleTimeString() : "—";
+    const apiStatusColor = apiStatus.status
+        ? apiStatus.status >= 200 && apiStatus.status < 300
+            ? "var(--text-positive)"
+            : "var(--text-danger)"
+        : "var(--text-muted)";
 
-function parseStateChangeFilterList(input: string): Set<string> {
-    const set = new Set<string>();
-    if (!input?.trim()) return set;
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <Divider style={{ margin: "24px 0 12px" }} />
 
-    for (const entry of input.split(",").map(s => s.trim()).filter(Boolean)) {
-        set.add(entry);
-    }
+            <Forms.FormTitle tag="h3" style={{ marginBottom: 4 }}>Troubleshooting</Forms.FormTitle>
 
-    return set;
-}
+            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <Button variant="dangerPrimary" size="small" onClick={onClearCache} disabled={cacheBusy}>
+                        Clear cache
+                    </Button>
 
-function serializeStateChangeFilterList(list: Set<string>) {
-    settings.store.stateChangeFilterList = Array.from(list).join(",");
-}
+                    <Button variant="secondary" size="xs" onClick={refreshCacheStats} disabled={cacheBusy}>
+                        Refresh size
+                    </Button>
+                </div>
 
-function addUserToStateChangeFilter(userId: string) {
-    const set = parseStateChangeFilterList(settings.store.stateChangeFilterList);
-    set.add(userId);
-    serializeStateChangeFilterList(set);
-}
+                <Forms.FormText style={{ margin: 0, opacity: 0.85, whiteSpace: "nowrap" }}>
+                    Cache: {cacheStats ? `${formatBytes(cacheStats.bytes)} • ${cacheStats.entries} entries` : "Unknown"}
+                </Forms.FormText>
+            </div>
 
-function removeUserFromStateChangeFilter(userId: string) {
-    const set = parseStateChangeFilterList(settings.store.stateChangeFilterList);
-    set.delete(userId);
-    serializeStateChangeFilterList(set);
-}
-
-// In-memory TTS audio cache (cleared on restart, persisted to IndexedDB)
-const ttsCache = new Map<string, string>();
-
-// Opens or creates the IndexedDB database for persistent TTS caching
-function openDB(): Promise<IDBDatabase> {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open("VcNarratorDB", 1);
-        request.onupgradeneeded = () => {
-            const db = request.result;
-            if (!db.objectStoreNames.contains("voices")) {
-                db.createObjectStore("voices");
-            }
-        };
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-    });
-}
-
-// Retrieves a cached TTS audio blob from IndexedDB
-async function getCachedVoiceFromDB(cacheKey: string): Promise<Blob | null> {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction("voices", "readonly");
-        const store = tx.objectStore("voices");
-        const request = store.get(cacheKey);
-        request.onsuccess = () => resolve(request.result || null);
-        request.onerror = () => reject(request.error);
-    });
-}
-
-// Stores a TTS audio blob in IndexedDB for persistence across sessions
-async function setCachedVoiceInDB(cacheKey: string, blob: Blob): Promise<void> {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction("voices", "readwrite");
-        const store = tx.objectStore("voices");
-        const request = store.put(blob, cacheKey);
-        request.onsuccess = () => resolve();
-        request.onerror = () => reject(request.error);
-    });
+            <Forms.FormText style={{ margin: 0, opacity: 0.9 }}>
+                <span>Last API call: </span>
+                <span style={{ color: apiStatusColor }}>{apiStatus.message}</span>
+                <span style={{ opacity: 0.75 }}> • {lastApiAt}</span>
+            </Forms.FormText>
+        </div>
+    );
 }
 
 interface VoiceState {
@@ -286,6 +243,7 @@ async function preCacheCommonActions() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ text: action, voice: DEFAULT_VOICE, base64: true }),
             });
+            recordApiResponse(response);
             if (response.ok) {
                 const audioData = atob((await response.text()).trim());
                 const binaryData = new Uint8Array(audioData.length);
@@ -300,7 +258,10 @@ async function preCacheCommonActions() {
                 // Persist to IndexedDB for future sessions
                 await setCachedVoiceInDB(cacheKey, blob);
             }
-        } catch { /* ignore pre-cache failures */ }
+        } catch (e) {
+            recordApiError(e);
+            /* ignore pre-cache failures */
+        }
 
         // Space out API requests to avoid rate limiting (2 seconds between each)
         await new Promise(r => setTimeout(r, 2000));
@@ -406,7 +367,13 @@ async function speak(text: string, userId?: string, interruptKey?: string, useDe
 
         void (async () => {
             // Use default voice for universal actions, otherwise user-specific voice
-            const voice = useDefaultVoice ? DEFAULT_VOICE : getVoiceForUser(userId);
+            const voice = useDefaultVoice
+                ? DEFAULT_VOICE
+                : getVoiceForUser(userId, {
+                    userVoiceMap: settings.store.userVoiceMap,
+                    customVoice: settings.store.customVoice,
+                    defaultVoice: DEFAULT_VOICE,
+                });
 
             // Create a unique cache key using the voice and text.
             const cacheKey = `${voice}_${text}`;
@@ -444,6 +411,7 @@ async function speak(text: string, userId?: string, interruptKey?: string, useDe
                         base64: true,
                     }),
                 });
+                recordApiResponse(response);
 
                 if (!response.ok) {
                     console.error(`TTS failed: ${response.status}`);
@@ -465,44 +433,12 @@ async function speak(text: string, userId?: string, interruptKey?: string, useDe
 
                 playAudio(url);
             } catch (e) {
+                recordApiError(e);
                 console.error("TTS Network Error:", e);
                 resolve();
             }
         })().catch(onEnd);
     });
-}
-
-function clean(str: string) {
-    const replacer = settings.store.latinOnly
-        ? /[^\p{Script=Latin}\p{Number}\p{Punctuation}\s]/gu
-        : /[^\p{Letter}\p{Number}\p{Punctuation}\s]/gu;
-
-    return str
-        .normalize("NFKC")
-        .replace(replacer, "")
-        .replace(/_{2,}/g, "_")
-        .trim()
-        .slice(0, 128);
-}
-
-function formatText(
-    str: string,
-    user: string,
-    channel: string,
-    displayName: string,
-    nickname: string
-) {
-    return str
-        .replaceAll("{{USER}}", clean(user) || (user ? "Someone" : ""))
-        .replaceAll("{{CHANNEL}}", clean(channel) || "channel")
-        .replaceAll(
-            "{{DISPLAY_NAME}}",
-            clean(displayName) || (displayName ? "Someone" : "")
-        )
-        .replaceAll(
-            "{{NICKNAME}}",
-            clean(nickname) || (nickname ? "Someone" : "")
-        );
 }
 
 // For every user, channelId and oldChannelId will differ when moving channel.
@@ -560,7 +496,7 @@ function buildStateSegments(
     preferredName: string,
     isSelf: boolean
 ): { intro: string; action: string; } {
-    const name = clean(preferredName) || (isSelf ? "You" : "Someone");
+    const name = clean(preferredName, settings.store.latinOnly) || (isSelf ? "You" : "Someone");
 
     if (type === "stream") {
         return {
@@ -674,7 +610,8 @@ function playSample(tempSettings: any, type: string) {
             currentUser.username,
             "general",
             (currentUser as any).globalName ?? currentUser.username,
-            (myGuildId ? GuildMemberStore.getNick(myGuildId, currentUser.id) : null) ?? currentUser.username
+            (myGuildId ? GuildMemberStore.getNick(myGuildId, currentUser.id) : null) ?? currentUser.username,
+            settingsobj.latinOnly
         )
     );
 }
@@ -778,6 +715,10 @@ const settings = definePluginSettings({
         description: "Comma-separated user IDs for whitelist/blacklist. Right-click users to add/remove.",
         default: "",
     },
+    troubleshooting: {
+        type: OptionType.COMPONENT,
+        component: () => <TroubleshootingSettings />,
+    },
 });
 
 interface UserContextProps {
@@ -818,6 +759,7 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ text, voice, base64: true }),
             });
+            recordApiResponse(response);
             if (response.ok) {
                 const audioData = atob((await response.text()).trim());
                 const binaryData = new Uint8Array(audioData.length);
@@ -834,6 +776,7 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
                 return;
             }
         } catch (e) {
+            recordApiError(e);
             console.error("Preview error:", e);
         }
         setBusy(false);
@@ -867,15 +810,15 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
                             variant="secondary"
                             size="small"
                             disabled={busy}
-                            onClick={() => previewVoice(clean(displayName) || "Someone")}
+                            onClick={() => previewVoice(clean(displayName, settings.store.latinOnly) || "Someone")}
                         >
-                            {busy ? "Playing..." : `"${clean(displayName) || "Someone"}"`}
+                            {busy ? "Playing..." : `"${clean(displayName, settings.store.latinOnly) || "Someone"}"`}
                         </Button>
                         <Button
                             variant="secondary"
                             size="small"
                             disabled={busy}
-                            onClick={() => previewVoice(`${clean(displayName) || "Someone"} joined`)}
+                            onClick={() => previewVoice(`${clean(displayName, settings.store.latinOnly) || "Someone"} joined`)}
                         >
                             Joined
                         </Button>
@@ -883,7 +826,7 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
                             variant="secondary"
                             size="small"
                             disabled={busy}
-                            onClick={() => previewVoice(`${clean(displayName) || "Someone"} left`)}
+                            onClick={() => previewVoice(`${clean(displayName, settings.store.latinOnly) || "Someone"} left`)}
                         >
                             Left
                         </Button>
@@ -903,9 +846,9 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
                         color={DiscordButton.Colors.BRAND}
                         onClick={() => {
                             if (currentValue === DEFAULT_VALUE) {
-                                removeUserVoice(user.id);
+                                settings.store.userVoiceMap = removeUserVoiceFromMap(settings.store.userVoiceMap, user.id);
                             } else {
-                                setUserVoice(user.id, currentValue);
+                                settings.store.userVoiceMap = upsertUserVoiceMap(settings.store.userVoiceMap, user.id, currentValue);
                             }
                             modalProps.onClose();
                         }}
@@ -950,9 +893,9 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
         ? undefined
         : () => {
             if (inFilter) {
-                removeUserFromStateChangeFilter(user.id);
+                settings.store.stateChangeFilterList = removeUserFromStateChangeFilterList(settings.store.stateChangeFilterList, user.id);
             } else {
-                addUserToStateChangeFilter(user.id);
+                settings.store.stateChangeFilterList = addUserToStateChangeFilterList(settings.store.stateChangeFilterList, user.id);
             }
         };
 
@@ -1053,7 +996,7 @@ export default definePlugin({
                     const nickname = u && ((myGuildId ? GuildMemberStore.getNick(myGuildId, userId) : null) ?? displayName);
                     const channel = ChannelStore.getChannel(id)?.name ?? "channel";
 
-                    queueSpeak(formatText(template, u, channel, displayName, nickname), userId);
+                    queueSpeak(formatText(template, u, channel, displayName, nickname, settings.store.latinOnly), userId);
 
                     if (isMe && (type === "join" || type === "move") && id) {
                         await refreshBaseline(id);
