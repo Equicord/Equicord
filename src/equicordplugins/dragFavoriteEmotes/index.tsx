@@ -19,7 +19,7 @@
 import "./style.css";
 
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { StartAt } from "@utils/types";
+import definePlugin from "@utils/types";
 import { findByPropsLazy, proxyLazyWebpack } from "@webpack";
 import { useDrag, useDrop, useLayoutEffect, useRef, UserSettingsActionCreators } from "@webpack/common";
 
@@ -41,36 +41,39 @@ type EmojiDescriptor = {
 
 export default definePlugin({
     name: "DragFavoriteEmotes",
-    authors: [EquicordDevs.busyboxkitty],
+    authors: [EquicordDevs.PWall],
     description: "Adds the ability to change the order of your favourite emotes",
-    startAt: StartAt.WebpackReady,
     patches: [
         {
-            find: "getDisambiguatedEmojiContext().isFavoriteEmojiWithoutFetchingLatest",
+            find: "#{intl::EMOJI_FAVORITE_TOOLTIP}",
             replacement: [
                 {
-                    match: /(\("li",\i\(\i\({},\i\),{key:\i,ref:\i)(}\))/,
-                    replace: "$1,style:{position:'relative'}$2",
-                },
-                {
-                    match: /(\(0,\i\.jsx\)\(\i,{ref:.*?inNitroLockedSection:\i}\))/,
-                    replace: "[$1,$self.wrapper(emoji)]",
-                },
-                {
-                    match: /(\[\i,\i\]=\i\.useState\(""\))/,
-                    replace: "$1,[collected,drag]=$self.drag(arguments[0]),emoji=arguments[0].descriptor",
-                },
-                {
-                    match: /(\(\i,{ref:)(\i),/,
-                    replace: "$1emoji.category==='FAVORITES'?drag:$2,collected:collected,",
-                },
-                {
                     match: /(data-animated.*?)(\(0,\i.jsx\)\(\i.\i)/,
-                    replace: "$1arguments[0].collected.isDragging?$self.dragItem():$2",
+                    replace: "$1arguments[0]?.collected?.isDragging?$self.dragItem():$2",
                 },
                 {
                     match: /\[(\i\.emojiItemSelected)\]/,
                     replace: "[arguments[0].collected.isDragging?'':$1]",
+                },
+                {
+                    match: /(\[\i,\i\]=\i\.useState\(""\))/,
+                    replace: "$1,[collected,drag]=$self.drag(arguments[0]),emoji=arguments[0]?.descriptor",
+                },
+                {
+                    match: /(\(\i,{ref:)(\i),/,
+                    replace: "$1arguments[0]?.descriptor?.emoji?.category==='FAVORITES'?drag:$2,collected:collected,",
+                },
+                {
+                    match: /(,\{key:\i,ref:\i)(?=\}\))/,
+                    replace: "$1,style:{position:'relative'}",
+                },
+                {
+                    match: /(delay:200,children:)(\i)/,
+                    replace: "$1[$2,$self.wrapper(emoji)]",
+                },
+                {
+                    match: /(delay:200,children:.{0,50}:)(\i)/,
+                    replace: "$1[$2,$self.wrapper(emoji)]",
                 },
             ],
         },
@@ -82,10 +85,10 @@ export default definePlugin({
                 collect: monitor => ({
                     isDragging: !!monitor.isDragging(),
                 }),
-                canDrag: () => (e.descriptor.category === "FAVORITES"),
-                item: { id: e.descriptor.emoji.uniqueName ?? e.descriptor.emoji.id }
+                canDrag: () => (e?.descriptor?.category === "FAVORITES"),
+                item: { id: e?.descriptor?.emoji?.uniqueName ?? e?.descriptor?.emoji?.id }
             }),
-            [e.descriptor],);
+            [e?.descriptor],);
     },
     drop({ emoji, category }: EmojiDescriptor) {
         return useDrop(() => ({
@@ -99,7 +102,7 @@ export default definePlugin({
             }),
             drop(item: { id: string; }) {
                 const source = item.id;
-                const target = emoji.uniqueName ?? emoji.id;
+                const target = emoji?.uniqueName ?? emoji?.id;
                 function update(this: { source: string; target: string; }, e: { emojis: string[]; }) {
                     if (this.source === this.target) {
                         return false;
@@ -127,7 +130,7 @@ export default definePlugin({
         const [collected, drop] = this.drop(emoji);
         const ref: React.RefObject<null | HTMLElement> = useRef(null);
         useLayoutEffect(() => {
-            if (emoji.category !== "FAVORITES") { return; }
+            if (emoji?.category !== "FAVORITES") { return; }
             const frame = requestAnimationFrame(() => {
                 if (!ref.current) {
                     return;
@@ -141,7 +144,7 @@ export default definePlugin({
             );
             return () => cancelAnimationFrame(frame);
         }, [collected, ref]);
-        if (emoji.category !== "FAVORITES") { return; }
+        if (emoji?.category !== "FAVORITES") { return; }
         return (
             <div className={`${dndCls.wrapper} vc-dragging-wrapper`} aria-hidden="true">
                 <div className={`${dndCls.target} ${collected.isOver ? "vc-dragging-indicator" : ""}`}
