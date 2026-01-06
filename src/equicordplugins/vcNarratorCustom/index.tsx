@@ -184,8 +184,6 @@ interface VoiceState {
     stream?: boolean;
 }
 
-
-
 // Two-queue system for TTS playback:
 // - mainQueue: Non-interruptable messages (user names, join/leave announcements)
 // - stateQueue: Interruptable messages (mute/deafen/stream state changes)
