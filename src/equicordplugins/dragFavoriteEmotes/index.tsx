@@ -57,7 +57,7 @@ export default definePlugin({
                 },
                 {
                     match: /(\[\i,\i\]=\i\.useState\(""\))/,
-                    replace: "$1,[collected,drag]=$self.drag(arguments[0]),emoji=arguments[0]?.descriptor",
+                    replace: "$1,[collected,drag]=$self.drag(arguments[0])",
                 },
                 {
                     match: /(\(\i,{ref:)(\i),/,
@@ -69,11 +69,11 @@ export default definePlugin({
                 },
                 {
                     match: /(delay:200,children:)(\i)/,
-                    replace: "$1[$2,$self.wrapper(emoji)]",
+                    replace: "$1[$2,$self.wrapper(arguments[0]?.descriptor?.emoji)]",
                 },
                 {
-                    match: /(delay:200,children:.{0,50}:)(\i)/,
-                    replace: "$1[$2,$self.wrapper(emoji)]",
+                    match: /(#{intl::EMOJI_FAVORITE_TOOLTIP}.{0,150}\}\):)(\i)/,
+                    replace: "$1[$2,$self.wrapper(arguments[0]?.descriptor?.emoji)]",
                 },
             ],
         },
