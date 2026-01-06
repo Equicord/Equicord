@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import customRPC from "@plugins/customRPC";
 import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { isAnyPluginDev } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
-import { Alerts, NavigationRouter, UserStore } from "@webpack/common";
+import { Alerts, ApplicationCommandIndexStore, NavigationRouter, UserStore } from "@webpack/common";
 
 import { PluginButtons } from "./pluginButtons";
 import { PluginCards } from "./pluginCards";
@@ -47,13 +48,24 @@ const settings = definePluginSettings({
         description: "Disable the default hang status when joining voice channels",
         restartNeeded: true,
         default: false,
+    },
+    refreshSlashCommands: {
+        type: OptionType.BOOLEAN,
+        description: "Refreshes Slash Commands to show newly added commands without restarting your client.",
+        default: false,
+    },
+    forceRoleIcon: {
+        type: OptionType.BOOLEAN,
+        description: "Forces role icons to display next to messages in compact mode",
+        restartNeeded: true,
+        default: false
     }
 });
 
 export default definePlugin({
     name: "EquicordHelper",
     description: "Used to provide support, fix discord caused crashes, and other misc features.",
-    authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keyages],
+    authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keyages, EquicordDevs.SerStars, EquicordDevs.mart],
     required: true,
     settings,
     patches: [
@@ -148,6 +160,15 @@ export default definePlugin({
                 },
             ]
         })),
+        // Force Role Icon
+        {
+            find: "Message Username",
+            predicate: () => settings.store.forceRoleIcon,
+            replacement: {
+                match: /(?<=\.badgesContainer.{0,150}\?2:)0(?=\})/,
+                replace: "1"
+            }
+        },
     ],
     renderMessageAccessory(props) {
         return (
@@ -179,5 +200,23 @@ export default definePlugin({
                 });
             }
         },
-    }
+    },
+    commands: [
+        {
+            name: "refresh-commands",
+            description: "Refresh Slash Commands",
+            inputType: ApplicationCommandInputType.BUILT_IN,
+            predicate: () => settings.store.refreshSlashCommands,
+            execute: async (opts, ctx) => {
+                try {
+                    ApplicationCommandIndexStore.indices = {};
+                    sendBotMessage(ctx.channel.id, { content: "Slash Commands refreshed successfully." });
+                }
+                catch (e) {
+                    console.error("[refreshSlashCommands] Failed to refresh commands:", e);
+                    sendBotMessage(ctx.channel.id, { content: "Failed to refresh commands. Check console for details." });
+                }
+            }
+        }
+    ]
 });

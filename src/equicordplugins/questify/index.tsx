@@ -7,6 +7,7 @@
 import "./styles.css";
 
 import { showNotification } from "@api/Notifications";
+import { plugins } from "@api/PluginManager";
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import { migratePluginToSettings } from "@api/Settings";
 import { ErrorBoundary, openPluginModal } from "@components/index";
@@ -87,7 +88,7 @@ export function QuestButton(): JSX.Element {
         if (todo === "open-quests") {
             NavigationRouter.transitionTo(questPath);
         } else if (todo === "plugin-settings") {
-            openPluginModal(Vencord.Plugins.plugins.Questify);
+            openPluginModal(plugins.Questify);
         } else if (todo === "context-menu") {
             ContextMenuApi.openContextMenu(event, () => (
                 <Menu.Menu
@@ -245,29 +246,24 @@ function shouldHideMembersListActivelyPlayingIcon(): boolean {
     return disableMembersListActivelyPlayingIcon || disableQuestsEverything;
 }
 
-function shouldDisableQuestTileOptions(quest: Quest, shouldBeIgnored: boolean): boolean {
-    const isIgnored = questIsIgnored(quest.id);
-
-    return !(
-        (shouldBeIgnored ? isIgnored : !isIgnored)
-    );
-}
-
 function QuestTileContextMenu(children: React.ReactNode[], props: { quest: any; }) {
+    const isIgnored = questIsIgnored(props.quest.id);
+
     children.unshift((
         <Menu.MenuGroup>
-            <Menu.MenuItem
-                id={q("ignore-quests")}
-                label="Mark as Ignored"
-                disabled={shouldDisableQuestTileOptions(props.quest, false)}
-                action={() => { addIgnoredQuest(props.quest.id); }}
-            />
-            <Menu.MenuItem
-                id={q("unignore-quests")}
-                label="Unmark as Ignored"
-                disabled={shouldDisableQuestTileOptions(props.quest, true)}
-                action={() => { removeIgnoredQuest(props.quest.id); }}
-            />
+            {!isIgnored ? (
+                <Menu.MenuItem
+                    id={q("ignore-quests")}
+                    label="Mark as Ignored"
+                    action={() => { addIgnoredQuest(props.quest.id); }}
+                />
+            ) : (
+                <Menu.MenuItem
+                    id={q("unignore-quests")}
+                    label="Unmark as Ignored"
+                    action={() => { removeIgnoredQuest(props.quest.id); }}
+                />
+            )}
             {activeQuestIntervals.has(props.quest.id) &&
                 <Menu.MenuItem
                     id={q("stop-auto-complete")}
@@ -1161,8 +1157,8 @@ export default definePlugin({
             find: "QUEST_HOME_V2):",
             replacement: [
                 {
-                    match: /(?<="family-center"\):null,)(\i)/,
-                    replace: "$self.shouldHideDirectMessagesTab()||$1"
+                    match: /(?<="family-center"\):null,)/,
+                    replace: "$self.shouldHideDirectMessagesTab()||"
                 }
             ]
         },
