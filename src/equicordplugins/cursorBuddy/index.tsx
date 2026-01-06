@@ -20,11 +20,11 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import oneko from "file://oneko.js";
 
 import fathorse from "./fathorse";
 
-const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/46b0684f29694eaf3252835003f4d9d0258556e5/oneko.gif";
+const ONEKO_SCRIPT = "https://raw.githubusercontent.com/adryd325/oneko.js/5281d057c4ea9bd4f6f997ee96ba30491aed16c0/oneko.js";
+const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/5281d057c4ea9bd4f6f997ee96ba30491aed16c0/oneko.gif";
 const FATASS_HORSE_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/08bc4042750d5f995c55327f7b6c6710158f5263/sheet.png";
 
 const settings = definePluginSettings({
@@ -109,14 +109,15 @@ function load() {
 
     switch (settings.store.buddy) {
         case "oneko": {
-            (0, eval)(
-                oneko
+            fetch(ONEKO_SCRIPT)
+                .then(x => x.text())
+                .then(s => s
                     .replace("(isReducedMotion)", "(false)")
                     .replace("persistPosition = true;", "persistPosition = false;")
                     .replace("./oneko.gif", ONEKO_IMAGE)
                     .replace("nekoSpeed = 10;", `nekoSpeed = ${settings.store.speed};`)
                     .replace(" > 100", ` > ${1000 / settings.store.fps}`)
-            );
+                );
             break;
         }
         case "fathorse": {
