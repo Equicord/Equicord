@@ -1,6 +1,7 @@
 // please keep in alphabetical order
 export * from "./AccessibilityStore";
 export * from "./ActiveJoinedThreadsStore";
+export * from "./ApplicationCommandIndexStore";
 export * from "./ApplicationStore";
 export * from "./AuthenticationStore";
 export * from "./CallStore";

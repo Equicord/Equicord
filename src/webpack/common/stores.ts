@@ -79,7 +79,7 @@ export let LocaleStore: t.LocaleStore;
 export let RTCConnectionStore: t.RTCConnectionStore;
 export let SoundboardStore: t.SoundboardStore;
 export let PopoutWindowStore: t.PopoutWindowStore;
-export let ApplicationCommandIndexStore: GenericStore;
+export let ApplicationCommandIndexStore: t.ApplicationCommandIndexStore;
 export let EditMessageStore: GenericStore;
 
 /**
