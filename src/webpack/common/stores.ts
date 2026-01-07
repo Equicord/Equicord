@@ -80,7 +80,7 @@ export let RTCConnectionStore: t.RTCConnectionStore;
 export let SoundboardStore: t.SoundboardStore;
 export let PopoutWindowStore: t.PopoutWindowStore;
 export let ApplicationCommandIndexStore: t.ApplicationCommandIndexStore;
-export let EditMessageStore: GenericStore;
+export let EditMessageStore: t.EditMessageStore;
 
 /**
  * @see jsdoc of {@link t.useStateFromStores}

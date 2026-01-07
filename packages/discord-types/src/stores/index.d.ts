@@ -8,6 +8,7 @@ export * from "./CallStore";
 export * from "./ChannelRTCStore";
 export * from "./ChannelStore";
 export * from "./DraftStore";
+export * from "./EditMessageStore";
 export * from "./EmojiStore";
 export * from "./FluxStore";
 export * from "./FriendsStore";
