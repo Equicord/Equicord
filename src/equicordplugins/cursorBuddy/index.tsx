@@ -46,6 +46,20 @@ const settings = definePluginSettings({
         isValid: (value: number) => value > 0 || "Framerate must be bigger than 0",
         onChange: load
     },
+    // Oneko Specific
+    furColor: {
+        description: "Fur hex color (replaces white)",
+        type: OptionType.STRING,
+        default: "#FFFFFF",
+        onChange: load,
+    },
+    outlineColor: {
+        description: "Outline hex color (replaces black)",
+        type: OptionType.STRING,
+        default: "#000000",
+        onChange: load,
+    },
+    // Fatass Horse Specific
     size: {
         description: "Size of the fatass horse",
         type: OptionType.NUMBER,
@@ -72,6 +86,14 @@ const settings = definePluginSettings({
         onChange: load
     },
 }, {
+    // Oneko Specific
+    furColor: {
+        disabled() { return this.store.buddy !== "oneko"; }
+    },
+    outlineColor: {
+        disabled() { return this.store.buddy !== "oneko"; }
+    },
+    // Fatass Horse Specific
     size: {
         disabled() { return this.store.buddy !== "fathorse"; },
     },
@@ -101,7 +123,9 @@ function load() {
                 speed: settings.store.speed,
                 fps: settings.store.fps,
                 image: ONEKO_IMAGE,
-                persistPosition: false
+                persistPosition: false,
+                furColor: settings.store.furColor,
+                outlineColor: settings.store.outlineColor
             });
             break;
         }

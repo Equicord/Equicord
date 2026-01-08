@@ -13,6 +13,8 @@ export default function oneko(options = {}) {
         fps = 24,
         image = "./oneko.gif",
         persistPosition = true,
+        furColor = "#FFFFFF",
+        outlineColor = "#000000",
     } = options;
 
     const isReducedMotion =
@@ -97,6 +99,65 @@ export default function oneko(options = {}) {
         ],
     };
 
+    function recolorImage(src, furColor, outlineColor) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = "anonymous"; // * Needed for CORS
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext("2d");
+
+                ctx.drawImage(img, 0, 0);
+
+                const imageData = ctx.getImageData(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+                const data = imageData.data;
+
+                const furRGB = hexToRgb(furColor);
+                const outlineRGB = hexToRgb(outlineColor);
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    const a = data[i + 3];
+
+                    if (r === 255 && g === 255 && b === 255) {
+                        data[i] = furRGB.r;
+                        data[i + 1] = furRGB.g;
+                        data[i + 2] = furRGB.b;
+                    } else if (r === 0 && g === 0 && b === 0) {
+                        data[i] = outlineRGB.r;
+                        data[i + 1] = outlineRGB.g;
+                        data[i + 2] = outlineRGB.b;
+                    }
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+                resolve(canvas.toDataURL());
+            };
+            img.onerror = reject;
+            img.src = src;
+        });
+    }
+
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result
+            ? {
+                  r: parseInt(result[1], 16),
+                  g: parseInt(result[2], 16),
+                  b: parseInt(result[3], 16),
+              }
+            : { r: 0, g: 0, b: 0 };
+    }
+
     function init() {
         const nekoFile = image; // Use passed-in image URL
 
@@ -126,7 +187,14 @@ export default function oneko(options = {}) {
         nekoEl.style.top = `${nekoPosY - 16}px`;
         nekoEl.style.zIndex = 2147483647;
 
-        nekoEl.style.backgroundImage = `url(${nekoFile})`;
+        recolorImage(nekoFile, furColor, outlineColor)
+            .then((recoloredImageUrl) => {
+                nekoEl.style.backgroundImage = `url(${recoloredImageUrl})`;
+            })
+            .catch((err) => {
+                console.error("Failed to recolor Oneko image:", err);
+                nekoEl.style.backgroundImage = `url(${nekoFile})`; // ! Error handling for tests
+            });
 
         document.body.appendChild(nekoEl);
 
