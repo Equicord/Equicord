@@ -48,13 +48,13 @@ const settings = definePluginSettings({
     },
     // Oneko Specific
     furColor: {
-        description: "Fur hex color (replaces white)",
+        description: "Fur hex color for Oneko",
         type: OptionType.STRING,
         default: "#FFFFFF",
         onChange: load,
     },
     outlineColor: {
-        description: "Outline hex color (replaces black)",
+        description: "Outline hex color for Oneko",
         type: OptionType.STRING,
         default: "#000000",
         onChange: load,
@@ -83,7 +83,7 @@ const settings = definePluginSettings({
         description: "If the horse should shake the window when it's walking",
         type: OptionType.BOOLEAN,
         default: false,
-        onChange: load
+        onChange: load,
     },
 }, {
     // Oneko Specific
