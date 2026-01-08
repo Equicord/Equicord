@@ -1236,7 +1236,7 @@ export const EquicordDevs = Object.freeze({
     FantasticLoki: {
         name: "The Fantastic Loki",
         id: 99972925800591360n
-    }
+    },
     PWall: {
         name: "PWall",
         id: 0n
