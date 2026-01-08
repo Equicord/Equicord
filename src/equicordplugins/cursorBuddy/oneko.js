@@ -4,18 +4,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-/* Sourced from https://raw.githubusercontent.com/adryd325/oneko.js/5281d057c4ea9bd4f6f997ee96ba30491aed16c0/oneko.js */
+/* eslint-disable */
+/* Sourced from https://raw.githubusercontent.com/adryd325/oneko.js/5281d057c4ea9bd4f6f997ee96ba30491aed16c0/oneko.js   */
 
-(function oneko() {
+export default function oneko(options = {}) {
+    const {
+        speed = 10,
+        fps = 24,
+        image = "./oneko.gif",
+        persistPosition = true,
+    } = options;
+
     const isReducedMotion =
-        window.matchMedia("(prefers-reduced-motion: reduce)") === true ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches === true;
+        window.matchMedia(`(prefers-reduced-motion: reduce)`) === true ||
+        window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
 
     if (isReducedMotion) return;
 
     const nekoEl = document.createElement("div");
-    let persistPosition = true;
-
     let nekoPosX = 32;
     let nekoPosY = 32;
 
@@ -27,7 +33,7 @@
     let idleAnimation = null;
     let idleAnimationFrame = 0;
 
-    const nekoSpeed = sp;
+    const nekoSpeed = speed;
     const spriteSets = {
         idle: [[-3, -3]],
         alert: [[-7, -3]],
@@ -92,23 +98,10 @@
     };
 
     function init() {
-        let nekoFile = "./oneko.gif";
-        const curScript = document.currentScript;
-        if (curScript && curScript.dataset.cat) {
-            nekoFile = curScript.dataset.cat;
-        }
-        if (curScript && curScript.dataset.persistPosition) {
-            if (curScript.dataset.persistPosition === "") {
-                persistPosition = true;
-            } else {
-                persistPosition = JSON.parse(
-                    curScript.dataset.persistPosition.toLowerCase()
-                );
-            }
-        }
+        const nekoFile = image; // Use passed-in image URL
 
         if (persistPosition) {
-            const storedNeko = JSON.parse(window.localStorage.getItem("oneko"));
+            let storedNeko = JSON.parse(window.localStorage.getItem("oneko"));
             if (storedNeko !== null) {
                 nekoPosX = storedNeko.nekoPosX;
                 nekoPosY = storedNeko.nekoPosY;
@@ -167,14 +160,9 @@
     let lastFrameTimestamp;
 
     function onAnimationFrame(timestamp) {
-        // Stops execution if the neko element is removed from DOM
-        if (!nekoEl.isConnected) {
-            return;
-        }
-        if (!lastFrameTimestamp) {
-            lastFrameTimestamp = timestamp;
-        }
-        if (timestamp - lastFrameTimestamp > 100) {
+        if (!nekoEl.isConnected) return;
+        if (!lastFrameTimestamp) lastFrameTimestamp = timestamp;
+        if (timestamp - lastFrameTimestamp > 1000 / fps) {
             lastFrameTimestamp = timestamp;
             frame();
         }
@@ -196,25 +184,18 @@
     function idle() {
         idleTime += 1;
 
-        // every ~ 20 seconds
         if (
             idleTime > 10 &&
-            Math.floor(Math.random() * 200) === 0 &&
+            Math.floor(Math.random() * 200) == 0 &&
             idleAnimation == null
         ) {
-            const avalibleIdleAnimations = ["sleeping", "scratchSelf"];
-            if (nekoPosX < 32) {
-                avalibleIdleAnimations.push("scratchWallW");
-            }
-            if (nekoPosY < 32) {
-                avalibleIdleAnimations.push("scratchWallN");
-            }
-            if (nekoPosX > window.innerWidth - 32) {
+            let avalibleIdleAnimations = ["sleeping", "scratchSelf"];
+            if (nekoPosX < 32) avalibleIdleAnimations.push("scratchWallW");
+            if (nekoPosY < 32) avalibleIdleAnimations.push("scratchWallN");
+            if (nekoPosX > window.innerWidth - 32)
                 avalibleIdleAnimations.push("scratchWallE");
-            }
-            if (nekoPosY > window.innerHeight - 32) {
+            if (nekoPosY > window.innerHeight - 32)
                 avalibleIdleAnimations.push("scratchWallS");
-            }
             idleAnimation =
                 avalibleIdleAnimations[
                     Math.floor(Math.random() * avalibleIdleAnimations.length)
@@ -265,7 +246,6 @@
 
         if (idleTime > 1) {
             setSprite("alert", 0);
-            // count down after being alerted before moving
             idleTime = Math.min(idleTime, 7);
             idleTime -= 1;
             return;
@@ -289,4 +269,4 @@
     }
 
     init();
-})();
+}

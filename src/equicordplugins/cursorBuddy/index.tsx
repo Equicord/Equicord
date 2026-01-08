@@ -10,8 +10,8 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 import fathorse from "./fathorse";
+import oneko from "./oneko";
 
-const ONEKO_SCRIPT = "https://raw.githubusercontent.com/adryd325/oneko.js/5281d057c4ea9bd4f6f997ee96ba30491aed16c0/oneko.js";
 const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/5281d057c4ea9bd4f6f997ee96ba30491aed16c0/oneko.gif";
 const FATASS_HORSE_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/08bc4042750d5f995c55327f7b6c6710158f5263/sheet.png";
 
@@ -97,16 +97,12 @@ function load() {
 
     switch (settings.store.buddy) {
         case "oneko": {
-            fetch(ONEKO_SCRIPT)
-                .then(x => x.text())
-                .then(s => s
-                    .replace("(isReducedMotion)", "(false)")
-                    .replace("persistPosition = true;", "persistPosition = false;")
-                    .replace("./oneko.gif", ONEKO_IMAGE)
-                    .replace("nekoSpeed = 10;", `nekoSpeed = ${settings.store.speed};`)
-                    .replace(" > 100", ` > ${1000 / settings.store.fps}`)
-                )
-                .then(s => Function(s)());
+            oneko({
+                speed: settings.store.speed,
+                fps: settings.store.fps,
+                image: ONEKO_IMAGE,
+                persistPosition: false
+            });
             break;
         }
         case "fathorse": {
