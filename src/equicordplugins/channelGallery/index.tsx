@@ -9,24 +9,19 @@ import "./style.css";
 import { ChannelToolbarButton } from "@api/HeaderBar";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import { EquicordDevs } from "@utils/constants";
 import { closeModal, ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { findByPropsLazy } from "@webpack";
 import { ChannelStore, PermissionsBits, PermissionStore, React, SelectedChannelStore, UserStore, useStateFromStores } from "@webpack/common";
 
-import { openFullscreenView } from "./components/FullscreenView";
+import { isFullscreenActive, openFullscreenView, resetFullscreenState } from "./components/FullscreenView";
 import { GalleryView } from "./components/GalleryView";
 import { SingleView } from "./components/SingleView";
+import { log } from "./utils/logging";
 import { extractImages, GalleryIcon, GalleryItem } from "./utils/media";
 import { fetchMessagesChunk } from "./utils/pagination";
-
-// Note: We don't use ChannelTypes anymore - we rely entirely on Channel class methods
-// which are more reliable and don't require webpack module resolution
-const jumper: any = findByPropsLazy("jumpToMessage");
 
 export const settings = definePluginSettings({
     includeGifs: {
@@ -38,6 +33,11 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: true,
         description: "Include embed images in the gallery (Some may not render)",
+    },
+    enableVideos: {
+        type: OptionType.BOOLEAN,
+        default: true,
+        description: "Enable videos in the gallery",
     },
     showCaptions: {
         type: OptionType.BOOLEAN,
@@ -70,6 +70,12 @@ type GalleryState = {
     mode: ViewMode;
     channelId: string | null;
     selectedStableId: string | null;
+    singleViewItems?: GalleryItem[]; // Filtered items for SingleView navigation
+    // Preserve filter state when returning from fullscreen
+    mediaFilter?: string;
+    usernameFilter?: string;
+    currentPage?: number;
+    scrollPosition?: number;
 };
 
 type GalleryCache = {
@@ -84,10 +90,27 @@ const cacheByChannel = new Map<string, GalleryCache>();
 
 function getOrCreateCache(channelId: string): GalleryCache {
     if (!channelId) {
-        return { items: [], stableIds: new Set(), failedIds: new Set(), oldestMessageId: null, hasMore: true };
+        log.warn("data", "getOrCreateCache called without channelId");
+        return {
+            items: [],
+            stableIds: new Set(),
+            failedIds: new Set(),
+            oldestMessageId: null,
+            hasMore: true
+        };
     }
+
     const existing = cacheByChannel.get(channelId);
-    if (existing) return existing;
+    if (existing) {
+        log.debug("data", "Using existing cache", {
+            channelId,
+            items: existing.items.length
+        });
+        return existing;
+    }
+
+    log.info("data", "Creating new gallery cache", { channelId });
+
     const created: GalleryCache = {
         items: [],
         stableIds: new Set(),
@@ -95,6 +118,7 @@ function getOrCreateCache(channelId: string): GalleryCache {
         oldestMessageId: null,
         hasMore: true
     };
+
     cacheByChannel.set(channelId, created);
     return created;
 }
@@ -123,12 +147,98 @@ function canUseGallery(channel: { guild_id?: string; isDM?: () => boolean; isGro
 let globalState: GalleryState = { mode: "closed", channelId: null, selectedStableId: null };
 let modalKey: string | null = null;
 const stateListeners = new Set<() => void>();
-let isOpeningFullscreen = false;
 let pendingFullscreen: { items: GalleryItem[]; selectedStableId: string; channelId: string; } | null = null;
 let isProcessingCloseCallback = false;
+let isTransitioning = false; // Guard against fast clicking
+
+// Reusable onCloseCallback that handles pendingFullscreen transitions
+function createGalleryModalCloseCallback() {
+    return () => {
+        log.debug("lifecycle", "Gallery modal close callback", { pendingFullscreen: !!pendingFullscreen });
+
+        if (isProcessingCloseCallback) {
+            log.warn("lifecycle", "onCloseCallback: Already processing, ignoring");
+            return;
+        }
+        isProcessingCloseCallback = true;
+        modalKey = null;
+
+        // Capture pendingFullscreen immediately to prevent race conditions
+        const fullscreenData = pendingFullscreen;
+        pendingFullscreen = null;
+
+        if (fullscreenData) {
+            log.info("lifecycle", "Transitioning to fullscreen view", fullscreenData);
+
+            const { items, selectedStableId, channelId: fsChannelId } = fullscreenData;
+
+            // Reset fullscreen state before opening to ensure clean state
+            resetFullscreenState();
+            isTransitioning = false; // Clear transition flag before opening
+
+            // Store current filter state before opening fullscreen
+            const currentState = globalState;
+
+            // Use setTimeout to ensure modal is fully closed before opening fullscreen
+            // This prevents race conditions with Discord's modal system
+            setTimeout(() => {
+                openFullscreenView(
+                    items,
+                    selectedStableId,
+                    () => {
+                        log.debug("lifecycle", "Returning from fullscreen to gallery view");
+
+                        // Ensure fullscreen state is fully reset before returning to gallery
+                        resetFullscreenState();
+                        // Also reset transition flag to ensure new fullscreen can open
+                        isTransitioning = false;
+
+                        // Return to gallery mode, preserving filter state
+                        setState({
+                            mode: "gallery",
+                            channelId: fsChannelId,
+                            selectedStableId: null,
+                            mediaFilter: currentState.mediaFilter,
+                            usernameFilter: currentState.usernameFilter,
+                            currentPage: currentState.currentPage,
+                            scrollPosition: currentState.scrollPosition
+                        });
+
+                        // Open modal immediately for instant transition with the same callback handler
+                        modalKey = openModal(
+                            ErrorBoundary.wrap(modalProps => (
+                                <GalleryModal
+                                    {...modalProps}
+                                    channelId={fsChannelId}
+                                    settings={settings.store}
+                                />
+                            ), { noop: true }),
+                            {
+                                onCloseCallback: createGalleryModalCloseCallback()
+                            }
+                        );
+                    }
+                );
+            }, 0);
+        } else {
+            log.info("lifecycle", "Gallery closed normally");
+            isTransitioning = false;
+            setState({ mode: "closed", channelId: null, selectedStableId: null });
+        }
+
+        isProcessingCloseCallback = false;
+    };
+}
 
 function setState(updates: Partial<GalleryState>): void {
+    const prev = globalState;
     globalState = { ...globalState, ...updates };
+
+    log.debug("lifecycle", "Global gallery state updated", {
+        prev,
+        next: globalState
+    });
+
     stateListeners.forEach(listener => listener());
 }
 
@@ -187,6 +297,13 @@ function GalleryModal(props: ModalProps & { channelId: string; settings: typeof 
         if (loadingRef.current) return;
         if (!hasMore) return;
 
+        log.perfStart("load-chunks");
+        log.debug("data", "Loading message chunks", {
+            channelId,
+            chunks,
+            chunkSize: pluginSettings.chunkSize
+        });
+
         loadingRef.current = true;
         setLoading(true);
         setError(null);
@@ -237,6 +354,11 @@ function GalleryModal(props: ModalProps & { channelId: string; settings: typeof 
                 loadedAny = true;
             }
 
+            log.debug("data", "Chunk load complete", {
+                addedItems: cache.items.length,
+                hasMore: localHasMore
+            });
+
             if (loadedAny || !localHasMore) {
                 cache.hasMore = localHasMore;
                 // Filter out failed items when updating
@@ -257,6 +379,7 @@ function GalleryModal(props: ModalProps & { channelId: string; settings: typeof 
         } finally {
             loadingRef.current = false;
             setLoading(false);
+            log.perfEnd("load-chunks");
         }
     }, [channelId, hasMore, pluginSettings.chunkSize, pluginSettings.includeEmbeds, pluginSettings.includeGifs, cache]);
 
@@ -266,79 +389,95 @@ function GalleryModal(props: ModalProps & { channelId: string; settings: typeof 
         void loadNextChunks(Math.max(1, Math.floor(pluginSettings.preloadChunks)));
     }, [channelId, items.length, pluginSettings.preloadChunks, loadNextChunks]);
 
-    const handleSelect = React.useCallback((stableId: string) => {
-        setState({ mode: "single", channelId, selectedStableId: stableId });
-    }, [channelId]);
-
-    const handleCloseSingle = React.useCallback(() => {
-        setState({ mode: "gallery", channelId, selectedStableId: null });
-    }, [channelId]);
-
-    const handleFullscreen = React.useCallback(() => {
-        if (!localState.selectedStableId) return;
-        if (items.length === 0) return;
-        if (isOpeningFullscreen) return;
-        if (localState.mode !== "single") return;
-
-        isOpeningFullscreen = true;
-        const currentStableId = localState.selectedStableId;
-        const currentChannelId = channelId;
-        const allItems = cache.items.length > items.length ? cache.items : items;
-
-        if (!allItems || allItems.length === 0) {
-            isOpeningFullscreen = false;
+    const handleSelect = React.useCallback((stableId: string, isVideo: boolean, filteredItems: GalleryItem[]) => {
+        // Guard against rapid clicking
+        if (isTransitioning || isFullscreenActive()) {
+            log.debug("lifecycle", "handleSelect blocked", { isTransitioning, isFullscreenActive: isFullscreenActive() });
             return;
         }
 
-        pendingFullscreen = {
-            items: allItems,
-            selectedStableId: currentStableId,
-            channelId: currentChannelId
-        };
-        modalProps.onClose();
-    }, [localState.selectedStableId, localState.mode, items, channelId, cache, modalProps]);
+        // Store current state before transitioning to preserve filter/page
+        const currentState = localState;
 
-    const handleOpenMessage = React.useCallback(() => {
-        if (!localState.selectedStableId) return;
-        const item = items.find(it => it && it.stableId === localState.selectedStableId);
-        if (!item || !item.messageId) return;
-
-        try {
-            jumper.jumpToMessage({
+        if (isVideo) {
+            // Videos open in SingleView - pass only videos from filtered items
+            isTransitioning = true;
+            // Filter to only videos so navigation stays within videos
+            const videoItems = filteredItems.filter(it => it.isVideo);
+            // Preserve filter state and page when opening single view
+            setState({
+                mode: "single",
                 channelId,
-                messageId: item.messageId,
-                flash: true,
-                jumpType: "INSTANT"
+                selectedStableId: stableId,
+                singleViewItems: videoItems,
+                mediaFilter: currentState.mediaFilter,
+                usernameFilter: currentState.usernameFilter,
+                currentPage: currentState.currentPage,
+                scrollPosition: currentState.scrollPosition
             });
-        } finally {
+            // Reset transition flag immediately after state update
+            isTransitioning = false;
+        } else {
+            // Images and GIFs open directly in fullscreen
+            const item = filteredItems.find(it => it && it.stableId === stableId);
+            if (!item) {
+                log.warn("lifecycle", "handleSelect: item not found", { stableId });
+                isTransitioning = false;
+                return;
+            }
+
+            // Always reset before opening to ensure clean state (defensive)
+            resetFullscreenState();
+            isTransitioning = true;
+
+            // Filter out videos from fullscreen view - use the already filtered items
+            // This ensures the gallery filter (Images, Animated, etc.) is respected
+            const nonVideoItems = filteredItems.filter(it => !it.isVideo);
+            if (nonVideoItems.length === 0) {
+                log.warn("lifecycle", "handleSelect: no non-video items", { filteredItems: filteredItems.length });
+                isTransitioning = false;
+                return;
+            }
+
+            // Preserve filter state and page when opening fullscreen
+            setState({
+                mediaFilter: currentState.mediaFilter,
+                usernameFilter: currentState.usernameFilter,
+                currentPage: currentState.currentPage,
+                scrollPosition: currentState.scrollPosition
+            });
+
+            // Set pending fullscreen BEFORE closing modal to prevent race conditions
+            pendingFullscreen = {
+                items: nonVideoItems,
+                selectedStableId: stableId,
+                channelId: channelId
+            };
+
+            log.info("lifecycle", "handleSelect: Setting pendingFullscreen and closing modal", {
+                items: nonVideoItems.length,
+                selectedStableId: stableId,
+                channelId
+            });
+
+            // Close modal - this will trigger onCloseCallback which will open fullscreen
             modalProps.onClose();
         }
-    }, [localState.selectedStableId, items, channelId, modalProps]);
+    }, [channelId, modalProps, localState]);
 
-    const downloadRef = React.useRef<HTMLAnchorElement | null>(null);
-
-    const handleDownload = React.useCallback(async () => {
-        if (!localState.selectedStableId) return;
-        const item = items.find(it => it && it.stableId === localState.selectedStableId);
-        if (!item || !item.url || !downloadRef.current) return;
-
-        try {
-            const response = await fetch(item.url);
-            if (!response.ok) throw new Error("Failed to fetch image");
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            downloadRef.current.href = url;
-            downloadRef.current.download = item.filename || "image";
-            downloadRef.current.click();
-            window.URL.revokeObjectURL(url);
-        } catch {
-            downloadRef.current.href = item.url;
-            downloadRef.current.download = item.filename || "image";
-            downloadRef.current.target = "_blank";
-            downloadRef.current.click();
-        }
-    }, [localState.selectedStableId, items]);
+    const handleCloseSingle = React.useCallback(() => {
+        // Preserve filter state and page when returning from single view
+        setState({
+            mode: "gallery",
+            channelId,
+            selectedStableId: null,
+            singleViewItems: undefined,
+            mediaFilter: localState.mediaFilter,
+            usernameFilter: localState.usernameFilter,
+            currentPage: localState.currentPage,
+            scrollPosition: localState.scrollPosition
+        });
+    }, [channelId, localState.mediaFilter, localState.usernameFilter, localState.currentPage, localState.scrollPosition]);
 
     const handleClose = React.useCallback((e?: React.MouseEvent | KeyboardEvent) => {
         if (localState.mode === "single" && localState.channelId === channelId) {
@@ -348,8 +487,17 @@ function GalleryModal(props: ModalProps & { channelId: string; settings: typeof 
             return;
         }
 
-        abortRef.current?.abort();
-        setState({ mode: "closed", channelId: null, selectedStableId: null });
+        // If we have a pending fullscreen, don't clear it - let onCloseCallback handle it
+        // Only clear if this is a manual close (not a transition to fullscreen)
+        if (!pendingFullscreen) {
+            log.debug("lifecycle", "handleClose: Manual close, clearing state");
+            // Always reset fullscreen state when gallery closes to prevent stale callbacks
+            resetFullscreenState();
+            abortRef.current?.abort();
+            setState({ mode: "closed", channelId: null, selectedStableId: null });
+        } else {
+            log.debug("lifecycle", "handleClose: Pending fullscreen exists, skipping state clear");
+        }
         modalProps.onClose();
     }, [localState.mode, localState.channelId, channelId, modalProps]);
 
@@ -371,40 +519,20 @@ function GalleryModal(props: ModalProps & { channelId: string; settings: typeof 
 
     return (
         <ModalRoot {...modalProps} size={ModalSize.DYNAMIC} aria-label="Gallery" className="vc-gallery-modal-root">
-            <a ref={downloadRef} style={{ display: "none" }} />
             <ModalHeader className="vc-gallery-modal-header">
                 <Heading tag="h3" className="vc-gallery-modal-title">
                     {title}
                 </Heading>
-                {isSingleView && (
-                    <>
-                        <Button onClick={handleOpenMessage} variant="secondary" size="small" className="vc-gallery-button">
-                            Open message
-                        </Button>
-                        <button onClick={handleDownload} className="vc-gallery-icon-button" aria-label="Download image">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="vc-gallery-icon">
-                                <path d="M12 2a1 1 0 0 1 1 1v10.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V3a1 1 0 0 1 1-1ZM3 20a1 1 0 1 0 0 2h18a1 1 0 1 0 0-2H3Z" fill="currentColor" />
-                            </svg>
-                        </button>
-                        <button onClick={handleFullscreen} className="vc-gallery-icon-button" aria-label="View fullscreen">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="vc-gallery-icon">
-                                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" fill="currentColor" />
-                            </svg>
-                        </button>
-                    </>
-                )}
                 <ModalCloseButton onClick={handleClose} />
             </ModalHeader>
             <ModalContent className="vc-channel-gallery-modal">
                 {isSingleView ? (
                     <SingleView
-                        items={validItems}
+                        items={localState.singleViewItems ?? validItems.filter(it => it.isVideo)}
                         selectedStableId={localState.selectedStableId!}
-                        channelId={channelId}
                         cache={cache}
                         onClose={handleCloseSingle}
-                        onChange={handleSelect}
-                        onOpenMessage={handleClose}
+                        onChange={stableId => setState({ mode: "single", channelId, selectedStableId: stableId, singleViewItems: localState.singleViewItems })}
                         onMarkFailed={markAsFailed}
                     />
                 ) : localState.mode === "gallery" ? (
@@ -415,10 +543,26 @@ function GalleryModal(props: ModalProps & { channelId: string; settings: typeof 
                         hasMore={hasMore}
                         error={error}
                         cache={cache}
+                        enableVideos={pluginSettings.enableVideos}
+                        userStore={UserStore}
                         onRetry={() => loadNextChunks(1)}
                         onLoadMore={() => loadNextChunks(1)}
                         onSelect={handleSelect}
                         onMarkFailed={markAsFailed}
+                        // Pass preserved filter state
+                        initialMediaFilter={localState.mediaFilter}
+                        initialUsernameFilter={localState.usernameFilter}
+                        initialCurrentPage={localState.currentPage}
+                        initialScrollPosition={localState.scrollPosition}
+                        onStateChange={state => {
+                            // Update global state with filter changes
+                            setState({
+                                mediaFilter: state.mediaFilter,
+                                usernameFilter: state.usernameFilter,
+                                currentPage: state.currentPage,
+                                scrollPosition: state.scrollPosition
+                            });
+                        }}
                     />
                 ) : null}
             </ModalContent>
@@ -427,16 +571,25 @@ function GalleryModal(props: ModalProps & { channelId: string; settings: typeof 
 }
 
 function toggleGallery(channelId: string): void {
-    if (!channelId) return;
+    if (!channelId) {
+        log.warn("lifecycle", "toggleGallery called with no channelId");
+        return;
+    }
 
     if (modalKey) {
+        log.debug("lifecycle", "Toggling gallery closed", { channelId });
+        // Always reset fullscreen state when gallery closes to prevent stale callbacks
+        resetFullscreenState();
         closeModal(modalKey);
         modalKey = null;
         setState({ mode: "closed", channelId: null, selectedStableId: null });
         return;
     }
 
+    log.info("lifecycle", "Opening gallery modal", { channelId });
+
     setState({ mode: "gallery", channelId, selectedStableId: null });
+
     modalKey = openModal(
         ErrorBoundary.wrap(modalProps => (
             <GalleryModal
@@ -446,46 +599,7 @@ function toggleGallery(channelId: string): void {
             />
         ), { noop: true }),
         {
-            onCloseCallback: () => {
-                if (isProcessingCloseCallback) return;
-
-                isProcessingCloseCallback = true;
-                modalKey = null;
-
-                if (pendingFullscreen) {
-                    const { items, selectedStableId, channelId: fsChannelId } = pendingFullscreen;
-                    pendingFullscreen = null;
-                    isOpeningFullscreen = false;
-
-                    openFullscreenView(
-                        items,
-                        selectedStableId,
-                        () => {
-                            setState({ mode: "single", channelId: fsChannelId, selectedStableId });
-                            setTimeout(() => {
-                                modalKey = openModal(
-                                    ErrorBoundary.wrap(modalProps => (
-                                        <GalleryModal
-                                            {...modalProps}
-                                            channelId={fsChannelId}
-                                            settings={settings.store}
-                                        />
-                                    ), { noop: true }),
-                                    {
-                                        onCloseCallback: () => {
-                                            modalKey = null;
-                                            setState({ mode: "closed", channelId: null, selectedStableId: null });
-                                        }
-                                    }
-                                );
-                            }, 50);
-                        }
-                    );
-                } else {
-                    setState({ mode: "closed", channelId: null, selectedStableId: null });
-                }
-                isProcessingCloseCallback = false;
-            }
+            onCloseCallback: createGalleryModalCloseCallback()
         }
     );
 }
@@ -525,7 +639,7 @@ function GalleryToolbarButton() {
 export default definePlugin({
     name: "ChannelGallery",
     description: "Adds a Gallery view for images in the current channel",
-    authors: [EquicordDevs.benjii],
+    authors: [EquicordDevs.benjii, EquicordDevs.FantasticLoki],
     dependencies: ["HeaderBarAPI"],
 
     settings,
@@ -540,6 +654,10 @@ export default definePlugin({
             predicate: () => !isPluginEnabled("ImageZoom")
         },
     ],
+
+    start() {
+        log.info("lifecycle", "ChannelGallery plugin started");
+    },
 
     handleMediaViewerClick(e: React.MouseEvent) {
         if (!e || e.button !== 0) return;
@@ -568,15 +686,25 @@ export default definePlugin({
     },
 
     stop() {
+        log.info("lifecycle", "ChannelGallery plugin stopping");
+
         cacheByChannel.clear();
+
         if (modalKey) {
+            log.debug("lifecycle", "Closing active gallery modal");
             closeModal(modalKey);
             modalKey = null;
         }
+
         setState({ mode: "closed", channelId: null, selectedStableId: null });
         stateListeners.clear();
-        isOpeningFullscreen = false;
+
+        // Reset all state flags
+        resetFullscreenState();
         pendingFullscreen = null;
         isProcessingCloseCallback = false;
+        isTransitioning = false;
+
+        log.info("lifecycle", "ChannelGallery plugin stopped");
     }
 });

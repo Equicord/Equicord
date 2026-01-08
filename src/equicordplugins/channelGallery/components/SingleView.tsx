@@ -4,40 +4,49 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { findByPropsLazy } from "@webpack";
-import { React, useCallback, useEffect, useMemo, useState } from "@webpack/common";
+import { ChannelStore, NavigationRouter, React, useCallback, useEffect, useMemo, useState } from "@webpack/common";
 
+import { log } from "../utils/logging";
 import type { GalleryItem } from "../utils/media";
 
-const jumper: any = findByPropsLazy("jumpToMessage");
-
-function preload(url?: string): void {
+function preloadImage(url?: string): void {
     if (url) new Image().src = url;
+}
+
+function preloadVideo(url?: string): void {
+    if (!url) return;
+    // Create a video element to start buffering
+    const video = document.createElement("video");
+    video.preload = "metadata";
+    video.src = url;
 }
 
 export function SingleView(props: {
     items: GalleryItem[];
     selectedStableId: string;
-    channelId: string;
-    cache: { failedIds: Set<string> };
+    cache: { failedIds: Set<string>; };
     onClose(): void;
     onChange(stableId: string): void;
-    onOpenMessage(): void;
     onMarkFailed(stableId: string): void;
 }) {
-    const { items, selectedStableId, channelId, cache, onClose, onChange, onOpenMessage, onMarkFailed } = props;
+    const { items, selectedStableId, cache, onClose, onChange, onMarkFailed } = props;
     const [videoFailed, setVideoFailed] = useState(false);
     const [imageFailed, setImageFailed] = useState(false);
 
     const selectedIndex = useMemo(() => {
         if (!items || items.length === 0 || !selectedStableId) return -1;
-        return items.findIndex(item => item && item.stableId === selectedStableId);
+        const idx = items.findIndex(item => item && item.stableId === selectedStableId);
+        log.debug("render", "SingleView selected index", {
+            selectedIndex: idx,
+            totalItems: items.length,
+            selectedStableId
+        });
+        return idx;
     }, [items, selectedStableId]);
 
     // Auto-advance to next valid image if current one fails or is invalid
     useEffect(() => {
         if (selectedIndex < 0 || selectedIndex >= items.length) {
-            // Find next valid item
             const nextValid = items.find(item => item && item.stableId && !cache.failedIds.has(item.stableId));
             if (nextValid && nextValid.stableId !== selectedStableId) {
                 onChange(nextValid.stableId);
@@ -49,12 +58,10 @@ export function SingleView(props: {
 
         const item = items[selectedIndex];
         if (!item || !item.url || cache.failedIds.has(item.stableId)) {
-            // Current item is invalid, find next valid
             const nextValid = items.find((it, idx) => idx > selectedIndex && it && it.stableId && !cache.failedIds.has(it.stableId));
             if (nextValid && nextValid.stableId !== selectedStableId) {
                 onChange(nextValid.stableId);
             } else {
-                // Try previous
                 const prevValid = items.slice(0, selectedIndex).reverse().find(it => it && it.stableId && !cache.failedIds.has(it.stableId));
                 if (prevValid && prevValid.stableId !== selectedStableId) {
                     onChange(prevValid.stableId);
@@ -88,91 +95,97 @@ export function SingleView(props: {
     const prevStableId = prevItem?.stableId ?? null;
     const nextStableId = nextItem?.stableId ?? null;
 
-    const handleJump = useCallback(() => {
-        if (!item || !item.messageId) return;
-        try {
-            jumper.jumpToMessage({
-                channelId,
-                messageId: item.messageId,
-                flash: true,
-                jumpType: "INSTANT"
-            });
-        } finally {
-            onOpenMessage();
-        }
-    }, [item, channelId, onOpenMessage]);
-
     // Keyboard navigation
     useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => {
+            log.debug("render", "SingleView key pressed", { key: e.key });
             if (e.key === "Escape") {
                 e.preventDefault();
                 onClose();
+            } else if (e.key === "Enter" && !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
+                // Jump to message in chat
+                if (item && item.messageId && item.channelId) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Get guild ID from channel
+                    const channel = ChannelStore.getChannel(item.channelId);
+                    const guildId = channel?.guild_id ?? "@me";
+
+                    // Jump to message
+                    const url = `/channels/${guildId}/${item.channelId}/${item.messageId}`;
+                    NavigationRouter.transitionTo(url);
+
+                    // Close the single view
+                    onClose();
+                }
             } else if (e.key === "ArrowLeft" && hasPrev && prevStableId) {
                 e.preventDefault();
                 onChange(prevStableId);
             } else if (e.key === "ArrowRight" && hasNext && nextStableId) {
                 e.preventDefault();
                 onChange(nextStableId);
-            } else if (e.key === "Enter") {
-                e.preventDefault();
-                handleJump();
             }
         };
 
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [hasPrev, hasNext, prevStableId, nextStableId, onClose, onChange, handleJump]);
+    }, [hasPrev, hasNext, prevStableId, nextStableId, onClose, onChange, item]);
 
+    // Reset failed states when item changes
     useEffect(() => {
-        if (!items || items.length === 0) return;
         setVideoFailed(false);
         setImageFailed(false);
-        
-        // Find next valid items for preloading
-        if (hasPrev) {
-            for (let i = selectedIndex - 1; i >= 0; i--) {
-                const prevItem = items[i];
-                if (prevItem && prevItem.url && !cache.failedIds.has(prevItem.stableId)) {
-                    preload(prevItem.url);
-                    break;
-                }
-            }
-        }
-        if (hasNext) {
-            for (let i = selectedIndex + 1; i < items.length; i++) {
-                const nextItem = items[i];
-                if (nextItem && nextItem.url && !cache.failedIds.has(nextItem.stableId)) {
-                    preload(nextItem.url);
-                    break;
-                }
-            }
-        }
-    }, [items, selectedIndex, hasPrev, hasNext, cache.failedIds]);
+    }, [selectedStableId]);
 
-    const handlePrev = (e: React.MouseEvent) => {
+    // Preload adjacent items
+    useEffect(() => {
+        if (!items || items.length === 0) return;
+
+        // Preload previous item
+        if (prevItem) {
+            const url = prevItem.proxyUrl || prevItem.url;
+            if (prevItem.isVideo) {
+                preloadVideo(url);
+            } else {
+                preloadImage(url);
+            }
+        }
+
+        // Preload next item
+        if (nextItem) {
+            const url = nextItem.proxyUrl || nextItem.url;
+            if (nextItem.isVideo) {
+                preloadVideo(url);
+            } else {
+                preloadImage(url);
+            }
+        }
+    }, [prevItem, nextItem]);
+
+    const handlePrev = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         if (hasPrev && prevStableId) {
             onChange(prevStableId);
         }
-    };
+    }, [hasPrev, prevStableId, onChange]);
 
-    const handleNext = (e: React.MouseEvent) => {
+    const handleNext = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         if (hasNext && nextStableId) {
             onChange(nextStableId);
         }
-    };
+    }, [hasNext, nextStableId, onChange]);
 
     const { isVideo, isAnimated, isEmbed, embedUrl } = item;
 
     return (
-        <div className="vc-gallery-lightbox">
+        <div className="vc-gallery-lightbox vc-gallery-lightbox-large">
             <div className="vc-gallery-lightbox-content">
                 {isEmbed && embedUrl ? (
-                    <div className="vc-gallery-embed-container">
+                    <div className="vc-gallery-embed-container vc-gallery-embed-large">
                         {embedUrl.includes("youtube.com") || embedUrl.includes("youtu.be") ? (
                             <iframe
                                 src={embedUrl.replace("youtu.be/", "youtube.com/embed/").replace("watch?v=", "embed/")}
@@ -200,15 +213,16 @@ export function SingleView(props: {
                     </div>
                 ) : isVideo && !videoFailed ? (
                     <video
+                        key={item.stableId}
                         src={item.proxyUrl || item.url}
-                        className="vc-gallery-lightbox-image"
+                        className="vc-gallery-lightbox-video"
                         controls
                         autoPlay
                         loop={isAnimated}
+                        preload="auto"
                         onError={() => {
                             setVideoFailed(true);
                             onMarkFailed(item.stableId);
-                            // Auto-advance to next valid image
                             if (nextStableId) {
                                 setTimeout(() => onChange(nextStableId), 100);
                             } else if (prevStableId) {
@@ -220,13 +234,13 @@ export function SingleView(props: {
                     />
                 ) : (
                     <img
+                        key={item.stableId}
                         src={item.proxyUrl || item.url}
                         alt={item.filename ?? "Image"}
                         className="vc-gallery-lightbox-image"
                         onError={() => {
                             setImageFailed(true);
                             onMarkFailed(item.stableId);
-                            // Auto-advance to next valid image
                             if (nextStableId) {
                                 setTimeout(() => onChange(nextStableId), 100);
                             } else if (prevStableId) {

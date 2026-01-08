@@ -6,8 +6,6 @@
 
 import { Constants, RestAPI } from "@webpack/common";
 
-const FETCH_TIMEOUT_MS = 10_000;
-
 export async function fetchMessagesChunk(args: {
     channelId: string;
     before: string | null;

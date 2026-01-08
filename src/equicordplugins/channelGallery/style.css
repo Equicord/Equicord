@@ -1,26 +1,31 @@
-/* Gallery scroll container */
+/* Gallery scroll container - Discord native thin scrollbar style */
 .vc-channel-gallery-scroll {
     height: 100%;
     overflow: auto;
     padding: 14px;
     box-sizing: border-box;
-    scrollbar-color: var(--interactive-normal) transparent;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thin-thumb) var(--scrollbar-thin-track);
     flex: 1;
 }
 
 .vc-channel-gallery-scroll::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
 }
 
 .vc-channel-gallery-scroll::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--scrollbar-thin-track);
+    border-radius: 4px;
 }
 
 .vc-channel-gallery-scroll::-webkit-scrollbar-thumb {
-    background-color: color-mix(in oklab, var(--interactive-normal) 55%, transparent);
-    border-radius: 999px;
-    border: 2px solid transparent;
-    background-clip: content-box;
+    background-color: var(--scrollbar-thin-thumb);
+    border-radius: 4px;
+    min-height: 40px;
+}
+
+.vc-channel-gallery-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thin-thumb);
 }
 
 .vc-channel-gallery-scroll::-webkit-scrollbar-corner {
@@ -29,8 +34,8 @@
 
 /* Modal styles */
 .vc-gallery-modal-root {
-    min-width: 1200px !important;
-    min-height: 800px !important;
+    min-width: 50vw !important;
+    min-height: 25vh !important;
     max-width: 90vw !important;
     max-height: 90vh !important;
 }
@@ -175,6 +180,11 @@
     background: var(--background-primary);
 }
 
+/* Large lightbox for SingleView video player */
+.vc-gallery-lightbox-large {
+    min-height: 60vh;
+}
+
 .vc-gallery-lightbox-content {
     position: absolute;
     inset: 0;
@@ -194,6 +204,20 @@
     border-radius: 12px;
     background: var(--background-secondary);
     pointer-events: none;
+    z-index: 0;
+}
+
+/* Large video player for SingleView */
+.vc-gallery-lightbox-video {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    min-width: min(80vw, 800px);
+    min-height: min(60vh, 450px);
+    object-fit: contain;
+    border-radius: 12px;
+    background: var(--background-secondary);
     z-index: 0;
 }
 
@@ -267,12 +291,31 @@
     overflow: hidden;
 }
 
-/* Tabbar styles */
-.vc-gallery-tabbar {
+/* Filter row - responsive layout */
+.vc-gallery-filter-row {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    padding: 12px 16px;
     flex-shrink: 0;
-    margin: 0;
-    padding: 0 16px;
-    justify-content: center;
+    border-bottom: 1px solid var(--background-modifier-accent);
+}
+
+.vc-gallery-filter-item {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Stack filters vertically on narrow widths */
+@media (width <= 500px) {
+    .vc-gallery-filter-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .vc-gallery-filter-item {
+        width: 100%;
+    }
 }
 
 /* Pagination styles */
@@ -315,7 +358,7 @@
 .vc-gallery-page-info {
     padding: 0 12px;
     font-size: 14px;
-    color: var(--text-normal);
+    color: white;
     font-weight: 500;
 }
 
@@ -326,6 +369,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Large embed for SingleView */
+.vc-gallery-embed-large {
+    min-width: min(80vw, 800px);
+    min-height: min(60vh, 450px);
 }
 
 .vc-gallery-embed-iframe {
@@ -366,3 +415,85 @@
     background: var(--brand-600);
 }
 
+/* Thumbnail placeholder/loading states */
+.vc-gallery-thumbnail-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    background: var(--background-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.vc-gallery-thumbnail-placeholder::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--background-modifier-hover),
+        transparent
+    );
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.vc-gallery-thumbnail-placeholder-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--text-muted);
+    opacity: 0.5;
+    z-index: 1;
+}
+
+/* Enhanced modal responsive dimensions */
+@media (width <= 768px) {
+    .vc-gallery-modal-root {
+        min-width: 95vw !important;
+        max-width: 95vw !important;
+        min-height: 50vh !important;
+        max-height: 90vh !important;
+    }
+}
+
+@media (width >= 769px) and (width <= 1200px) {
+    .vc-gallery-modal-root {
+        min-width: 60vw !important;
+        max-width: 85vw !important;
+    }
+}
+
+/* TabBar styling improvements (if TabBar is used) */
+.vc-gallery-tab-bar {
+    border-bottom: 1px solid var(--background-modifier-accent);
+    padding: 0 16px;
+}
+
+.vc-gallery-tab {
+    padding: 12px 16px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.15s ease, color 0.15s ease;
+    cursor: pointer;
+}
+
+.vc-gallery-tab:hover {
+    color: var(--interactive-hover);
+}
+
+.vc-gallery-tab-active {
+    border-bottom-color: var(--brand-500);
+    color: var(--interactive-active);
+}

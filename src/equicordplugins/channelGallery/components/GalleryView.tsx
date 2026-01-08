@@ -4,24 +4,29 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Button, React, ScrollerThin, TabBar, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
+import { Button, React, ScrollerThin, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "@webpack/common";
 
+import type { ManaSelectOption } from "../types/select";
+import { log } from "../utils/logging";
 import type { GalleryItem } from "../utils/media";
+import { ManaSelect } from "./ManaSelect";
 
 const GAP = 10;
 const PADDING = 14;
 const MIN_THUMB = 120;
 const MAX_THUMB = 150;
-const LOAD_MORE_THRESHOLD = 600;
+const PAGE_SIZE = 50;
 
+// Original filter type used by filterItems - preserved exactly
 type FilterType = "newest" | "oldest" | "animated";
+
+// Extended media filter type for new select control
+type MediaFilterType = "images" | "gifs" | "videos" | "oldest" | "newest";
 
 function withSizeParams(url: string, size: number): string {
     if (!url) return url;
     try {
         const u = new URL(url);
-        // Don't add size params to URLs that don't support them
-        // GitHub private images, YouTube, and other external services often don't support size params
         const hostname = u.hostname.toLowerCase();
         if (hostname.includes("githubusercontent.com") ||
             hostname.includes("youtube.com") ||
@@ -29,7 +34,7 @@ function withSizeParams(url: string, size: number): string {
             hostname.includes("vimeo.com") ||
             hostname.includes("instagram.com") ||
             hostname.includes("tenor.com")) {
-            return url; // Return original URL without size params
+            return url;
         }
         u.searchParams.set("width", String(size));
         u.searchParams.set("height", String(size));
@@ -44,12 +49,10 @@ function getThumbUrl(item: GalleryItem, size: number): string {
     const url = item.proxyUrl ?? item.url;
     if (!url) return "";
 
-    // Skip size params for animated/video media
     if (item.isAnimated || item.isVideo) {
         return url;
     }
 
-    // Skip size params for YouTube URLs (including clips) - they don't support it
     if (url.includes("youtube.com") || url.includes("youtu.be")) {
         return url;
     }
@@ -62,6 +65,7 @@ function getItemExt(item: GalleryItem): string {
         item.url.toLowerCase().split(".").pop()?.split("?")[0] || "";
 }
 
+// Original filterItems function - preserved exactly
 function filterItems(items: GalleryItem[], filter: FilterType): GalleryItem[] {
     const ANIMATED_EXTS = ["gif", "mp4", "webm", "mov", "m4v"];
     let filtered = [...items];
@@ -86,199 +90,407 @@ function filterItems(items: GalleryItem[], filter: FilterType): GalleryItem[] {
     return filtered;
 }
 
+// Post-filter for media type (applied outside filterItems)
+function applyMediaTypeFilter(items: GalleryItem[], mediaFilter: MediaFilterType, enableVideos: boolean): GalleryItem[] {
+    let result = [...items];
+
+    // Apply video setting first
+    if (!enableVideos) {
+        result = result.filter(item => !item.isVideo);
+    }
+
+    // Then apply media type filter
+    switch (mediaFilter) {
+        case "images":
+            // Static images only (not animated, not videos)
+            result = result.filter(item => !item.isVideo && !item.isAnimated);
+            break;
+        case "gifs":
+            // All animated images (GIF, animated WebP, APNG, etc.) but not videos
+            result = result.filter(item => item.isAnimated && !item.isVideo);
+            break;
+        case "videos":
+            if (enableVideos) {
+                result = result.filter(item => item.isVideo);
+            } else {
+                result = [];
+            }
+            break;
+        case "oldest":
+            result = result.reverse();
+            break;
+        case "newest":
+        default:
+            // No additional filtering needed
+            break;
+    }
+
+    return result;
+}
+
+// Get username from item (prefer stored authorName, fallback to UserStore)
+function getUsername(item: GalleryItem, userStore: any): string | null {
+    // Prefer the stored authorName from message extraction
+    if (item.authorName) return item.authorName;
+
+    // Fallback to UserStore lookup
+    if (!item.authorId) return null;
+    try {
+        const user = userStore?.getUser?.(item.authorId);
+        if (user) {
+            return user.globalName ?? user.username ?? null;
+        }
+    } catch {
+        // Ignore errors
+    }
+    return null;
+}
+
 export function GalleryView(props: {
     items: GalleryItem[];
     showCaptions: boolean;
     isLoading: boolean;
     hasMore: boolean;
     error: string | null;
-    cache: { failedIds: Set<string> };
+    cache: { failedIds: Set<string>; };
+    enableVideos: boolean;
+    userStore: any;
     onRetry(): void;
     onLoadMore(): void;
-    onSelect(stableId: string): void;
+    onSelect(stableId: string, isVideo: boolean, filteredItems: GalleryItem[]): void;
     onMarkFailed(stableId: string): void;
+    initialMediaFilter?: string;
+    initialUsernameFilter?: string;
+    initialCurrentPage?: number;
+    initialScrollPosition?: number;
+    onStateChange?: (state: { mediaFilter: string; usernameFilter: string; currentPage: number; scrollPosition: number; }) => void;
 }) {
-    const { items, showCaptions, isLoading, hasMore, error, cache, onRetry, onLoadMore, onSelect, onMarkFailed } = props;
+    const { items, showCaptions, isLoading, hasMore, error, cache, enableVideos, userStore, onRetry, onLoadMore, onSelect, onMarkFailed, initialMediaFilter, initialUsernameFilter, initialCurrentPage, initialScrollPosition, onStateChange } = props;
 
     const scrollRef = useRef<HTMLDivElement>(null);
-    const scrollTopRef = useRef<number>(0);
-    const rafIdRef = useRef<number | null>(null);
-    const isSelectingRef = useRef<boolean>(false);
-    const loadingTimeoutRef = useRef<number | null>(null);
-    const lastScrollTimeRef = useRef<number>(0);
-    const accelerationRef = useRef<number>(1);
 
     const [viewport, setViewport] = useState({ width: 800, height: 600 });
-    const [filter, setFilter] = useState<FilterType>("newest");
+    const [mediaFilter, setMediaFilter] = useState<MediaFilterType>((initialMediaFilter as MediaFilterType) || "newest");
+    const [usernameFilter, setUsernameFilter] = useState<string>(initialUsernameFilter || "all");
     const [failedVideos, setFailedVideos] = useState<Set<string>>(new Set());
+    const [currentPage, setCurrentPage] = useState(initialCurrentPage || 1);
 
-    // Initialize viewport
-    useEffect(() => {
+    // Initialize viewport with useLayoutEffect and ResizeObserver for better performance
+    useLayoutEffect(() => {
         const el = scrollRef.current;
         if (!el) return;
 
         const updateViewport = () => {
             if (el.clientWidth > 0 && el.clientHeight > 0) {
-                setViewport({
+                const newViewport = {
                     width: el.clientWidth,
                     height: el.clientHeight
-                });
+                };
+                log.debug("layout", "Viewport updated (useLayoutEffect)", newViewport);
+                setViewport(newViewport);
             }
         };
 
+        // Initial measurement
         updateViewport();
-        window.addEventListener("resize", updateViewport);
-        return () => window.removeEventListener("resize", updateViewport);
-    }, []);
+        log.debug("layout", "Viewport initialized", viewport);
 
-    // Calculate grid layout - ensure it's defined before use
-    const gridLayout = useMemo(() => {
-        const usableWidth = Math.max(1, viewport.width - PADDING * 2);
-        const columns = Math.max(1, Math.floor((usableWidth + GAP) / (MIN_THUMB + GAP)));
-        const cell = Math.max(MIN_THUMB, Math.min(MAX_THUMB, Math.floor((usableWidth - (columns - 1) * GAP) / columns)));
-        const thumbSize = Math.max(128, Math.min(512, cell * 2));
-        return { columns, cell, thumbSize };
-    }, [viewport.width]);
-
-    // Filter items based on selected filter
-    const filteredItems = useMemo(() => {
-        return filterItems(items, filter);
-    }, [items, filter]);
-
-    // Show all filtered items (infinite scroll loads more as needed)
-    const itemsToShow = filteredItems;
-
-    // Preload items near the bottom when scrolling
-    useEffect(() => {
-        const el = scrollRef.current;
-        if (!el || filteredItems.length === 0) return;
-
-        const checkAndPreload = () => {
-            const { scrollTop, clientHeight, scrollHeight } = el;
-            const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-
-            if (distanceFromBottom < clientHeight * 2) {
-                const startIndex = Math.max(0, filteredItems.length - 50);
-                const itemsToPreload = filteredItems.slice(startIndex);
-
-                for (const item of itemsToPreload) {
-                    if (item.url) {
-                        const img = new Image();
-                        img.src = getThumbUrl(item, gridLayout.thumbSize);
+        // Use ResizeObserver for better performance
+        const resizeObserver = new ResizeObserver(entries => {
+            for (const entry of entries) {
+                if (entry.contentBoxSize) {
+                    const width = entry.contentBoxSize[0]?.inlineSize ?? entry.contentRect.width;
+                    const height = entry.contentBoxSize[0]?.blockSize ?? entry.contentRect.height;
+                    if (width > 0 && height > 0) {
+                        log.debug("layout", "Viewport resized (ResizeObserver)", { width, height });
+                        setViewport({ width, height });
                     }
                 }
             }
-        };
-
-        checkAndPreload();
-        el.addEventListener("scroll", checkAndPreload, { passive: true });
-        return () => el.removeEventListener("scroll", checkAndPreload);
-    }, [filteredItems, gridLayout.thumbSize]);
-
-    // Infinite scroll handler with acceleration
-    const handleScroll = useCallback(() => {
-        if (rafIdRef.current !== null) return;
-
-        rafIdRef.current = requestAnimationFrame(() => {
-            rafIdRef.current = null;
-            const el = scrollRef.current;
-            if (!el || el.clientHeight === 0 || el.scrollHeight === 0) return;
-
-            const now = Date.now();
-            const currentScrollTop = el.scrollTop;
-            const lastScrollTop = scrollTopRef.current;
-            const scrollDelta = Math.abs(currentScrollTop - lastScrollTop);
-            const timeDelta = now - lastScrollTimeRef.current;
-
-            // Calculate scroll velocity and acceleration
-            if (timeDelta > 0 && timeDelta < 300) {
-                const velocity = scrollDelta / timeDelta;
-
-                // Increase acceleration if scrolling continues (velocity > threshold)
-                if (velocity > 0.3) {
-                    accelerationRef.current = Math.min(accelerationRef.current * 1.05, 2.5);
-                } else {
-                    accelerationRef.current = Math.max(accelerationRef.current * 0.98, 1);
-                }
-
-                // Apply smooth acceleration using requestAnimationFrame
-                if (accelerationRef.current > 1 && scrollDelta > 5) {
-                    const direction = currentScrollTop > lastScrollTop ? 1 : -1;
-                    const additionalScroll = scrollDelta * (accelerationRef.current - 1) * 0.3;
-                    requestAnimationFrame(() => {
-                        if (el && el === scrollRef.current) {
-                            const newScrollTop = el.scrollTop + (additionalScroll * direction);
-                            el.scrollTop = Math.max(0, Math.min(newScrollTop, el.scrollHeight - el.clientHeight));
-                        }
-                    });
-                }
-            } else {
-                accelerationRef.current = 1;
-            }
-
-            scrollTopRef.current = currentScrollTop;
-            lastScrollTimeRef.current = now;
-
-            const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-
-            // Load more items when near the bottom
-            if (distanceFromBottom < LOAD_MORE_THRESHOLD && distanceFromBottom >= 0 && !isLoading && hasMore) {
-                if (loadingTimeoutRef.current) {
-                    clearTimeout(loadingTimeoutRef.current);
-                }
-                loadingTimeoutRef.current = window.setTimeout(() => {
-                    onLoadMore();
-                }, 100);
-            }
         });
-    }, [hasMore, isLoading, onLoadMore]);
 
-    useEffect(() => {
-        const el = scrollRef.current;
-        if (!el) return;
+        resizeObserver.observe(el);
 
-        el.addEventListener("scroll", handleScroll, { passive: true });
-        const rafId = requestAnimationFrame(handleScroll);
+        // Fallback to window resize for older browsers
+        window.addEventListener("resize", updateViewport);
 
         return () => {
-            el.removeEventListener("scroll", handleScroll);
-            if (rafIdRef.current !== null) {
-                cancelAnimationFrame(rafIdRef.current);
-                rafIdRef.current = null;
-            }
-            if (loadingTimeoutRef.current) {
-                clearTimeout(loadingTimeoutRef.current);
-                loadingTimeoutRef.current = null;
-            }
-            cancelAnimationFrame(rafId);
+            resizeObserver.disconnect();
+            window.removeEventListener("resize", updateViewport);
         };
-    }, [handleScroll]);
+    }, []);
 
-    const handleThumbClick = useCallback((e: React.MouseEvent, stableId: string) => {
+    // Restore scroll position when returning from fullscreen
+    useEffect(() => {
+        if (initialScrollPosition !== undefined && scrollRef.current) {
+            scrollRef.current.scrollTop = initialScrollPosition;
+        }
+    }, []); // Only run once on mount
+
+    // Notify parent of state changes (only when filters/page actually change, not on every render)
+    const prevStateRef = React.useRef({ mediaFilter, usernameFilter, currentPage });
+    const isInitialMount = React.useRef(true);
+
+    useEffect(() => {
+        // Skip on initial mount to avoid triggering state updates during initial render
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            prevStateRef.current = { mediaFilter, usernameFilter, currentPage };
+            return;
+        }
+
+        if (onStateChange && scrollRef.current) {
+            const hasChanged =
+                prevStateRef.current.mediaFilter !== mediaFilter ||
+                prevStateRef.current.usernameFilter !== usernameFilter ||
+                prevStateRef.current.currentPage !== currentPage;
+
+            if (hasChanged) {
+                prevStateRef.current = { mediaFilter, usernameFilter, currentPage };
+                // Use setTimeout to defer state update to avoid React error #185
+                setTimeout(() => {
+                    if (scrollRef.current && onStateChange) {
+                        onStateChange({
+                            mediaFilter,
+                            usernameFilter,
+                            currentPage,
+                            scrollPosition: scrollRef.current.scrollTop
+                        });
+                    }
+                }, 0);
+            }
+        }
+    }, [mediaFilter, usernameFilter, currentPage]); // Removed onStateChange from deps to prevent loops
+
+    // Calculate grid layout
+    const gridLayout = useMemo(() => {
+        const usableWidth = Math.max(1, viewport.width - PADDING * 2);
+        const columns = Math.max(
+            1,
+            Math.floor((usableWidth + GAP) / (MIN_THUMB + GAP))
+        );
+        const cell = Math.max(
+            MIN_THUMB,
+            Math.min(
+                MAX_THUMB,
+                Math.floor((usableWidth - (columns - 1) * GAP) / columns)
+            )
+        );
+        const thumbSize = Math.max(128, Math.min(512, cell * 2));
+
+        log.debug("grid", "Grid calculation", {
+            viewportWidth: viewport.width,
+            usableWidth,
+            columns,
+            cell,
+            thumbSize
+        });
+
+        return { columns, cell, thumbSize };
+    }, [viewport.width]);
+
+    // Build unique usernames list for filter (sorted A-Z, case-insensitive)
+    // Only include users we can actually identify (skip unknowns)
+    const usernameOptions = useMemo(() => {
+        const userMap = new Map<string, { authorId: string; username: string; count: number; }>();
+
+        // Filter items based on video setting when building username list
+        const itemsForUsernames = enableVideos ? items : items.filter(item => !item.isVideo);
+
+        for (const item of itemsForUsernames) {
+            if (!item.authorId) continue;
+            const existing = userMap.get(item.authorId);
+            if (existing) {
+                existing.count++;
+            } else {
+                const username = getUsername(item, userStore);
+                // Only add users we can identify (skip null/unknown)
+                if (username) {
+                    userMap.set(item.authorId, { authorId: item.authorId, username, count: 1 });
+                }
+            }
+        }
+
+        const sorted = Array.from(userMap.values())
+            .sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
+
+        const options: ManaSelectOption[] = [
+            { id: "all", value: "all", label: "All users" },
+            ...sorted.map(u => ({
+                id: u.authorId,
+                value: u.authorId,
+                label: `${u.username} (${u.count})`
+            }))
+        ];
+
+        return options;
+    }, [items, userStore, enableVideos]);
+
+    // Apply all filters
+    const filteredItems = useMemo(() => {
+        log.perfStart("filter-items");
+        let result = [...items];
+
+        // For media type filters (images, gifs, videos), skip filterItems and apply directly
+        // For ordering filters (newest, oldest), use filterItems which handles sorting
+        if (mediaFilter === "images" || mediaFilter === "gifs" || mediaFilter === "videos") {
+            // Apply media type filter directly on all items
+            result = applyMediaTypeFilter(result, mediaFilter, enableVideos);
+
+            // Apply ordering (newest = default order, oldest = reversed)
+            // Items are already in newest order from the API
+        } else {
+            // Use original filterItems for "newest" and "oldest" ordering
+            const baseFilter: FilterType = mediaFilter === "oldest" ? "oldest" : "newest";
+            result = filterItems(result, baseFilter);
+
+            // Apply video setting filter
+            if (!enableVideos) {
+                result = result.filter(item => !item.isVideo);
+            }
+        }
+
+        // Then apply username filter
+        if (usernameFilter !== "all") {
+            result = result.filter(item => item.authorId === usernameFilter);
+        }
+
+        log.perfEnd("filter-items", {
+            originalCount: items.length,
+            filteredCount: result.length,
+            mediaFilter,
+            usernameFilter
+        });
+        return result;
+    }, [items, mediaFilter, usernameFilter, enableVideos]);
+
+    // Calculate pagination - add 4 extra items to ensure full grid
+    // Calculate how many items fit in the grid based on columns
+    const { columns, cell, thumbSize } = gridLayout;
+    const itemsPerRow = columns;
+    const rowsPerPage = Math.ceil(PAGE_SIZE / itemsPerRow);
+    const itemsNeededForFullGrid = rowsPerPage * itemsPerRow;
+    const adjustedPageSize = itemsNeededForFullGrid + 4; // Add 4 extra to ensure full grid
+
+    const totalPages = Math.max(1, Math.ceil(filteredItems.length / adjustedPageSize));
+    const startIndex = (currentPage - 1) * adjustedPageSize;
+    const endIndex = Math.min(startIndex + adjustedPageSize, filteredItems.length);
+    const itemsToShow = filteredItems.slice(startIndex, endIndex);
+
+    log.debug("render", "Rendering page", {
+        currentPage,
+        totalPages,
+        startIndex,
+        endIndex,
+        itemsToShow: itemsToShow.length,
+        totalFiltered: filteredItems.length
+    });
+
+    // Reset filter if videos selected but videos disabled
+    useEffect(() => {
+        if (mediaFilter === "videos" && !enableVideos) {
+            setMediaFilter("newest");
+        }
+    }, [enableVideos, mediaFilter]);
+
+    // Reset to first page and scroll position when filters change (but not on initial mount)
+    const isInitialFilterMount = React.useRef(true);
+    useEffect(() => {
+        if (isInitialFilterMount.current) {
+            isInitialFilterMount.current = false;
+            return;
+        }
+        // Only reset if filters actually changed (not when restoring state)
+        setCurrentPage(1);
+        const el = scrollRef.current;
+        if (el) {
+            el.scrollTop = 0;
+        }
+    }, [mediaFilter, usernameFilter]);
+
+    // Reset scroll position when page changes
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (el) {
+            el.scrollTop = 0;
+        }
+    }, [currentPage]);
+
+    // Load more data when approaching the last page
+    useEffect(() => {
+        if (currentPage === totalPages && hasMore && !isLoading) {
+            onLoadMore();
+        }
+    }, [currentPage, totalPages, hasMore, isLoading, onLoadMore]);
+
+    const handleThumbClick = useCallback((e: React.MouseEvent, stableId: string, isVideo: boolean) => {
+        log.debug("render", "Thumbnail clicked", { stableId, isVideo });
         e.preventDefault();
         e.stopPropagation();
-        isSelectingRef.current = true;
-        const el = scrollRef.current;
-        if (el) scrollTopRef.current = el.scrollTop;
-        onSelect(stableId);
-        setTimeout(() => { isSelectingRef.current = false; }, 100);
-    }, [onSelect]);
+        // Pass filtered items so fullscreen respects the current filter
+        onSelect(stableId, isVideo, filteredItems);
+    }, [onSelect, filteredItems]);
 
-    const { columns, cell, thumbSize } = gridLayout;
+    const handlePrevPage = useCallback(() => {
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 1);
+        }
+    }, [currentPage]);
+
+    const handleNextPage = useCallback(() => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prev => prev + 1);
+        }
+    }, [currentPage, totalPages]);
+
+    const mediaFilterOptions: ManaSelectOption[] = useMemo(() => {
+        const options: ManaSelectOption[] = [
+            { id: "images", value: "images", label: "Images" },
+            { id: "gifs", value: "gifs", label: "Animated" } // Includes GIFs, animated WebP, APNG, etc.
+        ];
+        // Only show Videos option if videos are enabled
+        if (enableVideos) {
+            options.push({ id: "videos", value: "videos", label: "Videos" });
+        }
+        options.push(
+            { id: "oldest", value: "oldest", label: "Oldest" },
+            { id: "newest", value: "newest", label: "Newest" }
+        );
+        return options;
+    }, [enableVideos]);
+
+    const handleMediaFilterChange = useCallback((value: string) => {
+        setMediaFilter(value as MediaFilterType);
+    }, []);
+
+    const handleUsernameFilterChange = useCallback((value: string) => {
+        setUsernameFilter(value);
+    }, []);
 
     return (
         <div className="vc-gallery-view-container">
-            <TabBar
-                type="top"
-                look="grey"
-                selectedItem={filter}
-                onItemSelect={id => setFilter(id as FilterType)}
-                className="vc-gallery-tabbar"
-            >
-                <TabBar.Item id="newest">Newest</TabBar.Item>
-                <TabBar.Item id="oldest">Oldest</TabBar.Item>
-                <TabBar.Item id="animated">Animated</TabBar.Item>
-            </TabBar>
+            <div className="vc-gallery-filter-row">
+                <div className="vc-gallery-filter-item">
+                    <ManaSelect
+                        value={mediaFilter}
+                        onSelectionChange={handleMediaFilterChange}
+                        options={mediaFilterOptions}
+                        selectionMode="single"
+                        closeOnSelect={true}
+                        fullWidth={true}
+                    />
+                </div>
+                <div className="vc-gallery-filter-item">
+                    <ManaSelect
+                        value={usernameFilter}
+                        onSelectionChange={handleUsernameFilterChange}
+                        options={usernameOptions}
+                        selectionMode="single"
+                        closeOnSelect={true}
+                        fullWidth={true}
+                    />
+                </div>
+            </div>
 
             <ScrollerThin orientation="vertical" className="vc-channel-gallery-scroll">
                 <div
@@ -295,28 +507,44 @@ export function GalleryView(props: {
                         return (
                             <button
                                 key={item.stableId}
-                                onClick={e => handleThumbClick(e, item.stableId)}
+                                onClick={e => handleThumbClick(e, item.stableId, Boolean(item.isVideo))}
                                 onMouseDown={e => e.preventDefault()}
                                 className="vc-gallery-thumbnail-button"
                             >
                                 <div className="vc-gallery-thumbnail-wrapper">
                                     {item.isVideo && !item.isEmbed && !failedVideos.has(item.stableId) ? (
-                                        <video
-                                            src={getThumbUrl(item, thumbSize)}
-                                            className="vc-gallery-thumbnail-image"
-                                            muted
-                                            loop
-                                            playsInline
-                                        onError={() => {
-                                            setFailedVideos(prev => new Set(prev).add(item.stableId));
-                                            onMarkFailed(item.stableId);
-                                        }}
-                                        />
+                                        <>
+                                            <video
+                                                src={item.proxyUrl ?? item.url}
+                                                className="vc-gallery-thumbnail-image"
+                                                muted
+                                                loop
+                                                playsInline
+                                                preload="metadata"
+                                                onLoadedData={e => {
+                                                    // Seek to first frame for thumbnail
+                                                    const video = e.currentTarget;
+                                                    if (video.duration && video.duration > 0) {
+                                                        video.currentTime = 0.1;
+                                                    }
+                                                }}
+                                                onError={() => {
+                                                    setFailedVideos(prev => new Set(prev).add(item.stableId));
+                                                    onMarkFailed(item.stableId);
+                                                }}
+                                            />
+                                            <div className="vc-gallery-play-overlay">
+                                                <svg width="48" height="48" viewBox="0 0 24 24" className="vc-gallery-play-icon">
+                                                    <path fill="white" d="M8 5v14l11-7z" />
+                                                </svg>
+                                            </div>
+                                        </>
                                     ) : (
                                         <img
                                             src={getThumbUrl(item, thumbSize)}
                                             alt={item.filename ?? "Image"}
-                                            loading="lazy"
+                                            loading={item.isAnimated ? "eager" : "lazy"}
+                                            decoding="async"
                                             className="vc-gallery-thumbnail-image"
                                             onError={() => {
                                                 onMarkFailed(item.stableId);
@@ -345,13 +573,38 @@ export function GalleryView(props: {
                     ) : isLoading ? (
                         <div className="vc-gallery-status-muted">Loading…</div>
                     ) : !filteredItems.length ? (
-                        <div className="vc-gallery-status-muted">No {filter === "animated" ? "animated " : ""}images found yet</div>
-                    ) : !hasMore && filteredItems.length > 0 ? (
-                        <div className="vc-gallery-status-muted">End of history</div>
+                        <div className="vc-gallery-status-muted">No media found</div>
                     ) : null}
                 </div>
             </ScrollerThin>
 
+            {filteredItems.length > 0 && (
+                <div className="vc-gallery-pagination">
+                    <button
+                        className="vc-gallery-pagination-button"
+                        disabled={currentPage === 1}
+                        onClick={handlePrevPage}
+                        aria-label="Previous page"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.41 7.41L14 6L8 12L14 18L15.41 16.59L10.83 12L15.41 7.41Z" />
+                        </svg>
+                    </button>
+                    <div className="vc-gallery-page-info">
+                        Page {currentPage} of {totalPages}
+                    </div>
+                    <button
+                        className="vc-gallery-pagination-button"
+                        disabled={currentPage === totalPages}
+                        onClick={handleNextPage}
+                        aria-label="Next page"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8.59 16.59L10 18L16 12L10 6L8.59 7.41L13.17 12L8.59 16.59Z" />
+                        </svg>
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

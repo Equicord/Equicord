@@ -123,6 +123,7 @@ export type GalleryItem = {
     height?: number;
     filename?: string;
     authorId?: string;
+    authorName?: string; // Store username directly to avoid lookup issues
     timestamp?: string;
     isAnimated?: boolean;
     isVideo?: boolean;
@@ -146,16 +147,21 @@ export function extractImages(
         if (!messageId) continue;
 
         const authorId = m.author && m.author.id ? String(m.author.id) : undefined;
+        // Get username directly from message author to avoid lookup issues
+        const authorName = m.author
+            ? (m.author.global_name ?? m.author.globalName ?? m.author.username ?? undefined)
+            : undefined;
         const timestamp = m.timestamp ? String(m.timestamp) : undefined;
         const base = {
             channelId,
             messageId,
             authorId,
+            authorName: authorName ? String(authorName) : undefined,
             timestamp
         };
 
         // Extract from attachments
-        const attachments = m.attachments;
+        const { attachments } = m;
         if (Array.isArray(attachments)) {
             for (const a of attachments) {
                 const url = String(a.url ?? "");
@@ -173,9 +179,12 @@ export function extractImages(
                 const width = typeof a.width === "number" ? a.width : undefined;
                 const height = typeof a.height === "number" ? a.height : undefined;
 
+                // Check if content is animated - handles GIFs, animated WebP, etc.
+                const ctLower = contentType?.toLowerCase() ?? "";
                 const animated = Boolean(
                     (ext && isAnimatedExt(ext)) ||
-                    (contentType && (contentType.toLowerCase() === "image/gif" || contentType.toLowerCase().startsWith("video/")))
+                    ctLower === "image/gif" ||
+                    ctLower.startsWith("video/")
                 );
 
                 // Extract original URL
@@ -198,7 +207,7 @@ export function extractImages(
 
         // Extract from embeds
         if (opts.includeEmbeds) {
-            let embeds = m.embeds;
+            let { embeds } = m;
             if (typeof embeds === "string") {
                 try {
                     embeds = JSON.parse(embeds);
@@ -255,7 +264,7 @@ export function extractImages(
                     }
 
                     // Handle video in embed
-                    const video = embed.video;
+                    const { video } = embed;
                     if (video && video.url) {
                         const videoUrl = String(video.url);
                         const proxyUrl = video.proxyURL ? String(video.proxyURL) : (video.proxy_url ? String(video.proxy_url) : undefined);
@@ -279,7 +288,7 @@ export function extractImages(
                     }
 
                     // Handle images and thumbnails
-                    const image = embed.image;
+                    const { image } = embed;
                     const thumb = embed.thumbnail;
 
                     for (const source of [image, thumb]) {
@@ -291,16 +300,16 @@ export function extractImages(
                         if (!isImageUrl(url, opts.includeGifs)) continue;
 
                         const ext = getExt(url);
+                        const ct = source.content_type ? String(source.content_type).toLowerCase() : "";
+                        // Check if content is animated
                         let animated = false;
                         if (ext && isAnimatedExt(ext)) {
                             animated = true;
-                        } else if (source.content_type) {
-                            const ct = String(source.content_type).toLowerCase();
-                            if (ct === "image/gif" || ct.startsWith("video/")) {
-                                animated = true;
-                            }
+                        } else if (ct === "image/gif" || ct.startsWith("video/")) {
+                            animated = true;
                         }
-                        if (ext && !isAnimatedExt(ext) && !isVideoExt(ext)) {
+                        // Don't mark video files as animated images
+                        if (ext && isVideoExt(ext)) {
                             animated = false;
                         }
 
