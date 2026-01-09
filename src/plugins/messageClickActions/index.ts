@@ -15,10 +15,20 @@ import { Channel, Message } from "@vencord/discord-types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
 import { AuthenticationStore, Constants, EditMessageStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, PinActions, RestAPI, Toasts, WindowStore } from "@webpack/common";
 
-let isDeletePressed = false;
-const keydown = (e: KeyboardEvent) => e.key === "Backspace" && (isDeletePressed = true);
-const keyup = (e: KeyboardEvent) => e.key === "Backspace" && (isDeletePressed = false);
-const focusChanged = () => !WindowStore.isFocused() && (isDeletePressed = false);
+let isKeyPressed = false;
+const keydown = (e: KeyboardEvent) => {
+    const key = settings.store.keySelection === "backspace" ? "Backspace" : "Delete";
+    if (e.key === key) {
+        isKeyPressed = true;
+    }
+};
+const keyup = (e: KeyboardEvent) => {
+    const key = settings.store.keySelection === "backspace" ? "Backspace" : "Delete";
+    if (e.key === key) {
+        isKeyPressed = false;
+    }
+};
+const focusChanged = () => !WindowStore.isFocused() && (isKeyPressed = false);
 
 let doubleClickTimeout: ReturnType<typeof setTimeout> | null = null;
 let pendingDoubleClickAction: (() => void) | null = null;
@@ -48,6 +58,14 @@ const settings = definePluginSettings({
             { label: "Copy Message ID", value: ClickAction.COPY_MESSAGE_ID },
             { label: "Copy User ID", value: ClickAction.COPY_USER_ID },
             { label: "None (Disabled)", value: ClickAction.NONE }
+        ]
+    },
+    keySelection: {
+        type: OptionType.SELECT,
+        description: "Key to use for click actions (Backspace or Delete)",
+        options: [
+            { label: "Backspace", value: "backspace", default: true },
+            { label: "Delete", value: "delete" }
         ]
     },
     doubleClickAction: {
@@ -280,7 +298,7 @@ export default definePlugin({
 
         if ((settings.store.disableInDms && isDM) || (settings.store.disableInSystemDms && isSystemDM)) return;
 
-        if (isDeletePressed) {
+        if (isKeyPressed) {
             const action = settings.store.backspaceClickAction;
             if (action === ClickAction.NONE) return;
 
