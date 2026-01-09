@@ -6,6 +6,8 @@
 
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
+import { Heading } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
@@ -47,6 +49,15 @@ const settings = definePluginSettings({
         onChange: load
     },
     // Oneko Specific
+    onekoSection: {
+        type: OptionType.COMPONENT,
+        component: () => (
+            <div>
+                <Heading style={{ fontSize: "1.6em", marginTip: "10px" }}>Oneko</Heading>
+                <Divider style={{ marginBottom: "-10px" }}></Divider>
+            </div>
+        ),
+    },
     furColor: {
         description: "Fur hex color for Oneko",
         type: OptionType.STRING,
@@ -60,6 +71,15 @@ const settings = definePluginSettings({
         onChange: load,
     },
     // Fatass Horse Specific
+    fathorseSection: {
+        type: OptionType.COMPONENT,
+        component: () => (
+            <div>
+                <Heading style={{ fontSize: "1.6em", marginTip: "10px" }}>Fatass Horse</Heading>
+                <Divider style={{ marginBottom: "-10px" }}></Divider>
+            </div>
+        ),
+    },
     size: {
         description: "Size of the fatass horse",
         type: OptionType.NUMBER,
