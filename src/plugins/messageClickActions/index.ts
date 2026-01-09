@@ -248,7 +248,8 @@ function quoteMessage(channel: Channel, msg: Message) {
 export default definePlugin({
     name: "MessageClickActions",
     description: "Customize message click actions - choose what happens when you click, double-click, or hold backspace",
-    authors: [Devs.Ven, EquicordDevs.keyages],
+    authors: [Devs.Ven, EquicordDevs.keyages, EquicordDevs.ZcraftElite],
+    isModified: true,
 
     settings,
 
