@@ -53,7 +53,7 @@ const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <div>
-                <Heading style={{ fontSize: "1.6em", marginTip: "10px" }}>Oneko</Heading>
+                <Heading style={{ fontSize: "1.6em", marginTop: "10px" }}>Oneko</Heading>
                 <Divider style={{ marginBottom: "-10px" }}></Divider>
             </div>
         ),
