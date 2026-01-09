@@ -167,7 +167,7 @@ migratePluginSettings("CursorBuddy", "Oneko", "oneko");
 export default definePlugin({
     name: "CursorBuddy",
     description: "only a slightly annoying plugin",
-    authors: [Devs.Ven, Devs.adryd, EquicordDevs.nexpid],
+    authors: [Devs.Ven, Devs.adryd, EquicordDevs.nexpid, EquicordDevs.ZcraftElite],
     settings,
     isModified: true,
 
