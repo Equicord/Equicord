@@ -75,7 +75,7 @@ const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <div>
-                <Heading style={{ fontSize: "1.6em", marginTip: "10px" }}>Fatass Horse</Heading>
+                <Heading style={{ fontSize: "1.6em", marginTop: "10px" }}>Fatass Horse</Heading>
                 <Divider style={{ marginBottom: "-10px" }}></Divider>
             </div>
         ),
