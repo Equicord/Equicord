@@ -71,7 +71,6 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { channel, 
     );
 };
 
-
 export default definePlugin({
     name: "FollowVoiceUser",
     description: "Follow a friend in voice chat.",
@@ -89,7 +88,7 @@ export default definePlugin({
 
             if (
                 settings.store.onlyWhenInVoice
-                && VoiceStateStore.getVoiceStateForUser(UserStore.getCurrentUser().id) === null
+                && !VoiceStateStore.getVoiceStateForUser(UserStore.getCurrentUser().id)
             ) return;
 
             voiceStates.forEach(voiceState => {

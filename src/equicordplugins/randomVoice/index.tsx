@@ -22,11 +22,6 @@ const valueOperation = [
     { label: "Equal to", value: "==", default: true },
 ];
 
-const CONNECT = 1n << 20n;
-const SPEAK = 1n << 21n;
-const STREAM = 1n << 9n;
-const VIDEO = 1 << 21;
-
 const settings = definePluginSettings({
     UserAmountOperation: {
         description: "Select an operation for the amounts of users",
@@ -244,7 +239,6 @@ function ContextMenu() {
             onClose={() => { }}
             aria-label="Voice state modifier"
         >
-
 
             <Menu.MenuItem
                 id="servers"
@@ -689,8 +683,8 @@ function getChannels() {
         if (!operations[settings.store.vcLimitOperation](VcLimit, settings.store.vcLimit)) return;
         if (Object.keys(channelVoiceStates).length === channel?.userLimit) return;
         if (Object.keys(channelVoiceStates).includes(UserStore.getCurrentUser().id)) return;
-        if (!PermissionStore.can(CONNECT, channel)) return;
-        if (settings.store.avoidAfk && !PermissionStore.can(SPEAK, channel)) return;
+        if (!PermissionStore.can(PermissionsBits.CONNECT, channel)) return;
+        if (settings.store.avoidAfk && !PermissionStore.can(PermissionsBits.SPEAK, channel)) return;
         if (settings.store.avoidStates) {
             let lowestMismatchCount = Infinity;
             const channelVoiceStates = VoiceStateStore.getVoiceStatesForChannel(channel.id);
@@ -714,7 +708,6 @@ function getChannels() {
                 criteriaChannel.push(channelId);
             }
         }
-
 
         if (settings.store.includeStates && !settings.store.avoidStates) {
             if ((settings.store.deafen && !selfDeaf) || (!settings.store.deafen && selfDeaf)) return;
@@ -749,8 +742,8 @@ function JoinVc(channelID) {
     const channel = ChannelStore.getChannel(channelID);
     ChannelActions.selectVoiceChannel(channelID);
     if (settings.store.autoNavigate) ChannelRouter.transitionToChannel(channel.id);
-    if (settings.store.autoCamera && PermissionStore.can(VIDEO, channel)) autoCamera();
-    if (settings.store.autoStream && PermissionStore.can(STREAM, channel)) autoStream();
+    if (settings.store.autoCamera && PermissionStore.can(PermissionsBits.STREAM, channel)) autoCamera();
+    if (settings.store.autoStream && PermissionStore.can(PermissionsBits.STREAM, channel)) autoStream();
     if (settings.store.selfMute && !MediaEngineStore.isSelfMute() && SelectedChannelStore.getVoiceChannelId()) VoiceActions.toggleSelfMute();
     if (settings.store.selfDeafen && !MediaEngineStore.isSelfDeaf() && SelectedChannelStore.getVoiceChannelId()) VoiceActions.toggleSelfDeaf();
 }
