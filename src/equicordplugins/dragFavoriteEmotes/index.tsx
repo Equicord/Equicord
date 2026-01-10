@@ -59,11 +59,11 @@ export default definePlugin({
                 },
                 {
                     match: /(\[\i,\i\]=\i\.useState\(""\))/,
-                    replace: "$1,[collected,drag]=$self.drag(arguments[0])",
+                    replace: "$1,[collected,drag]=$self.drag(arguments[0]),emoji=arguments[0]?.descriptor",
                 },
                 {
                     match: /(onFocus".{0,50}\(\i,{ref:)(\i),/,
-                    replace: '$1arguments[0]?.descriptor?.emoji?.category==="FAVORITES"?drag:$2,collected:collected,',
+                    replace: '$1emoji?.category==="FAVORITES"?drag:$2,collected:collected,',
                 },
                 {
                     match: /(,\{key:\i,ref:\i)(?=\}\),)/,
@@ -71,11 +71,11 @@ export default definePlugin({
                 },
                 {
                     match: /(delay:200,children:)(\i)/,
-                    replace: "$1[$2,$self.wrapper(arguments[0]?.descriptor?.emoji)]",
+                    replace: "$1[$2,$self.wrapper(emoji)]",
                 },
                 {
                     match: /(delay:200,children:.{0,100}\}\):)(\i)\)/,
-                    replace: "$1[$2,$self.wrapper(arguments[0]?.descriptor?.emoji)])",
+                    replace: "$1[$2,$self.wrapper(emoji)])",
                 },
             ],
         },
