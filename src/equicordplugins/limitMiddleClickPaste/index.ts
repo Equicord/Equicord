@@ -30,7 +30,7 @@ const settings = definePluginSettings({
     },
     threshold: {
         type: OptionType.NUMBER,
-        description: "Milliseconds until pasting is enabled again after a middle click. Smaller values are more convenient to unlock pasting quicker, but run the risk of unlocking pasting before the middle click paste event is fired on slower systems. Experiment to find the smallest value that works reliably on your system.",
+        description: "Milliseconds until pasting is enabled again after a middle click.",
         default: 100,
         onChange(newValue) { if (newValue < 1) { settings.store.threshold = 1; } },
     },
@@ -40,26 +40,21 @@ function migrateOldSettings() {
     const pluginSettings = SettingsStore.plain.plugins.LimitMiddleClickPaste;
 
     if (pluginSettings.limitTo !== undefined) {
-        console.info("[LimitMiddleClickPaste] Migrating limitTo setting...");
-
         if (pluginSettings.limitTo === "never") {
             pluginSettings.scope = "always";
-            delete pluginSettings.limitTo;
-            SettingsStore.markAsChanged();
         } else if (pluginSettings.limitTo === "active") {
             pluginSettings.scope = "focus";
-            delete pluginSettings.limitTo;
-            SettingsStore.markAsChanged();
         } else if (pluginSettings.limitTo === "direct") {
             pluginSettings.scope = "focus";
-            delete pluginSettings.limitTo;
-            SettingsStore.markAsChanged();
         }
+
+        console.info("[LimitMiddleClickPaste] Migrating limitTo setting...");
+        delete pluginSettings.limitTo;
+        SettingsStore.markAsChanged();
     }
 
     if (pluginSettings.reenableDelay !== undefined) {
         console.info("[LimitMiddleClickPaste] Migrating reenableDelay setting...");
-
         pluginSettings.threshold = pluginSettings.reenableDelay;
         delete pluginSettings.reenableDelay;
         SettingsStore.markAsChanged();
