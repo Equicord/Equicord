@@ -11,6 +11,7 @@ import { FormSwitch } from "@components/FormSwitch";
 import { Heading, HeadingPrimary } from "@components/Heading";
 import { Devs } from "@utils/constants";
 import { makeLazy } from "@utils/lazy";
+import { Logger } from "@utils/Logger";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByProps, wreq } from "@webpack";
@@ -18,6 +19,8 @@ import { Button, Timestamp, useState } from "@webpack/common";
 
 import TarFile from "./tar";
 import * as Webpack from "./webpack";
+
+const logger = new Logger("WebpackTarball");
 
 export const settings = definePluginSettings({
     patched: {
@@ -52,7 +55,7 @@ export const getBuildNumber = makeLazy(() => {
         const [, builtAt, buildNumber] = metrics.match(/\{built_at:"(\d+)",build_number:"(\d+)"\}/);
         return { buildNumber, builtAt: new Date(Number(builtAt)) };
     } catch (e) {
-        console.error("failed to get build number:", e);
+        logger.error("failed to get build number:", e);
         return { buildNumber: "unknown", builtAt: new Date() };
     }
 });

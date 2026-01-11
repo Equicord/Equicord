@@ -141,7 +141,7 @@ class YoutubeMusicSocket {
 
         try {
             this.socket = new WebSocket(new URL("/api/v1/ws", url));
-        } catch (e) {
+        } catch {
             logger.error("Connection failed");
             return;
         }
@@ -151,7 +151,7 @@ class YoutubeMusicSocket {
             this.connecting = false;
         });
 
-        this.socket.addEventListener("error", e => {
+        this.socket.addEventListener("error", () => {
             this.ready = false;
             this.connecting = false;
             if (!this.ready) this.scheduleReconnect(5_000);
@@ -159,7 +159,7 @@ class YoutubeMusicSocket {
 
         });
 
-        this.socket.addEventListener("close", e => {
+        this.socket.addEventListener("close", () => {
             this.ready = false;
             this.connecting = false;
             if (!this.ready) this.scheduleReconnect(10_000);

@@ -105,7 +105,7 @@ export default definePlugin({
             args.region = region;
         }
     },
-    renderIgnore(channel) {
+    renderIgnore(channel: Channel) {
         const currentUserId = UserStore.getCurrentUser().id;
         const permanentlyIgnoredUsers = settings.store.permanentlyIgnoredUsers.split(",").map(s => s.trim()).filter(Boolean);
         if (ignoredChannelIds.has(channel.id) || permanentlyIgnoredUsers.includes(channel.id)) {

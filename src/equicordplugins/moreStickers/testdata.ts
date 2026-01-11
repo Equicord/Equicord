@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Logger } from "@utils/Logger";
+
 import { setRecentStickers } from "./components";
 import {
     convert,
@@ -16,21 +18,16 @@ import {
 } from "./stickers";
 import { StickerPack } from "./types";
 
-export async function initTest() {
-    console.log("initTest.");
+const logger = new Logger("MoreStickers");
 
-    console.log("Clearing recent stickers.");
+export async function initTest() {
     setRecentStickers([]);
 
-    // Clear all sticker packs
-    console.log("Clearing all sticker packs.");
     const stickerPackMetas = await getStickerPackMetas();
     for (const meta of stickerPackMetas) {
         await deleteStickerPack(meta.id);
     }
 
-    // Add test sticker packs
-    console.log("Adding test sticker packs.");
     const lineStickerPackIds = [
         "22814489", // LV.47
         "22567773", // LV.46
@@ -46,30 +43,22 @@ export async function initTest() {
                 const sp = convert(lsp);
                 return sp;
             } catch (e) {
-                console.error("Failed to fetch sticker pack: " + id);
-                console.error(e);
+                logger.error("Failed to fetch sticker pack: " + id);
+                logger.error(e);
                 return null;
             }
         })());
     }
     const stickerPacks = (await Promise.all(ps)).filter(sp => sp !== null) as StickerPack[];
 
-    console.log("Saving test sticker packs.");
     for (const sp of stickerPacks) {
         await saveStickerPack(sp);
     }
-
-    console.log(await getStickerPackMetas());
 }
 
 export async function clearTest() {
-    console.log("clearTest.");
-
-    console.log("Clearing recent stickers.");
     setRecentStickers([]);
 
-    // Clear all sticker packs
-    console.log("Clearing all sticker packs.");
     const stickerPackMetas = await getStickerPackMetas();
     for (const meta of stickerPackMetas) {
         await deleteStickerPack(meta.id);

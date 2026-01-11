@@ -6,10 +6,14 @@
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import type { Guild } from "@vencord/discord-types";
+import { StickerFormatType } from "@vencord/discord-types/enums";
 import { EmojiStore, Menu, StickersStore } from "@webpack/common";
 import { zipSync } from "fflate";
+
+const logger = new Logger("GuildPickerDumper");
 
 const StickerExt = [, "png", "apng", "json", "gif"] as const;
 
@@ -33,9 +37,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
         ? EmojiStore.getGuilds()[guild.id]?.emojis
         : StickersStore.getStickersByGuildId(guild.id);
 
-    if (!items) {
-        return console.log("Server not found!");
-    }
+    if (!items) return;
 
     const getProxyEndpoint = () => {
         const rawEndpoint = window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT;
@@ -52,7 +54,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
             url = `https://${endpoint}/emojis/${e.id}${ext}?size=512&quality=lossless`;
         } else {
             ext = "." + StickerExt[e.format_type];
-            const urlExt = e.format_type === 2 ? ".png" : ext;
+            const urlExt = e.format_type === StickerFormatType.APNG ? ".png" : ext;
             url = `https://${endpoint}/stickers/${e.id}${urlExt}?size=4096&lossless=true`;
         }
 
@@ -61,7 +63,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
 
         let response = await fetch(url);
 
-        if (!isEmojis && e.format_type === 2 && (!response.ok || response.headers.get("content-type")?.includes("text"))) {
+        if (!isEmojis && e.format_type === StickerFormatType.APNG && (!response.ok || response.headers.get("content-type")?.includes("text"))) {
             const gifUrl = `https://${endpoint}/stickers/${e.id}.gif?size=4096&lossless=true`;
             const gifResponse = await fetch(gifUrl);
 
@@ -89,7 +91,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
             link.click();
             link.remove();
         })
-        .catch(console.error);
+        .catch(e => logger.error(e));
 }
 
 export default definePlugin({

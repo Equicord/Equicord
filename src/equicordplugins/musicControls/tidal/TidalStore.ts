@@ -102,12 +102,12 @@ class TidalSocket {
             this.socket?.send(JSON.stringify({ action: "subscribe", all: true, fields: ["currentTime"] }));
         });
 
-        this.socket.addEventListener("error", e => {
+        this.socket.addEventListener("error", () => {
             if (!this.ready) setTimeout(() => this.reconnect(), 5_000);
             this.onChange({ type: "update", all: true, fields: { playing: false, track: null, currentTime: 0, repeatMode: 0, shuffle: false, volume: 100 } });
         });
 
-        this.socket.addEventListener("close", e => {
+        this.socket.addEventListener("close", () => {
             this.ready = false;
             if (!this.ready) setTimeout(() => this.reconnect(), 10_000);
             this.onChange({ type: "update", all: true, fields: { playing: false, track: null, currentTime: 0, repeatMode: 0, shuffle: false, volume: 100 } });

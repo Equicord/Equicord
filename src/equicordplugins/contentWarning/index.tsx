@@ -15,7 +15,7 @@ import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, TextInput, useState } from "@webpack/common";
+import { Button, React, TextInput, useState } from "@webpack/common";
 
 const cl = classNameFactory("vc-content-warning-");
 
@@ -32,7 +32,7 @@ function safeMatchesRegex(s: string, r: string) {
     }
 }
 
-function TriggerContainer({ child }) {
+function TriggerContainer({ child }: { child: React.ReactNode; }) {
     const [visible, setVisible] = useState(false);
     const { onClick } = settings.store;
 
@@ -62,7 +62,7 @@ function TriggerContainer({ child }) {
     }
 }
 
-function FlaggedInput({ index, forceUpdate }) {
+function FlaggedInput({ index, forceUpdate }: { index: number; forceUpdate: () => void; }) {
     const [value, setValue] = useState(triggerWords[index]);
 
     if (value !== triggerWords[index]) {
@@ -71,7 +71,7 @@ function FlaggedInput({ index, forceUpdate }) {
 
     const isLast = index === triggerWords.length - 1;
 
-    const updateValue = v => {
+    const updateValue = (v: string) => {
         triggerWords[index] = v;
         setValue(v);
         DataStore.set(WORDS_KEY, triggerWords);

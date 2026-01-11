@@ -7,12 +7,11 @@
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Activity } from "@vencord/discord-types";
-import { ActivityType } from "@vencord/discord-types/enums";
+import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
 
 import { BanchoStatusEnum, GameState, Modes, TosuApi, UserLoginStatus } from "./type";
 
-const socketId = "tosu";
 const OSU_APP_ID = "367827983903490050";
 const OSU_LARGE_IMAGE = "373344233077211136";
 const OSU_STARDARD_SMALL_IMAGE = "373370493127884800";
@@ -68,7 +67,7 @@ async function onMessage(data: string) {
         timestamps: {
             start: Date.now() - session.playTime
         },
-        flags: 1 << 0,
+        flags: ActivityFlags.INSTANCE,
     };
 
     activity.assets = {};

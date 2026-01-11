@@ -10,8 +10,7 @@ import { Heart } from "@components/Heart";
 import { Paragraph } from "@components/Paragraph";
 import { Theme, ThemeInfoModalProps } from "@equicordplugins/themeLibrary/types";
 import { ClockIcon, DownloadIcon, WarningIcon } from "@equicordplugins/themeLibrary/utils/Icons";
-import { copyToClipboard } from "@utils/clipboard";
-import { openInviteModal } from "@utils/discord";
+import { copyWithToast, openInviteModal } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
@@ -147,10 +146,7 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
                                                 Close
                                             </Button>
                                             <Button className={Margins.right8}
-                                                onClick={() => {
-                                                    copyToClipboard(themeContent);
-                                                    showToast("Copied to Clipboard", Toasts.Type.SUCCESS);
-                                                }}>Copy to Clipboard</Button>
+                                                onClick={() => copyWithToast(themeContent, "Copied to Clipboard")}>Copy to Clipboard</Button>
                                         </ModalFooter>
                                     </ModalRoot>
                                 ))}

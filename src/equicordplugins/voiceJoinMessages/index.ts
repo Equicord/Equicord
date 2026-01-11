@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { pluralise } from "@utils/misc";
 import { humanFriendlyJoin } from "@utils/text";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
@@ -136,7 +137,7 @@ export default definePlugin({
                         if (otherMembersCount <= 0) {
                             memberListContent += ", nobody else is in the voice channel";
                         } else if (settings.store.friendDirectMessagesShowMemberCount) {
-                            memberListContent += ` with ${otherMembersCount} other member${otherMembersCount === 1 ? "s" : ""}`;
+                            memberListContent += ` with ${pluralise(otherMembersCount, "other member")}`;
                         }
                         if (settings.store.friendDirectMessagesShowMembers && otherMembersCount > 0) {
                             memberListContent += settings.store.friendDirectMessagesShowMemberCount ? ", " : " with ";

@@ -119,7 +119,7 @@ async function addListeners(audioElement: HTMLAudioElement, url: string, parentB
     });
 }
 
-function drawOscilloscope(canvasContext, canvas, dataArray, bufferLength) {
+function drawOscilloscope(canvasContext: CanvasRenderingContext2D, canvas: HTMLCanvasElement, dataArray: Uint8Array, bufferLength: number) {
     const sliceWidth = canvas.width / bufferLength;
     let x = 0;
 
@@ -157,7 +157,7 @@ function drawOscilloscope(canvasContext, canvas, dataArray, bufferLength) {
     canvasContext.stroke();
 }
 
-function drawSpectrograph(canvasContext, canvas, frequencyData, bufferLength) {
+function drawSpectrograph(canvasContext: CanvasRenderingContext2D, canvas: HTMLCanvasElement, frequencyData: Uint8Array, bufferLength: number) {
     const { spectrographSolidColor, spectrographColor } = settings.store;
     const maxHeight = canvas.height;
     const barWidth = canvas.width / bufferLength;
@@ -225,7 +225,7 @@ function createObserver(targetNode: HTMLElement) {
     return observer;
 }
 
-function tryHexToRgb(hex) {
+function tryHexToRgb(hex: string) {
     if (hex.startsWith("#")) {
         const hexMatch = hex.match(/\w\w/g);
         if (hexMatch) {
@@ -236,7 +236,7 @@ function tryHexToRgb(hex) {
     return hex;
 }
 
-function handleColorChange(value, settingKey, defaultValue) {
+function handleColorChange(value: string, settingKey: string, defaultValue: string) {
     const rgbPattern = /^(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})$/;
 
     if (!value.match(rgbPattern)) {

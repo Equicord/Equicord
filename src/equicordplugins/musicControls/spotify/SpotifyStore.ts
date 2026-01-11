@@ -19,53 +19,29 @@
 import { isPluginEnabled } from "@api/PluginManager";
 import { Settings } from "@api/Settings";
 import OpenInAppPlugin from "@plugins/openInApp";
+import { Logger } from "@utils/Logger";
+import { SpotifyDevice, SpotifyTrack } from "@vencord/discord-types";
 import { findByProps, findByPropsLazy, proxyLazyWebpack } from "@webpack";
 import { Flux, FluxDispatcher } from "@webpack/common";
 
-export interface Track {
-    id: string;
-    name: string;
-    duration: number;
-    isLocal: boolean;
-    album: {
-        id: string;
-        name: string;
-        image: {
-            height: number;
-            width: number;
-            url: string;
-        };
-    };
-    artists: {
-        id: string;
-        href: string;
-        name: string;
-        type: string;
-        uri: string;
-    }[];
-}
+const logger = new Logger("MusicControls");
+
+export type Track = SpotifyTrack;
+export type Device = Pick<SpotifyDevice, "id" | "is_active">;
+export type Repeat = "off" | "track" | "context";
 
 interface PlayerState {
     accountId: string;
     track: Track | null;
-    volumePercent: number,
-    isPlaying: boolean,
-    repeat: boolean,
-    position: number,
+    volumePercent: number;
+    isPlaying: boolean;
+    repeat: boolean;
+    position: number;
     context?: any;
     device?: Device;
-
-    // added by patch
     actual_repeat: Repeat;
     shuffle: boolean;
 }
-
-interface Device {
-    id: string;
-    is_active: boolean;
-}
-
-type Repeat = "off" | "track" | "context";
 
 // Don't wanna run before Flux and Dispatcher are ready!
 export const SpotifyStore = proxyLazyWebpack(() => {
@@ -161,7 +137,7 @@ export const SpotifyStore = proxyLazyWebpack(() => {
                     position_ms: Math.round(ms)
                 }
             }).catch((e: any) => {
-                console.error("[VencordSpotifyControls] Failed to seek", e);
+                logger.error("Failed to seek", e);
                 this.isSettingPosition = false;
             });
         }

@@ -27,7 +27,7 @@ export const settings = definePluginSettings({
     }
 });
 
-export function rand(min, max) {
+export function rand(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -146,7 +146,7 @@ export const replacements = [
     ["hello", "hewwo"],
 ];
 
-export function selectRandomElement(arr) {
+export function selectRandomElement<T>(arr: T[]): T {
     // generate a random index based on the length of the array
     const randomIndex = Math.floor(Math.random() * arr.length);
 
@@ -157,7 +157,7 @@ export const isOneCharacterString = (str: string): boolean => {
     return str.split("").every((char: string) => char === str[0]);
 };
 
-export function replaceString(inputString) {
+export function replaceString(inputString: string): string | false {
     let replaced = false;
     for (const replacement of replacements) {
         const regex = new RegExp(`\\b${replacement[0]}\\b`, "gi");
@@ -194,7 +194,7 @@ export function uwuify(message: string): string {
     return answer;
 }
 
-export function uwuifyArray(arr) {
+export function uwuifyArray(arr: any[]): any[] {
     const newArr = [...arr];
 
     newArr.forEach((item, index) => {

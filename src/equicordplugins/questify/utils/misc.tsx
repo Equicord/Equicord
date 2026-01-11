@@ -7,6 +7,7 @@
 import { questIsIgnored, settings } from "@equicordplugins/questify/settings";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
+import { sleep } from "@utils/misc";
 import { findByPropsLazy } from "@webpack";
 import { FluxDispatcher, RestAPI, UserStore } from "@webpack/common";
 
@@ -191,7 +192,7 @@ export async function waitUntilEnrolled(quest: Quest, timeout: number = 30000, i
     }
 
     while (!quest.userStatus?.enrolledAt && (Date.now() - start) < timeout) {
-        await new Promise(resolve => setTimeout(resolve, interval));
+        await sleep(interval);
         quest = refreshQuest(quest);
     }
 
@@ -228,7 +229,7 @@ export async function reportVideoQuestProgress(quest: Quest, currentProgress: nu
                 logger?.warn(`[${getFormattedNow()}] No response body received while reporting video progress for Quest ${questName} on attempt ${attempt}/${maxAttempts}.`);
 
                 if (attempt < maxAttempts) {
-                    await new Promise(resolve => setTimeout(resolve, delay));
+                    await sleep(delay);
                 }
 
                 continue;
@@ -240,7 +241,7 @@ export async function reportVideoQuestProgress(quest: Quest, currentProgress: nu
             logger?.error(`[${getFormattedNow()}] Failed to report progress for Quest ${questName} on attempt ${attempt}/${maxAttempts}:`, error);
 
             if (attempt < maxAttempts) {
-                await new Promise(resolve => setTimeout(resolve, delay));
+                await sleep(delay);
             }
         }
     }
@@ -276,7 +277,7 @@ export async function reportPlayGameQuestProgress(quest: Quest, terminal: boolea
                 logger?.warn(`[${getFormattedNow()}] No response body received while sending heartbeat for Quest ${questName} on attempt ${attempt}/${maxAttempts}.`);
 
                 if (attempt < maxAttempts) {
-                    await new Promise(resolve => setTimeout(resolve, delay));
+                    await sleep(delay);
                 }
 
                 continue;
@@ -298,7 +299,7 @@ export async function reportPlayGameQuestProgress(quest: Quest, terminal: boolea
             logger?.error(`[${getFormattedNow()}] Failed to send heartbeat for Quest ${questName} on attempt ${attempt}/${maxAttempts}:`, error);
 
             if (attempt < maxAttempts) {
-                await new Promise(resolve => setTimeout(resolve, delay));
+                await sleep(delay);
             }
         }
     }

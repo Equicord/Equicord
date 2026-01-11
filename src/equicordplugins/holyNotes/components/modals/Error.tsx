@@ -10,8 +10,6 @@ export default ({ error }: { error?: Error; } = {}) => {
     const classes = findByProps("emptyResultsWrap");
 
     if (error) {
-        // Error
-        console.log(error);
         return (
             <div className={classes.emptyResultsWrap}>
                 <div className={classes.emptyResultsContent} style={{ paddingBottom: "0px" }}>

@@ -10,6 +10,7 @@ import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { VoiceState } from "@vencord/discord-types";
+import { ChannelType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, MediaEngineStore, PermissionsBits, PermissionStore, SelectedChannelStore, showToast, Toasts, UserStore, VoiceActions } from "@webpack/common";
 
@@ -29,7 +30,7 @@ async function autoStartStream(instant = true) {
 
     const isGuildChannel = !channel.isDM() && !channel.isGroupDM();
 
-    if (channel.type === 13 || isGuildChannel && !PermissionStore.can(PermissionsBits.STREAM, channel)) return;
+    if (channel.type === ChannelType.GUILD_STAGE_VOICE || isGuildChannel && !PermissionStore.can(PermissionsBits.STREAM, channel)) return;
 
     if (settings.store.autoDeafen && !MediaEngineStore.isSelfDeaf() && instant) {
         VoiceActions.toggleSelfDeaf();

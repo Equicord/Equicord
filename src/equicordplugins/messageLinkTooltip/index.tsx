@@ -109,8 +109,8 @@ export default definePlugin({
     },
 });
 
-function withTooltip(Component, props, messageId, channelId) {
-    if (!messageId) return <Component {...props} />;
+function withTooltip(Component: ComponentType<any>, props: any, messageId: string | undefined, channelId: string | undefined) {
+    if (!messageId || !channelId) return <Component {...props} />;
     return <Tooltip
         tooltipClassName="c98-message-link-tooltip"
         text={
@@ -127,7 +127,7 @@ function withTooltip(Component, props, messageId, channelId) {
     </Tooltip>;
 }
 
-function MessagePreview({ channelId, messageId }) {
+function MessagePreview({ channelId, messageId }: { channelId: string; messageId: string; }) {
     const channel = ChannelStore.getChannel(channelId);
     const message = useMessage(channelId, messageId);
     const rawCompact = MessageDisplayCompact.useSetting();
@@ -147,7 +147,7 @@ function MessagePreview({ channelId, messageId }) {
     />;
 }
 
-function useMessage(channelId, messageId) {
+function useMessage(channelId: string, messageId: string) {
     const cachedMessage = useStateFromStores(
         [MessageStore],
         () => MessageStore.getMessage(channelId, messageId)

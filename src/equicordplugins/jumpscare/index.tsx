@@ -67,7 +67,7 @@ export default definePlugin({
         const [isPlaying, setIsPlaying] = useState(false);
         const jumpscareAudio = createAudioPlayer(settings.store.audioSource, { volume: 100, onEnded: () => { setIsPlaying(false); } });
 
-        const jumpscare = useCallback(event => {
+        const jumpscare = useCallback(() => {
             if (isPlaying) return;
 
             const chance = 1 / settings.store.chance;

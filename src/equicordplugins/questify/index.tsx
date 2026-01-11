@@ -11,8 +11,8 @@ import { plugins } from "@api/PluginManager";
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import { migratePluginToSettings } from "@api/Settings";
 import { ErrorBoundary, openPluginModal } from "@components/index";
+import { copyToClipboard } from "@utils/clipboard";
 import { EquicordDevs } from "@utils/constants";
-import { copyToClipboard } from "@utils/index";
 import definePlugin, { PluginNative, StartAt } from "@utils/types";
 import { onceReady } from "@webpack";
 import { ContextMenuApi, Menu, NavigationRouter, RestAPI, useEffect, useState } from "@webpack/common";
@@ -207,7 +207,6 @@ function shouldHideQuestPopup(quest: Quest | null): boolean {
     const {
         disableQuestsPopupAboveAccountPanel,
         disableQuestsEverything,
-        triggerQuestsRerender
     } = settings.use([
         "disableQuestsPopupAboveAccountPanel",
         "disableQuestsEverything",
@@ -291,8 +290,6 @@ function QuestTileContextMenu(children: React.ReactNode[], props: { quest: any; 
 
 export function getQuestTileClasses(originalClasses: string, quest: Quest, color: number | null | undefined, gradient: string | undefined): string {
     const {
-        ignoredQuestIDs,
-        ignoredQuestProfile,
         restyleQuestsUnclaimed,
         restyleQuestsClaimed,
         restyleQuestsIgnored,
@@ -366,7 +363,7 @@ export function getQuestTileClasses(originalClasses: string, quest: Quest, color
 }
 
 function makeDesktopCompatible(quests: Quest[]): void {
-    const { makeMobileQuestsDesktopCompatible, triggerQuestsRerender } = settings.use(["makeMobileQuestsDesktopCompatible", "triggerQuestsRerender"]);
+    const { makeMobileQuestsDesktopCompatible } = settings.use(["makeMobileQuestsDesktopCompatible", "triggerQuestsRerender"]);
 
     if (makeMobileQuestsDesktopCompatible) {
         quests.forEach(quest => {
@@ -398,17 +395,11 @@ function makeDesktopCompatible(quests: Quest[]): void {
 
 function sortQuests(quests: Quest[], skip?: boolean): Quest[] {
     const {
-        ignoredQuestIDs,
-        ignoredQuestProfile,
         reorderQuests,
         unclaimedSubsort,
         claimedSubsort,
         ignoredSubsort,
         expiredSubsort,
-        completeVideoQuestsInBackground,
-        completeGameQuestsInBackground,
-        completeAchievementQuestsInBackground,
-        triggerQuestsRerender
     } = settings.use([
         "ignoredQuestIDs",
         "ignoredQuestProfile",
@@ -510,11 +501,7 @@ function sortQuests(quests: Quest[], skip?: boolean): Quest[] {
 }
 
 export function getQuestTileStyle(quest: Quest | null): Record<string, string> {
-    const {
-        restyleQuests,
-        ignoredQuestIDs,
-        ignoredQuestProfile
-    } = settings.use([
+    settings.use([
         "restyleQuests",
         "ignoredQuestIDs",
         "ignoredQuestProfile"
@@ -1037,7 +1024,7 @@ function disguiseHomeButton(location: string): boolean {
 }
 
 function useQuestRerender(): number {
-    const { triggerQuestsRerender } = settings.use(["triggerQuestsRerender"]);
+    settings.use(["triggerQuestsRerender"]);
     const [renderTrigger, setRenderTrigger] = useState(0);
     useEffect(() => addRerenderCallback(() => setRenderTrigger(prev => prev + 1)), []);
     return renderTrigger;
@@ -1513,7 +1500,7 @@ export default definePlugin({
     },
 
     flux: {
-        CHANNEL_SELECT(data) {
+        CHANNEL_SELECT() {
             settings.store.onQuestsPage = (window.location.pathname === questPath);
         },
 
@@ -1565,12 +1552,12 @@ export default definePlugin({
             }
         },
 
-        LOGOUT(data) {
+        LOGOUT() {
             settings.store.unclaimedUnignoredQuests = 0;
             settings.store.onQuestsPage = false;
         },
 
-        LOGIN_SUCCESS(data) {
+        LOGIN_SUCCESS() {
             onceReady.then(() => {
                 fetchAndDispatchQuests("Questify", QuestifyLogger);
             });

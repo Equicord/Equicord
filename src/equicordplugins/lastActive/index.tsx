@@ -6,8 +6,11 @@
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { Menu, NavigationRouter, RestAPI, Toasts, UserStore } from "@webpack/common";
+
+const logger = new Logger("LastActive");
 
 async function findLastMessageFromUser(guildId: string, channelId: string, userId: string) {
     try {
@@ -27,7 +30,7 @@ async function findLastMessageFromUser(guildId: string, channelId: string, userI
         });
         return null;
     } catch (error) {
-        console.error("Error finding last message:", error);
+        logger.error("Error finding last message:", error);
         Toasts.show({
             type: Toasts.Type.FAILURE,
             message: "Failed to find messages. Check console for details.",
@@ -63,7 +66,7 @@ async function jumpToLastActive(channel: any, targetUserId?: string) {
             NavigationRouter.transitionTo(url);
         }
     } catch (error) {
-        console.error("Error in jumpToLastActive:", error);
+        logger.error("Error in jumpToLastActive:", error);
         Toasts.show({
             type: Toasts.Type.FAILURE,
             message: "Failed to jump to message. Check console for details.",

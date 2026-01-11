@@ -18,10 +18,13 @@
 
 import { addMessagesBulkIDB, DBMessageRecord, getAllMessagesIDB } from "@equicordplugins/messageLoggerEnhanced/db";
 import { LoggedMessage, LoggedMessageJSON } from "@equicordplugins/messageLoggerEnhanced/types";
+import { Logger } from "@utils/Logger";
 import { chooseFile as chooseFileWeb } from "@utils/web";
 import { Toasts } from "@webpack/common";
 
 import { Native } from "..";
+
+const logger = new Logger("MessageLoggerEnhanced");
 
 async function getLogContents(): Promise<string> {
     if (IS_WEB) {
@@ -72,7 +75,7 @@ export async function importLogs() {
             type: Toasts.Type.SUCCESS
         });
     } catch (e) {
-        console.error(e);
+        logger.error(e);
 
         Toasts.show({
             id: Toasts.genId(),

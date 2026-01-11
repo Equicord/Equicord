@@ -9,7 +9,7 @@ import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { UserSettingsActionCreators } from "@webpack/common";
 
-function getMessage(opts, other) {
+function getMessage(opts: unknown, other: { guild?: { ownerId?: string; } | null; }) {
     const frecencyStore = UserSettingsActionCreators.FrecencyUserSettingsActionCreators.getCurrentValue();
 
     const gifsArray = Object.keys(frecencyStore.favoriteGifs.gifs);

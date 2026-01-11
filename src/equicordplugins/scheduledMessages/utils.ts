@@ -6,8 +6,9 @@
 
 import * as DataStore from "@api/DataStore";
 import { Logger } from "@utils/Logger";
+import { sleep } from "@utils/misc";
 import { CloudUpload, Message } from "@vencord/discord-types";
-import { CloudUploadPlatform } from "@vencord/discord-types/enums";
+import { CloudUploadPlatform, MessageType } from "@vencord/discord-types/enums";
 import { findLazy } from "@webpack";
 import { ChannelStore, Constants, FluxDispatcher, GuildStore, IconUtils, MessageActions, MessageStore, RestAPI, showToast, SnowflakeUtils, Toasts, UserStore } from "@webpack/common";
 
@@ -211,7 +212,7 @@ export async function createPhantomMessage(msg: ScheduledMessage): Promise<void>
                 attachments,
                 embeds: [],
                 pinned: false,
-                type: 0,
+                type: MessageType.DEFAULT,
                 flags: 0,
                 components: [],
                 reactions: initialReactions,
@@ -309,7 +310,7 @@ async function postMessage(channelId: string, content: string, attachments?: { i
         body: {
             content,
             nonce: SnowflakeUtils.fromTimestamp(Date.now()),
-            ...(attachments?.length ? { channel_id: channelId, sticker_ids: [], type: 0, attachments } : {})
+            ...(attachments?.length ? { channel_id: channelId, sticker_ids: [], type: MessageType.DEFAULT, attachments } : {})
         }
     });
 }
@@ -327,15 +328,15 @@ async function addReactionsToMessage(channelId: string, messageId: string, react
             } catch (e) {
                 const err = e as { status?: number; body?: { retry_after?: number; }; };
                 if (err.status === 429 || err.body?.retry_after) {
-                    await new Promise(r => setTimeout(r, (err.body?.retry_after ?? 1) * 1000 + 100));
+                    await sleep((err.body?.retry_after ?? 1) * 1000 + 100);
                 } else if (err.status === 404) {
-                    await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+                    await sleep(1000 * (attempt + 1));
                 } else {
                     break;
                 }
             }
         }
-        await new Promise(r => setTimeout(r, 350));
+        await sleep(350);
     }
 }
 
@@ -358,7 +359,7 @@ async function sendScheduledMessage(msg: ScheduledMessage): Promise<boolean> {
         }
 
         if (reactions.length) {
-            await new Promise(r => setTimeout(r, 1500));
+            await sleep(1500);
             const msgArray = (MessageStore.getMessages(msg.channelId) as { _array?: Message[]; })?._array ?? [];
             const currentUserId = UserStore.getCurrentUser()?.id;
 

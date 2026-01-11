@@ -113,7 +113,8 @@ const _ = {
 };
 export const { openedTabs } = _;
 
-let update = (save = true) => {
+let update = (save?: boolean) => {
+    void save;
     logger.warn("Update function not set");
 };
 let bumpGhostTabCount = () => {
@@ -528,7 +529,7 @@ export function setOpenTab(id: number) {
     openTabHistory.push(id);
 }
 
-export function setUpdaterFunction(fn: () => void) {
+export function setUpdaterFunction(fn: (save?: boolean) => void) {
     update = fn;
 }
 

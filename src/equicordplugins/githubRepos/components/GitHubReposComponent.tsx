@@ -15,7 +15,7 @@ import { cl, settings } from "..";
 import { RepoCard } from "./RepoCard";
 import { ReposModal } from "./ReposModal";
 
-export function GitHubReposComponent({ id, theme }: { id: string, theme: string; }) {
+export function GitHubReposComponent({ id }: { id: string, theme: string; }) {
     const [repos, setRepos] = useState<GitHubRepo[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);

@@ -11,30 +11,9 @@ import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import type { Activity, ActivityAssets } from "@vencord/discord-types";
+import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher, showToast } from "@webpack/common";
-
-interface ActivityAssets {
-    large_image?: string;
-    large_text?: string;
-    small_image?: string;
-    small_text?: string;
-}
-
-interface Activity {
-    state: string;
-    details?: string;
-    timestamps?: {
-        start?: number;
-    };
-    assets?: ActivityAssets;
-    name: string;
-    application_id: string;
-    metadata?: {
-        button_urls?: Array<string>;
-    };
-    type: number;
-    flags: number;
-}
 
 interface MediaData {
     name: string;
@@ -187,7 +166,6 @@ export default definePlugin({
 
             const { mediaMetadata: media, mediaType, duration, currentTime, libraryItemId } = activeSession;
             if (!media) return null;
-            console.log(media);
             return {
                 name: media.title || "Unknown",
                 type: mediaType || "book",
@@ -213,7 +191,6 @@ export default definePlugin({
         if (!mediaData || mediaData.isFinished) return null;
 
         const largeImage = mediaData.imageUrl;
-        console.log("Large Image URL:", largeImage);
         const assets: ActivityAssets = {
             large_image: largeImage ? await getApplicationAsset(largeImage) : await getApplicationAsset("audiobookshelf"),
             large_text: mediaData.series || mediaData.author || undefined,
@@ -244,8 +221,8 @@ export default definePlugin({
             assets,
             timestamps,
 
-            type: 2,
-            flags: 1,
+            type: ActivityType.LISTENING,
+            flags: ActivityFlags.INSTANCE,
         };
     }
 });

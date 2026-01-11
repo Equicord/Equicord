@@ -134,7 +134,6 @@ export default definePlugin({
 
         React.useEffect(() => {
             (async () => {
-                console.log("Updating sticker packs...", counter);
                 setCounter(counter + 1);
 
                 const sps = (await Promise.all(

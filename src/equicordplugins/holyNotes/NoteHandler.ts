@@ -185,8 +185,7 @@ export const noteHandler = proxyLazyWebpack(() => {
         public importNotes = async (notes: HolyNotes.Note[]) => {
             try {
                 var parseNotes = JSON.parse(notes as unknown as string);
-            } catch (e) {
-                console.log(e);
+            } catch {
                 return Toasts.show({
                     id: Toasts.genId(),
                     message: "Invalid JSON.",

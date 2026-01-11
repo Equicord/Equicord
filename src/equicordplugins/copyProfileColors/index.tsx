@@ -5,33 +5,15 @@
  */
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { copyToClipboard } from "@utils/clipboard";
 import { EquicordDevs } from "@utils/constants";
+import { copyWithToast } from "@utils/discord";
 import definePlugin from "@utils/types";
 import { Menu, Toasts, UserProfileStore } from "@webpack/common";
 
-function getProfileColors(userId) {
-    try {
-        const profile = UserProfileStore.getUserProfile(userId);
+function copyProfileColors(userId: string) {
+    const profile = UserProfileStore.getUserProfile(userId);
 
-        if (!profile || !profile.themeColors || profile.themeColors.length < 2) {
-            return null;
-        }
-
-        const primaryColor = profile.themeColors[0].toString(16).padStart(6, "0");
-        const secondaryColor = profile.themeColors[1].toString(16).padStart(6, "0");
-
-        return { primaryColor, secondaryColor };
-    } catch (e) {
-        console.error("Failed to get profile colors:", e);
-        return null;
-    }
-}
-
-function copyProfileColors(userId) {
-    const colors = getProfileColors(userId);
-
-    if (!colors) {
+    if (!profile?.themeColors || profile.themeColors.length < 2) {
         Toasts.show({
             type: Toasts.Type.FAILURE,
             message: "No profile colors found!",
@@ -40,26 +22,11 @@ function copyProfileColors(userId) {
         return;
     }
 
-    const { primaryColor, secondaryColor } = colors;
-
-    //  Formatting
+    const primaryColor = profile.themeColors[0].toString(16).padStart(6, "0");
+    const secondaryColor = profile.themeColors[1].toString(16).padStart(6, "0");
     const formattedColors = `Primary-color #${primaryColor}, Secondary-Color #${secondaryColor}`;
 
-    try {
-        copyToClipboard(formattedColors);
-        Toasts.show({
-            type: Toasts.Type.SUCCESS,
-            message: "Profile colors copied to clipboard!",
-            id: Toasts.genId()
-        });
-    } catch (e) {
-        console.error("Failed to copy to clipboard:", e);
-        Toasts.show({
-            type: Toasts.Type.FAILURE,
-            message: "Error copying profile colors!",
-            id: Toasts.genId()
-        });
-    }
+    copyWithToast(formattedColors, "Profile colors copied to clipboard!");
 }
 
 export function ColorIcon() {

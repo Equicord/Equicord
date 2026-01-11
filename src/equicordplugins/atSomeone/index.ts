@@ -6,8 +6,9 @@
 
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { Devs } from "@utils/constants";
+import { getCurrentChannel } from "@utils/discord";
 import definePlugin from "@utils/types";
-import { ChannelStore, GuildMemberStore, SelectedChannelStore, SelectedGuildStore } from "@webpack/common";
+import { GuildMemberStore, SelectedGuildStore } from "@webpack/common";
 
 export default definePlugin({
     name: "AtSomeone",
@@ -45,7 +46,7 @@ export default definePlugin({
 const randomUser = () => {
     const guildId = SelectedGuildStore.getGuildId();
     if (guildId === null) {
-        const dmUsers = ChannelStore.getChannel(SelectedChannelStore.getChannelId()).recipients;
+        const dmUsers = getCurrentChannel()!.recipients;
         return dmUsers[~~(dmUsers.length * Math.random())];
     }
     const members = GuildMemberStore.getMembers(guildId);

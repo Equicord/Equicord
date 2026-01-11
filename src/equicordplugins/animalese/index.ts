@@ -6,8 +6,11 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { SelectedChannelStore, UserStore } from "@webpack/common";
+
+const logger = new Logger("Animalese");
 
 const settings = definePluginSettings({
     volume: {
@@ -217,7 +220,7 @@ export default definePlugin({
                 const buffer = await generateAnimalese(message.content);
                 if (buffer) await playSound(buffer, settings.store.volume);
             } catch (err) {
-                console.error("[Animalese]", err);
+                logger.error(err);
             }
         }
     },

@@ -37,7 +37,7 @@ export function MultipleChoice({ modalProps, onSelect, choices }: MultipleChoice
 
     const totalActions = filteredActions.length;
 
-    const handleButtonClick = (actionId: string, index: number) => {
+    const handleButtonClick = (actionId: string, _index?: number) => {
         const selectedAction = filteredActions.find(action => action.id === actionId);
 
         if (selectedAction) {

@@ -69,7 +69,7 @@ export function SelectFolderInput({ settingsKey, successMessage }: Props) {
                 type: Toasts.Type.SUCCESS,
                 message: successMessage
             });
-        } catch (err) {
+        } catch {
             Toasts.show({
                 id: Toasts.genId(),
                 type: Toasts.Type.FAILURE,

@@ -5,6 +5,9 @@
  */
 
 import { get, set } from "@api/DataStore";
+import { Logger } from "@utils/Logger";
+
+const logger = new Logger("CustomSounds");
 
 const STORAGE_KEY = "ScattrdCustomSounds";
 
@@ -70,7 +73,7 @@ async function generateDataURI(buffer: ArrayBuffer, type: string, name: string):
             reader.readAsDataURL(blob);
         });
     } catch (error) {
-        console.error("[CustomSounds] Error generating data URI:", error);
+        logger.error("Error generating data URI:", error);
 
         const uint8Array = new Uint8Array(buffer);
         let binary = "";
@@ -95,7 +98,6 @@ export async function getAudioDataURI(id: string): Promise<string | undefined> {
         return entry.dataUri;
     }
 
-    console.log(`[CustomSounds] No cached data URI for ${id}, generating...`);
     const dataUri = await generateDataURI(entry.buffer, entry.type, entry.name);
 
     const current = await getAllAudio();

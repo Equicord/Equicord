@@ -27,6 +27,7 @@ import { classes } from "@utils/misc";
 import { openModalLazy } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
+import { PremiumType } from "@vencord/discord-types/enums";
 import { extractAndLoadChunksLazy, findByPropsLazy, findComponentByCodeLazy, findModuleId, wreq } from "@webpack";
 import { Clickable, Menu, OverridePremiumTypeStore, Toasts, useState } from "@webpack/common";
 
@@ -136,7 +137,7 @@ const StatusSubMenuComponent = () => {
             render={() => <RenderStatusMenuItem
                 status={status}
                 update={update}
-                disabled={status.emojiInfo?.id != null && premiumType === 0}
+                disabled={status.emojiInfo?.id != null && premiumType === PremiumType.NONE}
             />}
         /> : null)}
     </Menu.Menu>;

@@ -44,7 +44,7 @@ export function OpenSBLogsButton() {
     );
 }
 
-export default function SoundBoardLog({ data, closeModal }) {
+export default function SoundBoardLog({ data, closeModal }: { data: SoundLogEntry[]; closeModal: () => void; }) {
     const [sounds, setSounds] = useState(data);
     const [users, setUsers] = useState<User[]>([]);
     const update = async () => setSounds(await getLoggedSounds());
@@ -76,7 +76,7 @@ export default function SoundBoardLog({ data, closeModal }) {
         })();
     }, [sounds]);
 
-    function renderMoreUsers(item, itemUsers) {
+    function renderMoreUsers(item: SoundLogEntry, itemUsers: User[]) {
         return (
             <Clickable
                 className={AvatarStyles.clickableAvatar}

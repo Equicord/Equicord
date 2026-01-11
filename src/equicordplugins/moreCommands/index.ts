@@ -20,6 +20,7 @@ import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, 
 import { addMessagePreEditListener, addMessagePreSendListener, MessageObject, removeMessagePreEditListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
+import { sleep } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { UserStore } from "@webpack/common";
 
@@ -58,7 +59,7 @@ export default definePlugin({
                         `> **Network**: ${networkInfo} (${onLine ? "Online" : "Offline"})`
                     ].join("\n");
                     return { content: info };
-                } catch (err) {
+                } catch {
                     sendBotMessage(ctx.channel.id, { content: "Failed to fetch system information" });
                 }
             },
@@ -115,7 +116,7 @@ export default definePlugin({
             name: "flipcoin",
             description: "Flips a coin and returns heads or tails",
             options: [],
-            execute: (opts, ctx) => {
+            execute: () => {
                 const flip = Math.random() < 0.5 ? "Heads" : "Tails";
                 return {
                     content: `The coin landed on: ${flip}`
@@ -166,7 +167,7 @@ export default definePlugin({
                         return {
                             content: data[0].url
                         };
-                    } catch (err) {
+                    } catch {
                         sendBotMessage(ctx.channel.id, {
                             content: "Sorry, couldn't fetch a cat picture right now 😿"
                         });
@@ -302,7 +303,7 @@ export default definePlugin({
                     content: `Starting countdown from ${number}...`
                 });
                 for (let i = number; i >= 0; i--) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    await sleep(1000);
                     sendBotMessage(ctx.channel.id, {
                         content: i === 0 ? "🎉 Go! 🎉" : `${i}...`
                     });

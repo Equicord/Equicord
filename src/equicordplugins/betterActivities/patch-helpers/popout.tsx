@@ -6,6 +6,7 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Activity } from "@vencord/discord-types";
+import { ActivityType } from "@vencord/discord-types/enums";
 import { PresenceStore, React, useEffect, useMemo, UserStore, useState, useStateFromStores } from "@webpack/common";
 import { JSX } from "react";
 
@@ -19,12 +20,12 @@ export function showAllActivitiesComponent({ activity, user, ...props }: Readonl
     if (!currentUser) return null;
 
     const [currentActivity, setCurrentActivity] = useState<Activity | null>(
-        activity?.type !== 4 ? activity! : null
+        activity?.type !== ActivityType.CUSTOM_STATUS ? activity! : null
     );
 
     const activities = useStateFromStores(
         [PresenceStore],
-        () => PresenceStore.getActivities(user.id).filter((activity: Activity) => activity.type !== 4)
+        () => PresenceStore.getActivities(user.id).filter((activity: Activity) => activity.type !== ActivityType.CUSTOM_STATUS)
     );
 
     useEffect(() => {

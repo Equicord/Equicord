@@ -13,18 +13,22 @@ import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
-import { copyToClipboard } from "@utils/clipboard";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { copyWithToast } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import { ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Alerts, Button, ContextMenuApi, FluxDispatcher, Menu, React, showToast, TextInput, Toasts, useCallback, useState } from "@webpack/common";
 
+import { Gif } from "./types";
 import { addToCollection, cache_collections, createCollection, DATA_COLLECTION_NAME, deleteCollection, fixPrefix, getCollections, getGifById, getItemCollectionNameFromId, moveGifToCollection, refreshCacheCollection, removeFromCollection, renameCollection, updateGif } from "./utils/collectionManager";
 import { getFormat } from "./utils/getFormat";
 import { getGif } from "./utils/getGif";
 import { refreshGifUrl } from "./utils/refreshUrl";
 import { downloadCollections, uploadGifCollections } from "./utils/settingsUtils";
 import { uuidv4 } from "./utils/uuidv4";
+
+const logger = new Logger("GifCollections");
 
 let GIF_COLLECTION_PREFIX: string;
 let GIF_ITEM_PREFIX: string;
@@ -51,10 +55,7 @@ const addCollectionContextMenuPatch: NavContextMenuPatchCallback = (children, pr
                     label="Copy Image Link"
                     key="copy-image-link"
                     id="copy-image-link"
-                    action={() => {
-                        copyToClipboard(gif.url);
-                        showToast("Image link copied to clipboard", Toasts.Type.SUCCESS);
-                    }}
+                    action={() => copyWithToast(gif.url, "Image link copied to clipboard")}
                 />
             );
         }
@@ -403,7 +404,7 @@ export default definePlugin({
                 instance.props.trendingCategories = this.sortedCollections().concat(this.oldTrendingCat);
             }
         } catch (err) {
-            console.error(err);
+            logger.error(err);
         }
     },
     shouldStopFetch(query) {
@@ -437,7 +438,7 @@ export default definePlugin({
     },
 });
 
-const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
+const RemoveItemContextMenu = ({ type, nameOrId, instance }: { type: string; nameOrId: string; instance: any; }) => (
     <Menu.Menu
         navId="gif-collection-id"
         onClose={() => FluxDispatcher.dispatch({ type: "CONTEXT_MENU_CLOSE" })}
@@ -588,8 +589,7 @@ const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
                     action={() => {
                         const gifInfo = getGifById(nameOrId);
                         if (!gifInfo) return;
-                        copyToClipboard(gifInfo.url);
-                        showToast("URL copied to clipboard", Toasts.Type.SUCCESS);
+                        copyWithToast(gifInfo.url, "URL copied to clipboard");
                     }}
                 />
                 <Menu.MenuItem
@@ -701,7 +701,7 @@ const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
     </Menu.Menu>
 );
 
-const MenuThingy = ({ gif }) => {
+const MenuThingy = ({ gif }: { gif: Gif; }) => {
     const collections = cache_collections;
     const menuItems: React.ReactNode[] = [];
 
@@ -711,10 +711,7 @@ const MenuThingy = ({ gif }) => {
                 label="Copy Image Link"
                 key="copy-image-link"
                 id="copy-image-link"
-                action={() => {
-                    copyToClipboard(gif.url);
-                    showToast("Image link copied to clipboard", Toasts.Type.SUCCESS);
-                }}
+                action={() => copyWithToast(gif.url, "Image link copied to clipboard")}
             />
         );
     }
@@ -744,7 +741,7 @@ const MenuThingy = ({ gif }) => {
     return <>{menuItems}</>;
 };
 
-function CreateCollectionModal({ gif, onClose, modalProps }) {
+function CreateCollectionModal({ gif, onClose, modalProps }: { gif: any; onClose: () => void; modalProps: any; }) {
     const [name, setName] = useState("");
     const onSubmit = useCallback(e => {
         e.preventDefault();
@@ -780,7 +777,7 @@ function CreateCollectionModal({ gif, onClose, modalProps }) {
     );
 }
 
-function RenameCollectionModal({ name, onClose, modalProps }) {
+function RenameCollectionModal({ name, onClose, modalProps }: { name: string; onClose: () => void; modalProps: any; }) {
     const prefix = settings.store.collectionPrefix;
     const strippedName = name.startsWith(prefix) ? name.slice(prefix.length) : name;
     const [newName, setNewName] = useState(strippedName);

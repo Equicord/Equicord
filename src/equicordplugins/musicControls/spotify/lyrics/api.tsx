@@ -101,7 +101,7 @@ export async function removeTranslations() {
     const newCache = {} as Record<string, LyricsData | null>;
 
     for (const [trackId, trackData] of Object.entries(cache)) {
-        const { Translated, ...lyricsVersions } = trackData?.lyricsVersions || {};
+        const { Translated: _, ...lyricsVersions } = trackData?.lyricsVersions || {}; void _;
         const newUseLyric = !!lyricsVersions[Provider.Spotify] ? Provider.Spotify : Provider.Lrclib;
 
         newCache[trackId] = { lyricsVersions, useLyric: newUseLyric };

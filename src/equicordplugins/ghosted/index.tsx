@@ -71,7 +71,7 @@ function getChannelDisplayName(channelId: string): string {
 
 function BooIndicator() {
     const [count, setCount] = useState(getBooCount());
-    const [showJumpscare, setShowJumpscare] = useState(false);
+    const [showJumpscare] = useState(false);
 
     useEffect(() => {
         const unsubscribe = onBooCountChange(newCount => {

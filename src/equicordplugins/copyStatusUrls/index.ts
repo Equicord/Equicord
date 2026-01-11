@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { copyToClipboard } from "@utils/clipboard";
 import { Devs } from "@utils/constants";
+import { copyWithToast } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
@@ -16,13 +17,12 @@ interface MakeContextMenuProps {
     activity: any;
 }
 
-// This is an API call if the result is not cached
-// i looked for an hour and did not find a better way to do this
+const logger = new Logger("CopyStatusUrls");
 const getMetadataFromApi: (activity: any, userId: string) => Promise<any> = findByCodeLazy("null/undefined");
 
 export default definePlugin({
     name: "CopyStatusUrls",
-    description: "Copy the users status url when you right-click it",
+    description: "Copy the users status url when you right-click it.",
     authors: [Devs.sadan],
 
     patches: [
@@ -42,20 +42,12 @@ export default definePlugin({
                 if (!button_urls[index]) {
                     throw new Error("button_urls does not contain index");
                 }
-                copyToClipboard(button_urls[index]);
-                Toasts.show({
-                    id: Toasts.genId(),
-                    message: "Copied URL",
-                    type: Toasts.Type.SUCCESS,
-                    options: {
-                        position: Toasts.Position.TOP
-                    }
-                });
+                copyWithToast(button_urls[index], "Copied URL");
             } catch (e) {
-                console.error(e);
+                logger.error("Failed to copy URL:", e);
                 Toasts.show({
                     id: Toasts.genId(),
-                    message: "Error copying URL, check console for more info",
+                    message: "Error copying URL",
                     type: Toasts.Type.FAILURE,
                     options: {
                         position: Toasts.Position.TOP
