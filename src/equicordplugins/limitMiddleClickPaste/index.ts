@@ -71,7 +71,7 @@ export default definePlugin({
             find: "document.addEventListener(\"paste\",",
             replacement: {
                 match: /(?<=paste",(\i)=>{)/,
-                replace: "if($self.isPastingDisabled(false)){$1.preventDefault?.();$1.stopPropagation?.();return;};"
+                replace: "if($1.target.tagName===\"BUTTON\"||$self.isPastingDisabled(false)){$1.preventDefault?.();$1.stopPropagation?.();return;};"
             }
         },
         {
