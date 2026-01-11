@@ -302,8 +302,6 @@ interface LMessageProps {
 function LMessage({ log, isGroupStart, reset, }: LMessageProps) {
     const message = useMemo(() => messageJsonToMessageClass(log), [log]);
 
-    // console.log(message);
-
     if (!message) return null;
 
     const channel = ChannelStore.getChannel(message?.channel_id);

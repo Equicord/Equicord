@@ -7,7 +7,10 @@
 import { showNotice } from "@api/Notices";
 import { plugins, startDependenciesRecursive, startPlugin, stopPlugin } from "@api/PluginManager";
 import { Settings } from "@api/Settings";
+import { Logger } from "@utils/Logger";
 import { Alerts, Toasts } from "@webpack/common";
+
+const logger = new Logger("EquicordHelper");
 
 function showErrorToast(message: string) {
     Toasts.show({
@@ -67,7 +70,7 @@ export async function toggleEnabled(name: string) {
     if (!wasEnabled) {
         const { restartNeeded, failures } = startDependenciesRecursive(plugin);
         if (failures.length) {
-            console.error(`Failed to start dependencies for ${plugin.name}: ${failures.join(", ")}`);
+            logger.error(`Failed to start dependencies for ${plugin.name}: ${failures.join(", ")}`);
             showNotice("Failed to start dependencies: " + failures.join(", "), "Close", () => null);
             return false;
         } else if (restartNeeded) {
@@ -92,7 +95,7 @@ export async function toggleEnabled(name: string) {
     if (!result) {
         settings.enabled = false;
         const msg = `Error while ${wasEnabled ? "stopping" : "starting"} plugin ${plugin.name}`;
-        console.error(msg);
+        logger.error(msg);
         showErrorToast(msg);
         return false;
     }

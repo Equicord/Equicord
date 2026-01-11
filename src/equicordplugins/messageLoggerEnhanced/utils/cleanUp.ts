@@ -18,6 +18,7 @@
 
 import { LoggedMessageJSON, RefrencedMessage } from "@equicordplugins/messageLoggerEnhanced/types";
 import { User } from "@vencord/discord-types";
+import { MessageType } from "@vencord/discord-types/enums";
 import { MessageStore } from "@webpack/common";
 
 import { getGuildIdByChannel, isGhostPinged } from "./index";
@@ -35,7 +36,7 @@ export function cleanupMessage(message: any, removeDetails: boolean = true): Log
     ret.deleted = ret.deleted ?? false;
     ret.deletedTimestamp = ret.deleted ? (new Date()).toISOString() : undefined;
     ret.editHistory = ret.editHistory ?? [];
-    if (ret.type === 19) {
+    if (ret.type === MessageType.REPLY) {
         ret.message_reference = message.message_reference || message.messageReference;
         if (ret.message_reference) {
             if (message.referenced_message) {
@@ -56,7 +57,7 @@ export function cleanUpCachedMessage(message: any) {
 }
 
 // stolen from mlv2
-export function cleanupEmbed(embed) {
+export function cleanupEmbed(embed: any) {
     /* backported code from MLV2 rewrite */
     if (!embed.id) return embed; /* already cleaned */
     const retEmbed: any = {};

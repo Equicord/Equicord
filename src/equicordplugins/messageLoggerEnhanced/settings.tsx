@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Logger } from "@utils/Logger";
 import { OptionType } from "@utils/types";
 import { Alerts, Button } from "@webpack/common";
 import { Settings } from "Vencord";
@@ -17,6 +18,8 @@ import { clearMessagesIDB } from "./db";
 import { blockedExts } from "./list";
 import { DEFAULT_IMAGE_CACHE_DIR } from "./utils/constants";
 import { exportLogs, importLogs } from "./utils/settingsUtils";
+
+const logger = new Logger("MessageLoggerEnhanced");
 
 export const settings = definePluginSettings({
     saveMessages: {
@@ -151,7 +154,7 @@ export const settings = definePluginSettings({
 
             const invalid = exts.filter(ext => blockedExts.includes(ext));
             if (invalid.length > 0) {
-                console.warn("Rejected invalid file extensions:", invalid);
+                logger.warn("Rejected invalid file extensions:", invalid);
                 return exts.filter(ext => !blockedExts.includes(ext)).join(",");
             }
 

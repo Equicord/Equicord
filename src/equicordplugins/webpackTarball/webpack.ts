@@ -20,7 +20,7 @@ export async function protectWebpack<T>(webpack: any[], body: () => Promise<T>):
     }
 }
 
-export function getLoadedChunks(wreq): { [chunkId: string | symbol]: 0 | undefined; } {
+export function getLoadedChunks(wreq: any): { [chunkId: string | symbol]: 0 | undefined; } {
     const { o } = wreq;
     try {
         wreq.o = (a: any) => { throw a; };
@@ -33,7 +33,7 @@ export function getLoadedChunks(wreq): { [chunkId: string | symbol]: 0 | undefin
     throw new Error("getLoadedChunks failed");
 }
 
-export function getChunkPaths(wreq): { [chunkId: string]: string; } {
+export function getChunkPaths(wreq: any): { [chunkId: string]: string; } {
     const sym = Symbol("getChunkPaths");
     try {
         Object.defineProperty(Object.prototype, sym, {

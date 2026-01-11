@@ -51,12 +51,6 @@ async function resizeImage(url: string) {
     // Draw the resized image onto the canvas
     ctx.drawImage(originalImage, 0, 0, resizedWidth, resizedHeight);
 
-    // Get the canvas image data
-    const imageData = ctx.getImageData(0, 0, targetSize, targetSize);
-    const { data } = imageData;
-
-    // Apply any additional image processing or filters here if desired
-
     // Convert the image data to a Blob
     const blob: Blob | null = await new Promise(resolve => {
         canvas.toBlob(resolve, "image/png");

@@ -6,7 +6,10 @@
 
 import { createStore } from "@api/DataStore";
 import { DataStore } from "@api/index";
+import { Logger } from "@utils/Logger";
 import { Toasts } from "@webpack/common";
+
+const logger = new Logger("HolyNotes");
 
 import { noteHandler, noteHandlerCache } from "./NoteHandler";
 import { HolyNotes } from "./types";
@@ -82,7 +85,7 @@ export async function uploadNotes() {
                 try {
                     await noteHandler.importNotes(reader.result as unknown as HolyNotes.Note[]);
                 } catch (err) {
-                    console.error(err);
+                    logger.error(err);
                     Toasts.show({
                         id: Toasts.genId(),
                         message: "Invalid JSON.",

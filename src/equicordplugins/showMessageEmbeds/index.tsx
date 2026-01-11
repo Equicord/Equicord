@@ -17,7 +17,7 @@ import { ChannelStore, Constants, Menu, MessageStore, React, RestAPI, showToast,
 
 const logger = new Logger("ShowMessageEmbeds");
 
-const addShowEmbedButton = (children, props) => {
+const addShowEmbedButton = (children: any[], props: any) => {
     if (props.itemSrc || !props.itemHref || !props.message) return; // itemSrc means the right clicked item is an image/attachment
 
     const group = findGroupChildrenByChildId("copy-native-link", children);
@@ -28,7 +28,7 @@ const addShowEmbedButton = (children, props) => {
     addButton(group, message, props.itemHref);
 };
 
-const addShowAttachmentEmbedButton = (children, props) => {
+const addShowAttachmentEmbedButton = (children: any[], props: any) => {
     if (!props.attachmentUrl) return;
 
     const message = MessageStore.getMessage(props.channelId, props.messageId);
@@ -37,7 +37,7 @@ const addShowAttachmentEmbedButton = (children, props) => {
     addButton(children, message, props.attachmentUrl);
 };
 
-const addButton = (children, message, url) => {
+const addButton = (children: any[], message: any, url: string) => {
     url = normaliseUrl(url);
 
     if (!isEmbedInMessage(message, url)) {
@@ -45,7 +45,7 @@ const addButton = (children, message, url) => {
             <Menu.MenuItem
                 id="vc-sme-show"
                 label="Show Embed"
-                action={_ => unfurlEmbed(url, message)}
+                action={() => unfurlEmbed(url, message)}
                 icon={ImageVisible}
                 key="vc-sme-show" />);
     } else if (isUrlInMessage(message, url)) { // check the url is actually in the message text so we know it's one people can actually add back
@@ -53,7 +53,7 @@ const addButton = (children, message, url) => {
             <Menu.MenuItem
                 id="vc-sme-remove"
                 label="Remove Embed"
-                action={_ => removeEmbed(url, message)}
+                action={() => removeEmbed(url, message)}
                 icon={ImageInvisible}
                 key="vc-sme-remove" />);
     }

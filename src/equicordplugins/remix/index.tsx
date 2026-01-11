@@ -22,7 +22,7 @@ const requireSettingsMenu = extractAndLoadChunksLazy(['name:"UserSettings"'], /c
 const PendingReplyStore = findStoreLazy("PendingReplyStore");
 const validMediaTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
 
-const UploadContextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
+const UploadContextMenuPatch: NavContextMenuPatchCallback = children => {
     if (children.find(c => c?.props?.id === "vc-remix")) return;
 
     children.push(<Menu.MenuItem

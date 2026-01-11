@@ -11,11 +11,14 @@ import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
 import { Button, Menu, showToast, Toasts, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
+
+const logger = new Logger("Timezones");
 
 import { deleteTimezone, getTimezone, loadDatabaseTimezones, setUserDatabaseTimezone } from "./database";
 import { SetTimezoneModal } from "./TimezoneModal";
@@ -114,7 +117,7 @@ export const settings = definePluginSettings({
                         await setUserDatabaseTimezone(UserStore.getCurrentUser().id, null);
                         await deleteTimezone();
                     } catch (error) {
-                        console.error("Error resetting database timezone:", error);
+                        logger.error("Error resetting database timezone:", error);
                         showToast("Failed to reset database timezone", Toasts.Type.FAILURE);
                     }
                 }}
@@ -295,7 +298,7 @@ export default definePlugin({
                 }
             }
             catch (error) {
-                console.error("Failed to refresh timezone:", error);
+                logger.error("Failed to refresh timezone:", error);
                 showToast("Failed to refresh timezones.", Toasts.Type.FAILURE);
             }
         }

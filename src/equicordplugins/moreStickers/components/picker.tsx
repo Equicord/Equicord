@@ -9,6 +9,7 @@ import { PickerContent, PickerContentHeader, PickerContentRow, PickerContentRowG
 import { sendSticker } from "@equicordplugins/moreStickers/upload";
 import { clPicker, FFmpegStateContext } from "@equicordplugins/moreStickers/utils";
 import { debounce } from "@shared/debounce";
+import { classes } from "@utils/misc";
 import { ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { React, TextInput } from "@webpack/common";
 import { JSX } from "react";
@@ -128,12 +129,10 @@ function PickerContentRowGrid({
             >
                 <span className={clPicker("content-row-grid-hidden-visually")}>{sticker.title}</span>
                 <div aria-hidden="true">
-                    <div className={
-                        [
-                            clPicker("content-row-grid-inspected-indicator"),
-                            `${isHovered ? "inspected" : ""}`
-                        ].join(" ")
-                    }></div>
+                    <div className={classes(
+                        clPicker("content-row-grid-inspected-indicator"),
+                        isHovered && "inspected"
+                    )}></div>
                     <div className={clPicker("content-row-grid-sticker-node")}>
                         <div className={clPicker("content-row-grid-asset-wrapper")} style={{
                             height: "96px",

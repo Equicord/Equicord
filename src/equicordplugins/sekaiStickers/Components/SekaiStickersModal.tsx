@@ -9,8 +9,9 @@ import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
 import { characters } from "@equicordplugins/sekaiStickers/characters.json";
+import { getCurrentChannel } from "@utils/discord";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { Button, ChannelStore, React, SelectedChannelStore, Slider, TextArea, UploadHandler } from "@webpack/common";
+import { Button, React, Slider, TextArea, UploadHandler } from "@webpack/common";
 
 import Canvas from "./Canvas";
 import CharSelectModal from "./Picker";
@@ -131,7 +132,7 @@ export default function SekaiStickersModal({ modalProps, settings }: { modalProp
                         if (settings.store.AutoCloseModal) modalProps.onClose();
                         canvast.toBlob(blob => {
                             const file = new File([blob as Blob], `${characters[character].character}-sekai_cards.png`, { type: "image/png" });
-                            UploadHandler.promptToUpload([file], ChannelStore.getChannel(SelectedChannelStore.getChannelId()), 0);
+                            UploadHandler.promptToUpload([file], getCurrentChannel()!, 0);
                         });
                     }}>Upload as Attachment</Button>
                 </Flex>

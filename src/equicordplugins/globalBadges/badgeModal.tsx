@@ -9,6 +9,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingTertiary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { openInviteModal } from "@utils/discord";
+import { pluralise } from "@utils/misc";
 import { ModalContent, ModalFooter, ModalHeader, ModalRoot, openModal } from "@utils/modal";
 import { User } from "@vencord/discord-types";
 import { React, Tooltip } from "@webpack/common";
@@ -54,8 +55,7 @@ export function openBadgeModal(user: User) {
                     {badgeDataElements.length ? (
                         <>
                             <Paragraph className={cl("modal-text")}>
-                                {badgeDataElements.length} global badge
-                                {badgeDataElements.length > 1 ? "s" : ""}.
+                                {pluralise(badgeDataElements.length, "global badge")}.
                             </Paragraph>
                             <div className={cl("modal-badges")}>
                                 {badgeDataElements}

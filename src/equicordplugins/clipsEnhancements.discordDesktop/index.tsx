@@ -9,6 +9,7 @@ import { Button } from "@components/Button";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Activity, SelectOption } from "@vencord/discord-types";
+import { ActivityType } from "@vencord/discord-types/enums";
 import { openUserSettingsPanel, PresenceStore, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
@@ -93,7 +94,7 @@ export default definePlugin({
         }
 
         const activities: Activity[] = PresenceStore.getActivities(UserStore.getCurrentUser().id);
-        const validActivities = activities.filter(activity => activity.type === 0 && activity.application_id !== null);
+        const validActivities = activities.filter(activity => activity.type === ActivityType.PLAYING && activity.application_id !== null);
 
         const splitName = activityName.split(" ");
 

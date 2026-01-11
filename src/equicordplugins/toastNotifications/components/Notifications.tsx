@@ -65,7 +65,6 @@ export async function showNotification(notification: NotificationData) {
                     // Remove this notification from the queue.
                     NotificationQueue = NotificationQueue.filter(n => n.key !== thisNotificationID.toString());
                     notification.onClose?.(); // Trigger the onClose callback if it exists.
-                    console.log(`[DEBUG] [ToastNotifications] Removed #${thisNotificationID} from queue.`);
 
                     // Re-render remaining notifications with new reversed indices.
                     root.render(
@@ -84,7 +83,6 @@ export async function showNotification(notification: NotificationData) {
 
         // Add this notification to the queue.
         NotificationQueue.push(ToastNotification);
-        console.log(`[DEBUG] [ToastNotifications] Added #${thisNotificationID} to queue.`);
 
         // Limit the number of notifications to the configured maximum.
         if (NotificationQueue.length > PluginSettings.store.maxNotifications) NotificationQueue.shift();

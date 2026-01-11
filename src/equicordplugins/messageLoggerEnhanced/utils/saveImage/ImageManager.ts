@@ -47,7 +47,7 @@ const idbSavedImages = new Map<string, IDBSavedImage>();
     }
 })();
 
-export async function getImage(attachmentId: string, fileExt?: string | null): Promise<any> {
+export async function getImage(attachmentId: string, _fileExt?: string | null): Promise<any> {
     // for people who have access to native api but some images are still in idb
     // also for people who dont have native api
     const idbPath = idbSavedImages.get(attachmentId)?.path;

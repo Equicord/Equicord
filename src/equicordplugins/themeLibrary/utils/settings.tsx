@@ -9,8 +9,8 @@ import { definePluginSettings } from "@api/Settings";
 import { HeadingSecondary } from "@components/Heading";
 import { OpenExternalIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
-import { copyToClipboard } from "@utils/clipboard";
 import { classNameFactory } from "@utils/css";
+import { copyWithToast } from "@utils/discord";
 import { OptionType } from "@utils/types";
 import { Button, Toasts } from "@webpack/common";
 
@@ -42,17 +42,7 @@ export const settings = definePluginSettings({
                     }
                 });
 
-                copyToClipboard(token);
-
-                Toasts.show({
-                    message: "Copied to Clipboard!",
-                    id: Toasts.genId(),
-                    type: Toasts.Type.SUCCESS,
-                    options: {
-                        duration: 2.5e3,
-                        position: Toasts.Position.BOTTOM
-                    }
-                });
+                copyWithToast(token, "Copied to Clipboard!");
             };
 
             return (

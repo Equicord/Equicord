@@ -32,7 +32,7 @@ async function enableLoopback() {
         }
 
         return true;
-    } catch (e) {
+    } catch {
         return false;
     }
 }
@@ -46,7 +46,7 @@ async function disableLoopback() {
             await VoiceActions.toggleSelfDeaf();
         }
         selfDeafenedByPlugin = false;
-    } catch (e) { }
+    } catch { }
 }
 
 function MicLoopbackIcon({ active = false, className = "" }: { active?: boolean; className?: string; }) {

@@ -9,6 +9,7 @@ import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { debounce } from "@shared/debounce";
 import { EquicordDevs, IS_MAC } from "@utils/constants";
+import { pluralise } from "@utils/misc";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
 
@@ -51,7 +52,7 @@ const refreshThemeList = async (silent = false) => {
         const diff = themeList.length - oldCount;
         const action = diff > 0 ? "Added" : "Removed";
         const count = Math.abs(diff);
-        showToast(`${action} ${count} theme${count > 1 ? "s" : ""}`, Toasts.Type.SUCCESS);
+        showToast(`${action} ${pluralise(count, "theme")}`, Toasts.Type.SUCCESS);
     }
 };
 
@@ -204,7 +205,7 @@ async function watchForLocalThemeChanges() {
         if (settings.store.showNotifications) {
             const action = diff > 0 ? "Added" : "Removed";
             const count = Math.abs(diff);
-            showToast(`${action} ${count} local theme${count > 1 ? "s" : ""}`, Toasts.Type.SUCCESS);
+            showToast(`${action} ${pluralise(count, "local theme")}`, Toasts.Type.SUCCESS);
         }
     }
 

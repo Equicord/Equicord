@@ -12,10 +12,13 @@ import { HeadingSecondary, HeadingTertiary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { debounce } from "@shared/debounce";
 import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { React, TextInput } from "@webpack/common";
+
+const logger = new Logger("FontLoader");
 
 interface GoogleFontMetadata {
     family: string;
@@ -53,7 +56,7 @@ async function searchGoogleFonts(query: string) {
 
         const data = await response.json();
         if (!data?.[1]) return [];
-        return data[1].map(([_, fontData]: [string, any[]]) => ({
+        return data[1].map(([, fontData]: [string, any[]]) => ({
             family: fontData[0],
             displayName: fontData[1],
             authors: fontData[2],
@@ -65,7 +68,7 @@ async function searchGoogleFonts(query: string) {
             }))
         }));
     } catch (err) {
-        console.error("Failed to fetch fonts:", err);
+        logger.error("Failed to fetch fonts:", err);
         return [];
     }
 }
@@ -98,7 +101,7 @@ const applyFont = async (fontFamily: string) => {
             }
         `;
     } catch (err) {
-        console.error("Failed to load font:", err);
+        logger.error("Failed to load font:", err);
     }
 };
 

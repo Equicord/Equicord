@@ -20,7 +20,7 @@ import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { settings as PluginSettings } from "@equicordplugins/toastNotifications/index";
-import { classes } from "@utils/misc";
+import { classes, pluralise } from "@utils/misc";
 import { React, useEffect, useMemo, useState } from "@webpack/common";
 
 import { NotificationData } from "./Notifications";
@@ -131,7 +131,7 @@ export default ErrorBoundary.wrap(function NotificationComponent({
                             )
                         ) : null}
                         {PluginSettings.store.renderImages && image && <img className="toastnotifications-notification-img" src={image} alt="ToastNotification Image" />}
-                        {footer && <p className="toastnotifications-notification-footer">{`${attachments} attachment${attachments > 1 ? "s" : ""} ${attachments > 1 ? "were" : "was"} sent.`}</p>}
+                        {footer && <p className="toastnotifications-notification-footer">{`${pluralise(attachments, "attachment")} ${attachments > 1 ? "were" : "was"} sent.`}</p>}
                     </div>
                 </div>
             </div>

@@ -9,8 +9,8 @@ import "./styles.css";
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { copyToClipboard } from "@utils/clipboard";
 import { EquicordDevs } from "@utils/constants";
+import { copyWithToast } from "@utils/discord";
 import { showItemInFolder } from "@utils/native";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
@@ -85,7 +85,7 @@ async function exportMessage(message: Message) {
             body: `Message exported successfully as ${filename}`,
             icon: "📄"
         });
-    } catch (error) {
+    } catch {
         showNotification({
             title: "Export Messages",
             body: "Failed to export message",
@@ -123,7 +123,7 @@ function getUsernames(contacts: ContactsList[], type: number): string[] {
         // only select contacts that are the specified type
         .filter(e => e.type === type)
         // return the username, and discriminator if necessary
-        .map(e => e.user.discriminator === "0" ? e.user.username : e.user.username + "#" + e.user.discriminator);
+        .map(e => e.user.discriminator === "0" ? e.user.username : `${e.user.username}#${e.user.discriminator}`);
 }
 
 export default definePlugin({
@@ -165,26 +165,14 @@ export default definePlugin({
     },
     addExportButton() {
         return <ErrorBoundary noop key=".2">
-            <button className="export-contacts-button" onClick={() => { this.copyContactToClipboard(); console.log("clicked"); }}>Export</button>
+            <button className="export-contacts-button" onClick={() => this.copyContactToClipboard()}>Export</button>
         </ErrorBoundary>;
     },
     copyContactToClipboard() {
         if (this.contactList) {
-            copyToClipboard(JSON.stringify(this.contactList));
-            Toasts.show({
-                message: "Contacts copied to clipboard successfully.",
-                type: Toasts.Type.SUCCESS,
-                id: Toasts.genId(),
-                options: {
-                    duration: 3000,
-                    position: Toasts.Position.BOTTOM
-                }
-            });
+            copyWithToast(JSON.stringify(this.contactList), "Contacts copied to clipboard successfully.");
             return;
         }
-        // reason why you need to click the all tab is because the data is extracted during
-        // the request itself when you fetch all your friends. this is done to avoid sending a
-        // manual request to discord, which may raise suspicion and might even get you terminated.
         Toasts.show({
             message: "Contact list is undefined. Click on the \"All\" tab before exporting.",
             type: Toasts.Type.FAILURE,

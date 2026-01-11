@@ -33,7 +33,7 @@ function UsersCollectionRows({ usersCollection }: { usersCollection: Data["users
     return (
         <>
             {Object.entries(usersCollection)
-                .map(([_key, { users, name }]) => ({ name, users: Object.values(users) }))
+                .map(([, { users, name }]) => ({ name, users: Object.values(users) }))
                 .sort((a, b) => b.users.length - a.users.length)
                 .map(({ name, users }) => (
                     <aside key={name}>

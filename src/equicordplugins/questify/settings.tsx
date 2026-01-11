@@ -8,6 +8,7 @@ import { defaultAudioNames, playAudio } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
 import { Divider, ErrorBoundary, Heading, Paragraph } from "@components/index";
 import { Logger } from "@utils/Logger";
+import { classes } from "@utils/misc";
 import { makeRange, OptionType } from "@utils/types";
 import { Button, ColorPicker, ContextMenuApi, Menu, Select, Slider, TextInput, useEffect, useRef, useState } from "@webpack/common";
 import { JSX } from "react";
@@ -364,7 +365,6 @@ function validateQuestButtonSetting() {
 
 function validateDisableQuestSetting() {
     const {
-        disableQuestsEverything,
         disableQuestsDiscoveryTab,
         disableQuestsFetchingQuests,
         disableQuestsDirectMessagesTab,
@@ -844,11 +844,11 @@ function DisableQuestsSetting(): JSX.Element {
 }
 
 const DummyQuestPreview = ({ quest, dummyColor, dummyGradient }: { quest: Quest; dummyColor: number | null; dummyGradient: string; }) => {
-    const classes = getQuestTileClasses("", quest, dummyColor, dummyGradient);
+    const tileClasses = getQuestTileClasses("", quest, dummyColor, dummyGradient);
 
     return (
         <QuestTile
-            className={[q("dummy-quest"), classes].join(" ")}
+            className={classes(q("dummy-quest"), tileClasses)}
             quest={quest}
         />
     );
@@ -1313,7 +1313,7 @@ function FetchingQuestsSetting(): JSX.Element {
         const existingOption = resolvedIntervals.find(option => option.value === value);
         if (existingOption) { return existingOption; }
 
-        const relevantScales = Object.entries(allowedScales).filter(([_, scale]) => { return value >= scale.multiplier; });
+        const relevantScales = Object.entries(allowedScales).filter(([, scale]) => { return value >= scale.multiplier; });
         const largestScale = relevantScales[relevantScales.length - 1]?.[1];
         const valueInScale = Math.ceil((value / largestScale.multiplier) * 100) / 100;
         const label = valueInScale === 1 ? largestScale.singular : largestScale.plural;
@@ -1519,7 +1519,7 @@ function FetchingQuestsSetting(): JSX.Element {
                         </div>
                         <div>
                             <DynamicDropdown
-                                filter={(options, query) => options}
+                                filter={options => options}
                                 placeholder="Select or type an interval between 30 minutes and 12 hours."
                                 feedback="Intervals must be between 30 minutes and 12 hours."
                                 className={q("select")}
@@ -1551,7 +1551,7 @@ function FetchingQuestsSetting(): JSX.Element {
                         <div className={q("sub-inline-group")}>
                             <div className={q("inline-group-item")}>
                                 <DynamicDropdown
-                                    filter={(options, query) => options}
+                                    filter={options => options}
                                     placeholder="Select a sound or provide a custom sound URL."
                                     feedback="Sound not found, or URL is not from a supported domain."
                                     className={q("select")}

@@ -65,7 +65,7 @@ const settings = definePluginSettings({
     }
 });
 
-function isChannelInGuildBlocked(channelID, guild) {
+function isChannelInGuildBlocked(channelID: string, guild: boolean) {
     const guildID = guild ? channelID : ChannelStore.getChannel(channelID)?.guild_id;
 
     const blacklist = settings.store.guildBlackList?.split(",").map(s => s.trim()).filter(Boolean) ?? [];
@@ -84,7 +84,7 @@ function shouldHideUser(userId: string, channelId?: string) {
     return settings.store.usersToBlock.split(", ").includes(userId);
 }
 
-function isRoleAllBlockedMembers(roleId, guildId) {
+function isRoleAllBlockedMembers(roleId: string, guildId: string) {
     const role = GuildRoleStore.getRole(guildId, roleId);
     if (!role) return false;
 
@@ -108,7 +108,7 @@ function hiddenReplyComponent() {
     }
 }
 
-function activeNowView(cards) {
+function activeNowView(cards: any[]) {
     if (!Array.isArray(cards)) return cards;
 
     return cards.filter(card => {

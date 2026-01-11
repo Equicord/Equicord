@@ -5,6 +5,7 @@
  */
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { ActivityType } from "@vencord/discord-types/enums";
 import { findComponentByCodeLazy } from "@webpack";
 import { React, Tooltip } from "@webpack/common";
 import { JSX } from "react";
@@ -84,7 +85,7 @@ export function patchActivityList({ activities, user, hideTooltip }: ActivityLis
     } else {
         // Show default icon when there are no custom icons
         // We need to filter out custom statuses
-        const shouldShow = activities.filter(a => a.type !== 4).length !== icons.length;
+        const shouldShow = activities.filter(a => a.type !== ActivityType.CUSTOM_STATUS).length !== icons.length;
         if (shouldShow) {
             return <DefaultActivityIcon size="xs" />;
         }

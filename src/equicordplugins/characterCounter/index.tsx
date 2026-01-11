@@ -9,6 +9,7 @@ import "./style.css";
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { PremiumType } from "@vencord/discord-types/enums";
 import { UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
@@ -42,7 +43,7 @@ export default definePlugin({
     ],
     getCharCounter(text: string) {
         const premiumType = (UserStore.getCurrentUser().premiumType ?? 0);
-        const charMax = premiumType === 2 ? 4000 : 2000;
+        const charMax = premiumType === PremiumType.TIER_2 ? 4000 : 2000;
         const { length } = text;
 
         let color = "var(--primary-330)";

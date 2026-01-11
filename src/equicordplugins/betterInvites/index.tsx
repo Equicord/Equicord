@@ -11,19 +11,12 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { openUserProfile } from "@utils/discord";
 import { classes } from "@utils/misc";
 import definePlugin, { StartAt } from "@utils/types";
-import { Guild } from "@vencord/discord-types";
+import { Guild, UserJSON } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
 import { Parser, Tooltip, UserStore } from "@webpack/common";
 
 const AvatarStyles = findByPropsLazy("avatar", "zalgo");
 const GuildManager = findByPropsLazy("joinGuild");
-
-interface User {
-    id: string;
-    avatar: string;
-    global_name: string;
-    username: string;
-}
 
 function lurk(id: string) {
     GuildManager.joinGuild(id, { lurker: true })
@@ -84,7 +77,7 @@ export default definePlugin({
             </Tooltip>
         );
     },
-    Header(inviter: User | undefined, guildName: string) {
+    Header(inviter: UserJSON | undefined, guildName: string) {
         const userId = UserStore.getCurrentUser().id;
         if (!inviter || userId === inviter.id) return null;
         return (
@@ -98,7 +91,7 @@ export default definePlugin({
                         : "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=128"}
                 />
                 <div className="vc-bi-header-text">
-                    {inviter.global_name || inviter.username} invited you to {guildName}
+                    {inviter.globalName || inviter.username} invited you to {guildName}
                 </div>
             </div>
         );

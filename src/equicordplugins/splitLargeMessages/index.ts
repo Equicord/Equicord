@@ -8,7 +8,9 @@ import { MessageSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { getCurrentChannel, sendMessage } from "@utils/discord";
+import { sleep } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
+import { PremiumType } from "@vencord/discord-types/enums";
 import { ChannelStore, ComponentDispatch, PermissionsBits, UserStore } from "@webpack/common";
 
 let maxLength: number = 0;
@@ -19,7 +21,7 @@ const canSplit: () => boolean = () => {
 };
 
 const autoMaxLength = () => {
-    const hasNitro = UserStore.getCurrentUser().premiumType === 2;
+    const hasNitro = UserStore.getCurrentUser().premiumType === PremiumType.TIER_2;
     return hasNitro ? 4000 : 2000;
 };
 
@@ -32,7 +34,7 @@ const split = async (channelId: string, chunks: string[], delayInMs: number) => 
     for (let i = 0; i < chunks.length; i++) {
         await sendChunk(chunks[i]);
         if (i < chunks.length - 1) // Not the last chunk
-            await new Promise(resolve => setTimeout(resolve, delayInMs)); // Wait for `delayInMs`
+            await sleep(delayInMs);
     }
 };
 

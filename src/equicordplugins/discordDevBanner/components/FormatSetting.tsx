@@ -9,12 +9,12 @@ import { useState } from "@webpack/common";
 
 import { makeDevBanner, settings, settingVariables } from ".";
 
-export function FormatSetting(setValue) {
+export function FormatSetting(setValue: (value: string) => void) {
     const { format } = settings.store;
     const [state, setState] = useState(format ?? "{buildChannel} {buildNumber} ({buildHash}) | {equicordName} {equicordVersion} ({equicordHash})");
     const [error, setError] = useState<string | null>(null);
 
-    function handleChange(newValue) {
+    function handleChange(newValue: string) {
         if (!newValue.trim()) {
             setError("Format cannot be empty.");
             return;

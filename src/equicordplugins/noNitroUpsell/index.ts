@@ -6,6 +6,7 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { PremiumType } from "@vencord/discord-types/enums";
 import { OverridePremiumTypeStore } from "@webpack/common";
 
 export default definePlugin({
@@ -15,12 +16,12 @@ export default definePlugin({
     flux: {
         CONNECTION_OPEN() {
             const state = OverridePremiumTypeStore.getState();
-            if (state.premiumTypeActual !== 2 || state.premiumTypeOverride === 2) return;
-            state.premiumTypeOverride = 2;
+            if (state.premiumTypeActual !== PremiumType.TIER_2 || state.premiumTypeOverride === PremiumType.TIER_2) return;
+            state.premiumTypeOverride = PremiumType.TIER_2;
         }
     },
     start() {
-        OverridePremiumTypeStore.getState().premiumTypeOverride = 2;
+        OverridePremiumTypeStore.getState().premiumTypeOverride = PremiumType.TIER_2;
     },
     stop() {
         OverridePremiumTypeStore.getState().premiumTypeOverride = undefined;

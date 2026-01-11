@@ -18,7 +18,7 @@ export async function getSettings(): Promise<MLSettings> {
     try {
         const settings = await fs.readFile(await getSettingsFilePath(), "utf8");
         return JSON.parse(settings);
-    } catch (err) {
+    } catch {
         // probably doesnt exist
         // time to create it
         const settings = {
@@ -27,7 +27,7 @@ export async function getSettings(): Promise<MLSettings> {
         };
         try {
             await saveSettings(settings);
-        } catch (err) { }
+        } catch { }
 
         return settings;
     }

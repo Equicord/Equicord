@@ -8,8 +8,11 @@ import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin, { StartAt } from "@utils/types";
 import { React } from "@webpack/common";
+
+const logger = new Logger("MessageColors");
 import type { ReactElement } from "react";
 
 import { BlockDisplayType, ColorType, regex, RenderType, replaceRegexp, settings } from "./constants";
@@ -114,7 +117,7 @@ export default definePlugin({
                         text: content
                     };
                 } catch (e) {
-                    console.error(e);
+                    logger.error(e);
                     return {
                         type: "text",
                         content: matchedContent[0]

@@ -14,14 +14,18 @@ import { Heading, HeadingTertiary } from "@components/Heading";
 import { DeleteIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { getCurrentChannel } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
-import { Button, ChannelStore, FluxDispatcher, Select, SelectedChannelStore, TabBar, TextInput, Tooltip, UserStore, useState } from "@webpack/common";
+import { Button, ChannelStore, FluxDispatcher, Select, TabBar, TextInput, Tooltip, UserStore, useState } from "@webpack/common";
 import type { JSX, PropsWithChildren } from "react";
+
+const logger = new Logger("KeywordNotify");
 
 type IconProps = JSX.IntrinsicElements["svg"];
 type KeywordEntry = { regex: string, listIds: Array<string>, listType: ListType, ignoreCase: boolean; };
@@ -73,7 +77,7 @@ function highlightKeywords(str: string, entries: Array<KeywordEntry>) {
     let regexes: Array<RegExp>;
     try {
         regexes = entries.map(e => new RegExp(e.regex, "g" + (e.ignoreCase ? "i" : "")));
-    } catch (err) {
+    } catch {
         return [str];
     }
 
@@ -93,7 +97,7 @@ function highlightKeywords(str: string, entries: Array<KeywordEntry>) {
     ];
 }
 
-function Collapsible({ title, children }) {
+function Collapsible({ title, children }: { title: string; children: React.ReactNode; }) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -117,7 +121,7 @@ function Collapsible({ title, children }) {
     );
 }
 
-function ListedIds({ listIds, setListIds }) {
+function ListedIds({ listIds, setListIds }: { listIds: string[]; setListIds: (ids: string[]) => void; }) {
     const update = useForceUpdater();
     const [values] = useState(listIds);
 
@@ -241,7 +245,7 @@ function KeywordEntries() {
                             <ListedIds listIds={values[i].listIds} setListIds={e => setListIds(i, e)} />
                         </div>
                     </Flex>
-                    <div className={[Margins.top8, Margins.bottom8].join(" ")} />
+                    <div className={classes(Margins.top8, Margins.bottom8)} />
                     <Flex flexDirection="row">
                         <Button onClick={() => {
                             values[i].listIds.push("");
@@ -367,7 +371,7 @@ export default definePlugin({
             try {
                 this.addToLog(e);
             } catch (err) {
-                console.error(err);
+                logger.error(err);
             }
         });
 
@@ -468,7 +472,7 @@ export default definePlugin({
         let messageRecord: any;
         try {
             messageRecord = createMessageRecord(m);
-        } catch (err) {
+        } catch {
             return;
         }
 
@@ -516,7 +520,7 @@ export default definePlugin({
     },
 
     tryKeywordMenu(onJump) {
-        const channel = ChannelStore.getChannel(SelectedChannelStore.getChannelId());
+        const channel = getCurrentChannel();
 
         const [tempLogs, setKeywordLog] = useState(keywordLog);
         this.onUpdate = () => {
@@ -524,7 +528,7 @@ export default definePlugin({
             setKeywordLog(newLog);
         };
 
-        const messageRender = (e, t) => {
+        const messageRender = (e: any, t: any) => {
             e._keyword = true;
 
             e.customRenderedContent = {

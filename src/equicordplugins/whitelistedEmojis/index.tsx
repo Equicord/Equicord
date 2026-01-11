@@ -10,10 +10,13 @@ import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatc
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { CustomEmoji, UnicodeEmoji } from "@vencord/discord-types";
 import { Alerts, Button, EmojiStore, GuildStore, Menu, Toasts, useEffect, useState } from "@webpack/common";
 import { JSX } from "react";
+
+const logger = new Logger("WhitelistedEmojis");
 
 interface ContextMenuEmoji {
     type: string;
@@ -229,7 +232,7 @@ const buildGuildContextPatch = (guild: { id: string; name: string; }) => {
                 key="add-white-list-guild-emojis"
                 label="Add All Guild Emojis"
                 action={() => {
-                    const { id, name } = guild;
+                    const { id } = guild;
                     const emojis = EmojiStore.getGuildEmoji(id);
                     addBulkToAllowedList(emojis.map(emoji => ({
                         type: "emoji",
@@ -243,7 +246,7 @@ const buildGuildContextPatch = (guild: { id: string; name: string; }) => {
                 key="remove-white-list-guild-emojis"
                 label="Remove All Guild Emojis"
                 action={() => {
-                    const { id, name } = guild;
+                    const { id } = guild;
                     const emojis = EmojiStore.getGuildEmoji(id);
                     removeBulkFromAllowedList(emojis.map(emoji => ({
                         type: "emoji",
@@ -447,7 +450,7 @@ const uploadEmojis = async () => {
             try {
                 await importEmojis(new TextDecoder().decode(file.data));
             } catch (err) {
-                console.error(err);
+                logger.error(err);
                 if (!settings.store.disableToasts) {
                     Toasts.show({
                         message: `Failed to import emojis: ${err}`,

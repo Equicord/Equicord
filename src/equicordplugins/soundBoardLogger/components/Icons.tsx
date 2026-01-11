@@ -7,7 +7,7 @@
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { cl } from "@equicordplugins/soundBoardLogger/utils";
 import { classes } from "@utils/misc";
-import { Button, ButtonWrapperClasses, Tooltip } from "@webpack/common";
+import { Button, ButtonWrapperClasses, React, Tooltip } from "@webpack/common";
 
 import { openSoundBoardLog } from "./SoundBoardLog";
 
@@ -34,7 +34,7 @@ export function LogIcon({ height = 24, width = 24, className = "chatBarLogIcon" 
     );
 }
 
-export function IconWithTooltip({ text, icon, onClick }) {
+export function IconWithTooltip({ text, icon, onClick }: { text: string; icon: React.ReactNode; onClick: () => void; }) {
     return <Tooltip text={text}>
         {({ onMouseEnter, onMouseLeave }) => (
             <div style={{ display: "flex" }}>

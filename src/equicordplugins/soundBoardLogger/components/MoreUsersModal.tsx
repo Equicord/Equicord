@@ -9,6 +9,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { HeadingPrimary } from "@components/Heading";
 import { cl, getEmojiUrl, SoundLogEntry, User } from "@equicordplugins/soundBoardLogger/utils";
+import { pluralise } from "@utils/misc";
 import { closeModal, ModalContent, ModalRoot, openModal } from "@utils/modal";
 import { Clickable } from "@webpack/common";
 
@@ -51,7 +52,7 @@ export default function MoreUsersModal({ item, users, onClickUser, closeModal }:
                                     />
                                     <BaseText size="xs" weight="medium" style={{ cursor: "pointer" }}>{user.username}</BaseText>
                                 </Flex>
-                                <BaseText size="xs" weight="medium" style={{ cursor: "pointer" }}>Played {currentUser.plays.length} {currentUser.plays.length === 1 ? "time" : "times"}</BaseText>
+                                <BaseText size="xs" weight="medium" style={{ cursor: "pointer" }}>Played {pluralise(currentUser.plays.length, "time")}</BaseText>
                             </div>
                         </Clickable>
                     );

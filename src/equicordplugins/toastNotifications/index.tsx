@@ -431,14 +431,13 @@ function findNotificationLevel(channel: Channel): NotificationLevel {
 async function handleGuildMessage(message: Message) {
     const c = ChannelStore.getChannel(message.channel_id);
     const notificationLevel: number = findNotificationLevel(c);
-    let t = false;
+
     // 0: All messages 1: Only mentions 2: No messages
     // todo: check if the user who sent it is a friend
     const all = notifyFor.includes(message.channel_id);
     const friend = settings.store.friendServerNotifications && RelationshipStore.isFriend(message.author.id);
 
     if (!all && !friend) {
-        t = true;
         const isMention: boolean = message.content.includes(`<@${UserStore.getCurrentUser().id}>`);
         const meetsMentionCriteria = notificationLevel !== NotificationLevel.ALL_MESSAGES && !isMention;
 
@@ -527,7 +526,6 @@ async function handleGuildMessage(message: Message) {
         Notification.icon = undefined;
     }
 
-    console.log("noti that went through: " + t);
     await showNotification(Notification);
 
 }

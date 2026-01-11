@@ -9,12 +9,15 @@ import { Card } from "@components/Card";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
 import { classNameFactory } from "@utils/css";
+import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
 import { makeRange } from "@utils/types";
 import { findLazy } from "@webpack";
 import { Button, React, Select, showToast, Slider } from "@webpack/common";
 import { ComponentType, Ref, SyntheticEvent } from "react";
+
+const logger = new Logger("CustomSounds");
 
 import { deleteAudio, getAllAudio, saveAudio, StoredAudioFile } from "./audioStore";
 import { ensureDataURICached } from "./index";
@@ -74,12 +77,12 @@ export function SoundOverrideComponent({ type, override, onChange }: {
 
                 sound.current = playAudio(dataUri, {
                     volume: override.volume, onError: e => {
-                        console.error("[CustomSounds] Error playing custom audio:", e);
+                        logger.error("Error playing custom audio:", e);
                         showToast("Error playing custom sound. File may be corrupted.");
                     }
                 });
             } catch (error) {
-                console.error("[CustomSounds] Error in previewSound:", error);
+                logger.error("Error in previewSound:", error);
                 showToast("Error playing sound.");
             }
         } else if (selectedSound === "default") {
@@ -115,7 +118,7 @@ export function SoundOverrideComponent({ type, override, onChange }: {
 
             showToast(`File uploaded successfully: ${file.name}`);
         } catch (error) {
-            console.error("[CustomSounds] Error uploading file:", error);
+            logger.error("Error uploading file:", error);
             showToast(`Error uploading file: ${error}`);
         }
 
@@ -137,7 +140,7 @@ export function SoundOverrideComponent({ type, override, onChange }: {
             }
             showToast("File deleted successfully");
         } catch (error) {
-            console.error("[CustomSounds] Error deleting file:", error);
+            logger.error("Error deleting file:", error);
             showToast("Error deleting file.");
         }
     };
@@ -155,21 +158,13 @@ export function SoundOverrideComponent({ type, override, onChange }: {
                 title={type.name}
                 value={override.enabled || false}
                 onChange={async val => {
-                    console.log(`[CustomSounds] Setting ${type.id} enabled to:`, val);
-
                     override.enabled = val;
 
                     if (val && override.selectedSound === "custom" && override.selectedFileId) {
-                        try {
-                            await ensureDataURICached(override.selectedFileId);
-                        } catch (error) {
-                            console.error(`[CustomSounds] Failed to cache data URI for ${type.id}:`, error);
-                            showToast("Error loading custom sound file");
-                        }
+                        await ensureDataURICached(override.selectedFileId);
                     }
 
                     await saveAndNotify();
-                    console.log("[CustomSounds] After setting enabled, override.enabled =", override.enabled);
                 }}
                 className={Margins.bottom16}
                 hideBorder
@@ -220,7 +215,7 @@ export function SoundOverrideComponent({ type, override, onChange }: {
                                 try {
                                     await ensureDataURICached(override.selectedFileId);
                                 } catch (error) {
-                                    console.error(`[CustomSounds] Failed to cache data URI for ${type.id}:`, error);
+                                    logger.error(`Failed to cache data URI for ${type.id}:`, error);
                                     showToast("Error loading custom sound file");
                                 }
                             }

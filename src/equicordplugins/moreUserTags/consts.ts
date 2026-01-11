@@ -5,6 +5,7 @@
  */
 
 import { Channel, Guild, Message, RC, User } from "@vencord/discord-types";
+import { MessageType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findLazy } from "@webpack";
 import { GuildStore } from "@webpack/common";
 
@@ -12,7 +13,7 @@ import { settings } from "./settings";
 import type { ITag } from "./types";
 
 export const isWebhook = (message: Message, user: User) => {
-    const isFollowed = message?.type === 0 && !!message?.messageReference && !settings.store.showWebhookTagFully;
+    const isFollowed = message?.type === MessageType.DEFAULT && !!message?.messageReference && !settings.store.showWebhookTagFully;
     return !!message?.webhookId && user.isNonUserBot() && !isFollowed;
 };
 

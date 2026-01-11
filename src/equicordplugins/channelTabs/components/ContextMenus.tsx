@@ -135,7 +135,7 @@ function AddToFolderModal({ modalProps, modalKey, bookmarks, onSave }: {
     );
 }
 
-function DeleteFolderConfirmationModal({ modalProps, modalKey, onConfirm }) {
+function DeleteFolderConfirmationModal({ modalProps, modalKey, onConfirm }: { modalProps: ModalProps; modalKey: string; onConfirm: () => void; }) {
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader>

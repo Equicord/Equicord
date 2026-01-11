@@ -8,6 +8,7 @@ import { addContextMenuPatch, removeContextMenuPatch } from "@api/ContextMenu";
 import { ScreenshareIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import type { Channel } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
 import { Menu, UploadHandler } from "@webpack/common";
 
@@ -24,7 +25,7 @@ export default definePlugin({
     }
 });
 
-function startRecording(children) {
+function startRecording(children: React.ReactNode[]) {
     children.push(
         <Menu.MenuItem
             id="start-recording"
@@ -45,7 +46,7 @@ function startRecording(children) {
     );
 }
 
-function stopRecording(children, props) {
+function stopRecording(children: React.ReactNode[], props: { channel: Channel; }) {
     children.push(
         <Menu.MenuItem
             id="stop-recording"

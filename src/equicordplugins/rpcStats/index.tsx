@@ -9,6 +9,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { Message } from "@vencord/discord-types";
+import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher, UserStore } from "@webpack/common";
 
 export async function getApplicationAsset(key: string): Promise<string> {
@@ -93,8 +94,8 @@ async function setRpc(disable?: boolean, details?: string, imageURL?: string) {
         "application_id": "0",
         "name": settings.store.RPCTitle,
         "details": details || "No info right now :(",
-        "type": 0,
-        "flags": 1,
+        "type": ActivityType.PLAYING,
+        "flags": ActivityFlags.INSTANCE,
         "assets": {
             // i love insanely long statements
             "large_image":
@@ -163,7 +164,6 @@ async function updateData() {
             if (lastFMDataJson == null) return;
 
             const lastFMData = JSON.parse(lastFMDataJson);
-            console.log(lastFMData);
             setRpc(false, settings.store.lastFMStatFormat.replace("$album", lastFMData.albumName).replace("$artist", lastFMData.artistName), lastFMData?.albumCoverUrl);
             break;
     }

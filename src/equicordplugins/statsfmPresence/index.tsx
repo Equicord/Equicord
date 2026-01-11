@@ -5,44 +5,15 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { getUserSettingLazy } from "@api/UserSettings";
 import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import type { Activity, ActivityAssets, ActivityButton } from "@vencord/discord-types";
 import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
 import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
-
-interface ActivityAssets {
-    large_image?: string;
-    large_text?: string;
-    small_image?: string;
-    small_text?: string;
-}
-
-interface ActivityButton {
-    label: string;
-    url: string;
-}
-
-interface Activity {
-    state: string;
-    details?: string;
-    timestamps?: {
-        start?: number;
-    };
-    assets?: ActivityAssets;
-    buttons?: Array<string>;
-    name: string;
-    application_id: string;
-    metadata?: {
-        button_urls?: Array<string>;
-    };
-    type: number;
-    flags: number;
-}
 
 interface TrackData {
     name: string;
@@ -103,8 +74,6 @@ interface Item {
 interface SFMR {
     item: Item;
 }
-
-const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;
 
 const applicationId = "1325126169179197500";
 const placeholderId = "2a96cbd8b46e442fc41c2b86b821562f";

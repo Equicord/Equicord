@@ -5,6 +5,7 @@
  */
 
 import { SvgOverFlowIcon } from "@equicordplugins/holyNotes/components/icons/overFlowIcon";
+import { isNonNullish } from "@utils/guards";
 import { classes } from "@utils/misc";
 import { findByPropsLazy } from "@webpack";
 import { Button, Clickable, Menu, Popout, React, useRef } from "@webpack/common";
@@ -18,10 +19,6 @@ export function NoteBookTabs({ tabs, selectedTabId, onSelectTab }: { tabs: strin
     const [overflowedTabs, setOverflowedTabs] = React.useState<string[]>([]);
     const resizeObserverRef = React.useRef<ResizeObserver | null>(null);
     const [show, setShow] = React.useState(false);
-
-    function isNotNullish(value) {
-        return value !== null && value !== undefined;
-    }
 
     const handleResize = React.useCallback(() => {
         if (!tabBarRef.current) return;
@@ -91,7 +88,7 @@ export function NoteBookTabs({ tabs, selectedTabId, onSelectTab }: { tabs: strin
                             action={() => onSelectTab(tab)}
                         />
                     ) : null;
-                }).filter(isNotNullish)}
+                }).filter(isNonNullish)}
 
             </Menu.Menu>
         );
@@ -126,7 +123,7 @@ export function NoteBookTabs({ tabs, selectedTabId, onSelectTab }: { tabs: strin
                     );
                 }
                 return null;
-            }).filter(isNotNullish)}
+            }).filter(isNonNullish)}
             {overflowedTabs.length > 0 && (
                 <Popout
                     shouldShow={show}
@@ -156,7 +153,7 @@ export function NoteBookTabs({ tabs, selectedTabId, onSelectTab }: { tabs: strin
     );
 }
 
-export function CreateTabBar({ tabs, firstSelectedTab, onChangeTab }) {
+export function CreateTabBar({ tabs, firstSelectedTab, onChangeTab }: { tabs: Record<string, any>; firstSelectedTab?: string | null; onChangeTab: (tab: string) => void; }) {
     const tabKeys = Object.keys(tabs);
     const mainTabIndex = tabKeys.indexOf("Main");
     if (mainTabIndex !== -1 && mainTabIndex !== 0) {
@@ -176,7 +173,7 @@ export function CreateTabBar({ tabs, firstSelectedTab, onChangeTab }) {
     return {
         TabBar: <NoteBookTabs
             tabs={tabKeys}
-            selectedTabId={selectedTab}
+            selectedTabId={selectedTab ?? ""}
             onSelectTab={tab => {
                 setSelectedTab(tab);
                 if (onChangeTab) onChangeTab(tab);

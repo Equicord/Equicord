@@ -5,7 +5,7 @@
  */
 
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
-import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
+import { addMessagePreSendListener, MessageObject, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -33,7 +33,7 @@ const isLegal = (word: string) => {
     return true;
 };
 
-const handleMessage = ((channelId, message) => {
+const handleMessage = ((channelId: string, message: MessageObject) => {
     if (!settings.store.isEnabled) return;
     if (!message.content || !message.content.trim()) return;
 

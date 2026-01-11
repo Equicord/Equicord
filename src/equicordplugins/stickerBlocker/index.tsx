@@ -10,6 +10,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { StickerFormatType } from "@vencord/discord-types/enums";
 import { Button, Menu } from "@webpack/common";
 import React, { ReactNode } from "react";
 
@@ -39,7 +40,7 @@ const settings = definePluginSettings({
     }
 });
 
-function blockedComponentRender(sticker) {
+function blockedComponentRender(sticker: { id: string; name: string; }) {
     const { showGif, showMessage, showButton } = settings.store;
     const elements = [] as ReactNode[];
 
@@ -73,7 +74,7 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (children, props) =
         switch (favoriteableType) {
             case "sticker":
                 const sticker = props.message.stickerItems.find(s => s.id === favoriteableId);
-                if (sticker?.format_type === 3 /* LOTTIE */) return;
+                if (sticker?.format_type === StickerFormatType.LOTTIE) return;
 
                 return buildMenuItem(favoriteableId);
         }
@@ -92,7 +93,7 @@ const expressionPickerPatch: NavContextMenuPatchCallback = (children, props: { t
     }
 };
 
-function buildMenuItem(name) {
+function buildMenuItem(name: string) {
     return (
         <Menu.MenuItem
             id="add-sticker-block"
@@ -103,7 +104,7 @@ function buildMenuItem(name) {
     );
 }
 
-function toggleBlock(name) {
+function toggleBlock(name: string) {
     if (settings.store.blockedStickers === undefined || settings.store.blockedStickers == null) {
         return;
     }
@@ -115,7 +116,7 @@ function toggleBlock(name) {
     }
 }
 
-function isStickerBlocked(name) {
+function isStickerBlocked(name: string) {
     if (settings.store.blockedStickers === undefined || settings.store.blockedStickers == null) {
         return;
     }

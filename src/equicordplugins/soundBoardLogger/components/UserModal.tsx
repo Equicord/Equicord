@@ -11,14 +11,14 @@ import { CopyIcon } from "@components/Icons";
 import { AvatarStyles, cl, downloadAudio, getEmojiUrl, playSound, SoundLogEntry, User, UserSummaryItem } from "@equicordplugins/soundBoardLogger/utils";
 import { copyWithToast, openUserProfile } from "@utils/discord";
 import { Margins } from "@utils/margins";
-import { classes } from "@utils/misc";
+import { classes, pluralise } from "@utils/misc";
 import { closeModal, ModalContent, ModalRoot, openModal } from "@utils/modal";
 import { Clickable, Timestamp } from "@webpack/common";
 import moment from "moment";
 
 import { DownloadIcon, IconWithTooltip, PlayIcon } from "./Icons";
 
-export function openUserModal(item, user, sounds) {
+export function openUserModal(item: SoundLogEntry, user: User, sounds: SoundLogEntry[]) {
     const key = openModal(props =>
         <ModalRoot {...props}>
             <UserModal item={item} user={user} sounds={sounds} closeModal={() => closeModal(key)} />
@@ -54,7 +54,7 @@ export default function UserModal({ item, user, sounds, closeModal }: { item: So
                 />
                 <Flex flexDirection="column" style={{ gap: "7px", height: "68px", justifyContent: "space-between" }}>
                     <BaseText size="md" weight="bold" style={{ height: "20px" }}>{item.soundId}</BaseText>
-                    <BaseText size="md">Played {currentUser.plays.length} {currentUser.plays.length === 1 ? "time" : "times"}.</BaseText>
+                    <BaseText size="md">Played {pluralise(currentUser.plays.length, "time")}.</BaseText>
                     <BaseText size="md">Last played: <Timestamp timestamp={new Date(moment(currentUser.plays.at(-1)).toDate())} /></BaseText>
                 </Flex>
             </Flex>
@@ -83,7 +83,8 @@ export default function UserModal({ item, user, sounds, closeModal }: { item: So
                             className={AvatarStyles.clickableAvatar}
                             onClick={() => {
                                 closeModal();
-                                openUserModal(sounds.find(sound => sound.soundId === soundId), user, sounds);
+                                const sound = sounds.find(s => s.soundId === soundId);
+                                if (sound) openUserModal(sound, user, sounds);
                             }}
                         >
                             <img

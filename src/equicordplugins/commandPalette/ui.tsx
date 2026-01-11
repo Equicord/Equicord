@@ -123,7 +123,7 @@ type PaletteItem =
     | { type: "section"; label: string; }
     | CommandItem;
 
-export function CommandPalette({ modalProps }) {
+export function CommandPalette({ modalProps }: { modalProps: any; }) {
     const [query, setQuery] = useState("");
     const [categoryStack, setCategoryStack] = useState<CommandCategory[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);

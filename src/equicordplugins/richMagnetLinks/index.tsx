@@ -7,7 +7,10 @@
 import "./styles.css";
 
 import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
+
+const logger = new Logger("RichMagnetLinks");
 
 export default definePlugin({
     authors: [EquicordDevs.cassie, EquicordDevs.mochienya, EquicordDevs.secp192k1],
@@ -55,7 +58,7 @@ export default definePlugin({
                     }
                 }
             } catch (err) {
-                console.error("Failed to parse magnet link", err);
+                logger.error("Failed to parse magnet link", err);
             }
 
             return { type: "magnet", filename, magnetLink };

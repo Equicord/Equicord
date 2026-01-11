@@ -12,7 +12,7 @@ import definePlugin from "@utils/types";
 import { Button, React, RelationshipStore, TextInput, UserStore } from "@webpack/common";
 
 let lastSearch = "";
-let updateFunc = (v: any) => { };
+let updateFunc = Function.prototype as (v: any) => void;
 
 export default definePlugin({
     name: "BetterBlockedUsers",

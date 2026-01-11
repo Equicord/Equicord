@@ -5,8 +5,12 @@
  */
 
 import { DataStore } from "@api/index";
+import { getUniqueUsername } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import { Guild, User } from "@vencord/discord-types";
 import { ChannelStore, GuildMemberStore, GuildStore, InviteActions, MessageStore, PermissionsBits, PermissionStore, UserStore, } from "@webpack/common";
+
+const logger = new Logger("IRememberYou");
 
 export interface IUserExtra {
     isOwner?: boolean;
@@ -100,7 +104,7 @@ export class Data {
             usersField[id] = {
                 id,
                 username,
-                tag: user.discriminator === "0" ? user.username : user.tag,
+                tag: getUniqueUsername(user),
                 extra: { ...previouExtra, ...extra },
                 iconURL: user.getAvatarURL(),
             };
@@ -204,7 +208,7 @@ export class Data {
                 }
             }
         } catch (error) {
-            console.warn("Failed to collect invite link for guild:", guildId, error);
+            logger.warn("Failed to collect invite link for guild:", guildId, error);
         }
     }
 

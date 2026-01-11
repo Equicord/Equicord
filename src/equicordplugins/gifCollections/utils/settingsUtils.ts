@@ -5,7 +5,10 @@
  */
 
 import { DataStore } from "@api/index";
+import { Logger } from "@utils/Logger";
 import { Toasts } from "@webpack/common";
+
+const logger = new Logger("GifCollections");
 
 import { DATA_COLLECTION_NAME, getCollections, refreshCacheCollection } from "./collectionManager";
 
@@ -43,7 +46,6 @@ export async function importCollections(data: string) {
     try {
         var parsed = JSON.parse(data);
     } catch (err) {
-        console.log(data);
         throw new Error("Failed to parse JSON: " + String(err));
     }
 
@@ -70,8 +72,7 @@ export async function uploadGifCollections(showToast = true): Promise<void> {
                     await importCollections(reader.result as string);
                     if (showToast) toastSuccess();
                 } catch (err) {
-                    console.error(err);
-                    // new Logger("SettingsSync").error(err);
+                    logger.error(err);
                     if (showToast) toastFailure(err);
                 }
             };
@@ -94,8 +95,7 @@ export async function uploadGifCollections(showToast = true): Promise<void> {
                 await importCollections(new TextDecoder().decode(file.data));
                 if (showToast) toastSuccess();
             } catch (err) {
-                console.error(err);
-                // new Logger("SettingsSync").error(err);
+                logger.error(err);
                 if (showToast) toastFailure(err);
             }
         }

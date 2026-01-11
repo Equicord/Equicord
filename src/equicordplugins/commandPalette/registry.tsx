@@ -10,9 +10,14 @@ import { SettingsStore } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { openPluginModal } from "@components/settings/tabs";
 import { toggleEnabled } from "@equicordplugins/equicordHelper/utils";
+import { Logger } from "@utils/Logger";
+import { pluralise } from "@utils/misc";
 import type { Plugin } from "@utils/types";
+
+const logger = new Logger("CommandPalette");
 import { changes, checkForUpdates } from "@utils/updater";
 import { Guild } from "@vencord/discord-types";
+import { ChannelType } from "@vencord/discord-types/enums";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, NavigationRouter, openUserSettingsPanel, React, ReadStateUtils, RelationshipStore, SelectedChannelStore, SelectedGuildStore, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
 import type { FC, ReactElement, ReactNode } from "react";
@@ -86,7 +91,6 @@ const RECENT_COMMAND_SKIP_IDS = new Set<string>([
     "command-palette-open-settings"
 ]);
 const StatusSetting = getUserSettingLazy<string>("status", "status");
-const COMMAND_PALETTE_PLUGIN_NAME = "CommandPalette";
 const CUSTOM_COMMANDS_KEY = "CommandPaletteCustomCommands";
 const CUSTOM_COMMANDS_CATEGORY_ID = "custom-commands";
 const SESSION_TOOLS_CATEGORY_ID = "session-tools";
@@ -354,7 +358,7 @@ export function activateChatBarCommand(state: ChatBarCommandState) {
     try {
         element.click();
     } catch (error) {
-        console.error("CommandPalette", "Failed to click chat bar button", state.label, error);
+        logger.error("Failed to click chat bar button", state.label, error);
         showToast(`Failed to trigger ${state.label}.`, Toasts.Type.FAILURE);
         return;
     }
@@ -368,7 +372,7 @@ export function resolveChatBarElement(state: ChatBarCommandState): HTMLElement |
             const candidate = getter();
             if (candidate && candidate.isConnected) return candidate;
         } catch (error) {
-            console.error("CommandPalette", "Failed to resolve chat bar button", error);
+            logger.error("Failed to resolve chat bar button", error);
         }
     }
     return document.querySelector<HTMLElement>(`[${CHATBAR_DATA_ATTRIBUTE}="${state.commandId}"]`);
@@ -533,8 +537,8 @@ function trackClosedChannel(channel: any) {
     if (!channel || typeof channel.id !== "string") return;
 
     try {
-        const isDm = typeof channel.isDM === "function" ? channel.isDM() : channel.type === 1;
-        const isGroupDm = typeof channel.isGroupDM === "function" ? channel.isGroupDM() : channel.type === 3;
+        const isDm = typeof channel.isDM === "function" ? channel.isDM() : channel.type === ChannelType.DM;
+        const isGroupDm = typeof channel.isGroupDM === "function" ? channel.isGroupDM() : channel.type === ChannelType.GROUP_DM;
         if (!isDm && !isGroupDm) return;
 
         lastClosedDm = {
@@ -561,7 +565,7 @@ function trackClosedRecipient(recipientId: string | null | undefined, fallbackCh
         try {
             dmChannelId = getDmFromUserId(recipientId) ?? null;
         } catch (error) {
-            console.error("CommandPalette", "Failed to resolve DM channel", error);
+            logger.error("Failed to resolve DM channel", error);
         }
     }
 
@@ -605,7 +609,7 @@ function patchChannelCloseMethods() {
                     }
                 }
             } catch (error) {
-                console.error("CommandPalette", `Failed to record closed channel via ${name}`, error);
+                logger.error(`Failed to record closed channel via ${name}`, error);
             }
             return (original as (...inner: any[]) => unknown).apply(this, args);
         };
@@ -624,7 +628,7 @@ function patchChannelCloseMethods() {
             try {
                 restore();
             } catch (error) {
-                console.error("CommandPalette", "Failed to restore channel close method", error);
+                logger.error("Failed to restore channel close method", error);
             }
         }
         channelClosePatched = false;
@@ -740,14 +744,14 @@ export interface CustomCommandDefinition {
 let customCommands: CustomCommandDefinition[] = [];
 const customCommandListeners = new Set<(commands: CustomCommandDefinition[]) => void>();
 
-const customCommandsReady = (async () => {
+void (async () => {
     try {
         const stored = await DataStore.get<CustomCommandDefinition[]>(CUSTOM_COMMANDS_KEY);
         if (Array.isArray(stored)) {
             setCustomCommands(stored);
         }
     } catch (error) {
-        console.error("CommandPalette", "Failed to load custom commands", error);
+        logger.error("Failed to load custom commands", error);
     }
 })();
 
@@ -867,7 +871,7 @@ export async function saveCustomCommands(commands: CustomCommandDefinition[]) {
     try {
         await DataStore.set(CUSTOM_COMMANDS_KEY, customCommands);
     } catch (error) {
-        console.error("CommandPalette", "Failed to persist custom commands", error);
+        logger.error("Failed to persist custom commands", error);
     }
 }
 
@@ -955,7 +959,7 @@ export function cleanupCommandPaletteRuntime() {
         try {
             callback?.();
         } catch (error) {
-            console.error("CommandPalette", "Failed to cleanup session callback", error);
+            logger.error("Failed to cleanup session callback", error);
         }
     }
     while (runtimeCleanupCallbacks.length) {
@@ -963,14 +967,14 @@ export function cleanupCommandPaletteRuntime() {
         try {
             callback?.();
         } catch (error) {
-            console.error("CommandPalette", "Failed to cleanup runtime callback", error);
+            logger.error("Failed to cleanup runtime callback", error);
         }
     }
     for (const record of contextProviders.values()) {
         try {
             record.unsubscribe?.();
         } catch (error) {
-            console.error("CommandPalette", "Failed to unsubscribe context provider", record.provider.id, error);
+            logger.error("Failed to unsubscribe context provider", record.provider.id, error);
         }
         record.unsubscribe = undefined;
         record.commandIds.clear();
@@ -1026,7 +1030,7 @@ function refreshContextProvider(id: string) {
     try {
         commands = record.provider.getCommands() ?? [];
     } catch (error) {
-        console.error("CommandPalette", "Failed to compute commands for provider", record.provider.id, error);
+        logger.error("Failed to compute commands for provider", record.provider.id, error);
         commands = [];
     }
 
@@ -1116,7 +1120,7 @@ const pinsReady = (async () => {
             for (const id of stored) pinnedCommandIds.add(id);
         }
     } catch (error) {
-        console.error("CommandPalette", "Failed to load pinned commands", error);
+        logger.error("Failed to load pinned commands", error);
     }
 })();
 
@@ -1181,7 +1185,7 @@ async function persistPinned() {
     try {
         await DataStore.set(PINNED_STORAGE_KEY, Array.from(pinnedCommandIds));
     } catch (error) {
-        console.error("CommandPalette", "Failed to save pinned commands", error);
+        logger.error("Failed to save pinned commands", error);
     }
 }
 
@@ -1451,7 +1455,7 @@ export async function togglePinned(commandId: string): Promise<boolean | null> {
     }
 
     if (!registry.has(commandId)) {
-        console.warn("CommandPalette", "Attempted to pin unavailable command", commandId);
+        logger.warn("Attempted to pin unavailable command", commandId);
         return null;
     }
 
@@ -1560,7 +1564,7 @@ export async function executeCommand(entry: CommandEntry) {
             type: Toasts.Type.FAILURE,
             id: Toasts.genId(),
         });
-        console.error("CommandPalette", error);
+        logger.error(error);
     }
 }
 
@@ -1680,7 +1684,7 @@ function registerUpdateCommands() {
                 }
             } catch (error) {
                 showToast("Failed to check for updates.", Toasts.Type.FAILURE);
-                console.error("CommandPalette", error);
+                logger.error(error);
             }
         }
     });
@@ -1719,7 +1723,7 @@ function registerDiscordSettingsCommands() {
                     if (fallbackRoute) {
                         await openUserSettingsPanel(fallbackRoute);
                     } else {
-                        console.error("CommandPalette", "Failed to open Discord settings", command.route, error);
+                        logger.error("Failed to open Discord settings", command.route, error);
                         showToast(`Unable to open ${command.label}.`, Toasts.Type.FAILURE);
                     }
                 }
@@ -1789,7 +1793,7 @@ function toggleChannelMuteState(channelId: string, guildId: string | null, mute:
         actions.updateChannelOverrideSettings(guildId, channelId, payload);
         showToast(`${mute ? "Muted" : "Unmuted"} channel.`, Toasts.Type.SUCCESS);
     } catch (error) {
-        console.error("CommandPalette", "Failed to toggle channel mute", error);
+        logger.error("Failed to toggle channel mute", error);
         showToast("Failed to update channel mute state.", Toasts.Type.FAILURE);
     }
 }
@@ -1810,7 +1814,7 @@ function toggleGuildMuteState(guildId: string, mute: boolean, durationMinutes?: 
         actions.updateGuildNotificationSettings(guildId, payload);
         showToast(`${mute ? "Muted" : "Unmuted"} server.`, Toasts.Type.SUCCESS);
     } catch (error) {
-        console.error("CommandPalette", "Failed to toggle guild mute", error);
+        logger.error("Failed to toggle guild mute", error);
         showToast("Failed to update server mute state.", Toasts.Type.FAILURE);
     }
 }
@@ -1839,7 +1843,7 @@ function openPinsForChannel(channelId: string) {
                 dispatched = true;
                 break;
             } catch (error) {
-                console.error("CommandPalette", `Failed to dispatch ${event} for pins`, error);
+                logger.error(`Failed to dispatch ${event} for pins`, error);
             }
         }
     }
@@ -1849,7 +1853,7 @@ function openPinsForChannel(channelId: string) {
     try {
         FluxDispatcher.dispatch({ type: "CHANNEL_PINS_MODAL_OPEN", channelId });
     } catch (error) {
-        console.error("CommandPalette", "Failed to open pins", error);
+        logger.error("Failed to open pins", error);
         showToast("Unable to open pins panel.", Toasts.Type.FAILURE);
     }
 }
@@ -1895,7 +1899,7 @@ function createContextualCommands(): CommandEntry[] {
                     await Promise.resolve(ackChannel(ackTarget));
                     showToast(`Marked ${channelLabel} as read.`, Toasts.Type.SUCCESS);
                 } catch (error) {
-                    console.error("CommandPalette", "Failed to mark read", error);
+                    logger.error("Failed to mark read", error);
                     showToast("Failed to mark channel as read.", Toasts.Type.FAILURE);
                 }
             }
@@ -1967,7 +1971,7 @@ function createContextualCommands(): CommandEntry[] {
                     try {
                         await Promise.resolve(GuildSettingsActions.open(guildId, "OVERVIEW"));
                     } catch (error) {
-                        console.error("CommandPalette", "Failed to open guild settings", error);
+                        logger.error("Failed to open guild settings", error);
                         showToast("Unable to open guild settings.", Toasts.Type.FAILURE);
                     }
                 }
@@ -2031,7 +2035,7 @@ async function executeCustomCommand(command: CustomCommandDefinition) {
                 break;
         }
     } catch (error) {
-        console.error("CommandPalette", "Failed to execute custom command", command, error);
+        logger.error("Failed to execute custom command", command, error);
         showToast(`Failed to run ${command.label}.`, Toasts.Type.FAILURE);
     }
 }
@@ -2064,7 +2068,7 @@ function clearDesktopNotifications() {
             api.clearAll();
             showToast("Cleared desktop notifications.", Toasts.Type.SUCCESS);
         } catch (error) {
-            console.error("CommandPalette", "Failed to clear notifications", error);
+            logger.error("Failed to clear notifications", error);
             showToast("Failed to clear notifications.", Toasts.Type.FAILURE);
         }
     } else {
@@ -2174,7 +2178,7 @@ async function reopenLastClosedDm() {
                     reopenedId = result;
                 }
             } catch (error) {
-                console.error("CommandPalette", "Failed to open DM via ChannelActionCreators", error);
+                logger.error("Failed to open DM via ChannelActionCreators", error);
             }
 
             if (!reopenedId) {
@@ -2200,7 +2204,7 @@ async function reopenLastClosedDm() {
 
         showToast("The DM is no longer available.", Toasts.Type.FAILURE);
     } catch (error) {
-        console.error("CommandPalette", "Failed to reopen DM", error);
+        logger.error("Failed to reopen DM", error);
         showToast("The DM is no longer available.", Toasts.Type.FAILURE);
     } finally {
         lastClosedDm = null;
@@ -2533,7 +2537,7 @@ async function reloadAllPlugins() {
     if (count === 0) {
         showToast("No plugins were reloaded.", Toasts.Type.MESSAGE);
     } else {
-        showToast(`Reloaded ${count} plugin${count === 1 ? "" : "s"}.`, Toasts.Type.SUCCESS);
+        showToast(`Reloaded ${pluralise(count, "plugin")}.`, Toasts.Type.SUCCESS);
     }
 }
 
@@ -2555,7 +2559,7 @@ async function setAllPluginsEnabled(enabled: boolean) {
         }
     }
 
-    showToast(changed ? `${enabled ? "Enabled" : "Disabled"} ${changed} plugin${changed === 1 ? "" : "s"}.` : "No plugins changed state.", Toasts.Type.SUCCESS);
+    showToast(changed ? `${enabled ? "Enabled" : "Disabled"} ${pluralise(changed, "plugin")}.` : "No plugins changed state.", Toasts.Type.SUCCESS);
 }
 
 function registerPluginChangeCommands() {
@@ -2661,7 +2665,7 @@ async function runPluginToolboxAction(plugin: Plugin, action: () => void | Promi
     try {
         await Promise.resolve(action.call(plugin));
     } catch (error) {
-        console.error("CommandPalette", "Toolbox action failed", plugin.name, actionLabel, error);
+        logger.error("Toolbox action failed", plugin.name, actionLabel, error);
         showToast(`Failed to run ${plugin.name}: ${actionLabel}`, Toasts.Type.FAILURE);
     }
 }

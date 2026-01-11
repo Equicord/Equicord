@@ -17,8 +17,12 @@ import { isV1, migrate } from "@equicordplugins/moreStickers/migrate-v1";
 import { deleteStickerPack, getStickerPack, getStickerPackMetas, saveStickerPack } from "@equicordplugins/moreStickers/stickers";
 import { SettingsTabsKey, Sticker, StickerPack, StickerPackMeta } from "@equicordplugins/moreStickers/types";
 import { cl, clPicker, Mutex } from "@equicordplugins/moreStickers/utils";
+import { Logger } from "@utils/Logger";
+import { classes } from "@utils/misc";
 import { Button, React, TabBar, TextArea, Toasts } from "@webpack/common";
 import { JSX } from "react";
+
+const logger = new Logger("MoreStickers");
 
 const mutex = new Mutex();
 
@@ -41,12 +45,10 @@ const StickerPackMetadata = ({ meta, hoveredStickerPackId, setHoveredStickerPack
             onMouseEnter={() => setHoveredStickerPackId(meta.id)}
             onMouseLeave={() => setHoveredStickerPackId(null)}
         >
-            <div className={
-                [
-                    clPicker("content-row-grid-inspected-indicator"),
-                    hoveredStickerPackId === meta.id ? "inspected" : ""
-                ].join(" ")
-            } style={{
+            <div className={classes(
+                clPicker("content-row-grid-inspected-indicator"),
+                hoveredStickerPackId === meta.id && "inspected"
+            )} style={{
                 top: "unset",
                 left: "unset",
                 height: "96px",
@@ -150,11 +152,11 @@ export const Packs = () => {
                                     try {
                                         getLineStickerPackIdFromUrl(v);
                                         return true;
-                                    } catch (e: any) { }
+                                    } catch { }
                                     try {
                                         getLineEmojiPackIdFromUrl(v);
                                         return true;
-                                    } catch (e: any) { }
+                                    } catch { }
 
                                     return "Invalid URL";
                                 }}
@@ -170,12 +172,12 @@ export const Packs = () => {
                                 try {
                                     getLineStickerPackIdFromUrl(addStickerUrl);
                                     type = "LineStickerPack";
-                                } catch (e: any) { }
+                                } catch { }
 
                                 try {
                                     getLineEmojiPackIdFromUrl(addStickerUrl);
                                     type = "LineEmojiPack";
-                                } catch (e: any) { }
+                                } catch { }
 
                                 let errorMessage = "";
                                 switch (type) {
@@ -186,7 +188,7 @@ export const Packs = () => {
                                             const stickerPack = convertLineSP(lineSP);
                                             await saveStickerPack(stickerPack);
                                         } catch (e: any) {
-                                            console.error(e);
+                                            logger.error(e);
                                             errorMessage = e.message;
                                         }
                                         break;
@@ -199,7 +201,7 @@ export const Packs = () => {
                                             await saveStickerPack(stickerPack);
 
                                         } catch (e: any) {
-                                            console.error(e);
+                                            logger.error(e);
                                             errorMessage = e.message;
                                         }
                                         break;
@@ -270,7 +272,7 @@ export const Packs = () => {
                                         const stickerPack = convertLineEP(lineEP);
                                         await saveStickerPack(stickerPack);
                                     } catch (e: any) {
-                                        console.error(e);
+                                        logger.error(e);
                                         errorMessage = e.message;
                                     }
                                 } else if (isLineStickerPackHtml(addStickerHtml)) {
@@ -279,7 +281,7 @@ export const Packs = () => {
                                         const stickerPack = convertLineSP(lineSP);
                                         await saveStickerPack(stickerPack);
                                     } catch (e: any) {
-                                        console.error(e);
+                                        logger.error(e);
                                         errorMessage = e.message;
                                     }
                                 }
@@ -318,11 +320,11 @@ export const Packs = () => {
 
                     <Button
                         size={Button.Sizes.SMALL}
-                        onClick={async e => {
+                        onClick={async () => {
                             const input = document.createElement("input");
                             input.type = "file";
                             input.accept = ".stickerpack,.stickerpacks,.json";
-                            input.onchange = async e => {
+                            input.onchange = async () => {
                                 try {
                                     const file = input.files?.[0];
                                     if (!file) return;
@@ -349,7 +351,7 @@ export const Packs = () => {
                                         }
                                     });
                                 } catch (e: any) {
-                                    console.error(e);
+                                    logger.error(e);
                                     Toasts.show({
                                         message: e.message,
                                         type: Toasts.Type.FAILURE,
@@ -378,7 +380,7 @@ export const Packs = () => {
                     }} >
                         <Button
                             size={Button.Sizes.SMALL}
-                            onClick={async e => {
+                            onClick={async () => {
                                 const result: StickerPack[] = [];
                                 const stickerPacks = await getStickerPackMetas();
                                 for (const stickerPack of stickerPacks) {
@@ -405,7 +407,7 @@ export const Packs = () => {
                         >Export Sticker Packs</Button>
                         <Button
                             size={Button.Sizes.SMALL}
-                            onClick={async e => {
+                            onClick={async () => {
                                 await migrate();
                             }}
                             style={{

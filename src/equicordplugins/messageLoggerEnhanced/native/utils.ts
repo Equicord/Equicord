@@ -11,7 +11,7 @@ export async function exists(filename: string) {
     try {
         await access(filename);
         return true;
-    } catch (error) {
+    } catch {
         return false;
     }
 }

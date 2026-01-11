@@ -13,7 +13,7 @@ export const settings = definePluginSettings({
         description: "Shows the Mod as Prefix",
         default: true,
         restartNeeded: false,
-        onChange: (e => {
+        onChange: ((e: boolean) => {
             if (e && settings.store.showSuffix) {
                 settings.store.showSuffix = false;
             }
@@ -24,7 +24,7 @@ export const settings = definePluginSettings({
         description: "Shows the Mod as Suffix",
         default: false,
         restartNeeded: false,
-        onChange: (e => {
+        onChange: ((e: boolean) => {
             if (e && settings.store.showPrefix) {
                 settings.store.showPrefix = false;
             }
@@ -89,7 +89,7 @@ export const settings = definePluginSettings({
         description: "API to use",
         default: "https://badges.equicord.org/",
         restartNeeded: false,
-        isValid: (value => {
+        isValid: ((value: string) => {
             if (!value) return false;
             return true;
         })

@@ -7,8 +7,11 @@
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { FluxDispatcher, UserStore } from "@webpack/common";
+
+const logger = new Logger("BetterCommands");
 
 const settings = definePluginSettings({
     autoFillArguments: {
@@ -106,7 +109,7 @@ export default definePlugin({
                         content: "Commands refreshed successfully!",
                     });
                 } catch (err) {
-                    console.error("[Refresh Command] Error refreshing commands:", err);
+                    logger.error("Error refreshing commands:", err);
                     sendBotMessage(ctx.channel.id, {
                         content: "Failed to refresh commands. Check the console for details.",
                     });

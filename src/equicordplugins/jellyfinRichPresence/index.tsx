@@ -11,36 +11,9 @@ import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import type { Activity, ActivityAssets, ActivityButton } from "@vencord/discord-types";
+import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
 import { ApplicationAssetUtils, FluxDispatcher, showToast } from "@webpack/common";
-
-interface ActivityAssets {
-    large_image?: string;
-    large_text?: string;
-    small_image?: string;
-    small_text?: string;
-}
-
-interface ActivityButton {
-    label: string;
-    url: string;
-}
-
-interface Activity {
-    state: string;
-    details?: string;
-    timestamps?: {
-        start?: number;
-    };
-    assets?: ActivityAssets;
-    buttons?: Array<string>;
-    name: string;
-    application_id: string;
-    metadata?: {
-        button_urls?: Array<string>;
-    };
-    type: number;
-    flags: number;
-}
 
 interface MediaData {
     name: string;
@@ -117,19 +90,19 @@ const settings = definePluginSettings({
             },
             {
                 label: "Listening",
-                value: 2,
+                value: ActivityType.LISTENING,
             },
             {
                 label: "Playing",
-                value: 0,
+                value: ActivityType.PLAYING,
             },
             {
                 label: "Streaming",
-                value: 1,
+                value: ActivityType.STREAMING,
             },
             {
                 label: "Watching",
-                value: 3
+                value: ActivityType.WATCHING
             },
         ],
     },
@@ -279,10 +252,10 @@ export default definePlugin({
         } else {
             switch (mediaData.type) {
                 case "Audio":
-                    richPresenceType = 2;
+                    richPresenceType = ActivityType.LISTENING;
                     break;
                 default:
-                    richPresenceType = 3;
+                    richPresenceType = ActivityType.WATCHING;
                     break;
             }
         }
@@ -413,7 +386,7 @@ export default definePlugin({
                 button_urls: buttons.map(v => v.url),
             },
             type: richPresenceType,
-            flags: 1
+            flags: ActivityFlags.INSTANCE
         };
     }
 });

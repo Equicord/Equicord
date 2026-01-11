@@ -231,14 +231,15 @@ function AlbumContextMenu({ track }: { track: Track; }) {
                 action={() => SpotifyStore.openExternal(`/album/${track.album.id}`)}
                 icon={OpenExternalIcon}
             />
-            <Menu.MenuItem
-                key="view-cover"
-                id="view-cover"
-                label="View Album Cover"
-                // trolley
-                action={() => openImageModal(track.album.image)}
-                icon={ImageIcon}
-            />
+            {track.album.image && (
+                <Menu.MenuItem
+                    key="view-cover"
+                    id="view-cover"
+                    label="View Album Cover"
+                    action={() => openImageModal(track.album.image!)}
+                    icon={ImageIcon}
+                />
+            )}
             <Menu.MenuControlItem
                 id="spotify-volume"
                 key="spotify-volume"

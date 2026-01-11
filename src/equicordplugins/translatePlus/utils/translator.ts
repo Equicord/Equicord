@@ -100,8 +100,6 @@ export async function translate(text: string): Promise<any> {
     if ((isTokiPona(text) || isSitelen(text)) && (toki || sitelen)) {
         if (isSitelen(text) && sitelen) text = await translateSitelen(text);
 
-        console.log(text);
-
         const translate = await (await fetch("https://aiapi.serversmp.xyz/toki", {
             method: "POST",
             headers: {
@@ -114,8 +112,6 @@ export async function translate(text: string): Promise<any> {
                 target: "en"
             })
         })).json();
-
-        console.log(translate);
 
         output.src = "tp";
         output.text = target === "en" ? translate.translation[0] : (await google(target, translate.translation[0])).text;

@@ -26,7 +26,7 @@ export async function getLyricsSpotify(trackId: string): Promise<LyricsData | nu
     let data: LyricsAPIResp;
     try {
         data = await resp.json() as LyricsAPIResp;
-    } catch (e) {
+    } catch {
         return null;
     }
 

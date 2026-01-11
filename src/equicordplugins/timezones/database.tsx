@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { openModal } from "@utils/index";
+import { Logger } from "@utils/Logger";
+import { openModal } from "@utils/modal";
 import { OAuth2AuthorizeModal, showToast, Toasts } from "@webpack/common";
 
 import { settings } from ".";
+
+const logger = new Logger("Timezones");
 
 const databaseTimezones: Record<string, { value: string | null; }> = {};
 const CLIENT_ID = "1377021506810417173";
@@ -21,7 +24,7 @@ function getRedirectUri(): string {
 }
 
 function handleApiError(error: any, defaultMessage: string): void {
-    console.error(defaultMessage, error);
+    logger.error(defaultMessage, error);
     const message = error?.message || defaultMessage;
     showToast(message, Toasts.Type.FAILURE);
 }
@@ -30,7 +33,7 @@ async function safeJsonParse(response: Response): Promise<any> {
     try {
         return await response.json();
     } catch (e) {
-        console.warn("Failed to parse JSON response:", e);
+        logger.warn("Failed to parse JSON response:", e);
         return { message: "Invalid response format" };
     }
 }
@@ -59,7 +62,7 @@ export async function loadDatabaseTimezones(): Promise<boolean> {
         }
         return false;
     } catch (e) {
-        console.error("Failed to fetch timezones list:", e);
+        logger.error("Failed to fetch timezones list:", e);
         return false;
     }
 }
@@ -72,7 +75,7 @@ async function checkAuthentication(): Promise<boolean> {
         });
         return res.ok;
     } catch (e) {
-        console.error("Failed to check authentication:", e);
+        logger.error("Failed to check authentication:", e);
         return false;
     }
 }

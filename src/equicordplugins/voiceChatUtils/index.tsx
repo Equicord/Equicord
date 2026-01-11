@@ -7,9 +7,14 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
+import { sleep } from "@utils/misc";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
+import { ChannelType } from "@vencord/discord-types/enums";
 import { GuildChannelStore, Menu, React, RestAPI, UserStore, VoiceStateStore } from "@webpack/common";
+
+const logger = new Logger("VoiceChatUtils");
 
 async function runSequential<T>(promises: Promise<T>[]): Promise<T[]> {
     const results: T[] = [];
@@ -20,7 +25,7 @@ async function runSequential<T>(promises: Promise<T>[]): Promise<T[]> {
         results.push(result);
 
         if (i % settings.store.waitAfter === 0) {
-            await new Promise(resolve => setTimeout(resolve, settings.store.waitSeconds * 1000));
+            await sleep(settings.store.waitSeconds * 1000);
         }
     }
 
@@ -32,7 +37,7 @@ function sendPatch(channel: Channel, body: Record<string, any>, bypass = false) 
     const myId = UserStore.getCurrentUser().id; // Get my user id
 
     const promises: Promise<any>[] = [];
-    Object.keys(usersVoice).forEach((key, index) => {
+    Object.keys(usersVoice).forEach(key => {
         const userVoice = usersVoice[key];
 
         if (bypass || userVoice.userId !== myId) {
@@ -44,7 +49,7 @@ function sendPatch(channel: Channel, body: Record<string, any>, bypass = false) 
     });
 
     runSequential(promises).catch(error => {
-        console.error("VoiceChatUtilities failed to run", error);
+        logger.error("VoiceChatUtilities failed to run", error);
     });
 }
 
@@ -54,7 +59,7 @@ interface VoiceChannelContextProps {
 
 const VoiceChannelContext: NavContextMenuPatchCallback = (children, { channel }: VoiceChannelContextProps) => {
     // only for voice and stage channels
-    if (!channel || (channel.type !== 2 && channel.type !== 13)) return;
+    if (!channel || (channel.type !== ChannelType.GUILD_VOICE && channel.type !== ChannelType.GUILD_STAGE_VOICE)) return;
     const userCount = Object.keys(VoiceStateStore.getVoiceStatesForChannel(channel.id)).length;
     if (userCount === 0) return;
 

@@ -7,11 +7,13 @@
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import type { Channel, Message } from "@vencord/discord-types";
+import { ChannelType } from "@vencord/discord-types/enums";
 import { findStoreLazy } from "@webpack";
 import {
     ChannelStore,
-    GuildStore,
     NavigationRouter,
     PresenceStore,
     RelationshipStore,
@@ -19,6 +21,7 @@ import {
     UserStore
 } from "@webpack/common";
 
+const logger = new Logger("PingNotifications");
 const UserGuildSettingsStore = findStoreLazy("UserGuildSettingsStore");
 
 const settings = definePluginSettings({
@@ -49,7 +52,7 @@ const settings = definePluginSettings({
     }
 });
 
-function formatContent(message) {
+function formatContent(message: Omit<Message, "mentions"> & { mentions?: Array<{ id: string; username: string; }>; }) {
     let content = message.content || "";
     message.mentions?.forEach(user => {
         content = content.replace(new RegExp(`<@!?${user.id}>`, "g"), `@${user.username}`);
@@ -57,13 +60,13 @@ function formatContent(message) {
     return content.slice(0, 200) + (content.length > 200 ? "..." : "");
 }
 
-function checkIfMuted(channel) {
+function checkIfMuted(channel: Channel & { isMuted?: () => boolean; }) {
     if (!settings.store.ignoreMuted) return false;
     if (!channel) return false;
 
     if (channel.isMuted?.()) return true;
 
-    const isDM = [1, 3].includes(channel.type);
+    const isDM = channel.type === ChannelType.DM || channel.type === ChannelType.GROUP_DM;
     if (isDM) {
         const recipientIds = channel.recipients || [];
         for (const userId of recipientIds) {
@@ -74,7 +77,6 @@ function checkIfMuted(channel) {
     }
 
     if (channel.guild_id) {
-        const guild = GuildStore.getGuild(channel.guild_id);
         if (UserGuildSettingsStore.isMuted(channel.guild_id)) return true;
 
         if (UserGuildSettingsStore?.isMuted?.(channel.guild_id)) return true;
@@ -85,7 +87,7 @@ function checkIfMuted(channel) {
     return false;
 }
 
-function isUserBlocked(userId) {
+function isUserBlocked(userId: string) {
     return settings.store.ignoreMuted && RelationshipStore.isBlocked?.(userId);
 }
 
@@ -106,7 +108,7 @@ export default definePlugin({
                 if (!channel || !currentUser) return;
                 if (message.author?.id === currentUser.id) return;
 
-                const isDM = [1, 3].includes(channel.type);
+                const isDM = channel.type === ChannelType.DM || channel.type === ChannelType.GROUP_DM;
 
                 if (checkIfMuted(channel)) return;
                 if (isUserBlocked(message.author.id)) return;
@@ -138,7 +140,7 @@ export default definePlugin({
                     });
                 }
             } catch (err) {
-                console.error("[PingNotifications] Error:", err);
+                logger.error("Error:", err);
             }
         }
     }

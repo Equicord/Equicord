@@ -41,7 +41,7 @@ const settings = definePluginSettings({
     }
 });
 
-function setStatus(preq, status) {
+function setStatus(preq: boolean, status: string) {
     if (preq) {
         if (status !== settings.store.statusToSet) {
             savedStatus = status;

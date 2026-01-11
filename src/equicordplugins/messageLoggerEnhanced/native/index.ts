@@ -38,7 +38,7 @@ export async function initDirs() {
 }
 initDirs();
 
-export async function init(_event: IpcMainInvokeEvent) {
+export async function init(_event?: IpcMainInvokeEvent) {
     const imageDir = await getImageCacheDir();
 
     await ensureDirectoryExists(imageDir);
