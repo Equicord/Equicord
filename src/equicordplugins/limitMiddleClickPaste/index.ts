@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings, SettingsStore } from "@api/Settings";
+import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 
@@ -36,33 +36,6 @@ const settings = definePluginSettings({
     },
 });
 
-function migrateOldSettings() {
-    const pluginSettings = SettingsStore.plain.plugins.LimitMiddleClickPaste;
-
-    if (pluginSettings.limitTo !== undefined) {
-        if (pluginSettings.limitTo === "never") {
-            pluginSettings.scope = "always";
-        } else if (pluginSettings.limitTo === "active") {
-            pluginSettings.scope = "focus";
-        } else if (pluginSettings.limitTo === "direct") {
-            pluginSettings.scope = "focus";
-        }
-
-        console.info("[LimitMiddleClickPaste] Migrating limitTo setting...");
-        delete pluginSettings.limitTo;
-        SettingsStore.markAsChanged();
-    }
-
-    if (pluginSettings.reenableDelay !== undefined) {
-        console.info("[LimitMiddleClickPaste] Migrating reenableDelay setting...");
-        pluginSettings.threshold = pluginSettings.reenableDelay;
-        delete pluginSettings.reenableDelay;
-        SettingsStore.markAsChanged();
-    }
-}
-
-migrateOldSettings();
-
 export default definePlugin({
     name: "LimitMiddleClickPaste",
     description: "Prevent middle click pasting either always or just when a text area is not focused.",
@@ -74,22 +47,14 @@ export default definePlugin({
         const { scope } = settings.store;
 
         if (!pasteBlocked) return false;
-
-        if (scope === "always") {
-            return true;
-        }
-
-        if (scope === "focus" && !isInput) {
-            return true;
-        }
+        if (scope === "always") return true;
+        if (scope === "focus" && !isInput) return true;
 
         return false;
     },
 
     onMouseUp: (e: MouseEvent) => {
-        if (e.button === MIDDLE_CLICK) {
-            lastMiddleClickUp = Date.now();
-        }
+        if (e.button === MIDDLE_CLICK) lastMiddleClickUp = Date.now();
     },
 
     start() {
@@ -114,7 +79,7 @@ export default definePlugin({
             find: ",origin:\"clipboard\"});",
             replacement: {
                 match: /(?<="handlePaste",(\i)=>{)(?=var)/,
-                replace: "if($self.isPastingDisabled(true)){$1.preventDefault?.();$1.stopPropagation?.();return null;}"
+                replace: "if($self.isPastingDisabled(true)){$1.preventDefault?.();$1.stopPropagation?.();return;}"
             }
         },
         {
