@@ -167,8 +167,9 @@ function TdlSeekBar() {
     useEffect(() => {
         if (isPlaying) {
             setPosition(TidalStore.position);
+            const maxPosition = songDuration * 1000;
             const interval = setInterval(() => {
-                setPosition(p => p + 1000);
+                setPosition(p => Math.min(p + 1000, maxPosition));
             }, 1000);
             return () => clearInterval(interval);
         }
