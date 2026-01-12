@@ -145,8 +145,12 @@ export const ThemeInfoModal: React.FC<ThemeInfoModalProps> = ({ author, theme, .
                                             >
                                                 Close
                                             </Button>
-                                            <Button className={Margins.right8}
-                                                onClick={() => copyWithToast(themeContent, "Copied to Clipboard")}>Copy to Clipboard</Button>
+                                            <Button
+                                                className={Margins.right8}
+                                                onClick={() => copyWithToast(themeContent, "Copied to Clipboard")}
+                                            >
+                                                Copy to Clipboard
+                                            </Button>
                                         </ModalFooter>
                                     </ModalRoot>
                                 ))}

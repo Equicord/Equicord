@@ -131,7 +131,7 @@ function PickerContentRowGrid({
                 <div aria-hidden="true">
                     <div className={classes(
                         clPicker("content-row-grid-inspected-indicator"),
-                        isHovered && "inspected"
+                        isHovered && clPicker("inspected")
                     )}></div>
                     <div className={clPicker("content-row-grid-sticker-node")}>
                         <div className={clPicker("content-row-grid-asset-wrapper")} style={{
