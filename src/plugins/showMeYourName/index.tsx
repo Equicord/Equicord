@@ -921,8 +921,8 @@ export default definePlugin({
             // Attach the group ID to their messages to allow animating gradients within a group.
             find: "CUSTOM_GIFT?\"\":",
             replacement: {
-                match: /(\(\i,\i,\i\);)(let \i=\i.id===\i(?:.{0,500}?)hovering:(\i))/,
-                replace: "$1arguments[0].message.showMeYourNameGroupId=!!arguments[0].groupId?`g-${arguments[0].groupId}`:null;$self.handleHoveringMessage(arguments[0].message,$3);$2"
+                match: /(isHovered:(\i).{0,1300}?\(\i,\i,\i\);)(let \i=\i.id===\i(?:.{0,500}?))/,
+                replace: "$1arguments[0].message.showMeYourNameGroupId=!!arguments[0].groupId?`g-${arguments[0].groupId}`:null;$self.handleHoveringMessage(arguments[0].message,$2);$3"
             },
         },
         {
@@ -977,7 +977,7 @@ export default definePlugin({
         },
         {
             // Same as above, but for bot members.
-            find: "popularApplicationCommandIds)!=null&&null",
+            find: "id,fullWidth:!0})]",
             replacement: {
                 match: /(pronouns,tags:)/,
                 replace: "pronouns,guildId:arguments[0]?.guild?.id??null,tags:"
@@ -1013,7 +1013,7 @@ export default definePlugin({
             replacement: [
                 {
                     // Replace names in reaction popouts.
-                    match: /children:(\[null!=(?:.{0,300}?)forceUsername:!0}\)\])/,
+                    match: /children:(null!=(?:.{0,300}?)children:\i}\))/,
                     replace: "style:{\"overflow\":\"visible\"},children:($self.getMemberListProfilesReactionsVoiceNameElement({user:arguments[0].user,guildId:arguments[0].guildId,type:\"reactionsPopout\"}))??($1)"
                 },
                 {
