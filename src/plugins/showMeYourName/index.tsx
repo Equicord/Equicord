@@ -966,24 +966,6 @@ export default definePlugin({
             },
         },
         {
-            // Tags *should* contain the guild ID nested in its structure, but on the first time
-            // loading a guild member's preview profile, it will be undefined. This patch bypasses
-            // that by passing the guild ID as its own prop.
-            find: "\"UserProfilePopoutBody\"}",
-            replacement: {
-                match: /(pronouns,tags:)/,
-                replace: "pronouns,guildId:arguments[0]?.guild?.id??null,tags:"
-            }
-        },
-        {
-            // Same as above, but for bot members.
-            find: "id,fullWidth:!0})]",
-            replacement: {
-                match: /(pronouns,tags:)/,
-                replace: "pronouns,guildId:arguments[0]?.guild?.id??null,tags:"
-            }
-        },
-        {
             // Replace names in the profile tooltip for switching between guild and global profiles.
             // You must open a profile modal before the code this is patching will be searchable.
             find: "\"view-main-profile\",",
