@@ -167,8 +167,8 @@ export default definePlugin({
         {
             find: "#{intl::COLLAPSE_ROLES}",
             replacement: {
-                match: /M\(\),(\i)\?/,
-                replace: "M(),$self.ViewPermissionsButton(arguments[0]),$1?"
+                match: /(?<=\i\.id\)\),\i\(\))(?=,\i\?)/,
+                replace: ",$self.ViewPermissionsButton(arguments[0])"
             }
         }
     ],

@@ -43,7 +43,7 @@ export default definePlugin({
             find: "hasDeveloperContextMenu:",
             replacement: [
                 {
-                    match: /useState\(!1\)/,
+                    match: /(?<=\?\i\.current\[\i\].{0,100})useState\(!1\)/,
                     replace: "useState(!0)"
                 },
                 {
