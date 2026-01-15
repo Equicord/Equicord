@@ -4,19 +4,23 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, ColorPicker } from "@webpack/common";
+import { ColorPicker } from "@webpack/common";
 
 import fathorse from "./fathorse";
 import oneko from "./oneko";
 
 const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/5281d057c4ea9bd4f6f997ee96ba30491aed16c0/oneko.gif";
 const FATASS_HORSE_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/08bc4042750d5f995c55327f7b6c6710158f5263/sheet.png";
+const cl = classNameFactory("vc-cursor-buddy-");
 
 function OnekoColorSettings() {
     const { furColor, outlineColor } = settings.use(["furColor", "outlineColor"]);
@@ -48,38 +52,26 @@ function OnekoColorSettings() {
 
     return (
         <div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px", marginTop: "10px" }}>
+            <div className={cl("color-modal")}>
                 <div>
                     <Heading className="form-subtitle">Fur Color</Heading>
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <div className={cl("color")}>
                         <ColorPicker
-                            color={parseHexToNumber(furColor)}
+                            color={parseHexToNumber(furColor) ?? 16777215}
                             onChange={handleFurColorChange}
                             showEyeDropper={true}
                         />
-                        <Button
-                            className="button button-blue"
-                            onClick={() => handleFurColorChange(parseHexToNumber("#FFFFFF"))}
-                        >
-                            Default
-                        </Button>
                     </div>
                 </div>
 
                 <div>
                     <Heading className="form-subtitle">Outline Color</Heading>
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <div className={cl("color")}>
                         <ColorPicker
-                            color={parseHexToNumber(outlineColor)}
+                            color={parseHexToNumber(outlineColor) ?? 0}
                             onChange={handleOutlineColorChange}
                             showEyeDropper={true}
                         />
-                        <Button
-                            className="button button-blue"
-                            onClick={() => handleOutlineColorChange(parseHexToNumber("#000000"))}
-                        >
-                            Default
-                        </Button>
                     </div>
                 </div>
             </div>
