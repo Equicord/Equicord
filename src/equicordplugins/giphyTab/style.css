@@ -1,0 +1,174 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.giphy-picker-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.giphy-picker-header {
+    padding: var(--custom-gif-picker-gutter-size);
+    flex-shrink: 0;
+}
+
+.giphy-search-container {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+}
+
+.giphy-picker-list-wrapper {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.giphy-picker-scroller {
+    position: absolute;
+    inset: 0;
+    overflow: hidden scroll;
+    padding: 0 8px 8px;
+}
+
+.giphy-picker-scroller::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.giphy-picker-scroller::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+}
+
+.giphy-picker-scroller::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thin-thumb);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.giphy-picker-scroller::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thin-thumb);
+}
+
+.giphy-picker-grid {
+    column-count: 3;
+    column-gap: 8px;
+    padding: 4px;
+}
+
+.giphy-gif-item {
+    position: relative;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--background-secondary);
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 8px;
+    break-inside: avoid;
+    transform: translateZ(0);
+}
+
+.giphy-gif-item:hover {
+    box-shadow: 0 4px 12px var(--shadow-border-box);
+    z-index: 1;
+}
+
+.giphy-gif-item:focus-visible {
+    outline: 2px solid var(--brand-500);
+    outline-offset: 2px;
+}
+
+.giphy-gif-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.giphy-category-fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 60%) 100%);
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.giphy-gif-item:hover .giphy-category-fade {
+    opacity: 1;
+}
+
+.giphy-category-text {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+.giphy-gif-item:hover .giphy-category-text {
+    opacity: 1;
+}
+
+.giphy-category-name {
+    color: var(--white);
+    font-weight: 600;
+    font-size: 14px;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 80%);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+.giphy-loader {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.giphy-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    text-align: center;
+}
+
+.giphy-picker-wrapper ~ .giphy-picker-wrapper {
+    display: none !important;
+}
+
+.giphy-picker-container ~ .giphy-picker-container {
+    display: none !important;
+}
+
+.giphy-modal-container {
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    padding: 16px;
+}
