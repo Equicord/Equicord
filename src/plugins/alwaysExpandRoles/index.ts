@@ -17,11 +17,8 @@
 */
 
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
-import { disableStyle, enableStyle } from "@api/Styles";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-
-import style from "./style.css?managed";
 
 const settings = definePluginSettings({
     hideArrow: {
@@ -38,6 +35,7 @@ export default definePlugin({
     description: "Always expands the role list in profile popouts",
     authors: [Devs.surgedevs],
     isModified: true,
+    settings,
     patches: [
         {
             find: "hasDeveloperContextMenu:",
@@ -51,15 +49,13 @@ export default definePlugin({
                     // which makes the collapse button never show up and calculation never occur
                     match: /(?<=useLayoutEffect\(\(\)=>\{if\()\i/,
                     replace: "false"
+                },
+                {
+                    match: /\(\)=>\i\.length<\i\.length/,
+                    replace: "()=>false",
+                    predicate: () => settings.store.hideArrow
                 }
             ]
         }
     ],
-    settings,
-    start() {
-        if (settings.store.hideArrow) enableStyle(style);
-    },
-    stop() {
-        if (settings.store.hideArrow) disableStyle(style);
-    }
 });
