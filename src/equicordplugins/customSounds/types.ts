@@ -81,7 +81,7 @@ export const soundTypes: readonly SoundType[] = [
     { name: "Mention 1 (Role)", id: "mention1" },
     { name: "Mention 2 (Everyone)", id: "mention2" },
     { name: "Mention 3 (Here)", id: "mention3" },
-    { name: "Message 1 ", id: "message1", seasonal: ["halloween_message1"] },
+    { name: "Message 1 (Generic)", id: "message1", seasonal: ["halloween_message1"] },
     { name: "Message 2 (Direct Mention)", id: "message2" },
     { name: "Message 3 (Direct Messages)", id: "message3" },
     { name: "Message 3 (Group Direct Messages)", id: "message3" },
