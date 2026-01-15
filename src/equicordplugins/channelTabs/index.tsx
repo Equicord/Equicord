@@ -59,10 +59,15 @@ export default definePlugin({
         // add the channel tab container at the top
         {
             find: '"AppView"',
-            replacement: {
+            replacement: [{
+                match: /(\?void 0:(\i)\.channelId.{0,600})"div",{className:\i\.content/,
+                replace: "$1$self.render,{currentChannel:$2",
+                predicate: () => settings.store.tabBarPosition === "top"
+            }, {
                 match: /(\?void 0:(\i)\.channelId.{0,300})"div",{/,
-                replace: "$1$self.render,{currentChannel:$2,"
-            }
+                replace: "$1$self.render,{currentChannel:$2,",
+                predicate: () => settings.store.tabBarPosition !== "top"
+            }]
         },
         // intercept channel navigation to switch/create tabs
         {
