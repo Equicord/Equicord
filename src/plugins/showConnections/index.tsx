@@ -168,7 +168,7 @@ export default definePlugin({
         {
             find: "UserProfilePopoutBody",
             replacement: {
-                match: /userId:\i\.id,guild:\i[^}]*?\}\)(?=])(?<=user:(\i),bio:null==(\i)\?.+?)/,
+                match: /userId:(\i)\.id,guild:\i\}\)(?=])(?<=bio:null==(\i)\?.+?)/,
                 replace: "$&,$self.profilePopoutComponent({ user: $1, displayProfile: $2 })"
             }
         }
