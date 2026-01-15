@@ -64,7 +64,7 @@ export default definePlugin({
                     match: /(\?void 0:(\i)\.channelId.{0,600})"div",{className:\i\.content/,
                     replace: "$1$self.render,{currentChannel:$2",
                     predicate: () => settings.store.tabBarPosition === "top"
-                }, 
+                },
                 {
                     match: /(\?void 0:(\i)\.channelId.{0,300})"div",{/,
                     replace: "$1$self.render,{currentChannel:$2,",
