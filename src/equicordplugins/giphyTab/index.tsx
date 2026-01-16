@@ -7,11 +7,14 @@
 import "./style.css";
 
 import { EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { ComponentDispatch, React } from "@webpack/common";
 
 import { getTrendingGifs, GiphyGif, giphySettings, searchGifs } from "./utils/giphy";
+
+const cl = classNameFactory("vc-giphy-");
 
 const SearchBar = findComponentByCodeLazy("#{intl::SEARCH}", "clearable", "autoComplete");
 
@@ -72,9 +75,9 @@ function GiphyPickerContent({ closePopout }: { closePopout?: () => void; }) {
     };
 
     return (
-        <div className="vc-giphy-picker-wrapper">
-            <div className="vc-giphy-picker-header">
-                <div className="vc-giphy-search-container">
+        <div className={cl("picker-wrapper")}>
+            <div className={cl("picker-header")}>
+                <div className={cl("search-container")}>
                     <SearchBar
                         query={query}
                         onChange={setQuery}
@@ -84,27 +87,27 @@ function GiphyPickerContent({ closePopout }: { closePopout?: () => void; }) {
                     />
                 </div>
             </div>
-            <div className="vc-giphy-picker-list-wrapper">
-                <div className="vc-giphy-picker-scroller" onScroll={handleScroll}>
-                    <div className="vc-giphy-picker-grid">
+            <div className={cl("picker-list-wrapper")}>
+                <div className={cl("picker-scroller")} onScroll={handleScroll}>
+                    <div className={cl("picker-grid")}>
                         {gifs.length === 0 && !loading ? (
-                            <div className="vc-giphy-empty">No GIFs found</div>
+                            <div className={cl("empty")}>No GIFs found</div>
                         ) : (
                             <>
                                 {gifs.map(gif => (
                                     <div
                                         key={gif.id}
-                                        className="vc-giphy-gif-item"
+                                        className={cl("gif-item")}
                                         onClick={() => handleSelect(gif)}
                                         role="button"
                                         tabIndex={0}
                                     >
-                                        <div className="vc-giphy-category-fade" />
-                                        <div className="vc-giphy-category-text">
-                                            <span className="vc-giphy-category-name">{gif.title}</span>
+                                        <div className={cl("category-fade")} />
+                                        <div className={cl("category-text")}>
+                                            <span className={cl("category-name")}>{gif.title}</span>
                                         </div>
                                         <video
-                                            className="vc-giphy-gif-video"
+                                            className={cl("gif-video")}
                                             src={gif.images.original.mp4 || gif.images.original.url}
                                             autoPlay
                                             loop
@@ -113,7 +116,7 @@ function GiphyPickerContent({ closePopout }: { closePopout?: () => void; }) {
                                         />
                                     </div>
                                 ))}
-                                {loading && <div className="vc-giphy-loader" style={{ gridColumn: "1 / -1", padding: "20px" }}>Loading...</div>}
+                                {loading && <div className={cl("loader")}>Loading...</div>}
                             </>
                         )}
                     </div>
