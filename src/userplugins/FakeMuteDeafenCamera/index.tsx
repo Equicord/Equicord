@@ -146,9 +146,7 @@ function FakeActionsButton() {
 const StateKeys = ["selfDeaf", "selfMute", "selfVideo"];
 
 export default definePlugin({
-    // KEEP THIS SAFE (No spaces/commas)
     name: "FakeMuteDeafenCamera",
-    // Put the fancy text here
     description: "Fake mute, deafen & Camera. Configure button behavior in Settings. Contributed by Chaython.",
     authors: [TestcordDevs.x2b],
     settings,
