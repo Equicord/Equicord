@@ -13,36 +13,6 @@ import { ComponentDispatch, React } from "@webpack/common";
 
 import { getTrendingGifs, GiphyGif, giphySettings, searchGifs } from "./utils/giphy";
 
-export default definePlugin({
-    name: "GiphyTab",
-    description: "Adds a Giphy tab to the expression picker",
-    authors: [EquicordDevs.secp192k1],
-    settings: giphySettings,
-    patches: [
-        {
-            find: "#{intl::EXPRESSION_PICKER_CATEGORIES_A11Y_LABEL}",
-            replacement: [
-                {
-                    match: /(?<=(\i)\?(\(.{0,15}\))\((\i),\{.{0,150}(\i)===\i\.\i\.STICKER,.{0,150}children:(.{0,30}\.stickersNavItem,children:.{0,25})\}\)\}\):null)/,
-                    replace: ',vcGiphyTab=$1?$2($3,{id:"vc-giphy-picker-tab","aria-controls":"vc-giphy-picker-tab-panel","aria-selected":$4==="vcGiphyTab",isActive:$4==="vcGiphyTab",autoFocus:false,viewType:"vcGiphyTab",children:"Giphy GIFs"}):null'
-                },
-                {
-                    match: /children:\[(\i,\i(?:,\i)*)\](?=.{0,5}\}\))/g,
-                    replace: "children:[$1,vcGiphyTab]"
-                },
-                {
-                    match: /:null,(([^,]{1,200})===.{1,30}\.STICKER&&\w+\?(\([^()]{1,10}\)).{1,15}?(\{.*?,onSelectSticker:.*?\})\):null)/,
-                    replace: ':null,$2==="vcGiphyTab"?$3($self.giphyComponent,$4):null,$1'
-                }
-            ]
-        }
-    ],
-
-    giphyComponent(props: { closePopout?: () => void; }) {
-        return <GiphyPickerContent closePopout={props.closePopout} />;
-    }
-});
-
 const SearchBar = findComponentByCodeLazy("#{intl::SEARCH}", "clearable", "autoComplete");
 
 function GiphyPickerContent({ closePopout }: { closePopout?: () => void; }) {
@@ -152,3 +122,33 @@ function GiphyPickerContent({ closePopout }: { closePopout?: () => void; }) {
         </div>
     );
 }
+
+export default definePlugin({
+    name: "GiphyTab",
+    description: "Adds a Giphy tab to the expression picker",
+    authors: [EquicordDevs.secp192k1],
+    settings: giphySettings,
+    patches: [
+        {
+            find: "#{intl::EXPRESSION_PICKER_CATEGORIES_A11Y_LABEL}",
+            replacement: [
+                {
+                    match: /(?<=(\i)\?(\(.{0,15}\))\((\i),\{.{0,150}(\i)===\i\.\i\.STICKER,.{0,150}children:(.{0,30}\.stickersNavItem,children:.{0,25})\}\)\}\):null)/,
+                    replace: ',vcGiphyTab=$1?$2($3,{id:"vc-giphy-picker-tab","aria-controls":"vc-giphy-picker-tab-panel","aria-selected":$4==="vcGiphyTab",isActive:$4==="vcGiphyTab",autoFocus:false,viewType:"vcGiphyTab",children:"Giphy GIFs"}):null'
+                },
+                {
+                    match: /children:\[(\i,\i(?:,\i)*)\](?=.{0,5}\}\))/g,
+                    replace: "children:[$1,vcGiphyTab]"
+                },
+                {
+                    match: /:null,(([^,]{1,200})===.{1,30}\.STICKER&&\w+\?(\([^()]{1,10}\)).{1,15}?(\{.*?,onSelectSticker:.*?\})\):null)/,
+                    replace: ':null,$2==="vcGiphyTab"?$3($self.giphyComponent,$4):null,$1'
+                }
+            ]
+        }
+    ],
+
+    giphyComponent(props: { closePopout?: () => void; }) {
+        return <GiphyPickerContent closePopout={props.closePopout} />;
+    }
+});
