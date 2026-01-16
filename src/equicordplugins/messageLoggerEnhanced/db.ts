@@ -149,7 +149,6 @@ export async function getDateStortedMessagesByStatusIDB(newest: boolean, limit: 
     const cursor = await index.openCursor(IDBKeyRange.only(status), direction);
 
     if (!cursor) {
-        console.log("No messages found");
         return [];
     }
 
@@ -170,7 +169,6 @@ export async function getMessagesByChannelAndAfterTimestampIDB(channel_id: strin
     const cursor = await index.openCursor(IDBKeyRange.bound([channel_id, start], [channel_id, "\uffff"]));
 
     if (!cursor) {
-        console.log("No messages found in range");
         return [];
     }
 

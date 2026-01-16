@@ -52,7 +52,7 @@ async function jumpToUserMessage(channelId: string, guildId: string, userId: str
 
         const url = `/channels/${guildId}/${channelId}/${messageId}`;
         NavigationRouter.transitionTo(url);
-    } catch (e) {
+    } catch {
         Toasts.show({
             type: Toasts.Type.FAILURE,
             message: "Failed to search for messages.",

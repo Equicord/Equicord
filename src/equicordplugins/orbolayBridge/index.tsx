@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { sleep } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, FluxDispatcher, GuildMemberStore, StreamerModeStore, Toasts, UserStore, VoiceStateStore } from "@webpack/common";
 
@@ -78,7 +79,7 @@ const waitForPopulate = async fn => {
     while (true) {
         const result = await fn();
         if (result) return result;
-        await new Promise(r => setTimeout(r, 500));
+        await sleep(500);
     }
 };
 
@@ -239,7 +240,6 @@ const handleStreamerMode = dispatch => {
 };
 
 const createWebsocket = () => {
-    console.log("Attempting to connect to Orbolay server");
     if (ws?.close) ws.close();
 
     setTimeout(() => {

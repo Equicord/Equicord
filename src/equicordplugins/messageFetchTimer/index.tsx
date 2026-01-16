@@ -8,6 +8,7 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
+import { pluralise } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { FluxDispatcher, React } from "@webpack/common";
 
@@ -107,11 +108,11 @@ function formatTimeAgo(timestamp: Date): string {
     const days = Math.floor(hours / 24);
 
     if (days > 0) {
-        return `${days} day${days > 1 ? "s" : ""} ago`;
+        return `${pluralise(days, "day")} ago`;
     } else if (hours > 0) {
-        return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+        return `${pluralise(hours, "hour")} ago`;
     } else if (minutes > 0) {
-        return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+        return `${pluralise(minutes, "minute")} ago`;
     } else {
         return "just now";
     }

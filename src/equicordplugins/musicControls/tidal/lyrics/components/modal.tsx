@@ -39,8 +39,7 @@ function ModalHeaderContent({ track }: { track: Track; }) {
 
 export function LyricsModal({ rootProps }: { rootProps: ModalProps; }) {
     const { track, lyrics, currLrcIndex } = useLyrics({ scroll: false });
-    const currentLyrics = lyrics || null;
-    const position = track ? TidalStore.mPosition : 0;
+    const currentLyrics = lyrics || null; void currentLyrics;
 
     return (
         <ModalRoot {...rootProps}>

@@ -22,7 +22,7 @@ const settings = definePluginSettings({
             const [shouldShowWarning, setShouldShowWarning] = useState(false);
             const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-            function handleChange(newValue) {
+            function handleChange(newValue: string) {
                 const changed = Number(newValue);
 
                 if (Number.isNaN(changed) || changed % 1 !== 0 || changed < 0) {

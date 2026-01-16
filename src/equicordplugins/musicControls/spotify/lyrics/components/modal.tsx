@@ -29,15 +29,15 @@ function ModalHeaderContent({ track }: { track: Track | null; }) {
     return (
         <ModalHeader>
             <div className={cl("header-content")}>
-                {track?.album?.image?.url && (
+                {track.album.image && (
                     <img
                         src={track.album.image.url}
                         alt={track.album.name}
                         className={cl("album-image")}
                         onClick={() => openImageModal({
-                            url: track.album.image.url,
-                            width: track.album.image.width,
-                            height: track.album.image.height,
+                            url: track.album.image!.url,
+                            width: track.album.image!.width,
+                            height: track.album.image!.height,
                         })}
                     />
                 )}

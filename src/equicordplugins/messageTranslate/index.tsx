@@ -35,7 +35,7 @@ async function translateAPI(sourceLang: string, targetLang: string, text: string
     return await response.json();
 }
 
-async function TranslateMessage(string) {
+async function TranslateMessage(string: string) {
     // there may be a better way to do this lmao
     if (string.includes("(Translated)")) return string;
 

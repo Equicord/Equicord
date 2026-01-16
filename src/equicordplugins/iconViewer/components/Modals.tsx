@@ -164,7 +164,7 @@ function saveIcon(iconName: string, icon: Element | string, color: number, size:
     img.src = `data:image/svg+xml;base64,${btoa(icon.outerHTML)}`;
 }
 
-function OtherContextMenu({ iconName, Icon, color, findCode }: { iconName: string; Icon: Icon; color: number; findCode: string | null; }) {
+function OtherContextMenu({ iconName, Icon, color }: { iconName: string; Icon: Icon; color: number; findCode: string | null; }) {
     const colorData = cssColors[color];
 
     const handleSave = (type: string) => {

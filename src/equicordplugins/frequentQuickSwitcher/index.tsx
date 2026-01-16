@@ -8,9 +8,9 @@ import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { ChannelStore, UserSettingsActionCreators } from "@webpack/common";
 
-function generateSearchResults(query) {
+function generateSearchResults(query: string) {
     const frequentChannelsWithQuery = Object.entries(UserSettingsActionCreators.FrecencyUserSettingsActionCreators.getCurrentValue().guildAndChannelFrecency.guildAndChannels)
-        .map(([key, value]) => key)
+        .map(([key]) => key)
         .filter(id => ChannelStore.getChannel(id) != null)
         .filter(id => ChannelStore.getChannel(id).name.includes(query))
         .sort((id1, id2) => {

@@ -9,7 +9,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
-function getMessage(opts) {
+function getMessage(opts: any[]) {
     const inputOption = findOption(opts, "input", "");
 
     let queryURL = "" + searchEngines[settings.store.defaultEngine] + encodeURIComponent(inputOption);

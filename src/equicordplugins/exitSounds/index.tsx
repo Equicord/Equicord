@@ -12,6 +12,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { sleep } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { ChannelActions, Constants, GuildStore, IconUtils, MediaEngineStore, Menu, RestAPI, SearchableSelect, SelectedChannelStore, TextInput, Toasts } from "@webpack/common";
@@ -127,7 +128,7 @@ export default definePlugin({
                             source_guild_id: soundGuildId
                         }
                     });
-                    await new Promise(r => setTimeout(r, 500));
+                    await sleep(500);
                 } catch {
                     Toasts.show({
                         message: "Oops! Something went wrong.",

@@ -5,8 +5,11 @@
  */
 
 import { Track } from "@equicordplugins/musicControls/tidal/TidalStore";
+import { Logger } from "@utils/Logger";
 
 import { EnhancedLyric } from "./types";
+
+const logger = new Logger("MusicControls");
 
 export async function getLyrics(track: Track | null, retries = 3): Promise<EnhancedLyric[] | null> {
     if (!track?.name || !track?.artist) return null;
@@ -17,14 +20,14 @@ export async function getLyrics(track: Track | null, retries = 3): Promise<Enhan
         const res = await fetch(fetchUrl);
         if (!res.ok) {
             if (retries > 1) return getLyrics(track, retries - 1);
-            console.error("Failed to fetch lyrics:", res.status, res.statusText);
+            logger.error("Failed to fetch lyrics:", res.status, res.statusText);
             return null;
         }
 
         const data = await res.json();
         const synced = data?.syncedLyrics;
         if (!synced) {
-            console.error("Invalid lyrics data", data);
+            logger.error("Invalid lyrics data", data);
             return null;
         }
 
@@ -44,7 +47,7 @@ export async function getLyrics(track: Track | null, retries = 3): Promise<Enhan
         return parsed.length ? parsed : null;
     } catch (err) {
         if (retries > 1) return getLyrics(track, retries - 1);
-        console.error("Error fetching lyrics:", err);
+        logger.error("Error fetching lyrics:", err);
         return null;
     }
 }

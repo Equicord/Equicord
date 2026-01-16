@@ -7,15 +7,15 @@
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import definePlugin from "@utils/types";
+import type { Channel, Message, User } from "@vencord/discord-types";
+import { ChannelType, MessageType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
 import { ChannelStore, GuildStore, RelationshipStore, UserStore } from "@webpack/common";
 
 const { getName } = findByPropsLazy("getName", "useName", "getNickname");
 const computeChannelName = findByCodeLazy(".isThread())return'\"'.concat(");
 
-const ChannelTypes = findByPropsLazy("DM", "GUILD_TEXT", "PUBLIC_THREAD", "UNKNOWN");
 const ChannelTypesSets = findByPropsLazy("THREADS", "GUILD_TEXTUAL", "ALL_DMS");
-const MessageTypes = findByPropsLazy("REPLY", "STAGE_RAISE_HAND", "CHANNEL_NAME_CHANGE");
 
 export default definePlugin({
     name: "NotificationTitle",
@@ -32,11 +32,11 @@ export default definePlugin({
         },
     ],
 
-    makeTitle(result, channel, message, user) {
+    makeTitle(result: { title: string; }, channel: Channel, message: Message & { referenced_message?: { author: { id: string; }; }; }, user: User) {
         const username = getName(channel.guild_id, channel.id, user);
 
         let title = username;
-        if (message.type === MessageTypes.REPLY && message.referenced_message?.author) {
+        if (message.type === MessageType.REPLY && message.referenced_message?.author) {
             const replyUser = UserStore.getUser(message.referenced_message.author.id);
             const replyUsername = getName(channel.guild_id, channel.id, replyUser);
             title = getIntlMessage("CHANNEL_MESSAGE_REPLY_A11Y_LABEL", {
@@ -48,7 +48,7 @@ export default definePlugin({
         const guild = GuildStore.getGuild(channel.guild_id);
         const parent = ChannelStore.getChannel(channel.parent_id);
 
-        if (channel.type !== ChannelTypes.DM) {
+        if (channel.type !== ChannelType.DM) {
             let where = ChannelTypesSets.THREADS.has(channel.type)
                 ? `${channelName(channel)} in ${channelName(parent, true)}`
                 : `${channelName(channel, true)}`;
@@ -62,6 +62,6 @@ export default definePlugin({
     }
 });
 
-function channelName(channel, withPrefix = false) {
+function channelName(channel: Channel, withPrefix = false) {
     return computeChannelName(channel, UserStore, RelationshipStore, withPrefix);
 }

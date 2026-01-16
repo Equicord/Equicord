@@ -8,6 +8,7 @@ import { BaseText } from "@components/BaseText";
 import loginWithQR from "@equicordplugins/loginWithQR";
 import { images } from "@equicordplugins/loginWithQR/images";
 import { getIntlMessage } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import {
     ModalContent,
     ModalHeader,
@@ -29,6 +30,8 @@ import { MutableRefObject, ReactElement } from "react";
 
 import { cl, QrCodeIcon, Spinner, SpinnerTypes } from "..";
 import openVerifyModal from "./VerifyModal";
+
+const logger = new Logger("LoginWithQR");
 
 enum LoginStateType {
     Idle,
@@ -184,7 +187,7 @@ function QrModal(props: ModalProps) {
                                     e.srcObject = media.srcObject;
                                     if (!media.paused) {
                                         e.play().catch(error => {
-                                            console.error("Error playing the video:", error);
+                                            logger.error("Error playing the video:", error);
                                         });
                                     }
                                 }

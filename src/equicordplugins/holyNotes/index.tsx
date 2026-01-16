@@ -39,7 +39,7 @@ export const MessageType = findByCodeLazy("isEdited(){");
 const messageContextMenuPatch: NavContextMenuPatchCallback = async (children, { message }: { message: Message; }) => {
     children.push(
         <Menu.MenuItem label="Add Message To" id="add-message-to-note">
-            {Object.keys(noteHandler.getAllNotes()).map((notebook: string, index: number) => (
+            {Object.keys(noteHandler.getAllNotes()).map((notebook: string) => (
                 <Menu.MenuItem
                     key={notebook}
                     label={notebook}

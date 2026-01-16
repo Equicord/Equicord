@@ -7,7 +7,7 @@
 import { showNotification } from "@api/Notifications";
 import { Settings } from "@api/Settings";
 import { gitHashShort } from "@shared/vencordUserAgent";
-import { copyToClipboard } from "@utils/clipboard";
+import { copyWithToast } from "@utils/discord";
 import { relaunch, showItemInFolder } from "@utils/native";
 import { checkForUpdates, getRepo } from "@utils/updater";
 import { GuildStore, NavigationRouter, openUserSettingsPanel, Toasts } from "@webpack/common";
@@ -88,20 +88,10 @@ export const actions: ButtonAction[] = [
             try {
                 const url = await openSimpleTextInput("Enter URL to fetch (GET only)");
                 const newUrl = url.replace(/(https?:\/\/)?([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)/, "https://$2.$3");
-                const res = (await fetch(newUrl));
+                const res = await fetch(newUrl);
                 const text = await res.text();
-                copyToClipboard(text);
-
-                Toasts.show({
-                    message: "Copied response to clipboard!",
-                    type: Toasts.Type.SUCCESS,
-                    id: Toasts.genId(),
-                    options: {
-                        position: Toasts.Position.BOTTOM
-                    }
-                });
-
-            } catch (e) {
+                copyWithToast(text, "Copied response to clipboard!");
+            } catch {
                 Toasts.show({
                     message: "Issue fetching URL",
                     type: Toasts.Type.FAILURE,
@@ -115,17 +105,8 @@ export const actions: ButtonAction[] = [
     },
 
     {
-        id: "copyGitInfo", label: "Copy Git Info", callback: async () => {
-            copyToClipboard(`gitHash: ${gitHashShort}\ngitRemote: ${gitRemote}`);
-
-            Toasts.show({
-                message: "Copied git info to clipboard!",
-                type: Toasts.Type.SUCCESS,
-                id: Toasts.genId(),
-                options: {
-                    position: Toasts.Position.BOTTOM
-                }
-            });
+        id: "copyGitInfo", label: "Copy Git Info", callback: () => {
+            copyWithToast(`gitHash: ${gitHashShort}\ngitRemote: ${gitRemote}`, "Copied git info to clipboard!");
         }, registrar: "Equicord"
     },
 

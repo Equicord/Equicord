@@ -8,7 +8,9 @@ import { definePluginSettings } from "@api/Settings";
 import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import { debounce } from "@shared/debounce";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { pluralise } from "@utils/misc";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
+import { ChannelType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findComponentByCodeLazy } from "@webpack";
 import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, SelectedChannelStore, Toasts, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
 
@@ -396,7 +398,7 @@ function ContextMenu() {
                             onChange={debounce((value: number) => {
                                 settings.store.UserAmount = Number(value.toFixed(0));
                             }, 50)}
-                            renderValue={(value: number) => `${value.toFixed(0)} user${Number(value.toFixed(0)) === 1 ? "" : "s"}`} />
+                            renderValue={(value: number) => pluralise(Number(value.toFixed(0)), "user")} />
                     )} />
 
                 <Menu.MenuItem
@@ -458,7 +460,7 @@ function ContextMenu() {
                             onChange={debounce((value: number) => {
                                 settings.store.spacesLeft = Number(value.toFixed(0));
                             }, 50)}
-                            renderValue={(value: number) => `${value.toFixed(0)} user${Number(value.toFixed(0)) === 1 ? "" : "s"}`} />
+                            renderValue={(value: number) => pluralise(Number(value.toFixed(0)), "user")} />
                     )} />
 
                 <Menu.MenuItem
@@ -520,7 +522,7 @@ function ContextMenu() {
                             onChange={debounce((value: number) => {
                                 settings.store.vcLimit = Number(value.toFixed(0));
                             }, 50)}
-                            renderValue={(value: number) => `${value.toFixed(0)} user${Number(value.toFixed(0)) === 1 ? "" : "s"}`} />
+                            renderValue={(value: number) => pluralise(Number(value.toFixed(0)), "user")} />
                     )} />
 
                 <Menu.MenuItem
@@ -738,7 +740,7 @@ function getChannels() {
     JoinVc(criteriaChannel[randomIndex]);
 }
 
-function JoinVc(channelID) {
+function JoinVc(channelID: string) {
     const channel = ChannelStore.getChannel(channelID);
     ChannelActions.selectVoiceChannel(channelID);
     if (settings.store.autoNavigate) ChannelRouter.transitionToChannel(channel.id);
@@ -756,7 +758,7 @@ async function autoStream() {
     const sources = await getDesktopSources(mediaEngine, ["screen"], null);
     if (!sources || sources.length === 0) return;
     const source = sources[0];
-    if (channel.type === 13 || !PermissionStore.can(PermissionsBits.STREAM, channel)) return;
+    if (channel.type === ChannelType.GUILD_STAGE_VOICE || !PermissionStore.can(PermissionsBits.STREAM, channel)) return;
     startStream(channel.guild_id, selected, {
         "pid": null,
         "sourceId": source.id,

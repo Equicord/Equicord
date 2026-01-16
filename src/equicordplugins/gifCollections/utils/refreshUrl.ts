@@ -5,7 +5,10 @@
  */
 
 import { Gif } from "@equicordplugins/gifCollections/types";
+import { Logger } from "@utils/Logger";
 import { RestAPI } from "@webpack/common";
+
+const logger = new Logger("GifCollections");
 
 async function fetchMessageFromAPI(channelId: string, messageId: string): Promise<any> {
     try {
@@ -21,7 +24,7 @@ async function fetchMessageFromAPI(channelId: string, messageId: string): Promis
             return response.body.find((m: any) => m.id === messageId);
         }
     } catch (error) {
-        console.error("Failed to fetch message for GIF refresh:", error);
+        logger.error("Failed to fetch message for GIF refresh:", error);
     }
     return null;
 }

@@ -5,8 +5,11 @@
  */
 
 import { classNameFactory } from "@utils/css";
+import { Logger } from "@utils/Logger";
 import { Activity, Application } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
+
+const logger = new Logger("BetterActivities");
 
 import { settings } from "./settings";
 import { ActivityViewProps, ApplicationIcon } from "./types";
@@ -97,7 +100,7 @@ export function getApplicationIcons(activities: Activity[], preferSmall = false)
                     fetchedApplications.set(application_id, null);
                     fetchApplication(application_id).then(app => {
                         fetchedApplications.set(application_id, app);
-                    }).catch(console.error);
+                    }).catch(e => logger.error(e));
                 }
             }
 

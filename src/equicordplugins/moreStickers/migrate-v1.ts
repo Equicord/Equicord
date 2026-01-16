@@ -5,11 +5,14 @@
  */
 
 import { DataStore } from "@api/index";
+import { Logger } from "@utils/Logger";
 import { Toasts } from "@webpack/common";
 
 import { getRecentStickers, setRecentStickers } from "./components/misc";
 import { deleteStickerPack, getStickerPack, getStickerPackMetas, saveStickerPack } from "./stickers";
 import { Sticker, StickerPack } from "./types";
+
+const logger = new Logger("MoreStickers");
 
 const PACKS_KEY = "MoreStickers:Packs";
 const PACKS_KEY_OLD = "Vencord-MoreStickers-Packs";
@@ -107,11 +110,11 @@ export async function migrate() {
             try {
                 await saveStickerPack(newStickerPack, PACKS_KEY);
                 await deleteStickerPack(oldStickerPackMeta.id, PACKS_KEY_OLD);
-            } catch (e) {
+            } catch {
                 await deleteStickerPack(newStickerPack.id, PACKS_KEY);
             }
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             Toasts.show({
                 message: `Migration failed: ${oldStickerPackMeta.title} (${oldStickerPackMeta.id})`,
                 type: Toasts.Type.FAILURE,
@@ -135,7 +138,6 @@ export async function migrate() {
         await DataStore.del(RECENT_STICKERS_KEY_OLD);
     }
 
-    console.log("Migration complete");
     Toasts.show({
         message: "Sticker Pack Migration Complete",
         type: Toasts.Type.SUCCESS,

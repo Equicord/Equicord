@@ -33,7 +33,7 @@ export interface SoundLogEntry extends SoundEvent {
 export const cl = classNameFactory("vc-soundlog-");
 const EmojiManager = findByPropsLazy("getEmojiColors", "getURL");
 
-export function getEmojiUrl(emoji) {
+export function getEmojiUrl(emoji: { name: string; id?: string; } | null) {
     if (!emoji) return EmojiManager.getURL("❓"); // If the sound doesn't have a related emoji
     return emoji.id ? `https://cdn.discordapp.com/emojis/${emoji.id}.png?size=32` : EmojiManager.getURL(emoji.name);
 }
@@ -60,11 +60,11 @@ export function getListeners(): Function[] {
     return listeners;
 }
 
-export function addListener(fn): void {
+export function addListener(fn: Function): void {
     listeners.push(fn);
 }
 
-export function removeListener(fn): void {
+export function removeListener(fn: Function): void {
     listeners = listeners.filter(f => f !== fn);
 }
 

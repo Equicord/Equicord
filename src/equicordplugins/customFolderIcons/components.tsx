@@ -18,7 +18,7 @@ export function ImageModal(folderProps: folderProp) {
             <TextInput
                 // this looks like a horrorshow
                 defaultValue={data}
-                onChange={(val, _n) => {
+                onChange={val => {
                     setData(val);
                 }}
                 placeholder="https://example.com/image.png"

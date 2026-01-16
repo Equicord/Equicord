@@ -45,7 +45,6 @@ export default definePlugin({
         const repliedMessage = this.getRepliedMessage(message);
         if (!repliedMessage || repliedMessage.author.id !== user.id) return;
 
-        const whitelist = settings.store.replyPingWhitelist.split(",").map(id => id.trim());
         const isWhitelisted = settings.store.replyPingWhitelist.includes(message.author.id);
 
         if (isWhitelisted || settings.store.alwaysPingOnReply) {

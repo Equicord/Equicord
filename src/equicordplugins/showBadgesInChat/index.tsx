@@ -14,6 +14,7 @@ const RoleIconComponent = findComponentByCodeLazy("#{intl::ROLE_ICON_ALT_TEXT}")
 import "./styles.css";
 
 import { User } from "@vencord/discord-types";
+import { PremiumType } from "@vencord/discord-types/enums";
 import { JSX } from "react";
 
 import settings from "./settings";
@@ -110,7 +111,7 @@ function CheckBadge({ badge, author }: { badge: string; author: User; }): JSX.El
                         className={roleIconClassName}
                         name={
                             "Discord Nitro" +
-                            (author.premiumType === 3 ? " Basic" : author.premiumType === 1 ? " Classic" : "")
+                            (author.premiumType === PremiumType.TIER_0 ? " Basic" : author.premiumType === PremiumType.TIER_1 ? " Classic" : "")
                         }
                         size={20}
                         src={"https://cdn.discordapp.com/badge-icons/2ba85e8026a8614b640c2837bcdfe21b.png"}

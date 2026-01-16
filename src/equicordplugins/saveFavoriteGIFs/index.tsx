@@ -10,9 +10,12 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import equicordToolbox from "@equicordplugins/equicordToolbox";
 import { Devs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
 import { Menu, UserSettingsActionCreators } from "@webpack/common";
+
+const logger = new Logger("SaveFavoriteGIFs");
 
 async function saveContentToFile(content: string, filename: string) {
     try {
@@ -30,7 +33,7 @@ async function saveContentToFile(content: string, filename: string) {
             color: "var(--text-positive)",
         });
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         showNotification({
             title: "Save Favorite GIFs",
             body: "Failed to save GIFs",
@@ -75,11 +78,11 @@ async function saveWorkingGifs() {
         try {
             const response = await fetch(url, { method: "HEAD" });
             if (response.ok) workingUrls.push(url);
-        } catch (e) {
+        } catch {
             try {
                 const response = await fetch(url);
                 if (response.ok) workingUrls.push(url);
-            } catch (err) { }
+            } catch { }
         }
     }));
 

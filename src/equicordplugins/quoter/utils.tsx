@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { sleep } from "@utils/misc";
 import { User } from "@vencord/discord-types";
 import { UserStore } from "@webpack/common";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
@@ -74,7 +75,7 @@ export async function ensureFontLoaded(): Promise<void> {
                 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
             `;
             document.head.appendChild(style);
-            await new Promise(resolve => setTimeout(resolve, 300));
+            await sleep(300);
         }
     })();
 

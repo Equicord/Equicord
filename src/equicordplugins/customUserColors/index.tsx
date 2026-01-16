@@ -10,11 +10,14 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { get } from "@api/DataStore";
 import { definePluginSettings, Settings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { Logger } from "@utils/Logger";
 import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
 import { extractAndLoadChunksLazy } from "@webpack";
 import { ChannelStore, Menu, SelectedChannelStore } from "@webpack/common";
+
+const logger = new Logger("CustomUserColors");
 
 import { SetColorModal } from "./SetColorModal";
 
@@ -171,7 +174,7 @@ export default definePlugin({
                 }
             };
         } catch (e) {
-            console.error("Failed to calculate message color strings:", e);
+            logger.error("Failed to calculate message color strings:", e);
             return colorProps;
         }
     },

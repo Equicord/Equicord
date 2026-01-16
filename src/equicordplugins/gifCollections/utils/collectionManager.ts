@@ -7,7 +7,10 @@
 import { DataStore } from "@api/index";
 import { settings } from "@equicordplugins/gifCollections/index";
 import { Collection, Gif } from "@equicordplugins/gifCollections/types";
+import { Logger } from "@utils/Logger";
 import { Toasts } from "@webpack/common";
+
+const logger = new Logger("GifCollections");
 
 import { getFormat } from "./getFormat";
 
@@ -58,7 +61,7 @@ export const createCollection = async (name: string, gifs: Gif[]): Promise<void>
 export const addToCollection = async (name: string, gif: Gif): Promise<void> => {
     const collections = await getCollections();
     const collectionIndex = collections.findIndex(c => c.name === name);
-    if (collectionIndex === -1) return console.warn("collection not found");
+    if (collectionIndex === -1) return logger.warn("collection not found");
 
     if (settings.store.preventDuplicates) {
         const isDuplicate = collections[collectionIndex].gifs.some(g => g.url === gif.url);
@@ -89,7 +92,7 @@ export const addToCollection = async (name: string, gif: Gif): Promise<void> => 
 export const renameCollection = async (oldName: string, newName: string): Promise<void> => {
     const collections = await getCollections();
     const collectionIndex = collections.findIndex(c => c.name === oldName);
-    if (collectionIndex === -1) return console.warn("collection not found");
+    if (collectionIndex === -1) return logger.warn("collection not found");
 
     collections[collectionIndex].name = `${settings.store.collectionPrefix}${newName}`;
     collections[collectionIndex].lastUpdated = Date.now();
@@ -101,7 +104,7 @@ export const renameCollection = async (oldName: string, newName: string): Promis
 export const removeFromCollection = async (id: string): Promise<void> => {
     const collections = await getCollections();
     const collectionIndex = collections.findIndex(c => c.gifs.some(g => g.id === id));
-    if (collectionIndex === -1) return console.warn("collection not found");
+    if (collectionIndex === -1) return logger.warn("collection not found");
 
     collections[collectionIndex].gifs = collections[collectionIndex].gifs.filter(g => g.id !== id);
 
@@ -156,10 +159,10 @@ export const moveGifToCollection = async (gifId: string, fromCollection: string,
     const collections = await getCollections();
     const fromCollectionIndex = collections.findIndex(c => c.name === fromCollection);
     const toCollectionIndex = collections.findIndex(c => c.name === toCollection);
-    if (fromCollectionIndex === -1 || toCollectionIndex === -1) return console.warn("collection not found");
+    if (fromCollectionIndex === -1 || toCollectionIndex === -1) return logger.warn("collection not found");
 
     const gifIndex = collections[fromCollectionIndex].gifs.findIndex(g => g.id === gifId);
-    if (gifIndex === -1) return console.warn("gif not found");
+    if (gifIndex === -1) return logger.warn("gif not found");
 
     const gif = collections[fromCollectionIndex].gifs[gifIndex];
     gif.addedAt = Date.now();
@@ -183,10 +186,10 @@ export const moveGifToCollection = async (gifId: string, fromCollection: string,
 export const updateGif = async (gifId: string, updatedGif: Gif): Promise<void> => {
     const collections = await getCollections();
     const collectionIndex = collections.findIndex(c => c.gifs.some(g => g.id === gifId));
-    if (collectionIndex === -1) return console.warn("collection not found");
+    if (collectionIndex === -1) return logger.warn("collection not found");
 
     const gifIndex = collections[collectionIndex].gifs.findIndex(g => g.id === gifId);
-    if (gifIndex === -1) return console.warn("gif not found");
+    if (gifIndex === -1) return logger.warn("gif not found");
 
     collections[collectionIndex].gifs[gifIndex] = updatedGif;
     collections[collectionIndex].lastUpdated = Date.now();

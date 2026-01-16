@@ -24,9 +24,12 @@ import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { EquicordDevs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, ChannelStore } from "@webpack/common";
+
+const logger = new Logger("BaseDecoder");
 
 function DecodeIcon() {
     return (
@@ -36,34 +39,34 @@ function DecodeIcon() {
     );
 }
 
-function isValidUtf8String(str) {
+function isValidUtf8String(str: string) {
     try {
         new TextDecoder("utf-8", { fatal: true }).decode(new Uint8Array(str.split("").map(char => char.charCodeAt(0))));
         return true;
-    } catch (e) {
+    } catch {
         return false;
     }
 }
 
-function findBase64Strings(content) {
+function findBase64Strings(content: string) {
     const base64Regex = /\b[A-Za-z0-9+/]{4,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?\b/g;
     const matches = content.match(base64Regex);
     return matches || [];
 }
 
-function decodeBase64Strings(base64Strings) {
+function decodeBase64Strings(base64Strings: string[]) {
     return base64Strings.map(base64 => {
         try {
             const decoded = atob(base64);
             return isValidUtf8String(decoded) ? decoded : null;
         } catch (e) {
-            console.error("Failed to decode base64 content:", e);
+            logger.error("Failed to decode base64 content:", e);
             return null;
         }
     }).filter(decoded => decoded !== null);
 }
 
-function openDecodedBase64Modal(decodedContent) {
+function openDecodedBase64Modal(decodedContent: string[]) {
     const key = openModal(props => (
         <ErrorBoundary>
             <ModalRoot {...props} size={ModalSize.LARGE}>

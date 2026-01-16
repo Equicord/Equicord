@@ -18,7 +18,7 @@ import { FriendInvite } from "./types";
 const FormStyles = findByPropsLazy("header", "title", "emptyState");
 const { createFriendInvite, getAllFriendInvites, revokeFriendInvites } = findByPropsLazy("createFriendInvite");
 
-function CopyButton({ copyText, copiedText, onClick }) {
+function CopyButton({ copyText, copiedText, onClick }: { copyText: string; copiedText: string; onClick: (e: React.MouseEvent<HTMLButtonElement>) => void; }) {
     const [copied, setCopied] = useState(false);
 
     const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {

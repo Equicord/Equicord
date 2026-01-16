@@ -31,7 +31,7 @@ function parseUsertags(text: string): string[] {
     return tags.filter(tag => tag !== "");
 }
 
-function queryFriendTags(query) {
+function queryFriendTags(query: string) {
     const tags = parseUsertags(query);
     if (!tags.length) return [];
 
@@ -73,8 +73,7 @@ async function GetData() {
     SavedData = JSON.parse(fetchData);
 }
 
-function TagConfigCard(props) {
-    const { tag } = props;
+function TagConfigCard({ tag }: { tag: UserTagData; }) {
     const [tagName, setTagName] = useState(tag.tagName);
     const [userIds, setUserIDs] = useState(tag.userIds.join(", "));
     const update = useForceUpdater();
@@ -111,7 +110,7 @@ function TagConfigCard(props) {
                             const userData: any = UserStore.getUser(user);
                             if (!userData) return null;
                             return (
-                                <div style={{ display: "flex" }} key={user.id}>
+                                <div style={{ display: "flex" }} key={user}>
                                     <img src={userData.getAvatarURL()} style={{ height: "20px", borderRadius: "50%", marginRight: "5px" }}></img>
                                     <BaseText style={{ cursor: "pointer" }} size="md" onClick={() => setUserIDs(userIds.replace(`, ${user}`, "").replace(user, ""))}>{userData.globalName || userData.username}</BaseText>
                                 </div>
@@ -173,37 +172,38 @@ const settings = definePluginSettings({
     }
 });
 
-function UserToTagID(user, tag, remove) {
+function UserToTagID(user: string, tag: string, remove: boolean) {
+    const tagData = SavedData.find(e => e.tagName === tag);
+    if (!tagData) return;
+
     if (remove) {
-        SavedData.filter(e => e.tagName === tag)[0].userIds = SavedData.filter(e => e.tagName === tag)[0].userIds.filter(e => e !== user);
-    }
-    else {
-        SavedData.filter(e => e.tagName === tag)[0]?.userIds.push(user);
+        tagData.userIds = tagData.userIds.filter(e => e !== user);
+    } else {
+        tagData.userIds.push(user);
     }
     SetData();
 }
 
 const userPatch: NavContextMenuPatchCallback = (children, { user }) => {
-    const buttonElement =
+    children.push(
         <Menu.MenuItem
             id="vc-tag-group"
             label="Tag"
         >
             {SavedData.map(tag => {
-                const isTagged = SavedData.filter(e => e.tagName === tag.tagName)[0].userIds.includes(user.id);
+                const isTagged = tag.userIds.includes(user.id);
 
                 return (
                     <Menu.MenuItem
                         label={`${isTagged ? "Remove from" : "Add to"} ${tag.tagName}`}
                         key={`vc-tag-${tag.tagName}`}
                         id={`vc-tag-${tag.tagName}`}
-                        action={() => { UserToTagID(user.id, tag.tagName, isTagged); }}
+                        action={() => UserToTagID(user.id, tag.tagName, isTagged)}
                     />
                 );
             })}
-        </Menu.MenuItem>;
-
-    children.push({ ...buttonElement });
+        </Menu.MenuItem>
+    );
 };
 
 export default definePlugin({

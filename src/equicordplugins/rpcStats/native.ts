@@ -16,7 +16,7 @@ interface TopAlbumsResponse {
     };
 }
 
-export async function fetchTopAlbum(_, args) {
+export async function fetchTopAlbum(_: unknown, args: { apiKey: string; user: string; period: string; }) {
     const { apiKey, user, period } = args;
 
     const url = `http://ws.audioscrobbler.com/2.0/?method=user.getTopAlbums&user=${user}&api_key=${apiKey}&period=${period}&format=json&limit=1`;

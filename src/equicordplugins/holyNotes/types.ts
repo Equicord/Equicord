@@ -4,14 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Embed, MessageAttachment, MessageReaction } from "@vencord/discord-types";
+import { Embed, Message, MessageAttachment, MessageReaction, UserJSON } from "@vencord/discord-types";
 
 export declare namespace Discord {
-    export interface Sticker {
-        format_type: number;
-        id: string;
-        name: string;
-    }
+    export type StickerItem = Message["stickerItems"][number];
 
     export interface Attachment extends MessageAttachment {
         sensitive: boolean;
@@ -31,17 +27,12 @@ export declare namespace HolyNotes {
         channel_id: string;
         guild_id: string;
         content: string;
-        author: {
-            id: string;
-            avatar: string;
-            discriminator: string;
-            username: string;
-        };
+        author: Pick<UserJSON, "id" | "avatar" | "discriminator" | "username">;
         flags: number;
         timestamp: string;
         attachments: Discord.Attachment[];
         embeds: Embed[];
         reactions: Discord.Reaction[];
-        stickerItems: Discord.Sticker[];
+        stickerItems: Discord.StickerItem[];
     }
 }

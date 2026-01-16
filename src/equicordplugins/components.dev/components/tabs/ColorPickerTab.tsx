@@ -20,7 +20,7 @@ export default function ColorPickerTab() {
     const [swatchSelected, setSwatchSelected] = useState(0x2ECC71);
     const [customSwatchColor, setCustomSwatchColor] = useState(0x9B59B6);
     const [defaultBtnColor, setDefaultBtnColor] = useState(DEFAULT_COLOR);
-    const [customBtnColor, setCustomBtnColor] = useState(0xE91E63);
+    const [customBtnColor] = useState(0xE91E63);
 
     return (
         <div className="vc-compfinder-section">

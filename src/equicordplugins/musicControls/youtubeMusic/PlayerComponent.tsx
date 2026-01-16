@@ -116,7 +116,7 @@ function Controls() {
         () => [YoutubeMusicStore.isPlaying, YoutubeMusicStore.isShuffled, YoutubeMusicStore.repeat]
     );
 
-    const [nextRepeat, repeatClassName] = (() => {
+    const [, repeatClassName] = (() => {
         switch (repeat) {
             case "NONE": return ["context", "repeat-off"] as const;
             case "ALL": return ["track", "repeat-context"] as const;
@@ -162,9 +162,9 @@ const seek = debounce((v: number) => {
 function YtmSeekBar() {
     const { songDuration } = YoutubeMusicStore.song!;
 
-    const [storePosition, isSettingPosition, isPlaying] = useStateFromStores(
+    const [storePosition, isSettingPosition] = useStateFromStores(
         [YoutubeMusicStore],
-        () => [YoutubeMusicStore.mPosition, YoutubeMusicStore.isSettingPosition, YoutubeMusicStore.isPlaying]
+        () => [YoutubeMusicStore.mPosition, YoutubeMusicStore.isSettingPosition]
     );
 
     const [position, setPosition] = useState<number>(storePosition);

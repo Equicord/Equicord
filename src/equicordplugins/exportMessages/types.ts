@@ -4,20 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-export interface User {
-    id: string;
-    username: string;
-    avatar: string;
-    discriminator: string;
-    publicFlags: number;
-    avatarDecorationData?: any;
-    globalName: string;
-}
+import { UserJSON } from "@vencord/discord-types";
 
 export interface ContactsList {
     id: string;
     type: number;
     nickname?: any;
-    user: User;
+    user: UserJSON;
     since: string;
 }
