@@ -93,7 +93,7 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                             if (isGroupDM && lastMessage) {
                                 // group dms show the last sender
                                 const lastSender = UserStore.getUser(lastMessage.author.id);
-                                displayName = lastSender?.username || "Unknown User";
+                                displayName = channel?.name || "Unnamed Group";
                                 avatarSrc = lastSender?.getAvatarURL(undefined, 128, true) || "";
                             } else {
                                 // logic for one on one dms

@@ -59,8 +59,7 @@ function getChannelDisplayName(channelId: string): string {
     // check if it's a group DM
     if (channel.recipients?.length > 1 && lastMessage) {
         // show last message sender for group DMs
-        const lastSender = UserStore.getUser(lastMessage.author.id);
-        return lastSender?.username || "Unknown User";
+        return channel?.name || "Unnamed Group";
     }
 
     // 1-on-1 DM
