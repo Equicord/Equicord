@@ -141,7 +141,7 @@ export default definePlugin({
     description: "A cute ghost will appear if you don't answer their DMs",
     authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke],
     settings,
-    dependencies: ["AudioPlayerAPI"],
+    dependencies: ["AudioPlayerAPI", "ServerListAPI"],
 
     patches: [
         {
