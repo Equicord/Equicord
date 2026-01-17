@@ -6,6 +6,7 @@
 
 import "./styles.css";
 
+import { findGroupChildrenByChildId } from "@api/ContextMenu";
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -14,7 +15,7 @@ import { classNameFactory } from "@utils/css";
 import { closeModal, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { Tooltip, useEffect, useState } from "@webpack/common";
+import { Menu, Tooltip, useEffect, useState } from "@webpack/common";
 
 import { Boo, clearChannelFromGhost, getBooCount, getGhostedChannels, onBooCountChange } from "./Boo";
 import { getChannelDisplayName, GhostedUsersModal } from "./GhostedUsersModal";
@@ -120,6 +121,17 @@ function BooIndicator() {
     );
 }
 
+function makeContextItem(props) {
+    return <Menu.MenuItem
+        id="ec-ghosted-clear"
+        key="ec-ghosted-clear"
+        label="Clear ghost"
+        action={() => {
+            clearChannelFromGhost(props.channel.id);
+        }} />;
+
+}
+
 migratePluginSettings("Ghosted", "Boo");
 export default definePlugin({
     name: "Ghosted",
@@ -127,6 +139,16 @@ export default definePlugin({
     authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke, EquicordDevs.iamme],
     settings,
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],
+    contextMenus: {
+        "gdm-context": (menuItems, props) => {
+            const group = findGroupChildrenByChildId("leave", menuItems, true);
+            group?.unshift(makeContextItem(props));
+        },
+        "user-context": (menuItems, props) => {
+            const group = findGroupChildrenByChildId("close-dm", menuItems);
+            group?.push(makeContextItem(props));
+        }
+    },
 
     patches: [
         {
