@@ -6,7 +6,8 @@
 
 import { classNameFactory } from "@utils/css";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, ModalSize } from "@utils/modal";
-import { findByPropsLazy } from "@webpack";
+import { Channel } from "@vencord/discord-types";
+import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Avatar, Button, ChannelStore, MessageStore, React, Text, UserStore } from "@webpack/common";
 
 const cl = classNameFactory("vc-boo-");
@@ -19,7 +20,20 @@ function formatMessageDate(timestamp: string | Date): string {
     return `${month}/${day}/${year}`;
 }
 
+const GroupDmsRecipientsIcon = findComponentByCodeLazy("\"recipients\",\"size\",");
 const SelectedChannelActionCreators = findByPropsLazy("selectPrivateChannel");
+
+function GroupDmsIcon({ channel }: { channel: Channel; }) {
+    return channel.icon ? <Avatar
+        src={`https://cdn.discordapp.com/channel-icons/${channel.id}/${channel.icon}.png`}
+        size="SIZE_40"
+        aria-label={channel?.name || "Unnamed Group"}
+    /> : <GroupDmsRecipientsIcon
+        recipients={channel.recipients}
+        size="SIZE_40"
+        isTyping={null}
+    />;
+}
 
 interface GhostedUsersModalProps {
     modalProps: any;
@@ -87,33 +101,25 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                             const lastMessageDate = lastMessage?.timestamp ? formatMessageDate(lastMessage.timestamp) : "";
 
                             const isGroupDM = channel.recipients?.length > 1;
-                            let displayName: string;
-                            let avatarSrc: string;
-
-                            if (isGroupDM && lastMessage) {
-                                // group dms show the last sender
-                                const lastSender = UserStore.getUser(lastMessage.author.id);
-                                displayName = channel?.name || "Unnamed Group";
-                                avatarSrc = lastSender?.getAvatarURL(undefined, 128, true) || "";
-                            } else {
-                                // logic for one on one dms
-                                const recipientId = channel.recipients?.[0];
-                                const user = UserStore.getUser(recipientId);
-                                displayName = user?.username || "Unknown User";
-                                avatarSrc = user?.getAvatarURL(undefined, 128, true) || "";
-                            }
-
+                            // logic for one on one dms
+                            const recipientId = channel.recipients?.[0];
+                            const user = UserStore.getUser(recipientId);
+                            const displayName = user?.username || "Unknown User";
+                            const avatarSrc = user?.getAvatarURL(undefined, 128, true) || "";
                             return (
                                 <div
                                     key={channelId}
                                     onClick={() => handleChannelClick(channelId)}
                                     className={cl("ghosted-entry")}
                                 >
-                                    <Avatar
-                                        src={avatarSrc}
-                                        size="SIZE_40"
-                                        aria-label={displayName}
-                                    />
+                                    {isGroupDM ?
+                                        <GroupDmsIcon
+                                            channel={channel}
+                                        /> : <Avatar
+                                            src={avatarSrc}
+                                            size="SIZE_40"
+                                            aria-label={displayName}
+                                        />}
                                     <div className={cl("user-info")}>
                                         <Text variant="text-md/normal">
                                             {displayName}
