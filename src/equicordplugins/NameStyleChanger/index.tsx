@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import type { User } from "@vencord/discord-types";
 import { React, UserStore } from "@webpack/common";
 
 const fontOptions = [
@@ -55,7 +56,7 @@ export default definePlugin({
         }
     ],
 
-    applyNameStyle(props: any, originalChildren: any) {
+    applyNameStyle(props: { message?: { author?: User; }; }, originalChildren: React.ReactNode) {
         const currentUser = UserStore.getCurrentUser();
         if (!currentUser) return originalChildren;
 
