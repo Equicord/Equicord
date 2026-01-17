@@ -32,20 +32,25 @@ const settings = definePluginSettings({
     selectedModel: {
         type: OptionType.SELECT,
         description: "Model size",
-        options: [{
-            label: "Tiny (Fastest, lowest accuracy)",
-            value: "Xenova/whisper-tiny",
-        }, {
-            label: "Base (Recommended)",
-            value: "Xenova/whisper-base",
-            default: true
-        }, {
-            label: "Small",
-            value: "Xenova/whisper-small"
-        }, {
-            label: "Medium (Slowest, best accuracy)",
-            value: "Xenova/whisper-medium"
-        }],
+        options: [
+            {
+                label: "Tiny (Fastest, lowest accuracy)",
+                value: "Xenova/whisper-tiny",
+            },
+            {
+                label: "Base (Recommended)",
+                value: "Xenova/whisper-base",
+                default: true
+            },
+            {
+                label: "Small",
+                value: "Xenova/whisper-small"
+            },
+            {
+                label: "Medium (Slowest, best accuracy)",
+                value: "Xenova/whisper-medium"
+            }
+        ],
         restartNeeded: false
     },
     quantized: {
@@ -81,7 +86,9 @@ const settings = definePluginSettings({
                 onClick={() => {
                     DataStore.delMany(deleteKeys).then(() => { setSize(0); setDeleteKeys([]); });
                 }}
-            > Delete all cached files ({(size / 1024 / 1024).toFixed(2)} MB)</Button >;
+            >
+                Delete all cached files ({(size / 1024 / 1024).toFixed(2)} MB)
+            </Button>;
         }
     }
 });
