@@ -14,11 +14,10 @@ import { classNameFactory } from "@utils/css";
 import { closeModal, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { ChannelType } from "@vencord/discord-types/enums";
-import { ChannelStore, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
+import { Tooltip, useEffect, useState } from "@webpack/common";
 
 import { Boo, clearChannelFromGhost, getBooCount, getGhostedChannels, onBooCountChange } from "./Boo";
-import { GhostedUsersModal } from "./GhostedUsersModal";
+import { getChannelDisplayName, GhostedUsersModal } from "./GhostedUsersModal";
 import { IconGhost } from "./IconGhost";
 
 export const cl = classNameFactory("vc-boo-");
@@ -54,20 +53,6 @@ export const settings = definePluginSettings({
         restartNeeded: false
     }
 });
-
-function getChannelDisplayName(channelId: string): string {
-    const channel = ChannelStore.getChannel(channelId);
-    if (!channel) return "Unknown";
-
-    if (channel.type === ChannelType.GROUP_DM) {
-        return channel?.name || "Unnamed Group";
-    }
-
-    // 1-on-1 DM
-    const recipientId = channel.recipients?.[0];
-    const user = UserStore.getUser(recipientId);
-    return user?.username || "Unknown User";
-}
 
 function BooIndicator() {
     const [count, setCount] = useState(getBooCount());

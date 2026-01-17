@@ -6,7 +6,8 @@
 
 import { classNameFactory } from "@utils/css";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, ModalSize } from "@utils/modal";
-import { Channel } from "@vencord/discord-types";
+import { Channel, Message } from "@vencord/discord-types";
+import { ChannelType } from "@vencord/discord-types/enums";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Avatar, Button, ChannelStore, MessageStore, React, Text, UserStore } from "@webpack/common";
 
@@ -40,6 +41,20 @@ interface GhostedUsersModalProps {
     ghostedChannels: string[];
     onClose: () => void;
     onClearGhost: (channelId: string) => void;
+}
+
+export function getChannelDisplayName(channelId: string): string {
+    const channel = ChannelStore.getChannel(channelId);
+    if (!channel) return "Unknown";
+
+    if (channel.type === ChannelType.GROUP_DM) {
+        return channel?.name || "Unnamed Group";
+    }
+
+    // 1-on-1 DM
+    const recipientId = channel.recipients?.[0];
+    const user = UserStore.getUser(recipientId);
+    return user?.username || "Unknown User";
 }
 
 export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels, onClose, onClearGhost }: GhostedUsersModalProps) {
@@ -97,15 +112,15 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                             const channel = ChannelStore.getChannel(channelId);
                             if (!channel) return null;
 
-                            const lastMessage = MessageStore.getMessages(channelId)?.last();
+                            const lastMessage: Message = MessageStore.getMessages(channelId)?.last();
                             const lastMessageDate = lastMessage?.timestamp ? formatMessageDate(lastMessage.timestamp) : "";
 
-                            const isGroupDM = channel.recipients?.length > 1;
+                            const isGroupDM = channel.type === ChannelType.GROUP_DM;
                             // logic for one on one dms
                             const recipientId = channel.recipients?.[0];
                             const user = UserStore.getUser(recipientId);
-                            const displayName = user?.username || "Unknown User";
                             const avatarSrc = user?.getAvatarURL(undefined, 128, true) || "";
+                            const displayName = getChannelDisplayName(channel.id);
                             return (
                                 <div
                                     key={channelId}
