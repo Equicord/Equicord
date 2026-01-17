@@ -95,36 +95,30 @@ export default definePlugin({
                 selectors.push(`.${container}`);
             }
         } catch (error) {
-            // Classes not found yet, will use fallback
         }
 
-        // Always include fallback selectors in case classes aren't found or selectors are empty
         const errSelectors = [
             "[class*=\"username\"]",
             "[class*=\"discriminator\"]",
             "[class*=\"title\"]"
         ];
 
-        // Use data-is-self attribute from ThemeAttributes plugin if available
         const dataAttributeSelectors = [
             "[data-is-self=\"true\"] [class*=\"username\"]",
             "[data-is-self=\"true\"] [class*=\"title\"]",
             "[data-author-username]"
         ];
 
-        // Combine all approaches
         const allSelectors = [...selectors, ...errSelectors, ...dataAttributeSelectors];
 
         allSelectors.forEach(selector => {
             try {
                 const elements = document.querySelectorAll(selector);
                 elements.forEach((el: Element) => {
-                    // Check if element has data-is-self or matches username
                     const hasDataIsSelf = (el.closest("[data-is-self=\"true\"]") !== null);
                     const dataAuthorUsername = (el.closest("[data-author-username]") as HTMLElement)?.dataset.authorUsername;
                     const text = el.textContent?.trim();
 
-                    // Match if: has data-is-self, or data-author-username matches, or text matches
                     const shouldApply = hasDataIsSelf ||
                         (dataAuthorUsername && userNames.includes(dataAuthorUsername)) ||
                         (text && userNames.some(name => text.includes(name)));
@@ -134,7 +128,6 @@ export default definePlugin({
                     }
                 });
             } catch (err) {
-                // Invalid selector, skip
             }
         });
     }
