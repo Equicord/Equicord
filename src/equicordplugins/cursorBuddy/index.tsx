@@ -4,18 +4,80 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
+import { ColorPicker } from "@webpack/common";
 
 import fathorse from "./fathorse";
 import oneko from "./oneko";
 
 const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/5281d057c4ea9bd4f6f997ee96ba30491aed16c0/oneko.gif";
 const FATASS_HORSE_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/08bc4042750d5f995c55327f7b6c6710158f5263/sheet.png";
+const cl = classNameFactory("vc-cursor-buddy-");
+
+function OnekoColorSettings() {
+    const { furColor, outlineColor } = settings.use(["furColor", "outlineColor"]);
+
+    const parseHexToNumber = (hex: string): number | null => {
+        if (!hex || typeof hex !== "string") return null;
+        const cleanHex = hex.replace(/^#/, "");
+        if (cleanHex.length !== 6) return null;
+        const num = parseInt(cleanHex, 16);
+        return isNaN(num) ? null : num;
+    };
+
+    const formatNumberToHex = (num: number | null): string => {
+        if (num === null) return "#FFFFFF";
+        return "#" + num.toString(16).padStart(6, "0").toUpperCase();
+    };
+
+    const handleFurColorChange = (value: number | null) => {
+        const hex = formatNumberToHex(value);
+        settings.store.furColor = hex;
+        load();
+    };
+
+    const handleOutlineColorChange = (value: number | null) => {
+        const hex = formatNumberToHex(value);
+        settings.store.outlineColor = hex;
+        load();
+    };
+
+    return (
+        <div>
+            <div className={cl("color-modal")}>
+                <div>
+                    <Heading className="form-subtitle">Fur Color</Heading>
+                    <div className={cl("color")}>
+                        <ColorPicker
+                            color={parseHexToNumber(furColor) ?? 16777215}
+                            onChange={handleFurColorChange}
+                            showEyeDropper={true}
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <Heading className="form-subtitle">Outline Color</Heading>
+                    <div className={cl("color")}>
+                        <ColorPicker
+                            color={parseHexToNumber(outlineColor) ?? 0}
+                            onChange={handleOutlineColorChange}
+                            showEyeDropper={true}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 const settings = definePluginSettings({
     buddy: {
@@ -58,17 +120,23 @@ const settings = definePluginSettings({
             </div>
         ),
     },
+    onekoColorSettings: {
+        type: OptionType.COMPONENT,
+        component: OnekoColorSettings,
+    },
     furColor: {
         description: "Fur hex color for Oneko",
         type: OptionType.STRING,
         default: "#FFFFFF",
         onChange: load,
+        hidden: true,
     },
     outlineColor: {
         description: "Outline hex color for Oneko",
         type: OptionType.STRING,
         default: "#000000",
         onChange: load,
+        hidden: true,
     },
     // Fatass Horse Specific
     fathorseSection: {

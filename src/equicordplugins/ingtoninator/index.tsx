@@ -11,6 +11,11 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 
+type WordMatch = {
+    word: string,
+    startIndex: number,
+};
+
 const settings = definePluginSettings({
     showIcon: {
         type: OptionType.BOOLEAN,
@@ -25,46 +30,87 @@ const settings = definePluginSettings({
     }
 });
 
-const isLegal = (word: string) => {
-    if (word.startsWith("<@")) return false;
-    if (word.endsWith("ington")) return false;
-    if (/^https?:\/\//i.test(word)) return false;
-    if (/[aeouy]$/i.test(word)) return false;
+const isLegal = (word: string): boolean => {
+    if (word === "i" || word === "I") return false;
+    if (word === "http" || word === "https") return false;
+
+    const lastChar = word.slice(-1).toLowerCase();
+    if (["a", "e", "o", "u", "y"].includes(lastChar)) return false;
+
     return true;
+};
+
+const getWordBoundaries = (string: string): WordMatch[] => {
+    const regex = /[.,!?;:'"\-_()[\]{}<>/\\|@#$%^&*+=`~…—–\s0-9]+/g;
+
+    const matches: WordMatch[] = [];
+    let startIndex: number = 0;
+
+    for (const match of string.matchAll(regex)) {
+        const word = string.slice(startIndex, match.index);
+        if (word.length > 0) {
+            matches.push({ word, startIndex });
+        }
+
+        startIndex = match.index + match[0].length;
+    }
+
+    if (startIndex < string.length) {
+        const word = string.slice(startIndex);
+        matches.push({ word, startIndex });
+    }
+
+    return matches;
+};
+
+const chooseRandomWord = (message: string): WordMatch | null => {
+    const words: WordMatch[] = getWordBoundaries(message);
+
+    while (words.length > 0) {
+        const index: number = Math.floor(Math.random() * words.length);
+        const wordMatch: WordMatch = words[index];
+
+        if (!isLegal(wordMatch.word)) {
+            words.splice(index, 1);
+            continue;
+        }
+
+        return wordMatch;
+    }
+
+    return null;
+};
+
+const whatToAppend = (word: string): string => {
+    if (word.endsWith("ington")) return "";
+    if (word.endsWith("ingto")) return "n";
+    if (word.endsWith("ingt")) return "on";
+    if (word.endsWith("ing")) return "ton";
+    if (word.endsWith("in")) return "gton";
+    if (word.endsWith("i")) return "ngton";
+    return "ington";
 };
 
 const handleMessage = ((channelId, message) => {
     if (!settings.store.isEnabled) return;
-    if (!message.content || !message.content.trim()) return;
 
-    const words = message.content.trim().split(/\s+/);
-    if (words.length === 0) return;
+    const msg = message.content;
+    if (!msg || !msg.trim()) return;
 
-    let index = -1;
-    let attempts = 0;
-    do {
-        index = Math.floor(Math.random() * words.length);
-        attempts++;
-    } while (!isLegal(words[index]) && attempts < words.length * 2);
+    const wordMatch: WordMatch | null = chooseRandomWord(msg);
+    if (wordMatch === null) return;
 
-    if (isLegal(words[index])) {
-        const word = words[index];
-        if (word.endsWith("ing")) {
-            words[index] = word === word.toUpperCase() ? word + "TON" : word + "ton";
-        } else if (word.endsWith("i") || word.endsWith("I")) {
-            words[index] = word === word.toUpperCase() ? word + "NGTON" : word + "ngton";
-        } else if (word.endsWith("in") || word.endsWith("IN")) {
-            words[index] = word === word.toUpperCase() ? word + "GTON" : word + "gton";
-        } else if (word.endsWith("ing") || word.endsWith("ING")) {
-            words[index] = word === word.toUpperCase() ? word + "TON" : word + "ton";
-        } else if (word.endsWith("ingt") || word.endsWith("INGT")) {
-            words[index] = word === word.toUpperCase() ? word + "ON" : word + "on";
-        } else {
-            words[index] = word === word.toUpperCase() ? word + "INGTON" : word + "ington";
-        }
+    const { word } = wordMatch;
+    const wordLower = word.toLowerCase();
+    const isLower = word === wordLower;
+
+    let append = whatToAppend(wordLower);
+    if (!isLower) {
+        append = append.toUpperCase();
     }
 
-    message.content = words.join(" ");
+    const idx: number = wordMatch.startIndex + word.length;
+    message.content = msg.slice(0, idx) + append + msg.slice(idx);
 });
 
 const IngtoninatorButton: ChatBarButtonFactory = ({ isMainChat }) => {

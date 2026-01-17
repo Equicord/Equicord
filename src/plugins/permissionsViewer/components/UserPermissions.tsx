@@ -39,14 +39,13 @@ interface UserPermission {
 
 type UserPermissions = Array<UserPermission>;
 
-const { RoleRootClasses, RoleClasses, RoleBorderClasses } = proxyLazyWebpack(() => {
-    const [RoleRootClasses, RoleClasses, RoleBorderClasses] = findBulk(
-        filters.byProps("root", "expandButton", "collapseButton"),
-        filters.byProps("role", "roleCircle", "roleName"),
-        filters.byProps("roleCircle", "dot", "dotBorderColor")
+const { RoleClasses, RoleBorderClasses } = proxyLazyWebpack(() => {
+    const [RoleClasses, RoleBorderClasses] = findBulk(
+        filters.byProps("root", "role", "roleRemoveButton", "roleName"),
+        filters.byProps("roleCircle", "dotBorderColor")
     ) as Record<string, string>[];
 
-    return { RoleRootClasses, RoleClasses, RoleBorderClasses };
+    return { RoleClasses, RoleBorderClasses };
 });
 
 interface FakeRoleProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -193,7 +192,7 @@ function UserPermissionsComponent({ guild, guildMember, closePopout }: { guild: 
             </div>
         </div>
         {userPermissions.length > 0 && (
-            <div className={classes(RoleRootClasses.root)}>
+            <div className={classes(RoleClasses.root)}>
                 {userPermissions.map(({ permission, roleColor, roleName }) => (
                     <Tooltip
                         key={permission}
