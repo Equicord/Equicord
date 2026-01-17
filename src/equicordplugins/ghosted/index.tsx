@@ -128,8 +128,8 @@ function makeContextItem(props) {
         label="Clear ghost"
         action={() => {
             clearChannelFromGhost(props.channel.id);
-        }} />;
-
+        }}
+    />;
 }
 
 migratePluginSettings("Ghosted", "Boo");
