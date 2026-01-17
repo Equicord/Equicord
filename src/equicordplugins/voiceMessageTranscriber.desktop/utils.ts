@@ -5,6 +5,7 @@
  */
 
 import { DataStore } from "@api/index";
+import { classNameFactory } from "@utils/css";
 import { lodash } from "@webpack/common";
 
 export const LANGUAGES = {
@@ -108,6 +109,8 @@ export const LANGUAGES = {
     jw: "javanese",
     su: "sundanese",
 };
+
+export const cl = classNameFactory("vc-transcription-");
 
 const getAudioContext = () => new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
 export async function decodeAudio(blob: Blob): Promise<Float32Array> {

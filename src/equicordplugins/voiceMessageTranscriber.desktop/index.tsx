@@ -22,7 +22,7 @@ import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { lodash, ScrollerAuto, SearchableSelect, useEffect, useRef, useState } from "@webpack/common";
 
-import { decodeAudio, LANGUAGES, TranscriptionWorker } from "./utils";
+import { cl, decodeAudio, LANGUAGES, TranscriptionWorker } from "./utils";
 const Native = VencordNative.pluginHelpers.VoiceMessageTranscriber as PluginNative<typeof import("./native")>;
 
 const ManaBaseRadioGroup = findComponentByCodeLazy('"data-mana-component":"BaseRadioGroup"') as React.ComponentType<ManaBaseRadioGroupProps>;
@@ -258,13 +258,11 @@ function TranscriptionModal(props: { modalProps: ModalProps, src: string, option
             <BaseText size="lg" weight="bold" style={{ flexGrow: 1 }}>Transcription</BaseText>
             <ModalCloseButton onClick={modalProps.onClose} />
         </ModalHeader>
-        <ModalContent className="vc-transcription-content">
+        <ModalContent className={cl("content")}>
             {error ? (
                 <Flex flexDirection="column" gap={16} style={{ padding: "20px 0" }}>
-                    <div className="vc-transcription-error">
-                        <Heading tag="h3" style={{ color: "var(--red-360)" }}>Error</Heading>
-                        <Span style={{ whiteSpace: "pre-wrap" }}>{error}</Span>
-                    </div>
+                    <Heading tag="h3" style={{ color: "var(--red-360)" }}>Error</Heading>
+                    <Span style={{ whiteSpace: "pre-wrap" }}>{error}</Span>
                     <Button onClick={retry}>
                         Retry
                     </Button>
@@ -274,7 +272,7 @@ function TranscriptionModal(props: { modalProps: ModalProps, src: string, option
                     {status === "transcribing" && (
                         <Span size="sm" color="text-muted">Transcribing in progress...</Span>
                     )}
-                    <ScrollerAuto className="vc-transcription-result">
+                    <ScrollerAuto className={cl("result")}>
                         <Span>{displayText}</Span>
                     </ScrollerAuto>
                     <Flex flexDirection="row" gap={12} alignItems="center">
@@ -327,13 +325,13 @@ export default definePlugin({
 
     button(src: string) {
         return <button
-            className="vc-voice-transcribe"
+            className={cl("button")}
             style={{ backgroundColor: "transparent" }}
             onClick={e => {
                 e.stopPropagation();
                 openModal(modalProps => <LanguageSelectionModal modalProps={modalProps} src={src} />);
             }}>
-            <ChannelListIcon colorClass="vc-voice-transcribe-icon" />
+            <ChannelListIcon colorClass={cl("icon")} />
         </button>;
     },
 });

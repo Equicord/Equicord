@@ -1,4 +1,4 @@
-.vc-voice-transcribe {
+.vc-transcription-button {
     width: 24px;
     height: 24px;
     padding: 0;
@@ -6,11 +6,11 @@
     position: relative;
 }
 
-.vc-voice-transcribe-icon {
+.vc-transcription-icon {
     color: var(--interactive-icon-default);
 }
 
-.vc-voice-transcribe-icon:hover {
+.vc-transcription-icon:hover {
     color: var(--interactive-background-hover);
 }
 
