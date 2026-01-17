@@ -222,7 +222,6 @@ function TranscriptionModal(props: { modalProps: ModalProps, src: string, option
                     options.language === "auto" ? undefined : options.language,
                     options.task
                 );
-
             } catch (err) {
                 if (active) setError(String(err));
             }
