@@ -5,7 +5,6 @@
  */
 
 import { Channel, Message } from "@vencord/discord-types";
-import { ChannelType } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
 import { MessageStore, useEffect, UserStore, useState, useStateFromStores } from "@webpack/common";
 
@@ -17,7 +16,7 @@ function isChannelExempted(channel: Channel): boolean {
         .split(",")
         .map(id => id.trim())
         .filter(id => id.length > 0);
-    const isGroupDmsExempted = settings.store.ignoreGroupDms && channel.type === ChannelType.GROUP_DM;
+    const isGroupDmsExempted = settings.store.ignoreGroupDms && channel.isGroupDM();
 
     return exemptList.includes(channel.id) || isGroupDmsExempted;
 }

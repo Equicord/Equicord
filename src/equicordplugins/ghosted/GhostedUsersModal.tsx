@@ -7,7 +7,6 @@
 import { classNameFactory } from "@utils/css";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, ModalSize } from "@utils/modal";
 import { Channel, Message } from "@vencord/discord-types";
-import { ChannelType } from "@vencord/discord-types/enums";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Avatar, Button, ChannelStore, MessageStore, React, Text, UserStore } from "@webpack/common";
 
@@ -47,7 +46,7 @@ export function getChannelDisplayName(channelId: string): string {
     const channel = ChannelStore.getChannel(channelId);
     if (!channel) return "Unknown";
 
-    if (channel.type === ChannelType.GROUP_DM) {
+    if (channel.isGroupDM()) {
         return channel?.name || "Unnamed Group";
     }
 
@@ -115,11 +114,6 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                             const lastMessage: Message = MessageStore.getMessages(channelId)?.last();
                             const lastMessageDate = lastMessage?.timestamp ? formatMessageDate(lastMessage.timestamp) : "";
 
-                            const isGroupDM = channel.type === ChannelType.GROUP_DM;
-                            // logic for one on one dms
-                            const recipientId = channel.recipients?.[0];
-                            const user = UserStore.getUser(recipientId);
-                            const avatarSrc = user?.getAvatarURL(undefined, 128, true) || "";
                             const displayName = getChannelDisplayName(channel.id);
                             return (
                                 <div
@@ -127,11 +121,11 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                                     onClick={() => handleChannelClick(channelId)}
                                     className={cl("ghosted-entry")}
                                 >
-                                    {isGroupDM ?
+                                    {channel.isGroupDM() ?
                                         <GroupDmsIcon
                                             channel={channel}
                                         /> : <Avatar
-                                            src={avatarSrc}
+                                            src={UserStore.getUser(channel.recipients?.[0])?.getAvatarURL(undefined, 128, true) || ""}
                                             size="SIZE_40"
                                             aria-label={displayName}
                                         />}
