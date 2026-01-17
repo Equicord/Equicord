@@ -11,6 +11,11 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 
+type WordMatch = {
+    word: string,
+    startIndex: number,
+};
+
 const settings = definePluginSettings({
     showIcon: {
         type: OptionType.BOOLEAN,
@@ -25,24 +30,10 @@ const settings = definePluginSettings({
     }
 });
 
-
-type WordMatch = {
-    word: string,
-    startIndex: number,
-};
-
-
 const isLegal = (word: string): boolean => {
-    // Ignore the word "I" (as in "me")
-    // This word is used frequently and has a different
-    // pronounciation than "ington" (/aɪ/ instead of /ɪŋtən/).
-    // Yes, Ington have to take this plugin seriously.
     if (word == "i" || word == "I") return false;
-
-    // Keep hyperlinks intact.
     if (word == "http" || word == "https") return false;
-
-    // Ignore words ending in a vowel (except i).
+    
     const lastChar = word.slice(-1).toLowerCase();
     if (["a", "e", "o", "u", "y"].includes(lastChar)) return false;
 
@@ -50,24 +41,20 @@ const isLegal = (word: string): boolean => {
 };
 
 const getWordBoundaries = (string: string): WordMatch[] => {
-    // Split at whitespace, punctuation and digits (numbers are not valid words)
     const regex = /[.,!?;:'"\-_()[\]{}<>/\\|@#$%^&*+=`~…—–\s0-9]+/g;
 
     let matches: WordMatch[] = [];
     let startIndex: number = 0;
 
     for (const match of string.matchAll(regex)) {
-        // Word goes from start_index to START of whitespace/punctuation.
         const word = string.slice(startIndex, match.index);
         if (word.length > 0) {
           matches.push({word, startIndex});
         }
 
-        // Next word will begin AFTER of whitespace/punctuation.
         startIndex = match.index + match[0].length;
     }
 
-    // Push last word
     if (startIndex < string.length) {
         const word = string.slice(startIndex);
         matches.push({word, startIndex});
@@ -88,17 +75,15 @@ const chooseRandomWord = (message: string): WordMatch | null => {
           continue;
         }
 
-        // Found word!
         return wordMatch;
     }
 
-    // Couldn't find fitting word :c
     return null;
 };
 
 const whatToAppend = (word: string): string => {
     if (word.endsWith("ington")) return "";
-    if (word.endsWith("ingto")) return "n";  // unreachable
+    if (word.endsWith("ingto")) return "n";
     if (word.endsWith("ingt")) return "on";
     if (word.endsWith("ing")) return "ton";
     if (word.endsWith("in")) return "gton";
@@ -149,7 +134,6 @@ const IngtoninatorButton: ChatBarButtonFactory = ({ isMainChat }) => {
     );
 };
 
-/// weed
 function enabledIcon() {
     return (
         <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
@@ -158,7 +142,6 @@ function enabledIcon() {
     );
 }
 
-/// weed but red
 function disabledIcon() {
     return (
         <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
