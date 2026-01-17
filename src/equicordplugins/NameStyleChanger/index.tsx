@@ -7,8 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { findByPropsLazy } from "@webpack";
-import { UserStore } from "@webpack/common";
+import { React, UserStore } from "@webpack/common";
 
 const fontOptions = [
     { label: "gg sans", value: "gg-sans", default: true },
@@ -32,9 +31,6 @@ const fontMap: Record<string, string> = {
     "vampyre": "'Sinistre', cursive"
 };
 
-const TitleClasses = findByPropsLazy("title", "container");
-const UserClasses = findByPropsLazy("username", "discriminator");
-
 const settings = definePluginSettings({
     font: {
         type: OptionType.SELECT,
@@ -49,86 +45,28 @@ export default definePlugin({
     authors: [EquicordDevs.x2b],
     settings,
 
-    start() {
-        this.currentFont = settings.store.font;
-        this.applyFontToNames();
-        this.timer = setInterval(() => {
-            this.applyFontToNames();
-            if (this.currentFont !== settings.store.font) {
-                this.currentFont = settings.store.font;
+    patches: [
+        {
+            find: '="SYSTEM_TAG"',
+            replacement: {
+                match: /(onContextMenu:\i,children:)(.{0,250}?),"data-text":(\i\+\i)/,
+                replace: "$1$self.applyNameStyle(arguments[0],$2),\"data-text\":$3"
             }
-        }, 1000);
-    },
-
-    stop() {
-        if (this.timer) {
-            clearInterval(this.timer);
-            this.timer = null;
         }
-    },
+    ],
 
-    applyFontToNames() {
+    applyNameStyle(props: any, originalChildren: any) {
         const currentUser = UserStore.getCurrentUser();
-        if (!currentUser) return;
+        if (!currentUser) return originalChildren;
 
-        const userNames = [currentUser.username];
-        if (currentUser.globalName) userNames.push(currentUser.globalName);
+        const message = props?.message;
+        const author = message?.author;
+        if (!author || author.id !== currentUser.id) return originalChildren;
 
         const fontFamily = fontMap[settings.store.font] || fontMap["gg-sans"];
 
-        const selectors: string[] = [];
-
-        try {
-            const { username, discriminator } = UserClasses;
-            const { title, container } = TitleClasses;
-
-            if (username) {
-                selectors.push(`.${username}`);
-            }
-            if (discriminator) {
-                selectors.push(`.${discriminator}`);
-            }
-            if (title) {
-                selectors.push(`.${title}`);
-            }
-            if (container) {
-                selectors.push(`.${container}`);
-            }
-        } catch (error) {
-        }
-
-        const errSelectors = [
-            "[class*=\"username\"]",
-            "[class*=\"discriminator\"]",
-            "[class*=\"title\"]"
-        ];
-
-        const dataAttributeSelectors = [
-            "[data-is-self=\"true\"] [class*=\"username\"]",
-            "[data-is-self=\"true\"] [class*=\"title\"]",
-            "[data-author-username]"
-        ];
-
-        const allSelectors = [...selectors, ...errSelectors, ...dataAttributeSelectors];
-
-        allSelectors.forEach(selector => {
-            try {
-                const elements = document.querySelectorAll(selector);
-                elements.forEach((el: Element) => {
-                    const hasDataIsSelf = (el.closest("[data-is-self=\"true\"]") !== null);
-                    const dataAuthorUsername = (el.closest("[data-author-username]") as HTMLElement)?.dataset.authorUsername;
-                    const text = el.textContent?.trim();
-
-                    const shouldApply = hasDataIsSelf ||
-                        (dataAuthorUsername && userNames.includes(dataAuthorUsername)) ||
-                        (text && userNames.some(name => text.includes(name)));
-
-                    if (shouldApply) {
-                        (el as HTMLElement).style.setProperty("font-family", fontFamily, "important");
-                    }
-                });
-            } catch (err) {
-            }
-        });
+        return React.createElement("span", {
+            style: { "font-family": fontFamily }
+        }, originalChildren);
     }
 });
