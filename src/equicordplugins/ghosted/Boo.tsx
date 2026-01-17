@@ -19,7 +19,7 @@ function isChannelExempted(channel: Channel): boolean {
         .filter(id => id.length > 0);
     const isGroupDmsExempted = settings.store.ignoreGroupDms && channel.type === ChannelType.GROUP_DM;
 
-    return exemptList.includes(channel.id);
+    return exemptList.includes(channel.id) || isGroupDmsExempted;
 }
 
 const countedChannels = new Set<string>();
