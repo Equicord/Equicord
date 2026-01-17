@@ -59,7 +59,7 @@ export const { match, P }: { match: typeof TSPattern["match"], P: typeof TSPatte
 
 export const lodash: typeof import("lodash") = findByPropsLazy("debounce", "cloneDeep");
 
-export const i18n = mapMangledModuleLazy('defaultLocale:"en-US"', {
+export const i18n = mapMangledModuleLazy(['defaultLocale:"en-US"', /initialLocale:\i/], {
     t: m => m?.[Symbol.toStringTag] === "IntlMessagesProxy",
     intl: m => m != null && Object.getPrototypeOf(m)?.withFormatters != null
 }, true);
@@ -141,7 +141,7 @@ export const UserUtils = {
 
 export const UploadManager = findByPropsLazy("clearAll", "addFile");
 export const UploadHandler = {
-    promptToUpload: findByCodeLazy("=!0,showLargeMessageDialog:") as (files: File[], channel: t.Channel, draftType: Number) => void
+    promptToUpload: findByCodeLazy("Unexpected mismatch between files and file metadata") as (files: File[], channel: t.Channel, draftType: Number) => void
 };
 
 export const ApplicationAssetUtils = mapMangledModuleLazy("getAssetImage: size must === [", {
@@ -189,6 +189,8 @@ export const ChannelActionCreators = findByPropsLazy("openPrivateChannel");
 export const VoiceActions = findByPropsLazy("toggleSelfMute");
 export const GuildActions = findByPropsLazy("setServerMute", "setServerDeaf");
 export const ChannelActions = findByPropsLazy("selectChannel", "selectVoiceChannel");
+export const DraftActions = findByPropsLazy("saveDraft", "changeDraft");
+export const PinActions = findByPropsLazy("pinMessage", "unpinMessage");
 
 export const IconUtils: t.IconUtils = findByPropsLazy("getGuildBannerURL", "getUserAvatarURL");
 

@@ -1,9 +1,13 @@
-import { definePluginSettings, Settings } from "@api/Settings";
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { ChannelStore, UserStore } from "@webpack/common";
-
-import "./styles.css";
+import { UserStore } from "@webpack/common";
 
 const fontOptions = [
     { label: "gg sans", value: "gg-sans", default: true },
@@ -40,8 +44,6 @@ export default definePlugin({
     description: "Change the font style of your own username and display name. (basically Display Name Styles but free)",
     authors: [EquicordDevs.x2b],
     settings,
-
-
 
     observer: null as MutationObserver | null,
 
@@ -89,9 +91,9 @@ export default definePlugin({
         const fontFamily = fontMap[settings.store.font] || fontMap["gg-sans"];
 
         const selectors = [
-            ".c19a557985eb7793-username",
-            ".c19a557985eb7793-clickable",
-            ".b6c092614b8d59f3-title"
+            "[class*=\"username\"]",
+            "[class*=\"clickable\"]",
+            "[class*=\"title\"]"
         ];
 
         selectors.forEach(selector => {
@@ -99,7 +101,7 @@ export default definePlugin({
             elements.forEach((el: Element) => {
                 const text = el.textContent?.trim();
                 if (text && userNames.some(name => text.includes(name))) {
-                    (el as HTMLElement).style.setProperty('font-family', fontFamily, 'important');
+                    (el as HTMLElement).style.setProperty("font-family", fontFamily, "important");
                 }
             });
         });

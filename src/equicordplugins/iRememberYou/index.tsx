@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { EyeIcon } from "@components/Icons";
-import SettingsPlugin from "@plugins/_core/settings";
+import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
@@ -18,7 +18,7 @@ import DataUI from "./components/ui";
 export default definePlugin({
     name: "IRememberYou",
     description: "Locally saves everyone you've been communicating with (including servers), in case of lose",
-    authors: [EquicordDevs.zoodogood],
+    authors: [EquicordDevs.zoodogood, EquicordDevs.keyages],
     dependencies: ["MessageEventsAPI"],
 
     patches: [],
@@ -39,6 +39,8 @@ export default definePlugin({
             element: () => <DataUI plugin={this} usersCollection={data.usersCollection} />,
             id: "IRememberYou"
         }));
+
+        settingsSectionMap.push(["EquicordIRememberYou", "equicord_i_remember_you"]);
 
         const data = (this.dataManager = await new Data().withStart());
 

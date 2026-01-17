@@ -15,6 +15,7 @@ import { useForceUpdater } from "@utils/react";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { Button, ContextMenuApi, FluxDispatcher, useCallback, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
 
+import channelTabs from "..";
 import BookmarkContainer, { HorizontalScroller } from "./BookmarkContainer";
 import ChannelTab, { PreviewTab } from "./ChannelTab";
 import { BasicContextMenu } from "./ContextMenus";
@@ -125,7 +126,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
     useEffect(() => {
         if (ref.current) {
             try {
-                (Vencord.Plugins.plugins.ChannelTabs as any).containerHeight = ref.current.clientHeight;
+                channelTabs.containerHeight = ref.current.clientHeight;
             } catch { }
         }
     }, [userId, showBookmarkBar, tabBarPosition]);
@@ -328,6 +329,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                     {openedTabs.filter(tab => tab != null).map((tab, i) =>
                         <ChannelTab {...tab} index={i} key={tab.id} />
                     )}
+                    {GhostTabs}
                 </HorizontalScroller>
 
                 <button
@@ -336,8 +338,6 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 >
                     <PlusSmallIcon />
                 </button>
-
-                {GhostTabs}
             </div >
 
         </div>

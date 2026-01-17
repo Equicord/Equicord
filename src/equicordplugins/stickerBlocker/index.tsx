@@ -45,7 +45,7 @@ function blockedComponentRender(sticker) {
 
     if (showGif) {
         elements.push(
-            <img key="gif" src="https://images.equicord.org/api/files/raw/0199e730-70cd-7001-ab3b-4c0ff258ec79" style={{ width: "160px", borderRadius: "20px" }} />
+            <img key="gif" src="https://ssd-cdn.nest.rip/uploads/b1bba1be-48d4-4873-880b-b4ff1a497bc6.gif" style={{ width: "160px", borderRadius: "20px" }} />
         );
     }
 
@@ -63,7 +63,6 @@ function blockedComponentRender(sticker) {
 
     return <>{elements}</>;
 }
-
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     const { favoriteableId, favoriteableType } = props ?? {};
@@ -116,7 +115,6 @@ function toggleBlock(name) {
     }
 }
 
-
 function isStickerBlocked(name) {
     if (settings.store.blockedStickers === undefined || settings.store.blockedStickers == null) {
         return;
@@ -133,7 +131,7 @@ export default definePlugin({
             find: /\i\.\i\.STICKER_MESSAGE/,
             replacement: {
                 match: /}\),\(null!=\i\?\i:(\i)\)\.name]}\);/,
-                replace: "$& if(Vencord.Settings.plugins.StickerBlocker.blockedStickers.split(\", \").includes($1.id)) { return($self.blockedComponent($1)) }"
+                replace: "$& if($self.isBlocked($1.id)) return($self.blockedComponent($1));"
             }
         }
     ],
@@ -143,6 +141,13 @@ export default definePlugin({
     },
     start() {
         DataStore.createStore("StickerBlocker", "data");
+    },
+    isBlocked(stickerId) {
+        if (settings.store.blockedStickers.split(", ").includes(stickerId)) {
+            return true;
+        }
+
+        return false;
     },
     blockedComponent: ErrorBoundary.wrap(blockedComponentRender, { fallback: () => <p style={{ color: "red" }}>Failed to render :(</p> }),
     settings,

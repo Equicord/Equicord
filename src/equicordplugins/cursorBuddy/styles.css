@@ -1,0 +1,12 @@
+.vc-cursor-buddy-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.vc-cursor-buddy-color {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
