@@ -6,7 +6,7 @@
 
 import { classNameFactory } from "@utils/css";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, ModalSize } from "@utils/modal";
-import { Channel, Message } from "@vencord/discord-types";
+import { Channel } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Avatar, Button, ChannelStore, MessageStore, React, Text, UserStore } from "@webpack/common";
 
@@ -111,7 +111,7 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                             const channel = ChannelStore.getChannel(channelId);
                             if (!channel) return null;
 
-                            const lastMessage: Message = MessageStore.getMessages(channelId)?.last();
+                            const lastMessage = MessageStore.getMessages(channelId)?.last();
                             const lastMessageDate = lastMessage?.timestamp ? formatMessageDate(lastMessage.timestamp) : "";
 
                             const displayName = getChannelDisplayName(channel.id);
