@@ -314,13 +314,15 @@ export default definePlugin({
     name: "VoiceMessageTranscriber",
     authors: [Devs.TheSun],
     description: "On-device transcriptions for voice messages powered by Whisper v3",
-    patches: [{
-        find: ".volumeButtonIcon,",
-        replacement: {
-            match: /"source",{src:(\i).{0,700}duration:\i}\),/,
-            replace: "$&$self.button($1),"
+    patches: [
+        {
+            find: ".volumeButtonIcon,",
+            replacement: {
+                match: /"source",{src:(\i).{0,700}duration:\i}\),/,
+                replace: "$&$self.button($1),"
+            }
         }
-    }],
+    ],
     settings,
 
     button(src: string) {
