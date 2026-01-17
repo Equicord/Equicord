@@ -82,7 +82,8 @@ const settings = definePluginSettings({
                 });
             }, []);
 
-            return <Button variant="dangerPrimary"
+            return <Button
+                variant="dangerPrimary"
                 onClick={() => {
                     DataStore.delMany(deleteKeys).then(() => { setSize(0); setDeleteKeys([]); });
                 }}
