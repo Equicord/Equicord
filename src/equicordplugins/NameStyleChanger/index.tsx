@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { findByPropsLazy } from "@webpack";
 import { UserStore } from "@webpack/common";
 
 const fontOptions = [
@@ -31,6 +32,9 @@ const fontMap: Record<string, string> = {
     "vampyre": "'Sinistre', cursive"
 };
 
+const TitleClasses = findByPropsLazy("title", "container");
+const UserClasses = findByPropsLazy("username", "discriminator");
+
 const settings = definePluginSettings({
     font: {
         type: OptionType.SELECT,
@@ -45,40 +49,22 @@ export default definePlugin({
     authors: [EquicordDevs.x2b],
     settings,
 
-    observer: null as MutationObserver | null,
-
     start() {
         this.currentFont = settings.store.font;
         this.applyFontToNames();
-        this.setupObserver();
         this.timer = setInterval(() => {
+            this.applyFontToNames();
             if (this.currentFont !== settings.store.font) {
                 this.currentFont = settings.store.font;
-                this.applyFontToNames();
             }
         }, 1000);
     },
 
     stop() {
-        if (this.observer) {
-            this.observer.disconnect();
-            this.observer = null;
-        }
         if (this.timer) {
             clearInterval(this.timer);
             this.timer = null;
         }
-    },
-
-    setupObserver() {
-        this.observer = new MutationObserver(() => {
-            this.applyFontToNames();
-        });
-
-        this.observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
     },
 
     applyFontToNames() {
@@ -90,20 +76,66 @@ export default definePlugin({
 
         const fontFamily = fontMap[settings.store.font] || fontMap["gg-sans"];
 
-        const selectors = [
+        const selectors: string[] = [];
+
+        try {
+            const { username, discriminator } = UserClasses;
+            const { title, container } = TitleClasses;
+
+            if (username) {
+                selectors.push(`.${username}`);
+            }
+            if (discriminator) {
+                selectors.push(`.${discriminator}`);
+            }
+            if (title) {
+                selectors.push(`.${title}`);
+            }
+            if (container) {
+                selectors.push(`.${container}`);
+            }
+        } catch (error) {
+            // Classes not found yet, will use fallback
+        }
+
+        // Always include fallback selectors in case classes aren't found or selectors are empty
+        const errSelectors = [
             "[class*=\"username\"]",
-            "[class*=\"clickable\"]",
+            "[class*=\"discriminator\"]",
             "[class*=\"title\"]"
         ];
 
-        selectors.forEach(selector => {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach((el: Element) => {
-                const text = el.textContent?.trim();
-                if (text && userNames.some(name => text.includes(name))) {
-                    (el as HTMLElement).style.setProperty("font-family", fontFamily, "important");
-                }
-            });
+        // Use data-is-self attribute from ThemeAttributes plugin if available
+        const dataAttributeSelectors = [
+            "[data-is-self=\"true\"] [class*=\"username\"]",
+            "[data-is-self=\"true\"] [class*=\"title\"]",
+            "[data-author-username]"
+        ];
+
+        // Combine all approaches
+        const allSelectors = [...selectors, ...errSelectors, ...dataAttributeSelectors];
+
+        allSelectors.forEach(selector => {
+            try {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach((el: Element) => {
+                    // Check if element has data-is-self or matches username
+                    const hasDataIsSelf = (el.closest("[data-is-self=\"true\"]") !== null);
+                    const dataAuthorUsername = (el.closest("[data-author-username]") as HTMLElement)?.dataset.authorUsername;
+                    const text = el.textContent?.trim();
+
+                    // Match if: has data-is-self, or data-author-username matches, or text matches
+                    const shouldApply = hasDataIsSelf ||
+                        (dataAuthorUsername && userNames.includes(dataAuthorUsername)) ||
+                        (text && userNames.some(name => text.includes(name)));
+
+                    if (shouldApply) {
+                        (el as HTMLElement).style.setProperty("font-family", fontFamily, "important");
+                    }
+                });
+            } catch (err) {
+                // Invalid selector, skip
+            }
         });
     }
 });
