@@ -14,7 +14,8 @@ import { classNameFactory } from "@utils/css";
 import { closeModal, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
-import { ChannelStore, MessageStore, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
+import { ChannelType } from "@vencord/discord-types/enums";
+import { ChannelStore, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
 
 import { Boo, clearChannelFromGhost, getBooCount, getGhostedChannels, onBooCountChange } from "./Boo";
 import { GhostedUsersModal } from "./GhostedUsersModal";
@@ -58,12 +59,7 @@ function getChannelDisplayName(channelId: string): string {
     const channel = ChannelStore.getChannel(channelId);
     if (!channel) return "Unknown";
 
-    // get last message to determine sender for group DMs
-    const lastMessage = MessageStore.getMessages(channelId)?.last();
-
-    // check if it's a group DM
-    if (channel.recipients?.length > 1 && lastMessage) {
-        // show last message sender for group DMs
+    if (channel.type === ChannelType.GROUP_DM) {
         return channel?.name || "Unnamed Group";
     }
 
@@ -143,7 +139,7 @@ migratePluginSettings("Ghosted", "Boo");
 export default definePlugin({
     name: "Ghosted",
     description: "A cute ghost will appear if you don't answer their DMs",
-    authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke],
+    authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke, EquicordDevs.iamme],
     settings,
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],
 
