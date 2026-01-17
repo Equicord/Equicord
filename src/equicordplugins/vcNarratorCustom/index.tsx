@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
@@ -11,6 +13,7 @@ import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import {
     ModalCloseButton,
@@ -58,6 +61,8 @@ import {
     upsertUserVoiceMap,
     VOICE_OPTIONS,
 } from "./util";
+
+const cl = classNameFactory("vc-narrator-");
 
 /*
  * TTS API maintained by example-git
@@ -135,20 +140,20 @@ function TroubleshootingSettings() {
     };
 
     const lastApiAt = apiStatus.at ? new Date(apiStatus.at).toLocaleTimeString() : "—";
-    const apiStatusColor = apiStatus.status
+    const apiStatusClass = apiStatus.status
         ? apiStatus.status >= 200 && apiStatus.status < 300
-            ? "var(--text-positive)"
-            : "var(--text-danger)"
-        : "var(--text-muted)";
+            ? cl("api-status-success")
+            : cl("api-status-error")
+        : cl("api-status-muted");
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <Divider style={{ margin: "24px 0 12px" }} />
+        <div className={cl("troubleshooting")}>
+            <Divider className={cl("divider")} />
 
-            <Forms.FormTitle tag="h3" style={{ marginBottom: 4 }}>Troubleshooting</Forms.FormTitle>
+            <Forms.FormTitle tag="h3" className={cl("title")}>Troubleshooting</Forms.FormTitle>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div className={cl("row")}>
+                <div className={cl("buttons")}>
                     <Button variant="dangerPrimary" size="small" onClick={onClearCache} disabled={cacheBusy}>
                         Clear cache
                     </Button>
@@ -158,15 +163,15 @@ function TroubleshootingSettings() {
                     </Button>
                 </div>
 
-                <Forms.FormText style={{ margin: 0, opacity: 0.85, whiteSpace: "nowrap" }}>
+                <Forms.FormText className={cl("cache-text")}>
                     Cache: {cacheStats ? `${formatBytes(cacheStats.bytes)} • ${cacheStats.entries} entries` : "Unknown"}
                 </Forms.FormText>
             </div>
 
-            <Forms.FormText style={{ margin: 0, opacity: 0.9 }}>
+            <Forms.FormText className={cl("api-text")}>
                 <span>Last API call: </span>
-                <span style={{ color: apiStatusColor }}>{apiStatus.message}</span>
-                <span style={{ opacity: 0.75 }}> • {lastApiAt}</span>
+                <span className={apiStatusClass}>{apiStatus.message}</span>
+                <span className={cl("api-time")}> • {lastApiAt}</span>
             </Forms.FormText>
         </div>
     );
@@ -780,7 +785,7 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
     return (
         <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
             <ModalHeader>
-                <HeadingPrimary style={{ flexGrow: 1 }}>VC Narrator Voice</HeadingPrimary>
+                <HeadingPrimary className={cl("modal-title")}>VC Narrator Voice</HeadingPrimary>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
@@ -797,10 +802,10 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
                     />
 
                     {/* Preview buttons */}
-                    <Forms.FormText style={{ fontSize: "12px", opacity: 0.7, marginTop: "12px", marginBottom: "8px", textAlign: "center" }}>
+                    <Forms.FormText className={cl("preview-hint")}>
                         Preview how this voice sounds with their name:
                     </Forms.FormText>
-                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", justifyContent: "center" }}>
+                    <div className={cl("preview-buttons")}>
                         <Button
                             variant="secondary"
                             size="small"
@@ -830,7 +835,7 @@ function VoiceSelectModal({ modalProps, user }: { modalProps: ModalProps; user: 
             </ModalContent>
 
             <ModalFooter>
-                <div style={{ display: "flex", justifyContent: "center", gap: "8px", width: "100%" }}>
+                <div className={cl("modal-footer")}>
                     <DiscordButton
                         color={DiscordButton.Colors.PRIMARY}
                         onClick={modalProps.onClose}
@@ -1075,58 +1080,33 @@ export default definePlugin({
         return (
             <>
                 {/* Author note - pinned at top */}
-                <div
-                    style={{
-                        padding: "10px 12px",
-                        background: "var(--background-secondary-alt)",
-                        borderRadius: "8px",
-                        border: "1px solid var(--background-tertiary)",
-                        borderLeft: "3px solid var(--brand-experiment)",
-                        display: "flex",
-                        gap: "10px",
-                        alignItems: "flex-start",
-                        marginBottom: "16px",
-                    }}
-                >
+                <div className={cl("author-note")}>
                     {authorAvatar && (
                         <img
                             src={authorAvatar}
-                            style={{ width: "24px", height: "24px", borderRadius: "999px", marginTop: "2px" }}
+                            alt="Author avatar"
+                            className={cl("author-avatar")}
                         />
                     )}
-                    <div style={{ minWidth: 0 }}>
-                        <Forms.FormText style={{ marginBottom: "2px", fontWeight: 600, fontSize: "12px" }}>
+                    <div className={cl("author-content")}>
+                        <Forms.FormText className={cl("author-title")}>
                             Note from example-git
                         </Forms.FormText>
-                        <Forms.FormText style={{ fontSize: "12px", opacity: 0.85 }}>
+                        <Forms.FormText className={cl("author-text")}>
                             Old TikTok-TTS API died, so I set up a new cloudflare worker. It's rate-limited and stricter than the old one by design — please don't abuse it so it can stay available for plugins like this.
                         </Forms.FormText>
                     </div>
                 </div>
 
                 {/* Preview sounds section */}
-                <div
-                    style={{
-                        padding: "12px 16px",
-                        background: "var(--background-secondary-alt)",
-                        borderRadius: "8px",
-                        border: "1px solid var(--background-tertiary)",
-                    }}
-                >
-                    <Forms.FormTitle tag="h3" style={{ marginTop: 0 }}>
+                <div className={cl("preview-section")}>
+                    <Forms.FormTitle tag="h3" className={cl("preview-title")}>
                         Preview Sounds {busy && "(playing...)"}
                     </Forms.FormTitle>
-                    <Forms.FormText style={{ fontSize: "12px", opacity: 0.7, marginBottom: "12px" }}>
+                    <Forms.FormText className={cl("preview-subtitle")}>
                         Uses your selected narrator voice
                     </Forms.FormText>
-                    <div
-                        style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: "6px",
-                            justifyContent: "center",
-                        }}
-                    >
+                    <div className={cl("preview-grid")}>
                         {allTypes.map(t => (
                             <Button
                                 key={t}
