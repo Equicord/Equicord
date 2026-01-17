@@ -35,6 +35,11 @@ export const settings = definePluginSettings({
         default: true,
         restartNeeded: false
     },
+    ignoreGroupDms: {
+        type: OptionType.BOOLEAN,
+        description: "Exclude all group dms from ghosting",
+        default: false
+    },
     exemptedChannels: {
         type: OptionType.STRING,
         description: "Comma-separated list of channel IDs to exempt from ghosting (right-click a DM channel to copy its ID)",
