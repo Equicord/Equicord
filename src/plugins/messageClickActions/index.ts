@@ -1,29 +1,62 @@
 /*
- * Vencord, a Discord client mod
- * Copyright (c) 2026 Vendicated and contributors
- * SPDX-License-Identifier: GPL-3.0-or-later
+ * Vencord, a modification for Discord's desktop app
+ * Copyright (c) 2023 Vendicated and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import NoReplyMentionPlugin from "@plugins/noReplyMention";
 import { Devs, EquicordDevs } from "@utils/constants";
-import { copyWithToast, insertTextIntoChatInputBox } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Message } from "@vencord/discord-types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
-import { AuthenticationStore, Constants, EditMessageStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, PinActions, RestAPI, showToast, Toasts, WindowStore } from "@webpack/common";
+import { AuthenticationStore, Constants, EditMessageStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, RestAPI, showToast, Toasts, WindowStore } from "@webpack/common";
 
 type Modifier = "NONE" | "SHIFT" | "CTRL" | "ALT" | "BACKSPACE";
 type ClickAction = "NONE" | "DELETE" | "COPY_LINK" | "COPY_ID" | "EDIT" | "REPLY" | "REACT" | "OPEN_THREAD" | "OPEN_TAB" | "EDIT_REPLY";
 
-const modifierOptions: { label: string; value: Modifier; }[] = [
+const actions: { label: string; value: ClickAction; }[] = [
+    { label: "None", value: "NONE" },
+    { label: "Delete", value: "DELETE" },
+    { label: "Copy Link", value: "COPY_LINK" },
+    { label: "Copy ID", value: "COPY_ID" },
+    { label: "Edit", value: "EDIT" },
+    { label: "Reply", value: "REPLY" },
+    { label: "React", value: "REACT" },
+    { label: "Open Thread", value: "OPEN_THREAD" },
+    { label: "Open Tab", value: "OPEN_TAB" }
+];
+
+const editReplyActions: { label: string; value: ClickAction; }[] = [
+    ...actions.slice(0, 4),
+    { label: "Edit / Reply", value: "EDIT_REPLY" },
+    ...actions.slice(4)
+];
+
+const modifiers: { label: string; value: Modifier; }[] = [
     { label: "None", value: "NONE" },
     { label: "Shift", value: "SHIFT" },
     { label: "Ctrl", value: "CTRL" },
-    { label: "Alt", value: "ALT" },
-    { label: "Backspace", value: "BACKSPACE" }
+    { label: "Alt", value: "ALT" }
+];
+
+const singleClickModifiers: { label: string; value: Modifier; }[] = [
+    { label: "Backspace", value: "BACKSPACE" },
+    ...modifiers
 ];
 
 const pressedModifiers = new Set<Modifier>();
@@ -56,146 +89,56 @@ let doubleClickTimeout: ReturnType<typeof setTimeout> | null = null;
 let pendingDoubleClickAction: (() => void) | null = null;
 
 const settings = definePluginSettings({
-    enableDelete: {
-        type: OptionType.BOOLEAN,
-        description: "Enable delete action (requires permission or own message)",
-        default: true
-    },
-    enableCopyLink: {
-        type: OptionType.BOOLEAN,
-        description: "Enable copying message link action",
-        default: true
-    },
-    enableCopyId: {
-        type: OptionType.BOOLEAN,
-        description: "Enable copying message ID action",
-        default: false
-    },
-    enableEdit: {
-        type: OptionType.BOOLEAN,
-        description: "Enable edit message action (own messages only)",
-        default: true
-    },
-    enableReply: {
-        type: OptionType.BOOLEAN,
-        description: "Enable reply to message action",
-        default: true
-    },
-    enableReact: {
-        type: OptionType.BOOLEAN,
-        description: "Enable react with emoji action",
-        default: false
-    },
-    enableOpenThread: {
-        type: OptionType.BOOLEAN,
-        description: "Enable open in thread action",
-        default: false
-    },
-    enableOpenTab: {
-        type: OptionType.BOOLEAN,
-        description: "Enable open in background tab action",
-        default: false
-    },
     reactEmoji: {
         type: OptionType.STRING,
-        description: "Emoji to react with (e.g. 💀 or pepe:123456789)",
+        description: "",
         default: "💀"
     },
     singleClickAction: {
         type: OptionType.SELECT,
-        description: "Action to perform on single left-click with modifier",
-        options: [
-            { label: "None", value: "NONE", default: true },
-            { label: "Delete", value: "DELETE" },
-            { label: "Copy Link", value: "COPY_LINK" },
-            { label: "Copy ID", value: "COPY_ID" },
-            { label: "React", value: "REACT" },
-            { label: "Open in Thread", value: "OPEN_THREAD" },
-            { label: "Open in Background Tab", value: "OPEN_TAB" }
-        ]
+        description: "",
+        options: actions,
+        default: "DELETE"
     },
     singleClickModifier: {
         type: OptionType.SELECT,
-        description: "Modifier required for single left-click action",
-        options: [
-            { label: "Backspace", value: "BACKSPACE", default: true },
-            { label: "None", value: "NONE" },
-            { label: "Shift", value: "SHIFT" },
-            { label: "Ctrl", value: "CTRL" },
-            { label: "Alt", value: "ALT" }
-        ]
+        description: "",
+        options: singleClickModifiers,
+        default: "BACKSPACE"
     },
     doubleClickAction: {
         type: OptionType.SELECT,
-        description: "Action to perform on double-click",
-        options: [
-            { label: "None", value: "NONE" },
-            { label: "Delete", value: "DELETE" },
-            { label: "Copy Link", value: "COPY_LINK" },
-            { label: "Copy ID", value: "COPY_ID" },
-            { label: "Edit (Own) / Reply", value: "EDIT_REPLY", default: true },
-            { label: "Edit (Own Only)", value: "EDIT" },
-            { label: "Reply Only", value: "REPLY" },
-            { label: "React", value: "REACT" },
-            { label: "Open in Thread", value: "OPEN_THREAD" },
-            { label: "Open in Background Tab", value: "OPEN_TAB" }
-        ]
+        description: "",
+        options: editReplyActions,
+        default: "EDIT_REPLY"
     },
     doubleClickModifier: {
         type: OptionType.SELECT,
-        description: "Modifier required for double-click action",
-        options: modifierOptions
+        description: "",
+        options: modifiers,
+        default: "NONE"
     },
     tripleClickAction: {
         type: OptionType.SELECT,
-        description: "Action to perform on triple-click",
-        options: [
-            { label: "None", value: "NONE" },
-            { label: "Delete", value: "DELETE" },
-            { label: "Copy Link", value: "COPY_LINK" },
-            { label: "Copy ID", value: "COPY_ID" },
-            { label: "Edit (Own) / Reply", value: "EDIT_REPLY" },
-            { label: "Edit (Own Only)", value: "EDIT" },
-            { label: "Reply Only", value: "REPLY" },
-            { label: "React", value: "REACT", default: true },
-            { label: "Open in Thread", value: "OPEN_THREAD" },
-            { label: "Open in Background Tab", value: "OPEN_TAB" }
-        ]
+        description: "",
+        options: actions,
+        default: "REACT"
     },
     tripleClickModifier: {
         type: OptionType.SELECT,
-        description: "Modifier required for triple-click action",
-        options: modifierOptions
+        description: "",
+        options: modifiers,
+        default: "NONE"
     },
     middleClickAction: {
         type: OptionType.SELECT,
-        description: "Action to perform on middle-click",
-        options: [
-            { label: "None", value: "NONE" },
-            { label: "Delete", value: "DELETE" },
-            { label: "Copy Link", value: "COPY_LINK" },
-            { label: "Copy ID", value: "COPY_ID", default: true },
-            { label: "Edit (Own) / Reply", value: "EDIT_REPLY" },
-            { label: "Edit (Own Only)", value: "EDIT" },
-            { label: "Reply Only", value: "REPLY" },
-            { label: "React", value: "REACT" },
-            { label: "Open in Thread", value: "OPEN_THREAD" },
-            { label: "Open in Background Tab", value: "OPEN_TAB" }
-        ]
-    },
-    disableInDms: {
-        type: OptionType.BOOLEAN,
-        description: "Disable all click actions in direct messages",
-        default: false
-    },
-    disableInSystemDms: {
-        type: OptionType.BOOLEAN,
-        description: "Disable all click actions in system DMs (e.g. Clyde, Discord)",
-        default: true
+        description: "",
+        options: editReplyActions,
+        default: "COPY_ID"
     },
     clickTimeout: {
         type: OptionType.NUMBER,
-        description: "Timeout in milliseconds to distinguish double/triple clicks",
+        description: "",
         default: 300
     }
 });
@@ -298,7 +241,6 @@ async function executeAction(
 
     switch (action) {
         case "DELETE":
-            if (!settings.store.enableDelete) return;
             if (!(isMe || PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel) || isSelfInvokedUserApp)) return;
 
             if (msg.deleted) {
@@ -315,19 +257,16 @@ async function executeAction(
             break;
 
         case "COPY_LINK":
-            if (!settings.store.enableCopyLink) return;
             await copyMessageLink(msg, channel);
             event.preventDefault();
             break;
 
         case "COPY_ID":
-            if (!settings.store.enableCopyId) return;
             await copyMessageId(msg);
             event.preventDefault();
             break;
 
         case "EDIT":
-            if (!settings.store.enableEdit) return;
             if (!isMe) return;
             if (EditMessageStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
             MessageActions.startEditMessage(channel.id, msg.id, msg.content);
@@ -335,7 +274,6 @@ async function executeAction(
             break;
 
         case "REPLY":
-            if (!settings.store.enableReply) return;
             if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) return;
             if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
 
@@ -355,9 +293,9 @@ async function executeAction(
             break;
 
         case "EDIT_REPLY":
-            if (isMe && settings.store.enableEdit && EditMessageStore.isEditing(channel.id, msg.id) === false && msg.state === "SENT") {
+            if (isMe && EditMessageStore.isEditing(channel.id, msg.id) === false && msg.state === "SENT") {
                 MessageActions.startEditMessage(channel.id, msg.id, msg.content);
-            } else if (settings.store.enableReply) {
+            } else {
                 if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) return;
                 if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
 
@@ -378,19 +316,16 @@ async function executeAction(
             break;
 
         case "REACT":
-            if (!settings.store.enableReact) return;
             await toggleReaction(channel.id, msg.id, settings.store.reactEmoji, channel, msg);
             event.preventDefault();
             break;
 
         case "OPEN_THREAD":
-            if (!settings.store.enableOpenThread) return;
             openInThread(msg, channel);
             event.preventDefault();
             break;
 
         case "OPEN_TAB":
-            if (!settings.store.enableOpenTab) return;
             openInNewTab(msg, channel);
             event.preventDefault();
             break;
@@ -402,7 +337,7 @@ async function executeAction(
 
 export default definePlugin({
     name: "MessageClickActions",
-    description: "Customize click actions on messages: delete, copy link/ID, edit, reply, react, and more.",
+    description: "Customize click actions on messages.",
     authors: [Devs.Ven, EquicordDevs.keyages],
     isModified: true,
 
@@ -435,11 +370,6 @@ export default definePlugin({
         const singleClickModifier = settings.store.singleClickModifier as Modifier;
         const doubleClickModifier = settings.store.doubleClickModifier as Modifier;
         const tripleClickModifier = settings.store.tripleClickModifier as Modifier;
-
-        const isDM = channel.isDM?.() ?? false;
-        const isSystemDM = channel.isSystemDM?.() ?? false;
-
-        if ((settings.store.disableInDms && isDM) || (settings.store.disableInSystemDms && isSystemDM)) return;
 
         const isSingleClick = event.detail === 1 && event.button === 0;
         const isDoubleClick = event.detail === 2;
