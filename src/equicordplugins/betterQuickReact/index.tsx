@@ -6,7 +6,7 @@
 
 import "./style.css";
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 
@@ -47,6 +47,8 @@ export const settings = definePluginSettings({
         default: true
     }
 });
+
+migratePluginSettings("BetterQuickReact", "MoreQuickReactions");
 
 export default definePlugin({
     name: "BetterQuickReact",
