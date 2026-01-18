@@ -24,17 +24,12 @@ const actions: { label: string; value: ClickAction; }[] = [
     { label: "Copy Link", value: "COPY_LINK" },
     { label: "Copy ID", value: "COPY_ID" },
     { label: "Copy Content", value: "COPY_CONTENT" },
+    { label: "Copy User ID", value: "COPY_USER_ID" },
     { label: "Edit", value: "EDIT" },
     { label: "Reply", value: "REPLY" },
     { label: "React", value: "REACT" },
     { label: "Open Thread", value: "OPEN_THREAD" },
     { label: "Open Tab", value: "OPEN_TAB" }
-];
-
-const editReplyActions: { label: string; value: ClickAction; }[] = [
-    ...actions.slice(0, 4),
-    { label: "Edit / Reply", value: "EDIT_REPLY" },
-    ...actions.slice(4)
 ];
 
 const doubleClickOwnActions: { label: string; value: ClickAction; }[] = [
@@ -44,6 +39,7 @@ const doubleClickOwnActions: { label: string; value: ClickAction; }[] = [
     { label: "Copy Content", value: "COPY_CONTENT" },
     { label: "Copy Link", value: "COPY_LINK" },
     { label: "Copy ID", value: "COPY_ID" },
+    { label: "Copy User ID", value: "COPY_USER_ID" },
     { label: "React", value: "REACT" },
     { label: "Pin", value: "PIN" }
 ];
@@ -55,6 +51,7 @@ const doubleClickOthersActions: { label: string; value: ClickAction; }[] = [
     { label: "Copy Content", value: "COPY_CONTENT" },
     { label: "Copy Link", value: "COPY_LINK" },
     { label: "Copy ID", value: "COPY_ID" },
+    { label: "Copy User ID", value: "COPY_USER_ID" },
     { label: "React", value: "REACT" },
     { label: "Pin", value: "PIN" }
 ];
@@ -83,7 +80,9 @@ const keyup = (e: KeyboardEvent) => {
     if (e.key === "Backspace") pressedModifiers.delete("BACKSPACE");
 };
 const focusChanged = () => {
-    pressedModifiers.clear();
+    if (!WindowStore.isFocused()) {
+        pressedModifiers.clear();
+    }
 };
 
 function modifierFromKey(e: KeyboardEvent): Modifier | null {
@@ -503,13 +502,13 @@ export default definePlugin({
         if (!isDoubleClick) {
             if (isSingleClick && isModifierPressed(singleClickModifier) && singleClickAction !== "NONE") {
                 executeAction(singleClickAction, msg, channel, event);
+                return;
             }
         }
 
-        if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
-        if (msg.deleted === true) return;
-
         const executeDoubleClick = () => {
+            if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
+            if (msg.deleted === true) return;
             if (doubleClickAction !== "NONE") {
                 executeAction(doubleClickAction, msg, channel, event);
             }
@@ -528,7 +527,7 @@ export default definePlugin({
                 doubleClickTimeout = null;
             }, settings.store.clickTimeout);
             event.preventDefault();
-        } else if (isModifierPressed(doubleClickModifier) || doubleClickModifier === "NONE") {
+        } else if (isDoubleClick && (isModifierPressed(doubleClickModifier) || doubleClickModifier === "NONE")) {
             executeDoubleClick();
             event.preventDefault();
         }
