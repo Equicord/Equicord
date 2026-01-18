@@ -300,7 +300,7 @@ function quoteMessage(channel: { id: string; guild_id?: string | null; isPrivate
 }
 
 function openInNewTab(msg: Message, channel: { id: string; guild_id?: string | null; }) {
-    const guildId = channel.guild_id ?? "dm";
+    const guildId = channel.guild_id ?? "@me";
     const link = `https://discord.com/channels/${guildId}/${channel.id}/${msg.id}`;
     window.open(link, "_blank");
 }
