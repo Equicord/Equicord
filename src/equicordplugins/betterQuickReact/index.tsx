@@ -11,6 +11,11 @@ import { Devs } from "@utils/constants";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 
 export const settings = definePluginSettings({
+    reactionCount: {
+        description: "Number of reactions (0-42)",
+        type: OptionType.NUMBER,
+        default: 5
+    },
     frequentEmojis: {
         description: "Use frequently used emojis instead of favourite emojis",
         type: OptionType.BOOLEAN,
@@ -50,6 +55,13 @@ export default definePlugin({
     settings,
 
     patches: [
+        {
+            find: "#{intl::MESSAGE_UTILITIES_A11Y_LABEL}",
+            replacement: {
+                match: /(?<=length>=3\?.{0,40})\.slice\(0,3\)/,
+                replace: ".slice(0,$self.reactionCount)"
+            }
+        },
         // Remove favourite emojis from being inserted at the start of the reaction list
         {
             find: "this.favoriteEmojisWithoutFetchingLatest.concat",
@@ -95,6 +107,9 @@ export default definePlugin({
     ],
     getMaxQuickReactions() {
         return settings.store.rows * settings.store.columns;
+    },
+    get reactionCount() {
+        return settings.store.reactionCount;
     },
     applyScroll(emojis: any[], index: number) {
         return emojis.slice(index, index + this.getMaxQuickReactions());
