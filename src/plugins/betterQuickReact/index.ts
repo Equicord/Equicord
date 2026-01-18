@@ -17,7 +17,7 @@ const settings = definePluginSettings({
 });
 
 export default definePlugin({
-    name: "MoreQuickReactions",
+    name: "BetterQuickReact",
     description: "Increases the number of reactions available in the Quick React hover menu",
     authors: [Devs.iamme],
     settings,
@@ -34,5 +34,5 @@ export default definePlugin({
                 replace: ".slice(0,$self.reactionCount)"
             }
         }
-    ],
+    ]
 });
