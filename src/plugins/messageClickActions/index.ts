@@ -118,12 +118,6 @@ const settings = definePluginSettings({
         options: modifiers,
         default: "NONE"
     },
-    middleClickAction: {
-        type: OptionType.SELECT,
-        description: "",
-        options: editReplyActions,
-        default: "COPY_ID"
-    },
     clickTimeout: {
         type: OptionType.NUMBER,
         description: "",
@@ -353,7 +347,6 @@ export default definePlugin({
         const singleClickAction = settings.store.singleClickAction as ClickAction;
         const doubleClickAction = settings.store.doubleClickAction as ClickAction;
         const tripleClickAction = settings.store.tripleClickAction as ClickAction;
-        const middleClickAction = settings.store.middleClickAction as ClickAction;
 
         const singleClickModifier = settings.store.singleClickModifier as Modifier;
         const doubleClickModifier = settings.store.doubleClickModifier as Modifier;
@@ -362,14 +355,6 @@ export default definePlugin({
         const isSingleClick = event.detail === 1 && event.button === 0;
         const isDoubleClick = event.detail === 2;
         const isTripleClick = event.detail === 3;
-        const isMiddleClick = event.button === 1 && event.detail === 1;
-
-        if (isMiddleClick) {
-            if (middleClickAction !== "NONE") {
-                executeAction(middleClickAction, msg, channel, event);
-            }
-            return;
-        }
 
         if (isTripleClick) {
             if (doubleClickTimeout) {
