@@ -1,31 +1,83 @@
 /*
- * Vencord, a modification for Discord's desktop app
- * Copyright (c) 2022 Vendicated and contributors
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+import "./styles.css";
 
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
+import { Heading } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
+import { ColorPicker } from "@webpack/common";
 
-const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/c4ee66353b11a44e4a5b7e914a81f8d33111555e/oneko.gif";
-const ONEKO_SCRIPT = "https://raw.githubusercontent.com/adryd325/oneko.js/c4ee66353b11a44e4a5b7e914a81f8d33111555e/oneko.js";
-const FATASS_HORSE_SCRIPT = "https://raw.githubusercontent.com/nexpid/fatass-horse/351f158bfd8fafd44d9c17faad61f2a80bcd33e3/horse.js";
-const FATASS_HORSE_ORIGINAL_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/refs/heads/main/sheet.png";
-const FATASS_HORSE_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/351f158bfd8fafd44d9c17faad61f2a80bcd33e3/sheet.png";
+import fathorse from "./fathorse";
+import oneko from "./oneko";
+
+const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/5281d057c4ea9bd4f6f997ee96ba30491aed16c0/oneko.gif";
+const FATASS_HORSE_IMAGE = "https://raw.githubusercontent.com/nexpid/fatass-horse/08bc4042750d5f995c55327f7b6c6710158f5263/sheet.png";
+const cl = classNameFactory("vc-cursor-buddy-");
+
+function OnekoColorSettings() {
+    const { furColor, outlineColor } = settings.use(["furColor", "outlineColor"]);
+
+    const parseHexToNumber = (hex: string): number | null => {
+        if (!hex || typeof hex !== "string") return null;
+        const cleanHex = hex.replace(/^#/, "");
+        if (cleanHex.length !== 6) return null;
+        const num = parseInt(cleanHex, 16);
+        return isNaN(num) ? null : num;
+    };
+
+    const formatNumberToHex = (num: number | null): string => {
+        if (num === null) return "#FFFFFF";
+        return "#" + num.toString(16).padStart(6, "0").toUpperCase();
+    };
+
+    const handleFurColorChange = (value: number | null) => {
+        const hex = formatNumberToHex(value);
+        settings.store.furColor = hex;
+        load();
+    };
+
+    const handleOutlineColorChange = (value: number | null) => {
+        const hex = formatNumberToHex(value);
+        settings.store.outlineColor = hex;
+        load();
+    };
+
+    return (
+        <div>
+            <div className={cl("color-modal")}>
+                <div>
+                    <Heading className="form-subtitle">Fur Color</Heading>
+                    <div className={cl("color")}>
+                        <ColorPicker
+                            color={parseHexToNumber(furColor) ?? 16777215}
+                            onChange={handleFurColorChange}
+                            showEyeDropper={true}
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <Heading className="form-subtitle">Outline Color</Heading>
+                    <div className={cl("color")}>
+                        <ColorPicker
+                            color={parseHexToNumber(outlineColor) ?? 0}
+                            onChange={handleOutlineColorChange}
+                            showEyeDropper={true}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 const settings = definePluginSettings({
     buddy: {
@@ -45,18 +97,56 @@ const settings = definePluginSettings({
         onChange: load,
     },
     speed: {
-        description: "Speed of Da Cat :3",
+        description: "Speed of your buddy",
         type: OptionType.NUMBER,
         default: 10,
         isValid: (value: number) => value >= 0 || "Speed must be bigger than 0",
         onChange: load,
     },
     fps: {
-        description: "Framerate of the fatass horse",
+        description: "Framerate of your buddy",
         type: OptionType.NUMBER,
         default: 24,
         isValid: (value: number) => value > 0 || "Framerate must be bigger than 0",
         onChange: load
+    },
+    // Oneko Specific
+    onekoSection: {
+        type: OptionType.COMPONENT,
+        component: () => (
+            <div>
+                <Heading style={{ fontSize: "1.6em", marginTop: "10px" }}>Oneko</Heading>
+                <Divider style={{ marginBottom: "-10px" }}></Divider>
+            </div>
+        ),
+    },
+    onekoColorSettings: {
+        type: OptionType.COMPONENT,
+        component: OnekoColorSettings,
+    },
+    furColor: {
+        description: "Fur hex color for Oneko",
+        type: OptionType.STRING,
+        default: "#FFFFFF",
+        onChange: load,
+        hidden: true,
+    },
+    outlineColor: {
+        description: "Outline hex color for Oneko",
+        type: OptionType.STRING,
+        default: "#000000",
+        onChange: load,
+        hidden: true,
+    },
+    // Fatass Horse Specific
+    fathorseSection: {
+        type: OptionType.COMPONENT,
+        component: () => (
+            <div>
+                <Heading style={{ fontSize: "1.6em", marginTop: "10px" }}>Fatass Horse</Heading>
+                <Divider style={{ marginBottom: "-10px" }}></Divider>
+            </div>
+        ),
     },
     size: {
         description: "Size of the fatass horse",
@@ -81,12 +171,17 @@ const settings = definePluginSettings({
         description: "If the horse should shake the window when it's walking",
         type: OptionType.BOOLEAN,
         default: false,
-        onChange: load
+        onChange: load,
     },
 }, {
-    fps: {
-        disabled() { return this.store.buddy !== "fathorse"; },
+    // Oneko Specific
+    furColor: {
+        disabled() { return this.store.buddy !== "oneko"; }
     },
+    outlineColor: {
+        disabled() { return this.store.buddy !== "oneko"; }
+    },
+    // Fatass Horse Specific
     size: {
         disabled() { return this.store.buddy !== "fathorse"; },
     },
@@ -112,26 +207,26 @@ function load() {
 
     switch (settings.store.buddy) {
         case "oneko": {
-            fetch(ONEKO_SCRIPT)
-                .then(x => x.text())
-                .then(s => s.replace("const nekoSpeed = 10;", `const nekoSpeed = ${settings.store.speed};`))
-                .then(s => s.replace("./oneko.gif", ONEKO_IMAGE)
-                    .replace("(isReducedMotion)", "(false)"))
-                .then(eval);
+            oneko({
+                speed: settings.store.speed,
+                fps: settings.store.fps,
+                image: ONEKO_IMAGE,
+                persistPosition: false,
+                furColor: settings.store.furColor,
+                outlineColor: settings.store.outlineColor
+            });
             break;
         }
         case "fathorse": {
-            fetch(FATASS_HORSE_SCRIPT)
-                .then(x => x.text())
-                .then(s => s.replace(FATASS_HORSE_ORIGINAL_IMAGE, FATASS_HORSE_IMAGE))
-                .then(s => (0, eval)(s)({
-                    speed: settings.store.speed,
-                    fps: settings.store.fps,
-                    size: settings.store.size,
-                    fade: settings.store.fade,
-                    freeroam: settings.store.freeroam,
-                    shake: settings.store.shake
-                }));
+            fathorse({
+                speed: settings.store.speed,
+                fps: settings.store.fps,
+                size: settings.store.size,
+                fade: settings.store.fade,
+                freeroam: settings.store.freeroam,
+                shake: settings.store.shake,
+                image: FATASS_HORSE_IMAGE
+            });
         }
     }
 }
@@ -140,7 +235,8 @@ migratePluginSettings("CursorBuddy", "Oneko", "oneko");
 export default definePlugin({
     name: "CursorBuddy",
     description: "only a slightly annoying plugin",
-    authors: [Devs.Ven, Devs.adryd, EquicordDevs.nexpid],
+    authors: [Devs.Ven, Devs.adryd, EquicordDevs.nexpid, EquicordDevs.ZcraftElite],
+    tags: ["Oneko", "FatassHorse", "Pet"],
     settings,
     isModified: true,
 

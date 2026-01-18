@@ -329,6 +329,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                     {openedTabs.filter(tab => tab != null).map((tab, i) =>
                         <ChannelTab {...tab} index={i} key={tab.id} />
                     )}
+                    {GhostTabs}
                 </HorizontalScroller>
 
                 <button
@@ -337,8 +338,6 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 >
                     <PlusSmallIcon />
                 </button>
-
-                {GhostTabs}
             </div >
 
         </div>
