@@ -386,6 +386,29 @@ async function executeAction(
             event.preventDefault();
             break;
 
+        case "EDIT_REPLY":
+            if (isMe) {
+                if (EditMessageStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
+                MessageActions.startEditMessage(channel.id, msg.id, msg.content);
+            } else {
+                if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) return;
+                if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
+
+                const shouldMentionReply = isPluginEnabled(NoReplyMentionPlugin.name)
+                    ? NoReplyMentionPlugin.shouldMention(msg, false)
+                    : true;
+
+                FluxDispatcher.dispatch({
+                    type: "CREATE_PENDING_REPLY",
+                    channel,
+                    message: msg,
+                    shouldMention: shouldMentionReply,
+                    showMentionToggle: channel.guild_id !== null
+                });
+            }
+            event.preventDefault();
+            break;
+
         case "QUOTE":
             quoteMessage(channel, msg);
             event.preventDefault();
