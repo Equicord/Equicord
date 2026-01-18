@@ -31,8 +31,8 @@ const settings = definePluginSettings({
 });
 
 const isLegal = (word: string): boolean => {
-    if (word === "i" || word === "I") return false;
-    if (word === "http" || word === "https") return false;
+    if (word == "i" || word == "I") return false;
+    if (word == "http" || word == "https") return false;
 
     const lastChar = word.slice(-1).toLowerCase();
     if (["a", "e", "o", "u", "y"].includes(lastChar)) return false;
@@ -40,31 +40,26 @@ const isLegal = (word: string): boolean => {
     return true;
 };
 
-const getWordBoundaries = (string: string): WordMatch[] => {
-    const regex = /[.,!?;:'"\-_()[\]{}<>/\\|@#$%^&*+=`~…—–\s0-9]+/g;
+const getWords = (string: string): WordMatch[] => {
+    const linkRegex = /https?:\/\/[^\s]+\.[^\s]+/g;
+    const linkRanges = new Set<number>();
 
-    const matches: WordMatch[] = [];
-    let startIndex: number = 0;
-
-    for (const match of string.matchAll(regex)) {
-        const word = string.slice(startIndex, match.index);
-        if (word.length > 0) {
-            matches.push({ word, startIndex });
+    for (const match of string.matchAll(linkRegex)) {
+        const start = match.index!;
+        const end = start + match[0].length;
+        for (let i = start; i < end; i++) {
+            linkRanges.add(i);
         }
-
-        startIndex = match.index + match[0].length;
     }
 
-    if (startIndex < string.length) {
-        const word = string.slice(startIndex);
-        matches.push({ word, startIndex });
-    }
-
-    return matches;
+    return Array.from(string.matchAll(/[\p{L}]+/gu), match => ({
+        word: match[0],
+        startIndex: match.index!
+    })).filter(match => !linkRanges.has(match.startIndex));
 };
 
 const chooseRandomWord = (message: string): WordMatch | null => {
-    const words: WordMatch[] = getWordBoundaries(message);
+    const words: WordMatch[] = getWords(message);
 
     while (words.length > 0) {
         const index: number = Math.floor(Math.random() * words.length);
@@ -81,14 +76,14 @@ const chooseRandomWord = (message: string): WordMatch | null => {
     return null;
 };
 
-const whatToAppend = (word: string): string => {
-    if (word.endsWith("ington")) return "";
-    if (word.endsWith("ingto")) return "n";
-    if (word.endsWith("ingt")) return "on";
-    if (word.endsWith("ing")) return "ton";
-    if (word.endsWith("in")) return "gton";
-    if (word.endsWith("i")) return "ngton";
-    return "ington";
+const ington = (word: string): string => {
+    if (word.endsWith("INGTON")) return "";
+    if (word.endsWith("INGTO")) return "N";
+    if (word.endsWith("INGT")) return "ON";
+    if (word.endsWith("ING")) return "TON";
+    if (word.endsWith("IN")) return "GTON";
+    if (word.endsWith("I")) return "NGTON";
+    return "INGTON";
 };
 
 const handleMessage = ((channelId, message) => {
@@ -100,18 +95,19 @@ const handleMessage = ((channelId, message) => {
     const wordMatch: WordMatch | null = chooseRandomWord(msg);
     if (wordMatch === null) return;
 
-    const { word } = wordMatch;
-    const wordLower = word.toLowerCase();
-    const isLower = word === wordLower;
+    const word = wordMatch.word;
+    const wordUpper = word.toUpperCase();
+    const isUpper = word === wordUpper;
 
-    let append = whatToAppend(wordLower);
-    if (!isLower) {
-        append = append.toUpperCase();
+    let insertion = ington(wordUpper);
+    if (!isUpper) {
+        insertion = insertion.toLowerCase();
     }
 
     const idx: number = wordMatch.startIndex + word.length;
-    message.content = msg.slice(0, idx) + append + msg.slice(idx);
+    message.content = msg.slice(0, idx) + insertion + msg.slice(idx);
 });
+
 
 const IngtoninatorButton: ChatBarButtonFactory = ({ isMainChat }) => {
     const { isEnabled, showIcon } = settings.use(["isEnabled", "showIcon"]);
@@ -152,7 +148,7 @@ function disabledIcon() {
 export default definePlugin({
     name: "Ingtoninator",
     description: "Suffixes 'ington' to a random word in your message",
-    authors: [EquicordDevs.zyqunix],
+    authors: [EquicordDevs.zyqunix, EquicordDevs.BioTomateDE],
     settings,
     chatBarButton: {
         icon: disabledIcon,
