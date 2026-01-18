@@ -31,8 +31,7 @@ const settings = definePluginSettings({
 });
 
 const isLegal = (word: string): boolean => {
-    if (word == "i" || word == "I") return false;
-    if (word == "http" || word == "https") return false;
+    if (word === "i" || word === "I") return false;
 
     const lastChar = word.slice(-1).toLowerCase();
     if (["a", "e", "o", "u", "y"].includes(lastChar)) return false;
