@@ -70,6 +70,14 @@
     z-index: 102;
 }
 
+/* as its in the same region as notices, it needs to hide itself when a notice is shown
+   there's no permanent notices, right? */
+[class*="notice"] + .vc-channeltabs-container-top {
+    z-index: 1;
+    height: 32px;
+    overflow: hidden;
+}
+
 .vc-channeltabs-container-top-macos {
     padding-left: 80px !important;
 }
