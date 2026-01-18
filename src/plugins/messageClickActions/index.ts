@@ -342,14 +342,16 @@ export default definePlugin({
         if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
         if (msg.deleted === true) return;
 
+        const isOwnMessage = msg.author.id === AuthenticationStore.getId();
+        const canDoubleClick = (isOwnMessage && editPressed && settings.store.enableDoubleClickToEdit) ||
+            (!isOwnMessage && replyPressed && settings.store.enableDoubleClickToReply);
+
         const executeDoubleClick = () => {
-            if (isMe) {
+            if (isOwnMessage) {
                 if (!settings.store.enableDoubleClickToEdit || EditMessageStore.isEditing(channel.id, msg.id) || msg.state !== "SENT") return;
-                if (!editPressed) return;
                 MessageActions.startEditMessage(channel.id, msg.id, msg.content);
             } else {
                 if (!settings.store.enableDoubleClickToReply) return;
-                if (!replyPressed) return;
                 if (!MessageTypeSets.REPLYABLE.has(msg.type) || msg.hasFlag(MessageFlags.EPHEMERAL)) return;
 
                 const isShiftPress = event.shiftKey && settings.store.replyModifier === "NONE";
@@ -378,7 +380,7 @@ export default definePlugin({
                 doubleClickTimeout = null;
             }, settings.store.clickTimeout);
             event.preventDefault();
-        } else {
+        } else if (canDoubleClick) {
             executeDoubleClick();
             event.preventDefault();
         }
