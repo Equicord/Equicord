@@ -227,7 +227,7 @@ async function toggleReaction(channelId: string, messageId: string, emoji: strin
 }
 
 async function copyMessageLink(msg: Message, channel: { id: string; guild_id?: string | null; }) {
-    const guildId = channel.guild_id ?? "dm";
+    const guildId = channel.guild_id ?? "@me";
     const link = `https://discord.com/channels/${guildId}/${channel.id}/${msg.id}`;
 
     try {
