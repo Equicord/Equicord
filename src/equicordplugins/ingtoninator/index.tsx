@@ -1,4 +1,4 @@
-/*
+ /*
  * Vencord, a Discord client mod
  * Copyright (c) 2025 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -106,7 +106,6 @@ const handleMessage = ((channelId, message) => {
     const idx: number = wordMatch.startIndex + word.length;
     message.content = msg.slice(0, idx) + insertion + msg.slice(idx);
 });
-
 
 const IngtoninatorButton: ChatBarButtonFactory = ({ isMainChat }) => {
     const { isEnabled, showIcon } = settings.use(["isEnabled", "showIcon"]);
