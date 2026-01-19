@@ -54,6 +54,7 @@ export default definePlugin({
     name: "MoreQuickReactions",
     description: "Improves the quick react buttons in the message context menu.",
     authors: [Devs.Ven, Devs.Sqaaakoi, Devs.iamme],
+    isModified: true,
     settings,
 
     patches: [
