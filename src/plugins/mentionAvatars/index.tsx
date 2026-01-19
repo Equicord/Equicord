@@ -68,8 +68,8 @@ export default definePlugin({
         // show avatar in the chat input box
         find: '.hasUniqueUsername()?null:"#"',
         replacement: {
-            match: /"@"\.concat\((\i)\)(\}\);if\(null!=(\i)\))/,
-            replace: "$self.renderInputMention($1,$3)$2"
+            match: /(?<=,(\i)\).{0,55})"@"\.concat\((\i)\)/,
+            replace: "$self.renderInputMention($2,$1)"
         }
     }],
 
