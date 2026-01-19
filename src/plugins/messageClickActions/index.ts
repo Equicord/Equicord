@@ -301,7 +301,7 @@ function quoteMessage(channel: { id: string; guild_id?: string | null; isPrivate
 function openInNewTab(msg: Message, channel: { id: string; guild_id?: string | null; }) {
     const guildId = channel.guild_id ?? "@me";
     const link = `https://discord.com/channels/${guildId}/${channel.id}/${msg.id}`;
-    window.open(link, "_blank");
+    VencordNative.native.openExternal(link);
 }
 
 function openInThread(msg: Message, channel: { id: string; }) {
@@ -467,8 +467,8 @@ export default definePlugin({
     onMessageClick(msg, channel, event) {
         const myId = AuthenticationStore.getId();
         const isMe = msg.author.id === myId;
-        const isDM = channel.isDM?.() ?? false;
-        const isSystemDM = channel.isSystemDM?.() ?? false;
+        const isDM = channel.isDM();
+        const isSystemDM = channel.isSystemDM();
 
         if ((settings.store.disableInDms && isDM) || (settings.store.disableInSystemDms && isSystemDM)) return;
 
