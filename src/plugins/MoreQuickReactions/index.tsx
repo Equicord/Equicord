@@ -48,12 +48,12 @@ export const settings = definePluginSettings({
     }
 });
 
-migratePluginSettings("BetterQuickReact", "MoreQuickReactions");
+migratePluginSettings("MoreQuickReactions", "BetterQuickReact");
 
 export default definePlugin({
-    name: "BetterQuickReact",
+    name: "MoreQuickReactions",
     description: "Improves the quick react buttons in the message context menu.",
-    authors: [Devs.Ven, Devs.Sqaaakoi],
+    authors: [Devs.Ven, Devs.Sqaaakoi, Devs.iamme],
     settings,
 
     patches: [
@@ -84,7 +84,7 @@ export default definePlugin({
                 // Override limit of emojis to display with offset hook.
                 {
                     match: /(\i)\.length>4&&\((\i)\.length=4\);/,
-                    replace: "let [betterQuickReactScrollValue,setBetterQuickReactScrollValue]=Vencord.Webpack.Common.React.useState(0);betterQuickReactScrollValue;"
+                    replace: "let [moreQuickReactionsScrollValue,setMoreQuickReactionScrollValue]=Vencord.Webpack.Common.React.useState(0);MoreQuickReactionsScrollValue;"
                 },
                 // Add a custom class to identify the quick reactions have been modified and a CSS variable for the number of columns to display
                 {
@@ -94,7 +94,7 @@ export default definePlugin({
                 // Scroll handler + Apply the emoji count limit from earlier with custom logic
                 {
                     match: /children:(\i)\.map\(/,
-                    replace: "onWheel:$self.onWheelWrapper(betterQuickReactScrollValue,setBetterQuickReactScrollValue,$1.length),children:$self.applyScroll($1,betterQuickReactScrollValue).map("
+                    replace: "onWheel:$self.onWheelWrapper(moreQuickReactionsScrollValue,setMoreQuickReactionsScrollValue,$1.length),children:$self.applyScroll($1,moreQuickReactionsScrollValue).map("
                 }
             ]
         },
