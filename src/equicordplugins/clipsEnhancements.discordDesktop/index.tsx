@@ -4,12 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings, migrateSettingsFromPlugin } from "@api/Settings";
 import { Button } from "@components/Button";
-import { Devs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
+import { Devs, EquicordDevs } from "@utils/constants";
+import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { Activity, SelectOption } from "@vencord/discord-types";
 import { openUserSettingsPanel, PresenceStore, UserStore } from "@webpack/common";
+
+migratePluginSettings("ClipsEnhancements", "TimelessClips");
+migrateSettingsFromPlugin("ClipsEnhancements", "TimelessClips", "clipLength");
 
 const settings = definePluginSettings({
     richPresenceTagging: {
@@ -20,6 +23,31 @@ const settings = definePluginSettings({
             { label: "Only when beginning or end of activity name matches", value: "whenMatched", default: true },
             { label: "Never", value: "never" },
         ]
+    },
+    clipLength: {
+        description: "Custom clip length in minutes",
+        type: OptionType.SLIDER,
+        markers: makeRange(3, 30, 1),
+        default: 5,
+        stickToMarkers: true,
+    },
+    enableScreenshotKeybind: {
+        type: OptionType.BOOLEAN,
+        description: "Enable the screenshot keybind feature",
+        default: true,
+        restartNeeded: true
+    },
+    enableVoiceOnlyClips: {
+        type: OptionType.BOOLEAN,
+        description: "Enable voice-only clips (audio without video)",
+        default: true,
+        restartNeeded: true
+    },
+    enableAdvancedSignals: {
+        type: OptionType.BOOLEAN,
+        description: "Enable advanced clip signals (auto-clip triggers)",
+        default: true,
+        restartNeeded: true
     },
     clipsLink: {
         type: OptionType.COMPONENT,
@@ -42,10 +70,11 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ClipsEnhancements",
-    description: "Add more Clip FPS and duration options, plus RPC tagging!",
-    authors: [Devs.niko],
+    description: "Add more Clip FPS and duration options, custom clip length, RPC tagging and more",
+    authors: [Devs.niko, Devs.Joona, EquicordDevs.keyages],
     settings,
     patches: [
+        // FPS and duration options
         {
             find: "clips_recording_settings",
             replacement: [
@@ -64,6 +93,29 @@ export default definePlugin({
             replacement: {
                 match: /(applicationName:)(.{0,50})(,applicationId:)(\i)/,
                 replace: "$1$2$3$self.getApplicationId($2)??$4"
+            }
+        },
+        // TimelessClips custom clip length
+        {
+            find: '"Save clip keybind unset"',
+            replacement: {
+                match: /\)}](?<={value:.{14,17},label:(.{35,55}:).{3,7})/,
+                replace: "$&.concat({value:$self.getClipLength(true),label:$1$self.getClipLength(false)})})"
+            }
+        },
+        // enables clips
+        {
+            find: "2022-11_clips_experiment",
+            replacement: {
+                match: /defaultConfig:\{enableClips:!\d,ignorePlatformRestriction:!\d,showClipsHeaderEntrypoint:!\d,enableScreenshotKeybind:!\d,enableVoiceOnlyClips:!\d,enableAdvancedSignals:!\d\}/,
+                replace: "defaultConfig:{enableClips:!0,ignorePlatformRestriction:!0,showClipsHeaderEntrypoint:!0,enableScreenshotKeybind:$self.settings.store.enableScreenshotKeybind,enableVoiceOnlyClips:$self.settings.store.enableVoiceOnlyClips,enableAdvancedSignals:$self.settings.store.enableAdvancedSignals}"
+            }
+        },
+        {
+            find: "2023-10_viewer_clipping",
+            replacement: {
+                match: /defaultConfig:\{enableViewerClipping:!\d,ignoreSenderPreference:!\d\}/,
+                replace: "defaultConfig:{enableViewerClipping:!0,ignoreSenderPreference:!0}"
             }
         }
     ],
@@ -94,12 +146,24 @@ export default definePlugin({
 
         const activities: Activity[] = PresenceStore.getActivities(UserStore.getCurrentUser().id);
         const validActivities = activities.filter(activity => activity.type === 0 && activity.application_id !== null);
-
         const splitName = activityName.split(" ");
 
         // Try to match activity by it's start and end
         const matchedActivities = validActivities.filter(activity => activity.name.endsWith(splitName.at(-1)!) || activity.name.startsWith(splitName.at(0)!));
 
-        return (matchedActivities ?? (settings.store.richPresenceTagging === "whenMatched" ? null : validActivities))[0]?.application_id;
+        if (matchedActivities.length > 0) {
+            return matchedActivities[0].application_id;
+        }
+
+        if (settings.store.richPresenceTagging !== "whenMatched") {
+            return validActivities[0]?.application_id ?? null;
+        }
+
+        return null;
+    },
+
+    getClipLength(millis: boolean) {
+        const minutes = settings.store.clipLength;
+        return millis ? minutes * 6e4 : minutes;
     }
 });
