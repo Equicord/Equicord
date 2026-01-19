@@ -6,6 +6,7 @@
 
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
+import { CodeBlock } from "@components/CodeBlock";
 import { Flex } from "@components/Flex";
 import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
@@ -25,6 +26,7 @@ import { saveFile } from "@utils/web";
 import { Icon } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
 import {
+    Clickable,
     ContextMenuApi,
     createRoot,
     FluxDispatcher,
@@ -286,12 +288,17 @@ function IconModal({ iconName, Icon, onClose, transitionState }: { iconName: str
                         </TooltipContainer>
                     </Flex>
                 </Flex>
+                <div className="vc-ic-use-as">
+                    <BaseText size="md" weight="semibold">Usage</BaseText>
+                    <BaseText size="sm" color="text-muted">Click to copy</BaseText>
+                </div>
+                {/* for some reason i cant make this shit codeblock full width, FF 15 */}
+                <Clickable className="vc-ic-codeblock-wrapper" onClick={() => copyWithToast(findCode, "Copied!")}>
+                    <CodeBlock content={findCode} lang="ts" />
+                </Clickable>
             </ModalContent>
             <ModalFooter className="vc-ic-modal-footer">
-                <Button variant="primary" onClick={() => copyWithToast(findCode, "Find code copied!")}>
-                    Copy
-                </Button>
-                <Button variant="secondary" onClick={openOtherMenu}>
+                <Button variant="primary" onClick={openOtherMenu}>
                     Actions
                 </Button>
             </ModalFooter>
