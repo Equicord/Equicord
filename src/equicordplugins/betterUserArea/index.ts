@@ -70,7 +70,7 @@ export default definePlugin({
                 },
                 {
                     // TODO: MAKE THIS BETTER
-                    match: /,\(0,\i\.jsx\).{0,130}\.buttonChevron.{0,530}\}\)(?=\])/g,
+                    match: /,\(0,\i\.jsxs?\).{0,130}\.buttonChevron.{0,530}\}\)(?=\])/g,
                     replace: ""
                 }
             ],
