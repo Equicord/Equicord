@@ -25,6 +25,7 @@ export function makeDevBanner(state?: string): string | JSX.Element {
         .replace(/{buildChannel}/g, buildChannel)
         .replace(/{buildNumber}/g, BUILD_NUMBER)
         .replace(/{buildHash}/g, VERSION_HASH.slice(0, 9))
+        .replace(/{equicordName}/g, IS_EQUIBOP ? "Equibop" : "Equicord")
         .replace(/{equicordVersion}/g, VERSION)
         .replace(/{equicordHash}/g, gitHashShort)
         .replace(/{equicordPlatform}/g, getVersionInfo(false))

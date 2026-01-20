@@ -35,6 +35,7 @@ export const settingVariables = [
     "",
     "Equicord Variables:",
     "{equicordIcon} - Equicord icon",
+    "{equicordName} - Name of the mod (e.g. Equicord)",
     "{equicordVersion} - Version of Equicord (e.g. 1.0.0)",
     "{equicordHash} - Equicord build hash (e.g. 123456789)",
     "{equicordPlatform} - Platform Equicord is running on (e.g. Dev)",
