@@ -58,10 +58,24 @@ const ProfilePopoutComponent = ErrorBoundary.wrap(
     }
 );
 
+const ProfileRepositoriesTab = ErrorBoundary.wrap(
+    (props: { user: User; displayProfile?: any; }) => {
+        return (
+            <GitHubReposComponent
+                {...props}
+                id={props.user.id}
+                theme={getProfileThemeProps(props).theme}
+                variant="tab"
+            />
+        );
+    },
+    { noop: true }
+);
+
 export default definePlugin({
     name: "GitHubRepos",
     description: "Displays a user's public GitHub repositories in their profile",
-    authors: [EquicordDevs.talhakf, EquicordDevs.Panniku],
+    authors: [EquicordDevs.talhakf, EquicordDevs.Panniku, EquicordDevs.benjii],
     settings,
 
     patches: [
@@ -88,7 +102,24 @@ export default definePlugin({
                 match: /displayProfile:(\i).*?profileAppConnections\}\)\}\)/,
                 replace: "$&,$self.ProfilePopoutComponent({ user: arguments[0].user, displayProfile: $1 }),"
             }
+        },
+        // User Profile Modal v2 tab bar
+        {
+            find: "useUserProfileModalV2TabBarItems",
+            replacement: {
+                match: /section:(\w+\.oh)\.ACTIVITY\}\);let/,
+                replace: "section:$1.ACTIVITY}),Z.push({text:\"Repositories\",section:\"REPOSITORIES\"});let"
+            }
+        },
+        // User Profile Modal v2 tab content
+        {
+            find: "i===b.oh.WISHLIST",
+            replacement: {
+                match: /(\w)===b\.oh\.WISHLIST/,
+                replace: "$1===\"REPOSITORIES\"?(0,r.jsx)($self.ProfileRepositoriesTab,arguments[0]):$1===b.oh.WISHLIST"
+            }
         }
     ],
-    ProfilePopoutComponent
+    ProfilePopoutComponent,
+    ProfileRepositoriesTab
 });

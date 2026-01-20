@@ -243,3 +243,47 @@
 .vc-github-repos-header-stars {
     width: 10%
 }
+
+/* Tab variant styles */
+.vc-github-repos-container.vc-github-repos-tab {
+    padding: 8px 12px;
+    height: 100%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.vc-github-repos-container.vc-github-repos-tab .vc-github-repos-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    overflow: hidden scroll;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thin-thumb) var(--scrollbar-thin-track);
+    align-content: start;
+}
+
+.vc-github-repos-container.vc-github-repos-tab .vc-github-repos-card {
+    padding: 4px 6px;
+    cursor: pointer;
+}
+
+.vc-github-repos-container.vc-github-repos-tab .vc-github-repos-language-color {
+    width: 8px;
+    height: 8px;
+}
+
+.vc-github-repos-container.vc-github-repos-tab .vc-github-repos-name {
+    font-size: 12px;
+    line-height: 1.1;
+}
+
+.vc-github-repos-container.vc-github-repos-tab .vc-github-repos-language,
+.vc-github-repos-container.vc-github-repos-tab .vc-github-repos-stars {
+    font-size: 11px;
+    line-height: 1.1;
+    gap: 3px;
+}
