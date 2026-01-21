@@ -64,10 +64,8 @@ export default definePlugin({
         const author = message?.author;
         if (!author || author.id !== currentUser.id) return originalChildren;
 
-        const fontFamily = fontMap[settings.store.font] || fontMap["gg-sans"];
+        const fontFamily = fontMap[settings.store.font] ?? fontMap["gg-sans"];
 
-        return React.createElement("span", {
-            style: { "font-family": fontFamily }
-        }, originalChildren);
+        return <span style={{ fontFamily }}>{originalChildren}</span>;
     }
 });
