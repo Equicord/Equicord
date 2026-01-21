@@ -87,11 +87,15 @@ export function GitHubReposComponent({ id, theme, variant = "popout" }: { id: st
         fetchData();
     }, [id]);
 
-    if (loading) return <BaseText size="xs" weight="semibold" className={cl("loading")} >
-        Loading repositories...</BaseText>;
+    if (loading) return;
+    <BaseText size="xs" weight="semibold" className={cl("loading")} >
+        Loading repositories...
+    </BaseText>;
 
-    if (error) return <BaseText size="xs" weight="semibold" className={cl("error")}>
-        Error: {error}</BaseText>;
+    if (error) return;
+    <BaseText size="xs" weight="semibold" className={cl("error")}>
+        Error: {error}
+    </BaseText>;
 
     if (!repos.length) return null;
 

@@ -105,23 +105,25 @@ export default definePlugin({
             find: ".MODAL_V2,onClose:",
             replacement: {
                 match: /displayProfile:(\i).*?profileAppConnections\}\)\}\)/,
-                replace: "$&,!$self.settings.store.showRepositoryTab&&$self.ProfilePopoutComponent({ user: arguments[0].user, displayProfile: $1 }),"
+                replace: "$&,$self.ProfilePopoutComponent({ user: arguments[0].user, displayProfile: $1 }),",
+                predicate: () => !settings.store.showRepositoryTab,
             }
         },
         // User Profile Modal v2 tab bar
         {
-            find: "useUserProfileModalV2TabBarItems",
+            find: "#{intl::USER_PROFILE_ACTIVITY}",
             replacement: {
-                match: /section:(\w+\.oh)\.ACTIVITY\}\);let/,
-                replace: "section:$1.ACTIVITY}),$self.settings.store.showRepositoryTab&&Z.push({text:\"Repositories\",section:\"REPOSITORIES\"});let"
+                match: /\.MUTUAL_GUILDS\}\)\)(?=,(\i))/,
+                replace: '$&,$1.push({text:"GitHub",section:"GITHUB"})',
+                predicate: () => settings.store.showRepositoryTab,
             }
         },
         // User Profile Modal v2 tab content
         {
-            find: "i===b.oh.WISHLIST",
+            find: ".WIDGETS?",
             replacement: {
-                match: /(\w)===b\.oh\.WISHLIST/,
-                replace: "$1===\"REPOSITORIES\"?(0,r.jsx)($self.ProfileRepositoriesTab,arguments[0]):$1===b.oh.WISHLIST"
+                match: /(\i)===\i\.\i\.WISHLIST/,
+                replace: '$1==="GITHUB"?$self.ProfileRepositoriesTab(arguments[0]):$&'
             }
         }
     ],
