@@ -473,6 +473,10 @@ export default definePlugin({
     },
 
     onMessageClick(msg, channel, event) {
+        const target = event.target as HTMLElement;
+        if (target.closest('a, button, input, img, [class*="repliedTextPreview"], [class*="threadMessageAccessory"]')) return;
+        if (!target.closest('[class*="message"]')) return;
+
         const myId = AuthenticationStore.getId();
         const isMe = msg.author.id === myId;
         const isDM = channel.isDM();
@@ -520,8 +524,6 @@ export default definePlugin({
                 clearTimeout(singleClickTimeout);
                 singleClickTimeout = null;
             }
-
-            if (window.getSelection()?.toString()) return;
 
             const executeDoubleClick = () => {
                 if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
