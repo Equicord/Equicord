@@ -15,7 +15,7 @@ import type { Message } from "@vencord/discord-types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
 import { AuthenticationStore, Constants, EditMessageStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, PinActions, RestAPI, showToast, Toasts, WindowStore } from "@webpack/common";
 
-type Modifier = "NONE" | "SHIFT" | "CTRL" | "ALT" | "BACKSPACE";
+type Modifier = "NONE" | "SHIFT" | "CTRL" | "ALT" | "BACKSPACE" | "DELETE";
 type ClickAction = "NONE" | "DELETE" | "COPY_LINK" | "COPY_ID" | "COPY_CONTENT" | "COPY_USER_ID" | "EDIT" | "REPLY" | "REACT" | "OPEN_THREAD" | "OPEN_TAB" | "EDIT_REPLY" | "QUOTE" | "PIN";
 
 const actions: { label: string; value: ClickAction; }[] = [
@@ -65,6 +65,7 @@ const modifiers: { label: string; value: Modifier; }[] = [
 
 const singleClickModifiers: { label: string; value: Modifier; }[] = [
     { label: "Backspace", value: "BACKSPACE" },
+    { label: "Delete", value: "DELETE" },
     ...modifiers
 ];
 
@@ -73,11 +74,13 @@ const keydown = (e: KeyboardEvent) => {
     const mod = modifierFromKey(e);
     if (mod) pressedModifiers.add(mod);
     if (e.key === "Backspace") pressedModifiers.add("BACKSPACE");
+    if (e.key === "Delete") pressedModifiers.add("DELETE");
 };
 const keyup = (e: KeyboardEvent) => {
     const mod = modifierFromKey(e);
     if (mod) pressedModifiers.delete(mod);
     if (e.key === "Backspace") pressedModifiers.delete("BACKSPACE");
+    if (e.key === "Delete") pressedModifiers.delete("DELETE");
 };
 const focusChanged = () => {
     if (!WindowStore.isFocused()) {
