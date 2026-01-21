@@ -457,7 +457,7 @@ export default definePlugin({
     getVersionInfo(support = true) {
         let version = "";
 
-        if (IS_DEV) version = "Dev";
+        if (IS_DEV) version = "Dev Build";
         if (IS_WEB) version = "Web";
         if (IS_VESKTOP) version = `Vesktop v${VesktopNative.app.getVersion()}`;
         if (IS_EQUIBOP) version = `Equibop v${VesktopNative.app.getVersion()}`;

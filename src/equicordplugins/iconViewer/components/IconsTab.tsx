@@ -17,9 +17,8 @@ import { useIntersection } from "@utils/react";
 import { Icon } from "@vencord/discord-types";
 import { Clickable, TextInput, useCallback, useEffect, useMemo, useState } from "@webpack/common";
 
-import { getNameByIcon, IconsFinds } from "../names";
 import { IconsDef } from "../types";
-import { findAllIcons } from "../utils";
+import { getIconsModule } from "../utils";
 import { openIconModal } from "./Modals";
 
 let cachedIcons: IconsDef | null = null;
@@ -27,10 +26,13 @@ let cachedIcons: IconsDef | null = null;
 function getIcons(): IconsDef {
     if (cachedIcons) return cachedIcons;
 
-    const allIcons = Array.from(new Set(findAllIcons()));
+    const iconsModule = getIconsModule();
     cachedIcons = Object.fromEntries(
-        allIcons.map((icon, idx) => [getNameByIcon(icon, String(idx)), icon])
+        Object.entries(iconsModule).filter(([name, fn]) =>
+            typeof fn === "function" && name.endsWith("Icon")
+        )
     );
+
     return cachedIcons;
 }
 
@@ -47,11 +49,11 @@ function searchMatch(search: string, name: string, Icon: Icon, searchByFunction:
 }
 
 function IconItem({ iconName, Icon }: { iconName: string; Icon: Icon; }) {
-    const fill = iconName === "CircleShield" ? "var(--background-base-low)" : "var(--interactive-icon-default)";
+    const fill = iconName === "CircleShieldIcon" ? "var(--background-base-low)" : "var(--interactive-icon-default)";
 
     return (
         <div className="vc-icon-box">
-            <Clickable onClick={() => openIconModal(iconName, Icon, IconsFinds[iconName])}>
+            <Clickable onClick={() => openIconModal(iconName, Icon)}>
                 <div className="vc-icon-container">
                     <Icon className="vc-icon-icon" size="lg" width={32} height={32} color="var(--interactive-icon-default)" fill={fill} />
                 </div>
@@ -107,7 +109,7 @@ function IconsTab() {
     return (
         <SettingsTab>
             <div className={classes(Margins.top16, "vc-icon-tab-search-bar-grid")}>
-                <TextInput autoFocus value={searchInput} placeholder="Search for an icon..." onChange={onSearch} />
+                <TextInput autoFocus value={searchInput} placeholder={`Search ${Object.keys(icons).length} icons...`} onChange={onSearch} />
                 <TooltipContainer text="Search by function context">
                     <Button
                         size="small"

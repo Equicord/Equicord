@@ -97,8 +97,8 @@ export default definePlugin({
             find: "keybindActionTypes()",
             predicate: () => settings.store.keybindScreenshare,
             replacement: {
-                match: /=\[(\{value:\i\.\i\.UNASSIGNED)/,
-                replace: '=[{value:"INSTANT_SCREEN_SHARE",label:"Instant Screenshare"},$1'
+                match: /=\[(\{id:.{0,25}value:\i\.\i\.UNASSIGNED)/,
+                replace: '=[{id:"instant-screen-share",value:"INSTANT_SCREEN_SHARE",label:"Instant Screenshare"},$1'
             }
         }
     ],

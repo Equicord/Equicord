@@ -7,7 +7,6 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import type { User } from "@vencord/discord-types";
 import { React, UserStore } from "@webpack/common";
 
 const fontOptions = [
@@ -51,18 +50,13 @@ export default definePlugin({
             find: '="SYSTEM_TAG"',
             replacement: {
                 match: /(onContextMenu:\i,children:)(.{0,250}?),"data-text":(\i\+\i)/,
-                replace: "$1$self.applyNameStyle(arguments[0],$2),\"data-text\":$3"
+                replace: "$1$self.applyNameStyle({author:arguments[0].message?.author},$2),\"data-text\":$3"
             }
         }
     ],
 
-    applyNameStyle(props: { message?: { author?: User; }; }, originalChildren: React.ReactNode) {
-        const currentUser = UserStore.getCurrentUser();
-        if (!currentUser) return originalChildren;
-
-        const message = props?.message;
-        const author = message?.author;
-        if (!author || author.id !== currentUser.id) return originalChildren;
+    applyNameStyle(props: { author: any; }, originalChildren: React.ReactNode) {
+        if (props.author.id !== UserStore.getCurrentUser()?.id) return originalChildren;
 
         const fontFamily = fontMap[settings.store.font] ?? fontMap["gg-sans"];
 

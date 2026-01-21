@@ -12,38 +12,18 @@ export default definePlugin({
     description: "Bypass the pin prompt when using the pin functions",
     authors: [Devs.thororen],
     patches: [
-        {
-            find: '"Channel Pins"',
-            replacement: {
-                match: /(\i\.\i\.unpinMessage\(\i,\i\.id\)):\i\.\i\.confirmUnpin\(\i,\i\)/,
-                replace: "$1:$1"
-            }
-        },
-        {
-            find: 'source:"message-actions"',
+        ...[
+            'source:"message-actions"',
+            'id:"pin",action',
+            '"Channel Pins"',
+        ].map(find => ({
+            find,
             replacement: [
                 {
-                    match: /(\i\.\i\.pinMessage\(\i,\i\.id\)):\i\.\i\.confirmPin\(\i,\i\)/,
-                    replace: "$1:$1"
-                },
-                {
-                    match: /(\i\.\i\.unpinMessage\(\i,\i\.id\)):\i\.\i\.confirmUnpin\(\i,\i\)/,
+                    match: /(\i\.\i\.(unpin|pin)Message\(\i,\i\.id\)):\i\.\i\.confirm(Unpin|Pin)\(\i,\i\)/g,
                     replace: "$1:$1"
                 }
             ]
-        },
-        {
-            find: 'id:"pin",action',
-            replacement: [
-                {
-                    match: /(\i\.\i\.pinMessage\(\i,\i\.id\)):\i\.\i\.confirmPin\(\i,\i\)/,
-                    replace: "$1:$1"
-                },
-                {
-                    match: /(\i\.\i\.unpinMessage\(\i,\i\.id\)):\i\.\i\.confirmUnpin\(\i,\i\)/,
-                    replace: "$1:$1"
-                }
-            ]
-        },
+        }))
     ],
 });
