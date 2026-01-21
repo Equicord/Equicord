@@ -97,6 +97,7 @@ function isModifierPressed(modifier: Modifier): boolean {
 }
 
 let doubleClickTimeout: ReturnType<typeof setTimeout> | null = null;
+let singleClickTimeout: ReturnType<typeof setTimeout> | null = null;
 let pendingDoubleClickAction: (() => void) | null = null;
 
 const settings = definePluginSettings({
@@ -461,6 +462,10 @@ export default definePlugin({
             clearTimeout(doubleClickTimeout);
             doubleClickTimeout = null;
         }
+        if (singleClickTimeout) {
+            clearTimeout(singleClickTimeout);
+            singleClickTimeout = null;
+        }
         pendingDoubleClickAction = null;
     },
 
@@ -486,6 +491,11 @@ export default definePlugin({
         const isDoubleClick = event.detail === 2;
         const isTripleClick = event.detail === 3;
 
+        if (singleClickTimeout) {
+            clearTimeout(singleClickTimeout);
+            singleClickTimeout = null;
+        }
+
         if (isTripleClick) {
             if (doubleClickTimeout) {
                 clearTimeout(doubleClickTimeout);
@@ -499,37 +509,50 @@ export default definePlugin({
             return;
         }
 
-        if (!isDoubleClick) {
-            if (isSingleClick && isModifierPressed(singleClickModifier) && singleClickAction !== "NONE") {
-                executeAction(singleClickAction, msg, channel, event);
-                return;
-            }
-        }
-
-        const executeDoubleClick = () => {
-            if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
-            if (msg.deleted === true) return;
-            if (doubleClickAction !== "NONE") {
-                executeAction(doubleClickAction, msg, channel, event);
-            }
-        };
-
+        const canDoubleClick = (isModifierPressed(doubleClickModifier) || doubleClickModifier === "NONE") && doubleClickAction !== "NONE";
         const canTripleClick = isModifierPressed(tripleClickModifier) && tripleClickAction !== "NONE";
 
-        if (canTripleClick) {
-            if (doubleClickTimeout) {
-                clearTimeout(doubleClickTimeout);
+        if (isDoubleClick) {
+            const executeDoubleClick = () => {
+                if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
+                if (msg.deleted === true) return;
+                if (canDoubleClick) {
+                    executeAction(doubleClickAction, msg, channel, event);
+                }
+            };
+
+            if (canTripleClick) {
+                if (doubleClickTimeout) {
+                    clearTimeout(doubleClickTimeout);
+                }
+                pendingDoubleClickAction = executeDoubleClick;
+                doubleClickTimeout = setTimeout(() => {
+                    pendingDoubleClickAction?.();
+                    pendingDoubleClickAction = null;
+                    doubleClickTimeout = null;
+                }, settings.store.clickTimeout);
+            } else {
+                executeDoubleClick();
             }
-            pendingDoubleClickAction = executeDoubleClick;
-            doubleClickTimeout = setTimeout(() => {
-                pendingDoubleClickAction?.();
-                pendingDoubleClickAction = null;
-                doubleClickTimeout = null;
-            }, settings.store.clickTimeout);
             event.preventDefault();
-        } else if (isDoubleClick && (isModifierPressed(doubleClickModifier) || doubleClickModifier === "NONE")) {
-            executeDoubleClick();
-            event.preventDefault();
+            return;
+        }
+
+        if (isSingleClick) {
+            const executeSingleClick = () => {
+                if (isModifierPressed(singleClickModifier) && singleClickAction !== "NONE") {
+                    executeAction(singleClickAction, msg, channel, event);
+                }
+            };
+
+            if (canDoubleClick) {
+                singleClickTimeout = setTimeout(() => {
+                    executeSingleClick();
+                    singleClickTimeout = null;
+                }, settings.store.clickTimeout);
+            } else {
+                executeSingleClick();
+            }
         }
     },
 });
