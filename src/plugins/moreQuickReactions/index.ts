@@ -84,7 +84,7 @@ export default definePlugin({
                 // Override limit of emojis to display with offset hook.
                 {
                     match: /(\i)\.length>4&&\((\i)\.length=4\);/,
-                    replace: "let [moreQuickReactionsScrollValue,setMoreQuickReactionScrollValue]=Vencord.Webpack.Common.React.useState(0);MoreQuickReactionsScrollValue;"
+                    replace: "let [moreQuickReactionsScrollValue,setMoreQuickReactionsScrollValue]=Vencord.Webpack.Common.React.useState(0);moreQuickReactionsScrollValue;"
                 },
                 // Add a custom class to identify the quick reactions have been modified and a CSS variable for the number of columns to display
                 {
