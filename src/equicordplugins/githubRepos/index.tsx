@@ -36,6 +36,11 @@ export const settings = definePluginSettings({
         description: "Show full ui in the mini profile instead of just a button",
         default: true
     },
+    showRepositoryTab: {
+        type: OptionType.BOOLEAN,
+        description: "Show repositories tab in profile modal (hides button in connections when enabled)",
+        default: true
+    },
 });
 
 const getProfileThemeProps = findByCodeLazy(".getPreviewThemeColors", "primaryColor:");
@@ -100,7 +105,7 @@ export default definePlugin({
             find: ".MODAL_V2,onClose:",
             replacement: {
                 match: /displayProfile:(\i).*?profileAppConnections\}\)\}\)/,
-                replace: "$&,$self.ProfilePopoutComponent({ user: arguments[0].user, displayProfile: $1 }),"
+                replace: "$&,!$self.settings.store.showRepositoryTab&&$self.ProfilePopoutComponent({ user: arguments[0].user, displayProfile: $1 }),"
             }
         },
         // User Profile Modal v2 tab bar
@@ -108,7 +113,7 @@ export default definePlugin({
             find: "useUserProfileModalV2TabBarItems",
             replacement: {
                 match: /section:(\w+\.oh)\.ACTIVITY\}\);let/,
-                replace: "section:$1.ACTIVITY}),Z.push({text:\"Repositories\",section:\"REPOSITORIES\"});let"
+                replace: "section:$1.ACTIVITY}),$self.settings.store.showRepositoryTab&&Z.push({text:\"Repositories\",section:\"REPOSITORIES\"});let"
             }
         },
         // User Profile Modal v2 tab content
