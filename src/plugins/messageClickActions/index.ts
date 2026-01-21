@@ -193,11 +193,11 @@ function isMessageReplyable(msg: Message) {
     return MessageTypeSets.REPLYABLE.has(msg.type) && !msg.hasFlag(MessageFlags.EPHEMERAL);
 }
 
-async function toggleReaction(channelId: string, messageId: string, emoji: string, channel: { id: string; }, msg: Message) {
+async function toggleReaction(channelId: string, messageId: string, emoji: string, channel: { id: string; guild_id?: string | null; }, msg: Message) {
     const trimmed = emoji.trim();
     if (!trimmed) return;
 
-    if (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) || !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel)) {
+    if (channel.guild_id && (!PermissionStore.can(PermissionsBits.ADD_REACTIONS, channel) || !PermissionStore.can(PermissionsBits.READ_MESSAGE_HISTORY, channel))) {
         showWarning("Cannot react: Missing permissions");
         return;
     }
@@ -516,6 +516,13 @@ export default definePlugin({
         const canTripleClick = isModifierPressed(tripleClickModifier) && tripleClickAction !== "NONE";
 
         if (isDoubleClick) {
+            if (singleClickTimeout) {
+                clearTimeout(singleClickTimeout);
+                singleClickTimeout = null;
+            }
+
+            if (window.getSelection()?.toString()) return;
+
             const executeDoubleClick = () => {
                 if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
                 if (msg.deleted === true) return;
