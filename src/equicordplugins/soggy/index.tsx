@@ -114,7 +114,7 @@ const settings = definePluginSettings({
     imageLink: {
         description: "URL for the image (button and modal)",
         type: OptionType.STRING,
-        default: "https://cdn.nest.rip/uploads/ecf0ef5b-55d1-4da7-9e5c-e469569a9731.png",
+        default: "https://equicord.org/assets/plugins/soggy/cat.png",
     },
     songLink: {
         description: "URL for the song to play",

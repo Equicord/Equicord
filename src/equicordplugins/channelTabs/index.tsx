@@ -61,8 +61,8 @@ export default definePlugin({
             find: '"AppView"',
             replacement: [
                 {
-                    match: /(\?void 0:(\i)\.channelId.{0,600})"div",{className:\i\.content/,
-                    replace: "$1$self.render,{currentChannel:$2",
+                    match: /(\?void 0:(\i)\.channelId.{0,600})"div",{(?=className:\i\.content)/,
+                    replace: "$1$self.render,{currentChannel:$2,",
                     predicate: () => settings.store.tabBarPosition === "top"
                 },
                 {
