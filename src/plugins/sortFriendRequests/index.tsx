@@ -18,16 +18,14 @@
 
 import "./styles.css";
 
-import { definePluginSettings, migratePluginSettings } from "@api/Settings";
-import { BaseText } from "@components/BaseText";
+import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Flex } from "@components/Flex";
 import { TooltipContainer } from "@components/TooltipContainer";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
-import { DateUtils, RelationshipStore } from "@webpack/common";
+import { DateUtils, RelationshipStore, Text } from "@webpack/common";
 import { PropsWithChildren } from "react";
 
 const formatter = new Intl.DateTimeFormat(undefined, {
@@ -36,7 +34,7 @@ const formatter = new Intl.DateTimeFormat(undefined, {
     year: "numeric",
 });
 
-const cl = classNameFactory("vc-sortFriends-");
+const cl = classNameFactory("vc-sortFriendRequests-");
 
 function getSince(user: User) {
     return new Date(RelationshipStore.getSince(user.id));
@@ -51,82 +49,31 @@ const settings = definePluginSettings({
     }
 });
 
-migratePluginSettings("SortFriends", "SortFriendRequests");
 export default definePlugin({
-    name: "SortFriends",
-    authors: [Devs.Megu, EquicordDevs.CallMeGii],
+    name: "SortFriendRequests",
+    authors: [Devs.Megu],
     description: "Sorts friend requests by date of receipt",
-    isModified: true,
     settings,
 
-    patches: [
-        {
-            find: "getRelationshipCounts(){",
-            replacement: {
-                match: /\}\)\.sortBy\((.+?)\)\.value\(\)/,
-                replace: "}).sortBy(row => $self.wrapSort(($1), row)).value()"
-            }
-        },
-        {
-            find: "peopleListItemRef",
-            replacement: {
-                predicate: () => settings.store.showDates,
-                match: /(?<=children:.*user:(\i),.*subText:).+?(?=,hovered:\i,showAccountIdentifier)/,
-                replace: "$self.makeSubtext($1, $&)"
-            }
-        },
-        {
-            find: "#{intl::FRIEND_REQUEST_CANCEL}",
-            replacement: {
-                predicate: () => settings.store.showDates,
-                match: /(?<=\.\i,children:\[)\(0,.+?(?=,\(0)(?<=user:(\i).+?)/,
-                replace: (children, user) => `$self.WrapperDateComponent({user:${user},children:${children}})`
-            }
+    patches: [{
+        find: "getRelationshipCounts(){",
+        replacement: {
+            match: /\}\)\.sortBy\((.+?)\)\.value\(\)/,
+            replace: "}).sortBy(row => $self.wrapSort(($1), row)).value()"
         }
-    ],
+    }, {
+        find: "#{intl::FRIEND_REQUEST_CANCEL}",
+        replacement: {
+            predicate: () => settings.store.showDates,
+            match: /(?<=\.\i,children:\[)\(0,.{0,100}user:\i,hovered:\i+?(?=,\(0)(?<=user:(\i).+?)/,
+            replace: (children, user) => `$self.WrapperDateComponent({user:${user},children:${children}})`
+        }
+    }],
 
     wrapSort(comparator: Function, row: any) {
         return row.type === 3 || row.type === 4
             ? -getSince(row.user)
             : comparator(row);
-    },
-
-    makeSubtext(user: User, origSubtext: any) {
-        const since = getSince(user);
-        if (isNaN(since.getTime())) {
-            return null;
-        }
-
-        return (
-            <Flex
-                flexDirection="column"
-                style={{ gap: "0px", flexWrap: "wrap", lineHeight: "0.9rem" }}
-            >
-                <span>{origSubtext}</span>
-                <span>
-                    <div className="" style={{ display: "flex", alignItems: "center" }}>
-                        <svg
-                            aria-hidden="true"
-                            role="img"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="8"
-                            height="8"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            style={{ marginRight: "4px", display: "inline-block" }}
-                        >
-                            <path
-                                fill="var(--input-placeholder-text)"
-                                fillRule="evenodd"
-                                d="M12 23a11 11 0 1 0 0-22 11 11 0 0 0 0 22Zm1-18a1 1 0 1 0-2 0v7c0 .27.1.52.3.7l3 3a1 1 0 0 0 1.4-1.4L13 11.58V5Z"
-                                clipRule="evenodd"
-                            ></path>
-                        </svg>
-                        <span>Added &mdash; {since.toDateString()}</span>
-                    </div>
-                </span>
-            </Flex>
-        );
     },
 
     WrapperDateComponent: ErrorBoundary.wrap(({ user, children }: PropsWithChildren<{ user: User; }>) => {
@@ -136,7 +83,7 @@ export default definePlugin({
             {children}
             {!isNaN(since.getTime()) && (
                 <TooltipContainer text={DateUtils.dateFormat(since, "LLLL")} tooltipClassName={cl("tooltip")}>
-                    <BaseText size="xs" className={cl("date")}>{formatter.format(since)}</BaseText>
+                    <Text variant="text-xs/normal" className={cl("date")}>{formatter.format(since)}</Text>
                 </TooltipContainer>
             )}
         </div>;
