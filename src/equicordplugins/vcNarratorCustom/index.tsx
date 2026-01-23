@@ -992,10 +992,12 @@ export default definePlugin({
                 if (!isMe && !affectsMyChannel) continue;
 
                 // Keep snapshots in sync for join/leave/move without announcing state changes.
-                if (oldChannelId !== myChanId && channelId === myChanId) {
-                    voiceStateSnapshot.set(userId, normalizeState(state));
-                } else if (oldChannelId === myChanId && channelId !== myChanId) {
-                    voiceStateSnapshot.delete(userId);
+                if (myChanId) {
+                    if (oldChannelId !== myChanId && channelId === myChanId) {
+                        voiceStateSnapshot.set(userId, normalizeState(state));
+                    } else if (oldChannelId === myChanId && channelId !== myChanId) {
+                        voiceStateSnapshot.delete(userId);
+                    }
                 }
 
                 // Join/leave/move announcements (existing behavior)
