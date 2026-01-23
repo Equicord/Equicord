@@ -194,17 +194,18 @@ export default definePlugin({
         "gdm-context": GroupDMContext
     },
 
+    getAvatarUrl(user: User) {
+        return IconUtils.getUserAvatarURL(user, true);
+    },
+
     patches: [
         // Avatar component used in User DMs "User Profile" popup in the right and User Profile Modal pfp
         {
-            find: ".overlay:void 0,status:",
-            replacement: [
-                {
-                    match: /avatarSrc:(\i),eventHandlers:(\i).+?"div",.{0,100}className:\i,/,
-                    replace: "$&style:{cursor:\"pointer\"},onClick:()=>{$self.openAvatar($1)},",
-                }
-            ],
-            all: true
+            find: "imageClassName:null!=",
+            replacement: {
+                match: /(?<=\("div",\i\(\i\(\{\},\i\),)(\{className:)/,
+                replace: '{style:{cursor:"pointer"},onClick:()=>$self.openAvatar($self.getAvatarUrl(arguments[0].user)),className:'
+            }
         },
         // Banners
         {
