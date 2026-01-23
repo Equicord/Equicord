@@ -12,10 +12,10 @@ import { openUserProfile } from "@utils/discord";
 import { classes } from "@utils/misc";
 import definePlugin, { StartAt } from "@utils/types";
 import { Guild } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
+import { findByPropsLazy, findCssClassesLazy } from "@webpack";
 import { Parser, Tooltip, UserStore } from "@webpack/common";
 
-const AvatarStyles = findByPropsLazy("avatar", "zalgo");
+const AvatarStyles = findCssClassesLazy("avatar", "zalgo");
 const GuildManager = findByPropsLazy("joinGuild");
 
 interface User {

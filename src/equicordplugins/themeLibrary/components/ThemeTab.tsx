@@ -17,12 +17,12 @@ import { SearchStatus, TabItem, Theme, ThemeLikeProps } from "@equicordplugins/t
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Button, React, SearchableSelect, TabBar, TextInput, useEffect, useState } from "@webpack/common";
 
 import { ThemeCard } from "./ThemeCard";
 
-const InputStyles = findByPropsLazy("inputWrapper", "inputError", "error");
+const InputStyles = findCssClassesLazy("inputWrapper", "inputError", "error");
 
 export const apiUrl = "https://themes.equicord.org/api";
 export const logger = new Logger("ThemeLibrary", "#e5c890");

@@ -82,7 +82,7 @@ export default definePlugin({
             find: '"sticker")',
             replacement: {
                 match: /(?<=\(\)\(\i\.\i,.{0,50}children:)(.+?)\}/,
-                replace: "$self.buttonsInner($2)}"
+                replace: "$self.buttonsInner($1)}"
             }
         }
     ],

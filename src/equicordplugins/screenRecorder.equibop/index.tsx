@@ -8,10 +8,10 @@ import { addContextMenuPatch, removeContextMenuPatch } from "@api/ContextMenu";
 import { ScreenshareIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Menu, UploadHandler } from "@webpack/common";
 
-const OptionClasses = findByPropsLazy("optionName", "optionIcon", "optionLabel");
+const OptionClasses = findCssClassesLazy("optionName", "optionIcon", "optionLabel");
 
 let recoder: MediaRecorder;
 

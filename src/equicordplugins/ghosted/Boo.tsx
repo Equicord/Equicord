@@ -5,7 +5,7 @@
  */
 
 import { Channel, Message } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { MessageStore, useEffect, UserStore, useState, useStateFromStores } from "@webpack/common";
 
 import { cl, settings } from ".";
@@ -81,7 +81,7 @@ export function isChannelCleared(channelId: string): boolean {
     return clearedChannels.has(channelId);
 }
 
-const ChannelWrapperStyles = findByPropsLazy("muted", "wrapper");
+const ChannelWrapperStyles = findCssClassesLazy("muted", "wrapper");
 
 export function Boo({ channel }: { channel: Channel; }) {
     const { id } = channel;

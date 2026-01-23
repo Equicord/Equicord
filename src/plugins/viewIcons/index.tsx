@@ -187,10 +187,6 @@ export default definePlugin({
     openAvatar,
     openBanner,
 
-    getAvatarUrl(user: User) {
-        return IconUtils.getUserAvatarURL(user, true);
-    },
-
     contextMenus: {
         "user-context": UserContext,
         "guild-context": GuildContext,
@@ -225,7 +221,7 @@ export default definePlugin({
         },
         // User DMs top small icon
         {
-            find: ".cursorPointer:null,children",
+            find: ".channel.getRecipientId(),",
             replacement: {
                 match: /(?=,src:(\i.getAvatarURL\(.+?[)]))/,
                 replace: (_, avatarUrl) => `,onClick:()=>$self.openAvatar(${avatarUrl})`
@@ -239,5 +235,9 @@ export default definePlugin({
                 replace: (_, avatarUrl) => `onClick:()=>$self.openAvatar(${avatarUrl}),`
             }
         }
-    ]
+    ],
+
+    getAvatarUrl(user: User) {
+        return IconUtils.getUserAvatarURL(user, true);
+    },
 });

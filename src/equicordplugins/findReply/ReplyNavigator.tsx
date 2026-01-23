@@ -9,13 +9,13 @@ import "./styles.css";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { ModalCloseButton } from "@utils/modal";
 import { Message } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Paginator, React, useRef, useState } from "@webpack/common";
 import { MutableRefObject } from "react";
 
 import { jumper } from "./index";
 
-const containerStyles = findByPropsLazy("containerBottom", "containerTop");
+const containerStyles = findCssClassesLazy("containerBottom", "containerTop");
 
 export default function ReplyNavigator({ replies }: { replies: Message[]; }) {
     const [page, setPage] = useState(1);

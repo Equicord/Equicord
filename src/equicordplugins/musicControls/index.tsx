@@ -52,7 +52,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "NITRO_PRIVACY_PERK_BETA_COACHMARK));",
+            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
             replacement: {
                 // react.jsx)(AccountPanel, { ..., showTaglessAccountPanel: blah })
                 match: /(?<=\i\.jsxs?\)\()(\i),{(?=[^}]*?userTag:\i,hidePrivateData:)/,

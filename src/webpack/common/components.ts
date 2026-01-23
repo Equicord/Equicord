@@ -26,7 +26,7 @@ import { TooltipContainer as TooltipContainerComponent } from "@components/Toolt
 import { TooltipFallback } from "@components/TooltipFallback";
 import { LazyComponent } from "@utils/lazyReact";
 import * as t from "@vencord/discord-types";
-import { filters, mapMangledModuleLazy, waitFor } from "@webpack";
+import { filters, find, findCssClassesLazy, mapMangledCssClasses, mapMangledModuleLazy, proxyLazyWebpack, waitFor } from "@webpack";
 
 import { waitForComponent } from "./internal";
 
@@ -75,19 +75,26 @@ export const UserSummaryItem = waitForComponent("UserSummaryItem", filters.compo
 
 export let createScroller: (scrollbarClassName: string, fadeClassName: string, customThemeClassName: string) => t.ScrollerThin;
 export let createListScroller: (scrollBarClassName: string, fadeClassName: string, someOtherClassIdkMan: string, resizeObserverClass: typeof ResizeObserver) => t.ListScrollerThin;
-export let scrollerClasses: Record<string, string>;
-export let listScrollerClasses: Record<string, string>;
+
+const listScrollerClassnames = ["thin", "auto", "fade"] as const;
+export const scrollerClasses = findCssClassesLazy("thin", "auto", "fade", "customTheme", "none");
+
+const isListScroller = filters.byClassNames(...listScrollerClassnames);
+const isNotNormalScroller = filters.byClassNames("customTheme");
+export const listScrollerClasses = proxyLazyWebpack(() => {
+    const mod = find(m => isListScroller(m) && !isNotNormalScroller(m), { topLevelOnly: true });
+    if (!mod) return {} as Record<typeof listScrollerClassnames[number], string>;
+
+    return mapMangledCssClasses(mod, listScrollerClassnames);
+});
 
 waitFor(filters.byCode('="ltr",orientation:', "customTheme:", "forwardRef"), m => createScroller = m);
 waitFor(filters.byCode("getScrollerNode:", "resizeObserver:", "sectionHeight:"), m => createListScroller = m);
-waitFor(["thin", "auto", "customTheme"], m => scrollerClasses = m);
-waitFor(m => m.thin && m.auto && !m.customTheme, m => listScrollerClasses = m);
 
 export const ScrollerNone = LazyComponent(() => createScroller(scrollerClasses.none, scrollerClasses.fade, scrollerClasses.customTheme));
 export const ScrollerThin = LazyComponent(() => createScroller(scrollerClasses.thin, scrollerClasses.fade, scrollerClasses.customTheme));
 export const ScrollerAuto = LazyComponent(() => createScroller(scrollerClasses.auto, scrollerClasses.fade, scrollerClasses.customTheme));
 
-export const ListScrollerNone = LazyComponent(() => createListScroller(listScrollerClasses.none, listScrollerClasses.fade, "", ResizeObserver));
 export const ListScrollerThin = LazyComponent(() => createListScroller(listScrollerClasses.thin, listScrollerClasses.fade, "", ResizeObserver));
 export const ListScrollerAuto = LazyComponent(() => createListScroller(listScrollerClasses.auto, listScrollerClasses.fade, "", ResizeObserver));
 

@@ -12,10 +12,10 @@ import { HolyNotes } from "@equicordplugins/holyNotes/types";
 import { copyToClipboard } from "@utils/clipboard";
 import { classes } from "@utils/misc";
 import { ModalProps } from "@utils/modal";
-import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import { ContextMenuApi, FluxDispatcher, Menu, NavigationRouter, React } from "@webpack/common";
 
-const messageClasses = findByPropsLazy("message", "groupStart", "cozyMessage");
+const messageClasses = findCssClassesLazy("message", "groupStart", "cozyMessage");
 const Channel = findByCodeLazy("computeLurkerPermissionsAllowList(){");
 const ChannelMessage = findComponentByCodeLazy("Message must not be a thread");
 

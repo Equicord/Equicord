@@ -19,7 +19,7 @@ import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { findByCodeLazy, findByPropsLazy } from "@webpack";
+import { findByCodeLazy, findCssClassesLazy } from "@webpack";
 import { Button, ChannelStore, FluxDispatcher, Select, SelectedChannelStore, TabBar, TextInput, Tooltip, UserStore, useState } from "@webpack/common";
 import type { JSX, PropsWithChildren } from "react";
 
@@ -30,9 +30,9 @@ let keywordEntries: Array<KeywordEntry> = [];
 let keywordLog: Array<any> = [];
 let interceptor: (e: any) => void;
 
-const recentMentionsPopoutClass = findByPropsLazy("recentMentionsPopout");
-const tabClass = findByPropsLazy("inboxTitle", "tab");
-const buttonClass = findByPropsLazy("size36");
+const recentMentionsPopoutClass = findCssClassesLazy("recentMentionsPopout");
+const tabClass = findCssClassesLazy("inboxTitle", "tab", "expand", "expanded", "controlButton");
+const buttonClass = findCssClassesLazy("size36", "size32", "tertiary", "button");
 const Popout = findByCodeLazy("getProTip", "canCloseAllMessages:");
 const createMessageRecord = findByCodeLazy(".createFromServer(", ".isBlockedForMessage", "messageReference:");
 const KEYWORD_ENTRIES_KEY = "KeywordNotify_keywordEntries";

@@ -6,10 +6,10 @@
 
 import { SvgOverFlowIcon } from "@equicordplugins/holyNotes/components/icons/overFlowIcon";
 import { classes } from "@utils/misc";
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Button, Clickable, Menu, Popout, React, useRef } from "@webpack/common";
 
-const { overflowIcon } = findByPropsLazy("overflowIcon", "forceButtonsShow");
+const { overflowIcon } = findCssClassesLazy("overflowIcon", "forceButtonsShow");
 
 export function NoteBookTabs({ tabs, selectedTabId, onSelectTab }: { tabs: string[], selectedTabId: string, onSelectTab: (tab: string) => void; }) {
     const tabBarRef = React.useRef<HTMLDivElement>(null);

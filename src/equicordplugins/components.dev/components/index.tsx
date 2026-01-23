@@ -10,7 +10,7 @@ import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { proxyLazy } from "@utils/lazy";
-import { filters, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findLazy, mapMangledModuleLazy, waitFor, wreq } from "@webpack";
+import { filters, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findLazy, mapMangledModuleLazy, waitFor, wreq } from "@webpack";
 import {
     GuildStore,
     ListScrollerAuto,
@@ -280,7 +280,7 @@ export function Divider({ className, style, ...restProps }: React.ComponentProps
     return <hr className={`vc-divider${className ? ` ${className}` : ""}`} style={style} {...restProps} />;
 }
 
-const CodeContainerClasses = findByPropsLazy("markup", "codeContainer");
+const CodeContainerClasses = findCssClassesLazy("markup", "codeContainer");
 
 export function InlineCode({ children }: { children: React.ReactNode; }) {
     return (
