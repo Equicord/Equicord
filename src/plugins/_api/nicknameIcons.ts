@@ -15,7 +15,7 @@ export default definePlugin({
         {
             find: "#{intl::USER_PROFILE_PRONOUNS}",
             replacement: {
-                match: /(\.nicknameIcons,children:)(\i)/,
+                match: /(?<=isVerifiedBot\(\)}\).{0,50})(children:)(\i)/,
                 replace: "$1[...Vencord.Api.NicknameIcons._renderIcons({userId:arguments[0].user?.id}),$2]"
             }
         }
