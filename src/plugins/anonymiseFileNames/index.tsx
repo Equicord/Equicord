@@ -16,17 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
-import { definePluginSettings, Settings } from "@api/Settings";
+import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { reverseExtensionMap } from "@equicordplugins/fixFileExtensions";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { CloudUpload } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
 import { useState } from "@webpack/common";
 
-const ActionBarIcon = findByCodeLazy(".actionBarIcon");
+const ActionBarIcon = findByCodeLazy("Children.map", "isValidElement", "dangerous:");
 
 const enum Methods {
     Random,
@@ -35,18 +33,13 @@ const enum Methods {
 }
 
 const ANONYMISE_UPLOAD_SYMBOL = Symbol("vcAnonymise");
-export const tarExtMatcher = /\.tar\.\w+$/;
+const tarExtMatcher = /\.tar\.\w+$/;
 
 const settings = definePluginSettings({
     anonymiseByDefault: {
         description: "Whether to anonymise file names by default",
         type: OptionType.BOOLEAN,
         default: true,
-    },
-    spoilerMessages: {
-        description: "Spoiler messages",
-        type: OptionType.BOOLEAN,
-        default: false,
     },
     method: {
         description: "Anonymising method",
@@ -75,7 +68,6 @@ export default definePlugin({
     name: "AnonymiseFileNames",
     authors: [Devs.fawn],
     description: "Anonymise uploaded file names",
-    isModified: true,
     settings,
 
     patches: [
@@ -119,56 +111,30 @@ export default definePlugin({
     }, { noop: true }),
 
     anonymise(upload: CloudUpload) {
+        if ((upload[ANONYMISE_UPLOAD_SYMBOL] ?? settings.store.anonymiseByDefault) === false) {
+            return;
+        }
+
         const originalFileName = upload.filename;
         const tarMatch = tarExtMatcher.exec(originalFileName);
         const extIdx = tarMatch?.index ?? originalFileName.lastIndexOf(".");
-        let ext = extIdx !== -1 ? originalFileName.slice(extIdx) : "";
-        const addSpoilerPrefix = (str: string) => settings.store.spoilerMessages ? "SPOILER_" + str : str;
-
-        if (Settings.plugins.FixFileExtensions.enabled) {
-            ext = reverseExtensionMap[ext] || ext;
-        }
-
-        if ((upload[ANONYMISE_UPLOAD_SYMBOL] ?? settings.store.anonymiseByDefault) === false) return addSpoilerPrefix(originalFileName + ext);
+        const ext = extIdx !== -1 ? originalFileName.slice(extIdx) : "";
 
         const newFilename = (() => {
             switch (settings.store.method) {
                 case Methods.Random:
                     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                    const returnedName = Array.from(
+                    return Array.from(
                         { length: settings.store.randomisedLength },
                         () => chars[Math.floor(Math.random() * chars.length)]
                     ).join("") + ext;
-                    return addSpoilerPrefix(returnedName);
                 case Methods.Consistent:
-                    return addSpoilerPrefix(settings.store.consistent + ext);
+                    return settings.store.consistent + ext;
                 case Methods.Timestamp:
-                    return addSpoilerPrefix(Date.now().toString() + ext);
+                    return Date.now() + ext;
             }
         })();
 
         upload.filename = newFilename;
-    },
-
-    commands: [
-        {
-            name: "Spoiler",
-            description: "Toggle your spoiler",
-            inputType: ApplicationCommandInputType.BUILT_IN,
-            options: [
-                {
-                    name: "value",
-                    description: "Toggle your Spoiler (default is toggle)",
-                    required: false,
-                    type: ApplicationCommandOptionType.BOOLEAN,
-                },
-            ],
-            execute: async (args, ctx) => {
-                settings.store.spoilerMessages = !!findOption(args, "value", !settings.store.spoilerMessages);
-                sendBotMessage(ctx.channel.id, {
-                    content: settings.store.spoilerMessages ? "Spoiler enabled!" : "Spoiler disabled!",
-                });
-            },
-        }
-    ],
+    }
 });
