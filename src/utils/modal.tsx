@@ -102,11 +102,11 @@ interface Modals {
 }
 
 export const Modals: Modals = mapMangledModuleLazy(':"thin")', {
-    ModalRoot: filters.componentByCode(".MODAL_ROOT_LEGACY"),
-    ModalHeader: filters.componentByCode(".CENTER"),
-    ModalContent: filters.componentByCode("scrollbarType"),
-    ModalFooter: filters.componentByCode(".HORIZONTAL_REVERSE"),
-    ModalCloseButton: filters.componentByCode(".BLANK")
+    ModalRoot: filters.componentByCode('.MODAL,"aria-labelledby":'),
+    ModalHeader: filters.componentByCode(",id:"),
+    ModalContent: filters.componentByCode(".content,"),
+    ModalFooter: filters.componentByCode(".footer,"),
+    ModalCloseButton: filters.componentByCode(".close]:")
 });
 
 export const ModalRoot = LazyComponent(() => Modals.ModalRoot);
