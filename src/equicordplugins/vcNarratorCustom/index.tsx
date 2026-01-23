@@ -1058,19 +1058,6 @@ export default definePlugin({
             }
         },
 
-        AUDIO_TOGGLE_SELF_MUTE() {
-            const myId = UserStore.getCurrentUser().id;
-            const s = VoiceStateStore.getVoiceStateForUser(myId) as VoiceState | undefined;
-            const chanId = s?.channelId;
-            if (!s || !chanId) return;
-        },
-
-        AUDIO_TOGGLE_SELF_DEAF() {
-            const myId = UserStore.getCurrentUser().id;
-            const s = VoiceStateStore.getVoiceStateForUser(myId) as VoiceState | undefined;
-            const chanId = s?.channelId;
-            if (!s || !chanId) return;
-        },
     },
 
     settingsAboutComponent({ tempSettings: s }: { tempSettings?: any; }) {
