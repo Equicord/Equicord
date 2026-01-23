@@ -58,8 +58,8 @@ export const TooltipContainer = TooltipContainerComponent as never;
 
 export const TextInput = waitForComponent<t.TextInput>("TextInput", filters.componentByCode("#{intl::MAXIMUM_LENGTH_ERROR}", '"input"'));
 export const TextArea = waitForComponent<t.TextArea>("TextArea", filters.componentByCode("this.getPaddingRight()},id:"));
-export const Select = waitForComponent<t.Select>("Select", filters.componentByCode('"Select"', '"renderTrailing"'));
-export const SearchableSelect = waitForComponent<t.SearchableSelect>("SearchableSelect", filters.componentByCode('"SearchableSelect"'));
+export const Select = waitForComponent<t.Select>("Select", filters.componentByCode('"renderLeading","renderTrailing"])'));
+export const SearchableSelect = waitForComponent<t.SearchableSelect>("SearchableSelect", filters.componentByCode('"SearchableSelect"),{id:'));
 export const Slider = waitForComponent<t.Slider>("Slider", filters.componentByCode('"markDash".concat('));
 export const Popout = waitForComponent<t.Popout>("Popout", filters.componentByCode("ref:this.ref,", "renderPopout:this.renderPopout,"));
 export const Dialog = waitForComponent<t.Dialog>("Dialog", filters.componentByCode('role:"dialog",tabIndex:-1'));
@@ -105,7 +105,7 @@ waitFor(m => {
 
 export const MaskedLink = waitForComponent<t.MaskedLink>("MaskedLink", filters.componentByCode("MASKED_LINK)"));
 export const Timestamp = waitForComponent<t.Timestamp>("Timestamp", filters.componentByCode("#{intl::MESSAGE_EDITED_TIMESTAMP_A11Y_LABEL}"));
-export const OAuth2AuthorizeModal = waitForComponent("OAuth2AuthorizeModal", filters.componentByCode(".authorize,children:", ".contentBackground"));
+export const OAuth2AuthorizeModal = waitForComponent("OAuth2AuthorizeModal", filters.componentByCode("hasContentBackground", "oauth2_authorize"));
 
 export const Animations = mapMangledModuleLazy(".assign({colorNames:", {
     Transition: filters.componentByCode('["items","children"]', ",null,"),
