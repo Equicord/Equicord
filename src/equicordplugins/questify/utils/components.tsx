@@ -15,7 +15,7 @@ import { formatLowerBadge } from "./misc";
 export const GuildlessServerListItemComponent = findComponentByCodeLazy("tooltip:", "lowerBadgeSize:");
 export const GuildedServerListItemPillComponent = findComponentByCodeLazy('"pill":"empty"');
 export const ServerListItemLowerBadgeComponent = findComponentByCodeLazy("GUILD_EVENT)}),[");
-export const ServerListItemUpperBadgeComponent = findComponentByCodeLazy("iconBadge", ".ROUND,disableColor");
+export const ServerListItemUpperBadgeComponent = findComponentByCodeLazy("{icon:", ".ROUND,disableColor");
 export const RadioGroup = findComponentByCodeLazy(',["label","description"');
 export const QuestTile = findComponentByCodeLazy(".rowIndex,trackGuildAndChannelMetadata");
 
