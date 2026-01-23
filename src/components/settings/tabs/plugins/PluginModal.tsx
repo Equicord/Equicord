@@ -31,7 +31,7 @@ import { classes, isObjectEmpty } from "@utils/misc";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { OptionType, Plugin } from "@utils/types";
 import { User } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
+import { findLazy } from "@webpack";
 import { Clickable, FluxDispatcher, Forms, React, Text, Tooltip, useEffect, UserStore, UserSummaryItem, UserUtils, useState } from "@webpack/common";
 import { Constructor } from "type-fest";
 
@@ -43,7 +43,8 @@ import { GithubButton, WebsiteButton } from "./LinkIconButton";
 
 const cl = classNameFactory("vc-plugin-modal-");
 
-const AvatarStyles = findByPropsLazy("moreUsers", "emptyUser", "avatarContainer", "clickableAvatar");
+const AvatarStyles: Record<string, string> = findLazy(m => Object.values(m).some(v => typeof v === "string" && v.includes("moreUsers__")));
+const getAvatarStyle = (name: string) => Object.values(AvatarStyles).find(v => v.startsWith(name + "__")) ?? "";
 const UserRecord: Constructor<Partial<User>> = proxyLazy(() => UserStore.getCurrentUser().constructor) as any;
 
 interface PluginModalProps extends ModalProps {
@@ -137,7 +138,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             <Tooltip text={plugin.authors.slice(sliceStart, sliceEnd).map(u => u.name).join(", ")}>
                 {({ onMouseEnter, onMouseLeave }) => (
                     <div
-                        className={AvatarStyles.moreUsers}
+                        className={getAvatarStyle("moreUsers")}
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
                     >
@@ -186,11 +187,11 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                                 renderMoreUsers={renderMoreUsers}
                                 renderUser={(user: User) => (
                                     <Clickable
-                                        className={AvatarStyles.clickableAvatar}
+                                        className={getAvatarStyle("clickableAvatar")}
                                         onClick={() => openContributorModal(user)}
                                     >
                                         <img
-                                            className={AvatarStyles.avatar}
+                                            className={getAvatarStyle("avatar")}
                                             src={user.getAvatarURL(void 0, 80, true)}
                                             alt={user.username}
                                             title={user.username}
