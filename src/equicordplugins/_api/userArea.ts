@@ -18,7 +18,7 @@ export default definePlugin({
         {
             find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
             replacement: {
-                match: /(?<=latched:\i}=\i.{0,50}className:(\i)\.\i,style:\i,)children:\[/,
+                match: /(?<=className:(\i)\.\i,style:\i,)children:\[/,
                 replace: "children:[...$self.renderButtons(arguments[0],$1),"
             }
         }
