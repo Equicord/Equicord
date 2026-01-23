@@ -938,9 +938,19 @@ export default definePlugin({
 
     flux: {
         async VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceState[]; }) {
-            const myGuildId = SelectedGuildStore.getGuildId();
-            const myChanId = SelectedChannelStore.getVoiceChannelId();
             const myId = UserStore.getCurrentUser().id;
+            const myGuildId = SelectedGuildStore.getGuildId();
+            const myVoiceState = VoiceStateStore.getVoiceStateForUser(myId) as VoiceState | undefined;
+            let myChanId = myVoiceState?.channelId;
+            if (!myChanId) {
+                const selectedChanId = SelectedChannelStore.getVoiceChannelId();
+                if (selectedChanId) {
+                    const states = VoiceStateStore.getVoiceStatesForChannel?.(selectedChanId) as Record<string, VoiceState> | undefined;
+                    if (states?.[myId]?.channelId === selectedChanId) {
+                        myChanId = selectedChanId;
+                    }
+                }
+            }
             const filterMode = settings.store.stateChangeFilterMode ?? "off";
             const filterList = parseStateChangeFilterList(settings.store.stateChangeFilterList);
             const allowStateChange = (targetId: string, isSelf: boolean) => {
@@ -972,6 +982,7 @@ export default definePlugin({
                 let { oldChannelId } = state;
 
                 const isMe = userId === myId;
+                if (!isMe && !myChanId) continue;
                 if (isMe && channelId !== myLastChannelId) {
                     oldChannelId = myLastChannelId;
                     myLastChannelId = channelId ?? undefined;
@@ -1048,19 +1059,17 @@ export default definePlugin({
         },
 
         AUDIO_TOGGLE_SELF_MUTE() {
-            const chanId = SelectedChannelStore.getVoiceChannelId()!;
-            const s = VoiceStateStore.getVoiceStateForChannel(
-                chanId
-            ) as VoiceState;
-            if (!s) return;
+            const myId = UserStore.getCurrentUser().id;
+            const s = VoiceStateStore.getVoiceStateForUser(myId) as VoiceState | undefined;
+            const chanId = s?.channelId;
+            if (!s || !chanId) return;
         },
 
         AUDIO_TOGGLE_SELF_DEAF() {
-            const chanId = SelectedChannelStore.getVoiceChannelId()!;
-            const s = VoiceStateStore.getVoiceStateForChannel(
-                chanId
-            ) as VoiceState;
-            if (!s) return;
+            const myId = UserStore.getCurrentUser().id;
+            const s = VoiceStateStore.getVoiceStateForUser(myId) as VoiceState | undefined;
+            const chanId = s?.channelId;
+            if (!s || !chanId) return;
         },
     },
 
