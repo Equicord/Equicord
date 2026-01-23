@@ -24,7 +24,7 @@ import { ThemeCard } from "./ThemeCard";
 
 const InputStyles = findByPropsLazy("inputWrapper", "inputError", "error");
 
-export const apiUrl = "https://discord-themes.com/api";
+export const apiUrl = "https://themes.equicord.org/api";
 export const logger = new Logger("ThemeLibrary", "#e5c890");
 
 export async function fetchAllThemes(): Promise<Theme[]> {
@@ -278,8 +278,8 @@ function SubmitThemes() {
             <p>
                 This tab was replaced in favour of the new website:
                 {" "}
-                <a href="https://discord-themes.com" target="_blank" rel="noreferrer">
-                    discord-themes.com
+                <a href="https://themes.equicord.org" target="_blank" rel="noreferrer">
+                    themes.equicord.org
                 </a>
             </p>
             <p style={{

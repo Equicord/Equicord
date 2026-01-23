@@ -41,8 +41,8 @@ type UserPermissions = Array<UserPermission>;
 
 const { RoleClasses, RoleBorderClasses } = proxyLazyWebpack(() => {
     const [RoleClasses, RoleBorderClasses] = findBulk(
-        filters.byProps("root", "role", "roleRemoveButton", "roleName"),
-        filters.byProps("roleCircle", "dotBorderColor")
+        filters.byProps("role", "roleCircle", "roleName"),
+        filters.byProps("roleCircle", "dot", "dotBorderColor")
     ) as Record<string, string>[];
 
     return { RoleClasses, RoleBorderClasses };
