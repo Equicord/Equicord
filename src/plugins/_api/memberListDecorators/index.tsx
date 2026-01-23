@@ -30,18 +30,16 @@ export default definePlugin({
 
     patches: [
         {
-            find: ".lostPermission)",
-            replacement: [
-                {
-                    match: /children:\[(?=.{0,300},lostPermissionTooltipText:)/,
-                    replace: "children:[Vencord.Api.MemberListDecorators.__getDecorators(arguments[0],'guild'),"
-                }
-            ]
+            find: "MemberListItem",
+            replacement: {
+                match: /(?<=GuildIcon:\i}=\i.{0,30}Fragment,\{children:\[)/,
+                replace: "Vencord.Api.MemberListDecorators.__getDecorators(arguments[0],'guild'),"
+            }
         },
         {
             find: "PrivateChannel.renderAvatar",
             replacement: {
-                match: /decorators:(\i\.isSystemDM\(\)\?.+?:null)/,
+                match: /decorators:(\i\.isSystemDM\(\)\?.{0,100}:null)/,
                 replace: "decorators:[Vencord.Api.MemberListDecorators.__getDecorators(arguments[0],'dm'),$1]"
             }
         }
