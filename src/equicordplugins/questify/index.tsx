@@ -558,13 +558,13 @@ function shouldPreloadQuestAssets(): boolean {
     return restyleQuestsPreload;
 }
 
-async function startVideoProgressTracking(quest: Quest, questTarget: number): Promise<void> {
+async function startVideoProgressTracking(quest: Quest, target: { raw: number; adjusted: number; }): Promise<void> {
     const questName = normalizeQuestName(quest.config.messages.questName);
     const questEnrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
     const initialProgress = Math.floor(((new Date()).getTime() - (questEnrolledAt ?? new Date()).getTime()) / 1000) || 1;
     activeQuestIntervals.set(quest.id, { progressTimeout: null as any, rerenderTimeout: null as any, progress: initialProgress, type: "watch" });
     // Max up to ~25 seconds into the future can be reported.
-    const questTargetWithLeeway = questTarget - videoQuestLeeway;
+    const { raw: reportTarget, adjusted: questTargetWithLeeway } = target;
     let currentProgress = initialProgress;
     let currentProgressScaled = initialProgress;
     const timeRemaining = Math.max(0, questTargetWithLeeway - currentProgressScaled);
@@ -593,7 +593,7 @@ async function startVideoProgressTracking(quest: Quest, questTarget: number): Pr
     async function handleSendComplete() {
         clearInterval(progressIntervalId);
         clearTimeout(renderIntervalId);
-        const success = await reportVideoQuestProgress(quest, questTarget, QuestifyLogger);
+        const success = await reportVideoQuestProgress(quest, reportTarget, QuestifyLogger);
         activeQuestIntervals.delete(quest.id);
 
         if (success) {
@@ -617,7 +617,7 @@ async function startVideoProgressTracking(quest: Quest, questTarget: number): Pr
             await handleSendComplete();
         }, timeRemaining * 1000);
     } else {
-        const simulatedProgressToCover = questTarget - currentProgressScaled;
+        const simulatedProgressToCover = reportTarget - currentProgressScaled;
         const speedFactor = simulatedProgressToCover / timeRemaining;
         const progressIncrementPerInterval = reportEverySec * speedFactor;
         const numberOfIntervals = Math.floor(timeRemaining / reportEverySec);
@@ -629,9 +629,9 @@ async function startVideoProgressTracking(quest: Quest, questTarget: number): Pr
             intervalsRun++;
             currentProgress += reportEverySec;
             currentProgressScaled += progressIncrementPerInterval;
-            const progressToReport = Math.min(Math.floor(currentProgressScaled), questTarget);
+            const progressToReport = Math.min(Math.floor(currentProgressScaled), reportTarget);
 
-            if (intervalsRun < numberOfIntervals || (currentProgress < questTarget - videoQuestLeeway - (reportEverySec / 2))) {
+            if (intervalsRun < numberOfIntervals || (currentProgress < reportTarget - videoQuestLeeway - (reportEverySec / 2))) {
                 await reportVideoQuestProgress(quest, progressToReport, QuestifyLogger);
             }
 
@@ -668,10 +668,11 @@ async function startVideoProgressTracking(quest: Quest, questTarget: number): Pr
     }
 }
 
-async function startPlayGameProgressTracking(quest: Quest, questTarget: number): Promise<void> {
+async function startPlayGameProgressTracking(quest: Quest, target: { raw: number; adjusted: number; }): Promise<void> {
     const questName = normalizeQuestName(quest.config.messages.questName);
     const questEnrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
     const task = getQuestTask(quest);
+    const questTarget = target.adjusted;
     const initialProgress = getQuestProgress(quest, task) || 0;
     const remaining = Math.max(0, questTarget - initialProgress);
     const heartbeatInterval = 20; // Heartbeats must be at most 2 minutes apart.
@@ -779,7 +780,7 @@ async function startPlayGameProgressTracking(quest: Quest, questTarget: number):
     }
 }
 
-async function startAchievementActivityProgressTracking(quest: Quest, questTarget: number): Promise<void> {
+async function startAchievementActivityProgressTracking(quest: Quest, target: { raw: number; adjusted: number; }): Promise<void> {
     const questName = normalizeQuestName(quest.config.messages.questName);
     const questEnrolledAt = quest.userStatus?.enrolledAt ? new Date(quest.userStatus.enrolledAt) : null;
     const achievementType = quest.config.taskConfigV2?.tasks.ACHIEVEMENT_IN_ACTIVITY;
@@ -836,7 +837,7 @@ async function startAchievementActivityProgressTracking(quest: Quest, questTarge
         return;
     }
 
-    const result = await QuestifyNative.complete(appID, authCode!, questTarget);
+    const result = await QuestifyNative.complete(appID, authCode!, target.adjusted);
     activeQuestIntervals.delete(quest.id);
 
     if (!result.success) {
@@ -880,9 +881,6 @@ function processQuestForAutoComplete(quest: Quest): boolean {
         return false;
     } else if (watchTypeIncompatible || playTypeIncompatible || achievementTypeIncompatible) {
         return false;
-    } else if (!questTarget) {
-        QuestifyLogger.warn(`[${getFormattedNow()}] Could not find target for Quest ${questName}.`);
-        return false;
     } else if (isWatch) {
         startVideoProgressTracking(quest, questTarget);
         return true;
@@ -915,7 +913,7 @@ function getQuestUnacceptedButtonText(quest: Quest): string | null {
     const { completeGameQuestsInBackground, completeVideoQuestsInBackground, completeAchievementQuestsInBackground } = settings.store;
 
     const task = getQuestTask(quest);
-    const target = getQuestTarget(task);
+    const { adjusted: target } = getQuestTarget(task);
     const targetFormatted = `${String(Math.floor(target / 60)).padStart(2, "0")}:${String(target % 60).padStart(2, "0")}`;
 
     const isWatch = task?.type === QuestTaskType.WATCH_VIDEO || task?.type === QuestTaskType.WATCH_VIDEO_ON_MOBILE;
@@ -945,7 +943,7 @@ function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false
 
     if (questEnrolledAt) {
         if (((isPlay && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (isWatch && completeVideoQuestsInBackground))) {
-            const durationWithLeeway = getQuestTarget(task);
+            const { adjusted: durationWithLeeway } = getQuestTarget(task);
             const currentProgress = getQuestProgress(quest, task) || 0;
             const progress = Math.min((intervalData?.progress ?? currentProgress), durationWithLeeway);
             const timeRemaining = Math.max(0, durationWithLeeway - progress);
@@ -979,7 +977,7 @@ function getQuestPanelPercentComplete({ quest, percentCompleteText }: { quest: Q
 
     if (!task) { return null; }
 
-    const questTarget = getQuestTarget(task);
+    const { adjusted: questTarget } = getQuestTarget(task);
     const questProgress = getQuestProgress(quest, task);
 
     if (!questTarget || questProgress === null) { return null; }
@@ -1035,7 +1033,7 @@ function getQuestPanelOverride(): Quest | null {
         }
 
         const task = getQuestTask(quest);
-        const duration = getQuestTarget(task);
+        const { adjusted: duration } = getQuestTarget(task);
 
         if (!duration) {
             return;
