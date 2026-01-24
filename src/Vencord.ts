@@ -29,6 +29,7 @@ export * as WebpackPatcher from "./webpack/patchWebpack";
 export { PlainSettings, Settings };
 
 import { coreStyleRootNode, initStyles } from "@api/Styles";
+import { openSettingsTabModal, UpdaterTab } from "@components/settings";
 import { debounce } from "@shared/debounce";
 import { IS_WINDOWS } from "@utils/constants";
 import { createAndAppendStyle } from "@utils/css";
@@ -145,11 +146,14 @@ async function runUpdateCheck() {
         if (Settings.autoUpdate) {
             await update();
             if (Settings.autoUpdateNotification) {
-                notify({
-                    title: "Equicord has been updated!",
-                    body: "Click here to restart",
-                    onClick: relaunch
-                });
+                if (notifiedForUpdatesThisSession) return;
+                notifiedForUpdatesThisSession = true;
+
+                showNotice(
+                    "Equicord has been updated!",
+                    "Restart",
+                    relaunch
+                );
             }
             return;
         }
@@ -158,12 +162,9 @@ async function runUpdateCheck() {
         notifiedForUpdatesThisSession = true;
 
         showNotice(
-            "A new version of Equicord is available. Update to enjoy the latest improvements!",
-            "Update Now",
-            async () => {
-                if (await update())
-                    relaunch();
-            }
+            "A new version of Equicord is available!",
+            "View Update",
+            () => openSettingsTabModal(UpdaterTab!)
         );
     } catch (err) {
         UpdateLogger.error("Failed to check for updates", err);
