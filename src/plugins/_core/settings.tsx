@@ -1,59 +1,48 @@
 /*
- * Vencord, a Discord client mod
- * Copyright (c) 2025 Vendicated and contributors
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
+ * Vencord, a modification for Discord's desktop app
+ * Copyright (c) 2022 Vendicated and Megumin
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 
 import { definePluginSettings } from "@api/Settings";
-import { BackupRestoreIcon, CloudIcon, LogIcon, MainSettingsIcon, PaintbrushIcon, PatchHelperIcon, PluginsIcon, UpdaterIcon } from "@components/Icons";
-import {
-    BackupAndRestoreTab,
-    ChangelogTab,
-    CloudTab,
-    PatchHelperTab,
-    PluginsTab,
-    ThemesTab,
-    UpdaterTab,
-    VencordTab,
-} from "@components/settings";
-import { gitHashShort } from "@shared/vencordUserAgent";
+import { BackupRestoreIcon, CloudIcon, MainSettingsIcon, PaintbrushIcon, PatchHelperIcon, PlaceholderIcon, PluginsIcon, UpdaterIcon, VesktopSettingsIcon } from "@components/Icons";
+import { BackupAndRestoreTab, CloudTab, PatchHelperTab, PluginsTab, ThemesTab, UpdaterTab, VencordTab } from "@components/settings/tabs";
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import { isTruthy } from "@utils/guards";
 import definePlugin, { IconProps, OptionType } from "@utils/types";
-import { findByPropsLazy } from "@webpack";
+import { waitFor } from "@webpack";
 import { React } from "@webpack/common";
 import type { ComponentType, PropsWithChildren, ReactNode } from "react";
 
-const enum LayoutType {
-    ROOT = 0,
-    SECTION = 1,
-    SIDEBAR_ITEM = 2,
-    PANEL = 3,
-    SPLIT = 4,
-    CATEGORY = 5,
-    ACCORDION = 6,
-    LIST = 7,
-    RELATED = 8,
-    FIELD_SET = 9,
-    TAB_ITEM = 10,
-    STATIC = 11,
-    BUTTON = 12,
-    TOGGLE = 13,
-    SLIDER = 14,
-    SELECT = 15,
-    RADIO = 16,
-    NAVIGATOR = 17,
-    CUSTOM = 18
-}
+import gitHash from "~git-hash";
 
-const LayoutTypes: typeof LayoutType = findByPropsLazy("SECTION", "SIDEBAR_ITEM", "PANEL");
+let LayoutTypes = {
+    SECTION: 1,
+    SIDEBAR_ITEM: 2,
+    PANEL: 3,
+    PANE: 4
+};
+waitFor(["SECTION", "SIDEBAR_ITEM", "PANEL"], v => LayoutTypes = v);
 
-const enum SectionType {
-    HEADER = "HEADER",
-    DIVIDER = "DIVIDER",
-    CUSTOM = "CUSTOM"
-}
+const FallbackSectionTypes = {
+    HEADER: "HEADER",
+    DIVIDER: "DIVIDER",
+    CUSTOM: "CUSTOM"
+};
+type SectionTypes = typeof FallbackSectionTypes;
 
 type SettingsLocation =
     | "top"
@@ -64,7 +53,7 @@ type SettingsLocation =
     | "bottom";
 
 interface SettingsLayoutNode {
-    type: LayoutType;
+    type: number;
     key?: string;
     legacySearchKey?: string;
     getLegacySearchKey?(): string;
@@ -77,13 +66,12 @@ interface SettingsLayoutNode {
 }
 
 interface EntryOptions {
-    key: string;
-    title: string;
-    panelTitle?: string;
-    Component: ComponentType<{}>;
+    key: string,
+    title: string,
+    panelTitle?: string,
+    Component: ComponentType<{}>,
     Icon: ComponentType<IconProps>;
 }
-
 interface SettingsLayoutBuilder {
     key?: string;
     buildLayout(): SettingsLayoutNode[];
@@ -92,7 +80,7 @@ interface SettingsLayoutBuilder {
 const settings = definePluginSettings({
     settingsLocation: {
         type: OptionType.SELECT,
-        description: "Where to put the Equicord settings section",
+        description: "Where to put the Vencord settings section",
         options: [
             { label: "At the very top", value: "top" },
             { label: "Above the Nitro section", value: "aboveNitro", default: true },
@@ -103,18 +91,6 @@ const settings = definePluginSettings({
         ] as { label: string; value: SettingsLocation; default?: boolean; }[]
     }
 });
-
-export const settingsSectionMap: [string, string][] = [
-    ["EquicordSettings", "equicord_main_panel"],
-    ["EquicordPlugins", "equicord_plugins_panel"],
-    ["EquicordThemes", "equicord_themes_panel"],
-    ["EquicordUpdater", "equicord_updater_panel"],
-    ["EquicordChangelog", "equicord_changelog_panel"],
-    ["EquicordCloud", "equicord_cloud_panel"],
-    ["EquicordBackupAndRestore", "equicord_backup_restore_panel"],
-    ["EquicordPatchHelper", "equicord_patch_helper_panel"],
-    ["EquibopSettings", "equicord_equibop_settings_panel"],
-];
 
 export default definePlugin({
     name: "Settings",
@@ -129,18 +105,14 @@ export default definePlugin({
             find: "#{intl::COPY_VERSION}",
             replacement: [
                 {
-                    match: /\.RELEASE_CHANNEL/,
-                    replace: "$&.replace(/^./, c => c.toUpperCase())"
-                },
-                {
-                    match: /"text-xxs\/normal".+?(?=null!=(\i)&&(.{0,20}\i\.Text.{0,200}?,children:).{0,15}?("span"),({className:\i\.\i,children:\["Build Override: ",\1\.id\]\})\)\}\))/,
+                    match: /"text-xxs\/normal".{0,300}?(?=null!=(\i)&&(.{0,20}\i\.Text.{0,200}?,children:).{0,15}?("span"),({className:\i\.\i,children:\["Build Override: ",\1\.id\]\})\)\}\))/,
                     replace: (m, _buildOverride, makeRow, component, props) => {
                         props = props.replace(/children:\[.+\]/, "");
                         return `${m},$self.makeInfoElements(${component},${props}).map(e=>${makeRow}e})),`;
                     }
                 },
                 {
-                    match: /"text-xs\/normal".+?\[\(0,\i\.jsxs?\)\((.{1,10}),(\{[^{}}]+\{.{0,20}className:\i.\i,.+?\})\)," "/,
+                    match: /"text-xs\/normal".{0,300}?\[\(0,\i\.jsxs?\)\((.{1,10}),(\{[^{}}]+\{.{0,20}className:\i.\i,.+?\})\)," "/,
                     replace: (m, component, props) => {
                         props = props.replace(/children:\[.+\]/, "");
                         return `${m},$self.makeInfoElements(${component},${props})`;
@@ -157,15 +129,13 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(?<=section:(.{0,50})\.DIVIDER\}\))([,;])(?=.{0,200}(\i)\.push.{0,100}label:(\i)\.header)/,
-                    replace: (_, sectionTypes, commaOrSemi, elements, element) =>
-                        `${commaOrSemi} $self.addSettings(${elements}, ${element}, ${sectionTypes}) ${commaOrSemi}`,
+                    replace: (_, sectionTypes, commaOrSemi, elements, element) => `${commaOrSemi} $self.addSettings(${elements}, ${element}, ${sectionTypes}) ${commaOrSemi}`
                 },
                 {
                     match: /({(?=.+?function (\i).{0,160}(\i)=\i\.useMemo.{0,140}return \i\.useMemo\(\(\)=>\i\(\3).+?\(\)=>)\2/,
-                    replace: (_, rest, settingsHook) =>
-                        `${rest}$self.wrapSettingsHook(${settingsHook})`,
-                },
-            ],
+                    replace: (_, rest, settingsHook) => `${rest}$self.wrapSettingsHook(${settingsHook})`
+                }
+            ]
         },
         {
             find: "#{intl::USER_SETTINGS_ACTIONS_MENU_LABEL}",
@@ -198,94 +168,129 @@ export default definePlugin({
             key: key + "_panel",
             type: LayoutTypes.PANEL,
             useTitle: () => panelTitle,
-            buildLayout: () => [],
+        };
+
+        const render = {
+            // FIXME
             StronglyDiscouragedCustomComponent: () => <Component />,
             render: () => <Component />,
         };
 
-        return {
+        // FIXME
+        if (LayoutTypes.PANE) {
+            panel.buildLayout = () => [
+                {
+                    key: key + "_pane",
+                    type: LayoutTypes.PANE,
+                    useTitle: () => panelTitle,
+                    buildLayout: () => [],
+                    ...render
+                }
+            ];
+        } else {
+            Object.assign(panel, render);
+            panel.buildLayout = () => [];
+        }
+
+        return ({
             key,
             type: LayoutTypes.SIDEBAR_ITEM,
+            // FIXME
             legacySearchKey: title.toUpperCase(),
             getLegacySearchKey: () => title.toUpperCase(),
             useTitle: () => title,
             icon: () => <Icon width={20} height={20} />,
             buildLayout: () => [panel]
-        };
+        });
     },
 
     getSettingsSectionMappings() {
-        return settingsSectionMap;
+        return [
+            ["VencordSettings", "vencord_main_panel"],
+            ["VencordPlugins", "vencord_plugins_panel"],
+            ["VencordThemes", "vencord_themes_panel"],
+            ["VencordUpdater", "vencord_updater_panel"],
+            ["VencordCloud", "vencord_cloud_panel"],
+            ["VencordBackupAndRestore", "vencord_backup_restore_panel"],
+            ["VencordPatchHelper", "vencord_patch_helper_panel"]
+        ];
     },
 
     buildLayout(originalLayoutBuilder: SettingsLayoutBuilder) {
         const layout = originalLayoutBuilder.buildLayout();
         if (originalLayoutBuilder.key !== "$Root") return layout;
         if (!Array.isArray(layout)) return layout;
-        if (layout.some(s => s?.key === "equicord_section")) return layout;
+
+        if (layout.some(s => s?.key === "vencord_section")) return layout;
 
         const { buildEntry } = this;
 
-        const equicordEntries: SettingsLayoutNode[] = [
+        const vencordEntries: SettingsLayoutNode[] = [
             buildEntry({
-                key: "equicord_main",
-                title: "Equicord",
-                panelTitle: "Equicord Settings",
+                key: "vencord_main",
+                title: "Vencord",
+                panelTitle: "Vencord Settings",
                 Component: VencordTab,
                 Icon: MainSettingsIcon
             }),
             buildEntry({
-                key: "equicord_plugins",
+                key: "vencord_plugins",
                 title: "Plugins",
                 Component: PluginsTab,
                 Icon: PluginsIcon
             }),
             buildEntry({
-                key: "equicord_themes",
+                key: "vencord_themes",
                 title: "Themes",
                 Component: ThemesTab,
                 Icon: PaintbrushIcon
             }),
             !IS_UPDATER_DISABLED && UpdaterTab && buildEntry({
-                key: "equicord_updater",
+                key: "vencord_updater",
                 title: "Updater",
-                panelTitle: "Equicord Updater",
+                panelTitle: "Vencord Updater",
                 Component: UpdaterTab,
                 Icon: UpdaterIcon
             }),
             buildEntry({
-                key: "equicord_changelog",
-                title: "Changelog",
-                Component: ChangelogTab,
-                Icon: LogIcon,
-            }),
-            buildEntry({
-                key: "equicord_cloud",
+                key: "vencord_cloud",
                 title: "Cloud",
-                panelTitle: "Equicord Cloud",
+                panelTitle: "Vencord Cloud",
                 Component: CloudTab,
                 Icon: CloudIcon
             }),
             buildEntry({
-                key: "equicord_backup_restore",
+                key: "vencord_backup_restore",
                 title: "Backup & Restore",
                 Component: BackupAndRestoreTab,
                 Icon: BackupRestoreIcon
             }),
             IS_DEV && PatchHelperTab && buildEntry({
-                key: "equicord_patch_helper",
+                key: "vencord_patch_helper",
                 title: "Patch Helper",
                 Component: PatchHelperTab,
                 Icon: PatchHelperIcon
             }),
-            ...this.customEntries.map(buildEntry)
+            ...this.customEntries.map(buildEntry),
+            // TODO: Remove deprecated customSections in a future update
+            ...this.customSections.map((func, i) => {
+                const { section, element, label } = func(FallbackSectionTypes);
+                if (Object.values(FallbackSectionTypes).includes(section)) return null;
+
+                return buildEntry({
+                    key: `vencord_deprecated_custom_${section}`,
+                    title: label,
+                    Component: element,
+                    Icon: section === "Vesktop" ? VesktopSettingsIcon : PlaceholderIcon
+                });
+            })
         ].filter(isTruthy);
 
-        const equicordSection: SettingsLayoutNode = {
-            key: "equicord_section",
+        const vencordSection: SettingsLayoutNode = {
+            key: "vencord_section",
             type: LayoutTypes.SECTION,
-            useTitle: () => "Equicord Settings",
-            buildLayout: () => equicordEntries
+            useTitle: () => "Vencord Settings",
+            buildLayout: () => vencordEntries
         };
 
         const { settingsLocation } = settings.store;
@@ -308,85 +313,74 @@ export default definePlugin({
             idx += 1;
         }
 
-        layout.splice(idx, 0, equicordSection);
+        layout.splice(idx, 0, vencordSection);
 
         return layout;
     },
 
-    customSections: [] as ((SectionTypes: Record<string, string>) => { section: string; element: ComponentType; label: string; id?: string; })[],
+    /** @deprecated Use customEntries */
+    customSections: [] as ((SectionTypes: SectionTypes) => any)[],
     customEntries: [] as EntryOptions[],
 
-    makeSettingsCategories(SectionTypes: Record<string, string>) {
+    makeSettingsCategories(SectionTypes: SectionTypes) {
         return [
             {
                 section: SectionTypes.HEADER,
-                label: "Equicord",
-                className: "vc-settings-header",
+                label: "Vencord",
+                className: "vc-settings-header"
             },
             {
-                section: "EquicordSettings",
-                label: "Equicord",
+                section: "VencordSettings",
+                label: "Vencord",
                 element: VencordTab,
-                className: "vc-settings",
+                className: "vc-settings"
             },
             {
-                section: "EquicordPlugins",
+                section: "VencordPlugins",
                 label: "Plugins",
-                searchableTitles: ["Plugins"],
                 element: PluginsTab,
-                className: "vc-plugins",
+                className: "vc-plugins"
             },
             {
-                section: "EquicordThemes",
+                section: "VencordThemes",
                 label: "Themes",
-                searchableTitles: ["Themes"],
                 element: ThemesTab,
-                className: "vc-themes",
+                className: "vc-themes"
             },
             !IS_UPDATER_DISABLED && {
-                section: "EquicordUpdater",
+                section: "VencordUpdater",
                 label: "Updater",
-                searchableTitles: ["Updater"],
                 element: UpdaterTab,
-                className: "vc-updater",
+                className: "vc-updater"
             },
             {
-                section: "EquicordChangelog",
-                label: "Changelog",
-                searchableTitles: ["Changelog"],
-                element: ChangelogTab,
-                className: "vc-changelog",
-            },
-            {
-                section: "EquicordCloud",
+                section: "VencordCloud",
                 label: "Cloud",
-                searchableTitles: ["Cloud"],
                 element: CloudTab,
-                className: "vc-cloud",
+                className: "vc-cloud"
             },
             {
-                section: "EquicordBackupAndRestore",
+                section: "VencordBackupAndRestore",
                 label: "Backup & Restore",
-                searchableTitles: ["Backup & Restore"],
                 element: BackupAndRestoreTab,
-                className: "vc-backup-restore",
+                className: "vc-backup-restore"
             },
             IS_DEV && {
-                section: "EquicordPatchHelper",
+                section: "VencordPatchHelper",
                 label: "Patch Helper",
-                searchableTitles: ["Patch Helper"],
                 element: PatchHelperTab,
-                className: "vc-patch-helper",
+                className: "vc-patch-helper"
             },
             ...this.customSections.map(func => func(SectionTypes)),
             {
-                section: SectionTypes.DIVIDER,
-            },
+                section: SectionTypes.DIVIDER
+            }
         ].filter(Boolean);
     },
 
     isRightSpot({ header, settings: s }: { header?: string; settings?: string[]; }) {
         const firstChild = s?.[0];
+        // lowest two elements... sanity backup
         if (firstChild === "LOGOUT" || firstChild === "SOCIAL_LINKS") return true;
 
         const { settingsLocation } = settings.store;
@@ -401,7 +395,7 @@ export default definePlugin({
                 top: getIntlMessage("USER_SETTINGS"),
                 aboveNitro: getIntlMessage("BILLING_SETTINGS"),
                 belowNitro: getIntlMessage("APP_SETTINGS"),
-                aboveActivity: getIntlMessage("ACTIVITY_SETTINGS"),
+                aboveActivity: getIntlMessage("ACTIVITY_SETTINGS")
             };
 
             if (!names[settingsLocation] || names[settingsLocation].endsWith("_SETTINGS"))
@@ -415,62 +409,51 @@ export default definePlugin({
 
     patchedSettings: new WeakSet(),
 
-    addSettings(
-        elements: any[],
-        element: { header?: string; settings: string[]; },
-        SectionTypes: Record<string, string>,
-    ) {
+    addSettings(elements: any[], element: { header?: string; settings: string[]; }, sectionTypes: SectionTypes) {
         if (this.patchedSettings.has(elements) || !this.isRightSpot(element)) return;
 
         this.patchedSettings.add(elements);
-        elements.push(...this.makeSettingsCategories(SectionTypes));
+
+        elements.push(...this.makeSettingsCategories(sectionTypes));
     },
 
     wrapSettingsHook(originalHook: (...args: any[]) => Record<string, unknown>[]) {
         return (...args: any[]) => {
             const elements = originalHook(...args);
             if (!this.patchedSettings.has(elements))
-                elements.unshift(...this.makeSettingsCategories({ HEADER: SectionType.HEADER, DIVIDER: SectionType.DIVIDER, CUSTOM: SectionType.CUSTOM }) as Record<string, unknown>[]);
+                elements.unshift(...this.makeSettingsCategories(FallbackSectionTypes));
 
             return elements;
         };
     },
 
     get electronVersion() {
-        return VencordNative.native.getVersions().electron ?? window.legcord?.electron ?? null;
+        return VencordNative.native.getVersions().electron || window.legcord?.electron || null;
     },
 
     get chromiumVersion() {
         try {
-            return (
-                VencordNative.native.getVersions().chrome ??
-                // @ts-expect-error userAgentData types
-                navigator.userAgentData?.brands?.find(
-                    (b: { brand: string; }) => b.brand === "Chromium" || b.brand === "Google Chrome",
-                )?.version ??
-                null
-            );
-        } catch {
+            return VencordNative.native.getVersions().chrome
+                // @ts-expect-error Typescript will add userAgentData IMMEDIATELY
+                || navigator.userAgentData?.brands?.find(b => b.brand === "Chromium" || b.brand === "Google Chrome")?.version
+                || null;
+        } catch { // inb4 some stupid browser throws unsupported error for navigator.userAgentData, it's only in chromium
             return null;
         }
     },
 
-    getVersionInfo(support = true) {
-        let version = "";
-
-        if (IS_DEV) version = "Dev Build";
-        if (IS_WEB) version = "Web";
-        if (IS_VESKTOP) version = `Vesktop v${VesktopNative.app.getVersion()}`;
-        if (IS_EQUIBOP) version = `Equibop v${VesktopNative.app.getVersion()}`;
-        if (IS_STANDALONE) version = "Standalone";
-
-        return support && version ? ` (${version})` : version;
+    get additionalInfo() {
+        if (IS_DEV) return " (Dev)";
+        if (IS_WEB) return " (Web)";
+        if (IS_VESKTOP) return ` (Vesktop v${VesktopNative.app.getVersion()})`;
+        if (IS_STANDALONE) return " (Standalone)";
+        return "";
     },
 
     getInfoRows() {
-        const { electronVersion, chromiumVersion, getVersionInfo } = this;
+        const { electronVersion, chromiumVersion, additionalInfo } = this;
 
-        const rows = [`Equicord ${gitHashShort}${getVersionInfo()}`];
+        const rows = [`Vencord ${gitHash}${additionalInfo}`];
 
         if (electronVersion) rows.push(`Electron ${electronVersion}`);
         if (chromiumVersion) rows.push(`Chromium ${chromiumVersion}`);
@@ -482,14 +465,9 @@ export default definePlugin({
         return "\n" + this.getInfoRows().join("\n");
     },
 
-    makeInfoElements(
-        Component: ComponentType<React.PropsWithChildren>,
-        props: PropsWithChildren,
-    ) {
-        return this.getInfoRows().map((text, i) => (
-            <Component key={i} {...props}>
-                {text}
-            </Component>
-        ));
-    },
+    makeInfoElements(Component: ComponentType<PropsWithChildren>, props: PropsWithChildren) {
+        return this.getInfoRows().map((text, i) =>
+            <Component key={i} {...props}>{text}</Component>
+        );
+    }
 });
