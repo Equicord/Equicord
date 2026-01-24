@@ -244,7 +244,7 @@ const handleThemeNamesChange = () => settings.store.autoRefresh && debouncedRefr
 export default definePlugin({
     name: "QuickThemeSwitcher",
     description: "Quickly switch between themes using keyboard shortcuts.",
-    authors: [EquicordDevs.Prism],
+    authors: [EquicordDevs.prism],
     settings,
     startAt: StartAt.DOMContentLoaded,
     settingsAboutComponent: () => (

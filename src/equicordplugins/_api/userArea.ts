@@ -15,7 +15,7 @@ const { iconForeground } = findCssClassesLazy("iconForeground", "autocompleteRow
 export default definePlugin({
     name: "UserAreaAPI",
     description: "API to add buttons to the user area panel.",
-    authors: [EquicordDevs.Prism],
+    authors: [EquicordDevs.prism],
 
     patches: [
         {

@@ -50,7 +50,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "BetterUserArea",
     description: "Customize and make the user area more clean.",
-    authors: [EquicordDevs.Prism],
+    authors: [EquicordDevs.prism],
     settings,
     patches: [
         {

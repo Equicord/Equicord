@@ -121,7 +121,7 @@ function getMatchingPattern(url: string): PatternEntry | null {
 export default definePlugin({
     name: "UrlHighlighter",
     description: "Highlights URLs in messages that match your patterns.",
-    authors: [EquicordDevs.Prism],
+    authors: [EquicordDevs.prism],
     settings,
 
     patches: [

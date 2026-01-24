@@ -644,7 +644,11 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     u32: {
         name: "u32",
         id: 1063237286818488351n,
-    }
+    },
+    prism: {
+        name: "prism",
+        id: 390884143749136386n,
+    },
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
@@ -1205,9 +1209,9 @@ export const EquicordDevs = Object.freeze({
         name: "Vei",
         id: 239414094799699968n
     },
-    Prism: {
-        name: "Prism",
-        id: 390884143749136386n
+    prism: {
+        name: "prism",
+        id: 390884143749136386n,
     },
     square: {
         name: "square",

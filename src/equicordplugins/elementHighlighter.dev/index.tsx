@@ -449,7 +449,7 @@ function onToggle(e: KeyboardEvent) {
 export default definePlugin({
     name: "ElementHighlighter",
     description: "Highlight and inspect elements easily.",
-    authors: [EquicordDevs.Prism],
+    authors: [EquicordDevs.prism],
     settings,
 
     start() {
