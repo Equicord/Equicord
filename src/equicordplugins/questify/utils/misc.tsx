@@ -76,7 +76,9 @@ export function getQuestProgress(quest: Quest, task: QuestTask) {
 
 export function getQuestTarget(task: QuestTask) {
     const isWatch = task.type === QuestTaskType.WATCH_VIDEO || task.type === QuestTaskType.WATCH_VIDEO_ON_MOBILE;
-    return task.target - (isWatch ? videoQuestLeeway : 0);
+    const raw = task.target;
+    const adjusted = raw - (isWatch ? videoQuestLeeway : 0);
+    return { raw, adjusted };
 }
 
 export function getQuestStatus(quest: Quest, checkIgnored: boolean = true): QuestStatus {
