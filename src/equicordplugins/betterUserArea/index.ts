@@ -93,10 +93,20 @@ export default definePlugin({
         },
         {
             find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
-            replacement: {
-                match: /tooltipText:\i,/g,
-                replace: "tooltipText:void 0,"
-            },
+            replacement: [
+                {
+                    match: /:\{tooltipText:\i\};/,
+                    replace: ":{tooltipText:void 0};"
+                },
+                {
+                    match: /(?<=role:"switch",)tooltipText:\i\}/,
+                    replace: "tooltipText:void 0}"
+                },
+                {
+                    match: /(?<=useRef\(null\);)(\i)=.{0,100}#{intl::USER_SETTINGS}\);/,
+                    replace: "$1=void 0;"
+                }
+            ],
             predicate: () => settings.store.removeButtonTooltips
         },
         {
