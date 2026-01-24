@@ -551,7 +551,7 @@ export default definePlugin({
                 }
             };
 
-            if (canTripleClick) {
+            if (canTripleClick && canDoubleClick) {
                 if (doubleClickTimeout) {
                     clearTimeout(doubleClickTimeout);
                 }
@@ -569,13 +569,14 @@ export default definePlugin({
         }
 
         if (isSingleClick) {
+            const shouldExecuteSingle = isModifierPressed(singleClickModifier) && singleClickAction !== "NONE";
             const executeSingleClick = () => {
-                if (isModifierPressed(singleClickModifier) && singleClickAction !== "NONE") {
+                if (shouldExecuteSingle) {
                     executeAction(singleClickAction, msg, channel, event);
                 }
             };
 
-            if (canDoubleClick) {
+            if (canDoubleClick && shouldExecuteSingle) {
                 singleClickTimeout = setTimeout(() => {
                     executeSingleClick();
                     singleClickTimeout = null;
