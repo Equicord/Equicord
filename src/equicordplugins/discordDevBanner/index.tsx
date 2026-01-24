@@ -18,7 +18,7 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: ".devBanner,",
+            find: '"isHideDevBanner"',
             replacement: [
                 {
                     match: '"staging"===window.GLOBAL_ENV.RELEASE_CHANNEL',

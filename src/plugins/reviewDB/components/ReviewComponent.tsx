@@ -33,7 +33,7 @@ import ReviewBadge from "./ReviewBadge";
 
 export default LazyComponent(() => {
     // this is terrible, blame mantika
-    const p = filters.byProps;
+    const c = filters.byClassNames;
     const [
         { cozyMessage, buttons, message, buttonsInner, groupStart },
         { container, isHeader },
@@ -41,11 +41,11 @@ export default LazyComponent(() => {
         buttonClasses,
         botTag
     ] = findBulk(
-        p("cozyMessage"),
-        p("container", "isHeader"),
-        p("avatar", "zalgo"),
-        p("button", "wrapper", "selected"),
-        p("botTagRegular")
+        c("cozyMessage"),
+        c("container", "isHeader"),
+        c("avatar", "zalgo"),
+        c("button", "wrapper", "selected"),
+        c("botTagRegular")
     );
 
     const dateFormat = new Intl.DateTimeFormat();

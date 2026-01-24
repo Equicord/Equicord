@@ -270,7 +270,7 @@ export default definePlugin({
         {
             find: "childrenMessageContent:null",
             replacement: {
-                match: /(cozyMessage.{1,50},)childrenHeader:/,
+                match: /(\i\]:!\i.{1,50},)childrenHeader:/,
                 replace: "$1childrenAccessories:arguments[0].childrenAccessories || null,childrenHeader:"
             }
         },

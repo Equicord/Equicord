@@ -88,19 +88,19 @@ export default definePlugin({
         },
         // Popout camera when not focused on voice channel
         {
-            find: ".mirror]:",
+            find: "this.handleReady})",
             all: true,
             predicate: () => settings.store.noMirroredCamera,
             replacement: {
-                match: /\[(\i).mirror]:\i/,
-                replace: "[$1.mirror]:!1"
+                match: /(\[\i\.\i\]:)\i/,
+                replace: "$1!1"
             },
         },
         // Overriding css on Preview Camera/Change Video Background popup
         {
-            find: ".cameraPreview,",
+            find: ".PREVIEW_CAMERA_MODAL,",
             replacement: {
-                match: /className:\i.camera,/,
+                match: /className:\i.\i,(?=children:\()/,
                 replace: "$&style:{transform: \"scalex(1)\"},"
             },
             predicate: () => settings.store.noMirroredCamera
@@ -146,7 +146,7 @@ export default definePlugin({
             find: "Message Username",
             predicate: () => settings.store.forceRoleIcon,
             replacement: {
-                match: /(?<=\.badgesContainer.{0,150}\?2:)0(?=\})/,
+                match: /(?<=\}\):null\].{0,150}\?2:)0(?=\})/,
                 replace: "1"
             }
         },

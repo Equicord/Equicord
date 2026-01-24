@@ -25,12 +25,9 @@ import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel, Role } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
 import { ChannelStore, PermissionsBits, PermissionStore, Tooltip } from "@webpack/common";
 
 import HiddenChannelLockScreen from "./components/HiddenChannelLockScreen";
-
-const ChannelListClasses = findByPropsLazy("modeMuted", "modeSelected", "unread", "icon");
 
 export const cl = classNameFactory("vc-shc-");
 
@@ -121,7 +118,7 @@ export default definePlugin({
             replacement: [
                 {
                     // Do not show confirmation to join a voice channel when already connected to another if clicking on a hidden voice channel
-                    match: /(?<=getIgnoredUsersForVoiceChannel\((\i)\.id\);return\()/,
+                    match: /(?<=getIgnoredUsersForVoiceChannel\((\i)\.id\)[^;]+?;return\()/,
                     replace: (_, channel) => `!$self.isHiddenChannel(${channel})&&`
                 },
                 {
@@ -199,12 +196,12 @@ export default definePlugin({
             replacement: [
                 // Make the channel appear as muted if it's hidden
                 {
-                    match: /\.subtitle,.+?;(?=return\(0,\i\.jsxs?\))(?<={channel:(\i),name:\i,muted:(\i).+?;)/,
+                    match: /Children\.count.+?;(?=return\(0,\i\.jsxs?\)\(\i\.\i,{focusTarget:)(?<={channel:(\i),name:\i,muted:(\i).+?;)/,
                     replace: (m, channel, muted) => `${m}${muted}=$self.isHiddenChannel(${channel})?true:${muted};`
                 },
                 // Make voice channels also appear as muted if they are muted
                 {
-                    match: /(?<=\.wrapper:\i\.notInteractive,)(.+?)if\((\i)(?:\)return |\?)(\i\.MUTED)/,
+                    match: /(?<=\?\i\.\i:\i\.\i,)(.{0,150}?)if\((\i)(?:\)return |\?)(\i\.MUTED)/,
                     replace: (_, otherClasses, isMuted, mutedClassExpression) => `${isMuted}?${mutedClassExpression}:"",${otherClasses}if(${isMuted})return ""`
                 }
             ]
@@ -219,7 +216,7 @@ export default definePlugin({
                 },
                 {
                     // Hide unreads
-                    match: /\.subtitle,.+?;(?=return\(0,\i\.jsxs?\))(?<={channel:(\i),name:\i,.+?unread:(\i).+?)/,
+                    match: /Children\.count.+?;(?=return\(0,\i\.jsxs?\)\(\i\.\i,{focusTarget:)(?<={channel:(\i),name:\i,.+?unread:(\i).+?)/,
                     replace: (m, channel, unread) => `${m}${unread}=$self.isHiddenChannel(${channel})?false:${unread};`
                 }
             ]
@@ -327,7 +324,7 @@ export default definePlugin({
                 },
                 {
                     // Patch the header to only return allowed users and roles if it's a hidden channel or locked channel (Like when it's used on the HiddenChannelLockScreen)
-                    match: /return\(0,\i\.jsxs?\)\(\i\.\i,{channelId:(\i)\.id(?=.+?(\(0,\i\.jsxs?\)\("div",{className:\i\.members.+?\]}\)),)/,
+                    match: /return\(0,\i\.jsxs?\)\(\i\.\i,{channelId:(\i)\.id(?=.+?(\(0,\i\.jsxs?\)\("div",{className:\i\.\i,children:\[.{0,100}\i\.length>0.+?\]}\)),)/,
                     replace: (m, channel, allowedUsersAndRolesComponent) => `if($self.isHiddenChannel(${channel},true)){return${allowedUsersAndRolesComponent};}${m}`
                 },
                 {
@@ -394,7 +391,7 @@ export default definePlugin({
                 },
                 {
                     // Disable bad CSS class which mess up hidden voice channels styling
-                    match: /callContainer,(?<=\i\.callContainer,)/,
+                    match: /(?=\i\|\|\i!==\i\.\i\.FULL_SCREEN.{0,100}?this\._callContainerRef)/,
                     replace: '$&!this.props.inCall&&$self.isHiddenChannel(this.props.channel,true)?"":'
                 }
             ]
@@ -434,7 +431,7 @@ export default definePlugin({
                 },
                 {
                     // Remove the open chat button for the HiddenChannelLockScreen
-                    match: /(?<=&&)\(0,\i\.jsxs?\).{0,180}\.buttonIcon/,
+                    match: /(?<="participants-list-button"\),!\i&&)\(0,\i\.jsxs?\).{0,280}?iconClassName:/,
                     replace: "!$self.isHiddenChannel(arguments[0]?.channel,true)&&$&"
                 }
             ]
@@ -464,10 +461,10 @@ export default definePlugin({
             },
         },
         {
-            find: 'className:"channelMention",children',
+            find: 'className:"channelMention",children:',
             replacement: {
                 // Show inside voice channel instead of trying to join them when clicking on a channel mention
-                match: /(?<=getChannel\(\i\);if\(null!=(\i))(?=.{0,100}?selectVoiceChannel)/,
+                match: /(?<=getChannel\(\i\);null!=(\i))(?=.{0,100}?selectVoiceChannel)/,
                 replace: (_, channel) => `&&!$self.isHiddenChannel(${channel})`
             }
         },
@@ -487,7 +484,7 @@ export default definePlugin({
             ]
         },
         {
-            find: ".invitesDisabledTooltip",
+            find: "GuildTooltip - ",
             replacement: {
                 // Make GuildChannelStore.getChannels return hidden channels
                 match: /(?<=getChannels\(\i)(?=\))/,
@@ -566,7 +563,7 @@ export default definePlugin({
 
     LockIcon: ErrorBoundary.wrap(() => (
         <svg
-            className={ChannelListClasses.icon}
+            className={cl("channel-list-icon")}
             height="18"
             width="20"
             viewBox="0 0 24 24"
@@ -583,7 +580,7 @@ export default definePlugin({
                 <svg
                     onMouseLeave={onMouseLeave}
                     onMouseEnter={onMouseEnter}
-                    className={classes(ChannelListClasses.icon, cl("hidden-channel-icon"))}
+                    className={classes(cl("channel-list-icon"), cl("hidden-channel-icon"))}
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
@@ -602,7 +599,7 @@ export default definePlugin({
                 <svg
                     onMouseLeave={onMouseLeave}
                     onMouseEnter={onMouseEnter}
-                    className={ChannelListClasses.icon + " " + "shc-hidden-channel-icon"}
+                    className={cl("channel-list-icon") + " " + "shc-hidden-channel-icon"}
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"

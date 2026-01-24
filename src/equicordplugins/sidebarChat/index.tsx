@@ -17,11 +17,10 @@ import { Channel, Guild, User } from "@vencord/discord-types";
 import {
     DefaultExtractAndLoadChunksRegex,
     extractAndLoadChunksLazy,
-    filters,
     findByPropsLazy,
     findComponentByCodeLazy,
-    findStoreLazy,
-    mapMangledModuleLazy
+    findCssClassesLazy,
+    findStoreLazy
 } from "@webpack";
 import {
     ChannelRouter,
@@ -49,13 +48,8 @@ import { settings, SidebarStore } from "./store";
 
 const cl = classNameFactory("vc-sidebar-chat-");
 
-const { HeaderBar } = mapMangledModuleLazy(".themedMobile]:", {
-    HeaderBar: filters.byCode(".themedMobile]:"),
-});
-
-const { ForumView } = mapMangledModuleLazy("forum-grid-header-section-", {
-    ForumView: filters.byCode("sidebarState")
-});
+const HeaderBar = findComponentByCodeLazy("toolbarClassName:", "}),onDoubleClick:");
+const ForumView = findComponentByCodeLazy("sidebarState");
 
 const ArrowsLeftRightIcon = ({ color, ...rest }) => {
     return (
@@ -75,14 +69,14 @@ const WindowLaunchIcon = findComponentByCodeLazy("1-1h6a1 1 0 1 0 0-2H5Z");
 const XSmallIcon = findComponentByCodeLazy("1.4L12 13.42l5.3 5.3Z");
 const Chat = findComponentByCodeLazy("filterAfterTimestamp:", "chatInputType");
 const Resize = findComponentByCodeLazy("sidebarType:", "RESIZE_HANDLE_WIDTH)");
-const ChannelHeader = findComponentByCodeLazy(".forumPostTitle]:", '"channel-".concat');
+const ChannelHeader = findComponentByCodeLazy(".GUILD_ANNOUNCEMENT", '"channel-".concat');
 const PopoutWindow = findComponentByCodeLazy("Missing guestWindow reference");
 const FullChannelView = findComponentByCodeLazy("showFollowButton:(null");
 const WanderingCubesLoading = findComponentByCodeLazy('="wanderingCubes"');
 
 const ChatInputTypes = findByPropsLazy("FORM", "NORMAL");
 const Sidebars = findByPropsLazy("ThreadSidebar", "MessageRequestSidebar");
-const ChatClasses = findByPropsLazy("threadSidebarOpen");
+const ChatClasses = findCssClassesLazy("threadSidebarOpen", "loader");
 
 const ChannelSectionStore = findStoreLazy("ChannelSectionStore");
 

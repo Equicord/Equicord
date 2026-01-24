@@ -45,11 +45,22 @@ export function extractModule(id: PropertyKey, patched = companionSettings.store
     }
     return extractUnpatchedModule(id);
 }
+
+// FIXME: maybe update companion to support new style later
+function getNormalizedModuleText(id_: PropertyKey): string {
+    const id = String(id_);
+    if (Number.isNaN(parseInt(String(id), 10))) {
+        throw new Error("can't normalize module with non-numeric id");
+    }
+    const moduleText = wreq.m[id].toString();
+    return "function" + moduleText.substring(moduleText.indexOf("("));
+}
+
 function extractUnpatchedModule(id: PropertyKey): string {
     if (!wreq.m[id]) {
         throw new Error(`Module not found for id: ${String(id)}`);
     }
-    return `// Webpack Module ${String(id)} - Patched by\n0,${wreq.m[id]}\n//# sourceURL=WebpackModule${String(id)}`;
+    return `// Webpack Module ${String(id)} - Patched by\n0,${getNormalizedModuleText(id)}\n//# sourceURL=WebpackModule${String(id)}`;
 }
 
 /**

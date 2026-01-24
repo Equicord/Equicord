@@ -10,11 +10,10 @@ import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { proxyLazy } from "@utils/lazy";
-import { filters, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findLazy, mapMangledModuleLazy, waitFor, wreq } from "@webpack";
+import { filters, findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findLazy, mapMangledModuleLazy, waitFor, wreq } from "@webpack";
 import {
     GuildStore,
     ListScrollerAuto,
-    ListScrollerNone,
     ListScrollerThin,
     OAuth2AuthorizeModal,
     ScrollerAuto,
@@ -102,7 +101,6 @@ export {
     GuildStore,
     Heading,
     ListScrollerAuto,
-    ListScrollerNone,
     ListScrollerThin,
     OAuth2AuthorizeModal,
     Paragraph,
@@ -118,7 +116,7 @@ export {
     useState,
 };
 
-export const Anchor = findComponentByCodeLazy("anchorUnderlineOnHover", "useDefaultUnderlineStyles") as React.ComponentType<AnchorProps>;
+export const Anchor = findComponentByCodeLazy("getDefaultLinkInterceptor", "useDefaultUnderlineStyles") as React.ComponentType<AnchorProps>;
 export const Clickable = findByCodeLazy("ignoreKeyPress", "renderNonInteractive") as React.ComponentType<ClickableProps>;
 
 export const ManaButton = findComponentByCodeLazy('"data-mana-component":"button"') as React.ComponentType<ManaButtonProps>;
@@ -145,12 +143,12 @@ export const ProgressBar = findComponentByCodeLazy("progressContainer", "labelle
 export const Spinner = findComponentByCodeLazy("spinningCircleSimple", "pulsingEllipsis", "wanderingCubes") as unknown as SpinnerComponent;
 export const SearchBar = findComponentByCodeLazy("#{intl::SEARCH}", "clearable", "autoComplete") as React.ComponentType<SearchBarProps>;
 export const Paginator = findComponentByCodeLazy("#{intl::BACK}", "#{intl::NEXT}", "renderPageWrapper") as React.ComponentType<PaginatorProps>;
-export const Notice = findComponentByCodeLazy("messageType", "iconDiv", "actionContainer") as React.ComponentType<NoticeProps>;
+export const Notice = findComponentByCodeLazy("messageType", '="text-default"', '="text-sm/medium"') as React.ComponentType<NoticeProps>;
 export const Chip = findComponentByCodeLazy('variant:"eyebrow"', "chip,") as React.ComponentType<ChipProps>;
 export const Skeleton = findComponentByCodeLazy("withHeader:t=!0,size:") as React.ComponentType<SkeletonProps>;
-export const Accordion = findComponentByCodeLazy("accordionContainer", "onExpandedChange", "defaultExpanded") as React.ComponentType<AccordionProps>;
+export const Accordion = findComponentByCodeLazy("scrollHeight)}", "onExpandedChange", "defaultExpanded") as React.ComponentType<AccordionProps>;
 export const Timestamp = findComponentByCodeLazy("#{intl::MESSAGE_EDITED_TIMESTAMP_A11Y_LABEL}", "isVisibleOnlyOnHover") as React.ComponentType<TimestampProps>;
-export const GuildIcon = findComponentByCodeLazy("Masks.CLAN_ICON", "guildIconImage") as React.ComponentType<GuildIconProps>;
+export const GuildIcon = findComponentByCodeLazy("Masks.CLAN_ICON,width", "acronymClassName") as React.ComponentType<GuildIconProps>;
 export const ColorPicker = findComponentByCodeLazy("#{intl::USER_SETTINGS_PROFILE_COLOR_SELECT_COLOR}", "showEyeDropper") as React.ComponentType<ColorPickerProps>;
 export const Popout: PopoutComponent = proxyLazy(() => findLazy(m => m?.y?.Animation && m.y.toString?.().includes("renderPopout")).y);
 export const FocusLock = findComponentByCodeLazy(".containerRef,{keyboardModeEnabled:") as React.ComponentType<FocusLockProps>;
@@ -201,7 +199,7 @@ export const CustomColorButton: React.ComponentType<CustomColorButtonProps> = pr
 const BadgeModule = findLazy(m => {
     const values = Object.values(m);
     return values.length < 15 &&
-        values.some(v => typeof v === "function" && v.toString?.().includes("numberBadge")) &&
+        values.some(v => typeof v === "function" && v.toString?.().includes("BADGE_NOTIFICATION_BACKGROUND")) &&
         values.some(v => typeof v === "object" && (v as BadgeShapesType)?.ROUND && (v as BadgeShapesType)?.ROUND_LEFT);
 });
 
@@ -280,7 +278,7 @@ export function Divider({ className, style, ...restProps }: React.ComponentProps
     return <hr className={`vc-divider${className ? ` ${className}` : ""}`} style={style} {...restProps} />;
 }
 
-const CodeContainerClasses = findByPropsLazy("markup", "codeContainer");
+const CodeContainerClasses = findCssClassesLazy("markup", "codeContainer");
 
 export function InlineCode({ children }: { children: React.ReactNode; }) {
     return (
@@ -313,7 +311,7 @@ waitFor(m => m.name === "MenuCheckboxItem", (_, id) => {
 });
 
 waitFor(filters.componentByCode('path:["empty"]'), m => { MenuComponents.Menu = m; });
-waitFor(filters.componentByCode("sliderContainer", "slider", "handleSize:16", "=100"), m => { MenuComponents.MenuSliderControl = m; });
+waitFor(filters.componentByCode("SLIDER)", "handleSize:16"), m => { MenuComponents.MenuSliderControl = m; });
 waitFor(filters.componentByCode(".SEARCH)", ".focus()", "query:"), m => { MenuComponents.MenuSearchControl = m; });
 
 waitFor(m => m.name === "MenuCheckboxItem", (_, id) => {

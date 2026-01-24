@@ -65,12 +65,12 @@ export default definePlugin({
             find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
             replacement: [
                 {
-                    match: /className:\i\.micButtonWithMenu,/g,
+                    match: /(?<=#{intl::MUTE}\),)className:\i\.\i,/g,
                     replace: ""
                 },
                 {
                     // TODO: MAKE THIS BETTER
-                    match: /,\(0,\i\.jsxs?\).{0,130}\.buttonChevron.{0,530}\}\)(?=\])/g,
+                    match: /,\(0,\i\.jsxs?\).{0,130}#{intl::18wnuD::raw}.{0,530}\}\)(?=\])/g,
                     replace: ""
                 }
             ],

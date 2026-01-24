@@ -152,9 +152,9 @@ export default definePlugin({
 
     patches: [
         {
-            find: "interactiveSelected]",
+            find: "PrivateChannel.renderAvatar",
             replacement: {
-                match: /interactiveSelected.{0,50}children:\[/,
+                match: /\]:\i\|\|\i.{0,50}children:\[/,
                 replace: "$&$self.renderBoo(arguments[0]),"
             }
         },

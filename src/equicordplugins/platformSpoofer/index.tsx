@@ -64,7 +64,7 @@ export default definePlugin({
             }
         },
         {
-            find: "voiceChannelEffect]:",
+            find: "#{intl::POPOUT_STAY_ON_TOP}),icon:",
             replacement: {
                 match: /(?<=CallTile.{0,15}\.memo\((\i)=>\{)/,
                 replace: "$1.platform = $self.getPlatform(false, $1?.participantUserId)?.vcIcon || $1?.platform;"

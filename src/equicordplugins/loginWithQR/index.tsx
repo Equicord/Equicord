@@ -85,7 +85,7 @@ export default definePlugin({
         {
             find: ".PRIVACY_ENCRYPTION_VERIFIED_DEVICES_V2]",
             replacement: {
-                match: /\.CLIPS]:{.*?},/,
+                match: /\.PRIVACY_SAFETY_ALERTS_V2]:{.*?},/,
                 replace: "$&\"SCAN_QR_CODE\":$self.ScanQrSettingsSheet,"
             }
         }

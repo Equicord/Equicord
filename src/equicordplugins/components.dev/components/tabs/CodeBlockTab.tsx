@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Parser } from "@webpack/common";
 
 import { Paragraph } from "..";
 import { SectionWrapper } from "../SectionWrapper";
 
-const MarkupClasses = findByPropsLazy("markup", "codeContainer");
+const MarkupClasses = findCssClassesLazy("markup", "codeContainer");
 
 interface CodeBlockProps {
     content: string;

@@ -23,7 +23,7 @@ import definePlugin, { OptionType, ReporterTestable } from "@utils/types";
 
 import { initWs, socket, stopWs } from "./initWs";
 export const PORT = 8485;
-export const CLIENT_VERSION: readonly [major: number, minor: number, patch: number] = [0, 1, 1];
+export const CLIENT_VERSION: readonly [major: number, minor: number, patch: number] = [0, 1, 2];
 
 export const logger = new Logger("DevCompanion");
 

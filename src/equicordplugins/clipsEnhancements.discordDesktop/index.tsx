@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings, migratePluginSettings, migrateSettingsFromPlugin } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
@@ -77,17 +77,18 @@ export default definePlugin({
             }
         },
         {
-            find: "#{intl::CLIPS_SETTINGS_ENABLE_CLIPS_HELP}),checked",
-            replacement: [
-                {
-                    match: /\[\{.{0,25}\i.\i.FPS_15.{0,500}\}\]/,
-                    replace: "$self.patchFramerates($&)"
-                },
-                {
-                    match: /\[\{.{0,25}\i.\i.SECONDS_30.{0,500}\}\]/,
-                    replace: "$self.patchTimeslots($&)"
-                },
-            ]
+            find: ".CLIPS_FRAME_RATE,{",
+            replacement: {
+                match: /\[\{.{0,25}\i.\i.FPS_15.{0,500}\}\]/,
+                replace: "$self.patchFramerates($&)"
+            }
+        },
+        {
+            find: ".CLIPS_LENGTH,{",
+            replacement: {
+                match: /\[\{.{0,25}\i.\i.SECONDS_30.{0,500}\}\]/,
+                replace: "$self.patchTimeslots($&)"
+            }
         },
         // enables clips
         {

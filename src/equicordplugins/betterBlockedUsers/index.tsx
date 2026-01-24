@@ -35,8 +35,8 @@ export default definePlugin({
                     replace: "let [searchResults,setSearchResults]=$2.useState([]);$self.setUpdateFunc($1,setSearchResults);"
                 },
                 {
-                    match: /(usersList,children:)(\i)/,
-                    replace: "$1(searchResults.length?searchResults:$2)"
+                    match: /(?<=\i,children:)(\i)(?=\.slice)/,
+                    replace: "(searchResults.length?searchResults:$1)"
                 },
             ]
         }

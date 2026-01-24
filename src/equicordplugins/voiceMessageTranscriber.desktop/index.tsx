@@ -316,7 +316,7 @@ export default definePlugin({
     description: "On-device transcriptions for voice messages powered by Whisper v3",
     patches: [
         {
-            find: ".volumeButtonIcon,",
+            find: ".VOICE_MESSAGE)),",
             replacement: {
                 match: /"source",{src:(\i).{0,700}duration:\i}\),/,
                 replace: "$&$self.button($1),"

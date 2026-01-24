@@ -27,7 +27,7 @@ import { classes } from "@utils/misc";
 import { openModalLazy } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
-import { extractAndLoadChunksLazy, findByPropsLazy, findComponentByCodeLazy, findModuleId, wreq } from "@webpack";
+import { extractAndLoadChunksLazy, findComponentByCodeLazy, findCssClassesLazy, findModuleId, wreq } from "@webpack";
 import { Clickable, Menu, OverridePremiumTypeStore, Toasts, useState } from "@webpack/common";
 
 import managedStyle from "./fixActionBar.css?managed";
@@ -56,9 +56,9 @@ interface DiscordStatus {
     status: "online" | "dnd" | "idle" | "invisible";
 }
 
-const StatusStyles = findByPropsLazy("statusItem");
+const StatusStyles = findCssClassesLazy("statusItem", "status", "menuDivider", "clearCustomStatusHint", "customEmojiPlaceholder");
 // TODO: find clearCustomStatusHint original css/svg or replace
-const PMenu = findComponentByCodeLazy(".menuItemLabel", ".menuItemInner");
+const PMenu = findComponentByCodeLazy("#{intl::MORE_OPTIONS}", ".ChevronSmallRightIcon");
 const EmojiComponent = findComponentByCodeLazy(/\.translateSurrogatesToInlineEmoji\(\i\.name\);/);
 
 const CustomStatusSettings = getUserSettingLazy("status", "customStatus")!;

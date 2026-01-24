@@ -162,10 +162,10 @@ export default definePlugin({
 
     patches: [
         {
-            find: ".dimensionlessImage,",
+            find: ".renderLinkComponent)?",
             replacement: [
                 {
-                    match: /className:\i\.media,/,
+                    match: /useFullWidth:!0,shouldLink:/,
                     replace: `id:"${ELEMENT_ID}",$&`
                 },
                 {
@@ -178,7 +178,7 @@ export default definePlugin({
         {
             find: '="FOCUS_SENSITIVE",',
             replacement: {
-                match: /(?<=\.hidden]:)\i/,
+                match: /(?<=\[\i\.\i]:)\i&&!\i&&"PINNED"!==\i/,
                 replace: "false"
             }
         },

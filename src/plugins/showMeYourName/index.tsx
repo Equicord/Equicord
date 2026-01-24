@@ -959,7 +959,7 @@ export default definePlugin({
         },
         {
             // Replace names in profile popouts.
-            find: "clickableUsername,\"aria-label\":",
+            find: "shouldWrap:!0,loop:!0,inProfile:!0",
             replacement: {
                 match: /(tags:\i,)nickname:(\i)/,
                 replace: "$1showMeYourNameNickname:$2=$self.getMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"profilesPopout\"})??(arguments[0].nickname)"
@@ -968,7 +968,7 @@ export default definePlugin({
         {
             // Replace names in the profile tooltip for switching between guild and global profiles.
             // You must open a profile modal before the code this is patching will be searchable.
-            find: "\"view-main-profile\",",
+            find: 'id:"view-server-profile",',
             group: true,
             replacement: [
                 {
@@ -990,18 +990,18 @@ export default definePlugin({
             }
         },
         {
-            find: "discriminator,forceUsername",
+            find: "MESSAGE,userId:",
             group: true,
             replacement: [
                 {
-                    // Replace names in reaction popouts.
-                    match: /(?<=className:\i.reactorInfo,children:)(\[.{0,450}?}\)\])/,
-                    replace: "($self.getMemberListProfilesReactionsVoiceNameElement({user:arguments[0].user,guildId:arguments[0].guildId,type:\"reactionsPopout\"}))??($1)"
+                    // Track hovering over reaction popouts.
+                    match: /(?<=return\(0,\i.\i\)\(\i.\i,{className:\i.\i,)(?=onContextMenu:\i=>)/,
+                    replace: "onMouseEnter:()=>{$self.addHoveringReactionPopout(arguments[0].user.id)},onMouseLeave:()=>{$self.removeHoveringReactionPopout(arguments[0].user.id)},$2"
                 },
                 {
-                    // Track hovering over reaction popouts.
-                    match: /(return\(0,\i.\i\)\(\i.\i,{className:\i.reactor,)(onContextMenu)/,
-                    replace: "$1onMouseEnter:()=>{$self.addHoveringReactionPopout(arguments[0].user.id)},onMouseLeave:()=>{$self.removeHoveringReactionPopout(arguments[0].user.id)},$2"
+                    // Replace names in reaction popouts.
+                    match: /(?<=Child,{className:\i.\i,children:)/,
+                    replace: "($self.getMemberListProfilesReactionsVoiceNameElement({user:arguments[0].user,guildId:arguments[0].guildId,type:\"reactionsPopout\"}))??"
                 }
             ]
         },

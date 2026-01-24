@@ -92,19 +92,11 @@ export default definePlugin({
                 replace: "$&,$self.ProfilePopoutComponent(arguments[0])"
             }
         },
-        // User Profile Modal v1
-        {
-            find: ".connections,userId:",
-            replacement: {
-                match: /user:(\i).{0,15}displayProfile:(\i).*?application\.id\)\)\}\)/,
-                replace: "$&,$self.ProfilePopoutComponent(arguments[0]),"
-            }
-        },
         // User Profile Modal v2
         {
             find: ".MODAL_V2,onClose:",
             replacement: {
-                match: /displayProfile:(\i).*?profileAppConnections\}\)\}\)/,
+                match: /displayProfile:(\i).*?connections:\i.{0,25}\i.\i\}\)\}\)/,
                 replace: "$&,$self.ProfilePopoutComponent({ user: arguments[0].user, displayProfile: $1 }),",
                 predicate: () => !settings.store.showRepositoryTab,
             }

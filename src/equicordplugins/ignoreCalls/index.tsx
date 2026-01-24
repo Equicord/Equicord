@@ -89,7 +89,7 @@ export default definePlugin({
         {
             find: "#{intl::INCOMING_CALL_ELLIPSIS}",
             replacement: {
-                match: /actionButton\}\)/,
+                match: /\(\i\)\)\),className:\i\.\i\}\)/,
                 replace: "$&,$self.renderIgnore(arguments[0].channel)"
             }
         }

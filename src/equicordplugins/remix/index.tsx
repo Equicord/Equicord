@@ -16,7 +16,7 @@ import { ChannelStore, DraftType, FluxDispatcher, Menu, SelectedChannelStore, Up
 import RemixModal from "./RemixModal";
 import css from "./styles.css?managed";
 
-const requireCreateStickerModal = extractAndLoadChunksLazy(["stickerInspected]:"]);
+const requireCreateStickerModal = extractAndLoadChunksLazy([".CREATE_STICKER_MODAL,", "isDisplayingIndividualStickers"]);
 const requireSettingsMenu = extractAndLoadChunksLazy(['name:"UserSettings"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/);
 
 const PendingReplyStore = findStoreLazy("PendingReplyStore");
@@ -77,7 +77,6 @@ export default definePlugin({
         "channel-attach": UploadContextMenuPatch,
         "message": MessageContextMenuPatch,
     },
-
     async start() {
 
         await requireCreateStickerModal();

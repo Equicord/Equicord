@@ -152,7 +152,7 @@ export default definePlugin({
     patches: [
         // message
         {
-            find: ".messageListItem",
+            find: ".NITRO_NOTIFICATION,[",
             replacement: {
                 match: /renderContentOnly:\i}=\i;/,
                 replace: "$&if($self.shouldHideUser(arguments[0].message.author.id, arguments[0].message.channel_id)) return null; "

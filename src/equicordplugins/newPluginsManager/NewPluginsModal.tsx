@@ -28,7 +28,7 @@ import { getNewPlugins, getNewSettings, KnownPluginSettingsMap, writeKnownSettin
 const cl = classNameFactory("vc-new-plugins-");
 
 const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
-const Checkbox = findComponentByCodeLazy(".checkboxWrapperDisabled:");
+const Checkbox = findComponentByCodeLazy('"data-toggleable-component":"checkbox');
 
 let hasSeen = false;
 

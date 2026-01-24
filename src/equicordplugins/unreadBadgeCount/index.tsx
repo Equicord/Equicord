@@ -14,7 +14,7 @@ import { ReadStateStore, useStateFromStores } from "@webpack/common";
 
 const UserGuildSettingsStore = findStoreLazy("UserGuildSettingsStore");
 const JoinedThreadsStore = findStoreLazy("JoinedThreadsStore");
-const NumberBadge = findComponentByCodeLazy("numberBadge", '"renderBadgeCount"');
+const NumberBadge = findComponentByCodeLazy("BADGE_NOTIFICATION_BACKGROUND", '"renderBadgeCount"');
 
 const settings = definePluginSettings({
     showOnMutedChannels: {

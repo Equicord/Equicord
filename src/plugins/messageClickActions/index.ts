@@ -34,6 +34,7 @@ const actions: { label: string; value: ClickAction; }[] = [
 
 const doubleClickOwnActions: { label: string; value: ClickAction; }[] = [
     { label: "None", value: "NONE" },
+    { label: "Reply", value: "REPLY" },
     { label: "Edit", value: "EDIT" },
     { label: "Quote", value: "QUOTE" },
     { label: "Copy Content", value: "COPY_CONTENT" },
@@ -86,6 +87,11 @@ const focusChanged = () => {
     if (!WindowStore.isFocused()) {
         pressedModifiers.clear();
     }
+};
+
+let lastMouseDownTime = 0;
+const onMouseDown = () => {
+    lastMouseDownTime = Date.now();
 };
 
 function modifierFromKey(e: KeyboardEvent): Modifier | null {
@@ -164,6 +170,11 @@ const settings = definePluginSettings({
     clickTimeout: {
         type: OptionType.NUMBER,
         description: "Timeout to distinguish double/triple clicks (ms)",
+        default: 300
+    },
+    selectionHoldTimeout: {
+        type: OptionType.NUMBER,
+        description: "Timeout to allow text selection (ms)",
         default: 300
     },
     quoteWithReply: {
@@ -453,12 +464,14 @@ export default definePlugin({
     start() {
         document.addEventListener("keydown", keydown);
         document.addEventListener("keyup", keyup);
+        document.addEventListener("mousedown", onMouseDown);
         WindowStore.addChangeListener(focusChanged);
     },
 
     stop() {
         document.removeEventListener("keydown", keydown);
         document.removeEventListener("keyup", keyup);
+        document.removeEventListener("mousedown", onMouseDown);
         WindowStore.removeChangeListener(focusChanged);
 
         if (doubleClickTimeout) {
@@ -524,6 +537,8 @@ export default definePlugin({
                 clearTimeout(singleClickTimeout);
                 singleClickTimeout = null;
             }
+
+            if (Date.now() - lastMouseDownTime > settings.store.selectionHoldTimeout) return;
 
             const executeDoubleClick = () => {
                 if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;

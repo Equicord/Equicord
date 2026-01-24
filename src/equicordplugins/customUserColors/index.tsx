@@ -124,7 +124,7 @@ export default definePlugin({
         {
             find: "PrivateChannel.renderAvatar",
             replacement: {
-                match: /(withDisplayNameStyles\]:\i\}\),children:\i\}\),)/,
+                match: /(\i\]:\i\}\),children:\i\}\),)(?=.{0,100}isSystemDM\(\))/,
                 replace: "$1style:{color:`${$self.colorDMList(arguments[0])}`},"
             },
             predicate: () => settings.store.dmList,
@@ -137,7 +137,7 @@ export default definePlugin({
                     replace: ",style$1"
                 },
                 {
-                    match: /(?<=nameAndDecorators,)/,
+                    match: /(?<="div",\{className:\i\.\i,)(?=children:\[)/,
                     replace: "style:style||{},"
                 },
             ],
