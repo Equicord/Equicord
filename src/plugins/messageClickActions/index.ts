@@ -102,7 +102,8 @@ function modifierFromKey(e: KeyboardEvent): Modifier | null {
 }
 
 function isModifierPressed(modifier: Modifier): boolean {
-    return modifier === "NONE" || pressedModifiers.has(modifier);
+    if (modifier === "NONE") return pressedModifiers.size === 0;
+    return pressedModifiers.has(modifier);
 }
 
 let doubleClickTimeout: ReturnType<typeof setTimeout> | null = null;
