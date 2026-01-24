@@ -1494,8 +1494,8 @@ export default definePlugin({
             replacement: [
                 {
                     // Resume Video Quest.
-                    match: /(onClick:\(\)=>)(\(0,\i.\i\)\({quest:(\i))/,
-                    replace: "$1!$self.processQuestForAutoComplete($3)&&$2"
+                    match: /(tooltipText:\i.intl.string\(\i.\i.\i\),onClick:\(\)=>)(\(0,\i.\i\)\({quest)/,
+                    replace: "$1!$self.processQuestForAutoComplete(arguments[0].quest)&&$2"
                 },
                 {
                     // Start Play Game and Play Activity Quests.
