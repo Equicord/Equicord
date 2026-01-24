@@ -486,8 +486,11 @@ export default definePlugin({
     },
 
     onMessageClick(msg, channel, event) {
-        const target = event.target as HTMLElement;
-        if (target.closest('a, button, input, img, [class*="repliedTextPreview"], [class*="threadMessageAccessory"]')) return;
+        let target = event.target as HTMLElement;
+        if (target.nodeType === Node.TEXT_NODE) target = target.parentElement as HTMLElement;
+
+        // dont look, please just dont
+        if (target.closest('a, button, input, img, video, audio, [role="button"], [role="link"], [role="menuitem"], [class*="repliedTextPreview"], [class*="threadMessageAccessory"], [class*="spoilerText"], [class*="mention"]')) return;
         if (!target.closest('[class*="message"]')) return;
 
         const myId = AuthenticationStore.getId();
@@ -510,6 +513,8 @@ export default definePlugin({
         const isSingleClick = event.detail === 1 && event.button === 0;
         const isDoubleClick = event.detail === 2;
         const isTripleClick = event.detail === 3;
+
+        if (Date.now() - lastMouseDownTime > settings.store.selectionHoldTimeout) return;
 
         if (singleClickTimeout) {
             clearTimeout(singleClickTimeout);
@@ -537,8 +542,6 @@ export default definePlugin({
                 clearTimeout(singleClickTimeout);
                 singleClickTimeout = null;
             }
-
-            if (Date.now() - lastMouseDownTime > settings.store.selectionHoldTimeout) return;
 
             const executeDoubleClick = () => {
                 if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return;
