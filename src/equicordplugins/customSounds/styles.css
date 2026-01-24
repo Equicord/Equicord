@@ -57,3 +57,45 @@
 .vc-custom-sounds-preview-controls {
     display: flex;
 }
+
+.vc-custom-sounds-user-controls {
+    margin-bottom: 16px;
+}
+
+.vc-custom-sounds-user-controls-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.vc-custom-sounds-user-search {
+    margin-bottom: 16px;
+}
+
+.vc-custom-sounds-user-overrides {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.vc-custom-sounds-user-card {
+    padding: 16px;
+}
+
+.vc-custom-sounds-user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.vc-custom-sounds-user-id {
+    color: var(--text-muted);
+}
+
+.vc-custom-sounds-user-sounds {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

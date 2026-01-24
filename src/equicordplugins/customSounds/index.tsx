@@ -7,17 +7,23 @@
 import "./styles.css";
 
 import { AudioProcessor, PreprocessAudioData } from "@api/AudioPlayer";
+import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { get as getFromDataStore } from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
-import { Button, React, showToast, TextInput } from "@webpack/common";
+import type { Call, Channel, Message, MessageJSON, User } from "@vencord/discord-types";
+import { ChannelType } from "@vencord/discord-types/enums";
+import { Button, ChannelStore, Menu, MessageStore, React, showToast, TextInput, UserStore } from "@webpack/common";
 
 import { getAllAudio, getAudioDataURI } from "./audioStore";
 import { SoundOverrideComponent } from "./SoundOverrideComponent";
 import { makeEmptyOverride, seasonalSounds, SoundOverride, soundTypes } from "./types";
+import { ensureUserEntry, getUserOverride, getUserOverridesCache, loadUserOverrides } from "./userOverrides";
+import { UserOverridesComponent } from "./UserOverridesComponent";
 
 const cl = classNameFactory("vc-custom-sounds-");
 
@@ -26,6 +32,36 @@ const allSoundTypes = soundTypes || [];
 const AUDIO_STORE_KEY = "ScattrdCustomSounds";
 
 const dataUriCache = new Map<string, string>();
+const soundContextBySoundId = new Map<string, { userId: string; at: number }>();
+const SOUND_CONTEXT_TTL_MS = 10_000;
+
+interface UserContextProps {
+    user?: User;
+}
+
+interface CallUpdatePayload {
+    call?: Call;
+    ringing?: string[];
+    messageId?: string;
+    channelId?: string;
+}
+
+type CallPayload = Call & {
+    channel_id?: string;
+    message_id?: string;
+    channelId?: string;
+    messageId?: string;
+};
+
+type ChannelWithRecipients = Channel & {
+    rawRecipients?: User[];
+    recipients?: User[];
+    recipient_ids?: string[];
+};
+
+type RecipientLike = User | { id: string } | string;
+
+type MessagePayload = Message | MessageJSON;
 
 function getOverride(id: string): SoundOverride {
     const stored = settings.store[id];
@@ -44,28 +80,43 @@ function setOverride(id: string, override: SoundOverride) {
     settings.store[id] = JSON.stringify(override);
 }
 
-export const getCustomSoundURL: AudioProcessor = (data: PreprocessAudioData) => {
-    let audioOverride = data.audio;
+function resolveBaseSoundId(soundId: string): string {
+    if (!(soundId in seasonalSounds)) return soundId;
 
-    if (data.audio in seasonalSounds) {
-        audioOverride = soundTypes.find(sound => sound.seasonal?.includes(data.audio))?.id || data.audio;
+    const soundType = allSoundTypes.find(sound => sound.seasonal?.includes(soundId));
+    return soundType?.id ?? soundId;
+}
+
+function setSoundContext(soundId: string, userId: string): void {
+    soundContextBySoundId.set(soundId, { userId, at: Date.now() });
+}
+
+function getSoundContextUserId(soundId: string): string | null {
+    const entry = soundContextBySoundId.get(soundId);
+    if (!entry) return null;
+
+    if (Date.now() - entry.at > SOUND_CONTEXT_TTL_MS) {
+        soundContextBySoundId.delete(soundId);
+        return null;
     }
 
-    const override = getOverride(audioOverride);
+    return entry.userId;
+}
 
-    if (!override?.enabled) {
-        return;
-    }
+function applyOverride(
+    data: PreprocessAudioData,
+    override: SoundOverride,
+    originalSoundId: string
+): void {
+    if (!override.enabled) return;
 
     if (override.selectedSound === "custom" && override.selectedFileId) {
         const dataUri = dataUriCache.get(override.selectedFileId);
-        if (dataUri) {
-            data.audio = dataUri;
-            data.volume = override.volume;
-            return;
-        } else {
-            return;
-        }
+        if (!dataUri) return;
+
+        data.audio = dataUri;
+        data.volume = override.volume;
+        return;
     }
 
     if (override.selectedSound !== "default" && override.selectedSound !== "custom") {
@@ -75,23 +126,44 @@ export const getCustomSoundURL: AudioProcessor = (data: PreprocessAudioData) => 
             return;
         }
 
-        const soundType = allSoundTypes.find(t => t.id === data.audio);
+        const soundType = allSoundTypes.find(type => type.id === originalSoundId);
+        const seasonalMatches = soundType?.seasonal;
+        if (!seasonalMatches?.length) {
+            data.volume = override.volume;
+            return;
+        }
 
-        if (soundType?.seasonal) {
-            const seasonalId = soundType.seasonal.find(seasonalId =>
-                seasonalId.startsWith(`${override.selectedSound}_`)
-            );
+        const seasonalId = seasonalMatches.find(seasonalId =>
+            seasonalId.startsWith(`${override.selectedSound}_`)
+        );
 
-            if (seasonalId && seasonalId in seasonalSounds) {
-                data.audio = seasonalSounds[seasonalId];
-                data.volume = override.volume;
-                return;
-            }
+        if (seasonalId && seasonalId in seasonalSounds) {
+            data.audio = seasonalSounds[seasonalId];
+            data.volume = override.volume;
+            return;
         }
     }
 
     data.volume = override.volume;
-    return;
+}
+
+export const getCustomSoundURL: AudioProcessor = (data: PreprocessAudioData) => {
+    const originalSoundId = data.audio;
+    const baseSoundId = resolveBaseSoundId(originalSoundId);
+    const userId = getSoundContextUserId(baseSoundId);
+
+    if (userId) {
+        const userOverride = getUserOverride(userId, baseSoundId);
+        if (userOverride) {
+            applyOverride(data, userOverride, originalSoundId);
+            return;
+        }
+    }
+
+    const override = getOverride(baseSoundId);
+    if (!override?.enabled) return;
+
+    applyOverride(data, override, originalSoundId);
 };
 
 export async function ensureDataURICached(fileId: string): Promise<string | null> {
@@ -111,6 +183,146 @@ export async function ensureDataURICached(fileId: string): Promise<string | null
     }
 
     return null;
+}
+
+function recordMessageSoundContext(message: MessagePayload): void {
+    if (!message?.author?.id) return;
+
+    const channel = ChannelStore.getChannel(message.channel_id);
+    if (!channel) return;
+
+    const currentUserId = UserStore.getCurrentUser().id;
+    if (message.author.id === currentUserId) return;
+
+    const soundId = getMessageSoundId(message, channel, currentUserId);
+    if (!soundId) return;
+
+    setSoundContext(soundId, message.author.id);
+}
+
+function getMessageSoundId(message: MessagePayload, channel: Channel, currentUserId: string): string | null {
+    if (channel.type === ChannelType.DM || channel.type === ChannelType.GROUP_DM) {
+        return "message3";
+    }
+
+    const mentionSound = getMentionSoundId(message);
+    if (mentionSound) return mentionSound;
+
+    if (isReplyToCurrentUser(message, currentUserId)) return "message2";
+
+    return "message1";
+}
+
+function getMentionSoundId(message: MessagePayload): string | null {
+    const mentionEveryone = getMentionEveryone(message);
+    const mentionRoles = getMentionRoles(message);
+    if (!mentionEveryone && !mentionRoles.length) return null;
+
+    const content = message.content ?? "";
+    if (content.includes("@everyone")) return "mention2";
+    if (content.includes("@here")) return "mention3";
+    if (mentionRoles.length) return "mention1";
+
+    return null;
+}
+
+function getMentionEveryone(message: MessagePayload): boolean {
+    if ("mentionEveryone" in message) return message.mentionEveryone;
+    return message.mention_everyone;
+}
+
+function getMentionRoles(message: MessagePayload): string[] {
+    if ("mentionRoles" in message) return message.mentionRoles ?? [];
+    return message.mention_roles ?? [];
+}
+
+function getReferencedAuthorId(message: MessagePayload): string | null {
+    if ("referenced_message" in message) {
+        return message.referenced_message?.author?.id ?? null;
+    }
+
+    return null;
+}
+
+function isReplyToCurrentUser(message: MessagePayload, currentUserId: string): boolean {
+    const repliedId = getReferencedAuthorId(message);
+    return repliedId === currentUserId;
+}
+
+function recordCallSoundContext(payload: CallUpdatePayload): void {
+    const details = getCallDetails(payload);
+    if (!details) return;
+
+    const currentUserId = UserStore.getCurrentUser().id;
+    if (!details.ringing.includes(currentUserId)) return;
+
+    const callerId = getCallerId(details);
+    if (!callerId) return;
+
+    setSoundContext("call_ringing", callerId);
+}
+
+function getCallDetails(payload: CallUpdatePayload): { channelId: string; messageId: string | null; ringing: string[]; } | null {
+    const call = payload.call as CallPayload | undefined;
+    let ringing: string[] = [];
+
+    if (Array.isArray(call?.ringing)) {
+        ringing = call.ringing;
+    } else if (Array.isArray(payload.ringing)) {
+        ringing = payload.ringing;
+    }
+
+    const channelId = call?.channelId ?? call?.channel_id ?? payload.channelId ?? null;
+    const messageId = call?.messageId ?? call?.message_id ?? payload.messageId ?? null;
+
+    if (!channelId || !ringing.length) return null;
+
+    return { channelId, messageId, ringing };
+}
+
+function getCallerId(details: { channelId: string; messageId: string | null; ringing: string[]; }): string | null {
+    if (details.messageId) {
+        const message = MessageStore.getMessage(details.channelId, details.messageId);
+        const authorId = message?.author?.id;
+        if (authorId) return authorId;
+    }
+
+    const channel = ChannelStore.getChannel(details.channelId) as ChannelWithRecipients | undefined;
+    if (!channel) return null;
+
+    const recipientIds = getRecipientIds(channel);
+    if (!recipientIds.length) return null;
+
+    const currentUserId = UserStore.getCurrentUser().id;
+    if (channel.type === ChannelType.DM) {
+        return recipientIds.find(id => id !== currentUserId) ?? null;
+    }
+
+    if (channel.type === ChannelType.GROUP_DM) {
+        const otherRecipients = recipientIds.filter(id => id !== currentUserId);
+        if (otherRecipients.length === 1) return otherRecipients[0];
+
+        const callerId = otherRecipients.find(id => !details.ringing.includes(id));
+        return callerId ?? null;
+    }
+
+    return null;
+}
+
+function getRecipientIds(channel: ChannelWithRecipients): string[] {
+    const rawRecipients = channel.rawRecipients as RecipientLike[] | undefined;
+    if (rawRecipients?.length) return rawRecipients.map(getRecipientId);
+
+    const recipients = channel.recipients as RecipientLike[] | undefined;
+    if (recipients?.length) return recipients.map(getRecipientId);
+
+    if (channel.recipient_ids?.length) return channel.recipient_ids;
+
+    return [];
+}
+
+function getRecipientId(recipient: RecipientLike): string {
+    return typeof recipient === "string" ? recipient : recipient.id;
 }
 
 export async function refreshDataURI(id: string): Promise<void> {
@@ -145,7 +357,24 @@ async function preloadDataURIs() {
         }
     }
 
+    await preloadUserOverrides();
+
     console.log(`[CustomSounds] Memory cache contains ${dataUriCache.size} data URIs`);
+}
+
+async function preloadUserOverrides() {
+    const userOverrides = getUserOverridesCache();
+    for (const overrides of Object.values(userOverrides)) {
+        for (const override of Object.values(overrides)) {
+            if (!override.enabled || override.selectedSound !== "custom" || !override.selectedFileId) continue;
+
+            try {
+                await ensureDataURICached(override.selectedFileId);
+            } catch (error) {
+                console.error("[CustomSounds] Failed to preload user override data URI:", error);
+            }
+        }
+    }
 }
 
 export async function debugCustomSounds() {
@@ -378,6 +607,11 @@ const settings = definePluginSettings({
                 </div>
             );
         }
+    },
+    userOverrides: {
+        type: OptionType.COMPONENT,
+        description: "Manage per-user sound overrides.",
+        component: ErrorBoundary.wrap(UserOverridesComponent, { noop: true }) as any
     }
 });
 
@@ -390,6 +624,22 @@ export function findOverride(id: string): SoundOverride | null {
     return override?.enabled ? override : null;
 }
 
+const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: UserContextProps) => {
+    if (!user) return;
+
+    children.push(
+        <Menu.MenuItem
+            id="custom-sounds-user"
+            label="Add to Custom Sounds"
+            action={() => {
+                void ensureUserEntry(user.id).then(() => {
+                    showToast(`Added ${user.username} to Custom Sounds`);
+                });
+            }}
+        />
+    );
+};
+
 export default definePlugin({
     name: "CustomSounds",
     description: "Customize Discord's sounds.",
@@ -397,11 +647,26 @@ export default definePlugin({
     settings,
     startAt: StartAt.Init,
     audioProcessor: getCustomSoundURL,
+    contextMenus: {
+        "user-context": UserContextMenuPatch
+    },
+    flux: {
+        MESSAGE_CREATE({ message, optimistic }: { message: MessagePayload; optimistic: boolean; }) {
+            if (optimistic) return;
+            if (!message?.channel_id) return;
+
+            recordMessageSoundContext(message);
+        },
+        CALL_UPDATE(payload: CallUpdatePayload) {
+            recordCallSoundContext(payload);
+        }
+    },
 
     async start() {
         console.log("[CustomSounds] Plugin starting...");
 
         try {
+            await loadUserOverrides();
             await preloadDataURIs();
             console.log("[CustomSounds] Startup complete");
         } catch (error) {

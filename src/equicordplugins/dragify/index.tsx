@@ -13,7 +13,7 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
-import { ChannelStore, ComponentDispatch, Constants, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
+import { ChannelStore, ComponentDispatch, Constants, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RelationshipStore, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
 
 import { type GhostState, hideGhost as hideDragGhost, isGhostVisible, mountGhost as mountDragGhost, scheduleGhostPosition as scheduleDragGhostPosition, showGhost as showDragGhost, unmountGhost as unmountDragGhost } from "./ghost";
 import { collectPayloadStrings, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractUserFromAvatar, extractUserFromProfile, parseFromStrings, tryParseJson } from "./utils";
@@ -128,59 +128,43 @@ export default definePlugin({
     settings,
 
     patches: [
-        // Voice user rows (voice channel sidebar)
-        {
-            find: "avatarContainer,onContextMenu",
-            replacement: {
-                match: /className:(\i)\.avatarContainer,onContextMenu:(\i)/,
-                replace: "className:$1.avatarContainer,onContextMenu:$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e)"
-            }
-        },
         // Voice user rows (voice channel sidebar list)
         {
-            find: "voiceUser]:!0",
+            find: "connectUserDragSource:ee,canDrag:et",
             replacement: {
-                match: /className:\i\(\)\(\i,\{[^}]*?\[\i\.voiceUser\]:!0[^}]*?\}\),/,
-                replace: "$&\"data-user-id\":arguments[0].user?.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].user?.id}),"
+                match: /"data-dnd-name":(\i)\.name,/,
+                replace: "\"data-dnd-name\":$1.name,\"data-dragify-user\":!0,\"data-user-id\":h.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:h.id}),"
             }
         },
-        // Voice user rows (content node for data-user-id fallback)
+        // Voice channel rows (guild sidebar)
         {
-            find: "voiceUser]:!0",
+            find: "tutorialId:\"voice-conversations\"",
             replacement: {
-                match: /className:\i\(\)\(\i\.content,\{\[\i\.flipped\]:\i\}\)/,
-                replace: "$&,\"data-user-id\":arguments[0].user?.id"
+                match: /className:(\i)\.(\i),iconClassName:/,
+                replace: "className:$1.$2,draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:e.id,guild_id:e.guild_id}),iconClassName:"
             }
         },
-        // Voice channel container (voice channel sidebar)
+        // Voice channel rows (guild sidebar fallback - li wrapper)
         {
-            find: "voiceUsers,!u",
+            find: "tutorialId:\"voice-conversations\"",
             replacement: {
-                match: /className:\i\(\)\(\i\.voiceUsers,!\i&&\i\.collapsed\),role:"group"/,
-                replace: "$&,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e)"
+                match: /"data-dnd-name":(\i)\.name,children:\[/,
+                replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:$1.id,guild_id:$1.guild_id}),children:["
             }
         },
-        // Voice channel list rows (guild sidebar)
+        // Voice channel rows (alternate voice list implementation)
         {
-            find: "className:a()(this.getModeClass(),{[V.disabled]:this.isDisabled()}),\"data-dnd-name\":e.name,children:[(0,r.jsx)(u.yRy",
+            find: "handleClickChat",
             replacement: {
                 match: /"data-dnd-name":(\i)\.name,/,
                 replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:$1.id,guild_id:$1.guild_id}),"
-            }
-        },
-        // Channel list items (text/voice/thread/forum)
-        {
-            find: "\"data-dnd-name\":U.name",
-            replacement: {
-                match: /"data-dnd-name":(\i)\.name,onMouseEnter:/,
-                replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:$1.id,guild_id:$1.guild_id}),onMouseEnter:"
             }
         },
         // Thread rows in channel list (sidebar thread items)
         {
             find: "__invalid_threadMainContent",
             replacement: {
-                match: /className:(\i)\.(\i),onClick:(\i),\"aria-label\":/,
+                match: /className:(\i)\.(\i),onClick:(\i),"aria-label":/,
                 replace: "className:$1.$2,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e),onClick:$3,\"aria-label\":"
             }
         },
@@ -202,28 +186,43 @@ export default definePlugin({
                 replace: "$1draggable:!0,onDragStart:$2=>$self.onChannelDragStart($2,{id:$4.id,guild_id:$4.guild_id}),onClick:$2=>{(0,$3.JA)($4,"
             }
         },
-        // Member list rows
+        // Member list items (server member list)
         {
-            find: "onContextMenu:J,onMouseEnter:eD",
+            find: "MemberListItem",
             replacement: {
-                match: /onContextMenu:(\i),onMouseEnter:(\i)(?=.{0,500}?user:(\i),guildId:)/,
-                replace: "onContextMenu:$1,draggable:!0,onDragStart:$2=>$self.onUserDragStart($2,$3),onMouseEnter:$2"
+                match: /onContextMenu:(\i),onMouseEnter:(\i),onMouseLeave:(\i),onBlur:(\i),hovered:(\i),name:/,
+                replace: "onContextMenu:$1,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].user?.id}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,onMouseEnter:$2,onMouseLeave:$3,onBlur:$4,hovered:$5,name:"
             }
         },
         // Chat usernames
         {
-            find: "N.username",
+            find: "data-text\":Q+$",
             replacement: {
-                match: /,"data-text":/,
-                replace: ",draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].author),\"data-user-id\":arguments[0].author.id,\"data-text\":"
+                match: /onClick:(\i),onContextMenu:(\i),children:/,
+                replace: "onClick:$1,onContextMenu:$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].author),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].author.id,children:"
             }
         },
-        // DM list entries
+        // Call avatars (DM/group call tiles)
         {
-            find: "href:eN?void 0:eh,target:\"_blank\",ref:ed,className:L.link",
+            find: "onContextMenu:S,className:x,children:D()",
             replacement: {
-                match: /className:(\i)\.link,/,
-                replace: "className:$1.link,draggable:!0,onDragStart:e=>$self.onDmDragStart(e),"
+                match: /onContextMenu:S,className:x,children:D\(\)/,
+                replace: "onContextMenu:S,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:t}),\"data-dragify-user\":!0,\"data-user-id\":t,className:x,children:D()"
+            }
+        },
+        // DM list entries (private channel rows)
+        {
+            find: "PrivateChannel.renderAvatar: Invalid prop configuration - no user or channel",
+            replacement: {
+                match: /to:(\i)\.(\i)\.CHANNEL\((\i)\.(\i),t\.id\),className:(\i)\.nf,"aria-label":(\i)/,
+                replace: "to:$1.$2.CHANNEL($3.$4,t.id),className:$5.nf,draggable:!0,onDragStart:e=>$self.onDmDragStart(e,arguments[0].channel),\"aria-label\":$6"
+            }
+        },
+        {
+            find: "PrivateChannel.renderAvatar: Invalid prop configuration - no user or channel",
+            replacement: {
+                match: /ea\(es\(\{\},(\i)\),\{/,
+                replace: "ea(es({},$1),{draggable:!0,onDragStart:e=>$self.onDmDragStart(e,arguments[0].channel),"
             }
         },
         // Forum post rows (forum channel list)
@@ -246,7 +245,7 @@ export default definePlugin({
             find: "className:K.avatar,src:u,avatarDecoration:d,status:a,size:f.EFr.SIZE_80",
             replacement: {
                 match: /className:(\i)\.avatar,src:(\i),avatarDecoration:(\i),status:(\i),size:(\i)\.EFr\.SIZE_80,"aria-label":(\i)\.username/,
-                replace: "className:$1.avatar,src:$2,avatarDecoration:$3,status:$4,size:$5.EFr.SIZE_80,draggable:!0,onDragStart:e=>$self.onUserDragStart(e),\"aria-label\":$6.username"
+                replace: "className:$1.avatar,src:$2,avatarDecoration:$3,status:$4,size:$5.EFr.SIZE_80,\"data-dragify-user\":!0,draggable:!0,onDragStart:e=>$self.onUserDragStart(e),\"aria-label\":$6.username"
             }
         },
         // Chat avatars (no popout)
@@ -254,7 +253,7 @@ export default definePlugin({
             find: "children:ee(X(q({},W)",
             replacement: {
                 match: /avatarSrc:(\i),avatarDecorationSrc:(\i),compact:(\i),onClick:(\i),onContextMenu:(\i),onMouseDown:void 0,onKeyDown:void 0,showCommunicationDisabledStyles:(\i),className:(\i)\}\)\)\}\)/,
-                replace: "avatarSrc:$1,avatarDecorationSrc:$2,compact:$3,onClick:$4,onContextMenu:$5,onMouseDown:void 0,onKeyDown:void 0,showCommunicationDisabledStyles:$6,className:$7,draggable:!0,onDragStart:e=>$self.onUserDragStart(e)}))})"
+                replace: "avatarSrc:$1,avatarDecorationSrc:$2,compact:$3,onClick:$4,onContextMenu:$5,onMouseDown:void 0,onKeyDown:void 0,showCommunicationDisabledStyles:$6,className:$7,\"data-dragify-user\":!0,draggable:!0,onDragStart:e=>$self.onUserDragStart(e)}))})"
             }
         },
     ],
@@ -353,8 +352,13 @@ export default definePlugin({
     },
 
     formatChannel(channelId: string, guildId?: string): string | null {
+        const channel = ChannelStore.getChannel(channelId);
+        if (channel?.type === ChannelType.GROUP_DM) {
+            return settings.store.userOutput === "id"
+                ? channelId
+                : `https://discord.com/channels/@me/${channelId}`;
+        }
         if (settings.store.channelOutput === "link") {
-            const channel = ChannelStore.getChannel(channelId);
             const effectiveGuildId = guildId ?? channel?.guild_id ?? "@me";
             return `https://discord.com/channels/${effectiveGuildId}/${channelId}`;
         }
@@ -562,7 +566,7 @@ export default definePlugin({
             if (parsed?.kind === "user") return;
         }
         const targetEl = event.target as HTMLElement | null;
-        if (targetEl?.closest?.("[data-user-id]")) return;
+        if (targetEl?.closest?.("[data-dragify-user]")) return;
 
         const targetResolved = this.extractChannelIdFromTarget(event.target as HTMLElement | null);
         const resolved = channel ?? targetResolved;
@@ -572,7 +576,9 @@ export default definePlugin({
         const channelObj = ChannelStore.getChannel(channelId);
         const resolvedGuildId = resolved ? ("guild_id" in resolved ? resolved.guild_id : resolved.guildId) : undefined;
         const guildId = resolvedGuildId ?? targetResolved?.guildId ?? channelObj?.guild_id;
-        if (channelObj?.isDM?.() || channelObj?.type === ChannelType.DM) {
+        const isDirectMessage = channelObj?.type === ChannelType.DM
+            || (channelObj?.isDM?.() && channelObj?.type !== ChannelType.GROUP_DM);
+        if (isDirectMessage) {
             const recipientId = this.getDmRecipientId(channelObj);
             if (recipientId) {
                 this.onUserDragStart(event, { id: recipientId });
@@ -588,6 +594,7 @@ export default definePlugin({
     },
 
     onUserDragStart(event: DragEvent, user?: { id: string; }) {
+        if (this.isAttachmentElement(event.target as HTMLElement | null)) return;
         const searchTarget = event.target as HTMLElement | null;
         if (searchTarget && typeof (searchTarget as any).closest === "function") {
             const chatMessage = searchTarget.closest("[data-author-id]") as HTMLElement | null;
@@ -633,10 +640,12 @@ export default definePlugin({
             if (targetChannel?.id) resolvedChannel = ChannelStore.getChannel(targetChannel.id) ?? null;
         }
         if (!resolvedChannel) return;
-        const recipientId = this.getDmRecipientId(resolvedChannel);
-        if (recipientId) {
-            this.onUserDragStart(event, { id: recipientId });
-            return;
+        if (resolvedChannel.type !== ChannelType.GROUP_DM) {
+            const recipientId = this.getDmRecipientId(resolvedChannel);
+            if (recipientId) {
+                this.onUserDragStart(event, { id: recipientId });
+                return;
+            }
         }
 
         this.onChannelDragStart(event, resolvedChannel);
@@ -741,15 +750,18 @@ export default definePlugin({
 
         const target = event.target as HTMLElement | null;
         if (!target) return;
+        const hasDragify = event.dataTransfer.types?.includes("application/dragify") ?? false;
+        const path = event.composedPath?.() ?? [];
+        if (inst.isAttachmentElement(target)) return;
         if (inst.isMessageInputElement(target)) {
             clearDragState();
             dragSourceIsInput = true;
             return;
         }
-        const inputPath = event.composedPath?.() ?? [];
-        for (const entry of inputPath) {
+        for (const entry of path) {
             const el = entry as Element | null;
             if (!el) continue;
+            if (inst.isAttachmentElement(el as HTMLElement | null)) return;
             if (inst.isMessageInputElement(el)) {
                 clearDragState();
                 dragSourceIsInput = true;
@@ -757,12 +769,11 @@ export default definePlugin({
             }
         }
 
-        if (!event.dataTransfer.types?.includes("application/dragify")) {
-            const path = event.composedPath?.() ?? [];
+        if (!hasDragify) {
             for (const entry of path) {
                 const el = entry as HTMLElement | null;
                 if (!el) continue;
-                const userTarget = el.closest?.("[data-user-id]") as HTMLElement | null;
+                const userTarget = el.closest?.("[data-dragify-user]") as HTMLElement | null;
                 if (!userTarget) continue;
                 const userId = inst.extractUserIdFromTarget(userTarget);
                 if (userId) {
@@ -774,19 +785,41 @@ export default definePlugin({
 
         const authorContainer = target.closest?.("[data-author-id]") as HTMLElement | null;
         const authorId = authorContainer?.getAttribute?.("data-author-id") ?? null;
-        if (authorId && target.getAttribute?.("data-text") && !event.dataTransfer.types?.includes("application/dragify")) {
+        if (authorId && target.getAttribute?.("data-text") && !hasDragify) {
             inst.onUserDragStart(event, { id: authorId });
             return;
         }
 
-        const userIdFromTarget = inst.extractUserIdFromEvent(event) ?? inst.extractUserIdFromTarget(target);
-        if (userIdFromTarget && !event.dataTransfer.types?.includes("application/dragify")) {
-            inst.onUserDragStart(event, { id: userIdFromTarget });
-            return;
+        if (!hasDragify) {
+            const dragifyTarget = target.closest?.("[data-dragify-user]") as HTMLElement | null;
+            if (dragifyTarget) {
+                const userIdFromTarget = inst.extractUserIdFromEvent(event) ?? inst.extractUserIdFromTarget(dragifyTarget);
+                if (userIdFromTarget) {
+                    inst.onUserDragStart(event, { id: userIdFromTarget });
+                    return;
+                }
+            }
+        }
+
+        if (!hasDragify) {
+            const avatarUserId = inst.extractAvatarUserIdFromTarget(target);
+            if (avatarUserId) {
+                const messageItem = target.closest?.("[data-author-id]") as HTMLElement | null;
+                const authorId = messageItem?.getAttribute("data-author-id") ?? null;
+                if (authorId) {
+                    inst.onUserDragStart(event, { id: authorId });
+                    return;
+                }
+                const channelFromTarget = inst.extractChannelIdFromTarget(target);
+                if (channelFromTarget) {
+                    inst.onChannelDragStart(event, channelFromTarget);
+                    return;
+                }
+            }
         }
 
         const channelFromTarget = inst.extractChannelIdFromTarget(target);
-        if (channelFromTarget && !event.dataTransfer.types?.includes("application/dragify")) {
+        if (channelFromTarget && !hasDragify) {
             if (target.closest?.("[data-user-id]")) return;
             inst.onChannelDragStart(event, channelFromTarget);
             return;
@@ -795,7 +828,7 @@ export default definePlugin({
         const guildId = inst.extractGuildIdFromTarget(target);
         if (!guildId) return;
 
-        if (!event.dataTransfer.types?.includes("application/dragify")) {
+        if (!hasDragify) {
             event.stopPropagation();
             event.dataTransfer.effectAllowed = "copyMove";
             activeGuildDragId = guildId;
@@ -857,32 +890,6 @@ export default definePlugin({
         return false;
     },
 
-    resolveElementFromNode(node: Node | null): Element | null {
-        if (!node) return null;
-        if (node instanceof Element) return node;
-        return (node as ChildNode).parentElement ?? null;
-    },
-
-    applySelectAll(editor: HTMLElement): boolean {
-        editor.focus?.();
-        let handled = false;
-        try {
-            handled = Boolean(document.execCommand?.("selectAll"));
-        } catch {
-            handled = false;
-        }
-        if (!handled) {
-            const selection = document.getSelection?.();
-            if (!selection) return false;
-            const range = document.createRange();
-            range.selectNodeContents(editor);
-            selection.removeAllRanges();
-            selection.addRange(range);
-            handled = true;
-        }
-        return handled;
-    },
-
     isMessageInputElement(el: Element | null): boolean {
         if (!el) return false;
         const selector = "[data-slate-editor],[role=\"textbox\"],[contenteditable=\"true\"],[aria-label^=\"Message \"]";
@@ -893,6 +900,34 @@ export default definePlugin({
         if (!el) return false;
         const selector = "[role=\"log\"],[data-list-id^=\"chat-messages\"]";
         return Boolean((el as HTMLElement).closest?.(selector));
+    },
+
+    isAttachmentElement(target: HTMLElement | null): boolean {
+        let el: HTMLElement | null = target;
+        while (el) {
+            if (typeof (el as any).getAttribute !== "function") {
+                el = (el as any).parentElement ?? null;
+                continue;
+            }
+            const href = el.getAttribute("href") ?? "";
+            const src = el.getAttribute("src") ?? "";
+            const style = (el as HTMLElement).style?.backgroundImage ?? "";
+            const dataAttachment =
+                el.getAttribute("data-attachment-id")
+                ?? el.getAttribute("data-attachment-type")
+                ?? el.getAttribute("data-attachment-item-id")
+                ?? "";
+
+            if (dataAttachment) return true;
+
+            const combined = `${href} ${src} ${style}`;
+            if (/(?:cdn|media)\.discordapp\.(?:com|net)\/attachments\//i.test(combined)) return true;
+            if (/discord\.com\/attachments\//i.test(combined)) return true;
+            if (/cdn\.discordapp\.com\/ephemeral-attachments\//i.test(combined)) return true;
+
+            el = el.parentElement;
+        }
+        return false;
     },
 
     extractGuildIdFromTarget(target: HTMLElement): string | null {
@@ -982,7 +1017,8 @@ export default definePlugin({
             if (listCandidate) {
                 if (UserStore.getUser(listCandidate)) return listCandidate;
                 const channel = ChannelStore.getChannel(listCandidate);
-                if (channel?.isDM?.() || channel?.type === ChannelType.DM || channel?.type === ChannelType.GROUP_DM) {
+                if (channel?.type === ChannelType.GROUP_DM) return null;
+                if (channel?.isDM?.() || channel?.type === ChannelType.DM) {
                     return this.getDmRecipientId(channel);
                 }
             }
@@ -1001,6 +1037,23 @@ export default definePlugin({
             const ariaMatch = extractSnowflakeFromString(aria);
             if (ariaMatch) return ariaMatch;
 
+            el = el.parentElement;
+        }
+        return null;
+    },
+
+    extractAvatarUserIdFromTarget(target: HTMLElement | null): string | null {
+        let el: HTMLElement | null = target;
+        while (el) {
+            if (typeof (el as any).getAttribute !== "function") {
+                el = (el as any).parentElement ?? null;
+                continue;
+            }
+            const src = el.getAttribute("src") ?? "";
+            const styleAttr = el.getAttribute("style") ?? "";
+            const bgImage = (el as HTMLElement).style?.backgroundImage ?? "";
+            const candidate = extractUserFromAvatar(`${src} ${styleAttr} ${bgImage}`);
+            if (candidate) return candidate;
             el = el.parentElement;
         }
         return null;
@@ -1063,15 +1116,27 @@ export default definePlugin({
         if (entity.kind === "channel") {
             const channel = ChannelStore.getChannel(entity.id);
             const isThread = Boolean(channel && typeof channel.isThread === "function" && channel.isThread());
-            const title = channel?.name
-                ? `${isThread ? "" : "#"}${channel.name}`
-                : `${isThread ? "" : "#"}${entity.id}`;
+            const isGroupDm = channel?.type === ChannelType.GROUP_DM;
+            const channelName = isGroupDm
+                ? (channel?.name || this.getGroupDmDisplayName(channel))
+                : channel?.name;
+            const title = channelName
+                ? `${isThread || isGroupDm ? "" : "#"}${channelName}`
+                : `${isThread || isGroupDm ? "" : "#"}${entity.id}`;
             const guild = channel?.guild_id ? GuildStore.getGuild(channel.guild_id) : null;
             const subtitle = guild?.name ?? (entity.guildId ? "Server" : "Direct Messages");
             let iconUrl: string | undefined;
             if (guild?.icon) {
                 iconUrl = IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 64 }) ?? undefined;
-            } else if (channel?.isDM?.() || channel?.type === ChannelType.DM || channel?.type === ChannelType.GROUP_DM) {
+            } else if (channel?.type === ChannelType.GROUP_DM) {
+                const channelIcon = IconUtils.getChannelIconURL?.({
+                    id: channel.id,
+                    icon: (channel as { icon?: string | null; }).icon ?? undefined,
+                    size: 64,
+                });
+                iconUrl = channelIcon ?? undefined;
+            }
+            if (!iconUrl && (channel?.isDM?.() || channel?.type === ChannelType.DM || channel?.type === ChannelType.GROUP_DM)) {
                 const recipientId = this.getDmRecipientId(channel);
                 const recipient = recipientId ? UserStore.getUser(recipientId) : null;
                 iconUrl = recipient?.getAvatarURL?.(void 0, 80, true) ?? undefined;
@@ -1126,5 +1191,22 @@ export default definePlugin({
             ?? (channel as any).rawRecipients?.[0]
             ?? null;
         return typeof raw === "string" ? raw : null;
+    },
+
+    getGroupDmDisplayName(channel?: Channel | null): string | null {
+        if (!channel || channel.type !== ChannelType.GROUP_DM) return null;
+        const selfId = UserStore.getCurrentUser()?.id ?? null;
+        const recipients = (channel.recipients ?? (channel as any).rawRecipients ?? []).filter(Boolean) as string[];
+        const names = recipients
+            .filter(id => id !== selfId)
+            .map(id => {
+                const user = UserStore.getUser(id);
+                return RelationshipStore?.getNickname?.(id)
+                    ?? user?.globalName
+                    ?? user?.username
+                    ?? null;
+            })
+            .filter(Boolean) as string[];
+        return names.length ? names.join(", ") : null;
     },
 });

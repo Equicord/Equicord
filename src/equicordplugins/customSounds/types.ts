@@ -18,6 +18,14 @@ export interface SoundOverride {
     selectedFileId?: string;
 }
 
+export interface UserSoundOverrides {
+    [soundId: string]: SoundOverride;
+}
+
+export interface UserOverridesStore {
+    [userId: string]: UserSoundOverrides;
+}
+
 export const seasonalSounds = {
     "halloween_call_calling": "https://canary.discord.com/assets/0950a7ea4f1dd037870b.mp3",
     "winter_call_calling": "https://canary.discord.com/assets/7b945e7be3f86c5b7c82.mp3",
