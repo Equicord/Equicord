@@ -1,18 +1,18 @@
 {
-    "name": "equicord",
+    "name": "vencord",
     "private": "true",
-    "version": "1.13.12.3",
-    "description": "The other cutest Discord client mod",
-    "homepage": "https://github.com/Equicord/Equicord#readme",
+    "version": "1.14.1",
+    "description": "The cutest Discord client mod",
+    "homepage": "https://github.com/Vendicated/Vencord#readme",
     "bugs": {
-        "url": "https://github.com/Equicord/Equicord/issues"
+        "url": "https://github.com/Vendicated/Vencord/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Equicord/Equicord.git"
+        "url": "git+https://github.com/Vendicated/Vencord.git"
     },
     "license": "GPL-3.0-or-later",
-    "author": "Equicord",
+    "author": "Vendicated",
     "scripts": {
         "build": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
         "buildStandalone": "pnpm build --standalone",
@@ -23,45 +23,30 @@
         "watch": "pnpm build --watch",
         "dev": "pnpm watch",
         "watchWeb": "pnpm buildWeb --watch",
-        "generateDevsList": "tsx scripts/generateDevsList.ts",
         "generatePluginJson": "tsx scripts/generatePluginList.ts",
-        "generateEquicordPluginJson": "tsx scripts/generatePluginList.ts --equicord",
-        "generateVencordPluginJson": "tsx scripts/generatePluginList.ts --vencord",
         "generateTypes": "tspc --emitDeclarationOnly --declaration --outDir packages/vencord-types --allowJs false",
         "inject": "node scripts/runInstaller.mjs -- --install",
         "uninject": "node scripts/runInstaller.mjs -- --uninstall",
-        "repair": "node scripts/runInstaller.mjs -- --repair",
         "lint": "eslint",
         "lint-styles": "stylelint \"src/**/*.css\" --ignore-pattern src/userplugins",
         "lint:fix": "pnpm lint --fix",
-        "test": "pnpm buildStandalone && pnpm testTsc && pnpm lint:fix && pnpm lint-styles && pnpm generatePluginJson",
-        "testWeb": "pnpm lint:fix && pnpm buildWeb && pnpm testTsc",
+        "test": "pnpm buildStandalone && pnpm testTsc && pnpm lint && pnpm lint-styles && pnpm generatePluginJson",
+        "testWeb": "pnpm lint && pnpm buildWeb && pnpm testTsc",
         "testTsc": "tsc --noEmit"
     },
     "dependencies": {
-        "@ffmpeg/ffmpeg": "^0.12.10",
-        "@ffmpeg/util": "^0.12.1",
         "@intrnl/xxhash64": "^0.1.2",
-        "@types/less": "^3.0.8",
-        "@types/stylus": "^0.48.42",
-        "@types/tinycolor2": "^1.4.6",
         "@vap/core": "0.0.12",
         "@vap/shiki": "0.10.5",
         "fflate": "^0.8.2",
         "gifenc": "github:mattdesl/gifenc#64842fca317b112a8590f8fef2bf3825da8f6fe3",
-        "idb": "8.0.3",
-        "jsqr": "1.4.0",
         "monaco-editor": "^0.54.0",
         "nanoid": "^5.1.6",
-        "usercss-meta": "^0.12.0",
         "virtual-merge": "^1.0.1"
     },
     "devDependencies": {
-        "@electron/asar": "^4.0.1",
         "@stylistic/eslint-plugin": "^5.6.0",
-        "@types/adm-zip": "^0.5.7",
         "@types/chrome": "^0.1.30",
-        "@types/diff": "^7.0.2",
         "@types/lodash": "^4.17.20",
         "@types/node": "^24.10.1",
         "@types/react": "^19.0.10",
@@ -72,6 +57,7 @@
         "esbuild": "^0.27.0",
         "eslint": "9.39.1",
         "eslint-import-resolver-alias": "^1.1.2",
+        "eslint-plugin-path-alias": "2.1.0",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-simple-header": "^1.2.1",
         "eslint-plugin-simple-import-sort": "^12.1.1",
@@ -83,6 +69,7 @@
         "standalone-electron-types": "^34.2.0",
         "stylelint": "^16.25.0",
         "stylelint-config-standard": "^39.0.1",
+        "svgo": "^4.0.0",
         "ts-patch": "^3.3.0",
         "ts-pattern": "^5.6.0",
         "tsx": "^4.20.6",
@@ -92,10 +79,10 @@
         "typescript-transform-paths": "^3.5.5",
         "zip-local": "^0.3.5"
     },
-    "packageManager": "pnpm@10.26.2",
+    "packageManager": "pnpm@10.4.1",
     "pnpm": {
         "patchedDependencies": {
-            "@types/less@3.0.8": "patches/@types__less@3.0.8.patch"
+            "eslint-plugin-path-alias@2.1.0": "patches/eslint-plugin-path-alias@2.1.0.patch"
         },
         "peerDependencyRules": {
             "ignoreMissing": [
@@ -112,10 +99,7 @@
         },
         "onlyBuiltDependencies": [
             "esbuild"
-        ],
-        "overrides": {
-            "@eslint/plugin-kit@<0.3.4": ">=0.3.4"
-        }
+        ]
     },
     "engines": {
         "node": ">=18"
