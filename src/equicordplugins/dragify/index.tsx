@@ -16,7 +16,7 @@ import { ChannelType } from "@vencord/discord-types/enums";
 import { ChannelStore, ComponentDispatch, Constants, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
 
 import { type GhostState, hideGhost as hideDragGhost, isGhostVisible, mountGhost as mountDragGhost, scheduleGhostPosition as scheduleDragGhostPosition, showGhost as showDragGhost, unmountGhost as unmountDragGhost } from "./ghost";
-import { collectPayloadStrings, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractStrings, extractUserFromAvatar, extractUserFromProfile, parseFromStrings, tryParseJson } from "./utils";
+import { collectPayloadStrings, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractUserFromAvatar, extractUserFromProfile, parseFromStrings, tryParseJson } from "./utils";
 
 type DropEntity =
     | { kind: "user"; id: string; }
@@ -353,11 +353,6 @@ export default definePlugin({
         }
     },
 
-    shouldHandle(dataTransfer?: DataTransfer | null): boolean {
-        if (!dataTransfer || dataTransfer.files?.length) return false;
-        return parseFromStrings(extractStrings(dataTransfer), { ChannelStore, GuildStore, UserStore }) !== null;
-    },
-
     async buildText(entity: DropEntity, currentChannel: Channel): Promise<string | null> {
         switch (entity.kind) {
             case "user":
@@ -566,16 +561,11 @@ export default definePlugin({
         const needsSpace = existing.length > 0 && !existing.endsWith(" ");
         const nextValue = needsSpace ? `${existing} ${text}` : `${existing}${text}`;
 
-        const emitChange = (DraftStore as any).emitChange as (() => void) | undefined;
-
         if (!existing) {
             DraftActions.setDraft(channelId, nextValue, DraftType.ChannelMessage);
         } else {
             DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
         }
-
-        DraftActions.saveDraft(channelId, nextValue, DraftType.ChannelMessage);
-        if (emitChange) emitChange.call(DraftStore);
     },
 
     onChannelDragStart(event: DragEvent, channel?: Pick<Channel, "id" | "guild_id"> | { id: string; guildId?: string; }) {
@@ -586,9 +576,6 @@ export default definePlugin({
             if (parsed?.kind === "user") return;
         }
         const targetEl = event.target as HTMLElement | null;
-        if (targetEl?.closest?.("[class*=\"voiceUser\"]")) {
-            logger.debug("Channel dragstart from voice user target");
-        }
         if (targetEl?.closest?.("[data-user-id]")) return;
 
         const targetResolved = this.extractChannelIdFromTarget(event.target as HTMLElement | null);
@@ -628,28 +615,20 @@ export default definePlugin({
         }
         const currentTarget = (event as unknown as { currentTarget?: EventTarget | null; }).currentTarget as HTMLElement | null;
         const target = (event.target as HTMLElement | null) ?? null;
-        const userIdFromParam =
-            user?.id
-            ?? (user as any)?.userId
-            ?? (user as any)?.user?.id
-            ?? null;
+        const userIdFromParam = user?.id ?? (user as any)?.userId ?? (user as any)?.user?.id ?? null;
         const userIdFromDom =
-            currentTarget?.getAttribute?.("data-user-id")
-            ?? currentTarget?.closest?.("[data-user-id]")?.getAttribute?.("data-user-id")
-            ?? target?.getAttribute?.("data-user-id")
-            ?? target?.closest?.("[data-user-id]")?.getAttribute?.("data-user-id")
+            this.extractUserIdFromTarget(currentTarget)
+            ?? this.extractUserIdFromTarget(target)
             ?? null;
         const userIdFromEvent = this.extractUserIdFromEvent(event);
         const rawUserId =
             userIdFromParam
             ?? userIdFromDom
-            ?? this.extractUserIdFromTarget(currentTarget)
-            ?? this.extractUserIdFromTarget(target)
             ?? userIdFromEvent
             ?? event.dataTransfer?.getData("data-user-id")
             ?? null;
         const userId = rawUserId ? (extractSnowflakeFromString(rawUserId) ?? rawUserId) : null;
-        if (!userId || !/^\d{17,20}$/.test(userId)) return;
+        if (!userId) return;
         const payload = JSON.stringify({ kind: "user", id: userId });
         event.stopPropagation();
         activeUserDragId = userId;
@@ -663,12 +642,9 @@ export default definePlugin({
 
     onDmDragStart(event: DragEvent, channel?: Channel | null) {
         let resolvedChannel = channel ?? null;
-        const channelId = resolvedChannel?.id ?? null;
-        if (!resolvedChannel && event.target) {
+        if (!resolvedChannel) {
             const targetChannel = this.extractChannelIdFromTarget(event.target as HTMLElement | null);
             if (targetChannel?.id) resolvedChannel = ChannelStore.getChannel(targetChannel.id) ?? null;
-        } else if (channelId && !resolvedChannel?.getRecipientId) {
-            resolvedChannel = ChannelStore.getChannel(channelId) ?? resolvedChannel;
         }
         if (!resolvedChannel) return;
         const recipientId = this.getDmRecipientId(resolvedChannel);
@@ -737,10 +713,9 @@ export default definePlugin({
 
     globalDragOver: (event: DragEvent) => {
         const inst = pluginInstance;
-        if (!inst) return;
+        if (!inst || !inst.isMessageInputEvent(event)) return;
         if (dragSourceIsInput) return;
         if (event.dataTransfer?.files?.length) return;
-        if (!inst.isMessageInputEvent(event)) return;
         const hasActiveGuildDrag = activeGuildDragId !== null;
         const hasActiveEntity = Boolean(activeDragEntity || activeUserDragId);
         const shouldHandle = hasActiveGuildDrag || hasActiveEntity || dragifyActive || hasDragifyTransfer(event.dataTransfer);
@@ -752,24 +727,20 @@ export default definePlugin({
 
     globalDrop: async (event: DragEvent) => {
         const inst = pluginInstance;
-        if (!inst) return;
+        if (!inst || !inst.isMessageInputEvent(event)) return;
         if (dragSourceIsInput) return;
-        if (!inst.isMessageInputEvent(event)) return;
         if (event.dataTransfer?.files?.length) {
             clearDragState();
             return;
         }
-        const channelId = SelectedChannelStore?.getChannelId?.();
-        const channel = channelId ? ChannelStore.getChannel(channelId) : null;
+        const channelId = SelectedChannelStore.getChannelId();
+        const channel = ChannelStore.getChannel(channelId);
         if (!channel) return;
 
         const types = event.dataTransfer?.types ?? [];
         const hasDragify = types.includes("application/dragify");
-        const hasActiveGuildDrag = activeGuildDragId !== null;
-        const hasActiveUserDrag = activeUserDragId !== null;
-        const hasActiveEntity = activeDragEntity !== null;
-
-        if (!hasDragify && !hasActiveGuildDrag && !hasActiveUserDrag && !hasActiveEntity && !dragifyActive) return;
+        const hasAnyActiveDrag = activeGuildDragId !== null || activeUserDragId !== null || activeDragEntity !== null || dragifyActive;
+        if (!hasDragify && !hasAnyActiveDrag) return;
 
         lastDropAt = Date.now();
         event.preventDefault();
@@ -801,21 +772,6 @@ export default definePlugin({
         }
 
         if (!event.dataTransfer.types?.includes("application/dragify")) {
-            if (typeof document !== "undefined" && typeof event.clientX === "number" && typeof event.clientY === "number") {
-                const atPoint = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement | null;
-                const userTarget = atPoint?.closest?.("[data-user-id]") as HTMLElement | null;
-                if (userTarget) {
-                    const nestedUserId = userTarget.getAttribute("data-user-id")
-                        ?? userTarget.querySelector?.("[data-user-id]")?.getAttribute("data-user-id")
-                        ?? null;
-                    const userId = nestedUserId ?? inst.extractUserIdFromTarget(userTarget);
-                    if (userId) {
-                        inst.onUserDragStart(event, { id: userId });
-                        return;
-                    }
-                }
-            }
-
             const path = event.composedPath?.() ?? [];
             for (const entry of path) {
                 const el = entry as HTMLElement | null;
