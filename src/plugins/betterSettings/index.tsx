@@ -6,7 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
-import { buildPluginMenuEntries, buildThemeMenuEntries } from "@equicordplugins/equicordToolbox/menu";
+import { buildPluginMenuEntries, buildThemeMenuEntries } from "@plugins/vencordToolbox/menu";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
@@ -145,7 +145,7 @@ export default definePlugin({
                 },
                 {
                     match: /case \i\.\i\.DEVELOPER_OPTIONS:return \i;/,
-                    replace: "$&case 'EquicordPlugins':return $self.buildPluginMenuEntries(true);$&case 'EquicordThemes':return $self.buildThemeMenuEntries();"
+                    replace: "$&case 'VencordPlugins':return $self.buildPluginMenuEntries(true);$&case 'VencordThemes':return $self.buildThemeMenuEntries();"
                 }
             ]
         },

@@ -16,16 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import "./style.css";
-
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import { getUserSettingLazy } from "@api/UserSettings";
-import equicordToolbox from "@equicordplugins/equicordToolbox";
+import ErrorBoundary from "@components/ErrorBoundary";
+import VencordToolboxPlugin from "@plugins/vencordToolbox";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { findComponentByCodeLazy } from "@webpack";
 import { Menu } from "@webpack/common";
+
+import managedStyle from "./style.css?managed";
+
+const Button = findComponentByCodeLazy(".GREEN,positionKeyStemOverride:");
 
 const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;
 
@@ -40,17 +43,18 @@ const settings = definePluginSettings({
         description: "Where to show the game activity toggle button",
         options: [
             { label: "Next to Mute/Deafen", value: "PANEL", default: true },
-            { label: "Equicord Toolbox", value: "TOOLBOX" }
+            { label: "Vencord Toolbox", value: "TOOLBOX" }
         ],
         get hidden() {
-            return !isPluginEnabled(equicordToolbox.name);
+            return !isPluginEnabled(VencordToolboxPlugin.name);
         }
     }
 });
 
-function Icon({ className }: { className?: string; }) {
+function Icon() {
     const { oldIcon } = settings.use(["oldIcon"]);
     const showCurrentGame = ShowCurrentGame.useSetting();
+
 
     const redLinePath = !oldIcon
         ? "M22.7 2.7a1 1 0 0 0-1.4-1.4l-20 20a1 1 0 1 0 1.4 1.4Z"
@@ -61,7 +65,7 @@ function Icon({ className }: { className?: string; }) {
         : "M23.27 4.54 19.46.73 .73 19.46 4.54 23.27 23.27 4.54Z";
 
     return (
-        <svg className={className} width="20" height="20" viewBox="0 0 24 24">
+        <svg width="20" height="20" viewBox="0 0 24 24">
             <path
                 fill={!showCurrentGame && !oldIcon ? "var(--status-danger)" : "currentColor"}
                 mask={!showCurrentGame ? "url(#gameActivityMask)" : void 0}
@@ -78,20 +82,20 @@ function Icon({ className }: { className?: string; }) {
     );
 }
 
-function GameActivityToggleButton({ iconForeground, hideTooltips, nameplate }: UserAreaRenderProps) {
+function GameActivityToggleButton(props: { nameplate?: any; }) {
     const { location } = settings.use(["location"]);
     const showCurrentGame = ShowCurrentGame.useSetting();
 
-    if (location !== "PANEL" && isPluginEnabled(equicordToolbox.name)) return null;
+    if (location !== "PANEL" && isPluginEnabled(VencordToolboxPlugin.name)) return null;
 
     return (
-        <UserAreaButton
-            tooltipText={hideTooltips ? void 0 : showCurrentGame ? "Disable Game Activity" : "Enable Game Activity"}
-            icon={<Icon className={iconForeground} />}
+        <Button
+            tooltipText={showCurrentGame ? "Disable Game Activity" : "Enable Game Activity"}
+            icon={Icon}
             role="switch"
             aria-checked={!showCurrentGame}
             redGlow={!showCurrentGame}
-            plated={nameplate != null}
+            plated={props?.nameplate != null}
             onClick={() => ShowCurrentGame.updateSetting(old => !old)}
         />
     );
@@ -104,10 +108,17 @@ export default definePlugin({
     dependencies: ["UserSettingsAPI"],
     settings,
 
-    userAreaButton: {
-        icon: Icon,
-        render: GameActivityToggleButton
-    },
+    managedStyle,
+
+    patches: [
+        {
+            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
+            replacement: {
+                match: /children:\[(?=.{0,25}?accountContainerRef)/,
+                replace: "children:[$self.GameActivityToggleButton(arguments[0]),"
+            }
+        }
+    ],
 
     toolboxActions() {
         const { location } = settings.use(["location"]);
@@ -124,4 +135,6 @@ export default definePlugin({
             />
         );
     },
+
+    GameActivityToggleButton: ErrorBoundary.wrap(GameActivityToggleButton, { noop: true }),
 });

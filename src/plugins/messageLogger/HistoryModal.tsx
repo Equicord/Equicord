@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { classNameFactory } from "@utils/css";
@@ -12,7 +11,7 @@ import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { findCssClassesLazy } from "@webpack";
-import { TabBar, Timestamp, useState } from "@webpack/common";
+import { TabBar, Text, Timestamp, useState } from "@webpack/common";
 
 import { parseEditContent } from ".";
 
@@ -40,7 +39,7 @@ export function HistoryModal({ modalProps, message }: { modalProps: ModalProps; 
     return (
         <ModalRoot {...modalProps} size={ModalSize.LARGE}>
             <ModalHeader className={cl("head")}>
-                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>Message Edit History</BaseText>
+                <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }}>Message Edit History</Text>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
@@ -86,7 +85,7 @@ export function HistoryModal({ modalProps, message }: { modalProps: ModalProps; 
                 </TabBar>
 
                 <div className={classes(CodeContainerClasses.markup, MiscClasses.messageContent, Margins.top20)}>
-                    {parseEditContent(contents[currentTab], message, currentTab === contents.length - 1 ? undefined : contents[contents.length - 1])}
+                    {parseEditContent(contents[currentTab], message)}
                 </div>
             </ModalContent>
         </ModalRoot>

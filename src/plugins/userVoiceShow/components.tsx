@@ -5,14 +5,13 @@
  */
 
 import { isPluginEnabled } from "@api/PluginManager";
-import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import ShowHiddenChannelsPlugin from "@plugins/showHiddenChannels";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import { Channel } from "@vencord/discord-types";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
-import { ChannelRouter, ChannelStore, Parser, PermissionsBits, PermissionStore, React, showToast, Toasts, Tooltip, useMemo, UserStore, UserSummaryItem, useStateFromStores, VoiceStateStore } from "@webpack/common";
+import { ChannelRouter, ChannelStore, Parser, PermissionsBits, PermissionStore, React, showToast, Text, Toasts, Tooltip, useMemo, UserStore, UserSummaryItem, useStateFromStores, VoiceStateStore } from "@webpack/common";
 import { PropsWithChildren } from "react";
 
 const cl = classNameFactory("vc-uvs-");
@@ -99,8 +98,8 @@ function VoiceChannelTooltip({ channel, isLocked }: VoiceChannelTooltipProps) {
     const Icon = isLocked ? LockedSpeakerIcon : SpeakerIcon;
     return (
         <>
-            <BaseText size="sm" weight="bold">In Voice Chat</BaseText>
-            <BaseText size="sm" weight="bold">{Parser.parse(`<#${channel.id}>`)}</BaseText>
+            <Text variant="text-sm/bold">In Voice Chat</Text>
+            <Text variant="text-sm/bold">{Parser.parse(`<#${channel.id}>`)}</Text>
             <div className={cl("vc-members")}>
                 <Icon size={18} />
                 <UserSummaryItem
@@ -114,13 +113,12 @@ function VoiceChannelTooltip({ channel, isLocked }: VoiceChannelTooltipProps) {
     );
 }
 
-export type VoiceChannelIndicatorProps = {
+export interface VoiceChannelIndicatorProps {
     userId: string;
-    isMessageIndicator?: boolean;
     isProfile?: boolean;
     isActionButton?: boolean;
     shouldHighlight?: boolean;
-};
+}
 
 const clickTimers = new Map<string, any>();
 
