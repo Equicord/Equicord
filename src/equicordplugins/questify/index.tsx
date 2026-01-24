@@ -874,6 +874,8 @@ function processQuestForAutoComplete(quest: Quest): boolean {
     const playTypeIncompatible = isPlay && (!completeGameQuestsInBackground || !IS_DISCORD_DESKTOP);
     const achievementTypeIncompatible = isAchievement && (!completeAchievementQuestsInBackground || !IS_DISCORD_DESKTOP);
 
+    QuestifyLogger.info(`[${getFormattedNow()}] quest:`, quest, "task:", task, "target:", questTarget, "existingInterval:", existingInterval);
+
     if (quest.userStatus?.completedAt || existingInterval) {
         return false;
     } else if (!task) {
@@ -1494,8 +1496,8 @@ export default definePlugin({
             replacement: [
                 {
                     // Resume Video Quest.
-                    match: /(onClick:\(\)=>)(\(0,\i.\i\)\({quest:(\i))/,
-                    replace: "$1!$self.processQuestForAutoComplete($3)&&$2"
+                    match: /(tooltipText:\i.intl.string\(\i.\i.\i\),onClick:\(\)=>)(\(0,\i.\i\)\({quest)/,
+                    replace: "$1!$self.processQuestForAutoComplete(arguments[0].quest)&&$2"
                 },
                 {
                     // Start Play Game and Play Activity Quests.
