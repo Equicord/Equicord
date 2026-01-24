@@ -38,7 +38,7 @@ function ComponentsIcon(props: React.SVGProps<SVGSVGElement>) {
 export default definePlugin({
     name: "Components",
     description: "Adds a new tab to settings to browse Discord components.",
-    authors: [EquicordDevs.Prism],
+    authors: [EquicordDevs.prism],
     dependencies: ["Settings"],
     startAt: StartAt.WebpackReady,
     toolboxActions: {

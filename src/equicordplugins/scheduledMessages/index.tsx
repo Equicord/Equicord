@@ -86,7 +86,7 @@ function handleReactionEvent(event: FluxReactionEvent): void {
 export default definePlugin({
     name: "ScheduledMessages",
     description: "Schedule messages to be sent at a specific time or after a delay.",
-    authors: [EquicordDevs.mmeta, EquicordDevs.Prism],
+    authors: [EquicordDevs.mmeta, EquicordDevs.prism],
     settings,
 
     flux: {
