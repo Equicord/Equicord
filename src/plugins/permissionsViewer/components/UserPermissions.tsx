@@ -16,19 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingTertiary } from "@components/Heading";
 import { cl, getGuildPermissionSpecMap, getSortedRolesForMember, sortUserRoles } from "@plugins/permissionsViewer/utils";
 import { getIntlMessage } from "@utils/discord";
 import { classes } from "@utils/misc";
-import type { Guild, GuildMember, RoleOrUserPermission } from "@vencord/discord-types";
-import { PermissionOverwriteType } from "@vencord/discord-types/enums";
-import { filters, findBulk, proxyLazyWebpack } from "@webpack";
-import { PermissionsBits, Tooltip, useMemo, UserStore } from "@webpack/common";
+import type { Guild, GuildMember } from "@vencord/discord-types";
+import { findCssClassesLazy } from "@webpack";
+import { PermissionsBits, Text, Tooltip, useMemo, UserStore } from "@webpack/common";
 
 import { PermissionsSortOrder, settings } from "..";
-import openRolesAndUsersPermissionsModal from "./RolesAndUsersPermissions";
+import openRolesAndUsersPermissionsModal, { PermissionType, type RoleOrUserPermission } from "./RolesAndUsersPermissions";
 
 interface UserPermission {
     permission: string;
@@ -39,14 +37,8 @@ interface UserPermission {
 
 type UserPermissions = Array<UserPermission>;
 
-const { RoleClasses, RoleBorderClasses } = proxyLazyWebpack(() => {
-    const [RoleClasses, RoleBorderClasses] = findBulk(
-        filters.byProps("role", "roleCircle", "roleName"),
-        filters.byProps("roleCircle", "dot", "dotBorderColor")
-    ) as Record<string, string>[];
-
-    return { RoleClasses, RoleBorderClasses };
-});
+const RoleClasses = findCssClassesLazy("role", "roleName", "roleRemoveButton", "roleNameOverflow", "root");
+const RoleBorderClasses = findCssClassesLazy("roleCircle", "dot", "dotBorderColor");
 
 interface FakeRoleProps extends React.HTMLAttributes<HTMLDivElement> {
     text: string;
@@ -58,18 +50,17 @@ function FakeRole({ text, color, ...props }: FakeRoleProps) {
         <div {...props} className={classes(RoleClasses.role)}>
             <div className={RoleClasses.roleRemoveButton}>
                 <span
-                    className={classes(RoleBorderClasses.roleCircle, RoleClasses.roleCircle)}
+                    className={RoleBorderClasses.roleCircle}
                     style={{ backgroundColor: color }}
                 />
             </div>
             <div className={RoleClasses.roleName}>
-                <BaseText
-                    size="xs"
-                    weight="medium"
+                <Text
                     className={RoleClasses.roleNameOverflow}
+                    variant="text-xs/medium"
                 >
                     {text}
-                </BaseText>
+                </Text>
             </div>
         </div>
     );
@@ -83,7 +74,7 @@ interface GrantedByTooltipProps {
 function GrantedByTooltip({ roleName, roleColor }: GrantedByTooltipProps) {
     return (
         <>
-            <BaseText size="sm">Granted By</BaseText>
+            <Text variant="text-sm/medium">Granted By</Text>
             <FakeRole text={roleName} color={roleColor} />
         </>
     );
@@ -100,13 +91,13 @@ function UserPermissionsComponent({ guild, guildMember, closePopout }: { guild: 
         const userRoles = getSortedRolesForMember(guild, guildMember);
 
         const rolePermissions: Array<RoleOrUserPermission> = userRoles.map(role => ({
-            type: PermissionOverwriteType.ROLE,
+            type: PermissionType.Role,
             ...role
         }));
 
         if (guild.ownerId === guildMember.userId) {
             rolePermissions.push({
-                type: PermissionOverwriteType.OWNER,
+                type: PermissionType.Owner,
                 permissions: Object.values(PermissionsBits).reduce((prev, curr) => prev | curr, 0n)
             });
 
