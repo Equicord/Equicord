@@ -65,12 +65,19 @@ export default definePlugin({
             find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
             replacement: [
                 {
-                    match: /(?<=#{intl::MUTE}\),)className:\i\.\i,/g,
+                    match: /(?<=#{intl::MUTE}\),)className:\i\.\i,/,
                     replace: ""
                 },
                 {
-                    // TODO: MAKE THIS BETTER
-                    match: /,\(0,\i\.jsxs?\).{0,130}#{intl::18wnuD::raw}.{0,530}\}\)(?=\])/g,
+                    match: /(?<=#{intl::DEAFEN}\),)className:\i\.\i,/,
+                    replace: ""
+                },
+                {
+                    match: /,\(0,\i\.jsxs?\)\(\i\.\i,\{.{0,600}#{intl::ACCOUNT_INPUT_OPTIONS}\)\}\)(?=\])/,
+                    replace: ""
+                },
+                {
+                    match: /,\(0,\i\.jsxs?\)\(\i\.\i,\{.{0,650}#{intl::ACCOUNT_OUTPUT_OPTIONS}\)\}\)(?=\])/,
                     replace: ""
                 }
             ],
