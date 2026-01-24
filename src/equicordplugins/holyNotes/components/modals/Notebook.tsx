@@ -7,12 +7,12 @@
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
+import { quickSelectClasses } from "@equicordplugins/holyNotes";
 import HelpIcon from "@equicordplugins/holyNotes/components/icons/HelpIcon";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { HolyNotes } from "@equicordplugins/holyNotes/types";
 import { classes } from "@utils/misc";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { findByProps } from "@webpack";
 import { ContextMenuApi, FluxDispatcher, Menu, React, TextInput } from "@webpack/common";
 
 import Errors from "./Error";
@@ -69,8 +69,6 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
     const [sortDirection, setSortDirection] = React.useState(true);
     const [currentNotebook, setCurrentNotebook] = React.useState("Main");
 
-    const { quickSelect, quickSelectLabel, quickSelectQuick, quickSelectValue, quickSelectArrow } = findByProps("quickSelect") || {};
-
     const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
 
     const notes = noteHandler.getNotes(currentNotebook);
@@ -126,7 +124,7 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
                     <div className={classes("sort-button-container", "vc-notebook-display-left")}>
                         <Flex
                             alignItems="center"
-                            className={quickSelect}
+                            className={quickSelectClasses.quickSelect}
                             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                                 ContextMenuApi.openContextMenu(event, () => (
                                     <Menu.Menu
@@ -164,13 +162,13 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
                                 ));
                             }}
                         >
-                            <BaseText className={quickSelectLabel}>Change Sorting:</BaseText>
-                            <Flex style={{ flexGrow: 0 }} alignItems="center" className={quickSelectQuick}>
-                                <BaseText className={quickSelectValue}>
+                            <BaseText className={quickSelectClasses.quickSelectLabel}>Change Sorting:</BaseText>
+                            <Flex style={{ flexGrow: 0 }} alignItems="center" className={quickSelectClasses.quickSelectClick}>
+                                <BaseText className={quickSelectClasses.quickSelectValue}>
                                     {sortDirection ? "Ascending" : "Descending"} /{" "}
                                     {sortType ? "Date Added" : "Message Date"}
                                 </BaseText>
-                                <div className={quickSelectArrow} />
+                                <div className={quickSelectClasses.quickSelectArrow} />
                             </Flex>
                         </Flex>
                     </div>
