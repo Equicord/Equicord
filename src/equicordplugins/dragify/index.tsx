@@ -160,14 +160,6 @@ export default definePlugin({
                 replace: "$&,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e)"
             }
         },
-        // Member list rows (server member list)
-        {
-            find: "membersWrap",
-            replacement: {
-                match: /user:(\i),currentUser:(\i),/,
-                replace: "user:$1,\"data-user-id\":$1.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:$1.id}),currentUser:$2,"
-            }
-        },
         // Voice channel list rows (guild sidebar)
         {
             find: "className:a()(this.getModeClass(),{[V.disabled]:this.isDisabled()}),\"data-dnd-name\":e.name,children:[(0,r.jsx)(u.yRy",
@@ -180,26 +172,20 @@ export default definePlugin({
         {
             find: "\"data-dnd-name\":U.name",
             replacement: {
-                match: /className:(\i)\.draggable,"data-dnd-name":(\i)\.name/,
-                replace: "className:$1.draggable,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:$2.id,guild_id:$2.guild_id}),\"data-dnd-name\":$2.name"
+                match: /"data-dnd-name":(\i)\.name,onMouseEnter:/,
+                replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:$1.id,guild_id:$1.guild_id}),onMouseEnter:"
             }
         },
         // Thread rows in channel list (sidebar thread items)
         {
             find: "__invalid_threadMainContent",
             replacement: {
-                match: /(?<=className:\i\.link,)/,
-                replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e),"
+                match: /className:(\i)\.(\i),onClick:(\i),\"aria-label\":/,
+                replace: "className:$1.$2,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e),onClick:$3,\"aria-label\":"
             }
         },
         // Thread rows in channel list (threaded child rows)
-        {
-            find: "basicChannelRowLink",
-            replacement: {
-                match: /(className:\i\(\)\(\[\i\.link,\i\.basicChannelRowLink,\i\]\),)children:/,
-                replace: "$1draggable:!0,onDragStart:e=>$self.onChannelDragStart(e),children:"
-            }
-        },
+        // (handled by __invalid_threadMainContent patch)
         // Channel list items (modern list wrapper)
         {
             find: "shouldShowThreadsPopout",
@@ -212,8 +198,8 @@ export default definePlugin({
         {
             find: "isForumPost()?e.shiftKey:!e.shiftKey",
             replacement: {
-                match: /className:(\i)\.row,onClick:(\i)=>\{\(0,(\i)\.ok\)\((\i),/,
-                replace: "className:$1.row,draggable:!0,onDragStart:$2=>$self.onChannelDragStart($2,{id:$4.id,guild_id:$4.guild_id}),onClick:$2=>{(0,$3.ok)($4,"
+                match: /(className:\i\.\i,)onClick:(\i)=>\{\(0,(\i)\.JA\)\((\i),/,
+                replace: "$1draggable:!0,onDragStart:$2=>$self.onChannelDragStart($2,{id:$4.id,guild_id:$4.guild_id}),onClick:$2=>{(0,$3.JA)($4,"
             }
         },
         // Member list rows
@@ -251,8 +237,8 @@ export default definePlugin({
         {
             find: "[aria-owns=folder-items-",
             replacement: {
-                match: /"data-dnd-name":(\i)\.name,"data-drop-hovering":(\i),children:\(0,(\i)\.jsx\)\((\i)\.LYs/,
-                replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:e=>$self.onGuildDragStart(e,$1.id),\"data-drop-hovering\":$2,children:(0,$3.jsx)($4.LYs"
+                match: /"data-dnd-name":(\i)\.name,"data-drop-hovering":(\i),children:\(0,(\i)\.jsx\)\((\i)\.(\i),/,
+                replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:e=>$self.onGuildDragStart(e,$1.id),\"data-drop-hovering\":$2,children:(0,$3.jsx)($4.$5,"
             }
         },
         // Chat avatars (popout)
