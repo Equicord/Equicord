@@ -874,8 +874,6 @@ function processQuestForAutoComplete(quest: Quest): boolean {
     const playTypeIncompatible = isPlay && (!completeGameQuestsInBackground || !IS_DISCORD_DESKTOP);
     const achievementTypeIncompatible = isAchievement && (!completeAchievementQuestsInBackground || !IS_DISCORD_DESKTOP);
 
-    QuestifyLogger.info(`[${getFormattedNow()}] quest:`, quest, "task:", task, "target:", questTarget, "existingInterval:", existingInterval);
-
     if (quest.userStatus?.completedAt || existingInterval) {
         return false;
     } else if (!task) {
