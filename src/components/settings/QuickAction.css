@@ -14,7 +14,7 @@
 
 .vc-settings-quickActions-pill {
     all: unset;
-    background: var(--redesign-button-secondary-background);
+    background: var(--channeltextarea-background);
     color: var(--text-default);
     display: flex;
     align-items: center;
@@ -29,6 +29,8 @@
 }
 
 .vc-settings-quickActions-pill:hover {
+    --redesign-button-secondary-pressed-background: color-mix(in oklab, var(--primary-130) 100%, var(--custom-theme-base-color, #000) var(--custom-theme-base-color-amount, 0%));
+
     background: var(--redesign-button-secondary-pressed-background);
     transform: translateY(-1px);
     box-shadow: var(--elevation-high);
