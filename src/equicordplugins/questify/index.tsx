@@ -1350,7 +1350,7 @@ export default definePlugin({
             ]
         },
         {
-            // Formats the BalanceCounter with locale string formatting.
+            // Formats the Orbs balance on the Quests page with locale string formatting.
             find: '("BalanceCounter")',
             replacement: {
                 match: /(?<=\i=>"".concat\(\i).toFixed\(0\)(?=\)\))/,
