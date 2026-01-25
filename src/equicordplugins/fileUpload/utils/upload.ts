@@ -59,8 +59,57 @@ async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string
     throw new Error("No URL returned from upload");
 }
 
+interface NestUploadResponse {
+    fileURL: string;
+}
+
+async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
+    const { authToken, folderId } = settings.store;
+
+    if (!authToken) {
+        throw new Error("Auth token is required");
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileBlob, filename);
+
+    if (folderId) {
+        formData.append("folder", folderId);
+    }
+
+    const response = await fetch("https://nest.rip/api/files/upload", {
+        method: "POST",
+        headers: {
+            "Authorization": authToken
+        },
+        body: formData
+    });
+
+    const responseContentType = response.headers.get("content-type") || "";
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Upload failed: ${response.status} ${errorText}`);
+    }
+
+    if (!responseContentType.includes("application/json")) {
+        throw new Error("Server returned invalid response (not JSON)");
+    }
+
+    const data: NestUploadResponse = await response.json();
+
+    if (data.fileURL) {
+        return data.fileURL;
+    }
+
+    throw new Error("No URL returned from upload");
+}
+
 export function isConfigured(): boolean {
-    const { serviceUrl, authToken } = settings.store;
+    const { serviceType, serviceUrl, authToken } = settings.store;
+    if (serviceType === ServiceType.NEST) {
+        return Boolean(authToken);
+    }
     return Boolean(serviceUrl && authToken);
 }
 
@@ -113,6 +162,9 @@ export async function uploadFile(url: string): Promise<void> {
         switch (serviceType) {
             case ServiceType.ZIPLINE:
                 uploadedUrl = await uploadToZipline(typedBlob, filename);
+                break;
+            case ServiceType.NEST:
+                uploadedUrl = await uploadToNest(typedBlob, filename);
                 break;
             default:
                 throw new Error("Unknown service type");

@@ -5,11 +5,13 @@
  */
 
 export enum ServiceType {
-    ZIPLINE = "zipline"
+    ZIPLINE = "zipline",
+    NEST = "nest"
 }
 
 export const serviceLabels: Record<ServiceType, string> = {
-    [ServiceType.ZIPLINE]: "Zipline"
+    [ServiceType.ZIPLINE]: "Zipline",
+    [ServiceType.NEST]: "Nest"
 };
 
 export interface UploadResponse {

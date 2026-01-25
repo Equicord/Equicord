@@ -19,12 +19,13 @@ export const settings = definePluginSettings({
         type: OptionType.SELECT,
         description: "The upload service to use",
         options: [
-            { label: "Zipline", value: ServiceType.ZIPLINE, default: true }
+            { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
+            { label: "Nest", value: ServiceType.NEST }
         ]
     },
     serviceUrl: {
         type: OptionType.STRING,
-        description: "The URL of your upload service (e.g., https://your-zipline-instance.com)",
+        description: "The URL of your upload service (Zipline only, e.g., https://your-zipline-instance.com)",
         default: ""
     },
     authToken: {
@@ -34,7 +35,7 @@ export const settings = definePluginSettings({
     },
     folderId: {
         type: OptionType.STRING,
-        description: "Folder ID for uploads (Zipline only, leave empty for no folder)",
+        description: "Folder ID for uploads (leave empty for no folder)",
         default: ""
     },
     stripQueryParams: {
@@ -107,7 +108,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
 
 export default definePlugin({
     name: "FileUpload",
-    description: "Upload images and videos to file hosting services like Zipline",
+    description: "Upload images and videos to file hosting services like Zipline and Nest",
     authors: [EquicordDevs.creations],
     settings,
     contextMenus: {
