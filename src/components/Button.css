@@ -144,7 +144,9 @@
 }
 
 .vc-btn-positive {
-    background-color: var(--redesign-button-positive-background, var(--green-430));
+    --redesign-button-positive-pressed-background: color-mix(in oklab, var(--green-460) 100%, var(--custom-theme-base-color, #000) var(--custom-theme-base-color-amount, 0%));
+
+    background-color: var(--status-positive-background, var(--green-430));
     color: var(--white);
 
     &:hover {

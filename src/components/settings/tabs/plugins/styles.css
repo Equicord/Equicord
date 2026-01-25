@@ -175,27 +175,32 @@
 
 .vc-plugins-disable-warning,
 .vc-plugin-modal-disable-warning {
-    background-color: color-mix(in srgb, var(--redesign-button-danger-background) 10%, transparent) !important;
+    background-color: color-mix(in srgb, var(--status-danger) 10%, transparent) !important;
     border-style: solid !important;
     border-width: .1rem !important;
-    border-color: color-mix(in srgb, var(--redesign-button-danger-background) 80%, transparent) !important;
+    border-color: color-mix(in srgb, var(--status-danger) 80%, transparent) !important;
     border-radius: 5px !important;
-    color: color-mix(in srgb, var(--redesign-button-danger-background) 100%, transparent) !important;
+    color: color-mix(in srgb, var(--status-danger) 100%, transparent) !important;
 }
 
 .vc-plugins-disable-warning:hover,
 .vc-plugin-modal-disable-warning:hover {
-    background-color: color-mix(in srgb, var(--redesign-button-danger-background) 40%, transparent) !important;
+    background-color: color-mix(in srgb, var(--status-danger) 40%, transparent) !important;
 }
 
 .vc-plugins-confirm-reset,
 .vc-plugin-modal-confirm-reset {
-    background-color: var(--redesign-button-danger-background) !important;
+    --redesign-button-danger-pressed-text: color-mix(in oklab, var(--white) 100%, var(--custom-theme-text-color, #000) var(--custom-theme-text-color-amount, 0%));
+
+    background-color: var(--status-danger) !important;
     color: var(--redesign-button-danger-pressed-text);
 }
 
 .vc-plugins-confirm-reset:hover,
 .vc-plugin-modal-confirm-reset:hover {
+    --redesign-button-danger-pressed-background: color-mix(in oklab, var(--red-460) 100%, var(--custom-theme-base-color, #000) var(--custom-theme-base-color-amount, 0%));
+    --redesign-button-danger-pressed-text: color-mix(in oklab, var(--white) 100%, var(--custom-theme-text-color, #000) var(--custom-theme-text-color-amount, 0%));
+
     background-color: var(--redesign-button-danger-pressed-background) !important;
     color: var(--redesign-button-danger-pressed-text);
 }

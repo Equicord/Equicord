@@ -18,10 +18,12 @@
 
 
 .vc-joindiscordbutton {
-    background-color: var(--redesign-button-secondary-background) !important;
+    background-color: var(--channeltextarea-background) !important;
 }
 
 .vc-joindiscordbutton:hover {
+    --redesign-button-secondary-pressed-background: color-mix(in oklab, var(--primary-130) 100%, var(--custom-theme-base-color, #000) var(--custom-theme-base-color-amount, 0%));
+
     background-color: var(--redesign-button-secondary-pressed-background) !important;
 }
 
