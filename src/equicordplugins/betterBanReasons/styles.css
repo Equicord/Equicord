@@ -11,6 +11,8 @@
 }
 
 .vc-bbr-remove-button:hover {
+    --redesign-button-danger-pressed-background: color-mix(in oklab, var(--red-460) 100%, var(--custom-theme-base-color, #000) var(--custom-theme-base-color-amount, 0%));
+
     color: var(--redesign-button-danger-pressed-background);
 }
 

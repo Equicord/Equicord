@@ -54,7 +54,7 @@ export function initStyles() {
     const osValuesNode = createAndAppendStyle("vencord-os-theme-values", coreStyleRootNode);
     createAndAppendStyle("vencord-text", coreStyleRootNode).textContent = generateTextCss();
     const rendererCssNode = createAndAppendStyle("vencord-css-core", coreStyleRootNode);
-    const vesktopCssNode = IS_VESKTOP ? createAndAppendStyle("vesktop-css-core", coreStyleRootNode) : null;
+    const vesktopCssNode = (IS_VESKTOP || IS_EQUIBOP) ? createAndAppendStyle("vesktop-css-core", coreStyleRootNode) : null;
     createAndAppendStyle("vencord-margins", coreStyleRootNode).textContent = generateMarginCss();
 
     VencordNative.native.getRendererCss().then(css => rendererCssNode.textContent = css);

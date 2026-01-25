@@ -91,10 +91,12 @@
 }
 
 .qrlogin-device-confirm {
+    --redesign-button-danger-pressed-background: color-mix(in oklab, var(--red-460) 100%, var(--custom-theme-base-color, #000) var(--custom-theme-base-color-amount, 0%));
+
     margin-top: 18px;
     width: 20rem;
     background: linear-gradient(to right,
-            var(--redesign-button-danger-background) calc(var(--progress) - 1%),
+            var(--status-danger) calc(var(--progress) - 1%),
             var(--redesign-button-danger-pressed-background) var(--progress)) !important;
     border-radius: 420rem;
 
