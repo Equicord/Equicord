@@ -29,9 +29,7 @@
 }
 
 .vc-settings-quickActions-pill:hover {
-    --redesign-button-secondary-pressed-background: color-mix(in oklab, var(--primary-130) 100%, var(--custom-theme-base-color, #000) var(--custom-theme-base-color-amount, 0%));
-
-    background: var(--redesign-button-secondary-pressed-background);
+    background: var(--redesign-button-tertiary-pressed-background);
     transform: translateY(-1px);
     box-shadow: var(--elevation-high);
 }
