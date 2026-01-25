@@ -11,7 +11,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Button, TextButton } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
-import { Heading, HeadingTertiary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { DeleteIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
@@ -31,8 +31,8 @@ let keywordEntries: Array<KeywordEntry> = [];
 let keywordLog: Array<any> = [];
 let interceptor: (e: any) => void;
 
-const recentMentionsPopoutClass = findCssClassesLazy("recentMentionsPopout");
-const tabClass = findCssClassesLazy("inboxTitle", "tab", "expand", "expanded", "controlButton");
+const recentMentionsPopoutClass = findCssClassesLazy("recentMentionsPopout", "scroller");
+const tabClass = findCssClassesLazy("inboxTitle", "tab");
 const Popout = findByCodeLazy("getProTip", "canCloseAllMessages:");
 const createMessageRecord = findByCodeLazy(".createFromServer(", ".isBlockedForMessage", "messageReference:");
 const KEYWORD_ENTRIES_KEY = "KeywordNotify_keywordEntries";
@@ -73,24 +73,24 @@ function highlightKeywords(str: string, entries: Array<KeywordEntry>) {
     let regexes: Array<RegExp>;
     try {
         regexes = entries.map(e => new RegExp(e.regex, "g" + (e.ignoreCase ? "i" : "")));
-    } catch {
+    } catch (err) {
         return [str];
     }
 
-    const matches = regexes.map(r => str.match(r)).flat().filter(e => e != null) as Array<string>;
+    const matches = regexes.map(r => str.match(r)).flat().filter(e => e !== null) as Array<string>;
     if (matches.length === 0) {
         return [str];
     }
 
     const idx = str.indexOf(matches[0]);
 
-    return [
+    return (
         <>
             <span>{str.substring(0, idx)}</span>
             <span className="highlight">{matches[0]}</span>
             <span>{str.substring(idx + matches[0].length)}</span>
         </>
-    ];
+    );
 }
 
 function Collapsible({ title, children }) {
@@ -107,7 +107,7 @@ function Collapsible({ title, children }) {
                         color: "var(--text-muted)",
                         paddingRight: "5px"
                     }}>{isOpen ? "▼" : "▶"}</div>
-                    <HeadingTertiary>{title}</HeadingTertiary>
+                    <Heading tag="h4">{title}</Heading>
                 </div>
             </TextButton>
             {isOpen && children}
@@ -127,29 +127,27 @@ function ListedIds({ listIds, setListIds }) {
 
     const elements = values.map((currentValue: string, index: number) => {
         return (
-            <>
-                <Flex flexDirection="row" style={{ marginBottom: "5px" }}>
-                    <div style={{ flexGrow: 1 }}>
-                        <TextInput
-                            placeholder="ID"
-                            spellCheck={false}
-                            value={currentValue}
-                            onChange={e => onChange(e, index)}
-                        />
-                    </div>
-                    <Button
-                        onClick={() => {
-                            values.splice(index, 1);
-                            setListIds(values);
-                            update();
-                        }}
-                        variant="none"
-                        size="iconOnly"
-                        className={cl("delete")}>
-                        <DeleteIcon />
-                    </Button>
-                </Flex>
-            </>
+            <Flex key={index} flexDirection="row" style={{ marginBottom: "5px" }}>
+                <div style={{ flexGrow: 1 }}>
+                    <TextInput
+                        placeholder="ID"
+                        spellCheck={false}
+                        value={currentValue}
+                        onChange={e => onChange(e, index)}
+                    />
+                </div>
+                <Button
+                    onClick={() => {
+                        values.splice(index, 1);
+                        setListIds(values);
+                        update();
+                    }}
+                    variant="none"
+                    size="iconOnly"
+                    className={cl("delete")}>
+                    <DeleteIcon />
+                </Button>
+            </Flex>
         );
     });
 
@@ -227,13 +225,13 @@ function KeywordEntries() {
                     </Flex>
                     <FormSwitch
                         title="Ignore Case"
-                        className={cl("switch")}
+                        className={cl("ignoreCaseSwitch")}
                         value={values[i].ignoreCase}
                         onChange={() => {
                             setIgnoreCase(i, !values[i].ignoreCase);
                         }}
                     />
-                    <Heading>Whitelist/Blacklist</Heading>
+                    <Heading tag="h5">Whitelist/Blacklist</Heading>
                     <Flex flexDirection="row">
                         <div style={{ flexGrow: 1 }}>
                             <ListedIds listIds={values[i].listIds} setListIds={e => setListIds(i, e)} />
@@ -372,14 +370,15 @@ export default definePlugin({
         interceptor = (e: any) => {
             return this.modify(e);
         };
-        FluxDispatcher.addInterceptor(interceptor);
-    },
 
+        FluxDispatcher.subscribe("MESSAGE_CREATE", interceptor);
+        FluxDispatcher.subscribe("MESSAGE_UPDATE", interceptor);
+        FluxDispatcher.subscribe("LOAD_MESSAGES_SUCCESS", interceptor);
+    },
     stop() {
-        const index = FluxDispatcher._interceptors.indexOf(interceptor);
-        if (index > -1) {
-            FluxDispatcher._interceptors.splice(index, 1);
-        }
+        FluxDispatcher.unsubscribe("MESSAGE_CREATE", interceptor);
+        FluxDispatcher.unsubscribe("MESSAGE_UPDATE", interceptor);
+        FluxDispatcher.unsubscribe("LOAD_MESSAGES_SUCCESS", interceptor);
     },
 
     applyKeywordEntries(m: Message) {
@@ -393,7 +392,7 @@ export default definePlugin({
             let listed = entry.listIds.some(id => id.trim() === m.channel_id || id === m.author.id);
             if (!listed) {
                 const channel = ChannelStore.getChannel(m.channel_id);
-                if (channel != null) {
+                if (channel !== null) {
                     listed = entry.listIds.some(id => id.trim() === channel.guild_id);
                 }
             }
@@ -419,7 +418,7 @@ export default definePlugin({
                     if (safeMatchesRegex(embed.description, entry.regex, flags) || safeMatchesRegex(embed.title, entry.regex, flags)) {
                         matches = true;
                         break;
-                    } else if (embed.fields != null) {
+                    } else if (embed.fields !== null) {
                         for (const field of embed.fields as Array<{ name: string, value: string; }>) {
                             if (safeMatchesRegex(field.value, entry.regex, flags) || safeMatchesRegex(field.name, entry.regex, flags)) {
                                 matches = true;
@@ -459,6 +458,15 @@ export default definePlugin({
             DataStore.set(KEYWORD_LOG_KEY, log.map(e => JSON.stringify(e)));
         });
     },
+    discardMessage(id: string) {
+        DataStore.get(KEYWORD_LOG_KEY).then((log: string[]) => {
+            let parsed_logs: Message[] = log ? log.map(e => JSON.parse(e)) : [];
+
+            parsed_logs = parsed_logs.filter(msg => msg.id !== id);
+
+            DataStore.set(KEYWORD_LOG_KEY, parsed_logs.map(e => JSON.stringify(e)));
+        });
+    },
     addToLog(m: Message) {
         if (m == null || keywordLog.some(e => e.id === m.id))
             return;
@@ -466,7 +474,7 @@ export default definePlugin({
         let messageRecord: any;
         try {
             messageRecord = createMessageRecord(m);
-        } catch {
+        } catch (err) {
             return;
         }
 
@@ -487,7 +495,7 @@ export default definePlugin({
 
     keywordTabBar() {
         return (
-            <TabBar.Item className={classes(tabClass.tab, tabClass.expanded)} id={8}>
+            <TabBar.Item className={classes(tabClass.tab)} id={8}>
                 Keywords
             </TabBar.Item>
         );
@@ -543,12 +551,16 @@ export default definePlugin({
             <>
                 <Popout
                     className={classes(recentMentionsPopoutClass.recentMentionsPopout)}
+                    scrollerClassName={classes(recentMentionsPopoutClass.scroller)}
                     renderHeader={() => null}
                     renderMessage={messageRender}
                     channel={channel}
                     onJump={onJump}
                     onFetch={() => null}
-                    onCloseMessage={this.deleteKeyword}
+                    onCloseMessage={(id: string) => {
+                        this.deleteKeyword(id);
+                        this.discardMessage(id);
+                    }}
                     loadMore={() => null}
                     messages={tempLogs}
                     renderEmptyState={() => null}
