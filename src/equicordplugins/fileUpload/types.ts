@@ -25,3 +25,9 @@ export interface UploadResponse {
 export interface NestUploadResponse {
     fileURL: string;
 }
+
+export interface NativeUploadResult {
+    success: boolean;
+    url?: string;
+    error?: string;
+}

@@ -5,9 +5,13 @@
  */
 
 import { settings } from "@equicordplugins/fileUpload/index";
-import { NestUploadResponse, ServiceType, UploadResponse } from "@equicordplugins/fileUpload/types";
+import { ServiceType, UploadResponse } from "@equicordplugins/fileUpload/types";
 import { copyToClipboard } from "@utils/clipboard";
 import { showToast, Toasts } from "@webpack/common";
+
+const Native = IS_DISCORD_DESKTOP
+    ? VencordNative.pluginHelpers.FileUpload as PluginNative<typeof import("../native")>
+    : null;
 
 import { convertApngToGif } from "./apngToGif";
 import { getExtensionFromBytes, getExtensionFromMime, getMimeFromExtension, getUrlExtension } from "./getMediaUrl";
@@ -15,9 +19,9 @@ import { getExtensionFromBytes, getExtensionFromMime, getMimeFromExtension, getU
 let isUploading = false;
 
 async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string> {
-    const { serviceUrl, authToken, folderId } = settings.store;
+    const { serviceUrl, ziplineToken, folderId } = settings.store;
 
-    if (!serviceUrl || !authToken) {
+    if (!serviceUrl || !ziplineToken) {
         throw new Error("Service URL and auth token are required");
     }
 
@@ -26,7 +30,7 @@ async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string
     formData.append("file", fileBlob, filename);
 
     const headers: Record<string, string> = {
-        "Authorization": authToken
+        "Authorization": ziplineToken
     };
 
     if (folderId) {
@@ -60,53 +64,36 @@ async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string
 }
 
 async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
-    const { authToken, folderId } = settings.store;
+    if (!Native) {
+        throw new Error("Nest upload is only available on desktop");
+    }
 
-    if (!authToken) {
+    const { nestToken } = settings.store;
+
+    if (!nestToken) {
         throw new Error("Auth token is required");
     }
 
-    const formData = new FormData();
-    formData.append("file", fileBlob, filename);
+    const arrayBuffer = await fileBlob.arrayBuffer();
+    const result = await Native.uploadToNest(arrayBuffer, filename, nestToken);
 
-    if (folderId) {
-        formData.append("folder", folderId);
+    if (!result.success) {
+        throw new Error(result.error || "Upload failed");
     }
 
-    const response = await fetch("https://nest.rip/api/files/upload", {
-        method: "POST",
-        headers: {
-            "Authorization": authToken
-        },
-        body: formData
-    });
-
-    const responseContentType = response.headers.get("content-type") || "";
-
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Upload failed: ${response.status} ${errorText}`);
+    if (!result.url) {
+        throw new Error("No URL returned from upload");
     }
 
-    if (!responseContentType.includes("application/json")) {
-        throw new Error("Server returned invalid response (not JSON)");
-    }
-
-    const data: NestUploadResponse = await response.json();
-
-    if (data.fileURL) {
-        return data.fileURL;
-    }
-
-    throw new Error("No URL returned from upload");
+    return result.url;
 }
 
 export function isConfigured(): boolean {
-    const { serviceType, serviceUrl, authToken } = settings.store;
+    const { serviceType, serviceUrl, ziplineToken, nestToken } = settings.store;
     if (serviceType === ServiceType.NEST) {
-        return Boolean(authToken);
+        return Boolean(nestToken);
     }
-    return Boolean(serviceUrl && authToken);
+    return Boolean(serviceUrl && ziplineToken);
 }
 
 export async function uploadFile(url: string): Promise<void> {

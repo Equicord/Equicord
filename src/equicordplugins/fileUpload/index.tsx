@@ -10,6 +10,7 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Menu } from "@webpack/common";
 
+import { SettingsComponent } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
 import { getMediaUrl } from "./utils/getMediaUrl";
 import { uploadFile } from "./utils/upload";
@@ -17,41 +18,59 @@ import { uploadFile } from "./utils/upload";
 export const settings = definePluginSettings({
     serviceType: {
         type: OptionType.SELECT,
-        description: "The upload service to use",
+        description: "",
         options: [
             { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
-            { label: "Nest", value: ServiceType.NEST }
-        ]
+            ...(IS_DISCORD_DESKTOP ? [{ label: "Nest", value: ServiceType.NEST }] : [])
+        ],
+        hidden: true
     },
     serviceUrl: {
         type: OptionType.STRING,
-        description: "The URL of your upload service (Zipline only, e.g., https://your-zipline-instance.com)",
-        default: ""
+        description: "",
+        default: "",
+        hidden: true
     },
-    authToken: {
+    ziplineToken: {
         type: OptionType.STRING,
-        description: "Your API authorization token",
-        default: ""
+        description: "",
+        default: "",
+        hidden: true
+    },
+    nestToken: {
+        type: OptionType.STRING,
+        description: "",
+        default: "",
+        hidden: true
     },
     folderId: {
         type: OptionType.STRING,
-        description: "Folder ID for uploads (leave empty for no folder)",
-        default: ""
+        description: "",
+        default: "",
+        hidden: true
     },
     stripQueryParams: {
         type: OptionType.BOOLEAN,
-        description: "Strip query parameters from the uploaded file URL",
-        default: false
+        description: "",
+        default: false,
+        hidden: true
     },
     apngToGif: {
         type: OptionType.BOOLEAN,
-        description: "Use .gif extension for APNG files",
-        default: false
+        description: "",
+        default: false,
+        hidden: true
     },
     autoCopy: {
         type: OptionType.BOOLEAN,
-        description: "Automatically copy the uploaded file URL to clipboard",
-        default: true
+        description: "",
+        default: true,
+        hidden: true
+    },
+    settingsComponent: {
+        type: OptionType.COMPONENT,
+        description: "Settings",
+        component: SettingsComponent
     }
 });
 
