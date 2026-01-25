@@ -16,9 +16,12 @@ export function SettingsComponent() {
     const update = useForceUpdater();
     const { store } = settings;
     const isNest = store.serviceType === ServiceType.NEST;
+    const isEzHost = store.serviceType === ServiceType.EZHOST;
+    const isZipline = store.serviceType === ServiceType.ZIPLINE;
 
     const serviceOptions = [
         { label: "Zipline", value: ServiceType.ZIPLINE },
+        { label: "E-Z Host", value: ServiceType.EZHOST },
         ...(IS_DISCORD_DESKTOP ? [{ label: "Nest", value: ServiceType.NEST }] : [])
     ];
 
@@ -37,7 +40,7 @@ export function SettingsComponent() {
                 />
             </SettingsSection>
 
-            {!isNest && (
+            {isZipline && (
                 <SettingsSection name="Service URL" description="The URL of your Zipline instance">
                     <TextInput
                         value={store.serviceUrl}
@@ -47,12 +50,22 @@ export function SettingsComponent() {
                 </SettingsSection>
             )}
 
-            {!isNest && (
+            {isZipline && (
                 <SettingsSection name="Zipline Token" description="Your Zipline API authorization token">
                     <TextInput
                         value={store.ziplineToken}
                         onChange={v => store.ziplineToken = v}
                         placeholder="Your Zipline API token"
+                    />
+                </SettingsSection>
+            )}
+
+            {isEzHost && (
+                <SettingsSection name="E-Z Host API Key" description="Your E-Z Host API key">
+                    <TextInput
+                        value={(store as { ezHostKey?: string }).ezHostKey || ""}
+                        onChange={v => (store as { ezHostKey?: string }).ezHostKey = v}
+                        placeholder="Your E-Z Host API key"
                     />
                 </SettingsSection>
             )}
@@ -67,7 +80,7 @@ export function SettingsComponent() {
                 </SettingsSection>
             )}
 
-            {!isNest && (
+            {isZipline && (
                 <SettingsSection name="Folder ID" description="Folder ID for uploads (leave empty for no folder)">
                     <TextInput
                         value={store.folderId}
