@@ -1,14 +1,32 @@
 .vc-link {
     color: var(--text-link);
-    text-decoration: none;
-    cursor: pointer;
+    text-decoration: var(--link-decoration);
 }
 
-.vc-link:hover {
+.vc-link-underline-on-hover:hover {
     text-decoration: underline;
 }
 
 .vc-link-disabled {
     pointer-events: none;
     opacity: 0.5;
+}
+
+/* Forced colors mode (high contrast accessibility) */
+.enable-forced-colors .vc-link,
+.enable-forced-colors .vc-link-underline-on-hover {
+    background-color: canvas;
+    text-decoration: underline;
+    color: linktext !important;
+}
+
+.enable-forced-colors .vc-link svg,
+.enable-forced-colors .vc-link-underline-on-hover svg {
+    color: currentcolor;
+}
+
+.enable-forced-colors .vc-link:not([href]),
+.enable-forced-colors .vc-link-underline-on-hover:not([href]) {
+    background-color: buttonface;
+    color: buttontext !important;
 }
