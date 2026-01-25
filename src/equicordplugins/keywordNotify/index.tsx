@@ -499,8 +499,9 @@ export default definePlugin({
         return (
             <Tooltip text="Clear All">
                 {({ onMouseLeave, onMouseEnter }) => (
-                    <div
-                        className={classes(tabClass.controlButton, buttonClass.button, buttonClass.tertiary, buttonClass.size32)}
+                    <Button
+                        variant="secondary"
+                        size="iconOnly"
                         onMouseLeave={onMouseLeave}
                         onMouseEnter={onMouseEnter}
                         onClick={() => {
@@ -509,7 +510,7 @@ export default definePlugin({
                             this.onUpdate();
                         }}>
                         <DoubleCheckmarkIcon />
-                    </div>
+                    </Button>
                 )}
             </Tooltip>
         );
