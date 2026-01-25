@@ -42,16 +42,16 @@
     color: var(--text-link);
 }
 
-.vc-card-base a:hover {
-    text-decoration: underline;
-}
-
 .vc-card-danger a,
 .vc-card-warning a,
 .vc-card-success a,
 .vc-card-brand a {
     color: var(--white);
     font-weight: var(--font-weight-bold);
+}
+
+.vc-card-base a:hover {
+    text-decoration: underline;
 }
 
 .vc-card-defaultPadding {

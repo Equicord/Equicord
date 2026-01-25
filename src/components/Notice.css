@@ -26,10 +26,7 @@
     min-height: 0;
     opacity: 1;
     overflow: hidden;
-    transition-delay: var(--expand-structural-duration, 0.2s);
-    transition-duration: var(--expand-fade-duration, 0.1s);
-    transition-property: opacity;
-    transition-timing-function: var(--expand-easing-function, ease);
+    transition: opacity var(--expand-fade-duration, 0.1s) var(--expand-easing-function, ease) var(--expand-structural-duration, 0.2s);
 }
 
 .vc-notice-hidden .vc-notice-inner {
@@ -56,7 +53,7 @@
     font-family: var(--font-primary);
     font-size: 14px;
     font-weight: 500;
-    line-height: 1.28571;
+    line-height: 1.2857;
     color: var(--text-default);
 }
 
