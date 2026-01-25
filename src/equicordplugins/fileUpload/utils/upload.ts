@@ -91,10 +91,44 @@ async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
 
 export function isConfigured(): boolean {
     const { serviceType, serviceUrl, ziplineToken, nestToken } = settings.store;
-    if (serviceType === ServiceType.NEST) {
-        return Boolean(nestToken);
+    switch (serviceType) {
+        case ServiceType.NEST:
+            return Boolean(nestToken);
+        case ServiceType.EZHOST:
+            return Boolean((settings.store as { ezHostKey?: string }).ezHostKey);
+        case ServiceType.ZIPLINE:
+        default:
+            return Boolean(serviceUrl && ziplineToken);
     }
-    return Boolean(serviceUrl && ziplineToken);
+}
+
+async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string> {
+    const ezHostKey = (settings.store as { ezHostKey?: string }).ezHostKey;
+
+    if (!ezHostKey) throw new Error("E-Z Host API key is required");
+
+    const formData = new FormData();
+    formData.append("file", fileBlob, filename);
+
+    const headers: Record<string, string> = { key: ezHostKey };
+
+    const response = await fetch("https://api.e-z.host/files", {
+        method: "POST",
+        headers,
+        body: formData
+    });
+
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Upload failed: ${response.status} ${text}`);
+    }
+
+    const data = await response.json();
+    if (!data || !data.success) {
+        throw new Error(data?.error || "Upload failed");
+    }
+
+    return data.imageUrl || data.rawUrl;
 }
 
 export async function uploadFile(url: string): Promise<void> {
@@ -149,6 +183,9 @@ export async function uploadFile(url: string): Promise<void> {
                 break;
             case ServiceType.NEST:
                 uploadedUrl = await uploadToNest(typedBlob, filename);
+                break;
+            case ServiceType.EZHOST:
+                uploadedUrl = await uploadToEzHost(typedBlob, filename);
                 break;
             default:
                 throw new Error("Unknown service type");
