@@ -7,14 +7,15 @@
 import { settings } from "@equicordplugins/fileUpload/index";
 import { ServiceType, UploadResponse } from "@equicordplugins/fileUpload/types";
 import { copyToClipboard } from "@utils/clipboard";
+import { PluginNative } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
+
+import { convertApngToGif } from "./apngToGif";
+import { getExtensionFromBytes, getExtensionFromMime, getMimeFromExtension, getUrlExtension } from "./getMediaUrl";
 
 const Native = IS_DISCORD_DESKTOP
     ? VencordNative.pluginHelpers.FileUpload as PluginNative<typeof import("../native")>
     : null;
-
-import { convertApngToGif } from "./apngToGif";
-import { getExtensionFromBytes, getExtensionFromMime, getMimeFromExtension, getUrlExtension } from "./getMediaUrl";
 
 let isUploading = false;
 
