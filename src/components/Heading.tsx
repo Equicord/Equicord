@@ -29,7 +29,7 @@ export function Heading<T extends HeadingTag>(props: HeadingProps<T>) {
     } = props;
 
     return (
-        <Tag className={classes(`vc-${Tag}`, !className && `vc-${Tag}-defaultMargin`, className)} {...restProps}>
+        <Tag className={classes(`vc-${Tag}`, `vc-${Tag}-defaultMargin`, className)} {...restProps}>
             {children}
         </Tag>
     );
