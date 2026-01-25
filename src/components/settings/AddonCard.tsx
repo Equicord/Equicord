@@ -18,8 +18,8 @@
 
 import "./AddonCard.css";
 
+import { Badge } from "@components/Badge";
 import { BaseText } from "@components/BaseText";
-import { AddonBadge } from "@components/settings/PluginBadge";
 import { Switch } from "@components/Switch";
 import { classNameFactory } from "@utils/css";
 import { Tooltip, useRef } from "@webpack/common";
@@ -72,7 +72,7 @@ export function AddonCard({ disabled, isNew, sourceBadge, tooltip, name, infoBut
                                 {name}
                             </div>
                         </div>
-                        {isNew && <AddonBadge text="NEW" color="#ED4245" />}
+                        {isNew && <Badge text="NEW" variant="danger" />}
                     </BaseText>
 
                     {!!author && (

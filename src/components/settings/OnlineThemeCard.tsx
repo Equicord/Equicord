@@ -18,9 +18,9 @@
 
 import "./AddonCard.css";
 
+import { Badge } from "@components/Badge";
 import { BaseText } from "@components/BaseText";
 import { Switch } from "@components/settings";
-import { AddonBadge } from "@components/settings/PluginBadge";
 import { classNameFactory } from "@utils/css";
 import { useRef } from "@webpack/common";
 import type { MouseEventHandler, ReactNode } from "react";
@@ -101,7 +101,7 @@ export function OnlineThemeCard({
                                 )}
                             </div>
                         </div>
-                        {isNew && <AddonBadge text="NEW" color="#ED4245" />}
+                        {isNew && <Badge text="NEW" variant="danger" />}
                     </BaseText>
 
                     {!!author && (
