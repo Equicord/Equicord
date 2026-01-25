@@ -86,8 +86,8 @@ function highlightKeywords(str: string, entries: Array<KeywordEntry>) {
 
     return [
         <>
-            <span>{str.substring(0, idx)}</span>,
-            <span className="highlight">{matches[0]}</span>,
+            <span>{str.substring(0, idx)}</span>
+            <span className="highlight">{matches[0]}</span>
             <span>{str.substring(idx + matches[0].length)}</span>
         </>
     ];
