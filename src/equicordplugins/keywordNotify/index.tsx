@@ -8,6 +8,7 @@ import "./style.css";
 
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
+import { Button, TextButton } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading, HeadingTertiary } from "@components/Heading";
@@ -20,7 +21,7 @@ import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByCodeLazy, findCssClassesLazy } from "@webpack";
-import { Button, ChannelStore, FluxDispatcher, Select, SelectedChannelStore, TabBar, TextInput, Tooltip, UserStore, useState } from "@webpack/common";
+import { ChannelStore, FluxDispatcher, Select, SelectedChannelStore, TabBar, TextInput, Tooltip, UserStore, useState } from "@webpack/common";
 import type { JSX, PropsWithChildren } from "react";
 
 type IconProps = JSX.IntrinsicElements["svg"];
@@ -32,7 +33,6 @@ let interceptor: (e: any) => void;
 
 const recentMentionsPopoutClass = findCssClassesLazy("recentMentionsPopout");
 const tabClass = findCssClassesLazy("inboxTitle", "tab", "expand", "expanded", "controlButton");
-const buttonClass = findCssClassesLazy("size36", "size32", "tertiary", "button");
 const Popout = findByCodeLazy("getProTip", "canCloseAllMessages:");
 const createMessageRecord = findByCodeLazy(".createFromServer(", ".isBlockedForMessage", "messageReference:");
 const KEYWORD_ENTRIES_KEY = "KeywordNotify_keywordEntries";
@@ -73,7 +73,7 @@ function highlightKeywords(str: string, entries: Array<KeywordEntry>) {
     let regexes: Array<RegExp>;
     try {
         regexes = entries.map(e => new RegExp(e.regex, "g" + (e.ignoreCase ? "i" : "")));
-    } catch (err) {
+    } catch {
         return [str];
     }
 
@@ -86,8 +86,8 @@ function highlightKeywords(str: string, entries: Array<KeywordEntry>) {
 
     return [
         <>
-            <span>{str.substring(0, idx)}</span>,
-            <span className="highlight">{matches[0]}</span>,
+            <span>{str.substring(0, idx)}</span>
+            <span className="highlight">{matches[0]}</span>
             <span>{str.substring(idx + matches[0].length)}</span>
         </>
     ];
@@ -98,10 +98,8 @@ function Collapsible({ title, children }) {
 
     return (
         <div>
-            <Button
+            <TextButton
                 onClick={() => setIsOpen(!isOpen)}
-                look={Button.Looks.FILLED}
-                size={Button.Sizes.SMALL}
                 className={cl("collapsible")}>
                 <div style={{ display: "flex", alignItems: "center" }}>
                     <div style={{
@@ -111,7 +109,7 @@ function Collapsible({ title, children }) {
                     }}>{isOpen ? "▼" : "▶"}</div>
                     <HeadingTertiary>{title}</HeadingTertiary>
                 </div>
-            </Button>
+            </TextButton>
             {isOpen && children}
         </div>
     );
@@ -145,8 +143,8 @@ function ListedIds({ listIds, setListIds }) {
                             setListIds(values);
                             update();
                         }}
-                        look={Button.Looks.FILLED}
-                        size={Button.Sizes.SMALL}
+                        variant="none"
+                        size="iconOnly"
                         className={cl("delete")}>
                         <DeleteIcon />
                     </Button>
@@ -221,8 +219,8 @@ function KeywordEntries() {
                         </div>
                         <Button
                             onClick={() => removeKeywordEntry(i, update)}
-                            look={Button.Looks.FILLED}
-                            size={Button.Sizes.SMALL}
+                            variant="none"
+                            size="iconOnly"
                             className={cl("delete")}>
                             <DeleteIcon />
                         </Button>
@@ -468,7 +466,7 @@ export default definePlugin({
         let messageRecord: any;
         try {
             messageRecord = createMessageRecord(m);
-        } catch (err) {
+        } catch {
             return;
         }
 
@@ -499,8 +497,9 @@ export default definePlugin({
         return (
             <Tooltip text="Clear All">
                 {({ onMouseLeave, onMouseEnter }) => (
-                    <div
-                        className={classes(tabClass.controlButton, buttonClass.button, buttonClass.tertiary, buttonClass.size32)}
+                    <Button
+                        variant="secondary"
+                        size="iconOnly"
                         onMouseLeave={onMouseLeave}
                         onMouseEnter={onMouseEnter}
                         onClick={() => {
@@ -509,7 +508,7 @@ export default definePlugin({
                             this.onUpdate();
                         }}>
                         <DoubleCheckmarkIcon />
-                    </div>
+                    </Button>
                 )}
             </Tooltip>
         );
