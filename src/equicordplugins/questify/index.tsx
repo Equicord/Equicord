@@ -1341,8 +1341,21 @@ export default definePlugin({
                     // Makes use of the custom prop if provided, otherwise assume default behavior.
                     match: /(\i.intl.string\(\i.\i#{intl::NO_RESULTS_FOUND}\))/,
                     replace: "arguments[0]?.feedback??$1"
+                },
+                {
+                    // Prevent SearchableSelect from force-scrolling into view, causing the dropdown to close.
+                    match: /(?<=\.scrollIntoView\()/,
+                    replace: "{block:\"nearest\",inline:\"nearest\"}"
                 }
             ]
+        },
+        {
+            // Formats the Orbs balance on the Quests page with locale string formatting.
+            find: '("BalanceCounter")',
+            replacement: {
+                match: /(?<=\i=>"".concat\(\i).toFixed\(0\)(?=\)\))/,
+                replace: ".toLocaleString(undefined,{maximumFractionDigits:0})"
+            }
         },
         {
             // Adds a maxDigits prop to the LowerBadge component which allows for not truncating, or for truncating at a specific threshold.
