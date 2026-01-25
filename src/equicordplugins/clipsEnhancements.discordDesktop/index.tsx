@@ -134,7 +134,9 @@ export default definePlugin({
         extraFramerates.forEach(framerate => newFramerates.push({
             id: `${framerate}fps`,
             value: framerate,
-            label: `${framerate} FPS`
+            label: getIntlMessage("SCREENSHARE_FPS_ABBREVIATED", {
+                fps: framerate
+            })
         }));
 
         return newFramerates.sort((a, b) => a.value - b.value);
