@@ -73,7 +73,7 @@ function highlightKeywords(str: string, entries: Array<KeywordEntry>) {
     let regexes: Array<RegExp>;
     try {
         regexes = entries.map(e => new RegExp(e.regex, "g" + (e.ignoreCase ? "i" : "")));
-    } catch (err) {
+    } catch {
         return [str];
     }
 
@@ -466,7 +466,7 @@ export default definePlugin({
         let messageRecord: any;
         try {
             messageRecord = createMessageRecord(m);
-        } catch (err) {
+        } catch {
             return;
         }
 
