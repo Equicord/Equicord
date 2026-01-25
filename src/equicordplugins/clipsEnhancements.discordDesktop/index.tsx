@@ -43,6 +43,12 @@ const settings = definePluginSettings({
         default: true,
         restartNeeded: true
     },
+    ignorePlatformRestriction: {
+        type: OptionType.BOOLEAN,
+        description: "Allow Platform Restricted Clipping (may cause save errors)",
+        default: true,
+        restartNeeded: true
+    },
     clipsLink: {
         type: OptionType.COMPONENT,
         description: "",
@@ -95,7 +101,7 @@ export default definePlugin({
             find: "2022-11_clips_experiment",
             replacement: {
                 match: /defaultConfig:\{enableClips:!\d,ignorePlatformRestriction:!\d,showClipsHeaderEntrypoint:!\d,enableScreenshotKeybind:!\d,enableVoiceOnlyClips:!\d,enableAdvancedSignals:!\d\}/,
-                replace: "defaultConfig:{enableClips:!0,ignorePlatformRestriction:!0,showClipsHeaderEntrypoint:!0,enableScreenshotKeybind:$self.settings.store.enableScreenshotKeybind,enableVoiceOnlyClips:$self.settings.store.enableVoiceOnlyClips,enableAdvancedSignals:$self.settings.store.enableAdvancedSignals}"
+                replace: "defaultConfig:{enableClips:!0,ignorePlatformRestriction:$self.settings.store.ignorePlatformRestriction,showClipsHeaderEntrypoint:!0,enableScreenshotKeybind:$self.settings.store.enableScreenshotKeybind,enableVoiceOnlyClips:$self.settings.store.enableVoiceOnlyClips,enableAdvancedSignals:$self.settings.store.enableAdvancedSignals}"
             }
         },
         {
