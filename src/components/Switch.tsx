@@ -29,6 +29,7 @@ export interface SwitchProps {
     onChange: (checked: boolean) => void;
     disabled?: boolean;
     id?: string;
+    // checkmark/x icon in thumb
     hasIcon?: boolean;
     innerRef?: Ref<HTMLInputElement>;
     "aria-describedby"?: string;
