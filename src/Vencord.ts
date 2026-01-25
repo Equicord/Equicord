@@ -36,6 +36,7 @@ import { createAndAppendStyle } from "@utils/css";
 import { StartAt } from "@utils/types";
 
 import { get as dsGet } from "./api/DataStore";
+import { showNotice } from "./api/Notices";
 import { NotificationData, showNotification } from "./api/Notifications";
 import { initPluginManager, PMLogger, startAllPlugins } from "./api/PluginManager";
 import { PlainSettings, Settings, SettingsStore } from "./api/Settings";
@@ -145,20 +146,26 @@ async function runUpdateCheck() {
         if (Settings.autoUpdate) {
             await update();
             if (Settings.autoUpdateNotification) {
-                notify({
-                    title: "Equicord has been updated!",
-                    body: "Click here to restart",
-                    onClick: relaunch
-                });
+                if (notifiedForUpdatesThisSession) return;
+                notifiedForUpdatesThisSession = true;
+
+                showNotice(
+                    "Equicord has been updated!",
+                    "Restart",
+                    relaunch
+                );
             }
             return;
         }
 
-        notify({
-            title: "A Equicord update is available!",
-            body: "Click here to view the update",
-            onClick: () => openSettingsTabModal(UpdaterTab!)
-        });
+        if (notifiedForUpdatesThisSession) return;
+        notifiedForUpdatesThisSession = true;
+
+        showNotice(
+            "A new version of Equicord is available!",
+            "View Update",
+            () => openSettingsTabModal(UpdaterTab!)
+        );
     } catch (err) {
         UpdateLogger.error("Failed to check for updates", err);
     }
