@@ -21,3 +21,7 @@ export interface UploadResponse {
         url: string;
     }[];
 }
+
+export interface NestUploadResponse {
+    fileURL: string;
+}

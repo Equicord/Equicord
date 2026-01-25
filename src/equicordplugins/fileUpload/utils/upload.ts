@@ -5,7 +5,7 @@
  */
 
 import { settings } from "@equicordplugins/fileUpload/index";
-import { ServiceType, UploadResponse } from "@equicordplugins/fileUpload/types";
+import { NestUploadResponse, ServiceType, UploadResponse } from "@equicordplugins/fileUpload/types";
 import { copyToClipboard } from "@utils/clipboard";
 import { showToast, Toasts } from "@webpack/common";
 
@@ -57,10 +57,6 @@ async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string
     }
 
     throw new Error("No URL returned from upload");
-}
-
-interface NestUploadResponse {
-    fileURL: string;
 }
 
 async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
