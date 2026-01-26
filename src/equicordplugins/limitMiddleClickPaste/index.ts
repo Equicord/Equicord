@@ -34,12 +34,43 @@ const settings = definePluginSettings({
         default: 100,
         onChange(newValue) { if (newValue < 1) { settings.store.threshold = 1; } },
     },
+    preventLinkOpen: {
+        type: OptionType.BOOLEAN,
+        description: "Prevent middle-click on links from opening new tabs while preserving autoscroll.",
+        default: false,
+        onChange(newValue) {
+            if (newValue) {
+                document.addEventListener("auxclick", handleAuxClick, true);
+            } else {
+                document.removeEventListener("auxclick", handleAuxClick, true);
+            }
+        },
+    },
 });
+
+function shouldBlockLink(e: MouseEvent): boolean {
+    if (e.button !== MIDDLE_CLICK) return false;
+
+    const target = e.target as HTMLElement | null;
+    if (!target?.closest) return false;
+
+    const a = target.closest("a[href]") as HTMLAnchorElement | null;
+    if (!a) return false;
+
+    const href = a.getAttribute("href");
+    return !!href && href !== "#";
+}
+
+function handleAuxClick(e: MouseEvent) {
+    if (!shouldBlockLink(e)) return;
+    e.preventDefault();
+    e.stopPropagation();
+}
 
 export default definePlugin({
     name: "LimitMiddleClickPaste",
-    description: "Prevent middle click pasting either always or just when a text area is not focused.",
-    authors: [EquicordDevs.Etorix],
+    description: "Prevent middle click pasting either always or just when a text area is not focused. Optionally prevent middle-click on links from opening new tabs.",
+    authors: [EquicordDevs.Etorix, EquicordDevs.korzi],
     settings,
 
     isPastingDisabled(isInput: boolean) {
@@ -59,10 +90,14 @@ export default definePlugin({
 
     start() {
         document.addEventListener("mouseup", this.onMouseUp);
+        if (settings.store.preventLinkOpen) {
+            document.addEventListener("auxclick", handleAuxClick, true);
+        }
     },
 
     stop() {
         document.removeEventListener("mouseup", this.onMouseUp);
+        document.removeEventListener("auxclick", handleAuxClick, true);
     },
 
     patches: [
