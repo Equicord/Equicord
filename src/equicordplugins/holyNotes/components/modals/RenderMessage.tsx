@@ -9,6 +9,7 @@ import { ChannelMessage, messageClasses, MessageType } from "@equicordplugins/ho
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { HolyNotes } from "@equicordplugins/holyNotes/types";
 import { copyToClipboard } from "@utils/clipboard";
+import { fetchUserProfile } from "@utils/discord";
 import { proxyLazy } from "@utils/lazy";
 import { classes } from "@utils/misc";
 import { ModalProps } from "@utils/modal";
@@ -33,6 +34,15 @@ export const RenderMessage = ({
 }) => {
     const isHoldingDeleteRef = React.useRef(false);
     const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
+    React.useEffect(() => {
+        const user = UserStore.getUser(note.author.id);
+        if (!user) {
+            fetchUserProfile(note.author.id);
+        }
+    }, [note.author.id]);
+
+    const author = UserStore.getUser(note.author.id) ?? note.author;
 
     React.useEffect(() => {
         const deleteHandler = (e: KeyboardEvent) => {
@@ -99,7 +109,7 @@ export const RenderMessage = ({
                         Object.assign(
                             { ...note },
                             {
-                                author: new UserRecord({ ...note.author, bot: true }),
+                                author: new UserRecord({ ...author, bot: true }),
                                 timestamp: new Date(note?.timestamp),
                                 // @ts-ignore
                                 embeds: note?.embeds?.map((embed: { timestamp: string | number | Date; }) =>
