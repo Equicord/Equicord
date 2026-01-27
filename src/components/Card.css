@@ -1,18 +1,57 @@
 .vc-card-base {
-    background: var(--card-background-default);
-    border-radius: var(--radius-sm, 8px)
+    border-style: solid;
+    border-width: 1px;
+    border-radius: var(--radius-sm);
+    position: relative;
 }
 
-.vc-card-normal {
-    border: 1px solid var(--border-subtle);
-}
-
-.vc-card-warning {
-    border: 1px solid var(--icon-status-idle);
+.vc-card-primary {
+    background-color: var(--card-background-default);
+    border-color: var(--border-subtle);
+    color: var(--text-default);
 }
 
 .vc-card-danger {
-    border: 1px solid var(--icon-status-dnd);
+    background-color: var(--background-feedback-critical);
+    border-color: var(--background-feedback-critical);
+    color: var(--text-feedback-critical);
+}
+
+.vc-card-warning {
+    background-color: var(--background-feedback-warning);
+    border-color: var(--background-feedback-warning);
+    color: var(--text-feedback-warning);
+}
+
+.vc-card-success {
+    background-color: var(--background-feedback-positive);
+    border-color: var(--background-feedback-positive);
+    color: var(--text-feedback-positive);
+}
+
+.vc-card-brand {
+    background-color: var(--brand-500);
+    border-color: var(--brand-500);
+}
+
+.vc-card-outline {
+    background-color: transparent;
+}
+
+.vc-card-base a {
+    color: var(--text-link);
+}
+
+.vc-card-danger a,
+.vc-card-warning a,
+.vc-card-success a,
+.vc-card-brand a {
+    color: var(--white);
+    font-weight: var(--font-weight-bold);
+}
+
+.vc-card-base a:hover {
+    text-decoration: underline;
 }
 
 .vc-card-defaultPadding {

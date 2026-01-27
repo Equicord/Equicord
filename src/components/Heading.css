@@ -1,51 +1,40 @@
 .vc-h1,
-.vc-h2 {
-    color: var(--text-strong);
-    font-weight: 600;
-}
-
+.vc-h2,
 .vc-h3,
 .vc-h4,
 .vc-h5 {
     color: var(--text-strong);
+    font-family: var(--font-display);
 }
 
 .vc-h1 {
     font-size: 20px;
-    line-height: 24px
+    font-weight: 600;
+    line-height: 1.2;
 }
 
 .vc-h2 {
     font-size: 16px;
-    line-height: 20px
+    font-weight: 600;
+    line-height: 1.25;
 }
 
 .vc-h3 {
-    font-weight: 500;
-    line-height: 24px
-}
-
-.vc-h3,
-.vc-h4 {
-    font-size: 16px
-}
-
-.vc-h4 {
-    font-weight: 600;
-    letter-spacing: .3px
-}
-
-.vc-h4,
-.vc-h5 {
-    line-height: 20px
-}
-
-.vc-h5 {
-    color: var(--text-strong);
     font-size: 16px;
     font-weight: 500;
-    margin-bottom: 8px;
-    text-transform: unset
+    line-height: 1.25;
+}
+
+.vc-h4 {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.vc-h5 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.25;
 }
 
 .vc-h1-defaultMargin,

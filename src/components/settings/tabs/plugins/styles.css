@@ -48,19 +48,6 @@
     grid-template-columns: 1fr 150px;
 }
 
-.vc-addon-badge {
-    padding: 0 6px;
-    font-family: var(--font-display);
-    font-weight: 500;
-    border-radius: 8px;
-    height: 16px;
-    font-size: 12px;
-    line-height: 16px;
-    color: var(--white-500);
-    text-align: center;
-    margin-right: 8px;
-}
-
 .vc-plugins-dep-name {
     margin: 0 auto;
 }

@@ -1,0 +1,114 @@
+.vc-notice-container {
+    border-radius: var(--radius-sm, 8px);
+    box-sizing: border-box;
+    display: grid;
+    font-weight: 500;
+    grid-template-rows: 1fr;
+    padding: 8px;
+    width: 100%;
+    transition-duration: var(--expand-structural-duration, 0.2s);
+    transition-property: grid-template-rows, padding-bottom, padding-top, border-width;
+    transition-timing-function: var(--expand-easing-function, ease);
+}
+
+.vc-notice-hidden {
+    border-width: 0;
+    grid-template-rows: 0fr;
+    padding-bottom: 0;
+    padding-top: 0;
+    transition-delay: var(--collapse-fade-duration, 0.1s);
+    transition-duration: var(--collapse-structural-duration, 0.2s);
+    transition-timing-function: var(--collapse-easing-function, ease);
+}
+
+.vc-notice-inner {
+    display: flex;
+    min-height: 0;
+    opacity: 1;
+    overflow: hidden;
+    transition: opacity var(--expand-fade-duration, 0.1s) var(--expand-easing-function, ease) var(--expand-structural-duration, 0.2s);
+}
+
+.vc-notice-hidden .vc-notice-inner {
+    opacity: 0;
+    transition-delay: 0s;
+    transition-duration: var(--collapse-fade-duration, 0.1s);
+    transition-timing-function: var(--collapse-easing-function, ease);
+}
+
+.vc-notice-icon-wrapper {
+    display: flex;
+}
+
+.vc-notice-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.vc-notice-text {
+    align-self: center;
+    flex: 1 1 0%;
+    margin-left: var(--space-8, 8px);
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2857;
+    color: var(--text-default);
+}
+
+.vc-notice-text p {
+    margin: 0;
+}
+
+.vc-notice-text p~p {
+    margin-top: 8px;
+}
+
+.vc-notice-action {
+    margin: auto 0 auto 16px;
+}
+
+/* Info variant */
+.vc-notice-info {
+    background: var(--background-feedback-info);
+    border: 1px solid var(--icon-feedback-info);
+    color: var(--text-feedback-info);
+}
+
+.vc-notice-info .vc-notice-icon {
+    color: var(--icon-feedback-info);
+}
+
+/* Warning variant */
+.vc-notice-warning {
+    background: var(--background-feedback-warning);
+    border: 1px solid var(--icon-feedback-warning);
+    color: var(--text-feedback-warning);
+}
+
+.vc-notice-warning .vc-notice-icon {
+    color: var(--icon-feedback-warning);
+}
+
+/* Danger variant */
+.vc-notice-danger {
+    background: var(--background-feedback-critical);
+    border: 1px solid var(--icon-feedback-critical);
+    color: var(--text-feedback-critical);
+}
+
+.vc-notice-danger .vc-notice-icon {
+    color: var(--icon-feedback-critical);
+}
+
+/* Positive variant */
+.vc-notice-positive {
+    background: var(--background-feedback-positive);
+    border: 1px solid var(--icon-feedback-positive);
+    color: var(--text-feedback-positive);
+}
+
+.vc-notice-positive .vc-notice-icon {
+    color: var(--icon-feedback-positive);
+}

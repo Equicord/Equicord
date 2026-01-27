@@ -39,7 +39,7 @@ export default definePlugin({
 
     settingsAboutComponent() {
         return (
-            <Card variant="normal">
+            <Card variant="primary">
                 <Flex flexDirection="column" gap="4px">
                     <Paragraph size="md" weight="semibold">The default behaviour is the following:</Paragraph>
                     <Paragraph>
