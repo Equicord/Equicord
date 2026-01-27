@@ -51,4 +51,8 @@ export const enum IpcEvents {
     GET_RENDERER_CSS = "VencordGetRendererCss",
     RENDERER_CSS_UPDATE = "VencordRendererCssUpdate",
     PRELOAD_GET_RENDERER_JS = "VencordPreloadGetRendererJs",
+
+    SET_TRAY_UPDATE_STATE = "EquicordSetTrayUpdateState",
+    TRAY_REPAIR_EQUICORD = "EquicordTrayRepairEquicord",
+    TRAY_CHECK_UPDATES = "EquicordTrayCheckUpdates",
 }
