@@ -26,31 +26,12 @@ import NotificationComponent from "./NotificationComponent";
 let NotificationQueue: JSX.Element[] = [];
 let notificationID = 0;
 let RootContainer: Root | undefined;
-let ContainerEl: HTMLDivElement | undefined;
-let lastPosition: string | undefined;
 
 function getNotificationContainer() {
-    const currentPosition = PluginSettings.store.position || "bottom-left";
-
-    if (lastPosition && lastPosition !== currentPosition) {
-        try {
-            RootContainer?.unmount();
-        } catch { }
-
-        ContainerEl?.remove();
-        RootContainer = undefined;
-        ContainerEl = undefined;
-        NotificationQueue = [];
-    }
-
-    lastPosition = currentPosition;
-
     if (!RootContainer) {
         const container = document.createElement("div");
         container.id = "toastnotifications-container";
         document.body.append(container);
-
-        ContainerEl = container;
         RootContainer = createRoot(container);
     }
 
