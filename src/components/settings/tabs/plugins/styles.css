@@ -177,19 +177,14 @@
 
 .vc-plugins-confirm-reset,
 .vc-plugin-modal-confirm-reset {
-    --redesign-button-danger-pressed-text: color-mix(in oklab, var(--white) 100%, var(--custom-theme-text-color, #000) var(--custom-theme-text-color-amount, 0%));
-
     background-color: var(--status-danger) !important;
-    color: var(--redesign-button-danger-pressed-text);
+    color: var(--text-default);
 }
 
 .vc-plugins-confirm-reset:hover,
 .vc-plugin-modal-confirm-reset:hover {
-    --redesign-button-danger-pressed-background: color-mix(in oklab, var(--red-460) 100%, var(--custom-theme-base-color, #000) var(--custom-theme-base-color-amount, 0%));
-    --redesign-button-danger-pressed-text: color-mix(in oklab, var(--white) 100%, var(--custom-theme-text-color, #000) var(--custom-theme-text-color-amount, 0%));
-
-    background-color: var(--redesign-button-danger-pressed-background) !important;
-    color: var(--redesign-button-danger-pressed-text);
+    background-color: var(--text-feedback-critical) !important;
+    color: var(--text-default);
 }
 
 .vc-modal-close-button {

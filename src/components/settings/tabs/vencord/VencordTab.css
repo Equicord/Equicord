@@ -22,9 +22,7 @@
 }
 
 .vc-joindiscordbutton:hover {
-    --redesign-button-secondary-pressed-background: color-mix(in oklab, var(--primary-130) 100%, var(--custom-theme-base-color, #000) var(--custom-theme-base-color-amount, 0%));
-
-    background-color: var(--redesign-button-secondary-pressed-background) !important;
+    background-color: var(--redesign-button-tertiary-pressed-background) !important;
 }
 
 .vc-settings-card-buttons {
