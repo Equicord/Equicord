@@ -133,23 +133,23 @@ export default definePlugin({
             find: "connectUserDragSource:ee,canDrag:et",
             replacement: {
                 match: /"data-dnd-name":(\i)\.name,/,
-                replace: "\"data-dnd-name\":$1.name,\"data-dragify-user\":!0,\"data-user-id\":h.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:h.id}),"
+                replace: "$&\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].user?.id}),"
             }
         },
         // Voice channel rows (guild sidebar)
         {
             find: "tutorialId:\"voice-conversations\"",
             replacement: {
-                match: /className:(\i)\.(\i),iconClassName:/,
-                replace: "className:$1.$2,draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:e.id,guild_id:e.guild_id}),iconClassName:"
+                match: /iconClassName:(\i\(\)\(\{[^}]{0,200}\}\)),hasActiveEvent:(\i),channel:(\i),/,
+                replace: "iconClassName:$1,hasActiveEvent:$2,draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:$3.id,guild_id:$3.guild_id}),channel:$3,"
             }
         },
         // Voice channel rows (guild sidebar fallback - li wrapper)
         {
             find: "tutorialId:\"voice-conversations\"",
             replacement: {
-                match: /"data-dnd-name":(\i)\.name,children:\[/,
-                replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:$1.id,guild_id:$1.guild_id}),children:["
+                match: /("data-dnd-name":(\i)\.name),children:\[/,
+                replace: "$1,draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:$2.id,guild_id:$2.guild_id}),children:["
             }
         },
         // Voice channel rows (alternate voice list implementation)
@@ -157,7 +157,7 @@ export default definePlugin({
             find: "handleClickChat",
             replacement: {
                 match: /"data-dnd-name":(\i)\.name,/,
-                replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:$1.id,guild_id:$1.guild_id}),"
+                replace: "$&draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:$1.id,guild_id:$1.guild_id}),"
             }
         },
         // Thread rows in channel list (sidebar thread items)
@@ -206,8 +206,8 @@ export default definePlugin({
         {
             find: "onContextMenu:S,className:x,children:D()",
             replacement: {
-                match: /onContextMenu:S,className:x,children:D\(\)/,
-                replace: "onContextMenu:S,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:t}),\"data-dragify-user\":!0,\"data-user-id\":t,className:x,children:D()"
+                match: /style:(\i),onContextMenu:(\i),className:(\i),children:D\(\)/,
+                replace: "style:$1,onContextMenu:$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].userId}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].userId,className:$3,children:D()"
             }
         },
         // DM list entries (private channel rows)
@@ -225,35 +225,11 @@ export default definePlugin({
                 replace: "ea(es({},$1),{draggable:!0,onDragStart:e=>$self.onDmDragStart(e,arguments[0].channel),"
             }
         },
-        // Forum post rows (forum channel list)
-        {
-            find: "\"data-item-id\":t,onClick:Z,onContextMenu:w",
-            replacement: {
-                match: /"data-item-id":(\i),/,
-                replace: "\"data-item-id\":$1,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:$1}),"
-            }
-        },
         {
             find: "[aria-owns=folder-items-",
             replacement: {
                 match: /"data-dnd-name":(\i)\.name,"data-drop-hovering":(\i),children:\(0,(\i)\.jsx\)\((\i)\.(\i),/,
                 replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:e=>$self.onGuildDragStart(e,$1.id),\"data-drop-hovering\":$2,children:(0,$3.jsx)($4.$5,"
-            }
-        },
-        // Chat avatars (popout)
-        {
-            find: "className:K.avatar,src:u,avatarDecoration:d,status:a,size:f.EFr.SIZE_80",
-            replacement: {
-                match: /className:(\i)\.avatar,src:(\i),avatarDecoration:(\i),status:(\i),size:(\i)\.EFr\.SIZE_80,"aria-label":(\i)\.username/,
-                replace: "className:$1.avatar,src:$2,avatarDecoration:$3,status:$4,size:$5.EFr.SIZE_80,\"data-dragify-user\":!0,draggable:!0,onDragStart:e=>$self.onUserDragStart(e),\"aria-label\":$6.username"
-            }
-        },
-        // Chat avatars (no popout)
-        {
-            find: "children:ee(X(q({},W)",
-            replacement: {
-                match: /avatarSrc:(\i),avatarDecorationSrc:(\i),compact:(\i),onClick:(\i),onContextMenu:(\i),onMouseDown:void 0,onKeyDown:void 0,showCommunicationDisabledStyles:(\i),className:(\i)\}\)\)\}\)/,
-                replace: "avatarSrc:$1,avatarDecorationSrc:$2,compact:$3,onClick:$4,onContextMenu:$5,onMouseDown:void 0,onKeyDown:void 0,showCommunicationDisabledStyles:$6,className:$7,\"data-dragify-user\":!0,draggable:!0,onDragStart:e=>$self.onUserDragStart(e)}))})"
             }
         },
     ],
