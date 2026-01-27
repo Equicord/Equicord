@@ -103,9 +103,24 @@ export function isConfigured(): boolean {
 }
 
 async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string> {
-    const ezHostKey = (settings.store as { ezHostKey?: string }).ezHostKey;
+    const { ezHostKey } = (settings.store as { ezHostKey?: string });
 
     if (!ezHostKey) throw new Error("E-Z Host API key is required");
+
+    if (Native) {
+        const arrayBuffer = await fileBlob.arrayBuffer();
+        const result = await Native.uploadToEzHost(arrayBuffer, filename, ezHostKey);
+
+        if (!result.success) {
+            throw new Error(result.error || "Upload failed");
+        }
+
+        if (!result.url) {
+            throw new Error("No URL returned from upload");
+        }
+
+        return result.url;
+    }
 
     const formData = new FormData();
     formData.append("file", fileBlob, filename);
@@ -152,13 +167,32 @@ export async function uploadFile(url: string): Promise<void> {
             fetchUrl = url.replace("passthrough=false", "passthrough=true");
         }
 
-        const response = await fetch(fetchUrl);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch file: ${response.status}`);
+        let blob: Blob;
+        let contentType: string;
+
+        if (Native) {
+            const res = await Native.fetchFile(fetchUrl);
+            if (res.success && res.data) {
+                contentType = res.contentType || "";
+                blob = new Blob([res.data], { type: contentType });
+            } else {
+                const response = await fetch(fetchUrl);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch file: ${response.status}`);
+                }
+                contentType = response.headers.get("content-type") || "";
+                blob = await response.blob();
+            }
+        } else {
+            const response = await fetch(fetchUrl);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch file: ${response.status}`);
+            }
+
+            contentType = response.headers.get("content-type") || "";
+            blob = await response.blob();
         }
 
-        const contentType = response.headers.get("content-type") || "";
-        let blob = await response.blob();
         let ext = await getExtensionFromBytes(blob) || getExtensionFromMime(contentType) || getExtensionFromMime(blob.type) || getUrlExtension(url) || "png";
 
         if (ext === "apng" && settings.store.apngToGif) {
