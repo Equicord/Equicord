@@ -69,7 +69,7 @@ function handleAuxClick(e: MouseEvent) {
 
 export default definePlugin({
     name: "LimitMiddleClickPaste",
-    description: "Prevent middle click pasting either always or just when a text area is not focused. Optionally prevent middle-click on links from opening new tabs.",
+    description: "Prevent middle click pasting either always or just when a text area is not focused.",
     authors: [EquicordDevs.Etorix, EquicordDevs.korzi],
     settings,
 
