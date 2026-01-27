@@ -121,7 +121,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "VOICE_PANEL}};",
+            find: "VOICE_PANEL}}",
             predicate: () => settings.store.allCallTimers,
             replacement: [
                 {

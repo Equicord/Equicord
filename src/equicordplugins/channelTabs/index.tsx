@@ -74,7 +74,7 @@ export default definePlugin({
         },
         // intercept channel navigation to switch/create tabs
         {
-            find: "sourceLocationStack,null",
+            find: '"transitionToGuild - Transitioning to "',
             replacement: {
                 match: /(\i\((\i),(\i),\i,\i\)\{)(.{0,25}"transitionToGuild)/,
                 replace: "$1$self.handleNavigation($2,$3);$4"
