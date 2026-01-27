@@ -59,9 +59,8 @@ export const settings = definePluginSettings({
     },
     userBasedCategoryList: {
         type: OptionType.CUSTOM,
-        default: {} as Record<string, Category[]>,
-        description: "",
-    },
+        default: {} as Record<string, Category[]>
+    }
 });
 
 export default definePlugin({
@@ -124,6 +123,7 @@ export default definePlugin({
             ]
         },
 
+
         // forceUpdate moment
         // https://regex101.com/r/kDN9fO/1
         {
@@ -147,7 +147,7 @@ export default definePlugin({
 
         // fix alt+shift+up/down
         {
-            find: ".getFlattenedGuildIds()]",
+            find: "=()=>!1,ensureChatIsVisible:",
             replacement: {
                 match: /(?<=\i===\i\.ME\?)\i\.\i\.getPrivateChannelIds\(\)/,
                 replace: "$self.getAllUncollapsedChannels().concat($&.filter(c=>!$self.isPinned(c)))"
@@ -304,6 +304,7 @@ export default definePlugin({
                                 label="Delete Category"
                                 action={() => removeCategory(category.id)}
                             />
+
 
                         </Menu.Menu>
                     ));
