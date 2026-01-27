@@ -173,7 +173,6 @@ $modifier: var(--input-border-default, var(--input-border));
 
 .vc-holy-note [class*="botText"]::after {
     content: "NOTE";
-    /* Inherit all text properties from parent */
     font-size: .725rem;
     line-height: 1.3;
     font-weight: 900;
