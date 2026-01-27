@@ -65,7 +65,7 @@ export default definePlugin({
                 },
                 // Always return static thumbnails for non gif media to prevent graphical glitches (side effect of the first patch).
                 {
-                    match: /getSrc\(\i\)\{let \i=/,
+                    match: /getSrc\(\i\)\{.*?let \i=/,
                     replace: "$&!this.constructor.isAnimated(this.props,true)||"
                 },
                 // Hide the default "GIF" tag accessory that is visible when discord is unfocused.
