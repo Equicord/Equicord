@@ -94,7 +94,7 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
                             <div className={classes("vc-notebook-flex", "vc-help-icon")} onClick={() => openModal(HelpModal)}>
                                 <HelpIcon />
                             </div>
-                            <div style={{ marginBottom: "10px" }} className={classes("vc-notebook-search")}>
+                            <div className={classes("vc-notebook-search")}>
                                 <TextInput
                                     autoFocus={false}
                                     placeholder="Search for a message..."

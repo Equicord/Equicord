@@ -8,7 +8,7 @@ $modifier: var(--input-border-default, var(--input-border));
 .vc-notebook-search {
     flex: auto;
     margin-right: 15px;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
     background-color: var(--background-base-low);
 }
 
