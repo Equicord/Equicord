@@ -35,7 +35,6 @@ import { noteHandler, noteHandlerCache } from "./NoteHandler";
 import { DataStoreToCache, HolyNoteStore } from "./utils";
 
 export const MessageType = findByCodeLazy("isEdited(){");
-export const { statusTagGreen } = findCssClassesLazy("statusTagGreen");
 export const iconClasses = findCssClassesLazy("iconWrapper", "clickable");
 export const resultsClasses = findCssClassesLazy("emptyResultsWrap", "emptyResultsContent", "errorImage", "emptyResultsText", "noResultsImage", "alt");
 export const quickSelectClasses = findCssClassesLazy("quickSelect", "quickSelectLabel", "quickSelectClick", "quickSelectValue", "quickSelectArrow");

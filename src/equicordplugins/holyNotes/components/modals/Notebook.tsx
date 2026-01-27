@@ -9,6 +9,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { quickSelectClasses } from "@equicordplugins/holyNotes";
 import HelpIcon from "@equicordplugins/holyNotes/components/icons/HelpIcon";
+import NoteButton from "@equicordplugins/holyNotes/components/icons/NoteButton";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { HolyNotes } from "@equicordplugins/holyNotes/types";
 import { classes } from "@utils/misc";
@@ -82,6 +83,7 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
                 <Flex className={classes("vc-notebook-flex")} flexDirection="column" style={{ width: "100%" }}>
                     <div className={classes("vc-notebook-top-section")}>
                         <ModalHeader className={classes("vc-notebook-header-main")}>
+                            <NoteButton className={classes("vc-notebook-icon")} />
                             <BaseText
                                 size="lg"
                                 weight="semibold"
@@ -130,7 +132,7 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
                                     <Menu.Menu
                                         navId="sort-menu"
                                         onClose={() => FluxDispatcher.dispatch({ type: "CONTEXT_MENU_CLOSE" })}
-                                        aria-label="Sort Menu"
+                                        aria-label="Sort options"
                                     >
                                         <Menu.MenuItem
                                             label="Ascending / Date Added"
@@ -138,37 +140,67 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
                                             action={() => {
                                                 setSortDirection(true);
                                                 setSortType(true);
-                                            }} /><Menu.MenuItem
+                                            }}
+                                        />
+                                        <Menu.MenuItem
                                             label="Ascending / Message Date"
                                             id="amd"
                                             action={() => {
                                                 setSortDirection(true);
                                                 setSortType(false);
-                                            }} /><Menu.MenuItem
+                                            }}
+                                        />
+                                        <Menu.MenuItem
                                             label="Descending / Date Added"
                                             id="dda"
                                             action={() => {
                                                 setSortDirection(false);
                                                 setSortType(true);
-                                            }} /><Menu.MenuItem
+                                            }}
+                                        />
+                                        <Menu.MenuItem
                                             label="Descending / Message Date"
                                             id="dmd"
                                             action={() => {
                                                 setSortDirection(false);
                                                 setSortType(false);
-                                            }} />
+                                            }}
+                                        />
                                     </Menu.Menu>
-
                                 ));
                             }}
+                            onKeyDown={e => { /* Really shitty way to do this but it works */
+                                if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    const el = e.currentTarget as HTMLElement;
+                                    const rect = el.getBoundingClientRect();
+                                    const evt = {
+                                        clientX: rect.left + rect.width / 2,
+                                        clientY: rect.top + rect.height / 2
+                                    } as any;
+
+                                    ContextMenuApi.openContextMenu(evt, () => (
+                                        <Menu.Menu
+                                            navId="sort-menu"
+                                            onClose={() => FluxDispatcher.dispatch({ type: "CONTEXT_MENU_CLOSE" })}
+                                            aria-label="Sort options"
+                                        >
+                                            <Menu.MenuItem label="Ascending / Date Added" id="ada" action={() => { setSortDirection(true); setSortType(true); }} />
+                                            <Menu.MenuItem label="Ascending / Message Date" id="amd" action={() => { setSortDirection(true); setSortType(false); }} />
+                                            <Menu.MenuItem label="Descending / Date Added" id="dda" action={() => { setSortDirection(false); setSortType(true); }} />
+                                            <Menu.MenuItem label="Descending / Message Date" id="dmd" action={() => { setSortDirection(false); setSortType(false); }} />
+                                        </Menu.Menu>
+                                    ));
+                                }
+                            }}
                         >
-                            <BaseText className={quickSelectClasses.quickSelectLabel}>Change Sorting:</BaseText>
+                            <BaseText className={quickSelectClasses.quickSelectLabel}>Sort:</BaseText>
                             <Flex style={{ flexGrow: 0 }} alignItems="center" className={quickSelectClasses.quickSelectClick}>
                                 <BaseText className={quickSelectClasses.quickSelectValue}>
-                                    {sortDirection ? "Ascending" : "Descending"} /{" "}
-                                    {sortType ? "Date Added" : "Message Date"}
+                                    {sortDirection ? "Asc" : "Desc"} /{" "}
+                                    {sortType ? "Date Added" : "Msg Date"}
                                 </BaseText>
-                                <div className={quickSelectClasses.quickSelectArrow} />
+                                <div className={quickSelectClasses.quickSelectArrow} aria-hidden="true" />
                             </Flex>
                         </Flex>
                     </div>
