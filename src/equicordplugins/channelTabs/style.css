@@ -78,10 +78,6 @@
     overflow: hidden;
 }
 
-.vc-channeltabs-container-top-macos {
-    padding-left: 80px !important;
-}
-
 .vc-channeltabs-separator {
     width: 98%;
     height: 1px;
@@ -1172,6 +1168,7 @@
     width: 20px;
     height: 20px;
     min-width: 20px;
+    max-width: 20px;
     font-size: 12px;
     font-weight: 700;
     display: flex;
@@ -1179,28 +1176,32 @@
     justify-content: center;
     padding: 0;
     transition:
-        opacity 0.4s ease-out 0.2s,
-        transform 0.4s ease-out 0.2s,
-        margin 0.4s ease-out;
+        opacity 0.2s ease-out,
+        transform 0.2s ease-out,
+        max-width 0.2s ease-out,
+        margin 0.2s ease-out;
     flex-shrink: 0;
+    overflow: hidden;
 }
 
 /* position: Left */
 .vc-channeltabs-tab-number-badge[data-position="left"] {
     margin-right: 0.5rem;
     transition:
-        opacity 0.4s ease-out,
-        transform 0.4s ease-out,
-        margin-right 0.4s ease-out;
+        opacity 0.2s ease-out,
+        transform 0.2s ease-out,
+        max-width 0.2s ease-out,
+        margin-right 0.2s ease-out;
 }
 
 /* position: Right */
 .vc-channeltabs-tab-number-badge[data-position="right"] {
     margin-left: 0.5rem;
     transition:
-        opacity 0.4s ease-out 0.2s,
-        transform 0.4s ease-out 0.2s,
-        margin-left 0.4s ease-out;
+        opacity 0.2s ease-out,
+        transform 0.2s ease-out,
+        max-width 0.2s ease-out,
+        margin-left 0.2s ease-out;
 }
 
 /* hover effect (slight scale up) */
@@ -1211,13 +1212,17 @@
 /* directional slide animations for compact mode */
 .vc-channeltabs-tab-compact:not(:hover, .vc-channeltabs-tab-selected) .vc-channeltabs-tab-number-badge[data-position="right"] {
     opacity: 0;
-    transform: translateX(-10px) scale(0.95);
+    transform: translateX(-6px) scale(0.95);
+    max-width: 0;
+    margin-left: 0;
     pointer-events: none;
 }
 
 .vc-channeltabs-tab-compact:not(:hover, .vc-channeltabs-tab-selected) .vc-channeltabs-tab-number-badge[data-position="left"] {
     opacity: 0;
-    transform: translateX(-15px) scale(0.9);
+    transform: translateX(-6px) scale(0.95);
+    max-width: 0;
+    margin-right: 0;
     pointer-events: none;
 }
 
