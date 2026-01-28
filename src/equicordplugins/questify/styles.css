@@ -50,6 +50,11 @@
     border-radius: 3px;
     min-height: 43px;
     border: 1px solid var(--border-normal);
+    margin-top: 8px;
+}
+
+.questify-titled-select > div {
+    margin-top: 0;
 }
 
 .questify-volume-slider-container {
@@ -58,10 +63,6 @@
     padding: 7px 12px 7px 7px;
     border-radius: 3px;
     border: 1px solid var(--border-normal);
-}
-
-.questify-inline-group-item .questify-select {
-    margin-top: 0;
 }
 
 .questify-button,
