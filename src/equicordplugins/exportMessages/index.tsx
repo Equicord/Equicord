@@ -14,8 +14,9 @@ import { EquicordDevs } from "@utils/constants";
 import { showItemInFolder } from "@utils/native";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
-import { Message } from "@vencord/discord-types";
-import { Menu, Toasts } from "@webpack/common";
+import { Channel, Message } from "@vencord/discord-types";
+import { Menu, RestAPI, Constants, Toasts } from "@webpack/common";
+import { sleep } from "@utils/misc";
 
 import { ContactsList } from "./types";
 
@@ -61,6 +62,24 @@ function formatMessage(message: Message) {
     return content;
 }
 
+function normalizeRawMessage(raw: any) {
+    const author = raw.author || {};
+    const attachments = (raw.attachments || []).map((a: any) => ({ filename: a.filename, url: a.url || a.proxy_url }));
+    const embeds = (raw.embeds || []).map((e: any) => ({ rawTitle: e.title ?? e.rawTitle, rawDescription: e.description ?? e.rawDescription, url: e.url }));
+
+    return {
+        id: raw.id,
+        timestamp: raw.timestamp,
+        content: raw.content ?? "",
+        author: {
+            username: author.username ?? "Unknown",
+            discriminator: author.discriminator ?? "0"
+        },
+        attachments,
+        embeds
+    } as unknown as Message;
+}
+
 async function exportMessage(message: Message) {
     const timestamp = new Date(message.timestamp.toString()).toISOString().split("T")[0];
     const filename = `message-${message.id}-${timestamp}.txt`;
@@ -94,23 +113,122 @@ async function exportMessage(message: Message) {
     }
 }
 
-const messageContextMenuPatch = (children: Array<React.ReactElement<any> | null>, props: { message: Message; }) => {
-    const { message } = props;
+async function exportChannel(channel: Channel) {
+    const channelName = (channel.name || "direct-messages").replace(/\s+/gi, '-').replace(/[^a-zA-Z0-9\-]/gi, '');
+    const timestamp = new Date().toISOString().split("T")[0];
+    const filename = `channel-${channelName}-${timestamp}.txt`;
 
-    if (!message) return;
+    showNotification({
+        title: "Exporting Messages...",
+        body: `Exporting channel as ${filename}. This may take a while on large channels...`,
+        icon: "⏳"
+    });
 
-    children.push(
-        <Menu.MenuItem
-            id="export-message"
-            label="Export Message"
-            icon={() => (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
-                </svg>
-            )}
-            action={() => exportMessage(message)}
-        />
-    );
+    try {
+        const pageLimit = 100;
+        let allMessages: Message[] = [];
+        let before: string | undefined = undefined;
+
+        while (true) {
+            const res = await RestAPI.get({
+                url: Constants.Endpoints.MESSAGES(channel.id),
+                query: {
+                    limit: pageLimit,
+                    before
+                },
+                retries: 2
+            }).catch((err) => {
+                return console.error("Failed to fetch messages:", err);
+            });
+
+            const pageRaw: any[] = res?.body ?? [];
+
+            if (!pageRaw || pageRaw.length === 0) break;
+
+            const page = pageRaw.map(normalizeRawMessage);
+            allMessages = allMessages.concat(page);
+
+            if (pageRaw.length < pageLimit) break;
+
+            before = pageRaw[pageRaw.length - 1]?.id;
+
+            // small delay to avoid rate limits
+            await sleep(250);
+        }
+
+        const content = allMessages
+            .slice()
+            .reverse()
+            .map(msg => formatMessage(msg))
+            .join("\n");
+
+        if (!content.trim()) {
+            showNotification({
+                title: "Export Messages",
+                body: "No messages to export from this channel",
+                icon: "ℹ️"
+            });
+            return;
+        }
+
+        if (IS_DISCORD_DESKTOP) {
+            const data = new TextEncoder().encode(content);
+            const result = await DiscordNative.fileManager.saveWithDialog(data, filename);
+
+            if (result && settings.store.openFileAfterExport) {
+                showItemInFolder(result);
+            }
+        } else {
+            const file = new File([content], filename, { type: "text/plain" });
+            saveFile(file);
+        }
+
+        showNotification({
+            title: "Export Messages",
+            body: `Channel exported successfully as ${filename} (${allMessages.length} messages)`,
+            icon: "📄"
+        });
+    } catch (error) {
+        console.error("Channel export error:", error);
+        showNotification({
+            title: "Export Messages",
+            body: "Failed to export channel",
+            icon: "❌"
+        });
+    }
+}
+
+const exportContextMenuPatch = (children: Array<React.ReactElement<any> | null>, props: any) => {
+    const { message, channel } = props;
+
+    if (message) {
+        children.push(
+            <Menu.MenuItem
+                id="export-message"
+                label="Export Message"
+                icon={() => (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                    </svg>
+                )}
+                action={() => exportMessage(message)}
+            />
+        );
+    }
+    else if (channel) {
+        children.push(
+            <Menu.MenuItem
+                id="export-channel"
+                label="Export Channel"
+                icon={() => (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                    </svg>
+                )}
+                action={() => exportChannel(channel)}
+            />
+        );
+    }
 };
 
 // for type parameter, it takes in a number that determines the type of the contact
@@ -128,11 +246,13 @@ function getUsernames(contacts: ContactsList[], type: number): string[] {
 
 export default definePlugin({
     name: "ExportMessages",
-    description: "Allows you to export any message to a file",
-    authors: [EquicordDevs.veygax, EquicordDevs.dat_insanity],
+    description: "Allows you to export any message or entire channel to a file",
+    authors: [EquicordDevs.veygax, EquicordDevs.dat_insanity, EquicordDevs.ASOwnerYT],
     settings,
     contextMenus: {
-        "message": messageContextMenuPatch
+        "message": exportContextMenuPatch,
+        "channel-context": exportContextMenuPatch,
+        "gdm-context": exportContextMenuPatch
     },
     patches: [
         {
