@@ -343,6 +343,7 @@ export function GuildlessServerListItem({
 
 export interface DynamicDropdownProps extends React.ComponentProps<typeof SearchableSelect> {
     feedback?: string;
+    maxOptionsVisible?: number;
 }
 
 export const DynamicDropdown: React.FC<DynamicDropdownProps> = props => {

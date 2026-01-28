@@ -1,4 +1,8 @@
 /* Plugin Settings */
+.questify-margin-bottom-8 {
+    margin-bottom: 8px;
+}
+
 .questify-setting-divider {
     margin: 0;
 }
@@ -50,11 +54,11 @@
     border-radius: 3px;
     min-height: 43px;
     border: 1px solid var(--border-normal);
-    margin-top: 8px;
 }
 
-.questify-titled-select > div {
-    margin-top: 0;
+.questify-affixless-select-popout-option {
+    grid-template-areas: "content selectedIcon" !important;
+    grid-template-columns: 1fr auto !important;
 }
 
 .questify-volume-slider-container {
