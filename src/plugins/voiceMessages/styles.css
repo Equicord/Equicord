@@ -21,7 +21,7 @@
 }
 
 .vc-vmsg-preview-indicator {
-    background: var(--channeltextarea-background);
+    background: var(--control-secondary-background-default);
     width: 16px;
     height: 16px;
     border-radius: 50%;

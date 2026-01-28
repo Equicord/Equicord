@@ -15,35 +15,6 @@
     flex-direction: row;
 }
 
-.vc-settings-discordinvite {
-    display: flex;
-    flex-direction: row;
-}
-
-.vc-settings-card {
-    padding: 1em;
-    margin-bottom: 1em;
-}
-
-.vc-settings-card-buttons {
-    display: flex;
-    margin-top: 1.5em;
-    gap: 0.5em;
-}
-
-.vc-warning-card {
-    padding: 1em;
-    background: var(--background-feedback-warning);
-    border: 1px solid var(--text-status-idle);
-    color: var(--text-status-idle);
-}
-
-.vc-backup-restore-card {
-    background-color: var(--background-feedback-warning);
-    border-color: var(--text-status-idle);
-    color: var(--text-status-idle);
-}
-
 .vc-settings-theme-links {
     /* Needed to fix bad themes that hide certain textarea elements for whatever eldritch reason */
     display: inline-block !important;
@@ -61,7 +32,7 @@
 }
 
 .vc-settings-theme-links::placeholder {
-    color: var(--text-subtle) !important;
+    color: var(--text-muted) !important;
 }
 
 .vc-settings-theme-links:focus {
@@ -76,8 +47,8 @@
 }
 
 .vc-cloud-erase-data-danger-btn {
-    color: var(--white-500);
-    background-color: var(--status-danger);
+    color: var(--control-critical-primary-text-default);
+    background-color: var(--control-critical-primary-background-default);
 }
 
 .vc-cloud-icon-with-button {

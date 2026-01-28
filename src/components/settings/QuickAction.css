@@ -14,22 +14,20 @@
 
 .vc-settings-quickActions-pill {
     all: unset;
-    background: var(--channeltextarea-background);
-    color: var(--text-default);
+    cursor: pointer;
+    background: var(--control-secondary-background-default);
+    color: var(--control-secondary-text-default, var(--text-default));
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5em;
-    padding: 8px 12px 8px 8px;
+    padding: 8px 9px;
     border-radius: 8px;
     transition: 0.1s ease-out;
     box-sizing: border-box;
-    line-height: 1;
-    cursor: pointer;
 }
 
 .vc-settings-quickActions-pill:hover {
-    background: var(--redesign-button-tertiary-pressed-background);
+    background: var(--control-secondary-background-hover);
     transform: translateY(-1px);
     box-shadow: var(--elevation-high);
 }
@@ -42,5 +40,4 @@
 .vc-settings-quickActions-img {
     width: 24px;
     height: 24px;
-    flex-shrink: 0;
 }
