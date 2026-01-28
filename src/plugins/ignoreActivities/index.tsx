@@ -8,12 +8,10 @@ import { definePluginSettings, Settings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
-import { HeadingSecondary } from "@components/Heading";
-import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, RunningGameStore, showToast, TextInput, Toasts, Tooltip, useEffect, useState } from "@webpack/common";
+import { Button, Forms, RunningGameStore, showToast, TextArea, Toasts, Tooltip, useEffect, useState } from "@webpack/common";
 
 const enum ActivitiesTypes {
     Game,
@@ -81,7 +79,7 @@ function recalculateActivities() {
 function ImportCustomRPCComponent() {
     return (
         <Flex flexDirection="column">
-            <Paragraph>Import the application id of the CustomRPC plugin to the filter list</Paragraph>
+            <Forms.FormText>Import the application id of the CustomRPC plugin to the filter list</Forms.FormText>
             <div>
                 <Button
                     onClick={() => {
@@ -131,9 +129,9 @@ function IdsListComponent(props: { setValue: (value: string) => void; }) {
 
     return (
         <section>
-            <HeadingSecondary>Filter List</HeadingSecondary>
-            <Paragraph className={Margins.bottom8}>Comma separated list of activity IDs to filter (Useful for filtering specific RPC activities and CustomRPC</Paragraph>
-            <TextInput
+            <Forms.FormTitle tag="h3">Filter List</Forms.FormTitle>
+            <Forms.FormText className={Margins.bottom8}>Comma separated list of activity IDs to filter (Useful for filtering specific RPC activities and CustomRPC</Forms.FormText>
+            <TextArea
                 type="text"
                 value={idsList}
                 onChange={handleChange}
@@ -207,8 +205,7 @@ const settings = definePluginSettings({
     ignoredActivities: {
         type: OptionType.CUSTOM,
         default: [] as IgnoredActivity[],
-        onChange: recalculateActivities,
-        description: "",
+        onChange: recalculateActivities
     }
 });
 
