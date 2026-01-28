@@ -558,7 +558,7 @@ function QuestButtonSettings(): JSX.Element {
                             </Heading>
                             <Select
                                 options={questButtonClickOptions}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="top"
                                 serialize={String}
                                 isSelected={(value: string) => value === currentQuestButtonLeftClickAction}
@@ -571,7 +571,7 @@ function QuestButtonSettings(): JSX.Element {
                             </Heading>
                             <Select
                                 options={questButtonClickOptions}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="top"
                                 serialize={String}
                                 isSelected={(value: string) => value === currentQuestButtonMiddleClickAction}
@@ -584,7 +584,7 @@ function QuestButtonSettings(): JSX.Element {
                             </Heading>
                             <Select
                                 options={questButtonClickOptions}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="top"
                                 serialize={String}
                                 isSelected={(value: string) => value === currentQuestButtonRightClickAction}
@@ -996,7 +996,7 @@ function RestyleQuestsSetting() {
                             </Heading>
                             <Select
                                 options={gradientOptions}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="top"
                                 serialize={String}
                                 isSelected={(value: string) => value === restyleQuestsGradientValue}
@@ -1009,7 +1009,7 @@ function RestyleQuestsSetting() {
                             </Heading>
                             <Select
                                 options={preloadOptions}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="top"
                                 serialize={String}
                                 isSelected={(value: boolean) => value === restyleQuestsPreloadValue}
@@ -1158,7 +1158,7 @@ function ReorderQuestsSetting(): JSX.Element {
                             </Heading>
                             <Select
                                 options={getSubsortOptions("unclaimed")}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="bottom"
                                 serialize={String}
                                 isSelected={(value: string) => value === unclaimedSubsort}
@@ -1173,7 +1173,7 @@ function ReorderQuestsSetting(): JSX.Element {
                             </Heading>
                             <Select
                                 options={getSubsortOptions("claimed")}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="bottom"
                                 serialize={String}
                                 isSelected={(value: string) => value === claimedSubsort}
@@ -1190,7 +1190,7 @@ function ReorderQuestsSetting(): JSX.Element {
                             </Heading>
                             <Select
                                 options={getSubsortOptions("ignored")}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="bottom"
                                 serialize={String}
                                 isSelected={(value: string) => value === ignoredSubsort}
@@ -1205,7 +1205,7 @@ function ReorderQuestsSetting(): JSX.Element {
                             </Heading>
                             <Select
                                 options={getSubsortOptions("expired")}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="bottom"
                                 serialize={String}
                                 isSelected={(value: string) => value === expiredSubsort}
@@ -1225,7 +1225,7 @@ function ReorderQuestsSetting(): JSX.Element {
                                     { label: "Shared: All accounts on this client share ignores.", value: "shared" },
                                     { label: "Private: All accounts on this client have separate ignores.", value: "private" }
                                 ]}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="bottom"
                                 serialize={String}
                                 isSelected={(value: string) => value === ignoredQuestProfile}
@@ -1243,7 +1243,7 @@ function ReorderQuestsSetting(): JSX.Element {
                                     { label: "Yes", value: true },
                                     { label: "No", value: false }
                                 ]}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="bottom"
                                 serialize={String}
                                 isSelected={(value: boolean) => value === rememberQuestPageSort}
@@ -1259,7 +1259,7 @@ function ReorderQuestsSetting(): JSX.Element {
                                     { label: "Yes", value: true },
                                     { label: "No", value: false }
                                 ]}
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 popoutPosition="bottom"
                                 serialize={String}
                                 isSelected={(value: boolean) => value === rememberQuestPageFilters}
@@ -1521,7 +1521,7 @@ function FetchingQuestsSetting(): JSX.Element {
                                 filter={(options, query) => options}
                                 placeholder="Select or type an interval between 30 minutes and 12 hours."
                                 feedback="Intervals must be between 30 minutes and 12 hours."
-                                className={q("select")}
+                                className={q("select", "titled-select")}
                                 maxVisibleItems={resolvedIntervals.length + 1}
                                 clearable={false}
                                 multi={false}
@@ -1553,7 +1553,7 @@ function FetchingQuestsSetting(): JSX.Element {
                                     filter={(options, query) => options}
                                     placeholder="Select a sound or provide a custom sound URL."
                                     feedback="Sound not found, or URL is not from a supported domain."
-                                    className={q("select")}
+                                    className={q("select", "titled-select")}
                                     clearable={true}
                                     multi={false}
                                     maxVisibleItems={7}

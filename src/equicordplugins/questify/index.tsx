@@ -245,12 +245,14 @@ function shouldHideMembersListActivelyPlayingIcon(): boolean {
     return disableMembersListActivelyPlayingIcon || disableQuestsEverything;
 }
 
-function QuestTileContextMenu(children: React.ReactNode[], props: { quest: any; }) {
+function QuestTileContextMenu(children: React.ReactNode[], props: { quest: any; }, isClaimedMenu: boolean = false): void {
     const isIgnored = questIsIgnored(props.quest.id);
+    const isEnrolled = !!props.quest.userStatus?.enrolledAt;
+    const canAutoComplete = !isClaimedMenu && isEnrolled && canQuestAutoComplete(props.quest);
 
     children.unshift((
         <Menu.MenuGroup>
-            {!isIgnored ? (
+            {!isClaimedMenu && (!isIgnored ? (
                 <Menu.MenuItem
                     id={q("ignore-quests")}
                     label="Mark as Ignored"
@@ -262,8 +264,8 @@ function QuestTileContextMenu(children: React.ReactNode[], props: { quest: any; 
                     label="Unmark as Ignored"
                     action={() => { removeIgnoredQuest(props.quest.id); }}
                 />
-            )}
-            {activeQuestIntervals.has(props.quest.id) &&
+            ))}
+            {activeQuestIntervals.has(props.quest.id) ? (
                 <Menu.MenuItem
                     id={q("stop-auto-complete")}
                     label="Stop Auto-Complete"
@@ -277,7 +279,12 @@ function QuestTileContextMenu(children: React.ReactNode[], props: { quest: any; 
                             rerenderQuests();
                         }
                     }}
-                />
+                />) : canAutoComplete ? (
+                    <Menu.MenuItem
+                        id={q("start-auto-complete")}
+                        label="Start Auto-Complete"
+                        action={() => { processQuestForAutoComplete(props.quest); }}
+                    />) : null
             }
             <Menu.MenuItem
                 id={q("copy-quest-id")}
@@ -858,9 +865,37 @@ async function startAchievementActivityProgressTracking(quest: Quest, target: { 
     }
 }
 
+function canQuestAutoComplete(quest: Quest): boolean {
+    const { completeVideoQuestsInBackground, completeGameQuestsInBackground, completeAchievementQuestsInBackground } = settings.store;
+
+    const task = getQuestTask(quest);
+
+    if (!task) { return false; }
+
+    const questStatus = getQuestStatus(quest);
+    const questCompleted = !!quest.userStatus?.completedAt;
+
+    if (questStatus !== QuestStatus.Unclaimed || questCompleted) {
+        return false;
+    }
+
+    const isWatch = task.type === QuestTaskType.WATCH_VIDEO || task.type === QuestTaskType.WATCH_VIDEO_ON_MOBILE;
+    const isPlay = task.type === QuestTaskType.PLAY_ON_DESKTOP || task.type === QuestTaskType.PLAY_ON_XBOX || task.type === QuestTaskType.PLAY_ON_PLAYSTATION || task.type === QuestTaskType.PLAY_ACTIVITY;
+    const isAchievement = task.type === QuestTaskType.ACHIEVEMENT_IN_ACTIVITY;
+
+    const watchTypeCompatible = isWatch && completeVideoQuestsInBackground;
+    const playTypeCompatible = isPlay && completeGameQuestsInBackground && IS_DISCORD_DESKTOP;
+    const achievementTypeCompatible = isAchievement && completeAchievementQuestsInBackground && IS_DISCORD_DESKTOP;
+
+    if (watchTypeCompatible || playTypeCompatible || achievementTypeCompatible) {
+        return true;
+    }
+
+    return false;
+}
+
 function processQuestForAutoComplete(quest: Quest): boolean {
     const questName = normalizeQuestName(quest.config.messages.questName);
-    const { completeVideoQuestsInBackground, completeGameQuestsInBackground, completeAchievementQuestsInBackground } = settings.store;
 
     const task = getQuestTask(quest);
     const questTarget = getQuestTarget(task);
@@ -869,17 +904,14 @@ function processQuestForAutoComplete(quest: Quest): boolean {
     const isWatch = task?.type === QuestTaskType.WATCH_VIDEO || task?.type === QuestTaskType.WATCH_VIDEO_ON_MOBILE;
     const isPlay = task?.type === QuestTaskType.PLAY_ON_DESKTOP || task?.type === QuestTaskType.PLAY_ON_XBOX || task?.type === QuestTaskType.PLAY_ON_PLAYSTATION || task?.type === QuestTaskType.PLAY_ACTIVITY;
     const isAchievement = task?.type === QuestTaskType.ACHIEVEMENT_IN_ACTIVITY;
-
-    const watchTypeIncompatible = isWatch && !completeVideoQuestsInBackground;
-    const playTypeIncompatible = isPlay && (!completeGameQuestsInBackground || !IS_DISCORD_DESKTOP);
-    const achievementTypeIncompatible = isAchievement && (!completeAchievementQuestsInBackground || !IS_DISCORD_DESKTOP);
+    const canAutoComplete = canQuestAutoComplete(quest);
 
     if (quest.userStatus?.completedAt || existingInterval) {
         return false;
     } else if (!task) {
         QuestifyLogger.warn(`[${getFormattedNow()}] Could not recognize the Quest type for ${questName}.`);
         return false;
-    } else if (watchTypeIncompatible || playTypeIncompatible || achievementTypeIncompatible) {
+    } else if (!canAutoComplete) {
         return false;
     } else if (isWatch) {
         startVideoProgressTracking(quest, questTarget);
@@ -945,7 +977,7 @@ function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false
         if (((isPlay && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (isWatch && completeVideoQuestsInBackground))) {
             const { adjusted: durationWithLeeway } = getQuestTarget(task);
             const currentProgress = getQuestProgress(quest, task) || 0;
-            const progress = Math.min((intervalData?.progress ?? currentProgress), durationWithLeeway);
+            const progress = Math.min(currentProgress, durationWithLeeway);
             const timeRemaining = Math.max(0, durationWithLeeway - progress);
             const canCompleteImmediately = isWatch && questEnrolledAt && ((new Date().getTime() - questEnrolledAt.getTime()) / 1000) >= durationWithLeeway;
             const progressFormatted = `${String(Math.floor(timeRemaining / 60)).padStart(2, "0")}:${String(timeRemaining % 60).padStart(2, "0")}`;
@@ -993,31 +1025,27 @@ function getQuestPanelPercentComplete({ quest, percentCompleteText }: { quest: Q
 }
 
 function getQuestPanelSubtitleText(quest: Quest): string | null {
+    const questStatus = getQuestStatus(quest);
+    const questCompleted = !!quest.userStatus?.completedAt && questStatus === QuestStatus.Unclaimed;
     const intervalData = activeQuestIntervals.get(quest.id);
+    const rewardItem = quest.config.rewardsConfig.rewards[0] || null;
+    const completingText = getQuestAcceptedButtonText(quest, true) || "Completing";
+    const completedText = questCompleted ? "Completed" : null;
 
-    if (!intervalData) {
+    if (!intervalData && !completedText) {
         return null;
     }
 
-    const rewardItem = quest.config.rewardsConfig.rewards[0] || null;
-    const completingText = getQuestAcceptedButtonText(quest, true) || "Completing";
-
-    if (rewardItem.orbQuantity) {
-        return `${completingText} for ${rewardItem.orbQuantity} Orbs.`;
-    } else if (rewardItem.messages?.nameWithArticle) {
-        return `${completingText} for ${rewardItem.messages.nameWithArticle}.`;
+    if (rewardItem?.orbQuantity) {
+        return `${completedText || completingText} for ${rewardItem.orbQuantity} Orbs.`;
+    } else if (rewardItem?.messages?.nameWithArticle) {
+        return `${completedText || completingText} for ${rewardItem.messages.nameWithArticle}.`;
     } else {
-        return `${completingText} for an unrecognized reward.`;
+        return `${completedText || completingText} for an unrecognized reward.`;
     }
 }
 
 function getQuestPanelTitleText(quest: Quest): string | null {
-    const intervalData = activeQuestIntervals.get(quest.id);
-
-    if (!intervalData) {
-        return null;
-    }
-
     return normalizeQuestName(quest.config.messages.questName);
 }
 
@@ -1286,8 +1314,8 @@ export default definePlugin({
             // be completed Quest which is actively being auto-completed.
             find: "questDeliveryOverride)?",
             replacement: {
-                match: /(\i=)(\i.\i.questDeliveryOverride)/,
-                replace: "$1$self.getQuestPanelOverride()??$2"
+                match: /(?<=null}\);return )(\i\?\i:\i)/,
+                replace: "$self.getQuestPanelOverride()??($1)"
             }
         },
         {
