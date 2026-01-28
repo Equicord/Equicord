@@ -199,7 +199,7 @@
         },
         "winNativeTitleBar": {
             "title": "Использовать строку заголовка Windows вместо пользовательской строки Discord",
-            "description": "Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools."
+            "description": "Заменить кастомный заголовок окна стандартным. Может улучшить совместимость с некоторыми инструментами управления окнами."
         }
     },
     "tabs": {
