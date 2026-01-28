@@ -50,13 +50,9 @@ export default definePlugin({
             find: ".gifts)",
             replacement: [
                 {
-                    match: /(?<=(,\(null==\(\i=\i\.stickers\)\?void 0.*?\i\.push\(\{).{0,15}node:(.{0,50})},"sticker"\)\}\))/,
-                    replace: "$1key:\"stickers+\",node:$2,stickersType:\"stickers+\"},\"stickers+\")})"
+                    match: /(?<=(,\(null==\(\i=\i\.stickers\)\?void 0.*?\i\.push\(\(.{0,100})\},"sticker"\)\))/,
+                    replace: "$1,stickersType:\"stickers+\"},\"stickers+\"))"
                 },
-                {
-                    match: /(?<="submit"\)\}\);)(?=.{0,50}null!=(\i))/,
-                    replace: '$1["stickers+"]=3;'
-                }
             ]
         },
         {
@@ -67,7 +63,7 @@ export default definePlugin({
                     replace: ',vcStickers=$1?$2($3,{id:"stickers+-picker-tab","aria-controls":"more-stickers-picker-tab-panel","aria-selected":$4==="stickers+",isActive:$4==="stickers+",autoFocus:true,viewType:"stickers+",children:$5+"+"})}):null'
                 },
                 {
-                    match: /children:\[\i,\i(?=.{0,5}\}\))/g,
+                    match: /children:\[\i,\i(?=.{0,150}\.SOUNDBOARD)/g,
                     replace: "$&,vcStickers"
                 },
                 {
