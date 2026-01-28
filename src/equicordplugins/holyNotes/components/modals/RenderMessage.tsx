@@ -5,16 +5,19 @@
  */
 
 import { CopyIcon, DeleteIcon, IDIcon, LinkIcon, OpenExternalIcon } from "@components/Icons";
-import { makeDummyUser } from "@components/settings/tabs/plugins/PluginModal";
 import { ChannelMessage, messageClasses, MessageType } from "@equicordplugins/holyNotes";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { HolyNotes } from "@equicordplugins/holyNotes/types";
 import { copyToClipboard } from "@utils/clipboard";
+import { fetchUserProfile } from "@utils/discord";
+import { proxyLazy } from "@utils/lazy";
 import { classes } from "@utils/misc";
 import { ModalProps } from "@utils/modal";
-import { ContextMenuApi, FluxDispatcher, Menu, NavigationRouter, React } from "@webpack/common";
+import { ContextMenuApi, FluxDispatcher, Menu, NavigationRouter, React, UserStore } from "@webpack/common";
 
 import { Channel } from "../..";
+
+const UserRecord = proxyLazy(() => UserStore.getCurrentUser().constructor) as any;
 
 export const RenderMessage = ({
     note,
@@ -31,6 +34,15 @@ export const RenderMessage = ({
 }) => {
     const isHoldingDeleteRef = React.useRef(false);
     const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
+    React.useEffect(() => {
+        const user = UserStore.getUser(note.author.id);
+        if (!user) {
+            fetchUserProfile(note.author.id);
+        }
+    }, [note.author.id]);
+
+    const author = UserStore.getUser(note.author.id) ?? note.author;
 
     React.useEffect(() => {
         const deleteHandler = (e: KeyboardEvent) => {
@@ -97,7 +109,7 @@ export const RenderMessage = ({
                         Object.assign(
                             { ...note },
                             {
-                                author: makeDummyUser(note?.author),
+                                author: new UserRecord({ ...author, bot: true }),
                                 timestamp: new Date(note?.timestamp),
                                 // @ts-ignore
                                 embeds: note?.embeds?.map((embed: { timestamp: string | number | Date; }) =>

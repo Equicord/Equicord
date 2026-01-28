@@ -6,7 +6,6 @@
 
 import { BaseText } from "@components/BaseText";
 import { Paragraph } from "@components/Paragraph";
-import { statusTagGreen } from "@equicordplugins/holyNotes";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { downloadNotes, uploadNotes } from "@equicordplugins/holyNotes/utils";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
@@ -21,30 +20,30 @@ export default ({ onClose, ...modalProps }: ModalProps & { onClose: () => void; 
             </ModalHeader>
             <ModalContent>
                 <div className="vc-help-markdown">
-                    <BaseText>Adding Notes</BaseText>
+                    <BaseText size="md">Adding Notes</BaseText>
                     <Paragraph>
                         To add a note right click on a message then hover over the "Note Message" item and click the button with the notebook name you would like to note the message to.
                     </Paragraph>
                     <div style={{ marginTop: "12px" }}>
-                        <span className={statusTagGreen}>Protip:</span>
+                        <span className="vc-help-protip">Protip:</span>
                     </div>
                     <Paragraph style={{ marginTop: "8px" }}>
                         Clicking the "Note Message" button by itself will note to Main by default!
                     </Paragraph>
                     <hr />
-                    <BaseText>Deleting Notes</BaseText>
+                    <BaseText size="md">Deleting Notes</BaseText>
                     <Paragraph>
                         Note you can either right click the note and hit "Delete Note" or you can hold the
                         'DELETE' key on your keyboard and click on a note; it's like magic!
                     </Paragraph>
                     <hr />
-                    <BaseText>Moving Notes</BaseText>
+                    <BaseText size="md">Moving Notes</BaseText>
                     <Paragraph>
                         To move a note right click on a note and hover over the "Move Note" item and click on
                         the button corresponding to the notebook you would like to move the note to.
                     </Paragraph>
                     <hr />
-                    <BaseText>Jump To Message</BaseText>
+                    <BaseText size="md">Jump To Message</BaseText>
                     <Paragraph>
                         To jump to the location that the note was originally located at just right click on the
                         note and hit "Jump to Message".
