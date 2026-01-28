@@ -61,6 +61,10 @@
     grid-template-columns: 1fr auto !important;
 }
 
+.questify-setting [class*="comboBoxInputContainer"] {
+    flex-wrap: wrap;
+}
+
 .questify-volume-slider-container {
     margin: 8px 0 0;
     background-color: var(--input-background-default, var(--input-background));
