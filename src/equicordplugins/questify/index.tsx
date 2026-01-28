@@ -977,7 +977,7 @@ function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false
         if (((isPlay && completeGameQuestsInBackground && IS_DISCORD_DESKTOP) || (isWatch && completeVideoQuestsInBackground))) {
             const { adjusted: durationWithLeeway } = getQuestTarget(task);
             const currentProgress = getQuestProgress(quest, task) || 0;
-            const progress = Math.min((intervalData?.progress ?? currentProgress), durationWithLeeway);
+            const progress = Math.min(currentProgress, durationWithLeeway);
             const timeRemaining = Math.max(0, durationWithLeeway - progress);
             const canCompleteImmediately = isWatch && questEnrolledAt && ((new Date().getTime() - questEnrolledAt.getTime()) / 1000) >= durationWithLeeway;
             const progressFormatted = `${String(Math.floor(timeRemaining / 60)).padStart(2, "0")}:${String(timeRemaining % 60).padStart(2, "0")}`;
@@ -1025,31 +1025,27 @@ function getQuestPanelPercentComplete({ quest, percentCompleteText }: { quest: Q
 }
 
 function getQuestPanelSubtitleText(quest: Quest): string | null {
+    const questStatus = getQuestStatus(quest);
+    const questCompleted = !!quest.userStatus?.completedAt && questStatus === QuestStatus.Unclaimed;
     const intervalData = activeQuestIntervals.get(quest.id);
+    const rewardItem = quest.config.rewardsConfig.rewards[0] || null;
+    const completingText = getQuestAcceptedButtonText(quest, true) || "Completing";
+    const completedText = questCompleted ? "Completed" : null;
 
-    if (!intervalData) {
+    if (!intervalData && !completedText) {
         return null;
     }
 
-    const rewardItem = quest.config.rewardsConfig.rewards[0] || null;
-    const completingText = getQuestAcceptedButtonText(quest, true) || "Completing";
-
-    if (rewardItem.orbQuantity) {
-        return `${completingText} for ${rewardItem.orbQuantity} Orbs.`;
-    } else if (rewardItem.messages?.nameWithArticle) {
-        return `${completingText} for ${rewardItem.messages.nameWithArticle}.`;
+    if (rewardItem?.orbQuantity) {
+        return `${completedText || completingText} for ${rewardItem.orbQuantity} Orbs.`;
+    } else if (rewardItem?.messages?.nameWithArticle) {
+        return `${completedText || completingText} for ${rewardItem.messages.nameWithArticle}.`;
     } else {
-        return `${completingText} for an unrecognized reward.`;
+        return `${completedText || completingText} for an unrecognized reward.`;
     }
 }
 
 function getQuestPanelTitleText(quest: Quest): string | null {
-    const intervalData = activeQuestIntervals.get(quest.id);
-
-    if (!intervalData) {
-        return null;
-    }
-
     return normalizeQuestName(quest.config.messages.questName);
 }
 
