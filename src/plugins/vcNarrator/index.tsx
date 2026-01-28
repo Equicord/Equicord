@@ -17,14 +17,12 @@
 */
 
 import { ErrorCard } from "@components/ErrorCard";
-import { HeadingSecondary } from "@components/Heading";
-import { Paragraph } from "@components/Paragraph";
 import { Devs, IS_LINUX } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { wordsToTitle } from "@utils/text";
 import definePlugin, { ReporterTestable } from "@utils/types";
-import { Button, ChannelStore, GuildMemberStore, SelectedChannelStore, SelectedGuildStore, useMemo, UserStore, VoiceStateStore } from "@webpack/common";
+import { AuthenticationStore, Button, ChannelStore, Forms, GuildMemberStore, SelectedChannelStore, SelectedGuildStore, useMemo, UserStore, VoiceStateStore } from "@webpack/common";
 import { ReactElement } from "react";
 
 import { getCurrentVoice, settings } from "./settings";
@@ -37,6 +35,7 @@ interface VoiceStateChangeEvent {
     mute: boolean;
     selfDeaf: boolean;
     selfMute: boolean;
+    sessionId: string;
 }
 
 // Mute/Deaf for other people than you is commented out, because otherwise someone can spam it and it will be annoying
@@ -75,6 +74,13 @@ function formatText(str: string, user: string, channel: string, displayName: str
         .replaceAll("{{NICKNAME}}", clean(nickname) || (nickname ? "Someone" : ""));
 }
 
+/*
+let StatusMap = {} as Record<string, {
+    mute: boolean;
+    deaf: boolean;
+}>;
+*/
+
 // For every user, channelId and oldChannelId will differ when moving channel.
 // Only for the local user, channelId and oldChannelId will be the same when moving channel,
 // for some ungodly reason
@@ -90,7 +96,15 @@ function getTypeAndChannelId({ channelId, oldChannelId }: VoiceStateChangeEvent,
         if (channelId) return [oldChannelId ? "move" : "join", channelId];
         if (oldChannelId) return ["leave", oldChannelId];
     }
-
+    /*
+    if (channelId) {
+        if (deaf || selfDeaf) return ["deafen", channelId];
+        if (mute || selfMute) return ["mute", channelId];
+        const oldStatus = StatusMap[userId];
+        if (oldStatus.deaf) return ["undeafen", channelId];
+        if (oldStatus.mute) return ["unmute", channelId];
+    }
+    */
     return ["", ""];
 }
 
@@ -157,6 +171,7 @@ export default definePlugin({
             for (const state of voiceStates) {
                 const { userId, channelId, oldChannelId } = state;
                 const isMe = userId === myId;
+                if (isMe && state.sessionId !== AuthenticationStore.getSessionId()) continue;
                 if (!isMe) {
                     if (!myChanId) continue;
                     if (channelId !== myChanId && oldChannelId !== myChanId) continue;
@@ -230,16 +245,16 @@ export default definePlugin({
 
         return (
             <section>
-                <Paragraph>
+                <Forms.FormText>
                     You can customise the spoken messages below. You can disable specific messages by setting them to nothing
-                </Paragraph>
-                <Paragraph>
+                </Forms.FormText>
+                <Forms.FormText>
                     The special placeholders <code>{"{{USER}}"}</code>, <code>{"{{DISPLAY_NAME}}"}</code>, <code>{"{{NICKNAME}}"}</code> and <code>{"{{CHANNEL}}"}</code>{" "}
                     will be replaced with the user's name (nothing if it's yourself), the user's display name, the user's nickname on current server and the channel's name respectively
-                </Paragraph>
+                </Forms.FormText>
                 {hasEnglishVoices && (
                     <>
-                        <HeadingSecondary className={Margins.top20}>Play Example Sounds</HeadingSecondary>
+                        <Forms.FormTitle className={Margins.top20} tag="h3">Play Example Sounds</Forms.FormTitle>
                         <div
                             style={{
                                 display: "grid",
