@@ -1,0 +1,37 @@
+{
+    "commands": {
+        "errorExecuting": "Ocorreu um erro ao executar o comando “{name}”"
+    },
+    "notifications": {
+        "dismissNotification": "Ignorar notificação",
+        "noNotifications": "Nenhuma notificação ainda",
+        "notificationLog": "Registro de notificações",
+        "notificationSettings": "Configurações de Notificação",
+        "logs": {
+            "title": "Você tem certeza?",
+            "body_zero": "Nenhuma notificação selecionada.",
+            "body_one": "Isso removerá permanentemente {count} notificação. Esta ação não pode ser desfeita.",
+            "body_other": "Isso removerá permanentemente {count} notificações. Esta ação não pode ser desfeita.",
+            "confirm": "Vai em frente!",
+            "cancel": "Deixa para lá",
+            "clearNotificationLog": "Limpar registro de notificações"
+        },
+        "missedNotifications": {
+            "title": "Enquanto você estava fora",
+            "body_one": "{count} Notificação recebidas",
+            "body_other": "{count} Notificações recebidas"
+        }
+    },
+    "memberListDecorators": {
+        "fallback": "Falha ao renderizar {key} Decorador da lista de membros"
+    },
+    "messageAccessories": {
+        "fallback": "Falha ao renderizar {key} Acessório de mensagem"
+    },
+    "messageDecorations": {
+        "fallback": "Falha ao renderizar {key} Decoração da mensagem"
+    },
+    "notices": {
+        "fallback": "Erro ao exibir aviso"
+    }
+}
