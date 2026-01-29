@@ -7,9 +7,8 @@
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
-import { quickSelectClasses } from "@equicordplugins/holyNotes";
+import { BookmarkIcon, quickSelectClasses } from "@equicordplugins/holyNotes";
 import HelpIcon from "@equicordplugins/holyNotes/components/icons/HelpIcon";
-import NoteButton from "@equicordplugins/holyNotes/components/icons/NoteButton";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { HolyNotes } from "@equicordplugins/holyNotes/types";
 import { classes } from "@utils/misc";
@@ -100,7 +99,7 @@ export const NoteModal = (props: ModalProps & { onClose: () => void; }) => {
                     <div className={classes("vc-notebook-top-section")}>
                         <ModalHeader className={classes("vc-notebook-header-main")}>
                             <Flex alignItems="center" style={{ gap: "8px", flex: 1 }}>
-                                <NoteButton className={classes("vc-notebook-icon")} />
+                                <BookmarkIcon className={classes("vc-notebook-icon")} />
                                 <Flex flexDirection="column" style={{ gap: "4px", flex: 1 }}>
                                     <BaseText
                                         size="lg"

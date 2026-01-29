@@ -33,7 +33,7 @@ import { NoteModal } from "./components/modals/Notebook";
 import { noteHandler, noteHandlerCache } from "./NoteHandler";
 import { DataStoreToCache, HolyNoteStore } from "./utils";
 
-const BookmarkIcon = findExportedComponentLazy("BookmarkIcon");
+export const BookmarkIcon = findExportedComponentLazy("BookmarkIcon");
 
 export const MessageType = findByCodeLazy("isEdited(){");
 export const iconClasses = findCssClassesLazy("iconWrapper", "clickable");
