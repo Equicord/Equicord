@@ -19,7 +19,7 @@ export default definePlugin({
     settings,
     toolboxActions: {
         "Open Theme Library": () => {
-            openUserSettingsPanel("theme_library");
+            openUserSettingsPanel("equicord_theme_library");
         },
     },
 
