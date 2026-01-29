@@ -53,9 +53,11 @@ let enabledPluginsSubscribedFlux = false;
 const subscribedFluxEventsPlugins = new Set<string>();
 
 export function isPluginEnabled(p: string) {
+    const plugin = Plugins[p];
+    const hasEnabledDependents = plugin ? hasEnabledDependentsFor(plugin.name) : false;
     return (
-        Plugins[p]?.required ||
-        Plugins[p]?.isDependency ||
+        plugin?.required ||
+        (plugin?.isDependency && !plugin?.allowDisableWithDependents && hasEnabledDependents) ||
         Settings.plugins[p]?.enabled
     ) ?? false;
 }
@@ -64,6 +66,10 @@ export function isPluginRequired(p: string) {
     return (
         Plugins[p]?.required
     ) ?? false;
+}
+
+export function hasEnabledDependentsFor(pluginName: string) {
+    return Object.values(Plugins).some(plugin => plugin.dependencies?.includes(pluginName) && Settings.plugins[plugin.name]?.enabled);
 }
 
 export function addPatch(newPatch: Omit<Patch, "plugin">, pluginName: string, pluginPath = `Vencord.Plugins.plugins[${JSON.stringify(pluginName)}]`) {
@@ -119,15 +125,36 @@ export const startAllPlugins = traceFunction("startAllPlugins", function startAl
     }
 });
 
-export function startDependenciesRecursive(p: Plugin) {
+export function startDependenciesRecursive(p: Plugin, state?: { visited: Set<string>; stack: string[]; }) {
     const settings = Settings.plugins;
     let restartNeeded = false;
     const failures: string[] = [];
+    let cycleDetected = false;
+    const visited = state?.visited ?? new Set<string>();
+    const stack = state?.stack ?? [];
+
+    if (visited.has(p.name)) {
+        return { restartNeeded, failures };
+    }
+
+    if (stack.includes(p.name)) {
+        logger.warn(new Error(`Plugin dependency cycle detected while starting: ${[...stack, p.name].join(" -> ")}`));
+        return { restartNeeded, failures, cycleDetected: true };
+    }
+
+    visited.add(p.name);
+    stack.push(p.name);
 
     p.dependencies?.forEach(d => {
         if (!settings[d].enabled) {
             const dep = Plugins[d];
-            startDependenciesRecursive(dep);
+            const depResult = startDependenciesRecursive(dep, { visited, stack });
+            if (depResult.cycleDetected) {
+                cycleDetected = true;
+                return;
+            }
+            if (depResult.restartNeeded) restartNeeded = true;
+            if (depResult.failures.length) failures.push(...depResult.failures);
 
             // If the plugin has patches, don't start the plugin, just enable it.
             settings[d].enabled = true;
@@ -139,12 +166,13 @@ export function startDependenciesRecursive(p: Plugin) {
                 return;
             }
 
-            const result = startPlugin(dep);
-            if (!result) failures.push(d);
+            const started = startPlugin(dep);
+            if (!started) failures.push(d);
         }
     });
 
-    return { restartNeeded, failures };
+    stack.pop();
+    return { restartNeeded, failures, cycleDetected };
 }
 
 export function subscribePluginFluxEvents(p: Plugin, fluxDispatcher: typeof FluxDispatcher) {
@@ -343,6 +371,8 @@ export const stopPlugin = traceFunction("stopPlugin", function stopPlugin(p: Plu
     if (audioProcessor) removeAudioProcessor(name);
     if (userAreaButton) removeUserAreaButton(name);
 
+    logger.info("Stopped plugin", name);
+
     return true;
 }, p => `stopPlugin ${p.name}`);
 
@@ -359,28 +389,42 @@ export const initPluginManager = onlyOnce(function init() {
 
     const neededApiPlugins = new Set<string>();
 
-    // First round-trip to mark and force enable dependencies
-    //
-    // FIXME: might need to revisit this if there's ever nested (dependencies of dependencies) dependencies since this only
-    // goes for the top level and their children, but for now this works okay with the current API plugins
-    for (const p of pluginsValues) if (isPluginEnabled(p.name)) {
-        p.dependencies?.forEach(d => {
-            const dep = Plugins[d];
+    const processedDependencies = new Set<string>();
+    const resolvingDependencies = new Set<string>();
 
-            if (!dep) {
-                const error = new Error(`Plugin ${p.name} has unresolved dependency ${d}`);
+    const enableDependencies = (pluginName: string, parent: string | null, isDependency: boolean) => {
+        if (processedDependencies.has(pluginName)) return;
+        if (resolvingDependencies.has(pluginName)) {
+            logger.warn(new Error(`Plugin dependency cycle detected: ${[...resolvingDependencies, pluginName].join(" -> ")}`));
+            return;
+        }
 
-                if (IS_DEV) {
-                    throw error;
-                }
+        const plugin = Plugins[pluginName];
+        if (!plugin) {
+            const error = new Error(`Plugin ${parent ?? pluginName} has unresolved dependency ${pluginName}`);
 
-                logger.warn(error);
-                return;
+            if (IS_DEV) {
+                throw error;
             }
 
-            settings[d].enabled = true;
-            dep.isDependency = true;
-        });
+            logger.warn(error);
+            return;
+        }
+
+        if (isDependency) {
+            settings[pluginName].enabled = true;
+            plugin.isDependency = true;
+        }
+
+        resolvingDependencies.add(pluginName);
+        plugin.dependencies?.forEach(dep => enableDependencies(dep, pluginName, true));
+        resolvingDependencies.delete(pluginName);
+        processedDependencies.add(pluginName);
+    };
+
+    // First round-trip to mark and force enable dependencies, including nested ones.
+    for (const p of pluginsValues) if (isPluginEnabled(p.name)) {
+        enableDependencies(p.name, null, false);
 
         if (p.commands?.length) neededApiPlugins.add("CommandsAPI");
         if (p.onBeforeMessageEdit || p.onBeforeMessageSend || p.onMessageClick) neededApiPlugins.add("MessageEventsAPI");

@@ -131,6 +131,11 @@ export interface PluginDef {
      */
     enabledByDefault?: boolean;
     /**
+     * Allow disabling this plugin even when dependents are enabled or it is marked as a dependency.
+     * Intended for developer/test plugins.
+     */
+    allowDisableWithDependents?: boolean;
+    /**
      * Whether enabling or disabling this plugin requires a restart. Defaults to true if the plugin has patches.
      */
     requiresRestart?: boolean;

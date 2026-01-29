@@ -224,6 +224,7 @@ export const Settings = SettingsStore.store;
 // TODO: Representing paths as essentially "string[].join('.')" wont allow dots in paths, change to "paths?: string[][]" later
 export function useSettings(paths?: UseSettings<Settings>[]) {
     const [, forceUpdate] = React.useReducer(() => ({}), {});
+    const pathsKey = paths?.join("\u0000");
 
     useEffect(() => {
         if (paths) {
@@ -246,7 +247,7 @@ export function useSettings(paths?: UseSettings<Settings>[]) {
             SettingsStore.addGlobalChangeListener(forceUpdate);
             return () => SettingsStore.removeGlobalChangeListener(forceUpdate);
         }
-    }, [paths]);
+    }, [pathsKey]);
 
     return SettingsStore.store;
 }

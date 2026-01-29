@@ -59,6 +59,11 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
                 onRestartNeeded(plugin.name, "enabled");
                 return;
             }
+
+            if (plugin.started) {
+                settings.enabled = true;
+                return;
+            }
         }
 
         // if the plugin requires a restart, don't use stopPlugin/startPlugin. Wait for restart to apply changes.

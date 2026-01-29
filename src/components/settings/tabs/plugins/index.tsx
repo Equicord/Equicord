@@ -278,12 +278,14 @@ export default function PluginSettings() {
 
             if (!pluginFilter(p, newPluginsSet)) continue;
 
-            const isRequired = p.required || p.isDependency || depMap[p.name]?.some(d => settings.plugins[d].enabled);
+            const ignoreDependentsLock = p.allowDisableWithDependents === true;
+            const enabledDependents = depMap[p.name]?.filter(d => settings.plugins[d].enabled) ?? [];
+            const isRequired = p.required || (!ignoreDependentsLock && enabledDependents.length > 0);
 
             if (isRequired) {
-                const tooltipText = p.required || !depMap[p.name]
+                const tooltipText = p.required || enabledDependents.length === 0
                     ? "This plugin is required for Equicord to function."
-                    : <PluginDependencyList deps={depMap[p.name]?.filter(d => settings.plugins[d].enabled)} />;
+                    : <PluginDependencyList deps={enabledDependents} />;
 
                 requiredPlugins.push(
                     <Tooltip text={tooltipText} key={p.name}>
