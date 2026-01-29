@@ -1615,11 +1615,11 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(?=let{quest:)/,
-                    replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest);const startingAutoComplete=$self.processQuestForAutoComplete(arguments[0].quest);"
+                    replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest);"
                 },
                 {
                     match: /(?<="primary",onClick:\(\)=>{null==\i\|\|\i\(\),)/,
-                    replace: "!startingAutoComplete&&"
+                    replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&"
                 },
                 {
                     match: /(?<=,text:)(?=\i)/,
