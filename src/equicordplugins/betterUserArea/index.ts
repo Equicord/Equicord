@@ -103,8 +103,8 @@ export default definePlugin({
                     replace: "tooltipText:void 0}"
                 },
                 {
-                    match: /(?<=useRef\(null\);)(\i)=.{0,100}#{intl::USER_SETTINGS}\);/,
-                    replace: "$1=void 0;"
+                    match: /tooltipText:\i,tooltipPositionKey/,
+                    replace: "tooltipText:void 0,tooltipPositionKey"
                 }
             ],
             predicate: () => settings.store.removeButtonTooltips
