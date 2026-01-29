@@ -1559,6 +1559,10 @@ export default definePlugin({
             }
         },
         {
+            // MARK: TODO
+            //  - Cleanup once Discord rolls out the new quest CTA refactor completely.
+            //  - See new entry point in 2nd patch group below.
+            //
             // Sets intervals to progress Play Game Quests in the background and patches some common click handlers.
             find: "IN_PROGRESS:if(",
             group: true,
@@ -1604,6 +1608,24 @@ export default definePlugin({
                 match: /(?<=SUCCESS:)(\i\({)/,
                 replace: "!$self.processQuestForAutoComplete(arguments[0])&&$1"
             }
+        },
+        {
+            // Adds support for dev://experiment/2025-12-quest-cta-refactor-rollout
+            find: '"sm",preClickCallback:',
+            replacement: [
+                {
+                    match: /(?=let{quest:)/,
+                    replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest);const startingAutoComplete=$self.processQuestForAutoComplete(arguments[0].quest);"
+                },
+                {
+                    match: /(?<="primary",onClick:\(\)=>{null==\i\|\|\i\(\),)/,
+                    replace: "!startingAutoComplete&&"
+                },
+                {
+                    match: /(?<=,text:)(?=\i)/,
+                    replace: "questifyText??"
+                }
+            ]
         },
         {
             // Sets intervals to progress Play Game Quests in the background.
