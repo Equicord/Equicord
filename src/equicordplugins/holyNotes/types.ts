@@ -5,43 +5,34 @@
  */
 
 import { Embed, MessageAttachment, MessageReaction } from "@vencord/discord-types";
+import { StickerFormatType } from "@vencord/discord-types/enums";
 
-export declare namespace Discord {
-    export interface Sticker {
-        format_type: number;
-        id: string;
-        name: string;
-    }
-
-    export interface Attachment extends MessageAttachment {
-        sensitive: boolean;
-    }
-
-    export interface Reaction extends MessageReaction {
-        burst_colors: string[];
-        borst_count: number;
-        count_details: { burst: number; normal: number; };
-        me_burst: boolean;
-    }
+export interface NoteAuthor {
+    id: string;
+    avatar: string;
+    discriminator: string;
+    username: string;
 }
 
-export declare namespace HolyNotes {
-    export interface Note {
-        id: string;
-        channel_id: string;
-        guild_id: string;
-        content: string;
-        author: {
-            id: string;
-            avatar: string;
-            discriminator: string;
-            username: string;
-        };
-        flags: number;
-        timestamp: string;
-        attachments: Discord.Attachment[];
-        embeds: Embed[];
-        reactions: Discord.Reaction[];
-        stickerItems: Discord.Sticker[];
-    }
+export interface NoteStickerItem {
+    format_type: StickerFormatType;
+    id: string;
+    name: string;
 }
+
+export interface Note {
+    id: string;
+    channel_id: string;
+    guild_id: string;
+    content: string;
+    author: NoteAuthor;
+    flags: number;
+    timestamp: string;
+    attachments: MessageAttachment[];
+    embeds: Embed[];
+    reactions: MessageReaction[];
+    stickerItems: NoteStickerItem[];
+}
+
+export type Notebook = Record<string, Note>;
+export type AllNotebooks = Record<string, Notebook>;
