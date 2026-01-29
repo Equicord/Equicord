@@ -75,7 +75,6 @@ import type {
     NumberBadgeProps,
     OpenModalOptions,
     PaginatorProps,
-    PopoutComponent,
     ProgressBarProps,
     SearchBarProps,
     SimpleErrorBoundaryProps,
@@ -150,7 +149,6 @@ export const Accordion = findComponentByCodeLazy("scrollHeight)}", "onExpandedCh
 export const Timestamp = findComponentByCodeLazy("#{intl::MESSAGE_EDITED_TIMESTAMP_A11Y_LABEL}", "isVisibleOnlyOnHover") as React.ComponentType<TimestampProps>;
 export const GuildIcon = findComponentByCodeLazy("Masks.CLAN_ICON,width", "acronymClassName") as React.ComponentType<GuildIconProps>;
 export const ColorPicker = findComponentByCodeLazy("#{intl::USER_SETTINGS_PROFILE_COLOR_SELECT_COLOR}", "showEyeDropper") as React.ComponentType<ColorPickerProps>;
-export const Popout: PopoutComponent = proxyLazy(() => findLazy(m => m?.y?.Animation && m.y.toString?.().includes("renderPopout")).y);
 export const FocusLock = findComponentByCodeLazy(".containerRef,{keyboardModeEnabled:") as React.ComponentType<FocusLockProps>;
 export const UserSummaryItem = findComponentByCodeLazy("popoutUserId") as React.ComponentType<UserSummaryItemProps>;
 
