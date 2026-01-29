@@ -22,17 +22,18 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { HeaderBarButton } from "@api/HeaderBar";
 import { DataStore } from "@api/index";
 import { EquicordDevs } from "@utils/constants";
-import { classes } from "@utils/misc";
 import { openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
+import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
 import { ChannelStore, Menu } from "@webpack/common";
 
-import { Popover as NoteButtonPopover, Popover } from "./components/icons/NoteButton";
+import { Popover as NoteButtonPopover } from "./components/icons/NoteButton";
 import { NoteModal } from "./components/modals/Notebook";
 import { noteHandler, noteHandlerCache } from "./NoteHandler";
 import { DataStoreToCache, HolyNoteStore } from "./utils";
+
+const BookmarkIcon = findExportedComponentLazy("BookmarkIcon");
 
 export const MessageType = findByCodeLazy("isEdited(){");
 export const iconClasses = findCssClassesLazy("iconWrapper", "clickable");
@@ -62,8 +63,8 @@ function ToolBarHeader() {
         <HeaderBarButton
             tooltip="Holy Notes"
             position="bottom"
-            className={classes("vc-note-button", iconClasses.iconWrapper, iconClasses.clickable)}
-            icon={Popover}
+            className="vc-note-button"
+            icon={BookmarkIcon}
             onClick={() => openModal(props => <NoteModal {...props} />)}
         />
     );
@@ -85,7 +86,7 @@ export default definePlugin({
     },
 
     headerBarButton: {
-        icon: Popover,
+        icon: BookmarkIcon,
         render: ToolBarHeader
     },
 
