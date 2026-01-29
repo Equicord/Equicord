@@ -34,6 +34,7 @@ const actions: { label: string; value: ClickAction; }[] = [
 
 const doubleClickOwnActions: { label: string; value: ClickAction; }[] = [
     { label: "None", value: "NONE" },
+    { label: "Delete", value: "DELETE" },
     { label: "Reply", value: "REPLY" },
     { label: "Edit", value: "EDIT" },
     { label: "Quote", value: "QUOTE" },
@@ -47,6 +48,7 @@ const doubleClickOwnActions: { label: string; value: ClickAction; }[] = [
 
 const doubleClickOthersActions: { label: string; value: ClickAction; }[] = [
     { label: "None", value: "NONE" },
+    { label: "Delete", value: "DELETE" },
     { label: "Reply", value: "REPLY" },
     { label: "Quote", value: "QUOTE" },
     { label: "Copy Content", value: "COPY_CONTENT" },
@@ -555,7 +557,7 @@ export default definePlugin({
                 }
             };
 
-            if (canDoubleClick && shouldExecuteSingle) {
+            if (canDoubleClick && shouldExecuteSingle && singleClickModifier === "NONE") {
                 singleClickTimeout = setTimeout(() => {
                     executeSingleClick();
                     singleClickTimeout = null;
