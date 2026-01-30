@@ -35,7 +35,7 @@ export type FindOrSearchData =
     } & _PrefixKeys<_CapitalizeKeys<FindData>, "find">);
 
 export type AnyFindType =
-    `find${"Component" | "ByProps" | "Store" | "ByCode" | "ModuleId" | "ComponentByCode" | ""}${"Lazy" | ""}`;
+    `find${"Component" | "ByProps" | "CssClasses" | "Store" | "ByCode" | "ModuleId" | "ComponentByCode" | ""}${"Lazy" | ""}`;
 
 export type StringNode = {
     type: "string";
