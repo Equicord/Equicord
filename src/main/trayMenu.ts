@@ -62,7 +62,7 @@ function createEquicordMenuItems(): MenuItemConstructorOptions[] {
                 },
                 {
                     label: "Repair Equicord",
-                    click: () => sendToRenderer(IpcEvents.TRAY_REPAIR_EQUICORD)
+                    click: () => sendToRenderer(IpcEvents.TRAY_REPAIR)
                 },
                 { type: "separator" },
                 {
