@@ -8,12 +8,10 @@ import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
-import { BookmarkIcon } from "@equicordplugins/holyNotes";
+import { BookmarkIcon, CircleQuestionIcon, cl, CloseButton } from "@equicordplugins/holyNotes";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { Note, Notebook } from "@equicordplugins/holyNotes/types";
-import { classNameFactory } from "@utils/css";
 import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { findComponentByCodeLazy, findExportedComponentLazy } from "@webpack";
 import { Clickable, React, Select, TextInput, Tooltip, useState } from "@webpack/common";
 
 import Errors from "./Error";
@@ -21,10 +19,6 @@ import HelpModal from "./HelpModal";
 import NotebookCreateModal from "./NotebookCreateModal";
 import NotebookDeleteModal from "./NotebookDeleteModal";
 import { RenderMessage } from "./RenderMessage";
-
-const cl = classNameFactory("vc-notebook-");
-const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
-const CircleQuestionIcon = findExportedComponentLazy("CircleQuestionIcon");
 
 const enum SortOption {
     NewestAdded,
