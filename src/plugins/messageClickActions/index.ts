@@ -10,7 +10,7 @@ import NoReplyMentionPlugin from "@plugins/noReplyMention";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { copyWithToast, insertTextIntoChatInputBox } from "@utils/discord";
 import { Logger } from "@utils/Logger";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin, { makeRange, OptionType } from "@utils/types";
 import type { Channel, Message } from "@vencord/discord-types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
 import { AuthenticationStore, Constants, EditMessageStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, PinActions, RestAPI, Toasts, WindowStore } from "@webpack/common";
@@ -191,16 +191,19 @@ const settings = definePluginSettings({
     clickTimeout: {
         type: OptionType.NUMBER,
         description: "Timeout to distinguish double/triple clicks (ms)",
+        markers: makeRange(100, 500, 50),
         default: 300
     },
     doubleClickHoldThreshold: {
         type: OptionType.NUMBER,
         description: "Max hold time for double-click actions (ms). Holding longer allows text selection",
+        markers: makeRange(50, 500, 50),
         default: 150
     },
     selectionHoldTimeout: {
         type: OptionType.NUMBER,
         description: "Timeout to allow text selection (ms)",
+        markers: makeRange(100, 1000, 100),
         default: 300
     },
     quoteWithReply: {
