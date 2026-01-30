@@ -8,10 +8,10 @@ import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
-import { BookmarkIcon, CircleQuestionIcon, cl, CloseButton } from "@equicordplugins/holyNotes";
+import { BookmarkIcon, CircleQuestionIcon, cl } from "@equicordplugins/holyNotes";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { Note, Notebook } from "@equicordplugins/holyNotes/types";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { CloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { Clickable, React, Select, TextInput, Tooltip, useState } from "@webpack/common";
 
 import Errors from "./Error";

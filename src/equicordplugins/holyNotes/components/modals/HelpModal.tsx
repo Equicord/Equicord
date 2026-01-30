@@ -7,10 +7,10 @@
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
-import { cl, CloseButton } from "@equicordplugins/holyNotes";
+import { cl } from "@equicordplugins/holyNotes";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { downloadNotes, uploadNotes } from "@equicordplugins/holyNotes/utils";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
+import { CloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
 
 function HelpSection({ title, children }: { title: string; children: React.ReactNode; }) {
     return (

@@ -34,7 +34,6 @@ import { noteHandler, noteHandlerCache } from "./NoteHandler";
 import { DataStoreToCache, HolyNoteStore } from "./utils";
 
 export const cl = classNameFactory("vc-notebook-");
-export const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
 export const CircleQuestionIcon = findExportedComponentLazy("CircleQuestionIcon");
 export const BookmarkIconLazy = findExportedComponentLazy("BookmarkIcon");
 export const BookmarkIcon: IconComponent = props => <BookmarkIconLazy {...props} />;

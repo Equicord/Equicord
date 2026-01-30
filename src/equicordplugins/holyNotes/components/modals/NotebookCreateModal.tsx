@@ -6,9 +6,9 @@
 
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
-import { cl, CloseButton } from "@equicordplugins/holyNotes";
+import { cl } from "@equicordplugins/holyNotes";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
+import { CloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
 import { TextInput, useState } from "@webpack/common";
 
 export default function NotebookCreateModal({ onClose, transitionState }: ModalProps) {
