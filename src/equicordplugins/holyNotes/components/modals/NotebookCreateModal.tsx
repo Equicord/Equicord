@@ -21,7 +21,7 @@ export default function NotebookCreateModal({ onClose, transitionState }: ModalP
     };
 
     return (
-        <ModalRoot transitionState={transitionState} size={ModalSize.SMALL} className="vc-notebook-create-modal">
+        <ModalRoot transitionState={transitionState} size={ModalSize.SMALL} className={cl("create-modal")}>
             <ModalHeader separator={false} className={cl("header")}>
                 <div className={cl("header-content")}>
                     <BaseText tag="h2" size="lg" weight="semibold" className={cl("title")}>
