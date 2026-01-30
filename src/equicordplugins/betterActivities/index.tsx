@@ -21,13 +21,9 @@ export default definePlugin({
     description: "Shows activity icons in the member list and allows showing all activities",
     authors: [Devs.D3SOX, Devs.Arjix, Devs.AutumnVN, Devs.thororen],
     tags: ["activity"],
-
     settings,
-
     patchActivityList,
-
     showAllActivitiesComponent,
-
     patches: [
         {
             // Patch activity icons
