@@ -11,36 +11,10 @@
             margin: 0;
         }
 
-        h1 {
-            text-align: center;
-        }
-
-        ul {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5em;
-        }
-
         :root {
-            color-scheme: light dark;
-            --bg: white;
-            --fg: black;
-            --fg-secondary: #313338;
-            --fg-semi-trans: rgba(0, 0, 0, 0.2);
-            --link: #006ce7;
-            --link-hover: #005bb5;
-        }
-
-        /* Dark theme overrides */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: hsl(223 6.7% 20.6%);
-                --fg: white;
-                --fg-secondary: #b5bac1;
-                --fg-semi-trans: rgba(255, 255, 255, 0.2);
-                --link: #00a8fc;
-                --link-hover: #0086c3;
-            }
+            --bg: #0d0d0d;
+            --fg: #ffffff;
+            --fg-secondary: #a1a1a1;
         }
 
         html,
@@ -49,24 +23,97 @@
             color: var(--fg);
         }
 
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 1.25em;
+            margin-bottom: 2em;
+        }
+
+        .header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+        }
+
+        .header-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25em;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5em;
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 1.75em;
+            font-weight: 700;
+            color: var(--fg);
+        }
+
+        .header-text .version {
+            color: var(--fg-secondary);
+            font-size: 0.875em;
+        }
+
+        .header-text .tagline {
+            color: var(--fg-secondary);
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--fg);
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            color: var(--fg-secondary);
+        }
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+            padding-left: 1.5em;
+        }
+
+        li {
+            color: var(--fg-secondary);
+        }
+
         a {
-            color: var(--link);
+            color: var(--fg-secondary);
+            text-decoration: underline;
             transition: color 0.2s linear;
-            text-decoration: none;
         }
 
         a:hover {
-            color: var(--link-hover);
+            color: var(--fg);
+        }
+
+        section {
+            margin-bottom: 1.5em;
         }
     </style>
 </head>
 
 <body>
-    <h1 id="title">Equicord v{{VERSION}} ({{GIT_HASH}})</h1>
-    <p>
-        Equicord is the unstable experimental FORK
-        of Vencord and the other cutest client mod.
-    </p>
+    <header class="header">
+        <img src="https://equicord.org/assets/favicon.png" alt="Equicord" />
+        <div class="header-text">
+            <div class="header-top">
+                <h1>Equicord</h1>
+                <span class="version">v{{VERSION}} ({{GIT_HASH}})</span>
+            </div>
+            <p class="tagline">An enhanced version of Vencord. A fork that offers a wider selection of plugins from the community.</p>
+        </div>
+    </header>
+
     <section>
         <h2>Links</h2>
         <ul>
