@@ -98,12 +98,15 @@ export function HeaderBarButton(props: HeaderBarButtonProps & { ref?: React.RefO
 
     return (
         <Tooltip text={tooltip ?? ""} position={position} shouldShow={tooltip != null}>
-            {() => (
+            {({ onMouseEnter, onMouseLeave }) => (
                 <Clickable
                     {...{ innerRef: ref } as any}
                     className={classes(HeaderBarClasses.clickable, HeaderBarClasses.withHighlight, className)}
+                    style={{ width: iconSize, boxSizing: "content-box", justifyContent: "center" }}
                     onClick={onClick}
                     onContextMenu={onContextMenu}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
                     role="button"
                     tabIndex={0}
                     aria-label={label}

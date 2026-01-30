@@ -14,6 +14,7 @@ import { TooltipContainer } from "@components/TooltipContainer";
 import { copyWithToast, getIntlMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import {
+    CloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
@@ -41,7 +42,6 @@ import {
 import { cssColors, getCssColorKeys, iconSizes, iconSizesInPx } from "../utils";
 
 const logger = new Logger("IconViewer");
-const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
 const BugIcon = findComponentByCodeLazy("1.1.27.1.37 0a6.66 6.6");
 
 const FORMAT_EXTENSIONS: Record<string, string> = {

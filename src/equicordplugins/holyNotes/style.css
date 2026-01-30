@@ -1,115 +1,85 @@
-/* stylelint-disable shorthand-property-no-redundant-values */
-/* stylelint-disable length-zero-no-unit */
-
-.vc-notebook-search {
-    flex: auto;
-    margin-right: 15px;
-    margin-bottom: 10px;
-    background-color: var(--background-surface-higher);
-}
-
 .vc-notebook-header {
-    margin-bottom: 10px;
-    padding: 16px 16px 10px 16px;
+    align-items: flex-start;
+    position: relative;
+    padding: 16px 16px 0 24px;
 }
 
-.vc-notebook-header-main {
-    padding: 16px 16px 12px 16px;
-    background-color: var(--background-surface-higher);
-    box-shadow: none !important;
+.vc-notebook-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
 }
 
-.vc-notebook-heading {
-    max-width: none;
-    margin: 0;
-    padding: 0;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 24px;
-    color: var(--text-default);
+.vc-notebook-header-trailing {
+    position: absolute;
+    top: 8px;
+    right: 8px;
 }
 
-.vc-notebook-count {
-    font-size: 12px;
+.vc-notebook-title {
+    color: var(--text-strong);
+}
+
+.vc-notebook-description {
+    color: var(--text-subtle);
+}
+
+.vc-notebook-controls {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 150px;
+    padding: 16px 24px;
+}
+
+.vc-notebook-tabs {
+    display: flex;
+    gap: 24px;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.vc-notebook-tab {
+    padding: 8px 0;
+    font-size: 14px;
     font-weight: 500;
-    line-height: 16px;
-    color: var(--text-muted);
-}
-
-.vc-notebook-flex {
-    overflow: hidden;
-}
-
-.vc-notebook-flex .vc-help-icon {
-    width: 20px;
-    height: 20px;
-    opacity: 0.6;
+    color: var(--text-subtle);
     cursor: pointer;
-    padding: 0;
-    margin: 0;
-    color: var(--icon-default);
-    transition: opacity 0.2s ease-in-out, color 0.2s ease-in-out;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.vc-notebook-icon {
-    width: 24px;
-    height: 24px;
-    cursor: default;
-    margin: 0;
+.vc-notebook-tab:hover {
     color: var(--text-default);
-    flex-shrink: 0;
+    border-bottom-color: var(--text-subtle);
 }
 
-.vc-notebook-help-button {
-    width: 20px;
-    height: 20px;
+.vc-notebook-tab-selected {
+    color: var(--text-default);
+    border-bottom-color: var(--control-brand-foreground);
+}
+
+.vc-notebook-content {
+    padding: 16px 24px;
+}
+
+.vc-notebook-create-modal [class*="footer"] {
+    gap: 8px;
+}
+
+.vc-notebook-icon-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.2s ease-in-out;
+    padding: 4px;
+    color: var(--icon-subtle);
+    border-radius: 4px;
+    transition: color 0.15s ease;
 }
 
-.vc-notebook-help-button:hover {
-    opacity: 1;
-}
-
-.vc-notebook-help-button svg {
-    width: 20px;
-    height: 20px;
+.vc-notebook-icon-button:hover {
     color: var(--icon-default);
-}
-
-.vc-notebook-display-left {
-    flex: auto;
-    display: flex;
-}
-
-.vc-notebook-search-container {
-    padding: 0 16px 12px 16px;
-    background-color: var(--background-surface-higher);
-}
-
-.vc-notebook-search-input {
-    width: 100%;
-    background-color: var(--input-background-default);
-}
-
-.vc-help-markdown {
-    margin-top: 6px;
-}
-
-.vc-help-markdown hr {
-    border: 0;
-    height: 1px;
-    margin: 12px 0px 16px 0px;
-    background-color: var(--border-normal);
-}
-
-.vc-help-markdown .vc-help-protip {
-    font-weight: 600;
-    color: var(--text-feedback-positive);
 }
 
 .vc-holy-note [class*="buttonContainer"] {
@@ -120,100 +90,6 @@
     list-style-type: none;
 }
 
-.vc-notebook-tabbar {
-    border-bottom: 1px solid var(--border-normal);
-    background-color: var(--background-surface-higher);
-    white-space: nowrap;
-    overflow: hidden;
-    height: 36px;
-    flex-shrink: 0;
-}
-
-.vc-notebook-overflow-chevron {
-    display: inline-block;
-    padding: 0 6px 2px;
-    height: 16px;
-    position: relative;
-    top: -10px;
-}
-
-.vc-notebook-tabbar-container {
-    border-bottom: 1px solid var(--border-normal);
-    margin: 0 16px;
-    padding: 0;
-    background-color: var(--background-surface-higher);
-}
-
-.vc-notebook-tabbar-item {
-    display: inline-block;
-    padding: 8px 12px;
-    margin-bottom: -1px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    line-height: 20px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    color: var(--interactive-text-default);
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
-    /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
-    border-bottom-color: transparent;
-    transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out, font-weight 0.2s ease-in-out;
-}
-
-.vc-notebook-selected {
-    border-bottom-width: 3px;
-    border-bottom-color: var(--control-brand-foreground);
-    color: var(--text-default);
-    font-weight: 600;
-}
-
-.vc-notebook-tabbar-item:hover {
-    color: var(--interactive-text-hover);
-}
-
-.vc-notebook-tabbar-item:hover:not(.vc-notebook-selected) {
-    border-bottom-color: var(--interactive-text-hover);
-}
-
-.vc-notebook-top-section {
-    margin-bottom: 0;
-    z-index: 1;
-    background-color: var(--background-surface-higher);
-}
-
-.vc-notebook-content {
-    padding: 16px;
-    background-color: var(--background-surface-high);
-}
-
-.vc-notebook-footer {
-    padding: 16px;
-    background-color: var(--background-surface-higher);
-    border-top: 1px solid var(--border-normal);
-}
-
-.vc-help-modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-}
-
-.vc-help-modal-footer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    width: 100%;
-}
-
-.vc-help-markdown span[class*="statusTag"] {
-    display: inline-block;
-    width: auto;
-}
-
 .vc-holy-note [class*="botText"] {
     font-size: 0 !important;
     line-height: 0;
@@ -221,16 +97,24 @@
 
 .vc-holy-note [class*="botText"]::after {
     content: "NOTE";
-    font-size: 0.675rem;
+    font-size: 0.625rem;
     line-height: 1.3;
-    font-weight: 800;
+    font-weight: 600;
     font-family: var(--font-display);
     color: inherit;
     letter-spacing: 0.02em;
     text-transform: uppercase;
 }
 
-.sort-button-container {
+.vc-help-markdown {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.vc-help-markdown hr {
+    border: none;
+    height: 1px;
+    margin: 12px 0;
+    background-color: var(--border-subtle);
 }
