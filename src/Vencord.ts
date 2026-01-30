@@ -193,10 +193,8 @@ function initTrayIpc() {
 
     VencordNative.tray.onRepair(async () => {
         try {
-            const res = await VencordNative.updater.rebuild();
-            if (!res.ok) throw res.error;
-
-            showNotice("Equicord has been repaired!", "Restart", relaunch);
+            await update();
+            relaunch();
         } catch (err) {
             UpdateLogger.error("Failed to repair Equicord", err);
         }
