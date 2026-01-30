@@ -111,6 +111,7 @@ function isModifierPressed(modifier: Modifier): boolean {
 let doubleClickTimeout: ReturnType<typeof setTimeout> | null = null;
 let singleClickTimeout: ReturnType<typeof setTimeout> | null = null;
 let pendingDoubleClickAction: (() => void) | null = null;
+let doubleClickFired = false;
 
 const settings = definePluginSettings({
     reactEmoji: {
@@ -495,7 +496,10 @@ export default definePlugin({
         const isDoubleClick = event.detail === 2;
         const isTripleClick = event.detail === 3;
 
-        if (Date.now() - lastMouseDownTime > settings.store.selectionHoldTimeout) return;
+        if (Date.now() - lastMouseDownTime > settings.store.selectionHoldTimeout) {
+            pressedModifiers.clear();
+            return;
+        }
 
         if (singleClickTimeout) {
             clearTimeout(singleClickTimeout);
@@ -511,7 +515,9 @@ export default definePlugin({
 
             if (isModifierPressed(tripleClickModifier) && tripleClickAction !== "NONE") {
                 executeAction(tripleClickAction, msg, channel, event);
+                pressedModifiers.clear();
             }
+            doubleClickFired = false;
             return;
         }
 
@@ -519,6 +525,8 @@ export default definePlugin({
         const canTripleClick = isModifierPressed(tripleClickModifier) && tripleClickAction !== "NONE";
 
         if (isDoubleClick) {
+            doubleClickFired = true;
+
             if (singleClickTimeout) {
                 clearTimeout(singleClickTimeout);
                 singleClickTimeout = null;
@@ -529,6 +537,7 @@ export default definePlugin({
                 if (msg.deleted === true) return;
                 if (canDoubleClick) {
                     executeAction(doubleClickAction, msg, channel, event);
+                    pressedModifiers.clear();
                 }
             };
 
@@ -550,14 +559,16 @@ export default definePlugin({
         }
 
         if (isSingleClick) {
-            const shouldExecuteSingle = isModifierPressed(singleClickModifier) && singleClickAction !== "NONE";
+            doubleClickFired = false;
+
             const executeSingleClick = () => {
-                if (shouldExecuteSingle) {
+                if (!doubleClickFired && isModifierPressed(singleClickModifier) && singleClickAction !== "NONE") {
                     executeAction(singleClickAction, msg, channel, event);
+                    pressedModifiers.clear();
                 }
             };
 
-            if (canDoubleClick && shouldExecuteSingle && singleClickModifier === "NONE") {
+            if (canDoubleClick && singleClickModifier === "NONE") {
                 singleClickTimeout = setTimeout(() => {
                     executeSingleClick();
                     singleClickTimeout = null;
