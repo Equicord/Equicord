@@ -10,11 +10,9 @@ import { Flex } from "@components/Flex";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { downloadNotes, uploadNotes } from "@equicordplugins/holyNotes/utils";
 import { classNameFactory } from "@utils/css";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
-import { findComponentByCodeLazy } from "@webpack";
+import { CloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
 
 const cl = classNameFactory("vc-notebook-");
-const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
 
 function HelpSection({ title, children }: { title: string; children: React.ReactNode; }) {
     return (

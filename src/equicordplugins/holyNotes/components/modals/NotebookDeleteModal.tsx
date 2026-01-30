@@ -9,15 +9,13 @@ import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { classNameFactory } from "@utils/css";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
-import { findComponentByCodeLazy } from "@webpack";
+import { CloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
 import { React } from "@webpack/common";
 
 import EmptyNotebook from "./Error";
 import { RenderMessage } from "./RenderMessage";
 
 const cl = classNameFactory("vc-notebook-");
-const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
 
 interface Props extends ModalProps {
     notebook: string;

@@ -8,12 +8,10 @@ import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { classNameFactory } from "@utils/css";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
-import { findComponentByCodeLazy } from "@webpack";
+import { CloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
 import { TextInput,useState } from "@webpack/common";
 
 const cl = classNameFactory("vc-notebook-");
-const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
 
 export default function NotebookCreateModal({ onClose, transitionState }: ModalProps) {
     const [name, setName] = useState("");
