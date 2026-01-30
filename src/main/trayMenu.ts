@@ -5,9 +5,11 @@
  */
 
 import { IpcEvents } from "@shared/IpcEvents";
+import { gitHashShort } from "@shared/vencordUserAgent";
 import { BrowserWindow, ipcMain, Menu, MenuItemConstructorOptions, shell } from "electron";
+import aboutHtml from "file://about.html?minify";
 
-import { SETTINGS_DIR } from "./utils/constants";
+import { SETTINGS_DIR, THEMES_DIR } from "./utils/constants";
 
 let cachedUpdateAvailable = false;
 
@@ -51,11 +53,41 @@ function isTrayMenu(template: MenuItemConstructorOptions[]): boolean {
     return hasOpenOrShow && hasQuit && isNotAppMenu;
 }
 
+let aboutWindow: BrowserWindow | null = null;
+
+function openAboutWindow() {
+    if (aboutWindow) {
+        aboutWindow.focus();
+        return;
+    }
+
+    const height = 750;
+    const width = height * (4 / 3);
+
+    aboutWindow = new BrowserWindow({
+        center: true,
+        autoHideMenuBar: true,
+        height,
+        width
+    });
+
+    const aboutParams = aboutHtml.replace("{{VERSION}}", VERSION).replace("{{GIT_HASH}}", gitHashShort);
+    const base64Html = Buffer.from(aboutParams).toString("base64");
+    aboutWindow.loadURL(`data:text/html;base64,${base64Html}`);
+    aboutWindow.on("closed", () => {
+        aboutWindow = null;
+    });
+}
+
 function createEquicordMenuItems(): MenuItemConstructorOptions[] {
     return [
         {
             label: "Equicord",
             submenu: [
+                {
+                    label: "About Equicord",
+                    click: () => openAboutWindow()
+                },
                 {
                     label: cachedUpdateAvailable ? "Update Equicord" : "Check for Updates",
                     click: () => sendToRenderer(IpcEvents.TRAY_CHECK_UPDATES)
@@ -68,6 +100,10 @@ function createEquicordMenuItems(): MenuItemConstructorOptions[] {
                 {
                     label: "Open Settings Folder",
                     click: () => shell.openPath(SETTINGS_DIR)
+                },
+                {
+                    label: "Open Themes Folder",
+                    click: () => shell.openPath(THEMES_DIR)
                 }
             ]
         },
