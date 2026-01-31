@@ -1,0 +1,17 @@
+.vc-message-peek-timestamp {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    color: var(--text-normal);
+}
+
+[class*="interactiveSelected__"] .vc-message-peek-timestamp {
+    color: var(--white);
+}
+
+[class*="interactive__"]:hover .vc-message-peek-timestamp {
+    display: none;
+}
