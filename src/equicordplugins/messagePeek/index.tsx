@@ -10,10 +10,10 @@ import { DecoratorProps } from "@api/MemberListDecorators";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
-import { Channel, Message } from "@vencord/discord-types";
+import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
-import { findByPropsLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
-import { ChannelStore, MessageStore, SnowflakeUtils, UserStore,useStateFromStores } from "@webpack/common";
+import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
+import { ChannelStore, MessageStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-message-peek-");
 
@@ -21,7 +21,15 @@ const PrivateChannelClasses = findCssClassesLazy("subtext", "channel", "interact
 const ActivityClasses = findCssClassesLazy("textWithIconContainer", "icon", "truncated", "container", "textXs");
 const MessageActions = findByPropsLazy("fetchMessages", "sendMessage");
 
-const Icons = {
+const hasRelevantActivity: (props: ActivityCheckProps) => boolean = findByCodeLazy(".OFFLINE||", ".INVISIBLE)return!1");
+const ActivityText: React.ComponentType<ActivityTextProps> = findComponentByCodeLazy("hasQuest:", "hideEmoji:");
+
+const ONE_HOUR_MS = 60 * 60 * 1000;
+
+type AttachmentType = "image" | "gif" | "video" | "file";
+type IconType = AttachmentType | "voice" | "sticker";
+
+const Icons: Record<IconType, React.ComponentType<{ size: string; className: string; }>> = {
     image: findExportedComponentLazy("ImageIcon"),
     file: findExportedComponentLazy("AttachmentIcon"),
     voice: findExportedComponentLazy("MicrophoneIcon"),
@@ -30,7 +38,38 @@ const Icons = {
     video: findExportedComponentLazy("VideoIcon"),
 };
 
-function getAttachmentType(contentType = ""): "image" | "gif" | "video" | "file" {
+const ATTACHMENT_LABELS: Record<AttachmentType, string> = {
+    gif: "GIF",
+    image: "image",
+    video: "video",
+    file: "file"
+};
+
+interface ActivityCheckProps {
+    activities: Activity[] | null;
+    status: OnlineStatus;
+    applicationStream: ApplicationStream | null;
+    voiceChannel: Channel | null;
+}
+
+interface ActivityTextProps {
+    user: User;
+    activities: Activity[] | null;
+    applicationStream: ApplicationStream | null;
+    voiceChannel: Channel | null;
+}
+
+interface PrivateChannelProps extends ActivityCheckProps {
+    channel: Channel;
+    user: User;
+}
+
+interface MessageContent {
+    text: string;
+    icon?: IconType;
+}
+
+function getAttachmentType(contentType = ""): AttachmentType {
     if (contentType === "image/gif") return "gif";
     if (contentType.startsWith("image/")) return "image";
     if (contentType.startsWith("video/")) return "video";
@@ -54,7 +93,7 @@ function pluralize(count: number, singular: string, plural = singular + "s") {
     return count === 1 ? `1 ${singular}` : `${count} ${plural}`;
 }
 
-function getMessageContent(message: Message): { text: string; icon?: keyof typeof Icons; } | null {
+function getMessageContent(message: Message): MessageContent | null {
     if (message.content) {
         if (/https?:\/\/(\S+\.gif|tenor\.com|giphy\.com)/i.test(message.content)) {
             return { text: "sent a GIF", icon: "gif" };
@@ -68,13 +107,12 @@ function getMessageContent(message: Message): { text: string; icon?: keyof typeo
 
     if (message.attachments?.length) {
         const types = message.attachments.map(a => getAttachmentType(a.content_type));
-        const allSame = types.every(t => t === types[0]);
         const count = types.length;
+        const firstType = types[0];
+        const allSameType = types.every(t => t === firstType);
 
-        if (allSame) {
-            const type = types[0];
-            const labels = { gif: "GIF", image: "image", video: "video", file: "file" };
-            return { text: pluralize(count, labels[type]), icon: type };
+        if (allSameType) {
+            return { text: pluralize(count, ATTACHMENT_LABELS[firstType]), icon: firstType };
         }
         return { text: pluralize(count, "file"), icon: "file" };
     }
@@ -87,7 +125,10 @@ function getMessageContent(message: Message): { text: string; icon?: keyof typeo
 }
 
 function MessagePreview({ channel }: { channel: Channel; }) {
-    const lastMessage = useStateFromStores([MessageStore], () => MessageStore.getLastMessage(channel.id) as Message | undefined);
+    const lastMessage = useStateFromStores(
+        [MessageStore],
+        () => MessageStore.getLastMessage(channel.id) as Message | undefined
+    );
 
     if (channel.isSystemDM()) {
         return <div className={PrivateChannelClasses.subtext}>Official Discord Message</div>;
@@ -102,8 +143,8 @@ function MessagePreview({ channel }: { channel: Channel; }) {
     const content = getMessageContent(lastMessage);
     if (!content) return null;
 
-    const currentUser = UserStore.getCurrentUser();
-    const isOwnMessage = lastMessage.author.id === currentUser.id;
+    const currentUserId = UserStore.getCurrentUser()?.id;
+    const isOwnMessage = lastMessage.author.id === currentUserId;
     const authorName = isOwnMessage ? "You" : (lastMessage.author.globalName ?? lastMessage.author.username);
     const Icon = content.icon ? Icons[content.icon] : null;
 
@@ -111,19 +152,34 @@ function MessagePreview({ channel }: { channel: Channel; }) {
         <div className={PrivateChannelClasses.subtext}>
             <div className={`${ActivityClasses.container} ${ActivityClasses.textXs} ${cl("preview")}`}>
                 <span className={ActivityClasses.truncated}>{authorName}: {content.text}</span>
-                {Icon && <span className={cl("icon")}><Icon size="xxs" className={ActivityClasses.icon} /></span>}
+                {Icon && (
+                    <span className={cl("icon")}>
+                        <Icon size="xxs" className={ActivityClasses.icon} />
+                    </span>
+                )}
             </div>
         </div>
     );
 }
 
 function Timestamp({ channel }: { channel: Channel; }) {
-    const lastMessage = useStateFromStores([MessageStore], () => MessageStore.getLastMessage(channel.id) as Message | undefined);
+    const lastMessage = useStateFromStores(
+        [MessageStore],
+        () => MessageStore.getLastMessage(channel.id) as Message | undefined
+    );
 
     if (!lastMessage) return null;
 
     const timestamp = SnowflakeUtils.extractTimestamp(lastMessage.id);
     return <span className={cl("timestamp")}>{formatRelativeTime(timestamp)}</span>;
+}
+
+function shouldShowActivity(lastMessage: Message | undefined, hasActivity: boolean): boolean {
+    if (!hasActivity) return false;
+    if (!lastMessage) return true;
+
+    const messageTimestamp = SnowflakeUtils.extractTimestamp(lastMessage.id);
+    return Date.now() - messageTimestamp > ONE_HOUR_MS;
 }
 
 export default definePlugin({
@@ -135,7 +191,7 @@ export default definePlugin({
             find: "PrivateChannel.renderAvatar",
             replacement: {
                 match: /,subText:(\i)\.isSystemDM\(\).{0,500}:null,(?=name:)/,
-                replace: ",subText:$self.getMessagePreview($1),"
+                replace: ",subText:$self.getSubText(arguments[0]),"
             }
         }
     ],
@@ -154,7 +210,22 @@ export default definePlugin({
         return <Timestamp channel={channel} />;
     },
 
-    getMessagePreview(channel: Channel) {
+    getSubText(props: PrivateChannelProps) {
+        const { channel, user, activities, status, applicationStream, voiceChannel } = props;
+        const lastMessage = MessageStore.getLastMessage(channel.id) as Message | undefined;
+        const hasActivity = hasRelevantActivity({ activities, status, applicationStream, voiceChannel });
+
+        if (shouldShowActivity(lastMessage, hasActivity)) {
+            return (
+                <ActivityText
+                    user={user}
+                    activities={activities}
+                    voiceChannel={voiceChannel}
+                    applicationStream={applicationStream}
+                />
+            );
+        }
+
         return <MessagePreview channel={channel} />;
     }
 });
