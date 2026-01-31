@@ -143,6 +143,7 @@ const settings = definePluginSettings({
     allowChatBodyDrop: {
         type: OptionType.BOOLEAN,
         default: false,
+        restartNeeded: true,
         description: "Allow dropping into the main chat body to insert text.",
     },
 });
