@@ -30,3 +30,18 @@
 [class*="interactive__"]:hover .vc-message-peek-icon svg path {
     fill: var(--white) !important;
 }
+
+.vc-message-peek-activity-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.vc-message-peek-activity-row>[class*="textXs"] {
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-message-peek-activity-row>[class*="vc-bactivities-row"] {
+    flex-shrink: 0;
+}

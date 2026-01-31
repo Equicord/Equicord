@@ -69,6 +69,34 @@ interface MessageContent {
     icon?: IconType;
 }
 
+interface BetterActivitiesPlugin {
+    started: boolean;
+    patchActivityList: (props: { activities: Activity[]; user: User; hideTooltip: boolean; }) => React.ReactNode;
+}
+
+function getBetterActivities(): BetterActivitiesPlugin | null {
+    const plugin = Vencord.Plugins.plugins.BetterActivities;
+    if (!plugin?.started) return null;
+
+    const betterActivities = plugin as unknown as BetterActivitiesPlugin;
+    if (typeof betterActivities.patchActivityList !== "function") return null;
+
+    return betterActivities;
+}
+
+function getActivityIcons(activities: Activity[] | null, user: User): React.ReactNode {
+    if (!activities?.length) return null;
+
+    const betterActivities = getBetterActivities();
+    if (!betterActivities) return null;
+
+    return betterActivities.patchActivityList({
+        activities,
+        user,
+        hideTooltip: false
+    });
+}
+
 function getAttachmentType(contentType = ""): AttachmentType {
     if (contentType === "image/gif") return "gif";
     if (contentType.startsWith("image/")) return "image";
@@ -124,18 +152,18 @@ function getMessageContent(message: Message): MessageContent | null {
     return null;
 }
 
-function MessagePreview({ channel }: { channel: Channel; }) {
+function MessagePreviewContent({ channel }: { channel: Channel; }) {
     const lastMessage = useStateFromStores(
         [MessageStore],
         () => MessageStore.getLastMessage(channel.id) as Message | undefined
     );
 
     if (channel.isSystemDM()) {
-        return <div className={PrivateChannelClasses.subtext}>Official Discord Message</div>;
+        return <>Official Discord Message</>;
     }
 
     if (channel.isMultiUserDM()) {
-        return <div className={PrivateChannelClasses.subtext}>{channel.recipients.length + 1} Members</div>;
+        return <>{channel.recipients.length + 1} Members</>;
     }
 
     if (!lastMessage) return null;
@@ -149,15 +177,45 @@ function MessagePreview({ channel }: { channel: Channel; }) {
     const Icon = content.icon ? Icons[content.icon] : null;
 
     return (
-        <div className={PrivateChannelClasses.subtext}>
-            <div className={`${ActivityClasses.container} ${ActivityClasses.textXs} ${cl("preview")}`}>
-                <span className={ActivityClasses.truncated}>{authorName}: {content.text}</span>
-                {Icon && (
-                    <span className={cl("icon")}>
-                        <Icon size="xxs" className={ActivityClasses.icon} />
-                    </span>
-                )}
+        <div className={`${ActivityClasses.container} ${ActivityClasses.textXs} ${cl("preview")}`}>
+            <span className={ActivityClasses.truncated}>{authorName}: {content.text}</span>
+            {Icon && (
+                <span className={cl("icon")}>
+                    <Icon size="xxs" className={ActivityClasses.icon} />
+                </span>
+            )}
+        </div>
+    );
+}
+
+function SubText({ channel, user, activities, applicationStream, voiceChannel, showActivity }: PrivateChannelProps & { showActivity: boolean; }) {
+    if (showActivity) {
+        return (
+            <ActivityText
+                user={user}
+                activities={activities}
+                voiceChannel={voiceChannel}
+                applicationStream={applicationStream}
+            />
+        );
+    }
+
+    const activityIcons = getActivityIcons(activities, user);
+
+    if (activityIcons) {
+        return (
+            <div className={PrivateChannelClasses.subtext}>
+                <div className={cl("activity-row")}>
+                    <MessagePreviewContent channel={channel} />
+                    {activityIcons}
+                </div>
             </div>
+        );
+    }
+
+    return (
+        <div className={PrivateChannelClasses.subtext}>
+            <MessagePreviewContent channel={channel} />
         </div>
     );
 }
@@ -214,18 +272,18 @@ export default definePlugin({
         const { channel, user, activities, status, applicationStream, voiceChannel } = props;
         const lastMessage = MessageStore.getLastMessage(channel.id) as Message | undefined;
         const hasActivity = hasRelevantActivity({ activities, status, applicationStream, voiceChannel });
+        const showActivity = shouldShowActivity(lastMessage, hasActivity);
 
-        if (shouldShowActivity(lastMessage, hasActivity)) {
-            return (
-                <ActivityText
-                    user={user}
-                    activities={activities}
-                    voiceChannel={voiceChannel}
-                    applicationStream={applicationStream}
-                />
-            );
-        }
-
-        return <MessagePreview channel={channel} />;
+        return (
+            <SubText
+                channel={channel}
+                user={user}
+                activities={activities}
+                status={status}
+                applicationStream={applicationStream}
+                voiceChannel={voiceChannel}
+                showActivity={showActivity}
+            />
+        );
     }
 });
