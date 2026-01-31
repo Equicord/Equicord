@@ -59,8 +59,9 @@ export const settings = definePluginSettings({
     },
     userBasedCategoryList: {
         type: OptionType.CUSTOM,
-        default: {} as Record<string, Category[]>
-    }
+        default: {} as Record<string, Category[]>,
+        description: "",
+    },
 });
 
 export default definePlugin({
@@ -122,7 +123,6 @@ export default definePlugin({
 
             ]
         },
-
 
         // forceUpdate moment
         // https://regex101.com/r/kDN9fO/1
@@ -304,7 +304,6 @@ export default definePlugin({
                                 label="Delete Category"
                                 action={() => removeCategory(category.id)}
                             />
-
 
                         </Menu.Menu>
                     ));

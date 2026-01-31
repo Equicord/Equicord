@@ -389,7 +389,9 @@ export function findModuleFactory(...code: CodeFilter) {
     return wreq.m[id];
 }
 
-export const lazyWebpackSearchHistory = [] as Array<["find" | "findByProps" | "findByCode" | "findCssClasses" | "findStore" | "findComponent" | "findComponentByCode" | "findExportedComponent" | "waitFor" | "waitForComponent" | "waitForStore" | "proxyLazyWebpack" | "LazyComponentWebpack" | "extractAndLoadChunks" | "mapMangledModule", any[]]>;
+// FIXME: give this a better name
+export type TypeWebpackSearchHistory = "find" | "findByProps" | "findByCode" | "findCssClasses" | "findStore" | "findComponent" | "findComponentByCode" | "findExportedComponent" | "waitFor" | "waitForComponent" | "waitForStore" | "proxyLazyWebpack" | "LazyComponentWebpack" | "extractAndLoadChunks" | "mapMangledModule";
+export const lazyWebpackSearchHistory = [] as Array<[TypeWebpackSearchHistory, any[]]>;
 
 /**
  * This is just a wrapper around {@link proxyLazy} to make our reporter test for your webpack finds.
@@ -426,8 +428,8 @@ export function LazyComponentWebpack<T extends object = any>(factory: () => any,
 /**
  * Find the first module that matches the filter, lazily
  */
-export function findLazy(filter: FilterFn) {
-    if (IS_REPORTER) lazyWebpackSearchHistory.push(["find", [filter]]);
+export function findLazy(filter: FilterFn, warning: boolean = true) {
+    if (IS_REPORTER && warning) lazyWebpackSearchHistory.push(["find", [filter]]);
 
     return proxyLazy(() => find(filter));
 }
@@ -540,7 +542,6 @@ export function findComponentByCode(...code: CodeFilter) {
  */
 export function findComponentLazy<T extends object = any>(filter: FilterFn) {
     if (IS_REPORTER) lazyWebpackSearchHistory.push(["findComponent", [filter]]);
-
 
     return LazyComponent<T>(() => {
         const res = find(filter, { isIndirect: true });

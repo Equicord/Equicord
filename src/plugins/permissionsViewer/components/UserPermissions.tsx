@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingTertiary } from "@components/Heading";
 import { cl, getGuildPermissionSpecMap, getSortedRolesForMember, sortUserRoles } from "@plugins/permissionsViewer/utils";
@@ -27,7 +28,7 @@ import { findCssClassesLazy } from "@webpack";
 import { PermissionsBits, Tooltip, useMemo, UserStore } from "@webpack/common";
 
 import { PermissionsSortOrder, settings } from "..";
-import openRolesAndUsersPermissionsModal, { PermissionType } from "./RolesAndUsersPermissions";
+import openRolesAndUsersPermissionsModal from "./RolesAndUsersPermissions";
 
 interface UserPermission {
     permission: string;
@@ -56,12 +57,13 @@ function FakeRole({ text, color, ...props }: FakeRoleProps) {
                 />
             </div>
             <div className={RoleClasses.roleName}>
-                <Text
+                <BaseText
+                    size="xs"
+                    weight="medium"
                     className={RoleClasses.roleNameOverflow}
-                    variant="text-xs/medium"
                 >
                     {text}
-                </Text>
+                </BaseText>
             </div>
         </div>
     );
@@ -75,7 +77,7 @@ interface GrantedByTooltipProps {
 function GrantedByTooltip({ roleName, roleColor }: GrantedByTooltipProps) {
     return (
         <>
-            <Text variant="text-sm/medium">Granted By</Text>
+            <BaseText size="sm">Granted By</BaseText>
             <FakeRole text={roleName} color={roleColor} />
         </>
     );
@@ -92,13 +94,13 @@ function UserPermissionsComponent({ guild, guildMember, closePopout }: { guild: 
         const userRoles = getSortedRolesForMember(guild, guildMember);
 
         const rolePermissions: Array<RoleOrUserPermission> = userRoles.map(role => ({
-            type: PermissionType.Role,
+            type: PermissionOverwriteType.ROLE,
             ...role
         }));
 
         if (guild.ownerId === guildMember.userId) {
             rolePermissions.push({
-                type: PermissionType.Owner,
+                type: PermissionOverwriteType.OWNER,
                 permissions: Object.values(PermissionsBits).reduce((prev, curr) => prev | curr, 0n)
             });
 
