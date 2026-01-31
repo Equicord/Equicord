@@ -11,7 +11,7 @@ import { EquicordDevs } from "@utils/constants";
 import { getGuildAcronym } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import type { Channel, Guild, User } from "@vencord/discord-types";
+import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
 import { ChannelStore, ComponentDispatch, Constants, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RelationshipStore, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
 
@@ -305,7 +305,7 @@ export default definePlugin({
         if (!resolvedChannel) return;
 
         if (dragifyData) {
-            const parsed = tryParseJson(dragifyData);
+            const parsed = tryParseJson<{ kind?: string; id?: string; guildId?: string }>(dragifyData);
             if (parsed?.kind && parsed.id) {
                 const fromDragify: DropEntity | null =
                     parsed.kind === "user"
@@ -450,7 +450,7 @@ export default definePlugin({
             const candidates = (body as ApiChannel[])
                 .filter((ch): ch is ApiChannel => Boolean(ch && typeof ch.id === "string"))
                 .filter(ch => {
-                    const type = ch.type;
+                    const { type } = ch;
                     return type === ChannelType.GUILD_TEXT
                         || type === ChannelType.GUILD_ANNOUNCEMENT
                         || type === ChannelType.GUILD_FORUM
@@ -526,7 +526,7 @@ export default definePlugin({
 
         const selectableStore = (GuildChannelStore.getSelectableChannels?.(guildId) ?? []).map(e => e.channel).filter(Boolean) as Channel[];
         const selectableCollection = (() => {
-            const collection = (GuildChannelStore as ChannelStoreLike).getChannels?.(guildId);
+            const collection = (GuildChannelStore as unknown as ChannelStoreLike).getChannels?.(guildId);
             const result: Channel[] = [];
             if (collection?.SELECTABLE) {
                 const values = Object.values(collection.SELECTABLE);
@@ -589,7 +589,7 @@ export default definePlugin({
         if (activeUserDragId) return;
         const existingDragify = event.dataTransfer?.getData("application/dragify") ?? "";
         if (existingDragify) {
-            const parsed = tryParseJson(existingDragify);
+            const parsed = tryParseJson<{ kind?: string }>(existingDragify);
             if (parsed?.kind === "user") return;
         }
         const targetEl = event.target as HTMLElement | null;
@@ -620,7 +620,7 @@ export default definePlugin({
         setDragifyDataTransfer(event.dataTransfer ?? null, payload);
     },
 
-    onUserDragStart(event: DragEvent, user?: { id: string; }) {
+    onUserDragStart(event: DragEvent, user?: { id: string; userId?: string; user?: { id: string } }) {
         if (this.isAttachmentElement(event.target as HTMLElement | null)) return;
         const searchTarget = event.target as HTMLElement | null;
         if (searchTarget?.closest) {
@@ -930,7 +930,7 @@ export default definePlugin({
     },
 
     isAttachmentElement(target: HTMLElement | null): boolean {
-        let el: HTMLElement | null = target;
+        let el: Element | null = target;
         while (el) {
             if (!(el instanceof HTMLElement)) {
                 el = el.parentElement ?? null;
@@ -1023,7 +1023,7 @@ export default definePlugin({
     },
 
     extractUserIdFromTarget(target: HTMLElement | null): string | null {
-        let el: HTMLElement | null = target;
+        let el: Element | null = target;
         while (el) {
             if (!(el instanceof HTMLElement)) {
                 el = el.parentElement ?? null;
@@ -1070,7 +1070,7 @@ export default definePlugin({
     },
 
     extractAvatarUserIdFromTarget(target: HTMLElement | null): string | null {
-        let el: HTMLElement | null = target;
+        let el: Element | null = target;
         while (el) {
             if (!(el instanceof HTMLElement)) {
                 el = el.parentElement ?? null;

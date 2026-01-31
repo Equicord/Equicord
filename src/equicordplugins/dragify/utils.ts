@@ -26,11 +26,11 @@ type StoreSet = {
     UserStore: { getUser(id: string): User | null | undefined; };
 };
 
-export function tryParseJson(value: string): Record<string, unknown> | null {
+export function tryParseJson<T = Record<string, unknown>>(value: string): T | null {
     if (!value || value.length < 2 || (value[0] !== "{" && value[0] !== "[")) return null;
     try {
         const parsed = JSON.parse(value);
-        return typeof parsed === "object" && parsed ? parsed : null;
+        return typeof parsed === "object" && parsed ? parsed as T : null;
     } catch {
         return null;
     }
@@ -85,8 +85,18 @@ export async function collectPayloadStrings(dataTransfer: DataTransfer): Promise
 export function parseFromStrings(payloads: string[], stores: StoreSet): DropEntity | null {
     if (payloads.length === 0) return null;
 
+interface DragifyPayload {
+    id?: string;
+    userId?: string;
+    channelId?: string;
+    guildId?: string;
+    type?: string;
+    kind?: string;
+    itemType?: string;
+}
+
     for (const value of payloads) {
-        const parsed = tryParseJson(value);
+        const parsed = tryParseJson<DragifyPayload>(value);
         if (parsed) {
             const id = parsed.id ?? parsed.userId ?? parsed.channelId ?? parsed.guildId;
             const type = (parsed.type ?? parsed.kind ?? parsed.itemType ?? "").toLowerCase();
