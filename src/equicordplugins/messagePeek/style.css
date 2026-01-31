@@ -15,3 +15,18 @@
 [class*="interactive__"]:hover .vc-message-peek-timestamp {
     display: none;
 }
+
+.vc-message-peek-preview {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.vc-message-peek-icon {
+    display: flex;
+    margin-top: 0.8px;
+}
+
+[class*="interactive__"]:hover .vc-message-peek-icon svg path {
+    fill: var(--white) !important;
+}
