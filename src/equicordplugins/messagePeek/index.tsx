@@ -24,7 +24,7 @@ const MessageActions = findByPropsLazy("fetchMessages", "sendMessage");
 const Icons = {
     image: findExportedComponentLazy("ImageIcon"),
     file: findExportedComponentLazy("AttachmentIcon"),
-    voice: findExportedComponentLazy("WaveformIcon"),
+    voice: findExportedComponentLazy("MicrophoneIcon"),
     sticker: findExportedComponentLazy("StickerIcon"),
     gif: findExportedComponentLazy("GifIcon"),
     video: findExportedComponentLazy("VideoIcon"),
