@@ -80,7 +80,6 @@ export const settings = definePluginSettings({
                     ReviewDB website
                 </Button>
 
-
                 <Button variant="link" onClick={() => openInviteModal("eWPBSbvznt")}>
                     ReviewDB Support Server
                 </Button>

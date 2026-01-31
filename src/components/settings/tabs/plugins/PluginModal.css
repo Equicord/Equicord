@@ -7,5 +7,38 @@
 }
 
 .vc-plugin-modal-description {
-    flex-grow: 1;
+    color: var(--text-subtle);
+    padding-right: 60px;
+}
+
+.vc-plugin-modal-links {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.vc-plugin-modal-confirm [class*="footer"] {
+    flex-direction: row-reverse;
+    gap: var(--space-8, 8px);
+}
+
+.vc-plugin-modal-confirm [class*="footer"] > button {
+    flex: 1;
+    margin: 0;
+    width: 100%;
+}
+
+.vc-plugin-modal-warning {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-feedback-critical);
+}
+
+.vc-settings-modal-content {
+    padding-bottom: 24px;
+}
+
+.vc-plugin-modal-info {
+    align-items: center;
 }

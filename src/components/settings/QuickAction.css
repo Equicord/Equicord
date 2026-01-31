@@ -14,7 +14,6 @@
 
 .vc-settings-quickActions-pill {
     all: unset;
-    cursor: pointer;
     background: var(--control-secondary-background-default);
     color: var(--control-secondary-text-default, var(--text-default));
     display: flex;
@@ -40,4 +39,5 @@
 .vc-settings-quickActions-img {
     width: 24px;
     height: 24px;
+    flex-shrink: 0;
 }

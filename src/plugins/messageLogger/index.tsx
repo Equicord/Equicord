@@ -141,6 +141,89 @@ export function parseEditContent(content: string, message: Message) {
     });
 }
 
+const settings = definePluginSettings({
+    deleteStyle: {
+        type: OptionType.SELECT,
+        description: "The style of deleted messages",
+        default: "text",
+        options: [
+            { label: "Red text", value: "text", default: true },
+            { label: "Red overlay", value: "overlay" },
+        ],
+        onChange: () => addDeleteStyle(),
+    },
+    logDeletes: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to log deleted messages",
+        default: true,
+    },
+    collapseDeleted: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to collapse deleted messages, similar to blocked messages",
+        default: false,
+        restartNeeded: true,
+    },
+    logEdits: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to log edited messages",
+        default: true,
+    },
+    inlineEdits: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to display edit history as part of message content",
+        default: true,
+    },
+    ignoreBots: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to ignore messages by bots",
+        default: false,
+    },
+    ignoreSelf: {
+        type: OptionType.BOOLEAN,
+        description: "Whether to ignore messages by yourself",
+        default: false,
+    },
+    ignoreUsers: {
+        type: OptionType.STRING,
+        description: "Comma-separated list of user IDs to ignore",
+        default: "",
+        multiline: true,
+    },
+    ignoreChannels: {
+        type: OptionType.STRING,
+        description: "Comma-separated list of channel IDs to ignore",
+        default: "",
+        multiline: true,
+    },
+    ignoreGuilds: {
+        type: OptionType.STRING,
+        description: "Comma-separated list of guild IDs to ignore",
+        default: "",
+        multiline: true,
+    },
+    showEditDiffs: {
+        type: OptionType.BOOLEAN,
+        description: "Show visual differences between edited message versions",
+        default: false,
+        onChange: value => {
+            if (!value && settings.store.separatedDiffs) {
+                settings.store.separatedDiffs = false;
+            }
+        },
+    },
+    separatedDiffs: {
+        type: OptionType.BOOLEAN,
+        description: "Separate addition and removals in diffs for a more readable differential",
+        default: false,
+    },
+}, {
+    separatedDiffs: {
+        disabled() {
+            return !this.store.showEditDiffs;
+        },
+    },
+});
+
 export default definePlugin({
     name: "MessageLogger",
     description: "Temporarily logs deleted and edited messages.",

@@ -239,10 +239,7 @@ export default definePlugin({
 
         const shouldAddUpdateButton =
             !IS_UPDATER_DISABLED
-            && (
-                (props.channel.id === KNOWN_ISSUES_CHANNEL_ID) ||
-                (props.channel.parent_id === SUPPORT_CATEGORY_ID && props.message.author.id === VENBOT_USER_ID)
-            )
+            && ((isSupportChannel(props.channel.id) && equicordSupport))
             && props.message.content?.toLowerCase().includes("update");
 
         if (shouldAddUpdateButton) {

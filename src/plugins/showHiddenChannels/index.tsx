@@ -172,7 +172,18 @@ export default definePlugin({
                 // Add the hidden eye icon if the channel is hidden
                 {
                     match: /\.Children\.count.+?:null(?<=,channel:(\i).+?)/,
-                    replace: (m, channel) => `${m},$self.isHiddenChannel(${channel})?$self.HiddenChannelIcon():null`
+                    replace: (m, channel) => `${m},$self.isHiddenChannel(${channel})?$self.LockRightIcon():null`
+                },
+            ]
+        },
+        {
+            find: "UNREAD_IMPORTANT:",
+            predicate: () => settings.store.channelStyle === ChannelStyle.Muted || settings.store.channelStyle === ChannelStyle.MutedUnread,
+            replacement: [
+                // Make the channel appear as muted if it's hidden
+                {
+                    match: /Children\.count.+?;(?=return\(0,\i\.jsxs?\)\(\i\.\i,{focusTarget:)(?<={channel:(\i),name:\i,muted:(\i).+?;)/,
+                    replace: (m, channel, muted) => `${m}${muted}=$self.isHiddenChannel(${channel})?true:${muted};`
                 },
                 // Make voice channels also appear as muted if they are muted
                 {
@@ -192,7 +203,6 @@ export default definePlugin({
                 },
                 {
                     // Hide unreads
-                    predicate: () => settings.store.hideUnreads === true,
                     match: /Children\.count.+?;(?=return\(0,\i\.jsxs?\)\(\i\.\i,{focusTarget:)(?<={channel:(\i),name:\i,.+?unread:(\i).+?)/,
                     replace: (m, channel, unread) => `${m}${unread}=$self.isHiddenChannel(${channel})?false:${unread};`
                 }
