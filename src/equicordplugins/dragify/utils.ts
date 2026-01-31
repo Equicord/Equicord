@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import type { Channel } from "@vencord/discord-types";
+import type { Channel, Guild, User } from "@vencord/discord-types";
 
 const userMentionRegex = /<@!?(\d{17,20})>/;
 const userProfileUrlRegex = /discord(?:(?:app)?\.com|:\/\/-?)\/users\/(\d{17,20})/;
@@ -22,11 +22,11 @@ export type DropEntity =
 
 type StoreSet = {
     ChannelStore: { getChannel(id: string): Channel | null | undefined; };
-    GuildStore: { getGuild(id: string): any | null | undefined; };
-    UserStore: { getUser(id: string): any | null | undefined; };
+    GuildStore: { getGuild(id: string): Guild | null | undefined; };
+    UserStore: { getUser(id: string): User | null | undefined; };
 };
 
-export function tryParseJson(value: string): Record<string, any> | null {
+export function tryParseJson(value: string): Record<string, unknown> | null {
     if (!value || value.length < 2 || (value[0] !== "{" && value[0] !== "[")) return null;
     try {
         const parsed = JSON.parse(value);

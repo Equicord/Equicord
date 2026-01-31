@@ -27,7 +27,7 @@ const ScreenArrowIcon = findComponentByCodeLazy("3V5Zm16") as React.ComponentTyp
     width?: number;
     height?: number;
     size?: number;
-    color?: any;
+    color?: string;
     colorClass?: string;
 }>;
 
@@ -100,11 +100,7 @@ export function mountGhost() {
     ghostContainer.className = "vc-dragify-ghost-root";
     document.body.appendChild(ghostContainer);
     ghostRoot = createRoot(ghostContainer);
-    ghostRoot.render(
-        <ErrorBoundary>
-            <DragGhost />
-        </ErrorBoundary>
-    );
+    ghostRoot.render(<DragGhost />);
 }
 
 export function unmountGhost() {
@@ -119,7 +115,7 @@ export function unmountGhost() {
     setGhostState({ visible: false, exiting: false });
 }
 
-const DragGhost = () => {
+const DragGhost = ErrorBoundary.wrap(() => {
     const [state, setState] = React.useState(ghostState);
     React.useEffect(() => {
         const listener = () => setState({ ...ghostState });
@@ -179,7 +175,7 @@ const DragGhost = () => {
             </div>
         </div>
     );
-};
+}, { noop: true });
 
 function VoiceStateIcon({ className, size = 14 }: { className?: string; size?: number; }) {
     return (

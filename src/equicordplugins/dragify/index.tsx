@@ -11,7 +11,7 @@ import { EquicordDevs } from "@utils/constants";
 import { getGuildAcronym } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import type { Channel } from "@vencord/discord-types";
+import type { Channel, Guild, User } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
 import { ChannelStore, ComponentDispatch, Constants, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RelationshipStore, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
 
@@ -23,8 +23,59 @@ type DropEntity =
     | { kind: "channel"; id: string; guildId?: string; }
     | { kind: "guild"; id: string; };
 
+type DragifyInstance = {
+    isMessageInputEvent(event: DragEvent): boolean;
+    onDrop(event: React.DragEvent, channel?: Channel | null): void;
+    isAttachmentElement(target: HTMLElement | null): boolean;
+    isMessageInputElement(el: Element | null): boolean;
+    extractUserIdFromTarget(target: HTMLElement | null): string | null;
+    extractUserIdFromEvent(event: DragEvent): string | null;
+    extractAvatarUserIdFromTarget(target: HTMLElement | null): string | null;
+    extractChannelIdFromTarget(target: HTMLElement | null): { id: string; guildId?: string; } | null;
+    extractGuildIdFromTarget(target: HTMLElement): string | null;
+    onUserDragStart(event: DragEvent, user?: { id?: string; userId?: string; user?: { id?: string } }): void;
+    onChannelDragStart(event: DragEvent, channel?: Pick<Channel, "id" | "guild_id"> | { id: string; guildId?: string; }): void;
+    onGuildDragStart(event: DragEvent, guildId: string): void;
+    showGhost(entity: DropEntity, event?: DragEvent): void;
+};
+
+type ApiChannel = {
+    id: string;
+    type: number;
+    position?: number | null;
+};
+
+type ApiInvite = {
+    code?: string;
+    expires_at?: string | null;
+    max_uses?: number | null;
+    uses?: number | null;
+};
+
+type ChannelCollection = {
+    SELECTABLE?: Record<string, Channel | { channel?: Channel }>;
+};
+
+type ChannelStoreLike = {
+    getChannels?: (guildId: string) => ChannelCollection | null | undefined;
+};
+
+type ConstantsWithInsert = {
+    CkL?: { INSERT_TEXT?: string };
+};
+
+type DispatchToLastSubscribed = {
+    dispatchToLastSubscribed?: (action: string, payload: { plainText: string; rawText: string }) => void;
+};
+
+type DmChannelExtras = Channel & {
+    getRecipientId?: () => string | null | undefined;
+    recipientId?: string | null;
+    rawRecipients?: string[] | null;
+};
+
 const logger = new Logger("Dragify");
-let pluginInstance: any = null;
+let pluginInstance: DragifyInstance | null = null;
 let activeGuildDragId: string | null = null;
 let activeUserDragId: string | null = null;
 let activeDragEntity: DropEntity | null = null;
@@ -130,10 +181,10 @@ export default definePlugin({
     patches: [
         // Voice user rows (voice channel sidebar list)
         {
-            find: "connectUserDragSource:ee,canDrag:et",
+            find: "location:\"VoiceUser\"}),ej=l.useRef(null),[ex,ev]=l.useState(!1)",
             replacement: {
                 match: /"data-dnd-name":(\i)\.name,/,
-                replace: "$&\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].user?.id}),"
+                replace: "$&\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].user),"
             }
         },
         // Voice channel rows (guild sidebar)
@@ -196,7 +247,7 @@ export default definePlugin({
         },
         // Chat usernames
         {
-            find: "data-text\":Q+$",
+            find: "className:o()(N.oF,eo,{[em]:ep,[N.IW]:\"username\"===er&&null!=$}),style:eg(),onClick:F,onContextMenu:V",
             replacement: {
                 match: /onClick:(\i),onContextMenu:(\i),children:/,
                 replace: "onClick:$1,onContextMenu:$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].author),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].author.id,children:"
@@ -204,10 +255,10 @@ export default definePlugin({
         },
         // Call avatars (DM/group call tiles)
         {
-            find: "onContextMenu:S,className:x,children:D()",
+            find: "participantUserId:eH,children:(0,r.jsxs)(d.sqX,{\"aria-label\":ti,className:es.lG",
             replacement: {
-                match: /style:(\i),onContextMenu:(\i),className:(\i),children:D\(\)/,
-                replace: "style:$1,onContextMenu:$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].userId}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].userId,className:$3,children:D()"
+                match: /className:(\i)\.(\i),onDoubleClick:(\i),onContextMenu:(\i)=>/,
+                replace: "className:$1.$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:eH}),\"data-dragify-user\":!0,\"data-user-id\":eH,onDoubleClick:$3,onContextMenu:$4=>"
             }
         },
         // DM list entries (private channel rows)
@@ -396,10 +447,10 @@ export default definePlugin({
             const { body } = await RestAPI.get({ url: `/guilds/${guildId}/channels` });
             if (!Array.isArray(body)) return null;
 
-            const candidates = (body as Array<any>)
-                .filter(ch => ch && typeof ch.id === "string")
+            const candidates = (body as ApiChannel[])
+                .filter((ch): ch is ApiChannel => Boolean(ch && typeof ch.id === "string"))
                 .filter(ch => {
-                    const { type } = ch;
+                    const type = ch.type;
                     return type === ChannelType.GUILD_TEXT
                         || type === ChannelType.GUILD_ANNOUNCEMENT
                         || type === ChannelType.GUILD_FORUM
@@ -425,7 +476,7 @@ export default definePlugin({
             if (!Array.isArray(body)) return null;
 
             const now = Date.now();
-            const invite = (body as Array<any>).find(inv => {
+            const invite = (body as ApiInvite[]).find(inv => {
                 const expiresAt = inv.expires_at ? Date.parse(inv.expires_at) : null;
                 const maxUsesRaw = inv.max_uses ?? null;
                 const maxUses = maxUsesRaw === 0 ? null : maxUsesRaw;
@@ -475,12 +526,12 @@ export default definePlugin({
 
         const selectableStore = (GuildChannelStore.getSelectableChannels?.(guildId) ?? []).map(e => e.channel).filter(Boolean) as Channel[];
         const selectableCollection = (() => {
-            const collection = (GuildChannelStore as any).getChannels?.(guildId);
+            const collection = (GuildChannelStore as ChannelStoreLike).getChannels?.(guildId);
             const result: Channel[] = [];
             if (collection?.SELECTABLE) {
-                const values = Object.values(collection.SELECTABLE) as any[];
+                const values = Object.values(collection.SELECTABLE);
                 for (const val of values) {
-                    const ch = (val as any).channel ?? val;
+                    const ch = (val && typeof val === "object" && "channel" in val) ? val.channel ?? null : val;
                     if (ch) result.push(ch as Channel);
                 }
             }
@@ -491,8 +542,8 @@ export default definePlugin({
             .filter(ch => ch && ch.guild_id === guildId)
             .filter((ch, idx, arr) => arr.findIndex(c => c.id === ch.id) === idx)
             .sort((a, b) => {
-                const pa = (a as any).position ?? 0;
-                const pb = (b as any).position ?? 0;
+                const pa = typeof a.position === "number" ? a.position : 0;
+                const pb = typeof b.position === "number" ? b.position : 0;
                 if (pa === pb) return a.id.localeCompare(b.id);
                 return pa - pb;
             });
@@ -513,8 +564,8 @@ export default definePlugin({
     },
 
     insertText(channelId: string, text: string, options?: { removeUnknownUser?: boolean; }) {
-        const insertAction = (Constants as any)?.CkL?.INSERT_TEXT ?? "INSERT_TEXT";
-        const dispatcher = ComponentDispatch as any;
+        const insertAction = (Constants as ConstantsWithInsert)?.CkL?.INSERT_TEXT ?? "INSERT_TEXT";
+        const dispatcher = ComponentDispatch as DispatchToLastSubscribed;
         if (dispatcher?.dispatchToLastSubscribed) {
             dispatcher.dispatchToLastSubscribed(insertAction, { plainText: text, rawText: text });
             return;
@@ -572,7 +623,7 @@ export default definePlugin({
     onUserDragStart(event: DragEvent, user?: { id: string; }) {
         if (this.isAttachmentElement(event.target as HTMLElement | null)) return;
         const searchTarget = event.target as HTMLElement | null;
-        if (searchTarget && typeof (searchTarget as any).closest === "function") {
+        if (searchTarget?.closest) {
             const chatMessage = searchTarget.closest("[data-author-id]") as HTMLElement | null;
             if (chatMessage) {
                 const authorId = chatMessage.getAttribute("data-author-id");
@@ -584,7 +635,7 @@ export default definePlugin({
         }
         const currentTarget = (event as unknown as { currentTarget?: EventTarget | null; }).currentTarget as HTMLElement | null;
         const target = (event.target as HTMLElement | null) ?? null;
-        const userIdFromParam = user?.id ?? (user as any)?.userId ?? (user as any)?.user?.id ?? null;
+        const userIdFromParam = user?.id ?? user?.userId ?? user?.user?.id ?? null;
         const userIdFromDom =
             this.extractUserIdFromTarget(currentTarget)
             ?? this.extractUserIdFromTarget(target)
@@ -881,13 +932,13 @@ export default definePlugin({
     isAttachmentElement(target: HTMLElement | null): boolean {
         let el: HTMLElement | null = target;
         while (el) {
-            if (typeof (el as any).getAttribute !== "function") {
-                el = (el as any).parentElement ?? null;
+            if (!(el instanceof HTMLElement)) {
+                el = el.parentElement ?? null;
                 continue;
             }
             const href = el.getAttribute("href") ?? "";
             const src = el.getAttribute("src") ?? "";
-            const style = (el as HTMLElement).style?.backgroundImage ?? "";
+            const style = el.style?.backgroundImage ?? "";
             const dataAttachment =
                 el.getAttribute("data-attachment-id")
                 ?? el.getAttribute("data-attachment-type")
@@ -974,8 +1025,8 @@ export default definePlugin({
     extractUserIdFromTarget(target: HTMLElement | null): string | null {
         let el: HTMLElement | null = target;
         while (el) {
-            if (typeof (el as any).getAttribute !== "function") {
-                el = (el as any).parentElement ?? null;
+            if (!(el instanceof HTMLElement)) {
+                el = el.parentElement ?? null;
                 continue;
             }
             const dataUserId = el.getAttribute("data-user-id") ?? el.getAttribute("data-userid") ?? "";
@@ -1006,7 +1057,7 @@ export default definePlugin({
             if (avatar) return avatar;
 
             const styleAttr = el.getAttribute("style") ?? "";
-            const bgImage = (el as HTMLElement).style?.backgroundImage ?? "";
+            const bgImage = el.style?.backgroundImage ?? "";
             const styleAvatar = extractUserFromAvatar(styleAttr + " " + bgImage);
             if (styleAvatar) return styleAvatar;
 
@@ -1021,13 +1072,13 @@ export default definePlugin({
     extractAvatarUserIdFromTarget(target: HTMLElement | null): string | null {
         let el: HTMLElement | null = target;
         while (el) {
-            if (typeof (el as any).getAttribute !== "function") {
-                el = (el as any).parentElement ?? null;
+            if (!(el instanceof HTMLElement)) {
+                el = el.parentElement ?? null;
                 continue;
             }
             const src = el.getAttribute("src") ?? "";
             const styleAttr = el.getAttribute("style") ?? "";
-            const bgImage = (el as HTMLElement).style?.backgroundImage ?? "";
+            const bgImage = el.style?.backgroundImage ?? "";
             const candidate = extractUserFromAvatar(`${src} ${styleAttr} ${bgImage}`);
             if (candidate) return candidate;
             el = el.parentElement;
@@ -1038,7 +1089,7 @@ export default definePlugin({
     extractUserIdFromEvent(event: DragEvent): string | null {
         const path = event.composedPath?.() ?? [];
         for (const entry of path) {
-            const candidate = this.extractUserIdFromTarget(entry as HTMLElement | null);
+            const candidate = entry instanceof HTMLElement ? this.extractUserIdFromTarget(entry) : null;
             if (candidate) return candidate;
         }
 
@@ -1054,7 +1105,7 @@ export default definePlugin({
             const elements = document.elementsFromPoint?.(event.clientX, event.clientY);
             if (elements && elements.length) {
                 for (const el of elements) {
-                    const candidate = this.extractUserIdFromTarget(el as HTMLElement | null);
+                    const candidate = el instanceof HTMLElement ? this.extractUserIdFromTarget(el) : null;
                     if (candidate) return candidate;
                 }
             }
@@ -1160,11 +1211,12 @@ export default definePlugin({
 
     getDmRecipientId(channel?: Channel | null): string | null {
         if (!channel) return null;
+        const channelExtras = channel as DmChannelExtras;
         const raw =
-            (channel as any).getRecipientId?.()
-            ?? (channel as any).recipientId
+            channelExtras.getRecipientId?.()
+            ?? channelExtras.recipientId
             ?? channel.recipients?.[0]
-            ?? (channel as any).rawRecipients?.[0]
+            ?? channelExtras.rawRecipients?.[0]
             ?? null;
         return typeof raw === "string" ? raw : null;
     },
@@ -1172,7 +1224,8 @@ export default definePlugin({
     getGroupDmDisplayName(channel?: Channel | null): string | null {
         if (!channel || channel.type !== ChannelType.GROUP_DM) return null;
         const selfId = UserStore.getCurrentUser()?.id ?? null;
-        const recipients = (channel.recipients ?? (channel as any).rawRecipients ?? []).filter(Boolean) as string[];
+        const channelExtras = channel as DmChannelExtras;
+        const recipients = (channel.recipients ?? channelExtras.rawRecipients ?? []).filter(Boolean) as string[];
         const names = recipients
             .filter(id => id !== selfId)
             .map(id => {
