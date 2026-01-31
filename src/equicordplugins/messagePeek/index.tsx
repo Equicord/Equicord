@@ -11,6 +11,7 @@ import { isPluginEnabled } from "@api/PluginManager";
 import betterActivities from "@equicordplugins/betterActivities";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
@@ -163,7 +164,7 @@ function MessagePreviewContent({ channel }: { channel: Channel; }) {
     const Icon = content.icon ? Icons[content.icon] : null;
 
     return (
-        <div className={`${ActivityClasses.container} ${ActivityClasses.textXs} ${cl("preview")}`}>
+        <div className={classes(ActivityClasses.container, ActivityClasses.textXs, cl("preview"))}>
             <span className={ActivityClasses.truncated}>{authorName}: {content.text}</span>
             {Icon && (
                 <span className={cl("icon")}>
