@@ -203,6 +203,7 @@ export default definePlugin({
                 },
                 {
                     // Hide unreads
+                    predicate: () => settings.store.hideUnreads === true,
                     match: /Children\.count.+?;(?=return\(0,\i\.jsxs?\)\(\i\.\i,{focusTarget:)(?<={channel:(\i),name:\i,.+?unread:(\i).+?)/,
                     replace: (m, channel, unread) => `${m}${unread}=$self.isHiddenChannel(${channel})?false:${unread};`
                 }

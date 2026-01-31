@@ -27,7 +27,7 @@ import { findCssClassesLazy } from "@webpack";
 import { PermissionsBits, Tooltip, useMemo, UserStore } from "@webpack/common";
 
 import { PermissionsSortOrder, settings } from "..";
-import openRolesAndUsersPermissionsModal, { PermissionType, type RoleOrUserPermission } from "./RolesAndUsersPermissions";
+import openRolesAndUsersPermissionsModal, { PermissionType } from "./RolesAndUsersPermissions";
 
 interface UserPermission {
     permission: string;
