@@ -7,6 +7,8 @@
 import "./style.css";
 
 import { DecoratorProps } from "@api/MemberListDecorators";
+import { isPluginEnabled } from "@api/PluginManager";
+import betterActivities from "@equicordplugins/betterActivities";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
@@ -69,26 +71,10 @@ interface MessageContent {
     icon?: IconType;
 }
 
-interface BetterActivitiesPlugin {
-    started: boolean;
-    patchActivityList: (props: { activities: Activity[]; user: User; hideTooltip: boolean; }) => React.ReactNode;
-}
-
-function getBetterActivities(): BetterActivitiesPlugin | null {
-    const plugin = Vencord.Plugins.plugins.BetterActivities;
-    if (!plugin?.started) return null;
-
-    const betterActivities = plugin as unknown as BetterActivitiesPlugin;
-    if (typeof betterActivities.patchActivityList !== "function") return null;
-
-    return betterActivities;
-}
-
 function getActivityIcons(activities: Activity[] | null, user: User): React.ReactNode {
     if (!activities?.length) return null;
 
-    const betterActivities = getBetterActivities();
-    if (!betterActivities) return null;
+    if (!isPluginEnabled(betterActivities.name)) return null;
 
     return betterActivities.patchActivityList({
         activities,
