@@ -12,7 +12,7 @@ import usrbg from "@plugins/usrbg";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
-import { findStoreLazy } from "@webpack";
+import { UserProfileStore } from "@webpack/common";
 
 import style from "./style.css?managed";
 
@@ -40,8 +40,6 @@ const settings = definePluginSettings({
 });
 
 const DATASTORE_KEY = "bannersEverywhere";
-
-const UserProfileStore = findStoreLazy("UserProfileStore");
 
 export default definePlugin({
     name: "BannersEverywhere",

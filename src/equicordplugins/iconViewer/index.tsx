@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { MagnifyingGlassIcon } from "@components/Icons";
 import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";

@@ -6,13 +6,11 @@
 
 import { getUserSettingLazy } from "@api/UserSettings";
 import { Logger } from "@utils/Logger";
+import { CustomStatus, ProfileEffect, ProfilePreset } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
-import { FluxDispatcher, UserStore } from "@webpack/common";
-
-import { ProfilePreset, ProfileEffect, Nameplate, DisplayNameStyles, CustomStatus } from "../types";
+import { FluxDispatcher, UserProfileStore, UserStore } from "@webpack/common";
 
 const logger = new Logger("ProfilePresets");
-const UserProfileStore = findStoreLazy("UserProfileStore");
 const UserProfileSettingsStore = findStoreLazy("UserProfileSettingsStore");
 const CustomStatusSettings = getUserSettingLazy("status", "customStatus")!;
 
@@ -42,17 +40,17 @@ async function processImage(imageData: any, userId: string, type: "avatar" | "ba
     if (typeof imageData === "object" && imageData.imageUri) {
         return imageData.imageUri;
     }
-    
+
     if (typeof imageData === "string") {
         if (imageData.startsWith("data:")) return imageData;
-        
+
         const isAnimated = imageData.startsWith("a_");
         const size = type === "banner" ? 1024 : 512;
         const urlPath = type === "banner" ? "banners" : "avatars";
         const url = `https://cdn.discordapp.com/${urlPath}/${userId}/${imageData}.${isAnimated ? "gif" : "png"}?size=${size}`;
         return await imageUrlToBase64(url);
     }
-    
+
     return null;
 }
 
@@ -133,8 +131,8 @@ export async function getCurrentProfile(guildId?: string): Promise<Omit<ProfileP
         : userAny.displayNameStyles;
 
     const displayNameStyles = displayNameStylesToUse ? {
-        fontId: displayNameStylesToUse.fontId,
-        effectId: displayNameStylesToUse.effectId,
+        font_id: displayNameStylesToUse.font_id,
+        effect_id: displayNameStylesToUse.effect_id,
         colors: Array.isArray(displayNameStylesToUse.colors) ? displayNameStylesToUse.colors : []
     } : null;
 
@@ -149,7 +147,7 @@ export async function getCurrentProfile(guildId?: string): Promise<Omit<ProfileP
         : userProfile?.banner;
 
     const bannerDataUrl = await processImage(bannerToUse, currentUser.id, "banner");
-    
+
     return {
         avatarDataUrl,
         bannerDataUrl,

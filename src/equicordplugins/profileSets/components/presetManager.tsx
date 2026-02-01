@@ -4,21 +4,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Heading } from "@components/Heading";
+import { Button } from "@components/index";
 import { openModal } from "@utils/modal";
-import { Button, Forms, React, TextInput } from "@webpack/common";
+import { React, TextInput } from "@webpack/common";
 
-import { settings } from "../index";
-import { presets, setCurrentPresetIndex, currentPresetIndex } from "../utils/storage";
-import { savePreset, importPresets, exportPresets } from "../utils/actions";
-import { loadPresetAsPending, getCurrentProfile } from "../utils/profile";
-import { PresetList } from "./presetList";
+import { cl, settings } from "../index";
+import { exportPresets, importPresets, savePreset } from "../utils/actions";
+import { loadPresetAsPending } from "../utils/profile";
+import { presets, setCurrentPresetIndex } from "../utils/storage";
 import { ConfirmModal } from "./confirmModal";
-
-import "../styles.css";
+import { PresetList } from "./presetList";
 
 const PRESETS_PER_PAGE = 5;
 
-export function PresetManager({ guildId }: { guildId?: string }) {
+export function PresetManager({ guildId }: { guildId?: string; }) {
     const [presetName, setPresetName] = React.useState("");
     const [, forceUpdate] = React.useReducer(x => x + 1, 0);
     const [isSaving, setIsSaving] = React.useState(false);
@@ -81,36 +81,35 @@ export function PresetManager({ guildId }: { guildId?: string }) {
     const shouldShowPagination = filteredPresets.length > PRESETS_PER_PAGE;
 
     return (
-        <div className="vc-profile-presets-section">
-            <Forms.FormTitle tag="h3" style={{ marginBottom: "8px", fontSize: "16px", fontWeight: 600 }}>
+        <div className={cl("section")} >
+            <Heading tag="h3" className={cl("heading")}>
                 Saved Profiles
-            </Forms.FormTitle>
+            </Heading>
 
-            <div style={{ marginBottom: "8px" }}>
+            <div className={cl("text")}>
                 <TextInput
                     placeholder={searchMode ? "Search profiles..." : "Profile Name"}
                     value={presetName}
                     onChange={setPresetName}
-                    style={{ width: "100%", maxWidth: "500px" }}
+                    className={cl("text-input")}
                 />
             </div>
 
-            <div style={{ display: "flex", gap: "8px", marginBottom: "12px", flexWrap: "wrap" }}>
+            <div className={cl("search")}>
                 {!searchMode && (
                     <Button
-                        size={Button.Sizes.SMALL}
-                        color={Button.Colors.BRAND}
+                        size="small"
                         disabled={isSaving || !presetName.trim()}
                         onClick={handleSavePreset}
-                        style={{ minWidth: "120px" }}
+                        className={cl("search-button")}
                     >
                         {isSaving ? "Saving..." : "Save Profile"}
                     </Button>
                 )}
                 {hasPresets && (
                     <Button
-                        size={Button.Sizes.SMALL}
-                        color={searchMode ? Button.Colors.BRAND : Button.Colors.PRIMARY}
+                        size="small"
+                        variant={searchMode ? "primary" : "secondary"}
                         onClick={() => {
                             setSearchMode(!searchMode);
                             handlePageChange(1);
@@ -136,36 +135,36 @@ export function PresetManager({ guildId }: { guildId?: string }) {
                     />
 
                     {shouldShowPagination && (
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px", justifyContent: "center" }}>
+                        <div className={cl("pagination")}>
                             <Button
-                                size={Button.Sizes.SMALL}
-                                color={Button.Colors.PRIMARY}
+                                size="small"
+                                variant="secondary"
                                 disabled={currentPage === 1}
                                 onClick={() => handlePageChange(currentPage - 1)}
                             >
                                 ←
                             </Button>
-                            <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                            <div className={cl("page")}>
                                 <input
                                     type="text"
                                     value={pageInput}
                                     onChange={e => {
-                                        const value = e.target.value;
+                                        const { value } = e.target;
                                         setPageInput(value);
                                         const num = parseInt(value);
                                         if (!isNaN(num) && num >= 1 && num <= totalPages) {
                                             setCurrentPage(num);
                                         }
                                     }}
-                                    className="vc-preset-page-input"
+                                    className={cl("page-input")}
                                 />
-                                <span style={{ fontSize: "14px", color: "var(--text-normal)", fontWeight: 500 }}>
+                                <span className={cl("page-of")}>
                                     / {totalPages}
                                 </span>
                             </div>
                             <Button
-                                size={Button.Sizes.SMALL}
-                                color={Button.Colors.PRIMARY}
+                                size="small"
+                                variant="secondary"
                                 disabled={currentPage === totalPages}
                                 onClick={() => handlePageChange(currentPage + 1)}
                             >
@@ -174,28 +173,24 @@ export function PresetManager({ guildId }: { guildId?: string }) {
                         </div>
                     )}
 
-                    <div style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
+                    <div className={cl("import")}>
                         <Button
-                            size={Button.Sizes.SMALL}
-                            color={Button.Colors.PRIMARY}
+                            size="small"
+                            variant="secondary"
                             onClick={() => importPresets(forceUpdate, showOverridePrompt)}
                         >
                             Import
                         </Button>
                         <Button
-                            size={Button.Sizes.SMALL}
-                            color={Button.Colors.PRIMARY}
+                            size="small"
+                            variant="secondary"
                             onClick={exportPresets}
                         >
                             Export All
                         </Button>
                     </div>
 
-                    <hr style={{ 
-                        margin: "16px 0",
-                        border: "none",
-                        borderTop: "1px solid var(--background-modifier-accent)"
-                    }} />
+                    <hr className={cl("block")} />
                 </>
             )}
         </div>

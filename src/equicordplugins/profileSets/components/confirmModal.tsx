@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ModalProps, ModalRoot, ModalHeader, ModalContent, ModalFooter } from "@utils/modal";
-import { Button, Forms } from "@webpack/common";
-
+import { Heading } from "@components/Heading";
+import { Button } from "@components/index";
+import { Paragraph } from "@components/Paragraph";
+import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
 interface ConfirmModalProps extends ModalProps {
     title: string;
     message: string;
@@ -20,14 +21,13 @@ export function ConfirmModal({ title, message, confirmText, cancelText, onConfir
     return (
         <ModalRoot transitionState={transitionState}>
             <ModalHeader>
-                <Forms.FormTitle tag="h2">{title}</Forms.FormTitle>
+                <Heading tag="h2">{title}</Heading>
             </ModalHeader>
             <ModalContent>
-                <Forms.FormText>{message}</Forms.FormText>
+                <Paragraph>{message}</Paragraph>
             </ModalContent>
             <ModalFooter>
                 <Button
-                    color={Button.Colors.BRAND}
                     onClick={() => {
                         onConfirm();
                         onClose();
@@ -36,7 +36,7 @@ export function ConfirmModal({ title, message, confirmText, cancelText, onConfir
                     {confirmText}
                 </Button>
                 <Button
-                    color={Button.Colors.PRIMARY}
+                    variant="secondary"
                     onClick={() => {
                         onCancel();
                         onClose();

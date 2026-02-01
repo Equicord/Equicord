@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ContextMenuApi, Menu, React, showToast, TextInput } from "@webpack/common";
+import { classes } from "@utils/misc";
+import { ProfilePreset } from "@vencord/discord-types";
+import { ContextMenuApi, Menu, React, showToast, TextInput, Toasts } from "@webpack/common";
 
-import { ProfilePreset } from "../types";
+import { cl } from "..";
 import { deletePreset, movePreset, renamePreset, updatePresetField } from "../utils/actions";
 import { getCurrentProfile } from "../utils/profile";
 
@@ -27,7 +29,7 @@ export function PresetList({ presets, allPresets, avatarSize, selectedPreset, on
     const [renameText, setRenameText] = React.useState("");
 
     return (
-        <div className="vc-preset-list-container">
+        <div className={cl("list-container")}>
             {presets.map(preset => {
                 const actualIndex = allPresets.indexOf(preset);
                 const isRenaming = renaming === actualIndex;
@@ -50,28 +52,28 @@ export function PresetList({ presets, allPresets, avatarSize, selectedPreset, on
                         onClick={() => {
                             if (!isRenaming) {
                                 onLoad(actualIndex);
-                                showToast(`Profile "${preset.name}" loaded successfully`, "success");
+                                showToast(`Profile "${preset.name}" loaded successfully`, Toasts.Type.SUCCESS);
                             }
                         }}
-                        onKeyDown={(e) => {
+                        onKeyDown={e => {
                             if (!isRenaming && (e.key === "Enter" || e.key === " ")) {
                                 e.preventDefault();
                                 onLoad(actualIndex);
-                                showToast(`Profile "${preset.name}" loaded successfully`, "success");
+                                showToast(`Profile "${preset.name}" loaded successfully`, Toasts.Type.SUCCESS);
                             }
                         }}
-                        className={`vc-preset-row ${!isRenaming && selectedPreset === actualIndex ? "selected" : ""}`}
+                        className={classes(cl("row"), !isRenaming && selectedPreset === actualIndex ? "selected" : "")}
                     >
-                        <div style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1, minWidth: 0 }}>
+                        <div className={cl("avatar-url")}>
                             {preset.avatarDataUrl && (
                                 <img
                                     src={preset.avatarDataUrl}
                                     alt=""
-                                    className="vc-preset-avatar"
+                                    className={cl("avatar")}
                                     style={{ width: `${avatarSize}px`, height: `${avatarSize}px` }}
                                 />
                             )}
-                            <div style={{ minWidth: 0, flex: 1 }}>
+                            <div className={cl("rename")}>
                                 {isRenaming ? (
                                     <TextInput
                                         value={renameText}
@@ -83,7 +85,7 @@ export function PresetList({ presets, allPresets, avatarSize, selectedPreset, on
                                             }
                                             setRenaming(-1);
                                         }}
-                                        onKeyDown={(e) => {
+                                        onKeyDown={e => {
                                             if (e.key === "Enter") {
                                                 if (renameText.trim()) {
                                                     renamePreset(actualIndex, renameText);
@@ -95,28 +97,28 @@ export function PresetList({ presets, allPresets, avatarSize, selectedPreset, on
                                             }
                                             e.stopPropagation();
                                         }}
-                                        onClick={(e) => e.stopPropagation()}
+                                        onClick={e => e.stopPropagation()}
                                         autoFocus
                                     />
                                 ) : (
                                     <>
-                                        <div className="vc-preset-name">
+                                        <div className={cl("name")}>
                                             {preset.name}
                                         </div>
-                                        <div className="vc-preset-timestamp">
+                                        <div className={cl("timestamp")}>
                                             {formattedDate} at {formattedTime}
                                         </div>
                                     </>
                                 )}
                             </div>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+                        <div className={cl("updated")}>
                             <svg
                                 width="20"
                                 height="20"
                                 viewBox="0 0 20 20"
-                                className="vc-preset-menu-icon"
-                                onClick={(e) => {
+                                className={cl("menu-icon")}
+                                onClick={e => {
                                     e.stopPropagation();
                                     const target = e.currentTarget;
                                     ContextMenuApi.openContextMenu(e, () => (
@@ -139,7 +141,7 @@ export function PresetList({ presets, allPresets, avatarSize, selectedPreset, on
                                                             updatePresetField(actualIndex, key as any, value);
                                                         }
                                                     });
-                                                    showToast("Profile updated successfully", "success");
+                                                    showToast("Profile updated successfully", Toasts.Type.SUCCESS);
                                                     onUpdate();
                                                 }}
                                             />

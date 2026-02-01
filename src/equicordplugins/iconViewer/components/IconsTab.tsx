@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "../styles.css";
-
 import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { SettingsTab, wrapTab } from "@components/settings";

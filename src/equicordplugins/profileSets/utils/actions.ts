@@ -4,15 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { showToast } from "@webpack/common";
+import { ProfilePreset } from "@vencord/discord-types";
+import { showToast, Toasts } from "@webpack/common";
 
-import { ProfilePreset } from "../types";
-import { addPreset, removePreset, movePresetInArray, presets, savePresetsData, updatePreset, replaceAllPresets } from "./storage";
 import { getCurrentProfile } from "./profile";
-
-function notify(message: string, type: "success" | "error" | "info" = "info") {
-    showToast(message, type === "error" ? "error" : "success");
-}
+import { addPreset, movePresetInArray, presets, removePreset, replaceAllPresets, savePresetsData, updatePreset } from "./storage";
 
 export async function savePreset(name: string, guildId?: string) {
     const profile = await getCurrentProfile(guildId);
@@ -23,7 +19,7 @@ export async function savePreset(name: string, guildId?: string) {
     };
     addPreset(newPreset);
     await savePresetsData();
-    notify(`Profile "${name}" saved successfully`, "success");
+    showToast(`Profile "${name}" saved successfully`, Toasts.Type.SUCCESS);
 }
 
 export async function updatePresetField(index: number, field: keyof Omit<ProfilePreset, "name" | "timestamp">, value: any) {
@@ -44,7 +40,7 @@ export async function deletePreset(index: number) {
     const preset = presets[index];
     removePreset(index);
     await savePresetsData();
-    notify(`Profile "${preset.name}" deleted`, "info");
+    showToast(`Profile "${preset.name}" deleted`, Toasts.Type.MESSAGE);
 }
 
 export async function movePreset(fromIndex: number, toIndex: number) {
@@ -60,7 +56,7 @@ export async function renamePreset(index: number, newName: string) {
     const updatedPreset = { ...presets[index], name: newName.trim() };
     updatePreset(index, updatedPreset);
     await savePresetsData();
-    notify(`Profile renamed to "${newName}"`, "success");
+    showToast(`Profile renamed to "${newName}"`, Toasts.Type.SUCCESS);
 }
 
 export function exportPresets() {
@@ -73,9 +69,9 @@ export function exportPresets() {
         link.download = `profile-presets-${Date.now()}.json`;
         link.click();
         URL.revokeObjectURL(url);
-        notify("Profiles exported successfully", "success");
+        showToast("Profiles exported successfully", Toasts.Type.SUCCESS);
     } catch (err) {
-        notify("Failed to export profiles", "error");
+        showToast("Failed to export profiles", Toasts.Type.FAILURE);
     }
 }
 
@@ -103,7 +99,7 @@ export async function importPresets(forceUpdate: () => void, onOverridePrompt: (
             const importedPresets = JSON.parse(text);
 
             if (!Array.isArray(importedPresets)) {
-                notify("Invalid profile file format", "error");
+                showToast("Invalid profile file format", Toasts.Type.FAILURE);
                 return;
             }
 
@@ -130,9 +126,9 @@ export async function importPresets(forceUpdate: () => void, onOverridePrompt: (
 
             await savePresetsData();
             forceUpdate();
-            notify(`Imported ${importedPresets.length} profiles successfully`, "success");
+            showToast(`Imported ${importedPresets.length} profiles successfully`, Toasts.Type.SUCCESS);
         } catch (err) {
-            notify("Failed to import profiles", "error");
+            showToast("Failed to import profiles", Toasts.Type.FAILURE);
         }
     };
     input.click();

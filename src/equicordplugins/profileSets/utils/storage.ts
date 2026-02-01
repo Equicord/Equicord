@@ -6,8 +6,7 @@
 
 import { DataStore } from "@api/index";
 import { Logger } from "@utils/Logger";
-
-import { ProfilePreset } from "../types";
+import { ProfilePreset } from "@vencord/discord-types";
 
 const logger = new Logger("ProfilePresets");
 const PRESETS_KEY = "ProfileDataset";
