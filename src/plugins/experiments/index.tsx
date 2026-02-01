@@ -116,6 +116,16 @@ export default definePlugin({
                 match: /}getServerAssignment\((\i),\i,\i\){/,
                 replace: "$&if($1==null)return;"
             }
+        },
+        // Enable playground embed on sent playground links
+        // dev://playground/mana, dev://playground/payments, dev://playground/virtual-currency,
+        // dev://playground/nitro, dev://playground/mfa, dev://playground/cms, dev://playground/void
+        {
+            find: "{PlaygroundEmbed:()=>",
+            replacement: {
+                match: /getCurrentUser\(\);return\(null==\i\?void 0:\i\.isStaff\(\)\)/,
+                replace: "getCurrentUser();return(true"
+            }
         }
     ],
 
