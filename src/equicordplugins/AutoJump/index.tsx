@@ -10,7 +10,6 @@ import { ComponentDispatch } from "@webpack/common";
 
 let lastChannelId: string | null = null;
 
-// credits to prism for removing useless pieces of code 
 export default definePlugin({
     name: "AutoJump",
     description: "Automatically jump to the bottom when switching channels.",
@@ -23,5 +22,3 @@ export default definePlugin({
         }
     }
 });
-
-
