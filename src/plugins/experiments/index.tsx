@@ -141,8 +141,8 @@ export default definePlugin({
             replacement: [
                 {
                     // Uses the label instead of the value for the button text in the experiment embed.
-                    match: /(?<="Apply Treatment) (".concat\()(\i).value/,
-                    replace: ": $1$2.label"
+                    match: /"Clear Treatment ".concat\((\i).value\):"Apply Treatment ".concat\(\i.value\)/,
+                    replace: '"Clear Treatment: ".concat($1.label):"Apply Treatment: ".concat($1.label)'
                 },
                 {
                     // Allow linking experiments by their label instead of their value.
