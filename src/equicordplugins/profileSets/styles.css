@@ -1,0 +1,91 @@
+.vc-profile-presets-section {
+    margin-bottom: 20px;
+    padding: 0;
+    background-color: transparent;
+}
+
+.vc-preset-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+    padding: 12px;
+    background-color: var(--background-secondary);
+    border-radius: 8px;
+    border: 2px solid var(--background-modifier-accent);
+}
+
+.vc-preset-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background-color: var(--background-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 2px solid transparent;
+    outline: none;
+}
+
+.vc-preset-row:hover {
+    background-color: var(--background-modifier-hover) !important;
+    border-color: var(--background-modifier-accent) !important;
+}
+
+.vc-preset-row:focus-visible {
+    border-color: var(--brand-experiment) !important;
+    box-shadow: 0 0 0 2px var(--brand-experiment-30a);
+}
+
+.vc-preset-row.selected {
+    background-color: var(--background-modifier-selected);
+}
+
+.vc-preset-avatar {
+    border-radius: 50%;
+    border: 2px solid var(--background-tertiary);
+    flex-shrink: 0;
+}
+
+.vc-preset-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--header-primary);
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-preset-timestamp {
+    font-size: 12px;
+    color: var(--text-normal);
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.vc-preset-menu-icon {
+    opacity: 0.7;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.vc-preset-menu-icon:hover {
+    opacity: 1;
+}
+
+.vc-preset-page-input {
+    width: 40px;
+    text-align: center;
+    padding: 4px;
+    background-color: var(--background-secondary);
+    border: 2px solid var(--background-modifier-accent);
+    border-radius: 4px;
+    color: var(--text-normal);
+}
+
+button:focus-visible {
+    outline: 2px solid var(--brand-experiment);
+    outline-offset: 2px;
+}
