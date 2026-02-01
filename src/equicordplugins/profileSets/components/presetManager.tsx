@@ -81,7 +81,7 @@ export function PresetManager({ guildId }: { guildId?: string }) {
     const shouldShowPagination = filteredPresets.length > PRESETS_PER_PAGE;
 
     return (
-        <Forms.FormSection className="vc-profile-presets-section">
+        <div className="vc-profile-presets-section">
             <Forms.FormTitle tag="h3" style={{ marginBottom: "8px", fontSize: "16px", fontWeight: 600 }}>
                 Saved Profiles
             </Forms.FormTitle>
@@ -194,6 +194,6 @@ export function PresetManager({ guildId }: { guildId?: string }) {
                     <Forms.FormDivider />
                 </>
             )}
-        </Forms.FormSection>
+        </div>
     );
 }
