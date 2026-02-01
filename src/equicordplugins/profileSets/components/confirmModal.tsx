@@ -16,9 +16,9 @@ interface ConfirmModalProps extends ModalProps {
     onCancel: () => void;
 }
 
-export function ConfirmModal({ title, message, confirmText, cancelText, onConfirm, onCancel, onClose }: ConfirmModalProps) {
+export function ConfirmModal({ title, message, confirmText, cancelText, onConfirm, onCancel, onClose, transitionState }: ConfirmModalProps) {
     return (
-        <ModalRoot>
+        <ModalRoot transitionState={transitionState}>
             <ModalHeader>
                 <Forms.FormTitle tag="h2">{title}</Forms.FormTitle>
             </ModalHeader>
