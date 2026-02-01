@@ -29,7 +29,7 @@ function autoJump(channel: any) {
     ComponentDispatch.dispatch("SCROLLTO_PRESENT");
 }
 
-const MenuPatch: NavContextMenuPatchCallback = (children, { channel }) => {
+const MenuPatch: NavContextMenuPatchCallback = (children) => {
     children.push(
         <Menu.MenuItem
             id="auto-jump"
