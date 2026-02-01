@@ -191,7 +191,11 @@ export function PresetManager({ guildId }: { guildId?: string }) {
                         </Button>
                     </div>
 
-                    <Forms.FormDivider />
+                    <hr style={{ 
+                        margin: "16px 0",
+                        border: "none",
+                        borderTop: "1px solid var(--background-modifier-accent)"
+                    }} />
                 </>
             )}
         </div>
