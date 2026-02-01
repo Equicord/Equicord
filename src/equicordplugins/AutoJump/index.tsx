@@ -7,7 +7,7 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { Menu, ChannelStore, NavigationRouter, MessageActions, MessageStore, ComponentDispatch } from "@webpack/common";
+import { Menu, ChannelStore, ComponentDispatch } from "@webpack/common";
 
 interface ChannelSelectEvent {
     type: "CHANNEL_SELECT";
