@@ -1618,8 +1618,8 @@ export default definePlugin({
                     replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest);"
                 },
                 {
-                    match: /(?<="primary",onClick:\(\)=>{null==\i\|\|\i\(\),)/,
-                    replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&"
+                    match: /(?<=}\),)(null==\i\|\|\i\(\))/,
+                    replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&($1)"
                 },
                 {
                     match: /(?<=,text:)(?=\i)/,
