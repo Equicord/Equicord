@@ -86,6 +86,14 @@ let guildGhostCleanupTimer: number | null = null;
 let dragifyActive = false;
 let dragStateWatchdog: number | null = null;
 let dragSourceIsInput = false;
+const dropDedupeWindowMs = 150;
+
+function shouldIgnoreDrop(key: string): boolean {
+    const now = Date.now();
+    if (lastHandledDrop.key === key && now - lastHandledDrop.at < dropDedupeWindowMs) return true;
+    lastHandledDrop = { key, at: now };
+    return false;
+}
 
 const settings = definePluginSettings({
     userOutput: {
@@ -182,7 +190,7 @@ export default definePlugin({
     patches: [
         // Voice user rows (voice channel sidebar list)
         {
-            find: "location:\"VoiceUser\"}),ej=l.useRef(null),[ex,ev]=l.useState(!1)",
+            find: "location:\"VoiceUser\"",
             replacement: {
                 match: /"data-dnd-name":(\i)\.name,/,
                 replace: "$&\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].user),"
@@ -216,8 +224,8 @@ export default definePlugin({
         {
             find: "__invalid_threadMainContent",
             replacement: {
-                match: /className:(\i)\.(\i),onClick:(\i),"aria-label":/,
-                replace: "className:$1.$2,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e),onClick:$3,\"aria-label\":"
+                match: /className:(\i\.\i),onClick:(\i),"aria-label":/,
+                replace: "className:$1,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e),onClick:$2,\"aria-label\":"
             }
         },
         // Thread rows in channel list (threaded child rows)
@@ -227,7 +235,7 @@ export default definePlugin({
             find: "shouldShowThreadsPopout",
             replacement: {
                 match: /"data-dnd-name":(\i)\.name,/,
-                replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:$1.id,guild_id:$1.guild_id}),"
+                replace: "$&draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:$1.id,guild_id:$1.guild_id}),"
             }
         },
         // Thread rows (active threads popout)
@@ -242,13 +250,13 @@ export default definePlugin({
         {
             find: "MemberListItem",
             replacement: {
-                match: /onContextMenu:(\i),onMouseEnter:(\i),onMouseLeave:(\i),onBlur:(\i),hovered:(\i),name:/,
-                replace: "onContextMenu:$1,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].user?.id}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,onMouseEnter:$2,onMouseLeave:$3,onBlur:$4,hovered:$5,name:"
+                match: /onContextMenu:\i,(?=onMouseEnter:)/,
+                replace: "$&draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].user?.id}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,"
             }
         },
         // Chat usernames
         {
-            find: "className:o()(N.oF,eo,{[em]:ep,[N.IW]:\"username\"===er&&null!=$}),style:eg(),onClick:F,onContextMenu:V",
+            find: "[N.IW]:\"username\"",
             replacement: {
                 match: /onClick:(\i),onContextMenu:(\i),children:/,
                 replace: "onClick:$1,onContextMenu:$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].author),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].author.id,children:"
@@ -256,32 +264,25 @@ export default definePlugin({
         },
         // Call avatars (DM/group call tiles)
         {
-            find: "participantUserId:eH,children:(0,r.jsxs)(d.sqX,{\"aria-label\":ti,className:es.lG",
+            find: "children:(0,r.jsxs)(d.sqX,{\"aria-label\":",
             replacement: {
                 match: /className:(\i)\.(\i),onDoubleClick:(\i),onContextMenu:(\i)=>/,
-                replace: "className:$1.$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:eH}),\"data-dragify-user\":!0,\"data-user-id\":eH,onDoubleClick:$3,onContextMenu:$4=>"
+                replace: "className:$1.$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].participantUserId}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].participantUserId,onDoubleClick:$3,onContextMenu:$4=>"
             }
         },
         // DM list entries (private channel rows)
         {
             find: "PrivateChannel.renderAvatar: Invalid prop configuration - no user or channel",
             replacement: {
-                match: /to:(\i)\.(\i)\.CHANNEL\((\i)\.(\i),t\.id\),className:(\i)\.nf,"aria-label":(\i)/,
-                replace: "to:$1.$2.CHANNEL($3.$4,t.id),className:$5.nf,draggable:!0,onDragStart:e=>$self.onDmDragStart(e,arguments[0].channel),\"aria-label\":$6"
-            }
-        },
-        {
-            find: "PrivateChannel.renderAvatar: Invalid prop configuration - no user or channel",
-            replacement: {
-                match: /ea\(es\(\{\},(\i)\),\{/,
-                replace: "ea(es({},$1),{draggable:!0,onDragStart:e=>$self.onDmDragStart(e,arguments[0].channel),"
+                match: /className:\i\.nf,(?="aria-label":)/,
+                replace: "$&draggable:!0,onDragStart:e=>$self.onDmDragStart(e,arguments[0].channel),"
             }
         },
         {
             find: "[aria-owns=folder-items-",
             replacement: {
-                match: /"data-dnd-name":(\i)\.name,"data-drop-hovering":(\i),children:\(0,(\i)\.jsx\)\((\i)\.(\i),/,
-                replace: "\"data-dnd-name\":$1.name,draggable:!0,onDragStart:e=>$self.onGuildDragStart(e,$1.id),\"data-drop-hovering\":$2,children:(0,$3.jsx)($4.$5,"
+                match: /"data-dnd-name":(\i)\.name,(?="data-drop-hovering":)/,
+                replace: "$&draggable:!0,onDragStart:e=>$self.onGuildDragStart(e,$1.id),"
             }
         },
     ],
@@ -308,20 +309,22 @@ export default definePlugin({
         if (dragifyData) {
             const parsed = tryParseJson<{ kind?: string; id?: string; guildId?: string }>(dragifyData);
             if (parsed?.kind && parsed.id) {
-                const fromDragify: DropEntity | null =
-                    parsed.kind === "user"
-                        ? { kind: "user", id: parsed.id }
-                        : parsed.kind === "channel"
-                            ? { kind: "channel", id: parsed.id, guildId: parsed.guildId }
-                            : parsed.kind === "guild"
-                                ? { kind: "guild", id: parsed.id }
-                                : null;
+                let fromDragify: DropEntity | null = null;
+                switch (parsed.kind) {
+                    case "user":
+                        fromDragify = { kind: "user", id: parsed.id };
+                        break;
+                    case "channel":
+                        fromDragify = { kind: "channel", id: parsed.id, guildId: parsed.guildId };
+                        break;
+                    case "guild":
+                        fromDragify = { kind: "guild", id: parsed.id };
+                        break;
+                }
                 if (fromDragify) {
                     const key = `${fromDragify.kind}:${fromDragify.id}:${resolvedChannel.id}`;
-                    const now = Date.now();
-                    if (lastHandledDrop.key === key && now - lastHandledDrop.at < 150) return;
-                    lastHandledDrop = { key, at: now };
-                    await this.handleDropEntity(fromDragify, resolvedChannel, dragifyData);
+                    if (shouldIgnoreDrop(key)) return;
+                    await this.handleDropEntity(fromDragify, resolvedChannel);
                     return;
                 }
             }
@@ -341,13 +344,11 @@ export default definePlugin({
         }
 
         const key = `${entity.kind}:${entity.id}:${resolvedChannel.id}`;
-        const now = Date.now();
-        if (lastHandledDrop.key === key && now - lastHandledDrop.at < 150) return;
-        lastHandledDrop = { key, at: now };
-        await this.handleDropEntity(entity, resolvedChannel, payloads);
+        if (shouldIgnoreDrop(key)) return;
+        await this.handleDropEntity(entity, resolvedChannel);
     },
 
-    async handleDropEntity(entity: DropEntity, channel: Channel, payloads: string[] | string) {
+    async handleDropEntity(entity: DropEntity, channel: Channel) {
         try {
             const text = await this.buildText(entity, channel);
             if (!text) {
@@ -507,7 +508,7 @@ export default definePlugin({
     isInviteExpired(invite: { expiresAt: number | null; maxUses: number | null; uses: number | null; }): boolean {
         const now = Date.now();
         const expired = invite.expiresAt !== null && invite.expiresAt <= now;
-        const exhausted = invite.maxUses !== null && invite.maxUses !== 0 && invite.uses !== null && invite.uses >= invite.maxUses;
+        const exhausted = invite.maxUses !== null && invite.uses !== null && invite.uses >= invite.maxUses;
         return expired || exhausted;
     },
 
@@ -525,23 +526,29 @@ export default definePlugin({
             if (this.canCreateInvite(channel)) return channel;
         }
 
-        const selectableStore = (GuildChannelStore.getSelectableChannels?.(guildId) ?? []).map(e => e.channel).filter(Boolean) as Channel[];
+        const selectableStore = (GuildChannelStore.getSelectableChannels?.(guildId) ?? [])
+            .map(e => e.channel)
+            .filter(Boolean) as Channel[];
         const selectableCollection = (() => {
             const collection = (GuildChannelStore as unknown as ChannelStoreLike).getChannels?.(guildId);
+            if (!collection?.SELECTABLE) return [] as Channel[];
+
             const result: Channel[] = [];
-            if (collection?.SELECTABLE) {
-                const values = Object.values(collection.SELECTABLE);
-                for (const val of values) {
-                    const ch = (val && typeof val === "object" && "channel" in val) ? val.channel ?? null : val;
-                    if (ch) result.push(ch as Channel);
-                }
+            for (const entry of Object.values(collection.SELECTABLE)) {
+                const channel = entry && typeof entry === "object" && "channel" in entry
+                    ? (entry as { channel?: Channel | null }).channel
+                    : (entry as Channel | null | undefined);
+                if (channel) result.push(channel);
             }
             return result;
         })();
 
-        const candidates = [...selectableStore, ...selectableCollection]
-            .filter(ch => ch && ch.guild_id === guildId)
-            .filter((ch, idx, arr) => arr.findIndex(c => c.id === ch.id) === idx)
+        const byId = new Map<string, Channel>();
+        for (const ch of [...selectableStore, ...selectableCollection]) {
+            if (!ch || ch.guild_id !== guildId) continue;
+            if (!byId.has(ch.id)) byId.set(ch.id, ch);
+        }
+        const candidates = [...byId.values()]
             .sort((a, b) => {
                 const pa = typeof a.position === "number" ? a.position : 0;
                 const pb = typeof b.position === "number" ? b.position : 0;
@@ -865,7 +872,6 @@ export default definePlugin({
         }
     },
     globalDragEnd: (_event: DragEvent) => {
-        const now = Date.now();
         setTimeout(() => {
             if (Date.now() - lastDropAt < 100) return;
             clearDragState();
