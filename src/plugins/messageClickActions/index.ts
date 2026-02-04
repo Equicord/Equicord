@@ -200,6 +200,11 @@ const settings = definePluginSettings({
         markers: makeRange(50, 500, 50),
         default: 150
     },
+    deferDoubleClickForTriple: {
+        type: OptionType.BOOLEAN,
+        description: "Delay double-click to allow triple-click actions (disables triple-click when off)",
+        default: true
+    },
     selectionHoldTimeout: {
         type: OptionType.NUMBER,
         description: "Timeout to allow text selection (ms)",
@@ -538,6 +543,12 @@ export default definePlugin({
         }
 
         if (isTripleClick) {
+            if (!settings.store.deferDoubleClickForTriple) {
+                mouseDownCount = 0;
+                doubleClickDetected = false;
+                secondMouseDownTime = 0;
+                return;
+            }
             if (doubleClickTimeout) {
                 clearTimeout(doubleClickTimeout);
                 doubleClickTimeout = null;
@@ -556,7 +567,14 @@ export default definePlugin({
         }
 
         const canDoubleClick = (isModifierPressed(doubleClickModifier) || doubleClickModifier === "NONE") && doubleClickAction !== "NONE";
-        const canTripleClick = isModifierPressed(tripleClickModifier) && tripleClickAction !== "NONE";
+        const canTripleClick =
+            settings.store.deferDoubleClickForTriple &&
+            isModifierPressed(tripleClickModifier) &&
+            tripleClickAction !== "NONE";
+        const shouldDeferDoubleClick =
+            canDoubleClick &&
+            canTripleClick &&
+            doubleClickModifier === tripleClickModifier;
 
         if (isDoubleClick) {
             doubleClickFired = true;
@@ -576,7 +594,7 @@ export default definePlugin({
                 }
             };
 
-            if (canTripleClick && canDoubleClick) {
+            if (shouldDeferDoubleClick) {
                 if (doubleClickTimeout) {
                     clearTimeout(doubleClickTimeout);
                 }
@@ -613,8 +631,10 @@ export default definePlugin({
                 secondMouseDownTime = 0;
             };
 
-            const hasDoubleClickAction = settings.store.doubleClickAction !== "NONE" || settings.store.doubleClickOthersAction !== "NONE";
-            if (hasDoubleClickAction && singleClickModifier === "NONE") {
+            const canDoubleClickWithCurrentModifier =
+                doubleClickAction !== "NONE" &&
+                (doubleClickModifier === "NONE" || isModifierPressed(doubleClickModifier));
+            if (canDoubleClickWithCurrentModifier && singleClickModifier === "NONE") {
                 singleClickTimeout = setTimeout(() => {
                     executeSingleClick();
                     singleClickTimeout = null;
