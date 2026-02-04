@@ -14,9 +14,9 @@ import { formatLowerBadge } from "./misc";
 // GuildlessServerListItem's built-in pill does not support unread state.
 export const GuildlessServerListItemComponent = findComponentByCodeLazy("tooltip:", "lowerBadgeSize:");
 export const GuildedServerListItemPillComponent = findComponentByCodeLazy('"pill":"empty"');
-export const ServerListItemLowerBadgeComponent = findComponentByCodeLazy("BADGE_NOTIFICATION_BACKGROUND", '"renderBadgeCount"');
+export const ServerListItemLowerBadgeComponent = findComponentByCodeLazy("BADGE_NOTIFICATION_BACKGROUND", "let{count:");
 export const ServerListItemUpperBadgeComponent = findComponentByCodeLazy("{icon:", ".ROUND,disableColor");
-export const RadioGroup = findComponentByCodeLazy(',["label","description"');
+export const RadioGroup = findComponentByCodeLazy(",{label:", ",description:", ",required:", ",errorMessage:", ",children:");
 export const QuestTile = findComponentByCodeLazy(".rowIndex,trackGuildAndChannelMetadata");
 
 export enum QuestRewardType {

@@ -1050,6 +1050,7 @@ function getQuestPanelTitleText(quest: Quest): string | null {
 }
 
 function getQuestPanelOverride(): Quest | null {
+    settings.use(["triggerQuestsRerender"]);
     let closestQuest: Quest | null = null;
     let closestTimeRemaining = Infinity;
 
@@ -1079,20 +1080,15 @@ function getQuestPanelOverride(): Quest | null {
     });
 
     if (!closestQuest) {
-        const completedQuests = Array.from(QuestsStore.quests.values() as Quest[]).filter(q => q.userStatus?.completedAt).sort((a, b) => {
-            const aTime = new Date(a.userStatus?.completedAt as string);
-            const bTime = new Date(b.userStatus?.completedAt as string);
-            return bTime.getTime() - aTime.getTime();
-        });
+        const completedUnclaimedQuests = (Array.from(QuestsStore.quests.values()) as Quest[])
+            .filter(q => q.userStatus?.completedAt && getQuestStatus(q) === QuestStatus.Unclaimed)
+            .sort((a, b) => {
+                const aTime = new Date(a.userStatus?.completedAt as string).getTime();
+                const bTime = new Date(b.userStatus?.completedAt as string).getTime();
+                return bTime - aTime;
+            });
 
-        completedQuests.forEach(quest => {
-            const completedQuest = quest.userStatus?.completedAt;
-            const questStatus = getQuestStatus(quest);
-
-            if (completedQuest && questStatus === QuestStatus.Unclaimed) {
-                closestQuest = quest;
-            }
-        });
+        closestQuest = completedUnclaimedQuests[0] ?? null;
     }
 
     return closestQuest;
@@ -1430,13 +1426,13 @@ export default definePlugin({
                     match: /(children:\i\(\i)/,
                     replace: "$1,maxDigits"
                 },
-                // {
-                // Makes use of the custom prop if provided by using custom logic for negatives and truncation.
-                // If the prop is not provided, assume default behavior for native badges or other plugins not
-                // utilizing the custom prop.
-                // match: /function (\i\((\i))\)\{return (.{0,100}?k\+`)/,
-                // replace: "function $1,maxDigits){return maxDigits===undefined?($3):$self.formatLowerBadge($2,maxDigits)[0]"
-                // }
+                {
+                    // Makes use of the custom prop if provided by using custom logic for negatives and truncation.
+                    // If the prop is not provided, assume default behavior for native badges or other plugins not
+                    // utilizing the custom prop.
+                    match: /(?<=function \i\((\i))(\){return )(\i<1e3.{0,60}?k\+`)/,
+                    replace: ",maxDigits$2maxDigits===undefined?($3):$self.formatLowerBadge($1,maxDigits)[0]"
+                }
             ]
         },
         {
