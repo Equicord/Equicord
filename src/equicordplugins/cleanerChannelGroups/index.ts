@@ -16,12 +16,12 @@ export default definePlugin({
             find: '"placeholder-channel-id"',
             replacement: [
                 {
-                    match: /this\.category\.isCollapsed&&\(.{0,600}?\)\?\{renderLevel:3,threadIds:(\i)\}:\{renderLevel:4,threadIds:\1\}/,
-                    replace: "this.category.isCollapsed?{renderLevel:3,threadIds:$1}:{renderLevel:4,threadIds:$1}"
+                    match: /this\.category\.isCollapsed&&\(.{0,600}?\)\?\{renderLevel:3,threadIds:/,
+                    replace: "this.category.isCollapsed?{renderLevel:3,threadIds:"
                 },
                 {
-                    match: /(\i)=ev\(this\.record,\i,\i,\i,\i\.hideMutedChannels\);/,
-                    replace: "$&this.category.isCollapsed&&($1=[]);"
+                    match: /(?<=!this.category.isCollapsed.{0,50}\i=)(\i\(this\.record,.{0,5},\i\.hideMutedChannels\);)/,
+                    replace: "this.category.isCollapsed?[]:$1"
                 }
             ]
         }
