@@ -8,12 +8,12 @@ import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import { getGuildAcronym } from "@utils/discord";
+import { getGuildAcronym, insertTextIntoChatInputBox } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
-import { ChannelStore, ComponentDispatch, Constants, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RelationshipStore, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
+import { ChannelStore, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RelationshipStore, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
 
 import { type GhostState, hideGhost as hideDragGhost, isGhostVisible, mountGhost as mountDragGhost, scheduleGhostPosition as scheduleDragGhostPosition, showGhost as showDragGhost, unmountGhost as unmountDragGhost } from "./ghost";
 import { collectPayloadStrings, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractUserFromAvatar, extractUserFromProfile, parseFromStrings, tryParseJson } from "./utils";
@@ -23,69 +23,18 @@ type DropEntity =
     | { kind: "channel"; id: string; guildId?: string; }
     | { kind: "guild"; id: string; };
 
-type DragifyInstance = {
-    isMessageInputEvent(event: DragEvent): boolean;
-    onDrop(event: React.DragEvent, channel?: Channel | null): void;
-    isAttachmentElement(target: HTMLElement | null): boolean;
-    isMessageInputElement(el: Element | null): boolean;
-    extractUserIdFromTarget(target: HTMLElement | null): string | null;
-    extractUserIdFromEvent(event: DragEvent): string | null;
-    extractAvatarUserIdFromTarget(target: HTMLElement | null): string | null;
-    extractChannelIdFromTarget(target: HTMLElement | null): { id: string; guildId?: string; } | null;
-    extractGuildIdFromTarget(target: HTMLElement): string | null;
-    onUserDragStart(event: DragEvent, user?: { id?: string; userId?: string; user?: { id?: string } }): void;
-    onChannelDragStart(event: DragEvent, channel?: Pick<Channel, "id" | "guild_id"> | { id: string; guildId?: string; }): void;
-    onGuildDragStart(event: DragEvent, guildId: string): void;
-    showGhost(entity: DropEntity, event?: DragEvent): void;
-};
-
-type ApiChannel = {
-    id: string;
-    type: number;
-    position?: number | null;
-};
-
-type ApiInvite = {
-    code?: string;
-    expires_at?: string | null;
-    max_uses?: number | null;
-    uses?: number | null;
-};
-
-type ChannelCollection = {
-    SELECTABLE?: Record<string, Channel | { channel?: Channel }>;
-};
-
-type ChannelStoreLike = {
-    getChannels?: (guildId: string) => ChannelCollection | null | undefined;
-};
-
-type ConstantsWithInsert = {
-    CkL?: { INSERT_TEXT?: string };
-};
-
-type DispatchToLastSubscribed = {
-    dispatchToLastSubscribed?: (action: string, payload: { plainText: string; rawText: string }) => void;
-};
-
-type DmChannelExtras = Channel & {
-    getRecipientId?: () => string | null | undefined;
-    recipientId?: string | null;
-    rawRecipients?: string[] | null;
-};
-
 const logger = new Logger("Dragify");
-let pluginInstance: DragifyInstance | null = null;
-let activeGuildDragId: string | null = null;
-let activeUserDragId: string | null = null;
-let activeDragEntity: DropEntity | null = null;
-let lastDropAt = 0;
-let lastHandledDrop: { at: number; key: string; } = { at: 0, key: "" };
-let lastDragEventAt = 0;
-let guildGhostCleanupTimer: number | null = null;
-let dragifyActive = false;
-let dragStateWatchdog: number | null = null;
-let dragSourceIsInput = false;
+let pluginInstance: any = null;
+let activeGuildDragId: any = null;
+let activeUserDragId: any = null;
+let activeDragEntity: any = null;
+let lastDropAt: any = 0;
+let lastHandledDrop: any = { at: 0, key: "" };
+let lastDragEventAt: any = 0;
+let guildGhostCleanupTimer: any = null;
+let dragifyActive: any = false;
+let dragStateWatchdog: any = null;
+let dragSourceIsInput: any = false;
 const dropDedupeWindowMs = 150;
 
 function shouldIgnoreDrop(key: string): boolean {
@@ -177,7 +126,7 @@ function setDragifyDataTransfer(dataTransfer: DataTransfer | null, payload: stri
 }
 
 function hasDragifyTransfer(dataTransfer?: DataTransfer | null) {
-    return Boolean(dataTransfer?.types?.includes("application/dragify"));
+    return dataTransfer?.types?.includes("application/dragify");
 }
 const inviteCache = new Map<string, { code: string; expiresAt: number | null; maxUses: number | null; uses: number | null; }>();
 
@@ -192,40 +141,39 @@ export default definePlugin({
         {
             find: "location:\"VoiceUser\"",
             replacement: {
-                match: /"data-dnd-name":(\i)\.name,/,
+                match: /(?<=previewIsOpen:.{0,100})"data-dnd-name":(\i)\.name,/,
                 replace: "$&\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].user),"
             }
         },
-        // Voice channel rows (guild sidebar)
         {
             find: "tutorialId:\"voice-conversations\"",
-            replacement: {
-                match: /iconClassName:(\i\(\)\(\{[^}]{0,200}\}\)),hasActiveEvent:(\i),channel:(\i),/,
-                replace: "iconClassName:$1,hasActiveEvent:$2,draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:$3.id,guild_id:$3.guild_id}),channel:$3,"
-            }
-        },
-        // Voice channel rows (guild sidebar fallback - li wrapper)
-        {
-            find: "tutorialId:\"voice-conversations\"",
-            replacement: {
-                match: /("data-dnd-name":(\i)\.name),children:\[/,
-                replace: "$1,draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:$2.id,guild_id:$2.guild_id}),children:["
-            }
+            replacement: [
+                // Voice channel rows (guild sidebar)
+                {
+                    match: /(?<=this.getTooltipText\(\),.{0,100})iconClassName:/,
+                    replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:this?.props?.channel?.id,guild_id:this?.props?.channel?.guild_id}),$&"
+                },
+                // Voice channel rows (guild sidebar fallback - li wrapper)
+                {
+                    match: /(?<=getModeClass\(\),.{0,50})"data-dnd-name":(\i)\.name,children:\[/,
+                    replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:this?.props?.channel?.id,guild_id:this?.props?.channel?.guild_id}),$&"
+                }
+            ]
         },
         // Voice channel rows (alternate voice list implementation)
         {
             find: "handleClickChat",
             replacement: {
-                match: /"data-dnd-name":(\i)\.name,/,
-                replace: "$&draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:$1.id,guild_id:$1.guild_id}),"
+                match: /(?<=getModeClass\(\),.{0,50})"data-dnd-name":(\i)\.name,/,
+                replace: "$&draggable:!0,onDragStart:t=>$self.onChannelDragStart(t,{id:this?.props?.channel?.id,guild_id:this?.props?.channel?.guild_id}),"
             }
         },
         // Thread rows in channel list (sidebar thread items)
         {
             find: "__invalid_threadMainContent",
             replacement: {
-                match: /className:(\i\.\i),onClick:(\i),"aria-label":/,
-                replace: "className:$1,draggable:!0,onDragStart:e=>$self.onChannelDragStart(e),onClick:$2,\"aria-label\":"
+                match: /className:\i\.\i,onClick:\i,"aria-label":(?=.{0,100}__invalid_threadMainContent)/,
+                replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e),$&"
             }
         },
         // Thread rows in channel list (threaded child rows)
@@ -234,54 +182,54 @@ export default definePlugin({
         {
             find: "shouldShowThreadsPopout",
             replacement: {
-                match: /"data-dnd-name":(\i)\.name,/,
-                replace: "$&draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:$1.id,guild_id:$1.guild_id}),"
+                match: /(?<=getClassName\(\).{0,50})"data-dnd-name":(\i)\.name,/,
+                replace: "$&draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:this?.props?.channel?.id,guild_id:this?.props?.channel?.guild_id}),"
             }
         },
         // Thread rows (active threads popout)
         {
-            find: "isForumPost()?e.shiftKey:!e.shiftKey",
+            find: "POPOUT)},children:",
             replacement: {
-                match: /(className:\i\.\i,)onClick:(\i)=>\{\(0,(\i)\.JA\)\((\i),/,
-                replace: "$1draggable:!0,onDragStart:$2=>$self.onChannelDragStart($2,{id:$4.id,guild_id:$4.guild_id}),onClick:$2=>{(0,$3.JA)($4,"
+                match: /(?<=getUser\(\i\.ownerId\).{0,100})className:\i\.\i,onClick:\i=>\{\(0,\i\.\i\)\((\i),/,
+                replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:arguments[0]?.thread?.id,guild_id:arguments[0]?.thread?.guild_id}),$&"
             }
         },
         // Member list items (server member list)
         {
             find: "MemberListItem",
             replacement: {
-                match: /onContextMenu:\i,(?=onMouseEnter:)/,
+                match: /(?<=useRawTargetDimensions.{0,250})onContextMenu:\i,(?=onMouseEnter:)/,
                 replace: "$&draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].user?.id}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,"
             }
         },
         // Chat usernames
         {
-            find: "[N.IW]:\"username\"",
+            find: ']="BADGES"',
             replacement: {
-                match: /onClick:(\i),onContextMenu:(\i),children:/,
-                replace: "onClick:$1,onContextMenu:$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].author),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].author.id,children:"
+                match: /(?<=textDecorationColor:null.{0,250})(onClick:\i,onContextMenu:\i,)(?=children:)/,
+                replace: "$1draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].author),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].author.id,"
             }
         },
         // Call avatars (DM/group call tiles)
         {
-            find: "children:(0,r.jsxs)(d.sqX,{\"aria-label\":",
+            find: ".VOICE_CHANNEL_TILE,children:",
             replacement: {
-                match: /className:(\i)\.(\i),onDoubleClick:(\i),onContextMenu:(\i)=>/,
-                replace: "className:$1.$2,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].participantUserId}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].participantUserId,onDoubleClick:$3,onContextMenu:$4=>"
+                match: /(?<=\.VOICE_USER,.{0,250})className:\i\.\i,onDoubleClick:\i,/,
+                replace: "draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].participantUserId}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].participantUserId,$&"
             }
         },
         // DM list entries (private channel rows)
         {
             find: "PrivateChannel.renderAvatar: Invalid prop configuration - no user or channel",
             replacement: {
-                match: /className:\i\.nf,(?="aria-label":)/,
+                match: /\.CHANNEL\(\i\.\i,\i\.\i\),(?=.{0,150}\.isMultiUserDM\(\))/,
                 replace: "$&draggable:!0,onDragStart:e=>$self.onDmDragStart(e,arguments[0].channel),"
             }
         },
         {
             find: "[aria-owns=folder-items-",
             replacement: {
-                match: /"data-dnd-name":(\i)\.name,(?="data-drop-hovering":)/,
+                match: /"data-dnd-name":(\i)\.name,(?="data-drop-hovering".{0,100}formatToPlainString\()/,
                 replace: "$&draggable:!0,onDragStart:e=>$self.onGuildDragStart(e,$1.id),"
             }
         },
@@ -307,7 +255,7 @@ export default definePlugin({
         if (!resolvedChannel) return;
 
         if (dragifyData) {
-            const parsed = tryParseJson<{ kind?: string; id?: string; guildId?: string }>(dragifyData);
+            const parsed = tryParseJson<{ kind?: string; id?: string; guildId?: string; }>(dragifyData);
             if (parsed?.kind && parsed.id) {
                 let fromDragify: DropEntity | null = null;
                 switch (parsed.kind) {
@@ -416,13 +364,13 @@ export default definePlugin({
         }
 
         try {
-            const maxAge = Number(settings.store.inviteExpireAfter ?? 0);
-            const maxUses = Number(settings.store.inviteMaxUses ?? 0);
+            const maxAge = settings.store.inviteExpireAfter ?? 0;
+            const maxUses = settings.store.inviteMaxUses ?? 0;
             const { body } = await RestAPI.post({
                 url: `/channels/${inviteChannelId}/invites`,
                 body: {
-                    max_age: Number.isFinite(maxAge) ? maxAge : 0,
-                    max_uses: Number.isFinite(maxUses) ? maxUses : 0,
+                    max_age: maxAge || 0,
+                    max_uses: maxUses || 0,
                     temporary: settings.store.inviteTemporaryMembership,
                     unique: true,
                 },
@@ -449,8 +397,8 @@ export default definePlugin({
             const { body } = await RestAPI.get({ url: `/guilds/${guildId}/channels` });
             if (!Array.isArray(body)) return null;
 
-            const candidates = (body as ApiChannel[])
-                .filter((ch): ch is ApiChannel => Boolean(ch && typeof ch.id === "string"))
+            const candidates = body
+                .filter(ch => Boolean(ch && typeof ch.id === "string"))
                 .filter(ch => {
                     const { type } = ch;
                     return type === ChannelType.GUILD_TEXT
@@ -478,7 +426,7 @@ export default definePlugin({
             if (!Array.isArray(body)) return null;
 
             const now = Date.now();
-            const invite = (body as ApiInvite[]).find(inv => {
+            const invite = body.find(inv => {
                 const expiresAt = inv.expires_at ? Date.parse(inv.expires_at) : null;
                 const maxUsesRaw = inv.max_uses ?? null;
                 const maxUses = maxUsesRaw === 0 ? null : maxUsesRaw;
@@ -530,13 +478,13 @@ export default definePlugin({
             .map(e => e.channel)
             .filter(Boolean) as Channel[];
         const selectableCollection = (() => {
-            const collection = (GuildChannelStore as unknown as ChannelStoreLike).getChannels?.(guildId);
+            const collection = GuildChannelStore.getChannels(guildId);
             if (!collection?.SELECTABLE) return [] as Channel[];
 
             const result: Channel[] = [];
             for (const entry of Object.values(collection.SELECTABLE)) {
                 const channel = entry && typeof entry === "object" && "channel" in entry
-                    ? (entry as { channel?: Channel | null }).channel
+                    ? (entry as { channel?: Channel | null; }).channel
                     : (entry as Channel | null | undefined);
                 if (channel) result.push(channel);
             }
@@ -565,24 +513,18 @@ export default definePlugin({
 
     canCreateInvite(channel?: Channel | null): channel is Channel {
         if (!channel || !channel.guild_id) return false;
-        if (channel.type === ChannelType.DM || channel.type === ChannelType.GROUP_DM) return false;
+        if (channel.isDM() || channel.isGroupDM() || channel.isMultiUserDM()) return false;
         if (channel.type === ChannelType.GUILD_CATEGORY) return false;
-        if (typeof channel.isThread === "function" && channel.isThread()) return false;
+        if (channel.isThread()) return false;
         return PermissionStore.can(PermissionsBits.CREATE_INSTANT_INVITE, channel);
     },
 
     insertText(channelId: string, text: string, options?: { removeUnknownUser?: boolean; }) {
-        const insertAction = (Constants as ConstantsWithInsert)?.CkL?.INSERT_TEXT ?? "INSERT_TEXT";
-        const dispatcher = ComponentDispatch as DispatchToLastSubscribed;
-        if (dispatcher?.dispatchToLastSubscribed) {
-            dispatcher.dispatchToLastSubscribed(insertAction, { plainText: text, rawText: text });
-            return;
-        }
+        insertTextIntoChatInputBox(text);
 
         let existing = DraftStore.getDraft(channelId, DraftType.ChannelMessage) ?? "";
-        if (options?.removeUnknownUser) {
-            existing = existing.replace(/@unknown[- ]user/gi, "").trim();
-        }
+        if (options?.removeUnknownUser) existing = existing.replace(/@unknown[- ]user/gi, "").trim();
+
         const needsSpace = existing.length > 0 && !existing.endsWith(" ");
         const nextValue = needsSpace ? `${existing} ${text}` : `${existing}${text}`;
 
@@ -591,13 +533,14 @@ export default definePlugin({
         } else {
             DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
         }
+        !existing ? DraftActions.setDraft(channelId, nextValue, DraftType.ChannelMessage) : DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
     },
 
     onChannelDragStart(event: DragEvent, channel?: Pick<Channel, "id" | "guild_id"> | { id: string; guildId?: string; }) {
         if (activeUserDragId) return;
         const existingDragify = event.dataTransfer?.getData("application/dragify") ?? "";
         if (existingDragify) {
-            const parsed = tryParseJson<{ kind?: string }>(existingDragify);
+            const parsed = tryParseJson<{ kind?: string; }>(existingDragify);
             if (parsed?.kind === "user") return;
         }
         const targetEl = event.target as HTMLElement | null;
@@ -628,7 +571,7 @@ export default definePlugin({
         setDragifyDataTransfer(event.dataTransfer ?? null, payload);
     },
 
-    onUserDragStart(event: DragEvent, user?: { id: string; userId?: string; user?: { id: string } }) {
+    onUserDragStart(event: DragEvent, user?: { id: string; userId?: string; user?: { id: string; }; }) {
         if (this.isAttachmentElement(event.target as HTMLElement | null)) return;
         const searchTarget = event.target as HTMLElement | null;
         if (searchTarget?.closest) {
@@ -1149,7 +1092,7 @@ export default definePlugin({
 
         if (entity.kind === "channel") {
             const channel = ChannelStore.getChannel(entity.id);
-            const isThread = Boolean(channel && typeof channel.isThread === "function" && channel.isThread());
+            const isThread = channel.isThread();
             const isGroupDm = channel?.type === ChannelType.GROUP_DM;
             const channelName = isGroupDm
                 ? (channel?.name || this.getGroupDmDisplayName(channel))
@@ -1218,10 +1161,9 @@ export default definePlugin({
 
     getDmRecipientId(channel?: Channel | null): string | null {
         if (!channel) return null;
-        const channelExtras = channel as DmChannelExtras;
+        const channelExtras = channel;
         const raw =
-            channelExtras.getRecipientId?.()
-            ?? channelExtras.recipientId
+            channelExtras.getRecipientId()
             ?? channel.recipients?.[0]
             ?? channelExtras.rawRecipients?.[0]
             ?? null;
@@ -1231,7 +1173,7 @@ export default definePlugin({
     getGroupDmDisplayName(channel?: Channel | null): string | null {
         if (!channel || channel.type !== ChannelType.GROUP_DM) return null;
         const selfId = UserStore.getCurrentUser()?.id ?? null;
-        const channelExtras = channel as DmChannelExtras;
+        const channelExtras = channel;
         const recipients = (channel.recipients ?? channelExtras.rawRecipients ?? []).filter(Boolean) as string[];
         const names = recipients
             .filter(id => id !== selfId)

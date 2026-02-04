@@ -5,6 +5,8 @@
  */
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 import { findComponentByCodeLazy } from "@webpack";
 import { createRoot, React, useStateFromStores, VoiceStateStore } from "@webpack/common";
 
@@ -30,6 +32,8 @@ const ScreenArrowIcon = findComponentByCodeLazy("3V5Zm16") as React.ComponentTyp
     color?: string;
     colorClass?: string;
 }>;
+
+const cl = classNameFactory("vc-dragify");
 
 let ghostRoot: ReturnType<typeof createRoot> | null = null;
 let ghostContainer: HTMLDivElement | null = null;
@@ -97,7 +101,7 @@ export function showGhost(next: Omit<GhostState, "visible" | "x" | "y">, positio
 export function mountGhost() {
     if (ghostRoot || typeof document === "undefined") return;
     ghostContainer = document.createElement("div");
-    ghostContainer.className = "vc-dragify-ghost-root";
+    ghostContainer.className = cl("ghost-root");
     document.body.appendChild(ghostContainer);
     ghostRoot = createRoot(ghostContainer);
     ghostRoot.render(<DragGhost />);
@@ -131,47 +135,44 @@ const DragGhost = ErrorBoundary.wrap(() => {
             ? VoiceStateStore.getVoiceStateForUser(state.entityId)
             : null)
     );
-    const inVoice = Boolean(voiceState?.channelId);
-    const isMuted = Boolean(
-        voiceState
-        && (voiceState.selfMute || voiceState.mute || voiceState.selfDeaf || voiceState.deaf)
-    );
-    const isStreaming = Boolean(voiceState?.selfStream);
+    const inVoice = voiceState?.channelId;
+    const isMuted = voiceState && (voiceState.selfMute || voiceState.mute || voiceState.selfDeaf || voiceState.deaf);
+    const isStreaming = voiceState?.selfStream;
 
     if (!state.visible) return null;
 
     return (
         <div
-            className={`vc-dragify-ghost${state.exiting ? " vc-dragify-ghost-exit" : ""}`}
+            className={state.exiting ? cl("ghost") : cl("ghost-exit")}
             style={{ transform: `translate3d(${state.x}px, ${state.y}px, 0)` }}
         >
-            <div className="vc-dragify-card">
-                <div className="vc-dragify-icon">
+            <div className={cl("card")}>
+                <div className={cl("icon")}>
                     {state.iconUrl
-                        ? <img className="vc-dragify-icon-image" src={state.iconUrl} alt="" />
-                        : <span className="vc-dragify-icon-text">{state.symbol ?? "#"}</span>
+                        ? <img className={cl("icon-image")} src={state.iconUrl} alt="" />
+                        : <span className={cl("icon-text")}>{state.symbol ?? "#"}</span>
                     }
                 </div>
-                <div className="vc-dragify-body">
-                    <div className="vc-dragify-title-row">
-                        <div className="vc-dragify-title">{state.title}</div>
+                <div className={cl("body")}>
+                    <div className={cl("title-row")}>
+                        <div className={cl("title")}>{state.title}</div>
                         {state.kind === "user" && inVoice
                             ? (isMuted
-                                ? <VoiceMutedIcon className="vc-dragify-voice-icon vc-dragify-voice-icon-muted" />
-                                : <VoiceStateIcon className="vc-dragify-voice-icon" />)
+                                ? <VoiceMutedIcon className={classes(cl("voice-icon"), cl("voice-icon-muted"))} />
+                                : <VoiceStateIcon className={cl("voice-icon")} />)
                             : null}
                         {state.kind === "user" && inVoice && isStreaming
                             ? <ScreenArrowIcon
-                                className="vc-dragify-voice-icon vc-dragify-voice-icon-stream"
+                                className={classes(cl("voice-icon"), cl("voice-icon-stream"))}
                                 size={14}
                                 width={14}
                                 height={14}
                             />
                             : null}
                     </div>
-                    {state.subtitle && <div className="vc-dragify-subtitle">{state.subtitle}</div>}
+                    {state.subtitle && <div className={cl("subtitle")}>{state.subtitle}</div>}
                 </div>
-                <div className="vc-dragify-badge">{state.badge ?? state.kind}</div>
+                <div className={cl("badge")}>{state.badge ?? state.kind}</div>
             </div>
         </div>
     );
