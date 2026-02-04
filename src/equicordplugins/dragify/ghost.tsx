@@ -41,6 +41,15 @@ let ghostRaf: number | null = null;
 let ghostPendingPos: { x: number; y: number; } | null = null;
 let ghostHideTimer: number | null = null;
 
+function getGhostContainer(): HTMLDivElement | null {
+    if (typeof document === "undefined") return null;
+    if (ghostContainer) return ghostContainer;
+
+    ghostContainer = document.createElement("div");
+    ghostContainer.className = cl("ghost-container");
+    return ghostContainer;
+}
+
 let ghostState: GhostState = {
     visible: false,
     x: 0,
@@ -99,19 +108,42 @@ export function showGhost(next: Omit<GhostState, "visible" | "x" | "y">, positio
 }
 
 export function mountGhost() {
-    if (ghostRoot || typeof document === "undefined") return;
-    ghostContainer = document.createElement("div");
-    ghostContainer.className = cl("ghost-root");
-    document.body.appendChild(ghostContainer);
-    ghostRoot = createRoot(ghostContainer);
-    ghostRoot.render(<DragGhost />);
+    if (typeof document === "undefined") return;
+    const { body } = document;
+    if (!body) return;
+
+    const container = getGhostContainer();
+    if (!container) return;
+
+    if (ghostRoot) {
+        if (!container.isConnected) body.appendChild(container);
+        return;
+    }
+
+    if (!container.isConnected) body.appendChild(container);
+    ghostRoot = createRoot(container);
+    ghostRoot.render(
+        <div className={cl("ghost-root")}>
+            <ErrorBoundary noop>
+                <DragGhost />
+            </ErrorBoundary>
+        </div>
+    );
 }
 
 export function unmountGhost() {
-    if (ghostRoot) ghostRoot.unmount();
+    ghostRoot?.unmount();
     ghostRoot = null;
+
     ghostContainer?.remove();
     ghostContainer = null;
+
+    if (ghostRaf !== null) {
+        cancelAnimationFrame(ghostRaf);
+        ghostRaf = null;
+    }
+    ghostPendingPos = null;
+
     if (ghostHideTimer !== null) {
         clearTimeout(ghostHideTimer);
         ghostHideTimer = null;
@@ -119,7 +151,7 @@ export function unmountGhost() {
     setGhostState({ visible: false, exiting: false });
 }
 
-const DragGhost = ErrorBoundary.wrap(() => {
+const DragGhost = () => {
     const [state, setState] = React.useState(ghostState);
     React.useEffect(() => {
         const listener = () => setState({ ...ghostState });
@@ -176,7 +208,7 @@ const DragGhost = ErrorBoundary.wrap(() => {
             </div>
         </div>
     );
-}, { noop: true });
+};
 
 function VoiceStateIcon({ className, size = 14 }: { className?: string; size?: number; }) {
     return (
