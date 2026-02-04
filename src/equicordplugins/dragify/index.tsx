@@ -241,7 +241,7 @@ export default definePlugin({
         if (!dataTransfer || dataTransfer.files?.length) return;
 
         const dragifyData = dataTransfer.getData("application/dragify");
-        const hasActiveEntity = Boolean(activeDragEntity || activeUserDragId || activeGuildDragId);
+        const hasActiveEntity = activeDragEntity || activeUserDragId || activeGuildDragId;
         if (dragifyData || hasActiveEntity) {
             lastDropAt = Date.now();
             event.preventDefault();
@@ -330,7 +330,8 @@ export default definePlugin({
 
     formatChannel(channelId: string, guildId?: string): string | null {
         const channel = ChannelStore.getChannel(channelId);
-        if (channel?.type === ChannelType.GROUP_DM) {
+        if (!channel) return null;
+        if (channel.isGroupDM() || channel.isMultiUserDM()) {
             return settings.store.userOutput === "id"
                 ? channelId
                 : `https://discord.com/channels/@me/${channelId}`;
@@ -398,7 +399,7 @@ export default definePlugin({
             if (!Array.isArray(body)) return null;
 
             const candidates = body
-                .filter(ch => Boolean(ch && typeof ch.id === "string"))
+                .filter(ch => ch && ch?.id)
                 .filter(ch => {
                     const { type } = ch;
                     return type === ChannelType.GUILD_TEXT
@@ -479,13 +480,11 @@ export default definePlugin({
             .filter(Boolean) as Channel[];
         const selectableCollection = (() => {
             const collection = GuildChannelStore.getChannels(guildId);
-            if (!collection?.SELECTABLE) return [] as Channel[];
+            if (!collection?.SELECTABLE) return [];
 
             const result: Channel[] = [];
             for (const entry of Object.values(collection.SELECTABLE)) {
-                const channel = entry && typeof entry === "object" && "channel" in entry
-                    ? (entry as { channel?: Channel | null; }).channel
-                    : (entry as Channel | null | undefined);
+                const channel = entry && entry?.channel ? entry.channel : entry;
                 if (channel) result.push(channel);
             }
             return result;
@@ -514,7 +513,7 @@ export default definePlugin({
     canCreateInvite(channel?: Channel | null): channel is Channel {
         if (!channel || !channel.guild_id) return false;
         if (channel.isDM() || channel.isGroupDM() || channel.isMultiUserDM()) return false;
-        if (channel.type === ChannelType.GUILD_CATEGORY) return false;
+        if (channel.isCategory()) return false;
         if (channel.isThread()) return false;
         return PermissionStore.can(PermissionsBits.CREATE_INSTANT_INVITE, channel);
     },
@@ -528,11 +527,6 @@ export default definePlugin({
         const needsSpace = existing.length > 0 && !existing.endsWith(" ");
         const nextValue = needsSpace ? `${existing} ${text}` : `${existing}${text}`;
 
-        if (!existing) {
-            DraftActions.setDraft(channelId, nextValue, DraftType.ChannelMessage);
-        } else {
-            DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
-        }
         !existing ? DraftActions.setDraft(channelId, nextValue, DraftType.ChannelMessage) : DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
     },
 
@@ -548,14 +542,12 @@ export default definePlugin({
 
         const targetResolved = this.extractChannelIdFromTarget(event.target as HTMLElement | null);
         const resolved = channel ?? targetResolved;
-        const channelId = resolved?.id ?? targetResolved?.id;
-        if (!channelId) return;
+        if (!resolved?.id) return;
 
-        const channelObj = ChannelStore.getChannel(channelId);
+        const channelObj = ChannelStore.getChannel(resolved.id);
         const resolvedGuildId = resolved ? ("guild_id" in resolved ? resolved.guild_id : resolved.guildId) : undefined;
         const guildId = resolvedGuildId ?? targetResolved?.guildId ?? channelObj?.guild_id;
-        const isDirectMessage = channelObj?.type === ChannelType.DM
-            || (channelObj?.isDM?.() && channelObj?.type !== ChannelType.GROUP_DM);
+        const isDirectMessage = channelObj.isDM();
         if (isDirectMessage) {
             const recipientId = this.getDmRecipientId(channelObj);
             if (recipientId) {
@@ -563,9 +555,9 @@ export default definePlugin({
                 return;
             }
         }
-        this.showGhost({ kind: "channel", id: channelId, guildId }, event);
-        const payload = JSON.stringify({ kind: "channel", id: channelId, guildId });
-        activeDragEntity = { kind: "channel", id: channelId, guildId };
+        this.showGhost({ kind: "channel", id: channelObj.id, guildId }, event);
+        const payload = JSON.stringify({ kind: "channel", id: channelObj.id, guildId });
+        activeDragEntity = { kind: "channel", id: channelObj.id, guildId };
         dragifyActive = true;
         lastDragEventAt = Date.now();
         setDragifyDataTransfer(event.dataTransfer ?? null, payload);
@@ -618,7 +610,7 @@ export default definePlugin({
             if (targetChannel?.id) resolvedChannel = ChannelStore.getChannel(targetChannel.id) ?? null;
         }
         if (!resolvedChannel) return;
-        if (resolvedChannel.type !== ChannelType.GROUP_DM) {
+        if (!resolvedChannel.isGroupDM() || !resolvedChannel.isMultiUserDM()) {
             const recipientId = this.getDmRecipientId(resolvedChannel);
             if (recipientId) {
                 this.onUserDragStart(event, { id: recipientId });
@@ -690,7 +682,7 @@ export default definePlugin({
         if (dragSourceIsInput) return;
         if (event.dataTransfer?.files?.length) return;
         const hasActiveGuildDrag = activeGuildDragId !== null;
-        const hasActiveEntity = Boolean(activeDragEntity || activeUserDragId);
+        const hasActiveEntity = activeDragEntity || activeUserDragId;
         const shouldHandle = hasActiveGuildDrag || hasActiveEntity || dragifyActive || hasDragifyTransfer(event.dataTransfer);
         if (!shouldHandle) return;
         event.preventDefault();
@@ -718,7 +710,7 @@ export default definePlugin({
         lastDropAt = Date.now();
         event.preventDefault();
         event.stopPropagation();
-        inst.onDrop(event as unknown as React.DragEvent, channel);
+        inst.onDrop(event, channel);
         hideDragGhost();
     },
 
@@ -739,7 +731,7 @@ export default definePlugin({
         for (const entry of path) {
             const el = entry as Element | null;
             if (!el) continue;
-            if (inst.isAttachmentElement(el as HTMLElement | null)) return;
+            if (inst.isAttachmentElement(el)) return;
             if (inst.isMessageInputElement(el)) {
                 clearDragState();
                 dragSourceIsInput = true;
@@ -751,7 +743,7 @@ export default definePlugin({
             for (const entry of path) {
                 const el = entry as HTMLElement | null;
                 if (!el) continue;
-                const userTarget = el.closest?.("[data-dragify-user]") as HTMLElement | null;
+                const userTarget = el.closest?.("[data-dragify-user]");
                 if (!userTarget) continue;
                 const userId = inst.extractUserIdFromTarget(userTarget);
                 if (userId) {
@@ -761,7 +753,7 @@ export default definePlugin({
             }
         }
 
-        const authorContainer = target.closest?.("[data-author-id]") as HTMLElement | null;
+        const authorContainer = target.closest?.("[data-author-id]");
         const authorId = authorContainer?.getAttribute?.("data-author-id") ?? null;
         if (authorId && target.getAttribute?.("data-text") && !hasDragify) {
             inst.onUserDragStart(event, { id: authorId });
@@ -769,7 +761,7 @@ export default definePlugin({
         }
 
         if (!hasDragify) {
-            const dragifyTarget = target.closest?.("[data-dragify-user]") as HTMLElement | null;
+            const dragifyTarget = target.closest?.("[data-dragify-user]");
             if (dragifyTarget) {
                 const userIdFromTarget = inst.extractUserIdFromEvent(event) ?? inst.extractUserIdFromTarget(dragifyTarget);
                 if (userIdFromTarget) {
@@ -823,7 +815,7 @@ export default definePlugin({
     },
     globalDragMove: (event: DragEvent | MouseEvent) => {
         if (!isGhostVisible()) return;
-        if (typeof event.clientX !== "number" || typeof event.clientY !== "number") return;
+        if (event?.clientX && event?.clientY) return;
         if (event instanceof DragEvent) {
             lastDragEventAt = Date.now();
             if (activeGuildDragId !== null || activeDragEntity?.kind === "guild") {
@@ -850,7 +842,7 @@ export default definePlugin({
             if (settings.store.allowChatBodyDrop && this.isChatBodyElement(el)) return true;
         }
 
-        if (typeof document !== "undefined" && typeof event.clientX === "number" && typeof event.clientY === "number") {
+        if (document && event?.clientX && event?.clientY) {
             const elements = document.elementsFromPoint?.(event.clientX, event.clientY);
             if (elements && elements.length) {
                 for (const el of elements) {
@@ -935,7 +927,7 @@ export default definePlugin({
     },
 
     extractChannelIdFromTarget(target: HTMLElement | null): { id: string; guildId?: string; } | null {
-        let el: HTMLElement | null = target;
+        let el = target;
         while (el) {
             const listId = el.getAttribute("data-list-id") ?? "";
             const rawId = el.getAttribute("data-list-item-id") ?? "";
@@ -994,8 +986,9 @@ export default definePlugin({
             if (listCandidate) {
                 if (UserStore.getUser(listCandidate)) return listCandidate;
                 const channel = ChannelStore.getChannel(listCandidate);
-                if (channel?.type === ChannelType.GROUP_DM) return null;
-                if (channel?.isDM?.() || channel?.type === ChannelType.DM) {
+                if (!channel) return null;
+                if (channel.isGroupDM() || channel.isMultiUserDM()) return null;
+                if (channel.isDM()) {
                     return this.getDmRecipientId(channel);
                 }
             }
@@ -1075,37 +1068,33 @@ export default definePlugin({
     showGhost(entity: DropEntity, event?: DragEvent) {
         const ghost = this.buildGhost(entity);
         if (!ghost) return;
-        const position = event && typeof event.clientX === "number" && typeof event.clientY === "number"
-            ? { x: event.clientX + 16, y: event.clientY + 20 }
-            : undefined;
+        const position = event && event?.clientX && event?.clientY ? { x: event.clientX + 16, y: event.clientY + 20 } : undefined;
         showDragGhost({ ...ghost, entityId: entity.id }, position);
     },
 
     buildGhost(entity: DropEntity): Omit<GhostState, "visible" | "x" | "y"> | null {
         if (entity.kind === "user") {
             const user = UserStore.getUser(entity.id);
-            const title = user?.globalName ?? user?.username ?? "Unknown user";
-            const subtitle = user?.username ? `@${user.username}` : "User";
-            const iconUrl = user?.getAvatarURL?.(void 0, 80, true) ?? undefined;
+            if (!user) return null;
+            const title = user.globalName ?? user.username;
+            const subtitle = user.username ? `@${user.username}` : "User";
+            const iconUrl = user.getAvatarURL(void 0, 80, true) ?? undefined;
             return { kind: "user", title, subtitle, iconUrl, symbol: "@", badge: "user", entityId: entity.id, exiting: false };
         }
 
         if (entity.kind === "channel") {
             const channel = ChannelStore.getChannel(entity.id);
+            if (!channel) return null;
             const isThread = channel.isThread();
-            const isGroupDm = channel?.type === ChannelType.GROUP_DM;
-            const channelName = isGroupDm
-                ? (channel?.name || this.getGroupDmDisplayName(channel))
-                : channel?.name;
-            const title = channelName
-                ? `${isThread || isGroupDm ? "" : "#"}${channelName}`
-                : `${isThread || isGroupDm ? "" : "#"}${entity.id}`;
+            const isGroupDm = channel.type === ChannelType.GROUP_DM;
+            const channelName = this.getGroupDmDisplayName(channel) || channel.name;
+            const title = `${isThread || isGroupDm ? "" : "#"}${channelName}`;
             const guild = channel?.guild_id ? GuildStore.getGuild(channel.guild_id) : null;
             const subtitle = guild?.name ?? (entity.guildId ? "Server" : "Direct Messages");
             let iconUrl: string | undefined;
             if (guild?.icon) {
                 iconUrl = IconUtils.getGuildIconURL({ id: guild.id, icon: guild.icon, size: 64 }) ?? undefined;
-            } else if (channel?.type === ChannelType.GROUP_DM) {
+            } else if (channel.type === ChannelType.GROUP_DM) {
                 const channelIcon = IconUtils.getChannelIconURL?.({
                     id: channel.id,
                     icon: (channel as { icon?: string | null; }).icon ?? undefined,
@@ -1113,10 +1102,10 @@ export default definePlugin({
                 });
                 iconUrl = channelIcon ?? undefined;
             }
-            if (!iconUrl && (channel?.isDM?.() || channel?.type === ChannelType.DM || channel?.type === ChannelType.GROUP_DM)) {
+            if (!iconUrl && (channel.isDM() || channel?.type === ChannelType.DM || channel?.type === ChannelType.GROUP_DM)) {
                 const recipientId = this.getDmRecipientId(channel);
                 const recipient = recipientId ? UserStore.getUser(recipientId) : null;
-                iconUrl = recipient?.getAvatarURL?.(void 0, 80, true) ?? undefined;
+                iconUrl = recipient ? recipient.getAvatarURL(void 0, 80, true) : undefined;
             }
             let badge = "channel";
             if (channel) {
@@ -1162,19 +1151,17 @@ export default definePlugin({
     getDmRecipientId(channel?: Channel | null): string | null {
         if (!channel) return null;
         const channelExtras = channel;
-        const raw =
-            channelExtras.getRecipientId()
+        return channelExtras.getRecipientId()
             ?? channel.recipients?.[0]
             ?? channelExtras.rawRecipients?.[0]
             ?? null;
-        return typeof raw === "string" ? raw : null;
     },
 
     getGroupDmDisplayName(channel?: Channel | null): string | null {
         if (!channel || channel.type !== ChannelType.GROUP_DM) return null;
-        const selfId = UserStore.getCurrentUser()?.id ?? null;
-        const channelExtras = channel;
-        const recipients = (channel.recipients ?? channelExtras.rawRecipients ?? []).filter(Boolean) as string[];
+        const selfId = UserStore.getCurrentUser().id ?? null;
+        const recipients = (channel.recipients ?? channel.rawRecipients ?? []).filter(Boolean);
+        if (recipients.length === 0) return null;
         const names = recipients
             .filter(id => id !== selfId)
             .map(id => {
@@ -1184,7 +1171,7 @@ export default definePlugin({
                     ?? user?.username
                     ?? null;
             })
-            .filter(Boolean) as string[];
-        return names.length ? names.join(", ") : null;
+            .filter(Boolean);
+        return names.length > 1 ? names.join(", ") : null;
     },
 });
