@@ -1044,7 +1044,7 @@ export default definePlugin({
             }
         }
 
-        if (typeof document !== "undefined" && typeof event.clientX === "number" && typeof event.clientY === "number") {
+        if (document && event?.clientX && event?.clientY) {
             const elements = document.elementsFromPoint?.(event.clientX, event.clientY);
             if (elements && elements.length) {
                 for (const el of elements) {
