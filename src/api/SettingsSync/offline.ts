@@ -28,6 +28,22 @@ const toastFailure = (err: any) =>
 
 const logger = new Logger("SettingsSync:Offline", "#39b7e0");
 
+function deepMerge<T extends object>(target: T, source: T): T {
+    for (const key in source) {
+        const sourceVal = source[key];
+
+        if (sourceVal !== null && typeof sourceVal === "object" && !Array.isArray(sourceVal)) {
+            if (target[key] === null || target[key] === undefined || typeof target[key] !== "object" || Array.isArray(target[key])) {
+                target[key] = {} as any;
+            }
+            deepMerge(target[key] as object, sourceVal as object);
+        } else {
+            target[key] = sourceVal;
+        }
+    }
+    return target;
+}
+
 function isSafeObject(obj: any) {
     if (obj == null || typeof obj !== "object") return true;
 
@@ -60,8 +76,8 @@ export async function importSettings(data: string, type: BackupType = "all", clo
                 throw new Error("Invalid Settings. Plugin settings is required for this import try a different one.");
 
             if (parsed.settings) {
-                Object.assign(PlainSettings, parsed.settings);
-                await VencordNative.settings.set(parsed.settings);
+                deepMerge(PlainSettings, parsed.settings);
+                await VencordNative.settings.set(PlainSettings);
             }
             if (parsed.quickCss) await VencordNative.quickCss.set(parsed.quickCss);
             if (parsed.dataStore) await DataStore.setMany(parsed.dataStore);
@@ -70,8 +86,8 @@ export async function importSettings(data: string, type: BackupType = "all", clo
         case "plugins": {
             if (!parsed.settings) throw new Error("Plugin settings missing");
 
-            Object.assign(PlainSettings, parsed.settings);
-            await VencordNative.settings.set(parsed.settings);
+            deepMerge(PlainSettings, parsed.settings);
+            await VencordNative.settings.set(PlainSettings);
             break;
         }
         case "css": {

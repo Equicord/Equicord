@@ -195,13 +195,6 @@ export default definePlugin({
                 replace: ""
             }
         },
-        {
-            find: "JANK loaded src",
-            replacement: {
-                match: /console.log\("JANK loaded src "\.concat\(\i," as data URI or isImageLoaded"\)\),/,
-                replace: ""
-            }
-        },
         // Patches Discord generic logger function
         {
             find: '"file-only"!==',

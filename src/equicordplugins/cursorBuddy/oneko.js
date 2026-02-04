@@ -21,12 +21,6 @@ export default function oneko(options = {}) {
         outlineColor = "#000000",
     } = options;
 
-    const isReducedMotion =
-        window.matchMedia(`(prefers-reduced-motion: reduce)`) === true ||
-        window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
-
-    if (isReducedMotion) return;
-
     const nekoEl = document.createElement("div");
     let nekoPosX = 32;
     let nekoPosY = 32;

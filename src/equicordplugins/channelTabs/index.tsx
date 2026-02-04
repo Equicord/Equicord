@@ -98,7 +98,7 @@ export default definePlugin({
         },
         // ctrl click to open in new tab in search results
         {
-            find: "(this,\"handleMessageClick\"",
+            find: "__invalid_searchResultFocusRing",
             replacement: {
                 match: /(\i)\.stopPropagation.{0,50}(?=null!=(\i))/,
                 replace: "$&if ($1.ctrlKey) return $self.open($2);"

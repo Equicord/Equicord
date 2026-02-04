@@ -1,4 +1,4 @@
-import { FluxStore, Guild, User, Application, ApplicationInstallParams } from "..";
+import { FluxStore, Guild, User, Application, ApplicationInstallParams, ProfileEffect } from "..";
 import { ApplicationFlags, ApplicationIntegrationType } from "../../enums";
 
 export interface MutualFriend {
@@ -70,9 +70,11 @@ export interface UserProfileBase extends Pick<User, "banner"> {
      */
     badges: ProfileBadge[];
     bio: string | undefined;
+    collectibles: ProfileEffect[];
     popoutAnimationParticleType: string | null;
     profileEffectExpiresAt: number | Date | undefined;
     profileEffectId: undefined | string;
+    profileEffect: ProfileEffect;
     /**
      * often an empty string when not set
      */

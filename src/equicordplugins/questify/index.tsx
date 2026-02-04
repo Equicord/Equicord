@@ -1288,8 +1288,8 @@ export default definePlugin({
             // Allows in-progress Quests to still show.
             find: "QUESTS_BAR,questId",
             replacement: {
-                match: /return null==(\i)\?null:\(/,
-                replace: "return !$self.shouldHideQuestPopup($1)&&("
+                match: /(?=if\(null==(\i)\)return null;)(.{0,125}?quest:\i}\);return)/,
+                replace: "const hidePopup=$self.shouldHideQuestPopup($1);$2!hidePopup&&"
             }
         },
         {
@@ -1351,7 +1351,7 @@ export default definePlugin({
             ]
         },
         {
-            // MARK: TODO
+            // MARK: TODO 1
             //  - Cleanup once Discord rolls out the new mana select completely.
             //  - Also see anywhere DynamicDropdown is used for refactoring.
             //
@@ -1558,11 +1558,9 @@ export default definePlugin({
                 replace: "showPlaceholder:false"
             }
         },
+        // MARK: TODO 2 START
+        //  - Cleanup once Discord rolls out the new quest CTA refactor completely.
         {
-            // MARK: TODO
-            //  - Cleanup once Discord rolls out the new quest CTA refactor completely.
-            //  - See new entry point in 2nd patch group below.
-            //
             // Sets intervals to progress Play Game Quests in the background and patches some common click handlers.
             find: "IN_PROGRESS:if(",
             group: true,
@@ -1618,8 +1616,8 @@ export default definePlugin({
                     replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest);"
                 },
                 {
-                    match: /(?<="primary",onClick:\(\)=>{null==\i\|\|\i\(\),)/,
-                    replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&"
+                    match: /(?<=}\),)(null==\i\|\|\i\(\))/,
+                    replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&($1)"
                 },
                 {
                     match: /(?<=,text:)(?=\i)/,
@@ -1654,6 +1652,7 @@ export default definePlugin({
                 }
             ]
         },
+        // MARK: TODO 2 END
         {
             // Prevents the new Quests location from counting as part of the
             // DM button highlight logic while the Quest button is visible.

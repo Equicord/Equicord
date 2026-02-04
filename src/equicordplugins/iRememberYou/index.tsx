@@ -37,7 +37,7 @@ export default definePlugin({
             section: "EquicordIRememberYou",
             label: "IRememberYou",
             element: () => <DataUI plugin={this} usersCollection={data.usersCollection} />,
-            id: "IRememberYou"
+            id: "EquicordIRememberYou"
         }));
 
         settingsSectionMap.push(["EquicordIRememberYou", "equicord_i_remember_you"]);
@@ -57,9 +57,11 @@ export default definePlugin({
         const dataManager = this.dataManager as Data;
         const { customEntries, customSections } = SettingsPlugin;
         const entry = customEntries.findIndex(entry => entry.key === "equicord_i_remember_you");
-        const section = customSections.findIndex(section => section({} as any).id === "IRememberYou");
         if (entry !== -1) customEntries.splice(entry, 1);
+        const section = customSections.findIndex(section => section({} as any).id === "EquicordIRememberYou");
         if (section !== -1) customSections.splice(section, 1);
+        const map = settingsSectionMap.findIndex(entry => entry[1] === "equicord_i_remember_you");
+        if (map !== -1) settingsSectionMap.splice(map, 1);
 
         removeMessagePreSendListener(dataManager._onMessagePreSend_preSend);
         clearInterval(dataManager._storageAutoSaveProtocol_interval);

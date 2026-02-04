@@ -71,6 +71,16 @@ function openAboutWindow() {
         width
     });
 
+    aboutWindow.webContents.setWindowOpenHandler(({ url }) => {
+        shell.openExternal(url);
+        return { action: "deny" };
+    });
+
+    aboutWindow.webContents.on("will-navigate", (e, url) => {
+        e.preventDefault();
+        shell.openExternal(url);
+    });
+
     const aboutParams = aboutHtml
         .replaceAll("{{VERSION}}", VERSION)
         .replaceAll("{{GIT_HASH}}", gitHashShort);
@@ -117,7 +127,8 @@ export function patchTrayMenu(): void {
     const originalBuildFromTemplate = Menu.buildFromTemplate;
 
     Menu.buildFromTemplate = function (template: MenuItemConstructorOptions[]) {
-        if (isTrayMenu(template)) {
+        const alreadyPatched = template.some(item => item.label === "Equicord");
+        if (isTrayMenu(template) && !alreadyPatched) {
             const insertIndex = findInsertIndex(template);
             const equicordItems = createEquicordMenuItems();
             template.splice(insertIndex, 0, ...equicordItems);

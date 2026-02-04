@@ -21,6 +21,13 @@ const settings = definePluginSettings({
         default: 2,
         stickToMarkers: true,
     },
+    rejoinTimeout: {
+        type: OptionType.SLIDER,
+        description: "Don't attempt to rejoin after this many seconds have passed since disconnecting.",
+        markers: makeRange(5, 120, 5),
+        default: 30,
+        stickToMarkers: true,
+    },
     preventReconnectIfCallEnded: {
         type: OptionType.SELECT,
         description: "Do not reconnect if the call has ended or the voice channel is empty or does not exist.",
@@ -31,6 +38,11 @@ const settings = definePluginSettings({
             { label: "DMs and Servers", value: "both", default: true },
         ],
     },
+    applyOnlyToDms: {
+        type: OptionType.BOOLEAN,
+        description: "Only apply to DMs.",
+        default: false,
+    }
 });
 
 export default definePlugin({
@@ -41,9 +53,7 @@ export default definePlugin({
 
     flux: {
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: any[]; }) {
-            const myUserId = UserStore?.getCurrentUser?.()?.id;
-            if (!myUserId) return;
-
+            const myUserId = UserStore.getCurrentUser().id;
             const myState = voiceStates.find(s => s.userId === myUserId);
             if (!myState) return;
 
@@ -51,6 +61,7 @@ export default definePlugin({
                 const saved = {
                     guildId: myState.guildId ?? null,
                     channelId: myState.channelId,
+                    timestamp: Date.now(),
                 };
                 DataStore.set(DATASTORE_KEY, saved);
                 DataStore.set(DATASTORE_SESSION_KEY, true);
@@ -70,16 +81,29 @@ export default definePlugin({
                 const saved = await DataStore.get(DATASTORE_KEY);
                 if (!saved?.channelId) return;
 
+                const channel = ChannelStore.getChannel(saved.channelId);
+                const isDM = channel.isDM() || channel.isGroupDM() || channel.isMultiUserDM();
+                const myUserId = UserStore.getCurrentUser().id;
+                const myVoiceState = VoiceStateStore.getVoiceStateForUser(myUserId);
                 const preventionMode = settings.store.preventReconnectIfCallEnded;
-                if (preventionMode !== "none") {
-                    const channel = ChannelStore.getChannel(saved.channelId);
+                const timeoutMs = settings.store.rejoinTimeout * 1000;
 
+                if (saved.timestamp && Date.now() - saved.timestamp > timeoutMs) {
+                    DataStore.set(DATASTORE_SESSION_KEY, false);
+                    return;
+                }
+
+                if (settings.store.applyOnlyToDms && !isDM) {
+                    DataStore.set(DATASTORE_SESSION_KEY, false);
+                    return;
+                }
+
+                if (preventionMode !== "none") {
                     if (!channel) {
                         DataStore.set(DATASTORE_SESSION_KEY, false);
                         return;
                     }
 
-                    const isDM = !saved.guildId;
                     const shouldPrevent =
                         preventionMode === "both" ||
                         (preventionMode === "dms" && isDM) ||
@@ -96,6 +120,11 @@ export default definePlugin({
                             return;
                         }
                     }
+                }
+
+                if (myVoiceState?.channelId) {
+                    DataStore.set(DATASTORE_SESSION_KEY, false);
+                    return;
                 }
 
                 FluxDispatcher.dispatch({
