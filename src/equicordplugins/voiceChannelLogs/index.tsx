@@ -1,4 +1,10 @@
-
+// Authors: Bluscream, Cursor.AI
+// Created at 2025-10-05 18:00:43
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2024 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 import { sendBotMessage } from "@api/Commands";
 import { definePluginSettings } from "@api/Settings";
@@ -798,11 +804,11 @@ async function handleVoiceStateUpdate(voiceStates: VoiceStateChangeEvent[]) {
 }
 
 export default definePlugin({
-    name: "VoiceChannelLogs",
+    name: "Voice Channel Logs",
     description: "Logs voice channel joins/leaves to the associated text chat",
     authors: [
-        { name: "Bluscream", id: 331103316650393611n },
-        { name: "Antigravity AI", id: 0n },
+        { name: "Bluscream", id: 467777925790564352n },
+        { name: "Cursor.AI", id: 0n },
     ],
 
     settings,
