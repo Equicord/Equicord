@@ -541,11 +541,11 @@ const settings = definePluginSettings({
 });
 
 export default definePlugin({
-    name: "WaitForSlot",
+    name: "Voice Channel Wait For Slot",
     description:
         "Adds a 'Wait for Slot' button to voice channel context menus that waits until a slot becomes available. Supports multiple channels across multiple servers.",
     authors: [
-        { name: "Bluscream", id: 331103316650393611n },
+        { name: "Bluscream", id: 467777925790564352n },
         { name: "Antigravity AI", id: 0n },
     ],
 
