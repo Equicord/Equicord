@@ -642,7 +642,6 @@ export default definePlugin({
         const userId = rawUserId ? (extractSnowflakeFromString(rawUserId) ?? rawUserId) : null;
         if (!userId) return;
         const payload = JSON.stringify({ kind: "user", id: userId });
-        event.stopPropagation();
         activeUserDragId = userId;
         activeDragEntity = { kind: "user", id: userId };
         dragifyActive = true;
@@ -850,7 +849,6 @@ export default definePlugin({
         if (!guildId) return;
 
         if (!hasDragify) {
-            event.stopPropagation();
             event.dataTransfer.effectAllowed = "copyMove";
             suppressDefaultDragPreview(event);
             activeGuildDragId = guildId;
