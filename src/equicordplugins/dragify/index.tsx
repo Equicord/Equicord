@@ -157,7 +157,7 @@ function hasDragifyTransfer(dataTransfer?: DataTransfer | null) {
 }
 const inviteCache = new Map<string, { code: string; expiresAt: number | null; maxUses: number | null; uses: number | null; }>();
 
-const Dragify = definePlugin({
+export default definePlugin({
     name: "Dragify",
     description: "Drop users, channels, or servers into chat to insert mentions or invites.",
     authors: [EquicordDevs.justjxke],
@@ -1225,5 +1225,3 @@ const Dragify = definePlugin({
         return names.length > 1 ? names.join(", ") : null;
     },
 });
-
-export default Dragify;
