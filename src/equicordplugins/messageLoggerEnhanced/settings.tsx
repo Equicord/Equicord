@@ -283,14 +283,14 @@ export const settings = definePluginSettings({
         multiline: true,
     },
 
-    templateReference: {
+    replyTemplateReference: {
         type: OptionType.STRING,
-        description: "Variables available for the template:",
+        description: "Variables available for the reply template",
         default: "{sent:format} {sent_unix} {author_id} {author_username} {message_id} {channel_id} {guild_id} {message} {reply}",
         readonly: true,
         restartNeeded: false,
         onChange() {
-            settings.store.templateReference = settings.def.templateReference.default;
+            settings.store.replyTemplateReference = settings.def.replyTemplateReference.default;
         },
     }
 
