@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
+const DEFAULT_TEMPLATE = `<@{author_id}> [said](https://discord.com/channels/{guild_id}/{channel_id}/{message_id}) <t:{sent_unix}:R>:
+> {message}
+
+{reply}`;
+
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { OptionType } from "@utils/types";
@@ -263,5 +269,29 @@ export const settings = definePluginSettings({
                 Clear Logs
             </Button>
     },
+
+    enableReplyToDeleted: {
+        default: true,
+        type: OptionType.BOOLEAN,
+        description: "Enable replying to deleted messages by routing them through a custom template.",
+    },
+
+    replyTemplate: {
+        type: OptionType.STRING,
+        default: DEFAULT_TEMPLATE,
+        description: "Template for replying to deleted messages.",
+        multiline: true,
+    },
+
+    templateReference: {
+        type: OptionType.STRING,
+        description: "Variables available for the template:",
+        default: "{sent:format} {sent_unix} {author_id} {author_username} {message_id} {channel_id} {guild_id} {message} {reply}",
+        readonly: true,
+        restartNeeded: false,
+        onChange() {
+            settings.store.templateReference = settings.def.templateReference.default;
+        },
+    }
 
 });
