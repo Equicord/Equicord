@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "userId": {
+        "type": "string"
+      },
+      "nick": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "guildId": {
+        "type": "string"
+      },
+      "avatar": {
+        "type": "null"
+      },
+      "avatarDecoration": {
+        "type": "null"
+      },
+      "roles": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "colorString": {
+        "type": "string"
+      },
+      "colorStrings": {
+        "type": "object",
+        "properties": {
+          "primaryColor": {
+            "type": "string"
+          },
+          "secondaryColor": {
+            "type": "null"
+          },
+          "tertiaryColor": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "primaryColor"
+        ]
+      },
+      "colorRoleId": {
+        "type": "string"
+      },
+      "hoistRoleId": {
+        "type": "string"
+      },
+      "highestRoleId": {
+        "type": "string"
+      },
+      "premiumSince": {
+        "type": "null"
+      },
+      "isPending": {
+        "type": "boolean"
+      },
+      "joinedAt": {
+        "type": "string"
+      },
+      "communicationDisabledUntil": {
+        "type": "null"
+      },
+      "flags": {
+        "type": "integer"
+      },
+      "collectibles": {
+        "type": "null"
+      },
+      "displayNameStyles": {
+        "type": "null"
+      }
+    },
+    "required": [
+      "userId",
+      "nick",
+      "guildId",
+      "colorString",
+      "colorRoleId",
+      "hoistRoleId",
+      "highestRoleId",
+      "isPending",
+      "joinedAt",
+      "flags"
+    ]
+  },
+  "title": "Generated Schema",
+  "description": "JSON Schema generated from provided JSON data",
+  "examples": [
+    [
+      {
+        "userId": "467777925790564352",
+        "nick": "Bluscream",
+        "guildId": "747967102895390741",
+        "roles": [
+          "748258358624256131",
+          "1084614743806980228",
+          "896309806447611974",
+          "752594831704064202",
+          "1230622672250077204",
+          "976131416511381534"
+        ],
+        "colorString": "#3498db",
+        "colorStrings": {
+          "primaryColor": "#3498db"
+        },
+        "colorRoleId": "748258358624256131",
+        "hoistRoleId": "748258358624256131",
+        "highestRoleId": "748258358624256131",
+        "isPending": false,
+        "joinedAt": "2020-08-27T09:44:54.086000+00:00",
+        "flags": 0
+      }
+    ]
+  ]
+}

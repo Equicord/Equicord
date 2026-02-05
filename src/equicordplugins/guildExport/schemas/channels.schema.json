@@ -1,0 +1,455 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "4": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "comparator": {
+            "type": "integer"
+          },
+          "channel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "guild_id": {
+                "type": "null"
+              },
+              "permissionOverwrites_": {
+                "type": "object",
+                "properties": {}
+              }
+            },
+            "required": [
+              "id",
+              "type",
+              "name"
+            ]
+          }
+        },
+        "required": [
+          "comparator",
+          "channel"
+        ]
+      }
+    },
+    "id": {
+      "type": "string"
+    },
+    "SELECTABLE": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "object",
+            "properties": {
+              "flags_": {
+                "type": "integer"
+              },
+              "guild_id": {
+                "type": "string"
+              },
+              "iconEmoji": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "null"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "lastMessageId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lastPinTimestamp": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "nsfw_": {
+                "type": "boolean"
+              },
+              "parent_id": {
+                "type": "string"
+              },
+              "permissionOverwrites_": {
+                "type": "object",
+                "properties": {
+                  "896309806447611974": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "integer"
+                      },
+                      "allow": {
+                        "type": "string"
+                      },
+                      "deny": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "type",
+                      "allow",
+                      "deny"
+                    ]
+                  },
+                  "896440828266967090": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "integer"
+                      },
+                      "allow": {
+                        "type": "string"
+                      },
+                      "deny": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "type",
+                      "allow",
+                      "deny"
+                    ]
+                  },
+                  "985544722300932160": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "integer"
+                      },
+                      "allow": {
+                        "type": "string"
+                      },
+                      "deny": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "type",
+                      "allow",
+                      "deny"
+                    ]
+                  },
+                  "747967102895390741": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "integer"
+                      },
+                      "allow": {
+                        "type": "string"
+                      },
+                      "deny": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "type",
+                      "allow",
+                      "deny"
+                    ]
+                  }
+                },
+                "required": []
+              },
+              "position_": {
+                "type": "integer"
+              },
+              "rateLimitPerUser_": {
+                "type": "integer"
+              },
+              "topic_": {
+                "type": "null"
+              },
+              "type": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "flags_",
+              "guild_id",
+              "id",
+              "name",
+              "nsfw_",
+              "parent_id",
+              "position_",
+              "rateLimitPerUser_",
+              "type"
+            ]
+          },
+          "comparator": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "channel",
+          "comparator"
+        ]
+      }
+    },
+    "VOCAL": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "object",
+            "properties": {
+              "bitrate_": {
+                "type": "integer"
+              },
+              "flags_": {
+                "type": "integer"
+              },
+              "guild_id": {
+                "type": "string"
+              },
+              "iconEmoji": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "null"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "lastMessageId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "nsfw_": {
+                "type": "boolean"
+              },
+              "parent_id": {
+                "type": "string"
+              },
+              "permissionOverwrites_": {
+                "type": "object",
+                "properties": {
+                  "747967102895390741": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "integer"
+                      },
+                      "allow": {
+                        "type": "string"
+                      },
+                      "deny": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "type",
+                      "allow",
+                      "deny"
+                    ]
+                  }
+                },
+                "required": [
+                  "747967102895390741"
+                ]
+              },
+              "position_": {
+                "type": "integer"
+              },
+              "rateLimitPerUser_": {
+                "type": "integer"
+              },
+              "rtcRegion": {
+                "type": "null"
+              },
+              "type": {
+                "type": "integer"
+              },
+              "userLimit_": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "bitrate_",
+              "flags_",
+              "guild_id",
+              "id",
+              "name",
+              "nsfw_",
+              "parent_id",
+              "position_",
+              "rateLimitPerUser_",
+              "type",
+              "userLimit_"
+            ]
+          },
+          "comparator": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "channel",
+          "comparator"
+        ]
+      }
+    },
+    "count": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "count"
+  ],
+  "title": "Generated Schema",
+  "description": "JSON Schema generated from provided JSON data",
+  "examples": [
+    {
+      "4": [
+        {
+          "comparator": -1,
+          "channel": {
+            "id": "null",
+            "type": 4,
+            "name": "Uncategorized",
+            "guild_id": null
+          }
+        }
+      ],
+      "id": "747967102895390741",
+      "SELECTABLE": [
+        {
+          "channel": {
+            "flags_": 1,
+            "guild_id": "747967102895390741",
+            "iconEmoji": {
+              "name": "🤖"
+            },
+            "id": "896433099100016750",
+            "lastMessageId": "1468073249828114698",
+            "lastPinTimestamp": "2021-10-09T17:18:36+00:00",
+            "name": "bot-logs",
+            "nsfw_": false,
+            "parent_id": "1216821130342699078",
+            "permissionOverwrites_": {
+              "896309806447611974": {
+                "id": "896309806447611974",
+                "type": 0,
+                "allow": "1024",
+                "deny": "0"
+              },
+              "896440828266967090": {
+                "id": "896440828266967090",
+                "type": 0,
+                "allow": "515396455488",
+                "deny": "131072"
+              },
+              "985544722300932160": {
+                "id": "985544722300932160",
+                "type": 0,
+                "allow": "1024",
+                "deny": "0"
+              },
+              "747967102895390741": {
+                "id": "747967102895390741",
+                "type": 0,
+                "allow": "0",
+                "deny": "1024"
+              }
+            },
+            "position_": 0,
+            "rateLimitPerUser_": 0,
+            "type": 0
+          },
+          "comparator": 0
+        }
+      ],
+      "VOCAL": [
+        {
+          "channel": {
+            "bitrate_": 64000,
+            "flags_": 0,
+            "guild_id": "747967102895390741",
+            "iconEmoji": {
+              "name": "🎤"
+            },
+            "id": "838470186067165214",
+            "lastMessageId": "1463483893423411283",
+            "name": "voice",
+            "nsfw_": false,
+            "parent_id": "747967102895390742",
+            "permissionOverwrites_": {
+              "747967102895390741": {
+                "id": "747967102895390741",
+                "type": 0,
+                "allow": "103079332928",
+                "deny": "0"
+              }
+            },
+            "position_": 0,
+            "rateLimitPerUser_": 0,
+            "type": 2,
+            "userLimit_": 0
+          },
+          "comparator": 0
+        }
+      ],
+      "count": 486
+    }
+  ]
+}

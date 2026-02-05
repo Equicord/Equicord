@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "discriminator": {
+            "type": "string"
+          },
+          "public_flags": {
+            "type": "integer"
+          },
+          "flags": {
+            "type": "integer"
+          },
+          "banner": {
+            "type": "string"
+          },
+          "accent_color": {
+            "type": "integer"
+          },
+          "global_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "avatar_decoration_data": {
+            "type": "object"
+          },
+          "collectibles": {
+            "type": "object"
+          },
+          "display_name_styles": {
+            "type": "object"
+          },
+          "banner_color": {
+            "type": "string"
+          },
+          "clan": {
+            "type": "object"
+          },
+          "primary_guild": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "username",
+          "discriminator",
+          "public_flags",
+          "flags"
+        ]
+      },
+      "reason": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "user"
+    ]
+  },
+  "title": "Generated Schema",
+  "description": "JSON Schema generated from provided JSON data",
+  "examples": [
+    [
+      {
+        "user": {
+          "id": "113486901326921728",
+          "username": "omatamatic",
+          "avatar": "47685a866bd4b923896e2055c5acb074",
+          "discriminator": "0",
+          "public_flags": 0,
+          "flags": 0,
+          "global_name": "Omata"
+        },
+        "reason": "Suspicious or spam account"
+      }
+    ]
+  ]
+}

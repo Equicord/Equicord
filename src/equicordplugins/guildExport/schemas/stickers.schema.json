@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "tags": {
+        "type": "string"
+      },
+      "type": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "format_type": {
+        "type": "integer"
+      },
+      "guild_id": {
+        "type": "string"
+      },
+      "available": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "id",
+      "tags",
+      "type",
+      "name",
+      "format_type",
+      "guild_id",
+      "available"
+    ]
+  },
+  "title": "Generated Schema",
+  "description": "JSON Schema generated from provided JSON data",
+  "examples": [
+    [
+      {
+        "id": "1338988679401701386",
+        "tags": "1338965885645361332",
+        "type": 2,
+        "name": "Quarkbällchen",
+        "format_type": 1,
+        "guild_id": "1338957510744215574",
+        "available": true
+      }
+    ]
+  ]
+}

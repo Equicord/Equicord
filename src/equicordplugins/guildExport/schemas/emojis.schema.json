@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "guildId": {
+        "type": "string"
+      },
+      "id": {
+        "type": "string"
+      },
+      "animated": {
+        "type": "boolean"
+      },
+      "name": {
+        "type": "string"
+      },
+      "require_colons": {
+        "type": "boolean"
+      },
+      "available": {
+        "type": "boolean"
+      },
+      "roles": {
+        "type": "array",
+        "items": {}
+      },
+      "managed": {
+        "type": "boolean"
+      },
+      "type": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "guildId",
+      "id",
+      "animated",
+      "name",
+      "require_colons",
+      "available",
+      "managed",
+      "type"
+    ]
+  },
+  "title": "Generated Schema",
+  "description": "JSON Schema generated from provided JSON data",
+  "examples": [
+    [
+      {
+        "guildId": "747967102895390741",
+        "id": "951136945935888446",
+        "animated": true,
+        "name": "Approval",
+        "require_colons": true,
+        "available": true,
+        "managed": false,
+        "type": 1
+      }
+    ]
+  ]
+}

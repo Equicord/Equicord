@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Guild Roles Schema",
+  "description": "Schema for Discord guild roles export",
+  "patternProperties": {
+    "^[0-9]+$": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "guildId": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "string"
+        },
+        "mentionable": {
+          "type": "boolean"
+        },
+        "position": {
+          "type": "integer"
+        },
+        "color": {
+          "type": "integer"
+        },
+        "colorString": {
+          "type": "string"
+        },
+        "colors": {
+          "type": "object",
+          "properties": {
+            "primary_color": {
+              "type": "integer"
+            },
+            "secondary_color": {
+              "type": "integer"
+            },
+            "tertiary_color": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "primary_color"
+          ]
+        },
+        "colorStrings": {
+          "type": "object",
+          "properties": {
+            "primaryColor": {
+              "type": "string"
+            },
+            "secondaryColor": {
+              "type": "string"
+            },
+            "tertiaryColor": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "primaryColor"
+          ]
+        },
+        "hoist": {
+          "type": "boolean"
+        },
+        "managed": {
+          "type": "boolean"
+        },
+        "tags": {
+          "type": "object"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "unicodeEmoji": {
+          "type": "string"
+        },
+        "flags": {
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "guildId",
+        "permissions",
+        "mentionable",
+        "position",
+        "color",
+        "hoist",
+        "managed",
+        "flags"
+      ]
+    }
+  }
+}

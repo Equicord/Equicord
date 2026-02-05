@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "sound_id": {
+        "type": "string"
+      },
+      "volume": {
+        "type": "integer"
+      },
+      "emoji_id": {
+        "type": "string"
+      },
+      "emoji_name": {
+        "type": "string"
+      },
+      "guild_id": {
+        "type": "string"
+      },
+      "available": {
+        "type": "boolean"
+      },
+      "user_id": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "sound_id",
+      "volume",
+      "emoji_name",
+      "guild_id",
+      "available"
+    ]
+  },
+  "title": "Generated Schema",
+  "description": "JSON Schema generated from provided JSON data",
+  "examples": [
+    [
+      {
+        "name": "Potato",
+        "sound_id": "1344013167080243262",
+        "volume": 1,
+        "emoji_name": "🥔",
+        "guild_id": "1338957510744215574",
+        "available": true,
+        "user_id": "349973848239767554"
+      }
+    ]
+  ]
+}

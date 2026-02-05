@@ -1,0 +1,130 @@
+{
+"$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "description": {
+    "type": "string"
+    },
+    "ownerId": {
+      "type": "string"
+    },
+    "verificationLevel": {
+      "type": "integer"
+    },
+    "rulesChannelId": {
+      "type": "string"
+    },
+    "publicUpdatesChannelId": {
+      "type": "string"
+    },
+    "preferredLocale": {
+      "type": "string"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "vanityURLCode": {
+      "type": "string"
+    },
+    "nsfwLevel": {
+      "type": "integer"
+    },
+    "premiumTier": {
+      "type": "integer"
+    },
+    "premiumSubscriberCount": {
+      "type": "integer"
+    },
+    "totalMembers": {
+      "type": "integer"
+    },
+    "activeMembers": {
+        "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "ownerId",
+    "verificationLevel",
+    "preferredLocale",
+    "nsfwLevel",
+    "premiumTier",
+    "totalMembers"
+  ],
+  "title": "Generated Schema",
+  "description": "JSON Schema generated from provided JSON data",
+  "examples": [
+    {
+      "id": "747967102895390741",
+      "name": "Flatscreen to VR Modding Community",
+      "icon": "4ed9b9516ae3bb878c8e15f4ca089141",
+      "ownerId": "377193438866833408",
+      "verificationLevel": 2,
+      "rulesChannelId": "976580026751406090",
+      "publicUpdatesChannelId": "752883835368112148",
+      "preferredLocale": "en-US",
+      "features": [
+        "COMMUNITY_EXP_LARGE_GATED",
+        "THREADS_ENABLED",
+        "STAGE_CHANNEL_VIEWERS_150",
+        "CREATOR_MONETIZABLE_PROVISIONAL",
+        "TIERLESS_BOOSTING_SYSTEM_MESSAGE",
+        "VIDEO_BITRATE_ENHANCED",
+        "GUILD_ONBOARDING",
+        "VANITY_URL",
+        "BANNER",
+        "VIP_REGIONS",
+        "PREVIEW_ENABLED",
+        "MEMBER_VERIFICATION_GATE_ENABLED",
+        "AUTO_MODERATION",
+        "NEW_THREAD_PERMISSIONS",
+        "ANIMATED_ICON",
+        "WELCOME_SCREEN_ENABLED",
+        "ANIMATED_BANNER",
+        "PIN_PERMISSION_MIGRATION_COMPLETE",
+        "CHANNEL_ICON_EMOJIS_GENERATED",
+        "AUDIO_BITRATE_256_KBPS",
+        "VIDEO_QUALITY_720_60FPS",
+        "AUDIO_BITRATE_384_KBPS",
+        "CONSIDERED_EXTERNALLY_DISCOVERABLE",
+        "NEWS",
+        "VIDEO_QUALITY_1080_60FPS",
+        "PARTNERED",
+        "MAX_FILE_SIZE_100_MB",
+        "BYPASS_SLOWMODE_PERMISSION_MIGRATION_COMPLETE",
+        "GUILD_ONBOARDING_HAS_PROMPTS",
+        "TIERLESS_BOOSTING",
+        "GUILD_ONBOARDING_EVER_ENABLED",
+        "TEXT_IN_VOICE_ENABLED",
+        "SOUNDBOARD",
+        "AUDIO_BITRATE_128_KBPS",
+        "INVITE_SPLASH",
+        "CREATOR_ACCEPTED_NEW_TERMS",
+        "COMMUNITY",
+        "STAGE_CHANNEL_VIEWERS_300",
+        "ROLE_ICONS",
+        "MAX_FILE_SIZE_50_MB",
+        "STAGE_CHANNEL_VIEWERS_50",
+        "ENABLED_DISCOVERABLE_BEFORE"
+      ],
+      "vanityURLCode": "flat2vr",
+      "nsfwLevel": 0,
+      "premiumTier": 3,
+      "premiumSubscriberCount": 18,
+      "totalMembers": 148542
+    }
+  ]
+}
