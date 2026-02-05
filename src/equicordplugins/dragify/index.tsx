@@ -13,13 +13,28 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
-import { ChannelStore, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RelationshipStore, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
+import { ChannelStore, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, RelationshipStore, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
 
 import { type GhostState, hideGhost as hideDragGhost, isGhostVisible, mountGhost as mountDragGhost, scheduleGhostPosition as scheduleDragGhostPosition, showGhost as showDragGhost, unmountGhost as unmountDragGhost } from "./ghost";
 import { collectPayloadStrings, type DropEntity, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractUserFromAvatar, extractUserFromProfile, parseFromStrings, tryParseJson } from "./utils";
 
 const logger = new Logger("Dragify");
-let pluginInstance: typeof Dragify | null = null;
+type DragifyRuntime = {
+    onDrop(event: DragEvent, channel?: Channel | null): Promise<void>;
+    isMessageInputEvent(event: DragEvent): boolean;
+    isAttachmentElement(target: Element | null): boolean;
+    isMessageInputElement(el: Element | null): boolean;
+    extractUserIdFromTarget(target: Element | null): string | null;
+    extractUserIdFromEvent(event: DragEvent): string | null;
+    onUserDragStart(event: DragEvent, user?: { id: string; userId?: string; user?: { id: string; }; }): void;
+    extractAvatarUserIdFromTarget(target: HTMLElement | null): string | null;
+    extractChannelIdFromTarget(target: HTMLElement | null): { id: string; guildId?: string; } | null;
+    onChannelDragStart(event: DragEvent, channel?: Pick<Channel, "id" | "guild_id"> | { id: string; guildId?: string; }): void;
+    extractGuildIdFromTarget(target: HTMLElement): string | null;
+    showGhost(entity: DropEntity, event?: DragEvent): void;
+};
+
+let pluginInstance: DragifyRuntime | null = null;
 let activeGuildDragId: string | null = null;
 let activeUserDragId: string | null = null;
 let activeDragEntity: DropEntity | null = null;
@@ -247,7 +262,7 @@ const Dragify = definePlugin({
         },
     ],
 
-    async onDrop(event: React.DragEvent, channel?: Channel | null) {
+    async onDrop(event: DragEvent, channel?: Channel | null) {
         if (dragSourceIsInput) return;
         const { dataTransfer } = event;
         if (!dataTransfer || dataTransfer.files?.length) return;
@@ -891,7 +906,7 @@ const Dragify = definePlugin({
         return Boolean((el as HTMLElement).closest?.(selector));
     },
 
-    isAttachmentElement(target: HTMLElement | null): boolean {
+    isAttachmentElement(target: Element | null): boolean {
         let el: Element | null = target;
         while (el) {
             if (!(el instanceof HTMLElement)) {
@@ -984,7 +999,7 @@ const Dragify = definePlugin({
         return null;
     },
 
-    extractUserIdFromTarget(target: HTMLElement | null): string | null {
+    extractUserIdFromTarget(target: Element | null): string | null {
         let el: Element | null = target;
         while (el) {
             if (!(el instanceof HTMLElement)) {
