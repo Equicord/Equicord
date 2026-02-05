@@ -565,7 +565,7 @@ export default definePlugin({
             const needsSpace = existing.length > 0 && !existing.endsWith(" ");
             const nextValue = needsSpace ? `${existing} ${text}` : `${existing}${text}`;
 
-            !existing ? DraftActions.setDraft(channelId, nextValue, DraftType.ChannelMessage) : DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
+            !existing ? DraftActions.saveDraft(channelId, nextValue, DraftType.ChannelMessage) : DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
             insertedIntoDraft = true;
         } catch (error) {
             logger.error("Failed to update draft", error);
