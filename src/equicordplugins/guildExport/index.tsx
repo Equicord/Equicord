@@ -300,10 +300,10 @@ const GuildContextMenu: NavContextMenuPatchCallback = (children, { guild }) => {
 };
 
 export default definePlugin({
-    name: "GuildExport",
+    name: "Guild Export",
     description: "Export guild info, assets, and settings to a ZIP file.",
     authors: [
-        { name: "Bluscream", id: 331103316650393611n },
+        { name: "Bluscream", id: 467777925790564352n },
         { name: "Antigravity AI", id: 0n }
     ],
     settings,
