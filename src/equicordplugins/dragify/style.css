@@ -1,4 +1,4 @@
-.vc-dragify-ghost-root {
+.vc-dragify-ghost-container {
     position: fixed;
     inset: 0;
     pointer-events: none;

@@ -36,19 +36,10 @@ const ScreenArrowIcon = findComponentByCodeLazy("3V5Zm16") as React.ComponentTyp
 const cl = classNameFactory("vc-dragify-");
 
 let ghostRoot: ReturnType<typeof createRoot> | null = null;
-let ghostContainer: HTMLDivElement | null = null;
+let ghostMountNode: HTMLDivElement | null = null;
 let ghostRaf: number | null = null;
 let ghostPendingPos: { x: number; y: number; } | null = null;
 let ghostHideTimer: number | null = null;
-
-function getGhostContainer(): HTMLDivElement | null {
-    if (typeof document === "undefined") return null;
-    if (ghostContainer) return ghostContainer;
-
-    ghostContainer = document.createElement("div");
-    ghostContainer.className = cl("ghost-container");
-    return ghostContainer;
-}
 
 let ghostState: GhostState = {
     visible: false,
@@ -112,18 +103,17 @@ export function mountGhost() {
     const { body } = document;
     if (!body) return;
 
-    const container = getGhostContainer();
-    if (!container) return;
-
     if (ghostRoot) {
-        if (!container.isConnected) body.appendChild(container);
+        if (ghostMountNode && !ghostMountNode.isConnected) body.appendChild(ghostMountNode);
         return;
     }
 
-    if (!container.isConnected) body.appendChild(container);
-    ghostRoot = createRoot(container);
+    if (!ghostMountNode) ghostMountNode = document.createElement("div");
+    if (!ghostMountNode.isConnected) body.appendChild(ghostMountNode);
+
+    ghostRoot = createRoot(ghostMountNode);
     ghostRoot.render(
-        <div className={cl("ghost-root")}>
+        <div className={cl("ghost-container")}>
             <ErrorBoundary noop>
                 <DragGhost />
             </ErrorBoundary>
@@ -135,8 +125,8 @@ export function unmountGhost() {
     ghostRoot?.unmount();
     ghostRoot = null;
 
-    ghostContainer?.remove();
-    ghostContainer = null;
+    ghostMountNode?.remove();
+    ghostMountNode = null;
 
     if (ghostRaf !== null) {
         cancelAnimationFrame(ghostRaf);
