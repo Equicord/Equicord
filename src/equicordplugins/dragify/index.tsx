@@ -330,11 +330,13 @@ const Dragify = definePlugin({
                 clearDragState();
                 return;
             }
+            let inserted = false;
             if (entity.kind === "user") {
-                this.insertText(channel.id, text, { removeUnknownUser: true });
+                inserted = this.insertText(channel.id, text, { removeUnknownUser: true });
             } else {
-                this.insertText(channel.id, text);
+                inserted = this.insertText(channel.id, text);
             }
+            if (!inserted) throw new Error("Unable to insert drag content");
             clearDragState();
         } catch (error) {
             logger.error("Failed handling drop", error);
@@ -545,16 +547,31 @@ const Dragify = definePlugin({
         return PermissionStore.can(PermissionsBits.CREATE_INSTANT_INVITE, channel);
     },
 
-    insertText(channelId: string, text: string, options?: { removeUnknownUser?: boolean; }) {
-        insertTextIntoChatInputBox(text);
+    insertText(channelId: string, text: string, options?: { removeUnknownUser?: boolean; }): boolean {
+        let insertedIntoInput = false;
+        let insertedIntoDraft = false;
 
-        let existing = DraftStore.getDraft(channelId, DraftType.ChannelMessage) ?? "";
-        if (options?.removeUnknownUser) existing = existing.replace(/@unknown[- ]user/gi, "").trim();
+        try {
+            insertTextIntoChatInputBox(text);
+            insertedIntoInput = true;
+        } catch (error) {
+            logger.error("Failed to insert text into input", error);
+        }
 
-        const needsSpace = existing.length > 0 && !existing.endsWith(" ");
-        const nextValue = needsSpace ? `${existing} ${text}` : `${existing}${text}`;
+        try {
+            let existing = DraftStore.getDraft(channelId, DraftType.ChannelMessage) ?? "";
+            if (options?.removeUnknownUser) existing = existing.replace(/@unknown[- ]user/gi, "").trim();
 
-        !existing ? DraftActions.setDraft(channelId, nextValue, DraftType.ChannelMessage) : DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
+            const needsSpace = existing.length > 0 && !existing.endsWith(" ");
+            const nextValue = needsSpace ? `${existing} ${text}` : `${existing}${text}`;
+
+            !existing ? DraftActions.setDraft(channelId, nextValue, DraftType.ChannelMessage) : DraftActions.changeDraft(channelId, nextValue, DraftType.ChannelMessage);
+            insertedIntoDraft = true;
+        } catch (error) {
+            logger.error("Failed to update draft", error);
+        }
+
+        return insertedIntoInput || insertedIntoDraft;
     },
 
     onChannelDragStart(event: DragEvent, channel?: Pick<Channel, "id" | "guild_id"> | { id: string; guildId?: string; }) {
