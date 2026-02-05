@@ -8,7 +8,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import { findComponentByCodeLazy } from "@webpack";
-import { createRoot, React, useStateFromStores, VoiceStateStore } from "@webpack/common";
+import { createRoot, React, useEffect, useState, useStateFromStores, VoiceStateStore } from "@webpack/common";
 
 export type GhostState = {
     visible: boolean;
@@ -33,7 +33,7 @@ const ScreenArrowIcon = findComponentByCodeLazy("3V5Zm16") as React.ComponentTyp
     colorClass?: string;
 }>;
 
-const cl = classNameFactory("vc-dragify");
+const cl = classNameFactory("vc-dragify-");
 
 let ghostRoot: ReturnType<typeof createRoot> | null = null;
 let ghostContainer: HTMLDivElement | null = null;
@@ -152,8 +152,8 @@ export function unmountGhost() {
 }
 
 const DragGhost = () => {
-    const [state, setState] = React.useState(ghostState);
-    React.useEffect(() => {
+    const [state, setState] = useState(ghostState);
+    useEffect(() => {
         const listener = () => setState({ ...ghostState });
         ghostListeners.add(listener);
         return () => {
@@ -175,7 +175,7 @@ const DragGhost = () => {
 
     return (
         <div
-            className={state.exiting ? cl("ghost") : cl("ghost-exit")}
+            className={classes(cl("ghost"), state.exiting ? cl("ghost-exit") : "")}
             style={{ transform: `translate3d(${state.x}px, ${state.y}px, 0)` }}
         >
             <div className={cl("card")}>

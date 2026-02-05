@@ -11,7 +11,7 @@
     left: 0;
     pointer-events: none;
     color: var(--text-normal, #fff);
-    opacity: 0;
+    opacity: 1;
     animation: vc-dragify-fade-in 200ms ease-out forwards;
     will-change: transform;
 }
@@ -133,6 +133,17 @@
     }
 
     to {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vc-dragify-ghost {
+        animation: none;
+    }
+
+    .vc-dragify-ghost-exit {
+        animation: none;
         opacity: 0;
     }
 }

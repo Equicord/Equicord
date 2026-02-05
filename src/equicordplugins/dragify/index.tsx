@@ -16,26 +16,38 @@ import { ChannelType } from "@vencord/discord-types/enums";
 import { ChannelStore, DraftActions, DraftStore, DraftType, GuildChannelStore, GuildStore, IconUtils, PermissionsBits, PermissionStore, React, RelationshipStore, RestAPI, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
 
 import { type GhostState, hideGhost as hideDragGhost, isGhostVisible, mountGhost as mountDragGhost, scheduleGhostPosition as scheduleDragGhostPosition, showGhost as showDragGhost, unmountGhost as unmountDragGhost } from "./ghost";
-import { collectPayloadStrings, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractUserFromAvatar, extractUserFromProfile, parseFromStrings, tryParseJson } from "./utils";
-
-type DropEntity =
-    | { kind: "user"; id: string; }
-    | { kind: "channel"; id: string; guildId?: string; }
-    | { kind: "guild"; id: string; };
+import { collectPayloadStrings, type DropEntity, extractChannelFromUrl, extractChannelPath, extractSnowflakeFromString, extractUserFromAvatar, extractUserFromProfile, parseFromStrings, tryParseJson } from "./utils";
 
 const logger = new Logger("Dragify");
-let pluginInstance: any = null;
-let activeGuildDragId: any = null;
-let activeUserDragId: any = null;
-let activeDragEntity: any = null;
-let lastDropAt: any = 0;
-let lastHandledDrop: any = { at: 0, key: "" };
-let lastDragEventAt: any = 0;
-let guildGhostCleanupTimer: any = null;
-let dragifyActive: any = false;
-let dragStateWatchdog: any = null;
-let dragSourceIsInput: any = false;
+let pluginInstance: typeof Dragify | null = null;
+let activeGuildDragId: string | null = null;
+let activeUserDragId: string | null = null;
+let activeDragEntity: DropEntity | null = null;
+let lastDropAt = 0;
+let lastHandledDrop: { at: number; key: string; } = { at: 0, key: "" };
+let lastDragEventAt = 0;
+let guildGhostCleanupTimer: number | null = null;
+let dragifyActive = false;
+let dragStateWatchdog: number | null = null;
+let dragSourceIsInput = false;
 const dropDedupeWindowMs = 150;
+let transparentDragImage: HTMLCanvasElement | null = null;
+
+function getTransparentDragImage(): HTMLCanvasElement | null {
+    if (typeof document === "undefined") return null;
+    if (transparentDragImage) return transparentDragImage;
+    const canvas = document.createElement("canvas");
+    canvas.width = 1;
+    canvas.height = 1;
+    transparentDragImage = canvas;
+    return canvas;
+}
+
+function suppressDefaultDragPreview(event: DragEvent) {
+    const image = getTransparentDragImage();
+    if (!image || !event.dataTransfer?.setDragImage) return;
+    event.dataTransfer.setDragImage(image, 0, 0);
+}
 
 function shouldIgnoreDrop(key: string): boolean {
     const now = Date.now();
@@ -130,7 +142,7 @@ function hasDragifyTransfer(dataTransfer?: DataTransfer | null) {
 }
 const inviteCache = new Map<string, { code: string; expiresAt: number | null; maxUses: number | null; uses: number | null; }>();
 
-export default definePlugin({
+const Dragify = definePlugin({
     name: "Dragify",
     description: "Drop users, channels, or servers into chat to insert mentions or invites.",
     authors: [EquicordDevs.justjxke],
@@ -349,7 +361,7 @@ export default definePlugin({
 
         if (settings.store.reuseExistingInvites) {
             const cached = inviteCache.get(guildId);
-            if (cached && !this.isInviteExpired(cached)) return `https://discord.gg/${cached.code}`;
+            if (cached && cached.maxUses === null && !this.isInviteExpired(cached)) return `https://discord.gg/${cached.code}`;
             const reused = await this.fetchReusableInvite(guildId, inviteChannel ?? null);
             if (reused) return `https://discord.gg/${reused}`;
         }
@@ -370,8 +382,8 @@ export default definePlugin({
             const { body } = await RestAPI.post({
                 url: `/channels/${inviteChannelId}/invites`,
                 body: {
-                    max_age: maxAge || 0,
-                    max_uses: maxUses || 0,
+                    max_age: maxAge,
+                    max_uses: maxUses,
                     temporary: settings.store.inviteTemporaryMembership,
                     unique: true,
                 },
@@ -417,7 +429,7 @@ export default definePlugin({
 
     async fetchReusableInvite(guildId: string, inviteChannel: Channel | null): Promise<string | null> {
         const cached = inviteCache.get(guildId);
-        if (cached && !this.isInviteExpired(cached)) return cached.code;
+        if (cached && cached.maxUses === null && !this.isInviteExpired(cached)) return cached.code;
 
         try {
             const channelId = inviteChannel?.id ?? null;
@@ -541,10 +553,14 @@ export default definePlugin({
         if (targetEl?.closest?.("[data-dragify-user]")) return;
 
         const targetResolved = this.extractChannelIdFromTarget(event.target as HTMLElement | null);
-        const resolved = channel ?? targetResolved;
+        const resolved =
+            channel && "id" in channel && channel.id
+                ? channel
+                : targetResolved;
         if (!resolved?.id) return;
 
         const channelObj = ChannelStore.getChannel(resolved.id);
+        if (!channelObj) return;
         const resolvedGuildId = resolved ? ("guild_id" in resolved ? resolved.guild_id : resolved.guildId) : undefined;
         const guildId = resolvedGuildId ?? targetResolved?.guildId ?? channelObj?.guild_id;
         const isDirectMessage = channelObj.isDM();
@@ -555,6 +571,7 @@ export default definePlugin({
                 return;
             }
         }
+        suppressDefaultDragPreview(event);
         this.showGhost({ kind: "channel", id: channelObj.id, guildId }, event);
         const payload = JSON.stringify({ kind: "channel", id: channelObj.id, guildId });
         activeDragEntity = { kind: "channel", id: channelObj.id, guildId };
@@ -598,6 +615,7 @@ export default definePlugin({
         activeDragEntity = { kind: "user", id: userId };
         dragifyActive = true;
         lastDragEventAt = Date.now();
+        suppressDefaultDragPreview(event);
         this.showGhost({ kind: "user", id: userId }, event);
         setDragifyDataTransfer(event.dataTransfer ?? null, payload);
         event.dataTransfer?.setData("data-user-id", userId);
@@ -610,7 +628,8 @@ export default definePlugin({
             if (targetChannel?.id) resolvedChannel = ChannelStore.getChannel(targetChannel.id) ?? null;
         }
         if (!resolvedChannel) return;
-        if (!resolvedChannel.isGroupDM() || !resolvedChannel.isMultiUserDM()) {
+        const shouldDragChannel = resolvedChannel.isGroupDM() && resolvedChannel.isMultiUserDM();
+        if (!shouldDragChannel) {
             const recipientId = this.getDmRecipientId(resolvedChannel);
             if (recipientId) {
                 this.onUserDragStart(event, { id: recipientId });
@@ -622,6 +641,7 @@ export default definePlugin({
     },
 
     onGuildDragStart(event: DragEvent, guildId: string) {
+        suppressDefaultDragPreview(event);
         this.showGhost({ kind: "guild", id: guildId }, event);
         const payload = JSON.stringify({ kind: "guild", id: guildId });
         if (event.dataTransfer) event.dataTransfer.effectAllowed = "copyMove";
@@ -638,7 +658,6 @@ export default definePlugin({
         window.addEventListener("dragover", this.globalDragOver, true);
         window.addEventListener("drop", this.globalDrop, true);
         window.addEventListener("dragstart", this.globalDragStart, true);
-        window.addEventListener("mousemove", this.globalDragMove, true);
         window.addEventListener("drag", this.globalDragMove, true);
         window.addEventListener("dragover", this.globalDragMove, true);
         window.addEventListener("dragend", this.globalDragEnd, true);
@@ -659,11 +678,11 @@ export default definePlugin({
         window.removeEventListener("dragover", this.globalDragOver, true);
         window.removeEventListener("drop", this.globalDrop, true);
         window.removeEventListener("dragstart", this.globalDragStart, true);
-        window.removeEventListener("mousemove", this.globalDragMove, true);
         window.removeEventListener("drag", this.globalDragMove, true);
         window.removeEventListener("dragover", this.globalDragMove, true);
         window.removeEventListener("dragend", this.globalDragEnd, true);
         clearDragState();
+        inviteCache.clear();
         if (guildGhostCleanupTimer !== null) {
             clearTimeout(guildGhostCleanupTimer);
             guildGhostCleanupTimer = null;
@@ -710,7 +729,7 @@ export default definePlugin({
         lastDropAt = Date.now();
         event.preventDefault();
         event.stopPropagation();
-        inst.onDrop(event, channel);
+        await inst.onDrop(event, channel);
         hideDragGhost();
     },
 
@@ -801,6 +820,7 @@ export default definePlugin({
         if (!hasDragify) {
             event.stopPropagation();
             event.dataTransfer.effectAllowed = "copyMove";
+            suppressDefaultDragPreview(event);
             activeGuildDragId = guildId;
             setDragifyDataTransfer(event.dataTransfer, JSON.stringify({ kind: "guild", id: guildId }));
             inst.showGhost({ kind: "guild", id: guildId }, event);
@@ -815,7 +835,7 @@ export default definePlugin({
     },
     globalDragMove: (event: DragEvent | MouseEvent) => {
         if (!isGhostVisible()) return;
-        if (event?.clientX && event?.clientY) return;
+        if (event?.clientX == null || event?.clientY == null) return;
         if (event instanceof DragEvent) {
             lastDragEventAt = Date.now();
             if (activeGuildDragId !== null || activeDragEntity?.kind === "guild") {
@@ -842,7 +862,7 @@ export default definePlugin({
             if (settings.store.allowChatBodyDrop && this.isChatBodyElement(el)) return true;
         }
 
-        if (document && event?.clientX && event?.clientY) {
+        if (typeof document !== "undefined" && event?.clientX != null && event?.clientY != null) {
             const elements = document.elementsFromPoint?.(event.clientX, event.clientY);
             if (elements && elements.length) {
                 for (const el of elements) {
@@ -986,10 +1006,9 @@ export default definePlugin({
             if (listCandidate) {
                 if (UserStore.getUser(listCandidate)) return listCandidate;
                 const channel = ChannelStore.getChannel(listCandidate);
-                if (!channel) return null;
-                if (channel.isGroupDM() || channel.isMultiUserDM()) return null;
-                if (channel.isDM()) {
-                    return this.getDmRecipientId(channel);
+                if (channel && channel.isDM() && !channel.isGroupDM() && !channel.isMultiUserDM()) {
+                    const recipientId = this.getDmRecipientId(channel);
+                    if (recipientId) return recipientId;
                 }
             }
 
@@ -1005,7 +1024,7 @@ export default definePlugin({
             if (styleAvatar) return styleAvatar;
 
             const ariaMatch = extractSnowflakeFromString(aria);
-            if (ariaMatch) return ariaMatch;
+            if (ariaMatch && UserStore.getUser(ariaMatch)) return ariaMatch;
 
             el = el.parentElement;
         }
@@ -1044,7 +1063,7 @@ export default definePlugin({
             }
         }
 
-        if (document && event?.clientX && event?.clientY) {
+        if (typeof document !== "undefined" && event?.clientX != null && event?.clientY != null) {
             const elements = document.elementsFromPoint?.(event.clientX, event.clientY);
             if (elements && elements.length) {
                 for (const el of elements) {
@@ -1068,7 +1087,9 @@ export default definePlugin({
     showGhost(entity: DropEntity, event?: DragEvent) {
         const ghost = this.buildGhost(entity);
         if (!ghost) return;
-        const position = event && event?.clientX && event?.clientY ? { x: event.clientX + 16, y: event.clientY + 20 } : undefined;
+        const position = event && event?.clientX != null && event?.clientY != null
+            ? { x: event.clientX + 16, y: event.clientY + 20 }
+            : undefined;
         showDragGhost({ ...ghost, entityId: entity.id }, position);
     },
 
@@ -1102,37 +1123,35 @@ export default definePlugin({
                 });
                 iconUrl = channelIcon ?? undefined;
             }
-            if (!iconUrl && (channel.isDM() || channel?.type === ChannelType.DM || channel?.type === ChannelType.GROUP_DM)) {
+            if (!iconUrl && (channel.isDM() || channel.type === ChannelType.GROUP_DM)) {
                 const recipientId = this.getDmRecipientId(channel);
                 const recipient = recipientId ? UserStore.getUser(recipientId) : null;
                 iconUrl = recipient ? recipient.getAvatarURL(void 0, 80, true) : undefined;
             }
             let badge = "channel";
-            if (channel) {
-                if (isThread) {
-                    badge = "thread";
-                } else {
-                    switch (channel.type) {
-                        case ChannelType.GUILD_VOICE:
-                        case ChannelType.GUILD_STAGE_VOICE:
-                            badge = "voice";
-                            break;
-                        case ChannelType.GUILD_FORUM:
-                            badge = "forum";
-                            break;
-                        case ChannelType.GUILD_MEDIA:
-                            badge = "media";
-                            break;
-                        case ChannelType.GUILD_ANNOUNCEMENT:
-                            badge = "announcement";
-                            break;
-                        case ChannelType.DM:
-                        case ChannelType.GROUP_DM:
-                            badge = "dm";
-                            break;
-                        default:
-                            badge = "channel";
-                    }
+            if (isThread) {
+                badge = "thread";
+            } else {
+                switch (channel.type) {
+                    case ChannelType.GUILD_VOICE:
+                    case ChannelType.GUILD_STAGE_VOICE:
+                        badge = "voice";
+                        break;
+                    case ChannelType.GUILD_FORUM:
+                        badge = "forum";
+                        break;
+                    case ChannelType.GUILD_MEDIA:
+                        badge = "media";
+                        break;
+                    case ChannelType.GUILD_ANNOUNCEMENT:
+                        badge = "announcement";
+                        break;
+                    case ChannelType.DM:
+                    case ChannelType.GROUP_DM:
+                        badge = "dm";
+                        break;
+                    default:
+                        badge = "channel";
                 }
             }
             return { kind: "channel", title, subtitle, iconUrl, badge, entityId: entity.id, exiting: false };
@@ -1150,16 +1169,15 @@ export default definePlugin({
 
     getDmRecipientId(channel?: Channel | null): string | null {
         if (!channel) return null;
-        const channelExtras = channel;
-        return channelExtras.getRecipientId()
+        return channel.getRecipientId()
             ?? channel.recipients?.[0]
-            ?? channelExtras.rawRecipients?.[0]
+            ?? channel.rawRecipients?.[0]
             ?? null;
     },
 
     getGroupDmDisplayName(channel?: Channel | null): string | null {
         if (!channel || channel.type !== ChannelType.GROUP_DM) return null;
-        const selfId = UserStore.getCurrentUser().id ?? null;
+        const selfId = UserStore.getCurrentUser()?.id ?? null;
         const recipients = (channel.recipients ?? channel.rawRecipients ?? []).filter(Boolean);
         if (recipients.length === 0) return null;
         const names = recipients
@@ -1175,3 +1193,5 @@ export default definePlugin({
         return names.length > 1 ? names.join(", ") : null;
     },
 });
+
+export default Dragify;

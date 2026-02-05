@@ -20,6 +20,16 @@ export type DropEntity =
     | { kind: "channel"; id: string; guildId?: string; }
     | { kind: "guild"; id: string; };
 
+interface DragifyPayload {
+    id?: string;
+    userId?: string;
+    channelId?: string;
+    guildId?: string;
+    type?: string;
+    kind?: string;
+    itemType?: string;
+}
+
 type StoreSet = {
     ChannelStore: { getChannel(id: string): Channel | null | undefined; };
     GuildStore: { getGuild(id: string): Guild | null | undefined; };
@@ -84,16 +94,6 @@ export async function collectPayloadStrings(dataTransfer: DataTransfer): Promise
 
 export function parseFromStrings(payloads: string[], stores: StoreSet): DropEntity | null {
     if (payloads.length === 0) return null;
-
-interface DragifyPayload {
-    id?: string;
-    userId?: string;
-    channelId?: string;
-    guildId?: string;
-    type?: string;
-    kind?: string;
-    itemType?: string;
-}
 
     for (const value of payloads) {
         const parsed = tryParseJson<DragifyPayload>(value);
