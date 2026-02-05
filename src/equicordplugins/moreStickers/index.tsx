@@ -47,10 +47,10 @@ export default definePlugin({
             }]
         },
         {
-            find: ".gifts)",
+            find: ".GIFT_PROMOTION]).",
             replacement: [
                 {
-                    match: /(?<=(,\(null==\(\i=\i\.stickers\)\?void 0.*?\i\.push\(\(.{0,100})\},"sticker"\)\))/,
+                    match: /(?<=(,\i\.stickers\?\.button.{0,50}\i\.push\(\(.{0,100})\},"sticker"\)\))/,
                     replace: "$1,stickersType:\"stickers+\"},\"stickers+\"))"
                 },
             ]

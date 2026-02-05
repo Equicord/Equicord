@@ -7,7 +7,7 @@
 import "./styles.css";
 
 import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin, { StartAt } from "@utils/types";
 import { openUserSettingsPanel } from "@webpack/common";
 
@@ -40,7 +40,7 @@ function ComponentsIcon(props: React.SVGProps<SVGSVGElement>) {
 export default definePlugin({
     name: "Components",
     description: "Adds a new tab to settings to browse Discord components.",
-    authors: [EquicordDevs.prism],
+    authors: [Devs.prism],
     dependencies: ["Settings"],
     startAt: StartAt.WebpackReady,
     toolboxActions: {

@@ -20,7 +20,7 @@ function formatMessageDate(timestamp: string | Date): string {
     return `${month}/${day}/${year}`;
 }
 
-const GroupDmsRecipientsIcon = findComponentByCodeLazy("\"recipients\",\"size\",");
+const GroupDmsRecipientsIcon = findComponentByCodeLazy('["aria-hidden"],"aria-label":');
 const SelectedChannelActionCreators = findByPropsLazy("selectPrivateChannel");
 
 function GroupDmsIcon({ channel }: { channel: Channel; }) {
@@ -29,7 +29,8 @@ function GroupDmsIcon({ channel }: { channel: Channel; }) {
         size="SIZE_40"
         aria-label={channel?.name || "Unnamed Group"}
     /> : <GroupDmsRecipientsIcon
-        recipients={channel.recipients}
+        recipients={channel?.recipients ?? []}
+        channel={channel}
         size="SIZE_40"
         isTyping={null}
     />;
@@ -51,7 +52,7 @@ export function getChannelDisplayName(channelId: string): string {
     }
 
     // 1-on-1 DM
-    const recipientId = channel.recipients?.[0];
+    const recipientId = channel?.recipients?.[0] ?? "";
     const user = UserStore.getUser(recipientId);
     return user?.username || "Unknown User";
 }
@@ -115,6 +116,7 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                             const lastMessageDate = lastMessage?.timestamp ? formatMessageDate(lastMessage.timestamp) : "";
 
                             const displayName = getChannelDisplayName(channel.id);
+                            const userId = channel?.recipients?.[0] ?? "";
                             return (
                                 <div
                                     key={channelId}
@@ -125,7 +127,7 @@ export function GhostedUsersModal({ modalProps, ghostedChannels: initialChannels
                                         <GroupDmsIcon
                                             channel={channel}
                                         /> : <Avatar
-                                            src={UserStore.getUser(channel.recipients?.[0])?.getAvatarURL(undefined, 128, true) || ""}
+                                            src={UserStore.getUser(userId)?.getAvatarURL(undefined, 128, true)}
                                             size="SIZE_40"
                                             aria-label={displayName}
                                         />}

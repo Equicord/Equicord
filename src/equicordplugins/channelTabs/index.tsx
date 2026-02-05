@@ -61,12 +61,12 @@ export default definePlugin({
             find: '"AppView"',
             replacement: [
                 {
-                    match: /(\?void 0:(\i)\.channelId.{0,600})"div",{(?=className:\i\.\i)/,
+                    match: /((\i\?.params)\?\.channelId.{0,600})"div",{(?=className:\i\.\i)/,
                     replace: "$1$self.render,{currentChannel:$2,",
                     predicate: () => settings.store.tabBarPosition === "top"
                 },
                 {
-                    match: /(\?void 0:(\i)\.channelId.{0,300})"div",{/,
+                    match: /((\i\?.params)\?.channelId.{0,300})"div",{/,
                     replace: "$1$self.render,{currentChannel:$2,",
                     predicate: () => settings.store.tabBarPosition === "bottom"
                 }
@@ -74,9 +74,9 @@ export default definePlugin({
         },
         // intercept channel navigation to switch/create tabs
         {
-            find: '"transitionToGuild - Transitioning to "',
+            find: "`transitionToGuild - Transitioning to",
             replacement: {
-                match: /(\i\((\i),(\i),\i,\i\)\{)(.{0,25}"transitionToGuild)/,
+                match: /(\i\((\i),(\i),\i,\i\)\{)(.{0,25}`transitionToGuild)/,
                 replace: "$1$self.handleNavigation($2,$3);$4"
             }
         },
@@ -106,7 +106,7 @@ export default definePlugin({
         },
         // prevent issues with the pins/inbox popouts being too tall
         {
-            find: "renderCloseButton()",
+            find: "#{intl::JUMP}),onClick:",
             replacement: {
                 match: /\i&&\((\i).maxHeight.{0,5}\)/,
                 replace: "$&;$1.maxHeight-=$self.containerHeight"

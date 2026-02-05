@@ -6,7 +6,7 @@
 
 import { isPluginEnabled } from "@api/PluginManager";
 import betterUserArea from "@equicordplugins/betterUserArea";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findCssClassesLazy } from "@webpack";
 
@@ -15,7 +15,7 @@ const { iconForeground } = findCssClassesLazy("iconForeground", "autocompleteRow
 export default definePlugin({
     name: "UserAreaAPI",
     description: "API to add buttons to the user area panel.",
-    authors: [EquicordDevs.prism],
+    authors: [Devs.prism],
 
     patches: [
         {

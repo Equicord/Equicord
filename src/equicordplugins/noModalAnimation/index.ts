@@ -29,8 +29,8 @@ export default definePlugin({
         {
             find: '="ABOVE"',
             replacement: {
-                match: /:300/,
-                replace: ":0",
+                match: /\?\?300/,
+                replace: "??0",
             }
         },
         {

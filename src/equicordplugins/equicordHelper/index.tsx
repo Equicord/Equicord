@@ -68,18 +68,18 @@ export default definePlugin({
             find: "Unknown resolution:",
             replacement: [
                 {
-                    match: /throw Error\("Unknown resolution: ".concat\((\i)\)\)/,
+                    match: /throw Error\(`Unknown resolution: \$\{(\i)\}`\)/,
                     replace: "return $1;"
                 },
                 {
-                    match: /throw Error\("Unknown frame rate: ".concat\((\i)\)\)/,
+                    match: /throw Error\(`Unknown frame rate: \$\{(\i)\}`\)/,
                     replace: "return $1;"
                 }
             ]
         },
         // When focused on voice channel or group chat voice call
         {
-            find: /\i\?\i.\i.SELF_VIDEO/,
+            find: ".STATUS_WARNING_BACKGROUND})})",
             predicate: () => settings.store.noMirroredCamera,
             replacement: {
                 match: /mirror:\i/,
@@ -115,7 +115,7 @@ export default definePlugin({
             },
         },
         {
-            find: ".buttons.length)>=1",
+            find: ".USER_PROFILE_ACTIVITY_BUTTONS),",
             predicate: () => settings.store.showYourOwnActivityButtons && !isPluginEnabled(customRPC.name),
             replacement: {
                 match: /.getId\(\)===\i.id/,

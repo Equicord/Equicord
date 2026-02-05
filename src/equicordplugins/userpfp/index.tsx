@@ -29,7 +29,7 @@ const cl = classNameFactory("vc-userpfp-");
 const DONO_URL = "https://ko-fi.com/coolesding";
 const INVITE_LINK = "userpfp-1129784704267210844";
 
-export const requireSettingsMenu = extractAndLoadChunksLazy(['name:"UserSettings"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}"UserSettings"/);
+export const requireSettingsMenu = extractAndLoadChunksLazy(['"AppSkeleton"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}\}\),(?=.{0,15}createPromise.*?\}\),)/);
 export const KEY_DATASTORE = "vencord-custom-avatars";
 export const data = { avatars: {} as Record<string, string> };
 

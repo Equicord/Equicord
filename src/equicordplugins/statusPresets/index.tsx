@@ -152,7 +152,7 @@ export default definePlugin({
         {
             find: '"CustomStatusModalWithPreview"',
             replacement: {
-                match: /(?<=(\i)\.state\).*?)\{text:\i\.\i\.\i\(\i\.\i#{intl::SAVE}\)/,
+                match: /(?<=(\i)\?\.state\?\?.*?)\{text:\i\.\i\.\i\(\i\.\i#{intl::SAVE}\)/,
                 replace: "$self.renderRememberButton($1),$&"
             }
         },

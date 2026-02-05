@@ -86,7 +86,7 @@ export default definePlugin({
     patches: [
         // User Popout
         {
-            find: ".hasAvatarForGuild(null==",
+            find: /onOpenUserProfileModal:\i\}\),\i/,
             replacement: {
                 match: /userId:\i\.id,guild:\i.{0,15}\}\).{0,100}(?=\])/,
                 replace: "$&,$self.ProfilePopoutComponent(arguments[0])"

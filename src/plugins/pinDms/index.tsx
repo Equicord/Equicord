@@ -73,7 +73,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: '"private-channels-".concat(',
+            find: '"dm-quick-launcher"===',
             replacement: [
                 {
                     // Filter out pinned channels from the private channel list
@@ -88,15 +88,15 @@ export default definePlugin({
 
                 // Rendering
                 {
-                    match: /"renderRow",(\i)=>{(?<="renderDM",.+?(\i\.\i),\{channel:.+?)/,
+                    match: /renderRow(?:",|=)(\i)=>{(?<=renderDM(?:",|=).+?(\i\.\i),\{channel:.+?)/,
                     replace: "$&if($self.isChannelIndex($1.section, $1.row))return $self.renderChannel($1.section,$1.row,$2)();"
                 },
                 {
-                    match: /"renderSection",(\i)=>{/,
+                    match: /renderSection(?:",|=)(\i)=>{/,
                     replace: "$&if($self.isCategoryIndex($1.section))return $self.renderCategory($1);"
                 },
                 {
-                    match: /"renderSection".{0,300}?"span",{/,
+                    match: /renderSection(?:",|=).{0,300}?"span",{/,
                     replace: "$&...$self.makeSpanProps(),"
                 },
 
@@ -106,7 +106,7 @@ export default definePlugin({
                     replace: "$1($2-$self.categoryLen())"
                 },
                 {
-                    match: /"getRowHeight",\((\i),(\i)\)=>{/,
+                    match: /getRowHeight(?:",|=)\((\i),(\i)\)=>{/,
                     replace: "$&if($self.isChannelHidden($1,$2))return 0;"
                 },
 

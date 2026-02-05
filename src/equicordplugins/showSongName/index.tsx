@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ShowSongName",
     description: "Shows song name instead of artist for Spotify activity",
-    authors: [EquicordDevs.prism],
+    authors: [Devs.prism],
 
     patches: [
         {

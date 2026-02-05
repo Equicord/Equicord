@@ -113,7 +113,7 @@ export default definePlugin({
             // Detects paste events triggered inside of Discord's text input.
             find: ",origin:\"clipboard\"});",
             replacement: {
-                match: /(?<="handlePaste",(\i)=>{)(?=var)/,
+                match: /(?<=handlePaste=(\i)=>{)(?=let)/,
                 replace: "if($self.isPastingDisabled(true)){$1.preventDefault?.();$1.stopPropagation?.();return;}"
             }
         },

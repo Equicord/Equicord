@@ -51,6 +51,7 @@ export default definePlugin({
     authors: [Devs.Ven, Devs.sadan],
     reporterTestable: ReporterTestable.None,
     isModified: true,
+    settings,
 
     toolboxActions: {
         Reconnect() {

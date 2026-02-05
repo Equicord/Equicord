@@ -1050,6 +1050,7 @@ function getQuestPanelTitleText(quest: Quest): string | null {
 }
 
 function getQuestPanelOverride(): Quest | null {
+    settings.use(["triggerQuestsRerender"]);
     let closestQuest: Quest | null = null;
     let closestTimeRemaining = Infinity;
 
@@ -1079,20 +1080,15 @@ function getQuestPanelOverride(): Quest | null {
     });
 
     if (!closestQuest) {
-        const completedQuests = Array.from(QuestsStore.quests.values() as Quest[]).filter(q => q.userStatus?.completedAt).sort((a, b) => {
-            const aTime = new Date(a.userStatus?.completedAt as string);
-            const bTime = new Date(b.userStatus?.completedAt as string);
-            return bTime.getTime() - aTime.getTime();
-        });
+        const completedUnclaimedQuests = (Array.from(QuestsStore.quests.values()) as Quest[])
+            .filter(q => q.userStatus?.completedAt && getQuestStatus(q) === QuestStatus.Unclaimed)
+            .sort((a, b) => {
+                const aTime = new Date(a.userStatus?.completedAt as string).getTime();
+                const bTime = new Date(b.userStatus?.completedAt as string).getTime();
+                return bTime - aTime;
+            });
 
-        completedQuests.forEach(quest => {
-            const completedQuest = quest.userStatus?.completedAt;
-            const questStatus = getQuestStatus(quest);
-
-            if (completedQuest && questStatus === QuestStatus.Unclaimed) {
-                closestQuest = quest;
-            }
-        });
+        closestQuest = completedUnclaimedQuests[0] ?? null;
     }
 
     return closestQuest;
@@ -1255,11 +1251,11 @@ export default definePlugin({
         {
             // Hides the Quest icon from members list items when
             // a user is playing a game tied to an active Quest.
-            find: "),\"activity-\".concat",
+            find: '"ActivityStatus")',
             group: true,
             replacement: [
                 {
-                    match: /(?<=voiceActivityChannel:\i\?\i:null}\);)/,
+                    match: /(?<=\i\)&&"xs"===\i;)/,
                     replace: "const shouldHideMembersListActivelyPlayingIcon=$self.shouldHideMembersListActivelyPlayingIcon();"
                 },
                 {
@@ -1312,15 +1308,15 @@ export default definePlugin({
         {
             // Replaces the default displayed Quest with the soonest to
             // be completed Quest which is actively being auto-completed.
-            find: "questDeliveryOverride)?",
+            find: '"useQuestBarQuest"})',
             replacement: {
-                match: /(?<=null}\);return )(\i\?\i:\i)/,
+                match: /(?<=null\);return )(\i\?\i:\i)/,
                 replace: "$self.getQuestPanelOverride()??($1)"
             }
         },
         {
             // Hides the Friends List "Active Now" promotion.
-            find: '"application-stream-"',
+            find: "`application-stream-",
             group: true,
             replacement: [
                 {
@@ -1345,7 +1341,7 @@ export default definePlugin({
                 },
                 {
                     // QUESTS_FETCH_QUEST_TO_DELIVER_BEGIN
-                    match: /(?=var.{0,150}QUESTS_FETCH_QUEST_TO_DELIVER_BEGIN)/,
+                    match: /(?=let.{0,150}QUESTS_FETCH_QUEST_TO_DELIVER_BEGIN)/,
                     replace: "if($self.shouldPreventFetchingQuests())return;"
                 }
             ]
@@ -1356,7 +1352,7 @@ export default definePlugin({
             //  - Also see anywhere DynamicDropdown is used for refactoring.
             //
             // Various patches to the SearchableSelect component.
-            find: '"onSearchChange",',
+            find: ".popoutLayerContext,renderPopout:",
             group: true,
             replacement: [
                 {
@@ -1386,8 +1382,8 @@ export default definePlugin({
                 },
                 {
                     // Makes use of the custom popoutClassName prop if provided.
-                    match: /(?<=onKeyDown"]\);return.{0,30}?className:\i\(\)\()/,
-                    replace: "arguments[0]?.popoutClassName,"
+                    match: /"aria-busy":!0,className:\i\(\)\(/,
+                    replace: "$&arguments[0]?.popoutClassName,"
                 },
                 {
                     // Passes the custom optionClassName prop to the row renderer.
@@ -1410,14 +1406,20 @@ export default definePlugin({
         {
             // Formats the Orbs balance on the Quests page with locale string formatting.
             find: '("BalanceCounter")',
-            replacement: {
-                match: /(?<=\i=>"".concat\(\i).toFixed\(0\)(?=\)\))/,
-                replace: ".toLocaleString(undefined,{maximumFractionDigits:0})"
-            }
+            replacement: [
+                {
+                    match: /(`\${(\i).toFixed\(0\)}`.length)/,
+                    replace: "$1+($2>=1e6?0.8:$2>=1e3?0.4:0)"
+                },
+                {
+                    match: /(?<=children:\i.to\(\i=>`\${\i)(.toFixed\(0\))/,
+                    replace: ".toLocaleString(undefined,{maximumFractionDigits:0})"
+                }
+            ]
         },
         {
             // Adds a maxDigits prop to the LowerBadge component which allows for not truncating, or for truncating at a specific threshold.
-            find: '"renderBadgeCount"])',
+            find: ".INTERACTIVE_TEXT_ACTIVE.css,shape",
             group: true,
             replacement: [
                 {
@@ -1434,13 +1436,13 @@ export default definePlugin({
                     // Makes use of the custom prop if provided by using custom logic for negatives and truncation.
                     // If the prop is not provided, assume default behavior for native badges or other plugins not
                     // utilizing the custom prop.
-                    match: /function (\i\((\i))\){return (.{0,100}?k\+"\))/,
-                    replace: "function $1,maxDigits){return maxDigits===undefined?($3):$self.formatLowerBadge($2,maxDigits)[0]"
+                    match: /(?<=function \i\((\i))(\){return )(\i<1e3.{0,60}?k\+`)/,
+                    replace: ",maxDigits$2maxDigits===undefined?($3):$self.formatLowerBadge($1,maxDigits)[0]"
                 }
             ]
         },
         {
-            find: "id:\"quest-tile-\".concat",
+            find: "id:`quest-tile-",
             group: true,
             replacement: [
                 {
@@ -1481,7 +1483,7 @@ export default definePlugin({
         },
         {
             // Adds the "Questify" sort option to the sort dropdown.
-            find: '" has no rewards configured"',
+            find: "has no rewards configured`",
             replacement: {
                 match: /(?=case (\i.\i).SUGGESTED)/,
                 replace: "case $1.QUESTIFY:return \"Questify\";"
@@ -1528,7 +1530,7 @@ export default definePlugin({
                 },
                 {
                     // Set the initial filters.
-                    match: /(get\(\i\)\)\)\?\i:)(\i)/,
+                    match: /(get\(\i\)\)\?\?)(\i)/,
                     replace: "$1$self.getLastFilterChoices()??$2"
                 },
                 {
@@ -1616,7 +1618,7 @@ export default definePlugin({
                     replace: "const questifyText=$self.getQuestUnacceptedButtonText(arguments[0].quest);"
                 },
                 {
-                    match: /(?<=}\),)(null==\i\|\|\i\(\))/,
+                    match: /(?<=}\),)(\i\?\.\(\))/,
                     replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&($1)"
                 },
                 {

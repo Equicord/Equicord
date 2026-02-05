@@ -11,7 +11,7 @@ import { Canvas } from "./components/Canvas";
 import { Toolbar } from "./components/Toolbar";
 import { imageToBlob, urlToImage } from "./utils/canvas";
 
-const FileUpload = findComponentByCodeLazy(".currentTarget.files)", "lineClamp:1");
+const FileUpload = findComponentByCodeLazy(".currentTarget.files", "lineClamp:1");
 
 export const Editor = (props: { url?: string; }) => {
     const [file, setFile] = useState<File | undefined>(undefined);

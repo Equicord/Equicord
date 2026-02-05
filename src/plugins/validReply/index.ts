@@ -44,10 +44,12 @@ export default definePlugin({
         },
         {
             find: "ReferencedMessageStore",
-            replacement: {
-                match: /constructor\(\)\{\i\(this,"_channelCaches",new Map\)/,
-                replace: "$&;$self.setReplyStore(this);"
-            }
+            replacement: [
+                {
+                    match: /_channelCaches=new Map;/,
+                    replace: "$&_=$self.setReplyStore(this);"
+                }
+            ]
         }
     ],
 
