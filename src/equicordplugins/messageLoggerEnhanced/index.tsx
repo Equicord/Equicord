@@ -243,7 +243,7 @@ async function processMessageFetch(response: FetchMessagesResponse) {
 
 export default definePlugin({
     name: "MessageLoggerEnhanced",
-    authors: [Devs.Aria, EquicordDevs.keyages, { name: "Bluscream", id: 331103316650393611n }, { name: "Antigravity AI", id: 0n }],
+    authors: [Devs.Aria, EquicordDevs.keyages, { name: "Bluscream", id: 467777925790564352n }, { name: "Antigravity AI", id: 0n }],
     description: "G'day",
     dependencies: ["MessageLogger"],
 
