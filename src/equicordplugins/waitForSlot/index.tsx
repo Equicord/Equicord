@@ -9,8 +9,7 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
-import { findByPropsLazy } from "@webpack";
-import { ChannelStore, Menu, SelectedChannelStore } from "@webpack/common";
+import { Menu, SelectedChannelStore } from "@webpack/common";
 import { settings } from "./settings";
 import { isChannelFull } from "./utils/voice";
 import { getWaitingChannels, hasWaitingChannels, isWaiting, joinAvailable, promptToWait, removeWaiting, shouldPromptForChannel, stopWaiting, waitForChannel } from "./utils/waiting";
@@ -22,19 +21,6 @@ interface VoiceStateChangeEvent {
 }
 
 const waitingChannels = getWaitingChannels();
-type SelectVoiceChannel = (channelId: string | null, ...args: unknown[]) => unknown;
-type SelectChannel = (channelId: string | null, ...args: unknown[]) => unknown;
-let selectVoiceChannelDescriptor: PropertyDescriptor | null = null;
-let rawSelectVoiceChannel: SelectVoiceChannel | null = null;
-let selectChannelDescriptor: PropertyDescriptor | null = null;
-let rawSelectChannel: SelectChannel | null = null;
-let selectVoiceChannelPatchInterval: number | null = null;
-let isSelectVoiceChannelPatched = false;
-let isSelectChannelPatched = false;
-const ChannelActions = findByPropsLazy("selectChannel", "selectVoiceChannel") as {
-    selectVoiceChannel?: SelectVoiceChannel;
-    selectChannel?: SelectChannel;
-};
 
 const isVoiceChannel = (channel: Channel) =>
     channel.type === ChannelType.GUILD_VOICE || channel.type === ChannelType.GUILD_STAGE_VOICE;
@@ -44,6 +30,12 @@ const shouldInterceptChannel = (channel: Channel) =>
     && SelectedChannelStore.getVoiceChannelId() !== channel.id
     && !isWaiting(channel)
     && shouldPromptForChannel(channel);
+
+function promptVoiceChannel(channel: Channel | null | undefined): boolean {
+    if (!channel || !shouldInterceptChannel(channel)) return false;
+    promptToWait(channel);
+    return true;
+}
 
 function onVoiceStateUpdate(voiceStates: VoiceStateChangeEvent[]) {
     if (!hasWaitingChannels()) return;
@@ -61,78 +53,6 @@ function onVoiceStateUpdate(voiceStates: VoiceStateChangeEvent[]) {
             return;
         }
     }
-}
-
-function wrapSelectVoiceChannel(fn: SelectVoiceChannel): SelectVoiceChannel {
-    return (channelId: string | null, ...args: unknown[]) => {
-        if (channelId == null) return fn(channelId, ...args);
-        const channel = ChannelStore.getChannel(channelId) as Channel | null;
-        if (!channel || !shouldInterceptChannel(channel)) return fn(channelId, ...args);
-        promptToWait(channel);
-    };
-}
-
-function wrapSelectChannel(fn: SelectChannel): SelectChannel {
-    return (channelId: string | null, ...args: unknown[]) => {
-        if (channelId == null) return fn(channelId, ...args);
-        const channel = ChannelStore.getChannel(channelId) as Channel | null;
-        if (!channel || !shouldInterceptChannel(channel)) return fn(channelId, ...args);
-        promptToWait(channel);
-    };
-}
-
-function patchSelectVoiceChannel(): boolean {
-    if (isSelectVoiceChannelPatched) return true;
-    const current = ChannelActions.selectVoiceChannel;
-    if (typeof current !== "function") return false;
-    const descriptor = Object.getOwnPropertyDescriptor(ChannelActions, "selectVoiceChannel");
-    let raw = current;
-    let wrapped = wrapSelectVoiceChannel(current);
-    Object.defineProperty(ChannelActions, "selectVoiceChannel", {
-        configurable: true,
-        enumerable: descriptor?.enumerable ?? true,
-        get: () => wrapped,
-        set: (fn: SelectVoiceChannel) => {
-            raw = fn;
-            wrapped = wrapSelectVoiceChannel(fn);
-        },
-    });
-    selectVoiceChannelDescriptor = descriptor ?? null;
-    rawSelectVoiceChannel = raw;
-    isSelectVoiceChannelPatched = true;
-    return true;
-}
-
-function patchSelectChannel(): boolean {
-    if (isSelectChannelPatched) return true;
-    const current = ChannelActions.selectChannel;
-    if (typeof current !== "function") return false;
-    const descriptor = Object.getOwnPropertyDescriptor(ChannelActions, "selectChannel");
-    let raw = current;
-    let wrapped = wrapSelectChannel(current);
-    Object.defineProperty(ChannelActions, "selectChannel", {
-        configurable: true,
-        enumerable: descriptor?.enumerable ?? true,
-        get: () => wrapped,
-        set: (fn: SelectChannel) => {
-            raw = fn;
-            wrapped = wrapSelectChannel(fn);
-        },
-    });
-    selectChannelDescriptor = descriptor ?? null;
-    rawSelectChannel = raw;
-    isSelectChannelPatched = true;
-    return true;
-}
-
-function installChannelActionPatch(): boolean {
-    patchSelectVoiceChannel();
-    patchSelectChannel();
-
-    const voiceReady = typeof ChannelActions?.selectVoiceChannel === "function";
-    const channelReady = typeof ChannelActions?.selectChannel === "function";
-    return (voiceReady ? isSelectVoiceChannelPatched : false)
-        && (channelReady ? isSelectChannelPatched : false);
 }
 
 const VoiceChannelContext: NavContextMenuPatchCallback = (children, { channel }: { channel: Channel; }) => {
@@ -169,18 +89,20 @@ export default definePlugin({
     authors: [EquicordDevs.omaw],
     managedStyle,
     settings,
+    patches: [
+        {
+            find: "VoiceChannel, transitionTo: Channel does not have a guildId",
+            replacement: {
+                match: /(?<=\|\|\i\|\|)\i\.default\.selectVoiceChannel\((\i)\.id\)/,
+                replace: "$self.promptVoiceChannel($1)||$&"
+            }
+        }
+    ],
     contextMenus: {
         "channel-context": VoiceChannelContext,
     },
-    start() {
-        if (installChannelActionPatch()) return;
-        selectVoiceChannelPatchInterval = window.setInterval(() => {
-            if (installChannelActionPatch() && selectVoiceChannelPatchInterval != null) {
-                clearInterval(selectVoiceChannelPatchInterval);
-                selectVoiceChannelPatchInterval = null;
-            }
-        }, 1000);
-    },
+    promptVoiceChannel,
+    start() { },
     flux: {
         VOICE_STATE_UPDATES({ voiceStates }: { voiceStates: VoiceStateChangeEvent[]; }) {
             onVoiceStateUpdate(voiceStates);
@@ -188,29 +110,5 @@ export default definePlugin({
     },
     stop() {
         stopWaiting();
-        if (selectVoiceChannelPatchInterval != null) {
-            clearInterval(selectVoiceChannelPatchInterval);
-            selectVoiceChannelPatchInterval = null;
-        }
-        if (isSelectVoiceChannelPatched) {
-            if (selectVoiceChannelDescriptor) {
-                Object.defineProperty(ChannelActions, "selectVoiceChannel", selectVoiceChannelDescriptor);
-            } else if (rawSelectVoiceChannel) {
-                ChannelActions.selectVoiceChannel = rawSelectVoiceChannel;
-            }
-            selectVoiceChannelDescriptor = null;
-            rawSelectVoiceChannel = null;
-            isSelectVoiceChannelPatched = false;
-        }
-        if (isSelectChannelPatched) {
-            if (selectChannelDescriptor) {
-                Object.defineProperty(ChannelActions, "selectChannel", selectChannelDescriptor);
-            } else if (rawSelectChannel) {
-                ChannelActions.selectChannel = rawSelectChannel;
-            }
-            selectChannelDescriptor = null;
-            rawSelectChannel = null;
-            isSelectChannelPatched = false;
-        }
     },
 });
