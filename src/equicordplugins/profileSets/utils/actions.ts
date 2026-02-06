@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { ProfilePreset } from "@vencord/discord-types";
+
 import { getCurrentProfile } from "./profile";
 import { addPreset, movePresetInArray, PresetSection, presets, removePreset, replaceAllPresets, savePresetsData, updatePreset, type ProfilePresetEx } from "./storage";
 
