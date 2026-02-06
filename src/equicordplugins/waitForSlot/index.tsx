@@ -42,7 +42,7 @@ function onVoiceStateUpdate(voiceStates: VoiceStateChangeEvent[]) {
     for (const state of voiceStates) {
         if (!state.oldChannelId) continue;
         let waiting: Channel | undefined;
-        for (const channel of waitingChannels) {
+        for (const channel of waitingChannels.values()) {
             if (channel.id === state.oldChannelId) {
                 waiting = channel;
                 break;
