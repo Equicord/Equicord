@@ -16,5 +16,5 @@ export default definePlugin({
 });
 
 function textProcessing(text: string): string {
-    return text.replace(/([*-]) /g, "\\$1 ");
+    return text.replace(/(^|\n)(\s*)([*+-])\s+/g, "$1$2\\$3 ");
 }
