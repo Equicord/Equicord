@@ -173,8 +173,8 @@ const editHandler = (_cid: string, _mid: string, msg: { content?: string; }) => 
 };
 
 export default definePlugin({
-    name: "EmbedFix",
-    description: "Automatically replace social media URLs with embed-friendly alternatives",
+    name: "SocialEmbedFix",
+    description: "Automatically fix social media embeds for Twitter, Instagram, TikTok, Reddit and Bluesky.",
     authors: [EquicordDevs.Mishal],
     isModified: false,
     settings: SETTINGS,
