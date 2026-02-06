@@ -33,7 +33,7 @@ export default definePlugin({
         {
             find: "DefaultCustomizationSections: user cannot be undefined",
             replacement: {
-                match: /return.{0,80}children:\[/,
+                match: /return.{0,50}children:\[(?<=\.getLegacyUsername\(\).*?)/,
                 replace: "$&$self.renderPresetSection(\"main\"),"
             }
         },
