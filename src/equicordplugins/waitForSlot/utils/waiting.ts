@@ -8,13 +8,13 @@ import { Button } from "@components/Button";
 import { NavigationRouter, React } from "@webpack/common";
 
 import { ReplaceQueueModal } from "../components/ReplaceQueueModal";
-import { SlotAvailableModalSimple } from "../components/SlotAvailableModalSimple";
+import { SlotAvailableModal } from "../components/SlotAvailableModal";
 import { WaitPromptModal } from "../components/WaitPromptModal";
 import { settings } from "../settings";
 import { isChannelFull, joinVoiceChannel, playNotificationSound } from "./voice";
 
 const logger = new Logger("WaitForSlot");
-const waitingChannels = new Set<Channel>();
+const waitingChannels = new Map<string, Channel>();
 let bypassPrompt = false;
 let waitingNoticeMessage: ReactNode | null = null;
 let waitingNoticeKey: string | null = null;
@@ -23,7 +23,7 @@ let waitingNoticeOnOk: (() => void) | null = null;
 const noop = () => { };
 
 export function isWaiting(channel: Channel) {
-    return waitingChannels.has(channel);
+    return waitingChannels.has(channel.id);
 }
 
 export function hasWaitingChannels() {
@@ -98,7 +98,7 @@ export function stopWaiting() {
 }
 
 export function removeWaiting(channel: Channel, sendMessage = true) {
-    waitingChannels.delete(channel);
+    waitingChannels.delete(channel.id);
     if (sendMessage) {
         sendBotMessage(channel.id, { content: `Stopped waiting for a free slot in <#${channel.id}>` });
     }
@@ -123,7 +123,7 @@ export function promptToWait(channel: Channel) {
 }
 
 export function waitForChannel(channel: Channel) {
-    if (waitingChannels.has(channel)) return;
+    if (waitingChannels.has(channel.id)) return;
     if (settings.store.promptOnReplace && waitingChannels.size > 0) {
         openModal(modalProps => React.createElement(ReplaceQueueModal, {
             modalProps,
@@ -131,26 +131,31 @@ export function waitForChannel(channel: Channel) {
             onReplace: () => {
                 dismissWaitingNotice();
                 waitingChannels.clear();
-                waitingChannels.add(channel);
+                waitingChannels.set(channel.id, channel);
                 sendBotMessage(channel.id, { content: `Started waiting for a free slot in <#${channel.id}>` });
                 showWaitingNotice(channel);
             },
         }));
         return;
     }
-    waitingChannels.add(channel);
+    waitingChannels.set(channel.id, channel);
     sendBotMessage(channel.id, { content: `Started waiting for a free slot in <#${channel.id}>` });
     showWaitingNotice(channel);
     if (!isChannelFull(channel.id, channel.userLimit)) joinAvailable(channel);
 }
 
 export function joinAvailable(channel: Channel) {
-    waitingChannels.clear();
-    dismissWaitingNotice();
+    waitingChannels.delete(channel.id);
+    if (waitingChannels.size === 0) {
+        dismissWaitingNotice();
+    } else {
+        const nextChannel = waitingChannels.values().next().value as Channel | undefined;
+        if (nextChannel) showWaitingNotice(nextChannel);
+    }
     if (settings.store.playSound) playNotificationSound();
 
     if (settings.store.showConfirmation) {
-        openModal(modalProps => React.createElement(SlotAvailableModalSimple, {
+        openModal(modalProps => React.createElement(SlotAvailableModal, {
             modalProps,
             channel,
             onJoin: () => attemptJoin(channel.id),
