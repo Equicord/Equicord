@@ -5,6 +5,15 @@ import { VoiceStateStore } from "@webpack/common";
 const logger = new Logger("WaitForSlot");
 const { selectVoiceChannel } = findByPropsLazy("selectVoiceChannel", "selectChannel");
 
+const NOTIFICATION_SOUND = {
+    startHz: 800,
+    peakHz: 1000,
+    stepSeconds: 0.1,
+    durationSeconds: 0.3,
+    gainStart: 0.3,
+    gainEnd: 0.01,
+} as const;
+
 export function getVoiceChannelUserCount(channelId: string): number {
     const voiceStates = VoiceStateStore.getVoiceStatesForChannel(channelId);
     return voiceStates ? Object.keys(voiceStates).length : 0;
@@ -26,7 +35,7 @@ export function joinVoiceChannel(channelId: string) {
 
 export function playNotificationSound() {
     try {
-        const AudioContextCtor = window.AudioContext ?? (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        const AudioContextCtor = window.AudioContext ?? (window as typeof window & { webkitAudioContext?: typeof AudioContext; }).webkitAudioContext;
         if (!AudioContextCtor) return;
         const audioContext = new AudioContextCtor();
         const oscillator = audioContext.createOscillator();
@@ -34,15 +43,15 @@ export function playNotificationSound() {
 
         oscillator.connect(gainNode);
         gainNode.connect(audioContext.destination);
-        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-        oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1);
-        oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.2);
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        oscillator.frequency.setValueAtTime(NOTIFICATION_SOUND.startHz, audioContext.currentTime);
+        oscillator.frequency.setValueAtTime(NOTIFICATION_SOUND.peakHz, audioContext.currentTime + NOTIFICATION_SOUND.stepSeconds);
+        oscillator.frequency.setValueAtTime(NOTIFICATION_SOUND.startHz, audioContext.currentTime + (NOTIFICATION_SOUND.stepSeconds * 2));
+        gainNode.gain.setValueAtTime(NOTIFICATION_SOUND.gainStart, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(NOTIFICATION_SOUND.gainEnd, audioContext.currentTime + NOTIFICATION_SOUND.durationSeconds);
         oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.3);
+        oscillator.stop(audioContext.currentTime + NOTIFICATION_SOUND.durationSeconds);
         oscillator.addEventListener("ended", () => {
-            audioContext.close().catch(() => {});
+            audioContext.close().catch(() => { });
         });
     } catch (error) {
         logger.warn("Could not play notification sound", error);
