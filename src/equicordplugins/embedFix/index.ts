@@ -1,4 +1,4 @@
-/* 
+/*
  * Vencord, a Discord client mod
  * Copyright (c) 2024 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -101,50 +101,60 @@ function escapeRegex(str: string): string {
 }
 
 function replaceEmbedUrls(content: string): string {
-    const replacements: Array<{ pattern: RegExp, replacement: string }> = [];
+    const replacements: Array<{ pattern: RegExp, domain: string, fixer: string }> = [];
 
     if (SETTINGS.store.twitterEnabled) {
         const fixer = SETTINGS.store.twitterFixer || "fxtwitter.com";
         replacements.push({
-            pattern: new RegExp(`(https?:\\/\\/)?(www\\.)?(twitter\\.com|x\\.com)(\\/[^\\s<>"']*)?`, "gi"),
-            replacement: `https://${fixer}$4`
+            pattern: new RegExp("(https?:\\/\\/)?(www\\.)?(twitter\\.com|x\\.com)(\\/[^\\s<>\"']*)?", "gi"),
+            domain: "twitter.com",
+            fixer: fixer
         });
     }
 
     if (SETTINGS.store.instagramEnabled) {
         const fixer = SETTINGS.store.instagramFixer || "ddinstagram.com";
         replacements.push({
-            pattern: new RegExp(`(https?:\\/\\/)?(www\\.)?instagram\\.com(\\/[^\\s<>"']*)?`, "gi"),
-            replacement: `https://${fixer}$3`
+            pattern: new RegExp("(https?:\\/\\/)?(www\\.)?instagram\\.com(\\/[^\\s<>\"']*)?", "gi"),
+            domain: "instagram.com",
+            fixer: fixer
         });
     }
 
     if (SETTINGS.store.tiktokEnabled) {
         const fixer = SETTINGS.store.tiktokFixer || "tnktok.com";
         replacements.push({
-            pattern: new RegExp(`(https?:\\/\\/)?(www\\.)?tiktok\\.com(\\/[^\\s<>"']*)?`, "gi"),
-            replacement: `https://${fixer}$3`
+            pattern: new RegExp("(https?:\\/\\/)?(www\\.)?tiktok\\.com(\\/[^\\s<>\"']*)?", "gi"),
+            domain: "tiktok.com",
+            fixer: fixer
         });
     }
 
     if (SETTINGS.store.redditEnabled) {
         const fixer = SETTINGS.store.redditFixer || "rxddit.com";
         replacements.push({
-            pattern: new RegExp(`(https?:\\/\\/)?(www\\.)?reddit\\.com(\\/[^\\s<>"']*)?`, "gi"),
-            replacement: `https://${fixer}$3`
+            pattern: new RegExp("(https?:\\/\\/)?(www\\.)?reddit\\.com(\\/[^\\s<>\"']*)?", "gi"),
+            domain: "reddit.com",
+            fixer: fixer
         });
     }
 
     if (SETTINGS.store.blueskyEnabled) {
         const fixer = SETTINGS.store.blueskyFixer || "fxbsky.app";
         replacements.push({
-            pattern: new RegExp(`(https?:\\/\\/)?(www\\.)?bsky\\.app(\\/[^\\s<>"']*)?`, "gi"),
-            replacement: `https://${fixer}$3`
+            pattern: new RegExp("(https?:\\/\\/)?(www\\.)?bsky\\.app(\\/[^\\s<>\"']*)?", "gi"),
+            domain: "bsky.app",
+            fixer: fixer
         });
     }
 
-    for (const { pattern, replacement } of replacements) {
-        content = content.replace(pattern, replacement);
+    for (const { pattern, domain, fixer } of replacements) {
+        content = content.replace(pattern, (match, protocol, www, matchedDomain, path) => {
+            const cleanPath = path || "";
+            const originalUrl = `${matchedDomain || domain}${cleanPath}`;
+            const fixerUrl = `https://${fixer}${cleanPath}`;
+            return `[${originalUrl}](${fixerUrl})`;
+        });
     }
 
     return content;
