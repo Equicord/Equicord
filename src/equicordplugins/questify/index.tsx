@@ -1751,10 +1751,13 @@ export default definePlugin({
         removeServerListElement(ServerListRenderPosition.Above, this.renderQuestifyButton);
         stopAutoFetchingQuests();
 
-        activeQuestIntervals.forEach((intervalData, questId) => {
-            clearInterval(intervalData.progressTimeout);
-            clearTimeout(intervalData.rerenderTimeout);
-            activeQuestIntervals.delete(questId);
-        });
+        for (const questId of activeQuestIntervals.keys()) {
+            const intervalData = activeQuestIntervals.get(questId);
+            if (intervalData) {
+                clearInterval(intervalData.progressTimeout);
+                clearTimeout(intervalData.rerenderTimeout);
+            }
+        }
+        activeQuestIntervals.clear();
     }
 });
