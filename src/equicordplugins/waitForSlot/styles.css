@@ -1,0 +1,82 @@
+.vc-wfs-footer {
+    display: flex;
+    justify-content: flex-start !important;
+    flex-direction: row !important;
+    gap: 8px;
+    width: 100%;
+    align-self: stretch;
+    padding-left: 16px !important;
+    padding-right: 0 !important;
+}
+
+.vc-wfs-footer > * {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.vc-wfs-footer button {
+    flex-shrink: 0;
+}
+
+.vc-wfs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vc-wfs-header > button {
+    margin-left: auto;
+}
+
+.vc-wfs-danger {
+    color: var(--status-danger);
+    font-weight: 600;
+}
+
+.vc-wfs-vc-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.vc-wfs-guild-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.vc-wfs-available-text {
+    font-size: 1.05rem;
+    line-height: 1.4;
+}
+
+.vc-wfs-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.vc-wfs-notice-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+.vc-wfs-notice-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.vc-wfs-notice-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vc-wfs-notice-actions button {
+    height: 24px;
+    padding: 0 8px;
+    min-height: 24px;
+}
