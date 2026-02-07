@@ -1498,8 +1498,8 @@ export default definePlugin({
                     // Run Questify's sort function every time due to hook requirements but return
                     // early if not applicable. If the sort method is set to "Questify", replace the
                     // Quests with the sorted ones. Also, setup a trigger to rerender the memo.
-                    match: /(?<=function \i\((\i),\i\){let \i=.{0,10}\i.useRef.{0,100}?;)(return \i.useMemo\(\(\)=>{)/,
-                    replace: "const questRerenderTrigger=$self.useQuestRerender();const questifySorted=$self.sortQuests($1,arguments[1].sortMethod!==\"questify\");$2if(arguments[1].sortMethod===\"questify\"){$1=questifySorted;};"
+                    match: /(return \i.useMemo\(\(\)=>{)(?=if\(0===(\i).length\))/,
+                    replace: "const questRerenderTrigger=$self.useQuestRerender();const questifySorted=$self.sortQuests($2,arguments[1].sortMethod!==\"questify\");$1if(arguments[1].sortMethod===\"questify\"){$2=questifySorted;};"
                 },
                 {
                     // Account for Quest status changes.
@@ -1508,8 +1508,8 @@ export default definePlugin({
                 },
                 {
                     // If we already applied Questify's sort, skip further sorting.
-                    match: /(?<=sortMethod:(\i).{0,100}?\i\);)(return )((\i).sort)/,
-                    replace: "$2$1===\"questify\"?$4:$3"
+                    match: /(?<=sortMethod:(\i).{0,115}?return )((\i).sort)/,
+                    replace: "$1===\"questify\"?$3:$2"
                 },
                 {
                     // Add the trigger to the memo for rerendering Quests order due to progress changes, etc.
