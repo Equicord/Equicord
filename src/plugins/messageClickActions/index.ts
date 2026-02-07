@@ -142,6 +142,12 @@ const settings = definePluginSettings({
         options: actions,
         default: "DELETE"
     },
+    singleClickOthersAction: {
+        type: OptionType.SELECT,
+        description: "Action on single click (others' messages)",
+        options: actions,
+        default: "DELETE"
+    },
     singleClickModifier: {
         type: OptionType.SELECT,
         description: "Modifier required for single click action",
@@ -515,7 +521,9 @@ export default definePlugin({
 
         if ((settings.store.disableInDms && isDM) || (settings.store.disableInSystemDms && isSystemDM)) return;
 
-        const singleClickAction = settings.store.singleClickAction as ClickAction;
+        const singleClickAction = isMe
+            ? (settings.store.singleClickAction as ClickAction)
+            : (settings.store.singleClickOthersAction as ClickAction);
         const doubleClickAction = isMe
             ? (settings.store.doubleClickAction as ClickAction)
             : (settings.store.doubleClickOthersAction as ClickAction);
