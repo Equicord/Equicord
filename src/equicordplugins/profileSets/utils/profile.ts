@@ -315,7 +315,7 @@ type LoadPresetOptions = {
 
 export async function loadPresetAsPending(preset: ProfilePreset, guildId?: string, options: LoadPresetOptions = {}) {
     try {
-        const isGuild = options.isGuildProfile ?? Boolean(guildId);
+        const isGuild = options.isGuildProfile ?? !!guildId;
         if (isGuild && !guildId) return;
         logger.info("loadPresetAsPending:start", {
             presetName: preset.name,
