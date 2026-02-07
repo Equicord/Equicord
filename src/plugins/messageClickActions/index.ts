@@ -138,9 +138,15 @@ const settings = definePluginSettings({
     },
     singleClickAction: {
         type: OptionType.SELECT,
-        description: "Action on single click with modifier",
+        description: "Action on single click (your messages)",
         options: actions,
         default: "DELETE"
+    },
+    singleClickModifier: {
+        type: OptionType.SELECT,
+        description: "Modifier required for single click action (your messages)",
+        options: singleClickModifiers,
+        default: "BACKSPACE"
     },
     singleClickOthersAction: {
         type: OptionType.SELECT,
@@ -148,9 +154,9 @@ const settings = definePluginSettings({
         options: actions,
         default: "DELETE"
     },
-    singleClickModifier: {
+    singleClickOthersModifier: {
         type: OptionType.SELECT,
-        description: "Modifier required for single click action",
+        description: "Modifier required for single click action (others' messages)",
         options: singleClickModifiers,
         default: "BACKSPACE"
     },
@@ -529,7 +535,9 @@ export default definePlugin({
             : (settings.store.doubleClickOthersAction as ClickAction);
         const tripleClickAction = settings.store.tripleClickAction as ClickAction;
 
-        const singleClickModifier = settings.store.singleClickModifier as Modifier;
+        const singleClickModifier = isMe
+            ? (settings.store.singleClickModifier as Modifier)
+            : (settings.store.singleClickOthersModifier as Modifier);
         const doubleClickModifier = settings.store.doubleClickModifier as Modifier;
         const tripleClickModifier = settings.store.tripleClickModifier as Modifier;
 
