@@ -21,8 +21,8 @@ export const settings = definePluginSettings({
         description: "",
         options: [
             { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
-            ...(IS_DISCORD_DESKTOP ? [{ label: "E-Z Host", value: ServiceType.EZHOST }] : []),
-            ...(IS_DISCORD_DESKTOP ? [{ label: "Nest", value: ServiceType.NEST }] : [])
+            { label: "E-Z Host", value: ServiceType.EZHOST },
+            { label: "Nest", value: ServiceType.NEST }
         ],
         hidden: true
     },
@@ -135,7 +135,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
 export default definePlugin({
     name: "FileUpload",
     description: "Upload images and videos to file hosting services like Zipline and Nest",
-    authors: [EquicordDevs.creations],
+    authors: [EquicordDevs.creations, EquicordDevs.keircn],
     settings,
     contextMenus: {
         "message": messageContextMenuPatch,
