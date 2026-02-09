@@ -23,7 +23,6 @@ let clicked = false;
 
 const SafetyHubStore = findStoreLazy("SafetyHubStore");
 const fetchSafetyHub: () => Promise<void> = findByCodeLazy("SAFETY_HUB_FETCH_START");
-
 const WarningIcon = findExportedComponentLazy("WarningIcon");
 const ShieldIcon = findExportedComponentLazy("ShieldIcon");
 
