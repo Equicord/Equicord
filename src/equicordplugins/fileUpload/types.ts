@@ -9,7 +9,8 @@ export enum ServiceType {
     NEST = "nest",
     EZHOST = "ezhost",
     CATBOX = "catbox",
-    ZEROX0 = "0x0"
+    ZEROX0 = "0x0",
+    LITTERBOX = "litterbox"
 }
 
 export const serviceLabels: Record<ServiceType, string> = {
@@ -17,7 +18,8 @@ export const serviceLabels: Record<ServiceType, string> = {
     [ServiceType.NEST]: "Nest",
     [ServiceType.EZHOST]: "E-Z Host",
     [ServiceType.CATBOX]: "Catbox",
-    [ServiceType.ZEROX0]: "0x0.st"
+    [ServiceType.ZEROX0]: "0x0.st",
+    [ServiceType.LITTERBOX]: "Litterbox"
 };
 
 export interface UploadResponse {

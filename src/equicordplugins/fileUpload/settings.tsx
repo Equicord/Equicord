@@ -18,13 +18,15 @@ export function SettingsComponent() {
     const isNest = store.serviceType === ServiceType.NEST;
     const isEzHost = store.serviceType === ServiceType.EZHOST;
     const isZipline = store.serviceType === ServiceType.ZIPLINE;
+    const isLitterbox = store.serviceType === ServiceType.LITTERBOX;
 
     const serviceOptions = [
         { label: "Zipline", value: ServiceType.ZIPLINE },
         { label: "E-Z Host", value: ServiceType.EZHOST },
         { label: "Nest", value: ServiceType.NEST },
-        { label: "Catbox.moe", value: ServiceType.CATBOX },
-        { label: "0x0.st", value: ServiceType.ZEROX0 }
+            { label: "Catbox.moe", value: ServiceType.CATBOX },
+            { label: "0x0.st", value: ServiceType.ZEROX0 },
+            { label: "Litterbox", value: ServiceType.LITTERBOX }
     ];
 
     return (
@@ -88,6 +90,26 @@ export function SettingsComponent() {
                         value={store.folderId}
                         onChange={v => store.folderId = v}
                         placeholder="Leave empty for no folder"
+                    />
+                </SettingsSection>
+            )}
+
+            {isLitterbox && (
+                <SettingsSection name="Litterbox Expiry" description="How long uploads are retained">
+                    <Select
+                        options={[
+                            { label: "1 hour", value: "1h" },
+                            { label: "12 hours", value: "12h" },
+                            { label: "24 hours", value: "24h" },
+                            { label: "72 hours", value: "72h" }
+                        ]}
+                        isSelected={v => v === store.litterboxExpiry}
+                        select={v => {
+                            store.litterboxExpiry = v;
+                            update();
+                        }}
+                        serialize={v => v}
+                        placeholder="Select expiry"
                     />
                 </SettingsSection>
             )}

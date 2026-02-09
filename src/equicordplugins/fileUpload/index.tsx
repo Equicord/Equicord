@@ -24,7 +24,8 @@ export const settings = definePluginSettings({
             { label: "E-Z Host", value: ServiceType.EZHOST },
             { label: "Nest", value: ServiceType.NEST },
             { label: "Catbox.moe", value: ServiceType.CATBOX },
-            { label: "0x0.st", value: ServiceType.ZEROX0 }
+            { label: "0x0.st", value: ServiceType.ZEROX0 },
+            { label: "Litterbox", value: ServiceType.LITTERBOX }
         ],
         hidden: true
     },
@@ -50,6 +51,18 @@ export const settings = definePluginSettings({
         type: OptionType.STRING,
         description: "",
         default: "",
+        hidden: true
+    },
+    litterboxExpiry: {
+        type: OptionType.SELECT,
+        description: "",
+        options: [
+            { label: "1 hour", value: "1h" },
+            { label: "12 hours", value: "12h" },
+            { label: "24 hours", value: "24h", default: true },
+            { label: "72 hours", value: "72h" }
+        ],
+        default: "24h",
         hidden: true
     },
     folderId: {

@@ -124,6 +124,7 @@ export function isConfigured(): boolean {
             return Boolean((settings.store as { ezHostKey?: string }).ezHostKey);
         case ServiceType.CATBOX:
         case ServiceType.ZEROX0:
+        case ServiceType.LITTERBOX:
             return true;
         case ServiceType.ZIPLINE:
         default:
@@ -223,6 +224,31 @@ async function uploadTo0x0(fileBlob: Blob, filename: string): Promise<string> {
     return text;
 }
 
+async function uploadToLitterbox(fileBlob: Blob, filename: string): Promise<string> {
+    const formData = new FormData();
+    formData.append("reqtype", "fileupload");
+    formData.append("time", settings.store.litterboxExpiry || "24h");
+    formData.append("fileToUpload", fileBlob, filename);
+
+    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`;
+    const response = await fetch(proxiedUrl, {
+        method: "POST",
+        body: formData
+    });
+
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Upload failed: ${response.status} ${text}`);
+    }
+
+    const text = (await response.text()).trim();
+    if (!text) {
+        throw new Error("No URL returned from upload");
+    }
+
+    return text;
+}
+
 export async function uploadFile(url: string): Promise<void> {
     if (isUploading) {
         showToast("Upload already in progress", Toasts.Type.MESSAGE);
@@ -303,6 +329,9 @@ export async function uploadFile(url: string): Promise<void> {
                 break;
             case ServiceType.ZEROX0:
                 uploadedUrl = await uploadTo0x0(typedBlob, filename);
+                break;
+            case ServiceType.LITTERBOX:
+                uploadedUrl = await uploadToLitterbox(typedBlob, filename);
                 break;
             default:
                 throw new Error("Unknown service type");
