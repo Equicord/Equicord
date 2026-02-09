@@ -157,9 +157,15 @@ const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     children.push(
         <Menu.MenuItem
             id="vc-send-vmsg"
-            label={hasPermission ? "Send Voice Message" : "Send Voice Message (Missing Permissions)"}
-            iconLeft={Microphone}
-            leadingAccessory={{ type: "icon", icon: Microphone }}
+            label={
+                <div>
+                    <Microphone height={24} width={24} />
+                    <div>
+                        Send Voice Message
+                        {!hasPermission && <span style={{ fontSize: "smaller", opacity: 0.6 }}> (Missing Permissions)</span>}
+                    </div>
+                </div>
+            }
             action={() => openModal(modalProps => <Modal modalProps={modalProps} />)}
             disabled={!hasPermission}
         />
