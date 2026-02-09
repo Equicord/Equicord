@@ -10,7 +10,7 @@ import { MagnifyingGlassIcon } from "@components/Icons";
 import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { StartAt } from "@utils/types";
-import { openUserSettingsPanel } from "@webpack/common";
+import { SettingsRouter } from "@webpack/common";
 
 import IconsTab from "./components/IconsTab";
 import { SettingsAbout } from "./components/Modals";
@@ -23,7 +23,7 @@ export default definePlugin({
     startAt: StartAt.WebpackReady,
     toolboxActions: {
         "Open Icons Tab"() {
-            openUserSettingsPanel("equicord_icon_viewer");
+            SettingsRouter.openUserSettings("equicord_icon_viewer_panel");
         },
     },
     settingsAboutComponent: SettingsAbout,

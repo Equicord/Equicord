@@ -52,7 +52,7 @@ function StandingButton() {
                 tooltip={config.label}
                 position="bottom"
                 icon={props => <config.Icon {...props} color={hovered ? config.hoverColor : "currentColor"} />}
-                onClick={() => SettingsRouter.openUserSettings("account_standing_tab")}
+                onClick={() => SettingsRouter.openUserSettings("my_account_panel")}
             />
         </div>
     );
@@ -98,6 +98,7 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Show an account standing button in the header bar",
         default: false,
+        restartNeeded: true,
     }
 });
 

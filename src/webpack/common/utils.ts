@@ -176,11 +176,6 @@ export const { zustandPersist } = mapMangledModuleLazy(".onRehydrateStorage)?", 
     zustandPersist: filters.byCode(/(\(\i,\i\))=>.+?\i\1/)
 });
 
-export const { openUserSettings } = findByPropsLazy("openUserSettings");
-export function openUserSettingsPanel(panel: string) {
-    openUserSettings(panel + "_panel");
-}
-
 export const MessageActions = findByPropsLazy("editMessage", "sendMessage");
 export const MessageCache = findByPropsLazy("clearCache", "_channelMessages");
 export const UserProfileActions = findByPropsLazy("openUserProfileModal", "closeUserProfileModal");

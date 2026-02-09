@@ -9,7 +9,7 @@ import "./styles.css";
 import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { StartAt } from "@utils/types";
-import { openUserSettingsPanel } from "@webpack/common";
+import { SettingsRouter } from "@webpack/common";
 
 import ComponentsTab from "./components/ComponentsTab";
 
@@ -45,7 +45,7 @@ export default definePlugin({
     startAt: StartAt.WebpackReady,
     toolboxActions: {
         "Open Components Tab"() {
-            openUserSettingsPanel("equicord_components");
+            SettingsRouter.openUserSettings("equicord_components_panel");
         },
     },
     start() {
