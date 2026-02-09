@@ -51,3 +51,11 @@ export const enum UserFlags {
     COLLABORATOR = 1125899906842624,
     RESTRICTED_COLLABORATOR = 2251799813685248,
 }
+
+export const enum StandingState {
+    ALL_GOOD = 100,
+    LIMITED = 200,
+    VERY_LIMITED = 300,
+    AT_RISK = 400,
+    SUSPENDED = 500,
+}
