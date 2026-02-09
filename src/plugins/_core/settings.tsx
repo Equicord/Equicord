@@ -153,21 +153,6 @@ export default definePlugin({
             ]
         },
         {
-            find: ".SEARCH_NO_RESULTS&&0===",
-            replacement: [
-                {
-                    match: /(?<=section:(.{0,50})\.DIVIDER\}\))([,;])(?=.{0,200}(\i)\.push.{0,100}label:(\i)\.header)/,
-                    replace: (_, sectionTypes, commaOrSemi, elements, element) =>
-                        `${commaOrSemi} $self.addSettings(${elements}, ${element}, ${sectionTypes}) ${commaOrSemi}`,
-                },
-                {
-                    match: /({(?=.+?function (\i).{0,160}(\i)=\i\.useMemo.{0,140}return \i\.useMemo\(\(\)=>\i\(\3).+?\(\)=>)\2/,
-                    replace: (_, rest, settingsHook) =>
-                        `${rest}$self.wrapSettingsHook(${settingsHook})`,
-                },
-            ],
-        },
-        {
             find: "#{intl::USER_SETTINGS_ACTIONS_MENU_LABEL}",
             replacement: {
                 // Skip the check Discord performs to make sure the section being selected in the user settings context menu is valid
