@@ -22,7 +22,9 @@ export const settings = definePluginSettings({
         options: [
             { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
             { label: "E-Z Host", value: ServiceType.EZHOST },
-            { label: "Nest", value: ServiceType.NEST }
+            { label: "Nest", value: ServiceType.NEST },
+            { label: "Catbox.moe", value: ServiceType.CATBOX },
+            { label: "0x0.st", value: ServiceType.ZEROX0 }
         ],
         hidden: true
     },

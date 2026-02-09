@@ -7,14 +7,17 @@
 export enum ServiceType {
     ZIPLINE = "zipline",
     NEST = "nest",
-    EZHOST = "ezhost"
+    EZHOST = "ezhost",
+    CATBOX = "catbox",
+    ZEROX0 = "0x0"
 }
 
 export const serviceLabels: Record<ServiceType, string> = {
     [ServiceType.ZIPLINE]: "Zipline",
-    [ServiceType.NEST]: "Nest"
-    ,
-    [ServiceType.EZHOST]: "E-Z Host"
+    [ServiceType.NEST]: "Nest",
+    [ServiceType.EZHOST]: "E-Z Host",
+    [ServiceType.CATBOX]: "Catbox",
+    [ServiceType.ZEROX0]: "0x0.st"
 };
 
 export interface UploadResponse {

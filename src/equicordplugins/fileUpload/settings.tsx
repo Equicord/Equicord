@@ -22,7 +22,9 @@ export function SettingsComponent() {
     const serviceOptions = [
         { label: "Zipline", value: ServiceType.ZIPLINE },
         { label: "E-Z Host", value: ServiceType.EZHOST },
-        { label: "Nest", value: ServiceType.NEST }
+        { label: "Nest", value: ServiceType.NEST },
+        { label: "Catbox.moe", value: ServiceType.CATBOX },
+        { label: "0x0.st", value: ServiceType.ZEROX0 }
     ];
 
     return (

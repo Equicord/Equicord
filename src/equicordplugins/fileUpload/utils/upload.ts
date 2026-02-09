@@ -122,6 +122,9 @@ export function isConfigured(): boolean {
             return Boolean(nestToken);
         case ServiceType.EZHOST:
             return Boolean((settings.store as { ezHostKey?: string }).ezHostKey);
+        case ServiceType.CATBOX:
+        case ServiceType.ZEROX0:
+            return true;
         case ServiceType.ZIPLINE:
         default:
             return Boolean(serviceUrl && ziplineToken);
@@ -171,6 +174,53 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
     }
 
     return data.imageUrl || data.rawUrl;
+}
+
+async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string> {
+    const formData = new FormData();
+    formData.append("reqtype", "fileupload");
+    formData.append("fileToUpload", fileBlob, filename);
+
+    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`;
+    const response = await fetch(proxiedUrl, {
+        method: "POST",
+        body: formData
+    });
+
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Upload failed: ${response.status} ${text}`);
+    }
+
+    const text = (await response.text()).trim();
+    if (!text) {
+        throw new Error("No URL returned from upload");
+    }
+
+    return text;
+}
+
+async function uploadTo0x0(fileBlob: Blob, filename: string): Promise<string> {
+    const formData = new FormData();
+    formData.append("file", fileBlob, filename);
+
+    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://0x0.st")}`;
+    const response = await fetch(proxiedUrl, {
+        method: "POST",
+        body: formData
+    });
+
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Upload failed: ${response.status} ${text}`);
+    }
+
+    const text = (await response.text()).trim();
+    if (!text) {
+        throw new Error("No URL returned from upload");
+    }
+
+    return text;
 }
 
 export async function uploadFile(url: string): Promise<void> {
@@ -247,6 +297,12 @@ export async function uploadFile(url: string): Promise<void> {
                 break;
             case ServiceType.EZHOST:
                 uploadedUrl = await uploadToEzHost(typedBlob, filename);
+                break;
+            case ServiceType.CATBOX:
+                uploadedUrl = await uploadToCatbox(typedBlob, filename);
+                break;
+            case ServiceType.ZEROX0:
+                uploadedUrl = await uploadTo0x0(typedBlob, filename);
                 break;
             default:
                 throw new Error("Unknown service type");
