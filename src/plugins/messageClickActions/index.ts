@@ -484,7 +484,7 @@ async function executeAction(
 export default definePlugin({
     name: "MessageClickActions",
     description: "Customize click actions on messages.",
-    authors: [Devs.Ven, EquicordDevs.keyages, EquicordDevs.ZcraftElite],
+    authors: [Devs.Ven, EquicordDevs.keircn, EquicordDevs.ZcraftElite],
     isModified: true,
 
     settings,

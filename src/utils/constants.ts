@@ -1233,7 +1233,7 @@ export const EquicordDevs = Object.freeze({
         name: "Benjii",
         id: 463702169443368970n
     },
-    keyages: {
+    keircn: {
         name: "Key",
         id: 1230319937155760131n
     },

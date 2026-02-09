@@ -21,7 +21,7 @@ export function SettingsComponent() {
 
     const serviceOptions = [
         { label: "Zipline", value: ServiceType.ZIPLINE },
-        { label: "E-Z Host", value: ServiceType.EZHOST },
+        ...(IS_DISCORD_DESKTOP ? [{ label: "E-Z Host", value: ServiceType.EZHOST }] : []),
         ...(IS_DISCORD_DESKTOP ? [{ label: "Nest", value: ServiceType.NEST }] : [])
     ];
 

@@ -59,7 +59,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "EquicordHelper",
     description: "Used to provide support, fix discord caused crashes, and other misc features.",
-    authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keyages, EquicordDevs.SerStars, EquicordDevs.mart],
+    authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keircn, EquicordDevs.SerStars, EquicordDevs.mart],
     required: true,
     settings,
     patches: [
