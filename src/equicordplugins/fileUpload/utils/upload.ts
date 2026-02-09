@@ -17,6 +17,8 @@ const Native = IS_DISCORD_DESKTOP
     ? VencordNative.pluginHelpers.FileUpload as PluginNative<typeof import("../native")>
     : null;
 
+const CORS_PROXY = "https://cors.keiran0.workers.dev"; // im hosting this on cloudflare workers so uptime and latency should be reliable
+
 let isUploading = false;
 
 async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string> {
@@ -65,28 +67,52 @@ async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string
 }
 
 async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
-    if (!Native) {
-        throw new Error("Nest upload is only available on desktop");
-    }
-
     const { nestToken } = settings.store;
 
     if (!nestToken) {
         throw new Error("Auth token is required");
     }
 
-    const arrayBuffer = await fileBlob.arrayBuffer();
-    const result = await Native.uploadToNest(arrayBuffer, filename, nestToken);
+    if (Native) {
+        const arrayBuffer = await fileBlob.arrayBuffer();
+        const result = await Native.uploadToNest(arrayBuffer, filename, nestToken);
 
-    if (!result.success) {
-        throw new Error(result.error || "Upload failed");
+        if (!result.success) {
+            throw new Error(result.error || "Upload failed");
+        }
+
+        if (!result.url) {
+            throw new Error("No URL returned from upload");
+        }
+
+        return result.url;
     }
 
-    if (!result.url) {
-        throw new Error("No URL returned from upload");
+    const formData = new FormData();
+    formData.append("file", fileBlob, filename);
+
+    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://nest.rip/api/files/upload")}`;
+
+    const response = await fetch(proxiedUrl, {
+        method: "POST",
+        headers: {
+            "Authorization": nestToken
+        },
+        body: formData
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Upload failed: ${response.status} ${errorText}`);
     }
 
-    return result.url;
+    const data = await response.json() as { fileURL?: string };
+
+    if (data.fileURL) {
+        return data.fileURL;
+    }
+
+    throw new Error("No URL returned from upload");
 }
 
 export function isConfigured(): boolean {
@@ -127,7 +153,8 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
 
     const headers: Record<string, string> = { key: ezHostKey };
 
-    const response = await fetch("https://api.e-z.host/files", {
+    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://api.e-z.host/files")}`;
+    const response = await fetch(proxiedUrl, {
         method: "POST",
         headers,
         body: formData

@@ -151,23 +151,18 @@ function useObjectUrl() {
 }
 
 const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
-    const hasPermission = !props.channel.guild_id
-        || (PermissionStore.can(PermissionsBits.SEND_VOICE_MESSAGES, props.channel) && PermissionStore.can(PermissionsBits.SEND_MESSAGES, props.channel));
+    if (props.channel.guild_id && !(PermissionStore.can(PermissionsBits.SEND_VOICE_MESSAGES, props.channel) && PermissionStore.can(PermissionsBits.SEND_MESSAGES, props.channel))) return;
 
     children.push(
         <Menu.MenuItem
             id="vc-send-vmsg"
-            label={
-                <div>
-                    <Microphone height={24} width={24} />
-                    <div>
-                        Send Voice Message
-                        {!hasPermission && <span style={{ fontSize: "smaller", opacity: 0.6 }}> (Missing Permissions)</span>}
-                    </div>
-                </div>
-            }
+            iconLeft={Microphone}
+            leadingAccessory={{
+                type: "icon",
+                icon: Microphone
+            }}
+            label="Send Voice Message"
             action={() => openModal(modalProps => <Modal modalProps={modalProps} />)}
-            disabled={!hasPermission}
         />
     );
 };
