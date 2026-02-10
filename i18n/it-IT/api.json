@@ -1,25 +1,25 @@
 {
     "commands": {
-        "errorExecuting": "An Error occurred while executing command \"{name}\""
+        "errorExecuting": "Si è verificato un errore durante l'esecuzione del comando \"{name}\""
     },
     "notifications": {
-        "dismissNotification": "Dismiss Notification",
-        "noNotifications": "No notifications yet",
-        "notificationLog": "Notification Log",
-        "notificationSettings": "Notification Settings",
+        "dismissNotification": "Ignora la notifica",
+        "noNotifications": "Nessuna notifica al momento",
+        "notificationLog": "Log delle notifiche",
+        "notificationSettings": "Impostazioni notifiche",
         "logs": {
-            "title": "Are you sure?",
-            "body_zero": "No notification selected.",
-            "body_one": "This will permanently remove {count} notification. This action cannot be undone.",
-            "body_other": "This will permanently remove {count} notifications. This action cannot be undone.",
-            "confirm": "Do it!",
-            "cancel": "Nevermind",
-            "clearNotificationLog": "Clear Notification Log"
+            "title": "Sei sicuro?",
+            "body_zero": "Nessuna notifica selezionata.",
+            "body_one": "Sarà rimossa permanentemente {count} notifica. Questa azione non può essere annullata.",
+            "body_other": "Saranno rimosse permanentemente {count} notifiche. Questa azione non può essere annullata.",
+            "confirm": "Fallo!",
+            "cancel": "Lascia stare",
+            "clearNotificationLog": "Cancella il log delle notifiche"
         },
         "missedNotifications": {
-            "title": "While you were away",
-            "body_one": "{count} notification received",
-            "body_other": "{count} notifications received"
+            "title": "Mentre eri via",
+            "body_one": " {count} notifica ricevuta",
+            "body_other": " {count} notifiche ricevute"
         }
     },
     "memberListDecorators": {
@@ -32,6 +32,6 @@
         "fallback": "Failed to render {key} Message Decoration"
     },
     "notices": {
-        "fallback": "Error Showing Notice"
+        "fallback": "Errore visualizzazione avviso"
     }
 }
