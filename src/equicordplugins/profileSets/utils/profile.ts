@@ -122,6 +122,13 @@ type CurrentProfileOptions = {
     isGuildProfile?: boolean;
 };
 
+type LoadPresetOptions = {
+    skipGlobalName?: boolean;
+    skipBio?: boolean;
+    skipPronouns?: boolean;
+    isGuildProfile?: boolean;
+};
+
 export async function getCurrentProfile(guildId?: string, options: CurrentProfileOptions = {}): Promise<Omit<ProfilePreset, "name" | "timestamp">> {
     const currentUser = UserStore.getCurrentUser();
     const baseProfile = UserProfileStore.getUserProfile(currentUser.id);
@@ -277,13 +284,6 @@ function customStatusEq(a: CustomStatus | null | undefined, b: CustomStatus | nu
         && a.emojiName === b.emojiName
         && String(a.expiresAtMs ?? "0") === String(b.expiresAtMs ?? "0");
 }
-
-type LoadPresetOptions = {
-    skipGlobalName?: boolean;
-    skipBio?: boolean;
-    skipPronouns?: boolean;
-    isGuildProfile?: boolean;
-};
 
 export async function loadPresetAsPending(preset: ProfilePreset, guildId?: string, options: LoadPresetOptions = {}) {
     try {
