@@ -38,7 +38,7 @@ export default definePlugin({
             }
         },
         {
-            find: "USER_SETTINGS_GUILD_PROFILE),",
+            find: "USER_SETTINGS_GUILD_PROFILE),L=",
             replacement: {
                 match: /guildId:.{0,80}onChange:.{0,120}\}\)/,
                 replace: "$&,$self.renderPresetSection(\"server\")"
