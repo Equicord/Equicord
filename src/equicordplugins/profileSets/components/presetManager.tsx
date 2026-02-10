@@ -13,7 +13,7 @@ import { React, SelectedGuildStore, TextInput, useStateFromStores } from "@webpa
 import { cl, settings } from "../index";
 import { exportPresets, ImportDecision, importPresets, savePreset } from "../utils/actions";
 import { loadPresetAsPending } from "../utils/profile";
-import { loadPresets, PresetSection, presets, setCurrentPresetIndex } from "../utils/storage";
+import { loadPresets, presets, PresetSection, setCurrentPresetIndex } from "../utils/storage";
 import { ImportProfilesModal } from "./confirmModal";
 import { PresetList } from "./presetList";
 
@@ -37,7 +37,7 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
     const isServerSection = resolvedSection === "server";
     const lastSelectedGuildId = useStateFromStores(
         [SelectedGuildStore],
-        () => SelectedGuildStore.getLastSelectedGuildId?.() ?? SelectedGuildStore.getGuildId?.()
+        () => SelectedGuildStore.getLastSelectedGuildId() ?? SelectedGuildStore.getGuildId()
     );
     const resolvedGuildId = isServerSection ? (guildId ?? lastSelectedGuildId ?? undefined) : undefined;
     const canUseGuild = !isServerSection || Boolean(resolvedGuildId);
