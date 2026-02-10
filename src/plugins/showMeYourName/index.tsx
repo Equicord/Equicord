@@ -990,13 +990,13 @@ export default definePlugin({
             }
         },
         {
-            find: "MESSAGE,userId:",
+            find: ".MESSAGE,userId:",
             group: true,
             replacement: [
                 {
                     // Track hovering over reaction popouts.
-                    match: /(?<=return\(0,\i.\i\)\(\i.\i,{className:\i.\i,)(?=onContextMenu:\i=>)/,
-                    replace: "onMouseEnter:()=>{$self.addHoveringReactionPopout(arguments[0].user.id)},onMouseLeave:()=>{$self.removeHoveringReactionPopout(arguments[0].user.id)},$2"
+                    match: /(?<=\(0,\i.\i\)\(\i.\i,{className:\i.\i,)(?=(?:align:\i\.\i\.\i\.CENTER|onContextMenu:\i=>))/g,
+                    replace: "onMouseEnter:()=>{$self.addHoveringReactionPopout(arguments[0].user.id)},onMouseLeave:()=>{$self.removeHoveringReactionPopout(arguments[0].user.id)},"
                 },
                 {
                     // Replace names in reaction popouts.
