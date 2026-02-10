@@ -16,7 +16,7 @@ import { ChannelActions, ChannelStore, Menu, VoiceStateStore } from "@webpack/co
 
 let waitingChannelId: string | null = null;
 
-const NOTIFICATION_AUDIO_URL = "https://raw.githubusercontent.com/Eazvy/Utils/694219a1d69f2e27912943ed9b41a75fca051d9d/notification.mp3";
+const NOTIFICATION_AUDIO_URL = "https://raw.githubusercontent.com/Equicord/Equibored/main/sounds/waitForSlot/notification.mp3";
 
 const settings = definePluginSettings({
     autoJoin: {
