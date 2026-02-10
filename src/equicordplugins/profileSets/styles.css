@@ -47,6 +47,11 @@
     margin-top: 12px;
 }
 
+.vc-profile-presets-section-server .vc-profile-presets-pagination {
+    width: 300px;
+    max-width: 100%;
+}
+
 .vc-profile-presets-page {
     display: flex;
     align-items: center;
