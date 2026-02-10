@@ -10,7 +10,6 @@ import { findStoreLazy } from "@webpack";
 import { FluxDispatcher, GuildMemberStore,IconUtils, UserProfileStore, UserStore } from "@webpack/common";
 
 const UserProfileSettingsStore = findStoreLazy("UserProfileSettingsStore");
-const GuildIdentitySettingsStore = findStoreLazy("GuildIdentitySettingsStore");
 const CustomStatusSettings = getUserSettingLazy("status", "customStatus")!;
 
 type PendingChanges = Record<string, unknown> & {
@@ -143,23 +142,10 @@ export async function getCurrentProfile(guildId?: string, options: CurrentProfil
     const pendingChangesForGuild = (effectiveGuildId
         ? (UserProfileSettingsStore.getPendingChanges(effectiveGuildId) ?? {})
         : {}) as PendingChanges;
-    let pendingChanges: PendingChanges = isGuildProfile && Object.keys(pendingChangesForGuild).length > 0
+    const pendingChanges: PendingChanges = isGuildProfile && Object.keys(pendingChangesForGuild).length > 0
         ? pendingChangesForGuild
         : pendingChangesDefault;
-    if (isGuildProfile && GuildIdentitySettingsStore?.getAllPending) {
-        const guildPending = GuildIdentitySettingsStore.getAllPending();
-        if (guildPending && typeof guildPending === "object") {
-            pendingChanges = {
-                ...guildPending,
-                pendingAvatarDecoration: guildPending.pendingAvatarDecoration ?? GuildIdentitySettingsStore.getPendingAvatarDecoration?.(),
-                pendingProfileEffect: guildPending.pendingProfileEffect ?? GuildIdentitySettingsStore.getPendingProfileEffect?.(),
-                pendingNameplate: guildPending.pendingNameplate ?? GuildIdentitySettingsStore.getPendingNameplate?.(),
-                pendingDisplayNameStyles: guildPending.pendingDisplayNameStyles ?? GuildIdentitySettingsStore.getPendingDisplayNameStyles?.(),
-                pendingAccentColor: guildPending.pendingAccentColor ?? GuildIdentitySettingsStore.getPendingAccentColor?.(),
-                pendingThemeColors: guildPending.pendingThemeColors ?? GuildIdentitySettingsStore.getPendingThemeColors?.()
-            } as PendingChanges;
-        }
-    }
+
     const customStatusSetting = CustomStatusSettings.getSetting();
     const customStatus: CustomStatus | null = isGuildProfile
         ? null
@@ -259,7 +245,7 @@ export async function getCurrentProfile(guildId?: string, options: CurrentProfil
         globalName: isGuildProfile
             ? (pendingChanges.pendingNickname ?? guildMember?.nick ?? null)
             : (pendingChanges.pendingGlobalName ?? currentUser.globalName ?? null),
-        pronouns: isGuildProfile ? null : (pendingChanges.pendingPronouns ?? userProfile?.pronouns ?? null),
+        pronouns: pendingChanges.pendingPronouns ?? userProfile?.pronouns ?? null,
         avatarDecoration,
         profileEffect,
         nameplate,
@@ -292,7 +278,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
         const current = await getCurrentProfile(guildId, {
             isGuildProfile: isGuild
         });
-        const profilePrefix = isGuild ? "GUILD_IDENTITY_SETTINGS" : "USER_SETTINGS_ACCOUNT";
+        const profilePrefix = "USER_SETTINGS_ACCOUNT";
         const dispatchProfile = (type: string, payload: Record<string, unknown>) => {
             dispatch(type, isGuild ? { ...payload, guildId } : payload);
         };
@@ -305,64 +291,70 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             }
         }
 
-        if ("bannerDataUrl" in preset && preset?.bannerDataUrl !== current.bannerDataUrl) {
+        if ("bannerDataUrl" in preset && preset.bannerDataUrl !== current.bannerDataUrl) {
             setPending(`${profilePrefix}_SET_PENDING_BANNER`, { banner: preset.bannerDataUrl });
         }
 
         if (!options.skipBio && "bio" in preset && preset.bio !== current.bio) {
-            const bioValue = preset?.bio === null ? "" : preset.bio;
+            const bioValue = preset.bio === null ? "" : preset.bio;
             setPending(`${profilePrefix}_SET_PENDING_BIO`, { bio: bioValue });
         }
 
-        if (!isGuild && !options.skipPronouns && "pronouns" in preset && preset.pronouns !== current.pronouns) {
-            const pronounsValue = preset?.pronouns === null ? "" : preset.pronouns;
+        if (!options.skipPronouns && "pronouns" in preset && preset.pronouns !== current.pronouns) {
+            const pronounsValue = preset.pronouns === null ? "" : preset.pronouns;
             setPending(`${profilePrefix}_SET_PENDING_PRONOUNS`, { pronouns: pronounsValue });
         }
 
-        if (!options.skipGlobalName && preset?.globalName && preset.globalName !== current.globalName) {
+        if (!options.skipGlobalName && preset.globalName !== undefined && preset.globalName !== current.globalName) {
             if (isGuild) {
-                setPending("GUILD_IDENTITY_SETTINGS_SET_PENDING_NICKNAME", { nickname: preset.globalName });
+                setPending("USER_SETTINGS_ACCOUNT_SET_PENDING_NICKNAME", { nickname: preset.globalName });
             } else {
                 setPending("USER_SETTINGS_ACCOUNT_SET_PENDING_GLOBAL_NAME", { globalName: preset.globalName });
             }
         }
 
-        if (preset?.avatarDecoration && !jsonEq(preset.avatarDecoration, current.avatarDecoration)) {
+        if (preset.avatarDecoration !== undefined && !jsonEq(preset.avatarDecoration, current.avatarDecoration)) {
             dispatchProfile(`${profilePrefix}_SET_PENDING_COLLECTIBLES_ITEM`, {
                 item: { type: 0, value: preset.avatarDecoration }
             });
         }
 
-        if (preset?.profileEffect && !jsonEq(preset.profileEffect, current.profileEffect)) {
+        if (preset.profileEffect !== undefined && !jsonEq(preset.profileEffect, current.profileEffect)) {
             dispatchProfile(`${profilePrefix}_SET_PENDING_COLLECTIBLES_ITEM`, {
                 item: { type: 1, value: preset.profileEffect }
             });
         }
 
-        if (preset?.nameplate && !jsonEq(preset.nameplate, current.nameplate)) {
+        if (preset.nameplate !== undefined && !jsonEq(preset.nameplate, current.nameplate)) {
             dispatchProfile(`${profilePrefix}_SET_PENDING_COLLECTIBLES_ITEM`, {
                 item: { type: 2, value: preset.nameplate }
             });
         }
 
-        if (preset?.displayNameStyles && !jsonEq(preset.displayNameStyles, current.displayNameStyles)) {
+        if (preset.displayNameStyles !== undefined && !jsonEq(preset.displayNameStyles, current.displayNameStyles)) {
             setPending(`${profilePrefix}_SET_PENDING_DISPLAY_NAME_STYLES`, { displayNameStyles: preset.displayNameStyles });
         }
 
-        if (preset?.themeColors && !jsonEq(preset.themeColors, current.themeColors)) {
+        if (preset.themeColors !== undefined && !jsonEq(preset.themeColors, current.themeColors)) {
             setPending(`${profilePrefix}_SET_PENDING_THEME_COLORS`, { themeColors: preset.themeColors });
         }
 
-        if (preset?.primaryGuildId && !isGuild && preset.primaryGuildId !== current.primaryGuildId) {
+        if (preset.primaryGuildId !== undefined && !isGuild && preset.primaryGuildId !== current.primaryGuildId) {
             dispatch("USER_SETTINGS_SET_PENDING_PRIMARY_GUILD_ID", { primaryGuildId: preset.primaryGuildId });
         }
 
-        if (preset?.customStatus && !isGuild && !customStatusEq(preset.customStatus, current.customStatus)) {
+        if (preset.customStatus !== undefined && !isGuild && !customStatusEq(preset.customStatus, current.customStatus)) {
+            const customStatusValue = preset.customStatus ?? {
+                text: "",
+                expiresAtMs: "0",
+                emojiId: "0",
+                emojiName: ""
+            };
             CustomStatusSettings.updateSetting({
-                text: preset.customStatus.text || "",
-                expiresAtMs: preset.customStatus.expiresAtMs || "0",
-                emojiId: preset.customStatus.emojiId || "0",
-                emojiName: preset.customStatus.emojiName || ""
+                text: customStatusValue.text || "",
+                expiresAtMs: customStatusValue.expiresAtMs || "0",
+                emojiId: customStatusValue.emojiId || "0",
+                emojiName: customStatusValue.emojiName || ""
             });
         }
     } catch (err) {
