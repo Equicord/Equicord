@@ -1,0 +1,39 @@
+.vc-emoji-alias-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    background: var(--background-secondary);
+}
+
+.vc-emoji-alias-row-editing {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vc-emoji-alias-row-editing-text-input {
+    width: 180px;
+}
+
+.vc-emoji-alias-row-arrow {
+    color: var(--text-muted);
+}
+
+.vc-emoji-alias-row-error {
+    color: var(--text-feedback-critical);
+}
+
+.vc-emoji-alias-row-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vc-emoji-alias-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
