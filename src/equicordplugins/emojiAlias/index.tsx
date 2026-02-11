@@ -1113,12 +1113,16 @@ export default definePlugin({
             find: "numEmojiResults:",
             replacement: [
                 {
-                    match: /\{emojis:\{unlocked:(\i)\}\}=\i\.\i\.queryEmojiResults\(\{query:(\i),channel:(\i),intention:(\i)\.emojiIntention,maxCount:\i\}\);/,
+                    match: /\{emojis:\{unlocked:(\i)\}\}=.{0,25}\(\{query:(\i),channel:(\i),intention:(\i).{0,30}\}\);/,
                     replace: "$&$1=$self.injectAliasResults($1,$2,$3,$4.emojiIntention);"
                 },
                 {
-                    match: /,maxCount:(\i)(.{1,500}\i)=(\i)\.slice\(0,(Math\.max\(\i,\i(?:-\i\.length){2}\))\)/,
-                    replace: ",maxCount:Infinity$2=($3.sliceTo = $4, $3)"
+                    match: /(intention:\i\.emojiIntention,maxCount:)\i/,
+                    replace: "$1Infinity"
+                },
+                {
+                    match: /(\i)\.slice\(0,(Math\.max\(\i,\i(?:-\i\.length){2}\))\)/,
+                    replace: "($1.sliceTo = $2, $1)"
                 }
             ]
         }
