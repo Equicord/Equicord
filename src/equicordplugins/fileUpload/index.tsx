@@ -23,8 +23,9 @@ export const settings = definePluginSettings({
             { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
             { label: "E-Z Host", value: ServiceType.EZHOST },
             { label: "Nest", value: ServiceType.NEST },
+            { label: "S3-Compatible", value: ServiceType.S3 },
             { label: "Catbox.moe", value: ServiceType.CATBOX },
-            { label: "0x0.st", value: ServiceType.ZEROX0 },
+            ...(IS_DISCORD_DESKTOP ? [{ label: "0x0.st", value: ServiceType.ZEROX0 }] : []),
             { label: "Litterbox", value: ServiceType.LITTERBOX }
         ],
         hidden: true
@@ -39,6 +40,60 @@ export const settings = definePluginSettings({
         type: OptionType.STRING,
         description: "E-Z Host API key",
         default: "",
+        hidden: true
+    },
+    s3Endpoint: {
+        type: OptionType.STRING,
+        description: "",
+        default: "",
+        hidden: true
+    },
+    s3Bucket: {
+        type: OptionType.STRING,
+        description: "",
+        default: "",
+        hidden: true
+    },
+    s3Region: {
+        type: OptionType.STRING,
+        description: "",
+        default: "auto",
+        hidden: true
+    },
+    s3AccessKeyId: {
+        type: OptionType.STRING,
+        description: "",
+        default: "",
+        hidden: true
+    },
+    s3SecretAccessKey: {
+        type: OptionType.STRING,
+        description: "",
+        default: "",
+        hidden: true
+    },
+    s3SessionToken: {
+        type: OptionType.STRING,
+        description: "",
+        default: "",
+        hidden: true
+    },
+    s3PublicUrl: {
+        type: OptionType.STRING,
+        description: "",
+        default: "",
+        hidden: true
+    },
+    s3Prefix: {
+        type: OptionType.STRING,
+        description: "",
+        default: "",
+        hidden: true
+    },
+    s3ForcePathStyle: {
+        type: OptionType.BOOLEAN,
+        description: "",
+        default: true,
         hidden: true
     },
     ziplineToken: {

@@ -17,6 +17,7 @@ export function SettingsComponent() {
     const { store } = settings;
     const isNest = store.serviceType === ServiceType.NEST;
     const isEzHost = store.serviceType === ServiceType.EZHOST;
+    const isS3 = store.serviceType === ServiceType.S3;
     const isZipline = store.serviceType === ServiceType.ZIPLINE;
     const isLitterbox = store.serviceType === ServiceType.LITTERBOX;
 
@@ -24,9 +25,10 @@ export function SettingsComponent() {
         { label: "Zipline", value: ServiceType.ZIPLINE },
         { label: "E-Z Host", value: ServiceType.EZHOST },
         { label: "Nest", value: ServiceType.NEST },
-            { label: "Catbox.moe", value: ServiceType.CATBOX },
-            { label: "0x0.st", value: ServiceType.ZEROX0 },
-            { label: "Litterbox", value: ServiceType.LITTERBOX }
+        { label: "S3-Compatible", value: ServiceType.S3 },
+        { label: "Catbox.moe", value: ServiceType.CATBOX },
+        ...(IS_DISCORD_DESKTOP ? [{ label: "0x0.st", value: ServiceType.ZEROX0 }] : []),
+        { label: "Litterbox", value: ServiceType.LITTERBOX }
     ];
 
     return (
@@ -80,6 +82,95 @@ export function SettingsComponent() {
                         value={store.nestToken}
                         onChange={v => store.nestToken = v}
                         placeholder="Your Nest API token"
+                    />
+                </SettingsSection>
+            )}
+
+            {isS3 && (
+                <SettingsSection name="S3 Endpoint URL" description="S3-compatible endpoint (e.g. https://<accountid>.r2.cloudflarestorage.com)">
+                    <TextInput
+                        value={(store as { s3Endpoint?: string; }).s3Endpoint || ""}
+                        onChange={v => (store as { s3Endpoint?: string; }).s3Endpoint = v}
+                        placeholder="https://your-endpoint.example.com"
+                    />
+                </SettingsSection>
+            )}
+
+            {isS3 && (
+                <SettingsSection name="Bucket Name" description="Bucket to upload into">
+                    <TextInput
+                        value={(store as { s3Bucket?: string; }).s3Bucket || ""}
+                        onChange={v => (store as { s3Bucket?: string; }).s3Bucket = v}
+                        placeholder="my-bucket"
+                    />
+                </SettingsSection>
+            )}
+
+            {isS3 && (
+                <SettingsSection name="Region" description="AWS region or auto for Cloudflare R2">
+                    <TextInput
+                        value={(store as { s3Region?: string; }).s3Region || "auto"}
+                        onChange={v => (store as { s3Region?: string; }).s3Region = v}
+                        placeholder="auto"
+                    />
+                </SettingsSection>
+            )}
+
+            {isS3 && (
+                <SettingsSection name="Access Key ID" description="S3-compatible access key">
+                    <TextInput
+                        value={(store as { s3AccessKeyId?: string; }).s3AccessKeyId || ""}
+                        onChange={v => (store as { s3AccessKeyId?: string; }).s3AccessKeyId = v}
+                        placeholder="Your access key ID"
+                    />
+                </SettingsSection>
+            )}
+
+            {isS3 && (
+                <SettingsSection name="Secret Access Key" description="S3-compatible secret key">
+                    <TextInput
+                        value={(store as { s3SecretAccessKey?: string; }).s3SecretAccessKey || ""}
+                        onChange={v => (store as { s3SecretAccessKey?: string; }).s3SecretAccessKey = v}
+                        placeholder="Your secret access key"
+                    />
+                </SettingsSection>
+            )}
+
+            {isS3 && (
+                <SettingsSection name="Session Token" description="Optional temporary credential token">
+                    <TextInput
+                        value={(store as { s3SessionToken?: string; }).s3SessionToken || ""}
+                        onChange={v => (store as { s3SessionToken?: string; }).s3SessionToken = v}
+                        placeholder="Optional session token"
+                    />
+                </SettingsSection>
+            )}
+
+            {isS3 && (
+                <SettingsSection name="Public Base URL" description="Optional public URL base to use for returned links">
+                    <TextInput
+                        value={(store as { s3PublicUrl?: string; }).s3PublicUrl || ""}
+                        onChange={v => (store as { s3PublicUrl?: string; }).s3PublicUrl = v}
+                        placeholder="https://cdn.example.com"
+                    />
+                </SettingsSection>
+            )}
+
+            {isS3 && (
+                <SettingsSection name="Object Key Prefix" description="Optional folder/prefix inside the bucket">
+                    <TextInput
+                        value={(store as { s3Prefix?: string; }).s3Prefix || ""}
+                        onChange={v => (store as { s3Prefix?: string; }).s3Prefix = v}
+                        placeholder="uploads/discord"
+                    />
+                </SettingsSection>
+            )}
+
+            {isS3 && (
+                <SettingsSection tag="label" name="Use Path-Style Endpoint" description="Use endpoint/bucket/key format (recommended for R2)" inlineSetting>
+                    <Switch
+                        checked={(store as { s3ForcePathStyle?: boolean; }).s3ForcePathStyle ?? true}
+                        onChange={v => (store as { s3ForcePathStyle?: boolean; }).s3ForcePathStyle = v}
                     />
                 </SettingsSection>
             )}
