@@ -16,8 +16,8 @@ import { classes } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
-import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
-import { ChannelStore, MessageStore, Parser, RelationshipStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
+import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy, findLazy } from "@webpack";
+import { ChannelStore, MessageStore, RelationshipStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-message-peek-");
 
@@ -27,6 +27,7 @@ const MessageActions = findByPropsLazy("fetchMessages", "sendMessage");
 
 const hasRelevantActivity: (props: ActivityCheckProps) => boolean = findByCodeLazy(".OFFLINE||", ".INVISIBLE)return!1");
 const ActivityText: React.ComponentType<ActivityTextProps> = findComponentByCodeLazy("hasQuest:", "hideEmoji:");
+const FavoritesServerExperiment = findLazy(m => m?.definition?.id === "2021-09_favorites_server");
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
@@ -162,7 +163,7 @@ function MessagePreviewContent({ channel, user }: { channel: Channel; user: User
 
     const currentUserId = UserStore.getCurrentUser()?.id;
     const isOwnMessage = lastMessage.author.id === currentUserId;
-    const authorName = isOwnMessage ? "You" : (smynName ?? RelationshipStore.getNickname(lastMessage.author.id) ?? lastMessage.author.globalName ?? lastMessage.author.username);
+    const authorName = isOwnMessage ? "You" : (smynName || RelationshipStore.getNickname(lastMessage.author.id) || lastMessage.author.globalName || lastMessage.author.username);
     const Icon = content.icon ? Icons[content.icon] : null;
 
     return (
@@ -210,15 +211,13 @@ function SubText({ channel, user, activities, applicationStream, voiceChannel, s
 }
 
 function Timestamp({ channel }: { channel: Channel; }) {
-    const lastMessage = useStateFromStores(
-        [MessageStore],
-        () => MessageStore.getLastMessage(channel.id) as Message | undefined
-    );
+    const lastMessage = useStateFromStores([MessageStore], () => MessageStore.getLastMessage(channel.id) as Message | undefined);
 
     if (!lastMessage) return null;
 
     const timestamp = SnowflakeUtils.extractTimestamp(lastMessage.id);
-    return <span className={cl("timestamp")}>{formatRelativeTime(timestamp)}</span>;
+    const className = FavoritesServerExperiment.getCurrentConfig().favoritesEnabled ? cl("timestamp-favorites") : cl("timestamp");
+    return <span className={className}>{formatRelativeTime(timestamp)}</span>;
 }
 
 function shouldShowActivity(lastMessage: Message | undefined, hasActivity: boolean): boolean {
