@@ -14,7 +14,7 @@ export default definePlugin({
     dependencies: ["MessageUpdaterAPI"],
     patches: [
         {
-            find: "}renderEmbeds(",
+            find: "renderEmbeds(",
             replacement: {
                 match: /(?<=renderEmbeds\(\i\){.+?embeds\.map\(\((\i),\i\)?=>{)/,
                 replace: "$&if($self.isTidalEmbed($1))return null;"

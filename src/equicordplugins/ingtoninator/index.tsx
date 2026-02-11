@@ -11,6 +11,11 @@ import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 
+type WordMatch = {
+    word: string,
+    startIndex: number,
+};
+
 const settings = definePluginSettings({
     showIcon: {
         type: OptionType.BOOLEAN,
@@ -25,46 +30,81 @@ const settings = definePluginSettings({
     }
 });
 
-const isLegal = (word: string) => {
-    if (word.startsWith("<@")) return false;
-    if (word.endsWith("ington")) return false;
-    if (/^https?:\/\//i.test(word)) return false;
-    if (/[aeouy]$/i.test(word)) return false;
+const isLegal = (word: string): boolean => {
+    if (word === "i" || word === "I") return false;
+
+    const lastChar = word.slice(-1).toLowerCase();
+    if (["a", "e", "o", "u", "y"].includes(lastChar)) return false;
+
     return true;
+};
+
+const getWords = (string: string): WordMatch[] => {
+    const linkRegex = /https?:\/\/[^\s]+\.[^\s]+/g;
+    const linkRanges = new Set<number>();
+
+    for (const match of string.matchAll(linkRegex)) {
+        const start = match.index!;
+        const end = start + match[0].length;
+        for (let i = start; i < end; i++) {
+            linkRanges.add(i);
+        }
+    }
+
+    return Array.from(string.matchAll(/[\p{L}]+/gu), match => ({
+        word: match[0],
+        startIndex: match.index!
+    })).filter(match => !linkRanges.has(match.startIndex));
+};
+
+const chooseRandomWord = (message: string): WordMatch | null => {
+    const words: WordMatch[] = getWords(message);
+
+    while (words.length > 0) {
+        const index: number = Math.floor(Math.random() * words.length);
+        const wordMatch: WordMatch = words[index];
+
+        if (!isLegal(wordMatch.word)) {
+            words.splice(index, 1);
+            continue;
+        }
+
+        return wordMatch;
+    }
+
+    return null;
+};
+
+const ington = (word: string): string => {
+    if (word.endsWith("INGTON")) return "";
+    if (word.endsWith("INGTO")) return "N";
+    if (word.endsWith("INGT")) return "ON";
+    if (word.endsWith("ING")) return "TON";
+    if (word.endsWith("IN")) return "GTON";
+    if (word.endsWith("I")) return "NGTON";
+    return "INGTON";
 };
 
 const handleMessage = ((channelId, message) => {
     if (!settings.store.isEnabled) return;
-    if (!message.content || !message.content.trim()) return;
 
-    const words = message.content.trim().split(/\s+/);
-    if (words.length === 0) return;
+    const msg = message.content;
+    if (!msg || !msg.trim()) return;
 
-    let index = -1;
-    let attempts = 0;
-    do {
-        index = Math.floor(Math.random() * words.length);
-        attempts++;
-    } while (!isLegal(words[index]) && attempts < words.length * 2);
+    const wordMatch: WordMatch | null = chooseRandomWord(msg);
+    if (wordMatch === null) return;
 
-    if (isLegal(words[index])) {
-        const word = words[index];
-        if (word.endsWith("ing")) {
-            words[index] = word === word.toUpperCase() ? word + "TON" : word + "ton";
-        } else if (word.endsWith("i") || word.endsWith("I")) {
-            words[index] = word === word.toUpperCase() ? word + "NGTON" : word + "ngton";
-        } else if (word.endsWith("in") || word.endsWith("IN")) {
-            words[index] = word === word.toUpperCase() ? word + "GTON" : word + "gton";
-        } else if (word.endsWith("ing") || word.endsWith("ING")) {
-            words[index] = word === word.toUpperCase() ? word + "TON" : word + "ton";
-        } else if (word.endsWith("ingt") || word.endsWith("INGT")) {
-            words[index] = word === word.toUpperCase() ? word + "ON" : word + "on";
-        } else {
-            words[index] = word === word.toUpperCase() ? word + "INGTON" : word + "ington";
-        }
+    const { word } = wordMatch;
+    const wordUpper = word.toUpperCase();
+    const isUpper = word === wordUpper;
+
+    let insertion = ington(wordUpper);
+    if (!isUpper) {
+        insertion = insertion.toLowerCase();
     }
 
-    message.content = words.join(" ");
+    const idx: number = wordMatch.startIndex + word.length;
+    message.content = msg.slice(0, idx) + insertion + msg.slice(idx);
 });
 
 const IngtoninatorButton: ChatBarButtonFactory = ({ isMainChat }) => {
@@ -106,7 +146,7 @@ function disabledIcon() {
 export default definePlugin({
     name: "Ingtoninator",
     description: "Suffixes 'ington' to a random word in your message",
-    authors: [EquicordDevs.zyqunix],
+    authors: [EquicordDevs.zyqunix, EquicordDevs.BioTomateDE],
     settings,
     chatBarButton: {
         icon: disabledIcon,

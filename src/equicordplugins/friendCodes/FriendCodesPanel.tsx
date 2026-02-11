@@ -11,12 +11,12 @@ import { Flex } from "@components/Flex";
 import { HeadingTertiary } from "@components/Heading";
 import { copyToClipboard } from "@utils/clipboard";
 import { t } from "@utils/translation";
-import { findByPropsLazy } from "@webpack";
+import { findByPropsLazy, findCssClassesLazy } from "@webpack";
 import { Button, Forms, Parser, useEffect, useState } from "@webpack/common";
 
 import { FriendInvite } from "./types";
 
-const FormStyles = findByPropsLazy("header", "title", "emptyState");
+const FormStyles = findCssClassesLazy("header", "title", "emptyState");
 const { createFriendInvite, getAllFriendInvites, revokeFriendInvites } = findByPropsLazy("createFriendInvite");
 
 function CopyButton({ copyText, copiedText, onClick }) {

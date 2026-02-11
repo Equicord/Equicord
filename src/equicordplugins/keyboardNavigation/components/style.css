@@ -102,11 +102,11 @@
     height: 30px;
     width: 128px;
     color: var(--white-500);
-    background-color: var(--redesign-button-secondary-background);
+    background-color: var(--channeltextarea-background);
     border-radius: 10px;
     transition: background-color 0.15s ease;
 }
 
 .vc-command-palette-key-recorder-button:hover {
-    background-color: var(--redesign-button-secondary-background);
+    background-color: var(--channeltextarea-background);
 }

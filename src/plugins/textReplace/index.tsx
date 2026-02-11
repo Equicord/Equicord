@@ -266,7 +266,7 @@ export default definePlugin({
         {
             find: "!1,hideSimpleEmbedContent",
             replacement: {
-                match: /(let{toAST:.{0,125}?)\(null!=\i\?\i:\i\).content/,
+                match: /(let{toAST:.{0,125}?)\(\i\?\?\i\).content/,
                 replace: "const textReplaceContent=$self.modifyIncomingMessage(arguments[2]?.contentMessage??arguments[1]);$1textReplaceContent"
             }
         },

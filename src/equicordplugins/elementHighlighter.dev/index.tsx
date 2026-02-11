@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
-import { EquicordDevs, IS_MAC } from "@utils/constants";
+import { Devs, IS_MAC } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { copyWithToast } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
@@ -449,7 +449,7 @@ function onToggle(e: KeyboardEvent) {
 export default definePlugin({
     name: "ElementHighlighter",
     description: "Highlight and inspect elements easily.",
-    authors: [EquicordDevs.Prism],
+    authors: [Devs.prism],
     settings,
 
     start() {

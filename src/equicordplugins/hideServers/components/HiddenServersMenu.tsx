@@ -21,13 +21,13 @@ import {
     openModal,
 } from "@utils/modal";
 import { Guild } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Button, IconUtils, useStateFromStores } from "@webpack/common";
 
 import { SortedGuildStore } from "..";
 
 const cl = classNameFactory("vc-hideservers-");
-const IconClasses = findByPropsLazy("icon", "acronym", "childWrapper");
+const IconClasses = findCssClassesLazy("icon", "acronym", "childWrapper");
 
 function HiddenServersModal({ modalProps, close }: { modalProps: ModalProps; close(): void; }) {
     const guilds = useStateFromStores([HiddenServersStore], () => HiddenServersStore.hiddenGuildsDetail());

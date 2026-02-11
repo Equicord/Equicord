@@ -18,8 +18,8 @@
 
 import "./AddonCard.css";
 
+import { Badge } from "@components/Badge";
 import { BaseText } from "@components/BaseText";
-import { AddonBadge } from "@components/settings/PluginBadge";
 import { Switch } from "@components/Switch";
 import { t } from "@utils/translation";
 import { classNameFactory } from "@utils/css";
@@ -73,7 +73,7 @@ export function AddonCard({ disabled, isNew, sourceBadge, tooltip, name, infoBut
                                 {name}
                             </div>
                         </div>
-                        {isNew && <AddonBadge text={t("vencord.addonCard.new")} color="#ED4245" />}
+                        {isNew && <Badge text={t("vencord.addonCard.new")} variant="danger" />}
                     </BaseText>
 
                     {!!author && (

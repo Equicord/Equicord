@@ -29,6 +29,18 @@ function getWebpackChunkMap() {
     return v;
 }
 
+async function promiseAllSettledBatched<T>(tasks: (() => Promise<T>)[], batchSize = 8): Promise<T[]> {
+    const results: T[] = [];
+    for (let i = 0; i < tasks.length; i += batchSize) {
+        const batch = tasks.slice(i, i + batchSize);
+        const settled = await Promise.allSettled(batch.map(t => t()));
+        for (const r of settled) {
+            if (r.status === "fulfilled") results.push(r.value);
+        }
+    }
+    return results;
+}
+
 export async function loadLazyChunks() {
     const LazyChunkLoaderLogger = new Logger("LazyChunkLoader");
 
@@ -45,8 +57,8 @@ export async function loadLazyChunks() {
         const chunksSearchPromises = [] as Array<() => boolean>;
 
         // This regex loads all language packs which makes webpack finds testing extremely slow, so for now, we prioritize using the one which doesnt include those
-        const CompleteLazyChunkRegex = canonicalizeMatch(/(?:(?:Promise\.all\(\[)?(\i\.e\("?[^)]+?"?\)[^\]]*?)(?:\]\))?)\.then\(\i(?:\.\i)?\.bind\(\i,"?([^)]+?)"?(?:,[^)]+?)?\)\)/g);
-        const PartialLazyChunkRegex = canonicalizeMatch(/(?:(?:Promise\.all\(\[)?(\i\.e\("?[^)]+?"?\)[^\]]*?)(?:\]\))?)\.then\(\i\.bind\(\i,"?([^)]+?)"?\)\)/g);
+        const CompleteLazyChunkRegex = canonicalizeMatch(/(?:(?:Promise\.all\(\[)?((?:\i\.e\("?[^)]+?"?\),?)+?)(?:\]\))?)\.then\(\i(?:\.\i)?\.bind\(\i,"?([^)]+?)"?(?:,[^)]+?)?\)\)/g);
+        const PartialLazyChunkRegex = canonicalizeMatch(/(?:(?:Promise\.all\(\[)?((?:\i\.e\("?[^)]+?"?\),?)+?)(?:\]\))?)\.then\(\i\.bind\(\i,"?([^)]+?)"?\)\)/g);
 
         let foundCssDebuggingLoad = false;
 
@@ -59,7 +71,7 @@ export async function loadLazyChunks() {
 
             const shouldForceDefer = false;
 
-            await Promise.all(Array.from(lazyChunks).map(async ([, rawChunkIds, entryPoint]) => {
+            await promiseAllSettledBatched(Array.from(lazyChunks).map(([, rawChunkIds, entryPoint]) => async () => {
                 const chunkIds = rawChunkIds ? Array.from(rawChunkIds.matchAll(Webpack.ChunkIdsRegex)).map(m => {
                     const numChunkId = Number(m[1]);
                     return Number.isNaN(numChunkId) ? m[1] : numChunkId;
@@ -104,9 +116,9 @@ export async function loadLazyChunks() {
             }));
 
             // Loads all found valid chunk groups
-            await Promise.all(
+            await promiseAllSettledBatched(
                 Array.from(validChunkGroups)
-                    .map(([chunkIds]) =>
+                    .map(([chunkIds]) => () =>
                         Promise.all(chunkIds.map(id => wreq.e(id)))
                     )
             );
@@ -182,7 +194,7 @@ export async function loadLazyChunks() {
             return !(validChunks.has(id) || invalidChunks.has(id));
         });
 
-        await Promise.all(chunksLeft.map(async id => {
+        await promiseAllSettledBatched(chunksLeft.map(id => async () => {
             const isWorkerAsset = await fetch(wreq.p + wreq.u(id))
                 .then(r => r.text())
                 .then(t => /importScripts\(|self\.postMessage/.test(t));

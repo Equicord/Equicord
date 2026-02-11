@@ -22,7 +22,7 @@ export type AvatarStatus = typeof AvatarStatuses[number];
 export const GuildIconSizes = [16, 20, 24, 32, 40, 48, 56, 80, 96] as const;
 export type GuildIconSize = typeof GuildIconSizes[number];
 
-export const CardVariants = ["normal", "warning", "danger"] as const;
+export const CardVariants = ["primary", "warning", "danger", "success", "brand"] as const;
 export type CardVariant = typeof CardVariants[number];
 
 export const SpinnerTypes = ["wanderingCubes", "chasingDots", "pulsingEllipsis", "spinningCircle", "spinningCircleSimple", "lowMotion"] as const;

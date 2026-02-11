@@ -12,7 +12,7 @@ import usrbg from "@plugins/usrbg";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
-import { findStoreLazy } from "@webpack";
+import { UserProfileStore } from "@webpack/common";
 
 import style from "./style.css?managed";
 
@@ -41,8 +41,6 @@ const settings = definePluginSettings({
 
 const DATASTORE_KEY = "bannersEverywhere";
 
-const UserProfileStore = findStoreLazy("UserProfileStore");
-
 export default definePlugin({
     name: "BannersEverywhere",
     description: "Displays banners in the member list ",
@@ -67,8 +65,8 @@ export default definePlugin({
             find: "role:\"listitem\",innerRef",
             replacement: {
                 // We cant access the user id here, so we take the banner property we set earlier
-                match: /focusProps.\i\}=(\i).*?children:\[/,
-                replace: "$&$1.banner,"
+                match: /children:\[(?=.{0,100}\.MEMBER_LIST)/,
+                replace: "$&arguments[0].banner,"
             }
         }
     ],
