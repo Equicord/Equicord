@@ -18,7 +18,7 @@
 
 import "./style.css";
 
-import { definePluginSettings, migratePluginSetting, Settings } from "@api/Settings";
+import { definePluginSettings, migratePluginSetting } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
@@ -40,7 +40,7 @@ export interface Session {
 const SessionsStore = findStoreLazy("SessionsStore") as {
     getSessions(): Record<string, Session>;
 };
-const { useStatusFillColor } = mapMangledModuleLazy("translate(${.5625*", {
+const { useStatusFillColor } = mapMangledModuleLazy([".5625*", "translate"], {
     useStatusFillColor: filters.byCode(".hex")
 });
 
@@ -131,7 +131,7 @@ interface PlatformIndicatorProps {
 }
 
 const PlatformIndicator = ({ user, isProfile, isMessage, isMemberList }: PlatformIndicatorProps) => {
-    if (user == null || (user.bot && !Settings.plugins.PlatformIndicators.showBots)) return null;
+    if (user == null || (user.bot && !settings.store.showBots)) return null;
     useEnsureOwnStatus(user);
 
     const status = useStateFromStores([PresenceStore], () => PresenceStore.getClientStatus(user.id));

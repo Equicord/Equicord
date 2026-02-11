@@ -29,7 +29,7 @@ export const patchTimings = [] as Array<[plugin: string, moduleId: PropertyKey, 
 export const getBuildNumber = makeLazy(() => {
     try {
         function matchBuildNumber(factoryStr: string) {
-            const buildNumberMatch = factoryStr.match(/.concat\("(\d+?)"\)/);
+            const buildNumberMatch = factoryStr.match(/"Trying to open a changelog for an invalid build number (\d+?)"\)/);
             if (buildNumberMatch == null) {
                 return -1;
             }
@@ -37,13 +37,15 @@ export const getBuildNumber = makeLazy(() => {
             return Number(buildNumberMatch[1]);
         }
 
-        const hardcodedFactoryStr = String(wreq.m[128014]);
+        const hardcodedFactoryStr = String(wreq.m[446023]);
         if (hardcodedFactoryStr.includes("Trying to open a changelog for an invalid build number")) {
             const hardcodedBuildNumber = matchBuildNumber(hardcodedFactoryStr);
 
             if (hardcodedBuildNumber !== -1) {
                 return hardcodedBuildNumber;
             }
+        } else if (IS_DEV || IS_REPORTER) {
+            logger.error("Hardcoded build number module id is invalid");
         }
 
         const moduleFactory = findModuleFactory("Trying to open a changelog for an invalid build number");
@@ -609,18 +611,22 @@ function patchFactory(moduleId: PropertyKey, originalFactory: AnyModuleFactory):
                     markedAsPatched = true;
                 }
             } catch (err) {
-                logger.error(`Patch by ${patch.plugin} errored (Module id is ${String(moduleId)}): ${replacement.match}\n`, err);
+                // FIXME: Maybe fix this properly
+                const shouldSuppressError = patch.plugin === "ContextMenuAPI" && err instanceof SyntaxError && err.message.includes("arguments");
+                if (!shouldSuppressError) {
+                    logger.error(`Patch by ${patch.plugin} errored (Module id is ${String(moduleId)}): ${replacement.match}\n`, err);
 
-                if (IS_COMPANION_TEST)
-                    reporterData.failedPatches.erroredPatch.push({
-                        ...patch,
-                        oldModule: lastCode,
-                        newModule: code,
-                        id: moduleId
-                    });
+                    if (IS_COMPANION_TEST)
+                        reporterData.failedPatches.erroredPatch.push({
+                            ...patch,
+                            oldModule: lastCode,
+                            newModule: code,
+                            id: moduleId
+                        });
 
-                if (IS_DEV) {
-                    diffErroredPatch(code, lastCode, lastCode.match(replacement.match)!);
+                    if (IS_DEV) {
+                        diffErroredPatch(code, lastCode, lastCode.match(replacement.match)!);
+                    }
                 }
 
                 if (markedAsPatched) {

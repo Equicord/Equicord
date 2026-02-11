@@ -164,12 +164,10 @@ export default definePlugin({
         },
         {
             find: "RPCServer:WSS",
-            replacement: [
-                {
-                    match: /\i\.error\(`Error: \$\{(\i)\.message\}/,
-                    replace: '!$1.message.includes("EADDRINUSE")&&$&'
-                }
-            ]
+            replacement: {
+                match: /\i\.error\(`Error: \$\{(\i)\.message\}/,
+                replace: '!$1.message.includes("EADDRINUSE")&&$&'
+            }
         },
         {
             find: "Tried getting Dispatch instance before instantiated",

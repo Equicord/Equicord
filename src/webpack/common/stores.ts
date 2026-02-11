@@ -82,6 +82,7 @@ export let PopoutWindowStore: t.PopoutWindowStore;
 export let ApplicationCommandIndexStore: t.ApplicationCommandIndexStore;
 export let EditMessageStore: t.EditMessageStore;
 export let QuestStore: t.QuestStore;
+export let PendingReplyStore: GenericStore;
 
 /**
  * @see jsdoc of {@link t.useStateFromStores}
@@ -135,6 +136,7 @@ waitForStore("SoundboardStore", m => SoundboardStore = m);
 waitForStore("PopoutWindowStore", m => PopoutWindowStore = m);
 waitForStore("ApplicationCommandIndexStore", m => ApplicationCommandIndexStore = m);
 waitForStore("EditMessageStore", m => EditMessageStore = m);
+waitForStore("PendingReplyStore", m => PendingReplyStore = m);
 waitForStore("QuestStore", m => QuestStore = m);
 waitForStore("ThemeStore", m => {
     ThemeStore = m;

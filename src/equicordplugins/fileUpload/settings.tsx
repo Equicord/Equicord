@@ -4,26 +4,183 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { definePluginSettings } from "@api/Settings";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Switch } from "@components/Switch";
 import { useForceUpdater } from "@utils/react";
+import { OptionType } from "@utils/types";
 import { Select, TextInput } from "@webpack/common";
 
-import { settings } from "./index";
 import { ServiceType } from "./types";
+
+const serviceOptions = [
+    { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
+    { label: "E-Z Host", value: ServiceType.EZHOST },
+    { label: "Nest", value: ServiceType.NEST },
+    { label: "S3-Compatible", value: ServiceType.S3 },
+    { label: "Catbox.moe", value: ServiceType.CATBOX },
+    ...(IS_DISCORD_DESKTOP ? [{ label: "0x0.st", value: ServiceType.ZEROX0 }] : []),
+    { label: "Litterbox", value: ServiceType.LITTERBOX }
+];
+
+const litterboxOptions = [
+    { label: "1 hour", value: "1h" },
+    { label: "12 hours", value: "12h" },
+    { label: "24 hours", value: "24h", default: true },
+    { label: "72 hours", value: "72h" }
+];
+
+export const settings = definePluginSettings({
+    serviceType: {
+        type: OptionType.SELECT,
+        description: "Selected uploader service",
+        options: serviceOptions,
+        hidden: true
+    },
+    serviceUrl: {
+        type: OptionType.STRING,
+        description: "Zipline service URL",
+        default: "",
+        hidden: true
+    },
+    ziplineToken: {
+        type: OptionType.STRING,
+        description: "Zipline auth token",
+        default: "",
+        hidden: true
+    },
+    folderId: {
+        type: OptionType.STRING,
+        description: "Optional Zipline folder ID",
+        default: "",
+        hidden: true
+    },
+    ezHostKey: {
+        type: OptionType.STRING,
+        description: "E-Z Host API key",
+        default: "",
+        hidden: true
+    },
+    nestToken: {
+        type: OptionType.STRING,
+        description: "Nest API token",
+        default: "",
+        hidden: true
+    },
+    s3Endpoint: {
+        type: OptionType.STRING,
+        description: "S3-compatible endpoint URL",
+        default: "",
+        hidden: true
+    },
+    s3Bucket: {
+        type: OptionType.STRING,
+        description: "S3 bucket name",
+        default: "",
+        hidden: true
+    },
+    s3Region: {
+        type: OptionType.STRING,
+        description: "S3 region (use auto for R2)",
+        default: "auto",
+        hidden: true
+    },
+    s3AccessKeyId: {
+        type: OptionType.STRING,
+        description: "S3 access key ID",
+        default: "",
+        hidden: true
+    },
+    s3SecretAccessKey: {
+        type: OptionType.STRING,
+        description: "S3 secret access key",
+        default: "",
+        hidden: true
+    },
+    s3SessionToken: {
+        type: OptionType.STRING,
+        description: "Optional S3 session token",
+        default: "",
+        hidden: true
+    },
+    s3PublicUrl: {
+        type: OptionType.STRING,
+        description: "Optional public base URL",
+        default: "",
+        hidden: true
+    },
+    s3Prefix: {
+        type: OptionType.STRING,
+        description: "Optional S3 object key prefix",
+        default: "",
+        hidden: true
+    },
+    s3ForcePathStyle: {
+        type: OptionType.BOOLEAN,
+        description: "Use path-style S3 URLs",
+        default: true,
+        hidden: true
+    },
+    litterboxExpiry: {
+        type: OptionType.SELECT,
+        description: "Litterbox retention window",
+        options: litterboxOptions,
+        default: "24h",
+        hidden: true
+    },
+    stripQueryParams: {
+        type: OptionType.BOOLEAN,
+        description: "Strip query params from uploaded URLs",
+        default: false,
+        hidden: true
+    },
+    apngToGif: {
+        type: OptionType.BOOLEAN,
+        description: "Convert APNG uploads to GIF",
+        default: false,
+        hidden: true
+    },
+    autoCopy: {
+        type: OptionType.BOOLEAN,
+        description: "Auto copy upload URL",
+        default: true,
+        hidden: true
+    },
+    settingsComponent: {
+        type: OptionType.COMPONENT,
+        description: "Settings",
+        component: SettingsComponent
+    }
+});
+
+function SettingTextInput(props: {
+    description: string;
+    name: string;
+    onChange: (value: string) => void;
+    placeholder: string;
+    value: string;
+}) {
+    const { description, name, onChange, placeholder, value } = props;
+
+    return (
+        <SettingsSection name={name} description={description}>
+            <TextInput
+                value={value}
+                onChange={onChange}
+                placeholder={placeholder}
+            />
+        </SettingsSection>
+    );
+}
 
 export function SettingsComponent() {
     const update = useForceUpdater();
     const { store } = settings;
     const isNest = store.serviceType === ServiceType.NEST;
     const isEzHost = store.serviceType === ServiceType.EZHOST;
+    const isS3 = store.serviceType === ServiceType.S3;
     const isZipline = store.serviceType === ServiceType.ZIPLINE;
-
-    const serviceOptions = [
-        { label: "Zipline", value: ServiceType.ZIPLINE },
-        { label: "E-Z Host", value: ServiceType.EZHOST },
-        ...(IS_DISCORD_DESKTOP ? [{ label: "Nest", value: ServiceType.NEST }] : [])
-    ];
+    const isLitterbox = store.serviceType === ServiceType.LITTERBOX;
 
     return (
         <>
@@ -41,51 +198,129 @@ export function SettingsComponent() {
             </SettingsSection>
 
             {isZipline && (
-                <SettingsSection name="Service URL" description="The URL of your Zipline instance">
-                    <TextInput
+                <>
+                    <SettingTextInput
+                        name="Service URL"
+                        description="The URL of your Zipline instance"
                         value={store.serviceUrl}
                         onChange={v => store.serviceUrl = v}
                         placeholder="https://your-zipline-instance.com"
                     />
-                </SettingsSection>
-            )}
-
-            {isZipline && (
-                <SettingsSection name="Zipline Token" description="Your Zipline API authorization token">
-                    <TextInput
+                    <SettingTextInput
+                        name="Zipline Token"
+                        description="Your Zipline API authorization token"
                         value={store.ziplineToken}
                         onChange={v => store.ziplineToken = v}
                         placeholder="Your Zipline API token"
                     />
-                </SettingsSection>
-            )}
-
-            {isEzHost && (
-                <SettingsSection name="E-Z Host API Key" description="Your E-Z Host API key">
-                    <TextInput
-                        value={(store as { ezHostKey?: string }).ezHostKey || ""}
-                        onChange={v => (store as { ezHostKey?: string }).ezHostKey = v}
-                        placeholder="Your E-Z Host API key"
-                    />
-                </SettingsSection>
-            )}
-
-            {isNest && (
-                <SettingsSection name="Nest Token" description="Your Nest API authorization token">
-                    <TextInput
-                        value={store.nestToken}
-                        onChange={v => store.nestToken = v}
-                        placeholder="Your Nest API token"
-                    />
-                </SettingsSection>
-            )}
-
-            {isZipline && (
-                <SettingsSection name="Folder ID" description="Folder ID for uploads (leave empty for no folder)">
-                    <TextInput
+                    <SettingTextInput
+                        name="Folder ID"
+                        description="Folder ID for uploads (leave empty for no folder)"
                         value={store.folderId}
                         onChange={v => store.folderId = v}
                         placeholder="Leave empty for no folder"
+                    />
+                </>
+            )}
+
+            {isEzHost && (
+                <SettingTextInput
+                    name="E-Z Host API Key"
+                    description="Your E-Z Host API key"
+                    value={store.ezHostKey}
+                    onChange={v => store.ezHostKey = v}
+                    placeholder="Your E-Z Host API key"
+                />
+            )}
+
+            {isNest && (
+                <SettingTextInput
+                    name="Nest Token"
+                    description="Your Nest API authorization token"
+                    value={store.nestToken}
+                    onChange={v => store.nestToken = v}
+                    placeholder="Your Nest API token"
+                />
+            )}
+
+            {isS3 && (
+                <>
+                    <SettingTextInput
+                        name="S3 Endpoint URL"
+                        description="S3-compatible endpoint (e.g. https://<accountid>.r2.cloudflarestorage.com)"
+                        value={store.s3Endpoint}
+                        onChange={v => store.s3Endpoint = v}
+                        placeholder="https://your-endpoint.example.com"
+                    />
+                    <SettingTextInput
+                        name="Bucket Name"
+                        description="Bucket to upload into"
+                        value={store.s3Bucket}
+                        onChange={v => store.s3Bucket = v}
+                        placeholder="my-bucket"
+                    />
+                    <SettingTextInput
+                        name="Region"
+                        description="AWS region or auto for Cloudflare R2"
+                        value={store.s3Region}
+                        onChange={v => store.s3Region = v}
+                        placeholder="auto"
+                    />
+                    <SettingTextInput
+                        name="Access Key ID"
+                        description="S3-compatible access key"
+                        value={store.s3AccessKeyId}
+                        onChange={v => store.s3AccessKeyId = v}
+                        placeholder="Your access key ID"
+                    />
+                    <SettingTextInput
+                        name="Secret Access Key"
+                        description="S3-compatible secret key"
+                        value={store.s3SecretAccessKey}
+                        onChange={v => store.s3SecretAccessKey = v}
+                        placeholder="Your secret access key"
+                    />
+                    <SettingTextInput
+                        name="Session Token"
+                        description="Optional temporary credential token"
+                        value={store.s3SessionToken}
+                        onChange={v => store.s3SessionToken = v}
+                        placeholder="Optional session token"
+                    />
+                    <SettingTextInput
+                        name="Public Base URL"
+                        description="Optional public URL base to use for returned links"
+                        value={store.s3PublicUrl}
+                        onChange={v => store.s3PublicUrl = v}
+                        placeholder="https://cdn.example.com"
+                    />
+                    <SettingTextInput
+                        name="Object Key Prefix"
+                        description="Optional folder/prefix inside the bucket"
+                        value={store.s3Prefix}
+                        onChange={v => store.s3Prefix = v}
+                        placeholder="uploads/discord"
+                    />
+                    <SettingsSection tag="label" name="Use Path-Style Endpoint" description="Use endpoint/bucket/key format (recommended for R2)" inlineSetting>
+                        <Switch
+                            checked={store.s3ForcePathStyle}
+                            onChange={v => store.s3ForcePathStyle = v}
+                        />
+                    </SettingsSection>
+                </>
+            )}
+
+            {isLitterbox && (
+                <SettingsSection name="Litterbox Expiry" description="How long uploads are retained">
+                    <Select
+                        options={litterboxOptions}
+                        isSelected={v => v === store.litterboxExpiry}
+                        select={v => {
+                            store.litterboxExpiry = v;
+                            update();
+                        }}
+                        serialize={v => v}
+                        placeholder="Select expiry"
                     />
                 </SettingsSection>
             )}

@@ -135,7 +135,7 @@ export default definePlugin({
         {
             find: ".STICKERS_CONSTANTS_STICKER_DIMENSION)",
             replacement: {
-                match: /}\),\(\i\?\?\i\)\.name\]\}\);/,
+                match: /}\),\(\i\?\?(\i)\)\.name\]\}\);/,
                 replace: "$& if($self.isBlocked($1.id)) return($self.blockedComponent($1));"
             }
         }

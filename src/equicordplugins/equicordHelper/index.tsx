@@ -5,18 +5,58 @@
  */
 
 import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
+import { HeaderBarButton } from "@api/HeaderBar";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import customRPC from "@plugins/customRPC";
 import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { isAnyPluginDev } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
-import { Alerts, ApplicationCommandIndexStore, NavigationRouter, UserStore } from "@webpack/common";
+import { StandingState } from "@vencord/discord-types/enums";
+import { findByCodeLazy, findExportedComponentLazy, findStoreLazy } from "@webpack";
+import { Alerts, ApplicationCommandIndexStore, NavigationRouter, React, SettingsRouter, UserStore, useStateFromStores } from "@webpack/common";
+import { ComponentType } from "react";
 
 import { PluginButtons } from "./pluginButtons";
 import { PluginCards } from "./pluginCards";
 
 let clicked = false;
+
+const SafetyHubStore = findStoreLazy("SafetyHubStore");
+const fetchSafetyHub: () => Promise<void> = findByCodeLazy("SAFETY_HUB_FETCH_START");
+const WarningIcon = findExportedComponentLazy("WarningIcon");
+const ShieldIcon = findExportedComponentLazy("ShieldIcon");
+
+const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: ComponentType<any>; }> = {
+    [StandingState.ALL_GOOD]: { label: "All good!", hoverColor: "var(--status-positive)", Icon: ShieldIcon },
+    [StandingState.LIMITED]: { label: "Limited", hoverColor: "var(--status-warning)", Icon: WarningIcon },
+    [StandingState.VERY_LIMITED]: { label: "Very limited", hoverColor: "var(--orange-345)", Icon: WarningIcon },
+    [StandingState.AT_RISK]: { label: "At risk", hoverColor: "var(--status-danger)", Icon: WarningIcon },
+    [StandingState.SUSPENDED]: { label: "Suspended", hoverColor: "var(--interactive-muted)", Icon: WarningIcon },
+};
+
+function StandingButton() {
+    const standing = useStateFromStores([SafetyHubStore], () => SafetyHubStore.getAccountStanding());
+    const isInitialized = useStateFromStores([SafetyHubStore], () => SafetyHubStore.isInitialized());
+    const [hovered, setHovered] = React.useState(false);
+
+    React.useEffect(() => {
+        if (!isInitialized) fetchSafetyHub().catch(() => { });
+    }, [isInitialized]);
+
+    const config = StandingConfig[standing?.state] ?? StandingConfig[StandingState.ALL_GOOD];
+
+    return (
+        <div style={{ display: "contents" }} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+            <HeaderBarButton
+                tooltip={config.label}
+                position="bottom"
+                icon={props => <config.Icon {...props} color={hovered ? config.hoverColor : "currentColor"} />}
+                onClick={() => SettingsRouter.openUserSettings("my_account_panel")}
+            />
+        </div>
+    );
+}
 
 const settings = definePluginSettings({
     noMirroredCamera: {
@@ -53,15 +93,25 @@ const settings = definePluginSettings({
         description: "Forces role icons to display next to messages in compact mode",
         restartNeeded: true,
         default: false
+    },
+    accountStandingButton: {
+        type: OptionType.BOOLEAN,
+        description: "Show an account standing button in the header bar",
+        default: false,
+        restartNeeded: true,
     }
 });
 
 export default definePlugin({
     name: "EquicordHelper",
     description: "Used to provide support, fix discord caused crashes, and other misc features.",
-    authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keyages, EquicordDevs.SerStars, EquicordDevs.mart],
+    authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keircn, EquicordDevs.SerStars, EquicordDevs.mart],
     required: true,
     settings,
+    headerBarButton: {
+        icon: ShieldIcon,
+        render: () => (settings.store.accountStandingButton ? <StandingButton /> : null),
+    },
     patches: [
         // Fixes Unknown Resolution/FPS Crashing
         {

@@ -138,13 +138,25 @@ const settings = definePluginSettings({
     },
     singleClickAction: {
         type: OptionType.SELECT,
-        description: "Action on single click with modifier",
+        description: "Action on single click (your messages)",
         options: actions,
         default: "DELETE"
     },
     singleClickModifier: {
         type: OptionType.SELECT,
-        description: "Modifier required for single click action",
+        description: "Modifier required for single click action (your messages)",
+        options: singleClickModifiers,
+        default: "BACKSPACE"
+    },
+    singleClickOthersAction: {
+        type: OptionType.SELECT,
+        description: "Action on single click (others' messages)",
+        options: actions,
+        default: "DELETE"
+    },
+    singleClickOthersModifier: {
+        type: OptionType.SELECT,
+        description: "Modifier required for single click action (others' messages)",
         options: singleClickModifiers,
         default: "BACKSPACE"
     },
@@ -472,7 +484,7 @@ async function executeAction(
 export default definePlugin({
     name: "MessageClickActions",
     description: "Customize click actions on messages.",
-    authors: [Devs.Ven, EquicordDevs.keyages, EquicordDevs.ZcraftElite],
+    authors: [Devs.Ven, EquicordDevs.keircn, EquicordDevs.ZcraftElite],
     isModified: true,
 
     settings,
@@ -515,13 +527,17 @@ export default definePlugin({
 
         if ((settings.store.disableInDms && isDM) || (settings.store.disableInSystemDms && isSystemDM)) return;
 
-        const singleClickAction = settings.store.singleClickAction as ClickAction;
+        const singleClickAction = isMe
+            ? (settings.store.singleClickAction as ClickAction)
+            : (settings.store.singleClickOthersAction as ClickAction);
         const doubleClickAction = isMe
             ? (settings.store.doubleClickAction as ClickAction)
             : (settings.store.doubleClickOthersAction as ClickAction);
         const tripleClickAction = settings.store.tripleClickAction as ClickAction;
 
-        const singleClickModifier = settings.store.singleClickModifier as Modifier;
+        const singleClickModifier = isMe
+            ? (settings.store.singleClickModifier as Modifier)
+            : (settings.store.singleClickOthersModifier as Modifier);
         const doubleClickModifier = settings.store.doubleClickModifier as Modifier;
         const tripleClickModifier = settings.store.tripleClickModifier as Modifier;
 

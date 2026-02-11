@@ -1969,5 +1969,11 @@ export const settings = definePluginSettings({
         description: "An array of Quest IDs that are ignored.",
         default: {} as Record<string, string[]>,
         hidden: true,
-    }
+    },
+    resumeQuestIDs: {
+        type: OptionType.CUSTOM,
+        description: "An array of Quest IDs that are being auto-completed in the background.",
+        default: { "watch": [], "play": [], "achievement": [] } as Record<"watch" | "play" | "achievement", string[]>, // Type to Quest ID
+        hidden: true,
+    },
 });

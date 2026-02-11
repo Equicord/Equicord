@@ -17,7 +17,7 @@ import RemixModal from "./RemixModal";
 import css from "./styles.css?managed";
 
 const requireCreateStickerModal = extractAndLoadChunksLazy([".CREATE_STICKER_MODAL,", "isDisplayingIndividualStickers"]);
-const requireSettingsMenu = extractAndLoadChunksLazy(['"AppSkeleton"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}\}\),(?=.{0,15}createPromise.*?\}\),)/);
+const requireSettingsMenu = extractAndLoadChunksLazy(['type:"USER_SETTINGS_MODAL_OPEN"']);
 
 const PendingReplyStore = findStoreLazy("PendingReplyStore");
 const validMediaTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];

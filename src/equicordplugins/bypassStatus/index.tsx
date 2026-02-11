@@ -22,7 +22,7 @@ interface IMessageCreate {
     message: Message;
 }
 
-const SILENT_PING_FLAG = 1 << 12; 
+const SILENT_PING_FLAG = 1 << 12;
 
 function Icon(enabled?: boolean): JSX.Element {
     return <svg
@@ -168,7 +168,7 @@ export default definePlugin({
                 if (message.state === "SENDING" || message.content === "" || message.author.id === currentUser.id || (channelId === currentChannelId && WindowStore.isFocused()) || userStatus !== settings.store.statusToUse) {
                     return;
                 }
-                if (settings.store.respectSilentPings && (message.flags & SILENT_PING_FLAG)) {return;}
+                if (settings.store.respectSilentPings && (message.flags & SILENT_PING_FLAG)) { return; }
                 const mentioned = MessageStore.getMessage(channelId, message.id)?.mentioned;
                 if ((settings.store.guilds.split(", ").includes(guildId) || settings.store.channels.split(", ").includes(channelId)) && mentioned) {
                     await showNotification(message, guildId);

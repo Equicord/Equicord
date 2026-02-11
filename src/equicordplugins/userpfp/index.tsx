@@ -29,7 +29,7 @@ const cl = classNameFactory("vc-userpfp-");
 const DONO_URL = "https://ko-fi.com/coolesding";
 const INVITE_LINK = "userpfp-1129784704267210844";
 
-export const requireSettingsMenu = extractAndLoadChunksLazy(['"AppSkeleton"'], /createPromise:.{0,20}(\i\.\i\("?.+?"?\).*?).then\(\i\.bind\(\i,"?(.+?)"?\)\).{0,50}\}\),(?=.{0,15}createPromise.*?\}\),)/);
+export const requireSettingsModal = extractAndLoadChunksLazy(['type:"USER_SETTINGS_MODAL_OPEN"']);
 export const KEY_DATASTORE = "vencord-custom-avatars";
 export const data = { avatars: {} as Record<string, string> };
 
@@ -118,7 +118,7 @@ export default definePlugin({
                     id="set-avatar"
                     icon={PencilIcon}
                     action={async () => {
-                        await requireSettingsMenu();
+                        await requireSettingsModal();
                         openModal(modalProps => <SetAvatarModal userId={user.id} modalProps={modalProps} />);
                     }}
                 />
