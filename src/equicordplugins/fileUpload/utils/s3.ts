@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { settings } from "@equicordplugins/fileUpload/index";
+import { settings } from "@equicordplugins/fileUpload/settings";
 import { PluginNative } from "@utils/types";
 
 type S3Store = {

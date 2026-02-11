@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { settings } from "@equicordplugins/fileUpload/index";
+import { settings } from "@equicordplugins/fileUpload/settings";
 import { ServiceType, UploadResponse } from "@equicordplugins/fileUpload/types";
 import { copyToClipboard } from "@utils/clipboard";
 import { PluginNative } from "@utils/types";
@@ -136,6 +136,7 @@ export function isConfigured(): boolean {
         case ServiceType.S3:
             return isS3Configured();
         case ServiceType.CATBOX:
+            return true;
         case ServiceType.ZEROX0:
             return Boolean(Native);
         case ServiceType.LITTERBOX:
@@ -196,8 +197,11 @@ async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string>
     formData.append("reqtype", "fileupload");
     formData.append("fileToUpload", fileBlob, filename);
 
-    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`;
-    const response = await fetch(proxiedUrl, {
+    const uploadUrl = Native
+        ? "https://catbox.moe/user/api.php"
+        : `${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`;
+
+    const response = await fetch(uploadUrl, {
         method: "POST",
         body: formData
     });
@@ -240,8 +244,11 @@ async function uploadToLitterbox(fileBlob: Blob, filename: string): Promise<stri
     formData.append("time", settings.store.litterboxExpiry || "24h");
     formData.append("fileToUpload", fileBlob, filename);
 
-    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`;
-    const response = await fetch(proxiedUrl, {
+    const uploadUrl = Native
+        ? "https://litterbox.catbox.moe/resources/internals/api.php"
+        : `${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`;
+
+    const response = await fetch(uploadUrl, {
         method: "POST",
         body: formData
     });
