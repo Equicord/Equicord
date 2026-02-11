@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgb(0 0 0 / 70%);
 }
 
 .emoji-pong-modal {
@@ -28,10 +28,10 @@
 .emoji-pong-phone {
   width: 375px;
   height: 667px;
-  background: #000000;
+  background: #000;
   border: 4px solid #1a1a1a;
   border-radius: 40px;
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 24px rgb(0 0 0 / 60%);
   position: relative;
   overflow: hidden;
 }
@@ -65,17 +65,17 @@
   background: #3a3a3a;
 }
 
-.emoji-pong-phone-purple .emoji-pong-close::before,
-.emoji-pong-phone-purple .emoji-pong-close::after {
-  background: #262626;
-}
-
 .emoji-pong-close::before {
   transform: rotate(45deg);
 }
 
 .emoji-pong-close::after {
   transform: rotate(-45deg);
+}
+
+.emoji-pong-phone-purple .emoji-pong-close::before,
+.emoji-pong-phone-purple .emoji-pong-close::after {
+  background: #262626;
 }
 
 .emoji-pong-high-score {
@@ -97,7 +97,7 @@
 .emoji-pong-gameover {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgb(0 0 0 / 25%);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -117,23 +117,23 @@
 .emoji-pong-gameover-title {
   font-size: 36px;
   font-weight: 800;
-  color: #ffffff;
+  color: #fff;
 }
 
 .emoji-pong-gameover-score {
   font-size: 28px;
   font-weight: 700;
-  color: #ffffff;
+  color: #fff;
 }
 
 .emoji-pong-gameover-hi {
-  color: #ffffff;
+  color: #fff;
 }
 
 .emoji-pong-gameover-play {
   margin-top: 0;
-  background: #000000;
-  color: #ffffff;
+  background: #000;
+  color: #fff;
   border: none;
   border-radius: 999px;
   padding: 16px 28px;
@@ -151,9 +151,9 @@
 
 .emoji-pong-gameover-share {
   margin-top: 8px;
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgb(255 255 255 / 12%);
+  color: #fff;
+  border: 1px solid rgb(255 255 255 / 25%);
   border-radius: 999px;
   padding: 10px 20px;
   font-size: 14px;
@@ -162,14 +162,14 @@
 }
 
 .emoji-pong-gameover-share:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgb(255 255 255 / 20%);
 }
 
 .emoji-pong-gameover-icon {
   display: inline-flex;
   width: 26px;
   height: 26px;
-  color: #ffffff;
+  color: #fff;
 }
 
 .emoji-pong-gameover-icon svg {
@@ -181,7 +181,7 @@
   margin-top: 2px;
   background: none;
   border: none;
-  color: #ffffff;
+  color: #fff;
   font-size: 14px;
   width: 80%;
   max-width: 300px;
@@ -192,8 +192,8 @@
   margin: 12px 0 0;
   padding: 12px;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgb(0 0 0 / 35%);
+  border: 1px solid rgb(255 255 255 / 8%);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -225,7 +225,7 @@
   height: 52px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.35);
+  border: 2px solid rgb(255 255 255 / 35%);
 }
 
 .emoji-pong-duel-crown {
@@ -234,22 +234,22 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 30px;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 2px 6px rgb(0 0 0 / 40%));
   z-index: 2;
 }
 
 .emoji-pong-duel-score {
   font-size: 20px;
   font-weight: 700;
-  color: #ffffff;
+  color: #fff;
   letter-spacing: 0.08em;
 }
 
 .emoji-pong-duel-share {
   align-self: center;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
+  background: rgb(255 255 255 / 16%);
+  border: 1px solid rgb(255 255 255 / 30%);
+  color: #fff;
   border-radius: 999px;
   padding: 8px 18px;
   font-size: 13px;
@@ -266,9 +266,9 @@
 
 .emoji-pong-duel-challenge {
   align-self: center;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #ffffff;
+  background: rgb(255 255 255 / 12%);
+  border: 1px solid rgb(255 255 255 / 25%);
+  color: #fff;
   border-radius: 999px;
   padding: 8px 18px;
   font-size: 13px;
@@ -277,11 +277,11 @@
 }
 
 .emoji-pong-duel-challenge:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgb(255 255 255 / 20%);
 }
 
 .emoji-pong-duel-share:hover {
-  background: rgba(255, 255, 255, 0.24);
+  background: rgb(255 255 255 / 24%);
 }
 
 .emoji-pong-duel-top {
@@ -297,10 +297,6 @@
   width: max-content;
 }
 
-.emoji-pong-duel-top-single .emoji-pong-duel-top-side {
-  gap: 10px;
-}
-
 .emoji-pong-duel-top-side {
   position: relative;
   display: flex;
@@ -308,12 +304,16 @@
   gap: 8px;
 }
 
+.emoji-pong-duel-top-single .emoji-pong-duel-top-side {
+  gap: 10px;
+}
+
 .emoji-pong-duel-top-score {
   position: relative;
   z-index: 3;
   font-size: 22px;
   font-weight: 800;
-  color: rgba(0, 0, 0, 0.55);
+  color: rgb(0 0 0 / 55%);
   letter-spacing: 0.08em;
 }
 
@@ -346,7 +346,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 34px;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 2px 6px rgb(0 0 0 / 40%));
   z-index: 2;
 }
 
