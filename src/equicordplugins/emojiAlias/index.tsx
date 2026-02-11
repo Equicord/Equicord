@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { addGlobalContextMenuPatch, findGroupChildrenByChildId, GlobalContextMenuPatchCallback, NavContextMenuPatchCallback, removeGlobalContextMenuPatch } from "@api/ContextMenu";
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
@@ -11,6 +13,7 @@ import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
@@ -97,6 +100,7 @@ const DATA_KEY = "emoji-aliases";
 const logger = new Logger("EmojiAlias");
 const EmojiQueryService = findByPropsLazy("queryEmojiResults");
 const PencilIcon = findExportedComponentLazy("PencilIcon");
+const cl = classNameFactory("vc-emoji-alias-");
 
 let aliasMap: AliasMap = {};
 const aliasListeners = new Set<() => void>();
@@ -267,7 +271,7 @@ function resolveUnicodeSurrogateByName(name: string): string | undefined {
 
     const queryCandidates = [normalizedName, `:${normalizedName}:`];
     for (const query of queryCandidates) {
-        const queried = EmojiQueryService?.queryEmojiResults?.({
+        const queried = EmojiQueryService.queryEmojiResults({
             query,
             channel: undefined,
             intention: undefined,
@@ -786,7 +790,7 @@ function queryAliasEmojiResult(aliasEmoji: StoredEmojiRef, channel: unknown, int
         ].filter((value): value is string => !!value && value.length > 0);
 
     for (const query of queryCandidates) {
-        const queried = EmojiQueryService?.queryEmojiResults?.({
+        const queried = EmojiQueryService.queryEmojiResults({
             query,
             channel,
             intention,
@@ -971,20 +975,11 @@ function AliasRow({ alias, emojiRef }: { alias: string; emojiRef: StoredEmojiRef
     };
 
     return (
-        <div
-            style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 12,
-                padding: 8,
-                borderRadius: 8,
-                background: "var(--background-secondary)"
-            }}
-        >
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div className={cl("row")}>
+            <div className={cl("row-editing")}>
                 {isEditing ? (
                     <TextInput
+                        className={cl("row-editing-text-input")}
                         value={draftAlias}
                         autoFocus
                         onChange={value => {
@@ -1004,17 +999,16 @@ function AliasRow({ alias, emojiRef }: { alias: string; emojiRef: StoredEmojiRef
                                 setIsEditing(false);
                             }
                         }}
-                        style={{ width: 180 }}
                     />
                 ) : (
                     <BaseText weight="semibold">:{alias}:</BaseText>
                 )}
-                <BaseText style={{ color: "var(--text-muted)" }}>→</BaseText>
+                <BaseText className={cl("row-arrow")}>→</BaseText>
                 <EmojiPreview emojiRef={emojiRef} />
                 <BaseText>{`:${normalizeEmojiName(emojiRef.name)}:`}</BaseText>
-                {error && <BaseText style={{ color: "var(--text-feedback-critical)" }}>{error}</BaseText>}
+                {error && <BaseText className={cl("row-error")}>{error}</BaseText>}
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div className={cl("row-button")}>
                 <Button
                     variant="secondary"
                     size="iconOnly"
@@ -1044,7 +1038,7 @@ function AliasListSetting() {
     }
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div className={cl("settings")}>
             {entries.map(([alias, ref]) => (
                 <AliasRow key={alias} alias={alias} emojiRef={ref} />
             ))}
