@@ -624,6 +624,12 @@ export function Game({ onClose, startEmoji }: GameProps) {
         event.nativeEvent.stopImmediatePropagation?.();
     };
 
+    const handleGameBlurCapture = (event: React.FocusEvent<HTMLDivElement>) => {
+        const nextFocused = event.relatedTarget;
+        if (nextFocused && event.currentTarget.contains(nextFocused as Node)) return;
+        focusRoot();
+    };
+
     const handleCanvasPointerMove = (event: React.PointerEvent<HTMLCanvasElement>) => {
         const width = event.currentTarget.clientWidth;
         if (width <= 0) return;
@@ -788,6 +794,7 @@ export function Game({ onClose, startEmoji }: GameProps) {
             aria-label="Equipong"
             tabIndex={0}
             onPointerDownCapture={focusRoot}
+            onBlurCapture={handleGameBlurCapture}
             onKeyDownCapture={handleGameKeyCapture}
             onKeyPressCapture={handleGameKeyCapture}
             onKeyUpCapture={handleGameKeyCapture}
