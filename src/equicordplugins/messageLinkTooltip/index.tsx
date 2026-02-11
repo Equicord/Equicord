@@ -62,14 +62,14 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "MessageLinkTooltip",
-    description: "Like MessageLinkEmbed but without taking space",
+    description: "Adds a tooltip with a message preview when hovering over message links, replies, and forwarded messages.",
     authors: [Devs.Kyuuhachi],
 
     settings,
 
     patches: [
         {
-            find: ',className:"channelMention",children:[',
+            find: '"channelMention",children:[null',
             replacement: {
                 match: /(?<=\.jsxs\)\()(\i\.\i),\{(?=role:"link")/,
                 replace: "$self.MentionTooltip,{Component:$1,vcProps:arguments[0],"
@@ -80,7 +80,7 @@ export default definePlugin({
             find: "#{intl::REPLY_QUOTE_MESSAGE_NOT_LOADED}",
             replacement: {
                 // Should match two places
-                match: /(\i\.\i),\{(?=className:\i\(\)\(\i\.repliedTextPreview,\i\.clickable)/g,
+                match: /(\i\.\i),\{(?=className:\i\(\)\(\i\.\i,\i\.\i)/g,
                 replace: "$self.ReplyTooltip,{Component:$1,vcProps:arguments[0],"
             },
             predicate: () => settings.store.onReply,
@@ -88,7 +88,7 @@ export default definePlugin({
         {
             find: "#{intl::MESSAGE_FORWARDED}",
             replacement: {
-                match: /(\i\.\i),\{(?=className:\i\.footerContainer)/g,
+                match: /(\i\.\i),\{(?=className:\i\.\i,onClick:\i)/g,
                 replace: "$self.ForwardTooltip,{Component:$1,vcProps:arguments[0],"
             },
             predicate: () => settings.store.onForward,

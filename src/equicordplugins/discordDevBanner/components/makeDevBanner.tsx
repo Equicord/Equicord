@@ -33,7 +33,7 @@ export function makeDevBanner(state?: string): string | JSX.Element {
         .replace(/{clientName}/g, clientInfo.name)
         .replace(/{clientVersion}/g, `v${clientInfo?.version ?? "0.0.0"}`)
         .replace(/{equibopHash}/g, clientInfo.shortHash ?? "Not Supported")
-        .replace(/{equibopPlatform}/g, `v${clientInfo?.dev ? "DevBuild" : "Standalone"}`)
+        .replace(/{equibopPlatform}/g, `v${clientInfo?.dev ? "Dev Build" : "Standalone"}`)
         .replace(/\\n|{newline}/g, "__NEWLINE__");
 
     if (!replaced.includes("__NEWLINE__") && !/{.*Icon}/.test(baseFormat)) {

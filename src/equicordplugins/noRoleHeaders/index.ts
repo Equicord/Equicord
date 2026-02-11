@@ -9,14 +9,14 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoRoleHeaders",
-    description: "We are all equal!!",
+    description: "We are all equal!! Removes the role headers in the member list.",
     authors: [Devs.Samwich],
     patches: [
         {
             find: "._areActivitiesExperimentallyHidden=(",
             replacement: {
-                match: /NumberFormat\(.{0,50}\]\);(?=.{0,100}\.membersGroup)/,
-                replace: "$&return null;"
+                match: /return \i===\i\.\i\.UNKNOWN/,
+                replace: "return null;$&"
             }
         }
     ]

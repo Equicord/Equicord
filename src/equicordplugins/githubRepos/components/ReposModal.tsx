@@ -55,7 +55,7 @@ export function ReposModal({ repos, username, rootProps }: ReposModalProps) {
             </td>
             <td>
                 <div className={cl("table-stars")}>
-                    <Star className={cl("table-star-icon")} />
+                    <Star className={cl("star-icon")} />
                     <span>{repo.stargazers_count.toLocaleString()}</span>
                 </div>
             </td>

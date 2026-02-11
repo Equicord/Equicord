@@ -11,7 +11,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { VoiceState } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, MediaEngineStore, PermissionsBits, PermissionStore, SelectedChannelStore, showToast, Toasts, UserStore, VoiceActions } from "@webpack/common";
+import { ChannelStore, MediaEngineStore, PermissionsBits, PermissionStore, SelectedChannelStore, showToast, Toasts, UserStore, VoiceActions, WindowStore } from "@webpack/common";
 
 import { getCurrentMedia, settings } from "./utils";
 
@@ -21,6 +21,7 @@ const StreamPreviewSettings = getUserSettingLazy("voiceAndVideo", "disableStream
 const ApplicationStreamingSettingsStore = findStoreLazy("ApplicationStreamingSettingsStore");
 
 async function autoStartStream(instant = true) {
+    if (!instant && !WindowStore.isFocused() && settings.store.focusDiscord) return;
     const selected = SelectedChannelStore.getVoiceChannelId();
     if (!selected) return;
 
@@ -89,15 +90,15 @@ export default definePlugin({
             predicate: () => settings.store.keybindScreenshare,
             replacement: {
                 match: /\[\i\.\i\.DISCONNECT_FROM_VOICE_CHANNEL/,
-                replace: '["INSTANT_SCREEN_SHARE"]:{onTrigger(){$self.autoStartStream(false)},keyEvents:{keyUp:!1,keyDown:!0,blurred:!1,focused:!0}},$&'
+                replace: '["INSTANT_SCREEN_SHARE"]:{onTrigger(){$self.autoStartStream(false)},keyEvents:{keyUp:!1,keyDown:!0}},$&'
             },
         },
         {
             find: "keybindActionTypes()",
             predicate: () => settings.store.keybindScreenshare,
             replacement: {
-                match: /=\[(\{value:\i\.\i\.UNASSIGNED)/,
-                replace: '=[{value:"INSTANT_SCREEN_SHARE",label:"Instant Screenshare"},$1'
+                match: /=\[(\{id:.{0,25}value:\i\.\i\.UNASSIGNED)/,
+                replace: '=[{id:"instant-screen-share",value:"INSTANT_SCREEN_SHARE",label:"Instant Screenshare"},$1'
             }
         }
     ],

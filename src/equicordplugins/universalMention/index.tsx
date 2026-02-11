@@ -60,7 +60,7 @@ export default definePlugin({
                     predicate: () => settings.store.globalMention || settings.store.onlyDMUsers,
                 },
                 {
-                    match: /(?<=\i=)\i\.recipients\.map\(.{0,100}:null\}\}\)/,
+                    match: /(?<=\i=)\i\.recipients\.map\(.{0,100}\?\?null\}\)\)/,
                     replace: "$self.useFilter(true)",
                 }
             ],
