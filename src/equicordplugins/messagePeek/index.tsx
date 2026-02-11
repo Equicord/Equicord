@@ -9,6 +9,7 @@ import "./style.css";
 import { DecoratorProps } from "@api/MemberListDecorators";
 import { isPluginEnabled } from "@api/PluginManager";
 import betterActivities from "@equicordplugins/betterActivities";
+import showMeYourName from "@plugins/showMeYourName";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
@@ -16,7 +17,7 @@ import definePlugin from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
-import { ChannelStore, MessageStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
+import { ChannelStore, MessageStore, RelationshipStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-message-peek-");
 
@@ -139,7 +140,7 @@ function getMessageContent(message: Message): MessageContent | null {
     return null;
 }
 
-function MessagePreviewContent({ channel }: { channel: Channel; }) {
+function MessagePreviewContent({ channel, user }: { channel: Channel; user: User | null | undefined; }) {
     const lastMessage = useStateFromStores(
         [MessageStore],
         () => MessageStore.getLastMessage(channel.id) as Message | undefined
@@ -153,6 +154,8 @@ function MessagePreviewContent({ channel }: { channel: Channel; }) {
         return <>{channel.recipients.length + 1} Members</>;
     }
 
+    const smynName = (isPluginEnabled(showMeYourName.name) && showMeYourName.getMemberListProfilesReactionsVoiceNameText({ user: user ?? lastMessage?.author, type: "membersList" }));
+
     if (!lastMessage) return null;
 
     const content = getMessageContent(lastMessage);
@@ -160,7 +163,7 @@ function MessagePreviewContent({ channel }: { channel: Channel; }) {
 
     const currentUserId = UserStore.getCurrentUser()?.id;
     const isOwnMessage = lastMessage.author.id === currentUserId;
-    const authorName = isOwnMessage ? "You" : (lastMessage.author.globalName ?? lastMessage.author.username);
+    const authorName = isOwnMessage ? "You" : (smynName ?? RelationshipStore.getNickname(lastMessage.author.id) ?? lastMessage.author.globalName ?? lastMessage.author.username);
     const Icon = content.icon ? Icons[content.icon] : null;
 
     return (
@@ -193,7 +196,7 @@ function SubText({ channel, user, activities, applicationStream, voiceChannel, s
         return (
             <div className={PrivateChannelClasses.subtext}>
                 <div className={cl("activity-row")}>
-                    <MessagePreviewContent channel={channel} />
+                    <MessagePreviewContent channel={channel} user={user} />
                     {activityIcons}
                 </div>
             </div>
@@ -202,7 +205,7 @@ function SubText({ channel, user, activities, applicationStream, voiceChannel, s
 
     return (
         <div className={PrivateChannelClasses.subtext}>
-            <MessagePreviewContent channel={channel} />
+            <MessagePreviewContent channel={channel} user={user} />
         </div>
     );
 }
