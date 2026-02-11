@@ -22,24 +22,31 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { HeaderBarButton } from "@api/HeaderBar";
 import { DataStore } from "@api/index";
 import { EquicordDevs } from "@utils/constants";
-import { classes } from "@utils/misc";
+import { classNameFactory } from "@utils/css";
 import { openModal } from "@utils/modal";
-import definePlugin from "@utils/types";
+import definePlugin, { IconComponent } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { findByCodeLazy, findByProps } from "@webpack";
+import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
 import { ChannelStore, Menu } from "@webpack/common";
 
-import { Popover as NoteButtonPopover, Popover } from "./components/icons/NoteButton";
 import { NoteModal } from "./components/modals/Notebook";
 import { noteHandler, noteHandlerCache } from "./NoteHandler";
 import { DataStoreToCache, HolyNoteStore } from "./utils";
 
-export const MessageType = findByCodeLazy("isEdited(){");
+export const cl = classNameFactory("vc-notebook-");
+export const CircleQuestionIcon = findExportedComponentLazy("CircleQuestionIcon");
+export const BookmarkIconLazy = findExportedComponentLazy("BookmarkIcon");
+export const BookmarkIcon: IconComponent = props => <BookmarkIconLazy {...props} />;
+export const MessageRecord = findByCodeLazy("isEdited(){");
+export const messageClasses = findCssClassesLazy("message", "groupStart", "cozyMessage");
+export const resultsClasses = findCssClassesLazy("emptyResultsWrap", "emptyResultsContent", "errorImage", "emptyResultsText", "noResultsImage", "alt");
+export const ChannelRecord = findByCodeLazy("computeLurkerPermissionsAllowList(){");
+export const ChannelMessage = findComponentByCodeLazy("Message must not be a thread");
 
-const messageContextMenuPatch: NavContextMenuPatchCallback = async (children, { message }: { message: Message; }) => {
+const messageContextMenuPatch: NavContextMenuPatchCallback = (children, { message }: { message: Message; }) => {
     children.push(
-        <Menu.MenuItem label="Add Message To" id="add-message-to-note">
-            {Object.keys(noteHandler.getAllNotes()).map((notebook: string, index: number) => (
+        <Menu.MenuItem label="Note Message" id="note-message">
+            {Object.keys(noteHandler.getAllNotes()).map(notebook => (
                 <Menu.MenuItem
                     key={notebook}
                     label={notebook}
@@ -52,14 +59,11 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = async (children, { 
 };
 
 function ToolBarHeader() {
-    const iconClasses = findByProps("iconWrapper", "clickable");
-
     return (
         <HeaderBarButton
             tooltip="Holy Notes"
             position="bottom"
-            className={classes("vc-note-button", iconClasses.iconWrapper, iconClasses.clickable)}
-            icon={Popover}
+            icon={BookmarkIcon}
             onClick={() => openModal(props => <NoteModal {...props} />)}
         />
     );
@@ -67,39 +71,43 @@ function ToolBarHeader() {
 
 export default definePlugin({
     name: "HolyNotes",
-    description: "Holy Notes allows you to save messages",
+    description: "Save messages as notes to revisit later",
     authors: [EquicordDevs.Wolfie],
 
     toolboxActions: {
-        async "Open Notes"() {
+        "Open Notes"() {
             openModal(props => <NoteModal {...props} />);
         }
     },
 
     contextMenus: {
-        "message": messageContextMenuPatch
+        message: messageContextMenuPatch
     },
 
     headerBarButton: {
-        icon: Popover,
+        icon: BookmarkIcon,
         render: ToolBarHeader
     },
 
     messagePopoverButton: {
-        icon: NoteButtonPopover,
+        icon: BookmarkIcon,
         render(message) {
             return {
                 label: "Save Note",
-                icon: NoteButtonPopover,
-                message: message,
+                icon: BookmarkIcon,
+                message,
                 channel: ChannelStore.getChannel(message.channel_id),
                 onClick: () => noteHandler.addNote(message, "Main")
-
             };
         }
     },
+
     async start() {
-        if (await DataStore.keys(HolyNoteStore).then(keys => !keys.includes("Main"))) return noteHandler.newNoteBook("Main");
+        const keys = await DataStore.keys(HolyNoteStore);
+        if (!keys.includes("Main")) {
+            noteHandler.newNoteBook("Main");
+            return;
+        }
         if (!noteHandlerCache.has("Main")) await DataStoreToCache();
     },
 });

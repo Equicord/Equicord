@@ -4,69 +4,88 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { filters, mapMangledModuleLazy } from "@webpack";
-import type { ComponentType, CSSProperties, ReactNode } from "react";
+import "./Notice.css";
 
-export type NoticeType = "warn" | "info" | "danger" | "positive" | "preview";
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
+import type { ComponentPropsWithoutRef, ComponentType, ReactNode, SVGProps } from "react";
 
-export const NoticeTypes: Record<"WARNING" | "INFO" | "ERROR" | "POSITIVE" | "PREVIEW", NoticeType> = {
-    WARNING: "warn",
-    INFO: "info",
-    ERROR: "danger",
-    POSITIVE: "positive",
-    PREVIEW: "preview"
-};
+const cl = classNameFactory("vc-notice-");
 
-const { HelpMessage } = mapMangledModuleLazy('POSITIVE="positive"', {
-    HelpMessage: filters.byCode(".iconDiv")
-});
+export const NoticeVariants = ["info", "warning", "danger", "positive"] as const;
 
-export interface NoticeProps {
+export type NoticeVariant = typeof NoticeVariants[number];
+
+export type NoticeProps = Omit<ComponentPropsWithoutRef<"div">, "children"> & {
     children: ReactNode;
-    className?: string;
-    style?: CSSProperties;
-    icon?: ComponentType<{ className?: string; color?: string; }>;
+    variant?: NoticeVariant;
+    icon?: ComponentType<SVGProps<SVGSVGElement>>;
     action?: ReactNode;
-    textColor?: string;
-    textVariant?: string;
     hidden?: boolean;
-}
-
-function Warning({ children, className, style, icon, action, textColor, textVariant, hidden }: NoticeProps) {
-    return (
-        <HelpMessage messageType={NoticeTypes.WARNING} className={className} style={style} icon={icon} action={action} textColor={textColor} textVariant={textVariant} hidden={hidden}>
-            {children}
-        </HelpMessage>
-    );
-}
-
-function Info({ children, className, style, icon, action, textColor, textVariant, hidden }: NoticeProps) {
-    return (
-        <HelpMessage messageType={NoticeTypes.INFO} className={className} style={style} icon={icon} action={action} textColor={textColor} textVariant={textVariant} hidden={hidden}>
-            {children}
-        </HelpMessage>
-    );
-}
-
-function Error({ children, className, style, icon, action, textColor, textVariant, hidden }: NoticeProps) {
-    return (
-        <HelpMessage messageType={NoticeTypes.ERROR} className={className} style={style} icon={icon} action={action} textColor={textColor} textVariant={textVariant} hidden={hidden}>
-            {children}
-        </HelpMessage>
-    );
-}
-
-function Positive({ children, className, style, icon, action, textColor, textVariant, hidden }: NoticeProps) {
-    return (
-        <HelpMessage messageType={NoticeTypes.POSITIVE} className={className} style={style} icon={icon} action={action} textColor={textColor} textVariant={textVariant} hidden={hidden}>
-            {children}
-        </HelpMessage>
-    );
-}
-
-export const Notice = {
-    Warning,
-    Info,
-    Error,
-    Positive
 };
+
+function InfoIcon(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" {...props}>
+            <path fill="currentColor" fillRule="evenodd" d="M23 12a11 11 0 1 1-22 0 11 11 0 0 1 22 0Zm-9.5-4.75a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0Zm-.77 3.96a1 1 0 1 0-1.96-.42l-1.04 4.86a2.77 2.77 0 0 0 4.31 2.83l.24-.17a1 1 0 1 0-1.16-1.62l-.24.17a.77.77 0 0 1-1.2-.79l1.05-4.86Z" clipRule="evenodd" />
+        </svg>
+    );
+}
+
+function WarningIcon(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" {...props}>
+            <path fill="currentColor" fillRule="evenodd" d="M10 3.1a2.37 2.37 0 0 1 4 0l8.71 14.75c.84 1.41-.26 3.15-2 3.15H3.29c-1.74 0-2.84-1.74-2-3.15L9.99 3.1Zm3.25 14.65a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0ZM13.06 14l.37-5.94a1 1 0 0 0-1-1.06h-.87a1 1 0 0 0-1 1.06l.38 5.94a1.06 1.06 0 0 0 2.12 0Z" clipRule="evenodd" />
+        </svg>
+    );
+}
+
+function DangerIcon(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" {...props}>
+            <path fill="currentColor" fillRule="evenodd" d="M12 23a11 11 0 1 0 0-22 11 11 0 0 0 0 22Zm4.7-15.7a1 1 0 0 0-1.4 0L12 10.58l-3.3-3.3a1 1 0 0 0-1.4 1.42L10.58 12l-3.3 3.3a1 1 0 1 0 1.42 1.4L12 13.42l3.3 3.3a1 1 0 0 0 1.4-1.42L13.42 12l3.3-3.3a1 1 0 0 0 0-1.4Z" clipRule="evenodd" />
+        </svg>
+    );
+}
+
+function PositiveIcon(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" {...props}>
+            <path fill="currentColor" fillRule="evenodd" d="M12 23a11 11 0 1 0 0-22 11 11 0 0 0 0 22Zm5.7-13.3a1 1 0 0 0-1.4-1.4L10 14.58l-2.3-2.3a1 1 0 0 0-1.4 1.42l3 3a1 1 0 0 0 1.4 0l7-7Z" clipRule="evenodd" />
+        </svg>
+    );
+}
+
+const DefaultIcons: Record<NoticeVariant, ComponentType<SVGProps<SVGSVGElement>>> = {
+    info: InfoIcon,
+    warning: WarningIcon,
+    danger: DangerIcon,
+    positive: PositiveIcon
+};
+
+export function Notice({ children, variant = "info", icon, action, hidden = false, className, ...restProps }: NoticeProps) {
+    const Icon = icon ?? DefaultIcons[variant];
+
+    return (
+        <div className={classes(cl("container", variant), hidden && cl("hidden"), className)} {...restProps}>
+            <div className={cl("inner")}>
+                <div className={cl("icon-wrapper")}>
+                    <Icon className={cl("icon")} />
+                </div>
+                <div className={cl("text")}>
+                    {children}
+                </div>
+                {action && (
+                    <div className={cl("action")}>
+                        {action}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+Notice.Info = (props: Omit<NoticeProps, "variant">) => <Notice variant="info" {...props} />;
+Notice.Warning = (props: Omit<NoticeProps, "variant">) => <Notice variant="warning" {...props} />;
+Notice.Danger = (props: Omit<NoticeProps, "variant">) => <Notice variant="danger" {...props} />;
+Notice.Positive = (props: Omit<NoticeProps, "variant">) => <Notice variant="positive" {...props} />;

@@ -17,8 +17,9 @@
 */
 
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
+import { openInviteModal } from "@utils/discord";
 import { OptionType } from "@utils/types";
-import { Button } from "@webpack/common";
 
 import { authorize, getToken } from "./auth";
 import { openBlockModal } from "./components/BlockedUserModal";
@@ -60,14 +61,15 @@ export const settings = definePluginSettings({
                 <Button onClick={openBlockModal}>Manage Blocked Users</Button>
 
                 <Button
-                    color={Button.Colors.GREEN}
+                    variant="positive"
                     onClick={() => {
                         VencordNative.native.openExternal("https://github.com/sponsors/mantikafasi");
                     }}
                 >
                     Support ReviewDB development
                 </Button>
-                <Button onClick={async () => {
+
+                <Button variant="link" onClick={async () => {
                     let url = "https://reviewdb.mantikafasi.dev";
                     const token = await getToken();
                     if (token)
@@ -78,9 +80,7 @@ export const settings = definePluginSettings({
                     ReviewDB website
                 </Button>
 
-                <Button onClick={() => {
-                    VencordNative.native.openExternal("https://discord.gg/eWPBSbvznt");
-                }}>
+                <Button variant="link" onClick={() => openInviteModal("eWPBSbvznt")}>
                     ReviewDB Support Server
                 </Button>
             </div >

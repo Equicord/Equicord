@@ -33,10 +33,8 @@ import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModa
 import { useAwaiter } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile } from "@utils/web";
-import { CloudUpload } from "@vencord/discord-types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
-import { findByPropsLazy, findLazy, findStoreLazy } from "@webpack";
-import { Button, Constants, FluxDispatcher, Forms, lodash, Menu, MessageActions, PermissionsBits, PermissionStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, Toasts, useEffect, useState } from "@webpack/common";
+import { Button, CloudUploader, Constants, FluxDispatcher, Forms, lodash, Menu, MessageActions, PendingReplyStore, PermissionsBits, PermissionStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, Toasts, useEffect, useState } from "@webpack/common";
 
 import { VoiceRecorderDesktop } from "./components/DesktopRecorder";
 import { VoicePreview } from "./components/VoicePreview";
@@ -55,10 +53,6 @@ const EMPTY_META: AudioMetadata = {
     waveform: DEFAULT_WAVEFORM,
     duration: DEFAULT_DURATION,
 };
-
-const CloudUploadConstructor = findLazy(m => m.prototype?.trackUploadFinished) as typeof CloudUpload;
-const PendingReplyStore = findStoreLazy("PendingReplyStore");
-const OptionClasses = findByPropsLazy("optionName", "optionIcon", "optionLabel");
 
 export const cl = classNameFactory("vc-vmsg-");
 
@@ -109,7 +103,7 @@ function sendAudio(blob: Blob, meta: AudioMetadata) {
     const reply = PendingReplyStore.getPendingReply(channelId);
     if (reply) FluxDispatcher.dispatch({ type: "DELETE_PENDING_REPLY", channelId });
 
-    const upload = new CloudUploadConstructor({
+    const upload = new CloudUploader({
         file: new File([blob], "voice-message.ogg", { type: "audio/ogg; codecs=opus" }),
         isThumbnail: false,
         platform: CloudUploadPlatform.WEB,
@@ -152,23 +146,18 @@ function useObjectUrl() {
 }
 
 const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
-    const hasPermission = !props.channel.guild_id
-        || (PermissionStore.can(PermissionsBits.SEND_VOICE_MESSAGES, props.channel) && PermissionStore.can(PermissionsBits.SEND_MESSAGES, props.channel));
+    if (props.channel.guild_id && !(PermissionStore.can(PermissionsBits.SEND_VOICE_MESSAGES, props.channel) && PermissionStore.can(PermissionsBits.SEND_MESSAGES, props.channel))) return;
 
     children.push(
         <Menu.MenuItem
             id="vc-send-vmsg"
-            label={
-                <div className={OptionClasses.optionLabel}>
-                    <Microphone className={OptionClasses.optionIcon} height={24} width={24} />
-                    <div className={OptionClasses.optionName}>
-                        Send Voice Message
-                        {!hasPermission && <span style={{ fontSize: "smaller", opacity: 0.6 }}> (Missing Permissions)</span>}
-                    </div>
-                </div>
-            }
+            iconLeft={Microphone}
+            leadingAccessory={{
+                type: "icon",
+                icon: Microphone
+            }}
+            label="Send Voice Message"
             action={() => openModal(modalProps => <Modal modalProps={modalProps} />)}
-            disabled={!hasPermission}
         />
     );
 };
@@ -283,7 +272,7 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "VoiceMessages",
     description: "Allows you to send voice messages like on mobile. To do so, right click the upload button and click Send Voice Message.",
-    authors: [Devs.Ven, Devs.Vap, Devs.Nickyux, EquicordDevs.Z1xus, EquicordDevs.Prism],
+    authors: [Devs.Ven, Devs.Vap, Devs.Nickyux, EquicordDevs.Z1xus, Devs.prism],
     settings,
 
     contextMenus: {

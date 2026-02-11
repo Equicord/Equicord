@@ -8,7 +8,7 @@ import { definePluginSettings, Settings, SettingsStore } from "@api/Settings";
 import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { debounce } from "@shared/debounce";
-import { EquicordDevs, IS_MAC } from "@utils/constants";
+import { Devs, IS_MAC } from "@utils/constants";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
 
@@ -244,7 +244,7 @@ const handleThemeNamesChange = () => settings.store.autoRefresh && debouncedRefr
 export default definePlugin({
     name: "QuickThemeSwitcher",
     description: "Quickly switch between themes using keyboard shortcuts.",
-    authors: [EquicordDevs.Prism],
+    authors: [Devs.prism],
     settings,
     startAt: StartAt.DOMContentLoaded,
     settingsAboutComponent: () => (

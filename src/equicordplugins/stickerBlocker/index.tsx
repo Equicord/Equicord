@@ -9,9 +9,14 @@ import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
+import { findCssClassesLazy } from "@webpack";
 import { Button, Menu } from "@webpack/common";
 import React, { ReactNode } from "react";
+
+const CodeContainerClasses = findCssClassesLazy("markup", "codeContainer");
+const MessageContentClasses = findCssClassesLazy("messageContent", "messageContentTrailingIcon");
 
 const settings = definePluginSettings({
     showGif: {
@@ -45,13 +50,13 @@ function blockedComponentRender(sticker) {
 
     if (showGif) {
         elements.push(
-            <img key="gif" src="https://images.equicord.org/api/files/raw/0199e730-70cd-7001-ab3b-4c0ff258ec79" style={{ width: "160px", borderRadius: "20px" }} />
+            <img key="gif" src="https://equicord.org/assets/plugins/stickerBlocker/blocked.gif" style={{ width: "160px", borderRadius: "20px" }} />
         );
     }
 
     if (showMessage) {
         elements.push(
-            <div key="message" id="message-content-1205482612316184657" className={"markup_a7e664 messageContent__21e69"}><span>Blocked Sticker. ID: {sticker.id}, NAME: {sticker.name}</span></div>
+            <div key="message" id="vc-blocked-sticker" className={classes(CodeContainerClasses.markup, MessageContentClasses.messageContent)}><span>Blocked Sticker. ID: {sticker.id}, NAME: {sticker.name}</span></div>
         );
     }
 
@@ -128,9 +133,9 @@ export default definePlugin({
     authors: [Devs.Samwich],
     patches: [
         {
-            find: /\i\.\i\.STICKER_MESSAGE/,
+            find: ".STICKERS_CONSTANTS_STICKER_DIMENSION)",
             replacement: {
-                match: /}\),\(null!=\i\?\i:(\i)\)\.name]}\);/,
+                match: /}\),\(\i\?\?(\i)\)\.name\]\}\);/,
                 replace: "$& if($self.isBlocked($1.id)) return($self.blockedComponent($1));"
             }
         }

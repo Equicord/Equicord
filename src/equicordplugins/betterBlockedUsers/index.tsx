@@ -31,12 +31,12 @@ export default definePlugin({
                     replace: "$self.renderUser($1,$2)",
                 },
                 {
-                    match: /(?<=\}=(\i).{0,10}(\i).useState\(\i\).{0,25}\};)/,
+                    match: /(?<=\}=(\i).{0,10}(\i).useState.{0,5};)/,
                     replace: "let [searchResults,setSearchResults]=$2.useState([]);$self.setUpdateFunc($1,setSearchResults);"
                 },
                 {
-                    match: /(usersList,children:)(\i)/,
-                    replace: "$1(searchResults.length?searchResults:$2)"
+                    match: /(?<=\i,children:)(\i)(?=\.slice)/,
+                    replace: "(searchResults.length?searchResults:$1)"
                 },
             ]
         }

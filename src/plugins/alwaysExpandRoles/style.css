@@ -1,3 +1,0 @@
-[aria-label]:has(> [class*="collapseButton"]) {
-    display: none
-}

@@ -42,7 +42,7 @@
     gap: var(--space-8, 8px);
 }
 
-.vc-plugin-modal-confirm [class*="footer"]>button {
+.vc-plugin-modal-confirm [class*="footer"] > button {
     flex: 1;
     margin: 0;
     width: 100%;
@@ -53,4 +53,12 @@
     align-items: center;
     gap: 4px;
     color: var(--text-feedback-critical);
+}
+
+.vc-settings-modal-content {
+    padding-bottom: 24px;
+}
+
+.vc-plugin-modal-info {
+    align-items: center;
 }

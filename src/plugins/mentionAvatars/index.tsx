@@ -53,15 +53,23 @@ export default definePlugin({
         // HEY THOR UPDATE SHOW ME YOUR NAME IF THIS SHIT CHANGES TY :)
         find: ".USER_MENTION)",
         replacement: {
-            match: /"@"\.concat\((null!=\i\?\i:\i)\)(?<=\.useName\((\i)\).+?)/,
-            replace: "$self.renderUsername({username:$1,user:$2,showMeYourNameMention:typeof showMeYourNameMention!=='undefined'?showMeYourNameMention:undefined})"
+            match: /children:`@\$\{(\i\?\?\i)\}`(?<=\.useName\((\i)\).+?)/,
+            replace: "children:$self.renderUsername({username:$1,user:$2,showMeYourNameMention:typeof showMeYourNameMention!=='undefined'?showMeYourNameMention:undefined})"
         }
     },
     {
         find: ".ROLE_MENTION)",
         replacement: {
-            match: /children:\[\i&&.{0,100}className:\i.roleDot,.{0,200},\i(?=\])/,
+            match: /children:\[\i&&.{0,100}className:\i.\i,background:!1,.{0,50}?,\i(?=\])/,
             replace: "$&,$self.renderRoleIcon(arguments[0])"
+        }
+    },
+    {
+        // show avatar in the chat input box
+        find: ".hasUniqueUsername()?null:`#",
+        replacement: {
+            match: /(?<=,(\i)\).{0,55})`@\$\{(\i)\}`/,
+            replace: "$self.renderInputMention($2,$1)"
         }
     }],
 
@@ -90,6 +98,20 @@ export default definePlugin({
             </span>
         );
     }, { noop: true }),
+
+    renderInputMention(username: string, user: User) {
+        if (!user) return getUsernameString(username);
+        return (
+            <>
+                <img
+                    src={user.getAvatarURL(SelectedGuildStore.getGuildId(), 16)}
+                    className="vc-mentionAvatars-icon"
+                    style={{ borderRadius: "50%" }}
+                />
+                {getUsernameString(username)}
+            </>
+        );
+    },
 
     renderRoleIcon: ErrorBoundary.wrap(({ roleId, guildId }: { roleId: string, guildId: string; }) => {
         // Discord uses Role Mentions for uncached users because .... idk

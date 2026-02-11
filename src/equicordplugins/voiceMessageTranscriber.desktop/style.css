@@ -1,0 +1,27 @@
+.vc-transcription-button {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.vc-transcription-icon {
+    color: var(--interactive-icon-default);
+}
+
+.vc-transcription-icon:hover {
+    color: var(--interactive-background-hover);
+}
+
+.vc-transcription-content {
+    min-height: 200px;
+}
+
+.vc-transcription-result {
+    padding: 16px;
+    white-space: pre-wrap;
+    user-select: text;
+    max-height: 400px;
+    overflow-y: auto;
+}

@@ -12,7 +12,7 @@ import { React, Tooltip } from "@webpack/common";
 import { cl } from "..";
 import { Star } from "./Star";
 
-export function RepoCard({ repo, showStars, showLanguage }: RepoCardProps) {
+export function RepoCard({ repo, showStars, showLanguage, variant }: RepoCardProps & { variant?: "popout" | "tab"; }) {
     const handleClick = () => window.open(repo.html_url, "_blank");
 
     const renderStars = () => {
@@ -20,7 +20,7 @@ export function RepoCard({ repo, showStars, showLanguage }: RepoCardProps) {
 
         return (
             <div className={cl("stars")}>
-                <Star className={cl("stars-icon")} />
+                <Star className={cl("star-icon")} />
                 <BaseText size="sm">{repo.stargazers_count.toLocaleString()}</BaseText>
             </div>
         );
@@ -56,11 +56,13 @@ export function RepoCard({ repo, showStars, showLanguage }: RepoCardProps) {
                     className={cl("language-color")}
                     style={{ backgroundColor: getLanguageColor(repo.language) }}
                 />
-                <BaseText size="sm">{repo.language}</BaseText>
+                <BaseText size="sm" className={cl("lang-name")}>{repo.language}</BaseText>
                 {renderStars()}
             </div >
         );
     };
+
+    const cardProps = variant === "tab" ? { onClick: handleClick } : {};
 
     return (
         <>
@@ -70,6 +72,7 @@ export function RepoCard({ repo, showStars, showLanguage }: RepoCardProps) {
                         <div className={cl("card")}
                             onMouseLeave={onMouseLeave}
                             onMouseEnter={onMouseEnter}
+                            {...cardProps}
                         >
                             <div className={cl("header")}>
                                 <BaseText size="sm" weight="medium" className={cl("name")}>
@@ -82,7 +85,7 @@ export function RepoCard({ repo, showStars, showLanguage }: RepoCardProps) {
                     )}
                 </Tooltip>
             ) : (
-                <div className={cl("card")}>
+                <div className={cl("card")} {...cardProps}>
                     <div className={cl("header")}>
                         <BaseText size="sm" weight="medium" className={cl("name")} >
                             {repo.name}

@@ -15,7 +15,7 @@
     cursor: pointer;
 }
 
-.vc-keywordnotify-switch {
+.vc-keywordnotify-ignoreCaseSwitch {
     margin-top: 0.5em;
     margin-right: 40px;
 }

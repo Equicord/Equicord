@@ -328,8 +328,8 @@ export default definePlugin({
                     replace: "const silentTypingShouldHideChatBarTypingIndicators=$self.shouldHideChatBarTypingIndicators();$1"
                 },
                 {
-                    match: /(typingDots,ref:\i,children:)(\[.{0,340}?}\)\])/,
-                    replace: "$1silentTypingShouldHideChatBarTypingIndicators?[]:$2"
+                    match: /("stop-animation".{0,80}?ref:\i,children:)/,
+                    replace: "$1silentTypingShouldHideChatBarTypingIndicators?[]:"
                 }
             ]
         },

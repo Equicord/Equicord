@@ -1,7 +1,7 @@
 {
     "name": "equicord",
     "private": "true",
-    "version": "1.13.11",
+    "version": "1.14.2.0",
     "description": "The other cutest Discord client mod",
     "homepage": "https://github.com/Equicord/Equicord#readme",
     "bugs": {
@@ -35,13 +35,14 @@
         "lint-styles": "stylelint \"src/**/*.css\" --ignore-pattern src/userplugins",
         "lint:fix": "bun run lint --fix",
         "test": "bun run buildStandalone && bun run testTsc && bun run lint:fix && bun run lint-styles && bun run generatePluginJson",
-        "testWeb": "bun run lint && bun run buildWeb && bun run testTsc",
+        "testWeb": "bun run lint:fix && bun run buildWeb && bun run testTsc",
         "testTsc": "tsc --noEmit"
     },
     "dependencies": {
         "@ffmpeg/ffmpeg": "^0.12.10",
         "@ffmpeg/util": "^0.12.1",
         "@intrnl/xxhash64": "^0.1.2",
+        "@streamparser/json": "^0.0.22",
         "@types/less": "^3.0.8",
         "@types/stylus": "^0.48.42",
         "@types/tinycolor2": "^1.4.6",
@@ -53,6 +54,7 @@
         "jsqr": "1.4.0",
         "monaco-editor": "^0.54.0",
         "nanoid": "^5.1.6",
+        "native-file-system-adapter": "^3.0.1",
         "usercss-meta": "^0.12.0",
         "virtual-merge": "^1.0.1"
     },

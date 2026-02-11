@@ -20,7 +20,7 @@ import { React } from "@webpack/common";
 import hideBugReport from "./hideBugReport.css?managed";
 
 const KbdStyles = findByPropsLazy("key", "combo");
-const BugReporterExperiment = findLazy(m => m?.definition?.id === "2024-09_bug_reporter");
+const BugReporterExperiment = findLazy(m => m?.definition?.name === "2026-01-bug-reporter");
 
 const modKey = IS_MAC ? "cmd" : "ctrl";
 const altKey = IS_MAC ? "opt" : "alt";
@@ -45,6 +45,7 @@ export default definePlugin({
         Devs.Nuckyz,
     ],
 
+    isModified: true,
     settings,
 
     patches: [
@@ -96,10 +97,11 @@ export default definePlugin({
         },
         // Enable experiment embed on sent experiment links
         {
-            find: ".experimentOverride,children:",
+            find: "Clear Treatment ",
             replacement: [
                 {
-                    match: /\i\.isStaff\(\)/,
+                    // TODO: stable compat optional chaining remove once some time has passed
+                    match: /\i\??\.isStaff\(\)/,
                     replace: "true"
                 },
                 // Fix some tricky experiments name causing a client crash
@@ -116,10 +118,45 @@ export default definePlugin({
                 match: /}getServerAssignment\((\i),\i,\i\){/,
                 replace: "$&if($1==null)return;"
             }
+        },
+        // Enable playground embed on sent playground links
+        // dev://playground/mana, dev://playground/payments, dev://playground/virtual-currency,
+        // dev://playground/nitro, dev://playground/mfa, dev://playground/cms, dev://playground/void
+        {
+            find: "{PlaygroundEmbed:()=>",
+            replacement: {
+                match: /PotionIcon.{0,250}getCurrentUser\(\);return/,
+                replace: "$& true||"
+            }
+        },
+        {
+            // Expands the experiment regex to allow negative numbers as well as text in the last segment of the URL.
+            find: '"^dev://experiment/',
+            replacement: {
+                match: /(\[0-9\]\+)/,
+                replace: "[a-zA-Z0-9-]+"
+            }
+        },
+        {
+            find: ".EXPERIMENT_TREATMENT&&null",
+            replacement: [
+                {
+                    // Allow linking experiments by their label instead of their value.
+                    match: /(?<=find\(\i=>)((\i).value===\i)/,
+                    replace: "{return($1)||($self.matchExperiment(arguments[0].url,$2.label))}"
+                }
+            ]
         }
     ],
 
-    start: () => !BugReporterExperiment.getCurrentConfig().hasBugReporterAccess && enableStyle(hideBugReport),
+    matchExperiment(url: string, label: string): boolean {
+        const items = url.split("/");
+        const labelCleaned = label.replace(/[^a-zA-Z0-9]+/g, "").toLowerCase();
+        const urlEndCleaned = items[items.length - 1]?.replace(/[^a-zA-Z0-9]+/g, "").toLowerCase();
+        return !!labelCleaned && urlEndCleaned !== undefined && labelCleaned === urlEndCleaned;
+    },
+
+    start: () => !BugReporterExperiment.getConfig().hasBugReporterAccess && enableStyle(hideBugReport),
     stop: () => disableStyle(hideBugReport),
 
     settingsAboutComponent: () => {

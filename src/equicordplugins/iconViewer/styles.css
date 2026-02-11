@@ -1,3 +1,4 @@
+/* Icon grid */
 .vc-icons-tab-grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
@@ -13,7 +14,6 @@
 .vc-icon-container {
     padding: 12px;
     border-radius: 8px;
-    border: 3px solid transparent;
     transition: background-color 0.15s ease;
 }
 
@@ -22,7 +22,6 @@
 }
 
 .vc-icon-icon {
-    color: var(--interactive-icon-default);
     transition: transform 0.15s ease, filter 0.15s ease;
 }
 
@@ -35,7 +34,6 @@
     font-size: 0.75rem;
     margin-top: 4px;
     text-align: center;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 64px;
@@ -44,11 +42,10 @@
 .vc-icon-tab-search-bar-grid {
     display: flex;
     gap: 8px;
-    align-items: center;
     margin-bottom: 16px;
 }
 
-.vc-icon-tab-search-bar-grid > div:first-child {
+.vc-icon-tab-search-bar-grid>div:first-child {
     flex: 1;
 }
 
@@ -56,32 +53,16 @@
     height: 32px;
 }
 
+/* Modal */
 .vc-ic-modal-header {
-    align-items: flex-start;
     position: relative;
     padding: 16px 16px 16px 24px;
-    z-index: 1;
-}
-
-.vc-ic-modal-header-content {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex: 1;
 }
 
 .vc-ic-modal-header-trailing {
     position: absolute;
     top: 8px;
     right: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-}
-
-.vc-ic-modal-content {
-    padding: 16px;
 }
 
 .vc-ic-modal-main {
@@ -95,11 +76,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: repeating-linear-gradient(45deg,
-            #ffffff1a 0,
-            #ffffff1a 10px,
-            #0000001a 10px,
-            #0000001a 20px);
+    background-image: repeating-linear-gradient(45deg, #ffffff1a 0, #ffffff1a 10px, #0000001a 10px, #0000001a 20px);
     border-radius: 8px;
     cursor: context-menu;
 }
@@ -123,18 +100,15 @@
 }
 
 .vc-ic-modal-footer {
-    display: flex;
     flex-direction: row-reverse;
-    justify-content: flex-start;
-    gap: 8px;
+}
+
+.vc-ic-use-as {
+    margin-top: 16px;
+    margin-bottom: 8px;
 }
 
 .vc-ic-unordered-list li {
     margin-left: 16px;
     list-style: disc;
-}
-
-.vc-ic-modal-title {
-    user-select: none;
-    padding-right: 32px;
 }

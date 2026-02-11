@@ -1,0 +1,149 @@
+.vc-dragify-ghost-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.vc-dragify-ghost {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    color: var(--text-normal, #fff);
+    opacity: 1;
+    animation: vc-dragify-fade-in 200ms ease-out forwards;
+    will-change: transform;
+}
+
+.vc-dragify-ghost-exit {
+    animation: vc-dragify-fade-out 200ms ease-in forwards;
+}
+
+.vc-dragify-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 10px;
+    min-width: 220px;
+    max-width: 320px;
+    border-radius: 6px;
+    background: rgb(0 0 0 / 70%);
+    border: 1px solid rgb(255 255 255 / 10%);
+    box-shadow: 0 12px 40px rgb(0 0 0 / 35%);
+    backdrop-filter: blur(12px);
+    transform: translateZ(0);
+    color: var(--text-default, #fff);
+    font-family: var(--font-code);
+    line-height: 1.4;
+    animation: none;
+    will-change: transform;
+}
+
+.vc-dragify-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: rgb(255 255 255 / 10%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    color: var(--text-default, #fff);
+    font-weight: 600;
+}
+
+.vc-dragify-icon-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vc-dragify-icon-text {
+    font-size: 13px;
+    color: var(--text-default, #fff);
+}
+
+.vc-dragify-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.vc-dragify-title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.vc-dragify-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-default, #fff);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vc-dragify-voice-icon {
+    flex-shrink: 0;
+    color: var(--interactive-normal, #b9bbbe);
+}
+
+.vc-dragify-voice-icon-muted {
+    color: var(--status-danger, #ed4245);
+}
+
+.vc-dragify-voice-icon-stream {
+    color: var(--status-positive, #3ba55d);
+}
+
+.vc-dragify-subtitle {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vc-dragify-badge {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+@keyframes vc-dragify-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes vc-dragify-fade-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vc-dragify-ghost {
+        animation: none;
+    }
+
+    .vc-dragify-ghost-exit {
+        animation: none;
+        opacity: 0;
+    }
+}

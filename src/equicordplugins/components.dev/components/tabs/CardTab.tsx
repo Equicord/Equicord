@@ -22,9 +22,11 @@ export default function CardTab() {
                             </Paragraph>
                             <Paragraph color="text-muted">
                                 This is a {variant} card variant. Use for {
-                                    variant === "normal" ? "general content" :
+                                    variant === "primary" ? "general content" :
                                         variant === "warning" ? "cautionary messages" :
-                                            "error or destructive actions"
+                                            variant === "danger" ? "error or destructive actions" :
+                                                variant === "success" ? "positive feedback" :
+                                                    "branded content"
                                 }.
                             </Paragraph>
                         </Card>
@@ -60,7 +62,7 @@ export default function CardTab() {
                 <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
                     Cards can be nested for complex layouts.
                 </Paragraph>
-                <Card variant="normal">
+                <Card variant="primary">
                     <Paragraph style={{ fontWeight: 600, marginBottom: 8 }}>Outer Card</Paragraph>
                     <Card variant="warning" style={{ marginBottom: 8 }}>
                         <Paragraph>Nested warning card</Paragraph>
@@ -76,7 +78,7 @@ export default function CardTab() {
                     Cards accept custom className and style props.
                 </Paragraph>
                 <Card
-                    variant="normal"
+                    variant="primary"
                     style={{
                         borderLeft: "4px solid var(--text-brand)",
                         borderRadius: 4,
@@ -87,7 +89,7 @@ export default function CardTab() {
             </SectionWrapper>
 
             <SectionWrapper title="Props">
-                <Paragraph color="text-muted">• variant - "normal" | "warning" | "danger" (default: "normal")</Paragraph>
+                <Paragraph color="text-muted">• variant - "primary" | "warning" | "danger" | "success" | "brand" (default: "primary")</Paragraph>
                 <Paragraph color="text-muted">• defaultPadding - Add 1em padding (default: true if no className)</Paragraph>
                 <Paragraph color="text-muted">• className - Custom CSS class</Paragraph>
                 <Paragraph color="text-muted">• style - Inline styles</Paragraph>
