@@ -5,21 +5,23 @@
  */
 
 import { BaseText } from "@components/BaseText";
+import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { InfoIcon } from "@components/Icons";
-import { clearMessagesIDB, DBMessageRecord, deleteMessageIDB, deleteMessagesBulkIDB } from "@equicordplugins/messageLoggerEnhanced/db";
-import { settings } from "@equicordplugins/messageLoggerEnhanced/index";
-import { LoggedMessage, LoggedMessageJSON } from "@equicordplugins/messageLoggerEnhanced/types";
-import { messageJsonToMessageClass } from "@equicordplugins/messageLoggerEnhanced/utils";
-import { importLogs } from "@equicordplugins/messageLoggerEnhanced/utils/settingsUtils";
+import { Link } from "@components/Link";
 import { classNameFactory } from "@utils/css";
 import { copyWithToast, openUserProfile } from "@utils/discord";
 import { closeAllModals, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { LazyComponent } from "@utils/react";
-import { User } from "@vencord/discord-types";
+import { type User } from "@vencord/discord-types";
 import { find, findByCode, findByCodeLazy } from "@webpack";
-import { Alerts, Button, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, NavigationRouter, React, TabBar, TextInput, Tooltip, useMemo, useRef, useState } from "@webpack/common";
+import { Alerts, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, NavigationRouter, React, TabBar, TextInput, Tooltip, useMemo, useRef, useState } from "@webpack/common";
 
+import { clearMessagesIDB, DBMessageRecord, deleteMessageIDB, deleteMessagesBulkIDB } from "../db";
+import { settings } from "../index";
+import { LoggedMessage, LoggedMessageJSON } from "../types";
+import { messageJsonToMessageClass } from "../utils";
+import { importLogs } from "../utils/settingsUtils";
 import { useMessages } from "./hooks";
 
 export interface MessagePreviewProps {
@@ -89,7 +91,6 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                         setCurrentTab(e);
                         setNumDisplayedMessages(settings.store.messagesToDisplayAtOnceInLogs);
                         contentRef.current?.firstElementChild?.scrollTo(0, 0);
-                        // forceUpdate();
                     }}
                 >
                     <TabBar.Item
@@ -138,14 +139,15 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                     </ModalContent>
                 }
             </div>
-            <ModalFooter>
+            <ModalFooter className={cl("footer")}>
                 <Button
-                    color={Button.Colors.RED}
+                    variant="dangerPrimary"
                     onClick={() => Alerts.show({
                         title: "Clear Logs",
                         body: "Are you sure you want to clear all the logs",
                         confirmText: "Clear",
-                        confirmColor: Button.Colors.RED,
+                        // @ts-expect-error not typed
+                        confirmVariant: "critical-primary",
                         cancelText: "Cancel",
                         onConfirm: async () => {
                             await clearMessagesIDB();
@@ -158,13 +160,14 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                 </Button>
                 <Button
                     style={{ marginRight: "16px" }}
-                    color={Button.Colors.BRAND}
+                    variant="dangerSecondary"
                     disabled={messages?.length === 0}
                     onClick={() => Alerts.show({
                         title: "Clear Logs",
                         body: `Are you sure you want to clear ${messages.length} logs`,
                         confirmText: "Clear",
-                        confirmColor: Button.Colors.RED,
+                        // @ts-expect-error not typed
+                        confirmVariant: "critical-primary",
                         cancelText: "Cancel",
                         onConfirm: async () => {
                             await deleteMessagesBulkIDB(messages.map(e => e.message_id));
@@ -174,9 +177,8 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                 >
                     Clear Visible Logs
                 </Button>
-                <Button
-                    style={{ marginRight: "16px" }}
-                    color={Button.Colors.PRIMARY}
+                <Link
+                    style={{ marginRight: "1rem" }}
                     onClick={() => {
                         setSortNewest(e => {
                             const val = !e;
@@ -187,7 +189,7 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                     }}
                 >
                     Sort {sortNewest ? "Oldest First" : "Newest First"}
-                </Button>
+                </Link>
             </ModalFooter>
         </ModalRoot>
     );
@@ -221,7 +223,7 @@ function LogsContent({ visibleMessages, canLoadMore, sortNewest, tab, reset, han
                 canLoadMore &&
                 <Button
                     style={{ marginTop: "1rem", width: "100%" }}
-                    size={Button.Sizes.SMALL} onClick={() => handleLoadMore()}
+                    size="small" onClick={() => handleLoadMore()}
                 >
                     Load More
                 </Button>
@@ -301,8 +303,6 @@ interface LMessageProps {
 }
 function LMessage({ log, isGroupStart, reset, }: LMessageProps) {
     const message = useMemo(() => messageJsonToMessageClass(log), [log]);
-
-    // console.log(message);
 
     if (!message) return null;
 

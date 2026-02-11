@@ -6,19 +6,25 @@
 
 import { Heading } from "@components/Heading";
 import { Button } from "@components/index";
+import { classes } from "@utils/misc";
 import { openModal } from "@utils/modal";
-import { React, TextInput } from "@webpack/common";
+import { React, SelectedGuildStore, TextInput, useStateFromStores } from "@webpack/common";
 
 import { cl, settings } from "../index";
-import { exportPresets, importPresets, savePreset } from "../utils/actions";
+import { exportPresets, ImportDecision, importPresets, savePreset } from "../utils/actions";
 import { loadPresetAsPending } from "../utils/profile";
-import { presets, setCurrentPresetIndex } from "../utils/storage";
-import { ConfirmModal } from "./confirmModal";
+import { loadPresets, presets, PresetSection, setCurrentPresetIndex } from "../utils/storage";
+import { ImportProfilesModal } from "./confirmModal";
 import { PresetList } from "./presetList";
 
 const PRESETS_PER_PAGE = 5;
 
-export function PresetManager({ guildId }: { guildId?: string; }) {
+type PresetManagerProps = {
+    section?: PresetSection;
+    guildId?: string;
+};
+
+export function PresetManager({ section, guildId }: PresetManagerProps) {
     const [presetName, setPresetName] = React.useState("");
     const [, forceUpdate] = React.useReducer(x => x + 1, 0);
     const [isSaving, setIsSaving] = React.useState(false);
@@ -26,10 +32,34 @@ export function PresetManager({ guildId }: { guildId?: string; }) {
     const [pageInput, setPageInput] = React.useState("1");
     const [selectedPreset, setSelectedPreset] = React.useState<number>(-1);
     const [searchMode, setSearchMode] = React.useState(false);
+    const lastRandomIndexRef = React.useRef<number>(-1);
+    const resolvedSection: PresetSection = section ?? "main";
+    const isServerSection = resolvedSection === "server";
+    const lastSelectedGuildId = useStateFromStores(
+        [SelectedGuildStore],
+        () => SelectedGuildStore.getLastSelectedGuildId() ?? SelectedGuildStore.getGuildId()
+    );
+    const resolvedGuildId = isServerSection ? (guildId ?? lastSelectedGuildId ?? undefined) : undefined;
+    const canUseGuild = !isServerSection || Boolean(resolvedGuildId);
 
-    const filteredPresets = searchMode
-        ? presets.filter(p => p.name.toLowerCase().includes(presetName.toLowerCase()))
-        : presets;
+    React.useEffect(() => {
+        let isActive = true;
+        (async () => {
+            await loadPresets(resolvedSection);
+            if (!isActive) return;
+            setSelectedPreset(-1);
+            setCurrentPage(1);
+            setPageInput("1");
+            forceUpdate();
+        })();
+        return () => {
+            isActive = false;
+        };
+    }, [resolvedGuildId, resolvedSection]);
+
+    const filteredPresets = !searchMode
+        ? presets
+        : presets.filter(preset => preset.name.toLowerCase().includes(presetName.toLowerCase()));
 
     const totalPages = Math.ceil(filteredPresets.length / PRESETS_PER_PAGE);
     const startIndex = (currentPage - 1) * PRESETS_PER_PAGE;
@@ -43,9 +73,11 @@ export function PresetManager({ guildId }: { guildId?: string; }) {
     };
 
     const handleSavePreset = async () => {
-        if (!presetName.trim()) return;
+        if (!canUseGuild) return;
+        const trimmedName = presetName.trim();
+        if (!trimmedName) return;
         setIsSaving(true);
-        await savePreset(presetName.trim(), guildId);
+        await savePreset(trimmedName, resolvedSection, resolvedGuildId);
         setPresetName("");
         setIsSaving(false);
         const newTotalPages = Math.ceil(presets.length / PRESETS_PER_PAGE);
@@ -53,24 +85,53 @@ export function PresetManager({ guildId }: { guildId?: string; }) {
         forceUpdate();
     };
 
-    const handleLoadPreset = (index: number) => {
+    const applyPreset = (index: number) => {
         setSelectedPreset(index);
         setCurrentPresetIndex(index);
-        loadPresetAsPending(presets[index], guildId);
+        loadPresetAsPending(presets[index], resolvedGuildId, {
+            isGuildProfile: resolvedSection === "server"
+        });
         forceUpdate();
     };
 
-    const showOverridePrompt = (): Promise<boolean> => {
+    const handleLoadPreset = (index: number) => {
+        if (!canUseGuild) return;
+        applyPreset(index);
+    };
+
+    const selectRandomPreset = (sectionType: PresetSection) => {
+        const availablePresets = presets;
+        if (!availablePresets.length) return null;
+        const randomIndex = Math.floor(Math.random() * availablePresets.length);
+        return { preset: availablePresets[randomIndex], index: randomIndex, section: sectionType };
+    };
+
+    const handleRandomPreset = () => {
+        if (!canUseGuild) return;
+        const selection = selectRandomPreset(resolvedSection);
+        if (!selection) return;
+        let nextIndex = selection.index;
+        if (presets.length > 1 && nextIndex === lastRandomIndexRef.current) {
+            let attempts = 0;
+            while (attempts < 5 && nextIndex === lastRandomIndexRef.current) {
+                nextIndex = Math.floor(Math.random() * presets.length);
+                attempts++;
+            }
+        }
+        lastRandomIndexRef.current = nextIndex;
+        applyPreset(nextIndex);
+    };
+
+    const showImportPrompt = (existingCount: number): Promise<ImportDecision> => {
         return new Promise(resolve => {
             openModal(props => (
-                <ConfirmModal
+                <ImportProfilesModal
                     {...props}
-                    title="Override Existing Presets?"
-                    message="Some imported profiles match existing ones. Do you want to override all profiles or combine them?"
-                    confirmText="Override"
-                    cancelText="Combine"
-                    onConfirm={() => resolve(true)}
-                    onCancel={() => resolve(false)}
+                    title="Import Profiles"
+                    message={`You have ${existingCount} existing profiles in this section. Do you want to override them or merge with imported profiles?`}
+                    onOverride={() => resolve("override")}
+                    onMerge={() => resolve("merge")}
+                    onCancel={() => resolve("cancel")}
                 />
             ));
         });
@@ -81,7 +142,7 @@ export function PresetManager({ guildId }: { guildId?: string; }) {
     const shouldShowPagination = filteredPresets.length > PRESETS_PER_PAGE;
 
     return (
-        <div className={cl("section")} >
+        <div className={classes(cl("section"), isServerSection ? cl("section-server") : "")} >
             <Heading tag="h3" className={cl("heading")}>
                 Saved Profiles
             </Heading>
@@ -99,7 +160,7 @@ export function PresetManager({ guildId }: { guildId?: string; }) {
                 {!searchMode && (
                     <Button
                         size="small"
-                        disabled={isSaving || !presetName.trim()}
+                        disabled={isSaving || !presetName.trim() || !canUseGuild}
                         onClick={handleSavePreset}
                         className={cl("search-button")}
                     >
@@ -128,8 +189,17 @@ export function PresetManager({ guildId }: { guildId?: string; }) {
                         avatarSize={avatarSize}
                         selectedPreset={selectedPreset}
                         onLoad={handleLoadPreset}
-                        onUpdate={forceUpdate}
-                        guildId={guildId}
+                        onUpdate={() => {
+                            const newTotal = Math.ceil(presets.length / PRESETS_PER_PAGE);
+                            if (newTotal === 0) {
+                                handlePageChange(1);
+                            } else if (currentPage > newTotal) {
+                                handlePageChange(newTotal);
+                            }
+                            forceUpdate();
+                        }}
+                        guildId={resolvedGuildId}
+                        section={resolvedSection}
                         currentPage={currentPage}
                         onPageChange={handlePageChange}
                     />
@@ -173,25 +243,47 @@ export function PresetManager({ guildId }: { guildId?: string; }) {
                         </div>
                     )}
 
-                    <div className={cl("import")}>
-                        <Button
-                            size="small"
-                            variant="secondary"
-                            onClick={() => importPresets(forceUpdate, showOverridePrompt)}
-                        >
-                            Import
-                        </Button>
-                        <Button
-                            size="small"
-                            variant="secondary"
-                            onClick={exportPresets}
-                        >
-                            Export All
-                        </Button>
-                    </div>
-
                     <hr className={cl("block")} />
                 </>
+            )}
+
+            <div className={cl("import")}>
+                <Button
+                    size="small"
+                    variant="secondary"
+                    onClick={handleRandomPreset}
+                    className={cl("random")}
+                    disabled={!presets.length || !canUseGuild}
+                >
+                    <span className={cl("random-content")}>
+                        <svg className={cl("random-icon")} viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                fill="currentColor"
+                                d="M20.5 4h-5a1 1 0 0 0 0 2h2.586l-4.293 4.293a1 1 0 0 0 1.414 1.414L19.5 7.414V10a1 1 0 1 0 2 0V5a1 1 0 0 0-1-1Zm-16 1a1 1 0 0 0 0 2h2.586l4.293 4.293a1 1 0 1 0 1.414-1.414L8.414 5H4.5ZM5 15a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-2.586l4.293 4.293a1 1 0 0 0 1.414-1.414L7.414 17H10a1 1 0 1 0 0-2H5Zm14.5 0a1 1 0 0 0 0 2h-2.586l-4.293 4.293a1 1 0 1 0 1.414 1.414L18.586 17H21a1 1 0 1 0 0-2h-1.5Z"
+                            />
+                        </svg>
+                        Random
+                    </span>
+                </Button>
+                <Button
+                    size="small"
+                    variant="secondary"
+                    onClick={() => importPresets(forceUpdate, showImportPrompt, resolvedSection, resolvedGuildId)}
+                    disabled={!canUseGuild}
+                >
+                    Import
+                </Button>
+                <Button
+                    size="small"
+                    variant="secondary"
+                    onClick={() => exportPresets(resolvedSection)}
+                >
+                    Export All
+                </Button>
+            </div>
+            <hr className={cl("block")} />
+            {resolvedSection === "server" && (
+                <hr className={cl("block")} />
             )}
         </div>
     );

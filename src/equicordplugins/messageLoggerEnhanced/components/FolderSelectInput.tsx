@@ -16,15 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
-import { DEFAULT_IMAGE_CACHE_DIR } from "@equicordplugins/messageLoggerEnhanced/utils/constants";
 import { classNameFactory } from "@utils/css";
 import { copyWithToast } from "@utils/discord";
-import { Button, Toasts } from "@webpack/common";
+import { classes } from "@utils/misc";
+import { findCssClassesLazy } from "@webpack";
+import { Toasts } from "@webpack/common";
 
 import { Native, settings } from "..";
+import { DEFAULT_IMAGE_CACHE_DIR } from "../utils/constants";
 
 const cl = classNameFactory("folder-upload");
+const inputClasses = findCssClassesLazy("input", "inputWrapper", "editable") as Record<string, string>;
 
 function createDirSelector(settingKey: "logsDir" | "imageCacheDir", successMessage: string) {
     return function DirSelector({ option }) {
@@ -32,7 +36,7 @@ function createDirSelector(settingKey: "logsDir" | "imageCacheDir", successMessa
 
         return (
             <section>
-                <Heading>{option.description}</Heading>
+                <Heading tag="h5">{option.description}</Heading>
                 <SelectFolderInput
                     settingsKey={settingKey}
                     successMessage={successMessage}
@@ -79,13 +83,13 @@ export function SelectFolderInput({ settingsKey, successMessage }: Props) {
     }
 
     return (
-        <div className={cl("-container")}>
+        <div className={classes(cl("-container"), inputClasses.input)}>
             <div onClick={() => copyWithToast(path)} className={cl("-input")}>
                 {path == null || path === DEFAULT_IMAGE_CACHE_DIR ? "Choose Folder" : getDirName(path)}
             </div>
             <Button
                 className={cl("-button")}
-                size={Button.Sizes.SMALL}
+                size="small"
                 onClick={onFolderSelect}
             >
                 Browse

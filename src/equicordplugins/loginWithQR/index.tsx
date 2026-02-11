@@ -7,9 +7,10 @@
 import { plugins } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import { Paragraph } from "@components/Paragraph";
-import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
+import SettingsPlugin from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
+import { removeFromArray } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button } from "@webpack/common";
 
@@ -59,37 +60,19 @@ export default definePlugin({
     qrModalOpen: false,
 
     start() {
-        const { customEntries, customSections } = SettingsPlugin;
-
-        customEntries.push({
+        SettingsPlugin.customEntries.push({
             key: "equicord_login_with_qr",
             title: getIntlMessage("USER_SETTINGS_SCAN_QR_CODE"),
             Component: openQrModal,
             Icon: QrCodeIcon
         });
-
-        customSections.push(() => ({
-            section: "EquicordLoginWithQR",
-            label: getIntlMessage("USER_SETTINGS_SCAN_QR_CODE"),
-            searchableTitles: [getIntlMessage("USER_SETTINGS_SCAN_QR_CODE")],
-            element: openQrModal,
-            id: "EquicordLoginWithQR",
-        }));
-
-        settingsSectionMap.push(["EquicordLoginWithQR", "equicord_login_with_qr"]);
-
+        SettingsPlugin.settingsSectionMap.push(["EquicordLoginWithQR", "equicord_login_with_qr"]);
         preload();
     },
 
     stop() {
-        const { customEntries, customSections } = SettingsPlugin;
-        const entry = customEntries.findIndex(entry => entry.key === "equicord_login_with_qr");
-        if (entry !== -1) customEntries.splice(entry, 1);
-        const section = customSections.findIndex(section => section({} as any).id === "EquicordLoginWithQR");
-        if (section !== -1) customSections.splice(section, 1);
-        const map = settingsSectionMap.findIndex(entry => entry[1] === "equicord_login_with_qr");
-        if (map !== -1) settingsSectionMap.splice(map, 1);
-
+        removeFromArray(SettingsPlugin.customEntries, e => e.key === "equicord_login_with_qr");
+        removeFromArray(SettingsPlugin.settingsSectionMap, entry => entry[1] === "equicord_login_with_qr");
         unload();
     },
 });

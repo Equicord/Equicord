@@ -1,5 +1,4 @@
 .vc-reply-timestamp {
-    display: inline-flex !important;
-    flex-shrink: 0;
+    width: fit-content !important;
     margin-right: 0.25em;
 }

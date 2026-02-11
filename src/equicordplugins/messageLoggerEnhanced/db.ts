@@ -110,6 +110,30 @@ export async function getOldestMessagesIDB(limit: number) {
     return cacheRecords(await db.getAllFromIndex("messages", "by_timestamp", undefined, limit));
 }
 
+export async function* iterateAllMessagesIDB(batchSize = 100) {
+    let lastId: string | undefined;
+    while (true) {
+        const batch: DBMessageRecord[] = [];
+        // new transaction for each batch to avoid timeouts during yield
+        const tx = db.transaction("messages");
+        const range = lastId ? IDBKeyRange.lowerBound(lastId, true) : undefined;
+        let cursor = await tx.store.openCursor(range);
+
+        while (cursor && batch.length < batchSize) {
+            batch.push(cursor.value);
+            cursor = await cursor.continue();
+        }
+
+        if (batch.length === 0) break;
+
+        lastId = batch[batch.length - 1].message_id;
+
+        yield await cacheRecords(batch);
+
+        if (batch.length < batchSize) break;
+    }
+}
+
 export async function getOlderThanTimestampIDB(timestamp: string) {
     const tx = db.transaction("messages", "readonly");
     const { store } = tx;

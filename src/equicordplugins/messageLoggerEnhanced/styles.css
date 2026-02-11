@@ -25,6 +25,10 @@
     /* width: 100%; */
 }
 
+.msg-logger-modal-footer {
+    align-items: center;
+}
+
 .msg-logger-modal-content-container {
     /* max-height: 80vh; */
     overflow: hidden;
@@ -58,17 +62,9 @@
     justify-content: space-around;
 }
 
-.msg-logger-modal-from {
-    font-size: 14px;
-    margin-left: 12px;
-}
-
-.msg-logger-modal-from-deleted {
-    color: var(--status-danger);
-}
-
-.msg-logger-modal-from-edited {
-    color: var(--white-600);
+.msg-logger-modal-danger-btn {
+    color: var(--white-500);
+    background-color: var(--button-danger-background);
 }
 
 .vc-log-toolbox-btn svg {
@@ -83,6 +79,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0;
     background-color: var(--background-secondary-alt);
 }
 
@@ -95,4 +92,8 @@
 .folder-upload-button {
     margin: 6px;
     padding: 4px 8px;
+}
+
+.vc-updater-modal-content {
+    padding: 1rem 2rem;
 }

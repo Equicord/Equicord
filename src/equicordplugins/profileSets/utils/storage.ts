@@ -7,28 +7,78 @@
 import { DataStore } from "@api/index";
 import { Logger } from "@utils/Logger";
 import { ProfilePreset } from "@vencord/discord-types";
+import { UserStore } from "@webpack/common";
 
 const logger = new Logger("ProfilePresets");
-const PRESETS_KEY = "ProfileDataset";
+const LEGACY_PRESETS_KEY = "ProfileDataset";
+const MAIN_PRESETS_KEY = "ProfilePresets_v2_Main";
+const SERVER_PRESETS_KEY = "ProfilePresets_v2_Server";
 
-export let presets: ProfilePreset[] = [];
+export type PresetSection = "main" | "server";
+
+export type ProfilePresetEx = ProfilePreset & {
+    avatarRaw?: string | null;
+};
+
+export let presets: ProfilePresetEx[] = [];
 export let currentPresetIndex = -1;
+let activeScopeKey: string | null = null;
 
-export async function loadPresets() {
+function resetPresets(nextPresets: ProfilePresetEx[] = []) {
+    presets = nextPresets;
+    currentPresetIndex = -1;
+}
+
+function getPresetsKey(section: PresetSection, userId: string) {
+    const baseKey = section === "main" ? MAIN_PRESETS_KEY : SERVER_PRESETS_KEY;
+    return `${baseKey}:${userId}`;
+}
+
+function getLegacyKey(userId: string) {
+    return `${LEGACY_PRESETS_KEY}:${userId}:main`;
+}
+
+export async function loadPresets(section: PresetSection) {
     try {
-        const stored = await DataStore.get(PRESETS_KEY);
+        const currentUser = UserStore.getCurrentUser();
+        const userId = currentUser!.id;
+        const key = getPresetsKey(section, userId);
+        activeScopeKey = key;
+        const stored = await DataStore.get(key);
         if (stored && Array.isArray(stored)) {
-            presets = stored;
+            resetPresets(stored);
+            return;
         }
+
+        if (section === "main") {
+            const legacyKey = getLegacyKey(userId);
+            const legacyStored = await DataStore.get(legacyKey);
+            const legacyBaseStored = await DataStore.get(LEGACY_PRESETS_KEY);
+            const legacyToUse = Array.isArray(legacyStored)
+                ? legacyStored
+                : (Array.isArray(legacyBaseStored) ? legacyBaseStored : null);
+            if (legacyToUse) {
+                resetPresets(legacyToUse);
+                await DataStore.set(key, legacyToUse);
+                await DataStore.del(legacyKey);
+                await DataStore.del(LEGACY_PRESETS_KEY);
+                return;
+            }
+        }
+        resetPresets();
     } catch (err) {
         logger.error("Failed to load presets", err);
-        presets = [];
+        resetPresets();
     }
 }
 
-export async function savePresetsData() {
+export async function savePresetsData(section?: PresetSection) {
     try {
-        await DataStore.set(PRESETS_KEY, presets);
+        if (!activeScopeKey && !section) return;
+        const currentUser = UserStore.getCurrentUser();
+        const userId = currentUser!.id;
+        const key = section ? getPresetsKey(section, userId) : activeScopeKey!;
+        await DataStore.set(key, presets);
     } catch (err) {
         logger.error("Failed to save presets", err);
     }
@@ -38,11 +88,11 @@ export function setCurrentPresetIndex(index: number) {
     currentPresetIndex = index;
 }
 
-export function addPreset(preset: ProfilePreset) {
+export function addPreset(preset: ProfilePresetEx) {
     presets.push(preset);
 }
 
-export function updatePreset(index: number, preset: ProfilePreset) {
+export function updatePreset(index: number, preset: ProfilePresetEx) {
     if (index >= 0 && index < presets.length) {
         presets[index] = preset;
     }
@@ -65,6 +115,6 @@ export function movePresetInArray(fromIndex: number, toIndex: number) {
     presets.splice(toIndex, 0, preset);
 }
 
-export function replaceAllPresets(newPresets: ProfilePreset[]) {
+export function replaceAllPresets(newPresets: ProfilePresetEx[]) {
     presets = newPresets;
 }

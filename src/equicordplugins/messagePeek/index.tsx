@@ -9,14 +9,15 @@ import "./style.css";
 import { DecoratorProps } from "@api/MemberListDecorators";
 import { isPluginEnabled } from "@api/PluginManager";
 import betterActivities from "@equicordplugins/betterActivities";
+import showMeYourName from "@plugins/showMeYourName";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
-import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
-import { ChannelStore, MessageStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
+import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy, findLazy } from "@webpack";
+import { ChannelStore, MessageStore, RelationshipStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-message-peek-");
 
@@ -26,6 +27,7 @@ const MessageActions = findByPropsLazy("fetchMessages", "sendMessage");
 
 const hasRelevantActivity: (props: ActivityCheckProps) => boolean = findByCodeLazy(".OFFLINE||", ".INVISIBLE)return!1");
 const ActivityText: React.ComponentType<ActivityTextProps> = findComponentByCodeLazy("hasQuest:", "hideEmoji:");
+const FavoritesServerExperiment = findLazy(m => m?.definition?.id === "2021-09_favorites_server");
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
@@ -110,7 +112,7 @@ function pluralize(count: number, singular: string, plural = singular + "s") {
 
 function getMessageContent(message: Message): MessageContent | null {
     if (message.content) {
-        if (/https?:\/\/(\S+\.gif|tenor\.com|giphy\.com)/i.test(message.content)) {
+        if (/https?:\/\/(\S+\.gif|tenor\.com|giphy\.com|klipy\.com)/i.test(message.content)) {
             return { text: "sent a GIF", icon: "gif" };
         }
         return { text: message.content };
@@ -139,7 +141,7 @@ function getMessageContent(message: Message): MessageContent | null {
     return null;
 }
 
-function MessagePreviewContent({ channel }: { channel: Channel; }) {
+function MessagePreviewContent({ channel, user }: { channel: Channel; user: User | null | undefined; }) {
     const lastMessage = useStateFromStores(
         [MessageStore],
         () => MessageStore.getLastMessage(channel.id) as Message | undefined
@@ -153,6 +155,8 @@ function MessagePreviewContent({ channel }: { channel: Channel; }) {
         return <>{channel.recipients.length + 1} Members</>;
     }
 
+    const smynName = (isPluginEnabled(showMeYourName.name) && showMeYourName.getMemberListProfilesReactionsVoiceNameText({ user: user ?? lastMessage?.author, type: "membersList" }));
+
     if (!lastMessage) return null;
 
     const content = getMessageContent(lastMessage);
@@ -160,7 +164,7 @@ function MessagePreviewContent({ channel }: { channel: Channel; }) {
 
     const currentUserId = UserStore.getCurrentUser()?.id;
     const isOwnMessage = lastMessage.author.id === currentUserId;
-    const authorName = isOwnMessage ? "You" : (lastMessage.author.globalName ?? lastMessage.author.username);
+    const authorName = isOwnMessage ? "You" : (smynName || RelationshipStore.getNickname(lastMessage.author.id) || lastMessage.author.globalName || lastMessage.author.username);
     const Icon = content.icon ? Icons[content.icon] : null;
 
     return (
@@ -193,7 +197,7 @@ function SubText({ channel, user, activities, applicationStream, voiceChannel, s
         return (
             <div className={PrivateChannelClasses.subtext}>
                 <div className={cl("activity-row")}>
-                    <MessagePreviewContent channel={channel} />
+                    <MessagePreviewContent channel={channel} user={user} />
                     {activityIcons}
                 </div>
             </div>
@@ -202,21 +206,19 @@ function SubText({ channel, user, activities, applicationStream, voiceChannel, s
 
     return (
         <div className={PrivateChannelClasses.subtext}>
-            <MessagePreviewContent channel={channel} />
+            <MessagePreviewContent channel={channel} user={user} />
         </div>
     );
 }
 
 function Timestamp({ channel }: { channel: Channel; }) {
-    const lastMessage = useStateFromStores(
-        [MessageStore],
-        () => MessageStore.getLastMessage(channel.id) as Message | undefined
-    );
+    const lastMessage = useStateFromStores([MessageStore], () => MessageStore.getLastMessage(channel.id) as Message | undefined);
 
     if (!lastMessage) return null;
 
     const timestamp = SnowflakeUtils.extractTimestamp(lastMessage.id);
-    return <span className={cl("timestamp")}>{formatRelativeTime(timestamp)}</span>;
+    const className = FavoritesServerExperiment.getCurrentConfig().favoritesEnabled ? cl("timestamp-favorites") : cl("timestamp");
+    return <span className={className}>{formatRelativeTime(timestamp)}</span>;
 }
 
 function shouldShowActivity(lastMessage: Message | undefined, hasActivity: boolean): boolean {

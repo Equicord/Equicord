@@ -8,8 +8,9 @@ import "./styles.css";
 
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { EyeIcon } from "@components/Icons";
-import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
+import SettingsPlugin from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
+import { removeFromArray } from "@utils/misc";
 import definePlugin from "@utils/types";
 
 import { Data } from "./components/data";
@@ -24,23 +25,13 @@ export default definePlugin({
     patches: [],
 
     async start() {
-        const { customEntries, customSections } = SettingsPlugin;
-
-        customEntries.push({
+        SettingsPlugin.customEntries.push({
             key: "equicord_i_remember_you",
             title: "I Remember You",
             Component: () => <DataUI usersCollection={data.usersCollection} />,
             Icon: EyeIcon
         });
-
-        customSections.push(() => ({
-            section: "EquicordIRememberYou",
-            label: "IRememberYou",
-            element: () => <DataUI plugin={this} usersCollection={data.usersCollection} />,
-            id: "EquicordIRememberYou"
-        }));
-
-        settingsSectionMap.push(["EquicordIRememberYou", "equicord_i_remember_you"]);
+        SettingsPlugin.settingsSectionMap.push(["EquicordIRememberYou", "equicord_i_remember_you"]);
 
         const data = (this.dataManager = await new Data().withStart());
 
@@ -54,15 +45,10 @@ export default definePlugin({
     },
 
     stop() {
-        const dataManager = this.dataManager as Data;
-        const { customEntries, customSections } = SettingsPlugin;
-        const entry = customEntries.findIndex(entry => entry.key === "equicord_i_remember_you");
-        if (entry !== -1) customEntries.splice(entry, 1);
-        const section = customSections.findIndex(section => section({} as any).id === "EquicordIRememberYou");
-        if (section !== -1) customSections.splice(section, 1);
-        const map = settingsSectionMap.findIndex(entry => entry[1] === "equicord_i_remember_you");
-        if (map !== -1) settingsSectionMap.splice(map, 1);
+        removeFromArray(SettingsPlugin.customEntries, e => e.key === "equicord_i_remember_you");
+        removeFromArray(SettingsPlugin.settingsSectionMap, entry => entry[1] === "equicord_i_remember_you");
 
+        const dataManager = this.dataManager as Data;
         removeMessagePreSendListener(dataManager._onMessagePreSend_preSend);
         clearInterval(dataManager._storageAutoSaveProtocol_interval);
     },

@@ -109,6 +109,7 @@ export function isEquicordGuild(id: string | null | undefined, isGuildId: boolea
     if (!id) return false;
     if (isGuildId) return id === GUILD_ID;
     const channel = ChannelStore.getChannel(id);
+    if (!channel) return false;
     return channel.guild_id === GUILD_ID;
 }
 
@@ -121,5 +122,11 @@ export function isEquicordSupport(userId: string | null | undefined): boolean {
     if (!userId) return false;
 
     const member = GuildMemberStore.getMember(GUILD_ID, userId);
-    return member?.roles?.includes(EQUICORD_HELPERS) || false;
+    if (!member) return false;
+    return member.roles.includes(EQUICORD_HELPERS) || false;
+}
+
+export function removeFromArray<T>(arr: T[], predicate: (e: T) => boolean) {
+    const idx = arr.findIndex(predicate);
+    if (idx !== -1) arr.splice(idx, 1);
 }
