@@ -111,7 +111,7 @@ function pluralize(count: number, singular: string, plural = singular + "s") {
 
 function getMessageContent(message: Message): MessageContent | null {
     if (message.content) {
-        if (/https?:\/\/(\S+\.gif|tenor\.com|giphy\.com)/i.test(message.content)) {
+        if (/https?:\/\/(\S+\.gif|tenor\.com|giphy\.com|klipy\.com)/i.test(message.content)) {
             return { text: "sent a GIF", icon: "gif" };
         }
         return { text: message.content };
