@@ -170,6 +170,7 @@ export const settings = definePluginSettings({
         component: () => (
             <section>
                 <HeadingSecondary>Youtube Music</HeadingSecondary>
+                <MaskedLink href="https://github.com/pear-devs/pear-desktop">Pear Desktop</MaskedLink> is required for these settings
             </section>
         )
     },

@@ -23,7 +23,7 @@ import definePlugin, { OptionType, ReporterTestable } from "@utils/types";
 
 import { initWs, socket, stopWs } from "./initWs";
 export const PORT = 8485;
-export const CLIENT_VERSION: readonly [major: number, minor: number, patch: number] = [0, 1, 1];
+export const CLIENT_VERSION: readonly [major: number, minor: number, patch: number] = [0, 1, 2];
 
 export const logger = new Logger("DevCompanion");
 
@@ -48,13 +48,13 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "DevCompanion",
     description: "Dev Companion Plugin. Please report anything not working or being weird (most likely its a bug) to sadan, either ping or dm, thanks!",
-    authors: [Devs.Ven, Devs.sadan, Devs.Samwich],
+    authors: [Devs.Ven, Devs.sadan],
     reporterTestable: ReporterTestable.None,
     isModified: true,
     settings,
 
     toolboxActions: {
-        "Reconnect"() {
+        Reconnect() {
             socket?.close(1000, "Reconnecting");
             initWs(true);
         }
@@ -64,6 +64,10 @@ export default definePlugin({
         // if we're running the reporter, we need to initws in the reporter file to avoid a race condition
         if (!IS_DEV) throw new Error("This plugin requires dev mode to run, please build with pnpm build --dev");
         initWs();
+        window.reconnectDevtools = () => {
+            socket?.close(1000, "Reconnecting");
+            initWs(true);
+        };
     },
 
     stop: stopWs,

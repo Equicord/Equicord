@@ -9,10 +9,10 @@ import { SpotifyLrcStore } from "@equicordplugins/musicControls/spotify/lyrics/p
 import { SyncedLyric } from "@equicordplugins/musicControls/spotify/lyrics/providers/types";
 import { SpotifyStore } from "@equicordplugins/musicControls/spotify/SpotifyStore";
 import { classNameFactory } from "@utils/css";
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { React, useEffect, useState, useStateFromStores } from "@webpack/common";
 
-export const scrollClasses = findByPropsLazy("auto", "customTheme");
+export const scrollClasses = findCssClassesLazy("auto", "customTheme");
 
 export const cl = classNameFactory("vc-spotify-lyrics-");
 

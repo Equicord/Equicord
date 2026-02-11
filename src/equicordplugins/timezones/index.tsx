@@ -14,7 +14,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
+import { findByPropsLazy, findCssClassesLazy } from "@webpack";
 import { Button, Menu, showToast, Toasts, Tooltip, useEffect, UserStore, useState } from "@webpack/common";
 
 import { deleteTimezone, getTimezone, loadDatabaseTimezones, setUserDatabaseTimezone } from "./database";
@@ -39,7 +39,7 @@ export function getSystemTimezone(): string {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
 
-const classes = findByPropsLazy("timestamp", "compact", "contentOnly");
+const classes = findCssClassesLazy("timestamp", "compact", "contentOnly");
 const locale = findByPropsLazy("getLocale");
 
 export const settings = definePluginSettings({
@@ -266,7 +266,7 @@ export default definePlugin({
         {
             find: 'backgroundColor:"COMPLETE"',
             replacement: {
-                match: /(?<=backgroundImage.+?children:)!\i.{0,100}gifTag\}\)/,
+                match: /(?<=backgroundImage.+?children:)!\i.{0,100}className:\i\.\i\}\)/,
                 replace: "[$self.renderProfileTimezone(arguments[0]),$&]"
             }
         },

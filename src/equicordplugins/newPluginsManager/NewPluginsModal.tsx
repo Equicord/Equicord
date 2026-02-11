@@ -15,7 +15,7 @@ import { PluginDependencyList } from "@components/settings/tabs/plugins";
 import { PluginCard } from "@components/settings/tabs/plugins/PluginCard";
 import { ChangeList } from "@utils/ChangeList";
 import { classNameFactory } from "@utils/css";
-import { closeModal, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { CloseButton, closeModal, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
 import { findComponentByCodeLazy } from "@webpack";
 import { Tooltip, useMemo } from "@webpack/common";
@@ -27,8 +27,7 @@ import { getNewPlugins, getNewSettings, KnownPluginSettingsMap, writeKnownSettin
 
 const cl = classNameFactory("vc-new-plugins-");
 
-const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
-const Checkbox = findComponentByCodeLazy(".checkboxWrapperDisabled:");
+const Checkbox = findComponentByCodeLazy('"data-toggleable-component":"checkbox');
 
 let hasSeen = false;
 

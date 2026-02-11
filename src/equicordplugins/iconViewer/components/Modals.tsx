@@ -6,6 +6,7 @@
 
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
+import { CodeBlock } from "@components/CodeBlock";
 import { Flex } from "@components/Flex";
 import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
@@ -13,6 +14,7 @@ import { TooltipContainer } from "@components/TooltipContainer";
 import { copyWithToast, getIntlMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import {
+    CloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
@@ -25,6 +27,7 @@ import { saveFile } from "@utils/web";
 import { Icon } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
 import {
+    Clickable,
     ContextMenuApi,
     createRoot,
     FluxDispatcher,
@@ -39,7 +42,6 @@ import {
 import { cssColors, getCssColorKeys, iconSizes, iconSizesInPx } from "../utils";
 
 const logger = new Logger("IconViewer");
-const CloseButton = findComponentByCodeLazy("CLOSE_BUTTON_LABEL");
 const BugIcon = findComponentByCodeLazy("1.1.27.1.37 0a6.66 6.6");
 
 const FORMAT_EXTENSIONS: Record<string, string> = {
@@ -164,7 +166,7 @@ function saveIcon(iconName: string, icon: Element | string, color: number, size:
     img.src = `data:image/svg+xml;base64,${btoa(icon.outerHTML)}`;
 }
 
-function OtherContextMenu({ iconName, Icon, color, findCode }: { iconName: string; Icon: Icon; color: number; findCode: string | null; }) {
+function OtherContextMenu({ iconName, Icon, color }: { iconName: string; Icon: Icon; color: number; }) {
     const colorData = cssColors[color];
 
     const handleSave = (type: string) => {
@@ -224,15 +226,13 @@ function OtherContextMenu({ iconName, Icon, color, findCode }: { iconName: strin
     );
 }
 
-function IconModal({ iconName, Icon, findPattern, onClose, transitionState }: { iconName: string; Icon: Icon; findPattern?: string; } & ModalProps) {
+function IconModal({ iconName, Icon, onClose, transitionState }: { iconName: string; Icon: Icon; } & ModalProps) {
     const [color, setColor] = useColorNavigation(209);
     const colorData = cssColors[color];
     const colorKeys = useMemo(() => getCssColorKeys(), []);
 
-    const fill = iconName === "CircleShield" ? "var(--background-base-low)" : colorData?.css;
-    const findCode = findPattern
-        ? `const ${iconName}Icon = findComponentByCode(${JSON.stringify(findPattern)})`
-        : null;
+    const fill = iconName === "CircleShieldIcon" ? "var(--background-base-low)" : colorData?.css;
+    const findCode = `const ${iconName} = findExportedComponentLazy("${iconName}")`;
 
     const openColorMenu = (e: React.MouseEvent) => {
         ContextMenuApi.openContextMenu(e, () => <ColorContextMenu colorKeys={colorKeys} />);
@@ -249,7 +249,7 @@ function IconModal({ iconName, Icon, findPattern, onClose, transitionState }: { 
 
     const openOtherMenu = (e: React.MouseEvent) => {
         ContextMenuApi.openContextMenu(e, () => (
-            <OtherContextMenu iconName={iconName} Icon={Icon} color={color} findCode={findCode} />
+            <OtherContextMenu iconName={iconName} Icon={Icon} color={color} />
         ));
     };
 
@@ -288,12 +288,17 @@ function IconModal({ iconName, Icon, findPattern, onClose, transitionState }: { 
                         </TooltipContainer>
                     </Flex>
                 </Flex>
+                <div className="vc-ic-use-as">
+                    <BaseText size="md" weight="semibold">Usage</BaseText>
+                    <BaseText size="sm" color="text-muted">Click to copy</BaseText>
+                </div>
+                {/* for some reason i cant make this shit codeblock full width, FF 15 */}
+                <Clickable className="vc-ic-codeblock-wrapper" onClick={() => copyWithToast(findCode, "Copied!")}>
+                    <CodeBlock content={findCode} lang="ts" />
+                </Clickable>
             </ModalContent>
             <ModalFooter className="vc-ic-modal-footer">
-                <Button variant="primary" onClick={() => copyWithToast(findCode ?? String(Icon), findCode ? "Find code copied!" : "Raw function copied!")}>
-                    {findCode ? "Copy" : "Copy Raw"}
-                </Button>
-                <Button variant="secondary" onClick={openOtherMenu}>
+                <Button variant="primary" onClick={openOtherMenu}>
                     Actions
                 </Button>
             </ModalFooter>
@@ -301,8 +306,8 @@ function IconModal({ iconName, Icon, findPattern, onClose, transitionState }: { 
     );
 }
 
-export function openIconModal(iconName: string, Icon: Icon, findPattern?: string) {
-    openModal(props => <IconModal iconName={iconName} Icon={Icon} findPattern={findPattern} {...props} />);
+export function openIconModal(iconName: string, Icon: Icon) {
+    openModal(props => <IconModal iconName={iconName} Icon={Icon} {...props} />);
 }
 
 export function SettingsAbout() {

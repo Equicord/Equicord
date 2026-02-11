@@ -92,7 +92,6 @@ export default function ScrollerTab() {
                 <Paragraph color="text-muted">• ScrollerNone - Hidden scrollbar</Paragraph>
                 <Paragraph color="text-muted">• ListScrollerThin - Virtualized list with thin scrollbar</Paragraph>
                 <Paragraph color="text-muted">• ListScrollerAuto - Virtualized list with auto scrollbar</Paragraph>
-                <Paragraph color="text-muted">• ListScrollerNone - Virtualized list with hidden scrollbar</Paragraph>
             </SectionWrapper>
 
             <SectionWrapper title="Import">

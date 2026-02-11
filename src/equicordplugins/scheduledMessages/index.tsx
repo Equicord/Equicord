@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { MessageOptions } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 import { isScheduleModeEnabled, ScheduledMessagesButton, setScheduleModeEnabled } from "./components/ChatBarButton";
@@ -86,7 +86,7 @@ function handleReactionEvent(event: FluxReactionEvent): void {
 export default definePlugin({
     name: "ScheduledMessages",
     description: "Schedule messages to be sent at a specific time or after a delay.",
-    authors: [EquicordDevs.mmeta, EquicordDevs.Prism],
+    authors: [EquicordDevs.mmeta, Devs.prism],
     settings,
 
     flux: {

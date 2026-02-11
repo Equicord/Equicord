@@ -1,7 +1,3 @@
-.qrlogin-modal-header {
-    padding: 16px;
-}
-
 .qrlogin-modal-filepaste {
     width: 30rem;
     height: 13rem;
@@ -67,11 +63,6 @@
     opacity: 0;
 }
 
-.qrlogin-modal-button {
-    margin: 1rem 0;
-    width: 100%;
-}
-
 .qrlogin-device-content {
     padding: 24px;
     display: flex;
@@ -94,8 +85,8 @@
     margin-top: 18px;
     width: 20rem;
     background: linear-gradient(to right,
-            var(--redesign-button-danger-background) calc(var(--progress) - 1%),
-            var(--redesign-button-danger-pressed-background) var(--progress)) !important;
+            var(--status-danger) calc(var(--progress) - 1%),
+            var(--text-feedback-critical) var(--progress)) !important;
     border-radius: 420rem;
 
     --progress: 0%;
@@ -109,6 +100,10 @@
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+.qrlogin-modal-container {
+    margin-left: 100px;
 }
 
 [data-tab-id="Scan QR Code"]::before {

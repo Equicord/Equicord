@@ -106,7 +106,7 @@ export default definePlugin({
             ]
         })),
         {
-            find: '"forum-post-action-bar-"',
+            find: "`forum-post-action-bar-",
             replacement: [
                 {
                     match: /(?<=\);)(let \i=null,\i=\[\],\i=(\i))/,

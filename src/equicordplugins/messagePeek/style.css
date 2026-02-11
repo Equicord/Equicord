@@ -1,0 +1,53 @@
+.vc-message-peek-timestamp {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    color: var(--text-normal);
+}
+
+.vc-message-peek-timestamp-favorites {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    color: var(--text-normal);
+}
+
+[class*="interactiveSelected__"] .vc-message-peek-timestamp {
+    color: var(--white);
+}
+
+[class*="interactive__"]:hover .vc-message-peek-timestamp {
+    display: none;
+}
+
+.vc-message-peek-preview {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.vc-message-peek-icon {
+    display: flex;
+    margin-top: 0.8px;
+}
+
+[class*="interactive__"]:hover .vc-message-peek-icon svg path {
+    fill: var(--white) !important;
+}
+
+.vc-message-peek-activity-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.vc-message-peek-activity-row>[class*="textXs"] {
+    min-width: 0;
+}
+
+.vc-message-peek-activity-row>[class*="vc-bactivities-row"] {
+    flex-shrink: 0;
+}

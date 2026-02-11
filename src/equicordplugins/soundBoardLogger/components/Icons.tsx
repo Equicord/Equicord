@@ -7,7 +7,7 @@
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { cl } from "@equicordplugins/soundBoardLogger/utils";
 import { classes } from "@utils/misc";
-import { Button, ButtonWrapperClasses, Tooltip } from "@webpack/common";
+import { Button, Tooltip } from "@webpack/common";
 
 import { openSoundBoardLog } from "./SoundBoardLog";
 
@@ -45,11 +45,11 @@ export function IconWithTooltip({ text, icon, onClick }) {
                     look={Button.Looks.FILLED}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    className={ButtonWrapperClasses.button}
+                    className={cl("discord-button")}
                     onClick={onClick}
                     style={{ padding: "0 4px" }}
                 >
-                    <div className={ButtonWrapperClasses.buttonWrapper}>
+                    <div className={cl("button-wrapper")}>
                         {icon}
                     </div>
                 </Button>

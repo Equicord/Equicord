@@ -1,8 +1,26 @@
 .vc-text-base {
     font-family: var(--font-primary);
     color: var(--text-default);
-    line-height: normal;
-
-    /* Discord puts an insane default margin on p tags, so reset that here */
     margin: 0;
+}
+
+.vc-text-selectable {
+    user-select: text;
+}
+
+.vc-text-line-clamp-1 {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-text-line-clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.vc-text-tabular-numbers {
+    font-variant-numeric: tabular-nums;
 }

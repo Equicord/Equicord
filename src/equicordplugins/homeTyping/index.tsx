@@ -9,7 +9,7 @@ import definePlugin from "@utils/types";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { TypingStore, UserStore, useStateFromStores } from "@webpack/common";
 
-const ThreeDots = findComponentByCodeLazy(".dots,", "dotRadius:");
+const ThreeDots = findComponentByCodeLazy("Math.min(1,Math.max(", "dotRadius:");
 
 const PrivateChannelSortStore = findStoreLazy("PrivateChannelSortStore") as { getPrivateChannelIds: () => string[]; };
 

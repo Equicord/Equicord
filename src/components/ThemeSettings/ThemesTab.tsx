@@ -397,8 +397,8 @@ function ThemesTab() {
 
     async function changeThemeLibraryURLs() {
         settings.themeLinks = settings.themeLinks.map(link => {
-            if (link.startsWith("https://themes-delta.vercel.app/api")) {
-                return link.replace("https://themes-delta.vercel.app/api", "https://discord-themes.com/api");
+            if (link.startsWith("https://discord-themes.com/api")) {
+                return link.replace("https://discord-themes.com/api", "https://themes.equicord.org/api");
             }
             return link;
         });

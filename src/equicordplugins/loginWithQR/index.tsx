@@ -7,41 +7,44 @@
 import { plugins } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import { Paragraph } from "@components/Paragraph";
+import SettingsPlugin from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
+import { removeFromArray } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, Menu } from "@webpack/common";
-import { ReactElement } from "react";
+import { Button } from "@webpack/common";
 
 import { preload, unload } from "./images";
-import { cl } from "./ui";
+import { QrCodeIcon } from "./ui";
 import openQrModal from "./ui/modals/QrModal";
+
+const settings = definePluginSettings({
+    scanQr: {
+        type: OptionType.COMPONENT,
+        description: "Scan a QR code",
+        component() {
+            if (!plugins.LoginWithQR.started)
+                return (
+                    <Paragraph>
+                        Enable the plugin and restart your client to scan a login QR code
+                    </Paragraph>
+                );
+
+            return (
+                <Button size={Button.Sizes.SMALL} onClick={openQrModal}>
+                    {getIntlMessage("USER_SETTINGS_SCAN_QR_CODE")}
+                </Button>
+            );
+        },
+    },
+});
 
 export default definePlugin({
     name: "LoginWithQR",
     description: "Allows you to login to another device by scanning a login QR code, just like on mobile!",
     authors: [EquicordDevs.nexpid],
 
-    settings: definePluginSettings({
-        scanQr: {
-            type: OptionType.COMPONENT,
-            description: "Scan a QR code",
-            component() {
-                if (!plugins.LoginWithQR.started)
-                    return (
-                        <Paragraph>
-                            Enable the plugin and restart your client to scan a login QR code
-                        </Paragraph>
-                    );
-
-                return (
-                    <Button size={Button.Sizes.SMALL} onClick={openQrModal}>
-                        {getIntlMessage("USER_SETTINGS_SCAN_QR_CODE")}
-                    </Button>
-                );
-            },
-        },
-    }),
+    settings,
 
     patches: [
         // Prevent paste event from firing when the QRModal is open
@@ -52,73 +55,24 @@ export default definePlugin({
                 replace: "handleGlobalPaste:(...args)=>!$self.qrModalOpen&&$1(...args)",
             },
         },
-        // Insert a Scan QR Code button in the My Account tab
-        /* broken
-        {
-            find: "UserSettingsAccountProfileCard",
-            replacement: {
-                // Find the Edit User Profile button and insert our custom button.
-                // A bit jank, but whatever
-                match: /,(\(.{1,90}#{intl::USER_SETTINGS_EDIT_USER_PROFILE}\),onClick:\i\}\))/,
-                replace: ",$self.insertScanQrButton($1)",
-            },
-        },
-        */
-        // Insert a Scan QR Code MenuItem in the Swith Accounts popout
-        {
-            find: 'id:"manage-accounts"',
-            replacement: {
-                match: /(id:"manage-accounts",.*?)}\)\)(,\i)/,
-                replace: "$1}),$self.ScanQrMenuItem)$2"
-            }
-        },
-
-        // Insert a Scan QR Code button in the Settings sheet
-        {
-            find: ".isInputProfileCustom()",
-            replacement: {
-                match: /\.CONNECTIONS/,
-                replace: "$&,\"SCAN_QR_CODE\""
-            }
-        },
-        // Insert a Scan QR Code button in the Settings sheet (part 2)
-        {
-            find: ".PRIVACY_ENCRYPTION_VERIFIED_DEVICES_V2]",
-            replacement: {
-                match: /\.CLIPS]:{.*?},/,
-                replace: "$&\"SCAN_QR_CODE\":$self.ScanQrSettingsSheet,"
-            }
-        }
     ],
 
     qrModalOpen: false,
 
-    insertScanQrButton: (button: ReactElement) => (
-        <div className={cl("settings-btns")}>
-            <Button size={Button.Sizes.SMALL} onClick={openQrModal}>
-                {getIntlMessage("USER_SETTINGS_SCAN_QR_CODE")}
-            </Button>
-            {button}
-        </div>
-    ),
-    get ScanQrMenuItem() {
-        return <Menu.MenuItem id="scan-qr" label={getIntlMessage("USER_SETTINGS_SCAN_QR_CODE")} action={openQrModal} />;
-    },
-    get ScanQrSettingsSheet() {
-        return {
-            section: getIntlMessage("USER_SETTINGS_SCAN_QR_CODE"),
-            onClick: openQrModal,
-            searchableTitles: [getIntlMessage("USER_SETTINGS_SCAN_QR_CODE")],
-            label: getIntlMessage("USER_SETTINGS_SCAN_QR_CODE"),
-            ariaLabel: getIntlMessage("USER_SETTINGS_SCAN_QR_CODE")
-        };
-    },
-
     start() {
+        SettingsPlugin.customEntries.push({
+            key: "equicord_login_with_qr",
+            title: getIntlMessage("USER_SETTINGS_SCAN_QR_CODE"),
+            Component: openQrModal,
+            Icon: QrCodeIcon
+        });
+        SettingsPlugin.settingsSectionMap.push(["EquicordLoginWithQR", "equicord_login_with_qr"]);
         preload();
     },
 
     stop() {
+        removeFromArray(SettingsPlugin.customEntries, e => e.key === "equicord_login_with_qr");
+        removeFromArray(SettingsPlugin.settingsSectionMap, entry => entry[1] === "equicord_login_with_qr");
         unload();
     },
 });
