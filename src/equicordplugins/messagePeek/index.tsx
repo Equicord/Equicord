@@ -17,7 +17,7 @@ import definePlugin from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
-import { ChannelStore, MessageStore, RelationshipStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
+import { ChannelStore, MessageStore, Parser, RelationshipStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-message-peek-");
 
@@ -69,7 +69,7 @@ interface PrivateChannelProps extends ActivityCheckProps {
 }
 
 interface MessageContent {
-    text: string;
+    text: React.ReactNode;
     icon?: IconType;
 }
 
@@ -114,7 +114,7 @@ function getMessageContent(message: Message): MessageContent | null {
         if (/https?:\/\/(\S+\.gif|tenor\.com|giphy\.com|klipy\.com)/i.test(message.content)) {
             return { text: "sent a GIF", icon: "gif" };
         }
-        return { text: message.content };
+        return { text: Parser.parseInlineReply(message.content) };
     }
 
     if (message.flags & MessageFlags.IS_VOICE_MESSAGE) {
@@ -150,13 +150,12 @@ function MessagePreviewContent({ channel, user }: { channel: Channel; user: User
         return <>Official Discord Message</>;
     }
 
-    if (channel.isMultiUserDM()) {
-        return <>{channel.recipients.length + 1} Members</>;
+    const smynName = isPluginEnabled(showMeYourName.name) ? showMeYourName.getMemberListProfilesReactionsVoiceNameText({ user: user ?? lastMessage?.author, type: "membersList" }) : null;
+
+    if (!lastMessage) {
+        if (channel.isMultiUserDM()) return <>{channel.recipients.length + 1} Members</>;
+        return null;
     }
-
-    const smynName = (isPluginEnabled(showMeYourName.name) && showMeYourName.getMemberListProfilesReactionsVoiceNameText({ user: user ?? lastMessage?.author, type: "membersList" }));
-
-    if (!lastMessage) return null;
 
     const content = getMessageContent(lastMessage);
     if (!content) return null;
