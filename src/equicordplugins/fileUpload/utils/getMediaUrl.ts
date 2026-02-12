@@ -55,8 +55,8 @@ const extensionToMime: Record<string, string> = {
     "mkv": "video/x-matroska"
 };
 
-export function getMimeFromExtension(ext: string): string {
-    return extensionToMime[ext.toLowerCase()] || "application/octet-stream";
+export function getMimeFromExtension(ext?: string): string {
+    return extensionToMime[ext?.toLowerCase() ?? ""] || "application/octet-stream";
 }
 
 export async function getExtensionFromBytes(blob: Blob): Promise<string | undefined> {
@@ -113,7 +113,7 @@ export function isSupported(url: string): boolean {
     return ext ? supportedExtensions.includes(ext) : false;
 }
 
-export function getMediaUrl(props: { src?: string; href?: string; itemSrc?: string; itemHref?: string; target?: any }): string | null {
+export function getMediaUrl(props: { src?: string; href?: string; itemSrc?: string; itemHref?: string; target?: any; }): string | null {
     const url = props.src || props.href || props.itemSrc || props.itemHref;
     if (url && isSupported(url)) return url;
 

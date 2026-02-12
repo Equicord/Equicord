@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { settings } from "@equicordplugins/fileUpload/index";
+import { settings } from "@equicordplugins/fileUpload/settings";
 import { ServiceType, UploadResponse } from "@equicordplugins/fileUpload/types";
 import { copyToClipboard } from "@utils/clipboard";
 import { PluginNative } from "@utils/types";
@@ -12,6 +12,7 @@ import { showToast, Toasts } from "@webpack/common";
 
 import { convertApngToGif } from "./apngToGif";
 import { getExtensionFromBytes, getExtensionFromMime, getMimeFromExtension, getUrlExtension } from "./getMediaUrl";
+import { isS3Configured, uploadToS3 } from "./s3";
 
 const Native = IS_DISCORD_DESKTOP
     ? VencordNative.pluginHelpers.FileUpload as PluginNative<typeof import("../native")>
@@ -106,7 +107,7 @@ async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
         throw new Error(`Upload failed: ${response.status} ${errorText}`);
     }
 
-    const data = await response.json() as { fileURL?: string };
+    const data = await response.json() as { fileURL?: string; };
 
     if (data.fileURL) {
         return data.fileURL;
@@ -116,14 +117,28 @@ async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
 }
 
 export function isConfigured(): boolean {
-    const { serviceType, serviceUrl, ziplineToken, nestToken } = settings.store;
+    const {
+        serviceType,
+        serviceUrl,
+        ziplineToken,
+        nestToken
+    } = settings.store as {
+        serviceType: ServiceType;
+        serviceUrl?: string;
+        ziplineToken?: string;
+        nestToken?: string;
+    };
     switch (serviceType) {
         case ServiceType.NEST:
             return Boolean(nestToken);
         case ServiceType.EZHOST:
-            return Boolean((settings.store as { ezHostKey?: string }).ezHostKey);
+            return Boolean((settings.store as { ezHostKey?: string; }).ezHostKey);
+        case ServiceType.S3:
+            return isS3Configured();
         case ServiceType.CATBOX:
+            return true;
         case ServiceType.ZEROX0:
+            return Boolean(Native);
         case ServiceType.LITTERBOX:
             return true;
         case ServiceType.ZIPLINE:
@@ -133,7 +148,7 @@ export function isConfigured(): boolean {
 }
 
 async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string> {
-    const { ezHostKey } = (settings.store as { ezHostKey?: string });
+    const { ezHostKey } = (settings.store as { ezHostKey?: string; });
 
     if (!ezHostKey) throw new Error("E-Z Host API key is required");
 
@@ -178,74 +193,71 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
 }
 
 async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string> {
+    const { catboxUserhash } = settings.store;
+
+    if (Native) {
+        const result = await Native.uploadToCatbox(await fileBlob.arrayBuffer(), filename, catboxUserhash || undefined);
+        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
+        return result.url;
+    }
+
     const formData = new FormData();
     formData.append("reqtype", "fileupload");
+    if (catboxUserhash) formData.append("userhash", catboxUserhash);
     formData.append("fileToUpload", fileBlob, filename);
 
-    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`;
-    const response = await fetch(proxiedUrl, {
+    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`, {
         method: "POST",
         body: formData
     });
 
-    if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Upload failed: ${response.status} ${text}`);
-    }
-
+    if (!response.ok) throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
     const text = (await response.text()).trim();
-    if (!text) {
-        throw new Error("No URL returned from upload");
-    }
-
+    if (!text) throw new Error("No URL returned from upload");
     return text;
 }
 
 async function uploadTo0x0(fileBlob: Blob, filename: string): Promise<string> {
-    const formData = new FormData();
-    formData.append("file", fileBlob, filename);
-
-    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://0x0.st")}`;
-    const response = await fetch(proxiedUrl, {
-        method: "POST",
-        body: formData
-    });
-
-    if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Upload failed: ${response.status} ${text}`);
+    if (!Native) {
+        throw new Error("0x0.st uploads are only supported on the desktop client");
     }
 
-    const text = (await response.text()).trim();
-    if (!text) {
+    const arrayBuffer = await fileBlob.arrayBuffer();
+    const result = await Native.uploadTo0x0(arrayBuffer, filename);
+
+    if (!result.success) {
+        throw new Error(result.error || "Upload failed");
+    }
+
+    if (!result.url) {
         throw new Error("No URL returned from upload");
     }
 
-    return text;
+    return result.url;
 }
 
 async function uploadToLitterbox(fileBlob: Blob, filename: string): Promise<string> {
+    const expiry = settings.store.litterboxExpiry || "24h";
+
+    if (Native) {
+        const result = await Native.uploadToLitterbox(await fileBlob.arrayBuffer(), filename, expiry);
+        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
+        return result.url;
+    }
+
     const formData = new FormData();
     formData.append("reqtype", "fileupload");
-    formData.append("time", settings.store.litterboxExpiry || "24h");
+    formData.append("time", expiry);
     formData.append("fileToUpload", fileBlob, filename);
 
-    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`;
-    const response = await fetch(proxiedUrl, {
+    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`, {
         method: "POST",
         body: formData
     });
 
-    if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Upload failed: ${response.status} ${text}`);
-    }
-
+    if (!response.ok) throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
     const text = (await response.text()).trim();
-    if (!text) {
-        throw new Error("No URL returned from upload");
-    }
-
+    if (!text) throw new Error("No URL returned from upload");
     return text;
 }
 
@@ -323,6 +335,9 @@ export async function uploadFile(url: string): Promise<void> {
                 break;
             case ServiceType.EZHOST:
                 uploadedUrl = await uploadToEzHost(typedBlob, filename);
+                break;
+            case ServiceType.S3:
+                uploadedUrl = await uploadToS3(typedBlob, filename, Native);
                 break;
             case ServiceType.CATBOX:
                 uploadedUrl = await uploadToCatbox(typedBlob, filename);

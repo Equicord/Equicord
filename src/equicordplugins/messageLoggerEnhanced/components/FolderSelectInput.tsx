@@ -18,16 +18,13 @@
 
 import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
-import { classNameFactory } from "@utils/css";
+import { cl, Native, settings } from "@equicordplugins/messageLoggerEnhanced/index";
+import { DEFAULT_IMAGE_CACHE_DIR } from "@equicordplugins/messageLoggerEnhanced/utils/constants";
 import { copyWithToast } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { findCssClassesLazy } from "@webpack";
 import { Toasts } from "@webpack/common";
 
-import { Native, settings } from "..";
-import { DEFAULT_IMAGE_CACHE_DIR } from "../utils/constants";
-
-const cl = classNameFactory("folder-upload");
 const inputClasses = findCssClassesLazy("input", "inputWrapper", "editable") as Record<string, string>;
 
 function createDirSelector(settingKey: "logsDir" | "imageCacheDir", successMessage: string) {
@@ -83,18 +80,18 @@ export function SelectFolderInput({ settingsKey, successMessage }: Props) {
     }
 
     return (
-        <div className={classes(cl("-container"), inputClasses.input)}>
-            <div onClick={() => copyWithToast(path)} className={cl("-input")}>
+        <div className={classes(cl("folder-upload-container"), inputClasses.input)}>
+            <div onClick={() => copyWithToast(path)} className={cl("folder-upload-input")}>
                 {path == null || path === DEFAULT_IMAGE_CACHE_DIR ? "Choose Folder" : getDirName(path)}
             </div>
             <Button
-                className={cl("-button")}
+                className={cl("folder-upload-button")}
                 size="small"
                 onClick={onFolderSelect}
             >
                 Browse
             </Button>
-        </div>
+        </div >
     );
 
 }

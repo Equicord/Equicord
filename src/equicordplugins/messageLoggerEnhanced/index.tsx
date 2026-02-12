@@ -9,6 +9,7 @@ export const Native = getNative();
 import "./styles.css";
 
 import { Devs, EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
@@ -33,6 +34,7 @@ export { settings };
 export const Flogger = new Logger("MessageLoggerEnhanced", "#f26c6c");
 
 export const cacheSentMessages = new LimitedMap<string, LoggedMessageJSON>();
+export const cl = classNameFactory("vc-msg-logger-enhanced-");
 
 const cacheThing = findByPropsLazy("commit", "getOrCreate");
 

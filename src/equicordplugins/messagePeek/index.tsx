@@ -16,8 +16,8 @@ import { classes } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
-import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy, findLazy } from "@webpack";
-import { ChannelStore, MessageStore, RelationshipStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
+import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
+import { ChannelStore, ExperimentStore, MessageStore, Parser, RelationshipStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-message-peek-");
 
@@ -27,7 +27,6 @@ const MessageActions = findByPropsLazy("fetchMessages", "sendMessage");
 
 const hasRelevantActivity: (props: ActivityCheckProps) => boolean = findByCodeLazy(".OFFLINE||", ".INVISIBLE)return!1");
 const ActivityText: React.ComponentType<ActivityTextProps> = findComponentByCodeLazy("hasQuest:", "hideEmoji:");
-const FavoritesServerExperiment = findLazy(m => m?.definition?.id === "2021-09_favorites_server");
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
@@ -70,7 +69,7 @@ interface PrivateChannelProps extends ActivityCheckProps {
 }
 
 interface MessageContent {
-    text: string;
+    text: React.ReactNode;
     icon?: IconType;
 }
 
@@ -115,7 +114,7 @@ function getMessageContent(message: Message): MessageContent | null {
         if (/https?:\/\/(\S+\.gif|tenor\.com|giphy\.com|klipy\.com)/i.test(message.content)) {
             return { text: "sent a GIF", icon: "gif" };
         }
-        return { text: message.content };
+        return { text: Parser.parseInlineReply(message.content) };
     }
 
     if (message.flags & MessageFlags.IS_VOICE_MESSAGE) {
@@ -151,13 +150,12 @@ function MessagePreviewContent({ channel, user }: { channel: Channel; user: User
         return <>Official Discord Message</>;
     }
 
-    if (channel.isMultiUserDM()) {
-        return <>{channel.recipients.length + 1} Members</>;
+    const smynName = isPluginEnabled(showMeYourName.name) ? showMeYourName.getMemberListProfilesReactionsVoiceNameText({ user: user ?? lastMessage?.author, type: "membersList" }) : null;
+
+    if (!lastMessage) {
+        if (channel.isMultiUserDM()) return <>{channel.recipients.length + 1} Members</>;
+        return null;
     }
-
-    const smynName = (isPluginEnabled(showMeYourName.name) && showMeYourName.getMemberListProfilesReactionsVoiceNameText({ user: user ?? lastMessage?.author, type: "membersList" }));
-
-    if (!lastMessage) return null;
 
     const content = getMessageContent(lastMessage);
     if (!content) return null;
@@ -217,7 +215,7 @@ function Timestamp({ channel }: { channel: Channel; }) {
     if (!lastMessage) return null;
 
     const timestamp = SnowflakeUtils.extractTimestamp(lastMessage.id);
-    const className = FavoritesServerExperiment.getCurrentConfig().favoritesEnabled ? cl("timestamp-favorites") : cl("timestamp");
+    const className = ExperimentStore.getUserExperimentBucket("2021-09_favorites_server") >= 1 ? cl("timestamp-favorites") : cl("timestamp");
     return <span className={className}>{formatRelativeTime(timestamp)}</span>;
 }
 

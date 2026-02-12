@@ -6,18 +6,14 @@
 
 import * as DataStore from "@api/DataStore";
 import { Logger } from "@utils/Logger";
-import { CloudUpload, Message } from "@vencord/discord-types";
+import { Message } from "@vencord/discord-types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
-import { findLazy } from "@webpack";
-import { ChannelStore, Constants, FluxDispatcher, GuildStore, IconUtils, MessageActions, MessageStore, RestAPI, showToast, SnowflakeUtils, Toasts, UserStore } from "@webpack/common";
+import { ChannelStore, CloudUploader, Constants, FluxDispatcher, GuildStore, IconUtils, MessageActions, MessageStore, RestAPI, showToast, SnowflakeUtils, Toasts, UserStore } from "@webpack/common";
 
 import { settings } from ".";
 import { PhantomMessageData, ScheduledAttachment, ScheduledMessage, ScheduledReaction } from "./types";
 
 const logger = new Logger("ScheduledMessages");
-
-const CloudUploader = findLazy(m => m.prototype?.trackUploadFinished) as typeof CloudUpload;
-
 const STORAGE_KEY = "ScheduledMessages_queue";
 
 let scheduledMessages: ScheduledMessage[] = [];
@@ -297,7 +293,7 @@ async function uploadAttachment(channelId: string, att: ScheduledAttachment): Pr
         const file = new File([bytes], att.filename, { type: att.type });
         const upload = new CloudUploader({ file, platform: CloudUploadPlatform.WEB }, channelId);
 
-        upload.on("complete", () => resolve({ id: "", filename: upload.filename, uploaded_filename: upload.uploadedFilename }));
+        upload.on("complete", () => resolve({ id: "0", filename: upload.filename, uploaded_filename: upload.uploadedFilename }));
         upload.on("error", () => resolve(null));
         upload.upload();
     });
