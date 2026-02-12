@@ -164,8 +164,8 @@ function patchChildrenTree(children: any): any {
 }
 
 export default definePlugin({
-    name: "ToneIndicators",
-    description: "Show tooltips for tone indicators like /srs, /gen, etc. in sent messages.",
+    name: "MouseoverExplanations",
+    description: "Shows the meanings of abbreviations and tonetags upon hover",
     authors: [EquicordDevs.justjxke],
     settings,
 
