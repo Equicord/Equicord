@@ -227,7 +227,14 @@ function validTemplate(value: string) {
     }
 }
 
-function getProcessedNames(author: any, truncateAllNamesWithStreamerMode: boolean, discriminators: boolean): {
+function getProcessedNames(
+    author: any,
+    truncateAllNamesWithStreamerMode: boolean,
+    discriminators: boolean,
+    inGuild: boolean,
+    friendNameOnlyInDirectMessages: boolean,
+    customNameOnlyInDirectMessages: boolean
+): {
     username: string | null;
     display: string | null;
     nick: string | null;
@@ -263,13 +270,13 @@ function getProcessedNames(author: any, truncateAllNamesWithStreamerMode: boolea
             ? author.nick[0] + "..."
             : author.nick as string;
 
-    const friendName: string | null = author ? RelationshipStore.getNickname(author.id) || null : null;
+    const friendName: string | null = (author && !(inGuild && friendNameOnlyInDirectMessages)) ? RelationshipStore.getNickname(author.id) || null : null;
     const friend: string | null = !friendName ? null
         : StreamerModeStore.enabled && (truncateAllNamesWithStreamerMode || friendName.toLowerCase() === author.username.toLowerCase())
             ? friendName[0] + "..."
             : friendName as string;
 
-    const customName: string | null = !author?.id ? null : customNicknames[author.id] || null;
+    const customName: string | null = (author && !(inGuild && customNameOnlyInDirectMessages)) ? customNicknames[author.id] || null : null;
     const custom: string | null = !customName ? null
         : StreamerModeStore.enabled && (truncateAllNamesWithStreamerMode || customName.toLowerCase() === author.username.toLowerCase())
             ? customName[0] + "..."
@@ -311,7 +318,7 @@ function getMemberListProfilesReactionsVoiceName(
     const member = guildId && user ? GuildMemberStore.getMember(guildId, user.id) : null;
     const author = user && member ? { ...user, ...member } : user || member || null;
     const shouldHookless = type === "reactionsTooltip" || type === "profilesTooltip";
-    return renderUsername(author, null, null, type, "", shouldHookless);
+    return renderUsername(author, null, null, type, "", shouldHookless, !!guildId);
 }
 
 function getMemberListProfilesReactionsVoiceNameText(props: memberListProfileReactionProps): string | null {
@@ -332,7 +339,7 @@ function getMessageName(props: messageProps): [string | null, JSX.Element | null
     const member = isWebhook ? null : target && channel ? GuildMemberStore.getMember(channel.guild_id, target.id) : null;
     const author = user && member ? { ...user, ...member } : user || member || null;
     const mentionSymbol = hideDefaultAtSign && (!isRepliedMessage || replies) ? "" : withMentionPrefix ? "@" : "";
-    return renderUsername(author, channel?.id || null, message?.id || null, isRepliedMessage ? "replies" : "messages", mentionSymbol);
+    return renderUsername(author, channel?.id || null, message?.id || null, isRepliedMessage ? "replies" : "messages", mentionSymbol, false, !!channel?.guild_id);
 }
 
 function getMessageNameElement(props: messageProps): JSX.Element | null {
@@ -343,7 +350,7 @@ function getMessageNameText(props: messageProps): string | null {
     return getMessageName(props)[0];
 }
 
-export function getMentionNameElement(props: mentionProps): JSX.Element | null {
+function getMentionNameElement(props: mentionProps): JSX.Element | null {
     const { hideDefaultAtSign, mentions } = settings.use(["hideDefaultAtSign", "mentions"]);
     const { channelId, userId, props: nestedProps } = props;
     const channel = channelId ? ChannelStore.getChannel(channelId) || null : null;
@@ -351,7 +358,7 @@ export function getMentionNameElement(props: mentionProps): JSX.Element | null {
     const member = channel ? GuildMemberStore.getMember(channel.guild_id, userId) : null;
     const author = user && member ? { ...user, ...member } : user || member || null;
     const mentionSymbol = hideDefaultAtSign && mentions ? "" : "@";
-    return renderUsername(author, channelId || null, nestedProps?.messageId || null, "mentions", mentionSymbol)[1];
+    return renderUsername(author, channelId || null, nestedProps?.messageId || null, "mentions", mentionSymbol, false, !!channel?.guild_id)[1];
 }
 
 function renderUsername(
@@ -360,7 +367,8 @@ function renderUsername(
     messageId: string | null,
     type: "messages" | "replies" | "mentions" | "membersList" | "profilesPopout" | "profilesTooltip" | "reactionsTooltip" | "reactionsPopout" | "voiceChannel",
     mentionSymbol: string,
-    hookless = false
+    hookless: boolean,
+    inGuild: boolean
 ): [string | null, JSX.Element | null, string | null] {
     const isMessage = type === "messages";
     const isReply = type === "replies";
@@ -372,8 +380,8 @@ function renderUsername(
     const isReaction = isReactionsTooltip || isReactionsPopout;
     const isVoice = type === "voiceChannel";
 
-    const config = hookless ? settings.store : settings.use(["messages", "replies", "mentions", "memberList", "profilePopout", "reactions", "discriminators", "hideDefaultAtSign", "truncateAllNamesWithStreamerMode", "removeDuplicates", "ignoreGradients", "ignoreFonts", "animateGradients", "includedNames", "customNameColor", "friendNameColor", "nicknameColor", "displayNameColor", "usernameColor", "nameSeparator", "triggerNameRerender"]);
-    const { messages, replies, mentions, memberList, profilePopout, reactions, discriminators, hideDefaultAtSign, truncateAllNamesWithStreamerMode, removeDuplicates, ignoreGradients, ignoreFonts, animateGradients, includedNames, customNameColor, friendNameColor, nicknameColor, displayNameColor, usernameColor, nameSeparator, triggerNameRerender } = config;
+    const config = hookless ? settings.store : settings.use(["messages", "replies", "mentions", "memberList", "profilePopout", "reactions", "friendNameOnlyInDirectMessages", "customNameOnlyInDirectMessages", "discriminators", "hideDefaultAtSign", "truncateAllNamesWithStreamerMode", "removeDuplicates", "ignoreGradients", "ignoreFonts", "animateGradients", "includedNames", "customNameColor", "friendNameColor", "nicknameColor", "displayNameColor", "usernameColor", "nameSeparator", "triggerNameRerender"]);
+    const { messages, replies, mentions, memberList, profilePopout, reactions, friendNameOnlyInDirectMessages, customNameOnlyInDirectMessages, discriminators, truncateAllNamesWithStreamerMode, removeDuplicates, ignoreGradients, ignoreFonts, animateGradients, includedNames, customNameColor, friendNameColor, nicknameColor, displayNameColor, usernameColor, nameSeparator, triggerNameRerender } = config;
 
     const canUseGradient = ((author as GuildMember)?.guildId ? (GuildStore.getGuild((author as GuildMember).guildId) ?? {}).premiumFeatures?.features.includes("ENHANCED_ROLE_COLORS") : false);
     const textMutedValue = getComputedStyle(document.documentElement)?.getPropertyValue("--text-muted")?.trim() || "#72767d";
@@ -384,7 +392,7 @@ function renderUsername(
     const resolvedFriendNameColor = author ? resolveColor(author, friendNameColor.trim(), "", canUseGradient) : null;
     const resolvedCustomNameColor = author ? resolveColor(author, customNameColor.trim(), "", canUseGradient) : null;
     const affixColor = { color: textMutedValue, "-webkit-text-fill-color": textMutedValue, isolation: "isolate", "white-space": "pre", "font-family": "var(--font-primary)", "letter-spacing": "normal" };
-    const { username, display, nick, friend, custom } = getProcessedNames(author, truncateAllNamesWithStreamerMode, discriminators);
+    const { username, display, nick, friend, custom } = getProcessedNames(author, truncateAllNamesWithStreamerMode, discriminators, inGuild, friendNameOnlyInDirectMessages, customNameOnlyInDirectMessages);
 
     const names: Record<string, [string | null, object | null]> = {
         user: [username, resolvedUsernameColor],
@@ -789,7 +797,7 @@ const settings = definePluginSettings({
     memberList: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Display the first available name listed in your custom name format in the member list.",
+        description: "Display the first available name listed in your custom name format in the member list and DMs list.",
     },
     profilePopout: {
         type: OptionType.BOOLEAN,
@@ -805,6 +813,16 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: true,
         description: "Display the first available name listed in your custom name format in reaction tooltips, and the full name in reaction popouts.",
+    },
+    friendNameOnlyInDirectMessages: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Only display friend names when in DMs, and not in servers.",
+    },
+    customNameOnlyInDirectMessages: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Only display custom names when in DMs, and not in servers.",
     },
     discriminators: {
         type: OptionType.BOOLEAN,
