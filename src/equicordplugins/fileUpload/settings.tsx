@@ -128,6 +128,12 @@ export const settings = definePluginSettings({
         default: "24h",
         hidden: true
     },
+    catboxUserhash: {
+        type: OptionType.STRING,
+        description: "Catbox userhash for account binding",
+        default: "",
+        hidden: true
+    },
     stripQueryParams: {
         type: OptionType.BOOLEAN,
         description: "Strip query params from uploaded URLs",
@@ -180,6 +186,7 @@ export function SettingsComponent() {
     const isEzHost = store.serviceType === ServiceType.EZHOST;
     const isS3 = store.serviceType === ServiceType.S3;
     const isZipline = store.serviceType === ServiceType.ZIPLINE;
+    const isCatbox = store.serviceType === ServiceType.CATBOX;
     const isLitterbox = store.serviceType === ServiceType.LITTERBOX;
 
     return (
@@ -308,6 +315,16 @@ export function SettingsComponent() {
                         />
                     </SettingsSection>
                 </>
+            )}
+
+            {isCatbox && (
+                <SettingTextInput
+                    name="Catbox Userhash"
+                    description="Your Catbox userhash for account binding (leave empty for anonymous uploads)"
+                    value={store.catboxUserhash}
+                    onChange={v => store.catboxUserhash = v}
+                    placeholder="Your Catbox userhash"
+                />
             )}
 
             {isLitterbox && (
