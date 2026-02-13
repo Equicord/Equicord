@@ -20,13 +20,13 @@ import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { Channel, Message, User } from "@vencord/discord-types";
-import { MessageType } from "@vencord/discord-types/enums";
+import { MessageType, RelationshipType } from "@vencord/discord-types/enums";
 import { findByPropsLazy, findStore } from "@webpack";
-import { Button, ChannelStore, GuildRoleStore, NavigationRouter, RelationshipStore, SelectedChannelStore, StreamerModeStore, UserStore } from "@webpack/common";
+import { Button, ChannelStore, GuildRoleStore, IconUtils, NavigationRouter, RelationshipStore, SelectedChannelStore, StreamerModeStore, UserStore } from "@webpack/common";
 import { ReactNode } from "react";
 
 import { NotificationData, showNotification } from "./components/Notifications";
-import { RelationshipType, StreamingTreatment } from "./types";
+import { StreamingTreatment } from "./types";
 
 let ignoredUsers: string[] = [];
 let notifyFor: string[] = [];
@@ -243,7 +243,7 @@ export default definePlugin({
             // Prepare the notification.
             const Notification: NotificationData = {
                 title: getName(message.author),
-                icon: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png?size=128`,
+                icon: IconUtils.getUserAvatarURL(message.author),
                 body: message.content,
                 attachments: message.attachments?.length,
                 richBody: null,
@@ -437,8 +437,6 @@ async function handleGuildMessage(message: Message) {
     const all = notifyFor.includes(message.channel_id);
     const friend = settings.store.friendServerNotifications && RelationshipStore.isFriend(message.author.id);
 
-
-
     if (!all && !friend) {
         t = true;
         const isMention: boolean = message.content.includes(`<@${UserStore.getCurrentUser().id}>`);
@@ -455,7 +453,7 @@ async function handleGuildMessage(message: Message) {
     // Prepare the notification.
     const Notification: NotificationData = {
         title: `${getName(message.author)} (#${channel.name})`,
-        icon: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png?size=128`,
+        icon: IconUtils.getUserAvatarURL(message.author),
         body: message.content,
         attachments: message.attachments?.length,
         richBody: null,
@@ -540,7 +538,7 @@ async function relationshipAdd(user: User, type: Number) {
 
     const Notification: NotificationData = {
         title: "",
-        icon: user.getAvatarURL(),
+        icon: IconUtils.getUserAvatarURL(user),
         body: "",
         attachments: 0,
     };
@@ -553,7 +551,6 @@ async function relationshipAdd(user: User, type: Number) {
         Notification.title = `${user.username} is now your friend`;
         Notification.body = "You can now message them directly.";
         Notification.onClick = () => switchChannels(null, user.id);
-
 
         await showNotification(Notification);
 
@@ -570,7 +567,7 @@ async function relationshipAdd(user: User, type: Number) {
 function showExampleNotification(): Promise<void> {
     const Notification: NotificationData = {
         title: "Example Notification",
-        icon: `https://cdn.discordapp.com/avatars/${UserStore.getCurrentUser().id}/${UserStore.getCurrentUser().avatar}.png?size=128`,
+        icon: IconUtils.getUserAvatarURL(UserStore.getCurrentUser()),
         body: "This is an example toast notification!",
         attachments: 0,
         permanent: false

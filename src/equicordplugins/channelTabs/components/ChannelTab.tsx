@@ -4,24 +4,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { ChannelTabsProps, closeTab, isTabSelected, moveDraggedTabs, moveToTab, openedTabs, settings } from "@equicordplugins/channelTabs/util";
 import { ActivityIcon, CircleQuestionIcon, DiscoveryIcon, EnvelopeIcon, FriendsIcon, ICYMIIcon, NitroIcon, QuestIcon, ShopIcon } from "@equicordplugins/channelTabs/util/icons";
 import { activeQuestIntervals } from "@equicordplugins/questify"; // sorry murphy!
+import { classNameFactory } from "@utils/css";
 import { getGuildAcronym, getIntlMessage, getUniqueUsername } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { Channel, Guild, User } from "@vencord/discord-types";
-import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import { Avatar, ChannelStore, ContextMenuApi, GuildStore, PresenceStore, ReadStateStore, TypingStore, useDrag, useDrop, useEffect, useRef, UserStore, useState, useStateFromStores } from "@webpack/common";
 import { JSX } from "react";
 
 import { TabContextMenu } from "./ContextMenus";
 
-const ThreeDots = findComponentByCodeLazy(".dots,", "dotRadius:");
-const dotStyles = findByPropsLazy("numberBadge", "textBadge");
+const ThreeDots = findComponentByCodeLazy("Math.min(1,Math.max(", "dotRadius:");
+const dotStyles = findCssClassesLazy("numberBadge", "baseShapeRound");
 
-const ChannelTypeIcon = findComponentByCodeLazy(".iconContainerWithGuildIcon,");
+const ChannelTypeIcon = findComponentByCodeLazy('"ChannelItemIcon")');
 
 // Custom SVG icons for pages that don't have findable components
 

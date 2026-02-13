@@ -30,7 +30,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: ".lostPermission)",
+            find: "#{intl::GUILD_OWNER}),children:",
             replacement: [
                 {
                     match: /children:\[(?=.{0,300},lostPermissionTooltipText:)/,
@@ -41,9 +41,23 @@ export default definePlugin({
         {
             find: "PrivateChannel.renderAvatar",
             replacement: {
-                match: /decorators:(\i\.isSystemDM\(\)\?.+?:null)/,
+                match: /decorators:(\i\.isSystemDM\(\)\?.{0,100}:null)/,
                 replace: "decorators:[Vencord.Api.MemberListDecorators.__getDecorators(arguments[0],'dm'),$1]"
             }
+        },
+        // fix discords styling for now
+        {
+            find: '"AvatarWithText"',
+            replacement: [
+                {
+                    match: /(?<=className:.{0,10}),\{.{0,10}\}\)(?=,children:)/,
+                    replace: ')+" vc-member-list-decorators-display-names"'
+                },
+                {
+                    match: /(?<=className:\i\.\i)(?=,children:\i\}\))/,
+                    replace: '+" vc-member-list-decorators-display-names"'
+                }
+            ]
         }
     ]
 });

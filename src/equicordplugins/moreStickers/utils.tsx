@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import type { FFmpeg } from "@ffmpeg/ffmpeg";
+import { classNameFactory } from "@utils/css";
 import { waitFor } from "@webpack";
 import { React } from "@webpack/common";
 
@@ -14,7 +14,7 @@ import { FFmpegState } from "./types";
 export const cl = classNameFactory("vc-more-stickers-");
 export const clPicker = (className: string, ...args: any[]) => cl("picker-" + className, ...args);
 
-const CORS_PROXY = "https://corsproxy.io/?url=";
+const CORS_PROXY = "https://cors.keiran0.workers.dev?url=";
 
 function corsUrl(url: string | URL) {
     return CORS_PROXY + encodeURIComponent(url.toString());

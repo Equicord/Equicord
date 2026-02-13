@@ -288,14 +288,14 @@ interface mentionProps {
 }
 
 interface messageProps {
-    message: Message;
+    message: Message | null | undefined;
     userOverride?: User;
     isRepliedMessage?: boolean;
     withMentionPrefix?: boolean;
 }
 
 interface memberListProfileReactionProps {
-    user: User;
+    user: User | null | undefined;
     type: "membersList" | "profilesPopout" | "profilesTooltip" | "reactionsTooltip" | "reactionsPopout" | "voiceChannel";
     guildId?: string;
     tags?: any;
@@ -308,7 +308,7 @@ function getMemberListProfilesReactionsVoiceName(
     // props.guildId for member list & preview profile, props.tags.props.displayProfile.guildId
     // for full guild profile and main profile, which is indicated by whether it is null or not.
     const guildId = props.guildId || props.tags?.props?.displayProfile?.guildId || null;
-    const member = guildId ? GuildMemberStore.getMember(guildId, user.id) : null;
+    const member = guildId && user ? GuildMemberStore.getMember(guildId, user.id) : null;
     const author = user && member ? { ...user, ...member } : user || member || null;
     const shouldHookless = type === "reactionsTooltip" || type === "profilesTooltip";
     return renderUsername(author, null, null, type, "", shouldHookless);
@@ -325,14 +325,14 @@ function getMemberListProfilesReactionsVoiceNameElement(props: memberListProfile
 function getMessageName(props: messageProps): [string | null, JSX.Element | null, string | null] {
     const { hideDefaultAtSign, replies } = settings.use(["hideDefaultAtSign", "replies"]);
     const { message, userOverride, isRepliedMessage, withMentionPrefix } = props;
-    const isWebhook = !!message.webhookId && !message.interaction;
-    const channel = ChannelStore.getChannel(message.channel_id) || {};
-    const target = userOverride || message.author;
-    const user = isWebhook ? target : UserStore.getUser(target.id);
-    const member = isWebhook ? null : GuildMemberStore.getMember(channel.guild_id, target.id);
+    const isWebhook = !!message?.webhookId && !message?.interaction;
+    const channel = message ? ChannelStore.getChannel(message.channel_id) || null : null;
+    const target = userOverride || message?.author;
+    const user = isWebhook ? target : target ? UserStore.getUser(target.id) : null;
+    const member = isWebhook ? null : target && channel ? GuildMemberStore.getMember(channel.guild_id, target.id) : null;
     const author = user && member ? { ...user, ...member } : user || member || null;
     const mentionSymbol = hideDefaultAtSign && (!isRepliedMessage || replies) ? "" : withMentionPrefix ? "@" : "";
-    return renderUsername(author, channel.id, message.id, isRepliedMessage ? "replies" : "messages", mentionSymbol);
+    return renderUsername(author, channel?.id || null, message?.id || null, isRepliedMessage ? "replies" : "messages", mentionSymbol);
 }
 
 function getMessageNameElement(props: messageProps): JSX.Element | null {
@@ -487,8 +487,7 @@ function renderUsername(
     } else if (isVoice && !reactions) {
         return [null, null, null];
     } else if (!author || !username) {
-        const fallbackText = `${mentionSymbol}Unknown`;
-        return [fallbackText, <>{fallbackText}</>, fallbackText];
+        return [null, null, null];
     }
 
     const prioritizeUsername = (new Set([first, second, third, fourth, fifth].filter(Boolean).map(pos => pos.name.toLowerCase())).size > 1);
@@ -894,7 +893,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "ShowMeYourName",
     description: "Display any permutation of custom nicknames, friend nicknames, server nicknames, display names, and usernames in chat.",
-    authors: [Devs.Rini, Devs.TheKodeToad, EquicordDevs.Etorix, Devs.sadan, EquicordDevs.Prism],
+    authors: [Devs.Rini, Devs.TheKodeToad, EquicordDevs.Etorix, Devs.sadan, Devs.prism],
     tags: ["SMYN", "Nicknames", "Custom Nicknames",],
     isModified: true,
     settings,
@@ -917,12 +916,20 @@ export default definePlugin({
             ]
         },
         {
+            // Replace names in DMs list.
+            find: "ImpressionNames.DM_LIST_RIGHT_CLICK_MENU_SHOWN",
+            replacement: {
+                match: /(?<=getMentionCount\(\i.id\)>0\),\i=)/,
+                replace: "$self.getMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"membersList\"})??"
+            },
+        },
+        {
             // Track hovering on messages to animate gradients.
             // Attach the group ID to their messages to allow animating gradients within a group.
             find: "CUSTOM_GIFT?\"\":",
             replacement: {
-                match: /(\(\i,\i,\i\);)(let \i=\i.id===\i(?:.{0,500}?)hovering:(\i))/,
-                replace: "$1arguments[0].message.showMeYourNameGroupId=!!arguments[0].groupId?`g-${arguments[0].groupId}`:null;$self.handleHoveringMessage(arguments[0].message,$3);$2"
+                match: /(isHovered:(\i).{0,1300}?\(\i,\i,\i\);)(let \i=\i.id===\i)/,
+                replace: "$1arguments[0].message.showMeYourNameGroupId=!!arguments[0].groupId?`g-${arguments[0].groupId}`:null;$self.handleHoveringMessage(arguments[0].message,$2);$3"
             },
         },
         {
@@ -934,7 +941,7 @@ export default definePlugin({
                     replace: "const showMeYourNameMention=$self.getMentionNameElement(arguments[0]);$1"
                 },
                 {
-                    match: /(?<=onContextMenu:\i\},\i\),{children:)/,
+                    match: /(?<=onContextMenu:\i,\.\.\.\i,children:)/,
                     replace: "showMeYourNameMention??",
                     predicate: () => !isPluginEnabled(mentionAvatars.name),
                 }
@@ -959,34 +966,16 @@ export default definePlugin({
         },
         {
             // Replace names in profile popouts.
-            find: "clickableUsername,\"aria-label\":",
+            find: "shouldWrap:!0,loop:!0,inProfile:!0",
             replacement: {
                 match: /(tags:\i,)nickname:(\i)/,
                 replace: "$1showMeYourNameNickname:$2=$self.getMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"profilesPopout\"})??(arguments[0].nickname)"
             },
         },
         {
-            // Tags *should* contain the guild ID nested in its structure, but on the first time
-            // loading a guild member's preview profile, it will be undefined. This patch bypasses
-            // that by passing the guild ID as its own prop.
-            find: ".hasAvatarForGuild(null==",
-            replacement: {
-                match: /(pronouns,tags:)/,
-                replace: "pronouns,guildId:arguments[0]?.guild?.id??null,tags:"
-            }
-        },
-        {
-            // Same as above, but for bot members.
-            find: "BotUserProfilePopoutBody\"}",
-            replacement: {
-                match: /(pronouns,tags:)/,
-                replace: "pronouns,guildId:arguments[0]?.guild?.id??null,tags:"
-            }
-        },
-        {
             // Replace names in the profile tooltip for switching between guild and global profiles.
             // You must open a profile modal before the code this is patching will be searchable.
-            find: "\"view-main-profile\",",
+            find: 'id:"view-server-profile",',
             group: true,
             replacement: [
                 {
@@ -1003,23 +992,23 @@ export default definePlugin({
             // Replace names in reaction tooltips.
             find: "reactionTooltip1,",
             replacement: {
-                match: /(\i.\i.getName\((\i),null==(?:.{0,15}?)(\i)\))/,
+                match: /(\i.\i.getName\((\i),\i\?\.id,(\i)\))/,
                 replace: "$self.getMemberListProfilesReactionsVoiceNameText({user:$3,guildId:$2,type:\"reactionsTooltip\"})??($1)"
             }
         },
         {
-            find: "discriminator,forceUsername",
+            find: ".MESSAGE,userId:",
             group: true,
             replacement: [
                 {
-                    // Replace names in reaction popouts.
-                    match: /children:(\[null!=(?:.{0,300}?)forceUsername:!0}\)\])/,
-                    replace: "style:{\"overflow\":\"visible\"},children:($self.getMemberListProfilesReactionsVoiceNameElement({user:arguments[0].user,guildId:arguments[0].guildId,type:\"reactionsPopout\"}))??($1)"
+                    // Track hovering over reaction popouts.
+                    match: /(?<=\(0,\i.\i\)\(\i.\i,{className:\i.\i,)(?=(?:align:\i\.\i\.\i\.CENTER|onContextMenu:\i=>))/g,
+                    replace: "onMouseEnter:()=>{$self.addHoveringReactionPopout(arguments[0].user.id)},onMouseLeave:()=>{$self.removeHoveringReactionPopout(arguments[0].user.id)},"
                 },
                 {
-                    // Track hovering over reaction popouts.
-                    match: /(return\(0,\i.\i\)\(\i.\i,{className:\i.reactor,)(onContextMenu)/,
-                    replace: "$1onMouseEnter:()=>{$self.addHoveringReactionPopout(arguments[0].user.id)},onMouseLeave:()=>{$self.removeHoveringReactionPopout(arguments[0].user.id)},$2"
+                    // Replace names in reaction popouts.
+                    match: /(?<=Child,{className:\i.\i,children:)/g,
+                    replace: "($self.getMemberListProfilesReactionsVoiceNameElement({user:arguments[0].user,guildId:arguments[0].guildId,type:\"reactionsPopout\"}))??"
                 }
             ]
         },
@@ -1069,6 +1058,7 @@ export default definePlugin({
     handleHoveringMessage,
     addHoveringReactionPopout,
     removeHoveringReactionPopout,
+    getMessageName,
     getMessageNameText,
     getMessageNameElement,
     getMentionNameElement,

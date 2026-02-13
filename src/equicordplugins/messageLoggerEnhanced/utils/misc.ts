@@ -16,12 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { DBMessageStatus } from "@equicordplugins/messageLoggerEnhanced/db";
-import { LoggedMessageJSON } from "@equicordplugins/messageLoggerEnhanced/types";
 import { PluginNative } from "@utils/types";
 import { findByCodeLazy, findLazy } from "@webpack";
 import { ChannelStore, moment, UserStore } from "@webpack/common";
 
+import { DBMessageStatus } from "../db";
+import { LoggedMessageJSON } from "../types";
 import { DEFAULT_IMAGE_CACHE_DIR } from "./constants";
 import { DISCORD_EPOCH } from "./index";
 import { memoize } from "./memoize";
@@ -72,8 +72,6 @@ export const sortMessagesByDate = (timestampA: string, timestampB: string) => {
     }
 };
 
-
-
 // stolen from mlv2
 export function findLastIndex<T>(array: T[], predicate: (e: T, t: number, n: T[]) => boolean) {
     let l = array.length;
@@ -94,7 +92,6 @@ export const mapTimestamp = (m: any) => {
     if (m.embeds) m.embeds = m.embeds.map(e => sanitizeEmbed(m.channel_id, m.id, e));
     return m;
 };
-
 
 export const messageJsonToMessageClass = memoize((log: { message: LoggedMessageJSON; }) => {
     // console.time("message populate");
@@ -128,7 +125,6 @@ export const messageJsonToMessageClass = memoize((log: { message: LoggedMessageJ
     return message;
 });
 
-
 export function parseJSON(json?: string | null) {
     try {
         return JSON.parse(json!);
@@ -160,6 +156,12 @@ export function getNative(): PluginNative<typeof import("../native")> {
             writeImageNative: async () => { },
             chooseFile: async () => "",
             downloadAttachment: async () => ({ error: "web", path: null }),
+            startNativeLogExport: async () => "" as any,
+            finishNativeLogExport: async () => { },
+            writeNativeLogChunk: async () => { },
+            startNativeLogImport: async () => "" as any,
+            readNativeLogChunk: async () => null,
+            closeNativeLogImport: async () => { }
         } satisfies PluginNative<typeof import("../native")>;
 
         return Native;

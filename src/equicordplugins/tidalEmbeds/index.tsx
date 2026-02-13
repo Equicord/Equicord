@@ -7,7 +7,6 @@
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
-
 export default definePlugin({
     name: "TidalEmbeds",
     description: "Embeds TIDAL songs to make them playable in Discord.",
@@ -15,7 +14,7 @@ export default definePlugin({
     dependencies: ["MessageUpdaterAPI"],
     patches: [
         {
-            find: "}renderEmbeds(",
+            find: "renderEmbeds(",
             replacement: {
                 match: /(?<=renderEmbeds\(\i\){.+?embeds\.map\(\((\i),\i\)?=>{)/,
                 replace: "$&if($self.isTidalEmbed($1))return null;"

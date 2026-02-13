@@ -18,7 +18,6 @@
 
 import "./styles.css";
 
-import { migratePluginToSetting } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
@@ -31,8 +30,6 @@ import { TidalLyrics } from "./tidal/lyrics/components/lyrics";
 import { TidalPlayer } from "./tidal/TidalPlayer";
 import { YtmPlayer } from "./youtubeMusic/PlayerComponent";
 
-migratePluginToSetting("MusicControls", "SpotifyControls", "showSpotifyControls");
-migratePluginToSetting("MusicControls", "SpotifyLyrics", "showSpotifyLyrics");
 export default definePlugin({
     name: "MusicControls",
     description: "Music Controls and Lyrics for multiple services ",
@@ -55,7 +52,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "this.isCopiedStreakGodlike",
+            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
             replacement: {
                 // react.jsx)(AccountPanel, { ..., showTaglessAccountPanel: blah })
                 match: /(?<=\i\.jsxs?\)\()(\i),{(?=[^}]*?userTag:\i,hidePrivateData:)/,
@@ -92,7 +89,6 @@ export default definePlugin({
             ]
         },
     ],
-
 
     PanelWrapper({ VencordOriginal, ...props }) {
         const { showTidalControls, showTidalLyrics, showSpotifyLyrics, showSpotifyControls, LyricsPosition, showYoutubeMusicControls } = settings.store;

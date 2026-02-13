@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Heading } from "@components/Heading";
+import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { Logger } from "@utils/Logger";
 import { OptionType } from "@utils/types";
@@ -41,12 +42,28 @@ export const settings = definePluginSettings({
         description: "Automatically deafen when joining a voice channel (also mutes you)",
         default: false,
     },
+    instantScreenshare: {
+        type: OptionType.BOOLEAN,
+        description: "Enables automatic screenshare feature",
+        default: true,
+    },
+    keybindScreenshare: {
+        type: OptionType.BOOLEAN,
+        description: "Screenshare by keybind in discord keybind settings",
+        restartNeeded: true,
+        default: false,
+    },
+    focusDiscord: {
+        type: OptionType.BOOLEAN,
+        description: "Only start screenshare with keybind when Discord is focused",
+        default: true,
+    },
     toolboxManagement: {
         type: OptionType.BOOLEAN,
         description: "Enable/Disable Instant Screenshare",
         default: true,
         hidden: true,
-    }
+    },
 });
 
 export async function getCurrentMedia() {
@@ -140,7 +157,7 @@ function SettingSection() {
     return (
         <section>
             <Heading>Media source to stream</Heading>
-            <Paragraph>Resets to main screen if not found</Paragraph>
+            <Paragraph className={Margins.bottom20}>Resets to main screen if not found</Paragraph>
             <ScreenSetting />
         </section>
     );

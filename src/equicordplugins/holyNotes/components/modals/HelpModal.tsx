@@ -5,82 +5,71 @@
  */
 
 import { BaseText } from "@components/BaseText";
-import { Paragraph } from "@components/Paragraph";
+import { Button } from "@components/Button";
+import { Flex } from "@components/Flex";
+import { cl } from "@equicordplugins/holyNotes";
 import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import { downloadNotes, uploadNotes } from "@equicordplugins/holyNotes/utils";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
-import { findByProps } from "@webpack";
-import { Button } from "@webpack/common";
+import { CloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize } from "@utils/modal";
 
-export default ({ onClose, ...modalProps }: ModalProps & { onClose: () => void; }) => {
-    const { statusTagGreen } = findByProps("statusTagGreen");
-
+function HelpSection({ title, children }: { title: string; children: React.ReactNode; }) {
     return (
-        <ModalRoot {...modalProps} className="vc-help-modal" size={ModalSize.MEDIUM}>
-            <ModalHeader className="vc-help-modal-header">
-                <BaseText tag="h3" style={{ flexGrow: 1 }}>Help Modal</BaseText>
-                <ModalCloseButton onClick={onClose} />
+        <>
+            <BaseText size="md" weight="semibold" color="text-strong">{title}</BaseText>
+            <BaseText size="sm" color="text-default" style={{ marginTop: 4 }}>{children}</BaseText>
+            <hr />
+        </>
+    );
+}
+
+export default function HelpModal({ onClose, transitionState }: ModalProps) {
+    return (
+        <ModalRoot transitionState={transitionState} size={ModalSize.MEDIUM}>
+            <ModalHeader separator={false} className={cl("header")}>
+                <div className={cl("header-content")}>
+                    <BaseText tag="h2" size="lg" weight="semibold" className={cl("title")}>
+                        Help
+                    </BaseText>
+                    <BaseText size="sm" className={cl("description")}>
+                        Learn how to use Holy Notes
+                    </BaseText>
+                </div>
+                <div className={cl("header-trailing")}>
+                    <CloseButton onClick={onClose} />
+                </div>
             </ModalHeader>
-            <ModalContent>
+            <ModalContent className={cl("content")}>
                 <div className="vc-help-markdown">
-                    <BaseText>Adding Notes</BaseText>
-                    <Paragraph>
-                        To add a note right click on a message then hover over the "Note Message" item and click the button with the notebook name you would like to note the message to.
-                    </Paragraph>
-                    <div style={{ marginTop: "12px" }}>
-                        <span className={statusTagGreen}>Protip:</span>
-                    </div>
-                    <Paragraph style={{ marginTop: "8px" }}>
-                        Clicking the "Note Message" button by itself will note to Main by default!
-                    </Paragraph>
-                    <hr />
-                    <BaseText>Deleting Notes</BaseText>
-                    <Paragraph>
-                        Note you can either right click the note and hit "Delete Note" or you can hold the
-                        'DELETE' key on your keyboard and click on a note; it's like magic!
-                    </Paragraph>
-                    <hr />
-                    <BaseText>Moving Notes</BaseText>
-                    <Paragraph>
-                        To move a note right click on a note and hover over the "Move Note" item and click on
-                        the button corresponding to the notebook you would like to move the note to.
-                    </Paragraph>
-                    <hr />
-                    <BaseText>Jump To Message</BaseText>
-                    <Paragraph>
-                        To jump to the location that the note was originally located at just right click on the
-                        note and hit "Jump to Message".
-                    </Paragraph>
+                    <HelpSection title="Adding Notes">
+                        Right-click a message, hover over "Note Message", and select the notebook.
+                    </HelpSection>
+                    <HelpSection title="Deleting Notes">
+                        Right-click a note and select "Delete Note", or hold DELETE and click a note.
+                    </HelpSection>
+                    <HelpSection title="Moving Notes">
+                        Right-click a note, hover over "Move Note", and select the destination notebook.
+                    </HelpSection>
+                    <HelpSection title="Jump To Message">
+                        Right-click a note and select "Jump to Message" to go to the original message.
+                    </HelpSection>
                 </div>
             </ModalContent>
             <ModalFooter>
-                <div className="vc-help-modal-footer">
-                    <Button
-                        look={Button.Looks.FILLED}
-                        color={Button.Colors.GREEN}
-                        onClick={() => {
-                            noteHandler.refreshAvatars();
-                        }}>Refresh Avatars</Button>
-                    <Button
-                        look={Button.Looks.FILLED}
-                        color={Button.Colors.GREEN}
-                        onClick={() => {
-                            uploadNotes();
-                        }}>Import Notes</Button>
-                    <Button
-                        look={Button.Looks.FILLED}
-                        color={Button.Colors.GREEN}
-                        onClick={() => {
-                            downloadNotes();
-                        }}>Export Notes</Button>
-                    <Button
-                        look={Button.Looks.FILLED}
-                        color={Button.Colors.RED}
-                        onClick={() => {
-                            noteHandler.deleteEverything();
-                        }}>Delete All Notes</Button>
-                </div>
+                <Flex style={{ gap: 8, flexWrap: "wrap" }}>
+                    <Button size="small" variant="primary" onClick={() => noteHandler.refreshAvatars()}>
+                        Refresh Avatars
+                    </Button>
+                    <Button size="small" variant="secondary" onClick={uploadNotes}>
+                        Import Notes
+                    </Button>
+                    <Button size="small" variant="secondary" onClick={downloadNotes}>
+                        Export Notes
+                    </Button>
+                    <Button size="small" variant="dangerSecondary" onClick={() => noteHandler.deleteEverything()}>
+                        Delete All Notes
+                    </Button>
+                </Flex>
             </ModalFooter>
         </ModalRoot>
     );
-};
+}

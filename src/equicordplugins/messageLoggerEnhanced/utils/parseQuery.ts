@@ -16,12 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { LoggedMessageJSON } from "@equicordplugins/messageLoggerEnhanced/types";
 import { ChannelStore, GuildStore } from "@webpack/common";
 
+import { LoggedMessageJSON } from "../types";
 import { getGuildIdByChannel } from "./index";
 import { memoize } from "./memoize";
-
 
 const validIdSearchTypes = ["server", "guild", "channel", "in", "user", "from", "message", "has", "before", "after", "around", "near", "during"] as const;
 type ValidIdSearchTypesUnion = typeof validIdSearchTypes[number];

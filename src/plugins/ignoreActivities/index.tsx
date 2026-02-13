@@ -13,8 +13,7 @@ import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
-import { findStoreLazy } from "@webpack";
-import { Button, showToast, TextInput, Toasts, Tooltip, useEffect, useState } from "@webpack/common";
+import { Button, RunningGameStore, showToast, TextArea, Toasts, Tooltip, useEffect, useState } from "@webpack/common";
 
 const enum ActivitiesTypes {
     Game,
@@ -31,8 +30,6 @@ const enum FilterMode {
     Whitelist,
     Blacklist
 }
-
-const RunningGameStore = findStoreLazy("RunningGameStore");
 
 const ShowCurrentGame = getUserSettingLazy("status", "showCurrentGame")!;
 
@@ -66,7 +63,7 @@ function ToggleActivityComponent(activity: IgnoredActivity, isPlaying = false) {
     const { ignoredActivities } = s;
 
     if (ignoredActivities.some(act => act.id === activity.id)) return ToggleIconOff(activity, "var(--status-danger)");
-    return ToggleIconOn(activity, isPlaying ? "var(--green-300)" : "var(--interactive-icon-default, var(--interactive-normal))");
+    return ToggleIconOn(activity, isPlaying ? "var(--green-300)" : "var(--interactive-icon-default)");
 }
 
 function handleActivityToggle(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, activity: IgnoredActivity) {
@@ -136,7 +133,7 @@ function IdsListComponent(props: { setValue: (value: string) => void; }) {
         <section>
             <HeadingSecondary>Filter List</HeadingSecondary>
             <Paragraph className={Margins.bottom8}>Comma separated list of activity IDs to filter (Useful for filtering specific RPC activities and CustomRPC</Paragraph>
-            <TextInput
+            <TextArea
                 type="text"
                 value={idsList}
                 onChange={handleChange}
@@ -256,35 +253,20 @@ export default definePlugin({
                 replace: (m, runningGames) => `${m}${runningGames}=${runningGames}.filter(({id,name})=>$self.isActivityNotIgnored({type:0,application_id:id,name}));`
             }
         },
-
-        // FIXME(Bundler minifier change related): Remove the non used compability once enough time has passed
         {
             find: "#{intl::SETTINGS_GAMES_TOGGLE_OVERLAY}",
             replacement: {
-                // let { ... nowPlaying: a = !1 ...
-                // let { overlay: b ... } = Props
-                match: /#{intl::SETTINGS_GAMES_TOGGLE_OVERLAY}.+?}\(\),(?<=nowPlaying:(\i)=!1,.+?overlay:\i,[^}]+?\}=(\i).+?)/,
-                replace: (m, nowPlaying, props) => `${m}$self.renderToggleGameActivityButton(${props},${nowPlaying}),`,
-                noWarn: true,
-            }
-        },
-        {
-            find: "#{intl::SETTINGS_GAMES_TOGGLE_OVERLAY}",
-            replacement: {
-                // let { ... nowPlaying: a = !1 ...
-                // let { overlay: b ... } = Props ...
-                // ToggleOverLayButton(), nowPlaying && ... RemoveGameButton()
-                match: /\.gameNameLastPlayed.+?,\i\(\),(?<=nowPlaying:(\i)=!1,.+?overlay:\i,[^}]+?\}=(\i).+?)(?=\1&&)/,
-                replace: (m, nowPlaying, props) => `${m}$self.renderToggleGameActivityButton(${props},${nowPlaying}),`,
+                match: /(\i)&&!\i\|\|\i\?null(?<=(\i)\.verified&&.+?)/,
+                replace: "$self.renderToggleGameActivityButton($2,$1),$&"
             }
         },
 
         // Activities from the apps launcher in the bottom right of the chat bar
         {
-            find: ".promotedLabelWrapperNonBanner,children",
+            find: "#{intl::EMBEDDED_ACTIVITIES_DEVELOPER_ACTIVITY}",
             replacement: {
-                match: /\.appDetailsHeaderContainer.+?children:\i.*?}\),(?<=application:(\i).+?)/,
-                replace: (m, props) => `${m}$self.renderToggleActivityButton(${props}),`
+                match: /lineClamp:1.{0,50}?(?=!\i&&\i\?.+?application:(\i))/,
+                replace: "$&$self.renderToggleActivityButton($1),"
             }
         }
     ],

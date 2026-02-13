@@ -9,15 +9,29 @@ import { findComponentByCodeLazy } from "@webpack";
 import { SearchableSelect, useState } from "@webpack/common";
 import { JSX } from "react";
 
+import { settings } from "../settings";
 import { formatLowerBadge } from "./misc";
 
 // GuildlessServerListItem's built-in pill does not support unread state.
 export const GuildlessServerListItemComponent = findComponentByCodeLazy("tooltip:", "lowerBadgeSize:");
 export const GuildedServerListItemPillComponent = findComponentByCodeLazy('"pill":"empty"');
-export const ServerListItemLowerBadgeComponent = findComponentByCodeLazy("numberBadge", '"renderBadgeCount"');
-export const ServerListItemUpperBadgeComponent = findComponentByCodeLazy("iconBadge", ".ROUND,disableColor");
-export const RadioGroup = findComponentByCodeLazy(',["label","description"');
+export const ServerListItemLowerBadgeComponent = findComponentByCodeLazy("BADGE_NOTIFICATION_BACKGROUND", "let{count:");
+export const ServerListItemUpperBadgeComponent = findComponentByCodeLazy("{icon:", ".ROUND,disableColor");
+export const RadioGroup = findComponentByCodeLazy(",{label:", ",description:", ",required:", ",errorMessage:", ",children:");
 export const QuestTile = findComponentByCodeLazy(".rowIndex,trackGuildAndChannelMetadata");
+
+export class ActiveQuestIntervalsMap extends Map<string, { progressTimeout: NodeJS.Timeout; rerenderTimeout: NodeJS.Timeout; progress: number; type: string; }> {
+    set(key: string, value: { progressTimeout: NodeJS.Timeout; rerenderTimeout: NodeJS.Timeout; progress: number; type: string; }): this {
+        settings.store.resumeQuestIDs[value.type].push(key);
+        return super.set(key, value);
+    }
+
+    delete(key: string): boolean {
+        const types = Object.keys(settings.def.resumeQuestIDs.default);
+        for (const type of types) { settings.store.resumeQuestIDs[type] = settings.store.resumeQuestIDs[type].filter((id: string) => id !== key); }
+        return super.delete(key);
+    }
+}
 
 export enum QuestRewardType {
     UNKNOWN = 0,
@@ -72,6 +86,21 @@ export interface ExcludedQuest {
     id: string;
 }
 
+export enum QuestTaskType {
+    WATCH_VIDEO = "WATCH_VIDEO",
+    WATCH_VIDEO_ON_MOBILE = "WATCH_VIDEO_ON_MOBILE",
+    PLAY_ON_DESKTOP = "PLAY_ON_DESKTOP",
+    PLAY_ON_XBOX = "PLAY_ON_XBOX",
+    PLAY_ON_PLAYSTATION = "PLAY_ON_PLAYSTATION",
+    PLAY_ACTIVITY = "PLAY_ACTIVITY",
+    ACHIEVEMENT_IN_ACTIVITY = "ACHIEVEMENT_IN_ACTIVITY"
+}
+
+export interface QuestTask {
+    type: QuestTaskType;
+    target: number;
+}
+
 export interface Quest {
     questifyNumber: number;
     id: string;
@@ -88,33 +117,45 @@ export interface Quest {
         rewardsConfig: {
             rewards: {
                 type: QuestRewardType;
+                orbQuantity?: number;
+                messages?: {
+                    nameWithArticle: string;
+                };
             }[];
         },
         taskConfigV2: {
             tasks: {
                 WATCH_VIDEO?: {
-                    type: "WATCH_VIDEO";
+                    type: QuestTaskType.WATCH_VIDEO;
                     target: number;
                 },
                 WATCH_VIDEO_ON_MOBILE?: {
-                    type: "WATCH_VIDEO_ON_MOBILE";
+                    type: QuestTaskType.WATCH_VIDEO_ON_MOBILE;
                     target: number;
                 },
                 PLAY_ON_DESKTOP?: {
-                    type: "PLAY_ON_DESKTOP";
+                    type: QuestTaskType.PLAY_ON_DESKTOP;
                     target: number;
                 },
                 PLAY_ON_XBOX?: {
-                    type: "PLAY_ON_XBOX";
+                    type: QuestTaskType.PLAY_ON_XBOX;
                     target: number;
                 },
                 PLAY_ON_PLAYSTATION?: {
-                    type: "PLAY_ON_PLAYSTATION";
+                    type: QuestTaskType.PLAY_ON_PLAYSTATION;
                     target: number;
                 },
                 PLAY_ACTIVITY?: {
-                    type: "PLAY_ACTIVITY";
+                    type: QuestTaskType.PLAY_ACTIVITY;
                     target: number;
+                };
+                ACHIEVEMENT_IN_ACTIVITY?: {
+                    type: QuestTaskType.ACHIEVEMENT_IN_ACTIVITY;
+                    target: number;
+                    eventName: "progress";
+                    applications: {
+                        id: string;
+                    }[];
                 };
             };
         };
@@ -126,27 +167,27 @@ export interface Quest {
         enrolledAt: string | null;
         progress: null | {
             WATCH_VIDEO?: {
-                eventName: "WATCH_VIDEO";
+                eventName: QuestTaskType.WATCH_VIDEO;
                 value: number;
             },
             WATCH_VIDEO_ON_MOBILE?: {
-                eventName: "WATCH_VIDEO_ON_MOBILE";
+                eventName: QuestTaskType.WATCH_VIDEO_ON_MOBILE;
                 value: number;
             },
             PLAY_ON_DESKTOP?: {
-                eventName: "PLAY_ON_DESKTOP";
+                eventName: QuestTaskType.PLAY_ON_DESKTOP;
                 value: number;
             },
             PLAY_ON_XBOX?: {
-                eventName: "PLAY_ON_XBOX";
+                eventName: QuestTaskType.PLAY_ON_XBOX;
                 value: number;
             },
             PLAY_ON_PLAYSTATION?: {
-                eventName: "PLAY_ON_PLAYSTATION";
+                eventName: QuestTaskType.PLAY_ON_PLAYSTATION;
                 value: number;
             },
             PLAY_ACTIVITY?: {
-                eventName: "PLAY_ACTIVITY";
+                eventName: QuestTaskType.PLAY_ACTIVITY;
                 value: number;
             },
         };
@@ -316,6 +357,7 @@ export function GuildlessServerListItem({
 
 export interface DynamicDropdownProps extends React.ComponentProps<typeof SearchableSelect> {
     feedback?: string;
+    maxOptionsVisible?: number;
 }
 
 export const DynamicDropdown: React.FC<DynamicDropdownProps> = props => {

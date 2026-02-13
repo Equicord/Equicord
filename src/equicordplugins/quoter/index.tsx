@@ -58,7 +58,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "Quoter",
     description: "Adds the ability to create an inspirational quote image from a message.",
-    authors: [Devs.Samwich, Devs.thororen, EquicordDevs.neoarz, EquicordDevs.Prism],
+    authors: [Devs.Samwich, Devs.thororen, EquicordDevs.neoarz, Devs.prism],
     settings,
 
     async start() {
@@ -167,7 +167,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
     return (
         <ModalRoot {...props} size={ModalSize.MEDIUM}>
             <ModalHeader separator={false}>
-                <BaseText color="header-primary" size="lg" weight="semibold" tag="h1" style={{ flexGrow: 1 }}>
+                <BaseText color="text-strong" size="lg" weight="semibold" tag="h1" style={{ flexGrow: 1 }}>
                     Catch Them In 4K.
                 </BaseText>
                 <ModalCloseButton onClick={props.onClose} />

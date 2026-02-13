@@ -5,13 +5,12 @@
  */
 
 import { showNotice } from "@api/Notices";
-import { isPluginEnabled, startDependenciesRecursive, startPlugin, stopPlugin } from "@api/PluginManager";
-import { classNameFactory } from "@api/Styles";
+import { isPluginEnabled, pluginRequiresRestart, startDependenciesRecursive, startPlugin, stopPlugin } from "@api/PluginManager";
 import { CogWheel, InfoIcon } from "@components/Icons";
 import { AddonCard } from "@components/settings/AddonCard";
+import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
-import { isObjectEmpty } from "@utils/misc";
-import { Plugin } from "@utils/types";
+import { OptionType, Plugin } from "@utils/types";
 import { React, showToast, Toasts } from "@webpack/common";
 import { Settings } from "Vencord";
 
@@ -61,8 +60,8 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
             }
         }
 
-        // if the plugin has patches, dont use stopPlugin/startPlugin. Wait for restart to apply changes.
-        if (plugin.patches?.length) {
+        // if the plugin requires a restart, don't use stopPlugin/startPlugin. Wait for restart to apply changes.
+        if (pluginRequiresRestart(plugin)) {
             settings.enabled = !wasEnabled;
             onRestartNeeded(plugin.name, "enabled");
             return;
@@ -99,7 +98,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
         },
         {
             condition: isEquicordPlugin,
-            src: "https://equicord.org/assets/icons/equicord/icon.png",
+            src: "https://equicord.org/assets/favicon.png",
             alt: "Equicord",
             title: "Equicord Plugin"
         },
@@ -147,7 +146,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
                     onClick={() => openPluginModal(plugin, onRestartNeeded)}
                     className={cl("info-button")}
                 >
-                    {plugin.options && !isObjectEmpty(plugin.options)
+                    {plugin.settings?.def && Object.values(plugin.settings.def).some(s => s.type !== OptionType.CUSTOM && !s.hidden)
                         ? <CogWheel className={cl("info-icon")} />
                         : <InfoIcon className={cl("info-icon")} />
                     }

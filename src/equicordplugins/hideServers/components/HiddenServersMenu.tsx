@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { BaseText } from "@components/BaseText";
 import { Heading } from "@components/Heading";
 import { HiddenServersStore } from "@equicordplugins/hideServers/HiddenServersStore";
+import { classNameFactory } from "@utils/css";
 import { getGuildAcronym } from "@utils/discord";
 import { classes } from "@utils/misc";
 import {
@@ -21,13 +21,13 @@ import {
     openModal,
 } from "@utils/modal";
 import { Guild } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Button, IconUtils, useStateFromStores } from "@webpack/common";
 
 import { SortedGuildStore } from "..";
 
 const cl = classNameFactory("vc-hideservers-");
-const IconClasses = findByPropsLazy("icon", "acronym", "childWrapper");
+const IconClasses = findCssClassesLazy("icon", "acronym", "childWrapper");
 
 function HiddenServersModal({ modalProps, close }: { modalProps: ModalProps; close(): void; }) {
     const guilds = useStateFromStores([HiddenServersStore], () => HiddenServersStore.hiddenGuildsDetail());
@@ -67,7 +67,6 @@ function restoreGuild(guild: Guild, SortedGuildStore: any) {
 
     HiddenServersStore.removeHiddenGuild("folder-" + folder.folderId);
 }
-
 
 function GuildRow({ guild }) {
     return (

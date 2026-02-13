@@ -18,8 +18,14 @@ function getMessage(opts) {
         queryURL = "" + [settings.store.customEngineURL] + encodeURIComponent(inputOption);
     }
 
-    if (settings.store.hyperlink) {
+    if (settings.store.hyperlink && !settings.store.embed) {
+        return `[${inputOption}](<${queryURL}>)`;
+    }
+    else if (settings.store.hyperlink) {
         return `[${inputOption}](${queryURL})`;
+    }
+    else if (!settings.store.embed) {
+        return `<${queryURL}>`;
     }
     else {
         return queryURL;
@@ -44,6 +50,11 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "If the sent link should hyperlink with the query as the label",
         default: false
+    },
+    embed: {
+        type: OptionType.BOOLEAN,
+        description: "If the sent link should render an embed",
+        default: true
     },
     defaultEngine: {
         type: OptionType.SELECT,

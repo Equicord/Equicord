@@ -8,10 +8,10 @@ import "./styles.css";
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
 import { Button } from "@components/Button";
 import { ErrorBoundary } from "@components/index";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
@@ -65,7 +65,6 @@ const ContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { 
     );
 };
 
-
 const settings = definePluginSettings({
     permanentlyIgnoredUsers: {
         type: OptionType.STRING,
@@ -90,7 +89,7 @@ export default definePlugin({
         {
             find: "#{intl::INCOMING_CALL_ELLIPSIS}",
             replacement: {
-                match: /actionButton\}\)/,
+                match: /(?<=onCallJoined:\(\).{0,150})\(\i\)\}\),className:\i\.\i\}\)/,
                 replace: "$&,$self.renderIgnore(arguments[0].channel)"
             }
         }

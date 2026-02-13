@@ -50,7 +50,8 @@ export interface ProfileBadge {
     key?: string;
 
     /**
-     * Allows dynamically returning multiple badges
+     * Allows dynamically returning multiple badges.
+     * Must not call hooks
      */
     getBadges?(userInfo: BadgeUserArgs): ProfileBadge[];
 }

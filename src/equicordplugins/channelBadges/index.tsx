@@ -46,7 +46,7 @@ export default definePlugin({
         },
         // Threads
         {
-            find: "spineWithGuildIcon]:",
+            find: "18V16H9v2H6Zm3",
             replacement: {
                 match: /mentionsCount:\i.+?null(?<=channel:(\i).+?)/,
                 replace: "$&,$self.renderChannelBadges($1)"

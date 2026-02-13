@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { isPluginEnabled } from "@api/PluginManager";
+import betterGifPicker from "@plugins/betterGifPicker";
 import { Devs } from "@utils/constants";
 import { insertTextIntoChatInputBox } from "@utils/discord";
 import definePlugin from "@utils/types";
@@ -27,17 +29,20 @@ export default definePlugin({
     authors: [Devs.Ven],
 
     patches: [{
-        find: '"handleSelectGIF",',
+        find: "handleSelectGIF=",
         replacement: {
-            match: /"handleSelectGIF",(\i)=>\{/,
-            replace: '"handleSelectGIF",$1=>{if (!this.props.className) return $self.handleSelect($1);'
+            match: /handleSelectGIF=(\i)=>\{/,
+            replace: "$&if (!this.props.className) return $self.handleSelect($1);"
         }
     }],
 
     handleSelect(gif?: { url: string; }) {
         if (gif) {
             insertTextIntoChatInputBox(gif.url + " ");
-            ExpressionPickerStore.closeExpressionPicker();
+
+            if (!(isPluginEnabled(betterGifPicker.name) && betterGifPicker.settings.store.keepOpen)) {
+                ExpressionPickerStore.closeExpressionPicker();
+            }
         }
     }
 });

@@ -5,9 +5,10 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { OptionType } from "@utils/types";
-import { Alerts, Button } from "@webpack/common";
+import { Alerts, useState } from "@webpack/common";
 import { Settings } from "Vencord";
 
 import { Native } from ".";
@@ -17,6 +18,46 @@ import { clearMessagesIDB } from "./db";
 import { blockedExts } from "./list";
 import { DEFAULT_IMAGE_CACHE_DIR } from "./utils/constants";
 import { exportLogs, importLogs } from "./utils/settingsUtils";
+
+function ImportLogsButton() {
+    const [loading, setLoading] = useState(false);
+
+    return (
+        <Button
+            disabled={loading}
+            onClick={async () => {
+                setLoading(true);
+                try {
+                    await importLogs();
+                } finally {
+                    setLoading(false);
+                }
+            }}
+        >
+            {loading ? "Importing..." : "Import Logs"}
+        </Button>
+    );
+}
+
+function ExportLogsButton() {
+    const [loading, setLoading] = useState(false);
+
+    return (
+        <Button
+            disabled={loading}
+            onClick={async () => {
+                setLoading(true);
+                try {
+                    await exportLogs();
+                } finally {
+                    setLoading(false);
+                }
+            }}
+        >
+            {loading ? "Exporting..." : "Export Logs"}
+        </Button>
+    );
+}
 
 export const settings = definePluginSettings({
     saveMessages: {
@@ -98,6 +139,12 @@ export const settings = definePluginSettings({
         description: "Always log current selected channel. Blacklisted channels/users will still be ignored.",
     },
 
+    permanentlyRemoveLogByDefault: {
+        default: false,
+        type: OptionType.BOOLEAN,
+        description: "Vencord's base MessageLogger remove log button wiil delete logs permanently",
+    },
+
     hideMessageFromMessageLoggers: {
         default: false,
         type: OptionType.BOOLEAN,
@@ -165,6 +212,18 @@ export const settings = definePluginSettings({
         description: "Maximum number of messages to store in the cache. Older messages are deleted when the limit is reached. This helps reduce memory usage and improve performance. 0 means there is no limit",
     },
 
+    timeBasedCleanupMinutes: {
+        default: 0,
+        type: OptionType.NUMBER,
+        description: "Automatically remove messages from servers that are older than this many minutes. Set to 0 to disable time-based cleanup.",
+    },
+
+    preserveCurrentChannel: {
+        default: true,
+        type: OptionType.BOOLEAN,
+        description: "When enabled, messages in your currently selected channel are not affected by time-based cleanup.",
+    },
+
     whitelistedIds: {
         default: "",
         type: OptionType.STRING,
@@ -192,19 +251,13 @@ export const settings = definePluginSettings({
     importLogs: {
         type: OptionType.COMPONENT,
         description: "Import Logs From File",
-        component: () =>
-            <Button onClick={importLogs}>
-                Import Logs
-            </Button>
+        component: ImportLogsButton
     },
 
     exportLogs: {
         type: OptionType.COMPONENT,
         description: "Export Logs From IndexedDB",
-        component: () =>
-            <Button onClick={exportLogs}>
-                Export Logs
-            </Button>
+        component: ExportLogsButton
     },
 
     openLogs: {
@@ -236,11 +289,12 @@ export const settings = definePluginSettings({
         description: "Clear Logs",
         component: () =>
             <Button
-                color={Button.Colors.RED}
+                variant="dangerPrimary"
                 onClick={() => Alerts.show({
                     title: "Clear Logs",
                     body: "Are you sure you want to clear all logs?",
-                    confirmColor: Button.Colors.RED,
+                    // @ts-expect-error not typed
+                    confirmVariant: "critical-primary",
                     confirmText: "Clear",
                     cancelText: "Cancel",
                     onConfirm: () => {

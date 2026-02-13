@@ -18,12 +18,10 @@
 
 import "./styles.css";
 
-import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
 import { Button } from "@components/Button";
-import fullVcPfp from "@equicordplugins/fullVcPfp";
 import { Devs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 
 const cl = classNameFactory("vc-usrbg-");
@@ -60,22 +58,29 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: '.banner)==null?"COMPLETE"',
+            find: ':"SHOULD_LOAD");',
             replacement: {
-                match: /(?<=void 0:)\i.getPreviewBanner\(\i,\i,\i\)/,
+                match: /\i(?:\?)?.getPreviewBanner\(\i,\i,\i\)(?=.{0,100}"COMPLETE")/,
                 replace: "$self.patchBannerUrl(arguments[0])||$&"
 
             }
         },
         {
             find: "\"data-selenium-video-tile\":",
-            predicate: () => !isPluginEnabled(fullVcPfp.name) && settings.store.voiceBackground,
             replacement: [
                 {
                     match: /(?<=function\((\i),\i\)\{)(?=let.{20,40},style:)/,
-                    replace: "$1.style=$self.getVoiceBackgroundStyles($1);"
+                    replace: "Object.assign($1.style=$1.style||{},$self.getVoiceBackgroundStyles($1));"
                 }
             ]
+        },
+        {
+            find: '"VideoBackground-web"',
+            predicate: () => settings.store.voiceBackground,
+            replacement: {
+                match: /backgroundColor:.{0,25},\{style:(?=\i\?)/,
+                replace: "$&$self.userHasBackground(arguments[0]?.userId)?null:",
+            }
         }
     ],
 
@@ -92,11 +97,8 @@ export default definePlugin({
     ),
 
     getVoiceBackgroundStyles({ className, participantUserId }: any) {
-        if (className.includes("tile_")) {
+        if (className.includes("tile")) {
             if (this.userHasBackground(participantUserId)) {
-                document.querySelectorAll('[class*="background_"]').forEach(element => {
-                    (element as HTMLElement).style.backgroundColor = "transparent";
-                });
                 return {
                     backgroundImage: `url(${this.getImageUrl(participantUserId)})`,
                     backgroundSize: "cover",

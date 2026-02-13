@@ -275,8 +275,7 @@ function capitalize(textInput: string): string {
         }
     }
 
-    // We'll fix capitalization of I's
-    result = result.replace(/\bi[\b']/g, "I");
+    result = result.replace(/\bi\b(?!\s+is\b)(?=['\s]|$)/g, "I");
 
     return result;
 }

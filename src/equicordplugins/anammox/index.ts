@@ -15,6 +15,12 @@ export const settings = definePluginSettings({
         description: "Remove shops above DMs list",
         restartNeeded: true,
     },
+    quests: {
+        type: OptionType.BOOLEAN,
+        default: false,
+        description: "Remove quests above DMs list",
+        restartNeeded: true,
+    },
     serverBoost: {
         type: OptionType.BOOLEAN,
         default: true,
@@ -43,7 +49,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Anammox",
-    description: "A microbial process that plays an important part in the nitrogen cycle",
+    description: "Hides various features related to nitro and the store",
     authors: [Devs.Kyuuhachi],
     settings,
 
@@ -53,15 +59,21 @@ export default definePlugin({
             find: 'tutorialId:"direct-messages"',
             replacement: [
                 {
-                    match: /NAVIGATION_LINK\}\}\}\)(?=,\i(&&\(|\]))/,
+                    match: /"nitro-tab-group"\)/,
                     replace: "$&&&undefined",
+                    predicate: () => settings.store.dms
                 },
                 {
-                    match: /NAVIGATION_LINK\}\}\}.{0,20}\)(?=,\i&&!\i)/,
+                    match: /"discord-shop"\)/,
                     replace: "$&&&undefined",
+                    predicate: () => settings.store.dms
+                },
+                {
+                    match: /"quests"\)/,
+                    replace: "$&&&undefined",
+                    predicate: () => settings.store.quests
                 },
             ],
-            predicate: () => settings.store.dms,
         },
         {
             // Above DMs, keyboard nav
@@ -82,35 +94,32 @@ export default definePlugin({
             // Channel list server boost progress bar
             find: "useGuildActionRow",
             replacement: {
-                match: /\i\.premiumProgressBarEnabled&&[^,]+/,
-                replace: "null"
+                match: /(GUILD_NEW_MEMBER_ACTIONS_PROGRESS_BAR\)):(\i(?:\.premiumProgressBarEnabled)?)/,
+                replace: "$1:null"
             },
             predicate: () => settings.store.serverBoost,
         },
         {
             // Settings, sidebar
-            find: "#{intl::BILLING_SETTINGS}",
-            replacement: [
-                {
-                    match: /(?<=#{intl::BILLING_SETTINGS}[^,]*?,)(?=div)/,
-                    replace: "capitalism:true,"
-                },
-                {
-                    match: /\i\?\i:\i\.toSpliced\(3,0,\i\)/,
-                    replace: "($&).filter(e=>!e.capitalism)",
-                },
-            ],
+            find: ".BILLING_SECTION,",
+            replacement: {
+                match: /(?<=buildLayout:\(\)=>)\[.+?\]/,
+                replace: "[]",
+            },
             predicate: () => settings.store.billing,
         },
         {
             // Gift button
             find: '"sticker")',
-            replacement: { match: /&&\i\.push\(\{[^&]*?,"gift"\)\}\)/, replace: "", },
+            replacement: {
+                match: /&&\i\.push\(\([^&]*?,"gift"\)\)/,
+                replace: "",
+            },
             predicate: () => settings.store.gift,
         },
         {
             // Emoji list
-            find: "#{intl::EMOJI_PICKER_CREATE_EMOJI_TITLE}),size:",
+            find: "#{intl::EMOJI_PICKER_EXPAND_EMOJI_SECTION}),size:",
             replacement: {
                 match: /(\i)=\i\|\|!\i&&\i.\i.isEmojiCategoryNitroLocked\(\{[^}]*\}\);/,
                 replace: "$&$1||"

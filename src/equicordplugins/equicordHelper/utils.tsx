@@ -5,6 +5,7 @@
  */
 
 import { showNotice } from "@api/Notices";
+import { plugins, startDependenciesRecursive, startPlugin, stopPlugin } from "@api/PluginManager";
 import { Settings } from "@api/Settings";
 import { Alerts, Toasts } from "@webpack/common";
 
@@ -39,7 +40,6 @@ function restartPrompt(): Promise<boolean> {
     });
 }
 
-
 export async function toggleEnabled(name: string) {
     let restartNeeded = false;
     function onRestartNeeded() {
@@ -59,13 +59,13 @@ export async function toggleEnabled(name: string) {
         return true;
     }
 
-    const plugin = Vencord.Plugins.plugins[name];
+    const plugin = plugins[name];
     const settings = Settings.plugins[plugin.name];
     const isEnabled = () => settings.enabled ?? false;
     const wasEnabled = isEnabled();
 
     if (!wasEnabled) {
-        const { restartNeeded, failures } = Vencord.Plugins.startDependenciesRecursive(plugin);
+        const { restartNeeded, failures } = startDependenciesRecursive(plugin);
         if (failures.length) {
             console.error(`Failed to start dependencies for ${plugin.name}: ${failures.join(", ")}`);
             showNotice("Failed to start dependencies: " + failures.join(", "), "Close", () => null);
@@ -87,7 +87,7 @@ export async function toggleEnabled(name: string) {
         return await beforeReturn(settings, wasEnabled);
     }
 
-    const result = wasEnabled ? Vencord.Plugins.stopPlugin(plugin) : Vencord.Plugins.startPlugin(plugin);
+    const result = wasEnabled ? stopPlugin(plugin) : startPlugin(plugin);
 
     if (!result) {
         settings.enabled = false;
@@ -112,6 +112,7 @@ export function getWindowsName(release: string) {
 
 export function getMacOSName(release: string) {
     const major = parseInt(release.split(".")[0]);
+    if (major === 25) return "MacOS 26 (Tahoe)";
     if (major === 24) return "MacOS 15 (Sequoia)";
     if (major === 23) return "MacOS 14 (Sonoma)";
     if (major === 22) return "MacOS 13 (Ventura)";
@@ -125,6 +126,6 @@ export function platformName() {
     if (typeof DiscordNative === "undefined") return navigator.platform;
     if (DiscordNative.process.platform === "win32") return `${getWindowsName(DiscordNative.os.release)}`;
     if (DiscordNative.process.platform === "darwin") return `${getMacOSName(DiscordNative.os.release)} (${DiscordNative.process.arch === "arm64" ? "Apple Silicon" : "Intel Silicon"})`;
-    if (DiscordNative.process.platform === "linux") return `Linux (${DiscordNative.os.release})`;
+    if (DiscordNative.process.platform === "linux") return `${navigator.platform} (${DiscordNative.os.release})`;
     return DiscordNative.process.platform;
 }

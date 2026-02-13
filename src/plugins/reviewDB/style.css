@@ -1,8 +1,3 @@
-:root {
-    --vc-rdb-avatar-size: 40px;
-    --vc-rdb-spacing-size: 8px;
-}
-
 .vc-rdb-badge {
     vertical-align: middle;
     margin-left: 4px;
@@ -41,10 +36,10 @@
 
 .vc-rdb-modal-footer .vc-rdb-input {
     margin-bottom: 0;
-    background: var(--input-background-default, var(--input-background));
+    background: var(--input-background-default);
 }
 
-.vc-rdb-modal-footer [class|="pageControlContainer"] {
+.vc-rdb-modal-footer [class*="pageControlContainer"] {
     margin-top: 0;
 }
 
@@ -56,14 +51,14 @@
     margin-top: 16px;
 }
 
-.vc-rdb-review-container {
-    padding-top: var(--vc-rdb-spacing-size) !important;
-    padding-bottom: var(--vc-rdb-spacing-size) !important;
+.vc-rdb-review {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
     padding-right: 32px !important;
 }
 
 .vc-rdb-review:hover {
-    background: var(--message-background-hover, var(--background-message-hover)) !important;
+    background: var(--message-background-hover) !important;
     border-radius: 8px;
 }
 

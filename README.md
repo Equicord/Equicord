@@ -68,17 +68,21 @@ Build Equicord:
 pnpm build
 ```
 
+Inject Equicord into your desktop client:
+
+```shell
+pnpm inject
+```
+
 Build Equicord for web:
 
 ```shell
 pnpm buildWeb
 ```
 
-Inject Equicord into your client:
+After building Equicord's web extension, locate the appropriate ZIP file in the `dist` directory and follow your browser’s guide for installing custom extensions, if supported.
 
-```shell
-pnpm inject
-```
+Note: Firefox extension zip requires Firefox for developers
 
 ## Credits
 

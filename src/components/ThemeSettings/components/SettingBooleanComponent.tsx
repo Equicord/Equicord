@@ -6,8 +6,8 @@
 
 import "./styles.css";
 
-import { classNameFactory } from "@api/Styles";
 import { FormSwitch } from "@components/FormSwitch";
+import { classNameFactory } from "@utils/css";
 
 interface Props {
     label: string;

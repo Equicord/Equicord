@@ -26,7 +26,7 @@ import { classes } from "@utils/misc";
 import { Queue } from "@utils/Queue";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
-import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { findComponentByCodeLazy, findComponentLazy, findCssClassesLazy } from "@webpack";
 import {
     Button,
     ChannelStore,
@@ -47,12 +47,12 @@ const messageCache = new Map<string, {
     fetched: boolean;
 }>();
 
-const Embed = findComponentByCodeLazy(".inlineMediaEmbed");
-const AutoModEmbed = findComponentByCodeLazy(".withFooter]:", "childrenMessageContent:");
+const Embed = findComponentLazy(m => m.prototype?.renderSuppressButton);
+const AutoModEmbed = findComponentByCodeLazy("withFooter", "childrenMessageContent:");
 const ChannelMessage = findComponentByCodeLazy("childrenExecutedCommand:", ".hideAccessories");
 
-const SearchResultClasses = findByPropsLazy("message", "searchResult");
-const EmbedClasses = findByPropsLazy("embedAuthorIcon", "embedAuthor", "embedAuthor");
+const SearchResultClasses = findCssClassesLazy("message", "searchResult");
+const EmbedClasses = findCssClassesLazy("embedAuthorIcon", "embedAuthor", "embedAuthor", "embedMargin");
 
 const MessageDisplayCompact = getUserSettingLazy("textAndImages", "messageDisplayCompact")!;
 
@@ -115,7 +115,8 @@ const settings = definePluginSettings({
     idList: {
         description: "Guild/channel/user IDs to blacklist or whitelist (separate with comma)",
         type: OptionType.STRING,
-        default: ""
+        default: "",
+        multiline: true,
     },
     clearMessageCache: {
         type: OptionType.COMPONENT,
@@ -126,7 +127,6 @@ const settings = definePluginSettings({
         )
     }
 });
-
 
 async function fetchMessage(channelID: string, messageID: string) {
     const cached = messageCache.get(messageID);
@@ -156,7 +156,6 @@ async function fetchMessage(channelID: string, messageID: string) {
 
     return message;
 }
-
 
 function getImages(message: Message): Attachment[] {
     const attachments: Attachment[] = [];
@@ -222,7 +221,6 @@ function withEmbeddedBy(message: Message, embeddedBy: string[]) {
         }
     });
 }
-
 
 function MessageEmbedAccessory({ message }: { message: Message; }) {
     // @ts-expect-error

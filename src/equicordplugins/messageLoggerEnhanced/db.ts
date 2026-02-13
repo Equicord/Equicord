@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { ChannelStore } from "@webpack/common";
 import { DBSchema, IDBPDatabase, openDB } from "idb";
 
 import { LoggedMessageJSON } from "./types";
@@ -109,6 +110,60 @@ export async function getOldestMessagesIDB(limit: number) {
     return cacheRecords(await db.getAllFromIndex("messages", "by_timestamp", undefined, limit));
 }
 
+export async function* iterateAllMessagesIDB(batchSize = 100) {
+    let lastId: string | undefined;
+    while (true) {
+        const batch: DBMessageRecord[] = [];
+        // new transaction for each batch to avoid timeouts during yield
+        const tx = db.transaction("messages");
+        const range = lastId ? IDBKeyRange.lowerBound(lastId, true) : undefined;
+        let cursor = await tx.store.openCursor(range);
+
+        while (cursor && batch.length < batchSize) {
+            batch.push(cursor.value);
+            cursor = await cursor.continue();
+        }
+
+        if (batch.length === 0) break;
+
+        lastId = batch[batch.length - 1].message_id;
+
+        yield await cacheRecords(batch);
+
+        if (batch.length < batchSize) break;
+    }
+}
+
+export async function getOlderThanTimestampIDB(timestamp: string) {
+    const tx = db.transaction("messages", "readonly");
+    const { store } = tx;
+    const index = store.index("by_timestamp");
+
+    const cursor = await index.openCursor(IDBKeyRange.upperBound(timestamp));
+
+    if (!cursor) {
+        return [];
+    }
+
+    const messages: DBMessageRecord[] = [];
+    for await (const c of cursor) {
+        messages.push(c.value);
+    }
+
+    return cacheRecords(messages);
+}
+
+export async function getOlderThanTimestampForGuildsIDB(timestamp: string, currentChannelId?: string, preserveCurrentChannel?: boolean) {
+    const allOldMessages = await getOlderThanTimestampIDB(timestamp);
+    return allOldMessages.filter(record => {
+        const { message } = record;
+        const channel = ChannelStore.getChannel(message.channel_id);
+        const isGuildMessage = channel?.guild_id != null;
+        const isCurrentChannel = preserveCurrentChannel && currentChannelId && message.channel_id === currentChannelId;
+        return isGuildMessage && !isCurrentChannel;
+    });
+}
+
 export async function getDateStortedMessagesByStatusIDB(newest: boolean, limit: number, status: DBMessageStatus) {
     const tx = db.transaction("messages", "readonly");
     const { store } = tx;
@@ -178,7 +233,6 @@ export async function addMessagesBulkIDB(messages: LoggedMessageJSON[], status?:
 
     messages.forEach(message => cachedMessages.set(message.id, message));
 }
-
 
 export async function deleteMessageIDB(message_id: string) {
     await db.delete("messages", message_id);

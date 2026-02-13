@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { Alert } from "@components/Alert";
+import { Notice } from "@components/Notice";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { UserStore } from "@webpack/common";
@@ -50,9 +50,9 @@ export default definePlugin({
     description: "Spoof what platform or device you're on",
     authors: [EquicordDevs.Drag],
     settingsAboutComponent: () => (
-        <Alert.Warning>
+        <Notice.Warning>
             We can't guarantee this plugin won't get you warned or banned.
-        </Alert.Warning>
+        </Notice.Warning>
     ),
     settings: settings,
     patches: [
@@ -64,10 +64,17 @@ export default definePlugin({
             }
         },
         {
-            find: "voiceChannelEffect]:",
+            find: "#{intl::POPOUT_STAY_ON_TOP}),icon:",
             replacement: {
                 match: /(?<=CallTile.{0,15}\.memo\((\i)=>\{)/,
                 replace: "$1.platform = $self.getPlatform(false, $1?.participantUserId)?.vcIcon || $1?.platform;"
+            }
+        },
+        {
+            find: '("AppSkeleton");',
+            replacement: {
+                match: /(?<=\.isPlatformEmbedded.{0,50}\i\)\)\}.{0,30})\i\?\i\.\i\.set\(.{0,10}:/,
+                replace: ""
             }
         }
     ],

@@ -7,21 +7,22 @@
 import "./VencordTab.css";
 
 import { openNotificationLogModal } from "@api/Notifications/notificationLog";
+import { plugins } from "@api/PluginManager";
 import { useSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
-import { Alert } from "@components/Alert";
 import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
 import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
 import { FolderIcon, GithubIcon, LogIcon, PaintbrushIcon, RestartIcon } from "@components/Icons";
+import { Notice } from "@components/Notice";
 import { Paragraph } from "@components/Paragraph";
 import { openContributorModal, openPluginModal, SettingsTab, wrapTab } from "@components/settings";
 import { QuickAction, QuickActionCard } from "@components/settings/QuickAction";
 import { SpecialCard } from "@components/settings/SpecialCard";
 import { gitRemote } from "@shared/vencordUserAgent";
 import { DONOR_ROLE_ID, GUILD_ID, IS_MAC, IS_WINDOWS, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { identity, isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
@@ -224,19 +225,19 @@ function EquicordSettings() {
             <Paragraph className={Margins.bottom16}>
                 Configure how Equicord behaves and integrates with Discord. These settings affect the Discord client's appearance and behavior.
             </Paragraph>
-            <Alert.Info className={Margins.bottom20} style={{ width: "100%" }}>
+            <Notice.Info className={Margins.bottom20} style={{ width: "100%" }}>
                 You can customize where this settings section appears in Discord's settings menu by configuring the{" "}
                 <a
                     role="button"
-                    onClick={() => openPluginModal(Vencord.Plugins.plugins.Settings)}
+                    onClick={() => openPluginModal(plugins.Settings)}
                     style={{ cursor: "pointer", color: "var(--text-link)" }}
                 >
                     Settings Plugin
                 </a>.
-            </Alert.Info>
+            </Notice.Info>
 
             {Switches.filter((s): s is Exclude<typeof s, false> => !!s).map(
-                (s, i, arr) => (
+                s => (
                     <FormSwitch
                         key={s.key}
                         value={settings[s.key]}
@@ -246,15 +247,15 @@ function EquicordSettings() {
                             s.warning.enabled ? (
                                 <>
                                     {s.description}
-                                    <Alert.Warning className={Margins.top8} style={{ width: "100%" }}>
+                                    <Notice.Warning className={Margins.top8} style={{ width: "100%" }}>
                                         {s.warning.message}
-                                    </Alert.Warning>
+                                    </Notice.Warning>
                                 </>
                             ) : (
                                 s.description
                             )
                         }
-                        hideBorder={i === arr.length - 1}
+                        hideBorder
                     />
                 ),
             )}

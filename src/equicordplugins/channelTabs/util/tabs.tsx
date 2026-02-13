@@ -6,7 +6,7 @@
 
 import { DataStore } from "@api/index";
 import { isPluginEnabled } from "@api/PluginManager";
-import { classNameFactory } from "@api/Styles";
+import { classNameFactory } from "@utils/css";
 import { NavigationRouter, SelectedChannelStore, SelectedGuildStore, showToast, Toasts, useEffect, useRef, useState } from "@webpack/common";
 import { JSX } from "react";
 
@@ -335,7 +335,7 @@ export function moveDraggedTabs(index1: number, index2: number) {
 
 function getScrollContainer(): HTMLElement | null {
     // discord's main chat scroller
-    return document.querySelector('[class*="scrollerInner_"]') as HTMLElement;
+    return document.querySelector('[class*="scrollerInner"]') as HTMLElement;
 }
 
 function evictStaleCache() {

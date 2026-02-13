@@ -5,13 +5,13 @@
  */
 
 import type { Settings } from "@api/Settings";
-import { CspRequestResult } from "@main/csp/manager";
-import { PluginIpcMappings } from "@main/ipcPlugins";
+import type { CspRequestResult } from "@main/csp/manager";
+import type { PluginIpcMappings } from "@main/ipcPlugins";
 import { IpcEvents } from "@shared/IpcEvents";
-import { IpcRes } from "@utils/types";
-import { ipcRenderer } from "electron";
+import type { IpcRes } from "@utils/types";
+import { ipcRenderer } from "electron/renderer";
 
-function invoke<T = any>(event: IpcEvents, ...args: any[]) {
+export function invoke<T = any>(event: IpcEvents, ...args: any[]) {
     return ipcRenderer.invoke(event, ...args) as Promise<T>;
 }
 
@@ -31,7 +31,9 @@ for (const [plugin, methods] of Object.entries(pluginIpcMap)) {
 
 export default {
     themes: {
-        uploadTheme: (fileName: string, fileData: string) => invoke<void>(IpcEvents.UPLOAD_THEME, fileName, fileData),
+        uploadTheme: async (fileName: string, fileData: string): Promise<void> => {
+            throw new Error("uploadTheme is WEB only");
+        },
         deleteTheme: (fileName: string) => invoke<void>(IpcEvents.DELETE_THEME, fileName),
         getThemesDir: () => invoke<string>(IpcEvents.GET_THEMES_DIR),
         getThemesList: () => invoke<Array<{ fileName: string; content: string; }>>(IpcEvents.GET_THEMES_LIST),
@@ -70,11 +72,18 @@ export default {
 
         openFile: () => invoke<void>(IpcEvents.OPEN_QUICKCSS),
         openEditor: () => invoke<void>(IpcEvents.OPEN_MONACO_EDITOR),
+        getEditorTheme: () => sendSync<string>(IpcEvents.GET_MONACO_THEME),
     },
 
     native: {
         getVersions: () => process.versions as Partial<NodeJS.ProcessVersions>,
-        openExternal: (url: string) => invoke<void>(IpcEvents.OPEN_EXTERNAL, url)
+        openExternal: (url: string) => invoke<void>(IpcEvents.OPEN_EXTERNAL, url),
+        getRendererCss: () => invoke<string>(IpcEvents.GET_RENDERER_CSS),
+        onRendererCssUpdate: (cb: (newCss: string) => void) => {
+            if (!IS_DEV) return;
+
+            ipcRenderer.on(IpcEvents.RENDERER_CSS_UPDATE, (_e, newCss: string) => cb(newCss));
+        }
     },
 
     csp: {
@@ -87,6 +96,13 @@ export default {
         removeOverride: (url: string) => invoke<boolean>(IpcEvents.CSP_REMOVE_OVERRIDE, url),
         requestAddOverride: (url: string, directives: string[], callerName: string) =>
             invoke<CspRequestResult>(IpcEvents.CSP_REQUEST_ADD_OVERRIDE, url, directives, callerName),
+    },
+
+    tray: {
+        setUpdateState: (available: boolean) => ipcRenderer.send(IpcEvents.SET_TRAY_UPDATE_STATE, available),
+        onCheckUpdates: (cb: () => void) => { ipcRenderer.on(IpcEvents.TRAY_CHECK_UPDATES, cb); },
+        onRepair: (cb: () => void) => { ipcRenderer.on(IpcEvents.TRAY_REPAIR, cb); },
+        onAbout: (cb: () => void) => { ipcRenderer.on(IpcEvents.TRAY_ABOUT, cb); },
     },
 
     pluginHelpers: PluginHelpers

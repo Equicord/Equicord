@@ -67,7 +67,6 @@ function greet(channel: Channel, message: Message, stickers: string[]) {
     }
 }
 
-
 function GreetMenu({ channel, message }: { message: Message, channel: Channel; }) {
     const s = settings.use(["greetMode", "multiGreetChoices"]);
     const { greetMode, multiGreetChoices = [] } = s;
@@ -161,7 +160,7 @@ export default definePlugin({
         {
             find: "#{intl::WELCOME_CTA_LABEL}",
             replacement: {
-                match: /className:\i\.welcomeCTA,(?<={channel:\i,message:\i}=(\i).+?)/,
+                match: /className:\i\.\i,(?=.{0,40}?"sticker")(?<={channel:\i,message:\i}=(\i).+?)/,
                 replace: "$&onContextMenu:(vcEvent)=>$self.pickSticker(vcEvent, $1),"
             }
         }

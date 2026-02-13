@@ -28,7 +28,6 @@ import { Root } from "react-dom/client";
 import ReplyNavigator from "./ReplyNavigator";
 import styles from "./styles.css?managed";
 
-
 export const jumper: any = findByPropsLazy("jumpToMessage");
 const FindReplyIcon = () => {
     return <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="18" height="18">
@@ -87,7 +86,6 @@ const settings = definePluginSettings({
     }
 });
 
-
 export default definePlugin({
     name: "FindReply",
     description: "Jumps to the earliest reply to a message in a channel (lets you follow past conversations more easily).",
@@ -120,7 +118,7 @@ export default definePlugin({
                                 message: "Use the bottom panel to navigate between replies.",
                                 type: Toasts.Type.MESSAGE
                             });
-                            const container = document.querySelector("[class^=channelBottomBarArea_]");
+                            const container = document.querySelector("[class*=channelBottomBarArea_]");
                             if (!container) {
                                 Toasts.show({
                                     id: Toasts.genId(),

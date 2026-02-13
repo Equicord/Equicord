@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { classNameFactory } from "@api/Styles";
 import { settings } from "@equicordplugins/musicControls/settings";
 import { SpotifyLrcStore } from "@equicordplugins/musicControls/spotify/lyrics/providers/store";
 import { SyncedLyric } from "@equicordplugins/musicControls/spotify/lyrics/providers/types";
 import { SpotifyStore } from "@equicordplugins/musicControls/spotify/SpotifyStore";
-import { findByPropsLazy } from "@webpack";
+import { classNameFactory } from "@utils/css";
+import { findCssClassesLazy } from "@webpack";
 import { React, useEffect, useState, useStateFromStores } from "@webpack/common";
 
-export const scrollClasses = findByPropsLazy("auto", "customTheme");
+export const scrollClasses = findCssClassesLazy("auto", "customTheme");
 
 export const cl = classNameFactory("vc-spotify-lyrics-");
 
@@ -23,7 +23,6 @@ export function NoteSvg() {
         </svg>
     );
 }
-
 
 const getIndexes = (lyrics: SyncedLyric[], position: number, delay: number) => {
     const posInSec = (position + delay) / 1000;
@@ -81,7 +80,6 @@ export function useLyrics({ scroll = true }: { scroll?: boolean; } = {}) {
             setLyricRefs(currentLyrics.map(() => React.createRef()));
         }
     }, [currentLyrics]);
-
 
     useEffect(() => {
         if (currentLyrics && position != null) {

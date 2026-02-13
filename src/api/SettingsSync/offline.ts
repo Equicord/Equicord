@@ -28,6 +28,22 @@ const toastFailure = (err: any) =>
 
 const logger = new Logger("SettingsSync:Offline", "#39b7e0");
 
+function deepMerge<T extends object>(target: T, source: T): T {
+    for (const key in source) {
+        const sourceVal = source[key];
+
+        if (sourceVal !== null && typeof sourceVal === "object" && !Array.isArray(sourceVal)) {
+            if (target[key] === null || target[key] === undefined || typeof target[key] !== "object" || Array.isArray(target[key])) {
+                target[key] = {} as any;
+            }
+            deepMerge(target[key] as object, sourceVal as object);
+        } else {
+            target[key] = sourceVal;
+        }
+    }
+    return target;
+}
+
 function isSafeObject(obj: any) {
     if (obj == null || typeof obj !== "object") return true;
 
@@ -56,22 +72,22 @@ export async function importSettings(data: string, type: BackupType = "all", clo
 
     switch (type) {
         case "all": {
-            if (!cloud && (!("settings" in parsed) || !("quickCss" in parsed) || !("dataStore" in parsed)))
-                throw new Error("Invalid Settings. Missing one or more required keys.");
+            if (!cloud && (!("settings" in parsed)))
+                throw new Error("Invalid Settings. Plugin settings is required for this import try a different one.");
 
             if (parsed.settings) {
-                Object.assign(PlainSettings, parsed.settings);
-                await VencordNative.settings.set(parsed.settings);
+                deepMerge(PlainSettings, parsed.settings);
+                await VencordNative.settings.set(PlainSettings);
             }
             if (parsed.quickCss) await VencordNative.quickCss.set(parsed.quickCss);
             if (parsed.dataStore) await DataStore.setMany(parsed.dataStore);
             break;
         }
         case "plugins": {
-            if (!parsed.settings?.settings) throw new Error("Plugin settings missing");
+            if (!parsed.settings) throw new Error("Plugin settings missing");
 
-            Object.assign(PlainSettings, parsed.settings.settings);
-            await VencordNative.settings.set(parsed.settings.settings);
+            deepMerge(PlainSettings, parsed.settings);
+            await VencordNative.settings.set(PlainSettings);
             break;
         }
         case "css": {
@@ -117,7 +133,7 @@ export async function exportSettings({ syncDataStore = true, type = "all", minif
             return JSON.stringify({ settings, quickCss, ...(dataStore && { dataStore }) }, null, minify ? undefined : 4);
         }
         case "plugins": {
-            return JSON.stringify({ settings: { settings } }, null, minify ? undefined : 4);
+            return JSON.stringify({ settings }, null, minify ? undefined : 4);
         }
         case "css": {
             return JSON.stringify({ quickCss }, null, minify ? undefined : 4);
@@ -126,21 +142,6 @@ export async function exportSettings({ syncDataStore = true, type = "all", minif
             return JSON.stringify({ dataStore }, null, minify ? undefined : 4);
         }
     }
-}
-
-export async function exportPlugins({ minify }: { minify?: boolean; } = {}) {
-    const { plugins } = VencordNative.settings.get();
-    return JSON.stringify({ settings: { plugins } }, null, minify ? undefined : 4);
-}
-
-export async function exportCSS({ minify }: { minify?: boolean; } = {}) {
-    const quickCss = await VencordNative.quickCss.get();
-    return JSON.stringify({ quickCss }, null, minify ? undefined : 4);
-}
-
-export async function exportDataStores({ minify }: { minify?: boolean; } = {}) {
-    const dataStore = await DataStore.entries();
-    return JSON.stringify({ dataStore }, null, minify ? undefined : 4);
 }
 
 export async function downloadSettingsBackup(type: BackupType = "all", { minify }: { minify?: boolean; } = {}) {
@@ -167,7 +168,7 @@ export async function uploadSettingsBackup(type: BackupType = "all", showToast =
     if (IS_DISCORD_DESKTOP) {
         const [file] = await DiscordNative.fileManager.openFiles({
             filters: [
-                { name: "Vencord Settings Backup", extensions: ["json"] },
+                { name: "Equicord Settings Backup", extensions: ["json"] },
                 { name: "all", extensions: ["*"] }
             ]
         });

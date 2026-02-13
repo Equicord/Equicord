@@ -35,6 +35,15 @@ const DESKTOP_ONLY = (f: string) => () => {
     throw new Error(`'${f}' is Discord Desktop only.`);
 };
 
+const switchBranch = (branch: string) => () => {
+    if (!IS_VESKTOP && !IS_EQUIBOP) throw new Error("This function only works on vesktop and equibop.");
+
+    const target = IS_VESKTOP ? Vesktop : Equibop;
+    if (target.Settings.store.discordBranch === branch) throw new Error(`Already on ${branch}.`);
+    target.Settings.store.discordBranch = branch;
+    VesktopNative.app.relaunch();
+};
+
 const define: typeof Object.defineProperty =
     (obj, prop, desc) => {
         if (Object.hasOwn(desc, "value"))
@@ -48,14 +57,14 @@ const define: typeof Object.defineProperty =
     };
 
 function makeShortcuts() {
-    function newFindWrapper(filterFactory: (...props: any[]) => Webpack.FilterFn) {
+    function newFindWrapper(filterFactory: (...props: any[]) => Webpack.FilterFn, topLevelOnly = false) {
         const cache = new Map<string, unknown>();
 
         return function (...filterProps: unknown[]) {
             const cacheKey = String(filterProps);
             if (cache.has(cacheKey)) return cache.get(cacheKey);
 
-            const matches = findAll(filterFactory(...filterProps));
+            const matches = findAll(filterFactory(...filterProps), { topLevelOnly });
 
             const result = (() => {
                 switch (matches.length) {
@@ -110,6 +119,7 @@ function makeShortcuts() {
         findByProps,
         findAllByProps: (...props: string[]) => findAll(filters.byProps(...props)),
         findByCode: newFindWrapper(filters.byCode),
+        findCssClasses: newFindWrapper(filters.byClassNames, true),
         findAllByCode: (code: string) => findAll(filters.byCode(code)),
         findComponentByCode: newFindWrapper(filters.componentByCode),
         findAllComponentsByCode: (...code: string[]) => findAll(filters.componentByCode(...code)),
@@ -180,13 +190,12 @@ function makeShortcuts() {
                 experimentBucket: bucket,
             });
         },
-        switchBranch: (branch: string) => {
-            if (!IS_VESKTOP && !IS_EQUIBOP) throw new Error("This function only works on vesktop and equibop.");
-            const target = IS_VESKTOP ? Vesktop : Equibop;
-            if (target.Settings.store.discordBranch === branch) throw new Error(`Already on ${branch}.`);
-            target.Settings.store.discordBranch = branch;
-            VesktopNative.app.relaunch();
-        },
+        switchBranch,
+        ...IS_EQUIBOP ? {
+            equibopStable: switchBranch("stable"),
+            equibopCanary: switchBranch("canary"),
+            equibopPtb: switchBranch("ptb"),
+        } : {},
     };
 }
 
@@ -240,14 +249,15 @@ export default definePlugin({
 
     patches: [
         {
-            find: 'this,"_changeCallbacks",',
-            replacement: {
-                match: /\i\(this,"_changeCallbacks",/,
-                replace: "Reflect.defineProperty(this,Symbol.toStringTag,{value:this.getName(),configurable:!0,writable:!0,enumerable:!1}),$&"
-            }
+            find: "&&this.initializeIfNeeded()",
+            replacement: [
+                {
+                    match: /\i&&this\.initializeIfNeeded\(\)/,
+                    replace: "$&,Reflect.defineProperty(this,Symbol.toStringTag,{value:this.getName(),configurable:!0,writable:!0,enumerable:!1})"
+                }
+            ]
         }
     ],
-
 
     start() {
         const shortcuts = makeShortcuts();

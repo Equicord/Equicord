@@ -17,16 +17,15 @@
 */
 
 import { Settings } from "@api/Settings";
-import { settings } from "@equicordplugins/messageLoggerEnhanced/index";
-import { LoggedMessageJSON } from "@equicordplugins/messageLoggerEnhanced/types";
 import { findStoreLazy } from "@webpack";
 import { ChannelStore, SelectedChannelStore, UserStore } from "@webpack/common";
 
+import { settings } from "../index";
+import { LoggedMessageJSON } from "../types";
 import { findLastIndex, getGuildIdByChannel } from "./misc";
 
 export * from "./cleanUp";
 export * from "./misc";
-
 
 // stolen from mlv2
 // https://github.com/1Lighty/BetterDiscordPlugins/blob/master/Plugins/MessageLoggerV2/MessageLoggerV2.plugin.js#L2367
@@ -126,7 +125,6 @@ export function shouldIgnore({ channelId, authorId, guildId, flags, bot, ghostPi
     const isAuthorBlacklisted = blacklistedIds.includes(authorId);
     const isChannelBlacklisted = blacklistedIds.includes(channelId);
 
-
     const shouldIgnoreMutedGuilds = settings.store.ignoreMutedGuilds;
     const shouldIgnoreMutedCategories = settings.store.ignoreMutedCategories;
     const shouldIgnoreMutedChannels = settings.store.ignoreMutedChannels;
@@ -170,9 +168,11 @@ export function addToXAndRemoveFromOpposite(list: ListType, id: string) {
 
 export function addToX(list: ListType, id: string) {
     const items = settings.store[list] ? settings.store[list].split(",") : [];
-    items.push(id);
 
-    settings.store[list] = items.join(",");
+    if (!items.includes(id)) {
+        items.push(id);
+        settings.store[list] = items.join(",");
+    }
 }
 
 export function removeFromX(list: ListType, id: string) {
@@ -180,6 +180,6 @@ export function removeFromX(list: ListType, id: string) {
     const index = items.indexOf(id);
     if (index !== -1) {
         items.splice(index, 1);
+        settings.store[list] = items.join(",");
     }
-    settings.store[list] = items.join(",");
 }

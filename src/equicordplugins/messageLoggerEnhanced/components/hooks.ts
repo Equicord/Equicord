@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { countMessagesByStatusIDB, countMessagesIDB, DBMessageRecord, DBMessageStatus, getDateStortedMessagesByStatusIDB } from "@equicordplugins/messageLoggerEnhanced/db";
-import { doesMatch, tokenizeQuery } from "@equicordplugins/messageLoggerEnhanced/utils/parseQuery";
 import { useEffect, useState } from "@webpack/common";
 
+import { countMessagesByStatusIDB, countMessagesIDB, DBMessageRecord, DBMessageStatus, getDateStortedMessagesByStatusIDB } from "../db";
+import { doesMatch, tokenizeQuery } from "../utils/parseQuery";
 import { LogTabs } from "./LogsModal";
 
 function useDebouncedValue<T>(value: T, delay: number): T {
@@ -52,7 +52,6 @@ export function useMessages(query: string, currentTab: LogTabs, sortNewest: bool
                     countMessagesByStatusIDB(status),
                 ]);
 
-
                 if (isMounted) {
                     setMessages(messages);
                     setStatusTotal(statusTotal);
@@ -92,10 +91,8 @@ export function useMessages(query: string, currentTab: LogTabs, sortNewest: bool
 
     }, [debouncedQuery, sortNewest, numDisplayedMessages, currentTab, pending]);
 
-
     return { messages, statusTotal, total, pending, reset: () => setPending(true) };
 }
-
 
 function getStatus(currentTab: LogTabs) {
     switch (currentTab) {

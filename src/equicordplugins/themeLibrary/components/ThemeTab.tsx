@@ -17,14 +17,14 @@ import { SearchStatus, TabItem, Theme, ThemeLikeProps } from "@equicordplugins/t
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Button, React, SearchableSelect, TabBar, TextInput, useEffect, useState } from "@webpack/common";
 
 import { ThemeCard } from "./ThemeCard";
 
-const InputStyles = findByPropsLazy("inputWrapper", "inputError", "error");
+const InputStyles = findCssClassesLazy("inputWrapper", "inputError", "error");
 
-export const apiUrl = "https://discord-themes.com/api";
+export const apiUrl = "https://themes.equicord.org/api";
 export const logger = new Logger("ThemeLibrary", "#e5c890");
 
 export async function fetchAllThemes(): Promise<Theme[]> {
@@ -59,7 +59,7 @@ const SearchTags = {
 function ThemeTab() {
     const [themes, setThemes] = useState<Theme[]>([]);
     const [filteredThemes, setFilteredThemes] = useState<Theme[]>([]);
-    const [themeLinks, setThemeLinks] = useState(Vencord.Settings.themeLinks);
+    const [themeLinks, setThemeLinks] = useState(Settings.themeLinks);
     const [likedThemes, setLikedThemes] = useState<ThemeLikeProps>();
     const [searchValue, setSearchValue] = useState({ value: "", status: SearchStatus.ALL });
     const [hideWarningCard, setHideWarningCard] = useState(Settings.plugins.ThemeLibrary.hideWarningCard);
@@ -123,7 +123,7 @@ function ThemeTab() {
     }, []);
 
     useEffect(() => {
-        setThemeLinks(Vencord.Settings.themeLinks);
+        setThemeLinks(Settings.themeLinks);
     }, []);
 
     useEffect(() => {
@@ -278,8 +278,8 @@ function SubmitThemes() {
             <p>
                 This tab was replaced in favour of the new website:
                 {" "}
-                <a href="https://discord-themes.com" target="_blank" rel="noreferrer">
-                    discord-themes.com
+                <a href="https://themes.equicord.org" target="_blank" rel="noreferrer">
+                    themes.equicord.org
                 </a>
             </p>
             <p style={{
@@ -291,7 +291,6 @@ function SubmitThemes() {
         </div>
     );
 }
-
 
 function ThemeLibrary() {
     const [currentTab, setCurrentTab] = useState(TabItem.THEMES);

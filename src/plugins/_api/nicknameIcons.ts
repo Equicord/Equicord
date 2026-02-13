@@ -13,10 +13,10 @@ export default definePlugin({
     authors: [Devs.Nuckyz],
     patches: [
         {
-            find: "#{intl::USER_PROFILE_LOAD_ERROR}",
+            find: "#{intl::USER_PROFILE_PRONOUNS}",
             replacement: {
-                match: /(\.fetchError.+?\?)null/,
-                replace: (_, rest) => `${rest}Vencord.Api.NicknameIcons._renderIcons(arguments[0])`
+                match: /(?<=isVerifiedBot\(\)}\).{0,60})children:(\i)/,
+                replace: "children:[...Vencord.Api.NicknameIcons._renderIcons({userId:arguments[0].user?.id}),$1]"
             }
         }
     ]

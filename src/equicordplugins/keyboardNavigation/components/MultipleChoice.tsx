@@ -6,8 +6,8 @@
 
 import "./style.css";
 
-import { classNameFactory } from "@api/Styles";
 import { ButtonAction } from "@equicordplugins/keyboardNavigation/commands";
+import { classNameFactory } from "@utils/css";
 import { closeAllModals, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { React, TextInput, useEffect, useState } from "@webpack/common";
 
@@ -32,7 +32,6 @@ export function MultipleChoice({ modalProps, onSelect, choices }: MultipleChoice
     const filteredActions = sortedActions.filter(
         action => action.label.toLowerCase().includes(queryEh.toLowerCase())
     );
-
 
     const visibleActions = filteredActions.slice(startIndex, startIndex + 20);
 

@@ -27,9 +27,8 @@ export function getGifByTarget(url: string, target?: HTMLDivElement | null): Gif
     return getGifByMessageAndUrl(url, message);
 }
 
-
 export function getGifByMessageAndTarget(target: HTMLDivElement, message: Message) {
-    const url = target.closest('[class^="imageWrapper"]')?.querySelector("video")?.src ?? target.closest('[class^="imageWrapper"]')?.querySelector("img")?.src;
+    const url = target.closest('[class*="imageWrapper"]')?.querySelector("video")?.src ?? target.closest('[class*="imageWrapper"]')?.querySelector("img")?.src;
 
     if (!url) return null;
 
@@ -85,7 +84,6 @@ export function getGifByMessageAndUrl(url: string, message: Message): Gif | null
             url: embed.thumbnail.url,
         };
     }
-
 
     const attachment = message.attachments.find(a => cleanUrl(a.url) === cleanedUrl || a.proxy_url === cleanedUrl);
     if (attachment) return {

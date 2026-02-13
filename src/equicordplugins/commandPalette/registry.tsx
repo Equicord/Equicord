@@ -5,7 +5,7 @@
  */
 
 import { DataStore } from "@api/index";
-import { isPluginEnabled } from "@api/PluginManager";
+import { isPluginEnabled, plugins, startPlugin, stopPlugin } from "@api/PluginManager";
 import { SettingsStore } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { openPluginModal } from "@components/settings/tabs";
@@ -14,9 +14,11 @@ import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
 import { Guild } from "@vencord/discord-types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, NavigationRouter, openUserSettingsPanel, React, ReadStateUtils, RelationshipStore, SelectedChannelStore, SelectedGuildStore, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
+import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, NavigationRouter, React, ReadStateUtils, RelationshipStore, SelectedChannelStore, SelectedGuildStore, SettingsRouter, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
 import type { FC, ReactElement, ReactNode } from "react";
 import { Settings } from "Vencord";
+
+import commandPalette from ".";
 
 type CommandHandler = () => void | Promise<void>;
 
@@ -60,10 +62,6 @@ interface ChatBarCommandState {
     label: string;
     getters: Set<() => HTMLElement | null>;
 }
-
-
-
-
 
 export const chatBarCommandStates = new Map<string, ChatBarCommandState>();
 export const chatBarCommandStatesById = new Map<string, ChatBarCommandState>();
@@ -149,12 +147,6 @@ export function wrapChatBarChildren(children: ReactNode): ReactNode {
 
     return wrappedChildren;
 }
-
-
-
-
-
-
 
 interface ChatBarCommandBridgeProps {
     element: ReactElement;
@@ -1291,7 +1283,7 @@ const BUILT_IN_COMMANDS: CommandEntry[] = [
         keywords: ["settings", "equicord"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_NAVIGATION, TAG_CORE],
-        handler: () => openUserSettingsPanel("equicord_main")
+        handler: () => SettingsRouter.openUserSettings("equicord_main_panel")
     },
     {
         id: "open-plugin-settings",
@@ -1299,7 +1291,7 @@ const BUILT_IN_COMMANDS: CommandEntry[] = [
         keywords: ["settings", "plugins"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_NAVIGATION, TAG_PLUGINS],
-        handler: () => openUserSettingsPanel("equicord_plugins")
+        handler: () => SettingsRouter.openUserSettings("equicord_plugins_panel")
     },
     {
         id: "reload-windows",
@@ -1313,15 +1305,15 @@ const BUILT_IN_COMMANDS: CommandEntry[] = [
 ];
 
 const DISCORD_SETTINGS_COMMANDS: Array<{ id: string; label: string; route: string; keywords: string[]; description?: string; }> = [
-    { id: "settings-account", label: "Open My Account", route: "my_account", keywords: ["account", "profile"] },
-    { id: "settings-privacy", label: "Open Data & Privacy", route: "data_and_privacy", keywords: ["privacy", "safety", "data"] },
-    { id: "settings-notifications", label: "Open Notifications", route: "legacy_notifications_settings", keywords: ["notifications"] },
-    { id: "settings-voice", label: "Open Voice & Video", route: "voice_and_video", keywords: ["voice", "video", "audio"] },
-    { id: "settings-text", label: "Open Text & Images", route: "text_and_images", keywords: ["text", "images"] },
-    { id: "settings-appearance", label: "Open Appearance", route: "appearance", keywords: ["appearance", "theme"] },
-    { id: "settings-accessibility", label: "Open Accessibility", route: "accessibility", keywords: ["accessibility"] },
-    { id: "settings-keybinds", label: "Open Keybinds", route: "keybinds", keywords: ["keybinds", "shortcuts"] },
-    { id: "settings-advanced", label: "Open Advanced", route: "advanced", keywords: ["advanced"] }
+    { id: "settings-account", label: "Open My Account", route: "my_account_panel", keywords: ["account", "profile"] },
+    { id: "settings-privacy", label: "Open Data & Privacy", route: "data_and_privacy_panel", keywords: ["privacy", "safety", "data"] },
+    { id: "settings-notifications", label: "Open Notifications", route: "notifications_panel", keywords: ["notifications"] },
+    { id: "settings-voice", label: "Open Voice & Video", route: "voice_and_video_panel", keywords: ["voice", "video", "audio"] },
+    { id: "settings-text", label: "Open Text & Images", route: "text_and_images_panel", keywords: ["text", "images"] },
+    { id: "settings-appearance", label: "Open Appearance", route: "appearance_panel", keywords: ["appearance", "theme"] },
+    { id: "settings-accessibility", label: "Open Accessibility", route: "accessibility_panel", keywords: ["accessibility"] },
+    { id: "settings-keybinds", label: "Open Keybinds", route: "keybinds_panel", keywords: ["keybinds", "shortcuts"] },
+    { id: "settings-advanced", label: "Open Advanced", route: "advanced_panel", keywords: ["advanced"] }
 ];
 
 const settingsCommandsById = new Map<string, typeof DISCORD_SETTINGS_COMMANDS[number]>();
@@ -1629,10 +1621,7 @@ function refreshPluginToggleCommand(plugin: Plugin) {
 }
 
 function registerPluginToggleCommands() {
-    const { plugins } = Vencord.Plugins;
-    const pluginMap = plugins as Record<string, Plugin>;
-
-    for (const plugin of Object.values(pluginMap)) {
+    for (const plugin of Object.values(plugins)) {
         refreshPluginToggleCommand(plugin);
     }
 
@@ -1641,8 +1630,7 @@ function registerPluginToggleCommands() {
             if (typeof path !== "string" || !path.startsWith("plugins.")) return;
             if (!path.endsWith(".enabled")) return;
             const pluginName = path.slice("plugins.".length, -".enabled".length);
-            const currentPlugins = Vencord.Plugins.plugins as Record<string, Plugin>;
-            const target = currentPlugins[pluginName];
+            const target = plugins[pluginName];
             if (!target) return;
             refreshPluginToggleCommand(target);
         };
@@ -1658,10 +1646,7 @@ function registerPluginToggleCommands() {
 }
 
 function registerPluginSettingsCommands() {
-    const { plugins } = Vencord.Plugins;
-    const pluginMap = plugins as Record<string, Plugin>;
-
-    for (const plugin of Object.values(pluginMap)) {
+    for (const plugin of Object.values(plugins)) {
         const keywords = createPluginKeywords(plugin);
         registerCommand({
             id: `settings-plugin-${plugin.name.toLowerCase()}`,
@@ -1707,7 +1692,7 @@ function registerUpdateCommands() {
         keywords: ["updates", "changelog"],
         categoryId: "updates",
         tags: [TAG_DEVELOPER, TAG_NAVIGATION],
-        handler: () => openUserSettingsPanel("equicord_changelog")
+        handler: () => SettingsRouter.openUserSettings("equicord_changelog_panel")
     });
 }
 
@@ -1726,13 +1711,13 @@ function registerDiscordSettingsCommands() {
             categoryId: "discord-settings",
             tags: [TAG_NAVIGATION],
             handler: async () => {
-                const fallbackRoute = command.id === "settings-privacy" ? "privacy_and_safety" : null;
+                const fallbackRoute = command.id === "settings-privacy" ? "privacy_and_safety_panel" : null;
 
                 try {
-                    await openUserSettingsPanel(command.route);
+                    await SettingsRouter.openUserSettings(command.route);
                 } catch (error) {
                     if (fallbackRoute) {
-                        await openUserSettingsPanel(fallbackRoute);
+                        await SettingsRouter.openUserSettings(fallbackRoute);
                     } else {
                         console.error("CommandPalette", "Failed to open Discord settings", command.route, error);
                         showToast(`Unable to open ${command.label}.`, Toasts.Type.FAILURE);
@@ -2027,7 +2012,7 @@ async function executeCustomCommand(command: CustomCommandDefinition) {
                 await runCommandById(action.commandId, new Set([command.id]));
                 break;
             case "settings":
-                openUserSettingsPanel(action.route);
+                SettingsRouter.openUserSettings(action.route);
                 break;
             case "url": {
                 const external = (window as any)?.DiscordNative?.app?.openExternalURL;
@@ -2317,15 +2302,6 @@ function registerFriendCommands() {
     });
 }
 
-function ensurePalettePlugin(): Plugin | null {
-    const plugin = Vencord.Plugins.plugins[COMMAND_PALETTE_PLUGIN_NAME] as Plugin | undefined;
-    if (!plugin) {
-        showToast("Command Palette plugin metadata unavailable.", Toasts.Type.FAILURE);
-        return null;
-    }
-    return plugin;
-}
-
 function setPresenceStatus(status: "online" | "idle" | "dnd" | "invisible") {
     if (!StatusSetting) {
         showToast("Unable to change status right now.", Toasts.Type.FAILURE);
@@ -2384,9 +2360,7 @@ function registerCommandPaletteUtilities() {
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_NAVIGATION, TAG_DEVELOPER],
         handler: () => {
-            const plugin = ensurePalettePlugin();
-            if (!plugin) return;
-            openPluginModal(plugin);
+            openPluginModal(commandPalette);
         }
     });
 
@@ -2532,13 +2506,13 @@ function hotReloadPlugin(plugin: Plugin) {
         return false;
     }
 
-    const stopped = Vencord.Plugins.stopPlugin(plugin);
+    const stopped = stopPlugin(plugin);
     if (!stopped) {
         showToast(`Failed to stop ${plugin.name}.`, Toasts.Type.FAILURE);
         return false;
     }
 
-    const started = Vencord.Plugins.startPlugin(plugin);
+    const started = startPlugin(plugin);
     if (!started) {
         showToast(`Failed to restart ${plugin.name}.`, Toasts.Type.FAILURE);
         return false;
@@ -2549,7 +2523,7 @@ function hotReloadPlugin(plugin: Plugin) {
 }
 
 async function reloadAllPlugins() {
-    const entries = Object.values(Vencord.Plugins.plugins) as Plugin[];
+    const entries = Object.values(plugins);
     let count = 0;
     for (const plugin of entries) {
         if (!isPluginEnabled(plugin.name)) continue;
@@ -2564,7 +2538,6 @@ async function reloadAllPlugins() {
 }
 
 async function setAllPluginsEnabled(enabled: boolean) {
-    const { plugins } = Vencord.Plugins;
     let changed = 0;
     for (const plugin of Object.values(plugins) as Plugin[]) {
         const currentlyEnabled = isPluginEnabled(plugin.name);
@@ -2634,7 +2607,6 @@ function slugifyActionLabel(label: string) {
 }
 
 function createPluginToolboxCommands(): CommandEntry[] {
-    const { plugins } = Vencord.Plugins;
     const pluginMap = plugins as Record<string, Plugin>;
     const entries: CommandEntry[] = [];
     const usedIds = new Set<string>();
@@ -2736,7 +2708,7 @@ function registerCustomizationCommands() {
         keywords: ["theme", "library"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_CUSTOMIZATION, TAG_NAVIGATION],
-        handler: () => openUserSettingsPanel("equicord_themes")
+        handler: () => SettingsRouter.openUserSettings("equicord_themes_panel")
     });
 }
 

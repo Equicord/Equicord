@@ -5,13 +5,14 @@
  */
 
 import ErrorBoundary from "@components/ErrorBoundary";
-import { CarouselControls } from "@equicordplugins/betterActivities/components/CarouselControls";
-import { settings } from "@equicordplugins/betterActivities/settings";
-import { AllActivitiesProps } from "@equicordplugins/betterActivities/types";
-import { ActivityView, getActivityApplication } from "@equicordplugins/betterActivities/utils";
 import { Activity } from "@vencord/discord-types";
 import { PresenceStore, React, useEffect, useMemo, UserStore, useState, useStateFromStores } from "@webpack/common";
 import { JSX } from "react";
+
+import { CarouselControls } from "../components/CarouselControls";
+import { settings } from "../settings";
+import { AllActivitiesProps } from "../types";
+import { ActivityView, getActivityApplication } from "../utils";
 
 export function showAllActivitiesComponent({ activity, user, ...props }: Readonly<AllActivitiesProps>): JSX.Element | null {
     const currentUser = UserStore.getCurrentUser();
@@ -49,7 +50,7 @@ export function showAllActivitiesComponent({ activity, user, ...props }: Readonl
         return (
             <ErrorBoundary noop>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    {activity && currentActivity?.id === activity.id ? (
+                    {activity && currentActivity?.application_id === activity.application_id ? (
                         <ActivityView
                             activity={currentActivity}
                             user={user}

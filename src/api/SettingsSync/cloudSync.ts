@@ -6,15 +6,22 @@
 
 import { showNotification } from "@api/Notifications";
 import { PlainSettings, Settings } from "@api/Settings";
+import { localStorage } from "@utils/localStorage";
 import { Logger } from "@utils/Logger";
 import { relaunch } from "@utils/native";
-import { openUserSettingsPanel } from "@webpack/common";
+import { SettingsRouter } from "@webpack/common";
 import { deflateSync, inflateSync } from "fflate";
 
 import { deauthorizeCloud, getCloudAuth, getCloudUrl } from "./cloudSetup";
 import { exportSettings, importSettings } from "./offline";
 
 const logger = new Logger("SettingsSync:Cloud", "#39b7e0");
+
+export function shouldCloudSync(direction: "push" | "pull") {
+    const localDirection = localStorage.Vencord_cloudSyncDirection;
+
+    return localDirection === direction || localDirection === "both";
+}
 
 export async function putCloudSettings(manual?: boolean) {
     const settings = await exportSettings({ syncDataStore: false, minify: true });
@@ -52,6 +59,8 @@ export async function putCloudSettings(manual?: boolean) {
                 noPersist: true,
             });
         }
+
+        delete localStorage.Vencord_settingsDirty;
     } catch (e: any) {
         logger.error("Failed to sync up", e);
         showNotification({
@@ -79,7 +88,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
                 title: "Cloud Settings",
                 body: "Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
                 color: "var(--yellow-360)",
-                onClick: () => openUserSettingsPanel("equicord_cloud")
+                onClick: () => SettingsRouter.openUserSettings("equicord_cloud_panel")
             });
             // Disable cloud sync globally
             Settings.cloud.authenticated = false;
@@ -150,6 +159,8 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
                 onClick: IS_WEB ? () => location.reload() : relaunch,
                 noPersist: true
             });
+
+        delete localStorage.Vencord_settingsDirty;
 
         return true;
     } catch (e: any) {

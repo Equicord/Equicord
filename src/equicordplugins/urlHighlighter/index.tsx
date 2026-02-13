@@ -7,11 +7,11 @@
 import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
-import { classNameFactory } from "@api/Styles";
 import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { ColorPicker, TextInput } from "@webpack/common";
@@ -121,14 +121,14 @@ function getMatchingPattern(url: string): PatternEntry | null {
 export default definePlugin({
     name: "UrlHighlighter",
     description: "Highlights URLs in messages that match your patterns.",
-    authors: [EquicordDevs.Prism],
+    authors: [Devs.prism],
     settings,
 
     patches: [
         {
-            find: '"messageId","channelId"',
+            find: ".MASKED_LINK),",
             replacement: {
-                match: /,children:null!=\i\?\i:\i/,
+                match: /,children:\i\?\?\i/,
                 replace: "$&,...$self.getProps(arguments[0])"
             }
         }
