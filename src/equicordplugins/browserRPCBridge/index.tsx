@@ -163,7 +163,6 @@ export default definePlugin({
     start() {
         try {
             const { port } = settings.store;
-            // @ts-ignore: Native types might not be updated yet
             Native.startServer(port);
             if (settings.store.showNotifications) {
                 Toasts.show({
