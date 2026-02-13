@@ -1294,7 +1294,7 @@ export default definePlugin({
             find: ",{progressTextAnimation:",
             replacement: {
                 match: /(?<=children:\i}=)(\i)/,
-                replace: "Object.assign({},$1,$self.getQuestPanelPercentComplete($1))"
+                replace: "Object.assign({},$1,$1.quest?$self.getQuestPanelPercentComplete($1):{})"
             }
         },
         {
