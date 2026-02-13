@@ -941,12 +941,12 @@ const settings = definePluginSettings({
     ignoreGradients: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "For the non-primary names, if the role has a gradient, ignore it in favor of the color set below.",
+        description: "For the non-primary names, if the role has a gradient or nitro effect, ignore it in favor of the color set below.",
     },
     animateGradients: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "For the non-primary names, if the role has a gradient, animate it. This is disabled by \"Ignore Gradients\" and reduced motion.",
+        description: "For the non-primary names, if the role has a gradient or nitro effect, animate it. This is disabled by \"Ignore Gradients\" and reduced motion.",
     },
     nameSeparator: {
         type: OptionType.STRING,
