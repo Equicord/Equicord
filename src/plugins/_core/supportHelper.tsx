@@ -41,7 +41,7 @@ import { makeCodeblock } from "@utils/text";
 import definePlugin from "@utils/types";
 import { checkForUpdates, isOutdated, update } from "@utils/updater";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
-import { Alerts, Button, ChannelStore, Constants, GuildMemberStore, Parser, PermissionsBits, PermissionStore, RelationshipStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, Toasts, UserStore } from "@webpack/common";
+import { Alerts, Button, ChannelStore, CloudUploader, Constants, GuildMemberStore, Parser, PermissionsBits, PermissionStore, RelationshipStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, Toasts, UserStore } from "@webpack/common";
 import { JSX } from "react";
 
 import plugins, { PluginMeta } from "~plugins";
