@@ -5,96 +5,14 @@
  */
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin from "@utils/types";
 import { Menu } from "@webpack/common";
 
-import { SettingsComponent } from "./settings";
+import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
 import { getMediaUrl } from "./utils/getMediaUrl";
 import { uploadFile } from "./utils/upload";
-
-export const settings = definePluginSettings({
-    serviceType: {
-        type: OptionType.SELECT,
-        description: "",
-        options: [
-            { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
-            { label: "E-Z Host", value: ServiceType.EZHOST },
-            { label: "Nest", value: ServiceType.NEST },
-            { label: "Catbox.moe", value: ServiceType.CATBOX },
-            { label: "0x0.st", value: ServiceType.ZEROX0 },
-            { label: "Litterbox", value: ServiceType.LITTERBOX }
-        ],
-        hidden: true
-    },
-    serviceUrl: {
-        type: OptionType.STRING,
-        description: "",
-        default: "",
-        hidden: true
-    },
-    ezHostKey: {
-        type: OptionType.STRING,
-        description: "E-Z Host API key",
-        default: "",
-        hidden: true
-    },
-    ziplineToken: {
-        type: OptionType.STRING,
-        description: "",
-        default: "",
-        hidden: true
-    },
-    nestToken: {
-        type: OptionType.STRING,
-        description: "",
-        default: "",
-        hidden: true
-    },
-    litterboxExpiry: {
-        type: OptionType.SELECT,
-        description: "",
-        options: [
-            { label: "1 hour", value: "1h" },
-            { label: "12 hours", value: "12h" },
-            { label: "24 hours", value: "24h", default: true },
-            { label: "72 hours", value: "72h" }
-        ],
-        default: "24h",
-        hidden: true
-    },
-    folderId: {
-        type: OptionType.STRING,
-        description: "",
-        default: "",
-        hidden: true
-    },
-    stripQueryParams: {
-        type: OptionType.BOOLEAN,
-        description: "",
-        default: false,
-        hidden: true
-    },
-    apngToGif: {
-        type: OptionType.BOOLEAN,
-        description: "",
-        default: false,
-        hidden: true
-    },
-    autoCopy: {
-        type: OptionType.BOOLEAN,
-        description: "",
-        default: true,
-        hidden: true
-    },
-    settingsComponent: {
-        type: OptionType.COMPONENT,
-        description: "Settings",
-        component: SettingsComponent
-    }
-});
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     if (!props) return;
