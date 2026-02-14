@@ -5,82 +5,97 @@
  */
 
 import { FocusLock, ManaButton, ManaTextInput, Paragraph, useRef, useState } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { DocPage, type PropDef } from "../DocPage";
 
-export default function FocusLockTab() {
-    const [focusLockEnabled, setFocusLockEnabled] = useState(false);
+const FOCUSLOCK_PROPS: PropDef[] = [
+    { name: "containerRef", type: "RefObject<HTMLElement | null>", required: true, description: "React ref pointing to the container element that defines the focus trap boundary." },
+    { name: "keyboardModeEnabled", type: "boolean", description: "Enable keyboard-based focus trapping. When true, Tab key cycles through focusable elements inside the container." },
+    { name: "children", type: "ReactNode", description: "Content rendered inside the focus trap." },
+];
+
+function FocusLockDemo() {
+    const [enabled, setEnabled] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const [inputValue, setInputValue] = useState("");
 
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="FocusLock Demo">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    FocusLock traps keyboard focus within a container. Enable it and try tabbing - focus stays inside the box.
-                </Paragraph>
-                <ManaButton
-                    variant={focusLockEnabled ? "primary" : "secondary"}
-                    text={focusLockEnabled ? "Disable Focus Lock" : "Enable Focus Lock"}
-                    onClick={() => setFocusLockEnabled(!focusLockEnabled)}
-                    style={{ marginBottom: 16 }}
-                />
-                <div
-                    ref={containerRef}
-                    style={{
-                        padding: 16,
-                        border: `2px solid ${focusLockEnabled ? "var(--brand-500)" : "var(--background-modifier-accent)"}`,
-                        borderRadius: 8,
-                        background: "var(--background-secondary)",
-                    }}
-                >
-                    {focusLockEnabled && (
-                        <FocusLock containerRef={containerRef}>
-                            <Paragraph style={{ marginBottom: 12 }}>
-                                Focus is now trapped! Tab between these elements:
-                            </Paragraph>
-                            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                                <ManaTextInput
-                                    value={inputValue}
-                                    onChange={setInputValue}
-                                    placeholder="First input"
-                                />
-                                <ManaTextInput
-                                    value=""
-                                    onChange={() => { }}
-                                    placeholder="Second input"
-                                />
-                                <div style={{ display: "flex", gap: 8 }}>
-                                    <ManaButton variant="secondary" text="Button 1" onClick={() => { }} />
-                                    <ManaButton variant="secondary" text="Button 2" onClick={() => { }} />
-                                    <ManaButton
-                                        variant="primary"
-                                        text="Exit Focus Lock"
-                                        onClick={() => setFocusLockEnabled(false)}
-                                    />
-                                </div>
-                            </div>
-                        </FocusLock>
-                    )}
-                    {!focusLockEnabled && (
-                        <Paragraph color="text-muted">
-                            Click "Enable Focus Lock" to activate the focus trap demo.
+        <div>
+            <ManaButton
+                variant={enabled ? "primary" : "secondary"}
+                text={enabled ? "Disable Focus Lock" : "Enable Focus Lock"}
+                onClick={() => setEnabled(!enabled)}
+                style={{ marginBottom: 16 }}
+            />
+            <div
+                ref={containerRef}
+                style={{
+                    padding: 16,
+                    border: `2px solid ${enabled ? "var(--brand-500)" : "var(--background-modifier-accent)"}`,
+                    borderRadius: 8,
+                    background: "var(--background-secondary)",
+                }}
+            >
+                {enabled ? (
+                    <FocusLock containerRef={containerRef}>
+                        <Paragraph style={{ marginBottom: 12 }}>
+                            Focus is trapped. Try pressing Tab to cycle through these elements:
                         </Paragraph>
-                    )}
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Use Cases">
-                <Paragraph color="text-muted">• Modal dialogs - Keep focus within the modal</Paragraph>
-                <Paragraph color="text-muted">• Dropdown menus - Trap focus while open</Paragraph>
-                <Paragraph color="text-muted">• Settings panels - Improve keyboard navigation</Paragraph>
-                <Paragraph color="text-muted">• Accessibility - Ensure screen readers stay in context</Paragraph>
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">• containerRef - React ref to the container element</Paragraph>
-                <Paragraph color="text-muted">• keyboardModeEnabled - Enable keyboard focus trapping</Paragraph>
-                <Paragraph color="text-muted">• children - Content to render inside the focus trap</Paragraph>
-            </SectionWrapper>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                            <ManaTextInput
+                                value={inputValue}
+                                onChange={setInputValue}
+                                placeholder="First input"
+                            />
+                            <ManaTextInput
+                                value=""
+                                onChange={() => { }}
+                                placeholder="Second input"
+                            />
+                            <div style={{ display: "flex", gap: 8 }}>
+                                <ManaButton variant="secondary" text="Button A" onClick={() => { }} />
+                                <ManaButton variant="secondary" text="Button B" onClick={() => { }} />
+                                <ManaButton variant="primary" text="Exit Focus Lock" onClick={() => setEnabled(false)} />
+                            </div>
+                        </div>
+                    </FocusLock>
+                ) : (
+                    <Paragraph color="text-muted">
+                        Click "Enable Focus Lock" to activate the focus trap demo.
+                    </Paragraph>
+                )}
+            </div>
         </div>
+    );
+}
+
+export default function FocusLockTab() {
+    return (
+        <DocPage
+            componentName="FocusLock"
+            overview="FocusLock traps keyboard focus within a container element. When active, pressing Tab cycles through focusable elements inside the boundary without escaping. Used in modals, dropdown menus, and anywhere keyboard accessibility requires scoped navigation."
+            notices={[
+                { type: "warn", children: "FocusLock traps all keyboard focus within its container. Always provide a way for the user to exit the focus trap (e.g. a close button or Escape key handler), otherwise they will be unable to navigate away." },
+                { type: "info", children: "FocusLock is typically used inside modals and dropdown menus that already handle dismiss behavior. If you use it standalone, you must implement your own dismiss logic." },
+            ]}
+            importPath={'import { FocusLock } from "../components";'}
+            sections={[
+                {
+                    title: "Focus Trap",
+                    description: "Enable the focus lock and press Tab to see focus cycle within the container boundary.",
+                    children: <FocusLockDemo />,
+                    code: `const containerRef = useRef<HTMLDivElement>(null);
+
+<div ref={containerRef}>
+  <FocusLock containerRef={containerRef}>
+    <input />
+    <button>OK</button>
+    <button>Cancel</button>
+  </FocusLock>
+</div>`,
+                    relevantProps: ["containerRef"],
+                },
+            ]}
+            props={FOCUSLOCK_PROPS}
+        />
     );
 }
