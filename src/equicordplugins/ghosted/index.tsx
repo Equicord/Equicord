@@ -100,7 +100,7 @@ function BooIndicator() {
 
     return (
         <>
-            {settings.store.showIndicator && (
+            {settings.store.showIndicator && getGhostedChannels().length && (
                 <div id={cl("container")}>
                     <Tooltip text={getTooltipText()} position="right">
                         {({ onMouseEnter, onMouseLeave }) => (
