@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
-import { Button } from "@components/index";
 import { classes } from "@utils/misc";
 import { openModal } from "@utils/modal";
 import { React, SelectedGuildStore, TextInput, useStateFromStores } from "@webpack/common";

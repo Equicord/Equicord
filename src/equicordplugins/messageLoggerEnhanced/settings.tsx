@@ -297,8 +297,8 @@ export const settings = definePluginSettings({
                     confirmVariant: "critical-primary",
                     confirmText: "Clear",
                     cancelText: "Cancel",
-                    onConfirm: () => {
-                        clearMessagesIDB();
+                    onConfirm: async () => {
+                        await clearMessagesIDB();
                     },
                 })}
             >

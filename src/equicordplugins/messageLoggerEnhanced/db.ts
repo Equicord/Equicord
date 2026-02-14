@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ChannelStore } from "@webpack/common";
+import { ChannelStore, Toasts } from "@webpack/common";
 import { DBSchema, IDBPDatabase, openDB } from "idb";
 
 import { LoggedMessageJSON } from "./types";
@@ -251,4 +251,9 @@ export async function deleteMessagesBulkIDB(message_ids: string[]) {
 export async function clearMessagesIDB() {
     await db.clear("messages");
     cachedMessages.clear();
+    Toasts.show({
+        type: Toasts.Type.MESSAGE,
+        message: "Cleared message log database and cache.",
+        id: Toasts.genId()
+    });
 }

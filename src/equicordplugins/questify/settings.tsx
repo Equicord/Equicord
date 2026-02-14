@@ -6,7 +6,10 @@
 
 import { defaultAudioNames, playAudio } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
-import { Divider, ErrorBoundary, Heading, Paragraph } from "@components/index";
+import { Divider } from "@components/Divider";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { Heading } from "@components/Heading";
+import { Paragraph } from "@components/Paragraph";
 import { Logger } from "@utils/Logger";
 import { makeRange, OptionType } from "@utils/types";
 import { Button, ColorPicker, ContextMenuApi, Menu, Select, Slider, TextInput, useEffect, useRef, useState } from "@webpack/common";

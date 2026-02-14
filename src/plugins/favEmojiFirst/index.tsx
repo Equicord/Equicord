@@ -1084,6 +1084,20 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (children, ...args:
     insertSetAliasMenuItem(children, emojiRef);
 };
 
+const messageSendListener = (_channelId: string, messageObj: { content: string; }) => {
+    if (!messageObj.content || !Object.keys(aliasMap).length) return;
+
+    messageObj.content = messageObj.content.replace(/:([a-z0-9_]{2,32}):/gi, (match, aliasName) => {
+        const ref = aliasMap[aliasName.toLowerCase()];
+        if (!ref) return match;
+
+        if (ref.kind === "custom" && ref.id) {
+            return `<${ref.animated ? "a" : ""}:${ref.name}:${ref.id}>`;
+        }
+        return getUnicodeSurrogate(ref) ?? resolveUnicodeSurrogateByName(ref.name) ?? match;
+    });
+};
+
 export default definePlugin({
     name: "FavoriteEmojiFirst",
     authors: [Devs.Aria, Devs.Ven, EquicordDevs.justjxke],
@@ -1097,6 +1111,7 @@ export default definePlugin({
         "textarea-context": messageContextMenuPatch
     },
     isModified: true,
+    onBeforeMessageSend: messageSendListener,
     patches: [
         {
             find: "renderResults({results:",
