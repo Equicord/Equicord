@@ -188,7 +188,7 @@ async function generateDebugInfoMessage() {
 
 async function uploadPluginListFile(channelId: string, fileContent: string, filename: string) {
     const file = new File([fileContent], filename, { type: "text/plain" });
-    const upload = new CloudUploader({ file, platform: CloudUploadPlatform.WEB }, channelId, false, 0);
+    const upload = new CloudUploader({ file, platform: CloudUploadPlatform.WEB }, channelId);
 
     return new Promise<void>((resolve, reject) => {
         upload.on("complete", () => {
