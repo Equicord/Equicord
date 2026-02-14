@@ -54,21 +54,21 @@
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
-    background: rgb(0 0 0 / 0.15);
+    background: rgb(0 0 0 / 15%);
     border-radius: 4px;
 }
 
 .vc-compfinder-demo-button {
     padding: 8px 16px;
-    background: rgb(0 0 0 / 0.15);
-    border: 1px solid rgb(255 255 255 / 0.06);
+    background: rgb(0 0 0 / 15%);
+    border: 1px solid rgb(255 255 255 / 6%);
     border-radius: 4px;
     color: var(--text-normal);
     cursor: pointer;
 }
 
 .vc-compfinder-demo-button:hover {
-    background: rgb(0 0 0 / 0.25);
+    background: rgb(0 0 0 / 25%);
 }
 
 /* ── Modal Demo Helpers ── */
@@ -219,8 +219,8 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--text-muted);
-    background: rgb(0 0 0 / 0.2);
-    border-bottom: 1px solid rgb(255 255 255 / 0.06);
+    background: rgb(0 0 0 / 20%);
+    border-bottom: 1px solid rgb(255 255 255 / 6%);
     vertical-align: middle;
 }
 
@@ -231,11 +231,11 @@
 }
 
 .vc-compfinder-table tbody tr:nth-child(odd) {
-    background: rgb(0 0 0 / 0.08);
+    background: rgb(0 0 0 / 8%);
 }
 
 .vc-compfinder-table tbody tr:nth-child(even) {
-    background: rgb(0 0 0 / 0.15);
+    background: rgb(0 0 0 / 15%);
 }
 
 .vc-compfinder-table code.inline {
