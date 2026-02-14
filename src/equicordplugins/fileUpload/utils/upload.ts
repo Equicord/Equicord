@@ -44,9 +44,9 @@ async function uploadToShareX(fileBlob: Blob, filename: string): Promise<string>
     const requestUrl = config.RequestURL!.trim();
     const bodyType = (config.Body || "MultipartFormData").toLowerCase();
 
-    const headers: Record<string, string> = {};
+    const headers = new Headers();
     for (const [key, value] of Object.entries(config.Headers || {})) {
-        headers[key] = resolveShareXRequestValue(value, filename);
+        headers.set(key, resolveShareXRequestValue(value, filename));
     }
 
     const buildArguments = () => {
@@ -60,8 +60,7 @@ async function uploadToShareX(fileBlob: Blob, filename: string): Promise<string>
     let body: BodyInit;
 
     if (bodyType === "multipartformdata" || bodyType === "formdata") {
-        delete headers["Content-Type"];
-        delete headers["content-type"];
+        headers.delete("content-type");
 
         const formData = new FormData();
         const fileField = config.FileFormName || "file";
@@ -76,8 +75,8 @@ async function uploadToShareX(fileBlob: Blob, filename: string): Promise<string>
     } else if (bodyType === "binary") {
         body = fileBlob;
     } else if (bodyType === "json") {
-        if (!headers["Content-Type"] && !headers["content-type"]) {
-            headers["Content-Type"] = "application/json";
+        if (!headers.has("content-type")) {
+            headers.set("content-type", "application/json");
         }
 
         const payload = buildArguments();
