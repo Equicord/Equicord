@@ -207,65 +207,65 @@
     },
     "reviewDB": {
         "settings": {
-            "authorize": "Authorize with ReviewDB",
+            "authorize": "Авторизуватися в ReviewDB",
             "notifyReviews": {
-                "description": "Notify about new reviews on startup"
+                "description": "Повідомляти про нові відгуки при запуску"
             },
             "showWarning": {
-                "description": "Display warning to be respectful at the top of the reviews list"
+                "description": "Показувати заклик до взаємоповаги вгорі списку відгуків"
             },
             "hideTimestamps": {
-                "description": "Hide timestamps on reviews"
+                "description": "Приховати відмітки часу на відгуках"
             },
             "hideBlockedUsers": {
-                "description": "Hide reviews from blocked users"
+                "description": "Приховати відгуки від заблокованих користувачів"
             },
-            "manageBlockedUsers": "Manage Blocked Users",
-            "supportDevelopment": "Support ReviewDB development",
-            "website": "ReviewDB website",
-            "supportServer": "ReviewDB Support Server"
+            "manageBlockedUsers": "Керування заблокованими користувачами",
+            "supportDevelopment": "Підтримати розробку ReviewDB",
+            "website": "Сайт ReviewDB",
+            "supportServer": "Сервер підтримки ReviewDB"
         },
-        "viewReviews": "View Reviews",
-        "newReviews": "You have new reviews on your profile!",
-        "appeal": "Appeal",
-        "ok": "Ok",
-        "areYouSure": "Are you sure?",
-        "confirmDelete": "Do you really want to delete this review?",
-        "delete": "Delete",
-        "nevermind": "Nevermind",
-        "mustBeLoggedInDelete": "You must be logged in to delete reviews.",
-        "confirmReport": "Do you really want to report this review?",
-        "report": "Report",
-        "mustBeLoggedInReport": "You must be logged in to report reviews.",
-        "confirmBlock": "Do you really want to block this user? They will be unable to leave further reviews on your profile. You can unblock users in the plugin settings.",
-        "block": "Block",
-        "mustBeLoggedInBlock": "You must be logged in to block users.",
-        "system": "System",
-        "blockedUser": "You have blocked this user",
-        "readMore": "Read more",
-        "unblockUser": "Unblock user",
-        "failedToFetchBlocks": "Failed to fetch blocks: {error}",
-        "noBlockedUsers": "No blocked users.",
-        "blockedUsers": "Blocked Users",
-        "notLoggedIn": "You are not logged into ReviewDB!"
+        "viewReviews": "Переглянути Відгуки",
+        "newReviews": "На вашому профілі з'явилися нові відгуки!",
+        "appeal": "Апеляція",
+        "ok": "Ок",
+        "areYouSure": "Ви впевнені?",
+        "confirmDelete": "Ви дійсно хочете видалити цей відгук?",
+        "delete": "Видалити",
+        "nevermind": "Скасувати",
+        "mustBeLoggedInDelete": "Для видалення відгуків вам потрібно авторизуватись.",
+        "confirmReport": "Ви справді хочете поскаржитися на цей відгук?",
+        "report": "Поскаржитися",
+        "mustBeLoggedInReport": "Для подання скарги на відгуки необхідно авторизуватися.",
+        "confirmBlock": "Ви дійсно хочете заблокувати цього користувача? Вони не зможуть залишати подальші відгуки на ваш профіль. Ви можете розблокувати користувачів в налаштуваннях плагіну.",
+        "block": "Заблокувати",
+        "mustBeLoggedInBlock": "Для блокування користувачів на відгуки необхідно авторизуватися.",
+        "system": "Системне",
+        "blockedUser": "Ви заблокували цього користувача",
+        "readMore": "Читати далі",
+        "unblockUser": "Розблокувати користувача",
+        "failedToFetchBlocks": "Не вдалося завантажити заблокованих користувачів: {error}",
+        "noBlockedUsers": "Немає заблокованих користувачів.",
+        "blockedUsers": "Заблоковані користувачі",
+        "notLoggedIn": "Ви не авторизовані в ReviewDB!"
     },
     "translate": {
         "autoTranslateEnabled": {
-            "title": "Equicord Auto-Translate Enabled",
-            "body": "You just enabled Auto Translate! Any message <0>will automatically be translated</0> before being sent."
+            "title": "Автопереклад Equicord Увімкнено",
+            "body": "Ви щойно увімкнули Автопереклад! Ваші повідомлення <0>автоматично перекладатимуться</0> перед відправленням."
         },
-        "disableAutoTranslate": "Disable Auto-Translate",
-        "gotIt": "Got it",
-        "dontShowAgain": "Don't show again",
-        "openTranslateModal": "Open Translate Modal",
-        "autoTranslateEnabledLabel": "Auto Translate Enabled",
-        "translate": "Translate",
-        "selectLanguage": "Select a language",
-        "autoTranslate": "Auto Translate",
-        "modalTitle": "Translate"
+        "disableAutoTranslate": "Вимкнути Автопереклад",
+        "gotIt": "Зрозуміло",
+        "dontShowAgain": "Не показувати знову",
+        "openTranslateModal": "Відкрити Вікно Перекладу",
+        "autoTranslateEnabledLabel": "Автопереклад увімкнено",
+        "translate": "Перекласти",
+        "selectLanguage": "Обрати мову",
+        "autoTranslate": "Автопереклад",
+        "modalTitle": "Переклад"
     },
     "voiceMessages": {
-        "send": "Send Voice Message",
+        "send": "Надіслати голосове повідомлення",
         "missingPermissions": "(Missing Permissions)",
         "recordModal": "Record Voice Message",
         "uploadFile": "Upload File",
