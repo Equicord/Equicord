@@ -1,37 +1,37 @@
 {
     "commands": {
-        "errorExecuting": "An Error occurred while executing command \"{name}\""
+        "errorExecuting": "Nastala chyba při provádění příkazu \"{name}\""
     },
     "notifications": {
-        "dismissNotification": "Dismiss Notification",
-        "noNotifications": "No notifications yet",
-        "notificationLog": "Notification Log",
-        "notificationSettings": "Notification Settings",
+        "dismissNotification": "Odmítnout oznámení",
+        "noNotifications": "Zatím žádná oznámení",
+        "notificationLog": "Záznam oznámení",
+        "notificationSettings": "Nastavení oznámení",
         "logs": {
-            "title": "Are you sure?",
-            "body_zero": "No notification selected.",
-            "body_one": "This will permanently remove {count} notification. This action cannot be undone.",
-            "body_other": "This will permanently remove {count} notifications. This action cannot be undone.",
-            "confirm": "Do it!",
-            "cancel": "Nevermind",
-            "clearNotificationLog": "Clear Notification Log"
+            "title": "Jste si jistý?",
+            "body_zero": "Nebylo vybráno žádné oznámení.",
+            "body_one": "Toto trvale odstraní {count} oznámení. Tuto akci nelze vrátit zpět.",
+            "body_other": "Toto trvale odstraní {count} oznámení. Tuto akci nelze vrátit zpět.",
+            "confirm": "Udělejte to!",
+            "cancel": "Nevadí",
+            "clearNotificationLog": "Vyčistit protokol oznámení"
         },
         "missedNotifications": {
-            "title": "While you were away",
-            "body_one": "{count} notification received",
-            "body_other": "{count} notifications received"
+            "title": "Když jste byli pryč",
+            "body_one": "Přijato {count} oznámení",
+            "body_other": "Přijata {count} oznámení"
         }
     },
     "memberListDecorators": {
-        "fallback": "Failed to render {key} Member List Decorator"
+        "fallback": "Nepodařilo se vykreslit {key} dekoraci seznamu členů"
     },
     "messageAccessories": {
-        "fallback": "Failed to render {key} Message Accessory"
+        "fallback": "Nepodařilo se zobrazit {key} příslušenství zpráv"
     },
     "messageDecorations": {
-        "fallback": "Failed to render {key} Message Decoration"
+        "fallback": "Nepodařilo se zobrazit dekoraci {key} zpráv"
     },
     "notices": {
-        "fallback": "Error Showing Notice"
+        "fallback": "Chyba při zobrazování oznámení"
     }
 }
