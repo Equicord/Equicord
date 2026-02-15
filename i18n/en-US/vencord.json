@@ -943,7 +943,7 @@
         "settings": {
             "originalImagesInChat": "Also load the original image in Chat. WARNING: Read the caveats above"
         },
-        "defaultBehavior": "The default behaviour is the following:",
+        "defaultBehavior": "The default behavior is the following:",
         "inChatOptimised": "In chat, optimised but full resolution images will be loaded.",
         "inModalOriginal": "In the image modal, the original image will be loaded.",
         "enableOriginalCaveats": "You can also enable original image in chat, but beware of the following caveats:",
