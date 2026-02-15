@@ -5,11 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "BypassPinPrompt",
-    description: "Bypass the pin prompt when using the pin functions",
+    description: t("bypassPinPrompt.description"),
     authors: [Devs.thororen],
     patches: [
         ...[

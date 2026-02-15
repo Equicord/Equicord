@@ -12,6 +12,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { getCurrentChannel } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Channel, Guild, User } from "@vencord/discord-types";
 import {
@@ -129,7 +130,7 @@ const ChannelContextPatch: NavContextMenuPatchCallback = (children, args: { chan
 export default definePlugin({
     name: "SidebarChat",
     authors: [Devs.Joona],
-    description: "Open a another channel or a DM as a sidebar or as a popout",
+    description: t("sidebarChat.description"),
     patches: [
         {
             find: 'case"pendingFriends":',

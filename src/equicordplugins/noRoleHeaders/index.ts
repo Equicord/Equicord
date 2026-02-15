@@ -5,11 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoRoleHeaders",
-    description: "We are all equal!! Removes the role headers in the member list.",
+    description: t("noRoleHeaders.description"),
     authors: [Devs.Samwich],
     patches: [
         {

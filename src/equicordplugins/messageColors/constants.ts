@@ -5,6 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { t } from "@utils/translation";
 import { OptionType } from "@utils/types";
 
 export const enum RenderType {
@@ -22,26 +23,26 @@ export const enum BlockDisplayType {
 export const settings = definePluginSettings({
     renderType: {
         type: OptionType.SELECT,
-        description: "How to render colors",
+        description: t("messageColors.settings.renderType"),
         options: [
             {
-                label: "Text color",
+                label: t("messageColors.settings.renderTypeOptions.textColor"),
                 value: RenderType.FOREGROUND,
                 default: true,
             },
             {
-                label: "Block nearby",
+                label: t("messageColors.settings.renderTypeOptions.blockNearby"),
                 value: RenderType.BLOCK,
             },
             {
-                label: "Background color",
+                label: t("messageColors.settings.renderTypeOptions.backgroundColor"),
                 value: RenderType.BACKGROUND
             },
         ]
     },
     enableShortHexCodes: {
         type: OptionType.BOOLEAN,
-        description: "Enable 3 char hex-code like #39f",
+        description: t("messageColors.settings.enableShortHexCodes"),
         default: true,
         // Regex are created on the start, so without restart nothing would change
         restartNeeded: true
@@ -49,19 +50,19 @@ export const settings = definePluginSettings({
     blockView: {
         type: OptionType.SELECT,
         disabled: () => settings.store.renderType !== RenderType.BLOCK,
-        description: "Where to display colored block",
+        description: t("messageColors.settings.blockView"),
         options: [
             {
-                label: "Right side",
+                label: t("messageColors.settings.blockViewOptions.rightSide"),
                 value: BlockDisplayType.RIGHT,
                 default: true
             },
             {
-                label: "Left side",
+                label: t("messageColors.settings.blockViewOptions.leftSide"),
                 value: BlockDisplayType.LEFT
             },
             {
-                label: "Both sides",
+                label: t("messageColors.settings.blockViewOptions.bothSides"),
                 value: BlockDisplayType.BOTH
             }
         ]

@@ -8,6 +8,7 @@ import { MessageSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { getCurrentChannel, sendMessage } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, ComponentDispatch, PermissionsBits, UserStore } from "@webpack/common";
 
@@ -115,7 +116,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SplitLargeMessages",
-    description: "Splits large messages into multiple to fit Discord's message limit.",
+    description: t("splitLargeMessages.description"),
     authors: [EquicordDevs.Reycko],
     settings,
     onBeforeMessageSend: listener,

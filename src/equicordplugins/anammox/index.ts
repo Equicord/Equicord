@@ -6,50 +6,51 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 export const settings = definePluginSettings({
     dms: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Remove shops above DMs list",
+        description: t("anammox.settings.dms"),
         restartNeeded: true,
     },
     quests: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Remove quests above DMs list",
+        description: t("anammox.settings.quests"),
         restartNeeded: true,
     },
     serverBoost: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Remove server boost info above channel list",
+        description: t("anammox.settings.serverBoost"),
         restartNeeded: true,
     },
     billing: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Remove billing settings",
+        description: t("anammox.settings.billing"),
         restartNeeded: true,
     },
     gift: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Remove gift button",
+        description: t("anammox.settings.gift"),
         restartNeeded: true,
     },
     emojiList: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Remove unavailable categories from the emoji picker",
+        description: t("anammox.settings.emojiList"),
         restartNeeded: true,
     },
 });
 
 export default definePlugin({
     name: "Anammox",
-    description: "Hides various features related to nitro and the store",
+    description: t("anammox.description"),
     authors: [Devs.Kyuuhachi],
     settings,
 

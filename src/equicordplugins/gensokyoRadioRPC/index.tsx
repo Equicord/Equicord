@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, PluginNative, ReporterTestable } from "@utils/types";
 import { Activity } from "@vencord/discord-types";
 import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
@@ -31,7 +32,7 @@ function getImageAsset(data: string) {
 const settings = definePluginSettings({
     refreshInterval: {
         type: OptionType.SLIDER,
-        description: "The interval between activity refreshes (seconds)",
+        description: t("gensokyoRadioRPC.settings.refreshInterval"),
         markers: [1, 2, 2.5, 3, 5, 10, 15],
         default: 15,
         restartNeeded: true,
@@ -42,14 +43,14 @@ let updateInterval: NodeJS.Timeout | undefined;
 
 export default definePlugin({
     name: "GensokyoRadioRPC",
-    description: "Discord rich presence for Gensokyo Radio!",
+    description: t("gensokyoRadioRPC.description"),
     authors: [Devs.RyanCaoDev, EquicordDevs.Prince527],
     reporterTestable: ReporterTestable.None,
 
     settingsAboutComponent() {
         return (
             <Paragraph>
-                Discord rich presence for Gensokyo Radio!
+                {t("gensokyoRadioRPC.info")}
             </Paragraph>
         );
     },

@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Notice } from "@components/Notice";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { ChannelStore, UserStore } from "@webpack/common";
@@ -38,7 +39,7 @@ function getCachedUsers(): User[] {
 export default definePlugin({
     name: "UniversalMention",
     authors: [EquicordDevs.justjxke],
-    description: "Mention any user, regardless of channel access.",
+    description: t("universalMention.description"),
     settings,
     settingsAboutComponent: () => (
         <Notice.Warning>

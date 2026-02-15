@@ -5,38 +5,39 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { t } from "@utils/translation";
 import { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 
 export const settings = definePluginSettings({
     memberList: {
         type: OptionType.BOOLEAN,
-        description: "Show activity icons in the member list",
+        description: t("betterActivities.settings.memberList"),
         default: true,
         restartNeeded: true,
     },
     iconSize: {
         type: OptionType.SLIDER,
-        description: "Size of the activity icons",
+        description: t("betterActivities.settings.iconSize"),
         markers: [10, 15, 20],
         default: 15,
         stickToMarkers: false,
     },
     specialFirst: {
         type: OptionType.BOOLEAN,
-        description: "Show special activities first (Currently Spotify and Twitch)",
+        description: t("betterActivities.settings.specialFirst"),
         default: true,
         restartNeeded: false,
     },
     renderGifs: {
         type: OptionType.BOOLEAN,
-        description: "Allow rendering GIFs",
+        description: t("betterActivities.settings.renderGifs"),
         default: true,
         restartNeeded: false,
     },
     removeGameActivityStatus: {
         type: OptionType.BOOLEAN,
-        description: "Remove game activity icon and status",
+        description: t("betterActivities.settings.removeGameActivityStatus"),
         default: false,
         restartNeeded: true,
     },
@@ -55,26 +56,26 @@ export const settings = definePluginSettings({
     },
     userPopout: {
         type: OptionType.BOOLEAN,
-        description: "Show all activities in the profile popout/sidebar",
+        description: t("betterActivities.settings.userPopout"),
         default: true,
         restartNeeded: true,
     },
     hideTooltip: {
         type: OptionType.BOOLEAN,
-        description: "Hides activities in various places",
+        description: t("betterActivities.settings.hideTooltip"),
         default: true,
     },
     allActivitiesStyle: {
         type: OptionType.SELECT,
-        description: "Style for showing all activities",
+        description: t("betterActivities.settings.allActivitiesStyle"),
         options: [
             {
                 default: true,
-                label: "Carousel",
+                label: t("betterActivities.options.carousel"),
                 value: "carousel",
             },
             {
-                label: "List",
+                label: t("betterActivities.options.list"),
                 value: "list",
             },
         ]

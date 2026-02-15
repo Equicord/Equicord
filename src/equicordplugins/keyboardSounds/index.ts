@@ -7,6 +7,7 @@
 import { AudioPlayerInterface, createAudioPlayer } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 import { ignoredKeys, packs } from "./packs";
@@ -105,7 +106,7 @@ function assignSounds(volume: number, pack: "operagx" | "osu") {
 
 const settings = definePluginSettings({
     volume: {
-        description: "Volume of the keyboard sounds.",
+        description: t("keyboardSounds.settings.volume"),
         type: OptionType.SLIDER,
         markers: [0, 25, 50, 75, 100],
         stickToMarkers: false,
@@ -113,11 +114,11 @@ const settings = definePluginSettings({
         onChange: value => { assignSounds(value, settings.store.soundPack); }
     },
     soundPack: {
-        description: "Sound pack to use.",
+        description: t("keyboardSounds.settings.soundPack"),
         type: OptionType.SELECT,
         options: [
-            { label: "OperaGX", value: "operagx" as "operagx", default: true },
-            { label: "osu!", value: "osu" as "osu" }
+            { label: t("keyboardSounds.options.operaGx"), value: "operagx" as "operagx", default: true },
+            { label: t("keyboardSounds.options.osu"), value: "osu" as "osu" }
         ],
         onChange: value => { assignSounds(settings.store.volume, value); }
     }
@@ -125,7 +126,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "KeyboardSounds",
-    description: "Adds OperaGX or osu! sound effects when typing on your keyboard.",
+    description: t("keyboardSounds.description"),
     authors: [Devs.HypedDomi, EquicordDevs.Etorix],
     dependencies: ["AudioPlayerAPI"],
     settings,

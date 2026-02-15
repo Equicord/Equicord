@@ -8,6 +8,7 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Notice } from "@components/Notice";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User, VoiceState } from "@vencord/discord-types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
@@ -34,12 +35,12 @@ const settings = definePluginSettings({
     onlyWhenInVoice: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Only follow the user when you are in a voice channel"
+        description: t("followVoiceUser.settings.onlyWhenInVoice")
     },
     leaveWhenUserLeaves: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Leave the voice channel when the user leaves. (That can cause you to sometimes enter infinite leave/join loop)"
+        description: t("followVoiceUser.settings.leaveWhenUserLeaves")
     }
 });
 
@@ -52,7 +53,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { channel, 
         <Menu.MenuSeparator />,
         <Menu.MenuCheckboxItem
             id="fvu-follow-user"
-            label="Follow User"
+            label={t("followVoiceUser.ui.followUser")}
             checked={checked}
             action={() => {
                 if (followedUserInfo?.userId === user.id) {
@@ -73,12 +74,12 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { channel, 
 
 export default definePlugin({
     name: "FollowVoiceUser",
-    description: "Follow a friend in voice chat.",
+    description: t("followVoiceUser.description"),
     authors: [EquicordDevs.TheArmagan],
     settings,
     settingsAboutComponent: () => (
         <Notice.Info>
-            This Plugin is used to follow a Friend/Friends into voice chat(s).
+            {t("followVoiceUser.info")}
         </Notice.Info>
     ),
     flux: {

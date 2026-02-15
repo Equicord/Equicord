@@ -6,12 +6,13 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
     inviteDuration: {
         type: OptionType.SELECT,
-        description: "Invite Duration",
+        description: t("inviteDefaults.settings.inviteDuration"),
         options: [
             { label: "30 minutes", value: 1800 },
             { label: "1 hour", value: 3600 },
@@ -19,14 +20,14 @@ const settings = definePluginSettings({
             { label: "12 hours", value: 43200 },
             { label: "1 day", value: 86400 },
             { label: "7 days", value: 604800 },
-            { label: "Forever", value: 0, default: true },
+            { label: t("inviteDefaults.options.forever"), value: 0, default: true },
         ],
     },
     maxUses: {
         type: OptionType.SELECT,
-        description: "Invite Use Count",
+        description: t("inviteDefaults.settings.maxUses"),
         options: [
-            { label: "Infinite", value: 0, default: true },
+            { label: t("inviteDefaults.options.infinite"), value: 0, default: true },
             { label: "1", value: 1 },
             { label: "5", value: 5 },
             { label: "10", value: 10 },
@@ -38,13 +39,13 @@ const settings = definePluginSettings({
     temporaryMembership: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Temporary Membership",
+        description: t("inviteDefaults.settings.temporaryMembership"),
     },
 });
 
 export default definePlugin({
     name: "InviteDefaults",
-    description: "Allows you to edit the default values when creating server invites.",
+    description: t("inviteDefaults.description"),
     authors: [EquicordDevs.VillainsRule],
     settings,
     patches: [

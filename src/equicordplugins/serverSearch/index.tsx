@@ -9,6 +9,7 @@ import "./styles.css";
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
 import { Tooltip } from "webpack/common/components";
@@ -28,7 +29,7 @@ function SearchIcon() {
 export default definePlugin({
     name: "ServerSearch",
     authors: [EquicordDevs.camila314],
-    description: "Navigate your servers better with a quick search button",
+    description: t("serverSearch.description"),
 
     renderButton() {
         return <ErrorBoundary noop>

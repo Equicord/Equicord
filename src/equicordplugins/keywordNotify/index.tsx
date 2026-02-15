@@ -18,6 +18,7 @@ import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByCodeLazy, findCssClassesLazy } from "@webpack";
@@ -162,8 +163,8 @@ function ListTypeSelector({ listType, setListType }: { listType: ListType, setLi
     return (
         <Select
             options={[
-                { label: "Whitelist", value: ListType.Whitelist },
-                { label: "Blacklist", value: ListType.BlackList }
+                { label: t("keywordNotify.options.whitelist"), value: ListType.Whitelist },
+                { label: t("keywordNotify.options.blacklist"), value: ListType.BlackList }
             ]}
             placeholder={"Select a list type"}
             isSelected={v => v === listType}
@@ -205,7 +206,7 @@ function KeywordEntries() {
     const elements = keywordEntries.map((entry, i) => {
         return (
             <>
-                <Collapsible title={`Keyword Entry ${i + 1}`}>
+                <Collapsible title={t("keywordNotify.ui.keywordEntry", { index: i + 1 })}>
                     <Flex flexDirection="row">
                         <div style={{ flexGrow: 1 }}>
                             <TextInput
@@ -224,14 +225,14 @@ function KeywordEntries() {
                         </Button>
                     </Flex>
                     <FormSwitch
-                        title="Ignore Case"
+                        title={t("keywordNotify.ui.ignoreCase")}
                         className={cl("ignoreCaseSwitch")}
                         value={values[i].ignoreCase}
                         onChange={() => {
                             setIgnoreCase(i, !values[i].ignoreCase);
                         }}
                     />
-                    <Heading tag="h5">Whitelist/Blacklist</Heading>
+                    <Heading tag="h5">{t("keywordNotify.ui.whitelistBlacklist")}</Heading>
                     <Flex flexDirection="row">
                         <div style={{ flexGrow: 1 }}>
                             <ListedIds listIds={values[i].listIds} setListIds={e => setListIds(i, e)} />
@@ -242,7 +243,7 @@ function KeywordEntries() {
                         <Button onClick={() => {
                             values[i].listIds.push("");
                             update();
-                        }}>Add ID</Button>
+                        }}>{t("keywordNotify.ui.addId")}</Button>
                         <div style={{ flexGrow: 1 }}>
                             <ListTypeSelector listType={values[i].listType} setListType={e => setListType(i, e)} />
                         </div>
@@ -255,7 +256,7 @@ function KeywordEntries() {
     return (
         <>
             {elements}
-            <div><Button onClick={() => addKeywordEntry(update)}>Add Keyword Entry</Button></div>
+            <div><Button onClick={() => addKeywordEntry(update)}>{t("keywordNotify.ui.addKeywordEntry")}</Button></div>
         </>
     );
 }
@@ -299,17 +300,17 @@ function DoubleCheckmarkIcon(props: IconProps) {
 const settings = definePluginSettings({
     ignoreBots: {
         type: OptionType.BOOLEAN,
-        description: "Ignore messages from bots",
+        description: t("keywordNotify.settings.ignoreBots"),
         default: true
     },
     amountToKeep: {
         type: OptionType.NUMBER,
-        description: "Amount of messages to keep in the log",
+        description: t("keywordNotify.settings.amountToKeep"),
         default: 50
     },
     keywords: {
         type: OptionType.COMPONENT,
-        description: "Manage keywords",
+        description: t("keywordNotify.settings.keywords"),
         component: () => <KeywordEntries />
     }
 });
@@ -317,7 +318,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "KeywordNotify",
     authors: [EquicordDevs.camila314, EquicordDevs.x3rt],
-    description: "Sends a notification if a given message matches certain keywords or regexes",
+    description: t("keywordNotify.description"),
     settings,
     patches: [
         {
@@ -497,14 +498,14 @@ export default definePlugin({
     keywordTabBar() {
         return (
             <TabBar.Item className={classes(tabClass.tab)} id={8}>
-                Keywords
+                {t("keywordNotify.ui.keywords")}
             </TabBar.Item>
         );
     },
 
     keywordClearButton() {
         return (
-            <Tooltip text="Clear All">
+            <Tooltip text={t("keywordNotify.ui.clearAll")}>
                 {({ onMouseLeave, onMouseEnter }) => (
                     <Button
                         variant="secondary"

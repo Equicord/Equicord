@@ -5,11 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "DisableCameras",
-    description: "Disables cameras in a call by default",
+    description: t("disableCameras.description"),
     authors: [Devs.Joona],
     patches: [
         {

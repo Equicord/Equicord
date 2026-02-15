@@ -21,6 +21,7 @@ import "./styles.css";
 import { HeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Popout, useRef, useState } from "@webpack/common";
 
@@ -30,7 +31,7 @@ export const settings = definePluginSettings({
     showPluginMenu: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Show the plugins menu in the toolbox",
+        description: t("equicordToolbox.settings.showPluginMenu"),
     }
 });
 
@@ -64,7 +65,7 @@ function VencordPopoutButton() {
                     ref={buttonRef}
                     className="vc-toolbox-btn"
                     onClick={() => setShow(v => !v)}
-                    tooltip={isShown ? null : "Equicord Toolbox"}
+                    tooltip={isShown ? null : t("equicordToolbox.ui.tooltip")}
                     icon={Icon}
                     selected={isShown}
                 />
@@ -76,7 +77,7 @@ function VencordPopoutButton() {
 migratePluginSettings("EquicordToolbox", "VencordToolbox");
 export default definePlugin({
     name: "EquicordToolbox",
-    description: "Adds a button next to the inbox button in the channel header that houses Equicord quick actions",
+    description: t("equicordToolbox.description"),
     authors: [Devs.Ven, Devs.AutumnVN],
     dependencies: ["HeaderBarAPI"],
 

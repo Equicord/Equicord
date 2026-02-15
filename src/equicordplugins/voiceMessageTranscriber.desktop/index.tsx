@@ -18,6 +18,7 @@ import { ManaBaseRadioGroupProps } from "@equicordplugins/components.dev/types";
 import { copyToClipboard } from "@utils/clipboard";
 import { Devs } from "@utils/constants";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { lodash, ScrollerAuto, SearchableSelect, useEffect, useRef, useState } from "@webpack/common";
@@ -313,7 +314,7 @@ function TranscriptionModal(props: { modalProps: ModalProps, src: string, option
 export default definePlugin({
     name: "VoiceMessageTranscriber",
     authors: [Devs.TheSun],
-    description: "On-device transcriptions for voice messages powered by Whisper v3",
+    description: t("voiceMessageTranscriber.description"),
     patches: [
         {
             find: ".VOICE_MESSAGE)),",

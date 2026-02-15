@@ -9,6 +9,7 @@ import { HeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { ModalProps, ModalRoot, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 let boopSound: AudioPlayerInterface;
@@ -136,7 +137,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Soggy",
-    description: "Adds a soggy button to the toolbox",
+    description: t("soggy.description"),
     authors: [EquicordDevs.sliwka],
     settings,
     dependencies: ["AudioPlayerAPI"],

@@ -10,6 +10,7 @@ import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Activity, ActivityAssets, ActivityButton } from "@vencord/discord-types";
 import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
@@ -58,100 +59,96 @@ function setActivity(activity: Activity | null) {
 
 const settings = definePluginSettings({
     username: {
-        description: "ListenBrainz username",
+        description: t("listenBrainzRPC.settings.username"),
         type: OptionType.STRING,
     },
     mbContact: {
-        description: "ListenBrainz contact",
+        description: t("listenBrainzRPC.settings.mbContact"),
         type: OptionType.STRING,
     },
     shareUsername: {
-        description:
-            "show link to ListenBrainz profile (may only be visible to other users)",
+        description: t("listenBrainzRPC.settings.shareUsername"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     shareSong: {
-        description:
-            "show link to song on ListenBrainz (may only be visible to other users)",
+        description: t("listenBrainzRPC.settings.shareSong"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     hideWithSpotify: {
-        description: "hide ListenBrainz presence if Spotify is running",
+        description: t("listenBrainzRPC.settings.hideWithSpotify"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     hideWithActivity: {
-        description: "hide ListenBrainz presence if you have any other presence",
+        description: t("listenBrainzRPC.settings.hideWithActivity"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     useTimeBar: {
-        description:
-            "use track duration to display a time bar (must be using Listening status)",
+        description: t("listenBrainzRPC.settings.useTimeBar"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     statusName: {
-        description: "custom status text",
+        description: t("listenBrainzRPC.settings.statusName"),
         type: OptionType.STRING,
-        default: "some music",
+        default: t("listenBrainzRPC.defaults.statusName"),
     },
     nameFormat: {
-        description: "Show name of song and artist in status name",
+        description: t("listenBrainzRPC.settings.nameFormat"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Use custom status name",
+                label: t("listenBrainzRPC.nameFormatOptions.customStatus"),
                 value: NameFormat.StatusName,
                 default: true,
             },
             {
-                label: "Use format 'artist - song'",
+                label: t("listenBrainzRPC.nameFormatOptions.artistFirst"),
                 value: NameFormat.ArtistFirst,
             },
             {
-                label: "Use format 'song - artist'",
+                label: t("listenBrainzRPC.nameFormatOptions.songFirst"),
                 value: NameFormat.SongFirst,
             },
             {
-                label: "Use artist name only",
+                label: t("listenBrainzRPC.nameFormatOptions.artistOnly"),
                 value: NameFormat.ArtistOnly,
             },
             {
-                label: "Use song name only",
+                label: t("listenBrainzRPC.nameFormatOptions.songOnly"),
                 value: NameFormat.SongOnly,
             },
             {
-                label:
-                    "Use album name (falls back to custom status text if song has no album)",
+                label: t("listenBrainzRPC.nameFormatOptions.albumName"),
                 value: NameFormat.AlbumName,
             },
         ],
     },
     useListeningStatus: {
-        description: 'show "Listening to" status instead of "Playing"',
+        description: t("listenBrainzRPC.settings.useListeningStatus"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     missingArt: {
-        description: "When album or album art is missing",
+        description: t("listenBrainzRPC.settings.missingArt"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Use large ListenBrainz logo",
+                label: t("listenBrainzRPC.missingArtOptions.listenbrainzLogo"),
                 value: "listenbrainzLogo",
                 default: true,
             },
             {
-                label: "Use generic placeholder",
+                label: t("listenBrainzRPC.missingArtOptions.placeholder"),
                 value: "placeholder",
             },
         ],
     },
     useLogo: {
-        description: "Show ListenBrainz logo on album art",
+        description: t("listenBrainzRPC.settings.useLogo"),
         type: OptionType.BOOLEAN,
         default: true,
     },
@@ -162,17 +159,17 @@ var currentStart = 0;
 
 export default definePlugin({
     name: "ListenBrainzRPC",
-    description: "Little plugin for ListenBrainz rich presence",
+    description: t("listenBrainzRPC.description"),
     authors: [EquicordDevs.qouesm],
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>About MusicBrainz API</HeadingSecondary>
+            <HeadingSecondary>{t("listenBrainzRPC.about.title")}</HeadingSecondary>
             <Paragraph>
-                The MusicBrainz API does not require an API key, but it does require a{" "}
+                {t("listenBrainzRPC.about.description")}
                 <Link href="https://musicbrainz.org/doc/MusicBrainz_API/Rate_Limiting#Provide_meaningful_User-Agent_strings">
                     {" "}
-                    meaningful user-agent string
+                    {t("listenBrainzRPC.about.description").split("meaningful user-agent string")[1]?.trim() || ""}
                 </Link>{" "}
                 . For most, an email address should suffice.
             </Paragraph>
@@ -316,13 +313,13 @@ export default definePlugin({
 
         if (settings.store.shareUsername)
             buttons.push({
-                label: "ListenBrainz Profile",
+                label: t("listenBrainzRPC.buttons.profile"),
                 url: `https://www.listenbrainz.org/user/${settings.store.username}`,
             });
 
         if (settings.store.shareSong)
             buttons.push({
-                label: "View Song",
+                label: t("listenBrainzRPC.buttons.viewSong"),
                 url: trackData.url,
             });
 

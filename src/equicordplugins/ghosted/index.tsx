@@ -13,6 +13,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { closeModal, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { Menu, Tooltip, useEffect, useState } from "@webpack/common";
@@ -26,30 +27,30 @@ export const cl = classNameFactory("vc-boo-");
 export const settings = definePluginSettings({
     showIndicator: {
         type: OptionType.BOOLEAN,
-        description: "Show the ghost counter at the top of the server list",
+        description: t("ghosted.settings.showIndicator"),
         default: true,
         restartNeeded: false
     },
     showDmIcons: {
         type: OptionType.BOOLEAN,
-        description: "Show ghost icons next to individual DMs",
+        description: t("ghosted.settings.showDmIcons"),
         default: true,
         restartNeeded: false
     },
     ignoreGroupDms: {
         type: OptionType.BOOLEAN,
-        description: "Exclude all group dms from ghosting",
+        description: t("ghosted.settings.ignoreGroupDms"),
         default: false
     },
     exemptedChannels: {
         type: OptionType.STRING,
-        description: "Comma-separated list of channel IDs to exempt from ghosting (right-click a DM channel to copy its ID)",
+        description: t("ghosted.settings.exemptedChannels"),
         default: "",
         restartNeeded: false
     },
     ignoreBots: {
         type: OptionType.BOOLEAN,
-        description: "Ignore DMs from bots",
+        description: t("ghosted.settings.ignoreBots"),
         default: true,
         restartNeeded: false
     }
@@ -88,14 +89,14 @@ function BooIndicator() {
     const getTooltipText = () => {
         const ghostedChannels = getGhostedChannels();
         if (ghostedChannels.length === 0) {
-            return "No Ghosted Users";
+            return t("ghosted.ui.noGhostedUsers");
         }
         if (ghostedChannels.length <= 5) {
             return ghostedChannels
                 .map(id => getChannelDisplayName(id))
                 .join(", ");
         }
-        return `${ghostedChannels.length} Ghosted Users`;
+        return t("ghosted.ui.ghostedUsers", { count: ghostedChannels.length });
     };
 
     return (
@@ -125,7 +126,7 @@ function makeContextItem(props) {
     return <Menu.MenuItem
         id="ec-ghosted-clear"
         key="ec-ghosted-clear"
-        label="unghost"
+        label={t("ghosted.ui.unghost")}
         action={() => {
             clearChannelFromGhost(props.channel.id);
         }}
@@ -134,7 +135,7 @@ function makeContextItem(props) {
 
 export default definePlugin({
     name: "Ghosted",
-    description: "A cute ghost will appear if you don't answer their DMs",
+    description: t("ghosted.description"),
     authors: [EquicordDevs.vei, Devs.sadan, EquicordDevs.justjxke, EquicordDevs.iamme],
     settings,
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],

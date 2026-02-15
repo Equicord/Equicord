@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { humanFriendlyJoin } from "@utils/text";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
@@ -103,7 +104,7 @@ let clientOldChannelId: string | undefined;
 
 export default definePlugin({
     name: "VoiceJoinMessages",
-    description: "Recieve client-side ephemeral messages when your friends join voice channels",
+    description: t("voiceJoinMessages.description"),
     authors: [Devs.Sqaaakoi, Devs.thororen],
     settings,
     flux: {

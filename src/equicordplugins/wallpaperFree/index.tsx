@@ -8,6 +8,7 @@ import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { useStateFromStores } from "@webpack/common";
@@ -32,7 +33,7 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "WallpaperFree",
     authors: [Devs.Joona],
-    description: "Recreation of the old DM wallpaper experiment; Set a background image for any channel, user or server.",
+    description: t("wallpaperFree.description"),
     patches: [
         {
             find: ".handleSendMessage,onResize",

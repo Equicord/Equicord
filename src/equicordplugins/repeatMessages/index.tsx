@@ -10,6 +10,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { sendMessage } from "@utils/discord";
 import { useForceUpdater } from "@utils/react";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { ChannelStore, Menu, useEffect } from "@webpack/common";
@@ -131,7 +132,7 @@ const keydownListener = (event: KeyboardEvent) => {
 migratePluginSettings("RepeatMessages", "RepeatMessage");
 export default definePlugin({
     name: "RepeatMessages",
-    description: "Allows you to repeat messages quickly. If you hold shift while clicking the Repeat option, it will reply to the message.",
+    description: t("repeatMessages.description"),
     authors: [EquicordDevs.Tolgchu, Devs.thororen],
     contextMenus: {
         "message": messageCtxPatch

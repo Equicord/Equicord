@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/index";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const MIDDLE_CLICK = 1;
@@ -15,28 +16,28 @@ let lastMiddleClickUp = 0;
 const settings = definePluginSettings({
     scope: {
         type: OptionType.SELECT,
-        description: "Situations in which to prevent middle click from pasting.",
+        description: t("limitMiddleClickPaste.settings.scope"),
         options: [
             {
-                label: "Always Prevent Middle Click Pasting",
+                label: t("limitMiddleClickPaste.options.alwaysPrevent"),
                 value: "always",
                 default: true
             },
             {
-                label: "Only Prevent When Text Area Not Focused",
+                label: t("limitMiddleClickPaste.options.onlyWhenNotFocused"),
                 value: "focus"
             },
         ]
     },
     threshold: {
         type: OptionType.NUMBER,
-        description: "Milliseconds until pasting is enabled again after a middle click.",
+        description: t("limitMiddleClickPaste.settings.threshold"),
         default: 100,
         onChange(newValue) { if (newValue < 1) { settings.store.threshold = 1; } },
     },
     preventLinkOpen: {
         type: OptionType.BOOLEAN,
-        description: "Prevent middle-click on links from opening new tabs while preserving autoscroll.",
+        description: t("limitMiddleClickPaste.settings.preventLinkOpen"),
         default: false,
         onChange(newValue) {
             if (newValue) {
@@ -69,7 +70,7 @@ function handleAuxClick(e: MouseEvent) {
 
 export default definePlugin({
     name: "LimitMiddleClickPaste",
-    description: "Prevent middle click pasting either always or just when a text area is not focused.",
+    description: t("limitMiddleClickPaste.description"),
     authors: [EquicordDevs.Etorix, EquicordDevs.korzi],
     settings,
 

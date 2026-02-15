@@ -6,20 +6,21 @@
 
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { ChannelStore, GuildMemberStore, SelectedChannelStore, SelectedGuildStore } from "@webpack/common";
 
 export default definePlugin({
     name: "AtSomeone",
     authors: [Devs.Joona],
-    description: "Mention someone randomly",
+    description: t("atSomeone.description"),
     patches: [
         {
             find: ".LAUNCHABLE_APPLICATIONS;",
             replacement: [
                 {
                     match: /&(\i)\(\)\((\i),\i\(\)\.test\)&&(\i)\.push\(\i\(\)\)/g,
-                    replace: "$&,$1()($2,/someone/.test)&&$3.push({text:'@someone',description:'Mention someone randomly'})"
+                    replace: "$&,$1()($2,/someone/.test)&&$3.push({text:'@someone',description:$self.getSomeoneDescription()})"
                 },
             ],
         },
@@ -31,6 +32,9 @@ export default definePlugin({
             }
         }
     ],
+    getSomeoneDescription() {
+        return t("atSomeone.contextMenu.someone");
+    },
     start() {
         this.preSend = addMessagePreSendListener((_, msg) => {
             msg.content = msg.content.replace(/@someone/g, () => `<@${randomUser()}>`);

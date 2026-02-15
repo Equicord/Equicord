@@ -10,6 +10,7 @@ import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { ApplicationAssetUtils, FluxDispatcher, showToast } from "@webpack/common";
 
@@ -60,86 +61,86 @@ interface MediaData {
 
 const settings = definePluginSettings({
     serverUrl: {
-        description: "Jellyfin server URL (e.g., https://jellyfin.example.com)",
+        description: t("jellyfinRichPresence.settings.serverUrl"),
         type: OptionType.STRING,
     },
     apiKey: {
-        description: "Jellyfin API key obtained from your Jellyfin administration dashboard",
+        description: t("jellyfinRichPresence.settings.apiKey"),
         type: OptionType.STRING,
     },
     userId: {
-        description: "Jellyfin user ID obtained from your user profile URL",
+        description: t("jellyfinRichPresence.settings.userId"),
         type: OptionType.STRING,
     },
     nameDisplay: {
-        description: "Choose how the application name should appear in Rich Presence",
+        description: t("jellyfinRichPresence.settings.nameDisplay"),
         type: OptionType.SELECT,
         options: [
-            { label: "Series/Movie Name", value: "default", default: true },
-            { label: "Series - Episode/Track/Movie Name", value: "full" },
-            { label: "Custom", value: "custom" },
+            { label: t("jellyfinRichPresence.nameFormatOptions.seriesMovieName"), value: "default", default: true },
+            { label: t("jellyfinRichPresence.nameFormatOptions.seriesEpisodeName"), value: "full" },
+            { label: t("jellyfinRichPresence.nameFormatOptions.custom"), value: "custom" },
         ],
     },
     customName: {
-        description: "Custom Rich Presence name (only used if 'Custom' is selected).\nOptions: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
+        description: t("jellyfinRichPresence.settings.customName"),
         type: OptionType.STRING,
     },
     coverType: {
-        description: "Choose which cover to display when watching a TV show",
+        description: t("jellyfinRichPresence.settings.coverType"),
         type: OptionType.SELECT,
         options: [
-            { label: "Series Cover", value: "series", default: true },
-            { label: "Episode Cover", value: "episode" },
+            { label: t("jellyfinRichPresence.coverTypeOptions.seriesCover"), value: "series", default: true },
+            { label: t("jellyfinRichPresence.coverTypeOptions.episodeCover"), value: "episode" },
         ],
     },
     episodeFormat: {
-        description: "Episode number format",
+        description: t("jellyfinRichPresence.settings.episodeFormat"),
         type: OptionType.SELECT,
         options: [
-            { label: "S01E01", value: "long", default: true },
-            { label: "1x01", value: "short" },
-            { label: "Season 1 Episode 1", value: "fulltext" },
+            { label: t("jellyfinRichPresence.episodeFormatOptions.s01e01"), value: "long", default: true },
+            { label: t("jellyfinRichPresence.episodeFormatOptions.short"), value: "short" },
+            { label: t("jellyfinRichPresence.episodeFormatOptions.fulltext"), value: "fulltext" },
         ],
     },
     showEpisodeName: {
-        description: "Show episode name after season/episode info",
+        description: t("jellyfinRichPresence.settings.showEpisodeName"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     overrideRichPresenceType: {
-        description: "Override the rich presence type",
+        description: t("jellyfinRichPresence.settings.overrideRichPresenceType"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Off",
+                label: t("jellyfinRichPresence.overrideTypeOptions.off"),
                 value: false,
                 default: true,
             },
             {
-                label: "Listening",
+                label: t("jellyfinRichPresence.overrideTypeOptions.listening"),
                 value: 2,
             },
             {
-                label: "Playing",
+                label: t("jellyfinRichPresence.overrideTypeOptions.playing"),
                 value: 0,
             },
             {
-                label: "Streaming",
+                label: t("jellyfinRichPresence.overrideTypeOptions.streaming"),
                 value: 1,
             },
             {
-                label: "Watching",
+                label: t("jellyfinRichPresence.overrideTypeOptions.watching"),
                 value: 3
             },
         ],
     },
     showPausedState: {
-        description: "Show Rich Presence when media is paused",
+        description: t("jellyfinRichPresence.settings.showPausedState"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     privacyMode: {
-        description: "Privacy Mode (Hide media details like Episode/Song Name)",
+        description: t("jellyfinRichPresence.settings.privacyMode"),
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -165,14 +166,14 @@ function setActivity(activity: Activity | null) {
 
 export default definePlugin({
     name: "JellyfinRichPresence",
-    description: "Rich presence for Jellyfin media server",
+    description: t("jellyfinRichPresence.description"),
     authors: [EquicordDevs.vmohammad, Devs.SerStars, EquicordDevs.ZcraftElite],
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>How to get an API key</HeadingSecondary>
+            <HeadingSecondary>{t("jellyfinRichPresence.howToGetApiKey.title")}</HeadingSecondary>
             <Paragraph>
-                Auth token can be found by following these steps:
+                {t("jellyfinRichPresence.howToGetApiKey.description")}
                 <ol style={{ marginTop: 8, marginBottom: 8, paddingLeft: 20 }}>
                     <li>1. Log into your Jellyfin instance</li>
                     <li>2. Open your browser's Developer Tools (usually F12 or right-click then Inspect)</li>
@@ -187,7 +188,7 @@ export default definePlugin({
                     </li>
                 </ol>
                 <br />
-                You'll also need your User ID, which can be found in the url of your user profile page.
+                {t("jellyfinRichPresence.howToGetApiKey.userIdInfo")}
             </Paragraph>
         </>
     ),
@@ -207,7 +208,7 @@ export default definePlugin({
     async fetchMediaData(): Promise<MediaData | null> {
         if (!settings.store.serverUrl || !settings.store.apiKey || !settings.store.userId) {
             logger.warn("Jellyfin server URL, API key, or user ID is not set in settings.");
-            showToast("JellyfinRPC is not configured.", "failure", {
+            showToast(t("jellyfinRichPresence.toasts.notConfigured"), "failure", {
                 duration: 15000,
             });
             return null;
@@ -302,15 +303,15 @@ export default definePlugin({
             case "full":
                 if (mediaData.type === "Episode" && mediaData.seriesName) {
                     appName = settings.store.privacyMode
-                        ? `${mediaData.seriesName} - [Episode Hidden]`
+                        ? `${mediaData.seriesName} - ${t("jellyfinRichPresence.privacyMode.episodeHidden")}`
                         : `${mediaData.seriesName} - ${mediaData.name}`;
                 } else if (mediaData.type === "Audio") {
                     appName = settings.store.privacyMode
-                        ? "[Track Hidden]"
+                        ? t("jellyfinRichPresence.privacyMode.trackHidden")
                         : `${mediaData.artist || "Unknown Artist"} - ${mediaData.name}`;
                 } else {
                     appName = settings.store.privacyMode
-                        ? "[Movie Hidden]"
+                        ? t("jellyfinRichPresence.privacyMode.movieHidden")
                         : mediaData.name || "Jellyfin";
                 }
                 break;
@@ -318,10 +319,10 @@ export default definePlugin({
                 appName = templateReplace(settings.store.customName || "{name} on Jellyfin");
                 if (settings.store.privacyMode) {
                     appName = appName
-                        .replace(mediaData.name || "", "[Title Hidden]")
-                        .replace(mediaData.seriesName || "", "[Series Hidden]")
-                        .replace(mediaData.artist || "", "[Artist Hidden]")
-                        .replace(mediaData.album || "", "[Album Hidden]");
+                        .replace(mediaData.name || "", t("jellyfinRichPresence.privacyMode.titleHidden"))
+                        .replace(mediaData.seriesName || "", t("jellyfinRichPresence.privacyMode.seriesHidden"))
+                        .replace(mediaData.artist || "", t("jellyfinRichPresence.privacyMode.artistHidden"))
+                        .replace(mediaData.album || "", t("jellyfinRichPresence.privacyMode.albumHidden"));
                 }
                 break;
             case "default":
@@ -330,7 +331,7 @@ export default definePlugin({
                     appName = mediaData.seriesName;
                 } else {
                     appName = settings.store.privacyMode
-                        ? "[Media Hidden]"
+                        ? t("jellyfinRichPresence.privacyMode.mediaHidden")
                         : mediaData.name || "Jellyfin";
                 }
                 break;
@@ -351,14 +352,14 @@ export default definePlugin({
 
         const getDetails = () => {
             if (mediaData.type === "Episode" && mediaData.seriesName) {
-                return settings.store.privacyMode ? "Watching a TV Show" : mediaData.seriesName;
+                return settings.store.privacyMode ? t("jellyfinRichPresence.privacyMode.watchingTvShow") : mediaData.seriesName;
             }
-            return settings.store.privacyMode ? "Watching Something" : mediaData.name;
+            return settings.store.privacyMode ? t("jellyfinRichPresence.privacyMode.watchingSomething") : mediaData.name;
         };
 
         const getState = () => {
             if (mediaData.isPaused) {
-                return "Paused";
+                return t("jellyfinRichPresence.state.paused");
             }
             if (mediaData.type === "Episode" && mediaData.seriesName) {
                 let episodeFormat = "";
@@ -375,13 +376,13 @@ export default definePlugin({
                             episodeFormat = `${season}x${episode.toString().padStart(2, "0")}`;
                             break;
                         case "fulltext":
-                            episodeFormat = `Season ${season} Episode ${episode}`;
+                            episodeFormat = t("jellyfinRichPresence.state.season", { season }) + " " + t("jellyfinRichPresence.state.episode", { episode });
                             break;
                     }
                 } else if (season != null) {
-                    episodeFormat = format === "fulltext" ? `Season ${season}` : `S${season.toString().padStart(2, "0")}`;
+                    episodeFormat = format === "fulltext" ? t("jellyfinRichPresence.state.season", { season }) : `S${season.toString().padStart(2, "0")}`;
                 } else if (episode != null) {
-                    episodeFormat = format === "fulltext" ? `Episode ${episode}` : `E${episode.toString().padStart(2, "0")}`;
+                    episodeFormat = format === "fulltext" ? t("jellyfinRichPresence.state.episode", { episode }) : `E${episode.toString().padStart(2, "0")}`;
                 }
 
                 if (settings.store.showEpisodeName && mediaData.name && !settings.store.privacyMode) {
@@ -390,7 +391,7 @@ export default definePlugin({
                 return episodeFormat;
             }
             if (settings.store.privacyMode) {
-                return mediaData.type === "Audio" ? "Listening to music" : (mediaData.year ? "(????)" : undefined);
+                return mediaData.type === "Audio" ? t("jellyfinRichPresence.privacyMode.listeningToMusic") : (mediaData.year ? "(????)" : undefined);
             }
             return mediaData.artist || (mediaData.year ? `(${mediaData.year})` : undefined);
         };

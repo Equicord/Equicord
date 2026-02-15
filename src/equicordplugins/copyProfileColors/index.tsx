@@ -7,6 +7,7 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { copyToClipboard } from "@utils/clipboard";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Menu, Toasts, UserProfileStore } from "@webpack/common";
 
@@ -34,7 +35,7 @@ function copyProfileColors(userId) {
     if (!colors) {
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: "No profile colors found!",
+            message: t("copyProfileColors.toast.noColorsFound"),
             id: Toasts.genId()
         });
         return;
@@ -49,14 +50,14 @@ function copyProfileColors(userId) {
         copyToClipboard(formattedColors);
         Toasts.show({
             type: Toasts.Type.SUCCESS,
-            message: "Profile colors copied to clipboard!",
+            message: t("copyProfileColors.toast.copied"),
             id: Toasts.genId()
         });
     } catch (e) {
         console.error("Failed to copy to clipboard:", e);
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: "Error copying profile colors!",
+            message: t("copyProfileColors.toast.error"),
             id: Toasts.genId()
         });
     }
@@ -81,7 +82,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }) =
         <Menu.MenuItem
             id="CopyProfileColors"
             icon={ColorIcon}
-            label="Copy Profile Colors"
+            label={t("copyProfileColors.contextMenu.copyProfileColors")}
             action={() => copyProfileColors(user.id)}
         />
     );
@@ -89,7 +90,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }) =
 
 export default definePlugin({
     name: "CopyProfileColors",
-    description: "A plugin to copy people's profile gradient colors to clipboard.",
+    description: t("copyProfileColors.description"),
     authors: [EquicordDevs.Crxa, EquicordDevs.Cortex],
     contextMenus: {
         "user-context": userContextMenuPatch,

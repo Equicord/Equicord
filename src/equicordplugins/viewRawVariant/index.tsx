@@ -22,6 +22,7 @@ import {
     ModalSize,
     openModal,
 } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { Menu } from "@webpack/common";
@@ -128,7 +129,7 @@ function makeContextCallback(
 
 export default definePlugin({
     name: "ViewRawVariant",
-    description: "Copy/View raw content of any message, channel, or guild, but show in the right click menu.",
+    description: t("viewRawVariant.description"),
     authors: [Devs.KingFish, Devs.Ven, Devs.rad, Devs.ImLvna, Devs.Kyuuhachi],
     contextMenus: {
         "guild-context": makeContextCallback("guild", val =>

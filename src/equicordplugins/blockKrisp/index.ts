@@ -5,11 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "BlockKrisp",
-    description: "Prevent Krisp from loading",
+    description: t("blockKrisp.description"),
     authors: [Devs.D3SOX],
     patches: [
         // Block loading modules on Desktop

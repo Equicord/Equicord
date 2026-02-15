@@ -14,6 +14,7 @@ import { classNameFactory } from "@utils/css";
 import { getIntlMessage, openUserProfile } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findCssClassesLazy, findStoreLazy } from "@webpack";
@@ -72,7 +73,7 @@ const AvatarStyles = findCssClassesLazy("moreUsers", "emptyUser", "avatarContain
 
 export default definePlugin({
     name: "WhosWatching",
-    description: "Hover over the screenshare icon to view what users are watching your stream",
+    description: t("whosWatching.description"),
     authors: [EquicordDevs.Fres],
     settings,
     patches: [

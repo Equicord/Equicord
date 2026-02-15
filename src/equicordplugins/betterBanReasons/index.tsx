@@ -11,6 +11,7 @@ import { Heading } from "@components/Heading";
 import { DeleteIcon, PlusIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, TextInput } from "@webpack/common";
 
@@ -21,7 +22,7 @@ function ReasonsComponent() {
 
     return (
         <section>
-            <Heading>Reasons</Heading>
+            <Heading>{t("betterBanReasons.ui.reasons")}</Heading>
             {reasons.map((r, i) => (
                 <div
                     key={i}
@@ -33,7 +34,7 @@ function ReasonsComponent() {
                             reasons[i] = v;
                             settings.store.reasons = reasons;
                         }}
-                        placeholder="Reason"
+                        placeholder={t("betterBanReasons.ui.reasonPlaceholder")}
                     />
                     <Button
                         className={cl("remove-button")}
@@ -51,7 +52,7 @@ function ReasonsComponent() {
             ))}
             <div className={cl("reason-wrapper")}>
                 <Button onClick={() => settings.store.reasons.push("")} className={cl("add-button")} size={Button.Sizes.LARGE} color={Button.Colors.TRANSPARENT}>
-                    <PlusIcon /> Add another reason
+                    <PlusIcon /> {t("betterBanReasons.ui.addAnotherReason")}
                 </Button>
             </div>
         </section>
@@ -60,20 +61,20 @@ function ReasonsComponent() {
 
 const settings = definePluginSettings({
     reasons: {
-        description: "Your custom reasons",
+        description: t("betterBanReasons.settings.reasons"),
         type: OptionType.COMPONENT,
         default: [] as string[],
         component: ReasonsComponent,
     },
     isTextInputDefault: {
         type: OptionType.BOOLEAN,
-        description: 'Shows a text input instead of a select menu by default. (Equivalent to clicking the "Other" option)'
+        description: t("betterBanReasons.settings.isTextInputDefault")
     }
 });
 
 export default definePlugin({
     name: "BetterBanReasons",
-    description: "Create custom reasons to use in the Discord ban modal, and/or show a text input by default instead of the options.",
+    description: t("betterBanReasons.description"),
     authors: [Devs.Inbestigator],
     patches: [
         {

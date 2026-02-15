@@ -9,6 +9,7 @@ import { disableStyle, enableStyle } from "@api/Styles";
 import { PaintbrushIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { closeModal, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { extractAndLoadChunksLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, DraftType, FluxDispatcher, Menu, SelectedChannelStore, UploadHandler } from "@webpack/common";
@@ -71,7 +72,7 @@ export function sendRemix(blob: Blob) {
 
 export default definePlugin({
     name: "RemixRevived",
-    description: "Revives Remix and breings it to Desktop",
+    description: t("remix.description"),
     authors: [EquicordDevs.MrDiamond, EquicordDevs.meowabyte],
     contextMenus: {
         "channel-attach": UploadContextMenuPatch,

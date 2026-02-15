@@ -10,6 +10,7 @@ import { FormSwitch } from "@components/FormSwitch";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { Button, Menu, TextInput, UploadHandler, useEffect, useState } from "@webpack/common";
@@ -21,7 +22,7 @@ import { createQuoteImage, ensureFontLoaded, generateFileNamePreview, getFileExt
 const settings = definePluginSettings({
     quoteFont: {
         type: OptionType.SELECT,
-        description: "Font for quote text (author/username always use M PLUS Rounded 1c)",
+        description: t("quoter.settings.quoteFont"),
         options: [
             { label: "M PLUS Rounded 1c", value: QuoteFont.MPlusRounded, default: true },
             { label: "Open Sans", value: QuoteFont.OpenSans },
@@ -32,24 +33,24 @@ const settings = definePluginSettings({
     },
     watermark: {
         type: OptionType.STRING,
-        description: "Custom watermark text (max 32 characters)",
+        description: t("quoter.settings.watermark"),
         default: "Made with Equicord"
     },
     grayscale: {
         type: OptionType.BOOLEAN,
-        description: "Enable grayscale by default",
+        description: t("quoter.settings.grayscale"),
         default: true,
         hidden: true
     },
     showWatermark: {
         type: OptionType.BOOLEAN,
-        description: "Show watermark by default",
+        description: t("quoter.settings.showWatermark"),
         default: false,
         hidden: true
     },
     saveAsGif: {
         type: OptionType.BOOLEAN,
-        description: "Save as GIF by default",
+        description: t("quoter.settings.saveAsGif"),
         default: false,
         hidden: true
     }
@@ -57,7 +58,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Quoter",
-    description: "Adds the ability to create an inspirational quote image from a message.",
+    description: t("quoter.description"),
     authors: [Devs.Samwich, Devs.thororen, EquicordDevs.neoarz, Devs.prism],
     settings,
 

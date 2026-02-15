@@ -7,24 +7,25 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 
 // Taken From Signature :)
 const settings = definePluginSettings({
     forwardPreface: {
-        description: "What should forwarded from be prefaced with",
+        description: t("forwardAnywhere.settings.forwardPreface"),
         type: OptionType.SELECT,
         options: [
-            { label: ">", value: ">", default: true },
-            { label: "-#", value: "-#" }
+            { label: t("forwardAnywhere.options.greaterThan"), value: ">", default: true },
+            { label: t("forwardAnywhere.options.hash"), value: "-#" }
         ]
     }
 });
 
 export default definePlugin({
     name: "ForwardAnywhere",
-    description: "If a forward fails send it as a normal message also allows nsfw forwards",
+    description: t("forwardAnywhere.description"),
     authors: [Devs.thororen],
     settings,
     patches: [

@@ -13,6 +13,7 @@ import showMeYourName from "@plugins/showMeYourName";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
@@ -229,7 +230,7 @@ function shouldShowActivity(lastMessage: Message | undefined, hasActivity: boole
 
 export default definePlugin({
     name: "MessagePeek",
-    description: "Shows the last message preview and timestamp in the Direct Messages list.",
+    description: t("messagePeek.description"),
     authors: [Devs.prism, EquicordDevs.justjxke],
     patches: [
         {

@@ -12,6 +12,7 @@ import { Heading } from "@components/Heading";
 import { Link } from "@components/Link";
 import { Devs } from "@utils/constants";
 import { identity } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { FluxDispatcher, Select, Slider, useEffect, useState } from "@webpack/common";
@@ -237,7 +238,7 @@ function VoiceSettings() {
 
 export default definePlugin({
     name: "VCPanelSettings",
-    description: "Control voice settings right from the voice panel",
+    description: t("vcPanelSettings.description"),
     authors: [Devs.nin0dev],
     settings,
     renderVoiceSettings() { return <VoiceSettings />; },

@@ -12,6 +12,7 @@ import { Divider } from "@components/Divider";
 import { Heading } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { ColorPicker } from "@webpack/common";
 
@@ -54,7 +55,7 @@ function OnekoColorSettings() {
         <div>
             <div className={cl("color-modal")}>
                 <div>
-                    <Heading className="form-subtitle">Fur Color</Heading>
+                    <Heading className="form-subtitle">{t("cursorBuddy.ui.furColor")}</Heading>
                     <div className={cl("color")}>
                         <ColorPicker
                             color={parseHexToNumber(furColor) ?? 16777215}
@@ -65,7 +66,7 @@ function OnekoColorSettings() {
                 </div>
 
                 <div>
-                    <Heading className="form-subtitle">Outline Color</Heading>
+                    <Heading className="form-subtitle">{t("cursorBuddy.ui.outlineColor")}</Heading>
                     <div className={cl("color")}>
                         <ColorPicker
                             color={parseHexToNumber(outlineColor) ?? 0}
@@ -81,30 +82,30 @@ function OnekoColorSettings() {
 
 const settings = definePluginSettings({
     buddy: {
-        description: "Pick a cursor buddy",
+        description: t("cursorBuddy.settings.buddy"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Oneko",
+                label: t("cursorBuddy.settings.buddyOptions.oneko"),
                 value: "oneko",
                 default: true
             },
             {
-                label: "Fatass Horse",
+                label: t("cursorBuddy.settings.buddyOptions.fathorse"),
                 value: "fathorse"
             }
         ],
         onChange: load,
     },
     speed: {
-        description: "Speed of your buddy",
+        description: t("cursorBuddy.settings.speed"),
         type: OptionType.NUMBER,
         default: 10,
         isValid: (value: number) => value >= 0 || "Speed must be bigger than 0",
         onChange: load,
     },
     fps: {
-        description: "Framerate of your buddy",
+        description: t("cursorBuddy.settings.fps"),
         type: OptionType.NUMBER,
         default: 24,
         isValid: (value: number) => value > 0 || "Framerate must be bigger than 0",
@@ -125,14 +126,14 @@ const settings = definePluginSettings({
         component: OnekoColorSettings,
     },
     furColor: {
-        description: "Fur hex color for Oneko",
+        description: t("cursorBuddy.settings.furColor"),
         type: OptionType.STRING,
         default: "#FFFFFF",
         onChange: load,
         hidden: true,
     },
     outlineColor: {
-        description: "Outline hex color for Oneko",
+        description: t("cursorBuddy.settings.outlineColor"),
         type: OptionType.STRING,
         default: "#000000",
         onChange: load,
@@ -149,26 +150,26 @@ const settings = definePluginSettings({
         ),
     },
     size: {
-        description: "Size of the fatass horse",
+        description: t("cursorBuddy.settings.size"),
         type: OptionType.NUMBER,
         default: 120,
         isValid: (value: number) => value > 0 || "Size must be bigger than 0",
         onChange: load
     },
     fade: {
-        description: "If the horse should fade when the cursor is near",
+        description: t("cursorBuddy.settings.fade"),
         type: OptionType.BOOLEAN,
         default: true,
         onChange: load
     },
     freeroam: {
-        description: "If the horse should roam freely when idle",
+        description: t("cursorBuddy.settings.freeroam"),
         type: OptionType.BOOLEAN,
         default: true,
         onChange: load
     },
     shake: {
-        description: "If the horse should shake the window when it's walking",
+        description: t("cursorBuddy.settings.shake"),
         type: OptionType.BOOLEAN,
         default: false,
         onChange: load,
@@ -192,7 +193,7 @@ const settings = definePluginSettings({
         disabled() { return this.store.buddy !== "fathorse"; },
     },
     shake: {
-        disabled() { return this.store.buddy !== "fathorse"; },
+        disabled() { return this.store.buddy !== "fathorse"; }
     }
 });
 
@@ -234,7 +235,7 @@ function load() {
 migratePluginSettings("CursorBuddy", "Oneko", "oneko");
 export default definePlugin({
     name: "CursorBuddy",
-    description: "Adds a sprite that follows your cursor.",
+    description: t("cursorBuddy.description"),
     authors: [Devs.Ven, Devs.adryd, EquicordDevs.nexpid, EquicordDevs.ZcraftElite],
     tags: ["Oneko", "FatassHorse", "Pet"],
     settings,

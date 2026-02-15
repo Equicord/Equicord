@@ -12,6 +12,7 @@ import { Button } from "@components/Button";
 import { BadgeContextMenu } from "@plugins/_api/badges";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { openInviteModal } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { ContextMenuApi, React, Toasts, UserStore } from "@webpack/common";
 
@@ -24,7 +25,7 @@ let intervalId: any;
 migratePluginSetting("GlobalBadges", "showRaincord", "showRa1ncord");
 export default definePlugin({
     name: "GlobalBadges",
-    description: "Adds global badges from other client mods",
+    description: t("globalBadges.description"),
     authors: [Devs.HypedDomi, EquicordDevs.Wolfie, Devs.thororen],
     settings,
     settingsAboutComponent: () => (
@@ -34,7 +35,7 @@ export default definePlugin({
                 className={cl("settings-button")}
                 onClick={() => openInviteModal(INVITE_LINK)}
             >
-                Join GlobalBadges Server
+                {t("globalBadges.ui.joinServer")}
             </Button>
         </>
     ),
@@ -51,7 +52,7 @@ export default definePlugin({
             await loadBadges();
             Toasts.show({
                 id: Toasts.genId(),
-                message: "Successfully refetched global badges!",
+                message: t("globalBadges.ui.refetchSuccess"),
                 type: Toasts.Type.SUCCESS
             });
         }

@@ -8,6 +8,7 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { FluxDispatcher, React } from "@webpack/common";
 
@@ -26,17 +27,17 @@ const channelTimings: Map<string, { time: number; timestamp: Date; }> = new Map(
 const settings = definePluginSettings({
     showIcon: {
         type: OptionType.BOOLEAN,
-        description: "Show fetch time icon in message bar",
+        description: t("messageFetchTimer.settings.showIcon"),
         default: true,
     },
     showMs: {
         type: OptionType.BOOLEAN,
-        description: "Show milliseconds in timing",
+        description: t("messageFetchTimer.settings.showMs"),
         default: true,
     },
     iconColor: {
         type: OptionType.STRING,
-        description: "Icon color (CSS color value)",
+        description: t("messageFetchTimer.settings.iconColor"),
         default: "#00d166",
     }
 });
@@ -146,7 +147,7 @@ function handleMessageLoad(data: any) {
 
 export default definePlugin({
     name: "MessageFetchTimer",
-    description: "Shows how long it took to fetch messages for the current channel",
+    description: t("messageFetchTimer.description"),
     authors: [EquicordDevs.GroupXyz],
     settings,
 

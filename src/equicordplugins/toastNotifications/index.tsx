@@ -18,6 +18,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { Channel, Message, User } from "@vencord/discord-types";
 import { MessageType, RelationshipType } from "@vencord/discord-types/enums";
@@ -208,7 +209,7 @@ const addMention = (id: string, type: string, guildId?: string): ReactNode => {
 
 export default definePlugin({
     name: "ToastNotifications",
-    description: "Show a toast notification whenever you receive a direct message.",
+    description: t("toastNotifications.description"),
     authors: [EquicordDevs.Skully, EquicordDevs.Ethan, EquicordDevs.Buzzy],
     settings,
     flux: {

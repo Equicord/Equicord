@@ -14,6 +14,7 @@ import { DeleteIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { useForceUpdater } from "@utils/react";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, TextInput, useState } from "@webpack/common";
 
@@ -93,7 +94,7 @@ function FlaggedInput({ index, forceUpdate }) {
     return (<Flex flexDirection="row">
         <div style={{ flexGrow: 1 }}>
             <TextInput
-                placeholder="Word"
+                placeholder={t("contentWarning.ui.placeholder")}
                 spellCheck={false}
                 value={value}
                 onChange={updateValue}
@@ -130,7 +131,7 @@ function FlaggedWords() {
 
     return (
         <>
-            <HeadingTertiary>Flagged Words</HeadingTertiary>
+            <HeadingTertiary>{t("contentWarning.ui.flaggedWords")}</HeadingTertiary>
             {inputs}
         </>
     );
@@ -143,7 +144,7 @@ const settings = definePluginSettings({
     },
     onClick: {
         type: OptionType.BOOLEAN,
-        description: "Only show trigger content on click instead of hover",
+        description: t("contentWarning.settings.onClick"),
         default: false,
     }
 });
@@ -151,7 +152,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "ContentWarning",
     authors: [EquicordDevs.camila314],
-    description: "Allows you to specify certain trigger words that will be blurred by default. Hovering/Clicking on the blurred content will reveal it.",
+    description: t("contentWarning.description"),
     settings,
     patches: [
         {

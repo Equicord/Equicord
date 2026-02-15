@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByCodeLazy } from "@webpack";
 
@@ -28,7 +29,7 @@ function setTitle(v: string) {
 
 export default definePlugin({
     name: "Title",
-    description: "Replaces the window title prefix",
+    description: t("title.description"),
     authors: [Devs.Kyuuhachi],
     settings,
 

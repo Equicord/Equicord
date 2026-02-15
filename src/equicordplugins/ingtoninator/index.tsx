@@ -8,6 +8,7 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 
@@ -20,13 +21,13 @@ const settings = definePluginSettings({
     showIcon: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Show a button to toggle the Ingtoninator plugin",
+        description: t("ingtoninator.settings.showIcon"),
         restartNeeded: true
     },
     isEnabled: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Enable or disable the Ingtoninator"
+        description: t("ingtoninator.settings.isEnabled")
     }
 });
 
@@ -115,7 +116,7 @@ const IngtoninatorButton: ChatBarButtonFactory = ({ isMainChat }) => {
 
     return (
         <ChatBarButton
-            tooltip={isEnabled ? "Ingtoninator Enabled" : "Ingtoninator Disabled"}
+            tooltip={isEnabled ? t("ingtoninator.ui.enabled") : t("ingtoninator.ui.disabled")}
             onClick={toggle}
         >
             {isEnabled ? (
@@ -145,7 +146,7 @@ function disabledIcon() {
 
 export default definePlugin({
     name: "Ingtoninator",
-    description: "Suffixes 'ington' to a random word in your message",
+    description: t("ingtoninator.description"),
     authors: [EquicordDevs.zyqunix, EquicordDevs.BioTomateDE],
     settings,
     chatBarButton: {

@@ -26,6 +26,7 @@ import { proxyLazy } from "@utils/lazy";
 import { classes } from "@utils/misc";
 import { openModalLazy } from "@utils/modal";
 import { useForceUpdater } from "@utils/react";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { extractAndLoadChunksLazy, findComponentByCodeLazy, findModuleId, wreq } from "@webpack";
 import { Clickable, Menu, OverridePremiumTypeStore, Toasts, useState } from "@webpack/common";
@@ -143,7 +144,7 @@ const StatusSubMenuComponent = () => {
 
 export default definePlugin({
     name: "StatusPresets",
-    description: "Allows you to remember your statuses and set them later",
+    description: t("statusPresets.description"),
     authors: [EquicordDevs.iamme],
     settings: settings,
     dependencies: ["UserSettingsAPI"],

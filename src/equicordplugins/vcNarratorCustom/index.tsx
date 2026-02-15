@@ -26,6 +26,7 @@ import {
     openModal,
 } from "@utils/modal";
 import { wordsToTitle } from "@utils/text";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import type { User } from "@vencord/discord-types";
 import {
@@ -923,7 +924,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: U
 
 export default definePlugin({
     name: "VcNarratorCustom",
-    description: "Announces when users join, leave, or move voice channels via narrator using TikTok TTS. Revamped and back from the dead.",
+    description: t("vcNarratorCustom.description"),
     authors: [Devs.Ven, Devs.Nyako, EquicordDevs.Loukios, EquicordDevs.examplegit],
     settings,
     contextMenus: {

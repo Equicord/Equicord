@@ -5,6 +5,7 @@
  */
 
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 import { makeContextItem } from "./components";
@@ -13,7 +14,7 @@ import { folderProp, int2rgba } from "./util";
 
 export default definePlugin({
     name: "CustomFolderIcons",
-    description: "Customize folder icons with any png",
+    description: t("customFolderIcons.description"),
     authors: [EquicordDevs.sadan],
     settings,
     patches: [

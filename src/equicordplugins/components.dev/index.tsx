@@ -9,6 +9,7 @@ import "./styles.css";
 import SettingsPlugin from "@plugins/_core/settings";
 import { Devs } from "@utils/constants";
 import { removeFromArray } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { StartAt } from "@utils/types";
 import { SettingsRouter } from "@webpack/common";
 
@@ -40,7 +41,7 @@ function ComponentsIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export default definePlugin({
     name: "Components",
-    description: "Adds a new tab to settings to browse Discord components.",
+    description: t("components.description"),
     authors: [Devs.prism],
     dependencies: ["Settings"],
     startAt: StartAt.WebpackReady,

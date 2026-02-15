@@ -6,6 +6,7 @@
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Menu } from "@webpack/common";
 
@@ -31,7 +32,7 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (children, props) =
 
         group.push(
             <Menu.MenuItem
-                label={`Upload to ${serviceName}`}
+                label={t("fileUpload.ui.uploadTo", { serviceName })}
                 key="file-upload"
                 id="file-upload"
                 action={() => uploadFile(url)}
@@ -56,7 +57,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
     children.push(
         <Menu.MenuGroup id="file-upload-group">
             <Menu.MenuItem
-                label={`Upload to ${serviceName}`}
+                label={t("fileUpload.ui.uploadTo", { serviceName })}
                 key="file-upload"
                 id="file-upload"
                 action={() => uploadFile(url)}
@@ -67,7 +68,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
 
 export default definePlugin({
     name: "FileUpload",
-    description: "Upload images and videos to file hosting services like Zipline and Nest",
+    description: t("fileUpload.description"),
     authors: [EquicordDevs.creations, EquicordDevs.keircn],
     settings,
     contextMenus: {

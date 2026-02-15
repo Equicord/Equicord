@@ -10,6 +10,7 @@ import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
@@ -222,7 +223,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "StatsfmPresence",
-    description: "Statsfm presence to track your music",
+    description: t("statsfmPresence.description"),
     authors: [EquicordDevs.Crxa],
 
     settingsAboutComponent: () => (

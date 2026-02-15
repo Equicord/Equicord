@@ -5,6 +5,7 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { TypingStore, UserStore, useStateFromStores } from "@webpack/common";
@@ -15,7 +16,7 @@ const PrivateChannelSortStore = findStoreLazy("PrivateChannelSortStore") as { ge
 
 export default definePlugin({
     name: "HomeTyping",
-    description: "Changes the home button to a typing indicator if someone in your dms is typing",
+    description: t("homeTyping.description"),
     authors: [Devs.Samwich],
     TypingIcon() {
         return <ThreeDots dotRadius={3} themed={true} />;

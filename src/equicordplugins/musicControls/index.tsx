@@ -20,6 +20,7 @@ import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 import { settings, toggleHoverControls } from "./settings";
@@ -32,7 +33,7 @@ import { YtmPlayer } from "./youtubeMusic/PlayerComponent";
 
 export default definePlugin({
     name: "MusicControls",
-    description: "Music Controls and Lyrics for multiple services ",
+    description: t("musicControls.description"),
     authors: [Devs.Ven, Devs.afn, Devs.KraXen72, Devs.Av32000, Devs.nin0dev, Devs.thororen, EquicordDevs.vmohammad, Devs.Joona],
     settings,
     tags: [

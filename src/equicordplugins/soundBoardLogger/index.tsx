@@ -6,6 +6,7 @@
 
 import { disableStyle, enableStyle } from "@api/Styles";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
 
@@ -19,7 +20,7 @@ import { getListeners } from "./utils";
 export default definePlugin({
     name: "SoundBoardLogger",
     authors: [Devs.Moxxie, EquicordDevs.Fres, Devs.amy, Devs.thororen],
-    description: "Logs all soundboards that are played in a voice chat and allows you to download them",
+    description: t("soundBoardLogger.description"),
     dependencies: ["AudioPlayerAPI"],
     settings,
 

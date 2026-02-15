@@ -21,6 +21,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, EmojiStore, RestAPI } from "@webpack/common";
 import type { SVGProps } from "react";
@@ -69,17 +70,17 @@ export function Husk(props: IconProps) {
 
 const settings = definePluginSettings({
     findInServer: {
-        description: "Attempt to find emoji of same name in server before using ID in settings (useful if no nitro)",
+        description: t("husk.settings.findInServer"),
         type: OptionType.BOOLEAN,
         default: true
     },
     emojiName: {
-        description: "Emoji name (default (from Vencord Server): husk)",
+        description: t("husk.settings.emojiName"),
         type: OptionType.STRING,
         default: "husk"
     },
     emojiID: {
-        description: "Emoji ID (default (from Vencord Server): 1026532993923293184)",
+        description: t("husk.settings.emojiID"),
         type: OptionType.BIGINT,
         default: 1026532993923293184n
     }
@@ -98,14 +99,14 @@ function getEmojiIdThatShouldBeUsed(guildId: string) {
 
 export default definePlugin({
     name: "Husk",
-    description: "Adds Husk button (check settings to change used emoji)",
+    description: t("husk.description"),
     authors: [Devs.nin0dev],
     settings,
     messagePopoverButton: {
         icon: Husk,
         render(msg) {
             return {
-                label: "Husk",
+                label: t("husk.ui.husk"),
                 icon: Husk,
                 message: msg,
                 channel: ChannelStore.getChannel(msg.channel_id),

@@ -6,6 +6,7 @@
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Channel, Message, User } from "@vencord/discord-types";
 import { Constants, Menu, NavigationRouter, RestAPI, SelectedChannelStore, SelectedGuildStore, Toasts } from "@webpack/common";
@@ -44,7 +45,7 @@ async function jumpToUserMessage(channelId: string, guildId: string, userId: str
         if (!messageId) {
             Toasts.show({
                 type: Toasts.Type.FAILURE,
-                message: "No messages found from this user in this channel.",
+                message: t("jumpTo.errors.noMessagesFound"),
                 id: Toasts.genId()
             });
             return;
@@ -55,7 +56,7 @@ async function jumpToUserMessage(channelId: string, guildId: string, userId: str
     } catch (e) {
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: "Failed to search for messages.",
+            message: t("jumpTo.errors.failedSearch"),
             id: Toasts.genId()
         });
     }
@@ -67,12 +68,12 @@ const ChannelMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { 
     children.push(
         <Menu.MenuItem
             id="vc-jump-to-first"
-            label="Jump To First Message"
+            label={t("jumpTo.ui.jumpToFirst")}
             action={() => jumpToFirstMessage(channel.id, channel.guild_id)}
         />,
         <Menu.MenuItem
             id="vc-jump-to-last"
-            label="Jump To Last Message"
+            label={t("jumpTo.ui.jumpToLast")}
             action={() => jumpToLastMessage(channel.id, channel.guild_id)}
         />
     );
@@ -86,12 +87,12 @@ const UserMenuPatch: NavContextMenuPatchCallback = (children, { user, channel }:
     children.push(
         <Menu.MenuItem
             id="vc-jump-to-first"
-            label="Jump To First Message"
+            label={t("jumpTo.ui.jumpToFirst")}
             action={() => jumpToFirstMessage(channel.id, null)}
         />,
         <Menu.MenuItem
             id="vc-jump-to-last"
-            label="Jump To Last Message"
+            label={t("jumpTo.ui.jumpToLast")}
             action={() => jumpToLastMessage(channel.id, null)}
         />
     );
@@ -107,12 +108,12 @@ const MessageMenuPatch: NavContextMenuPatchCallback = (children, { message }: { 
     children.push(
         <Menu.MenuItem
             id="vc-jump-to-first-user"
-            label="Jump To First Message"
+            label={t("jumpTo.ui.jumpToFirst")}
             action={() => jumpToUserMessage(channelId, guildId, message.author.id, true)}
         />,
         <Menu.MenuItem
             id="vc-jump-to-last-user"
-            label="Jump To Last Message"
+            label={t("jumpTo.ui.jumpToLast")}
             action={() => jumpToUserMessage(channelId, guildId, message.author.id, false)}
         />
     );
@@ -120,7 +121,7 @@ const MessageMenuPatch: NavContextMenuPatchCallback = (children, { message }: { 
 
 export default definePlugin({
     name: "JumpTo",
-    description: "Adds context menu options to jump to the start or bottom of a channel/DM.",
+    description: t("jumpTo.description"),
     authors: [Devs.Samwich, Devs.thororen],
     contextMenus: {
         "channel-context": ChannelMenuPatch,

@@ -8,6 +8,7 @@ import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
 
@@ -245,7 +246,7 @@ function handleColorChange(value, settingKey, defaultValue) {
         if (rgb.match(rgbPattern)) {
             settings.store[settingKey] = rgb;
         } else {
-            showToast(`Invalid color format for ${settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'`, Toasts.Type.FAILURE);
+            showToast(t("betterAudioPlayer.toasts.invalidColor", { settingKey }), Toasts.Type.FAILURE);
             settings.store[settingKey] = defaultValue;
         }
     } else {
@@ -256,39 +257,39 @@ function handleColorChange(value, settingKey, defaultValue) {
 const settings = definePluginSettings({
     oscilloscope: {
         type: OptionType.BOOLEAN,
-        description: "Enable oscilloscope visualizer",
+        description: t("betterAudioPlayer.settings.oscilloscope"),
         default: true,
     },
     spectrograph: {
         type: OptionType.BOOLEAN,
-        description: "Enable spectrograph visualizer",
+        description: t("betterAudioPlayer.settings.spectrograph"),
         default: true,
     },
     oscilloscopeSolidColor: {
         type: OptionType.BOOLEAN,
-        description: "Use solid color for oscilloscope",
+        description: t("betterAudioPlayer.settings.oscilloscopeSolidColor"),
         default: false,
     },
     oscilloscopeColor: {
         type: OptionType.STRING,
-        description: "Color for oscilloscope",
+        description: t("betterAudioPlayer.settings.oscilloscopeColor"),
         default: "255, 255, 255",
         onChange: value => handleColorChange(value, "oscilloscopeColor", "255, 255, 255"),
     },
     spectrographSolidColor: {
         type: OptionType.BOOLEAN,
-        description: "Use solid color for spectrograph",
+        description: t("betterAudioPlayer.settings.spectrographSolidColor"),
         default: false,
     },
     spectrographColor: {
         type: OptionType.STRING,
-        description: "Color for spectrograph",
+        description: t("betterAudioPlayer.settings.spectrographColor"),
         default: "33, 150, 243",
         onChange: value => handleColorChange(value, "spectrographColor", "33, 150, 243"),
     },
     forceMoveBelow: {
         type: OptionType.BOOLEAN,
-        description: "Force the visualizer below the audio player",
+        description: t("betterAudioPlayer.settings.forceMoveBelow"),
         default: true,
     },
 });
@@ -297,7 +298,7 @@ let observer: MutationObserver | null = null;
 
 export default definePlugin({
     name: "BetterAudioPlayer",
-    description: "Adds a spectrograph and oscilloscope visualizer to audio attachment players",
+    description: t("betterAudioPlayer.description"),
     authors: [EquicordDevs.creations],
     settings,
     start() {

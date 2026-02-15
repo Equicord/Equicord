@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
@@ -68,19 +69,19 @@ function findReplies(message: Message) {
 const settings = definePluginSettings({
     includePings: {
         type: OptionType.BOOLEAN,
-        description: "Will also search for messages that @ the author directly",
+        description: t("findReply.settings.includePings"),
         default: false,
         restartNeeded: false
     },
     includeAuthor: {
         type: OptionType.BOOLEAN,
-        description: "Will also search for messages that reply to the author in general, not just that exact message",
+        description: t("findReply.settings.includeAuthor"),
         default: false,
         restartNeeded: false
     },
     hideButtonIfNoReply: {
         type: OptionType.BOOLEAN,
-        description: "Hides the button if there are no replies to the message",
+        description: t("findReply.settings.hideButtonIfNoReply"),
         default: true,
         restartNeeded: true
     }
@@ -88,7 +89,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "FindReply",
-    description: "Jumps to the earliest reply to a message in a channel (lets you follow past conversations more easily).",
+    description: t("findReply.description"),
     authors: [Devs.newwares],
     settings,
     messagePopoverButton: {
@@ -98,7 +99,7 @@ export default definePlugin({
             const replies = findReplies(message);
             if (settings.store.hideButtonIfNoReply && !replies.length) return null;
             return {
-                label: "Jump to Reply",
+                label: t("findReply.ui.jumpToReply"),
                 icon: FindReplyIcon,
                 message,
                 channel: ChannelStore.getChannel(message.channel_id),
@@ -115,14 +116,14 @@ export default definePlugin({
                         if (replies.length > 1) {
                             Toasts.show({
                                 id: Toasts.genId(),
-                                message: "Use the bottom panel to navigate between replies.",
+                                message: t("findReply.toasts.useBottomPanel"),
                                 type: Toasts.Type.MESSAGE
                             });
                             const container = document.querySelector("[class*=channelBottomBarArea_]");
                             if (!container) {
                                 Toasts.show({
                                     id: Toasts.genId(),
-                                    message: "Couldn't find the container element.",
+                                    message: t("findReply.toasts.containerNotFound"),
                                     type: Toasts.Type.FAILURE
                                 });
                                 return;
@@ -139,7 +140,7 @@ export default definePlugin({
                     } else {
                         Toasts.show({
                             id: Toasts.genId(),
-                            message: "Couldn't find a reply.",
+                            message: t("findReply.toasts.noReplyFound"),
                             type: Toasts.Type.FAILURE
                         });
                     }

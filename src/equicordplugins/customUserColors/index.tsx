@@ -11,6 +11,7 @@ import { get } from "@api/DataStore";
 import { definePluginSettings, Settings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
 import { extractAndLoadChunksLazy } from "@webpack";
@@ -46,7 +47,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: {
 
     const setCustomColorItem = (
         <Menu.MenuItem
-            label="Set Color"
+            label={t("customUserColors.contextMenu.setColor")}
             id="set-color"
             icon={ColorIcon}
             action={async () => {
@@ -64,7 +65,7 @@ const channelContextMenuPatch: NavContextMenuPatchCallback = (children, { channe
 
     const setCustomColorItem = (
         <Menu.MenuItem
-            label="Set Color"
+            label={t("customUserColors.contextMenu.setColor")}
             id="set-color"
             icon={ColorIcon}
             action={async () => {
@@ -87,19 +88,19 @@ export function getCustomColorString(id: string | undefined, withHash?: boolean)
 const settings = definePluginSettings({
     dmList: {
         type: OptionType.BOOLEAN,
-        description: "Users with custom colors defined will have their name in the dm list colored",
+        description: t("customUserColors.settings.dmList"),
         default: true,
     },
     colorInServers: {
         type: OptionType.BOOLEAN,
-        description: "If name colors should be changed within servers",
+        description: t("customUserColors.settings.colorInServers"),
         default: true,
     }
 });
 
 export default definePlugin({
     name: "CustomUserColors",
-    description: "Lets you add a custom color to any user, anywhere! Highly recommend to use with typingTweaks and roleColorEverywhere",
+    description: t("customUserColors.description"),
     authors: [EquicordDevs.mochienya],
     contextMenus: {
         "user-context": userContextMenuPatch,
