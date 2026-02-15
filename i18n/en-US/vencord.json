@@ -622,7 +622,7 @@
     },
     "permissionsViewer": {
         "settings": {
-            "permissionsSortOrder": "The sort method used for defining which role grants an user a certain permission",
+            "permissionsSortOrder": "The sort method used for defining which role grants a user a certain permission",
             "highestRole": "Highest Role",
             "lowestRole": "Lowest Role"
         },
