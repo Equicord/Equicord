@@ -7,6 +7,7 @@
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 let savedStatus: string | null;
@@ -16,30 +17,30 @@ const StatusSettings = getUserSettingLazy<string>("status", "status")!;
 const settings = definePluginSettings({
     statusToSet: {
         type: OptionType.SELECT,
-        description: "Status to set while playing a game",
+        description: t("autoDndWhilePlaying.settings.statusToSet"),
         options: [
             {
-                label: "Online",
+                label: t("autoDndWhilePlaying.statusOptions.online"),
                 value: "online",
             },
             {
-                label: "Idle",
+                label: t("autoDndWhilePlaying.statusOptions.idle"),
                 value: "idle",
             },
             {
-                label: "Do Not Disturb",
+                label: t("autoDndWhilePlaying.statusOptions.dnd"),
                 value: "dnd",
                 default: true
             },
             {
-                label: "Invisible",
+                label: t("autoDndWhilePlaying.statusOptions.invisible"),
                 value: "invisible",
             }
         ]
     },
     excludeInvisible: {
         type: OptionType.BOOLEAN,
-        description: "Prevent automatic status changes while your status is set to invisible",
+        description: t("autoDndWhilePlaying.settings.excludeInvisible"),
         default: false
     },
 });
@@ -47,7 +48,7 @@ const settings = definePluginSettings({
 migratePluginSettings("AutoDNDWhilePlaying", "StatusWhilePlaying");
 export default definePlugin({
     name: "AutoDNDWhilePlaying",
-    description: "Automatically updates your online status (online, idle, dnd) when launching games",
+    description: t("autoDndWhilePlaying.description"),
     authors: [Devs.thororen],
     isModified: true,
     settings,

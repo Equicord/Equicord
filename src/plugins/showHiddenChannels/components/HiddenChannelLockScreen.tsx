@@ -103,9 +103,9 @@ const getForumLayoutName = (layout: number) => {
 
 const getVideoQualityModeName = (mode: number) => {
     switch (mode) {
-        case VideoQualityModes.AUTO: return t("showHiddenChannels.videoQualityModes.automatic");
-        case VideoQualityModes.FULL: return t("showHiddenChannels.videoQualityModes.720p");
-        default: return t("showHiddenChannels.videoQualityModes.automatic");
+        case VideoQualityModes.AUTO: return t("showHiddenChannels.videoQuality.automatic");
+        case VideoQualityModes.FULL: return t("showHiddenChannels.videoQuality.720p");
+        default: return t("showHiddenChannels.videoQuality.automatic");
     }
 };
 
@@ -195,7 +195,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
 
                 {(!channel.isGuildVoice() && !channel.isGuildStageVoice()) && (
                     <BaseText size="lg">
-                        {t("showHiddenChannels.cannotSeeMessages", { type: channel.isForumChannel() ? t("showHiddenChannels.types.posts") : t("showHiddenChannels.types.messages") })}
+                        {t("showHiddenChannels.cannotSeeMessages", { type: channel.isForumChannel() ? t("showHiddenChannels.channelTypes.posts") : t("showHiddenChannels.channelTypes.messages") })}
                         {channel.isForumChannel() && topic && topic.length > 0 && ` ${t("showHiddenChannels.seeGuidelines")}`}
                     </BaseText>
                 )}
@@ -208,7 +208,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
 
                 {lastMessageId &&
                     <BaseText size="md">
-                        {t("showHiddenChannels.lastMessageCreated", { type: channel.isForumChannel() ? t("showHiddenChannels.types.post") : t("showHiddenChannels.types.message") })}
+                        {t("showHiddenChannels.lastMessageCreated", { type: channel.isForumChannel() ? t("showHiddenChannels.channelTypes.post") : t("showHiddenChannels.channelTypes.message") })}
                         <Timestamp timestamp={new Date(SnowflakeUtils.extractTimestamp(lastMessageId))} />
                     </BaseText>
                 }
@@ -242,7 +242,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                 }
                 {(defaultAutoArchiveDuration ?? 0) > 0 &&
                     <BaseText size="md">
-                        {t("showHiddenChannels.archiveDuration", { type: channel.isForumChannel() ? t("showHiddenChannels.types.posts") : t("showHiddenChannels.types.threads"), duration: formatDuration(defaultAutoArchiveDuration!, "minutes") })}
+                        {t("showHiddenChannels.archiveDuration", { type: channel.isForumChannel() ? t("showHiddenChannels.channelTypes.posts") : t("showHiddenChannels.channelTypes.threads"), duration: formatDuration(defaultAutoArchiveDuration!, "minutes") })}
                     </BaseText>
                 }
                 {defaultForumLayout != null &&

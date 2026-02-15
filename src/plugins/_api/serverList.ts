@@ -18,11 +18,12 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 
 export default definePlugin({
     name: "ServerListAPI",
     authors: [Devs.kemo],
-    description: "Api required for plugins that modify the server list",
+    description: t("serverListAPI.description"),
     patches: [
         {
             find: "#{intl::DISCODO_DISABLED}",

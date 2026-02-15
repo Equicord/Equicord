@@ -18,6 +18,7 @@
 
 import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 
@@ -25,12 +26,12 @@ const FriendInvites = findByPropsLazy("createFriendInvite");
 
 export default definePlugin({
     name: "FriendInvites",
-    description: "Create and manage friend invite links via slash commands (/create friend invite, /view friend invites, /revoke friend invites).",
+    description: t("friendInvites.description"),
     authors: [Devs.afn, Devs.Dziurwa],
     commands: [
         {
             name: "create friend invite",
-            description: "Generates a friend invite link.",
+            description: t("friendInvites.commands.createFriendInvite.description"),
             inputType: ApplicationCommandInputType.BUILT_IN,
 
             execute: async (args, ctx) => {
@@ -39,40 +40,40 @@ export default definePlugin({
                 sendBotMessage(ctx.channel.id, {
                     content: `
                         discord.gg/${invite.code} ·
-                        Expires: <t:${new Date(invite.expires_at).getTime() / 1000}:R> ·
-                        Max uses: \`${invite.max_uses}\`
+                        ${t("friendInvites.ui.expires")} <t:${new Date(invite.expires_at).getTime() / 1000}:R> ·
+                        ${t("friendInvites.ui.maxUses")} \`${invite.max_uses}\`
                     `.trim().replace(/\s+/g, " ")
                 });
             }
         },
         {
             name: "view friend invites",
-            description: "View a list of all generated friend invites.",
+            description: t("friendInvites.commands.viewFriendInvites.description"),
             inputType: ApplicationCommandInputType.BUILT_IN,
             execute: async (_, ctx) => {
                 const invites = await FriendInvites.getAllFriendInvites();
                 const friendInviteList = invites.map(i =>
                     `
                     _discord.gg/${i.code}_ ·
-                    Expires: <t:${new Date(i.expires_at).getTime() / 1000}:R> ·
-                    Times used: \`${i.uses}/${i.max_uses}\`
+                    ${t("friendInvites.ui.expires")} <t:${new Date(i.expires_at).getTime() / 1000}:R> ·
+                    ${t("friendInvites.ui.timesUsed")} \`${i.uses}/${i.max_uses}\`
                     `.trim().replace(/\s+/g, " ")
                 );
 
                 sendBotMessage(ctx.channel.id, {
-                    content: friendInviteList.join("\n") || "You have no active friend invites!"
+                    content: friendInviteList.join("\n") || t("friendInvites.ui.noActiveInvites")
                 });
             },
         },
         {
             name: "revoke friend invites",
-            description: "Revokes all generated friend invites.",
+            description: t("friendInvites.commands.revokeFriendInvites.description"),
             inputType: ApplicationCommandInputType.BUILT_IN,
             execute: async (_, ctx) => {
                 await FriendInvites.revokeFriendInvites();
 
                 sendBotMessage(ctx.channel.id, {
-                    content: "All friend invites have been revoked."
+                    content: t("friendInvites.ui.allRevoked")
                 });
             },
         },

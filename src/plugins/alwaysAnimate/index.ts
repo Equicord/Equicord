@@ -18,39 +18,40 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
     icons: {
         type: OptionType.BOOLEAN,
-        description: "Always animate server icons, avatars, decor and more",
+        description: t("alwaysAnimate.settings.icons"),
         default: true,
     },
     statusEmojis: {
         type: OptionType.BOOLEAN,
-        description: "Always animate status emojis",
+        description: t("alwaysAnimate.settings.statusEmojis"),
         default: true,
     },
     serverBanners: {
         type: OptionType.BOOLEAN,
-        description: "Always animate server banners",
+        description: t("alwaysAnimate.settings.serverBanners"),
         default: true,
     },
     nameplates: {
         type: OptionType.BOOLEAN,
-        description: "Always animate nameplates",
+        description: t("alwaysAnimate.settings.nameplates"),
         default: true,
     },
     roleGradients: {
         type: OptionType.BOOLEAN,
-        description: "Always animate role gradients",
+        description: t("alwaysAnimate.settings.roleGradients"),
         default: true,
     }
 });
 
 export default definePlugin({
     name: "AlwaysAnimate",
-    description: "Animates anything that can be animated",
+    description: t("alwaysAnimate.description"),
     authors: [Devs.FieryFlames],
     settings,
     patches: [

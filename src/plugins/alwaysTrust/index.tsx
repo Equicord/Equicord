@@ -36,31 +36,31 @@ const settings = definePluginSettings({
     domain: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Remove the untrusted domain popup when opening links",
+        description: t("alwaysTrust.settings.domain"),
         restartNeeded: true
     },
     file: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Remove the 'Potentially Dangerous Download' popup when opening links",
+        description: t("alwaysTrust.settings.file"),
         restartNeeded: true
     },
     noDeleteSafety: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Removes the enter server name requirement when deleting a server",
+        description: t("alwaysTrust.settings.noDeleteSafety"),
         restartNeeded: true
     },
     confirmModal: {
         type: OptionType.BOOLEAN,
-        description: "Should a \"are you sure you want to delete\" modal be shown?",
+        description: t("alwaysTrust.settings.confirmModal"),
         default: true
     },
 });
 
 export default definePlugin({
     name: "AlwaysTrust",
-    description: "Removes the annoying untrusted domain and suspicious file popup",
+    description: t("alwaysTrust.description"),
     authors: [Devs.zt, Devs.Trwy],
     isModified: true,
     settings,
@@ -93,10 +93,10 @@ export default definePlugin({
     async HandleGuildDeleteModal(server) {
         if (settings.store.confirmModal) {
             return Alerts.show({
-                title: "Delete server?",
-                body: <p>It's permanent, if that wasn't obvious.</p>,
+                title: t("alwaysTrust.ui.deleteServerTitle"),
+                body: <p>{t("alwaysTrust.ui.deleteServerBody")}</p>,
                 confirmColor: Button.Colors.RED,
-                confirmText: "Delete",
+                confirmText: t("alwaysTrust.ui.deleteServerConfirm"),
                 onConfirm: () => GetPropsAndDeleteGuild(server.id),
                 cancelText: t("vencord.cancel")
             });

@@ -6,12 +6,13 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 let closeSuppressCount = 0;
 const settings = definePluginSettings({
     keepOpen: {
-        description: "Keeps the gif picker open after selecting a gif",
+        description: t("betterGifPicker.settings.keepOpen"),
         type: OptionType.BOOLEAN,
         default: false
     },
@@ -19,7 +20,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterGifPicker",
-    description: "Makes the gif picker open the favourite category by default",
+    description: t("betterGifPicker.description"),
     authors: [Devs.Samwich, EquicordDevs.justjxke],
     isModified: true,
     settings,

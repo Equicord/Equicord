@@ -9,6 +9,7 @@ import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize } from "@utils/modal";
+import { t } from "@utils/translation";
 import { TextInput, useState } from "@webpack/common";
 
 import { SetAliasModalProps } from "./types";
@@ -26,25 +27,25 @@ export function SetAliasModal({
 
     const validationError = getValidationError(input);
     const duplicateAlias = isDuplicateAlias(input);
-    const finalError = duplicateAlias ? "Duplicate alias" : error ?? validationError;
+    const finalError = duplicateAlias ? t("favEmojiFirst.ui.duplicateAlias") : error ?? validationError;
     const canSave = !validationError && !duplicateAlias;
 
     return (
         <ModalRoot {...modalProps} size={ModalSize.SMALL}>
             <ModalHeader>
-                <Heading style={{ flexGrow: 1 }}>Set alias</Heading>
+                <Heading style={{ flexGrow: 1 }}>{t("favEmojiFirst.ui.modal.setTitle")}</Heading>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
             <ModalContent style={{ overflowY: "hidden" }}>
-                <Paragraph style={{ margin: 0, marginBottom: 8 }}>Set an alias for {emojiDisplayName}</Paragraph>
+                <Paragraph style={{ margin: 0, marginBottom: 8 }}>{t("favEmojiFirst.ui.modal.setDescription", { emoji: emojiDisplayName })}</Paragraph>
                 <TextInput
                     value={input}
                     onChange={value => {
                         setInput(value);
                         setError(null);
                     }}
-                    placeholder='Alias, e.g. "sob"'
+                    placeholder={t("favEmojiFirst.ui.modal.placeholder")}
                 />
                 {finalError && (
                     <BaseText style={{ color: "var(--text-feedback-critical)", marginTop: 8 }}>
@@ -66,7 +67,7 @@ export function SetAliasModal({
                         modalProps.onClose();
                     }}
                 >
-                    Save
+                    {t("favEmojiFirst.ui.modal.save")}
                 </Button>
             </ModalFooter>
         </ModalRoot>

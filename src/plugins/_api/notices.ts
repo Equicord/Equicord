@@ -18,10 +18,11 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 
 export default definePlugin({
     name: "NoticesAPI",
-    description: "Fixes notices being automatically dismissed",
+    description: t("noticesAPI.description"),
     authors: [Devs.Ven],
     required: true,
     patches: [

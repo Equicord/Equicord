@@ -17,13 +17,13 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "BetterGifAltText",
     authors: [Devs.Ven],
-    description:
-        "Change GIF alt text from simply being 'GIF' to containing the gif tags / filename",
+    description: t("betterGifAltText.description"),
     patches: [
         {
             find: ".modalContext})};",

@@ -16,6 +16,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import { openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Emoji, Message } from "@vencord/discord-types";
 import { findByPropsLazy, findExportedComponentLazy } from "@webpack";
@@ -111,12 +112,12 @@ const aliasResultCache = new Map<string, EmojiResult | null>();
 const settings = definePluginSettings({
     aliases: {
         type: OptionType.COMPONENT,
-        description: "Manage your emoji aliases.",
+        description: t("favEmojiFirst.settings.aliases"),
         component: AliasListSetting
     },
     clearAll: {
         type: OptionType.COMPONENT,
-        description: "Delete all aliases.",
+        description: t("favEmojiFirst.settings.clearAll"),
         component: ClearAllAliasesSetting
     }
 });
@@ -149,8 +150,8 @@ function normalizeEmojiNameForCompare(input: string | undefined): string {
 
 function getAliasValidationError(input: string): string | null {
     const normalized = normalizeAlias(input);
-    if (!normalized.length) return "Alias is required.";
-    if (!/^[a-z0-9_]{2,32}$/.test(normalized)) return "Alias must be 2-32 characters and only use lowercase letters, numbers, or underscores.";
+    if (!normalized.length) return t("favEmojiFirst.ui.aliasRequired");
+    if (!/^[a-z0-9_]{2,32}$/.test(normalized)) return t("favEmojiFirst.ui.aliasValidation");
     return null;
 }
 
@@ -661,7 +662,7 @@ async function saveAlias(aliasInput: string, ref: StoredEmojiRef): Promise<{ ok:
     const existing = aliasMap[alias];
 
     if (existing && !isSameEmoji(existing, ref)) {
-        return { ok: false, error: "Duplicate alias" };
+        return { ok: false, error: t("favEmojiFirst.ui.duplicateAlias") };
     }
 
     const normalizedRef = ref.kind === "unicode"
@@ -685,12 +686,12 @@ async function saveAlias(aliasInput: string, ref: StoredEmojiRef): Promise<{ ok:
         return { ok: true };
     } catch (error) {
         logger.error("Failed to save emoji alias.", error);
-        return { ok: false, error: "Failed to save alias." };
+        return { ok: false, error: t("favEmojiFirst.ui.failedToSave") };
     }
 }
 
 function getAliasMenuLabel(ref: StoredEmojiRef): string {
-    return getExistingAliasForEmoji(ref) ? "Edit alias" : "Set alias";
+    return getExistingAliasForEmoji(ref) ? t("favEmojiFirst.ui.editAlias") : t("favEmojiFirst.ui.setAlias");
 }
 
 async function removeAlias(alias: string) {
@@ -703,14 +704,14 @@ async function removeAlias(alias: string) {
         await persistAliases(nextMap);
         Toasts.show({
             id: Toasts.genId(),
-            message: `Removed alias :${alias}:`,
+            message: t("favEmojiFirst.ui.removedAlias", { alias }),
             type: Toasts.Type.SUCCESS
         });
     } catch (error) {
         logger.error("Failed to remove emoji alias.", error);
         Toasts.show({
             id: Toasts.genId(),
-            message: "Failed to remove alias.",
+            message: t("favEmojiFirst.ui.failedToRemove"),
             type: Toasts.Type.FAILURE
         });
     }
@@ -723,14 +724,14 @@ async function clearAliases() {
         await persistAliases({});
         Toasts.show({
             id: Toasts.genId(),
-            message: "Deleted all emoji aliases.",
+            message: t("favEmojiFirst.ui.deletedAllAliases"),
             type: Toasts.Type.SUCCESS
         });
     } catch (error) {
         logger.error("Failed to clear emoji aliases.", error);
         Toasts.show({
             id: Toasts.genId(),
-            message: "Failed to delete aliases.",
+            message: t("favEmojiFirst.ui.failedToDelete"),
             type: Toasts.Type.FAILURE
         });
     }
@@ -753,7 +754,7 @@ function openSetAliasModal(ref: StoredEmojiRef) {
                 if (!result.ok) return result;
                 Toasts.show({
                     id: Toasts.genId(),
-                    message: `Alias set for ${getEmojiDisplayName(ref)}.`,
+                    message: t("favEmojiFirst.ui.aliasSetFor", { emoji: getEmojiDisplayName(ref) }),
                     type: Toasts.Type.SUCCESS
                 });
                 return result;
@@ -1020,7 +1021,7 @@ function AliasRow({ alias, emojiRef }: { alias: string; emojiRef: StoredEmojiRef
                 >
                     <PencilIcon width={14} height={14} />
                 </Button>
-                <Button variant="dangerSecondary" size="small" onClick={() => removeAlias(alias)}>Remove</Button>
+                <Button variant="dangerSecondary" size="small" onClick={() => removeAlias(alias)}>{t("favEmojiFirst.ui.remove")}</Button>
             </div>
         </div>
     );
@@ -1034,7 +1035,7 @@ function AliasListSetting() {
     const entries = getAliasMapEntries();
 
     if (!entries.length) {
-        return <Paragraph>No aliases set yet.</Paragraph>;
+        return <Paragraph>{t("favEmojiFirst.ui.noAliasesYet")}</Paragraph>;
     }
 
     return (
@@ -1055,7 +1056,7 @@ function ClearAllAliasesSetting() {
 
     return (
         <Button variant="dangerPrimary" size="small" disabled={disabled} onClick={openClearAliasesConfirmModal}>
-            Delete all aliases
+            {t("favEmojiFirst.ui.deleteAllAliases")}
         </Button>
     );
 }
@@ -1102,7 +1103,7 @@ export default definePlugin({
     name: "FavoriteEmojiFirst",
     authors: [Devs.Aria, Devs.Ven, EquicordDevs.justjxke],
     tags: ["EmojiAlias"],
-    description: "Puts your favorite emoji first in the emoji autocomplete and also has emoji alias.",
+    description: t("favEmojiFirst.description"),
     settings,
     contextMenus: {
         "expression-picker": expressionPickerPatch,

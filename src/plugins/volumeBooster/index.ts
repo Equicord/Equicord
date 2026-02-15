@@ -19,10 +19,11 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
+import { t } from "@utils/translation";
 
 const settings = definePluginSettings({
     multiplier: {
-        description: "Volume Multiplier",
+        description: t("volumeBooster.settings.multiplier"),
         type: OptionType.SLIDER,
         markers: makeRange(1, 5, 0.5),
         default: 2,
@@ -50,7 +51,7 @@ interface StreamData {
 export default definePlugin({
     name: "VolumeBooster",
     authors: [Devs.Nuckyz, Devs.sadan],
-    description: "Allows you to set the user and stream volume above the default maximum",
+    description: t("volumeBooster.description"),
     settings,
 
     patches: [

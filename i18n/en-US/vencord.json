@@ -1,4 +1,240 @@
 {
+    "badgeAPI": {
+        "description": "API to add badges to users"
+    },
+    "chatInputButtonAPI": {
+        "description": "API to add buttons to the chat input"
+    },
+    "commandsAPI": {
+        "description": "API required by anything that uses commands"
+    },
+    "contextMenuAPI": {
+        "description": "API for adding/removing items to/from context menus"
+    },
+    "dynamicImageModalAPI": {
+        "description": "Allows you to omit either width or height when opening an image modal"
+    },
+    "memberListDecoratorsAPI": {
+        "description": "API to add decorators to member list (both in servers and DMs)"
+    },
+    "menuItemDemanglerAPI": {
+        "description": "Demangles Discord's Menu Item module"
+    },
+    "messageAccessoriesAPI": {
+        "description": "API to add message accessories"
+    },
+    "messageDecorationsAPI": {
+        "description": "API to add decorations to messages"
+    },
+    "messageEventsAPI": {
+        "description": "API required by anything using message events"
+    },
+    "messagePopoverAPI": {
+        "description": "API to add buttons to message popovers"
+    },
+    "messageUpdaterAPI": {
+        "description": "API for updating and re-rendering messages"
+    },
+    "nicknameIconsAPI": {
+        "description": "API to add icons to the nickname, in profiles"
+    },
+    "noticesAPI": {
+        "description": "Fixes notices being automatically dismissed"
+    },
+    "serverListAPI": {
+        "description": "API required for plugins that modify the server list"
+    },
+    "userSettingsAPI": {
+        "description": "Patches Discord's UserSettings to expose their group and name"
+    },
+    "secretRingTone": {
+        "description": "Always play the secret version of the discord ringtone (except during special ringtone events)",
+        "settings": {
+            "onlySnow": "Only play the Snow Halation Theme"
+        }
+    },
+    "shikiCodeblocks": {
+        "description": "Brings vscode-style codeblocks into Discord, powered by Shiki",
+        "settings": {
+            "theme": "Default themes",
+            "customTheme": "A link to a custom vscode theme",
+            "tryHljs": "Use the more lightweight default Discord highlighter and theme.",
+            "tryHljsOptions": {
+                "never": "Never",
+                "preferShiki": "Prefer Shiki instead of Highlight.js",
+                "preferHljs": "Prefer Highlight.js instead of Shiki",
+                "always": "Always"
+            },
+            "useDevIcon": "How to show language icons on codeblocks",
+            "useDevIconOptions": {
+                "disabled": "Disabled",
+                "colorless": "Colorless",
+                "colored": "Colored"
+            },
+            "bgOpacity": "Background opacity"
+        }
+    },
+    "showHiddenThings": {
+        "description": "Displays various hidden & moderator-only things regardless of permissions.",
+        "settings": {
+            "showTimeouts": "Show member timeout icons in chat.",
+            "showInvitesPaused": "Show the invites paused tooltip in the server list.",
+            "showModView": "Show the member mod view context menu item in all servers."
+        }
+    },
+    "spotifyCrack": {
+        "description": "Free listen along, no auto-pausing in voice chat, and allows activity to continue playing when idling",
+        "settings": {
+            "noSpotifyAutoPause": "Disable Spotify auto-pause",
+            "keepSpotifyActivityOnIdle": "Keep Spotify activity playing when idling"
+        }
+    },
+    "spotifyShareCommands": {
+        "description": "Share your current Spotify track, album or artist via slash command (/track, /album, /artist)",
+        "commands": {
+            "shareDescription": "Share your current Spotify {name} in chat",
+            "notListening": "You're not listening to any music.",
+            "trackNotFound": "Failed to find the track on spotify."
+        }
+    },
+    "startupTimings": {
+        "description": "Adds Startup Timings to the Settings menu",
+        "ui": {
+            "title": "Startup Timings"
+        }
+    },
+    "stickerPaste": {
+        "description": "Makes picking a sticker in the sticker picker insert it into the chatbox instead of instantly sending"
+    },
+    "streamerModeOnStream": {
+        "description": "Automatically enables streamer mode when you start streaming in Discord"
+    },
+    "superReactionTweaks": {
+        "description": "Customize the limit of Super Reactions playing at once, and super react by default",
+        "settings": {
+            "superReactByDefault": "Reaction picker will default to Super Reactions",
+            "unlimitedSuperReactionPlaying": "Remove the limit on Super Reactions playing at once",
+            "superReactionPlayingLimit": "Max Super Reactions to play at once. 0 to disable playing Super Reactions"
+        }
+    },
+    "themeAttributes": {
+        "description": "Adds data attributes to various elements for theming purposes"
+    },
+    "unindent": {
+        "description": "Trims leading indentation from codeblocks"
+    },
+    "unlockedAvatarZoom": {
+        "description": "Allows you to zoom in further in the image crop tool when changing your avatar",
+        "settings": {
+            "zoomMultiplier": "Zoom multiplier"
+        }
+    },
+    "userMessagesPronouns": {
+        "description": "Adds pronouns to chat user messages",
+        "settings": {
+            "pronounsFormat": "The format for pronouns to appear in chat",
+            "pronounsFormatOptions": {
+                "lowercase": "Lowercase",
+                "capitalized": "Capitalized"
+            },
+            "showSelf": "Enable or disable showing pronouns for yourself"
+        }
+    },
+    "validReply": {
+        "description": "Fixes \"Message could not be loaded\" upon hovering over the reply"
+    },
+    "validUser": {
+        "description": "Fix mentions for unknown users showing up as '@unknown-user' (hover over a mention to fix it)"
+    },
+    "vcDoubleClick": {
+        "description": "Join voice chats via double click instead of single click"
+    },
+    "volumeBooster": {
+        "description": "Allows you to set the user and stream volume above the default maximum",
+        "settings": {
+            "multiplier": "Volume Multiplier"
+        }
+    },
+    "webContextMenus": {
+        "description": "Re-adds context menus missing in the web version of Discord: Links & Images (Copy/Open Link/Image), Text Area (Copy, Cut, Paste, SpellCheck)",
+        "settings": {
+            "addBack": "Add back the Discord context menus for images, links and the chat input bar"
+        }
+    },
+    "webKeybinds": {
+        "description": "Re-adds keybinds missing in the web version of Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. Only works fully on Vesktop/Legcord, not inside your browser"
+    },
+    "webScreenShareFixes": {
+        "description": "Removes 2500kbps bitrate cap on chromium and vesktop clients."
+    },
+    "youtubeAdblock": {
+        "description": "Block ads in YouTube embeds and the WatchTogether activity via AdGuard"
+    },
+    "devCompanion": {
+        "description": "Dev Companion Plugin. Please report anything not working or being weird (most likely its a bug) to sadan, either ping or dm, thanks!",
+        "settings": {
+            "notifyOnAutoConnect": "Whether to notify when Dev Companion has automatically connected.",
+            "usePatchedModule": "On extract requests, reply with the current patched module (if it is patched) instead of the original.",
+            "reloadAfterToggle": "Reload after a disable/enable plugin command is recived."
+        }
+    },
+    "disableCallIdle": {
+        "description": "Disables automatically getting kicked from a DM voice call after 3 minutes and being moved to an AFK voice channel."
+    },
+    "dontRoundMyTimestamps": {
+        "description": "Always rounds relative timestamps down, so 7.6y becomes 7y instead of 8y"
+    },
+    "f8break": {
+        "description": "Pause the client when you press F8 with DevTools (+ breakpoints) open."
+    },
+    "fixCodeblockGap": {
+        "description": "Removes the gap between codeblocks and text below it"
+    },
+    "fixSpotifyEmbeds": {
+        "description": "Fixes spotify embeds being incredibly loud by letting you customise the volume",
+        "settings": {
+            "volume": "The volume % to set for spotify embeds. Anything above 10% is veeeery loud"
+        }
+    },
+    "fixYoutubeEmbeds": {
+        "description": "Bypasses youtube videos being blocked from display on Discord (for example by UMG)"
+    },
+    "forceOwnerCrown": {
+        "description": "Force the owner crown next to usernames even if the server is large."
+    },
+    "friendInvites": {
+        "description": "Create and manage friend invite links via slash commands (/create friend invite, /view friend invites, /revoke friend invites).",
+        "commands": {
+            "createFriendInvite": {
+                "name": "create friend invite",
+                "description": "Generates a friend invite link."
+            },
+            "viewFriendInvites": {
+                "name": "view friend invites",
+                "description": "View a list of all generated friend invites."
+            },
+            "revokeFriendInvites": {
+                "name": "revoke friend invites",
+                "description": "Revokes all generated friend invites."
+            }
+        },
+        "ui": {
+            "expires": "Expires:",
+            "maxUses": "Max uses:",
+            "timesUsed": "Times used:",
+            "noActiveInvites": "You have no active friend invites!",
+            "allRevoked": "All friend invites have been revoked."
+        }
+    },
+    "fullSearchContext": {
+        "description": "Makes the message context menu in message search results have all options you'd expect"
+    },
+    "fullUserInChatbox": {
+        "description": "Makes the user mention in the chatbox have more functionalities, like left/right clicking"
+    },
+    "gifPaste": {
+        "description": "Makes picking a gif in the gif picker insert a link into the chatbox instead of instantly sending it"
+    },
     "donate": "Donate",
     "invite": "Invite",
     "loading": "Loading...",
@@ -279,6 +515,7 @@
         "echoCancellation": "Echo Cancellation"
     },
     "showHiddenChannels": {
+        "description": "Show channels that you do not have access to view.",
         "hiddenChannel": "This is a hidden {type} channel",
         "lockedChannel": "This is a locked {type} channel",
         "nsfw": "NSFW",
@@ -302,6 +539,25 @@
         "allowedUsersAndRoles": "Allowed users and roles:",
         "hideAllowedUsersAndRoles": "Hide Allowed Users and Roles",
         "viewAllowedUsersAndRoles": "View Allowed Users and Roles",
+        "hiddenChannelTooltip": "Hidden Channel",
+        "settings": {
+            "channelStyle": {
+                "description": "The style used to display hidden channels.",
+                "classic": "Classic",
+                "muted": "Muted",
+                "showUnreads": "Show Unreads",
+                "mutedAndShowUnreads": "Muted and Show Unreads"
+            },
+            "showMode": {
+                "description": "The mode used to display hidden channels.",
+                "lockIcon": "Lock Icon replacing channel icon",
+                "eyeIconRight": "Eye icon on the right",
+                "lockIconRight": "Lock icon on the right"
+            },
+            "defaultAllowedUsersAndRolesDropdownState": {
+                "description": "Whether the allowed users and roles dropdown on hidden channels should be open by default"
+            }
+        },
         "channelTypes": {
             "text": "text",
             "announcement": "announcement",
@@ -309,7 +565,11 @@
             "voice": "voice",
             "stage": "stage",
             "messages": "messages",
-            "posts": "posts"
+            "message": "message",
+            "posts": "posts",
+            "post": "post",
+            "threads": "threads",
+            "thread": "thread"
         },
         "sortOrders": {
             "latestActivity": "Latest activity",
@@ -684,10 +944,16 @@
             "servers": "Notify when removed from a server",
             "groups": "Notify when removed from a group chat"
         },
+        "description": "Notifies you when a friend, group chat, or server removes you.",
         "friendRemoved": "{username} removed you as a friend.",
         "friendRequestRemoved": "A friend request from {username} has been removed.",
         "serverRemoved": "You were removed from the server {name}.",
-        "groupRemoved": "You were removed from the group {name}."
+        "groupRemoved": "You were removed from the group {name}.",
+        "offlineGroupRemoved": "You are no longer in the group {name}.",
+        "offlineServerRemoved": "You are no longer in the server {name}.",
+        "offlineFriendRemoved": "You are no longer friends with {username}.",
+        "offlineFriendRequestRevoked": "Friend request from {username} has been revoked.",
+        "notificationTitle": "Relationship Notifier"
     },
     "messageLatency": {
         "settings": {
@@ -829,6 +1095,65 @@
         },
         "disableGameActivity": "Disable Game Activity",
         "enableGameActivity": "Enable Game Activity"
+    },
+    "autoDndWhilePlaying": {
+        "description": "Automatically sets your status to Do Not Disturb or another status when playing games",
+        "settings": {
+            "statusToSet": "Status to set when playing games",
+            "excludeInvisible": "Don't change status if you're currently invisible"
+        },
+        "statusOptions": {
+            "online": "Online",
+            "idle": "Idle",
+            "dnd": "Do Not Disturb",
+            "invisible": "Invisible"
+        }
+    },
+    "appleMusicRichPresence": {
+        "description": "Shows your currently playing Apple Music track in your Discord status",
+        "settings": {
+            "activityType": "Activity type to display as",
+            "statusDisplayType": "Show the track or artist name in the member list",
+            "refreshInterval": "How often to refresh the track data (in seconds)",
+            "enableTimestamps": "Enable timestamps showing how long you've been listening",
+            "enableButtons": "Enable buttons to view the track on Apple Music or SongLink",
+            "nameString": "The name to display for the activity. Use {name}, {artist}, and {album} as placeholders",
+            "detailsString": "The details text. Use {name}, {artist}, and {album} as placeholders",
+            "stateString": "The state text. Use {name}, {artist}, and {album} as placeholders",
+            "largeImageType": "The type of image to use for the large activity image",
+            "largeTextString": "The text to display when hovering over the large image. Use {name}, {artist}, and {album} as placeholders",
+            "smallImageType": "The type of image to use for the small activity image",
+            "smallTextString": "The text to display when hovering over the small image. Use {name}, {artist}, and {album} as placeholders"
+        },
+        "activityTypes": {
+            "playing": "Playing",
+            "listening": "Listening"
+        },
+        "statusDisplayTypes": {
+            "off": "Off",
+            "artist": "Artist name",
+            "track": "Track name"
+        },
+        "assetImageTypes": {
+            "album": "Album Artwork",
+            "artist": "Artist Artwork",
+            "disabled": "Disabled"
+        },
+        "defaultName": "Apple Music",
+        "defaultDetails": "{name}",
+        "defaultState": "by {artist}",
+        "defaultLargeText": "{album}",
+        "defaultSmallText": "by {artist}",
+        "settingsAbout": {
+            "intro": "You can use placeholders in the string fields:",
+            "namePlaceholder": "will be replaced with the track name",
+            "artistPlaceholder": "will be replaced with the artist name",
+            "albumPlaceholder": "will be replaced with the album name"
+        },
+        "buttons": {
+            "listenOnAppleMusic": "Listen on Apple Music",
+            "viewOnSongLink": "View on SongLink"
+        }
     },
     "lastfmRichPresence": {
         "description": "Little plugin for Last.fm rich presence",
@@ -1389,6 +1714,508 @@
             "embeds_only_other": "[no content, {count} embeds]",
             "both_one": "[no content, {attachments} attachment and {embeds} embed]",
             "both_other": "[no content, {attachments} attachments and {embeds} embeds]"
+        }
+    },
+    "alwaysAnimate": {
+        "description": "Animates anything that can be animated",
+        "settings": {
+            "icons": "Always animate server icons, avatars, decor and more",
+            "statusEmojis": "Always animate status emojis",
+            "serverBanners": "Always animate server banners",
+            "nameplates": "Always animate nameplates",
+            "roleGradients": "Always animate role gradients"
+        }
+    },
+    "alwaysExpandRoles": {
+        "description": "Always expands the role list in profile popouts",
+        "settings": {
+            "hideArrow": "Hide Arrow"
+        }
+    },
+    "alwaysTrust": {
+        "description": "Removes the annoying untrusted domain and suspicious file popup",
+        "settings": {
+            "domain": "Remove the untrusted domain popup when opening links",
+            "file": "Remove the 'Potentially Dangerous Download' popup when opening links",
+            "noDeleteSafety": "Removes the enter server name requirement when deleting a server",
+            "confirmModal": "Should a \"are you sure you want to delete\" modal be shown?"
+        },
+        "ui": {
+            "deleteServerTitle": "Delete server?",
+            "deleteServerBody": "It's permanent, if that wasn't obvious.",
+            "deleteServerConfirm": "Delete"
+        }
+    },
+    "autoDndWhilePlaying": {
+        "description": "Automatically updates your online status (online, idle, dnd) when launching games",
+        "settings": {
+            "statusToSet": "Status to set while playing a game",
+            "excludeInvisible": "Prevent automatic status changes while your status is set to invisible"
+        },
+        "statusOptions": {
+            "online": "Online",
+            "idle": "Idle",
+            "dnd": "Do Not Disturb",
+            "invisible": "Invisible"
+        }
+    },
+    "betterGifAltText": {
+        "description": "Change GIF alt text from simply being 'GIF' to containing the gif tags / filename"
+    },
+    "betterNotesBox": {
+        "description": "Hide notes or disable spellcheck (Configure in settings!!)",
+        "settings": {
+            "hide": "Hide notes",
+            "noSpellCheck": "Disable spellcheck in notes"
+        }
+    },
+    "betterRoleDot": {
+        "description": "Copy role colour on RoleDot (accessibility setting) click. Also allows using both RoleDot and coloured names simultaneously",
+        "settings": {
+            "bothStyles": "Show both role dot and coloured names",
+            "copyRoleColorInProfilePopout": "Allow click on role dot in profile popout to copy role color"
+        }
+    },
+    "betterUploadButton": {
+        "description": "Upload with a single click, open menu with right click"
+    },
+    "blurNsfw": {
+        "description": "Blur attachments in NSFW channels until hovered",
+        "settings": {
+            "blurAmount": "Blur Amount (in pixels)",
+            "blurAllChannels": "Blur attachments in all channels (not just NSFW)"
+        }
+    },
+    "clearURLs": {
+        "description": "Automatically removes tracking elements from URLs you send"
+    },
+    "colorSighted": {
+        "description": "Removes the colorblind-friendly icons from statuses, just like 2015-2017 Discord"
+    },
+    "consoleShortcuts": {
+        "description": "Adds shorter Aliases for many things on the window. Run `shortcutList` for a list."
+    },
+    "crashHandler": {
+        "description": "Utility plugin for handling and possibly recovering from crashes without a restart",
+        "settings": {
+            "attemptToPreventCrashes": "Whether to attempt to prevent Discord crashes.",
+            "attemptToNavigateToHome": "Whether to attempt to navigate to the home when preventing Discord crashes."
+        },
+        "notifications": {
+            "crashedTitle": "Discord has crashed!",
+            "crashedBody": "Awn :( Discord has crashed two times rapidly, not attempting to recover. Click here to join our support server!",
+            "recoveringBody": "Attempting to recover... Click here to join our support server!",
+            "invalidInvite": "Invalid or expired invite"
+        },
+        "updatePrompt": "Uh oh, Discord has just crashed... but good news, there is a Equicord update available that might fix this issue! Would you like to update now?"
+    },
+    "ctrlEnterSend": {
+        "description": "Use Ctrl+Enter to send messages (customizable)",
+        "settings": {
+            "submitRule": "The way to send a message",
+            "sendMessageInTheMiddleOfACodeBlock": "Whether to send a message in the middle of a code block"
+        },
+        "submitRuleOptions": {
+            "ctrlEnter": "Ctrl+Enter (Enter or Shift+Enter for new line) (cmd+enter on macOS)",
+            "shiftEnter": "Shift+Enter (Enter for new line)",
+            "enter": "Enter (Shift+Enter for new line; Discord default)"
+        }
+    },
+    "customIdle": {
+        "description": "Allows you to set the time before Discord goes idle (or disable auto-idle)",
+        "settings": {
+            "idleTimeout": "Minutes before Discord goes idle (0 to disable auto-idle)",
+            "remainInIdle": "When you come back to Discord, remain idle until you confirm you want to go online"
+        },
+        "ui": {
+            "backOnlineMessage": "Welcome back! Click the button to go online. Click the X to stay idle until reload.",
+            "exitIdle": "Exit idle"
+        }
+    },
+    "iLoveSpam": {
+        "description": "Do not hide messages from 'likely spammers'"
+    },
+    "imageFilename": {
+        "description": "Display the file name of images & GIFs as a tooltip when hovering over them",
+        "settings": {
+            "showFullUrl": "Show the full URL of the image instead of just the file name. Always enabled for GIFs because they usually have no meaningful file name"
+        }
+    },
+    "imageLink": {
+        "description": "Never hide image links in messages, even if it's the only content"
+    },
+    "implicitRelationships": {
+        "description": "Shows your implicit relationships in the Friends tab.",
+        "settings": {
+            "sortByAffinity": "Whether to sort implicit relationships by their affinity to you."
+        },
+        "ui": {
+            "implicitHeader": "Implicit — {count}",
+            "implicitSection": "Implicit"
+        }
+    },
+    "ircColors": {
+        "description": "Makes username colors in chat unique, like in IRC clients",
+        "settings": {
+            "lightness": "Lightness, in %. Change if the colors are too light or too dark",
+            "memberListColors": "Replace role colors in the member list",
+            "applyColorOnlyToUsersWithoutColor": "Apply colors only to users who don't have a predefined color",
+            "applyColorOnlyInDms": "Apply colors only in direct messages; do not apply colors in servers."
+        }
+    },
+    "keepCurrentChannel": {
+        "description": "Attempt to navigate to the channel you were in before switching accounts or loading Discord."
+    },
+    "loadingQuotes": {
+        "description": "Replace Discords loading quotes",
+        "settings": {
+            "replaceEvents": "Should this plugin also apply during events with special event themed quotes? (e.g. Halloween)",
+            "enablePluginPresetQuotes": "Enable the quotes preset by this plugin",
+            "enableDiscordPresetQuotes": "Enable Discord's preset quotes (including event quotes, during events)",
+            "additionalQuotes": "Additional custom quotes to possibly appear, separated by the below delimiter",
+            "additionalQuotesDelimiter": "Delimiter for additional quotes"
+        },
+        "ui": {
+            "noQuotesQuote": "Did you really disable all loading quotes? What a buffoon you are..."
+        }
+    },
+    "mentionAvatars": {
+        "description": "Shows user avatars and role icons inside mentions",
+        "settings": {
+            "showAtSymbol": "Whether the the @ symbol should be displayed on user mentions"
+        }
+    },
+    "messageTags": {
+        "description": "Allows you to save messages and to use them with a simple command.",
+        "settings": {
+            "clydeName": "Clyde message on send",
+            "clydeDescription": "If enabled, clyde will send you an ephemeral message when a tag was used."
+        },
+        "commands": {
+            "tags": "Manage all the tags for yourself",
+            "create": "Create a new tag",
+            "delete": "Remove a tag from your yourself",
+            "list": "List all tags from yourself",
+            "preview": "Preview a tag without sending it publicly",
+            "tagName": "The name of the tag to trigger the response",
+            "message": "The message that you will send when using this tag"
+        },
+        "ui": {
+            "tagDoesNotExist": "The tag **{name}** does not exist anymore! Please reload ur Discord to fix :)",
+            "tagSent": "The tag **{name}** has been sent!",
+            "tagAlreadyExists": "A Tag with the name **{name}** already exists!",
+            "tagCreated": "Successfully created the tag **{name}**!",
+            "tagDoesNotExist2": "A Tag with the name **{name}** does not exist!",
+            "tagDeleted": "Successfully deleted the tag **{name}**!",
+            "allTags": "All Tags:",
+            "noTagsYet": "Woops! There are no tags yet, use `/tags create` to create one!",
+            "invalidSubCommand": "Invalid sub-command"
+        }
+    },
+    "moreQuickReactions": {
+        "description": "Improves the quick react buttons in the message context menu.",
+        "settings": {
+            "reactionCount": "Number of reactions (0-42)",
+            "frequentEmojis": "Use frequently used emojis instead of favourite emojis",
+            "rows": "Rows of quick reactions to display",
+            "columns": "Columns of quick reactions to display",
+            "compactMode": "Scales the buttons to 75% of their original scale, whilst increasing the inner emoji to 125% scale. Emojis will be 93.75% of the original size. Recommended to have a minimum of 5 columns",
+            "scroll": "Enable scrolling the list of emojis"
+        }
+    },
+    "noDeepLinks": {
+        "description": "Disables Discord's stupid deep linking feature which tries to force you to use their Desktop App"
+    },
+    "noDevtoolsWarning": {
+        "description": "Disables the 'HOLD UP' banner in the console. As a side effect, also prevents Discord from hiding your token, which prevents random logouts."
+    },
+    "noF1": {
+        "description": "Disables F1 help bind."
+    },
+    "noMaskedUrlPaste": {
+        "description": "Pasting a link while having text selected will not paste as masked URL"
+    },
+    "noMosaic": {
+        "description": "Removes Discord image mosaic",
+        "settings": {
+            "inlineVideo": "Play videos without carousel modal"
+        }
+    },
+    "noOnboardingDelay": {
+        "description": "Skips the slow and annoying onboarding delay"
+    },
+    "noPendingCount": {
+        "description": "Removes the ping count of incoming friend requests, message requests, and nitro offers.",
+        "settings": {
+            "hideFriendRequestsCount": "Hide incoming friend requests count",
+            "hideMessageRequestsCount": "Hide message requests count",
+            "hidePremiumOffersCount": "Hide nitro offers count"
+        }
+    },
+    "noProfileThemes": {
+        "description": "Completely removes Nitro profile themes from everyone but yourself"
+    },
+    "noServerEmojis": {
+        "description": "Do not show server emojis in the autocomplete menu.",
+        "settings": {
+            "shownEmojis": "The types of emojis to show in the autocomplete menu.",
+            "shownEmojisOptions": {
+                "onlyUnicode": "Only unicode emojis",
+                "currentServer": "Unicode emojis and server emojis from current server",
+                "all": "Unicode emojis and all server emojis (Discord default)"
+            }
+        }
+    },
+    "noSystemBadge": {
+        "description": "Disables the taskbar and system tray unread count badge."
+    },
+    "notificationVolume": {
+        "description": "Save your ears and set a separate volume for notifications and in-app sounds",
+        "settings": {
+            "notificationVolume": "Notification volume"
+        }
+    },
+    "noTypingAnimation": {
+        "description": "Disables the CPU-intensive typing dots animation"
+    },
+    "noUnblockToJump": {
+        "description": "Allows you to jump to messages of blocked or ignored users and likely spammers without unblocking them"
+    },
+    "onePingPerDM": {
+        "description": "If unread messages are sent by a user in DMs multiple times, you'll only receive one audio ping.",
+        "settings": {
+            "channelToAffect": "Select the type of DM for the plugin to affect",
+            "channelToAffectOptions": {
+                "both": "Both",
+                "userDm": "User DMs",
+                "groupDm": "Group DMs"
+            },
+            "allowMentions": "Receive audio pings for @mentions",
+            "allowEveryone": "Receive audio pings for @everyone and @here in group DMs",
+            "ignoreUsers": "User IDs (comma + space) whose pings should NEVER be throttled",
+            "alwaysPlaySound": "Play the message notification sound even when its disabled"
+        }
+    },
+    "openInApp": {
+        "description": "Open links in their respective apps instead of your browser",
+        "settings": {
+            "spotify": "Open Spotify links in the Spotify app",
+            "steam": "Open Steam links in the Steam app",
+            "epic": "Open Epic Games links in the Epic Games Launcher",
+            "tidal": "Open Tidal links in the Tidal app",
+            "itunes": "Open Apple Music links in the iTunes app",
+            "vrcx": "Open VRChat links in the VRCX app"
+        },
+        "ui": {
+            "openedInApp": "Opened link in native app"
+        }
+    },
+    "permissionFreeWill": {
+        "description": "Disables the client-side restrictions for channel permission management.",
+        "settings": {
+            "lockout": "Bypass the permission lockout prevention (\"Pretty sure you don't want to do this\")",
+            "onboarding": "Bypass the onboarding requirements (\"Making this change will make your server incompatible [...]\")"
+        }
+    },
+    "petpet": {
+        "description": "Adds a /petpet slash command to create headpet gifs from any image",
+        "commands": {
+            "petpet": {
+                "name": "petpet",
+                "description": "Create a petpet gif. You can only specify one of the image options",
+                "options": {
+                    "delay": "The delay between each frame in ms. Rounded to nearest 10ms. Defaults to the minimum value of 20.",
+                    "resolution": "Resolution for the gif. Defaults to 120. If you enter an insane number and it freezes Discord that's your fault.",
+                    "image": "Image attachment to use",
+                    "url": "URL to fetch image from",
+                    "user": "User whose avatar to use as image",
+                    "noServerPfp": "Use the normal avatar instead of the server specific one when using the 'user' option"
+                }
+            }
+        },
+        "errors": {
+            "noImage": "No Image specified!",
+            "delayMinimum": "Delay must be at least 20.",
+            "uploadNotImage": "Upload is not an image",
+            "failedToFetchUser": "Failed to fetch user. Check the console for more info."
+        }
+    },
+    "plainFolderIcon": {
+        "description": "Dont show the small guild icons in folders"
+    },
+    "quickReply": {
+        "description": "Reply to (ctrl + up/down) and edit (ctrl + shift + up/down) messages via keybinds",
+        "settings": {
+            "shouldMention": "Ping reply by default",
+            "shouldMentionOptions": {
+                "followPlugin": "Follow NoReplyMention plugin (if enabled)",
+                "enabled": "Enabled",
+                "disabled": "Disabled"
+            },
+            "ignoreBlockedAndIgnored": "Ignore messages by blocked/ignored users when navigating"
+        }
+    },
+    "reactErrorDecoder": {
+        "description": "Replaces \"Minifed React Error\" with the actual error."
+    },
+    "replyTimestamp": {
+        "description": "Shows a timestamp on replied-message previews"
+    },
+    "revealAllSpoilers": {
+        "description": "Reveal all spoilers in a message by Ctrl-clicking a spoiler, or in the chat with Ctrl+Shift-click"
+    },
+    "roleColorEverywhere": {
+        "description": "Adds the top role color anywhere possible",
+        "settings": {
+            "chatMentions": "Show role colors in chat mentions (including in the message box)",
+            "memberList": "Show role colors in member list role headers",
+            "voiceUsers": "Show role colors in the voice chat user list",
+            "reactorsList": "Show role colors in the reactors list",
+            "pollResults": "Show role colors in the poll results",
+            "colorChatMessages": "Color chat messages based on the author's role color",
+            "messageSaturation": "Intensity of message coloring."
+        }
+    },
+    "betterGifPicker": {
+        "description": "Makes the gif picker open the favourite category by default",
+        "settings": {
+            "keepOpen": "Keeps the gif picker open after selecting a gif"
+        }
+    },
+    "favEmojiFirst": {
+        "description": "Puts your favorite emoji first in the emoji autocomplete and also has emoji alias.",
+        "settings": {
+            "aliases": "Manage your emoji aliases.",
+            "clearAll": "Delete all aliases."
+        },
+        "ui": {
+            "setAlias": "Set alias",
+            "editAlias": "Edit alias",
+            "aliasRequired": "Alias is required.",
+            "aliasValidation": "Alias must be 2-32 characters and only use lowercase letters, numbers, or underscores.",
+            "duplicateAlias": "Duplicate alias",
+            "failedToSave": "Failed to save alias.",
+            "aliasSetFor": "Alias set for {emoji}.",
+            "removedAlias": "Removed alias :{alias}:",
+            "failedToRemove": "Failed to remove alias.",
+            "deletedAllAliases": "Deleted all emoji aliases.",
+            "failedToDelete": "Failed to delete aliases.",
+            "noAliasesYet": "No aliases set yet.",
+            "deleteAllAliases": "Delete all aliases",
+            "remove": "Remove",
+            "modal": {
+                "setTitle": "Set alias",
+                "setDescription": "Set an alias for {emoji}",
+                "placeholder": "Alias, e.g. \"sob\"",
+                "save": "Save"
+            },
+            "confirmModal": {
+                "title": "Delete all aliases",
+                "description": "This will remove every emoji alias you saved.",
+                "confirmButton": "Delete all aliases"
+            }
+        }
+    },
+    "messageClickActions": {
+        "description": "Customize click actions on messages.",
+        "settings": {
+            "reactEmoji": "Emoji to use for react actions",
+            "singleClickAction": "Action on single click (your messages)",
+            "singleClickModifier": "Modifier required for single click action (your messages)",
+            "singleClickOthersAction": "Action on single click (others' messages)",
+            "singleClickOthersModifier": "Modifier required for single click action (others' messages)",
+            "doubleClickAction": "Action on double-click (your messages)",
+            "doubleClickOthersAction": "Action on double-click (others' messages)",
+            "doubleClickModifier": "Modifier required for double-click action",
+            "tripleClickAction": "Action on triple-click",
+            "tripleClickModifier": "Modifier required for triple-click action",
+            "disableInDms": "Disable all click actions in direct messages",
+            "disableInSystemDms": "Disable all click actions in system DMs",
+            "clickTimeout": "Timeout to distinguish double/triple clicks (ms)",
+            "doubleClickHoldThreshold": "Max hold time for double-click actions (ms). Holding longer allows text selection",
+            "deferDoubleClickForTriple": "Delay double-click to allow triple-click actions (disables triple-click when off)",
+            "selectionHoldTimeout": "Timeout to allow text selection (ms)",
+            "quoteWithReply": "When quoting, also reply to the message",
+            "useSelectionForQuote": "When quoting, use selected text if available"
+        },
+        "actions": {
+            "none": "None",
+            "delete": "Delete",
+            "copyLink": "Copy Link",
+            "copyId": "Copy ID",
+            "copyContent": "Copy Content",
+            "copyUserId": "Copy User ID",
+            "edit": "Edit",
+            "reply": "Reply",
+            "react": "React",
+            "openThread": "Open Thread",
+            "openTab": "Open Tab",
+            "quote": "Quote",
+            "pin": "Pin"
+        },
+        "modifiers": {
+            "none": "None",
+            "shift": "Shift",
+            "ctrl": "Ctrl",
+            "alt": "Alt",
+            "backspace": "Backspace",
+            "delete": "Delete"
+        },
+        "toasts": {
+            "cannotReact": "Cannot react: Missing permissions",
+            "cannotPin": "Cannot pin: Missing permissions",
+            "cannotQuote": "Cannot quote this message type"
+        },
+        "ui": {
+            "linkCopied": "Link copied!",
+            "messageIdCopied": "Message ID copied!",
+            "messageContentCopied": "Message content copied!",
+            "userIdCopied": "User ID copied!"
+        }
+    },
+    "noBlockedMessages": {
+        "description": "Hide all blocked/ignored messages from chat completely.",
+        "settings": {
+            "alsoHideIgnoredUsers": "Also hide messages from ignored users.",
+            "disableNotifications": "Hide new message notifications for blocked users. Always true if \"Default Hide Users\" is enabled below and the user triggering the notification is not exempted in \"Override Users\".",
+            "allowAutoModMessages": "Allow messages sent by AutoMod to bypass filtering.",
+            "hideBlockedUserReplies": "Hide replies to blocked users.",
+            "defaultHideUsers": "If enabled, messages from blocked users will be completely hidden and any messages from user IDs in the override list will be collapsed (default Discord behavior) instead. If disabled, messages from blocked users will be collapsed and any messages from user IDs in the override list will be completely hidden instead.",
+            "overrideUsers": "Comma separated list of user IDs which will be hidden or collapsed instead of the default behavior selected above."
+        }
+    },
+    "serverInfo": {
+        "description": "Allows you to view info about a server",
+        "settings": {
+            "sorting": "Username or if applicable Display Name",
+            "sortingOptions": {
+                "username": "Username",
+                "displayname": "Display Name",
+                "none": "Dont Sort"
+            }
+        },
+        "ui": {
+            "serverInfo": "Server Info",
+            "friends": "Friends",
+            "mutualUsers": "Mutual Users",
+            "blockedUsers": "Blocked Users",
+            "ignoredUsers": "Ignored Users",
+            "serverOwner": "Server Owner",
+            "createdAt": "Created At",
+            "joinedAt": "Joined At",
+            "vanityLink": "Vanity Link",
+            "preferredLocale": "Preferred Locale",
+            "verificationLevel": "Verification Level",
+            "serverBoosts": "Server Boosts",
+            "channels": "Channels",
+            "roles": "Roles"
+        }
+    },
+    "showAllMessageButtons": {
+        "description": "Always show all message buttons no matter if you are holding the shift key or not.",
+        "settings": {
+            "noShiftDelete": "Remove requirement to hold shift for deleting a message.",
+            "noShiftPin": "Remove requirement to hold shift for pinning a message."
         }
     }
 }
