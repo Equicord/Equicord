@@ -8,7 +8,7 @@ import { openModal } from "@utils/modal";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 
 import { Heading, ManaButton, Paragraph, useState } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { DocPage, type PropDef } from "../DocPage";
 
 const LayerModal = findComponentByCodeLazy('"data-mana-component":"layer-modal"') as React.ComponentType<{
     transitionState: number;
@@ -27,7 +27,16 @@ const TransitionState = findByPropsLazy("ENTERING", "ENTERED", "EXITING") as {
     HIDDEN: number;
 };
 
-function LayerModalDemo({ onClose }: { onClose: () => void; }) {
+const LAYERMODAL_PROPS: PropDef[] = [
+    { name: "transitionState", type: "number", required: true, description: "Animation state. Use TransitionState.ENTERED for visible." },
+    { name: "onClose", type: "() => void", required: true, description: "Called when the modal should close." },
+    { name: "children", type: "ReactNode", required: true, description: "Modal content." },
+    { name: "animationVariant", type: '"default" | string', default: '"default"', description: "Animation style for enter/exit transitions." },
+    { name: "returnRef", type: "Ref<HTMLDivElement>", internal: true, description: "Ref forwarded to the modal root element." },
+    { name: "aria-label", type: "string", description: "Accessibility label for the modal." },
+];
+
+function ModalContentDemo({ onClose }: { onClose: () => void; }) {
     return (
         <LayerModal
             transitionState={TransitionState.ENTERED}
@@ -37,8 +46,8 @@ function LayerModalDemo({ onClose }: { onClose: () => void; }) {
             <div style={{ padding: 24, minWidth: 300 }}>
                 <Heading tag="h2" style={{ marginBottom: 8 }}>Layer Modal</Heading>
                 <Paragraph color="text-muted" style={{ marginBottom: 16 }}>
-                    This is a layer modal. It's used for layered/stacked modals
-                    with different animation behavior than regular modals.
+                    This is a layer modal opened via openModal. It supports stacked/layered
+                    modal experiences with built-in animation handling.
                 </Paragraph>
                 <ManaButton variant="primary" text="Close" onClick={onClose} />
             </div>
@@ -46,92 +55,81 @@ function LayerModalDemo({ onClose }: { onClose: () => void; }) {
     );
 }
 
-export default function LayerModalTab() {
-    const [showInline, setShowInline] = useState(false);
+function InlineDemo() {
+    const [visible, setVisible] = useState(false);
 
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Layer Modal">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Layer modals are used for stacked/layered modal experiences.
-                    They have different animation variants and are typically used
-                    when you need to show a modal on top of another modal.
-                </Paragraph>
-                <div className="vc-compfinder-grid">
-                    <ManaButton
-                        variant="secondary"
-                        text="Open via openModal"
-                        onClick={() => openModal(props => (
-                            <LayerModalDemo onClose={props.onClose} />
-                        ))}
-                    />
+        <div>
+            <ManaButton
+                variant="secondary"
+                text={visible ? "Hide Inline" : "Show Inline"}
+                onClick={() => setVisible(!visible)}
+            />
+            {visible && (
+                <div style={{ marginTop: 16, position: "relative", minHeight: 200 }}>
+                    <LayerModal
+                        transitionState={TransitionState.ENTERED}
+                        onClose={() => setVisible(false)}
+                        aria-label="Inline Demo"
+                    >
+                        <div style={{ padding: 16 }}>
+                            <Paragraph>Inline layer modal content</Paragraph>
+                            <ManaButton variant="primary" text="Close" onClick={() => setVisible(false)} style={{ marginTop: 8 }} />
+                        </div>
+                    </LayerModal>
                 </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Inline Preview">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Toggle to see the layer modal rendered inline (not recommended for production).
-                </Paragraph>
-                <div className="vc-compfinder-grid">
-                    <ManaButton
-                        variant="secondary"
-                        text={showInline ? "Hide Inline" : "Show Inline"}
-                        onClick={() => setShowInline(!showInline)}
-                    />
-                </div>
-                {showInline && (
-                    <div style={{ marginTop: 16, position: "relative", minHeight: 200 }}>
-                        <LayerModal
-                            transitionState={TransitionState.ENTERED}
-                            onClose={() => setShowInline(false)}
-                            aria-label="Inline Demo"
-                        >
-                            <div style={{ padding: 16 }}>
-                                <Paragraph>Inline layer modal content</Paragraph>
-                            </div>
-                        </LayerModal>
-                    </div>
-                )}
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    <strong>LayerModal</strong>
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • transitionState: number - Use TransitionState.ENTERED for visible
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • onClose: () =&gt; void - Close handler
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • children: ReactNode - Modal content
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • animationVariant?: "default" | string - Animation style
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • returnRef?: React.Ref - Ref for the modal element
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • aria-label?: string - Accessibility label
-                </Paragraph>
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>TransitionState</strong> - findByPropsLazy("ENTERING", "ENTERED", "EXITING")
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • ENTERING, ENTERED, EXITING, EXITED, HIDDEN
-                </Paragraph>
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>Usage Notes</strong>
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • Use with openModal() for proper backdrop and positioning
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • Has built-in animation handling based on transitionState
-                </Paragraph>
-            </SectionWrapper>
+            )}
         </div>
+    );
+}
+
+export default function LayerModalTab() {
+    return (
+        <DocPage
+            componentName="LayerModal"
+            overview="LayerModal is Discord's component for stacked/layered modal experiences. It has different animation behavior than regular modals and is typically used with openModal() for proper backdrop and positioning. Requires TransitionState for controlling visibility."
+            notices={[
+                { type: "warn", children: "LayerModal must be used with openModal() for proper backdrop, positioning, and transition state management. Rendering it inline without the modal system will result in incorrect behavior." },
+                { type: "info", children: "LayerModal is found via findComponentByCodeLazy, not exported directly. The TransitionState constants are also required and must be found separately." },
+            ]}
+            importPath={`import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+
+const LayerModal = findComponentByCodeLazy('"data-mana-component":"layer-modal"');
+const TransitionState = findByPropsLazy("ENTERING", "ENTERED", "EXITING");`}
+            sections={[
+                {
+                    title: "Open via openModal",
+                    description: "The recommended way to use LayerModal is with openModal() which handles backdrop and positioning.",
+                    children: (
+                        <ManaButton
+                            variant="secondary"
+                            text="Open Layer Modal"
+                            onClick={() => openModal(props => (
+                                <ModalContentDemo onClose={props.onClose} />
+                            ))}
+                        />
+                    ),
+                    code: `openModal(props => (
+  <LayerModal
+    transitionState={TransitionState.ENTERED}
+    onClose={props.onClose}
+    aria-label="My Modal"
+  >
+    <div style={{ padding: 24 }}>
+      <p>Modal content here</p>
+    </div>
+  </LayerModal>
+))`,
+                    relevantProps: ["transitionState", "onClose"],
+                },
+                {
+                    title: "Inline Preview",
+                    description: "Rendered inline for preview purposes. Not recommended for production use.",
+                    children: <InlineDemo />,
+                    relevantProps: ["aria-label", "animationVariant"],
+                },
+            ]}
+            props={LAYERMODAL_PROPS}
+        />
     );
 }

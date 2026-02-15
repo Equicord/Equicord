@@ -7,8 +7,9 @@
 import "./styles.css";
 
 import { MagnifyingGlassIcon } from "@components/Icons";
-import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
+import SettingsPlugin from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
+import { removeFromArray } from "@utils/misc";
 import definePlugin, { StartAt } from "@utils/types";
 import { SettingsRouter } from "@webpack/common";
 
@@ -28,32 +29,17 @@ export default definePlugin({
     },
     settingsAboutComponent: SettingsAbout,
     start() {
-        const { customEntries, customSections } = SettingsPlugin;
-
-        customEntries.push({
+        SettingsPlugin.customEntries.push({
             key: "equicord_icon_viewer",
             title: "Icon Finder",
             Component: IconsTab,
             Icon: MagnifyingGlassIcon
         });
 
-        customSections.push(() => ({
-            section: "EquicordDiscordIcons",
-            label: "Icon Finder",
-            element: IconsTab,
-            className: "vc-discord-icons",
-            id: "EquicordIconViewer"
-        }));
-
-        settingsSectionMap.push(["EquicordDiscordIcons", "equicord_icon_viewer"]);
+        SettingsPlugin.settingsSectionMap.push(["EquicordDiscordIcons", "equicord_icon_viewer"]);
     },
     stop() {
-        const { customEntries, customSections } = SettingsPlugin;
-        const entryIdx = customEntries.findIndex(e => e.key === "equicord_icon_viewer");
-        if (entryIdx !== -1) customEntries.splice(entryIdx, 1);
-        const sectionIdx = customSections.findIndex(s => s({} as any).id === "EquicordIconViewer");
-        if (sectionIdx !== -1) customSections.splice(sectionIdx, 1);
-        const map = settingsSectionMap.findIndex(entry => entry[1] === "equicord_icon_viewer");
-        if (map !== -1) settingsSectionMap.splice(map, 1);
+        removeFromArray(SettingsPlugin.customEntries, e => e.key === "equicord_icon_viewer");
+        removeFromArray(SettingsPlugin.settingsSectionMap, entry => entry[1] === "equicord_icon_viewer");
     },
 });

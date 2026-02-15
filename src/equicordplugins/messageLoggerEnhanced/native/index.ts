@@ -7,12 +7,15 @@
 import { readdir, readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { LoggedAttachment } from "@equicordplugins/messageLoggerEnhanced/types";
-import { LOGS_DATA_FILENAME } from "@equicordplugins/messageLoggerEnhanced/utils/constants";
 import { DATA_DIR } from "@main/utils/constants";
 import { dialog, IpcMainInvokeEvent, shell } from "electron";
 
 import { getSettings, saveSettings } from "./settings";
+export * from "./export";
+export * from "./import";
+
+import { LoggedAttachment } from "../types";
+import { LOGS_DATA_FILENAME } from "../utils/constants";
 import { ensureDirectoryExists, getAttachmentIdFromFilename, sleep } from "./utils";
 
 export { getSettings };
