@@ -735,7 +735,7 @@
             "format": "Compact or human readable format:",
             "allCallTimers": "Add call timer to all users in a server voice channel",
             "showWithoutHover": "Always show the timer without needing to hover",
-            "showRoleColor": "Show the user's role color (if this plugin in enabled)",
+            "showRoleColor": "Show the user's role color (if this plugin is enabled)",
             "trackSelf": "Also track yourself",
             "showSeconds": "Show seconds in the timer",
             "watchLargeGuilds": "Track users in large guilds. This may cause lag if you're in a lot of large guilds with active voice users. Tested with up to 2000 active voice users with no issues."
