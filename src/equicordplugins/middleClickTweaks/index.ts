@@ -59,7 +59,7 @@ function handleMediaClick(event: MouseEvent) {
 
     const target = event.target as HTMLElement;
     const videoControls = target.querySelector?.("[class^='videoControls']") as HTMLElement | null;
-    const video = videoControls?.querySelector?.("[class^='videoButton']") as HTMLVideoElement | null;
+    const video = videoControls?.querySelector?.("[class^='videoButton']") as HTMLElement | null;
 
     if (video) {
         event.preventDefault();
