@@ -21,6 +21,7 @@ import "./style.css";
 import { definePluginSettings, migratePluginSetting, Settings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { DiscordPlatform, User } from "@vencord/discord-types";
 import { filters, findStoreLazy, mapMangledModuleLazy } from "@webpack";
@@ -95,8 +96,12 @@ interface PlatformIconProps {
 
 const PlatformIcon = ({ platform, status, small }: PlatformIconProps) => {
     const tooltip = platform === "embedded"
-        ? "Console"
-        : platform[0].toUpperCase() + platform.slice(1);
+        ? t("vencord.platformIndicators.platforms.console")
+        : platform === "desktop"
+            ? t("vencord.platformIndicators.platforms.desktop")
+            : platform === "mobile"
+                ? t("vencord.platformIndicators.platforms.mobile")
+                : t("vencord.platformIndicators.platforms.web");
     let Icon = Icons[platform] ?? Icons.desktop;
     const { ConsoleIcon } = settings.store;
     if (platform === "embedded") {
@@ -186,47 +191,47 @@ migratePluginSetting("PlatformIndicators", "profiles", "badges");
 const settings = definePluginSettings({
     list: {
         type: OptionType.BOOLEAN,
-        description: "Show indicators in the member list",
+        description: t("vencord.platformIndicators.settings.list"),
         default: true,
     },
     profiles: {
         type: OptionType.BOOLEAN,
-        description: "Show indicators in user profiles",
+        description: t("vencord.platformIndicators.settings.profiles"),
         default: true,
     },
     messages: {
         type: OptionType.BOOLEAN,
-        description: "Show indicators inside messages",
+        description: t("vencord.platformIndicators.settings.messages"),
         default: true,
     },
     colorMobileIndicator: {
         type: OptionType.BOOLEAN,
-        description: "Whether to make the mobile indicator match the color of the user status.",
+        description: t("vencord.platformIndicators.settings.colorMobileIndicator"),
         default: true,
         restartNeeded: true
     },
     showBots: {
         type: OptionType.BOOLEAN,
-        description: "Whether to show platform indicators on bots",
+        description: t("vencord.platformIndicators.settings.showBots"),
         default: false,
         restartNeeded: false
     },
     ConsoleIcon: {
         type: OptionType.SELECT,
-        description: "What console icon to use",
+        description: t("vencord.platformIndicators.settings.consoleIcon"),
         restartNeeded: true,
         options: [
             {
-                label: "Equicord",
+                label: t("vencord.platformIndicators.consoleIcons.equicord"),
                 value: "equicord",
                 default: true
             },
             {
-                label: "Suncord",
+                label: t("vencord.platformIndicators.consoleIcons.suncord"),
                 value: "suncord",
             },
             {
-                label: "Vencord",
+                label: t("vencord.platformIndicators.consoleIcons.vencord"),
                 value: "vencord",
             },
         ],
@@ -235,7 +240,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PlatformIndicators",
-    description: "Adds platform indicators (Desktop, Mobile, Web...) to users",
+    description: t("vencord.platformIndicators.description"),
     authors: [Devs.kemo, Devs.TheSun, Devs.Nuckyz, Devs.Ven],
     settings,
     renderNicknameIcon(props) {

@@ -21,6 +21,7 @@ import { FormSwitch } from "@components/FormSwitch";
 import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
 import { Margins } from "@utils/margins";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
+import { t } from "@utils/translation";
 import { SearchableSelect, useMemo } from "@webpack/common";
 
 import { settings } from "./settings";
@@ -50,7 +51,7 @@ function LanguageSelect({ settingsKey, includeAuto }: { settingsKey: typeof Lang
             <SearchableSelect
                 options={options}
                 value={options.find(o => o.value === currentValue)}
-                placeholder={"Select a language"}
+                placeholder={t("translate.selectLanguage")}
                 maxVisibleItems={5}
                 closeOnSelect={true}
                 onChange={v => settings.store[settingsKey] = v}
@@ -64,7 +65,7 @@ function AutoTranslateToggle() {
 
     return (
         <FormSwitch
-            title="Auto Translate"
+            title={t("translate.autoTranslate")}
             description={settings.def.autoTranslate.description}
             value={value}
             onChange={v => settings.store.autoTranslate = v}
@@ -78,7 +79,7 @@ export function TranslateModal({ rootProps }: { rootProps: ModalProps; }) {
         <ModalRoot {...rootProps}>
             <ModalHeader className={cl("modal-header")}>
                 <HeadingPrimary className={cl("modal-title")}>
-                    Translate
+                    {t("translate.modalTitle")}
                 </HeadingPrimary>
                 <ModalCloseButton onClick={rootProps.onClose} />
             </ModalHeader>

@@ -12,11 +12,12 @@ import { cl } from "@plugins/reviewDB/utils";
 import { Logger } from "@utils/Logger";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/modal";
 import { useAwaiter } from "@utils/react";
+import { t } from "@utils/translation";
 import { Forms, Tooltip, useState } from "@webpack/common";
 
 function UnblockButton(props: { onClick?(): void; }) {
     return (
-        <Tooltip text="Unblock user">
+        <Tooltip text={t("reviewDB.unblockUser")}>
             {tooltipProps => (
                 <div
                     {...tooltipProps}
@@ -66,9 +67,9 @@ function Modal() {
     if (pending)
         return null;
     if (error)
-        return <Paragraph>Failed to fetch blocks: ${String(error)}</Paragraph>;
+        return <Paragraph>{t("reviewDB.failedToFetchBlocks", { error: String(error) })}</Paragraph>;
     if (!blocks.length)
-        return <Paragraph>No blocked users.</Paragraph>;
+        return <Paragraph>{t("reviewDB.noBlockedUsers")}</Paragraph>;
 
     return (
         <>
@@ -88,11 +89,11 @@ export function openBlockModal() {
     openModal(modalProps => (
         <ModalRoot {...modalProps}>
             <ModalHeader className={cl("block-modal-header")}>
-                <Forms.FormTitle style={{ margin: 0 }}>Blocked Users</Forms.FormTitle>
+                <Forms.FormTitle style={{ margin: 0 }}>{t("reviewDB.blockedUsers")}</Forms.FormTitle>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
             <ModalContent className={cl("block-modal")}>
-                {Auth.token ? <Modal /> : <Paragraph>You are not logged into ReviewDB!</Paragraph>}
+                {Auth.token ? <Modal /> : <Paragraph>{t("reviewDB.notLoggedIn")}</Paragraph>}
             </ModalContent>
         </ModalRoot>
     ));

@@ -23,6 +23,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { openUserProfile } from "@utils/discord";
 import { isNonNullish } from "@utils/guards";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
 import { AuthenticationStore, Avatar, GuildMemberStore, React, RelationshipStore, TypingStore, UserStore, useStateFromStores } from "@webpack/common";
@@ -34,23 +35,23 @@ const settings = definePluginSettings({
     showAvatars: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Show avatars in the typing indicator"
+        description: t("typingTweaks.settings.showAvatars")
     },
     showRoleColors: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Show role colors in the typing indicator"
+        description: t("typingTweaks.settings.showRoleColors")
     },
     alternativeFormatting: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Show a more useful message when several users are typing"
+        description: t("typingTweaks.settings.alternativeFormatting")
     },
     amITyping: {
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true,
-        description: "Shows you if other people can see you typing"
+        description: t("typingTweaks.settings.amITyping")
     }
 });
 
@@ -63,7 +64,7 @@ export const buildSeveralUsers = ErrorBoundary.wrap(function buildSeveralUsers({
                     {", "}
                 </React.Fragment>
             ))}
-            and {count} others are typing...
+            {t("typingTweaks.andOthersTyping", { count })}
         </>
     );
 }, { noop: true });
@@ -113,7 +114,7 @@ const TypingUser = ErrorBoundary.wrap(function TypingUser({ user, guildId }: Typ
 migratePluginToSettings(true, "TypingTweaks", "AmITyping", "amITyping");
 export default definePlugin({
     name: "TypingTweaks",
-    description: "Show avatars and role colours in the typing indicator",
+    description: t("typingTweaks.description"),
     authors: [Devs.zt, Devs.sadan, EquicordDevs.MrDiamond],
     settings,
     isModified: true,

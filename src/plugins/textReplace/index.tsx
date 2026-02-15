@@ -23,6 +23,7 @@ import { HeadingTertiary } from "@components/Heading";
 import { DeleteIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { Button, React, Select, TextInput, UserStore, useState } from "@webpack/common";
@@ -51,11 +52,11 @@ const settings = definePluginSettings({
             return (
                 <>
                     <TextReplace
-                        title="Using String"
+                        title={t("textReplace.usingString")}
                         rulesArray={stringRules}
                     />
                     <TextReplace
-                        title="Using Regex"
+                        title={t("textReplace.usingRegex")}
                         rulesArray={regexRules}
                     />
                     <TextReplaceTesting />
@@ -120,7 +121,7 @@ function Input({ initialValue, onChange, placeholder }: {
 }
 
 function TextReplace({ title, rulesArray }: TextReplaceProps) {
-    const isRegexRules = title === "Using Regex";
+    const isRegexRules = title === t("textReplace.usingRegex");
 
     async function onClickRemove(index: number) {
         if (index === rulesArray.length - 1) return;
@@ -140,9 +141,9 @@ function TextReplace({ title, rulesArray }: TextReplaceProps) {
     }
 
     const scopeOptions = [
-        { label: "Apply to your messages (visible to everyone)", value: "myMessages" },
-        { label: "Apply to others' messages (only visible to you)", value: "othersMessages" },
-        { label: "Apply to all messages", value: "allMessages" }
+        { label: t("textReplace.scope.myMessages"), value: "myMessages" },
+        { label: t("textReplace.scope.othersMessages"), value: "othersMessages" },
+        { label: t("textReplace.scope.allMessages"), value: "allMessages" }
     ];
 
     return (
@@ -154,17 +155,17 @@ function TextReplace({ title, rulesArray }: TextReplaceProps) {
                         <React.Fragment key={`${rule.find}-${index}`}>
                             <Flex gap="0.5em" flexDirection="row" style={{ flexGrow: 1 }}>
                                 <Input
-                                    placeholder="Find"
+                                    placeholder={t("textReplace.find")}
                                     initialValue={rule.find}
                                     onChange={e => onChange(e, index, "find")}
                                 />
                                 <Input
-                                    placeholder="Replace"
+                                    placeholder={t("textReplace.replace")}
                                     initialValue={rule.replace}
                                     onChange={e => onChange(e, index, "replace")}
                                 />
                                 <Input
-                                    placeholder="Only if includes"
+                                    placeholder={t("textReplace.onlyIfIncludes")}
                                     initialValue={rule.onlyIfIncludes}
                                     onChange={e => onChange(e, index, "onlyIfIncludes")}
                                 />
@@ -200,9 +201,9 @@ function TextReplaceTesting() {
     const [value, setValue] = useState("");
     return (
         <>
-            <HeadingTertiary>Test Rules</HeadingTertiary>
-            <TextInput placeholder="Type a message" onChange={setValue} />
-            <TextInput placeholder="Message with rules applied" editable={false} value={applyRules(value, "allMessages")} />
+            <HeadingTertiary>{t("textReplace.testRules")}</HeadingTertiary>
+            <TextInput placeholder={t("textReplace.typeMessage")} onChange={setValue} />
+            <TextInput placeholder={t("textReplace.messageWithRules")} editable={false} value={applyRules(value, "allMessages")} />
         </>
     );
 }

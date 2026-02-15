@@ -9,6 +9,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { useTimer } from "@utils/react";
 import { formatDurationMs } from "@utils/text";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { PassiveUpdateState, VoiceState } from "@vencord/discord-types";
 import { FluxDispatcher, GuildStore, React, UserStore } from "@webpack/common";
@@ -19,7 +20,7 @@ import { Timer } from "./Timer";
 export const settings = definePluginSettings({
     format: {
         type: OptionType.SELECT,
-        description: "Compact or human readable format:",
+        description: t("vencord.callTimer.settings.format"),
         options: [
             {
                 label: "30:23:00:42",
@@ -34,37 +35,37 @@ export const settings = definePluginSettings({
     },
     allCallTimers: {
         type: OptionType.BOOLEAN,
-        description: "Add call timer to all users in a server voice channel",
+        description: t("vencord.callTimer.settings.allCallTimers"),
         restartNeeded: true,
         default: false
     },
     showWithoutHover: {
         type: OptionType.BOOLEAN,
-        description: "Always show the timer without needing to hover",
+        description: t("vencord.callTimer.settings.showWithoutHover"),
         restartNeeded: true,
         default: false
     },
     showRoleColor: {
         type: OptionType.BOOLEAN,
-        description: "Show the user's role color (if this plugin in enabled)",
+        description: t("vencord.callTimer.settings.showRoleColor"),
         restartNeeded: false,
         default: false
     },
     trackSelf: {
         type: OptionType.BOOLEAN,
-        description: "Also track yourself",
+        description: t("vencord.callTimer.settings.trackSelf"),
         restartNeeded: false,
         default: false
     },
     showSeconds: {
         type: OptionType.BOOLEAN,
-        description: "Show seconds in the timer",
+        description: t("vencord.callTimer.settings.showSeconds"),
         restartNeeded: false,
         default: false
     },
     watchLargeGuilds: {
         type: OptionType.BOOLEAN,
-        description: "Track users in large guilds. This may cause lag if you're in a lot of large guilds with active voice users. Tested with up to 2000 active voice users with no issues.",
+        description: t("vencord.callTimer.settings.watchLargeGuilds"),
         restartNeeded: true,
         default: false
     }
@@ -110,7 +111,7 @@ migratePluginToSettings(false, "CallTimer", "AllCallTimers", "allCallTimers");
 migrateSettingsFromPlugin("CallTimer", "AllCallTimers", "showWithoutHover", "showRoleColor", "trackSelf", "showSeconds", "watchLargeGuilds");
 export default definePlugin({
     name: "CallTimer",
-    description: "Add call timers for all users in voice channels and in the connection status.",
+    description: t("vencord.callTimer.description"),
     authors: [Devs.Ven, EquicordDevs.MaxHerbold, Devs.D3SOX],
     managedStyle: alignedChatInputFix,
     settings,

@@ -23,6 +23,7 @@ import {
 import { definePluginSettings } from "@api/Settings";
 import { CogWheel } from "@components/Icons";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Guild } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy, findStoreLazy, mapMangledModuleLazy } from "@webpack";
@@ -41,52 +42,52 @@ const collapsedChannels = findByPropsLazy("toggleCollapseGuild");
 
 const settings = definePluginSettings({
     guild: {
-        description: "Mute Guild automatically",
+        description: t("vencord.newGuildSettings.settings.guild"),
         type: OptionType.BOOLEAN,
         default: true
     },
     messages: {
-        description: "Server Notification Settings",
+        description: t("vencord.newGuildSettings.settings.messages"),
         type: OptionType.SELECT,
         options: [
-            { label: "All messages", value: 0 },
-            { label: "Only @mentions", value: 1 },
-            { label: "Nothing", value: 2 },
-            { label: "Server default", value: 3, default: true }
+            { label: t("vencord.newGuildSettings.settings.allMessages"), value: 0 },
+            { label: t("vencord.newGuildSettings.settings.onlyMentions"), value: 1 },
+            { label: t("vencord.newGuildSettings.settings.nothing"), value: 2 },
+            { label: t("vencord.newGuildSettings.settings.serverDefault"), value: 3, default: true }
         ],
     },
     everyone: {
-        description: "Suppress @everyone and @here",
+        description: t("vencord.newGuildSettings.settings.everyone"),
         type: OptionType.BOOLEAN,
         default: true
     },
     role: {
-        description: "Suppress All Role @mentions",
+        description: t("vencord.newGuildSettings.settings.role"),
         type: OptionType.BOOLEAN,
         default: true
     },
     highlights: {
-        description: "Suppress Highlights automatically",
+        description: t("vencord.newGuildSettings.settings.highlights"),
         type: OptionType.BOOLEAN,
         default: true
     },
     events: {
-        description: "Mute New Events automatically",
+        description: t("vencord.newGuildSettings.settings.events"),
         type: OptionType.BOOLEAN,
         default: true
     },
     showAllChannels: {
-        description: "Show all channels automatically",
+        description: t("vencord.newGuildSettings.settings.showAllChannels"),
         type: OptionType.BOOLEAN,
         default: true
     },
     mobilePush: {
-        description: "Mute Mobile Push Notifications automatically",
+        description: t("vencord.newGuildSettings.settings.mobilePush"),
         type: OptionType.BOOLEAN,
         default: true
     },
     voiceChannels: {
-        description: "Hide names in Voice channels automatically",
+        description: t("vencord.newGuildSettings.settings.voiceChannels"),
         type: OptionType.BOOLEAN,
         default: false
     }
@@ -98,7 +99,7 @@ const makeContextMenuPatch: (shouldAddIcon: boolean) => NavContextMenuPatchCallb
     const group = findGroupChildrenByChildId("privacy", children);
     group?.push(
         <Menu.MenuItem
-            label="Apply NewGuildSettings"
+            label={t("vencord.newGuildSettings.applySettings")}
             id="vc-newguildsettings-apply"
             icon={shouldAddIcon ? CogWheel : void 0}
             action={() => applyDefaultSettings(guild.id)}
@@ -150,7 +151,7 @@ function applyDefaultSettings(guildId: string | null) {
 
 export default definePlugin({
     name: "NewGuildSettings",
-    description: "Automatically mute new servers and change various other settings upon joining",
+    description: t("vencord.newGuildSettings.description"),
     tags: ["MuteNewGuild", "mute", "server"],
     authors: [Devs.Glitch, Devs.Nuckyz, Devs.carince, Devs.Mopi, Devs.GabiRP],
     isModified: true,

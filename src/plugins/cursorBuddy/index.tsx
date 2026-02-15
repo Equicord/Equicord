@@ -19,6 +19,7 @@
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const ONEKO_IMAGE = "https://raw.githubusercontent.com/adryd325/oneko.js/c4ee66353b11a44e4a5b7e914a81f8d33111555e/oneko.gif";
@@ -27,56 +28,56 @@ const FATASS_HORSE = "https://raw.githubusercontent.com/nexpid/fatass-horse/351f
 
 const settings = definePluginSettings({
     buddy: {
-        description: "Pick a cursor buddy",
+        description: () => t("cursorBuddy.settings.buddy"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Oneko",
+                label: t("cursorBuddy.buddies.oneko"),
                 value: "oneko",
                 default: true
             },
             {
-                label: "Fatass Horse",
+                label: t("cursorBuddy.buddies.fathorse"),
                 value: "fathorse"
             }
         ],
         onChange: load,
     },
     speed: {
-        description: "Speed of Da Cat :3",
+        description: () => t("cursorBuddy.settings.speed"),
         type: OptionType.NUMBER,
         default: 10,
         isValid: (value: number) => value >= 0 || "Speed must be bigger than 0",
         onChange: load,
     },
     fps: {
-        description: "Framerate of the fatass horse",
+        description: () => t("cursorBuddy.settings.fps"),
         type: OptionType.NUMBER,
         default: 24,
         isValid: (value: number) => value > 0 || "Framerate must be bigger than 0",
         onChange: load
     },
     size: {
-        description: "Size of the fatass horse",
+        description: () => t("cursorBuddy.settings.size"),
         type: OptionType.NUMBER,
         default: 120,
         isValid: (value: number) => value > 0 || "Size must be bigger than 0",
         onChange: load
     },
     fade: {
-        description: "If the horse should fade when the cursor is near",
+        description: () => t("cursorBuddy.settings.fade"),
         type: OptionType.BOOLEAN,
         default: true,
         onChange: load
     },
     freeroam: {
-        description: "If the horse should roam freely when idle",
+        description: () => t("cursorBuddy.settings.freeroam"),
         type: OptionType.BOOLEAN,
         default: true,
         onChange: load
     },
     shake: {
-        description: "If the horse should shake the window when it's walking",
+        description: () => t("cursorBuddy.settings.shake"),
         type: OptionType.BOOLEAN,
         default: false,
         onChange: load
@@ -134,7 +135,7 @@ function load() {
 migratePluginSettings("CursorBuddy", "Oneko", "oneko");
 export default definePlugin({
     name: "CursorBuddy",
-    description: "only a slightly annoying plugin",
+    description: t("cursorBuddy.description"),
     authors: [Devs.Ven, Devs.adryd, EquicordDevs.nexpid],
     settings,
 

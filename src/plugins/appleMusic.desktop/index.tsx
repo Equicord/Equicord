@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, IS_MAC } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, PluginNative, ReporterTestable } from "@utils/types";
 import { Activity, ActivityAssets, ActivityButton } from "@vencord/discord-types";
 import { ActivityFlags, ActivityStatusDisplayType, ActivityType } from "@vencord/discord-types/enums";
@@ -50,90 +51,90 @@ function setActivity(activity: Activity | null) {
 const settings = definePluginSettings({
     activityType: {
         type: OptionType.SELECT,
-        description: "Which type of activity",
+        description: () => t("appleMusicRichPresence.settings.activityType"),
         options: [
-            { label: "Playing", value: ActivityType.PLAYING, default: true },
-            { label: "Listening", value: ActivityType.LISTENING }
+            { label: t("appleMusicRichPresence.activityTypes.playing"), value: ActivityType.PLAYING, default: true },
+            { label: t("appleMusicRichPresence.activityTypes.listening"), value: ActivityType.LISTENING }
         ],
     },
     statusDisplayType: {
-        description: "Show the track / artist name in the member list",
+        description: () => t("appleMusicRichPresence.settings.statusDisplayType"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Don't show (shows generic listening message)",
+                label: t("appleMusicRichPresence.statusDisplayTypes.off"),
                 value: "off",
                 default: true
             },
             {
-                label: "Show artist name",
+                label: t("appleMusicRichPresence.statusDisplayTypes.artist"),
                 value: "artist"
             },
             {
-                label: "Show track name",
+                label: t("appleMusicRichPresence.statusDisplayTypes.track"),
                 value: "track"
             }
         ]
     },
     refreshInterval: {
         type: OptionType.SLIDER,
-        description: "The interval between activity refreshes (seconds)",
+        description: () => t("appleMusicRichPresence.settings.refreshInterval"),
         markers: [1, 2, 2.5, 3, 5, 10, 15],
         default: 5,
         restartNeeded: true,
     },
     enableTimestamps: {
         type: OptionType.BOOLEAN,
-        description: "Whether or not to enable timestamps",
+        description: () => t("appleMusicRichPresence.settings.enableTimestamps"),
         default: true,
     },
     enableButtons: {
         type: OptionType.BOOLEAN,
-        description: "Whether or not to enable buttons",
+        description: () => t("appleMusicRichPresence.settings.enableButtons"),
         default: true,
     },
     nameString: {
         type: OptionType.STRING,
-        description: "Activity name format string",
-        default: "Apple Music"
+        description: () => t("appleMusicRichPresence.settings.nameString"),
+        default: t("appleMusicRichPresence.defaultName")
     },
     detailsString: {
         type: OptionType.STRING,
-        description: "Activity details format string",
-        default: "{name}"
+        description: () => t("appleMusicRichPresence.settings.detailsString"),
+        default: t("appleMusicRichPresence.defaultDetails")
     },
     stateString: {
         type: OptionType.STRING,
-        description: "Activity state format string",
-        default: "{artist} · {album}"
+        description: () => t("appleMusicRichPresence.settings.stateString"),
+        default: t("appleMusicRichPresence.defaultState")
     },
     largeImageType: {
         type: OptionType.SELECT,
-        description: "Activity assets large image type",
+        description: () => t("appleMusicRichPresence.settings.largeImageType"),
         options: [
-            { label: "Album artwork", value: AssetImageType.Album, default: true },
-            { label: "Artist artwork", value: AssetImageType.Artist },
-            { label: "Disabled", value: AssetImageType.Disabled }
+            { label: t("appleMusicRichPresence.assetImageTypes.album"), value: AssetImageType.Album, default: true },
+            { label: t("appleMusicRichPresence.assetImageTypes.artist"), value: AssetImageType.Artist },
+            { label: t("appleMusicRichPresence.assetImageTypes.disabled"), value: AssetImageType.Disabled }
         ],
     },
     largeTextString: {
         type: OptionType.STRING,
-        description: "Activity assets large text format string",
-        default: "{album}"
+        description: () => t("appleMusicRichPresence.settings.largeTextString"),
+        default: t("appleMusicRichPresence.defaultLargeText")
     },
     smallImageType: {
         type: OptionType.SELECT,
-        description: "Activity assets small image type",
+        description: () => t("appleMusicRichPresence.settings.smallImageType"),
         options: [
-            { label: "Album artwork", value: AssetImageType.Album },
-            { label: "Artist artwork", value: AssetImageType.Artist, default: true },
-            { label: "Disabled", value: AssetImageType.Disabled }
+            { label: t("appleMusicRichPresence.assetImageTypes.album"), value: AssetImageType.Album },
+            { label: t("appleMusicRichPresence.assetImageTypes.artist"), value: AssetImageType.Artist, default: true },
+            { label: t("appleMusicRichPresence.assetImageTypes.disabled"), value: AssetImageType.Disabled }
         ],
     },
     smallTextString: {
         type: OptionType.STRING,
-        description: "Activity assets small text format string",
-        default: "{artist}"
+        description: () => t("appleMusicRichPresence.settings.smallTextString"),
+        default: t("appleMusicRichPresence.defaultSmallText")
     },
 });
 
@@ -156,7 +157,7 @@ function getImageAsset(type: AssetImageType, data: TrackData) {
 
 export default definePlugin({
     name: "AppleMusicRichPresence",
-    description: "Discord rich presence for your Apple Music!",
+    description: t("appleMusicRichPresence.description"),
     authors: [Devs.RyanCaoDev],
     hidden: !IS_MAC,
     reporterTestable: ReporterTestable.None,
@@ -164,8 +165,8 @@ export default definePlugin({
     settingsAboutComponent() {
         return <>
             <Paragraph>
-                For the customizable activity format strings, you can use several special strings to include track data in activities!{" "}
-                <code>{"{name}"}</code> is replaced with the track name; <code>{"{artist}"}</code> is replaced with the artist(s)' name(s); and <code>{"{album}"}</code> is replaced with the album name.
+                {t("appleMusicRichPresence.settingsAbout.intro")}{" "}
+                <code>{"{name}"}</code> {t("appleMusicRichPresence.settingsAbout.namePlaceholder")}; <code>{"{artist}"}</code> {t("appleMusicRichPresence.settingsAbout.artistPlaceholder")}; and <code>{"{album}"}</code> {t("appleMusicRichPresence.settingsAbout.albumPlaceholder")}
             </Paragraph>
         </>;
     },
@@ -215,13 +216,13 @@ export default definePlugin({
         if (settings.store.enableButtons) {
             if (trackData.appleMusicLink)
                 buttons.push({
-                    label: "Listen on Apple Music",
+                    label: t("appleMusicRichPresence.buttons.listenOnAppleMusic"),
                     url: trackData.appleMusicLink,
                 });
 
             if (trackData.songLink)
                 buttons.push({
-                    label: "View on SongLink",
+                    label: t("appleMusicRichPresence.buttons.viewOnSongLink"),
                     url: trackData.songLink,
                 });
         }

@@ -17,6 +17,7 @@
 */
 
 import { getUniqueUsername, openUserProfile } from "@utils/discord";
+import { t } from "@utils/translation";
 import { ChannelType, RelationshipType } from "@vencord/discord-types/enums";
 import { UserUtils } from "@webpack/common";
 
@@ -46,7 +47,7 @@ export async function onRelationshipRemove({ relationship: { type, id } }: Relat
         case RelationshipType.FRIEND:
             if (settings.store.friends)
                 notify(
-                    `${getUniqueUsername(user)} removed you as a friend.`,
+                    t("relationshipNotifier.friendRemoved", { username: getUniqueUsername(user) }),
                     user.getAvatarURL(undefined, undefined, false),
                     () => openUserProfile(user.id)
                 );
@@ -54,7 +55,7 @@ export async function onRelationshipRemove({ relationship: { type, id } }: Relat
         case RelationshipType.INCOMING_REQUEST:
             if (settings.store.friendRequestCancels)
                 notify(
-                    `A friend request from ${getUniqueUsername(user)} has been removed.`,
+                    t("relationshipNotifier.friendRequestRemoved", { username: getUniqueUsername(user) }),
                     user.getAvatarURL(undefined, undefined, false),
                     () => openUserProfile(user.id)
                 );
@@ -75,7 +76,7 @@ export function onGuildDelete({ guild: { id, unavailable } }: GuildDelete) {
     const guild = getGuild(id);
     if (guild) {
         deleteGuild(id);
-        notify(`You were removed from the server ${guild.name}.`, guild.iconURL);
+        notify(t("relationshipNotifier.serverRemoved", { name: guild.name }), guild.iconURL);
     }
 }
 
@@ -92,6 +93,6 @@ export function onChannelDelete({ channel: { id, type } }: ChannelDelete) {
     const group = getGroup(id);
     if (group) {
         deleteGroup(id);
-        notify(`You were removed from the group ${group.name}.`, group.iconURL);
+        notify(t("relationshipNotifier.groupRemoved", { name: group.name }), group.iconURL);
     }
 }

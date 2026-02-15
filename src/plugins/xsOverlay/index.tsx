@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { makeRange, OptionType, PluginNative, ReporterTestable } from "@utils/types";
 import type { Channel, Embed, GuildMember, MessageAttachment, User } from "@vencord/discord-types";
 import { findByCodeLazy, findLazy } from "@webpack";
@@ -95,7 +96,7 @@ const logger = new Logger("XSOverlay");
 const settings = definePluginSettings({
     webSocketPort: {
         type: OptionType.NUMBER,
-        description: "Websocket port",
+        description: t("xsOverlay.webSocketPort"),
         default: 42070,
         async onChange() {
             await start();
@@ -103,69 +104,69 @@ const settings = definePluginSettings({
     },
     preferUDP: {
         type: OptionType.BOOLEAN,
-        description: "Enable if you use an older build of XSOverlay unable to connect through websockets. This setting is ignored on web.",
+        description: t("xsOverlay.preferUDPDescription"),
         default: false,
         disabled: () => IS_WEB
     },
     botNotifications: {
         type: OptionType.BOOLEAN,
-        description: "Allow bot notifications",
+        description: t("xsOverlay.botNotifications"),
         default: false
     },
     serverNotifications: {
         type: OptionType.BOOLEAN,
-        description: "Allow server notifications",
+        description: t("xsOverlay.serverNotifications"),
         default: true
     },
     dmNotifications: {
         type: OptionType.BOOLEAN,
-        description: "Allow Direct Message notifications",
+        description: t("xsOverlay.dmNotifications"),
         default: true
     },
     groupDmNotifications: {
         type: OptionType.BOOLEAN,
-        description: "Allow Group DM notifications",
+        description: t("xsOverlay.groupDmNotifications"),
         default: true
     },
     callNotifications: {
         type: OptionType.BOOLEAN,
-        description: "Allow call notifications",
+        description: t("xsOverlay.callNotifications"),
         default: true
     },
     pingColor: {
         type: OptionType.STRING,
-        description: "User mention color",
+        description: t("xsOverlay.pingColor"),
         default: "#7289da"
     },
     channelPingColor: {
         type: OptionType.STRING,
-        description: "Channel mention color",
+        description: t("xsOverlay.channelPingColor"),
         default: "#8a2be2"
     },
     soundPath: {
         type: OptionType.STRING,
-        description: "Notification sound (default/warning/error)",
+        description: t("xsOverlay.soundPath"),
         default: "default"
     },
     timeout: {
         type: OptionType.NUMBER,
-        description: "Notification duration (secs)",
+        description: t("xsOverlay.timeout"),
         default: 3,
     },
     lengthBasedTimeout: {
         type: OptionType.BOOLEAN,
-        description: "Extend duration with message length",
+        description: t("xsOverlay.lengthBasedTimeout"),
         default: true
     },
     opacity: {
         type: OptionType.SLIDER,
-        description: "Notif opacity",
+        description: t("xsOverlay.opacity"),
         default: 1,
         markers: makeRange(0, 1, 0.1)
     },
     volume: {
         type: OptionType.SLIDER,
-        description: "Volume",
+        description: t("xsOverlay.volume"),
         default: 0.2,
         markers: makeRange(0, 1, 0.1)
     },
@@ -187,7 +188,7 @@ const Native = VencordNative.pluginHelpers.XSOverlay as PluginNative<typeof impo
 
 export default definePlugin({
     name: "XSOverlay",
-    description: "Forwards discord notifications to XSOverlay, for easy viewing in VR",
+    description: t("xsOverlay.description"),
     authors: [Devs.Nyako],
     tags: ["vr", "notify"],
     reporterTestable: ReporterTestable.None,
@@ -197,7 +198,7 @@ export default definePlugin({
         CALL_UPDATE({ call }: { call: Call; }) {
             if (call?.ringing?.includes(UserStore.getCurrentUser().id) && settings.store.callNotifications) {
                 const channel = ChannelStore.getChannel(call.channel_id);
-                sendOtherNotif("Incoming call", `${channel.name} is calling you...`);
+                sendOtherNotif(t("xsOverlay.incomingCall"), `${channel.name} ${t("xsOverlay.isCallingYou")}`);
             }
         },
         MESSAGE_CREATE({ message, optimistic }: { message: Message; optimistic: boolean; }) {
@@ -226,20 +227,20 @@ export default definePlugin({
             }
 
             if (message.referenced_message) {
-                titleString += " (reply)";
+                titleString += ` (${t("xsOverlay.reply")})`;
             }
 
             if (message.embeds.length > 0) {
-                finalMsg += " [embed] ";
+                finalMsg += ` [${t("xsOverlay.embed")}] `;
                 if (message.content === "") {
-                    finalMsg = "sent message embed(s)";
+                    finalMsg = t("xsOverlay.sentEmbeds");
                 }
             }
 
             if (message.sticker_items) {
-                finalMsg += " [sticker] ";
+                finalMsg += ` [${t("xsOverlay.sticker")}] `;
                 if (message.content === "") {
-                    finalMsg = "sent a sticker";
+                    finalMsg = t("xsOverlay.sentSticker");
                 }
             }
 
@@ -249,11 +250,11 @@ export default definePlugin({
             );
 
             images.forEach(img => {
-                finalMsg += ` [image: ${img.filename}] `;
+                finalMsg += ` [${t("xsOverlay.image")}: ${img.filename}] `;
             });
 
             message.attachments.filter(a => a && !a.content_type?.startsWith("image")).forEach(a => {
-                finalMsg += ` [attachment: ${a.filename}] `;
+                finalMsg += ` [${t("xsOverlay.attachment")}: ${a.filename}] `;
             });
 
             // make mentions readable
@@ -303,8 +304,8 @@ export default definePlugin({
 
     settingsAboutComponent: () => (
         <>
-            <Button onClick={() => sendOtherNotif("This is a test notification! explode", "Hello from Vendor!")}>
-                Send test notification
+            <Button onClick={() => sendOtherNotif(t("xsOverlay.testNotification"), t("xsOverlay.helloFromVendor"))}>
+                {t("xsOverlay.sendTestNotification")}
             </Button>
         </>
     )

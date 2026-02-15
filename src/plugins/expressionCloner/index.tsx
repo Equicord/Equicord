@@ -26,6 +26,7 @@ import { getGuildAcronym } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { ModalContent, ModalHeader, ModalRoot, openModalLazy } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Guild, GuildSticker } from "@vencord/discord-types";
 import { StickerFormatType } from "@vencord/discord-types/enums";
@@ -193,19 +194,19 @@ async function doClone(guildId: string, data: Sticker | Emoji) {
             await cloneEmoji(guildId, data);
 
         Toasts.show({
-            message: `Successfully cloned ${data.name} to ${GuildStore.getGuild(guildId)?.name ?? "your server"}!`,
+            message: t("expressionCloner.clonedSuccess", { name: data.name, guild: GuildStore.getGuild(guildId)?.name ?? "your server" }),
             type: Toasts.Type.SUCCESS,
             id: Toasts.genId()
         });
     } catch (e: any) {
-        let message = "Something went wrong (check console!)";
+        let message = t("expressionCloner.somethingWentWrong");
         try {
             message = JSON.parse(e.text).message;
         } catch { }
 
         new Logger("ExpressionCloner").error("Failed to clone", data.name, "to", guildId, e);
         Toasts.show({
-            message: "Failed to clone: " + message,
+            message: t("expressionCloner.failedToClone", { error: message }),
             type: Toasts.Type.FAILURE,
             id: Toasts.genId()
         });
@@ -230,7 +231,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
 
     return (
         <>
-            <Heading className={Margins.top20}>Custom Name</Heading>
+            <Heading className={Margins.top20}>{t("expressionCloner.customName")}</Heading>
             <CheckedTextInput
                 value={name}
                 onChange={v => {
@@ -240,7 +241,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
                 validate={v =>
                     (data.t === "Emoji" && v.length > 2 && v.length < 32 && nameValidator.test(v))
                     || (data.t === "Sticker" && v.length > 2 && v.length < 30)
-                    || "Name must be between 2 and 32 characters and only contain alphanumeric characters"
+                    || t("expressionCloner.nameValidation")
                 }
             />
             <div style={{
@@ -258,7 +259,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
                                 onMouseLeave={onMouseLeave}
                                 onMouseEnter={onMouseEnter}
                                 role="button"
-                                aria-label={"Clone to " + g.name}
+                                aria-label={t("expressionCloner.cloneTo", { guild: g.name })}
                                 aria-disabled={isCloning}
                                 style={{
                                     borderRadius: "50%",
@@ -323,7 +324,7 @@ function buildMenuItem(type: "Emoji" | "Sticker", fetchData: () => Promisable<Om
         <Menu.MenuItem
             id="emote-cloner"
             key="emote-cloner"
-            label={`Clone ${type}`}
+            label={type === "Emoji" ? t("expressionCloner.cloneEmoji") : t("expressionCloner.cloneSticker")}
             action={() =>
                 openModalLazy(async () => {
                     const res = await fetchData();

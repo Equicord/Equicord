@@ -23,6 +23,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { isNonNullish } from "@utils/guards";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
@@ -53,7 +54,9 @@ const isBotOrSelf = (user: User) => user.bot || user.id === UserStore.getCurrent
 
 function getMutualGDMCountText(user: User) {
     const count = getMutualGroupDms(user.id).length;
-    return `${count === 0 ? "No" : count} Mutual Group${count !== 1 ? "s" : ""}`;
+    return count === 0
+        ? t("vencord.mutualGroupDMs.noMutualGroups")
+        : t("vencord.mutualGroupDMs.mutualGroups", { count });
 }
 
 function renderClickableGDMs(mutualDms: Channel[], onClose: () => void) {
@@ -74,7 +77,7 @@ function renderClickableGDMs(mutualDms: Channel[], onClose: () => void) {
             </Avatar>
             <div className={MutualsListClasses.details}>
                 <div className={MutualsListClasses.name}>{getGroupDMName(c)}</div>
-                <BaseText size="xs" weight="medium">{c.recipients.length + 1} Members</BaseText>
+                <BaseText size="xs" weight="medium">{t("vencord.mutualGroupDMs.members", { count: c.recipients.length + 1 })}</BaseText>
             </div>
         </Clickable>
     ));
@@ -84,7 +87,7 @@ const IS_PATCHED = Symbol("MutualGroupDMs.Patched");
 
 export default definePlugin({
     name: "MutualGroupDMs",
-    description: "Shows mutual group dms in profiles",
+    description: t("vencord.mutualGroupDMs.description"),
     authors: [Devs.amia],
 
     patches: [
@@ -182,7 +185,7 @@ export default definePlugin({
                     : (
                         <div className={ProfileListClasses.empty}>
                             <div className={ProfileListClasses.emptyIconFriends}></div>
-                            <div className={ProfileListClasses.emptyText}>No group dms in common</div>
+                            <div className={ProfileListClasses.emptyText}>{t("vencord.mutualGroupDMs.noGroupDms")}</div>
                         </div>
                     )
                 }
@@ -199,7 +202,7 @@ export default definePlugin({
                 {hasDivider && Divider}
                 <ExpandableList
                     listClassName={listStyle}
-                    header={"Mutual Groups"}
+                    header={t("vencord.mutualGroupDMs.mutualGroupsHeader")}
                     isLoading={false}
                     items={renderClickableGDMs(mutualGDms, () => { })}
                 />

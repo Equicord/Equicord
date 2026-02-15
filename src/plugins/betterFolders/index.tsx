@@ -20,6 +20,7 @@ import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { FluxDispatcher } from "@webpack/common";
@@ -80,54 +81,54 @@ function filterTreeWithTargetNode(children: any, predicate: (node: any) => boole
 export const settings = definePluginSettings({
     sidebar: {
         type: OptionType.BOOLEAN,
-        description: "Display servers from folder on dedicated sidebar",
+        description: t("betterFolders.settings.sidebar"),
         restartNeeded: true,
         default: true
     },
     sidebarAnim: {
         type: OptionType.BOOLEAN,
-        description: "Animate opening the folder sidebar",
+        description: t("betterFolders.settings.sidebarAnim"),
         default: true
     },
     closeAllFolders: {
         type: OptionType.BOOLEAN,
-        description: "Close all folders when selecting a server not in a folder",
+        description: t("betterFolders.settings.closeAllFolders"),
         default: false
     },
     closeAllHomeButton: {
         type: OptionType.BOOLEAN,
-        description: "Close all folders when clicking on the home button",
+        description: t("betterFolders.settings.closeAllHomeButton"),
         restartNeeded: true,
         default: false
     },
     closeOthers: {
         type: OptionType.BOOLEAN,
-        description: "Close other folders when opening a folder",
+        description: t("betterFolders.settings.closeOthers"),
         default: false
     },
     closeServerFolder: {
         type: OptionType.BOOLEAN,
-        description: "Close folder when selecting a server in that folder",
+        description: t("betterFolders.settings.closeServerFolder"),
         default: false,
     },
     forceOpen: {
         type: OptionType.BOOLEAN,
-        description: "Force a folder to open when switching to a server of that folder",
+        description: t("betterFolders.settings.forceOpen"),
         default: false
     },
     keepIcons: {
         type: OptionType.BOOLEAN,
-        description: "Keep showing guild icons in the primary guild bar folder when it's open in the BetterFolders sidebar",
+        description: t("betterFolders.settings.keepIcons"),
         restartNeeded: true,
         default: false
     },
     showFolderIcon: {
         type: OptionType.SELECT,
-        description: "Show the folder icon above the folder guilds in the BetterFolders sidebar",
+        description: t("betterFolders.settings.showFolderIcon"),
         options: [
-            { label: "Never", value: FolderIconDisplay.Never },
-            { label: "Always", value: FolderIconDisplay.Always, default: true },
-            { label: "When more than one folder is expanded", value: FolderIconDisplay.MoreThanOneFolderExpanded }
+            { label: t("betterFolders.settings.folderIconNever"), value: FolderIconDisplay.Never },
+            { label: t("betterFolders.settings.folderIconAlways"), value: FolderIconDisplay.Always, default: true },
+            { label: t("betterFolders.settings.folderIconMultipleExpanded"), value: FolderIconDisplay.MoreThanOneFolderExpanded }
         ],
         restartNeeded: true
     }

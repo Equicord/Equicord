@@ -10,6 +10,7 @@ import { ImageIcon } from "@components/Icons";
 import { copyToClipboard } from "@utils/clipboard";
 import { Devs } from "@utils/constants";
 import { getCurrentGuild, openImageModal } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { GuildRoleStore, Menu, PermissionStore } from "@webpack/common";
@@ -43,7 +44,7 @@ function AppearanceIcon() {
 const settings = definePluginSettings({
     roleIconFileFormat: {
         type: OptionType.SELECT,
-        description: "File format to use when viewing role icons",
+        description: () => t("betterRoleContext.settings.roleIconFileFormat"),
         options: [
             {
                 label: "png",
@@ -64,7 +65,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterRoleContext",
-    description: "Adds options to copy role color / edit role / view role icon when right clicking roles in the user profile",
+    description: t("betterRoleContext.description"),
     authors: [Devs.Ven, Devs.goodbee],
     dependencies: ["UserSettingsAPI"],
 
@@ -87,7 +88,7 @@ export default definePlugin({
                 children.unshift(
                     <Menu.MenuItem
                         id="vc-copy-role-color"
-                        label="Copy Role Color"
+                        label={t("betterRoleContext.copyRoleColor")}
                         action={() => copyToClipboard(role.colorString!)}
                         icon={AppearanceIcon}
                     />
@@ -98,7 +99,7 @@ export default definePlugin({
                 children.unshift(
                     <Menu.MenuItem
                         id="vc-edit-role"
-                        label="Edit Role"
+                        label={t("betterRoleContext.editRole")}
                         action={async () => {
                             await GuildSettingsActions.open(guild.id, "ROLES");
                             GuildSettingsActions.selectRole(id);
@@ -112,7 +113,7 @@ export default definePlugin({
                 children.push(
                     <Menu.MenuItem
                         id="vc-view-role-icon"
-                        label="View Role Icon"
+                        label={t("betterRoleContext.viewRoleIcon")}
                         action={() => {
                             openImageModal({
                                 url: `${location.protocol}//${window.GLOBAL_ENV.CDN_HOST}/role-icons/${role.id}/${role.icon}.${settings.store.roleIconFileFormat}`,

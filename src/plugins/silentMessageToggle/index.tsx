@@ -20,6 +20,7 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { addMessagePreSendListener, MessageSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import { React, useEffect, useState } from "@webpack/common";
 
@@ -30,11 +31,11 @@ export { lastState };
 const settings = definePluginSettings({
     persistState: {
         type: OptionType.SELECT,
-        description: "How to persist the silent message toggle state",
+        description: t("silentMessageToggle.settings.persistState"),
         options: [
-            { label: "Don't persist (reset on channel change)", value: "none", default: true },
-            { label: "Persist between channels", value: "channels" },
-            { label: "Persist between channels and restarts", value: "restarts" }
+            { label: t("silentMessageToggle.settings.persistNone"), value: "none", default: true },
+            { label: t("silentMessageToggle.settings.persistChannels"), value: "channels" },
+            { label: t("silentMessageToggle.settings.persistRestarts"), value: "restarts" }
         ],
         onChange(newValue: string) {
             lastState = newValue !== "none" && lastState;
@@ -42,7 +43,7 @@ const settings = definePluginSettings({
     },
     autoDisable: {
         type: OptionType.BOOLEAN,
-        description: "Automatically disable the silent message toggle again after sending one",
+        description: t("silentMessageToggle.settings.autoDisable"),
         default: true
     }
 });
@@ -98,7 +99,7 @@ const SilentMessageToggle: ChatBarButtonFactory = ({ isMainChat }) => {
 
     return (
         <ChatBarButton
-            tooltip={enabled ? "Disable Silent Message" : "Enable Silent Message"}
+            tooltip={enabled ? t("silentMessageToggle.disableSilentMessage") : t("silentMessageToggle.enableSilentMessage")}
             onClick={() => setEnabledValue(!enabled)}
         >
             {enabled ? <SilentMessageIcon /> : <SilentMessageDisabledIcon />}
@@ -109,7 +110,7 @@ const SilentMessageToggle: ChatBarButtonFactory = ({ isMainChat }) => {
 export default definePlugin({
     name: "SilentMessageToggle",
     authors: [Devs.Nuckyz, Devs.CatNoir, EquicordDevs.Z1xus],
-    description: "Adds a button to the chat bar to toggle sending a silent message.",
+    description: t("silentMessageToggle.description"),
     settings,
 
     chatBarButton: {

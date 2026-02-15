@@ -11,6 +11,7 @@ import { DEFAULT_COLOR, SWATCHES } from "@plugins/pinDms/constants";
 import { categoryLen, createCategory, getCategory } from "@plugins/pinDms/data";
 import { classNameFactory } from "@utils/css";
 import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModalLazy } from "@utils/modal";
+import { t } from "@utils/translation";
 import { extractAndLoadChunksLazy, findComponentByCodeLazy } from "@webpack";
 import { Button, ColorPicker, TextInput, Toasts, useMemo, useState } from "@webpack/common";
 
@@ -43,7 +44,7 @@ function useCategory(categoryId: string | null, initalChannelId: string | null) 
         } else if (initalChannelId) {
             return {
                 id: Toasts.genId(),
-                name: `Pin Category ${categoryLen() + 1}`,
+                name: t("pinDms.pinCategory", { index: categoryLen() + 1 }),
                 color: DEFAULT_COLOR,
                 collapsed: false,
                 channels: [initalChannelId]
@@ -77,14 +78,14 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader>
-                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{categoryId ? "Edit" : "New"} Category</BaseText>
+                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{categoryId ? t("pinDms.editCategoryTitle") : t("pinDms.newCategory")}</BaseText>
             </ModalHeader>
 
             {/* form is here so when you press enter while in the text input it submits */}
             <form onSubmit={onSave}>
                 <ModalContent className={cl("content")}>
                     <section>
-                        <Heading>Name</Heading>
+                        <Heading>{t("pinDms.name")}</Heading>
                         <TextInput
                             value={name}
                             onChange={e => setName(e)}
@@ -92,7 +93,7 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
                     </section>
                     <Divider />
                     <section>
-                        <Heading>Color</Heading>
+                        <Heading>{t("pinDms.color")}</Heading>
                         <ColorPickerWithSwatches
                             key={category.id}
                             defaultColor={DEFAULT_COLOR}
@@ -112,7 +113,7 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
                     </section>
                 </ModalContent>
                 <ModalFooter>
-                    <Button type="submit" onClick={onSave} disabled={!name}>{categoryId ? "Save" : "Create"}</Button>
+                    <Button type="submit" onClick={onSave} disabled={!name}>{categoryId ? t("pinDms.save") : t("pinDms.create")}</Button>
                 </ModalFooter>
             </form>
         </ModalRoot>

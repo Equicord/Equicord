@@ -21,6 +21,7 @@ import { isPluginEnabled } from "@api/PluginManager";
 import ExpressionClonerPlugin from "@plugins/expressionCloner";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Message, Sticker } from "@vencord/discord-types";
 import { Menu, React, StickersStore } from "@webpack/common";
@@ -43,14 +44,14 @@ function buildMenuItem(sticker: PartialSticker, addBottomSeparator: boolean) {
                 <Menu.MenuItem
                     id="vc-copy-sticker-link"
                     key="vc-copy-sticker-link"
-                    label="Copy Link"
-                    action={() => copyWithToast(getUrl(sticker), "Link copied!")}
+                    label={t("copyStickerLinks.copyLink")}
+                    action={() => copyWithToast(getUrl(sticker), t("copyStickerLinks.linkCopied"))}
                 />
 
                 <Menu.MenuItem
                     id="vc-open-sticker-link"
                     key="vc-open-sticker-link"
-                    label="Open Link"
+                    label={t("copyStickerLinks.openLink")}
                     action={() => VencordNative.native.openExternal(getUrl(sticker))}
                 />
             </Menu.MenuGroup>
@@ -86,7 +87,7 @@ const expressionPickerPatch: NavContextMenuPatchCallback = (children, props: { t
 
 export default definePlugin({
     name: "CopyStickerLinks",
-    description: "Adds the ability to copy & open Sticker links",
+    description: t("copyStickerLinks.description"),
     authors: [Devs.Ven, Devs.Byeoon],
     contextMenus: {
         "message": messageContextMenuPatch,

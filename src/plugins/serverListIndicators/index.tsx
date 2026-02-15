@@ -24,6 +24,7 @@ import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
 import { GuildStore, PresenceStore, RelationshipStore, Tooltip, useStateFromStores } from "@webpack/common";
@@ -78,7 +79,7 @@ function FriendsIndicator() {
                 size="xs"
                 id="vc-friendcount-text">{onlineFriendsCount}
             </BaseText>
-            {!!settings.store.useCompact && <BaseText size="xs" id="vc-friendcount-text-compact">Friends</BaseText>}
+            {!!settings.store.useCompact && <BaseText size="xs" id="vc-friendcount-text-compact">{t("serverListIndicators.friends")}</BaseText>}
         </div>
     );
 }
@@ -114,33 +115,33 @@ function ServersIndicator() {
                 size="xs"
                 id="vc-guildcount-text">{guildCount}
             </BaseText>
-            {!!settings.store.useCompact && <BaseText size="xs" id="vc-guildcount-text-compact">Servers</BaseText>}
+            {!!settings.store.useCompact && <BaseText size="xs" id="vc-guildcount-text-compact">{t("serverListIndicators.servers")}</BaseText>}
         </div>
     );
 }
 
 export const settings = definePluginSettings({
     mode: {
-        description: "Mode",
+        description: t("serverListIndicators.settings.mode"),
         type: OptionType.SELECT,
         options: [
-            { label: "Only online friend count", value: IndicatorType.FRIEND, default: true },
-            { label: "Only server count", value: IndicatorType.SERVER },
-            { label: "Both server and online friend counts", value: IndicatorType.BOTH },
+            { label: t("serverListIndicators.settings.modeOnlyFriends"), value: IndicatorType.FRIEND, default: true },
+            { label: t("serverListIndicators.settings.modeOnlyServers"), value: IndicatorType.SERVER },
+            { label: t("serverListIndicators.settings.modeBoth"), value: IndicatorType.BOTH },
         ],
-        restartNeeded: true // Restart needed just to force update
+        restartNeeded: true
     },
     useCompact: {
-        description: "Makes the indicator appear with only text",
+        description: t("serverListIndicators.settings.useCompact"),
         type: OptionType.BOOLEAN,
         default: false,
-        restartNeeded: true // Restart needed just to force update
+        restartNeeded: true
     }
 });
 
 export default definePlugin({
     name: "ServerListIndicators",
-    description: "Add online friend count or server count in the server list",
+    description: t("serverListIndicators.description"),
     authors: [Devs.dzshn, EquicordDevs.Panniku],
     dependencies: ["ServerListAPI"],
     settings,
@@ -148,16 +149,15 @@ export default definePlugin({
     renderIndicator: () => {
         const { mode, useCompact } = settings.store;
         let text;
-        // switch is simply better
         switch (mode) {
             case IndicatorType.BOTH:
-                text = `${onlineFriendsCount} Friends, ${guildCount} Servers`;
+                text = t("serverListIndicators.tooltipBoth", { friends: onlineFriendsCount, servers: guildCount });
                 break;
             case IndicatorType.FRIEND:
-                text = `${onlineFriendsCount} Friends`;
+                text = t("serverListIndicators.tooltipFriends", { count: onlineFriendsCount });
                 break;
             case IndicatorType.SERVER:
-                text = `${guildCount} Servers`;
+                text = t("serverListIndicators.tooltipServers", { count: guildCount });
                 break;
         }
 

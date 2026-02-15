@@ -18,6 +18,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import { findLazy } from "@webpack";
@@ -32,10 +33,10 @@ const settings = definePluginSettings({
     greetMode: {
         type: OptionType.SELECT,
         options: [
-            { label: "Greet (you can only greet 3 times)", value: GreetMode.Greet, default: true },
-            { label: "Normal Message (you can greet spam)", value: GreetMode.NormalMessage }
+            { label: t("greetStickerPicker.greetModeLabel"), value: GreetMode.Greet, default: true },
+            { label: t("greetStickerPicker.normalMessageLabel"), value: GreetMode.NormalMessage }
         ],
-        description: "Choose the greet mode"
+        description: t("greetStickerPicker.greetModeDescription")
     }
 }).withPrivateSettings<{
     multiGreetChoices?: string[];
@@ -75,10 +76,10 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
         <Menu.Menu
             navId="greet-sticker-picker"
             onClose={() => FluxDispatcher.dispatch({ type: "CONTEXT_MENU_CLOSE" })}
-            aria-label="Greet Sticker Picker"
+            aria-label={t("greetStickerPicker.ariaLabel")}
         >
             <Menu.MenuGroup
-                label="Greet Mode"
+                label={t("greetStickerPicker.greetMode")}
             >
                 {Object.values(GreetMode).map(mode => (
                     <Menu.MenuRadioItem
@@ -95,7 +96,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
             <Menu.MenuSeparator />
 
             <Menu.MenuGroup
-                label="Greet Stickers"
+                label={t("greetStickerPicker.greetStickers")}
             >
                 {WELCOME_STICKERS.map(sticker => (
                     <Menu.MenuItem
@@ -112,7 +113,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
                     <Menu.MenuSeparator />
 
                     <Menu.MenuItem
-                        label="Unholy Multi-Greet"
+                        label={t("greetStickerPicker.unholyMultiGreet")}
                         id="unholy-multi-greet"
                     >
                         {WELCOME_STICKERS.map(sticker => {
@@ -137,7 +138,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
                         <Menu.MenuSeparator />
                         <Menu.MenuItem
                             id="multi-greet-submit"
-                            label="Send Greets"
+                            label={t("greetStickerPicker.sendGreets")}
                             action={() => greet(channel, message, multiGreetChoices!)}
                             disabled={multiGreetChoices.length === 0}
                         />
@@ -151,7 +152,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
 
 export default definePlugin({
     name: "GreetStickerPicker",
-    description: "Allows you to use any greet sticker instead of only the random one by right-clicking the 'Wave to say hi!' button",
+    description: t("greetStickerPicker.description"),
     authors: [Devs.Ven],
 
     settings,

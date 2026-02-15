@@ -22,6 +22,7 @@ import { addServerListElement, removeServerListElement, ServerListRenderPosition
 import { TextButton } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { ActiveJoinedThreadsStore, FluxDispatcher, GuildChannelStore, GuildStore, React, ReadStateStore } from "@webpack/common";
 
@@ -59,13 +60,13 @@ const ReadAllButton = () => (
         onClick={onClick}
         className="vc-ranb-button"
     >
-        Read All
+        {t("readAllNotificationsButton.readAll")}
     </TextButton>
 );
 
 export default definePlugin({
     name: "ReadAllNotificationsButton",
-    description: "Read all server notifications with a single button click!",
+    description: t("readAllNotificationsButton.description"),
     authors: [Devs.kemo, EquicordDevs.KrystalSkull],
     dependencies: ["ServerListAPI"],
 

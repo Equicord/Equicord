@@ -18,40 +18,39 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Message } from "@vencord/discord-types";
 import { ChannelStore, GuildMemberStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     userList: {
-        description:
-            "List of users to allow or exempt pings for (separated by commas or spaces)",
+        description: t("noReplyMention.settings.userList"),
         type: OptionType.STRING,
         default: "1234567890123445,1234567890123445",
     },
     roleList: {
-        description:
-            "List of roles to allow or exempt pings for (separated by commas or spaces)",
+        description: t("noReplyMention.settings.roleList"),
         type: OptionType.STRING,
         default: "1234567890123445,1234567890123445",
     },
     shouldPingListed: {
-        description: "Behaviour",
+        description: t("noReplyMention.settings.shouldPingListed"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Do not ping the listed users / roles",
+                label: t("noReplyMention.settings.doNotPingListed"),
                 value: false,
             },
             {
-                label: "Only ping the listed users / roles",
+                label: t("noReplyMention.settings.onlyPingListed"),
                 value: true,
                 default: true,
             },
         ],
     },
     inverseShiftReply: {
-        description: "Invert Discord's shift replying behaviour (enable to make shift reply mention user)",
+        description: t("noReplyMention.settings.inverseShiftReply"),
         type: OptionType.BOOLEAN,
         default: false,
     }
@@ -59,7 +58,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "NoReplyMention",
-    description: "Disables reply pings by default",
+    description: t("noReplyMention.description"),
     authors: [Devs.DustyAngel47, Devs.rae, Devs.pylix, Devs.outfoxxed],
     settings,
 

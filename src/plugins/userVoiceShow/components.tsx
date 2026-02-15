@@ -10,6 +10,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import ShowHiddenChannelsPlugin from "@plugins/showHiddenChannels";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import { Channel } from "@vencord/discord-types";
 import { filters, findByPropsLazy, mapMangledModuleLazy } from "@webpack";
 import { ChannelRouter, ChannelStore, Parser, PermissionsBits, PermissionStore, React, showToast, Toasts, Tooltip, useMemo, UserStore, UserSummaryItem, useStateFromStores, VoiceStateStore } from "@webpack/common";
@@ -105,7 +106,7 @@ function VoiceChannelTooltip({ channel, isLocked }: VoiceChannelTooltipProps) {
     const Icon = isLocked ? LockedSpeakerIcon : SpeakerIcon;
     return (
         <>
-            <BaseText size="sm" weight="bold">In Voice Chat</BaseText>
+            <BaseText size="sm" weight="bold">{t("vencord.userVoiceShow.inVoiceChat")}</BaseText>
             <BaseText size="sm" weight="bold">{Parser.parse(`<#${channel.id}>`)}</BaseText>
             <div className={cl("vc-members")}>
                 <Icon size={18} />
@@ -160,7 +161,7 @@ export const VoiceChannelIndicator = ErrorBoundary.wrap(({ userId, isProfile, is
 
         if (e.detail > 1) {
             if (!isDM && !PermissionStore.can(PermissionsBits.CONNECT, channel)) {
-                showToast("You cannot join the user's Voice Channel", Toasts.Type.FAILURE);
+                showToast(t("vencord.userVoiceShow.cannotJoinChannel"), Toasts.Type.FAILURE);
                 return;
             }
 

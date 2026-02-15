@@ -10,6 +10,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
@@ -40,20 +41,20 @@ export const enum PinOrder {
 export const settings = definePluginSettings({
     pinOrder: {
         type: OptionType.SELECT,
-        description: "Which order should pinned DMs be displayed in?",
+        description: t("pinDms.settings.pinOrder"),
         options: [
-            { label: "Most recent message", value: PinOrder.LastMessage, default: true },
-            { label: "Custom (right click channels to reorder)", value: PinOrder.Custom }
+            { label: t("pinDms.settings.mostRecentMessage"), value: PinOrder.LastMessage, default: true },
+            { label: t("pinDms.settings.customOrder"), value: PinOrder.Custom }
         ]
     },
     canCollapseDmSection: {
         type: OptionType.BOOLEAN,
-        description: "Allow uncategorised DMs section to be collapsable",
+        description: t("pinDms.settings.canCollapseDmSection"),
         default: false
     },
     dmSectionCollapsed: {
         type: OptionType.BOOLEAN,
-        description: "Collapse DM section",
+        description: t("pinDms.settings.dmSectionCollapsed"),
         default: false,
         hidden: true
     },
@@ -271,7 +272,7 @@ export default definePlugin({
                         >
                             <Menu.MenuItem
                                 id="vc-pindms-edit-category"
-                                label="Edit Category"
+                                label={t("pinDms.editCategory")}
                                 action={() => openCategoryModal(category.id, null)}
                             />
 
@@ -281,14 +282,14 @@ export default definePlugin({
                                         {
                                             canMoveCategoryInDirection(category.id, -1) && <Menu.MenuItem
                                                 id="vc-pindms-move-category-up"
-                                                label="Move Up"
+                                                label={t("pinDms.moveUp")}
                                                 action={() => moveCategory(category.id, -1)}
                                             />
                                         }
                                         {
                                             canMoveCategoryInDirection(category.id, 1) && <Menu.MenuItem
                                                 id="vc-pindms-move-category-down"
-                                                label="Move Down"
+                                                label={t("pinDms.moveDown")}
                                                 action={() => moveCategory(category.id, 1)}
                                             />
                                         }
@@ -301,7 +302,7 @@ export default definePlugin({
                             <Menu.MenuItem
                                 id="vc-pindms-delete-category"
                                 color="danger"
-                                label="Delete Category"
+                                label={t("pinDms.deleteCategory")}
                                 action={() => removeCategory(category.id)}
                             />
 

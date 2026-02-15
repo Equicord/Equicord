@@ -9,6 +9,7 @@ import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { defineDefault, OptionType, StartAt } from "@utils/types";
 import { Checkbox } from "@webpack/common";
 
@@ -58,7 +59,7 @@ function AllowLevelSetting({ settingKey }: AllowLevelSettingProps) {
 
 const AllowLevelSettings = ErrorBoundary.wrap(() => {
     return (
-        <SettingsSection name="Filter List" description="Always allow loggers of these types">
+        <SettingsSection name={t("consoleJanitor.filterList")} description={t("consoleJanitor.alwaysAllowLoggers")}>
             <div style={{ display: "flex", flexDirection: "row" }}>
                 {Object.keys(settings.store.allowLevel).map(key => (
                     <AllowLevelSetting key={key} settingKey={key as keyof AllowLevels} />
@@ -71,19 +72,19 @@ const AllowLevelSettings = ErrorBoundary.wrap(() => {
 const settings = definePluginSettings({
     disableLoggers: {
         type: OptionType.BOOLEAN,
-        description: "Disables Discords loggers",
+        description: () => t("consoleJanitor.settings.disableLoggers"),
         default: false,
         restartNeeded: true
     },
     disableSpotifyLogger: {
         type: OptionType.BOOLEAN,
-        description: "Disable the Spotify logger, which leaks account information and access token",
+        description: () => t("consoleJanitor.settings.disableSpotifyLogger"),
         default: true,
         restartNeeded: true
     },
     whitelistedLoggers: {
         type: OptionType.STRING,
-        description: "Semi colon separated list of loggers to allow even if others are hidden",
+        description: () => t("consoleJanitor.settings.whitelistedLoggers"),
         default: "GatewaySocket; Routing/Utils",
         onChange(newVal: string) {
             logAllow.clear();
@@ -106,7 +107,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "ConsoleJanitor",
-    description: "Disables annoying console messages/errors",
+    description: t("consoleJanitor.description"),
     authors: [Devs.Nuckyz, Devs.sadan],
     settings,
 

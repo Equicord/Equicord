@@ -24,6 +24,7 @@ import { migratePluginSettings } from "@api/Settings";
 import { ImageInvisible, ImageVisible } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { ChannelStore } from "@webpack/common";
@@ -55,7 +56,7 @@ async function toggleHide(channelId: string, messageId: string) {
 
 export default definePlugin({
     name: "HideMedia",
-    description: "Hide attachments and embeds for individual messages via hover button",
+    description: t("hideAttachments.description"),
     authors: [Devs.Ven],
     dependencies: ["MessageUpdaterAPI"],
 
@@ -75,7 +76,7 @@ export default definePlugin({
             const isHidden = hiddenMessages.has(msg.id);
 
             return {
-                label: isHidden ? "Show Media" : "Hide Media",
+                label: isHidden ? t("hideAttachments.showMedia") : t("hideAttachments.hideMedia"),
                 icon: isHidden ? ImageVisible : ImageInvisible,
                 message: msg,
                 channel: ChannelStore.getChannel(msg.channel_id),
@@ -89,7 +90,7 @@ export default definePlugin({
 
         return (
             <span className={classes("vc-hideAttachments-accessory", !message.content && "vc-hideAttachments-no-content")}>
-                Media Hidden
+                {t("hideAttachments.mediaHidden")}
             </span>
         );
     },

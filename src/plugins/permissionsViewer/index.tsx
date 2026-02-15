@@ -25,6 +25,7 @@ import { SafetyIcon } from "@components/Icons";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { type Guild, type GuildMember, RoleOrUserPermission } from "@vencord/discord-types";
 import { PermissionOverwriteType } from "@vencord/discord-types/enums";
@@ -50,11 +51,11 @@ const enum MenuItemParentType {
 
 export const settings = definePluginSettings({
     permissionsSortOrder: {
-        description: "The sort method used for defining which role grants an user a certain permission",
+        description: t("permissionsViewer.settings.permissionsSortOrder"),
         type: OptionType.SELECT,
         options: [
-            { label: "Highest Role", value: PermissionsSortOrder.HighestRole, default: true },
-            { label: "Lowest Role", value: PermissionsSortOrder.LowestRole }
+            { label: t("permissionsViewer.settings.highestRole"), value: PermissionsSortOrder.HighestRole, default: true },
+            { label: t("permissionsViewer.settings.lowestRole"), value: PermissionsSortOrder.LowestRole }
         ]
     },
 });
@@ -65,7 +66,7 @@ function MenuItem(guildId: string, id?: string, type?: MenuItemParentType) {
     return (
         <Menu.MenuItem
             id="perm-viewer-permissions"
-            label="Permissions"
+            label={t("permissionsViewer.permissions")}
             action={() => {
                 const guild = GuildStore.getGuild(guildId);
 
@@ -188,7 +189,7 @@ export default definePlugin({
                 )}
             >
                 {popoutProps => (
-                    <TooltipContainer text="View Permissions">
+                    <TooltipContainer text={t("permissionsViewer.viewPermissions")}>
                         <Button
                             {...popoutProps}
                             ref={buttonRef}

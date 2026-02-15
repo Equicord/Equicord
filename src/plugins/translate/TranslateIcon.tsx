@@ -20,6 +20,7 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { Paragraph } from "@components/Paragraph";
 import { classes } from "@utils/misc";
 import { openModal } from "@utils/modal";
+import { t, Translate } from "@utils/translation";
 import { IconComponent } from "@utils/types";
 import { Alerts, Tooltip, useEffect, useState } from "@webpack/common";
 
@@ -58,15 +59,17 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
         settings.store.autoTranslate = newState;
         if (newState && settings.store.showAutoTranslateAlert !== false)
             Alerts.show({
-                title: "Equicord Auto-Translate Enabled",
+                title: t("translate.autoTranslateEnabled.title"),
                 body: <>
                     <Paragraph>
-                        You just enabled Auto Translate! Any message <b>will automatically be translated</b> before being sent.
+                        <Translate i18nKey="translate.autoTranslateEnabled.body">
+                            You just enabled Auto Translate! Any message <b>will automatically be translated</b> before being sent.
+                        </Translate>
                     </Paragraph>
                 </>,
-                confirmText: "Disable Auto-Translate",
-                cancelText: "Got it",
-                secondaryConfirmText: "Don't show again",
+                confirmText: t("translate.disableAutoTranslate"),
+                cancelText: t("translate.gotIt"),
+                secondaryConfirmText: t("translate.dontShowAgain"),
                 onConfirmSecondary: () => settings.store.showAutoTranslateAlert = false,
                 onConfirm: () => settings.store.autoTranslate = false,
                 // troll
@@ -76,7 +79,7 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
 
     const button = (
         <ChatBarButton
-            tooltip="Open Translate Modal"
+            tooltip={t("translate.openTranslateModal")}
             onClick={e => {
                 if (e.shiftKey) return toggle();
 
@@ -95,7 +98,7 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
 
     if (shouldShowTranslateEnabledTooltip && settings.store.showAutoTranslateTooltip)
         return (
-            <Tooltip text="Auto Translate Enabled" forceOpen>
+            <Tooltip text={t("translate.autoTranslateEnabled")} forceOpen>
                 {() => button}
             </Tooltip>
         );

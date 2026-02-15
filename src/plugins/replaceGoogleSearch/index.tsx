@@ -8,6 +8,7 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Flex } from "@components/Flex";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Menu } from "@webpack/common";
 
@@ -30,21 +31,21 @@ const enum ReplacementEngineValue {
 
 const settings = definePluginSettings({
     customEngineName: {
-        description: "Name of the custom search engine",
+        description: t("replaceGoogleSearch.settings.customEngineName"),
         type: OptionType.STRING,
         placeholder: "Google"
     },
     customEngineURL: {
-        description: "The URL of your Engine",
+        description: t("replaceGoogleSearch.settings.customEngineURL"),
         type: OptionType.STRING,
         placeholder: "https://google.com/search?q="
     },
     replacementEngine: {
-        description: "Replace with a specific search engine instead of adding a menu",
+        description: t("replaceGoogleSearch.settings.replacementEngine"),
         type: OptionType.SELECT,
         options: [
-            { label: "Off", value: ReplacementEngineValue.OFF, default: true },
-            { label: "Custom Engine", value: ReplacementEngineValue.CUSTOM },
+            { label: t("replaceGoogleSearch.settings.off"), value: ReplacementEngineValue.OFF, default: true },
+            { label: t("replaceGoogleSearch.settings.customEngine"), value: ReplacementEngineValue.CUSTOM },
             ...Object.keys(DefaultEngines).map(engine => ({ label: engine, value: engine }))
         ]
     }
@@ -73,7 +74,7 @@ function makeSearchItem(src: string) {
 
         return (
             <Menu.MenuItem
-                label={`Search with ${name}`}
+                label={t("replaceGoogleSearch.searchWith", { engine: name })}
                 key="search-custom-engine"
                 id="vc-search-custom-engine"
                 action={() => search(src, Engines[name!])}
@@ -83,7 +84,7 @@ function makeSearchItem(src: string) {
 
     return (
         <Menu.MenuItem
-            label="Search Text"
+            label={t("replaceGoogleSearch.searchText")}
             key="search-text"
             id="vc-search-text"
         >
@@ -129,7 +130,7 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (children, _props) 
 migratePluginSettings("ReplaceGoogleSearch", "Search");
 export default definePlugin({
     name: "ReplaceGoogleSearch",
-    description: "Replaces the Google search with different Engine(s)",
+    description: t("replaceGoogleSearch.description"),
     authors: [Devs.Moxxie, Devs.Ethan],
 
     settings,

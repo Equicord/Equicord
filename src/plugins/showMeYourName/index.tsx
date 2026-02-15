@@ -14,6 +14,7 @@ import { Button, ErrorBoundary, Heading, TextButton } from "@components/index";
 import mentionAvatars from "@plugins/mentionAvatars";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/index";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember, Message, User } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
@@ -686,17 +687,17 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; use
         <ModalRoot {...modalProps}>
             <ModalHeader>
                 <Heading tag="h1" style={{ flexGrow: 1, margin: 0 }}>
-                    {customNicknames[user.id] ? "Change SMYN Nickname" : "Add SMYN Nickname"}
+                    {customNicknames[user.id] ? t("showMeYourName.changeNickname") : t("showMeYourName.addNickname")}
                 </Heading>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
             <ModalContent>
                 <Heading tag="h3" style={{ marginBottom: 8, fontSize: "16px", fontWeight: "400", lineHeight: "1.25", color: "var(--text-subtle)" }}>
-                    {"Set a custom SMYN nickname for this user. Make use of it by specifying {custom} in the SMYN template settings."}
+                    {t("showMeYourName.modalDescription")}
                 </Heading>
                 <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
                 <Heading tag="h3" style={{ marginBottom: 8, fontSize: "14px", fontWeight: 600 }}>
-                    SMYN Nickname
+                    {t("showMeYourName.nicknameLabel")}
                 </Heading>
                 <TextInput
                     value={value}
@@ -714,7 +715,7 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; use
                         settings.store.triggerNameRerender = !settings.store.triggerNameRerender;
                     }}
                 >
-                    Reset SMYN Nickname
+                    {t("showMeYourName.resetNickname")}
                 </TextButton>
                 <div style={{ paddingTop: "10px", flexGrow: 0 }}></div>
             </ModalContent>
@@ -735,14 +736,14 @@ function CustomNicknameModal({ modalProps, user }: { modalProps: ModalProps; use
                         modalProps.onClose();
                     }}
                 >
-                    Save
+                    {t("showMeYourName.save")}
                 </Button>
                 <Button
                     variant="secondary"
                     style={{ marginRight: "8px" }}
                     onClick={modalProps.onClose}
                 >
-                    Cancel
+                    {t("showMeYourName.cancel")}
                 </Button>
             </ModalFooter>
         </ModalRoot>
@@ -761,7 +762,7 @@ const userContextPatch: NavContextMenuPatchCallback = (children, { user }) => {
     (group || children).push(
         <Menu.MenuItem
             id="smyn-custom-nickname"
-            label={customNicknames[user.id] ? "Change SMYN Nickname" : "Add SMYN Nickname"}
+            label={customNicknames[user.id] ? t("showMeYourName.changeNickname") : t("showMeYourName.addNickname")}
             action={() => openModal(props => (
                 <ErrorBoundary>
                     <CustomNicknameModal modalProps={props} user={user} />
@@ -775,111 +776,111 @@ const settings = definePluginSettings({
     messages: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Display custom name format in messages.",
+        description: t("showMeYourName.settings.messages"),
     },
     replies: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Display custom name format in replies.",
+        description: t("showMeYourName.settings.replies"),
     },
     mentions: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Display custom name format in mentions.",
+        description: t("showMeYourName.settings.mentions"),
     },
     memberList: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Display the first available name listed in your custom name format in the member list.",
+        description: t("showMeYourName.settings.memberList"),
     },
     profilePopout: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Display the first available name listed in your custom name format in profile popouts.",
+        description: t("showMeYourName.settings.profilePopout"),
     },
     voiceChannels: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Display the first available name listed in your custom name format in voice channels.",
+        description: t("showMeYourName.settings.voiceChannels"),
     },
     reactions: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Display the first available name listed in your custom name format in reaction tooltips, and the full name in reaction popouts.",
+        description: t("showMeYourName.settings.reactions"),
     },
     discriminators: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Append discriminators to usernames for bots. Discriminators were deprecated for users, but are still used for bots. By default, a bot's username is equivalent to a user's global name, therefore multiple bots can have the same username. Appending discriminators makes them unique again.",
+        description: t("showMeYourName.settings.discriminators"),
     },
     hideDefaultAtSign: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Hide the default \"@\" symbol before the name in mentions and replies. Only applied if either feature is enabled.",
+        description: t("showMeYourName.settings.hideDefaultAtSign"),
     },
     truncateAllNamesWithStreamerMode: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Truncate all names, not just usernames, while in Streamer Mode.",
+        description: t("showMeYourName.settings.truncateAllNamesWithStreamerMode"),
     },
     removeDuplicates: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "If any of the names are equivalent, remove them, leaving only the unique names.",
+        description: t("showMeYourName.settings.removeDuplicates"),
     },
     ignoreFonts: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "For the non-primary names, use Discord's default fonts regardless of the user's custom nitro font.",
+        description: t("showMeYourName.settings.ignoreFonts"),
     },
     ignoreGradients: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "For the non-primary names, if the role has a gradient, ignore it in favor of the color set below.",
+        description: t("showMeYourName.settings.ignoreGradients"),
     },
     animateGradients: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "For the non-primary names, if the role has a gradient, animate it. This is disabled by \"Ignore Gradients\" and reduced motion.",
+        description: t("showMeYourName.settings.animateGradients"),
     },
     nameSeparator: {
         type: OptionType.STRING,
-        description: "The separator to use between names. The default is a single space.",
+        description: t("showMeYourName.settings.nameSeparator"),
         default: " ",
     },
     includedNames: {
         type: OptionType.STRING,
-        description: "The order to display usernames, display names, nicknames, friend names, and custom names. Use the following placeholders: {user}, {display}, {nick}, {friend}, {custom}. You can provide multiple name options to use as fallbacks if one is unavailable by separating them with commas as such: {custom, friend, nick}. You can have up to three prefixes and three suffixes per name.",
+        description: t("showMeYourName.settings.includedNames"),
         default: "{custom, friend, nick} [{display}] (@{user})",
         isValid: validTemplate,
     },
     customNameColor: {
         type: OptionType.STRING,
-        description: "The color to use for the custom name you assigned a user if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+        description: t("showMeYourName.settings.customNameColor"),
         default: "Role-25",
         isValid: validColor,
     },
     friendNameColor: {
         type: OptionType.STRING,
-        description: "The color to use for a friend's nickname if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+        description: t("showMeYourName.settings.friendNameColor"),
         default: "Role-25",
         isValid: validColor,
     },
     nicknameColor: {
         type: OptionType.STRING,
-        description: "The color to use for the nickname if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+        description: t("showMeYourName.settings.nicknameColor"),
         default: "Role-25",
         isValid: validColor,
     },
     displayNameColor: {
         type: OptionType.STRING,
-        description: "The color to use for the display name if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+        description: t("showMeYourName.settings.displayNameColor"),
         default: "Role-25",
         isValid: validColor,
     },
     usernameColor: {
         type: OptionType.STRING,
-        description: "The color to use for the username if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+        description: t("showMeYourName.settings.usernameColor"),
         default: "Role-25",
         isValid: validColor,
     },

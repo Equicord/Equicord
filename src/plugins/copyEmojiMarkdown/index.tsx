@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { Menu } from "@webpack/common";
@@ -43,14 +44,14 @@ function getEmojiMarkdown(target: Target, copyUnicode: boolean): string {
 const settings = definePluginSettings({
     copyUnicode: {
         type: OptionType.BOOLEAN,
-        description: "Copy the raw unicode character instead of :name: for default emojis (👽)",
+        description: t("copyEmojiMarkdown.copyUnicodeDescription"),
         default: true,
     },
 });
 
 export default definePlugin({
     name: "CopyEmojiMarkdown",
-    description: "Allows you to copy emojis as formatted string (<:blobcatcozy:1026533070955872337>)",
+    description: t("copyEmojiMarkdown.description"),
     authors: [Devs.HappyEnderman, Devs.Vishnya],
     settings,
 
@@ -61,11 +62,11 @@ export default definePlugin({
             children.push(
                 <Menu.MenuItem
                     id="vc-copy-emoji-markdown"
-                    label="Copy Emoji Markdown"
+                    label={t("copyEmojiMarkdown.copyEmojiMarkdown")}
                     action={() => {
                         copyWithToast(
                             getEmojiMarkdown(target, settings.store.copyUnicode),
-                            "Success! Copied emoji markdown."
+                            t("copyEmojiMarkdown.success")
                         );
                     }}
                 />

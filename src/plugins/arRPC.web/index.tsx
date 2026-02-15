@@ -22,6 +22,7 @@ import { HeadingSecondary } from "@components/Heading";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { ReporterTestable } from "@utils/types";
 import { ApplicationAssetUtils, fetchApplicationsRPC, FluxDispatcher, Toasts } from "@webpack/common";
 
@@ -48,9 +49,9 @@ export default definePlugin({
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>How to use arRPC</HeadingSecondary>
+            <HeadingSecondary>{t("arRPC.settingsAbout.title")}</HeadingSecondary>
             <Paragraph>
-                <Link href="https://github.com/OpenAsar/arrpc/tree/main#server">Follow the instructions in the GitHub repo</Link> to get the server running, and then enable the plugin.
+                <Link href="https://github.com/OpenAsar/arrpc/tree/main#server">{t("arRPC.settingsAbout.description")}</Link>
             </Paragraph>
         </>
     ),
@@ -77,14 +78,13 @@ export default definePlugin({
 
     async start() {
         if (ws) ws.close();
-        ws = new WebSocket("ws://127.0.0.1:1337"); // try to open WebSocket
+        ws = new WebSocket("ws://127.0.0.1:1337");
 
         ws.onmessage = this.handleEvent;
 
-        const connectionSuccessful = await new Promise(res => setTimeout(() => res(ws.readyState === WebSocket.OPEN), 5000)); // check if open after 5s
+        const connectionSuccessful = await new Promise(res => setTimeout(() => res(ws.readyState === WebSocket.OPEN), 5000));
         if (!connectionSuccessful) {
-            showNotice("Failed to connect to arRPC, is it running?", "Retry", () => {
-                // show notice about failure to connect, with retry/ignore
+            showNotice(t("arRPC.connectionFailed"), t("arRPC.retry"), () => {
                 popNotice();
                 this.start();
             });
@@ -92,8 +92,7 @@ export default definePlugin({
         }
 
         Toasts.show({
-            // show toast on success
-            message: "Connected to arRPC",
+            message: t("arRPC.connected"),
             type: Toasts.Type.SUCCESS,
             id: Toasts.genId(),
             options: {

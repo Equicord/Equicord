@@ -10,6 +10,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { CopyIcon, NoEntrySignIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Tooltip, useState } from "@webpack/common";
 
@@ -21,7 +22,7 @@ const CheckMarkIcon = () => {
 
 export default definePlugin({
     name: "CopyFileContents",
-    description: "Adds a button to text file attachments to copy their contents",
+    description: t("copyFileContents.description"),
     authors: [Devs.Obsidian, Devs.Nuckyz],
     patches: [
         {
@@ -37,7 +38,7 @@ export default definePlugin({
         const [recentlyCopied, setRecentlyCopied] = useState(false);
 
         return (
-            <Tooltip text={recentlyCopied ? "Copied!" : bytesLeft > 0 ? "File too large to copy" : "Copy File Contents"}>
+            <Tooltip text={recentlyCopied ? t("copyFileContents.copied") : bytesLeft > 0 ? t("copyFileContents.fileTooLarge") : t("copyFileContents.copyFileContents")}>
                 {tooltipProps => (
                     <div
                         {...tooltipProps}

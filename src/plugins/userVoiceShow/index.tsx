@@ -20,6 +20,7 @@ import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 import { VoiceChannelIndicator } from "./components";
@@ -27,19 +28,19 @@ import { VoiceChannelIndicator } from "./components";
 const settings = definePluginSettings({
     showInUserProfileModal: {
         type: OptionType.BOOLEAN,
-        description: "Show a user's Voice Channel indicator in their profile next to the name",
+        description: t("vencord.userVoiceShow.settings.showInUserProfileModal"),
         default: true,
         restartNeeded: true
     },
     showInMemberList: {
         type: OptionType.BOOLEAN,
-        description: "Show a user's Voice Channel indicator in the member and DMs list",
+        description: t("vencord.userVoiceShow.settings.showInMemberList"),
         default: true,
         restartNeeded: true
     },
     showInMessages: {
         type: OptionType.BOOLEAN,
-        description: "Show a user's Voice Channel indicator in messages",
+        description: t("vencord.userVoiceShow.settings.showInMessages"),
         default: true,
         restartNeeded: true
     }
@@ -47,7 +48,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UserVoiceShow",
-    description: "Shows an indicator when a user is in a Voice Channel",
+    description: t("vencord.userVoiceShow.description"),
     authors: [Devs.Nuckyz, Devs.LordElias, EquicordDevs.omaw],
     settings,
     renderNicknameIcon({ userId }) {

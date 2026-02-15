@@ -24,6 +24,7 @@ import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import { getUserSettingLazy } from "@api/UserSettings";
 import equicordToolbox from "@equicordplugins/equicordToolbox";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Menu } from "@webpack/common";
 
@@ -32,15 +33,15 @@ const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")
 const settings = definePluginSettings({
     oldIcon: {
         type: OptionType.BOOLEAN,
-        description: "Use the old icon style before Discord icon redesign",
+        description: t("gameActivityToggle.settings.oldIcon"),
         default: false
     },
     location: {
         type: OptionType.SELECT,
-        description: "Where to show the game activity toggle button",
+        description: t("gameActivityToggle.settings.location"),
         options: [
-            { label: "Next to Mute/Deafen", value: "PANEL", default: true },
-            { label: "Equicord Toolbox", value: "TOOLBOX" }
+            { label: t("gameActivityToggle.settings.locationPanel"), value: "PANEL", default: true },
+            { label: t("gameActivityToggle.settings.locationToolbox"), value: "TOOLBOX" }
         ],
         get hidden() {
             return !isPluginEnabled(equicordToolbox.name);
@@ -86,7 +87,7 @@ function GameActivityToggleButton({ iconForeground, hideTooltips, nameplate }: U
 
     return (
         <UserAreaButton
-            tooltipText={hideTooltips ? void 0 : showCurrentGame ? "Disable Game Activity" : "Enable Game Activity"}
+            tooltipText={hideTooltips ? void 0 : showCurrentGame ? t("gameActivityToggle.disableGameActivity") : t("gameActivityToggle.enableGameActivity")}
             icon={<Icon className={iconForeground} />}
             role="switch"
             aria-checked={!showCurrentGame}
@@ -99,7 +100,7 @@ function GameActivityToggleButton({ iconForeground, hideTooltips, nameplate }: U
 
 export default definePlugin({
     name: "GameActivityToggle",
-    description: "Adds a button next to the mic and deafen button to toggle game activity.",
+    description: t("gameActivityToggle.description"),
     authors: [Devs.Nuckyz, Devs.RuukuLada],
     dependencies: ["UserSettingsAPI"],
     settings,
@@ -118,7 +119,7 @@ export default definePlugin({
         return (
             <Menu.MenuCheckboxItem
                 id="game-activity-toggle-toolbox"
-                label="Enable Game Activity"
+                label={t("gameActivityToggle.enableGameActivity")}
                 checked={showCurrentGame}
                 action={() => ShowCurrentGame.updateSetting(old => !old)}
             />

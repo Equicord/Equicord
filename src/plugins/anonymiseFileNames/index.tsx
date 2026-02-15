@@ -21,6 +21,7 @@ import { definePluginSettings, Settings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { reverseExtensionMap } from "@equicordplugins/fixFileExtensions";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { CloudUpload } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
@@ -39,32 +40,32 @@ export const tarExtMatcher = /\.tar\.\w+$/;
 
 const settings = definePluginSettings({
     anonymiseByDefault: {
-        description: "Whether to anonymise file names by default",
+        description: t("anonymiseFileNames.settings.anonymiseByDefault"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     spoilerMessages: {
-        description: "Spoiler messages",
+        description: t("anonymiseFileNames.settings.spoilerMessages"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     method: {
-        description: "Anonymising method",
+        description: t("anonymiseFileNames.settings.method"),
         type: OptionType.SELECT,
         options: [
-            { label: "Random Characters", value: Methods.Random, default: true },
-            { label: "Consistent", value: Methods.Consistent },
-            { label: "Timestamp", value: Methods.Timestamp },
+            { label: t("anonymiseFileNames.methods.random"), value: Methods.Random, default: true },
+            { label: t("anonymiseFileNames.methods.consistent"), value: Methods.Consistent },
+            { label: t("anonymiseFileNames.methods.timestamp"), value: Methods.Timestamp },
         ],
     },
     randomisedLength: {
-        description: "Random characters length",
+        description: t("anonymiseFileNames.settings.randomisedLength"),
         type: OptionType.NUMBER,
         default: 7,
         disabled: () => settings.store.method !== Methods.Random,
     },
     consistent: {
-        description: "Consistent filename",
+        description: t("anonymiseFileNames.settings.consistent"),
         type: OptionType.STRING,
         default: "image",
         disabled: () => settings.store.method !== Methods.Consistent,
@@ -74,7 +75,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "AnonymiseFileNames",
     authors: [Devs.fawn],
-    description: "Anonymise uploaded file names",
+    description: t("anonymiseFileNames.description"),
     isModified: true,
     settings,
 
@@ -107,7 +108,7 @@ export default definePlugin({
 
         return (
             <ActionBarIcon
-                tooltip={anonymise ? "Using anonymous file name" : "Using normal file name"}
+                tooltip={anonymise ? t("anonymiseFileNames.usingAnonymous") : t("anonymiseFileNames.usingNormal")}
                 onClick={onToggleAnonymise}
             >
                 {anonymise
@@ -152,13 +153,13 @@ export default definePlugin({
 
     commands: [
         {
-            name: "Spoiler",
-            description: "Toggle your spoiler",
+            name: t("anonymiseFileNames.commands.spoiler.name"),
+            description: t("anonymiseFileNames.commands.spoiler.description"),
             inputType: ApplicationCommandInputType.BUILT_IN,
             options: [
                 {
-                    name: "value",
-                    description: "Toggle your Spoiler (default is toggle)",
+                    name: t("anonymiseFileNames.commands.spoiler.optionName"),
+                    description: t("anonymiseFileNames.commands.spoiler.optionDescription"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 },
@@ -166,7 +167,7 @@ export default definePlugin({
             execute: async (args, ctx) => {
                 settings.store.spoilerMessages = !!findOption(args, "value", !settings.store.spoilerMessages);
                 sendBotMessage(ctx.channel.id, {
-                    content: settings.store.spoilerMessages ? "Spoiler enabled!" : "Spoiler disabled!",
+                    content: settings.store.spoilerMessages ? t("anonymiseFileNames.commands.spoiler.enabled") : t("anonymiseFileNames.commands.spoiler.disabled"),
                 });
             },
         }

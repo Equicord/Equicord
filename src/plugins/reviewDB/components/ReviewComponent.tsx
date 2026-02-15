@@ -24,6 +24,7 @@ import { canBlockReviewAuthor, canDeleteReview, canReportReview, cl, showToast }
 import { openUserProfile } from "@utils/discord";
 import { classes } from "@utils/misc";
 import { LazyComponent } from "@utils/react";
+import { t } from "@utils/translation";
 import { filters, findBulk } from "@webpack";
 import { Alerts, Parser, Timestamp, useState } from "@webpack/common";
 
@@ -59,13 +60,13 @@ export default LazyComponent(() => {
 
         function delReview() {
             Alerts.show({
-                title: "Are you sure?",
-                body: "Do you really want to delete this review?",
-                confirmText: "Delete",
-                cancelText: "Nevermind",
+                title: t("reviewDB.confirm.title"),
+                body: t("reviewDB.confirm.deleteBody"),
+                confirmText: t("reviewDB.delete"),
+                cancelText: t("reviewDB.cancel"),
                 onConfirm: async () => {
                     if (!(await getToken())) {
-                        return showToast("You must be logged in to delete reviews.");
+                        return showToast(t("reviewDB.mustLogin"));
                     } else {
                         deleteReview(review.id).then(res => {
                             if (res) {
@@ -79,14 +80,14 @@ export default LazyComponent(() => {
 
         function reportRev() {
             Alerts.show({
-                title: "Are you sure?",
-                body: "Do you really you want to report this review?",
-                confirmText: "Report",
-                cancelText: "Nevermind",
+                title: t("reviewDB.confirm.title"),
+                body: t("reviewDB.confirm.reportBody"),
+                confirmText: t("reviewDB.report"),
+                cancelText: t("reviewDB.cancel"),
                 // confirmColor: "red", this just adds a class name and breaks the submit button guh
                 onConfirm: async () => {
                     if (!(await getToken())) {
-                        return showToast("You must be logged in to report reviews.");
+                        return showToast(t("reviewDB.mustLogin"));
                     } else {
                         reportReview(review.id);
                     }
@@ -101,14 +102,14 @@ export default LazyComponent(() => {
                 return unblockUser(review.sender.discordID);
 
             Alerts.show({
-                title: "Are you sure?",
-                body: "Do you really you want to block this user? They will be unable to leave further reviews on your profile. You can unblock users in the plugin settings.",
-                confirmText: "Block",
-                cancelText: "Nevermind",
+                title: t("reviewDB.confirm.title"),
+                body: t("reviewDB.confirm.blockBody"),
+                confirmText: t("reviewDB.block"),
+                cancelText: t("reviewDB.cancel"),
                 // confirmColor: "red", this just adds a class name and breaks the submit button guh
                 onConfirm: async () => {
                     if (!(await getToken())) {
-                        return showToast("You must be logged in to block users.");
+                        return showToast(t("reviewDB.mustLogin"));
                     } else {
                         blockUser(review.sender.discordID);
                     }
@@ -145,15 +146,15 @@ export default LazyComponent(() => {
                             className={classes(botTag.botTagVerified, botTag.botTagRegular, botTag.px, botTag.rem)}
                             style={{ marginLeft: "4px" }}>
                             <span className={botTag.botText}>
-                                System
+                                {t("reviewDB.system")}
                             </span>
                         </span>
                     )}
                 </div>
                 {isAuthorBlocked && (
                     <ReviewBadge
-                        name="You have blocked this user"
-                        description="You have blocked this user"
+                        name={t("reviewDB.blockedUser")}
+                        description={t("reviewDB.blockedUser")}
                         icon="/assets/aaee57e0090991557b66.svg"
                         type={0}
                         onClick={() => openBlockModal()}
@@ -174,7 +175,7 @@ export default LazyComponent(() => {
                             <>
                                 {Parser.parseGuildEventDescription(review.comment.substring(0, 200))}...
                                 <br />
-                                <a onClick={() => setShowAll(true)}>Read more</a>]
+                                <a onClick={() => setShowAll(true)}>{t("reviewDB.readMore")}</a>]
                             </>
                         )
                         : Parser.parseGuildEventDescription(review.comment)}

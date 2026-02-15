@@ -11,6 +11,7 @@ import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import { findByPropsLazy } from "@webpack";
 import { TabBar, Timestamp, useState } from "@webpack/common";
 
@@ -40,7 +41,7 @@ export function HistoryModal({ modalProps, message }: { modalProps: ModalProps; 
     return (
         <ModalRoot {...modalProps} size={ModalSize.LARGE}>
             <ModalHeader className={cl("head")}>
-                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>Message Edit History</BaseText>
+                <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("messageLogger.editHistory")}</BaseText>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
@@ -53,7 +54,7 @@ export function HistoryModal({ modalProps, message }: { modalProps: ModalProps; 
                     onItemSelect={setCurrentTab}
                 >
                     {message.firstEditTimestamp.getTime() !== message.timestamp.getTime() && (
-                        <TooltipContainer text="This edit state was not logged so it can't be displayed.">
+                        <TooltipContainer text={t("messageLogger.notLoggedTooltip")}>
                             <TabBar.Item
                                 className="vc-settings-tab-bar-item"
                                 id={-1}

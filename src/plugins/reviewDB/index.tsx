@@ -24,6 +24,7 @@ import { NotesIcon, OpenExternalIcon } from "@components/Icons";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Guild, User } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
@@ -42,7 +43,7 @@ const guildPopoutPatch: NavContextMenuPatchCallback = (children, { guild }: { gu
     if (!guild) return;
     children.push(
         <Menu.MenuItem
-            label="View Reviews"
+            label={t("reviewDB.viewReviews")}
             id="vc-rdb-server-reviews"
             icon={OpenExternalIcon}
             action={() => openReviewsModal(guild.id, guild.name, ReviewType.Server)}
@@ -54,7 +55,7 @@ const userContextPatch: NavContextMenuPatchCallback = (children, { user }: { use
     if (!user) return;
     children.push(
         <Menu.MenuItem
-            label="View Reviews"
+            label={t("reviewDB.viewReviews")}
             id="vc-rdb-user-reviews"
             icon={OpenExternalIcon}
             action={() => openReviewsModal(user.id, user.username, ReviewType.User)}
@@ -115,14 +116,14 @@ export default definePlugin({
                 if (lastReviewId && lastReviewId < user.lastReviewID) {
                     s.lastReviewId = user.lastReviewID;
                     if (user.lastReviewID !== 0)
-                        showToast("You have new reviews on your profile!");
+                        showToast(t("reviewDB.newReviews"));
                 }
             }
 
             if (user.notification) {
                 const props = user.notification.type === NotificationType.Ban ? {
-                    cancelText: "Appeal",
-                    confirmText: "Ok",
+                    cancelText: t("reviewDB.appeal"),
+                    confirmText: t("reviewDB.ok"),
                     onCancel: async () =>
                         VencordNative.native.openExternal(
                             "https://reviewdb.mantikafasi.dev/api/redirect?"
@@ -151,7 +152,7 @@ export default definePlugin({
 
     BiteSizeReviewsButton: ErrorBoundary.wrap(({ user }: { user: User; }) => {
         return (
-            <TooltipContainer text="View Reviews">
+            <TooltipContainer text={t("reviewDB.viewReviews")}>
                 <Clickable
                     onClick={() => openReviewsModal(user.id, user.username, ReviewType.User)}
                     className={classes(BannerButtonClasses.bannerButton)}

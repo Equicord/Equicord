@@ -77,69 +77,69 @@ const hyperLinkRegex = /\[.+?\]\((https?:\/\/.+?)\)/;
 
 const settings = definePluginSettings({
     enableEmojiBypass: {
-        description: "Allows sending fake emojis (also bypasses missing permission to use custom emojis)",
+        description: t("vencord.fakeNitro.settings.enableEmojiBypass"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     emojiSize: {
-        description: "Size of the emojis when sending",
+        description: t("vencord.fakeNitro.settings.emojiSize"),
         type: OptionType.SLIDER,
         default: 48,
         markers: [32, 48, 64, 96, 128, 160, 256, 512]
     },
     transformEmojis: {
-        description: "Whether to transform fake emojis into real ones",
+        description: t("vencord.fakeNitro.settings.transformEmojis"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     enableStickerBypass: {
-        description: "Allows sending fake stickers (also bypasses missing permission to use stickers)",
+        description: t("vencord.fakeNitro.settings.enableStickerBypass"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     stickerSize: {
-        description: "Size of the stickers when sending",
+        description: t("vencord.fakeNitro.settings.stickerSize"),
         type: OptionType.SLIDER,
         default: 160,
         markers: [32, 64, 128, 160, 256, 512]
     },
     transformStickers: {
-        description: "Whether to transform fake stickers into real ones",
+        description: t("vencord.fakeNitro.settings.transformStickers"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     transformCompoundSentence: {
-        description: "Whether to transform fake stickers and emojis in compound sentences (sentences with more content than just the fake emoji or sticker link)",
+        description: t("vencord.fakeNitro.settings.transformCompoundSentence"),
         type: OptionType.BOOLEAN,
         default: false
     },
     enableStreamQualityBypass: {
-        description: "Allow streaming in nitro quality",
+        description: t("vencord.fakeNitro.settings.enableStreamQualityBypass"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     useStickerHyperLinks: {
-        description: "Whether to use hyperlinks when sending fake stickers",
+        description: t("vencord.fakeNitro.settings.useStickerHyperLinks"),
         type: OptionType.BOOLEAN,
         default: true
     },
     useEmojiHyperLinks: {
-        description: "Whether to use hyperlinks when sending fake emojis",
+        description: t("vencord.fakeNitro.settings.useEmojiHyperLinks"),
         type: OptionType.BOOLEAN,
         default: true
     },
     hyperLinkText: {
-        description: "What text the hyperlink should use. {{NAME}} will be replaced with the emoji/sticker name.",
+        description: t("vencord.fakeNitro.settings.hyperLinkText"),
         type: OptionType.STRING,
         default: "{{NAME}}"
     },
     disableEmbedPermissionCheck: {
-        description: "Whether to disable the embed permission check when sending fake emojis and stickers",
+        description: t("vencord.fakeNitro.settings.disableEmbedPermissionCheck"),
         type: OptionType.BOOLEAN,
         default: false
     }
@@ -180,7 +180,7 @@ function makeBypassPatches(): Omit<Patch, "plugin"> {
 export default definePlugin({
     name: "FakeNitro",
     authors: [Devs.Arjix, Devs.D3SOX, Devs.Ven, Devs.fawn, Devs.captain, Devs.Nuckyz, Devs.AutumnVN, Devs.sadan],
-    description: "Allows you to send fake emojis/stickers, use nitro themes, and stream in nitro quality",
+    description: t("vencord.fakeNitro.description"),
     dependencies: ["MessageEventsAPI"],
 
     settings,
@@ -694,12 +694,12 @@ export default definePlugin({
 
         switch (type) {
             case FakeNoticeType.Sticker: {
-                node.push(" This is a FakeNitro sticker and renders like a real sticker only for you. Appears as a link to non-plugin users.");
+                node.push(" " + t("vencord.fakeNitro.stickerNotice"));
 
                 return node;
             }
             case FakeNoticeType.Emoji: {
-                node.push(" This is a FakeNitro emoji and renders like a real emoji only for you. Appears as a link to non-plugin users.");
+                node.push(" " + t("vencord.fakeNitro.emojiNotice"));
 
                 return node;
             }
@@ -800,20 +800,22 @@ export default definePlugin({
         function cannotEmbedNotice() {
             return new Promise<boolean>(resolve => {
                 Alerts.show({
-                    title: "Hold on!",
+                    title: t("vencord.fakeNitro.holdOn"),
                     body: <div>
                         <Paragraph>
-                            You are trying to send/edit a message that contains a FakeNitro emoji or sticker,
-                            however you do not have permissions to embed links in the current channel.
-                            Are you sure you want to send this message? Your FakeNitro items will appear as a link only.
+                            {t("vencord.fakeNitro.noEmbedPerms.body1")}
+                            <br />
+                            {t("vencord.fakeNitro.noEmbedPerms.body2")}
+                            <br />
+                            {t("vencord.fakeNitro.noEmbedPerms.body3")}
                         </Paragraph>
                         <Paragraph>
-                            You can disable this notice in the plugin settings.
+                            {t("vencord.fakeNitro.noEmbedPerms.disableNotice")}
                         </Paragraph>
                     </div>,
-                    confirmText: "Send Anyway",
+                    confirmText: t("vencord.fakeNitro.sendAnyway"),
                     cancelText: t("vencord.cancel"),
-                    secondaryConfirmText: "Do not show again",
+                    secondaryConfirmText: t("vencord.fakeNitro.doNotShowAgain"),
                     onConfirm: () => resolve(true),
                     onCloseCallback: () => setImmediate(() => resolve(false)),
                     onConfirmSecondary() {
@@ -850,11 +852,10 @@ export default definePlugin({
                 if (sticker.format_type === StickerFormatType.APNG) {
                     if (!hasAttachmentPerms(channelId)) {
                         Alerts.show({
-                            title: "Hold on!",
+                            title: t("vencord.fakeNitro.holdOn"),
                             body: <div>
                                 <Paragraph>
-                                    You cannot send this message because it contains an animated FakeNitro sticker,
-                                    and you do not have permissions to attach files in the current channel. Please remove the sticker to proceed.
+                                    {t("vencord.fakeNitro.noAttachmentPerms.body")}
                                 </Paragraph>
                             </div>
                         });
