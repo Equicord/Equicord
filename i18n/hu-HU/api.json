@@ -1,37 +1,37 @@
 {
-    "commands": {
-        "errorExecuting": "Hiba történt a(z) \"{name}\" parancs végrehajtása közben"
+    "commands":{
+        "errorExecuting":"Hiba történt a(z) \"{name}\" parancs végrehajtása közben"
     },
-    "notifications": {
-        "dismissNotification": "Értesítés Elvetése",
-        "noNotifications": "Még nem kaptál értesítés",
-        "notificationLog": "Értesítési Napló",
-        "notificationSettings": "Értesítési Beállítások",
-        "logs": {
-            "title": "Biztos?",
-            "body_zero": "Nincs kiválasztott értesítés.",
-            "body_one": "Ez véglegesen töröl {count} értesítést. Ez a művelet nem vonható vissza.",
-            "body_other": "Ez véglegesen töröl {count} értesítést. Ez a művelet nem vonható vissza.",
-            "confirm": "Csináld!",
-            "cancel": "Mindegy",
-            "clearNotificationLog": "Értesítési Napló Törlése"
+    "memberListDecorators":{
+        "fallback":"Nem sikerült megjeleníteni a(z) {key} taglista dekorációt"
+    },
+    "messageAccessories":{
+        "fallback":"Nem sikerült megjeleníteni a(z) {key} üzenetkiegészítőt"
+    },
+    "messageDecorations":{
+        "fallback":"Nem sikerült megjeleníteni a(z) {key} üzenetdekorációt"
+    },
+    "notices":{
+        "fallback":"Hiba az értesítés megjelenítésekor"
+    },
+    "notifications":{
+        "dismissNotification":"Értesítés Elvetése",
+        "logs":{
+            "body_one":"Ez véglegesen töröl {count} értesítést. Ez a művelet nem vonható vissza.",
+            "body_other":"Ez véglegesen töröl {count} értesítést. Ez a művelet nem vonható vissza.",
+            "body_zero":"Nincs kiválasztott értesítés.",
+            "cancel":"Mindegy",
+            "clearNotificationLog":"Értesítési Napló Törlése",
+            "confirm":"Csináld!",
+            "title":"Biztos?"
         },
-        "missedNotifications": {
-            "title": "Amíg távol voltál",
-            "body_one": "{count} értesítést kaptál",
-            "body_other": "{count} értesítést kaptál"
-        }
-    },
-    "memberListDecorators": {
-        "fallback": "Nem sikerült megjeleníteni a(z) {key} taglista dekorációt"
-    },
-    "messageAccessories": {
-        "fallback": "Nem sikerült megjeleníteni a(z) {key} üzenetkiegészítőt"
-    },
-    "messageDecorations": {
-        "fallback": "Nem sikerült megjeleníteni a(z) {key} üzenetdekorációt"
-    },
-    "notices": {
-        "fallback": "Hiba az értesítés megjelenítésekor"
+        "missedNotifications":{
+            "body_one":"{count} értesítést kaptál",
+            "body_other":"{count} értesítést kaptál",
+            "title":"Amíg távol voltál"
+        },
+        "noNotifications":"Még nem kaptál értesítés",
+        "notificationLog":"Értesítési Napló",
+        "notificationSettings":"Értesítési Beállítások"
     }
 }

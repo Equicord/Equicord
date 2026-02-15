@@ -1,37 +1,37 @@
 {
-    "commands": {
-        "errorExecuting": "Ocurrió un error al ejecutar el comando \"{name}\""
+    "commands":{
+        "errorExecuting":"Ocurrió un error al ejecutar el comando \"{name}\""
     },
-    "notifications": {
-        "dismissNotification": "Descartar Notificación",
-        "noNotifications": "Sin notificaciones",
-        "notificationLog": "Registro de Notificaciones",
-        "notificationSettings": "Configuración de Notificaciones",
-        "logs": {
-            "title": "¿Estás seguro?",
-            "body_zero": "Ninguna notificación seleccionada.",
-            "body_one": "Esto eliminará permanentemente {count} notificación. Esta acción no se puede deshacer.",
-            "body_other": "Esto eliminará permanentemente {count} notificaciones. Esta acción no se puede deshacer.",
-            "confirm": "¡Hazlo!",
-            "cancel": "Mejor no",
-            "clearNotificationLog": "Borrar el Registro de Notificaciones"
+    "memberListDecorators":{
+        "fallback":"Fallo al renderizar el Decorador de Lista de Miembros {key}"
+    },
+    "messageAccessories":{
+        "fallback":"Fallo al renderizar el Accesorio de Mensaje {key}"
+    },
+    "messageDecorations":{
+        "fallback":"Fallo al renderizar la Decoración de Mensaje {key}"
+    },
+    "notices":{
+        "fallback":"Error al mostrar aviso"
+    },
+    "notifications":{
+        "dismissNotification":"Descartar Notificación",
+        "logs":{
+            "body_one":"Esto eliminará permanentemente {count} notificación. Esta acción no se puede deshacer.",
+            "body_other":"Esto eliminará permanentemente {count} notificaciones. Esta acción no se puede deshacer.",
+            "body_zero":"Ninguna notificación seleccionada.",
+            "cancel":"Mejor no",
+            "clearNotificationLog":"Borrar el Registro de Notificaciones",
+            "confirm":"¡Hazlo!",
+            "title":"¿Estás seguro?"
         },
-        "missedNotifications": {
-            "title": "Mientras estabas ausente",
-            "body_one": "{count} notificación recibida",
-            "body_other": "{count} notificaciones recibidas"
-        }
-    },
-    "memberListDecorators": {
-        "fallback": "Fallo al renderizar el Decorador de Lista de Miembros {key}"
-    },
-    "messageAccessories": {
-        "fallback": "Fallo al renderizar el Accesorio de Mensaje {key}"
-    },
-    "messageDecorations": {
-        "fallback": "Fallo al renderizar la Decoración de Mensaje {key}"
-    },
-    "notices": {
-        "fallback": "Error al mostrar aviso"
+        "missedNotifications":{
+            "body_one":"{count} notificación recibida",
+            "body_other":"{count} notificaciones recibidas",
+            "title":"Mientras estabas ausente"
+        },
+        "noNotifications":"Sin notificaciones",
+        "notificationLog":"Registro de Notificaciones",
+        "notificationSettings":"Configuración de Notificaciones"
     }
 }
