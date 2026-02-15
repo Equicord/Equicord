@@ -1,50 +1,50 @@
 {
     "absRPC": {
-        "description": "Rich presence for AudioBookShelf media server",
+        "description": "Bohatá přítomnost pro AudioBookShelf media server",
         "settings": {
-            "serverUrl": "AudioBookShelf server URL (e.g., https://abs.example.com)",
-            "username": "AudioBookShelf username",
-            "password": "AudioBookShelf password"
+            "serverUrl": "Adresa URL serveru AudioBookShelf (např. https://abs.example.com)",
+            "username": "AudioBookShelf uživatelské jméno",
+            "password": "AudiobookShelf heslo"
         },
         "about": {
-            "title": "How to connect to AudioBookShelf",
-            "description": "Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.",
-            "automaticAuth": "The plugin will automatically authenticate and fetch your listening progress."
+            "title": "Jak se připojit k AudioBookShelf",
+            "description": "Zadejte URL svého AudioBookShelf serveru, uživatelské jméno a heslo pro zobrazení tvých aktuálně přehrávaných audioknih jako Discord Rich Presence.",
+            "automaticAuth": "Plugin automaticky ověří a načte váš postup poslechu."
         },
         "toasts": {
-            "notConfigured": "AudioBookShelf RPC is not configured."
+            "notConfigured": "AudioBookShelf RPC není nakonfigurován."
         }
     },
     "altKrispSwitch": {
-        "description": "Makes the Noise Suppression Popout switch between None and Krisp instead of Krisp and Standard"
+        "description": "Umění přepínač Popout na potlačení šumu mezi None a Krisp namísto Krisp a Standard"
     },
     "bannersEverywhere": {
-        "description": "Displays banners in the member list ",
+        "description": "Zobrazuje bannery v seznamu členů ",
         "settings": {
-            "animate": "Animate banners",
-            "preferNameplate": "prefer nameplate over banner"
+            "animate": "Animovat bannery",
+            "preferNameplate": "preferovaná tabulka se jménem nad bannerem"
         }
     },
     "baseDecoder": {
-        "description": "Decode base64 content of any message and copy the decoded content.",
+        "description": "Dekódujte base64 obsah zprávy a zkopírujte dekódovaný obsah.",
         "settings": {
-            "clickMethod": "Change the button to decode base64 content of any message.",
+            "clickMethod": "Změňte tlačítko pro dekódování base64 obsahu jakékoli zprávy.",
             "clickMethodOptions": {
-                "left": "Left Click to decode the base64 content.",
-                "right": "Right click to decode the base64 content."
+                "left": "Kliknutím levým tlačítkem dekódovat obsah base64.",
+                "right": "Kliknutím pravým tlačítkem myši dekódovat obsah base64."
             }
         },
         "ui": {
-            "modalTitle": "Decoded Base64 Content",
-            "decodedContent": "Decoded Content",
-            "copyDecoded": "Copy Decoded Content",
-            "copiedToast": "Decoded content copied to clipboard!",
-            "tooltipLeft": "Copy Decoded (Left Click) / Decode Base64 (Right Click)",
-            "tooltipRight": "Decode Base64 (Left Click) / Copy Decoded (Right Click)"
+            "modalTitle": "Obsah base64 dekódován",
+            "decodedContent": "Dekódovaný Obsah",
+            "copyDecoded": "Zkopírovat dekódovaný obsah",
+            "copiedToast": "Dekódovaný obsah zkopírován do schránky!",
+            "tooltipLeft": "Kopírovat dekódované (kliknutím levým tlačítkem) / Dekódovat Base64 (pravé kliknutí)",
+            "tooltipRight": "Dekódovat Base64 (kliknutí levým tlačítkem) / Kopírovat dekódované (pravé kliknutí)"
         }
     },
     "betterAudioPlayer": {
-        "description": "Adds a spectrograph and oscilloscope visualizer to audio attachment players",
+        "description": "",
         "settings": {
             "oscilloscope": "Enable oscilloscope visualizer",
             "spectrograph": "Enable spectrograph visualizer",
@@ -65,24 +65,24 @@
             "isTextInputDefault": "Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)"
         },
         "ui": {
-            "reasons": "Reasons",
-            "reasonPlaceholder": "Reason",
+            "reasons": "Zdůvodnění",
+            "reasonPlaceholder": "Důvod",
             "addAnotherReason": "Add another reason"
         }
     },
     "betterBlockedUsers": {
         "description": "Allows you to search in blocked users list and makes names selectable in settings.",
         "ui": {
-            "searchPlaceholder": "Search users..."
+            "searchPlaceholder": "Hledat uživatele..."
         }
     },
     "betterInvites": {
         "description": "See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
         "ui": {
-            "expireTooltip": "This invite will {expiry}",
-            "expireWill": "expire",
-            "notExpire": "not expire",
-            "invitedYouTo": "{inviter} invited you to {guild}"
+            "expireTooltip": "Tato pozvánka bude {expiry}",
+            "expireWill": "vyprší",
+            "notExpire": "nevyprší",
+            "invitedYouTo": "{inviter} vás pozval do {guild}"
         }
     },
     "bypassStatus": {
