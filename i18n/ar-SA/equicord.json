@@ -99,7 +99,7 @@
         "statusOptions": {
             "online": "متصل",
             "idle": "مشغول",
-            "dnd": "Do Not Disturb",
+            "dnd": "عدم الإزعاج",
             "invisible": "مخفي"
         },
         "contextMenu": {
@@ -135,9 +135,9 @@
             "soundQuality": "Quality of sound to use"
         },
         "quality": {
-            "high": "High",
-            "medium": "Medium",
-            "low": "Low",
+            "high": "مرتفع",
+            "medium": "متوسط",
+            "low": "منخفض",
             "lowest": "Lowest"
         }
     },
