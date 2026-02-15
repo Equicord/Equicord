@@ -27,6 +27,7 @@ export interface ManaTooltipProps {
     tooltipStyle?: React.CSSProperties;
     tooltipContentClassName?: string;
     tooltipPointerClassName?: string;
+    positionKeyStemOverride?: string;
     onTooltipShow?: () => void;
     onTooltipHide?: () => void;
     onAnimationRest?: () => void;
@@ -50,6 +51,13 @@ export interface ManaRichTooltipProps {
     anchorRef?: React.RefObject<HTMLElement>;
     positionKey?: string;
     ariaHidden?: boolean;
+    shouldShow?: boolean;
+    delay?: number;
+    onTooltipShow?: () => void;
+    onTooltipHide?: () => void;
+    forceOpen?: boolean;
+    overflowOnly?: boolean;
+    hideOnClick?: boolean;
     children: React.ReactNode | ((props: Record<string, any>) => React.ReactNode);
 }
 
@@ -68,10 +76,14 @@ export interface ManaPopoverProps {
     actions?: PopoverAction[];
     textLink?: { text: string; onClick?: () => void; };
     gradientColor?: string;
+    scrollBehavior?: string;
+    hasVideo?: boolean;
     onRequestClose?: (reason: string) => void;
+    popoverRef?: React.Ref<HTMLDivElement>;
     targetElementRef: React.RefObject<HTMLElement | null>;
     shouldShow: boolean;
     position?: TooltipPosition;
+    caretConfig?: { align?: "start" | "center" | "end"; };
     alignmentStrategy?: "edge" | "trigger-center";
     align?: "left" | "center" | "right";
 }

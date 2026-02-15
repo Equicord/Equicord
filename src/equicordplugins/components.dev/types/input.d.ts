@@ -47,6 +47,18 @@ export interface ManaTextInputProps {
     defaultDirty?: boolean;
     focusProps?: Record<string, any>;
     inputRef?: React.Ref<HTMLInputElement>;
+    label?: string;
+    hideLabel?: boolean;
+    badge?: React.ReactNode;
+    icon?: React.ReactNode;
+    required?: boolean;
+    description?: string;
+    helperText?: string;
+    errorMessage?: string;
+    successMessage?: string;
+    id?: string;
+    layout?: string;
+    layoutConfig?: Record<string, unknown>;
     "aria-label"?: string;
     "aria-labelledby"?: string;
     "aria-describedby"?: string;
@@ -74,6 +86,18 @@ export interface ManaTextAreaProps {
     fullWidth?: boolean;
     focusProps?: Record<string, any>;
     inputRef?: React.Ref<HTMLTextAreaElement>;
+    label?: string;
+    hideLabel?: boolean;
+    badge?: React.ReactNode;
+    icon?: React.ReactNode;
+    required?: boolean;
+    description?: string;
+    helperText?: string;
+    errorMessage?: string;
+    successMessage?: string;
+    id?: string;
+    layout?: string;
+    layoutConfig?: Record<string, unknown>;
     "aria-label"?: string;
     "aria-labelledby"?: string;
     "aria-describedby"?: string;
@@ -92,6 +116,6 @@ export interface SearchBarProps {
     onFocus?: () => void;
     autoComplete?: string;
     inputProps?: Record<string, any>;
-    className?: string;
+    ref?: React.Ref<HTMLInputElement>;
     "aria-label"?: string;
 }

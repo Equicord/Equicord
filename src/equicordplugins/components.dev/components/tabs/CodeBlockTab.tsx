@@ -4,35 +4,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { findCssClassesLazy } from "@webpack";
-import { Parser } from "@webpack/common";
+import { CodeBlock } from "@components/CodeBlock";
 
-import { Paragraph } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { InlineCode, Paragraph } from "..";
+import { DocPage, type PropDef } from "../DocPage";
 
-const MarkupClasses = findCssClassesLazy("markup", "codeContainer");
+const CODEBLOCK_PROPS: PropDef[] = [
+    { name: "content", type: "string", description: "The code text to render inside the block." },
+    { name: "lang", type: "string", required: true, description: "Language identifier for syntax highlighting (e.g. \"tsx\", \"js\", \"css\", \"py\"). Use empty string for no highlighting." },
+];
 
-interface CodeBlockProps {
-    content: string;
-    language?: string;
-}
-
-function CodeBlock({ content, language = "" }: CodeBlockProps) {
-    const codeBlock = `\`\`\`${language}\n${content}\n\`\`\``;
-    return (
-        <div className={MarkupClasses.markup}>
-            {Parser.parse(codeBlock)}
-        </div>
-    );
-}
-
-function InlineCode({ children }: { children: React.ReactNode; }) {
-    return (
-        <span className={MarkupClasses.markup}>
-            <code className="inline">{children}</code>
-        </span>
-    );
-}
+const INLINECODE_PROPS: PropDef[] = [
+    { name: "children", type: "ReactNode", required: true, description: "Content to render as inline code." },
+];
 
 const JS_EXAMPLE = `function greet(name) {
     return \`Hello, \${name}!\`;
@@ -78,65 +62,61 @@ const JSON_EXAMPLE = `{
     }
 }`;
 
-const BASH_EXAMPLE = `#!/bin/bash
-for file in *.ts; do
-    echo "Processing $file"
-    node "$file"
-done`;
-
-const PLAIN_EXAMPLE = `This is a plain code block
-without syntax highlighting.
-It preserves whitespace and formatting.`;
-
 export default function CodeBlockTab() {
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Inline Code">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Use <InlineCode>InlineCode</InlineCode> component for inline code snippets.
-                </Paragraph>
-                <Paragraph>I really like <InlineCode>cats</InlineCode> so yeah</Paragraph>
-                <Paragraph>Use <InlineCode>console.log()</InlineCode> to debug your code.</Paragraph>
-                <Paragraph>
-                    Combine <InlineCode>const</InlineCode> with <InlineCode>let</InlineCode> and
-                    use <InlineCode>===</InlineCode> for strict equality.
-                </Paragraph>
-            </SectionWrapper>
-
-            <SectionWrapper title="JavaScript">
-                <CodeBlock content={JS_EXAMPLE} language="js" />
-            </SectionWrapper>
-
-            <SectionWrapper title="TypeScript">
-                <CodeBlock content={TS_EXAMPLE} language="ts" />
-            </SectionWrapper>
-
-            <SectionWrapper title="CSS">
-                <CodeBlock content={CSS_EXAMPLE} language="css" />
-            </SectionWrapper>
-
-            <SectionWrapper title="Python">
-                <CodeBlock content={PYTHON_EXAMPLE} language="py" />
-            </SectionWrapper>
-
-            <SectionWrapper title="JSON">
-                <CodeBlock content={JSON_EXAMPLE} language="json" />
-            </SectionWrapper>
-
-            <SectionWrapper title="Bash">
-                <CodeBlock content={BASH_EXAMPLE} language="bash" />
-            </SectionWrapper>
-
-            <SectionWrapper title="Plain Code Block">
-                <CodeBlock content={PLAIN_EXAMPLE} />
-            </SectionWrapper>
-
-            <SectionWrapper title="Usage">
-                <Paragraph color="text-muted">
-                    Use <InlineCode>Parser.parse()</InlineCode> from <InlineCode>@webpack/common</InlineCode> to
-                    render markdown with code blocks. Wrap in <InlineCode>markup</InlineCode> class for proper styling.
-                </Paragraph>
-            </SectionWrapper>
-        </div>
+        <DocPage
+            componentName="CodeBlock"
+            overview="CodeBlock renders syntax-highlighted code using Discord's built-in markdown parser. InlineCode renders small code snippets inline within text. Both are Vencord components wrapping Discord's markup system."
+            importPath={'import { CodeBlock } from "@components/CodeBlock";\nimport { InlineCode } from "../components";'}
+            sections={[
+                {
+                    title: "Inline Code",
+                    description: "Small code snippets rendered inline within text.",
+                    children: (
+                        <>
+                            <Paragraph>I really like <InlineCode>cats</InlineCode> so yeah</Paragraph>
+                            <Paragraph>Use <InlineCode>console.log()</InlineCode> to debug your code.</Paragraph>
+                            <Paragraph>
+                                Combine <InlineCode>const</InlineCode> with <InlineCode>let</InlineCode> and
+                                use <InlineCode>===</InlineCode> for strict equality.
+                            </Paragraph>
+                        </>
+                    ),
+                    code: "<Paragraph>Use <InlineCode>console.log()</InlineCode> to debug.</Paragraph>",
+                },
+                {
+                    title: "JavaScript",
+                    children: <CodeBlock content={JS_EXAMPLE} lang="js" />,
+                    code: '<CodeBlock content={jsCode} lang="js" />',
+                    relevantProps: ["content", "lang"],
+                },
+                {
+                    title: "TypeScript",
+                    children: <CodeBlock content={TS_EXAMPLE} lang="ts" />,
+                },
+                {
+                    title: "CSS",
+                    children: <CodeBlock content={CSS_EXAMPLE} lang="css" />,
+                },
+                {
+                    title: "Python",
+                    children: <CodeBlock content={PYTHON_EXAMPLE} lang="py" />,
+                },
+                {
+                    title: "JSON",
+                    children: <CodeBlock content={JSON_EXAMPLE} lang="json" />,
+                },
+                {
+                    title: "Plain Text",
+                    description: "Use an empty string for lang to render without syntax highlighting.",
+                    children: <CodeBlock content={"This is plain text\nwithout any syntax highlighting."} lang="" />,
+                    code: '<CodeBlock content="plain text" lang="" />',
+                },
+            ]}
+            props={[
+                { title: "CodeBlock", props: CODEBLOCK_PROPS },
+                { title: "InlineCode", props: INLINECODE_PROPS },
+            ]}
+        />
     );
 }

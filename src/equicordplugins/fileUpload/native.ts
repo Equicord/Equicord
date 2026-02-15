@@ -136,13 +136,81 @@ export async function uploadToS3(
     }
 }
 
+export async function uploadToCatbox(
+    _: IpcMainInvokeEvent,
+    fileBuffer: ArrayBuffer,
+    filename: string,
+    userhash?: string
+): Promise<NativeUploadResult> {
+    try {
+        const formData = new FormData();
+        formData.append("reqtype", "fileupload");
+        if (userhash) {
+            formData.append("userhash", userhash);
+        }
+        formData.append("fileToUpload", new Blob([fileBuffer]), filename);
+
+        const response = await fetch("https://catbox.moe/user/api.php", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            return { success: false, error: `Upload failed: ${response.status} ${errorText}` };
+        }
+
+        const text = (await response.text()).trim();
+        if (!text) {
+            return { success: false, error: "No URL returned from upload" };
+        }
+
+        return { success: true, url: text };
+    } catch (e) {
+        return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+    }
+}
+
+export async function uploadToLitterbox(
+    _: IpcMainInvokeEvent,
+    fileBuffer: ArrayBuffer,
+    filename: string,
+    expiry: string
+): Promise<NativeUploadResult> {
+    try {
+        const formData = new FormData();
+        formData.append("reqtype", "fileupload");
+        formData.append("time", expiry);
+        formData.append("fileToUpload", new Blob([fileBuffer]), filename);
+
+        const response = await fetch("https://litterbox.catbox.moe/resources/internals/api.php", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            return { success: false, error: `Upload failed: ${response.status} ${errorText}` };
+        }
+
+        const text = (await response.text()).trim();
+        if (!text) {
+            return { success: false, error: "No URL returned from upload" };
+        }
+
+        return { success: true, url: text };
+    } catch (e) {
+        return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+    }
+}
+
 export async function fetchFile(
 
     _: IpcMainInvokeEvent,
 
     url: string
 
-): Promise<{ success: boolean; data?: ArrayBuffer; contentType?: string; error?: string }> {
+): Promise<{ success: boolean; data?: ArrayBuffer; contentType?: string; error?: string; }> {
 
     try {
 
