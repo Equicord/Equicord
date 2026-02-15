@@ -88,7 +88,7 @@ async function google(target: string, text: string) {
 
     return {
         src: translate.src,
-        text: translate.sentences.map(s => s.trans).filter(Boolean).join("")
+        text: translate.sentences.map(s => s.trans).filter(Boolean).join("\n")
     };
 }
 
