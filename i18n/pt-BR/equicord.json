@@ -295,77 +295,77 @@
     "clipsEnhancements":{
         "description":"Adicionar mais opções de FPS e duração de Clipes, comprimento de clipe personalizado, marcação de RPC e mais",
         "settings":{
-            "enableScreenshotKeybind": "Ativar o recurso de teclas de atalho para captura de tela",
-            "enableVoiceOnlyClips": "Ativar clipes apenas de voz (áudio sem vídeo)",
-            "enableAdvancedSignals": "Ativar sinais de clipe avançados (gatilhos de auto-clipe)",
-            "ignorePlatformRestriction": "Permitir Clipping Restrito por Plataforma (pode causar erros ao salvar)",
-            "clipsLink": "Alterar as opções de FPS e duração nas configurações de Clipes!"
+            "clipsLink":"Alterar as opções de FPS e duração nas configurações de Clipes!",
+            "enableAdvancedSignals":"Ativar sinais de clipe avançados (gatilhos de auto-clipe)",
+            "enableScreenshotKeybind":"Ativar o recurso de teclas de atalho para captura de tela",
+            "enableVoiceOnlyClips":"Ativar clipes apenas de voz (áudio sem vídeo)",
+            "ignorePlatformRestriction":"Permitir Clipping Restrito por Plataforma (pode causar erros ao salvar)"
         }
     },
-    "commandPalette": {
-        "description": "Executar ações rapidamente através de uma paleta de comandos pesquisável",
-        "settings": {
-            "hotkey": "Atalho usado para abrir a paleta de comandos",
-            "visualStyle": "Aparência da paleta",
-            "visualStyleOptions": {
-                "classic": "Clássico",
-                "polished": "Polido"
-            },
-            "showTags": "Exibir etiquetas de tags para comandos",
-            "enableTagFilter": "Mostrar a barra de filtro de tags",
-            "customCommands": "Gerenciar entradas personalizadas da paleta de comandos"
+    "commandPalette":{
+        "description":"Executar ações rapidamente através de uma paleta de comandos pesquisável",
+        "settings":{
+            "customCommands":"Gerenciar entradas personalizadas da paleta de comandos",
+            "enableTagFilter":"Mostrar a barra de filtro de tags",
+            "hotkey":"Atalho usado para abrir a paleta de comandos",
+            "showTags":"Exibir etiquetas de tags para comandos",
+            "visualStyle":"Aparência da paleta",
+            "visualStyleOptions":{
+                "classic":"Clássico",
+                "polished":"Polido"
+            }
         },
-        "ui": {
-            "hotkeyTitle": "Atalho da Paleta de Comandos",
-            "hotkeyDescription": "Atalho usado para abrir a paleta de comandos",
-            "pressAnyKey": "Pressione qualquer tecla...",
-            "reset": "Redefinir"
+        "ui":{
+            "hotkeyDescription":"Atalho usado para abrir a paleta de comandos",
+            "hotkeyTitle":"Atalho da Paleta de Comandos",
+            "pressAnyKey":"Pressione qualquer tecla...",
+            "reset":"Redefinir"
         }
     },
-    "components": {
-        "description": "Plugin utilitário para desenvolvedores testarem e visualizarem componentes do Discord"
+    "components":{
+        "description":"Plugin utilitário para desenvolvedores testarem e visualizarem componentes do Discord"
     },
-    "contentWarning": {
-        "description": "Permite especificar certas palavras de gatilho que serão desfocadas por padrão. Passar o Mouse/Clicar no conteúdo desfocado irá revelá-lo.",
-        "settings": {
-            "onClick": "Mostrar conteúdo do gatilho apenas ao clicar em vez de ao passar o rato"
+    "contentWarning":{
+        "description":"Permite especificar certas palavras de gatilho que serão desfocadas por padrão. Passar o Mouse/Clicar no conteúdo desfocado irá revelá-lo.",
+        "settings":{
+            "onClick":"Mostrar conteúdo do gatilho apenas ao clicar em vez de ao passar o rato"
         },
-        "ui": {
-            "flaggedWords": "Palavras sinalizadas",
-            "placeholder": "Word"
+        "ui":{
+            "flaggedWords":"Palavras sinalizadas",
+            "placeholder":"Word"
         }
     },
-    "copyProfileColors": {
-        "description": "A plugin to copy people's profile gradient colors to clipboard.",
-        "contextMenu": {
-            "copyProfileColors": "Copy Profile Colors"
+    "copyProfileColors":{
+        "contextMenu":{
+            "copyProfileColors":"Copy Profile Colors"
         },
-        "toast": {
-            "noColorsFound": "No profile colors found!",
-            "copied": "Profile colors copied to clipboard!",
-            "error": "Error copying profile colors!"
+        "description":"A plugin to copy people's profile gradient colors to clipboard.",
+        "toast":{
+            "copied":"Profile colors copied to clipboard!",
+            "error":"Error copying profile colors!",
+            "noColorsFound":"No profile colors found!"
         }
     },
-    "copyStatusUrls": {
-        "description": "Copy the users status url when you right-click it",
-        "toast": {
-            "copied": "Copied URL",
-            "error": "Error copying URL, check console for more info"
+    "copyStatusUrls":{
+        "description":"Copy the users status url when you right-click it",
+        "toast":{
+            "copied":"Copied URL",
+            "error":"Error copying URL, check console for more info"
         }
     },
-    "copyUserMention": {
-        "description": "Adds a button to copy user's mention on the user context menu, works best with ValidUser.",
-        "contextMenu": {
-            "copyUserMention": "Copy User Mention"
-        }
+    "copyUserMention":{
+        "contextMenu":{
+            "copyUserMention":"Copy User Mention"
+        },
+        "description":"Adds a button to copy user's mention on the user context menu, works best with ValidUser."
     },
-    "cursorBuddy": {
-        "description": "Adds a sprite that follows your cursor.",
-        "settings": {
-            "buddy": "Pick a cursor buddy",
-            "buddyOptions": {
-                "oneko": "Oneko",
-                "fathorse": "Fatass Horse"
+    "cursorBuddy":{
+        "description":"Adds a sprite that follows your cursor.",
+        "settings":{
+            "buddy":"Pick a cursor buddy",
+            "buddyOptions":{
+                "fathorse":"Fatass Horse",
+                "oneko":"Oneko"
             },
             "fade":"If the horse should fade when the cursor is near",
             "fps":"Framerate of your buddy",
