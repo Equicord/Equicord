@@ -23,7 +23,7 @@ const MEDIA_STYLE_CONTENT = `
 let mediaStyle: HTMLStyleElement | null = null;
 let lastMiddleClickUp = 0;
 
-function updateMediaStyle(scope: string) {
+function updateMediaStyle(scope: string = "none") {
     const shouldEnable = scope === "media" || scope === "both";
 
     if (shouldEnable) {
@@ -37,11 +37,52 @@ function updateMediaStyle(scope: string) {
     }
 }
 
-function updateListeners(openScope: string) {
+function updateListeners(openScope: string = "none") {
+    document.removeEventListener("mouseup", handleMouseUp, true);
     document.removeEventListener("auxclick", handleAuxClick, true);
     document.removeEventListener("click", handleMediaClick, true);
+
+    document.addEventListener("mouseup", handleMouseUp, true);
     if (["links", "both"].includes(openScope)) { document.addEventListener("auxclick", handleAuxClick, true); }
     if (["media", "both"].includes(openScope)) { document.addEventListener("click", handleMediaClick, true); }
+}
+
+function handleAuxClick(event: MouseEvent) {
+    if (!shouldBlockLink(event)) return;
+    event.preventDefault();
+    event.stopPropagation();
+}
+
+function handleMediaClick(event: MouseEvent) {
+    if (event.button !== LEFT_CLICK) return;
+    if (!["media", "both"].includes(settings.store.openScope)) return;
+
+    const target = event.target as HTMLElement;
+    const videoControls = target.querySelector?.("[class^='videoControls']") as HTMLElement | null;
+    const video = videoControls?.querySelector?.("[class^='videoButton']") as HTMLVideoElement | null;
+
+    if (video) {
+        event.preventDefault();
+        event.stopPropagation();
+        video.click();
+    }
+}
+
+function handleMouseUp(event: MouseEvent) {
+    if (event.button === MIDDLE_CLICK) lastMiddleClickUp = Date.now();
+}
+
+function shouldBlockLink(event: MouseEvent): boolean {
+    if (event.button !== MIDDLE_CLICK) return false;
+
+    const target = event.target as HTMLElement | null;
+    const anchor = target?.closest?.("a[href]") as HTMLAnchorElement | null;
+    const role = anchor?.dataset.role ?? "";
+
+    if (!anchor) return false;
+    if (["img", "video", "button"].includes(role)) return false;
+
+    return !!anchor.href && anchor.href !== "#";
 }
 
 const settings = definePluginSettings({
@@ -74,40 +115,6 @@ const settings = definePluginSettings({
         onChange(newValue) { if (newValue < 1) { settings.store.pasteThreshold = 1; } },
     }
 });
-
-function shouldBlockLink(event: MouseEvent): boolean {
-    if (event.button !== MIDDLE_CLICK) return false;
-
-    const target = event.target as HTMLElement | null;
-    const anchor = target?.closest?.("a[href]") as HTMLAnchorElement | null;
-    const role = anchor?.dataset.role ?? "";
-
-    if (!anchor) return false;
-    if (["img", "video", "button"].includes(role)) return false;
-
-    return !!anchor.href && anchor.href !== "#";
-}
-
-function handleAuxClick(event: MouseEvent) {
-    if (!shouldBlockLink(event)) return;
-    event.preventDefault();
-    event.stopPropagation();
-}
-
-function handleMediaClick(event: MouseEvent) {
-    if (event.button !== LEFT_CLICK) return;
-    if (!["media", "both"].includes(settings.store.openScope)) return;
-
-    const target = event.target as HTMLElement;
-    const videoControls = target.querySelector?.("[class^='videoControls']") as HTMLElement | null;
-    const video = videoControls?.querySelector?.("[class^='videoButton']") as HTMLVideoElement | null;
-
-    if (video) {
-        event.preventDefault();
-        event.stopPropagation();
-        video.click();
-    }
-}
 
 function migrate() {
     const { plugins } = SettingsStore.plain;
@@ -146,26 +153,21 @@ export default definePlugin({
         return false;
     },
 
-    onMouseUp: (event: MouseEvent) => {
-        if (event.button === MIDDLE_CLICK) lastMiddleClickUp = Date.now();
-    },
-
     start() {
         migrate();
-        document.addEventListener("mouseup", this.onMouseUp);
         const { openScope } = settings.store;
         updateMediaStyle(openScope);
         updateListeners(openScope);
     },
 
     stop() {
-        document.removeEventListener("mouseup", this.onMouseUp);
-        updateListeners("none");
-        updateMediaStyle("none");
+        updateListeners();
+        updateMediaStyle();
     },
 
     patches: [
         {
+            // Detects paste events triggered by the "browser" outside of input fields.
             find: "document.addEventListener(\"paste\",",
             replacement: {
                 match: /(?<=paste",(\i)=>{)/,
@@ -173,6 +175,7 @@ export default definePlugin({
             }
         },
         {
+            // Detects paste events triggered inside of Discord's text input.
             find: ",origin:\"clipboard\"});",
             replacement: {
                 match: /(?<=handlePaste=(\i)=>{)(?=let)/,
@@ -180,6 +183,7 @@ export default definePlugin({
             }
         },
         {
+            // Detects paste events triggered inside of Discord's search box.
             find: "props.handlePastedText&&",
             replacement: {
                 match: /(?<=clipboardData\);)/,
