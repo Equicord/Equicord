@@ -1,13 +1,13 @@
 {
     "absRPC": {
-        "description": "Rich presence for AudioBookShelf media server",
+        "description": "Rich presence para el servidor multimedia de AudioBookShelf",
         "settings": {
-            "serverUrl": "AudioBookShelf server URL (e.g., https://abs.example.com)",
-            "username": "AudioBookShelf username",
-            "password": "AudioBookShelf password"
+            "serverUrl": "URL del servidor AudioBookShelf (p. ej. https://abs.example.com)",
+            "username": "Usuario de AudioBookShelf",
+            "password": "Contraseña de AudioBookShelf"
         },
         "about": {
-            "title": "How to connect to AudioBookShelf",
+            "title": "Cómo conectarse a AudioBookShelf",
             "description": "Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.",
             "automaticAuth": "The plugin will automatically authenticate and fetch your listening progress."
         },
@@ -21,7 +21,7 @@
     "bannersEverywhere": {
         "description": "Displays banners in the member list ",
         "settings": {
-            "animate": "Animate banners",
+            "animate": "Animar banners",
             "preferNameplate": "prefer nameplate over banner"
         }
     },
@@ -35,12 +35,12 @@
             }
         },
         "ui": {
-            "modalTitle": "Decoded Base64 Content",
-            "decodedContent": "Decoded Content",
-            "copyDecoded": "Copy Decoded Content",
-            "copiedToast": "Decoded content copied to clipboard!",
-            "tooltipLeft": "Copy Decoded (Left Click) / Decode Base64 (Right Click)",
-            "tooltipRight": "Decode Base64 (Left Click) / Copy Decoded (Right Click)"
+            "modalTitle": "Contenido Base64 Decodificado",
+            "decodedContent": "Contenido Decodificado",
+            "copyDecoded": "Copiar Contenido Decodificado",
+            "copiedToast": "¡Contenido decodificado ha sido copiado al portapapeles!",
+            "tooltipLeft": "Copiar Decodificado (Click Izquierdo) / Decodificar Base64 (Click Derecho)",
+            "tooltipRight": "Decodificar Base64 (Click Izquierdo) / Copiar decodificado (Click Derecho)"
         }
     },
     "betterAudioPlayer": {
@@ -61,19 +61,19 @@
     "betterBanReasons": {
         "description": "Create custom reasons to use in the Discord ban modal, and/or show a text input by default instead of the options.",
         "settings": {
-            "reasons": "Your custom reasons",
+            "reasons": "Tus razones personalizadas",
             "isTextInputDefault": "Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)"
         },
         "ui": {
-            "reasons": "Reasons",
-            "reasonPlaceholder": "Reason",
-            "addAnotherReason": "Add another reason"
+            "reasons": "Razones",
+            "reasonPlaceholder": "Razón",
+            "addAnotherReason": "Añadir otro motivo"
         }
     },
     "betterBlockedUsers": {
         "description": "Allows you to search in blocked users list and makes names selectable in settings.",
         "ui": {
-            "searchPlaceholder": "Search users..."
+            "searchPlaceholder": "Buscar usuarios..."
         }
     },
     "betterInvites": {
@@ -82,7 +82,7 @@
             "expireTooltip": "This invite will {expiry}",
             "expireWill": "expire",
             "notExpire": "not expire",
-            "invitedYouTo": "{inviter} invited you to {guild}"
+            "invitedYouTo": "{inviter} te invitó a {guild}"
         }
     },
     "bypassStatus": {
@@ -94,33 +94,33 @@
             "allowOutsideOfDms": "Allow selected users to bypass status outside of DMs too (acts like a channel/guild bypass, but it's for all messages sent by the selected users)",
             "notificationSound": "Whether the notification sound should be played",
             "respectSilentPings": "Respect silent pings (@silent / suppress notifications)",
-            "statusToUse": "Status to use for whitelist"
+            "statusToUse": ""
         },
         "statusOptions": {
             "online": "Online",
-            "idle": "Idle",
-            "dnd": "Do Not Disturb",
+            "idle": "Ausente",
+            "dnd": "No molestar",
             "invisible": "Invisible"
         },
         "contextMenu": {
-            "addStatusBypass": "Add Status Bypass",
-            "removeStatusBypass": "Remove Status Bypass"
+            "addStatusBypass": "Añadir Bypass de Estado",
+            "removeStatusBypass": "Eliminar Bypass de Estado"
         },
         "placeholder": {
-            "separateWithCommas": "Separate with commas"
+            "separateWithCommas": "Separar con comas"
         }
     },
     "alwaysExpandProfiles": {
         "description": "Always expands profile popouts to the full modal"
     },
     "anammox": {
-        "description": "Hides various features related to nitro and the store",
+        "description": "Ocultar varias funciones relacionadas con el nitro y la tienda",
         "settings": {
-            "dms": "Remove shops above DMs list",
-            "quests": "Remove quests above DMs list",
-            "serverBoost": "Remove server boost info above channel list",
-            "billing": "Remove billing settings",
-            "gift": "Remove gift button",
+            "dms": "Eliminar tiendas sobre la lista de Mensajes Directos",
+            "quests": "Eliminar misiones sobre la lista de Mensajes Directos",
+            "serverBoost": "Eliminar información sobre mejoras del servidor sobre la lista de Mensajes Directos",
+            "billing": "Eliminar ajustes de facturación",
+            "gift": "Eliminar botón de regalo",
             "emojiList": "Remove unavailable categories from the emoji picker"
         }
     },
@@ -129,22 +129,22 @@
         "settings": {
             "volume": "Volume of the animalese sound",
             "speed": "Speed of the animalese sound",
-            "pitch": "Pitch multiplier",
+            "pitch": "Multiplicador de tono",
             "messageLengthLimit": "Maximum length of message to process",
             "processOwnMessages": "Enable to yap your own messages too",
             "soundQuality": "Quality of sound to use"
         },
         "quality": {
-            "high": "High",
-            "medium": "Medium",
-            "low": "Low",
-            "lowest": "Lowest"
+            "high": "Alto",
+            "medium": "Mediano",
+            "low": "Bajo",
+            "lowest": "Muy bajo"
         }
     },
     "atSomeone": {
-        "description": "Mention someone randomly",
+        "description": "Mencionar a alguien al azar",
         "contextMenu": {
-            "someone": "Mention someone randomly"
+            "someone": "Mencionar a alguien al azar"
         }
     },
     "autoZipper": {
@@ -202,10 +202,10 @@
         "description": "Adds badges to channels based on their type",
         "settings": {
             "oneBadgePerChannel": "Show only one badge per channel",
-            "showTextBadge": "Show Text badge",
-            "showVoiceBadge": "Show Voice badge",
-            "showCategoryBadge": "Show Category badge",
-            "showDirectoryBadge": "Show Directory badge",
+            "showTextBadge": "Mostrar insignia de texto",
+            "showVoiceBadge": "Mostrar insignia de voz",
+            "showCategoryBadge": "Mostrar insignia de categoría",
+            "showDirectoryBadge": "Mostrar insignia de directorio",
             "showAnnouncementThreadBadge": "Show Announcement Thread badge",
             "showPublicThreadBadge": "Show Public Thread badge",
             "showPrivateThreadBadge": "Show Private Thread badge",
@@ -242,22 +242,22 @@
             "stageBadgeColor": "Stage badge color",
             "directoryBadgeColor": "Directory badge color",
             "forumBadgeColor": "Forum badge color",
-            "mediaBadgeColor": "Media badge color",
-            "nsfwBadgeColor": "NSFW badge color",
-            "lockedBadgeColor": "Locked badge color",
-            "rulesBadgeColor": "Rules badge color",
-            "unknownBadgeColor": "Unknown badge color"
+            "mediaBadgeColor": "Color de la insignia multimedia",
+            "nsfwBadgeColor": "Color de la insignia NSFW",
+            "lockedBadgeColor": "Color de insignia bloqueada",
+            "rulesBadgeColor": "Color de la insignia de Reglas",
+            "unknownBadgeColor": "Color de insignia Desconocido"
         },
         "tooltips": {
             "lockedChannel": "This channel is locked.",
-            "nsfwChannel": "This channel is marked as NSFW.",
-            "rulesChannel": "This channel is the server rules channel."
+            "nsfwChannel": "Este canal está marcado como NSFW.",
+            "rulesChannel": "Este canal es el canal de reglas del servidor."
         }
     },
     "channelTabs": {
         "description": "Group your commonly visited channels in tabs, like a browser",
         "contextMenu": {
-            "openInNewTab": "Open in New Tab"
+            "openInNewTab": "Abrir en una Nueva Pestaña"
         }
     },
     "characterCounter": {
@@ -283,7 +283,7 @@
             "blockedReplyDisplay": "What should display instead of the message when someone replies to someone you have hidden",
             "blockedReplyDisplayOptions": {
                 "displayText": "Display text saying a hidden message was replied to",
-                "hideReply": "Literally nothing"
+                "hideReply": "Literalmente nada"
             },
             "guildBlackList": "Guild ids to disable functionality in",
             "guildWhiteList": "Guild ids to enable functionality in"
@@ -297,9 +297,9 @@
         "settings": {
             "richPresenceTagging": "When should clips be tagged with the current Rich Presence?",
             "richPresenceTaggingOptions": {
-                "always": "Always",
+                "always": "Siempre",
                 "whenMatched": "Only when beginning or end of activity name matches",
-                "never": "Never"
+                "never": "Nunca"
             },
             "enableScreenshotKeybind": "Enable the screenshot keybind feature",
             "enableVoiceOnlyClips": "Enable voice-only clips (audio without video)",
@@ -314,8 +314,8 @@
             "hotkey": "Hotkey used to open the command palette",
             "visualStyle": "Palette appearance",
             "visualStyleOptions": {
-                "classic": "Classic",
-                "polished": "Polished"
+                "classic": "Clásico",
+                "polished": "Pulido"
             },
             "showTags": "Display tag chips for commands",
             "enableTagFilter": "Show the tag filter bar",
@@ -325,7 +325,7 @@
             "hotkeyTitle": "Command Palette Hotkey",
             "hotkeyDescription": "Hotkey used to open the command palette",
             "pressAnyKey": "Press any key...",
-            "reset": "Reset"
+            "reset": "Restablecer"
         }
     },
     "components": {
@@ -338,7 +338,7 @@
         },
         "ui": {
             "flaggedWords": "Flagged Words",
-            "placeholder": "Word"
+            "placeholder": "Palabra"
         }
     },
     "copyProfileColors": {
@@ -355,7 +355,7 @@
     "copyStatusUrls": {
         "description": "Copy the users status url when you right-click it",
         "toast": {
-            "copied": "Copied URL",
+            "copied": "URL Copiado",
             "error": "Error copying URL, check console for more info"
         }
     },
@@ -371,19 +371,19 @@
             "buddy": "Pick a cursor buddy",
             "buddyOptions": {
                 "oneko": "Oneko",
-                "fathorse": "Fatass Horse"
+                "fathorse": "Caballo Gordo"
             },
-            "speed": "Speed of your buddy",
-            "fps": "Framerate of your buddy",
-            "furColor": "Fur hex color for Oneko",
+            "speed": "Velocidad de tu amigo",
+            "fps": "Cantidad de frames de tu amigo",
+            "furColor": "Color hexadecimal de piel de Oneko",
             "outlineColor": "Outline hex color for Oneko",
-            "size": "Size of the fatass horse",
+            "size": "Tamaño del caballo gordo",
             "fade": "If the horse should fade when the cursor is near",
             "freeroam": "If the horse should roam freely when idle",
             "shake": "If the horse should shake the window when it's walking"
         },
         "ui": {
-            "furColor": "Fur Color",
+            "furColor": "Color de Pelaje",
             "outlineColor": "Outline Color"
         }
     },
@@ -395,9 +395,9 @@
         "settings": {
             "searchSounds": "Search Sounds",
             "searchPlaceholder": "Search by name or ID",
-            "import": "Import",
-            "export": "Export",
-            "resetAll": "Reset All",
+            "import": "Importar",
+            "export": "Exportar",
+            "resetAll": "Resetear todo",
             "debug": "Debug"
         },
         "toast": {
@@ -456,23 +456,23 @@
             },
             "inviteExpireAfter": "Invite expiration.",
             "inviteExpireAfterOptions": {
-                "30min": "30 minutes",
-                "1hour": "1 hour",
-                "6hours": "6 hours",
-                "12hours": "12 hours",
-                "1day": "1 day",
-                "7days": "7 days",
-                "never": "Never"
+                "30min": "30 minutos",
+                "1hour": "1 hora",
+                "6hours": "6 horas",
+                "12hours": "12 horas",
+                "1day": "1 día",
+                "7days": "7 días",
+                "never": "Nunca"
             },
             "inviteMaxUses": "Invite max uses.",
             "inviteMaxUsesOptions": {
-                "noLimit": "No limit",
-                "1use": "1 use",
-                "5uses": "5 uses",
-                "10uses": "10 uses",
-                "25uses": "25 uses",
-                "50uses": "50 uses",
-                "100uses": "100 uses"
+                "noLimit": "Ilimitado",
+                "1use": "1 uso",
+                "5uses": "5 usos",
+                "10uses": "10 usos",
+                "25uses": "25 usos",
+                "50uses": "50 usos",
+                "100uses": "100 usos"
             },
             "inviteTemporaryMembership": "Grant temporary membership.",
             "reuseExistingInvites": "Reuse existing invite instead of creating a new one.",
@@ -481,8 +481,8 @@
         "toast": {
             "dropFailed": "Dragify failed to handle drop.",
             "noChannelForInvites": "No channel available for invites.",
-            "inviteCreated": "Invite created.",
-            "inviteFailed": "Unable to create invite."
+            "inviteCreated": "Invitación creada.",
+            "inviteFailed": "No se pudo crear la invitación."
         }
     },
     "messageLoggerEnhanced": {
@@ -517,27 +517,27 @@
             "selectLogsDir": "Select logs directory",
             "importLogsFromFile": "Import Logs From File",
             "exportLogsFromIndexedDB": "Export Logs From IndexedDB",
-            "openLogs": "Open Logs",
+            "openLogs": "Abrir Registros",
             "openImageCacheFolder": "Opens the image cache directory"
         },
         "modal": {
             "filterMessages": "Filter Messages",
-            "deleted": "Deleted",
-            "edited": "Edited",
-            "ghostPinged": "Ghost Pinged",
-            "clearAllLogs": "Clear All Logs",
-            "clearVisibleLogs": "Clear Visible Logs",
-            "sortOldestFirst": "Sort Oldest First",
-            "sortNewestFirst": "Sort Newest First",
-            "noResultsIn": "No results in {tab}.",
-            "maybeTry": "Maybe try {nextTab} or {lastTab}",
+            "deleted": "Eliminado",
+            "edited": "Editado",
+            "ghostPinged": "Ping Fantasma",
+            "clearAllLogs": "Borrar todos los registros",
+            "clearVisibleLogs": "Borrar Registros Visibles",
+            "sortOldestFirst": "Ordenar primero más antiguo",
+            "sortNewestFirst": "Ordenar primero más nuevo",
+            "noResultsIn": "Sin resultados en {tab}.",
+            "maybeTry": "Tal vez pruebe {nextTab} o {lastTab}",
             "emptyLogs": "Empty eh",
             "importLogsTooltip": "ML Enhanced now stores logs in indexeddb. You need to import your old logs from the logs directory. Importing wont overwrite existing logs",
-            "importLogs": "Import Logs",
-            "loadMore": "Load More",
+            "importLogs": "Importar Registros",
+            "loadMore": "Cargar Más",
             "jumpToMessage": "Jump To Message",
             "openUserProfile": "Open user profile",
-            "copyContent": "Copy Content",
+            "copyContent": "Copiar Contenido",
             "copyUserId": "Copy User ID",
             "copyMessageId": "Copy Message ID",
             "copyChannelId": "Copy Channel ID",

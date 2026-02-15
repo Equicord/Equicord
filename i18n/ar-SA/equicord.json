@@ -82,7 +82,7 @@
             "expireTooltip": "This invite will {expiry}",
             "expireWill": "expire",
             "notExpire": "not expire",
-            "invitedYouTo": "{inviter} invited you to {guild}"
+            "invitedYouTo": "{inviter} دعاك إلى {guild}"
         }
     },
     "bypassStatus": {
@@ -97,14 +97,14 @@
             "statusToUse": "Status to use for whitelist"
         },
         "statusOptions": {
-            "online": "Online",
-            "idle": "Idle",
+            "online": "متصل",
+            "idle": "مشغول",
             "dnd": "Do Not Disturb",
-            "invisible": "Invisible"
+            "invisible": "مخفي"
         },
         "contextMenu": {
-            "addStatusBypass": "Add Status Bypass",
-            "removeStatusBypass": "Remove Status Bypass"
+            "addStatusBypass": "إضافة تجاوز الحالة",
+            "removeStatusBypass": "إزالة تجاوز الحالة"
         },
         "placeholder": {
             "separateWithCommas": "Separate with commas"
