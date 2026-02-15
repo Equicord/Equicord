@@ -298,8 +298,8 @@ export const settings = definePluginSettings({
                     confirmVariant: "critical-primary",
                     confirmText: "Clear",
                     cancelText: t("vencord.cancel"),
-                    onConfirm: () => {
-                        clearMessagesIDB();
+                    onConfirm: async () => {
+                        await clearMessagesIDB();
                     },
                 })}
             >

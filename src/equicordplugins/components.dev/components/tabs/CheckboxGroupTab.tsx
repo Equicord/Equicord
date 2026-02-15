@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { CheckboxGroupOption, ManaCheckboxGroup, Paragraph, useState } from "..";
+import { CheckboxGroupOption, ManaCheckboxGroup, useState } from "..";
+import { DocPage, type PropDef } from "../DocPage";
 import { EquicordIcon } from "../icons/EquicordIcon";
-import { SectionWrapper } from "../SectionWrapper";
 
 const BASIC_OPTIONS: CheckboxGroupOption[] = [
     { value: "option1", label: "Option 1" },
@@ -32,89 +32,102 @@ const OPTIONS_MIXED: CheckboxGroupOption[] = [
     { value: "another", label: "Another enabled" },
 ];
 
+const GROUP_PROPS: PropDef[] = [
+    { name: "options", type: "CheckboxGroupOption[]", required: true, description: "Array of checkbox options to render." },
+    { name: "selectedValues", type: "(string | number)[]", required: true, description: "Currently selected option values." },
+    { name: "onChange", type: "(values: (string | number)[]) => void", description: "Called with the updated selection array when any checkbox is toggled." },
+    { name: "disabled", type: "boolean", default: "false", description: "Disables the entire group. Individual option disabled flags still apply." },
+    { name: "label", type: "string", description: "Field label displayed above the group." },
+    { name: "hideLabel", type: "boolean", description: "Visually hides the label while keeping it accessible." },
+    { name: "badge", type: "ReactNode", description: "Badge element displayed next to the label." },
+    { name: "icon", type: "ReactNode", description: "Icon element displayed next to the label." },
+    { name: "required", type: "boolean", description: "Marks the field as required." },
+    { name: "description", type: "string", description: "Description text displayed below the label." },
+    { name: "helperText", type: "string", description: "Helper text displayed below the group." },
+    { name: "errorMessage", type: "string", description: "Error message displayed below the group." },
+    { name: "successMessage", type: "string", description: "Success message displayed below the group." },
+    { name: "id", type: "string", description: "Custom ID for the control element." },
+    { name: "layout", type: "string", description: "Field layout variant." },
+    { name: "layoutConfig", type: "Record<string, unknown>", description: "Configuration for the field layout." },
+];
+
+const OPTION_PROPS: PropDef[] = [
+    { name: "value", type: "string | number", required: true, description: "Unique identifier for this option." },
+    { name: "label", type: "string", required: true, description: "Label text displayed next to the checkbox." },
+    { name: "description", type: "string", description: "Description text below the label." },
+    { name: "disabled", type: "boolean", description: "Disables this individual option." },
+    { name: "leadingIcon", type: "ComponentType<any>", description: "Icon component displayed before the checkbox." },
+];
+
+function BasicDemo() {
+    const [selected, setSelected] = useState<(string | number)[]>(["option1"]);
+    return <ManaCheckboxGroup options={BASIC_OPTIONS} selectedValues={selected} onChange={setSelected} />;
+}
+
+function DescriptionDemo() {
+    const [selected, setSelected] = useState<(string | number)[]>(["notifications", "sounds"]);
+    return <ManaCheckboxGroup options={OPTIONS_WITH_DESCRIPTIONS} selectedValues={selected} onChange={setSelected} />;
+}
+
+function IconDemo() {
+    const [selected, setSelected] = useState<(string | number)[]>(["item1"]);
+    return <ManaCheckboxGroup options={OPTIONS_WITH_ICONS} selectedValues={selected} onChange={setSelected} />;
+}
+
+function MixedDemo() {
+    const [selected, setSelected] = useState<(string | number)[]>(["enabled"]);
+    return <ManaCheckboxGroup options={OPTIONS_MIXED} selectedValues={selected} onChange={setSelected} />;
+}
+
 export default function CheckboxGroupTab() {
-    const [basicSelected, setBasicSelected] = useState<(string | number)[]>(["option1"]);
-    const [descSelected, setDescSelected] = useState<(string | number)[]>(["notifications", "sounds"]);
-    const [iconSelected, setIconSelected] = useState<(string | number)[]>(["item1"]);
-    const [mixedSelected, setMixedSelected] = useState<(string | number)[]>(["enabled"]);
-
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Basic">
-                <ManaCheckboxGroup
-                    options={BASIC_OPTIONS}
-                    selectedValues={basicSelected}
-                    onChange={setBasicSelected}
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="With Descriptions">
-                <ManaCheckboxGroup
-                    options={OPTIONS_WITH_DESCRIPTIONS}
-                    selectedValues={descSelected}
-                    onChange={setDescSelected}
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="With Leading Icons">
-                <ManaCheckboxGroup
-                    options={OPTIONS_WITH_ICONS}
-                    selectedValues={iconSelected}
-                    onChange={setIconSelected}
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="With Disabled Option">
-                <ManaCheckboxGroup
-                    options={OPTIONS_MIXED}
-                    selectedValues={mixedSelected}
-                    onChange={setMixedSelected}
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="Entire Group Disabled">
-                <ManaCheckboxGroup
-                    options={BASIC_OPTIONS}
-                    selectedValues={["option1", "option2"]}
-                    disabled
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    <strong>CheckboxGroup</strong>
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • options: CheckboxGroupOption[] - Array of options
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • selectedValues: (string | number)[] - Currently selected values
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • onChange?: (values: (string | number)[]) =&gt; void - Called when selection changes
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • disabled?: boolean - Disable entire group
-                </Paragraph>
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>CheckboxGroupOption</strong>
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • value: string | number - Option value
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • label: string - Option label
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • description?: string - Optional description
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • disabled?: boolean - Disable individual option
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • leadingIcon?: React.ComponentType - Icon before checkbox
-                </Paragraph>
-            </SectionWrapper>
-        </div>
+        <DocPage
+            componentName="ManaCheckboxGroup"
+            overview="ManaCheckboxGroup renders a group of checkboxes from an options array with multi-select state management. Each option supports labels, descriptions, icons, and individual disabled state. The group can also be disabled entirely."
+            notices={[
+                { type: "info", children: "CheckboxGroup manages multi-select state internally by delegating to individual ManaCheckbox instances. Use this instead of manually rendering multiple checkboxes when you need shared state tracking." },
+            ]}
+            importPath={'import { ManaCheckboxGroup } from "../components";'}
+            sections={[
+                {
+                    title: "Basic",
+                    description: "Simple group with three options.",
+                    children: <BasicDemo />,
+                    code: '<ManaCheckboxGroup\n  options={[\n    { value: "a", label: "Option A" },\n    { value: "b", label: "Option B" },\n  ]}\n  selectedValues={selected}\n  onChange={setSelected}\n/>',
+                    relevantProps: ["options", "selectedValues", "onChange"],
+                },
+                {
+                    title: "With Descriptions",
+                    description: "Each option can have a description below its label.",
+                    children: <DescriptionDemo />,
+                },
+                {
+                    title: "With Leading Icons",
+                    description: "Options can display an icon component before the checkbox.",
+                    children: <IconDemo />,
+                },
+                {
+                    title: "With Disabled Option",
+                    description: "Individual options can be disabled while others remain interactive.",
+                    children: <MixedDemo />,
+                },
+                {
+                    title: "Entire Group Disabled",
+                    description: "The disabled prop on the group disables all options.",
+                    children: (
+                        <ManaCheckboxGroup
+                            options={BASIC_OPTIONS}
+                            selectedValues={["option1", "option2"]}
+                            disabled
+                        />
+                    ),
+                    relevantProps: ["disabled"],
+                },
+            ]}
+            props={[
+                { title: "ManaCheckboxGroup", props: GROUP_PROPS },
+                { title: "CheckboxGroupOption", props: OPTION_PROPS },
+            ]}
+        />
     );
 }

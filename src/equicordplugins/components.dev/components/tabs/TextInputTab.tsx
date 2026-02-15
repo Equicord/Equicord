@@ -4,86 +4,118 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ManaTextInput, Paragraph, useState } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { ManaTextInput, useState } from "..";
+import { DocPage, type PropDef } from "../DocPage";
+
+const TEXTINPUT_PROPS: PropDef[] = [
+    { name: "value", type: "string", description: "Current input value (controlled)." },
+    { name: "defaultValue", type: "string", description: "Initial value (uncontrolled)." },
+    { name: "onChange", type: "(value: string, name?: string) => void", description: "Called when the input value changes." },
+    { name: "placeholder", type: "string", description: "Placeholder text when empty." },
+    { name: "name", type: "string", description: "HTML name attribute for form submission." },
+    { name: "type", type: '"text" | "password" | "email" | "number" | "search" | "tel" | "url"', default: '"text"', description: "Input type." },
+    { name: "size", type: '"sm" | "md"', default: '"md"', description: "Input size variant." },
+    { name: "clearable", type: "boolean | { show: boolean }", description: "Show a clear button when the input has a value." },
+    { name: "showCharacterCount", type: "boolean", description: "Display current character count." },
+    { name: "maxLength", type: "number", description: "Maximum character limit." },
+    { name: "minLength", type: "number", description: "Minimum character requirement." },
+    { name: "error", type: "string | boolean", description: "Error state. String shows error message, boolean shows red border." },
+    { name: "disabled", type: "boolean", default: "false", description: "Disable the input." },
+    { name: "readOnly", type: "boolean", description: "Make the input read-only." },
+    { name: "fullWidth", type: "boolean", description: "Expand to full available width." },
+    { name: "leading", type: "TextInputLeadingAccessory", description: "Leading accessory (icon, button, tags, or image)." },
+    { name: "trailing", type: "TextInputTrailingAccessory", description: "Trailing accessory (icon or button)." },
+    { name: "inputRef", type: "Ref<HTMLInputElement>", internal: true, description: "Ref to the underlying input element." },
+];
+
+function BasicDemo() {
+    const [value, setValue] = useState("Hello world");
+    return <ManaTextInput value={value} onChange={setValue} />;
+}
+
+function SizesDemo() {
+    const [sm, setSm] = useState("Small");
+    const [md, setMd] = useState("Medium");
+    return (
+        <div className="vc-compfinder-grid-vertical">
+            <ManaTextInput value={sm} onChange={setSm} size="sm" placeholder="Size: sm" />
+            <ManaTextInput value={md} onChange={setMd} size="md" placeholder="Size: md" />
+        </div>
+    );
+}
+
+function ClearableDemo() {
+    const [value, setValue] = useState("Clear me");
+    return <ManaTextInput value={value} onChange={setValue} clearable />;
+}
+
+function CharCountDemo() {
+    const [value, setValue] = useState("Count chars");
+    return <ManaTextInput value={value} onChange={setValue} showCharacterCount maxLength={50} />;
+}
+
+function ErrorDemo() {
+    const [value, setValue] = useState("Invalid input");
+    return <ManaTextInput value={value} onChange={setValue} error />;
+}
 
 export default function TextInputTab() {
-    const [basic, setBasic] = useState("Hello world");
-    const [sizeSm, setSizeSm] = useState("Small input");
-    const [sizeMd, setSizeMd] = useState("Medium input");
-    const [withPlaceholder, setWithPlaceholder] = useState("");
-    const [clearable, setClearable] = useState("Clear me");
-    const [charCount, setCharCount] = useState("Count chars");
-    const [error, setError] = useState("Invalid input");
-
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Basic">
-                <ManaTextInput value={basic} onChange={setBasic} />
-            </SectionWrapper>
-
-            <SectionWrapper title="Sizes">
-                <div className="vc-compfinder-grid-vertical">
-                    <ManaTextInput value={sizeSm} onChange={setSizeSm} size="sm" placeholder="Size: sm" />
-                    <ManaTextInput value={sizeMd} onChange={setSizeMd} size="md" placeholder="Size: md" />
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="With Placeholder">
-                <ManaTextInput value={withPlaceholder} onChange={setWithPlaceholder} placeholder="Enter text here..." />
-            </SectionWrapper>
-
-            <SectionWrapper title="Clearable">
-                <ManaTextInput value={clearable} onChange={setClearable} clearable />
-            </SectionWrapper>
-
-            <SectionWrapper title="Character Count">
-                <ManaTextInput value={charCount} onChange={setCharCount} showCharacterCount maxLength={50} />
-            </SectionWrapper>
-
-            <SectionWrapper title="Error State">
-                <ManaTextInput value={error} onChange={setError} error />
-            </SectionWrapper>
-
-            <SectionWrapper title="States">
-                <div className="vc-compfinder-grid-vertical">
-                    <ManaTextInput value="Disabled" disabled />
-                    <ManaTextInput value="Read only" readOnly />
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    • value: string - Input value
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • onChange?: (value: string) =&gt; void - Called on input change
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • placeholder?: string - Placeholder text
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • size?: "sm" | "md" - Input size (default: "md")
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • clearable?: boolean - Show clear button
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • showCharacterCount?: boolean - Display character count
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • maxLength?: number - Maximum character limit
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • error?: boolean - Show error state styling
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • disabled?: boolean - Disable input
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • readOnly?: boolean - Make input read-only
-                </Paragraph>
-            </SectionWrapper>
-        </div>
+        <DocPage
+            overview="ManaTextInput is Discord's single-line text input with support for two sizes, clearable button, character counting, error states, leading/trailing accessories, and disabled/read-only modes."
+            importPath={'import { ManaTextInput } from "../components";'}
+            sections={[
+                {
+                    title: "Basic",
+                    description: "Default text input with controlled value.",
+                    children: <BasicDemo />,
+                    code: "<ManaTextInput value={value} onChange={setValue} />",
+                    relevantProps: ["value", "onChange"],
+                },
+                {
+                    title: "Sizes",
+                    description: "Available in sm and md (default) sizes.",
+                    children: <SizesDemo />,
+                    relevantProps: ["size"],
+                },
+                {
+                    title: "With Placeholder",
+                    children: (
+                        <ManaTextInput value="" onChange={() => { }} placeholder="Enter text here..." />
+                    ),
+                    relevantProps: ["placeholder"],
+                },
+                {
+                    title: "Clearable",
+                    description: "Shows a clear button when the input has a value.",
+                    children: <ClearableDemo />,
+                    relevantProps: ["clearable"],
+                },
+                {
+                    title: "Character Count",
+                    description: "Displays character count with a 50-character max.",
+                    children: <CharCountDemo />,
+                    relevantProps: ["showCharacterCount", "maxLength"],
+                },
+                {
+                    title: "Error State",
+                    description: "Red border indicating invalid input.",
+                    children: <ErrorDemo />,
+                    relevantProps: ["error"],
+                },
+                {
+                    title: "States",
+                    description: "Disabled and read-only states.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            <ManaTextInput value="Disabled" disabled />
+                            <ManaTextInput value="Read only" readOnly />
+                        </div>
+                    ),
+                    relevantProps: ["disabled", "readOnly"],
+                },
+            ]}
+            props={TEXTINPUT_PROPS}
+        />
     );
 }
