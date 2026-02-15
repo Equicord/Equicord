@@ -1,0 +1,88 @@
+{
+    "messageLoggerEnhanced": {
+        "settings": {
+            "saveMessages": "Whether to save the deleted and edited messages.",
+            "saveImages": "Save deleted attachments.",
+            "sortNewest": "Sort logs by newest.",
+            "cacheMessagesFromServers": "Usually message logger only logs from whitelisted ids and dms, enabling this would mean it would log messages from all servers as well. Note that this may cause the cache to exceed its limit, resulting in some messages being missed. If you are in a lot of servers, this may significantly increase the chances of messages being logged, which can result in a large message record and the inclusion of irrelevant messages.",
+            "ignoreBots": "Whether to ignore messages by bots",
+            "ignoreWebhooks": "Whether to ignore messages by webhooks",
+            "ignoreSelf": "Whether to ignore messages by yourself",
+            "ignoreMutedGuilds": "Messages in muted guilds will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
+            "ignoreMutedCategories": "Messages in channels belonging to muted categories will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
+            "ignoreMutedChannels": "Messages in muted channels will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
+            "alwaysLogDirectMessages": "Always log DMs",
+            "alwaysLogCurrentChannel": "Always log current selected channel. Blacklisted channels/users will still be ignored.",
+            "permanentlyRemoveLogByDefault": "Vencord's base MessageLogger remove log button wiil delete logs permanently",
+            "hideMessageFromMessageLoggers": "When enabled, a context menu button will be added to messages to allow you to delete messages without them being logged by other loggers. Might not be safe, use at your own risk.",
+            "showLogsButton": "Toggle to whenever show the toolbox or not",
+            "showWhereMessageIsFrom": "Show message channel/author name and server name",
+            "messagesToDisplayAtOnceInLogs": "Number of messages to display at once in logs & number of messages to load when loading more messages in logs.",
+            "hideMessageFromMessageLoggersDeletedMessage": "The message content to replace the message with when using the hide message from message loggers feature.",
+            "messageLimit": "Maximum number of messages to save. Older messages are deleted when the limit is reached. 0 means there is no limit",
+            "attachmentSizeLimitInMegabytes": "Maximum size of an attachment in megabytes to save. Attachments larger than this size will not be saved.",
+            "attachmentFileExtensions": "Comma separated list of file extensions to save. Attachments with file extensions not in this list will not be saved. Leave empty to save all attachments.",
+            "cacheLimit": "Maximum number of messages to store in the cache. Older messages are deleted when the limit is reached. This helps reduce memory usage and improve performance. 0 means there is no limit",
+            "timeBasedCleanupMinutes": "Automatically remove messages from servers that are older than this many minutes. Set to 0 to disable time-based cleanup.",
+            "preserveCurrentChannel": "When enabled, messages in your currently selected channel are not affected by time-based cleanup.",
+            "whitelistedIds": "Whitelisted server, channel, or user IDs.",
+            "blacklistedIds": "Blacklisted server, channel, or user IDs.",
+            "selectImageCacheDir": "Select saved images directory",
+            "selectLogsDir": "Select logs directory",
+            "importLogsFromFile": "Import Logs From File",
+            "exportLogsFromIndexedDB": "Export Logs From IndexedDB",
+            "openLogs": "Open Logs",
+            "openImageCacheFolder": "Opens the image cache directory"
+        },
+        "modal": {
+            "filterMessages": "Filter Messages",
+            "deleted": "Deleted",
+            "edited": "Edited",
+            "ghostPinged": "Ghost Pinged",
+            "clearAllLogs": "Clear All Logs",
+            "clearVisibleLogs": "Clear Visible Logs",
+            "sortOldestFirst": "Sort Oldest First",
+            "sortNewestFirst": "Sort Newest First",
+            "noResultsIn": "No results in {tab}.",
+            "maybeTry": "Maybe try {nextTab} or {lastTab}",
+            "emptyLogs": "Empty eh",
+            "importLogsTooltip": "ML Enhanced now stores logs in indexeddb. You need to import your old logs from the logs directory. Importing wont overwrite existing logs",
+            "importLogs": "Import Logs",
+            "loadMore": "Load More",
+            "jumpToMessage": "Jump To Message",
+            "openUserProfile": "Open user profile",
+            "copyContent": "Copy Content",
+            "copyUserId": "Copy User ID",
+            "copyMessageId": "Copy Message ID",
+            "copyChannelId": "Copy Channel ID",
+            "copyServerId": "Copy Server ID",
+            "deleteLog": "Delete Log",
+            "fromDms": "From {username}'s DMs",
+            "fromGroupDm": "From {name} Group DM",
+            "fromChannel": "From {channel} in {guild}"
+        },
+        "buttons": {
+            "importing": "Importing...",
+            "importLogs": "Import Logs",
+            "exporting": "Exporting...",
+            "exportLogs": "Export Logs"
+        }
+    },
+    "friendCodes": {
+        "settings": {
+            "autoCopy": "Automatically copy friend code to clipboard when it changes",
+            "sendToServer": "Automatically send friend code to server when it changes",
+            "webhookUrl": "Webhook URL to send friend code to"
+        },
+        "panel": {
+            "title": "Friend Codes",
+            "currentCode": "Current Friend Code",
+            "copyCode": "Copy Code",
+            "copied": "Copied!",
+            "sendToServer": "Send to Server",
+            "sent": "Sent!",
+            "refresh": "Refresh",
+            "error": "Error: {error}"
+        }
+    }
+}
