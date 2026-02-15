@@ -1,307 +1,307 @@
 {
     "absRPC": {
-        "description": "Rich presence for AudioBookShelf media server",
+        "description": "Rich presence para servidor de mídia AudioBookShelf",
         "settings": {
-            "serverUrl": "AudioBookShelf server URL (e.g., https://abs.example.com)",
-            "username": "AudioBookShelf username",
-            "password": "AudioBookShelf password"
+            "serverUrl": "URL do servidor AudioBookShelf (exemplo: https://abs.exemplo.com)",
+            "username": "Usuário AudioBookShelf",
+            "password": "Senha AudioBookShelf"
         },
         "about": {
-            "title": "How to connect to AudioBookShelf",
-            "description": "Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.",
-            "automaticAuth": "The plugin will automatically authenticate and fetch your listening progress."
+            "title": "Como conectar ao AudioBookShelf",
+            "description": "Insira a URL do seu servidor AudioBookShelf, usuário e senha para exibir os audiolivros que você está ouvindo no Discord Rich Presence.",
+            "automaticAuth": "O plugin irá autenticar automaticamente e buscar seu progresso de escuta."
         },
         "toasts": {
-            "notConfigured": "AudioBookShelf RPC is not configured."
+            "notConfigured": "AudioBookShelf RPC não está configurado."
         }
     },
     "altKrispSwitch": {
-        "description": "Makes the Noise Suppression Popout switch between None and Krisp instead of Krisp and Standard"
+        "description": "Faz o Popout de Supressão de Ruído alternar entre Nenhum e Krisp em vez de Krisp e Padrão"
     },
     "bannersEverywhere": {
-        "description": "Displays banners in the member list ",
+        "description": "Exibe banners na lista de membros ",
         "settings": {
-            "animate": "Animate banners",
-            "preferNameplate": "prefer nameplate over banner"
+            "animate": "Animar banners",
+            "preferNameplate": "preferir placa de identificação em vez de banner"
         }
     },
     "baseDecoder": {
-        "description": "Decode base64 content of any message and copy the decoded content.",
+        "description": "Decodificar conteúdo base64 de qualquer mensagem e copiar o conteúdo decodificado.",
         "settings": {
-            "clickMethod": "Change the button to decode base64 content of any message.",
+            "clickMethod": "Altere o botão para decodificar conteúdo base64 de qualquer mensagem.",
             "clickMethodOptions": {
-                "left": "Left Click to decode the base64 content.",
-                "right": "Right click to decode the base64 content."
+                "left": "Clique esquerdo para decodificar o conteúdo base64.",
+                "right": "Clique direito para decodificar o conteúdo base64."
             }
         },
         "ui": {
-            "modalTitle": "Decoded Base64 Content",
-            "decodedContent": "Decoded Content",
-            "copyDecoded": "Copy Decoded Content",
-            "copiedToast": "Decoded content copied to clipboard!",
-            "tooltipLeft": "Copy Decoded (Left Click) / Decode Base64 (Right Click)",
-            "tooltipRight": "Decode Base64 (Left Click) / Copy Decoded (Right Click)"
+            "modalTitle": "Conteúdo Base64 Decodificado",
+            "decodedContent": "Conteúdo Decodificado",
+            "copyDecoded": "Copiar Conteúdo Decodificado",
+            "copiedToast": "Conteúdo decodificado copiado para área de transferência!",
+            "tooltipLeft": "Copiar Decodificado (Clique esquerdo) / Decodificar Base64 (Clique direito)",
+            "tooltipRight": "Decodificar Base64 (Clique esquerdo) / Copiar Decodificado (Clique direito)"
         }
     },
     "betterAudioPlayer": {
-        "description": "Adds a spectrograph and oscilloscope visualizer to audio attachment players",
+        "description": "Adiciona um visualizador de espectrógrafo e osciloscópio aos reprodutores de anexos de áudio",
         "settings": {
-            "oscilloscope": "Enable oscilloscope visualizer",
-            "spectrograph": "Enable spectrograph visualizer",
-            "oscilloscopeSolidColor": "Use solid color for oscilloscope",
-            "oscilloscopeColor": "Color for oscilloscope",
-            "spectrographSolidColor": "Use solid color for spectrograph",
-            "spectrographColor": "Color for spectrograph",
-            "forceMoveBelow": "Force the visualizer below the audio player"
+            "oscilloscope": "Ativar visualizador de osciloscópio",
+            "spectrograph": "Ativar visualizador espectrográfico",
+            "oscilloscopeSolidColor": "Usar cor sólida para o osciloscópio",
+            "oscilloscopeColor": "Cor para osciloscópio",
+            "spectrographSolidColor": "Usar cores sólidas para o espectrógrafo",
+            "spectrographColor": "Cor para espectrográfico",
+            "forceMoveBelow": "Forçar o visualizador abaixo do reprodutor de áudio"
         },
         "toasts": {
-            "invalidColor": "Invalid color format for {settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'"
+            "invalidColor": "Formato de cor inválido para {settingKey}, verifique se está no formato 'R, G, B' ou '#RGGBB'"
         }
     },
     "betterBanReasons": {
-        "description": "Create custom reasons to use in the Discord ban modal, and/or show a text input by default instead of the options.",
+        "description": "Criar motivos personalizados para usar na janela de banimento do Discord e/ou exibir uma entrada de texto por padrão em vez das opções.",
         "settings": {
-            "reasons": "Your custom reasons",
-            "isTextInputDefault": "Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)"
+            "reasons": "Seus motivos personalizados",
+            "isTextInputDefault": "Mostra uma entrada de texto em vez de um menu de seleção por padrão. (Equivalente a clicar na opção \"Outro\")"
         },
         "ui": {
-            "reasons": "Reasons",
-            "reasonPlaceholder": "Reason",
-            "addAnotherReason": "Add another reason"
+            "reasons": "Motivos",
+            "reasonPlaceholder": "Motivo",
+            "addAnotherReason": "Adicionar outro motivo"
         }
     },
     "betterBlockedUsers": {
-        "description": "Allows you to search in blocked users list and makes names selectable in settings.",
+        "description": "Permite que você pesquise na lista de usuários bloqueados e torna os nomes selecionáveis nas configurações.",
         "ui": {
-            "searchPlaceholder": "Search users..."
+            "searchPlaceholder": "Pesquisar usuários..."
         }
     },
     "betterInvites": {
-        "description": "See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
+        "description": "Ver a data de expiração dos convites, visualizar o perfil de quem convidou e pré-visualizar servidores antes de entrar ao clicar no nome",
         "ui": {
-            "expireTooltip": "This invite will {expiry}",
-            "expireWill": "expire",
-            "notExpire": "not expire",
-            "invitedYouTo": "{inviter} invited you to {guild}"
+            "expireTooltip": "Este convite irá {expiry}",
+            "expireWill": "expirar",
+            "notExpire": "não expirar",
+            "invitedYouTo": "{inviter} convidou você para {guild}"
         }
     },
     "bypassStatus": {
-        "description": "Still get notifications from specific sources when in do not disturb mode. Right-click on users/channels/guilds to set them to bypass do not disturb mode.",
+        "description": "Ainda receba notificações de lugares específicos quando estiver no modo não perturbe. Clique com o botão direito em usuários/canais/servidores para defini-los para ignorar o modo não perturbe.",
         "settings": {
-            "guilds": "Guilds to let bypass (notified when pinged anywhere in guild)",
-            "channels": "Channels to let bypass (notified when pinged in that channel)",
-            "users": "Users to let bypass (notified for all messages sent in DMs)",
-            "allowOutsideOfDms": "Allow selected users to bypass status outside of DMs too (acts like a channel/guild bypass, but it's for all messages sent by the selected users)",
-            "notificationSound": "Whether the notification sound should be played",
-            "respectSilentPings": "Respect silent pings (@silent / suppress notifications)",
-            "statusToUse": "Status to use for whitelist"
+            "guilds": "Servidores para permitir ignorar (notificado quando mencionado em qualquer lugar no servidor)",
+            "channels": "Canais para permitir ignorar (notificado quando mencionado naquele canal)",
+            "users": "Usuários para permitir ignorar (notificado para todas as mensagens enviadas em DMs)",
+            "allowOutsideOfDms": "Permitir que usuários selecionados ignorem o status fora de DMs também (age como uma exceção de canal/servidor, mas é para todas as mensagens enviadas pelos usuários selecionados)",
+            "notificationSound": "Se o som de notificação deve ser reproduzido",
+            "respectSilentPings": "Respeita pings silenciosos (@silent / suprimir notificações)",
+            "statusToUse": "Status para usar para lista de permissões"
         },
         "statusOptions": {
             "online": "Online",
-            "idle": "Idle",
-            "dnd": "Do Not Disturb",
-            "invisible": "Invisible"
+            "idle": "Ausente",
+            "dnd": "Não perturbe",
+            "invisible": "Invisível"
         },
         "contextMenu": {
-            "addStatusBypass": "Add Status Bypass",
-            "removeStatusBypass": "Remove Status Bypass"
+            "addStatusBypass": "Adicionar Exceção de Status",
+            "removeStatusBypass": "Remover Exceção de Status"
         },
         "placeholder": {
-            "separateWithCommas": "Separate with commas"
+            "separateWithCommas": "Separe com vírgulas"
         }
     },
     "alwaysExpandProfiles": {
-        "description": "Always expands profile popouts to the full modal"
+        "description": "Sempre expande os popouts de perfil para o modal completo"
     },
     "anammox": {
-        "description": "Hides various features related to nitro and the store",
+        "description": "Oculta vários recursos relacionados com o nitro e a loja",
         "settings": {
-            "dms": "Remove shops above DMs list",
-            "quests": "Remove quests above DMs list",
-            "serverBoost": "Remove server boost info above channel list",
-            "billing": "Remove billing settings",
-            "gift": "Remove gift button",
-            "emojiList": "Remove unavailable categories from the emoji picker"
+            "dms": "Remover lojas acima da lista de DMs",
+            "quests": "Remover lojas acima da lista de DMs",
+            "serverBoost": "Remover informação de boost do servidor acima da lista de canais",
+            "billing": "Remover configurações de cobrança",
+            "gift": "Remover botão de presente",
+            "emojiList": "Remover categorias indisponíveis do seletor de emoji"
         }
     },
     "animalese": {
-        "description": "Plays animal crossing animalese for every message sent (they yap a lot)",
+        "description": "Reproduz animalese de animal crossing para cada mensagem enviada (eles são muito tagarela)",
         "settings": {
-            "volume": "Volume of the animalese sound",
-            "speed": "Speed of the animalese sound",
-            "pitch": "Pitch multiplier",
-            "messageLengthLimit": "Maximum length of message to process",
-            "processOwnMessages": "Enable to yap your own messages too",
-            "soundQuality": "Quality of sound to use"
+            "volume": "Volume do som de animalese",
+            "speed": "Velocidade do som de animalese",
+            "pitch": "Multiplicador de Tom",
+            "messageLengthLimit": "Tamanho máximo de mensagens para processar",
+            "processOwnMessages": "Ativar para tagarelar suas próprias mensagens também",
+            "soundQuality": "Qualidade do som para ser usado"
         },
         "quality": {
-            "high": "High",
-            "medium": "Medium",
-            "low": "Low",
-            "lowest": "Lowest"
+            "high": "Alto",
+            "medium": "Médio",
+            "low": "Baixa",
+            "lowest": "Mais Baixa"
         }
     },
     "atSomeone": {
-        "description": "Mention someone randomly",
+        "description": "Mencione alguém aleatoriamente",
         "contextMenu": {
-            "someone": "Mention someone randomly"
+            "someone": "Mencione alguém aleatoriamente"
         }
     },
     "autoZipper": {
-        "description": "Automatically zips specified file types and folders before uploading to Discord",
+        "description": "Compacta automaticamente pastas e tipos de arquivos especificados antes de fazer o upload para o Discord",
         "settings": {
-            "extensions": "Comma-separated list of file extensions to auto-zip (e.g., .psd,.blend,.exe,.dmg)"
+            "extensions": "Aqui está a tradução fiel, respeitando a capitalização original:\n\nLista de extensões de arquivos separadas por vírgulas para compactar automaticamente (ex: .psd, .blend, .exe, .dmg)"
         }
     },
     "betterCommands": {
-        "description": "Enhances the command system with miscellaneous improvements.",
+        "description": "Melhora o sistema de comandos com diversas melhorias.",
         "settings": {
-            "autoFillArguments": "Automatically fill command with all arguements instead of just required ones",
-            "allowNewlinesInCommands": "Allow newlines in command inputs (CTRL + Shift + Enter)"
+            "autoFillArguments": "Preencher automaticamente o comando com todos os argumentos em vez de apenas os necessários",
+            "allowNewlinesInCommands": "Permitir novas linhas em entradas de comando (CTRL + Shift + Enter)"
         },
         "commands": {
             "refresh": {
-                "description": "Refreshes Discord application commands locally",
-                "userOption": "specific user to try and refresh",
-                "refreshing": "Refreshing application commands...",
-                "success": "Commands refreshed successfully!",
-                "failed": "Failed to refresh commands. Check the console for details."
+                "description": "Atualiza os comandos do aplicativo Discord localmente",
+                "userOption": "usuário específico para tentar atualizar",
+                "refreshing": "Atualizando comandos do aplicativo...",
+                "success": "Comandos atualizados com sucesso!",
+                "failed": "Falha ao atualizar comandos. Verifique o console para detalhes."
             }
         }
     },
     "betterPlusReacts": {
-        "description": "The amount of plus before :emoji: is the message to add it to"
+        "description": "A quantidade de mais antes de :emoji: é a mensagem para adicioná-lo"
     },
     "betterUserArea": {
-        "description": "Customize and make the user area more clean.",
+        "description": "Personalize e faça a área do usuário mais limpa.",
         "settings": {
-            "removeNameplate": "Remove nameplate styling.",
-            "removeAudioMenus": "Remove menus next to mute and deafen buttons.",
-            "alwaysShowUsername": "Always show username instead of status.",
-            "removeButtonTooltips": "Remove button tooltips.",
-            "removeAvatarDecoration": "Remove avatar decoration.",
-            "removeUsernameStyles": "Remove username colors and effects."
+            "removeNameplate": "Remover estilo da placa de identificação.",
+            "removeAudioMenus": "Remova menus ao lado dos botões de mutar e silenciar áudio.",
+            "alwaysShowUsername": "Sempre mostrar nome de usuário em vez de status.",
+            "removeButtonTooltips": "Remover dicas de ferramentas dos botões.",
+            "removeAvatarDecoration": "Remover decoração de avatar.",
+            "removeUsernameStyles": "Remover cores e efeitos de nome de usuário."
         }
     },
     "blockKeywords": {
-        "description": "Blocks messages containing specific user-defined keywords, as if the user sending them was blocked.",
+        "description": "Bloqueia mensagens contendo palavras-chave específicas definidas pelo usuário, como se o usuário que as enviou estivesse bloqueado.",
         "settings": {
-            "blockedWords": "Comma-seperated list of words to block",
-            "useRegex": "Use each value as a regular expression when checking message content (advanced)",
-            "caseSensitive": "Whether to use a case sensitive search or not",
-            "ignoreBlockedMessages": "Completely ignores (recent) new messages bar"
+            "blockedWords": "Lista de palavras separadas por vírgulas para bloquear",
+            "useRegex": "Usar cada valor como uma expressão regular ao verificar o conteúdo da mensagem (avançado)",
+            "caseSensitive": "Se deve usar uma pesquisa sensível a maiúsculas e minúsculas ou não",
+            "ignoreBlockedMessages": "Ignora completamente a barra de novas mensagens (recentes)"
         }
     },
     "blockKrisp": {
-        "description": "Prevent Krisp from loading"
+        "description": "Impede que Krisp carregue"
     },
     "bypassPinPrompt": {
-        "description": "Bypass the pin prompt when using the pin functions"
+        "description": "Ignorar a confirmação de fixação ao usar as funções de fixar"
     },
     "channelBadges": {
-        "description": "Adds badges to channels based on their type",
+        "description": "Adiciona emblemas a canais baseados no seu tipo",
         "settings": {
-            "oneBadgePerChannel": "Show only one badge per channel",
-            "showTextBadge": "Show Text badge",
-            "showVoiceBadge": "Show Voice badge",
-            "showCategoryBadge": "Show Category badge",
-            "showDirectoryBadge": "Show Directory badge",
-            "showAnnouncementThreadBadge": "Show Announcement Thread badge",
-            "showPublicThreadBadge": "Show Public Thread badge",
-            "showPrivateThreadBadge": "Show Private Thread badge",
-            "showStageBadge": "Show Stage badge",
-            "showAnnouncementBadge": "Show Announcement badge",
-            "showForumBadge": "Show Forum badge",
-            "showMediaBadge": "Show Media badge",
-            "showNSFWBadge": "Show NSFW badge",
-            "showLockedBadge": "Show Locked badge",
-            "showRulesBadge": "Show Rules badge",
-            "showUnknownBadge": "Show Unknown badge",
-            "textBadgeLabel": "Text badge label",
-            "voiceBadgeLabel": "Voice badge label",
-            "categoryBadgeLabel": "Category badge label",
-            "announcementBadgeLabel": "Announcement badge label",
-            "announcementThreadBadgeLabel": "Announcement Thread badge label",
-            "publicThreadBadgeLabel": "Public Thread badge label",
-            "privateThreadBadgeLabel": "Private Thread badge label",
-            "stageBadgeLabel": "Stage badge label",
-            "directoryBadgeLabel": "Directory badge label",
-            "forumBadgeLabel": "Forum badge label",
-            "mediaBadgeLabel": "Media badge label",
-            "nsfwBadgeLabel": "NSFW badge label",
-            "lockedBadgeLabel": "Locked badge label",
-            "rulesBadgeLabel": "Rules badge label",
-            "unknownBadgeLabel": "Unknown badge label",
-            "textBadgeColor": "Text badge color",
-            "voiceBadgeColor": "Voice badge color",
-            "categoryBadgeColor": "Category badge color",
-            "announcementBadgeColor": "Announcement badge color",
-            "announcementThreadBadgeColor": "Announcement Thread badge color",
-            "publicThreadBadgeColor": "Public Thread badge color",
-            "privateThreadBadgeColor": "Private Thread badge color",
-            "stageBadgeColor": "Stage badge color",
-            "directoryBadgeColor": "Directory badge color",
-            "forumBadgeColor": "Forum badge color",
-            "mediaBadgeColor": "Media badge color",
-            "nsfwBadgeColor": "NSFW badge color",
-            "lockedBadgeColor": "Locked badge color",
-            "rulesBadgeColor": "Rules badge color",
-            "unknownBadgeColor": "Unknown badge color"
+            "oneBadgePerChannel": "Mostrar apenas um emblema por canal",
+            "showTextBadge": "Mostrar emblema de Texto",
+            "showVoiceBadge": "Mostrar emblema de Voz",
+            "showCategoryBadge": "Mostrar emblema de Categoria",
+            "showDirectoryBadge": "Mostrar emblema de Diretório",
+            "showAnnouncementThreadBadge": "Mostrar emblema de Tópico de Anúncio",
+            "showPublicThreadBadge": "Mostrar emblema de Tópico Público",
+            "showPrivateThreadBadge": "Mostrar emblema de Tópico Privado",
+            "showStageBadge": "Mostrar emblema de Palco",
+            "showAnnouncementBadge": "Mostrar emblema de Anúncio",
+            "showForumBadge": "Mostrar emblema de Fórum",
+            "showMediaBadge": "Mostrar emblema de Mídia",
+            "showNSFWBadge": "Mostrar emblema de NSFW",
+            "showLockedBadge": "Mostrar emblema de Bloqueado",
+            "showRulesBadge": "Mostrar emblema de Regras",
+            "showUnknownBadge": "Mostrar emblema de Desconhecido",
+            "textBadgeLabel": "Rótulo do emblema de Texto",
+            "voiceBadgeLabel": "Rótulo do emblema de Voz",
+            "categoryBadgeLabel": "Rótulo do emblema de Categoria",
+            "announcementBadgeLabel": "Rótulo do emblema de Anúncio",
+            "announcementThreadBadgeLabel": "Rótulo do emblema de Tópico de Anúncio",
+            "publicThreadBadgeLabel": "Rótulo do emblema de Tópico público",
+            "privateThreadBadgeLabel": "Rótulo do emblema de Tópico privado",
+            "stageBadgeLabel": "Rótulo do emblema de Palco",
+            "directoryBadgeLabel": "Rótulo do emblema de Diretório",
+            "forumBadgeLabel": "Rótulo do emblema de Fórum",
+            "mediaBadgeLabel": "Rótulo do emblema de Mídia",
+            "nsfwBadgeLabel": "Rótulo do emblema de NSFW",
+            "lockedBadgeLabel": "Rótulo do emblema de Bloqueado",
+            "rulesBadgeLabel": "Rótulo do emblema de Regras",
+            "unknownBadgeLabel": "Rótulo do emblema de Desconhecido",
+            "textBadgeColor": "Cor do emblema de Texto",
+            "voiceBadgeColor": "Cor do emblema de Voz",
+            "categoryBadgeColor": "Cor do emblema de Categoria",
+            "announcementBadgeColor": "Cor do emblema de Anúncio",
+            "announcementThreadBadgeColor": "Cor do emblema de Tópico de Anúncio",
+            "publicThreadBadgeColor": "Cor do emblema de Tópico Público",
+            "privateThreadBadgeColor": "Cor do emblema de Tópico Privado",
+            "stageBadgeColor": "Cor do emblema de Palco",
+            "directoryBadgeColor": "Cor do emblema de Diretório",
+            "forumBadgeColor": "Cor do emblema de Fórum",
+            "mediaBadgeColor": "Cor do emblema de Mídia",
+            "nsfwBadgeColor": "Cor do emblema de NSFW",
+            "lockedBadgeColor": "Cor do emblema de Bloqueado",
+            "rulesBadgeColor": "Cor do emblema de Regras",
+            "unknownBadgeColor": "Cor do emblema de Desconhecido"
         },
         "tooltips": {
-            "lockedChannel": "This channel is locked.",
-            "nsfwChannel": "This channel is marked as NSFW.",
-            "rulesChannel": "This channel is the server rules channel."
+            "lockedChannel": "Este canal está bloqueado.",
+            "nsfwChannel": "Este canal está marcado como NSFW.",
+            "rulesChannel": "Este canal é o canal de regras do servidor."
         }
     },
     "channelTabs": {
-        "description": "Group your commonly visited channels in tabs, like a browser",
+        "description": "Agrupe os canais que você visita com frequência em guias, como em um navegador",
         "contextMenu": {
-            "openInNewTab": "Open in New Tab"
+            "openInNewTab": "Abrir em Nova Aba"
         }
     },
     "characterCounter": {
-        "description": "Adds a character counter to the chat input",
+        "description": "Adiciona um contador de caracteres na entrada de chat",
         "settings": {
-            "colorEffects": "Turn on or off color effects for getting close to the character limit"
+            "colorEffects": "Ativar ou desativar efeitos de cor para ficar perto do limite de caracteres"
         }
     },
     "cleanChannelName": {
-        "description": "remove all emoji and decor shit from channel names"
+        "description": "remove todos os emojis e decorações irrelevantes dos nomes dos canais"
     },
     "cleanerChannelGroups": {
-        "description": "Hides all channels in collapsed categories, even if they have unread messages."
+        "description": "Oculta todos os canais em categorias colapsadas, mesmo se tiverem mensagens não lidas."
     },
     "clientSideBlock": {
-        "description": "Allows you to locally hide almost all content from any user",
+        "description": "Permite que você oculte localmente quase todo o conteúdo de qualquer usuário",
         "settings": {
-            "hideVc": "Hide voice channels containing blocked users.",
-            "usersToBlock": "User IDs seperated by a comma and a space",
-            "hideBlockedUsers": "Should blocked users should also be hidden everywhere",
-            "hideBlockedMessages": "Should messages from blocked users should be hidden fully (same as the old noblockedmessages plugin)",
-            "hideEmptyRoles": "Should role headers be hidden if all of their members are blocked",
-            "blockedReplyDisplay": "What should display instead of the message when someone replies to someone you have hidden",
+            "hideVc": "Ocultar canais de voz contendo usuários bloqueados.",
+            "usersToBlock": "IDs de usuários separados por uma vírgula e um espaço",
+            "hideBlockedUsers": "Usuários bloqueados também devem estar ocultos em todos os lugares",
+            "hideBlockedMessages": "Se as mensagens de usuários bloqueados devem ser totalmente ocultadas (igual ao antigo plugin noblockedmessages)",
+            "hideEmptyRoles": "Se os cabeçalhos de cargos devem ser ocultados se todos os seus membros estiverem bloqueados",
+            "blockedReplyDisplay": "O que deve ser exibido em vez da mensagem quando alguém responde a alguém que você ocultou",
             "blockedReplyDisplayOptions": {
-                "displayText": "Display text saying a hidden message was replied to",
-                "hideReply": "Literally nothing"
+                "displayText": "Exibir texto informando que uma mensagem oculta foi respondida",
+                "hideReply": "Literalmente nada"
             },
-            "guildBlackList": "Guild ids to disable functionality in",
-            "guildWhiteList": "Guild ids to enable functionality in"
+            "guildBlackList": "Ids de servidores para desativar a funcionalidade em",
+            "guildWhiteList": "Ids de servidores para ativar a funcionalidade em"
         },
         "reply": {
-            "replyingToBlocked": "Replying to blocked message"
+            "replyingToBlocked": "Respondendo a uma mensagem bloqueada"
         }
     },
     "clipsEnhancements": {
-        "description": "Add more Clip FPS and duration options, custom clip length, RPC tagging and more",
+        "description": "Adicionar mais opções de FPS e duração de Clipes, comprimento de clipe personalizado, marcação de RPC e mais",
         "settings": {
-            "richPresenceTagging": "When should clips be tagged with the current Rich Presence?",
+            "richPresenceTagging": "Quando os clipes devem ser marcados com a Rich Presence atual?",
             "richPresenceTaggingOptions": {
-                "always": "Always",
-                "whenMatched": "Only when beginning or end of activity name matches",
-                "never": "Never"
+                "always": "Sempre",
+                "whenMatched": "Somente quando o início ou o fim do nome da atividade coincidir",
+                "never": "Nunca"
             },
-            "enableScreenshotKeybind": "Enable the screenshot keybind feature",
+            "enableScreenshotKeybind": "Ativar o recurso de teclas de atalho para captura de tela",
             "enableVoiceOnlyClips": "Enable voice-only clips (audio without video)",
             "enableAdvancedSignals": "Enable advanced clip signals (auto-clip triggers)",
             "ignorePlatformRestriction": "Allow Platform Restricted Clipping (may cause save errors)",

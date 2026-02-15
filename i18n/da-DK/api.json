@@ -1,37 +1,37 @@
 {
     "commands": {
-        "errorExecuting": "An Error occurred while executing command \"{name}\""
+        "errorExecuting": "Der opstod en fejl under udførelse af kommandoen \"{name}\""
     },
     "notifications": {
-        "dismissNotification": "Dismiss Notification",
-        "noNotifications": "No notifications yet",
-        "notificationLog": "Notification Log",
-        "notificationSettings": "Notification Settings",
+        "dismissNotification": "Afvis notifikation",
+        "noNotifications": "Ingen notifikationer endnu",
+        "notificationLog": "Notifikationslog",
+        "notificationSettings": "Indstillinger for notifikationer",
         "logs": {
-            "title": "Are you sure?",
-            "body_zero": "No notification selected.",
-            "body_one": "This will permanently remove {count} notification. This action cannot be undone.",
-            "body_other": "This will permanently remove {count} notifications. This action cannot be undone.",
-            "confirm": "Do it!",
-            "cancel": "Nevermind",
-            "clearNotificationLog": "Clear Notification Log"
+            "title": "Er du sikker?",
+            "body_zero": "Ingen notifikation valgt.",
+            "body_one": "Dette vil permanent fjerne {count} notifikation. Denne handling kan ikke fortrydes.",
+            "body_other": "Dette vil permanent fjerne {count} notifikationer. Denne handling kan ikke fortrydes.",
+            "confirm": "Gør det!",
+            "cancel": "Glem det",
+            "clearNotificationLog": "Ryd notifikationslog"
         },
         "missedNotifications": {
-            "title": "While you were away",
-            "body_one": "{count} notification received",
-            "body_other": "{count} notifications received"
+            "title": "Mens du var væk",
+            "body_one": "{count} notifikation modtaget",
+            "body_other": "{count} notifikationer modtaget"
         }
     },
     "memberListDecorators": {
-        "fallback": "Failed to render {key} Member List Decorator"
+        "fallback": "Kunne ikke vise {key} medlemsliste dekorator"
     },
     "messageAccessories": {
-        "fallback": "Failed to render {key} Message Accessory"
+        "fallback": "Kunne ikke vise {key} beskedtilbehør"
     },
     "messageDecorations": {
-        "fallback": "Failed to render {key} Message Decoration"
+        "fallback": "Kunne ikke vise {key} besked dekoration"
     },
     "notices": {
-        "fallback": "Error Showing Notice"
+        "fallback": "Fejl ved visning af meddelelse"
     }
 }
