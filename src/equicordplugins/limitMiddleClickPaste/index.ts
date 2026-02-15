@@ -48,21 +48,8 @@ const settings = definePluginSettings({
     },
 });
 
-function shouldBlockLink(e: MouseEvent): boolean {
-    if (e.button !== MIDDLE_CLICK) return false;
-
-    const target = e.target as HTMLElement | null;
-    if (!target?.closest) return false;
-
-    const a = target.closest("a[href]") as HTMLAnchorElement | null;
-    if (!a) return false;
-
-    const href = a.getAttribute("href");
-    return !!href && href !== "#";
-}
-
 function handleAuxClick(e: MouseEvent) {
-    if (!shouldBlockLink(e)) return;
+    if (e.button !== MIDDLE_CLICK) return;
     e.preventDefault();
     e.stopPropagation();
 }
