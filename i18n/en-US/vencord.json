@@ -814,7 +814,7 @@
         "insert": "Insert",
         "insertTimestamp": "Insert Timestamp",
         "extendedDescription": {
-            "quickSend": "To quickly send send time only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message",
+            "quickSend": "To quickly send time-only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message",
             "seeBelow": "See below for examples. If you need anything more specific, use the Date button in the chat bar!",
             "examples": "Examples:"
         }
