@@ -20,6 +20,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType, ReporterTestable } from "@utils/types";
+import { t } from "@utils/translation";
 
 import { initWs, socket, stopWs } from "./initWs";
 export const PORT = 8485;
@@ -29,17 +30,17 @@ export const logger = new Logger("DevCompanion");
 
 export const settings = definePluginSettings({
     notifyOnAutoConnect: {
-        description: "Whether to notify when Dev Companion has automatically connected.",
+        description: t("devCompanion.settings.notifyOnAutoConnect"),
         type: OptionType.BOOLEAN,
         default: true
     },
     usePatchedModule: {
-        description: "On extract requests, reply with the current patched module (if it is patched) instead of the original.",
+        description: t("devCompanion.settings.usePatchedModule"),
         default: true,
         type: OptionType.BOOLEAN,
     },
     reloadAfterToggle: {
-        description: "Reload after a disable/enable plugin command is recived.",
+        description: t("devCompanion.settings.reloadAfterToggle"),
         default: true,
         type: OptionType.BOOLEAN
     }
@@ -47,7 +48,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "DevCompanion",
-    description: "Dev Companion Plugin. Please report anything not working or being weird (most likely its a bug) to sadan, either ping or dm, thanks!",
+    description: t("devCompanion.description"),
     authors: [Devs.Ven, Devs.sadan],
     reporterTestable: ReporterTestable.None,
     isModified: true,

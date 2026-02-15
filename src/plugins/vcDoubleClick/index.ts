@@ -18,6 +18,7 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 import { ChannelRouter, ChannelStore, SelectedChannelStore } from "@webpack/common";
 
 const timers = {} as Record<string, {
@@ -27,7 +28,7 @@ const timers = {} as Record<string, {
 
 export default definePlugin({
     name: "VoiceChatDoubleClick",
-    description: "Join voice chats via double click instead of single click",
+    description: t("vcDoubleClick.description"),
     authors: [Devs.Ven, Devs.D3SOX, Devs.sadan],
     patches: [
         ...[

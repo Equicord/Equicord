@@ -20,6 +20,7 @@ import { definePluginSettings } from "@api/Settings";
 import { copyToClipboard } from "@utils/clipboard";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { t } from "@utils/translation";
 import { saveFile } from "@utils/web";
 import { filters, mapMangledModuleLazy } from "@webpack";
 import { ComponentDispatch } from "@webpack/common";
@@ -52,7 +53,7 @@ const settings = definePluginSettings({
     // menu handler instead of the web one, which breaks the other menus that aren't enabled
     addBack: {
         type: OptionType.BOOLEAN,
-        description: "Add back the Discord context menus for images, links and the chat input bar",
+        description: t("webContextMenus.settings.addBack"),
         default: hideSetting,
         restartNeeded: true,
         // Web slate menu has proper spellcheck suggestions and image context menu is also pretty good,
@@ -87,7 +88,7 @@ function fixImageUrl(urlString: string) {
 
 export default definePlugin({
     name: "WebContextMenus",
-    description: "Re-adds context menus missing in the web version of Discord: Links & Images (Copy/Open Link/Image), Text Area (Copy, Cut, Paste, SpellCheck)",
+    description: t("webContextMenus.description"),
     authors: [Devs.Ven],
     enabledByDefault: true,
     required: requiredByPlatform,

@@ -6,6 +6,7 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 import { Channel, Message, User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
 import { FluxDispatcher, RestAPI } from "@webpack/common";
@@ -32,7 +33,7 @@ const createMessageRecord = findByCodeLazy(".createFromServer(", ".isBlockedForM
 
 export default definePlugin({
     name: "ValidReply",
-    description: 'Fixes "Message could not be loaded" upon hovering over the reply',
+    description: t("validReply.description"),
     authors: [Devs.newwares],
     patches: [
         {

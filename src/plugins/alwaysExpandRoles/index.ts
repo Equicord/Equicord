@@ -18,13 +18,14 @@
 
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
     hideArrow: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Hide Arrow",
+        description: t("alwaysExpandRoles.settings.hideArrow"),
         restartNeeded: true
     },
 });
@@ -32,7 +33,7 @@ const settings = definePluginSettings({
 migratePluginSettings("AlwaysExpandRoles", "ShowAllRoles");
 export default definePlugin({
     name: "AlwaysExpandRoles",
-    description: "Always expands the role list in profile popouts",
+    description: t("alwaysExpandRoles.description"),
     authors: [Devs.surgedevs],
     isModified: true,
     settings,

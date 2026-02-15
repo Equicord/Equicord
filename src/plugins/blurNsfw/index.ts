@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { managedStyleRootNode } from "@api/Styles";
 import { Devs } from "@utils/constants";
 import { createAndAppendStyle } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 let style: HTMLStyleElement;
@@ -29,20 +30,20 @@ function setCss() {
 const settings = definePluginSettings({
     blurAmount: {
         type: OptionType.NUMBER,
-        description: "Blur Amount (in pixels)",
+        description: t("blurNsfw.settings.blurAmount"),
         default: 10,
         onChange: setCss
     },
     blurAllChannels: {
         type: OptionType.BOOLEAN,
-        description: "Blur attachments in all channels (not just NSFW)",
+        description: t("blurNsfw.settings.blurAllChannels"),
         default: false
     },
 });
 
 export default definePlugin({
     name: "BlurNSFW",
-    description: "Blur attachments in NSFW channels until hovered",
+    description: t("blurNsfw.description"),
     authors: [Devs.Ven],
     isModified: true,
     settings,

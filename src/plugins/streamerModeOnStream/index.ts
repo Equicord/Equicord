@@ -18,6 +18,7 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 import { FluxDispatcher, UserStore } from "@webpack/common";
 
 interface StreamEvent {
@@ -36,7 +37,7 @@ function toggleStreamerMode({ streamKey }: StreamEvent, value: boolean) {
 
 export default definePlugin({
     name: "StreamerModeOn",
-    description: "Automatically enables streamer mode when you start streaming in Discord",
+    description: t("streamerModeOnStream.description"),
     authors: [Devs.Kodarru],
     flux: {
         STREAM_CREATE: d => toggleStreamerMode(d, true),

@@ -6,10 +6,11 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 
 export default definePlugin({
     name: "StickerPaste",
-    description: "Makes picking a sticker in the sticker picker insert it into the chatbox instead of instantly sending",
+    description: t("stickerPaste.description"),
     authors: [Devs.ImBanana],
 
     patches: [

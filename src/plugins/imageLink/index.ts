@@ -6,10 +6,11 @@
 
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 
 export default definePlugin({
     name: "ImageLink",
-    description: "Never hide image links in messages, even if it's the only content",
+    description: t("imageLink.description"),
     authors: [Devs.Kyuuhachi, Devs.Sqaaakoi],
 
     patches: [

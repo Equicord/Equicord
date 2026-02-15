@@ -19,13 +19,14 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { WebpackRequire } from "@vencord/discord-types/webpack";
 
 const settings = definePluginSettings({
     disableAnalytics: {
         type: OptionType.BOOLEAN,
-        description: "Disable Discord's tracking (analytics/'science')",
+        description: t("noTrack.settings.disableAnalytics"),
         default: true,
         restartNeeded: true
     }
@@ -33,7 +34,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "NoTrack",
-    description: "Disable Discord's tracking (analytics/'science'), metrics and Sentry crash reporting",
+    description: t("noTrack.description"),
     authors: [Devs.Cyn, Devs.Ven, Devs.Nuckyz, Devs.Arrow],
     required: true,
 

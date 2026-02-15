@@ -21,17 +21,18 @@ import SettingsPlugin from "@plugins/_core/settings";
 import { Devs } from "@utils/constants";
 import { removeFromArray } from "@utils/misc";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 
 import StartupTimingPage from "./StartupTimingPage";
 
 export default definePlugin({
     name: "StartupTimings",
-    description: "Adds Startup Timings to the Settings menu",
+    description: t("startupTimings.description"),
     authors: [Devs.Megu],
     start() {
         SettingsPlugin.customEntries.push({
             key: "vencord_startup_timings",
-            title: "Startup Timings",
+            title: t("startupTimings.ui.title"),
             Component: StartupTimingPage,
             Icon: ClockIcon
         });

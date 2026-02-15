@@ -18,6 +18,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { OptionType } from "@utils/types";
+import { t } from "@utils/translation";
 
 export const enum PronounsFormat {
     Lowercase = "LOWERCASE",
@@ -27,22 +28,22 @@ export const enum PronounsFormat {
 export const settings = definePluginSettings({
     pronounsFormat: {
         type: OptionType.SELECT,
-        description: "The format for pronouns to appear in chat",
+        description: t("userMessagesPronouns.settings.pronounsFormat"),
         options: [
             {
-                label: "Lowercase",
+                label: t("userMessagesPronouns.settings.pronounsFormatOptions.lowercase"),
                 value: PronounsFormat.Lowercase,
                 default: true
             },
             {
-                label: "Capitalized",
+                label: t("userMessagesPronouns.settings.pronounsFormatOptions.capitalized"),
                 value: PronounsFormat.Capitalized
             }
         ]
     },
     showSelf: {
         type: OptionType.BOOLEAN,
-        description: "Enable or disable showing pronouns for yourself",
+        description: t("userMessagesPronouns.settings.showSelf"),
         default: true
     }
 });

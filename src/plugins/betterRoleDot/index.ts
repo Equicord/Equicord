@@ -19,18 +19,19 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
     bothStyles: {
         type: OptionType.BOOLEAN,
-        description: "Show both role dot and coloured names",
+        description: t("betterRoleDot.settings.bothStyles"),
         restartNeeded: true,
         default: false,
     },
     copyRoleColorInProfilePopout: {
         type: OptionType.BOOLEAN,
-        description: "Allow click on role dot in profile popout to copy role color",
+        description: t("betterRoleDot.settings.copyRoleColorInProfilePopout"),
         restartNeeded: true,
         default: false
     },
@@ -39,7 +40,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "BetterRoleDot",
     authors: [Devs.Ven, Devs.AutumnVN],
-    description: "Copy role colour on RoleDot (accessibility setting) click. Also allows using both RoleDot and coloured names simultaneously",
+    description: t("betterRoleDot.description"),
     settings,
 
     patches: [

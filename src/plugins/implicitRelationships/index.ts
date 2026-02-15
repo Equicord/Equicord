@@ -20,6 +20,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
+import { t } from "@utils/translation";
 import { findStoreLazy } from "@webpack";
 import { Constants, FluxDispatcher, GuildStore, RelationshipStore, SnowflakeUtils, UserStore } from "@webpack/common";
 import { Settings } from "Vencord";
@@ -28,7 +29,7 @@ const UserAffinitiesStore = findStoreLazy("UserAffinitiesV2Store");
 
 export default definePlugin({
     name: "ImplicitRelationships",
-    description: "Shows your implicit relationships in the Friends tab.",
+    description: t("implicitRelationships.description"),
     authors: [Devs.Dolfies],
     patches: [
         // Counts header
@@ -36,7 +37,7 @@ export default definePlugin({
             find: "#{intl::FRIENDS_ALL_HEADER}",
             replacement: {
                 match: /toString\(\)\}\);case (\i\.\i)\.PENDING/,
-                replace: 'toString()});case $1.IMPLICIT:return "Implicit — "+arguments[1];case $1.BLOCKED'
+                replace: `toString()});case $1.IMPLICIT:return "${t("implicitRelationships.ui.implicitHeader").replace("{count}", '"+arguments[1]+"')}";case $1.BLOCKED`
             },
         },
         // No friends page
@@ -52,7 +53,7 @@ export default definePlugin({
             find: "#{intl::FRIENDS_SECTION_ONLINE}),className:",
             replacement: {
                 match: /,{id:(\i\.\i)\.PENDING,show:.+?className:(\i\.\i)(?=\},\{id:)/,
-                replace: (rest, relationShipTypes, className) => `,{id:${relationShipTypes}.IMPLICIT,show:true,className:${className},content:"Implicit"}${rest}`
+                replace: (rest, relationShipTypes, className) => `,{id:${relationShipTypes}.IMPLICIT,show:true,className:${className},content:"${t("implicitRelationships.ui.implicitSection")}"}${rest}`
             }
         },
         // Sections content
@@ -110,7 +111,7 @@ export default definePlugin({
             sortByAffinity: {
                 type: OptionType.BOOLEAN,
                 default: true,
-                description: "Whether to sort implicit relationships by their affinity to you.",
+                description: t("implicitRelationships.settings.sortByAffinity"),
                 restartNeeded: true
             },
         }

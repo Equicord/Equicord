@@ -153,6 +153,23 @@
             "extensions": "Comma-separated list of file extensions to auto-zip (e.g., .psd,.blend,.exe,.dmg)"
         }
     },
+    "betterActivities": {
+        "description": "Shows all activities in the member list and user popout, with options to customize the display",
+        "settings": {
+            "memberList": "Show activities in the member list",
+            "iconSize": "Size of the activity icons",
+            "specialFirst": "Show special activities first",
+            "renderGifs": "Render GIFs in activity icons",
+            "removeGameActivityStatus": "Remove the game activity status indicator",
+            "userPopout": "Show all activities in user popout",
+            "hideTooltip": "Hide the tooltip on activity icons",
+            "allActivitiesStyle": "Style for displaying all activities"
+        },
+        "options": {
+            "carousel": "Carousel",
+            "list": "List"
+        }
+    },
     "betterCommands": {
         "description": "Enhances the command system with miscellaneous improvements.",
         "settings": {
@@ -553,6 +570,160 @@
             "exporting": "Exporting...",
             "exportLogs": "Export Logs"
         }
+    },
+    "mediaPlaybackSpeed": {
+        "description": "Control media playback speed for voice messages, videos, and audio attachments",
+        "settings": {
+            "defaultVoiceMessageSpeed": "Default playback speed for voice messages",
+            "defaultVideoSpeed": "Default playback speed for videos",
+            "defaultAudioSpeed": "Default playback speed for audio files"
+        }
+    },
+    "messageBurst": {
+        "description": "Send messages in bursts by merging consecutive messages within a time period",
+        "settings": {
+            "timePeriod": "Time period in seconds to merge messages",
+            "shouldMergeWithAttachment": "Allow merging messages with attachments",
+            "useSpace": "Use space instead of newline as separator"
+        }
+    },
+    "messageColors": {
+        "description": "Render color codes (hex, rgb, hsl) in messages with color preview",
+        "settings": {
+            "renderType": "How to render colors in messages",
+            "renderTypeOptions": {
+                "textColor": "Change text color",
+                "blockNearby": "Show color block",
+                "backgroundColor": "Change background color"
+            },
+            "enableShortHexCodes": "Enable short hex color codes (3 characters)",
+            "blockView": "Position of the color block",
+            "blockViewOptions": {
+                "rightSide": "Right side of text",
+                "leftSide": "Left side of text",
+                "bothSides": "Both sides of text"
+            }
+        }
+    },
+    "messageFetchTimer": {
+        "description": "Show message fetch times in the chat bar",
+        "settings": {
+            "showIcon": "Show the fetch timer icon",
+            "showMs": "Show milliseconds instead of seconds",
+            "iconColor": "Color of the fetch timer icon"
+        }
+    },
+    "messageLinkTooltip": {
+        "description": "Show message previews when hovering over message links, replies, and forwarded messages",
+        "settings": {
+            "onLink": "Show tooltip when hovering over message links",
+            "onReply": "Show tooltip when hovering over message replies",
+            "onForward": "Show tooltip when hovering over forwarded messages",
+            "display": "Display style for message preview"
+        }
+    },
+    "messageNotifier": {
+        "description": "Get notified when specific users send messages",
+        "settings": {
+            "users": "User IDs to get notifications for (comma-separated)"
+        }
+    },
+    "messagePeek": {
+        "description": "Peek at the last message in DM channels without opening them"
+    },
+    "messageTranslate": {
+        "description": "Automatically translate messages to your preferred language",
+        "settings": {
+            "targetLanguage": "Target language for translation (e.g., en, es, fr)",
+            "confidenceRequirement": "Minimum confidence level for translation (0-1)"
+        }
+    },
+    "micLoopbackTester": {
+        "description": "Test your microphone with a loopback button in the user area"
+    },
+    "moreCommands": {
+        "description": "Additional slash commands including system info, dice rolls, coin flips, and more",
+        "settings": {
+            "addFreakyEnding": "Add 👅 or ❤️ at the end of freaky command",
+            "uwuEveryMessage": "Make every single message uwuified",
+            "uwuEverything": "Makes all text uwuified - really bad idea"
+        }
+    },
+    "moreKaomoji": {
+        "description": "More kaomoji slash commands for expressing emotions"
+    },
+    "moreStickers": {
+        "description": "Add more sticker packs from external sources",
+        "settings": {
+            "promptToUpload": "Prompt before uploading stickers",
+            "packs": "Manage sticker packs"
+        }
+    },
+    "moreUserTags": {
+        "description": "Show additional user tags based on permissions and roles",
+        "settings": {
+            "dontShowForBots": "Don't show tags for bot users",
+            "dontShowBotTag": "Hide the default BOT tag",
+            "showWebhookTagFully": "Show webhook tags fully",
+            "tagSettings": "Configure individual tag settings"
+        }
+    },
+    "moyai": {
+        "description": "Play the moyai sound effect when 🗿 emoji is used",
+        "settings": {
+            "volume": "Volume of the moyai sound",
+            "quality": "Quality of the moyai sound",
+            "qualityOptions": {
+                "normal": "Normal",
+                "hd": "HD"
+            },
+            "triggerWhenUnfocused": "Trigger sound even when window is not focused",
+            "ignoreBots": "Ignore messages from bots",
+            "ignoreBlocked": "Ignore messages from blocked users"
+        }
+    },
+    "musicControls": {
+        "description": "Show music player controls for Spotify, Tidal, and YouTube Music",
+        "settings": {
+            "hoverControls": "Show controls on hover only",
+            "showSpotifyControls": "Show Spotify controls",
+            "showSpotifyLyrics": "Show Spotify lyrics",
+            "showTidalControls": "Show Tidal controls",
+            "showTidalLyrics": "Show Tidal lyrics",
+            "showYoutubeMusicControls": "Show YouTube Music controls",
+            "LyricsPosition": "Position of lyrics relative to player",
+            "LyricsProvider": "Source for lyrics",
+            "TranslateTo": "Translate lyrics to",
+            "LyricsConversion": "Auto-translate or romanize lyrics",
+            "FallbackProvider": "Use fallback provider when primary fails",
+            "ShowFailedToasts": "Show error toasts when lyrics fail to load",
+            "LyricDelay": "Lyric delay offset",
+            "useSpotifyUris": "Open Spotify URIs instead of URLs",
+            "previousButtonRestartsTrack": "Restart track when pressing previous button",
+            "YoutubeMusicApiUrl": "Custom YouTube Music API URL"
+        }
+    },
+    "neverPausePreviews": {
+        "description": "Never pause video previews when switching channels or unfocusing",
+        "warning": "This may increase resource usage and data consumption"
+    },
+    "newPluginsManager": {
+        "description": "Manage and discover new plugins with the plugin manager"
+    },
+    "noAppsAllowed": {
+        "description": "Blocks apps/categories from showing in the app launcher"
+    },
+    "noBulletPoints": {
+        "description": "Remove bullet points from messages by escaping them"
+    },
+    "noModalAnimation": {
+        "description": "Disable modal animations for faster UI interactions"
+    },
+    "noNitroUpsell": {
+        "description": "Removes Nitro upsells by overriding your premium type"
+    },
+    "noRPC": {
+        "description": "Disables Discord's Rich Presence (RPC) feature"
     },
     "friendCodes": {
         "settings": {
@@ -1326,5 +1497,949 @@
             "enableAndRestart": "Enable the plugin and restart your client to scan a login QR code",
             "scanQrCode": "Scan QR Code"
         }
+    },
+    "partyMode": {
+        "description": "Enable party mode effects with confetti and screen shake",
+        "settings": {
+            "superIntensePartyMode": "Party mode intensity level",
+            "intensityOptions": {
+                "normal": "Normal - Subtle effects",
+                "better": "Better - More confetti",
+                "projectX": "Project X - Maximum intensity"
+            }
+        }
+    },
+    "pinIcon": {
+        "description": "Adds a pin icon to pinned messages"
+    },
+    "pingNotifications": {
+        "description": "Custom notification settings for pings, DMs, and friend messages",
+        "settings": {
+            "friends": "Notify when friends send messages in servers",
+            "mentions": "Notify when mentioned (@username)",
+            "dms": "Notify for DM and group DM messages",
+            "showInActive": "Show notifications even when channel is active",
+            "ignoreMuted": "Ignore muted channels, guilds, and blocked users"
+        }
+    },
+    "platformSpoofer": {
+        "description": "Spoof your platform status (mobile, desktop, web, console)",
+        "settings": {
+            "platform": "Platform to spoof as",
+            "platformOptions": {
+                "desktop": "Desktop (Discord Client)",
+                "web": "Web (Discord Web)",
+                "android": "Android",
+                "ios": "iOS",
+                "xbox": "Xbox",
+                "playstation": "PlayStation"
+            }
+        },
+        "warning": "Changing platform may affect certain features and how others see your status."
+    },
+    "polishWording": {
+        "description": "Automatically improve message text with better grammar, capitalization, and punctuation",
+        "settings": {
+            "quickDisable": "Quick disable - temporarily disable all corrections",
+            "blockedWords": "Comma-separated list of words to exclude from capitalization fixes",
+            "fixApostrophes": "Fix missing apostrophes in contractions (e.g., 'dont' → 'don't')",
+            "expandContractions": "Expand contractions (e.g., 'don't' → 'do not')",
+            "fixCapitalization": "Fix sentence capitalization",
+            "fixPunctuation": "Add periods to end of sentences",
+            "fixPunctuationFrequency": "Frequency of auto-adding periods (0-100%)"
+        }
+    },
+    "profileSets": {
+        "description": "Save and manage profile customization presets",
+        "settings": {
+            "avatarSize": "Avatar size in preset manager"
+        }
+    },
+    "questify": {
+        "description": "Enhanced quest management with auto-completion, notifications, and custom styling",
+        "settings": {
+            "questButtonDisplay": "When to show quest button in server list",
+            "questButtonUnclaimed": "Show badge/pill for unclaimed quests",
+            "questButtonBadgeColor": "Custom badge color",
+            "questButtonLeftClickAction": "Left-click action",
+            "questButtonMiddleClickAction": "Middle-click action",
+            "questButtonRightClickAction": "Right-click action",
+            "completeVideoQuestsInBackground": "Auto-complete video quests in background",
+            "completeGameQuestsInBackground": "Auto-complete game quests in background (desktop only)",
+            "completeAchievementQuestsInBackground": "Auto-complete achievement quests in background (desktop only)",
+            "notifyOnQuestComplete": "Show notification when quest completes",
+            "makeMobileQuestsDesktopCompatible": "Make mobile-only video quests completable on desktop",
+            "reorderQuests": "Custom quest order (comma-separated: unclaimed, claimed, expired, ignored)",
+            "unclaimedSubsort": "Sort unclaimed quests by",
+            "claimedSubsort": "Sort claimed quests by",
+            "ignoredSubsort": "Sort ignored quests by",
+            "expiredSubsort": "Sort expired quests by",
+            "restyleQuestsUnclaimed": "Custom color for unclaimed quests",
+            "restyleQuestsClaimed": "Custom color for claimed quests",
+            "restyleQuestsIgnored": "Custom color for ignored quests",
+            "restyleQuestsExpired": "Custom color for expired quests",
+            "restyleQuestsGradient": "Gradient style for restyled quests",
+            "restyleQuestsPreload": "Preload quest assets for better styling",
+            "disableQuestsEverything": "Hide all quest-related elements",
+            "disableQuestsDiscoveryTab": "Hide Quests tab in Discovery",
+            "disableQuestsDirectMessagesTab": "Hide Quests tab in DMs",
+            "disableQuestsPopupAboveAccountPanel": "Hide quest progress popup",
+            "disableQuestsBadgeOnUserProfiles": "Hide quest badge on profiles",
+            "disableQuestsPageSponsoredBanner": "Hide sponsored quest banner",
+            "disableQuestsGiftInventoryRelocationNotice": "Hide gift inventory notice",
+            "disableQuestsFetchingQuests": "Prevent fetching quest data",
+            "disableFriendsListActiveNowPromotion": "Hide Active Now promotion in friends list",
+            "disableMembersListActivelyPlayingIcon": "Hide actively playing icon in member list"
+        },
+        "sortOptions": {
+            "recentAsc": "Recent (Oldest first)",
+            "recentDesc": "Recent (Newest first)",
+            "expiringAsc": "Expiring (Soonest first)",
+            "expiringDesc": "Expiring (Latest first)",
+            "claimedAsc": "Claimed (Oldest first)",
+            "claimedDesc": "Claimed (Newest first)"
+        },
+        "gradientOptions": {
+            "default": "Default",
+            "intense": "Intense",
+            "black": "Black",
+            "hide": "Hide"
+        },
+        "buttonActions": {
+            "openQuests": "Open Quests page",
+            "pluginSettings": "Open plugin settings",
+            "contextMenu": "Show context menu"
+        }
+    },
+    "questionMarkReplacement": {
+        "description": "Replace question marks with custom text/emoji when message contains only question marks",
+        "settings": {
+            "replace": "Text or emoji to replace '?' with"
+        }
+    },
+    "quickThemeSwitcher": {
+        "description": "Quickly cycle through themes using keyboard shortcuts",
+        "settings": {
+            "includeLocal": "Include local themes in the cycle",
+            "includeOnline": "Include online themes in the cycle",
+            "sortOrder": "Sort order for the theme list",
+            "sortOptions": {
+                "az": "A-Z (Alphabetical)",
+                "za": "Z-A (Reverse Alphabetical)",
+                "recent": "Recently Used"
+            },
+            "autoRefresh": "Automatically refresh theme list when changes are detected",
+            "showNotifications": "Show notifications when themes are added or removed"
+        }
+    },
+    "quoter": {
+        "description": "Create stylized quote images from messages",
+        "settings": {
+            "quoteFont": "Font for quote images",
+            "watermark": "Watermark text",
+            "grayscale": "Apply grayscale filter",
+            "showWatermark": "Show watermark on quotes",
+            "saveAsGif": "Save as GIF instead of PNG"
+        }
+    },
+    "randomVoice": {
+        "description": "Join random voice channels based on customizable filters",
+        "settings": {
+            "UserAmount": "Target user count in channel",
+            "UserAmountOperation": "User count comparison operator",
+            "spacesLeft": "Minimum spaces left in channel",
+            "spacesLeftOperation": "Spaces left comparison operator",
+            "vcLimit": "Voice channel user limit",
+            "vcLimitOperation": "Channel limit comparison operator",
+            "Servers": "Server IDs to include (comma-separated)",
+            "autoNavigate": "Automatically navigate to voice channel",
+            "autoCamera": "Automatically turn on camera",
+            "autoStream": "Automatically start streaming",
+            "selfMute": "Auto-mute when joining",
+            "selfDeafen": "Auto-deafen when joining",
+            "leaveEmpty": "Leave when channel becomes empty",
+            "avoidStages": "Avoid stage channels",
+            "avoidAfk": "Avoid AFK channels",
+            "video": "Look for channels with video enabled",
+            "stream": "Look for channels with streams",
+            "mute": "Look for muted users",
+            "deafen": "Look for deafened users",
+            "includeStates": "Include users matching state filters",
+            "avoidStates": "Avoid users matching state filters"
+        },
+        "operations": {
+            "moreThan": "More than",
+            "lessThan": "Less than",
+            "equalTo": "Equal to"
+        }
+    },
+    "recentDMSwitcher": {
+        "description": "Quickly switch between recent DMs using Ctrl+Tab (Alt+Tab style)",
+        "settings": {
+            "visualStyle": "Visual indicator style while cycling",
+            "overlayMode": "Overlay content mode",
+            "amountOfUsers": "Number of users to track",
+            "overlayRowLength": "Number of DMs to show in overlay row",
+            "overlayShowAvatars": "Show avatars in overlay",
+            "toastDurationMs": "Toast notification duration (ms)",
+            "clearRdms": "Clear RDMS history"
+        },
+        "visualStyles": {
+            "overlay": "Overlay (Alt+Tab style)",
+            "toast": "Toast notification",
+            "off": "No visual indicator"
+        },
+        "overlayModes": {
+            "row": "Row of recent DMs",
+            "current": "Current DM only"
+        }
+    },
+    "remix": {
+        "description": "Remix images directly in Discord with a built-in editor"
+    },
+    "repeatMessages": {
+        "description": "Repeat messages with optional reply (Shift+Click to reply)"
+    },
+    "replyPingControl": {
+        "description": "Control whether you get pinged when someone replies to your messages",
+        "settings": {
+            "alwaysPingOnReply": "Always get pinged when someone replies to your messages",
+            "replyPingWhitelist": "Comma-separated list of User IDs to always receive reply pings from"
+        }
+    },
+    "richMagnetLinks": {
+        "description": "Display rich previews for magnet links with filename extraction"
+    },
+    "rpcEditor": {
+        "description": "Edit and customize your Rich Presence (RPC) display for any application",
+        "settings": {
+            "replacedAppIds": "Manage application-specific RPC overrides"
+        },
+        "placeholders": {
+            "name": "Application name",
+            "details": "Current details text",
+            "state": "Current state text",
+            "largeImage": "Large image URL",
+            "largeText": "Large image tooltip text",
+            "smallImage": "Small image URL",
+            "smallText": "Small image tooltip text"
+        }
+    },
+    "rpcStats": {
+        "description": "Display custom statistics in your Rich Presence (messages sent, Last.fm top album)",
+        "settings": {
+            "assetURL": "Custom image URL for RPC (default: your avatar)",
+            "RPCTitle": "Title text for the RPC",
+            "statDisplay": "Statistic to display",
+            "lastFMApiKey": "Last.fm API key (get from last.fm/api)",
+            "lastFMUsername": "Last.fm username",
+            "albumCoverImage": "Use album cover as RPC image (Last.fm mode)",
+            "lastFMStatFormat": "Format for Last.fm stat ($album, $artist)"
+        },
+        "statOptions": {
+            "messagesToday": "Messages sent today",
+            "messagesAllTime": "Messages sent all time",
+            "mostListenedAlbum": "Most listened album this week (Last.fm)"
+        }
+    },
+    "saveFavoriteGIFs": {
+        "description": "Save all favorite GIF urls to a text file",
+        "settings": {
+            "showToolboxButton": "Show 'Save Favorite GIFs' button in Equicord Toolbox (Requires Reload)"
+        }
+    },
+    "scheduledMessages": {
+        "description": "Schedule messages to send later",
+        "settings": {
+            "maxMessagesPerMinute": "Max scheduled messages per channel that can fire in the same minute",
+            "checkIntervalSeconds": "How often to check for messages to send (seconds)",
+            "showNotifications": "Show toast notifications when messages are sent",
+            "showPhantomMessages": "Show scheduled messages as phantom messages in chat"
+        }
+    },
+    "screenRecorder": {
+        "description": "Screen recording functionality for Equibop"
+    },
+    "searchFix": {
+        "description": "Fix search functionality by working around Discord's 5000 message offset limit"
+    },
+    "sekaiStickers": {
+        "description": "Sekai stickers integration",
+        "settings": {
+            "AutoCloseModal": "Auto close modal when done"
+        }
+    },
+    "selfForward": {
+        "description": "Forward messages to yourself"
+    },
+    "serverSearch": {
+        "description": "Enhanced server search with quick switcher integration"
+    },
+    "showBadgesInChat": {
+        "description": "Show user badges in chat messages",
+        "settings": {
+            "showEquicordDonor": "Enable to show Equicord Donor badges in chat",
+            "EquicordDonorPosition": "The position of the Equicord Donor badges",
+            "showEquicordContributor": "Enable to show Equicord Contributor badges in chat",
+            "EquicordContributorPosition": "The position of the Equicord Contributor badge",
+            "showVencordDonor": "Enable to show Vencord donor badges in chat",
+            "VencordDonorPosition": "The position of the Vencord Donor badges",
+            "showVencordContributor": "Enable to show Vencord contributor badges in chat",
+            "VencordContributorPosition": "The position of the Vencord Contributor badge",
+            "showDiscordProfile": "Enable to show Discord profile badges in chat",
+            "DiscordProfilePosition": "The position of the Discord profile badges",
+            "showDiscordNitro": "Enable to show Discord Nitro badges in chat",
+            "DiscordNitroPosition": "The position of the Discord Nitro badge",
+            "badgeSettings": "Setup badge layout and visibility"
+        }
+    },
+    "showMessageEmbeds": {
+        "description": "Show message embeds with options to add or remove embeds from messages"
+    },
+    "showResourceChannels": {
+        "description": "Show resource channels that are normally hidden"
+    },
+    "showSongName": {
+        "description": "Show currently playing song name in status"
+    },
+    "sidebarChat": {
+        "description": "Sidebar chat interface for viewing multiple channels",
+        "settings": {
+            "persistSidebar": "Keep the sidebar chat open across Discord restarts",
+            "patchCommunity": "Patch things like the Channel Browser or Members tab that community servers have"
+        }
+    },
+    "signature": {
+        "description": "Add signatures to messages",
+        "settings": {
+            "name": "The signature that will be added to the end of your messages",
+            "textHeader": "What header to preface text with",
+            "showIcon": "Show an icon for toggling the plugin in the chat bar",
+            "contextMenu": "Add option to toggle the functionality in the chat input context menu",
+            "isEnabled": "Toggle functionality"
+        }
+    },
+    "snowfall": {
+        "description": "Adds a christmas-y snowfall effect on top of Discord's interface",
+        "settings": {
+            "typeOfSnow": "Change the type of snow displayed (Affects performance)",
+            "maxSize": "Maximum snowflake size",
+            "speed": "Snowfall speed (higher = faster fall)",
+            "flakesPerSecond": "Snowflakes per second (higher = denser snowfall)"
+        }
+    },
+    "soggy": {
+        "description": "Soggy plugin with clickable image and sound effects",
+        "settings": {
+            "songVolume": "Volume of the song. 0 to disable",
+            "boopVolume": "Volume of the boop sound",
+            "tooltipText": "The text shown when hovering over the button",
+            "imageLink": "URL for the image (button and modal)",
+            "songLink": "URL for the song to play",
+            "boopLink": "URL for the boop sound"
+        }
+    },
+    "songLink": {
+        "description": "Song.link integration for sharing music across platforms",
+        "settings": {
+            "servicesSettings": "Settings for services",
+            "userCountry": "Country used for lookup (Two letter country code)"
+        }
+    },
+    "soundBoardLogger": {
+        "description": "Log soundboard usage in voice channels",
+        "settings": {
+            "SavedIds": "The amount of soundboard ids you want to save at a time (0 lets you save infinite)",
+            "FileType": "The format that you want to save your file",
+            "soundVolume": "How loud the toggle sound is (0 to disable)"
+        }
+    },
+    "splitLargeMessages": {
+        "description": "Split large messages into chunks automatically",
+        "settings": {
+            "maxLength": "Maximum length of a message before it is split. Set to 0 to automatically detect",
+            "disableFileConversion": "If true, disables file conversion for large messages",
+            "sendDelay": "Delay between each chunk in seconds",
+            "hardSplit": "If true, splits on the last character instead of the last space/newline",
+            "splitInSlowmode": "Should messages be split if the channel has slowmode enabled?",
+            "slowmodeMax": "Maximum slowmode time if splitting in slowmode"
+        }
+    },
+    "spotifyActivityToggle": {
+        "description": "Toggle Spotify activity sharing on and off",
+        "settings": {
+            "location": "Where to show the Spotify toggle button"
+        }
+    },
+    "statsfmPresence": {
+        "description": "Stats.fm presence integration",
+        "settings": {
+            "username": "Stats.fm username",
+            "shareUsername": "Show link to stats.fm profile",
+            "shareSong": "Show link to song on stats.fm",
+            "hideWithSpotify": "Hide stats.fm presence if spotify is running",
+            "hideWithExternalRPC": "Hides stats.fm presence if an external RPC is running",
+            "statusName": "Custom status text",
+            "nameFormat": "Show name of song and artist in status name",
+            "useListeningStatus": "Show 'Listening to' status instead of 'Playing'",
+            "missingArt": "When albums or albums art is missing",
+            "showStatsFmLogo": "Show the Stats.fm next to the albums cover",
+            "alwaysHideArt": "Disable downloading album art"
+        }
+    },
+    "statusPresets": {
+        "description": "Save and load status presets"
+    },
+    "statusWhileActive": {
+        "description": "Automatically set status while active in voice channels",
+        "settings": {
+            "statusToSet": "Status to set while in a voice channel"
+        }
+    },
+    "steamStatusSync": {
+        "description": "Sync Steam status with Discord status",
+        "settings": {
+            "onlineStatus": "Steam status when on Online",
+            "idleStatus": "Steam status when on Idle",
+            "dndStatus": "Steam status when on Do Not Disturb",
+            "invisibleStatus": "Steam status when on Invisible",
+            "goInvisibleIfActivityIsHidden": "Always go invisible if hiding game activity on Discord"
+        }
+    },
+    "stickerBlocker": {
+        "description": "Block specific stickers from appearing",
+        "settings": {
+            "showGif": "Whether to show a snazzy cat gif",
+            "showMessage": "Whether to show a message detailing which id was blocked",
+            "showButton": "Whether to show a button to unblock the gif",
+            "blockedStickers": "The list of blocked sticker IDs (don't edit unless you know what you're doing)"
+        }
+    },
+    "streamingCodecDisabler": {
+        "description": "Disable streaming codec for Discord streaming",
+        "settings": {
+            "disableAv1Codec": "Make Discord not consider using AV1 for streaming",
+            "disableH265Codec": "Make Discord not consider using H265 for streaming",
+            "disableH264Codec": "Make Discord not consider using H264 for streaming",
+            "disableVP8Codec": "Make Discord not consider using VP8 for streaming",
+            "disableVP9Codec": "Make Discord not consider using VP9 for streaming"
+        }
+    },
+    "talkInReverse": {
+        "description": "Adds a chat bar button to reverse your messages before sending"
+    },
+    "themeLibrary": {
+        "description": "Browse and manage themes from the Equicord theme library",
+        "toolbox": {
+            "openThemeLibrary": "Open Theme Library"
+        }
+    },
+    "tidalEmbeds": {
+        "description": "Embeds Tidal music links with a custom player"
+    },
+    "tiktokTTS": {
+        "description": "Play TikTok text-to-speech for messages",
+        "settings": {
+            "volume": "Playback volume"
+        },
+        "contextMenu": {
+            "playTikTokTTS": "Play TikTok TTS"
+        }
+    },
+    "timezones": {
+        "description": "Display user timezones in profiles and message headers",
+        "settings": {
+            "showOwnTimezone": "Show your own timezone in profiles and message headers",
+            "24hTime": "Show time in 24h format",
+            "showTimezoneInfo": "Show timezone info next to time",
+            "showMessageHeaderTime": "Show time in message headers",
+            "showProfileTime": "Show time in profiles",
+            "useDatabase": "Enable database for getting user timezones",
+            "preferDatabaseOverLocal": "Prefer database over local storage for timezones",
+            "databaseUrl": "Database URL for timezone storage",
+            "setDatabaseTimezone": "Set your timezone on the database",
+            "resetDatabaseTimezone": "Reset your timezone on the database"
+        },
+        "contextMenu": {
+            "setLocalTimezone": "Set Local Timezone"
+        },
+        "toolbox": {
+            "setDatabaseTimezone": "Set Database Timezone",
+            "refreshDatabaseTimezones": "Refresh Database Timezones"
+        },
+        "toasts": {
+            "refreshed": "Timezones refreshed successfully!",
+            "failed": "Timezones Failed to refresh!"
+        }
+    },
+    "title": {
+        "description": "Change Discord's window title",
+        "settings": {
+            "title": "Window title prefix"
+        }
+    },
+    "toastNotifications": {
+        "description": "Show toast notifications for messages and events",
+        "settings": {
+            "position": "The position of the toast notification",
+            "timeout": "Time in seconds notifications will be shown for",
+            "opacity": "Opacity of the notification",
+            "maxNotifications": "Maximum number of notifications displayed at once",
+            "determineServerNotifications": "Automatically determine what server notifications to show based on your channel/guild settings",
+            "disableInStreamerMode": "Disable notifications while in streamer mode",
+            "renderImages": "Render images in notifications",
+            "directMessages": "Show notifications for direct messages",
+            "groupMessages": "Show notifications for group messages",
+            "friendServerNotifications": "Show notifications when friends send messages in servers they share with you",
+            "friendActivity": "Show notifications for adding someone or receiving a friend request",
+            "streamingTreatment": "How to treat notifications while sharing your screen",
+            "notifyFor": "Create a list of channel ids to receive notifications from (separate with commas)",
+            "ignoreUsers": "Create a list of user ids to ignore all their notifications from (separate with commas)",
+            "exampleButton": "Show an example toast notification"
+        },
+        "positionOptions": {
+            "bottomLeft": "Bottom Left",
+            "topLeft": "Top Left",
+            "topRight": "Top Right",
+            "bottomRight": "Bottom Right"
+        },
+        "streamingOptions": {
+            "normal": "Normal - Show the notification as normal",
+            "noContent": "No Content - Hide the notification body",
+            "ignore": "Ignore - Don't show the notification at all"
+        }
+    },
+    "toggleVideoBind": {
+        "description": "Adds a keybind to toggle your video/webcam in voice chat",
+        "settings": {
+            "keyBind": "The key to toggle webcam when pressed",
+            "reqCtrl": "Require control to be held",
+            "reqShift": "Require shift to be held",
+            "reqAlt": "Require alt to be held"
+        }
+    },
+    "toneIndicators": {
+        "description": "Adds tone indicators (sarcasm, joking, etc.) to messages",
+        "settings": {
+            "prefix": "Prefix character(s) for tone indicators",
+            "customIndicators": "Custom tone indicators (format: jk=Joking; srs=Serious)",
+            "maxIndicators": "Maximum number of tone indicators to show per message"
+        }
+    },
+    "tosuRPC": {
+        "description": "Rich presence integration for osu! via tosu"
+    },
+    "translatePlus": {
+        "description": "Adds a translate button to messages with a better UI",
+        "contextMenu": {
+            "translate": "Translate"
+        },
+        "popover": {
+            "translate": "Translate"
+        }
+    },
+    "unitConverter": {
+        "description": "Convert units in messages (imperial/metric)",
+        "settings": {
+            "myUnits": "The units you use and want things converted to"
+        },
+        "unitOptions": {
+            "imperial": "Imperial",
+            "metric": "Metric"
+        },
+        "popover": {
+            "convertUnits": "Convert Units"
+        }
+    },
+    "universalMention": {
+        "description": "Mention users from any server using a universal format",
+        "settings": {
+            "globalMention": "Mention users from any server, not just the current one",
+            "onlyDMUsers": "Only show users you've had DMs with"
+        },
+        "warning": "Using Global Mention can cause performance issues and show an absurd amount of users in the autocomplete."
+    },
+    "unlimitedAccounts": {
+        "description": "Removes the 5 account limit for Discord's account switcher",
+        "settings": {
+            "maxAccounts": "Number of accounts that can be added, or 0 for no limit"
+        }
+    },
+    "unreadBadgeCount": {
+        "description": "Show unread message count badges on channels",
+        "settings": {
+            "showOnMutedChannels": "Show unread count on muted channels",
+            "notificationCountLimit": "Limit notification count to 99+"
+        }
+    },
+    "urlHighlighter": {
+        "description": "Highlight specific URLs in messages with custom colors",
+        "settings": {
+            "patterns": "URL patterns to highlight using glob patterns",
+            "boldUrls": "Make highlighted URLs bold",
+            "highlightEmbeds": "Also highlight URLs in embed content"
+        },
+        "ui": {
+            "urlPatterns": "URL Patterns",
+            "patternPlaceholder": "*.example.com",
+            "addNew": "Add New"
+        }
+    },
+    "userpfp": {
+        "description": "Use custom profile pictures from UserPFP database or set your own",
+        "settings": {
+            "overrideServerAvatars": "Override server avatars with custom avatars or the default user avatar if no custom avatar is set",
+            "preferNitro": "Which avatar to use if both default animated (Nitro) pfp and UserPFP avatars are present",
+            "databaseSource": "URL to load database from"
+        },
+        "avatarOptions": {
+            "userpfp": "UserPFP",
+            "nitro": "Nitro"
+        },
+        "notice": "Using the set avatar feature is local only meaning only you see it change.",
+        "contextMenu": {
+            "setAvatar": "Set Avatar"
+        },
+        "buttons": {
+            "joinServer": "Join UserPFP Server",
+            "support": "Support UserPFP here"
+        }
+    },
+    "vcNarratorCustom": {
+        "description": "Custom voice channel narrator with TTS for user joins/leaves and state changes",
+        "settings": {
+            "customVoice": "Narrator voice",
+            "volume": "Narrator Volume",
+            "rate": "Narrator Speed",
+            "sayOwnName": "Say own name",
+            "ignoreSelf": "Ignore yourself for all events",
+            "latinOnly": "Strip non latin characters from names before saying them",
+            "joinMessage": "Placeholders: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
+            "leaveMessage": "Leave Message",
+            "moveMessage": "Move Message",
+            "announceOthersMute": "Announce when other users mute/unmute in your current VC",
+            "announceOthersDeafen": "Announce when other users deafen/undeafen in your current VC",
+            "announceOthersStream": "Announce when other users start/stop streaming in your current VC",
+            "announceSelfStream": "Announce when you start/stop streaming",
+            "stateChangeCooldownMs": "State-change announce cooldown (ms)",
+            "userVoiceMap": "Per-user voice overrides (format: userId:voiceId,userId2:voiceId2). Right-click users to set.",
+            "stateChangeFilterMode": "Filter which users trigger state-change announcements",
+            "stateChangeFilterList": "Comma-separated user IDs for whitelist/blacklist. Right-click users to add/remove."
+        },
+        "filterOptions": {
+            "off": "Off",
+            "whitelist": "Whitelist (only announce listed users)",
+            "blacklist": "Blacklist (announce everyone except listed)"
+        },
+        "contextMenu": {
+            "vcNarrator": "VC Narrator",
+            "voice": "Voice",
+            "stateFilter": "State-change filter"
+        },
+        "troubleshooting": {
+            "title": "Troubleshooting",
+            "clearCache": "Clear cache",
+            "refreshSize": "Refresh size",
+            "cacheInfo": "Cache",
+            "lastApiCall": "Last API call"
+        },
+        "preview": {
+            "title": "Preview Sounds",
+            "playing": "playing...",
+            "subtitle": "Uses your selected narrator voice"
+        },
+        "modal": {
+            "title": "VC Narrator Voice",
+            "selectVoice": "Select a voice",
+            "previewHint": "Preview how this voice sounds with their name:",
+            "cancel": "Cancel",
+            "save": "Save"
+        }
+    },
+    "vcPanelSettings": {
+        "description": "Customize the voice channel panel with additional settings",
+        "settings": {
+            "uncollapseSettingsByDefault": "Automatically uncollapse voice settings by default",
+            "outputVolume": "Show an output volume slider",
+            "inputVolume": "Show an input volume slider",
+            "outputDevice": "Show an output device selector",
+            "inputDevice": "Show an input device selector",
+            "camera": "Show a camera selector",
+            "showOutputVolumeHeader": "Show header above output volume slider",
+            "showInputVolumeHeader": "Show header above input volume slider",
+            "showOutputDeviceHeader": "Show header above output device selector",
+            "showInputDeviceHeader": "Show header above input device selector",
+            "showVideoDeviceHeader": "Show header above camera selector"
+        },
+        "ui": {
+            "settings": "Settings",
+            "hide": "Hide",
+            "outputVolume": "Output volume",
+            "inputVolume": "Input volume",
+            "outputDevice": "Output device",
+            "inputDevice": "Input device",
+            "camera": "Camera"
+        }
+    },
+    "viewRawVariant": {
+        "description": "View raw JSON data for messages, users, channels, and guilds",
+        "contextMenu": {
+            "viewRaw": "View Raw"
+        },
+        "modal": {
+            "title": "View Raw {type}",
+            "content": "Content",
+            "data": "Data"
+        }
+    },
+    "voiceButtons": {
+        "description": "Adds quick action buttons (chat, mute, deafen) to voice channel users",
+        "settings": {
+            "showChatButton": "Show chat button",
+            "showMuteButton": "Show mute button",
+            "showDeafenButton": "Show deafen button"
+        }
+    },
+    "voiceChannelLog": {
+        "description": "Log voice channel join/leave/move events",
+        "settings": {
+            "mode": "How to show the voice channel log",
+            "voiceChannelChatSelf": "Log your own voice channel events in the voice channels",
+            "voiceChannelChatSilent": "Join/leave/move messages in voice channel chats will be silent",
+            "voiceChannelChatSilentSelf": "Join/leave/move messages in voice channel chats will be silent if you are in the voice channel",
+            "ignoreBlockedUsers": "Do not log blocked users"
+        },
+        "modeOptions": {
+            "logMenu": "Log menu",
+            "logToChat": "Log to associated chat directly",
+            "both": "Log to chat and log menu"
+        },
+        "contextMenu": {
+            "viewChannelLogs": "View Channel Logs"
+        }
+    },
+    "voiceChatUtils": {
+        "description": "Adds voice channel moderation tools (mute all, deafen all, move all, disconnect all)",
+        "settings": {
+            "waitAfter": "Amount of API actions to perform before waiting (to avoid rate limits)",
+            "waitSeconds": "Time to wait between each action (in seconds)"
+        },
+        "contextMenu": {
+            "voiceTools": "Voice Tools",
+            "disconnectAll": "Disconnect all",
+            "muteAll": "Mute all",
+            "unmuteAll": "Unmute all",
+            "deafenAll": "Deafen all",
+            "undeafenAll": "Undeafen all",
+            "moveAll": "Move all"
+        }
+    },
+    "voiceJoinMessages": {
+        "description": "Receive notifications when friends join voice channels",
+        "settings": {
+            "friendDirectMessages": "Receive notifications in your friends' DMs when they join a voice channel",
+            "friendDirectMessagesShowMembers": "Show a list of other members in the voice channel when receiving a DM notification",
+            "friendDirectMessagesShowMemberCount": "Show the count of other members in the voice channel when receiving a DM notification",
+            "friendDirectMessagesSelf": "Receive notifications in your friends' DMs even if you are in the same voice channel as them",
+            "friendDirectMessagesSilent": "Join messages in your friends DMs will be silent",
+            "allowedFriends": "Comma or space separated list of friends' user IDs you want to receive join messages from",
+            "ignoreBlockedUsers": "Do not send messages about blocked users joining/leaving/moving voice channels"
+        }
+    },
+    "voiceMessageTranscriber": {
+        "description": "Transcribe voice messages using AI (Whisper)",
+        "settings": {
+            "selectedModel": "Model size",
+            "quantized": "Use quantized model (smaller size, slightly lower accuracy)",
+            "delete": "Delete all cached files"
+        },
+        "modelOptions": {
+            "tiny": "Tiny (Fastest, lowest accuracy)",
+            "base": "Base (Recommended)",
+            "small": "Small",
+            "medium": "Medium (Slowest, best accuracy)"
+        },
+        "modal": {
+            "transcriptionOptions": "Transcription Options",
+            "audioLanguage": "Audio Language",
+            "autoDetect": "Auto Detect",
+            "action": "Action",
+            "transcribe": "Transcribe",
+            "translateToEnglish": "Translate to English",
+            "start": "Start",
+            "transcription": "Transcription",
+            "initializing": "Initializing...",
+            "downloadingAudio": "Downloading Audio...",
+            "processingAudio": "Processing Audio...",
+            "loadingModel": "Loading Model...",
+            "transcribing": "Transcribing...",
+            "inProgress": "Transcribing in progress...",
+            "showTimestamps": "Show Timestamps",
+            "copyToClipboard": "Copy to Clipboard",
+            "copied": "Copied!",
+            "error": "Error",
+            "retry": "Retry"
+        }
+    },
+    "voiceRejoin": {
+        "description": "Automatically rejoin voice channels after connection drops",
+        "settings": {
+            "rejoinDelay": "Set Delay before rejoining voice channel",
+            "rejoinTimeout": "Don't attempt to rejoin after this many seconds have passed since disconnecting",
+            "preventReconnectIfCallEnded": "Do not reconnect if the call has ended or the voice channel is empty or does not exist",
+            "applyOnlyToDms": "Only apply to DMs"
+        },
+        "preventionOptions": {
+            "none": "None",
+            "dms": "DMs only",
+            "servers": "Servers only",
+            "both": "DMs and Servers"
+        }
+    },
+    "waitForSlot": {
+        "description": "Queue for full voice channels and get notified when a slot opens",
+        "settings": {
+            "autoJoin": "Join the channel immediately instead of showing a notice",
+            "notificationSound": "Play a sound when a slot becomes available"
+        },
+        "contextMenu": {
+            "joinQueue": "Join Queue",
+            "leaveQueue": "Leave Queue"
+        },
+        "notices": {
+            "channelFull": "Voice channel {channel} is full. Wait for a slot?",
+            "slotAvailable": "Hey, someone just left #{channel} and there's a spot for you now!",
+            "wait": "Wait",
+            "join": "Join"
+        }
+    },
+    "wallpaperFree": {
+        "description": "Set custom wallpapers for channels, users, or globally",
+        "settings": {
+            "globalDefault": "Set a global default wallpaper for all channels",
+            "stylingTips": "Styling tips"
+        },
+        "contextMenu": {
+            "setWallpaper": "Set Wallpaper",
+            "removeWallpaper": "Remove Wallpaper"
+        }
+    },
+    "webpackTarball": {
+        "description": "Export Discord's webpack modules as a tarball for analysis",
+        "settings": {
+            "patched": "Include patched modules"
+        },
+        "toolbox": {
+            "webpackTarball": "Webpack Tarball"
+        },
+        "modal": {
+            "title": "Webpack Tarball",
+            "lazyChunks": "Lazy chunks",
+            "loaded": "Loaded",
+            "errors": "errors",
+            "loadAll": "Load all",
+            "loading": "Loading",
+            "loadedStatus": "Loaded",
+            "create": "Create"
+        }
+    },
+    "whitelistedEmojis": {
+        "description": "Whitelist specific emojis and hide all others from the emoji picker",
+        "settings": {
+            "defaultEmojis": "Hide default emojis",
+            "serverEmojis": "Hide server emojis",
+            "disableToasts": "Disable toasts",
+            "whitelistedEmojis": "Whitelisted Emojis",
+            "exportEmojis": "Export Emojis",
+            "importEmojis": "Import Emojis",
+            "resetEmojis": "Reset Emojis"
+        },
+        "contextMenu": {
+            "addToWhitelist": "Add to Whitelist",
+            "removeFromWhitelist": "Remove from Whitelist",
+            "addAllGuildEmojis": "Add All Guild Emojis",
+            "removeAllGuildEmojis": "Remove All Guild Emojis"
+        },
+        "alerts": {
+            "importConfirmTitle": "Are you sure?",
+            "importConfirmBody": "This will overwrite your current whitelist.",
+            "resetConfirmTitle": "Are you sure?",
+            "resetConfirmBody": "This will remove all emojis from your whitelist."
+        },
+        "ui": {
+            "defaultEmojis": "Default Emojis",
+            "guildEmojis": "{guild} Emojis",
+            "removeAll": "Remove All",
+            "noEmojis": "No emojis in the whitelist."
+        },
+        "toasts": {
+            "added": "Added \"{name}\" to the list",
+            "alreadyInList": "\"{name}\" is already in the list",
+            "removed": "Removed \"{name}\" from the list",
+            "notInList": "\"{name}\" is not in the list",
+            "addedBulk": "Added {count} emojis to the list, {skipped} already in the list",
+            "removedBulk": "Removed {count} emojis from the list",
+            "imported": "Successfully imported emojis",
+            "importFailed": "Failed to import emojis: {error}",
+            "exported": "Successfully exported emojis",
+            "reset": "Reset emojis"
+        }
+    },
+    "whosWatching": {
+        "description": "See who's watching your screen share or streams",
+        "settings": {
+            "showPanel": "Show spectators under screenshare panel"
+        },
+        "ui": {
+            "spectators": "Spectators",
+            "noSpectators": "No spectators"
+        }
+    },
+    "wigglyText": {
+        "description": "Make text wiggle with special syntax (~text~)",
+        "settings": {
+            "intensity": "Animation intensity in px"
+        },
+        "about": {
+            "description": "You can make text wiggle with the following:",
+            "leftRight": "left and right by typing <~text~>",
+            "upDown": "up and down by typing ^~text~^",
+            "circle": "in a circle by typing )~text~^("
+        }
+    },
+    "writeUpperCase": {
+        "description": "Automatically capitalize the first letter of sentences",
+        "settings": {
+            "blockedWords": "Strings not to capitalize (separate with a comma)"
+        }
+    },
+    "noRoleHeaders": {
+        "description": "Removes role headers from the member list, creating a cleaner appearance"
+    },
+    "orbolayBridge": {
+        "description": "Bridge plugin for Orbolay overlay integration, enabling voice state sync and message notifications",
+        "settings": {
+            "port": "Port number for the Orbolay WebSocket connection",
+            "isKeybindEnabled": "Enable keybind support for Orbolay controls",
+            "messageAlignment": "Alignment position for message overlay",
+            "userAlignment": "Alignment position for user overlay",
+            "alignmentOptions": {
+                "topLeft": "Top Left",
+                "topRight": "Top Right",
+                "bottomLeft": "Bottom Left",
+                "bottomRight": "Bottom Right"
+            },
+            "voiceSemitransparent": "Make voice overlay semi-transparent",
+            "messagesSemitransparent": "Make messages overlay semi-transparent"
+        }
+    },
+    "normalizeMessageLinks": {
+        "description": "Normalizes Discord message links by removing canary/ptb subdomains for consistency"
+    },
+    "notificationTitle": {
+        "description": "Adds detailed notification titles showing the sender, channel, and server information"
+    },
+    "youtubeDescription": {
+        "description": "Adds a toggleable description for YouTube video embeds"
     }
 }

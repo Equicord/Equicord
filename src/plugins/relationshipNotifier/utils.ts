@@ -20,6 +20,7 @@ import * as DataStore from "@api/DataStore";
 import { popNotice, showNotice } from "@api/Notices";
 import { showNotification } from "@api/Notifications";
 import { getUniqueUsername, openUserProfile } from "@utils/discord";
+import { t } from "@utils/translation";
 import { FluxStore } from "@vencord/discord-types";
 import { ChannelType, RelationshipType } from "@vencord/discord-types/enums";
 import { findStoreLazy } from "@webpack";
@@ -66,14 +67,14 @@ export async function syncAndRunChecks() {
         if (settings.store.groups && oldGroups?.size) {
             for (const [id, group] of oldGroups) {
                 if (!groups.has(id))
-                    notify(`You are no longer in the group ${group.name}.`, group.iconURL);
+                    notify(t("relationshipNotifier.offlineGroupRemoved", { name: group.name }), group.iconURL);
             }
         }
 
         if (settings.store.servers && oldGuilds?.size) {
             for (const [id, guild] of oldGuilds) {
                 if (!guilds.has(id) && !GuildAvailabilityStore.isUnavailable(id))
-                    notify(`You are no longer in the server ${guild.name}.`, guild.iconURL);
+                    notify(t("relationshipNotifier.offlineServerRemoved", { name: guild.name }), guild.iconURL);
             }
         }
 
@@ -84,7 +85,7 @@ export async function syncAndRunChecks() {
                 const user = await UserUtils.getUser(id).catch(() => void 0);
                 if (user)
                     notify(
-                        `You are no longer friends with ${getUniqueUsername(user)}.`,
+                        t("relationshipNotifier.offlineFriendRemoved", { username: getUniqueUsername(user) }),
                         user.getAvatarURL(undefined, undefined, false),
                         () => openUserProfile(user.id)
                     );
@@ -101,7 +102,7 @@ export async function syncAndRunChecks() {
                 const user = await UserUtils.getUser(id).catch(() => void 0);
                 if (user)
                     notify(
-                        `Friend request from ${getUniqueUsername(user)} has been revoked.`,
+                        t("relationshipNotifier.offlineFriendRequestRevoked", { username: getUniqueUsername(user) }),
                         user.getAvatarURL(undefined, undefined, false),
                         () => openUserProfile(user.id)
                     );
@@ -115,7 +116,7 @@ export function notify(text: string, icon?: string, onClick?: () => void) {
         showNotice(text, "OK", () => popNotice());
 
     showNotification({
-        title: "Relationship Notifier",
+        title: t("relationshipNotifier.notificationTitle"),
         body: text,
         icon,
         onClick

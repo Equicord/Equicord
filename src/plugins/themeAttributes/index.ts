@@ -7,12 +7,13 @@
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 import { Message } from "@vencord/discord-types";
 import { UserStore } from "@webpack/common";
 
 export default definePlugin({
     name: "ThemeAttributes",
-    description: "Adds data attributes to various elements for theming purposes",
+    description: t("themeAttributes.description"),
     authors: [Devs.Ven, Devs.Board],
 
     patches: [

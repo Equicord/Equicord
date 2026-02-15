@@ -7,12 +7,13 @@
 import { currentNotice, noticesQueue, popNotice, showNotice } from "@api/Notices";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
 
 const settings = definePluginSettings({
     idleTimeout: {
-        description: "Minutes before Discord goes idle (0 to disable auto-idle)",
+        description: t("customIdle.settings.idleTimeout"),
         type: OptionType.SLIDER,
         markers: makeRange(0, 60, 5),
         default: 10,
@@ -20,7 +21,7 @@ const settings = definePluginSettings({
         restartNeeded: true // Because of the setInterval patch
     },
     remainInIdle: {
-        description: "When you come back to Discord, remain idle until you confirm you want to go online",
+        description: t("customIdle.settings.remainInIdle"),
         type: OptionType.BOOLEAN,
         default: true
     }
@@ -28,7 +29,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "CustomIdle",
-    description: "Allows you to set the time before Discord goes idle (or disable auto-idle)",
+    description: t("customIdle.description"),
     authors: [Devs.newwares],
     settings,
     patches: [
@@ -60,13 +61,13 @@ export default definePlugin({
             return;
         }
 
-        const backOnlineMessage = "Welcome back! Click the button to go online. Click the X to stay idle until reload.";
+        const backOnlineMessage = t("customIdle.ui.backOnlineMessage");
         if (
             currentNotice?.[1] === backOnlineMessage ||
             noticesQueue.some(([, noticeMessage]) => noticeMessage === backOnlineMessage)
         ) return;
 
-        showNotice(backOnlineMessage, "Exit idle", () => {
+        showNotice(backOnlineMessage, t("customIdle.ui.exitIdle"), () => {
             popNotice();
             FluxDispatcher.dispatch({
                 type: "IDLE",

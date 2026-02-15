@@ -19,16 +19,17 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { t } from "@utils/translation";
 
 const settings = definePluginSettings({
     noSpotifyAutoPause: {
-        description: "Disable Spotify auto-pause",
+        description: t("spotifyCrack.settings.noSpotifyAutoPause"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     keepSpotifyActivityOnIdle: {
-        description: "Keep Spotify activity playing when idling",
+        description: t("spotifyCrack.settings.keepSpotifyActivityOnIdle"),
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true
@@ -37,7 +38,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SpotifyCrack",
-    description: "Free listen along, no auto-pausing in voice chat, and allows activity to continue playing when idling",
+    description: t("spotifyCrack.description"),
     authors: [Devs.Cyn, Devs.Nuckyz],
     settings,
 
