@@ -1027,23 +1027,6 @@
         "searchImage": "Search Image",
         "all": "All"
     },
-    "cursorBuddy": {
-        "name": "CursorBuddy",
-        "description": "only a slightly annoying plugin",
-        "settings": {
-            "buddy": "Pick a cursor buddy",
-            "speed": "Speed of Da Cat :3",
-            "fps": "Framerate of the fatass horse",
-            "size": "Size of the fatass horse",
-            "fade": "If the horse should fade when the cursor is near",
-            "freeroam": "If the horse should roam freely when idle",
-            "shake": "If the horse should shake the window when it's walking"
-        },
-        "buddies": {
-            "oneko": "Oneko",
-            "fathorse": "Fatass Horse"
-        }
-    },
     "seeSummaries": {
         "name": "Summaries",
         "description": "Enables Discord's experimental Summaries feature on every server, displaying AI generated summaries of conversations",
