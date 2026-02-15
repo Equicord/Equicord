@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
-import { Button } from "@components/index";
 import { Paragraph } from "@components/Paragraph";
 import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
 interface ConfirmModalProps extends ModalProps {

@@ -441,8 +441,8 @@ export default definePlugin({
             find: ".isPureReactComponent=!0;",
             predicate: () => settings.store.uwuEverything,
             replacement: {
-                match: /(?<=.defaultProps\)void 0.{0,60})(\i)\)/,
-                replace: "$self.uwuifyProps($1))"
+                match: /(\.defaultProps\).{0,80}return \i\(\i,\i,void 0,void 0,null,)(\i)\)/,
+                replace: "$1$self.uwuifyProps($2))"
             }
         }
     ],

@@ -22,7 +22,7 @@ import { Toasts } from "@webpack/common";
 import { showSaveFilePicker } from "native-file-system-adapter";
 
 import { Native } from "..";
-import { addMessagesBulkIDB, iterateAllMessagesIDB } from "../db";
+import { addMessagesBulkIDB, clearMessagesIDB, iterateAllMessagesIDB } from "../db";
 import { LoggedMessageJSON } from "../types";
 
 export async function importLogs() {
@@ -30,17 +30,27 @@ export async function importLogs() {
         let count = 0;
         const batchSize = 50;
         let batch: LoggedMessageJSON[] = [];
+        let cleared = false;
 
-        for await (const item of iterateLogItems()) {
-            const message = item.message || item;
-            if (!message || !message.id || !message.channel_id || !message.timestamp) continue;
+        for await (const logItems of iterateLogItems()) {
+            if (!cleared) {
+                await clearMessagesIDB();
+                cleared = true;
+            }
 
-            batch.push(message);
+            const items = logItems.flat();
 
-            if (batch.length >= batchSize) {
-                await addMessagesBulkIDB(batch);
-                count += batch.length;
-                batch = [];
+            for (const item of items) {
+                const { message } = item;
+                if (!message || !message.id || !message.channel_id || !message.timestamp) continue;
+
+                batch.push(message);
+
+                if (batch.length >= batchSize) {
+                    await addMessagesBulkIDB(batch);
+                    count += batch.length;
+                    batch = [];
+                }
             }
         }
 
@@ -72,7 +82,6 @@ export async function importLogs() {
             type: Toasts.Type.FAILURE
         });
     }
-
 }
 
 export async function exportLogs() {
@@ -128,7 +137,7 @@ export async function exportLogs() {
                 first = false;
                 const chunk = prefix + "    " + JSON.stringify(records);
                 await writer.write(encoder.encode(chunk));
-                count += records.length;
+                count++;
             }
 
             await writer.write(encoder.encode("\n  ]\n}"));

@@ -5,7 +5,7 @@
  */
 
 import { Button, ErrorBoundary, LocalErrorBoundary, Paragraph, SimpleErrorBoundary, useState } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { DocPage, type PropDef, type PropGroup } from "../DocPage";
 
 function ThrowError(): never {
     throw new Error("This is a demo error thrown intentionally!");
@@ -34,7 +34,81 @@ function CustomFallback({ error, resetErrorBoundary }: { error: Error; resetErro
             <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
                 Error: {error.message}
             </Paragraph>
-            <Button onClick={resetErrorBoundary}>
+            <Button onClick={resetErrorBoundary}>Reset</Button>
+        </div>
+    );
+}
+
+const ERROR_BOUNDARY_PROPS: PropDef[] = [
+    { name: "children", type: "ReactNode", required: true, description: "Content to wrap with error handling." },
+    { name: "fallback", type: "ReactNode", description: "Static fallback content to show on error." },
+    { name: "fallbackRender", type: "(props: { error, resetErrorBoundary }) => ReactNode", description: "Render function for dynamic fallback with error details and reset capability." },
+    { name: "FallbackComponent", type: "ComponentType<{ error, resetErrorBoundary }>", description: "Component that receives error and reset props as fallback." },
+    { name: "onError", type: "(error: Error, info: ErrorInfo) => void", description: "Callback fired when an error is caught." },
+    { name: "onReset", type: "(details) => void", description: "Callback fired when the boundary is reset." },
+    { name: "resetKeys", type: "any[]", description: "Array of values that trigger an automatic reset when changed." },
+];
+
+const SIMPLE_PROPS: PropDef[] = [
+    { name: "children", type: "ReactNode", required: true, description: "Content to wrap with error handling." },
+    { name: "fallback", type: "ReactNode", required: true, description: "Static content to display when an error occurs." },
+];
+
+const LOCAL_PROPS: PropDef[] = [
+    { name: "children", type: "ReactNode", required: true, description: "Content to wrap. Shows inline error text on failure." },
+];
+
+const PROP_GROUPS: PropGroup[] = [
+    { title: "ErrorBoundary", props: ERROR_BOUNDARY_PROPS },
+    { title: "SimpleErrorBoundary", props: SIMPLE_PROPS },
+    { title: "LocalErrorBoundary", props: LOCAL_PROPS },
+];
+
+function ErrorBoundaryDemo() {
+    const [key, setKey] = useState(0);
+
+    return (
+        <div key={key}>
+            <ErrorBoundary
+                fallbackRender={({ error, resetErrorBoundary }) => (
+                    <CustomFallback error={error} resetErrorBoundary={resetErrorBoundary} />
+                )}
+                onReset={() => setKey(k => k + 1)}
+            >
+                <ErrorTrigger label="Trigger Error" />
+            </ErrorBoundary>
+        </div>
+    );
+}
+
+function SimpleDemo() {
+    const [key, setKey] = useState(0);
+
+    return (
+        <div key={key}>
+            <SimpleErrorBoundary
+                fallback={
+                    <div style={{ padding: 16, background: "var(--background-secondary)", borderRadius: 8 }}>
+                        <Paragraph color="text-danger">Something went wrong!</Paragraph>
+                        <Button onClick={() => setKey(k => k + 1)} style={{ marginTop: 8 }}>Reset</Button>
+                    </div>
+                }
+            >
+                <ErrorTrigger label="Trigger Error" />
+            </SimpleErrorBoundary>
+        </div>
+    );
+}
+
+function LocalDemo() {
+    const [key, setKey] = useState(0);
+
+    return (
+        <div key={key}>
+            <LocalErrorBoundary>
+                <ErrorTrigger label="Trigger Error" />
+            </LocalErrorBoundary>
+            <Button variant="secondary" onClick={() => setKey(k => k + 1)} style={{ marginTop: 8 }}>
                 Reset
             </Button>
         </div>
@@ -42,93 +116,52 @@ function CustomFallback({ error, resetErrorBoundary }: { error: Error; resetErro
 }
 
 export default function ErrorBoundaryTab() {
-    const [key1, setKey1] = useState(0);
-    const [key2, setKey2] = useState(0);
-    const [key3, setKey3] = useState(0);
-
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="ErrorBoundary">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Full-featured error boundary with fallbackRender, FallbackComponent, onError, onReset, and resetKeys props.
-                </Paragraph>
-                <div key={key1}>
-                    <ErrorBoundary
-                        fallbackRender={({ error, resetErrorBoundary }) => (
-                            <CustomFallback error={error} resetErrorBoundary={resetErrorBoundary} />
-                        )}
-                        onError={(error, info) => console.log("ErrorBoundary caught:", error, info)}
-                        onReset={() => setKey1(k => k + 1)}
-                    >
-                        <ErrorTrigger label="Trigger Error (with fallbackRender)" />
-                    </ErrorBoundary>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="SimpleErrorBoundary">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Simple error boundary with just a fallback prop. Shows fallback content when error occurs.
-                </Paragraph>
-                <div key={key2}>
-                    <SimpleErrorBoundary
-                        fallback={
-                            <div style={{ padding: 16, background: "var(--background-secondary)", borderRadius: 8 }}>
-                                <Paragraph color="text-danger">Something went wrong!</Paragraph>
-                                <Button onClick={() => setKey2(k => k + 1)} style={{ marginTop: 8 }}>
-                                    Reset
-                                </Button>
-                            </div>
-                        }
-                    >
-                        <ErrorTrigger label="Trigger Error (SimpleErrorBoundary)" />
-                    </SimpleErrorBoundary>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="LocalErrorBoundary">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Displays an inline error message. Used for non-critical component errors.
-                </Paragraph>
-                <div key={key3}>
-                    <LocalErrorBoundary>
-                        <ErrorTrigger label="Trigger Error (LocalErrorBoundary)" />
-                    </LocalErrorBoundary>
-                    <Button variant="secondary" onClick={() => setKey3(k => k + 1)} style={{ marginTop: 8 }}>
-                        Reset LocalErrorBoundary
-                    </Button>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    <strong>ErrorBoundary</strong>
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    <code>fallback</code> - Static ReactNode to show on error.
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    <code>fallbackRender</code> - Function receiving error and resetErrorBoundary.
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    <code>FallbackComponent</code> - Component receiving error and resetErrorBoundary props.
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    <code>onError</code> - Callback when error is caught (error, errorInfo).
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    <code>onReset</code> - Callback when boundary is reset.
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    <code>resetKeys</code> - Array of values that trigger reset when changed.
-                </Paragraph>
-            </SectionWrapper>
-
-            <SectionWrapper title="Usage">
-                <Paragraph color="text-muted">
-                    Wrap components that may throw errors. Use ErrorBoundary for full control,
-                    SimpleErrorBoundary for basic fallback, or LocalErrorBoundary for inline error display.
-                </Paragraph>
-            </SectionWrapper>
-        </div>
+        <DocPage
+            componentName="ErrorBoundary"
+            overview="Discord provides three error boundary components with different levels of control. ErrorBoundary is feature-rich with fallbackRender, FallbackComponent, onError/onReset callbacks, and resetKeys. SimpleErrorBoundary accepts a static fallback ReactNode. LocalErrorBoundary shows inline error text for non-critical failures."
+            notices={[
+                { type: "positive", children: "Wrap plugin UI components with ErrorBoundary to prevent crashes from taking down the entire Discord UI. Use LocalErrorBoundary for non-critical elements." },
+                { type: "info", children: "ErrorBoundary only catches errors during rendering, lifecycle methods, and constructors. It does not catch errors in event handlers or async code." },
+            ]}
+            importPath={'import { ErrorBoundary, SimpleErrorBoundary, LocalErrorBoundary } from "../components";'}
+            sections={[
+                {
+                    title: "ErrorBoundary",
+                    description: "Full-featured boundary with fallbackRender for dynamic error UI with reset capability.",
+                    children: <ErrorBoundaryDemo />,
+                    code: `<ErrorBoundary
+  fallbackRender={({ error, resetErrorBoundary }) => (
+    <div>
+      <p>Error: {error.message}</p>
+      <button onClick={resetErrorBoundary}>Reset</button>
+    </div>
+  )}
+  onError={(error, info) => console.error(error)}
+  onReset={() => refetch()}
+>
+  <MyComponent />
+</ErrorBoundary>`,
+                    relevantProps: ["fallbackRender", "onError", "onReset", "resetKeys"],
+                },
+                {
+                    title: "SimpleErrorBoundary",
+                    description: "Lightweight boundary that shows static fallback content on error.",
+                    children: <SimpleDemo />,
+                    code: `<SimpleErrorBoundary fallback={<p>Something went wrong!</p>}>
+  <MyComponent />
+</SimpleErrorBoundary>`,
+                },
+                {
+                    title: "LocalErrorBoundary",
+                    description: "Displays an inline error message for non-critical component failures. No fallback prop needed.",
+                    children: <LocalDemo />,
+                    code: `<LocalErrorBoundary>
+  <MyWidget />
+</LocalErrorBoundary>`,
+                },
+            ]}
+            props={PROP_GROUPS}
+        />
     );
 }
