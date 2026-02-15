@@ -86,107 +86,107 @@
         }
     },
     "bypassStatus": {
-        "description": "Still get notifications from specific sources when in do not disturb mode. Right-click on users/channels/guilds to set them to bypass do not disturb mode.",
+        "description": "Ainda receba notificações de lugares específicos quando estiver no modo não perturbe. Clique com o botão direito em usuários/canais/servidores para defini-los para ignorar o modo não perturbe.",
         "settings": {
-            "guilds": "Guilds to let bypass (notified when pinged anywhere in guild)",
-            "channels": "Channels to let bypass (notified when pinged in that channel)",
-            "users": "Users to let bypass (notified for all messages sent in DMs)",
-            "allowOutsideOfDms": "Allow selected users to bypass status outside of DMs too (acts like a channel/guild bypass, but it's for all messages sent by the selected users)",
-            "notificationSound": "Whether the notification sound should be played",
-            "respectSilentPings": "Respect silent pings (@silent / suppress notifications)",
-            "statusToUse": "Status to use for whitelist"
+            "guilds": "Servidores para permitir ignorar (notificado quando mencionado em qualquer lugar no servidor)",
+            "channels": "Canais para permitir ignorar (notificado quando mencionado naquele canal)",
+            "users": "Usuários para permitir ignorar (notificado para todas as mensagens enviadas em DMs)",
+            "allowOutsideOfDms": "Permitir que usuários selecionados ignorem o status fora de DMs também (age como uma exceção de canal/servidor, mas é para todas as mensagens enviadas pelos usuários selecionados)",
+            "notificationSound": "Se o som de notificação deve ser reproduzido",
+            "respectSilentPings": "Respeita pings silenciosos (@silent / suprimir notificações)",
+            "statusToUse": "Status para usar para lista de permissões"
         },
         "statusOptions": {
             "online": "Online",
-            "idle": "Idle",
-            "dnd": "Do Not Disturb",
-            "invisible": "Invisible"
+            "idle": "Ausente",
+            "dnd": "Não perturbe",
+            "invisible": "Invisível"
         },
         "contextMenu": {
-            "addStatusBypass": "Add Status Bypass",
-            "removeStatusBypass": "Remove Status Bypass"
+            "addStatusBypass": "Adicionar Exceção de Status",
+            "removeStatusBypass": "Remover Exceção de Status"
         },
         "placeholder": {
-            "separateWithCommas": "Separate with commas"
+            "separateWithCommas": "Separe com vírgulas"
         }
     },
     "alwaysExpandProfiles": {
-        "description": "Always expands profile popouts to the full modal"
+        "description": "Sempre expande os popouts de perfil para o modal completo"
     },
     "anammox": {
-        "description": "Hides various features related to nitro and the store",
+        "description": "Oculta vários recursos relacionados com o nitro e a loja",
         "settings": {
-            "dms": "Remove shops above DMs list",
-            "quests": "Remove quests above DMs list",
-            "serverBoost": "Remove server boost info above channel list",
-            "billing": "Remove billing settings",
-            "gift": "Remove gift button",
-            "emojiList": "Remove unavailable categories from the emoji picker"
+            "dms": "Remover lojas acima da lista de DMs",
+            "quests": "Remover lojas acima da lista de DMs",
+            "serverBoost": "Remover informação de boost do servidor acima da lista de canais",
+            "billing": "Remover configurações de cobrança",
+            "gift": "Remover botão de presente",
+            "emojiList": "Remover categorias indisponíveis do seletor de emoji"
         }
     },
     "animalese": {
-        "description": "Plays animal crossing animalese for every message sent (they yap a lot)",
+        "description": "Reproduz animalese de animal crossing para cada mensagem enviada (eles são muito tagarela)",
         "settings": {
-            "volume": "Volume of the animalese sound",
-            "speed": "Speed of the animalese sound",
-            "pitch": "Pitch multiplier",
-            "messageLengthLimit": "Maximum length of message to process",
-            "processOwnMessages": "Enable to yap your own messages too",
-            "soundQuality": "Quality of sound to use"
+            "volume": "Volume do som de animalese",
+            "speed": "Velocidade do som de animalese",
+            "pitch": "Multiplicador de Tom",
+            "messageLengthLimit": "Tamanho máximo de mensagens para processar",
+            "processOwnMessages": "Ativar para tagarelar suas próprias mensagens também",
+            "soundQuality": "Qualidade do som para ser usado"
         },
         "quality": {
-            "high": "High",
-            "medium": "Medium",
-            "low": "Low",
-            "lowest": "Lowest"
+            "high": "Alto",
+            "medium": "Médio",
+            "low": "Baixa",
+            "lowest": "Mais Baixa"
         }
     },
     "atSomeone": {
-        "description": "Mention someone randomly",
+        "description": "Mencione alguém aleatoriamente",
         "contextMenu": {
-            "someone": "Mention someone randomly"
+            "someone": "Mencione alguém aleatoriamente"
         }
     },
     "autoZipper": {
-        "description": "Automatically zips specified file types and folders before uploading to Discord",
+        "description": "Compacta automaticamente pastas e tipos de arquivos especificados antes de fazer o upload para o Discord",
         "settings": {
-            "extensions": "Comma-separated list of file extensions to auto-zip (e.g., .psd,.blend,.exe,.dmg)"
+            "extensions": "Aqui está a tradução fiel, respeitando a capitalização original:\n\nLista de extensões de arquivos separadas por vírgulas para compactar automaticamente (ex: .psd, .blend, .exe, .dmg)"
         }
     },
     "betterCommands": {
-        "description": "Enhances the command system with miscellaneous improvements.",
+        "description": "Melhora o sistema de comandos com diversas melhorias.",
         "settings": {
-            "autoFillArguments": "Automatically fill command with all arguements instead of just required ones",
-            "allowNewlinesInCommands": "Allow newlines in command inputs (CTRL + Shift + Enter)"
+            "autoFillArguments": "Preencher automaticamente o comando com todos os argumentos em vez de apenas os necessários",
+            "allowNewlinesInCommands": "Permitir novas linhas em entradas de comando (CTRL + Shift + Enter)"
         },
         "commands": {
             "refresh": {
-                "description": "Refreshes Discord application commands locally",
-                "userOption": "specific user to try and refresh",
-                "refreshing": "Refreshing application commands...",
-                "success": "Commands refreshed successfully!",
-                "failed": "Failed to refresh commands. Check the console for details."
+                "description": "Atualiza os comandos do aplicativo Discord localmente",
+                "userOption": "usuário específico para tentar atualizar",
+                "refreshing": "Atualizando comandos do aplicativo...",
+                "success": "Comandos atualizados com sucesso!",
+                "failed": "Falha ao atualizar comandos. Verifique o console para detalhes."
             }
         }
     },
     "betterPlusReacts": {
-        "description": "The amount of plus before :emoji: is the message to add it to"
+        "description": "A quantidade de mais antes de :emoji: é a mensagem para adicioná-lo"
     },
     "betterUserArea": {
-        "description": "Customize and make the user area more clean.",
+        "description": "Personalize e faça a área do usuário mais limpa.",
         "settings": {
-            "removeNameplate": "Remove nameplate styling.",
-            "removeAudioMenus": "Remove menus next to mute and deafen buttons.",
-            "alwaysShowUsername": "Always show username instead of status.",
-            "removeButtonTooltips": "Remove button tooltips.",
-            "removeAvatarDecoration": "Remove avatar decoration.",
-            "removeUsernameStyles": "Remove username colors and effects."
+            "removeNameplate": "Remover estilo da placa de identificação.",
+            "removeAudioMenus": "Remova menus ao lado dos botões de mutar e silenciar áudio.",
+            "alwaysShowUsername": "Sempre mostrar nome de usuário em vez de status.",
+            "removeButtonTooltips": "Remover dicas de ferramentas dos botões.",
+            "removeAvatarDecoration": "Remover decoração de avatar.",
+            "removeUsernameStyles": "Remover cores e efeitos de nome de usuário."
         }
     },
     "blockKeywords": {
-        "description": "Blocks messages containing specific user-defined keywords, as if the user sending them was blocked.",
+        "description": "Bloqueia mensagens contendo palavras-chave específicas definidas pelo usuário, como se o usuário que as enviou estivesse bloqueado.",
         "settings": {
-            "blockedWords": "Comma-seperated list of words to block",
+            "blockedWords": "Lista de palavras separadas por vírgulas para bloquear",
             "useRegex": "Use each value as a regular expression when checking message content (advanced)",
             "caseSensitive": "Whether to use a case sensitive search or not",
             "ignoreBlockedMessages": "Completely ignores (recent) new messages bar"
