@@ -1,88 +1,88 @@
 {
     "absRPC": {
-        "description": "Rich presence for AudioBookShelf media server",
+        "description": "Rich presence para servidor de mídia AudioBookShelf",
         "settings": {
-            "serverUrl": "AudioBookShelf server URL (e.g., https://abs.example.com)",
-            "username": "AudioBookShelf username",
-            "password": "AudioBookShelf password"
+            "serverUrl": "URL do servidor AudioBookShelf (exemplo: https://abs.exemplo.com)",
+            "username": "Usuário AudioBookShelf",
+            "password": "Senha AudioBookShelf"
         },
         "about": {
-            "title": "How to connect to AudioBookShelf",
-            "description": "Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.",
-            "automaticAuth": "The plugin will automatically authenticate and fetch your listening progress."
+            "title": "Como conectar ao AudioBookShelf",
+            "description": "Insira a URL do seu servidor AudioBookShelf, usuário e senha para exibir os audiolivros que você está ouvindo no Discord Rich Presence.",
+            "automaticAuth": "O plugin irá autenticar automaticamente e buscar seu progresso de escuta."
         },
         "toasts": {
-            "notConfigured": "AudioBookShelf RPC is not configured."
+            "notConfigured": "AudioBookShelf RPC não está configurado."
         }
     },
     "altKrispSwitch": {
-        "description": "Makes the Noise Suppression Popout switch between None and Krisp instead of Krisp and Standard"
+        "description": "Faz o Popout de Supressão de Ruído alternar entre Nenhum e Krisp em vez de Krisp e Padrão"
     },
     "bannersEverywhere": {
-        "description": "Displays banners in the member list ",
+        "description": "Exibe banners na lista de membros ",
         "settings": {
-            "animate": "Animate banners",
-            "preferNameplate": "prefer nameplate over banner"
+            "animate": "Animar banners",
+            "preferNameplate": "preferir placa de identificação em vez de banner"
         }
     },
     "baseDecoder": {
-        "description": "Decode base64 content of any message and copy the decoded content.",
+        "description": "Decodificar conteúdo base64 de qualquer mensagem e copiar o conteúdo decodificado.",
         "settings": {
-            "clickMethod": "Change the button to decode base64 content of any message.",
+            "clickMethod": "Altere o botão para decodificar conteúdo base64 de qualquer mensagem.",
             "clickMethodOptions": {
-                "left": "Left Click to decode the base64 content.",
-                "right": "Right click to decode the base64 content."
+                "left": "Clique esquerdo para decodificar o conteúdo base64.",
+                "right": "Clique direito para decodificar o conteúdo base64."
             }
         },
         "ui": {
-            "modalTitle": "Decoded Base64 Content",
-            "decodedContent": "Decoded Content",
-            "copyDecoded": "Copy Decoded Content",
-            "copiedToast": "Decoded content copied to clipboard!",
-            "tooltipLeft": "Copy Decoded (Left Click) / Decode Base64 (Right Click)",
-            "tooltipRight": "Decode Base64 (Left Click) / Copy Decoded (Right Click)"
+            "modalTitle": "Conteúdo Base64 Decodificado",
+            "decodedContent": "Conteúdo Decodificado",
+            "copyDecoded": "Copiar Conteúdo Decodificado",
+            "copiedToast": "Conteúdo decodificado copiado para área de transferência!",
+            "tooltipLeft": "Copiar Decodificado (Clique esquerdo) / Decodificar Base64 (Clique direito)",
+            "tooltipRight": "Decodificar Base64 (Clique esquerdo) / Copiar Decodificado (Clique direito)"
         }
     },
     "betterAudioPlayer": {
-        "description": "Adds a spectrograph and oscilloscope visualizer to audio attachment players",
+        "description": "Adiciona um visualizador de espectrógrafo e osciloscópio aos reprodutores de anexos de áudio",
         "settings": {
-            "oscilloscope": "Enable oscilloscope visualizer",
-            "spectrograph": "Enable spectrograph visualizer",
-            "oscilloscopeSolidColor": "Use solid color for oscilloscope",
-            "oscilloscopeColor": "Color for oscilloscope",
-            "spectrographSolidColor": "Use solid color for spectrograph",
-            "spectrographColor": "Color for spectrograph",
-            "forceMoveBelow": "Force the visualizer below the audio player"
+            "oscilloscope": "Ativar visualizador de osciloscópio",
+            "spectrograph": "Ativar visualizador espectrográfico",
+            "oscilloscopeSolidColor": "Usar cor sólida para o osciloscópio",
+            "oscilloscopeColor": "Cor para osciloscópio",
+            "spectrographSolidColor": "Usar cores sólidas para o espectrógrafo",
+            "spectrographColor": "Cor para espectrográfico",
+            "forceMoveBelow": "Forçar o visualizador abaixo do reprodutor de áudio"
         },
         "toasts": {
-            "invalidColor": "Invalid color format for {settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'"
+            "invalidColor": "Formato de cor inválido para {settingKey}, verifique se está no formato 'R, G, B' ou '#RGGBB'"
         }
     },
     "betterBanReasons": {
-        "description": "Create custom reasons to use in the Discord ban modal, and/or show a text input by default instead of the options.",
+        "description": "Criar motivos personalizados para usar na janela de banimento do Discord e/ou exibir uma entrada de texto por padrão em vez das opções.",
         "settings": {
-            "reasons": "Your custom reasons",
-            "isTextInputDefault": "Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)"
+            "reasons": "Seus motivos personalizados",
+            "isTextInputDefault": "Mostra uma entrada de texto em vez de um menu de seleção por padrão. (Equivalente a clicar na opção \"Outro\")"
         },
         "ui": {
-            "reasons": "Reasons",
-            "reasonPlaceholder": "Reason",
-            "addAnotherReason": "Add another reason"
+            "reasons": "Motivos",
+            "reasonPlaceholder": "Motivo",
+            "addAnotherReason": "Adicionar outro motivo"
         }
     },
     "betterBlockedUsers": {
-        "description": "Allows you to search in blocked users list and makes names selectable in settings.",
+        "description": "Permite que você pesquise na lista de usuários bloqueados e torna os nomes selecionáveis nas configurações.",
         "ui": {
-            "searchPlaceholder": "Search users..."
+            "searchPlaceholder": "Pesquisar usuários..."
         }
     },
     "betterInvites": {
-        "description": "See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
+        "description": "Ver a data de expiração dos convites, visualizar o perfil de quem convidou e pré-visualizar servidores antes de entrar ao clicar no nome",
         "ui": {
-            "expireTooltip": "This invite will {expiry}",
-            "expireWill": "expire",
-            "notExpire": "not expire",
-            "invitedYouTo": "{inviter} invited you to {guild}"
+            "expireTooltip": "Este convite irá {expiry}",
+            "expireWill": "expirar",
+            "notExpire": "não expirar",
+            "invitedYouTo": "{inviter} convidou você para {guild}"
         }
     },
     "bypassStatus": {
