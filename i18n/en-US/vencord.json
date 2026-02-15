@@ -1312,7 +1312,7 @@
         },
         "filterList": {
             "title": "Filter List",
-            "description": "Comma separated list of activity IDs to filter (Useful for filtering specific RPC activities and CustomRPC"
+            "description": "Comma separated list of activity IDs to filter (Useful for filtering specific RPC activities and CustomRPC)"
         },
         "settings": {
             "listMode": "Change the mode of the filter list",
