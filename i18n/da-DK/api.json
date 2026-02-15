@@ -1,37 +1,37 @@
 {
-    "commands": {
-        "errorExecuting": "Der opstod en fejl under udførelse af kommandoen \"{name}\""
+    "commands":{
+        "errorExecuting":"Der opstod en fejl under udførelse af kommandoen \"{name}\""
     },
-    "notifications": {
-        "dismissNotification": "Afvis notifikation",
-        "noNotifications": "Ingen notifikationer endnu",
-        "notificationLog": "Notifikationslog",
-        "notificationSettings": "Indstillinger for notifikationer",
-        "logs": {
-            "title": "Er du sikker?",
-            "body_zero": "Ingen notifikation valgt.",
-            "body_one": "Dette vil permanent fjerne {count} notifikation. Denne handling kan ikke fortrydes.",
-            "body_other": "Dette vil permanent fjerne {count} notifikationer. Denne handling kan ikke fortrydes.",
-            "confirm": "Gør det!",
-            "cancel": "Glem det",
-            "clearNotificationLog": "Ryd notifikationslog"
+    "memberListDecorators":{
+        "fallback":"Kunne ikke vise {key} medlemsliste dekorator"
+    },
+    "messageAccessories":{
+        "fallback":"Kunne ikke vise {key} beskedtilbehør"
+    },
+    "messageDecorations":{
+        "fallback":"Kunne ikke vise {key} besked dekoration"
+    },
+    "notices":{
+        "fallback":"Fejl ved visning af meddelelse"
+    },
+    "notifications":{
+        "dismissNotification":"Afvis notifikation",
+        "logs":{
+            "body_one":"Dette vil permanent fjerne {count} notifikation. Denne handling kan ikke fortrydes.",
+            "body_other":"Dette vil permanent fjerne {count} notifikationer. Denne handling kan ikke fortrydes.",
+            "body_zero":"Ingen notifikation valgt.",
+            "cancel":"Glem det",
+            "clearNotificationLog":"Ryd notifikationslog",
+            "confirm":"Gør det!",
+            "title":"Er du sikker?"
         },
-        "missedNotifications": {
-            "title": "Mens du var væk",
-            "body_one": "{count} notifikation modtaget",
-            "body_other": "{count} notifikationer modtaget"
-        }
-    },
-    "memberListDecorators": {
-        "fallback": "Kunne ikke vise {key} medlemsliste dekorator"
-    },
-    "messageAccessories": {
-        "fallback": "Kunne ikke vise {key} beskedtilbehør"
-    },
-    "messageDecorations": {
-        "fallback": "Kunne ikke vise {key} besked dekoration"
-    },
-    "notices": {
-        "fallback": "Fejl ved visning af meddelelse"
+        "missedNotifications":{
+            "body_one":"{count} notifikation modtaget",
+            "body_other":"{count} notifikationer modtaget",
+            "title":"Mens du var væk"
+        },
+        "noNotifications":"Ingen notifikationer endnu",
+        "notificationLog":"Notifikationslog",
+        "notificationSettings":"Indstillinger for notifikationer"
     }
 }

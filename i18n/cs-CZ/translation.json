@@ -1,10 +1,10 @@
 {
-    "description": "Pomoc s překládáním Equicord",
-    "settings": {
-        "forceLocale": {
-            "description": "Vynutit jinou lokalizaci pro použití Equicord",
-            "followDiscord": "Výchozí (sledovat Discord)"
+    "description":"Pomoc s překládáním Equicord",
+    "settings":{
+        "forceLocale":{
+            "description":"Vynutit jinou lokalizaci pro použití Equicord",
+            "followDiscord":"Výchozí (sledovat Discord)"
         },
-        "showMissingKeys": "Pokud v aktuálním jazyku chybí překlady, zobrazte klíče místo toho, aby se vrátily do angličtiny"
+        "showMissingKeys":"Pokud v aktuálním jazyku chybí překlady, zobrazte klíče místo toho, aby se vrátily do angličtiny"
     }
 }

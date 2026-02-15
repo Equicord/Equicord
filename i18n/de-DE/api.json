@@ -1,37 +1,37 @@
 {
-    "commands": {
-        "errorExecuting": "Beim Ausführen des Befehls \"{name} \" ist ein Fehler aufgetreten"
+    "commands":{
+        "errorExecuting":"Beim Ausführen des Befehls \"{name} \" ist ein Fehler aufgetreten"
     },
-    "notifications": {
-        "dismissNotification": "Benachrichtigung schließen",
-        "noNotifications": "Noch keine Benachrichtigungen",
-        "notificationLog": "Benachrichtigungsprotokoll",
-        "notificationSettings": "Benachrichtigungseinstellungen",
-        "logs": {
-            "title": "Bist du sicher?",
-            "body_zero": "Keine Benachrichtigung ausgewählt.",
-            "body_one": "Dies wird {count} Benachrichtigung dauerhaft entfernen. Diese Aktion kann nicht rückgängig gemacht werden.",
-            "body_other": "Dies wird {count} Benachrichtigungen dauerhaft entfernen. Diese Aktion kann nicht rückgängig gemacht werden.",
-            "confirm": "Mach es!",
-            "cancel": "Vergiss es",
-            "clearNotificationLog": "Benachrichtigungsprotokoll löschen"
+    "memberListDecorators":{
+        "fallback":"Failed to render {key} Member List Decorator"
+    },
+    "messageAccessories":{
+        "fallback":"Failed to render {key} Message Accessory"
+    },
+    "messageDecorations":{
+        "fallback":"Failed to render {key} Message Decoration"
+    },
+    "notices":{
+        "fallback":"Fehler beim Anzeigen der Mitteilung"
+    },
+    "notifications":{
+        "dismissNotification":"Benachrichtigung schließen",
+        "logs":{
+            "body_one":"Dies wird {count} Benachrichtigung dauerhaft entfernen. Diese Aktion kann nicht rückgängig gemacht werden.",
+            "body_other":"Dies wird {count} Benachrichtigungen dauerhaft entfernen. Diese Aktion kann nicht rückgängig gemacht werden.",
+            "body_zero":"Keine Benachrichtigung ausgewählt.",
+            "cancel":"Vergiss es",
+            "clearNotificationLog":"Benachrichtigungsprotokoll löschen",
+            "confirm":"Mach es!",
+            "title":"Bist du sicher?"
         },
-        "missedNotifications": {
-            "title": "Während du weg warst",
-            "body_one": "{count} Benachrichtigung erhalten",
-            "body_other": "{count} Benachrichtigungen erhalten"
-        }
-    },
-    "memberListDecorators": {
-        "fallback": "Failed to render {key} Member List Decorator"
-    },
-    "messageAccessories": {
-        "fallback": "Failed to render {key} Message Accessory"
-    },
-    "messageDecorations": {
-        "fallback": "Failed to render {key} Message Decoration"
-    },
-    "notices": {
-        "fallback": "Fehler beim Anzeigen der Mitteilung"
+        "missedNotifications":{
+            "body_one":"{count} Benachrichtigung erhalten",
+            "body_other":"{count} Benachrichtigungen erhalten",
+            "title":"Während du weg warst"
+        },
+        "noNotifications":"Noch keine Benachrichtigungen",
+        "notificationLog":"Benachrichtigungsprotokoll",
+        "notificationSettings":"Benachrichtigungseinstellungen"
     }
 }

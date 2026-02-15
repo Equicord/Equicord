@@ -1,10 +1,10 @@
 {
-    "description": "Segít az Equicord fordításában",
-    "settings": {
-        "forceLocale": {
-            "description": "Kényszeríts egy másik nyelvi beállítást az Equicord számára",
-            "followDiscord": "Alapértelmezett (Discord követése)"
+    "description":"Segít az Equicord fordításában",
+    "settings":{
+        "forceLocale":{
+            "description":"Kényszeríts egy másik nyelvi beállítást az Equicord számára",
+            "followDiscord":"Alapértelmezett (Discord követése)"
         },
-        "showMissingKeys": "Ha a jelenlegi nyelvi beállítás hiányos fordításokat tartalmaz, mutassa a kulcsokat az angolra való visszaállás helyett"
+        "showMissingKeys":"Ha a jelenlegi nyelvi beállítás hiányos fordításokat tartalmaz, mutassa a kulcsokat az angolra való visszaállás helyett"
     }
 }
