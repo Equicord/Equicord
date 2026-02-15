@@ -46,28 +46,28 @@
     "betterAudioPlayer": {
         "description": "",
         "settings": {
-            "oscilloscope": "Enable oscilloscope visualizer",
-            "spectrograph": "Enable spectrograph visualizer",
-            "oscilloscopeSolidColor": "Use solid color for oscilloscope",
-            "oscilloscopeColor": "Color for oscilloscope",
-            "spectrographSolidColor": "Use solid color for spectrograph",
-            "spectrographColor": "Color for spectrograph",
-            "forceMoveBelow": "Force the visualizer below the audio player"
+            "oscilloscope": "Povolit vizualizér osciloskopu",
+            "spectrograph": "Povolit vizualizér spektografu",
+            "oscilloscopeSolidColor": "Použít pevnou barvu pro osciloskop",
+            "oscilloscopeColor": "Barva pro osciloskop",
+            "spectrographSolidColor": "Použít pevnou barvu pro spektrograf",
+            "spectrographColor": "Barva pro spektrograf",
+            "forceMoveBelow": "Vynutit vizualizér pod zvukovým přehrávačem"
         },
         "toasts": {
-            "invalidColor": "Invalid color format for {settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'"
+            "invalidColor": "Neplatný formát barvy pro {settingKey}, ujistěte se, že je ve formátu 'R, G, B' nebo '#RRGBB'"
         }
     },
     "betterBanReasons": {
-        "description": "Create custom reasons to use in the Discord ban modal, and/or show a text input by default instead of the options.",
+        "description": "Vytvořte vlastní důvody pro použití v režimu zakázání Discord a/nebo zobrazí výchozí textový vstup namísto možností.",
         "settings": {
-            "reasons": "Your custom reasons",
+            "reasons": "Vaše vlastní důvody",
             "isTextInputDefault": "Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)"
         },
         "ui": {
             "reasons": "Zdůvodnění",
             "reasonPlaceholder": "Důvod",
-            "addAnotherReason": "Add another reason"
+            "addAnotherReason": "Přidat další důvod"
         }
     },
     "betterBlockedUsers": {
@@ -98,9 +98,9 @@
         },
         "statusOptions": {
             "online": "Online",
-            "idle": "Idle",
-            "dnd": "Do Not Disturb",
-            "invisible": "Invisible"
+            "idle": "Nečinný",
+            "dnd": "Nerušit",
+            "invisible": "Neviditelný"
         },
         "contextMenu": {
             "addStatusBypass": "Add Status Bypass",
@@ -135,10 +135,10 @@
             "soundQuality": "Quality of sound to use"
         },
         "quality": {
-            "high": "High",
-            "medium": "Medium",
-            "low": "Low",
-            "lowest": "Lowest"
+            "high": "Vysoký",
+            "medium": "Střední",
+            "low": "Nízká",
+            "lowest": "Nejnižší"
         }
     },
     "atSomeone": {
