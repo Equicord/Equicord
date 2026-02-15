@@ -1125,7 +1125,7 @@
         "everything": "Everything (Titles & Thumbnails)",
         "titles": "Titles",
         "thumbnails": "Thumbnails",
-        "dearrowByDefault": "Dearow videos automatically"
+        "dearrowByDefault": "Dearrow videos automatically"
     },
     "copyUserURLs": {
         "description": "Adds a 'Copy User URL' option to the user context menu.",
