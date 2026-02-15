@@ -5,7 +5,7 @@
  */
 
 import { settings } from "@equicordplugins/fileUpload/settings";
-import { ServiceType, UploadResponse } from "@equicordplugins/fileUpload/types";
+import { ServiceType, ShareXUploaderConfig, UploadResponse } from "@equicordplugins/fileUpload/types";
 import { copyToClipboard } from "@utils/clipboard";
 import { PluginNative } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
@@ -13,6 +13,7 @@ import { showToast, Toasts } from "@webpack/common";
 import { convertApngToGif } from "./apngToGif";
 import { getExtensionFromBytes, getExtensionFromMime, getMimeFromExtension, getUrlExtension } from "./getMediaUrl";
 import { isS3Configured, uploadToS3 } from "./s3";
+import { parseShareXConfig, resolveShareXTemplate } from "./sharex";
 
 const Native = IS_DISCORD_DESKTOP
     ? VencordNative.pluginHelpers.FileUpload as PluginNative<typeof import("../native")>
@@ -21,6 +22,106 @@ const Native = IS_DISCORD_DESKTOP
 const CORS_PROXY = "https://cors.keiran0.workers.dev"; // im hosting this on cloudflare workers so uptime and latency should be reliable
 
 let isUploading = false;
+
+function resolveShareXRequestValue(value: string | number | boolean, filename: string): string {
+    return String(value)
+        .replace(/\$filename\$/g, filename)
+        .replace(/\{filename\}/g, filename);
+}
+
+function parseShareXConfigFromSettings(): ShareXUploaderConfig {
+    const configText = settings.store.sharexConfig || "";
+    if (!configText.trim()) {
+        throw new Error("ShareX config is required");
+    }
+
+    return parseShareXConfig(configText);
+}
+
+async function uploadToShareX(fileBlob: Blob, filename: string): Promise<string> {
+    const config = parseShareXConfigFromSettings();
+    const method = (config.RequestMethod || "POST").toUpperCase();
+    const requestUrl = config.RequestURL!.trim();
+    const bodyType = (config.Body || "MultipartFormData").toLowerCase();
+
+    const headers = new Headers();
+    for (const [key, value] of Object.entries(config.Headers || {})) {
+        headers.set(key, resolveShareXRequestValue(value, filename));
+    }
+
+    const buildArguments = () => {
+        const args: Record<string, string> = {};
+        for (const [key, value] of Object.entries(config.Arguments || {})) {
+            args[key] = resolveShareXRequestValue(value, filename);
+        }
+        return args;
+    };
+
+    let body: BodyInit;
+
+    if (bodyType === "multipartformdata" || bodyType === "formdata") {
+        headers.delete("content-type");
+
+        const formData = new FormData();
+        const fileField = config.FileFormName || "file";
+        formData.append(fileField, fileBlob, filename);
+
+        const args = buildArguments();
+        for (const [key, value] of Object.entries(args)) {
+            formData.append(key, value);
+        }
+
+        body = formData;
+    } else if (bodyType === "binary") {
+        body = fileBlob;
+    } else if (bodyType === "json") {
+        if (!headers.has("content-type")) {
+            headers.set("content-type", "application/json");
+        }
+
+        const payload = buildArguments();
+        body = JSON.stringify(payload);
+    } else {
+        throw new Error(`Unsupported ShareX Body type: ${config.Body || "unknown"}`);
+    }
+
+    let response: Response;
+    try {
+        response = await fetch(requestUrl, { method, headers, body });
+    } catch (error) {
+        if (Native) {
+            throw error;
+        }
+
+        const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent(requestUrl)}`;
+        response = await fetch(proxiedUrl, { method, headers, body });
+    }
+
+    const responseText = await response.text();
+    let responseJson: unknown = null;
+    try {
+        responseJson = responseText ? JSON.parse(responseText) : null;
+    } catch {
+        responseJson = null;
+    }
+
+    if (!response.ok) {
+        const configuredError = resolveShareXTemplate(config.ErrorMessage, responseText, responseJson);
+        throw new Error(configuredError || `Upload failed: ${response.status} ${response.statusText}`);
+    }
+
+    const configuredUrl = resolveShareXTemplate(config.URL, responseText, responseJson)?.trim();
+    const fallbackUrl = typeof responseJson === "object" && responseJson && "url" in responseJson
+        ? String((responseJson as Record<string, unknown>).url || "")
+        : responseText.trim();
+
+    const resultUrl = configuredUrl || fallbackUrl;
+    if (!resultUrl) {
+        throw new Error("No URL returned from ShareX uploader");
+    }
+
+    return resultUrl;
+}
 
 async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string> {
     const { serviceUrl, ziplineToken, folderId } = settings.store;
@@ -141,6 +242,13 @@ export function isConfigured(): boolean {
             return Boolean(Native);
         case ServiceType.LITTERBOX:
             return true;
+        case ServiceType.SHAREX:
+            try {
+                parseShareXConfigFromSettings();
+                return true;
+            } catch {
+                return false;
+            }
         case ServiceType.ZIPLINE:
         default:
             return Boolean(serviceUrl && ziplineToken);
@@ -347,6 +455,9 @@ export async function uploadFile(url: string): Promise<void> {
                 break;
             case ServiceType.LITTERBOX:
                 uploadedUrl = await uploadToLitterbox(typedBlob, filename);
+                break;
+            case ServiceType.SHAREX:
+                uploadedUrl = await uploadToShareX(typedBlob, filename);
                 break;
             default:
                 throw new Error("Unknown service type");
