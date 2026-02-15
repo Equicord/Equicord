@@ -107,7 +107,7 @@ async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
         throw new Error(`Upload failed: ${response.status} ${errorText}`);
     }
 
-    const data = await response.json() as { fileURL?: string };
+    const data = await response.json() as { fileURL?: string; };
 
     if (data.fileURL) {
         return data.fileURL;
@@ -132,7 +132,7 @@ export function isConfigured(): boolean {
         case ServiceType.NEST:
             return Boolean(nestToken);
         case ServiceType.EZHOST:
-            return Boolean((settings.store as { ezHostKey?: string }).ezHostKey);
+            return Boolean((settings.store as { ezHostKey?: string; }).ezHostKey);
         case ServiceType.S3:
             return isS3Configured();
         case ServiceType.CATBOX:
@@ -148,7 +148,7 @@ export function isConfigured(): boolean {
 }
 
 async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string> {
-    const { ezHostKey } = (settings.store as { ezHostKey?: string });
+    const { ezHostKey } = (settings.store as { ezHostKey?: string; });
 
     if (!ezHostKey) throw new Error("E-Z Host API key is required");
 
@@ -193,29 +193,27 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
 }
 
 async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string> {
+    const { catboxUserhash } = settings.store;
+
+    if (Native) {
+        const result = await Native.uploadToCatbox(await fileBlob.arrayBuffer(), filename, catboxUserhash || undefined);
+        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
+        return result.url;
+    }
+
     const formData = new FormData();
     formData.append("reqtype", "fileupload");
+    if (catboxUserhash) formData.append("userhash", catboxUserhash);
     formData.append("fileToUpload", fileBlob, filename);
 
-    const uploadUrl = Native
-        ? "https://catbox.moe/user/api.php"
-        : `${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`;
-
-    const response = await fetch(uploadUrl, {
+    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`, {
         method: "POST",
         body: formData
     });
 
-    if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Upload failed: ${response.status} ${text}`);
-    }
-
+    if (!response.ok) throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
     const text = (await response.text()).trim();
-    if (!text) {
-        throw new Error("No URL returned from upload");
-    }
-
+    if (!text) throw new Error("No URL returned from upload");
     return text;
 }
 
@@ -239,30 +237,27 @@ async function uploadTo0x0(fileBlob: Blob, filename: string): Promise<string> {
 }
 
 async function uploadToLitterbox(fileBlob: Blob, filename: string): Promise<string> {
+    const expiry = settings.store.litterboxExpiry || "24h";
+
+    if (Native) {
+        const result = await Native.uploadToLitterbox(await fileBlob.arrayBuffer(), filename, expiry);
+        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
+        return result.url;
+    }
+
     const formData = new FormData();
     formData.append("reqtype", "fileupload");
-    formData.append("time", settings.store.litterboxExpiry || "24h");
+    formData.append("time", expiry);
     formData.append("fileToUpload", fileBlob, filename);
 
-    const uploadUrl = Native
-        ? "https://litterbox.catbox.moe/resources/internals/api.php"
-        : `${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`;
-
-    const response = await fetch(uploadUrl, {
+    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`, {
         method: "POST",
         body: formData
     });
 
-    if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Upload failed: ${response.status} ${text}`);
-    }
-
+    if (!response.ok) throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
     const text = (await response.text()).trim();
-    if (!text) {
-        throw new Error("No URL returned from upload");
-    }
-
+    if (!text) throw new Error("No URL returned from upload");
     return text;
 }
 
