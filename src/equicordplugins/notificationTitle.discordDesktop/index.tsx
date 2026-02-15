@@ -6,6 +6,7 @@
 
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
 import { ChannelStore, GuildStore, RelationshipStore, UserStore } from "@webpack/common";
@@ -19,7 +20,7 @@ const MessageTypes = findByPropsLazy("REPLY", "STAGE_RAISE_HAND", "CHANNEL_NAME_
 
 export default definePlugin({
     name: "NotificationTitle",
-    description: "Makes desktop notifications more informative",
+    description: t("notificationTitle.description"),
     authors: [Devs.Kyuuhachi],
 
     patches: [

@@ -18,6 +18,7 @@
 
 import { Devs } from "@utils/constants";
 import { insertTextIntoChatInputBox } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { ChannelStore, PermissionsBits, PermissionStore } from "@webpack/common";
 
@@ -40,7 +41,7 @@ function Icon({ height = 24, width = 24, className = "icon" }: { height?: number
 export default definePlugin({
     name: "QuickMention",
     authors: [Devs.kemo],
-    description: "Adds a quick mention button to the message actions bar",
+    description: t("quickMention.description"),
 
     messagePopoverButton: {
         icon: Icon,
@@ -49,7 +50,7 @@ export default definePlugin({
             if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return null;
 
             return {
-                label: "Quick Mention",
+                label: t("quickMention.label"),
                 icon: Icon,
                 message: msg,
                 channel,

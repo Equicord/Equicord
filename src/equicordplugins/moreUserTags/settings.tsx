@@ -10,6 +10,7 @@ import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
 import { Paragraph } from "@components/Paragraph";
 import { Margins } from "@utils/margins";
+import { t } from "@utils/translation";
 import { OptionType } from "@utils/types";
 import { Forms, TextInput, Tooltip } from "@webpack/common";
 
@@ -95,24 +96,24 @@ function SettingsComponent() {
 
 export const settings = definePluginSettings({
     dontShowForBots: {
-        description: "Don't show extra tags for bots (excluding webhooks)",
+        description: t("moreUserTags.settings.dontShowForBots"),
         type: OptionType.BOOLEAN,
         default: false
     },
     dontShowBotTag: {
-        description: "Only show extra tags for bots / Hide [APP] text",
+        description: t("moreUserTags.settings.dontShowBotTag"),
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true
     },
     showWebhookTagFully: {
-        description: "Show Webhook tag in followed channels like announcements",
+        description: t("moreUserTags.settings.showWebhookTagFully"),
         type: OptionType.BOOLEAN,
         default: false
     },
     tagSettings: {
         type: OptionType.COMPONENT,
         component: SettingsComponent,
-        description: "fill me"
+        description: t("moreUserTags.settings.tagSettings")
     },
 });

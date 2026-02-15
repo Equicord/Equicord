@@ -23,6 +23,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { buildSeveralUsers } from "@plugins/typingTweaks";
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { GuildMemberStore, RelationshipStore, SelectedChannelStore, Tooltip, TypingStore, UserGuildSettingsStore, UserStore, UserSummaryItem, useStateFromStores } from "@webpack/common";
@@ -134,38 +135,38 @@ function TypingIndicator({ channelId, guildId }: { channelId: string; guildId: s
 const settings = definePluginSettings({
     includeCurrentChannel: {
         type: OptionType.BOOLEAN,
-        description: "Whether to show the typing indicator for the currently selected channel",
+        description: t("typingIndicator.settings.includeCurrentChannel"),
         default: true
     },
     includeMutedChannels: {
         type: OptionType.BOOLEAN,
-        description: "Whether to show the typing indicator for muted channels.",
+        description: t("typingIndicator.settings.includeMutedChannels"),
         default: false
     },
     includeIgnoredUsers: {
         type: OptionType.BOOLEAN,
-        description: "Whether to show the typing indicator for ignored users.",
+        description: t("typingIndicator.settings.includeIgnoredUsers"),
         default: false
     },
     includeBlockedUsers: {
         type: OptionType.BOOLEAN,
-        description: "Whether to show the typing indicator for blocked users.",
+        description: t("typingIndicator.settings.includeBlockedUsers"),
         default: false
     },
     indicatorMode: {
         type: OptionType.SELECT,
-        description: "How should the indicator be displayed?",
+        description: t("typingIndicator.settings.indicatorMode"),
         options: [
-            { label: "Avatars and animated dots", value: IndicatorMode.Dots | IndicatorMode.Avatars, default: true },
-            { label: "Animated dots", value: IndicatorMode.Dots },
-            { label: "Avatars", value: IndicatorMode.Avatars },
+            { label: t("typingIndicator.settings.avatarsAndDots"), value: IndicatorMode.Dots | IndicatorMode.Avatars, default: true },
+            { label: t("typingIndicator.settings.animatedDots"), value: IndicatorMode.Dots },
+            { label: t("typingIndicator.settings.avatars"), value: IndicatorMode.Avatars },
         ],
     }
 });
 
 export default definePlugin({
     name: "TypingIndicator",
-    description: "Adds an indicator if someone is typing on a channel.",
+    description: t("typingIndicator.description"),
     authors: [Devs.Nuckyz, Devs.fawn, Devs.Sqaaakoi],
     isModified: true,
     settings,

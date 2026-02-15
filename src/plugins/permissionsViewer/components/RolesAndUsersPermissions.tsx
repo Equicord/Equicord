@@ -24,6 +24,7 @@ import { cl, getGuildPermissionSpecMap } from "@plugins/permissionsViewer/utils"
 import { copyToClipboard } from "@utils/clipboard";
 import { getIntlMessage, getUniqueUsername } from "@utils/discord";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import { Guild, Role, RoleOrUserPermission, UnicodeEmoji, User } from "@vencord/discord-types";
 import { PermissionOverwriteType } from "@vencord/discord-types/enums";
 import { findByCodeLazy } from "@webpack";
@@ -80,14 +81,14 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
             size={ModalSize.LARGE}
         >
             <ModalHeader>
-                <BaseText size="lg" weight="semibold" className={cl("modal-title")}>{header} Permissions</BaseText>
+                <BaseText size="lg" weight="semibold" className={cl("modal-title")}>{t("permissionsViewer.permissionsTitle", { header })}</BaseText>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
 
             <ModalContent className={cl("modal-content")}>
                 {!selectedItem && (
                     <div className={cl("modal-no-perms")}>
-                        <BaseText size="lg">No permissions to display!</BaseText>
+                        <BaseText size="lg">{t("permissionsViewer.noPermissions")}</BaseText>
                     </div>
                 )}
 
@@ -148,12 +149,12 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
                                             <BaseText size="md" className={cl("modal-list-item-text")}>
                                                 {
                                                     permission.type === PermissionOverwriteType.ROLE
-                                                        ? role?.name ?? "Unknown Role"
+                                                        ? role?.name ?? t("permissionsViewer.unknownRole")
                                                         : permission.type === PermissionOverwriteType.MEMBER
-                                                            ? (user != null && getUniqueUsername(user)) ?? "Unknown User"
+                                                            ? (user != null && getUniqueUsername(user)) ?? t("permissionsViewer.unknownUser")
                                                             : (
                                                                 <Flex gap="0.2em">
-                                                                    @owner
+                                                                    @{t("permissionsViewer.owner")}
                                                                     <OwnerCrownIcon height={18} width={18} aria-hidden="true" />
                                                                 </Flex>
                                                             )
@@ -210,7 +211,7 @@ function RoleContextMenu({ guild, roleId, onClose }: { guild: Guild; roleId: str
         <Menu.Menu
             navId={cl("role-context-menu")}
             onClose={ContextMenuApi.closeContextMenu}
-            aria-label="Role Options"
+            aria-label={t("permissionsViewer.roleOptions")}
         >
             <Menu.MenuItem
                 id={cl("copy-role-id")}
@@ -251,7 +252,7 @@ function UserContextMenu({ userId }: { userId: string; }) {
         <Menu.Menu
             navId={cl("user-context-menu")}
             onClose={ContextMenuApi.closeContextMenu}
-            aria-label="User Options"
+            aria-label={t("permissionsViewer.userOptions")}
         >
             <Menu.MenuItem
                 id={cl("copy-user-id")}

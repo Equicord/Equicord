@@ -11,6 +11,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Message } from "@vencord/discord-types";
 import { ChannelActionCreators, ChannelStore, Menu, MessageStore, NavigationRouter, PresenceStore, UserStore, WindowStore } from "@webpack/common";
@@ -79,7 +80,7 @@ function ContextCallback(name: "guild" | "user" | "channel"): NavContextMenuPatc
             <Menu.MenuGroup>
                 <Menu.MenuItem
                     id={`status-${name}-bypass`}
-                    label={`${enabled ? "Remove" : "Add"} Status Bypass`}
+                    label={enabled ? t("bypassStatus.contextMenu.removeStatusBypass") : t("bypassStatus.contextMenu.addStatusBypass")}
                     icon={() => Icon(enabled)}
                     action={() => {
                         let bypasses: string[] = settings.store[`${name}s`].split(", ");
@@ -96,58 +97,58 @@ function ContextCallback(name: "guild" | "user" | "channel"): NavContextMenuPatc
 const settings = definePluginSettings({
     guilds: {
         type: OptionType.STRING,
-        description: "Guilds to let bypass (notified when pinged anywhere in guild)",
+        description: t("bypassStatus.settings.guilds"),
         default: "",
-        placeholder: "Separate with commas",
+        placeholder: t("bypassStatus.placeholder.separateWithCommas"),
         onChange: value => settings.store.guilds = processIds(value)
     },
     channels: {
         type: OptionType.STRING,
-        description: "Channels to let bypass (notified when pinged in that channel)",
+        description: t("bypassStatus.settings.channels"),
         default: "",
-        placeholder: "Separate with commas",
+        placeholder: t("bypassStatus.placeholder.separateWithCommas"),
         onChange: value => settings.store.channels = processIds(value)
     },
     users: {
         type: OptionType.STRING,
-        description: "Users to let bypass (notified for all messages sent in DMs)",
+        description: t("bypassStatus.settings.users"),
         default: "",
-        placeholder: "Separate with commas",
+        placeholder: t("bypassStatus.placeholder.separateWithCommas"),
         onChange: value => settings.store.users = processIds(value)
     },
     allowOutsideOfDms: {
         type: OptionType.BOOLEAN,
-        description: "Allow selected users to bypass status outside of DMs too (acts like a channel/guild bypass, but it's for all messages sent by the selected users)"
+        description: t("bypassStatus.settings.allowOutsideOfDms")
     },
     notificationSound: {
         type: OptionType.BOOLEAN,
-        description: "Whether the notification sound should be played",
+        description: t("bypassStatus.settings.notificationSound"),
         default: true,
     },
     respectSilentPings: {
         type: OptionType.BOOLEAN,
-        description: "Respect silent pings (@silent / suppress notifications)",
+        description: t("bypassStatus.settings.respectSilentPings"),
         default: true
     },
     statusToUse: {
         type: OptionType.SELECT,
-        description: "Status to use for whitelist",
+        description: t("bypassStatus.settings.statusToUse"),
         options: [
             {
-                label: "Online",
+                label: t("bypassStatus.statusOptions.online"),
                 value: "online",
             },
             {
-                label: "Idle",
+                label: t("bypassStatus.statusOptions.idle"),
                 value: "idle",
             },
             {
-                label: "Do Not Disturb",
+                label: t("bypassStatus.statusOptions.dnd"),
                 value: "dnd",
                 default: true
             },
             {
-                label: "Invisible",
+                label: t("bypassStatus.statusOptions.invisible"),
                 value: "invisible",
             }
         ]
@@ -156,7 +157,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BypassStatus",
-    description: "Still get notifications from specific sources when in do not disturb mode. Right-click on users/channels/guilds to set them to bypass do not disturb mode.",
+    description: t("bypassStatus.description"),
     authors: [Devs.Inbestigator],
     dependencies: ["AudioPlayerAPI"],
     flux: {

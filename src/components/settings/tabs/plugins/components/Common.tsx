@@ -35,19 +35,20 @@ export function resolveError(isValidResult: boolean | string) {
 
 interface SettingsSectionProps extends PropsWithChildren {
     name: string;
-    description: string;
+    description: string | (() => string);
     error?: string | null;
     inlineSetting?: boolean;
     tag?: "label" | "div";
 }
 
 export function SettingsSection({ tag: Tag = "div", name, description, error, inlineSetting, children }: SettingsSectionProps) {
+    const resolvedDescription = typeof description === "function" ? description() : description;
     return (
         <Tag className={cl("section")}>
             <div className={classes(cl("content"), inlineSetting && cl("inline"))}>
                 <div className={cl("label")}>
                     {name && <BaseText className={cl("title")} size="md" weight="medium">{wordsToTitle(wordsFromCamel(name))}</BaseText>}
-                    {description && <BaseText className={cl("description")} size="sm">{description}</BaseText>}
+                    {resolvedDescription && <BaseText className={cl("description")} size="sm">{resolvedDescription}</BaseText>}
                 </div>
                 {children}
             </div>

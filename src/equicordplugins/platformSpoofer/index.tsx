@@ -7,38 +7,39 @@
 import { definePluginSettings } from "@api/Settings";
 import { Notice } from "@components/Notice";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     platform: {
         type: OptionType.SELECT,
-        description: "What platform to show up as on",
+        description: t("platformSpoofer.settings.platform"),
         restartNeeded: true,
         options: [
             {
-                label: "Desktop",
+                label: t("platformSpoofer.settings.platformOptions.desktop"),
                 value: "desktop",
                 default: true,
             },
             {
-                label: "Web",
+                label: t("platformSpoofer.settings.platformOptions.web"),
                 value: "web",
             },
             {
-                label: "Android",
+                label: t("platformSpoofer.settings.platformOptions.android"),
                 value: "android"
             },
             {
-                label: "iOS",
+                label: t("platformSpoofer.settings.platformOptions.ios"),
                 value: "ios"
             },
             {
-                label: "Xbox",
+                label: t("platformSpoofer.settings.platformOptions.xbox"),
                 value: "xbox",
             },
             {
-                label: "Playstation",
+                label: t("platformSpoofer.settings.platformOptions.playstation"),
                 value: "playstation",
             },
         ]
@@ -47,11 +48,11 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PlatformSpoofer",
-    description: "Spoof what platform or device you're on",
+    description: t("platformSpoofer.description"),
     authors: [EquicordDevs.Drag],
     settingsAboutComponent: () => (
         <Notice.Warning>
-            We can't guarantee this plugin won't get you warned or banned.
+            {t("platformSpoofer.warning")}
         </Notice.Warning>
     ),
     settings: settings,

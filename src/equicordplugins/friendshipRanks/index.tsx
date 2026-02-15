@@ -14,6 +14,7 @@ import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { ModalContent, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Forms, RelationshipStore } from "@webpack/common";
 
@@ -40,44 +41,44 @@ function daysSince(dateString: string): number {
 const ranks: rankInfo[] =
     [
         {
-            title: "Sprout",
-            description: "Your friendship is just starting",
+            title: t("friendshipRanks.ranks.sprout.title"),
+            description: t("friendshipRanks.ranks.sprout.description"),
             requirement: 0,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/sprout.png"
         },
         {
-            title: "Blooming",
-            description: "Your friendship is getting there! (1 Month)",
+            title: t("friendshipRanks.ranks.blooming.title"),
+            description: t("friendshipRanks.ranks.blooming.description"),
             requirement: 30,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/blooming.png"
         },
         {
-            title: "Burning",
-            description: "Your friendship has reached terminal velocity (3 Months)",
+            title: t("friendshipRanks.ranks.burning.title"),
+            description: t("friendshipRanks.ranks.burning.description"),
             requirement: 90,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/burning.png"
         },
         {
-            title: "Fighter",
-            description: "Your friendship is strong (6 Months)",
+            title: t("friendshipRanks.ranks.fighter.title"),
+            description: t("friendshipRanks.ranks.fighter.description"),
             requirement: 182.5,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/fighter.png"
         },
         {
-            title: "Star",
-            description: "Your friendship has been going on for a WHILE (1 Year)",
+            title: t("friendshipRanks.ranks.star.title"),
+            description: t("friendshipRanks.ranks.star.description"),
             requirement: 365,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/star.png"
         },
         {
-            title: "Royal",
-            description: "Your friendship has gone through thick and thin- a whole 2 years!",
+            title: t("friendshipRanks.ranks.royal.title"),
+            description: t("friendshipRanks.ranks.royal.description"),
             requirement: 730,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/royal.png"
         },
         {
-            title: "Besties",
-            description: "How do you even manage this??? (5 Years)",
+            title: t("friendshipRanks.ranks.besties.title"),
+            description: t("friendshipRanks.ranks.besties.description"),
             requirement: 1826.25,
             iconSrc: "https://equicord.org/assets/plugins/friendshipRanks/besties.png"
         }
@@ -142,7 +143,7 @@ function getBadgesToApply() {
 
 export default definePlugin({
     name: "FriendshipRanks",
-    description: "Adds badges showcasing how long you have been friends with a user for",
+    description: t("friendshipRanks.description"),
     authors: [Devs.Samwich],
     start() {
         getBadgesToApply().forEach(b => Badges.addProfileBadge(b));

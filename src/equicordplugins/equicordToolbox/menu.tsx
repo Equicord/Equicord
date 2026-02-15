@@ -10,6 +10,7 @@ import { Settings, useSettings } from "@api/Settings";
 import { openPluginModal, openSettingsTabModal, PluginsTab, ThemesTab } from "@components/settings";
 import { useAwaiter } from "@utils/react";
 import { wordsFromCamel, wordsToTitle } from "@utils/text";
+import { t } from "@utils/translation";
 import { OptionType, Plugin } from "@utils/types";
 import { Menu, showToast, useMemo, useState } from "@webpack/common";
 import type { ReactNode } from "react";
@@ -27,7 +28,7 @@ function buildPluginMenu() {
     return (
         <Menu.MenuItem
             id="plugins"
-            label="Plugins"
+            label={t("equicordToolbox.ui.plugins")}
             action={() => openSettingsTabModal(PluginsTab)}
         >
             {pluginEntries}
@@ -103,7 +104,7 @@ export function buildPluginMenuEntries(includeEmpty = false) {
                                         checked={s[key]}
                                         action={() => {
                                             s[key] = !s[key];
-                                            if (option.restartNeeded) showToast("Restart to apply the change");
+                                            if (option.restartNeeded) showToast(t("equicordToolbox.ui.restartToApply"));
                                         }}
                                     />
                                 );
@@ -120,7 +121,7 @@ export function buildPluginMenuEntries(includeEmpty = false) {
                                                 checked={s[key] === opt.value}
                                                 action={() => {
                                                     s[key] = opt.value;
-                                                    if (option.restartNeeded) showToast("Restart to apply the change");
+                                                    if (option.restartNeeded) showToast(t("equicordToolbox.ui.restartToApply"));
                                                 }}
                                             />
                                         ))}
@@ -188,7 +189,7 @@ export function buildThemeMenu() {
     return (
         <Menu.MenuItem
             id="themes"
-            label="Themes"
+            label={t("equicordToolbox.ui.themes")}
             action={() => openSettingsTabModal(ThemesTab)}
         >
             {buildThemeMenuEntries()}
@@ -205,19 +206,19 @@ export function buildThemeMenuEntries() {
             <Menu.MenuCheckboxItem
                 id="toggle-quickcss"
                 checked={useQuickCss}
-                label={"Enable QuickCSS"}
+                label={t("equicordToolbox.ui.enableQuickCss")}
                 action={() => {
                     Settings.useQuickCss = !useQuickCss;
                 }}
             />
             <Menu.MenuItem
                 id="edit-quickcss"
-                label="Edit QuickCSS"
+                label={t("equicordToolbox.ui.editQuickCss")}
                 action={() => VencordNative.quickCss.openEditor()}
             />
             <Menu.MenuItem
                 id="manage-themes"
-                label="Manage Themes"
+                label={t("equicordToolbox.ui.manageThemes")}
                 action={() => openSettingsTabModal(ThemesTab)}
             />
             {!!themes?.length && (
@@ -304,7 +305,7 @@ export function renderPopout(onClose: () => void) {
         >
             <Menu.MenuItem
                 id="notifications"
-                label="Open Notification Log"
+                label={t("equicordToolbox.ui.openNotificationLog")}
                 action={openNotificationLogModal}
             />
 

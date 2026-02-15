@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { openInviteModal } from "@utils/discord";
+import { t } from "@utils/translation";
 import { OptionType } from "@utils/types";
 
 import { authorize, getToken } from "./auth";
@@ -30,35 +31,35 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <Button onClick={() => authorize()}>
-                Authorize with ReviewDB
+                {t("reviewDB.settings.authorize")}
             </Button>
         )
     },
     notifyReviews: {
         type: OptionType.BOOLEAN,
-        description: "Notify about new reviews on startup",
+        description: t("reviewDB.settings.notifyReviews"),
         default: true,
     },
     showWarning: {
         type: OptionType.BOOLEAN,
-        description: "Display warning to be respectful at the top of the reviews list",
+        description: t("reviewDB.settings.showWarning"),
         default: true,
     },
     hideTimestamps: {
         type: OptionType.BOOLEAN,
-        description: "Hide timestamps on reviews",
+        description: t("reviewDB.settings.hideTimestamps"),
         default: false,
     },
     hideBlockedUsers: {
         type: OptionType.BOOLEAN,
-        description: "Hide reviews from blocked users",
+        description: t("reviewDB.settings.hideBlockedUsers"),
         default: true,
     },
     buttons: {
         type: OptionType.COMPONENT,
         component: () => (
             <div className={cl("button-grid")} >
-                <Button onClick={openBlockModal}>Manage Blocked Users</Button>
+                <Button onClick={openBlockModal}>{t("reviewDB.settings.manageBlockedUsers")}</Button>
 
                 <Button
                     variant="positive"
@@ -66,7 +67,7 @@ export const settings = definePluginSettings({
                         VencordNative.native.openExternal("https://github.com/sponsors/mantikafasi");
                     }}
                 >
-                    Support ReviewDB development
+                    {t("reviewDB.settings.supportDevelopment")}
                 </Button>
 
                 <Button variant="link" onClick={async () => {
@@ -77,11 +78,11 @@ export const settings = definePluginSettings({
 
                     VencordNative.native.openExternal(url);
                 }}>
-                    ReviewDB website
+                    {t("reviewDB.settings.website")}
                 </Button>
 
                 <Button variant="link" onClick={() => openInviteModal("eWPBSbvznt")}>
-                    ReviewDB Support Server
+                    {t("reviewDB.settings.supportServer")}
                 </Button>
             </div >
         )

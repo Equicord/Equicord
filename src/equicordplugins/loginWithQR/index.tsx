@@ -11,6 +11,7 @@ import SettingsPlugin from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import { removeFromArray } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button } from "@webpack/common";
 
@@ -21,12 +22,12 @@ import openQrModal from "./ui/modals/QrModal";
 const settings = definePluginSettings({
     scanQr: {
         type: OptionType.COMPONENT,
-        description: "Scan a QR code",
+        description: t("loginWithQR.settings.scanQr"),
         component() {
             if (!plugins.LoginWithQR.started)
                 return (
                     <Paragraph>
-                        Enable the plugin and restart your client to scan a login QR code
+                        {t("loginWithQR.ui.enableAndRestart")}
                     </Paragraph>
                 );
 
@@ -41,7 +42,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "LoginWithQR",
-    description: "Allows you to login to another device by scanning a login QR code, just like on mobile!",
+    description: t("loginWithQR.description"),
     authors: [EquicordDevs.nexpid],
 
     settings,

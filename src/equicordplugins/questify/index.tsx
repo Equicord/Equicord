@@ -14,6 +14,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { openPluginModal } from "@components/settings";
 import { EquicordDevs } from "@utils/constants";
 import { copyToClipboard } from "@utils/index";
+import { t } from "@utils/translation";
 import definePlugin, { PluginNative, StartAt } from "@utils/types";
 import { onceReady } from "@webpack";
 import { ContextMenuApi, Menu, NavigationRouter, RestAPI, useEffect, useState } from "@webpack/common";
@@ -1169,7 +1170,7 @@ migratePluginToSettings(true, "Questify", "QuestCompleter", "completeVideoQuests
 
 export default definePlugin({
     name: "Questify",
-    description: "Enhance your Quest experience with a suite of features, or disable them entirely if they're not your thing.",
+    description: t("questify.description"),
     authors: [EquicordDevs.Etorix],
     dependencies: ["AudioPlayerAPI", "ServerListAPI"],
     startAt: StartAt.Init, // Needed in order to beat Read All Messages to inserting above the server list.

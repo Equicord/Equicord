@@ -6,6 +6,7 @@
 
 import { definePluginSettings, Settings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { MediaEngineStore } from "@webpack/common";
 
@@ -55,7 +56,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "StreamingCodecDisabler",
-    description: "Disable codecs for streaming of your choice",
+    description: t("streamingCodecDisabler.description"),
     authors: [EquicordDevs.davidkra230],
     settings,
 

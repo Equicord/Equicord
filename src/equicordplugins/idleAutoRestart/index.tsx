@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Menu, VoiceStateStore } from "@webpack/common";
 
@@ -16,12 +17,12 @@ let intervalId: ReturnType<typeof setInterval> | null = null;
 
 const settings = definePluginSettings({
     isEnabled: {
-        description: "Enable automatic restart after idle",
+        description: t("idleAutoRestart.settings.isEnabled"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     idleMinutes: {
-        description: "Minutes of inactivity before restarting (when not in VC)",
+        description: t("idleAutoRestart.settings.idleMinutes"),
         type: OptionType.SLIDER,
         markers: [5, 10, 15, 30, 60, 120],
         default: 30,
@@ -35,7 +36,7 @@ function onActivity() {
 
 export default definePlugin({
     name: "IdleAutoRestart",
-    description: "Automatically restarts the client after being idle for a configurable amount of time, but avoids restarting while you are in VC.",
+    description: t("idleAutoRestart.description"),
     authors: [EquicordDevs.SteelTech],
     settings,
 
@@ -43,7 +44,7 @@ export default definePlugin({
         return (
             <Menu.MenuItem
                 id="auto-idle-restart-toggle-toolbox"
-                label={settings.store.isEnabled ? "Disable Auto Idle Restart" : "Enable Auto Idle Restart"}
+                label={settings.store.isEnabled ? t("idleAutoRestart.ui.disableAutoIdle") : t("idleAutoRestart.ui.enableAutoIdle")}
                 action={() => {
                     settings.store.isEnabled = !settings.store.isEnabled;
                 }}

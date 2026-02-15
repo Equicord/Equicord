@@ -7,6 +7,7 @@
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
 import {
@@ -25,27 +26,27 @@ const settings = definePluginSettings({
     friends: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Notify when friends send messages in servers"
+        description: t("pingNotifications.settings.friends")
     },
     mentions: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Notify when someone @mentions you directly"
+        description: t("pingNotifications.settings.mentions")
     },
     dms: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Notify for direct messages (DMs)"
+        description: t("pingNotifications.settings.dms")
     },
     showInActive: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Show notifications even for currently active channel"
+        description: t("pingNotifications.settings.showInActive")
     },
     ignoreMuted: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Skip notifications from muted servers, channels, or users"
+        description: t("pingNotifications.settings.ignoreMuted")
     }
 });
 
@@ -91,7 +92,7 @@ function isUserBlocked(userId) {
 
 export default definePlugin({
     name: "PingNotifications",
-    description: "Customizable notifications with improved mention formatting",
+    description: t("pingNotifications.description"),
     authors: [EquicordDevs.smuki],
     settings,
 

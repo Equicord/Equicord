@@ -10,6 +10,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Tooltip } from "@webpack/common";
 import type { Component } from "react";
@@ -91,7 +92,7 @@ function DearrowButton({ component }: { component: Component<Props>; }) {
     if (!embed?.dearrow) return null;
 
     return (
-        <Tooltip text={embed.dearrow.enabled ? "This embed has been dearrowed, click to restore" : "Click to dearrow"}>
+        <Tooltip text={embed.dearrow.enabled ? t("dearrow.dearrowedClickRestore") : t("dearrow.clickToDearrow")}>
             {({ onMouseEnter, onMouseLeave }) => (
                 <button
                     onMouseEnter={onMouseEnter}
@@ -144,23 +145,23 @@ function DearrowButton({ component }: { component: Component<Props>; }) {
 
 const settings = definePluginSettings({
     hideButton: {
-        description: "Hides the Dearrow button from YouTube embeds",
+        description: t("dearrow.hideButton"),
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true
     },
     replaceElements: {
-        description: "Choose which elements of the embed will be replaced",
+        description: t("dearrow.replaceElementsDescription"),
         type: OptionType.SELECT,
         restartNeeded: true,
         options: [
-            { label: "Everything (Titles & Thumbnails)", value: ReplaceElements.ReplaceAllElements, default: true },
-            { label: "Titles", value: ReplaceElements.ReplaceTitlesOnly },
-            { label: "Thumbnails", value: ReplaceElements.ReplaceThumbnailsOnly },
+            { label: t("dearrow.everything"), value: ReplaceElements.ReplaceAllElements, default: true },
+            { label: t("dearrow.titles"), value: ReplaceElements.ReplaceTitlesOnly },
+            { label: t("dearrow.thumbnails"), value: ReplaceElements.ReplaceThumbnailsOnly },
         ],
     },
     dearrowByDefault: {
-        description: "Dearrow videos automatically",
+        description: t("dearrow.dearrowByDefault"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: false
@@ -169,7 +170,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Dearrow",
-    description: "Makes YouTube embed titles and thumbnails less sensationalist, powered by Dearrow",
+    description: t("dearrow.description"),
     authors: [Devs.Ven],
     settings,
 

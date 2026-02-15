@@ -22,6 +22,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const cl = classNameFactory("vc-usrbg-");
@@ -36,15 +37,15 @@ interface UsrbgApiReturn {
 
 const settings = definePluginSettings({
     nitroFirst: {
-        description: "Banner to use if both Nitro and USRBG banners are present",
+        description: t("usrbg.settings.nitroFirst"),
         type: OptionType.SELECT,
         options: [
-            { label: "Nitro banner", value: true, default: true },
-            { label: "USRBG banner", value: false },
+            { label: t("usrbg.settings.nitroBanner"), value: true, default: true },
+            { label: t("usrbg.settings.usrbgBanner"), value: false },
         ]
     },
     voiceBackground: {
-        description: "Use USRBG banners as voice chat backgrounds",
+        description: t("usrbg.settings.voiceBackground"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
@@ -53,7 +54,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "USRBG",
-    description: "Displays user banners from USRBG, allowing anyone to get a banner without Nitro",
+    description: t("usrbg.description"),
     authors: [Devs.AutumnVN, Devs.katlyn, Devs.pylix, Devs.TheKodeToad],
     settings,
     patches: [
@@ -92,7 +93,7 @@ export default definePlugin({
             className={cl("settings-button")}
             onClick={() => VencordNative.native.openExternal("https://github.com/AutumnVN/usrbg#how-to-request-your-own-usrbg-banner")}
         >
-            Get your own USRBG banner
+            {t("usrbg.getOwnBanner")}
         </Button>
     ),
 

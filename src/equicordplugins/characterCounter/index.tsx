@@ -8,20 +8,21 @@ import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     colorEffects: {
         type: OptionType.BOOLEAN,
-        description: "Turn on or off color effects for getting close to the character limit",
+        description: t("characterCounter.settings.colorEffects"),
         default: true,
     },
 });
 
 export default definePlugin({
     name: "CharacterCounter",
-    description: "Adds a character counter to the chat input",
+    description: t("characterCounter.description"),
     authors: [EquicordDevs.creations, EquicordDevs.Panniku, Devs.thororen],
     settings,
     patches: [

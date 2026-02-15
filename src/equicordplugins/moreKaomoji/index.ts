@@ -18,11 +18,12 @@
 
 import { findOption, OptionalMessageOption } from "@api/Commands";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "MoreKaomoji",
-    description: "Adds more Kaomoji to discord. ヽ(´▽`)/",
+    description: t("moreKaomoji.description"),
     authors: [Devs.JacobTm, EquicordDevs.voidbbg],
     commands: [
         {

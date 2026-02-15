@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 
 import Providers from "./Providers";
@@ -50,7 +51,7 @@ export const Native = VencordNative.pluginHelpers.SongLink as PluginNative<typeo
 
 export default definePlugin({
     name: "SongLink",
-    description: "Adds streaming service buttons below song links",
+    description: t("songLink.description"),
     authors: [Devs.nin0dev],
     settings,
     Providers,

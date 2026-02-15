@@ -8,6 +8,7 @@ import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { useForceUpdater } from "@utils/react";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Activity } from "@vencord/discord-types";
 import { ActivityType } from "@vencord/discord-types/enums";
@@ -72,7 +73,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "RPCEditor",
-    description: "Edit the type and content of any Rich Presence",
+    description: t("rpcEditor.description"),
     authors: [Devs.Nyako, Devs.nin0dev],
     patches: [
         {

@@ -25,6 +25,7 @@ import { Heading } from "@components/Heading";
 import { EquicordDevs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, ChannelStore } from "@webpack/common";
 
@@ -68,12 +69,12 @@ function openDecodedBase64Modal(decodedContent) {
         <ErrorBoundary>
             <ModalRoot {...props} size={ModalSize.LARGE}>
                 <ModalHeader>
-                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>Decoded Base64 Content</BaseText>
+                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("baseDecoder.ui.modalTitle")}</BaseText>
                     <ModalCloseButton onClick={() => closeModal(key)} />
                 </ModalHeader>
                 <ModalContent>
                     <div style={{ padding: "16px 0" }}>
-                        <Heading>Decoded Content</Heading>
+                        <Heading>{t("baseDecoder.ui.decodedContent")}</Heading>
                         {decodedContent.map((content, index) => (
                             <CodeBlock key={index} content={content} lang="" />
                         ))}
@@ -82,8 +83,8 @@ function openDecodedBase64Modal(decodedContent) {
                 <ModalFooter>
                     <Flex gap={10}>
                         {decodedContent.map((content, index) => (
-                            <Button key={index} onClick={() => copyWithToast(content, "Decoded content copied to clipboard!")}>
-                                Copy Decoded Content {index + 1}
+                            <Button key={index} onClick={() => copyWithToast(content, t("baseDecoder.ui.copiedToast"))}>
+                                {t("baseDecoder.ui.copyDecoded")} {index + 1}
                             </Button>
                         ))}
                     </Flex>
@@ -95,18 +96,18 @@ function openDecodedBase64Modal(decodedContent) {
 
 const settings = definePluginSettings({
     clickMethod: {
-        description: "Change the button to decode base64 content of any message.",
+        description: t("baseDecoder.settings.clickMethod"),
         type: OptionType.SELECT,
         options: [
-            { label: "Left Click to decode the base64 content.", value: "Left", default: true },
-            { label: "Right click to decode the base64 content.", value: "Right" }
+            { label: t("baseDecoder.settings.clickMethodOptions.left"), value: "Left", default: true },
+            { label: t("baseDecoder.settings.clickMethodOptions.right"), value: "Right" }
         ]
     }
 });
 
 export default definePlugin({
     name: "DecodeBase64",
-    description: "Decode base64 content of any message and copy the decoded content.",
+    description: t("baseDecoder.description"),
     authors: [EquicordDevs.ThePirateStoner],
     settings,
     messagePopoverButton: {
@@ -137,8 +138,8 @@ export default definePlugin({
             };
 
             const label = settings.store.clickMethod === "Right"
-                ? "Copy Decoded (Left Click) / Decode Base64 (Right Click)"
-                : "Decode Base64 (Left Click) / Copy Decoded (Right Click)";
+                ? t("baseDecoder.ui.tooltipLeft")
+                : t("baseDecoder.ui.tooltipRight");
 
             return {
                 label,

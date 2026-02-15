@@ -7,6 +7,7 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { GuildChannelStore, Menu, React, RestAPI, UserStore, VoiceStateStore } from "@webpack/common";
@@ -154,7 +155,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "VoiceChatUtilities",
-    description: "This plugin allows you to perform multiple actions on an entire channel (move, mute, disconnect, etc.) (originally by dutake)",
+    description: t("voiceChatUtils.description"),
     authors: [Devs.D3SOX],
 
     settings,

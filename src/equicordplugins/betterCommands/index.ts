@@ -7,17 +7,18 @@
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { FluxDispatcher, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     autoFillArguments: {
-        description: "Automatically fill command with all arguements instead of just required ones",
+        description: t("betterCommands.settings.autoFillArguments"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     allowNewlinesInCommands: {
-        description: "Allow newlines in command inputs (CTRL + Shift + Enter)",
+        description: t("betterCommands.settings.allowNewlinesInCommands"),
         type: OptionType.BOOLEAN,
         default: true,
     }
@@ -32,7 +33,7 @@ function fetchIndex(target: object) {
 
 export default definePlugin({
     name: "BetterCommands",
-    description: "Enhances the command system with miscellaneous improvements.",
+    description: t("betterCommands.description"),
     authors: [Devs.thororen],
     settings,
     patches: [
@@ -70,11 +71,11 @@ export default definePlugin({
     commands: [
         {
             name: "refresh",
-            description: "Refreshes Discord application commands locally",
+            description: t("betterCommands.commands.refresh.description"),
             options: [
                 {
                     name: "user",
-                    description: "specific user to try and refresh",
+                    description: t("betterCommands.commands.refresh.userOption"),
                     type: ApplicationCommandOptionType.USER,
                 }
             ],
@@ -86,7 +87,7 @@ export default definePlugin({
                     const user = findOption(opts, "user") as string;
 
                     sendBotMessage(ctx.channel.id, {
-                        content: "Refreshing application commands...",
+                        content: t("betterCommands.commands.refresh.refreshing"),
                     });
 
                     fetchIndex({ type: "channel", channelId });
@@ -103,12 +104,12 @@ export default definePlugin({
                     }
 
                     sendBotMessage(ctx.channel.id, {
-                        content: "Commands refreshed successfully!",
+                        content: t("betterCommands.commands.refresh.success"),
                     });
                 } catch (err) {
                     console.error("[Refresh Command] Error refreshing commands:", err);
                     sendBotMessage(ctx.channel.id, {
-                        content: "Failed to refresh commands. Check the console for details.",
+                        content: t("betterCommands.commands.refresh.failed"),
                     });
                 }
             },

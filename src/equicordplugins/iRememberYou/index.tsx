@@ -11,6 +11,7 @@ import { EyeIcon } from "@components/Icons";
 import SettingsPlugin from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import { removeFromArray } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 import { Data } from "./components/data";
@@ -18,7 +19,7 @@ import DataUI from "./components/ui";
 
 export default definePlugin({
     name: "IRememberYou",
-    description: "Locally saves everyone you've been communicating with (including servers), in case of lose",
+    description: t("iRememberYou.description"),
     authors: [EquicordDevs.zoodogood, EquicordDevs.keircn],
     dependencies: ["MessageEventsAPI"],
 
@@ -27,7 +28,7 @@ export default definePlugin({
     async start() {
         SettingsPlugin.customEntries.push({
             key: "equicord_i_remember_you",
-            title: "I Remember You",
+            title: t("iRememberYou.ui.iRememberYou"),
             Component: () => <DataUI usersCollection={data.usersCollection} />,
             Icon: EyeIcon
         });

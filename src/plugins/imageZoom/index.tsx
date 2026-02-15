@@ -21,6 +21,7 @@ import { definePluginSettings } from "@api/Settings";
 import { debounce } from "@shared/debounce";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { createRoot, Menu } from "@webpack/common";
 import { JSX } from "react";
@@ -33,37 +34,37 @@ import managedStyle from "./styles.css?managed";
 export const settings = definePluginSettings({
     saveZoomValues: {
         type: OptionType.BOOLEAN,
-        description: "Whether to save zoom and lens size values",
+        description: t("imageZoom.settings.saveZoomValues"),
         default: true,
     },
 
     invertScroll: {
         type: OptionType.BOOLEAN,
-        description: "Invert scroll",
+        description: t("imageZoom.settings.invertScroll"),
         default: true,
     },
 
     nearestNeighbour: {
         type: OptionType.BOOLEAN,
-        description: "Use Nearest Neighbour Interpolation when scaling images",
+        description: t("imageZoom.settings.nearestNeighbour"),
         default: false,
     },
 
     square: {
         type: OptionType.BOOLEAN,
-        description: "Make the lens square",
+        description: t("imageZoom.settings.square"),
         default: false,
     },
 
     zoom: {
-        description: "Zoom of the lens",
+        description: t("imageZoom.settings.zoom"),
         type: OptionType.SLIDER,
         markers: [1, 5, 10, 20, 30, 40, 50],
         default: 2,
         stickToMarkers: false,
     },
     size: {
-        description: "Radius / Size of the lens",
+        description: t("imageZoom.settings.size"),
         type: OptionType.SLIDER,
         markers: [50, 100, 250, 500, 750, 1000],
         default: 100,
@@ -71,7 +72,7 @@ export const settings = definePluginSettings({
     },
 
     zoomSpeed: {
-        description: "How fast the zoom / lens size changes",
+        description: t("imageZoom.settings.zoomSpeed"),
         type: OptionType.SLIDER,
         markers: [0.1, 0.5, 1, 2, 3, 4, 5],
         default: 0.5,
@@ -91,7 +92,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
         <Menu.MenuGroup id="image-zoom">
             <Menu.MenuCheckboxItem
                 id="vc-square"
-                label="Square Lens"
+                label={t("imageZoom.squareLens")}
                 checked={square}
                 action={() => {
                     settings.store.square = !square;
@@ -99,7 +100,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
             />
             <Menu.MenuCheckboxItem
                 id="vc-nearest-neighbour"
-                label="Nearest Neighbour"
+                label={t("imageZoom.nearestNeighbour")}
                 checked={nearestNeighbour}
                 action={() => {
                     settings.store.nearestNeighbour = !nearestNeighbour;
@@ -107,7 +108,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
             />
             <Menu.MenuControlItem
                 id="vc-zoom"
-                label="Zoom"
+                label={t("imageZoom.zoom")}
                 control={(props, ref) => (
                     <Menu.MenuSliderControl
                         ref={ref}
@@ -121,7 +122,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
             />
             <Menu.MenuControlItem
                 id="vc-size"
-                label="Lens Size"
+                label={t("imageZoom.lensSize")}
                 control={(props, ref) => (
                     <Menu.MenuSliderControl
                         ref={ref}
@@ -135,7 +136,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
             />
             <Menu.MenuControlItem
                 id="vc-zoom-speed"
-                label="Zoom Speed"
+                label={t("imageZoom.zoomSpeed")}
                 control={(props, ref) => (
                     <Menu.MenuSliderControl
                         ref={ref}

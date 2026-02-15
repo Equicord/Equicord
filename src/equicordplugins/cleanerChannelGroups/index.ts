@@ -5,11 +5,12 @@
  */
 
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "CleanerChannelGroups",
-    description: "Hides all channels in collapsed categories, even if they have unread messages.",
+    description: t("cleanerChannelGroups.description"),
     authors: [EquicordDevs.justjxke],
     patches: [
         {

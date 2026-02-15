@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findStoreLazy } from "@webpack";
@@ -18,12 +19,12 @@ const NumberBadge = findComponentByCodeLazy("BADGE_NOTIFICATION_BACKGROUND", "le
 
 const settings = definePluginSettings({
     showOnMutedChannels: {
-        description: "Show unread count on muted channels",
+        description: t("unreadBadgeCount.settings.showOnMutedChannels"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     notificationCountLimit: {
-        description: "Show +99 instead of true amount",
+        description: t("unreadBadgeCount.settings.notificationCountLimit"),
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -32,7 +33,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "UnreadCountBadge",
     authors: [Devs.Joona],
-    description: "Shows unread message count badges on channels in the channel list",
+    description: t("unreadBadgeCount.description"),
     settings,
 
     patches: [

@@ -8,6 +8,7 @@ import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Activity } from "@vencord/discord-types";
 import { PresenceStore, SettingsRouter, UserStore } from "@webpack/common";
@@ -18,34 +19,34 @@ const extraFramerates = [45, 90, 120, 144, 165, 240];
 const settings = definePluginSettings({
     richPresenceTagging: {
         type: OptionType.SELECT,
-        description: "When should clips be tagged with the current Rich Presence?",
+        description: t("clipsEnhancements.settings.richPresenceTagging"),
         options: [
-            { label: "Always", value: "always" },
-            { label: "Only when beginning or end of activity name matches", value: "whenMatched", default: true },
-            { label: "Never", value: "never" },
+            { label: t("clipsEnhancements.settings.richPresenceTaggingOptions.always"), value: "always" },
+            { label: t("clipsEnhancements.settings.richPresenceTaggingOptions.whenMatched"), value: "whenMatched", default: true },
+            { label: t("clipsEnhancements.settings.richPresenceTaggingOptions.never"), value: "never" },
         ]
     },
     enableScreenshotKeybind: {
         type: OptionType.BOOLEAN,
-        description: "Enable the screenshot keybind feature",
+        description: t("clipsEnhancements.settings.enableScreenshotKeybind"),
         default: true,
         restartNeeded: true
     },
     enableVoiceOnlyClips: {
         type: OptionType.BOOLEAN,
-        description: "Enable voice-only clips (audio without video)",
+        description: t("clipsEnhancements.settings.enableVoiceOnlyClips"),
         default: true,
         restartNeeded: true
     },
     enableAdvancedSignals: {
         type: OptionType.BOOLEAN,
-        description: "Enable advanced clip signals (auto-clip triggers)",
+        description: t("clipsEnhancements.settings.enableAdvancedSignals"),
         default: true,
         restartNeeded: true
     },
     ignorePlatformRestriction: {
         type: OptionType.BOOLEAN,
-        description: "Allow Platform Restricted Clipping (may cause save errors)",
+        description: t("clipsEnhancements.settings.ignorePlatformRestriction"),
         default: true,
         restartNeeded: true
     },
@@ -60,7 +61,7 @@ const settings = definePluginSettings({
                             SettingsRouter.openUserSettings("clips_panel");
                         }}
                     >
-                        Change FPS and duration options in Clips settings!
+                        {t("clipsEnhancements.settings.clipsLink")}
                     </Button >
                 </>
             );
@@ -71,7 +72,7 @@ const settings = definePluginSettings({
 migratePluginSettings("ClipsEnhancements", "TimelessClips");
 export default definePlugin({
     name: "ClipsEnhancements",
-    description: "Add more Clip FPS and duration options, custom clip length, RPC tagging and more",
+    description: t("clipsEnhancements.description"),
     authors: [Devs.niko, Devs.Joona, EquicordDevs.keircn],
     settings,
     patches: [

@@ -10,6 +10,7 @@ import { buildPluginMenuEntries, buildThemeMenuEntries } from "@equicordplugins/
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findCssClassesLazy } from "@webpack";
 import { ComponentDispatch, FocusLock, Menu, useEffect, useRef } from "@webpack/common";
@@ -24,19 +25,19 @@ const Classes = findCssClassesLazy("animating", "baseLayer", "bg", "layer", "lay
 
 const settings = definePluginSettings({
     disableFade: {
-        description: "Disable the crossfade animation",
+        description: t("betterSettings.settings.disableFade"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     organizeMenu: {
-        description: "Organizes the settings cog context menu into categories",
+        description: t("betterSettings.settings.organizeMenu"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true
     },
     eagerLoad: {
-        description: "Removes the loading delay when opening the menu for the first time",
+        description: t("betterSettings.settings.eagerLoad"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true

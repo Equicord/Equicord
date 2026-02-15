@@ -9,6 +9,7 @@ import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { debounce } from "@shared/debounce";
 import { Devs, IS_MAC } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
 
@@ -60,34 +61,34 @@ const debouncedRefresh = debounce(() => refreshThemeList(), 500);
 const settings = definePluginSettings({
     includeLocal: {
         type: OptionType.BOOLEAN,
-        description: "Include local themes",
+        description: t("quickThemeSwitcher.settings.includeLocal"),
         default: true,
         onChange: refreshThemeList,
     },
     includeOnline: {
         type: OptionType.BOOLEAN,
-        description: "Include online themes",
+        description: t("quickThemeSwitcher.settings.includeOnline"),
         default: true,
         onChange: refreshThemeList,
     },
     sortOrder: {
         type: OptionType.SELECT,
-        description: "Sort method",
+        description: t("quickThemeSwitcher.settings.sortOrder"),
         options: [
-            { label: "A-Z", value: "alphabetical", default: true },
-            { label: "Z-A", value: "reverse" },
-            { label: "Recent", value: "recent" },
+            { label: t("quickThemeSwitcher.settings.sortOptions.az"), value: "alphabetical", default: true },
+            { label: t("quickThemeSwitcher.settings.sortOptions.za"), value: "reverse" },
+            { label: t("quickThemeSwitcher.settings.sortOptions.recent"), value: "recent" },
         ],
         onChange: refreshThemeList,
     },
     autoRefresh: {
         type: OptionType.BOOLEAN,
-        description: "Auto-refresh theme list when changes are detected",
+        description: t("quickThemeSwitcher.settings.autoRefresh"),
         default: true,
     },
     showNotifications: {
         type: OptionType.BOOLEAN,
-        description: "Show notifications when themes are added/removed",
+        description: t("quickThemeSwitcher.settings.showNotifications"),
         default: true,
     },
 });
@@ -243,7 +244,7 @@ const handleThemeNamesChange = () => settings.store.autoRefresh && debouncedRefr
 
 export default definePlugin({
     name: "QuickThemeSwitcher",
-    description: "Quickly switch between themes using keyboard shortcuts.",
+    description: t("quickThemeSwitcher.description"),
     authors: [Devs.prism],
     settings,
     startAt: StartAt.DOMContentLoaded,

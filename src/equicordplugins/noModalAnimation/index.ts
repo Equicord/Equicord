@@ -5,11 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoModalAnimation",
-    description: "Remove the 300ms long animation when opening or closing modals",
+    description: t("noModalAnimation.description"),
     authors: [Devs.AutumnVN],
     patches: [
         {

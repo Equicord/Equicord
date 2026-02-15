@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 
@@ -14,24 +15,24 @@ let blockedKeywords: Array<RegExp>;
 const settings = definePluginSettings({
     blockedWords: {
         type: OptionType.STRING,
-        description: "Comma-seperated list of words to block",
+        description: t("blockKeywords.settings.blockedWords"),
         default: "",
         restartNeeded: true
     },
     useRegex: {
         type: OptionType.BOOLEAN,
-        description: "Use each value as a regular expression when checking message content (advanced)",
+        description: t("blockKeywords.settings.useRegex"),
         default: false,
         restartNeeded: true
     },
     caseSensitive: {
         type: OptionType.BOOLEAN,
-        description: "Whether to use a case sensitive search or not",
+        description: t("blockKeywords.settings.caseSensitive"),
         default: false,
         restartNeeded: true
     },
     ignoreBlockedMessages: {
-        description: "Completely ignores (recent) new messages bar",
+        description: t("blockKeywords.settings.ignoreBlockedMessages"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: true,
@@ -69,7 +70,7 @@ export function containsBlockedKeywords(message: Message) {
 
 export default definePlugin({
     name: "BlockKeywords",
-    description: "Blocks messages containing specific user-defined keywords, as if the user sending them was blocked.",
+    description: t("blockKeywords.description"),
     authors: [EquicordDevs.catcraft],
     patches: [
         {

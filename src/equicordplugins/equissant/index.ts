@@ -7,6 +7,7 @@
 import { AudioPlayerInterface, createAudioPlayer } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 let clickCount = 0;
@@ -25,14 +26,14 @@ function play() {
 const settings = definePluginSettings({
     amount: {
         type: OptionType.NUMBER,
-        description: "amount of clicks to trigger crossant",
+        description: t("equissant.settings.amount"),
         default: 10,
     }
 });
 
 export default definePlugin({
     name: "Equissant",
-    description: "Crossant every specified amount of clicks :trolley:",
+    description: t("equissant.description"),
     authors: [EquicordDevs.SomeAspy, Devs.thororen],
     dependencies: ["AudioPlayerAPI"],
     settings,

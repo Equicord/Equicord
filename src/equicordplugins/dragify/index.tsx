@@ -10,6 +10,7 @@ import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { getGuildAcronym, insertTextIntoChatInputBox } from "@utils/discord";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
@@ -74,61 +75,61 @@ function shouldIgnoreDrop(key: string): boolean {
 const settings = definePluginSettings({
     userOutput: {
         type: OptionType.SELECT,
-        description: "User drop output.",
+        description: t("dragify.settings.userOutput"),
         options: [
-            { label: "Mention user", value: "mention", default: true },
-            { label: "User ID", value: "id" },
+            { label: t("dragify.settings.userOutputOptions.mention"), value: "mention", default: true },
+            { label: t("dragify.settings.userOutputOptions.id"), value: "id" },
         ],
     },
     channelOutput: {
         type: OptionType.SELECT,
-        description: "Channel drop output.",
+        description: t("dragify.settings.channelOutput"),
         options: [
-            { label: "#channel mention", value: "mention", default: true },
-            { label: "Channel link", value: "link" },
+            { label: t("dragify.settings.channelOutputOptions.mention"), value: "mention", default: true },
+            { label: t("dragify.settings.channelOutputOptions.link"), value: "link" },
         ],
     },
     inviteExpireAfter: {
         type: OptionType.SELECT,
-        description: "Invite expiration.",
+        description: t("dragify.settings.inviteExpireAfter"),
         options: [
-            { label: "30 minutes", value: 1800 },
-            { label: "1 hour", value: 3600 },
-            { label: "6 hours", value: 21600 },
-            { label: "12 hours", value: 43200 },
-            { label: "1 day", value: 86400 },
-            { label: "7 days", value: 604800 },
-            { label: "Never", value: 0, default: true },
+            { label: t("dragify.settings.inviteExpireAfterOptions.30min"), value: 1800 },
+            { label: t("dragify.settings.inviteExpireAfterOptions.1hour"), value: 3600 },
+            { label: t("dragify.settings.inviteExpireAfterOptions.6hours"), value: 21600 },
+            { label: t("dragify.settings.inviteExpireAfterOptions.12hours"), value: 43200 },
+            { label: t("dragify.settings.inviteExpireAfterOptions.1day"), value: 86400 },
+            { label: t("dragify.settings.inviteExpireAfterOptions.7days"), value: 604800 },
+            { label: t("dragify.settings.inviteExpireAfterOptions.never"), value: 0, default: true },
         ],
     },
     inviteMaxUses: {
         type: OptionType.SELECT,
-        description: "Invite max uses.",
+        description: t("dragify.settings.inviteMaxUses"),
         options: [
-            { label: "No limit", value: 0, default: true },
-            { label: "1 use", value: 1 },
-            { label: "5 uses", value: 5 },
-            { label: "10 uses", value: 10 },
-            { label: "25 uses", value: 25 },
-            { label: "50 uses", value: 50 },
-            { label: "100 uses", value: 100 },
+            { label: t("dragify.settings.inviteMaxUsesOptions.noLimit"), value: 0, default: true },
+            { label: t("dragify.settings.inviteMaxUsesOptions.1use"), value: 1 },
+            { label: t("dragify.settings.inviteMaxUsesOptions.5uses"), value: 5 },
+            { label: t("dragify.settings.inviteMaxUsesOptions.10uses"), value: 10 },
+            { label: t("dragify.settings.inviteMaxUsesOptions.25uses"), value: 25 },
+            { label: t("dragify.settings.inviteMaxUsesOptions.50uses"), value: 50 },
+            { label: t("dragify.settings.inviteMaxUsesOptions.100uses"), value: 100 },
         ],
     },
     inviteTemporaryMembership: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Grant temporary membership.",
+        description: t("dragify.settings.inviteTemporaryMembership"),
     },
     reuseExistingInvites: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Reuse existing invite instead of creating a new one.",
+        description: t("dragify.settings.reuseExistingInvites"),
     },
     allowChatBodyDrop: {
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true,
-        description: "Allow dropping into the main chat body to insert text.",
+        description: t("dragify.settings.allowChatBodyDrop"),
     },
 });
 
@@ -159,7 +160,7 @@ const inviteCache = new Map<string, { code: string; expiresAt: number | null; ma
 
 export default definePlugin({
     name: "Dragify",
-    description: "Drop users, channels, or servers into chat to insert mentions or invites.",
+    description: t("dragify.description"),
     authors: [EquicordDevs.justjxke],
     settings,
 
@@ -340,7 +341,7 @@ export default definePlugin({
             clearDragState();
         } catch (error) {
             logger.error("Failed handling drop", error);
-            showToast("Dragify failed to handle drop.", Toasts.Type.FAILURE);
+            showToast(t("dragify.toast.dropFailed"), Toasts.Type.FAILURE);
         }
     },
 
@@ -385,11 +386,11 @@ export default definePlugin({
 
         const inviteChannelId = inviteChannel?.id ?? fallbackChannelId;
         if (!inviteChannelId) {
-            showToast("No channel available for invites.", Toasts.Type.FAILURE);
+            showToast(t("dragify.toast.noChannelForInvites"), Toasts.Type.FAILURE);
             return null;
         }
         if (inviteChannel && inviteChannel.guild_id !== guildId) {
-            showToast("No channel available for invites.", Toasts.Type.FAILURE);
+            showToast(t("dragify.toast.noChannelForInvites"), Toasts.Type.FAILURE);
             return null;
         }
 
@@ -413,11 +414,11 @@ export default definePlugin({
                 maxUses: maxUses === 0 ? null : maxUses,
                 uses: 0,
             });
-            showToast("Invite created.", Toasts.Type.SUCCESS);
+            showToast(t("dragify.toast.inviteCreated"), Toasts.Type.SUCCESS);
             return `https://discord.gg/${code}`;
         } catch (error) {
             logger.error("Failed to create invite", error);
-            showToast("Unable to create invite.", Toasts.Type.FAILURE); // uh oh!
+            showToast(t("dragify.toast.inviteFailed"), Toasts.Type.FAILURE); // uh oh!
             return null;
         }
     },

@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { closeAllModals } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { SettingsRouter, useState } from "@webpack/common";
 
@@ -19,7 +20,7 @@ let isRecordingGlobal: boolean = false;
 
 export const settings = definePluginSettings({
     hotkey: {
-        description: "The hotkey to open the command palette.",
+        description: t("keyboardNavigation.settings.hotkey"),
         type: OptionType.COMPONENT,
         default: ["Control", "Shift", "P"],
         component: () => {
@@ -69,7 +70,7 @@ export const settings = definePluginSettings({
                         <div className={`${cl("key-recorder")} ${isRecording ? cl("recording") : ""}`}>
                             {settings.store.hotkey.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" + ")}
                             <button className={`${cl("key-recorder-button")} ${isRecording ? cl("recording-button") : ""}`} disabled={isRecording}>
-                                {isRecording ? "Recording..." : "Record keybind"}
+                                {isRecording ? t("keyboardNavigation.ui.recording") : t("keyboardNavigation.ui.recordKeybind")}
                             </button>
                         </div>
                     </div>
@@ -78,7 +79,7 @@ export const settings = definePluginSettings({
         }
     },
     allowMouseControl: {
-        description: "Allow the mouse to control the command palette.",
+        description: t("keyboardNavigation.settings.allowMouseControl"),
         type: OptionType.BOOLEAN,
         default: true
     }
@@ -86,7 +87,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "KeyboardNavigation",
-    description: "Allows you to navigate the UI with a keyboard.",
+    description: t("keyboardNavigation.description"),
     authors: [Devs.Ethan],
     settings,
 
@@ -96,7 +97,7 @@ export default definePlugin({
         if (IS_DEV) {
             registerAction({
                 id: "openDevSettings",
-                label: "Open Dev tab",
+                label: t("keyboardNavigation.commands.openDevSettings"),
                 callback: () => SettingsRouter.openUserSettings("equicord_patch_helper_panel"),
                 registrar: "Equicord"
             });

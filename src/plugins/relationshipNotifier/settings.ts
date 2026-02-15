@@ -17,37 +17,38 @@
 */
 
 import { definePluginSettings } from "@api/Settings";
+import { t } from "@utils/translation";
 import { OptionType } from "@utils/types";
 
 export default definePluginSettings({
     notices: {
         type: OptionType.BOOLEAN,
-        description: "Also show a notice at the top of your screen when removed (use this if you don't want to miss any notifications).",
+        description: t("relationshipNotifier.settings.notices"),
         default: false
     },
     offlineRemovals: {
         type: OptionType.BOOLEAN,
-        description: "Notify you when starting discord if you were removed while offline.",
+        description: t("relationshipNotifier.settings.offlineRemovals"),
         default: true
     },
     friends: {
         type: OptionType.BOOLEAN,
-        description: "Notify when a friend removes you",
+        description: t("relationshipNotifier.settings.friends"),
         default: true
     },
     friendRequestCancels: {
         type: OptionType.BOOLEAN,
-        description: "Notify when a friend request is cancelled",
+        description: t("relationshipNotifier.settings.friendRequestCancels"),
         default: true
     },
     servers: {
         type: OptionType.BOOLEAN,
-        description: "Notify when removed from a server",
+        description: t("relationshipNotifier.settings.servers"),
         default: true
     },
     groups: {
         type: OptionType.BOOLEAN,
-        description: "Notify when removed from a group chat",
+        description: t("relationshipNotifier.settings.groups"),
         default: true
     }
 });

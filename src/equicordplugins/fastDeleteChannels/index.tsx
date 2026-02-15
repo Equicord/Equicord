@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Constants, PermissionsBits, PermissionStore, React, RestAPI, useCallback, useEffect, useState } from "@webpack/common";
 
@@ -49,23 +50,23 @@ function showIcon() {
 // TY ToggleVideoBind
 const settings = definePluginSettings({
     keyBind: {
-        description: "The key to toggle trash when pressed.",
+        description: t("fastDeleteChannels.settings.keyBind"),
         type: OptionType.STRING,
         default: "KeyZ",
         isValid: (value: string) => validKeycodes.includes(value),
     },
     reqCtrl: {
-        description: "Require control to be held.",
+        description: t("fastDeleteChannels.settings.reqCtrl"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     reqShift: {
-        description: "Require shift to be held.",
+        description: t("fastDeleteChannels.settings.reqShift"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     reqAlt: {
-        description: "Require alt to be held.",
+        description: t("fastDeleteChannels.settings.reqAlt"),
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -73,7 +74,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "FastDeleteChannels",
-    description: "Adds a trash icon to delete channels",
+    description: t("fastDeleteChannels.description"),
     authors: [Devs.thororen],
     settings,
     patches: [

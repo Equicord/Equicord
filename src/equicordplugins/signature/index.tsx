@@ -9,6 +9,7 @@ import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Menu, React } from "@webpack/common";
 
@@ -99,7 +100,7 @@ const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
 
 export default definePlugin({
     name: "Signature",
-    description: "Automated fingerprint/end text",
+    description: t("signature.description"),
     authors: [Devs.Ven, Devs.Rini, Devs.ImBanana, EquicordDevs.KrystalSkull],
     onBeforeMessageSend(channelId, msg) {
         if (!settings.store.isEnabled) {

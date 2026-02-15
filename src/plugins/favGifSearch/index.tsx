@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { useCallback, useEffect, useRef, useState } from "@webpack/common";
 
@@ -61,18 +62,18 @@ interface Instance {
 export const settings = definePluginSettings({
     searchOption: {
         type: OptionType.SELECT,
-        description: "The part of the url you want to search",
+        description: t("favGifSearch.settings.searchOption"),
         options: [
             {
-                label: "Entire Url",
+                label: t("favGifSearch.searchOptions.entireUrl"),
                 value: "url"
             },
             {
-                label: "Path Only (/somegif.gif)",
+                label: t("favGifSearch.searchOptions.pathOnly"),
                 value: "path"
             },
             {
-                label: "Host & Path (tenor.com somgif.gif)",
+                label: t("favGifSearch.searchOptions.hostAndPath"),
                 value: "hostandpath",
                 default: true
             }
@@ -83,7 +84,7 @@ export const settings = definePluginSettings({
 export default definePlugin({
     name: "FavoriteGifSearch",
     authors: [Devs.Aria],
-    description: "Adds a search bar to favorite gifs.",
+    description: t("favGifSearch.description"),
 
     patches: [
         {
@@ -185,7 +186,7 @@ function SearchBar({ instance, SearchBarComponent }: { instance: Instance; Searc
                 }
             }}
             query={query}
-            placeholder="Search Favorite Gifs"
+            placeholder={t("favGifSearch.searchPlaceholder")}
         />
     );
 }

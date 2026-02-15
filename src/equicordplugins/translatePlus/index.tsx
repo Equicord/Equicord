@@ -20,6 +20,7 @@ import "./style.css";
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { ChannelStore, Menu } from "@webpack/common";
 
@@ -45,7 +46,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }) => 
 
 export default definePlugin({
     name: "Translate+",
-    description: "Vencord's translate plugin but with support for artistic languages!",
+    description: t("translatePlus.description"),
     authors: [Devs.Ven, EquicordDevs.Prince527],
     settings,
     contextMenus: {

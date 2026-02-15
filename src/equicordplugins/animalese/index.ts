@@ -6,57 +6,58 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { SelectedChannelStore, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     volume: {
         type: OptionType.SLIDER,
-        description: "Volume of the animalese sound",
+        description: t("animalese.settings.volume"),
         default: 0.5,
         markers: [0, 0.1, 0.25, 0.5, 0.6, 0.75, 1],
     },
     speed: {
         type: OptionType.SLIDER,
-        description: "Speed of the animalese sound",
+        description: t("animalese.settings.speed"),
         default: 1,
         markers: [0.5, 0.75, 1, 1.25, 1.5],
     },
     pitch: {
         type: OptionType.SLIDER,
-        description: "Pitch multiplier",
+        description: t("animalese.settings.pitch"),
         default: 1,
         markers: [0.75, 0.8, 0.85, 1, 1.15, 1.25, 1.35, 1.5],
     },
     messageLengthLimit: {
         type: OptionType.NUMBER,
-        description: "Maximum length of message to process",
+        description: t("animalese.settings.messageLengthLimit"),
         default: 50,
     },
     processOwnMessages: {
         type: OptionType.BOOLEAN,
-        description: "Enable to yap your own messages too",
+        description: t("animalese.settings.processOwnMessages"),
         default: true,
     },
     soundQuality: {
         type: OptionType.SELECT,
-        description: "Quality of sound to use",
+        description: t("animalese.settings.soundQuality"),
         options: [
             {
-                label: "High",
+                label: t("animalese.quality.high"),
                 value: "high",
                 default: true
             },
             {
-                label: "Medium",
+                label: t("animalese.quality.medium"),
                 value: "med"
             },
             {
-                label: "Low",
+                label: t("animalese.quality.low"),
                 value: "low"
             },
             {
-                label: "Lowest",
+                label: t("animalese.quality.lowest"),
                 value: "low"
             }
         ]
@@ -192,7 +193,7 @@ async function playSound(buffer: AudioBuffer, volume: number) {
 
 export default definePlugin({
     name: "Animalese",
-    description: "Plays animal crossing animalese for every message sent (they yap a lot)",
+    description: t("animalese.description"),
     authors: [EquicordDevs.ryanamay, EquicordDevs.Mocha],
     settings,
 

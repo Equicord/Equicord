@@ -10,6 +10,7 @@ import { Paragraph } from "@components/Paragraph";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { closeAllModals } from "@utils/modal";
+import { t } from "@utils/translation";
 import { OptionType } from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
 
@@ -21,20 +22,20 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component() {
             if (!DecorPlugin.started) return <Paragraph>
-                Enable Decor and restart your client to change your avatar decoration.
+                {t("decor.enableAndRestart")}
             </Paragraph>;
 
             return <div>
                 <DecorSection hideTitle hideDivider noMargin />
                 <Paragraph className={classes(Margins.top8, Margins.bottom8)}>
-                    You can also access Decor decorations from the <Link
+                    {t("decor.accessFromProfiles", { link: <Link
                         href="/settings/profile-customization"
                         onClick={e => {
                             e.preventDefault();
                             closeAllModals();
                             FluxDispatcher.dispatch({ type: "USER_SETTINGS_MODAL_SET_SECTION", section: "Profile Customization" });
                         }}
-                    >Profiles</Link> page.
+                    >{t("decor.profilesLink")}</Link> })}
                 </Paragraph>
             </div>;
         }

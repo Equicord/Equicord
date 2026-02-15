@@ -6,6 +6,7 @@
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import type { Guild } from "@vencord/discord-types";
 import { EmojiStore, Menu, StickersStore } from "@webpack/common";
@@ -14,14 +15,13 @@ import { zipSync } from "fflate";
 const StickerExt = [, "png", "apng", "json", "gif"] as const;
 
 const Patch: NavContextMenuPatchCallback = (children, { guild }: { guild: Guild; }) => {
-    // Assuming "privacy" is the correct ID for the group you want to modify.
     const group = findGroupChildrenByChildId("privacy", children);
 
     if (group) {
         group.push(
             <>
-                <Menu.MenuItem id="emoji.download" label="Download Emojis" action={() => zipGuildAssets(guild, "emojis")}></Menu.MenuItem>
-                <Menu.MenuItem id="sticker.download" label="Download Stickers" action={() => zipGuildAssets(guild, "stickers")}></Menu.MenuItem>
+                <Menu.MenuItem id="emoji.download" label={t("guildPickerDumper.ui.downloadEmojis")} action={() => zipGuildAssets(guild, "emojis")}></Menu.MenuItem>
+                <Menu.MenuItem id="sticker.download" label={t("guildPickerDumper.ui.downloadStickers")} action={() => zipGuildAssets(guild, "stickers")}></Menu.MenuItem>
             </>
         );
     }
@@ -34,7 +34,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
         : StickersStore.getStickersByGuildId(guild.id);
 
     if (!items) {
-        return console.log("Server not found!");
+        return console.log(t("guildPickerDumper.ui.serverNotFound"));
     }
 
     const getProxyEndpoint = () => {
@@ -94,7 +94,7 @@ async function zipGuildAssets(guild: Guild, type: "emojis" | "stickers") {
 
 export default definePlugin({
     name: "GuildPickerDumper",
-    description: "Context menu to dump and download a server's emojis and stickers.",
+    description: t("guildPickerDumper.description"),
     authors: [EquicordDevs.Cortex, Devs.Samwich, EquicordDevs.Synth, Devs.thororen],
     contextMenus: {
         "guild-context": Patch,

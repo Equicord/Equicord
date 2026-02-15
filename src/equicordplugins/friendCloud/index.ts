@@ -19,6 +19,7 @@
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findStore } from "@webpack";
@@ -51,17 +52,17 @@ interface UserPosition {
 
 export default definePlugin({
     name: "FriendCloud",
-    description: "Adds a /friendcloud command to visualize the users you most interact with",
+    description: t("friendCloud.description"),
     authors: [EquicordDevs.Fafa],
     commands: [
         {
             inputType: ApplicationCommandInputType.BUILT_IN,
             name: "friendcloud",
-            description: "Display user you most interact with in a cloud",
+            description: t("friendCloud.commands.friendcloud"),
             options: [
                 {
                     name: "count",
-                    description: "Number of users to display",
+                    description: t("friendCloud.commands.count"),
                     type: ApplicationCommandOptionType.NUMBER,
                     required: false
                 }
@@ -69,14 +70,14 @@ export default definePlugin({
             execute: async (opts, cmdCtx) => {
                 const count = findOption(opts, "count", 25);
 
-                if (!count) return sendBotMessage(cmdCtx.channel.id, { content: "The count must be 1 or higher!" });
+                if (!count) return sendBotMessage(cmdCtx.channel.id, { content: t("friendCloud.errors.countMustBeHigher") });
 
                 try {
                     const affinities: AffinitiesV2[] = findStore("UserAffinitiesV2Store").getUserAffinities();
 
                     if (!affinities?.length) {
                         return sendBotMessage(cmdCtx.channel.id, {
-                            content: "No affinities found. Check your [privacy settings](<https://support.discord.com/hc/en-us/articles/21864805694999-Data-Used-to-Improve-Discord>)."
+                            content: t("friendCloud.errors.noAffinities")
                         });
                     }
 
@@ -91,7 +92,7 @@ export default definePlugin({
 
                     if (!users.length) {
                         return sendBotMessage(cmdCtx.channel.id, {
-                            content: "No valid users found in affinities. Check your [privacy settings](<https://support.discord.com/hc/en-us/articles/21864805694999-Data-Used-to-Improve-Discord>)."
+                            content: t("friendCloud.errors.noValidUsers")
                         });
                     }
 
@@ -153,7 +154,7 @@ export default definePlugin({
                             if (loadedImages === totalImages) {
                                 canvas.toBlob(blob => {
                                     if (!blob) {
-                                        sendBotMessage(cmdCtx.channel.id, { content: "Couldn't generate the image :c" });
+                                        sendBotMessage(cmdCtx.channel.id, { content: t("friendCloud.errors.couldntGenerate") });
                                         return;
                                     }
                                     const file = new File([blob], "affinities-cloud.png", { type: "image/png" });

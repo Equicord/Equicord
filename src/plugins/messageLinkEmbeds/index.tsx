@@ -24,6 +24,7 @@ import { BaseText } from "@components/BaseText";
 import { Devs } from "@utils/constants.js";
 import { classes } from "@utils/misc";
 import { Queue } from "@utils/Queue";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findComponentLazy, findCssClassesLazy } from "@webpack";
@@ -75,45 +76,45 @@ const messageFetchQueue = new Queue();
 
 const settings = definePluginSettings({
     messageBackgroundColor: {
-        description: "Background color for messages in rich embeds",
+        description: t("vencord.messageLinkEmbeds.settings.messageBackgroundColor"),
         type: OptionType.BOOLEAN
     },
     automodEmbeds: {
-        description: "Use automod embeds instead of rich embeds (smaller but less info)",
+        description: t("vencord.messageLinkEmbeds.settings.automodEmbeds"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Always use automod embeds",
+                label: t("vencord.messageLinkEmbeds.automodOptions.always"),
                 value: "always"
             },
             {
-                label: "Prefer automod embeds, but use rich embeds if some content can't be shown",
+                label: t("vencord.messageLinkEmbeds.automodOptions.prefer"),
                 value: "prefer"
             },
             {
-                label: "Never use automod embeds",
+                label: t("vencord.messageLinkEmbeds.automodOptions.never"),
                 value: "never",
                 default: true
             }
         ]
     },
     listMode: {
-        description: "Whether to use ID list as blacklist or whitelist",
+        description: t("vencord.messageLinkEmbeds.settings.listMode"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Blacklist",
+                label: t("vencord.messageLinkEmbeds.listModeOptions.blacklist"),
                 value: "blacklist",
                 default: true
             },
             {
-                label: "Whitelist",
+                label: t("vencord.messageLinkEmbeds.listModeOptions.whitelist"),
                 value: "whitelist"
             }
         ]
     },
     idList: {
-        description: "Guild/channel/user IDs to blacklist or whitelist (separate with comma)",
+        description: t("vencord.messageLinkEmbeds.settings.idList"),
         type: OptionType.STRING,
         default: "",
         multiline: true,
@@ -122,7 +123,7 @@ const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <Button onClick={() => messageCache.clear()}>
-                Clear the linked message cache
+                {t("vencord.messageLinkEmbeds.settings.clearMessageCache")}
             </Button>
         )
     }
@@ -186,9 +187,9 @@ function getImages(message: Message): Attachment[] {
 
 function noContent(attachments: number, embeds: number) {
     if (!attachments && !embeds) return "";
-    if (!attachments) return `[no content, ${embeds} embed${embeds !== 1 ? "s" : ""}]`;
-    if (!embeds) return `[no content, ${attachments} attachment${attachments !== 1 ? "s" : ""}]`;
-    return `[no content, ${attachments} attachment${attachments !== 1 ? "s" : ""} and ${embeds} embed${embeds !== 1 ? "s" : ""}]`;
+    if (!attachments) return t("vencord.messageLinkEmbeds.noContent.embeds_only", { count: embeds });
+    if (!embeds) return t("vencord.messageLinkEmbeds.noContent.attachments_only", { count: attachments });
+    return t("vencord.messageLinkEmbeds.noContent.both", { attachments, embeds });
 }
 
 function requiresRichEmbed(message: Message) {
@@ -276,9 +277,9 @@ function MessageEmbedAccessory({ message }: { message: Message; }) {
 }
 
 function getChannelLabelAndIconUrl(channel: Channel) {
-    if (channel.isDM()) return ["Direct Message", IconUtils.getUserAvatarURL(UserStore.getUser(channel.recipients[0]))];
-    if (channel.isGroupDM()) return ["Group DM", IconUtils.getChannelIconURL(channel)];
-    return ["Server", IconUtils.getGuildIconURL(GuildStore.getGuild(channel.guild_id))];
+    if (channel.isDM()) return [t("vencord.messageLinkEmbeds.channelLabels.directMessage"), IconUtils.getUserAvatarURL(UserStore.getUser(channel.recipients[0]))];
+    if (channel.isGroupDM()) return [t("vencord.messageLinkEmbeds.channelLabels.groupDM"), IconUtils.getChannelIconURL(channel)];
+    return [t("vencord.messageLinkEmbeds.channelLabels.server"), IconUtils.getGuildIconURL(GuildStore.getGuild(channel.guild_id))];
 }
 
 function ChannelMessageEmbedAccessory({ message, channel }: MessageEmbedProps): JSX.Element | null {
@@ -363,7 +364,7 @@ function AutomodEmbedAccessory(props: MessageEmbedProps): JSX.Element | null {
 
 export default definePlugin({
     name: "MessageLinkEmbeds",
-    description: "Adds a preview to messages that link another message",
+    description: t("vencord.messageLinkEmbeds.description"),
     authors: [Devs.TheSun, Devs.Ven, Devs.RyanCaoDev],
     dependencies: ["MessageAccessoriesAPI", "MessageUpdaterAPI", "UserSettingsAPI"],
 

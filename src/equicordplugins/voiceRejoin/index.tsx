@@ -7,6 +7,7 @@
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { ChannelStore, FluxDispatcher, UserStore, VoiceStateStore } from "@webpack/common";
 
@@ -47,7 +48,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "VoiceRejoin",
-    description: "Rejoins DM/Server call automatically when restarting Discord.",
+    description: t("voiceRejoin.description"),
     authors: [EquicordDevs.omaw],
     settings,
 

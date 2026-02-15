@@ -7,6 +7,7 @@
 import { ApplicationCommandOptionType, findOption } from "@api/Commands";
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 function getMessage(opts) {
@@ -48,17 +49,17 @@ const searchEngines = {
 const settings = definePluginSettings({
     hyperlink: {
         type: OptionType.BOOLEAN,
-        description: "If the sent link should hyperlink with the query as the label",
+        description: t("googleThat.settings.hyperlink"),
         default: false
     },
     embed: {
         type: OptionType.BOOLEAN,
-        description: "If the sent link should render an embed",
+        description: t("googleThat.settings.embed"),
         default: true
     },
     defaultEngine: {
         type: OptionType.SELECT,
-        description: "The search engine to use",
+        description: t("googleThat.settings.defaultEngine"),
         options: Object.keys(searchEngines).map((key, index) => ({
             label: key,
             value: key,
@@ -66,7 +67,7 @@ const settings = definePluginSettings({
         }))
     },
     customEngineURL: {
-        description: "The URL of the Engine you wish to use",
+        description: t("googleThat.settings.customEngineURL"),
         type: OptionType.STRING,
         placeholder: ""
     }
@@ -74,18 +75,18 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "GoogleThat",
-    description: "Adds a command to send a internet search link",
+    description: t("googleThat.description"),
     authors: [Devs.Samwich, EquicordDevs.KrystalSkull],
     tags: ["search", "google", "query", "duckduckgo", "command"],
     settings,
     commands: [
         {
             name: "googlethat",
-            description: "send a search engine link",
+            description: t("googleThat.commands.googlethat"),
             options: [
                 {
                     name: "input",
-                    description: "The search query",
+                    description: t("googleThat.commands.input"),
                     type: ApplicationCommandOptionType.STRING,
                     required: true,
                 }

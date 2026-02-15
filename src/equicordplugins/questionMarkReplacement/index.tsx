@@ -7,12 +7,13 @@
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
     replace: {
         type: OptionType.STRING,
-        description: "Replace with",
+        description: t("questionMarkReplacement.settings.replace"),
         default: ":face_with_monocle:"
     },
 });
@@ -29,7 +30,7 @@ function replaceQuestionMarks(content: string): string {
 
 export default definePlugin({
     name: "QuestionMarkReplacement",
-    description: "Replace all question marks with chosen string, if message only contains question marks.",
+    description: t("questionMarkReplacement.description"),
     authors: [Devs.nyx],
 
     settings,

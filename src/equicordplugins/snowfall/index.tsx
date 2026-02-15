@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { createRoot, React } from "@webpack/common";
 import type { Root } from "react-dom/client";
@@ -450,7 +451,7 @@ let container: HTMLDivElement | null = null;
 
 export default definePlugin({
     name: "Snowfall",
-    description: "Let it snow on Discord! Ported from the BetterDiscord plugin by square.",
+    description: t("snowfall.description"),
     authors: [EquicordDevs.ZcraftElite, EquicordDevs.square],
 
     settingsAboutComponent: () => (

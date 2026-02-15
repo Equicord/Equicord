@@ -5,11 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ShowSongName",
-    description: "Shows song name instead of artist for Spotify activity",
+    description: t("showSongName.description"),
     authors: [Devs.prism],
 
     patches: [

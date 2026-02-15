@@ -13,6 +13,7 @@ import { HeadingPrimary, HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, IS_MAC } from "@utils/constants";
 import { Margins } from "@utils/margins";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findLazy } from "@webpack";
 import { React } from "@webpack/common";
@@ -28,7 +29,7 @@ const altKey = IS_MAC ? "opt" : "alt";
 const settings = definePluginSettings({
     toolbarDevMenu: {
         type: OptionType.BOOLEAN,
-        description: "Change the Help (?) toolbar button (top right in chat) to Discord's developer menu",
+        description: t("experiments.settings.toolbarDevMenu"),
         default: false,
         restartNeeded: true
     }
@@ -36,7 +37,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "Experiments",
-    description: "Enable Access to Experiments & other dev-only features in Discord!",
+    description: t("experiments.description"),
     authors: [
         Devs.Megu,
         Devs.Ven,
@@ -160,16 +161,18 @@ export default definePlugin({
     stop: () => disableStyle(hideBugReport),
 
     settingsAboutComponent: () => {
+        const keyboardCombo = (
+            <div className={KbdStyles.combo} style={{ display: "inline-flex" }}>
+                <kbd className={KbdStyles.key}>{modKey}</kbd> +{" "}
+                <kbd className={KbdStyles.key}>{altKey}</kbd> +{" "}
+                <kbd className={KbdStyles.key}>O</kbd>{" "}
+            </div>
+        );
         return (
             <React.Fragment>
-                <HeadingSecondary>More Information</HeadingSecondary>
+                <HeadingSecondary>{t("experiments.moreInfo")}</HeadingSecondary>
                 <BaseText size="md">
-                    You can open Discord's DevTools via {" "}
-                    <div className={KbdStyles.combo} style={{ display: "inline-flex" }}>
-                        <kbd className={KbdStyles.key}>{modKey}</kbd> +{" "}
-                        <kbd className={KbdStyles.key}>{altKey}</kbd> +{" "}
-                        <kbd className={KbdStyles.key}>O</kbd>{" "}
-                    </div>
+                    {t("experiments.devToolsInfo", { keyboardCombo })}
                 </BaseText>
             </React.Fragment>
         );
@@ -177,20 +180,18 @@ export default definePlugin({
 
     WarningCard: ErrorBoundary.wrap(() => (
         <ErrorCard id="vc-experiments-warning-card" className={Margins.bottom16}>
-            <HeadingPrimary>Hold on!!</HeadingPrimary>
+            <HeadingPrimary>{t("experiments.holdOn")}</HeadingPrimary>
 
             <Paragraph>
-                Experiments are unreleased Discord features. They might not work, or even break your client or get your account disabled.
+                {t("experiments.warning1")}
             </Paragraph>
 
             <Paragraph className={Margins.top8}>
-                Only use experiments if you know what you're doing. Equicord is not responsible for any damage caused by enabling experiments.
-
-                If you don't know what an experiment does, ignore it. Do not ask us what experiments do either, we probably don't know.
+                {t("experiments.warning2")}
             </Paragraph>
 
             <Paragraph className={Margins.top8}>
-                No, you cannot use server-side features like checking the "Send to Client" box.
+                {t("experiments.warning3")}
             </Paragraph>
         </ErrorCard>
     ), { noop: true })

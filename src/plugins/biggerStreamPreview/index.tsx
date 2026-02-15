@@ -20,6 +20,7 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { ScreenshareIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import { openImageModal } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
 import { Menu } from "@webpack/common";
@@ -70,7 +71,7 @@ export const addViewStreamContext: NavContextMenuPatchCallback = (children, { us
 
     const streamPreviewItem = (
         <Menu.MenuItem
-            label="View Stream Preview"
+            label={t("biggerStreamPreview.viewStreamPreview")}
             id="view-stream-preview"
             icon={ScreenshareIcon}
             action={() => stream && handleViewPreview(stream)}
@@ -91,7 +92,7 @@ export const userContextPatch: NavContextMenuPatchCallback = (children, { user }
 
 export default definePlugin({
     name: "BiggerStreamPreview",
-    description: "This plugin allows you to enlarge stream previews",
+    description: t("biggerStreamPreview.description"),
     authors: [Devs.phil],
     contextMenus: {
         "user-context": userContextPatch,

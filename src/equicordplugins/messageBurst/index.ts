@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import { ChannelStore, MessageActions, MessageStore, UserStore } from "@webpack/common";
@@ -48,24 +49,24 @@ function shouldEdit(channel: Channel, message: Message, timePeriod: number, shou
 const settings = definePluginSettings({
     timePeriod: {
         type: OptionType.NUMBER,
-        description: "The duration of bursts (in seconds).",
+        description: t("messageBurst.settings.timePeriod"),
         default: 3
     },
     shouldMergeWithAttachment: {
         type: OptionType.BOOLEAN,
-        description: "Should the message be merged if the last message has an attachment?",
+        description: t("messageBurst.settings.shouldMergeWithAttachment"),
         default: false
     },
     useSpace: {
         type: OptionType.BOOLEAN,
-        description: "Whether to add a space between messages when merging instead of new lines.",
+        description: t("messageBurst.settings.useSpace"),
         default: false
     }
 });
 
 export default definePlugin({
     name: "MessageBurst",
-    description: "Merges messages sent within a time period with your previous sent message if no one else sends a message before you.",
+    description: t("messageBurst.description"),
     authors: [EquicordDevs.port22exposed],
     settings,
     onBeforeMessageSend(channelId, message) {

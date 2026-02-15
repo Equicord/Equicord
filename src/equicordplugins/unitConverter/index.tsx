@@ -21,6 +21,7 @@ import "./style.css";
 import { addMessageAccessory } from "@api/MessageAccessories";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore } from "@webpack/common";
 
@@ -47,7 +48,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UnitConverter",
-    description: "Converts metric units to Imperal units and vice versa",
+    description: t("unitConverter.description"),
     authors: [Devs.sadan],
     messagePopoverButton: {
         icon: ConvertIcon,

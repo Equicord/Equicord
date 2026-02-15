@@ -22,6 +22,7 @@ import { Devs } from "@utils/constants";
 import { sleep } from "@utils/misc";
 import { Queue } from "@utils/Queue";
 import { useForceUpdater } from "@utils/react";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { CustomEmoji, Message, ReactionEmoji, User } from "@vencord/discord-types";
 import { ChannelStore, Constants, FluxDispatcher, React, RestAPI, useEffect, useLayoutEffect, UserStore, UserSummaryItem } from "@webpack/common";
@@ -78,7 +79,7 @@ function handleClickAvatar(event: React.UIEvent<HTMLElement, Event>) {
 
 const settings = definePluginSettings({
     avatarClick: {
-        description: "Toggle clicking avatars in reactions",
+        description: t("whoReacted.settings.avatarClick"),
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true

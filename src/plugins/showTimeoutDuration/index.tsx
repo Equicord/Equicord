@@ -13,6 +13,7 @@ import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import { canonicalizeMatch } from "@utils/patches";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findComponentLazy } from "@webpack";
@@ -29,11 +30,11 @@ const enum DisplayStyle {
 
 const settings = definePluginSettings({
     displayStyle: {
-        description: "How to display the timeout duration",
+        description: t("showTimeoutDuration.displayStyleDescription"),
         type: OptionType.SELECT,
         options: [
-            { label: "In the Tooltip", value: DisplayStyle.Tooltip },
-            { label: "Next to the timeout icon", value: DisplayStyle.Inline, default: true },
+            { label: t("showTimeoutDuration.inTooltip"), value: DisplayStyle.Tooltip },
+            { label: t("showTimeoutDuration.nextToIcon"), value: DisplayStyle.Inline, default: true },
         ],
     }
 });
@@ -68,7 +69,7 @@ function renderTimeout(message: Message, inline: boolean) {
 
 export default definePlugin({
     name: "ShowTimeoutDuration",
-    description: "Shows how much longer a user's timeout will last, either in the timeout icon tooltip or next to it",
+    description: t("showTimeoutDuration.description"),
     authors: [Devs.Ven, Devs.Sqaaakoi],
 
     settings,
@@ -93,7 +94,7 @@ export default definePlugin({
             <div className="vc-std-wrapper">
                 <TooltipContainer text={text}>{children}</TooltipContainer>
                 <BaseText size="md" color="text-danger">
-                    {renderTimeout(message, true)} timeout remaining
+                    {renderTimeout(message, true)} {t("showTimeoutDuration.timeoutRemaining")}
                 </BaseText>
             </div>
         );

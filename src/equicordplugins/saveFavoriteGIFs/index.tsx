@@ -10,6 +10,7 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import equicordToolbox from "@equicordplugins/equicordToolbox";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
 import { Menu, UserSettingsActionCreators } from "@webpack/common";
@@ -114,7 +115,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SaveFavoriteGIFs",
-    description: "Export favorited GIF urls",
+    description: t("saveFavoriteGIFs.description"),
     authors: [Devs.thororen],
     settings,
     commands: [

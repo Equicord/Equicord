@@ -8,6 +8,7 @@ import { ColorPaletteIcon } from "@components/Icons";
 import SettingsPlugin from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import { removeFromArray } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { SettingsRouter } from "@webpack/common";
 
@@ -15,7 +16,7 @@ import { settings } from "./utils/settings";
 
 export default definePlugin({
     name: "ThemeLibrary",
-    description: "A library of themes for Vencord.",
+    description: t("themeLibrary.description"),
     authors: [EquicordDevs.Fafa],
     settings,
     toolboxActions: {

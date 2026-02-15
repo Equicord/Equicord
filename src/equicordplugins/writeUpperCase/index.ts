@@ -7,6 +7,7 @@
 import { addMessagePreSendListener, MessageSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings(
@@ -36,7 +37,7 @@ const presendObject: MessageSendListener = (_, msg) => {
 
 export default definePlugin({
     name: "WriteUpperCase",
-    description: "Changes the first Letter of each Sentence in Message Inputs to Uppercase",
+    description: t("writeUpperCase.description"),
     authors: [Devs.Samwich, EquicordDevs.KrystalSkull],
     settings,
 

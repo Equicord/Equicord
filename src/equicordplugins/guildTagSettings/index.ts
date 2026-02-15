@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 import clanBadges from "./styles.css?managed";
@@ -26,7 +27,7 @@ import clanBadges from "./styles.css?managed";
 const settings = definePluginSettings({
     hideTags: {
         type: OptionType.BOOLEAN,
-        description: "Hide tags",
+        description: t("guildTagSettings.settings.hideTags"),
         default: false,
         onChange: value => {
             if (value) enableStyle(clanBadges);
@@ -35,7 +36,7 @@ const settings = definePluginSettings({
     },
     disableAdoptTagPrompt: {
         type: OptionType.BOOLEAN,
-        description: "Disable the prompt to adopt tags",
+        description: t("guildTagSettings.settings.disableAdoptTagPrompt"),
         default: true,
         restartNeeded: true
     }
@@ -43,7 +44,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "GuildTagSettings",
-    description: "Adds some settings for guild tags, such as hiding them or disabling the prompt to adopt them.",
+    description: t("guildTagSettings.description"),
     authors: [Devs.thororen],
     settings,
     patches: [

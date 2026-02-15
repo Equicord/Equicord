@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { RelationshipStore, SelectedChannelStore } from "@webpack/common";
@@ -20,18 +21,18 @@ interface IMessageCreate {
 const settings = definePluginSettings({
     regex: {
         type: OptionType.STRING,
-        description: "Regex to trigger on",
+        description: t("hopOn.settings.regex"),
         default: "hop on (?:fortnite|fn)"
     },
     url: {
         type: OptionType.STRING,
-        description: "URL to open",
+        description: t("hopOn.settings.url"),
         default: "com.epicgames.launcher://apps/fn%3A4fe75bbc5a674f4f9b356b5c90567da5%3AFortnite?action=launch&silent=true"
     }
 });
 export default definePlugin({
     name: "HopOn",
-    description: "Hop on Fortnite or Hop on bloons :3",
+    description: t("hopOn.description"),
     authors: [Devs.ImLvna],
     settings,
     flux: {

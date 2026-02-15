@@ -7,12 +7,13 @@
 import "./styles.css";
 
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     authors: [EquicordDevs.cassie, EquicordDevs.mochienya, EquicordDevs.secp192k1],
     name: "RichMagnetLinks",
-    description: "Renders magnet links like message links",
+    description: t("richMagnetLinks.description"),
     patches: [
         {
             find: "AUTO_MODERATION_SYSTEM_MESSAGE_RULES:",

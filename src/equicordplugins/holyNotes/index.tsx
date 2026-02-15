@@ -24,6 +24,7 @@ import { DataStore } from "@api/index";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { IconComponent } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByCodeLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
@@ -45,7 +46,7 @@ export const ChannelMessage = findComponentByCodeLazy("Message must not be a thr
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = (children, { message }: { message: Message; }) => {
     children.push(
-        <Menu.MenuItem label="Note Message" id="note-message">
+        <Menu.MenuItem label={t("holyNotes.ui.noteMessage")} id="note-message">
             {Object.keys(noteHandler.getAllNotes()).map(notebook => (
                 <Menu.MenuItem
                     key={notebook}
@@ -61,7 +62,7 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (children, { messag
 function ToolBarHeader() {
     return (
         <HeaderBarButton
-            tooltip="Holy Notes"
+            tooltip={t("holyNotes.ui.holyNotes")}
             position="bottom"
             icon={BookmarkIcon}
             onClick={() => openModal(props => <NoteModal {...props} />)}
@@ -71,11 +72,11 @@ function ToolBarHeader() {
 
 export default definePlugin({
     name: "HolyNotes",
-    description: "Save messages as notes to revisit later",
+    description: t("holyNotes.description"),
     authors: [EquicordDevs.Wolfie],
 
     toolboxActions: {
-        "Open Notes"() {
+        [t("holyNotes.ui.openNotes")]() {
             openModal(props => <NoteModal {...props} />);
         }
     },
@@ -93,7 +94,7 @@ export default definePlugin({
         icon: BookmarkIcon,
         render(message) {
             return {
-                label: "Save Note",
+                label: t("holyNotes.ui.saveNote"),
                 icon: BookmarkIcon,
                 message,
                 channel: ChannelStore.getChannel(message.channel_id),

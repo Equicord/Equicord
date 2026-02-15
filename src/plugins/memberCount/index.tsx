@@ -22,6 +22,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { FluxStore } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
@@ -38,19 +39,19 @@ export const ThreadMemberListStore = findStoreLazy("ThreadMemberListStore") as F
 export const settings = definePluginSettings({
     toolTip: {
         type: OptionType.BOOLEAN,
-        description: "Show member count on the server tooltip",
+        description: t("memberCount.settings.toolTip"),
         default: true,
         restartNeeded: true
     },
     memberList: {
         type: OptionType.BOOLEAN,
-        description: "Show member count in the member list",
+        description: t("memberCount.settings.memberList"),
         default: true,
         restartNeeded: true
     },
     voiceActivity: {
         type: OptionType.BOOLEAN,
-        description: "Show voice activity with member count in the member list",
+        description: t("memberCount.settings.voiceActivity"),
         default: true
     }
 });

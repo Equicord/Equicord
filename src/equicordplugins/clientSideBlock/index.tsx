@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { GuildMember } from "@vencord/discord-types";
 import { ChannelStore, GuildMemberStore, GuildRoleStore, React, RelationshipStore, UserStore } from "@webpack/common";
@@ -14,52 +15,52 @@ import { ChannelStore, GuildMemberStore, GuildRoleStore, React, RelationshipStor
 const settings = definePluginSettings({
     hideVc: {
         type: OptionType.BOOLEAN,
-        description: "Hide voice channels containing blocked users.",
+        description: t("clientSideBlock.settings.hideVc"),
         default: false,
         restartNeeded: true
     },
     usersToBlock: {
         type: OptionType.STRING,
-        description: "User IDs seperated by a comma and a space",
+        description: t("clientSideBlock.settings.usersToBlock"),
         restartNeeded: true,
         default: ""
     },
     hideBlockedUsers: {
         type: OptionType.BOOLEAN,
-        description: "Should blocked users should also be hidden everywhere",
+        description: t("clientSideBlock.settings.hideBlockedUsers"),
         default: true,
         restartNeeded: true
     },
     hideBlockedMessages: {
         type: OptionType.BOOLEAN,
-        description: "Should messages from blocked users should be hidden fully (same as the old noblockedmessages plugin)",
+        description: t("clientSideBlock.settings.hideBlockedMessages"),
         default: true,
         restartNeeded: true
     },
     hideEmptyRoles: {
         type: OptionType.BOOLEAN,
-        description: "Should role headers be hidden if all of their members are blocked",
+        description: t("clientSideBlock.settings.hideEmptyRoles"),
         restartNeeded: true,
         default: true
     },
     blockedReplyDisplay: {
         type: OptionType.SELECT,
-        description: "What should display instead of the message when someone replies to someone you have hidden",
+        description: t("clientSideBlock.settings.blockedReplyDisplay"),
         restartNeeded: true,
         options: [
-            { value: "displayText", label: "Display text saying a hidden message was replied to", default: true },
-            { value: "hideReply", label: "Literally nothing" }
+            { value: "displayText", label: t("clientSideBlock.settings.blockedReplyDisplayOptions.displayText"), default: true },
+            { value: "hideReply", label: t("clientSideBlock.settings.blockedReplyDisplayOptions.hideReply") }
         ]
     },
     guildBlackList: {
         type: OptionType.STRING,
-        description: "Guild ids to disable functionality in",
+        description: t("clientSideBlock.settings.guildBlackList"),
         restartNeeded: true,
         default: ""
     },
     guildWhiteList: {
         type: OptionType.STRING,
-        description: "Guild ids to enable functionality in",
+        description: t("clientSideBlock.settings.guildWhiteList"),
         restartNeeded: true,
         default: ""
     }
@@ -100,7 +101,7 @@ function hiddenReplyComponent() {
         case "displayText":
             return <Paragraph style={{ marginTop: "0px", marginBottom: "0px" }}>
                 <i>
-                    ↓ Replying to blocked message
+                    ↓ {t("clientSideBlock.reply.replyingToBlocked")}
                 </i>
             </Paragraph>;
         case "hideReply":
@@ -141,7 +142,7 @@ function activeNowView(cards) {
 
 export default definePlugin({
     name: "ClientSideBlock",
-    description: "Allows you to locally hide almost all content from any user",
+    description: t("clientSideBlock.description"),
     tags: ["blocked", "block", "hide", "hidden", "noblockedmessages"],
     authors: [Devs.Samwich, EquicordDevs.KamiRu],
     settings,

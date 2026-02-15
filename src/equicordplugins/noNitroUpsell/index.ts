@@ -5,12 +5,13 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { OverridePremiumTypeStore } from "@webpack/common";
 
 export default definePlugin({
     name: "NoNitroUpsell",
-    description: "Removes ALL of Discord's nitro upsells by tricking the client into thinking you have nitro.",
+    description: t("noNitroUpsell.description"),
     authors: [Devs.thororen],
     flux: {
         CONNECTION_OPEN() {

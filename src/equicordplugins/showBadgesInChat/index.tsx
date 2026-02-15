@@ -8,6 +8,7 @@ import "./styles.css";
 
 import { Devs, EquicordDevs } from "@utils/constants";
 import { isEquicordPluginDev, isPluginDev } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import badges from "plugins/_api/badges";
@@ -141,7 +142,7 @@ function ChatBadges({ author }: { author: User; }) {
 export default definePlugin({
     name: "ShowBadgesInChat",
     authors: [Devs.Inbestigator, EquicordDevs.KrystalSkull],
-    description: "Shows the message author's badges beside their name in chat.",
+    description: t("showBadgesInChat.description"),
     settings,
     renderMessageDecoration(props) {
         return props.message?.author ? <ChatBadges author={props.message.author} /> : null;
