@@ -5,13 +5,15 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Switch } from "@components/Switch";
 import { useForceUpdater } from "@utils/react";
 import { OptionType } from "@utils/types";
-import { Select, TextInput } from "@webpack/common";
+import { React, Select, showToast, TextArea, TextInput, Toasts } from "@webpack/common";
 
 import { ServiceType } from "./types";
+import { parseShareXConfig } from "./utils/sharex";
 
 const serviceOptions = [
     { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
@@ -20,7 +22,8 @@ const serviceOptions = [
     { label: "S3-Compatible", value: ServiceType.S3 },
     { label: "Catbox.moe", value: ServiceType.CATBOX },
     ...(IS_DISCORD_DESKTOP ? [{ label: "0x0.st", value: ServiceType.ZEROX0 }] : []),
-    { label: "Litterbox", value: ServiceType.LITTERBOX }
+    { label: "Litterbox", value: ServiceType.LITTERBOX },
+    { label: "ShareX Custom Uploader", value: ServiceType.SHAREX }
 ];
 
 const litterboxOptions = [
@@ -134,6 +137,12 @@ export const settings = definePluginSettings({
         default: "",
         hidden: true
     },
+    sharexConfig: {
+        type: OptionType.STRING,
+        description: "ShareX custom uploader JSON",
+        default: "",
+        hidden: true
+    },
     stripQueryParams: {
         type: OptionType.BOOLEAN,
         description: "Strip query params from uploaded URLs",
@@ -182,12 +191,49 @@ function SettingTextInput(props: {
 export function SettingsComponent() {
     const update = useForceUpdater();
     const { store } = settings;
+    const sharexFileInputRef = React.useRef<HTMLInputElement>(null);
     const isNest = store.serviceType === ServiceType.NEST;
     const isEzHost = store.serviceType === ServiceType.EZHOST;
     const isS3 = store.serviceType === ServiceType.S3;
     const isZipline = store.serviceType === ServiceType.ZIPLINE;
     const isCatbox = store.serviceType === ServiceType.CATBOX;
     const isLitterbox = store.serviceType === ServiceType.LITTERBOX;
+    const isShareX = store.serviceType === ServiceType.SHAREX;
+
+    const validateShareXConfig = () => {
+        try {
+            parseShareXConfig(store.sharexConfig || "");
+            showToast("ShareX config is valid", Toasts.Type.SUCCESS);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : "Invalid ShareX config";
+            showToast(message, Toasts.Type.FAILURE);
+        }
+    };
+
+    const triggerShareXFileUpload = () => {
+        sharexFileInputRef.current?.click();
+    };
+
+    const handleShareXFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+            try {
+                const content = String(e.target?.result || "");
+                const parsed = parseShareXConfig(content);
+                store.sharexConfig = JSON.stringify(parsed, null, 2);
+                update();
+                showToast("Imported ShareX config", Toasts.Type.SUCCESS);
+            } catch (error) {
+                const message = error instanceof Error ? error.message : "Failed to import ShareX config";
+                showToast(message, Toasts.Type.FAILURE);
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = "";
+    };
 
     return (
         <>
@@ -340,6 +386,35 @@ export function SettingsComponent() {
                         placeholder="Select expiry"
                     />
                 </SettingsSection>
+            )}
+
+            {isShareX && (
+                <>
+                    <SettingsSection
+                        name="ShareX Custom Uploader Config"
+                        description="Paste your ShareX custom uploader JSON (.sxcu/.json). DestinationType must include FileUploader or ImageUploader."
+                    >
+                        <TextArea
+                            value={store.sharexConfig}
+                            rows={10}
+                            placeholder='{"RequestMethod":"POST","RequestURL":"https://example.com/api/upload","Body":"MultipartFormData"}'
+                            onChange={v => store.sharexConfig = v}
+                        />
+                    </SettingsSection>
+                    <SettingsSection name="ShareX Config Actions" description="Import from file or validate pasted config">
+                        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                            <Button size="small" onClick={triggerShareXFileUpload}>Import .sxcu/.json</Button>
+                            <Button size="small" onClick={validateShareXConfig}>Validate</Button>
+                        </div>
+                        <input
+                            ref={sharexFileInputRef}
+                            type="file"
+                            accept=".sxcu,.json,application/json,text/plain"
+                            style={{ display: "none" }}
+                            onChange={handleShareXFileUpload}
+                        />
+                    </SettingsSection>
+                </>
             )}
 
             <SettingsSection tag="label" name="Strip Query Parameters" description="Strip query parameters from the uploaded file URL" inlineSetting>
