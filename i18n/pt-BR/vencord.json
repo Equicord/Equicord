@@ -43,7 +43,7 @@
             "newerThanCloud": "Suas configurações locais são mais recentes do que as da nuvem.",
             "updated": "Suas configurações foram atualizadas! Clique aqui para reiniciar e aplicar todas as alterações!",
             "syncFromCloud": "Não foi possível sincronizar as configurações da nuvem ({e}).",
-            "apiDelete": "Não foi possível excluir as configurações (API retornada {e}).",
+            "apiDelete": "Não foi possível excluir as configurações (API retornou {e}).",
             "deleted": "Configurações excluídas da nuvem!",
             "failedToDelete": "Não foi possível excluir as configurações ({e}).",
             "apiEraseAll": "Não foi possível apagar todos os dados (API retornou {e}), entre em contato com o suporte.",
@@ -63,7 +63,7 @@
     "donorCard": {
         "donated": {
             "vencordDescription": "Todos os usuários do Vencord podem ver seu emblema! Você pode gerenciar suas vantagens enviando uma mensagem para @{v}.",
-            "equicordDescription": "Todos os usuários do Equicord podem ver seu emblema! Você pode gerenciar suas vantagens criando um ticket no servidor do Equicord.",
+            "equicordDescription": "Todos os usuários do Equicord podem ver seu emblema! Você pode gerenciar suas vantagens criando um ‘ticket’ no servidor do Equicord.",
             "description": "Todos os usuários do Vencord podem ver seu emblema de doador do Vencord, e os usuários do Equicord podem ver seu emblema de doador do Equicord. Para alterar seu emblema de doador do Vencord, entre em contato com @vending.machine. Para seu emblema de doador do Equicord, crie um ticket no servidor do Equicord.",
             "subtitle": "Obrigado por doar!",
             "title": "Doações"
@@ -89,13 +89,13 @@
         },
         "enableReactDevtools": {
             "title": "Habilitar as Ferramentas de Desenvolvedor React",
-            "description": "Ativar a extensão React Developer Tools para depurar os componentes React do Discord. Útil para o desenvolvimento de plugins."
+            "description": "Ativar a extensão React Developer Tools para debugar os componentes React do Discord. Útil para o desenvolvimento de plugins."
         },
         "frameless": {
             "title": "Desativar a moldura da janela",
             "description": "Remover a moldura nativa da janela para uma aparência mais limpa. Você ainda poderá mover a janela arrastando a área da barra de título."
         },
-        "hint": "Dica: você pode mudar a posição desta seção nas <0>configurações do plugin Configurações</0>!",
+        "hint": "Dica: você pode mudar a posição desta seção nas <0>configurações do plugin Settings</0>!",
         "macosVibrancyStyle": {
             "placeholder": "Estilo de vibração da janela",
             "title": "Estilo de vibração da janela (requer reinicialização)"
@@ -107,7 +107,7 @@
         "plugins": {
             "contributorModal": {
                 "contributorInfo": {
-                    "noPlugins": "Esta pessoa não criou nenhum plugin. Provavelmente <0>contribuiu</0> para o Equicord de outras maneiras!",
+                    "noPlugins": "Esta pessoa não criou nenhum plugins. Provavelmente <0>contribuiu</0> para o Equicord de outras maneiras!",
                     "plugins_one": "Essa pessoa <0>contribuiu</0> para {count} plugin!",
                     "plugins_other": "Esta pessoa <0>contribuiu</0> para {count} plugins!"
                 }
@@ -172,7 +172,7 @@
             "updateLogs_one": "Registros de atualização ({count})",
             "updateLogs_other": "Atualizar registros ({count} registros)",
             "previousSessions": "Um histórico de suas sessões de atualização anteriores com o histórico de commits e alterações de plugins. Clique em um registro para expandi-lo e ver os detalhes",
-            "info": "Verifque o repositório em busca de novos commits, atualizações de plugins e alterações de código. Isso comparará sua versão atual com a última disponível e mostrará o que há de novo",
+            "info": "Verifique o repositório em busca de novos commits, atualizações de plugins e alterações de código. Isso comparará sua versão atual com a última disponível e mostrará o que há de novo",
             "title": "Registro de alterações"
         },
         "restartRequired": {
