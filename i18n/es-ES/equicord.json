@@ -79,10 +79,10 @@
     "betterInvites": {
         "description": "See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
         "ui": {
-            "expireTooltip": "This invite will {expiry}",
+            "expireTooltip": "Esta invitación va a {expiry}",
             "expireWill": "expire",
             "notExpire": "not expire",
-            "invitedYouTo": "{inviter} te invitó a {guild}"
+            "invitedYouTo": "{inviter} Te invitó a {guild}"
         }
     },
     "bypassStatus": {
@@ -193,7 +193,7 @@
         }
     },
     "blockKrisp": {
-        "description": "Prevent Krisp from loading"
+        "description": "Evitar que Krisp cargue"
     },
     "bypassPinPrompt": {
         "description": "Bypass the pin prompt when using the pin functions"
@@ -312,7 +312,7 @@
         "description": "Quickly run actions through a searchable command palette",
         "settings": {
             "hotkey": "Hotkey used to open the command palette",
-            "visualStyle": "Palette appearance",
+            "visualStyle": "Aspecto de la paleta",
             "visualStyleOptions": {
                 "classic": "Clásico",
                 "polished": "Pulido"
@@ -324,7 +324,7 @@
         "ui": {
             "hotkeyTitle": "Command Palette Hotkey",
             "hotkeyDescription": "Hotkey used to open the command palette",
-            "pressAnyKey": "Press any key...",
+            "pressAnyKey": "Presiona cualquier tecla...",
             "reset": "Restablecer"
         }
     },
@@ -337,7 +337,7 @@
             "onClick": "Only show trigger content on click instead of hover"
         },
         "ui": {
-            "flaggedWords": "Flagged Words",
+            "flaggedWords": "Palabras marcadas",
             "placeholder": "Palabra"
         }
     },
@@ -347,7 +347,7 @@
             "copyProfileColors": "Copy Profile Colors"
         },
         "toast": {
-            "noColorsFound": "No profile colors found!",
+            "noColorsFound": "¡No se encontraron colores de perfil!",
             "copied": "Profile colors copied to clipboard!",
             "error": "Error copying profile colors!"
         }
@@ -412,11 +412,11 @@
         "description": "Custom timestamps on messages and tooltips",
         "settings": {
             "formats": "Customize the timestamp formats",
-            "calendarFormats": "Calendar formats",
+            "calendarFormats": "Formatos del calendario",
             "calendarFormatsDescription": "How to format the [calendar] value if used in the above timestamps."
         },
         "about": {
-            "title": "How to use:",
+            "title": "Cómo usar:",
             "additional": "Additionally you can use these in your inputs:",
             "calendar": "enables dynamic date formatting such as \"Today\" or \"Yesterday\".",
             "relative": "gives you times such as \"4 hours ago\"."
@@ -429,7 +429,7 @@
             "colorInServers": "If name colors should be changed within servers"
         },
         "contextMenu": {
-            "setColor": "Set Color"
+            "setColor": "Definir Color"
         }
     },
     "disableCameras": {
@@ -446,13 +446,13 @@
         "settings": {
             "userOutput": "User drop output.",
             "userOutputOptions": {
-                "mention": "Mention user",
-                "id": "User ID"
+                "mention": "Mencionar usuario",
+                "id": "ID de Usuario"
             },
             "channelOutput": "Channel drop output.",
             "channelOutputOptions": {
                 "mention": "#channel mention",
-                "link": "Channel link"
+                "link": "Enlace del canal"
             },
             "inviteExpireAfter": "Invite expiration.",
             "inviteExpireAfterOptions": {
@@ -538,20 +538,20 @@
             "jumpToMessage": "Jump To Message",
             "openUserProfile": "Open user profile",
             "copyContent": "Copiar Contenido",
-            "copyUserId": "Copy User ID",
-            "copyMessageId": "Copy Message ID",
-            "copyChannelId": "Copy Channel ID",
-            "copyServerId": "Copy Server ID",
-            "deleteLog": "Delete Log",
+            "copyUserId": "Copiar ID del Usuario",
+            "copyMessageId": "Copiar ID del mensaje",
+            "copyChannelId": "Copiar ID del canal",
+            "copyServerId": "Copiar ID del servidor",
+            "deleteLog": "Eliminar registro",
             "fromDms": "From {username}'s DMs",
             "fromGroupDm": "From {name} Group DM",
             "fromChannel": "From {channel} in {guild}"
         },
         "buttons": {
-            "importing": "Importing...",
-            "importLogs": "Import Logs",
-            "exporting": "Exporting...",
-            "exportLogs": "Export Logs"
+            "importing": "Importando...",
+            "importLogs": "Importar Registros",
+            "exporting": "Exportando...",
+            "exportLogs": "Exportar Registros"
         }
     },
     "friendCodes": {
@@ -561,13 +561,13 @@
             "webhookUrl": "Webhook URL to send friend code to"
         },
         "panel": {
-            "title": "Friend Codes",
+            "title": "Códigos de Amigo",
             "currentCode": "Current Friend Code",
-            "copyCode": "Copy Code",
+            "copyCode": "Copiar código",
             "copied": "Copied!",
-            "sendToServer": "Send to Server",
-            "sent": "Sent!",
-            "refresh": "Refresh",
+            "sendToServer": "Enviar al Servidor",
+            "sent": "¡Enviado!",
+            "refresh": "Refrescar",
             "error": "Error: {error}"
         }
     },
@@ -586,7 +586,7 @@
         },
         "ui": {
             "recording": "Recording...",
-            "reset": "Reset",
+            "reset": "Reiniciar",
             "copiedColor": "Copied color to clipboard!"
         }
     },
@@ -603,10 +603,10 @@
         },
         "standing": {
             "allGood": "All good!",
-            "limited": "Limited",
-            "veryLimited": "Very limited",
-            "atRisk": "At risk",
-            "suspended": "Suspended"
+            "limited": "Limitado",
+            "veryLimited": "Muy limitado",
+            "atRisk": "En Riesgo",
+            "suspended": "Suspendido"
         },
         "commands": {
             "refreshCommands": "Refresh Slash Commands",
@@ -616,8 +616,8 @@
         "alerts": {
             "supportWarningTitle": "Vencord Support Channel Warning",
             "supportWarningBody": "Before asking for help. Check updates and if this issue is actually caused by Equicord!",
-            "equicordSupport": "Equicord Support",
-            "okayContinue": "Okay continue"
+            "equicordSupport": "Soporte de Equicord",
+            "okayContinue": "Okay continuar"
         }
     },
     "equicordToolbox": {
@@ -626,15 +626,15 @@
             "showPluginMenu": "Show the plugins menu in the toolbox"
         },
         "ui": {
-            "tooltip": "Equicord Toolbox",
+            "tooltip": "Caja de herramientas de Equicord",
             "plugins": "Plugins",
-            "themes": "Themes",
-            "openNotificationLog": "Open Notification Log",
-            "openSettings": "Open Settings",
-            "enableQuickCss": "Enable QuickCSS",
-            "editQuickCss": "Edit QuickCSS",
-            "manageThemes": "Manage Themes",
-            "restartToApply": "Restart to apply the change"
+            "themes": "Temas",
+            "openNotificationLog": "Abrir el registro de notificaciones",
+            "openSettings": "Abrir Ajustes",
+            "enableQuickCss": "Habilitar QuickCSS",
+            "editQuickCss": "Editar QuickCSS",
+            "manageThemes": "Gestionar Temas",
+            "restartToApply": "Reiniciar para aplicar el cambio"
         }
     },
     "equissant": {
@@ -666,14 +666,14 @@
         },
         "ui": {
             "exportMessage": "Export Message",
-            "export": "Export",
+            "export": "Exportar",
             "contactsCopied": "Contacts copied to clipboard successfully.",
             "contactListUndefined": "Contact list is undefined. Click on the \"All\" tab before exporting."
         },
         "notifications": {
-            "title": "Export Messages",
+            "title": "Exportar mensajes",
             "exportSuccess": "Message exported successfully as {filename}",
-            "exportFailed": "Failed to export message"
+            "exportFailed": "Error al exportar el mensaje"
         }
     },
     "fastDeleteChannels": {
@@ -702,7 +702,7 @@
             "hideButtonIfNoReply": "Hides the button if there are no replies to the message"
         },
         "ui": {
-            "jumpToReply": "Jump to Reply"
+            "jumpToReply": "Ir a la respuesta"
         },
         "toasts": {
             "useBottomPanel": "Use the bottom panel to navigate between replies.",
@@ -720,7 +720,7 @@
             "leaveWhenUserLeaves": "Leave the voice channel when the user leaves. (That can cause you to sometimes enter infinite leave/join loop)"
         },
         "ui": {
-            "followUser": "Follow User"
+            "followUser": "Seguir usuario"
         },
         "info": "This Plugin is used to follow a Friend/Friends into voice chat(s)."
     },
@@ -1107,21 +1107,21 @@
             "savedPasswords": "Saved Passwords (Seperated with a , )"
         },
         "ui": {
-            "encryptMessage": "Encrypt Message",
-            "decryptMessage": "Decrypt Message",
+            "encryptMessage": "Encriptar Mensaje",
+            "decryptMessage": "Descifrar Mensaje",
             "hiddenMessageIndicator": "This message has a hidden message! (InvisibleChat)"
         }
     },
     "inviteDefaults": {
         "description": "Allows you to edit the default values when creating server invites.",
         "settings": {
-            "inviteDuration": "Invite Duration",
+            "inviteDuration": "Duración de la invitación",
             "maxUses": "Invite Use Count",
             "temporaryMembership": "Temporary Membership"
         },
         "options": {
-            "infinite": "Infinite",
-            "forever": "Forever"
+            "infinite": "Infinito",
+            "forever": "Permanente"
         }
     },
     "jellyfinRichPresence": {
@@ -1142,7 +1142,7 @@
         "nameFormatOptions": {
             "seriesMovieName": "Series/Movie Name",
             "seriesEpisodeName": "Series - Episode/Track/Movie Name",
-            "custom": "Custom"
+            "custom": "Personalizado"
         },
         "coverTypeOptions": {
             "seriesCover": "Series Cover",
@@ -1154,14 +1154,14 @@
             "fulltext": "Season 1 Episode 1"
         },
         "overrideTypeOptions": {
-            "off": "Off",
-            "listening": "Listening",
-            "playing": "Playing",
+            "off": "Desactivado",
+            "listening": "Escuchando",
+            "playing": "Jugando",
             "streaming": "Streaming",
-            "watching": "Watching"
+            "watching": "Viendo"
         },
         "howToGetApiKey": {
-            "title": "How to get an API key",
+            "title": "Cómo obtener una clave API",
             "description": "Auth token can be found by following these steps:",
             "userIdInfo": "You'll also need your User ID, which can be found in the url of your user profile page."
         },
@@ -1169,22 +1169,22 @@
             "notConfigured": "JellyfinRPC is not configured."
         },
         "privacyMode": {
-            "episodeHidden": "[Episode Hidden]",
-            "trackHidden": "[Track Hidden]",
-            "movieHidden": "[Movie Hidden]",
-            "titleHidden": "[Title Hidden]",
-            "seriesHidden": "[Series Hidden]",
-            "artistHidden": "[Artist Hidden]",
-            "albumHidden": "[Album Hidden]",
+            "episodeHidden": "[Episodio oculto]",
+            "trackHidden": "[Pista oculta]",
+            "movieHidden": "[Película oculta]",
+            "titleHidden": "[Título oculto]",
+            "seriesHidden": "[Serie oculta]",
+            "artistHidden": "[Artista oculta]",
+            "albumHidden": "[Álbum oculto]",
             "mediaHidden": "[Media Hidden]",
-            "watchingTvShow": "Watching a TV Show",
-            "watchingSomething": "Watching Something",
-            "listeningToMusic": "Listening to music"
+            "watchingTvShow": "Ver una serie de TV",
+            "watchingSomething": "Viendo algo",
+            "listeningToMusic": "Escuchando música"
         },
         "state": {
-            "paused": "Paused",
-            "season": "Season {season}",
-            "episode": "Episode {episode}"
+            "paused": "Pausado",
+            "season": "Temporada {season}",
+            "episode": "Episodio {episode}"
         }
     },
     "jumpscare": {
@@ -1198,13 +1198,13 @@
     "jumpTo": {
         "description": "Adds context menu options to jump to the start or bottom of a channel/DM.",
         "ui": {
-            "jumpToFirst": "Jump To First Message",
-            "jumpToLast": "Jump To Last Message",
-            "yourLastMessage": "Your Last Message",
+            "jumpToFirst": "Ir al primer mensaje",
+            "jumpToLast": "Ir al último mensaje",
+            "yourLastMessage": "Tu último mensaje",
             "usersLastMessage": "User's Last Message"
         },
         "errors": {
-            "noMessagesFound": "No messages found from this user in this channel.",
+            "noMessagesFound": "No se han encontrado mensajes de este usuario en este canal.",
             "failedSearch": "Failed to search for messages.",
             "channelNotAvailable": "Channel information not available.",
             "failedJump": "Failed to jump to message. Check console for details."
@@ -1217,7 +1217,7 @@
             "allowMouseControl": "Allow the mouse to control the command palette."
         },
         "ui": {
-            "recording": "Recording...",
+            "recording": "Grabando...",
             "recordKeybind": "Record keybind"
         },
         "commands": {
@@ -1225,7 +1225,7 @@
         }
     },
     "keyboardSounds": {
-        "description": "Adds OperaGX or osu! sound effects when typing on your keyboard.",
+        "description": "Añade efectos de sonido de OperaGX u osu! al escribir en el teclado.",
         "settings": {
             "volume": "Volume of the keyboard sounds.",
             "soundPack": "Sound pack to use."
@@ -1240,12 +1240,12 @@
         "settings": {
             "ignoreBots": "Ignore messages from bots",
             "amountToKeep": "Amount of messages to keep in the log",
-            "keywords": "Manage keywords"
+            "keywords": "Administrar palabras clave"
         },
         "ui": {
-            "keywords": "Keywords",
+            "keywords": "Palabras clave",
             "clearAll": "Clear All",
-            "addId": "Add ID",
+            "addId": "Agregar ID",
             "addKeywordEntry": "Add Keyword Entry",
             "keywordEntry": "Keyword Entry {index}",
             "ignoreCase": "Ignore Case",
@@ -1280,8 +1280,8 @@
     "listenBrainzRPC": {
         "description": "Little plugin for ListenBrainz rich presence",
         "settings": {
-            "username": "ListenBrainz username",
-            "mbContact": "ListenBrainz contact",
+            "username": "Nombre de usuario ListenBrainz",
+            "mbContact": "Contacto ListenBrainz",
             "shareUsername": "Show link to ListenBrainz profile (may only be visible to other users)",
             "shareSong": "Show link to song on ListenBrainz (may only be visible to other users)",
             "hideWithSpotify": "Hide ListenBrainz presence if Spotify is running",
@@ -1294,37 +1294,37 @@
             "useLogo": "Show ListenBrainz logo on album art"
         },
         "nameFormatOptions": {
-            "customStatus": "Use custom status name",
-            "artistFirst": "Use format 'artist - song'",
-            "songFirst": "Use format 'song - artist'",
-            "artistOnly": "Use artist name only",
-            "songOnly": "Use song name only",
+            "customStatus": "Usar nombre de estado personalizado",
+            "artistFirst": "Usar formato 'artista - canción'",
+            "songFirst": "Usar formato 'canción - artista'",
+            "artistOnly": "Usar solo el nombre del artista",
+            "songOnly": "Usar solo nombre de canción",
             "albumName": "Use album name (falls back to custom status text if song has no album)"
         },
         "missingArtOptions": {
             "listenbrainzLogo": "Use large ListenBrainz logo",
-            "placeholder": "Use generic placeholder"
+            "placeholder": "Usar placeholder genérico"
         },
         "about": {
-            "title": "About MusicBrainz API",
+            "title": "Acerca de la API de MusicBrainz ",
             "description": "The MusicBrainz API does not require an API key, but it does require a meaningful user-agent string. For most, an email address should suffice."
         },
         "buttons": {
-            "profile": "ListenBrainz Profile",
-            "viewSong": "View Song"
+            "profile": "Perfil ListenBrainz",
+            "viewSong": "Ver canción"
         },
         "defaults": {
-            "statusName": "some music"
+            "statusName": "Algo de música"
         }
     },
     "loginWithQR": {
         "description": "Allows you to login to another device by scanning a login QR code, just like on mobile!",
         "settings": {
-            "scanQr": "Scan a QR code"
+            "scanQr": "Escanear código QR"
         },
         "ui": {
             "enableAndRestart": "Enable the plugin and restart your client to scan a login QR code",
-            "scanQrCode": "Scan QR Code"
+            "scanQrCode": "Escanear código QR"
         }
     }
 }
