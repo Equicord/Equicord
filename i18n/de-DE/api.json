@@ -1,25 +1,25 @@
 {
     "commands": {
-        "errorExecuting": "An Error occurred while executing command \"{name}\""
+        "errorExecuting": "Beim Ausführen des Befehls \"{name} \" ist ein Fehler aufgetreten"
     },
     "notifications": {
-        "dismissNotification": "Dismiss Notification",
-        "noNotifications": "No notifications yet",
-        "notificationLog": "Notification Log",
-        "notificationSettings": "Notification Settings",
+        "dismissNotification": "Benachrichtigung schließen",
+        "noNotifications": "Noch keine Benachrichtigungen",
+        "notificationLog": "Benachrichtigungsprotokoll",
+        "notificationSettings": "Benachrichtigungseinstellungen",
         "logs": {
-            "title": "Are you sure?",
-            "body_zero": "No notification selected.",
-            "body_one": "This will permanently remove {count} notification. This action cannot be undone.",
-            "body_other": "This will permanently remove {count} notifications. This action cannot be undone.",
-            "confirm": "Do it!",
-            "cancel": "Nevermind",
-            "clearNotificationLog": "Clear Notification Log"
+            "title": "Bist du sicher?",
+            "body_zero": "Keine Benachrichtigung ausgewählt.",
+            "body_one": "Dies wird {count} Benachrichtigung dauerhaft entfernen. Diese Aktion kann nicht rückgängig gemacht werden.",
+            "body_other": "Dies wird {count} Benachrichtigungen dauerhaft entfernen. Diese Aktion kann nicht rückgängig gemacht werden.",
+            "confirm": "Mach es!",
+            "cancel": "Vergiss es",
+            "clearNotificationLog": "Benachrichtigungsprotokoll löschen"
         },
         "missedNotifications": {
-            "title": "While you were away",
-            "body_one": "{count} notification received",
-            "body_other": "{count} notifications received"
+            "title": "Während du weg warst",
+            "body_one": "{count} Benachrichtigung erhalten",
+            "body_other": "{count} Benachrichtigungen erhalten"
         }
     },
     "memberListDecorators": {
@@ -32,6 +32,6 @@
         "fallback": "Failed to render {key} Message Decoration"
     },
     "notices": {
-        "fallback": "Error Showing Notice"
+        "fallback": "Fehler beim Anzeigen der Mitteilung"
     }
 }

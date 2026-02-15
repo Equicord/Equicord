@@ -1,37 +1,37 @@
 {
     "commands": {
-        "errorExecuting": "An Error occurred while executing command \"{name}\""
+        "errorExecuting": "Произошла ошибка во время выполнения команды \"{name}\""
     },
     "notifications": {
-        "dismissNotification": "Dismiss Notification",
-        "noNotifications": "No notifications yet",
-        "notificationLog": "Notification Log",
-        "notificationSettings": "Notification Settings",
+        "dismissNotification": "Скрыть уведомление",
+        "noNotifications": "Нет уведомлений",
+        "notificationLog": "Лог уведомлений",
+        "notificationSettings": "Настройки уведомлений",
         "logs": {
-            "title": "Are you sure?",
-            "body_zero": "No notification selected.",
-            "body_one": "This will permanently remove {count} notification. This action cannot be undone.",
-            "body_other": "This will permanently remove {count} notifications. This action cannot be undone.",
-            "confirm": "Do it!",
-            "cancel": "Nevermind",
-            "clearNotificationLog": "Clear Notification Log"
+            "title": "Вы уверены?",
+            "body_zero": "Уведомление не выбрано.",
+            "body_one": "Это навсегда удалит {count} уведомление. Это действие нельзя отменить.",
+            "body_other": "Это навсегда удалит {count} уведомлений. Это действие нельзя отменить.",
+            "confirm": "Подтвердить",
+            "cancel": "Отменить",
+            "clearNotificationLog": "Очистить лог уведомлений"
         },
         "missedNotifications": {
-            "title": "While you were away",
-            "body_one": "{count} notification received",
-            "body_other": "{count} notifications received"
+            "title": "Пока вас не было",
+            "body_one": "{count} уведомление получено",
+            "body_other": "{count} уведомлений получено"
         }
     },
     "memberListDecorators": {
-        "fallback": "Failed to render {key} Member List Decorator"
+        "fallback": "Не удалось отобразить декоратор списка участников {key}"
     },
     "messageAccessories": {
-        "fallback": "Failed to render {key} Message Accessory"
+        "fallback": "Не удалось отобразить аксессуар сообщения {key}"
     },
     "messageDecorations": {
-        "fallback": "Failed to render {key} Message Decoration"
+        "fallback": "Не удалось отобразить декорацию сообщения {key}"
     },
     "notices": {
-        "fallback": "Error Showing Notice"
+        "fallback": "Ошибка показа уведомления"
     }
 }

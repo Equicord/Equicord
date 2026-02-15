@@ -1,10 +1,10 @@
 {
-    "description": "Assists with translating Equicord",
+    "description": "Equicordの翻訳を手伝う",
     "settings": {
         "forceLocale": {
-            "description": "Force a different locale for Equicord to use",
-            "followDiscord": "Default (follow Discord)"
+            "description": "Equicord の言語を強制的に変更する",
+            "followDiscord": "デフォルト（Discordに従う）"
         },
-        "showMissingKeys": "If the current locale is missing translations, show the keys instead of falling back to English"
+        "showMissingKeys": "現在の設定言語で翻訳が見つからない場合は、英語にフォールバックせず、翻訳キーをそのまま表示する"
     }
 }

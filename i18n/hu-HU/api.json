@@ -1,37 +1,37 @@
 {
     "commands": {
-        "errorExecuting": "An Error occurred while executing command \"{name}\""
+        "errorExecuting": "Hiba történt a(z) \"{name}\" parancs végrehajtása közben"
     },
     "notifications": {
-        "dismissNotification": "Dismiss Notification",
-        "noNotifications": "No notifications yet",
-        "notificationLog": "Notification Log",
-        "notificationSettings": "Notification Settings",
+        "dismissNotification": "Értesítés Elvetése",
+        "noNotifications": "Még nem kaptál értesítés",
+        "notificationLog": "Értesítési Napló",
+        "notificationSettings": "Értesítési Beállítások",
         "logs": {
-            "title": "Are you sure?",
-            "body_zero": "No notification selected.",
-            "body_one": "This will permanently remove {count} notification. This action cannot be undone.",
-            "body_other": "This will permanently remove {count} notifications. This action cannot be undone.",
-            "confirm": "Do it!",
-            "cancel": "Nevermind",
-            "clearNotificationLog": "Clear Notification Log"
+            "title": "Biztos?",
+            "body_zero": "Nincs kiválasztott értesítés.",
+            "body_one": "Ez véglegesen töröl {count} értesítést. Ez a művelet nem vonható vissza.",
+            "body_other": "Ez véglegesen töröl {count} értesítést. Ez a művelet nem vonható vissza.",
+            "confirm": "Csináld!",
+            "cancel": "Mindegy",
+            "clearNotificationLog": "Értesítési Napló Törlése"
         },
         "missedNotifications": {
-            "title": "While you were away",
-            "body_one": "{count} notification received",
-            "body_other": "{count} notifications received"
+            "title": "Amíg távol voltál",
+            "body_one": "{count} értesítést kaptál",
+            "body_other": "{count} értesítést kaptál"
         }
     },
     "memberListDecorators": {
-        "fallback": "Failed to render {key} Member List Decorator"
+        "fallback": "Nem sikerült megjeleníteni a(z) {key} taglista dekorációt"
     },
     "messageAccessories": {
-        "fallback": "Failed to render {key} Message Accessory"
+        "fallback": "Nem sikerült megjeleníteni a(z) {key} üzenetkiegészítőt"
     },
     "messageDecorations": {
-        "fallback": "Failed to render {key} Message Decoration"
+        "fallback": "Nem sikerült megjeleníteni a(z) {key} üzenetdekorációt"
     },
     "notices": {
-        "fallback": "Error Showing Notice"
+        "fallback": "Hiba az értesítés megjelenítésekor"
     }
 }
