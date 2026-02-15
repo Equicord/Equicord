@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { readFileSync, writeFileSync } from "fs";
 import { BigIntLiteral, createSourceFile, Identifier, isCallExpression, isIdentifier, isObjectLiteralExpression, isPropertyAssignment, isSatisfiesExpression, isVariableStatement, NamedDeclaration, ObjectLiteralExpression, ScriptTarget, StringLiteral } from "typescript";
 
 interface Dev {
@@ -41,8 +40,8 @@ function getObjectProp(node: ObjectLiteralExpression, name: string) {
     return prop;
 }
 
-function parseDevs() {
-    const file = createSourceFile("constants.ts", readFileSync("src/utils/constants.ts", "utf8"), ScriptTarget.Latest);
+async function parseDevs() {
+    const file = createSourceFile("constants.ts", await Bun.file("src/utils/constants.ts").text(), ScriptTarget.Latest);
 
     for (const child of file.getChildAt(0).getChildren()) {
         if (!isVariableStatement(child)) continue;
@@ -72,8 +71,8 @@ function parseDevs() {
     throw new Error("Could not find Devs constant");
 }
 
-function parseEquicordDevs() {
-    const file = createSourceFile("constants.ts", readFileSync("src/utils/constants.ts", "utf8"), ScriptTarget.Latest);
+async function parseEquicordDevs() {
+    const file = createSourceFile("constants.ts", await Bun.file("src/utils/constants.ts").text(), ScriptTarget.Latest);
 
     for (const child of file.getChildAt(0).getChildren()) {
         if (!isVariableStatement(child)) continue;
@@ -104,8 +103,8 @@ function parseEquicordDevs() {
 }
 
 (async () => {
-    parseDevs();
-    parseEquicordDevs();
+    await parseDevs();
+    await parseEquicordDevs();
 
     const allDevs = {
         vencord: devs,
@@ -114,7 +113,7 @@ function parseEquicordDevs() {
 
     const data = JSON.stringify(allDevs, null, 2);
     if (process.argv.length > 2) {
-        writeFileSync(process.argv[2], data);
+        await Bun.write(process.argv[2], data);
     } else {
         console.log(data);
     }

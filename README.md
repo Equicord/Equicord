@@ -79,7 +79,7 @@ bun run inject
 Build Equicord for web:
 
 ```shell
-pnpm buildWeb
+bun run buildWeb
 ```
 
 After building Equicord's web extension, locate the appropriate ZIP file in the `dist` directory and follow your browser’s guide for installing custom extensions, if supported.

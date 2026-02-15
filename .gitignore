@@ -10,8 +10,8 @@ equicord_installer
 .DS_Store
 
 yarn.lock
-bun.lock
 package-lock.json
+pnpm-lock.yaml
 
 *.log
 npm-debug.log*

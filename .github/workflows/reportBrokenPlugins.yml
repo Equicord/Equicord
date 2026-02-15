@@ -56,7 +56,6 @@ jobs:
             - name: Run Reporter
               timeout-minutes: 10
               run: |
-                  export PATH="$PWD/node_modules/.bin:$PATH"
                   export CHROMIUM_BIN=${{ steps.setup-chrome.outputs.chrome-path }}
 
                   bun build scripts/generateReport.ts --outfile dist/report.mjs --target bun

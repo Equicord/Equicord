@@ -1,4 +1,4 @@
-#!/usr/bin/node
+#!/usr/bin/env bun
 /*
  * Vencord, a modification for Discord's desktop app
  * Copyright (c) 2022 Vendicated and contributors
@@ -20,11 +20,12 @@
 // @ts-check
 
 import { createPackage } from "@electron/asar";
-import { readdir, writeFile } from "fs/promises";
-import { dirname, join, resolve } from "path";
-import { fileURLToPath } from "url";
+import { readdir } from "fs/promises";
+import { join, resolve } from "path";
 
 import { BUILD_TIMESTAMP, commonOpts, exists, globPlugins, IS_DEV, IS_REPORTER, IS_COMPANION_TEST, IS_STANDALONE, IS_UPDATER_DISABLED, resolvePluginName, VERSION, commonRendererPlugins, watch, buildOrWatchAll, stringifyValues, IS_ANTI_CRASH_TEST } from "./common.mjs";
+
+const __dirname = import.meta.dir;
 
 const defines = stringifyValues({
     IS_STANDALONE,
@@ -123,7 +124,7 @@ const buildConfigs = ([
     // Discord Desktop main & renderer & preload
     {
         ...nodeCommonOpts,
-        entryPoints: [join(dirname(fileURLToPath(import.meta.url)), "../../src/main/index.ts")],
+        entryPoints: [join(__dirname, "../../src/main/index.ts")],
         outfile: "dist/desktop/patcher.js",
         footer: { js: "//# sourceURL=file:///VencordPatcher\n" + sourceMapFooter("patcher") },
         sourcemap,
@@ -141,7 +142,7 @@ const buildConfigs = ([
     },
     {
         ...commonOpts,
-        entryPoints: [join(dirname(fileURLToPath(import.meta.url)), "../../src/Vencord.ts")],
+        entryPoints: [join(__dirname, "../../src/Vencord.ts")],
         outfile: "dist/desktop/renderer.js",
         format: "iife",
         target: ["esnext"],
@@ -161,7 +162,7 @@ const buildConfigs = ([
     },
     {
         ...nodeCommonOpts,
-        entryPoints: [join(dirname(fileURLToPath(import.meta.url)), "../../src/preload.ts")],
+        entryPoints: [join(__dirname, "../../src/preload.ts")],
         outfile: "dist/desktop/preload.js",
         footer: { js: "//# sourceURL=file:///VencordPreload\n" + sourceMapFooter("preload") },
         sourcemap,
@@ -176,7 +177,7 @@ const buildConfigs = ([
     // Vencord Desktop main & renderer & preload
     {
         ...nodeCommonOpts,
-        entryPoints: [join(dirname(fileURLToPath(import.meta.url)), "../../src/main/index.ts")],
+        entryPoints: [join(__dirname, "../../src/main/index.ts")],
         outfile: "dist/equibop/main.js",
         footer: { js: "//# sourceURL=file:///VencordDesktopMain\n" + sourceMapFooter("main") },
         sourcemap,
@@ -193,7 +194,7 @@ const buildConfigs = ([
     },
     {
         ...commonOpts,
-        entryPoints: [join(dirname(fileURLToPath(import.meta.url)), "../../src/Vencord.ts")],
+        entryPoints: [join(__dirname, "../../src/Vencord.ts")],
         outfile: "dist/equibop/renderer.js",
         format: "iife",
         target: ["esnext"],
@@ -213,7 +214,7 @@ const buildConfigs = ([
     },
     {
         ...nodeCommonOpts,
-        entryPoints: [join(dirname(fileURLToPath(import.meta.url)), "../../src/preload.ts")],
+        entryPoints: [join(__dirname, "../../src/preload.ts")],
         outfile: "dist/equibop/preload.js",
         footer: { js: "//# sourceURL=file:///VencordPreload\n" + sourceMapFooter("preload") },
         sourcemap,
@@ -229,11 +230,11 @@ const buildConfigs = ([
 await buildOrWatchAll(buildConfigs);
 
 await Promise.all([
-    writeFile("dist/desktop/package.json", JSON.stringify({
+    Bun.write("dist/desktop/package.json", JSON.stringify({
         name: "equicord",
         main: "patcher.js"
     })),
-    writeFile("dist/equibop/package.json", JSON.stringify({
+    Bun.write("dist/equibop/package.json", JSON.stringify({
         name: "equicord",
         main: "main.js"
     }))

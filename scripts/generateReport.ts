@@ -20,7 +20,6 @@
 /// <reference types="../src/modules" />
 
 import { createHmac } from "crypto";
-import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import pup, { JSHandle } from "puppeteer-core";
 
@@ -359,7 +358,7 @@ page.on("pageerror", (e: any) => {
 
 await page.evaluateOnNewDocument(`
     if (location.host.endsWith("discord.com")) {
-        ${readFileSync("./dist/browser/browser.js", "utf-8")};
+        ${await Bun.file("./dist/browser/browser.js").text()};
     }
 `);
 

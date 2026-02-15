@@ -16,20 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import "./checkNodeVersion.js";
-
-import { execFileSync, execSync } from "child_process";
-import { createWriteStream, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
-import { dirname, join } from "path";
-import { Readable } from "stream";
-import { finished } from "stream/promises";
-import { fileURLToPath } from "url";
+import { mkdirSync } from "fs";
+import { join } from "path";
 
 const BASE_URL = "https://github.com/Equicord/Equilotl/releases/latest/download/";
 const INSTALLER_PATH_DARWIN = "Equilotl.app/Contents/MacOS/Equilotl";
 const INSTALLER_APP_DARWIN = "Equilotl.app";
 
-const BASE_DIR = join(dirname(fileURLToPath(import.meta.url)), "..");
+const BASE_DIR = join(import.meta.dir, "..");
 const FILE_DIR = join(BASE_DIR, "dist", "Installer");
 const ETAG_FILE = join(FILE_DIR, "etag.txt");
 
@@ -60,8 +54,9 @@ async function ensureBinary() {
         ? join(FILE_DIR, INSTALLER_APP_DARWIN)
         : null;
 
-    const etag = existsSync(outputFile) && existsSync(ETAG_FILE)
-        ? readFileSync(ETAG_FILE, "utf-8")
+    const etagFile = Bun.file(ETAG_FILE);
+    const etag = await Bun.file(outputFile).exists() && await etagFile.exists()
+        ? await etagFile.text()
         : null;
 
     const res = await fetch(BASE_URL + filename, {
@@ -78,33 +73,31 @@ async function ensureBinary() {
     if (!res.ok)
         throw new Error(`Failed to download installer: ${res.status} ${res.statusText}`);
 
-    writeFileSync(ETAG_FILE, res.headers.get("etag"));
+    await Bun.write(ETAG_FILE, res.headers.get("etag"));
 
     if (process.platform === "darwin") {
         console.log("Saving zip...");
-        const zip = new Uint8Array(await res.arrayBuffer());
-        writeFileSync(downloadName, zip);
+        await Bun.write(downloadName, new Uint8Array(await res.arrayBuffer()));
 
         console.log("Unzipping app bundle...");
-        execSync(`ditto -x -k '${downloadName}' '${FILE_DIR}'`);
+        Bun.spawnSync(["ditto", "-x", "-k", downloadName, FILE_DIR], { stdio: ["inherit", "inherit", "inherit"] });
 
         console.log("Clearing quarantine from installer app (this is required to run it)");
         console.log("xattr might error, that's okay");
 
-        const logAndRun = cmd => {
-            console.log("Running", cmd);
+        const logAndRun = args => {
+            console.log("Running", args.join(" "));
             try {
-                execSync(cmd);
+                Bun.spawnSync(args, { stdio: ["inherit", "inherit", "inherit"] });
             } catch { }
         };
-        logAndRun(`sudo xattr -dr com.apple.quarantine '${outputApp}'`);
+        logAndRun(["sudo", "xattr", "-dr", "com.apple.quarantine", outputApp]);
     } else {
-        // WHY DOES NODE FETCH RETURN A WEB STREAM OH MY GOD
-        const body = Readable.fromWeb(res.body);
-        await finished(body.pipe(createWriteStream(outputFile, {
-            mode: 0o755,
-            autoClose: true
-        })));
+        await Bun.write(outputFile, new Uint8Array(await res.arrayBuffer()));
+        if (process.platform !== "win32") {
+            const { chmodSync } = await import("fs");
+            chmodSync(outputFile, 0o755);
+        }
     }
 
     console.log("Finished downloading!");
@@ -118,19 +111,18 @@ const installerBin = await ensureBinary();
 
 console.log("Now running Installer...");
 
-const argStart = process.argv.indexOf("--");
-const args = argStart === -1 ? [] : process.argv.slice(argStart + 1);
+const args = process.argv.slice(2);
 
-try {
-    execFileSync(installerBin, args, {
-        stdio: "inherit",
-        env: {
-            ...process.env,
-            EQUICORD_USER_DATA_DIR: BASE_DIR,
-            EQUICORD_DIRECTORY: join(BASE_DIR, "dist/desktop"),
-            EQUICORD_DEV_INSTALL: "1"
-        }
-    });
-} catch {
+const result = Bun.spawnSync([installerBin, ...args], {
+    stdio: ["inherit", "inherit", "inherit"],
+    env: {
+        ...process.env,
+        EQUICORD_USER_DATA_DIR: BASE_DIR,
+        EQUICORD_DIRECTORY: join(BASE_DIR, "dist/desktop"),
+        EQUICORD_DEV_INSTALL: "1"
+    }
+});
+
+if (!result.success) {
     console.error("Something went wrong. Please check the logs above.");
 }

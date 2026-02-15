@@ -58,24 +58,19 @@ jobs:
               with:
                   tag_prefix: "v"
 
-            - name: Setup PNPM
+            - name: Setup Bun
               if: steps.check.outputs.release == 'true'
-              uses: pnpm/action-setup@v3
-
-            - name: Use Node.js 20
-              if: steps.check.outputs.release == 'true'
-              uses: actions/setup-node@v4
+              uses: oven-sh/setup-bun@v2
               with:
-                  node-version: 20
-                  cache: "pnpm"
+                  bun-version: latest
 
             - name: Install dependencies
               if: steps.check.outputs.release == 'true'
-              run: pnpm install --frozen-lockfile
+              run: bun install --frozen-lockfile
 
             - name: Build web
               if: steps.check.outputs.release == 'true'
-              run: pnpm buildWebStandalone
+              run: bun run buildWebStandalone
 
             - name: Create sources zip
               if: steps.check.outputs.release == 'true'
@@ -83,7 +78,7 @@ jobs:
 
             - name: Publish extension
               if: steps.check.outputs.release == 'true'
-              run: pnpx @equicord/publish-browser-extension@latest --chrome-zip dist/extension-chrome.zip --firefox-zip dist/extension-firefox.zip --firefox-sources-zip dist/extension-sources.zip --edge-zip dist/extension-chrome.zip
+              run: bunx @equicord/publish-browser-extension@latest --chrome-zip dist/extension-chrome.zip --firefox-zip dist/extension-firefox.zip --firefox-sources-zip dist/extension-sources.zip --edge-zip dist/extension-chrome.zip
 
               env:
                   CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Dirent, readdirSync, readFileSync, writeFileSync } from "fs";
-import { access, readFile } from "fs/promises";
+import { Dirent, readdirSync } from "fs";
 import { join, sep } from "path";
 import { normalize as posixNormalize, sep as posixSep } from "path/posix";
 import { BigIntLiteral, createSourceFile, Identifier, isArrayLiteralExpression, isCallExpression, isExportAssignment, isIdentifier, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSatisfiesExpression, isStringLiteral, isVariableStatement, NamedDeclaration, NodeArray, ObjectLiteralExpression, PropertyAssignment, ScriptTarget, StringLiteral, SyntaxKind } from "typescript";
@@ -68,8 +67,8 @@ export function getObjectProp(node: ObjectLiteralExpression, name: string) {
     return prop;
 }
 
-export function parseDevs() {
-    const file = createSourceFile("constants.ts", readFileSync("src/utils/constants.ts", "utf8"), ScriptTarget.Latest);
+export async function parseDevs() {
+    const file = createSourceFile("constants.ts", await Bun.file("src/utils/constants.ts").text(), ScriptTarget.Latest);
 
     for (const child of file.getChildAt(0).getChildren()) {
         if (!isVariableStatement(child)) continue;
@@ -99,8 +98,8 @@ export function parseDevs() {
     throw new Error("Could not find Devs constant");
 }
 
-export function parseEquicordDevs() {
-    const file = createSourceFile("constants.ts", readFileSync("src/utils/constants.ts", "utf8"), ScriptTarget.Latest);
+export async function parseEquicordDevs() {
+    const file = createSourceFile("constants.ts", await Bun.file("src/utils/constants.ts").text(), ScriptTarget.Latest);
 
     for (const child of file.getChildAt(0).getChildren()) {
         if (!isVariableStatement(child)) continue;
@@ -131,7 +130,7 @@ export function parseEquicordDevs() {
 }
 
 export async function parseFile(fileName: string) {
-    const file = createSourceFile(fileName, await readFile(fileName, "utf8"), ScriptTarget.Latest);
+    const file = createSourceFile(fileName, await Bun.file(fileName).text(), ScriptTarget.Latest);
 
     const fail = (reason: string) => {
         return new Error(`Invalid plugin ${fileName}, because ${reason}`);
@@ -260,10 +259,7 @@ export async function getEntryPoint(dir: string, dirent: Dirent) {
 
     for (const name of ["index.ts", "index.tsx"]) {
         const full = join(base, name);
-        try {
-            await access(full);
-            return full;
-        } catch { }
+        if (await Bun.file(full).exists()) return full;
     }
 
     throw new Error(`${dirent.name}: Couldn't find entry point`);

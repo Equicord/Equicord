@@ -29,10 +29,10 @@ jobs:
 
             - name: Generate plugin lists
               run: |
-                  pnpm generatePluginJson dist/plugins.json
-                  pnpm generateEquicordPluginJson dist/equicordplugins.json
-                  pnpm generateVencordPluginJson dist/vencordplugins.json
-                  pnpm generateDevsList dist/devs.json
+                  bun run generatePluginJson dist/plugins.json
+                  bun run generateEquicordPluginJson dist/equicordplugins.json
+                  bun run generateVencordPluginJson dist/vencordplugins.json
+                  bun run generateDevsList dist/devs.json
 
             - name: Collect files to be released
               run: |
