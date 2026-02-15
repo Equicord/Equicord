@@ -85,7 +85,7 @@
     "settings": {
         "disableMinSize": {
             "title": "Вимкнути мінімальний розмір вікна",
-            "description": "Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens."
+            "description": "Дозволити вікну Discord змінювати розмір менше мінімального. Буде зручніше в мозаїчних менеджерів вікон та на малих екранах."
         },
         "enableReactDevtools": {
             "title": "Увімкнути Інструменти Розробника React",
