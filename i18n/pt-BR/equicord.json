@@ -302,42 +302,42 @@
                 "never": "Nunca"
             },
             "enableScreenshotKeybind": "Ativar o recurso de teclas de atalho para captura de tela",
-            "enableVoiceOnlyClips": "Enable voice-only clips (audio without video)",
-            "enableAdvancedSignals": "Enable advanced clip signals (auto-clip triggers)",
-            "ignorePlatformRestriction": "Allow Platform Restricted Clipping (may cause save errors)",
-            "clipsLink": "Change FPS and duration options in Clips settings!"
+            "enableVoiceOnlyClips": "Ativar clipes apenas de voz (áudio sem vídeo)",
+            "enableAdvancedSignals": "Ativar sinais de clipe avançados (gatilhos de auto-clipe)",
+            "ignorePlatformRestriction": "Permitir Clipping Restrito por Plataforma (pode causar erros ao salvar)",
+            "clipsLink": "Alterar as opções de FPS e duração nas configurações de Clipes!"
         }
     },
     "commandPalette": {
-        "description": "Quickly run actions through a searchable command palette",
+        "description": "Executar ações rapidamente através de uma paleta de comandos pesquisável",
         "settings": {
-            "hotkey": "Hotkey used to open the command palette",
-            "visualStyle": "Palette appearance",
+            "hotkey": "Atalho usado para abrir a paleta de comandos",
+            "visualStyle": "Aparência da paleta",
             "visualStyleOptions": {
-                "classic": "Classic",
-                "polished": "Polished"
+                "classic": "Clássico",
+                "polished": "Polido"
             },
-            "showTags": "Display tag chips for commands",
-            "enableTagFilter": "Show the tag filter bar",
-            "customCommands": "Manage custom command palette entries"
+            "showTags": "Exibir etiquetas de tags para comandos",
+            "enableTagFilter": "Mostrar a barra de filtro de tags",
+            "customCommands": "Gerenciar entradas personalizadas da paleta de comandos"
         },
         "ui": {
-            "hotkeyTitle": "Command Palette Hotkey",
-            "hotkeyDescription": "Hotkey used to open the command palette",
-            "pressAnyKey": "Press any key...",
-            "reset": "Reset"
+            "hotkeyTitle": "Atalho da Paleta de Comandos",
+            "hotkeyDescription": "Atalho usado para abrir a paleta de comandos",
+            "pressAnyKey": "Pressione qualquer tecla...",
+            "reset": "Redefinir"
         }
     },
     "components": {
-        "description": "Utility plugin for developers to test and preview Discord components"
+        "description": "Plugin utilitário para desenvolvedores testarem e visualizarem componentes do Discord"
     },
     "contentWarning": {
-        "description": "Allows you to specify certain trigger words that will be blurred by default. Hovering/Clicking on the blurred content will reveal it.",
+        "description": "Permite especificar certas palavras de gatilho que serão desfocadas por padrão. Passar o Mouse/Clicar no conteúdo desfocado irá revelá-lo.",
         "settings": {
-            "onClick": "Only show trigger content on click instead of hover"
+            "onClick": "Mostrar conteúdo do gatilho apenas ao clicar em vez de ao passar o rato"
         },
         "ui": {
-            "flaggedWords": "Flagged Words",
+            "flaggedWords": "Palavras sinalizadas",
             "placeholder": "Word"
         }
     },
