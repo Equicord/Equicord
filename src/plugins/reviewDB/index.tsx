@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
 import "./style.css";
 
@@ -27,7 +27,7 @@ import { classes } from "@utils/misc";
 import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Guild, User } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Alerts, Clickable, Menu, Parser } from "@webpack/common";
 
 import { Auth, initAuth, updateAuth } from "./auth";
@@ -37,7 +37,7 @@ import { getCurrentUserInfo, readNotification } from "./reviewDbApi";
 import { settings } from "./settings";
 import { showToast } from "./utils";
 
-const BannerButtonClasses = findByPropsLazy("bannerButton");
+const BannerButtonClasses = findCssClassesLazy("bannerButton");
 
 const guildPopoutPatch: NavContextMenuPatchCallback = (children, { guild }: { guild: Guild, onClose(): void; }) => {
     if (!guild) return;
@@ -155,7 +155,7 @@ export default definePlugin({
             <TooltipContainer text={t("reviewDB.viewReviews")}>
                 <Clickable
                     onClick={() => openReviewsModal(user.id, user.username, ReviewType.User)}
-                    className={classes(BannerButtonClasses.bannerButton)}
+                    className={BannerButtonClasses.bannerButton}
                 >
                     <NotesIcon height={16} width={16} />
                 </Clickable>

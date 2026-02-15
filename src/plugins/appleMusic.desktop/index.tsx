@@ -51,14 +51,14 @@ function setActivity(activity: Activity | null) {
 const settings = definePluginSettings({
     activityType: {
         type: OptionType.SELECT,
-        description: () => t("appleMusicRichPresence.settings.activityType"),
+        description: t("appleMusicRichPresence.settings.activityType"),
         options: [
             { label: t("appleMusicRichPresence.activityTypes.playing"), value: ActivityType.PLAYING, default: true },
             { label: t("appleMusicRichPresence.activityTypes.listening"), value: ActivityType.LISTENING }
         ],
     },
     statusDisplayType: {
-        description: () => t("appleMusicRichPresence.settings.statusDisplayType"),
+        description: t("appleMusicRichPresence.settings.statusDisplayType"),
         type: OptionType.SELECT,
         options: [
             {
@@ -78,39 +78,39 @@ const settings = definePluginSettings({
     },
     refreshInterval: {
         type: OptionType.SLIDER,
-        description: () => t("appleMusicRichPresence.settings.refreshInterval"),
+        description: t("appleMusicRichPresence.settings.refreshInterval"),
         markers: [1, 2, 2.5, 3, 5, 10, 15],
         default: 5,
         restartNeeded: true,
     },
     enableTimestamps: {
         type: OptionType.BOOLEAN,
-        description: () => t("appleMusicRichPresence.settings.enableTimestamps"),
+        description: t("appleMusicRichPresence.settings.enableTimestamps"),
         default: true,
     },
     enableButtons: {
         type: OptionType.BOOLEAN,
-        description: () => t("appleMusicRichPresence.settings.enableButtons"),
+        description: t("appleMusicRichPresence.settings.enableButtons"),
         default: true,
     },
     nameString: {
         type: OptionType.STRING,
-        description: () => t("appleMusicRichPresence.settings.nameString"),
+        description: t("appleMusicRichPresence.settings.nameString"),
         default: t("appleMusicRichPresence.defaultName")
     },
     detailsString: {
         type: OptionType.STRING,
-        description: () => t("appleMusicRichPresence.settings.detailsString"),
+        description: t("appleMusicRichPresence.settings.detailsString"),
         default: t("appleMusicRichPresence.defaultDetails")
     },
     stateString: {
         type: OptionType.STRING,
-        description: () => t("appleMusicRichPresence.settings.stateString"),
+        description: t("appleMusicRichPresence.settings.stateString"),
         default: t("appleMusicRichPresence.defaultState")
     },
     largeImageType: {
         type: OptionType.SELECT,
-        description: () => t("appleMusicRichPresence.settings.largeImageType"),
+        description: t("appleMusicRichPresence.settings.largeImageType"),
         options: [
             { label: t("appleMusicRichPresence.assetImageTypes.album"), value: AssetImageType.Album, default: true },
             { label: t("appleMusicRichPresence.assetImageTypes.artist"), value: AssetImageType.Artist },
@@ -119,12 +119,12 @@ const settings = definePluginSettings({
     },
     largeTextString: {
         type: OptionType.STRING,
-        description: () => t("appleMusicRichPresence.settings.largeTextString"),
+        description: t("appleMusicRichPresence.settings.largeTextString"),
         default: t("appleMusicRichPresence.defaultLargeText")
     },
     smallImageType: {
         type: OptionType.SELECT,
-        description: () => t("appleMusicRichPresence.settings.smallImageType"),
+        description: t("appleMusicRichPresence.settings.smallImageType"),
         options: [
             { label: t("appleMusicRichPresence.assetImageTypes.album"), value: AssetImageType.Album },
             { label: t("appleMusicRichPresence.assetImageTypes.artist"), value: AssetImageType.Artist, default: true },
@@ -133,7 +133,7 @@ const settings = definePluginSettings({
     },
     smallTextString: {
         type: OptionType.STRING,
-        description: () => t("appleMusicRichPresence.settings.smallTextString"),
+        description: t("appleMusicRichPresence.settings.smallTextString"),
         default: t("appleMusicRichPresence.defaultSmallText")
     },
 });

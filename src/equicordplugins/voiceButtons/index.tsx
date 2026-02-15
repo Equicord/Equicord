@@ -20,10 +20,10 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: "\"avatarContainerClass\",\"userNameClassName\"",
+            find: ".VOICE_PANEL}}",
             replacement: [
                 {
-                    match: /flipped\]:\i\}\),children:\[/,
+                    match: /\[\i\.\i\]:\i\}\),children:\[/,
                     replace: "$&$self.renderButtons(arguments[0].user),"
                 }
             ]

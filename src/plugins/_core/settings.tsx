@@ -104,6 +104,18 @@ const settings = definePluginSettings({
     }
 });
 
+export const settingsSectionMap: [string, string][] = [
+    ["EquicordSettings", "equicord_main_panel"],
+    ["EquicordPlugins", "equicord_plugins_panel"],
+    ["EquicordThemes", "equicord_themes_panel"],
+    ["EquicordUpdater", "equicord_updater_panel"],
+    ["EquicordChangelog", "equicord_changelog_panel"],
+    ["EquicordCloud", "equicord_cloud_panel"],
+    ["EquicordBackupAndRestore", "equicord_backup_restore_panel"],
+    ["EquicordPatchHelper", "equicord_patch_helper_panel"],
+    ["EquibopSettings", "equicord_equibop_settings_panel"],
+];
+
 export default definePlugin({
     name: "Settings",
     description: "Adds Settings UI and debug info",
@@ -114,21 +126,21 @@ export default definePlugin({
 
     patches: [
         {
-            find: ".versionHash",
+            find: "#{intl::COPY_VERSION}",
             replacement: [
                 {
                     match: /\.RELEASE_CHANNEL/,
                     replace: "$&.replace(/^./, c => c.toUpperCase())"
                 },
                 {
-                    match: /\.compactInfo.+?(?=null!=(\i)&&(.{0,20}\i\.Text.{0,200}?,children:).{0,15}?("span"),({className:\i\.versionHash,children:\["Build Override: ",\1\.id\]\})\)\}\))/,
+                    match: /"text-xxs\/normal".{0,300}?(?=null!=(\i)&&(.{0,20}\i\.Text.{0,200}?,children:).{0,15}?("span"),({className:\i\.\i,children:\["Build Override: ",\1\.id\]\})\)\}\))/,
                     replace: (m, _buildOverride, makeRow, component, props) => {
                         props = props.replace(/children:\[.+\]/, "");
                         return `${m},$self.makeInfoElements(${component},${props}).map(e=>${makeRow}e})),`;
                     }
                 },
                 {
-                    match: /\.info.+?\[\(0,\i\.jsxs?\)\((.{1,10}),(\{[^{}}]+\{.{0,20}.versionHash,.+?\})\)," "/,
+                    match: /"text-xs\/normal".{0,300}?\[\(0,\i\.jsxs?\)\((.{1,10}),(\{[^{}}]+\{.{0,20}className:\i.\i,.+?\})\)," "/,
                     replace: (m, component, props) => {
                         props = props.replace(/children:\[.+\]/, "");
                         return `${m},$self.makeInfoElements(${component},${props})`;
@@ -141,25 +153,11 @@ export default definePlugin({
             ]
         },
         {
-            find: ".SEARCH_NO_RESULTS&&0===",
-            replacement: [
-                {
-                    match: /(?<=section:(.{0,50})\.DIVIDER\}\))([,;])(?=.{0,200}(\i)\.push.{0,100}label:(\i)\.header)/,
-                    replace: (_, sectionTypes, commaOrSemi, elements, element) =>
-                        `${commaOrSemi} $self.addSettings(${elements}, ${element}, ${sectionTypes}) ${commaOrSemi}`,
-                },
-                {
-                    match: /({(?=.+?function (\i).{0,160}(\i)=\i\.useMemo.{0,140}return \i\.useMemo\(\(\)=>\i\(\3).+?\(\)=>)\2/,
-                    replace: (_, rest, settingsHook) =>
-                        `${rest}$self.wrapSettingsHook(${settingsHook})`,
-                },
-            ],
-        },
-        {
             find: "#{intl::USER_SETTINGS_ACTIONS_MENU_LABEL}",
             replacement: {
-                match: /(?<=function\((\i),(\i),\i\)\{)(?=let \i=Object\.values\(\i\.\i\).+?(\(0,\i\.openUserSettings\))\()/,
-                replace: (_, settingsPanel, section, openUserSettings) => `${openUserSettings}(${settingsPanel},{section:${section}});return;`
+                // Skip the check Discord performs to make sure the section being selected in the user settings context menu is valid
+                match: /null!=\(\i=Object.values\(\i\.\i\).{0,50}?&&(?=\(0,\i\.openUserSettings\)\(\i,\{section:\i)/,
+                replace: ""
             }
         },
         {
@@ -202,20 +200,7 @@ export default definePlugin({
     },
 
     getSettingsSectionMappings() {
-        return [
-            ["EquicordSettings", "equicord_main_panel"],
-            ["EquicordPlugins", "equicord_plugins_panel"],
-            ["EquicordThemes", "equicord_themes_panel"],
-            ["EquicordUpdater", "equicord_updater_panel"],
-            ["EquicordChangelog", "equicord_changelog_panel"],
-            ["EquicordCloud", "equicord_cloud_panel"],
-            ["EquicordBackupAndRestore", "equicord_backup_restore_panel"],
-            ["EquicordPatchHelper", "equicord_patch_helper_panel"],
-            ["EquibopSettings", "equicord_equibop_settings_panel"],
-            ["EquicordDiscordIcons", "equicord_icon_viewer"],
-            ["EquicordThemeLibrary", "equicord_theme_library"],
-            ["EquicordIRememberYou", "equicord_i_remember_you"],
-        ];
+        return settingsSectionMap;
     },
 
     buildLayout(originalLayoutBuilder: SettingsLayoutBuilder) {
@@ -458,7 +443,7 @@ export default definePlugin({
     getVersionInfo(support = true) {
         let version = "";
 
-        if (IS_DEV) version = "Dev";
+        if (IS_DEV) version = "Dev Build";
         if (IS_WEB) version = "Web";
         if (IS_VESKTOP) version = `Vesktop v${VesktopNative.app.getVersion()}`;
         if (IS_EQUIBOP) version = `Equibop v${VesktopNative.app.getVersion()}`;

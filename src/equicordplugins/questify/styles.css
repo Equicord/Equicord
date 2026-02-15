@@ -1,4 +1,8 @@
 /* Plugin Settings */
+.questify-margin-bottom-8 {
+    margin-bottom: 8px;
+}
+
 .questify-setting-divider {
     margin: 0;
 }
@@ -52,16 +56,21 @@
     border: 1px solid var(--border-normal);
 }
 
+.questify-affixless-select-popout-option {
+    grid-template-areas: "content selectedIcon" !important;
+    grid-template-columns: 1fr auto !important;
+}
+
+.questify-setting [class*="comboBoxInputContainer"] {
+    flex-wrap: wrap;
+}
+
 .questify-volume-slider-container {
     margin: 8px 0 0;
     background-color: var(--input-background-default, var(--input-background));
     padding: 7px 12px 7px 7px;
     border-radius: 3px;
     border: 1px solid var(--border-normal);
-}
-
-.questify-inline-group-item .questify-select {
-    margin-top: 0;
 }
 
 .questify-button,

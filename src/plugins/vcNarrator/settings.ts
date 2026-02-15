@@ -38,61 +38,61 @@ export const settings = definePluginSettings({
     },
     volume: {
         type: OptionType.SLIDER,
-        description: () => t("vcNarrator.settings.volume"),
+        description: t("vcNarrator.settings.volume"),
         default: 1,
         markers: [0, 0.25, 0.5, 0.75, 1],
         stickToMarkers: false
     },
     rate: {
         type: OptionType.SLIDER,
-        description: () => t("vcNarrator.settings.speed"),
+        description: t("vcNarrator.settings.speed"),
         default: 1,
         markers: [0.1, 0.5, 1, 2, 5, 10],
         stickToMarkers: false
     },
     sayOwnName: {
-        description: () => t("vcNarrator.settings.sayOwnName"),
+        description: t("vcNarrator.settings.sayOwnName"),
         type: OptionType.BOOLEAN,
         default: false
     },
     latinOnly: {
-        description: () => t("vcNarrator.settings.latinOnly"),
+        description: t("vcNarrator.settings.latinOnly"),
         type: OptionType.BOOLEAN,
         default: false
     },
     joinMessage: {
         type: OptionType.STRING,
-        description: () => t("vcNarrator.settings.joinMessage"),
+        description: t("vcNarrator.settings.joinMessage"),
         default: t("vcNarrator.defaults.join")
     },
     leaveMessage: {
         type: OptionType.STRING,
-        description: () => t("vcNarrator.settings.leaveMessage"),
+        description: t("vcNarrator.settings.leaveMessage"),
         default: t("vcNarrator.defaults.leave")
     },
     moveMessage: {
         type: OptionType.STRING,
-        description: () => t("vcNarrator.settings.moveMessage"),
+        description: t("vcNarrator.settings.moveMessage"),
         default: t("vcNarrator.defaults.move")
     },
     muteMessage: {
         type: OptionType.STRING,
-        description: () => t("vcNarrator.settings.muteMessage"),
+        description: t("vcNarrator.settings.muteMessage"),
         default: t("vcNarrator.defaults.mute")
     },
     unmuteMessage: {
         type: OptionType.STRING,
-        description: () => t("vcNarrator.settings.unmuteMessage"),
+        description: t("vcNarrator.settings.unmuteMessage"),
         default: t("vcNarrator.defaults.unmute")
     },
     deafenMessage: {
         type: OptionType.STRING,
-        description: () => t("vcNarrator.settings.deafenMessage"),
+        description: t("vcNarrator.settings.deafenMessage"),
         default: t("vcNarrator.defaults.deafen")
     },
     undeafenMessage: {
         type: OptionType.STRING,
-        description: () => t("vcNarrator.settings.undeafenMessage"),
+        description: t("vcNarrator.settings.undeafenMessage"),
         default: t("vcNarrator.defaults.undeafen")
     }
 });

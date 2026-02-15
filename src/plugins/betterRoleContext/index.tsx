@@ -44,7 +44,7 @@ function AppearanceIcon() {
 const settings = definePluginSettings({
     roleIconFileFormat: {
         type: OptionType.SELECT,
-        description: () => t("betterRoleContext.settings.roleIconFileFormat"),
+        description: t("betterRoleContext.settings.roleIconFileFormat"),
         options: [
             {
                 label: "png",

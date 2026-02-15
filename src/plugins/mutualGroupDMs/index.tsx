@@ -26,16 +26,17 @@ import { Logger } from "@utils/Logger";
 import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
-import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
 import { Avatar, ChannelStore, Clickable, IconUtils, RelationshipStore, ScrollerThin, useMemo, UserStore } from "@webpack/common";
 import { JSX } from "react";
 
 const SelectedChannelActionCreators = findByPropsLazy("selectPrivateChannel");
 const UserUtils = findByPropsLazy("getGlobalName");
 
-const ProfileListClasses = findByPropsLazy("emptyIconFriends", "emptyIconGuilds");
-const MutualsListClasses = findByPropsLazy("row", "icon", "name", "nick");
-const ExpandableList = findComponentByCodeLazy('"PRESS_SECTION"', ".header");
+const ProfileListClasses = findCssClassesLazy("empty", "textContainer", "connectionIcon");
+const TabBarClasses = findCssClassesLazy("tabPanelScroller", "tabBarPanel");
+const MutualsListClasses = findCssClassesLazy("row", "icon", "name", "details");
+const ExpandableList = findComponentByCodeLazy('action:"PRESS_SECTION"', "section");
 
 function getGroupDMName(channel: Channel) {
     return channel.name ||
@@ -106,7 +107,7 @@ export default definePlugin({
                 // Discord adds spacing between each item which pushes our tab off screen.
                 // set the gap to zero to ensure ours stays on screen
                 {
-                    match: /className:\i\.tabBar/,
+                    match: /className:\i\.\i(?=,type:"top")/,
                     replace: '$& + " vc-mutual-gdms-modal-tab-bar"'
                 }
             ]
@@ -120,7 +121,7 @@ export default definePlugin({
                     replace: "$&$self.pushSection($1,arguments[0].user);"
                 },
                 {
-                    match: /\.tabBarPanel,.*?children:(?=.+?section:(\i))/,
+                    match: /children:(?=.{0,100}?component:.+?section:(\i))/,
                     replace: "$&$1==='MUTUAL_GDMS'?$self.renderMutualGDMs(arguments[0]):"
                 },
                 // Make the gap between each item smaller so our tab can fit.
@@ -138,7 +139,7 @@ export default definePlugin({
                     replace: "$&||$self.getMutualGroupDms(arguments[0].user.id).length>0"
                 },
                 {
-                    match: /\.openUserProfileModal.+?\)}\)}\)(?<=,(\i)&&(\i)&&(\(0,\i\.jsxs?\)\(\i\.\i,{className:(\i)\.divider}\)).+?)/,
+                    match: /\.openUserProfileModal.+?\)}\)}\)(?<=,(\i)&&(\i)&&(\(0,\i\.jsxs?\)\(\i\.\i,{className:(\i)\.\i}\)).{0,50}?"MUTUAL_FRIENDS".+?)/,
                     replace: (m, hasMutualGuilds, hasMutualFriends, Divider, classes) => "" +
                         `${m},$self.renderDMPageList({user:arguments[0].user,hasDivider:${hasMutualGuilds}||${hasMutualFriends},Divider:${Divider},listStyle:${classes}.list})`
                 }
@@ -176,7 +177,7 @@ export default definePlugin({
 
         return (
             <ScrollerThin
-                className={ProfileListClasses.listScroller}
+                className={TabBarClasses.tabPanelScroller}
                 fade={true}
                 onClose={onClose}
             >
@@ -184,8 +185,9 @@ export default definePlugin({
                     ? entries
                     : (
                         <div className={ProfileListClasses.empty}>
-                            <div className={ProfileListClasses.emptyIconFriends}></div>
-                            <div className={ProfileListClasses.emptyText}>{t("vencord.mutualGroupDMs.noGroupDms")}</div>
+                            <div className={ProfileListClasses.textContainer}>
+                                <BaseText tag="h3" size="md" weight="medium" style={{ color: "var(--text-strong)" }}>{t("vencord.mutualGroupDMs.noGroupDms")}</BaseText>
+                            </div>
                         </div>
                     )
                 }

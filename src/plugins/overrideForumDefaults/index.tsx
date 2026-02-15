@@ -16,7 +16,7 @@ const settings = definePluginSettings({
             { label: t("overrideForumDefaults.layouts.list"), value: 1, default: true },
             { label: t("overrideForumDefaults.layouts.gallery"), value: 2 }
         ],
-        description: () => t("overrideForumDefaults.settings.defaultLayout")
+        description: t("overrideForumDefaults.settings.defaultLayout")
     },
     defaultSortOrder: {
         type: OptionType.SELECT,
@@ -24,7 +24,7 @@ const settings = definePluginSettings({
             { label: t("overrideForumDefaults.sortOrders.recentlyActive"), value: 0, default: true },
             { label: t("overrideForumDefaults.sortOrders.datePosted"), value: 1 }
         ],
-        description: () => t("overrideForumDefaults.settings.defaultSortOrder")
+        description: t("overrideForumDefaults.settings.defaultSortOrder")
     }
 });
 

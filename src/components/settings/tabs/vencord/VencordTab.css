@@ -18,11 +18,11 @@
 
 
 .vc-joindiscordbutton {
-    background-color: var(--redesign-button-secondary-background) !important;
+    background-color: var(--channeltextarea-background) !important;
 }
 
 .vc-joindiscordbutton:hover {
-    background-color: var(--redesign-button-secondary-pressed-background) !important;
+    background-color: var(--redesign-button-tertiary-pressed-background) !important;
 }
 
 .vc-settings-card-buttons {

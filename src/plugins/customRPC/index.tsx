@@ -39,7 +39,7 @@ import { ApplicationAssetUtils, Button, FluxDispatcher, React, UserStore } from 
 import { RPCSettings } from "./RpcSettings";
 
 const useProfileThemeStyle = findByCodeLazy("profileThemeStyle:", "--profile-gradient-primary-color");
-const ActivityView = findComponentByCodeLazy(".party?(0", ".card");
+const ActivityView = findComponentByCodeLazy(".party?(0", "USER_PROFILE_ACTIVITY");
 
 const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;
 
@@ -228,7 +228,7 @@ export default definePlugin({
     // Discord hides buttons on your own Rich Presence for some reason. This patch disables that behaviour
     patches: [
         {
-            find: ".buttons.length)>=1",
+            find: ".USER_PROFILE_ACTIVITY_BUTTONS),",
             replacement: {
                 match: /.getId\(\)===\i.id/,
                 replace: "$& && false"

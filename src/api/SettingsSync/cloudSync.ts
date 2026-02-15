@@ -10,7 +10,7 @@ import { localStorage } from "@utils/localStorage";
 import { Logger } from "@utils/Logger";
 import { relaunch } from "@utils/native";
 import { t } from "@utils/translation";
-import { openUserSettingsPanel } from "@webpack/common";
+import { SettingsRouter } from "@webpack/common";
 import { deflateSync, inflateSync } from "fflate";
 
 import { deauthorizeCloud, getCloudAuth, getCloudUrl } from "./cloudSetup";
@@ -89,7 +89,7 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
                 title: t("vencord.cloud.settings.header"),
                 body: t("vencord.cloud.settings.accountChanged"),
                 color: "var(--yellow-360)",
-                onClick: () => openUserSettingsPanel("equicord_cloud")
+                onClick: () => SettingsRouter.openUserSettings("equicord_cloud_panel")
             });
             // Disable cloud sync globally
             Settings.cloud.authenticated = false;

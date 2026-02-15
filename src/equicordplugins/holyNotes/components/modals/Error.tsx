@@ -4,47 +4,35 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { findByProps } from "@webpack";
+import { resultsClasses } from "@equicordplugins/holyNotes";
 
-export default ({ error }: { error?: Error; } = {}) => {
-    const classes = findByProps("emptyResultsWrap");
-
+export default function EmptyNotebook({ error }: { error?: Error; } = {}) {
     if (error) {
-        // Error
-        console.log(error);
+        console.error("[HolyNotes] Error:", error);
         return (
-            <div className={classes.emptyResultsWrap}>
-                <div className={classes.emptyResultsContent} style={{ paddingBottom: "0px" }}>
-                    <div className={classes.errorImage} />
-                    <div className={classes.emptyResultsText}>
-                        There was an error parsing your notes! The issue was logged in your console, press CTRL
-                        + I to access it! Please visit the support server if you need extra help!
+            <div className={resultsClasses.emptyResultsWrap}>
+                <div className={resultsClasses.emptyResultsContent} style={{ paddingBottom: 0 }}>
+                    <div className={resultsClasses.errorImage} />
+                    <div className={resultsClasses.emptyResultsText}>
+                        There was an error parsing your notes. Check the console for details.
                     </div>
                 </div>
             </div>
         );
-    } else if (Math.floor(Math.random() * 100) <= 10)
-        // Easter egg
-        return (
-            <div className={classes.emptyResultsWrap}>
-                <div className={classes.emptyResultsContent} style={{ paddingBottom: "0px" }}>
-                    <div className={`${classes.noResultsImage} ${classes.alt}`} />
-                    <div className={classes.emptyResultsText}>
-                        No notes were found. Empathy banana is here for you.
-                    </div>
+    }
+
+    const isEasterEgg = Math.random() < 0.1;
+
+    return (
+        <div className={resultsClasses.emptyResultsWrap}>
+            <div className={resultsClasses.emptyResultsContent} style={{ paddingBottom: 0 }}>
+                <div className={`${resultsClasses.noResultsImage}${isEasterEgg ? ` ${resultsClasses.alt}` : ""}`} />
+                <div className={resultsClasses.emptyResultsText}>
+                    {isEasterEgg
+                        ? "No notes were found. Empathy banana is here for you."
+                        : "No notes were found in this notebook."}
                 </div>
             </div>
-        );
-    // Empty notebook
-    else
-        return (
-            <div className={classes.emptyResultsWrap}>
-                <div className={classes.emptyResultsContent} style={{ paddingBottom: "0px" }}>
-                    <div className={classes.noResultsImage} />
-                    <div className={classes.emptyResultsText}>
-                        No notes were found saved in this notebook.
-                    </div>
-                </div>
-            </div>
-        );
-};
+        </div>
+    );
+}

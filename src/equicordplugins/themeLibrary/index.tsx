@@ -5,10 +5,10 @@
  */
 
 import { ColorPaletteIcon } from "@components/Icons";
-import SettingsPlugin from "@plugins/_core/settings";
+import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { openUserSettingsPanel } from "@webpack/common";
+import { SettingsRouter } from "@webpack/common";
 
 import { settings } from "./utils/settings";
 
@@ -19,7 +19,7 @@ export default definePlugin({
     settings,
     toolboxActions: {
         "Open Theme Library": () => {
-            openUserSettingsPanel("theme_library");
+            SettingsRouter.openUserSettings("equicord_theme_library_panel");
         },
     },
 
@@ -27,7 +27,7 @@ export default definePlugin({
         const { customEntries, customSections } = SettingsPlugin;
 
         customEntries.push({
-            key: "equicord_theme_library",
+            key: "theme_library",
             title: "Theme Library",
             Component: require("./components/ThemeTab").default,
             Icon: ColorPaletteIcon
@@ -38,15 +38,19 @@ export default definePlugin({
             label: "Theme Library",
             searchableTitles: ["Theme Library"],
             element: require("./components/ThemeTab").default,
-            id: "ThemeLibrary",
+            id: "EquicordThemeLibrary",
         }));
+
+        settingsSectionMap.push(["EquicordThemeLibrary", "equicord_theme_library"]);
     },
 
     stop() {
         const { customEntries, customSections } = SettingsPlugin;
         const entry = customEntries.findIndex(entry => entry.key === "equicord_theme_library");
-        const section = customSections.findIndex(section => section({} as any).id === "ThemeLibrary");
         if (entry !== -1) customEntries.splice(entry, 1);
+        const section = customSections.findIndex(section => section({} as any).id === "EquicordThemeLibrary");
         if (section !== -1) customSections.splice(section, 1);
+        const map = settingsSectionMap.findIndex(entry => entry[1] === "equicord_theme_library");
+        if (map !== -1) settingsSectionMap.splice(map, 1);
     },
 });

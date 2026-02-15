@@ -19,7 +19,7 @@
 import { Devs, IS_MAC } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { ComponentDispatch, FluxDispatcher, NavigationRouter, openUserSettingsPanel, SelectedGuildStore } from "@webpack/common";
+import { ComponentDispatch, FluxDispatcher, NavigationRouter, SelectedGuildStore, SettingsRouter } from "@webpack/common";
 
 const KeyBinds = findByPropsLazy("JUMP_TO_GUILD", "SERVER_NEXT");
 
@@ -55,7 +55,7 @@ export default definePlugin({
                 break;
             case ",":
                 e.preventDefault();
-                openUserSettingsPanel("my_account");
+                SettingsRouter.openUserSettings("my_account_panel");
                 break;
             default:
                 if (e.key >= "1" && e.key <= "9") {

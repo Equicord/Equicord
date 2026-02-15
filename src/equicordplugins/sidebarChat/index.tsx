@@ -10,18 +10,17 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { HeaderBarButton } from "@api/HeaderBar";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { classNameFactory } from "@utils/css";
 import { getCurrentChannel } from "@utils/discord";
 import definePlugin from "@utils/types";
 import { Channel, Guild, User } from "@vencord/discord-types";
 import {
     DefaultExtractAndLoadChunksRegex,
     extractAndLoadChunksLazy,
-    filters,
     findByPropsLazy,
     findComponentByCodeLazy,
-    findLazy,
-    findStoreLazy,
-    mapMangledModuleLazy
+    findCssClassesLazy,
+    findStoreLazy
 } from "@webpack";
 import {
     ChannelRouter,
@@ -47,13 +46,10 @@ import {
 
 import { settings, SidebarStore } from "./store";
 
-const { HeaderBar } = mapMangledModuleLazy(".themedMobile]:", {
-    HeaderBar: filters.byCode(".themedMobile]:"),
-});
+const cl = classNameFactory("vc-sidebar-chat-");
 
-const { ForumView } = mapMangledModuleLazy("forum-grid-header-section-", {
-    ForumView: filters.byCode("sidebarState")
-});
+const HeaderBar = findComponentByCodeLazy("toolbarClassName:", "}),onDoubleClick:");
+const ForumView = findComponentByCodeLazy("sidebarState");
 
 const ArrowsLeftRightIcon = ({ color, ...rest }) => {
     return (
@@ -73,23 +69,20 @@ const WindowLaunchIcon = findComponentByCodeLazy("1-1h6a1 1 0 1 0 0-2H5Z");
 const XSmallIcon = findComponentByCodeLazy("1.4L12 13.42l5.3 5.3Z");
 const Chat = findComponentByCodeLazy("filterAfterTimestamp:", "chatInputType");
 const Resize = findComponentByCodeLazy("sidebarType:", "RESIZE_HANDLE_WIDTH)");
-const ChannelHeader = findComponentByCodeLazy(".forumPostTitle]:", '"channel-".concat');
+const ChannelHeader = findComponentByCodeLazy(".GUILD_ANNOUNCEMENT", "`channel-");
 const PopoutWindow = findComponentByCodeLazy("Missing guestWindow reference");
-const FullChannelView = findComponentByCodeLazy("showFollowButton:(null");
+const FullChannelView = findComponentByCodeLazy(/showFollowButton:\i\?\.type===/);
 const WanderingCubesLoading = findComponentByCodeLazy('="wanderingCubes"');
-
-// love
-const ppStyle = findLazy(m => m?.popoutContent && Object.keys(m).length === 1);
 
 const ChatInputTypes = findByPropsLazy("FORM", "NORMAL");
 const Sidebars = findByPropsLazy("ThreadSidebar", "MessageRequestSidebar");
-const ChatClasses = findByPropsLazy("threadSidebarOpen");
+const ChatClasses = findCssClassesLazy("threadSidebarOpen", "loader");
 
 const ChannelSectionStore = findStoreLazy("ChannelSectionStore");
 
 const requireChannelContextMenu = extractAndLoadChunksLazy(
     ["&&this.handleActivitiesPopoutClose(),"],
-    new RegExp(DefaultExtractAndLoadChunksRegex.source + ".{1,150}isFavorite")
+    new RegExp(DefaultExtractAndLoadChunksRegex.source + ".{1,250}hasActiveThread")
 );
 
 const requireForumView = extractAndLoadChunksLazy(
@@ -332,9 +325,9 @@ const RenderPopout = ErrorBoundary.wrap(({ channel, name }: { channel: Channel; 
         <PopoutWindow
             withTitleBar
             windowKey={`DISCORD_VC_SC-${channel.id}`}
-            title={name || "Vencord"}
+            title={name || "Equicord"}
             channelId={channel.id}
-            contentClassName={ppStyle.popoutContent}
+            contentClassName={cl("popout")}
         >
             <FullChannelView providedChannel={channel} />
         </PopoutWindow>

@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./styles.css";
+
 import { MagnifyingGlassIcon } from "@components/Icons";
-import SettingsPlugin from "@plugins/_core/settings";
+import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { StartAt } from "@utils/types";
-import { openUserSettingsPanel } from "@webpack/common";
+import { SettingsRouter } from "@webpack/common";
 
 import IconsTab from "./components/IconsTab";
 import { SettingsAbout } from "./components/Modals";
@@ -21,7 +23,7 @@ export default definePlugin({
     startAt: StartAt.WebpackReady,
     toolboxActions: {
         "Open Icons Tab"() {
-            openUserSettingsPanel("equicord_icon_viewer");
+            SettingsRouter.openUserSettings("equicord_icon_viewer_panel");
         },
     },
     settingsAboutComponent: SettingsAbout,
@@ -40,14 +42,18 @@ export default definePlugin({
             label: "Icon Finder",
             element: IconsTab,
             className: "vc-discord-icons",
-            id: "IconViewer"
+            id: "EquicordIconViewer"
         }));
+
+        settingsSectionMap.push(["EquicordDiscordIcons", "equicord_icon_viewer"]);
     },
     stop() {
         const { customEntries, customSections } = SettingsPlugin;
         const entryIdx = customEntries.findIndex(e => e.key === "equicord_icon_viewer");
-        const sectionIdx = customSections.findIndex(s => s({} as any).id === "IconViewer");
         if (entryIdx !== -1) customEntries.splice(entryIdx, 1);
+        const sectionIdx = customSections.findIndex(s => s({} as any).id === "EquicordIconViewer");
         if (sectionIdx !== -1) customSections.splice(sectionIdx, 1);
+        const map = settingsSectionMap.findIndex(entry => entry[1] === "equicord_icon_viewer");
+        if (map !== -1) settingsSectionMap.splice(map, 1);
     },
 });

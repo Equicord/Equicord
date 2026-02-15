@@ -1,0 +1,54 @@
+.vc-badge-base {
+    display: inline-flex;
+    align-items: center;
+    align-self: center;
+    gap: var(--space-4, 4px);
+    padding: 0 var(--space-8, 8px);
+    border-radius: var(--radius-round, 9999px);
+    box-sizing: border-box;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3333;
+    letter-spacing: 0.02em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.vc-badge-icon {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+}
+
+/* Discord variants */
+.vc-badge-default {
+    background-color: var(--badge-background-brand);
+    color: var(--badge-text-brand);
+}
+
+.vc-badge-expressive {
+    background-color: var(--badge-expressive-background-default);
+    color: var(--badge-expressive-text-default);
+}
+
+/* Equicord variants */
+.vc-badge-danger {
+    background-color: var(--status-danger);
+    color: var(--white);
+}
+
+.vc-badge-positive {
+    background-color: var(--status-positive);
+    color: var(--white);
+}
+
+.vc-badge-warning {
+    background-color: var(--status-warning);
+    color: var(--black);
+}
+
+.vc-badge-premium {
+    background-color: var(--premium-tier-2-purple-for-gradients);
+    color: var(--white);
+}

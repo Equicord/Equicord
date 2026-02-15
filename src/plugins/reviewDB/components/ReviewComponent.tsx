@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
 import { Auth, getToken } from "@plugins/reviewDB/auth";
 import { Review, ReviewType } from "@plugins/reviewDB/entities";
@@ -23,176 +23,163 @@ import { settings } from "@plugins/reviewDB/settings";
 import { canBlockReviewAuthor, canDeleteReview, canReportReview, cl, showToast } from "@plugins/reviewDB/utils";
 import { openUserProfile } from "@utils/discord";
 import { classes } from "@utils/misc";
-import { LazyComponent } from "@utils/react";
 import { t } from "@utils/translation";
-import { filters, findBulk } from "@webpack";
+import { findCssClassesLazy } from "@webpack";
 import { Alerts, Parser, Timestamp, useState } from "@webpack/common";
 
 import { openBlockModal } from "./BlockedUserModal";
 import { BlockButton, DeleteButton, ReportButton } from "./MessageButton";
 import ReviewBadge from "./ReviewBadge";
 
-export default LazyComponent(() => {
-    // this is terrible, blame mantika
-    const p = filters.byProps;
-    const [
-        { cozyMessage, buttons, message, buttonsInner, groupStart },
-        { container, isHeader },
-        { avatar, clickable, username, wrapper, cozy },
-        buttonClasses,
-        botTag
-    ] = findBulk(
-        p("cozyMessage"),
-        p("container", "isHeader"),
-        p("avatar", "zalgo"),
-        p("button", "wrapper", "selected"),
-        p("botTagRegular")
-    );
+const MessageClasses = findCssClassesLazy("cozyMessage", "message", "groupStart", "buttons", "buttonsInner");
+const ContainerClasses = findCssClassesLazy("container", "isHeader");
+const AvatarClasses = findCssClassesLazy("avatar", "wrapper", "cozy", "clickable", "username");
+const ButtonClasses = findCssClassesLazy("button", "wrapper", "selected");
+const BotTagClasses = findCssClassesLazy("botTagVerified", "botTagRegular", "botText", "px", "rem");
 
-    const dateFormat = new Intl.DateTimeFormat();
+const dateFormat = new Intl.DateTimeFormat();
 
-    return function ReviewComponent({ review, refetch, profileId }: { review: Review; refetch(): void; profileId: string; }) {
-        const [showAll, setShowAll] = useState(false);
+export default function ReviewComponent({ review, refetch, profileId }: { review: Review; refetch(): void; profileId: string; }) {
+    const [showAll, setShowAll] = useState(false);
 
-        function openModal() {
-            openUserProfile(review.sender.discordID);
-        }
+    function openModal() {
+        openUserProfile(review.sender.discordID);
+    }
 
-        function delReview() {
-            Alerts.show({
-                title: t("reviewDB.confirm.title"),
-                body: t("reviewDB.confirm.deleteBody"),
-                confirmText: t("reviewDB.delete"),
-                cancelText: t("reviewDB.cancel"),
-                onConfirm: async () => {
-                    if (!(await getToken())) {
-                        return showToast(t("reviewDB.mustLogin"));
-                    } else {
-                        deleteReview(review.id).then(res => {
-                            if (res) {
-                                refetch();
-                            }
-                        });
-                    }
+    function delReview() {
+        Alerts.show({
+            title: t("reviewDB.confirm.title"),
+            body: t("reviewDB.confirm.deleteBody"),
+            confirmText: t("reviewDB.delete"),
+            cancelText: t("reviewDB.cancel"),
+            onConfirm: async () => {
+                if (!(await getToken())) {
+                    return showToast(t("reviewDB.mustLogin"));
+                } else {
+                    deleteReview(review.id).then(res => {
+                        if (res) {
+                            refetch();
+                        }
+                    });
                 }
-            });
-        }
+            }
+        });
+    }
 
-        function reportRev() {
-            Alerts.show({
-                title: t("reviewDB.confirm.title"),
-                body: t("reviewDB.confirm.reportBody"),
-                confirmText: t("reviewDB.report"),
-                cancelText: t("reviewDB.cancel"),
-                // confirmColor: "red", this just adds a class name and breaks the submit button guh
-                onConfirm: async () => {
-                    if (!(await getToken())) {
-                        return showToast(t("reviewDB.mustLogin"));
-                    } else {
-                        reportReview(review.id);
-                    }
+    function reportRev() {
+        Alerts.show({
+            title: t("reviewDB.confirm.title"),
+            body: t("reviewDB.confirm.reportBody"),
+            confirmText: t("reviewDB.report"),
+            cancelText: t("reviewDB.cancel"),
+            // confirmColor: "red", this just adds a class name and breaks the submit button guh
+            onConfirm: async () => {
+                if (!(await getToken())) {
+                    return showToast(t("reviewDB.mustLogin"));
+                } else {
+                    reportReview(review.id);
                 }
-            });
-        }
+            }
+        });
+    }
 
-        const isAuthorBlocked = Auth?.user?.blockedUsers?.includes(review.sender.discordID) ?? false;
+    const isAuthorBlocked = Auth?.user?.blockedUsers?.includes(review.sender.discordID) ?? false;
 
-        function blockReviewSender() {
-            if (isAuthorBlocked)
-                return unblockUser(review.sender.discordID);
+    function blockReviewSender() {
+        if (isAuthorBlocked)
+            return unblockUser(review.sender.discordID);
 
-            Alerts.show({
-                title: t("reviewDB.confirm.title"),
-                body: t("reviewDB.confirm.blockBody"),
-                confirmText: t("reviewDB.block"),
-                cancelText: t("reviewDB.cancel"),
-                // confirmColor: "red", this just adds a class name and breaks the submit button guh
-                onConfirm: async () => {
-                    if (!(await getToken())) {
-                        return showToast(t("reviewDB.mustLogin"));
-                    } else {
-                        blockUser(review.sender.discordID);
-                    }
+        Alerts.show({
+            title: t("reviewDB.confirm.title"),
+            body: t("reviewDB.confirm.blockBody"),
+            confirmText: t("reviewDB.block"),
+            cancelText: t("reviewDB.cancel"),
+            // confirmColor: "red", this just adds a class name and breaks the submit button guh
+            onConfirm: async () => {
+                if (!(await getToken())) {
+                    return showToast(t("reviewDB.mustLogin"));
+                } else {
+                    blockUser(review.sender.discordID);
                 }
-            });
-        }
+            }
+        });
+    }
 
-        return (
-            <div className={classes(cl("review"), cozyMessage, wrapper, message, groupStart, cozy)} style={
-                {
-                    marginLeft: "0px",
-                    paddingLeft: "52px", // wth is this
-                    // nobody knows anymore
-                }
-            }>
+    return (
+        <div className={classes(cl("review"), MessageClasses.cozyMessage, AvatarClasses.wrapper, MessageClasses.message, MessageClasses.groupStart, AvatarClasses.cozy)} style={
+            {
+                marginLeft: "0px",
+                paddingLeft: "52px", // wth is this
+                // nobody knows anymore
+            }
+        }>
 
-                <img
-                    className={classes(avatar, clickable)}
-                    onClick={openModal}
-                    src={review.sender.profilePhoto || "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=128"}
-                    style={{ left: "0px", zIndex: 0 }}
-                />
-                <div style={{ display: "inline-flex", justifyContent: "center", alignItems: "center" }}>
+            <img
+                className={classes(AvatarClasses.avatar, AvatarClasses.clickable)}
+                onClick={openModal}
+                src={review.sender.profilePhoto || "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=128"}
+                style={{ left: "0px", zIndex: 0 }}
+            />
+            <div style={{ display: "inline-flex", justifyContent: "center", alignItems: "center" }}>
+                <span
+                    className={classes(AvatarClasses.clickable, AvatarClasses.username)}
+                    style={{ color: "var(--channels-default)", fontSize: "14px" }}
+                    onClick={() => openModal()}
+                >
+                    {review.sender.username}
+                </span>
+
+                {review.type === ReviewType.System && (
                     <span
-                        className={classes(clickable, username)}
-                        style={{ color: "var(--channels-default)", fontSize: "14px" }}
-                        onClick={() => openModal()}
-                    >
-                        {review.sender.username}
-                    </span>
-
-                    {review.type === ReviewType.System && (
-                        <span
-                            className={classes(botTag.botTagVerified, botTag.botTagRegular, botTag.px, botTag.rem)}
-                            style={{ marginLeft: "4px" }}>
-                            <span className={botTag.botText}>
-                                {t("reviewDB.system")}
-                            </span>
+                        className={classes(BotTagClasses.botTagVerified, BotTagClasses.botTagRegular, BotTagClasses.px, BotTagClasses.rem)}
+                        style={{ marginLeft: "4px" }}>
+                        <span className={BotTagClasses.botText}>
+                            {t("reviewDB.system")}
                         </span>
-                    )}
-                </div>
-                {isAuthorBlocked && (
-                    <ReviewBadge
-                        name={t("reviewDB.blockedUser")}
-                        description={t("reviewDB.blockedUser")}
-                        icon="/assets/aaee57e0090991557b66.svg"
-                        type={0}
-                        onClick={() => openBlockModal()}
-                    />
-                )}
-                {review.sender.badges.map((badge, idx) => <ReviewBadge key={idx} {...badge} />)}
-
-                {
-                    !settings.store.hideTimestamps && review.type !== ReviewType.System && (
-                        <Timestamp timestamp={new Date(review.timestamp * 1000)} >
-                            {dateFormat.format(review.timestamp * 1000)}
-                        </Timestamp>)
-                }
-
-                <div className={cl("review-comment")}>
-                    {(review.comment.length > 200 && !showAll)
-                        ? (
-                            <>
-                                {Parser.parseGuildEventDescription(review.comment.substring(0, 200))}...
-                                <br />
-                                <a onClick={() => setShowAll(true)}>{t("reviewDB.readMore")}</a>]
-                            </>
-                        )
-                        : Parser.parseGuildEventDescription(review.comment)}
-                </div>
-
-                {review.id !== 0 && (
-                    <div className={classes(container, isHeader, buttons)} style={{
-                        padding: "0px",
-                    }}>
-                        <div className={classes(buttonClasses.wrapper, buttonsInner)} >
-                            {canReportReview(review) && <ReportButton onClick={reportRev} />}
-                            {canBlockReviewAuthor(profileId, review) && <BlockButton isBlocked={isAuthorBlocked} onClick={blockReviewSender} />}
-                            {canDeleteReview(profileId, review) && <DeleteButton onClick={delReview} />}
-                        </div>
-                    </div>
+                    </span>
                 )}
             </div>
-        );
-    };
-});
+            {isAuthorBlocked && (
+                <ReviewBadge
+                    name={t("reviewDB.blockedUser")}
+                    description={t("reviewDB.blockedUser")}
+                    icon="/assets/aaee57e0090991557b66.svg"
+                    type={0}
+                    onClick={() => openBlockModal()}
+                />
+            )}
+            {review.sender.badges.map((badge, idx) => <ReviewBadge key={idx} {...badge} />)}
+
+            {
+                !settings.store.hideTimestamps && review.type !== ReviewType.System && (
+                    <Timestamp timestamp={new Date(review.timestamp * 1000)} >
+                        {dateFormat.format(review.timestamp * 1000)}
+                    </Timestamp>)
+            }
+
+            <div className={cl("review-comment")}>
+                {(review.comment.length > 200 && !showAll)
+                    ? (
+                        <>
+                            {Parser.parseGuildEventDescription(review.comment.substring(0, 200))}...
+                            <br />
+                            <a onClick={() => setShowAll(true)}>{t("reviewDB.readMore")}</a>]
+                        </>
+                    )
+                    : Parser.parseGuildEventDescription(review.comment)}
+            </div>
+
+            {review.id !== 0 && (
+                <div className={classes(ContainerClasses.container, ContainerClasses.isHeader, MessageClasses.buttons)} style={{
+                    padding: "0px",
+                }}>
+                    <div className={classes(ButtonClasses.wrapper, MessageClasses.buttonsInner)} >
+                        {canReportReview(review) && <ReportButton onClick={reportRev} />}
+                        {canBlockReviewAuthor(profileId, review) && <BlockButton isBlocked={isAuthorBlocked} onClick={blockReviewSender} />}
+                        {canDeleteReview(profileId, review) && <DeleteButton onClick={delReview} />}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}

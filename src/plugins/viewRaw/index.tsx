@@ -120,7 +120,7 @@ function openViewRawModalMessage(msg: Message) {
 
 const settings = definePluginSettings({
     clickMethod: {
-        description: () => t("viewRaw.settings.clickMethodDescription"),
+        description: t("viewRaw.settings.clickMethodDescription"),
         type: OptionType.SELECT,
         options: [
             { label: t("viewRaw.settings.leftClick"), value: "Left", default: true },

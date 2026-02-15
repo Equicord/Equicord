@@ -22,7 +22,7 @@ import { debounce } from "@shared/debounce";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { t } from "@utils/translation";
-import definePlugin, { makeRange, OptionType } from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { createRoot, Menu } from "@webpack/common";
 import { JSX } from "react";
 import type { Root } from "react-dom/client";
@@ -59,14 +59,14 @@ export const settings = definePluginSettings({
     zoom: {
         description: t("imageZoom.settings.zoom"),
         type: OptionType.SLIDER,
-        markers: makeRange(1, 50, 4),
+        markers: [1, 5, 10, 20, 30, 40, 50],
         default: 2,
         stickToMarkers: false,
     },
     size: {
         description: t("imageZoom.settings.size"),
         type: OptionType.SLIDER,
-        markers: makeRange(50, 1000, 50),
+        markers: [50, 100, 250, 500, 750, 1000],
         default: 100,
         stickToMarkers: false,
     },
@@ -74,7 +74,7 @@ export const settings = definePluginSettings({
     zoomSpeed: {
         description: t("imageZoom.settings.zoomSpeed"),
         type: OptionType.SLIDER,
-        markers: makeRange(0.1, 5, 0.2),
+        markers: [0.1, 0.5, 1, 2, 3, 4, 5],
         default: 0.5,
         stickToMarkers: false,
     },
@@ -163,10 +163,10 @@ export default definePlugin({
 
     patches: [
         {
-            find: ".dimensionlessImage,",
+            find: "disableArrowKeySeek:!0",
             replacement: [
                 {
-                    match: /className:\i\.media,/,
+                    match: /useFullWidth:!0,shouldLink:/,
                     replace: `id:"${ELEMENT_ID}",$&`
                 },
                 {
@@ -179,7 +179,7 @@ export default definePlugin({
         {
             find: '="FOCUS_SENSITIVE",',
             replacement: {
-                match: /(?<=\.hidden]:)\i/,
+                match: /(?<=\[\i\.\i]:)\i&&!\i&&"PINNED"!==\i/,
                 replace: "false"
             }
         },

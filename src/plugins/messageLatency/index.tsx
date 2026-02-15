@@ -11,7 +11,6 @@ import { isNonNullish } from "@utils/guards";
 import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { findComponentByCodeLazy } from "@webpack";
 import { AuthenticationStore, SnowflakeUtils, Tooltip } from "@webpack/common";
 
 type FillValue = ("status-danger" | "status-warning" | "status-positive" | "text-muted");
@@ -27,7 +26,6 @@ interface Diff {
 }
 
 const DISCORD_KT_DELAY = 1471228928;
-const HiddenVisually = findComponentByCodeLazy(".hiddenVisually]:");
 
 export default definePlugin({
     name: "MessageLatency",
@@ -37,22 +35,22 @@ export default definePlugin({
     settings: definePluginSettings({
         latency: {
             type: OptionType.NUMBER,
-            description: () => t("messageLatency.settings.latency"),
+            description: t("messageLatency.settings.latency"),
             default: 2
         },
         detectDiscordKotlin: {
             type: OptionType.BOOLEAN,
-            description: () => t("messageLatency.settings.detectDiscordKotlin"),
+            description: t("messageLatency.settings.detectDiscordKotlin"),
             default: true
         },
         showMillis: {
             type: OptionType.BOOLEAN,
-            description: () => t("messageLatency.settings.showMillis"),
+            description: t("messageLatency.settings.showMillis"),
             default: false
         },
         ignoreSelf: {
             type: OptionType.BOOLEAN,
-            description: () => t("messageLatency.settings.ignoreSelf"),
+            description: t("messageLatency.settings.ignoreSelf"),
             default: false
         }
     }),
@@ -171,12 +169,7 @@ export default definePlugin({
                 text={text}
                 position="top"
             >
-                {
-                    props => <>
-                        {<this.Icon delta={d.delta} fill={d.fill} props={props} />}
-                        <HiddenVisually>{t("messageLatency.delayedMessage")}</HiddenVisually>
-                    </>
-                }
+                {props => <this.Icon delta={d.delta} fill={d.fill} props={props} />}
             </Tooltip>;
         }, { noop: true });
     },

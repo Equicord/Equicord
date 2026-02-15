@@ -17,7 +17,7 @@ import definePlugin, { OptionType } from "@utils/types";
 const settings = definePluginSettings({
     originalImagesInChat: {
         type: OptionType.BOOLEAN,
-        description: () => t("fixImagesQuality.settings.originalImagesInChat"),
+        description: t("fixImagesQuality.settings.originalImagesInChat"),
         default: false,
     }
 });
@@ -40,7 +40,7 @@ export default definePlugin({
 
     settingsAboutComponent() {
         return (
-            <Card variant="normal">
+            <Card variant="primary">
                 <Flex flexDirection="column" gap="4px">
                     <Paragraph size="md" weight="semibold">{t("fixImagesQuality.defaultBehavior")}</Paragraph>
                     <Paragraph>
@@ -61,19 +61,28 @@ export default definePlugin({
         );
     },
 
-    getSrc(props: { src: string; mediaLayoutType: string; width: number; height: number; contentType: string; }, freeze?: boolean) {
+    getSrc(props: { src: string; width: number; height: number; contentType: string; mosaicStyleAlt?: boolean; trigger?: string; }, freeze?: boolean) {
         if (!props?.src) return;
 
         try {
-            const { contentType, height, mediaLayoutType, src, width } = props;
-            if (!contentType?.startsWith("image/") || src.startsWith("data:")) return;
+            const { contentType, height, src, width, mosaicStyleAlt, trigger } = props;
+
+            // Embed images do not have a content type set.
+            // It's difficult to differentiate between images and videos. but mosaicStyleAlt seems exclusive to images
+            const isImage = contentType?.startsWith("image/") ?? (typeof mosaicStyleAlt === "boolean");
+            if (!isImage || src.startsWith("data:")) return;
 
             const url = new URL(src);
             if (!url.pathname.startsWith("/attachments/")) return;
 
             url.searchParams.set("animated", String(!freeze));
+            if (freeze && url.pathname.endsWith(".gif")) {
+                // gifs don't support animated=false, so we have no choice but to use webp
+                url.searchParams.set("format", "webp");
+            }
 
-            if (!settings.store.originalImagesInChat && mediaLayoutType === "MOSAIC") {
+            const isModal = !!trigger;
+            if (!settings.store.originalImagesInChat && !isModal) {
                 // make sure the image is not too large
                 const pixels = width * height;
                 const limit = 2000 * 1200;

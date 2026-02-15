@@ -14,7 +14,7 @@ import { t } from "@utils/translation";
 import { findComponentByCodeLazy } from "@webpack";
 import { useEffect } from "@webpack/common";
 
-const CustomizationSection = findComponentByCodeLazy(".customizationSectionBackground");
+const CustomizationSection = findComponentByCodeLazy(".DESCRIPTION", "hasBackground:");
 
 export interface DecorSectionProps {
     hideTitle?: boolean;

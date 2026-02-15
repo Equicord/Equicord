@@ -132,7 +132,7 @@ export default definePlugin({
                     replace: "$self.renderTypingUsers({ users: arguments[0]?.typingUserObjects, guildId: arguments[0]?.channel?.guild_id, children: $& })"
                 },
                 {
-                    match: /(?<=function \i\(\i\)\{)(?=[^}]+?\{channel:\i,isThreadCreation:\i=!1\})/,
+                    match: /(?<=function \i\(\i\)\{)(?=[^}]+?\{channel:\i,isThreadCreation:\i=!1,\.\.\.\i\})/,
                     replace: "let typingUserObjects = $self.useTypingUsers(arguments[0]?.channel);"
                 },
                 {
@@ -151,7 +151,7 @@ export default definePlugin({
             ]
         },
         {
-            find: "\"handleDismissInviteEducation\"",
+            find: "this.handleDismissInviteEducation",
             predicate: () => settings.store.amITyping,
             replacement: {
                 match: /\i\.default\.getCurrentUser\(\)/,
@@ -172,7 +172,7 @@ export default definePlugin({
             return Object.keys(typingUsers)
                 .filter(id => {
                     if (!id || RelationshipStore.isBlockedOrIgnored(id)) return false;
-                    if (id === myId) return Settings.plugins.AmITyping?.enabled;
+                    if (id === myId) return settings.store.amITyping;
                     return true;
                 })
                 .map(id => UserStore.getUser(id))

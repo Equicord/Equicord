@@ -38,6 +38,7 @@ export const reporterData: ReporterData = {
         findByProps: [],
         findByCode: [],
         findStore: [],
+        findCssClasses: [],
         findComponent: [],
         findComponentByCode: [],
         findExportedComponent: [],

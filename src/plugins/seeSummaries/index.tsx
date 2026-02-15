@@ -19,7 +19,7 @@ const createSummaryFromServer = findByCodeLazy(".people)),startId:", ".type}");
 const settings = definePluginSettings({
     summaryExpiryThresholdDays: {
         type: OptionType.SLIDER,
-        description: () => t("seeSummaries.settings.summaryExpiryThresholdDays"),
+        description: t("seeSummaries.settings.summaryExpiryThresholdDays"),
         markers: [1, 3, 5, 7, 10, 15, 20, 25, 30],
         stickToMarkers: false,
         default: 3,

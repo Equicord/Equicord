@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { questIsIgnored, settings } from "@equicordplugins/questify/settings";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import { findByPropsLazy } from "@webpack";
 import { FluxDispatcher, RestAPI, UserStore } from "@webpack/common";
 
-import { Quest, QuestStatus, RGB } from "./components";
+import { activeQuestIntervals } from "..";
+import { questIsIgnored, settings } from "../settings";
+import { Quest, QuestStatus, QuestTask, QuestTaskType, RGB } from "./components";
 
 export const q = classNameFactory("questify-");
 export const QuestifyLogger = new Logger("Questify");
@@ -36,6 +37,48 @@ export function getIgnoredQuestIDs(userId?: string): string[] {
     const key = ignoredQuestProfile === "shared" ? "shared" : currentUserID;
     ignoredQuestIDs[key] ??= [];
     return ignoredQuestIDs[key];
+}
+
+export function getQuestTask(quest: Quest): QuestTask {
+    const tasks = quest.config.taskConfigV2?.tasks;
+
+    return (tasks.PLAY_ON_DESKTOP ||
+        tasks.PLAY_ON_XBOX ||
+        tasks.PLAY_ON_PLAYSTATION ||
+        tasks.PLAY_ACTIVITY ||
+        tasks.WATCH_VIDEO ||
+        tasks.WATCH_VIDEO_ON_MOBILE ||
+        tasks.ACHIEVEMENT_IN_ACTIVITY) as QuestTask;
+}
+
+export function getQuestProgress(quest: Quest, task: QuestTask) {
+    const intervalData = activeQuestIntervals.get(quest.id);
+
+    if (intervalData) { return intervalData.progress; }
+
+    const progressMap = quest.userStatus?.progress;
+
+    if (!progressMap) { return null; }
+
+    if (task.type === QuestTaskType.WATCH_VIDEO || task.type === QuestTaskType.WATCH_VIDEO_ON_MOBILE) {
+        const watchProgress = progressMap.WATCH_VIDEO?.value;
+        const mobileProgress = progressMap.WATCH_VIDEO_ON_MOBILE?.value;
+
+        if (watchProgress !== undefined || mobileProgress !== undefined) {
+            return Math.max(watchProgress ?? 0, mobileProgress ?? 0);
+        }
+
+        return null;
+    }
+
+    return progressMap[task.type]?.value ?? null;
+}
+
+export function getQuestTarget(task: QuestTask) {
+    const isWatch = task.type === QuestTaskType.WATCH_VIDEO || task.type === QuestTaskType.WATCH_VIDEO_ON_MOBILE;
+    const raw = task.target;
+    const adjusted = raw - (isWatch ? videoQuestLeeway : 0);
+    return { raw, adjusted };
 }
 
 export function getQuestStatus(quest: Quest, checkIgnored: boolean = true): QuestStatus {

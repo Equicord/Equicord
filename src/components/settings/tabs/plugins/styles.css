@@ -48,19 +48,6 @@
     grid-template-columns: 1fr 150px;
 }
 
-.vc-addon-badge {
-    padding: 0 6px;
-    font-family: var(--font-display);
-    font-weight: 500;
-    border-radius: 8px;
-    height: 16px;
-    font-size: 12px;
-    line-height: 16px;
-    color: var(--white-500);
-    text-align: center;
-    margin-right: 8px;
-}
-
 .vc-plugins-dep-name {
     margin: 0 auto;
 }
@@ -175,29 +162,29 @@
 
 .vc-plugins-disable-warning,
 .vc-plugin-modal-disable-warning {
-    background-color: color-mix(in srgb, var(--redesign-button-danger-background) 10%, transparent) !important;
+    background-color: color-mix(in srgb, var(--status-danger) 10%, transparent) !important;
     border-style: solid !important;
     border-width: .1rem !important;
-    border-color: color-mix(in srgb, var(--redesign-button-danger-background) 80%, transparent) !important;
+    border-color: color-mix(in srgb, var(--status-danger) 80%, transparent) !important;
     border-radius: 5px !important;
-    color: color-mix(in srgb, var(--redesign-button-danger-background) 100%, transparent) !important;
+    color: color-mix(in srgb, var(--status-danger) 100%, transparent) !important;
 }
 
 .vc-plugins-disable-warning:hover,
 .vc-plugin-modal-disable-warning:hover {
-    background-color: color-mix(in srgb, var(--redesign-button-danger-background) 40%, transparent) !important;
+    background-color: color-mix(in srgb, var(--status-danger) 40%, transparent) !important;
 }
 
 .vc-plugins-confirm-reset,
 .vc-plugin-modal-confirm-reset {
-    background-color: var(--redesign-button-danger-background) !important;
-    color: var(--redesign-button-danger-pressed-text);
+    background-color: var(--status-danger) !important;
+    color: var(--text-default);
 }
 
 .vc-plugins-confirm-reset:hover,
 .vc-plugin-modal-confirm-reset:hover {
-    background-color: var(--redesign-button-danger-pressed-background) !important;
-    color: var(--redesign-button-danger-pressed-text);
+    background-color: var(--text-feedback-critical) !important;
+    color: var(--text-default);
 }
 
 .vc-modal-close-button {

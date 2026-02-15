@@ -8,7 +8,6 @@ import { Flex } from "@components/Flex";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { BasicChannelTabsProps, ChannelTabsProps, clearStaleNavigationContext, closeTab, createTab, handleChannelSwitch, isNavigationFromSource, isTabSelected, moveToTab, openedTabs, openStartupTabs, saveTabs, settings, setUpdaterFunction, useGhostTabs } from "@equicordplugins/channelTabs/util";
-import { IS_MAC } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
@@ -294,7 +293,6 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
             className={classes(
                 cl("container"),
                 tabBarPosition === "top" && cl("container-top"),
-                IS_MAC && tabBarPosition === "top" && cl("container-top-macos"),
                 !animationHover && cl("no-hover-animation"),
                 !animationSelection && cl("no-selection-animation"),
                 !animationDragDrop && cl("no-drag-animation"),
@@ -329,6 +327,7 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                     {openedTabs.filter(tab => tab != null).map((tab, i) =>
                         <ChannelTab {...tab} index={i} key={tab.id} />
                     )}
+                    {GhostTabs}
                 </HorizontalScroller>
 
                 <button
@@ -337,8 +336,6 @@ export default function ChannelsTabsContainer(props: BasicChannelTabsProps) {
                 >
                     <PlusSmallIcon />
                 </button>
-
-                {GhostTabs}
             </div >
 
         </div>
