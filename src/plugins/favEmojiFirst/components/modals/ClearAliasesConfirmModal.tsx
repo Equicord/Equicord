@@ -8,6 +8,7 @@ import { Button } from "@components/Button";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize } from "@utils/modal";
+import { t } from "@utils/translation";
 
 import { ClearAliasesConfirmModalProps } from "./types";
 
@@ -15,11 +16,11 @@ export function ClearAliasesConfirmModal({ modalProps, onConfirm }: ClearAliases
     return (
         <ModalRoot {...modalProps} size={ModalSize.SMALL}>
             <ModalHeader>
-                <Heading style={{ flexGrow: 1 }}>Delete all aliases</Heading>
+                <Heading style={{ flexGrow: 1 }}>{t("favEmojiFirst.ui.confirmModal.title")}</Heading>
                 <ModalCloseButton onClick={modalProps.onClose} />
             </ModalHeader>
             <ModalContent>
-                <Paragraph>This will remove every emoji alias you saved.</Paragraph>
+                <Paragraph>{t("favEmojiFirst.ui.confirmModal.description")}</Paragraph>
             </ModalContent>
             <ModalFooter>
                 <Button
@@ -30,7 +31,7 @@ export function ClearAliasesConfirmModal({ modalProps, onConfirm }: ClearAliases
                         modalProps.onClose();
                     }}
                 >
-                    Delete all aliases
+                    {t("favEmojiFirst.ui.confirmModal.confirmButton")}
                 </Button>
             </ModalFooter>
         </ModalRoot>

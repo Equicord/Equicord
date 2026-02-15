@@ -23,6 +23,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel, Role } from "@vencord/discord-types";
 import { ChannelStore, PermissionsBits, PermissionStore, Tooltip } from "@webpack/common";
@@ -48,28 +49,28 @@ const CONNECT = 1n << 20n;
 
 export const settings = definePluginSettings({
     channelStyle: {
-        description: "The style used to display hidden channels.",
+        description: t("showHiddenChannels.settings.channelStyle.description"),
         type: OptionType.SELECT,
         options: [
-            { label: "Classic", value: ChannelStyle.Classic, default: true },
-            { label: "Muted", value: ChannelStyle.Muted },
-            { label: "Show Unreads", value: ChannelStyle.Unread },
-            { label: "Muted and Show Unreads", value: ChannelStyle.MutedUnread }
+            { label: t("showHiddenChannels.settings.channelStyle.classic"), value: ChannelStyle.Classic, default: true },
+            { label: t("showHiddenChannels.settings.channelStyle.muted"), value: ChannelStyle.Muted },
+            { label: t("showHiddenChannels.settings.channelStyle.showUnreads"), value: ChannelStyle.Unread },
+            { label: t("showHiddenChannels.settings.channelStyle.mutedAndShowUnreads"), value: ChannelStyle.MutedUnread }
         ],
         restartNeeded: true
     },
     showMode: {
-        description: "The mode used to display hidden channels.",
+        description: t("showHiddenChannels.settings.showMode.description"),
         type: OptionType.SELECT,
         options: [
-            { label: "Lock Icon replacing channel icon", value: ShowMode.LockIcon, default: true },
-            { label: "Eye icon on the right", value: ShowMode.EyeIconRight },
-            { label: "Lock icon on the right", value: ShowMode.LockIconRight }
+            { label: t("showHiddenChannels.settings.showMode.lockIcon"), value: ShowMode.LockIcon, default: true },
+            { label: t("showHiddenChannels.settings.showMode.eyeIconRight"), value: ShowMode.EyeIconRight },
+            { label: t("showHiddenChannels.settings.showMode.lockIconRight"), value: ShowMode.LockIconRight }
         ],
         restartNeeded: true
     },
     defaultAllowedUsersAndRolesDropdownState: {
-        description: "Whether the allowed users and roles dropdown on hidden channels should be open by default",
+        description: t("showHiddenChannels.settings.defaultAllowedUsersAndRolesDropdownState.description"),
         type: OptionType.BOOLEAN,
         default: true
     }
@@ -81,7 +82,7 @@ function isUncategorized(objChannel: { channel: Channel; comparator: number; }) 
 
 export default definePlugin({
     name: "ShowHiddenChannels",
-    description: "Show channels that you do not have access to view.",
+    description: t("showHiddenChannels.description"),
     authors: [Devs.BigDuck, Devs.AverageReactEnjoyer, Devs.D3SOX, Devs.Ven, Devs.Nuckyz, Devs.Nickyux, Devs.dzshn, EquicordDevs.Oggetto],
     isModified: true,
     settings,
@@ -575,7 +576,7 @@ export default definePlugin({
     ), { noop: true }),
 
     EyeRightIcon: ErrorBoundary.wrap(() => (
-        <Tooltip text="Hidden Channel">
+        <Tooltip text={t("showHiddenChannels.hiddenChannelTooltip")}>
             {({ onMouseLeave, onMouseEnter }) => (
                 <svg
                     onMouseLeave={onMouseLeave}
@@ -594,7 +595,7 @@ export default definePlugin({
     ), { noop: true }),
 
     LockRightIcon: ErrorBoundary.wrap(() => (
-        <Tooltip text="Hidden Channel">
+        <Tooltip text={t("showHiddenChannels.hiddenChannelTooltip")}>
             {({ onMouseLeave, onMouseEnter }) => (
                 <svg
                     onMouseLeave={onMouseLeave}

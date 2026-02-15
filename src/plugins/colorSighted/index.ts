@@ -17,11 +17,12 @@
 */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "ColorSighted",
-    description: "Removes the colorblind-friendly icons from statuses, just like 2015-2017 Discord",
+    description: t("colorSighted.description"),
     authors: [Devs.lewisakura],
     patches: [
         {

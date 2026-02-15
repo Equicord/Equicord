@@ -24,6 +24,7 @@ import { sleep } from "@utils/misc";
 import { ModalAPI } from "@utils/modal";
 import { relaunch } from "@utils/native";
 import { canonicalizeMatch, canonicalizeReplace, canonicalizeReplacement } from "@utils/patches";
+import { t } from "@utils/translation";
 import definePlugin, { PluginNative, StartAt } from "@utils/types";
 import * as Webpack from "@webpack";
 import { extract, filters, findAll, findModuleId, search } from "@webpack";
@@ -243,7 +244,7 @@ const webpackModulesProbablyLoaded = Webpack.onceReady.then(() => sleep(1000));
 
 export default definePlugin({
     name: "ConsoleShortcuts",
-    description: "Adds shorter Aliases for many things on the window. Run `shortcutList` for a list.",
+    description: t("consoleShortcuts.description"),
     authors: [Devs.Ven],
     startAt: StartAt.Init,
 

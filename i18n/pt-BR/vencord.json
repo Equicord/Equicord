@@ -207,76 +207,76 @@
     },
     "reviewDB": {
         "settings": {
-            "authorize": "Authorize with ReviewDB",
+            "authorize": "Autorizar com ReviewDB",
             "notifyReviews": {
-                "description": "Notify about new reviews on startup"
+                "description": "Notificar sobre novas avaliações na inicialização"
             },
             "showWarning": {
-                "description": "Display warning to be respectful at the top of the reviews list"
+                "description": "Exibir aviso para ser respeitoso no topo da lista de avaliações"
             },
             "hideTimestamps": {
-                "description": "Hide timestamps on reviews"
+                "description": "Esconder data e hora em avaliações"
             },
             "hideBlockedUsers": {
-                "description": "Hide reviews from blocked users"
+                "description": "Esconder avaliações de usuários bloqueados"
             },
-            "manageBlockedUsers": "Manage Blocked Users",
-            "supportDevelopment": "Support ReviewDB development",
+            "manageBlockedUsers": "Gerenciar Usuários Bloqueados",
+            "supportDevelopment": "Suporte ao desenvolvimento do ReviewDB",
             "website": "ReviewDB website",
-            "supportServer": "ReviewDB Support Server"
+            "supportServer": "ReviewDB Servidor de Suporte"
         },
-        "viewReviews": "View Reviews",
-        "newReviews": "You have new reviews on your profile!",
+        "viewReviews": "Ver Avaliações",
+        "newReviews": "Você tem novas avaliações no seu perfil!",
         "appeal": "Appeal",
         "ok": "Ok",
-        "areYouSure": "Are you sure?",
-        "confirmDelete": "Do you really want to delete this review?",
-        "delete": "Delete",
-        "nevermind": "Nevermind",
-        "mustBeLoggedInDelete": "You must be logged in to delete reviews.",
-        "confirmReport": "Do you really want to report this review?",
-        "report": "Report",
-        "mustBeLoggedInReport": "You must be logged in to report reviews.",
-        "confirmBlock": "Do you really want to block this user? They will be unable to leave further reviews on your profile. You can unblock users in the plugin settings.",
-        "block": "Block",
-        "mustBeLoggedInBlock": "You must be logged in to block users.",
-        "system": "System",
-        "blockedUser": "You have blocked this user",
-        "readMore": "Read more",
-        "unblockUser": "Unblock user",
+        "areYouSure": "Você tem certeza?",
+        "confirmDelete": "Você realmente deseja deletar esta avaliação?",
+        "delete": "Deletar",
+        "nevermind": "Deixa pra lá",
+        "mustBeLoggedInDelete": "Você tem que estar logado para deletar avaliações.",
+        "confirmReport": "Você realmente deseja reportar está avaliação?",
+        "report": "Reportar",
+        "mustBeLoggedInReport": "Você tem que estar logado para reportar avaliações.",
+        "confirmBlock": "Você realmente quer bloquear esse usuário? Eles não poderão deixar mais avaliações no seu perfil. Você pode desbloquear usuários nas configurações do plugin.",
+        "block": "Bloquear",
+        "mustBeLoggedInBlock": "Você tem que estar logado para bloquear usuários.",
+        "system": "Sistema",
+        "blockedUser": "Você bloqueou este usuário",
+        "readMore": "Ler mais",
+        "unblockUser": "Desbloquear usuário",
         "failedToFetchBlocks": "Failed to fetch blocks: {error}",
-        "noBlockedUsers": "No blocked users.",
-        "blockedUsers": "Blocked Users",
-        "notLoggedIn": "You are not logged into ReviewDB!"
+        "noBlockedUsers": "Sem usuários bloqueados.",
+        "blockedUsers": "Usuários Bloqueados",
+        "notLoggedIn": "Você não esta logado no ReviewDB!"
     },
     "translate": {
         "autoTranslateEnabled": {
-            "title": "Equicord Auto-Translate Enabled",
+            "title": "Equicord Tradução Automática Ativada",
             "body": "You just enabled Auto Translate! Any message <0>will automatically be translated</0> before being sent."
         },
-        "disableAutoTranslate": "Disable Auto-Translate",
-        "gotIt": "Got it",
-        "dontShowAgain": "Don't show again",
+        "disableAutoTranslate": "Desativar Tradução Automática",
+        "gotIt": "Entendi",
+        "dontShowAgain": "Não mostrar novamente",
         "openTranslateModal": "Open Translate Modal",
-        "autoTranslateEnabledLabel": "Auto Translate Enabled",
-        "translate": "Translate",
-        "selectLanguage": "Select a language",
+        "autoTranslateEnabledLabel": "Tradução Automática Ativada",
+        "translate": "Traduzir",
+        "selectLanguage": "Selecionar um idioma",
         "autoTranslate": "Auto Translate",
         "modalTitle": "Translate"
     },
     "voiceMessages": {
-        "send": "Send Voice Message",
-        "missingPermissions": "(Missing Permissions)",
-        "recordModal": "Record Voice Message",
-        "uploadFile": "Upload File",
+        "send": "Enviar Mensagem de Voz",
+        "missingPermissions": "(Permissões Ausentes)",
+        "recordModal": "Gravar Mensagem de Voz",
+        "uploadFile": "Enviar Arquivo",
         "preview": "Preview",
         "failedToParse": "Failed to parse selected audio file: {error}",
         "iosWarning": "Voice Messages have to be OggOpus to be playable on iOS. This file is <0>{type}</0> so it will not be playable on iOS.",
         "iosFix": "To fix it, first convert it to OggOpus, for example using the <0>convertio web converter</0>",
-        "sending": "Now sending voice message... Please be patient",
-        "failedToUpload": "Failed to upload voice message",
-        "noiseSuppression": "Noise Suppression",
-        "echoCancellation": "Echo Cancellation"
+        "sending": "Enviando mensagem de voz... Por favor seja paciente",
+        "failedToUpload": "Falha ao enviar mensagem de voz",
+        "noiseSuppression": "Supressão de ruído",
+        "echoCancellation": "Cancelamento de Eco"
     },
     "showHiddenChannels": {
         "hiddenChannel": "This is a hidden {type} channel",
@@ -333,9 +333,9 @@
         "removeMessageTemporary": "Remove Message (Temporary)",
         "clearMessageLog": "Clear Message Log",
         "settings": {
-            "deleteStyle": "The style of deleted messages",
-            "deleteStyleRedText": "Red text",
-            "deleteStyleRedOverlay": "Red overlay",
+            "deleteStyle": "O estilo das mensagens excluídas",
+            "deleteStyleRedText": "Texto vermelho",
+            "deleteStyleRedOverlay": "Overlay vermelho",
             "logDeletes": "Whether to log deleted messages",
             "collapseDeleted": "Whether to collapse deleted messages, similar to blocked messages",
             "logEdits": "Whether to log edited messages",
@@ -416,13 +416,13 @@
             "enterValue": "Enter a value",
             "selectOption": "Select an option"
         },
-        "activityType": "Activity Type",
+        "activityType": "Tipo de atividade",
         "activityTypes": {
-            "playing": "Playing",
+            "playing": "Jogando",
             "streaming": "Streaming",
-            "listening": "Listening",
-            "watching": "Watching",
-            "competing": "Competing"
+            "listening": "Ouvindo",
+            "watching": "Assistindo",
+            "competing": "Competindo"
         },
         "appId": "Application ID",
         "appName": "Application Name",

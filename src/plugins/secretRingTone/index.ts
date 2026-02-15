@@ -7,11 +7,12 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+import { t } from "@utils/translation";
 
 const settings = definePluginSettings({
     onlySnow: {
         type: OptionType.BOOLEAN,
-        description: "Only play the Snow Halation Theme",
+        description: t("secretRingTone.settings.onlySnow"),
         default: false,
         restartNeeded: true
     }
@@ -19,7 +20,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SecretRingToneEnabler",
-    description: "Always play the secret version of the discord ringtone (except during special ringtone events)",
+    description: t("secretRingTone.description"),
     authors: [Devs.AndrewDLO, Devs.FieryFlames, Devs.RamziAH],
     settings,
     patches: [

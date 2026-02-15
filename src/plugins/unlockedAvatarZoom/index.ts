@@ -7,11 +7,12 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
+import { t } from "@utils/translation";
 
 const settings = definePluginSettings({
     zoomMultiplier: {
         type: OptionType.SLIDER,
-        description: "Zoom multiplier",
+        description: t("unlockedAvatarZoom.settings.zoomMultiplier"),
         markers: makeRange(2, 16),
         default: 4,
     },
@@ -19,7 +20,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UnlockedAvatarZoom",
-    description: "Allows you to zoom in further in the image crop tool when changing your avatar",
+    description: t("unlockedAvatarZoom.description"),
     authors: [Devs.nakoyasha],
     settings,
     patches: [

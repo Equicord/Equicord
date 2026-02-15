@@ -19,18 +19,19 @@
 import { definePluginSettings, Settings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { canonicalizeMatch } from "@utils/patches";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
     hide: {
         type: OptionType.BOOLEAN,
-        description: "Hide notes",
+        description: t("betterNotesBox.settings.hide"),
         default: false,
         restartNeeded: true
     },
     noSpellCheck: {
         type: OptionType.BOOLEAN,
-        description: "Disable spellcheck in notes",
+        description: t("betterNotesBox.settings.noSpellCheck"),
         disabled: () => Settings.plugins.BetterNotesBox.hide,
         default: false
     }
@@ -38,7 +39,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterNotesBox",
-    description: "Hide notes or disable spellcheck (Configure in settings!!)",
+    description: t("betterNotesBox.description"),
     authors: [Devs.Ven],
     settings,
 

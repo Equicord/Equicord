@@ -20,6 +20,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType, PluginSettingDef } from "@utils/types";
+import { t } from "@utils/translation";
 import { GuildMember, Role } from "@vencord/discord-types";
 
 const opt = (description: string) => ({
@@ -30,15 +31,15 @@ const opt = (description: string) => ({
 } satisfies PluginSettingDef);
 
 const settings = definePluginSettings({
-    showTimeouts: opt("Show member timeout icons in chat."),
-    showInvitesPaused: opt("Show the invites paused tooltip in the server list."),
-    showModView: opt("Show the member mod view context menu item in all servers.")
+    showTimeouts: opt(t("showHiddenThings.settings.showTimeouts")),
+    showInvitesPaused: opt(t("showHiddenThings.settings.showInvitesPaused")),
+    showModView: opt(t("showHiddenThings.settings.showModView"))
 });
 
 export default definePlugin({
     name: "ShowHiddenThings",
     tags: ["ShowTimeouts", "ShowInvitesPaused", "ShowModView", "DisableDiscoveryFilters"],
-    description: "Displays various hidden & moderator-only things regardless of permissions.",
+    description: t("showHiddenThings.description"),
     authors: [Devs.Dolfies],
     settings,
 

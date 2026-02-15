@@ -20,6 +20,7 @@ import { ApplicationCommandInputType, findOption, OptionalMessageOption, sendBot
 import { Devs } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 import { Command } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
 import { FluxDispatcher, MessageActions } from "@webpack/common";
@@ -60,21 +61,21 @@ const PendingReplyStore = findByPropsLazy("getPendingReply");
 function makeCommand(name: string, formatUrl: (track: Track) => string): Command {
     return {
         name,
-        description: `Share your current Spotify ${name} in chat`,
+        description: t("spotifyShareCommands.commands.shareDescription", { name }),
         inputType: ApplicationCommandInputType.BUILT_IN,
         options: [OptionalMessageOption],
         execute(options, { channel }) {
             const track: Track | null = Spotify.getTrack();
             if (!track) {
                 return sendBotMessage(channel.id, {
-                    content: "You're not listening to any music."
+                    content: t("spotifyShareCommands.commands.notListening")
                 });
             }
 
             // local tracks have an id of null
             if (track.id == null) {
                 return sendBotMessage(channel.id, {
-                    content: "Failed to find the track on spotify."
+                    content: t("spotifyShareCommands.commands.trackNotFound")
                 });
             }
 
@@ -98,7 +99,7 @@ function makeCommand(name: string, formatUrl: (track: Track) => string): Command
 
 export default definePlugin({
     name: "SpotifyShareCommands",
-    description: "Share your current Spotify track, album or artist via slash command (/track, /album, /artist)",
+    description: t("spotifyShareCommands.description"),
     authors: [Devs.katlyn],
     commands: [
         makeCommand("track", track => `https://open.spotify.com/track/${track.id}`),

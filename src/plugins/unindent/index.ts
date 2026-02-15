@@ -19,10 +19,11 @@
 import { MessageObject } from "@api/MessageEvents";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 
 export default definePlugin({
     name: "Unindent",
-    description: "Trims leading indentation from codeblocks",
+    description: t("unindent.description"),
     authors: [Devs.Ven],
 
     patches: [

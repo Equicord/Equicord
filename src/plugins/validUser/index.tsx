@@ -22,6 +22,7 @@ import { isNonNullish } from "@utils/guards";
 import { sleep } from "@utils/misc";
 import { Queue } from "@utils/Queue";
 import definePlugin from "@utils/types";
+import { t } from "@utils/translation";
 import { ProfileBadge } from "@vencord/discord-types";
 import { Constants, FluxDispatcher, RestAPI, UserProfileStore, UserStore, useState } from "@webpack/common";
 import { type ComponentType, type ReactNode } from "react";
@@ -176,7 +177,7 @@ function MentionWrapper({ data, UserMention, RoleMention, parse, props }: Mentio
 
 export default definePlugin({
     name: "ValidUser",
-    description: "Fix mentions for unknown users showing up as '@unknown-user' (hover over a mention to fix it)",
+    description: t("validUser.description"),
     authors: [Devs.Ven, Devs.Dolfies],
     tags: ["MentionCacheFix"],
 
