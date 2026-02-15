@@ -58,6 +58,10 @@ type ProfileCollectible = {
 };
 
 type ImageInput = string | { imageUri: string; } | null | undefined;
+type DisplayNameStylesLike = DisplayNameStyles & {
+    fontId?: number;
+    effectId?: number;
+};
 
 function dispatch(type: string, payload: Record<string, unknown>) {
     FluxDispatcher.dispatch({ type, ...payload });
@@ -71,6 +75,22 @@ function hasImageInput(value: ImageInput): boolean {
     if (!value) return false;
     if (typeof value === "string") return value.length > 0;
     return typeof value === "object" && "imageUri" in value && isNonEmptyString(value.imageUri);
+}
+
+function normalizeDisplayNameStyles(value: DisplayNameStylesLike | null | undefined): DisplayNameStylesLike | null {
+    if (!value) return null;
+    const fontId = value.fontId ?? value.font_id;
+    const effectId = value.effectId ?? value.effect_id;
+    if (typeof fontId !== "number" || typeof effectId !== "number") return null;
+    const colors = Array.isArray(value.colors) ? [...value.colors] : [];
+
+    return {
+        fontId,
+        effectId,
+        font_id: fontId,
+        effect_id: effectId,
+        colors
+    };
 }
 
 export async function imageUrlToBase64(url: string): Promise<string | null> {
@@ -208,12 +228,11 @@ export async function getCurrentProfile(guildId?: string, options: CurrentProfil
         type: nameplateToUse.type || 2
     } : null;
 
-    const displayNameStylesToUse = pendingChanges.pendingDisplayNameStyles ?? userAny.displayNameStyles;
-    const displayNameStyles = displayNameStylesToUse ? {
-        font_id: displayNameStylesToUse.font_id ?? 0,
-        effect_id: displayNameStylesToUse.effect_id ?? 0,
-        colors: Array.isArray(displayNameStylesToUse.colors) ? displayNameStylesToUse.colors : []
-    } : null;
+    const savedDisplayNameStyles = isGuildProfile
+        ? (guildMember?.displayNameStyles ?? userAny.displayNameStyles)
+        : userAny.displayNameStyles;
+    const displayNameStylesToUse = pendingChanges.pendingDisplayNameStyles ?? savedDisplayNameStyles;
+    const displayNameStyles = normalizeDisplayNameStyles(displayNameStylesToUse as DisplayNameStylesLike | null | undefined);
 
     const pendingAvatar = pendingChanges.pendingAvatar ?? pendingChanges.avatar;
     const avatarToUse: ImageInput = hasImageInput(pendingAvatar)
@@ -245,7 +264,7 @@ export async function getCurrentProfile(guildId?: string, options: CurrentProfil
         globalName: isGuildProfile
             ? (pendingChanges.pendingNickname ?? guildMember?.nick ?? null)
             : (pendingChanges.pendingGlobalName ?? currentUser.globalName ?? null),
-        pronouns: pendingChanges.pendingPronouns ?? userProfile?.pronouns ?? null,
+        pronouns: isGuildProfile ? null : (pendingChanges.pendingPronouns ?? userProfile?.pronouns ?? null),
         avatarDecoration,
         profileEffect,
         nameplate,
@@ -278,11 +297,16 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
         const current = await getCurrentProfile(guildId, {
             isGuildProfile: isGuild
         });
-        const profilePrefix = "USER_SETTINGS_ACCOUNT";
+        const profilePrefix = isGuild ? "GUILD_IDENTITY_SETTINGS" : "USER_SETTINGS_ACCOUNT";
         const dispatchProfile = (type: string, payload: Record<string, unknown>) => {
             dispatch(type, isGuild ? { ...payload, guildId } : payload);
         };
-        const setPending = (type: string, payload: Record<string, unknown>) => dispatchProfile(type, payload);
+        const setPending = (type: string, payload: Record<string, unknown>) => {
+            dispatchProfile(type, payload);
+            if (isGuild && type.startsWith("GUILD_IDENTITY_SETTINGS_")) {
+                dispatchProfile(type.replace("GUILD_IDENTITY_SETTINGS_", "USER_SETTINGS_ACCOUNT_"), payload);
+            }
+        };
 
         if ("avatarDataUrl" in preset) {
             const avatarValue = preset.avatarDataUrl;
@@ -300,14 +324,14 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             setPending(`${profilePrefix}_SET_PENDING_BIO`, { bio: bioValue });
         }
 
-        if (!options.skipPronouns && "pronouns" in preset && preset.pronouns !== current.pronouns) {
+        if (!isGuild && !options.skipPronouns && "pronouns" in preset && preset.pronouns !== current.pronouns) {
             const pronounsValue = preset.pronouns === null ? "" : preset.pronouns;
             setPending(`${profilePrefix}_SET_PENDING_PRONOUNS`, { pronouns: pronounsValue });
         }
 
         if (!options.skipGlobalName && preset.globalName !== undefined && preset.globalName !== current.globalName) {
             if (isGuild) {
-                setPending("USER_SETTINGS_ACCOUNT_SET_PENDING_NICKNAME", { nickname: preset.globalName });
+                setPending("GUILD_IDENTITY_SETTINGS_SET_PENDING_NICKNAME", { nickname: preset.globalName });
             } else {
                 setPending("USER_SETTINGS_ACCOUNT_SET_PENDING_GLOBAL_NAME", { globalName: preset.globalName });
             }
@@ -331,8 +355,11 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             });
         }
 
-        if (preset.displayNameStyles !== undefined && !jsonEq(preset.displayNameStyles, current.displayNameStyles)) {
-            setPending(`${profilePrefix}_SET_PENDING_DISPLAY_NAME_STYLES`, { displayNameStyles: preset.displayNameStyles });
+        if (preset.displayNameStyles !== undefined) {
+            const presetDisplayNameStyles = normalizeDisplayNameStyles(preset.displayNameStyles as DisplayNameStylesLike | null | undefined);
+            if (!jsonEq(presetDisplayNameStyles, current.displayNameStyles)) {
+                setPending(`${profilePrefix}_SET_PENDING_DISPLAY_NAME_STYLES`, { displayNameStyles: presetDisplayNameStyles });
+            }
         }
 
         if (preset.themeColors !== undefined && !jsonEq(preset.themeColors, current.themeColors)) {
