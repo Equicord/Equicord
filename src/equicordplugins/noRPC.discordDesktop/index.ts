@@ -5,11 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoRPC",
-    description: "Disables Discord's RPC server.",
+    description: t("noRPC.description"),
     authors: [Devs.Cyn],
     patches: [
         {

@@ -10,6 +10,7 @@ import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { ApplicationAssetUtils, FluxDispatcher, showToast } from "@webpack/common";
 
@@ -51,15 +52,15 @@ interface MediaData {
 
 const settings = definePluginSettings({
     serverUrl: {
-        description: "AudioBookShelf server URL (e.g., https://abs.example.com)",
+        description: t("absRPC.settings.serverUrl"),
         type: OptionType.STRING,
     },
     username: {
-        description: "AudioBookShelf username",
+        description: t("absRPC.settings.username"),
         type: OptionType.STRING,
     },
     password: {
-        description: "AudioBookShelf password",
+        description: t("absRPC.settings.password"),
         type: OptionType.STRING,
     },
 });
@@ -85,16 +86,16 @@ function setActivity(activity: Activity | null) {
 
 export default definePlugin({
     name: "AudioBookShelfRichPresence",
-    description: "Rich presence for AudioBookShelf media server",
+    description: t("absRPC.description"),
     authors: [EquicordDevs.vmohammad],
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>How to connect to AudioBookShelf</HeadingSecondary>
+            <HeadingSecondary>{t("absRPC.about.title")}</HeadingSecondary>
             <Paragraph>
-                Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.
+                {t("absRPC.about.description")}
                 <br /><br />
-                The plugin will automatically authenticate and fetch your listening progress.
+                {t("absRPC.about.automaticAuth")}
             </Paragraph>
         </>
     ),
@@ -114,7 +115,7 @@ export default definePlugin({
     async authenticate(): Promise<boolean> {
         if (!settings.store.serverUrl || !settings.store.username || !settings.store.password) {
             logger.warn("AudioBookShelf server URL, username, or password is not set in settings.");
-            showToast("AudioBookShelf RPC is not configured.", "failure", {
+            showToast(t("absRPC.toasts.notConfigured"), "failure", {
                 duration: 15000,
             });
             return false;

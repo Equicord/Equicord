@@ -10,6 +10,7 @@ import { ImageInvisible, ImageVisible } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { parseUrl } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
@@ -192,7 +193,7 @@ function showFailureToast(message: string) {
 
 export default definePlugin({
     name: "ShowMessageEmbeds",
-    description: "Adds a context menu option to show embeds for links that don't have one",
+    description: t("showMessageEmbeds.description"),
     authors: [EquicordDevs.Suffocate],
 
     patches: [

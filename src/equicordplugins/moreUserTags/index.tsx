@@ -9,6 +9,7 @@ import "./styles.css";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { getCurrentChannel, getIntlMessage } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Channel, Message, User } from "@vencord/discord-types";
 import { ChannelStore, GuildStore, PermissionsBits, SelectedChannelStore, UserStore } from "@webpack/common";
@@ -33,7 +34,7 @@ const genTagTypes = () => {
 
 export default definePlugin({
     name: "MoreUserTags",
-    description: "Adds tags for webhooks and moderative roles (owner, admin, etc.)",
+    description: t("moreUserTags.description"),
     authors: [Devs.Cyn, Devs.TheSun, Devs.RyanCaoDev, Devs.LordElias, Devs.AutumnVN, EquicordDevs.Hen],
     settings,
     patches: [

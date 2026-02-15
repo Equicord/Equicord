@@ -10,6 +10,7 @@ import { MagnifyingGlassIcon } from "@components/Icons";
 import SettingsPlugin from "@plugins/_core/settings";
 import { EquicordDevs } from "@utils/constants";
 import { removeFromArray } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { StartAt } from "@utils/types";
 import { SettingsRouter } from "@webpack/common";
 
@@ -18,12 +19,12 @@ import { SettingsAbout } from "./components/Modals";
 
 export default definePlugin({
     name: "IconViewer",
-    description: "Adds a new tab to settings to preview all icons.",
+    description: t("iconViewer.description"),
     authors: [EquicordDevs.iamme],
     dependencies: ["Settings"],
     startAt: StartAt.WebpackReady,
     toolboxActions: {
-        "Open Icons Tab"() {
+        [t("iconViewer.ui.openIconsTab")]() {
             SettingsRouter.openUserSettings("equicord_icon_viewer_panel");
         },
     },
@@ -31,7 +32,7 @@ export default definePlugin({
     start() {
         SettingsPlugin.customEntries.push({
             key: "equicord_icon_viewer",
-            title: "Icon Finder",
+            title: t("iconViewer.ui.iconFinder"),
             Component: IconsTab,
             Icon: MagnifyingGlassIcon
         });

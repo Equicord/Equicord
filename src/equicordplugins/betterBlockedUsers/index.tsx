@@ -8,6 +8,7 @@ import "./styles.css";
 
 import { EquicordDevs } from "@utils/constants";
 import { getIntlMessage, openUserProfile } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Button, React, RelationshipStore, TextInput, UserStore } from "@webpack/common";
 
@@ -16,7 +17,7 @@ let updateFunc = (v: any) => { };
 
 export default definePlugin({
     name: "BetterBlockedUsers",
-    description: "Allows you to search in blocked users list and makes names selectable in settings.",
+    description: t("betterBlockedUsers.description"),
     authors: [EquicordDevs.TheArmagan],
     patches: [
         {
@@ -50,7 +51,7 @@ export default definePlugin({
         }, []);
 
         return <TextInput
-            placeholder="Search users..."
+            placeholder={t("betterBlockedUsers.ui.searchPlaceholder")}
             style={{ width: "200px" }}
             onInput={e => {
                 const search = (e.target as HTMLInputElement).value.toLowerCase().trim();

@@ -11,6 +11,7 @@ import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
@@ -23,22 +24,22 @@ export const cl = classNameFactory("vc-github-repos-");
 export const settings = definePluginSettings({
     showStars: {
         type: OptionType.BOOLEAN,
-        description: "Show repository stars",
+        description: t("githubRepos.settings.showStars"),
         default: true
     },
     showLanguage: {
         type: OptionType.BOOLEAN,
-        description: "Show repository language",
+        description: t("githubRepos.settings.showLanguage"),
         default: true
     },
     showInMiniProfile: {
         type: OptionType.BOOLEAN,
-        description: "Show full ui in the mini profile instead of just a button",
+        description: t("githubRepos.settings.showInMiniProfile"),
         default: true
     },
     showRepositoryTab: {
         type: OptionType.BOOLEAN,
-        description: "Show repositories tab in profile modal (hides button in connections when enabled)",
+        description: t("githubRepos.settings.showRepositoryTab"),
         default: true
     },
 });
@@ -58,7 +59,7 @@ const ProfilePopoutComponent = ErrorBoundary.wrap(
     {
         noop: true,
         fallback: () => <BaseText size="xs" weight="semibold" className="vc-github-repos-error" style={{ color: "var(--text-feedback-critical)" }}>
-            Error, Failed to render GithubRepos
+            {t("githubRepos.ui.error")}
         </BaseText>
     }
 );
@@ -79,7 +80,7 @@ const ProfileRepositoriesTab = ErrorBoundary.wrap(
 
 export default definePlugin({
     name: "GitHubRepos",
-    description: "Displays a user's public GitHub repositories in their profile",
+    description: t("githubRepos.description"),
     authors: [EquicordDevs.talhakf, EquicordDevs.Panniku, EquicordDevs.benjii],
     settings,
 

@@ -12,6 +12,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Heading } from "@components/Heading";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { Button, React, showToast, TextInput } from "@webpack/common";
 
@@ -245,7 +246,7 @@ const settings = definePluginSettings({
                 });
                 dataUriCache.clear();
                 setResetTrigger(prev => prev + 1);
-                showToast("All overrides reset successfully!");
+                showToast(t("customSounds.toast.resetSuccess"));
             };
 
             const triggerFileUpload = () => {
@@ -277,10 +278,10 @@ const settings = definePluginSettings({
                             }
 
                             setResetTrigger(prev => prev + 1);
-                            showToast("Settings imported successfully!");
+                            showToast(t("customSounds.toast.importSuccess"));
                         } catch (error) {
                             console.error("Error importing settings:", error);
-                            showToast("Error importing settings. Check console for details.");
+                            showToast(t("customSounds.toast.importError"));
                         }
                     };
 
@@ -314,7 +315,7 @@ const settings = definePluginSettings({
                 a.click();
                 URL.revokeObjectURL(url);
 
-                showToast(`Exported ${overrides.length} settings (audio files not included)`);
+                showToast(t("customSounds.toast.exportSuccess", { count: overrides.length }));
             };
 
             const filteredSoundTypes = allSoundTypes.filter(type =>
@@ -325,10 +326,10 @@ const settings = definePluginSettings({
             return (
                 <div>
                     <div className="vc-custom-sounds-buttons">
-                        <Button color={Button.Colors.BRAND} onClick={triggerFileUpload}>Import</Button>
-                        <Button color={Button.Colors.PRIMARY} onClick={downloadSettings}>Export</Button>
-                        <Button color={Button.Colors.RED} onClick={resetOverrides}>Reset All</Button>
-                        <Button color={Button.Colors.WHITE} onClick={debugCustomSounds}>Debug</Button>
+                        <Button color={Button.Colors.BRAND} onClick={triggerFileUpload}>{t("customSounds.settings.import")}</Button>
+                        <Button color={Button.Colors.PRIMARY} onClick={downloadSettings}>{t("customSounds.settings.export")}</Button>
+                        <Button color={Button.Colors.RED} onClick={resetOverrides}>{t("customSounds.settings.resetAll")}</Button>
+                        <Button color={Button.Colors.WHITE} onClick={debugCustomSounds}>{t("customSounds.settings.debug")}</Button>
                         <input
                             ref={fileInputRef}
                             type="file"
@@ -339,11 +340,11 @@ const settings = definePluginSettings({
                     </div>
 
                     <div className={cl("search")}>
-                        <Heading>Search Sounds</Heading>
+                        <Heading>{t("customSounds.settings.searchSounds")}</Heading>
                         <TextInput
                             value={searchQuery}
                             onChange={e => setSearchQuery(e)}
-                            placeholder="Search by name or ID"
+                            placeholder={t("customSounds.settings.searchPlaceholder")}
                         />
                     </div>
 
@@ -365,7 +366,7 @@ const settings = definePluginSettings({
                                                 await ensureDataURICached(currentOverride.selectedFileId);
                                             } catch (error) {
                                                 console.error(`[CustomSounds] Failed to cache data URI for ${type.id}:`, error);
-                                                showToast("Error loading custom sound file");
+                                                showToast(t("customSounds.toast.loadError"));
                                             }
                                         }
 
@@ -392,7 +393,7 @@ export function findOverride(id: string): SoundOverride | null {
 
 export default definePlugin({
     name: "CustomSounds",
-    description: "Customize Discord's sounds.",
+    description: t("customSounds.description"),
     authors: [Devs.ScattrdBlade, Devs.TheKodeToad],
     settings,
     startAt: StartAt.Init,

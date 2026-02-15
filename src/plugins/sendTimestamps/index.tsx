@@ -27,12 +27,13 @@ import { classNameFactory } from "@utils/css";
 import { getTheme, insertTextIntoChatInputBox, Theme } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import { Button, Parser, Select, useMemo, useState } from "@webpack/common";
 
 const settings = definePluginSettings({
     replaceMessageContents: {
-        description: "Replace timestamps in message contents",
+        description: t("sendTimestamps.settings.replaceMessageContents"),
         type: OptionType.BOOLEAN,
         default: true,
     },
@@ -71,7 +72,7 @@ function PickerModal({ rootProps, close }: { rootProps: ModalProps, close(): voi
         <ModalRoot {...rootProps}>
             <ModalHeader className={cl("modal-header")}>
                 <HeadingPrimary className={cl("modal-title")}>
-                    Timestamp Picker
+                    {t("sendTimestamps.timestampPicker")}
                 </HeadingPrimary>
 
                 <ModalCloseButton onClick={close} className={cl("modal-close-button")} />
@@ -88,7 +89,7 @@ function PickerModal({ rootProps, close }: { rootProps: ModalProps, close(): voi
                     }}
                 />
 
-                <Heading>Timestamp Format</Heading>
+                <Heading>{t("sendTimestamps.timestampFormat")}</Heading>
                 <div className={cl("format-select")}>
                     <Select
                         options={
@@ -109,7 +110,7 @@ function PickerModal({ rootProps, close }: { rootProps: ModalProps, close(): voi
                     />
                 </div>
 
-                <Heading className={Margins.bottom8}>Preview</Heading>
+                <Heading className={Margins.bottom8}>{t("sendTimestamps.preview")}</Heading>
                 <Paragraph className={cl("preview-text")}>
                     {rendered} ({formatted})
                 </Paragraph>
@@ -121,7 +122,7 @@ function PickerModal({ rootProps, close }: { rootProps: ModalProps, close(): voi
                         insertTextIntoChatInputBox(formatted + " ");
                         close();
                     }}
-                >Insert</Button>
+                >{t("sendTimestamps.insert")}</Button>
             </ModalFooter>
         </ModalRoot>
     );
@@ -151,7 +152,7 @@ const SendTimestampButton: ChatBarButtonFactory = ({ isAnyChat }) => {
 
     return (
         <ChatBarButton
-            tooltip="Insert Timestamp"
+            tooltip={t("sendTimestamps.insertTimestamp")}
             onClick={() => {
                 const key = openModal(props => (
                     <PickerModal
@@ -169,7 +170,7 @@ const SendTimestampButton: ChatBarButtonFactory = ({ isAnyChat }) => {
 
 export default definePlugin({
     name: "SendTimestamps",
-    description: "Send timestamps easily via chat box button & text shortcuts. Read the extended description!",
+    description: t("sendTimestamps.description"),
     authors: [Devs.Ven, Devs.Tyler, Devs.Grzesiek11],
     settings,
 
@@ -197,14 +198,13 @@ export default definePlugin({
         return (
             <>
                 <Paragraph>
-                    To quickly send send time only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message
+                    {t("sendTimestamps.extendedDescription.quickSend")}
                 </Paragraph>
                 <Paragraph>
-                    See below for examples.
-                    If you need anything more specific, use the Date button in the chat bar!
+                    {t("sendTimestamps.extendedDescription.seeBelow")}
                 </Paragraph>
                 <Paragraph>
-                    Examples:
+                    {t("sendTimestamps.extendedDescription.examples")}
                     <ul>
                         {samples.map(s => (
                             <li key={s}>

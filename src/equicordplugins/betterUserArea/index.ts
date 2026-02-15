@@ -6,42 +6,43 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
     removeNameplate: {
         type: OptionType.BOOLEAN,
-        description: "Remove nameplate styling.",
+        description: t("betterUserArea.settings.removeNameplate"),
         default: true,
         restartNeeded: true
     },
     removeAudioMenus: {
         type: OptionType.BOOLEAN,
-        description: "Remove menus next to mute and deafen buttons.",
+        description: t("betterUserArea.settings.removeAudioMenus"),
         default: true,
         restartNeeded: true
     },
     alwaysShowUsername: {
         type: OptionType.BOOLEAN,
-        description: "Always show username instead of status.",
+        description: t("betterUserArea.settings.alwaysShowUsername"),
         default: true,
         restartNeeded: true
     },
     removeButtonTooltips: {
         type: OptionType.BOOLEAN,
-        description: "Remove button tooltips.",
+        description: t("betterUserArea.settings.removeButtonTooltips"),
         default: false,
         restartNeeded: true
     },
     removeAvatarDecoration: {
         type: OptionType.BOOLEAN,
-        description: "Remove avatar decoration.",
+        description: t("betterUserArea.settings.removeAvatarDecoration"),
         default: true,
         restartNeeded: true
     },
     removeUsernameStyles: {
         type: OptionType.BOOLEAN,
-        description: "Remove username colors and effects.",
+        description: t("betterUserArea.settings.removeUsernameStyles"),
         default: true,
         restartNeeded: true
     }
@@ -49,7 +50,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "BetterUserArea",
-    description: "Customize and make the user area more clean.",
+    description: t("betterUserArea.description"),
     authors: [Devs.prism],
     settings,
     patches: [

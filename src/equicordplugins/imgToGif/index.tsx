@@ -18,6 +18,7 @@
 
 import { ApplicationCommandInputType, ApplicationCommandOptionType, sendBotMessage } from "@api/Commands";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { CommandArgument, CommandContext } from "@vencord/discord-types";
 import { DraftType, UploadAttachmentStore, UploadHandler, UploadManager } from "@webpack/common";
@@ -50,10 +51,10 @@ async function resolveImage(options: CommandArgument[], ctx: CommandContext): Pr
         switch (opt.name) {
             case "image":
                 const upload = UploadAttachmentStore.getUpload(ctx.channel.id, opt.name, DraftType.SlashCommand);
-                if (upload) {
+                    if (upload) {
                     if (!upload.isImage) {
                         UploadManager.clearAll(ctx.channel.id, DraftType.SlashCommand);
-                        throw "Upload is not an image";
+                        throw t("imgToGif.errors.notAnImage");
                     }
                     image = upload.item.file;
                 }
@@ -73,34 +74,34 @@ async function resolveImage(options: CommandArgument[], ctx: CommandContext): Pr
 
 export default definePlugin({
     name: "ImgToGif",
-    description: "Adds a /imgtogif slash command to create a gif from any image",
+    description: t("imgToGif.description"),
     authors: [EquicordDevs.zyqunix],
     commands: [
         {
             inputType: ApplicationCommandInputType.BUILT_IN,
             name: "imgtogif",
-            description: "Allows you to turn an image to a gif",
+            description: t("imgToGif.commands.imgtogif"),
             options: [
                 {
                     name: "image",
-                    description: "Image attachment to use",
+                    description: t("imgToGif.commands.image"),
                     type: ApplicationCommandOptionType.ATTACHMENT
                 },
                 {
                     name: "width",
-                    description: "Width of the gif",
+                    description: t("imgToGif.commands.width"),
                     type: ApplicationCommandOptionType.INTEGER
                 },
                 {
                     name: "height",
-                    description: "Height of the gif",
+                    description: t("imgToGif.commands.height"),
                     type: ApplicationCommandOptionType.INTEGER
                 }
             ],
             execute: async (opts, cmdCtx) => {
                 try {
                     const { image, width, height } = await resolveImage(opts, cmdCtx);
-                    if (!image) throw "No Image specified!";
+                    if (!image) throw t("imgToGif.errors.noImage");
 
                     const avatar = await loadImage(image);
 

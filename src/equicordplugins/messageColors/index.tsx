@@ -8,6 +8,7 @@ import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { StartAt } from "@utils/types";
 import { React } from "@webpack/common";
 import type { ReactElement } from "react";
@@ -26,7 +27,7 @@ const requiredFirstCharacters = ["r", "h", "#"].flatMap(v => [v, v.toUpperCase()
 export default definePlugin({
     authors: [EquicordDevs.Hen],
     name: "MessageColors",
-    description: "Displays color codes like #FF0042 inside of messages",
+    description: t("messageColors.description"),
     settings,
     patches: [
         // Create a new markdown rule, so it parses just like any other features

@@ -7,6 +7,7 @@
 import { Button } from "@components/Button";
 import { SessionInfo } from "@plugins/betterSessions/types";
 import { openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 
 import { RenameModal } from "./RenameModal";
 
@@ -26,7 +27,7 @@ export function RenameButton({ session, state }: { session: SessionInfo["session
                 ))
             }
         >
-            Rename
+            {t("betterSessions.rename")}
         </Button>
     );
 }

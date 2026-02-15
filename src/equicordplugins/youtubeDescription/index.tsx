@@ -6,6 +6,7 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Embed } from "@vencord/discord-types";
 import { useState } from "@webpack/common";
@@ -14,7 +15,7 @@ interface ToggleableDescriptionProps { embed: Embed, original: () => any; }
 
 export default definePlugin({
     name: "YoutubeDescription",
-    description: "Adds descriptions to youtube video embeds",
+    description: t("youtubeDescription.description"),
     authors: [Devs.arHSM],
     patches: [
         {

@@ -8,6 +8,7 @@ import { playAudio } from "@api/AudioPlayer";
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Menu, React } from "@webpack/common";
 
@@ -210,7 +211,7 @@ async function processQueue() {
 
 export default definePlugin({
     name: "TiktokTTS",
-    description: "Adds a context menu option to read out chat messages with the good ol' Tiktok TTS voice :sob:",
+    description: t("tiktokTTS.description"),
     authors: [EquicordDevs.VillainsRule, EquicordDevs.examplegit],
     dependencies: ["AudioPlayerAPI"],
     settings,

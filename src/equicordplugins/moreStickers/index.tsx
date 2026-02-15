@@ -9,6 +9,7 @@ import "./style.css";
 import { definePluginSettings } from "@api/Settings";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { React } from "@webpack/common";
@@ -21,19 +22,19 @@ import { cl, FFmpegStateContext, loadFFmpeg } from "./utils";
 export const settings = definePluginSettings({
     promptToUpload: {
         type: OptionType.BOOLEAN,
-        description: "Inserts the sticker into your chatbar instead of sending immediately",
+        description: t("moreStickers.settings.promptToUpload"),
         default: false
     },
     packs: {
         type: OptionType.COMPONENT,
-        description: "Packs",
+        description: t("moreStickers.settings.packs"),
         component: Packs
     }
 });
 
 export default definePlugin({
     name: "MoreStickers",
-    description: "Adds sticker packs from other social media platforms. (e.g. LINE)",
+    description: t("moreStickers.description"),
     authors: [EquicordDevs.Leko, Devs.Arjix],
     settings,
 

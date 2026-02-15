@@ -12,6 +12,7 @@ import { Heading, HeadingPrimary } from "@components/Heading";
 import { Devs } from "@utils/constants";
 import { makeLazy } from "@utils/lazy";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByProps, wreq } from "@webpack";
 import { Button, Timestamp, useState } from "@webpack/common";
@@ -30,7 +31,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "WebpackTarball",
-    description: "Converts Discord's webpack sources into a tarball.",
+    description: t("webpackTarball.description"),
     authors: [Devs.Kyuuhachi],
     settings,
 

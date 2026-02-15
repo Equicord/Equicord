@@ -31,6 +31,7 @@ import { copyWithToast, fetchUserProfile } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useAwaiter } from "@utils/react";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { User, UserProfile } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
@@ -81,8 +82,8 @@ const settings = definePluginSettings({
         description: "Default color source if both are present",
         type: OptionType.SELECT,
         options: [
-            { label: "Nitro colors", value: true, default: true },
-            { label: "Fake colors", value: false },
+            { label: t("fakeProfileThemes.nitroColors"), value: true, default: true },
+            { label: t("fakeProfileThemes.fakeColors"), value: false },
         ]
     }
 });
@@ -119,22 +120,21 @@ function SettingsAboutComponent() {
 
     return (
         <section>
-            <HeadingSecondary>Usage</HeadingSecondary>
+            <HeadingSecondary>{t("fakeProfileThemes.usage")}</HeadingSecondary>
             <Paragraph>
-                After enabling this plugin, you will see custom colors in
-                the profiles of other people using compatible plugins.{" "}
+                {t("fakeProfileThemes.instructions")}
             </Paragraph>
             <Paragraph className={Margins.top8}>
                 <strong>To set your own profile theme colors:</strong>
                 <ul>
                     <li>&mdash; use the color pickers below to choose your colors</li>
-                    <li>&mdash; click the "Copy 3y3" button</li>
+                    <li>&mdash; click the "{t("fakeProfileThemes.copy3y3")}" button</li>
                     <li>&mdash; paste the invisible text anywhere in your bio</li>
                 </ul>
                 <Divider
                     className={classes(Margins.top8, Margins.bottom8)}
                 />
-                <Forms.FormTitle tag="h3">Color pickers</Forms.FormTitle>
+                <Forms.FormTitle tag="h3">{t("fakeProfileThemes.colorPickers")}</Forms.FormTitle>
                 <Flex gap="1em">
                     <ColorPicker
                         color={color1}
@@ -143,7 +143,7 @@ function SettingsAboutComponent() {
                                 size="xs"
                                 style={{ marginTop: "4px" }}
                             >
-                                Primary
+                                {t("fakeProfileThemes.primary")}
                             </BaseText>
                         }
                         onChange={(color: number) => {
@@ -157,7 +157,7 @@ function SettingsAboutComponent() {
                                 size="xs"
                                 style={{ marginTop: "4px" }}
                             >
-                                Accent
+                                {t("fakeProfileThemes.accent")}
                             </BaseText>
                         }
                         onChange={(color: number) => {
@@ -173,13 +173,13 @@ function SettingsAboutComponent() {
                         size={Button.Sizes.XLARGE}
                         style={{ marginBottom: "auto" }}
                     >
-                        Copy 3y3
+                        {t("fakeProfileThemes.copy3y3")}
                     </Button>
                 </Flex>
                 <Divider
                     className={classes(Margins.top8, Margins.bottom8)}
                 />
-                <HeadingSecondary>Preview</HeadingSecondary>
+                <HeadingSecondary>{t("fakeProfileThemes.preview")}</HeadingSecondary>
                 <div className="vc-fpt-preview">
                     <ProfileModal
                         user={UserStore.getCurrentUser()}
@@ -244,7 +244,7 @@ export default definePlugin({
             color={Button.Colors.PRIMARY}
             size={Button.Sizes.XLARGE}
             className={Margins.left16}
-        >Copy 3y3
+        >{t("fakeProfileThemes.copy3y3")}
         </Button >;
     }, { noop: true }),
 });

@@ -17,6 +17,7 @@
 */
 
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
@@ -24,7 +25,7 @@ import { findComponentByCodeLazy } from "@webpack";
 const PinIcon = findComponentByCodeLazy("1-.06-.63L6.16");
 export default definePlugin({
     name: "PinIcon",
-    description: "Adds a pin icon to pinned messages",
+    description: t("pinIcon.description"),
     authors: [EquicordDevs.iamme],
     patches: [
         {

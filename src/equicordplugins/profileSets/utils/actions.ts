@@ -7,7 +7,7 @@
 import { ProfilePreset } from "@vencord/discord-types";
 
 import { getCurrentProfile } from "./profile";
-import { addPreset, movePresetInArray, PresetSection, presets, removePreset, replaceAllPresets, savePresetsData, updatePreset, type ProfilePresetEx } from "./storage";
+import { addPreset, movePresetInArray, presets, PresetSection, type ProfilePresetEx,removePreset, replaceAllPresets, savePresetsData, updatePreset } from "./storage";
 
 export async function savePreset(name: string, section: PresetSection, guildId?: string) {
     const profile = await getCurrentProfile(guildId, { isGuildProfile: section === "server" });

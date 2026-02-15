@@ -6,6 +6,7 @@
 
 import { copyToClipboard } from "@utils/clipboard";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
@@ -22,7 +23,7 @@ const getMetadataFromApi: (activity: any, userId: string) => Promise<any> = find
 
 export default definePlugin({
     name: "CopyStatusUrls",
-    description: "Copy the users status url when you right-click it",
+    description: t("copyStatusUrls.description"),
     authors: [Devs.sadan],
 
     patches: [
@@ -45,7 +46,7 @@ export default definePlugin({
                 copyToClipboard(button_urls[index]);
                 Toasts.show({
                     id: Toasts.genId(),
-                    message: "Copied URL",
+                    message: t("copyStatusUrls.toast.copied"),
                     type: Toasts.Type.SUCCESS,
                     options: {
                         position: Toasts.Position.TOP
@@ -55,7 +56,7 @@ export default definePlugin({
                 console.error(e);
                 Toasts.show({
                     id: Toasts.genId(),
-                    message: "Error copying URL, check console for more info",
+                    message: t("copyStatusUrls.toast.error"),
                     type: Toasts.Type.FAILURE,
                     options: {
                         position: Toasts.Position.TOP

@@ -22,6 +22,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { getStegCloak } from "@utils/dependencies";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, ReporterTestable } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { ChannelStore, Constants, RestAPI, Tooltip } from "@webpack/common";
@@ -46,7 +47,7 @@ function PopOverIcon() {
 
 function Indicator() {
     return (
-        <Tooltip text="This message has a hidden message! (InvisibleChat)">
+        <Tooltip text={t("invisibleChat.ui.hiddenMessageIndicator")}>
             {({ onMouseEnter, onMouseLeave }) => (
                 <img
                     aria-label="Hidden Message Indicator (InvisibleChat)"
@@ -69,7 +70,7 @@ const ChatBarRender: ChatBarButtonFactory = ({ isMainChat }) => {
 
     return (
         <ChatBarButton
-            tooltip="Encrypt Message"
+            tooltip={t("invisibleChat.ui.encryptMessage")}
             onClick={() => buildEncModal()}
             buttonProps={{
                 "aria-haspopup": "dialog",
@@ -99,7 +100,7 @@ const settings = definePluginSettings({
     savedPasswords: {
         type: OptionType.STRING,
         default: "password, Password",
-        description: "Saved Passwords (Seperated with a , )"
+        description: t("invisibleChat.settings.savedPasswords")
     }
 });
 
@@ -148,7 +149,7 @@ export async function buildEmbed(message: any, revealed: string): Promise<void> 
 
 export default definePlugin({
     name: "InvisibleChat",
-    description: "Encrypt your Messages in a non-suspicious way!",
+    description: t("invisibleChat.description"),
     authors: [Devs.SammCheese],
     dependencies: ["MessageUpdaterAPI"],
     reporterTestable: ReporterTestable.Patches,
@@ -180,7 +181,7 @@ export default definePlugin({
         render(message) {
             return INV_REGEX.test(message?.content)
                 ? {
-                    label: "Decrypt Message",
+                    label: t("invisibleChat.ui.decryptMessage"),
                     icon: PopOverIcon,
                     message: message,
                     channel: ChannelStore.getChannel(message.channel_id),

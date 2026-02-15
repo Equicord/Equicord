@@ -23,6 +23,7 @@ import { plugins } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import { openPluginModal } from "@components/settings";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { ChannelStore, FluxDispatcher, Menu, React } from "@webpack/common";
@@ -30,72 +31,72 @@ import { ChannelStore, FluxDispatcher, Menu, React } from "@webpack/common";
 const settings = definePluginSettings({
     enabledGlobally: {
         type: OptionType.BOOLEAN,
-        description: "Toggle functionality of your own typing indicator globally.",
+        description: t("silentTyping.settings.enabledGlobally"),
         default: true,
     },
     hideChatBoxTypingIndicators: {
         type: OptionType.BOOLEAN,
-        description: "Hide other users' typing indicators from above the chat bar.",
+        description: t("silentTyping.settings.hideChatBoxTypingIndicators"),
         default: false,
     },
     hideMembersListTypingIndicators: {
         type: OptionType.BOOLEAN,
-        description: "Hide other users' typing indicators from the members list.",
+        description: t("silentTyping.settings.hideMembersListTypingIndicators"),
         default: false,
     },
     chatIcon: {
         type: OptionType.BOOLEAN,
-        description: "Show an icon in the chat bar for modifying the plugin on the go.",
+        description: t("silentTyping.settings.chatIcon"),
         default: true,
     },
     chatIconLeftClickAction: {
         type: OptionType.SELECT,
-        description: "What to do when left clicking the chat icon.",
+        description: t("silentTyping.settings.chatIconLeftClickAction"),
         options: [
-            { label: "Toggle Typing Globally", value: "global" },
-            { label: "Toggle Typing in Channel", value: "channel", default: true },
-            { label: "Toggle Typing in Guild", value: "guild" },
-            { label: "Open Plugin Settings", value: "settings" }
+            { label: t("silentTyping.clickActions.toggleTypingGlobally"), value: "global" },
+            { label: t("silentTyping.clickActions.toggleTypingInChannel"), value: "channel", default: true },
+            { label: t("silentTyping.clickActions.toggleTypingInGuild"), value: "guild" },
+            { label: t("silentTyping.clickActions.openPluginSettings"), value: "settings" }
         ]
     },
     chatIconMiddleClickAction: {
         type: OptionType.SELECT,
-        description: "What to do when middle clicking the chat icon.",
+        description: t("silentTyping.settings.chatIconMiddleClickAction"),
         options: [
-            { label: "Toggle Typing Globally", value: "global" },
-            { label: "Toggle Typing in Channel", value: "channel" },
-            { label: "Toggle Typing in Guild", value: "guild" },
-            { label: "Open Plugin Settings", value: "settings", default: true }
+            { label: t("silentTyping.clickActions.toggleTypingGlobally"), value: "global" },
+            { label: t("silentTyping.clickActions.toggleTypingInChannel"), value: "channel" },
+            { label: t("silentTyping.clickActions.toggleTypingInGuild"), value: "guild" },
+            { label: t("silentTyping.clickActions.openPluginSettings"), value: "settings", default: true }
         ]
     },
     chatIconRightClickAction: {
         type: OptionType.SELECT,
-        description: "What to do when right clicking the chat icon.",
+        description: t("silentTyping.settings.chatIconRightClickAction"),
         options: [
-            { label: "Toggle Typing Globally", value: "global", default: true },
-            { label: "Toggle Typing in Channel", value: "channel" },
-            { label: "Toggle Typing in Guild", value: "guild" },
-            { label: "Open Plugin Settings", value: "settings" }
+            { label: t("silentTyping.clickActions.toggleTypingGlobally"), value: "global", default: true },
+            { label: t("silentTyping.clickActions.toggleTypingInChannel"), value: "channel" },
+            { label: t("silentTyping.clickActions.toggleTypingInGuild"), value: "guild" },
+            { label: t("silentTyping.clickActions.openPluginSettings"), value: "settings" }
         ]
     },
     chatContextMenu: {
         type: OptionType.BOOLEAN,
-        description: "Show a dropdown in the chat context menu to modify plugin settings on the go.",
+        description: t("silentTyping.settings.chatContextMenu"),
         default: true
     },
     defaultHidden: {
         type: OptionType.BOOLEAN,
-        description: "If enabled, the plugin will hide your typing from others in any DMs/channels/guilds not listed in \"Disabled Locations\" below. If disabled, the plugin will show your typing to others for any DMs/channels/guilds not listed in \"Enabled Locations\" below.",
+        description: t("silentTyping.settings.defaultHidden"),
         default: true,
     },
     enabledLocations: {
         type: OptionType.STRING,
-        description: "Enable functionality for these IDs. Accepts a comma separated list of DM IDs, channel IDs, and guild IDs. Only used if \"Default Hidden\" is disabled.",
+        description: t("silentTyping.settings.enabledLocations"),
         default: "",
     },
     disabledLocations: {
         type: OptionType.STRING,
-        description: "Disable functionality for these IDs. Accepts a comma separated list of DM IDs, channel IDs, and guild IDs. Only used if \"Default Hidden\" is enabled.",
+        description: t("silentTyping.settings.disabledLocations"),
         default: "",
     },
 });
@@ -148,8 +149,8 @@ const SilentTypingChatToggle: ChatBarButtonFactory = ({ channel, type }) => {
     const location = channel.guild_id && effectiveList.includes(channel.guild_id) ? "Guild" : effectiveList.includes(channel.id) ? "Channel" : "Global";
 
     const tooltip = enabledGlobally ? (
-        enabledLocally ? `Typing Hidden (${location})` : `Typing Visible (${location})`
-    ) : "Typing Visible (Global)";
+        enabledLocally ? t("silentTyping.typingHidden", { location }) : t("silentTyping.typingVisible", { location })
+    ) : t("silentTyping.typingVisibleGlobal");
 
     function performAction(action: string): void {
         switch (action) {
@@ -268,16 +269,16 @@ const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
     const idx = group.findIndex(c => c?.props?.id === "submit-button");
 
     group.splice(idx >= 0 ? idx : 0, 0,
-        <Menu.MenuItem id="vc-silent-typing" label="Silent Typing">
-            <Menu.MenuCheckboxItem id="vc-silent-typing-enabled" label="Enabled" checked={enabledGlobally}
+        <Menu.MenuItem id="vc-silent-typing" label={t("silentTyping.contextMenu.silentTyping")}>
+            <Menu.MenuCheckboxItem id="vc-silent-typing-enabled" label={t("silentTyping.contextMenu.enabled")} checked={enabledGlobally}
                 action={() => settings.store.enabledGlobally = !settings.store.enabledGlobally} />
-            <Menu.MenuCheckboxItem id="vc-silent-typing-chat-bar-indicators" label="Chat Bar Indicators" checked={settings.store.hideChatBoxTypingIndicators}
+            <Menu.MenuCheckboxItem id="vc-silent-typing-chat-bar-indicators" label={t("silentTyping.contextMenu.chatBarIndicators")} checked={settings.store.hideChatBoxTypingIndicators}
                 action={() => settings.store.hideChatBoxTypingIndicators = !settings.store.hideChatBoxTypingIndicators} />
-            <Menu.MenuCheckboxItem id="vc-silent-typing-members-list-indicators" label="Members List Indicators" checked={settings.store.hideMembersListTypingIndicators}
+            <Menu.MenuCheckboxItem id="vc-silent-typing-members-list-indicators" label={t("silentTyping.contextMenu.membersListIndicators")} checked={settings.store.hideMembersListTypingIndicators}
                 action={() => settings.store.hideMembersListTypingIndicators = !settings.store.hideMembersListTypingIndicators} />
-            <Menu.MenuCheckboxItem id="vc-silent-typing-chat-icon" label="Chat Icon" checked={chatIcon}
+            <Menu.MenuCheckboxItem id="vc-silent-typing-chat-icon" label={t("silentTyping.contextMenu.chatIcon")} checked={chatIcon}
                 action={() => settings.store.chatIcon = !settings.store.chatIcon} />
-            <Menu.MenuCheckboxItem id="vc-silent-typing-default" label="Default Hidden" checked={defaultHidden}
+            <Menu.MenuCheckboxItem id="vc-silent-typing-default" label={t("silentTyping.contextMenu.defaultHidden")} checked={defaultHidden}
                 action={() => settings.store.defaultHidden = !settings.store.defaultHidden} />
         </Menu.MenuItem>
     );
@@ -345,48 +346,48 @@ export default definePlugin({
     commands: [
         {
             name: "silent-typing",
-            description: "Hide your typing indicator from chat.",
+            description: t("silentTyping.command.description"),
             inputType: ApplicationCommandInputType.BUILT_IN,
 
             options: [
                 {
                     name: "toggle",
-                    description: "Toggle functionality globally, for the channel, or for the guild.",
+                    description: t("silentTyping.command.toggleOption"),
                     required: false,
                     type: ApplicationCommandOptionType.STRING,
                     choices: [
-                        { name: "Global", label: "Global", value: "global" },
-                        { name: "Channel", label: "Channel", value: "channel" },
-                        { name: "Guild", label: "Guild", value: "guild" },
+                        { name: "Global", label: t("silentTyping.command.toggleGlobal"), value: "global" },
+                        { name: "Channel", label: t("silentTyping.command.toggleChannel"), value: "channel" },
+                        { name: "Guild", label: t("silentTyping.command.toggleGuild"), value: "guild" },
                     ]
                 },
                 {
                     name: "chat-bar-indicators",
-                    description: "Hide other users' typing indicators from above the chat bar.",
+                    description: t("silentTyping.command.chatBarIndicatorsOption"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 },
                 {
                     name: "members-list-indicators",
-                    description: "Hide other users' typing indicators from the members list.",
+                    description: t("silentTyping.command.membersListIndicatorsOption"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 },
                 {
                     name: "chat-icon",
-                    description: "Show an icon in the chat bar for toggling the plugin on the go.",
+                    description: t("silentTyping.command.chatIconOption"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 },
                 {
                     name: "chat-context-menu",
-                    description: "Show a dropdown in the chat context menu to toggle plugin settings on the go.",
+                    description: t("silentTyping.command.chatContextMenuOption"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 },
                 {
                     name: "default-hidden",
-                    description: "Whether to hide typing in DMs/channels/guilds by default or not.",
+                    description: t("silentTyping.command.defaultHiddenOption"),
                     required: false,
                     type: ApplicationCommandOptionType.BOOLEAN,
                 }
@@ -429,7 +430,7 @@ export default definePlugin({
                 }
 
                 sendBotMessage(ctx.channel.id, {
-                    content: updated ? "Silent typing settings updated." : "No changes made to silent typing settings.",
+                    content: updated ? t("silentTyping.settingsUpdated") : t("silentTyping.noChanges"),
                 });
             },
         }

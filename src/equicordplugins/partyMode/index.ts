@@ -18,6 +18,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, ReporterTestable } from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
 
@@ -29,12 +30,12 @@ const enum Intensity {
 
 const settings = definePluginSettings({
     superIntensePartyMode: {
-        description: "Party intensity",
+        description: t("partyMode.settings.superIntensePartyMode"),
         type: OptionType.SELECT,
         options: [
-            { label: "Normal", value: Intensity.Normal, default: true },
-            { label: "Better", value: Intensity.Better },
-            { label: "Project X", value: Intensity.ProjectX },
+            { label: t("partyMode.settings.intensityOptions.normal"), value: Intensity.Normal, default: true },
+            { label: t("partyMode.settings.intensityOptions.better"), value: Intensity.Better },
+            { label: t("partyMode.settings.intensityOptions.projectX"), value: Intensity.ProjectX },
         ],
         restartNeeded: false,
         onChange: setSettings
@@ -43,7 +44,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PartyMode",
-    description: "Allows you to use party mode cause the party never ends ✨",
+    description: t("partyMode.description"),
     authors: [Devs.UwUDev],
     reporterTestable: ReporterTestable.None,
     settings,

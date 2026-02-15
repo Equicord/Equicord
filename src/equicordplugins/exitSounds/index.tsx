@@ -12,6 +12,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { ChannelActions, Constants, GuildStore, IconUtils, MediaEngineStore, Menu, RestAPI, SearchableSelect, SelectedChannelStore, TextInput, Toasts } from "@webpack/common";
@@ -31,7 +32,7 @@ function GuildSelector() {
         <SearchableSelect
             options={options}
             value={options.find(o => o.value === soundGuildId)}
-            placeholder="Select a server..."
+            placeholder={t("exitSounds.ui.selectServer")}
             maxVisibleItems={6}
             closeOnSelect={true}
             onChange={v => settings.store.soundGuildId = v}
@@ -58,7 +59,7 @@ function SoundIdInput() {
                 <TextInput
                     value={soundId}
                     onChange={v => settings.store.soundId = v}
-                    placeholder="Enter sound ID..."
+                    placeholder={t("exitSounds.ui.enterSoundId")}
                 />
             </div>
             <Button
@@ -74,12 +75,12 @@ function SoundIdInput() {
 const settings = definePluginSettings({
     soundGuildId: {
         type: OptionType.COMPONENT,
-        description: "Select the server containing the sound.",
+        description: t("exitSounds.settings.soundGuildId"),
         component: GuildSelector
     },
     soundId: {
         type: OptionType.COMPONENT,
-        description: "Enter the ID of the sound you want to play.",
+        description: t("exitSounds.settings.soundId"),
         component: SoundIdInput
     }
 });
@@ -89,7 +90,7 @@ const SoundButtonContext: NavContextMenuPatchCallback = (children, { sound }: { 
         <Menu.MenuGroup>
             <Menu.MenuItem
                 id="set-global-exit-sound"
-                label="Set as global exit sound"
+                label={t("exitSounds.ui.setGlobalExitSound")}
                 action={() => {
                     settings.store.soundGuildId = sound.guildId;
                     settings.store.soundId = sound.soundId;
@@ -103,7 +104,7 @@ let original: typeof ChannelActions.selectVoiceChannel;
 
 export default definePlugin({
     name: "ExitSounds",
-    description: "Play soundboard sounds when you disconnect from voice.",
+    description: t("exitSounds.description"),
     authors: [Devs.prism],
     dependencies: ["AudioPlayerAPI"],
     settings,
@@ -130,7 +131,7 @@ export default definePlugin({
                     await new Promise(r => setTimeout(r, 500));
                 } catch {
                     Toasts.show({
-                        message: "Oops! Something went wrong.",
+                        message: t("exitSounds.toasts.somethingWentWrong"),
                         id: Toasts.genId(),
                         type: Toasts.Type.FAILURE
                     });

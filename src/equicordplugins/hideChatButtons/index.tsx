@@ -7,6 +7,7 @@
 import { ChatBarButton } from "@api/ChatButtons";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { React, useEffect, useState } from "@webpack/common";
 import type { MouseEventHandler, ReactNode } from "react";
@@ -16,12 +17,12 @@ let hidechatbuttonsopen: boolean | undefined;
 const settings = definePluginSettings({
     Color: {
         type: OptionType.BOOLEAN,
-        description: "Color it red on open", // something extra
+        description: t("hideChatButtons.settings.color"),
         default: false,
     },
     Open: {
         type: OptionType.BOOLEAN,
-        description: "opened by default",
+        description: t("hideChatButtons.settings.open"),
         default: false,
         onChange: (store: { open: boolean; }) => {
             hidechatbuttonsopen = store.open;
@@ -32,7 +33,7 @@ const settings = definePluginSettings({
 function HideToggleButton(props: { open: boolean | undefined, onClick: MouseEventHandler<HTMLButtonElement>; }) {
     return (<ChatBarButton
         onClick={props.onClick}
-        tooltip={props.open ? "Close" : "Open"}
+        tooltip={props.open ? t("hideChatButtons.ui.close") : t("hideChatButtons.ui.open")}
     >
         <svg
             fill={settings.store.Color && props.open ? "#c32a32" : "currentColor"}
@@ -74,7 +75,7 @@ function ButtonsInnerComponent({ buttons }: { buttons: ReactNode[]; }) {
 
 export default definePlugin({
     name: "HideChatButtons",
-    description: "able to hide the chat buttons",
+    description: t("hideChatButtons.description"),
     settings: settings,
     authors: [EquicordDevs.iamme],
     patches: [

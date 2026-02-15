@@ -17,6 +17,7 @@
 */
 
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 function settingsComponent() {
@@ -38,7 +39,7 @@ function settingsComponent() {
 
 export default definePlugin({
     name: "SearchFix",
-    description: 'Fixes the annoying "We dropped the magnifying glass!" error.',
+    description: t("searchFix.description"),
     settingsAboutComponent: () => settingsComponent(),
     authors: [EquicordDevs.Jaxx],
     patches: [

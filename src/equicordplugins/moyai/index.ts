@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { sleep } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { Message, ReactionEmoji } from "@vencord/discord-types";
 import { RelationshipStore, SelectedChannelStore, UserStore } from "@webpack/common";
@@ -56,32 +57,32 @@ const MOYAI_URL_HD = "https://github.com/Equicord/Equibored/raw/main/sounds/moya
 
 const settings = definePluginSettings({
     volume: {
-        description: "Volume of the 🗿🗿🗿",
+        description: t("moyai.settings.volume"),
         type: OptionType.SLIDER,
         markers: makeRange(0, 1, 0.1),
         default: 0.5,
         stickToMarkers: false
     },
     quality: {
-        description: "Quality of the 🗿🗿🗿",
+        description: t("moyai.settings.quality"),
         type: OptionType.SELECT,
         options: [
-            { label: "Normal", value: "Normal", default: true },
-            { label: "HD", value: "HD" }
+            { label: t("moyai.settings.qualityOptions.normal"), value: "Normal", default: true },
+            { label: t("moyai.settings.qualityOptions.hd"), value: "HD" }
         ],
     },
     triggerWhenUnfocused: {
-        description: "Trigger the 🗿 even when the window is unfocused",
+        description: t("moyai.settings.triggerWhenUnfocused"),
         type: OptionType.BOOLEAN,
         default: true
     },
     ignoreBots: {
-        description: "Ignore bots",
+        description: t("moyai.settings.ignoreBots"),
         type: OptionType.BOOLEAN,
         default: true
     },
     ignoreBlocked: {
-        description: "Ignore blocked users",
+        description: t("moyai.settings.ignoreBlocked"),
         type: OptionType.BOOLEAN,
         default: true
     }
@@ -90,7 +91,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "Moyai",
     authors: [Devs.Megu, Devs.Nuckyz],
-    description: "🗿🗿🗿🗿🗿🗿🗿🗿",
+    description: t("moyai.description"),
     settings,
 
     flux: {

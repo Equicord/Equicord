@@ -5,6 +5,7 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Activity } from "@vencord/discord-types";
 import { ActivityType } from "@vencord/discord-types/enums";
@@ -28,7 +29,7 @@ let shouldReconnect = false;
 
 export default definePlugin({
     name: "TosuRPC",
-    description: "osu! RPC with data from tosu",
+    description: t("tosuRPC.description"),
     authors: [Devs.AutumnVN],
     start() {
         shouldReconnect = true;

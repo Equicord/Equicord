@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { UserSettingsActionCreators } from "@webpack/common";
 
@@ -30,20 +31,20 @@ function getMessage(opts, other) {
 const settings = definePluginSettings({
     pingOwnerChance: {
         type: OptionType.BOOLEAN,
-        description: "If there should be a 1 in 10 change to ping the owner of the guild (oh no)",
+        description: t("gifRoulette.settings.pingOwnerChance"),
         default: true
     }
 });
 
 export default definePlugin({
     name: "GifRoulette",
-    description: "Adds a command to send a random gif from your favourites, and a one in ten chance to ping the owner of the server",
+    description: t("gifRoulette.description"),
     authors: [Devs.Samwich],
     settings,
     commands: [
         {
             name: "gifroulette",
-            description: "Tempt fate and send a gif",
+            description: t("gifRoulette.commands.gifroulette"),
             execute: (opts, other) => ({
                 content: getMessage(opts, other)
             }),

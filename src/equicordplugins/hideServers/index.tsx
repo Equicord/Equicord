@@ -16,6 +16,7 @@ import {
     ServerListRenderPosition,
 } from "@api/ServerList";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Guild } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
@@ -53,7 +54,7 @@ const Patch: NavContextMenuPatchCallback = (
     group.push(
         <Menu.MenuItem
             id="vc-hide-server"
-            label={isHidden ? "Unhide Server" : "Hide Server"}
+            label={isHidden ? t("hideServers.ui.unhideServer") : t("hideServers.ui.hideServer")}
             action={() => {
                 if (isHidden) {
                     HiddenServersStore.removeHiddenGuild(guild.id);
@@ -75,7 +76,7 @@ export function removeIndicator() {
 
 export default definePlugin({
     name: "HideServers",
-    description: "Allows you to hide servers from the guild list and quick switcher by right clicking them",
+    description: t("hideServers.description"),
     authors: [EquicordDevs.bep],
     tags: ["guild", "server", "hide", "folder"],
 
@@ -96,7 +97,7 @@ export default definePlugin({
                 menuItems.push(
                     <Menu.MenuItem
                         id="vc-hide-folder"
-                        label={isHidden ? "Unhide Folder" : "Hide Folder"}
+                        label={isHidden ? t("hideServers.ui.unhideFolder") : t("hideServers.ui.hideFolder")}
                         action={() => {
                             if (isHidden) {
                                 HiddenServersStore.removeHiddenFolder(folderId, guildIds);

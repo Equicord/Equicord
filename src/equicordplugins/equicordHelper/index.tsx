@@ -11,6 +11,7 @@ import { definePluginSettings } from "@api/Settings";
 import customRPC from "@plugins/customRPC";
 import { Devs, EquicordDevs, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { isAnyPluginDev } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { StandingState } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findExportedComponentLazy, findStoreLazy } from "@webpack";
@@ -28,11 +29,11 @@ const WarningIcon = findExportedComponentLazy("WarningIcon");
 const ShieldIcon = findExportedComponentLazy("ShieldIcon");
 
 const StandingConfig: Record<number, { label: string; hoverColor: string; Icon: ComponentType<any>; }> = {
-    [StandingState.ALL_GOOD]: { label: "All good!", hoverColor: "var(--status-positive)", Icon: ShieldIcon },
-    [StandingState.LIMITED]: { label: "Limited", hoverColor: "var(--status-warning)", Icon: WarningIcon },
-    [StandingState.VERY_LIMITED]: { label: "Very limited", hoverColor: "var(--orange-345)", Icon: WarningIcon },
-    [StandingState.AT_RISK]: { label: "At risk", hoverColor: "var(--status-danger)", Icon: WarningIcon },
-    [StandingState.SUSPENDED]: { label: "Suspended", hoverColor: "var(--interactive-muted)", Icon: WarningIcon },
+    [StandingState.ALL_GOOD]: { label: t("equicordHelper.standing.allGood"), hoverColor: "var(--status-positive)", Icon: ShieldIcon },
+    [StandingState.LIMITED]: { label: t("equicordHelper.standing.limited"), hoverColor: "var(--status-warning)", Icon: WarningIcon },
+    [StandingState.VERY_LIMITED]: { label: t("equicordHelper.standing.veryLimited"), hoverColor: "var(--orange-345)", Icon: WarningIcon },
+    [StandingState.AT_RISK]: { label: t("equicordHelper.standing.atRisk"), hoverColor: "var(--status-danger)", Icon: WarningIcon },
+    [StandingState.SUSPENDED]: { label: t("equicordHelper.standing.suspended"), hoverColor: "var(--interactive-muted)", Icon: WarningIcon },
 };
 
 function StandingButton() {
@@ -61,42 +62,42 @@ function StandingButton() {
 const settings = definePluginSettings({
     noMirroredCamera: {
         type: OptionType.BOOLEAN,
-        description: "Prevents the camera from being mirrored on your screen",
+        description: t("equicordHelper.settings.noMirroredCamera"),
         restartNeeded: true,
         default: false,
     },
     removeActivitySection: {
         type: OptionType.BOOLEAN,
-        description: "Removes the activity section above member list",
+        description: t("equicordHelper.settings.removeActivitySection"),
         restartNeeded: true,
         default: false,
     },
     showYourOwnActivityButtons: {
         type: OptionType.BOOLEAN,
-        description: "Discord hides your own activity buttons for some reason",
+        description: t("equicordHelper.settings.showYourOwnActivityButtons"),
         restartNeeded: true,
         default: false,
     },
     noDefaultHangStatus: {
         type: OptionType.BOOLEAN,
-        description: "Disable the default hang status when joining voice channels",
+        description: t("equicordHelper.settings.noDefaultHangStatus"),
         restartNeeded: true,
         default: false,
     },
     refreshSlashCommands: {
         type: OptionType.BOOLEAN,
-        description: "Refreshes Slash Commands to show newly added commands without restarting your client.",
+        description: t("equicordHelper.settings.refreshSlashCommands"),
         default: false,
     },
     forceRoleIcon: {
         type: OptionType.BOOLEAN,
-        description: "Forces role icons to display next to messages in compact mode",
+        description: t("equicordHelper.settings.forceRoleIcon"),
         restartNeeded: true,
         default: false
     },
     accountStandingButton: {
         type: OptionType.BOOLEAN,
-        description: "Show an account standing button in the header bar",
+        description: t("equicordHelper.settings.accountStandingButton"),
         default: false,
         restartNeeded: true,
     }
@@ -104,7 +105,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "EquicordHelper",
-    description: "Used to provide support, fix discord caused crashes, and other misc features.",
+    description: t("equicordHelper.description"),
     authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keircn, EquicordDevs.SerStars, EquicordDevs.mart],
     required: true,
     settings,
@@ -218,13 +219,13 @@ export default definePlugin({
             if (!selfId || isAnyPluginDev(selfId)) return;
             if (VC_SUPPORT_CHANNEL_IDS.includes(channelId) && !clicked) {
                 return Alerts.show({
-                    title: "Vencord Support Channel Warning",
-                    body: "Before asking for help. Check updates and if this issue is actually caused by Equicord!",
-                    confirmText: "Equicord Support",
+                    title: t("equicordHelper.alerts.supportWarningTitle"),
+                    body: t("equicordHelper.alerts.supportWarningBody"),
+                    confirmText: t("equicordHelper.alerts.equicordSupport"),
                     onConfirm() {
                         NavigationRouter.transitionTo(`/channels/${GUILD_ID}/${SUPPORT_CHANNEL_ID}`);
                     },
-                    cancelText: "Okay continue",
+                    cancelText: t("equicordHelper.alerts.okayContinue"),
                     onCancel() {
                         clicked = true;
                     },
@@ -235,17 +236,17 @@ export default definePlugin({
     commands: [
         {
             name: "refresh-commands",
-            description: "Refresh Slash Commands",
+            description: t("equicordHelper.commands.refreshCommands"),
             inputType: ApplicationCommandInputType.BUILT_IN,
             predicate: () => settings.store.refreshSlashCommands,
             execute: async (opts, ctx) => {
                 try {
                     ApplicationCommandIndexStore.indices = {};
-                    sendBotMessage(ctx.channel.id, { content: "Slash Commands refreshed successfully." });
+                    sendBotMessage(ctx.channel.id, { content: t("equicordHelper.commands.refreshSuccess") });
                 }
                 catch (e) {
                     console.error("[refreshSlashCommands] Failed to refresh commands:", e);
-                    sendBotMessage(ctx.channel.id, { content: "Failed to refresh commands. Check console for details." });
+                    sendBotMessage(ctx.channel.id, { content: t("equicordHelper.commands.refreshFailed") });
                 }
             }
         }

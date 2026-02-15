@@ -7,6 +7,7 @@
 import "./style.css";
 
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { GuildStore, React, SelectedGuildStore } from "@webpack/common";
@@ -31,7 +32,7 @@ function renderBadge(id: number, title: string) {
 
 export default definePlugin({
     name: "ChannelBadges",
-    description: "Adds badges to channels based on their type",
+    description: t("channelBadges.description"),
     authors: [EquicordDevs.creations, Devs.thororen],
     settings,
     patches: [
@@ -64,9 +65,9 @@ export default definePlugin({
         const guild = selectedGuildId ? GuildStore.getGuild(selectedGuildId) : null;
 
         const badgeConditions = [
-            { id: 6101, condition: isPrivate, title: "This channel is locked." },
-            { id: 6100, condition: isNSFW, title: "This channel is marked as NSFW." },
-            { id: 6102, condition: guild?.rulesChannelId === channel.id, title: "This channel is the server rules channel." },
+            { id: 6101, condition: isPrivate, title: t("channelBadges.tooltips.lockedChannel") },
+            { id: 6100, condition: isNSFW, title: t("channelBadges.tooltips.nsfwChannel") },
+            { id: 6102, condition: guild?.rulesChannelId === channel.id, title: t("channelBadges.tooltips.rulesChannel") },
         ];
 
         let badges: JSX.Element[] = [];

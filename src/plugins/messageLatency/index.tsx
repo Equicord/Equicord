@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { isNonNullish } from "@utils/guards";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { AuthenticationStore, SnowflakeUtils, Tooltip } from "@webpack/common";
@@ -34,22 +35,22 @@ export default definePlugin({
     settings: definePluginSettings({
         latency: {
             type: OptionType.NUMBER,
-            description: "Threshold in seconds for latency indicator",
+            description: t("messageLatency.settings.latency"),
             default: 2
         },
         detectDiscordKotlin: {
             type: OptionType.BOOLEAN,
-            description: "Detect old Discord Android clients",
+            description: t("messageLatency.settings.detectDiscordKotlin"),
             default: true
         },
         showMillis: {
             type: OptionType.BOOLEAN,
-            description: "Show milliseconds",
+            description: t("messageLatency.settings.showMillis"),
             default: false
         },
         ignoreSelf: {
             type: OptionType.BOOLEAN,
-            description: "Don't add indicator to your own messages",
+            description: t("messageLatency.settings.ignoreSelf"),
             default: false
         }
     }),
@@ -73,7 +74,12 @@ export default definePlugin({
             milliseconds: Math.floor(delta % 1000)
         };
 
-        const str = (k: DiffKey) => diff[k] > 0 ? `${diff[k]} ${diff[k] > 1 ? k : k.substring(0, k.length - 1)}` : null;
+        const str = (k: DiffKey) => {
+            if (diff[k] <= 0) return null;
+            const unitKey = diff[k] > 1 ? k : k.substring(0, k.length - 1);
+            const unit = t(`messageLatency.timeUnits.${unitKey}`);
+            return `${diff[k]} ${unit}`;
+        };
         const keys = Object.keys(diff) as DiffKey[];
 
         const ts = keys.reduce((prev, k) => {
@@ -90,7 +96,7 @@ export default definePlugin({
             );
         }, "");
 
-        return ts || "0 seconds";
+        return ts || `0 ${t("messageLatency.timeUnits.seconds")}`;
     },
 
     latencyTooltipData(message: Message) {
@@ -151,9 +157,12 @@ export default definePlugin({
 
             let text: string;
             if (!d.delta) {
-                text = "User is suspected to be on an old Discord Android client";
+                text = t("messageLatency.oldDiscordAndroid");
             } else {
-                text = (d.ahead ? `This user's clock is ${d.delta} ahead.` : `This message was sent with a delay of ${d.delta}.`) + (d.isDiscordKotlin ? " User is suspected to be on an old Discord Android client." : "");
+                const mainText = d.ahead
+                    ? t("messageLatency.clockAhead", { delta: d.delta })
+                    : t("messageLatency.messageDelayed", { delta: d.delta });
+                text = mainText + (d.isDiscordKotlin ? ` ${t("messageLatency.oldDiscordAndroid")}` : "");
             }
 
             return <Tooltip
@@ -186,7 +195,7 @@ export default definePlugin({
             role="img"
             fill="none"
             style={{ marginRight: "8px", verticalAlign: -1 }}
-            aria-label={delta ?? "Old Discord Android client"}
+            aria-label={delta ?? t("messageLatency.oldAndroidClient")}
             aria-hidden="false"
             {...props}
         >

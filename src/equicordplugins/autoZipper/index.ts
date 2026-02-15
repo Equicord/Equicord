@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, DraftType, SelectedChannelStore, UploadHandler } from "@webpack/common";
 import { zipSync } from "fflate";
@@ -16,7 +17,7 @@ const logger = new Logger("AutoZipper");
 const settings = definePluginSettings({
     extensions: {
         type: OptionType.STRING,
-        description: "Comma-separated list of file extensions to auto-zip (e.g., .psd,.blend,.exe,.dmg)",
+        description: t("autoZipper.settings.extensions"),
         default: ".psd,.blend,.exe,.dmg,.app,.apk,.iso",
         onChange: () => {
             extensionsToZip.clear();
@@ -208,7 +209,7 @@ function handlePaste(event: ClipboardEvent) {
 
 export default definePlugin({
     name: "AutoZipper",
-    description: "Automatically zips specified file types and folders before uploading to Discord",
+    description: t("autoZipper.description"),
     authors: [EquicordDevs.SSnowly],
     settings,
 

@@ -18,6 +18,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { openInviteModal } from "@utils/discord";
 import { openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { extractAndLoadChunksLazy } from "@webpack";
@@ -64,7 +65,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "UserPFP",
-    description: "Allows you to use an animated avatar without Nitro",
+    description: t("userpfp.description"),
     authors: [EquicordDevs.nexpid, Devs.thororen, EquicordDevs.soapphia],
     settings,
     data,

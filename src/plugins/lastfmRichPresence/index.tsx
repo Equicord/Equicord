@@ -24,6 +24,7 @@ import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
+import { t, Translate } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Activity, ActivityAssets, ActivityButton } from "@vencord/discord-types";
 import { ActivityFlags, ActivityStatusDisplayType, ActivityType } from "@vencord/discord-types/enums";
@@ -69,115 +70,115 @@ function setActivity(activity: Activity | null) {
 
 const settings = definePluginSettings({
     apiKey: {
-        description: "Custom Last.fm API key. Not required but highly recommended to avoid rate limiting with our shared key",
+        description: t("lastfmRichPresence.settings.apiKey"),
         type: OptionType.STRING,
     },
     username: {
-        description: "Last.fm username",
+        description: t("lastfmRichPresence.settings.username"),
         type: OptionType.STRING,
     },
     shareUsername: {
-        description: "Show link to Last.fm profile",
+        description: t("lastfmRichPresence.settings.shareUsername"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     clickableLinks: {
-        description: "Make track, artist and album names clickable links",
+        description: t("lastfmRichPresence.settings.clickableLinks"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     hideWithSpotify: {
-        description: "Hide Last.fm presence if spotify is running",
+        description: t("lastfmRichPresence.settings.hideWithSpotify"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     hideWithActivity: {
-        description: "Hide Last.fm presence if you have any other presence",
+        description: t("lastfmRichPresence.settings.hideWithActivity"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     statusName: {
-        description: "Custom status text",
+        description: t("lastfmRichPresence.settings.statusName"),
         type: OptionType.STRING,
         default: "some music",
     },
     statusDisplayType: {
-        description: "Show the track / artist name in the member list",
+        description: t("lastfmRichPresence.settings.statusDisplayType"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Don't show (shows generic listening message)",
+                label: t("lastfmRichPresence.statusDisplayType.off"),
                 value: "off"
             },
             {
-                label: "Show artist name",
+                label: t("lastfmRichPresence.statusDisplayType.artist"),
                 value: "artist",
                 default: true
             },
             {
-                label: "Show track name",
+                label: t("lastfmRichPresence.statusDisplayType.track"),
                 value: "track"
             }
         ]
     },
     nameFormat: {
-        description: "Show name of song and artist in status name",
+        description: t("lastfmRichPresence.settings.nameFormat"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Use custom status name",
+                label: t("lastfmRichPresence.nameFormat.statusName"),
                 value: NameFormat.StatusName,
                 default: true
             },
             {
-                label: "Use format 'artist - song'",
+                label: t("lastfmRichPresence.nameFormat.artistFirst"),
                 value: NameFormat.ArtistFirst
             },
             {
-                label: "Use format 'song - artist'",
+                label: t("lastfmRichPresence.nameFormat.songFirst"),
                 value: NameFormat.SongFirst
             },
             {
-                label: "Use artist name only",
+                label: t("lastfmRichPresence.nameFormat.artistOnly"),
                 value: NameFormat.ArtistOnly
             },
             {
-                label: "Use song name only",
+                label: t("lastfmRichPresence.nameFormat.songOnly"),
                 value: NameFormat.SongOnly
             },
             {
-                label: "Use album name (falls back to custom status text if song has no album)",
+                label: t("lastfmRichPresence.nameFormat.albumName"),
                 value: NameFormat.AlbumName
             }
         ],
     },
     useListeningStatus: {
-        description: 'Show "Listening to" status instead of "Playing"',
+        description: t("lastfmRichPresence.settings.useListeningStatus"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     missingArt: {
-        description: "When album or album art is missing",
+        description: t("lastfmRichPresence.settings.missingArt"),
         type: OptionType.SELECT,
         options: [
             {
-                label: "Use large Last.fm logo",
+                label: t("lastfmRichPresence.missingArt.lastfmLogo"),
                 value: "lastfmLogo",
                 default: true
             },
             {
-                label: "Use generic placeholder",
+                label: t("lastfmRichPresence.missingArt.placeholder"),
                 value: "placeholder"
             }
         ],
     },
     showLastFmLogo: {
-        description: "Show the Last.fm logo by the album cover",
+        description: t("lastfmRichPresence.settings.showLastFmLogo"),
         type: OptionType.BOOLEAN,
         default: true,
     },
     alwaysHideArt: {
-        description: "Disable downloading album art",
+        description: t("lastfmRichPresence.settings.alwaysHideArt"),
         type: OptionType.BOOLEAN,
         default: false,
     },
@@ -185,7 +186,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "LastFMRichPresence",
-    description: "Little plugin for Last.fm rich presence",
+    description: t("lastfmRichPresence.description"),
     authors: [Devs.dzshn, Devs.RuiNtD, Devs.blahajZip, Devs.archeruwu],
 
     settings,
@@ -193,9 +194,11 @@ export default definePlugin({
     settingsAboutComponent() {
         return (
             <Card>
-                <Heading tag="h5">How to create an API key</Heading>
-                <Paragraph>Set <strong>Application name</strong> and <strong>Application description</strong> to anything and leave the rest blank.</Paragraph>
-                <LinkButton size="small" href="https://www.last.fm/api/account/create" className={Margins.top8}>Create API Key</LinkButton>
+                <Heading tag="h5">{t("lastfmRichPresence.howToCreateApiKey")}</Heading>
+                <Paragraph>
+                    <Translate i18nKey="lastfmRichPresence.apiKeyInstructions">Set <b>Application name</b> and <b>Application description</b> to anything and leave the rest blank.</Translate>
+                </Paragraph>
+                <LinkButton size="small" href="https://www.last.fm/api/account/create" className={Margins.top8}>{t("lastfmRichPresence.createApiKey")}</LinkButton>
             </Card>
         );
     },
@@ -299,7 +302,7 @@ export default definePlugin({
 
         if (settings.store.shareUsername)
             buttons.push({
-                label: "Last.fm Profile",
+                label: t("lastfmRichPresence.lastfmProfile"),
                 url: `https://www.last.fm/user/${settings.store.username}`,
             });
 

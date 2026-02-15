@@ -10,6 +10,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findCssClassesLazy } from "@webpack";
 import { Button, Menu } from "@webpack/common";
@@ -129,7 +130,7 @@ function isStickerBlocked(name) {
 
 export default definePlugin({
     name: "StickerBlocker",
-    description: "Allows you to block stickers from being displayed.",
+    description: t("stickerBlocker.description"),
     authors: [Devs.Samwich],
     patches: [
         {

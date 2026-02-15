@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Logger } from "@utils/Logger";
+import { t } from "@utils/translation";
 import { OptionType } from "@utils/types";
 
 import { VoiceSettingSection } from "./VoiceSetting";
@@ -37,61 +38,61 @@ export const settings = definePluginSettings({
     },
     volume: {
         type: OptionType.SLIDER,
-        description: "Narrator Volume",
+        description: t("vcNarrator.settings.volume"),
         default: 1,
         markers: [0, 0.25, 0.5, 0.75, 1],
         stickToMarkers: false
     },
     rate: {
         type: OptionType.SLIDER,
-        description: "Narrator Speed",
+        description: t("vcNarrator.settings.speed"),
         default: 1,
         markers: [0.1, 0.5, 1, 2, 5, 10],
         stickToMarkers: false
     },
     sayOwnName: {
-        description: "Say own name",
+        description: t("vcNarrator.settings.sayOwnName"),
         type: OptionType.BOOLEAN,
         default: false
     },
     latinOnly: {
-        description: "Strip non latin characters from names before saying them",
+        description: t("vcNarrator.settings.latinOnly"),
         type: OptionType.BOOLEAN,
         default: false
     },
     joinMessage: {
         type: OptionType.STRING,
-        description: "Join Message",
-        default: "{{USER}} joined"
+        description: t("vcNarrator.settings.joinMessage"),
+        default: t("vcNarrator.defaults.join")
     },
     leaveMessage: {
         type: OptionType.STRING,
-        description: "Leave Message",
-        default: "{{USER}} left"
+        description: t("vcNarrator.settings.leaveMessage"),
+        default: t("vcNarrator.defaults.leave")
     },
     moveMessage: {
         type: OptionType.STRING,
-        description: "Move Message",
-        default: "{{USER}} moved to {{CHANNEL}}"
+        description: t("vcNarrator.settings.moveMessage"),
+        default: t("vcNarrator.defaults.move")
     },
     muteMessage: {
         type: OptionType.STRING,
-        description: "Mute Message (only self for now)",
-        default: "{{USER}} muted"
+        description: t("vcNarrator.settings.muteMessage"),
+        default: t("vcNarrator.defaults.mute")
     },
     unmuteMessage: {
         type: OptionType.STRING,
-        description: "Unmute Message (only self for now)",
-        default: "{{USER}} unmuted"
+        description: t("vcNarrator.settings.unmuteMessage"),
+        default: t("vcNarrator.defaults.unmute")
     },
     deafenMessage: {
         type: OptionType.STRING,
-        description: "Deafen Message (only self for now)",
-        default: "{{USER}} deafened"
+        description: t("vcNarrator.settings.deafenMessage"),
+        default: t("vcNarrator.defaults.deafen")
     },
     undeafenMessage: {
         type: OptionType.STRING,
-        description: "Undeafen Message (only self for now)",
-        default: "{{USER}} undeafened"
+        description: t("vcNarrator.settings.undeafenMessage"),
+        default: t("vcNarrator.defaults.undeafen")
     }
 });

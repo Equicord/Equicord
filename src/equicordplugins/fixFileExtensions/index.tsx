@@ -7,6 +7,7 @@
 import { isPluginEnabled } from "@api/PluginManager";
 import anonymiseFileNames, { tarExtMatcher } from "@plugins/anonymiseFileNames";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { ReporterTestable } from "@utils/types";
 import { CloudUpload } from "@vencord/discord-types";
 
@@ -28,7 +29,7 @@ export const reverseExtensionMap = Object.entries(extensionMap).reduce((acc, [ta
 export default definePlugin({
     name: "FixFileExtensions",
     authors: [Devs.thororen],
-    description: "Fixes file extensions by renaming them to a compatible supported format if possible",
+    description: t("fixFileExtensions.description"),
     reporterTestable: ReporterTestable.None,
     patches: [
         // Taken from AnonymiseFileNames

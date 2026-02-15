@@ -6,19 +6,20 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings(
     {
         targetLanguage: {
             type: OptionType.STRING,
-            description: "The language messages should be translated to",
+            description: t("messageTranslate.settings.targetLanguage"),
             default: "en",
             restartNeeded: true
         },
         confidenceRequirement: {
             type: OptionType.STRING,
-            description: "The confidence required to translated the message. Best not to edit unless you know what you're doing",
+            description: t("messageTranslate.settings.confidenceRequirement"),
             default: "0.8",
             restartNeeded: true
         },
@@ -51,7 +52,7 @@ async function TranslateMessage(string) {
 
 export default definePlugin({
     name: "MessageTranslate",
-    description: "Auto translate messages to your language",
+    description: t("messageTranslate.description"),
     authors: [Devs.Samwich],
     settings,
     TranslateMessage: TranslateMessage,

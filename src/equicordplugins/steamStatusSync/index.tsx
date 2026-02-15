@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 enum SteamStatus {
@@ -84,7 +85,7 @@ export const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SteamStatusSync",
-    description: "Sync your status to Steam! (Online, Away, Invisible, or Offline.)",
+    description: t("steamStatusSync.description"),
     authors: [EquicordDevs.niko],
 
     settings,

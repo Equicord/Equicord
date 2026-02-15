@@ -6,30 +6,31 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const settings = definePluginSettings({
     defaultLayout: {
         type: OptionType.SELECT,
         options: [
-            { label: "List", value: 1, default: true },
-            { label: "Gallery", value: 2 }
+            { label: t("overrideForumDefaults.layouts.list"), value: 1, default: true },
+            { label: t("overrideForumDefaults.layouts.gallery"), value: 2 }
         ],
-        description: "Which layout to use as default"
+        description: t("overrideForumDefaults.settings.defaultLayout")
     },
     defaultSortOrder: {
         type: OptionType.SELECT,
         options: [
-            { label: "Recently Active", value: 0, default: true },
-            { label: "Date Posted", value: 1 }
+            { label: t("overrideForumDefaults.sortOrders.recentlyActive"), value: 0, default: true },
+            { label: t("overrideForumDefaults.sortOrders.datePosted"), value: 1 }
         ],
-        description: "Which sort order to use as default"
+        description: t("overrideForumDefaults.settings.defaultSortOrder")
     }
 });
 
 export default definePlugin({
     name: "OverrideForumDefaults",
-    description: "Allows you to override default forum layout/sort order. you can still change it on a per-channel basis",
+    description: t("overrideForumDefaults.description"),
     authors: [Devs.Inbestigator],
     patches: [
         {

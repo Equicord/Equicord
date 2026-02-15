@@ -12,6 +12,7 @@ import { InfoIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { getCurrentChannel, getCurrentGuild } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { GuildMember } from "@vencord/discord-types";
 import { GuildMemberStore, GuildRoleStore, Menu, Parser } from "@webpack/common";
@@ -33,21 +34,20 @@ function getMembersInRole(roleId: string, guildId: string) {
 
 export default definePlugin({
     name: "InRole",
-    description: "Know who is in a role with the role context menu or /inrole command (read plugin info!)",
+    description: t("inRole.description"),
     authors: [Devs.nin0dev],
     dependencies: ["UserSettingsAPI"],
     start() {
-        // DeveloperMode needs to be enabled for the context menu to be shown
         DeveloperMode.updateSetting(true);
     },
     settingsAboutComponent: () => {
         return (
             <>
-                <Paragraph style={{ fontSize: "1.2rem", marginTop: "15px", fontWeight: "bold" }}>{Parser.parse(":warning:")} Limitations</Paragraph>
-                <Paragraph style={{ marginTop: "10px", fontWeight: "500" }} >If you don't have mod permissions on the server, and that server is large (over 100 members), the plugin may be limited in the following ways:</Paragraph>
-                <Paragraph>• Offline members won't be listed</Paragraph>
-                <Paragraph>• Up to 100 members will be listed by default. To get more, scroll down in the member list to load more members.</Paragraph>
-                <Paragraph>• However, friends will always be shown regardless of their status.</Paragraph>
+                <Paragraph style={{ fontSize: "1.2rem", marginTop: "15px", fontWeight: "bold" }}>{Parser.parse(t("inRole.limitations.title"))}</Paragraph>
+                <Paragraph style={{ marginTop: "10px", fontWeight: "500" }} >{t("inRole.limitations.description")}</Paragraph>
+                <Paragraph>• {t("inRole.limitations.offlineNotListed")}</Paragraph>
+                <Paragraph>• {t("inRole.limitations.upTo100")}</Paragraph>
+                <Paragraph>• {t("inRole.limitations.friendsAlwaysShown")}</Paragraph>
             </>
         );
     },
@@ -55,20 +55,19 @@ export default definePlugin({
     commands: [
         {
             name: "inrole",
-            description: "Know who is in a role",
+            description: t("inRole.commands.inrole"),
             inputType: ApplicationCommandInputType.BUILT_IN,
             options: [
                 {
                     name: "role",
-                    description: "The role",
+                    description: t("inRole.commands.role"),
                     type: ApplicationCommandOptionType.ROLE,
                     required: true
                 },
             ],
             execute: (args, ctx) => {
-                // Guild check
                 if (!ctx.guild) {
-                    return sendBotMessage(ctx.channel.id, { content: "Make sure that you are in a server." });
+                    return sendBotMessage(ctx.channel.id, { content: t("inRole.errors.makeSureServer") });
                 }
                 const role = args[0].value;
                 showInRoleModal(getMembersInRole(role, ctx.guild.id), role, ctx.channel.id);
@@ -89,7 +88,7 @@ export default definePlugin({
             children.push(
                 <Menu.MenuItem
                     id="vc-view-inrole"
-                    label="View Members in Role"
+                    label={t("inRole.ui.viewMembers")}
                     action={() => {
                         showInRoleModal(getMembersInRole(role.id, guild.id), role.id, channel.id);
                     }}
@@ -115,7 +114,7 @@ export default definePlugin({
             children.push(
                 <Menu.MenuItem
                     id="vc-view-inrole"
-                    label="View Members in Role"
+                    label={t("inRole.ui.viewMembers")}
                     action={() => {
                         showInRoleModal(getMembersInRole(role.id, guild.id), role.id, channel.id);
                     }}

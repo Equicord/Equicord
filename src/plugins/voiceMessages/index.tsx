@@ -31,6 +31,7 @@ import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
 import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
 import { useAwaiter } from "@utils/react";
+import { t, Translate } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { chooseFile } from "@utils/web";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
@@ -130,7 +131,7 @@ function sendAudio(blob: Blob, meta: AudioMetadata) {
             }
         });
     });
-    upload.on("error", () => showToast("Failed to upload voice message", Toasts.Type.FAILURE));
+    upload.on("error", () => showToast(t("voiceMessages.failedToUpload"), Toasts.Type.FAILURE));
 
     upload.upload();
 }
@@ -156,7 +157,7 @@ const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
                 type: "icon",
                 icon: Microphone
             }}
-            label="Send Voice Message"
+            label={t("voiceMessages.send")}
             action={() => openModal(modalProps => <Modal modalProps={modalProps} />)}
         />
     );
@@ -194,7 +195,7 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
     return (
         <ModalRoot {...modalProps}>
             <ModalHeader>
-                <Heading>Record Voice Message</Heading>
+                <Heading>{t("voiceMessages.recordModal")}</Heading>
             </ModalHeader>
 
             <ModalContent className={cl("modal")}>
@@ -214,13 +215,13 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
                             setBlobUrl(file);
                         }
                     }}>
-                        Upload File
+                        {t("voiceMessages.uploadFile")}
                     </Button>
                 </div>
 
-                <Heading>Preview</Heading>
+                <Heading>{t("voiceMessages.preview")}</Heading>
                 {metaError
-                    ? <Paragraph className={cl("error")}>Failed to parse selected audio file: {metaError.message}</Paragraph>
+                    ? <Paragraph className={cl("error")}>{t("voiceMessages.failedToParse", { error: metaError.message })}</Paragraph>
                     : (
                         <VoicePreview
                             src={blobUrl}
@@ -231,10 +232,16 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
 
                 {isUnsupportedFormat && (
                     <Card variant="warning" className={Margins.top16} defaultPadding>
-                        <Forms.FormText>Voice Messages have to be OggOpus to be playable on iOS. This file is <code>{blob.type}</code> so it will not be playable on iOS.</Forms.FormText>
+                        <Forms.FormText>
+                            <Translate i18nKey="voiceMessages.iosWarning" variables={{ type: blob.type }}>
+                                Voice Messages have to be OggOpus to be playable on iOS. This file is <code>{blob.type}</code> so it will not be playable on iOS.
+                            </Translate>
+                        </Forms.FormText>
 
                         <Paragraph className={Margins.top8}>
-                            To fix it, first convert it to OggOpus, for example using the <Link href="https://convertio.co/mp3-opus/">convertio web converter</Link>
+                            <Translate i18nKey="voiceMessages.iosFix">
+                                To fix it, first convert it to OggOpus, for example using the <Link href="https://convertio.co/mp3-opus/">convertio web converter</Link>
+                            </Translate>
                         </Paragraph>
                     </Card>
                 )}
@@ -247,9 +254,9 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
                     onClick={() => {
                         sendAudio(blob!, meta ?? EMPTY_META);
                         modalProps.onClose();
-                        showToast("Now sending voice message... Please be patient", Toasts.Type.MESSAGE);
+                        showToast(t("voiceMessages.sending"), Toasts.Type.MESSAGE);
                     }}>
-                    Send
+                    {t("voiceMessages.send")}
                 </Button>
             </ModalFooter>
         </ModalRoot>
@@ -259,12 +266,12 @@ function Modal({ modalProps }: { modalProps: ModalProps; }) {
 export const settings = definePluginSettings({
     noiseSuppression: {
         type: OptionType.BOOLEAN,
-        description: "Noise Suppression",
+        description: t("voiceMessages.noiseSuppression"),
         default: true,
     },
     echoCancellation: {
         type: OptionType.BOOLEAN,
-        description: "Echo Cancellation",
+        description: t("voiceMessages.echoCancellation"),
         default: true,
     },
 });

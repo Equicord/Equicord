@@ -6,6 +6,7 @@
 
 import { disableStyle, enableStyle } from "@api/Styles";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { ChannelRTCStore, IconUtils, UserStore, VoiceStateStore } from "@webpack/common";
 
@@ -13,7 +14,7 @@ import style from "./style.css?managed";
 
 export default definePlugin({
     name: "FullVCPFP",
-    description: "Makes avatars take up the entire vc tile",
+    description: t("fullVcPfp.description"),
     authors: [EquicordDevs.mochienya],
     patches: [
         {

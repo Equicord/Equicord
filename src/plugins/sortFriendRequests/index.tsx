@@ -25,6 +25,7 @@ import { Flex } from "@components/Flex";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { DateUtils, RelationshipStore } from "@webpack/common";
@@ -45,7 +46,7 @@ function getSince(user: User) {
 const settings = definePluginSettings({
     showDates: {
         type: OptionType.BOOLEAN,
-        description: "Show dates on friend requests",
+        description: t("sortFriendRequests.settings.showDates"),
         default: false,
         restartNeeded: true
     }
@@ -55,7 +56,7 @@ migratePluginSettings("SortFriends", "SortFriendRequests");
 export default definePlugin({
     name: "SortFriends",
     authors: [Devs.Megu, EquicordDevs.CallMeGii],
-    description: "Sorts friend requests by date of receipt",
+    description: t("sortFriendRequests.description"),
     isModified: true,
     settings,
 
@@ -122,7 +123,7 @@ export default definePlugin({
                                 clipRule="evenodd"
                             ></path>
                         </svg>
-                        <span>Added &mdash; {since.toDateString()}</span>
+                        <span>{t("sortFriendRequests.added")} &mdash; {since.toDateString()}</span>
                     </div>
                 </span>
             </Flex>

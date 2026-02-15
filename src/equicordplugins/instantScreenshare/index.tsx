@@ -8,6 +8,7 @@ import { getUserSettingLazy } from "@api/UserSettings";
 import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { VoiceState } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
@@ -56,7 +57,7 @@ async function autoStartStream(instant = true) {
 
 export default definePlugin({
     name: "InstantScreenshare",
-    description: "Instantly screenshare when joining a voice channel with support for desktop sources, windows, and video input devices (cameras, capture cards)",
+    description: t("instantScreenshare.description"),
     authors: [Devs.HAHALOSAH, Devs.thororen, EquicordDevs.mart],
     dependencies: ["EquicordToolbox"],
     tags: ["ScreenshareKeybind"],
@@ -65,21 +66,21 @@ export default definePlugin({
 
     settingsAboutComponent: () => (
         <>
-            <HeadingSecondary>For Linux</HeadingSecondary>
+            <HeadingSecondary>{t("instantScreenshare.info.linux")}</HeadingSecondary>
             <Paragraph>
-                For Wayland it only pops up the screenshare select
+                {t("instantScreenshare.info.wayland")}
                 <br />
-                For X11 it may or may not work :shrug:
+                {t("instantScreenshare.info.x11")}
             </Paragraph>
             <br />
-            <HeadingSecondary>Video Devices</HeadingSecondary>
+            <HeadingSecondary>{t("instantScreenshare.info.videoDevices")}</HeadingSecondary>
             <Paragraph>
-                Supports cameras and capture cards (like Elgato HD60X) when enabled in settings
+                {t("instantScreenshare.info.videoDevicesInfo")}
             </Paragraph>
             <br />
-            <HeadingSecondary>Regarding Sound & Preview Settings</HeadingSecondary>
+            <HeadingSecondary>{t("instantScreenshare.info.soundPreview")}</HeadingSecondary>
             <Paragraph>
-                We use the settings set and used by discord to decide if stream preview and sound should be enabled or not
+                {t("instantScreenshare.info.soundPreviewInfo")}
             </Paragraph>
         </>
     ),
@@ -126,9 +127,9 @@ export default definePlugin({
     },
 
     toolboxActions: {
-        "Instant Screenshare"() {
+        [t("instantScreenshare.ui.instantScreenshare")]() {
             settings.store.toolboxManagement = !settings.store.toolboxManagement;
-            showToast(`Instant Screenshare ${settings.store.toolboxManagement ? "Enabled" : "Disabled"}`, Toasts.Type.SUCCESS);
+            showToast(settings.store.toolboxManagement ? t("instantScreenshare.ui.instantScreenshareEnabled") : t("instantScreenshare.ui.instantScreenshareDisabled"), Toasts.Type.SUCCESS);
         }
     }
 });

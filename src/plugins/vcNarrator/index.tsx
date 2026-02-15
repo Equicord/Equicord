@@ -23,6 +23,7 @@ import { Devs, IS_LINUX } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { wordsToTitle } from "@utils/text";
+import { t, Translate } from "@utils/translation";
 import definePlugin, { ReporterTestable } from "@utils/types";
 import { AuthenticationStore, Button, ChannelStore, GuildMemberStore, SelectedChannelStore, SelectedGuildStore, useMemo, UserStore, VoiceStateStore } from "@webpack/common";
 import { ReactElement } from "react";
@@ -141,7 +142,7 @@ function playSample(type: string) {
 
 export default definePlugin({
     name: "VcNarrator",
-    description: "Announces when users join, leave, or move voice channels via narrator",
+    description: t("vcNarrator.description"),
     authors: [Devs.Ven],
     reporterTestable: ReporterTestable.None,
 
@@ -201,7 +202,7 @@ export default definePlugin({
     start() {
         if (typeof speechSynthesis === "undefined" || speechSynthesis.getVoices().length === 0) {
             new Logger("VcNarrator").warn(
-                "SpeechSynthesis not supported or no Narrator voices found. Thus, this plugin will not work. Check my Settings for more info"
+                t("vcNarrator.speechSynthesisNotSupported")
             );
             return;
         }
@@ -221,27 +222,31 @@ export default definePlugin({
 
         let errorComponent: ReactElement<any> | null = null;
         if (!hasVoices) {
-            let error = "No narrator voices found. ";
+            let error = t("vcNarrator.noVoices");
             error += IS_LINUX
-                ? "Install speech-dispatcher or espeak and run Discord with the --enable-speech-dispatcher flag"
-                : "Try installing some in the Narrator settings of your Operating System";
+                ? t("vcNarrator.linuxVoicesHelp")
+                : t("vcNarrator.osVoicesHelp");
             errorComponent = <ErrorCard>{error}</ErrorCard>;
         } else if (!hasEnglishVoices) {
-            errorComponent = <ErrorCard>You don't have any English voices installed, so the narrator might sound weird</ErrorCard>;
+            errorComponent = <ErrorCard>{t("vcNarrator.noEnglishVoices")}</ErrorCard>;
         }
 
         return (
             <section>
                 <Paragraph>
-                    You can customise the spoken messages below. You can disable specific messages by setting them to nothing
+                    {t("vcNarrator.customiseMessages")}
                 </Paragraph>
                 <Paragraph>
-                    The special placeholders <code>{"{{USER}}"}</code>, <code>{"{{DISPLAY_NAME}}"}</code>, <code>{"{{NICKNAME}}"}</code> and <code>{"{{CHANNEL}}"}</code>{" "}
-                    will be replaced with the user's name (nothing if it's yourself), the user's display name, the user's nickname on current server and the channel's name respectively
+                    <Translate i18nKey="vcNarrator.placeholdersHelp">
+                        <code>{"{{USER}}"}</code>
+                        <code>{"{{DISPLAY_NAME}}"}</code>
+                        <code>{"{{NICKNAME}}"}</code>
+                        <code>{"{{CHANNEL}}"}</code>
+                    </Translate>
                 </Paragraph>
                 {hasEnglishVoices && (
                     <>
-                        <HeadingSecondary className={Margins.top20}>Play Example Sounds</HeadingSecondary>
+                        <HeadingSecondary className={Margins.top20}>{t("vcNarrator.playExampleSounds")}</HeadingSecondary>
                         <div
                             style={{
                                 display: "grid",

@@ -6,6 +6,7 @@
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Menu, NavigationRouter, RestAPI, Toasts, UserStore } from "@webpack/common";
 
@@ -22,7 +23,7 @@ async function findLastMessageFromUser(guildId: string, channelId: string, userI
 
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: "Couldn't find any recent messages from this user.",
+            message: t("lastActive.errors.noRecentMessages"),
             id: Toasts.genId()
         });
         return null;
@@ -30,7 +31,7 @@ async function findLastMessageFromUser(guildId: string, channelId: string, userI
         console.error("Error finding last message:", error);
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: "Failed to find messages. Check console for details.",
+            message: t("lastActive.errors.findFailed"),
             id: Toasts.genId()
         });
         return null;
@@ -42,7 +43,7 @@ async function jumpToLastActive(channel: any, targetUserId?: string) {
         if (!channel) {
             Toasts.show({
                 type: Toasts.Type.FAILURE,
-                message: "Channel information not available.",
+                message: t("lastActive.errors.channelNotAvailable"),
                 id: Toasts.genId()
             });
             return;
@@ -66,7 +67,7 @@ async function jumpToLastActive(channel: any, targetUserId?: string) {
         console.error("Error in jumpToLastActive:", error);
         Toasts.show({
             type: Toasts.Type.FAILURE,
-            message: "Failed to jump to message. Check console for details.",
+            message: t("lastActive.errors.jumpFailed"),
             id: Toasts.genId()
         });
     }
@@ -75,7 +76,7 @@ const ChannelContextMenuPatch: NavContextMenuPatchCallback = (children, { channe
     children.push(
         <Menu.MenuItem
             id="LastActive"
-            label={<span style={{ color: "#aa6746" }}>Your Last Message</span>}
+            label={<span style={{ color: "#aa6746" }}>{t("jumpTo.ui.yourLastMessage")}</span>}
             icon={LastActiveIcon}
             action={() => {
                 jumpToLastActive(channel);
@@ -89,7 +90,7 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, { user, cha
     children.push(
         <Menu.MenuItem
             id="LastActive"
-            label={<span style={{ color: "#aa6746" }}>User's Last Message</span>}
+            label={<span style={{ color: "#aa6746" }}>{t("jumpTo.ui.usersLastMessage")}</span>}
             icon={UserLastActiveIcon}
             action={() => {
                 jumpToLastActive(channel, user.id);
@@ -134,7 +135,7 @@ export function LastActiveIcon() {
 
 export default definePlugin({
     name: "LastActive",
-    description: "A plugin to jump to last active message from yourself or another user in a channel/server.",
+    description: t("lastActive.description"),
     authors: [EquicordDevs.Crxa],
     contextMenus: {
         "channel-context": ChannelContextMenuPatch,

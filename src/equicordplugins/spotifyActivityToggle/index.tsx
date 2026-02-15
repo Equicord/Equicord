@@ -9,6 +9,7 @@ import { definePluginSettings } from "@api/Settings";
 import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import equicordToolbox from "@equicordplugins/equicordToolbox";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Constants, Menu, RestAPI, useEffect, useState } from "@webpack/common";
 
@@ -87,7 +88,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "SpotifyActivityToggle",
-    description: "Adds a toggle button for Spotify activity visibility.",
+    description: t("spotifyActivityToggle.description"),
     authors: [Devs.thororen],
     settings,
 

@@ -7,6 +7,7 @@
 import { addContextMenuPatch, removeContextMenuPatch } from "@api/ContextMenu";
 import { ScreenshareIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Menu, UploadHandler } from "@webpack/common";
 
@@ -14,7 +15,7 @@ let recoder: MediaRecorder;
 
 export default definePlugin({
     name: "ScreenRecorder",
-    description: "epic screen recorder lol",
+    description: t("screenRecorder.description"),
     authors: [Devs.AutumnVN],
     contextMenus: {
         "channel-attach": startRecording

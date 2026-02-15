@@ -43,11 +43,11 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
     return (
         <ModalRoot {...props}>
             <ModalHeader>
-                <HeadingTertiary>Rename</HeadingTertiary>
+                <HeadingTertiary>{t("betterSessions.renameModal.title")}</HeadingTertiary>
             </ModalHeader>
 
             <ModalContent>
-                <Heading style={{ marginTop: "10px" }}>New device name</Heading>
+                <Heading style={{ marginTop: "10px" }}>{t("betterSessions.renameModal.newDeviceName")}</Heading>
                 <TextInput
                     style={{ marginBottom: "10px" }}
                     placeholder={getDefaultName(session.client_info)}
@@ -71,7 +71,7 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
                     size={Button.Sizes.NONE}
                     onClick={() => setValue("")}
                 >
-                    Reset Name
+                    {t("betterSessions.renameModal.resetName")}
                 </Button>
             </ModalContent>
 
@@ -87,7 +87,7 @@ export function RenameModal({ props, session, state }: { props: ModalProps, sess
                         color={Button.Colors.BRAND}
                         onClick={onSaveClick}
                     >
-                        Save
+                        {t("betterSessions.renameModal.save")}
                     </Button>
                 </div>
             </ModalFooter>

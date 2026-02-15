@@ -5,6 +5,7 @@
  */
 
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Embed } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findCssClassesLazy, proxyLazyWebpack } from "@webpack";
@@ -44,7 +45,7 @@ const EmbedContext = proxyLazyWebpack(() => React.createContext<null | Embed>(nu
 
 export default definePlugin({
     name: "FavouriteAnything",
-    description: "Favourite any image",
+    description: t("favouriteAnything.description"),
     authors: [Devs.nin0dev, EquicordDevs.davri],
     patches: [
         {

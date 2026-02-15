@@ -6,11 +6,12 @@
 
 import { Devs } from "@utils/constants";
 import { openUserProfile } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "AlwaysExpandProfiles",
-    description: "Always expands profile popouts to the full modal",
+    description: t("alwaysExpandProfiles.description"),
     authors: [Devs.thororen],
     patches: [
         {

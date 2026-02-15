@@ -22,6 +22,7 @@ import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy, findCssClassesLazy, findStoreLazy } from "@webpack";
 import { Constants, React, RestAPI, SettingsRouter, Tooltip } from "@webpack/common";
@@ -40,12 +41,12 @@ const BlobMask = findComponentByCodeLazy("!1,lowerBadgeSize:");
 const settings = definePluginSettings({
     backgroundCheck: {
         type: OptionType.BOOLEAN,
-        description: "Check for new sessions in the background, and display notifications when they are detected",
+        description: t("betterSessions.settings.backgroundCheck"),
         default: false,
         restartNeeded: true
     },
     checkInterval: {
-        description: "How often to check for new sessions in the background (if enabled), in minutes",
+        description: t("betterSessions.settings.checkInterval"),
         type: OptionType.NUMBER,
         default: 20,
         restartNeeded: true
@@ -87,7 +88,6 @@ export default definePlugin({
         const state = React.useState(savedSession?.name ? `${savedSession.name}*` : getDefaultName(session.client_info));
         const [title, setTitle] = state;
 
-        // Show a "NEW" badge if the session is seen for the first time
         return (
             <>
                 <span>{title}</span>
@@ -99,7 +99,7 @@ export default definePlugin({
                             marginLeft: "2px"
                         }}
                     >
-                        NEW
+                        {t("betterSessions.newBadge")}
                     </div>
                 )}
                 <RenameButton session={session} state={state} />
@@ -172,7 +172,7 @@ export default definePlugin({
             savedSessionsCache.set(session.id_hash, { name: "", isNew: true });
             showNotification({
                 title: "BetterSessions",
-                body: `New session:\n${session.client_info.os} · ${session.client_info.platform} · ${session.client_info.location}`,
+                body: `${t("betterSessions.newSession")}\n${session.client_info.os} · ${session.client_info.platform} · ${session.client_info.location}`,
                 permanent: true,
                 onClick: () => SettingsRouter.openUserSettings("sessions_panel")
             });

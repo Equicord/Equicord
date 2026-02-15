@@ -28,6 +28,7 @@ import { Devs } from "@utils/constants";
 import { copyWithToast, getCurrentGuild, getIntlMessage } from "@utils/discord";
 import { Margins } from "@utils/margins";
 import { closeModal, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { Button, ChannelStore, GuildRoleStore, Menu } from "@webpack/common";
@@ -76,31 +77,31 @@ function openViewRawModal(json: string, type: string, msgContent?: string) {
         <ErrorBoundary>
             <ModalRoot {...props} size={ModalSize.LARGE}>
                 <ModalHeader>
-                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>View Raw</BaseText>
+                    <BaseText size="lg" weight="semibold" style={{ flexGrow: 1 }}>{t("viewRaw.viewRaw")}</BaseText>
                     <ModalCloseButton onClick={() => closeModal(key)} />
                 </ModalHeader>
                 <ModalContent>
                     <div style={{ padding: "16px 0" }}>
                         {!!msgContent && (
                             <>
-                                <Heading>Content</Heading>
+                                <Heading>{t("viewRaw.content")}</Heading>
                                 <CodeBlock content={msgContent} lang="" />
                                 <Divider className={Margins.bottom20} />
                             </>
                         )}
 
-                        <Heading>{type} Data</Heading>
+                        <Heading>{t("viewRaw.data", { type })}</Heading>
                         <CodeBlock content={json} lang="json" />
                     </div>
                 </ModalContent >
                 <ModalFooter>
                     <Flex>
-                        <Button onClick={() => copyWithToast(json, `${type} data copied to clipboard!`)}>
-                            Copy {type} JSON
+                        <Button onClick={() => copyWithToast(json, t("viewRaw.dataCopied", { type }))}>
+                            {t("viewRaw.copyJson", { type })}
                         </Button>
                         {!!msgContent && (
-                            <Button onClick={() => copyWithToast(msgContent, "Content copied to clipboard!")}>
-                                Copy Raw Content
+                            <Button onClick={() => copyWithToast(msgContent, t("viewRaw.contentCopied"))}>
+                                {t("viewRaw.copyRawContent")}
                             </Button>
                         )}
                     </Flex>
@@ -119,11 +120,11 @@ function openViewRawModalMessage(msg: Message) {
 
 const settings = definePluginSettings({
     clickMethod: {
-        description: "Change the button to view the raw content/data of any message.",
+        description: t("viewRaw.settings.clickMethodDescription"),
         type: OptionType.SELECT,
         options: [
-            { label: "Left Click to view the raw content.", value: "Left", default: true },
-            { label: "Right click to view the raw content.", value: "Right" }
+            { label: t("viewRaw.settings.leftClick"), value: "Left", default: true },
+            { label: t("viewRaw.settings.rightClick"), value: "Right" }
         ]
     }
 });
@@ -148,7 +149,7 @@ function MakeContextCallback(name: "Guild" | "Role" | "User" | "Channel"): NavCo
         children.splice(-1, 0,
             <Menu.MenuItem
                 id={id}
-                label="View Raw"
+                label={t("viewRaw.viewRaw")}
                 action={() => openViewRawModal(JSON.stringify(value, null, 4), name)}
                 icon={CopyIcon}
             />
@@ -166,7 +167,7 @@ const devContextCallback: NavContextMenuPatchCallback = (children, { id }: { id:
     children.push(
         <Menu.MenuItem
             id={"vc-view-role-raw"}
-            label="View Raw"
+            label={t("viewRaw.viewRaw")}
             action={() => openViewRawModal(JSON.stringify(role, null, 4), "Role")}
             icon={CopyIcon}
         />
@@ -175,7 +176,7 @@ const devContextCallback: NavContextMenuPatchCallback = (children, { id }: { id:
 
 export default definePlugin({
     name: "ViewRaw",
-    description: "Copy and view the raw content/data of any message, channel or guild",
+    description: t("viewRaw.description"),
     authors: [Devs.KingFish, Devs.Ven, Devs.rad, Devs.ImLvna],
     settings,
 
@@ -213,8 +214,8 @@ export default definePlugin({
             };
 
             const label = settings.store.clickMethod === "Right"
-                ? "Copy Raw (Left Click) / View Raw (Right Click)"
-                : "View Raw (Left Click) / Copy Raw (Right Click)";
+                ? t("viewRaw.copyRawLeftViewRawRight")
+                : t("viewRaw.viewRawLeftCopyRawRight");
 
             return {
                 label,

@@ -14,6 +14,7 @@ import { debounce } from "@shared/debounce";
 import { EquicordDevs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { React, TextInput } from "@webpack/common";
 
@@ -134,13 +135,13 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
 
     return (
         <section>
-            <HeadingSecondary>Search Google Fonts</HeadingSecondary>
-            <Paragraph>Click on any font to apply it.</Paragraph>
+            <HeadingSecondary>{t("fontLoader.ui.searchGoogleFonts")}</HeadingSecondary>
+            <Paragraph>{t("fontLoader.ui.clickToApply")}</Paragraph>
 
             <TextInput
                 value={query}
                 onChange={e => handleSearch(e)}
-                placeholder="Search fonts..."
+                placeholder={t("fontLoader.ui.searchFonts")}
                 disabled={loading}
                 className={Margins.bottom16}
             />
@@ -159,7 +160,7 @@ function GoogleFontSearch({ onSelect }: { onSelect: (font: GoogleFontMetadata) =
                             </div>
                             {font.authors?.length && (
                                 <Paragraph className={Margins.top8} style={{ opacity: 0.7 }}>
-                                    by {font.authors.join(", ")}
+                                    {t("fontLoader.ui.by", { authors: font.authors.join(", ") })}
                                 </Paragraph>
                             )}
                         </Card>
@@ -192,14 +193,14 @@ const settings = definePluginSettings({
     },
     applyOnCodeBlocks: {
         type: OptionType.BOOLEAN,
-        description: "Apply the font to code blocks",
+        description: t("fontLoader.settings.applyOnCodeBlocks"),
         default: false
     }
 });
 
 export default definePlugin({
     name: "FontLoader",
-    description: "Loads any font from Google Fonts",
+    description: t("fontLoader.description"),
     authors: [EquicordDevs.vmohammad],
     settings,
 

@@ -5,13 +5,14 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { MessageStore } from "@webpack/common";
 
 export default definePlugin({
     name: "BetterPlusReacts",
     authors: [Devs.Joona],
-    description: "The amount of plus before :emoji: is the message to add it to",
+    description: t("betterPlusReacts.description"),
     patches: [
         {
             find: ".SLASH_COMMAND_USED,",

@@ -16,6 +16,7 @@ import { Paragraph } from "@components/Paragraph";
 import { copyToClipboard } from "@utils/clipboard";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { ModalContent, ModalFooter, ModalHeader, ModalRoot, ModalSize, openModal } from "@utils/modal";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Alerts, Button, ContextMenuApi, FluxDispatcher, Menu, React, showToast, TextInput, Toasts, useCallback, useState } from "@webpack/common";
 
@@ -48,12 +49,12 @@ const addCollectionContextMenuPatch: NavContextMenuPatchCallback = (children, pr
         if (settings.store.showCopyImageLink) {
             group.push(
                 <Menu.MenuItem
-                    label="Copy Image Link"
+                    label={t("gifCollections.ui.copyImageLink")}
                     key="copy-image-link"
                     id="copy-image-link"
                     action={() => {
                         copyToClipboard(gif.url);
-                        showToast("Image link copied to clipboard", Toasts.Type.SUCCESS);
+                        showToast(t("gifCollections.ui.imageLinkCopied"), Toasts.Type.SUCCESS);
                     }}
                 />
             );
@@ -61,7 +62,7 @@ const addCollectionContextMenuPatch: NavContextMenuPatchCallback = (children, pr
 
         group.push(
             <Menu.MenuItem
-                label="Add To Collection"
+                label={t("gifCollections.ui.addToCollection")}
                 key="add-to-collection"
                 id="add-to-collection"
             >
@@ -79,7 +80,7 @@ const addCollectionContextMenuPatch: NavContextMenuPatchCallback = (children, pr
                 <Menu.MenuItem
                     key="create-collection"
                     id="create-collection"
-                    label="Create Collection"
+                    label={t("gifCollections.ui.createCollection")}
                     action={() => {
                         openModal(modalProps => (
                             <CreateCollectionModal onClose={modalProps.onClose} gif={gif} modalProps={modalProps} />
@@ -93,7 +94,7 @@ const addCollectionContextMenuPatch: NavContextMenuPatchCallback = (children, pr
 
 export const settings = definePluginSettings({
     itemPrefix: {
-        description: "The prefix for gif items",
+        description: t("gifCollections.settings.itemPrefix"),
         type: OptionType.STRING,
         default: "gc-item:",
         onChange: value => {
@@ -106,7 +107,7 @@ export const settings = definePluginSettings({
         restartNeeded: true
     },
     collectionPrefix: {
-        description: "The prefix for collections",
+        description: t("gifCollections.settings.collectionPrefix"),
         type: OptionType.STRING,
         default: "gc:",
         onChange: value => {
@@ -119,28 +120,28 @@ export const settings = definePluginSettings({
         restartNeeded: true
     },
     onlyShowCollections: {
-        description: "Only show collections",
+        description: t("gifCollections.settings.onlyShowCollections"),
         type: OptionType.BOOLEAN,
         default: false,
         restartNeeded: true
     },
     stopWarnings: {
-        description: "Stop deletion warnings",
+        description: t("gifCollections.settings.stopWarnings"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     showCopyImageLink: {
-        description: "Show 'Copy Image Link' option in context menus",
+        description: t("gifCollections.settings.showCopyImageLink"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     preventDuplicates: {
-        description: "Prevent adding the same GIF to a collection multiple times",
+        description: t("gifCollections.settings.preventDuplicates"),
         type: OptionType.BOOLEAN,
         default: false,
     },
     defaultEmptyCollectionImage: {
-        description: "The image / gif that will be shown when a collection has no images / gifs",
+        description: t("gifCollections.settings.defaultEmptyCollectionImage"),
         type: OptionType.STRING,
         default: "https://c.tenor.com/YEG33HsLEaIAAAAC/parksandrec-oops.gif"
     },
@@ -175,14 +176,14 @@ export const settings = definePluginSettings({
 
             return (
                 <div className="collections-sort-container">
-                    <Heading className="collections-sort-title">Sort Collections</Heading>
+                    <Heading className="collections-sort-title">{t("gifCollections.ui.sortCollections")}</Heading>
                     <Divider className="collections-sort-divider" />
                     <Paragraph className="collections-sort-description">
-                        Choose a sorting criteria for your collections
+                        {t("gifCollections.ui.sortCollectionsDescription")}
                     </Paragraph>
                     <Divider className="collections-sort-divider" />
                     <div className="collections-sort-section">
-                        <Paragraph className="collections-sort-section-title">Sort By</Paragraph>
+                        <Paragraph className="collections-sort-section-title">{t("gifCollections.ui.sortBy")}</Paragraph>
                         <div className="collections-sort-option">
                             <label className="collections-sort-label">
                                 <input
@@ -193,7 +194,7 @@ export const settings = definePluginSettings({
                                     onChange={() => handleSortTypeChange(SortingOptions.NAME)}
                                     className="collections-sort-input"
                                 />
-                                Name
+                                {t("gifCollections.ui.name")}
                             </label>
                         </div>
                         <div className="collections-sort-option">
@@ -206,7 +207,7 @@ export const settings = definePluginSettings({
                                     onChange={() => handleSortTypeChange(SortingOptions.CREATION_DATE)}
                                     className="collections-sort-input"
                                 />
-                                Creation Date
+                                {t("gifCollections.ui.creationDate")}
                             </label>
                         </div>
                         <div className="collections-sort-option">
@@ -219,13 +220,13 @@ export const settings = definePluginSettings({
                                     onChange={() => handleSortTypeChange(SortingOptions.MODIFIED_DATE)}
                                     className="collections-sort-input"
                                 />
-                                Modified Date
+                                {t("gifCollections.ui.modifiedDate")}
                             </label>
                         </div>
                     </div>
                     <Divider className="collections-sort-divider" />
                     <div className="collections-sort-section">
-                        <Paragraph className="collections-sort-section-title">Order</Paragraph>
+                        <Paragraph className="collections-sort-section-title">{t("gifCollections.ui.order")}</Paragraph>
                         <div className="collections-sort-option">
                             <label className="collections-sort-label">
                                 <input
@@ -236,7 +237,7 @@ export const settings = definePluginSettings({
                                     onChange={() => handleSortOrderChange("asc")}
                                     className="collections-sort-input"
                                 />
-                                Ascending
+                                {t("gifCollections.ui.ascending")}
                             </label>
                         </div>
                         <div className="collections-sort-option">
@@ -249,7 +250,7 @@ export const settings = definePluginSettings({
                                     onChange={() => handleSortOrderChange("desc")}
                                     className="collections-sort-input"
                                 />
-                                Descending
+                                {t("gifCollections.ui.descending")}
                             </label>
                         </div>
                     </div>
@@ -259,52 +260,52 @@ export const settings = definePluginSettings({
     },
     importGifs: {
         type: OptionType.COMPONENT,
-        description: "Import Collections",
+        description: t("gifCollections.ui.importCollections"),
         component: () =>
             <Button onClick={async () =>
                 (await getCollections()).length ? Alerts.show({
-                    title: "Are you sure?",
-                    body: "Importing collections will overwrite your current collections.",
-                    confirmText: "Import",
+                    title: t("gifCollections.ui.areYouSure"),
+                    body: t("gifCollections.ui.importOverwrite"),
+                    confirmText: t("gifCollections.ui.import"),
                     confirmColor: Button.Colors.RED,
-                    cancelText: "Nevermind",
+                    cancelText: t("gifCollections.ui.nevermind"),
                     onConfirm: async () => uploadGifCollections()
                 }) : uploadGifCollections()}>
-                Import Collections
+                {t("gifCollections.ui.importCollections")}
             </Button>,
     },
     exportGifs: {
         type: OptionType.COMPONENT,
-        description: "Export Collections",
+        description: t("gifCollections.ui.exportCollections"),
         component: () =>
             <Button onClick={downloadCollections}>
-                Export Collections
+                {t("gifCollections.ui.exportCollections")}
             </Button>
     },
     resetCollections: {
         type: OptionType.COMPONENT,
-        description: "Reset Collections",
+        description: t("gifCollections.ui.resetCollections"),
         component: () =>
             <Button onClick={() =>
                 Alerts.show({
-                    title: "Are you sure?",
-                    body: "Resetting collections will remove all your collections.",
-                    confirmText: "Reset",
+                    title: t("gifCollections.ui.areYouSure"),
+                    body: t("gifCollections.ui.resetRemove"),
+                    confirmText: t("gifCollections.ui.reset"),
                     confirmColor: Button.Colors.RED,
-                    cancelText: "Nevermind",
+                    cancelText: t("gifCollections.ui.nevermind"),
                     onConfirm: async () => {
                         await DataStore.set(DATA_COLLECTION_NAME, []);
                         refreshCacheCollection();
                     }
                 })}>
-                Reset Collections
+                {t("gifCollections.ui.resetCollections")}
             </Button>
     }
 });
 
 export default definePlugin({
     name: "GifCollections",
-    description: "Allows you to create collections of gifs",
+    description: t("gifCollections.description"),
     authors: [Devs.Aria, EquicordDevs.creations],
     patches: [
         {
@@ -448,7 +449,7 @@ const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
                 <Menu.MenuItem
                     key="collection-information"
                     id="collection-information"
-                    label="Collection Information"
+                    label={t("gifCollections.ui.collectionInformation")}
                     action={() => {
                         const collection = cache_collections.find(c => c.name === nameOrId);
                         if (!collection) return;
@@ -460,30 +461,30 @@ const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
                                 className="custom-modal"
                             >
                                 <ModalHeader separator={false} className="custom-modal-header">
-                                    <Paragraph className="custom-modal-title">Collection Information</Paragraph>
+                                    <Paragraph className="custom-modal-title">{t("gifCollections.ui.collectionInformation")}</Paragraph>
                                 </ModalHeader>
                                 <ModalContent className="custom-modal-content">
                                     <section>
                                         <Flex className="collection-info">
-                                            <Heading className="collection-info-title">Name</Heading>
+                                            <Heading className="collection-info-title">{t("gifCollections.ui.name")}</Heading>
                                             <Paragraph className="collection-info-text">{collection.name.replace(/.+?:/, "")}</Paragraph>
                                         </Flex>
                                         <Flex className="collection-info">
-                                            <Heading className="collection-info-title">Gifs</Heading>
+                                            <Heading className="collection-info-title">{t("gifCollections.ui.gifs")}</Heading>
                                             <Paragraph className="collection-info-text">{collection.gifs.length}</Paragraph>
                                         </Flex>
                                         <Flex className="collection-info">
-                                            <Heading className="collection-info-title">Created At</Heading>
-                                            <Paragraph className="collection-info-text">{collection.createdAt ? new Date(collection.createdAt).toLocaleString() : "Unknown"}</Paragraph>
+                                            <Heading className="collection-info-title">{t("gifCollections.ui.createdAt")}</Heading>
+                                            <Paragraph className="collection-info-text">{collection.createdAt ? new Date(collection.createdAt).toLocaleString() : t("gifCollections.ui.unknown")}</Paragraph>
                                         </Flex>
                                         <Flex className="collection-info">
-                                            <Heading className="collection-info-title">Last Updated</Heading>
-                                            <Paragraph className="collection-info-text">{collection.lastUpdated ? new Date(collection.lastUpdated).toLocaleString() : "Unknown"}</Paragraph>
+                                            <Heading className="collection-info-title">{t("gifCollections.ui.lastUpdated")}</Heading>
+                                            <Paragraph className="collection-info-text">{collection.lastUpdated ? new Date(collection.lastUpdated).toLocaleString() : t("gifCollections.ui.unknown")}</Paragraph>
                                         </Flex>
                                     </section>
                                 </ModalContent>
                                 <ModalFooter className="custom-modal-footer">
-                                    <Button onClick={modalProps.onClose} className="custom-modal-button">Close</Button>
+                                    <Button onClick={modalProps.onClose} className="custom-modal-button">{t("gifCollections.ui.close")}</Button>
                                 </ModalFooter>
                             </ModalRoot>
                         ));
@@ -493,7 +494,7 @@ const RemoveItemContextMenu = ({ type, nameOrId, instance }) => (
                 <Menu.MenuItem
                     key="rename-collection"
                     id="rename-collection"
-                    label="Rename"
+                    label={t("gifCollections.ui.rename")}
                     action={() => openModal(modalProps => (
                         <RenameCollectionModal
                             onClose={modalProps.onClose}

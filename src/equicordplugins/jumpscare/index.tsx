@@ -9,6 +9,7 @@ import "./styles.css";
 import { createAudioPlayer } from "@api/AudioPlayer";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { createRoot, FluxDispatcher, useCallback, useEffect, useState } from "@webpack/common";
 import { Root } from "react-dom/client";
@@ -18,17 +19,17 @@ let jumpscareRoot: Root | undefined;
 const settings = definePluginSettings({
     imageSource: {
         type: OptionType.STRING,
-        description: "Sets the image url of the jumpscare",
+        description: t("jumpscare.settings.imageSource"),
         default: "https://github.com/Equicord/Equibored/blob/main/icons/jumpscare/troll.gif?raw=true"
     },
     audioSource: {
         type: OptionType.STRING,
-        description: "Sets the audio url of the jumpscare",
+        description: t("jumpscare.settings.audioSource"),
         default: "https://github.com/Equicord/Equibored/raw/main/sounds/jumpscare/trollolol.mp3?raw=true"
     },
     chance: {
         type: OptionType.NUMBER,
-        description: "The chance of a jumpscare happening (1 in X so: 100 = 1/100 or 1%, 50 = 1/50 or 2%, etc.)",
+        description: t("jumpscare.settings.chance"),
         default: 1000
     }
 });
@@ -47,7 +48,7 @@ function getJumpscareRoot(): Root {
 
 export default definePlugin({
     name: "Jumpscare",
-    description: "Adds a configurable chance of jumpscaring you whenever you open a channel. Inspired by Geometry Dash Mega Hack",
+    description: t("jumpscare.description"),
     authors: [Devs.surgedevs],
     dependencies: ["AudioPlayerAPI"],
     settings,

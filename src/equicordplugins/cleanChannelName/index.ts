@@ -5,13 +5,14 @@
  */
 
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 
 export default definePlugin({
     name: "CleanChannelName",
     authors: [Devs.AutumnVN],
-    description: "remove all emoji and decor shit from channel names",
+    description: t("cleanChannelName.description"),
     patches: [
         {
             find: "loadAllGuildAndPrivateChannelsFromDisk(){",

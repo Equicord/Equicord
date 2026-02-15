@@ -10,6 +10,7 @@ import { InfoIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { openUserProfile } from "@utils/discord";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { StartAt } from "@utils/types";
 import { Guild } from "@vencord/discord-types";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
@@ -33,7 +34,7 @@ function lurk(id: string) {
 
 export default definePlugin({
     name: "BetterInvites",
-    description: "See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
+    description: t("betterInvites.description"),
     authors: [EquicordDevs.iamme, Devs.thororen],
     patches: [
         {
@@ -66,7 +67,9 @@ export default definePlugin({
         const timestamp = <>{Parser.parse(`<t:${Math.round(new Date(expires_at).getTime() / 1000)}:R>`)}</>;
         const tooltipText = (
             <>
-                This invite will {expires_at ? <>expire {timestamp}</> : <>not expire</>}
+                {t("betterInvites.ui.expireTooltip", {
+                    expiry: expires_at ? <>{t("betterInvites.ui.expireWill")} {timestamp}</> : <>{t("betterInvites.ui.notExpire")}</>
+                })}
             </>
         );
 
@@ -98,7 +101,7 @@ export default definePlugin({
                         : "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=128"}
                 />
                 <div className="vc-bi-header-text">
-                    {inviter.global_name || inviter.username} invited you to {guildName}
+                    {t("betterInvites.ui.invitedYouTo", { inviter: inviter.global_name || inviter.username, guild: guildName })}
                 </div>
             </div>
         );

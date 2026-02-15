@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, FluxDispatcher, GuildMemberStore, StreamerModeStore, Toasts, UserStore, VoiceStateStore } from "@webpack/common";
 
@@ -23,49 +24,49 @@ interface ChannelState {
 const settings = definePluginSettings({
     port: {
         type: OptionType.NUMBER,
-        description: "Port to connect to",
+        description: t("orbolayBridge.settings.port"),
         default: 6888,
         restartNeeded: true
     },
     isKeybindEnabled: {
         type: OptionType.BOOLEAN,
-        description: "Enable/disable the global keybind (Ctrl + `)",
+        description: t("orbolayBridge.settings.isKeybindEnabled"),
         default: true,
         restartNeeded: true,
     },
     messageAlignment: {
         type: OptionType.SELECT,
-        description: "Alignment of messages in the overlay",
+        description: t("orbolayBridge.settings.messageAlignment"),
         options: [
-            { label: "Top left", value: "topleft", default: true },
-            { label: "Top right", value: "topright" },
-            { label: "Bottom left", value: "bottomleft" },
-            { label: "Bottom right", value: "bottomright" },
+            { label: t("orbolayBridge.settings.alignmentOptions.topLeft"), value: "topleft", default: true },
+            { label: t("orbolayBridge.settings.alignmentOptions.topRight"), value: "topright" },
+            { label: t("orbolayBridge.settings.alignmentOptions.bottomLeft"), value: "bottomleft" },
+            { label: t("orbolayBridge.settings.alignmentOptions.bottomRight"), value: "bottomright" },
         ],
         default: "topright",
         restartNeeded: true
     },
     userAlignment: {
         type: OptionType.SELECT,
-        description: "Alignment of users in the overlay",
+        description: t("orbolayBridge.settings.userAlignment"),
         options: [
-            { label: "Top left", value: "topleft", default: true },
-            { label: "Top right", value: "topright" },
-            { label: "Bottom left", value: "bottomleft" },
-            { label: "Bottom right", value: "bottomright" },
+            { label: t("orbolayBridge.settings.alignmentOptions.topLeft"), value: "topleft", default: true },
+            { label: t("orbolayBridge.settings.alignmentOptions.topRight"), value: "topright" },
+            { label: t("orbolayBridge.settings.alignmentOptions.bottomLeft"), value: "bottomleft" },
+            { label: t("orbolayBridge.settings.alignmentOptions.bottomRight"), value: "bottomright" },
         ],
         default: "topleft",
         restartNeeded: true
     },
     voiceSemitransparent: {
         type: OptionType.BOOLEAN,
-        description: "Make voice channel members transparent",
+        description: t("orbolayBridge.settings.voiceSemitransparent"),
         default: true,
         restartNeeded: true
     },
     messagesSemitransparent: {
         type: OptionType.BOOLEAN,
-        description: "Make message notifications transparent",
+        description: t("orbolayBridge.settings.messagesSemitransparent"),
         default: false,
         restartNeeded: true
     },
@@ -313,7 +314,7 @@ const createWebsocket = () => {
 
 export default definePlugin({
     name: "OrbolayBridge",
-    description: "Bridge plugin to connect Orbolay to Discord",
+    description: t("orbolayBridge.description"),
     authors: [EquicordDevs.SpikeHD],
     settings,
     flux: {

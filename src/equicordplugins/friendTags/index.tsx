@@ -13,6 +13,7 @@ import { BaseText } from "@components/BaseText";
 import { Divider } from "@components/Divider";
 import { Devs } from "@utils/constants";
 import { useForceUpdater } from "@utils/react";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, ChannelStore, Menu, RelationshipStore, TextInput, useEffect, UserStore, useState } from "@webpack/common";
 
@@ -99,12 +100,12 @@ function TagConfigCard(props) {
 
     return (
         <>
-            <BaseText size="md" tag="h5">Name</BaseText>
+            <BaseText size="md" tag="h5">{t("friendTags.ui.name")}</BaseText>
             <TextInput value={tagName} onChange={setTagName}></TextInput>
-            <BaseText size="md" tag="h5">Users (Seperated by comma)</BaseText>
+            <BaseText size="md" tag="h5">{t("friendTags.ui.usersSeperated")}</BaseText>
             <TextInput value={userIds} onChange={setUserIDs}></TextInput>
             <div className={"vc-friend-tags-user-header-container"}>
-                <BaseText>User List (Click A User To Remove)</BaseText>
+                <BaseText>{t("friendTags.ui.userList")}</BaseText>
                 <div className={"vc-friend-tags-user-header-btns"}>
                     {
                         userIds.split(", ").map(user => {
@@ -128,7 +129,7 @@ function TagConfigCard(props) {
                 }}
                 color={Button.Colors.RED}
             >
-                Remove
+                {t("friendTags.ui.remove")}
             </Button>
         </>
     );
@@ -156,7 +157,7 @@ function TagConfigurationComponent() {
                     });
                 SetData();
                 update();
-            }}>Add</Button>
+            }}>{t("friendTags.ui.add")}</Button>
         </>
     );
 }
@@ -187,14 +188,14 @@ const userPatch: NavContextMenuPatchCallback = (children, { user }) => {
     const buttonElement =
         <Menu.MenuItem
             id="vc-tag-group"
-            label="Tag"
+            label={t("friendTags.ui.tag")}
         >
             {SavedData.map(tag => {
                 const isTagged = SavedData.filter(e => e.tagName === tag.tagName)[0].userIds.includes(user.id);
 
                 return (
                     <Menu.MenuItem
-                        label={`${isTagged ? "Remove from" : "Add to"} ${tag.tagName}`}
+                        label={isTagged ? t("friendTags.ui.removeFrom", { tagName: tag.tagName }) : t("friendTags.ui.addTo", { tagName: tag.tagName })}
                         key={`vc-tag-${tag.tagName}`}
                         id={`vc-tag-${tag.tagName}`}
                         action={() => { UserToTagID(user.id, tag.tagName, isTagged); }}
@@ -208,7 +209,7 @@ const userPatch: NavContextMenuPatchCallback = (children, { user }) => {
 
 export default definePlugin({
     name: "FriendTags",
-    description: "Allows you to filter by custom tags in the quick switcher by starting a search with &",
+    description: t("friendTags.description"),
     authors: [Devs.Samwich],
     settings,
     contextMenus: {

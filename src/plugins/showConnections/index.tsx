@@ -26,6 +26,7 @@ import { CopyIcon, LinkIcon } from "@components/Icons";
 import OpenInAppPlugin from "@plugins/openInApp";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { ConnectedAccount, User } from "@vencord/discord-types";
 import { findByCodeLazy, findByPropsLazy } from "@webpack";
@@ -47,17 +48,17 @@ const getSpacingPx = (spacing: Spacing | undefined) => (spacing ?? Spacing.COMPA
 const settings = definePluginSettings({
     iconSize: {
         type: OptionType.NUMBER,
-        description: "Icon size (px)",
+        description: t("showConnections.settings.iconSize"),
         default: 32
     },
     iconSpacing: {
         type: OptionType.SELECT,
-        description: "Icon margin",
+        description: t("showConnections.settings.iconSpacing"),
         default: Spacing.COZY,
         options: [
-            { label: "Compact", value: Spacing.COMPACT },
-            { label: "Cozy", value: Spacing.COZY }, // US Spelling :/
-            { label: "Roomy", value: Spacing.ROOMY }
+            { label: t("showConnections.settings.compact"), value: Spacing.COMPACT },
+            { label: t("showConnections.settings.cozy"), value: Spacing.COZY }, // US Spelling :/
+            { label: t("showConnections.settings.roomy"), value: Spacing.ROOMY }
         ]
     }
 });
@@ -160,7 +161,7 @@ function CompactConnectionComponent({ connection, theme }: { connection: Connect
 
 export default definePlugin({
     name: "ShowConnections",
-    description: "Show connected accounts in user popouts",
+    description: t("showConnections.description"),
     authors: [Devs.TheKodeToad],
     settings,
 

@@ -14,6 +14,7 @@ import { Paragraph } from "@components/Paragraph";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { moment, TextInput, useEffect, useState } from "@webpack/common";
 
@@ -74,7 +75,7 @@ const TimeRow = (props: TimeRowProps) => {
 const settings = definePluginSettings({
     formats: {
         type: OptionType.COMPONENT,
-        description: "Customize the timestamp formats",
+        description: t("customTimestamps.settings.formats"),
         component: componentProps => {
             const [settingsState, setSettingsState] = useState(useSettings().plugins?.CustomTimestamps?.formats ?? {});
 
@@ -92,9 +93,9 @@ const settings = definePluginSettings({
                             {key === "sameDayFormat" && (
                                 <div className={Margins.bottom20}>
                                     <Divider style={{ marginBottom: "10px" }} />
-                                    <Heading tag="h1">Calendar formats</Heading>
+                                    <Heading tag="h1">{t("customTimestamps.settings.calendarFormats")}</Heading>
                                     <Paragraph>
-                                        How to format the [calendar] value if used in the above timestamps.
+                                        {t("customTimestamps.settings.calendarFormatsDescription")}
                                     </Paragraph>
                                 </div>
                             )}
@@ -124,19 +125,18 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "CustomTimestamps",
-    description: "Custom timestamps on messages and tooltips",
+    description: t("customTimestamps.description"),
     authors: [Devs.Rini, EquicordDevs.nvhhr, EquicordDevs.Suffocate, Devs.Obsidian],
     settings,
     settingsAboutComponent: () => (
         <div className={"vc-cmt-info-card"}>
-            <HeadingPrimary>How to use:</HeadingPrimary>
+            <HeadingPrimary>{t("customTimestamps.about.title")}</HeadingPrimary>
             <Paragraph>
                 <Link href="https://momentjs.com/docs/#/displaying/format/">Moment.js formatting documentation</Link>
                 <div className={Margins.top8}>
-                    Additionally you can use these in your inputs:<br />
-                    <b>[calendar]</b> enables dynamic date formatting such
-                    as &quot;Today&quot; or &quot;Yesterday&quot;.<br />
-                    <b>[relative]</b> gives you times such as &quot;4 hours ago&quot;.<br />
+                    {t("customTimestamps.about.additional")}<br />
+                    <b>[calendar]</b> {t("customTimestamps.about.calendar")}<br />
+                    <b>[relative]</b> {t("customTimestamps.about.relative")}<br />
                 </div>
             </Paragraph>
         </div>

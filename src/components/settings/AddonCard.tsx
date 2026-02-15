@@ -21,8 +21,8 @@ import "./AddonCard.css";
 import { Badge } from "@components/Badge";
 import { BaseText } from "@components/BaseText";
 import { Switch } from "@components/Switch";
-import { t } from "@utils/translation";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import { Tooltip, useRef } from "@webpack/common";
 import type { MouseEventHandler, ReactNode } from "react";
 

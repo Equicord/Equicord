@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
 import { EquicordDevs, IS_MAC } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { useEffect, useState } from "@webpack/common";
 
@@ -92,9 +93,9 @@ function KeybindRecorder() {
     return (
         <div className="vc-command-palette-keybind-input">
             <div className="vc-command-palette-keybind-info">
-                <BaseText size="md" weight="semibold">Command Palette Hotkey</BaseText>
+                <BaseText size="md" weight="semibold">{t("commandPalette.ui.hotkeyTitle")}</BaseText>
                 <BaseText size="sm" weight="normal" style={{ color: "var(--text-muted)" }}>
-                    Hotkey used to open the command palette
+                    {t("commandPalette.ui.hotkeyDescription")}
                 </BaseText>
                 {error && (
                     <BaseText size="xs" weight="normal" className="vc-command-palette-keybind-conflict">
@@ -111,14 +112,14 @@ function KeybindRecorder() {
                 >
                     {isListening ? (
                         <BaseText size="sm" weight="normal" style={{ color: "var(--white)", opacity: 0.8 }}>
-                            Press any key...
+                            {t("commandPalette.ui.pressAnyKey")}
                         </BaseText>
                     ) : (
                         formatKeybind(currentKeybind)
                     )}
                 </Button>
                 <Button size="small" variant="secondary" onClick={handleReset}>
-                    Reset
+                    {t("commandPalette.ui.reset")}
                 </Button>
             </div>
         </div>
@@ -127,31 +128,31 @@ function KeybindRecorder() {
 
 export const settings = definePluginSettings({
     hotkey: {
-        description: "Hotkey used to open the command palette",
+        description: t("commandPalette.settings.hotkey"),
         type: OptionType.COMPONENT,
         default: DEFAULT_KEYS,
         component: KeybindRecorder
     },
     visualStyle: {
-        description: "Palette appearance",
+        description: t("commandPalette.settings.visualStyle"),
         type: OptionType.SELECT,
         options: [
-            { label: "Classic", value: "classic", default: true },
-            { label: "Polished", value: "polished" }
+            { label: t("commandPalette.settings.visualStyleOptions.classic"), value: "classic", default: true },
+            { label: t("commandPalette.settings.visualStyleOptions.polished"), value: "polished" }
         ]
     },
     showTags: {
-        description: "Display tag chips for commands",
+        description: t("commandPalette.settings.showTags"),
         type: OptionType.BOOLEAN,
         default: true
     },
     enableTagFilter: {
-        description: "Show the tag filter bar",
+        description: t("commandPalette.settings.enableTagFilter"),
         type: OptionType.BOOLEAN,
         default: true
     },
     customCommands: {
-        description: "Manage custom command palette entries",
+        description: t("commandPalette.settings.customCommands"),
         type: OptionType.COMPONENT,
         component: CommandPaletteSettingsPanel
     }
@@ -223,7 +224,7 @@ function hotkeyUsesModifiers() {
 
 export default definePlugin({
     name: "CommandPalette",
-    description: "Quickly run actions through a searchable command palette",
+    description: t("commandPalette.description"),
     authors: [EquicordDevs.justjxke, EquicordDevs.Ethan],
     settings,
     patches: [

@@ -9,12 +9,13 @@ import "./styles.css";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Tooltip } from "@webpack/common";
 
 const settings = definePluginSettings({
     loop: {
-        description: "Whether to make the PiP video loop or not",
+        description: t("pictureInPicture.settings.loop"),
         type: OptionType.BOOLEAN,
         default: true,
         restartNeeded: false
@@ -23,7 +24,7 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "PictureInPicture",
-    description: "Adds picture in picture to videos (next to the Download button)",
+    description: t("pictureInPicture.description"),
     authors: [Devs.Lumap],
     settings,
     patches: [
@@ -38,7 +39,7 @@ export default definePlugin({
 
     PictureInPictureButton: ErrorBoundary.wrap(() => {
         return (
-            <Tooltip text="Toggle Picture in Picture">
+            <Tooltip text={t("pictureInPicture.togglePip")}>
                 {tooltipProps => (
                     <div
                         {...tooltipProps}

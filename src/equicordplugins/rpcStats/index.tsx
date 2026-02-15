@@ -7,6 +7,7 @@
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { ApplicationAssetUtils, FluxDispatcher, UserStore } from "@webpack/common";
@@ -171,7 +172,7 @@ async function updateData() {
 
 export default definePlugin({
     name: "RPCStats",
-    description: "Displays stats about your activity as an rpc",
+    description: t("rpcStats.description"),
     authors: [Devs.Samwich],
     async start() {
         updateData();

@@ -12,6 +12,7 @@ import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
@@ -34,7 +35,7 @@ const ContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { 
             <Menu.MenuSeparator />
             <Menu.MenuCheckboxItem
                 id="vc-ignore-calls-temp"
-                label="Temporarily Ignore Calls"
+                label={t("ignoreCalls.ui.temporarilyIgnore")}
                 checked={tempChecked}
                 action={() => {
                     if (tempChecked)
@@ -47,7 +48,7 @@ const ContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { 
             />
             <Menu.MenuCheckboxItem
                 id="vc-ignore-calls-perm"
-                label="Permanently Ignore Calls"
+                label={t("ignoreCalls.ui.permanentlyIgnore")}
                 checked={permChecked}
                 action={() => {
                     let updated = permanentlyIgnoredUsers.slice();
@@ -68,7 +69,7 @@ const ContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { 
 const settings = definePluginSettings({
     permanentlyIgnoredUsers: {
         type: OptionType.STRING,
-        description: "User IDs (comma + space) who should be permanetly ignored",
+        description: t("ignoreCalls.settings.permanentlyIgnoredUsers"),
         restartNeeded: true,
         default: "",
     },
@@ -82,7 +83,7 @@ const args = {
 
 export default definePlugin({
     name: "IgnoreCalls",
-    description: "Allows you to ignore calls from specific users or dm groups.",
+    description: t("ignoreCalls.description"),
     authors: [EquicordDevs.TheArmagan, Devs.thororen],
     settings,
     patches: [
@@ -121,7 +122,7 @@ export default definePlugin({
 
         return (
             <ErrorBoundary>
-                <Tooltip text="Ignore">
+                <Tooltip text={t("ignoreCalls.ui.ignore")}>
                     {({ onMouseEnter, onMouseLeave }) => (
                         <Button
                             className={cl("button")}

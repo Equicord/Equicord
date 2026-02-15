@@ -11,6 +11,7 @@ import { Button } from "@components/Button";
 import { Devs, IS_MAC } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { copyWithToast } from "@utils/discord";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { useEffect, useState } from "@webpack/common";
@@ -79,14 +80,14 @@ function KeybindRecorder() {
                 className={cl("keybind-button", isListening ? "listening" : "")}
                 onClick={() => setIsListening(true)}
             >
-                {isListening ? "Recording..." : <KeybindShortcut shortcut={currentKeybind.join("+")} />}
+                {isListening ? t("elementHighlighter.ui.recording") : <KeybindShortcut shortcut={currentKeybind.join("+")} />}
             </button>
             <Button
                 size="small"
                 variant="secondary"
                 onClick={() => { settings.store.keybind = DEFAULT_KEYBIND; }}
             >
-                Reset
+                {t("elementHighlighter.ui.reset")}
             </Button>
         </div>
     );
@@ -94,48 +95,48 @@ function KeybindRecorder() {
 
 const settings = definePluginSettings({
     keybind: {
-        description: "Toggle Highlighter",
+        description: t("elementHighlighter.settings.keybind"),
         type: OptionType.COMPONENT,
         default: DEFAULT_KEYBIND,
         component: KeybindRecorder
     },
     showClasses: {
-        description: "Display the element's CSS class names in the tooltip",
+        description: t("elementHighlighter.settings.showClasses"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showId: {
-        description: "Display the element's ID attribute in the tooltip",
+        description: t("elementHighlighter.settings.showId"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showFont: {
-        description: "Display the computed font family and font size",
+        description: t("elementHighlighter.settings.showFont"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showPadding: {
-        description: "Display the element's padding values",
+        description: t("elementHighlighter.settings.showPadding"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showMargin: {
-        description: "Display the element's margin values",
+        description: t("elementHighlighter.settings.showMargin"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showBorderRadius: {
-        description: "Display the element's border-radius values",
+        description: t("elementHighlighter.settings.showBorderRadius"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showPosition: {
-        description: "Display the element's CSS position type and z-index",
+        description: t("elementHighlighter.settings.showPosition"),
         type: OptionType.BOOLEAN,
         default: false
     },
     showDisplay: {
-        description: "Display the element's display type along with flex or grid properties",
+        description: t("elementHighlighter.settings.showDisplay"),
         type: OptionType.BOOLEAN,
         default: false
     }
@@ -354,7 +355,7 @@ function onClick(e: MouseEvent) {
     if (!el || el === overlay || el === tooltip) return;
 
     const colorVar = getColorVar(el);
-    if (colorVar) copyWithToast(colorVar, "Copied color to clipboard!");
+    if (colorVar) copyWithToast(colorVar, t("elementHighlighter.ui.copiedColor"));
 }
 
 function onKeyDown(e: KeyboardEvent) {
@@ -448,7 +449,7 @@ function onToggle(e: KeyboardEvent) {
 
 export default definePlugin({
     name: "ElementHighlighter",
-    description: "Highlight and inspect elements easily.",
+    description: t("elementHighlighter.description"),
     authors: [Devs.prism],
     settings,
 

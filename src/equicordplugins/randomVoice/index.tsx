@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
 import { debounce } from "@shared/debounce";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/translation";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { findByCodeLazy, findComponentByCodeLazy } from "@webpack";
 import { ChannelActions, ChannelRouter, ChannelStore, ContextMenuApi, GuildStore, MediaEngineStore, Menu, PermissionsBits, PermissionStore, React, SelectedChannelStore, Toasts, UserStore, VoiceActions, VoiceStateStore } from "@webpack/common";
@@ -163,7 +164,7 @@ function RandomVoiceIcon({ className }: { className?: string; }) {
 
 export default definePlugin({
     name: "RandomVoice",
-    description: "Adds a Button near the Mute button to join a random voice call.",
+    description: t("randomVoice.description"),
     authors: [EquicordDevs.xijexo, EquicordDevs.omaw, Devs.thororen],
 
     userAreaButton: {

@@ -19,6 +19,7 @@ import { Devs, EQUIBOT_USER_ID, EquicordDevs, SUPPORT_CHANNEL_ID, VC_SUPPORT_CAT
 import { getIntlMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findCssClassesLazy } from "@webpack";
@@ -80,7 +81,7 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
             <Menu.MenuItem
                 id={TOGGLE_DELETE_STYLE_ID}
                 key={TOGGLE_DELETE_STYLE_ID}
-                label="Toggle Deleted Highlight"
+                label={t("messageLogger.toggleDeletedHighlight")}
                 action={() => domElement.classList.toggle("messagelogger-deleted")}
             />,
         );
@@ -94,7 +95,7 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
             <Menu.MenuItem
                 id={TOGGLE_DIFF_VIEW_ID}
                 key={TOGGLE_DIFF_VIEW_ID}
-                label={isDisabled ? "Enable Diff View" : "Disable Diff View"}
+                label={isDisabled ? t("messageLogger.enableDiffView") : t("messageLogger.disableDiffView")}
                 color="danger"
                 action={() => {
                     if (isDisabled) disabledDiffMessages.delete(id);
@@ -112,9 +113,9 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
     let label;
 
     if (!isPluginEnabled("MessageLoggerEnhanced")) {
-        label = "Remove Message History";
+        label = t("messageLogger.removeMessageHistory");
     } else {
-        label = "Remove Message (Temporary)";
+        label = t("messageLogger.removeMessageTemporary");
     }
 
     children.push(
@@ -150,7 +151,7 @@ const patchChannelContextMenu: NavContextMenuPatchCallback = (
     group.push(
         <Menu.MenuItem
             id="vc-ml-clear-channel"
-            label="Clear Message Log"
+            label={t("messageLogger.clearMessageLog")}
             color="danger"
             action={() => {
                 messages.forEach(msg => {
@@ -324,66 +325,66 @@ export function parseEditContent(content: string, message: Message, previousCont
 const settings = definePluginSettings({
     deleteStyle: {
         type: OptionType.SELECT,
-        description: "The style of deleted messages",
+        description: t("messageLogger.settings.deleteStyleDescription"),
         default: "text",
         options: [
-            { label: "Red text", value: "text", default: true },
-            { label: "Red overlay", value: "overlay" },
+            { label: t("messageLogger.settings.deleteStyleRedText"), value: "text", default: true },
+            { label: t("messageLogger.settings.deleteStyleRedOverlay"), value: "overlay" },
         ],
         onChange: () => addDeleteStyle(),
     },
     logDeletes: {
         type: OptionType.BOOLEAN,
-        description: "Whether to log deleted messages",
+        description: t("messageLogger.settings.logDeletesDescription"),
         default: true,
     },
     collapseDeleted: {
         type: OptionType.BOOLEAN,
-        description: "Whether to collapse deleted messages, similar to blocked messages",
+        description: t("messageLogger.settings.collapseDeletedDescription"),
         default: false,
         restartNeeded: true,
     },
     logEdits: {
         type: OptionType.BOOLEAN,
-        description: "Whether to log edited messages",
+        description: t("messageLogger.settings.logEditsDescription"),
         default: true,
     },
     inlineEdits: {
         type: OptionType.BOOLEAN,
-        description: "Whether to display edit history as part of message content",
+        description: t("messageLogger.settings.inlineEditsDescription"),
         default: true,
     },
     ignoreBots: {
         type: OptionType.BOOLEAN,
-        description: "Whether to ignore messages by bots",
+        description: t("messageLogger.settings.ignoreBotsDescription"),
         default: false,
     },
     ignoreSelf: {
         type: OptionType.BOOLEAN,
-        description: "Whether to ignore messages by yourself",
+        description: t("messageLogger.settings.ignoreSelfDescription"),
         default: false,
     },
     ignoreUsers: {
         type: OptionType.STRING,
-        description: "Comma-separated list of user IDs to ignore",
+        description: t("messageLogger.settings.ignoreUsersDescription"),
         default: "",
         multiline: true,
     },
     ignoreChannels: {
         type: OptionType.STRING,
-        description: "Comma-separated list of channel IDs to ignore",
+        description: t("messageLogger.settings.ignoreChannelsDescription"),
         default: "",
         multiline: true,
     },
     ignoreGuilds: {
         type: OptionType.STRING,
-        description: "Comma-separated list of guild IDs to ignore",
+        description: t("messageLogger.settings.ignoreGuildsDescription"),
         default: "",
         multiline: true,
     },
     showEditDiffs: {
         type: OptionType.BOOLEAN,
-        description: "Show visual differences between edited message versions",
+        description: t("messageLogger.settings.showEditDiffsDescription"),
         default: false,
         onChange: value => {
             if (!value && settings.store.separatedDiffs) {
@@ -393,7 +394,7 @@ const settings = definePluginSettings({
     },
     separatedDiffs: {
         type: OptionType.BOOLEAN,
-        description: "Separate addition and removals in diffs for a more readable differential",
+        description: t("messageLogger.settings.separatedDiffsDescription"),
         default: false,
     },
 }, {
@@ -631,20 +632,20 @@ export default definePlugin({
             6,
             "count",
             {
-                "=0": ["No deleted messages"],
+                "=0": [t("messageLogger.deletedMessages.none")],
                 one: [
                     [
                         1,
                         "count"
                     ],
-                    " deleted message"
+                    t("messageLogger.deletedMessages.one")
                 ],
                 other: [
                     [
                         1,
                         "count"
                     ],
-                    " deleted messages"
+                    t("messageLogger.deletedMessages.other")
                 ]
             },
             0,

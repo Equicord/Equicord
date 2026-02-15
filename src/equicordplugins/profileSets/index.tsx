@@ -9,6 +9,7 @@ import "./styles.css";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 
@@ -19,14 +20,14 @@ export const cl = classNameFactory("vc-profile-presets-");
 export const settings = definePluginSettings({
     avatarSize: {
         type: OptionType.NUMBER,
-        description: "Avatar size in preset list.",
+        description: t("profileSets.settings.avatarSize"),
         default: 40,
     },
 });
 
 export default definePlugin({
     name: "ProfileSets",
-    description: "Allows you to save and load different profile presets, via the Profile Section in Settings.",
+    description: t("profileSets.description"),
     authors: [EquicordDevs.omaw, EquicordDevs.justjxke],
     settings,
     patches: [

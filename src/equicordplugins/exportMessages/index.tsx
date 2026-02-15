@@ -12,6 +12,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { copyToClipboard } from "@utils/clipboard";
 import { EquicordDevs } from "@utils/constants";
 import { showItemInFolder } from "@utils/native";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 import { saveFile } from "@utils/web";
 import { Message } from "@vencord/discord-types";
@@ -22,12 +23,12 @@ import { ContactsList } from "./types";
 const settings = definePluginSettings({
     openFileAfterExport: {
         type: OptionType.BOOLEAN,
-        description: "Open the exported file in the default file handler after export",
+        description: t("exportMessages.settings.openFileAfterExport"),
         default: true
     },
     exportContacts: {
         type: OptionType.BOOLEAN,
-        description: "Export a list of friends to your clipboard. Adds a new button to the menu bar for the friends tab.",
+        description: t("exportMessages.settings.exportContacts"),
         default: false
     }
 });
@@ -81,14 +82,14 @@ async function exportMessage(message: Message) {
         }
 
         showNotification({
-            title: "Export Messages",
-            body: `Message exported successfully as ${filename}`,
+            title: t("exportMessages.notifications.title"),
+            body: t("exportMessages.notifications.exportSuccess", { filename }),
             icon: "📄"
         });
     } catch (error) {
         showNotification({
-            title: "Export Messages",
-            body: "Failed to export message",
+            title: t("exportMessages.notifications.title"),
+            body: t("exportMessages.notifications.exportFailed"),
             icon: "❌"
         });
     }
@@ -102,7 +103,7 @@ const messageContextMenuPatch = (children: Array<React.ReactElement<any> | null>
     children.push(
         <Menu.MenuItem
             id="export-message"
-            label="Export Message"
+            label={t("exportMessages.ui.exportMessage")}
             icon={() => (
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
@@ -128,7 +129,7 @@ function getUsernames(contacts: ContactsList[], type: number): string[] {
 
 export default definePlugin({
     name: "ExportMessages",
-    description: "Allows you to export any message to a file",
+    description: t("exportMessages.description"),
     authors: [EquicordDevs.veygax, EquicordDevs.dat_insanity],
     settings,
     contextMenus: {
@@ -165,14 +166,14 @@ export default definePlugin({
     },
     addExportButton() {
         return <ErrorBoundary noop key=".2">
-            <button className="export-contacts-button" onClick={() => { this.copyContactToClipboard(); console.log("clicked"); }}>Export</button>
+            <button className="export-contacts-button" onClick={() => { this.copyContactToClipboard(); console.log("clicked"); }}>{t("exportMessages.ui.export")}</button>
         </ErrorBoundary>;
     },
     copyContactToClipboard() {
         if (this.contactList) {
             copyToClipboard(JSON.stringify(this.contactList));
             Toasts.show({
-                message: "Contacts copied to clipboard successfully.",
+                message: t("exportMessages.ui.contactsCopied"),
                 type: Toasts.Type.SUCCESS,
                 id: Toasts.genId(),
                 options: {
@@ -182,11 +183,8 @@ export default definePlugin({
             });
             return;
         }
-        // reason why you need to click the all tab is because the data is extracted during
-        // the request itself when you fetch all your friends. this is done to avoid sending a
-        // manual request to discord, which may raise suspicion and might even get you terminated.
         Toasts.show({
-            message: "Contact list is undefined. Click on the \"All\" tab before exporting.",
+            message: t("exportMessages.ui.contactListUndefined"),
             type: Toasts.Type.FAILURE,
             id: Toasts.genId(),
             options: {
