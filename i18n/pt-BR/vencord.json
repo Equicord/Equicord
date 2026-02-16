@@ -1431,6 +1431,9 @@
 												"title":"Tempos de Inicialização"
 								}
 				},
+				"streamerModeOnStream":{
+								"description":"Ativa automaticamente o modo modo streaming quando você compartilha sua tela no Discord."
+				},
 				"tabs":{
 								"settings":"Configurações do Equicord"
 				},
