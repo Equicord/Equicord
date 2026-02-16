@@ -13,9 +13,9 @@ const LEFT_CLICK = 0;
 const MIDDLE_CLICK = 1;
 const MEDIA_STYLE_ID = "middleclicktweaks-media-block";
 const MEDIA_STYLE_CONTENT = `
-    img,
-    a[data-role="img"],
-    video {
+    [id^="message-accessories"] img,
+    [id^="message-accessories"] a[data-role="img"],
+    [id^="message-accessories"] video {
         pointer-events: none !important;
     }
 `;
