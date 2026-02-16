@@ -49,7 +49,7 @@
 												"playing":"Jogando"
 								},
 								"assetImageTypes":{
-												"album":"Album artwork",
+												"album":"Arte do álbum",
 												"artist":"Artist artwork",
 												"disabled":"Desativado"
 								},
@@ -79,7 +79,7 @@
 												"statusDisplayType":"Show the track / artist name in the member list"
 								},
 								"settingsAbout":{
-												"albumPlaceholder":"{album} is replaced with the album name.",
+												"albumPlaceholder":"{album} é substituído pelo nome do álbum.",
 												"artistPlaceholder":"{artist} is replaced with the artist(s)' name(s)",
 												"intro":"For the customizable activity format strings, you can use several special strings to include track data in activities!",
 												"namePlaceholder":"{name} is replaced with the track name"
@@ -133,6 +133,11 @@
 								},
 								"viewRoleIcon":"Ver Ícone do Cargo"
 				},
+				"betterRoleDot":{
+								"settings":{
+												"copyRoleColorInProfilePopout":"Permitir clicar no ponto do cargo no pop-up do perfil para copiar a cor do cargo"
+								}
+				},
 				"betterSessions":{
 								"newBadge":"NOVO",
 								"newSession":"Nova sessão:",
@@ -178,7 +183,7 @@
 				},
 				"clientTheme":{
 								"contrastWarning":"Selected color won't contrast well with text",
-								"disableNitroTheme":"Disable Nitro Theme",
+								"disableNitroTheme":"Desativar o tema Nitro",
 								"nitroNotSupported":"Os temas Nitro não são suportados",
 								"resetThemeColor":"Redefinir Cor do Tema",
 								"switchToMode":"Switch to {mode} mode",
@@ -219,7 +224,7 @@
 				},
 				"consoleJanitor":{
 								"alwaysAllowLoggers":"Always allow loggers of these types",
-								"description":"Disables annoying console messages/errors",
+								"description":"Desativa mensagens/erros irritantes do console",
 								"filterList":"Filter List",
 								"name":"ConsoleJanitor",
 								"settings":{
@@ -241,19 +246,19 @@
 								"title":"Contribuições"
 				},
 				"copyEmojiMarkdown":{
-								"copyEmojiMarkdown":"Copy Emoji Markdown",
+								"copyEmojiMarkdown":"Copiar Emoji Markdown",
 								"copyUnicodeDescription":"Copy the raw unicode character instead of :name: for default emojis (👽)",
-								"description":"Allows you to copy emojis as formatted string (<:blobcatcozy:1026533070955872337>)",
+								"description":"Permite copiar emojis como string formatada (<:blobcatcozy:1026533070955872337>)",
 								"success":"Success! Copied emoji markdown."
 				},
 				"copyFileContents":{
 								"copied":"Copiado!",
-								"copyFileContents":"Copy File Contents",
+								"copyFileContents":"Copiar conteúdos de arquivos",
 								"description":"Adiciona um botão aos anexos de arquivos de texto para copiar seu conteúdo",
 								"fileTooLarge":"File too large to copy"
 				},
 				"copyStickerLinks":{
-								"copyLink":"Copy Link",
+								"copyLink":"Copiar Link",
 								"description":"Adiciona a habilidade de copiar e abrir links de Sticker",
 								"linkCopied":"Link copied!",
 								"openLink":"Open Link"
@@ -410,9 +415,9 @@
 								"settings":{
 												"disableEmbedPermissionCheck":"Whether to disable the embed permission check when sending fake emojis and stickers",
 												"emojiSize":"Size of the emojis when sending",
-												"enableEmojiBypass":"Allows sending fake emojis (also bypasses missing permission to use custom emojis)",
-												"enableStickerBypass":"Allows sending fake stickers (also bypasses missing permission to use stickers)",
-												"enableStreamQualityBypass":"Allow streaming in nitro quality",
+												"enableEmojiBypass":"Permite enviar emojis falsos (também ignora a falta de permissão para usar emojis personalizados)",
+												"enableStickerBypass":"Permite enviar stickers falsos (também ignora a falta de permissão para usar stickers)",
+												"enableStreamQualityBypass":"Permitir a transmissão em qualidade nitro",
 												"hyperLinkText":"What text the hyperlink should use. {{NAME}} will be replaced with the emoji/sticker name.",
 												"stickerSize":"Size of the stickers when sending",
 												"transformCompoundSentence":"Whether to transform fake stickers and emojis in compound sentences (sentences with more content than just the fake emoji or sticker link)",
@@ -426,7 +431,7 @@
 				"fakeProfileThemes":{
 								"accent":"Destaque",
 								"colorPickers":"Color pickers",
-								"copy3y3":"Copy 3y3",
+								"copy3y3":"Copiar 3y3",
 								"fakeColors":"Fake colors",
 								"instructions":"Set your profile colors using the color pickers below. The colors will be encoded into your profile's 'About Me' section.",
 								"nitroColors":"Cores Nitro",
@@ -439,12 +444,18 @@
 												"clearAll":"Excluir todos os apelidos."
 								},
 								"ui":{
+												"aliasRequired":"É necessário um apelido.",
+												"aliasSetFor":"Alias definido para {emoji}.",
+												"aliasValidation":"Alias deve ter de 2 a 32 caracteres e usar apenas letras minúsculas, números ou sublinhados.",
 												"confirmModal":{
 																"confirmButton":"Excluir todos os apelidos",
 																"title":"Excluir todos os apelidos"
 												},
 												"deleteAllAliases":"Excluir todos os apelidos",
-												"deletedAllAliases":"Excluídos todos os apelidos de emoji."
+												"deletedAllAliases":"Excluídos todos os apelidos de emoji.",
+												"modal":{
+																"placeholder":"Alias, ex: \"sob\""
+												}
 								}
 				},
 				"favGifSearch":{
@@ -479,7 +490,10 @@
 																"description":"Gera um link de convite de amigo."
 												}
 								},
-								"description":"Crie e gerencie links de convite de amigo via comandos de barra (/create friend invite, /view friend invites, /revoke friend invites)."
+								"description":"Crie e gerencie links de convite de amigo via comandos de barra (/create friend invite, /view friend invites, /revoke friend invites).",
+								"ui":{
+												"allRevoked":"Todos os convites de amizade foram revogados."
+								}
 				},
 				"friendsSince":{
 								"description":"Shows when you became friends with someone in the user popout",
@@ -514,7 +528,7 @@
 								"showMedia":"Show Media"
 				},
 				"ignoreActivities":{
-								"disableActivity":"Disable activity",
+								"disableActivity":"Desativar atividade",
 								"enableActivity":"Enable activity",
 								"filterList":{
 												"description":"Comma separated list of activity IDs to filter (Useful for filtering specific RPC activities and CustomRPC)",
@@ -636,6 +650,9 @@
 				},
 				"messageClickActions":{
 								"actions":{
+												"copyContent":"Copiar Conteúdo",
+												"copyId":"Copiar ID",
+												"copyLink":"Copiar Link",
 												"delete":"Excluir",
 												"pin":"Fixar",
 												"reply":"Resposta"
@@ -644,6 +661,8 @@
 												"delete":"Excluir"
 								},
 								"settings":{
+												"disableInDms":"Desativar todas as ações de clique em mensagens diretas",
+												"disableInSystemDms":"Desativar todas as ações de clique nas mensagens diretas do sistema",
 												"doubleClickAction":"Ação ao clicar duas vezes (suas mensagens)",
 												"doubleClickModifier":"Modificador necessário para a ação de clique duplo",
 												"doubleClickOthersAction":"Ação ao clicar duas vezes (mensagens de outros)",
@@ -696,8 +715,8 @@
 												"prefer":"Prefer automod embeds, but use rich embeds if some content can't be shown"
 								},
 								"channelLabels":{
-												"directMessage":"Direct Message",
-												"groupDM":"Group DM",
+												"directMessage":"Mensagens Diretas",
+												"groupDM":"DM de Grupo",
 												"server":"Servidor"
 								},
 								"description":"Adiciona uma prévia a mensagens que contêm links de outras mensagens",
@@ -770,7 +789,7 @@
 								"applySettings":"Apply NewGuildSettings",
 								"description":"Automatically mute new servers and change various other settings upon joining",
 								"settings":{
-												"allMessages":"All messages",
+												"allMessages":"Todas as mensagens",
 												"events":"Mute New Events automatically",
 												"everyone":"Suppress @everyone and @here",
 												"guild":"Mute Guild automatically",
@@ -788,6 +807,11 @@
 				"nicknameIconsAPI":{
 								"description":"API para adicionar ícones ao apelido, nos perfis"
 				},
+				"noBlockedMessages":{
+								"settings":{
+												"allowAutoModMessages":"Permitir que as mensagens enviadas pelo AutoMod ignorem a filtragem."
+								}
+				},
 				"noReplyMention":{
 								"description":"Disables reply pings by default",
 								"settings":{
@@ -799,11 +823,21 @@
 												"userList":"List of users to allow or exempt pings for (separated by commas or spaces)"
 								}
 				},
+				"noUnblockToJump":{
+								"description":"Permite que você acesse mensagens de usuários bloqueados ou ignorados e possíveis spammers sem desbloqueá-los."
+				},
 				"noticesAPI":{
 								"description":"Corrige avisos sendo descartados automaticamente"
 				},
+				"onePingPerDM":{
+								"settings":{
+												"channelToAffectOptions":{
+																"groupDm":"DMs de Grupo"
+												}
+								}
+				},
 				"overrideForumDefaults":{
-								"description":"Allows you to override default forum layout/sort order. you can still change it on a per-channel basis",
+								"description":"Permite que você substitua o layout/ordem de classificação padrão do fórum. você ainda pode alterá-lo individualmente por canal",
 								"layouts":{
 												"gallery":"Galeria",
 												"list":"Lista"
@@ -932,7 +966,7 @@
 				},
 				"relationshipNotifier":{
 								"friendRemoved":"{username} removed you as a friend.",
-								"friendRequestRemoved":"A friend request from {username} has been removed.",
+								"friendRequestRemoved":"Um pedido de amizade de {username} foi removido.",
 								"groupRemoved":"You were removed from the group {name}.",
 								"serverRemoved":"You were removed from the server {name}.",
 								"settings":{
@@ -1005,6 +1039,9 @@
 								"system":"Sistema",
 								"unblockUser":"Desbloquear usuário",
 								"viewReviews":"Ver Avaliações"
+				},
+				"roleColorEverywhere":{
+								"description":"Adiciona a cor do cargo mais alto onde for possível"
 				},
 				"secretRingTone":{
 								"description":"Sempre toca a versão secreta do toque do Discord (exceto durante eventos especiais de toques).",
@@ -1218,14 +1255,14 @@
 								}
 				},
 				"showHiddenChannels":{
-								"allowedUsersAndRoles":"Allowed users and roles:",
+								"allowedUsersAndRoles":"Usuários e cargos permitidos:",
 								"archiveDuration":"Default inactivity duration before archiving {type}: {duration}",
 								"availableTags":"Available tags:",
 								"bitrate":"Bitrate: {bitrate} bits",
 								"cannotSeeMessages":"You can not see the {type} of this channel.",
 								"channelTypes":{
 												"announcement":"announcement",
-												"forum":"forum",
+												"forum":"fórum",
 												"message":"mensagem",
 												"messages":"mensagens",
 												"posts":"posts",
@@ -1518,19 +1555,19 @@
 				},
 				"viewRaw":{
 								"content":"Conteúdo",
-								"contentCopied":"Content copied to clipboard!",
+								"contentCopied":"Conteúdo copiado para a área de transferência!",
 								"copyJson":"Copy {type} JSON",
-								"copyRawContent":"Copy Raw Content",
-								"copyRawLeftViewRawRight":"Copy Raw (Left Click) / View Raw (Right Click)",
+								"copyRawContent":"Copiar conteúdo raw",
+								"copyRawLeftViewRawRight":"Copiar Raw (clique com o botão esquerdo) / View RawView Raw (clique com o botão direito)",
 								"data":"Dados",
 								"dataCopied":"{type} data copied to clipboard!",
-								"description":"Copy and view the raw content/data of any message, channel or guild",
+								"description":"Copie e visualize o conteúdo/dados raws de qualquer mensagem, canal ou servidor",
 								"settings":{
 												"clickMethodDescription":"Change the button to view the raw content/data of any message.",
 												"leftClick":"Left Click to view the raw content.",
 												"rightClick":"Right click to view the raw content."
 								},
-								"viewRaw":"View Raw",
+								"viewRaw":"Visualizar Raw",
 								"viewRawLeftCopyRawRight":"View Raw (Left Click) / Copy Raw (Right Click)"
 				},
 				"voiceDownload":{
@@ -1568,13 +1605,13 @@
 				},
 				"xsOverlay":{
 								"attachment":"anexo",
-								"botNotifications":"Allow bot notifications",
-								"callNotifications":"Allow call notifications",
+								"botNotifications":"Permitir notificações de bots",
+								"callNotifications":"Permitir notificações de chamadas",
 								"channelPingColor":"Channel mention color",
 								"description":"Forwards discord notifications to XSOverlay, for easy viewing in VR",
-								"dmNotifications":"Allow Direct Message notifications",
+								"dmNotifications":"Permitir notificações de mensagens diretas",
 								"embed":"embed",
-								"groupDmNotifications":"Allow Group DM notifications",
+								"groupDmNotifications":"Permitir notificações de DMs de Grupo",
 								"helloFromVendor":"Hello from Vendor!",
 								"image":"imagem",
 								"incomingCall":"Incoming call",
@@ -1587,7 +1624,7 @@
 								"sendTestNotification":"Send test notification",
 								"sentEmbeds":"sent message embed(s)",
 								"sentSticker":"sent a sticker",
-								"serverNotifications":"Allow server notifications",
+								"serverNotifications":"Permitir notificações do servidor",
 								"soundPath":"Notification sound (default/warning/error)",
 								"sticker":"sticker",
 								"testNotification":"This is a test notification! explode",
