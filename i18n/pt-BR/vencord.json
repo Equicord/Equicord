@@ -1311,6 +1311,7 @@
 				"showHiddenThings":{
 								"description":"Exibe várias coisas ocultas e exclusivas para moderadores, independentemente das permissões.",
 								"settings":{
+												"showModView":"Mostra o menu de moderador de membro em todos os servidores.",
 												"showTimeouts":"Mostrar ícones de castigo de membros no chat."
 								}
 				},
@@ -1416,6 +1417,11 @@
 								"description":"Sorts friend requests by date of receipt",
 								"settings":{
 												"showDates":"Show dates on friend requests"
+								}
+				},
+				"spotifyShareCommands":{
+								"commands":{
+												"notListening":"Você não esta ouvindo nenhuma música."
 								}
 				},
 				"startupTimings":{
