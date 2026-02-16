@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Nastala chyba při provádění příkazu \"{name}\""
-    },
-    "memberListDecorators":{
-        "fallback":"Nepodařilo se vykreslit {key} dekoraci seznamu členů"
-    },
-    "messageAccessories":{
-        "fallback":"Nepodařilo se zobrazit {key} příslušenství zpráv"
-    },
-    "messageDecorations":{
-        "fallback":"Nepodařilo se zobrazit dekoraci {key} zpráv"
-    },
-    "notices":{
-        "fallback":"Chyba při zobrazování oznámení"
-    },
-    "notifications":{
-        "dismissNotification":"Odmítnout oznámení",
-        "logs":{
-            "body_one":"Toto trvale odstraní {count} oznámení. Tuto akci nelze vrátit zpět.",
-            "body_other":"Toto trvale odstraní {count} oznámení. Tuto akci nelze vrátit zpět.",
-            "body_zero":"Nebylo vybráno žádné oznámení.",
-            "cancel":"Nevadí",
-            "clearNotificationLog":"Vyčistit protokol oznámení",
-            "confirm":"Udělejte to!",
-            "title":"Jste si jistý?"
-        },
-        "missedNotifications":{
-            "body_one":"Přijato {count} oznámení",
-            "body_other":"Přijata {count} oznámení",
-            "title":"Když jste byli pryč"
-        },
-        "noNotifications":"Zatím žádná oznámení",
-        "notificationLog":"Záznam oznámení",
-        "notificationSettings":"Nastavení oznámení"
-    }
+				"commands":{
+								"errorExecuting":"Nastala chyba při provádění příkazu \"{name}\""
+				},
+				"memberListDecorators":{
+								"fallback":"Nepodařilo se vykreslit {key} dekoraci seznamu členů"
+				},
+				"messageAccessories":{
+								"fallback":"Nepodařilo se zobrazit {key} příslušenství zpráv"
+				},
+				"messageDecorations":{
+								"fallback":"Nepodařilo se zobrazit dekoraci {key} zpráv"
+				},
+				"notices":{
+								"fallback":"Chyba při zobrazování oznámení"
+				},
+				"notifications":{
+								"dismissNotification":"Odmítnout oznámení",
+								"logs":{
+												"body_one":"Toto trvale odstraní {count} oznámení. Tuto akci nelze vrátit zpět.",
+												"body_other":"Toto trvale odstraní {count} oznámení. Tuto akci nelze vrátit zpět.",
+												"body_zero":"Nebylo vybráno žádné oznámení.",
+												"cancel":"Nevadí",
+												"clearNotificationLog":"Vyčistit protokol oznámení",
+												"confirm":"Udělejte to!",
+												"title":"Jste si jistý?"
+								},
+								"missedNotifications":{
+												"body_one":"Přijato {count} oznámení",
+												"body_other":"Přijata {count} oznámení",
+												"title":"Když jste byli pryč"
+								},
+								"noNotifications":"Zatím žádná oznámení",
+								"notificationLog":"Záznam oznámení",
+								"notificationSettings":"Nastavení oznámení"
+				}
 }
