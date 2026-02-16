@@ -1311,6 +1311,7 @@
 				"showHiddenThings":{
 								"description":"Exibe várias coisas ocultas e exclusivas para moderadores, independentemente das permissões.",
 								"settings":{
+												"showInvitesPaused":"Exibir dica de convites pausados na lista de servidores.",
 												"showModView":"Mostra o menu de moderador de membro em todos os servidores.",
 												"showTimeouts":"Mostrar ícones de castigo de membros no chat."
 								}
@@ -1419,11 +1420,18 @@
 												"showDates":"Show dates on friend requests"
 								}
 				},
+				"spotifyCrack":{
+								"settings":{
+												"keepSpotifyActivityOnIdle":"Manter atividade do Spotify \"escutando\" enquanto inativo",
+												"noSpotifyAutoPause":"Desativar pausa automática do Spotify"
+								}
+				},
 				"spotifyShareCommands":{
 								"commands":{
-												"notListening":"Você não esta ouvindo nenhuma música.",
-												"trackNotFound":"Falha ao encontrar a musica no spotify."
-								}
+												"notListening":"Você não está ouvindo nenhuma música.",
+												"trackNotFound":"Falha ao encontrar a música no Spotify."
+								},
+								"description":"Compartilhe sua música, álbum ou artista atual do Spotify via slash command (/track, /album, /artist)"
 				},
 				"startupTimings":{
 								"description":"Adiciona tempos de inicialização ao menu Configurações",
@@ -1432,7 +1440,7 @@
 								}
 				},
 				"streamerModeOnStream":{
-								"description":"Ativa automaticamente o modo modo streaming quando você compartilha sua tela no Discord."
+								"description":"Ativa automaticamente o modo streaming, quando você compartilha sua tela no Discord."
 				},
 				"tabs":{
 								"settings":"Configurações do Equicord"
