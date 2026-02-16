@@ -47,7 +47,7 @@ export function fixUpQuote(quote: string): string {
 export function generateFileNamePreview(message: string): string {
     const words = message.split(" ");
     const preview = words.length > 6 ? words.slice(0, 6).join(" ") : words.join(" ");
-    return preview.slice(0, 50);
+    return preview.slice(0, 10);
 }
 
 export function getFileExtension(saveAsGif: boolean): string {
