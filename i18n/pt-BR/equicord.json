@@ -1368,6 +1368,44 @@
 												"includeStates":"Incluir usuários que correspondam aos filtros de estado"
 								}
 				},
+				"rpcEditor":{
+								"description":"Edite e customize seu Rich Precense (RPC) para qualquer aplicação",
+								"placeholders":{
+												"smallImage":"URL da imagem pequena"
+								}
+				},
+				"rpcStats":{
+								"description":"Exibir estatísticas customizadas no seu Rich Precense (Mensagem enviada, top álbum do Last.fm)",
+								"settings":{
+												"RPCTitle":"Texto do título do RPC",
+												"albumCoverImage":"Usar o capa do álbum como imagem do RPC (modo last.fm)",
+												"assetURL":"URL personalizada para o RPC (Padrão: sua foto de perfil)",
+												"lastFMApiKey":"Chave de API do Last.fm (obtenha em last.fm/api)",
+												"lastFMStatFormat":"Formato para estatística do Last.fm ($album, $artist)",
+												"lastFMUsername":"Nome de usuário do Last.Fm",
+												"statDisplay":"Estatísticas a serem exibidas"
+								},
+								"statOptions":{
+												"messagesAllTime":"Total de mensagens enviadas",
+												"messagesToday":"Mensagens enviadas hoje",
+												"mostListenedAlbum":"Álbuns mais escutado esta semana (Last.fm)"
+								}
+				},
+				"scheduledMessages":{
+								"description":"Agende mensagens para enviar mais tarde",
+								"settings":{
+												"maxMessagesPerMinute":"Máximo de mensagens agendadas por canal que podem ser enviadas no mesmo minuto",
+												"showPhantomMessages":"Mostrar mensagens agendas como mensagens fantasma no chat"
+								}
+				},
+				"sekaiStickers":{
+								"settings":{
+												"AutoCloseModal":"Fechar automaticamente a janela modal quando terminado"
+								}
+				},
+				"selfForward":{
+								"description":"Encaminhar mensagens para você mesmo"
+				},
 				"timezones":{
 								"settings":{
 												"resetDatabaseTimezone":"Redefina seu fuso horário no banco de dados"
