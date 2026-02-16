@@ -1421,11 +1421,15 @@
 				},
 				"spotifyShareCommands":{
 								"commands":{
-												"notListening":"Você não esta ouvindo nenhuma música."
+												"notListening":"Você não esta ouvindo nenhuma música.",
+												"trackNotFound":"Falha ao encontrar a musica no spotify."
 								}
 				},
 				"startupTimings":{
-								"description":"Adiciona tempos de inicialização ao menu Configurações"
+								"description":"Adiciona tempos de inicialização ao menu Configurações",
+								"ui":{
+												"title":"Tempos de Inicialização"
+								}
 				},
 				"tabs":{
 								"settings":"Configurações do Equicord"
