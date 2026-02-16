@@ -58,7 +58,7 @@
 				"autoZipper":{
 								"description":"Compacta automaticamente pastas e tipos de arquivos especificados antes de fazer o upload para o Discord",
 								"settings":{
-												"extensions":"Aqui está a tradução fiel, respeitando a capitalização original:\n\nLista de extensões de arquivos separadas por vírgulas para compactar automaticamente (ex: .psd, .blend, .exe, .dmg)"
+												"extensions":"Lista de extensões de arquivos separadas por vírgulas para compactar automaticamente (ex: .psd, .blend, .exe, .dmg)"
 								}
 				},
 				"bannersEverywhere":{
@@ -85,6 +85,9 @@
 												"tooltipLeft":"Copiar Decodificado (Clique esquerdo) / Decodificar Base64 (Clique direito)",
 												"tooltipRight":"Decodificar Base64 (Clique esquerdo) / Copiar Decodificado (Clique direito)"
 								}
+				},
+				"betterActivities":{
+								"description":"Mostra todas as atividades na lista de membros e no pop-out do usuário, com opções para personalizar a exibição"
 				},
 				"betterAudioPlayer":{
 								"description":"Adiciona um visualizador de espectrógrafo e osciloscópio aos reprodutores de anexos de áudio",
