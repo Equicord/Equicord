@@ -1442,6 +1442,13 @@
 				"streamerModeOnStream":{
 								"description":"Ativa automaticamente o modo streaming, quando você compartilha sua tela no Discord."
 				},
+				"superReactionTweaks":{
+								"description":"Costumizar o limite de Super Reações animada ao mesmo tempo, e  super reagir por padrao",
+								"settings":{
+												"superReactionPlayingLimit":"Máximo de Super Reações animadas ao mesmo tempo. 0 para desativar Super Reações",
+												"unlimitedSuperReactionPlaying":"Romove o limite de Super Reações animadas ao mesmo tempo"
+								}
+				},
 				"tabs":{
 								"settings":"Configurações do Equicord"
 				},
@@ -1499,13 +1506,25 @@
 												"showRoleColors":"Show role colors in the typing indicator"
 								}
 				},
+				"unlockedAvatarZoom":{
+								"description":"Permite que você amplie ainda mais a ferramenta de corte de imagem ao alterar seu avatar",
+								"settings":{
+												"zoomMultiplier":"Multiplicador de zoom"
+								}
+				},
 				"unsuppressEmbeds":{
 								"description":"Allows you to unsuppress embeds in messages",
 								"suppressEmbeds":"Suppress Embeds",
 								"unsuppressEmbeds":"Unsuppress Embeds"
 				},
 				"userMessagesPronouns":{
-								"description":"Adiciona pronomes às mensagens de usuários no chat"
+								"description":"Adiciona pronomes às mensagens de usuários no chat",
+								"settings":{
+												"pronounsFormat":"O formato dos pronomes no chat",
+												"pronounsFormatOptions":{
+																"lowercase":"Minúsculo"
+												}
+								}
 				},
 				"userSettingsAPI":{
 								"description":"Patcheia as UserSettings do Discord para expor seu grupo e nome"
