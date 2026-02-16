@@ -1,6 +1,7 @@
 import definePlugin, { OptionType } from "@utils/types";
 import { definePluginSettings } from "@api/Settings";
 import { findByProps } from "@webpack";
+import { EquicordDevs } from "@utils/constants";
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -18,7 +19,7 @@ const settings = definePluginSettings({
     baseDelay: {
         type: OptionType.NUMBER,
         description: "Base Delay (ms): The default delay between sending each message.",
-        default: 2500
+        default: 1000
     },
     randomizeDelay: {
         type: OptionType.NUMBER,
@@ -33,7 +34,7 @@ const settings = definePluginSettings({
     cooldownDelay: {
         type: OptionType.NUMBER,
         description: "Cooldown Delay (ms): The additional time to wait during a cooldown pause.",
-        default: 5000
+        default: 20000
     }
 });
 
