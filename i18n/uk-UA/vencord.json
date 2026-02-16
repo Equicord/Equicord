@@ -92,6 +92,9 @@
 												"title":"How to use arRPC"
 								}
 				},
+				"badgeAPI":{
+								"description":"API для додавання значків користувачам"
+				},
 				"betterFolders":{
 								"settings":{
 												"closeAllFolders":"Close all folders when selecting a server not in a folder",
