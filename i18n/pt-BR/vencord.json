@@ -355,7 +355,13 @@
 								"title":"Decoração"
 				},
 				"devCompanion":{
-								"description":"Plugin Dev Companion. Por favor, informe qualquer coisa que não esteja funcionando ou que esteja estranha (provavelmente é um bug) para o sadan, seja por ping ou dm, obrigado!"
+								"description":"Plugin Dev Companion. Por favor, informe qualquer coisa que não esteja funcionando ou que esteja estranha (provavelmente é um bug) para o sadan, seja por ping ou dm, obrigado!",
+								"settings":{
+												"notifyOnAutoConnect":"Se deve notificar quando o Dev Companion estiver conectado automaticamente."
+								}
+				},
+				"disableCallIdle":{
+								"description":"Desativa automaticamente ser expulso de uma chamada de voz DM após 3 minutos e ser movido para um canal de voz AFK."
 				},
 				"donate":"Doar",
 				"donorCard":{
@@ -1522,6 +1528,7 @@
 								"settings":{
 												"pronounsFormat":"O formato dos pronomes no chat",
 												"pronounsFormatOptions":{
+																"capitalized":"Maiúsculo",
 																"lowercase":"Minúsculo"
 												}
 								}
@@ -1548,6 +1555,15 @@
 												"usrbgBanner":"banner USRBG",
 												"voiceBackground":"Use USRBG banners as voice chat backgrounds"
 								}
+				},
+				"validReply":{
+								"description":"Corrige \"A mensagem não pôde ser carregada\" ao passar o mouse sobre a resposta"
+				},
+				"validUser":{
+								"description":"Corrigir menções para usuários desconhecidos que aparecem como '@usuário-desconhecido' (movar mause sobre uma menção para corrigi-la)"
+				},
+				"vcDoubleClick":{
+								"description":"Junte-se a bate-papos de voz através de um clique duplo em vez de um clique único"
 				},
 				"vcNarrator":{
 								"customiseMessages":"You can customise the spoken messages below. You can disable specific messages by setting them to nothing",
@@ -1634,9 +1650,16 @@
 								}
 				},
 				"webContextMenus":{
+								"description":"Adiciona menus de contexto ausentes na versão web do Discord: Links e Imagens (Copiar/Abrir Link/Imagem), Área de Texto (Copiar, Cortar, Colar, Verificação Ortográfica)",
 								"settings":{
 												"addBack":"Adiciona de volta os menus de contexto do Discord para imagens, links e a barra de entrada de chat"
 								}
+				},
+				"webKeybinds":{
+								"description":"Adiciona combinações de teclas ausentes na versão web do Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. Só funciona totalmente no Vesktop/Legcord, não dentro do seu navegador"
+				},
+				"webScreenShareFixes":{
+								"description":"Remove o limite de taxa de bits de 2500kbps em clientes de chromium e vesktop."
 				},
 				"whoReacted":{
 								"settings":{
@@ -1671,5 +1694,8 @@
 								"timeout":"Notification duration (secs)",
 								"volume":"Volume",
 								"webSocketPort":"porta Websocket"
+				},
+				"youtubeAdblock":{
+								"description":"Bloqueie anúncios no YouTube incorporado e a atividade WatchTogether via AdGuard"
 				}
 }
