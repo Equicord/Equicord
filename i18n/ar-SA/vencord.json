@@ -222,7 +222,7 @@
 				"copyFileContents":{
 								"copied":"Copied!",
 								"copyFileContents":"Copy File Contents",
-								"description":"Adds a button to text file attachments to copy their contents",
+								"description":"Utility plugin for developers to test and preview Discord components",
 								"fileTooLarge":"File too large to copy"
 				},
 				"copyStickerLinks":{
@@ -316,7 +316,7 @@
 				"decor":{
 								"accessFromProfiles":"You can also access Decor decorations from the {link} page.",
 								"changeDecoration":"Change Decoration",
-								"description":"Create and use your own custom avatar decorations, or pick your favorite from the presets.",
+								"description":"Decode base64 content of any message and copy the decoded content.",
 								"enableAndRestart":"Enable Decor and restart your client to change your avatar decoration.",
 								"profilesLink":"Profiles",
 								"removeDecoration":"Remove Decoration",
@@ -428,7 +428,7 @@
 								}
 				},
 				"friendsSince":{
-								"description":"Shows when you became friends with someone in the user popout",
+								"description":"Adds badges showcasing how long you have been friends with a user for",
 								"heading":"Friends Since"
 				},
 				"gameActivityToggle":{
@@ -503,7 +503,7 @@
 				"lastfmRichPresence":{
 								"apiKeyInstructions":"Set <0>Application name</0> and <1>Application description</1> to anything and leave the rest blank.",
 								"createApiKey":"Create API Key",
-								"description":"Little plugin for Last.fm rich presence",
+								"description":"Rich presence for Jellyfin media server",
 								"howToCreateApiKey":"How to create an API key",
 								"lastfmProfile":"Last.fm Profile",
 								"missingArt":{
@@ -520,7 +520,7 @@
 								},
 								"settings":{
 												"alwaysHideArt":"Disable downloading album art",
-												"apiKey":"Custom Last.fm API key. Not required but highly recommended to avoid rate limiting with our shared key",
+												"apiKey":"Jellyfin API key obtained from your Jellyfin administration dashboard",
 												"clickableLinks":"Make track, artist and album names clickable links",
 												"hideWithActivity":"Hide Last.fm presence if you have any other presence",
 												"hideWithSpotify":"Hide Last.fm presence if spotify is running",
@@ -571,7 +571,7 @@
 								"oldDiscordAndroid":"User is suspected to be on an old Discord Android client",
 								"settings":{
 												"detectDiscordKotlin":"Detect old Discord Android clients",
-												"ignoreSelf":"Don't add indicator to your own messages",
+												"ignoreSelf":"Whether to ignore messages by yourself",
 												"latency":"Threshold in seconds for latency indicator",
 												"showMillis":"Show milliseconds"
 								},
@@ -637,10 +637,10 @@
 												"deleteStyleRedOverlay":"Red overlay",
 												"deleteStyleRedText":"Red text",
 												"ignoreBots":"Whether to ignore messages by bots",
-												"ignoreChannels":"Comma-separated list of channel IDs to ignore",
-												"ignoreGuilds":"Comma-separated list of guild IDs to ignore",
+												"ignoreChannels":"Messages in muted channels will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
+												"ignoreGuilds":"Messages in muted guilds will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
 												"ignoreSelf":"Whether to ignore messages by yourself",
-												"ignoreUsers":"Comma-separated list of user IDs to ignore",
+												"ignoreUsers":"Whether to ignore messages by yourself",
 												"inlineEdits":"Whether to display edit history as part of message content",
 												"logDeletes":"Whether to log deleted messages",
 												"logEdits":"Whether to log edited messages",
@@ -661,7 +661,7 @@
 				},
 				"newGuildSettings":{
 								"applySettings":"Apply NewGuildSettings",
-								"description":"Automatically mute new servers and change various other settings upon joining",
+								"description":"Adds some settings for guild tags, such as hiding them or disabling the prompt to adopt them.",
 								"settings":{
 												"allMessages":"All messages",
 												"events":"Mute New Events automatically",
@@ -679,7 +679,7 @@
 								}
 				},
 				"noReplyMention":{
-								"description":"Disables reply pings by default",
+								"description":"Adds a button to copy user's mention on the user context menu, works best with ValidUser.",
 								"settings":{
 												"doNotPingListed":"Do not ping the listed users / roles",
 												"inverseShiftReply":"Invert Discord's shift replying behaviour (enable to make shift reply mention user)",
@@ -779,7 +779,7 @@
 								}
 				},
 				"previewMessage":{
-								"description":"Lets you preview your message before sending it.",
+								"description":"Allows you to export any message to a file",
 								"name":"PreviewMessage",
 								"previewMessage":"Preview Message"
 				},
@@ -884,7 +884,7 @@
 								}
 				},
 				"sendTimestamps":{
-								"description":"Send timestamps easily via chat box button & text shortcuts. Read the extended description!",
+								"description":"Custom timestamps on messages and tooltips",
 								"extendedDescription":{
 												"examples":"Examples:",
 												"quickSend":"To quickly send time-only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message",
@@ -1231,7 +1231,7 @@
 								"translate":"Translate"
 				},
 				"typingIndicator":{
-								"description":"Adds an indicator if someone is typing on a channel.",
+								"description":"Suffixes 'ington' to a random word in your message",
 								"settings":{
 												"animatedDots":"Animated dots",
 												"avatars":"Avatars",
@@ -1269,7 +1269,7 @@
 								}
 				},
 				"usrbg":{
-								"description":"Displays user banners from USRBG, allowing anyone to get a banner without Nitro",
+								"description":"Adds Husk button (check settings to change used emoji)",
 								"getOwnBanner":"Get your own USRBG banner",
 								"settings":{
 												"nitroBanner":"Nitro banner",
