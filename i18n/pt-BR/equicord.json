@@ -5,7 +5,7 @@
 												"description":"Insira a URL do seu servidor AudioBookShelf, usuário e senha para exibir os audiolivros que você está ouvindo no Discord Rich Presence.",
 												"title":"Como conectar ao AudioBookShelf"
 								},
-								"description":"testing new thing",
+								"description":"Rich presence para o servidor de mídia AudioBookShelf",
 								"settings":{
 												"password":"Senha AudioBookShelf",
 												"serverUrl":"URL do servidor AudioBookShelf (exemplo: https://abs.exemplo.com)",
@@ -293,13 +293,16 @@
 								}
 				},
 				"clipsEnhancements":{
-								"description":"Adicionar mais opções de FPS e duração de Clipes, comprimento de clipe personalizado, marcação de RPC e mais",
+								"description":"Adiciona mais opções de FPS e duração de Clipes, comprimento de clipe personalizado, marcação de RPC e mais",
 								"settings":{
 												"clipsLink":"Alterar as opções de FPS e duração nas configurações de Clipes!",
 												"enableAdvancedSignals":"Ativar sinais de clipe avançados (gatilhos de auto-clipe)",
 												"enableScreenshotKeybind":"Ativar o recurso de teclas de atalho para captura de tela",
 												"enableVoiceOnlyClips":"Ativar clipes apenas de voz (áudio sem vídeo)",
-												"ignorePlatformRestriction":"Permitir Clipping Restrito por Plataforma (pode causar erros ao salvar)"
+												"ignorePlatformRestriction":"Permitir Clipping Restrito por Plataforma (pode causar erros ao salvar)",
+												"richPresenceTaggingOptions":{
+																"never":"Nunca"
+												}
 								}
 				},
 				"commandPalette":{
@@ -389,8 +392,8 @@
 								"settings":{
 												"debug":"Debug",
 												"export":"Export",
-												"import":"Import",
-												"resetAll":"Reset All",
+												"import":"Importar",
+												"resetAll":"Redefinir Tudo",
 												"searchPlaceholder":"Search by name or ID",
 												"searchSounds":"Search Sounds"
 								},
@@ -444,7 +447,7 @@
 																"link":"Channel link",
 																"mention":"#channel mention"
 												},
-												"inviteExpireAfter":"Invite expiration.",
+												"inviteExpireAfter":"Expiração do convite.",
 												"inviteExpireAfterOptions":{
 																"12hours":"12 hours",
 																"1day":"1 day",
@@ -452,9 +455,9 @@
 																"30min":"30 minutes",
 																"6hours":"6 hours",
 																"7days":"7 days",
-																"never":"Never"
+																"never":"Nunca"
 												},
-												"inviteMaxUses":"Invite max uses.",
+												"inviteMaxUses":"Número máximo de usos do convite.",
 												"inviteMaxUsesOptions":{
 																"100uses":"100 uses",
 																"10uses":"10 uses",
@@ -468,13 +471,13 @@
 												"reuseExistingInvites":"Reuse existing invite instead of creating a new one.",
 												"userOutput":"User drop output.",
 												"userOutputOptions":{
-																"id":"User ID",
+																"id":"ID de usuário",
 																"mention":"Mention user"
 												}
 								},
 								"toast":{
 												"dropFailed":"Dragify failed to handle drop.",
-												"inviteCreated":"Invite created.",
+												"inviteCreated":"Convite criado.",
 												"inviteFailed":"Unable to create invite.",
 												"noChannelForInvites":"No channel available for invites."
 								}
@@ -495,7 +498,7 @@
 								"ui":{
 												"copiedColor":"Copied color to clipboard!",
 												"recording":"Recording...",
-												"reset":"Reset"
+												"reset":"Redefinir"
 								}
 				},
 				"equicordHelper":{
@@ -540,8 +543,8 @@
 												"openNotificationLog":"Open Notification Log",
 												"openSettings":"Open Settings",
 												"plugins":"Plugins",
-												"restartToApply":"Restart to apply the change",
-												"themes":"Themes",
+												"restartToApply":"Reinicie para aplicar a alteração.",
+												"themes":"Temas",
 												"tooltip":"Equicord Toolbox"
 								}
 				},
@@ -672,7 +675,7 @@
 				},
 				"friendCodes":{
 								"panel":{
-												"copied":"Copied!",
+												"copied":"Copiado!",
 												"copyCode":"Copy Code",
 												"currentCode":"Current Friend Code",
 												"error":"Error: {error}",
@@ -690,10 +693,10 @@
 				"friendTags":{
 								"description":"Allows you to filter by custom tags in the quick switcher by starting a search with &",
 								"ui":{
-												"add":"Add",
+												"add":"Adicionar",
 												"addTo":"Add to {tagName}",
-												"name":"Name",
-												"remove":"Remove",
+												"name":"Nome",
+												"remove":"Remover",
 												"removeFrom":"Remove from {tagName}",
 												"tag":"Tag",
 												"userList":"User List (Click A User To Remove)",
@@ -747,7 +750,7 @@
 								"description":"A cute ghost will appear if you don't answer their DMs",
 								"settings":{
 												"exemptedChannels":"Comma-separated list of channel IDs to exempt from ghosting (right-click a DM channel to copy its ID)",
-												"ignoreBots":"Ignore DMs from bots",
+												"ignoreBots":"Ignorar DMs de bots",
 												"ignoreGroupDms":"Exclude all group dms from ghosting",
 												"showDmIcons":"Show ghost icons next to individual DMs",
 												"showIndicator":"Show the ghost counter at the top of the server list"
@@ -794,34 +797,34 @@
 												"descending":"Descending",
 												"exportCollections":"Export Collections",
 												"gifs":"Gifs",
-												"height":"Height",
-												"imageLinkCopied":"Image link copied to clipboard",
-												"import":"Import",
-												"importCollections":"Import Collections",
-												"importOverwrite":"Importing collections will overwrite your current collections.",
-												"information":"Information",
+												"height":"Altura",
+												"imageLinkCopied":"Link da imagem copiado para a área de transferência",
+												"import":"Importar",
+												"importCollections":"Importar coleções",
+												"importOverwrite":"A importação de coleções substituirá suas coleções atuais.",
+												"information":"Informações",
 												"lastUpdated":"Last Updated",
 												"modifiedDate":"Modified Date",
 												"moveToCollection":"Move To Collection",
-												"name":"Name",
-												"nevermind":"Nevermind",
-												"order":"Order",
+												"name":"Nome",
+												"nevermind":"Deixa para lá",
+												"order":"Ordem",
 												"refreshFailed":"Failed to refresh URL",
 												"refreshSuccess":"URL refreshed successfully",
 												"refreshUrl":"Refresh URL",
 												"refreshing":"Refreshing URL...",
-												"remove":"Remove",
+												"remove":"Remover",
 												"removeAction":"remove this item",
 												"rename":"Rename",
-												"reset":"Reset",
-												"resetCollections":"Reset Collections",
-												"resetRemove":"Resetting collections will remove all your collections.",
+												"reset":"Redefinir",
+												"resetCollections":"Redefinir Coleções",
+												"resetRemove":"Redefinir as coleções removerá todas as suas coleções.",
 												"selectCollection":"Select a collection to move the item to",
 												"sortBy":"Sort By",
 												"sortCollections":"Sort Collections",
 												"unknown":"Unknown",
 												"urlCopied":"URL copied to clipboard",
-												"width":"Width"
+												"width":"Largura"
 								}
 				},
 				"gifRoulette":{
@@ -848,7 +851,7 @@
 				"globalBadges":{
 								"description":"Adds global badges from other client mods",
 								"ui":{
-												"joinServer":"Join GlobalBadges Server",
+												"joinServer":"Entre no servidor GlobalBadges",
 												"refetchSuccess":"Successfully refetched global badges!"
 								}
 				},
@@ -866,7 +869,7 @@
 								}
 				},
 				"guildPickerDumper":{
-								"description":"Context menu to dump and download a server's emojis and stickers.",
+								"description":"Menu de contexto para extrair e baixar emojis e figurinhas de um servidor.",
 								"ui":{
 												"downloadEmojis":"Download Emojis",
 												"downloadStickers":"Download Stickers",
@@ -888,7 +891,7 @@
 								},
 								"ui":{
 												"close":"Close",
-												"open":"Open"
+												"open":"Abrir"
 								}
 				},
 				"hideServers":{
@@ -960,17 +963,17 @@
 												"permanentlyIgnoredUsers":"User IDs (comma + space) who should be permanetly ignored"
 								},
 								"ui":{
-												"ignore":"Ignore",
-												"permanentlyIgnore":"Permanently Ignore Calls",
+												"ignore":"Ignorar",
+												"permanentlyIgnore":"Ignorar chamadas permanentemente",
 												"temporarilyIgnore":"Temporarily Ignore Calls"
 								}
 				},
 				"imgToGif":{
 								"commands":{
 												"height":"Height of the gif",
-												"image":"Image attachment to use",
+												"image":"Anexo de imagem a ser usado",
 												"imgtogif":"Allows you to turn an image to a gif",
-												"width":"Width of the gif"
+												"width":"Largura do gif"
 								},
 								"description":"Adds a /imgtogif slash command to create a gif from any image",
 								"errors":{
@@ -1005,12 +1008,12 @@
 												"showIcon":"Show a button to toggle the Ingtoninator plugin"
 								},
 								"ui":{
-												"disabled":"Ingtoninator Disabled",
-												"enabled":"Ingtoninator Enabled"
+												"disabled":"Ingtoninator Desativado",
+												"enabled":"Ingtoninator Ativado"
 								}
 				},
 				"instantScreenshare":{
-								"description":"Instantly screenshare when joining a voice channel with support for desktop sources, windows, and video input devices (cameras, capture cards)",
+								"description":"Compartilhar tela instantaneamente ao entrar em um canal de voz com suporte para fontes de desktop, janelas e dispositivos de entrada de vídeo (câmeras, placas de captura)",
 								"info":{
 												"linux":"For Linux",
 												"soundPreview":"Regarding Sound & Preview Settings",
@@ -1021,9 +1024,9 @@
 												"x11":"For X11 it may or may not work :shrug:"
 								},
 								"ui":{
-												"instantScreenshare":"Instant Screenshare",
-												"instantScreenshareDisabled":"Instant Screenshare Disabled",
-												"instantScreenshareEnabled":"Instant Screenshare Enabled"
+												"instantScreenshare":"Compartilhamento instantâneo de tela",
+												"instantScreenshareDisabled":"Compartilhamento instantâneo de tela desativado",
+												"instantScreenshareEnabled":"Compartilhamento instantâneo de tela ativado"
 								}
 				},
 				"invisibleChat":{
@@ -1041,11 +1044,11 @@
 								"description":"Allows you to edit the default values when creating server invites.",
 								"options":{
 												"forever":"Forever",
-												"infinite":"Infinite"
+												"infinite":"Infinito"
 								},
 								"settings":{
-												"inviteDuration":"Invite Duration",
-												"maxUses":"Invite Use Count",
+												"inviteDuration":"Duração do convite",
+												"maxUses":"Contagem de Usos do Convite",
 												"temporaryMembership":"Temporary Membership"
 								}
 				},
@@ -1066,16 +1069,16 @@
 												"userIdInfo":"You'll also need your User ID, which can be found in the url of your user profile page."
 								},
 								"nameFormatOptions":{
-												"custom":"Custom",
+												"custom":"Personalizada",
 												"seriesEpisodeName":"Series - Episode/Track/Movie Name",
 												"seriesMovieName":"Series/Movie Name"
 								},
 								"overrideTypeOptions":{
 												"listening":"Listening",
 												"off":"Off",
-												"playing":"Playing",
-												"streaming":"Streaming",
-												"watching":"Watching"
+												"playing":"Jogando",
+												"streaming":"Transmitindo",
+												"watching":"Assistindo"
 								},
 								"privacyMode":{
 												"albumHidden":"[Album Hidden]",
@@ -1091,25 +1094,25 @@
 												"watchingTvShow":"Watching a TV Show"
 								},
 								"settings":{
-												"apiKey":"Jellyfin API key obtained from your Jellyfin administration dashboard",
+												"apiKey":"Chave de API do Jellyfin obtida no seu painel de administração do Jellyfin",
 												"coverType":"Choose which cover to display when watching a TV show",
 												"customName":"Custom Rich Presence name (only used if 'Custom' is selected). Options: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
 												"episodeFormat":"Episode number format",
 												"nameDisplay":"Choose how the application name should appear in Rich Presence",
 												"overrideRichPresenceType":"Override the rich presence type",
 												"privacyMode":"Privacy Mode (Hide media details like Episode/Song Name)",
-												"serverUrl":"Jellyfin server URL (e.g., https://jellyfin.example.com)",
+												"serverUrl":"URL do servidor Jellyfin (ex: https://jellyfin.examplo.com)",
 												"showEpisodeName":"Show episode name after season/episode info",
 												"showPausedState":"Show Rich Presence when media is paused",
-												"userId":"Jellyfin user ID obtained from your user profile URL"
+												"userId":"ID de usuário Jellyfin obtido a partir da URL do seu perfil de usuário"
 								},
 								"state":{
 												"episode":"Episode {episode}",
-												"paused":"Paused",
+												"paused":"Pausado",
 												"season":"Season {season}"
 								},
 								"toasts":{
-												"notConfigured":"JellyfinRPC is not configured."
+												"notConfigured":"JellyfinRPC não está configurado."
 								}
 				},
 				"jumpTo":{
@@ -1168,14 +1171,14 @@
 								},
 								"settings":{
 												"amountToKeep":"Amount of messages to keep in the log",
-												"ignoreBots":"Ignore messages from bots",
+												"ignoreBots":"Ignorar mensagens de bots",
 												"keywords":"Manage keywords"
 								},
 								"ui":{
 												"addId":"Add ID",
 												"addKeywordEntry":"Add Keyword Entry",
 												"clearAll":"Clear All",
-												"ignoreCase":"Ignore Case",
+												"ignoreCase":"Ignorar Maiúsculas/Minúsculas",
 												"keywordEntry":"Keyword Entry {index}",
 												"keywords":"Keywords",
 												"whitelistBlacklist":"Whitelist/Blacklist"
@@ -1256,19 +1259,19 @@
 								"buttons":{
 												"exportLogs":"Export Logs",
 												"exporting":"Exporting...",
-												"importLogs":"Import Logs",
-												"importing":"Importing..."
+												"importLogs":"Importar Registros",
+												"importing":"Importando..."
 								},
 								"modal":{
 												"clearAllLogs":"Clear All Logs",
 												"clearVisibleLogs":"Clear Visible Logs",
 												"copyChannelId":"Copy Channel ID",
-												"copyContent":"Copy Content",
+												"copyContent":"Copiar Conteúdo",
 												"copyMessageId":"Copy Message ID",
 												"copyServerId":"Copy Server ID",
 												"copyUserId":"Copy User ID",
 												"deleteLog":"Delete Log",
-												"deleted":"Deleted",
+												"deleted":"Excluído",
 												"edited":"Edited",
 												"emptyLogs":"Empty eh",
 												"filterMessages":"Filter Messages",
@@ -1276,7 +1279,7 @@
 												"fromDms":"From {username}'s DMs",
 												"fromGroupDm":"From {name} Group DM",
 												"ghostPinged":"Ghost Pinged",
-												"importLogs":"Import Logs",
+												"importLogs":"Importar Registros",
 												"importLogsTooltip":"ML Enhanced now stores logs in indexeddb. You need to import your old logs from the logs directory. Importing wont overwrite existing logs",
 												"jumpToMessage":"Jump To Message",
 												"loadMore":"Load More",
@@ -1303,7 +1306,7 @@
 												"ignoreMutedGuilds":"Messages in muted guilds will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
 												"ignoreSelf":"Whether to ignore messages by yourself",
 												"ignoreWebhooks":"Whether to ignore messages by webhooks",
-												"importLogsFromFile":"Import Logs From File",
+												"importLogsFromFile":"Importar registros do arquivo",
 												"messageLimit":"Maximum number of messages to save. Older messages are deleted when the limit is reached. 0 means there is no limit",
 												"messagesToDisplayAtOnceInLogs":"Number of messages to display at once in logs & number of messages to load when loading more messages in logs.",
 												"openImageCacheFolder":"Opens the image cache directory",
@@ -1319,6 +1322,131 @@
 												"sortNewest":"Sort logs by newest.",
 												"timeBasedCleanupMinutes":"Automatically remove messages from servers that are older than this many minutes. Set to 0 to disable time-based cleanup.",
 												"whitelistedIds":"Whitelisted server, channel, or user IDs."
+								}
+				},
+				"messagePeek":{
+								"description":"Espiar a última mensagem em canais de DM sem abri-los"
+				},
+				"moyai":{
+								"settings":{
+												"ignoreBlocked":"Ignorar mensagens de usuários bloqueados",
+												"ignoreBots":"Ignorar mensagens de bots"
+								}
+				},
+				"pingNotifications":{
+								"settings":{
+												"ignoreMuted":"Ignorar canais silenciados, guildas e usuários bloqueados"
+								}
+				},
+				"platformSpoofer":{
+								"settings":{
+												"platformOptions":{
+																"ios":"iOS"
+												}
+								}
+				},
+				"questify":{
+								"gradientOptions":{
+												"intense":"Intenso"
+								},
+								"settings":{
+												"questButtonBadgeColor":"Cor personalizada do emblema"
+								}
+				},
+				"quickThemeSwitcher":{
+								"settings":{
+												"includeLocal":"Incluir temas locais no ciclo",
+												"includeOnline":"Incluir temas online no ciclo"
+								}
+				},
+				"randomVoice":{
+								"description":"Entrar em canais de voz aleatórios com base em filtros personalizáveis",
+								"settings":{
+												"includeStates":"Incluir usuários que correspondam aos filtros de estado"
+								}
+				},
+				"timezones":{
+								"settings":{
+												"resetDatabaseTimezone":"Redefina seu fuso horário no banco de dados"
+								}
+				},
+				"toastNotifications":{
+								"streamingOptions":{
+												"ignore":"Ignorar - Não mostrar a notificação de jeito nenhum"
+								}
+				},
+				"unitConverter":{
+								"unitOptions":{
+												"imperial":"imperial"
+								}
+				},
+				"vcNarratorCustom":{
+								"contextMenu":{
+												"voice":"Voz"
+								},
+								"settings":{
+												"ignoreSelf":"Ignore você mesmo em todos os eventos"
+								}
+				},
+				"vcPanelSettings":{
+								"ui":{
+												"inputDevice":"Dispositivo de entrada",
+												"inputVolume":"Volume de entrada"
+								}
+				},
+				"viewRawVariant":{
+								"modal":{
+												"content":"Conteúdo"
+								}
+				},
+				"voiceChannelLog":{
+								"settings":{
+												"voiceChannelChatSilent":"Mensagens de entrada/saída/movimentação em chats de canal de voz serão silenciosas",
+												"voiceChannelChatSilentSelf":"Mensagens de entrada/saída/movimentação em chats de canal de voz serão silenciosas se você estiver no canal de voz"
+								}
+				},
+				"voiceJoinMessages":{
+								"settings":{
+												"friendDirectMessagesSilent":"Mensagens de entrada nas DMs dos seus amigos serão silenciosas"
+								}
+				},
+				"voiceMessageTranscriber":{
+								"modal":{
+												"action":"Ação",
+												"initializing":"Inicializando..."
+								}
+				},
+				"waitForSlot":{
+								"contextMenu":{
+												"joinQueue":"Entrar na fila"
+								},
+								"notices":{
+												"join":"Entrar"
+								}
+				},
+				"webpackTarball":{
+								"settings":{
+												"patched":"Incluir módulos patcheados"
+								}
+				},
+				"whitelistedEmojis":{
+								"contextMenu":{
+												"removeAllGuildEmojis":"Remover todos os emojis de Servidor(es)"
+								},
+								"settings":{
+												"importEmojis":"Importar Emojis",
+												"resetEmojis":"Redefinir Emojis"
+								},
+								"toasts":{
+												"reset":"Redefinir emojis"
+								},
+								"ui":{
+												"removeAll":"Remover tudo"
+								}
+				},
+				"wigglyText":{
+								"about":{
+												"circle":"em um círculo ao digitar )~texto~^"
 								}
 				}
 }
