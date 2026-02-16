@@ -2,14 +2,14 @@
 				"absRPC":{
 								"about":{
 												"automaticAuth":"The plugin will automatically authenticate and fetch your listening progress.",
-												"description":"Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.",
-												"title":"How to connect to AudioBookShelf"
+												"description":"Wprowadź adres URL serwera AudioBookShelf, nazwę użytkownika i hasło, aby wyświetlać aktualnie odtwarzane audiobooki jako Discord Rich Presence.",
+												"title":"Jak połączyć się z AudioBookShelf"
 								},
-								"description":"Rich presence for AudioBookShelf media server",
+								"description":"Rich Presence dla serwera multimediów AudioBookShelf",
 								"settings":{
-												"password":"AudioBookShelf password",
-												"serverUrl":"AudioBookShelf server URL (e.g., https://abs.example.com)",
-												"username":"AudioBookShelf username"
+												"password":"Hasło do AudioBookShelf",
+												"serverUrl":"Adres URL serwera AudioBookShelf (np. https://abs.example.com)",
+												"username":"Nazwa użytkownika AudioBookShelf"
 								},
 								"toasts":{
 												"notConfigured":"AudioBookShelf RPC is not configured."
