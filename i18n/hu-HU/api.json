@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Hiba történt a(z) \"{name}\" parancs végrehajtása közben"
-    },
-    "memberListDecorators":{
-        "fallback":"Nem sikerült megjeleníteni a(z) {key} taglista dekorációt"
-    },
-    "messageAccessories":{
-        "fallback":"Nem sikerült megjeleníteni a(z) {key} üzenetkiegészítőt"
-    },
-    "messageDecorations":{
-        "fallback":"Nem sikerült megjeleníteni a(z) {key} üzenetdekorációt"
-    },
-    "notices":{
-        "fallback":"Hiba az értesítés megjelenítésekor"
-    },
-    "notifications":{
-        "dismissNotification":"Értesítés Elvetése",
-        "logs":{
-            "body_one":"Ez véglegesen töröl {count} értesítést. Ez a művelet nem vonható vissza.",
-            "body_other":"Ez véglegesen töröl {count} értesítést. Ez a művelet nem vonható vissza.",
-            "body_zero":"Nincs kiválasztott értesítés.",
-            "cancel":"Mindegy",
-            "clearNotificationLog":"Értesítési Napló Törlése",
-            "confirm":"Csináld!",
-            "title":"Biztos?"
-        },
-        "missedNotifications":{
-            "body_one":"{count} értesítést kaptál",
-            "body_other":"{count} értesítést kaptál",
-            "title":"Amíg távol voltál"
-        },
-        "noNotifications":"Még nem kaptál értesítés",
-        "notificationLog":"Értesítési Napló",
-        "notificationSettings":"Értesítési Beállítások"
-    }
+				"commands":{
+								"errorExecuting":"Hiba történt a(z) \"{name}\" parancs végrehajtása közben"
+				},
+				"memberListDecorators":{
+								"fallback":"Nem sikerült megjeleníteni a(z) {key} taglista dekorációt"
+				},
+				"messageAccessories":{
+								"fallback":"Nem sikerült megjeleníteni a(z) {key} üzenetkiegészítőt"
+				},
+				"messageDecorations":{
+								"fallback":"Nem sikerült megjeleníteni a(z) {key} üzenetdekorációt"
+				},
+				"notices":{
+								"fallback":"Hiba az értesítés megjelenítésekor"
+				},
+				"notifications":{
+								"dismissNotification":"Értesítés Elvetése",
+								"logs":{
+												"body_one":"Ez véglegesen töröl {count} értesítést. Ez a művelet nem vonható vissza.",
+												"body_other":"Ez véglegesen töröl {count} értesítést. Ez a művelet nem vonható vissza.",
+												"body_zero":"Nincs kiválasztott értesítés.",
+												"cancel":"Mindegy",
+												"clearNotificationLog":"Értesítési Napló Törlése",
+												"confirm":"Csináld!",
+												"title":"Biztos?"
+								},
+								"missedNotifications":{
+												"body_one":"{count} értesítést kaptál",
+												"body_other":"{count} értesítést kaptál",
+												"title":"Amíg távol voltál"
+								},
+								"noNotifications":"Még nem kaptál értesítés",
+								"notificationLog":"Értesítési Napló",
+								"notificationSettings":"Értesítési Beállítások"
+				}
 }
