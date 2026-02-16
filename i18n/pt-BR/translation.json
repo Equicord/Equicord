@@ -5,6 +5,6 @@
 												"description":"Forçar um idioma diferente para Equicord usar",
 												"followDiscord":"Padrão (usar o idioma do Discord)"
 								},
-								"showMissingKeys":"Se o idioma atual não tiver traduções, mostrar as chaves em vez de usar o inglês"
+								"showMissingKeys":"Se o idioma atual não tiver traduções, mostrar as chaves em vez de voltar ao inglês"
 				}
 }
