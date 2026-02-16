@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"コマンド\"{name}\"の実行中にエラーが発生しました"
-    },
-    "memberListDecorators":{
-        "fallback":"{key}メンバーリスト装飾の描画に失敗しました"
-    },
-    "messageAccessories":{
-        "fallback":"{key}のメッセージアクセサリを読み込めませんでした"
-    },
-    "messageDecorations":{
-        "fallback":"{key}のメッセージの装飾を読み込めませんでした"
-    },
-    "notices":{
-        "fallback":"通知を表示できませんでした"
-    },
-    "notifications":{
-        "dismissNotification":"通知を非表示",
-        "logs":{
-            "body_one":"{count} の通知を完全に削除します。この操作は元に戻せません。",
-            "body_other":"{count} の通知を完全に削除します。この操作は元に戻せません。",
-            "body_zero":"通知が選択されていません。",
-            "cancel":"結構です",
-            "clearNotificationLog":"通知ログを削除",
-            "confirm":"続行！",
-            "title":"よろしいですか？"
-        },
-        "missedNotifications":{
-            "body_one":"{count}件の通知を受け取りました",
-            "body_other":"{count}件の通知を受け取りました",
-            "title":"あなたがいない間に"
-        },
-        "noNotifications":"まだ通知はありません",
-        "notificationLog":"通知ログ",
-        "notificationSettings":"通知設定"
-    }
+				"commands":{
+								"errorExecuting":"コマンド\"{name}\"の実行中にエラーが発生しました"
+				},
+				"memberListDecorators":{
+								"fallback":"{key}メンバーリスト装飾の描画に失敗しました"
+				},
+				"messageAccessories":{
+								"fallback":"{key}のメッセージアクセサリを読み込めませんでした"
+				},
+				"messageDecorations":{
+								"fallback":"{key}のメッセージの装飾を読み込めませんでした"
+				},
+				"notices":{
+								"fallback":"通知を表示できませんでした"
+				},
+				"notifications":{
+								"dismissNotification":"通知を非表示",
+								"logs":{
+												"body_one":"{count} の通知を完全に削除します。この操作は元に戻せません。",
+												"body_other":"{count} の通知を完全に削除します。この操作は元に戻せません。",
+												"body_zero":"通知が選択されていません。",
+												"cancel":"結構です",
+												"clearNotificationLog":"通知ログを削除",
+												"confirm":"続行！",
+												"title":"よろしいですか？"
+								},
+								"missedNotifications":{
+												"body_one":"{count}件の通知を受け取りました",
+												"body_other":"{count}件の通知を受け取りました",
+												"title":"あなたがいない間に"
+								},
+								"noNotifications":"まだ通知はありません",
+								"notificationLog":"通知ログ",
+								"notificationSettings":"通知設定"
+				}
 }
