@@ -100,8 +100,16 @@
 								}
 				},
 				"autoDndWhilePlaying":{
+								"description":"Atualiza automaticamente seu status online (online, ausente, não perturbe) ao iniciar jogos",
+								"settings":{
+												"excludeInvisible":"Impedir mudanças automáticas de status enquanto seu status estiver definido como invisível",
+												"statusToSet":"Status a definir enquanto joga"
+								},
 								"statusOptions":{
-												"idle":"Ausente"
+												"dnd":"Não Perturbe",
+												"idle":"Ausente",
+												"invisible":"Invisível",
+												"online":"Online"
 								}
 				},
 				"badgeAPI":{
@@ -1077,9 +1085,15 @@
 								"readAll":"Read All"
 				},
 				"relationshipNotifier":{
+								"description":"Notifica você quando um amigo, chat em grupo ou servidor te remove.",
 								"friendRemoved":"{username} removed you as a friend.",
 								"friendRequestRemoved":"Um pedido de amizade de {username} foi removido.",
 								"groupRemoved":"You were removed from the group {name}.",
+								"notificationTitle":"Notificador de Relacionamentos",
+								"offlineFriendRemoved":"Você não é mais amigo de {username}.",
+								"offlineFriendRequestRevoked":"A solicitação de amizade de {username} foi revogada.",
+								"offlineGroupRemoved":"Você não está mais no grupo {name}.",
+								"offlineServerRemoved":"Você não está mais no servidor {name}.",
 								"serverRemoved":"You were removed from the server {name}.",
 								"settings":{
 												"friendRequestCancels":"Notify when a friend request is cancelled",
