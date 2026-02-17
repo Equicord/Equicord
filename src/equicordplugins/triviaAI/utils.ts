@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { sendMessage } from "@utils/discord";
+import { insertTextIntoChatInputBox, sendMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { Message } from "@vencord/discord-types";
-import { ComponentDispatch } from "@webpack/common/utils";
 
 import { settings } from "./settings";
 
@@ -27,14 +26,6 @@ type ImagePart = {
 };
 
 export type ContentPayload = string | (TextPart | ImagePart)[];
-
-// stolen from plugins/messageClickActions
-export function insertTextIntoChatInputBox(text: string) {
-    ComponentDispatch.dispatchToLastSubscribed("INSERT_TEXT", {
-        rawText: text,
-        plainText: text
-    });
-}
 
 export function parseMessageContent(message: Message): ContentPayload | null {
     const textParts: string[] = [];
