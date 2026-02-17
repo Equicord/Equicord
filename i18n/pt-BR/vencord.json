@@ -287,6 +287,20 @@
 								"copyUserURL":"Copiar URL do Usuário",
 								"description":"Adiciona uma opção 'Copiar URL do usuário' ao menu de contexto do usuário."
 				},
+				"crashHandler":{
+								"updatePrompt":"Oh não, o Discord acabou de dar pau... mas noticia boa, tem uma atualização do Equicord que talvez resolva esse problema! Gostaria de atualizar agora?"
+				},
+				"ctrlEnterSend":{
+								"description":"Use Ctrl+Enter para enviar mensagens (Customizável)",
+								"settings":{
+												"submitRule":"A maneira de enviar uma mensagem"
+								},
+								"submitRuleOptions":{
+												"ctrlEnter":"Ctrl+Enter (Enter ou Shift+Enter para nova linha) (cmd + enter no macOS)",
+												"enter":"Enter (Shift+Enter para nova linha; padrão do Discord)",
+												"shiftEnter":"Shift+Enter (Enter para nova linha)"
+								}
+				},
 				"customRPC":{
 								"activityType":"Tipo de atividade",
 								"activityTypes":{
@@ -598,6 +612,9 @@
 								"mediaHidden":"Media Hidden",
 								"showMedia":"Show Media"
 				},
+				"iLoveSpam":{
+								"description":"Não ocultar mensagens de ‘prováveis spammers’"
+				},
 				"ignoreActivities":{
 								"disableActivity":"Desativar atividade",
 								"enableActivity":"Enable activity",
@@ -622,6 +639,9 @@
 												"whitelist":"Lista Branca"
 								}
 				},
+				"imageLink":{
+								"description":"Nunca ocultar links de imagens nas mensagens, mesmo que seja o único conteúdo"
+				},
 				"imageZoom":{
 								"lensSize":"Tamanho da lente",
 								"nearestNeighbour":"Nearest Neighbour",
@@ -640,7 +660,9 @@
 				},
 				"invite":"Convidar",
 				"ircColors":{
+								"description":"Torna as cores do nome de usuário no chat únicas, como em clientes de IRC",
 								"settings":{
+												"applyColorOnlyInDms":"Aplicar cores somente na DM; não aplicar em servidores",
 												"lightness":"Luminosidade, em %. Altere se as cores estiverem muito claras ou muito escuras."
 								}
 				},
@@ -1702,10 +1724,10 @@
 												"moveMessage":"Mover mensagem",
 												"muteMessage":"Mute Message (only self for now)",
 												"sayOwnName":"Say own name",
-												"speed":"Narrator Speed",
+												"speed":"Velocidade do narrador",
 												"undeafenMessage":"Undeafen Message (only self for now)",
 												"unmuteMessage":"Unmute Message (only self for now)",
-												"volume":"Narrator Volume"
+												"volume":"Volume do narrador"
 								},
 								"speechSynthesisNotSupported":"SpeechSynthesis not supported or no Narrator voices found. Thus, this plugin will not work. Check my Settings for more info"
 				},
