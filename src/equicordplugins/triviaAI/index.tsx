@@ -8,8 +8,8 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { IconComponent } from "@utils/types";
 import { Message } from "@vencord/discord-types";
+import { findExportedComponentLazy } from "@webpack";
 import { ChannelStore, Menu } from "@webpack/common";
-import { findExportedComponentLazy } from "webpack";
 
 import { settings } from "./settings";
 import { getResponse, handleResponse, parseMessageContent } from "./utils";
