@@ -7,6 +7,7 @@
 import { insertTextIntoChatInputBox, sendMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { Message } from "@vencord/discord-types";
+import { showToast, Toasts } from "@webpack/common";
 
 import { settings } from "./settings";
 
@@ -160,6 +161,7 @@ export async function getResponse(payload: ContentPayload): Promise<string> {
             const errorBody = await req.text();
             const errorMessage = `API request failed with status ${req.status}: ${errorBody}`;
             logger.error(errorMessage);
+            showToast(errorMessage, Toasts.Type.FAILURE);
             return "";
         }
 
@@ -168,6 +170,7 @@ export async function getResponse(payload: ContentPayload): Promise<string> {
         if (data.error) {
             const errorMessage = data.error.message ?? "An unknown error occurred";
             logger.error(`API Error: ${errorMessage}`);
+            showToast(errorMessage, Toasts.Type.FAILURE);
             return "";
         }
 
@@ -181,6 +184,7 @@ export async function getResponse(payload: ContentPayload): Promise<string> {
         return response;
     } catch (e) {
         logger.error("Error getting response from AI model", e);
+        showToast("Error getting response from AI model", Toasts.Type.FAILURE);
         return "";
     }
 }
