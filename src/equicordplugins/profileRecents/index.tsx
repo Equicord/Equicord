@@ -86,10 +86,6 @@ export default definePlugin({
                     replace: "onClick:()=>$self.runtime.onRecentSelect($1,$2),onMouseEnter:$3,onMouseLeave:$4"
                 },
                 {
-                    match: /text:(\i\.intl\.\i\(\i\.t\.\i\)),anchorRef:(\i)/,
-                    replace: "text:$1,anchorRef:$2"
-                },
-                {
                     match: /className:(\i\.\i),children:\(0,\i\.jsx\)\((\i\.\i),\{size:"xs",color:"currentColor",className:(\i\.\i)\}\)/,
                     replace: "className:$1,children:$self.renderTrashIcon()"
                 },
