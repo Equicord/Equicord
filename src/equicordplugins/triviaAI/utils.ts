@@ -144,39 +144,54 @@ export async function handleResponse(message: Message, response: string): Promis
 }
 
 export async function getResponse(payload: ContentPayload): Promise<string> {
-    const req = await fetch(settings.store.endpoint, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${settings.store.apiKey}`
-        },
-        body: JSON.stringify({
-            model: settings.store.model,
-            messages: [
-                {
-                    role: "system",
-                    content: settings.store.systemPrompt
-                },
-                {
-                    role: "user",
-                    content: payload
-                }
-            ],
-            max_tokens: settings.store.maxTokens,
-        })
-    });
+    try {
+        const req = await fetch(settings.store.endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${settings.store.apiKey}`
+            },
+            body: JSON.stringify({
+                model: settings.store.model,
+                messages: [
+                    {
+                        role: "system",
+                        content: settings.store.systemPrompt
+                    },
+                    {
+                        role: "user",
+                        content: payload
+                    }
+                ],
+                max_tokens: settings.store.maxTokens,
+            })
+        });
 
-    const data = await req.json();
+        if (!req.ok) {
+            const errorBody = await req.text();
+            const errorMessage = `API request failed with status ${req.status}: ${errorBody}`;
+            logger.error(errorMessage);
+            return "";
+        }
 
-    if (data.error) {
-        logger.error(`API Error: ${data.error.message || "An unknown error occurred"}`);
+        const data = await req.json();
+
+        if (data.error) {
+            const errorMessage = data.error.message ?? "An unknown error occurred";
+            logger.error(`API Error: ${errorMessage}`);
+            return "";
+        }
+
+        const response = data.choices[0].message.content;
+
+        if (!response?.trim()) {
+            logger.warn("no response from AI model");
+            return "";
+        }
+
+        return response;
+    } catch (e) {
+        logger.error("Error getting response from AI model", e);
+        return "";
     }
-
-    const response = data.choices[0].message.content;
-
-    if (!response || response.trim().length === 0) {
-        logger.warn("no response from AI model");
-    }
-
-    return response;
 }
