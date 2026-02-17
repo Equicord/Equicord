@@ -317,8 +317,11 @@
 												"enableScreenshotKeybind":"Ativar o recurso de teclas de atalho para captura de tela",
 												"enableVoiceOnlyClips":"Ativar clipes apenas de voz (áudio sem vídeo)",
 												"ignorePlatformRestriction":"Permitir Clipping Restrito por Plataforma (pode causar erros ao salvar)",
+												"richPresenceTagging":"Quando os clips devem ser marcados com a Atividade atual?",
 												"richPresenceTaggingOptions":{
-																"never":"Nunca"
+																"always":"Sempre",
+																"never":"Nunca",
+																"whenMatched":"Apenas quando o início ou fim do nome da atividade corresponder"
 												}
 								}
 				},
@@ -1272,6 +1275,57 @@
 												"scanQrCode":"Scan QR Code"
 								}
 				},
+				"mediaPlaybackSpeed":{
+								"description":"Controle a velocidade de reprodução de mídia para mensagens de voz, vídeos e anexos de áudio",
+								"settings":{
+												"defaultAudioSpeed":"Velocidade de reprodução padrão para arquivos de áudio",
+												"defaultVideoSpeed":"Velocidade de reprodução padrão para vídeos",
+												"defaultVoiceMessageSpeed":"Velocidade de reprodução padrão para mensagens de voz"
+								}
+				},
+				"messageBurst":{
+								"description":"Envia mensagens em rajadas, mesclando mensagens consecutivas dentro de um período de tempo",
+								"settings":{
+												"shouldMergeWithAttachment":"Permitir a mesclagem de mensagens com anexos",
+												"timePeriod":"Período de tempo em segundos para mesclar mensagens",
+												"useSpace":"Use espaço em vez de nova linha como separador"
+								}
+				},
+				"messageColors":{
+								"description":"Renderize códigos de cores (hex, rgb, hsl) em mensagens com visualização de cores",
+								"settings":{
+												"blockView":"Posição do bloco de cor",
+												"blockViewOptions":{
+																"bothSides":"Ambos os lados do texto",
+																"leftSide":"Lado esquerdo do texto",
+																"rightSide":"Lado direito do texto"
+												},
+												"enableShortHexCodes":"Habilitar códigos de cores hexadenais curtos (3 caracteres)",
+												"renderType":"Como renderizar cores em mensagens",
+												"renderTypeOptions":{
+																"backgroundColor":"Alterar cor de fundo",
+																"blockNearby":"Mostrar bloco de cor",
+																"textColor":"Mudar cor do texto"
+												}
+								}
+				},
+				"messageFetchTimer":{
+								"description":"Mostrar horários de busca de mensagens na barra de bate-papo",
+								"settings":{
+												"iconColor":"Cor do ícone do temporizador de carregamento",
+												"showIcon":"Mostrar o ícone do temporizador de carregamento",
+												"showMs":"Mostrar milissegundos em vez de segundos"
+								}
+				},
+				"messageLinkTooltip":{
+								"description":"Mostrar visualizações de mensagens ao passar o mouse sobre links de mensagens, respostas e mensagens encaminhadas",
+								"settings":{
+												"display":"Estilo de exibição para visualização de mensagens",
+												"onForward":"Mostrar dica ao passar o mouse sobre mensagens encaminhadas",
+												"onLink":"Mostrar dica de ao passar o mouse sobre os links de mensagens",
+												"onReply":"Mostrar dica ao passar o mouse sobre as respostas de mensagens"
+								}
+				},
 				"messageLoggerEnhanced":{
 								"buttons":{
 												"exportLogs":"Export Logs",
@@ -1341,13 +1395,80 @@
 												"whitelistedIds":"Whitelisted server, channel, or user IDs."
 								}
 				},
+				"messageNotifier":{
+								"description":"Seja notificado quando usuários específicos enviarem mensagens",
+								"settings":{
+												"users":"IDs de usuário para receber notificações (separados por vírgula)"
+								}
+				},
 				"messagePeek":{
 								"description":"Espiar a última mensagem em DMs sem abri-las"
 				},
+				"messageTranslate":{
+								"description":"Traduzir mensagens automaticamente para o seu idioma preferido",
+								"settings":{
+												"confidenceRequirement":"Nível mínimo de confiança para tradução (0-1)",
+												"targetLanguage":"Idioma de destino para tradução (por exemplo, en, es, fr)"
+								}
+				},
+				"micLoopbackTester":{
+								"description":"Teste seu microfone com um botão de loopback na área do usuário"
+				},
+				"moreCommands":{
+								"description":"Comandos de barra adicionais incluindo informações do sistema, rolagem de dados, cara ou coroa, e mais",
+								"settings":{
+												"addFreakyEnding":"Adicione 👅 ou ❤️ no final do comando freaky",
+												"uwuEveryMessage":"Faça todas as mensagens fofinhas :3",
+												"uwuEverything":"Transforma todo o texto em uwu - péssima ideia"
+								}
+				},
+				"moreKaomoji":{
+								"description":"Mais comandos de barra de kaomoji para expressar emoções"
+				},
+				"moreStickers":{
+								"description":"Adicionee mais pacotes de slickers de fontes externas",
+								"settings":{
+												"packs":"Gerenciar pacotes de figurinhas",
+												"promptToUpload":"Confirmar antes de enviar figurinhas"
+								}
+				},
+				"moreUserTags":{
+								"description":"Mostrar tags de usuário adicionais baseadas em permissões e cargos",
+								"settings":{
+												"dontShowBotTag":"Ocultar a tag BOT padrão",
+												"dontShowForBots":"Não mostrar tags para usuários bot",
+												"showWebhookTagFully":"Mostrar tags de webhook completamente",
+												"tagSettings":"Configurar definições individuais de tag"
+								}
+				},
 				"moyai":{
+								"description":"Reproduz o efeito sonoro moyai quando o emoji 🗿 for usado",
 								"settings":{
 												"ignoreBlocked":"Ignorar mensagens de usuários bloqueados",
-												"ignoreBots":"Ignorar mensagens de bots"
+												"ignoreBots":"Ignorar mensagens de bots",
+												"quality":"Qualidade do som moyai",
+												"qualityOptions":{
+																"hd":"HD",
+																"normal":"Normal"
+												},
+												"triggerWhenUnfocused":"Acione o som mesmo quando a janela não estiver focada",
+												"volume":"Volume do som moyai"
+								}
+				},
+				"musicControls":{
+								"description":"Mostrar controles do player de música para Spotify, Tidal e YouTube Music",
+								"settings":{
+												"FallbackProvider":"Usar provedor alternativo quando o principal falhar",
+												"LyricsConversion":"Traduzir automaticamente ou romanizar letras",
+												"LyricsPosition":"Posição da letra em relação ao player",
+												"LyricsProvider":"Fonte para as Letras",
+												"TranslateTo":"Traduzir letras para",
+												"hoverControls":"Mostrar controles apenas ao passar o mouse",
+												"showSpotifyControls":"Mostrar controles do Spotify",
+												"showSpotifyLyrics":"Mostrar letras do Spotify",
+												"showTidalControls":"Mostrar controles do Tidal",
+												"showTidalLyrics":"Mostrar letras do Tidal",
+												"showYoutubeMusicControls":"Mostrar controles do Yutube Music"
 								}
 				},
 				"pingNotifications":{
