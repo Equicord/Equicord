@@ -452,7 +452,7 @@
 												},
 												"inviteExpireAfter":"Invite expiration.",
 												"inviteExpireAfterOptions":{
-																"12hours":"12 hours",
+																"12hours":"12 uur",
 																"1day":"1 dag",
 																"1hour":"1 uur",
 																"30min":"30 minutes",
