@@ -143,6 +143,21 @@ export async function handleResponse(message: Message, response: string): Promis
 }
 
 export async function getResponse(payload: ContentPayload): Promise<string> {
+    if (settings.store.decancer) {
+        // @ts-ignore
+        const initDecancer = (await import("https://cdn.jsdelivr.net/gh/null8626/decancer@v3.3.3/bindings/wasm/bin/decancer.min.js")).default;
+        const decancer = await initDecancer();
+        if (typeof payload === "string") {
+            payload = decancer(payload).toString();
+        } else {
+            payload = payload.map(part =>
+                part.type === "text"
+                    ? { ...part, text: decancer(part.text).toString() }
+                    : part
+            );
+        }
+    }
+
     const req = await fetch(settings.store.endpoint, {
         method: "POST",
         headers: {

@@ -49,5 +49,10 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Pass images to the AI for context (if any). This is not supported by all models.",
         default: true
+    },
+    decancer: {
+        type: OptionType.BOOLEAN,
+        description: "Decancer the message before sending it to the AI",
+        default: true
     }
 });
