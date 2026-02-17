@@ -1486,6 +1486,27 @@
 				"noAppsAllowed":{
 								"description":"Bloqueia apps/categorias de aparecerem no iniciador de aplicativos"
 				},
+				"noBulletPoints":{
+								"description":"Remove marcadores de mensagens escapando-os"
+				},
+				"noModalAnimation":{
+								"description":"Desativar animações de modal para interações de interface mais rápidas"
+				},
+				"noNitroUpsell":{
+								"description":"Remove propagandas do Nitro substituindo seu tipo de premium"
+				},
+				"noRPC":{
+								"description":"Desativa o recurso de Atividade (RPC) do Discord"
+				},
+				"partyMode":{
+								"description":"Ativa efeitos de modo festa com confetes e tremida de tela",
+								"settings":{
+												"intensityOptions":{
+																"normal":"Normal - Efeitos sutis"
+												},
+												"superIntensePartyMode":"Level de intensidade do modo Festa"
+								}
+				},
 				"pingNotifications":{
 								"settings":{
 												"ignoreMuted":"Ignorar canais silenciados, servidores e usuários bloqueados"
@@ -1498,7 +1519,23 @@
 												}
 								}
 				},
+				"polishWording":{
+								"settings":{
+												"expandContractions":"Expandir contrações (ex.: 'don't' → 'do not')",
+												"fixApostrophes":"Corrigir apóstrofos ausentes em contrações (ex.: 'dont' → 'don't')",
+												"fixCapitalization":"Corrigir capitalização de frases",
+												"fixPunctuation":"Adicionar pontos ao final das frases",
+												"fixPunctuationFrequency":"Frequência de adição automática de pontos (0-100%)"
+								}
+				},
+				"profileSets":{
+								"description":"Salvar e gerenciar predefinições de personalização de perfil",
+								"settings":{
+												"avatarSize":"Tamanho do avatar no gerenciador de predefinições"
+								}
+				},
 				"questify":{
+								"description":"Gerenciamento aprimorado de missões com conclusão automática, notificações e estilização personalizada",
 								"gradientOptions":{
 												"hide":"Ocultar",
 												"intense":"Intenso"
