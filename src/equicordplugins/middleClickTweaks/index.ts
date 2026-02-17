@@ -78,10 +78,12 @@ const settings = definePluginSettings({
 function migrate() {
     const { plugins } = SettingsStore.plain;
     const oldPlugin = plugins?.LimitMiddleClickPaste;
-    const newPlugin = plugins?.MiddleClickTweaks;
+
+    if (!oldPlugin) return;
+
+    const newPlugin = plugins.MiddleClickTweaks ??= { enabled: false };
     const { scope, threshold, preventLinkOpen } = oldPlugin || {};
 
-    if (!oldPlugin || !newPlugin) return;
     if (scope) newPlugin.pasteScope = scope === "always" ? "always" : "focus";
     if (threshold) newPlugin.pasteThreshold = threshold;
     if (preventLinkOpen) newPlugin.openScope = !!preventLinkOpen ? "both" : "none";
