@@ -1459,17 +1459,32 @@
 								"description":"Mostrar controles do player de música para Spotify, Tidal e YouTube Music",
 								"settings":{
 												"FallbackProvider":"Usar provedor alternativo quando o principal falhar",
+												"LyricDelay":"Deslocamento de atraso da letra",
 												"LyricsConversion":"Traduzir automaticamente ou romanizar letras",
 												"LyricsPosition":"Posição da letra em relação ao player",
 												"LyricsProvider":"Fonte para as Letras",
+												"ShowFailedToasts":"Mostrar notificações de erro quando as letras falharem ao carregar",
 												"TranslateTo":"Traduzir letras para",
+												"YoutubeMusicApiUrl":"URL personalizada da API do YouTube Music",
 												"hoverControls":"Mostrar controles apenas ao passar o mouse",
+												"previousButtonRestartsTrack":"Reiniciar a faixa ao pressionar o botão de anterior",
 												"showSpotifyControls":"Mostrar controles do Spotify",
 												"showSpotifyLyrics":"Mostrar letras do Spotify",
 												"showTidalControls":"Mostrar controles do Tidal",
 												"showTidalLyrics":"Mostrar letras do Tidal",
-												"showYoutubeMusicControls":"Mostrar controles do Yutube Music"
+												"showYoutubeMusicControls":"Mostrar controles do Yutube Music",
+												"useSpotifyUris":"Abrir URIs do Spotify ao invés de URLs"
 								}
+				},
+				"neverPausePreviews":{
+								"description":"Nunca pausar pré-visualizações de vídeo ao trocar de canal ou perder o foco",
+								"warning":"Isso pode aumentar o uso de recursos e o consumo de dados"
+				},
+				"newPluginsManager":{
+								"description":"Gerencie e descubra novos plugins com o gerenciador de plugins"
+				},
+				"noAppsAllowed":{
+								"description":"Bloqueia apps/categorias de aparecerem no iniciador de aplicativos"
 				},
 				"pingNotifications":{
 								"settings":{
