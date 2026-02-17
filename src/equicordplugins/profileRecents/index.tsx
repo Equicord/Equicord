@@ -86,7 +86,7 @@ export default definePlugin({
                     replace: "onClick:()=>$self.runtime.onRecentSelect($1,$2),onMouseEnter:$3,onMouseLeave:$4"
                 },
                 {
-                    match: /text:(\i\.intl\.\i\(\i\.\i\.\i\)),anchorRef:(\i)/,
+                    match: /text:(\i\.intl\.\i\(\i\.t\.\i\)),anchorRef:(\i)/,
                     replace: "text:$1,anchorRef:$2"
                 },
                 {
