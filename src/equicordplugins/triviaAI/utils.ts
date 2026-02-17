@@ -143,7 +143,7 @@ export async function handleResponse(message: Message, response: string): Promis
 }
 
 export async function getResponse(payload: ContentPayload): Promise<string> {
-    const req = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const req = await fetch(settings.store.endpoint, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

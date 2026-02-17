@@ -10,9 +10,12 @@ import { OptionType } from "@utils/types";
 export const settings = definePluginSettings({
     apiKey: {
         type: OptionType.STRING,
-        description: "OpenRouter API Key",
+        description: "API Key",
         default: "",
-        placeholder: "Enter your OpenRouter.ai API Key here"
+        placeholder: "Enter API Key here for your AI endpoint",
+        componentProps: {
+            type: "password"
+        }
     },
     model: {
         type: OptionType.STRING,
@@ -30,6 +33,12 @@ export const settings = definePluginSettings({
         type: OptionType.NUMBER,
         description: "Maximum number of tokens in the response",
         default: 500
+    },
+    endpoint: {
+        type: OptionType.STRING,
+        description: "AI Endpoint",
+        default: "https://openrouter.ai/api/v1/chat/completions",
+        placeholder: "Enter your OpenAI compatible AI endpoint here"
     },
     autoRespond: {
         type: OptionType.BOOLEAN,
