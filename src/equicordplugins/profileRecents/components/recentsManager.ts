@@ -20,9 +20,6 @@ const LEGACY_KEY_PREFIX = "MoreSets";
 
 const toKind = (isBanner: boolean): SlotKind => isBanner ? "banner" : "avatar";
 type CurrentUserWithBanner = User & { banner?: string | null; };
-type IconUtilsLike = {
-    getUserBannerURL?: (opts: { id: string; banner: string; canAnimate?: boolean; size?: number; }) => string | null;
-};
 type SettingsStore = { avatarSlots: number; bannerSlots: number; };
 
 const dataPayload = (url: string): string | null => {
@@ -139,7 +136,7 @@ export class ProfileRecentsRuntime {
             const id = typeof args[2] === "string" ? args[2] : null;
             if (!id) {
                 try { return await removeNative(...args); }
-                catch { return; }
+                catch (error) { void error; return; }
             }
 
             if (id.startsWith("data:") && this.caches[this.kind]?.some(s => s.dataUrl === id)) {
@@ -149,7 +146,7 @@ export class ProfileRecentsRuntime {
             this.refreshRecents(true);
             if (!id.startsWith("data:")) {
                 try { return await removeNative(...args); }
-                catch { return; }
+                catch (error) { void error; return; }
             }
         };
     }
@@ -222,7 +219,8 @@ export class ProfileRecentsRuntime {
                 }).map(s => ({ dataUrl: s.dataUrl, addedAt: typeof s.addedAt === "number" ? s.addedAt : Date.now() }))
                 : [];
             this.refreshRecents();
-        } catch {
+        } catch (error) {
+            void error;
             this.caches[kind] = [];
         }
     }
@@ -231,7 +229,8 @@ export class ProfileRecentsRuntime {
         const key = this.key(KEY_PREFIX, kind);
         try {
             await DataStore.set(key, this.caches[kind] ?? []);
-        } catch {
+        } catch (error) {
+            void error;
             return;
         }
     }
@@ -290,8 +289,7 @@ export class ProfileRecentsRuntime {
 
         if (user.banner && user.banner !== this.appliedHashes.banner) {
             this.appliedHashes.banner = user.banner;
-            const bannerUrl = (IconUtils as IconUtilsLike).getUserBannerURL?.({ id: user.id, banner: user.banner, canAnimate: true, size: 1024 })
-                ?? `https://cdn.discordapp.com/banners/${user.id}/${user.banner}.${user.banner.startsWith("a_") ? "gif" : "png"}?size=1024`;
+            const bannerUrl = IconUtils.getUserBannerURL({ id: user.id, banner: user.banner, canAnimate: true, size: 1024 });
             const dataUrl = typeof bannerUrl === "string" ? await this.toDataUrl(bannerUrl) : null;
             if (dataUrl) await this.addSlot("banner", dataUrl);
         }
@@ -301,7 +299,8 @@ export class ProfileRecentsRuntime {
         try {
             const b = await (await fetch(dataUrl)).blob();
             return new File([b], name, { type: b.type ?? "image/png" });
-        } catch {
+        } catch (error) {
+            void error;
             return null;
         }
     }
@@ -320,7 +319,8 @@ export class ProfileRecentsRuntime {
         if (file instanceof Blob) return this.blobToDataUrl(file);
         try {
             return uri ? this.blobToDataUrl(await (await fetch(uri)).blob()) : null;
-        } catch {
+        } catch (error) {
+            void error;
             return null;
         }
     }

@@ -46,15 +46,15 @@ export default definePlugin({
             replacement: [
                 {
                     match: /,(\i)=(\i)&&(\i)===(\i\.\i)\.AVATAR;/,
-                    replace: ",$1=$2&&($3===$4.AVATAR||($3===$4.BANNER&&$self.hasSlots(!0)));$self.setModalKind($3===$4.BANNER);"
+                    replace: ",$1=$2&&($3===$4.AVATAR||($3===$4.BANNER&&$self.runtime.hasSlots(!0)));$self.runtime.setModalKind($3===$4.BANNER);"
                 },
                 {
                     match: /uploadType:(\i),guild:(\i),handleOpenImageEditingModal:(\i),maxFileSizeBytes:(\i),filters:(\i),handleFileSizeError:(\i)/,
-                    replace: "uploadType:$1,guild:$2,handleOpenImageEditingModal:($self.setBannerEditor($3),$3),maxFileSizeBytes:$4,filters:$5,handleFileSizeError:$6"
+                    replace: "uploadType:$1,guild:$2,handleOpenImageEditingModal:($self.runtime.setBannerEditor($3),$3),maxFileSizeBytes:$4,filters:$5,handleFileSizeError:$6"
                 },
                 {
                     match: /onComplete:(\i)(?=\}\),\i&&\(0,\i\.jsx\)\(\i\.\i,\{uploadType:\i)/,
-                    replace: "onComplete:$self.handleRecentComplete($1),isBanner:$self.isBannerMode()"
+                    replace: "onComplete:$self.runtime.handleRecentComplete($1),isBanner:$self.runtime.isBannerMode()"
                 }
             ]
         },
@@ -63,31 +63,31 @@ export default definePlugin({
             replacement: [
                 {
                     match: /\{avatars:(\i),loading:(\i),error:(\i)\}=\(0,(\i)\.(\i)\)\(\)/,
-                    replace: "{avatars:$1,loading:$2,error:$3}=$self.mergeRecentData((0,$4.$5)())"
+                    replace: "{avatars:$1,loading:$2,error:$3}=$self.runtime.mergeRecentData((0,$4.$5)())"
                 },
                 {
                     match: /label:\i\.intl\.\i\(\i\.\i\.\i\)/,
-                    replace: "label:$self.getRecentTitle()"
+                    replace: "label:$self.runtime.getRecentTitle()"
                 },
                 {
                     match: /description:\i\.intl\.\i\([^)]*recentAvatarsLimit:6\}\)/,
-                    replace: "description:$self.getRecentDescription()"
+                    replace: "description:$self.runtime.getRecentDescription()"
                 },
                 {
                     match: /className:(\i)\(\)\((\i\.\i),(\i)\)(?=,children:\(0,\i\.jsx\)\(\i\.\i,\{label:)/,
-                    replace: "className:$1()($2,$3,$self.getRecentRootClass())"
+                    replace: "className:$1()($2,$3,$self.runtime.getRecentRootClass())"
                 },
                 {
                     match: /onSelectRecentAvatar:(\i),onDeleteRecentAvatar:(\i),avatarButtonRef:(\i)=>\{(\i)\.current\[(\i)\]=\i\}/,
-                    replace: "onSelectRecentAvatar:$1,onDeleteRecentAvatar:$self.wrapRecentDelete($2),avatarButtonRef:$3=>{$4.current[$5]=$3}"
+                    replace: "onSelectRecentAvatar:$1,onDeleteRecentAvatar:$self.runtime.wrapRecentDelete($2),avatarButtonRef:$3=>{$4.current[$5]=$3}"
                 },
                 {
                     match: /onClick:\(\)=>(\i)\((\i)\),onMouseEnter:(\i),onMouseLeave:(\i)/,
-                    replace: "onClick:()=>$self.onRecentSelect($1,$2),onMouseEnter:$3,onMouseLeave:$4"
+                    replace: "onClick:()=>$self.runtime.onRecentSelect($1,$2),onMouseEnter:$3,onMouseLeave:$4"
                 },
                 {
                     match: /text:(\i\.intl\.\i\(\i\.\i\.\i\)),anchorRef:(\i)/,
-                    replace: "text:\"Remove\",anchorRef:$2"
+                    replace: "text:$1,anchorRef:$2"
                 },
                 {
                     match: /className:(\i\.\i),children:\(0,\i\.jsx\)\((\i\.\i),\{size:"xs",color:"currentColor",className:(\i\.\i)\}\)/,
@@ -95,7 +95,7 @@ export default definePlugin({
                 },
                 {
                     match: /onMouseLeave:(\i),className:(\i\.\i),"aria-label":(\i),innerRef:(\i),children:\(0,\i\.jsx\)\("img",\{src:(\i),alt:(\i),className:(\i\.\i)\}\)/,
-                    replace: "onMouseLeave:$1,className:$2,style:$self.getRecentButtonStyle(arguments[0]?.avatar),\"aria-label\":$3,innerRef:$4,children:(0,a.jsx)(\"img\",{src:$self.getRecentMediaSrc(arguments[0]?.avatar,$5),alt:$6,className:$7,style:$self.getRecentMediaStyle(arguments[0]?.avatar)})"
+                    replace: "onMouseLeave:$1,className:$2,style:$self.runtime.getRecentButtonStyle(arguments[0]?.avatar),\"aria-label\":$3,innerRef:$4,children:(0,a.jsx)(\"img\",{src:$self.runtime.getRecentMediaSrc(arguments[0]?.avatar,$5),alt:$6,className:$7,style:$self.runtime.getRecentMediaStyle(arguments[0]?.avatar)})"
                 },
                 {
                     match: /,(\i)>0&&/,
@@ -104,22 +104,9 @@ export default definePlugin({
             ]
         }
     ],
-    start: runtime.start.bind(runtime),
-    stop: runtime.stop.bind(runtime),
-    setModalKind: runtime.setModalKind.bind(runtime),
-    isBannerMode: runtime.isBannerMode.bind(runtime),
-    setBannerEditor: runtime.setBannerEditor.bind(runtime),
-    hasSlots: runtime.hasSlots.bind(runtime),
-    getRecentTitle: runtime.getRecentTitle.bind(runtime),
-    getRecentDescription: runtime.getRecentDescription.bind(runtime),
-    getRecentRootClass: runtime.getRecentRootClass.bind(runtime),
-    getRecentButtonStyle: runtime.getRecentButtonStyle.bind(runtime),
-    getRecentMediaStyle: runtime.getRecentMediaStyle.bind(runtime),
-    getRecentMediaSrc: runtime.getRecentMediaSrc.bind(runtime),
-    mergeRecentData: runtime.mergeRecentData.bind(runtime),
-    wrapRecentDelete: runtime.wrapRecentDelete.bind(runtime),
-    onRecentSelect: runtime.onRecentSelect.bind(runtime),
-    handleRecentComplete: runtime.handleRecentComplete.bind(runtime),
+    start: () => runtime.start(),
+    stop: () => runtime.stop(),
+    runtime,
 
     renderTrashIcon() {
         return (
