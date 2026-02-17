@@ -1541,7 +1541,14 @@
 												"intense":"Intenso"
 								},
 								"settings":{
-												"questButtonBadgeColor":"Cor personalizada da insígnia"
+												"claimedSubsort":"Ordenar missões reivindicadas por",
+												"expiredSubsort":"Ordenar missões expiradas por",
+												"ignoredSubsort":"Ordenar missões ignoradas por",
+												"makeMobileQuestsDesktopCompatible":"Tornar missões de vídeo exclusivas de mobile completáveis no desktop",
+												"notifyOnQuestComplete":"Mostrar notificação quando a missão for concluída",
+												"questButtonBadgeColor":"Cor personalizada da insígnia",
+												"reorderQuests":"Ordem personalizada de missões (separados por vírgula: não reivindicadas, reivindicadas, expiradas, ignoradas)",
+												"unclaimedSubsort":"Ordenar missões não reivindicadas por"
 								}
 				},
 				"quickThemeSwitcher":{
