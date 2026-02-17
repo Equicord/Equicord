@@ -26,7 +26,7 @@ export const settings = definePluginSettings({
     systemPrompt: {
         type: OptionType.STRING,
         description: "System Prompt for the AI",
-        default: "You are a helpful assistant.",
+        default: "You are a helpful assistant who answers questions for the user in a concise and short way while using the least amount of words and punctuation.",
         placeholder: "Enter system prompt"
     },
     maxTokens: {
@@ -36,7 +36,7 @@ export const settings = definePluginSettings({
     },
     endpoint: {
         type: OptionType.STRING,
-        description: "AI Endpoint",
+        description: "OpenAI Compatible AI Endpoint",
         default: "https://openrouter.ai/api/v1/chat/completions",
         placeholder: "Enter your OpenAI compatible AI endpoint here"
     },
@@ -47,7 +47,7 @@ export const settings = definePluginSettings({
     },
     supportImages: {
         type: OptionType.BOOLEAN,
-        description: "Pass images to the AI for context (if any)",
+        description: "Pass images to the AI for context (if any). This is not supported by all models.",
         default: true
     }
 });
