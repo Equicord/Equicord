@@ -13,6 +13,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Button, TextButton } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Heading } from "@components/Heading";
+import ircColors from "@plugins/ircColors";
 import mentionAvatars from "@plugins/mentionAvatars";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/index";
@@ -325,6 +326,7 @@ interface mentionProps {
 
 interface messageProps {
     message: Message | null | undefined;
+    colorString?: string;
     colorStrings: { primaryColor: string | null, secondaryColor: string | null, tertiaryColor: string | null; } | null | undefined;
     userOverride?: User;
     isRepliedMessage?: boolean;
@@ -369,7 +371,7 @@ function getMessageName(props: messageProps): [string | null, JSX.Element | null
     const member = isWebhook ? null : target && channel ? GuildMemberStore.getMember(channel.guild_id, target.id) : null;
     const author = user && member ? { ...user, ...member } : user || member || null;
     const mentionSymbol = hideDefaultAtSign && (!isRepliedMessage || replies) ? "" : withMentionPrefix ? "@" : "";
-    return renderUsername(author, channel?.id || null, message?.id || null, isRepliedMessage ? "replies" : "messages", mentionSymbol, false, !!channel?.guild_id, props.colorStrings);
+    return renderUsername(author, channel?.id || null, message?.id || null, isRepliedMessage ? "replies" : "messages", mentionSymbol, false, !!channel?.guild_id, props.colorString, props.colorStrings);
 }
 
 function getMessageNameElement(props: messageProps): JSX.Element | null {
@@ -435,6 +437,7 @@ function renderUsername(
     mentionSymbol: string,
     hookless: boolean,
     inGuild: boolean,
+    colorString?: string,
     colorStrings?: { primaryColor: string | null, secondaryColor: string | null, tertiaryColor: string | null; } | null
 ): [string | null, JSX.Element | null, string | null] {
     const isMessage = type === "messages";
@@ -462,15 +465,25 @@ function renderUsername(
                 ? hoveringReactionPopoutSet.has((author as User).id)
                 : false;
 
+    if (colorString && !colorStrings) {
+        colorStrings = {
+            primaryColor: colorString,
+            secondaryColor: null,
+            tertiaryColor: null
+        };
+    }
+
+    const ircColorsEnabled = isPluginEnabled(ircColors.name);
+
     const authorColorStrings = colorStrings || (author as any)?.colorStrings || null;
-    const authorDisplayNameStyles = (!inGuild && (author as any)?.displayNameStyles) || null;
+    const authorDisplayNameStyles = (!inGuild && !ircColorsEnabled && (author as any)?.displayNameStyles) || null;
     const effectType = authorDisplayNameStyles ? getEffectType(authorDisplayNameStyles.effectId) : null;
     const effectCSSVars = authorDisplayNameStyles ? computeEffectCSSVars(authorDisplayNameStyles) : {};
     const hasEffect = !!effectType;
     const needsEffectDataAttr = effectType === "neon" || effectType === "toon" || effectType === "pop";
     const shouldShowEffect = hasEffect && isHovering;
     const shouldAnimateEffect = shouldShowEffect && !AccessibilityStore.useReducedMotion;
-    const shouldUseDMDefault = !inGuild && !isHovering;
+    const shouldUseDMDefault = !inGuild && !ircColorsEnabled && !isHovering;
 
     const canUseGradient = ((author as GuildMember)?.guildId ? (GuildStore.getGuild((author as GuildMember).guildId) ?? {}).premiumFeatures?.features.includes("ENHANCED_ROLE_COLORS") : !inGuild);
     const useTopRoleStyle = isMention || isReactionsPopout || channel?.isDM() || channel?.isGroupDM();
@@ -1058,8 +1071,8 @@ export default definePlugin({
             replacement: [
                 {
                     // Replace names in messages and replies.
-                    match: /(?<=colorStrings:(\i).{0,300}?)style:\i\(\),(onClick:\i,onContextMenu:\i,children:)(.{0,250}?),"data-text":(\i\+\i)/,
-                    replace: "$2$self.getMessageNameElement({...arguments[0],colorStrings:$1})??($3),\"data-text\":$self.getMessageNameText(arguments[0])??($4)"
+                    match: /(?<=colorString:(\i),colorStrings:(\i).{0,900}?)style:\i\(\),(onClick:\i,onContextMenu:\i,children:)(.{0,250}?),"data-text":(\i\+\i)/,
+                    replace: "$3$self.getMessageNameElement({...arguments[0],colorString:$1,colorStrings:$2})??($4),\"data-text\":$self.getMessageNameText(arguments[0])??($5)"
                 },
                 {
                     // Pass the message object to the should-animate checker.
