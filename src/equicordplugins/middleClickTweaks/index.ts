@@ -4,69 +4,39 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Styles } from "@api/index";
 import { definePluginSettings, SettingsStore } from "@api/Settings";
-import { createAndAppendStyle, EquicordDevs } from "@utils/index";
+import { EquicordDevs } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 
-const LEFT_CLICK = 0;
 const MIDDLE_CLICK = 1;
-const MEDIA_STYLE_ID = "middleclicktweaks-media-block";
-const MEDIA_STYLE_CONTENT = `
-    [data-list-id^="forum-channel-list"] a[data-role="img"],
-    [id^="message-accessories"] a[data-role="img"],
-    [id^="message-accessories"] video,
-    [id^="message-accessories"] img
-    {
-        pointer-events: none !important;
-    }
-`;
-
-let mediaStyle: HTMLStyleElement | null = null;
 let lastMiddleClickUp = 0;
 
-function updateMediaStyle(scope: string = "none") {
-    const shouldEnable = scope === "media" || scope === "both";
-
-    if (shouldEnable) {
-        if (!mediaStyle) {
-            mediaStyle = createAndAppendStyle(MEDIA_STYLE_ID, Styles.managedStyleRootNode);
-            mediaStyle.textContent = MEDIA_STYLE_CONTENT;
-        }
-    } else {
-        mediaStyle?.remove();
-        mediaStyle = null;
-    }
-}
-
-function updateListeners(openScope: string = "none") {
+function updateListeners() {
     document.removeEventListener("mouseup", handleMouseUp, true);
     document.removeEventListener("auxclick", handleAuxClick, true);
-    document.removeEventListener("click", handleMediaClick, true);
-
     document.addEventListener("mouseup", handleMouseUp, true);
-    if (["links", "both"].includes(openScope)) { document.addEventListener("auxclick", handleAuxClick, true); }
-    if (["media", "both"].includes(openScope)) { document.addEventListener("click", handleMediaClick, true); }
+    document.addEventListener("auxclick", handleAuxClick, true);
 }
 
 function handleAuxClick(event: MouseEvent) {
-    if (!shouldBlockLink(event)) return;
-    event.preventDefault();
-    event.stopPropagation();
-}
+    if (event.button !== MIDDLE_CLICK) return false;
 
-function handleMediaClick(event: MouseEvent) {
-    if (event.button !== LEFT_CLICK) return;
-    if (!["media", "both"].includes(settings.store.openScope)) return;
+    const { openScope } = settings.store;
 
-    const target = event.target as HTMLElement;
-    const videoControls = target.querySelector?.("[class^='videoControls']") as HTMLElement | null;
-    const video = videoControls?.querySelector?.("[class^='videoButton']") as HTMLElement | null;
+    const target = event.target as HTMLElement | null;
+    const anchor = target?.closest?.("a[href]") as HTMLAnchorElement | null;
+    const media = target?.closest?.("a[href][data-role='img'], a[href][data-role='video']") as HTMLAnchorElement | null;
+    const role = anchor?.dataset.role ?? "";
 
-    if (video) {
+    const isMedia = !!media;
+    const isLink = !isMedia && !!anchor?.href && anchor.href !== "#" && !["img", "video", "button"].includes(role);
+
+    if (isLink && ["links", "both"].includes(openScope)) {
         event.preventDefault();
         event.stopPropagation();
-        video.click();
+    } else if (isMedia && ["media", "both"].includes(openScope)) {
+        event.preventDefault();
+        event.stopPropagation();
     }
 }
 
@@ -74,33 +44,17 @@ function handleMouseUp(event: MouseEvent) {
     if (event.button === MIDDLE_CLICK) lastMiddleClickUp = Date.now();
 }
 
-function shouldBlockLink(event: MouseEvent): boolean {
-    if (event.button !== MIDDLE_CLICK) return false;
-
-    const target = event.target as HTMLElement | null;
-    const anchor = target?.closest?.("a[href]") as HTMLAnchorElement | null;
-    const role = anchor?.dataset.role ?? "";
-
-    if (!anchor) return false;
-    if (["img", "video", "button"].includes(role)) return false;
-
-    return !!anchor.href && anchor.href !== "#";
-}
-
 const settings = definePluginSettings({
     openScope: {
         type: OptionType.SELECT,
         description: "Prevent middle clicking on these content types from opening them.",
+        onChange: updateListeners,
         options: [
             { label: "Links", value: "links" },
             { label: "Media", value: "media" },
             { label: "Links & Media", value: "both" },
             { label: "None", value: "none", default: true },
-        ],
-        onChange(newValue) {
-            updateMediaStyle(newValue);
-            updateListeners(newValue);
-        }
+        ]
     },
     pasteScope: {
         type: OptionType.SELECT,
@@ -114,7 +68,7 @@ const settings = definePluginSettings({
         type: OptionType.NUMBER,
         description: "Milliseconds until pasting is enabled again after a middle click.",
         default: 100,
-        onChange(newValue) { if (newValue < 1) { settings.store.pasteThreshold = 1; } },
+        onChange(newValue) { if (newValue < 1) { settings.store.pasteThreshold = 1; } }
     }
 });
 
@@ -157,15 +111,10 @@ export default definePlugin({
 
     start() {
         migrate();
-        const { openScope } = settings.store;
-        updateMediaStyle(openScope);
-        updateListeners(openScope);
+        updateListeners();
     },
 
-    stop() {
-        updateListeners();
-        updateMediaStyle();
-    },
+    stop() { updateListeners(); },
 
     patches: [
         {
