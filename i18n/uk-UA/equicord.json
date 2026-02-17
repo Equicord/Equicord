@@ -16,7 +16,7 @@
 								}
 				},
 				"altKrispSwitch":{
-								"description":"Makes the Noise Suppression Popout switch between None and Krisp instead of Krisp and Standard"
+								"description":"Змінює перемикач випливаючого вікна Поглинання Шуму з Krisp та Стандартне на Krisp та Пусто"
 				},
 				"alwaysExpandProfiles":{
 								"description":"Always expands profile popouts to the full modal"
@@ -62,40 +62,40 @@
 								}
 				},
 				"bannersEverywhere":{
-								"description":"Displays banners in the member list ",
+								"description":"Показує банери у списку учасників ",
 								"settings":{
-												"animate":"Animate banners",
-												"preferNameplate":"prefer nameplate over banner"
+												"animate":"Анімувати банери",
+												"preferNameplate":"надавати перевагу табличці імені над банером"
 								}
 				},
 				"baseDecoder":{
-								"description":"Decode base64 content of any message and copy the decoded content.",
+								"description":"Декодуйє вміст Base64 повідомлень та копіює результат.",
 								"settings":{
-												"clickMethod":"Change the button to decode base64 content of any message.",
+												"clickMethod":"Змінити спосіб виклику декодування Base64 повідомлень",
 												"clickMethodOptions":{
-																"left":"Left Click to decode the base64 content.",
-																"right":"Right click to decode the base64 content."
+																"left":"Лівий клік для декодування вмісту Base64.",
+																"right":"Правий клік для декодування вмісту Base64."
 												}
 								},
 								"ui":{
-												"copiedToast":"Decoded content copied to clipboard!",
-												"copyDecoded":"Copy Decoded Content",
-												"decodedContent":"Decoded Content",
-												"modalTitle":"Decoded Base64 Content",
-												"tooltipLeft":"Copy Decoded (Left Click) / Decode Base64 (Right Click)",
-												"tooltipRight":"Decode Base64 (Left Click) / Copy Decoded (Right Click)"
+												"copiedToast":"Декодований вміст скопійовано!",
+												"copyDecoded":"Копіювати Декодований Вміст",
+												"decodedContent":"Декодований Вміст",
+												"modalTitle":"Декодований Вміст Base64",
+												"tooltipLeft":"Скопіювати Декодоване (Лівий Клік) / Декодувати Base64 (Правий Клік)",
+												"tooltipRight":"Декодувати Base64 (Лівий Клік) / Скопіювати Декодоване (Правий Клік)"
 								}
 				},
 				"betterAudioPlayer":{
-								"description":"Adds a spectrograph and oscilloscope visualizer to audio attachment players",
+								"description":"Додає візуалізатори спектрографа та осцилографа до програвачів аудіовкладень",
 								"settings":{
 												"forceMoveBelow":"Force the visualizer below the audio player",
-												"oscilloscope":"Enable oscilloscope visualizer",
-												"oscilloscopeColor":"Color for oscilloscope",
-												"oscilloscopeSolidColor":"Use solid color for oscilloscope",
-												"spectrograph":"Enable spectrograph visualizer",
-												"spectrographColor":"Color for spectrograph",
-												"spectrographSolidColor":"Use solid color for spectrograph"
+												"oscilloscope":"Увімкнути візуалізатор осцилографа",
+												"oscilloscopeColor":"Колір для осцилографа",
+												"oscilloscopeSolidColor":"Використовувати суцільний колір для осцилографа",
+												"spectrograph":"Увімкнути візуалізатор спектрографа",
+												"spectrographColor":"Колір спектрографа",
+												"spectrographSolidColor":"Використовувати суцільний колір для спектрографа"
 								},
 								"toasts":{
 												"invalidColor":"Invalid color format for {settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'"
