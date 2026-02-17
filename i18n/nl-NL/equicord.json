@@ -5,7 +5,7 @@
 												"description":"Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.",
 												"title":"How to connect to AudioBookShelf"
 								},
-								"description":"Rich presence for AudioBookShelf media server",
+								"description":"Rich presence voor de AudioBookShelf media server",
 								"settings":{
 												"password":"AudioBookShelf password",
 												"serverUrl":"AudioBookShelf server URL (e.g., https://abs.example.com)",
@@ -108,7 +108,7 @@
 												"reasons":"Your custom reasons"
 								},
 								"ui":{
-												"addAnotherReason":"Add another reason",
+												"addAnotherReason":"Een andere reden",
 												"reasonPlaceholder":"Reason",
 												"reasons":"Reasons"
 								}
@@ -293,7 +293,7 @@
 								}
 				},
 				"clipsEnhancements":{
-								"description":"Add more Clip FPS and duration options, custom clip length, RPC tagging and more",
+								"description":"Voeg meer opties toe voor Clip-FPS en duur, aangepaste cliplengte, RPC-tagging en meer",
 								"settings":{
 												"clipsLink":"Change FPS and duration options in Clips settings!",
 												"enableAdvancedSignals":"Enable advanced clip signals (auto-clip triggers)",
@@ -410,7 +410,7 @@
 				},
 				"customTimestamps":{
 								"about":{
-												"additional":"Additionally you can use these in your inputs:",
+												"additional":"Ook te gebruiken in je invoer:",
 												"calendar":"enables dynamic date formatting such as \"Today\" or \"Yesterday\".",
 												"relative":"gives you times such as \"4 hours ago\".",
 												"title":"How to use:"
@@ -453,11 +453,11 @@
 												"inviteExpireAfter":"Invite expiration.",
 												"inviteExpireAfterOptions":{
 																"12hours":"12 hours",
-																"1day":"1 day",
-																"1hour":"1 hour",
+																"1day":"1 dag",
+																"1hour":"1 uur",
 																"30min":"30 minutes",
-																"6hours":"6 hours",
-																"7days":"7 days",
+																"6hours":"6 uur",
+																"7days":"7 dagen",
 																"never":"Never"
 												},
 												"inviteMaxUses":"Invite max uses.",
@@ -696,7 +696,7 @@
 				"friendTags":{
 								"description":"Allows you to filter by custom tags in the quick switcher by starting a search with &",
 								"ui":{
-												"add":"Add",
+												"add":"Toevoegen",
 												"addTo":"Add to {tagName}",
 												"name":"Name",
 												"remove":"Remove",
@@ -750,7 +750,7 @@
 								}
 				},
 				"ghosted":{
-								"description":"A cute ghost will appear if you don't answer their DMs",
+								"description":"Er verschijnt een schattig spookje als je hun DM’s niet beantwoordt",
 								"settings":{
 												"exemptedChannels":"Comma-separated list of channel IDs to exempt from ghosting (right-click a DM channel to copy its ID)",
 												"ignoreBots":"Ignore DMs from bots",
@@ -782,7 +782,7 @@
 								},
 								"ui":{
 												"addToCollection":"Add To Collection",
-												"addedAt":"Added At",
+												"addedAt":"Toegevoegd om",
 												"areYouSure":"Are you sure?",
 												"ascending":"Ascending",
 												"cannotRefresh":"Cannot refresh: GIF missing metadata (re-add to collection)",
@@ -887,7 +887,7 @@
 								}
 				},
 				"hideChatButtons":{
-								"description":"Able to hide the chat buttons",
+								"description":"Kan chatknoppen verbergen",
 								"settings":{
 												"color":"Color it red on open",
 												"open":"Opened by default"
@@ -1060,7 +1060,7 @@
 												"episodeCover":"Episode Cover",
 												"seriesCover":"Series Cover"
 								},
-								"description":"Rich presence for Jellyfin media server",
+								"description":"Rich presence voor de Jellyfin media server",
 								"episodeFormatOptions":{
 												"fulltext":"Season 1 Episode 1",
 												"s01e01":"S01E01",
@@ -1178,8 +1178,8 @@
 												"keywords":"Manage keywords"
 								},
 								"ui":{
-												"addId":"Add ID",
-												"addKeywordEntry":"Add Keyword Entry",
+												"addId":"ID toevoegen",
+												"addKeywordEntry":"Trefwoord toevoegen",
 												"clearAll":"Clear All",
 												"ignoreCase":"Ignore Case",
 												"keywordEntry":"Keyword Entry {index}",
@@ -1211,7 +1211,7 @@
 				"listenBrainzRPC":{
 								"about":{
 												"description":"The MusicBrainz API does not require an API key, but it does require a meaningful user-agent string. For most, an email address should suffice.",
-												"title":"About MusicBrainz API"
+												"title":"Over MusicBrainz API"
 								},
 								"buttons":{
 												"profile":"ListenBrainz Profile",
@@ -1325,6 +1325,26 @@
 												"sortNewest":"Sort logs by newest.",
 												"timeBasedCleanupMinutes":"Automatically remove messages from servers that are older than this many minutes. Set to 0 to disable time-based cleanup.",
 												"whitelistedIds":"Whitelisted server, channel, or user IDs."
+								}
+				},
+				"moreCommands":{
+								"description":"Eztra slash-commandos,waaronder systeeminformatie, dobbelsteenworpen, kop of munt en meer"
+				},
+				"moreStickers":{
+								"description":"Voeg meer stickers van externe bronnen"
+				},
+				"voiceMessageTranscriber":{
+								"modal":{
+												"action":"Actie"
+								}
+				},
+				"whitelistedEmojis":{
+								"contextMenu":{
+												"addAllGuildEmojis":"Voeg alle Guild emojis toe"
+								},
+								"toasts":{
+												"added":"“{name}” toegevoegd aan de lijst",
+												"addedBulk":"{count} emoji’s toegevoegd aan de lijst, {skipped} stonden al in de lijst"
 								}
 				}
 }
