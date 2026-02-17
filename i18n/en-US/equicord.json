@@ -1556,7 +1556,7 @@
         }
     },
     "questify": {
-        "description": "Enhanced quest management with auto-completion, notifications, and custom styling",
+        "description": "Enhance your Quest experience with a suite of features, or disable them entirely if they're not your thing.",
         "settings": {
             "questButtonDisplay": "When to show quest button in server list",
             "questButtonUnclaimed": "Show badge/pill for unclaimed quests",
