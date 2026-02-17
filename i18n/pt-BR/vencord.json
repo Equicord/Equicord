@@ -128,6 +128,11 @@
 												"keepOpen":"Mantém o seletor de gif aberto após selecionar um gif"
 								}
 				},
+				"betterNotesBox":{
+								"settings":{
+												"hide":"Ocultar notas"
+								}
+				},
 				"betterRoleContext":{
 								"copyRoleColor":"Copiar Cor do Cargo",
 								"description":"Adiciona opções para copiar a cor do cargo / editar cargo / visualizar o ícone do cargo ao clicar com o botão direito do mouse nos cargos no perfil do usuário.",
@@ -169,6 +174,13 @@
 								"description":"This plugin allows you to enlarge stream previews",
 								"name":"BiggerStreamPreview",
 								"viewStreamPreview":"Ver prévia de transmissão"
+				},
+				"blurNsfw":{
+								"description":"Desfocar anexos NSFW até o mouse sobrepor",
+								"settings":{
+												"blurAllChannels":"Desfocar anexos em todos os canais (não apenas NSFW)",
+												"blurAmount":"Quantidade de Desfoque (em pixeis)"
+								}
 				},
 				"callTimer":{
 								"description":"Adicione temporizadores de chamadas para todos os usuários nos canais de voz e no status de conexão.",
@@ -223,6 +235,9 @@
 												"updated":"Suas configurações foram atualizadas! Clique aqui para reiniciar e aplicar todas as alterações!",
 												"updatedRemote":"Suas configurações foram atualizadas! Clique aqui para reiniciar e aplicar todas as alterações!"
 								}
+				},
+				"colorSighted":{
+								"description":"Remove os ícones para daltônicos dos status, assim como o Discord 2015-2017"
 				},
 				"commandsAPI":{
 								"description":"API necessária para qualquer coisa que utilize comandos"
