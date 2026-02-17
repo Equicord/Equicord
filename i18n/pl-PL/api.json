@@ -15,7 +15,7 @@
 								"fallback":"Error Showing Notice"
 				},
 				"notifications":{
-								"dismissNotification":"Dismiss Notification",
+								"dismissNotification":"Odrzuć powiadomienie",
 								"logs":{
 												"body_one":"This will permanently remove {count} notification. This action cannot be undone.",
 												"body_other":"This will permanently remove {count} notifications. This action cannot be undone.",
@@ -23,15 +23,15 @@
 												"cancel":"Nevermind",
 												"clearNotificationLog":"Clear Notification Log",
 												"confirm":"Do it!",
-												"title":"Are you sure?"
+												"title":"Jesteś tego pewny?"
 								},
 								"missedNotifications":{
 												"body_one":"{count} notification received",
 												"body_other":"{count} notifications received",
 												"title":"While you were away"
 								},
-								"noNotifications":"No notifications yet",
-								"notificationLog":"Notification Log",
-								"notificationSettings":"Notification Settings"
+								"noNotifications":"Brak powiadomień na razie",
+								"notificationLog":"Dziennik Powiadomień",
+								"notificationSettings":"Ustawienia powiadomień"
 				}
 }
