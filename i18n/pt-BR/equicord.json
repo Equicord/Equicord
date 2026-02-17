@@ -1548,6 +1548,12 @@
 												"notifyOnQuestComplete":"Mostrar notificação quando a missão for concluída",
 												"questButtonBadgeColor":"Cor personalizada da insígnia",
 												"reorderQuests":"Ordem personalizada de missões (separados por vírgula: não reivindicadas, reivindicadas, expiradas, ignoradas)",
+												"restyleQuestsClaimed":"Cor personalizada para missões reivindicadas",
+												"restyleQuestsExpired":"Cor personalizada para missões expiradas",
+												"restyleQuestsGradient":"Estilo de gradiente para missões estilizadas",
+												"restyleQuestsIgnored":"Cor personalizada para missões ignoradas",
+												"restyleQuestsPreload":"Pré-carregar recursos de missões para melhor estilização",
+												"restyleQuestsUnclaimed":"Cor personalizada para missões não reivindicadas",
 												"unclaimedSubsort":"Ordenar missões não reivindicadas por"
 								}
 				},
