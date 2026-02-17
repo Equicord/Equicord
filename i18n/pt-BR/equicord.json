@@ -35,10 +35,10 @@
 				"animalese":{
 								"description":"Reproduz animalese de animal crossing para cada mensagem enviada (eles são muito tagarela)",
 								"quality":{
-												"high":"Alto",
+												"high":"Alta",
 												"low":"Baixa",
 												"lowest":"Mais baixa",
-												"medium":"Médio"
+												"medium":"Média"
 								},
 								"settings":{
 												"messageLengthLimit":"Tamanho máximo de mensagens para processar",
@@ -87,7 +87,7 @@
 								}
 				},
 				"betterActivities":{
-								"description":"Mostra todas as atividades na lista de membros e no pop-out do usuário, com opções para personalizar a exibição",
+								"description":"Mostra todas as atividades na lista de membros e no popout de usuário, com opções para personalizar a exibição",
 								"options":{
 												"carousel":"Carrossel",
 												"list":"Lista"
@@ -97,7 +97,7 @@
 												"hideTooltip":"Ocultar a dica nos ícones de atividade",
 												"iconSize":"Tamanho dos ícones de atividade",
 												"memberList":"Mostrar atividades na lista de membros",
-												"removeGameActivityStatus":"Remova o indicador de status da atividade do jogo",
+												"removeGameActivityStatus":"Remover o indicador de status de atividade de jogo",
 												"renderGifs":"Renderize GIFs em ícones de atividade",
 												"specialFirst":"Mostre atividades especiais primeiro",
 												"userPopout":"Mostrar todas as atividades no popout do usuário"
@@ -106,7 +106,7 @@
 				"betterAudioPlayer":{
 								"description":"Adiciona um visualizador de espectrógrafo e osciloscópio aos reprodutores de anexos de áudio",
 								"settings":{
-												"forceMoveBelow":"Forçar o visualizador abaixo do reprodutor de áudio",
+												"forceMoveBelow":"Forçar o visualizador abaixo do player de áudio",
 												"oscilloscope":"Ativar visualizador de osciloscópio",
 												"oscilloscopeColor":"Cor para osciloscópio",
 												"oscilloscopeSolidColor":"Usar cor sólida para o osciloscópio",
@@ -119,7 +119,7 @@
 								}
 				},
 				"betterBanReasons":{
-								"description":"Criar motivos personalizados para usar na janela de banimento do Discord e/ou exibir uma entrada de texto por padrão em vez das opções.",
+								"description":"Crie motivos personalizados para usar na janela de ban do Discord e/ou exibir uma entrada de texto por padrão em vez das opções.",
 								"settings":{
 												"isTextInputDefault":"Mostra uma entrada de texto em vez de um menu de seleção por padrão. (Equivalente a clicar na opção \"Outro\")",
 												"reasons":"Seus motivos personalizados"
@@ -139,9 +139,9 @@
 				"betterCommands":{
 								"commands":{
 												"refresh":{
-																"description":"Atualiza os comandos do aplicativo Discord localmente",
+																"description":"Atualiza os comandos de Apps do Discord localmente",
 																"failed":"Falha ao atualizar comandos. Verifique o console para detalhes.",
-																"refreshing":"Atualizando comandos do aplicativo...",
+																"refreshing":"Atualizando comandos de apps...",
 																"success":"Comandos atualizados com sucesso!",
 																"userOption":"usuário específico para tentar atualizar"
 												}
@@ -153,7 +153,7 @@
 								}
 				},
 				"betterInvites":{
-								"description":"Ver a data de expiração dos convites, visualizar o perfil de quem convidou e pré-visualizar servidores antes de entrar ao clicar no nome",
+								"description":"Veja a data de expiração dos convites, visualize o perfil de quem convidou e pré-visualize servidores antes de entrar ao clicar no nome",
 								"ui":{
 												"expireTooltip":"Este convite irá {expiry}",
 												"expireWill":"expirar",
@@ -169,14 +169,14 @@
 								"settings":{
 												"alwaysShowUsername":"Sempre mostrar nome de usuário em vez de status.",
 												"removeAudioMenus":"Remova menus ao lado dos botões de mutar e silenciar áudio.",
-												"removeAvatarDecoration":"Remover decoração de avatar.",
-												"removeButtonTooltips":"Remover dicas de ferramentas dos botões.",
-												"removeNameplate":"Remover estilo da placa de identificação.",
-												"removeUsernameStyles":"Remover cores e efeitos de nome de usuário."
+												"removeAvatarDecoration":"Remove decoração de avatar.",
+												"removeButtonTooltips":"Remove dicas (tooltips) dos botões.",
+												"removeNameplate":"Remove o estilo da placa de identificação.",
+												"removeUsernameStyles":"Remove cores e efeitos de nome de usuário."
 								}
 				},
 				"blockKeywords":{
-								"description":"Bloqueia mensagens contendo palavras-chave específicas definidas pelo usuário, como se o usuário que as enviou estivesse bloqueado.",
+								"description":"Bloqueia mensagens contendo palavras específicas definidas pelo usuário, como se o usuário que as enviou estivesse bloqueado.",
 								"settings":{
 												"blockedWords":"Lista de palavras separadas por vírgulas para bloquear",
 												"caseSensitive":"Se deve usar uma pesquisa sensível a maiúsculas e minúsculas ou não",
@@ -188,7 +188,7 @@
 								"description":"Impede que Krisp carregue"
 				},
 				"bypassPinPrompt":{
-								"description":"Ignorar a confirmação de fixação ao usar as funções de fixar"
+								"description":"Ignora o prompt de fixar ao usar as funções de fixar"
 				},
 				"bypassStatus":{
 								"contextMenu":{
@@ -216,57 +216,57 @@
 								}
 				},
 				"channelBadges":{
-								"description":"Adiciona emblemas a canais baseados no seu tipo",
+								"description":"Adiciona selos a canais baseados no seu tipo",
 								"settings":{
-												"announcementBadgeColor":"Cor do emblema de Anúncio",
-												"announcementBadgeLabel":"Rótulo do emblema de Anúncio",
-												"announcementThreadBadgeColor":"Cor do emblema de Tópico de Anúncio",
-												"announcementThreadBadgeLabel":"Rótulo do emblema de Tópico de Anúncio",
-												"categoryBadgeColor":"Cor do emblema de Categoria",
-												"categoryBadgeLabel":"Rótulo do emblema de Categoria",
-												"directoryBadgeColor":"Cor do emblema de Diretório",
-												"directoryBadgeLabel":"Rótulo do emblema de Diretório",
-												"forumBadgeColor":"Cor do emblema de Fórum",
-												"forumBadgeLabel":"Rótulo do emblema de Fórum",
-												"lockedBadgeColor":"Cor do emblema de Bloqueado",
-												"lockedBadgeLabel":"Rótulo do emblema de Bloqueado",
-												"mediaBadgeColor":"Cor do emblema de Mídia",
-												"mediaBadgeLabel":"Rótulo do emblema de Mídia",
-												"nsfwBadgeColor":"Cor do emblema de NSFW",
-												"nsfwBadgeLabel":"Rótulo do emblema de NSFW",
-												"oneBadgePerChannel":"Mostrar apenas um emblema por canal",
-												"privateThreadBadgeColor":"Cor do emblema de Tópico Privado",
-												"privateThreadBadgeLabel":"Rótulo do emblema de Tópico privado",
-												"publicThreadBadgeColor":"Cor do emblema de Tópico Público",
-												"publicThreadBadgeLabel":"Rótulo do emblema de Tópico público",
-												"rulesBadgeColor":"Cor do emblema de Regras",
-												"rulesBadgeLabel":"Rótulo do emblema de Regras",
-												"showAnnouncementBadge":"Mostrar emblema de Anúncio",
-												"showAnnouncementThreadBadge":"Mostrar emblema de Tópico de Anúncio",
-												"showCategoryBadge":"Mostrar emblema de Categoria",
-												"showDirectoryBadge":"Mostrar emblema de Diretório",
-												"showForumBadge":"Mostrar emblema de Fórum",
-												"showLockedBadge":"Mostrar emblema de Bloqueado",
-												"showMediaBadge":"Mostrar emblema de Mídia",
-												"showNSFWBadge":"Mostrar emblema de NSFW",
-												"showPrivateThreadBadge":"Mostrar emblema de Tópico Privado",
-												"showPublicThreadBadge":"Mostrar emblema de Tópico Público",
-												"showRulesBadge":"Mostrar emblema de Regras",
-												"showStageBadge":"Mostrar emblema de Palco",
-												"showTextBadge":"Mostrar emblema de Texto",
-												"showUnknownBadge":"Mostrar emblema de Desconhecido",
-												"showVoiceBadge":"Mostrar emblema de Voz",
-												"stageBadgeColor":"Cor do emblema de Palco",
-												"stageBadgeLabel":"Rótulo do emblema de Palco",
-												"textBadgeColor":"Cor do emblema de Texto",
-												"textBadgeLabel":"Rótulo do emblema de Texto",
-												"unknownBadgeColor":"Cor do emblema de Desconhecido",
-												"unknownBadgeLabel":"Rótulo do emblema de Desconhecido",
-												"voiceBadgeColor":"Cor do emblema de Voz",
-												"voiceBadgeLabel":"Rótulo do emblema de Voz"
+												"announcementBadgeColor":"Cor do selo de Anúncio",
+												"announcementBadgeLabel":"Rótulo do selo de Anúncio",
+												"announcementThreadBadgeColor":"Cor do selo de Tópico de Anúncio",
+												"announcementThreadBadgeLabel":"Rótulo do selo de Tópico de Anúncio",
+												"categoryBadgeColor":"Cor do selo de Categoria",
+												"categoryBadgeLabel":"Rótulo do selo de Categoria",
+												"directoryBadgeColor":"Cor do selo de Diretório",
+												"directoryBadgeLabel":"Rótulo do selo de Diretório",
+												"forumBadgeColor":"Cor do selo de Fórum",
+												"forumBadgeLabel":"Rótulo do selo de Fórum",
+												"lockedBadgeColor":"Cor do selo de Bloqueado",
+												"lockedBadgeLabel":"Rótulo do selo de Bloqueado",
+												"mediaBadgeColor":"Cor do selo de Mídia",
+												"mediaBadgeLabel":"Rótulo do selo de Mídia",
+												"nsfwBadgeColor":"Cor do selo de NSFW",
+												"nsfwBadgeLabel":"Rótulo do selo de NSFW",
+												"oneBadgePerChannel":"Mostrar apenas um selo por canal",
+												"privateThreadBadgeColor":"Cor do selo de Tópico Privado",
+												"privateThreadBadgeLabel":"Rótulo do selo de Tópico privado",
+												"publicThreadBadgeColor":"Cor do selo de Tópico Público",
+												"publicThreadBadgeLabel":"Rótulo do selo de Tópico público",
+												"rulesBadgeColor":"Cor do selo de Regras",
+												"rulesBadgeLabel":"Rótulo do selo de Regras",
+												"showAnnouncementBadge":"Mostrar selo de Anúncio",
+												"showAnnouncementThreadBadge":"Mostrar selo de Tópico de Anúncio",
+												"showCategoryBadge":"Mostrar selo de Categoria",
+												"showDirectoryBadge":"Mostrar selo de Diretório",
+												"showForumBadge":"Mostrar selo de Fórum",
+												"showLockedBadge":"Mostrar selo de Bloqueado",
+												"showMediaBadge":"Mostrar selo de Mídia",
+												"showNSFWBadge":"Mostrar selo de NSFW",
+												"showPrivateThreadBadge":"Mostrar selo de Tópico Privado",
+												"showPublicThreadBadge":"Mostrar selo de Tópico Público",
+												"showRulesBadge":"Mostrar selo de Regras",
+												"showStageBadge":"Mostrar selo de Palco",
+												"showTextBadge":"Mostrar selo de Texto",
+												"showUnknownBadge":"Mostrar selo de Desconhecido",
+												"showVoiceBadge":"Mostrar selo de Voz",
+												"stageBadgeColor":"Cor do selo de Palco",
+												"stageBadgeLabel":"Rótulo do selo de Palco",
+												"textBadgeColor":"Cor do selo de Texto",
+												"textBadgeLabel":"Rótulo do selo de Texto",
+												"unknownBadgeColor":"Cor do selo de Desconhecido",
+												"unknownBadgeLabel":"Rótulo do selo de Desconhecido",
+												"voiceBadgeColor":"Cor do selo de Voz",
+												"voiceBadgeLabel":"Rótulo do selo de Voz"
 								},
 								"tooltips":{
-												"lockedChannel":"Este canal está bloqueado.",
+												"lockedChannel":"Este canal está trancado.",
 												"nsfwChannel":"Este canal está marcado como NSFW.",
 												"rulesChannel":"Este canal é o canal de regras do servidor."
 								}
@@ -469,22 +469,22 @@
 												},
 												"inviteExpireAfter":"Expiração do convite.",
 												"inviteExpireAfterOptions":{
-																"12hours":"12 hours",
-																"1day":"1 day",
-																"1hour":"1 hour",
-																"30min":"30 minutes",
-																"6hours":"6 hours",
-																"7days":"7 days",
+																"12hours":"12 horas",
+																"1day":"1 dia",
+																"1hour":"1 hora",
+																"30min":"30 minutos",
+																"6hours":"6 horas",
+																"7days":"7 dias",
 																"never":"Nunca"
 												},
 												"inviteMaxUses":"Número máximo de usos do convite.",
 												"inviteMaxUsesOptions":{
-																"100uses":"100 uses",
-																"10uses":"10 uses",
-																"1use":"1 use",
-																"25uses":"25 uses",
-																"50uses":"50 uses",
-																"5uses":"5 uses",
+																"100uses":"100 usos",
+																"10uses":"10 usos",
+																"1use":"1 uso",
+																"25uses":"25 usos",
+																"50uses":"50 usos",
+																"5uses":"5 usos",
 																"noLimit":"No limit"
 												},
 												"inviteTemporaryMembership":"Grant temporary membership.",
@@ -767,7 +767,7 @@
 								}
 				},
 				"ghosted":{
-								"description":"A cute ghost will appear if you don't answer their DMs",
+								"description":"Um fantasma fofo aparecerá se você não responder às DMs dele",
 								"settings":{
 												"exemptedChannels":"Comma-separated list of channel IDs to exempt from ghosting (right-click a DM channel to copy its ID)",
 												"ignoreBots":"Ignorar DMs de bots",
@@ -782,13 +782,13 @@
 								}
 				},
 				"gifCollections":{
-								"description":"Allows you to create collections of gifs",
+								"description":"Allows you to create collections of GIFs",
 								"settings":{
 												"collectionPrefix":"The prefix for collections",
 												"collectionsSortOrder":"The order of sorting for collections",
 												"collectionsSortType":"The type of sorting for collections",
-												"defaultEmptyCollectionImage":"The image / gif that will be shown when a collection has no images / gifs",
-												"itemPrefix":"The prefix for gif items",
+												"defaultEmptyCollectionImage":"The image / GIF that will be shown when a collection has no images / GIFs",
+												"itemPrefix":"The prefix for GIF items",
 												"onlyShowCollections":"Only show collections",
 												"preventDuplicates":"Prevent adding the same GIF to a collection multiple times",
 												"showCopyImageLink":"Show 'Copy Image Link' option in context menus",
@@ -799,7 +799,7 @@
 								},
 								"ui":{
 												"addToCollection":"Add To Collection",
-												"addedAt":"Added At",
+												"addedAt":"Adicionado em",
 												"areYouSure":"Are you sure?",
 												"ascending":"Ascending",
 												"cannotRefresh":"Cannot refresh: GIF missing metadata (re-add to collection)",
@@ -849,9 +849,9 @@
 				},
 				"gifRoulette":{
 								"commands":{
-												"gifroulette":"Tempt fate and send a gif"
+												"gifroulette":"Tempt fate and send a GIF"
 								},
-								"description":"Adds a command to send a random gif from your favourites, and a one in ten chance to ping the owner of the server",
+								"description":"Adds a command to send a random GIF from your favourites, and a one in ten chance to ping the owner of the server",
 								"settings":{
 												"pingOwnerChance":"If there should be a 1 in 10 change to ping the owner of the guild (oh no)"
 								}
@@ -904,7 +904,7 @@
 								}
 				},
 				"hideChatButtons":{
-								"description":"Able to hide the chat buttons",
+								"description":"Capaz de ocultar os botões de chat",
 								"settings":{
 												"color":"Color it red on open",
 												"open":"Opened by default"
@@ -990,12 +990,12 @@
 				},
 				"imgToGif":{
 								"commands":{
-												"height":"Height of the gif",
+												"height":"Height of the GIF",
 												"image":"Anexo de imagem a ser usado",
-												"imgtogif":"Allows you to turn an image to a gif",
-												"width":"Largura do gif"
+												"imgtogif":"Allows you to turn an image to a GIF",
+												"width":"Largura do GIF"
 								},
-								"description":"Adds a /imgtogif slash command to create a gif from any image",
+								"description":"Adds a /imgtoGIF slash command to create a GIF from any image",
 								"errors":{
 												"noImage":"No Image specified!",
 												"notAnImage":"Upload is not an image"
@@ -1004,7 +1004,7 @@
 				"inRole":{
 								"commands":{
 												"inrole":"Know who is in a role",
-												"role":"The role"
+												"role":"O cargo"
 								},
 								"description":"Know who is in a role with the role context menu or /inrole command (read plugin info!)",
 								"errors":{
@@ -1033,7 +1033,7 @@
 								}
 				},
 				"instantScreenshare":{
-								"description":"Compartilhar tela instantaneamente ao entrar em um canal de voz com suporte para fontes de desktop, janelas e dispositivos de entrada de vídeo (câmeras, placas de captura)",
+								"description":"Compartilha tela instantaneamente ao entrar em um canal de voz com suporte para fontes de desktop, janelas e dispositivos de entrada de vídeo (câmeras, placas de captura)",
 								"info":{
 												"linux":"For Linux",
 												"soundPreview":"Regarding Sound & Preview Settings",
@@ -1195,9 +1195,9 @@
 												"keywords":"Manage keywords"
 								},
 								"ui":{
-												"addId":"Add ID",
+												"addId":"Adicionar ID",
 												"addKeywordEntry":"Add Keyword Entry",
-												"clearAll":"Clear All",
+												"clearAll":"Limpar Tudo",
 												"ignoreCase":"Ignorar Maiúsculas/Minúsculas",
 												"keywordEntry":"Keyword Entry {index}",
 												"keywords":"Keywords",
@@ -1228,7 +1228,7 @@
 				"listenBrainzRPC":{
 								"about":{
 												"description":"The MusicBrainz API does not require an API key, but it does require a meaningful user-agent string. For most, an email address should suffice.",
-												"title":"About MusicBrainz API"
+												"title":"Sobre a API do MusicBrainz"
 								},
 								"buttons":{
 												"profile":"ListenBrainz Profile",
@@ -1292,7 +1292,7 @@
 								}
 				},
 				"messageColors":{
-								"description":"Renderize códigos de cores (hex, rgb, hsl) em mensagens com visualização de cores",
+								"description":"Renderiza códigos de cores (hex, rgb, hsl) em mensagens com visualização de cores",
 								"settings":{
 												"blockView":"Posição do bloco de cor",
 												"blockViewOptions":{
@@ -1312,8 +1312,8 @@
 				"messageFetchTimer":{
 								"description":"Mostrar horários de busca de mensagens na barra de bate-papo",
 								"settings":{
-												"iconColor":"Cor do ícone do temporizador de carregamento",
-												"showIcon":"Mostrar o ícone do temporizador de carregamento",
+												"iconColor":"Cor do ícone do temporizador de busca",
+												"showIcon":"Mostrar o ícone do temporizador de busca",
 												"showMs":"Mostrar milissegundos em vez de segundos"
 								}
 				},
@@ -1334,7 +1334,7 @@
 												"importing":"Importando..."
 								},
 								"modal":{
-												"clearAllLogs":"Clear All Logs",
+												"clearAllLogs":"Limpar Todas as Logs",
 												"clearVisibleLogs":"Clear Visible Logs",
 												"copyChannelId":"Copy Channel ID",
 												"copyContent":"Copiar Conteúdo",
@@ -1398,17 +1398,17 @@
 				"messageNotifier":{
 								"description":"Seja notificado quando usuários específicos enviarem mensagens",
 								"settings":{
-												"users":"IDs de usuário para receber notificações (separados por vírgula)"
+												"users":"IDs de usuários para receber notificações (separados por vírgula)"
 								}
 				},
 				"messagePeek":{
-								"description":"Espiar a última mensagem em DMs sem abri-las"
+								"description":"Espia a última mensagem em DMs sem abri-las"
 				},
 				"messageTranslate":{
-								"description":"Traduzir mensagens automaticamente para o seu idioma preferido",
+								"description":"Traduzi mensagens automaticamente para o seu idioma preferido",
 								"settings":{
 												"confidenceRequirement":"Nível mínimo de confiança para tradução (0-1)",
-												"targetLanguage":"Idioma de destino para tradução (por exemplo, en, es, fr)"
+												"targetLanguage":"Idioma de destino para tradução (ex: en, es, fr)"
 								}
 				},
 				"micLoopbackTester":{
@@ -1418,22 +1418,22 @@
 								"description":"Comandos de barra adicionais incluindo informações do sistema, rolagem de dados, cara ou coroa, e mais",
 								"settings":{
 												"addFreakyEnding":"Adicione 👅 ou ❤️ no final do comando freaky",
-												"uwuEveryMessage":"Faça todas as mensagens fofinhas :3",
-												"uwuEverything":"Transforma todo o texto em uwu - péssima ideia"
+												"uwuEveryMessage":"Transforma todas as mensagens em uwu",
+												"uwuEverything":"Transforma todo texto em uwu - péssima ideia"
 								}
 				},
 				"moreKaomoji":{
 								"description":"Mais comandos de barra de kaomoji para expressar emoções"
 				},
 				"moreStickers":{
-								"description":"Adicionee mais pacotes de slickers de fontes externas",
+								"description":"Adiciona mais pacotes de figurinhas de fontes externas",
 								"settings":{
 												"packs":"Gerenciar pacotes de figurinhas",
 												"promptToUpload":"Confirmar antes de enviar figurinhas"
 								}
 				},
 				"moreUserTags":{
-								"description":"Mostrar tags de usuário adicionais baseadas em permissões e cargos",
+								"description":"Mostra tags de usuário adicionais baseadas em permissões e cargos",
 								"settings":{
 												"dontShowBotTag":"Ocultar a tag BOT padrão",
 												"dontShowForBots":"Não mostrar tags para usuários bot",
@@ -1456,10 +1456,10 @@
 								}
 				},
 				"musicControls":{
-								"description":"Mostrar controles do player de música para Spotify, Tidal e YouTube Music",
+								"description":"Mostra controles do player de música para Spotify, Tidal e YouTube Music",
 								"settings":{
 												"FallbackProvider":"Usar provedor alternativo quando o principal falhar",
-												"LyricDelay":"Deslocamento de atraso da letra",
+												"LyricDelay":"Ajuste de atraso da letra",
 												"LyricsConversion":"Traduzir automaticamente ou romanizar letras",
 												"LyricsPosition":"Posição da letra em relação ao player",
 												"LyricsProvider":"Fonte para as Letras",
@@ -1472,12 +1472,12 @@
 												"showSpotifyLyrics":"Mostrar letras do Spotify",
 												"showTidalControls":"Mostrar controles do Tidal",
 												"showTidalLyrics":"Mostrar letras do Tidal",
-												"showYoutubeMusicControls":"Mostrar controles do Yutube Music",
-												"useSpotifyUris":"Abrir URIs do Spotify ao invés de URLs"
+												"showYoutubeMusicControls":"Mostrar controles do Youtube Music",
+												"useSpotifyUris":"Abrir URIs do Spotify em vez de URLs"
 								}
 				},
 				"neverPausePreviews":{
-								"description":"Nunca pausar pré-visualizações de vídeo ao trocar de canal ou perder o foco",
+								"description":"Nunca pausa as prévias de vídeo ao trocar de canal ou tirar o foco",
 								"warning":"Isso pode aumentar o uso de recursos e o consumo de dados"
 				},
 				"newPluginsManager":{
@@ -1490,7 +1490,7 @@
 								"description":"Remove marcadores de mensagens escapando-os"
 				},
 				"noModalAnimation":{
-								"description":"Desativar animações de modal para interações de interface mais rápidas"
+								"description":"Desativa animações de modal para interações de interface mais rápidas"
 				},
 				"noNitroUpsell":{
 								"description":"Remove propagandas do Nitro substituindo seu tipo de premium"
@@ -1504,7 +1504,7 @@
 												"intensityOptions":{
 																"normal":"Normal - Efeitos sutis"
 												},
-												"superIntensePartyMode":"Level de intensidade do modo Festa"
+												"superIntensePartyMode":"Nível de intensidade do modo Festa"
 								}
 				},
 				"pingNotifications":{
@@ -1521,8 +1521,8 @@
 				},
 				"polishWording":{
 								"settings":{
-												"expandContractions":"Expandir contrações (ex.: 'don't' → 'do not')",
-												"fixApostrophes":"Corrigir apóstrofos ausentes em contrações (ex.: 'dont' → 'don't')",
+												"expandContractions":"Expandir contrações (ex: 'don't' → 'do not')",
+												"fixApostrophes":"Corrigir apóstrofos ausentes em contrações (ex: 'dont' → 'don't')",
 												"fixCapitalization":"Corrigir capitalização de frases",
 												"fixPunctuation":"Adicionar pontos ao final das frases",
 												"fixPunctuationFrequency":"Frequência de adição automática de pontos (0-100%)"
@@ -1541,20 +1541,20 @@
 												"intense":"Intenso"
 								},
 								"settings":{
-												"claimedSubsort":"Ordenar missões reivindicadas por",
+												"claimedSubsort":"Ordenar missões resgatadas por",
 												"expiredSubsort":"Ordenar missões expiradas por",
 												"ignoredSubsort":"Ordenar missões ignoradas por",
-												"makeMobileQuestsDesktopCompatible":"Tornar missões de vídeo exclusivas de mobile completáveis no desktop",
-												"notifyOnQuestComplete":"Mostrar notificação quando a missão for concluída",
+												"makeMobileQuestsDesktopCompatible":"Tornar missões de vídeo exclusivas para mobile completáveis no desktop",
+												"notifyOnQuestComplete":"Mostrar notificação quando uma missão for concluída",
 												"questButtonBadgeColor":"Cor personalizada da insígnia",
 												"reorderQuests":"Ordem personalizada de missões (separados por vírgula: não reivindicadas, reivindicadas, expiradas, ignoradas)",
-												"restyleQuestsClaimed":"Cor personalizada para missões reivindicadas",
+												"restyleQuestsClaimed":"Cor personalizada para missões resgatadas",
 												"restyleQuestsExpired":"Cor personalizada para missões expiradas",
 												"restyleQuestsGradient":"Estilo de gradiente para missões estilizadas",
 												"restyleQuestsIgnored":"Cor personalizada para missões ignoradas",
-												"restyleQuestsPreload":"Pré-carregar recursos de missões para melhor estilização",
-												"restyleQuestsUnclaimed":"Cor personalizada para missões não reivindicadas",
-												"unclaimedSubsort":"Ordenar missões não reivindicadas por"
+												"restyleQuestsPreload":"Pré-carregar assets das missões para melhor estilização",
+												"restyleQuestsUnclaimed":"Cor personalizada para missões não resgatadas",
+												"unclaimedSubsort":"Ordenar missões não resgatadas por"
 								}
 				},
 				"quickThemeSwitcher":{
@@ -1583,20 +1583,20 @@
 												"assetURL":"URL personalizada para o RPC (Padrão: sua foto de perfil)",
 												"lastFMApiKey":"Chave de API do Last.fm (obtenha em last.fm/api)",
 												"lastFMStatFormat":"Formato para estatística do Last.fm ($album, $artist)",
-												"lastFMUsername":"Nome de usuário do Last.Fm",
+												"lastFMUsername":"Nome de usuário Last.Fm",
 												"statDisplay":"Estatísticas a serem exibidas"
 								},
 								"statOptions":{
 												"messagesAllTime":"Total de mensagens enviadas",
 												"messagesToday":"Mensagens enviadas hoje",
-												"mostListenedAlbum":"Álbuns mais escutado esta semana (Last.fm)"
+												"mostListenedAlbum":"Álbum mais escutado esta semana (Last.fm)"
 								}
 				},
 				"scheduledMessages":{
 								"description":"Agende mensagens para enviar mais tarde",
 								"settings":{
 												"maxMessagesPerMinute":"Máximo de mensagens agendadas por canal que podem ser enviadas no mesmo minuto",
-												"showPhantomMessages":"Mostrar mensagens agendas como mensagens fantasma no chat"
+												"showPhantomMessages":"Mostrar mensagens agendadas como mensagens fantasmas no chat"
 								}
 				},
 				"sekaiStickers":{
@@ -1607,16 +1607,21 @@
 				"selfForward":{
 								"description":"Encaminhar mensagens para você mesmo"
 				},
+				"signature":{
+								"settings":{
+												"contextMenu":"Adiciona opção para ativar/desativar a funcionalidade na entrada de chat"
+								}
+				},
 				"timezones":{
 								"settings":{
-												"24hTime":"Mostrar hora no formato 24h",
+												"24hTime":"Mostrar horário no formato 24h",
 												"databaseUrl":"URL do banco de dados para armazenamento de fusos horários",
 												"preferDatabaseOverLocal":"Preferir banco de dados ao armazenamento local para fuso horários",
 												"resetDatabaseTimezone":"Redefina seu fuso horário no banco de dados",
 												"setDatabaseTimezone":"Defina seu fuso horário no banco de dados",
 												"showMessageHeaderTime":"Mostrar hora no cabeçalho da mensagem",
 												"showOwnTimezone":"Mostrar seu próprio fuso horário nos perfis e cabeçalhos de mensagens",
-												"showTimezoneInfo":"Mostrar informações de fuso horário ao lado da hora",
+												"showTimezoneInfo":"Mostrar informações de fuso horário ao lado do horário",
 												"useDatabase":"Ativar banco de dados para obter fuso horário dos usuários"
 								}
 				},
@@ -1629,7 +1634,7 @@
 								},
 								"settings":{
 												"ignoreUsers":"Crie uma lista de IDs de usuários para ignorar todas as notificações vindas deles (separado com vírgula)",
-												"maxNotifications":"Numero máximo de notificações exibidas de uma só vez",
+												"maxNotifications":"Número máximo de notificações exibidas de uma só vez",
 												"opacity":"Opacidade das notificações"
 								},
 								"streamingOptions":{
@@ -1639,6 +1644,11 @@
 				"unitConverter":{
 								"unitOptions":{
 												"imperial":"imperial"
+								}
+				},
+				"urlHighlighter":{
+								"ui":{
+												"addNew":"Adicionar novo"
 								}
 				},
 				"vcNarratorCustom":{
@@ -1663,8 +1673,8 @@
 				},
 				"voiceChannelLog":{
 								"settings":{
-												"voiceChannelChatSilent":"Mensagens de entrada/saída/movimentação em chats de canal de voz serão silenciosas",
-												"voiceChannelChatSilentSelf":"Mensagens de entrada/saída/movimentação em chats de canal de voz serão silenciosas se você estiver no canal de voz"
+												"voiceChannelChatSilent":"Mensagens de entrada/saída/movimentação em canais de voz serão silenciosas",
+												"voiceChannelChatSilentSelf":"Mensagens de entrada/saída/movimentação em canais de voz serão silenciadas se você estiver neles"
 								}
 				},
 				"voiceJoinMessages":{
@@ -1688,12 +1698,13 @@
 				},
 				"webpackTarball":{
 								"settings":{
-												"patched":"Incluir módulos patcheados"
+												"patched":"Incluir módulos corrigidos"
 								}
 				},
 				"whitelistedEmojis":{
 								"contextMenu":{
-												"removeAllGuildEmojis":"Remover todos os emojis de Servidor(es)"
+												"addAllGuildEmojis":"Adicionar Todos os Emojis do Servidor",
+												"removeAllGuildEmojis":"Remover todos os emojis do Servidor"
 								},
 								"settings":{
 												"importEmojis":"Importar Emojis",
@@ -1701,6 +1712,8 @@
 												"whitelistedEmojis":"Emojis na Lista Branca"
 								},
 								"toasts":{
+												"added":"Adicionado \"{name}\" à lista",
+												"addedBulk":"Adicionado {count} emojis à lista, {skipped} já estavam na lista",
 												"reset":"Redefinir emojis"
 								},
 								"ui":{
