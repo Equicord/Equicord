@@ -362,7 +362,9 @@
 				"devCompanion":{
 								"description":"Plugin Dev Companion. Por favor, informe qualquer coisa que não esteja funcionando ou que esteja estranha (provavelmente é um bug) para sadan, seja por ping ou dm, obrigado!",
 								"settings":{
-												"notifyOnAutoConnect":"Se deve notificar quando o Dev Companion estiver conectado automaticamente."
+												"notifyOnAutoConnect":"Se deve notificar quando o Dev Companion estiver conectado automaticamente.",
+												"reloadAfterToggle":"Recarregar após receber um comando de desativar/ativar plugin.",
+												"usePatchedModule":"Em requisições de extração, responder com o módulo modificado atual (se estiver modificado) ao invés do original"
 								}
 				},
 				"disableCallIdle":{
@@ -488,6 +490,9 @@
 												"searchOption":"The part of the url you want to search"
 								}
 				},
+				"fixCodeblockGap":{
+								"description":"Remove o espaço entre blocos de código e o texto abaixo deles."
+				},
 				"fixImagesQuality":{
 								"animatedImagesAlways":"Animated images (GIF, WebP, etc.) in chat will always animate, regardless of if the App is focused.",
 								"defaultBehavior":"The default behavior is the following:",
@@ -533,7 +538,8 @@
 												"allRevoked":"Todos os convites de amizade foram revogados.",
 												"expires":"Expira:",
 												"maxUses":"Maximo de usuários:",
-												"noActiveInvites":"Você não tem convites de amigos ativos!"
+												"noActiveInvites":"Você não tem convites de amigos ativos!",
+												"timesUsed":"vezes usado:"
 								}
 				},
 				"friendsSince":{
@@ -542,6 +548,9 @@
 				},
 				"fullSearchContext":{
 								"description":"Faz com que o menus da mensagem nos resultados da pesquisa de mensagens tenha todas as opções que você esperaria"
+				},
+				"fullUserInChatbox":{
+								"description":"Faz a menção de usuário no chat ter mais funcionalidades, como cliques esquerda/direita"
 				},
 				"gameActivityToggle":{
 								"description":"Adiciona um botão ao lado do botão do microfone e do botão de silenciar para ativar/desativar a atividade de jogo.",
@@ -553,6 +562,9 @@
 												"locationToolbox":"Equicord Toolbox",
 												"oldIcon":"Use the old icon style before Discord icon redesign"
 								}
+				},
+				"gifPaste":{
+								"description":"Faz com que selecionar um GIF no seletor de GIFs insira o link no campo de texto ao invés de enviá-lo instantaneamente"
 				},
 				"greetStickerPicker":{
 								"ariaLabel":"Greet Sticker Picker",
@@ -1328,20 +1340,25 @@
 												"forum":"fórum",
 												"message":"mensagem",
 												"messages":"mensagens",
+												"post":"postar",
 												"posts":"posts",
 												"stage":"stage",
 												"text":"texto",
+												"thread":"tópico",
+												"threads":"Tópicos",
 												"voice":"voz"
 								},
 								"defaultLayout":"Default layout: {layout}",
 								"defaultReactionEmoji":"Default reaction emoji:",
 								"defaultSortOrder":"Default sort order: {order}",
+								"description":"Mostra canais que você nao tem permissao para visualizar",
 								"forumLayouts":{
 												"gridView":"Visualização em galeria",
 												"listView":"Visualização em lista",
 												"notSet":"Not set"
 								},
 								"hiddenChannel":"This is a hidden {type} channel",
+								"hiddenChannelTooltip":"Canal Oculto",
 								"hideAllowedUsersAndRoles":"Hide Allowed Users and Roles",
 								"lastMessageCreated":"Último {type} criado:",
 								"lastMessagePin":"Última mensagem fixada:",
@@ -1354,10 +1371,18 @@
 								"seeGuidelines":" However you may see its guidelines:",
 								"settings":{
 												"channelStyle":{
+																"classic":"Clássico",
+																"description":"O estilo usado para exibir canais ocultos.",
 																"muted":"Silenciado",
-																"mutedAndShowUnreads":"Silenciado e mostrar não lidos"
+																"mutedAndShowUnreads":"Silenciado e mostrar não lidos",
+																"showUnreads":"Mostra Não lidos"
+												},
+												"defaultAllowedUsersAndRolesDropdownState":{
+																"description":"Se o dropdown de usuários e cargos permitidos em canais ocultos deve estar aberto por padrão"
 												},
 												"showMode":{
+																"description":"O modo usado para exibir canais ocultos.",
+																"eyeIconRight":"Ícone de olho na esquerda",
 																"lockIcon":"Ícone de cadeado substituindo o ícone do canal",
 																"lockIconRight":"Ícone de cadeado à direita"
 												}
@@ -1716,6 +1741,7 @@
 								"uploadFile":"Enviar Arquivo"
 				},
 				"volumeBooster":{
+								"description":"Permite que você defina o volume do usuário e do stream acima do máximo padrão",
 								"settings":{
 												"multiplier":"Multiplicador de volume"
 								}
