@@ -658,7 +658,7 @@ function renderUsername(
     const prefixClasses = "smyn-affix smyn-prefix";
     const suffixClasses = "smyn-affix smyn-suffix";
 
-    const animationDuration = Math.max(0.75, 1.5 * (first.name.length / 12));
+    const animationDuration = Math.max(1, 1.5 * (first.name.length / 12));
 
     const topLevelStyle = {
         // Allows names to wrap in reaction popouts.
