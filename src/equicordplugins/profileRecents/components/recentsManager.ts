@@ -6,11 +6,11 @@
 
 import { DataStore } from "@api/index";
 import { classNameFactory } from "@utils/css";
+import { User } from "@vencord/discord-types";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
-import { FluxDispatcher, SelectedGuildStore, UserStore } from "@webpack/common";
+import { FluxDispatcher, IconUtils, SelectedGuildStore, UserStore } from "@webpack/common";
 
-import { settings } from "../settings";
-import type { ModalCompleteHandler, ModalOpenEditorHandler, RecentAvatarEntry, RecentData, RecentSelectHandler, SlotKind, StoredSlot } from "./types";
+import type { ModalCompleteHandler, ModalOpenEditorHandler, RecentAvatarEntry, RecentData, RecentSelectHandler, SlotKind, StoredSlot } from "../types";
 
 const cl = classNameFactory("vc-profile-recents-");
 const RecentAvatarsStore = findStoreLazy("RecentAvatarsStore");
@@ -19,7 +19,11 @@ const KEY_PREFIX = "ProfileRecents";
 const LEGACY_KEY_PREFIX = "MoreSets";
 
 const toKind = (isBanner: boolean): SlotKind => isBanner ? "banner" : "avatar";
-const slotLimit = (kind: SlotKind) => kind === "banner" ? settings.store.bannerSlots : settings.store.avatarSlots;
+type CurrentUserWithBanner = User & { banner?: string | null; };
+type IconUtilsLike = {
+    getUserBannerURL?: (opts: { id: string; banner: string; canAnimate?: boolean; size?: number; }) => string | null;
+};
+type SettingsStore = { avatarSlots: number; bannerSlots: number; };
 
 const dataPayload = (url: string): string | null => {
     if (!url.startsWith("data:")) return null;
@@ -31,34 +35,54 @@ export class ProfileRecentsRuntime {
     private caches: Record<SlotKind, StoredSlot[] | null> = { avatar: null, banner: null };
     private hiddenIds: Record<SlotKind, Set<string>> = { avatar: new Set(), banner: new Set() };
     private nativeDataCache = new Map<string, string | null>();
-    private skipCapture: Record<SlotKind, number> = { avatar: 0, banner: 0 };
-    private suppressCapture: Record<SlotKind, boolean> = { avatar: false, banner: false };
+    private appliedHashes: Record<SlotKind, string | null> = { avatar: null, banner: null };
+    private modalEditor: ModalOpenEditorHandler | null = null;
+    private modalComplete: ModalCompleteHandler | null = null;
 
     private kind: SlotKind = "avatar";
-    private avatarEditor: ModalOpenEditorHandler | null = null;
-    private avatarComplete: ModalCompleteHandler | null = null;
-    private bannerEditor: ModalOpenEditorHandler | null = null;
-    private bannerComplete: ModalCompleteHandler | null = null;
+
+    constructor(private getSettings: () => SettingsStore) { }
 
     private key(prefix: string, kind: SlotKind) {
         return `${prefix}:${kind}:${UserStore.getCurrentUser()?.id ?? "unknown"}`;
     }
 
-    start() { void this.load("avatar"); void this.load("banner"); }
+    private slotLimit(kind: SlotKind) {
+        const settings = this.getSettings();
+        return kind === "banner" ? settings.bannerSlots : settings.avatarSlots;
+    }
+
+    start() {
+        void this.load("avatar");
+        void this.load("banner");
+
+        const user = UserStore.getCurrentUser() as CurrentUserWithBanner | null;
+        this.appliedHashes.avatar = user?.avatar ?? null;
+        this.appliedHashes.banner = user?.banner ?? null;
+        FluxDispatcher.subscribe("CURRENT_USER_UPDATE", this.onCurrentUserUpdate);
+    }
+
+    stop() {
+        FluxDispatcher.unsubscribe("CURRENT_USER_UPDATE", this.onCurrentUserUpdate);
+    }
 
     setModalKind(isBanner: boolean) { this.kind = toKind(isBanner); }
 
-    beginModalSession(isBanner: boolean) { const k = toKind(isBanner); this.suppressCapture[k] = false; this.skipCapture[k] = 0; }
+    isBannerMode() { return this.kind === "banner"; }
+
+    setBannerEditor(editor: ModalOpenEditorHandler | null) {
+        this.modalEditor = editor;
+    }
+
+    private onCurrentUserUpdate = () => {
+        void this.captureAppliedProfileMedia();
+    };
 
     hasSlots(isBanner: boolean) { return Boolean(this.caches[toKind(isBanner)]?.length); }
 
-    shouldRenderRecents(avatars: RecentAvatarEntry[] | null | undefined) {
-        return !!avatars?.length;
-    }
-
     getRecentTitle() { return this.kind === "banner" ? "Recent Banners" : "Recent Avatars"; }
 
-    getRecentDescription() { return `Access your ${slotLimit(this.kind)} most recent ${this.kind} uploads`; }
+    getRecentDescription() { return `Access your ${this.slotLimit(this.kind)} most recent ${this.kind} uploads`; }
 
     getRecentRootClass() { return cl("recentRoot"); }
 
@@ -72,28 +96,6 @@ export class ProfileRecentsRuntime {
 
     getRecentMediaStyle(avatar?: RecentAvatarEntry | null) {
         return this.isBannerEntry(avatar) ? { width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 } : undefined;
-    }
-
-    getRecentButtonClass(avatar: RecentAvatarEntry | null | undefined, cls: string) {
-        return this.isBannerEntry(avatar) ? undefined : cls;
-    }
-
-    getRecentMediaClass(avatar: RecentAvatarEntry | null | undefined, cls: string) {
-        return this.isBannerEntry(avatar) ? undefined : cls;
-    }
-
-    getRecentListStyle(avatars?: RecentAvatarEntry[] | null) {
-        return avatars?.some(a => this.isBannerEntry(a))
-            ? { display: "grid", gridTemplateColumns: "1fr", width: "100%", gap: 8 }
-            : undefined;
-    }
-
-    getRecentItemStyle(avatar?: RecentAvatarEntry | null) {
-        return this.isBannerEntry(avatar) ? { width: "100%", maxWidth: "100%" } : undefined;
-    }
-
-    getRecentRowStyle(avatar?: RecentAvatarEntry | null) {
-        return this.isBannerEntry(avatar) ? { width: "100%", maxWidth: "100%" } : undefined;
     }
 
     getRecentMediaSrc(avatar: RecentAvatarEntry | { id?: string; storageHash?: string; } | null | undefined, nativeSrc: string) {
@@ -129,7 +131,7 @@ export class ProfileRecentsRuntime {
         }
 
         const isBanner = k === "banner";
-        return { ...data, avatars: merged.slice(0, slotLimit(k)), loading: isBanner ? false : data.loading, error: isBanner ? null : data.error };
+        return { ...data, avatars: merged.slice(0, this.slotLimit(k)), loading: isBanner ? false : data.loading, error: isBanner ? null : data.error };
     }
 
     wrapRecentDelete(removeNative: (...a: unknown[]) => unknown) {
@@ -155,40 +157,19 @@ export class ProfileRecentsRuntime {
     onRecentSelect(selectRecent: RecentSelectHandler, avatar: RecentAvatarEntry) {
         const id = avatar?.id;
         if (!id?.startsWith("data:")) return selectRecent(avatar);
-
-        if (this.caches[this.kind]?.some(s => s.dataUrl === id)) {
-            this.suppressCapture[this.kind] = true;
-            this.skipCapture[this.kind]++;
-        }
-        if (this.kind === "banner") return this.openBannerFromRecent(id);
-        return this.openAvatarFromRecent(id);
+        return this.openFromRecent(this.kind, id);
     }
 
-    handleRecentComplete(complete: ModalCompleteHandler, openEditor?: ModalOpenEditorHandler) {
+    handleRecentComplete(complete: ModalCompleteHandler) {
         const isBanner = this.kind === "banner";
-        if (isBanner) {
-            this.bannerComplete = complete;
-            this.bannerEditor = openEditor ?? null;
-        } else {
-            this.avatarComplete = complete;
-            this.avatarEditor = openEditor ?? null;
-        }
+        this.modalComplete = complete;
         return async (payload: { imageUri?: string; file?: File | null; } & Record<string, unknown>) => {
             if (!isBanner) return complete(payload);
             const uri = typeof payload.imageUri === "string" ? payload.imageUri : null;
             if (!uri) return complete(payload);
             const file = payload.file instanceof File ? payload.file : await this.toFile(uri, "profilerecents-banner.png");
-            return this.bannerEditor && file ? this.bannerEditor(uri, file) : complete(payload);
+            return this.modalEditor && file ? this.modalEditor(uri, file) : complete(payload);
         };
-    }
-
-    async captureSlot(imageUri?: string, file?: Blob | null, assetOrigin?: unknown, originalAsset?: unknown) {
-        const k = this.kind;
-        if (originalAsset != null || (assetOrigin != null && `${assetOrigin}` !== "NEW_ASSET")) return;
-        if (this.suppressCapture[k] || this.skipCapture[k]-- > 0) return;
-        if (!(file instanceof Blob) && typeof imageUri === "string" && !imageUri.startsWith("data:")) return;
-        const dataUrl = await this.toDataUrl(imageUri, file);
-        if (dataUrl) await this.addSlot(k, dataUrl);
     }
 
     private refreshRecents(force = false) {
@@ -267,7 +248,7 @@ export class ProfileRecentsRuntime {
         const seen = new Set<string>();
         this.caches[kind] = [{ dataUrl, addedAt: Date.now() }, ...current]
             .filter(s => { const p = dataPayload(s.dataUrl) ?? s.dataUrl; if (seen.has(p)) return false; seen.add(p); return true; })
-            .slice(0, slotLimit(kind));
+            .slice(0, this.slotLimit(kind));
         await this.persist(kind);
         this.refreshRecents();
     }
@@ -286,18 +267,34 @@ export class ProfileRecentsRuntime {
         FluxDispatcher.dispatch(guildId ? { type, guildId, [k]: dataUrl } : { type, [k]: dataUrl });
     }
 
-    private async openBannerFromRecent(dataUrl: string) {
-        const file = this.bannerEditor ? await this.toFile(dataUrl, "profilerecents-banner.png") : null;
-        if (this.bannerEditor && file) return this.bannerEditor(dataUrl, file);
-        if (this.bannerComplete) return this.bannerComplete({ imageUri: dataUrl });
+    private async openFromRecent(kind: SlotKind, dataUrl: string) {
+        const file = this.modalEditor ? await this.toFile(dataUrl, `profilerecents-${kind}.png`) : null;
+        if (this.modalEditor && file) return this.modalEditor(dataUrl, file);
+        if (this.modalComplete) return this.modalComplete(kind === "banner" ? { imageUri: dataUrl } : { imageUri: dataUrl, file });
+        const prevKind = this.kind;
+        this.kind = kind;
         this.applyPendingPreview(dataUrl);
+        this.kind = prevKind;
     }
 
-    private async openAvatarFromRecent(dataUrl: string) {
-        const file = this.avatarEditor ? await this.toFile(dataUrl, "profilerecents-avatar.png") : null;
-        if (this.avatarEditor && file) return this.avatarEditor(dataUrl, file);
-        if (this.avatarComplete) return this.avatarComplete({ imageUri: dataUrl, file });
-        this.applyPendingPreview(dataUrl);
+    private async captureAppliedProfileMedia() {
+        const user = UserStore.getCurrentUser() as CurrentUserWithBanner | null;
+        if (!user?.id) return;
+
+        if (user.avatar && user.avatar !== this.appliedHashes.avatar) {
+            this.appliedHashes.avatar = user.avatar;
+            const avatarUrl = IconUtils.getUserAvatarURL(user, true, 1024);
+            const dataUrl = typeof avatarUrl === "string" ? await this.toDataUrl(avatarUrl) : null;
+            if (dataUrl) await this.addSlot("avatar", dataUrl);
+        }
+
+        if (user.banner && user.banner !== this.appliedHashes.banner) {
+            this.appliedHashes.banner = user.banner;
+            const bannerUrl = (IconUtils as IconUtilsLike).getUserBannerURL?.({ id: user.id, banner: user.banner, canAnimate: true, size: 1024 })
+                ?? `https://cdn.discordapp.com/banners/${user.id}/${user.banner}.${user.banner.startsWith("a_") ? "gif" : "png"}?size=1024`;
+            const dataUrl = typeof bannerUrl === "string" ? await this.toDataUrl(bannerUrl) : null;
+            if (dataUrl) await this.addSlot("banner", dataUrl);
+        }
     }
 
     private async toFile(dataUrl: string, name: string): Promise<File | null> {
@@ -328,5 +325,3 @@ export class ProfileRecentsRuntime {
         }
     }
 }
-
-export const runtime = new ProfileRecentsRuntime();
