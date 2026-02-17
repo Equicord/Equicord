@@ -261,7 +261,7 @@
 								"description":"Group your commonly visited channels in tabs, like a browser"
 				},
 				"characterCounter":{
-								"description":"Adds a character counter to the chat input",
+								"description":"Voegt een karakterteller toe  in de tekstveld",
 								"settings":{
 												"colorEffects":"Turn on or off color effects for getting close to the character limit"
 								}
@@ -363,7 +363,7 @@
 								"contextMenu":{
 												"copyUserMention":"Copy User Mention"
 								},
-								"description":"Adds a button to copy user's mention on the user context menu, works best with ValidUser."
+								"description":"Voegt een knop toe aan het gebruikers-contextmenu om de vermelding van de gebruiker te kopiëren, werkt het beste met ValidUser"
 				},
 				"cursorBuddy":{
 								"description":"Adds a sprite that follows your cursor.",
@@ -455,7 +455,7 @@
 																"12hours":"12 uur",
 																"1day":"1 dag",
 																"1hour":"1 uur",
-																"30min":"30 minutes",
+																"30min":"30 minuten",
 																"6hours":"6 uur",
 																"7days":"7 dagen",
 																"never":"Never"
@@ -535,7 +535,7 @@
 								}
 				},
 				"equicordToolbox":{
-								"description":"Adds a button next to the inbox button in the channel header that houses Equicord quick actions",
+								"description":"Voegt een knop toe naast de inbox-knop in de kanaalkoptekst met daarin de snelle acties van Equicord",
 								"settings":{
 												"showPluginMenu":"Show the plugins menu in the toolbox"
 								},
@@ -668,7 +668,7 @@
 												"count":"Number of users to display",
 												"friendcloud":"Display user you most interact with in a cloud"
 								},
-								"description":"Adds a /friendcloud command to visualize the users you most interact with",
+								"description":"Voegt een /friendcloud commando toe om de gebruikers met wie je de meeste interactie hebt te visualiseren",
 								"errors":{
 												"couldntGenerate":"Couldn't generate the image :c",
 												"countMustBeHigher":"The count must be 1 or higher!",
@@ -834,7 +834,7 @@
 								"commands":{
 												"gifroulette":"Tempt fate and send a gif"
 								},
-								"description":"Adds a command to send a random gif from your favourites, and a one in ten chance to ping the owner of the server",
+								"description":"Voegt een commando toe om een willekeurige gif uit je favorieten te sturen, met een kans van één op tien dat de servereigenaar vermeld wordt",
 								"settings":{
 												"pingOwnerChance":"If there should be a 1 in 10 change to ping the owner of the guild (oh no)"
 								}
@@ -863,7 +863,7 @@
 												"googlethat":"Send a search engine link",
 												"input":"The search query"
 								},
-								"description":"Adds a command to send a internet search link",
+								"description":"Voegt een commando toe om een internet-zoeklink te versturen",
 								"settings":{
 												"customEngineURL":"The URL of the Engine you wish to use",
 												"defaultEngine":"The search engine to use",
@@ -943,7 +943,7 @@
 								}
 				},
 				"iconViewer":{
-								"description":"Adds a new tab to settings to preview all icons.",
+								"description":"Voegt een nieuw tabblad toe aan de instellingen om alle iconen te bekijken",
 								"ui":{
 												"iconFinder":"Icon Finder",
 												"openIconsTab":"Open Icons Tab"
@@ -978,7 +978,7 @@
 												"imgtogif":"Allows you to turn an image to a gif",
 												"width":"Width of the gif"
 								},
-								"description":"Adds a /imgtogif slash command to create a gif from any image",
+								"description":"Voegt een /imgtogif slash-commando toe om een gif te maken van een willekeurige afbeelding",
 								"errors":{
 												"noImage":"No Image specified!",
 												"notAnImage":"Upload is not an image"
@@ -1134,7 +1134,7 @@
 								}
 				},
 				"jumpscare":{
-								"description":"Adds a configurable chance of jumpscaring you whenever you open a channel. Inspired by Geometry Dash Mega Hack",
+								"description":"Voegt een instelbare kans op een jumpscare toe wanneer je een kanaal opent. Geïnspireerd door Geometry Dash Mega Hack",
 								"settings":{
 												"audioSource":"Sets the audio url of the jumpscare",
 												"chance":"The chance of a jumpscare happening (1 in X so: 100 = 1/100 or 1%, 50 = 1/50 or 2%, etc.)",
@@ -1328,10 +1328,37 @@
 								}
 				},
 				"moreCommands":{
-								"description":"Eztra slash-commandos,waaronder systeeminformatie, dobbelsteenworpen, kop of munt en meer"
+								"description":"Eztra slash-commandos,waaronder systeeminformatie, dobbelsteenworpen, kop of munt en meer",
+								"settings":{
+												"addFreakyEnding":"Voeg 👅 of ❤️ aan het einde van een freaky command"
+								}
 				},
 				"moreStickers":{
 								"description":"Voeg meer stickers van externe bronnen"
+				},
+				"polishWording":{
+								"settings":{
+												"fixPunctuation":"Punten toevoegen aan het einde van zinnen"
+								}
+				},
+				"signature":{
+								"settings":{
+												"contextMenu":"Voeg een schakeloptie toe aan het contextmenu van het tekstveld"
+								}
+				},
+				"snowfall":{
+								"description":"Voegt een kerstachtig sneeuweffect toe over de interface van Discord"
+				},
+				"talkInReverse":{
+								"description":"Voegt een knop toe aan de chatbalk om je berichten om te draaien voordat je ze verstuurt"
+				},
+				"toggleVideoBind":{
+								"description":"Voegt een sneltoets toe om je video/webcam in spraakkanalen aan of uit te zetten"
+				},
+				"urlHighlighter":{
+								"ui":{
+												"addNew":"Voeg nieuwe toe"
+								}
 				},
 				"voiceMessageTranscriber":{
 								"modal":{
