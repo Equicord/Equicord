@@ -35,6 +35,8 @@ export class ProfileRecentsRuntime {
     private suppressCapture: Record<SlotKind, boolean> = { avatar: false, banner: false };
 
     private kind: SlotKind = "avatar";
+    private avatarEditor: ModalOpenEditorHandler | null = null;
+    private avatarComplete: ModalCompleteHandler | null = null;
     private bannerEditor: ModalOpenEditorHandler | null = null;
     private bannerComplete: ModalCompleteHandler | null = null;
 
@@ -151,24 +153,28 @@ export class ProfileRecentsRuntime {
     }
 
     onRecentSelect(selectRecent: RecentSelectHandler, avatar: RecentAvatarEntry) {
-        if (avatar?.id?.startsWith("data:")) {
-            if (this.caches[this.kind]?.some(s => s.dataUrl === avatar.id)) {
-                this.suppressCapture[this.kind] = true;
-                this.skipCapture[this.kind]++;
-            }
-            if (this.kind === "banner") return this.openBannerFromRecent(avatar.id);
-            this.applyPendingPreview(avatar.id);
+        const id = avatar?.id;
+        if (!id?.startsWith("data:")) return selectRecent(avatar);
+
+        if (this.caches[this.kind]?.some(s => s.dataUrl === id)) {
+            this.suppressCapture[this.kind] = true;
+            this.skipCapture[this.kind]++;
         }
-        return selectRecent(avatar);
+        if (this.kind === "banner") return this.openBannerFromRecent(id);
+        return this.openAvatarFromRecent(id);
     }
 
     handleRecentComplete(complete: ModalCompleteHandler, openEditor?: ModalOpenEditorHandler) {
-        if (this.kind === "banner") {
+        const isBanner = this.kind === "banner";
+        if (isBanner) {
             this.bannerComplete = complete;
             this.bannerEditor = openEditor ?? null;
+        } else {
+            this.avatarComplete = complete;
+            this.avatarEditor = openEditor ?? null;
         }
         return async (payload: { imageUri?: string; file?: File | null; } & Record<string, unknown>) => {
-            if (this.kind !== "banner") return complete(payload);
+            if (!isBanner) return complete(payload);
             const uri = typeof payload.imageUri === "string" ? payload.imageUri : null;
             if (!uri) return complete(payload);
             const file = payload.file instanceof File ? payload.file : await this.toFile(uri, "profilerecents-banner.png");
@@ -284,6 +290,13 @@ export class ProfileRecentsRuntime {
         const file = this.bannerEditor ? await this.toFile(dataUrl, "profilerecents-banner.png") : null;
         if (this.bannerEditor && file) return this.bannerEditor(dataUrl, file);
         if (this.bannerComplete) return this.bannerComplete({ imageUri: dataUrl });
+        this.applyPendingPreview(dataUrl);
+    }
+
+    private async openAvatarFromRecent(dataUrl: string) {
+        const file = this.avatarEditor ? await this.toFile(dataUrl, "profilerecents-avatar.png") : null;
+        if (this.avatarEditor && file) return this.avatarEditor(dataUrl, file);
+        if (this.avatarComplete) return this.avatarComplete({ imageUri: dataUrl, file });
         this.applyPendingPreview(dataUrl);
     }
 
