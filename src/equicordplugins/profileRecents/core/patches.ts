@@ -54,8 +54,8 @@ export const patches = [
                 replace: "onClick:()=>$self.onRecentSelect($1,$2),onMouseEnter:$3,onMouseLeave:$4"
             },
             {
-                match: /text:\i\.intl\.\i\(\i\.\i\.\i\),anchorRef:(\i)/,
-                replace: "text:\"Remove\",anchorRef:$1"
+                match: /text:(\i\.intl\.\i\(\i\.\i\.\i\)),anchorRef:(\i)/,
+                replace: "text:$1,anchorRef:$2"
             },
             {
                 match: /className:x\.G5,children:\(0,a\.jsx\)\(o\.ucK,\{size:"xs",color:"currentColor",className:x\.fy\}\)/,

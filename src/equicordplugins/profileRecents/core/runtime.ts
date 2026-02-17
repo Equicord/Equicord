@@ -6,7 +6,6 @@
 
 import { DataStore } from "@api/index";
 import { classNameFactory } from "@utils/css";
-import { Logger } from "@utils/Logger";
 import { findByCodeLazy, findStoreLazy } from "@webpack";
 import { FluxDispatcher, SelectedGuildStore, UserStore } from "@webpack/common";
 
@@ -14,7 +13,6 @@ import { settings } from "../settings";
 import type { ModalCompleteHandler, ModalOpenEditorHandler, RecentAvatarEntry, RecentData, RecentSelectHandler, SlotKind, StoredSlot } from "./types";
 
 const cl = classNameFactory("vc-profile-recents-");
-const logger = new Logger("ProfileRecents");
 const RecentAvatarsStore = findStoreLazy("RecentAvatarsStore");
 const ArchivedAvatarUtils = findByCodeLazy("ARCHIVED_AVATAR", "storageHash", "allowWebp");
 const KEY_PREFIX = "ProfileRecents";
@@ -53,7 +51,7 @@ export class ProfileRecentsRuntime {
     hasSlots(isBanner: boolean) { return Boolean(this.caches[toKind(isBanner)]?.length); }
 
     shouldRenderRecents(avatars: RecentAvatarEntry[] | null | undefined) {
-        return Array.isArray(avatars) && avatars.length > 0;
+        return !!avatars?.length;
     }
 
     getRecentTitle() { return this.kind === "banner" ? "Recent Banners" : "Recent Avatars"; }
@@ -135,14 +133,20 @@ export class ProfileRecentsRuntime {
     wrapRecentDelete(removeNative: (...a: unknown[]) => unknown) {
         return async (...args: unknown[]) => {
             const id = typeof args[2] === "string" ? args[2] : null;
-            if (!id) { try { return await removeNative(...args); } catch { return; } }
+            if (!id) {
+                try { return await removeNative(...args); }
+                catch { return; }
+            }
 
             if (id.startsWith("data:") && this.caches[this.kind]?.some(s => s.dataUrl === id)) {
                 return void await this.removeSlot(this.kind, id);
             }
             this.hiddenIds[this.kind].add(id);
             this.refreshRecents(true);
-            if (!id.startsWith("data:")) try { return await removeNative(...args); } catch (error) { logger.warn("Failed to remove native recent entry.", error); }
+            if (!id.startsWith("data:")) {
+                try { return await removeNative(...args); }
+                catch { return; }
+            }
         };
     }
 
@@ -190,7 +194,7 @@ export class ProfileRecentsRuntime {
         const payload = dataPayload(dataUrl);
         if (!payload) return false;
         const natives = RecentAvatarsStore.getAvatars?.() as RecentAvatarEntry[] | undefined;
-        if (!Array.isArray(natives) || !natives.length) return false;
+        if (!natives?.length) return false;
         for (const a of natives) {
             const native = await this.getNativeDataUrl(a);
             if (native && dataPayload(native) === payload) return true;
@@ -231,13 +235,18 @@ export class ProfileRecentsRuntime {
                 }).map(s => ({ dataUrl: s.dataUrl, addedAt: typeof s.addedAt === "number" ? s.addedAt : Date.now() }))
                 : [];
             this.refreshRecents();
-        } catch { this.caches[kind] = []; }
+        } catch {
+            this.caches[kind] = [];
+        }
     }
 
     private async persist(kind: SlotKind) {
         const key = this.key(KEY_PREFIX, kind);
-        try { await DataStore.set(key, this.caches[kind] ?? []); }
-        catch (error) { logger.error("Failed to save profile recents.", error); }
+        try {
+            await DataStore.set(key, this.caches[kind] ?? []);
+        } catch {
+            return;
+        }
     }
 
     private async addSlot(kind: SlotKind, dataUrl: string) {
@@ -279,8 +288,12 @@ export class ProfileRecentsRuntime {
     }
 
     private async toFile(dataUrl: string, name: string): Promise<File | null> {
-        try { const b = await (await fetch(dataUrl)).blob(); return new File([b], name, { type: b.type || "image/png" }); }
-        catch { return null; }
+        try {
+            const b = await (await fetch(dataUrl)).blob();
+            return new File([b], name, { type: b.type ?? "image/png" });
+        } catch {
+            return null;
+        }
     }
 
     private blobToDataUrl(blob: Blob): Promise<string | null> {
@@ -295,7 +308,11 @@ export class ProfileRecentsRuntime {
     private async toDataUrl(uri?: string, file?: Blob | null): Promise<string | null> {
         if (uri?.startsWith("data:")) return uri;
         if (file instanceof Blob) return this.blobToDataUrl(file);
-        try { return uri ? this.blobToDataUrl(await (await fetch(uri)).blob()) : null; } catch { return null; }
+        try {
+            return uri ? this.blobToDataUrl(await (await fetch(uri)).blob()) : null;
+        } catch {
+            return null;
+        }
     }
 }
 
