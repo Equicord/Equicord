@@ -43,7 +43,7 @@ export const settings = definePluginSettings({
     autoRespond: {
         type: OptionType.BOOLEAN,
         description: "Automatically respond to messages on receiving a response",
-        default: true
+        default: false
     },
     supportImages: {
         type: OptionType.BOOLEAN,
