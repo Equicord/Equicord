@@ -1556,6 +1556,17 @@
 								}
 				},
 				"toastNotifications":{
+								"positionOptions":{
+												"bottomLeft":"Canto Inferior esquerdo",
+												"bottomRight":"Canto Inferior Direito",
+												"topLeft":"Canto Superior Esquerdo",
+												"topRight":"Canto Superior Direito"
+								},
+								"settings":{
+												"ignoreUsers":"Crie uma lista de IDs de usuários para ignorar todas as notificações vindas deles (separado com vírgula)",
+												"maxNotifications":"Numero máximo de notificações exibidas de uma só vez",
+												"opacity":"Opacidade das notificações"
+								},
 								"streamingOptions":{
 												"ignore":"Ignorar - Não mostrar a notificação de jeito nenhum"
 								}
@@ -1570,7 +1581,8 @@
 												"voice":"Voz"
 								},
 								"settings":{
-												"ignoreSelf":"Ignore você mesmo em todos os eventos"
+												"ignoreSelf":"Ignore você mesmo em todos os eventos",
+												"rate":"Velocidade do narrador"
 								}
 				},
 				"vcPanelSettings":{
