@@ -5,8 +5,7 @@
  */
 
 import { CogWheel } from "@components/Icons";
-import { TextInput } from "@webpack/common";
-import { useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
+import { TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
 import type { KeyboardEvent } from "react";
 
 export interface PaletteAction {
@@ -26,7 +25,7 @@ interface CommandPaletteActionsMenuProps {
 function parseShortcut(shortcut: string): string[] {
     if (!shortcut) return [];
     const keys: string[] = [];
-    let remaining = shortcut;
+    const remaining = shortcut;
     const specialKeys: { [key: string]: string } = {
         "⌘": "⌘",
         "⌥": "⌥",
