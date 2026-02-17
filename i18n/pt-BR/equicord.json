@@ -87,7 +87,21 @@
 								}
 				},
 				"betterActivities":{
-								"description":"Mostra todas as atividades na lista de membros e no pop-out do usuário, com opções para personalizar a exibição"
+								"description":"Mostra todas as atividades na lista de membros e no pop-out do usuário, com opções para personalizar a exibição",
+								"options":{
+												"carousel":"Carrossel",
+												"list":"Lista"
+								},
+								"settings":{
+												"allActivitiesStyle":"Estilo para exibir todas as atividades",
+												"hideTooltip":"Ocultar a dica nos ícones de atividade",
+												"iconSize":"Tamanho dos ícones de atividade",
+												"memberList":"Mostrar atividades na lista de membros",
+												"removeGameActivityStatus":"Remova o indicador de status da atividade do jogo",
+												"renderGifs":"Renderize GIFs em ícones de atividade",
+												"specialFirst":"Mostre atividades especiais primeiro",
+												"userPopout":"Mostrar todas as atividades no popout do usuário"
+								}
 				},
 				"betterAudioPlayer":{
 								"description":"Adiciona um visualizador de espectrógrafo e osciloscópio aos reprodutores de anexos de áudio",
