@@ -134,6 +134,21 @@ export async function handleResponse(message: Message, response: string): Promis
 }
 
 export async function getResponse(payload: ContentPayload): Promise<string> {
+    if (!settings.store.apiKey) {
+        showToast("TriviaAI: API Key is not set.", Toasts.Type.FAILURE);
+        return "";
+    }
+
+    if (!settings.store.endpoint) {
+        showToast("TriviaAI: Endpoint is not set.", Toasts.Type.FAILURE);
+        return "";
+    }
+
+    if (!settings.store.model) {
+        showToast("TriviaAI: Model is not set.", Toasts.Type.FAILURE);
+        return "";
+    }
+
     try {
         const req = await fetch(settings.store.endpoint, {
             method: "POST",
