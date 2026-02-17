@@ -13,9 +13,11 @@ const LEFT_CLICK = 0;
 const MIDDLE_CLICK = 1;
 const MEDIA_STYLE_ID = "middleclicktweaks-media-block";
 const MEDIA_STYLE_CONTENT = `
-    [id^="message-accessories"] img,
+    [data-list-id^="forum-channel-list"] a[data-role="img"],
     [id^="message-accessories"] a[data-role="img"],
-    [id^="message-accessories"] video {
+    [id^="message-accessories"] video,
+    [id^="message-accessories"] img
+    {
         pointer-events: none !important;
     }
 `;
@@ -118,8 +120,8 @@ const settings = definePluginSettings({
 
 function migrate() {
     const { plugins } = SettingsStore.plain;
-    const oldPlugin = plugins.LimitMiddleClickPaste;
-    const newPlugin = plugins.MiddleClickTweaks;
+    const oldPlugin = plugins?.LimitMiddleClickPaste;
+    const newPlugin = plugins?.MiddleClickTweaks;
     const { scope, threshold, preventLinkOpen } = oldPlugin || {};
 
     if (!oldPlugin || !newPlugin) return;
