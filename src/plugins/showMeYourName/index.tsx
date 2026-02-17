@@ -126,7 +126,7 @@ function validColor(color: string) {
 }
 
 function resolveColor(
-    colorStrings: { primaryColor: string | null, secondaryColor: string | null, tertiaryColor: string | null; } | null | undefined,
+    colorStrings: colorStringsType,
     displayNameStyles: { effectId: number; colors: number[]; } | null | undefined,
     savedColor: string,
     canUseGradient: boolean,
@@ -327,7 +327,7 @@ interface mentionProps {
 interface messageProps {
     message: Message | null | undefined;
     colorString?: string;
-    colorStrings: { primaryColor: string | null, secondaryColor: string | null, tertiaryColor: string | null; } | null | undefined;
+    colorStrings: colorStringsType;
     userOverride?: User;
     isRepliedMessage?: boolean;
     withMentionPrefix?: boolean;
@@ -339,6 +339,8 @@ interface memberListProfileReactionProps {
     guildId?: string;
     tags?: any;
 }
+
+type colorStringsType = { primaryColor: string | null, secondaryColor: string | null, tertiaryColor: string | null; } | null | undefined;
 
 function getMemberListProfilesReactionsVoiceName(
     props: memberListProfileReactionProps,
@@ -390,7 +392,20 @@ function getMentionNameElement(props: mentionProps): JSX.Element | null {
     const member = channel ? GuildMemberStore.getMember(channel.guild_id, userId) : null;
     const author = user && member ? { ...user, ...member } : user || member || null;
     const mentionSymbol = hideDefaultAtSign && mentions ? "" : "@";
-    return renderUsername(author, channelId || null, nestedProps?.messageId || null, "mentions", mentionSymbol, false, !!channel?.guild_id)[1];
+
+    let colorString: string | undefined = undefined;
+    let colorStrings: colorStringsType = undefined;
+
+    if (isPluginEnabled(ircColors.name)) {
+        const color = ircColors.calculateNameColorForMessageContext({ message: { author: { id: userId } }, channel });
+
+        if (color) {
+            colorString = color;
+            colorStrings = { primaryColor: color, secondaryColor: null, tertiaryColor: null };
+        }
+    }
+
+    return renderUsername(author, channelId || null, nestedProps?.messageId || null, "mentions", mentionSymbol, false, !!channel?.guild_id, colorString, colorStrings)[1];
 }
 
 function getEffectType(effectId: number | null | undefined): string | null {
