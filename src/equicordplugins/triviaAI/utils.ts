@@ -62,13 +62,11 @@ export function parseMessageContent(message: Message): ContentPayload | null {
             embedBuffer.push(embed.rawDescription);
         }
 
-        if (embed.fields && Array.isArray(embed.fields)) {
-            embed.fields.forEach(field => {
-                if (field.rawName && field.rawValue) {
-                    embedBuffer.push(`**${field.rawName}**: ${field.rawValue}`);
-                }
-            });
-        }
+        embed.fields?.forEach(field => {
+            if (field.rawName && field.rawValue) {
+                embedBuffer.push(`**${field.rawName}**: ${field.rawValue}`);
+            }
+        });
 
         if (embed.footer?.text) {
             embedBuffer.push(`_${embed.footer.text}_`);
