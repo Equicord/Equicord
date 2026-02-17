@@ -16,59 +16,61 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { addMessagesBulkIDB, DBMessageRecord, getAllMessagesIDB } from "@equicordplugins/messageLoggerEnhanced/db";
-import { LoggedMessage, LoggedMessageJSON } from "@equicordplugins/messageLoggerEnhanced/types";
+import JSONParser from "@streamparser/json/jsonparser.js";
 import { chooseFile as chooseFileWeb } from "@utils/web";
 import { Toasts } from "@webpack/common";
+import { showSaveFilePicker } from "native-file-system-adapter";
 
 import { Native } from "..";
-
-async function getLogContents(): Promise<string> {
-    if (IS_WEB) {
-        const file = await chooseFileWeb(".json");
-        return new Promise((resolve, reject) => {
-            if (!file) return reject("No file selected");
-
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsText(file);
-        });
-    }
-
-    const settings = await Native.getSettings();
-    return Native.chooseFile("Logs", [{ extensions: ["json"], name: "logs" }], settings.logsDir);
-}
+import { addMessagesBulkIDB, clearMessagesIDB, iterateAllMessagesIDB } from "../db";
+import { LoggedMessageJSON } from "../types";
 
 export async function importLogs() {
     try {
-        const content = await getLogContents();
-        const data = JSON.parse(content) as { messages: DBMessageRecord[]; };
+        let count = 0;
+        const batchSize = 50;
+        let batch: LoggedMessageJSON[] = [];
+        let cleared = false;
 
-        let messages: LoggedMessageJSON[] = [];
+        for await (const logItems of iterateLogItems()) {
+            if (!cleared) {
+                await clearMessagesIDB();
+                cleared = true;
+            }
 
-        if ((data as any).deletedMessages || (data as any).editedMessages) {
-            messages = Object.values((data as unknown as LoggedMessage)).filter(m => m.message).map(m => m.message) as LoggedMessageJSON[];
-        } else
-            messages = data.messages.map(m => m.message);
+            const items = logItems.flat();
 
-        if (!Array.isArray(messages)) {
-            throw new Error("Invalid log file format");
+            for (const item of items) {
+                const { message } = item;
+                if (!message || !message.id || !message.channel_id || !message.timestamp) continue;
+
+                batch.push(message);
+
+                if (batch.length >= batchSize) {
+                    await addMessagesBulkIDB(batch);
+                    count += batch.length;
+                    batch = [];
+                }
+            }
         }
 
-        if (!messages.length) {
-            throw new Error("No messages found in log file");
+        if (batch.length > 0) {
+            await addMessagesBulkIDB(batch);
+            count += batch.length;
         }
 
-        if (!messages.every(m => m.id && m.channel_id && m.timestamp)) {
-            throw new Error("Invalid message format");
+        if (count === 0) {
+            Toasts.show({
+                id: Toasts.genId(),
+                message: "No messages found in log file",
+                type: Toasts.Type.FAILURE
+            });
+            return;
         }
-
-        await addMessagesBulkIDB(messages);
 
         Toasts.show({
             id: Toasts.genId(),
-            message: "Successfully imported logs",
+            message: `Successfully imported ${count} logs`,
             type: Toasts.Type.SUCCESS
         });
     } catch (e) {
@@ -80,28 +82,149 @@ export async function importLogs() {
             type: Toasts.Type.FAILURE
         });
     }
-
 }
 
 export async function exportLogs() {
     const filename = "message-logger-logs-idb.json";
 
-    const messages = await getAllMessagesIDB();
-    const data = JSON.stringify({ messages }, null, 2);
+    try {
+        if (!IS_WEB) {
+            const streamId = await Native.startNativeLogExport(filename);
 
-    if (IS_WEB || IS_VESKTOP || IS_EQUIBOP || !DiscordNative) {
-        const file = new File([data], filename, { type: "application/json" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(file);
-        a.download = filename;
+            await Native.writeNativeLogChunk(streamId, '{\n  "messages": [\n');
 
-        document.body.appendChild(a);
-        a.click();
-        setImmediate(() => {
-            URL.revokeObjectURL(a.href);
-            document.body.removeChild(a);
+            let first = true;
+            for await (const record of iterateAllMessagesIDB()) {
+                const prefix = first ? "" : ",\n";
+                first = false;
+
+                const chunk = prefix + "    " + JSON.stringify(record);
+
+                await Native.writeNativeLogChunk(streamId, chunk);
+            }
+
+            await Native.writeNativeLogChunk(streamId, "\n  ]\n}");
+            await Native.finishNativeLogExport(streamId);
+
+            Toasts.show({
+                id: Toasts.genId(),
+                message: "Successfully exported logs",
+                type: Toasts.Type.SUCCESS
+            });
+            return;
+        }
+
+        // if check needed so esbuild doenst include native-file-system-adapter in native builds
+        if (IS_WEB) {
+            const handle = await showSaveFilePicker({
+                suggestedName: filename,
+                types: [{
+                    description: "JSON File",
+                    accept: { "application/json": [".json"] },
+                }],
+            });
+
+            const writable = await handle.createWritable();
+            const writer = writable.getWriter();
+            const encoder = new TextEncoder();
+
+            await writer.write(encoder.encode('{\n  "messages": [\n'));
+
+            let first = true;
+            let count = 0;
+            for await (const records of iterateAllMessagesIDB()) {
+                const prefix = first ? "" : ",\n";
+                first = false;
+                const chunk = prefix + "    " + JSON.stringify(records);
+                await writer.write(encoder.encode(chunk));
+                count++;
+            }
+
+            await writer.write(encoder.encode("\n  ]\n}"));
+            await writer.close();
+
+            Toasts.show({
+                id: Toasts.genId(),
+                message: `Successfully exported ${count} logs`,
+                type: Toasts.Type.SUCCESS
+            });
+        }
+    } catch (e) {
+        console.error(e);
+
+        Toasts.show({
+            id: Toasts.genId(),
+            message: "Error exporting logs. Check the console for more information",
+            type: Toasts.Type.FAILURE
+        });
+    }
+}
+
+async function* parseJsonStream(readChunk: () => Promise<string | null>) {
+    const parser = new JSONParser({
+        paths: ["$.messages.*"],
+        keepStack: false,
+    });
+    const queue: any[] = [];
+    let error: Error | null = null;
+
+    parser.onValue = ({ value }) => {
+        queue.push(value);
+    };
+
+    parser.onError = (err: Error) => {
+        error = err;
+    };
+
+    try {
+        while (true) {
+            if (error) throw error;
+            while (queue.length > 0) {
+                yield queue.shift();
+            }
+
+            const chunk = await readChunk();
+            if (chunk === null) break;
+
+            parser.write(chunk);
+        }
+    } catch (e) {
+        throw e;
+    } finally {
+        if (!parser.isEnded)
+            parser.end();
+    }
+
+    if (error) throw error;
+    while (queue.length > 0) {
+        yield queue.shift();
+    }
+}
+
+async function* iterateLogItems(): AsyncGenerator<any> {
+    if (IS_WEB) {
+        const file = await chooseFileWeb(".json");
+        if (!file) throw new Error("No file selected");
+
+        const stream = file.stream();
+        const reader = stream.getReader();
+        const decoder = new TextDecoder();
+
+        yield* parseJsonStream(async () => {
+            const { done, value } = await reader.read();
+            if (done) return null;
+            return decoder.decode(value, { stream: true });
         });
     } else {
-        DiscordNative.fileManager.saveWithDialog(data, filename);
+        const settings = await Native.getSettings();
+        const fileId = await Native.startNativeLogImport(settings.logsDir);
+
+        try {
+            yield* parseJsonStream(async () => {
+                return await Native.readNativeLogChunk(fileId);
+            });
+        } finally {
+            await Native.closeNativeLogImport(fileId);
+        }
     }
 }

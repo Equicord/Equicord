@@ -108,11 +108,27 @@ export async function importSettings(data: string, type: BackupType = "all", clo
 export async function exportSettings({ syncDataStore = true, type = "all", minify }: { syncDataStore?: boolean; type?: BackupType; minify?: boolean; }) {
     const settings = VencordNative.settings.get();
     const quickCss = await VencordNative.quickCss.get();
-    const dataStore = syncDataStore ? await DataStore.entries() : undefined;
+    let dataStore: any;
+
+    if (syncDataStore) {
+        try {
+            dataStore = await DataStore.entries();
+        } catch (err) {
+            logger.error("Failed to read DataStore entries:", err);
+
+            if (type === "all") {
+                logger.warn("Skipping DataStore in backup due to size. Export DataStore separately if needed.");
+                toast(Toasts.Type.MESSAGE, "DataStore too large - exported without it. Use 'Export DataStore' separately if needed.");
+                dataStore = undefined;
+            } else if (type === "datastore") {
+                throw new Error("DataStore is too large to export. Please clear some plugin data and try again.");
+            }
+        }
+    }
 
     switch (type) {
         case "all": {
-            return JSON.stringify({ settings, quickCss, ...(syncDataStore && { dataStore }) }, null, minify ? undefined : 4);
+            return JSON.stringify({ settings, quickCss, ...(dataStore && { dataStore }) }, null, minify ? undefined : 4);
         }
         case "plugins": {
             return JSON.stringify({ settings }, null, minify ? undefined : 4);
@@ -127,14 +143,21 @@ export async function exportSettings({ syncDataStore = true, type = "all", minif
 }
 
 export async function downloadSettingsBackup(type: BackupType = "all", { minify }: { minify?: boolean; } = {}) {
-    const backup = await exportSettings({ minify, type });
-    const filename = `equicord-${type}-backup-${moment().format("YYYY-MM-DD")}.json`;
-    const data = new TextEncoder().encode(backup);
+    try {
+        const syncDataStore = type === "all" || type === "datastore";
+        const backup = await exportSettings({ minify, type, syncDataStore });
+        const filename = `equicord-${type}-backup-${moment().format("YYYY-MM-DD")}.json`;
+        const data = new TextEncoder().encode(backup);
 
-    if (IS_DISCORD_DESKTOP) {
-        DiscordNative.fileManager.saveWithDialog(data, filename);
-    } else {
-        saveFile(new File([data], filename, { type: "application/json" }));
+        if (IS_DISCORD_DESKTOP) {
+            DiscordNative.fileManager.saveWithDialog(data, filename);
+        } else {
+            saveFile(new File([data], filename, { type: "application/json" }));
+        }
+    } catch (err) {
+        logger.error("Failed to export settings:", err);
+        toast(Toasts.Type.FAILURE, "Failed to export settings, check console");
+        throw err;
     }
 }
 

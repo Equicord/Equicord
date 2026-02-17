@@ -9,20 +9,18 @@ import "./styles.css";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
-import definePlugin, { makeRange, OptionType } from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { React } from "@webpack/common";
 
 import { PresetManager } from "./components/presetManager";
-import { loadPresets } from "./utils/storage";
+import { loadPresets, PresetSection } from "./utils/storage";
 
 export const cl = classNameFactory("vc-profile-presets-");
 export const settings = definePluginSettings({
     avatarSize: {
-        type: OptionType.SLIDER,
+        type: OptionType.NUMBER,
         description: "Avatar size in preset list.",
         default: 40,
-        markers: makeRange(32, 96, 8),
-        stickToMarkers: true
     },
 });
 
@@ -36,14 +34,21 @@ export default definePlugin({
             find: "DefaultCustomizationSections: user cannot be undefined",
             replacement: {
                 match: /return.{0,50}children:\[(?<=\.getLegacyUsername\(\).*?)/,
-                replace: "$&$self.renderPresetSection(),"
+                replace: "$&$self.renderPresetSection(\"main\"),"
+            }
+        },
+        {
+            find: "USER_SETTINGS_GUILD_PROFILE)",
+            replacement: {
+                match: /onChange:\i\}\)(?=.{0,25}profilePreviewTitle:)/,
+                replace: '$&,$self.renderPresetSection("server")'
             }
         }
     ],
     start() {
-        loadPresets();
+        loadPresets("main");
     },
-    renderPresetSection() {
-        return <PresetManager />;
+    renderPresetSection(section: PresetSection, guildId?: string) {
+        return <PresetManager section={section} guildId={guildId} />;
     }
 });

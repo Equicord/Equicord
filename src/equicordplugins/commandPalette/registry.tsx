@@ -15,7 +15,7 @@ import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
 import { Guild } from "@vencord/discord-types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, IconUtils, MediaEngineStore, MessageStore, NavigationRouter, openUserSettingsPanel, React, ReadStateStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
+import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, IconUtils, MediaEngineStore, MessageStore, NavigationRouter, React, ReadStateStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, SettingsRouter, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
 import type { FC, ReactElement, ReactNode } from "react";
 import { Settings } from "Vencord";
 
@@ -839,7 +839,7 @@ async function openDiscordSettingsRoute(route: string, label?: string) {
 
     for (const candidate of candidates) {
         try {
-            await Promise.resolve(openUserSettingsPanel(candidate));
+            await Promise.resolve(SettingsRouter.openUserSettings(candidate));
             return true;
         } catch (error) {
             console.error("CommandPalette", "Failed to open Discord settings route", candidate, error);
@@ -1372,7 +1372,15 @@ const BUILT_IN_COMMANDS: CommandEntry[] = [
         keywords: ["settings", "equicord"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_NAVIGATION, TAG_CORE],
-        handler: () => openUserSettingsPanel("equicord_main")
+        handler: () => SettingsRouter.openUserSettings("equicord_main_panel")
+    },
+    {
+        id: "open-plugin-settings",
+        label: "Open Plugin Settings",
+        keywords: ["settings", "plugins"],
+        categoryId: DEFAULT_CATEGORY_ID,
+        tags: [TAG_NAVIGATION, TAG_PLUGINS],
+        handler: () => SettingsRouter.openUserSettings("equicord_plugins_panel")
     },
     {
         id: "reload-windows",
@@ -2178,7 +2186,7 @@ function registerUpdateCommands() {
         keywords: ["updates", "changelog"],
         categoryId: "updates",
         tags: [TAG_DEVELOPER, TAG_NAVIGATION],
-        handler: () => openUserSettingsPanel("equicord_changelog")
+        handler: () => SettingsRouter.openUserSettings("equicord_changelog_panel")
     });
 }
 
@@ -3519,7 +3527,7 @@ function registerCustomizationCommands() {
         keywords: ["theme", "library"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_CUSTOMIZATION, TAG_NAVIGATION],
-        handler: () => openUserSettingsPanel("equicord_themes")
+        handler: () => SettingsRouter.openUserSettings("equicord_themes_panel")
     });
 }
 

@@ -23,6 +23,7 @@ export interface SliderProps {
     renderMarker?: (value: number) => React.ReactNode;
     getAriaValueText?: (value: number) => string;
     keyboardStep?: number;
+    handleSize?: number;
     disabled?: boolean;
     mini?: boolean;
     hideBubble?: boolean;
@@ -39,4 +40,11 @@ export interface SliderProps {
     "aria-label"?: string;
     "aria-labelledby"?: string;
     "aria-describedby"?: string;
+    label?: string;
+    hideLabel?: boolean;
+    required?: boolean;
+    description?: string;
+    helperText?: string;
+    errorMessage?: string;
+    successMessage?: string;
 }

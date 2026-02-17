@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Message, MessageAttachment, MessageJSON, User } from "@vencord/discord-types";
+import { Message, MessageAttachment, MessageJSON } from "@vencord/discord-types";
 
 export interface LoggedAttachment extends MessageAttachment {
     fileExtension?: string | null;
@@ -35,14 +35,6 @@ export interface LoggedMessageJSON extends Omit<LoggedMessage, "timestamp"> {
     ghostPinged?: boolean;
     timestamp: string;
     ourCache?: boolean;
-    channel_id: string;
-    id: string;
-    author: User;
-    flags: number;
-    bot: boolean;
-    mentions: string[];
-    content: string;
-    webhookId: string | undefined;
     referenced_message: RefrencedMessage;
     message_reference: RefrencedMessage;
 }
@@ -55,14 +47,6 @@ export interface LoggedMessage extends Message {
         timestamp: string;
         content: string;
     }[];
-    channel_id: string;
-    id: string;
-    author: User;
-    flags: number;
-    bot: boolean;
-    mentions: string[];
-    content: string;
-    webhookId: string | undefined;
 }
 
 export interface MessageDeletePayload {
