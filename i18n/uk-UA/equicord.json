@@ -1,18 +1,18 @@
 {
 				"absRPC":{
 								"about":{
-												"automaticAuth":"The plugin will automatically authenticate and fetch your listening progress.",
-												"description":"Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.",
-												"title":"How to connect to AudioBookShelf"
+												"automaticAuth":"Плагін автоматично авторизується та отримає ваш прогрес прослуховування.",
+												"description":"Введіть адресу сервера, ім'я користувача та пароль AudioBookShelf, щоб показувати аудіокнигу, яка зараз грає, як Rich Presence у Discord.",
+												"title":"Як підключитися до AudioBookShelf"
 								},
-								"description":"Rich presence for AudioBookShelf media server",
+								"description":"Rich presence для медіа серверу AudioBookShelf",
 								"settings":{
-												"password":"AudioBookShelf password",
-												"serverUrl":"AudioBookShelf server URL (e.g., https://abs.example.com)",
-												"username":"AudioBookShelf username"
+												"password":"Пароль AudioBookShelf",
+												"serverUrl":"Адреса сервера AudioBookShelf (наприклад, https://abs.example.com)",
+												"username":"Логін AudioBookShelf"
 								},
 								"toasts":{
-												"notConfigured":"AudioBookShelf RPC is not configured."
+												"notConfigured":"RPC AudioBookShelf не налаштовано."
 								}
 				},
 				"altKrispSwitch":{
@@ -201,135 +201,135 @@
 				"channelBadges":{
 								"description":"Adds badges to channels based on their type",
 								"settings":{
-												"announcementBadgeColor":"Announcement badge color",
-												"announcementBadgeLabel":"Announcement badge label",
-												"announcementThreadBadgeColor":"Announcement Thread badge color",
-												"announcementThreadBadgeLabel":"Announcement Thread badge label",
-												"categoryBadgeColor":"Category badge color",
-												"categoryBadgeLabel":"Category badge label",
-												"directoryBadgeColor":"Directory badge color",
-												"directoryBadgeLabel":"Directory badge label",
-												"forumBadgeColor":"Forum badge color",
-												"forumBadgeLabel":"Forum badge label",
-												"lockedBadgeColor":"Locked badge color",
-												"lockedBadgeLabel":"Locked badge label",
-												"mediaBadgeColor":"Media badge color",
-												"mediaBadgeLabel":"Media badge label",
-												"nsfwBadgeColor":"NSFW badge color",
-												"nsfwBadgeLabel":"NSFW badge label",
+												"announcementBadgeColor":"Колір значка Оголошень",
+												"announcementBadgeLabel":"Напис значка Оголошень",
+												"announcementThreadBadgeColor":"Колір значка Гілки Оголошень",
+												"announcementThreadBadgeLabel":"Напис значка Гілки Оголошень",
+												"categoryBadgeColor":"Колір значка Категорії",
+												"categoryBadgeLabel":"Напис значка Категорії",
+												"directoryBadgeColor":"Колір значка Директорії",
+												"directoryBadgeLabel":"Напис значка Директорії",
+												"forumBadgeColor":"Колір значка Форуму",
+												"forumBadgeLabel":"Напис значка Форуму",
+												"lockedBadgeColor":"Колір значка Обмежених",
+												"lockedBadgeLabel":"Напис значка Обмежених",
+												"mediaBadgeColor":"Колір значка Медіаконтенту",
+												"mediaBadgeLabel":"Напис значка Медіаконтенту",
+												"nsfwBadgeColor":"Колір значка Вікових обмежень",
+												"nsfwBadgeLabel":"Напис значка Вікових обмежень",
 												"oneBadgePerChannel":"Show only one badge per channel",
-												"privateThreadBadgeColor":"Private Thread badge color",
-												"privateThreadBadgeLabel":"Private Thread badge label",
-												"publicThreadBadgeColor":"Public Thread badge color",
-												"publicThreadBadgeLabel":"Public Thread badge label",
-												"rulesBadgeColor":"Rules badge color",
-												"rulesBadgeLabel":"Rules badge label",
+												"privateThreadBadgeColor":"Колір значка Приватної Гілки",
+												"privateThreadBadgeLabel":"Напис значка Приватної Гілки",
+												"publicThreadBadgeColor":"Колір значка Публічної Гілки",
+												"publicThreadBadgeLabel":"Напис значка Публічної Гілки",
+												"rulesBadgeColor":"Колір значка Правил",
+												"rulesBadgeLabel":"Напис значка Правил",
 												"showAnnouncementBadge":"Show Announcement badge",
 												"showAnnouncementThreadBadge":"Show Announcement Thread badge",
 												"showCategoryBadge":"Show Category badge",
 												"showDirectoryBadge":"Show Directory badge",
 												"showForumBadge":"Show Forum badge",
-												"showLockedBadge":"Show Locked badge",
+												"showLockedBadge":"Показувати значок Обмеженого доступу",
 												"showMediaBadge":"Show Media badge",
 												"showNSFWBadge":"Show NSFW badge",
 												"showPrivateThreadBadge":"Show Private Thread badge",
 												"showPublicThreadBadge":"Show Public Thread badge",
-												"showRulesBadge":"Show Rules badge",
+												"showRulesBadge":"Показувати значок Правил",
 												"showStageBadge":"Show Stage badge",
 												"showTextBadge":"Show Text badge",
-												"showUnknownBadge":"Show Unknown badge",
+												"showUnknownBadge":"Показувати значок Невідомого",
 												"showVoiceBadge":"Show Voice badge",
-												"stageBadgeColor":"Stage badge color",
-												"stageBadgeLabel":"Stage badge label",
-												"textBadgeColor":"Text badge color",
-												"textBadgeLabel":"Text badge label",
-												"unknownBadgeColor":"Unknown badge color",
-												"unknownBadgeLabel":"Unknown badge label",
-												"voiceBadgeColor":"Voice badge color",
-												"voiceBadgeLabel":"Voice badge label"
+												"stageBadgeColor":"Колір значка Етапу",
+												"stageBadgeLabel":"Напис значка Етапу",
+												"textBadgeColor":"Колір значка Текстового",
+												"textBadgeLabel":"Напис значка Текстового",
+												"unknownBadgeColor":"Колір значка Невідомих",
+												"unknownBadgeLabel":"Напис значка Невідомих",
+												"voiceBadgeColor":"Колір значка Голосового",
+												"voiceBadgeLabel":"Напис значка Голосового"
 								},
 								"tooltips":{
-												"lockedChannel":"This channel is locked.",
-												"nsfwChannel":"This channel is marked as NSFW.",
-												"rulesChannel":"This channel is the server rules channel."
+												"lockedChannel":"Цей канал обмежений.",
+												"nsfwChannel":"Цей канал має Вікові Обмеження.",
+												"rulesChannel":"Це канал правил серверу."
 								}
 				},
 				"channelTabs":{
 								"contextMenu":{
-												"openInNewTab":"Open in New Tab"
+												"openInNewTab":"Відкрити в Новій Вкладці"
 								},
-								"description":"Group your commonly visited channels in tabs, like a browser"
+								"description":"Об'єднуйте ваші часто відвідувані канали у вкладки, як в браузері"
 				},
 				"characterCounter":{
-								"description":"Adds a character counter to the chat input",
+								"description":"Додає лічильник символів у текстове поле чату",
 								"settings":{
-												"colorEffects":"Turn on or off color effects for getting close to the character limit"
+												"colorEffects":"Увімкнути або вимкнути кольорові ефекти при наближенні до ліміту символів"
 								}
 				},
 				"cleanChannelName":{
-								"description":"remove all emoji and decor shit from channel names"
+								"description":"прибирає усі емодзі та декоративну хуйню з назв каналів"
 				},
 				"cleanerChannelGroups":{
-								"description":"Hides all channels in collapsed categories, even if they have unread messages."
+								"description":"Прибирає усі канали зі згорнутих категорій, навіть якщо в них є непрочитані повідомлення."
 				},
 				"clientSideBlock":{
-								"description":"Allows you to locally hide almost all content from any user",
+								"description":"Дозволяє локально приховати майже весь контент від будь-якого користувача",
 								"reply":{
-												"replyingToBlocked":"Replying to blocked message"
+												"replyingToBlocked":"Відповіь на заблоковане повідомлення"
 								},
 								"settings":{
-												"blockedReplyDisplay":"What should display instead of the message when someone replies to someone you have hidden",
+												"blockedReplyDisplay":"Що відображати замість тексту повідомлення, коли хтось відповідає прихованому користувачу",
 												"blockedReplyDisplayOptions":{
-																"displayText":"Display text saying a hidden message was replied to",
-																"hideReply":"Literally nothing"
+																"displayText":"Показувати текст про те, що відповідь була на приховане повідомлення",
+																"hideReply":"Абсолютно нічого"
 												},
-												"guildBlackList":"Guild ids to disable functionality in",
-												"guildWhiteList":"Guild ids to enable functionality in",
-												"hideBlockedMessages":"Should messages from blocked users should be hidden fully (same as the old noblockedmessages plugin)",
-												"hideBlockedUsers":"Should blocked users should also be hidden everywhere",
-												"hideEmptyRoles":"Should role headers be hidden if all of their members are blocked",
-												"hideVc":"Hide voice channels containing blocked users.",
-												"usersToBlock":"User IDs seperated by a comma and a space"
+												"guildBlackList":"ID серверів в яких вимкнути функціонал",
+												"guildWhiteList":"ID серверів в яких увімкнути функціонал",
+												"hideBlockedMessages":"Чи приховувати повідомлення від заблокованих користувачів повністю (так само як у старому noblockedmessages плагіні)",
+												"hideBlockedUsers":"Чи приховувати заблокованих користувачів усюди",
+												"hideEmptyRoles":"Чи приховувати заголовки ролей, якщо всі їхні учасники заблоковані",
+												"hideVc":"Приховати голосові канали в яких є заблоковані користувачі.",
+												"usersToBlock":"ID користувачів, розділені комою та пробілом"
 								}
 				},
 				"clipsEnhancements":{
-								"description":"Add more Clip FPS and duration options, custom clip length, RPC tagging and more",
+								"description":"Додає більше опцій тривалості та FPS Відеонарізок, власну довжину, тегування в RPC та багато іншого",
 								"settings":{
-												"clipsLink":"Change FPS and duration options in Clips settings!",
-												"enableAdvancedSignals":"Enable advanced clip signals (auto-clip triggers)",
-												"enableScreenshotKeybind":"Enable the screenshot keybind feature",
-												"enableVoiceOnlyClips":"Enable voice-only clips (audio without video)",
-												"ignorePlatformRestriction":"Allow Platform Restricted Clipping (may cause save errors)",
-												"richPresenceTagging":"When should clips be tagged with the current Rich Presence?",
+												"clipsLink":"Змінюйте параметри FPS та тривалості в налаштуваннях Відеонарізок!",
+												"enableAdvancedSignals":"Увімкнути розширені сигнали відеонарізок (тригери автонарізки)",
+												"enableScreenshotKeybind":"Увімкнути функцію створення скріншотів через клавіатурне скорочення",
+												"enableVoiceOnlyClips":"Увімкнути відеокліпи лише з голосом (аудіо без відео)",
+												"ignorePlatformRestriction":"Дозволити Відеонарізки коли є Обмеження Платформи (може спричинити помилки збереження)",
+												"richPresenceTagging":"Коли додавати теги поточного Rich Presence до відеонарізок?",
 												"richPresenceTaggingOptions":{
-																"always":"Always",
-																"never":"Never",
+																"always":"Завжди",
+																"never":"Ніколи",
 																"whenMatched":"Only when beginning or end of activity name matches"
 												}
 								}
 				},
 				"commandPalette":{
-								"description":"Quickly run actions through a searchable command palette",
+								"description":"Швидко виконуйте дії через пошукову палітру команд",
 								"settings":{
-												"customCommands":"Manage custom command palette entries",
-												"enableTagFilter":"Show the tag filter bar",
-												"hotkey":"Hotkey used to open the command palette",
-												"showTags":"Display tag chips for commands",
-												"visualStyle":"Palette appearance",
+												"customCommands":"Керування власними командами палітри",
+												"enableTagFilter":"Показувати панель фільтрації за мітками",
+												"hotkey":"Клавіатурне скорочення для відкриття пошукової палітри команд",
+												"showTags":"Показувати плашки тегів команд",
+												"visualStyle":"Зовнішній вигляд палітри",
 												"visualStyleOptions":{
-																"classic":"Classic",
-																"polished":"Polished"
+																"classic":"Класичний",
+																"polished":"Охайний"
 												}
 								},
 								"ui":{
-												"hotkeyDescription":"Hotkey used to open the command palette",
-												"hotkeyTitle":"Command Palette Hotkey",
-												"pressAnyKey":"Press any key...",
-												"reset":"Reset"
+												"hotkeyDescription":"Клавіатурне скорочення, яке використовується для відкриття пошукової палітри команд",
+												"hotkeyTitle":"Клавіатурне скорочення Палітри Команд",
+												"pressAnyKey":"Натисніть будь-яку клавішу...",
+												"reset":"Скинути"
 								}
 				},
 				"components":{
-								"description":"Utility plugin for developers to test and preview Discord components"
+								"description":"Допоміжний плагін для розробників, щоб тестувати та переглядати компоненти Discord"
 				},
 				"contentWarning":{
 								"description":"Allows you to specify certain trigger words that will be blurred by default. Hovering/Clicking on the blurred content will reveal it.",
