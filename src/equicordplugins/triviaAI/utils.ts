@@ -98,11 +98,9 @@ export function parseMessageContent(message: Message): ContentPayload | null {
             imageUrls.add(embed.thumbnail.url);
         }
 
-        if (embed.images && Array.isArray(embed.images)) {
-            embed.images.forEach(img => {
-                if (img.url) imageUrls.add(img.url);
-            });
-        }
+        embed.images?.forEach(img => {
+            if (img.url) imageUrls.add(img.url);
+        });
     });
 
     if (imageUrls.size === 0) {
