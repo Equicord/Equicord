@@ -161,6 +161,9 @@
 								}
 				},
 				"cancel":"Скасувати",
+				"chatInputButtonAPI":{
+								"description":"API для додавання кнопок до поля чату"
+				},
 				"clientTheme":{
 								"contrastWarning":"Selected color won't contrast well with text",
 								"disableNitroTheme":"Disable Nitro Theme",
@@ -199,6 +202,9 @@
 												"updatedRemote":"Ваші налаштування оновлено! Натисніть тут, щоб перезавантажитись, щоб повністю застосувати зміни!"
 								}
 				},
+				"commandsAPI":{
+								"description":"API , необхідний для усього що використовує команди"
+				},
 				"consoleJanitor":{
 								"alwaysAllowLoggers":"Always allow loggers of these types",
 								"description":"Disables annoying console messages/errors",
@@ -209,6 +215,9 @@
 												"disableSpotifyLogger":"Disable the Spotify logger, which leaks account information and access token",
 												"whitelistedLoggers":"Semi colon separated list of loggers to allow even if others are hidden"
 								}
+				},
+				"contextMenuAPI":{
+								"description":"API для додавання/видалення елементів до/з контекстних меню"
 				},
 				"contributorCard":{
 								"contributionsButton":"Погляньте, на що ви внесли свій внесок",
@@ -338,6 +347,9 @@
 												"description":"Будь ласка, підтримайте розробку Equicord пожертвуванням!",
 												"title":"Підтримка Проєкту"
 								}
+				},
+				"dynamicImageModalAPI":{
+								"description":"Дозволяє не вказувати ширину чи висоту під час відкриття модального вікна-зображення"
 				},
 				"experiments":{
 								"description":"Enable Access to Experiments & other dev-only features in Discord!",
@@ -566,6 +578,21 @@
 												"voiceActivity":"Show voice activity with member count in the member list"
 								}
 				},
+				"memberListDecoratorsAPI":{
+								"description":"API для додавання декорацій до списку учасників (і у серверах і у ПП)"
+				},
+				"menuItemDemanglerAPI":{
+								"description":"Деманґлює Discord модуль Меню Елементів"
+				},
+				"messageAccessoriesAPI":{
+								"description":"API для додавання аксесуарів повідомлень"
+				},
+				"messageDecorationsAPI":{
+								"description":"API для додавання декорацій до повідомлень"
+				},
+				"messageEventsAPI":{
+								"description":"API, необхідний для усього що використовує івенти повідомлень"
+				},
 				"messageLatency":{
 								"clockAhead":"This user's clock is {delta} ahead.",
 								"delayedMessage":"Delayed Message",
@@ -652,6 +679,12 @@
 								},
 								"toggleDeletedHighlight":"Toggle Deleted Highlight"
 				},
+				"messagePopoverAPI":{
+								"description":"API для додавання кнопок до спливаючих меню повідомлень"
+				},
+				"messageUpdaterAPI":{
+								"description":"API для оновлення та перемальовування повідомлень"
+				},
 				"mutualGroupDMs":{
 								"description":"Shows mutual group dms in profiles",
 								"members_one":"{count} Member",
@@ -681,6 +714,9 @@
 												"voiceChannels":"Hide names in Voice channels automatically"
 								}
 				},
+				"nicknameIconsAPI":{
+								"description":"API для додавання іконок до нікнеймів у профілі"
+				},
 				"noReplyMention":{
 								"description":"Disables reply pings by default",
 								"settings":{
@@ -691,6 +727,9 @@
 												"shouldPingListed":"Behaviour",
 												"userList":"List of users to allow or exempt pings for (separated by commas or spaces)"
 								}
+				},
+				"noticesAPI":{
+								"description":"Виправляє проблему автоматичного відхилення сповіщень"
 				},
 				"overrideForumDefaults":{
 								"description":"Allows you to override default forum layout/sort order. you can still change it on a per-channel basis",
@@ -879,6 +918,12 @@
 								"unblockUser":"Розблокувати користувача",
 								"viewReviews":"Переглянути Відгуки"
 				},
+				"secretRingTone":{
+								"description":"Завжди відтворювати секретну версію рінгтону Discord (окрім спеціальних подій)",
+								"settings":{
+												"onlySnow":"Відтворювати лише тему Snow Halation"
+								}
+				},
 				"seeSummaries":{
 								"description":"Enables Discord's experimental Summaries feature on every server, displaying AI generated summaries of conversations",
 								"name":"Summaries",
@@ -901,6 +946,9 @@
 								},
 								"timestampFormat":"Timestamp Format",
 								"timestampPicker":"Timestamp Picker"
+				},
+				"serverListAPI":{
+								"description":"API, необхідний плагінам які редагують список серверів"
 				},
 				"serverListIndicators":{
 								"description":"Add online friend count or server count in the server list",
@@ -1040,6 +1088,25 @@
 				"settingsSync":{
 								"failedToImport":"Не вдалося імпортувати налаштування: {e}",
 								"imported":"Налаштування успішно імпортовано. Перезапустіть програму, щоб застосувати зміни!"
+				},
+				"shikiCodeblocks":{
+								"description":"Впроваджує vscode-стилізовані блоки коду до Discord на базі Shiki",
+								"settings":{
+												"customTheme":"Посилання на власну vscode тему",
+												"theme":"Стандартні теми",
+												"tryHljs":"Використовувати більш легкий стандартний підсвічувач та тему Discord.",
+												"tryHljsOptions":{
+																"always":"Завжди",
+																"never":"Ніколи",
+																"preferHljs":"Надавати перевагу Highlight.js замість Shiki",
+																"preferShiki":"Надавати перевагу Shiki замість Highlight.js"
+												},
+												"useDevIcon":"Як відображати іконки мов у блоках коду",
+												"useDevIconOptions":{
+																"colorless":"Безкольорово",
+																"disabled":"Вимкнені"
+												}
+								}
 				},
 				"showConnections":{
 								"description":"Show connected accounts in user popouts",
@@ -1260,6 +1327,9 @@
 								"description":"Allows you to unsuppress embeds in messages",
 								"suppressEmbeds":"Suppress Embeds",
 								"unsuppressEmbeds":"Unsuppress Embeds"
+				},
+				"userSettingsAPI":{
+								"description":"Патчить Discord модуль UserSettings для розкриття групи та імені налаштувань"
 				},
 				"userVoiceShow":{
 								"cannotJoinChannel":"You cannot join the user's Voice Channel",
