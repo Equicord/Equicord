@@ -27,8 +27,8 @@ function handleAuxClick(event: MouseEvent) {
     const { openScope } = settings.store;
 
     const target = event.target as HTMLElement | null;
-    const anchor = target?.closest?.("a[href]") as HTMLAnchorElement | null;
-    const media = target?.closest?.("a[href][data-role='img'], a[href][data-role='video']") as HTMLAnchorElement | null;
+    const anchor = target?.closest("a[href]") as HTMLAnchorElement | null;
+    const media = target?.closest("a[href][data-role='img'], a[href][data-role='video']") as HTMLAnchorElement | null;
     const role = anchor?.dataset.role ?? "";
 
     const isMedia = !!media;
@@ -82,11 +82,11 @@ function migrate() {
     if (!oldPlugin) return;
 
     const newPlugin = plugins.MiddleClickTweaks ??= { enabled: false };
-    const { scope, threshold, preventLinkOpen } = oldPlugin || {};
+    const { scope, threshold, preventLinkOpen } = oldPlugin;
 
-    if (scope) newPlugin.pasteScope = scope === "always" ? "always" : "focus";
+    if (scope) newPlugin.pasteScope = scope;
     if (threshold) newPlugin.pasteThreshold = threshold;
-    if (preventLinkOpen) newPlugin.openScope = !!preventLinkOpen ? "both" : "none";
+    if (preventLinkOpen) newPlugin.openScope = "both";
     if (oldPlugin.enabled) newPlugin.enabled = true;
 
     delete plugins.LimitMiddleClickPaste;
