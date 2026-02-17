@@ -11,11 +11,14 @@ import definePlugin, { OptionType } from "@utils/types";
 const MIDDLE_CLICK = 1;
 let lastMiddleClickUp = 0;
 
-function updateListeners() {
+function updateListeners(refresh: boolean = true) {
     document.removeEventListener("mouseup", handleMouseUp, true);
     document.removeEventListener("auxclick", handleAuxClick, true);
-    document.addEventListener("mouseup", handleMouseUp, true);
-    document.addEventListener("auxclick", handleAuxClick, true);
+
+    if (refresh) {
+        document.addEventListener("mouseup", handleMouseUp, true);
+        document.addEventListener("auxclick", handleAuxClick, true);
+    }
 }
 
 function handleAuxClick(event: MouseEvent) {
@@ -29,7 +32,7 @@ function handleAuxClick(event: MouseEvent) {
     const role = anchor?.dataset.role ?? "";
 
     const isMedia = !!media;
-    const isLink = !isMedia && !!anchor?.href && anchor.href !== "#" && !["img", "video", "button"].includes(role);
+    const isLink = !isMedia && !!anchor?.href && anchor.getAttribute("href") !== "#" && !["img", "video", "button"].includes(role);
 
     if (isLink && ["links", "both"].includes(openScope)) {
         event.preventDefault();
@@ -48,13 +51,13 @@ const settings = definePluginSettings({
     openScope: {
         type: OptionType.SELECT,
         description: "Prevent middle clicking on these content types from opening them.",
-        onChange: updateListeners,
         options: [
             { label: "Links", value: "links" },
             { label: "Media", value: "media" },
             { label: "Links & Media", value: "both" },
             { label: "None", value: "none", default: true },
-        ]
+        ],
+        onChange(newValue) { updateListeners(newValue !== "none"); }
     },
     pasteScope: {
         type: OptionType.SELECT,
@@ -114,7 +117,7 @@ export default definePlugin({
         updateListeners();
     },
 
-    stop() { updateListeners(); },
+    stop() { updateListeners(false); },
 
     patches: [
         {
