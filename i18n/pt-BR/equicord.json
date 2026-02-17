@@ -2,14 +2,14 @@
 				"absRPC":{
 								"about":{
 												"automaticAuth":"O plugin irá autenticar automaticamente e buscar seu progresso de escuta.",
-												"description":"Insira a URL do seu servidor AudioBookShelf, usuário e senha para exibir os audiolivros que você está ouvindo no Discord Rich Presence.",
+												"description":"Insira a URL do seu servidor AudioBookShelf, usuário e senha para exibir os audiolivros que você está ouvindo com Discord Rich Presence.",
 												"title":"Como conectar ao AudioBookShelf"
 								},
 								"description":"Rich presence para o servidor de mídia AudioBookShelf",
 								"settings":{
 												"password":"Senha AudioBookShelf",
 												"serverUrl":"URL do servidor AudioBookShelf (exemplo: https://abs.exemplo.com)",
-												"username":"Usuário AudioBookShelf"
+												"username":"nome de usuário AudioBookShelf"
 								},
 								"toasts":{
 												"notConfigured":"AudioBookShelf RPC não está configurado."
@@ -37,7 +37,7 @@
 								"quality":{
 												"high":"Alto",
 												"low":"Baixa",
-												"lowest":"Mais Baixa",
+												"lowest":"Mais baixa",
 												"medium":"Médio"
 								},
 								"settings":{
@@ -69,7 +69,7 @@
 								}
 				},
 				"baseDecoder":{
-								"description":"Decodificar conteúdo base64 de qualquer mensagem e copiar o conteúdo decodificado.",
+								"description":"Decodifica conteúdo base64 de qualquer mensagem e copia o conteúdo decodificado.",
 								"settings":{
 												"clickMethod":"Altere o botão para decodificar conteúdo base64 de qualquer mensagem.",
 												"clickMethodOptions":{
@@ -158,7 +158,7 @@
 												"expireTooltip":"Este convite irá {expiry}",
 												"expireWill":"expirar",
 												"invitedYouTo":"{inviter} convidou você para {guild}",
-												"notExpire":"não expirar"
+												"notExpire":"não expira"
 								}
 				},
 				"betterPlusReacts":{
@@ -192,21 +192,21 @@
 				},
 				"bypassStatus":{
 								"contextMenu":{
-												"addStatusBypass":"Adicionar Exceção de Status",
-												"removeStatusBypass":"Remover Exceção de Status"
+												"addStatusBypass":"Adicionar Bypass de Status",
+												"removeStatusBypass":"Remover Bypass de Status"
 								},
 								"description":"Ainda receba notificações de lugares específicos quando estiver no modo não perturbe. Clique com o botão direito em usuários/canais/servidores para defini-los para ignorar o modo não perturbe.",
 								"placeholder":{
 												"separateWithCommas":"Separe com vírgulas"
 								},
 								"settings":{
-												"allowOutsideOfDms":"Permitir que usuários selecionados ignorem o status fora de DMs também (age como uma exceção de canal/servidor, mas é para todas as mensagens enviadas pelos usuários selecionados)",
-												"channels":"Canais para permitir ignorar (notificado quando mencionado naquele canal)",
-												"guilds":"Servidores para permitir ignorar (notificado quando mencionado em qualquer lugar no servidor)",
+												"allowOutsideOfDms":"Permitir que usuários selecionados ignorem o status fora de DMs também (funciona como um bypass de canal/servidor, mas para todas as mensagens enviadas pelos usuários selecionados)",
+												"channels":"Canais a serem ignorados (notificado quando mencionado naquele canal)",
+												"guilds":"Servidores a serem ignorados (notificado quando mencionado em qualquer lugar no servidor)",
 												"notificationSound":"Se o som de notificação deve ser reproduzido",
 												"respectSilentPings":"Respeita pings silenciosos (@silent / suprimir notificações)",
-												"statusToUse":"Status para usar para lista de permissões",
-												"users":"Usuários para permitir ignorar (notificado para todas as mensagens enviadas em DMs)"
+												"statusToUse":"Status para usar na lista branca",
+												"users":"Usuários a serem ignorados (notificado para todas as mensagens enviadas em DMs)"
 								},
 								"statusOptions":{
 												"dnd":"Não perturbe",
@@ -819,7 +819,7 @@
 												"import":"Importar",
 												"importCollections":"Importar coleções",
 												"importOverwrite":"A importação de coleções substituirá suas coleções atuais.",
-												"information":"Informações",
+												"information":"Informação",
 												"lastUpdated":"Last Updated",
 												"modifiedDate":"Modified Date",
 												"moveToCollection":"Move To Collection",
@@ -839,7 +839,7 @@
 												"selectCollection":"Select a collection to move the item to",
 												"sortBy":"Sort By",
 												"sortCollections":"Sort Collections",
-												"unknown":"Unknown",
+												"unknown":"Desconhecido",
 												"urlCopied":"URL copied to clipboard",
 												"width":"Largura"
 								}
@@ -1086,12 +1086,12 @@
 												"userIdInfo":"You'll also need your User ID, which can be found in the url of your user profile page."
 								},
 								"nameFormatOptions":{
-												"custom":"Personalizada",
+												"custom":"Personalizado",
 												"seriesEpisodeName":"Series - Episode/Track/Movie Name",
 												"seriesMovieName":"Series/Movie Name"
 								},
 								"overrideTypeOptions":{
-												"listening":"Listening",
+												"listening":"Ouvindo",
 												"off":"Off",
 												"playing":"Jogando",
 												"streaming":"Transmitindo",
@@ -1184,7 +1184,7 @@
 								"description":"Sends a notification if a given message matches certain keywords or regexes",
 								"options":{
 												"blacklist":"Blacklist",
-												"whitelist":"Whitelist"
+												"whitelist":"Lista Branca"
 								},
 								"settings":{
 												"amountToKeep":"Amount of messages to keep in the log",
@@ -1198,7 +1198,7 @@
 												"ignoreCase":"Ignorar Maiúsculas/Minúsculas",
 												"keywordEntry":"Keyword Entry {index}",
 												"keywords":"Keywords",
-												"whitelistBlacklist":"Whitelist/Blacklist"
+												"whitelistBlacklist":"Lista Branca/Lista Negra"
 								}
 				},
 				"lastActive":{
@@ -1276,7 +1276,7 @@
 								"buttons":{
 												"exportLogs":"Export Logs",
 												"exporting":"Exporting...",
-												"importLogs":"Importar Registros",
+												"importLogs":"Importar Logs",
 												"importing":"Importando..."
 								},
 								"modal":{
@@ -1296,7 +1296,7 @@
 												"fromDms":"From {username}'s DMs",
 												"fromGroupDm":"From {name} Group DM",
 												"ghostPinged":"Ghost Pinged",
-												"importLogs":"Importar Registros",
+												"importLogs":"Importar Logs",
 												"importLogsTooltip":"ML Enhanced now stores logs in indexeddb. You need to import your old logs from the logs directory. Importing wont overwrite existing logs",
 												"jumpToMessage":"Jump To Message",
 												"loadMore":"Load More",
@@ -1323,7 +1323,7 @@
 												"ignoreMutedGuilds":"Messages in muted guilds will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
 												"ignoreSelf":"Whether to ignore messages by yourself",
 												"ignoreWebhooks":"Whether to ignore messages by webhooks",
-												"importLogsFromFile":"Importar registros do arquivo",
+												"importLogsFromFile":"Importar logs de um arquivo",
 												"messageLimit":"Maximum number of messages to save. Older messages are deleted when the limit is reached. 0 means there is no limit",
 												"messagesToDisplayAtOnceInLogs":"Number of messages to display at once in logs & number of messages to load when loading more messages in logs.",
 												"openImageCacheFolder":"Opens the image cache directory",
@@ -1342,7 +1342,7 @@
 								}
 				},
 				"messagePeek":{
-								"description":"Espiar a última mensagem em canais de DM sem abri-los"
+								"description":"Espiar a última mensagem em DMs sem abri-las"
 				},
 				"moyai":{
 								"settings":{
@@ -1352,7 +1352,7 @@
 				},
 				"pingNotifications":{
 								"settings":{
-												"ignoreMuted":"Ignorar canais silenciados, guildas e usuários bloqueados"
+												"ignoreMuted":"Ignorar canais silenciados, servidores e usuários bloqueados"
 								}
 				},
 				"platformSpoofer":{
@@ -1367,7 +1367,7 @@
 												"intense":"Intenso"
 								},
 								"settings":{
-												"questButtonBadgeColor":"Cor personalizada do emblema"
+												"questButtonBadgeColor":"Cor personalizada da insígnia"
 								}
 				},
 				"quickThemeSwitcher":{
@@ -1490,7 +1490,8 @@
 								},
 								"settings":{
 												"importEmojis":"Importar Emojis",
-												"resetEmojis":"Redefinir Emojis"
+												"resetEmojis":"Redefinir Emojis",
+												"whitelistedEmojis":"Emojis na Lista Branca"
 								},
 								"toasts":{
 												"reset":"Redefinir emojis"
