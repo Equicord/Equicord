@@ -9,7 +9,7 @@
 								"fallback":"Falha ao renderizar {key} o Acessório de Mensagem"
 				},
 				"messageDecorations":{
-								"fallback":"Falha ao renderizar {key} Decoração de Mensagem"
+								"fallback":"Falha ao renderizar {key} a Decoração de Mensagem"
 				},
 				"notices":{
 								"fallback":"Erro ao exibir aviso"
@@ -26,8 +26,8 @@
 												"title":"Você tem certeza?"
 								},
 								"missedNotifications":{
-												"body_one":"{count} Notificação recebida",
-												"body_other":"{count} Notificações recebidas",
+												"body_one":"{count} notificação recebida",
+												"body_other":"{count} notificações recebidas",
 												"title":"Enquanto você estava fora"
 								},
 								"noNotifications":"Nenhuma notificação ainda",
