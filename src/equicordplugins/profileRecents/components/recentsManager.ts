@@ -88,11 +88,11 @@ export class ProfileRecentsRuntime {
     }
 
     getRecentButtonStyle(avatar?: RecentAvatarEntry | null) {
-        return this.isBannerEntry(avatar) ? { width: "100%", aspectRatio: "16 / 9", borderRadius: 8, overflow: "hidden" } : undefined;
+        return this.isBannerEntry(avatar) ? { width: "100%", aspectRatio: "16 / 9", borderRadius: 8, overflow: "hidden" } : null;
     }
 
     getRecentMediaStyle(avatar?: RecentAvatarEntry | null) {
-        return this.isBannerEntry(avatar) ? { width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 } : undefined;
+        return this.isBannerEntry(avatar) ? { width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 } : null;
     }
 
     getRecentMediaSrc(avatar: RecentAvatarEntry | { id?: string; storageHash?: string; } | null | undefined, nativeSrc: string) {
