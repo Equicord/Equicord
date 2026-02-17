@@ -377,6 +377,9 @@
 												"title":"Apoie o Projeto"
 								}
 				},
+				"dontRoundMyTimestamps":{
+								"description":"Sempre arredonda indicadores de tempo relativos para baixo, para que 7.6y se torne 7y em vez de 8y"
+				},
 				"dynamicImageModalAPI":{
 								"description":"Permite omitir a largura ou a altura ao abrir um modal de imagem"
 				},
@@ -401,6 +404,9 @@
 								"failedToClone":"Failed to clone: {error}",
 								"nameValidation":"Name must be between 2 and 32 characters",
 								"somethingWentWrong":"Something went wrong (check console!)"
+				},
+				"f8break":{
+								"description":"Pause o cliente quando você pressionar F8 com DevTools (+ pontos de interrupção) aberto."
 				},
 				"failedToRender":"Falha ao renderizar a guia {tab}. Se o problema persistir, tente usar o instalador para reinstalar!",
 				"fakeNitro":{
@@ -490,20 +496,47 @@
 												"originalImagesInChat":"Also load the original image in Chat. WARNING: Read the caveats above"
 								}
 				},
+				"fixSpotifyEmbeds":{
+								"description":"Corrige spotify embeds sendo incrivelmente alto, permitindo que você personalize o volume",
+								"settings":{
+												"volume":"A % de volume para os embeds do spotify. Qualquer coisa acima de 10% é muuuito alto"
+								}
+				},
+				"fixYoutubeEmbeds":{
+								"description":"Ignora vídeos do youtube tendo a exibição bloqueada no Discord (por exemplo, pela UMG)"
+				},
+				"forceOwnerCrown":{
+								"description":"Force a coroa do proprietário ao lado dos nomes de usuário, mesmo que o servidor seja grande."
+				},
 				"friendInvites":{
 								"commands":{
 												"createFriendInvite":{
-																"description":"Gera um link de convite de amigo."
+																"description":"Gera um link de convite de amigo.",
+																"name":"criar convite de amigo"
+												},
+												"revokeFriendInvites":{
+																"description":"Revoga todos os convites de amigos gerados.",
+																"name":"Revogar convites de amigos"
+												},
+												"viewFriendInvites":{
+																"description":"Veja a lista de todos os convites de amigos gerados",
+																"name":"ver convites de amigo"
 												}
 								},
 								"description":"Crie e gerencie links de convite de amigo via comandos de barra (/create friend invite, /view friend invites, /revoke friend invites).",
 								"ui":{
-												"allRevoked":"Todos os convites de amizade foram revogados."
+												"allRevoked":"Todos os convites de amizade foram revogados.",
+												"expires":"Expira:",
+												"maxUses":"Maximo de usuários:",
+												"noActiveInvites":"Você não tem convites de amigos ativos!"
 								}
 				},
 				"friendsSince":{
 								"description":"Shows when you became friends with someone in the user popout",
 								"heading":"Amigos desde"
+				},
+				"fullSearchContext":{
+								"description":"Faz com que o menus da mensagem nos resultados da pesquisa de mensagens tenha todas as opções que você esperaria"
 				},
 				"gameActivityToggle":{
 								"description":"Adiciona um botão ao lado do botão do microfone e do botão de silenciar para ativar/desativar a atividade de jogo.",
@@ -777,6 +810,9 @@
 				},
 				"messagePopoverAPI":{
 								"description":"API para adicionar botões a popovers de mensagem"
+				},
+				"messageTags":{
+								"description":"Permite que você salve mensagens e as use com um comando simples."
 				},
 				"messageUpdaterAPI":{
 								"description":"API para atualizar e renderizar novamente mensagens"
