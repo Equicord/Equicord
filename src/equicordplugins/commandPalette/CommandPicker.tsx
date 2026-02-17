@@ -4,23 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./style.css";
-
-import { classNameFactory } from "@utils/css";
+import { CogWheel } from "@components/Icons";
 import { ModalRoot, ModalSize, openModal } from "@utils/modal";
-import { React, TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
+import { TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
 
-import { settings } from "./index";
 import {
-    type CommandEntry,
-    getCategoryGroupLabel,
-    getCategoryPath,
-    getCategoryWeight,
-    getCommandSearchText,
-    getRecentRank,
-    getRegistryVersion,
-    listCommands,
-    subscribeRegistry
+    type CommandEntry, getCategoryGroupLabel, getCategoryWeight, getCommandSearchText, getRecentRank, getRegistryVersion, listCommands, subscribeRegistry
 } from "./registry";
 
 type PickerItem =
@@ -44,9 +33,12 @@ const getNextSelectableIndex = (start: number, direction: 1 | -1, items: PickerI
 };
 
 interface CommandPickerProps {
+    commands?: CommandEntry[];
     allowMultiple?: boolean;
     initialQuery?: string;
     initialSelectedIds?: string[];
+    includeHiddenInSearch?: boolean;
+    emptyStateText?: string;
     filter?(command: CommandEntry): boolean;
     onSelect?(command: CommandEntry): void;
     onComplete?(commands: CommandEntry[], commandIds: string[]): void;
@@ -59,31 +51,28 @@ export function openCommandPicker(props: CommandPickerProps) {
     ));
 }
 
-function CommandPickerModal({ modalProps, allowMultiple = false, initialQuery = "", initialSelectedIds = [], filter: filterPredicate, onSelect, onComplete, onClose }: CommandPickerProps & { modalProps: any; }) {
-    const cl = classNameFactory("vc-command-palette-");
+function CommandPickerModal({ modalProps, commands: providedCommands, allowMultiple = false, initialQuery = "", initialSelectedIds = [], includeHiddenInSearch = false, emptyStateText = "No commands found", filter: filterPredicate, onSelect, onComplete, onClose }: CommandPickerProps & { modalProps: any; }) {
     const [query, setQuery] = useState(initialQuery);
     const [registryVersion, setRegistryVersion] = useState(() => getRegistryVersion());
     const [selectedIndex, setSelectedIndex] = useState(-1);
-    const [visible, setVisible] = useState(false);
-    const showTags = settings.store.showTags ?? true;
-    const { visualStyle = "classic" } = settings.use(["visualStyle"]);
-    const styleClass = visualStyle === "polished" ? "style-polished" : "style-classic";
     const normalizedInitialSelected = useMemo(() => Array.from(new Set(initialSelectedIds)), [initialSelectedIds]);
     const [pickedIds, setPickedIds] = useState<string[]>(() => normalizedInitialSelected);
     const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
     const pickedIdsRef = useRef<string[]>([]);
 
-    useEffect(() => subscribeRegistry(setRegistryVersion), []);
     useEffect(() => {
-        const frame = requestAnimationFrame(() => setVisible(true));
-        return () => cancelAnimationFrame(frame);
-    }, []);
+        if (providedCommands) return;
+        return subscribeRegistry(setRegistryVersion);
+    }, [providedCommands]);
 
     useEffect(() => {
         pickedIdsRef.current = pickedIds;
     }, [pickedIds]);
 
-    const commands = useMemo(() => listCommands(), [registryVersion]);
+    const commands = useMemo(() => {
+        if (providedCommands) return providedCommands;
+        return listCommands();
+    }, [providedCommands, registryVersion]);
     const commandMap = useMemo(() => new Map(commands.map(entry => [entry.id, entry])), [commands]);
     const availableCommands = useMemo(() => {
         if (!filterPredicate) return commands;
@@ -138,9 +127,7 @@ function CommandPickerModal({ modalProps, allowMultiple = false, initialQuery = 
                 score += getCategoryWeight(entry.categoryId);
 
                 const recentRank = getRecentRank(entry.id);
-                if (recentRank >= 0) {
-                    score += Math.max(0, 30 - recentRank * 4);
-                }
+                if (recentRank >= 0) score += Math.max(0, 30 - recentRank * 4);
 
                 return score;
             };
@@ -149,7 +136,7 @@ function CommandPickerModal({ modalProps, allowMultiple = false, initialQuery = 
             let orderCounter = 0;
 
             for (const entry of availableCommands) {
-                if (entry.hiddenInSearch) continue;
+                if (!includeHiddenInSearch && entry.hiddenInSearch) continue;
                 const searchText = getCommandSearchText(entry.id);
                 if (!searchText.includes(lowerQuery)) continue;
 
@@ -181,7 +168,7 @@ function CommandPickerModal({ modalProps, allowMultiple = false, initialQuery = 
                 grouped.set(label, []);
                 groupOrder.push(label);
             }
-            grouped.get(label)!.push(entry);
+            grouped.get(label)?.push(entry);
         }
 
         const built: PickerItem[] = [];
@@ -195,7 +182,7 @@ function CommandPickerModal({ modalProps, allowMultiple = false, initialQuery = 
         }
 
         return { items: built, hasCommands: entries.length > 0 };
-    }, [availableCommands, lowerQuery]);
+    }, [availableCommands, includeHiddenInSearch, lowerQuery]);
 
     useEffect(() => {
         if (!hasCommands) {
@@ -307,12 +294,12 @@ function CommandPickerModal({ modalProps, allowMultiple = false, initialQuery = 
         }
 
         if (
-            allowMultiple &&
-            event.key === " " &&
-            !event.altKey &&
-            !event.ctrlKey &&
-            !event.metaKey &&
-            !isEditableTarget(event.target)
+            allowMultiple
+            && event.key === " "
+            && !event.altKey
+            && !event.ctrlKey
+            && !event.metaKey
+            && !isEditableTarget(event.target)
         ) {
             const selectedItem = selectedIndex >= 0 ? items[selectedIndex] : undefined;
             if (isCommandItem(selectedItem)) {
@@ -328,24 +315,13 @@ function CommandPickerModal({ modalProps, allowMultiple = false, initialQuery = 
         }
     };
 
-    const headerText = allowMultiple ? "Add Commands" : "Choose Command";
+    const selectedItem = selectedIndex >= 0 ? items[selectedIndex] : undefined;
+    const selectedLabel = isCommandItem(selectedItem) ? selectedItem.command.label : undefined;
 
     return (
-        <ModalRoot
-            {...modalProps}
-            size={ModalSize.SMALL}
-            className={cl("root", styleClass, visible && "root-visible")}
-        >
-            <div className={cl("container")} onKeyDown={handleKeyDown}>
-                <div className={cl("header")}>{headerText}</div>
-                <div
-                    className={cl("search")}
-                    onMouseDown={event => {
-                        event.preventDefault();
-                        event.currentTarget.querySelector("input")?.focus({ preventScroll: true });
-                    }}
-                >
-                    <span className={cl("prompt")}>›</span>
+        <ModalRoot {...modalProps} size={ModalSize.SMALL} className="vc-command-palette">
+            <div className="vc-command-palette-shell" onKeyDown={handleKeyDown}>
+                <div className="vc-command-palette-input">
                     <TextInput
                         autoFocus
                         value={query}
@@ -353,63 +329,66 @@ function CommandPickerModal({ modalProps, allowMultiple = false, initialQuery = 
                         placeholder="Search commands"
                     />
                 </div>
-                <div className={cl("list")}>
-                    {!hasCommands && (
-                        <div className={cl("empty")}>No commands found</div>
-                    )}
+                <div className="vc-command-palette-list">
+                    {!hasCommands && <div className="vc-command-palette-empty">{emptyStateText}</div>}
                     {items.map((item, index) => {
                         if (item.type === "section") {
                             itemRefs.current[index] = null;
-                            return (
-                                <div key={`section-${index}`} className={cl("section")}>
-                                    {item.label}
-                                </div>
-                            );
+                            return <div key={`section-${index}`} className="vc-command-palette-section-label">{item.label}</div>;
                         }
 
                         const { command } = item;
-                        const path = getCategoryPath(command.categoryId);
-                        const categoryLabel = path
-                            .filter(cat => cat.label && cat.id !== "quick-actions")
-                            .map(cat => cat.label)
-                            .join(" / ");
+                        const Icon = command.icon ?? CogWheel;
+                        const isSelected = index === selectedIndex;
+                        const isPicked = allowMultiple && pickedSet.has(command.id);
 
                         return (
                             <button
                                 key={command.id}
                                 type="button"
-                                className={cl("item", {
-                                    selected: index === selectedIndex,
-                                    chosen: allowMultiple && pickedSet.has(command.id),
-                                    danger: command.danger
-                                })}
+                                className={isSelected ? "vc-command-palette-row vc-command-palette-row-selected" : "vc-command-palette-row"}
                                 onClick={() => handleSelect(command)}
                                 onMouseEnter={() => setSelectedIndex(index)}
                                 ref={element => {
                                     itemRefs.current[index] = element;
                                 }}
                             >
-                                <div className={cl("item-content")}>
-                                    <div className={cl("text")}>
-                                        <div className={cl("label")}>{command.label}</div>
-                                        {command.description && (
-                                            <div className={cl("description")}>{command.description}</div>
-                                        )}
-                                        {categoryLabel && (
-                                            <div className={cl("meta")}>{categoryLabel}</div>
-                                        )}
-                                        {showTags && command.tags && command.tags.length > 0 && (
-                                            <div className={cl("tags")}>
-                                                {command.tags.map(tag => (
-                                                    <span key={tag} className={cl("tag-chip")}>{tag}</span>
-                                                ))}
-                                            </div>
-                                        )}
+                                <div className="vc-command-palette-row-icon">
+                                    <Icon size="18" />
+                                </div>
+                                <div className="vc-command-palette-row-content">
+                                    <div className="vc-command-palette-row-title">
+                                        {allowMultiple && (isPicked ? "[x] " : "[ ] ")}
+                                        {command.label}
                                     </div>
+                                    {command.description && (
+                                        <div className="vc-command-palette-row-subtitle">{command.description}</div>
+                                    )}
                                 </div>
                             </button>
                         );
                     })}
+                </div>
+                <div className="vc-command-palette-action-bar">
+                    <div className="vc-command-palette-action-bar-hints">
+                        <div className="vc-command-palette-action-bar-hint">
+                            <span className="vc-command-palette-action-bar-key">↑↓</span>
+                            <span>Navigate</span>
+                        </div>
+                        <div className="vc-command-palette-action-bar-hint">
+                            <span className="vc-command-palette-action-bar-key">↵</span>
+                            <span>{allowMultiple ? "Select" : "Execute"}</span>
+                        </div>
+                        <div className="vc-command-palette-action-bar-hint">
+                            <span className="vc-command-palette-action-bar-key">Esc</span>
+                            <span>Close</span>
+                        </div>
+                    </div>
+                    {selectedLabel && (
+                        <div className="vc-command-palette-action-bar-actions">
+                            <span className="vc-command-palette-row-subtitle">{selectedLabel}</span>
+                        </div>
+                    )}
                 </div>
             </div>
         </ModalRoot>

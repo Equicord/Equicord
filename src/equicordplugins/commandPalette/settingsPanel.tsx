@@ -144,10 +144,10 @@ const TEMPLATE_CONFIGS: TemplateConfig[] = [
 ];
 
 function parseListInput(value: string): string[] {
-    const parts = value
+    return value
         .split(",")
-        .map(item => item.trim());
-    return normalizeTagList(parts);
+        .map(item => item.trim())
+        .filter(Boolean);
 }
 
 function renderActionFields(command: CustomCommandDefinition, onChange: (action: CustomCommandDefinition["action"]) => void) {
