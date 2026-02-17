@@ -14,12 +14,13 @@
     --cp-text-primary: #f0f0f0;
     --cp-text-secondary: #a0a0a0;
     --cp-text-muted: #6b6b6b;
-    --cp-border: rgba(255, 255, 255, 0.12);
-    --cp-border-strong: rgba(255, 255, 255, 0.24);
+    --cp-border: rgb(255 255 255 / 12%);
+    --cp-border-strong: rgb(255 255 255 / 24%);
     --cp-accent: #5865f2;
     --cp-radius: 14px;
     --cp-radius-sm: 8px;
-    --cp-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
+    --cp-shadow: 0 24px 64px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 30%);
+
     width: min(900px, 92vw) !important;
     max-width: min(900px, 92vw) !important;
     background: var(--cp-bg) !important;
@@ -64,19 +65,14 @@
     color: var(--cp-text-muted) !important;
 }
 
-.vc-command-palette-main-input input:focus {
-    outline: none !important;
-}
-
 /* Prompt Header */
 .vc-command-palette-header-prompt {
     margin-top: 8px;
     padding: 2px 0 0;
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
     align-items: center;
     gap: 8px;
-    flex-wrap: wrap;
 }
 
 .vc-command-palette-input:has(.vc-command-palette-header-prompt) {
@@ -124,7 +120,7 @@
 
 .vc-command-palette-prompt-input input {
     width: 100% !important;
-    background: rgba(255, 255, 255, 0.04) !important;
+    background: rgb(255 255 255 / 4%) !important;
     border: 1px solid var(--cp-border-strong) !important;
     border-radius: 10px !important;
     color: var(--cp-text-primary) !important;
@@ -139,11 +135,6 @@
 
 .vc-command-palette-prompt-input input::placeholder {
     color: var(--cp-text-secondary) !important;
-}
-
-.vc-command-palette-prompt-input input:focus {
-    border-color: var(--cp-border-strong) !important;
-    outline: none !important;
 }
 
 .vc-command-palette-header-prompt-command-preview {
@@ -163,7 +154,7 @@
     padding: 8px 14px;
     border-radius: 12px;
     border: 1px solid var(--cp-border-strong);
-    background: rgba(255, 255, 255, 0.04);
+    background: rgb(255 255 255 / 4%);
     cursor: pointer;
 }
 
@@ -262,7 +253,7 @@
 }
 
 .vc-command-palette-row-selected {
-    background: rgba(255, 255, 255, 0.06) !important;
+    background: rgb(255 255 255 / 6%) !important;
 }
 
 .vc-command-palette-row-icon {
@@ -280,6 +271,16 @@
     width: 16px;
     height: 16px;
     color: var(--cp-text-secondary);
+}
+
+.vc-command-palette-action-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.vc-command-palette-action-dropdown-icon svg {
+    width: 18px;
+    height: 18px;
 }
 
 .vc-command-palette-row-selected .vc-command-palette-row-icon {
@@ -527,16 +528,10 @@
     font-size: 14px !important;
 }
 
-.vc-command-palette-scheduled-create-field input:focus,
-.vc-command-palette-scheduled-create-field textarea:focus {
-    border-color: var(--cp-accent) !important;
-    outline: none !important;
-}
-
 .vc-command-palette-scheduled-create-error {
     padding: 10px 12px;
-    background: rgba(237, 66, 69, 0.1);
-    border: 1px solid rgba(237, 66, 69, 0.3);
+    background: rgb(237 66 69 / 10%);
+    border: 1px solid rgb(237 66 69 / 30%);
     border-radius: 8px;
     color: #ed4245;
     font-size: 13px;
@@ -600,11 +595,6 @@
     border-radius: 6px;
     background: var(--cp-bg-secondary);
     color: var(--cp-text-secondary);
-}
-
-.vc-command-palette-action-icon svg {
-    width: 16px;
-    height: 16px;
 }
 
 .vc-command-palette-action-label {
@@ -687,6 +677,11 @@
     box-shadow: 0 0 0 1px var(--background-mod-muted);
 }
 
+.vc-command-palette-keybind-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .vc-command-palette-keybind-button:hover:not(:disabled) {
     background-color: var(--background-mod-subtle);
     border-color: var(--brand-experiment);
@@ -697,11 +692,6 @@
 .vc-command-palette-keybind-button:active:not(:disabled) {
     transform: translateY(0);
     box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
-}
-
-.vc-command-palette-keybind-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 .vc-command-palette-keybind-button.listening {
@@ -743,7 +733,7 @@
     background: var(--cp-bg);
     border: 1px solid var(--cp-border);
     border-radius: var(--cp-radius);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 40%), 0 2px 8px rgb(0 0 0 / 30%);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -806,11 +796,6 @@
     border-radius: 8px;
     background: var(--cp-bg-secondary);
     color: var(--cp-text-secondary);
-}
-
-.vc-command-palette-action-dropdown-icon svg {
-    width: 18px;
-    height: 18px;
 }
 
 .vc-command-palette-action-dropdown-item-selected .vc-command-palette-action-dropdown-icon {
@@ -878,5 +863,20 @@
 
 .vc-command-palette-actions-search-input input:focus {
     border-color: var(--cp-border-strong) !important;
+    outline: none !important;
+}
+
+.vc-command-palette-main-input input:focus {
+    outline: none !important;
+}
+
+.vc-command-palette-prompt-input input:focus {
+    border-color: var(--cp-border-strong) !important;
+    outline: none !important;
+}
+
+.vc-command-palette-scheduled-create-field input:focus,
+.vc-command-palette-scheduled-create-field textarea:focus {
+    border-color: var(--cp-accent) !important;
     outline: none !important;
 }
