@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-export const ManaButtonVariants = ["primary", "secondary", "critical-primary", "critical-secondary", "overlay-primary", "overlay-secondary", "expressive"] as const;
+export const ManaButtonVariants = ["primary", "secondary", "critical-primary", "critical-secondary", "active", "overlay-primary", "overlay-secondary", "expressive"] as const;
 export type ManaButtonVariant = typeof ManaButtonVariants[number];
 
 export const ManaButtonSizes = ["xs", "sm", "md"] as const;
@@ -34,7 +34,7 @@ export type TooltipPosition = typeof TooltipPositions[number];
 export const TooltipAligns = ["start", "center", "end"] as const;
 export type TooltipAlign = typeof TooltipAligns[number];
 
-export const TooltipColors = ["primary", "black", "grey", "brand", "green", "yellow", "red"] as const;
+export const TooltipColors = ["primary", "grey", "brand", "green", "red"] as const;
 export type TooltipColor = typeof TooltipColors[number];
 
 export const TextInputSizes = ["sm", "md"] as const;
@@ -174,10 +174,8 @@ export const ToastType = {
     CLIP: "clip",
     LINK: "link",
     FORWARD: "forward",
-    INVITE: "invite",
     BOOKMARK: "bookmark",
     CLOCK: "clock",
-    AI: "ai",
 } as const;
 
 export const ToastPosition = {

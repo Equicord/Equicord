@@ -5,117 +5,140 @@
  */
 
 import { CodeColors, FontSizeMap, Paragraph, TextColors, TextSizes, TextWeights } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { DocPage, type PropGroup } from "../DocPage";
+
+const PROP_GROUPS: PropGroup[] = [
+    {
+        title: "Text Colors",
+        props: TextColors.map(color => ({
+            name: color,
+            type: "CSS variable",
+            description: `var(--${color})`,
+        })),
+    },
+    {
+        title: "Text Sizes",
+        props: TextSizes.map(({ name, value, pixels }) => ({
+            name,
+            type: "font-size",
+            description: `${value} (${pixels}).`,
+        })),
+    },
+    {
+        title: "Text Weights",
+        props: TextWeights.map(({ name, value }) => ({
+            name,
+            type: "font-weight",
+            description: `font-weight: ${value}.`,
+        })),
+    },
+    {
+        title: "Code Colors",
+        props: CodeColors.map(color => ({
+            name: color,
+            type: "CSS variable",
+            description: `var(--${color})`,
+        })),
+    },
+];
 
 export default function TypographyTab() {
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Text Colors (CSS Variables)">
-                <div className="vc-compfinder-grid-vertical">
-                    {TextColors.map(color => (
-                        <div key={color} style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                            <span style={{ color: `var(--${color})`, minWidth: 200 }}>
-                                {color}
-                            </span>
-                            <code style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
-                                var(--{color})
-                            </code>
+        <DocPage
+            componentName="Typography Reference"
+            overview="Typography reference for Discord's design system CSS variables. Shows all available text colors, sizes, weights, and code syntax colors. Use these with the Paragraph, DiscordHeading, and DiscordText components."
+            importPath={'import { TextColors, TextSizes, TextWeights, CodeColors, FontSizeMap } from "../components";'}
+            sections={[
+                {
+                    title: "Text Colors",
+                    description: "All available text color CSS variables. Use these as the color prop on Paragraph and DiscordText.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            {TextColors.map(color => (
+                                <div key={color} style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                                    <span style={{ color: `var(--${color})`, minWidth: 200 }}>
+                                        {color}
+                                    </span>
+                                    <code style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
+                                        var(--{color})
+                                    </code>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Text Sizes">
-                <div className="vc-compfinder-grid-vertical">
-                    {TextSizes.map(({ name, value, pixels }) => (
-                        <div key={name} style={{ display: "flex", alignItems: "baseline", gap: 16 }}>
-                            <span style={{ fontSize: FontSizeMap[name], minWidth: 200 }}>
-                                {name}
-                            </span>
-                            <code style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
-                                {value} ({pixels})
-                            </code>
+                    ),
+                    code: '<Paragraph color="text-muted">Muted text</Paragraph>',
+                },
+                {
+                    title: "Text Sizes",
+                    description: "Font sizes from xxs (10px) to xxl (32px).",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            {TextSizes.map(({ name, value, pixels }) => (
+                                <div key={name} style={{ display: "flex", alignItems: "baseline", gap: 16 }}>
+                                    <span style={{ fontSize: FontSizeMap[name], minWidth: 200 }}>
+                                        {name}
+                                    </span>
+                                    <code style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
+                                        {value} ({pixels})
+                                    </code>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Text Weights">
-                <div className="vc-compfinder-grid-vertical">
-                    {TextWeights.map(({ name, value }) => (
-                        <div key={name} style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                            <span style={{ fontWeight: value, minWidth: 200 }}>
-                                {name}
-                            </span>
-                            <code style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
-                                font-weight: {value}
-                            </code>
+                    ),
+                },
+                {
+                    title: "Text Weights",
+                    description: "Font weights from thin (100) to extrabold (800).",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            {TextWeights.map(({ name, value }) => (
+                                <div key={name} style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                                    <span style={{ fontWeight: Number(value), minWidth: 200 }}>
+                                        {name}
+                                    </span>
+                                    <code style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
+                                        font-weight: {value}
+                                    </code>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Usage with BaseText">
-                <div className="vc-compfinder-grid-vertical" style={{ gap: 4 }}>
-                    <code style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
-                        {"import { BaseText } from \"@components/BaseText\";"}
-                    </code>
-                    <code style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
-                        {"<BaseText size=\"md\" weight=\"semibold\" color=\"text-default\">Text</BaseText>"}
-                    </code>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Code Colors">
-                <div className="vc-compfinder-grid-vertical">
-                    {CodeColors.map(color => (
-                        <div key={color} style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                            <span style={{ color: `var(--${color})`, minWidth: 200, fontFamily: "monospace" }}>
-                                {color}
-                            </span>
-                            <code style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
-                                var(--{color})
-                            </code>
+                    ),
+                },
+                {
+                    title: "Code Colors",
+                    description: "Syntax highlighting colors for code blocks.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            {CodeColors.map(color => (
+                                <div key={color} style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                                    <span style={{ color: `var(--${color})`, minWidth: 200, fontFamily: "monospace" }}>
+                                        {color}
+                                    </span>
+                                    <code style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
+                                        var(--{color})
+                                    </code>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    <strong>BaseText</strong> - from @components/BaseText
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • size?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "xxl"
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • weight?: "thin" | "extralight" | "light" | "normal" | "medium" | "semibold" | "bold" | "extrabold"
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • color?: string - CSS variable name (e.g., "text-muted")
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • tag?: "span" | "p" | "div" | "h1" - etc.
-                </Paragraph>
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>Heading</strong> - from @components/Heading
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" (default: h5)
-                </Paragraph>
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>Paragraph</strong> - from @components/Paragraph
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • color?: string - CSS variable name
-                </Paragraph>
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>Span</strong> - from @components/Span
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • Inline text with default styling
-                </Paragraph>
-            </SectionWrapper>
-        </div>
+                    ),
+                },
+                {
+                    title: "Usage with Components",
+                    description: "These values are used with Paragraph, DiscordHeading, and DiscordText. See those tabs for component-specific documentation.",
+                    children: (
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                            <Paragraph color="text-default">text-default: Primary readable text.</Paragraph>
+                            <Paragraph color="text-muted">text-muted: Secondary, less prominent text.</Paragraph>
+                            <Paragraph color="text-link">text-link: Clickable link text.</Paragraph>
+                            <Paragraph color="text-brand">text-brand: Brand-colored text.</Paragraph>
+                        </div>
+                    ),
+                    code: `<Paragraph color="text-muted">Muted text</Paragraph>
+<DiscordText variant="text-md/semibold" color="text-brand">Brand text</DiscordText>
+<DiscordHeading variant="heading-lg/bold">Bold heading</DiscordHeading>`,
+                },
+            ]}
+            props={PROP_GROUPS}
+        />
     );
 }

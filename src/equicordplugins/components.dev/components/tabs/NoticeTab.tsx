@@ -5,123 +5,108 @@
  */
 
 import { Button, Notice, NoticeTypes, Paragraph } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { DocPage, type PropDef } from "../DocPage";
+
+const NOTICE_PROPS: PropDef[] = [
+    { name: "children", type: "ReactNode", required: true, description: "Notice content text." },
+    { name: "messageType", type: '"info" | "warn" | "danger" | "positive" | "preview"', required: true, description: "Visual severity level of the notice." },
+    { name: "action", type: "ReactNode", description: "Action element (typically a button) displayed on the right side." },
+    { name: "hidden", type: "boolean", default: "false", description: "Hides the notice without removing it from the DOM." },
+    { name: "textColor", type: "string", description: "Custom text color override." },
+    { name: "textVariant", type: "string", default: '"text-sm/medium"', description: 'Text size/weight variant, e.g. "text-md/normal".' },
+    { name: "icon", type: "ComponentType<{ className?, color? }>", description: "Custom icon component to replace the default." },
+    { name: "className", type: "string", description: "Additional CSS class." },
+];
 
 export default function NoticeTab() {
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Message Types">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Notice component for displaying informational messages with different severity levels.
-                </Paragraph>
-                <div className="vc-compfinder-grid">
-                    {NoticeTypes.map(type => (
-                        <div key={type} style={{ textAlign: "center" }}>
-                            <Notice messageType={type}>
-                                This is a {type} notice message.
-                            </Notice>
-                            <Paragraph color="text-muted" style={{ fontSize: 10, marginTop: 4 }}>
-                                {type}
-                            </Paragraph>
+        <DocPage
+            componentName="Notice"
+            overview="Notice displays informational messages with different severity levels. Each type has a distinct color and icon. Supports action buttons, custom icons, text variants, and can be hidden without unmounting."
+            importPath={'import { Notice, NoticeTypes } from "../components";'}
+            sections={[
+                {
+                    title: "Message Types",
+                    description: "All five severity levels with distinct colors and icons.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            {NoticeTypes.map(type => (
+                                <Notice key={type} messageType={type}>
+                                    This is a {type} notice message.
+                                </Notice>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="With Action">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Notices can include action buttons for user interaction.
-                </Paragraph>
-                <div className="vc-compfinder-grid">
-                    <Notice
-                        messageType="info"
-                        action={<Button size="small" variant="secondary">Action</Button>}
-                    >
-                        Notice with an action button.
-                    </Notice>
-                    <Notice
-                        messageType="warn"
-                        action={<Button size="small" variant="primary">Fix Now</Button>}
-                    >
-                        Warning that requires attention.
-                    </Notice>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Hidden State">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    The hidden prop controls visibility without removing from DOM.
-                </Paragraph>
-                <div className="vc-compfinder-grid">
-                    <div style={{ textAlign: "center" }}>
-                        <Notice messageType="info" hidden={false}>
-                            This notice is visible.
-                        </Notice>
-                        <Paragraph color="text-muted" style={{ fontSize: 10, marginTop: 4 }}>
-                            hidden=false
-                        </Paragraph>
-                    </div>
-                    <div style={{ textAlign: "center" }}>
-                        <Notice messageType="info" hidden={true}>
-                            This notice is hidden.
-                        </Notice>
-                        <Paragraph color="text-muted" style={{ fontSize: 10, marginTop: 4 }}>
-                            hidden=true
-                        </Paragraph>
-                    </div>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Text Variants">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Custom text styling via the textVariant prop.
-                </Paragraph>
-                <div className="vc-compfinder-grid">
-                    <div style={{ textAlign: "center" }}>
-                        <Notice messageType="info">
-                            Default text variant.
-                        </Notice>
-                        <Paragraph color="text-muted" style={{ fontSize: 10, marginTop: 4 }}>
-                            text-sm/medium (default)
-                        </Paragraph>
-                    </div>
-                    <div style={{ textAlign: "center" }}>
-                        <Notice messageType="info" textVariant="text-md/normal">
-                            Larger text variant.
-                        </Notice>
-                        <Paragraph color="text-muted" style={{ fontSize: 10, marginTop: 4 }}>
-                            text-md/normal
-                        </Paragraph>
-                    </div>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    • children: ReactNode - Notice content
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • messageType: "info" | "warn" | "danger" | "positive" | "preview"
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • action?: ReactNode - Action button or element
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • hidden?: boolean - Hide the notice
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • textColor?: string - Custom text color
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • textVariant?: string - Text size/weight variant
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • icon?: ComponentType - Custom icon component
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • className?: string - Additional CSS class
-                </Paragraph>
-            </SectionWrapper>
-        </div>
+                    ),
+                    code: '<Notice messageType="info">Informational message.</Notice>',
+                    relevantProps: ["messageType"],
+                },
+                {
+                    title: "With Action Button",
+                    description: "Notices can include action buttons for user interaction.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            <Notice
+                                messageType="info"
+                                action={<Button size="small" variant="secondary">Action</Button>}
+                            >
+                                Notice with an action button.
+                            </Notice>
+                            <Notice
+                                messageType="warn"
+                                action={<Button size="small" variant="primary">Fix Now</Button>}
+                            >
+                                Warning that requires attention.
+                            </Notice>
+                        </div>
+                    ),
+                    code: `<Notice
+  messageType="warn"
+  action={<Button size="small" variant="primary">Fix Now</Button>}
+>
+  Warning that requires attention.
+</Notice>`,
+                    relevantProps: ["action"],
+                },
+                {
+                    title: "Hidden State",
+                    description: "The hidden prop controls visibility without removing from the DOM.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            <div>
+                                <Paragraph color="text-muted" style={{ marginBottom: 4 }}>hidden=false:</Paragraph>
+                                <Notice messageType="info" hidden={false}>
+                                    This notice is visible.
+                                </Notice>
+                            </div>
+                            <div>
+                                <Paragraph color="text-muted" style={{ marginBottom: 4 }}>hidden=true (invisible below):</Paragraph>
+                                <Notice messageType="info" hidden={true}>
+                                    This notice is hidden.
+                                </Notice>
+                            </div>
+                        </div>
+                    ),
+                    relevantProps: ["hidden"],
+                },
+                {
+                    title: "Text Variants",
+                    description: "Customize text sizing with the textVariant prop.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            <div>
+                                <Paragraph color="text-muted" style={{ marginBottom: 4 }}>Default (text-sm/medium):</Paragraph>
+                                <Notice messageType="info">Default text variant.</Notice>
+                            </div>
+                            <div>
+                                <Paragraph color="text-muted" style={{ marginBottom: 4 }}>text-md/normal:</Paragraph>
+                                <Notice messageType="info" textVariant="text-md/normal">Larger text variant.</Notice>
+                            </div>
+                        </div>
+                    ),
+                    relevantProps: ["textVariant"],
+                },
+            ]}
+            props={NOTICE_PROPS}
+        />
     );
 }

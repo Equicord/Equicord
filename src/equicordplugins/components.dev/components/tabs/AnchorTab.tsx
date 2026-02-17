@@ -4,107 +4,106 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Anchor , Paragraph } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { Anchor, Paragraph } from "..";
+import { DocPage, type PropDef } from "../DocPage";
+
+const ANCHOR_PROPS: PropDef[] = [
+    { name: "href", type: "string", description: "Link URL. External links automatically get rel=\"noreferrer noopener\" and target=\"_blank\"." },
+    { name: "children", type: "ReactNode", description: "Link content." },
+    { name: "onClick", type: "MouseEventHandler", description: "Click handler. If omitted and href is set, uses Discord's default link interceptor." },
+    { name: "useDefaultUnderlineStyles", type: "boolean", default: "true", description: "Whether to show underline on hover." },
+    { name: "title", type: "string", description: "Tooltip text shown on hover." },
+    { name: "target", type: "string", description: "Link target. Auto-set to _blank for external URLs." },
+    { name: "rel", type: "string", description: "Link relationship. Auto-set to \"noreferrer noopener\" for external URLs." },
+    { name: "focusProps", type: "Record<string, unknown>", internal: true, description: "Props forwarded to the focus management wrapper." },
+    { name: "ref", type: "Ref<HTMLAnchorElement>", description: "Ref to the underlying anchor element." },
+    { name: "className", type: "string", description: "Additional CSS class name." },
+    { name: "style", type: "CSSProperties", description: "Inline styles." },
+];
 
 export default function AnchorTab() {
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Basic Anchor">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    A styled anchor/link component with underline on hover.
-                </Paragraph>
-                <Anchor href="https://discord.com">
-                    Discord Homepage
-                </Anchor>
-            </SectionWrapper>
-
-            <SectionWrapper title="Without Underline Styles">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Disable the default underline-on-hover behavior.
-                </Paragraph>
-                <Anchor href="https://discord.com" useDefaultUnderlineStyles={false}>
-                    No underline on hover
-                </Anchor>
-            </SectionWrapper>
-
-            <SectionWrapper title="With Custom Target">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Open in same tab instead of new tab.
-                </Paragraph>
-                <Anchor href="https://discord.com" target="_self">
-                    Opens in same tab
-                </Anchor>
-            </SectionWrapper>
-
-            <SectionWrapper title="With Title Tooltip">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Hover to see the title tooltip.
-                </Paragraph>
-                <Anchor href="https://discord.com" title="Click to visit Discord">
-                    Hover for tooltip
-                </Anchor>
-            </SectionWrapper>
-
-            <SectionWrapper title="With Custom Styling">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Custom styles applied via style prop.
-                </Paragraph>
-                <Anchor
-                    href="https://discord.com"
-                    style={{ color: "var(--text-positive)", fontWeight: 600 }}
-                >
-                    Green styled link
-                </Anchor>
-            </SectionWrapper>
-
-            <SectionWrapper title="With onClick Handler">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Custom click handler (prevents default navigation).
-                </Paragraph>
-                <Anchor
-                    href="#"
-                    onClick={e => {
-                        e.preventDefault();
-                        alert("Link clicked!");
-                    }}
-                >
-                    Click me (shows alert)
-                </Anchor>
-            </SectionWrapper>
-
-            <SectionWrapper title="Multiple Links">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Links in a sentence.
-                </Paragraph>
-                <Paragraph>
-                    Check out the <Anchor href="https://discord.com/terms">Terms of Service</Anchor> and{" "}
-                    <Anchor href="https://discord.com/privacy">Privacy Policy</Anchor> for more info.
-                </Paragraph>
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    <strong>Anchor</strong> - Styled link component (also known as MaskedLink)
-                </Paragraph>
-                <Paragraph color="text-muted">• href?: string - Link URL</Paragraph>
-                <Paragraph color="text-muted">• onClick?: MouseEventHandler - Click handler</Paragraph>
-                <Paragraph color="text-muted">• className?: string - Additional CSS classes</Paragraph>
-                <Paragraph color="text-muted">• children?: ReactNode - Link content</Paragraph>
-                <Paragraph color="text-muted">• rel?: string - Link relationship (auto-set for external)</Paragraph>
-                <Paragraph color="text-muted">• target?: string - Link target (auto-set to _blank for external)</Paragraph>
-                <Paragraph color="text-muted">• useDefaultUnderlineStyles?: boolean - Show underline on hover (default: true)</Paragraph>
-                <Paragraph color="text-muted">• title?: string - Tooltip text on hover</Paragraph>
-                <Paragraph color="text-muted">• style?: CSSProperties - Inline styles</Paragraph>
-                <Paragraph color="text-muted">• focusProps?: object - Focus ring configuration</Paragraph>
-                <Paragraph color="text-muted">• ref?: Ref - Forward ref to anchor element</Paragraph>
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>Behavior</strong>
-                </Paragraph>
-                <Paragraph color="text-muted">• External links automatically get rel="noreferrer noopener" and target="_blank"</Paragraph>
-                <Paragraph color="text-muted">• If no onClick is provided but href is set, uses Discord's default link interceptor</Paragraph>
-                <Paragraph color="text-muted">• Untrusted external links show a warning modal before navigating</Paragraph>
-            </SectionWrapper>
-        </div>
+        <DocPage
+            componentName="Anchor"
+            overview="Anchor is Discord's styled link component. It handles external link safety (adding noreferrer/noopener, opening in new tabs), untrusted link warning modals, and integrates with Discord's focus management system. Supports underline-on-hover styling by default."
+            notices={[
+                { type: "positive", children: 'Anchor automatically applies rel="noreferrer noopener" and target="_blank" for external URLs, so you don\'t need to set these manually.' },
+            ]}
+            importPath={'import { Anchor } from "../components";'}
+            sections={[
+                {
+                    title: "Basic Link",
+                    description: "A styled link with underline on hover.",
+                    children: (
+                        <Anchor href="https://discord.com">
+                            Discord Homepage
+                        </Anchor>
+                    ),
+                    code: '<Anchor href="https://example.com">Visit Example</Anchor>',
+                    relevantProps: ["href", "children"]
+                },
+                {
+                    title: "Without Underline",
+                    description: "Disable the default underline-on-hover behavior with useDefaultUnderlineStyles={false}.",
+                    children: (
+                        <Anchor href="https://discord.com" useDefaultUnderlineStyles={false}>
+                            No underline on hover
+                        </Anchor>
+                    ),
+                    relevantProps: ["useDefaultUnderlineStyles"]
+                },
+                {
+                    title: "With Title Tooltip",
+                    description: "Hover to see the native title tooltip.",
+                    children: (
+                        <Anchor href="https://discord.com" title="Click to visit Discord">
+                            Hover for tooltip
+                        </Anchor>
+                    ),
+                    relevantProps: ["title"]
+                },
+                {
+                    title: "Custom Styling",
+                    children: (
+                        <Anchor
+                            href="https://discord.com"
+                            style={{ color: "var(--text-positive)", fontWeight: 600 }}
+                        >
+                            Green styled link
+                        </Anchor>
+                    ),
+                    relevantProps: ["style", "className"]
+                },
+                {
+                    title: "With onClick Handler",
+                    description: "Custom click handler prevents default navigation.",
+                    children: (
+                        <Anchor
+                            href="#"
+                            onClick={e => {
+                                e.preventDefault();
+                                alert("Link clicked!");
+                            }}
+                        >
+                            Click me (shows alert)
+                        </Anchor>
+                    ),
+                    code: '<Anchor href="#" onClick={e => { e.preventDefault(); doSomething(); }}>\n  Click me\n</Anchor>',
+                    relevantProps: ["onClick"]
+                },
+                {
+                    title: "Inline in Text",
+                    description: "Links used naturally within a paragraph.",
+                    children: (
+                        <Paragraph>
+                            Check out the <Anchor href="https://discord.com/terms">Terms of Service</Anchor> and{" "}
+                            <Anchor href="https://discord.com/privacy">Privacy Policy</Anchor> for more info.
+                        </Paragraph>
+                    ),
+                    code: '<Paragraph>\n  Read the <Anchor href="/docs" useDefaultUnderlineStyles={false}>documentation</Anchor>.\n</Paragraph>'
+                },
+            ]}
+            props={ANCHOR_PROPS}
+        />
     );
 }

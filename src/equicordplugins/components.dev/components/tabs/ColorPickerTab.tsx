@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ColorPicker, ColorPickerWithSwatches, ColorSwatch, CustomColorButton, DefaultColorButton, Paragraph, PresetColors, useState } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { ColorPicker, ColorPickerWithSwatches, ColorSwatch, DefaultColorButton, Paragraph, PresetColors, useState } from "..";
+import { DocPage, type PropDef } from "../DocPage";
 
 const DEFAULT_COLOR = 0x5865F2;
 
@@ -13,245 +13,230 @@ function intToHex(color: number): string {
     return "#" + color.toString(16).padStart(6, "0");
 }
 
-export default function ColorPickerTab() {
-    const [basicColor, setBasicColor] = useState(DEFAULT_COLOR);
-    const [suggestedColor, setSuggestedColor] = useState(0xE74C3C);
-    const [swatchColor, setSwatchColor] = useState(0x3498DB);
-    const [swatchSelected, setSwatchSelected] = useState(0x2ECC71);
-    const [customSwatchColor, setCustomSwatchColor] = useState(0x9B59B6);
-    const [defaultBtnColor, setDefaultBtnColor] = useState(DEFAULT_COLOR);
-    const [customBtnColor, setCustomBtnColor] = useState(0xE91E63);
+const PICKER_PROPS: PropDef[] = [
+    { name: "color", type: "number", required: true, description: "Current color as an integer (e.g. 0x5865F2)." },
+    { name: "onChange", type: "(color: number) => void", required: true, description: "Called with the new color integer when changed." },
+    { name: "onClose", type: "() => void", description: "Called when the picker popout closes." },
+    { name: "suggestedColors", type: "string[]", description: "Array of hex color strings shown as suggestions in the popout." },
+    { name: "disabled", type: "boolean", description: "Disables the color picker." },
+    { name: "label", type: "ReactNode", description: "Optional label displayed next to the swatch." },
+    { name: "colorPickerMiddle", type: "ReactNode", internal: true, description: "Content injected in the middle of the popout." },
+    { name: "colorPickerFooter", type: "ReactNode", internal: true, description: "Content injected in the footer of the popout." },
+    { name: "showEyeDropper", type: "boolean", description: "Shows the eye dropper tool in the popout." },
+];
+
+const SWATCH_PROPS: PropDef[] = [
+    { name: "color", type: "number", description: "Color value. Omit for a \"no color\" state." },
+    { name: "isDefault", type: "boolean", description: "Renders in the larger default button style." },
+    { name: "isCustom", type: "boolean", description: "Shows a dropper icon overlay." },
+    { name: "isSelected", type: "boolean", description: "Shows a checkmark overlay." },
+    { name: "disabled", type: "boolean", description: "Disables the swatch." },
+    { name: "onClick", type: "(color) => void", description: "Click handler receiving the color or gradient object." },
+    { name: "isGradient", type: "boolean", description: "Enables gradient rendering mode." },
+    { name: "gradientStart", type: "number", description: "Start color for gradients." },
+    { name: "gradientEnd", type: "number", description: "End color for gradients." },
+    { name: "gradientDegrees", type: "number", default: "180", description: "Angle in degrees for the gradient." },
+    { name: "aria-label", type: "string", description: "Accessibility label." },
+    { name: "style", type: "CSSProperties", description: "Inline styles." },
+];
+
+const SWATCHES_PROPS: PropDef[] = [
+    { name: "defaultColor", type: "number", required: true, description: "Default/reset color value." },
+    { name: "colors", type: "number[] | GradientColor[]", required: true, description: "Array of preset color values or gradient definitions." },
+    { name: "value", type: "number", required: true, description: "Currently selected color." },
+    { name: "onChange", type: "(color: number) => void", required: true, description: "Called when a color is selected." },
+    { name: "customColor", type: "number", description: "Current custom color for the custom button." },
+    { name: "secondaryValue", type: "number", description: "Secondary color value for gradient mode." },
+    { name: "disabled", type: "boolean", description: "Disables all swatches." },
+    { name: "renderDefaultButton", type: "(props) => ReactNode", description: "Render prop for the default/reset button." },
+    { name: "renderCustomButton", type: "(props) => ReactNode", description: "Render prop for the custom color button." },
+    { name: "isGradient", type: "boolean", description: "Enables gradient mode for all swatches." },
+    { name: "gradientDegrees", type: "number", description: "Gradient angle for all swatches." },
+    { name: "allowBlackCustomColor", type: "boolean", description: "Allows selecting pure black (#000000)." },
+    { name: "className", type: "string", description: "Additional CSS class on the root." },
+    { name: "colorContainerClassName", type: "string", description: "CSS class on the swatch grid container." },
+];
+
+function BasicPickerDemo() {
+    const [color, setColor] = useState(DEFAULT_COLOR);
 
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Basic ColorPicker">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Click the swatch to open a full color picker popout. Selected: {intToHex(basicColor)}
-                </Paragraph>
-                <ColorPicker
-                    color={basicColor}
-                    onChange={setBasicColor}
-                    showEyeDropper={false}
-                />
-            </SectionWrapper>
+        <>
+            <Paragraph color="text-muted" style={{ marginBottom: 8 }}>Selected: {intToHex(color)}</Paragraph>
+            <ColorPicker color={color} onChange={setColor} showEyeDropper={false} />
+        </>
+    );
+}
 
-            <SectionWrapper title="With Eye Dropper">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Includes the eye dropper tool for picking colors from screen.
-                </Paragraph>
-                <ColorPicker
-                    color={basicColor}
-                    onChange={setBasicColor}
-                    showEyeDropper={true}
-                />
-            </SectionWrapper>
+function EyeDropperDemo() {
+    const [color, setColor] = useState(DEFAULT_COLOR);
 
-            <SectionWrapper title="With Suggested Colors">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Popout shows suggested color swatches. Selected: {intToHex(suggestedColor)}
-                </Paragraph>
-                <ColorPicker
-                    color={suggestedColor}
-                    onChange={setSuggestedColor}
-                    showEyeDropper={false}
-                    suggestedColors={[
-                        "#1ABC9C", "#2ECC71", "#3498DB", "#9B59B6", "#E91E63",
-                        "#F1C40F", "#E67E22", "#E74C3C", "#95A5A6", "#607D8B",
-                    ]}
-                />
-            </SectionWrapper>
+    return <ColorPicker color={color} onChange={setColor} showEyeDropper />;
+}
 
-            <SectionWrapper title="Disabled ColorPicker">
-                <ColorPicker
-                    color={0x5865F2}
-                    onChange={() => { }}
-                    disabled
-                />
-            </SectionWrapper>
+function SuggestedDemo() {
+    const [color, setColor] = useState(0xE74C3C);
 
-            <SectionWrapper title="ColorSwatch - Basic">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Individual color swatch buttons. Click to select.
-                </Paragraph>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                    {PresetColors.slice(0, 10).map(color => (
-                        <ColorSwatch
-                            key={color}
-                            color={color}
-                            isSelected={swatchSelected === color}
-                            onClick={() => setSwatchSelected(color)}
-                        />
-                    ))}
-                </div>
-            </SectionWrapper>
+    return (
+        <>
+            <Paragraph color="text-muted" style={{ marginBottom: 8 }}>Selected: {intToHex(color)}</Paragraph>
+            <ColorPicker
+                color={color}
+                onChange={setColor}
+                showEyeDropper={false}
+                suggestedColors={["#1ABC9C", "#2ECC71", "#3498DB", "#9B59B6", "#E91E63", "#F1C40F", "#E67E22", "#E74C3C"]}
+            />
+        </>
+    );
+}
 
-            <SectionWrapper title="ColorSwatch - States">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Different swatch states: default, custom, selected, disabled, no color.
-                </Paragraph>
-                <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                    <div style={{ textAlign: "center" }}>
-                        <ColorSwatch color={0x5865F2} />
-                        <Paragraph color="text-muted" style={{ fontSize: 10 }}>Normal</Paragraph>
-                    </div>
-                    <div style={{ textAlign: "center" }}>
-                        <ColorSwatch color={0x5865F2} isSelected />
-                        <Paragraph color="text-muted" style={{ fontSize: 10 }}>Selected</Paragraph>
-                    </div>
-                    <div style={{ textAlign: "center" }}>
-                        <ColorSwatch color={0x5865F2} isDefault />
-                        <Paragraph color="text-muted" style={{ fontSize: 10 }}>Default</Paragraph>
-                    </div>
-                    <div style={{ textAlign: "center" }}>
-                        <ColorSwatch color={0x5865F2} isCustom />
-                        <Paragraph color="text-muted" style={{ fontSize: 10 }}>Custom</Paragraph>
-                    </div>
-                    <div style={{ textAlign: "center" }}>
-                        <ColorSwatch color={0x5865F2} disabled />
-                        <Paragraph color="text-muted" style={{ fontSize: 10 }}>Disabled</Paragraph>
-                    </div>
-                    <div style={{ textAlign: "center" }}>
-                        <ColorSwatch />
-                        <Paragraph color="text-muted" style={{ fontSize: 10 }}>No Color</Paragraph>
-                    </div>
-                </div>
-            </SectionWrapper>
+function SwatchSelectDemo() {
+    const [selected, setSelected] = useState(0x2ECC71);
 
-            <SectionWrapper title="ColorSwatch - Gradient">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Gradient swatches with customizable angle.
-                </Paragraph>
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                    <ColorSwatch
-                        isGradient
-                        gradientStart={0xE91E63}
-                        gradientEnd={0x9B59B6}
-                        gradientDegrees={90}
-                    />
-                    <ColorSwatch
-                        isGradient
-                        gradientStart={0x3498DB}
-                        gradientEnd={0x2ECC71}
-                        gradientDegrees={135}
-                    />
-                    <ColorSwatch
-                        isGradient
-                        gradientStart={0xF1C40F}
-                        gradientEnd={0xE74C3C}
-                        gradientDegrees={180}
-                    />
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="DefaultColorButton">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    The "default" button used in ColorPickerWithSwatches. Shows checkmark when selected.
-                </Paragraph>
-                <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-                    <DefaultColorButton
-                        color={DEFAULT_COLOR}
-                        value={defaultBtnColor}
-                        onChange={setDefaultBtnColor}
-                    />
-                    <Paragraph color="text-muted">Selected: {defaultBtnColor === DEFAULT_COLOR ? "Yes" : "No"}</Paragraph>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="CustomColorButton">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    The "custom" button for custom color selection. Shows dropper icon.
-                </Paragraph>
-                <CustomColorButton
-                    customColor={customBtnColor}
-                    value={customBtnColor}
-                    presets={[...PresetColors]}
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="ColorPickerWithSwatches">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Full swatch grid with preset colors. Selected: {intToHex(swatchColor)}
-                </Paragraph>
-                <ColorPickerWithSwatches
-                    defaultColor={DEFAULT_COLOR}
-                    colors={[...PresetColors]}
-                    value={swatchColor}
-                    onChange={setSwatchColor}
-                    renderDefaultButton={() => null}
-                    renderCustomButton={() => null}
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="With Default & Custom Buttons">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Full picker with default reset button and custom color picker. Selected: {intToHex(customSwatchColor)}
-                </Paragraph>
-                <ColorPickerWithSwatches
-                    defaultColor={DEFAULT_COLOR}
-                    customColor={customSwatchColor}
-                    colors={[...PresetColors]}
-                    value={customSwatchColor}
-                    onChange={setCustomSwatchColor}
-                    renderDefaultButton={props => (
-                        <DefaultColorButton {...props} />
-                    )}
-                    renderCustomButton={props => (
-                        <ColorPicker
-                            color={props.customColor ?? DEFAULT_COLOR}
-                            onChange={setCustomSwatchColor}
-                            showEyeDropper={false}
-                        />
-                    )}
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    <strong>ColorPicker</strong> - Full color picker with popout
-                </Paragraph>
-                <Paragraph color="text-muted">• color: number - Current color as integer</Paragraph>
-                <Paragraph color="text-muted">• onChange: (color: number) ={">"} void - Change callback</Paragraph>
-                <Paragraph color="text-muted">• onClose?: () ={">"} void - Called when picker closes</Paragraph>
-                <Paragraph color="text-muted">• suggestedColors?: string[] - Hex color strings for suggestions</Paragraph>
-                <Paragraph color="text-muted">• disabled?: boolean - Disable interaction</Paragraph>
-                <Paragraph color="text-muted">• label?: ReactNode - Optional label next to swatch</Paragraph>
-                <Paragraph color="text-muted">• colorPickerMiddle?: ReactNode - Content in middle of popout</Paragraph>
-                <Paragraph color="text-muted">• colorPickerFooter?: ReactNode - Content in footer of popout</Paragraph>
-                <Paragraph color="text-muted">• showEyeDropper?: boolean - Show eye dropper tool</Paragraph>
-
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>ColorSwatch</strong> - Individual color swatch button
-                </Paragraph>
-                <Paragraph color="text-muted">• color?: number - Color value (null for "no color")</Paragraph>
-                <Paragraph color="text-muted">• isDefault?: boolean - Larger "default" style</Paragraph>
-                <Paragraph color="text-muted">• isCustom?: boolean - Shows dropper icon</Paragraph>
-                <Paragraph color="text-muted">• isSelected?: boolean - Shows checkmark</Paragraph>
-                <Paragraph color="text-muted">• disabled?: boolean - Disable interaction</Paragraph>
-                <Paragraph color="text-muted">• onClick?: (color) ={">"} void - Click callback</Paragraph>
-                <Paragraph color="text-muted">• isGradient?: boolean - Gradient mode</Paragraph>
-                <Paragraph color="text-muted">• gradientStart/End?: number - Gradient colors</Paragraph>
-                <Paragraph color="text-muted">• gradientDegrees?: number - Gradient angle (default 180)</Paragraph>
-
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>ColorPickerWithSwatches</strong> - Swatch grid with render props
-                </Paragraph>
-                <Paragraph color="text-muted">• defaultColor: number - Default/reset color</Paragraph>
-                <Paragraph color="text-muted">• customColor?: number - Current custom color</Paragraph>
-                <Paragraph color="text-muted">• colors: number[] - Array of preset colors</Paragraph>
-                <Paragraph color="text-muted">• value: number - Selected color</Paragraph>
-                <Paragraph color="text-muted">• onChange: (color: number) ={">"} void - Change callback</Paragraph>
-                <Paragraph color="text-muted">• renderDefaultButton?: (props) ={">"} ReactNode</Paragraph>
-                <Paragraph color="text-muted">• renderCustomButton?: (props) ={">"} ReactNode</Paragraph>
-                <Paragraph color="text-muted">• isGradient?: boolean - Gradient mode</Paragraph>
-                <Paragraph color="text-muted">• gradientDegrees?: number - Gradient angle</Paragraph>
-                <Paragraph color="text-muted">• allowBlackCustomColor?: boolean - Allow #000000</Paragraph>
-
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>Color Conversion</strong>
-                </Paragraph>
-                <Paragraph color="text-muted">• Hex to int: parseInt(hex.replace("#", ""), 16)</Paragraph>
-                <Paragraph color="text-muted">• Int to hex: "#" + color.toString(16).padStart(6, "0")</Paragraph>
-            </SectionWrapper>
+    return (
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {PresetColors.slice(0, 10).map(color => (
+                <ColorSwatch key={color} color={color} isSelected={selected === color} onClick={() => setSelected(color)} />
+            ))}
         </div>
+    );
+}
+
+function SwatchesGridDemo() {
+    const [color, setColor] = useState(0x3498DB);
+
+    return (
+        <>
+            <Paragraph color="text-muted" style={{ marginBottom: 8 }}>Selected: {intToHex(color)}</Paragraph>
+            <ColorPickerWithSwatches
+                defaultColor={DEFAULT_COLOR}
+                colors={[...PresetColors]}
+                value={color}
+                onChange={setColor}
+                renderDefaultButton={() => null}
+                renderCustomButton={() => null}
+            />
+        </>
+    );
+}
+
+function FullPickerDemo() {
+    const [color, setColor] = useState(0x9B59B6);
+
+    return (
+        <>
+            <Paragraph color="text-muted" style={{ marginBottom: 8 }}>Selected: {intToHex(color)}</Paragraph>
+            <ColorPickerWithSwatches
+                defaultColor={DEFAULT_COLOR}
+                customColor={color}
+                colors={[...PresetColors]}
+                value={color}
+                onChange={setColor}
+                renderDefaultButton={props => <DefaultColorButton {...props} />}
+                renderCustomButton={() => (
+                    <ColorPicker color={color} onChange={setColor} showEyeDropper={false} />
+                )}
+            />
+        </>
+    );
+}
+
+export default function ColorPickerTab() {
+    return (
+        <DocPage
+            componentName="ColorPicker"
+            overview="Discord's color picker system includes a full-featured ColorPicker popout, individual ColorSwatch buttons, and a ColorPickerWithSwatches grid. Colors are represented as integers (e.g. 0x5865F2). Convert with parseInt(hex, 16) and color.toString(16)."
+            notices={[
+                { type: "info", children: 'Colors are represented as integers, not hex strings. Convert with parseInt(hex, 16) to get an integer and color.toString(16).padStart(6, "0") to get a hex string.' },
+            ]}
+            importPath={'import { ColorPicker, ColorPickerWithSwatches, ColorSwatch, DefaultColorButton, CustomColorButton } from "../components";'}
+            sections={[
+                {
+                    title: "Basic ColorPicker",
+                    description: "Click the swatch to open a full color picker popout.",
+                    children: <BasicPickerDemo />,
+                    code: "<ColorPicker color={color} onChange={setColor} showEyeDropper={false} />",
+                    relevantProps: ["color", "onChange"],
+                },
+                {
+                    title: "With Eye Dropper",
+                    description: "Includes the eye dropper tool for picking colors from screen.",
+                    children: <EyeDropperDemo />,
+                    relevantProps: ["showEyeDropper"],
+                },
+                {
+                    title: "With Suggested Colors",
+                    description: "Shows suggested color swatches inside the popout.",
+                    children: <SuggestedDemo />,
+                    code: '<ColorPicker\n  color={color}\n  onChange={setColor}\n  suggestedColors={["#1ABC9C", "#2ECC71", "#3498DB"]}\n/>',
+                    relevantProps: ["suggestedColors"],
+                },
+                {
+                    title: "Disabled",
+                    children: <ColorPicker color={0x5865F2} onChange={() => { }} disabled />,
+                    relevantProps: ["disabled"],
+                },
+                {
+                    title: "Color Swatches",
+                    description: "Individual swatch buttons. Click to select.",
+                    children: <SwatchSelectDemo />,
+                    code: "<ColorSwatch color={0x5865F2} isSelected={selected === 0x5865F2} onClick={() => setSelected(0x5865F2)} />",
+                },
+                {
+                    title: "Swatch States",
+                    description: "Normal, selected, default, custom, disabled, and no-color states.",
+                    children: (
+                        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                            {([
+                                ["Normal", {}],
+                                ["Selected", { isSelected: true }],
+                                ["Default", { isDefault: true }],
+                                ["Custom", { isCustom: true }],
+                                ["Disabled", { disabled: true }],
+                            ] as const).map(([label, props]) => (
+                                <div key={label} style={{ textAlign: "center" }}>
+                                    <ColorSwatch color={0x5865F2} {...props} />
+                                    <Paragraph color="text-muted" style={{ fontSize: 10 }}>{label}</Paragraph>
+                                </div>
+                            ))}
+                            <div style={{ textAlign: "center" }}>
+                                <ColorSwatch />
+                                <Paragraph color="text-muted" style={{ fontSize: 10 }}>No Color</Paragraph>
+                            </div>
+                        </div>
+                    ),
+                    relevantProps: ["isSelected", "isDefault", "isCustom", "disabled"],
+                },
+                {
+                    title: "Gradient Swatches",
+                    description: "Gradient swatches with customizable angle.",
+                    children: (
+                        <div style={{ display: "flex", gap: 8 }}>
+                            <ColorSwatch isGradient gradientStart={0xE91E63} gradientEnd={0x9B59B6} gradientDegrees={90} />
+                            <ColorSwatch isGradient gradientStart={0x3498DB} gradientEnd={0x2ECC71} gradientDegrees={135} />
+                            <ColorSwatch isGradient gradientStart={0xF1C40F} gradientEnd={0xE74C3C} gradientDegrees={180} />
+                        </div>
+                    ),
+                    relevantProps: ["isGradient", "gradientStart", "gradientEnd", "gradientDegrees"],
+                },
+                {
+                    title: "Swatch Grid",
+                    description: "ColorPickerWithSwatches renders a grid of preset color swatches.",
+                    children: <SwatchesGridDemo />,
+                    code: "<ColorPickerWithSwatches\n  defaultColor={DEFAULT_COLOR}\n  colors={presetColors}\n  value={color}\n  onChange={setColor}\n  renderDefaultButton={() => null}\n  renderCustomButton={() => null}\n/>",
+                },
+                {
+                    title: "Full Picker with Buttons",
+                    description: "Swatch grid with default reset button and custom color picker using render props.",
+                    children: <FullPickerDemo />,
+                    relevantProps: ["renderDefaultButton", "renderCustomButton"],
+                },
+            ]}
+            props={[
+                { title: "ColorPicker", props: PICKER_PROPS },
+                { title: "ColorSwatch", props: SWATCH_PROPS },
+                { title: "ColorPickerWithSwatches", props: SWATCHES_PROPS },
+            ]}
+        />
     );
 }

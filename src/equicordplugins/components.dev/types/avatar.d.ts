@@ -22,6 +22,7 @@ export interface AvatarProps {
     statusColor?: string;
     statusBackdropColor?: string;
     isMobile?: boolean;
+    isVR?: boolean;
     isTyping?: boolean;
     isSpeaking?: boolean;
     isLatched?: boolean;
@@ -35,9 +36,17 @@ export interface AvatarProps {
     avatarTooltipAsset?: React.ReactNode;
     avatarTooltipText?: string;
     avatarTooltipTitle?: string;
+    avatarDecoration?: string;
     "aria-hidden"?: boolean;
     "aria-label"?: string;
     imageClassName?: string;
     className?: string;
+    onClick?: React.MouseEventHandler<HTMLElement>;
+    onMouseDown?: React.MouseEventHandler<HTMLElement>;
+    onKeyDown?: React.KeyboardEventHandler<HTMLElement>;
+    onContextMenu?: React.MouseEventHandler<HTMLElement>;
+    onMouseEnter?: React.MouseEventHandler<HTMLElement>;
+    onMouseLeave?: React.MouseEventHandler<HTMLElement>;
+    tabIndex?: number;
     ref?: React.Ref<SVGSVGElement>;
 }

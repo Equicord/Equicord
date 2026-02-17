@@ -40,7 +40,8 @@ import { onlyOnce } from "@utils/onlyOnce";
 import { makeCodeblock } from "@utils/text";
 import definePlugin from "@utils/types";
 import { checkForUpdates, isOutdated, update } from "@utils/updater";
-import { Alerts, Button, ChannelStore, GuildMemberStore, Parser, PermissionsBits, PermissionStore, RelationshipStore, SelectedChannelStore, showToast, Toasts, UserStore } from "@webpack/common";
+import { CloudUploadPlatform } from "@vencord/discord-types/enums";
+import { Alerts, Button, ChannelStore, CloudUploader, Constants, GuildMemberStore, Parser, PermissionsBits, PermissionStore, RelationshipStore, RestAPI, SelectedChannelStore, showToast, SnowflakeUtils, Toasts, UserStore } from "@webpack/common";
 import { JSX } from "react";
 
 import plugins, { PluginMeta } from "~plugins";
@@ -185,6 +186,36 @@ async function generateDebugInfoMessage() {
     return content.trim();
 }
 
+async function uploadPluginListFile(channelId: string, fileContent: string, filename: string) {
+    const file = new File([fileContent], filename, { type: "text/plain" });
+    const upload = new CloudUploader({ file, platform: CloudUploadPlatform.WEB }, channelId);
+
+    return new Promise<void>((resolve, reject) => {
+        upload.on("complete", () => {
+            RestAPI.post({
+                url: Constants.Endpoints.MESSAGES(channelId),
+                body: {
+                    flags: 0,
+                    channel_id: channelId,
+                    content: `⚠️ Plugin list attached as file due to high plugin count (${fileContent.split("\n").filter(l => l.startsWith("  -")).length} plugins enabled)`,
+                    nonce: SnowflakeUtils.fromTimestamp(Date.now()),
+                    sticker_ids: [],
+                    type: 0,
+                    attachments: [{
+                        id: "0",
+                        filename: upload.filename,
+                        uploaded_filename: upload.uploadedFilename,
+                    }],
+                }
+            }).then(() => resolve()).catch(reject);
+        });
+
+        upload.on("error", () => reject(new Error("Failed to upload file")));
+
+        upload.upload();
+    });
+}
+
 function generatePluginList() {
     const isApiPlugin = (plugin: string) => plugin.endsWith("API") || plugins[plugin].required;
 
@@ -194,29 +225,54 @@ function generatePluginList() {
     const enabledStockPlugins = enabledPlugins.filter(p => !PluginMeta[p].userPlugin).sort();
     const enabledUserPlugins = enabledPlugins.filter(p => PluginMeta[p].userPlugin).sort();
 
-    let content = `**Enabled Plugins (${enabledStockPlugins.length}):**\n${makeCodeblock(enabledStockPlugins.join(", "))}`;
-
-    if (enabledUserPlugins.length) {
-        content += `**Enabled UserPlugins (${enabledUserPlugins.length}):**\n${makeCodeblock(enabledUserPlugins.join(", "))}`;
-    }
-
     const user = UserStore.getCurrentUser();
 
     if (enabledPlugins.length > 100 && !isAnyPluginDev(user.id)) {
         Alerts.show({
-            title: "You are attempting to get support!",
+            title: "Warning: High Plugin Count",
             body: <div>
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
                     <img src="https://media.tenor.com/QtGqjwBpRzwAAAAi/wumpus-dancing.gif" />
                 </div>
-                <Paragraph>Before you ask for help,</Paragraph>
-                <Paragraph>We do not handle support for users who use 100+ plugins</Paragraph>
-                <Paragraph>issue could be plugin confliction</Paragraph>
-                <Paragraph>try removing some plugins and see if it fixes!</Paragraph>
+                <Paragraph>You have more than 100 plugins enabled.</Paragraph>
+                <Paragraph>Due to the sheer amount of plugins, you may not receive support.</Paragraph>
+                <Paragraph>Your issue is likely caused by plugin conflicts.</Paragraph>
+                <Paragraph>Please consider disabling some plugins to troubleshoot.</Paragraph>
+                <Paragraph className={Margins.top8}>Your plugin list will be sent as a text file.</Paragraph>
             </div>
         });
 
-        return `${user.username} has more than 100 plugins enabled, please reduce the number of enabled plugins to get support.`;
+        const fileContent = [
+            `Enabled Stock Plugins (${enabledStockPlugins.length}):`,
+            ...enabledStockPlugins.map(p => `  - ${p}`),
+            "",
+        ];
+
+        if (enabledUserPlugins.length) {
+            fileContent.push(
+                `Enabled User Plugins (${enabledUserPlugins.length}):`,
+                ...enabledUserPlugins.map(p => `  - ${p}`),
+                ""
+            );
+        }
+
+        fileContent.push(
+            "---",
+            `Total Enabled Plugins: ${enabledPlugins.length}`,
+            "Warning: Due to the high number of enabled plugins, support may be limited."
+        );
+
+        return {
+            uploadFile: true,
+            fileContent: fileContent.join("\n"),
+            filename: `${user.username}-plugins.txt`
+        };
+    }
+
+    let content = `**Enabled Plugins (${enabledStockPlugins.length}):**\n${makeCodeblock(enabledStockPlugins.join(", "))}`;
+
+    if (enabledUserPlugins.length) {
+        content += `**Enabled UserPlugins (${enabledUserPlugins.length}):**\n${makeCodeblock(enabledUserPlugins.join(", "))}`;
     }
 
     return content;
@@ -258,9 +314,22 @@ export default definePlugin({
             description: "Send Equicord plugin list",
             // @ts-ignore
             predicate: ctx => isAnyPluginDev(UserStore.getCurrentUser()?.id) || isEquicordGuild(ctx?.guild?.id, true),
-            execute: () => {
+            execute: async () => {
+                const channelId = SelectedChannelStore.getChannelId();
                 const pluginList = generatePluginList();
-                return { content: typeof pluginList === "string" ? pluginList : "Unable to generate plugin list." };
+
+                if (typeof pluginList === "string") {
+                    return { content: pluginList };
+                } else if (pluginList && typeof pluginList === "object" && pluginList.uploadFile) {
+                    try {
+                        await uploadPluginListFile(channelId, pluginList.fileContent, pluginList.filename);
+                        return { content: "" }; // Empty return since file was already sent
+                    } catch (e) {
+                        new Logger("SupportHelper").error("Failed to upload plugin list:", e);
+                        return { content: "Failed to upload plugin list file. Please try again." };
+                    }
+                }
+                return { content: "Unable to generate plugin list." };
             }
         }
     ],
@@ -380,6 +449,14 @@ export default definePlugin({
                             const pluginList = generatePluginList();
                             if (typeof pluginList === "string") {
                                 sendMessage(props.channel.id, { content: pluginList });
+                            } else if (pluginList && typeof pluginList === "object" && pluginList.uploadFile) {
+                                try {
+                                    await uploadPluginListFile(props.channel.id, pluginList.fileContent, pluginList.filename);
+                                    showToast("Plugin list uploaded successfully!", Toasts.Type.SUCCESS);
+                                } catch (e) {
+                                    new Logger("SupportHelper").error("Failed to upload plugin list:", e);
+                                    showToast("Failed to upload plugin list", Toasts.Type.FAILURE);
+                                }
                             }
                         }}
                     >

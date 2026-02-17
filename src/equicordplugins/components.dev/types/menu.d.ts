@@ -36,12 +36,19 @@ export interface MenuItemProps {
     iconLeft?: ComponentType<MenuItemIconProps>;
     iconLeftSize?: MenuIconSize;
     iconProps?: MenuItemIconProps;
+    leadingAccessory?: ReactNode;
+    trailingIndicator?: ReactNode;
     hint?: ReactNode | ((props: MenuItemProps) => ReactNode);
+    shortcut?: ReactNode;
     subtext?: ReactNode;
     subtextLineClamp?: number;
     hasSubmenu?: boolean;
+    loading?: boolean;
+    badge?: ReactNode;
     disabled?: boolean;
     action?: (e: MouseEvent) => void;
+    onClose?: () => void;
+    onFocus?: () => void;
     dontCloseOnAction?: boolean;
     dontCloseOnActionIfHoldingShiftKey?: boolean;
     className?: string;
@@ -64,6 +71,9 @@ export interface MenuCheckboxItemProps {
     action?: (e: MouseEvent) => void;
     disabled?: boolean;
     subtext?: ReactNode;
+    subtextLineClamp?: number;
+    leftIcon?: ComponentType<MenuItemIconProps>;
+    leadingAccessory?: ReactNode;
     className?: string;
     focusedClassName?: string;
 }
@@ -77,6 +87,9 @@ export interface MenuRadioItemProps {
     action?: (e: MouseEvent) => void;
     disabled?: boolean;
     subtext?: ReactNode;
+    subtextLineClamp?: number;
+    leftIcon?: ComponentType<MenuItemIconProps>;
+    leadingAccessory?: ReactNode;
 }
 
 export interface MenuSwitchItemProps {
@@ -86,6 +99,8 @@ export interface MenuSwitchItemProps {
     checked: boolean;
     action: (e: MouseEvent) => void;
     disabled?: boolean;
+    subtext?: ReactNode;
+    subtextLineClamp?: number;
     className?: string;
 }
 
@@ -150,6 +165,7 @@ export interface MenuSliderControlProps {
     minValue?: number;
     maxValue?: number;
     onChange: (value: number) => void;
+    onInteraction?: (type?: number) => void;
     renderValue?: (value: number) => string;
     "aria-label"?: string;
 }
@@ -157,7 +173,9 @@ export interface MenuSliderControlProps {
 export interface MenuSearchControlProps {
     query: string;
     onChange: (query: string) => void;
+    disabled?: boolean;
     placeholder?: string;
+    onInteraction?: (type?: number) => void;
     "aria-label"?: string;
 }
 

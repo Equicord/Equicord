@@ -27,6 +27,14 @@ export interface ManaDatePickerProps {
     disabled?: boolean;
     required?: boolean;
     label?: string;
+    hideLabel?: boolean;
+    badge?: React.ReactNode;
+    icon?: React.ReactNode;
     description?: string;
+    helperText?: string;
     errorMessage?: string;
+    successMessage?: string;
+    id?: string;
+    layout?: string;
+    layoutConfig?: Record<string, unknown>;
 }

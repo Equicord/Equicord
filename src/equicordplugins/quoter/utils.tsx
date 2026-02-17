@@ -46,7 +46,8 @@ export function fixUpQuote(quote: string): string {
 
 export function generateFileNamePreview(message: string): string {
     const words = message.split(" ");
-    return words.length > 6 ? words.slice(0, 6).join(" ") : words.join(" ");
+    const preview = words.length > 6 ? words.slice(0, 6).join(" ") : words.join(" ");
+    return preview.slice(0, 10);
 }
 
 export function getFileExtension(saveAsGif: boolean): string {
@@ -153,12 +154,31 @@ function calculateTextLines(
     let currentLine: string[] = [];
 
     words.forEach(word => {
-        const testLine = [...currentLine, word].join(" ");
-        if (ctx.measureText(testLine).width > maxWidth && currentLine.length) {
-            lines.push(currentLine.join(" "));
-            currentLine = [word];
+        if (ctx.measureText(word).width > maxWidth) {
+            if (currentLine.length) {
+                lines.push(currentLine.join(" "));
+                currentLine = [];
+            }
+
+            let chunk = "";
+            for (const char of word) {
+                const testChunk = chunk + char;
+                if (ctx.measureText(testChunk).width > maxWidth) {
+                    if (chunk) lines.push(chunk);
+                    chunk = char;
+                } else {
+                    chunk = testChunk;
+                }
+            }
+            if (chunk) lines.push(chunk);
         } else {
-            currentLine.push(word);
+            const testLine = [...currentLine, word].join(" ");
+            if (ctx.measureText(testLine).width > maxWidth && currentLine.length) {
+                lines.push(currentLine.join(" "));
+                currentLine = [word];
+            } else {
+                currentLine.push(word);
+            }
         }
     });
 

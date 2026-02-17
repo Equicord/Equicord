@@ -5,223 +5,137 @@
  */
 
 import { Clickable, Paragraph, useState } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { DocPage, type PropDef } from "../DocPage";
 
-export default function ClickableTab() {
-    const [clickCount, setClickCount] = useState(0);
-    const [lastAction, setLastAction] = useState("None");
+const CLICKABLE_PROPS: PropDef[] = [
+    { name: "tag", type: "keyof JSX.IntrinsicElements", default: '"div"', description: "HTML element to render as." },
+    { name: "onClick", type: "MouseEventHandler", description: "Click handler. When absent, renders as a non-interactive element without keyboard handling." },
+    { name: "onKeyPress", type: "KeyboardEventHandler", description: "Key press handler called after internal Enter/Space handling." },
+    { name: "role", type: "string", default: '"button"', description: "ARIA role attribute." },
+    { name: "tabIndex", type: "number", default: "0", description: "Tab index for keyboard navigation." },
+    { name: "ignoreKeyPress", type: "boolean", description: "When true, Enter and Space keys will not trigger onClick." },
+    { name: "focusProps", type: "Record<string, unknown>", internal: true, description: "Props forwarded to the focus management wrapper." },
+    { name: "innerRef", type: "Ref<HTMLElement>", internal: true, description: "Ref to the underlying DOM element." },
+    { name: "href", type: "string", description: "Optional href. Affects key handling behavior (Space won't preventDefault when set)." },
+    { name: "className", type: "string", description: "Additional CSS class name." },
+    { name: "children", type: "ReactNode", description: "Child elements." },
+];
+
+const boxStyle: React.CSSProperties = {
+    padding: "8px 16px",
+    backgroundColor: "var(--background-secondary)",
+    borderRadius: 4,
+    cursor: "pointer",
+};
+
+function BasicDemo() {
+    const [count, setCount] = useState(0);
 
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Basic Clickable">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Default clickable element. Click count: {clickCount}
-                </Paragraph>
-                <Clickable
-                    onClick={() => setClickCount(c => c + 1)}
-                    style={{
-                        padding: "8px 16px",
-                        backgroundColor: "var(--background-secondary)",
-                        borderRadius: 4,
-                        cursor: "pointer"
-                    }}
-                >
-                    Click me!
+        <>
+            <Paragraph color="text-muted" style={{ marginBottom: 8 }}>Click count: {count}</Paragraph>
+            <Clickable onClick={() => setCount(c => c + 1)} style={boxStyle}>
+                Click me!
+            </Clickable>
+        </>
+    );
+}
+
+function TagDemo() {
+    const [last, setLast] = useState("None");
+
+    return (
+        <>
+            <div style={{ display: "flex", gap: 8 }}>
+                <Clickable tag="div" onClick={() => setLast("div")} style={{ ...boxStyle, backgroundColor: "var(--background-tertiary)" }}>
+                    tag="div"
                 </Clickable>
-            </SectionWrapper>
-
-            <SectionWrapper title="With Custom Tag">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Clickable can render as different HTML elements using the tag prop.
-                </Paragraph>
-                <div style={{ display: "flex", gap: 8 }}>
-                    <Clickable
-                        tag="div"
-                        onClick={() => setLastAction("Clicked div")}
-                        style={{
-                            padding: "8px 16px",
-                            backgroundColor: "var(--background-tertiary)",
-                            borderRadius: 4,
-                            cursor: "pointer"
-                        }}
-                    >
-                        tag="div"
-                    </Clickable>
-                    <Clickable
-                        tag="span"
-                        onClick={() => setLastAction("Clicked span")}
-                        style={{
-                            padding: "8px 16px",
-                            backgroundColor: "var(--background-tertiary)",
-                            borderRadius: 4,
-                            cursor: "pointer"
-                        }}
-                    >
-                        tag="span"
-                    </Clickable>
-                    <Clickable
-                        tag="button"
-                        onClick={() => setLastAction("Clicked button")}
-                        style={{
-                            padding: "8px 16px",
-                            backgroundColor: "var(--background-tertiary)",
-                            borderRadius: 4,
-                            cursor: "pointer",
-                            border: "none",
-                            color: "inherit"
-                        }}
-                    >
-                        tag="button"
-                    </Clickable>
-                </div>
-                <Paragraph color="text-muted" style={{ marginTop: 8 }}>
-                    Last action: {lastAction}
-                </Paragraph>
-            </SectionWrapper>
-
-            <SectionWrapper title="With Role and TabIndex">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Accessibility props for keyboard navigation.
-                </Paragraph>
-                <div style={{ display: "flex", gap: 8 }}>
-                    <Clickable
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => setLastAction("Role: button")}
-                        style={{
-                            padding: "8px 16px",
-                            backgroundColor: "var(--background-secondary)",
-                            borderRadius: 4,
-                            cursor: "pointer"
-                        }}
-                    >
-                        role="button" tabIndex=0
-                    </Clickable>
-                    <Clickable
-                        role="link"
-                        tabIndex={0}
-                        onClick={() => setLastAction("Role: link")}
-                        style={{
-                            padding: "8px 16px",
-                            backgroundColor: "var(--background-secondary)",
-                            borderRadius: 4,
-                            cursor: "pointer"
-                        }}
-                    >
-                        role="link" tabIndex=0
-                    </Clickable>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Ignore Key Press">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    When ignoreKeyPress is true, Enter/Space won't trigger onClick.
-                </Paragraph>
-                <div style={{ display: "flex", gap: 8 }}>
-                    <Clickable
-                        tabIndex={0}
-                        onClick={() => setLastAction("Normal (keys work)")}
-                        style={{
-                            padding: "8px 16px",
-                            backgroundColor: "var(--background-secondary)",
-                            borderRadius: 4,
-                            cursor: "pointer"
-                        }}
-                    >
-                        Normal (try Enter/Space)
-                    </Clickable>
-                    <Clickable
-                        tabIndex={0}
-                        ignoreKeyPress
-                        onClick={() => setLastAction("Ignored (keys blocked)")}
-                        style={{
-                            padding: "8px 16px",
-                            backgroundColor: "var(--background-secondary)",
-                            borderRadius: 4,
-                            cursor: "pointer"
-                        }}
-                    >
-                        ignoreKeyPress (keys blocked)
-                    </Clickable>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Without onClick">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    When no onClick is provided, renders as non-interactive element.
-                </Paragraph>
-                <Clickable
-                    style={{
-                        padding: "8px 16px",
-                        backgroundColor: "var(--background-modifier-accent)",
-                        borderRadius: 4
-                    }}
-                >
-                    Non-interactive (no onClick)
+                <Clickable tag="span" onClick={() => setLast("span")} style={{ ...boxStyle, backgroundColor: "var(--background-tertiary)" }}>
+                    tag="span"
                 </Clickable>
-            </SectionWrapper>
+                <Clickable tag="button" onClick={() => setLast("button")} style={{ ...boxStyle, backgroundColor: "var(--background-tertiary)", border: "none", color: "inherit" }}>
+                    tag="button"
+                </Clickable>
+            </div>
+            <Paragraph color="text-muted" style={{ marginTop: 8 }}>Last clicked: {last}</Paragraph>
+        </>
+    );
+}
 
-            <SectionWrapper title="Styled Examples">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Clickable with different visual styles.
-                </Paragraph>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                    <Clickable
-                        onClick={() => setLastAction("Card clicked")}
-                        style={{
-                            padding: 16,
-                            backgroundColor: "var(--background-secondary)",
-                            borderRadius: 8,
-                            cursor: "pointer",
-                            width: 120,
-                            textAlign: "center"
-                        }}
-                    >
-                        <div style={{ fontSize: 24, marginBottom: 4 }}>📁</div>
-                        <div>Card Style</div>
-                    </Clickable>
-                    <Clickable
-                        onClick={() => setLastAction("Chip clicked")}
-                        style={{
-                            padding: "4px 12px",
-                            backgroundColor: "var(--brand-experiment)",
-                            borderRadius: 16,
-                            cursor: "pointer",
-                            color: "white"
-                        }}
-                    >
-                        Chip Style
-                    </Clickable>
-                    <Clickable
-                        onClick={() => setLastAction("List item clicked")}
-                        style={{
-                            padding: "8px 16px",
-                            backgroundColor: "var(--background-secondary)",
-                            cursor: "pointer",
-                            width: 200
-                        }}
-                    >
-                        List Item Style →
-                    </Clickable>
-                </div>
-            </SectionWrapper>
+function KeyPressDemo() {
+    const [last, setLast] = useState("None");
 
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    <strong>Clickable</strong> - Interactive element wrapper
-                </Paragraph>
-                <Paragraph color="text-muted">• tag?: keyof JSX.IntrinsicElements - HTML element to render (default: div)</Paragraph>
-                <Paragraph color="text-muted">• onClick?: MouseEventHandler - Click handler</Paragraph>
-                <Paragraph color="text-muted">• onKeyPress?: KeyboardEventHandler - Key press handler</Paragraph>
-                <Paragraph color="text-muted">• focusProps?: object - Props for FocusLock wrapper</Paragraph>
-                <Paragraph color="text-muted">• innerRef?: Ref - Ref to the inner element</Paragraph>
-                <Paragraph color="text-muted">• role?: string - ARIA role attribute</Paragraph>
-                <Paragraph color="text-muted">• tabIndex?: number - Tab index for keyboard navigation</Paragraph>
-                <Paragraph color="text-muted">• ignoreKeyPress?: boolean - Disable Enter/Space triggering onClick</Paragraph>
-                <Paragraph color="text-muted">• href?: string - Optional href (affects key handling)</Paragraph>
-                <Paragraph color="text-muted">• className?: string - CSS class name</Paragraph>
-                <Paragraph color="text-muted">• children?: ReactNode - Child elements</Paragraph>
-            </SectionWrapper>
-        </div>
+    return (
+        <>
+            <div style={{ display: "flex", gap: 8 }}>
+                <Clickable tabIndex={0} onClick={() => setLast("Normal (keys work)")} style={boxStyle}>
+                    Normal (try Enter/Space)
+                </Clickable>
+                <Clickable tabIndex={0} ignoreKeyPress onClick={() => setLast("Keys blocked")} style={boxStyle}>
+                    ignoreKeyPress (keys blocked)
+                </Clickable>
+            </div>
+            <Paragraph color="text-muted" style={{ marginTop: 8 }}>Last action: {last}</Paragraph>
+        </>
+    );
+}
+
+export default function ClickableTab() {
+    return (
+        <DocPage
+            componentName="Clickable"
+            overview="Clickable is a generic interactive wrapper that adds click and keyboard handling to any HTML element. It handles Enter/Space key presses, integrates with Discord's focus management context, and gracefully degrades to a non-interactive element when no onClick is provided. It's a class component with configurable tag, role, and tabIndex defaults."
+            notices={[
+                { type: "positive", children: 'Use Clickable instead of adding onClick to plain divs. It handles keyboard accessibility, focus management, and proper ARIA role="button" automatically.' },
+            ]}
+            importPath={'import { Clickable } from "../components";'}
+            sections={[
+                {
+                    title: "Basic",
+                    description: "Default clickable element. Renders as a div with role=\"button\" and tabIndex=0.",
+                    children: <BasicDemo />,
+                    code: "<Clickable onClick={() => doSomething()} style={myStyles}>\n  Click me!\n</Clickable>",
+                    relevantProps: ["onClick", "children"],
+                },
+                {
+                    title: "Custom Tag",
+                    description: "Clickable can render as any HTML element using the tag prop.",
+                    children: <TagDemo />,
+                    code: '<Clickable tag="button" onClick={handleClick}>\n  I am a button element\n</Clickable>',
+                    relevantProps: ["tag"],
+                },
+                {
+                    title: "Role and TabIndex",
+                    description: "Accessibility props for keyboard navigation. Defaults to role=\"button\" and tabIndex=0.",
+                    children: (
+                        <div style={{ display: "flex", gap: 8 }}>
+                            <Clickable role="button" tabIndex={0} onClick={() => { }} style={boxStyle}>
+                                role="button"
+                            </Clickable>
+                            <Clickable role="link" tabIndex={0} onClick={() => { }} style={boxStyle}>
+                                role="link"
+                            </Clickable>
+                        </div>
+                    ),
+                    relevantProps: ["role", "tabIndex"],
+                },
+                {
+                    title: "Ignore Key Press",
+                    description: "When ignoreKeyPress is true, Enter and Space will not trigger onClick. Only mouse clicks work.",
+                    children: <KeyPressDemo />,
+                    relevantProps: ["ignoreKeyPress"],
+                },
+                {
+                    title: "Non-Interactive",
+                    description: "When no onClick is provided, renders without keyboard handling or interactive behavior.",
+                    children: (
+                        <Clickable style={{ padding: "8px 16px", backgroundColor: "var(--background-modifier-accent)", borderRadius: 4 }}>
+                            Non-interactive (no onClick)
+                        </Clickable>
+                    ),
+                },
+            ]}
+            props={CLICKABLE_PROPS}
+        />
     );
 }
