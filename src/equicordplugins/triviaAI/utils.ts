@@ -5,10 +5,13 @@
  */
 
 import { sendMessage } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import { Message } from "@vencord/discord-types";
 import { ComponentDispatch } from "@webpack/common/utils";
 
 import { settings } from "./settings";
+
+const logger = new Logger("TriviaAI");
 
 type TextPart = {
     type: "text";
@@ -183,13 +186,13 @@ export async function getResponse(payload: ContentPayload): Promise<string> {
     const data = await req.json();
 
     if (data.error) {
-        console.log(`API Error: ${data.error.message || "An unknown error occurred"}`);
+        logger.error(`API Error: ${data.error.message || "An unknown error occurred"}`);
     }
 
     const response = data.choices[0].message.content;
 
     if (!response || response.trim().length === 0) {
-        console.log("no response from AI model");
+        logger.warn("no response from AI model");
     }
 
     return response;
