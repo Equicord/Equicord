@@ -1485,6 +1485,7 @@
 				},
 				"questify":{
 								"gradientOptions":{
+												"hide":"Ocultar",
 												"intense":"Intenso"
 								},
 								"settings":{
@@ -1543,7 +1544,15 @@
 				},
 				"timezones":{
 								"settings":{
-												"resetDatabaseTimezone":"Redefina seu fuso horário no banco de dados"
+												"24hTime":"Mostrar hora no formato 24h",
+												"databaseUrl":"URL do banco de dados para armazenamento de fusos horários",
+												"preferDatabaseOverLocal":"Preferir banco de dados ao armazenamento local para fuso horários",
+												"resetDatabaseTimezone":"Redefina seu fuso horário no banco de dados",
+												"setDatabaseTimezone":"Defina seu fuso horário no banco de dados",
+												"showMessageHeaderTime":"Mostrar hora no cabeçalho da mensagem",
+												"showOwnTimezone":"Mostrar seu próprio fuso horário nos perfis e cabeçalhos de mensagens",
+												"showTimezoneInfo":"Mostrar informações de fuso horário ao lado da hora",
+												"useDatabase":"Ativar banco de dados para obter fuso horário dos usuários"
 								}
 				},
 				"toastNotifications":{
