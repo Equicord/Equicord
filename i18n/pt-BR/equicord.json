@@ -1369,7 +1369,7 @@
             "cacheLimit":"Número máximo de mensagens para armazenar no cache. Mensagens mais antigas são excluídas quando o limite é atingido. Isso ajuda a reduzir o uso de memória e melhorar o desempenho. 0 significa que não há limite",
             "cacheMessagesFromServers":"Geralmente, message logger apenas registra IDs na lista branca e DMs, ativar isso significa que ele também registrará mensagens de todos os servidores. Observe que isso pode fazer com que o cache exceda seu limite, resultando na perda de algumas mensagens. Se você estiver em muitos servidores, isso pode aumentar significativamente as chances de as mensagens serem registradas, o que pode resultar em um registro de mensagens volumoso e na inclusão de mensagens irrelevantes.",
             "exportLogsFromIndexedDB":"Exportar registros do IndexedDB",
-            "hideMessageFromMessageLoggers":"Quando ativado, um botão de menu de contexto será adicionado às mensagens para permitir que você as exclua sem que sejam registradas por outros loggers. Pode não ser seguro, use por sua conta e risco.",
+            "hideMessageFromMessageLoggers":"Quando ativado, um botão será adicionado às mensagens para permitir que você as exclua sem que sejam registradas por outros registradores (loggers). Pode não ser seguro, use por sua conta e risco.",
             "hideMessageFromMessageLoggersDeletedMessage":"O conteúdo da mensagem para substituir a mensagem ao usar o recurso de ocultar mensagem dos registradores de mensagens",
             "ignoreBots":"Whether to ignore messages by bots",
             "ignoreMutedCategories":"Mensagens em canais pertencentes a categorias silenciadas não serão registradas. Usuários/canais na lista branca em servidores silenciados ainda serão registrados.",
