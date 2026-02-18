@@ -1105,6 +1105,7 @@ export default definePlugin({
             ]
         },
         {
+            // Replace names in the typing indicator.
             find: "activityInviteEducationActivity:",
             replacement: {
                 match: /(?=\i.\i.getName\((\i.guild_id),\i.id,(\i)\))/,
