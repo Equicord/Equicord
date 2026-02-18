@@ -286,8 +286,7 @@ function jsonEq(a: unknown, b: unknown): boolean {
 }
 
 function customStatusEq(a: CustomStatus | null | undefined, b: CustomStatus | null | undefined): boolean {
-    if (a == null && b == null) return true;
-    if (a == null || b == null) return false;
+    if (a == null || b == null) return a == null && b == null;
     return a.text === b.text
         && String(a.emojiId ?? "") === String(b.emojiId ?? "")
         && a.emojiName === b.emojiName
@@ -316,20 +315,17 @@ function normalizeImageValue(value: unknown): string | null {
 }
 
 function collectibleEqBySku(a: { skuId?: string | number | null; } | null | undefined, b: { skuId?: string | number | null; } | null | undefined): boolean {
-    if (a == null && b == null) return true;
-    if (a == null || b == null) return false;
+    if (a == null || b == null) return a == null && b == null;
     return String(a.skuId ?? "") === String(b.skuId ?? "");
 }
 
 function avatarDecorationEq(a: { skuId?: string | number | null; asset?: string | null; } | null | undefined, b: { skuId?: string | number | null; asset?: string | null; } | null | undefined): boolean {
-    if (a == null && b == null) return true;
-    if (a == null || b == null) return false;
+    if (a == null || b == null) return a == null && b == null;
     return String(a.skuId ?? "") === String(b.skuId ?? "") && String(a.asset ?? "") === String(b.asset ?? "");
 }
 
 function nameplateEq(a: { skuId?: string | number | null; asset?: string | null; } | null | undefined, b: { skuId?: string | number | null; asset?: string | null; } | null | undefined): boolean {
-    if (a == null && b == null) return true;
-    if (a == null || b == null) return false;
+    if (a == null || b == null) return a == null && b == null;
     return String(a.skuId ?? "") === String(b.skuId ?? "") && String(a.asset ?? "") === String(b.asset ?? "");
 }
 
@@ -409,8 +405,8 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
                 equippedAvatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined
             )
             && !avatarDecorationEq(
-            preset.avatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
-            current.avatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined
+                preset.avatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
+                current.avatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined
             )) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 0, value: preset.avatarDecoration }
@@ -427,8 +423,8 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
                 equippedProfileEffect as { skuId?: string | number | null; } | null | undefined
             )
             && !collectibleEqBySku(
-            preset.profileEffect as { skuId?: string | number | null; } | null | undefined,
-            current.profileEffect as { skuId?: string | number | null; } | null | undefined
+                preset.profileEffect as { skuId?: string | number | null; } | null | undefined,
+                current.profileEffect as { skuId?: string | number | null; } | null | undefined
             )) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 1, value: preset.profileEffect }
@@ -445,8 +441,8 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
                 equippedNameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined
             )
             && !nameplateEq(
-            preset.nameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
-            current.nameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined
+                preset.nameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
+                current.nameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined
             )) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 2, value: preset.nameplate }
