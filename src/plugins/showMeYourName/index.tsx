@@ -28,6 +28,7 @@ const UserStore = findStoreLazy("UserStore");
 const wrapEmojis = findByCodeLazy("lastIndex;return");
 const adjustColor = findByCodeLazy("light1", "dark1", "toonStroke");
 const AccessibilityStore = findStoreLazy("AccessibilityStore");
+const SelectedGuildStore = findStoreLazy("SelectedGuildStore");
 
 const roleColorPattern = /^role((?:\+|-)\d{0,4})?$/iu;
 const symbolPattern = /^[\p{S}\p{P}]{1,3}$/iu;
@@ -1067,6 +1068,7 @@ export default definePlugin({
     settings,
 
     UserStore,
+    SelectedGuildStore,
 
     patches: [
         {
@@ -1105,8 +1107,8 @@ export default definePlugin({
             // Replace names in the friends list.
             find: "location:\"DiscordTag\"});",
             replacement: {
-                match: /(?<=let{user:(\i).{0,800},{(?:primary|name):)\i/g,
-                replace: "$self.getTypingMemberListProfilesReactionsVoiceNameText({user:$1,type:\"membersList\"})"
+                match: /(?<=let{user:(\i).{0,800},{(?:primary|name):)(\i)/g,
+                replace: "!$self.SelectedGuildStore.getGuildId()?$self.getTypingMemberListProfilesReactionsVoiceNameText({user:$1,type:\"membersList\"}):$2"
             },
         },
         {
