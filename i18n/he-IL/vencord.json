@@ -915,6 +915,12 @@
         "unblockUser":"Unblock user",
         "viewReviews":"View Reviews"
     },
+    "secretRingTone":{
+        "description":"תמיד משמיע את הרינגטון הסודי של Discord (רק לא במהלך אירועי רינגטון מיוחדים)",
+        "settings":{
+            "onlySnow":"השמע רק את שיר הנושא של Snow Halation"
+        }
+    },
     "seeSummaries":{
         "description":"Enables Discord's experimental Summaries feature on every server, displaying AI generated summaries of conversations",
         "name":"Summaries",
@@ -1299,6 +1305,9 @@
         "description":"Allows you to unsuppress embeds in messages",
         "suppressEmbeds":"Suppress Embeds",
         "unsuppressEmbeds":"Unsuppress Embeds"
+    },
+    "userSettingsAPI":{
+        "description":"גורם לUserSettings של Discord כדי לחשוף את הקבוצה והשם שלהם"
     },
     "userVoiceShow":{
         "cannotJoinChannel":"You cannot join the user's Voice Channel",
