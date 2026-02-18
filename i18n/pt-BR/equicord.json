@@ -1498,6 +1498,12 @@
     "noRPC":{
         "description":"Desativa o recurso de Atividade (RPC) do Discord"
     },
+    "normalizeMessageLinks":{
+        "description":"Normaliza links de mensagens do Discord removendo subdomínios canary/ptb para maior consistência"
+    },
+    "notificationTitle":{
+        "description":"Adiciona títulos de notificação detalhados mostrando informações do remetente, canal e servidor"
+    },
     "partyMode":{
         "description":"Ativa efeitos de modo festa com confetes e tremida de tela",
         "settings":{
@@ -1623,6 +1629,11 @@
             "FileType":"O formato em que você deseja salvar seu arquivo",
             "SavedIds":"A quantidade de IDs de soundboard que você deseja salvar por vez (0 permite salvar infinitos)",
             "soundVolume":"O volume do som de alternância(toggle) (0 para desativar)"
+        }
+    },
+    "splitLargeMessages":{
+        "settings":{
+            "maxLength":"Comprimento máximo de uma mensagem antes de ser dividida. Defina como 0 para detectar automaticamente"
         }
     },
     "statsfmPresence":{
