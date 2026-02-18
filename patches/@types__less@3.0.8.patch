@@ -4,7 +4,7 @@ index eb4f07d47b932fb9cc8c8cd451ab107f648bd013..18a3e15a1997734e1773718e5be55d25
 +++ b/index.d.ts
 @@ -306,7 +306,5 @@ interface LessStatic {
  }
- 
+
  declare module "less" {
 -    export = less;
 +    export = LessStatic;

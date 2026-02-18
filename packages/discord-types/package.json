@@ -1,5 +1,5 @@
 {
-    "name": "@equicord/discord-types",
+    "name": "@vencord/discord-types",
     "author": "Equicord & Vencord Contributors",
     "private": false,
     "description": "Typescript definitions for the webpack modules of the Discord Web app",

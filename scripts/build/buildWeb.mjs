@@ -1,4 +1,4 @@
-#!/usr/bin/node
+#!/usr/bin/env bun
 /*
  * Vencord, a modification for Discord's desktop app
  * Copyright (c) 2022 Vendicated and contributors
@@ -19,9 +19,8 @@
 
 // @ts-check
 
-import { readFileSync } from "fs";
-import { appendFile, mkdir, readdir, readFile, rm, writeFile } from "fs/promises";
-import path, { join } from "path";
+import { appendFile, mkdir, readdir, rm } from "fs/promises";
+import { join } from "path";
 import Zip from "zip-local";
 
 import { BUILD_TIMESTAMP, commonOpts, globPlugins, IS_DEV, IS_REPORTER, IS_COMPANION_TEST, VERSION, commonRendererPlugins, buildOrWatchAll, stringifyValues, IS_ANTI_CRASH_TEST } from "./common.mjs";
@@ -107,7 +106,7 @@ const buildConfigs = [
         },
         outfile: "dist/Equicord.user.js",
         banner: {
-            js: readFileSync("browser/userscript.meta.js", "utf-8").replace("%version%", `${VERSION}.${new Date().getTime()}`)
+            js: (await Bun.file("browser/userscript.meta.js").text()).replace("%version%", `${VERSION}.${Date.now()}`)
         },
         footer: {
             // UserScripts get wrapped in an iife, so define Vencord prop on window that returns our local
@@ -144,7 +143,7 @@ async function loadDir(dir, basePath = "") {
         await Promise.all(
             files.map(
                 async f =>
-                    [f.slice(basePath.length), await readFile(f)]
+                    [f.slice(basePath.length), Buffer.from(await Bun.file(f).arrayBuffer())]
             )
         )
     );
@@ -155,15 +154,15 @@ async function loadDir(dir, basePath = "") {
  */
 async function buildExtension(target, files) {
     const entries = {
-        "dist/Equicord.js": await readFile("dist/browser/extension.js"),
-        "dist/Equicord.css": await readFile("dist/browser/extension.css"),
+        "dist/Equicord.js": Buffer.from(await Bun.file("dist/browser/extension.js").arrayBuffer()),
+        "dist/Equicord.css": Buffer.from(await Bun.file("dist/browser/extension.css").arrayBuffer()),
         ...await loadDir("dist/browser/vendor/monaco", "dist/browser/"),
         ...Object.fromEntries(await Promise.all(files.map(async f => {
-            let content = await readFile(join("browser", f));
+            let content = Buffer.from(await Bun.file(join("browser", f)).arrayBuffer());
             if (f.startsWith("manifest")) {
                 const json = JSON.parse(content.toString("utf-8"));
                 json.version = VERSION;
-                content = Buffer.from(new TextEncoder().encode(JSON.stringify(json)));
+                content = Buffer.from(JSON.stringify(json));
             }
 
             return [
@@ -178,13 +177,13 @@ async function buildExtension(target, files) {
         const dest = join("dist/browser", target, file);
         const parentDirectory = join(dest, "..");
         await mkdir(parentDirectory, { recursive: true });
-        await writeFile(dest, content);
+        await Bun.write(dest, content);
     }));
 
     console.info("Unpacked Extension written to dist/browser/" + target);
 }
 
-const appendCssRuntime = readFile("dist/Equicord.user.css", "utf-8").then(content => {
+const appendCssRuntime = Bun.file("dist/Equicord.user.css").text().then(content => {
     const cssRuntime = `unsafeWindow._vcUserScriptRendererCss=\`${content.replaceAll("`", "\\`")}\``;
 
     return appendFile("dist/Equicord.user.js", cssRuntime);
