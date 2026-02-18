@@ -385,7 +385,7 @@
     "cursorBuddy":{
         "description":"Adiciona um sprite que segue o cursor.",
         "settings":{
-            "buddy":"Escolha um amigo cursor",
+            "buddy":"Escolha um companheiro de cursor",
             "buddyOptions":{
                 "fathorse":"Cavalo Gordo",
                 "oneko":"Oneko"
