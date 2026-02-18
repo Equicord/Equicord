@@ -18,7 +18,7 @@
 
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, registerCommand, sendBotMessage, unregisterCommand } from "@api/Commands";
 import { definePluginSettings } from "@api/Settings";
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 const EMOTE = "<:luna:1035316192220553236>";
@@ -28,6 +28,7 @@ const MessageTagsMarker = Symbol("MessageTags");
 interface Tag {
     name: string;
     message: string;
+    modified: boolean;
 }
 
 function getTags() {
@@ -36,6 +37,42 @@ function getTags() {
 
 function getTag(name: string) {
     return settings.store.tagsList[name] ?? null;
+}
+
+function getTagEntries() {
+    return Object.values(getTags()).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function normalizeTagMessageInput(input: string) {
+    return input.replaceAll("\r\n", "\n").replaceAll("\\n", "\n");
+}
+
+function resolveTag(nameOrIndex: string) {
+    const direct = getTag(nameOrIndex);
+    if (direct) return direct;
+
+    const lowered = nameOrIndex.toLowerCase();
+    const byName = getTagEntries().find(tag => tag.name.toLowerCase() === lowered);
+    if (byName) return byName;
+
+    const parsed = Number(nameOrIndex);
+    if (!Number.isInteger(parsed) || parsed <= 0) return null;
+    return getTagEntries()[parsed - 1] ?? null;
+}
+
+function migrateTags() {
+    const next: Record<string, Tag> = {};
+
+    for (const [name, raw] of Object.entries(settings.store.tagsList)) {
+        const tag = raw as Partial<Tag>;
+        next[name] = {
+            name,
+            message: normalizeTagMessageInput(String(tag.message ?? "")),
+            modified: Boolean(tag.modified)
+        };
+    }
+
+    settings.store.tagsList = next;
 }
 
 function addTag(tag: Tag) {
@@ -62,7 +99,7 @@ function createTagCommand(tag: Tag) {
             if (settings.store.clyde) sendBotMessage(ctx.channel.id, {
                 content: `${EMOTE} The tag **${tag.name}** has been sent!`
             });
-            return { content: tag.message.replaceAll("\\n", "\n") };
+            return { content: tag.message };
         },
         [MessageTagsMarker]: true,
     }, "CustomTags");
@@ -85,10 +122,11 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "MessageTags",
     description: "Allows you to save messages and to use them with a simple command.",
-    authors: [Devs.Luna],
+    authors: [Devs.Luna, EquicordDevs.omaw],
     settings,
 
     async start() {
+        migrateTags();
         const tags = getTags();
         for (const tagName in tags) {
             createTagCommand(tags[tagName]);
@@ -127,6 +165,19 @@ export default definePlugin({
                     options: []
                 },
                 {
+                    name: "send",
+                    description: "Send a tag by name or index from /tags list",
+                    type: ApplicationCommandOptionType.SUB_COMMAND,
+                    options: [
+                        {
+                            name: "tag",
+                            description: "Tag name or numeric index from /tags list",
+                            type: ApplicationCommandOptionType.STRING,
+                            required: true
+                        }
+                    ]
+                },
+                {
                     name: "delete",
                     description: "Remove a tag from your yourself",
                     type: ApplicationCommandOptionType.SUB_COMMAND,
@@ -134,6 +185,25 @@ export default definePlugin({
                         {
                             name: "tag-name",
                             description: "The name of the tag to trigger the response",
+                            type: ApplicationCommandOptionType.STRING,
+                            required: true
+                        }
+                    ]
+                },
+                {
+                    name: "update",
+                    description: "Update an existing tag and mark it as modified",
+                    type: ApplicationCommandOptionType.SUB_COMMAND,
+                    options: [
+                        {
+                            name: "tag-name",
+                            description: "The name of the tag to update",
+                            type: ApplicationCommandOptionType.STRING,
+                            required: true
+                        },
+                        {
+                            name: "message",
+                            description: "The new message for this tag",
                             type: ApplicationCommandOptionType.STRING,
                             required: true
                         }
@@ -159,7 +229,7 @@ export default definePlugin({
                 switch (args[0].name) {
                     case "create": {
                         const name: string = findOption(args[0].options, "tag-name", "");
-                        const message: string = findOption(args[0].options, "message", "");
+                        const message: string = normalizeTagMessageInput(findOption(args[0].options, "message", ""));
 
                         if (getTag(name))
                             return sendBotMessage(ctx.channel.id, {
@@ -168,7 +238,8 @@ export default definePlugin({
 
                         const tag = {
                             name: name,
-                            message: message
+                            message: message,
+                            modified: false
                         };
 
                         createTagCommand(tag);
@@ -178,6 +249,21 @@ export default definePlugin({
                             content: `${EMOTE} Successfully created the tag **${name}**!`
                         });
                         break; // end 'create'
+                    }
+                    case "send": {
+                        const key: string = findOption(args[0].options, "tag", "");
+                        const tag = resolveTag(key);
+
+                        if (!tag)
+                            return sendBotMessage(ctx.channel.id, {
+                                content: `${EMOTE} No tag found for **${key}**. Use \`/tags list\`.`
+                            });
+
+                        if (settings.store.clyde) sendBotMessage(ctx.channel.id, {
+                            content: `${EMOTE} The tag **${tag.name}** has been sent!`
+                        });
+
+                        return { content: tag.message };
                     }
                     case "delete": {
                         const name: string = findOption(args[0].options, "tag-name", "");
@@ -195,13 +281,40 @@ export default definePlugin({
                         });
                         break; // end 'delete'
                     }
+                    case "update": {
+                        const name: string = findOption(args[0].options, "tag-name", "");
+                        const message: string = normalizeTagMessageInput(findOption(args[0].options, "message", ""));
+                        const existing = getTag(name);
+
+                        if (!existing)
+                            return sendBotMessage(ctx.channel.id, {
+                                content: `${EMOTE} A Tag with the name **${name}** does not exist!`
+                            });
+
+                        addTag({
+                            name,
+                            message,
+                            modified: true
+                        });
+
+                        sendBotMessage(ctx.channel.id, {
+                            content: `${EMOTE} Successfully updated the tag **${name}**!`
+                        });
+                        break;
+                    }
                     case "list": {
+                        const tagList = getTagEntries();
                         sendBotMessage(ctx.channel.id, {
                             embeds: [
                                 {
                                     title: "All Tags:",
-                                    description: Object.values(getTags())
-                                        .map(tag => `\`${tag.name}\`: ${tag.message.slice(0, 72).replaceAll("\\n", " ")}${tag.message.length > 72 ? "..." : ""}`)
+                                    description: tagList
+                                        .map((tag, index) => {
+                                            const preview = tag.message.replaceAll("\n", " ").slice(0, 72);
+                                            const suffix = tag.message.length > 72 ? "..." : "";
+                                            const modified = tag.modified ? " (modified)" : "";
+                                            return `\`${index + 1}.\` **${tag.name}**${modified}: ${preview}${suffix}`;
+                                        })
                                         .join("\n") || `${EMOTE} Woops! There are no tags yet, use \`/tags create\` to create one!`,
                                     // @ts-expect-error
                                     color: 0xd77f7f,
@@ -213,7 +326,7 @@ export default definePlugin({
                     }
                     case "preview": {
                         const name: string = findOption(args[0].options, "tag-name", "");
-                        const tag = getTag(name);
+                        const tag = resolveTag(name);
 
                         if (!tag)
                             return sendBotMessage(ctx.channel.id, {
@@ -221,7 +334,7 @@ export default definePlugin({
                             });
 
                         sendBotMessage(ctx.channel.id, {
-                            content: tag.message.replaceAll("\\n", "\n")
+                            content: tag.message
                         });
                         break; // end 'preview'
                     }

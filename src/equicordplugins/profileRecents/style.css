@@ -1,0 +1,11 @@
+.vc-profile-recents-recentRoot,
+.vc-profile-recents-recentRoot * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.vc-profile-recents-recentRoot *::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
