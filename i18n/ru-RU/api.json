@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Произошла ошибка во время выполнения команды \"{name}\""
-    },
-    "memberListDecorators":{
-        "fallback":"Не удалось отобразить декоратор списка участников {key}"
-    },
-    "messageAccessories":{
-        "fallback":"Не удалось отобразить аксессуар сообщения {key}"
-    },
-    "messageDecorations":{
-        "fallback":"Не удалось отобразить декорацию сообщения {key}"
-    },
-    "notices":{
-        "fallback":"Ошибка показа уведомления"
-    },
-    "notifications":{
-        "dismissNotification":"Скрыть уведомление",
-        "logs":{
-            "body_one":"Это навсегда удалит {count} уведомление. Это действие нельзя отменить.",
-            "body_other":"Это навсегда удалит {count} уведомлений. Это действие нельзя отменить.",
-            "body_zero":"Уведомление не выбрано.",
-            "cancel":"Отменить",
-            "clearNotificationLog":"Очистить лог уведомлений",
-            "confirm":"Подтвердить",
-            "title":"Вы уверены?"
-        },
-        "missedNotifications":{
-            "body_one":"{count} уведомление получено",
-            "body_other":"{count} уведомлений получено",
-            "title":"Пока вас не было"
-        },
-        "noNotifications":"Нет уведомлений",
-        "notificationLog":"Лог уведомлений",
-        "notificationSettings":"Настройки уведомлений"
-    }
+				"commands":{
+								"errorExecuting":"Произошла ошибка во время выполнения команды \"{name}\""
+				},
+				"memberListDecorators":{
+								"fallback":"Не удалось отобразить декоратор списка участников {key}"
+				},
+				"messageAccessories":{
+								"fallback":"Не удалось отобразить аксессуар сообщения {key}"
+				},
+				"messageDecorations":{
+								"fallback":"Не удалось отобразить декорацию сообщения {key}"
+				},
+				"notices":{
+								"fallback":"Ошибка показа уведомления"
+				},
+				"notifications":{
+								"dismissNotification":"Скрыть уведомление",
+								"logs":{
+												"body_one":"Это навсегда удалит {count} уведомление. Это действие нельзя отменить.",
+												"body_other":"Это навсегда удалит {count} уведомлений. Это действие нельзя отменить.",
+												"body_zero":"Уведомление не выбрано.",
+												"cancel":"Отменить",
+												"clearNotificationLog":"Очистить лог уведомлений",
+												"confirm":"Подтвердить",
+												"title":"Вы уверены?"
+								},
+								"missedNotifications":{
+												"body_one":"{count} уведомление получено",
+												"body_other":"{count} уведомлений получено",
+												"title":"Пока вас не было"
+								},
+								"noNotifications":"Нет уведомлений",
+								"notificationLog":"Лог уведомлений",
+								"notificationSettings":"Настройки уведомлений"
+				}
 }

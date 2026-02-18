@@ -1,37 +1,37 @@
 {
-    "commands":{
-        "errorExecuting":"Ocorreu um erro ao executar o comando “{name}”"
-    },
-    "memberListDecorators":{
-        "fallback":"Falha ao renderizar {key} Decorador da lista de membros"
-    },
-    "messageAccessories":{
-        "fallback":"Falha ao renderizar {key} Acessório de mensagem"
-    },
-    "messageDecorations":{
-        "fallback":"Falha ao renderizar {key} Decoração da mensagem"
-    },
-    "notices":{
-        "fallback":"Erro ao exibir aviso"
-    },
-    "notifications":{
-        "dismissNotification":"Ignorar notificação",
-        "logs":{
-            "body_one":"Isso removerá permanentemente {count} notificação. Esta ação não pode ser desfeita.",
-            "body_other":"Isso removerá permanentemente {count} notificações. Esta ação não pode ser desfeita.",
-            "body_zero":"Nenhuma notificação selecionada.",
-            "cancel":"Deixa para lá",
-            "clearNotificationLog":"Limpar registro de notificações",
-            "confirm":"Vai em frente!",
-            "title":"Você tem certeza?"
-        },
-        "missedNotifications":{
-            "body_one":"{count} Notificação recebidas",
-            "body_other":"{count} Notificações recebidas",
-            "title":"Enquanto você estava fora"
-        },
-        "noNotifications":"Nenhuma notificação ainda",
-        "notificationLog":"Registro de notificações",
-        "notificationSettings":"Configurações de Notificação"
-    }
+				"commands":{
+								"errorExecuting":"Ocorreu um erro ao executar o comando “{name}”"
+				},
+				"memberListDecorators":{
+								"fallback":"Falha ao renderizar {key} o Decorador da Lista de Membros"
+				},
+				"messageAccessories":{
+								"fallback":"Falha ao renderizar {key} o Acessório de Mensagem"
+				},
+				"messageDecorations":{
+								"fallback":"Falha ao renderizar {key} a Decoração de Mensagem"
+				},
+				"notices":{
+								"fallback":"Erro ao exibir aviso"
+				},
+				"notifications":{
+								"dismissNotification":"Ignorar Notificação",
+								"logs":{
+												"body_one":"Isso removerá permanentemente {count} notificação. Esta ação não pode ser desfeita.",
+												"body_other":"Isso removerá permanentemente {count} notificações. Esta ação não pode ser desfeita.",
+												"body_zero":"Nenhuma notificação selecionada.",
+												"cancel":"Deixa para lá",
+												"clearNotificationLog":"Limpar log de notificações",
+												"confirm":"Manda ver!",
+												"title":"Você tem certeza?"
+								},
+								"missedNotifications":{
+												"body_one":"{count} notificação recebida",
+												"body_other":"{count} notificações recebidas",
+												"title":"Enquanto você estava fora"
+								},
+								"noNotifications":"Nenhuma notificação ainda",
+								"notificationLog":"Log de Notificações",
+								"notificationSettings":"Configurações de Notificação"
+				}
 }
