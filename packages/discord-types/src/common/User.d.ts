@@ -39,7 +39,7 @@ export class User extends DiscordRecord {
     get avatarDecoration(): AvatarDecorationData | null;
     get createdAt(): Date;
     get isProvisional(): boolean;
-    get nameplate(): { asset: string; sku_id: string; } | null;
+    get nameplate(): { asset: string; skuId: string; } | null;
     get premiumGroupRole(): { id: string; name: string; color: number; } | null;
     get tag(): string;
 

@@ -40,7 +40,7 @@ export default definePlugin({
         {
             find: "USER_SETTINGS_GUILD_PROFILE)",
             replacement: {
-                match: /guildId:([^,]+),onChange:(\i)\}\)(?=.{0,25}profilePreviewTitle:)/,
+                match: /guildId:(\i\.id),onChange:(\i)\}\)(?=.{0,25}profilePreviewTitle:)/,
                 replace: 'guildId:$1,onChange:$2}),$self.renderPresetSection("server",$1)'
             }
         }

@@ -14,15 +14,15 @@ export interface PermissionOverwrite {
 export interface AvatarDecorationData {
     asset: string;
     expires_at: string | null;
-    sku_id: string;
+    skuId: string;
 }
 
 /** Clan identity information. */
 export interface ClanData {
     badge: string;
-    identity_enabled: boolean;
-    identity_guild_id: string;
     tag: string;
+    identityEnabled: boolean;
+    identityGuildId: string;
 }
 
 /** Display name style configuration. */
@@ -38,7 +38,8 @@ export interface CollectibleItem {
     expires_at: string | null;
     label: string;
     palette: string;
-    sku_id: string;
+    type: number;
+    skuId: string;
 }
 
 /** User collectibles configuration. */

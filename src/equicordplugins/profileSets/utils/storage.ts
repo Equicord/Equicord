@@ -65,7 +65,7 @@ export async function loadPresets(section: PresetSection) {
         }
         resetPresets();
     } catch (err) {
-        void err;
+        console.log(`Failed to load presets: ${err}`);
         resetPresets();
     }
 }
@@ -78,7 +78,7 @@ export async function savePresetsData(section?: PresetSection) {
         const key = section ? getPresetsKey(section, userId) : activeScopeKey!;
         await DataStore.set(key, presets);
     } catch (err) {
-        void err;
+        console.log(`Failed to save presets: ${err}`);
     }
 }
 
