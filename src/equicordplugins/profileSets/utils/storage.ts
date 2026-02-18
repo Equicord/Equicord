@@ -5,9 +5,11 @@
  */
 
 import { DataStore } from "@api/index";
+import { Logger } from "@utils/Logger";
 import { ProfilePreset } from "@vencord/discord-types";
 import { UserStore } from "@webpack/common";
 
+const logger = new Logger("ProfilePresets");
 const LEGACY_PRESETS_KEY = "ProfileDataset";
 const MAIN_PRESETS_KEY = "ProfilePresets_v2_Main";
 const SERVER_PRESETS_KEY = "ProfilePresets_v2_Server";
@@ -65,7 +67,7 @@ export async function loadPresets(section: PresetSection) {
         }
         resetPresets();
     } catch (err) {
-        console.log(`Failed to load presets: ${err}`);
+        logger.error("Failed to load presets", err);
         resetPresets();
     }
 }
@@ -78,7 +80,7 @@ export async function savePresetsData(section?: PresetSection) {
         const key = section ? getPresetsKey(section, userId) : activeScopeKey!;
         await DataStore.set(key, presets);
     } catch (err) {
-        console.log(`Failed to save presets: ${err}`);
+        logger.error("Failed to save presets", err);
     }
 }
 

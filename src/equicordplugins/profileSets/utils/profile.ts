@@ -207,7 +207,7 @@ export async function getCurrentProfile(guildId?: string, options: CurrentProfil
         ? (guildMember?.displayNameStyles ?? userAny.displayNameStyles)
         : userAny.displayNameStyles;
     const displayNameStylesToUse = pendingChanges.pendingDisplayNameStyles ?? savedDisplayNameStyles;
-    const displayNameStyles = normalizeDisplayNameStyles(displayNameStylesToUse!);
+    const displayNameStyles = normalizeDisplayNameStyles(displayNameStylesToUse);
 
     const pendingAvatar = pendingChanges.pendingAvatar ?? pendingChanges.avatar;
     const avatarToUse: ImageInput = hasImageInput(pendingAvatar)
@@ -374,13 +374,13 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             });
         }
 
-        if (preset.profileEffect && ![pendingProfileEffect, equippedProfileEffect, current.profileEffect].some(d => avatarDecorationEq(preset.profileEffect, d))) {
+        if (preset.profileEffect && ![pendingProfileEffect, equippedProfileEffect, current.profileEffect].some(d => collectibleEqBySku(preset.profileEffect, d))) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 1, value: preset.profileEffect }
             });
         }
 
-        if (preset.nameplate && ![pendingNameplate, equippedNameplate, current.nameplate].some(d => avatarDecorationEq(preset.nameplate, d))) {
+        if (preset.nameplate && ![pendingNameplate, equippedNameplate, current.nameplate].some(d => nameplateEq(preset.nameplate, d))) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 2, value: preset.nameplate }
             });
