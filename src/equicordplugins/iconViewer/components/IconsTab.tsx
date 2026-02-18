@@ -13,7 +13,7 @@ import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useIntersection } from "@utils/react";
 import { Icon } from "@vencord/discord-types";
-import { Clickable, TextInput, useCallback, useEffect, useMemo, useState } from "@webpack/common";
+import { Clickable, SearchBar, useCallback, useEffect, useMemo, useState } from "@webpack/common";
 
 import { IconsDef } from "../types";
 import { getIconsModule } from "../utils";
@@ -107,10 +107,9 @@ function IconsTab() {
     return (
         <SettingsTab>
             <div className={classes(Margins.top16, "vc-icon-tab-search-bar-grid")}>
-                <TextInput autoFocus value={searchInput} placeholder={`Search ${Object.keys(icons).length} icons...`} onChange={onSearch} />
+                <SearchBar autoFocus query={searchInput} onChange={onSearch} onClear={() => onSearch("")} placeholder={`Search ${Object.keys(icons).length} icons...`} />
                 <TooltipContainer text="Search by function context">
                     <Button
-                        size="small"
                         aria-label="Search by function context"
                         className="vc-icon-search-func-btn"
                         variant={searchByFunction ? "positive" : "primary"}
