@@ -335,14 +335,14 @@ interface messageProps {
 
 interface memberListProfileReactionProps {
     user: User | null | undefined;
-    type: "membersList" | "profilesPopout" | "profilesTooltip" | "reactionsTooltip" | "reactionsPopout" | "voiceChannel";
+    type: "typingIndicator" | "membersList" | "profilesPopout" | "profilesTooltip" | "reactionsTooltip" | "reactionsPopout" | "voiceChannel";
     guildId?: string;
     tags?: any;
 }
 
 type colorStringsType = { primaryColor: string | null, secondaryColor: string | null, tertiaryColor: string | null; } | null | undefined;
 
-function getMemberListProfilesReactionsVoiceName(
+function getTypingMemberListProfilesReactionsVoiceName(
     props: memberListProfileReactionProps,
 ): [string | null, JSX.Element | null, string | null] {
     const { user, type } = props;
@@ -351,16 +351,16 @@ function getMemberListProfilesReactionsVoiceName(
     const guildId = props.guildId || props.tags?.props?.displayProfile?.guildId || null;
     const member = guildId && user ? GuildMemberStore.getMember(guildId, user.id) : null;
     const author = user && member ? { ...user, ...member } : user || member || null;
-    const shouldHookless = type === "reactionsTooltip" || type === "profilesTooltip";
+    const shouldHookless = ["typingIndicator", "reactionsTooltip", "profilesTooltip"].includes(type);
     return renderUsername(author, null, null, type, "", shouldHookless, !!guildId);
 }
 
-function getMemberListProfilesReactionsVoiceNameText(props: memberListProfileReactionProps): string | null {
-    return getMemberListProfilesReactionsVoiceName(props)[2];
+function getTypingMemberListProfilesReactionsVoiceNameText(props: memberListProfileReactionProps): string | null {
+    return getTypingMemberListProfilesReactionsVoiceName(props)[2];
 }
 
-function getMemberListProfilesReactionsVoiceNameElement(props: memberListProfileReactionProps): JSX.Element | null {
-    return getMemberListProfilesReactionsVoiceName(props)[1];
+function getTypingMemberListProfilesReactionsVoiceNameElement(props: memberListProfileReactionProps): JSX.Element | null {
+    return getTypingMemberListProfilesReactionsVoiceName(props)[1];
 }
 
 function getMessageName(props: messageProps): [string | null, JSX.Element | null, string | null] {
@@ -448,7 +448,7 @@ function renderUsername(
     author: User | GuildMember | null,
     channelId: string | null,
     messageId: string | null,
-    type: "messages" | "replies" | "mentions" | "membersList" | "profilesPopout" | "profilesTooltip" | "reactionsTooltip" | "reactionsPopout" | "voiceChannel",
+    type: "messages" | "replies" | "typingIndicator" | "mentions" | "membersList" | "profilesPopout" | "profilesTooltip" | "reactionsTooltip" | "reactionsPopout" | "voiceChannel",
     mentionSymbol: string,
     hookless: boolean,
     inGuild: boolean,
@@ -458,6 +458,7 @@ function renderUsername(
     const isMessage = type === "messages";
     const isReply = type === "replies";
     const isMention = type === "mentions";
+    const isTyping = type === "typingIndicator";
     const isMember = type === "membersList";
     const isProfile = type === "profilesPopout";
     const isReactionsPopout = type === "reactionsPopout";
@@ -465,8 +466,8 @@ function renderUsername(
     const isReaction = isReactionsTooltip || isReactionsPopout;
     const isVoice = type === "voiceChannel";
 
-    const config = hookless ? settings.store : settings.use(["messages", "replies", "mentions", "memberList", "profilePopout", "reactions", "friendNameOnlyInDirectMessages", "customNameOnlyInDirectMessages", "discriminators", "hideDefaultAtSign", "truncateAllNamesWithStreamerMode", "removeDuplicates", "ignoreGradients", "ignoreFonts", "animateGradients", "includedNames", "customNameColor", "friendNameColor", "nicknameColor", "displayNameColor", "usernameColor", "nameSeparator", "triggerNameRerender"]);
-    const { messages, replies, mentions, memberList, profilePopout, reactions, friendNameOnlyInDirectMessages, customNameOnlyInDirectMessages, discriminators, truncateAllNamesWithStreamerMode, removeDuplicates, ignoreGradients, ignoreFonts, animateGradients, includedNames, customNameColor, friendNameColor, nicknameColor, displayNameColor, usernameColor, nameSeparator, triggerNameRerender } = config;
+    const config = hookless ? settings.store : settings.use(["messages", "replies", "mentions", "typingIndicator", "memberList", "profilePopout", "reactions", "friendNameOnlyInDirectMessages", "customNameOnlyInDirectMessages", "discriminators", "hideDefaultAtSign", "truncateAllNamesWithStreamerMode", "removeDuplicates", "ignoreGradients", "ignoreFonts", "animateGradients", "includedNames", "customNameColor", "friendNameColor", "nicknameColor", "displayNameColor", "usernameColor", "nameSeparator", "triggerNameRerender"]);
+    const { messages, replies, mentions, typingIndicator, memberList, profilePopout, reactions, friendNameOnlyInDirectMessages, customNameOnlyInDirectMessages, discriminators, truncateAllNamesWithStreamerMode, removeDuplicates, ignoreGradients, ignoreFonts, animateGradients, includedNames, customNameColor, friendNameColor, nicknameColor, displayNameColor, usernameColor, nameSeparator, triggerNameRerender } = config;
 
     const channel = channelId ? ChannelStore.getChannel(channelId) || null : null;
     const message = channelId && messageId ? MessageStore.getMessage(channelId, messageId) : null;
@@ -606,6 +607,8 @@ function renderUsername(
     } else if (isReply && !replies) {
         return [null, null, null];
     } else if (isMention && !mentions) {
+        return [null, null, null];
+    } else if (isTyping && !typingIndicator) {
         return [null, null, null];
     } else if (isMember && !memberList) {
         return [null, null, null];
@@ -955,6 +958,11 @@ const settings = definePluginSettings({
         default: true,
         description: "Display custom name format in mentions.",
     },
+    typingIndicator: {
+        type: OptionType.BOOLEAN,
+        default: true,
+        description: "Display the first available name listed in your custom name format in the typing indicator.",
+    },
     memberList: {
         type: OptionType.BOOLEAN,
         default: true,
@@ -1097,11 +1105,18 @@ export default definePlugin({
             ]
         },
         {
+            find: "activityInviteEducationActivity:",
+            replacement: {
+                match: /(?=\i.\i.getName\((\i.guild_id),\i.id,(\i)\))/,
+                replace: "$self.getTypingMemberListProfilesReactionsVoiceNameText({user:$2,type:\"typingIndicator\",guildId:$1})??"
+            },
+        },
+        {
             // Replace names in DMs list.
             find: "ImpressionNames.DM_LIST_RIGHT_CLICK_MENU_SHOWN",
             replacement: {
                 match: /(?<=getMentionCount\(\i.id\)>0\),\i=)/,
-                replace: "$self.getMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"membersList\"})??"
+                replace: "$self.getTypingMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"membersList\"})??"
             },
         },
         {
@@ -1109,7 +1124,7 @@ export default definePlugin({
             find: "channel.isSystemDM(),",
             replacement: {
                 match: /(?<=}\);)(return.{0,500}?{text:)(\i,position:"bottom",children:.{0,40}?children:)(\i\?\?\i.\i.getName\(\i\))/,
-                replace: "const smynName=arguments[0].channel.recipients.length===1?$self.getMemberListProfilesReactionsVoiceNameText({user:$self.UserStore.getUser(arguments[0].channel.recipients[0]),type:\"profilesPopout\"})??null:null;$1smynName??$2smynName??$3"
+                replace: "const smynName=arguments[0].channel.recipients.length===1?$self.getTypingMemberListProfilesReactionsVoiceNameText({user:$self.UserStore.getUser(arguments[0].channel.recipients[0]),type:\"profilesPopout\"})??null:null;$1smynName??$2smynName??$3"
             },
         },
         {
@@ -1150,7 +1165,7 @@ export default definePlugin({
             find: "let{colorRoleName:",
             replacement: {
                 match: /(let{colorRoleName:\i,colorString:\i,colorStrings:\i,)name:(\i)/,
-                replace: "$1showMeYourNameName:$2=$self.getMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"membersList\"})??(arguments[0].name)"
+                replace: "$1showMeYourNameName:$2=$self.getTypingMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"membersList\"})??(arguments[0].name)"
             }
         },
         {
@@ -1158,7 +1173,7 @@ export default definePlugin({
             find: "shouldWrap:!0,loop:!0,inProfile:!0",
             replacement: {
                 match: /(tags:\i,)nickname:(\i)/,
-                replace: "$1showMeYourNameNickname:$2=$self.getMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"profilesPopout\"})??(arguments[0].nickname)"
+                replace: "$1showMeYourNameNickname:$2=$self.getTypingMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"profilesPopout\"})??(arguments[0].nickname)"
             },
         },
         {
@@ -1169,11 +1184,11 @@ export default definePlugin({
             replacement: [
                 {
                     match: /(displayName:)(\i.\i.getName\(void 0,void 0,\i\))/,
-                    replace: "$1$self.getMemberListProfilesReactionsVoiceNameText({user:arguments[0].user,guildId:null,type:\"profilesTooltip\"})??($2)"
+                    replace: "$1$self.getTypingMemberListProfilesReactionsVoiceNameText({user:arguments[0].user,guildId:null,type:\"profilesTooltip\"})??($2)"
                 },
                 {
                     match: /(displayName:)(\i.\i.getName\(\i,\i,\i\))/,
-                    replace: "$1$self.getMemberListProfilesReactionsVoiceNameText({user:arguments[0].user,guildId:arguments[0].guildId,type:\"profilesTooltip\"})??($2)"
+                    replace: "$1$self.getTypingMemberListProfilesReactionsVoiceNameText({user:arguments[0].user,guildId:arguments[0].guildId,type:\"profilesTooltip\"})??($2)"
                 }
             ]
         },
@@ -1182,7 +1197,7 @@ export default definePlugin({
             find: "reactionTooltip1,",
             replacement: {
                 match: /(\i.\i.getName\((\i),\i\?\.id,(\i)\))/,
-                replace: "$self.getMemberListProfilesReactionsVoiceNameText({user:$3,guildId:$2,type:\"reactionsTooltip\"})??($1)"
+                replace: "$self.getTypingMemberListProfilesReactionsVoiceNameText({user:$3,guildId:$2,type:\"reactionsTooltip\"})??($1)"
             }
         },
         {
@@ -1197,7 +1212,7 @@ export default definePlugin({
                 {
                     // Replace names in reaction popouts.
                     match: /(?<=Child,{className:\i.\i,children:)/g,
-                    replace: "($self.getMemberListProfilesReactionsVoiceNameElement({user:arguments[0].user,guildId:arguments[0].guildId,type:\"reactionsPopout\"}))??"
+                    replace: "($self.getTypingMemberListProfilesReactionsVoiceNameElement({user:arguments[0].user,guildId:arguments[0].guildId,type:\"reactionsPopout\"}))??"
                 }
             ]
         },
@@ -1206,7 +1221,7 @@ export default definePlugin({
             find: ",connectUserDragSource:",
             replacement: {
                 match: /(serverDeaf:\i,)nick:(\i)/,
-                replace: "$1showMeYourNameVoice:$2=$self.getMemberListProfilesReactionsVoiceNameText({user:arguments[0].user,guildId:arguments[0].channel.guild_id,type:\"voiceChannel\"})??(arguments[0].nick)"
+                replace: "$1showMeYourNameVoice:$2=$self.getTypingMemberListProfilesReactionsVoiceNameText({user:arguments[0].user,guildId:arguments[0].channel.guild_id,type:\"voiceChannel\"})??(arguments[0].nick)"
             }
         }
     ],
@@ -1251,6 +1266,6 @@ export default definePlugin({
     getMessageNameText,
     getMessageNameElement,
     getMentionNameElement,
-    getMemberListProfilesReactionsVoiceNameText,
-    getMemberListProfilesReactionsVoiceNameElement
+    getTypingMemberListProfilesReactionsVoiceNameText,
+    getTypingMemberListProfilesReactionsVoiceNameElement
 });
