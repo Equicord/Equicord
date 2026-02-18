@@ -1502,10 +1502,15 @@
         "description":"Ativa efeitos de modo festa com confetes e tremida de tela",
         "settings":{
             "intensityOptions":{
-                "normal":"Normal - Efeitos sutis"
+                "better":"Melhor - Mais confetti",
+                "normal":"Normal - Efeitos sutis",
+                "projectX":"Projeto X - Intensidade máxima"
             },
             "superIntensePartyMode":"Nível de intensidade do modo Festa"
         }
+    },
+    "pinIcon":{
+        "description":"Adiciona um ícone de alfinete às mensagens fixadas"
     },
     "pingNotifications":{
         "settings":{
@@ -1712,6 +1717,7 @@
     },
     "voiceJoinMessages":{
         "settings":{
+            "allowedFriends":"Lista separada por vírgulas ou espaços de IDs de usuários dos amigos dos quais você deseja receber mensagens",
             "friendDirectMessagesSelf":"Receber notificações nas DMs dos seus amigos mesmo se você estiver no mesmo canal de voz que eles",
             "friendDirectMessagesSilent":"Mensagens de entrada nas DMs dos seus amigos serão silenciosas"
         }
@@ -1763,5 +1769,8 @@
         "about":{
             "circle":"em um círculo ao digitar )~texto~^"
         }
+    },
+    "youtubeDescription":{
+        "description":"Adiciona uma descrição ativável para incorporações de vídeos do YouTube"
     }
 }
