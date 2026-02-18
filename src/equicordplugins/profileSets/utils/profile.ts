@@ -65,7 +65,7 @@ function hasImageInput(value: ImageInput): boolean {
     return typeof value === "object" && isNonEmptyString(value?.imageUri);
 }
 
-function normalizeDisplayNameStyles(value: DisplayNameStylesLike): DisplayNameStylesLike | null {
+function normalizeDisplayNameStyles(value: DisplayNameStylesLike | null | undefined): DisplayNameStylesLike | null {
     if (!value) return null;
     const fontId = value.fontId ?? value.font_id;
     const effectId = value.effectId ?? value.effect_id;
