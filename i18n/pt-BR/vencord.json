@@ -143,6 +143,9 @@
             "sidebarAnim":"Animate opening the folder sidebar"
         }
     },
+    "betterGifAltText":{
+        "description":"Altera o texto alternativo de GIF de apenas 'GIF' para conter as tags/nome do arquivo do gif"
+    },
     "betterGifPicker":{
         "settings":{
             "keepOpen":"Mantém o seletor de GIF aberto após selecionar um GIF"
@@ -239,7 +242,7 @@
             "reauthenticateOtherClient":"Notamos que você tem integrações com a nuvem ativadas em outro cliente! Devido a limitações, você precisará se autenticar novamente para continuar usando elas. Clique aqui para acessar a página de configurações e fazer isso!"
         },
         "settings":{
-            "accountChanged":"A sincronização com a nuvem foi desativada porque esta conta não está conectada ao App da nuvem. Você pode ativá-la novamente conectando esta conta em Configurações da Nuvem. (note: suas preferências serão armazenadas separadamente)",
+            "accountChanged":"A sincronização com a nuvem foi desativada porque esta conta não está conectada ao App da nuvem. Você pode ativá-la novamente conectando esta conta em Configurações de Nuvem. (note: suas preferências serão armazenadas separadamente)",
             "apiDelete":"Não foi possível excluir as configurações (API retornou {e}).",
             "apiEraseAll":"Não foi possível apagar todos os dados (API retornou {e}), entre em contato com o suporte.",
             "apiReject":"Não foi possível sincronizar as configurações com a nuvem (API retornou {e}).",
@@ -269,9 +272,9 @@
         "filterList":"Filter List",
         "name":"ConsoleJanitor",
         "settings":{
-            "disableLoggers":"Disables Discords loggers",
-            "disableSpotifyLogger":"Disable the Spotify logger, which leaks account information and access token",
-            "whitelistedLoggers":"Semi colon separated list of loggers to allow even if others are hidden"
+            "disableLoggers":"Desativa os registradores(loggers) do Discord",
+            "disableSpotifyLogger":"Desativa o registrador(logger) do Spotify, que vaza informações da conta e tokens de acesso",
+            "whitelistedLoggers":"Lista de registradores(loggers) separados por ponto e vírgula para permitir, mesmo que outros estejam ocultos"
         }
     },
     "consoleShortcuts":{
@@ -282,7 +285,7 @@
     },
     "contributorCard":{
         "contributionsButton":"Veja o que você contribuiu para",
-        "description":"Como você contribuiu para o Equicord, agora você tem um novo emblema legal!",
+        "description":"Como você contribuiu para o Equicord, agora você tem uma nova insígnia legal!",
         "subtitle":"Obrigado por sua contribuição!",
         "title":"Contribuições"
     },
@@ -705,7 +708,7 @@
         "howToCreateApiKey":"How to create an API key",
         "lastfmProfile":"Perfil Last.fm",
         "missingArt":{
-            "lastfmLogo":"Use large Last.fm logo",
+            "lastfmLogo":"Usar logo grande do Last.fm",
             "placeholder":"Use generic placeholder"
         },
         "nameFormat":{
@@ -725,7 +728,7 @@
             "missingArt":"When album or album art is missing",
             "nameFormat":"Show name of song and artist in status name",
             "shareUsername":"Show link to Last.fm profile",
-            "showLastFmLogo":"Show the Last.fm logo by the album cover",
+            "showLastFmLogo":"Mostrar o logo do Last.fm junto à capa do álbum",
             "statusDisplayType":"Show the track / artist name in the member list",
             "statusName":"Custom status text",
             "useListeningStatus":"Show \"Listening to\" status instead of \"Playing\"",
@@ -747,20 +750,20 @@
         }
     },
     "logs":{
-        "allLogsCleared":"Todas as logs foram apagadas",
+        "allLogsCleared":"Todos registros foram apagados",
         "clearAll":"Apagar Tudo",
-        "clearAllLogs":"Limpar Todas as Logs",
-        "clearAllLogsConfirmation":"Tem certeza de que deseja limpar toda as logs? Isso não pode ser desfeito.",
-        "clearLog":"Limpar Log",
-        "clearLogConfirmation":"Tem certeza de que deseja limpar esta log? Isso não pode ser desfeito.",
-        "clearLogs":"Limpar Logs",
-        "clearLogsConfirmation":"Tem certeza que gostaria de limpar essas logs? Isso não pode ser desfeito.",
-        "clearLogsConfirmationNum_one":"Tem certeza de que deseja limpar {count} log",
-        "clearLogsConfirmationNum_other":"Tem certeza de que deseja limpar {count} logs",
-        "hideLogs":"Ocultar Logs",
-        "logCleared":"Log foi apagada",
-        "logsCleared":"As logs selecionadas foram apagadas",
-        "showLogs":"Mostrar Logs"
+        "clearAllLogs":"Limpar Todos os Registros",
+        "clearAllLogsConfirmation":"Tem certeza de que deseja limpar todos os registros? Isso não pode ser desfeito.",
+        "clearLog":"Limpar Registro",
+        "clearLogConfirmation":"Tem certeza de que deseja limpar este registro? Isso não pode ser desfeito.",
+        "clearLogs":"Limpar Registros",
+        "clearLogsConfirmation":"Tem certeza de que deseja limpar estes registros? Isso não pode ser desfeito.",
+        "clearLogsConfirmationNum_one":"Tem certeza de que deseja limpar {count} registro",
+        "clearLogsConfirmationNum_other":"Tem certeza de que deseja limpar {count} registros",
+        "hideLogs":"Ocultar Registros",
+        "logCleared":"Registro limpo",
+        "logsCleared":"Os registros selecionados foram apagados",
+        "showLogs":"Mostrar Registros"
     },
     "memberCount":{
         "settings":{
@@ -875,44 +878,62 @@
         }
     },
     "messageLogger":{
-        "clearMessageLog":"Clear Message Log",
+        "clearMessageLog":"Limpar registro de mensagens",
         "deletedMessages_one":"{count} mensagem excluída",
         "deletedMessages_other":"{count} mensagens excluídas",
-        "deletedMessages_zero":"No deleted messages",
-        "disableDiffView":"Desativar visualização de diferenças",
-        "editHistory":"Message Edit History",
-        "enableDiffView":"Enable Diff View",
-        "notLoggedTooltip":"This edit state was not logged so it can't be displayed.",
-        "removeMessageHistory":"Remove Message History",
-        "removeMessageTemporary":"Remove Message (Temporary)",
+        "deletedMessages_zero":"Nenhuma Mensagem excluída",
+        "disableDiffView":"Desativa visualização de diferenças",
+        "editHistory":"Histórico de Edição de Mensagens",
+        "enableDiffView":"Ativa visualização de diferença",
+        "notLoggedTooltip":"Este estado de edição não foi registrado, portanto não pode ser exibido.",
+        "removeMessageHistory":"Remover histórico de mensagens",
+        "removeMessageTemporary":"Remover mensagem (temporário)",
         "settings":{
             "collapseDeleted":"Whether to collapse deleted messages, similar to blocked messages",
             "deleteStyle":"O estilo das mensagens excluídas",
             "deleteStyleRedOverlay":"Overlay vermelho",
-            "deleteStyleRedText":"Texto vermelho",
+            "deleteStyleRedText":"Texto Vermelho",
             "ignoreBots":"Whether to ignore messages by bots",
-            "ignoreChannels":"Comma-separated list of channel IDs to ignore",
-            "ignoreGuilds":"Comma-separated list of guild IDs to ignore",
-            "ignoreSelf":"Whether to ignore messages by yourself",
-            "ignoreUsers":"Comma-separated list of user IDs to ignore",
+            "ignoreChannels":"Lista de IDs de canais separados por vírgula para ignorar",
+            "ignoreGuilds":"Lista de IDs de servidores separados por vírgula para ignorar",
+            "ignoreSelf":"Se deve ignorar suas próprias mensagens",
+            "ignoreUsers":"Lista de IDs de usuário separados por vírgula para ignorar",
             "inlineEdits":"Whether to display edit history as part of message content",
             "logDeletes":"Whether to log deleted messages",
             "logEdits":"Whether to log edited messages",
-            "separatedDiffs":"Separate addition and removals in diffs for a more readable differential",
-            "showEditDiffs":"Show visual differences between edited message versions"
+            "separatedDiffs":"Separa adições e remoções em diferenças para uma visualização de diferenças mais legível",
+            "showEditDiffs":"Mostra diferenças visuais entre versões editadas da mensagem"
         },
-        "toggleDeletedHighlight":"Toggle Deleted Highlight"
+        "toggleDeletedHighlight":"Alterna destaque de excluídas"
     },
     "messagePopoverAPI":{
         "description":"API para adicionar botões aos popovers de mensagem"
     },
     "messageTags":{
         "commands":{
-            "list":"Listar todas as suas tags"
+            "create":"Criar uma nova tag",
+            "delete":"Remover uma tag de si mesmo",
+            "list":"Listar todas as suas tags",
+            "message":"A mensagem que você enviará ao usar esta tag",
+            "preview":"Visualize uma tag sem enviá-la publicamente",
+            "tagName":"O nome da tag para acionar a resposta",
+            "tags":"Gerencie todas as suas próprias tags"
         },
         "description":"Permite que você salve mensagens e as use com um comando simples.",
+        "settings":{
+            "clydeDescription":"Se ativado, o Clyde enviará uma mensagem efêmera quando uma tag for usada.",
+            "clydeName":"Mensagem do Clyde ao enviar"
+        },
         "ui":{
-            "allTags":"Todas as tags:"
+            "allTags":"Todas as tags:",
+            "invalidSubCommand":"Subcomando inválido",
+            "noTagsYet":"Epa! Ainda não há tags, use `/tags create` para criar uma!",
+            "tagAlreadyExists":"Uma tag com o nome **{name}** já existe!",
+            "tagCreated":"Tag **{name}** criada com sucesso!",
+            "tagDeleted":"Tag **{name}** excluída com sucesso!",
+            "tagDoesNotExist":"A tag **{name}** não existe mais! Por favor recarregue seu Discord para corrigir :)",
+            "tagDoesNotExist2":"Uma tag com o nome **{name}** não existe!",
+            "tagSent":"A tag **{name}** foi enviada!"
         }
     },
     "messageUpdaterAPI":{
@@ -965,7 +986,7 @@
         }
     },
     "noDevtoolsWarning":{
-        "description":"Desativa o banner 'HOLD UP' no console. Como efeito colateral, também impede o Discord de ocultar seu token, o que previne logouts aleatórios."
+        "description":"Desativa o banner 'Calma ai' no console. Como efeito colateral, também impede que o Discord oculte seu token, o que evita desconexões aleatórias."
     },
     "noReplyMention":{
         "description":"Disables reply pings by default",
@@ -1105,7 +1126,7 @@
     },
     "quickActions":{
         "editQuickCSS":"Editar QuickCSS",
-        "notificationLog":"log de Notificações",
+        "notificationLog":"Registro de Notificações",
         "openSettings":"Abrir pasta de configurações",
         "relaunchDiscord":"Reiniciar o Discord",
         "title":"Ações Rápidas",
@@ -1168,7 +1189,7 @@
         "searchImage":"Search Image"
     },
     "reviewDB":{
-        "appeal":"Appeal",
+        "appeal":"Apelar",
         "areYouSure":"Você tem certeza?",
         "block":"Bloquear",
         "blockedUser":"Você bloqueou este usuário",
@@ -1177,7 +1198,7 @@
         "confirmDelete":"Você realmente deseja deletar esta avaliação?",
         "confirmReport":"Você realmente deseja reportar está avaliação?",
         "delete":"Excluir",
-        "failedToFetchBlocks":"Failed to fetch blocks: {error}",
+        "failedToFetchBlocks":"Falha ao buscar blocos: {error}",
         "mustBeLoggedInBlock":"Você tem que estar logado para bloquear usuários.",
         "mustBeLoggedInDelete":"Você tem que estar logado para deletar avaliações.",
         "mustBeLoggedInReport":"Você tem que estar logado para reportar avaliações.",
@@ -1191,21 +1212,21 @@
         "settings":{
             "authorize":"Autorizar com ReviewDB",
             "hideBlockedUsers":{
-                "description":"Esconder avaliações de usuários bloqueados"
+                "description":"Esconde avaliações de usuários bloqueados"
             },
             "hideTimestamps":{
-                "description":"Esconder data e hora em avaliações"
+                "description":"Esconde data e hora em avaliações"
             },
             "manageBlockedUsers":"Gerenciar Usuários Bloqueados",
             "notifyReviews":{
-                "description":"Notificar sobre novas avaliações na inicialização"
+                "description":"Notifica sobre novas avaliações na inicialização"
             },
             "showWarning":{
-                "description":"Exibir aviso para ser respeitoso no topo da lista de avaliações"
+                "description":"Exibe aviso para ser respeitoso no topo da lista de avaliações"
             },
-            "supportDevelopment":"Suporte ao desenvolvimento do ReviewDB",
-            "supportServer":"ReviewDB Servidor de Suporte",
-            "website":"ReviewDB website"
+            "supportDevelopment":"Apoie o desenvolvimento de ReviewDB",
+            "supportServer":"Servidor de Suporte do ReviewDB",
+            "website":"Site do ReviewDB"
         },
         "system":"Sistema",
         "unblockUser":"Desbloquear usuário",
@@ -1305,7 +1326,7 @@
                 "numMorePlugins_other":"+{count} mais plugins",
                 "recentlyAddedPlugins":"Os seguintes plugins foram adicionados nas atualizações recentes:"
             },
-            "previousSessions":"Um histórico de suas sessões de atualização anteriores com o histórico de commits e alterações de plugins. Clique em uma log para expandi-la e ver os detalhes",
+            "previousSessions":"Um histórico de suas sessões de atualização anteriores com o histórico de commits e alterações de plugins. Clique em um registro para expandi-lo e ver os detalhes",
             "recentChanges":"Alterações recentes",
             "repository":"Repositório",
             "title":"Registro de alterações",
@@ -1322,12 +1343,12 @@
                 "outOfDate":"Verificação do repositório: {fromHash} → {toHash}",
                 "upToDate":"Verificação do repositório: {fromHash} (atualizado)",
                 "update":"Atualização: {fromHash} → {toHash}",
-                "updatedPlugins":"Plugins atualizados",
+                "updatedPlugins":"Plugins Atualizados",
                 "updatedPluginsCount":" • {plugins} plugins atualizados"
             },
-            "updateLogs_one":"Registros de atualização ({count})",
-            "updateLogs_other":"Atualizar registros ({count} registros)",
-            "updateLogs_zero":"Nenhum registro de atualização",
+            "updateLogs_one":"Registros de Atualização ({count} registro)",
+            "updateLogs_other":"Registros de Atualização ({count} registros)",
+            "updateLogs_zero":"Nenhum Registro de Atualização",
             "updatedPluginsCount":"Plugins atualizados ({plugins})",
             "viewRecentChanges":"Estes são os novos commits e atualizações de plugins desde a sua última versão. Você pode ver quais recursos foram adicionados, erros corrigidos e quais plugins receberam atualizações",
             "whereUpdatesFetch":"Este é o repositório do GitHub de onde o Equicord busca atualizações"
@@ -1337,12 +1358,12 @@
             "title":"Desativar tamanho mínimo da janela"
         },
         "enableReactDevtools":{
-            "description":"Ativar a extensão React Developer Tools para debugar os componentes React do Discord. Útil para o desenvolvimento de plugins.",
-            "title":"Habilitar as Ferramentas de Desenvolvedor React"
+            "description":"Ativa a extensão React Developer Tools para debugar os componentes React do Discord. Útil para o desenvolvimento de plugins.",
+            "title":"Habilitar React Developer Tools"
         },
         "frameless":{
-            "description":"Remover a moldura nativa da janela para uma aparência mais limpa. Você ainda poderá mover a janela arrastando a área da barra de título.",
-            "title":"Desativar a moldura da janela"
+            "description":"Remove a moldura nativa da janela para um visual mais limpo. Você ainda pode mover a janela arrastando a área da barra de título.",
+            "title":"Desativar a moldura(frame) da janela"
         },
         "hint":"Dica: você pode mudar a posição desta seção nas <0>configurações do plugin Settings</0>!",
         "macosVibrancyStyle":{
@@ -1350,7 +1371,7 @@
             "title":"Estilo de vibração da janela (requer reinicialização)"
         },
         "notification":{
-            "logButton":"Ver log de notificações",
+            "logButton":"Ver Registro de Notificações",
             "settingsButton":"Configurações de Notificação"
         },
         "plugins":{
@@ -1430,7 +1451,7 @@
     "showHiddenChannels":{
         "allowedUsersAndRoles":"Usuários e cargos permitidos:",
         "archiveDuration":"Default inactivity duration before archiving {type}: {duration}",
-        "availableTags":"Available tags:",
+        "availableTags":"Tags disponíveis:",
         "bitrate":"Bitrate: {bitrate} bits",
         "cannotSeeMessages":"You can not see the {type} of this channel.",
         "channelTypes":{
