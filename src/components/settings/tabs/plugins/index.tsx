@@ -409,11 +409,9 @@ export default function PluginSettings() {
                 </Notice>
             )}
 
-            <HeadingTertiary className={classes(Margins.top20, Margins.bottom8)}>
-                Filters
-            </HeadingTertiary>
+            <HeadingTertiary className={Margins.top20}>Plugins</HeadingTertiary>
 
-            <div className={classes(Margins.bottom20, cl("filter-controls"))}>
+            <div className={classes(Margins.top8, Margins.bottom16, cl("filter-controls"))}>
                 <ErrorBoundary noop>
                     <SearchBar
                         autoFocus
@@ -444,8 +442,6 @@ export default function PluginSettings() {
                     </ErrorBoundary>
                 </div>
             </div>
-
-            <HeadingTertiary className={Margins.top20}>Plugins</HeadingTertiary>
 
             {plugins.length || requiredPlugins.length
                 ? (
