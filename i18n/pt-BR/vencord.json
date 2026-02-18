@@ -1054,7 +1054,8 @@
     },
     "permissionFreeWill":{
         "settings":{
-            "lockout":"Ignora a prevenção de bloqueio de permissões (\"Prrovávelmente você não quer fazer isso\")"
+            "lockout":"Ignora a prevenção de bloqueio de permissões (\"Prrovávelmente você não quer fazer isso\")",
+            "onboarding":"Ignora os requisitos de onboarding (\"Fazer essa alteração tornará seu servidor incompatível [...]\")"
         }
     },
     "permissionsViewer":{
