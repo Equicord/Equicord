@@ -35,7 +35,7 @@ import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSiz
 import { OptionType, Plugin } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findComponentByCodeLazy, findCssClassesLazy } from "@webpack";
-import { Clickable, FluxDispatcher, React, Toasts, Tooltip, useEffect, useMemo, UserStore, UserSummaryItem, UserUtils, useState } from "@webpack/common";
+import { Clickable, FluxDispatcher, React, SettingsRouter, Toasts, Tooltip, useEffect, useMemo, UserStore, UserSummaryItem, UserUtils, useState } from "@webpack/common";
 import { Constructor } from "type-fest";
 
 import { PluginMeta } from "~plugins";
@@ -324,16 +324,36 @@ export function openWarningModal(plugin?: Plugin | null, onRestartNeeded?: (plug
             }}
             onCancel={props.onClose}
         >
-            <Paragraph>
-                {isPlugin
-                    ? <>Are you sure you want to reset all settings for <strong>{plugin?.name}</strong> to their default values?</>
-                    : `Are you sure you want to disable ${enabledPlugins} plugins?`
-                }
-            </Paragraph>
+            {isPlugin && (
+                <Paragraph>
+                    Are you sure you want to reset all settings for <strong>{plugin?.name}</strong> to their default values?
+                </Paragraph>
+            )}
             <div className={classes(Margins.top16, cl("warning"))}>
                 <WarningIcon color="var(--text-feedback-critical)" />
                 <span>This action cannot be undone.</span>
             </div>
+            {!isPlugin && (
+                <>
+                    <Paragraph className={Margins.top16}>
+                        Before disabling all plugins, we recommend syncing your current settings to the cloud
+                        so you can easily restore them later. You can do this in the{" "}
+                        <a
+                            role="button"
+                            onClick={() => {
+                                props.onClose();
+                                SettingsRouter.openUserSettings("equicord_cloud_panel");
+                            }}
+                            style={{ color: "var(--text-link)", cursor: "pointer" }}
+                        >
+                            Cloud Tab
+                        </a>.
+                    </Paragraph>
+                    <Paragraph className={Margins.top8}>
+                        This action cannot be undone without manually re-enabling each plugin or restoring from a cloud backup.
+                    </Paragraph>
+                </>
+            )}
         </ConfirmModal>
     ));
 }
