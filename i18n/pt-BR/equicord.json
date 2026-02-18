@@ -435,7 +435,7 @@
         "description":"Carimbos de data e hora personalizados em mensagens e dicas de ferramentas",
         "settings":{
             "calendarFormats":"Formatos de calendário",
-            "calendarFormatsDescription":"Como formatar o valor [calendar] se usado nos carimbos de data/hora acima.",
+            "calendarFormatsDescription":"Como formatar o valor [calendar] se usado nos formatos de data/hora acima.",
             "formats":"Personalize os formatos de carimbo de data/hora"
         }
     },
@@ -536,7 +536,7 @@
         "description":"Usado para fornecer suporte, corrigir falhas causadas por discórdia e outros recursos diversos.",
         "settings":{
             "accountStandingButton":"Mostrar um botão de situação da conta na barra de cabeçalho",
-            "forceRoleIcon":"Força a exibição de ícones de função ao lado das mensagens no modo compacto",
+            "forceRoleIcon":"Força a exibição de ícones de cargo ao lado das mensagens no modo compacto",
             "noDefaultHangStatus":"Desative o status de travamento padrão ao ingressar em canais de voz",
             "noMirroredCamera":"Impede que a câmera seja espelhada na tela",
             "refreshSlashCommands":"Atualiza comandos de barra para mostrar comandos recém-adicionados sem reiniciar seu cliente.",
@@ -646,7 +646,7 @@
     },
     "followVoiceUser":{
         "description":"Siga um amigo no chat de voz.",
-        "info":"Este plug-in é usado para seguir um amigo/amigos em bate-papos de voz.",
+        "info":"Este plugin é usado para seguir um ou mais amigos em chats de voz.",
         "settings":{
             "leaveWhenUserLeaves":"Saia do canal de voz quando o usuário sair. (Isso pode fazer com que você às vezes entre em um loop infinito de saída/entrada)",
             "onlyWhenInVoice":"Siga o usuário apenas quando você estiver em um canal de voz"
@@ -769,7 +769,7 @@
     "ghosted":{
         "description":"Um fantasma fofo aparecerá se você não responder às DMs dele",
         "settings":{
-            "exemptedChannels":"Lista separada por vírgulas de IDs de canais a serem isentos de fantasma (clique com o botão direito em um canal DM para copiar seu ID)",
+            "exemptedChannels":"Lista de IDs de canal separada por vírgulas para isentar do Ghosted (clique com o botão direito em um DM para copiar o ID)",
             "ignoreBots":"Ignorar DMs de bots",
             "ignoreGroupDms":"Excluir todos os DMs do grupo do fantasma",
             "showDmIcons":"Mostrar ícones fantasmas ao lado de DMs individuais",
@@ -853,7 +853,7 @@
         },
         "description":"Adds a command to send a random GIF from your favourites, and a one in ten chance to ping the owner of the server",
         "settings":{
-            "pingOwnerChance":"Se houver uma mudança de 1 em 10 no ping do dono da guilda (ah, não)"
+            "pingOwnerChance":"Se houver uma mudança de 1 em 10 no ping do dono da servidor (ah, não)"
         }
     },
     "githubRepos":{
@@ -915,7 +915,7 @@
         }
     },
     "hideServers":{
-        "description":"Permite ocultar servidores da lista de guildas e alternar rapidamente clicando com o botão direito neles",
+        "description":"Permite ocultar servidores da lista de servidores e alternar rapidamente clicando com o botão direito neles",
         "ui":{
             "hideFolder":"Ocultar pasta",
             "hideServer":"Ocultar servidor",
@@ -1003,10 +1003,10 @@
     },
     "inRole":{
         "commands":{
-            "inrole":"Saiba quem está em uma função",
+            "inrole":"Saiba quem está em um cargo",
             "role":"O cargo"
         },
-        "description":"Saiba quem está em uma função com o menu de contexto da função ou com o comando /inrole (leia as informações do plugin!)",
+        "description":"Saiba quem está em um cargo pelo menu de contexto do cargo ou com o comando /inrole (leia as informações do plugin!)",
         "errors":{
             "makeSureServer":"Certifique-se de estar em um servidor."
         },
@@ -1018,7 +1018,7 @@
             "upTo100":"Até 100 membros serão listados por padrão. Para obter mais, role para baixo na lista de membros para carregar mais membros."
         },
         "ui":{
-            "viewMembers":"Ver membros em função"
+            "viewMembers":"Ver membros no cargo"
         }
     },
     "ingtoninator":{
@@ -1169,7 +1169,7 @@
         },
         "ui":{
             "recordKeybind":"Gravar atalho de teclado",
-            "recording":"Gravação..."
+            "recording":"Gravando..."
         }
     },
     "keyboardSounds":{
@@ -1371,12 +1371,12 @@
             "exportLogsFromIndexedDB":"Exportar registros do IndexedDB",
             "hideMessageFromMessageLoggers":"Quando ativado, um botão será adicionado às mensagens para permitir que você as exclua sem que sejam registradas por outros registradores (loggers). Pode não ser seguro, use por sua conta e risco.",
             "hideMessageFromMessageLoggersDeletedMessage":"O conteúdo da mensagem para substituir a mensagem ao usar o recurso de ocultar mensagem dos registradores de mensagens",
-            "ignoreBots":"Se deve ignorar mensagens de bots",
+            "ignoreBots":"Define se mensagens de bots devem ser ignoradas",
             "ignoreMutedCategories":"Mensagens em canais pertencentes a categorias silenciadas não serão registradas. Usuários/canais na lista branca em servidores silenciados ainda serão registrados.",
             "ignoreMutedChannels":"Mensagens em canais silenciados não serão registradas. Usuários/canais na lista branca em servidores silenciados ainda serão registrados.",
             "ignoreMutedGuilds":"Mensagens em servidores silenciados não serão registradas. Usuários/canais na lista branca em servidores silenciados ainda serão registrados.",
-            "ignoreSelf":"Se deve ignorar mensagens sozinho",
-            "ignoreWebhooks":"Se deve ignorar mensagens por webhooks",
+            "ignoreSelf":"Define se suas próprias mensagens devem ser ignoradas",
+            "ignoreWebhooks":"Define se mensagens de webhooks devem ser ignoradas",
             "importLogsFromFile":"Importar registros de um arquivo",
             "messageLimit":"Número máximo de mensagens a serem salvas. As mensagens mais antigas são excluídas quando o limite é atingido. 0 significa que não há limite",
             "messagesToDisplayAtOnceInLogs":"Número de mensagens a exibir de uma só vez nos registos e número de mensagens a carregar ao carregar mais mensagens nos registos.",
@@ -1499,7 +1499,7 @@
         "description":"Desativa o recurso de Atividade (RPC) do Discord"
     },
     "noRoleHeaders":{
-        "description":"Remove cabeçalhos de funções da lista de membros, criando uma aparência mais limpa"
+        "description":"Remove cabeçalhos de cargos da lista de membros, criando uma aparência mais limpa"
     },
     "normalizeMessageLinks":{
         "description":"Normaliza links de mensagens do Discord removendo subdomínios canary/ptb para maior consistência"
@@ -1585,7 +1585,7 @@
         "buttonActions":{
             "contextMenu":"Mostrar menu de contexto",
             "openQuests":"Abra a página de missões",
-            "pluginSettings":"Abra as configurações do plug-in"
+            "pluginSettings":"Abrir configurações do plugin"
         },
         "description":"Gerenciamento aprimorado de missões com conclusão automática, notificações e estilização personalizada",
         "gradientOptions":{
@@ -1772,7 +1772,7 @@
         "description":"Corrija a funcionalidade de pesquisa contornando o limite de deslocamento de 5.000 mensagens do Discord"
     },
     "sekaiStickers":{
-        "description":"Integração de adesivos Sekai",
+        "description":"Integração de figurinhas Sekai",
         "settings":{
             "AutoCloseModal":"Fechar automaticamente a janela modal quando terminado"
         }
@@ -1915,12 +1915,12 @@
         }
     },
     "stickerBlocker":{
-        "description":"Impedir a exibição de adesivos específicos",
+        "description":"Impede a exibição de figurinhas específicas",
         "settings":{
             "blockedStickers":"A lista de IDs de figurinhas bloqueadas (não edite a menos que saiba o que está fazendo)",
-            "showButton":"Se deve mostrar um botão para desbloquear o gif",
-            "showGif":"Seja para mostrar um gif de gato estiloso",
-            "showMessage":"Se deve mostrar uma mensagem detalhando qual ID foi bloqueado"
+            "showButton":"Define se deve exibir um botão para desbloquear o GIF",
+            "showGif":"Define se deve mostrar um gif de gato estiloso",
+            "showMessage":"Define se deve exibir uma mensagem informando qual ID foi bloqueado"
         }
     },
     "streamingCodecDisabler":{
@@ -1995,7 +1995,7 @@
             "topRight":"Canto Superior Direito"
         },
         "settings":{
-            "determineServerNotifications":"Determine automaticamente quais notificações do servidor serão exibidas com base nas configurações do seu canal/guilda",
+            "determineServerNotifications":"Determine automaticamente quais notificações do servidor serão exibidas com base nas configurações do seu canal/servidor",
             "directMessages":"Mostrar notificações para mensagens diretas",
             "disableInStreamerMode":"Desative notificações no modo streamer",
             "exampleButton":"Mostrar um exemplo de notificação do sistema",
@@ -2145,7 +2145,7 @@
             "customVoice":"Voz do narrador",
             "ignoreSelf":"Ignore você mesmo em todos os eventos",
             "joinMessage":"Marcadores: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
-            "latinOnly":"Retire os caracteres não latinos dos nomes antes de pronunciá-los",
+            "latinOnly":"Remova caracteres não latinos dos nomes antes da narração",
             "leaveMessage":"Mensagem de saída",
             "moveMessage":"Mensagem de mudança de canal",
             "rate":"Velocidade do narrador",
@@ -2193,7 +2193,7 @@
         "contextMenu":{
             "viewRaw":"Ver bruto"
         },
-        "description":"Visualize dados JSON brutos para mensagens, usuários, canais e guildas",
+        "description":"Visualize dados JSON brutos para mensagens, usuários, canais e servidores",
         "modal":{
             "content":"Conteúdo",
             "data":"Dados",
@@ -2269,7 +2269,7 @@
             "loadingModel":"Carregando modelo...",
             "processingAudio":"Processando Áudio...",
             "retry":"Tentar novamente",
-            "showTimestamps":"Mostrar carimbos de data/hora",
+            "showTimestamps":"Mostrar data/hora",
             "start":"Começar",
             "transcribe":"Transcrever",
             "transcribing":"Transcrevendo...",
@@ -2407,7 +2407,7 @@
         "about":{
             "circle":"em um círculo ao digitar )~texto~^",
             "description":"Você pode fazer o texto oscilar com o seguinte:",
-            "leftRight":"esquerda e direita digitando <~text~>",
+            "leftRight":"para a esquerda e para a direita digitando <~text~>",
             "upDown":"para cima e para baixo digitando ^~text~^"
         },
         "description":"Faça o texto balançar com sintaxe especial (~texto~)",
