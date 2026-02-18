@@ -29,7 +29,6 @@ const wrapEmojis = findByCodeLazy("lastIndex;return");
 const adjustColor = findByCodeLazy("light1", "dark1", "toonStroke");
 const AccessibilityStore = findStoreLazy("AccessibilityStore");
 
-const colorPattern = /^#(?:[\da-f]{3}){1,2}$|^#(?:[\da-f]{4}){1,2}$|(rgb|hsl)a?\((\s*-?\d+%?\s*,){2}(\s*-?\d+%?\s*)\)|(rgb|hsl)a?\((\s*-?\d+%?\s*,){3}\s*(0|(0?\.\d+)|1)\)$/iu;
 const roleColorPattern = /^role((?:\+|-)\d{0,4})?$/iu;
 const symbolPattern = /^[\p{S}\p{P}]{1,3}$/iu;
 const templatePattern = /(?:\{(?:custom|friend|nick|display|user)(?:,\s*(?:custom|friend|nick|display|user))*\})/iu;
@@ -37,71 +36,59 @@ const templatePattern = /(?:\{(?:custom|friend|nick|display|user)(?:,\s*(?:custo
 type CustomNicknameData = Record<string, string>;
 let customNicknames: CustomNicknameData = {};
 
-function adjustHex(color: string, percent: number): string {
-    let hex = color.replace("#", "");
+let toCSSCache: Map<string, string | null> | null = null;
+let toCSSProbe: HTMLDivElement | null = null;
 
-    if (hex.length === 3) {
-        hex = hex.split("").map(c => c + c).join("");
-    }
+function toCSS(color: string | number | null | undefined): string | null {
+    if (color == null) return null;
+    if (typeof color === "number") return `#${color.toString(16).padStart(6, "0")}`;
+    if (!color) return null;
 
-    const num = parseInt(hex, 16);
-    let r = (num >> 16) & 0xFF;
-    let g = (num >> 8) & 0xFF;
-    let b = num & 0xFF;
+    const cached = toCSSCache?.get(color);
+    if (cached !== undefined) return cached ?? null;
 
+    if (!toCSSProbe) return null;
+
+    toCSSProbe.style.color = "";
+    toCSSProbe.style.color = color;
+    const result = toCSSProbe.style.color !== "" ? color : null;
+    toCSSCache?.set(color, result);
+    return result;
+}
+
+let convertToRGBCanvas: HTMLCanvasElement | null = null;
+let convertToRGBCtx: CanvasRenderingContext2D | null = null;
+let convertToRGBCache: Map<string, [number, number, number] | null> | null = null;
+
+function convertToRGB(color: string): [number, number, number] | null {
+    const cached = convertToRGBCache?.get(color);
+    if (cached !== undefined) return cached ?? null;
+
+    if (!convertToRGBCanvas || !convertToRGBCtx) return null;
+
+    convertToRGBCtx.fillStyle = "#000000";
+    convertToRGBCtx.clearRect(0, 0, 1, 1);
+    convertToRGBCtx.fillStyle = color;
+    convertToRGBCtx.fillRect(0, 0, 1, 1);
+    const [r, g, b] = convertToRGBCtx.getImageData(0, 0, 1, 1).data;
+    const result: [number, number, number] = [r, g, b];
+    convertToRGBCache?.set(color, result);
+    return result;
+}
+
+function adjustBrightness(color: string, percent: number): string {
+    const rgb = convertToRGB(color);
+    if (!rgb) return color;
+
+    let [r, g, b] = rgb;
     r = Math.max(0, Math.min(255, r + Math.round(r * (percent / 100))));
     g = Math.max(0, Math.min(255, g + Math.round(g * (percent / 100))));
     b = Math.max(0, Math.min(255, b + Math.round(b * (percent / 100))));
 
-    const newColor = ((r << 16) | (g << 8) | b).toString(16).padStart(6, "0");
+    const hex = `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
+    if (hex === "#ffffff" || hex === "#000000") return color;
 
-    if (newColor === "ffffff" || newColor === "000000") {
-        return color;
-    }
-
-    return `#${newColor}`;
-}
-
-function normalizeHexColor(color: string): string | null {
-    const trimmed = color.trim();
-
-    if (/^#[\da-f]{3}$/iu.test(trimmed)) {
-        return `#${trimmed.slice(1).split("").map(c => c + c).join("")}`;
-    }
-
-    if (/^#[\da-f]{6}$/iu.test(trimmed)) {
-        return trimmed;
-    }
-
-    return null;
-}
-
-function cssColorToHex(color: string): string | null {
-    const colorTestDiv = document.createElement("div");
-    colorTestDiv.style.color = color;
-    document.body.appendChild(colorTestDiv);
-
-    const computedColor = getComputedStyle(colorTestDiv).color;
-    colorTestDiv.remove();
-
-    const match = computedColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
-    if (!match) return null;
-
-    const r = Math.max(0, Math.min(255, parseInt(match[1], 10)));
-    const g = Math.max(0, Math.min(255, parseInt(match[2], 10)));
-    const b = Math.max(0, Math.min(255, parseInt(match[3], 10)));
-
-    return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
-}
-
-function toHexColor(color: string | number | null | undefined): string | null {
-    if (!color) return null;
-    if (typeof color === "number") { return `#${color.toString(16).padStart(6, "0")}`; }
-
-    const normalized = normalizeHexColor(color);
-    if (normalized) return normalized;
-
-    return cssColorToHex(color);
+    return hex;
 }
 
 function validColor(color: string) {
@@ -116,13 +103,7 @@ function validColor(color: string) {
         return !isNaN(percentage) && percentage <= 100 && percentage >= -100;
     }
 
-    const colorTestDiv = document.createElement("div");
-    colorTestDiv.style.borderColor = color;
-
-    const isValid = colorTestDiv.style.borderColor !== "" && colorPattern.test(color);
-    colorTestDiv.remove();
-
-    return isValid;
+    return !!toCSS(color);
 }
 
 function resolveColor(
@@ -131,7 +112,7 @@ function resolveColor(
     savedColor: string,
     canUseGradient: boolean,
     inGuild: boolean,
-    forceWhite: boolean
+    forceDefault: boolean
 ): Record<string, any> | null {
     if (!savedColor.trim()) { return null; }
 
@@ -147,18 +128,18 @@ function resolveColor(
         const percentage = roleColorPattern.exec(savedColor)?.[1] || "";
         if (percentage && isNaN(parseInt(percentage))) return null;
 
-        primaryColor = forceWhite ? "#ffffff" : (toHexColor(colorStrings?.primaryColor) || (!inGuild && toHexColor(displayNameStyles?.colors?.[0])) || "#ffffff");
-        secondaryColor = forceWhite ? null : (toHexColor(colorStrings?.secondaryColor) || (!inGuild && toHexColor(displayNameStyles?.colors?.[1])) || null);
-        tertiaryColor = forceWhite ? null : (toHexColor(colorStrings?.tertiaryColor) || (!inGuild && toHexColor(displayNameStyles?.colors?.[2])) || null);
+        primaryColor = forceDefault ? toCSS("var(--text-strong)") : (toCSS(colorStrings?.primaryColor) || (!inGuild && toCSS(displayNameStyles?.colors?.[0])) || toCSS("var(--text-strong)"));
+        secondaryColor = forceDefault ? null : (toCSS(colorStrings?.secondaryColor) || (!inGuild && toCSS(displayNameStyles?.colors?.[1])) || null);
+        tertiaryColor = forceDefault ? null : (toCSS(colorStrings?.tertiaryColor) || (!inGuild && toCSS(displayNameStyles?.colors?.[2])) || null);
 
-        primaryAdjusted = percentage ? adjustHex(primaryColor, parseInt(percentage)) : primaryColor;
-        secondaryAdjusted = secondaryColor && percentage ? adjustHex(secondaryColor, parseInt(percentage)) : secondaryColor;
-        tertiaryAdjusted = tertiaryColor && percentage ? adjustHex(tertiaryColor, parseInt(percentage)) : tertiaryColor;
+        primaryAdjusted = percentage ? adjustBrightness(primaryColor, parseInt(percentage)) : primaryColor;
+        secondaryAdjusted = secondaryColor && percentage ? adjustBrightness(secondaryColor, parseInt(percentage)) : secondaryColor;
+        tertiaryAdjusted = tertiaryColor && percentage ? adjustBrightness(tertiaryColor, parseInt(percentage)) : tertiaryColor;
     } else {
         primaryColor = savedColor;
     }
 
-    gradient = !canUseGradient || !secondaryColor || forceWhite
+    gradient = !canUseGradient || !secondaryColor || forceDefault
         ? null
         : tertiaryColor
             ? "linear-gradient(to right,var(--custom-gradient-color-1),var(--custom-gradient-color-2),var(--custom-gradient-color-3),var(--custom-gradient-color-1))"
@@ -966,7 +947,7 @@ const settings = definePluginSettings({
     memberList: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Display the first available name listed in your custom name format in the member list and DMs list.",
+        description: "Display the first available name listed in your custom name format in the members list, DMs list, and friends list.",
     },
     profilePopout: {
         type: OptionType.BOOLEAN,
@@ -1041,31 +1022,31 @@ const settings = definePluginSettings({
     },
     customNameColor: {
         type: OptionType.STRING,
-        description: "The color to use for the custom name you assigned a user if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+        description: "The color to use for the custom name you assigned a user if it's not the first displayed. Leave blank for default. Accepts any valid CSS input.. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
         default: "Role-25",
         isValid: validColor,
     },
     friendNameColor: {
         type: OptionType.STRING,
-        description: "The color to use for a friend's nickname if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+        description: "The color to use for a friend's nickname if it's not the first displayed. Leave blank for default. Accepts any valid CSS input.. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
         default: "Role-25",
         isValid: validColor,
     },
     nicknameColor: {
         type: OptionType.STRING,
-        description: "The color to use for the nickname if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+        description: "The color to use for the nickname if it's not the first displayed. Leave blank for default. Accepts any valid CSS input.. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
         default: "Role-25",
         isValid: validColor,
     },
     displayNameColor: {
         type: OptionType.STRING,
-        description: "The color to use for the display name if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+        description: "The color to use for the display name if it's not the first displayed. Leave blank for default. Accepts any valid CSS input.. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
         default: "Role-25",
         isValid: validColor,
     },
     usernameColor: {
         type: OptionType.STRING,
-        description: "The color to use for the username if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+        description: "The color to use for the username if it's not the first displayed. Leave blank for default. Accepts any valid CSS input.. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
         default: "Role-25",
         isValid: validColor,
     },
@@ -1080,7 +1061,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "ShowMeYourName",
     description: "Display any permutation of custom nicknames, friend nicknames, server nicknames, display names, and usernames in chat.",
-    authors: [Devs.Rini, Devs.TheKodeToad, EquicordDevs.Etorix, Devs.sadan, Devs.prism],
+    authors: [EquicordDevs.Etorix, Devs.Rini, Devs.TheKodeToad, Devs.sadan, Devs.prism],
     tags: ["SMYN", "Nicknames", "Custom Nicknames",],
     isModified: true,
     settings,
@@ -1118,6 +1099,14 @@ export default definePlugin({
             replacement: {
                 match: /(?<=getMentionCount\(\i.id\)>0\),\i=)/,
                 replace: "$self.getTypingMemberListProfilesReactionsVoiceNameText({...arguments[0],type:\"membersList\"})??"
+            },
+        },
+        {
+            // Replace names in the friends list.
+            find: "location:\"DiscordTag\"});",
+            replacement: {
+                match: /(?<=let{user:(\i).{0,800},{(?:primary|name):)\i/g,
+                replace: "$self.getTypingMemberListProfilesReactionsVoiceNameText({user:$1,type:\"membersList\"})"
             },
         },
         {
@@ -1228,8 +1217,25 @@ export default definePlugin({
     ],
 
     async start() {
+        toCSSCache = new Map();
+        toCSSProbe = document.createElement("div");
+        convertToRGBCanvas = document.createElement("canvas");
+        convertToRGBCanvas.width = convertToRGBCanvas.height = 1;
+        convertToRGBCtx = convertToRGBCanvas.getContext("2d");
+        convertToRGBCache = new Map();
+
         const data = await DataStore.get<CustomNicknameData>("SMYNCustomNicknames");
         customNicknames = data ?? {};
+    },
+
+    stop() {
+        toCSSCache?.clear();
+        toCSSCache = null;
+        toCSSProbe = null;
+        convertToRGBCache?.clear();
+        convertToRGBCache = null;
+        convertToRGBCanvas = null;
+        convertToRGBCtx = null;
     },
 
     contextMenus: {
