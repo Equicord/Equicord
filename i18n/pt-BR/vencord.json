@@ -1182,6 +1182,9 @@
             "replacementEngine":"Replace with a specific search engine instead of adding a menu"
         }
     },
+    "revealAllSpoilers":{
+        "description":"Revela todos os spoilers de uma mensagem ao clicar com Ctrl em um spoiler, ou no chat com Ctrl+Shift+clique"
+    },
     "reverseImageSearch":{
         "all":"Todos",
         "description":"Adiciona o ImageSearch aos menus de contexto das imagens",
@@ -1437,6 +1440,9 @@
                 "disabled":"Desativado"
             }
         }
+    },
+    "showAllMessageButtons":{
+        "description":"Sempre exibe todos os botões de mensagem independentemente se estar  segurando a tecla Shift ou não."
     },
     "showConnections":{
         "description":"Show connected accounts in user popouts",
