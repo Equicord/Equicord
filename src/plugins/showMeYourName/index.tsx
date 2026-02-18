@@ -1103,10 +1103,19 @@ export default definePlugin({
         },
         {
             // Replace names in the friends list.
+            find: "hasUniqueUsername()}),usernameClass",
+            replacement: {
+                match: /(?<=nick:)(\i)/,
+                replace: "$self.getTypingMemberListProfilesReactionsVoiceNameText({user:arguments[0].user,type:\"membersList\"})??$1"
+            },
+        },
+        {
+            // Don't block name style in friends list just
+            // because the name is the same as the username.
             find: "location:\"DiscordTag\"});",
             replacement: {
-                match: /(?<=let{user:(\i).{0,800},{(?:primary|name):)(\i)/g,
-                replace: "window.location.pathname===\"/channels/@me\"?$self.getTypingMemberListProfilesReactionsVoiceNameText({user:$1,type:\"membersList\"}):$2"
+                match: /(?<=forceUsername:(\i),.{0,550}?displayNameStyles:)\i!==\i\?(\i.displayNameStyles):null/,
+                replace: "!$1?$2:null"
             },
         },
         {
