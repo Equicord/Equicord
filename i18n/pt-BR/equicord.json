@@ -421,7 +421,7 @@
             "exportSuccess":"Exportadas {count} configurações (arquivos de áudio não incluídos)",
             "importError":"Erro ao importar as configurações. Verifique o console para ver detalhes.",
             "importSuccess":"Configurações importadas com sucesso!",
-            "loadError":"Erro ao carregar arquivo de som personalizado",
+            "loadError":"Erro ao carregar arquivo de áudio personalizado",
             "resetSuccess":"Todas as configurações foram redefinidas com sucesso!"
         }
     },
@@ -432,18 +432,18 @@
             "relative":"fornece horários como \"4 horas atrás\".",
             "title":"Como usar:"
         },
-        "description":"Carimbos de data e hora personalizados em mensagens e dicas de ferramentas",
+        "description":"Data e hora personalizados em mensagens e dicas",
         "settings":{
             "calendarFormats":"Formatos de calendário",
             "calendarFormatsDescription":"Como formatar o valor [calendar] se usado nos formatos de data/hora acima.",
-            "formats":"Personalize os formatos de carimbo de data/hora"
+            "formats":"Personalize os formatos de data/hora"
         }
     },
     "customUserColors":{
         "contextMenu":{
             "setColor":"Definir cor"
         },
-        "description":"Permite adicionar uma cor personalizada para qualquer usuário, em qualquer lugar! Altamente recomendado para usar com digitaçãoTweaks e roleColorEverywhere",
+        "description":"Permite adicionar uma cor personalizada para qualquer usuário, em qualquer lugar! Altamente recomendado para usar com typingTweaks e roleColorEverywhere",
         "settings":{
             "colorInServers":"Se as cores dos nomes devem ser alteradas nos servidores",
             "dmList":"Usuários com cores personalizadas definidas terão seus nomes coloridos na lista dm"
@@ -459,7 +459,7 @@
         "description":"Adiciona a capacidade de alterar a ordem dos seus emotes favoritos"
     },
     "dragify":{
-        "description":"Coloque usuários, canais ou servidores no chat para inserir menções ou convites.",
+        "description":"Arraste usuários, canais ou servidores no chat para inserir menções ou convites.",
         "settings":{
             "allowChatBodyDrop":"Permitir entrar no corpo principal do chat para inserir texto.",
             "channelOutput":"Saída de queda de canal.",
@@ -517,7 +517,7 @@
         },
         "ui":{
             "copiedColor":"Cor copiada para a área de transferência!",
-            "recording":"Gravação...",
+            "recording":"Gravando...",
             "reset":"Redefinir"
         }
     },
