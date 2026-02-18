@@ -13,6 +13,10 @@ const UserProfileSettingsStore = findStoreLazy("UserProfileSettingsStore");
 const CustomStatusSettings = getUserSettingLazy("status", "customStatus")!;
 
 type PendingChanges = Record<string, unknown> & {
+    selectedAvatarRaw?: ImageInput;
+    presetAvatarRaw?: ImageInput;
+    selectedAvatarProcessed?: ImageInput;
+    presetAvatarProcessed?: ImageInput;
     pendingAvatar?: ImageInput;
     avatar?: ImageInput;
     pendingBanner?: ImageInput;
@@ -75,24 +79,6 @@ function hasImageInput(value: ImageInput): boolean {
     if (!value) return false;
     if (typeof value === "string") return value.length > 0;
     return typeof value === "object" && "imageUri" in value && isNonEmptyString(value.imageUri);
-}
-
-function resolvePendingAvatar(pendingChanges: PendingChanges): ImageInput {
-    const pending = pendingChanges as PendingChanges & {
-        selectedAvatarRaw?: ImageInput;
-        presetAvatarRaw?: ImageInput;
-        selectedAvatarProcessed?: ImageInput;
-        presetAvatarProcessed?: ImageInput;
-    };
-    const candidates: ImageInput[] = [
-        pending.selectedAvatarRaw,
-        pending.presetAvatarRaw,
-        pending.pendingAvatar,
-        pending.avatar,
-        pending.selectedAvatarProcessed,
-        pending.presetAvatarProcessed
-    ];
-    return candidates.find(hasImageInput) ?? null;
 }
 
 function normalizeDisplayNameStyles(value: DisplayNameStylesLike | null | undefined): DisplayNameStylesLike | null {
@@ -308,6 +294,18 @@ function customStatusEq(a: CustomStatus | null | undefined, b: CustomStatus | nu
         && String(a.expiresAtMs ?? "0") === String(b.expiresAtMs ?? "0");
 }
 
+function resolvePendingAvatar(pendingChanges: PendingChanges): ImageInput {
+    const candidates: ImageInput[] = [
+        pendingChanges.selectedAvatarRaw,
+        pendingChanges.presetAvatarRaw,
+        pendingChanges.pendingAvatar,
+        pendingChanges.avatar,
+        pendingChanges.selectedAvatarProcessed,
+        pendingChanges.presetAvatarProcessed
+    ];
+    return candidates.find(hasImageInput) ?? null;
+}
+
 function normalizeImageValue(value: unknown): string | null {
     if (typeof value === "string") return value;
     if (value && typeof value === "object" && "imageUri" in value) {
@@ -345,15 +343,10 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
         const pendingChanges = (isGuild && guildId
             ? UserProfileSettingsStore.getPendingChanges(guildId)
             : UserProfileSettingsStore.getPendingChanges()) as PendingChanges | undefined;
-        const profilePrefix = isGuild ? "GUILD_IDENTITY_SETTINGS" : "USER_SETTINGS_ACCOUNT";
-        const dispatchProfile = (type: string, payload: Record<string, unknown>) => {
-            dispatch(type, isGuild ? { ...payload, guildId } : payload);
-        };
-        const setPending = (type: string, payload: Record<string, unknown>) => {
-            dispatchProfile(type, payload);
-            if (isGuild && type.startsWith("GUILD_IDENTITY_SETTINGS_")) {
-                dispatchProfile(type.replace("GUILD_IDENTITY_SETTINGS_", "USER_SETTINGS_ACCOUNT_"), payload);
-            }
+        const setPending = (field: string, payload: Record<string, unknown>) => {
+            const cleanPayload = Object.fromEntries(Object.entries(payload).filter(([, v]) => v !== undefined));
+            if (!Object.keys(cleanPayload).length) return;
+            dispatch(`USER_PROFILE_SETTINGS_SET_PENDING_${field}`, isGuild ? { ...cleanPayload, guildId } : cleanPayload);
         };
 
         if ("avatarDataUrl" in preset) {
@@ -361,31 +354,38 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             const presetAvatar = normalizeImageValue(avatarValue);
             const currentAvatar = normalizeImageValue(current.avatarDataUrl);
             const pendingAvatar = normalizeImageValue(resolvePendingAvatar(pendingChanges ?? {} as PendingChanges));
-            const shouldDispatchAvatar = isGuild || (presetAvatar !== currentAvatar && presetAvatar !== pendingAvatar);
-            if (shouldDispatchAvatar) {
-                setPending(`${profilePrefix}_SET_PENDING_AVATAR`, { avatar: avatarValue });
+            if (isGuild || (presetAvatar !== currentAvatar && presetAvatar !== pendingAvatar)) {
+                const avatarPayload =
+                    typeof avatarValue === "string" && avatarValue.startsWith("data:")
+                        ? {
+                            assetOrigin: "NEW_ASSET",
+                            imageUri: avatarValue,
+                            description: `profilesets-${preset.name ?? "preset"}`
+                        }
+                        : avatarValue;
+                setPending("AVATAR", { avatar: avatarPayload });
             }
         }
 
         if ("bannerDataUrl" in preset && preset.bannerDataUrl !== current.bannerDataUrl) {
-            setPending(`${profilePrefix}_SET_PENDING_BANNER`, { banner: preset.bannerDataUrl });
+            setPending("BANNER", { banner: preset.bannerDataUrl });
         }
 
         if (!options.skipBio && "bio" in preset && preset.bio !== current.bio) {
             const bioValue = preset.bio === null ? "" : preset.bio;
-            setPending(`${profilePrefix}_SET_PENDING_BIO`, { bio: bioValue });
+            setPending("BIO", { bio: bioValue });
         }
 
         if (!isGuild && !options.skipPronouns && "pronouns" in preset && preset.pronouns !== current.pronouns) {
             const pronounsValue = preset.pronouns === null ? "" : preset.pronouns;
-            setPending(`${profilePrefix}_SET_PENDING_PRONOUNS`, { pronouns: pronounsValue });
+            setPending("PRONOUNS", { pronouns: pronounsValue });
         }
 
         if (!options.skipGlobalName && preset.globalName !== undefined && preset.globalName !== current.globalName) {
             if (isGuild) {
-                setPending("GUILD_IDENTITY_SETTINGS_SET_PENDING_NICKNAME", { nickname: preset.globalName });
+                setPending("NICKNAME", { nickname: preset.globalName });
             } else {
-                setPending("USER_SETTINGS_ACCOUNT_SET_PENDING_GLOBAL_NAME", { globalName: preset.globalName });
+                setPending("GLOBAL_NAME", { globalName: preset.globalName });
             }
         }
 
@@ -393,7 +393,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             preset.avatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
             current.avatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined
         )) {
-            dispatchProfile(`${profilePrefix}_SET_PENDING_COLLECTIBLES_ITEM`, {
+            setPending("COLLECTIBLES_ITEM", {
                 item: { type: 0, value: preset.avatarDecoration }
             });
         }
@@ -402,7 +402,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             preset.profileEffect as { skuId?: string | number | null; } | null | undefined,
             current.profileEffect as { skuId?: string | number | null; } | null | undefined
         )) {
-            dispatchProfile(`${profilePrefix}_SET_PENDING_COLLECTIBLES_ITEM`, {
+            setPending("COLLECTIBLES_ITEM", {
                 item: { type: 1, value: preset.profileEffect }
             });
         }
@@ -411,7 +411,7 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             preset.nameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
             current.nameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined
         )) {
-            dispatchProfile(`${profilePrefix}_SET_PENDING_COLLECTIBLES_ITEM`, {
+            setPending("COLLECTIBLES_ITEM", {
                 item: { type: 2, value: preset.nameplate }
             });
         }
@@ -419,12 +419,12 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
         if (preset.displayNameStyles !== undefined) {
             const presetDisplayNameStyles = normalizeDisplayNameStyles(preset.displayNameStyles as DisplayNameStylesLike | null | undefined);
             if (!jsonEq(presetDisplayNameStyles, current.displayNameStyles)) {
-                setPending(`${profilePrefix}_SET_PENDING_DISPLAY_NAME_STYLES`, { displayNameStyles: presetDisplayNameStyles });
+                setPending("DISPLAY_NAME_STYLES", { displayNameStyles: presetDisplayNameStyles });
             }
         }
 
         if (preset.themeColors !== undefined && !jsonEq(preset.themeColors, current.themeColors)) {
-            setPending(`${profilePrefix}_SET_PENDING_THEME_COLORS`, { themeColors: preset.themeColors });
+            setPending("THEME_COLORS", { themeColors: preset.themeColors });
         }
 
         if (preset.primaryGuildId !== undefined && !isGuild && preset.primaryGuildId !== current.primaryGuildId) {
@@ -439,10 +439,10 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
                 emojiName: ""
             };
             CustomStatusSettings.updateSetting({
-                text: customStatusValue.text || "",
-                expiresAtMs: customStatusValue.expiresAtMs || "0",
-                emojiId: customStatusValue.emojiId || "0",
-                emojiName: customStatusValue.emojiName || ""
+                text: customStatusValue.text ?? "",
+                expiresAtMs: customStatusValue.expiresAtMs ?? "0",
+                emojiId: customStatusValue.emojiId ?? "0",
+                emojiName: customStatusValue.emojiName ?? ""
             });
         }
     } catch (err) {
