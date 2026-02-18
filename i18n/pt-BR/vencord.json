@@ -91,7 +91,7 @@
             "activityType":"Que tipo de atividade",
             "detailsString":"String de formato dos detalhes da atividade",
             "enableButtons":"Habilitar ou não botões",
-            "enableTimestamps":"Habilitar ou não carimbos de data/hora",
+            "enableTimestamps":"Habilitar data/hora",
             "largeImageType":"Imagem grande dos assets da atividade",
             "largeTextString":"String de formato do texto grande dos assets de atividade",
             "nameString":"String de formato do nome da atividade",
@@ -149,7 +149,7 @@
             "folderIconNever":"Nunca",
             "forceOpen":"Forçar a abertura de uma pasta ao mudar para um servidor dessa pasta",
             "keepIcons":"Manter os ícones dos servidores visíveis na pasta da barra principal de servidores quando estiver aberta na barra lateral do BetterFolders",
-            "showFolderIcon":"Mostre o ícone da pasta acima das guildas da pasta na barra lateral do BetterFolders",
+            "showFolderIcon":"Mostre o ícone da pasta acima das servidores da pasta na barra lateral do BetterFolders",
             "sidebar":"Exibir servidores da pasta na barra lateral dedicada",
             "sidebarAnim":"Animar abrindo a barra lateral da pasta"
         }
@@ -176,14 +176,14 @@
         "editRole":"Editar Cargo",
         "name":"BetterRoleContext",
         "settings":{
-            "roleIconFileFormat":"Formato de arquivo a ser usado ao visualizar ícones de função"
+            "roleIconFileFormat":"Formato de arquivo a ser usado ao visualizar ícones de cargo"
         },
         "viewRoleIcon":"Ver Ícone do Cargo"
     },
     "betterRoleDot":{
         "description":"Copiar a cor do cargo ao clicar no RoleDot (configuração de acessibilidade). Também permite usar tanto o RoleDot quanto os nomes coloridos simultaneamente",
         "settings":{
-            "bothStyles":"Mostrar pontos de função e nomes coloridos",
+            "bothStyles":"Mostrar pontos de cargo e nomes coloridos",
             "copyRoleColorInProfilePopout":"Permitir clicar no ponto do cargo no pop-up do perfil para copiar a cor do cargo"
         }
     },
@@ -229,11 +229,11 @@
         "settings":{
             "allCallTimers":"Adiciona temporizador de chamadas a todos os usuários em um canal de voz do servidor",
             "format":"Formato compacto ou legível por humanos:",
-            "showRoleColor":"Mostrar a cor da função do usuário (se este plugin estiver habilitado)",
+            "showRoleColor":"Mostrar a cor do cargo do usuário (se este plugin estiver habilitado)",
             "showSeconds":"Mostrar segundos no cronômetro",
             "showWithoutHover":"Sempre mostre o cronômetro sem precisar passar o mouse",
             "trackSelf":"Também permite acompanhar você mesmo",
-            "watchLargeGuilds":"Rastreie usuários em grandes guildas. Isso pode causar atraso se você estiver em muitas guildas grandes com usuários de voz ativos. Testado com até 2.000 usuários de voz ativos sem problemas."
+            "watchLargeGuilds":"Rastreie usuários em grandes servidores. Isso pode causar atraso se você estiver em muitas servidores grandes com usuários de voz ativos. Testado com até 2.000 usuários de voz ativos sem problemas."
         }
     },
     "cancel":"Cancelar",
@@ -341,15 +341,15 @@
             "recoveringBody":"Tentando recuperar... Clique aqui para ingressar em nosso servidor de suporte!"
         },
         "settings":{
-            "attemptToNavigateToHome":"Se deve tentar navegar até a casa ao evitar travamentos do Discord.",
-            "attemptToPreventCrashes":"Se deve tentar evitar travamentos do Discord."
+            "attemptToNavigateToHome":"Define se deve tentar voltar para a tela inicial ao evitar travamentos do Discord.",
+            "attemptToPreventCrashes":"Define se deve tentar evitar travamentos do Discord."
         },
         "updatePrompt":"Oh não, o Discord acabou de dar pau... mas noticia boa, tem uma atualização do Equicord que talvez resolva esse problema! Gostaria de atualizar agora?"
     },
     "ctrlEnterSend":{
         "description":"Use Ctrl+Enter para enviar mensagens (customizável)",
         "settings":{
-            "sendMessageInTheMiddleOfACodeBlock":"Se deve enviar uma mensagem no meio de um bloco de código",
+            "sendMessageInTheMiddleOfACodeBlock":"Define se deve enviar mensagem no meio de um bloco de código",
             "submitRule":"A maneira de enviar uma mensagem"
         },
         "submitRuleOptions":{
@@ -386,7 +386,7 @@
         "button2Url":"URL do botão2",
         "detailLine1":"Detalhe (linha 1)",
         "detailUrl":"URL detalhada",
-        "endTimestamp":"Carimbo de data/hora final (em milissegundos)",
+        "endTimestamp":"Data/hora final (em milissegundos)",
         "instructions":{
             "buttons":"Você não pode ver seus próprios botões em seu perfil, mas todos os outros podem vê-los perfeitamente.",
             "devPortal":"Acesse o <0>Portal do desenvolvedor Discord</0> para criar um aplicativo e obter o ID do aplicativo.",
@@ -411,7 +411,7 @@
         "smallImageClickUrl":"URL clicável de imagem pequena",
         "smallImageText":"Texto de imagem pequena",
         "smallImageUrl":"URL/chave de imagem pequena",
-        "startTimestamp":"Carimbo de data e hora inicial (em milissegundos)",
+        "startTimestamp":"Data/hora inicial (em milissegundos)",
         "stateLine2":"Estado (linha 2)",
         "stateUrl":"URL do estado",
         "streamLink":"Stream Link (Twitch ou YouTube, somente se o tipo de atividade for Streaming)",
@@ -516,7 +516,7 @@
     "fakeNitro":{
         "description":"Permite enviar emojis/figurinhas falsas, usar temas nitro e transmitir em qualidade nitro.",
         "doNotShowAgain":"Não mostre novamente",
-        "emojiNotice":"Este é um emoji FakeNitro e é renderizado como um emoji real apenas para você. Aparece como um link para usuários que não usam plug-in.",
+        "emojiNotice":"Este é um emoji FakeNitro e é renderizado como um emoji real apenas para você. Para usuários sem plugin, aparece como um link.",
         "holdOn":"Aguarde!",
         "noAttachmentPerms":{
             "body":"Você não pode enviar esta mensagem porque ela contém uma figurinha FakeNitro animada e você não tem permissão para anexar arquivos no canal atual. Remova a figurinha para prosseguir."
@@ -529,18 +529,18 @@
         },
         "sendAnyway":"Enviar mesmo assim",
         "settings":{
-            "disableEmbedPermissionCheck":"Se deve desativar a verificação de permissão de incorporação ao enviar emojis e adesivos falsos",
+            "disableEmbedPermissionCheck":"Define se deve desativar a verificação de permissão de incorporação ao enviar emojis e figurinhas falsas",
             "emojiSize":"Tamanho dos emojis ao enviar",
             "enableEmojiBypass":"Permite enviar emojis falsos (também ignora a falta de permissão para usar emojis personalizados)",
             "enableStickerBypass":"Permite enviar figurinhas falsas (também ignora a falta de permissão para usar figurinhas)",
             "enableStreamQualityBypass":"Permitir a transmissão em qualidade nitro",
-            "hyperLinkText":"Qual texto o hiperlink deve usar. {{NAME}} será substituído pelo nome do emoji/figurinha.",
+            "hyperLinkText":"Texto usado no hiperlink. {{NAME}} será substituído pelo nome do emoji/figurinha.",
             "stickerSize":"Tamanho das figurinhas ao enviar",
-            "transformCompoundSentence":"Se deve transformar figurinhas e emojis falsos em frases compostas (frases com mais conteúdo do que apenas o emoji falso ou o link da figurinha)",
-            "transformEmojis":"Se deve transformar emojis falsos em reais",
-            "transformStickers":"Se deve transformar figurinhas falsas em reais",
-            "useEmojiHyperLinks":"Se deve usar hiperlinks ao enviar emojis falsos",
-            "useStickerHyperLinks":"Se deve usar hiperlinks ao enviar figurinhas falsas"
+            "transformCompoundSentence":"Define se figurinhas e emojis falsos devem ser convertidos em frases compostas (frases com mais conteúdo do que apenas o emoji falso ou o link da figurinha)",
+            "transformEmojis":"Define se emojis falsos devem ser transformados em reais",
+            "transformStickers":"Define se figurinhas falsas devem ser transformadas em reais",
+            "useEmojiHyperLinks":"Define se deve usar hiperlinks ao enviar emojis falsos",
+            "useStickerHyperLinks":"Define se deve usar hiperlinks ao enviar figurinhas falsas"
         },
         "stickerNotice":"Esta é uma figurinha FakeNitro e ela é renderizada como figurinha real apenas para você. Para usuários sem plugin, aparece como um link."
     },
@@ -679,12 +679,12 @@
         "description":"Faz com que selecionar um GIF no seletor de GIFs insira o link no campo de texto ao invés de enviá-lo instantaneamente"
     },
     "greetStickerPicker":{
-        "ariaLabel":"Seletor de adesivos de saudação",
+        "ariaLabel":"Seletor de figurinhas de saudação",
         "description":"Permite usar qualquer figurinha de saudação em vez de apenas um aleatório ao clicar com o botão direito no botão 'Acene para dizer olá!'",
         "greetMode":"Modo de saudação",
         "greetModeDescription":"Escolha o modo de saudação",
         "greetModeLabel":"Cumprimentar (você só pode cumprimentar 3 vezes)",
-        "greetStickers":"Saudação Adesivos",
+        "greetStickers":"Figurinhas de saudação",
         "normalMessageLabel":"Mensagem normal (você pode cumprimentar spam)",
         "sendGreets":"Enviar saudações",
         "unholyMultiGreet":"Multi-cumprimento profano"
@@ -737,7 +737,7 @@
         "settings":{
             "invertScroll":"Inverter rolagem",
             "nearestNeighbour":"Use a interpolação do vizinho mais próximo ao dimensionar imagens",
-            "saveZoomValues":"Se deve salvar os valores de zoom e tamanho da lente",
+            "saveZoomValues":"Define se os valores de zoom e do tamanho da lente devem ser salvos",
             "size":"Raio / Tamanho da lente",
             "square":"Faça a lente quadrada",
             "zoom":"Zoom da lente",
@@ -750,7 +750,7 @@
     "implicitRelationships":{
         "description":"Mostra seus relacionamentos implícitos na aba Amigos.",
         "settings":{
-            "sortByAffinity":"Se deve classificar os relacionamentos implícitos por afinidade com você."
+            "sortByAffinity":"Define se os relacionamentos implícitos devem ser ordenados por afinidade com você."
         },
         "ui":{
             "implicitHeader":"Implícito - {count}",
@@ -764,7 +764,7 @@
             "applyColorOnlyInDms":"Aplicar cores somente na DM; não aplicar em servidores",
             "applyColorOnlyToUsersWithoutColor":"Aplicar cores apenas a usuários que não possuem uma cor predefinida",
             "lightness":"Luminosidade, em %. Altere se as cores estiverem muito claras ou muito escuras.",
-            "memberListColors":"Substitua as cores da função na lista de membros"
+            "memberListColors":"Substitua as cores de cargo na lista de membros"
         }
     },
     "keepCurrentChannel":{
@@ -850,7 +850,7 @@
         "description":"API para adicionar decoradores à lista de membros (em servidores e DMs)"
     },
     "mentionAvatars":{
-        "description":"Mostra avatares de usuários e ícones de funções dentro das menções",
+        "description":"Mostra avatares de usuários e ícones de cargos nas menções",
         "settings":{
             "showAtSymbol":"Se o símbolo @ deve ser exibido nas menções do usuário"
         }
@@ -976,8 +976,8 @@
         "settings":{
             "automodEmbeds":"Use incorporações de automod em vez de incorporações ricas (menores, mas com menos informações)",
             "clearMessageCache":"Limpe o cache de mensagens vinculadas",
-            "idList":"IDs de guilda/canal/usuário para lista negra ou lista branca (separados por vírgula)",
-            "listMode":"Se deve usar a lista de IDs como lista negra ou lista branca",
+            "idList":"IDs de servidor/canal/usuário para lista negra ou lista branca (separados por vírgula)",
+            "listMode":"Define se a lista de IDs será tratada como lista negra ou lista branca",
             "messageBackgroundColor":"Cor de fundo para mensagens em incorporações avançadas"
         }
     },
@@ -997,7 +997,7 @@
             "deleteStyle":"O estilo das mensagens excluídas",
             "deleteStyleRedOverlay":"Overlay vermelho",
             "deleteStyleRedText":"Texto Vermelho",
-            "ignoreBots":"Se deve ignorar mensagens de bots",
+            "ignoreBots":"Define se mensagens de bots devem ser ignoradas",
             "ignoreChannels":"Lista de IDs de canais separados por vírgula para ignorar",
             "ignoreGuilds":"Lista de IDs de servidores separados por vírgula para ignorar",
             "ignoreSelf":"Se deve ignorar suas próprias mensagens",
@@ -1071,13 +1071,13 @@
             "allMessages":"Todas as mensagens",
             "events":"Silenciar novos eventos automaticamente",
             "everyone":"Suprimir @todos e @aqui",
-            "guild":"Silenciar Guilda automaticamente",
+            "guild":"Silenciar servidor automaticamente",
             "highlights":"Suprimir destaques automaticamente",
             "messages":"Configurações de notificação do servidor",
             "mobilePush":"Silenciar notificações push móveis automaticamente",
             "nothing":"Nada",
             "onlyMentions":"Somente @menções",
-            "role":"Suprimir todas as @menções de função",
+            "role":"Suprimir todas as @menções de cargo",
             "serverDefault":"Padrão do servidor",
             "showAllChannels":"Mostrar todos os canais automaticamente",
             "voiceChannels":"Ocultar nomes em canais de voz automaticamente"
@@ -1132,9 +1132,9 @@
     "noReplyMention":{
         "description":"Desativa pings de resposta por padrão",
         "settings":{
-            "doNotPingListed":"Não faça ping nos usuários/funções listados",
+            "doNotPingListed":"Não faça ping nos usuários/cargos listados",
             "inverseShiftReply":"Inverter o comportamento de resposta de turno do Discord (permitir que a resposta de turno mencione o usuário)",
-            "onlyPingListed":"Faça ping apenas nos usuários/funções listados",
+            "onlyPingListed":"Faça ping apenas nos usuários/cargos listados",
             "roleList":"Lista de cargos para permitir ou isentar pings (separados por vírgulas ou espaços)",
             "shouldPingListed":"Comportamento",
             "userList":"Lista de usuários para permitir ou isentar pings (separados por vírgulas ou espaços)"
@@ -1231,13 +1231,13 @@
         "owner":"proprietário",
         "permissions":"Permissões",
         "permissionsTitle":"Permissões {header}",
-        "roleOptions":"Opções de função",
+        "roleOptions":"Opções de cargo",
         "settings":{
-            "highestRole":"Papel mais alto",
+            "highestRole":"Cargo mais alto",
             "lowestRole":"Cargo mais baixo",
-            "permissionsSortOrder":"O método de classificação usado para definir qual função concede a um usuário uma determinada permissão"
+            "permissionsSortOrder":"O método de classificação usado para definir qual cargo concede a um usuário uma determinada permissão"
         },
-        "unknownRole":"Função desconhecida",
+        "unknownRole":"Cargo desconhecido",
         "unknownUser":"Usuário desconhecido",
         "userOptions":"Opções do usuário",
         "viewPermissions":"Ver permissões"
@@ -1296,7 +1296,7 @@
         "unpinDm":"Liberar DM"
     },
     "plainFolderIcon":{
-        "description":"Não mostre os pequenos ícones de guilda nas pastas"
+        "description":"Não mostre os pequenos ícones de servidor nas pastas"
     },
     "platformIndicators":{
         "consoleIcons":{
@@ -1390,7 +1390,7 @@
         }
     },
     "replyTimestamp":{
-        "description":"Mostra um carimbo de data/hora nas visualizações de mensagens respondidas"
+        "description":"Mostra data/hora na prévia das mensagens respondidas"
     },
     "revealAllSpoilers":{
         "description":"Revela todos os spoilers de uma mensagem ao clicar com Ctrl em um spoiler, ou no chat com Ctrl+Shift+clique"
@@ -1448,13 +1448,13 @@
     "roleColorEverywhere":{
         "description":"Adiciona a cor do cargo mais alto onde for possível",
         "settings":{
-            "chatMentions":"Mostrar cores de função nas menções do chat (inclusive na caixa de mensagem)",
-            "colorChatMessages":"Mensagens de bate-papo coloridas com base na cor da função do autor",
-            "memberList":"Mostrar cores de funções nos cabeçalhos de funções da lista de membros",
+            "chatMentions":"Mostrar cores de cargo nas menções do chat (inclusive na caixa de mensagem)",
+            "colorChatMessages":"Mensagens de chat coloridas com base na cor do cargo do autor",
+            "memberList":"Mostrar cores de cargo nos cabeçalhos de cargo da lista de membros",
             "messageSaturation":"Intensidade da coloração da mensagem.",
-            "pollResults":"Mostrar cores de função nos resultados da enquete",
-            "reactorsList":"Mostrar cores de função na lista de reatores",
-            "voiceUsers":"Mostrar cores de funções na lista de usuários do chat de voz"
+            "pollResults":"Mostrar cores de cargo nos resultados da enquete",
+            "reactorsList":"Mostrar cores de cargo na lista de reatores",
+            "voiceUsers":"Mostrar cores de cargo na lista de usuários do chat de voz"
         }
     },
     "secretRingTone":{
@@ -1471,20 +1471,20 @@
         }
     },
     "sendTimestamps":{
-        "description":"Envie carimbos de data/hora facilmente por meio do botão da caixa de bate-papo e atalhos de texto. Leia a descrição estendida!",
+        "description":"Envie data/hora facilmente pelo botão da caixa de bate-papo e por atalhos de texto. Leia a descrição estendida!",
         "extendedDescription":{
             "examples":"Exemplos:",
-            "quickSend":"Para enviar rapidamente carimbos de data e hora apenas, inclua carimbos de data e hora formatados como `HH:MM` (incluindo os crases!) em sua mensagem",
+            "quickSend":"Para enviar rapidamente apenas data/hora, inclua data/hora formatada como `HH:MM` (incluindo os crases!) na sua mensagem",
             "seeBelow":"Veja abaixo exemplos. Se precisar de algo mais específico, use o botão Data na barra de chat!"
         },
         "insert":"Inserir",
         "insertTimestamp":"Inserir Timestamp",
         "preview":"Prévia",
         "settings":{
-            "replaceMessageContents":"Substituir carimbos de data/hora no conteúdo da mensagem"
+            "replaceMessageContents":"Substituir data/hora no conteúdo da mensagem"
         },
         "timestampFormat":"Formato de Timestamp",
-        "timestampPicker":"Seletor de carimbo de data/hora"
+        "timestampPicker":"Seletor de data/hora"
     },
     "serverInfo":{
         "description":"Permite visualizar informações sobre um servidor",
@@ -1677,7 +1677,7 @@
         }
     },
     "showAllMessageButtons":{
-        "description":"Sempre exibe todos os botões de mensagem independentemente se estar segurando a tecla Shift ou não.",
+        "description":"Sempre exibe todos os botões de mensagem independentemente se estar  segurando a tecla Shift ou não.",
         "settings":{
             "noShiftDelete":"Remova o requisito de segurar shift para excluir uma mensagem.",
             "noShiftPin":"Remova o requisito de segurar shift para fixar uma mensagem."
@@ -1723,7 +1723,7 @@
         },
         "hiddenChannel":"Este é um canal {type} oculto",
         "hiddenChannelTooltip":"Canal Oculto",
-        "hideAllowedUsersAndRoles":"Ocultar usuários e funções permitidos",
+        "hideAllowedUsersAndRoles":"Ocultar usuários e cargos permitidos",
         "lastMessageCreated":"Último {type} criado:",
         "lastMessagePin":"Última mensagem fixada:",
         "lockedChannel":"Este é um canal {type} bloqueado",
@@ -1762,7 +1762,7 @@
             "automatic":"Automático"
         },
         "videoQualityMode":"Modo de qualidade de vídeo: {mode}",
-        "viewAllowedUsersAndRoles":"Ver usuários e funções permitidos"
+        "viewAllowedUsersAndRoles":"Ver usuários e cargos permitidos"
     },
     "showHiddenThings":{
         "description":"Exibe várias coisas ocultas e exclusivas para moderadores, independentemente das permissões.",
@@ -1781,26 +1781,26 @@
         "resetNickname":"Redefinir Apelido SMYN",
         "save":"Salvar",
         "settings":{
-            "animateGradients":"Para os nomes não primários, se a função tiver gradiente, anime-a. Isso é desativado por \"Ignorar gradientes\" e movimento reduzido.",
-            "customNameColor":"A cor a ser usada para o nome personalizado atribuído a um usuário, caso não seja o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor da função principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
+            "animateGradients":"Para os nomes não primários, se o cargo tiver gradiente, anime-a. Isso é desativado por \"Ignorar gradientes\" e movimento reduzido.",
+            "customNameColor":"A cor a ser usada para o nome personalizado atribuído a um usuário, caso não seja o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor do cargo principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
             "discriminators":"Anexe discriminadores aos nomes de usuário dos bots. Os discriminadores foram descontinuados para os usuários, mas ainda são usados para bots. Por padrão, o nome de usuário de um bot é equivalente ao nome global de um usuário, portanto, vários bots podem ter o mesmo nome de usuário. Acrescentar discriminadores os torna únicos novamente.",
-            "displayNameColor":"A cor a ser usada para o nome de exibição se não for o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor da função principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
-            "friendNameColor":"A cor a ser usada no apelido de um amigo, caso não seja o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor da função principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
+            "displayNameColor":"A cor a ser usada para o nome de exibição se não for o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor do cargo principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
+            "friendNameColor":"A cor a ser usada no apelido de um amigo, caso não seja o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor do cargo principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
             "hideDefaultAtSign":"Oculte o símbolo padrão “@” antes do nome em menções e respostas. Aplicado apenas se um dos recursos estiver ativado.",
             "ignoreFonts":"Para nomes não primários, use as fontes padrão do Discord, independentemente da fonte nitro personalizada do usuário.",
-            "ignoreGradients":"Para os nomes não primários, se a função tiver gradiente, ignore-o em favor da cor definida abaixo.",
+            "ignoreGradients":"Para os nomes não primários, se o cargo tiver gradiente, ignore-o em favor da cor definida abaixo.",
             "includedNames":"A ordem para exibir nomes de usuário, nomes de exibição, apelidos, nomes de amigos e nomes personalizados. Use os seguintes espaços reservados: {user}, {display}, {nick}, {friend}, {custom}. Você pode fornecer várias opções de nome para usar como substitutos se algum estiver indisponível, separando-os com vírgulas como: {custom, friend, nick}. Você pode ter até três prefixos e três sufixos por nome.",
             "memberList":"Exiba o primeiro nome disponível listado em seu formato de nome personalizado na lista de membros.",
             "mentions":"Exibir formato de nome personalizado nas menções.",
             "messages":"Exibir formato de nome personalizado em mensagens.",
             "nameSeparator":"O separador a ser usado entre nomes. O padrão é um espaço único.",
-            "nicknameColor":"A cor a ser usada para o apelido se não for o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor da função principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
+            "nicknameColor":"A cor a ser usada para o apelido se não for o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor do cargo principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
             "profilePopout":"Exiba o primeiro nome disponível listado em seu formato de nome personalizado nas janelas pop-up do perfil.",
             "reactions":"Exiba o primeiro nome disponível listado em seu formato de nome personalizado nas dicas de ferramentas de reação e o nome completo nos pop-outs de reação.",
             "removeDuplicates":"Se algum dos nomes for equivalente, remova-o, deixando apenas os nomes exclusivos.",
             "replies":"Exibir formato de nome personalizado nas respostas.",
             "truncateAllNamesWithStreamerMode":"Trunque todos os nomes, não apenas os nomes de usuário, no modo Streamer.",
-            "usernameColor":"A cor a ser usada para o nome de usuário, caso não seja a primeira exibida. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor da função principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
+            "usernameColor":"A cor a ser usada para o nome de usuário, caso não seja a primeira exibida. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor do cargo principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
             "voiceChannels":"Exiba o primeiro nome disponível listado em seu formato de nome personalizado em canais de voz."
         }
     },
@@ -1825,22 +1825,22 @@
     },
     "silentTyping":{
         "clickActions":{
-            "openPluginSettings":"Abra as configurações do plug-in",
+            "openPluginSettings":"Abrir configurações do plugin",
             "toggleTypingGlobally":"Alternar digitação globalmente",
             "toggleTypingInChannel":"Alternar digitação no canal",
-            "toggleTypingInGuild":"Alternar digitação na guilda"
+            "toggleTypingInGuild":"Alternar digitação no servidor"
         },
         "command":{
             "chatBarIndicatorsOption":"Oculte os indicadores de digitação de outros usuários acima da barra de bate-papo.",
-            "chatContextMenuOption":"Mostre um menu suspenso no menu de contexto do bate-papo para alternar as configurações do plug-in em qualquer lugar.",
-            "chatIconOption":"Mostre um ícone na barra de bate-papo para alternar o plugin em qualquer lugar.",
-            "defaultHiddenOption":"Se deve ocultar a digitação em DMs/channels/guilds por padrão ou não.",
+            "chatContextMenuOption":"Mostra um submenu no menu de contexto do chat para alternar as configurações do plugin em qualquer lugar.",
+            "chatIconOption":"Mostra um ícone na barra de bate-papo para alternar o plugin em qualquer lugar.",
+            "defaultHiddenOption":"Define se a digitação deve ficar oculta por padrão em DMs/canais/servidores",
             "description":"Oculte seu indicador de digitação do chat.",
             "membersListIndicatorsOption":"Oculte os indicadores de digitação de outros usuários da lista de membros.",
             "toggleChannel":"Canal",
             "toggleGlobal":"Global",
             "toggleGuild":"Servidor",
-            "toggleOption":"Alterne a funcionalidade globalmente, para o canal ou para a guilda."
+            "toggleOption":"Alterna a funcionalidade globalmente, para o canal ou para o servidor."
         },
         "contextMenu":{
             "chatBarIndicators":"Indicadores da barra de bate-papo",
@@ -1852,15 +1852,15 @@
         },
         "noChanges":"Nenhuma alteração feita nas configurações de digitação silenciosa.",
         "settings":{
-            "chatContextMenu":"Mostre um menu suspenso no menu de contexto do bate-papo para modificar as configurações do plug-in em qualquer lugar.",
-            "chatIcon":"Mostre um ícone na barra de bate-papo para modificar o plugin em qualquer lugar.",
+            "chatContextMenu":"Mostra um submenu no menu de contexto do chat para modificar as configurações do plugin em qualquer lugar.",
+            "chatIcon":"Mostra um ícone na barra de bate-papo para modificar o plugin em qualquer lugar.",
             "chatIconLeftClickAction":"O que fazer ao clicar com o botão esquerdo no ícone de bate-papo.",
             "chatIconMiddleClickAction":"O que fazer ao clicar com o botão do meio no ícone de bate-papo.",
             "chatIconRightClickAction":"O que fazer ao clicar com o botão direito no ícone de bate-papo.",
-            "defaultHidden":"Se ativado, o plug-in ocultará sua digitação de outras pessoas em qualquer DMs/canal/guilda não listado em \"Locais desativados\" abaixo. Se desabilitado, o plugin mostrará sua digitação para outras pessoas para qualquer DMs/canal/guilda não listado em \"Locais habilitados\" abaixo.",
+            "defaultHidden":"Se ativado, o plugin ocultará sua digitação de outras pessoas em quaisquer DMs/canais/servidores não listados em \"Locais desativados\" abaixo. Se desativado, o plugin mostrará sua digitação para outras pessoas em quaisquer DMs/canais/servidores não listados em \"Locais habilitados\" abaixo.",
             "disabledLocations":"Desativar funcionalidade para estes IDs. Aceita uma lista separada por vírgulas de IDs de DM, IDs de canais e IDs de servidores. Usado apenas se \"Oculto por padrão\" estiver ativado.",
-            "enabledGlobally":"Alterne a funcionalidade do seu próprio indicador de digitação globalmente.",
-            "enabledLocations":"Habilite a funcionalidade para esses IDs. Aceita uma lista separada por vírgulas de IDs de DM, IDs de canal e IDs de guilda. Usado apenas se \"Padrão Oculto\" estiver desabilitado.",
+            "enabledGlobally":"Alterna globalmente o indicador da sua própria digitação.",
+            "enabledLocations":"Habilita a funcionalidade para estes IDs. Aceita uma lista separada por vírgulas de IDs de DM, IDs de canal e IDs de servidor. Usado apenas se \"Oculto por padrão\" estiver desativado.",
             "hideChatBoxTypingIndicators":"Oculte os indicadores de digitação de outros usuários acima da barra de bate-papo.",
             "hideMembersListTypingIndicators":"Oculte os indicadores de digitação de outros usuários da lista de membros."
         },
@@ -1951,21 +1951,21 @@
             "animatedDots":"Pontos animados",
             "avatars":"Avatares",
             "avatarsAndDots":"Avatares e pontos animados",
-            "includeBlockedUsers":"Se deve mostrar o indicador de digitação para usuários bloqueados.",
-            "includeCurrentChannel":"Se deve mostrar o indicador de digitação para o canal atualmente selecionado",
-            "includeIgnoredUsers":"Se deve mostrar o indicador de digitação para usuários ignorados.",
-            "includeMutedChannels":"Se deve mostrar o indicador de digitação para canais silenciados.",
+            "includeBlockedUsers":"Define se o indicador de digitação deve aparecer para usuários bloqueados",
+            "includeCurrentChannel":"Define se o indicador de digitação deve aparecer para o canal selecionado no momento",
+            "includeIgnoredUsers":"Define se o indicador de digitação deve aparecer para usuários ignorados",
+            "includeMutedChannels":"Define se o indicador de digitação deve aparecer para canais silenciados",
             "indicatorMode":"Como o indicador deve ser exibido?"
         }
     },
     "typingTweaks":{
         "andOthersTyping":"e {count} outros estão digitando...",
-        "description":"Mostrar avatares e cores de funções no indicador de digitação",
+        "description":"Mostrar avatares e cores de cargos no indicador de digitação",
         "settings":{
             "alternativeFormatting":"Mostrar uma mensagem mais útil quando vários usuários estiverem digitando",
             "amITyping":"Mostra se outras pessoas podem ver você digitando",
             "showAvatars":"Mostrar avatares no indicador de digitação",
-            "showRoleColors":"Mostrar cores de função no indicador de digitação"
+            "showRoleColors":"Mostrar cores de cargo no indicador de digitação"
         }
     },
     "unindent":{
@@ -2031,10 +2031,10 @@
             "deafen":"{{USER}} ensurdeceu",
             "join":"{{USER}} entrou",
             "leave":"{{USER}} saiu",
-            "move":"{{USER}} se moveu para {{CHANNEL}}",
+            "move":"{{USER}} foi para {{CHANNEL}}",
             "mute":"{{USER}} se silenciou",
-            "undeafen":"{{USER}} deixou de estar ensurdecido",
-            "unmute":"{{USER}} deixou de estar silenciado"
+            "undeafen":"{{USER}} voltou a ouvir",
+            "unmute":"{{USER}} ativou o microfone"
         },
         "description":"Anuncia quando usuários entram, saem ou mudam de canal de voz pelo narrador",
         "linuxVoicesHelp":"Instale o Speech-Dispatcher ou espeak e execute Discord com o sinalizador --enable-speech-dispatcher",
@@ -2046,14 +2046,14 @@
         "settings":{
             "deafenMessage":"Mensagem ao ensurdecer (apenas eu por enquanto)",
             "joinMessage":"Mensagem de entrada",
-            "latinOnly":"Retire os caracteres não latinos dos nomes antes de pronunciá-los",
+            "latinOnly":"Remova caracteres não latinos dos nomes antes da narração",
             "leaveMessage":"Mensagem de Saída",
             "moveMessage":"Mover mensagem",
             "muteMessage":"Mensagem ao silenciar (apenas eu por enquanto)",
             "sayOwnName":"Diga o próprio nome",
             "speed":"Velocidade do narrador",
-            "undeafenMessage":"Mensagem ao desensurdecer (apenas eu por enquanto)",
-            "unmuteMessage":"Mensagem de desmutar (apenas eu por enquanto)",
+            "undeafenMessage":"Mensagem ao voltar a ouvir (apenas eu por enquanto)",
+            "unmuteMessage":"Mensagem ao ativar o microfone (apenas eu por enquanto)",
             "volume":"Volume do narrador"
         },
         "speechSynthesisNotSupported":"SpeechSynthesis não suportado ou nenhuma voz do Narrador encontrada. Portanto, este plugin não funcionará. Verifique minhas configurações para mais informações"
@@ -2084,7 +2084,7 @@
             "rightClick":"Clique com o botão direito para visualizar o conteúdo bruto."
         },
         "viewRaw":"Ver Raw",
-        "viewRawLeftCopyRawRight":"Visualizar Raw (clique com o botão esquerdo) / Copiar Raw (clique com o botão direito)"
+        "viewRawLeftCopyRawRight":"Ver raw (clique esquerdo) / Copiar raw (clique direito)"
     },
     "voiceDownload":{
         "description":"Adiciona um download às mensagens de voz. (Abre uma nova guia do navegador)",
@@ -2147,7 +2147,7 @@
         "reply":"resposta",
         "sendTestNotification":"Enviar notificação de teste",
         "sentEmbeds":"mensagem enviada incorporada(s)",
-        "sentSticker":"enviou um adesivo",
+        "sentSticker":"enviou uma figurinha",
         "serverNotifications":"Permitir notificações do servidor",
         "soundPath":"Som de notificação (padrão/aviso/erro)",
         "sticker":"figurinha",
