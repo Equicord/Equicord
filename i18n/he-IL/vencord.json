@@ -581,6 +581,9 @@
     "memberListDecoratorsAPI":{
         "description":"API כדי להוסיף מעצבים לרשימה של המשתמשים(גם בהתכתבות פרטית ובשרתים)"
     },
+    "messageAccessoriesAPI":{
+        "description":"API כדי להוסיף עיצוב הודעות"
+    },
     "messageLatency":{
         "clockAhead":"This user's clock is {delta} ahead.",
         "delayedMessage":"Delayed Message",
