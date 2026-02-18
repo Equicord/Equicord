@@ -79,9 +79,9 @@
         },
         "ui":{
             "copiedToast":"Decoded content copied to clipboard!",
-            "copyDecoded":"Copy Decoded Content",
-            "decodedContent":"Decoded Content",
-            "modalTitle":"Decoded Base64 Content",
+            "copyDecoded":"העתק תוכן מפוענח",
+            "decodedContent":"תוכן מפוענח",
+            "modalTitle":"תוכן Base64 מפוענח",
             "tooltipLeft":"Copy Decoded (Left Click) / Decode Base64 (Right Click)",
             "tooltipRight":"Decode Base64 (Left Click) / Copy Decoded (Right Click)"
         }
