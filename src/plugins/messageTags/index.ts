@@ -51,13 +51,14 @@ function resolveTag(nameOrIndex: string) {
     const direct = getTag(nameOrIndex);
     if (direct) return direct;
 
+    const tags = getTagEntries();
     const lowered = nameOrIndex.toLowerCase();
-    const byName = getTagEntries().find(tag => tag.name.toLowerCase() === lowered);
+    const byName = tags.find(tag => tag.name.toLowerCase() === lowered);
     if (byName) return byName;
 
     const parsed = Number(nameOrIndex);
     if (!Number.isInteger(parsed) || parsed <= 0) return null;
-    return getTagEntries()[parsed - 1] ?? null;
+    return tags[parsed - 1] ?? null;
 }
 
 function migrateTags() {
