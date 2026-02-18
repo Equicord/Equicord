@@ -1504,6 +1504,9 @@
     "notificationTitle":{
         "description":"Adiciona títulos de notificação detalhados mostrando informações do remetente, canal e servidor"
     },
+    "orbolayBridge":{
+        "description":"Plugin de ponte para integração do overlay Orbolay, permitindo sincronização de estado de voz e notificações de mensagens"
+    },
     "partyMode":{
         "description":"Ativa efeitos de modo festa com confetes e tremida de tela",
         "settings":{
@@ -1618,6 +1621,11 @@
     "selfForward":{
         "description":"Encaminhar mensagens para você mesmo"
     },
+    "sidebarChat":{
+        "settings":{
+            "patchCommunity":"Aplica correções em itens como o Navegador de Canais ou a aba de Membros que servidores comunitários possuem"
+        }
+    },
     "signature":{
         "settings":{
             "contextMenu":"Adiciona opção para ativar/desativar a funcionalidade na entrada de chat"
@@ -1639,6 +1647,11 @@
     "statsfmPresence":{
         "settings":{
             "showStatsFmLogo":"Mostrar o Stats.fm ao lado da capa do álbum"
+        }
+    },
+    "stickerBlocker":{
+        "settings":{
+            "blockedStickers":"A lista de IDs de figurinhas bloqueadas (não edite a menos que saiba o que está fazendo)"
         }
     },
     "timezones":{
@@ -1664,6 +1677,7 @@
         "settings":{
             "ignoreUsers":"Crie uma lista de IDs de usuários para ignorar todas as notificações vindas deles (separado com vírgula)",
             "maxNotifications":"Número máximo de notificações exibidas de uma só vez",
+            "notifyFor":"Crie uma lista de IDs de canais para receber notificações (separe com vírgulas)",
             "opacity":"Opacidade das notificações"
         },
         "streamingOptions":{
@@ -1684,8 +1698,10 @@
         }
     },
     "userpfp":{
+        "notice":"Usar o recurso de definir avatar é apenas local, ou seja, somente você vê a alteração.",
         "settings":{
-            "overrideServerAvatars":"Substituir os avatares de servidor por avatares personalizados ou pelo avatar padrão do usuário se nenhum avatar personalizado estiver definido"
+            "overrideServerAvatars":"Substituir os avatares de servidor por avatares personalizados ou pelo avatar padrão do usuário se nenhum avatar personalizado estiver definido",
+            "preferNitro":"Qual avatar usar se tanto o pfp animado padrão (Nitro) quanto os avatares do UserPFP estiverem presentes"
         }
     },
     "vcNarratorCustom":{
@@ -1726,10 +1742,15 @@
             "voiceChannelChatSilentSelf":"Mensagens de entrada/saída/movimentação em canais de voz serão silenciadas se você estiver neles"
         }
     },
+    "voiceChatUtils":{
+        "description":"Adiciona ferramentas de moderação de canal de voz (mutar todos, ensurdecer todos, mover todos, desconectar todos)"
+    },
     "voiceJoinMessages":{
         "settings":{
             "allowedFriends":"Lista separada por vírgulas ou espaços de IDs de usuários dos amigos dos quais você deseja receber mensagens",
             "friendDirectMessagesSelf":"Receber notificações nas DMs dos seus amigos mesmo se você estiver no mesmo canal de voz que eles",
+            "friendDirectMessagesShowMemberCount":"Exibe a contagem de outros membros no canal de voz ao receber uma notificação de DM",
+            "friendDirectMessagesShowMembers":"Exibe uma lista de outros membros no canal de voz ao receber uma notificação de DM",
             "friendDirectMessagesSilent":"Mensagens de entrada nas DMs dos seus amigos serão silenciosas"
         }
     },
