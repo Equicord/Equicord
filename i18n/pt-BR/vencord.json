@@ -1,1871 +1,1896 @@
 {
-				"accountPanelServerProfile":{
-								"description":"Right click your account panel in the bottom left to view your profile in the current server",
-								"prioritizeServerProfile":"Prioritize Server Profile",
-								"prioritizeServerProfileDescription":"Prioritize Server Profile when left clicking your account panel",
-								"viewAccountProfile":"View Account Profile",
-								"viewServerProfile":"Ver perfil do servidor"
-				},
-				"addonCard":{
-								"new":"NOVO"
-				},
-				"alwaysAnimate":{
-								"settings":{
-												"icons":"Sempre animar ícones de servidor, avatares, decorações e mais",
-												"nameplates":"Sempre animar placas de identificação",
-												"roleGradients":"Sempre animar gradientes de cargos",
-												"serverBanners":"Sempre animar banners do servidor",
-												"statusEmojis":"Sempre animar os emojis de status"
-								}
-				},
-				"alwaysExpandRoles":{
-								"description":"Sempre expande a lista de cargos nos popups do perfil"
-				},
-				"alwaysTrust":{
-								"ui":{
-												"deleteServerBody":"É permanente, caso não tenha ficado claro.",
-												"deleteServerConfirm":"Excluir",
-												"deleteServerTitle":"Excluir servidor?"
-								}
-				},
-				"anonymiseFileNames":{
-								"commands":{
-												"spoiler":{
-																"description":"Toggle your spoiler",
-																"disabled":"Spoiler disabled!",
-																"enabled":"Spoiler enabled!",
-																"name":"Spoiler",
-																"optionDescription":"Toggle your Spoiler (default is toggle)",
-																"optionName":"valor"
-												}
-								},
-								"description":"Anonymise uploaded file names",
-								"methods":{
-												"consistent":"Consistent",
-												"random":"Random Characters",
-												"timestamp":"Timestamp"
-								},
-								"settings":{
-												"anonymiseByDefault":"Whether to anonymise file names by default",
-												"consistent":"Consistent filename",
-												"method":"Anonymising method",
-												"randomisedLength":"Random characters length",
-												"spoilerMessages":"Spoiler messages"
-								},
-								"usingAnonymous":"Using anonymous file name",
-								"usingNormal":"Using normal file name"
-				},
-				"appleMusicRichPresence":{
-								"activityTypes":{
-												"listening":"Ouvindo",
-												"playing":"Jogando"
-								},
-								"assetImageTypes":{
-												"album":"Arte do álbum",
-												"artist":"Artist artwork",
-												"disabled":"Desativado"
-								},
-								"buttons":{
-												"listenOnAppleMusic":"Ouça no Apple Music",
-												"viewOnSongLink":"View on SongLink"
-								},
-								"defaultDetails":"{name}",
-								"defaultLargeText":"{album}",
-								"defaultName":"Apple Music",
-								"defaultSmallText":"{artist}",
-								"defaultState":"{artist} · {album}",
-								"description":"Discord rich presence for your Apple Music!",
-								"name":"AppleMusicRichPresence",
-								"settings":{
-												"activityType":"Which type of activity",
-												"detailsString":"String de formato dos detalhes da atividade",
-												"enableButtons":"Whether or not to enable buttons",
-												"enableTimestamps":"Whether or not to enable timestamps",
-												"largeImageType":"Imagem grande dos assets da atividade",
-												"largeTextString":"String de formato do texto grande dos assets de atividade",
-												"nameString":"String de formato do nome da atividade",
-												"refreshInterval":"The interval between activity refreshes (seconds)",
-												"smallImageType":"Tipo de imagem pequena dos assets de atividade",
-												"smallTextString":"String de formato do texto pequeno dos assets de atividade",
-												"stateString":"String de formato do estado da atividade",
-												"statusDisplayType":"Show the track / artist name in the member list"
-								},
-								"settingsAbout":{
-												"albumPlaceholder":"{album} é substituído pelo nome do álbum.",
-												"artistPlaceholder":"{artist} is replaced with the artist(s)' name(s)",
-												"intro":"For the customizable activity format strings, you can use several special strings to include track data in activities!",
-												"namePlaceholder":"{name} is replaced with the track name"
-								},
-								"statusDisplayTypes":{
-												"artist":"Show artist name",
-												"off":"Don't show (shows generic listening message)",
-												"track":"Show track name"
-								}
-				},
-				"arRPC":{
-								"connected":"Connected to arRPC",
-								"connectionFailed":"Failed to connect to arRPC, is it running?",
-								"retry":"Retry",
-								"settingsAbout":{
-												"description":"Follow the instructions in the GitHub repo to get the server running, and then enable the plugin.",
-												"title":"How to use arRPC"
-								}
-				},
-				"autoDndWhilePlaying":{
-								"description":"Atualiza automaticamente seu status online (online, ausente, não perturbe) ao iniciar jogos",
-								"settings":{
-												"excludeInvisible":"Impedir mudanças automáticas de status enquanto seu status estiver definido como invisível",
-												"statusToSet":"Status a definir enquanto joga"
-								},
-								"statusOptions":{
-												"dnd":"Não Perturbe",
-												"idle":"Ausente",
-												"invisible":"Invisível",
-												"online":"Online"
-								}
-				},
-				"badgeAPI":{
-								"description":"API para adicionar insígnias aos usuários"
-				},
-				"betterFolders":{
-								"settings":{
-												"closeAllFolders":"Close all folders when selecting a server not in a folder",
-												"closeAllHomeButton":"Close all folders when clicking on the home button",
-												"closeOthers":"Close other folders when opening a folder",
-												"closeServerFolder":"Close folder when selecting a server in that folder",
-												"folderIconAlways":"Sempre",
-												"folderIconMultipleExpanded":"When more than one folder is expanded",
-												"folderIconNever":"Nunca",
-												"forceOpen":"Force a folder to open when switching to a server of that folder",
-												"keepIcons":"Manter os ícones dos servidores visíveis na pasta da barra principal de servidores quando estiver aberta na barra lateral do BetterFolders",
-												"showFolderIcon":"Show the folder icon above the folder guilds in the BetterFolders sidebar",
-												"sidebar":"Display servers from folder on dedicated sidebar",
-												"sidebarAnim":"Animate opening the folder sidebar"
-								}
-				},
-				"betterGifPicker":{
-								"settings":{
-												"keepOpen":"Mantém o seletor de GIF aberto após selecionar um GIF"
-								}
-				},
-				"betterNotesBox":{
-								"settings":{
-												"hide":"Ocultar notas"
-								}
-				},
-				"betterRoleContext":{
-								"copyRoleColor":"Copiar Cor do Cargo",
-								"description":"Adiciona opções para copiar a cor do cargo / editar cargo / visualizar o ícone do cargo ao clicar com o botão direito do mouse nos cargos no perfil do usuário.",
-								"editRole":"Editar Cargo",
-								"name":"BetterRoleContext",
-								"settings":{
-												"roleIconFileFormat":"File format to use when viewing role icons"
-								},
-								"viewRoleIcon":"Ver Ícone do Cargo"
-				},
-				"betterRoleDot":{
-								"settings":{
-												"copyRoleColorInProfilePopout":"Permitir clicar no ponto do cargo no pop-up do perfil para copiar a cor do cargo"
-								}
-				},
-				"betterSessions":{
-								"newBadge":"NOVO",
-								"newSession":"Nova sessão:",
-								"rename":"Rename",
-								"renameModal":{
-												"newDeviceName":"Novo nome do dispositivo",
-												"resetName":"Redefinir nome",
-												"save":"Save",
-												"title":"Rename"
-								},
-								"settings":{
-												"backgroundCheck":"Check for new sessions in the background, and display notifications when they are detected",
-												"checkInterval":"How often to check for new sessions in the background (if enabled), in minutes"
-								}
-				},
-				"betterSettings":{
-								"settings":{
-												"disableFade":"Disable the crossfade animation",
-												"eagerLoad":"Removes the loading delay when opening the menu for the first time",
-												"organizeMenu":"Organizes the settings cog context menu into categories"
-								}
-				},
-				"biggerStreamPreview":{
-								"description":"This plugin allows you to enlarge stream previews",
-								"name":"BiggerStreamPreview",
-								"viewStreamPreview":"Ver prévia de transmissão"
-				},
-				"blurNsfw":{
-								"description":"Desfocar anexos em canais NSFW até passar o mouse sobre eles",
-								"settings":{
-												"blurAllChannels":"Desfocar anexos em todos os canais (não apenas NSFW)",
-												"blurAmount":"Desfocagem (em pixels)"
-								}
-				},
-				"callTimer":{
-								"description":"Adiciona temporizadores de chamadas para todos os usuários nos canais de voz e no status de conexão.",
-								"settings":{
-												"allCallTimers":"Adiciona temporizador de chamadas a todos os usuários em um canal de voz do servidor",
-												"format":"Compact or human readable format:",
-												"showRoleColor":"Show the user's role color (if this plugin is enabled)",
-												"showSeconds":"Show seconds in the timer",
-												"showWithoutHover":"Always show the timer without needing to hover",
-												"trackSelf":"Também permite acompanhar você mesmo",
-												"watchLargeGuilds":"Track users in large guilds. This may cause lag if you're in a lot of large guilds with active voice users. Tested with up to 2000 active voice users with no issues."
-								}
-				},
-				"cancel":"Cancelar",
-				"chatInputButtonAPI":{
-								"description":"API para adicionar botões à entrada de chat"
-				},
-				"clientTheme":{
-								"contrastWarning":"Selected color won't contrast well with text",
-								"disableNitroTheme":"Desativar Tema Nitro",
-								"nitroNotSupported":"Os temas Nitro não são suportados",
-								"resetThemeColor":"Redefinir Cor do Tema",
-								"switchToMode":"Switch to {mode} mode",
-								"themeColor":"Cor do Tema",
-								"themeColorDescription":"Adicione uma cor ao tema do seu cliente Discord",
-								"themeWontLookGood":"Your theme won't look good!"
-				},
-				"cloud":{
-								"integrations":{
-												"enabled":"Integrações com a nuvem ativadas!",
-												"error":"Falha na configuração ({e})",
-												"failedToRetrieveOAuth":"Configuração falhou (não foi possível obter a configuração OAuth).",
-												"header":"Integrações com a nuvem",
-												"noSecret":"Falha na configuração (nenhum segredo retornado?).",
-												"reauthenticateOtherClient":"Notamos que você tem integrações com a nuvem ativadas em outro cliente! Devido a limitações, você precisará se autenticar novamente para continuar usando elas. Clique aqui para acessar a página de configurações e fazer isso!"
-								},
-								"settings":{
-												"accountChanged":"A sincronização com a nuvem foi desativada porque esta conta não está conectada ao App da nuvem. Você pode ativá-la novamente conectando esta conta em Configurações da Nuvem. (note: suas preferências serão armazenadas separadamente)",
-												"apiDelete":"Não foi possível excluir as configurações (API retornou {e}).",
-												"apiEraseAll":"Não foi possível apagar todos os dados (API retornou {e}), entre em contato com o suporte.",
-												"apiReject":"Não foi possível sincronizar as configurações com a nuvem (API retornou {e}).",
-												"deleted":"Configurações excluídas da nuvem!",
-												"erased":"Todos os dados foram apagados com sucesso.",
-												"failedToDelete":"Não foi possível excluir as configurações ({e}).",
-												"failedToSync":"Não foi possível sincronizar as configurações com a nuvem ({e}).",
-												"header":"Configurações de Nuvem",
-												"newerThanCloud":"Suas configurações locais são mais recentes do que as da nuvem.",
-												"noSettings":"Não há nenhuma configuração na nuvem.",
-												"success":"Configurações sincronizadas com a nuvem!",
-												"syncFromCloud":"Não foi possível sincronizar as configurações da nuvem ({e}).",
-												"upToDate":"Suas configurações estão atualizadas.",
-												"updated":"Suas configurações foram atualizadas! Clique aqui para reiniciar e aplicar todas as alterações!",
-												"updatedRemote":"Suas configurações foram atualizadas! Clique aqui para reiniciar e aplicar todas as alterações!"
-								}
-				},
-				"colorSighted":{
-								"description":"Remove os ícones para daltônicos dos status, assim como o Discord 2015-2017"
-				},
-				"commandsAPI":{
-								"description":"API necessária para qualquer coisa que utilize comandos"
-				},
-				"consoleJanitor":{
-								"alwaysAllowLoggers":"Sempre permitir logs destes tipos",
-								"description":"Desativa mensagens/erros irritantes do console",
-								"filterList":"Filter List",
-								"name":"ConsoleJanitor",
-								"settings":{
-												"disableLoggers":"Disables Discords loggers",
-												"disableSpotifyLogger":"Disable the Spotify logger, which leaks account information and access token",
-												"whitelistedLoggers":"Semi colon separated list of loggers to allow even if others are hidden"
-								}
-				},
-				"consoleShortcuts":{
-								"description":"Adiciona apelidos mais curtos para muitas coisas na janela. Execute `shortcutList` para obter uma lista."
-				},
-				"contextMenuAPI":{
-								"description":"API para adicionar/remover itens dos menus de contexto"
-				},
-				"contributorCard":{
-								"contributionsButton":"Veja o que você contribuiu para",
-								"description":"Como você contribuiu para o Equicord, agora você tem um novo emblema legal!",
-								"subtitle":"Obrigado por sua contribuição!",
-								"title":"Contribuições"
-				},
-				"copyEmojiMarkdown":{
-								"copyEmojiMarkdown":"Copiar Emoji Markdown",
-								"copyUnicodeDescription":"Copy the raw unicode character instead of :name: for default emojis (👽)",
-								"description":"Permite copiar emojis como string formatada (<:blobcatcozy:1026533070955872337>)",
-								"success":"Success! Copied emoji markdown."
-				},
-				"copyFileContents":{
-								"copied":"Copiado!",
-								"copyFileContents":"Copiar conteúdos de arquivos",
-								"description":"Adiciona um botão aos anexos de arquivos de texto para copiar seu conteúdo",
-								"fileTooLarge":"File too large to copy"
-				},
-				"copyStickerLinks":{
-								"copyLink":"Copiar Link",
-								"description":"Adiciona a habilidade de copiar e abrir links de Figurinha",
-								"linkCopied":"Link copiado!",
-								"openLink":"Open Link"
-				},
-				"copyUserURLs":{
-								"copyUserURL":"Copiar URL do Usuário",
-								"description":"Adiciona uma opção 'Copiar URL do usuário' ao menu de contexto do usuário."
-				},
-				"crashHandler":{
-								"updatePrompt":"Oh não, o Discord acabou de dar pau... mas noticia boa, tem uma atualização do Equicord que talvez resolva esse problema! Gostaria de atualizar agora?"
-				},
-				"ctrlEnterSend":{
-								"description":"Use Ctrl+Enter para enviar mensagens (customizável)",
-								"settings":{
-												"submitRule":"A maneira de enviar uma mensagem"
-								},
-								"submitRuleOptions":{
-												"ctrlEnter":"Ctrl+Enter (Enter ou Shift+Enter para nova linha) (cmd+enter no macOS)",
-												"enter":"Enter (Shift+Enter para nova linha; padrão do Discord)",
-												"shiftEnter":"Shift+Enter (Enter para nova linha)"
-								}
-				},
-				"customIdle":{
-								"description":"Permite definir o tempo antes que o Discord fique inativo (ou desativar a inatividade automática)"
-				},
-				"customRPC":{
-								"activityType":"Tipo de atividade",
-								"activityTypes":{
-												"competing":"Competindo",
-												"listening":"Ouvindo",
-												"playing":"Jogando",
-												"streaming":"Transmitindo",
-												"watching":"Assistindo"
-								},
-								"appId":"Application ID",
-								"appName":"Application Name",
-								"button1Text":"Button1 Text",
-								"button1Url":"Button1 URL",
-								"button2Text":"Button2 Text",
-								"button2Url":"Button2 URL",
-								"detailLine1":"Detalhe (linha 1)",
-								"detailUrl":"URL detalhada",
-								"endTimestamp":"End Timestamp (in milliseconds)",
-								"instructions":{
-												"buttons":"You can't see your own buttons on your profile, but everyone else can see it fine.",
-												"devPortal":"Go to the <0>Discord Developer Portal</0> to create an application and get the application ID.",
-												"imgur":"If you want to use an image link, download your image and reupload the image to <0>Imgur</0> and get the image link by right-clicking the image and selecting \"Copy image address\".",
-												"unicode":"Some weird unicode text (\"fonts\" 𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘) may cause the rich presence to not show up, try using normal letters instead.",
-												"uploadImages":"Upload images in the Rich Presence tab to get the image keys."
-								},
-								"largeImageClickUrl":"URL clicável da imagem grande",
-								"largeImageText":"Texto da imagem grande",
-								"largeImageUrl":"URL/Chave da Imagem Grande",
-								"notice":{
-												"body":"O Compartilhamento de Atividades não está ativado, as pessoas não poderão ver sua rich presence personalizada!",
-												"enable":"Ativar",
-												"title":"Aviso"
-								},
-								"partyMaxSize":"Maximum Party Size",
-								"partySize":"Party Size",
-								"placeholder":{
-												"enterValue":"Enter a value",
-												"selectOption":"Select an option"
-								},
-								"smallImageClickUrl":"Small Image clickable URL",
-								"smallImageText":"Small Image Text",
-								"smallImageUrl":"Small Image URL/Key",
-								"startTimestamp":"Start Timestamp (in milliseconds)",
-								"stateLine2":"State (line 2)",
-								"stateUrl":"State URL",
-								"streamLink":"Stream Link (Twitch or YouTube, only if activity type is Streaming)",
-								"timestampMode":"Modo de Timestamp",
-								"timestampModes":{
-												"currentTime":"Same as your current time (not reset after 24h)",
-												"custom":"Personalizado",
-												"none":"Nenhum",
-												"sinceOpen":"since discord open"
-								},
-								"validation":{
-												"discordId":"Deve ser um ID Discord válido.",
-												"discordLink":"Don't use a Discord link. Use an Imgur image link instead.",
-												"imgurDirect":"Imgur link must be a direct link to the image (e.g. https://i.imgur.com/...). Right click the image and click 'Copy image address'",
-												"maxLength":"Não deve ter mais de {length} caracteres.",
-												"number":"Deve ser um número.",
-												"positiveNumber":"Deve ser um número positivo.",
-												"required":"This field is required.",
-												"streamingLink":"O link de transmissão deve ser uma URL válida",
-												"streamingLinkLength":"O link de transmissão não deve ter mais de 512 caracteres.",
-												"tenorDirect":"Tenor link must be a direct link to the image (e.g. https://media.tenor.com/...). Right click the GIF and click 'Copy image address'",
-												"url":"Deve ser uma URL válida."
-								}
-				},
-				"dearrow":{
-								"clickToDearrow":"Click to dearrow",
-								"dearrowByDefault":"Dearrow videos automatically",
-								"dearrowedClickRestore":"This embed has been dearrowed, click to restore",
-								"description":"Makes YouTube embed titles and thumbnails less sensationalist, powered by Dearrow",
-								"everything":"Everything (Titles & Thumbnails)",
-								"hideButton":"Hides the Dearrow button from YouTube embeds",
-								"replaceElementsDescription":"Choose which elements of the embed will be replaced",
-								"thumbnails":"Thumbnails",
-								"titles":"Titles"
-				},
-				"decor":{
-								"accessFromProfiles":"You can also access Decor decorations from the {link} page.",
-								"changeDecoration":"Change Decoration",
-								"description":"Create and use your own custom avatar decorations, or pick your favorite from the presets.",
-								"enableAndRestart":"Enable Decor and restart your client to change your avatar decoration.",
-								"profilesLink":"Perfis",
-								"removeDecoration":"Remove Decoration",
-								"title":"Decoração"
-				},
-				"devCompanion":{
-								"description":"Plugin Dev Companion. Por favor, informe qualquer coisa que não esteja funcionando ou que esteja estranha (provavelmente é um bug) para sadan, seja por ping ou dm, obrigado!",
-								"settings":{
-												"notifyOnAutoConnect":"Se deve notificar quando o Dev Companion estiver conectado automaticamente.",
-												"reloadAfterToggle":"Recarregar após o recebimento de um comando para desativar/ativar plugin.",
-												"usePatchedModule":"Em solicitações de extração, responder com o módulo corrigido atual (se estiver corrigido) em vez do original."
-								}
-				},
-				"disableCallIdle":{
-								"description":"Desativa a expulsão automática de chamadas de voz em DMs após 3 minutos e o redirecionamento para canais de voz de AFK."
-				},
-				"donate":"Doar",
-				"donorCard":{
-								"donated":{
-												"description":"Todos os usuários do Vencord podem ver sua insígnia de doador do Vencord, e os usuários do Equicord podem ver sua insígnia de doador do Equicord. Para alterar sua insígnia de doador do Vencord, entre em contato com @vending.machine. Para sua insígnia de doador do Equicord, crie um ticket no servidor do Equicord.",
-												"equicordDescription":"Todos os usuários do Equicord podem ver sua insígnia! Você pode gerenciar seus benefícios criando um ticket no servidor do Equicord.",
-												"subtitle":"Obrigado por doar!",
-												"title":"Doações",
-												"vencordDescription":"Todos os usuários do Vencord podem ver sua insígnia! Você pode gerenciar seus benefícios enviando uma mensagem para @{v}."
-								},
-								"notDonated":{
-												"description":"Por favor, considere apoiar o desenvolvimento do Equicord doando!",
-												"title":"Apoie o Projeto"
-								}
-				},
-				"dontRoundMyTimestamps":{
-								"description":"Sempre arredonda indicadores de tempo relativos para baixo, para que 7.6y se torne 7y em vez de 8y"
-				},
-				"dynamicImageModalAPI":{
-								"description":"Permite ignorar a largura ou altura ao abrir uma imagem expandida"
-				},
-				"experiments":{
-								"description":"Enable Access to Experiments & other dev-only features in Discord!",
-								"devToolsInfo":"You can open Discord's DevTools via {keyboardCombo}",
-								"holdOn":"Hold on!!",
-								"moreInfo":"Mais informações",
-								"settings":{
-												"toolbarDevMenu":"Change the Help (?) toolbar button (top right in chat) to Discord's developer menu"
-								},
-								"warning1":"Experiments are unreleased Discord features. They might not work, or even break your client or get your account disabled.",
-								"warning2":"Only use experiments if you know what you're doing. Equicord is not responsible for any damage caused by enabling experiments. If you don't know what an experiment does, ignore it. Do not ask us what experiments do either, we probably don't know.",
-								"warning3":"No, you cannot use server-side features like checking the \"Send to Client\" box."
-				},
-				"expressionCloner":{
-								"cloneEmoji":"Clone Emoji",
-								"cloneSticker":"Clone Sticker",
-								"cloneTo":"Clone to {guild}",
-								"clonedSuccess":"Successfully cloned {name} to {guild}!",
-								"customName":"Custom Name",
-								"failedToClone":"Failed to clone: {error}",
-								"nameValidation":"Name must be between 2 and 32 characters",
-								"somethingWentWrong":"Something went wrong (check console!)"
-				},
-				"f8break":{
-								"description":"Pausa o cliente ao pressionar F8 com o DevTools (+ breakpoints) aberto."
-				},
-				"failedToRender":"Falha ao renderizar a guia {tab}. Se o problema persistir, tente usar o instalador para reinstalar!",
-				"fakeNitro":{
-								"description":"Permite enviar emojis/figurinhas falsas, usar temas nitro e transmitir em qualidade nitro.",
-								"doNotShowAgain":"Do not show again",
-								"emojiNotice":"This is a FakeNitro emoji and renders like a real emoji only for you. Appears as a link to non-plugin users.",
-								"holdOn":"Hold on!",
-								"noAttachmentPerms":{
-												"body":"You cannot send this message because it contains an animated FakeNitro sticker, and you do not have permissions to attach files in the current channel. Please remove the sticker to proceed."
-								},
-								"noEmbedPerms":{
-												"body1":"You are trying to send/edit a message that contains a FakeNitro emoji or sticker,",
-												"body2":"however you do not have permissions to embed links in the current channel.",
-												"body3":"Are you sure you want to send this message? Your FakeNitro items will appear as a link only.",
-												"disableNotice":"You can disable this notice in the plugin settings."
-								},
-								"sendAnyway":"Send Anyway",
-								"settings":{
-												"disableEmbedPermissionCheck":"Whether to disable the embed permission check when sending fake emojis and stickers",
-												"emojiSize":"Size of the emojis when sending",
-												"enableEmojiBypass":"Permite enviar emojis falsos (também ignora a falta de permissão para usar emojis personalizados)",
-												"enableStickerBypass":"Permite enviar figurinhas falsas (também ignora a falta de permissão para usar figurinhas)",
-												"enableStreamQualityBypass":"Permitir a transmissão em qualidade nitro",
-												"hyperLinkText":"What text the hyperlink should use. {{NAME}} will be replaced with the emoji/sticker name.",
-												"stickerSize":"Size of the stickers when sending",
-												"transformCompoundSentence":"Whether to transform fake stickers and emojis in compound sentences (sentences with more content than just the fake emoji or sticker link)",
-												"transformEmojis":"Whether to transform fake emojis into real ones",
-												"transformStickers":"Whether to transform fake stickers into real ones",
-												"useEmojiHyperLinks":"Whether to use hyperlinks when sending fake emojis",
-												"useStickerHyperLinks":"Whether to use hyperlinks when sending fake stickers"
-								},
-								"stickerNotice":"This is a FakeNitro sticker and renders like a real sticker only for you. Appears as a link to non-plugin users."
-				},
-				"fakeProfileThemes":{
-								"accent":"Destaque",
-								"colorPickers":"Color pickers",
-								"copy3y3":"Copiar 3y3",
-								"fakeColors":"Fake colors",
-								"instructions":"Set your profile colors using the color pickers below. The colors will be encoded into your profile's 'About Me' section.",
-								"nitroColors":"Cores Nitro",
-								"preview":"Prévia",
-								"primary":"Principal",
-								"usage":"Uso"
-				},
-				"favEmojiFirst":{
-								"settings":{
-												"clearAll":"Excluir todos os aliases."
-								},
-								"ui":{
-												"aliasRequired":"É necessário um Alias.",
-												"aliasSetFor":"Alias definido para {emoji}.",
-												"aliasValidation":"Alias deve ter de 2 a 32 caracteres e usar apenas letras minúsculas, números ou sublinhados.",
-												"confirmModal":{
-																"confirmButton":"Excluir todos os aliases",
-																"title":"Excluir todos os aliases"
-												},
-												"deleteAllAliases":"Excluir todos os aliases",
-												"deletedAllAliases":"Excluídos todos os aliases de emoji.",
-												"modal":{
-																"placeholder":"Alias, ex: \"sob\""
-												}
-								}
-				},
-				"favGifSearch":{
-								"description":"Adiciona uma barra de pesquisa aos GIFs favoritos.",
-								"name":"FavoriteGifSearch",
-								"searchOptions":{
-												"entireUrl":"Entire Url",
-												"hostAndPath":"Host & Path (tenor.com somgif.gif)",
-												"pathOnly":"Path Only (/somegif.gif)"
-								},
-								"searchPlaceholder":"Search Favorite Gifs",
-								"settings":{
-												"searchOption":"The part of the url you want to search"
-								}
-				},
-				"fixCodeblockGap":{
-								"description":"Remove o espaço entre blocos de código e o texto abaixo deles."
-				},
-				"fixImagesQuality":{
-								"animatedImagesAlways":"Animated images (GIF, WebP, etc.) in chat will always animate, regardless of if the App is focused.",
-								"defaultBehavior":"The default behavior is the following:",
-								"description":"Improves quality of images by loading them at their original resolution",
-								"enableOriginalCaveats":"You can also enable original image in chat, but beware of the following caveats:",
-								"inChatOptimised":"In chat, optimised but full resolution images will be loaded.",
-								"inModalOriginal":"In the image modal, the original image will be loaded.",
-								"mayCauseLag":"May cause lag.",
-								"name":"FixImagesQuality",
-								"settings":{
-												"originalImagesInChat":"Carrega também a imagem original no Chat. AVISO: Leia os avisos acima."
-								}
-				},
-				"fixSpotifyEmbeds":{
-								"description":"Corrige embeds do spotify sendo incrivelmente alto, permitindo que você personalize o volume",
-								"settings":{
-												"volume":"A % de volume para os embeds do spotify. Qualquer coisa acima de 10% é muuuito alto"
-								}
-				},
-				"fixYoutubeEmbeds":{
-								"description":"Ignora vídeos do youtube tendo a exibição bloqueada no Discord (por exemplo, pela UMG)"
-				},
-				"forceOwnerCrown":{
-								"description":"Force a coroa do proprietário ao lado dos nomes de usuário, mesmo que o servidor seja grande."
-				},
-				"friendInvites":{
-								"commands":{
-												"createFriendInvite":{
-																"description":"Gera um link de convite de amigo.",
-																"name":"criar convite de amigo"
-												},
-												"revokeFriendInvites":{
-																"description":"Revoga todos os convites de amigos gerados.",
-																"name":"revogar convites de amigos"
-												},
-												"viewFriendInvites":{
-																"description":"Veja a lista de todos os convites de amigos gerados",
-																"name":"ver convites de amigo"
-												}
-								},
-								"description":"Crie e gerencie links de convite de amigo via comandos de barra (/create friend invite, /view friend invites, /revoke friend invites).",
-								"ui":{
-												"allRevoked":"Todos os convites de amizade foram revogados.",
-												"expires":"Expira:",
-												"maxUses":"Número máximo de usos:",
-												"noActiveInvites":"Você não tem convites de amigos ativos!",
-												"timesUsed":"Vezes usado:"
-								}
-				},
-				"friendsSince":{
-								"description":"Shows when you became friends with someone in the user popout",
-								"heading":"Amigos desde"
-				},
-				"fullSearchContext":{
-								"description":"Faz com que o menu de mensagens nos resultados de busca tenha todas as opções esperadas"
-				},
-				"fullUserInChatbox":{
-								"description":"Faz com que a menção de usuário no chat tenha mais funcionalidades, como clique esquerdo/direito"
-				},
-				"gameActivityToggle":{
-								"description":"Adiciona um botão ao lado do botão do microfone e do botão de silenciar para ativar/desativar a atividade de jogo.",
-								"disableGameActivity":"Desativar Atividade de Jogo",
-								"enableGameActivity":"Enable Game Activity",
-								"settings":{
-												"location":"Where to show the game activity toggle button",
-												"locationPanel":"Ao lado de Silenciar/Ensurdecer",
-												"locationToolbox":"Equicord Toolbox",
-												"oldIcon":"Use the old icon style before Discord icon redesign"
-								}
-				},
-				"gifPaste":{
-								"description":"Faz com que selecionar um GIF no seletor de GIFs insira o link no campo de texto ao invés de enviá-lo instantaneamente"
-				},
-				"greetStickerPicker":{
-								"ariaLabel":"Greet Sticker Picker",
-								"description":"Permite usar qualquer figurinha de saudação em vez de apenas um aleatório ao clicar com o botão direito no botão 'Acene para dizer olá!'",
-								"greetMode":"Greet Mode",
-								"greetModeDescription":"Choose the greet mode",
-								"greetModeLabel":"Greet (you can only greet 3 times)",
-								"greetStickers":"Greet Stickers",
-								"normalMessageLabel":"Normal Message (you can greet spam)",
-								"sendGreets":"Send Greets",
-								"unholyMultiGreet":"Unholy Multi-Greet"
-				},
-				"hideAttachments":{
-								"description":"Hide attachments and embeds for individual messages via hover button",
-								"hideMedia":"Hide Media",
-								"mediaHidden":"Media Hidden",
-								"showMedia":"Show Media"
-				},
-				"iLoveSpam":{
-								"description":"Não ocultar mensagens de 'prováveis spammers'"
-				},
-				"ignoreActivities":{
-								"disableActivity":"Desativar atividade",
-								"enableActivity":"Enable activity",
-								"filterList":{
-												"description":"Comma separated list of activity IDs to filter (Useful for filtering specific RPC activities and CustomRPC)",
-												"title":"Filter List"
-								},
-								"importCustomRPC":{
-												"alreadyAdded":"CustomRPC application ID is already added.",
-												"button":"Import CustomRPC ID",
-												"description":"Import the application id of the CustomRPC plugin to the filter list",
-												"notSet":"CustomRPC application ID is not set."
-								},
-								"settings":{
-												"blacklist":"Blacklist",
-												"ignoreCompeting":"Ignore all competing activities (These are normally special game activities)",
-												"ignoreListening":"Ignore all listening activities (These are usually spotify activities)",
-												"ignorePlaying":"Ignore all playing activities (These are usually game and RPC activities)",
-												"ignoreStreaming":"Ignore all streaming activities",
-												"ignoreWatching":"Ignore all watching activities",
-												"listMode":"Change the mode of the filter list",
-												"whitelist":"Lista Branca"
-								}
-				},
-				"imageLink":{
-								"description":"Nunca ocultar links de imagens nas mensagens, mesmo que seja o único conteúdo"
-				},
-				"imageZoom":{
-								"lensSize":"Tamanho da lente",
-								"nearestNeighbour":"Nearest Neighbour",
-								"settings":{
-												"invertScroll":"Invert scroll",
-												"nearestNeighbour":"Use Nearest Neighbour Interpolation when scaling images",
-												"saveZoomValues":"Whether to save zoom and lens size values",
-												"size":"Radius / Size of the lens",
-												"square":"Make the lens square",
-												"zoom":"Zoom of the lens",
-												"zoomSpeed":"How fast the zoom / lens size changes"
-								},
-								"squareLens":"Square Lens",
-								"zoom":"Zoom",
-								"zoomSpeed":"Zoom Speed"
-				},
-				"invite":"Convidar",
-				"ircColors":{
-								"description":"Torna as cores do nome de usuário no chat únicas, como em clientes de IRC",
-								"settings":{
-												"applyColorOnlyInDms":"Aplicar cores somente na DM; não aplicar em servidores",
-												"lightness":"Luminosidade, em %. Altere se as cores estiverem muito claras ou muito escuras."
-								}
-				},
-				"lastfmRichPresence":{
-								"apiKeyInstructions":"Set <0>Application name</0> and <1>Application description</1> to anything and leave the rest blank.",
-								"createApiKey":"Create API Key",
-								"description":"Pequeno plugin para Rich Presence do Last.fm",
-								"howToCreateApiKey":"How to create an API key",
-								"lastfmProfile":"Perfil Last.fm",
-								"missingArt":{
-												"lastfmLogo":"Use large Last.fm logo",
-												"placeholder":"Use generic placeholder"
-								},
-								"nameFormat":{
-												"albumName":"Use album name (falls back to custom status text if song has no album)",
-												"artistFirst":"Use format 'artist - song'",
-												"artistOnly":"Use artist name only",
-												"songFirst":"Use format 'song - artist'",
-												"songOnly":"Use song name only",
-												"statusName":"Use custom status name"
-								},
-								"settings":{
-												"alwaysHideArt":"Desativar download de capas de álbuns",
-												"apiKey":"Custom Last.fm API key. Not required but highly recommended to avoid rate limiting with our shared key",
-												"clickableLinks":"Make track, artist and album names clickable links",
-												"hideWithActivity":"Hide Last.fm presence if you have any other presence",
-												"hideWithSpotify":"Hide Last.fm presence if spotify is running",
-												"missingArt":"When album or album art is missing",
-												"nameFormat":"Show name of song and artist in status name",
-												"shareUsername":"Show link to Last.fm profile",
-												"showLastFmLogo":"Show the Last.fm logo by the album cover",
-												"statusDisplayType":"Show the track / artist name in the member list",
-												"statusName":"Custom status text",
-												"useListeningStatus":"Show \"Listening to\" status instead of \"Playing\"",
-												"username":"Nome de usuário Last.fm"
-								},
-								"statusDisplayType":{
-												"artist":"Show artist name",
-												"off":"Don't show (shows generic listening message)",
-												"track":"Show track name"
-								}
-				},
-				"loading":"Carregando...",
-				"loadingQuotes":{
-								"settings":{
-												"additionalQuotes":"Citações personalizadas adicionais para possivelmente aparecerem, separadas pelo delimitador abaixo"
-								},
-								"ui":{
-												"noQuotesQuote":"Você realmente desativou todas as frases de carregamento? Que bobão(bobona) você é..."
-								}
-				},
-				"logs":{
-								"allLogsCleared":"Todas as logs foram apagadas",
-								"clearAll":"Apagar Tudo",
-								"clearAllLogs":"Limpar Todas as Logs",
-								"clearAllLogsConfirmation":"Tem certeza de que deseja limpar toda as logs? Isso não pode ser desfeito.",
-								"clearLog":"Limpar Log",
-								"clearLogConfirmation":"Tem certeza de que deseja limpar esta log? Isso não pode ser desfeito.",
-								"clearLogs":"Limpar Logs",
-								"clearLogsConfirmation":"Tem certeza que gostaria de limpar essas logs? Isso não pode ser desfeito.",
-								"clearLogsConfirmationNum_one":"Tem certeza de que deseja limpar {count} log",
-								"clearLogsConfirmationNum_other":"Tem certeza de que deseja limpar {count} logs",
-								"hideLogs":"Ocultar Logs",
-								"logCleared":"Log foi apagada",
-								"logsCleared":"As logs selecionadas foram apagadas",
-								"showLogs":"Mostrar Logs"
-				},
-				"memberCount":{
-								"settings":{
-												"memberList":"Show member count in the member list",
-												"toolTip":"Show member count on the server tooltip",
-												"voiceActivity":"Show voice activity with member count in the member list"
-								}
-				},
-				"memberListDecoratorsAPI":{
-								"description":"API para adicionar decoradores à lista de membros (em servidores e DMs)"
-				},
-				"menuItemDemanglerAPI":{
-								"description":"Decodifica o módulo de itens de Menu do Discord"
-				},
-				"messageAccessoriesAPI":{
-								"description":"API para adicionar acessórios à mensagem"
-				},
-				"messageClickActions":{
-								"actions":{
-												"copyContent":"Copiar Conteúdo",
-												"copyId":"Copiar ID",
-												"copyLink":"Copiar Link",
-												"delete":"Excluir",
-												"none":"Nenhum",
-												"pin":"Fixar",
-												"reply":"Resposta"
-								},
-								"modifiers":{
-												"alt":"Alt",
-												"delete":"Excluir",
-												"none":"Nenhum"
-								},
-								"settings":{
-												"disableInDms":"Desativar todas as ações de clique em mensagens diretas",
-												"disableInSystemDms":"Desativar todas as ações de clique nas mensagens diretas do sistema",
-												"doubleClickAction":"Ação ao clicar duas vezes (suas mensagens)",
-												"doubleClickModifier":"Modificador necessário para a ação de clique duplo",
-												"doubleClickOthersAction":"Ação ao clicar duas vezes (mensagens de outros)",
-												"singleClickAction":"Ação de clique único (suas mensagens)",
-												"singleClickModifier":"Modificador necessário para ação de clique único (suas mensagens)",
-												"singleClickOthersAction":"Ação de clique único (mensagens de outros)",
-												"singleClickOthersModifier":"Modificador necessário para a ação de clique único (mensagens de outros)",
-												"tripleClickAction":"Ação ao clicar três vezes",
-												"tripleClickModifier":"Modificador necessário para a ação de clicar três vezes"
-								},
-								"ui":{
-												"linkCopied":"Link copiado!",
-												"messageContentCopied":"Conteúdo da mensagem copiado!"
-								}
-				},
-				"messageDecorationsAPI":{
-								"description":"API para adicionar decorações às mensagens"
-				},
-				"messageEventsAPI":{
-								"description":"API necessária para qualquer coisa que utilize eventos de mensagem"
-				},
-				"messageLatency":{
-								"clockAhead":"This user's clock is {delta} ahead.",
-								"delayedMessage":"Delayed Message",
-								"messageDelayed":"This message was sent with a delay of {delta}.",
-								"oldAndroidClient":"Old Discord Android client",
-								"oldDiscordAndroid":"User is suspected to be on an old Discord Android client",
-								"settings":{
-												"detectDiscordKotlin":"Detectar clientes antigos do Discord para Android",
-												"ignoreSelf":"Don't add indicator to your own messages",
-												"latency":"Threshold in seconds for latency indicator",
-												"showMillis":"Show milliseconds"
-								},
-								"timeUnits":{
-												"day":"dia",
-												"days":"dias",
-												"hour":"hora",
-												"hours":"horas",
-												"millisecond":"millisecond",
-												"milliseconds":"milliseconds",
-												"minute":"minuto",
-												"minutes":"minutos",
-												"second":"second",
-												"seconds":"seconds"
-								}
-				},
-				"messageLinkEmbeds":{
-								"automodOptions":{
-												"always":"Always use automod embeds",
-												"never":"Never use automod embeds",
-												"prefer":"Prefer automod embeds, but use rich embeds if some content can't be shown"
-								},
-								"channelLabels":{
-												"directMessage":"Mensagens Diretas",
-												"groupDM":"Groupo de DM",
-												"server":"Servidor"
-								},
-								"description":"Adiciona uma prévia a mensagens que contêm links de outras mensagens",
-								"listModeOptions":{
-												"blacklist":"Blacklist",
-												"whitelist":"Lista Branca"
-								},
-								"noContent":{
-												"attachments_only_one":"[no content, {count} attachment]",
-												"attachments_only_other":"[no content, {count} attachments]",
-												"both_one":"[no content, {attachments} attachment and {embeds} embed]",
-												"both_other":"[no content, {attachments} attachments and {embeds} embeds]",
-												"embeds_only_one":"[no content, {count} embed]",
-												"embeds_only_other":"[no content, {count} embeds]"
-								},
-								"settings":{
-												"automodEmbeds":"Use automod embeds instead of rich embeds (smaller but less info)",
-												"clearMessageCache":"Clear the linked message cache",
-												"idList":"Guild/channel/user IDs to blacklist or whitelist (separate with comma)",
-												"listMode":"Whether to use ID list as blacklist or whitelist",
-												"messageBackgroundColor":"Background color for messages in rich embeds"
-								}
-				},
-				"messageLogger":{
-								"clearMessageLog":"Clear Message Log",
-								"deletedMessages_one":"{count} mensagem excluída",
-								"deletedMessages_other":"{count} mensagens excluídas",
-								"deletedMessages_zero":"No deleted messages",
-								"disableDiffView":"Desativar visualização de diferenças",
-								"editHistory":"Message Edit History",
-								"enableDiffView":"Enable Diff View",
-								"notLoggedTooltip":"This edit state was not logged so it can't be displayed.",
-								"removeMessageHistory":"Remove Message History",
-								"removeMessageTemporary":"Remove Message (Temporary)",
-								"settings":{
-												"collapseDeleted":"Whether to collapse deleted messages, similar to blocked messages",
-												"deleteStyle":"O estilo das mensagens excluídas",
-												"deleteStyleRedOverlay":"Overlay vermelho",
-												"deleteStyleRedText":"Texto vermelho",
-												"ignoreBots":"Whether to ignore messages by bots",
-												"ignoreChannels":"Comma-separated list of channel IDs to ignore",
-												"ignoreGuilds":"Comma-separated list of guild IDs to ignore",
-												"ignoreSelf":"Whether to ignore messages by yourself",
-												"ignoreUsers":"Comma-separated list of user IDs to ignore",
-												"inlineEdits":"Whether to display edit history as part of message content",
-												"logDeletes":"Whether to log deleted messages",
-												"logEdits":"Whether to log edited messages",
-												"separatedDiffs":"Separate addition and removals in diffs for a more readable differential",
-												"showEditDiffs":"Show visual differences between edited message versions"
-								},
-								"toggleDeletedHighlight":"Toggle Deleted Highlight"
-				},
-				"messagePopoverAPI":{
-								"description":"API para adicionar botões aos popovers de mensagem"
-				},
-				"messageTags":{
-								"commands":{
-												"list":"Listar todas as suas tags"
-								},
-								"description":"Permite que você salve mensagens e as use com um comando simples.",
-								"ui":{
-												"allTags":"Todas as tags:"
-								}
-				},
-				"messageUpdaterAPI":{
-								"description":"API para atualizar e renderizar novamente mensagens"
-				},
-				"mutualGroupDMs":{
-								"description":"Shows mutual group dms in profiles",
-								"members_one":"{count} Membro",
-								"members_other":"{count} Membros",
-								"mutualGroupsHeader":"Mutual Groups",
-								"mutualGroups_one":"{count} Grupo Mútuo",
-								"mutualGroups_other":"{count} Grupos Mútuos",
-								"noGroupDms":"No group dms in common",
-								"noMutualGroups":"No Mutual Groups"
-				},
-				"newGuildSettings":{
-								"applySettings":"Apply NewGuildSettings",
-								"description":"Automatically mute new servers and change various other settings upon joining",
-								"settings":{
-												"allMessages":"Todas as mensagens",
-												"events":"Mute New Events automatically",
-												"everyone":"Suppress @everyone and @here",
-												"guild":"Mute Guild automatically",
-												"highlights":"Suppress Highlights automatically",
-												"messages":"Server Notification Settings",
-												"mobilePush":"Mute Mobile Push Notifications automatically",
-												"nothing":"Nothing",
-												"onlyMentions":"Only @mentions",
-												"role":"Suppress All Role @mentions",
-												"serverDefault":"Server default",
-												"showAllChannels":"Show all channels automatically",
-												"voiceChannels":"Hide names in Voice channels automatically"
-								}
-				},
-				"nicknameIconsAPI":{
-								"description":"API para adicionar ícones ao apelido, nos perfis"
-				},
-				"noBlockedMessages":{
-								"settings":{
-												"allowAutoModMessages":"Permitir que as mensagens enviadas pelo AutoMod ignorem a filtragem.",
-												"alsoHideIgnoredUsers":"Oculta também mensagens de usuários ignorados."
-								}
-				},
-				"noReplyMention":{
-								"description":"Disables reply pings by default",
-								"settings":{
-												"doNotPingListed":"Do not ping the listed users / roles",
-												"inverseShiftReply":"Invert Discord's shift replying behaviour (enable to make shift reply mention user)",
-												"onlyPingListed":"Only ping the listed users / roles",
-												"roleList":"Lista de cargos para permitir ou isentar pings (separados por vírgulas ou espaços)",
-												"shouldPingListed":"Behaviour",
-												"userList":"Lista de usuários para permitir ou isentar pings (separados por vírgulas ou espaços)"
-								}
-				},
-				"noUnblockToJump":{
-								"description":"Permite que você acesse mensagens de usuários bloqueados ou ignorados e possíveis spammers sem desbloqueá-los."
-				},
-				"noticesAPI":{
-								"description":"Corrige avisos sendo ignorados automaticamente"
-				},
-				"notificationVolume":{
-								"settings":{
-												"notificationVolume":"Volume da Notificação"
-								}
-				},
-				"onePingPerDM":{
-								"settings":{
-												"channelToAffectOptions":{
-																"groupDm":"Grupos de DMs"
-												}
-								}
-				},
-				"overrideForumDefaults":{
-								"description":"Permite que você substitua o layout/ordem de classificação padrão do fórum. Você ainda pode alterá-lo individualmente por canal",
-								"layouts":{
-												"gallery":"Galeria",
-												"list":"Lista"
-								},
-								"name":"OverrideForumDefaults",
-								"settings":{
-												"defaultLayout":"Which layout to use as default",
-												"defaultSortOrder":"Which sort order to use as default"
-								},
-								"sortOrders":{
-												"datePosted":"Date Posted",
-												"recentlyActive":"Recently Active"
-								}
-				},
-				"pauseInvitesForever":{
-								"description":"Brings back the option to pause invites indefinitely that stupid Discord removed.",
-								"name":"PauseInvitesForever",
-								"pauseIndefinitely":"Pause Indefinitely."
-				},
-				"permissionsViewer":{
-								"noPermissions":"No permissions to display!",
-								"owner":"owner",
-								"permissions":"Permissões",
-								"permissionsTitle":"{header} Permissions",
-								"roleOptions":"Role Options",
-								"settings":{
-												"highestRole":"Highest Role",
-												"lowestRole":"Cargo mais baixo",
-												"permissionsSortOrder":"The sort method used for defining which role grants a user a certain permission"
-								},
-								"unknownRole":"Unknown Role",
-								"unknownUser":"Unknown User",
-								"userOptions":"User Options",
-								"viewPermissions":"View Permissions"
-				},
-				"petpet":{
-								"commands":{
-												"petpet":{
-																"name":"petpet"
-												}
-								},
-								"description":"Adiciona um comando de barra /petpet para criar GIFs de carinho (headpet) a partir de qualquer imagem"
-				},
-				"pictureInPicture":{
-								"description":"Adiciona picture-in-picture aos vídeos (ao lado do botão de Download)",
-								"settings":{
-												"loop":"Whether to make the PiP video loop or not"
-								},
-								"togglePip":"Toggle Picture in Picture"
-				},
-				"pinDms":{
-								"addCategory":"Adicionar Categoria",
-								"color":"Cor",
-								"create":"Criar",
-								"deleteCategory":"Excluir Categoria",
-								"editCategory":"Edit Category",
-								"editCategoryTitle":"Edit Category",
-								"moveDown":"Mover para baixo",
-								"moveUp":"Mover para cima",
-								"name":"Nome",
-								"newCategory":"Nova Categoria",
-								"pinCategory":"Fixar Categoria {index}",
-								"pinDms":"Fixar DMs",
-								"save":"Save",
-								"settings":{
-												"canCollapseDmSection":"Permitir que a seção de DMs não categorizadas seja colapsável",
-												"customOrder":"Custom (right click channels to reorder)",
-												"dmSectionCollapsed":"Collapse DM section",
-												"mostRecentMessage":"Mensagem mais recente",
-												"pinOrder":"Which order should pinned DMs be displayed in?"
-								},
-								"unpinDm":"Unpin DM"
-				},
-				"platformIndicators":{
-								"consoleIcons":{
-												"equicord":"Equicord",
-												"suncord":"Suncord",
-												"vencord":"Vencord"
-								},
-								"description":"Adiciona indicadores de plataforma (Desktop, Celular, Web...) aos usuários",
-								"platforms":{
-												"console":"Console",
-												"desktop":"Desktop",
-												"mobile":"Mobile",
-												"web":"Web"
-								},
-								"settings":{
-												"colorMobileIndicator":"Whether to make the mobile indicator match the color of the user status.",
-												"consoleIcon":"What console icon to use",
-												"list":"Show indicators in the member list",
-												"messages":"Show indicators inside messages",
-												"profiles":"Show indicators in user profiles",
-												"showBots":"Whether to show platform indicators on bots"
-								}
-				},
-				"previewMessage":{
-								"description":"Permite que você visualize sua mensagem antes de enviá-la.",
-								"name":"PreviewMessage",
-								"previewMessage":"Preview Message"
-				},
-				"quickActions":{
-								"editQuickCSS":"Editar QuickCSS",
-								"notificationLog":"log de Notificações",
-								"openSettings":"Abrir pasta de configurações",
-								"relaunchDiscord":"Reiniciar o Discord",
-								"title":"Ações Rápidas",
-								"viewSource":"Ver código-fonte"
-				},
-				"quickMention":{
-								"description":"Adiciona um botão de menção rápida à barra de ações de mensagem",
-								"label":"Menção Rápida"
-				},
-				"quickReply":{
-								"settings":{
-												"shouldMention":"Marcar na resposta por padrão",
-												"shouldMentionOptions":{
-																"disabled":"Desativado",
-																"enabled":"Ativado"
-												}
-								}
-				},
-				"readAllNotificationsButton":{
-								"description":"Read all server notifications with a single button click!",
-								"name":"ReadAllNotificationsButton",
-								"readAll":"Read All"
-				},
-				"relationshipNotifier":{
-								"description":"Notifica você quando um amigo, chat em grupo ou servidor te remove.",
-								"friendRemoved":"{username} removed you as a friend.",
-								"friendRequestRemoved":"Um pedido de amizade de {username} foi removido.",
-								"groupRemoved":"You were removed from the group {name}.",
-								"notificationTitle":"Notificador de Relacionamentos",
-								"offlineFriendRemoved":"Você não é mais amigo de {username}.",
-								"offlineFriendRequestRevoked":"A solicitação de amizade de {username} foi revogada.",
-								"offlineGroupRemoved":"Você não está mais no grupo {name}.",
-								"offlineServerRemoved":"Você não está mais no servidor {name}.",
-								"serverRemoved":"You were removed from the server {name}.",
-								"settings":{
-												"friendRequestCancels":"Notify when a friend request is cancelled",
-												"friends":"Notify when a friend removes you",
-												"groups":"Notify when removed from a group chat",
-												"notices":"Mostra também um aviso na parte superior da tela quando removido (use isso se não quiser perder nenhuma notificação).",
-												"offlineRemovals":"Notify you when starting discord if you were removed while offline.",
-												"servers":"Notify when removed from a server"
-								}
-				},
-				"replaceGoogleSearch":{
-								"description":"Replaces the Google search with different Engine(s)",
-								"searchText":"Search Text",
-								"searchWith":"Search with {engine}",
-								"settings":{
-												"customEngine":"Custom Engine",
-												"customEngineName":"Name of the custom search engine",
-												"customEngineURL":"The URL of your Engine",
-												"off":"Off",
-												"replacementEngine":"Replace with a specific search engine instead of adding a menu"
-								}
-				},
-				"reverseImageSearch":{
-								"all":"Todos",
-								"description":"Adiciona o ImageSearch aos menus de contexto das imagens",
-								"name":"ReverseImageSearch",
-								"searchImage":"Search Image"
-				},
-				"reviewDB":{
-								"appeal":"Appeal",
-								"areYouSure":"Você tem certeza?",
-								"block":"Bloquear",
-								"blockedUser":"Você bloqueou este usuário",
-								"blockedUsers":"Usuários Bloqueados",
-								"confirmBlock":"Você realmente quer bloquear esse usuário? Eles não poderão deixar mais avaliações no seu perfil. Você pode desbloquear usuários nas configurações do plugin.",
-								"confirmDelete":"Você realmente deseja deletar esta avaliação?",
-								"confirmReport":"Você realmente deseja reportar está avaliação?",
-								"delete":"Excluir",
-								"failedToFetchBlocks":"Failed to fetch blocks: {error}",
-								"mustBeLoggedInBlock":"Você tem que estar logado para bloquear usuários.",
-								"mustBeLoggedInDelete":"Você tem que estar logado para deletar avaliações.",
-								"mustBeLoggedInReport":"Você tem que estar logado para reportar avaliações.",
-								"nevermind":"Deixa pra lá",
-								"newReviews":"Você tem novas avaliações no seu perfil!",
-								"noBlockedUsers":"Sem usuários bloqueados.",
-								"notLoggedIn":"Você não esta logado no ReviewDB!",
-								"ok":"Ok",
-								"readMore":"Ler mais",
-								"report":"Reportar",
-								"settings":{
-												"authorize":"Autorizar com ReviewDB",
-												"hideBlockedUsers":{
-																"description":"Esconder avaliações de usuários bloqueados"
-												},
-												"hideTimestamps":{
-																"description":"Esconder data e hora em avaliações"
-												},
-												"manageBlockedUsers":"Gerenciar Usuários Bloqueados",
-												"notifyReviews":{
-																"description":"Notificar sobre novas avaliações na inicialização"
-												},
-												"showWarning":{
-																"description":"Exibir aviso para ser respeitoso no topo da lista de avaliações"
-												},
-												"supportDevelopment":"Suporte ao desenvolvimento do ReviewDB",
-												"supportServer":"ReviewDB Servidor de Suporte",
-												"website":"ReviewDB website"
-								},
-								"system":"Sistema",
-								"unblockUser":"Desbloquear usuário",
-								"viewReviews":"Ver Avaliações"
-				},
-				"roleColorEverywhere":{
-								"description":"Adiciona a cor do cargo mais alto onde for possível"
-				},
-				"secretRingTone":{
-								"description":"Sempre toca a versão secreta do toque do Discord (exceto durante eventos especiais de toques).",
-								"settings":{
-												"onlySnow":"Tocar apenas o Tema de Snow Halation"
-								}
-				},
-				"seeSummaries":{
-								"description":"Enables Discord's experimental Summaries feature on every server, displaying AI generated summaries of conversations",
-								"name":"Summaries",
-								"settings":{
-												"summaryExpiryThresholdDays":"The time in days before a summary is removed. Note that only up to 50 summaries are kept per channel"
-								}
-				},
-				"sendTimestamps":{
-								"description":"Send timestamps easily via chat box button & text shortcuts. Read the extended description!",
-								"extendedDescription":{
-												"examples":"Examples:",
-												"quickSend":"To quickly send time-only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message",
-												"seeBelow":"See below for examples. If you need anything more specific, use the Date button in the chat bar!"
-								},
-								"insert":"Inserir",
-								"insertTimestamp":"Inserir Timestamp",
-								"preview":"Prévia",
-								"settings":{
-												"replaceMessageContents":"Replace timestamps in message contents"
-								},
-								"timestampFormat":"Formato de Timestamp",
-								"timestampPicker":"Timestamp Picker"
-				},
-				"serverInfo":{
-								"description":"Permite visualizar informações sobre um servidor",
-								"ui":{
-												"blockedUsers":"Usuários Bloqueados",
-												"channels":"Canais",
-												"friends":"Amigos",
-												"joinedAt":"Entrou em",
-												"serverBoosts":"Impulsos do Servidor",
-												"verificationLevel":"Nível de verificação"
-								}
-				},
-				"serverListAPI":{
-								"description":"API necessária para plugins que modificam a lista de servidores"
-				},
-				"serverListIndicators":{
-								"description":"Adiciona contagem de amigos online ou contagem de servidores na lista de servidores",
-								"friends":"Amigos",
-								"servers":"Servidores",
-								"settings":{
-												"mode":"Modo",
-												"modeBoth":"Both server and online friend counts",
-												"modeOnlyFriends":"Only online friend count",
-												"modeOnlyServers":"Only server count",
-												"useCompact":"Makes the indicator appear with only text"
-								},
-								"tooltipBoth":"{friends} Amigos, {servers} Servidores",
-								"tooltipFriends":"{count} Amigos",
-								"tooltipServers":"{count} Servidores"
-				},
-				"settings":{
-								"changelog":{
-												"alreadyUpToDate":"Já atualizado com o repositório",
-												"checkYourConnection":"Falha ao conectar-se ao repositório. Verifique sua conexão com a Internet",
-												"checkYourInternet":"Certifique-se de que você tem uma conexão à Internet e tente novamente",
-												"codeChanges_one":"Alterações no código ({count} commit)",
-												"codeChanges_other":"Alterações no código ({count} commits)",
-												"codeChanges_zero":"Sem alterações no código",
-												"emptyChangelog":"Nenhum commit disponível além da sua versão atual. Clique em “Buscar no repositório” para verificar novas alterações",
-												"failedToFetchRepo":"Falha ao buscar no repositório",
-												"failedToRetrieve":"Falha ao obter – verifique o console",
-												"failedtoFetchCommits":"Não foi possível buscar commits do repositório",
-												"fetchRepo":"Buscar no repositório",
-												"foundCommits_one":"Encontrado {count} commit no repositório",
-												"foundCommits_other":"Encontrados {count} commits no repositório",
-												"foundCommits_zero":"Sem novos commits",
-												"info":"Verifique o repositório em busca de novos commits, atualizações de plugins e alterações de código. Isso comparará sua versão atual com a última disponível e mostrará o que há de novo",
-												"loggedCommits":"Commits registrados desde sua última atualização",
-												"manager":{
-																"days_one":"{count} dia atrás",
-																"days_other":"{count} dias atrás",
-																"hours_one":"{count} hora atrás",
-																"hours_other":"{count} horas atrás",
-																"minutes_one":"{count} minuto atrás",
-																"minutes_other":"{count} minutos atrás"
-												},
-												"missingRepoInfo":"Falha ao obter informações do repositório",
-												"newPluginsSection":{
-																"newPluginsCount":"Novos Plugins ({count})",
-																"numMorePlugins_one":"+{count} mais plugin",
-																"numMorePlugins_other":"+{count} mais plugins",
-																"recentlyAddedPlugins":"Os seguintes plugins foram adicionados nas atualizações recentes:"
-												},
-												"previousSessions":"Um histórico de suas sessões de atualização anteriores com o histórico de commits e alterações de plugins. Clique em uma log para expandi-la e ver os detalhes",
-												"recentChanges":"Alterações recentes",
-												"repository":"Repositório",
-												"title":"Registro de alterações",
-												"upToDate":"Repositório atualizado",
-												"upToDateLocalCopy":"O repositório está atualizado com sua cópia local",
-												"updateCard":{
-																"commits_one":" • {count} commit disponível",
-																"commits_other":" • {count} commits disponíveis",
-																"commits_zero":" • Sem novos commits",
-																"newPluginsCount":" • {plugins} novos plugins",
-																"newSettingInPlugin":"Nova configuração em {pluginName}",
-																"newSettings":"Novas configurações",
-																"newSettingsCount":" • {settings} novas configurações",
-																"outOfDate":"Verificação do repositório: {fromHash} → {toHash}",
-																"upToDate":"Verificação do repositório: {fromHash} (atualizado)",
-																"update":"Atualização: {fromHash} → {toHash}",
-																"updatedPlugins":"Plugins atualizados",
-																"updatedPluginsCount":" • {plugins} plugins atualizados"
-												},
-												"updateLogs_one":"Registros de atualização ({count})",
-												"updateLogs_other":"Atualizar registros ({count} registros)",
-												"updateLogs_zero":"Nenhum registro de atualização",
-												"updatedPluginsCount":"Plugins atualizados ({plugins})",
-												"viewRecentChanges":"Estes são os novos commits e atualizações de plugins desde a sua última versão. Você pode ver quais recursos foram adicionados, erros corrigidos e quais plugins receberam atualizações",
-												"whereUpdatesFetch":"Este é o repositório do GitHub de onde o Equicord busca atualizações"
-								},
-								"disableMinSize":{
-												"description":"Permite que a janela do Discord seja redimensionada para um tamanho menor que o mínimo padrão. Útil para gerenciadores de janelas em mosaico (tiling) ou telas pequenas.",
-												"title":"Desativar tamanho mínimo da janela"
-								},
-								"enableReactDevtools":{
-												"description":"Ativar a extensão React Developer Tools para debugar os componentes React do Discord. Útil para o desenvolvimento de plugins.",
-												"title":"Habilitar as Ferramentas de Desenvolvedor React"
-								},
-								"frameless":{
-												"description":"Remover a moldura nativa da janela para uma aparência mais limpa. Você ainda poderá mover a janela arrastando a área da barra de título.",
-												"title":"Desativar a moldura da janela"
-								},
-								"hint":"Dica: você pode mudar a posição desta seção nas <0>configurações do plugin Settings</0>!",
-								"macosVibrancyStyle":{
-												"placeholder":"Estilo de vibração da janela",
-												"title":"Estilo de vibração da janela (requer reinicialização)"
-								},
-								"notification":{
-												"logButton":"Ver log de notificações",
-												"settingsButton":"Configurações de Notificação"
-								},
-								"plugins":{
-												"contributorModal":{
-																"contributorInfo":{
-																				"noPlugins":"Esta pessoa não criou nenhum plugins. Provavelmente <0>contribuiu</0> para o Equicord de outras maneiras!",
-																				"plugins_one":"Essa pessoa <0>contribuiu</0> para {count} plugin!",
-																				"plugins_other":"Esta pessoa <0>contribuiu</0> para {count} plugins!"
-																}
-												},
-												"noDescription":"Não há descrição disponível",
-												"pluginRequiredBy":"Este plugin é necessário por: {pluginNames}",
-												"requiredToFunction":"Este plugin é necessário para o Equicord funcionar"
-								},
-								"restartRequired":{
-												"body":"É necessário reiniciar para aplicar esta alteração",
-												"cancel":"Depois!",
-												"confirm":"Reiniciar agora",
-												"plugins":"Os seguintes plugins requerem uma reinicialização:",
-												"title":"Reinicialização necessária"
-								},
-								"title":"Configurações",
-								"transparent":{
-												"description":"Torne a janela do Discord transparente. É necessário um tema que suporte transparência, caso contrário, esta opção não terá efeito.",
-												"note":"Isso impedirá que a janela seja redimensionada.",
-												"noteWindows":"Isso impedirá que a janela seja redimensionada e evitará que você a encaixe nas bordas da tela",
-												"title":"Ativar transparência de janela"
-								},
-								"useQuickCss":{
-												"description":"Carrega CSS personalizado do editor QuickCSS. Isso permite que você personalize a aparência do Discord com seus próprios estilos.",
-												"title":"Habilitar CSS personalizado"
-								},
-								"winCtrlQ":{
-												"description":"Adiciona Ctrl+Q como um atalho de teclado para fechar o Discord. Isso fornece uma alternativa ao Alt+F4 para fechar rapidamente o aplicativo.",
-												"title":"Registrar Ctrl+Q como atalho para fechar o Discord"
-								},
-								"winNativeTitleBar":{
-												"description":"Substitui a barra de título personalizada do Discord pela barra de título padrão do Windows. Isso pode melhorar a compatibilidade com algumas ferramentas de gerenciamento de janelas.",
-												"title":"Use a barra de título nativa do Windows em vez da barra personalizada do Discord"
-								}
-				},
-				"settingsSync":{
-								"failedToImport":"Falha ao importar configurações: {e}",
-								"imported":"Configurações importadas com sucesso. Reinicie para aplicar as alterações!"
-				},
-				"shikiCodeblocks":{
-								"description":"Traz blocos de código no estilo vscode para o Discord, com tecnologia Shiki.",
-								"settings":{
-												"bgOpacity":"Opacidade do fundo",
-												"customTheme":"Um link para um tema personalizado do vscode",
-												"theme":"Temas Padrão",
-												"tryHljs":"Usar o marcador e o tema padrão mais leve do Discord.",
-												"tryHljsOptions":{
-																"always":"Sempre",
-																"never":"Nunca",
-																"preferHljs":"Preferir Highlight.js em vez do Shiki",
-																"preferShiki":"Preferir Shiki em vez do Highlight.js"
-												},
-												"useDevIcon":"Como exibir ícones de idioma em blocos de código",
-												"useDevIconOptions":{
-																"colored":"Colorido",
-																"colorless":"Sem cor",
-																"disabled":"Desativado"
-												}
-								}
-				},
-				"showConnections":{
-								"description":"Show connected accounts in user popouts",
-								"settings":{
-												"compact":"Compact",
-												"cozy":"Confortável",
-												"iconSize":"Icon size (px)",
-												"iconSpacing":"Icon margin",
-												"roomy":"Roomy"
-								}
-				},
-				"showHiddenChannels":{
-								"allowedUsersAndRoles":"Usuários e cargos permitidos:",
-								"archiveDuration":"Default inactivity duration before archiving {type}: {duration}",
-								"availableTags":"Available tags:",
-								"bitrate":"Bitrate: {bitrate} bits",
-								"cannotSeeMessages":"You can not see the {type} of this channel.",
-								"channelTypes":{
-												"announcement":"anúncio",
-												"forum":"fórum",
-												"message":"mensagem",
-												"messages":"mensagens",
-												"post":"postar",
-												"posts":"posts",
-												"stage":"stage",
-												"text":"texto",
-												"thread":"tópico",
-												"threads":"tópicos",
-												"voice":"voz"
-								},
-								"defaultLayout":"Default layout: {layout}",
-								"defaultReactionEmoji":"Default reaction emoji:",
-								"defaultSortOrder":"Default sort order: {order}",
-								"description":"Mostra canais que você não tem permissão para ver",
-								"forumLayouts":{
-												"gridView":"Visualização em galeria",
-												"listView":"Visualização em lista",
-												"notSet":"Not set"
-								},
-								"hiddenChannel":"This is a hidden {type} channel",
-								"hiddenChannelTooltip":"Canal Oculto",
-								"hideAllowedUsersAndRoles":"Hide Allowed Users and Roles",
-								"lastMessageCreated":"Último {type} criado:",
-								"lastMessagePin":"Última mensagem fixada:",
-								"lockedChannel":"This is a locked {type} channel",
-								"nsfw":"NSFW",
-								"permissionDetails":"Permission Details",
-								"region":"Region: {region}",
-								"regionAutomatic":"Automatic",
-								"requireTag":"Posts on this forum require a tag to be set.",
-								"seeGuidelines":" However you may see its guidelines:",
-								"settings":{
-												"channelStyle":{
-																"classic":"Clássico",
-																"description":"O estilo usado para exibir canais ocultos.",
-																"muted":"Silenciado",
-																"mutedAndShowUnreads":"Silenciado e mostrar não lidos",
-																"showUnreads":"Mostra Não lidos"
-												},
-												"defaultAllowedUsersAndRolesDropdownState":{
-																"description":"Se o dropdown de usuários e cargos permitidos em canais ocultos deve estar aberto por padrão"
-												},
-												"showMode":{
-																"description":"O modo usado para exibir canais ocultos.",
-																"eyeIconRight":"Ícone de olho na direita",
-																"lockIcon":"Ícone de cadeado substituindo o ícone do canal",
-																"lockIconRight":"Ícone de cadeado à direita"
-												}
-								},
-								"slowmode":"Slowmode: {duration}",
-								"sortOrders":{
-												"creationDate":"Creation date",
-												"latestActivity":"Última atividade"
-								},
-								"threadSlowmode":"Default thread slowmode: {duration}",
-								"videoQuality":{
-												"720p":"720p",
-												"automatic":"Automatic"
-								},
-								"videoQualityMode":"Modo de qualidade de vídeo: {mode}",
-								"viewAllowedUsersAndRoles":"View Allowed Users and Roles"
-				},
-				"showHiddenThings":{
-								"description":"Exibe várias coisas ocultas e exclusivas para moderadores, independentemente das permissões.",
-								"settings":{
-												"showInvitesPaused":"Exibir dica de convites pausados na lista de servidores.",
-												"showModView":"Mostra o menu de moderador de membro em todos os servidores.",
-												"showTimeouts":"Mostrar ícones de castigo de membros no chat."
-								}
-				},
-				"showMeYourName":{
-								"addNickname":"Adicionar apelido SMYN",
-								"cancel":"Cancel",
-								"changeNickname":"Change SMYN Nickname",
-								"modalDescription":"Set a custom SMYN nickname for this user. Make use of it by specifying {custom} in the SMYN template settings.",
-								"nicknameLabel":"Apelido SMYN",
-								"resetNickname":"Redefinir Apelido SMYN",
-								"save":"Save",
-								"settings":{
-												"animateGradients":"For the non-primary names, if the role has a gradient, animate it. This is disabled by \"Ignore Gradients\" and reduced motion.",
-												"customNameColor":"The color to use for the custom name you assigned a user if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
-												"discriminators":"Append discriminators to usernames for bots. Discriminators were deprecated for users, but are still used for bots. By default, a bot's username is equivalent to a user's global name, therefore multiple bots can have the same username. Appending discriminators makes them unique again.",
-												"displayNameColor":"The color to use for the display name if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
-												"friendNameColor":"The color to use for a friend's nickname if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
-												"hideDefaultAtSign":"Hide the default \"@\" symbol before the name in mentions and replies. Only applied if either feature is enabled.",
-												"ignoreFonts":"For the non-primary names, use Discord's default fonts regardless of the user's custom nitro font.",
-												"ignoreGradients":"For the non-primary names, if the role has a gradient, ignore it in favor of the color set below.",
-												"includedNames":"The order to display usernames, display names, nicknames, friend names, and custom names. Use the following placeholders: {user}, {display}, {nick}, {friend}, {custom}. You can provide multiple name options to use as fallbacks if one is unavailable by separating them with commas as such: {custom, friend, nick}. You can have up to three prefixes and three suffixes per name.",
-												"memberList":"Display the first available name listed in your custom name format in the member list.",
-												"mentions":"Display custom name format in mentions.",
-												"messages":"Display custom name format in messages.",
-												"nameSeparator":"The separator to use between names. The default is a single space.",
-												"nicknameColor":"The color to use for the nickname if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
-												"profilePopout":"Display the first available name listed in your custom name format in profile popouts.",
-												"reactions":"Display the first available name listed in your custom name format in reaction tooltips, and the full name in reaction popouts.",
-												"removeDuplicates":"If any of the names are equivalent, remove them, leaving only the unique names.",
-												"replies":"Display custom name format in replies.",
-												"truncateAllNamesWithStreamerMode":"Truncate all names, not just usernames, while in Streamer Mode.",
-												"usernameColor":"The color to use for the username if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
-												"voiceChannels":"Display the first available name listed in your custom name format in voice channels."
-								}
-				},
-				"showTimeoutDuration":{
-								"description":"Shows how much longer a user's timeout will last, either in the timeout icon tooltip or next to it",
-								"displayStyleDescription":"How to display the timeout duration",
-								"inTooltip":"In the Tooltip",
-								"nextToIcon":"Ao lado do ícone de castigo",
-								"timeoutRemaining":"timeout remaining"
-				},
-				"silentMessageToggle":{
-								"description":"Adiciona um botão à barra de bate-papo para alternar o envio de uma mensagem silenciosa.",
-								"disableSilentMessage":"Disable Silent Message",
-								"enableSilentMessage":"Enable Silent Message",
-								"settings":{
-												"autoDisable":"Automatically disable the silent message toggle again after sending one",
-												"persistChannels":"Persistência entre canais",
-												"persistNone":"Don't persist (reset on channel change)",
-												"persistRestarts":"Persistência entre canais e reinicializações",
-												"persistState":"How to persist the silent message toggle state"
-								}
-				},
-				"silentTyping":{
-								"clickActions":{
-												"openPluginSettings":"Open Plugin Settings",
-												"toggleTypingGlobally":"Toggle Typing Globally",
-												"toggleTypingInChannel":"Toggle Typing in Channel",
-												"toggleTypingInGuild":"Toggle Typing in Guild"
-								},
-								"command":{
-												"chatBarIndicatorsOption":"Hide other users' typing indicators from above the chat bar.",
-												"chatContextMenuOption":"Show a dropdown in the chat context menu to toggle plugin settings on the go.",
-												"chatIconOption":"Show an icon in the chat bar for toggling the plugin on the go.",
-												"defaultHiddenOption":"Whether to hide typing in DMs/channels/guilds by default or not.",
-												"description":"Hide your typing indicator from chat.",
-												"membersListIndicatorsOption":"Hide other users' typing indicators from the members list.",
-												"toggleChannel":"Canal",
-												"toggleGlobal":"Global",
-												"toggleGuild":"Servidor",
-												"toggleOption":"Toggle functionality globally, for the channel, or for the guild."
-								},
-								"contextMenu":{
-												"chatBarIndicators":"Chat Bar Indicators",
-												"chatIcon":"Chat Icon",
-												"defaultHidden":"Oculto por padrão",
-												"enabled":"Ativado",
-												"membersListIndicators":"Members List Indicators",
-												"silentTyping":"Silent Typing"
-								},
-								"noChanges":"No changes made to silent typing settings.",
-								"settings":{
-												"chatContextMenu":"Show a dropdown in the chat context menu to modify plugin settings on the go.",
-												"chatIcon":"Show an icon in the chat bar for modifying the plugin on the go.",
-												"chatIconLeftClickAction":"What to do when left clicking the chat icon.",
-												"chatIconMiddleClickAction":"What to do when middle clicking the chat icon.",
-												"chatIconRightClickAction":"What to do when right clicking the chat icon.",
-												"defaultHidden":"If enabled, the plugin will hide your typing from others in any DMs/channels/guilds not listed in \"Disabled Locations\" below. If disabled, the plugin will show your typing to others for any DMs/channels/guilds not listed in \"Enabled Locations\" below.",
-												"disabledLocations":"Desativar funcionalidade para estes IDs. Aceita uma lista separada por vírgulas de IDs de DM, IDs de canais e IDs de servidores. Usado apenas se \"Oculto por padrão\" estiver ativado.",
-												"enabledGlobally":"Toggle functionality of your own typing indicator globally.",
-												"enabledLocations":"Enable functionality for these IDs. Accepts a comma separated list of DM IDs, channel IDs, and guild IDs. Only used if \"Default Hidden\" is disabled.",
-												"hideChatBoxTypingIndicators":"Hide other users' typing indicators from above the chat bar.",
-												"hideMembersListTypingIndicators":"Hide other users' typing indicators from the members list."
-								},
-								"settingsUpdated":"Silent typing settings updated.",
-								"typingHidden":"Typing Hidden ({location})",
-								"typingVisible":"Typing Visible ({location})",
-								"typingVisibleGlobal":"Typing Visible (Global)"
-				},
-				"sortFriendRequests":{
-								"added":"Adicionado",
-								"description":"Sorts friend requests by date of receipt",
-								"settings":{
-												"showDates":"Show dates on friend requests"
-								}
-				},
-				"spotifyCrack":{
-								"description":"Ouvir junto gratuito, sem pausa automática no chat de voz, e permite que a atividade continue tocando ao ficar inativo",
-								"settings":{
-												"keepSpotifyActivityOnIdle":"Manter a atividade do Spotify em execução ao ficar ausente",
-												"noSpotifyAutoPause":"Desativar pausa automática do Spotify"
-								}
-				},
-				"spotifyShareCommands":{
-								"commands":{
-												"notListening":"Você não está ouvindo nenhuma música.",
-												"shareDescription":"Compartilhe seu {name} atual do Spotify no chat",
-												"trackNotFound":"Falha ao encontrar a música no Spotify."
-								},
-								"description":"Compartilhe sua música, álbum ou artista atual do Spotify via comandos de barra (/track, /album, /artist)"
-				},
-				"startupTimings":{
-								"description":"Adiciona tempos de inicialização ao menu Configurações",
-								"ui":{
-												"title":"Tempos de Inicialização"
-								}
-				},
-				"stickerPaste":{
-								"description":"Faz com que escolher uma figurinha no seletor de figurinhas a insira na caixa de chat em vez de enviar instantaneamente"
-				},
-				"streamerModeOnStream":{
-								"description":"Ativa automaticamente o modo streaming quando você compartilha sua tela no Discord."
-				},
-				"superReactionTweaks":{
-								"description":"Personalize o limite de Super Reações animada ao mesmo tempo, e super reagir por padrão",
-								"settings":{
-												"superReactByDefault":"O seletor de reações será padronizado para Super Reações.",
-												"superReactionPlayingLimit":"Máximo de Super Reações animadas ao mesmo tempo. 0 para desativar Super Reações",
-												"unlimitedSuperReactionPlaying":"Remove o limite de Super Reações animadas ao mesmo tempo"
-								}
-				},
-				"tabs":{
-								"settings":"Configurações do Equicord"
-				},
-				"textReplace":{
-								"find":"Find",
-								"messageWithRules":"Message with rules applied",
-								"onlyIfIncludes":"Only if includes",
-								"replace":"Substituir",
-								"scope.allMessages":"Apply to all messages",
-								"scope.myMessages":"Apply to your messages (visible to everyone)",
-								"scope.othersMessages":"Apply to others' messages (only visible to you)",
-								"testRules":"Test Rules",
-								"typeMessage":"Type a message",
-								"usingRegex":"Using Regex",
-								"usingString":"Using String"
-				},
-				"themeAttributes":{
-								"description":"Adiciona atributos de dados a vários elementos para fins de personalização de temas."
-				},
-				"translate":{
-								"autoTranslate":"Auto Translate",
-								"autoTranslateEnabled":{
-												"body":"You just enabled Auto Translate! Any message <0>will automatically be translated</0> before being sent.",
-												"title":"Tradução Automática do Equicord Ativada"
-								},
-								"autoTranslateEnabledLabel":"Tradução Automática Ativada",
-								"disableAutoTranslate":"Desativar Tradução Automática",
-								"dontShowAgain":"Não mostrar novamente",
-								"gotIt":"Entendi",
-								"modalTitle":"Traduzir",
-								"openTranslateModal":"Open Translate Modal",
-								"selectLanguage":"Selecionar um idioma",
-								"translate":"Traduzir"
-				},
-				"typingIndicator":{
-								"description":"Adiciona um indicador se alguém estiver digitando em um canal.",
-								"settings":{
-												"animatedDots":"Pontos animados",
-												"avatars":"Avatares",
-												"avatarsAndDots":"Avatars and animated dots",
-												"includeBlockedUsers":"Whether to show the typing indicator for blocked users.",
-												"includeCurrentChannel":"Whether to show the typing indicator for the currently selected channel",
-												"includeIgnoredUsers":"Whether to show the typing indicator for ignored users.",
-												"includeMutedChannels":"Whether to show the typing indicator for muted channels.",
-												"indicatorMode":"How should the indicator be displayed?"
-								}
-				},
-				"typingTweaks":{
-								"andOthersTyping":"and {count} others are typing...",
-								"description":"Show avatars and role colours in the typing indicator",
-								"settings":{
-												"alternativeFormatting":"Show a more useful message when several users are typing",
-												"amITyping":"Shows you if other people can see you typing",
-												"showAvatars":"Show avatars in the typing indicator",
-												"showRoleColors":"Show role colors in the typing indicator"
-								}
-				},
-				"unindent":{
-								"description":"Remove a indentação inicial dos blocos de código"
-				},
-				"unlockedAvatarZoom":{
-								"description":"Permite dar mais zoom na ferramenta de corte de imagem ao alterar seu avatar",
-								"settings":{
-												"zoomMultiplier":"Multiplicador de zoom"
-								}
-				},
-				"unsuppressEmbeds":{
-								"description":"Permite desativar a supressão de embeds em mensagens",
-								"suppressEmbeds":"Suppress Embeds",
-								"unsuppressEmbeds":"Desativar supressão de embeds"
-				},
-				"userMessagesPronouns":{
-								"description":"Adiciona pronomes às mensagens de usuários no chat",
-								"settings":{
-												"pronounsFormat":"O formato dos pronomes no chat",
-												"pronounsFormatOptions":{
-																"capitalized":"Maiúsculo",
-																"lowercase":"Minúsculo"
-												},
-												"showSelf":"Ativa ou desativa a exibição de pronomes para você mesmo"
-								}
-				},
-				"userSettingsAPI":{
-								"description":"Corrige as UserSettings do Discord para expor seu grupo e nome"
-				},
-				"userVoiceShow":{
-								"cannotJoinChannel":"You cannot join the user's Voice Channel",
-								"description":"Shows an indicator when a user is in a Voice Channel",
-								"inVoiceChat":"Em Chat de Voz",
-								"settings":{
-												"showInMemberList":"Show a user's Voice Channel indicator in the member and DMs list",
-												"showInMessages":"Show a user's Voice Channel indicator in messages",
-												"showInUserProfileModal":"Show a user's Voice Channel indicator in their profile next to the name"
-								}
-				},
-				"usrbg":{
-								"description":"Displays user banners from USRBG, allowing anyone to get a banner without Nitro",
-								"getOwnBanner":"Obtenha seu próprio banner USRBG",
-								"settings":{
-												"nitroBanner":"banner Nitro",
-												"nitroFirst":"Banner to use if both Nitro and USRBG banners are present",
-												"usrbgBanner":"banner USRBG",
-												"voiceBackground":"Use USRBG banners as voice chat backgrounds"
-								}
-				},
-				"validReply":{
-								"description":"Corrige \"A mensagem não pôde ser carregada\" ao passar o mouse sobre a resposta"
-				},
-				"validUser":{
-								"description":"Corrige menções para usuários desconhecidos que aparecem como '@usuário-desconhecido' (passe o cursor sobre uma menção para corrigi-la)"
-				},
-				"vcDoubleClick":{
-								"description":"Junte-se a canais voz através de um duplo clique em vez de um clique único"
-				},
-				"vcNarrator":{
-								"customiseMessages":"You can customise the spoken messages below. You can disable specific messages by setting them to nothing",
-								"defaults":{
-												"deafen":"{{USER}} deafened",
-												"join":"{{USER}} joined",
-												"leave":"{{USER}} left",
-												"move":"{{USER}} moved to {{CHANNEL}}",
-												"mute":"{{USER}} muted",
-												"undeafen":"{{USER}} undeafened",
-												"unmute":"{{USER}} unmuted"
-								},
-								"description":"Announces when users join, leave, or move voice channels via narrator",
-								"linuxVoicesHelp":"Install speech-dispatcher or espeak and run Discord with the --enable-speech-dispatcher flag",
-								"noEnglishVoices":"You don't have any English voices installed, so the narrator might sound weird",
-								"noVoices":"No narrator voices found. ",
-								"osVoicesHelp":"Try installing some in the Narrator settings of your Operating System",
-								"placeholdersHelp":"The special placeholders <0>{{USER}}</0>, <1>{{DISPLAY_NAME}}</1>, <2>{{NICKNAME}}</2> and <3>{{CHANNEL}}</3> will be replaced with the user's name (nothing if it's yourself), the user's display name, the user's nickname on current server and the channel's name respectively",
-								"playExampleSounds":"Reproduzir exemplos de sons",
-								"settings":{
-												"deafenMessage":"Deafen Message (only self for now)",
-												"joinMessage":"Join Message",
-												"latinOnly":"Strip non latin characters from names before saying them",
-												"leaveMessage":"Mensagem de Saída",
-												"moveMessage":"Mover mensagem",
-												"muteMessage":"Mute Message (only self for now)",
-												"sayOwnName":"Say own name",
-												"speed":"Velocidade do narrador",
-												"undeafenMessage":"Undeafen Message (only self for now)",
-												"unmuteMessage":"Unmute Message (only self for now)",
-												"volume":"Volume do narrador"
-								},
-								"speechSynthesisNotSupported":"SpeechSynthesis not supported or no Narrator voices found. Thus, this plugin will not work. Check my Settings for more info"
-				},
-				"viewIcons":{
-								"description":"Torna avatares e banners em perfis de usuário clicáveis, adiciona as entradas Ver Ícone/Banner nos menus de contexto de usuário, servidor e canal de grupo.",
-								"settings":{
-												"formatDescription":"Choose the image format to use for non animated images. Animated images will always use .gif",
-												"imgSizeDescription":"The image size to use"
-								},
-								"viewAvatar":"View Avatar",
-								"viewBanner":"View Banner",
-								"viewIcon":"Ver Ícone",
-								"viewServerAvatar":"Ver Avatar do Servidor"
-				},
-				"viewRaw":{
-								"content":"Conteúdo",
-								"contentCopied":"Conteúdo copiado para a área de transferência!",
-								"copyJson":"Copy {type} JSON",
-								"copyRawContent":"Copiar Conteúdo raw",
-								"copyRawLeftViewRawRight":"Copiar Raw (clique com o botão esquerdo) / Ver Raw (clique com o botão direito)",
-								"data":"Dados",
-								"dataCopied":"{type} data copied to clipboard!",
-								"description":"Copie e visualize o conteúdo/dados raws de qualquer mensagem, canal ou servidor",
-								"settings":{
-												"clickMethodDescription":"Change the button to view the raw content/data of any message.",
-												"leftClick":"Clique com o botão esquerdo para ver o conteúdo raw.",
-												"rightClick":"Right click to view the raw content."
-								},
-								"viewRaw":"Ver Raw",
-								"viewRawLeftCopyRawRight":"View Raw (Left Click) / Copy Raw (Right Click)"
-				},
-				"voiceDownload":{
-								"description":"Adiciona um download às mensagens de voz. (Abre uma nova guia do navegador)",
-								"downloadVoiceMessage":"Download voice message"
-				},
-				"voiceMessages":{
-								"echoCancellation":"Cancelamento de Eco",
-								"failedToParse":"Failed to parse selected audio file: {error}",
-								"failedToUpload":"Falha ao enviar mensagem de voz",
-								"iosFix":"To fix it, first convert it to OggOpus, for example using the <0>convertio web converter</0>",
-								"iosWarning":"Voice Messages have to be OggOpus to be playable on iOS. This file is <0>{type}</0> so it will not be playable on iOS.",
-								"missingPermissions":"(Permissões Ausentes)",
-								"noiseSuppression":"Supressão de ruído",
-								"preview":"Prévia",
-								"recordModal":"Gravar Mensagem de Voz",
-								"send":"Enviar Mensagem de Voz",
-								"sending":"Enviando mensagem de voz... Por favor seja paciente",
-								"uploadFile":"Enviar Arquivo"
-				},
-				"volumeBooster":{
-								"description":"Permite que você defina o volume de usuário e de stream mais alto que o padrão",
-								"settings":{
-												"multiplier":"Multiplicador de volume"
-								}
-				},
-				"webContextMenus":{
-								"description":"Adiciona menus de contexto ausentes na versão web do Discord: Links e Imagens (Copiar/Abrir Link/Imagem), Área de Texto (Copiar, Cortar, Colar, Verificação Ortográfica)",
-								"settings":{
-												"addBack":"Adiciona de volta os menus de contexto do Discord para imagens, links e a barra de entrada de chat"
-								}
-				},
-				"webKeybinds":{
-								"description":"Adiciona combinações de teclas faltando na versão web do Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. Só funciona totalmente no Vesktop/Legcord, não dentro do seu navegador"
-				},
-				"webScreenShareFixes":{
-								"description":"Remove o limite de taxa de bits de 2500kbps em clientes de chromium e vesktop."
-				},
-				"whoReacted":{
-								"settings":{
-												"avatarClick":"Toggle clicking avatars in reactions"
-								}
-				},
-				"xsOverlay":{
-								"attachment":"anexo",
-								"botNotifications":"Permitir notificações de bots",
-								"callNotifications":"Permitir notificações de chamadas",
-								"channelPingColor":"Channel mention color",
-								"description":"Forwards discord notifications to XSOverlay, for easy viewing in VR",
-								"dmNotifications":"Permitir notificações de mensagens diretas",
-								"embed":"embed",
-								"groupDmNotifications":"Permitir notificações de Grupo de DM",
-								"helloFromVendor":"Hello from Vendor!",
-								"image":"imagem",
-								"incomingCall":"Incoming call",
-								"isCallingYou":"está ligando para você...",
-								"lengthBasedTimeout":"Extend duration with message length",
-								"opacity":"Notif opacity",
-								"pingColor":"User mention color",
-								"preferUDPDescription":"Enable if you use an older build of XSOverlay unable to connect through websockets. This setting is ignored on web.",
-								"reply":"resposta",
-								"sendTestNotification":"Send test notification",
-								"sentEmbeds":"sent message embed(s)",
-								"sentSticker":"sent a sticker",
-								"serverNotifications":"Permitir notificações do servidor",
-								"soundPath":"Som de notificação (padrão/aviso/erro)",
-								"sticker":"figurinha",
-								"testNotification":"This is a test notification! explode",
-								"timeout":"Duração da notificação (secs)",
-								"volume":"Volume",
-								"webSocketPort":"porta Websocket"
-				},
-				"youtubeAdblock":{
-								"description":"Bloqueie anúncios em embeds do YouTube e na atividade WatchTogether via AdGuard"
-				}
+    "accountPanelServerProfile":{
+        "description":"Right click your account panel in the bottom left to view your profile in the current server",
+        "prioritizeServerProfile":"Prioritize Server Profile",
+        "prioritizeServerProfileDescription":"Prioritize Server Profile when left clicking your account panel",
+        "viewAccountProfile":"View Account Profile",
+        "viewServerProfile":"Ver perfil do servidor"
+    },
+    "addonCard":{
+        "new":"NOVO"
+    },
+    "alwaysAnimate":{
+        "settings":{
+            "icons":"Sempre animar ícones de servidor, avatares, decorações e mais",
+            "nameplates":"Sempre animar placas de identificação",
+            "roleGradients":"Sempre animar gradientes de cargos",
+            "serverBanners":"Sempre animar banners do servidor",
+            "statusEmojis":"Sempre animar os emojis de status"
+        }
+    },
+    "alwaysExpandRoles":{
+        "description":"Sempre expande a lista de cargos nos popups do perfil"
+    },
+    "alwaysTrust":{
+        "ui":{
+            "deleteServerBody":"É permanente, caso não tenha ficado claro.",
+            "deleteServerConfirm":"Excluir",
+            "deleteServerTitle":"Excluir servidor?"
+        }
+    },
+    "anonymiseFileNames":{
+        "commands":{
+            "spoiler":{
+                "description":"Toggle your spoiler",
+                "disabled":"Spoiler disabled!",
+                "enabled":"Spoiler enabled!",
+                "name":"Spoiler",
+                "optionDescription":"Toggle your Spoiler (default is toggle)",
+                "optionName":"valor"
+            }
+        },
+        "description":"Anonymise uploaded file names",
+        "methods":{
+            "consistent":"Consistent",
+            "random":"Random Characters",
+            "timestamp":"Timestamp"
+        },
+        "settings":{
+            "anonymiseByDefault":"Whether to anonymise file names by default",
+            "consistent":"Consistent filename",
+            "method":"Anonymising method",
+            "randomisedLength":"Random characters length",
+            "spoilerMessages":"Spoiler messages"
+        },
+        "usingAnonymous":"Using anonymous file name",
+        "usingNormal":"Using normal file name"
+    },
+    "appleMusicRichPresence":{
+        "activityTypes":{
+            "listening":"Ouvindo",
+            "playing":"Jogando"
+        },
+        "assetImageTypes":{
+            "album":"Arte do álbum",
+            "artist":"Artist artwork",
+            "disabled":"Desativado"
+        },
+        "buttons":{
+            "listenOnAppleMusic":"Ouça no Apple Music",
+            "viewOnSongLink":"View on SongLink"
+        },
+        "defaultDetails":"{name}",
+        "defaultLargeText":"{album}",
+        "defaultName":"Apple Music",
+        "defaultSmallText":"{artist}",
+        "defaultState":"{artist} · {album}",
+        "description":"Discord rich presence for your Apple Music!",
+        "name":"AppleMusicRichPresence",
+        "settings":{
+            "activityType":"Which type of activity",
+            "detailsString":"String de formato dos detalhes da atividade",
+            "enableButtons":"Whether or not to enable buttons",
+            "enableTimestamps":"Whether or not to enable timestamps",
+            "largeImageType":"Imagem grande dos assets da atividade",
+            "largeTextString":"String de formato do texto grande dos assets de atividade",
+            "nameString":"String de formato do nome da atividade",
+            "refreshInterval":"The interval between activity refreshes (seconds)",
+            "smallImageType":"Tipo de imagem pequena dos assets de atividade",
+            "smallTextString":"String de formato do texto pequeno dos assets de atividade",
+            "stateString":"String de formato do estado da atividade",
+            "statusDisplayType":"Show the track / artist name in the member list"
+        },
+        "settingsAbout":{
+            "albumPlaceholder":"{album} é substituído pelo nome do álbum.",
+            "artistPlaceholder":"{artist} is replaced with the artist(s)' name(s)",
+            "intro":"For the customizable activity format strings, you can use several special strings to include track data in activities!",
+            "namePlaceholder":"{name} is replaced with the track name"
+        },
+        "statusDisplayTypes":{
+            "artist":"Show artist name",
+            "off":"Don't show (shows generic listening message)",
+            "track":"Show track name"
+        }
+    },
+    "arRPC":{
+        "connected":"Connected to arRPC",
+        "connectionFailed":"Failed to connect to arRPC, is it running?",
+        "retry":"Retry",
+        "settingsAbout":{
+            "description":"Follow the instructions in the GitHub repo to get the server running, and then enable the plugin.",
+            "title":"How to use arRPC"
+        }
+    },
+    "autoDndWhilePlaying":{
+        "description":"Atualiza automaticamente seu status online (online, ausente, não perturbe) ao iniciar jogos",
+        "settings":{
+            "excludeInvisible":"Impedir mudanças automáticas de status enquanto seu status estiver definido como invisível",
+            "statusToSet":"Status a definir enquanto joga"
+        },
+        "statusOptions":{
+            "dnd":"Não Perturbe",
+            "idle":"Ausente",
+            "invisible":"Invisível",
+            "online":"Online"
+        }
+    },
+    "badgeAPI":{
+        "description":"API para adicionar insígnias aos usuários"
+    },
+    "betterFolders":{
+        "settings":{
+            "closeAllFolders":"Close all folders when selecting a server not in a folder",
+            "closeAllHomeButton":"Close all folders when clicking on the home button",
+            "closeOthers":"Close other folders when opening a folder",
+            "closeServerFolder":"Close folder when selecting a server in that folder",
+            "folderIconAlways":"Sempre",
+            "folderIconMultipleExpanded":"When more than one folder is expanded",
+            "folderIconNever":"Nunca",
+            "forceOpen":"Force a folder to open when switching to a server of that folder",
+            "keepIcons":"Manter os ícones dos servidores visíveis na pasta da barra principal de servidores quando estiver aberta na barra lateral do BetterFolders",
+            "showFolderIcon":"Show the folder icon above the folder guilds in the BetterFolders sidebar",
+            "sidebar":"Display servers from folder on dedicated sidebar",
+            "sidebarAnim":"Animate opening the folder sidebar"
+        }
+    },
+    "betterGifPicker":{
+        "settings":{
+            "keepOpen":"Mantém o seletor de GIF aberto após selecionar um GIF"
+        }
+    },
+    "betterNotesBox":{
+        "settings":{
+            "hide":"Ocultar notas"
+        }
+    },
+    "betterRoleContext":{
+        "copyRoleColor":"Copiar Cor do Cargo",
+        "description":"Adiciona opções para copiar a cor do cargo / editar cargo / visualizar o ícone do cargo ao clicar com o botão direito do mouse nos cargos no perfil do usuário.",
+        "editRole":"Editar Cargo",
+        "name":"BetterRoleContext",
+        "settings":{
+            "roleIconFileFormat":"File format to use when viewing role icons"
+        },
+        "viewRoleIcon":"Ver Ícone do Cargo"
+    },
+    "betterRoleDot":{
+        "description":"Copiar a cor do cargo ao clicar no RoleDot (configuração de acessibilidade). Também permite usar tanto o RoleDot quanto os nomes coloridos simultaneamente",
+        "settings":{
+            "copyRoleColorInProfilePopout":"Permitir clicar no ponto do cargo no pop-up do perfil para copiar a cor do cargo"
+        }
+    },
+    "betterSessions":{
+        "newBadge":"NOVO",
+        "newSession":"Nova sessão:",
+        "rename":"Rename",
+        "renameModal":{
+            "newDeviceName":"Novo nome do dispositivo",
+            "resetName":"Redefinir nome",
+            "save":"Save",
+            "title":"Rename"
+        },
+        "settings":{
+            "backgroundCheck":"Check for new sessions in the background, and display notifications when they are detected",
+            "checkInterval":"How often to check for new sessions in the background (if enabled), in minutes"
+        }
+    },
+    "betterSettings":{
+        "settings":{
+            "disableFade":"Disable the crossfade animation",
+            "eagerLoad":"Removes the loading delay when opening the menu for the first time",
+            "organizeMenu":"Organizes the settings cog context menu into categories"
+        }
+    },
+    "biggerStreamPreview":{
+        "description":"This plugin allows you to enlarge stream previews",
+        "name":"BiggerStreamPreview",
+        "viewStreamPreview":"Ver prévia de transmissão"
+    },
+    "blurNsfw":{
+        "description":"Desfocar anexos em canais NSFW até passar o mouse sobre eles",
+        "settings":{
+            "blurAllChannels":"Desfocar anexos em todos os canais (não apenas NSFW)",
+            "blurAmount":"Desfocagem (em pixels)"
+        }
+    },
+    "callTimer":{
+        "description":"Adiciona temporizadores de chamadas para todos os usuários nos canais de voz e no status de conexão.",
+        "settings":{
+            "allCallTimers":"Adiciona temporizador de chamadas a todos os usuários em um canal de voz do servidor",
+            "format":"Compact or human readable format:",
+            "showRoleColor":"Show the user's role color (if this plugin is enabled)",
+            "showSeconds":"Show seconds in the timer",
+            "showWithoutHover":"Always show the timer without needing to hover",
+            "trackSelf":"Também permite acompanhar você mesmo",
+            "watchLargeGuilds":"Track users in large guilds. This may cause lag if you're in a lot of large guilds with active voice users. Tested with up to 2000 active voice users with no issues."
+        }
+    },
+    "cancel":"Cancelar",
+    "chatInputButtonAPI":{
+        "description":"API para adicionar botões à entrada de chat"
+    },
+    "clientTheme":{
+        "contrastWarning":"Selected color won't contrast well with text",
+        "disableNitroTheme":"Desativar Tema Nitro",
+        "nitroNotSupported":"Os temas Nitro não são suportados",
+        "resetThemeColor":"Redefinir Cor do Tema",
+        "switchToMode":"Switch to {mode} mode",
+        "themeColor":"Cor do Tema",
+        "themeColorDescription":"Adicione uma cor ao tema do seu cliente Discord",
+        "themeWontLookGood":"Your theme won't look good!"
+    },
+    "cloud":{
+        "integrations":{
+            "enabled":"Integrações com a nuvem ativadas!",
+            "error":"Falha na configuração ({e})",
+            "failedToRetrieveOAuth":"Configuração falhou (não foi possível obter a configuração OAuth).",
+            "header":"Integrações com a nuvem",
+            "noSecret":"Falha na configuração (nenhum segredo retornado?).",
+            "reauthenticateOtherClient":"Notamos que você tem integrações com a nuvem ativadas em outro cliente! Devido a limitações, você precisará se autenticar novamente para continuar usando elas. Clique aqui para acessar a página de configurações e fazer isso!"
+        },
+        "settings":{
+            "accountChanged":"A sincronização com a nuvem foi desativada porque esta conta não está conectada ao App da nuvem. Você pode ativá-la novamente conectando esta conta em Configurações da Nuvem. (note: suas preferências serão armazenadas separadamente)",
+            "apiDelete":"Não foi possível excluir as configurações (API retornou {e}).",
+            "apiEraseAll":"Não foi possível apagar todos os dados (API retornou {e}), entre em contato com o suporte.",
+            "apiReject":"Não foi possível sincronizar as configurações com a nuvem (API retornou {e}).",
+            "deleted":"Configurações excluídas da nuvem!",
+            "erased":"Todos os dados foram apagados com sucesso.",
+            "failedToDelete":"Não foi possível excluir as configurações ({e}).",
+            "failedToSync":"Não foi possível sincronizar as configurações com a nuvem ({e}).",
+            "header":"Configurações de Nuvem",
+            "newerThanCloud":"Suas configurações locais são mais recentes do que as da nuvem.",
+            "noSettings":"Não há nenhuma configuração na nuvem.",
+            "success":"Configurações sincronizadas com a nuvem!",
+            "syncFromCloud":"Não foi possível sincronizar as configurações da nuvem ({e}).",
+            "upToDate":"Suas configurações estão atualizadas.",
+            "updated":"Suas configurações foram atualizadas! Clique aqui para reiniciar e aplicar todas as alterações!",
+            "updatedRemote":"Suas configurações foram atualizadas! Clique aqui para reiniciar e aplicar todas as alterações!"
+        }
+    },
+    "colorSighted":{
+        "description":"Remove os ícones para daltônicos dos status, assim como o Discord 2015-2017"
+    },
+    "commandsAPI":{
+        "description":"API necessária para qualquer coisa que utilize comandos"
+    },
+    "consoleJanitor":{
+        "alwaysAllowLoggers":"Sempre permitir logs destes tipos",
+        "description":"Desativa mensagens/erros irritantes do console",
+        "filterList":"Filter List",
+        "name":"ConsoleJanitor",
+        "settings":{
+            "disableLoggers":"Disables Discords loggers",
+            "disableSpotifyLogger":"Disable the Spotify logger, which leaks account information and access token",
+            "whitelistedLoggers":"Semi colon separated list of loggers to allow even if others are hidden"
+        }
+    },
+    "consoleShortcuts":{
+        "description":"Adiciona apelidos mais curtos para muitas coisas na janela. Execute `shortcutList` para obter uma lista."
+    },
+    "contextMenuAPI":{
+        "description":"API para adicionar/remover itens dos menus de contexto"
+    },
+    "contributorCard":{
+        "contributionsButton":"Veja o que você contribuiu para",
+        "description":"Como você contribuiu para o Equicord, agora você tem um novo emblema legal!",
+        "subtitle":"Obrigado por sua contribuição!",
+        "title":"Contribuições"
+    },
+    "copyEmojiMarkdown":{
+        "copyEmojiMarkdown":"Copiar Emoji Markdown",
+        "copyUnicodeDescription":"Copy the raw unicode character instead of :name: for default emojis (👽)",
+        "description":"Permite copiar emojis como string formatada (<:blobcatcozy:1026533070955872337>)",
+        "success":"Success! Copied emoji markdown."
+    },
+    "copyFileContents":{
+        "copied":"Copiado!",
+        "copyFileContents":"Copiar conteúdos de arquivos",
+        "description":"Adiciona um botão aos anexos de arquivos de texto para copiar seu conteúdo",
+        "fileTooLarge":"File too large to copy"
+    },
+    "copyStickerLinks":{
+        "copyLink":"Copiar Link",
+        "description":"Adiciona a habilidade de copiar e abrir links de Figurinha",
+        "linkCopied":"Link copiado!",
+        "openLink":"Open Link"
+    },
+    "copyUserURLs":{
+        "copyUserURL":"Copiar URL do Usuário",
+        "description":"Adiciona uma opção 'Copiar URL do usuário' ao menu de contexto do usuário."
+    },
+    "crashHandler":{
+        "notifications":{
+            "crashedBody":"Awn :( O Discord crashou duas vezes seguidas, não tentando recuperar. Clique aqui para entrar no nosso servidor de suporte!"
+        },
+        "updatePrompt":"Oh não, o Discord acabou de dar pau... mas noticia boa, tem uma atualização do Equicord que talvez resolva esse problema! Gostaria de atualizar agora?"
+    },
+    "ctrlEnterSend":{
+        "description":"Use Ctrl+Enter para enviar mensagens (customizável)",
+        "settings":{
+            "submitRule":"A maneira de enviar uma mensagem"
+        },
+        "submitRuleOptions":{
+            "ctrlEnter":"Ctrl+Enter (Enter ou Shift+Enter para nova linha) (cmd+enter no macOS)",
+            "enter":"Enter (Shift+Enter para nova linha; padrão do Discord)",
+            "shiftEnter":"Shift+Enter (Enter para nova linha)"
+        }
+    },
+    "customIdle":{
+        "description":"Permite definir o tempo antes que o Discord fique inativo (ou desativar a inatividade automática)"
+    },
+    "customRPC":{
+        "activityType":"Tipo de atividade",
+        "activityTypes":{
+            "competing":"Competindo",
+            "listening":"Ouvindo",
+            "playing":"Jogando",
+            "streaming":"Transmitindo",
+            "watching":"Assistindo"
+        },
+        "appId":"Application ID",
+        "appName":"Application Name",
+        "button1Text":"Button1 Text",
+        "button1Url":"Button1 URL",
+        "button2Text":"Button2 Text",
+        "button2Url":"Button2 URL",
+        "detailLine1":"Detalhe (linha 1)",
+        "detailUrl":"URL detalhada",
+        "endTimestamp":"End Timestamp (in milliseconds)",
+        "instructions":{
+            "buttons":"You can't see your own buttons on your profile, but everyone else can see it fine.",
+            "devPortal":"Go to the <0>Discord Developer Portal</0> to create an application and get the application ID.",
+            "imgur":"If you want to use an image link, download your image and reupload the image to <0>Imgur</0> and get the image link by right-clicking the image and selecting \"Copy image address\".",
+            "unicode":"Some weird unicode text (\"fonts\" 𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘) may cause the rich presence to not show up, try using normal letters instead.",
+            "uploadImages":"Upload images in the Rich Presence tab to get the image keys."
+        },
+        "largeImageClickUrl":"URL clicável da imagem grande",
+        "largeImageText":"Texto da imagem grande",
+        "largeImageUrl":"URL/Chave da Imagem Grande",
+        "notice":{
+            "body":"O Compartilhamento de Atividades não está ativado, as pessoas não poderão ver sua rich presence personalizada!",
+            "enable":"Ativar",
+            "title":"Aviso"
+        },
+        "partyMaxSize":"Maximum Party Size",
+        "partySize":"Party Size",
+        "placeholder":{
+            "enterValue":"Enter a value",
+            "selectOption":"Select an option"
+        },
+        "smallImageClickUrl":"Small Image clickable URL",
+        "smallImageText":"Small Image Text",
+        "smallImageUrl":"Small Image URL/Key",
+        "startTimestamp":"Start Timestamp (in milliseconds)",
+        "stateLine2":"State (line 2)",
+        "stateUrl":"State URL",
+        "streamLink":"Stream Link (Twitch or YouTube, only if activity type is Streaming)",
+        "timestampMode":"Modo de Timestamp",
+        "timestampModes":{
+            "currentTime":"Same as your current time (not reset after 24h)",
+            "custom":"Personalizado",
+            "none":"Nenhum",
+            "sinceOpen":"since discord open"
+        },
+        "validation":{
+            "discordId":"Deve ser um ID Discord válido.",
+            "discordLink":"Don't use a Discord link. Use an Imgur image link instead.",
+            "imgurDirect":"Imgur link must be a direct link to the image (e.g. https://i.imgur.com/...). Right click the image and click 'Copy image address'",
+            "maxLength":"Não deve ter mais de {length} caracteres.",
+            "number":"Deve ser um número.",
+            "positiveNumber":"Deve ser um número positivo.",
+            "required":"This field is required.",
+            "streamingLink":"O link de transmissão deve ser uma URL válida",
+            "streamingLinkLength":"O link de transmissão não deve ter mais de 512 caracteres.",
+            "tenorDirect":"Tenor link must be a direct link to the image (e.g. https://media.tenor.com/...). Right click the GIF and click 'Copy image address'",
+            "url":"Deve ser uma URL válida."
+        }
+    },
+    "dearrow":{
+        "clickToDearrow":"Click to dearrow",
+        "dearrowByDefault":"Dearrow videos automatically",
+        "dearrowedClickRestore":"This embed has been dearrowed, click to restore",
+        "description":"Makes YouTube embed titles and thumbnails less sensationalist, powered by Dearrow",
+        "everything":"Everything (Titles & Thumbnails)",
+        "hideButton":"Hides the Dearrow button from YouTube embeds",
+        "replaceElementsDescription":"Choose which elements of the embed will be replaced",
+        "thumbnails":"Thumbnails",
+        "titles":"Titles"
+    },
+    "decor":{
+        "accessFromProfiles":"You can also access Decor decorations from the {link} page.",
+        "changeDecoration":"Change Decoration",
+        "description":"Create and use your own custom avatar decorations, or pick your favorite from the presets.",
+        "enableAndRestart":"Enable Decor and restart your client to change your avatar decoration.",
+        "profilesLink":"Perfis",
+        "removeDecoration":"Remove Decoration",
+        "title":"Decoração"
+    },
+    "devCompanion":{
+        "description":"Plugin Dev Companion. Por favor, informe qualquer coisa que não esteja funcionando ou que esteja estranha (provavelmente é um bug) para sadan, seja por ping ou dm, obrigado!",
+        "settings":{
+            "notifyOnAutoConnect":"Se deve notificar quando o Dev Companion estiver conectado automaticamente.",
+            "reloadAfterToggle":"Recarregar após o recebimento de um comando para desativar/ativar plugin.",
+            "usePatchedModule":"Em solicitações de extração, responder com o módulo corrigido atual (se estiver corrigido) em vez do original."
+        }
+    },
+    "disableCallIdle":{
+        "description":"Desativa a expulsão automática de chamadas de voz em DMs após 3 minutos e o redirecionamento para canais de voz de AFK."
+    },
+    "donate":"Doar",
+    "donorCard":{
+        "donated":{
+            "description":"Todos os usuários do Vencord podem ver sua insígnia de doador do Vencord, e os usuários do Equicord podem ver sua insígnia de doador do Equicord. Para alterar sua insígnia de doador do Vencord, entre em contato com @vending.machine. Para sua insígnia de doador do Equicord, crie um ticket no servidor do Equicord.",
+            "equicordDescription":"Todos os usuários do Equicord podem ver sua insígnia! Você pode gerenciar seus benefícios criando um ticket no servidor do Equicord.",
+            "subtitle":"Obrigado por doar!",
+            "title":"Doações",
+            "vencordDescription":"Todos os usuários do Vencord podem ver sua insígnia! Você pode gerenciar seus benefícios enviando uma mensagem para @{v}."
+        },
+        "notDonated":{
+            "description":"Por favor, considere apoiar o desenvolvimento do Equicord doando!",
+            "title":"Apoie o Projeto"
+        }
+    },
+    "dontRoundMyTimestamps":{
+        "description":"Sempre arredonda indicadores de tempo relativos para baixo, para que 7.6y se torne 7y em vez de 8y"
+    },
+    "dynamicImageModalAPI":{
+        "description":"Permite ignorar a largura ou altura ao abrir uma imagem expandida"
+    },
+    "experiments":{
+        "description":"Enable Access to Experiments & other dev-only features in Discord!",
+        "devToolsInfo":"You can open Discord's DevTools via {keyboardCombo}",
+        "holdOn":"Hold on!!",
+        "moreInfo":"Mais informações",
+        "settings":{
+            "toolbarDevMenu":"Change the Help (?) toolbar button (top right in chat) to Discord's developer menu"
+        },
+        "warning1":"Experiments are unreleased Discord features. They might not work, or even break your client or get your account disabled.",
+        "warning2":"Only use experiments if you know what you're doing. Equicord is not responsible for any damage caused by enabling experiments. If you don't know what an experiment does, ignore it. Do not ask us what experiments do either, we probably don't know.",
+        "warning3":"No, you cannot use server-side features like checking the \"Send to Client\" box."
+    },
+    "expressionCloner":{
+        "cloneEmoji":"Clone Emoji",
+        "cloneSticker":"Clone Sticker",
+        "cloneTo":"Clone to {guild}",
+        "clonedSuccess":"Successfully cloned {name} to {guild}!",
+        "customName":"Custom Name",
+        "failedToClone":"Failed to clone: {error}",
+        "nameValidation":"Name must be between 2 and 32 characters",
+        "somethingWentWrong":"Something went wrong (check console!)"
+    },
+    "f8break":{
+        "description":"Pausa o cliente ao pressionar F8 com o DevTools (+ breakpoints) aberto."
+    },
+    "failedToRender":"Falha ao renderizar a guia {tab}. Se o problema persistir, tente usar o instalador para reinstalar!",
+    "fakeNitro":{
+        "description":"Permite enviar emojis/figurinhas falsas, usar temas nitro e transmitir em qualidade nitro.",
+        "doNotShowAgain":"Do not show again",
+        "emojiNotice":"This is a FakeNitro emoji and renders like a real emoji only for you. Appears as a link to non-plugin users.",
+        "holdOn":"Hold on!",
+        "noAttachmentPerms":{
+            "body":"You cannot send this message because it contains an animated FakeNitro sticker, and you do not have permissions to attach files in the current channel. Please remove the sticker to proceed."
+        },
+        "noEmbedPerms":{
+            "body1":"You are trying to send/edit a message that contains a FakeNitro emoji or sticker,",
+            "body2":"however you do not have permissions to embed links in the current channel.",
+            "body3":"Are you sure you want to send this message? Your FakeNitro items will appear as a link only.",
+            "disableNotice":"You can disable this notice in the plugin settings."
+        },
+        "sendAnyway":"Send Anyway",
+        "settings":{
+            "disableEmbedPermissionCheck":"Whether to disable the embed permission check when sending fake emojis and stickers",
+            "emojiSize":"Size of the emojis when sending",
+            "enableEmojiBypass":"Permite enviar emojis falsos (também ignora a falta de permissão para usar emojis personalizados)",
+            "enableStickerBypass":"Permite enviar figurinhas falsas (também ignora a falta de permissão para usar figurinhas)",
+            "enableStreamQualityBypass":"Permitir a transmissão em qualidade nitro",
+            "hyperLinkText":"What text the hyperlink should use. {{NAME}} will be replaced with the emoji/sticker name.",
+            "stickerSize":"Size of the stickers when sending",
+            "transformCompoundSentence":"Whether to transform fake stickers and emojis in compound sentences (sentences with more content than just the fake emoji or sticker link)",
+            "transformEmojis":"Whether to transform fake emojis into real ones",
+            "transformStickers":"Whether to transform fake stickers into real ones",
+            "useEmojiHyperLinks":"Whether to use hyperlinks when sending fake emojis",
+            "useStickerHyperLinks":"Whether to use hyperlinks when sending fake stickers"
+        },
+        "stickerNotice":"This is a FakeNitro sticker and renders like a real sticker only for you. Appears as a link to non-plugin users."
+    },
+    "fakeProfileThemes":{
+        "accent":"Destaque",
+        "colorPickers":"Color pickers",
+        "copy3y3":"Copiar 3y3",
+        "fakeColors":"Fake colors",
+        "instructions":"Set your profile colors using the color pickers below. The colors will be encoded into your profile's 'About Me' section.",
+        "nitroColors":"Cores Nitro",
+        "preview":"Prévia",
+        "primary":"Principal",
+        "usage":"Uso"
+    },
+    "favEmojiFirst":{
+        "settings":{
+            "clearAll":"Excluir todos os aliases."
+        },
+        "ui":{
+            "aliasRequired":"É necessário um Alias.",
+            "aliasSetFor":"Alias definido para {emoji}.",
+            "aliasValidation":"Alias deve ter de 2 a 32 caracteres e usar apenas letras minúsculas, números ou sublinhados.",
+            "confirmModal":{
+                "confirmButton":"Excluir todos os aliases",
+                "title":"Excluir todos os aliases"
+            },
+            "deleteAllAliases":"Excluir todos os aliases",
+            "deletedAllAliases":"Excluídos todos os aliases de emoji.",
+            "modal":{
+                "placeholder":"Alias, ex: \"sob\""
+            }
+        }
+    },
+    "favGifSearch":{
+        "description":"Adiciona uma barra de pesquisa aos GIFs favoritos.",
+        "name":"FavoriteGifSearch",
+        "searchOptions":{
+            "entireUrl":"Entire Url",
+            "hostAndPath":"Host & Path (tenor.com somgif.gif)",
+            "pathOnly":"Path Only (/somegif.gif)"
+        },
+        "searchPlaceholder":"Search Favorite Gifs",
+        "settings":{
+            "searchOption":"The part of the url you want to search"
+        }
+    },
+    "fixCodeblockGap":{
+        "description":"Remove o espaço entre blocos de código e o texto abaixo deles."
+    },
+    "fixImagesQuality":{
+        "animatedImagesAlways":"Animated images (GIF, WebP, etc.) in chat will always animate, regardless of if the App is focused.",
+        "defaultBehavior":"The default behavior is the following:",
+        "description":"Improves quality of images by loading them at their original resolution",
+        "enableOriginalCaveats":"You can also enable original image in chat, but beware of the following caveats:",
+        "inChatOptimised":"In chat, optimised but full resolution images will be loaded.",
+        "inModalOriginal":"In the image modal, the original image will be loaded.",
+        "mayCauseLag":"May cause lag.",
+        "name":"FixImagesQuality",
+        "settings":{
+            "originalImagesInChat":"Carrega também a imagem original no Chat. AVISO: Leia os avisos acima."
+        }
+    },
+    "fixSpotifyEmbeds":{
+        "description":"Corrige embeds do spotify sendo incrivelmente alto, permitindo que você personalize o volume",
+        "settings":{
+            "volume":"A % de volume para os embeds do spotify. Qualquer coisa acima de 10% é muuuito alto"
+        }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"Ignora vídeos do youtube tendo a exibição bloqueada no Discord (por exemplo, pela UMG)"
+    },
+    "forceOwnerCrown":{
+        "description":"Force a coroa do proprietário ao lado dos nomes de usuário, mesmo que o servidor seja grande."
+    },
+    "friendInvites":{
+        "commands":{
+            "createFriendInvite":{
+                "description":"Gera um link de convite de amigo.",
+                "name":"criar convite de amigo"
+            },
+            "revokeFriendInvites":{
+                "description":"Revoga todos os convites de amigos gerados.",
+                "name":"revogar convites de amigos"
+            },
+            "viewFriendInvites":{
+                "description":"Veja a lista de todos os convites de amigos gerados",
+                "name":"ver convites de amigo"
+            }
+        },
+        "description":"Crie e gerencie links de convite de amigo via comandos de barra (/create friend invite, /view friend invites, /revoke friend invites).",
+        "ui":{
+            "allRevoked":"Todos os convites de amizade foram revogados.",
+            "expires":"Expira:",
+            "maxUses":"Número máximo de usos:",
+            "noActiveInvites":"Você não tem convites de amigos ativos!",
+            "timesUsed":"Vezes usado:"
+        }
+    },
+    "friendsSince":{
+        "description":"Shows when you became friends with someone in the user popout",
+        "heading":"Amigos desde"
+    },
+    "fullSearchContext":{
+        "description":"Faz com que o menu de mensagens nos resultados de busca tenha todas as opções esperadas"
+    },
+    "fullUserInChatbox":{
+        "description":"Faz com que a menção de usuário no chat tenha mais funcionalidades, como clique esquerdo/direito"
+    },
+    "gameActivityToggle":{
+        "description":"Adiciona um botão ao lado do botão do microfone e do botão de silenciar para ativar/desativar a atividade de jogo.",
+        "disableGameActivity":"Desativar Atividade de Jogo",
+        "enableGameActivity":"Enable Game Activity",
+        "settings":{
+            "location":"Where to show the game activity toggle button",
+            "locationPanel":"Ao lado de Silenciar/Ensurdecer",
+            "locationToolbox":"Equicord Toolbox",
+            "oldIcon":"Use the old icon style before Discord icon redesign"
+        }
+    },
+    "gifPaste":{
+        "description":"Faz com que selecionar um GIF no seletor de GIFs insira o link no campo de texto ao invés de enviá-lo instantaneamente"
+    },
+    "greetStickerPicker":{
+        "ariaLabel":"Greet Sticker Picker",
+        "description":"Permite usar qualquer figurinha de saudação em vez de apenas um aleatório ao clicar com o botão direito no botão 'Acene para dizer olá!'",
+        "greetMode":"Greet Mode",
+        "greetModeDescription":"Choose the greet mode",
+        "greetModeLabel":"Greet (you can only greet 3 times)",
+        "greetStickers":"Greet Stickers",
+        "normalMessageLabel":"Normal Message (you can greet spam)",
+        "sendGreets":"Send Greets",
+        "unholyMultiGreet":"Unholy Multi-Greet"
+    },
+    "hideAttachments":{
+        "description":"Hide attachments and embeds for individual messages via hover button",
+        "hideMedia":"Hide Media",
+        "mediaHidden":"Media Hidden",
+        "showMedia":"Show Media"
+    },
+    "iLoveSpam":{
+        "description":"Não ocultar mensagens de 'prováveis spammers'"
+    },
+    "ignoreActivities":{
+        "disableActivity":"Desativar atividade",
+        "enableActivity":"Enable activity",
+        "filterList":{
+            "description":"Comma separated list of activity IDs to filter (Useful for filtering specific RPC activities and CustomRPC)",
+            "title":"Filter List"
+        },
+        "importCustomRPC":{
+            "alreadyAdded":"CustomRPC application ID is already added.",
+            "button":"Import CustomRPC ID",
+            "description":"Import the application id of the CustomRPC plugin to the filter list",
+            "notSet":"CustomRPC application ID is not set."
+        },
+        "settings":{
+            "blacklist":"Blacklist",
+            "ignoreCompeting":"Ignore all competing activities (These are normally special game activities)",
+            "ignoreListening":"Ignore all listening activities (These are usually spotify activities)",
+            "ignorePlaying":"Ignore all playing activities (These are usually game and RPC activities)",
+            "ignoreStreaming":"Ignore all streaming activities",
+            "ignoreWatching":"Ignore all watching activities",
+            "listMode":"Change the mode of the filter list",
+            "whitelist":"Lista Branca"
+        }
+    },
+    "imageFilename":{
+        "settings":{
+            "showFullUrl":"Mostrar a URL completa da imagem ao invés de apenas o nome do arquivo. Sempre ativado para GIFs porque geralmente não possuem nome de arquivo significativo"
+        }
+    },
+    "imageLink":{
+        "description":"Nunca ocultar links de imagens nas mensagens, mesmo que seja o único conteúdo"
+    },
+    "imageZoom":{
+        "lensSize":"Tamanho da lente",
+        "nearestNeighbour":"Nearest Neighbour",
+        "settings":{
+            "invertScroll":"Invert scroll",
+            "nearestNeighbour":"Use Nearest Neighbour Interpolation when scaling images",
+            "saveZoomValues":"Whether to save zoom and lens size values",
+            "size":"Radius / Size of the lens",
+            "square":"Make the lens square",
+            "zoom":"Zoom of the lens",
+            "zoomSpeed":"How fast the zoom / lens size changes"
+        },
+        "squareLens":"Square Lens",
+        "zoom":"Zoom",
+        "zoomSpeed":"Zoom Speed"
+    },
+    "invite":"Convidar",
+    "ircColors":{
+        "description":"Torna as cores do nome de usuário no chat únicas, como em clientes de IRC",
+        "settings":{
+            "applyColorOnlyInDms":"Aplicar cores somente na DM; não aplicar em servidores",
+            "lightness":"Luminosidade, em %. Altere se as cores estiverem muito claras ou muito escuras."
+        }
+    },
+    "lastfmRichPresence":{
+        "apiKeyInstructions":"Set <0>Application name</0> and <1>Application description</1> to anything and leave the rest blank.",
+        "createApiKey":"Create API Key",
+        "description":"Pequeno plugin para Rich Presence do Last.fm",
+        "howToCreateApiKey":"How to create an API key",
+        "lastfmProfile":"Perfil Last.fm",
+        "missingArt":{
+            "lastfmLogo":"Use large Last.fm logo",
+            "placeholder":"Use generic placeholder"
+        },
+        "nameFormat":{
+            "albumName":"Use album name (falls back to custom status text if song has no album)",
+            "artistFirst":"Use format 'artist - song'",
+            "artistOnly":"Use artist name only",
+            "songFirst":"Use format 'song - artist'",
+            "songOnly":"Use song name only",
+            "statusName":"Use custom status name"
+        },
+        "settings":{
+            "alwaysHideArt":"Desativar download de capas de álbuns",
+            "apiKey":"Custom Last.fm API key. Not required but highly recommended to avoid rate limiting with our shared key",
+            "clickableLinks":"Make track, artist and album names clickable links",
+            "hideWithActivity":"Hide Last.fm presence if you have any other presence",
+            "hideWithSpotify":"Hide Last.fm presence if spotify is running",
+            "missingArt":"When album or album art is missing",
+            "nameFormat":"Show name of song and artist in status name",
+            "shareUsername":"Show link to Last.fm profile",
+            "showLastFmLogo":"Show the Last.fm logo by the album cover",
+            "statusDisplayType":"Show the track / artist name in the member list",
+            "statusName":"Custom status text",
+            "useListeningStatus":"Show \"Listening to\" status instead of \"Playing\"",
+            "username":"Nome de usuário Last.fm"
+        },
+        "statusDisplayType":{
+            "artist":"Show artist name",
+            "off":"Don't show (shows generic listening message)",
+            "track":"Show track name"
+        }
+    },
+    "loading":"Carregando...",
+    "loadingQuotes":{
+        "settings":{
+            "additionalQuotes":"Citações personalizadas adicionais para possivelmente aparecerem, separadas pelo delimitador abaixo"
+        },
+        "ui":{
+            "noQuotesQuote":"Você realmente desativou todas as frases de carregamento? Que bobão(bobona) você é..."
+        }
+    },
+    "logs":{
+        "allLogsCleared":"Todas as logs foram apagadas",
+        "clearAll":"Apagar Tudo",
+        "clearAllLogs":"Limpar Todas as Logs",
+        "clearAllLogsConfirmation":"Tem certeza de que deseja limpar toda as logs? Isso não pode ser desfeito.",
+        "clearLog":"Limpar Log",
+        "clearLogConfirmation":"Tem certeza de que deseja limpar esta log? Isso não pode ser desfeito.",
+        "clearLogs":"Limpar Logs",
+        "clearLogsConfirmation":"Tem certeza que gostaria de limpar essas logs? Isso não pode ser desfeito.",
+        "clearLogsConfirmationNum_one":"Tem certeza de que deseja limpar {count} log",
+        "clearLogsConfirmationNum_other":"Tem certeza de que deseja limpar {count} logs",
+        "hideLogs":"Ocultar Logs",
+        "logCleared":"Log foi apagada",
+        "logsCleared":"As logs selecionadas foram apagadas",
+        "showLogs":"Mostrar Logs"
+    },
+    "memberCount":{
+        "settings":{
+            "memberList":"Show member count in the member list",
+            "toolTip":"Show member count on the server tooltip",
+            "voiceActivity":"Show voice activity with member count in the member list"
+        }
+    },
+    "memberListDecoratorsAPI":{
+        "description":"API para adicionar decoradores à lista de membros (em servidores e DMs)"
+    },
+    "menuItemDemanglerAPI":{
+        "description":"Decodifica o módulo de itens de Menu do Discord"
+    },
+    "messageAccessoriesAPI":{
+        "description":"API para adicionar acessórios à mensagem"
+    },
+    "messageClickActions":{
+        "actions":{
+            "copyContent":"Copiar Conteúdo",
+            "copyId":"Copiar ID",
+            "copyLink":"Copiar Link",
+            "delete":"Excluir",
+            "none":"Nenhum",
+            "pin":"Fixar",
+            "reply":"Resposta"
+        },
+        "modifiers":{
+            "alt":"Alt",
+            "delete":"Excluir",
+            "none":"Nenhum"
+        },
+        "settings":{
+            "disableInDms":"Desativar todas as ações de clique em mensagens diretas",
+            "disableInSystemDms":"Desativar todas as ações de clique nas mensagens diretas do sistema",
+            "doubleClickAction":"Ação ao clicar duas vezes (suas mensagens)",
+            "doubleClickModifier":"Modificador necessário para a ação de clique duplo",
+            "doubleClickOthersAction":"Ação ao clicar duas vezes (mensagens de outros)",
+            "singleClickAction":"Ação de clique único (suas mensagens)",
+            "singleClickModifier":"Modificador necessário para ação de clique único (suas mensagens)",
+            "singleClickOthersAction":"Ação de clique único (mensagens de outros)",
+            "singleClickOthersModifier":"Modificador necessário para a ação de clique único (mensagens de outros)",
+            "tripleClickAction":"Ação ao clicar três vezes",
+            "tripleClickModifier":"Modificador necessário para a ação de clicar três vezes"
+        },
+        "ui":{
+            "linkCopied":"Link copiado!",
+            "messageContentCopied":"Conteúdo da mensagem copiado!"
+        }
+    },
+    "messageDecorationsAPI":{
+        "description":"API para adicionar decorações às mensagens"
+    },
+    "messageEventsAPI":{
+        "description":"API necessária para qualquer coisa que utilize eventos de mensagem"
+    },
+    "messageLatency":{
+        "clockAhead":"This user's clock is {delta} ahead.",
+        "delayedMessage":"Delayed Message",
+        "messageDelayed":"This message was sent with a delay of {delta}.",
+        "oldAndroidClient":"Old Discord Android client",
+        "oldDiscordAndroid":"User is suspected to be on an old Discord Android client",
+        "settings":{
+            "detectDiscordKotlin":"Detectar clientes antigos do Discord para Android",
+            "ignoreSelf":"Don't add indicator to your own messages",
+            "latency":"Threshold in seconds for latency indicator",
+            "showMillis":"Show milliseconds"
+        },
+        "timeUnits":{
+            "day":"dia",
+            "days":"dias",
+            "hour":"hora",
+            "hours":"horas",
+            "millisecond":"millisecond",
+            "milliseconds":"milliseconds",
+            "minute":"minuto",
+            "minutes":"minutos",
+            "second":"second",
+            "seconds":"seconds"
+        }
+    },
+    "messageLinkEmbeds":{
+        "automodOptions":{
+            "always":"Always use automod embeds",
+            "never":"Never use automod embeds",
+            "prefer":"Prefer automod embeds, but use rich embeds if some content can't be shown"
+        },
+        "channelLabels":{
+            "directMessage":"Mensagens Diretas",
+            "groupDM":"Groupo de DM",
+            "server":"Servidor"
+        },
+        "description":"Adiciona uma prévia a mensagens que contêm links de outras mensagens",
+        "listModeOptions":{
+            "blacklist":"Blacklist",
+            "whitelist":"Lista Branca"
+        },
+        "noContent":{
+            "attachments_only_one":"[no content, {count} attachment]",
+            "attachments_only_other":"[no content, {count} attachments]",
+            "both_one":"[no content, {attachments} attachment and {embeds} embed]",
+            "both_other":"[no content, {attachments} attachments and {embeds} embeds]",
+            "embeds_only_one":"[no content, {count} embed]",
+            "embeds_only_other":"[no content, {count} embeds]"
+        },
+        "settings":{
+            "automodEmbeds":"Use automod embeds instead of rich embeds (smaller but less info)",
+            "clearMessageCache":"Clear the linked message cache",
+            "idList":"Guild/channel/user IDs to blacklist or whitelist (separate with comma)",
+            "listMode":"Whether to use ID list as blacklist or whitelist",
+            "messageBackgroundColor":"Background color for messages in rich embeds"
+        }
+    },
+    "messageLogger":{
+        "clearMessageLog":"Clear Message Log",
+        "deletedMessages_one":"{count} mensagem excluída",
+        "deletedMessages_other":"{count} mensagens excluídas",
+        "deletedMessages_zero":"No deleted messages",
+        "disableDiffView":"Desativar visualização de diferenças",
+        "editHistory":"Message Edit History",
+        "enableDiffView":"Enable Diff View",
+        "notLoggedTooltip":"This edit state was not logged so it can't be displayed.",
+        "removeMessageHistory":"Remove Message History",
+        "removeMessageTemporary":"Remove Message (Temporary)",
+        "settings":{
+            "collapseDeleted":"Whether to collapse deleted messages, similar to blocked messages",
+            "deleteStyle":"O estilo das mensagens excluídas",
+            "deleteStyleRedOverlay":"Overlay vermelho",
+            "deleteStyleRedText":"Texto vermelho",
+            "ignoreBots":"Whether to ignore messages by bots",
+            "ignoreChannels":"Comma-separated list of channel IDs to ignore",
+            "ignoreGuilds":"Comma-separated list of guild IDs to ignore",
+            "ignoreSelf":"Whether to ignore messages by yourself",
+            "ignoreUsers":"Comma-separated list of user IDs to ignore",
+            "inlineEdits":"Whether to display edit history as part of message content",
+            "logDeletes":"Whether to log deleted messages",
+            "logEdits":"Whether to log edited messages",
+            "separatedDiffs":"Separate addition and removals in diffs for a more readable differential",
+            "showEditDiffs":"Show visual differences between edited message versions"
+        },
+        "toggleDeletedHighlight":"Toggle Deleted Highlight"
+    },
+    "messagePopoverAPI":{
+        "description":"API para adicionar botões aos popovers de mensagem"
+    },
+    "messageTags":{
+        "commands":{
+            "list":"Listar todas as suas tags"
+        },
+        "description":"Permite que você salve mensagens e as use com um comando simples.",
+        "ui":{
+            "allTags":"Todas as tags:"
+        }
+    },
+    "messageUpdaterAPI":{
+        "description":"API para atualizar e renderizar novamente mensagens"
+    },
+    "moreQuickReactions":{
+        "settings":{
+            "compactMode":"Reduz os botões para 75% da escala original, enquanto aumenta o emoji interno para 125%. Os emojis ficarão com 93,75% do tamanho original. Recomendado ter no mínimo 5 colunas"
+        }
+    },
+    "mutualGroupDMs":{
+        "description":"Shows mutual group dms in profiles",
+        "members_one":"{count} Membro",
+        "members_other":"{count} Membros",
+        "mutualGroupsHeader":"Mutual Groups",
+        "mutualGroups_one":"{count} Grupo Mútuo",
+        "mutualGroups_other":"{count} Grupos Mútuos",
+        "noGroupDms":"No group dms in common",
+        "noMutualGroups":"No Mutual Groups"
+    },
+    "newGuildSettings":{
+        "applySettings":"Apply NewGuildSettings",
+        "description":"Automatically mute new servers and change various other settings upon joining",
+        "settings":{
+            "allMessages":"Todas as mensagens",
+            "events":"Mute New Events automatically",
+            "everyone":"Suppress @everyone and @here",
+            "guild":"Mute Guild automatically",
+            "highlights":"Suppress Highlights automatically",
+            "messages":"Server Notification Settings",
+            "mobilePush":"Mute Mobile Push Notifications automatically",
+            "nothing":"Nothing",
+            "onlyMentions":"Only @mentions",
+            "role":"Suppress All Role @mentions",
+            "serverDefault":"Server default",
+            "showAllChannels":"Show all channels automatically",
+            "voiceChannels":"Hide names in Voice channels automatically"
+        }
+    },
+    "nicknameIconsAPI":{
+        "description":"API para adicionar ícones ao apelido, nos perfis"
+    },
+    "noBlockedMessages":{
+        "settings":{
+            "allowAutoModMessages":"Permitir que as mensagens enviadas pelo AutoMod ignorem a filtragem.",
+            "alsoHideIgnoredUsers":"Oculta também mensagens de usuários ignorados.",
+            "defaultHideUsers":"Se ativado, mensagens de usuários bloqueados serão completamente ocultas e quaisquer mensagens de IDs de usuário na lista de exceção serão colapsadas (comportamento padrão do Discord). Se desativado, mensagens de usuários bloqueados serão colapsadas e quaisquer mensagens de IDs de usuário na lista de exceção serão completamente ocultas.",
+            "disableNotifications":"Ocultar notificações de novas mensagens de usuários bloqueados. Sempre ativo se \"Ocultar Usuários por Padrão\" estiver habilitado abaixo e o usuário que disparou a notificação não estiver isento em \"Usuários de Exceção\".",
+            "overrideUsers":"Lista separada por vírgulas de IDs de usuários que serão ocultados ou colapsados em vez do comportamento padrão selecionado acima."
+        }
+    },
+    "noDevtoolsWarning":{
+        "description":"Desativa o banner 'HOLD UP' no console. Como efeito colateral, também impede o Discord de ocultar seu token, o que previne logouts aleatórios."
+    },
+    "noReplyMention":{
+        "description":"Disables reply pings by default",
+        "settings":{
+            "doNotPingListed":"Do not ping the listed users / roles",
+            "inverseShiftReply":"Invert Discord's shift replying behaviour (enable to make shift reply mention user)",
+            "onlyPingListed":"Only ping the listed users / roles",
+            "roleList":"Lista de cargos para permitir ou isentar pings (separados por vírgulas ou espaços)",
+            "shouldPingListed":"Behaviour",
+            "userList":"Lista de usuários para permitir ou isentar pings (separados por vírgulas ou espaços)"
+        }
+    },
+    "noUnblockToJump":{
+        "description":"Permite que você acesse mensagens de usuários bloqueados ou ignorados e possíveis spammers sem desbloqueá-los."
+    },
+    "noticesAPI":{
+        "description":"Corrige avisos sendo ignorados automaticamente"
+    },
+    "notificationVolume":{
+        "settings":{
+            "notificationVolume":"Volume da Notificação"
+        }
+    },
+    "onePingPerDM":{
+        "description":"Se um usuário enviar mensagens não lidas em DMs várias vezes, você receberá apenas um ping de áudio.",
+        "settings":{
+            "channelToAffectOptions":{
+                "groupDm":"Grupos de DMs"
+            }
+        }
+    },
+    "overrideForumDefaults":{
+        "description":"Permite que você substitua o layout/ordem de classificação padrão do fórum. Você ainda pode alterá-lo individualmente por canal",
+        "layouts":{
+            "gallery":"Galeria",
+            "list":"Lista"
+        },
+        "name":"OverrideForumDefaults",
+        "settings":{
+            "defaultLayout":"Which layout to use as default",
+            "defaultSortOrder":"Which sort order to use as default"
+        },
+        "sortOrders":{
+            "datePosted":"Date Posted",
+            "recentlyActive":"Recently Active"
+        }
+    },
+    "pauseInvitesForever":{
+        "description":"Brings back the option to pause invites indefinitely that stupid Discord removed.",
+        "name":"PauseInvitesForever",
+        "pauseIndefinitely":"Pause Indefinitely."
+    },
+    "permissionsViewer":{
+        "noPermissions":"No permissions to display!",
+        "owner":"owner",
+        "permissions":"Permissões",
+        "permissionsTitle":"{header} Permissions",
+        "roleOptions":"Role Options",
+        "settings":{
+            "highestRole":"Highest Role",
+            "lowestRole":"Cargo mais baixo",
+            "permissionsSortOrder":"The sort method used for defining which role grants a user a certain permission"
+        },
+        "unknownRole":"Unknown Role",
+        "unknownUser":"Unknown User",
+        "userOptions":"User Options",
+        "viewPermissions":"View Permissions"
+    },
+    "petpet":{
+        "commands":{
+            "petpet":{
+                "name":"petpet",
+                "options":{
+                    "delay":"O atraso entre cada frame em ms. Arredondado para os 10ms mais próximos. O padrão é o valor mínimo de 20.",
+                    "resolution":"Resolução do GIF. Padrão é 120. Se você colocar um número absurdo e travar o Discord, a culpa é sua."
+                }
+            }
+        },
+        "description":"Adiciona um comando de barra /petpet para criar GIFs de carinho (headpet) a partir de qualquer imagem"
+    },
+    "pictureInPicture":{
+        "description":"Adiciona picture-in-picture aos vídeos (ao lado do botão de Download)",
+        "settings":{
+            "loop":"Whether to make the PiP video loop or not"
+        },
+        "togglePip":"Toggle Picture in Picture"
+    },
+    "pinDms":{
+        "addCategory":"Adicionar Categoria",
+        "color":"Cor",
+        "create":"Criar",
+        "deleteCategory":"Excluir Categoria",
+        "editCategory":"Edit Category",
+        "editCategoryTitle":"Edit Category",
+        "moveDown":"Mover para baixo",
+        "moveUp":"Mover para cima",
+        "name":"Nome",
+        "newCategory":"Nova Categoria",
+        "pinCategory":"Fixar Categoria {index}",
+        "pinDms":"Fixar DMs",
+        "save":"Save",
+        "settings":{
+            "canCollapseDmSection":"Permitir que a seção de DMs não categorizadas seja colapsável",
+            "customOrder":"Custom (right click channels to reorder)",
+            "dmSectionCollapsed":"Collapse DM section",
+            "mostRecentMessage":"Mensagem mais recente",
+            "pinOrder":"Which order should pinned DMs be displayed in?"
+        },
+        "unpinDm":"Unpin DM"
+    },
+    "platformIndicators":{
+        "consoleIcons":{
+            "equicord":"Equicord",
+            "suncord":"Suncord",
+            "vencord":"Vencord"
+        },
+        "description":"Adiciona indicadores de plataforma (Desktop, Celular, Web...) aos usuários",
+        "platforms":{
+            "console":"Console",
+            "desktop":"Desktop",
+            "mobile":"Mobile",
+            "web":"Web"
+        },
+        "settings":{
+            "colorMobileIndicator":"Whether to make the mobile indicator match the color of the user status.",
+            "consoleIcon":"What console icon to use",
+            "list":"Show indicators in the member list",
+            "messages":"Show indicators inside messages",
+            "profiles":"Show indicators in user profiles",
+            "showBots":"Whether to show platform indicators on bots"
+        }
+    },
+    "previewMessage":{
+        "description":"Permite que você visualize sua mensagem antes de enviá-la.",
+        "name":"PreviewMessage",
+        "previewMessage":"Preview Message"
+    },
+    "quickActions":{
+        "editQuickCSS":"Editar QuickCSS",
+        "notificationLog":"log de Notificações",
+        "openSettings":"Abrir pasta de configurações",
+        "relaunchDiscord":"Reiniciar o Discord",
+        "title":"Ações Rápidas",
+        "viewSource":"Ver código-fonte"
+    },
+    "quickMention":{
+        "description":"Adiciona um botão de menção rápida à barra de ações de mensagem",
+        "label":"Menção Rápida"
+    },
+    "quickReply":{
+        "settings":{
+            "shouldMention":"Marcar na resposta por padrão",
+            "shouldMentionOptions":{
+                "disabled":"Desativado",
+                "enabled":"Ativado"
+            }
+        }
+    },
+    "readAllNotificationsButton":{
+        "description":"Read all server notifications with a single button click!",
+        "name":"ReadAllNotificationsButton",
+        "readAll":"Read All"
+    },
+    "relationshipNotifier":{
+        "description":"Notifica você quando um amigo, chat em grupo ou servidor te remove.",
+        "friendRemoved":"{username} removed you as a friend.",
+        "friendRequestRemoved":"Um pedido de amizade de {username} foi removido.",
+        "groupRemoved":"You were removed from the group {name}.",
+        "notificationTitle":"Notificador de Relacionamentos",
+        "offlineFriendRemoved":"Você não é mais amigo de {username}.",
+        "offlineFriendRequestRevoked":"A solicitação de amizade de {username} foi revogada.",
+        "offlineGroupRemoved":"Você não está mais no grupo {name}.",
+        "offlineServerRemoved":"Você não está mais no servidor {name}.",
+        "serverRemoved":"You were removed from the server {name}.",
+        "settings":{
+            "friendRequestCancels":"Notify when a friend request is cancelled",
+            "friends":"Notify when a friend removes you",
+            "groups":"Notify when removed from a group chat",
+            "notices":"Mostra também um aviso na parte superior da tela quando removido (use isso se não quiser perder nenhuma notificação).",
+            "offlineRemovals":"Notify you when starting discord if you were removed while offline.",
+            "servers":"Notify when removed from a server"
+        }
+    },
+    "replaceGoogleSearch":{
+        "description":"Replaces the Google search with different Engine(s)",
+        "searchText":"Search Text",
+        "searchWith":"Search with {engine}",
+        "settings":{
+            "customEngine":"Custom Engine",
+            "customEngineName":"Name of the custom search engine",
+            "customEngineURL":"The URL of your Engine",
+            "off":"Off",
+            "replacementEngine":"Replace with a specific search engine instead of adding a menu"
+        }
+    },
+    "reverseImageSearch":{
+        "all":"Todos",
+        "description":"Adiciona o ImageSearch aos menus de contexto das imagens",
+        "name":"ReverseImageSearch",
+        "searchImage":"Search Image"
+    },
+    "reviewDB":{
+        "appeal":"Appeal",
+        "areYouSure":"Você tem certeza?",
+        "block":"Bloquear",
+        "blockedUser":"Você bloqueou este usuário",
+        "blockedUsers":"Usuários Bloqueados",
+        "confirmBlock":"Você realmente quer bloquear esse usuário? Eles não poderão deixar mais avaliações no seu perfil. Você pode desbloquear usuários nas configurações do plugin.",
+        "confirmDelete":"Você realmente deseja deletar esta avaliação?",
+        "confirmReport":"Você realmente deseja reportar está avaliação?",
+        "delete":"Excluir",
+        "failedToFetchBlocks":"Failed to fetch blocks: {error}",
+        "mustBeLoggedInBlock":"Você tem que estar logado para bloquear usuários.",
+        "mustBeLoggedInDelete":"Você tem que estar logado para deletar avaliações.",
+        "mustBeLoggedInReport":"Você tem que estar logado para reportar avaliações.",
+        "nevermind":"Deixa pra lá",
+        "newReviews":"Você tem novas avaliações no seu perfil!",
+        "noBlockedUsers":"Sem usuários bloqueados.",
+        "notLoggedIn":"Você não esta logado no ReviewDB!",
+        "ok":"Ok",
+        "readMore":"Ler mais",
+        "report":"Reportar",
+        "settings":{
+            "authorize":"Autorizar com ReviewDB",
+            "hideBlockedUsers":{
+                "description":"Esconder avaliações de usuários bloqueados"
+            },
+            "hideTimestamps":{
+                "description":"Esconder data e hora em avaliações"
+            },
+            "manageBlockedUsers":"Gerenciar Usuários Bloqueados",
+            "notifyReviews":{
+                "description":"Notificar sobre novas avaliações na inicialização"
+            },
+            "showWarning":{
+                "description":"Exibir aviso para ser respeitoso no topo da lista de avaliações"
+            },
+            "supportDevelopment":"Suporte ao desenvolvimento do ReviewDB",
+            "supportServer":"ReviewDB Servidor de Suporte",
+            "website":"ReviewDB website"
+        },
+        "system":"Sistema",
+        "unblockUser":"Desbloquear usuário",
+        "viewReviews":"Ver Avaliações"
+    },
+    "roleColorEverywhere":{
+        "description":"Adiciona a cor do cargo mais alto onde for possível"
+    },
+    "secretRingTone":{
+        "description":"Sempre toca a versão secreta do toque do Discord (exceto durante eventos especiais de toques).",
+        "settings":{
+            "onlySnow":"Tocar apenas o Tema de Snow Halation"
+        }
+    },
+    "seeSummaries":{
+        "description":"Enables Discord's experimental Summaries feature on every server, displaying AI generated summaries of conversations",
+        "name":"Summaries",
+        "settings":{
+            "summaryExpiryThresholdDays":"The time in days before a summary is removed. Note that only up to 50 summaries are kept per channel"
+        }
+    },
+    "sendTimestamps":{
+        "description":"Send timestamps easily via chat box button & text shortcuts. Read the extended description!",
+        "extendedDescription":{
+            "examples":"Examples:",
+            "quickSend":"To quickly send time-only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message",
+            "seeBelow":"See below for examples. If you need anything more specific, use the Date button in the chat bar!"
+        },
+        "insert":"Inserir",
+        "insertTimestamp":"Inserir Timestamp",
+        "preview":"Prévia",
+        "settings":{
+            "replaceMessageContents":"Replace timestamps in message contents"
+        },
+        "timestampFormat":"Formato de Timestamp",
+        "timestampPicker":"Timestamp Picker"
+    },
+    "serverInfo":{
+        "description":"Permite visualizar informações sobre um servidor",
+        "ui":{
+            "blockedUsers":"Usuários Bloqueados",
+            "channels":"Canais",
+            "friends":"Amigos",
+            "joinedAt":"Entrou em",
+            "serverBoosts":"Impulsos do Servidor",
+            "verificationLevel":"Nível de verificação"
+        }
+    },
+    "serverListAPI":{
+        "description":"API necessária para plugins que modificam a lista de servidores"
+    },
+    "serverListIndicators":{
+        "description":"Adiciona contagem de amigos online ou contagem de servidores na lista de servidores",
+        "friends":"Amigos",
+        "servers":"Servidores",
+        "settings":{
+            "mode":"Modo",
+            "modeBoth":"Both server and online friend counts",
+            "modeOnlyFriends":"Only online friend count",
+            "modeOnlyServers":"Only server count",
+            "useCompact":"Makes the indicator appear with only text"
+        },
+        "tooltipBoth":"{friends} Amigos, {servers} Servidores",
+        "tooltipFriends":"{count} Amigos",
+        "tooltipServers":"{count} Servidores"
+    },
+    "settings":{
+        "changelog":{
+            "alreadyUpToDate":"Já atualizado com o repositório",
+            "checkYourConnection":"Falha ao conectar-se ao repositório. Verifique sua conexão com a Internet",
+            "checkYourInternet":"Certifique-se de que você tem uma conexão à Internet e tente novamente",
+            "codeChanges_one":"Alterações no código ({count} commit)",
+            "codeChanges_other":"Alterações no código ({count} commits)",
+            "codeChanges_zero":"Sem alterações no código",
+            "emptyChangelog":"Nenhum commit disponível além da sua versão atual. Clique em “Buscar no repositório” para verificar novas alterações",
+            "failedToFetchRepo":"Falha ao buscar no repositório",
+            "failedToRetrieve":"Falha ao obter – verifique o console",
+            "failedtoFetchCommits":"Não foi possível buscar commits do repositório",
+            "fetchRepo":"Buscar no repositório",
+            "foundCommits_one":"Encontrado {count} commit no repositório",
+            "foundCommits_other":"Encontrados {count} commits no repositório",
+            "foundCommits_zero":"Sem novos commits",
+            "info":"Verifique o repositório em busca de novos commits, atualizações de plugins e alterações de código. Isso comparará sua versão atual com a última disponível e mostrará o que há de novo",
+            "loggedCommits":"Commits registrados desde sua última atualização",
+            "manager":{
+                "days_one":"{count} dia atrás",
+                "days_other":"{count} dias atrás",
+                "hours_one":"{count} hora atrás",
+                "hours_other":"{count} horas atrás",
+                "minutes_one":"{count} minuto atrás",
+                "minutes_other":"{count} minutos atrás"
+            },
+            "missingRepoInfo":"Falha ao obter informações do repositório",
+            "newPluginsSection":{
+                "newPluginsCount":"Novos Plugins ({count})",
+                "numMorePlugins_one":"+{count} mais plugin",
+                "numMorePlugins_other":"+{count} mais plugins",
+                "recentlyAddedPlugins":"Os seguintes plugins foram adicionados nas atualizações recentes:"
+            },
+            "previousSessions":"Um histórico de suas sessões de atualização anteriores com o histórico de commits e alterações de plugins. Clique em uma log para expandi-la e ver os detalhes",
+            "recentChanges":"Alterações recentes",
+            "repository":"Repositório",
+            "title":"Registro de alterações",
+            "upToDate":"Repositório atualizado",
+            "upToDateLocalCopy":"O repositório está atualizado com sua cópia local",
+            "updateCard":{
+                "commits_one":" • {count} commit disponível",
+                "commits_other":" • {count} commits disponíveis",
+                "commits_zero":" • Sem novos commits",
+                "newPluginsCount":" • {plugins} novos plugins",
+                "newSettingInPlugin":"Nova configuração em {pluginName}",
+                "newSettings":"Novas configurações",
+                "newSettingsCount":" • {settings} novas configurações",
+                "outOfDate":"Verificação do repositório: {fromHash} → {toHash}",
+                "upToDate":"Verificação do repositório: {fromHash} (atualizado)",
+                "update":"Atualização: {fromHash} → {toHash}",
+                "updatedPlugins":"Plugins atualizados",
+                "updatedPluginsCount":" • {plugins} plugins atualizados"
+            },
+            "updateLogs_one":"Registros de atualização ({count})",
+            "updateLogs_other":"Atualizar registros ({count} registros)",
+            "updateLogs_zero":"Nenhum registro de atualização",
+            "updatedPluginsCount":"Plugins atualizados ({plugins})",
+            "viewRecentChanges":"Estes são os novos commits e atualizações de plugins desde a sua última versão. Você pode ver quais recursos foram adicionados, erros corrigidos e quais plugins receberam atualizações",
+            "whereUpdatesFetch":"Este é o repositório do GitHub de onde o Equicord busca atualizações"
+        },
+        "disableMinSize":{
+            "description":"Permite que a janela do Discord seja redimensionada para um tamanho menor que o mínimo padrão. Útil para gerenciadores de janelas em mosaico (tiling) ou telas pequenas.",
+            "title":"Desativar tamanho mínimo da janela"
+        },
+        "enableReactDevtools":{
+            "description":"Ativar a extensão React Developer Tools para debugar os componentes React do Discord. Útil para o desenvolvimento de plugins.",
+            "title":"Habilitar as Ferramentas de Desenvolvedor React"
+        },
+        "frameless":{
+            "description":"Remover a moldura nativa da janela para uma aparência mais limpa. Você ainda poderá mover a janela arrastando a área da barra de título.",
+            "title":"Desativar a moldura da janela"
+        },
+        "hint":"Dica: você pode mudar a posição desta seção nas <0>configurações do plugin Settings</0>!",
+        "macosVibrancyStyle":{
+            "placeholder":"Estilo de vibração da janela",
+            "title":"Estilo de vibração da janela (requer reinicialização)"
+        },
+        "notification":{
+            "logButton":"Ver log de notificações",
+            "settingsButton":"Configurações de Notificação"
+        },
+        "plugins":{
+            "contributorModal":{
+                "contributorInfo":{
+                    "noPlugins":"Esta pessoa não criou nenhum plugins. Provavelmente <0>contribuiu</0> para o Equicord de outras maneiras!",
+                    "plugins_one":"Essa pessoa <0>contribuiu</0> para {count} plugin!",
+                    "plugins_other":"Esta pessoa <0>contribuiu</0> para {count} plugins!"
+                }
+            },
+            "noDescription":"Não há descrição disponível",
+            "pluginRequiredBy":"Este plugin é necessário por: {pluginNames}",
+            "requiredToFunction":"Este plugin é necessário para o Equicord funcionar"
+        },
+        "restartRequired":{
+            "body":"É necessário reiniciar para aplicar esta alteração",
+            "cancel":"Depois!",
+            "confirm":"Reiniciar agora",
+            "plugins":"Os seguintes plugins requerem uma reinicialização:",
+            "title":"Reinicialização necessária"
+        },
+        "title":"Configurações",
+        "transparent":{
+            "description":"Torne a janela do Discord transparente. É necessário um tema que suporte transparência, caso contrário, esta opção não terá efeito.",
+            "note":"Isso impedirá que a janela seja redimensionada.",
+            "noteWindows":"Isso impedirá que a janela seja redimensionada e evitará que você a encaixe nas bordas da tela",
+            "title":"Ativar transparência de janela"
+        },
+        "useQuickCss":{
+            "description":"Carrega CSS personalizado do editor QuickCSS. Isso permite que você personalize a aparência do Discord com seus próprios estilos.",
+            "title":"Habilitar CSS personalizado"
+        },
+        "winCtrlQ":{
+            "description":"Adiciona Ctrl+Q como um atalho de teclado para fechar o Discord. Isso fornece uma alternativa ao Alt+F4 para fechar rapidamente o aplicativo.",
+            "title":"Registrar Ctrl+Q como atalho para fechar o Discord"
+        },
+        "winNativeTitleBar":{
+            "description":"Substitui a barra de título personalizada do Discord pela barra de título padrão do Windows. Isso pode melhorar a compatibilidade com algumas ferramentas de gerenciamento de janelas.",
+            "title":"Use a barra de título nativa do Windows em vez da barra personalizada do Discord"
+        }
+    },
+    "settingsSync":{
+        "failedToImport":"Falha ao importar configurações: {e}",
+        "imported":"Configurações importadas com sucesso. Reinicie para aplicar as alterações!"
+    },
+    "shikiCodeblocks":{
+        "description":"Traz blocos de código no estilo vscode para o Discord, com tecnologia Shiki.",
+        "settings":{
+            "bgOpacity":"Opacidade do fundo",
+            "customTheme":"Um link para um tema personalizado do vscode",
+            "theme":"Temas Padrão",
+            "tryHljs":"Usar o marcador e o tema padrão mais leve do Discord.",
+            "tryHljsOptions":{
+                "always":"Sempre",
+                "never":"Nunca",
+                "preferHljs":"Preferir Highlight.js em vez do Shiki",
+                "preferShiki":"Preferir Shiki em vez do Highlight.js"
+            },
+            "useDevIcon":"Como exibir ícones de idioma em blocos de código",
+            "useDevIconOptions":{
+                "colored":"Colorido",
+                "colorless":"Sem cor",
+                "disabled":"Desativado"
+            }
+        }
+    },
+    "showConnections":{
+        "description":"Show connected accounts in user popouts",
+        "settings":{
+            "compact":"Compact",
+            "cozy":"Confortável",
+            "iconSize":"Icon size (px)",
+            "iconSpacing":"Icon margin",
+            "roomy":"Roomy"
+        }
+    },
+    "showHiddenChannels":{
+        "allowedUsersAndRoles":"Usuários e cargos permitidos:",
+        "archiveDuration":"Default inactivity duration before archiving {type}: {duration}",
+        "availableTags":"Available tags:",
+        "bitrate":"Bitrate: {bitrate} bits",
+        "cannotSeeMessages":"You can not see the {type} of this channel.",
+        "channelTypes":{
+            "announcement":"anúncio",
+            "forum":"fórum",
+            "message":"mensagem",
+            "messages":"mensagens",
+            "post":"postar",
+            "posts":"posts",
+            "stage":"stage",
+            "text":"texto",
+            "thread":"tópico",
+            "threads":"tópicos",
+            "voice":"voz"
+        },
+        "defaultLayout":"Default layout: {layout}",
+        "defaultReactionEmoji":"Default reaction emoji:",
+        "defaultSortOrder":"Default sort order: {order}",
+        "description":"Mostra canais que você não tem permissão para ver",
+        "forumLayouts":{
+            "gridView":"Visualização em galeria",
+            "listView":"Visualização em lista",
+            "notSet":"Not set"
+        },
+        "hiddenChannel":"This is a hidden {type} channel",
+        "hiddenChannelTooltip":"Canal Oculto",
+        "hideAllowedUsersAndRoles":"Hide Allowed Users and Roles",
+        "lastMessageCreated":"Último {type} criado:",
+        "lastMessagePin":"Última mensagem fixada:",
+        "lockedChannel":"This is a locked {type} channel",
+        "nsfw":"NSFW",
+        "permissionDetails":"Permission Details",
+        "region":"Region: {region}",
+        "regionAutomatic":"Automatic",
+        "requireTag":"Posts on this forum require a tag to be set.",
+        "seeGuidelines":" However you may see its guidelines:",
+        "settings":{
+            "channelStyle":{
+                "classic":"Clássico",
+                "description":"O estilo usado para exibir canais ocultos.",
+                "muted":"Silenciado",
+                "mutedAndShowUnreads":"Silenciado e mostrar não lidos",
+                "showUnreads":"Mostra Não lidos"
+            },
+            "defaultAllowedUsersAndRolesDropdownState":{
+                "description":"Se o dropdown de usuários e cargos permitidos em canais ocultos deve estar aberto por padrão"
+            },
+            "showMode":{
+                "description":"O modo usado para exibir canais ocultos.",
+                "eyeIconRight":"Ícone de olho na direita",
+                "lockIcon":"Ícone de cadeado substituindo o ícone do canal",
+                "lockIconRight":"Ícone de cadeado à direita"
+            }
+        },
+        "slowmode":"Slowmode: {duration}",
+        "sortOrders":{
+            "creationDate":"Creation date",
+            "latestActivity":"Última atividade"
+        },
+        "threadSlowmode":"Default thread slowmode: {duration}",
+        "videoQuality":{
+            "720p":"720p",
+            "automatic":"Automatic"
+        },
+        "videoQualityMode":"Modo de qualidade de vídeo: {mode}",
+        "viewAllowedUsersAndRoles":"View Allowed Users and Roles"
+    },
+    "showHiddenThings":{
+        "description":"Exibe várias coisas ocultas e exclusivas para moderadores, independentemente das permissões.",
+        "settings":{
+            "showInvitesPaused":"Exibir dica de convites pausados na lista de servidores.",
+            "showModView":"Mostra o menu de moderador de membro em todos os servidores.",
+            "showTimeouts":"Mostrar ícones de castigo de membros no chat."
+        }
+    },
+    "showMeYourName":{
+        "addNickname":"Adicionar apelido SMYN",
+        "cancel":"Cancel",
+        "changeNickname":"Change SMYN Nickname",
+        "modalDescription":"Set a custom SMYN nickname for this user. Make use of it by specifying {custom} in the SMYN template settings.",
+        "nicknameLabel":"Apelido SMYN",
+        "resetNickname":"Redefinir Apelido SMYN",
+        "save":"Save",
+        "settings":{
+            "animateGradients":"For the non-primary names, if the role has a gradient, animate it. This is disabled by \"Ignore Gradients\" and reduced motion.",
+            "customNameColor":"The color to use for the custom name you assigned a user if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+            "discriminators":"Append discriminators to usernames for bots. Discriminators were deprecated for users, but are still used for bots. By default, a bot's username is equivalent to a user's global name, therefore multiple bots can have the same username. Appending discriminators makes them unique again.",
+            "displayNameColor":"The color to use for the display name if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+            "friendNameColor":"The color to use for a friend's nickname if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+            "hideDefaultAtSign":"Hide the default \"@\" symbol before the name in mentions and replies. Only applied if either feature is enabled.",
+            "ignoreFonts":"For the non-primary names, use Discord's default fonts regardless of the user's custom nitro font.",
+            "ignoreGradients":"For the non-primary names, if the role has a gradient, ignore it in favor of the color set below.",
+            "includedNames":"The order to display usernames, display names, nicknames, friend names, and custom names. Use the following placeholders: {user}, {display}, {nick}, {friend}, {custom}. You can provide multiple name options to use as fallbacks if one is unavailable by separating them with commas as such: {custom, friend, nick}. You can have up to three prefixes and three suffixes per name.",
+            "memberList":"Display the first available name listed in your custom name format in the member list.",
+            "mentions":"Display custom name format in mentions.",
+            "messages":"Display custom name format in messages.",
+            "nameSeparator":"The separator to use between names. The default is a single space.",
+            "nicknameColor":"The color to use for the nickname if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+            "profilePopout":"Display the first available name listed in your custom name format in profile popouts.",
+            "reactions":"Display the first available name listed in your custom name format in reaction tooltips, and the full name in reaction popouts.",
+            "removeDuplicates":"If any of the names are equivalent, remove them, leaving only the unique names.",
+            "replies":"Display custom name format in replies.",
+            "truncateAllNamesWithStreamerMode":"Truncate all names, not just usernames, while in Streamer Mode.",
+            "usernameColor":"The color to use for the username if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
+            "voiceChannels":"Display the first available name listed in your custom name format in voice channels."
+        }
+    },
+    "showTimeoutDuration":{
+        "description":"Shows how much longer a user's timeout will last, either in the timeout icon tooltip or next to it",
+        "displayStyleDescription":"How to display the timeout duration",
+        "inTooltip":"In the Tooltip",
+        "nextToIcon":"Ao lado do ícone de castigo",
+        "timeoutRemaining":"timeout remaining"
+    },
+    "silentMessageToggle":{
+        "description":"Adiciona um botão à barra de bate-papo para alternar o envio de uma mensagem silenciosa.",
+        "disableSilentMessage":"Disable Silent Message",
+        "enableSilentMessage":"Enable Silent Message",
+        "settings":{
+            "autoDisable":"Automatically disable the silent message toggle again after sending one",
+            "persistChannels":"Persistência entre canais",
+            "persistNone":"Don't persist (reset on channel change)",
+            "persistRestarts":"Persistência entre canais e reinicializações",
+            "persistState":"How to persist the silent message toggle state"
+        }
+    },
+    "silentTyping":{
+        "clickActions":{
+            "openPluginSettings":"Open Plugin Settings",
+            "toggleTypingGlobally":"Toggle Typing Globally",
+            "toggleTypingInChannel":"Toggle Typing in Channel",
+            "toggleTypingInGuild":"Toggle Typing in Guild"
+        },
+        "command":{
+            "chatBarIndicatorsOption":"Hide other users' typing indicators from above the chat bar.",
+            "chatContextMenuOption":"Show a dropdown in the chat context menu to toggle plugin settings on the go.",
+            "chatIconOption":"Show an icon in the chat bar for toggling the plugin on the go.",
+            "defaultHiddenOption":"Whether to hide typing in DMs/channels/guilds by default or not.",
+            "description":"Hide your typing indicator from chat.",
+            "membersListIndicatorsOption":"Hide other users' typing indicators from the members list.",
+            "toggleChannel":"Canal",
+            "toggleGlobal":"Global",
+            "toggleGuild":"Servidor",
+            "toggleOption":"Toggle functionality globally, for the channel, or for the guild."
+        },
+        "contextMenu":{
+            "chatBarIndicators":"Chat Bar Indicators",
+            "chatIcon":"Chat Icon",
+            "defaultHidden":"Oculto por padrão",
+            "enabled":"Ativado",
+            "membersListIndicators":"Members List Indicators",
+            "silentTyping":"Silent Typing"
+        },
+        "noChanges":"No changes made to silent typing settings.",
+        "settings":{
+            "chatContextMenu":"Show a dropdown in the chat context menu to modify plugin settings on the go.",
+            "chatIcon":"Show an icon in the chat bar for modifying the plugin on the go.",
+            "chatIconLeftClickAction":"What to do when left clicking the chat icon.",
+            "chatIconMiddleClickAction":"What to do when middle clicking the chat icon.",
+            "chatIconRightClickAction":"What to do when right clicking the chat icon.",
+            "defaultHidden":"If enabled, the plugin will hide your typing from others in any DMs/channels/guilds not listed in \"Disabled Locations\" below. If disabled, the plugin will show your typing to others for any DMs/channels/guilds not listed in \"Enabled Locations\" below.",
+            "disabledLocations":"Desativar funcionalidade para estes IDs. Aceita uma lista separada por vírgulas de IDs de DM, IDs de canais e IDs de servidores. Usado apenas se \"Oculto por padrão\" estiver ativado.",
+            "enabledGlobally":"Toggle functionality of your own typing indicator globally.",
+            "enabledLocations":"Enable functionality for these IDs. Accepts a comma separated list of DM IDs, channel IDs, and guild IDs. Only used if \"Default Hidden\" is disabled.",
+            "hideChatBoxTypingIndicators":"Hide other users' typing indicators from above the chat bar.",
+            "hideMembersListTypingIndicators":"Hide other users' typing indicators from the members list."
+        },
+        "settingsUpdated":"Silent typing settings updated.",
+        "typingHidden":"Typing Hidden ({location})",
+        "typingVisible":"Typing Visible ({location})",
+        "typingVisibleGlobal":"Typing Visible (Global)"
+    },
+    "sortFriendRequests":{
+        "added":"Adicionado",
+        "description":"Sorts friend requests by date of receipt",
+        "settings":{
+            "showDates":"Show dates on friend requests"
+        }
+    },
+    "spotifyCrack":{
+        "description":"Ouvir junto gratuito, sem pausa automática no chat de voz, e permite que a atividade continue tocando ao ficar inativo",
+        "settings":{
+            "keepSpotifyActivityOnIdle":"Manter a atividade do Spotify em execução ao ficar ausente",
+            "noSpotifyAutoPause":"Desativar pausa automática do Spotify"
+        }
+    },
+    "spotifyShareCommands":{
+        "commands":{
+            "notListening":"Você não está ouvindo nenhuma música.",
+            "shareDescription":"Compartilhe seu {name} atual do Spotify no chat",
+            "trackNotFound":"Falha ao encontrar a música no Spotify."
+        },
+        "description":"Compartilhe sua música, álbum ou artista atual do Spotify via comandos de barra (/track, /album, /artist)"
+    },
+    "startupTimings":{
+        "description":"Adiciona tempos de inicialização ao menu Configurações",
+        "ui":{
+            "title":"Tempos de Inicialização"
+        }
+    },
+    "stickerPaste":{
+        "description":"Faz com que escolher uma figurinha no seletor de figurinhas a insira na caixa de chat em vez de enviar instantaneamente"
+    },
+    "streamerModeOnStream":{
+        "description":"Ativa automaticamente o modo streaming quando você compartilha sua tela no Discord."
+    },
+    "superReactionTweaks":{
+        "description":"Personalize o limite de Super Reações animada ao mesmo tempo, e super reagir por padrão",
+        "settings":{
+            "superReactByDefault":"O seletor de reações será padronizado para Super Reações.",
+            "superReactionPlayingLimit":"Máximo de Super Reações animadas ao mesmo tempo. 0 para desativar Super Reações",
+            "unlimitedSuperReactionPlaying":"Remove o limite de Super Reações animadas ao mesmo tempo"
+        }
+    },
+    "tabs":{
+        "settings":"Configurações do Equicord"
+    },
+    "textReplace":{
+        "find":"Find",
+        "messageWithRules":"Message with rules applied",
+        "onlyIfIncludes":"Only if includes",
+        "replace":"Substituir",
+        "scope.allMessages":"Apply to all messages",
+        "scope.myMessages":"Apply to your messages (visible to everyone)",
+        "scope.othersMessages":"Apply to others' messages (only visible to you)",
+        "testRules":"Test Rules",
+        "typeMessage":"Type a message",
+        "usingRegex":"Using Regex",
+        "usingString":"Using String"
+    },
+    "themeAttributes":{
+        "description":"Adiciona atributos de dados a vários elementos para fins de personalização de temas."
+    },
+    "translate":{
+        "autoTranslate":"Auto Translate",
+        "autoTranslateEnabled":{
+            "body":"You just enabled Auto Translate! Any message <0>will automatically be translated</0> before being sent.",
+            "title":"Tradução Automática do Equicord Ativada"
+        },
+        "autoTranslateEnabledLabel":"Tradução Automática Ativada",
+        "disableAutoTranslate":"Desativar Tradução Automática",
+        "dontShowAgain":"Não mostrar novamente",
+        "gotIt":"Entendi",
+        "modalTitle":"Traduzir",
+        "openTranslateModal":"Open Translate Modal",
+        "selectLanguage":"Selecionar um idioma",
+        "translate":"Traduzir"
+    },
+    "typingIndicator":{
+        "description":"Adiciona um indicador se alguém estiver digitando em um canal.",
+        "settings":{
+            "animatedDots":"Pontos animados",
+            "avatars":"Avatares",
+            "avatarsAndDots":"Avatars and animated dots",
+            "includeBlockedUsers":"Whether to show the typing indicator for blocked users.",
+            "includeCurrentChannel":"Whether to show the typing indicator for the currently selected channel",
+            "includeIgnoredUsers":"Whether to show the typing indicator for ignored users.",
+            "includeMutedChannels":"Whether to show the typing indicator for muted channels.",
+            "indicatorMode":"How should the indicator be displayed?"
+        }
+    },
+    "typingTweaks":{
+        "andOthersTyping":"and {count} others are typing...",
+        "description":"Show avatars and role colours in the typing indicator",
+        "settings":{
+            "alternativeFormatting":"Show a more useful message when several users are typing",
+            "amITyping":"Shows you if other people can see you typing",
+            "showAvatars":"Show avatars in the typing indicator",
+            "showRoleColors":"Show role colors in the typing indicator"
+        }
+    },
+    "unindent":{
+        "description":"Remove a indentação inicial dos blocos de código"
+    },
+    "unlockedAvatarZoom":{
+        "description":"Permite dar mais zoom na ferramenta de corte de imagem ao alterar seu avatar",
+        "settings":{
+            "zoomMultiplier":"Multiplicador de zoom"
+        }
+    },
+    "unsuppressEmbeds":{
+        "description":"Permite desativar a supressão de embeds em mensagens",
+        "suppressEmbeds":"Suppress Embeds",
+        "unsuppressEmbeds":"Desativar supressão de embeds"
+    },
+    "userMessagesPronouns":{
+        "description":"Adiciona pronomes às mensagens de usuários no chat",
+        "settings":{
+            "pronounsFormat":"O formato dos pronomes no chat",
+            "pronounsFormatOptions":{
+                "capitalized":"Maiúsculo",
+                "lowercase":"Minúsculo"
+            },
+            "showSelf":"Ativa ou desativa a exibição de pronomes para você mesmo"
+        }
+    },
+    "userSettingsAPI":{
+        "description":"Corrige as UserSettings do Discord para expor seu grupo e nome"
+    },
+    "userVoiceShow":{
+        "cannotJoinChannel":"You cannot join the user's Voice Channel",
+        "description":"Shows an indicator when a user is in a Voice Channel",
+        "inVoiceChat":"Em Chat de Voz",
+        "settings":{
+            "showInMemberList":"Show a user's Voice Channel indicator in the member and DMs list",
+            "showInMessages":"Show a user's Voice Channel indicator in messages",
+            "showInUserProfileModal":"Show a user's Voice Channel indicator in their profile next to the name"
+        }
+    },
+    "usrbg":{
+        "description":"Displays user banners from USRBG, allowing anyone to get a banner without Nitro",
+        "getOwnBanner":"Obtenha seu próprio banner USRBG",
+        "settings":{
+            "nitroBanner":"banner Nitro",
+            "nitroFirst":"Banner to use if both Nitro and USRBG banners are present",
+            "usrbgBanner":"banner USRBG",
+            "voiceBackground":"Use USRBG banners as voice chat backgrounds"
+        }
+    },
+    "validReply":{
+        "description":"Corrige \"A mensagem não pôde ser carregada\" ao passar o mouse sobre a resposta"
+    },
+    "validUser":{
+        "description":"Corrige menções para usuários desconhecidos que aparecem como '@usuário-desconhecido' (passe o cursor sobre uma menção para corrigi-la)"
+    },
+    "vcDoubleClick":{
+        "description":"Junte-se a canais voz através de um duplo clique em vez de um clique único"
+    },
+    "vcNarrator":{
+        "customiseMessages":"You can customise the spoken messages below. You can disable specific messages by setting them to nothing",
+        "defaults":{
+            "deafen":"{{USER}} deafened",
+            "join":"{{USER}} joined",
+            "leave":"{{USER}} left",
+            "move":"{{USER}} moved to {{CHANNEL}}",
+            "mute":"{{USER}} muted",
+            "undeafen":"{{USER}} undeafened",
+            "unmute":"{{USER}} unmuted"
+        },
+        "description":"Announces when users join, leave, or move voice channels via narrator",
+        "linuxVoicesHelp":"Install speech-dispatcher or espeak and run Discord with the --enable-speech-dispatcher flag",
+        "noEnglishVoices":"You don't have any English voices installed, so the narrator might sound weird",
+        "noVoices":"No narrator voices found. ",
+        "osVoicesHelp":"Try installing some in the Narrator settings of your Operating System",
+        "placeholdersHelp":"The special placeholders <0>{{USER}}</0>, <1>{{DISPLAY_NAME}}</1>, <2>{{NICKNAME}}</2> and <3>{{CHANNEL}}</3> will be replaced with the user's name (nothing if it's yourself), the user's display name, the user's nickname on current server and the channel's name respectively",
+        "playExampleSounds":"Reproduzir exemplos de sons",
+        "settings":{
+            "deafenMessage":"Deafen Message (only self for now)",
+            "joinMessage":"Join Message",
+            "latinOnly":"Strip non latin characters from names before saying them",
+            "leaveMessage":"Mensagem de Saída",
+            "moveMessage":"Mover mensagem",
+            "muteMessage":"Mute Message (only self for now)",
+            "sayOwnName":"Say own name",
+            "speed":"Velocidade do narrador",
+            "undeafenMessage":"Undeafen Message (only self for now)",
+            "unmuteMessage":"Unmute Message (only self for now)",
+            "volume":"Volume do narrador"
+        },
+        "speechSynthesisNotSupported":"SpeechSynthesis not supported or no Narrator voices found. Thus, this plugin will not work. Check my Settings for more info"
+    },
+    "viewIcons":{
+        "description":"Torna avatares e banners em perfis de usuário clicáveis, adiciona as entradas Ver Ícone/Banner nos menus de contexto de usuário, servidor e canal de grupo.",
+        "settings":{
+            "formatDescription":"Choose the image format to use for non animated images. Animated images will always use .gif",
+            "imgSizeDescription":"The image size to use"
+        },
+        "viewAvatar":"View Avatar",
+        "viewBanner":"View Banner",
+        "viewIcon":"Ver Ícone",
+        "viewServerAvatar":"Ver Avatar do Servidor"
+    },
+    "viewRaw":{
+        "content":"Conteúdo",
+        "contentCopied":"Conteúdo copiado para a área de transferência!",
+        "copyJson":"Copy {type} JSON",
+        "copyRawContent":"Copiar Conteúdo raw",
+        "copyRawLeftViewRawRight":"Copiar Raw (clique com o botão esquerdo) / Ver Raw (clique com o botão direito)",
+        "data":"Dados",
+        "dataCopied":"{type} data copied to clipboard!",
+        "description":"Copie e visualize o conteúdo/dados raws de qualquer mensagem, canal ou servidor",
+        "settings":{
+            "clickMethodDescription":"Change the button to view the raw content/data of any message.",
+            "leftClick":"Clique com o botão esquerdo para ver o conteúdo raw.",
+            "rightClick":"Right click to view the raw content."
+        },
+        "viewRaw":"Ver Raw",
+        "viewRawLeftCopyRawRight":"View Raw (Left Click) / Copy Raw (Right Click)"
+    },
+    "voiceDownload":{
+        "description":"Adiciona um download às mensagens de voz. (Abre uma nova guia do navegador)",
+        "downloadVoiceMessage":"Download voice message"
+    },
+    "voiceMessages":{
+        "echoCancellation":"Cancelamento de Eco",
+        "failedToParse":"Failed to parse selected audio file: {error}",
+        "failedToUpload":"Falha ao enviar mensagem de voz",
+        "iosFix":"To fix it, first convert it to OggOpus, for example using the <0>convertio web converter</0>",
+        "iosWarning":"Voice Messages have to be OggOpus to be playable on iOS. This file is <0>{type}</0> so it will not be playable on iOS.",
+        "missingPermissions":"(Permissões Ausentes)",
+        "noiseSuppression":"Supressão de ruído",
+        "preview":"Prévia",
+        "recordModal":"Gravar Mensagem de Voz",
+        "send":"Enviar Mensagem de Voz",
+        "sending":"Enviando mensagem de voz... Por favor seja paciente",
+        "uploadFile":"Enviar Arquivo"
+    },
+    "volumeBooster":{
+        "description":"Permite que você defina o volume de usuário e de stream mais alto que o padrão",
+        "settings":{
+            "multiplier":"Multiplicador de volume"
+        }
+    },
+    "webContextMenus":{
+        "description":"Adiciona menus de contexto ausentes na versão web do Discord: Links e Imagens (Copiar/Abrir Link/Imagem), Área de Texto (Copiar, Cortar, Colar, Verificação Ortográfica)",
+        "settings":{
+            "addBack":"Adiciona de volta os menus de contexto do Discord para imagens, links e a barra de entrada de chat"
+        }
+    },
+    "webKeybinds":{
+        "description":"Adiciona combinações de teclas faltando na versão web do Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. Só funciona totalmente no Vesktop/Legcord, não dentro do seu navegador"
+    },
+    "webScreenShareFixes":{
+        "description":"Remove o limite de taxa de bits de 2500kbps em clientes de chromium e vesktop."
+    },
+    "whoReacted":{
+        "settings":{
+            "avatarClick":"Toggle clicking avatars in reactions"
+        }
+    },
+    "xsOverlay":{
+        "attachment":"anexo",
+        "botNotifications":"Permitir notificações de bots",
+        "callNotifications":"Permitir notificações de chamadas",
+        "channelPingColor":"Channel mention color",
+        "description":"Forwards discord notifications to XSOverlay, for easy viewing in VR",
+        "dmNotifications":"Permitir notificações de mensagens diretas",
+        "embed":"embed",
+        "groupDmNotifications":"Permitir notificações de Grupo de DM",
+        "helloFromVendor":"Hello from Vendor!",
+        "image":"imagem",
+        "incomingCall":"Incoming call",
+        "isCallingYou":"está ligando para você...",
+        "lengthBasedTimeout":"Extend duration with message length",
+        "opacity":"Notif opacity",
+        "pingColor":"User mention color",
+        "preferUDPDescription":"Enable if you use an older build of XSOverlay unable to connect through websockets. This setting is ignored on web.",
+        "reply":"resposta",
+        "sendTestNotification":"Send test notification",
+        "sentEmbeds":"sent message embed(s)",
+        "sentSticker":"sent a sticker",
+        "serverNotifications":"Permitir notificações do servidor",
+        "soundPath":"Som de notificação (padrão/aviso/erro)",
+        "sticker":"figurinha",
+        "testNotification":"This is a test notification! explode",
+        "timeout":"Duração da notificação (secs)",
+        "volume":"Volume",
+        "webSocketPort":"porta Websocket"
+    },
+    "youtubeAdblock":{
+        "description":"Bloqueie anúncios em embeds do YouTube e na atividade WatchTogether via AdGuard"
+    }
 }
