@@ -337,12 +337,22 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
     try {
         const isGuild = options.isGuildProfile ?? Boolean(guildId);
         if (isGuild && !guildId) return;
+        const currentUser = UserStore.getCurrentUser() as UserExtras & { id: string; };
+        const baseProfile = UserProfileStore.getUserProfile(currentUser.id);
+        const guildProfile = isGuild && guildId ? UserProfileStore.getGuildMemberProfile(currentUser.id, guildId) : null;
+        const equippedProfile = guildProfile ?? baseProfile;
         const current = await getCurrentProfile(guildId, {
             isGuildProfile: isGuild
         });
         const pendingChanges = (isGuild && guildId
             ? UserProfileSettingsStore.getPendingChanges(guildId)
             : UserProfileSettingsStore.getPendingChanges()) as PendingChanges | undefined;
+        const equippedAvatarDecoration = currentUser.avatarDecorationData ?? null;
+        const equippedProfileEffect = equippedProfile?.profileEffect ?? null;
+        const equippedNameplate = currentUser.collectibles?.nameplate ?? null;
+        const pendingAvatarDecoration = pendingChanges?.pendingAvatarDecoration ?? null;
+        const pendingProfileEffect = pendingChanges?.pendingProfileEffect ?? null;
+        const pendingNameplate = pendingChanges?.pendingNameplate ?? null;
         const setPending = (field: string, payload: Record<string, unknown>) => {
             const cleanPayload = Object.fromEntries(Object.entries(payload).filter(([, v]) => v !== undefined));
             if (!Object.keys(cleanPayload).length) return;
@@ -389,28 +399,55 @@ export async function loadPresetAsPending(preset: ProfilePreset, guildId?: strin
             }
         }
 
-        if (preset.avatarDecoration !== undefined && !avatarDecorationEq(
+        if (preset.avatarDecoration !== undefined
+            && !avatarDecorationEq(
+                preset.avatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
+                pendingAvatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined
+            )
+            && !avatarDecorationEq(
+                preset.avatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
+                equippedAvatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined
+            )
+            && !avatarDecorationEq(
             preset.avatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
             current.avatarDecoration as { skuId?: string | number | null; asset?: string | null; } | null | undefined
-        )) {
+            )) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 0, value: preset.avatarDecoration }
             });
         }
 
-        if (preset.profileEffect !== undefined && !collectibleEqBySku(
+        if (preset.profileEffect !== undefined
+            && !collectibleEqBySku(
+                preset.profileEffect as { skuId?: string | number | null; } | null | undefined,
+                pendingProfileEffect as { skuId?: string | number | null; } | null | undefined
+            )
+            && !collectibleEqBySku(
+                preset.profileEffect as { skuId?: string | number | null; } | null | undefined,
+                equippedProfileEffect as { skuId?: string | number | null; } | null | undefined
+            )
+            && !collectibleEqBySku(
             preset.profileEffect as { skuId?: string | number | null; } | null | undefined,
             current.profileEffect as { skuId?: string | number | null; } | null | undefined
-        )) {
+            )) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 1, value: preset.profileEffect }
             });
         }
 
-        if (preset.nameplate !== undefined && !nameplateEq(
+        if (preset.nameplate !== undefined
+            && !nameplateEq(
+                preset.nameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
+                pendingNameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined
+            )
+            && !nameplateEq(
+                preset.nameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
+                equippedNameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined
+            )
+            && !nameplateEq(
             preset.nameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined,
             current.nameplate as { skuId?: string | number | null; asset?: string | null; } | null | undefined
-        )) {
+            )) {
             setPending("COLLECTIBLES_ITEM", {
                 item: { type: 2, value: preset.nameplate }
             });
