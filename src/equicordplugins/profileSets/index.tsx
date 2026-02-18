@@ -48,7 +48,6 @@ export default definePlugin({
     start() {
         loadPresets("main");
     },
-    stop() { },
     renderPresetSection(section: PresetSection, guildId?: string) {
         return <PresetManager section={section} guildId={guildId} />;
     }
