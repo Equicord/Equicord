@@ -10,7 +10,9 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { DataStore } from "@api/index";
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import { Button, ErrorBoundary, Heading, TextButton } from "@components/index";
+import { Button, TextButton } from "@components/Button";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { Heading } from "@components/Heading";
 import mentionAvatars from "@plugins/mentionAvatars";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/index";

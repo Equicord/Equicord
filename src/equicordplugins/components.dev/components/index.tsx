@@ -75,6 +75,7 @@ import type {
     NumberBadgeProps,
     OpenModalOptions,
     PaginatorProps,
+    PremiumBadgeProps,
     ProgressBarProps,
     SearchBarProps,
     SimpleErrorBoundaryProps,
@@ -226,10 +227,27 @@ export const CircleBadge: React.ComponentType<CircleBadgeProps> = proxyLazy(() =
         !fn.toString().includes("premiumBadge")
     )
 );
+export const PremiumBadge: React.ComponentType<PremiumBadgeProps> = proxyLazy(() =>
+    getBadgeExport(fn => fn.toString().includes("premiumBadge"))
+);
 export const BadgeShapes = proxyLazy(() =>
     Object.values(BadgeModule).find(v => typeof v === "object" && (v as BadgeShapesType)?.ROUND) as BadgeShapesType ??
     { ROUND: "", ROUND_LEFT: "", ROUND_RIGHT: "", SQUARE: "" }
 );
+
+export const getBadgeWidthForValue: (count: number) => number = proxyLazy(() => {
+    for (const value of Object.values(BadgeModule)) {
+        if (typeof value === "function" && value.toString().includes("e<10?16:e<100")) return value as (count: number) => number;
+    }
+    return (count: number) => count < 10 ? 16 : count < 100 ? 22 : 30;
+});
+
+export const getBadgeCountString: (count: number) => string = proxyLazy(() => {
+    for (const value of Object.values(BadgeModule)) {
+        if (typeof value === "function" && value.toString().includes("e<1e3")) return value as (count: number) => string;
+    }
+    return (count: number) => count < 1000 ? `${count}` : `${Math.min(Math.floor(count / 1000), 9)}k+`;
+});
 
 const ToastsModule = findByPropsLazy("showToast", "popToast");
 export const Toasts: ToastsModule = proxyLazy(() => ({
