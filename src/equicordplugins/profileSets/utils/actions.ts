@@ -5,23 +5,61 @@
  */
 
 import { ProfilePreset } from "@vencord/discord-types";
+import { findStoreLazy } from "@webpack";
 
 import { getCurrentProfile } from "./profile";
-import { addPreset, movePresetInArray, PresetSection, presets, removePreset, replaceAllPresets, savePresetsData, updatePreset, type ProfilePresetEx } from "./storage";
+import { addPreset, movePresetInArray, presets, PresetSection, type ProfilePresetEx, removePreset, replaceAllPresets, savePresetsData, updatePreset } from "./storage";
+
+const UserProfileSettingsStore = findStoreLazy("UserProfileSettingsStore");
+
+function isImageInput(value: unknown): value is string | { imageUri: string; } {
+    if (typeof value === "string") return value.length > 0;
+    return typeof value === "object" && value != null && "imageUri" in value && typeof (value as { imageUri?: unknown; }).imageUri === "string";
+}
+
+function getFreshPendingAvatar(section: PresetSection, guildId?: string): string | null {
+    const pending = (section === "server" && guildId
+        ? UserProfileSettingsStore.getPendingChanges?.(guildId)
+        : UserProfileSettingsStore.getPendingChanges?.()) ?? {};
+    const pendingObj = pending as Record<string, unknown>;
+
+    const candidates = [
+        pendingObj.selectedAvatarRaw,
+        pendingObj.presetAvatarRaw,
+        pendingObj.pendingAvatar,
+        pendingObj.avatar,
+        pendingObj.selectedAvatarProcessed,
+        pendingObj.presetAvatarProcessed
+    ];
+    const selected = candidates.find(isImageInput);
+    if (!selected) return null;
+    return typeof selected === "string" ? selected : selected.imageUri;
+}
 
 export async function savePreset(name: string, section: PresetSection, guildId?: string) {
     const profile = await getCurrentProfile(guildId, { isGuildProfile: section === "server" });
+    const freshPendingAvatar = getFreshPendingAvatar(section, guildId);
+    const effectiveAvatar = freshPendingAvatar ?? profile.avatarDataUrl ?? null;
+
     const newPreset: ProfilePresetEx = {
         name,
         timestamp: Date.now(),
         ...profile,
+        avatarDataUrl: effectiveAvatar,
     };
     addPreset(newPreset);
     await savePresetsData(section);
 }
 
-export async function updatePresetField(index: number, field: keyof Omit<ProfilePreset, "name" | "timestamp">, value: any, section: PresetSection, guildId?: string) {
+export async function updatePresetField<K extends keyof Omit<ProfilePreset, "name" | "timestamp">>(
+    index: number,
+    field: K,
+    value: Omit<ProfilePreset, "name" | "timestamp">[K],
+    section: PresetSection,
+    guildId?: string
+) {
     if (index < 0 || index >= presets.length) return;
+    void guildId;
 
     const updatedPreset = {
         ...presets[index],
@@ -55,17 +93,14 @@ export async function renamePreset(index: number, newName: string, section: Pres
 }
 
 export function exportPresets(section: PresetSection) {
-    try {
-        const dataStr = JSON.stringify(presets, null, 2);
-        const dataBlob = new Blob([dataStr], { type: "application/json" });
-        const url = URL.createObjectURL(dataBlob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `profile-presets-${section}-${Date.now()}.json`;
-        link.click();
-        URL.revokeObjectURL(url);
-    } catch {
-    }
+    const dataStr = JSON.stringify(presets, null, 2);
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `profile-presets-${section}-${Date.now()}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
 }
 
 export type ImportDecision = "override" | "merge" | "cancel";
@@ -107,7 +142,8 @@ export async function importPresets(
 
             await savePresetsData(section);
             forceUpdate();
-        } catch {
+        } catch (error) {
+            void error;
         }
     };
     input.click();
