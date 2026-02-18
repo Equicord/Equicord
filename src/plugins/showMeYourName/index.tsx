@@ -1230,7 +1230,7 @@ export default definePlugin({
         toCSSProbe = document.createElement("div");
         convertToRGBCanvas = document.createElement("canvas");
         convertToRGBCanvas.width = convertToRGBCanvas.height = 1;
-        convertToRGBCtx = convertToRGBCanvas.getContext("2d");
+        convertToRGBCtx = convertToRGBCanvas.getContext("2d", { willReadFrequently: true });
         convertToRGBCache = new Map();
 
         const data = await DataStore.get<CustomNicknameData>("SMYNCustomNicknames");
