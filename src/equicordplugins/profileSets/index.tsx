@@ -10,36 +10,12 @@ import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
-import { FluxDispatcher, React } from "@webpack/common";
+import { React } from "@webpack/common";
 
 import { PresetManager } from "./components/presetManager";
 import { loadPresets, PresetSection } from "./utils/storage";
 
 export const cl = classNameFactory("vc-profile-presets-");
-
-const displayNameStylesSanitizer = (payload: Record<string, unknown>) => {
-    const styles = payload.displayNameStyles as Record<string, unknown> | null | undefined;
-    if (styles == null || typeof styles !== "object") return;
-
-    const fontId = styles.fontId ?? styles.font_id;
-    const effectId = styles.effectId ?? styles.effect_id;
-    const invalid =
-        typeof fontId !== "number"
-        || typeof effectId !== "number"
-        || !Number.isFinite(fontId)
-        || !Number.isFinite(effectId)
-        || fontId <= 0
-        || effectId <= 0;
-
-    if (!invalid) return;
-
-    const guildId = payload.guildId as string | undefined;
-    FluxDispatcher.dispatch({
-        type: "USER_PROFILE_SETTINGS_SET_PENDING_DISPLAY_NAME_STYLES",
-        ...(guildId ? { guildId } : {}),
-        displayNameStyles: null
-    });
-};
 export const settings = definePluginSettings({
     avatarSize: {
         type: OptionType.NUMBER,
@@ -71,11 +47,8 @@ export default definePlugin({
     ],
     start() {
         loadPresets("main");
-        FluxDispatcher.subscribe("USER_PROFILE_SETTINGS_SET_PENDING_DISPLAY_NAME_STYLES", displayNameStylesSanitizer);
     },
-    stop() {
-        FluxDispatcher.unsubscribe("USER_PROFILE_SETTINGS_SET_PENDING_DISPLAY_NAME_STYLES", displayNameStylesSanitizer);
-    },
+    stop() { },
     renderPresetSection(section: PresetSection, guildId?: string) {
         return <PresetManager section={section} guildId={guildId} />;
     }
