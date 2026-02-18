@@ -16,7 +16,7 @@
         }
     },
     "altKrispSwitch":{
-        "description":"Makes the Noise Suppression Popout switch between None and Krisp instead of Krisp and Standard"
+        "description":"גורם למתג הקופץ של הדיכוי רעשים להחליף מריק וKrisp לKrisp ורגיל"
     },
     "alwaysExpandProfiles":{
         "description":"Always expands profile popouts to the full modal"
@@ -62,19 +62,19 @@
         }
     },
     "bannersEverywhere":{
-        "description":"Displays banners in the member list ",
+        "description":"מציג באנרים ברשימת חברים ",
         "settings":{
-            "animate":"Animate banners",
-            "preferNameplate":"prefer nameplate over banner"
+            "animate":"באנרים באנימציה",
+            "preferNameplate":"לעדיף לוחית שם במקום באנר"
         }
     },
     "baseDecoder":{
-        "description":"Decode base64 content of any message and copy the decoded content.",
+        "description":"פענח תוכן base64 של כל הודעה והעתק את התוכן המפוענח.",
         "settings":{
-            "clickMethod":"Change the button to decode base64 content of any message.",
+            "clickMethod":"שנה את הכפתור כדי לפענח תוכן base64 של כל הודעה.",
             "clickMethodOptions":{
-                "left":"Left Click to decode the base64 content.",
-                "right":"Right click to decode the base64 content."
+                "left":"לחץ על הכפתור העכבר השמאלי כדי לפענח את תוכן base64.",
+                "right":"לחץ לחיצה ימנית כדי לפענח את תוכן base64"
             }
         },
         "ui":{
