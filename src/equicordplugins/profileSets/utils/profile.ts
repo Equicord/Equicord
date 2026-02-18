@@ -264,8 +264,8 @@ function customStatusEq(a: CustomStatus | null | undefined, b: CustomStatus | nu
         && String(a.expiresAtMs ?? "0") === String(b.expiresAtMs ?? "0");
 }
 
-function resolvePendingAvatar(pendingChanges): ImageInput {
-    if (pendingChanges) return null;
+function resolvePendingAvatar(pendingChanges: PendingChanges | null): ImageInput {
+    if (!pendingChanges) return null;
 
     const candidates: ImageInput[] = [
         pendingChanges.selectedAvatarRaw,
