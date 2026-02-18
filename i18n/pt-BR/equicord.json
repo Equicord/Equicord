@@ -280,7 +280,7 @@
     "characterCounter":{
         "description":"Adiciona um contador de caracteres na entrada de chat",
         "settings":{
-            "colorEffects":"Ativar ou desativar efeitos de cor para ficar perto do limite de caracteres"
+            "colorEffects":"Ativar ou desativar efeitos de cor ao se aproximar do limite de caracteres"
         }
     },
     "cleanChannelName":{
@@ -297,24 +297,24 @@
         "settings":{
             "blockedReplyDisplay":"O que deve ser exibido em vez da mensagem quando alguém responde a alguém que você ocultou",
             "blockedReplyDisplayOptions":{
-                "displayText":"Exibir texto informando que uma mensagem oculta foi respondida",
+                "displayText":"Exibe um texto informando que uma mensagem oculta foi respondida",
                 "hideReply":"Literalmente nada"
             },
             "guildBlackList":"Ids de servidores para desativar a funcionalidade em",
             "guildWhiteList":"Ids de servidores para ativar a funcionalidade em",
             "hideBlockedMessages":"Se as mensagens de usuários bloqueados devem ser totalmente ocultadas (igual ao antigo plugin noblockedmessages)",
-            "hideBlockedUsers":"Usuários bloqueados também devem estar ocultos em todos os lugares",
+            "hideBlockedUsers":"Se usuários bloqueados também devem estar ocultos em todos os lugares",
             "hideEmptyRoles":"Se os cabeçalhos de cargos devem ser ocultados se todos os seus membros estiverem bloqueados",
-            "hideVc":"Ocultar canais de voz contendo usuários bloqueados.",
+            "hideVc":"Oculta canais de voz contendo usuários bloqueados.",
             "usersToBlock":"IDs de usuários separados por uma vírgula e um espaço"
         }
     },
     "clipsEnhancements":{
         "description":"Adiciona mais opções de FPS e duração de Clipes, comprimento de clipe personalizado, marcação de RPC e mais",
         "settings":{
-            "clipsLink":"Alterar as opções de FPS e duração nas configurações de Clipes!",
+            "clipsLink":"Altere as opções de FPS e duração nas configurações de Clipes!",
             "enableAdvancedSignals":"Ativar sinais de clipe avançados (gatilhos de auto-clipe)",
-            "enableScreenshotKeybind":"Ativar o recurso de teclas de atalho para captura de tela",
+            "enableScreenshotKeybind":"Ativar o recurso de tecla de atalho para captura de tela",
             "enableVoiceOnlyClips":"Ativar clipes apenas de voz (áudio sem vídeo)",
             "ignorePlatformRestriction":"Permitir Clipping Restrito por Plataforma (pode causar erros ao salvar)",
             "richPresenceTagging":"Quando os clips devem ser marcados com a Atividade atual?",
@@ -326,7 +326,7 @@
         }
     },
     "commandPalette":{
-        "description":"Executar ações rapidamente através de uma paleta de comandos pesquisável",
+        "description":"Executa ações rapidamente através de uma paleta de comandos pesquisável",
         "settings":{
             "customCommands":"Gerenciar entradas personalizadas da paleta de comandos",
             "enableTagFilter":"Mostrar a barra de filtro de tags",
@@ -351,78 +351,78 @@
     "contentWarning":{
         "description":"Permite especificar certas palavras de gatilho que serão desfocadas por padrão. Passar o Mouse/Clicar no conteúdo desfocado irá revelá-lo.",
         "settings":{
-            "onClick":"Mostrar conteúdo do gatilho apenas ao clicar em vez de ao passar o rato"
+            "onClick":"Mostrar conteúdo do gatilho apenas ao clicar em vez de ao passar o mouse"
         },
         "ui":{
             "flaggedWords":"Palavras sinalizadas",
-            "placeholder":"Word"
+            "placeholder":"Palavra"
         }
     },
     "copyProfileColors":{
         "contextMenu":{
-            "copyProfileColors":"Copy Profile Colors"
+            "copyProfileColors":"Copiar Cores do Perfil"
         },
-        "description":"A plugin to copy people's profile gradient colors to clipboard.",
+        "description":"Um plugin para copiar as cores do gradiente do perfil de pessoas para a área de transferência.",
         "toast":{
-            "copied":"Profile colors copied to clipboard!",
-            "error":"Error copying profile colors!",
-            "noColorsFound":"No profile colors found!"
+            "copied":"Cores do perfil copiadas para a área de transferência!",
+            "error":"Error ao copiar cores do perfil!",
+            "noColorsFound":"Nenhuma cor do perfil encontrada!"
         }
     },
     "copyStatusUrls":{
-        "description":"Copy the users status url when you right-click it",
+        "description":"Copie o URL do status de usuário ao clicar com o botão direito nele",
         "toast":{
-            "copied":"Copied URL",
-            "error":"Error copying URL, check console for more info"
+            "copied":"URL Copiada",
+            "error":"Erro ao copiar URL, verifique o console para mais informações"
         }
     },
     "copyUserMention":{
         "contextMenu":{
-            "copyUserMention":"Copy User Mention"
+            "copyUserMention":"Copiar Menção do Usuário"
         },
-        "description":"Adds a button to copy user's mention on the user context menu, works best with ValidUser."
+        "description":"Adiciona um botão para copiar a menção do usuário no menu de usuário, funciona melhor com ValidUser."
     },
     "cursorBuddy":{
-        "description":"Adds a sprite that follows your cursor.",
+        "description":"Adiciona um sprite que segue o cursor.",
         "settings":{
             "buddy":"Pick a cursor buddy",
             "buddyOptions":{
                 "fathorse":"Fatass Horse",
                 "oneko":"Oneko"
             },
-            "fade":"If the horse should fade when the cursor is near",
-            "fps":"Framerate of your buddy",
-            "freeroam":"If the horse should roam freely when idle",
-            "furColor":"Fur hex color for Oneko",
-            "outlineColor":"Outline hex color for Oneko",
-            "shake":"If the horse should shake the window when it's walking",
-            "size":"Size of the fatass horse",
-            "speed":"Speed of your buddy"
+            "fade":"Se o cavalo deve desaparecer quando o cursor estiver próximo",
+            "fps":"Taxa de quadros do seu amiguinho",
+            "freeroam":"Se o cavalo deve vagar livremente quando ausente",
+            "furColor":"Cor hexadecimal do pelo para Oneko",
+            "outlineColor":"Cor hexadecimal do contorno para Oneko",
+            "shake":"Se o cavalo deve tremer a janela quando estiver andando",
+            "size":"Tamanho do cavalo gorducho",
+            "speed":"Velocidade do seu amiguinho"
         },
         "ui":{
-            "furColor":"Fur Color",
-            "outlineColor":"Outline Color"
+            "furColor":"Cor do Pelo",
+            "outlineColor":"Cor do Contorno"
         }
     },
     "customFolderIcons":{
-        "description":"Customize folder icons with any png"
+        "description":"Personalize os ícones de pastas com qualquer png"
     },
     "customSounds":{
-        "description":"Customize Discord's sounds.",
+        "description":"Personalize os sons do Discord",
         "settings":{
             "debug":"Debug",
-            "export":"Export",
+            "export":"Exportar",
             "import":"Importar",
             "resetAll":"Redefinir Tudo",
-            "searchPlaceholder":"Search by name or ID",
-            "searchSounds":"Search Sounds"
+            "searchPlaceholder":"Pesquisar por nome ou ID",
+            "searchSounds":"Pesquisar Sons"
         },
         "toast":{
-            "exportSuccess":"Exported {count} settings (audio files not included)",
-            "importError":"Error importing settings. Check console for details.",
-            "importSuccess":"Settings imported successfully!",
+            "exportSuccess":"Exportadas {count} configurações (arquivos de áudio não incluídos)",
+            "importError":"Erro ao importar as configurações. Verifique o console para ver detalhes.",
+            "importSuccess":"Configurações importadas com sucesso!",
             "loadError":"Error loading custom sound file",
-            "resetSuccess":"All overrides reset successfully!"
+            "resetSuccess":"Todas as configurações foram redefinidas com sucesso!"
         }
     },
     "customTimestamps":{
@@ -560,7 +560,7 @@
             "editQuickCss":"Edit QuickCSS",
             "enableQuickCss":"Enable QuickCSS",
             "manageThemes":"Manage Themes",
-            "openNotificationLog":"Open Notification Log",
+            "openNotificationLog":"Abrir registo de notificações",
             "openSettings":"Open Settings",
             "plugins":"Plugins",
             "restartToApply":"Reinicie para aplicar a alteração.",
@@ -682,15 +682,15 @@
     },
     "friendCloud":{
         "commands":{
-            "count":"Number of users to display",
-            "friendcloud":"Display user you most interact with in a cloud"
+            "count":"Número de usuários a serem exibidos",
+            "friendcloud":"Exibe usuários com quem você mais interage em uma nuvem"
         },
-        "description":"Adds a /friendcloud command to visualize the users you most interact with",
+        "description":"Adiciona um comando /friendcloud para visualizar os usuários com quem você mais interage",
         "errors":{
-            "couldntGenerate":"Couldn't generate the image :c",
-            "countMustBeHigher":"The count must be 1 or higher!",
-            "noAffinities":"No affinities found. Check your privacy settings.",
-            "noValidUsers":"No valid users found in affinities. Check your privacy settings."
+            "couldntGenerate":"Não deu pra gerar a imagem :c",
+            "countMustBeHigher":"A contagem deve ser igual ou superior a 1!",
+            "noAffinities":"Nenhuma afinidade encontrada. Verifique suas configurações de privacidade.",
+            "noValidUsers":"Nenhum usuário válido encontrado nas afinidades. Verifique suas configurações de privacidade."
         }
     },
     "friendCodes":{
@@ -711,16 +711,16 @@
         }
     },
     "friendTags":{
-        "description":"Allows you to filter by custom tags in the quick switcher by starting a search with &",
+        "description":"Permite filtrar por tags personalizadas na troca rápida iniciando uma pesquisa com &",
         "ui":{
             "add":"Adicionar",
-            "addTo":"Add to {tagName}",
+            "addTo":"Adicionar a {tagName}",
             "name":"Nome",
             "remove":"Remover",
-            "removeFrom":"Remove from {tagName}",
+            "removeFrom":"Remover de {tagName}",
             "tag":"Tag",
-            "userList":"User List (Click A User To Remove)",
-            "usersSeperated":"Users (Seperated by comma)"
+            "userList":"Lista de Usuários (Clique em Um Usuário Para Remover)",
+            "usersSeperated":"Usuários (separados por vírgula)"
         }
     },
     "friendshipRanks":{
@@ -897,10 +897,10 @@
         }
     },
     "guildTagSettings":{
-        "description":"Adds some settings for guild tags, such as hiding them or disabling the prompt to adopt them.",
+        "description":"Adiciona algumas configurações para tags de servidor, como ocultá-las ou desativar o aviso para usar-las.",
         "settings":{
-            "disableAdoptTagPrompt":"Disable the prompt to adopt tags",
-            "hideTags":"Hide tags"
+            "disableAdoptTagPrompt":"Desativar o aviso para adotar tags",
+            "hideTags":"Esconder Tags"
         }
     },
     "hideChatButtons":{
@@ -1190,7 +1190,7 @@
             "whitelist":"Lista Branca"
         },
         "settings":{
-            "amountToKeep":"Amount of messages to keep in the log",
+            "amountToKeep":"Quantidade de mensagens a manter no registro",
             "ignoreBots":"Ignorar mensagens de bots",
             "keywords":"Manage keywords"
         },
@@ -1260,19 +1260,19 @@
             "shareUsername":"Show link to ListenBrainz profile (may only be visible to other users)",
             "statusName":"Custom status text",
             "useListeningStatus":"Show \"Listening to\" status instead of \"Playing\"",
-            "useLogo":"Show ListenBrainz logo on album art",
+            "useLogo":"Mostrar logo do ListenBrainz na arte do álbum",
             "useTimeBar":"Use track duration to display a time bar (must be using Listening status)",
             "username":"ListenBrainz username"
         }
     },
     "loginWithQR":{
-        "description":"Allows you to login to another device by scanning a login QR code, just like on mobile!",
+        "description":"Permite que você faça login em outro dispositivo digitalizando um código QR de login, assim como no celular!",
         "settings":{
-            "scanQr":"Scan a QR code"
+            "scanQr":"Escanear um QR code"
         },
         "ui":{
-            "enableAndRestart":"Enable the plugin and restart your client to scan a login QR code",
-            "scanQrCode":"Scan QR Code"
+            "enableAndRestart":"Ative o plugin e reinicie seu cliente para escanear um código QR de login",
+            "scanQrCode":"Escanear um QR code"
         }
     },
     "mediaPlaybackSpeed":{
@@ -1328,71 +1328,71 @@
     },
     "messageLoggerEnhanced":{
         "buttons":{
-            "exportLogs":"Export Logs",
-            "exporting":"Exporting...",
+            "exportLogs":"Exportar Registros",
+            "exporting":"Exportando...",
             "importLogs":"Importar Logs",
             "importing":"Importando..."
         },
         "modal":{
             "clearAllLogs":"Limpar Todas as Logs",
-            "clearVisibleLogs":"Clear Visible Logs",
-            "copyChannelId":"Copy Channel ID",
+            "clearVisibleLogs":"Limpar Registros Visíveis",
+            "copyChannelId":"Copiar ID do Canal",
             "copyContent":"Copiar Conteúdo",
-            "copyMessageId":"Copy Message ID",
-            "copyServerId":"Copy Server ID",
-            "copyUserId":"Copy User ID",
-            "deleteLog":"Delete Log",
+            "copyMessageId":"Copiar ID da Mensagem",
+            "copyServerId":"Copiar ID do Servidor",
+            "copyUserId":"Copiar ID de Usuário",
+            "deleteLog":"Deletar Registro",
             "deleted":"Excluído",
-            "edited":"Edited",
-            "emptyLogs":"Empty eh",
-            "filterMessages":"Filter Messages",
-            "fromChannel":"From {channel} in {guild}",
-            "fromDms":"From {username}'s DMs",
-            "fromGroupDm":"From {name} Group DM",
-            "ghostPinged":"Ghost Pinged",
+            "edited":"Editado",
+            "emptyLogs":"Vazio, hein?",
+            "filterMessages":"Filtrar Mensagens",
+            "fromChannel":"De {channel} em {guild}",
+            "fromDms":"Das DMs de {username}",
+            "fromGroupDm":"Do Grupo de DM de {name}",
+            "ghostPinged":"Ghost Pinged (mencionou e apagou a mensagem)",
             "importLogs":"Importar Logs",
-            "importLogsTooltip":"ML Enhanced now stores logs in indexeddb. You need to import your old logs from the logs directory. Importing wont overwrite existing logs",
-            "jumpToMessage":"Jump To Message",
-            "loadMore":"Load More",
-            "maybeTry":"Maybe try {nextTab} or {lastTab}",
-            "noResultsIn":"No results in {tab}.",
-            "openUserProfile":"Open user profile",
-            "sortNewestFirst":"Sort Newest First",
-            "sortOldestFirst":"Sort Oldest First"
+            "importLogsTooltip":"O ML Enhanced agora armazena registros no IndexedDB. Você precisa importar seus registros antigos do diretório de registros. A importação não substituirá os registros existentes.",
+            "jumpToMessage":"Ir Para a Mensagem",
+            "loadMore":"Carregar Mais",
+            "maybeTry":"Talvez tente {nextTab} ou {lastTab}",
+            "noResultsIn":"Nenhum resultado em {tab}.",
+            "openUserProfile":"Abrir Perfil do Usuário",
+            "sortNewestFirst":"Ordenar por Mais Recente Primeiro",
+            "sortOldestFirst":"Ordenar por Mais Antigo Primeiro"
         },
         "settings":{
-            "alwaysLogCurrentChannel":"Always log current selected channel. Blacklisted channels/users will still be ignored.",
-            "alwaysLogDirectMessages":"Always log DMs",
-            "attachmentFileExtensions":"Comma separated list of file extensions to save. Attachments with file extensions not in this list will not be saved. Leave empty to save all attachments.",
-            "attachmentSizeLimitInMegabytes":"Maximum size of an attachment in megabytes to save. Attachments larger than this size will not be saved.",
-            "blacklistedIds":"Blacklisted server, channel, or user IDs.",
-            "cacheLimit":"Maximum number of messages to store in the cache. Older messages are deleted when the limit is reached. This helps reduce memory usage and improve performance. 0 means there is no limit",
-            "cacheMessagesFromServers":"Usually message logger only logs from whitelisted ids and dms, enabling this would mean it would log messages from all servers as well. Note that this may cause the cache to exceed its limit, resulting in some messages being missed. If you are in a lot of servers, this may significantly increase the chances of messages being logged, which can result in a large message record and the inclusion of irrelevant messages.",
-            "exportLogsFromIndexedDB":"Export Logs From IndexedDB",
-            "hideMessageFromMessageLoggers":"When enabled, a context menu button will be added to messages to allow you to delete messages without them being logged by other loggers. Might not be safe, use at your own risk.",
-            "hideMessageFromMessageLoggersDeletedMessage":"The message content to replace the message with when using the hide message from message loggers feature.",
+            "alwaysLogCurrentChannel":"Sempre registrar o canal selecionado no momento. Canais/usuários na lista negra ainda serão ignorados.",
+            "alwaysLogDirectMessages":"Sempre registrar DMs",
+            "attachmentFileExtensions":"Lista de extensões de arquivo separadas por vírgulas para salvar. Anexos com extensões de arquivo que não estiverem nesta lista não serão salvos. Deixe em branco para salvar todos os anexos.",
+            "attachmentSizeLimitInMegabytes":"Tamanho máximo de um anexo em megabytes para salvar. Anexos maiores que esse tamanho não serão salvos.",
+            "blacklistedIds":"IDs de servidores, canais ou usuários na lista negra.",
+            "cacheLimit":"Número máximo de mensagens para armazenar no cache. Mensagens mais antigas são excluídas quando o limite é atingido. Isso ajuda a reduzir o uso de memória e melhorar o desempenho. 0 significa que não há limite",
+            "cacheMessagesFromServers":"Geralmente, message logger apenas registra IDs na lista branca e DMs, ativar isso significa que ele também registrará mensagens de todos os servidores. Observe que isso pode fazer com que o cache exceda seu limite, resultando na perda de algumas mensagens. Se você estiver em muitos servidores, isso pode aumentar significativamente as chances de as mensagens serem registradas, o que pode resultar em um registro de mensagens volumoso e na inclusão de mensagens irrelevantes.",
+            "exportLogsFromIndexedDB":"Exportar registros do IndexedDB",
+            "hideMessageFromMessageLoggers":"Quando ativado, um botão de menu de contexto será adicionado às mensagens para permitir que você as exclua sem que sejam registradas por outros loggers. Pode não ser seguro, use por sua conta e risco.",
+            "hideMessageFromMessageLoggersDeletedMessage":"O conteúdo da mensagem para substituir a mensagem ao usar o recurso de ocultar mensagem dos registradores de mensagens",
             "ignoreBots":"Whether to ignore messages by bots",
-            "ignoreMutedCategories":"Messages in channels belonging to muted categories will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-            "ignoreMutedChannels":"Messages in muted channels will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-            "ignoreMutedGuilds":"Messages in muted guilds will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
+            "ignoreMutedCategories":"Mensagens em canais pertencentes a categorias silenciadas não serão registradas. Usuários/canais na lista branca em servidores silenciados ainda serão registrados.",
+            "ignoreMutedChannels":"Mensagens em canais silenciados não serão registradas. Usuários/canais na lista branca em servidores silenciados ainda serão registrados.",
+            "ignoreMutedGuilds":"Mensagens em servidores silenciados não serão registradas. Usuários/canais na lista branca em servidores silenciados ainda serão registrados.",
             "ignoreSelf":"Whether to ignore messages by yourself",
             "ignoreWebhooks":"Whether to ignore messages by webhooks",
-            "importLogsFromFile":"Importar logs de um arquivo",
+            "importLogsFromFile":"Importar registros de um arquivo",
             "messageLimit":"Maximum number of messages to save. Older messages are deleted when the limit is reached. 0 means there is no limit",
-            "messagesToDisplayAtOnceInLogs":"Number of messages to display at once in logs & number of messages to load when loading more messages in logs.",
-            "openImageCacheFolder":"Opens the image cache directory",
-            "openLogs":"Open Logs",
-            "permanentlyRemoveLogByDefault":"Vencord's base MessageLogger remove log button wiil delete logs permanently",
-            "preserveCurrentChannel":"When enabled, messages in your currently selected channel are not affected by time-based cleanup.",
-            "saveImages":"Save deleted attachments.",
-            "saveMessages":"Whether to save the deleted and edited messages.",
-            "selectImageCacheDir":"Select saved images directory",
-            "selectLogsDir":"Select logs directory",
+            "messagesToDisplayAtOnceInLogs":"Número de mensagens a exibir de uma só vez nos registos e número de mensagens a carregar ao carregar mais mensagens nos registos.",
+            "openImageCacheFolder":"Abre o diretório de cache de imagens",
+            "openLogs":"Abrir Registros",
+            "permanentlyRemoveLogByDefault":"O botão de remover registro do MessageLogger base do Vencord excluirá os registros permanentemente",
+            "preserveCurrentChannel":"Quando ativado, as mensagens no canal selecionado no momento não são afetadas pela limpeza baseada em tempo.",
+            "saveImages":"Salva anexos apagados.",
+            "saveMessages":"Se deseja salvar as mensagens apagadas e editadas.",
+            "selectImageCacheDir":"Selecionar diretório de imagens salvas",
+            "selectLogsDir":"Selecionar diretório de registros",
             "showLogsButton":"Toggle to whenever show the toolbox or not",
-            "showWhereMessageIsFrom":"Show message channel/author name and server name",
-            "sortNewest":"Sort logs by newest.",
-            "timeBasedCleanupMinutes":"Automatically remove messages from servers that are older than this many minutes. Set to 0 to disable time-based cleanup.",
-            "whitelistedIds":"Whitelisted server, channel, or user IDs."
+            "showWhereMessageIsFrom":"Mostra canal da mensagem/nome do autor e nome do servidor",
+            "sortNewest":"Ordena registros pelos mais recentes.",
+            "timeBasedCleanupMinutes":"Remove automaticamente mensagens de servidores que sejam mais antigas que esta quantidade de minutos. Defina como 0 para desativar a limpeza baseada em tempo.",
+            "whitelistedIds":"IDs de servidores, canais ou usuários na lista branca."
         }
     },
     "messageNotifier":{
@@ -1613,8 +1613,16 @@
         }
     },
     "soundBoardLogger":{
+        "description":"Registra o uso do efeitos sonoros em canais de voz",
         "settings":{
-            "SavedIds":"A quantidade de IDs de soundboard que você deseja salvar por vez (0 permite salvar infinitos)"
+            "FileType":"O formato em que você deseja salvar seu arquivo",
+            "SavedIds":"A quantidade de IDs de soundboard que você deseja salvar por vez (0 permite salvar infinitos)",
+            "soundVolume":"O volume do som de alternância(toggle) (0 para desativar)"
+        }
+    },
+    "statsfmPresence":{
+        "settings":{
+            "showStatsFmLogo":"Mostrar o Stats.fm ao lado da capa do álbum"
         }
     },
     "timezones":{
@@ -1685,7 +1693,19 @@
         }
     },
     "voiceChannelLog":{
+        "contextMenu":{
+            "viewChannelLogs":"Ver registros do canal"
+        },
+        "description":"Registra eventos de entrada/saída/movimentação em canais de voz",
+        "modeOptions":{
+            "both":"Registra no chat e no menu de registros",
+            "logMenu":"Menu de registros",
+            "logToChat":"Registra diretamente no chat associado"
+        },
         "settings":{
+            "ignoreBlockedUsers":"Não registrar usuários bloqueados",
+            "mode":"Como mostrar o registro do canal de voz",
+            "voiceChannelChatSelf":"Registra seus próprios eventos de canal de voz nos canais de voz",
             "voiceChannelChatSilent":"Mensagens de entrada/saída/movimentação em canais de voz serão silenciosas",
             "voiceChannelChatSilentSelf":"Mensagens de entrada/saída/movimentação em canais de voz serão silenciadas se você estiver neles"
         }
