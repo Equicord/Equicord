@@ -584,6 +584,12 @@
     "messageAccessoriesAPI":{
         "description":"API כדי להוסיף עיצוב הודעות"
     },
+    "messageDecorationsAPI":{
+        "description":"API כדי להוסיף קישוטים להודעות"
+    },
+    "messageEventsAPI":{
+        "description":"API מחויב על ידי כל דבר שמשתמש באירועי הודעות"
+    },
     "messageLatency":{
         "clockAhead":"This user's clock is {delta} ahead.",
         "delayedMessage":"Delayed Message",
@@ -670,6 +676,12 @@
         },
         "toggleDeletedHighlight":"Toggle Deleted Highlight"
     },
+    "messagePopoverAPI":{
+        "description":"API כדי להוסיף כפתורים לחלונות קופצים של הודעות"
+    },
+    "messageUpdaterAPI":{
+        "description":"API כדי לעדכן ורלרנדר מחדש את ההודעות"
+    },
     "mutualGroupDMs":{
         "description":"Shows mutual group dms in profiles",
         "members_one":"{count} Member",
@@ -699,6 +711,9 @@
             "voiceChannels":"Hide names in Voice channels automatically"
         }
     },
+    "nicknameIconsAPI":{
+        "description":"API כדי איקונים לשם חיבה בפרופילים"
+    },
     "noReplyMention":{
         "description":"Disables reply pings by default",
         "settings":{
@@ -709,6 +724,9 @@
             "shouldPingListed":"Behaviour",
             "userList":"List of users to allow or exempt pings for (separated by commas or spaces)"
         }
+    },
+    "noticesAPI":{
+        "description":"מתקן התראות נדחות באוטומת"
     },
     "overrideForumDefaults":{
         "description":"Allows you to override default forum layout/sort order. you can still change it on a per-channel basis",
@@ -919,6 +937,9 @@
         },
         "timestampFormat":"Timestamp Format",
         "timestampPicker":"Timestamp Picker"
+    },
+    "serverListAPI":{
+        "description":"API מחויב בשביל Plugins שמשנים את הרשימה של השרת"
     },
     "serverListIndicators":{
         "description":"Add online friend count or server count in the server list",
