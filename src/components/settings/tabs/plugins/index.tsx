@@ -26,6 +26,7 @@ import { Card } from "@components/Card";
 import { Divider } from "@components/Divider";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingTertiary } from "@components/Heading";
+import { Notice } from "@components/Notice";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab } from "@components/settings";
 import { debounce } from "@shared/debounce";
@@ -36,7 +37,7 @@ import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useAwaiter, useIntersection } from "@utils/react";
-import { Alerts, lodash, Parser, React, Select, TextInput, Toasts, Tooltip, useCallback, useMemo, useState } from "@webpack/common";
+import { Alerts, lodash, Parser, React, SearchBar, Select, Toasts, Tooltip, useCallback, useMemo, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
@@ -79,18 +80,6 @@ function ReloadRequiredCard({ required, enabledPlugins, openWarningModal, resetC
                     <Paragraph>Press the cog wheel or info icon to get more info on a plugin</Paragraph>
                     <Paragraph>Plugins with a cog wheel have settings you can modify!</Paragraph>
                 </>
-            )}
-            {enabledPlugins.length > 0 && !required && (
-                <Button
-                    variant="secondary"
-                    size="small"
-                    className={"vc-plugins-disable-warning vc-modal-align-reset"}
-                    onClick={() => {
-                        return openWarningModal(null, undefined, false, enabledPlugins.length, resetCheckAndDo);
-                    }}
-                >
-                    Disable All Plugins
-                </Button>
             )}
         </Card>
     );
@@ -402,13 +391,37 @@ export default function PluginSettings() {
                 <UIElementsButton />
             </div>
 
+            {enabledPlugins.length > 0 && (
+                <Notice
+                    variant="warning"
+                    className={classes(Margins.top16, cl("disable-notice"))}
+                    action={
+                        <Button
+                            size="small"
+                            variant="dangerSecondary"
+                            onClick={() => openWarningModal(null, undefined, false, enabledPlugins.length, resetCheckAndDo)}
+                        >
+                            Disable All
+                        </Button>
+                    }
+                >
+                    Having issues? Disable all plugins to troubleshoot.
+                </Notice>
+            )}
+
             <HeadingTertiary className={classes(Margins.top20, Margins.bottom8)}>
                 Filters
             </HeadingTertiary>
 
             <div className={classes(Margins.bottom20, cl("filter-controls"))}>
                 <ErrorBoundary noop>
-                    <TextInput autoFocus value={searchInput} placeholder="Search for a plugin..." onChange={onSearch} />
+                    <SearchBar
+                        autoFocus
+                        query={searchInput}
+                        onChange={onSearch}
+                        onClear={() => onSearch("")}
+                        placeholder={`Search ${plugins.length + requiredPlugins.length} plugins...`}
+                    />
                 </ErrorBoundary>
                 <div>
                     <ErrorBoundary noop>
