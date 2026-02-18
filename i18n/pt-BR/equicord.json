@@ -1385,7 +1385,7 @@
             "permanentlyRemoveLogByDefault":"O botão de remover registro do MessageLogger base do Vencord excluirá os registros permanentemente",
             "preserveCurrentChannel":"Quando ativado, as mensagens no canal selecionado no momento não são afetadas pela limpeza baseada em tempo.",
             "saveImages":"Salva anexos apagados.",
-            "saveMessages":"Se deseja salvar as mensagens apagadas e editadas.",
+            "saveMessages":"Salvar as mensagens apagadas e editadas?",
             "selectImageCacheDir":"Selecionar diretório de imagens salvas",
             "selectLogsDir":"Selecionar diretório de registros",
             "showLogsButton":"Toggle to whenever show the toolbox or not",
