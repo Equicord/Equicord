@@ -1612,6 +1612,11 @@
             "contextMenu":"Adiciona opção para ativar/desativar a funcionalidade na entrada de chat"
         }
     },
+    "soundBoardLogger":{
+        "settings":{
+            "SavedIds":"A quantidade de IDs de soundboard que você deseja salvar por vez (0 permite salvar infinitos)"
+        }
+    },
     "timezones":{
         "settings":{
             "24hTime":"Mostrar horário no formato 24h",
@@ -1646,9 +1651,17 @@
             "imperial":"imperial"
         }
     },
+    "universalMention":{
+        "warning":"Usar a Menção Global pode causar problemas de desempenho e mostrar uma quantidade absurda de usuários no autocompletar."
+    },
     "urlHighlighter":{
         "ui":{
             "addNew":"Adicionar novo"
+        }
+    },
+    "userpfp":{
+        "settings":{
+            "overrideServerAvatars":"Substituir os avatares de servidor por avatares personalizados ou pelo avatar padrão do usuário se nenhum avatar personalizado estiver definido"
         }
     },
     "vcNarratorCustom":{
@@ -1679,6 +1692,7 @@
     },
     "voiceJoinMessages":{
         "settings":{
+            "friendDirectMessagesSelf":"Receber notificações nas DMs dos seus amigos mesmo se você estiver no mesmo canal de voz que eles",
             "friendDirectMessagesSilent":"Mensagens de entrada nas DMs dos seus amigos serão silenciosas"
         }
     },
@@ -1686,6 +1700,11 @@
         "modal":{
             "action":"Ação",
             "initializing":"Inicializando..."
+        }
+    },
+    "voiceRejoin":{
+        "settings":{
+            "preventReconnectIfCallEnded":"Não reconectar se a chamada tiver sido encerrada ou o canal de voz estiver vazio ou não existir"
         }
     },
     "waitForSlot":{
