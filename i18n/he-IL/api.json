@@ -1,9 +1,9 @@
 {
     "commands":{
-        "errorExecuting":"היה שגיעה בזמן הפקודה \"{שם}\""
+        "errorExecuting":"היה שגיעה בזמן הפקודה \"{name}\""
     },
     "memberListDecorators":{
-        "fallback":"Failed to render {key} Member List Decorator"
+        "fallback":"לא הצלחנו לראנדר את {key} קישוט רשימת החברים"
     },
     "messageAccessories":{
         "fallback":"Failed to render {key} Message Accessory"
@@ -17,18 +17,18 @@
     "notifications":{
         "dismissNotification":"להתעלם מההודעה",
         "logs":{
-            "body_one":"זה הימחוק לתמיד את ה {מספר} של הודעות. הפעולה הזאות לא ניתנה לביטול.",
-            "body_other":"This will permanently remove {count} notifications. This action cannot be undone.",
+            "body_one":"זה הימחוק לתמיד את ה {count} של הודעות. הפעולה הזאות לא ניתנה לביטול.",
+            "body_other":"זה הימחוק לתמיד את ה {count} של הודעות. הפעולה הזאות לא ניתנה לביטול.",
             "body_zero":"אף הודעות נבחרו",
-            "cancel":"Nevermind",
-            "clearNotificationLog":"Clear Notification Log",
-            "confirm":"Do it!",
+            "cancel":"לא משנה",
+            "clearNotificationLog":"לנקות את יומן ההודעות",
+            "confirm":"תעשה את זה!",
             "title":"אתה בטוח?"
         },
         "missedNotifications":{
-            "body_one":"{count} notification received",
-            "body_other":"{count} notifications received",
-            "title":"While you were away"
+            "body_one":"{count} ההודעות שהתקבלו",
+            "body_other":"{count} הודעות ‎התקבלו",
+            "title":"בזמן שלא הייתה פה"
         },
         "noNotifications":"אין הודעת כרגע",
         "notificationLog":"יומן הודעות",
