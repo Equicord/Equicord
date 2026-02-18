@@ -518,6 +518,7 @@
         "usage":"Uso"
     },
     "favEmojiFirst":{
+        "description":"Coloca seu emoji favorito primeiro no preenchimento automático de emojis e também possui alias de emoji.",
         "settings":{
             "clearAll":"Excluir todos os aliases."
         },
@@ -670,6 +671,7 @@
         }
     },
     "imageFilename":{
+        "description":"Exibe o nome do arquivo de imagens e GIFs como uma dica ao passar o mouse sobre eles",
         "settings":{
             "showFullUrl":"Mostrar a URL completa da imagem ao invés de apenas o nome do arquivo. Sempre ativado para GIFs porque geralmente não possuem nome de arquivo significativo"
         }
@@ -700,6 +702,9 @@
             "applyColorOnlyInDms":"Aplicar cores somente na DM; não aplicar em servidores",
             "lightness":"Luminosidade, em %. Altere se as cores estiverem muito claras ou muito escuras."
         }
+    },
+    "keepCurrentChannel":{
+        "description":"Tenta navegar para o canal em que você estava antes de trocar de conta ou carregar o Discord."
     },
     "lastfmRichPresence":{
         "apiKeyInstructions":"Set <0>Application name</0> and <1>Application description</1> to anything and leave the rest blank.",
@@ -743,7 +748,8 @@
     "loading":"Carregando...",
     "loadingQuotes":{
         "settings":{
-            "additionalQuotes":"Citações personalizadas adicionais para possivelmente aparecerem, separadas pelo delimitador abaixo"
+            "additionalQuotes":"Citações personalizadas adicionais para possivelmente aparecerem, separadas pelo delimitador abaixo",
+            "replaceEvents":"Este plugin também deve ser aplicado durante eventos com citações temáticas especiais? (ex.: Halloween)"
         },
         "ui":{
             "noQuotesQuote":"Você realmente desativou todas as frases de carregamento? Que bobão(bobona) você é..."
@@ -988,6 +994,12 @@
     "noDevtoolsWarning":{
         "description":"Desativa o banner 'Calma ai' no console. Como efeito colateral, também impede que o Discord oculte seu token, o que evita desconexões aleatórias."
     },
+    "noMaskedUrlPaste":{
+        "description":"Colar um link enquanto há texto selecionado não irá colar como URL mascarada"
+    },
+    "noPendingCount":{
+        "description":"Remove a contagem de notificações de solicitações de amizade, solicitações de mensagens e ofertas de Nitro."
+    },
     "noReplyMention":{
         "description":"Disables reply pings by default",
         "settings":{
@@ -1006,6 +1018,7 @@
         "description":"Corrige avisos sendo ignorados automaticamente"
     },
     "notificationVolume":{
+        "description":"Salve seus ouvidos e defina um volume separado para notificações e sons do aplicativo",
         "settings":{
             "notificationVolume":"Volume da Notificação"
         }
@@ -1039,6 +1052,11 @@
         "name":"PauseInvitesForever",
         "pauseIndefinitely":"Pause Indefinitely."
     },
+    "permissionFreeWill":{
+        "settings":{
+            "lockout":"Ignora a prevenção de bloqueio de permissões (\"Prrovávelmente você não quer fazer isso\")"
+        }
+    },
     "permissionsViewer":{
         "noPermissions":"No permissions to display!",
         "owner":"owner",
@@ -1061,6 +1079,7 @@
                 "name":"petpet",
                 "options":{
                     "delay":"O atraso entre cada frame em ms. Arredondado para os 10ms mais próximos. O padrão é o valor mínimo de 20.",
+                    "noServerPfp":"Usa o avatar normal em vez do avatar específico do servidor ao usar a opção 'usuário\"",
                     "resolution":"Resolução do GIF. Padrão é 120. Se você colocar um número absurdo e travar o Discord, a culpa é sua."
                 }
             }
@@ -1137,6 +1156,7 @@
         "label":"Menção Rápida"
     },
     "quickReply":{
+        "description":"Responda (ctrl + up/down) e edite (ctrl + shift + up/down) mensagens por atalhos de teclado",
         "settings":{
             "shouldMention":"Marcar na resposta por padrão",
             "shouldMentionOptions":{
