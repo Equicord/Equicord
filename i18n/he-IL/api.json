@@ -17,7 +17,7 @@
     "notifications":{
         "dismissNotification":"להתעלם מההודעה",
         "logs":{
-            "body_one":"This will permanently remove {count} notification. This action cannot be undone.",
+            "body_one":"זה הימחוק לתמיד את ה {מספר} של הודעות. הפעולה הזאות לא ניתנה לביטול.",
             "body_other":"This will permanently remove {count} notifications. This action cannot be undone.",
             "body_zero":"אף הודעות נבחרו",
             "cancel":"Nevermind",
