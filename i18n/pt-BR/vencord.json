@@ -415,7 +415,7 @@
         "stateLine2":"Estado (linha 2)",
         "stateUrl":"URL do estado",
         "streamLink":"Stream Link (Twitch ou YouTube, somente se o tipo de atividade for Streaming)",
-        "timestampMode":"Modo de Timestamp",
+        "timestampMode":"Modo de data/hora",
         "timestampModes":{
             "currentTime":"Igual ao seu horário atual (não redefinido após 24h)",
             "custom":"Personalizado",
@@ -459,7 +459,7 @@
     "devCompanion":{
         "description":"Plugin Dev Companion. Por favor, informe qualquer coisa que não esteja funcionando ou que esteja estranha (provavelmente é um bug) para sadan, seja por ping ou dm, obrigado!",
         "settings":{
-            "notifyOnAutoConnect":"Se deve notificar quando o Dev Companion estiver conectado automaticamente.",
+            "notifyOnAutoConnect":"Define se deve notificar quando o Dev Companion se conectar automaticamente.",
             "reloadAfterToggle":"Recarregar após o recebimento de um comando para desativar/ativar plugin.",
             "usePatchedModule":"Em solicitações de extração, responder com o módulo corrigido atual (se estiver corrigido) em vez do original."
         }
@@ -680,7 +680,7 @@
     },
     "greetStickerPicker":{
         "ariaLabel":"Seletor de figurinhas de saudação",
-        "description":"Permite usar qualquer figurinha de saudação em vez de apenas um aleatório ao clicar com o botão direito no botão 'Acene para dizer olá!'",
+        "description":"Permite usar qualquer figurinha de saudação em vez de apenas a aleatória ao clicar com o botão direito no botão \"Acene para dizer olá!\"",
         "greetMode":"Modo de saudação",
         "greetModeDescription":"Escolha o modo de saudação",
         "greetModeLabel":"Cumprimentar (você só pode cumprimentar 3 vezes)",
@@ -824,7 +824,7 @@
         }
     },
     "logs":{
-        "allLogsCleared":"Todos registros foram apagados",
+        "allLogsCleared":"Todos os registros foram apagados",
         "clearAll":"Apagar Tudo",
         "clearAllLogs":"Limpar Todos os Registros",
         "clearAllLogsConfirmation":"Tem certeza de que deseja limpar todos os registros? Isso não pode ser desfeito.",
@@ -1327,7 +1327,7 @@
     },
     "quickActions":{
         "editQuickCSS":"Editar QuickCSS",
-        "notificationLog":"Registro de Notificações",
+        "notificationLog":"Registro de notificações",
         "openSettings":"Abrir pasta de configurações",
         "relaunchDiscord":"Reiniciar o Discord",
         "title":"Ações Rápidas",
@@ -1483,7 +1483,7 @@
         "settings":{
             "replaceMessageContents":"Substituir data/hora no conteúdo da mensagem"
         },
-        "timestampFormat":"Formato de Timestamp",
+        "timestampFormat":"Formato de data/hora",
         "timestampPicker":"Seletor de data/hora"
     },
     "serverInfo":{
@@ -1584,8 +1584,8 @@
                 "updatedPlugins":"Plugins Atualizados",
                 "updatedPluginsCount":" • {plugins} plugins atualizados"
             },
-            "updateLogs_one":"Registros de Atualização ({count} registro)",
-            "updateLogs_other":"Registros de Atualização ({count} registros)",
+            "updateLogs_one":"Registros de atualização ({count} registro)",
+            "updateLogs_other":"Registros de atualização ({count} registros)",
             "updateLogs_zero":"Nenhum Registro de Atualização",
             "updatedPluginsCount":"Plugins atualizados ({plugins})",
             "viewRecentChanges":"Estes são os novos commits e atualizações de plugins desde a sua última versão. Você pode ver quais recursos foram adicionados, erros corrigidos e quais plugins receberam atualizações",
@@ -1609,7 +1609,7 @@
             "title":"Estilo de vibração da janela (requer reinicialização)"
         },
         "notification":{
-            "logButton":"Ver Registro de Notificações",
+            "logButton":"Ver registro de notificações",
             "settingsButton":"Configurações de Notificação"
         },
         "plugins":{
@@ -2047,7 +2047,7 @@
             "deafenMessage":"Mensagem ao ensurdecer (apenas eu por enquanto)",
             "joinMessage":"Mensagem de entrada",
             "latinOnly":"Remova caracteres não latinos dos nomes antes da narração",
-            "leaveMessage":"Mensagem de Saída",
+            "leaveMessage":"Mensagem de saída",
             "moveMessage":"Mover mensagem",
             "muteMessage":"Mensagem ao silenciar (apenas eu por enquanto)",
             "sayOwnName":"Diga o próprio nome",
@@ -2073,14 +2073,14 @@
         "content":"Conteúdo",
         "contentCopied":"Conteúdo copiado para a área de transferência!",
         "copyJson":"Copiar {type} JSON",
-        "copyRawContent":"Copiar Conteúdo raw",
+        "copyRawContent":"Copiar conteúdo Raw",
         "copyRawLeftViewRawRight":"Copiar Raw (clique com o botão esquerdo) / Ver Raw (clique com o botão direito)",
         "data":"Dados",
         "dataCopied":"Dados {type} copiados para a área de transferência!",
-        "description":"Copie e visualize o conteúdo/dados raws de qualquer mensagem, canal ou servidor",
+        "description":"Copie e visualize o conteúdo/dados Raw de qualquer mensagem, canal ou servidor",
         "settings":{
             "clickMethodDescription":"Altere o botão para visualizar o conteúdo/dados raw de qualquer mensagem.",
-            "leftClick":"Clique com o botão esquerdo para ver o conteúdo raw.",
+            "leftClick":"Clique com o botão esquerdo para ver o conteúdo Raw.",
             "rightClick":"Clique com o botão direito para visualizar o conteúdo raw."
         },
         "viewRaw":"Ver Raw",
