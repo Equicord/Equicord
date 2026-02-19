@@ -1,37 +1,37 @@
 {
-				"commands":{
-								"errorExecuting":"Сталася Помилка під час виконання команди \"{name}\""
-				},
-				"memberListDecorators":{
-								"fallback":"Не вдалося показати Декоратор Списку Учасників {key}"
-				},
-				"messageAccessories":{
-								"fallback":"Не вдалося показати Аксесуар Повідомлення {key}"
-				},
-				"messageDecorations":{
-								"fallback":"Не вдалося показати Прикрасу Повідомлення {key}"
-				},
-				"notices":{
-								"fallback":"Помилка Під Час Показу Сповіщення"
-				},
-				"notifications":{
-								"dismissNotification":"Відхилити Сповіщення",
-								"logs":{
-												"body_one":"Це назавжди видалить {count} сповіщення. Цю дію не можна скасувати.",
-												"body_other":"Це остаточно видалить {count} сповіщень. Цю дію не можна скасувати.",
-												"body_zero":"Ніякого сповіщення не вибрано.",
-												"cancel":"Не зараз",
-												"clearNotificationLog":"Очистити Журнал Сповіщень",
-												"confirm":"Виконати!",
-												"title":"Ви впевнені?"
-								},
-								"missedNotifications":{
-												"body_one":"Отримано {count} сповіщення",
-												"body_other":"Отримано сповіщень: {count}",
-												"title":"Поки вас не було"
-								},
-								"noNotifications":"Сповіщень ще немає",
-								"notificationLog":"Журнал Сповіщень",
-								"notificationSettings":"Налаштування Сповіщень"
-				}
+    "commands":{
+        "errorExecuting":"Сталася Помилка під час виконання команди \"{name}\""
+    },
+    "memberListDecorators":{
+        "fallback":"Не вдалося показати Декоратор Списку Учасників {key}"
+    },
+    "messageAccessories":{
+        "fallback":"Не вдалося показати Аксесуар Повідомлення {key}"
+    },
+    "messageDecorations":{
+        "fallback":"Не вдалося показати Прикрасу Повідомлення {key}"
+    },
+    "notices":{
+        "fallback":"Помилка Під Час Показу Сповіщення"
+    },
+    "notifications":{
+        "dismissNotification":"Відхилити Сповіщення",
+        "logs":{
+            "body_one":"Це назавжди видалить {count} сповіщення. Цю дію не можна скасувати.",
+            "body_other":"Це остаточно видалить {count} сповіщень. Цю дію не можна скасувати.",
+            "body_zero":"Ніякого сповіщення не вибрано.",
+            "cancel":"Не зараз",
+            "clearNotificationLog":"Очистити Журнал Сповіщень",
+            "confirm":"Виконати!",
+            "title":"Ви впевнені?"
+        },
+        "missedNotifications":{
+            "body_one":"Отримано {count} сповіщення",
+            "body_other":"Отримано сповіщень: {count}",
+            "title":"Поки вас не було"
+        },
+        "noNotifications":"Сповіщень ще немає",
+        "notificationLog":"Журнал Сповіщень",
+        "notificationSettings":"Налаштування Сповіщень"
+    }
 }
