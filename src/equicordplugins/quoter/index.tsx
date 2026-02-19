@@ -9,14 +9,15 @@ import { BaseText } from "@components/BaseText";
 import { FormSwitch } from "@components/FormSwitch";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { Button, Menu, TextInput, UploadHandler, useEffect, useState } from "@webpack/common";
+import { Button, Menu, TextInput, UploadHandler, useEffect, useRef, useState } from "@webpack/common";
 
 import { QuoteIcon } from "./components/QuoteIcon";
 import { QuoteFont } from "./types";
-import { createQuoteImage, ensureFontLoaded, generateFileNamePreview, getFileExtension, getMimeType, resetFontLoading, sizeUpgrade } from "./utils";
+import { clearEmojiCaches, createQuoteImage, ensureFontLoaded, generateFileNamePreview, getFileExtension, getMimeType, resetFontLoading, sizeUpgrade } from "./utils";
 
 const settings = definePluginSettings({
     quoteFont: {
@@ -52,13 +53,19 @@ const settings = definePluginSettings({
         description: "Save as GIF by default",
         default: false,
         hidden: true
+    },
+    renderEmoji: {
+        type: OptionType.BOOLEAN,
+        description: "Render emojis in quotes by default.",
+        default: true,
+        hidden: true
     }
 });
 
 export default definePlugin({
     name: "Quoter",
     description: "Adds the ability to create an inspirational quote image from a message.",
-    authors: [Devs.Samwich, Devs.thororen, EquicordDevs.neoarz, Devs.prism],
+    authors: [Devs.Samwich, Devs.thororen, EquicordDevs.neoarz, Devs.prism, EquicordDevs.mishl],
     settings,
 
     async start() {
@@ -69,6 +76,7 @@ export default definePlugin({
         const style = document.getElementById("quoter-font-style");
         if (style) style.remove();
         resetFontLoading();
+        clearEmojiCaches();
     },
 
     contextMenus: {
@@ -92,38 +100,58 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
     const [gray, setGray] = useState(settings.store.grayscale);
     const [showWatermark, setShowWatermark] = useState(settings.store.showWatermark);
     const [saveAsGif, setSaveAsGif] = useState(settings.store.saveAsGif);
+    const [renderEmoji, setRenderEmoji] = useState(settings.store.renderEmoji);
     const [watermarkText, setWatermarkText] = useState(settings.store.watermark);
     const [quoteImage, setQuoteImage] = useState<Blob | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const { quoteFont } = settings.store;
+    const imgRef = useRef<HTMLImageElement>(null);
 
     useEffect(() => {
         settings.store.grayscale = gray;
         settings.store.showWatermark = showWatermark;
         settings.store.saveAsGif = saveAsGif;
-    }, [gray, showWatermark, saveAsGif]);
+        settings.store.renderEmoji = renderEmoji;
+    }, [gray, showWatermark, saveAsGif, renderEmoji]);
 
-    const generateImage = async () => {
-        const image = await createQuoteImage({
-            avatarUrl: sizeUpgrade(message.author.getAvatarURL()),
-            quote: message.content,
-            grayScale: gray,
-            author: message.author,
-            watermark: watermarkText,
-            showWatermark,
-            saveAsGif,
-            quoteFont
-        });
-        setQuoteImage(image);
+    useEffect(() => {
+        let cancelled = false;
 
-        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        const generateImage = async () => {
+            try {
+                const image = await createQuoteImage({
+                    avatarUrl: sizeUpgrade(message.author.getAvatarURL()),
+                    quote: message.content,
+                    grayScale: gray,
+                    author: message.author,
+                    watermark: watermarkText,
+                    showWatermark,
+                    saveAsGif,
+                    quoteFont,
+                    renderEmoji
+                });
+                if (cancelled) return;
 
-        const newUrl = URL.createObjectURL(image);
-        setPreviewUrl(newUrl);
-        document.getElementById("quoterPreview")?.setAttribute("src", newUrl);
-    };
+                setQuoteImage(image);
 
-    useEffect(() => { generateImage(); }, [gray, showWatermark, saveAsGif, watermarkText, quoteFont]);
+                if (previewUrl) URL.revokeObjectURL(previewUrl);
+
+                const newUrl = URL.createObjectURL(image);
+                setPreviewUrl(newUrl);
+                if (imgRef.current) {
+                    imgRef.current.src = newUrl;
+                }
+            } catch (err) {
+                if (cancelled) return;
+                new Logger("Quoter").error("Failed to generate quote image:", err);
+                setQuoteImage(null);
+                setPreviewUrl(null);
+            }
+        };
+
+        generateImage();
+        return () => { cancelled = true; };
+    }, [gray, showWatermark, saveAsGif, watermarkText, quoteFont, renderEmoji]);
 
     useEffect(() => {
         return () => {
@@ -173,29 +201,15 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
                 <ModalCloseButton onClick={props.onClose} />
             </ModalHeader>
             <ModalContent scrollbarType="none">
-                <img alt="Quote preview" src="" id="quoterPreview" style={{ borderRadius: "20px", width: "100%", marginBottom: "20px" }} />
+                <img ref={imgRef} alt="Quote preview" src={previewUrl || ""} style={{ borderRadius: "20px", width: "100%", marginBottom: "20px" }} />
 
                 <FormSwitch title="Grayscale" value={gray} onChange={setGray} />
-                <FormSwitch
-                    title="Save as GIF"
-                    value={saveAsGif}
-                    onChange={setSaveAsGif}
-                    description="Saves/Sends the image as a GIF instead of a PNG"
-                />
-                <FormSwitch
-                    title="Show Watermark"
-                    value={showWatermark}
-                    onChange={setShowWatermark}
-                    hideBorder={showWatermark}
-                />
+                <FormSwitch title="Render Emoji" value={renderEmoji} onChange={setRenderEmoji} description="Render emojis in the quote." />
+                <FormSwitch title="Save as GIF" value={saveAsGif} onChange={setSaveAsGif} description="Saves/Sends the image as a GIF instead of a PNG" />
+                <FormSwitch title="Show Watermark" value={showWatermark} onChange={setShowWatermark} hideBorder={showWatermark} />
                 {showWatermark && (
                     <div style={{ marginTop: "8px", marginBottom: "20px" }}>
-                        <TextInput
-                            value={watermarkText}
-                            onChange={setWatermarkText}
-                            placeholder="Watermark text (max 32 characters)"
-                            maxLength={32}
-                        />
+                        <TextInput value={watermarkText} onChange={setWatermarkText} placeholder="Watermark text (max 32 characters)" maxLength={32} />
                     </div>
                 )}
 

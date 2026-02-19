@@ -23,6 +23,7 @@ export interface QuoteImageOptions {
     showWatermark: boolean;
     saveAsGif: boolean;
     quoteFont: QuoteFont;
+    renderEmoji: boolean;
 }
 
 export interface CanvasConfig {
@@ -33,12 +34,31 @@ export interface CanvasConfig {
     maxContentHeight: number;
 }
 
+export interface EmojiToken {
+    type: "text" | "custom_emoji";
+    value: string;
+    emojiId?: string;
+}
+
+export interface TextSegment {
+    type: "text" | "emoji";
+    text?: string;
+    emojiToken?: EmojiToken;
+    width: number;
+}
+
+export interface TextLine {
+    segments: TextSegment[];
+    totalWidth: number;
+    emojiCount: number;
+}
+
 export interface FontSizeCalculation {
     fontSize: number;
     lineHeight: number;
     authorFontSize: number;
     usernameFontSize: number;
-    lines: string[];
+    lines: TextLine[];
     totalHeight: number;
 }
 
@@ -68,4 +88,8 @@ export const SPACING = {
     gradientStart: 200,
     gradientWidth: 400,
     watermarkPadding: 20
+};
+
+export const EMOJI_SIZES = {
+    custom: 48
 };
