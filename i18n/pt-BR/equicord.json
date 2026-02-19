@@ -533,7 +533,7 @@
             "refreshFailed":"Falha ao atualizar comandos. Verifique o console para obter detalhes.",
             "refreshSuccess":"Comandos de barra atualizados com sucesso."
         },
-        "description":"Usado para fornecer suporte, corrigir falhas causadas por discórdia e outros recursos diversos.",
+        "description":"Usado para fornecer suporte, corrigir falhas causadas pelo Discord e outros recursos diversos.",
         "settings":{
             "accountStandingButton":"Mostrar um botão de situação da conta na barra de cabeçalho",
             "forceRoleIcon":"Força a exibição de ícones de cargo ao lado das mensagens no modo compacto",
@@ -658,7 +658,7 @@
     "fontLoader":{
         "description":"Carrega qualquer fonte do Google Fonts",
         "settings":{
-            "applyOnCodeBlocks":"Aplique a fonte aos blocos de código"
+            "applyOnCodeBlocks":"Aplicar a fonte aos blocos de código"
         },
         "ui":{
             "by":"por {authors}",
@@ -724,40 +724,40 @@
         }
     },
     "friendshipRanks":{
-        "description":"Adiciona emblemas mostrando há quanto tempo você é amigo de um usuário",
+        "description":"Adiciona insígnias mostrando há quanto tempo você é amigo de um usuário",
         "ranks":{
             "besties":{
-                "description":"Como você consegue isso??? (5 anos)",
+                "description":"Como vocês conseguem isso??? (5 anos)",
                 "title":"Melhores amigos"
             },
             "blooming":{
-                "description":"Sua amizade está chegando lá! (1 mês)",
-                "title":"Florescendo"
+                "description":"Essa amizade está evoluindo! (1 mês)",
+                "title":"Em flor"
             },
             "burning":{
-                "description":"Sua amizade atingiu velocidade terminal (3 meses)",
-                "title":"Queimando"
+                "description":"Essa amizade está voando! (3 meses)",
+                "title":"A todo vapor"
             },
             "fighter":{
-                "description":"Sua amizade é forte (6 meses)",
-                "title":"Lutador"
+                "description":"Essa amizade já está firme e forte (6 meses)",
+                "title":"Firme e forte"
             },
             "royal":{
-                "description":"Sua amizade passou por bons e maus momentos - 2 anos inteiros!",
-                "title":"Real"
+                "description":"Essa amizade já passou por altos e baixos: 2 anos inteiros!",
+                "title":"Realeza"
             },
             "sprout":{
-                "description":"Sua amizade está apenas começando",
-                "title":"Brotar"
+                "description":"Essa amizade ainda está começando",
+                "title":"Brotinho"
             },
             "star":{
-                "description":"Sua amizade já dura algum tempo (1 ano)",
-                "title":"Estrela"
+                "description":"Essa amizade já é de longa data (1 ano)",
+                "title":"De longa data"
             }
         }
     },
     "fullVcPfp":{
-        "description":"Faz com que os avatares ocupem todo o bloco vc"
+        "description":"Faz com que os avatares ocupem todo o bloco do canal de voz"
     },
     "gensokyoRadioRPC":{
         "description":"Presença rica em Discord para a Rádio Gensokyo!",
@@ -782,13 +782,13 @@
         }
     },
     "gifCollections":{
-        "description":"Allows you to create collections of GIFs",
+        "description":"Permite criar coleções de GIFs",
         "settings":{
             "collectionPrefix":"O prefixo para coleções",
             "collectionsSortOrder":"A ordem de classificação das coleções",
             "collectionsSortType":"O tipo de classificação para coleções",
-            "defaultEmptyCollectionImage":"The image / GIF that will be shown when a collection has no images / GIFs",
-            "itemPrefix":"The prefix for GIF items",
+            "defaultEmptyCollectionImage":"A imagem/GIF exibida quando uma coleção não tiver imagens/GIFs",
+            "itemPrefix":"O prefixo dos itens de GIF",
             "onlyShowCollections":"Mostrar apenas coleções",
             "preventDuplicates":"Evite adicionar o mesmo GIF a uma coleção várias vezes",
             "showCopyImageLink":"Mostrar a opção 'Copiar link da imagem' nos menus de contexto",
@@ -849,11 +849,11 @@
     },
     "gifRoulette":{
         "commands":{
-            "gifroulette":"Tempt fate and send a GIF"
+            "gifroulette":"Desafie a sorte e envie um GIF"
         },
-        "description":"Adds a command to send a random GIF from your favourites, and a one in ten chance to ping the owner of the server",
+        "description":"Adiciona um comando para enviar um GIF aleatório dos seus favoritos, com 10% de chance de mencionar o dono do servidor",
         "settings":{
-            "pingOwnerChance":"Se houver uma mudança de 1 em 10 no ping do dono da servidor (ah, não)"
+            "pingOwnerChance":"Chance de 1 em 10 de marcar o dono do servidor (ah, não)"
         }
     },
     "githubRepos":{
@@ -869,10 +869,10 @@
         }
     },
     "globalBadges":{
-        "description":"Adiciona emblemas globais de outros mods de cliente",
+        "description":"Adiciona insígnias globais de outros mods de cliente",
         "ui":{
             "joinServer":"Entre no servidor GlobalBadges",
-            "refetchSuccess":"Emblemas globais buscados novamente com sucesso!"
+            "refetchSuccess":"Insígnias globais buscados novamente com sucesso!"
         }
     },
     "googleThat":{
@@ -884,15 +884,15 @@
         "settings":{
             "customEngineURL":"A URL do mecanismo que você deseja usar",
             "defaultEngine":"O mecanismo de pesquisa a ser usado",
-            "embed":"Se o link enviado renderizar uma incorporação",
+            "embed":"Se o link enviado renderizar um embed",
             "hyperlink":"Se o link enviado tiver um hiperlink com a consulta como rótulo"
         }
     },
     "guildPickerDumper":{
         "description":"Menu de contexto para extrair e baixar emojis e figurinhas de um servidor.",
         "ui":{
-            "downloadEmojis":"Baixar emoticons",
-            "downloadStickers":"Baixar adesivos",
+            "downloadEmojis":"Baixar emojis",
+            "downloadStickers":"Baixar figurinhas",
             "serverNotFound":"Servidor não encontrado!"
         }
     },
@@ -926,7 +926,7 @@
     "holyNotes":{
         "description":"Salve mensagens como notas para revisitar mais tarde",
         "ui":{
-            "holyNotes":"Notas Sagradas",
+            "holyNotes":"holynotes",
             "noteMessage":"Mensagem de nota",
             "openNotes":"Notas abertas",
             "saveNote":"Salvar nota"
@@ -990,12 +990,12 @@
     },
     "imgToGif":{
         "commands":{
-            "height":"Height of the GIF",
+            "height":"Altura do GIF",
             "image":"Anexo de imagem a ser usado",
-            "imgtogif":"Allows you to turn an image to a GIF",
+            "imgtogif":"Permite transformar uma imagem em GIF",
             "width":"Largura do GIF"
         },
-        "description":"Adds a /imgtoGIF slash command to create a GIF from any image",
+        "description":"Adiciona o comando de barra /imgtoGIF para criar um GIF a partir de qualquer imagem",
         "errors":{
             "noImage":"Nenhuma imagem especificada!",
             "notAnImage":"O upload não é uma imagem"
@@ -1041,7 +1041,7 @@
             "videoDevices":"Dispositivos de vídeo",
             "videoDevicesInfo":"Suporta câmeras e placas de captura (como Elgato HD60X) quando habilitado nas configurações",
             "wayland":"Para Wayland, apenas aparece a seleção de compartilhamento de tela",
-            "x11":"Para X11 pode ou não funcionar: encolher os ombros:"
+            "x11":"Para X11 pode ou não funcionar :shrug:"
         },
         "ui":{
             "instantScreenshare":"Compartilhamento instantâneo de tela",
@@ -1310,7 +1310,7 @@
         }
     },
     "messageFetchTimer":{
-        "description":"Mostrar horários de busca de mensagens na barra de bate-papo",
+        "description":"Mostrar horários de busca de mensagens na barra de chat",
         "settings":{
             "iconColor":"Cor do ícone do temporizador de busca",
             "showIcon":"Mostrar o ícone do temporizador de busca",
@@ -1549,15 +1549,15 @@
         }
     },
     "platformSpoofer":{
-        "description":"Falsifique o status da sua plataforma (dispositivo móvel, desktop, web, console)",
+        "description":"Falsifique o status da sua plataforma (mobile, desktop, web, console)",
         "settings":{
             "platform":"Plataforma para falsificar como",
             "platformOptions":{
                 "android":"Android",
-                "desktop":"Área de trabalho (cliente Discord)",
+                "desktop":"desktop (cliente Discord)",
                 "ios":"iOS",
                 "playstation":"Playstation",
-                "web":"Web (Web Discord)",
+                "web":"web (Discord Web)",
                 "xbox":"Xbox"
             }
         },
@@ -1667,7 +1667,7 @@
             "avoidAfk":"Evite canais AFK",
             "avoidStages":"Evite canais de palco",
             "avoidStates":"Evite que usuários correspondam a filtros de estado",
-            "deafen":"Procure usuários surdos",
+            "deafen":"Procure usuários ensurdecidos",
             "includeStates":"Incluir usuários que correspondam aos filtros de estado",
             "leaveEmpty":"Sair quando o canal ficar vazio",
             "mute":"Procure usuários silenciados",
@@ -1784,25 +1784,25 @@
         "description":"Pesquisa aprimorada de servidor com integração rápida de switcher"
     },
     "showBadgesInChat":{
-        "description":"Mostrar emblemas de usuário em mensagens de bate-papo",
+        "description":"Mostrar insígnias de usuário em mensagens de chat",
         "settings":{
-            "DiscordNitroPosition":"A posição do emblema Discord Nitro",
-            "DiscordProfilePosition":"A posição dos emblemas do perfil Discord",
-            "EquicordContributorPosition":"A posição do selo de Colaborador Equicord",
-            "EquicordDonorPosition":"A posição dos crachás de doador Equicord",
-            "VencordContributorPosition":"A posição do selo de Colaborador Vencord",
-            "VencordDonorPosition":"A posição dos crachás de doador Vencord",
-            "badgeSettings":"Configurar layout e visibilidade do crachá",
-            "showDiscordNitro":"Habilite para mostrar emblemas Discord Nitro no chat",
-            "showDiscordProfile":"Ative para mostrar emblemas de perfil Discord no bate-papo",
-            "showEquicordContributor":"Habilite a exibição de emblemas de Colaborador Equicord no bate-papo",
-            "showEquicordDonor":"Habilite a exibição de emblemas de doador Equicord no bate-papo",
-            "showVencordContributor":"Habilite a exibição de emblemas de contribuidor Vencord no bate-papo",
-            "showVencordDonor":"Habilite a exibição de emblemas de doador Vencord no bate-papo"
+            "DiscordNitroPosition":"A posição da insígnia Discord Nitro",
+            "DiscordProfilePosition":"A posição das insígnias do perfil Discord",
+            "EquicordContributorPosition":"A posição da insígnia de Colaborador Equicord",
+            "EquicordDonorPosition":"A posição das insígnias de doador Equicord",
+            "VencordContributorPosition":"A posição da insígnia de Colaborador Vencord",
+            "VencordDonorPosition":"A posição das insígnias de doador Vencord",
+            "badgeSettings":"Configurar layout e visibilidade das insígnias",
+            "showDiscordNitro":"Habilite para mostrar insígnias Discord Nitro no chat",
+            "showDiscordProfile":"Ative para mostrar insígnias de perfil Discord no chat",
+            "showEquicordContributor":"Habilite a exibição de insígnias de Colaborador Equicord no chat",
+            "showEquicordDonor":"Habilite a exibição de insígnias de doador Equicord no chat",
+            "showVencordContributor":"Habilite a exibição de insígnias de colaborador Vencord no chat",
+            "showVencordDonor":"Habilite a exibição de insígnias de doador Vencord no chat"
         }
     },
     "showMessageEmbeds":{
-        "description":"Mostrar incorporações de mensagens com opções para adicionar ou remover incorporações de mensagens"
+        "description":"Mostrar embeds de mensagens com opções para adicionar ou remover embeds de mensagens"
     },
     "showResourceChannels":{
         "description":"Mostrar canais de recursos que normalmente ficam ocultos"
@@ -1811,10 +1811,10 @@
         "description":"Mostrar o nome da música atualmente tocando no status"
     },
     "sidebarChat":{
-        "description":"Interface de bate-papo na barra lateral para visualização de vários canais",
+        "description":"Interface de chat na barra lateral para visualização de vários canais",
         "settings":{
             "patchCommunity":"Aplica correções em itens como o Navegador de Canais ou a aba de Membros que servidores comunitários possuem",
-            "persistSidebar":"Mantenha o bate-papo da barra lateral aberto durante as reinicializações do Discord"
+            "persistSidebar":"Mantenha o chat da barra lateral aberto durante as reinicializações do Discord"
         }
     },
     "signature":{
@@ -1934,7 +1934,7 @@
         }
     },
     "talkInReverse":{
-        "description":"Adiciona um botão na barra de bate-papo para reverter suas mensagens antes de enviá-las"
+        "description":"Adiciona um botão na barra de chat para reverter suas mensagens antes de enviá-las"
     },
     "themeLibrary":{
         "description":"Navegue e gerencie temas da biblioteca de temas Equicord",
@@ -2018,7 +2018,7 @@
         }
     },
     "toggleVideoBind":{
-        "description":"Adiciona um atalho de teclado para alternar seu vídeo/webcam no bate-papo por voz",
+        "description":"Adiciona um atalho de teclado para alternar seu vídeo/webcam no chat por voz",
         "settings":{
             "keyBind":"A tecla para alternar a webcam quando pressionada",
             "reqAlt":"Exigir que alt seja mantido",
@@ -2074,7 +2074,7 @@
         }
     },
     "unreadBadgeCount":{
-        "description":"Mostrar selos de contagem de mensagens não lidas nos canais",
+        "description":"Mostrar insígnias de contagem de mensagens não lidas nos canais",
         "settings":{
             "notificationCountLimit":"Limitar a contagem de notificações para mais de 99",
             "showOnMutedChannels":"Mostrar contagem não lida em canais silenciados"
@@ -2084,7 +2084,7 @@
         "description":"Destaque URLs específicos em mensagens com cores personalizadas",
         "settings":{
             "boldUrls":"Deixe os URLs destacados em negrito",
-            "highlightEmbeds":"Destaque também URLs no conteúdo incorporado",
+            "highlightEmbeds":"Destaque também URLs no conteúdo do embed",
             "patterns":"Padrões de URL para destacar usando padrões glob"
         },
         "ui":{
@@ -2177,7 +2177,7 @@
             "showOutputDeviceHeader":"Mostrar cabeçalho acima do seletor de dispositivo de saída",
             "showOutputVolumeHeader":"Mostrar cabeçalho acima do controle deslizante de volume de saída",
             "showVideoDeviceHeader":"Mostrar cabeçalho acima do seletor de câmera",
-            "uncollapseSettingsByDefault":"Recolher automaticamente as configurações de voz por padrão"
+            "uncollapseSettingsByDefault":"Expandir automaticamente as configurações de voz por padrão"
         },
         "ui":{
             "camera":"Câmera",
@@ -2191,7 +2191,7 @@
     },
     "viewRawVariant":{
         "contextMenu":{
-            "viewRaw":"Ver bruto"
+            "viewRaw":"Ver raw"
         },
         "description":"Visualize dados JSON brutos para mensagens, usuários, canais e servidores",
         "modal":{
@@ -2201,11 +2201,11 @@
         }
     },
     "voiceButtons":{
-        "description":"Adiciona botões de ação rápida (bate-papo, mudo, surdo) para usuários de canais de voz",
+        "description":"Adiciona botões de ação rápida (chat, silenciar, ensurdecer) para usuários de canais de voz",
         "settings":{
-            "showChatButton":"Mostrar botão de bate-papo",
-            "showDeafenButton":"Mostrar botão surdo",
-            "showMuteButton":"Mostrar botão mudo"
+            "showChatButton":"Mostrar botão de chat",
+            "showDeafenButton":"Mostrar botão de ensurdecer",
+            "showMuteButton":"Mostrar botão de silenciar"
         }
     },
     "voiceChannelLog":{
@@ -2230,10 +2230,10 @@
         "contextMenu":{
             "deafenAll":"Ensurdecer todos",
             "disconnectAll":"Desconectar tudo",
-            "moveAll":"Mova tudo",
-            "muteAll":"Silenciar tudo",
-            "undeafenAll":"Deixar tudo surdo",
-            "unmuteAll":"Ativar som de tudo",
+            "moveAll":"Mover todos",
+            "muteAll":"Silenciar todos",
+            "undeafenAll":"Remover surdez de todos",
+            "unmuteAll":"Ativar som de todos",
             "voiceTools":"Ferramentas de voz"
         },
         "description":"Adiciona ferramentas de moderação de canal de voz (mutar todos, ensurdecer todos, mover todos, desconectar todos)",
@@ -2422,6 +2422,6 @@
         }
     },
     "youtubeDescription":{
-        "description":"Adiciona uma descrição ativável para incorporações de vídeos do YouTube"
+        "description":"Adiciona uma descrição ativável para embeds de vídeos do YouTube"
     }
 }
