@@ -10,6 +10,17 @@ import { applyPalette, GIFEncoder, quantize } from "gifenc";
 
 import { CANVAS_CONFIG, CanvasConfig, FONT_SIZES, FontSizeCalculation, QuoteFont, QuoteImageOptions, SPACING } from "./types";
 
+const CUSTOM_EMOJI_REGEX = /<a?:(\w+):(\d+)>/g;
+const CUSTOM_EMOJI_PLACEHOLDER = "\uFFFC";
+const CUSTOM_EMOJI_SIZE_MULTIPLIER = 1.15;
+const CUSTOM_EMOJI_BASELINE_OFFSET = 0.85;
+
+interface CustomEmojiToken {
+    id: string;
+    name: string;
+    animated: boolean;
+}
+
 export function sizeUpgrade(url: string): string {
     const u = new URL(url);
     u.searchParams.set("size", "512");
@@ -32,7 +43,7 @@ export async function fetchImageAsBlob(url: string): Promise<Blob> {
 }
 
 export function fixUpQuote(quote: string): string {
-    let result = quote.replace(/<a?:(\w+):(\d+)>/g, "");
+    let result = quote;
     const mentionMatches = result.match(/<@!?\d+>/g);
     if (mentionMatches) {
         mentionMatches.forEach(match => {
@@ -141,6 +152,90 @@ function drawGradientOverlay(ctx: CanvasRenderingContext2D, config: CanvasConfig
     ctx.fillRect(config.height - SPACING.gradientWidth, 0, SPACING.gradientWidth, config.height);
 }
 
+function extractCustomEmojis(text: string): { text: string; emojis: CustomEmojiToken[]; } {
+    const emojis: CustomEmojiToken[] = [];
+    const cleanText = text.replace(CUSTOM_EMOJI_REGEX, (match, name: string, id: string) => {
+        emojis.push({
+            id,
+            name,
+            animated: match.startsWith("<a:")
+        });
+        return CUSTOM_EMOJI_PLACEHOLDER;
+    });
+
+    return { text: cleanText, emojis };
+}
+
+function getCustomEmojiUrl(emoji: CustomEmojiToken, extension: "gif" | "png"): string {
+    return `https://cdn.discordapp.com/emojis/${emoji.id}.${extension}?size=96&quality=lossless`;
+}
+
+async function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
+    const image = new Image();
+    const blobUrl = URL.createObjectURL(blob);
+
+    try {
+        await new Promise<void>((resolve, reject) => {
+            image.onload = () => resolve();
+            image.onerror = () => reject(new Error("Failed to load image"));
+            image.src = blobUrl;
+        });
+        return image;
+    } finally {
+        URL.revokeObjectURL(blobUrl);
+    }
+}
+
+async function loadCustomEmojiImage(emoji: CustomEmojiToken): Promise<HTMLImageElement | null> {
+    const extensions: Array<"gif" | "png"> = emoji.animated ? ["gif", "png"] : ["png"];
+
+    for (const extension of extensions) {
+        try {
+            const blob = await fetchImageAsBlob(getCustomEmojiUrl(emoji, extension));
+            return await loadImageFromBlob(blob);
+        } catch {
+            continue;
+        }
+    }
+
+    return null;
+}
+
+async function loadCustomEmojiImages(emojis: CustomEmojiToken[]): Promise<Map<string, HTMLImageElement>> {
+    if (!emojis.length) return new Map<string, HTMLImageElement>();
+
+    const unique = new Map<string, CustomEmojiToken>();
+    emojis.forEach(emoji => {
+        const key = `${emoji.id}:${emoji.animated ? "a" : "s"}`;
+        if (!unique.has(key)) unique.set(key, emoji);
+    });
+
+    const entries = await Promise.all(
+        Array.from(unique.entries()).map(async ([key, emoji]) => [key, await loadCustomEmojiImage(emoji)] as const)
+    );
+
+    return entries.reduce((acc, [key, image]) => {
+        if (image) acc.set(key, image);
+        return acc;
+    }, new Map<string, HTMLImageElement>());
+}
+
+function measureTextWithCustomEmojis(ctx: CanvasRenderingContext2D, text: string, fontSize: number): number {
+    const emojiSize = fontSize * CUSTOM_EMOJI_SIZE_MULTIPLIER;
+    let width = 0;
+    let start = 0;
+
+    for (let i = 0; i < text.length; i++) {
+        if (text[i] !== CUSTOM_EMOJI_PLACEHOLDER) continue;
+        width += ctx.measureText(text.slice(start, i)).width;
+        width += emojiSize;
+        start = i + 1;
+    }
+
+    width += ctx.measureText(text.slice(start)).width;
+    return width;
+}
+
 function calculateTextLines(
     ctx: CanvasRenderingContext2D,
     text: string,
@@ -154,7 +249,7 @@ function calculateTextLines(
     let currentLine: string[] = [];
 
     words.forEach(word => {
-        if (ctx.measureText(word).width > maxWidth) {
+        if (measureTextWithCustomEmojis(ctx, word, fontSize) > maxWidth) {
             if (currentLine.length) {
                 lines.push(currentLine.join(" "));
                 currentLine = [];
@@ -163,7 +258,7 @@ function calculateTextLines(
             let chunk = "";
             for (const char of word) {
                 const testChunk = chunk + char;
-                if (ctx.measureText(testChunk).width > maxWidth) {
+                if (measureTextWithCustomEmojis(ctx, testChunk, fontSize) > maxWidth) {
                     if (chunk) lines.push(chunk);
                     chunk = char;
                 } else {
@@ -173,7 +268,7 @@ function calculateTextLines(
             if (chunk) lines.push(chunk);
         } else {
             const testLine = [...currentLine, word].join(" ");
-            if (ctx.measureText(testLine).width > maxWidth && currentLine.length) {
+            if (measureTextWithCustomEmojis(ctx, testLine, fontSize) > maxWidth && currentLine.length) {
                 lines.push(currentLine.join(" "));
                 currentLine = [word];
             } else {
@@ -224,17 +319,52 @@ function drawQuoteText(
     ctx: CanvasRenderingContext2D,
     calculation: FontSizeCalculation,
     font: QuoteFont,
-    config: CanvasConfig
+    config: CanvasConfig,
+    emojis: CustomEmojiToken[],
+    emojiImages: Map<string, HTMLImageElement>
 ): number {
     ctx.fillStyle = "#fff";
     ctx.font = `300 ${calculation.fontSize}px '${font}', sans-serif`;
+    const emojiSize = calculation.fontSize * CUSTOM_EMOJI_SIZE_MULTIPLIER;
 
     let quoteY = (config.height - calculation.totalHeight) / 2;
+    let emojiIndex = 0;
 
     calculation.lines.forEach(line => {
-        const xOffset = (config.quoteAreaWidth - ctx.measureText(line).width) / 2;
+        const xOffset = (config.quoteAreaWidth - measureTextWithCustomEmojis(ctx, line, calculation.fontSize)) / 2;
+        let x = config.quoteAreaX + xOffset;
+        let segmentStart = 0;
         quoteY += calculation.lineHeight;
-        ctx.fillText(line, config.quoteAreaX + xOffset, quoteY);
+
+        for (let i = 0; i < line.length; i++) {
+            if (line[i] !== CUSTOM_EMOJI_PLACEHOLDER) continue;
+
+            const segment = line.slice(segmentStart, i);
+            if (segment) {
+                ctx.fillText(segment, x, quoteY);
+                x += ctx.measureText(segment).width;
+            }
+
+            const emoji = emojis[emojiIndex++];
+            if (emoji) {
+                const key = `${emoji.id}:${emoji.animated ? "a" : "s"}`;
+                const image = emojiImages.get(key);
+                if (image) {
+                    const y = quoteY - emojiSize * CUSTOM_EMOJI_BASELINE_OFFSET;
+                    ctx.drawImage(image, x, y, emojiSize, emojiSize);
+                } else {
+                    ctx.fillText("□", x, quoteY);
+                }
+            }
+
+            x += emojiSize;
+            segmentStart = i + 1;
+        }
+
+        const tail = line.slice(segmentStart);
+        if (tail) {
+            ctx.fillText(tail, x, quoteY);
+        }
     });
 
     return quoteY;
@@ -283,6 +413,8 @@ export async function createQuoteImage(options: QuoteImageOptions): Promise<Blob
     await ensureFontLoaded();
 
     const quote = fixUpQuote(rawQuote);
+    const { text: quoteText, emojis } = extractCustomEmojis(quote);
+    const emojiImages = await loadCustomEmojiImages(emojis);
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("Failed to get 2D rendering context");
@@ -302,8 +434,8 @@ export async function createQuoteImage(options: QuoteImageOptions): Promise<Blob
 
     drawGradientOverlay(ctx, CANVAS_CONFIG);
 
-    const calculation = calculateOptimalFontSize(ctx, quote, quoteFont, CANVAS_CONFIG);
-    const quoteEndY = drawQuoteText(ctx, calculation, quoteFont, CANVAS_CONFIG);
+    const calculation = calculateOptimalFontSize(ctx, quoteText, quoteFont, CANVAS_CONFIG);
+    const quoteEndY = drawQuoteText(ctx, calculation, quoteFont, CANVAS_CONFIG, emojis, emojiImages);
     drawAuthorInfo(ctx, author, calculation, CANVAS_CONFIG, quoteEndY);
 
     if (showWatermark && watermark) {
