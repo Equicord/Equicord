@@ -179,7 +179,7 @@
         "description":"Bloqueia mensagens contendo palavras específicas definidas pelo usuário, como se o usuário que as enviou estivesse bloqueado.",
         "settings":{
             "blockedWords":"Lista de palavras separadas por vírgulas para bloquear",
-            "caseSensitive":"Define se a busca deve diferenciar maiúsculas de minúsculas",
+            "caseSensitive":"Se a busca deve diferenciar maiúsculas de minúsculas",
             "ignoreBlockedMessages":"Ignora completamente a barra de novas mensagens (recentes)",
             "useRegex":"Usar cada valor como uma expressão regular ao verificar o conteúdo da mensagem (avançado)"
         }
@@ -427,7 +427,7 @@
     },
     "customTimestamps":{
         "about":{
-            "additional":"Além disso, você pode usá-los em suas entradas:",
+            "additional":"Além disso, você pode usar estes em suas entradas:",
             "calendar":"permite a formatação dinâmica de data, como \"Hoje\" ou \"Ontem\".",
             "relative":"fornece horários como \"4 horas atrás\".",
             "title":"Como usar:"
@@ -462,7 +462,7 @@
         "description":"Arraste usuários, canais ou servidores no chat para inserir menções ou convites.",
         "settings":{
             "allowChatBodyDrop":"Permitir entrar no corpo principal do chat para inserir texto.",
-            "channelOutput":"Saída de queda de canal.",
+            "channelOutput":"Saída de soltura de canal.",
             "channelOutputOptions":{
                 "link":"Link do canal",
                 "mention":"#menção do canal"
@@ -489,7 +489,7 @@
             },
             "inviteTemporaryMembership":"Conceda adesão temporária.",
             "reuseExistingInvites":"Reutilize o convite existente em vez de criar um novo.",
-            "userOutput":"Saída de eliminação do usuário.",
+            "userOutput":"Saída de soltura de usuário.",
             "userOutputOptions":{
                 "id":"ID de usuário",
                 "mention":"Mencionar usuário"
@@ -1239,7 +1239,7 @@
         },
         "description":"Pequeno plugin para rica presença do ListenBrainz",
         "missingArtOptions":{
-            "listenbrainzLogo":"Use o logotipo grande do ListenBrainz",
+            "listenbrainzLogo":"Usar logo grande do ListenBrainz",
             "placeholder":"Use espaço reservado genérico"
         },
         "nameFormatOptions":{
