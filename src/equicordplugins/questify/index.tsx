@@ -1007,8 +1007,6 @@ function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false
 }
 
 function getQuestPanelPercentComplete({ quest, percentCompleteText }: { quest: Quest; percentCompleteText?: string; }): { percentComplete: number; } | { percentComplete: number; percentCompleteText: string; } | null {
-    QuestifyLogger.info("AAAA", quest, percentCompleteText);
-
     if (!quest) { return null; }
 
     const task = getQuestTask(quest);
