@@ -1,10 +1,10 @@
 {
-				"description":"Assists with translating Equicord",
-				"settings":{
-								"forceLocale":{
-												"description":"Force a different locale for Equicord to use",
-												"followDiscord":"Default (follow Discord)"
-								},
-								"showMissingKeys":"If the current locale is missing translations, show the keys instead of falling back to English"
-				}
+    "description":"يساعد في ترجمه ايكويكورد",
+    "settings":{
+        "forceLocale":{
+            "description":"فرض لغه اخري في ايكويكورد",
+            "followDiscord":"الأفتراضي (اتبع الديسكورد)"
+        },
+        "showMissingKeys":"اذا كانت اللغه غير كامله الترجمه، برجاء اظهار الكلام الغير مترجم بدل من الرجوع للغه الأنجليزيه"
+    }
 }
