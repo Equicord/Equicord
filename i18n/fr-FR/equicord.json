@@ -19,46 +19,46 @@
         "description":"Fait en sorte que le pop‑up de suppression de bruit bascule entre Aucun et Krisp au lieu de Krisp et Standard"
     },
     "alwaysExpandProfiles":{
-        "description":"Always expands profile popouts to the full modal"
+        "description":"Toujours agrandir les fenêtres de profil en grand"
     },
     "anammox":{
-        "description":"Hides various features related to nitro and the store",
+        "description":"Masque diverses fonctionnalités liées à Nitro et à la boutique",
         "settings":{
-            "billing":"Remove billing settings",
-            "dms":"Remove shops above DMs list",
-            "emojiList":"Remove unavailable categories from the emoji picker",
-            "gift":"Remove gift button",
-            "quests":"Remove quests above DMs list",
-            "serverBoost":"Remove server boost info above channel list"
+            "billing":"Supprimer les paramètres de facturation",
+            "dms":"Supprimer lea boutique au-dessus de la liste des messages privés",
+            "emojiList":"Supprimer les catégories indisponibles du sélecteur d'émojis",
+            "gift":"Supprimer le bouton cadeau",
+            "quests":"Supprimer les quêtes au-dessus de la liste des messages privés",
+            "serverBoost":"Supprimer le \"Boost de serveur\" au-dessus de la liste des salons"
         }
     },
     "animalese":{
-        "description":"Plays animal crossing animalese for every message sent (they yap a lot)",
+        "description":"Fait des bruits Animalese d'Animal Crossing pour chaque message envoyé (ils jacassent beaucoup)",
         "quality":{
-            "high":"High",
-            "low":"Low",
-            "lowest":"Lowest",
-            "medium":"Medium"
+            "high":"Haut",
+            "low":"Bas",
+            "lowest":"Le plus bas",
+            "medium":"Moyen"
         },
         "settings":{
-            "messageLengthLimit":"Maximum length of message to process",
-            "pitch":"Pitch multiplier",
-            "processOwnMessages":"Enable to yap your own messages too",
-            "soundQuality":"Quality of sound to use",
-            "speed":"Speed of the animalese sound",
-            "volume":"Volume of the animalese sound"
+            "messageLengthLimit":"Longueur maximale du message à traiter",
+            "pitch":"Multiplicateur de hauteur du son",
+            "processOwnMessages":"Jouer l'Animalese aussi pour ses propres messages",
+            "soundQuality":"Qualité sonore à utiliser",
+            "speed":"Vitesse des bruits Animalese",
+            "volume":"Volume des bruits Animalese"
         }
     },
     "atSomeone":{
         "contextMenu":{
-            "someone":"Mention someone randomly"
+            "someone":"Mentionne quelqu'un au hasard"
         },
-        "description":"Mention someone randomly"
+        "description":"Mentionne quelqu'un au hasard"
     },
     "autoZipper":{
-        "description":"Automatically zips specified file types and folders before uploading to Discord",
+        "description":"Compresse automatiquement en zip les types de fichiers et dossiers spécifiés avant leur envois vers Discord",
         "settings":{
-            "extensions":"Comma-separated list of file extensions to auto-zip (e.g., .psd,.blend,.exe,.dmg)"
+            "extensions":"Liste séparée par des virgules des extensions de fichiers à zipper automatiquement (par exemple: .psd,.blend,.exe,.dmg)"
         }
     },
     "bannersEverywhere":{
@@ -84,6 +84,23 @@
             "modalTitle":"Contenu Base64 décodé",
             "tooltipLeft":"Copier décodé (clic gauche) / Décoder Base64 (clic droit)",
             "tooltipRight":"Décoder Base64 (clic gauche) / Copier le résultat décodé (clic droit)"
+        }
+    },
+    "betterActivities":{
+        "description":"Affiche toutes les activités dans la liste des membres et la pop-up utilisateur, avec des options permettant de personnaliser l'affichage",
+        "options":{
+            "carousel":"Carrousel",
+            "list":"Liste"
+        },
+        "settings":{
+            "allActivitiesStyle":"Style d'affichage de toutes les activités",
+            "hideTooltip":"Masquer l'info-bulle sur les icônes d'activité",
+            "iconSize":"Taille des icônes d'activité",
+            "memberList":"Afficher les activités dans la liste des membres",
+            "removeGameActivityStatus":"Supprimer l'indicateur d'activité du jeu",
+            "renderGifs":"Afficher les GIFs dans les icônes d'activité",
+            "specialFirst":"Afficher les activités spéciales en premier",
+            "userPopout":"Afficher toutes les activités dans la pop-up de profil utilisateur"
         }
     },
     "betterAudioPlayer":{
@@ -129,10 +146,10 @@
                 "userOption":"specific user to try and refresh"
             }
         },
-        "description":"Enhances the command system with miscellaneous improvements.",
+        "description":"Renforce le système de commandes avec plusieurs améliorations.",
         "settings":{
             "allowNewlinesInCommands":"Allow newlines in command inputs (CTRL + Shift + Enter)",
-            "autoFillArguments":"Automatically fill command with all arguements instead of just required ones"
+            "autoFillArguments":"Remplir automatiquement la commande avec tous les arguments au lieu des seuls arguments obligatoires"
         }
     },
     "betterInvites":{
@@ -175,12 +192,12 @@
     },
     "bypassStatus":{
         "contextMenu":{
-            "addStatusBypass":"Add Status Bypass",
-            "removeStatusBypass":"Remove Status Bypass"
+            "addStatusBypass":"Ajouter un contournement de statut",
+            "removeStatusBypass":"Suppriwer un contournement de statut"
         },
         "description":"Continuez à recevoir des notifications provenant de sources spécifiques lorsque vous êtes en mode \"Ne pas déranger\". Cliquez avec le bouton droit sur les utilisateurs/salons/serveur pour les configurer afin qu'ils contournent le mode \"Ne pas déranger\".",
         "placeholder":{
-            "separateWithCommas":"Separate with commas"
+            "separateWithCommas":"Séparer par des virgules"
         },
         "settings":{
             "allowOutsideOfDms":"Autoriser les utilisateurs sélectionnés à contourner le statut hors messages privés également (agit comme un contournement de salon/guilde, mais pour tous les messages envoyés par ces utilisateurs)",
