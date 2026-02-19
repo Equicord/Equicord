@@ -2023,7 +2023,7 @@
         "description":"Corrige menções para usuários desconhecidos que aparecem como '@usuário-desconhecido' (passe o cursor sobre uma menção para corrigi-la)"
     },
     "vcDoubleClick":{
-        "description":"Entre em canais de voz com clique duplo em vez de clique único"
+        "description":"Entre em canais de voz com clique duplo em vez de um clique único"
     },
     "vcNarrator":{
         "customiseMessages":"Você pode personalizar as mensagens faladas abaixo. Para desativar uma mensagem específica, deixe-a em branco",
