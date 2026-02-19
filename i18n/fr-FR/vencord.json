@@ -331,6 +331,17 @@
         "removeDecoration":"Remove Decoration",
         "title":"Decor"
     },
+    "devCompanion":{
+        "description":"Plugin Dev Companion. Veuillez signaler tout dysfonctionnement ou comportement étrange (probablement un bug) à sadan, soit par ping, soit par message privé, merci !",
+        "settings":{
+            "notifyOnAutoConnect":"Notifier lorsque le Dev Companion s'est connecté automatiquement.",
+            "reloadAfterToggle":"Recharger après réception d'une commande de désactivation/activation du plugin.",
+            "usePatchedModule":"En cas de demande d'extraction, répondez avec le module corrigé actuel (s'il est corrigé) au lieu de l'original."
+        }
+    },
+    "disableCallIdle":{
+        "description":"Désactive l'expulsion automatique des appels vocaux DM après 3 minutes, désactive aussi le déplacement vers un salon AFK."
+    },
     "donate":"Donate",
     "donorCard":{
         "donated":{
@@ -344,6 +355,9 @@
             "description":"Please consider supporting the development of Equicord by donating!",
             "title":"Support the Project"
         }
+    },
+    "dontRoundMyTimestamps":{
+        "description":"Toujours tronquer les horodatages relatifs, donc 7,6 ans devient 7 ans au lieu de 8 ans"
     },
     "dynamicImageModalAPI":{
         "description":"Permet d'omettre la largeur ou la hauteur lors de l'ouverture d'une fenêtre modale d'image"
@@ -369,6 +383,9 @@
         "failedToClone":"Failed to clone: {error}",
         "nameValidation":"Name must be between 2 and 32 characters",
         "somethingWentWrong":"Something went wrong (check console!)"
+    },
+    "f8break":{
+        "description":"Mettre le client en pause lorsque vous appuyez sur F8 avec DevTools (+ points d'arrêt) ouvert."
     },
     "failedToRender":"Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!",
     "fakeNitro":{
@@ -426,6 +443,9 @@
             "searchOption":"The part of the url you want to search"
         }
     },
+    "fixCodeblockGap":{
+        "description":"Supprime l'espace entre les blocs de code et le texte situé en dessous"
+    },
     "fixImagesQuality":{
         "animatedImagesAlways":"Animated images (GIF, WebP, etc.) in chat will always animate, regardless of if the App is focused.",
         "defaultBehavior":"The default behavior is the following:",
@@ -439,9 +459,51 @@
             "originalImagesInChat":"Also load the original image in Chat. WARNING: Read the caveats above"
         }
     },
+    "fixSpotifyEmbeds":{
+        "description":"Corrige le volume excessivement élevé des intégrations Spotify en vous permettant de personnaliser le volume",
+        "settings":{
+            "volume":"Le pourcentage de volume à définir pour les intégrations Spotify. Tout ce qui dépasse 10 % est trèèèès fort"
+        }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"Contourne le blocage des vidéos YouTube sur Discord (par exemple par UMG)"
+    },
+    "forceOwnerCrown":{
+        "description":"Forcer l'affichage de la couronne du propriétaire à côté des noms d'utilisateur, même si le serveur est grand"
+    },
+    "friendInvites":{
+        "commands":{
+            "createFriendInvite":{
+                "description":"Génère un lien d'invitation d'ami.",
+                "name":"Créer une invitation d'ami"
+            },
+            "revokeFriendInvites":{
+                "description":"Révoque toutes les invitations d'amis générées.",
+                "name":"révoquer les invitations d'amis"
+            },
+            "viewFriendInvites":{
+                "description":"Afficher la liste de toutes les invitations d'amis générées.",
+                "name":"Afficher les invitations d'amis"
+            }
+        },
+        "description":"Créez et gérez des liens d'invitation d'amis via des commandes slash (/create friend invite, /view friend invites, /revoke friend invites).",
+        "ui":{
+            "allRevoked":"Toutes les invitations d'amis ont été révoquées.",
+            "expires":"Expire :",
+            "maxUses":"Utilisations maximales :",
+            "noActiveInvites":"Vous n'avez aucune invitation d'ami active !",
+            "timesUsed":"Nombre d'utilisations :"
+        }
+    },
     "friendsSince":{
         "description":"Shows when you became friends with someone in the user popout",
         "heading":"Friends Since"
+    },
+    "fullSearchContext":{
+        "description":"Rend le menu contextuel des messages dans les résultats de recherche aussi complet qu'attendu"
+    },
+    "fullUserInChatbox":{
+        "description":"Rend les mentions d'utilisateurs dans la barre de chat plus fonctionnelles (clic gauche/droit, etc.)"
     },
     "gameActivityToggle":{
         "description":"Adds a button next to the mic and deafen button to toggle game activity.",
@@ -1376,6 +1438,17 @@
         "suppressEmbeds":"Suppress Embeds",
         "unsuppressEmbeds":"Unsuppress Embeds"
     },
+    "userMessagesPronouns":{
+        "description":"Ajoute les pronoms des utilisateurs dans leurs messages du chat",
+        "settings":{
+            "pronounsFormat":"Le format d'affichage des pronoms dans le chat",
+            "pronounsFormatOptions":{
+                "capitalized":"Majuscule",
+                "lowercase":"Minuscule"
+            },
+            "showSelf":"Activer ou désactiver l'affichage de vos pronoms"
+        }
+    },
     "userSettingsAPI":{
         "description":"Modifie les paramètres utilisateur de Discord pour afficher leur groupe et leur nom."
     },
@@ -1398,6 +1471,15 @@
             "usrbgBanner":"USRBG banner",
             "voiceBackground":"Use USRBG banners as voice chat backgrounds"
         }
+    },
+    "validReply":{
+        "description":"Correction du message \"Impossible de charger le message\" qui s'affichait lorsque l'on passait la souris sur la réponse"
+    },
+    "validUser":{
+        "description":"Corrigez les mentions d'utilisateurs inconnus qui apparaissent sous la forme \"@utilisateur-inconnu\" (passez la souris sur une mention pour la corriger)"
+    },
+    "vcDoubleClick":{
+        "description":"Rejoignez les discussions vocales en double-cliquant au lieu de cliquer une seule fois"
     },
     "vcNarrator":{
         "customiseMessages":"You can customise the spoken messages below. You can disable specific messages by setting them to nothing",
@@ -1478,6 +1560,24 @@
         "sending":"Now sending voice message... Please be patient",
         "uploadFile":"Upload File"
     },
+    "volumeBooster":{
+        "description":"Vous permet de régler le volume de l'utilisateur et du stream au-dessus de la limite par défaut",
+        "settings":{
+            "multiplier":"Multiplicateur de volume"
+        }
+    },
+    "webContextMenus":{
+        "description":"Réajoute les menus contextuels manquants dans la version Web de Discord : Liens et images (Copier/Ouvrir le lien/l'image), Zone de texte (Copier, Couper, Coller, Vérification orthographique)",
+        "settings":{
+            "addBack":"Réintégrer les menus contextuels de Discord pour les images, les liens et la barre de saisie du chat"
+        }
+    },
+    "webKeybinds":{
+        "description":"Réajoute les raccourcis clavier manquants dans la version web de Discord : ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. Ne fonctionne que sur Equibop/Vesktop/Legcord, pas dans votre navigateur"
+    },
+    "webScreenShareFixes":{
+        "description":"Supprime la limite de débit de 2500 kbps sur les clients Chromium et Vesktop."
+    },
     "whoReacted":{
         "settings":{
             "avatarClick":"Toggle clicking avatars in reactions"
@@ -1511,5 +1611,8 @@
         "timeout":"Notification duration (secs)",
         "volume":"Volume",
         "webSocketPort":"Websocket port"
+    },
+    "youtubeAdblock":{
+        "description":"Bloquer les publicités dans les vidéos YouTube intégrées et l'activité WatchTogether via AdGuard"
     }
 }
