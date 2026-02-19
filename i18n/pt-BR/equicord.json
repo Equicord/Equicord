@@ -179,7 +179,7 @@
         "description":"Bloqueia mensagens contendo palavras específicas definidas pelo usuário, como se o usuário que as enviou estivesse bloqueado.",
         "settings":{
             "blockedWords":"Lista de palavras separadas por vírgulas para bloquear",
-            "caseSensitive":"Se deve usar uma pesquisa sensível a maiúsculas e minúsculas ou não",
+            "caseSensitive":"Define se a busca deve diferenciar maiúsculas de minúsculas",
             "ignoreBlockedMessages":"Ignora completamente a barra de novas mensagens (recentes)",
             "useRegex":"Usar cada valor como uma expressão regular ao verificar o conteúdo da mensagem (avançado)"
         }
