@@ -324,7 +324,7 @@
     },
     "copyStickerLinks":{
         "copyLink":"Copiar Link",
-        "description":"Adiciona a habilidade de copiar e abrir links de Figurinha",
+        "description":"Adiciona a opção de copiar e abrir links de figurinhas",
         "linkCopied":"Link copiado!",
         "openLink":"Abrir link"
     },
@@ -957,7 +957,7 @@
         },
         "channelLabels":{
             "directMessage":"Mensagens Diretas",
-            "groupDM":"Groupo de DM",
+            "groupDM":"Grupo de DM",
             "server":"Servidor"
         },
         "description":"Adiciona uma prévia a mensagens que contêm links de outras mensagens",
