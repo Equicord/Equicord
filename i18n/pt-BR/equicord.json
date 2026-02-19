@@ -436,7 +436,7 @@
         "settings":{
             "calendarFormats":"Formatos de calendário",
             "calendarFormatsDescription":"Como formatar o valor [calendar] se usado nos formatos de data/hora acima.",
-            "formats":"Personalize os formatos de data/hora"
+            "formats":"Personalizar formatos de data/hora"
         }
     },
     "customUserColors":{
@@ -560,7 +560,7 @@
             "editQuickCss":"Editar QuickCSS",
             "enableQuickCss":"Habilitar QuickCSS",
             "manageThemes":"Gerenciar temas",
-            "openNotificationLog":"Abrir registo de notificações",
+            "openNotificationLog":"Abrir registro de notificações",
             "openSettings":"Abra Configurações",
             "plugins":"Plugins",
             "restartToApply":"Reinicie para aplicar a alteração.",
@@ -1239,7 +1239,7 @@
         },
         "description":"Pequeno plugin para rica presença do ListenBrainz",
         "missingArtOptions":{
-            "listenbrainzLogo":"Use large ListenBrainz logo",
+            "listenbrainzLogo":"Use o logotipo grande do ListenBrainz",
             "placeholder":"Use espaço reservado genérico"
         },
         "nameFormatOptions":{
@@ -1330,11 +1330,11 @@
         "buttons":{
             "exportLogs":"Exportar Registros",
             "exporting":"Exportando...",
-            "importLogs":"Importar Logs",
+            "importLogs":"Importar registros",
             "importing":"Importando..."
         },
         "modal":{
-            "clearAllLogs":"Limpar Todas as Logs",
+            "clearAllLogs":"Limpar todos os registros",
             "clearVisibleLogs":"Limpar Registros Visíveis",
             "copyChannelId":"Copiar ID do Canal",
             "copyContent":"Copiar Conteúdo",
@@ -1350,7 +1350,7 @@
             "fromDms":"Das DMs de {username}",
             "fromGroupDm":"Do Grupo de DM de {name}",
             "ghostPinged":"Ghost Pinged (mencionou e apagou a mensagem)",
-            "importLogs":"Importar Logs",
+            "importLogs":"Importar registros",
             "importLogsTooltip":"O ML Enhanced agora armazena registros no IndexedDB. Você precisa importar seus registros antigos do diretório de registros. A importação não substituirá os registros existentes.",
             "jumpToMessage":"Ir Para a Mensagem",
             "loadMore":"Carregar Mais",
@@ -1379,7 +1379,7 @@
             "ignoreWebhooks":"Define se mensagens de webhooks devem ser ignoradas",
             "importLogsFromFile":"Importar registros de um arquivo",
             "messageLimit":"Número máximo de mensagens a serem salvas. As mensagens mais antigas são excluídas quando o limite é atingido. 0 significa que não há limite",
-            "messagesToDisplayAtOnceInLogs":"Número de mensagens a exibir de uma só vez nos registos e número de mensagens a carregar ao carregar mais mensagens nos registos.",
+            "messagesToDisplayAtOnceInLogs":"Número de mensagens a exibir de uma só vez nos registros e número de mensagens a carregar ao carregar mais mensagens nos registros.",
             "openImageCacheFolder":"Abre o diretório de cache de imagens",
             "openLogs":"Abrir Registros",
             "permanentlyRemoveLogByDefault":"O botão de remover registro do MessageLogger base do Vencord excluirá os registros permanentemente",
@@ -1855,7 +1855,7 @@
         }
     },
     "soundBoardLogger":{
-        "description":"Registra o uso do efeitos sonoros em canais de voz",
+        "description":"Registra o uso de efeitos sonoros em canais de voz",
         "settings":{
             "FileType":"O formato em que você deseja salvar seu arquivo",
             "SavedIds":"A quantidade de IDs de soundboard que você deseja salvar por vez (0 permite salvar infinitos)",
