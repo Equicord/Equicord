@@ -5,7 +5,7 @@
  */
 
 import { User } from "@vencord/discord-types";
-import { UserStore } from "@webpack/common";
+import { IconUtils, UserStore } from "@webpack/common";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
 
 import { CANVAS_CONFIG, CanvasConfig, FONT_SIZES, FontSizeCalculation, QuoteFont, QuoteImageOptions, SPACING } from "./types";
@@ -166,10 +166,6 @@ function extractCustomEmojis(text: string): { text: string; emojis: CustomEmojiT
     return { text: cleanText, emojis };
 }
 
-function getCustomEmojiUrl(emoji: CustomEmojiToken, extension: "gif" | "png"): string {
-    return `https://cdn.discordapp.com/emojis/${emoji.id}.${extension}?size=96&quality=lossless`;
-}
-
 async function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
     const image = new Image();
     const blobUrl = URL.createObjectURL(blob);
@@ -187,11 +183,14 @@ async function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
 }
 
 async function loadCustomEmojiImage(emoji: CustomEmojiToken): Promise<HTMLImageElement | null> {
-    const extensions: Array<"gif" | "png"> = emoji.animated ? ["gif", "png"] : ["png"];
-
-    for (const extension of extensions) {
+    const animatedVariants = emoji.animated ? [true, false] : [false];
+    for (const animated of animatedVariants) {
         try {
-            const blob = await fetchImageAsBlob(getCustomEmojiUrl(emoji, extension));
+            const blob = await fetchImageAsBlob(IconUtils.getEmojiURL({
+                id: emoji.id,
+                animated,
+                size: 96
+            }));
             return await loadImageFromBlob(blob);
         } catch {
             continue;
