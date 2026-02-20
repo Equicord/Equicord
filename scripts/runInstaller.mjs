@@ -18,27 +18,26 @@
 
 import "./checkNodeVersion.js";
 
-import { execFileSync, execSync } from "child_process";
-import { createWriteStream, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { execFileSync } from "child_process";
+import { createWriteStream, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import { Readable } from "stream";
 import { finished } from "stream/promises";
 import { fileURLToPath } from "url";
 
 const BASE_URL = "https://github.com/Equicord/Equilotl/releases/latest/download/";
-const INSTALLER_PATH_DARWIN = "Equilotl.app/Contents/MacOS/Equilotl";
-const INSTALLER_APP_DARWIN = "Equilotl.app";
+const RELEASE_API_URL = "https://api.github.com/repos/Equicord/Equilotl/releases/latest";
+const INSTALLER_CLI_DARWIN = "EquilotlCli-darwin";
 
 const BASE_DIR = join(dirname(fileURLToPath(import.meta.url)), "..");
 const FILE_DIR = join(BASE_DIR, "dist", "Installer");
 const ETAG_FILE = join(FILE_DIR, "etag.txt");
+const DARWIN_TAG_FILE = join(FILE_DIR, "darwin-cli-tag.txt");
 
 function getFilename() {
     switch (process.platform) {
         case "win32":
             return "EquilotlCli.exe";
-        case "darwin":
-            return "Equilotl.MacOS.zip";
         case "linux":
             return "EquilotlCli-linux";
         default:
@@ -46,19 +45,89 @@ function getFilename() {
     }
 }
 
+function downloadToFile(res, outputFile, mode) {
+    const body = Readable.fromWeb(res.body);
+    return finished(body.pipe(createWriteStream(outputFile, {
+        mode,
+        autoClose: true
+    })));
+}
+
+async function ensureDarwinCliBinary() {
+    mkdirSync(FILE_DIR, { recursive: true });
+
+    const outputFile = join(FILE_DIR, INSTALLER_CLI_DARWIN);
+    const releaseRes = await fetch(RELEASE_API_URL, {
+        headers: {
+            "User-Agent": "Equicord (https://github.com/Equicord/Equicord)"
+        }
+    });
+
+    if (!releaseRes.ok)
+        throw new Error(`Failed to fetch latest Equilotl release metadata: ${releaseRes.status} ${releaseRes.statusText}`);
+
+    const release = await releaseRes.json();
+    const latestTag = release?.tag_name;
+    if (!latestTag)
+        throw new Error("Latest Equilotl release metadata did not include a tag");
+
+    const cachedTag = existsSync(DARWIN_TAG_FILE)
+        ? readFileSync(DARWIN_TAG_FILE, "utf-8")
+        : "";
+
+    if (existsSync(outputFile) && cachedTag === latestTag) {
+        console.log("macOS Equilotl CLI is up to date, not rebuilding!");
+        return outputFile;
+    }
+
+    console.log(`Building macOS Equilotl CLI for ${latestTag}...`);
+
+    const srcDir = join(FILE_DIR, "Equilotl-src");
+    const srcArchive = join(FILE_DIR, `Equilotl-${latestTag}.tar.gz`);
+
+    const tarballUrl = release?.tarball_url;
+    if (!tarballUrl)
+        throw new Error("Latest Equilotl release metadata did not include a tarball URL");
+
+    const tarRes = await fetch(tarballUrl, {
+        headers: {
+            "User-Agent": "Equicord (https://github.com/Equicord/Equicord)"
+        }
+    });
+
+    if (!tarRes.ok)
+        throw new Error(`Failed to download Equilotl source tarball: ${tarRes.status} ${tarRes.statusText}`);
+
+    await downloadToFile(tarRes, srcArchive);
+
+    rmSync(srcDir, { recursive: true, force: true });
+    mkdirSync(srcDir, { recursive: true });
+
+    execFileSync("tar", ["-xzf", srcArchive, "-C", srcDir, "--strip-components=1"], {
+        stdio: "inherit"
+    });
+
+    execFileSync("go", ["build", "-tags", "cli", "-o", outputFile], {
+        cwd: srcDir,
+        stdio: "inherit"
+    });
+
+    writeFileSync(DARWIN_TAG_FILE, latestTag);
+
+    return outputFile;
+}
+
 async function ensureBinary() {
+    if (process.platform === "darwin") {
+        return ensureDarwinCliBinary();
+    }
+
     const filename = getFilename();
     console.log("Downloading " + filename);
 
     mkdirSync(FILE_DIR, { recursive: true });
 
-    const downloadName = join(FILE_DIR, filename);
-    const outputFile = process.platform === "darwin"
-        ? join(FILE_DIR, INSTALLER_PATH_DARWIN)
-        : downloadName;
-    const outputApp = process.platform === "darwin"
-        ? join(FILE_DIR, INSTALLER_APP_DARWIN)
-        : null;
+    const outputFile = join(FILE_DIR, filename);
 
     const etag = existsSync(outputFile) && existsSync(ETAG_FILE)
         ? readFileSync(ETAG_FILE, "utf-8")
@@ -80,39 +149,13 @@ async function ensureBinary() {
 
     writeFileSync(ETAG_FILE, res.headers.get("etag"));
 
-    if (process.platform === "darwin") {
-        console.log("Saving zip...");
-        const zip = new Uint8Array(await res.arrayBuffer());
-        writeFileSync(downloadName, zip);
-
-        console.log("Unzipping app bundle...");
-        execSync(`ditto -x -k '${downloadName}' '${FILE_DIR}'`);
-
-        console.log("Clearing quarantine from installer app (this is required to run it)");
-        console.log("xattr might error, that's okay");
-
-        const logAndRun = cmd => {
-            console.log("Running", cmd);
-            try {
-                execSync(cmd);
-            } catch { }
-        };
-        logAndRun(`sudo xattr -dr com.apple.quarantine '${outputApp}'`);
-    } else {
-        // WHY DOES NODE FETCH RETURN A WEB STREAM OH MY GOD
-        const body = Readable.fromWeb(res.body);
-        await finished(body.pipe(createWriteStream(outputFile, {
-            mode: 0o755,
-            autoClose: true
-        })));
-    }
+    // WHY DOES NODE FETCH RETURN A WEB STREAM OH MY GOD
+    await downloadToFile(res, outputFile, 0o755);
 
     console.log("Finished downloading!");
 
     return outputFile;
 }
-
-
 
 const installerBin = await ensureBinary();
 
