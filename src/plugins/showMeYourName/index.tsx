@@ -136,7 +136,7 @@ function resolveColor(
         secondaryAdjusted = secondaryColor && percentage ? adjustBrightness(secondaryColor, parseInt(percentage)) : secondaryColor;
         tertiaryAdjusted = tertiaryColor && percentage ? adjustBrightness(tertiaryColor, parseInt(percentage)) : tertiaryColor;
     } else {
-        primaryColor = toCSS(savedColor);
+        primaryColor = forceDefault ? toCSS("var(--text-strong)") : toCSS(savedColor);
         primaryAdjusted = primaryColor;
     }
 
