@@ -12,14 +12,18 @@ export interface ProgressBarOverride {
     gradientEnd?: string;
 }
 
+export type ProgressBarWeight = "light" | "medium";
+
 export interface ProgressBarProps {
     progress: number;
     minimum?: number;
     maximum?: number;
+    weight?: ProgressBarWeight;
     variant?: ProgressBarVariant;
     override?: {
         default?: ProgressBarOverride;
         [key: string]: ProgressBarOverride | undefined;
     };
+    glowing?: boolean;
     labelledBy?: string;
 }

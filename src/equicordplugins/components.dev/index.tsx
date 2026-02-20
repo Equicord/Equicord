@@ -6,10 +6,11 @@
 
 import "./styles.css";
 
-import SettingsPlugin, { settingsSectionMap } from "@plugins/_core/settings";
+import SettingsPlugin from "@plugins/_core/settings";
 import { Devs } from "@utils/constants";
+import { removeFromArray } from "@utils/misc";
 import definePlugin, { StartAt } from "@utils/types";
-import { openUserSettingsPanel } from "@webpack/common";
+import { SettingsRouter } from "@webpack/common";
 
 import ComponentsTab from "./components/ComponentsTab";
 
@@ -45,36 +46,21 @@ export default definePlugin({
     startAt: StartAt.WebpackReady,
     toolboxActions: {
         "Open Components Tab"() {
-            openUserSettingsPanel("equicord_components");
+            SettingsRouter.openUserSettings("equicord_components_panel");
         },
     },
     start() {
-        const { customEntries, customSections } = SettingsPlugin;
-
-        customEntries.push({
+        SettingsPlugin.customEntries.push({
             key: "equicord_components",
             title: "Components",
             Component: ComponentsTab,
             Icon: ComponentsIcon
         });
 
-        customSections.push(() => ({
-            section: "EquicordDiscordComponents",
-            label: "Components",
-            element: ComponentsTab,
-            className: "vc-discord-components",
-            id: "EquicordDiscordComponents"
-        }));
-
-        settingsSectionMap.push(["EquicordDiscordComponents", "equicord_components"]);
+        SettingsPlugin.settingsSectionMap.push(["EquicordDiscordComponents", "equicord_components"]);
     },
     stop() {
-        const { customEntries, customSections } = SettingsPlugin;
-        const entryIdx = customEntries.findIndex(e => e.key === "equicord_components");
-        if (entryIdx !== -1) customEntries.splice(entryIdx, 1);
-        const sectionIdx = customSections.findIndex(s => s({} as any).id === "EquicordDiscordComponents");
-        if (sectionIdx !== -1) customSections.splice(sectionIdx, 1);
-        const map = settingsSectionMap.findIndex(entry => entry[1] === "equicord_components");
-        if (map !== -1) settingsSectionMap.splice(map, 1);
+        removeFromArray(SettingsPlugin.customEntries, e => e.key === "equicord_components");
+        removeFromArray(SettingsPlugin.settingsSectionMap, entry => entry[1] === "equicord_components");
     },
 });

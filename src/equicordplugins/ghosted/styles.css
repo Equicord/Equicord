@@ -10,7 +10,8 @@
     background-color: var(--background-primary);
     height: 30px;
     width: 48px;
-    margin-left: 8px;
+    margin-left: auto;
+    margin-right: auto;
     color: var(--text-default);
     fill: var(--text-default);
 }

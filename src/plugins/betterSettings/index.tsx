@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import { buildPluginMenuEntries, buildThemeMenuEntries } from "@equicordplugins/equicordToolbox/menu";
+import SettingsPlugin from "@plugins/_core/settings";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
@@ -17,7 +18,17 @@ import type { HTMLAttributes, ReactElement } from "react";
 
 import fullHeightStyle from "./fullHeightContext.css?managed";
 
-type SettingsEntry = { section: string, label: string; };
+type SettingsEntry = {
+    ariaLabel?: string;
+    element?: any;
+    label?: string;
+    newIndicator?: any;
+    newIndicatorDismissibleContentTypes?: number[];
+    predicate?: () => boolean;
+    searchableTitles?: string[];
+    section: string,
+    tabPredicate?: () => boolean;
+};
 
 const cl = classNameFactory("");
 const Classes = findCssClassesLazy("animating", "baseLayer", "bg", "layer", "layers");
@@ -127,7 +138,7 @@ export default definePlugin({
             predicate: () => settings.store.disableFade
         },
         { // Load menu TOC eagerly
-            find: "#{intl::USER_SETTINGS_WITH_BUILD_OVERRIDE}",
+            find: "handleOpenSettingsContextMenu=",
             replacement: {
                 match: /(?=handleOpenSettingsContextMenu=.{0,100}?null!=\i&&.{0,100}?(await [^};]*?\)\)))/,
                 replace: "_vencordBetterSettingsEagerLoad=(async ()=>$1)();"
@@ -145,7 +156,7 @@ export default definePlugin({
                 },
                 {
                     match: /case \i\.\i\.DEVELOPER_OPTIONS:return \i;/,
-                    replace: "$&case 'EquicordPlugins':return $self.buildPluginMenuEntries(true);$&case 'EquicordThemes':return $self.buildThemeMenuEntries();"
+                    replace: "$&case 'EquicordPlugins':return $self.buildPluginMenuEntries(true);case 'EquicordThemes':return $self.buildThemeMenuEntries();"
                 }
             ]
         },
@@ -173,6 +184,8 @@ export default definePlugin({
         const items = [] as TransformedSettingsEntry[];
 
         for (const item of list) {
+            if (!item.label || item.predicate != null && !item.predicate()) continue;
+
             if (item.section === "HEADER") {
                 keyMap.set(item.label, item.label);
                 items.push({ section: item.label, items: [] });
@@ -180,6 +193,28 @@ export default definePlugin({
                 items.at(-1)?.items.push(item);
             }
         }
+
+        keyMap.set("Equicord", "Equicord");
+        const equicordItems: SettingsEntry[] = [
+            { section: "EquicordSettings", label: "Settings" },
+            { section: "EquicordPlugins", label: "Plugins" },
+            { section: "EquicordThemes", label: "Themes" },
+            { section: "EquicordUpdater", label: "Updater" },
+            { section: "EquicordChangelog", label: "Changelog" },
+            { section: "EquicordCloud", label: "Cloud" },
+            { section: "EquicordBackupAndRestore", label: "Backup & Restore" },
+            { section: "EquicordPatchHelper", label: "Patch Helper" },
+        ];
+
+        for (const [section, key] of SettingsPlugin.settingsSectionMap) {
+            const entry = SettingsPlugin.customEntries.find(e => key.endsWith(e.key));
+            if (entry) equicordItems.push({ section, label: entry.title });
+        }
+
+        items.push({
+            section: "Equicord",
+            items: equicordItems
+        });
 
         return items;
     },

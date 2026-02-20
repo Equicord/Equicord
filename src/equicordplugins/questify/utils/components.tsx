@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ErrorBoundary } from "@components/index";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { findComponentByCodeLazy } from "@webpack";
 import { SearchableSelect, useState } from "@webpack/common";
 import { JSX } from "react";

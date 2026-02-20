@@ -1,4 +1,7 @@
-@keyframes show-me-your-name-animation {
+/* stylelint-disable rule-empty-line-before */
+/* stylelint-disable property-no-vendor-prefix */
+
+@keyframes smyn-animation {
     0% {
         background-position: 0;
     }
@@ -8,12 +11,12 @@
     }
 }
 
-.show-me-your-name-gradient {
+.smyn-gradient {
     position: relative;
     z-index: 0;
 }
 
-.show-me-your-name-gradient::after {
+.smyn-gradient::after {
     background-clip: text;
     content: attr(data-text) / "";
     inset: 0;
@@ -26,25 +29,288 @@
     z-index: -1;
 }
 
-.show-me-your-name-gradient-unset-bg::after {
+.smyn-gradient-unset-bg::after {
     background: unset;
+    -webkit-text-fill-color: currentcolor;
 }
 
-.show-me-your-name-gradient-inherit-bg::after {
+.smyn-gradient-inherit-bg::after {
     background: inherit;
+    -webkit-text-fill-color: transparent;
 }
 
-.show-me-your-name-gradient-hovered::after {
+.smyn-gradient-hovered::after {
     opacity: .7;
-    transition: opacity .1s ease-in-out
+    transition: opacity .1s ease-in-out;
 }
 
-.show-me-your-name-modal-footer-container button {
+.smyn-modal-footer-container button {
     width: 100%;
 }
 
-.show-me-your-name-reset-button {
+.smyn-reset-button {
     margin-top: 8px;
     font-size: 14px;
     font-weight: 500;
+}
+
+.smyn-container:hover {
+    text-decoration: underline;
+}
+
+.smyn-effect-container {
+    position: relative;
+    opacity: 1;
+}
+
+.smyn-effect-solid {
+    color: var(--smyn-effect-main-color);
+}
+
+.smyn-effect-gradient {
+    background: linear-gradient(to bottom right, var(--smyn-effect-gradient-start) 10%, var(--smyn-effect-gradient-end) 90%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-size: 100% auto;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    z-index: 0;
+}
+
+.smyn-effect-neon {
+    paint-order: stroke fill;
+    -webkit-text-stroke-width: calc(1px + .04em);
+    -webkit-text-stroke-color: var(--smyn-effect-neon-stroke);
+    -webkit-text-fill-color: currentcolor;
+    color: var(--white);
+    margin-inline-start: calc(-1px - .04em);
+    margin-bottom: calc(-1px - .04em);
+    padding-bottom: calc(1px + .04em);
+    padding-inline-start: calc(1px + .04em);
+    position: relative;
+    z-index: 0;
+}
+
+.smyn-effect-neon::after {
+    content: attr(data-username-with-effects);
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom left, var(--smyn-effect-light-2) 0, var(--smyn-effect-light-2) 6%, var(--smyn-effect-main-color) 20%, var(--smyn-effect-light-1) 50%, var(--smyn-effect-light-2) 56%, var(--smyn-effect-main-color) 70%, var(--smyn-effect-light-1) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-position: 100% 0;
+    background-size: 200% 200%;
+    -webkit-text-fill-color: transparent;
+    color: var(--smyn-effect-main-color);
+    filter: blur(calc(1px + .12em));
+    opacity: 0;
+    transition: opacity .15s ease-in-out;
+    -webkit-text-stroke-width: calc(1px + .04em);
+    -webkit-text-stroke-color: transparent;
+    perspective: 1px;
+    z-index: -1;
+}
+
+.smyn-effect-animated.smyn-effect-neon {
+    animation: smyn-neon-flicker 4s cubic-bezier(.24, .31, .36, .93) infinite;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+}
+
+.smyn-effect-animated.smyn-effect-neon::after {
+    opacity: .8;
+    animation: smyn-neon-glow-flicker 1666ms linear infinite;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+}
+
+.smyn-effect-toon {
+    --smyn-toon-stroke-width: calc(1.6px + 0.04em);
+    --smyn-toon-margin: calc(var(--smyn-toon-stroke-width)*-1);
+
+    paint-order: stroke fill;
+    position: relative;
+    -webkit-text-stroke-width: var(--smyn-toon-stroke-width);
+    -webkit-text-stroke-color: var(--smyn-effect-toon-stroke);
+    color: var(--smyn-effect-toon-stroke);
+    margin-inline: var(--smyn-toon-margin);
+    margin-bottom: var(--smyn-toon-margin);
+    padding-inline: var(--smyn-toon-stroke-width);
+    padding-bottom: var(--smyn-toon-stroke-width);
+    transition: color 266ms cubic-bezier(.43, .21, .27, .78);
+}
+
+.smyn-effect-toon::before {
+    background: linear-gradient(180deg, var(--white) 0, var(--smyn-effect-light-2) 8%, var(--smyn-effect-light-1) 15%, var(--smyn-effect-main-color) 25%, var(--smyn-effect-light-2) 45%, var(--smyn-effect-main-color) 55%, var(--white) 75%, var(--smyn-effect-light-2) 83%, var(--smyn-effect-light-1) 90%, var(--smyn-effect-main-color) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-size: 100% 400%;
+    content: attr(data-username-with-effects);
+    inset: 0;
+    padding-inline: var(--smyn-toon-stroke-width);
+    padding-bottom: var(--smyn-toon-margin);
+    position: absolute;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-width: 0;
+    -webkit-text-stroke-color: transparent;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 266ms cubic-bezier(.43, .21, .27, .78);
+}
+
+.smyn-effect-pop {
+    --smyn-pop-stroke-width: calc(1.2px + 0.04em);
+    --smyn-pop-bottom-translate: 0.08em;
+
+    display: inline-block;
+    color: var(--white);
+    paint-order: stroke fill;
+    position: relative;
+    -webkit-text-stroke-color: var(--smyn-effect-dark-2);
+    -webkit-text-stroke-width: var(--smyn-pop-stroke-width);
+    margin-inline-start: calc(var(--smyn-pop-stroke-width)*-1);
+    margin-bottom: calc(var(--smyn-pop-stroke-width)*-1 - var(--smyn-pop-bottom-translate));
+    padding-bottom: calc(var(--smyn-pop-stroke-width) + var(--smyn-pop-bottom-translate));
+    padding-inline-start: var(--smyn-pop-stroke-width);
+}
+
+.smyn-effect-pop::before {
+    bottom: calc(var(--smyn-pop-bottom-translate)*-1 - var(--smyn-pop-stroke-width));
+    color: var(--smyn-effect-main-color);
+    content: attr(data-username-with-effects);
+    padding-inline-start: var(--smyn-pop-stroke-width);
+    position: absolute;
+    top: 0;
+    width: calc(100% - var(--smyn-pop-stroke-width));
+    z-index: -1;
+    -webkit-text-stroke-width: var(--smyn-pop-stroke-width);
+    -webkit-text-stroke-color: transparent;
+    background: linear-gradient(to bottom left, var(--smyn-effect-light-1) 0, var(--smyn-effect-light-1) 6%, var(--smyn-effect-main-color) 20%, var(--smyn-effect-main-color) 50%, var(--smyn-effect-light-1) 56%, var(--smyn-effect-main-color) 70%, var(--smyn-effect-main-color) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-position: 100% 0;
+    background-size: 200% 200%;
+    transform: translate3d(0, var(--smyn-pop-bottom-translate), 0);
+    -webkit-text-fill-color: transparent;
+    overflow: hidden;
+    text-decoration: none;
+    text-overflow: ellipsis;
+}
+
+.smyn-effect-pop:hover::before {
+    text-decoration: underline;
+    text-decoration-color: var(--smyn-effect-main-color);
+    text-underline-offset: calc(var(--smyn-pop-bottom-translate));
+}
+
+.smyn-effect-animated.smyn-effect-toon::before {
+    animation: smyn-toon-animation 4s cubic-bezier(.44, .29, .48, 1) infinite;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+}
+
+.smyn-effect-animated.smyn-effect-pop {
+    animation: smyn-pop-main 4s cubic-bezier(.44, .29, .48, 1) infinite;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+}
+
+.smyn-effect-animated.smyn-effect-pop::before {
+    animation: smyn-pop-shadow 4s cubic-bezier(.44, .29, .48, 1) infinite;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+}
+
+@keyframes smyn-neon-flicker {
+
+    0%,
+    15%,
+    18%,
+    20%,
+    23%,
+    25%,
+    50% {
+        color: var(--white);
+    }
+
+    16%,
+    22%,
+    28% {
+        color: var(--smyn-effect-neon-flicker);
+    }
+
+    51%,
+    100% {
+        color: var(--white);
+    }
+}
+
+@keyframes smyn-neon-glow-flicker {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: 0 100%;
+    }
+}
+
+@keyframes smyn-toon-animation {
+
+    0%,
+    5% {
+        background-position: 50% 0;
+    }
+
+    55%,
+    100% {
+        background-position: 50% 100%;
+    }
+}
+
+@keyframes smyn-pop-main {
+    0% {
+        transform: translateZ(0);
+    }
+
+    18% {
+        perspective: 1px;
+        transform: translate3d(0, -.05em, 0);
+    }
+
+    35% {
+        perspective: 1px;
+        transform: translate3d(0, .08em, 0);
+    }
+
+    50%,
+    100% {
+        perspective: 1px;
+        transform: translateZ(0);
+    }
+}
+
+@keyframes smyn-pop-shadow {
+    0% {
+        background-position: 100% 0;
+        perspective: 1px;
+        transform: translate3d(0, .08em, 0);
+    }
+
+    18% {
+        perspective: 1px;
+        transform: translate3d(0, .13em, 0);
+    }
+
+    35% {
+        perspective: 1px;
+        transform: translateZ(0);
+    }
+
+    50%,
+    100% {
+        background-position: 0 100%;
+        perspective: 1px;
+        transform: translate3d(0, .08em, 0);
+    }
 }

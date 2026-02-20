@@ -54,76 +54,77 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
-            replacement: {
-                match: /,nameplate:\i,selectedGuildId:(\i),avatarDecoration/,
-                replace: ",nameplate:null,selectedGuildId:$1,avatarDecoration"
-            },
-            predicate: () => settings.store.removeNameplate
-        },
-        {
-            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
+            find: ".NITRO_PRIVACY_PERK_BETA_COACHMARK));",
             replacement: [
                 {
-                    match: /(?<=#{intl::MUTE}\),)className:\i\.\i,/,
-                    replace: ""
+                    match: /,nameplate:\i,selectedGuildId:(\i),avatarDecoration/,
+                    replace: ",nameplate:null,selectedGuildId:$1,avatarDecoration",
+                    predicate: () => settings.store.removeNameplate
                 },
                 {
-                    match: /(?<=#{intl::DEAFEN}\),)className:\i\.\i,/,
-                    replace: ""
+                    match: /hoverText:(\i),forceHover:\i,children:/g,
+                    replace: "hoverText:$1,forceHover:!0,children:",
+                    predicate: () => settings.store.alwaysShowUsername
                 },
                 {
-                    match: /,\(0,\i\.jsxs?\)\(\i\.\i,\{.{0,600}#{intl::ACCOUNT_INPUT_OPTIONS}\)\}\)(?=\])/,
-                    replace: ""
+                    match: /avatarDecoration:(.{0,70}),size:/,
+                    replace: "avatarDecoration:void 0,size:",
+                    predicate: () => settings.store.removeAvatarDecoration
                 },
                 {
-                    match: /,\(0,\i\.jsxs?\)\(\i\.\i,\{.{0,650}#{intl::ACCOUNT_OUTPUT_OPTIONS}\)\}\)(?=\])/,
-                    replace: ""
+                    match: /displayNameStyles:(\i),/,
+                    replace: "displayNameStyles:void 0,",
+                    predicate: () => settings.store.removeUsernameStyles
                 }
             ],
-            predicate: () => settings.store.removeAudioMenus
         },
         {
-            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
-            replacement: {
-                match: /hoverText:(\i),forceHover:\i,children:/g,
-                replace: "hoverText:$1,forceHover:!0,children:"
-            },
-            predicate: () => settings.store.alwaysShowUsername
-        },
-        {
-            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
+            find: '"MicrophoneButton"',
             replacement: [
                 {
                     match: /:\{tooltipText:\i\};/,
-                    replace: ":{tooltipText:void 0};"
+                    replace: ":{tooltipText:void 0};",
+                    predicate: () => settings.store.removeButtonTooltips
                 },
+                {
+                    match: /(?<=#{intl::MUTE}\),)className:\i\.\i,/,
+                    replace: "",
+                    predicate: () => settings.store.removeAudioMenus
+                },
+                {
+                    match: /,\(0,\i\.jsxs?\)\(\i\.\i,\{.{0,600}#{intl::ACCOUNT_INPUT_OPTIONS}\)\}\)(?=\])/,
+                    replace: "",
+                    predicate: () => settings.store.removeAudioMenus
+                },
+            ],
+        },
+        {
+            find: "#{intl::f+DDY/::raw},{outputDeviceName",
+            replacement: [
                 {
                     match: /(?<=role:"switch",)tooltipText:\i\}/,
-                    replace: "tooltipText:void 0}"
+                    replace: "tooltipText:void 0}",
+                    predicate: () => settings.store.removeButtonTooltips
                 },
                 {
-                    match: /tooltipText:\i,tooltipPositionKey/,
-                    replace: "tooltipText:void 0,tooltipPositionKey"
+                    match: /(?<=#{intl::DEAFEN}\),)className:\i\.\i,/,
+                    replace: "",
+                    predicate: () => settings.store.removeAudioMenus
+                },
+                {
+                    match: /,\(0,\i\.jsxs?\)\(\i\.\i,\{.{0,650}#{intl::ACCOUNT_OUTPUT_OPTIONS}\)\}\)(?=\])/,
+                    replace: "",
+                    predicate: () => settings.store.removeAudioMenus
                 }
             ],
+        },
+        {
+            find: "#{intl::USER_SETTINGS_WITH_BUILD_OVERRIDE}",
+            replacement: {
+                match: /tooltipText:\i,tooltipPositionKey/,
+                replace: "tooltipText:void 0,tooltipPositionKey"
+            },
             predicate: () => settings.store.removeButtonTooltips
         },
-        {
-            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
-            replacement: {
-                match: /avatarDecoration:(.{0,70}),size:/,
-                replace: "avatarDecoration:void 0,size:"
-            },
-            predicate: () => settings.store.removeAvatarDecoration
-        },
-        {
-            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
-            replacement: {
-                match: /displayNameStyles:(\i),/,
-                replace: "displayNameStyles:void 0,"
-            },
-            predicate: () => settings.store.removeUsernameStyles
-        }
     ],
 });
