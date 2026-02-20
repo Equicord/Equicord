@@ -139,14 +139,11 @@ export default definePlugin({
             find: "#{intl::USER_SETTINGS_ACTIONS_MENU_LABEL}",
             replacement: [
                 {
-                    // Intercept the items list and inject our organizer + Equicord entries
                     match: /=\[\];(\i)(?=\.forEach.{0,200}?"logout"===\i.{0,100}?(\i)\.get\(\i\))/,
                     replace: "=$self.wrapMap([]);$self.transformSettingsEntries($1,$2)",
                     predicate: () => settings.store.organizeMenu
                 },
                 {
-                    // Add Equicord section cases to the section -> panel switch.
-                    // Use a single $& (no duplicate DEVELOPER_OPTIONS case).
                     match: /case \i\.\i\.DEVELOPER_OPTIONS:return \i;/,
                     replace: "$&case 'EquicordPlugins':return $self.buildPluginMenuEntries(true);case 'EquicordThemes':return $self.buildThemeMenuEntries();"
                 }
@@ -176,7 +173,6 @@ export default definePlugin({
         const items = [] as TransformedSettingsEntry[];
 
         for (const item of list) {
-            // Skip entries whose predicate returns false (e.g. Linux settings on Windows, WARP+ without Nitro)
             if (item.predicate != null && !item.predicate()) continue;
 
             if (item.section === "HEADER") {
@@ -187,7 +183,6 @@ export default definePlugin({
             }
         }
 
-        // Inject Equicord section after the last built-in group
         keyMap.set("Equicord", "Equicord");
         items.push({
             section: "Equicord",
