@@ -53,6 +53,11 @@ const settings = definePluginSettings({
         description: "Forces role icons to display next to messages in compact mode",
         restartNeeded: true,
         default: false
+    },
+    restoreFileDownloadButton: {
+        type: OptionType.BOOLEAN,
+        description: "Adds back the Download button at the top right corner of files.",
+        default: true
     }
 });
 
@@ -148,6 +153,15 @@ export default definePlugin({
             replacement: {
                 match: /(?<=\}\):null\].{0,150}\?2:)0(?=\})/,
                 replace: "1"
+            }
+        },
+        // Restore File Download Button
+        {
+            predicate: () => settings.store.restoreFileDownloadButton,
+            find: "[\"VIDEO\",\"CLIP\",\"AUDIO\"]",
+            replacement: {
+                match: /showDownload:\i,onRemoveItem:(\i\?\i:void 0),isVisualMediaType:(\i)/,
+                replace: "showDownload:!0,onRemoveItem:$1,isVisualMediaType:$2"
             }
         },
     ],
