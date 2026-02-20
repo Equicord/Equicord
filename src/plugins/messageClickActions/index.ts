@@ -141,7 +141,7 @@ const settings = definePluginSettings({
     },
     additionalReactEmojis: {
         type: OptionType.STRING,
-        description: "Additional emojis to add when using React action (comma/newline separated, max 8)",
+        description: "Additional emojis to add when using React action (comma/newline separated, max 5)",
         default: ""
     },
     addAdditionalReacts: {
@@ -297,7 +297,7 @@ function getConfiguredReactionEmojis() {
             .split(/[\n,]/g)
             .map(normalizeEmoji)
             .filter((emoji): emoji is string => Boolean(emoji))
-            .slice(0, 8); // limiting it to 8 for now but this may be tweaked in the future
+            .slice(0, 5); // limiting it to 5 for now but this may be tweaked in the future
         configured.push(...extra);
     }
 
