@@ -123,12 +123,13 @@ function resolveColor(
     let primaryAdjusted: any = null;
     let secondaryAdjusted: any = null;
     let tertiaryAdjusted: any = null;
+    const defaultColor = toCSS("var(--text-strong)");
 
     if (savedColor.toLowerCase().includes("role")) {
         const percentage = roleColorPattern.exec(savedColor)?.[1] || "";
         if (percentage && isNaN(parseInt(percentage))) return null;
 
-        primaryColor = forceDefault ? toCSS("var(--text-strong)") : (toCSS(colorStrings?.primaryColor) || (!inGuild && toCSS(displayNameStyles?.colors?.[0])) || toCSS("var(--text-strong)"));
+        primaryColor = forceDefault ? defaultColor : (toCSS(colorStrings?.primaryColor) || (!inGuild && toCSS(displayNameStyles?.colors?.[0])) || defaultColor);
         secondaryColor = forceDefault ? null : (toCSS(colorStrings?.secondaryColor) || (!inGuild && toCSS(displayNameStyles?.colors?.[1])) || null);
         tertiaryColor = forceDefault ? null : (toCSS(colorStrings?.tertiaryColor) || (!inGuild && toCSS(displayNameStyles?.colors?.[2])) || null);
 
@@ -136,7 +137,7 @@ function resolveColor(
         secondaryAdjusted = secondaryColor && percentage ? adjustBrightness(secondaryColor, parseInt(percentage)) : secondaryColor;
         tertiaryAdjusted = tertiaryColor && percentage ? adjustBrightness(tertiaryColor, parseInt(percentage)) : tertiaryColor;
     } else {
-        primaryColor = forceDefault ? toCSS("var(--text-strong)") : toCSS(savedColor);
+        primaryColor = forceDefault ? defaultColor : toCSS(savedColor);
         primaryAdjusted = primaryColor;
     }
 
