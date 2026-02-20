@@ -5,7 +5,6 @@
 - **NEVER** edit existing license headers. New files use 2026.
 - Push back when the user idea is wrong or not correct.
 - **NEVER** git checkout files without explicit permission.
-- You can run `pnpm testTsc`, `pnpm lint`, or `pnpm lint:fix` after changes, but **ONLY** on files you modified, never on the entire codebase. **NEVER** run `pnpm build` unless explicitly asked.
 - Always verify components/functions arent deprecated before using.
 - **NEVER** use `any` for Discord objects. Import proper types from `@vencord/discord-types`.
 - Fix with smallest possible change. No refactoring unless explicitly asked.
