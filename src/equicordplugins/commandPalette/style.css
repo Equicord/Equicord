@@ -106,10 +106,6 @@
     flex-shrink: 0;
 }
 
-.vc-command-palette-header-prompt-selection-icon svg {
-    display: none;
-}
-
 .vc-command-palette-prompt-input {
     flex: 0 1 260px;
     min-width: 170px;
@@ -415,49 +411,7 @@
     flex-shrink: 0;
 }
 
-.vc-command-palette-action-bar-action-label {
-    color: var(--cp-text-primary);
-    font-weight: 500;
-}
-
-.vc-command-palette-action-bar-action-icon {
-    color: var(--cp-text-muted);
-    font-size: 14px;
-}
-
 .vc-command-palette-action-bar-placeholder {
-    color: var(--cp-text-muted);
-}
-
-.vc-command-palette-action-bar-hints {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.vc-command-palette-action-bar-hint {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.vc-command-palette-action-bar-hint-key {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 8px;
-    background: var(--cp-bg-secondary);
-    border: 1px solid var(--cp-border);
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--cp-text-secondary);
-    font-family: inherit;
-    min-width: 28px;
-}
-
-.vc-command-palette-action-bar-hint-label {
-    font-size: 12px;
     color: var(--cp-text-muted);
 }
 

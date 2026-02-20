@@ -11,12 +11,13 @@ import { noteHandler } from "@equicordplugins/holyNotes/NoteHandler";
 import type { Note } from "@equicordplugins/holyNotes/types";
 import type { ScheduledMessage } from "@equicordplugins/scheduledMessages/types";
 import { addScheduledMessage, getChannelDisplayInfo, getScheduledMessages, removeScheduledMessage, sendScheduledMessageNow, updateScheduledMessageTime } from "@equicordplugins/scheduledMessages/utils";
-import { ChannelActionCreators, ChannelStore, NavigationRouter, React, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
+import { ChannelActionCreators, ChannelStore, NavigationRouter, SelectedChannelStore, Toasts, UserStore } from "@webpack/common";
 
 import { parseQuery } from "../query/parser";
 import { pluginToggleVerb, resolveAllChannels, resolveChannels, resolveGuilds, resolvePlugins, resolveRecentDmUsers, resolveSettingsCommandIds, resolveUsers } from "../query/resolvers";
 import type { QueryActionCandidate, QueryResolution } from "../query/types";
 import { executeCommand, getCommandById } from "../registry";
+import { makeIconFromUrl } from "../ui/iconFromUrl";
 import { sendMessageToChannel, sendMessageToUser } from "./sendMessageAction";
 
 interface ResolvedHolyNote {
@@ -79,7 +80,7 @@ function showToast(message: string, type: (typeof Toasts.Type)[keyof typeof Toas
 }
 
 function openExternalUrl(url: string) {
-    const external = (window as unknown as { DiscordNative?: { app?: { openExternalURL?(url: string): void; }; }; })?.DiscordNative?.app?.openExternalURL;
+    const external = (window as Window & { DiscordNative?: { app?: { openExternalURL?(url: string): void; }; }; }).DiscordNative?.app?.openExternalURL;
     if (typeof external === "function") {
         external(url);
         return;
@@ -109,27 +110,6 @@ function normalizeUrl(input: string): URL | null {
     }
 }
 
-function makeIconFromUrl(iconUrl?: string): React.ComponentType<{ className?: string; size?: string; }> | undefined {
-    if (!iconUrl) return undefined;
-
-    return function IconFromUrl({ className, size }) {
-        const parsed = Number.parseInt(size ?? "18", 10);
-        const base = Number.isFinite(parsed) ? parsed : 18;
-        const dimension = Math.max(22, base + 8);
-        return React.createElement("img", {
-            src: iconUrl,
-            alt: "",
-            className,
-            width: dimension,
-            height: dimension,
-            style: {
-                borderRadius: "50%",
-                objectFit: "cover"
-            }
-        });
-    };
-}
-
 function isDirectMessageChannelForUser(channelId: string, userId: string): boolean {
     const channel = ChannelStore.getChannel(channelId);
     if (!channel) return false;
@@ -142,7 +122,7 @@ function isDirectMessageChannelForUser(channelId: string, userId: string): boole
 }
 
 function findDirectMessageChannelForUser(userId: string): string | null {
-    const sortedPrivateChannels = (ChannelStore as unknown as {
+    const sortedPrivateChannels = (ChannelStore as {
         getSortedPrivateChannels?(): Array<string | { id?: string; channelId?: string; }>;
     }).getSortedPrivateChannels?.() ?? [];
 

@@ -73,6 +73,7 @@ import {
 import { createPinsStore } from "./runtime/pins";
 import { createRecentsStore } from "./runtime/recents";
 import { createRegistryStore } from "./runtime/registryStore";
+import { makeIconFromUrl } from "./ui/iconFromUrl";
 import { createCommandPageCommand } from "./ui/pages/createCommandPageCommand";
 import type { PalettePageRef } from "./ui/pages/types";
 
@@ -1758,27 +1759,6 @@ function showToast(message: string, type: ToastKind) {
             position: Toasts.Position.BOTTOM
         }
     });
-}
-
-function makeIconFromUrl(iconUrl?: string): React.ComponentType<{ className?: string; size?: string; }> | undefined {
-    if (!iconUrl) return undefined;
-
-    return function IconFromUrl({ className, size }) {
-        const parsed = Number.parseInt(size ?? "18", 10);
-        const base = Number.isFinite(parsed) ? parsed : 18;
-        const dimension = Math.max(22, base + 8);
-        return React.createElement("img", {
-            src: iconUrl,
-            alt: "",
-            className,
-            width: dimension,
-            height: dimension,
-            style: {
-                borderRadius: "50%",
-                objectFit: "cover"
-            }
-        });
-    };
 }
 
 function createPluginKeywords(plugin: Plugin): string[] {

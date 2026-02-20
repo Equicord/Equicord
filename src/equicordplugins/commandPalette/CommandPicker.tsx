@@ -5,6 +5,8 @@
  */
 
 import { CogWheel } from "@components/Icons";
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 import { ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
 
@@ -31,6 +33,9 @@ const getNextSelectableIndex = (start: number, direction: 1 | -1, items: PickerI
     }
     return getFirstSelectableIndex(items);
 };
+
+const cl = classNameFactory("vc-command-palette-");
+const cn = classNameFactory();
 
 interface CommandPickerProps {
     commands?: CommandEntry[];
@@ -316,23 +321,23 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
     };
 
     return (
-        <ModalRoot {...modalProps} size={ModalSize.SMALL} className="vc-command-palette vc-command-palette-picker">
-            <div className="vc-command-palette-shell vc-command-palette-picker-shell" onKeyDown={handleKeyDown}>
-                <div className="vc-command-palette-input">
+        <ModalRoot {...modalProps} size={ModalSize.SMALL} className={classes(cn("vc-command-palette"), cl("picker"))}>
+            <div className={classes(cl("shell"), cl("picker-shell"))} onKeyDown={handleKeyDown}>
+                <div className={cl("input")}>
                     <TextInput
                         autoFocus
                         value={query}
                         onChange={setQuery}
                         placeholder="Search commands"
-                        className="vc-command-palette-main-input"
+                        className={cl("main-input")}
                     />
                 </div>
-                <div className="vc-command-palette-list">
-                    {!hasCommands && <div className="vc-command-palette-empty">{emptyStateText}</div>}
+                <div className={cl("list")}>
+                    {!hasCommands && <div className={cl("empty")}>{emptyStateText}</div>}
                     {items.map((item, index) => {
                         if (item.type === "section") {
                             itemRefs.current[index] = null;
-                            return <div key={`section-${index}`} className="vc-command-palette-section-label">{item.label}</div>;
+                            return <div key={`section-${index}`} className={cl("section-label")}>{item.label}</div>;
                         }
 
                         const { command } = item;
@@ -344,23 +349,23 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
                             <button
                                 key={command.id}
                                 type="button"
-                                className={isSelected ? "vc-command-palette-row vc-command-palette-row-selected" : "vc-command-palette-row"}
+                                className={classes(cl("row"), isSelected && cl("row-selected"))}
                                 onClick={() => handleSelect(command)}
                                 onMouseEnter={() => setSelectedIndex(index)}
                                 ref={element => {
                                     itemRefs.current[index] = element;
                                 }}
                             >
-                                <div className="vc-command-palette-row-icon">
+                                <div className={cl("row-icon")}>
                                     <Icon size="18" />
                                 </div>
-                                <div className="vc-command-palette-row-content">
-                                    <div className="vc-command-palette-row-title">
+                                <div className={cl("row-content")}>
+                                    <div className={cl("row-title")}>
                                         {allowMultiple && (isPicked ? "[x] " : "[ ] ")}
                                         {command.label}
                                     </div>
                                     {command.description && (
-                                        <div className="vc-command-palette-row-subtitle">{command.description}</div>
+                                        <div className={cl("row-subtitle")}>{command.description}</div>
                                     )}
                                 </div>
                             </button>

@@ -66,21 +66,188 @@ const UNITS: Record<string, UnitDefinition> = {
     days: { kind: "duration", toBase: v => v * 86400, fromBase: v => v / 86400, label: "d" }
 };
 
-function evaluateMathExpression(expression: string): number | null {
-    const compact = expression.replace(/\s+/g, "");
+type MathToken =
+    | { type: "number"; value: number; }
+    | { type: "operator"; value: "+" | "-" | "*" | "/" | "%" | "^"; }
+    | { type: "leftParen"; }
+    | { type: "rightParen"; }
+    | { type: "sqrt"; };
+
+function tokenizeMathExpression(expression: string): MathToken[] | null {
+    const compact = expression
+        .replace(/\s+/g, "")
+        .replace(/math\.sqrt\(/gi, "sqrt(")
+        .replace(/\*\*/g, "^")
+        .replace(/[x×]/gi, "*");
     if (!compact) return null;
 
-    const prepared = compact.replace(/sqrt\(/g, "Math.sqrt(").replace(/%/g, "/100");
-    if (!/^[0-9+\-*/().Mathsqrt]+$/.test(prepared)) return null;
+    const tokens: MathToken[] = [];
+    let index = 0;
 
-    try {
-        const evaluate = Function(`"use strict"; return (${prepared});`) as () => unknown;
-        const result = evaluate();
-        if (typeof result !== "number" || !Number.isFinite(result)) return null;
-        return result;
-    } catch {
+    while (index < compact.length) {
+        const char = compact[index];
+
+        if (/[0-9.]/.test(char)) {
+            let end = index + 1;
+            while (end < compact.length && /[0-9.]/.test(compact[end])) end += 1;
+            const literal = compact.slice(index, end);
+            if ((literal.match(/\./g)?.length ?? 0) > 1) return null;
+            const parsed = Number.parseFloat(literal);
+            if (!Number.isFinite(parsed)) return null;
+            tokens.push({ type: "number", value: parsed });
+            index = end;
+            continue;
+        }
+
+        if (char === "(") {
+            tokens.push({ type: "leftParen" });
+            index += 1;
+            continue;
+        }
+
+        if (char === ")") {
+            tokens.push({ type: "rightParen" });
+            index += 1;
+            continue;
+        }
+
+        if (char === "+" || char === "-" || char === "*" || char === "/" || char === "%" || char === "^") {
+            tokens.push({ type: "operator", value: char });
+            index += 1;
+            continue;
+        }
+
+        if (compact.slice(index, index + 4).toLowerCase() === "sqrt") {
+            tokens.push({ type: "sqrt" });
+            index += 4;
+            continue;
+        }
+
         return null;
     }
+
+    return tokens;
+}
+
+function evaluateMathExpression(expression: string): number | null {
+    const tokens = tokenizeMathExpression(expression);
+    if (!tokens || tokens.length === 0) return null;
+
+    let index = 0;
+
+    const parseExpression = (): number | null => {
+        let left = parseTerm();
+        if (left == null) return null;
+
+        while (index < tokens.length) {
+            const token = tokens[index];
+            if (token.type !== "operator" || (token.value !== "+" && token.value !== "-")) break;
+            index += 1;
+            const right = parseTerm();
+            if (right == null) return null;
+            left = token.value === "+" ? left + right : left - right;
+        }
+
+        return left;
+    };
+
+    const parseTerm = (): number | null => {
+        let left = parsePower();
+        if (left == null) return null;
+
+        while (index < tokens.length) {
+            const token = tokens[index];
+            if (token.type !== "operator" || (token.value !== "*" && token.value !== "/")) break;
+            index += 1;
+            const right = parsePower();
+            if (right == null) return null;
+            if (token.value === "/" && right === 0) return null;
+            if (token.value === "*") left *= right;
+            else left /= right;
+        }
+
+        return left;
+    };
+
+    const parsePower = (): number | null => {
+        const left = parseUnary();
+        if (left == null) return null;
+
+        const token = tokens[index];
+        if (token?.type === "operator" && token.value === "^") {
+            index += 1;
+            const right = parsePower();
+            if (right == null) return null;
+            return left ** right;
+        }
+
+        return left;
+    };
+
+    const parseUnary = (): number | null => {
+        const token = tokens[index];
+        if (!token) return null;
+
+        if (token.type === "operator" && token.value === "+") {
+            index += 1;
+            return parseUnary();
+        }
+
+        if (token.type === "operator" && token.value === "-") {
+            index += 1;
+            const value = parseUnary();
+            return value == null ? null : -value;
+        }
+
+        if (token.type === "sqrt") {
+            index += 1;
+            const value = parseUnary();
+            if (value == null || value < 0) return null;
+            return Math.sqrt(value);
+        }
+
+        return parsePrimary();
+    };
+
+    const parsePrimary = (): number | null => {
+        const token = tokens[index];
+        if (!token) return null;
+
+        if (token.type === "number") {
+            index += 1;
+            let { value } = token;
+            while (true) {
+                const nextToken = tokens[index];
+                if (nextToken?.type !== "operator" || nextToken.value !== "%") break;
+                value /= 100;
+                index += 1;
+            }
+            return value;
+        }
+
+        if (token.type === "leftParen") {
+            index += 1;
+            const value = parseExpression();
+            if (value == null) return null;
+            const closing = tokens[index];
+            if (!closing || closing.type !== "rightParen") return null;
+            index += 1;
+            let normalized = value;
+            while (true) {
+                const nextToken = tokens[index];
+                if (nextToken?.type !== "operator" || nextToken.value !== "%") break;
+                normalized /= 100;
+                index += 1;
+            }
+            return normalized;
+        }
+
+        return null;
+    };
+
+    const result = parseExpression();
+    if (result == null || index !== tokens.length || !Number.isFinite(result)) return null;
+    return result;
 }
 
 function getMathOperationLabel(expression: string): string {
