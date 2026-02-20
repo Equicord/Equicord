@@ -10,6 +10,7 @@ import { findComponentByCodeLazy } from "@webpack";
 import { TextInput, useState } from "@webpack/common";
 
 import { settings } from ".";
+import "./styles.css";
 
 type EmojiData = {
     id?: string | null;
@@ -66,15 +67,9 @@ export function ReactEmojiSetting({ setValue }: IPluginOptionComponentProps) {
         <div>
             <Heading>Select Emoji For Reactions</Heading>
             <div
+                className="vc-message-click-actions-primary-emoji-picker"
                 onClick={event => event.stopPropagation()}
                 onMouseDown={event => event.stopPropagation()}
-                style={{
-                    marginTop: 8,
-                    marginLeft: 6,
-                    display: "inline-flex",
-                    transform: "scale(1.3)",
-                    transformOrigin: "top left"
-                }}
             >
                 <StatusEmojiPicker
                     customStatusEmoji={parseEmojiValue(emoji)}
