@@ -4,11 +4,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
+import componentsDev from "@equicordplugins/components.dev";
 import { buildPluginMenuEntries, buildThemeMenuEntries } from "@equicordplugins/equicordToolbox/menu";
+import iconViewer from "@equicordplugins/iconViewer";
+import iRememberYou from "@equicordplugins/iRememberYou";
+import loginWithQR from "@equicordplugins/loginWithQR";
+import themeLibrary from "@equicordplugins/themeLibrary";
+import startupTimings from "@plugins/startupTimings";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { getIntlMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { findCssClassesLazy } from "@webpack";
@@ -17,7 +25,17 @@ import type { HTMLAttributes, ReactElement } from "react";
 
 import fullHeightStyle from "./fullHeightContext.css?managed";
 
-type SettingsEntry = { section: string, label: string; predicate?: () => boolean; };
+type SettingsEntry = {
+    ariaLabel?: string;
+    element?: any;
+    label?: string;
+    newIndicator?: any;
+    newIndicatorDismissibleContentTypes?: number[];
+    predicate?: () => boolean;
+    searchableTitles?: string[];
+    section: string,
+    tabPredicate?: () => boolean;
+};
 
 const cl = classNameFactory("");
 const Classes = findCssClassesLazy("animating", "baseLayer", "bg", "layer", "layers");
@@ -81,11 +99,30 @@ function Layer({ mode, baseLayer = false, ...props }: LayerProps) {
         : <FocusLock containerRef={containerRef}>{node}</FocusLock>;
 }
 
+const settingsContextMenuItems = [
+    { section: "EquicordSettings", label: "Settings" },
+    { section: "EquicordPlugins", label: "Plugins" },
+    { section: "EquicordThemes", label: "Themes" },
+    { section: "EquicordUpdater", label: "Updater", predicate: () => !IS_UPDATER_DISABLED },
+    { section: "EquicordChangelog", label: "Changelog" },
+    { section: "EquicordCloud", label: "Cloud" },
+    { section: "EquicordBackupAndRestore", label: "Backup & Restore" },
+    { section: "EquicordPatchHelper", label: "Patch Helper", predicate: () => IS_DEV },
+    { section: "EquibopSettings", label: "Equibop Settings", predicate: () => IS_EQUIBOP },
+    { section: "EquicordDiscordComponents", label: "Components", predicate: () => IS_DEV && isPluginEnabled(componentsDev.name) },
+    { section: "EquicordDiscordIcons", label: "Icon Finder", predicate: () => isPluginEnabled(iconViewer.name) },
+    { section: "EquicordIRememberYou", label: "I Remember You", predicate: () => isPluginEnabled(iRememberYou.name) },
+    { section: "EquicordLoginWithQR", label: getIntlMessage("USER_SETTINGS_SCAN_QR_CODE"), predicate: () => isPluginEnabled(loginWithQR.name) },
+    { section: "EquicordThemeLibrary", label: "Theme Library", predicate: () => isPluginEnabled(themeLibrary.name) },
+    { section: "VencordStartupTimings", label: "Startup Timings", predicate: () => isPluginEnabled(startupTimings.name) },
+];
+
 export default definePlugin({
     name: "BetterSettings",
     description: "Enhances your settings-menu-opening experience",
     authors: [Devs.Kyuuhachi],
     settings,
+    settingsContextMenuItems,
 
     start() {
         if (settings.store.organizeMenu)
@@ -173,7 +210,7 @@ export default definePlugin({
         const items = [] as TransformedSettingsEntry[];
 
         for (const item of list) {
-            if (item.predicate != null && !item.predicate()) continue;
+            if (!item.label || item.predicate != null && !item.predicate()) continue;
 
             if (item.section === "HEADER") {
                 keyMap.set(item.label, item.label);
@@ -186,10 +223,7 @@ export default definePlugin({
         keyMap.set("Equicord", "Equicord");
         items.push({
             section: "Equicord",
-            items: [
-                { section: "EquicordPlugins", label: "Plugins" },
-                { section: "EquicordThemes", label: "Themes" },
-            ]
+            items: settingsContextMenuItems.filter(item => item.predicate == null || item.predicate())
         });
 
         return items;
