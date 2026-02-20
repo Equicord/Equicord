@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { isNonNullish } from "@utils/guards";
 import { classes } from "@utils/misc";
 import { ProfilePreset } from "@vencord/discord-types";
 import { ContextMenuApi, Menu, React, TextInput } from "@webpack/common";
@@ -151,11 +152,11 @@ export function PresetList({
                                                 label="Update"
                                                 action={async () => {
                                                     const profile = await getCurrentProfile(guildId, { isGuildProfile });
-                                                    (Object.entries(profile) as [keyof EditableProfile, EditableProfile[keyof EditableProfile]][]).forEach(([key, value]) => {
-                                                        if (value != null) {
-                                                            updatePresetField(actualIndex, key, value, section, guildId);
-                                                        }
-                                                    });
+                                                    await Promise.all(
+                                                        (Object.entries(profile) as [keyof EditableProfile, EditableProfile[keyof EditableProfile]][])
+                                                            .filter(([, value]) => isNonNullish(value))
+                                                            .map(([key, value]) => updatePresetField(actualIndex, key, value, section, guildId))
+                                                    );
                                                     onUpdate();
                                                 }}
                                             />
