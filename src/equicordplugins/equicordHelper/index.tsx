@@ -57,6 +57,7 @@ const settings = definePluginSettings({
     restoreFileDownloadButton: {
         type: OptionType.BOOLEAN,
         description: "Adds back the Download button at the top right corner of files",
+        restartNeeded: true,
         default: true
     }
 });
