@@ -31,10 +31,12 @@
 
 .smyn-gradient-unset-bg::after {
     background: unset;
+    -webkit-text-fill-color: currentcolor;
 }
 
 .smyn-gradient-inherit-bg::after {
     background: inherit;
+    -webkit-text-fill-color: transparent;
 }
 
 .smyn-gradient-hovered::after {

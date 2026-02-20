@@ -19,7 +19,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
+            find: ".NITRO_PRIVACY_PERK_BETA_COACHMARK));",
             replacement: [
                 {
                     match: /(?<=className:(\i)\.\i,style:\i,)children:\[/,
@@ -27,7 +27,7 @@ export default definePlugin({
                 },
                 // fix discord weird shrink with extra buttons
                 {
-                    match: /(?<=\{ref:\i,)style:(\i)(?=,onMouseEnter:\i,onMouseDown:\i,onClick)/,
+                    match: /(?<=\{ref:\i,)style:(\i)/,
                     replace: "style:{...$1,minWidth:0}"
                 }
             ]

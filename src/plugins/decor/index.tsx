@@ -87,7 +87,7 @@ export default definePlugin({
         },
         // Current user area, at bottom of channels/dm list
         {
-            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
+            find: ".NITRO_PRIVACY_PERK_BETA_COACHMARK));",
             replacement: [
                 // Use Decor avatar decoration hook
                 {
