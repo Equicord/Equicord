@@ -18,13 +18,11 @@ import { loadPresets, PresetSection } from "./utils/storage";
 export const cl = classNameFactory("vc-profile-presets-");
 export const settings = definePluginSettings({
     avatarSize: {
-        type: OptionType.SELECT,
+        type: OptionType.SLIDER,
         description: "Avatar size in preset list.",
-        options: [16, 32, 64].map(size => ({
-            label: String(size),
-            value: size,
-            default: size === 64
-        }))
+        markers: [16, 32, 64],
+        default: 64,
+        stickToMarkers: true
     },
 });
 
