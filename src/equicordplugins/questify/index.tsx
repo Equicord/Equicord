@@ -10,7 +10,8 @@ import { showNotification } from "@api/Notifications";
 import { plugins } from "@api/PluginManager";
 import { addServerListElement, removeServerListElement, ServerListRenderPosition } from "@api/ServerList";
 import { migratePluginToSettings, Settings } from "@api/Settings";
-import { ErrorBoundary, openPluginModal } from "@components/index";
+import ErrorBoundary from "@components/ErrorBoundary";
+import { openPluginModal } from "@components/settings";
 import { EquicordDevs } from "@utils/constants";
 import { copyToClipboard } from "@utils/index";
 import definePlugin, { PluginNative, StartAt } from "@utils/types";
@@ -1006,6 +1007,8 @@ function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false
 }
 
 function getQuestPanelPercentComplete({ quest, percentCompleteText }: { quest: Quest; percentCompleteText?: string; }): { percentComplete: number; } | { percentComplete: number; percentCompleteText: string; } | null {
+    if (!quest) { return null; }
+
     const task = getQuestTask(quest);
 
     if (!task) { return null; }
@@ -1293,8 +1296,8 @@ export default definePlugin({
             // Fixes the progress tracking for auto-completing Quests.
             find: ",{progressTextAnimation:",
             replacement: {
-                match: /(?<=children:\i}=)(\i)/,
-                replace: "Object.assign({},$1,$self.getQuestPanelPercentComplete($1))"
+                match: /(let{percentComplete:.{0,115}?children:\i}=)(\i)/,
+                replace: "const questifyProgress=$self.getQuestPanelPercentComplete({...$2,quest:$2.children?.props?.quest});$1Object.assign({},$2,questifyProgress??{})"
             }
         },
         {
@@ -1302,7 +1305,7 @@ export default definePlugin({
             // useful information for Quests being auto-completed.
             find: '"progress-title"',
             replacement: {
-                match: /(?<=return.{0,150}?quest:(\i),percentComplete:\i.{0,280}?"progress-title",children.{0,115}?children:)(\i.{0,50}"progress-subtitle",isTextTransition:!0,children.{0,115}?children:)/,
+                match: /(?<={quest:(\i).{0,250}?return.{0,150}?,percentComplete:\i.{0,280}?"progress-title",children.{0,115}?children:)(\i.{0,50}"progress-subtitle",isTextTransition:!0,children.{0,115}?children:)/,
                 replace: "$self.getQuestPanelTitleText($1)??$2$self.getQuestPanelSubtitleText($1)??"
             }
         },

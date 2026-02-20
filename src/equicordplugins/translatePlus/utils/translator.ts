@@ -84,12 +84,20 @@ async function translateSitelen(message: string) {
 }
 
 async function google(target: string, text: string) {
-    const translate = await (await fetch(`https://translate.googleapis.com/translate_a/single?${new URLSearchParams({ client: "gtx", sl: "auto", tl: target, dt: "t", dj: "1", source: "input", q: text })}`)).json();
+    if (!text) return { src: "", text: "" };
+    try {
+        const res = await fetch(`https://translate.googleapis.com/translate_a/single?${new URLSearchParams({ client: "gtx", sl: "auto", tl: target, dt: "t", dj: "1", source: "input", q: text })}`);
+        if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
+        const translate = await res.json();
 
-    return {
-        src: translate.src,
-        text: translate.sentences.map(s => s.trans).filter(Boolean).join("")
-    };
+        return {
+            src: translate.src,
+            text: translate.sentences?.map(s => s.trans).filter(Boolean).join("\n")
+        };
+    } catch (error) {
+        console.error("[TranslatePlus] Google Translate request failed:", error);
+        return { src: "en", text: "Translation failed due to an error." };
+    }
 }
 
 export async function translate(text: string): Promise<any> {

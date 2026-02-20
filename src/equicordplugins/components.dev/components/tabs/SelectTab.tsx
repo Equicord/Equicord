@@ -4,8 +4,39 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ManaSelect, ManaSelectOption, Paragraph, useState } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { ManaSelect, ManaSelectOption, useState } from "..";
+import { DocPage, type PropDef, type PropGroup } from "../DocPage";
+
+const SELECT_PROPS: PropDef[] = [
+    { name: "options", type: "ManaSelectOption[]", required: true, description: "Array of selectable options." },
+    { name: "value", type: "string | string[] | null", description: "Currently selected value(s)." },
+    { name: "onSelectionChange", type: "(value: string | string[] | null) => void", description: "Called when the selection changes. Note: NOT onChange." },
+    { name: "selectionMode", type: '"single" | "multiple"', description: "Single or multi-select mode." },
+    { name: "placeholder", type: "string", description: "Placeholder text when nothing is selected." },
+    { name: "disabled", type: "boolean", default: "false", description: "Disable the select." },
+    { name: "readOnly", type: "boolean", description: "Make the select read-only." },
+    { name: "clearable", type: "boolean", description: "Allow clearing the selection." },
+    { name: "fullWidth", type: "boolean", description: "Expand to fill available width." },
+    { name: "autoFocus", type: "boolean", description: "Focus on mount." },
+    { name: "closeOnSelect", type: "boolean", description: "Close the dropdown after selecting." },
+    { name: "shouldFocusWrap", type: "boolean", description: "Wrap keyboard focus at list ends." },
+    { name: "maxOptionsVisible", type: "number", description: "Maximum options visible before scrolling." },
+    { name: "wrapTags", type: "boolean", description: "Wrap selected tags to multiple lines in multi-select." },
+    { name: "formatOption", type: "(option: ManaSelectOption) => ReactNode", description: "Custom render for each option." },
+    { name: "label", type: "string", description: "Label text for the select." },
+    { name: "required", type: "boolean", description: "Mark as required for form validation." },
+];
+
+const OPTION_PROPS: PropDef[] = [
+    { name: "id", type: "string", required: true, description: "Unique option identifier." },
+    { name: "value", type: "string", required: true, description: "Option value." },
+    { name: "label", type: "string", required: true, description: "Display label." },
+];
+
+const PROP_GROUPS: PropGroup[] = [
+    { title: "ManaSelect", props: SELECT_PROPS },
+    { title: "ManaSelectOption", props: OPTION_PROPS },
+];
 
 const SAMPLE_OPTIONS: ManaSelectOption[] = [
     { id: "1", value: "option1", label: "Option 1" },
@@ -14,107 +45,111 @@ const SAMPLE_OPTIONS: ManaSelectOption[] = [
     { id: "4", value: "option4", label: "Option 4" },
 ];
 
-export default function SelectTab() {
-    const [singleValue, setSingleValue] = useState<string>("option1");
-    const [multiValue, setMultiValue] = useState<string[]>(["option1", "option2"]);
-    const [clearableValue, setClearableValue] = useState<string>("option1");
-    const [placeholderValue, setPlaceholderValue] = useState<string>("");
-
+function SingleDemo() {
+    const [value, setValue] = useState<string>("option1");
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Single Selection">
-                <ManaSelect
-                    options={SAMPLE_OPTIONS}
-                    value={singleValue}
-                    onSelectionChange={v => setSingleValue(v as string)}
-                    selectionMode="single"
-                />
-            </SectionWrapper>
+        <ManaSelect
+            options={SAMPLE_OPTIONS}
+            value={value}
+            onSelectionChange={v => setValue(v as string)}
+            selectionMode="single"
+        />
+    );
+}
 
-            <SectionWrapper title="Multiple Selection">
-                <ManaSelect
-                    options={SAMPLE_OPTIONS}
-                    value={multiValue}
-                    onSelectionChange={v => setMultiValue(v as string[])}
-                    selectionMode="multiple"
-                />
-            </SectionWrapper>
+function MultiDemo() {
+    const [value, setValue] = useState<string[]>(["option1", "option2"]);
+    return (
+        <ManaSelect
+            options={SAMPLE_OPTIONS}
+            value={value}
+            onSelectionChange={v => setValue(v as string[])}
+            selectionMode="multiple"
+        />
+    );
+}
 
-            <SectionWrapper title="With Placeholder">
-                <ManaSelect
-                    options={SAMPLE_OPTIONS}
-                    value={placeholderValue}
-                    onSelectionChange={v => setPlaceholderValue(v as string)}
-                    placeholder="Select an option..."
-                />
-            </SectionWrapper>
+function PlaceholderDemo() {
+    const [value, setValue] = useState<string>("");
+    return (
+        <ManaSelect
+            options={SAMPLE_OPTIONS}
+            value={value}
+            onSelectionChange={v => setValue(v as string)}
+            placeholder="Select an option..."
+        />
+    );
+}
 
-            <SectionWrapper title="Clearable">
-                <ManaSelect
-                    options={SAMPLE_OPTIONS}
-                    value={clearableValue}
-                    onSelectionChange={v => setClearableValue(v as string)}
-                    clearable
-                />
-            </SectionWrapper>
+function ClearableDemo() {
+    const [value, setValue] = useState<string>("option1");
+    return (
+        <ManaSelect
+            options={SAMPLE_OPTIONS}
+            value={value}
+            onSelectionChange={v => setValue(v as string)}
+            clearable
+        />
+    );
+}
 
-            <SectionWrapper title="Full Width">
-                <ManaSelect
-                    options={SAMPLE_OPTIONS}
-                    value="option1"
-                    fullWidth
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="Disabled">
-                <ManaSelect
-                    options={SAMPLE_OPTIONS}
-                    value="option2"
-                    disabled
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    <strong>ManaSelect</strong> - Note: Uses onSelectionChange, NOT onChange.
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • options: ManaSelectOption[] - Array of options
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • value?: string | string[] | null - Selected value(s)
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • onSelectionChange?: (value) =&gt; void - Called when selection changes
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • selectionMode?: "single" | "multiple" - Selection mode
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • placeholder?: string - Placeholder text
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • clearable?: boolean - Allow clearing selection
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • fullWidth?: boolean - Expand to full width
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • disabled?: boolean - Disable select
-                </Paragraph>
-                <Paragraph color="text-muted" style={{ marginTop: 12 }}>
-                    <strong>ManaSelectOption</strong>
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • id: string - Unique option ID
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • value: string - Option value
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • label: string - Display label
-                </Paragraph>
-            </SectionWrapper>
-        </div>
+export default function SelectTab() {
+    return (
+        <DocPage
+            componentName="ManaSelect"
+            overview="ManaSelect is Discord's dropdown select component supporting single and multi-select modes. Important: uses onSelectionChange (not onChange) for the selection callback. Supports clearable selection, placeholder text, full width, and custom option rendering."
+            notices={[
+                { type: "warn", children: "ManaSelect uses onSelectionChange, not onChange. This is a common source of confusion since most other Discord form components use onChange." },
+            ]}
+            importPath={'import { ManaSelect, ManaSelectOption } from "../components";'}
+            sections={[
+                {
+                    title: "Single Selection",
+                    description: "Default single-select dropdown.",
+                    children: <SingleDemo />,
+                    code: `<ManaSelect
+  options={options}
+  value={value}
+  onSelectionChange={v => setValue(v as string)}
+  selectionMode="single"
+/>`,
+                    relevantProps: ["options", "value", "onSelectionChange", "selectionMode"],
+                },
+                {
+                    title: "Multiple Selection",
+                    description: "Multi-select with tag pills for each selected option.",
+                    children: <MultiDemo />,
+                },
+                {
+                    title: "With Placeholder",
+                    description: "Shows placeholder text when no option is selected.",
+                    children: <PlaceholderDemo />,
+                    relevantProps: ["placeholder"],
+                },
+                {
+                    title: "Clearable",
+                    description: "Adds a clear button to reset the selection.",
+                    children: <ClearableDemo />,
+                    relevantProps: ["clearable"],
+                },
+                {
+                    title: "Full Width",
+                    description: "Expands to fill the available width.",
+                    children: (
+                        <ManaSelect options={SAMPLE_OPTIONS} value="option1" fullWidth />
+                    ),
+                    relevantProps: ["fullWidth"],
+                },
+                {
+                    title: "Disabled",
+                    description: "Non-interactive disabled state.",
+                    children: (
+                        <ManaSelect options={SAMPLE_OPTIONS} value="option2" disabled />
+                    ),
+                    relevantProps: ["disabled"],
+                },
+            ]}
+            props={PROP_GROUPS}
+        />
     );
 }

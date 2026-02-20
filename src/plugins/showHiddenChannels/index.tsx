@@ -461,10 +461,10 @@ export default definePlugin({
             },
         },
         {
-            find: 'className:"channelMention",children:',
+            find: '"channel_mention"});',
             replacement: {
                 // Show inside voice channel instead of trying to join them when clicking on a channel mention
-                match: /(?<=getChannel\(\i\);null!=(\i))(?=.{0,100}?selectVoiceChannel)/,
+                match: /(?<=getChannel\(\i\);if\(null!=(\i))(?=.{0,150}?selectVoiceChannel)/,
                 replace: (_, channel) => `&&!$self.isHiddenChannel(${channel})`
             }
         },

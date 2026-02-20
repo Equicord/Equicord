@@ -75,7 +75,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
+            find: ".NITRO_PRIVACY_PERK_BETA_COACHMARK));",
             group: true,
             replacement: [
                 {
@@ -87,7 +87,7 @@ export default definePlugin({
                     replace: "$&$self.onPopoutClose();"
                 },
                 {
-                    match: /(?:#{intl::5fWB8U::raw}|#{intl::SET_STATUS})\)(?<=ref:(\i),style:.+?)/,
+                    match: /ref:(\i),style:\i(?=.{0,250}#{intl::5fWB8U::raw})/,
                     replace: "$&,onContextMenu:($self.grabRef($1),$self.openAccountPanelContextMenu)"
                 }
             ]

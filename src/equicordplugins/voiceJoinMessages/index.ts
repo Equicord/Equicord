@@ -45,6 +45,11 @@ const settings = definePluginSettings({
         description: "Comma or space separated list of friends' user IDs you want to recieve join messages from",
         default: ""
     },
+    ignoredFriends: {
+        type: OptionType.STRING,
+        description: "Comma or space separated list of friends' user IDs you do NOT want to recieve join messages from",
+        default: ""
+    },
     ignoreBlockedUsers: {
         type: OptionType.BOOLEAN,
         description: "Do not send messages about blocked users joining/leaving/moving voice channels",
@@ -89,9 +94,11 @@ function sendVoiceStatusMessage(channelId: string, content: string, userId: stri
 
 function isFriendAllowlisted(friendId: string) {
     if (!RelationshipStore.isFriend(friendId)) return false;
-    const list = settings.store.allowedFriends.split(",").join(" ").split(" ").filter(i => i.length > 0);
-    if (list.join(" ").length < 1) return true;
-    return list.includes(friendId);
+    const ignoreList = settings.store.ignoredFriends.split(",").join(" ").split(" ").filter(i => i.length > 0);
+    if (ignoreList.includes(friendId)) return false;
+    const allowList = settings.store.allowedFriends.split(",").join(" ").split(" ").filter(i => i.length > 0);
+    if (allowList.join(" ").length < 1) return true;
+    return allowList.includes(friendId);
 }
 
 // Blatantly stolen from VcNarrator plugin

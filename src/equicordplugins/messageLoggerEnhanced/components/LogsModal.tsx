@@ -5,21 +5,22 @@
  */
 
 import { BaseText } from "@components/BaseText";
+import { Button } from "@components/Button";
 import { Flex } from "@components/Flex";
 import { InfoIcon } from "@components/Icons";
-import { clearMessagesIDB, DBMessageRecord, deleteMessageIDB, deleteMessagesBulkIDB } from "@equicordplugins/messageLoggerEnhanced/db";
-import { settings } from "@equicordplugins/messageLoggerEnhanced/index";
-import { LoggedMessage, LoggedMessageJSON } from "@equicordplugins/messageLoggerEnhanced/types";
-import { messageJsonToMessageClass } from "@equicordplugins/messageLoggerEnhanced/utils";
-import { importLogs } from "@equicordplugins/messageLoggerEnhanced/utils/settingsUtils";
-import { classNameFactory } from "@utils/css";
+import { Link } from "@components/Link";
 import { copyWithToast, openUserProfile } from "@utils/discord";
 import { closeAllModals, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import { LazyComponent } from "@utils/react";
-import { User } from "@vencord/discord-types";
+import { type User } from "@vencord/discord-types";
 import { find, findByCode, findByCodeLazy } from "@webpack";
-import { Alerts, Button, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, NavigationRouter, React, TabBar, TextInput, Tooltip, useMemo, useRef, useState } from "@webpack/common";
+import { Alerts, ChannelStore, ContextMenuApi, FluxDispatcher, GuildStore, Menu, NavigationRouter, React, TabBar, TextInput, Tooltip, useMemo, useRef, useState } from "@webpack/common";
 
+import { clearMessagesIDB, DBMessageRecord, deleteMessageIDB, deleteMessagesBulkIDB } from "../db";
+import { cl, settings } from "../index";
+import { LoggedMessage, LoggedMessageJSON } from "../types";
+import { messageJsonToMessageClass } from "../utils";
+import { importLogs } from "../utils/settingsUtils";
 import { useMessages } from "./hooks";
 
 export interface MessagePreviewProps {
@@ -54,8 +55,6 @@ const PrivateChannelRecord = findByCodeLazy(".is_message_request_timestamp,");
 const MessagePreview = LazyComponent<MessagePreviewProps>(() => find(m => m?.type?.toString().includes("previewLinkTarget:") && !m?.type?.toString().includes("HAS_THREAD")));
 const ChildrenAccessories = LazyComponent<ChildrenAccProops>(() => findByCode("channelMessageProps:{message:"));
 
-const cl = classNameFactory("msg-logger-modal-");
-
 export enum LogTabs {
     DELETED = "Deleted",
     EDITED = "Edited",
@@ -77,46 +76,45 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
     const { messages, total, statusTotal, pending, reset } = useMessages(queryEh, currentTab, sortNewest, numDisplayedMessages);
 
     return (
-        <ModalRoot className={cl("root")} {...modalProps} size={ModalSize.LARGE}>
-            <ModalHeader className={cl("header")}>
+        <ModalRoot className={cl("modal-root")} {...modalProps} size={ModalSize.LARGE}>
+            <ModalHeader className={cl("modal-header")}>
                 <TextInput value={queryEh} onChange={e => setQuery(e)} style={{ width: "100%" }} placeholder="Filter Messages" />
                 <TabBar
                     type="top"
                     look="brand"
-                    className={cl("tab-bar")}
+                    className={cl("modal-tab-bar")}
                     selectedItem={currentTab}
                     onItemSelect={e => {
                         setCurrentTab(e);
                         setNumDisplayedMessages(settings.store.messagesToDisplayAtOnceInLogs);
                         contentRef.current?.firstElementChild?.scrollTo(0, 0);
-                        // forceUpdate();
                     }}
                 >
                     <TabBar.Item
-                        className={cl("tab-bar-item")}
+                        className={cl("modal-tab-bar-item")}
                         id={LogTabs.DELETED}
                     >
                         Deleted
                     </TabBar.Item>
                     <TabBar.Item
-                        className={cl("tab-bar-item")}
+                        className={cl("modal-tab-bar-item")}
                         id={LogTabs.EDITED}
                     >
                         Edited
                     </TabBar.Item>
                     <TabBar.Item
-                        className={cl("tab-bar-item")}
+                        className={cl("modal-tab-bar-item")}
                         id={LogTabs.GHOST_PING}
                     >
                         Ghost Pinged
                     </TabBar.Item>
                 </TabBar>
             </ModalHeader>
-            <div style={{ opacity: modalProps.transitionState === 1 ? "1" : "0" }} className={cl("content-container")} ref={contentRef}>
+            <div style={{ opacity: modalProps.transitionState === 1 ? "1" : "0" }} className={cl("modal-content-container")} ref={contentRef}>
                 {
                     modalProps.transitionState === 1 &&
                     <ModalContent
-                        className={cl("content")}
+                        className={cl("modal-content")}
                     >
                         {messages != null && total === 0 && (
                             <EmptyLogs
@@ -138,14 +136,15 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                     </ModalContent>
                 }
             </div>
-            <ModalFooter>
+            <ModalFooter className={cl("footer")}>
                 <Button
-                    color={Button.Colors.RED}
+                    variant="dangerPrimary"
                     onClick={() => Alerts.show({
                         title: "Clear Logs",
                         body: "Are you sure you want to clear all the logs",
                         confirmText: "Clear",
-                        confirmColor: Button.Colors.RED,
+                        // @ts-expect-error not typed
+                        confirmVariant: "critical-primary",
                         cancelText: "Cancel",
                         onConfirm: async () => {
                             await clearMessagesIDB();
@@ -158,13 +157,14 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                 </Button>
                 <Button
                     style={{ marginRight: "16px" }}
-                    color={Button.Colors.BRAND}
+                    variant="dangerSecondary"
                     disabled={messages?.length === 0}
                     onClick={() => Alerts.show({
                         title: "Clear Logs",
                         body: `Are you sure you want to clear ${messages.length} logs`,
                         confirmText: "Clear",
-                        confirmColor: Button.Colors.RED,
+                        // @ts-expect-error not typed
+                        confirmVariant: "critical-primary",
                         cancelText: "Cancel",
                         onConfirm: async () => {
                             await deleteMessagesBulkIDB(messages.map(e => e.message_id));
@@ -174,9 +174,8 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                 >
                     Clear Visible Logs
                 </Button>
-                <Button
-                    style={{ marginRight: "16px" }}
-                    color={Button.Colors.PRIMARY}
+                <Link
+                    style={{ marginRight: "1rem" }}
                     onClick={() => {
                         setSortNewest(e => {
                             const val = !e;
@@ -187,7 +186,7 @@ export function LogsModal({ modalProps, initalQuery }: Props) {
                     }}
                 >
                     Sort {sortNewest ? "Oldest First" : "Newest First"}
-                </Button>
+                </Link>
             </ModalFooter>
         </ModalRoot>
     );
@@ -207,7 +206,7 @@ function LogsContent({ visibleMessages, canLoadMore, sortNewest, tab, reset, han
         return <NoResults tab={tab} />;
 
     return (
-        <div className={cl("content-inner")}>
+        <div className={cl("modal-content-inner")}>
             {visibleMessages
                 .map(({ message }, i) => (
                     <LMessage
@@ -221,7 +220,7 @@ function LogsContent({ visibleMessages, canLoadMore, sortNewest, tab, reset, han
                 canLoadMore &&
                 <Button
                     style={{ marginTop: "1rem", width: "100%" }}
-                    size={Button.Sizes.SMALL} onClick={() => handleLoadMore()}
+                    size="small" onClick={() => handleLoadMore()}
                 >
                     Load More
                 </Button>
@@ -249,7 +248,7 @@ function NoResults({ tab }: { tab: LogTabs; }) {
     const { nextTab, lastTab } = generateSuggestedTabs(tab);
 
     return (
-        <div className={cl("empty-logs", "content-inner")} style={{ textAlign: "center" }}>
+        <div className={cl("modal-empty-logs", "modal-content-inner")} style={{ textAlign: "center" }}>
             <BaseText size="lg">
                 No results in <b>{tab}</b>.
             </BaseText>
@@ -262,7 +261,7 @@ function NoResults({ tab }: { tab: LogTabs; }) {
 
 function EmptyLogs({ hasQuery, reset: forceUpdate }: { hasQuery: boolean; reset: () => void; }) {
     return (
-        <div className={cl("empty-logs", "content-inner")} style={{ textAlign: "center" }}>
+        <div className={cl("modal-empty-logs", "modal-content-inner")} style={{ textAlign: "center" }}>
             <Flex flexDirection="column" style={{ position: "relative" }}>
 
                 <BaseText size="lg">
@@ -274,7 +273,7 @@ function EmptyLogs({ hasQuery, reset: forceUpdate }: { hasQuery: boolean; reset:
                         <Tooltip text="ML Enhanced now stores logs in indexeddb. You need to import your old logs from the logs directory. Importing wont overwrite existing logs">
                             {({ onMouseEnter, onMouseLeave }) => (
                                 <div
-                                    className={cl("info-icon")}
+                                    className={cl("modal-info-icon")}
                                     onMouseEnter={onMouseEnter}
                                     onMouseLeave={onMouseLeave}
                                 >
@@ -301,8 +300,6 @@ interface LMessageProps {
 }
 function LMessage({ log, isGroupStart, reset, }: LMessageProps) {
     const message = useMemo(() => messageJsonToMessageClass(log), [log]);
-
-    // console.log(message);
 
     if (!message) return null;
 
@@ -392,7 +389,7 @@ function LMessage({ log, isGroupStart, reset, }: LMessageProps) {
                 );
             }}>
             <MessagePreview
-                className={`${cl("msg-preview")} ${message.deleted ? "messagelogger-deleted" : ""}`}
+                className={`${cl("modal-msg-preview")} ${message.deleted ? "messagelogger-deleted" : ""}`}
                 author={message.author}
                 message={message}
                 compact={false}
@@ -419,13 +416,13 @@ function LMessage({ log, isGroupStart, reset, }: LMessageProps) {
                 }
             />
             {settings.store.ShowWhereMessageIsFrom && channel?.isDM() && message?.author && (
-                <span className={`${cl("from")} ${message.deleted ? cl("from-deleted") : cl("from-edited")}`}>From {message.author.username}'s DMs</span>
+                <span className={`${cl("modal-from")} ${message.deleted ? cl("modal-from-deleted") : cl("modal-from-edited")}`}>From {message.author.username}'s DMs</span>
             )}
             {settings.store.ShowWhereMessageIsFrom && channel?.isGroupDM() && channel?.name && (
-                <span className={`${cl("from")} ${message.deleted ? cl("from-deleted") : cl("from-edited")}`}>From {channel.name} Group DM</span>
+                <span className={`${cl("modal-from")} ${message.deleted ? cl("modal-from-deleted") : cl("modal-from-edited")}`}>From {channel.name} Group DM</span>
             )}
             {settings.store.ShowWhereMessageIsFrom && !channel?.isDM() && !channel?.isGroupDM() && channel?.name && guild?.name && (
-                <span className={`${cl("from")} ${message.deleted ? cl("from-deleted") : cl("from-edited")}`}>From {channel.name} in {guild.name}</span>
+                <span className={`${cl("modal-from")} ${message.deleted ? cl("modal-from-deleted") : cl("modal-from-edited")}`}>From {channel.name} in {guild.name}</span>
             )}
         </div>
     );

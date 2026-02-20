@@ -8,15 +8,17 @@ import "./style.css";
 
 import { DecoratorProps } from "@api/MemberListDecorators";
 import { isPluginEnabled } from "@api/PluginManager";
+import { definePluginSettings } from "@api/Settings";
 import betterActivities from "@equicordplugins/betterActivities";
+import showMeYourName from "@plugins/showMeYourName";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { classes } from "@utils/misc";
-import definePlugin from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
 import { MessageFlags } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, findExportedComponentLazy } from "@webpack";
-import { ChannelStore, MessageStore, SnowflakeUtils, UserStore, useStateFromStores } from "@webpack/common";
+import { ChannelStore, ExperimentStore, MessageStore, Parser, RelationshipStore, SnowflakeUtils, UserGuildSettingsStore, UserStore, useStateFromStores } from "@webpack/common";
 
 const cl = classNameFactory("vc-message-peek-");
 
@@ -28,6 +30,14 @@ const hasRelevantActivity: (props: ActivityCheckProps) => boolean = findByCodeLa
 const ActivityText: React.ComponentType<ActivityTextProps> = findComponentByCodeLazy("hasQuest:", "hideEmoji:");
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
+
+const settings = definePluginSettings({
+    hideMuted: {
+        type: OptionType.BOOLEAN,
+        description: "Hide message previews and timestamps for muted DMs and group chats.",
+        default: false
+    }
+});
 
 type AttachmentType = "image" | "gif" | "video" | "file";
 type IconType = AttachmentType | "voice" | "sticker";
@@ -68,7 +78,7 @@ interface PrivateChannelProps extends ActivityCheckProps {
 }
 
 interface MessageContent {
-    text: string;
+    text: React.ReactNode;
     icon?: IconType;
 }
 
@@ -110,10 +120,10 @@ function pluralize(count: number, singular: string, plural = singular + "s") {
 
 function getMessageContent(message: Message): MessageContent | null {
     if (message.content) {
-        if (/https?:\/\/(\S+\.gif|tenor\.com|giphy\.com)/i.test(message.content)) {
+        if (/https?:\/\/(\S+\.gif|tenor\.com|giphy\.com|klipy\.com)/i.test(message.content)) {
             return { text: "sent a GIF", icon: "gif" };
         }
-        return { text: message.content };
+        return { text: Parser.parseInlineReply(message.content) };
     }
 
     if (message.flags & MessageFlags.IS_VOICE_MESSAGE) {
@@ -139,7 +149,7 @@ function getMessageContent(message: Message): MessageContent | null {
     return null;
 }
 
-function MessagePreviewContent({ channel }: { channel: Channel; }) {
+function MessagePreviewContent({ channel, user }: { channel: Channel; user: User | null | undefined; }) {
     const lastMessage = useStateFromStores(
         [MessageStore],
         () => MessageStore.getLastMessage(channel.id) as Message | undefined
@@ -149,18 +159,19 @@ function MessagePreviewContent({ channel }: { channel: Channel; }) {
         return <>Official Discord Message</>;
     }
 
-    if (channel.isMultiUserDM()) {
-        return <>{channel.recipients.length + 1} Members</>;
-    }
+    const smynName = isPluginEnabled(showMeYourName.name) ? showMeYourName.getTypingMemberListProfilesReactionsVoiceNameText({ user: user ?? lastMessage?.author, type: "membersList" }) : null;
 
-    if (!lastMessage) return null;
+    if (!lastMessage) {
+        if (channel.isMultiUserDM()) return <>{channel.recipients.length + 1} Members</>;
+        return null;
+    }
 
     const content = getMessageContent(lastMessage);
     if (!content) return null;
 
     const currentUserId = UserStore.getCurrentUser()?.id;
     const isOwnMessage = lastMessage.author.id === currentUserId;
-    const authorName = isOwnMessage ? "You" : (lastMessage.author.globalName ?? lastMessage.author.username);
+    const authorName = isOwnMessage ? "You" : (smynName || RelationshipStore.getNickname(lastMessage.author.id) || lastMessage.author.globalName || lastMessage.author.username);
     const Icon = content.icon ? Icons[content.icon] : null;
 
     return (
@@ -193,7 +204,7 @@ function SubText({ channel, user, activities, applicationStream, voiceChannel, s
         return (
             <div className={PrivateChannelClasses.subtext}>
                 <div className={cl("activity-row")}>
-                    <MessagePreviewContent channel={channel} />
+                    <MessagePreviewContent channel={channel} user={user} />
                     {activityIcons}
                 </div>
             </div>
@@ -202,21 +213,19 @@ function SubText({ channel, user, activities, applicationStream, voiceChannel, s
 
     return (
         <div className={PrivateChannelClasses.subtext}>
-            <MessagePreviewContent channel={channel} />
+            <MessagePreviewContent channel={channel} user={user} />
         </div>
     );
 }
 
 function Timestamp({ channel }: { channel: Channel; }) {
-    const lastMessage = useStateFromStores(
-        [MessageStore],
-        () => MessageStore.getLastMessage(channel.id) as Message | undefined
-    );
+    const lastMessage = useStateFromStores([MessageStore], () => MessageStore.getLastMessage(channel.id) as Message | undefined);
 
     if (!lastMessage) return null;
 
     const timestamp = SnowflakeUtils.extractTimestamp(lastMessage.id);
-    return <span className={cl("timestamp")}>{formatRelativeTime(timestamp)}</span>;
+    const className = ExperimentStore.getUserExperimentBucket("2021-09_favorites_server") >= 1 ? cl("timestamp-favorites") : cl("timestamp");
+    return <span className={className}>{formatRelativeTime(timestamp)}</span>;
 }
 
 function shouldShowActivity(lastMessage: Message | undefined, hasActivity: boolean): boolean {
@@ -231,6 +240,7 @@ export default definePlugin({
     name: "MessagePeek",
     description: "Shows the last message preview and timestamp in the Direct Messages list.",
     authors: [Devs.prism, EquicordDevs.justjxke],
+    settings,
     patches: [
         {
             find: "PrivateChannel.renderAvatar",
@@ -252,11 +262,28 @@ export default definePlugin({
 
     renderMemberListDecorator({ channel }: DecoratorProps) {
         if (!channel) return null;
+        if (settings.store.hideMuted && UserGuildSettingsStore.isChannelMuted(null!, channel.id)) return null;
         return <Timestamp channel={channel} />;
     },
 
     getSubText(props: PrivateChannelProps) {
         const { channel, user, activities, status, applicationStream, voiceChannel } = props;
+
+        if (settings.store.hideMuted && UserGuildSettingsStore.isChannelMuted(null!, channel.id)) {
+            const hasActivity = hasRelevantActivity({ activities, status, applicationStream, voiceChannel });
+            if (hasActivity) {
+                return (
+                    <ActivityText
+                        user={user}
+                        activities={activities}
+                        voiceChannel={voiceChannel}
+                        applicationStream={applicationStream}
+                    />
+                );
+            }
+            return null;
+        }
+
         const lastMessage = MessageStore.getLastMessage(channel.id) as Message | undefined;
         const hasActivity = hasRelevantActivity({ activities, status, applicationStream, voiceChannel });
         const showActivity = shouldShowActivity(lastMessage, hasActivity);
