@@ -20,7 +20,7 @@ export const settings = definePluginSettings({
     avatarSize: {
         type: OptionType.SELECT,
         description: "Avatar size in preset list.",
-        options: [16, 32, 64, 128, 256, 512, 1024, 2048, 4096].map(size => ({
+        options: [16, 32, 64].map(size => ({
             label: String(size),
             value: size,
             default: size === 64
