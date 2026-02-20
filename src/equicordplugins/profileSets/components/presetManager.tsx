@@ -137,7 +137,8 @@ export function PresetManager({ section, guildId }: PresetManagerProps) {
         });
     };
 
-    const { avatarSize } = settings.store;
+    // eslint-disable-next-line prefer-destructuring
+    const avatarSize = settings.store.avatarSize;
     const hasPresets = presets.length > 0;
     const shouldShowPagination = filteredPresets.length > PRESETS_PER_PAGE;
 
