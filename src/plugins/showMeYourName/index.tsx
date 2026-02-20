@@ -380,7 +380,7 @@ function getMentionNameElement(props: mentionProps): JSX.Element | null {
     let colorStrings: colorStringsType = undefined;
 
     if (isPluginEnabled(ircColors.name)) {
-        const color = ircColors.calculateNameColorForMessageContext({ message: { author: { id: userId } }, channel });
+        const color = ircColors.calculateNameColorForMessageContext({ message: { author: author }, author: author, channel: channel });
 
         if (color) {
             colorString = color;
