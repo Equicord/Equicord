@@ -12,7 +12,7 @@ import { Toasts } from "@webpack/common";
 import { DEFAULT_CATEGORY_ID } from "../../metadata/categories";
 import { TAG_NAVIGATION, TAG_PLUGINS, TAG_UTILITY } from "../../metadata/tags";
 import type { CommandEntry } from "../../registry";
-import { SCHEDULED_MESSAGES_CREATE_PAGE_CATEGORY_ID } from "../catalog";
+import { createCommandPageCommand } from "../../ui/pages/createCommandPageCommand";
 import type { ScheduledMessagesPlugin } from "../types";
 
 function showToast(message: string, type: (typeof Toasts.Type)[keyof typeof Toasts.Type]) {
@@ -59,16 +59,15 @@ export function createScheduledMessagesExtensionCommands(): CommandEntry[] {
             tags: [TAG_PLUGINS, TAG_UTILITY, TAG_NAVIGATION],
             handler: runOpenScheduledMessages
         },
-        {
+        createCommandPageCommand({
             id: "extension-scheduled-messages-create",
             label: "Create Scheduled Message",
             description: "Create a scheduled message from separate fields.",
             keywords: ["create", "scheduled", "message", "channel", "time", "plugin", "extension"],
             categoryId: DEFAULT_CATEGORY_ID,
             tags: [TAG_PLUGINS, TAG_UTILITY],
-            drilldownCategoryId: SCHEDULED_MESSAGES_CREATE_PAGE_CATEGORY_ID,
-            handler: () => undefined
-        },
+            page: { id: "scheduled-create" }
+        }),
         {
             id: "extension-scheduled-messages-quick-schedule-query",
             label: "Quick Schedule",

@@ -299,6 +299,7 @@ function parseMath(query: string): CalculatorIntent | null {
             return String(parsed ?? value);
         });
 
+    expression = expression.replace(/([0-9.)])\s*[x×]\s*([0-9(])/g, "$1*$2");
     expression = expression.replace(/\^/g, "**");
 
     if (!/[0-9]/.test(expression)) return null;

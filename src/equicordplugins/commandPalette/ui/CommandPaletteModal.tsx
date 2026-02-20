@@ -6,51 +6,66 @@
 
 import "../style.css";
 
-import { isPluginEnabled, plugins } from "@api/PluginManager";
-import { toggleEnabled } from "@equicordplugins/equicordHelper/utils";
-import { addScheduledMessage } from "@equicordplugins/scheduledMessages/utils";
 import { copyWithToast } from "@utils/discord";
+import { Logger } from "@utils/Logger";
 import { type ModalProps, ModalRoot, ModalSize } from "@utils/modal";
-import { ChannelStore, SelectedChannelStore, TextInput, Toasts, useEffect, useMemo, useRef, useState } from "@webpack/common";
+import { TextInput, Toasts, useEffect, useMemo, useRef, useState } from "@webpack/common";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from "react";
 
 import { buildQueryResolution } from "../actions/executors";
 import { resolveCalculatorQuery } from "../calculator";
-import { SCHEDULED_MESSAGES_CREATE_PAGE_CATEGORY_ID } from "../extensions/catalog";
 import { settings } from "../index";
 import { getRecentCommandEntries } from "../providers/recentProvider";
-import { resolveAllChannels } from "../query/resolvers";
 import type { QueryActionCandidate } from "../query/types";
 import {
+    type CommandActionIntent,
     type CommandEntry,
     DEFAULT_CATEGORY_ID,
     executeCommandAction,
     getCategoryPath,
     getCategoryWeight,
+    getCustomCommandById,
     getMentionCommandsSnapshot,
     getRecentRank,
     getRegistryVersion,
+    isCommandPinned,
     listChildCategories,
     listCommands,
     markCommandAsRecent,
     refreshAllContextProviders,
+    resolveCommandActionIntentByActionKey,
     subscribePinned,
-    subscribeRegistry
+    subscribeRegistry,
+    togglePinned
 } from "../registry";
 import { rankItems } from "../search/ranker";
+import { dispatchPaletteActionIntent } from "./actions/dispatchPaletteActionIntent";
+import { resolvePaletteActions } from "./actions/resolvePaletteActions";
 import { CommandPaletteActionBar } from "./CommandPaletteActionBar";
-import { CommandPaletteActionsMenu, type PaletteAction } from "./CommandPaletteActionsMenu";
+import { CommandPaletteActionsMenu } from "./CommandPaletteActionsMenu";
 import { CommandPaletteCalculatorCards } from "./CommandPaletteCalculatorCards";
 import { CommandPaletteInput } from "./CommandPaletteInput";
 import { CommandPaletteRow } from "./CommandPaletteRow";
-import { CommandPaletteScheduledCreatePage } from "./CommandPaletteScheduledCreatePage";
+import { getPalettePageSpec } from "./pages/registry";
+import type { PalettePageRef, PalettePageRuntimeContext, PalettePageValuesState, PaletteSuggestion } from "./pages/types";
+import { PaletteDropdown } from "./primitives/PaletteDropdown";
+import { PaletteField } from "./primitives/PaletteField";
+import { PalettePageShell } from "./primitives/PalettePageShell";
+import { PalettePickerInput } from "./primitives/PalettePickerInput";
 import type { CommandCandidate, PaletteCandidate } from "./types";
 
 type NavigationLevel =
     | { type: "root"; }
     | { type: "category"; categoryId: string; parentLevels: NavigationLevel[]; };
 
+interface PalettePageStackItem {
+    ref: PalettePageRef;
+    state: PalettePageValuesState;
+    error: string | null;
+}
+
 const MENTIONS_CATEGORY_ID = "mentions-actions";
+const RECENTS_CATEGORY_ID = "recent-actions";
 let persistedCategoryId: string | null = null;
 const SINGLE_SELECT_PROMPT_COMMAND_IDS = new Set([
     "command-palette-open-dm-query",
@@ -59,6 +74,28 @@ const SINGLE_SELECT_PROMPT_COMMAND_IDS = new Set([
     "extension-holy-notes-move-note-query",
     "extension-holy-notes-jump-note-query"
 ]);
+const logger = new Logger("CommandPaletteModal");
+
+function getCommandBadge(command: CommandEntry, fallback: "Command" | "Recent"): string {
+    const defaultBadge = fallback === "Recent" ? "Command" : fallback;
+    if (!command.id.startsWith("custom-")) return defaultBadge;
+
+    const customCommand = getCustomCommandById(command.id);
+    if (!customCommand) return defaultBadge;
+
+    switch (customCommand.action.type) {
+        case "command":
+            return "Alias";
+        case "url":
+            return "Quicklink";
+        case "macro":
+            return "Sequence";
+        case "settings":
+            return "Settings";
+        default:
+            return defaultBadge;
+    }
+}
 
 function asCommandCandidate(command: CommandEntry, pinned: boolean, badge: "Command" | "Recent"): CommandCandidate {
     const path = getCategoryPath(command.categoryId)
@@ -71,7 +108,7 @@ function asCommandCandidate(command: CommandEntry, pinned: boolean, badge: "Comm
         id: `command-${command.id}`,
         command,
         subtitle: path || undefined,
-        badge,
+        badge: getCommandBadge(command, badge),
         pinned,
         shortcut: command.shortcut ?? undefined,
         icon: command.icon
@@ -99,6 +136,12 @@ function hasChildren(command: CommandEntry, allCommands: CommandEntry[]): boolea
     if (childCategories.length > 0) return true;
 
     return allCommands.some(entry => entry.categoryId === command.categoryId && entry.id !== command.id);
+}
+
+function getDrilldownCategoryId(command: CommandEntry): string | null {
+    if (command.drilldownCategoryId) return command.drilldownCategoryId;
+    if (!command.categoryId) return null;
+    return listChildCategories(command.categoryId)[0]?.id ?? null;
 }
 
 function getCategoryCommands(categoryId: string, allCommands: CommandEntry[]): CommandEntry[] {
@@ -164,116 +207,28 @@ function clearPersistedNavigation() {
     persistedCategoryId = null;
 }
 
-function parseClockToken(value: string, base: Date): number | null {
-    const match = value.trim().match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/i);
-    if (!match) return null;
+function createInitialPageState(ref: PalettePageRef): PalettePageValuesState {
+    const spec = getPalettePageSpec(ref.id);
+    const initialValues = ref.initialData ?? {};
+    const values: Record<string, string> = {};
+    const selectedIds: Record<string, string | null> = {};
 
-    const rawHour = Number.parseInt(match[1], 10);
-    const minute = Number.parseInt(match[2] ?? "0", 10);
-    const meridiem = match[3]?.toLowerCase();
-
-    if (Number.isNaN(rawHour) || Number.isNaN(minute) || minute < 0 || minute > 59) return null;
-
-    let hour = rawHour;
-    if (meridiem) {
-        if (hour < 1 || hour > 12) return null;
-        if (meridiem === "pm" && hour < 12) hour += 12;
-        if (meridiem === "am" && hour === 12) hour = 0;
-    } else if (hour < 0 || hour > 23) {
-        return null;
+    for (const field of spec?.fields ?? []) {
+        values[field.key] = initialValues[field.key] ?? "";
+        selectedIds[field.key] = null;
     }
 
-    const candidate = new Date(base);
-    candidate.setHours(hour, minute, 0, 0);
-    return candidate.getTime();
+    return {
+        values,
+        selectedIds
+    };
 }
 
-function parseScheduledTimeInput(input: string): number | null {
-    const normalized = input.trim();
-    if (!normalized) return null;
-
-    const lower = normalized.toLowerCase();
-    const now = Date.now();
-
-    const relative = lower.match(/^in\s+(\d+)\s*(m|min|mins|minute|minutes|h|hr|hrs|hour|hours|d|day|days)$/);
-    if (relative) {
-        const amount = Number.parseInt(relative[1], 10);
-        if (amount < 1) return null;
-        const unit = relative[2];
-        const multiplier = unit.startsWith("m")
-            ? 60_000
-            : unit.startsWith("h")
-                ? 3_600_000
-                : 86_400_000;
-        return now + amount * multiplier;
-    }
-
-    const tomorrow = lower.match(/^tomorrow(?:\s+at)?\s+(.+)$/);
-    if (tomorrow?.[1]) {
-        const base = new Date();
-        base.setDate(base.getDate() + 1);
-        return parseClockToken(tomorrow[1], base);
-    }
-
-    const today = lower.match(/^today(?:\s+at)?\s+(.+)$/);
-    if (today?.[1]) {
-        const timestamp = parseClockToken(today[1], new Date());
-        return timestamp && timestamp > now ? timestamp : null;
-    }
-
-    const clockOnly = parseClockToken(normalized, new Date());
-    if (clockOnly) {
-        if (clockOnly > now) return clockOnly;
-        return clockOnly + 86_400_000;
-    }
-
-    const absolute = normalized.match(/^(\d{4}-\d{2}-\d{2})(?:[ t](\d{1,2}:\d{2}(?:\s*(?:am|pm))?))?$/i);
-    if (absolute) {
-        if (absolute[2]) {
-            const [year, month, day] = absolute[1].split("-").map(part => Number.parseInt(part, 10));
-            const base = new Date(year, month - 1, day);
-            return parseClockToken(absolute[2], base);
-        }
-
-        const dateOnly = new Date(`${absolute[1]}T09:00:00`);
-        const timestamp = dateOnly.getTime();
-        return Number.isNaN(timestamp) ? null : timestamp;
-    }
-
-    const parsed = new Date(normalized).getTime();
-    if (Number.isNaN(parsed) || parsed <= now) return null;
-    return parsed;
-}
-
-async function ensureScheduledMessagesPluginEnabled() {
-    const plugin = plugins.ScheduledMessages;
-    if (!plugin) {
-        Toasts.show({
-            message: "ScheduledMessages plugin is unavailable.",
-            type: Toasts.Type.FAILURE,
-            id: Toasts.genId(),
-            options: { position: Toasts.Position.BOTTOM }
-        });
-        return false;
-    }
-
-    if (isPluginEnabled(plugin.name)) return true;
-
-    const success = await toggleEnabled(plugin.name);
-    if (!success || !isPluginEnabled(plugin.name)) {
-        Toasts.show({
-            message: "Failed to enable ScheduledMessages.",
-            type: Toasts.Type.FAILURE,
-            id: Toasts.genId(),
-            options: { position: Toasts.Position.BOTTOM }
-        });
-        return false;
-    }
-
-    return true;
-}
-
-export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; }) {
+export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: ModalProps; instanceKey: number; }) {
+    const {
+        compactStartEnabled = true,
+        closeAfterExecute = true
+    } = settings.use();
     const [query, setQuery] = useState("");
     const [expanded, setExpanded] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -282,7 +237,7 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
     const [registryVersion, setRegistryVersion] = useState(() => getRegistryVersion());
     const [pinnedIds, setPinnedIds] = useState<Set<string>>(new Set());
     const [navigationLevel, setNavigationLevel] = useState<NavigationLevel>(() => {
-        if (!persistedCategoryId) return { type: "root" };
+        if (compactStartEnabled || !persistedCategoryId) return { type: "root" };
         return buildNavigationLevelForCategory(persistedCategoryId);
     });
     const [activePromptCommand, setActivePromptCommand] = useState<CommandEntry | null>(null);
@@ -291,29 +246,46 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
     const [focusPromptInput, setFocusPromptInput] = useState(false);
     const [showPromptDropdown, setShowPromptDropdown] = useState(false);
     const [selectionSource, setSelectionSource] = useState<"keyboard" | "pointer">("keyboard");
-    const [createScheduledChannel, setCreateScheduledChannel] = useState("");
-    const [createScheduledChannelId, setCreateScheduledChannelId] = useState<string | null>(null);
-    const [createScheduledTime, setCreateScheduledTime] = useState("");
-    const [createScheduledMessage, setCreateScheduledMessage] = useState("");
-    const [createScheduledError, setCreateScheduledError] = useState<string | null>(null);
+    const [pageStack, setPageStack] = useState<PalettePageStackItem[]>([]);
     const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
+    const [isActionsMenuClosing, setIsActionsMenuClosing] = useState(false);
     const activePromptCommandIdRef = useRef<string | null>(null);
     const promptContainerRef = useRef<HTMLDivElement | null>(null);
     const suggestionSeedRef = useRef((Math.random() * 0xffffffff) >>> 0);
     const listRef = useRef<HTMLDivElement | null>(null);
     const closeReasonRef = useRef<"programmatic" | "explicit-root" | null>(null);
     const keyboardNavigationAtRef = useRef(0);
-
-    const {
-        compactStartEnabled = true,
-        closeAfterExecute = true
-    } = settings.use();
+    const lastTrimmedQueryRef = useRef("");
 
     const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
     useEffect(() => subscribeRegistry(setRegistryVersion), []);
 
     useEffect(() => subscribePinned(ids => setPinnedIds(new Set(ids))), []);
+
+    useEffect(() => {
+        setQuery("");
+        setExpanded(false);
+        setSelectedIndex(-1);
+        setSelectedKey(null);
+        setKeyboardSelectedKey(null);
+        setActivePromptCommand(null);
+        setPromptInputValue("");
+        setSelectedPromptCandidateId(null);
+        setFocusPromptInput(false);
+        setShowPromptDropdown(false);
+        setSelectionSource("keyboard");
+        setPageStack([]);
+        setIsActionsMenuOpen(false);
+        setActivePageFieldKey(null);
+        activePromptCommandIdRef.current = null;
+        closeReasonRef.current = null;
+        keyboardNavigationAtRef.current = 0;
+        setNavigationLevel(() => {
+            if (compactStartEnabled || !persistedCategoryId) return { type: "root" };
+            return buildNavigationLevelForCategory(persistedCategoryId);
+        });
+    }, [compactStartEnabled, instanceKey]);
 
     useEffect(() => {
         return () => {
@@ -341,12 +313,15 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
     }, [navigationLevel]);
 
     const trimmedQuery = query.trim();
-    const compact = compactStartEnabled && trimmedQuery.length === 0 && !expanded && navigationLevel.type === "root";
+    const compact = compactStartEnabled && trimmedQuery.length === 0 && !expanded && navigationLevel.type === "root" && pageStack.length === 0;
 
     const allCommands = useMemo(() => listCommands(), [registryVersion]);
 
     const currentCommands = useMemo(() => {
         if (navigationLevel.type === "root") return allCommands;
+        if (navigationLevel.categoryId === RECENTS_CATEGORY_ID) {
+            return getRecentCommandEntries(30);
+        }
         if (navigationLevel.categoryId === MENTIONS_CATEGORY_ID) {
             const snapshot = getMentionCommandsSnapshot();
             if (snapshot.length > 0) return snapshot;
@@ -430,6 +405,9 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
         }
 
         if (rankedCommandCandidates.length > 0) {
+            if (trimmedQuery.length > 0) {
+                expandedItems.push({ type: "section", id: "section-results", label: "Results" });
+            }
             if (navigationLevel.type === "root" && trimmedQuery.length === 0) {
                 const seenCommandIds = new Set<string>();
                 for (const item of expandedItems) {
@@ -485,94 +463,32 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
 
     const selectedItem = selectedIndex >= 0 ? items[selectedIndex] : undefined;
     const selectedLabel = getSelectedLabel(selectedItem);
+    const activePage = pageStack.length > 0 ? pageStack[pageStack.length - 1] : null;
+    const activePageSpec = activePage ? getPalettePageSpec(activePage.ref.id) ?? null : null;
+    const activePageState = activePage?.state ?? null;
+    const isPageOpen = Boolean(activePageSpec && activePageState);
 
-    const canDrillDown = isSelectable(selectedItem) && hasChildren(selectedItem.command, allCommands);
-    const canGoBack = navigationLevel.type !== "root";
-    const isScheduledCreatePage = navigationLevel.type === "category" && navigationLevel.categoryId === SCHEDULED_MESSAGES_CREATE_PAGE_CATEGORY_ID;
-    const selectedCommand = isSelectable(selectedItem) ? selectedItem.command : null;
-    const actionBarExtraHints = selectedCommand?.secondaryActions
-        ? Object.values(selectedCommand.secondaryActions).map(action => ({
-            key: action.hintKey,
-            label: action.label
-        }))
-        : undefined;
-    const calculatorActionHints = calculatorResult
-        ? [
-            { key: "↵", label: "Copy answer" },
-            { key: "⌘↵", label: "Copy raw" },
-            { key: "⌘⇧↵", label: "Copy Q+A" }
-        ]
-        : undefined;
-    const actionBarHints = calculatorResult ? calculatorActionHints : undefined;
-    const scheduledCreateHints = isScheduledCreatePage ? [
-        { key: "⌘↵", label: "Create" },
-        { key: "Esc", label: "Back" }
-    ] : undefined;
-    const defaultHints = canGoBack
-        ? [
-            { key: "←", label: "Back" },
-            { key: "↑↓", label: "Navigate" },
-            { key: "↵", label: "Execute" },
-            { key: "Esc", label: "Close" },
-            ...(canDrillDown ? [{ key: "→", label: "Open" }] : [])
-        ]
-        : [
-            { key: "↑↓", label: "Navigate" },
-            { key: "↵", label: "Execute" },
-            { key: "Esc", label: "Close" },
-            ...(canDrillDown ? [{ key: "→", label: "Open" }] : [])
-        ];
-    const actionHintsForBar = scheduledCreateHints ?? actionBarHints ?? actionBarExtraHints ?? defaultHints;
-
-    const scheduledChannelSuggestions = useMemo(() => {
-        if (!isScheduledCreatePage) return [];
-
-        const toSuggestion = (entry: { id: string; display: string; iconUrl?: string; }) => {
-            const channel = ChannelStore.getChannel(entry.id);
-            const isDm = channel ? (typeof channel.isDM === "function" ? channel.isDM() : channel.type === 1) : false;
-            const isGroupDm = channel ? (typeof channel.isGroupDM === "function" ? channel.isGroupDM() : channel.type === 3) : false;
-            return {
-                id: entry.id,
-                display: entry.display,
-                iconUrl: entry.iconUrl,
-                kind: isDm ? "dm" as const : isGroupDm ? "group" as const : "guild" as const
-            };
-        };
-
-        const target = createScheduledChannel.trim();
-        return resolveAllChannels(target, {
-            includeAllWhenEmpty: target.length === 0,
-            limit: 24
-        }).map(toSuggestion);
-    }, [createScheduledChannel, isScheduledCreatePage]);
-
-    const resolveCreateScheduledChannel = () => {
-        if (createScheduledChannelId) {
-            const selected = ChannelStore.getChannel(createScheduledChannelId);
-            if (selected) {
-                return {
-                    id: createScheduledChannelId,
-                    display: selected.name ? `#${selected.name}` : `Channel ${createScheduledChannelId}`
-                };
-            }
-        }
-
-        const typed = createScheduledChannel.trim();
-        if (typed) {
-            const match = resolveAllChannels(typed)[0];
-            if (match) return { id: match.id, display: match.display };
-            return null;
-        }
-
-        const currentChannelId = SelectedChannelStore.getChannelId();
-        if (!currentChannelId) return null;
-        const currentChannel = ChannelStore.getChannel(currentChannelId);
-        if (!currentChannel) return null;
-        return {
-            id: currentChannelId,
-            display: currentChannel.name ? `#${currentChannel.name}` : `Channel ${currentChannelId}`
-        };
-    };
+    const canDrillDown = !isPageOpen && isSelectable(selectedItem) && hasChildren(selectedItem.command, allCommands);
+    const canGoBack = isPageOpen || navigationLevel.type !== "root";
+    const selectedCommand = !isPageOpen && isSelectable(selectedItem) ? selectedItem.command : null;
+    const selectedDrilldownCategoryId = selectedCommand ? getDrilldownCategoryId(selectedCommand) : null;
+    const promptDropdownSuggestions = useMemo<PaletteSuggestion[]>(() => queryCandidates.map(candidate => ({
+        id: candidate.id,
+        label: candidate.label,
+        iconUrl: undefined,
+        kind: "generic"
+    })), [queryCandidates]);
+    const promptSelectedSuggestionIndex = useMemo(() => {
+        if (!selectedPromptCandidateId) return -1;
+        return promptDropdownSuggestions.findIndex(candidate => candidate.id === selectedPromptCandidateId);
+    }, [promptDropdownSuggestions, selectedPromptCandidateId]);
+    const [activePageFieldKey, setActivePageFieldKey] = useState<string | null>(null);
+    const activePageSuggestions = useMemo<PaletteSuggestion[]>(() => {
+        if (!activePageSpec || !activePageState || !activePageFieldKey) return [];
+        if (!activePageSpec.resolveSuggestions) return [];
+        const value = activePageState.values[activePageFieldKey] ?? "";
+        return activePageSpec.resolveSuggestions(activePageFieldKey, value, activePageState.values, activePageState.selectedIds);
+    }, [activePageSpec, activePageState, activePageFieldKey]);
 
     const promptOffsetChars = Math.min(42, Math.max(1, trimmedQuery.length));
     const showPromptCommandPreview = Boolean(promptCommand && trimmedQuery.length === 0);
@@ -584,12 +500,12 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
     }, [queryCandidates, selectedPromptCandidateId]);
 
     useEffect(() => {
-        if (isScheduledCreatePage) return;
-        setCreateScheduledError(null);
-        setCreateScheduledChannelId(null);
-    }, [isScheduledCreatePage]);
+        if (compact) {
+            setSelectedIndex(-1);
+            setSelectedKey(null);
+            return;
+        }
 
-    useEffect(() => {
         if (!hasCommandItems) {
             setSelectedIndex(-1);
             setSelectedKey(null);
@@ -613,7 +529,7 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
 
         setSelectedIndex(firstSelectable);
         setSelectedKey(items[firstSelectable].id);
-    }, [hasCommandItems, items, selectedKey]);
+    }, [hasCommandItems, items, selectedKey, compact]);
 
     useEffect(() => {
         if (selectedIndex < 0) return;
@@ -634,6 +550,22 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
             container.scrollTop -= containerRect.top - nodeRect.top;
         }
     }, [selectedIndex, selectionSource]);
+
+    useEffect(() => {
+        const previous = lastTrimmedQueryRef.current;
+        if (previous === trimmedQuery) return;
+        lastTrimmedQueryRef.current = trimmedQuery;
+
+        if (compact || isPageOpen) return;
+
+        setSelectedIndex(-1);
+        setSelectedKey(null);
+        setKeyboardSelectedKey(null);
+
+        if (listRef.current) {
+            listRef.current.scrollTop = 0;
+        }
+    }, [compact, isPageOpen, trimmedQuery]);
 
     useEffect(() => {
         if (!focusPromptInput) return;
@@ -695,7 +627,7 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
                 id: Toasts.genId(),
                 options: { position: Toasts.Position.BOTTOM }
             });
-            console.error("CommandPalette", "Prompt action failed", error);
+            logger.error("Prompt action failed", error);
         } finally {
             if (!success) return;
             if (commandId) {
@@ -718,61 +650,142 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
         await copyWithToast(text, "Copied to clipboard.");
     };
 
-    const submitCreateScheduledMessage = async () => {
-        setCreateScheduledError(null);
+    const pushPage = (ref: PalettePageRef) => {
+        setPageStack(current => [
+            ...current,
+            {
+                ref,
+                state: createInitialPageState(ref),
+                error: null
+            }
+        ]);
+        clearPromptState();
+        setActivePageFieldKey(null);
+        setSelectedKey(null);
+        setKeyboardSelectedKey(null);
+        setQuery("");
+        setExpanded(false);
+    };
 
-        const content = createScheduledMessage.trim();
-        if (!content) {
-            setCreateScheduledError("Message content is required.");
-            return;
-        }
-
-        const scheduledTime = parseScheduledTimeInput(createScheduledTime);
-        if (!scheduledTime) {
-            setCreateScheduledError("Enter a valid future time.");
-            return;
-        }
-
-        const channel = resolveCreateScheduledChannel();
-        if (!channel) {
-            setCreateScheduledError("Select a valid channel.");
-            return;
-        }
-
-        if (!await ensureScheduledMessagesPluginEnabled()) return;
-
-        const result = await addScheduledMessage(channel.id, content, scheduledTime);
-        if (!result.success) {
-            setCreateScheduledError(result.error ?? "Failed to schedule message.");
-            return;
-        }
-
-        Toasts.show({
-            message: "Message scheduled.",
-            type: Toasts.Type.SUCCESS,
-            id: Toasts.genId(),
-            options: { position: Toasts.Position.BOTTOM }
+    const setActivePageValue = (fieldKey: string, value: string) => {
+        setPageStack(current => {
+            if (current.length === 0) return current;
+            const next = [...current];
+            const top = next[next.length - 1];
+            next[next.length - 1] = {
+                ...top,
+                state: {
+                    ...top.state,
+                    values: {
+                        ...top.state.values,
+                        [fieldKey]: value
+                    },
+                    selectedIds: {
+                        ...top.state.selectedIds,
+                        [fieldKey]: null
+                    }
+                },
+                error: null
+            };
+            return next;
         });
+    };
 
-        setCreateScheduledChannel("");
-        setCreateScheduledChannelId(null);
-        setCreateScheduledTime("");
-        setCreateScheduledMessage("");
-        setCreateScheduledError(null);
-        closePalette("programmatic");
+    const setActivePageSelectedId = (fieldKey: string, id: string | null) => {
+        setPageStack(current => {
+            if (current.length === 0) return current;
+            const next = [...current];
+            const top = next[next.length - 1];
+            next[next.length - 1] = {
+                ...top,
+                state: {
+                    ...top.state,
+                    selectedIds: {
+                        ...top.state.selectedIds,
+                        [fieldKey]: id
+                    }
+                },
+                error: null
+            };
+            return next;
+        });
+    };
+
+    const setActivePageError = (error: string | null) => {
+        setPageStack(current => {
+            if (current.length === 0) return current;
+            const next = [...current];
+            const top = next[next.length - 1];
+            next[next.length - 1] = {
+                ...top,
+                error
+            };
+            return next;
+        });
+    };
+
+    const buildActivePageContext = (): PalettePageRuntimeContext | null => {
+        if (!activePageState) return null;
+        return {
+            values: activePageState.values,
+            selectedIds: activePageState.selectedIds,
+            setValue: setActivePageValue,
+            setSelectedId: setActivePageSelectedId,
+            showSuccess(message) {
+                Toasts.show({
+                    message,
+                    type: Toasts.Type.SUCCESS,
+                    id: Toasts.genId(),
+                    options: { position: Toasts.Position.BOTTOM }
+                });
+            },
+            showFailure(message) {
+                Toasts.show({
+                    message,
+                    type: Toasts.Type.FAILURE,
+                    id: Toasts.genId(),
+                    options: { position: Toasts.Position.BOTTOM }
+                });
+            }
+        };
+    };
+
+    const submitActivePage = async () => {
+        if (!activePageSpec) return;
+        const context = buildActivePageContext();
+        if (!context) return;
+
+        const validationError = activePageSpec.validate?.(context) ?? null;
+        if (validationError) {
+            setActivePageError(validationError);
+            return;
+        }
+
+        try {
+            await activePageSpec.submit(context);
+            closePalette("programmatic");
+        } catch (error) {
+            const message = error instanceof Error && error.message
+                ? error.message
+                : "Unable to complete page action.";
+            setActivePageError(message);
+        }
+    };
+
+    const openDrilldownCategory = (categoryId: string): boolean => {
+        refreshAllContextProviders();
+        setNavigationLevel(current => pushNavigationLevel(current, categoryId));
+        clearPromptState();
+        setSelectedKey(null);
+        setKeyboardSelectedKey(null);
+        setQuery("");
+        setExpanded(false);
+        return true;
     };
 
     const openDrilldown = (command: CommandEntry): boolean => {
         if (command.drilldownCategoryId) {
-            const { drilldownCategoryId } = command;
-            refreshAllContextProviders();
-            setNavigationLevel(current => pushNavigationLevel(current, drilldownCategoryId));
-            clearPromptState();
-            setSelectedKey(null);
-            setKeyboardSelectedKey(null);
-            setQuery("");
-            setExpanded(false);
-            return true;
+            return openDrilldownCategory(command.drilldownCategoryId);
         }
 
         const { categoryId } = command;
@@ -780,13 +793,7 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
 
         const childCategories = listChildCategories(categoryId);
         if (childCategories.length > 0) {
-            setNavigationLevel(current => pushNavigationLevel(current, childCategories[0].id));
-            clearPromptState();
-            setSelectedKey(null);
-            setKeyboardSelectedKey(null);
-            setQuery("");
-            setExpanded(false);
-            return true;
+            return openDrilldownCategory(childCategories[0].id);
         }
 
         return false;
@@ -805,6 +812,12 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
             return;
         }
 
+        if (actionKey === "primary" && item.command.page) {
+            markCommandAsRecent(item.command.id);
+            pushPage(item.command.page);
+            return;
+        }
+
         if (actionKey === "primary" && openDrilldown(item.command)) {
             return;
         }
@@ -817,12 +830,41 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
         }
     };
 
+    const handleTogglePin = async (commandId: string) => {
+        const result = await togglePinned(commandId);
+        if (result === null) {
+            Toasts.show({
+                message: "Unable to toggle pin for this command.",
+                type: Toasts.Type.FAILURE,
+                id: Toasts.genId(),
+                options: { position: Toasts.Position.BOTTOM }
+            });
+            return;
+        }
+
+        const command = selectedCommand;
+        const label = command?.id === commandId ? command.label : "Command";
+
+        Toasts.show({
+            message: `${label} ${result ? "pinned" : "unpinned"}.`,
+            type: Toasts.Type.SUCCESS,
+            id: Toasts.genId(),
+            options: { position: Toasts.Position.BOTTOM }
+        });
+    };
+
     const drillDown = () => {
         if (!isSelectable(selectedItem)) return;
         openDrilldown(selectedItem.command);
     };
 
     const goBack = () => {
+        if (isPageOpen) {
+            setPageStack(current => current.slice(0, -1));
+            setActivePageFieldKey(null);
+            return;
+        }
+
         if (navigationLevel.type === "root") return;
 
         const { parentLevels } = navigationLevel;
@@ -871,6 +913,7 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
     };
 
     const ensureSelectionForActions = () => {
+        if (isPageOpen) return true;
         if (isSelectable(selectedItem)) return true;
 
         const firstSelectable = items.findIndex(item => isSelectable(item));
@@ -921,8 +964,7 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
         const target = event.target as HTMLElement | null;
         const isPromptInputTarget = Boolean(target?.closest(".vc-command-palette-header-prompt-active"));
         const isMainInputTarget = Boolean(target?.closest(".vc-command-palette-main-input")) && !isPromptInputTarget;
-        const isScheduledCreateTarget = Boolean(target?.closest(".vc-command-palette-scheduled-create-page"));
-        const isScheduledCreateChannelTarget = Boolean(target?.closest(".vc-command-palette-scheduled-create-field"));
+        const isPageTarget = Boolean(target?.closest(".vc-command-palette-page"));
 
         if (event.key === "Escape" && event.metaKey) {
             event.preventDefault();
@@ -935,38 +977,28 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
         if (event.key === "l" && event.metaKey && !event.altKey && !event.ctrlKey && !event.shiftKey) {
             event.preventDefault();
             event.stopPropagation();
-            setIsActionsMenuOpen(prev => {
-                if (prev) return false;
-                if (!ensureSelectionForActions()) return false;
-                return true;
-            });
-            return;
-        }
-
-        if (isActionsMenuOpen) {
-            return;
-        }
-
-        if (isScheduledCreatePage && isScheduledCreateTarget) {
-            if (event.key === "Enter" && !event.metaKey && !event.altKey && !event.ctrlKey && !event.shiftKey) {
-                if (isScheduledCreateChannelTarget && scheduledChannelSuggestions.length > 0) {
-                    event.preventDefault();
-                    const first = scheduledChannelSuggestions[0];
-                    setCreateScheduledChannel(first.display);
-                    setCreateScheduledChannelId(first.id);
-                    setCreateScheduledError(null);
-                    return;
-                }
+            if (isActionsMenuOpen || isActionsMenuClosing) {
+                setIsActionsMenuClosing(true);
+            } else {
+                if (!ensureSelectionForActions()) return;
+                setIsActionsMenuOpen(true);
+                setIsActionsMenuClosing(false);
             }
+            return;
+        }
 
+        if (isActionsMenuOpen && !isActionsMenuClosing) {
+            return;
+        }
+
+        if (isPageOpen && isPageTarget) {
             if (event.key === "Enter" && event.metaKey && !event.altKey && !event.ctrlKey && !event.shiftKey) {
                 event.preventDefault();
-                await submitCreateScheduledMessage();
+                await submitActivePage();
                 return;
             }
 
             if (event.key === "Enter") {
-                event.preventDefault();
                 return;
             }
 
@@ -1052,7 +1084,7 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
             return;
         }
 
-        if (isMainInputTarget && promptCommand && (event.key === "Tab" || event.key === "ArrowRight")) {
+        if (isMainInputTarget && promptCommand && !isPageOpen && (event.key === "Tab" || event.key === "ArrowRight")) {
             event.preventDefault();
             activatePromptCommand(promptCommand, true);
             return;
@@ -1120,7 +1152,40 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
             const actionKey = event.metaKey || event.altKey || event.ctrlKey || event.shiftKey
                 ? getEnterActionKey(event)
                 : "primary";
-            await executeItem(selectedItem, actionKey);
+            if (actionKey === "primary") {
+                await executeItem(selectedItem, actionKey);
+                return;
+            }
+
+            if (!selectedCommand) return;
+
+            const actionContext = {
+                command: selectedCommand,
+                drilldownCategoryId: selectedDrilldownCategoryId,
+                isPageOpen: false,
+                hasCalculatorResult: Boolean(calculatorResult),
+                canGoBack
+            };
+            const intent = resolveCommandActionIntentByActionKey(selectedCommand, actionKey, actionContext);
+            if (!intent) return;
+
+            await dispatchPaletteActionIntent({
+                intent,
+                executePrimary: () => executeItem(selectedItem, "primary"),
+                executeSecondary: async resolvedActionKey => {
+                    const executed = await executeCommandAction(selectedCommand, resolvedActionKey, actionContext);
+                    if (!executed) return;
+                    if (selectedCommand.closeAfterExecute ?? closeAfterExecute) {
+                        closePalette("programmatic");
+                    }
+                },
+                togglePin: handleTogglePin,
+                openPage: pushPage,
+                openDrilldown: openDrilldownCategory,
+                submitActivePage,
+                goBack,
+                copyCalculatorResult
+            });
             return;
         }
 
@@ -1153,160 +1218,201 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
         }
     };
 
-    const paletteActions: PaletteAction[] = useMemo(() => {
-        const actions: PaletteAction[] = [];
+    const paletteActions = useMemo(() => {
+        return resolvePaletteActions({
+            activePage: activePageSpec
+                ? { id: activePageSpec.id, submitLabel: activePageSpec.submitLabel }
+                : null,
+            hasCalculatorResult: Boolean(calculatorResult),
+            selectedCommand,
+            selectedCommandPinned: selectedCommand ? isCommandPinned(selectedCommand.id) : false,
+            canGoBack,
+            canDrillDown,
+            drilldownCategoryId: selectedDrilldownCategoryId
+        });
+    }, [activePageSpec, calculatorResult, selectedCommand, canGoBack, canDrillDown, selectedDrilldownCategoryId, pinnedIds]);
 
-        if (isScheduledCreatePage) {
-            actions.push({ id: "create", label: "Create Scheduled Message", shortcut: "⌘↵", handler: submitCreateScheduledMessage });
-            actions.push({ id: "back", label: "Go Back", shortcut: "Esc", handler: goBack });
-            return actions;
-        }
+    const handleActionIntent = async (intent: CommandActionIntent) => {
+        await dispatchPaletteActionIntent({
+            intent,
+            executePrimary: () => executeItem(selectedItem, "primary"),
+            executeSecondary: actionKey => executeItem(selectedItem, actionKey),
+            togglePin: handleTogglePin,
+            openPage: pushPage,
+            openDrilldown: openDrilldownCategory,
+            submitActivePage,
+            goBack,
+            copyCalculatorResult
+        });
+    };
 
-        if (calculatorResult) {
-            actions.push({ id: "copy-answer", label: "Copy Answer", shortcut: "↵", handler: () => copyCalculatorResult("formatted") });
-            actions.push({ id: "copy-raw", label: "Copy Raw", shortcut: "⌘↵", handler: () => copyCalculatorResult("raw") });
-            actions.push({ id: "copy-qa", label: "Copy Q+A", shortcut: "⌘⇧↵", handler: () => copyCalculatorResult("qa") });
-        } else if (selectedCommand) {
-            actions.push({ id: "execute", label: "Execute", shortcut: "↵", handler: () => executeItem(selectedItem, "primary") });
+    const activePageView = useMemo(() => {
+        if (!activePageSpec || !activePageState) return null;
+        const context = buildActivePageContext();
+        if (!context) return null;
 
-            if (selectedCommand.secondaryActions) {
-                Object.entries(selectedCommand.secondaryActions).forEach(([key, action]) => {
-                    actions.push({ id: `secondary-${key}`, label: action.label, shortcut: action.hintKey, handler: action.handler });
-                });
-            }
+        return (
+            <PalettePageShell title={activePageSpec.title} error={activePage?.error}>
+                {activePageSpec.renderPage?.(context)}
+                {activePageSpec.fields.map(field => {
+                    const custom = activePageSpec.renderField?.(field, context);
+                    if (custom) return <div key={field.key}>{custom}</div>;
 
-            if (canDrillDown) {
-                actions.push({ id: "open", label: "Open", shortcut: "→", handler: drillDown });
-            }
-        }
+                    const value = context.values[field.key] ?? "";
+                    if (field.type === "picker") {
+                        const suggestions = activePageFieldKey === field.key
+                            ? activePageSuggestions.slice(0, field.suggestionLimit ?? activePageSuggestions.length)
+                            : [];
 
-        if (canGoBack) {
-            actions.push({ id: "back", label: "Go Back", shortcut: "←", handler: goBack });
-        }
+                        return (
+                            <PaletteField key={field.key} label={field.label}>
+                                <PalettePickerInput
+                                    value={value}
+                                    suggestions={suggestions}
+                                    placeholder={field.placeholder}
+                                    onChange={next => {
+                                        setActivePageFieldKey(field.key);
+                                        context.setValue(field.key, next);
+                                    }}
+                                    onPick={suggestion => {
+                                        setActivePageFieldKey(field.key);
+                                        context.setValue(field.key, suggestion.label);
+                                        context.setSelectedId(field.key, suggestion.id);
+                                    }}
+                                />
+                            </PaletteField>
+                        );
+                    }
 
-        return actions;
-    }, [isScheduledCreatePage, calculatorResult, selectedCommand, selectedItem, canDrillDown, canGoBack, submitCreateScheduledMessage, goBack, executeItem, drillDown, copyCalculatorResult]);
+                    return (
+                        <PaletteField key={field.key} label={field.label}>
+                            <TextInput
+                                className="vc-command-palette-page-input"
+                                value={value}
+                                onChange={next => context.setValue(field.key, next)}
+                                onFocus={() => setActivePageFieldKey(field.key)}
+                                placeholder={field.placeholder}
+                            />
+                        </PaletteField>
+                    );
+                })}
+            </PalettePageShell>
+        );
+    }, [activePage, activePageFieldKey, activePageSpec, activePageState, activePageSuggestions]);
 
     return (
         <ModalRoot
             {...modalProps}
             className={compact ? "vc-command-palette vc-command-palette-compact" : "vc-command-palette"}
-            size={ModalSize.LARGE}
+            size={isPageOpen ? ModalSize.DYNAMIC : (compact ? ModalSize.SMALL : ModalSize.LARGE)}
         >
             <div className="vc-command-palette-shell" onKeyDown={onKeyDown}>
-                <CommandPaletteInput
-                    value={query}
-                    onChange={value => {
-                        const next = value.trim();
-                        setQuery(value);
+                {!isPageOpen && (
+                    <CommandPaletteInput
+                        value={query}
+                        onChange={value => {
+                            const next = value.trim();
+                            setQuery(value);
 
-                        if (next.length > 0) {
-                            setExpanded(true);
-                        } else if (!activePromptCommand) {
-                            if (navigationLevel.type !== "root") {
-                                goBack();
-                                return;
+                            if (next.length > 0) {
+                                setExpanded(true);
+                            } else if (!activePromptCommand) {
+                                if (navigationLevel.type !== "root") {
+                                    goBack();
+                                    return;
+                                }
+                                setExpanded(false);
                             }
-                            setExpanded(false);
-                        }
-                    }}
-                    placeholder={undefined}
-                    hideMainInput={showPromptCommandPreview}
-                    compact={compact}
-                >
-                    {promptCommand && (
-                        <div
-                            ref={promptContainerRef}
-                            className={showPromptCommandPreview ? "vc-command-palette-header-prompt vc-command-palette-header-prompt-with-command-preview" : "vc-command-palette-header-prompt"}
-                            style={{ "--vc-prompt-offset-ch": String(promptOffsetChars) } as CSSProperties}
-                        >
-                            {showPromptCommandPreview && (
-                                <span className="vc-command-palette-header-prompt-command-preview">
-                                    {promptCommand.label}
-                                </span>
-                            )}
-                            {activePromptCommand ? (
-                                <div className={selectedPromptCandidate ? "vc-command-palette-header-prompt-active vc-command-palette-header-prompt-active-with-selection" : "vc-command-palette-header-prompt-active"}>
-                                    {selectedPromptCandidate && (
-                                        <span className="vc-command-palette-header-prompt-selection">
-                                            <span className="vc-command-palette-header-prompt-selection-label">{selectedPromptCandidate.label}</span>
-                                        </span>
-                                    )}
-                                    {!(activePromptIsSingleSelect && selectedPromptCandidate) && (
-                                        <TextInput
-                                            className={selectedPromptCandidate ? "vc-command-palette-prompt-input vc-command-palette-prompt-input-with-selection" : "vc-command-palette-prompt-input"}
-                                            value={promptInputValue}
-                                            onChange={value => {
-                                                setPromptInputValue(value);
-                                                if (selectedPromptCandidateId) {
-                                                    setSelectedPromptCandidateId(null);
-                                                }
-                                            }}
-                                            placeholder={selectedPromptCandidate ? "" : (promptCommand.queryPlaceholder ?? "Prompt")}
-                                            onFocus={() => setShowPromptDropdown(true)}
-                                            onBlur={() => {
-                                                window.setTimeout(() => {
-                                                    const active = document.activeElement;
-                                                    if (promptContainerRef.current?.contains(active)) return;
-                                                    setShowPromptDropdown(false);
-                                                    if (selectedPromptCandidateId || promptInputValue.trim().length > 0) return;
-                                                    clearPromptState();
-                                                }, 0);
-                                            }}
-                                        />
-                                    )}
-                                </div>
-                            ) : (
-                                <button
-                                    type="button"
-                                    className="vc-command-palette-header-prompt-trigger"
-                                    onClick={() => activatePromptCommand(promptCommand, true)}
-                                >
-                                    <span className="vc-command-palette-header-prompt-placeholder">
-                                        {promptCommand.queryPlaceholder ?? "Prompt"}
+                        }}
+                        placeholder={undefined}
+                        hideMainInput={showPromptCommandPreview}
+                        compact={compact}
+                    >
+                        {promptCommand && (
+                            <div
+                                ref={promptContainerRef}
+                                className={showPromptCommandPreview ? "vc-command-palette-header-prompt vc-command-palette-header-prompt-with-command-preview" : "vc-command-palette-header-prompt"}
+                                style={{ "--vc-prompt-offset-ch": String(promptOffsetChars) } as CSSProperties}
+                            >
+                                {showPromptCommandPreview && (
+                                    <span className="vc-command-palette-header-prompt-command-preview">
+                                        {promptCommand.label}
                                     </span>
-                                </button>
-                            )}
-                            {activePromptCommand && showPromptDropdown && queryCandidates.length > 0 && (
-                                <div className="vc-command-palette-header-prompt-dropdown">
-                                    {queryCandidates.map(candidate => {
-                                        const Icon = candidate.icon;
-                                        return (
-                                            <button
-                                                key={candidate.id}
-                                                type="button"
-                                                className="vc-command-palette-header-prompt-option"
-                                                onClick={async () => {
-                                                    setSelectedPromptCandidateId(candidate.id);
-                                                    setPromptInputValue("");
-                                                    if (activePromptIsSingleSelect) {
-                                                        setShowPromptDropdown(false);
-                                                        focusSearchInput();
-                                                    } else {
-                                                        setFocusPromptInput(true);
+                                )}
+                                {activePromptCommand ? (
+                                    <div className={selectedPromptCandidate ? "vc-command-palette-header-prompt-active vc-command-palette-header-prompt-active-with-selection" : "vc-command-palette-header-prompt-active"}>
+                                        {selectedPromptCandidate && (
+                                            <span className="vc-command-palette-header-prompt-selection">
+                                                <span className="vc-command-palette-header-prompt-selection-label">{selectedPromptCandidate.label}</span>
+                                            </span>
+                                        )}
+                                        {!(activePromptIsSingleSelect && selectedPromptCandidate) && (
+                                            <TextInput
+                                                className={selectedPromptCandidate ? "vc-command-palette-prompt-input vc-command-palette-prompt-input-with-selection" : "vc-command-palette-prompt-input"}
+                                                value={promptInputValue}
+                                                onChange={value => {
+                                                    setPromptInputValue(value);
+                                                    if (selectedPromptCandidateId) {
+                                                        setSelectedPromptCandidateId(null);
                                                     }
                                                 }}
-                                            >
-                                                {Icon && (
-                                                    <span className="vc-command-palette-header-prompt-option-icon">
-                                                        <Icon />
-                                                    </span>
-                                                )}
-                                                <span className="vc-command-palette-header-prompt-option-label">{candidate.label}</span>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </CommandPaletteInput>
+                                                placeholder={selectedPromptCandidate ? "" : (promptCommand.queryPlaceholder ?? "Prompt")}
+                                                onFocus={() => setShowPromptDropdown(true)}
+                                                onBlur={() => {
+                                                    window.setTimeout(() => {
+                                                        const active = document.activeElement;
+                                                        if (promptContainerRef.current?.contains(active)) return;
+                                                        setShowPromptDropdown(false);
+                                                        if (selectedPromptCandidateId || promptInputValue.trim().length > 0) return;
+                                                        clearPromptState();
+                                                    }, 0);
+                                                }}
+                                            />
+                                        )}
+                                    </div>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        className="vc-command-palette-header-prompt-trigger"
+                                        onClick={() => activatePromptCommand(promptCommand, true)}
+                                    >
+                                        <span className="vc-command-palette-header-prompt-placeholder">
+                                            {promptCommand.queryPlaceholder ?? "Prompt"}
+                                        </span>
+                                    </button>
+                                )}
+                                {activePromptCommand && showPromptDropdown && queryCandidates.length > 0 && (
+                                    <PaletteDropdown
+                                        className="vc-command-palette-header-prompt-dropdown"
+                                        suggestions={promptDropdownSuggestions}
+                                        highlightedIndex={promptSelectedSuggestionIndex}
+                                        onHover={index => {
+                                            const candidate = promptDropdownSuggestions[index];
+                                            if (!candidate) return;
+                                            setSelectedPromptCandidateId(candidate.id);
+                                        }}
+                                        onPick={candidate => {
+                                            setSelectedPromptCandidateId(candidate.id);
+                                            setPromptInputValue("");
+                                            if (activePromptIsSingleSelect) {
+                                                setShowPromptDropdown(false);
+                                                focusSearchInput();
+                                            } else {
+                                                setFocusPromptInput(true);
+                                            }
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        )}
+                    </CommandPaletteInput>
+                )}
 
-                {!compact && !isScheduledCreatePage && calculatorResult && (
+                {!compact && !isPageOpen && calculatorResult && (
                     <CommandPaletteCalculatorCards result={calculatorResult} />
                 )}
 
-                {!compact && !isScheduledCreatePage && (
+                {!compact && !isPageOpen && (
                     <div ref={listRef} className="vc-command-palette-list">
                         {!hasCommandItems && <div className="vc-command-palette-empty">{emptyStateText}</div>}
                         {items.map((item, index) => {
@@ -1347,52 +1453,33 @@ export function CommandPaletteModal({ modalProps }: { modalProps: ModalProps; })
                     </div>
                 )}
 
-                {!compact && isScheduledCreatePage && (
-                    <CommandPaletteScheduledCreatePage
-                        channelValue={createScheduledChannel}
-                        hasSelectedChannel={createScheduledChannelId != null}
-                        timeValue={createScheduledTime}
-                        messageValue={createScheduledMessage}
-                        channelSuggestions={scheduledChannelSuggestions}
-                        error={createScheduledError}
-                        onChannelChange={value => {
-                            setCreateScheduledChannel(value);
-                            setCreateScheduledChannelId(null);
-                            setCreateScheduledError(null);
-                        }}
-                        onTimeChange={value => {
-                            setCreateScheduledTime(value);
-                            setCreateScheduledError(null);
-                        }}
-                        onMessageChange={value => {
-                            setCreateScheduledMessage(value);
-                            setCreateScheduledError(null);
-                        }}
-                        onPickSuggestion={suggestion => {
-                            setCreateScheduledChannel(suggestion.display);
-                            setCreateScheduledChannelId(suggestion.id);
-                            setCreateScheduledError(null);
-                        }}
-                    />
-                )}
+                {!compact && isPageOpen && activePageView}
 
-                {!compact && isActionsMenuOpen && (
+                {!compact && (isActionsMenuOpen || isActionsMenuClosing) && (
                     <CommandPaletteActionsMenu
                         actions={paletteActions}
-                        title={selectedLabel || "Actions"}
-                        onClose={() => setIsActionsMenuOpen(false)}
+                        title={activePageSpec?.title ?? selectedLabel ?? "Actions"}
+                        onAction={handleActionIntent}
+                        isClosing={isActionsMenuClosing}
+                        onClose={() => {
+                            setIsActionsMenuOpen(false);
+                            setIsActionsMenuClosing(false);
+                        }}
                     />
                 )}
 
-                {!compact && (
+                {(
                     <CommandPaletteActionBar
-                        selectedLabel={isScheduledCreatePage
-                            ? "Create Scheduled Message"
+                        selectedLabel={activePageSpec
+                            ? activePageSpec.title
                             : (calculatorResult ? calculatorResult.displayAnswer : selectedLabel)}
                         onOpenActions={() => {
                             if (!ensureSelectionForActions()) return;
                             setIsActionsMenuOpen(true);
+                            setIsActionsMenuClosing(false);
                         }}
+                        compact={compact}
+                        onExpand={() => setExpanded(true)}
                     />
                 )}
             </div>

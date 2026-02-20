@@ -274,6 +274,11 @@ export function getNowInTimezone(timezone: string): { hour: number; minute: numb
     return { hour: parts.hour, minute: parts.minute };
 }
 
+export function getTimezoneDate(timezone: string): Date {
+    const parts = getTimezoneDateParts(new Date(), timezone);
+    return new Date(parts.year, parts.month - 1, parts.day);
+}
+
 export function normalizeTimezoneOrDefault(input: string): string {
     return resolveTimezone(input) ?? DEFAULT_TIMEZONE;
 }

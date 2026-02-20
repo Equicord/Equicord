@@ -9,7 +9,6 @@ import {
     EXTENSIONS_ROOT_CATEGORY_ID,
     HOLY_NOTES_EXTENSION_DETAIL_CATEGORY_ID,
     RANDOM_VOICE_EXTENSION_DETAIL_CATEGORY_ID,
-    SCHEDULED_MESSAGES_CREATE_PAGE_CATEGORY_ID,
     SCHEDULED_MESSAGES_EXTENSION_DETAIL_CATEGORY_ID,
     SILENT_MESSAGE_TOGGLE_EXTENSION_DETAIL_CATEGORY_ID,
     SILENT_TYPING_EXTENSION_DETAIL_CATEGORY_ID
@@ -44,6 +43,7 @@ export const PLUGIN_MANAGER_DISABLE_COMMAND_ID = "plugins-manager-disable";
 export const PLUGIN_MANAGER_SETTINGS_COMMAND_ID = "plugins-manager-settings";
 export const MENTION_PROVIDER_ID = "mentions-provider";
 export const MENTIONS_CATEGORY_ID = "mentions-actions";
+export const RECENTS_CATEGORY_ID = "recent-actions";
 
 export const CATEGORY_WEIGHTS = new Map<string, number>([
     [DEFAULT_CATEGORY_ID, 100],
@@ -57,6 +57,7 @@ export const CATEGORY_WEIGHTS = new Map<string, number>([
     ["plugins-disable", 45],
     ["plugins-settings", 45],
     [MENTIONS_CATEGORY_ID, 55],
+    [RECENTS_CATEGORY_ID, 70],
     [EXTENSIONS_ROOT_CATEGORY_ID, 60],
     [EXTENSIONS_CATALOG_CATEGORY_ID, 60],
     [SILENT_TYPING_EXTENSION_DETAIL_CATEGORY_ID, 60],
@@ -64,7 +65,6 @@ export const CATEGORY_WEIGHTS = new Map<string, number>([
     [HOLY_NOTES_EXTENSION_DETAIL_CATEGORY_ID, 60],
     [SILENT_MESSAGE_TOGGLE_EXTENSION_DETAIL_CATEGORY_ID, 60],
     [SCHEDULED_MESSAGES_EXTENSION_DETAIL_CATEGORY_ID, 60],
-    [SCHEDULED_MESSAGES_CREATE_PAGE_CATEGORY_ID, 60],
     [GUILD_CATEGORY_ID, 40],
     [FRIENDS_CATEGORY_ID, 40]
 ]);
@@ -81,6 +81,7 @@ export const CATEGORY_GROUP_LABELS = new Map<string | undefined, string>([
     ["plugins-disable", "Plugin Controls"],
     ["plugins-settings", "Plugin Controls"],
     [MENTIONS_CATEGORY_ID, "Mentions"],
+    [RECENTS_CATEGORY_ID, "Core Actions"],
     [EXTENSIONS_ROOT_CATEGORY_ID, "Extensions"],
     [EXTENSIONS_CATALOG_CATEGORY_ID, "Extensions"],
     [SILENT_TYPING_EXTENSION_DETAIL_CATEGORY_ID, "Extensions"],
@@ -88,7 +89,6 @@ export const CATEGORY_GROUP_LABELS = new Map<string | undefined, string>([
     [HOLY_NOTES_EXTENSION_DETAIL_CATEGORY_ID, "Extensions"],
     [SILENT_MESSAGE_TOGGLE_EXTENSION_DETAIL_CATEGORY_ID, "Extensions"],
     [SCHEDULED_MESSAGES_EXTENSION_DETAIL_CATEGORY_ID, "Extensions"],
-    [SCHEDULED_MESSAGES_CREATE_PAGE_CATEGORY_ID, "Extensions"],
     [GUILD_CATEGORY_ID, "Guilds"],
     [FRIENDS_CATEGORY_ID, "Friends"]
 ]);
@@ -107,6 +107,7 @@ export const CATEGORY_DEFAULT_TAGS = new Map<string, string[]>([
     ["plugins-disable", [TAG_PLUGINS]],
     ["plugins-settings", [TAG_PLUGINS, TAG_UTILITY]],
     [MENTIONS_CATEGORY_ID, [TAG_NAVIGATION]],
+    [RECENTS_CATEGORY_ID, [TAG_CORE, TAG_UTILITY]],
     [EXTENSIONS_ROOT_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
     [EXTENSIONS_CATALOG_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
     [SILENT_TYPING_EXTENSION_DETAIL_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
@@ -114,7 +115,6 @@ export const CATEGORY_DEFAULT_TAGS = new Map<string, string[]>([
     [HOLY_NOTES_EXTENSION_DETAIL_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
     [SILENT_MESSAGE_TOGGLE_EXTENSION_DETAIL_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
     [SCHEDULED_MESSAGES_EXTENSION_DETAIL_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
-    [SCHEDULED_MESSAGES_CREATE_PAGE_CATEGORY_ID, [TAG_PLUGINS, TAG_UTILITY]],
     [GUILD_CATEGORY_ID, [TAG_GUILDS]],
     [FRIENDS_CATEGORY_ID, [TAG_FRIENDS]]
 ]);
@@ -186,6 +186,11 @@ export const BUILT_IN_CATEGORIES: CommandCategory[] = [
         description: "Your recent mentions and inbox items"
     },
     {
+        id: RECENTS_CATEGORY_ID,
+        label: "Recent Commands",
+        description: "Recently executed commands"
+    },
+    {
         id: EXTENSIONS_ROOT_CATEGORY_ID,
         label: "Extensions",
         description: "Install extension command packs."
@@ -219,10 +224,5 @@ export const BUILT_IN_CATEGORIES: CommandCategory[] = [
         id: SCHEDULED_MESSAGES_EXTENSION_DETAIL_CATEGORY_ID,
         label: "ScheduledMessages",
         parentId: EXTENSIONS_CATALOG_CATEGORY_ID
-    },
-    {
-        id: SCHEDULED_MESSAGES_CREATE_PAGE_CATEGORY_ID,
-        label: "Create Scheduled Message",
-        parentId: SCHEDULED_MESSAGES_EXTENSION_DETAIL_CATEGORY_ID
     }
 ];

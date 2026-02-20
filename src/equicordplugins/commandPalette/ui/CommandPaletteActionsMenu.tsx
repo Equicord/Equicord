@@ -5,28 +5,32 @@
  */
 
 import { CogWheel } from "@components/Icons";
-import { TextInput } from "@webpack/common";
-import { useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
+import { TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
 import type { KeyboardEvent } from "react";
 
-export interface PaletteAction {
+import type { CommandActionIntent } from "../registry";
+
+export interface PaletteActionItem {
     id: string;
     label: string;
     shortcut: string;
     icon?: React.ComponentType<{ className?: string; size?: string; }>;
-    handler(): void;
+    intent: CommandActionIntent;
+    disabled?: boolean;
 }
 
 interface CommandPaletteActionsMenuProps {
-    actions: PaletteAction[];
+    actions: PaletteActionItem[];
     title?: string;
     onClose(): void;
+    onAction(intent: CommandActionIntent): Promise<void> | void;
+    isClosing?: boolean;
 }
 
 function parseShortcut(shortcut: string): string[] {
     if (!shortcut) return [];
     const keys: string[] = [];
-    let remaining = shortcut;
+    const remaining = shortcut;
     const specialKeys: { [key: string]: string } = {
         "⌘": "⌘",
         "⌥": "⌥",
@@ -54,12 +58,29 @@ function parseShortcut(shortcut: string): string[] {
     return keys.length > 0 ? keys : [shortcut];
 }
 
-export function CommandPaletteActionsMenu({ actions, title, onClose }: CommandPaletteActionsMenuProps) {
+export function CommandPaletteActionsMenu({ actions, title, onClose, onAction, isClosing }: CommandPaletteActionsMenuProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const actionRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                onClose();
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [onClose]);
+
+    const handleAnimationEnd = () => {
+        if (isClosing) {
+            onClose();
+        }
+    };
 
     const filteredActions = useMemo(() => {
         if (!searchQuery.trim()) return actions;
@@ -84,10 +105,11 @@ export function CommandPaletteActionsMenu({ actions, title, onClose }: CommandPa
         }
     }, [selectedIndex]);
 
-    const handleActionClick = useCallback((action: PaletteAction) => {
-        action.handler();
+    const handleActionClick = useCallback((action: PaletteActionItem) => {
+        if (action.disabled) return;
+        void onAction(action.intent);
         onClose();
-    }, [onClose]);
+    }, [onAction, onClose]);
 
     const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
         if (event.key === "Escape") {
@@ -127,6 +149,8 @@ export function CommandPaletteActionsMenu({ actions, title, onClose }: CommandPa
             ref={containerRef}
             className="vc-command-palette-actions-dropdown"
             onKeyDown={handleKeyDown}
+            onAnimationEnd={handleAnimationEnd}
+            data-closing={isClosing}
             tabIndex={-1}
         >
             {title && (
@@ -135,7 +159,7 @@ export function CommandPaletteActionsMenu({ actions, title, onClose }: CommandPa
                 </div>
             )}
 
-            <div className="vc-command-palette-actions-dropdown-list">
+            <div className="vc-command-palette-actions-dropdown-list vc-command-palette-dropdown-list">
                 {filteredActions.length === 0 ? (
                     <div className="vc-command-palette-actions-dropdown-empty">
                         No actions found
@@ -151,16 +175,17 @@ export function CommandPaletteActionsMenu({ actions, title, onClose }: CommandPa
                                 key={action.id}
                                 ref={el => { actionRefs.current[index] = el; }}
                                 type="button"
+                                disabled={action.disabled}
                                 className={isSelected
-                                    ? "vc-command-palette-action-dropdown-item vc-command-palette-action-dropdown-item-selected"
-                                    : "vc-command-palette-action-dropdown-item"}
+                                    ? "vc-command-palette-action-dropdown-item vc-command-palette-dropdown-item vc-command-palette-action-dropdown-item-selected vc-command-palette-dropdown-item-selected"
+                                    : "vc-command-palette-action-dropdown-item vc-command-palette-dropdown-item"}
                                 onClick={() => handleActionClick(action)}
                                 onMouseEnter={() => setSelectedIndex(index)}
                             >
-                                <div className="vc-command-palette-action-dropdown-icon">
+                                <div className="vc-command-palette-action-dropdown-icon vc-command-palette-dropdown-icon">
                                     <Icon size="18" />
                                 </div>
-                                <span className="vc-command-palette-action-dropdown-label">{action.label}</span>
+                                <span className="vc-command-palette-action-dropdown-label vc-command-palette-dropdown-label">{action.label}</span>
                                 <div className="vc-command-palette-action-dropdown-shortcuts">
                                     {shortcutKeys.map((key, keyIndex) => (
                                         <kbd key={keyIndex} className="vc-command-palette-action-dropdown-key">

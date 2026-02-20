@@ -84,52 +84,32 @@ function KeybindRecorder() {
         };
     }, [isListening]);
 
-    const handleReset = () => {
-        settings.store.hotkey = DEFAULT_KEYS;
-        setError(null);
-    };
-
     return (
         <div className="vc-command-palette-keybind-input">
             <div className="vc-command-palette-keybind-info">
-                <BaseText size="md" weight="semibold">Command Palette Hotkey</BaseText>
-                <BaseText size="sm" weight="normal" style={{ color: "var(--text-muted)" }}>
-                    Choose the key combo that opens the command palette.
-                </BaseText>
-                {error && (
-                    <BaseText size="xs" weight="normal" className="vc-command-palette-keybind-conflict">
-                        {error}
-                    </BaseText>
-                )}
+                <BaseText size="md" weight="semibold">Keybind</BaseText>
             </div>
             <div className="vc-command-palette-keybind-controls">
-                <BaseText size="md" weight="semibold" className="vc-command-palette-keybind-value">
-                    {isListening ? "Press any key..." : formatKeybind(currentKeybind)}
-                </BaseText>
                 <Button
                     type="button"
                     variant="secondary"
                     className={`vc-command-palette-keybind-button ${isListening ? "listening" : ""}`}
                     onClick={() => setIsListening(true)}
                 >
-                    Record
-                </Button>
-                <Button
-                    type="button"
-                    variant="secondary"
-                    className="vc-command-palette-keybind-button"
-                    onClick={handleReset}
-                >
-                    Default
+                    {isListening ? "Recording..." : formatKeybind(currentKeybind)}
                 </Button>
             </div>
+            {error && (
+                <BaseText size="xs" weight="normal" className="vc-command-palette-keybind-conflict">
+                    {error}
+                </BaseText>
+            )}
         </div>
     );
 }
 
 export const settings = definePluginSettings({
     hotkey: {
-        description: "Hotkey used to open the command palette",
         type: OptionType.COMPONENT,
         default: DEFAULT_KEYS,
         component: KeybindRecorder
@@ -218,7 +198,7 @@ function hotkeyUsesModifiers() {
 export default definePlugin({
     name: "CommandPalette",
     description: "Quickly run actions through a searchable command palette",
-    authors: [EquicordDevs.justjxke, EquicordDevs.Ethan],
+    authors: [EquicordDevs.justjxke],
     settings,
     patches: [
         {

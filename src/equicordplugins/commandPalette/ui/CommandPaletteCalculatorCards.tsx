@@ -19,6 +19,33 @@ interface AutoFitLineProps {
     minSize: number;
 }
 
+const SUPERSCRIPT_MAP: Record<string, string> = {
+    "0": "⁰",
+    "1": "¹",
+    "2": "²",
+    "3": "³",
+    "4": "⁴",
+    "5": "⁵",
+    "6": "⁶",
+    "7": "⁷",
+    "8": "⁸",
+    "9": "⁹",
+    "+": "⁺",
+    "-": "⁻",
+    "(": "⁽",
+    ")": "⁾"
+};
+
+function toSuperscript(value: string): string {
+    return Array.from(value).map(char => SUPERSCRIPT_MAP[char] ?? char).join("");
+}
+
+function formatMathDisplayInput(value: string): string {
+    return value
+        .replace(/\*\*/g, "^")
+        .replace(/\^([+-]?\d+)/g, (_, exponent: string) => toSuperscript(exponent));
+}
+
 function AutoFitLine({ text, className, maxSize, minSize }: AutoFitLineProps) {
     const ref = useRef<HTMLDivElement | null>(null);
     const [fontSize, setFontSize] = useState(maxSize);
@@ -72,20 +99,25 @@ export function CommandPaletteCalculatorCards({ result }: CommandPaletteCalculat
         day: "numeric",
         year: "numeric"
     }).format(new Date());
-    const leftSecondary = result.kind === "number" || result.kind === "unit" ? "Input" : today;
+    const leftLabel = result.tertiaryText
+        ?? (result.kind === "number" ? "Sum" : result.kind === "unit" ? "Input" : today);
+    const rightLabel = result.secondaryText ?? "Answer";
+    const displayInput = result.kind === "number"
+        ? formatMathDisplayInput(result.displayInput)
+        : result.displayInput;
 
     return (
         <section className="vc-command-palette-calculator">
             <h3 className="vc-command-palette-calculator-title">Calculator</h3>
-            <div className="vc-command-palette-calculator-cards">
-                <div className="vc-command-palette-calculator-card vc-command-palette-calculator-card-left">
-                    <AutoFitLine text={result.displayInput} className="vc-command-palette-calculator-primary" maxSize={34} minSize={14} />
-                    <div className="vc-command-palette-calculator-secondary">{leftSecondary}</div>
+            <div className="vc-command-palette-calculator-card">
+                <div className="vc-command-palette-calculator-section vc-command-palette-calculator-section-left">
+                    <AutoFitLine text={displayInput} className="vc-command-palette-calculator-value" maxSize={44} minSize={18} />
+                    <span className="vc-command-palette-calculator-label">{leftLabel}</span>
                 </div>
                 <div className="vc-command-palette-calculator-arrow">→</div>
-                <div className="vc-command-palette-calculator-card vc-command-palette-calculator-card-right">
-                    <AutoFitLine text={result.displayAnswer} className="vc-command-palette-calculator-primary" maxSize={34} minSize={14} />
-                    <div className="vc-command-palette-calculator-secondary">{result.secondaryText ?? "Answer"}</div>
+                <div className="vc-command-palette-calculator-section vc-command-palette-calculator-section-right">
+                    <AutoFitLine text={result.displayAnswer} className="vc-command-palette-calculator-value" maxSize={44} minSize={18} />
+                    <span className="vc-command-palette-calculator-label">{rightLabel}</span>
                 </div>
             </div>
         </section>

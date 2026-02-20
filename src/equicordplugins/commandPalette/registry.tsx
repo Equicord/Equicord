@@ -15,11 +15,21 @@ import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
 import { Guild } from "@vencord/discord-types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, IconUtils, MediaEngineStore, MessageStore, NavigationRouter, openUserSettingsPanel, React, ReadStateStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
+import { Alerts, ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, IconUtils, MediaEngineStore, MessageStore, NavigationRouter, openUserSettingsPanel, React, ReadStateStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
 import type { FC, ReactElement, ReactNode } from "react";
 import { Settings } from "Vencord";
 
 import commandPalette from ".";
+import {
+    resolveActionByActionKey,
+    resolveActionIntentByActionKey,
+    type ResolvedActionByKey
+} from "./actions/actionRouting";
+import {
+    type CustomCommandIconId,
+    getCustomCommandIconById,
+    isCustomCommandIconId,
+    resolveCustomCommandDefaultIconId } from "./customCommandIcons";
 import {
     createExtensionsState,
     EXTENSIONS_CATALOG_CATEGORY_ID,
@@ -43,6 +53,7 @@ import {
     PLUGIN_MANAGER_ENABLE_COMMAND_ID,
     PLUGIN_MANAGER_ROOT_COMMAND_ID,
     PLUGIN_MANAGER_SETTINGS_COMMAND_ID,
+    RECENTS_CATEGORY_ID,
     SESSION_TOOLS_CATEGORY_ID,
     TOOLBOX_ACTIONS_CATEGORY_ID,
     TOOLBOX_ACTIONS_PROVIDER_ID
@@ -62,17 +73,43 @@ import {
 import { createPinsStore } from "./runtime/pins";
 import { createRecentsStore } from "./runtime/recents";
 import { createRegistryStore } from "./runtime/registryStore";
+import { createCommandPageCommand } from "./ui/pages/createCommandPageCommand";
+import type { PalettePageRef } from "./ui/pages/types";
 
 export { DEFAULT_CATEGORY_ID, normalizeTag };
+export { normalizeActionKey } from "./actions/actionRouting";
 
 type CommandHandler = () => void | Promise<void>;
 
 type ToastKind = (typeof Toasts.Type)[keyof typeof Toasts.Type];
 
-export interface CommandSecondaryAction {
-    hintKey: string;
+export type CommandActionIntent =
+    | { type: "execute-primary"; }
+    | { type: "execute-secondary"; actionKey: string; }
+    | { type: "toggle-pin"; commandId: string; }
+    | { type: "open-page"; page: PalettePageRef; }
+    | { type: "open-drilldown"; categoryId: string; }
+    | { type: "submit-active-page"; }
+    | { type: "go-back"; }
+    | { type: "copy-calculator"; mode: "formatted" | "raw" | "qa"; };
+
+export interface CommandActionContext {
+    command: CommandEntry;
+    drilldownCategoryId: string | null;
+    isPageOpen: boolean;
+    hasCalculatorResult: boolean;
+    canGoBack: boolean;
+}
+
+export interface CommandActionDefinition {
+    id: string;
     label: string;
-    handler: CommandHandler;
+    shortcut: string;
+    icon?: React.ComponentType<{ className?: string; size?: string; }>;
+    intent: CommandActionIntent;
+    handler?: CommandHandler;
+    isVisible?(ctx: CommandActionContext): boolean;
+    isEnabled?(ctx: CommandActionContext): boolean;
 }
 
 export interface CommandCategory {
@@ -96,10 +133,11 @@ export interface CommandEntry {
     searchGroup?: string;
     icon?: React.ComponentType<{ className?: string; size?: string; }>;
     drilldownCategoryId?: string;
+    page?: PalettePageRef;
     queryTemplate?: string;
     queryPlaceholder?: string;
     closeAfterExecute?: boolean;
-    secondaryActions?: Record<string, CommandSecondaryAction>;
+    actions?(ctx: CommandActionContext): CommandActionDefinition[];
 }
 
 export interface ExtensionDefinition {
@@ -741,9 +779,9 @@ export interface CustomCommandDefinition {
     label: string;
     description?: string;
     keywords?: string[];
-    tags?: string[];
     categoryId?: string;
-    danger?: boolean;
+    showConfirmation?: boolean;
+    iconId?: CustomCommandIconId;
     action: CustomCommandAction;
 }
 
@@ -880,6 +918,17 @@ function openDevToolsWindow() {
         return true;
     }
 
+    try {
+        FluxDispatcher.dispatch({
+            type: "DEV_TOOLS_SETTINGS_UPDATE",
+            settings: {
+                displayTools: true,
+                lastOpenTabId: "analytics"
+            }
+        });
+        return true;
+    } catch { }
+
     return false;
 }
 
@@ -984,19 +1033,6 @@ function sanitizeCustomCommands(input: CustomCommandDefinition[] | undefined | n
             ? entry.keywords.map(keyword => String(keyword).trim()).filter(Boolean)
             : [];
 
-        const tags: string[] = [];
-        if (Array.isArray(entry.tags)) {
-            const seenTags = new Set<string>();
-            for (const rawTag of entry.tags) {
-                const trimmedTag = String(rawTag ?? "").trim();
-                if (!trimmedTag) continue;
-                const tagSlug = normalizeTag(trimmedTag);
-                if (!tagSlug || seenTags.has(tagSlug)) continue;
-                seenTags.add(tagSlug);
-                tags.push(trimmedTag);
-            }
-        }
-
         let id = typeof entry.id === "string" && entry.id.trim().length ? entry.id.trim() : "";
         if (!id || seen.has(id)) {
             id = generateCustomId(seen);
@@ -1009,9 +1045,11 @@ function sanitizeCustomCommands(input: CustomCommandDefinition[] | undefined | n
             label,
             description: entry.description ? String(entry.description) : undefined,
             keywords,
-            tags,
             categoryId: entry.categoryId ? String(entry.categoryId) : undefined,
-            danger: Boolean(entry.danger),
+            showConfirmation: Boolean((entry as { showConfirmation?: unknown; danger?: unknown; }).showConfirmation ?? (entry as { danger?: unknown; }).danger),
+            iconId: isCustomCommandIconId((entry as { iconId?: unknown; }).iconId)
+                ? (entry as { iconId: CustomCommandIconId; }).iconId
+                : undefined,
             action: normalizedAction
         };
 
@@ -1025,8 +1063,7 @@ function sanitizeCustomCommands(input: CustomCommandDefinition[] | undefined | n
 function emitCustomCommands() {
     const snapshot = customCommands.map(command => ({
         ...command,
-        keywords: command.keywords ? [...command.keywords] : undefined,
-        tags: command.tags ? [...command.tags] : undefined
+        keywords: command.keywords ? [...command.keywords] : undefined
     }));
     for (const listener of customCommandListeners) listener(snapshot);
 }
@@ -1040,9 +1077,12 @@ function setCustomCommands(commands: CustomCommandDefinition[]) {
 export function getCustomCommandsSnapshot(): CustomCommandDefinition[] {
     return customCommands.map(command => ({
         ...command,
-        keywords: command.keywords ? [...command.keywords] : undefined,
-        tags: command.tags ? [...command.tags] : undefined
+        keywords: command.keywords ? [...command.keywords] : undefined
     }));
+}
+
+export function getCustomCommandById(commandId: string): CustomCommandDefinition | undefined {
+    return customCommands.find(command => command.id === commandId);
 }
 
 export function subscribeCustomCommands(listener: (commands: CustomCommandDefinition[]) => void) {
@@ -1108,6 +1148,20 @@ function scheduleStatusReset(durationMinutes: number) {
     }, durationMinutes * 60_000);
 
     showToast(`Do Not Disturb for ${durationMinutes} minutes.`, Toasts.Type.SUCCESS);
+}
+
+export function setStatusDndForDuration(durationMinutes: number) {
+    if (!Number.isFinite(durationMinutes) || durationMinutes < 1) {
+        showToast("Choose a valid duration.", Toasts.Type.FAILURE);
+        return false;
+    }
+
+    scheduleStatusReset(Math.floor(durationMinutes));
+    return true;
+}
+
+export function cancelScheduledStatusReset() {
+    clearScheduledStatusReset(true);
 }
 
 function ensureSessionHooks() {
@@ -1391,7 +1445,7 @@ const DISCORD_SETTINGS_COMMANDS: Array<{ id: string; label: string; route: strin
     { id: "settings-privacy", label: "Open Data & Privacy", route: "data_and_privacy", keywords: ["privacy", "safety", "data"] },
     { id: "settings-notifications", label: "Open Notifications", route: "notifications", keywords: ["notifications"] },
     { id: "settings-clips", label: "Open Clips", route: "clips", keywords: ["clips", "recording"] },
-    { id: "settings-voice", label: "Open Voice & Video", route: "voice_and_video", keywords: ["voice", "video", "audio"] },
+    { id: "settings-voice", label: "Open Voice & Video", route: "voice_and_video", keywords: ["voice", "video", "audio", "mic", "microphone", "input", "output", "speaker", "camera"] },
     { id: "settings-chat", label: "Open Chat", route: "chat", keywords: ["chat", "messages"] },
     { id: "settings-text", label: "Open Text & Images", route: "text_and_images", keywords: ["text", "images"] },
     { id: "settings-appearance", label: "Open Appearance", route: "appearance", keywords: ["appearance", "theme"] },
@@ -1620,10 +1674,57 @@ export function subscribeRegistry(listener: (version: number) => void) {
     return registryStore.subscribeRegistry(listener);
 }
 
-export async function executeCommandAction(entry: CommandEntry, actionKey: string = "primary"): Promise<boolean> {
+function createDefaultCommandActionContext(command: CommandEntry): CommandActionContext {
+    return {
+        command,
+        drilldownCategoryId: command.drilldownCategoryId ?? null,
+        isPageOpen: false,
+        hasCalculatorResult: false,
+        canGoBack: false
+    };
+}
+
+export type ResolvedCommandAction = ResolvedActionByKey<CommandActionDefinition>;
+
+export function resolveCommandActionByActionKey(entry: CommandEntry, actionKey: string, context: CommandActionContext): ResolvedCommandAction | null {
+    return resolveActionByActionKey(entry.actions?.(context), actionKey);
+}
+
+export function resolveCommandActionIntentByActionKey(entry: CommandEntry, actionKey: string, context: CommandActionContext): CommandActionIntent | null {
+    const intent = resolveActionIntentByActionKey(entry.actions?.(context), actionKey);
+    if (!intent) return null;
+
+    switch (intent.type) {
+        case "execute-primary":
+            return { type: "execute-primary" };
+        case "execute-secondary":
+            return intent.actionKey ? { type: "execute-secondary", actionKey: intent.actionKey } : null;
+        case "open-page":
+            return "page" in intent ? { type: "open-page", page: intent.page as PalettePageRef } : null;
+        case "open-drilldown":
+            return "categoryId" in intent && typeof intent.categoryId === "string"
+                ? { type: "open-drilldown", categoryId: intent.categoryId }
+                : null;
+        case "submit-active-page":
+            return { type: "submit-active-page" };
+        case "go-back":
+            return { type: "go-back" };
+        case "copy-calculator":
+            return "mode" in intent && (intent.mode === "formatted" || intent.mode === "raw" || intent.mode === "qa")
+                ? { type: "copy-calculator", mode: intent.mode }
+                : null;
+        default:
+            return null;
+    }
+}
+
+export async function executeCommandAction(entry: CommandEntry, actionKey: string = "primary", context?: CommandActionContext): Promise<boolean> {
+    const resolvedAction = actionKey === "primary"
+        ? null
+        : resolveCommandActionByActionKey(entry, actionKey, context ?? createDefaultCommandActionContext(entry));
     const action = actionKey === "primary"
         ? entry.handler
-        : entry.secondaryActions?.[actionKey]?.handler;
+        : resolvedAction?.action.handler;
     if (!action) return false;
 
     try {
@@ -1631,6 +1732,9 @@ export async function executeCommandAction(entry: CommandEntry, actionKey: strin
         await recentsStore.record(entry.id);
         return true;
     } catch (error) {
+        if (error instanceof Error && error.name === "CommandExecutionCanceled") {
+            return false;
+        }
         Toasts.show({
             message: `Command failed: ${entry.label}`,
             type: Toasts.Type.FAILURE,
@@ -2183,6 +2287,21 @@ function registerUpdateCommands() {
 }
 
 function registerDiscordSettingsCommands() {
+    const buildSettingsKeywords = (command: typeof DISCORD_SETTINGS_COMMANDS[number]) => {
+        const routePhrases = [
+            command.route,
+            command.route.replace(/_/g, " "),
+            ...resolveSettingsRouteCandidates(command.route)
+        ];
+
+        return Array.from(new Set([
+            ...command.keywords,
+            ...routePhrases,
+            "open settings",
+            "discord settings"
+        ]));
+    };
+
     for (const command of DISCORD_SETTINGS_COMMANDS) {
         settingsCommandsById.set(command.id, command);
         const routeCandidates = resolveSettingsRouteCandidates(command.route);
@@ -2193,7 +2312,7 @@ function registerDiscordSettingsCommands() {
             id: command.id,
             label: command.label,
             description: command.description,
-            keywords: command.keywords,
+            keywords: buildSettingsKeywords(command),
             categoryId: "discord-settings",
             tags: [TAG_NAVIGATION],
             handler: async () => {
@@ -2564,49 +2683,118 @@ async function runMacroSteps(steps: string[], visited: Set<string>) {
     }
 }
 
-async function executeCustomCommand(command: CustomCommandDefinition) {
+class CommandExecutionCanceled extends Error {
+    constructor() {
+        super("Command execution canceled");
+        this.name = "CommandExecutionCanceled";
+    }
+}
+
+function describeCustomAction(command: CustomCommandDefinition): string {
     const { action } = command;
-    try {
-        switch (action.type) {
-            case "command":
-                await runCommandById(action.commandId, new Set([command.id]));
-                break;
-            case "settings":
-                await openDiscordSettingsRoute(action.route);
-                break;
-            case "url": {
-                let parsed: URL;
-                try {
-                    parsed = new URL(action.url.trim());
-                } catch {
-                    showToast("Please enter a valid URL.", Toasts.Type.FAILURE);
-                    break;
-                }
-
-                if (action.openExternal) {
-                    openExternalUrl(parsed.toString());
-                    break;
-                }
-
-                const route = toDiscordInternalRoute(parsed);
-                if (route) {
-                    NavigationRouter.transitionTo(route);
-                } else {
-                    openExternalUrl(parsed.toString());
-                    showToast("Non-Discord links open externally.", Toasts.Type.MESSAGE);
-                }
-                break;
-            }
-            case "macro":
-                await runMacroSteps(action.steps, new Set([command.id]));
-                break;
-            default:
-                showToast("Unsupported custom command action.", Toasts.Type.FAILURE);
-                break;
+    switch (action.type) {
+        case "command": {
+            const targetId = action.commandId.trim();
+            const target = targetId ? getCommandById(targetId) : null;
+            return target
+                ? `Run “${target.label}” (${target.id}).`
+                : `Run command ID “${targetId || "not set"}”.`;
         }
+        case "settings": {
+            const route = action.route.trim();
+            const target = route ? getSettingsCommandMetaByRoute(route) : undefined;
+            return target
+                ? `Open settings page “${target.label}” (${target.route}).`
+                : `Open settings route “${route || "not set"}”.`;
+        }
+        case "url":
+            return `Open URL “${action.url.trim() || "not set"}” ${action.openExternal ? "externally" : "inside Discord when possible"}.`;
+        case "macro": {
+            if (!action.steps.length) return "Run macro with no configured steps.";
+            const steps = action.steps.map((step, index) => {
+                const target = getCommandById(step);
+                return `${index + 1}. ${target?.label ?? "Unknown command"} (${step})`;
+            }).join("\n");
+            return `Run macro steps:\n${steps}`;
+        }
+        default:
+            return "Run this custom command.";
+    }
+}
+
+function confirmCustomCommand(command: CustomCommandDefinition): Promise<boolean> {
+    return new Promise(resolve => {
+        Alerts.show({
+            title: command.label || "Confirm command",
+            body: (
+                <div style={{ whiteSpace: "pre-wrap" }}>
+                    {describeCustomAction(command)}
+                </div>
+            ),
+            confirmText: "Yes",
+            cancelText: "Cancel",
+            onConfirm: () => resolve(true),
+            onCancel: () => resolve(false)
+        });
+    });
+}
+
+async function performCustomCommand(command: CustomCommandDefinition) {
+    const { action } = command;
+    switch (action.type) {
+        case "command":
+            await runCommandById(action.commandId, new Set([command.id]));
+            break;
+        case "settings":
+            await openDiscordSettingsRoute(action.route);
+            break;
+        case "url": {
+            let parsed: URL;
+            try {
+                parsed = new URL(action.url.trim());
+            } catch {
+                showToast("Please enter a valid URL.", Toasts.Type.FAILURE);
+                return;
+            }
+
+            if (action.openExternal) {
+                openExternalUrl(parsed.toString());
+                return;
+            }
+
+            const route = toDiscordInternalRoute(parsed);
+            if (route) {
+                NavigationRouter.transitionTo(route);
+            } else {
+                openExternalUrl(parsed.toString());
+                showToast("Non-Discord links open externally.", Toasts.Type.MESSAGE);
+            }
+            return;
+        }
+        case "macro":
+            await runMacroSteps(action.steps, new Set([command.id]));
+            break;
+        default:
+            showToast("Unsupported custom command action.", Toasts.Type.FAILURE);
+            break;
+    }
+}
+
+async function executeCustomCommand(command: CustomCommandDefinition) {
+    try {
+        if (command.showConfirmation) {
+            const confirmed = await confirmCustomCommand(command);
+            if (!confirmed) {
+                throw new CommandExecutionCanceled();
+            }
+        }
+        await performCustomCommand(command);
     } catch (error) {
+        if (error instanceof CommandExecutionCanceled) {
+            throw error;
+        }
         console.error("CommandPalette", "Failed to execute custom command", command, error);
-        showToast(`Failed to run ${command.label}.`, Toasts.Type.FAILURE);
+        throw error;
     }
 }
 
@@ -2616,9 +2804,8 @@ function createCustomCommandEntries(): CommandEntry[] {
         label: command.label || "Untitled Command",
         description: command.description,
         keywords: command.keywords,
-        tags: command.tags,
         categoryId: command.categoryId ?? CUSTOM_COMMANDS_CATEGORY_ID,
-        danger: command.danger,
+        icon: getCustomCommandIconById(command.iconId && command.iconId !== "auto" ? command.iconId : resolveCustomCommandDefaultIconId(command.action.type)),
         handler: () => executeCustomCommand(command)
     }));
 }
@@ -2786,28 +2973,14 @@ function registerSessionCommands() {
 
     const commands: CommandEntry[] = [
         {
-            id: "session-dnd-30",
-            label: "Set DND for 30 Minutes",
-            keywords: ["session", "status", "dnd", "30"],
+            id: "session-dnd-timer",
+            label: "Set DND Timer",
+            description: "Choose how long Do Not Disturb should stay active.",
+            keywords: ["session", "status", "dnd", "timer", "duration", "focus", "busy", "cancel"],
             categoryId: SESSION_TOOLS_CATEGORY_ID,
             tags: [TAG_SESSION, TAG_UTILITY],
-            handler: () => scheduleStatusReset(30)
-        },
-        {
-            id: "session-dnd-60",
-            label: "Set DND for 1 Hour",
-            keywords: ["session", "status", "dnd", "60"],
-            categoryId: SESSION_TOOLS_CATEGORY_ID,
-            tags: [TAG_SESSION, TAG_UTILITY],
-            handler: () => scheduleStatusReset(60)
-        },
-        {
-            id: "session-status-cancel",
-            label: "Cancel Status Timer",
-            keywords: ["session", "status", "cancel"],
-            categoryId: SESSION_TOOLS_CATEGORY_ID,
-            tags: [TAG_SESSION, TAG_UTILITY],
-            handler: () => clearScheduledStatusReset()
+            page: { id: "status-timer" },
+            handler: () => undefined
         },
         {
             id: "session-clear-notifications",
@@ -2948,6 +3121,16 @@ function registerCommandPaletteUtilities() {
         queryPlaceholder: "Username or display name",
         handler: () => undefined
     });
+
+    registerCommand(createCommandPageCommand({
+        id: "command-palette-send-dm",
+        label: "Send DM",
+        description: "Send a direct message to a user from separate fields.",
+        keywords: ["send", "dm", "direct message", "message", "friend", "recipient"],
+        categoryId: DEFAULT_CATEGORY_ID,
+        tags: [TAG_NAVIGATION, TAG_CORE],
+        page: { id: "send-dm" }
+    }));
 
     registerCommand({
         id: "command-palette-navigate-to-query",
@@ -3148,29 +3331,13 @@ function registerCommandPaletteUtilities() {
 
     registerCommand({
         id: "command-palette-show-recent",
-        label: "Show Recent Commands",
-        description: "Displays the last executed commands",
-        keywords: ["recent", "history"],
+        label: "Recent Commands",
+        description: "Browse and run your recently used commands.",
+        keywords: ["recent", "history", "rerun", "pin"],
         categoryId: DEFAULT_CATEGORY_ID,
-        tags: [TAG_CORE],
-        handler: () => {
-            const recents = getRecentCommands().slice(0, 5);
-            if (recents.length === 0) {
-                showToast("No commands have been run yet.", Toasts.Type.MESSAGE);
-                return;
-            }
-
-            const message = recents
-                .map((entry, index) => `${index + 1}. ${entry.label}`)
-                .join("\n");
-
-            Toasts.show({
-                message,
-                type: Toasts.Type.MESSAGE,
-                id: Toasts.genId(),
-                options: { position: Toasts.Position.BOTTOM }
-            });
-        }
+        tags: [TAG_CORE, TAG_UTILITY],
+        drilldownCategoryId: RECENTS_CATEGORY_ID,
+        handler: () => undefined
     });
 
     registerCommand({

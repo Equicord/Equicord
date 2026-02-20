@@ -11,9 +11,10 @@ import { SelectedChannelStore, Toasts } from "@webpack/common";
 
 import { DEFAULT_CATEGORY_ID } from "../../metadata/categories";
 import { TAG_PLUGINS, TAG_UTILITY } from "../../metadata/tags";
-import type { CommandEntry, CommandSecondaryAction } from "../../registry";
+import type { CommandEntry } from "../../registry";
 import { DEFAULT_EXTENSION_KEYBINDS, SILENT_TYPING_EXTENSION_ID } from "../catalog";
 import type { ExtensionKeybindMap, SilentTypingPluginWithSettings, SilentTypingSettingsStore } from "../types";
+import { createExecuteSecondaryAction } from "./actionHelpers";
 
 function showToast(message: string, type: (typeof Toasts.Type)[keyof typeof Toasts.Type]) {
     Toasts.show({ message, type, id: Toasts.genId(), options: { position: Toasts.Position.BOTTOM } });
@@ -116,28 +117,8 @@ async function runSilentTypingOpenSettings() {
     openPluginModal(plugin);
 }
 
-function formatActionChord(chord: string): string {
-    return chord
-        .split("+")
-        .map(segment => (segment === "meta" ? "Cmd" : segment === "alt" ? "Alt" : segment.toUpperCase()))
-        .join("+");
-}
-
 export function createSilentTypingExtensionCommand(extensionKeybinds: Map<string, ExtensionKeybindMap>): CommandEntry {
     const keybinds = extensionKeybinds.get(SILENT_TYPING_EXTENSION_ID) ?? DEFAULT_EXTENSION_KEYBINDS[SILENT_TYPING_EXTENSION_ID];
-    const secondaryActions: Record<string, CommandSecondaryAction> = {};
-
-    secondaryActions[keybinds.secondaryActionChord] = {
-        hintKey: formatActionChord(keybinds.secondaryActionChord),
-        label: "Toggle global",
-        handler: runSilentTypingGlobalToggle
-    };
-
-    secondaryActions[keybinds.tertiaryActionChord] = {
-        hintKey: formatActionChord(keybinds.tertiaryActionChord),
-        label: "Open settings",
-        handler: runSilentTypingOpenSettings
-    };
 
     return {
         id: "extension-silent-typing-toggle",
@@ -147,6 +128,19 @@ export function createSilentTypingExtensionCommand(extensionKeybinds: Map<string
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_PLUGINS, TAG_UTILITY],
         handler: runSilentTypingChannelToggle,
-        secondaryActions
+        actions: () => [
+            createExecuteSecondaryAction({
+                id: "toggle-global",
+                label: "Toggle global",
+                chord: keybinds.secondaryActionChord,
+                handler: runSilentTypingGlobalToggle
+            }),
+            createExecuteSecondaryAction({
+                id: "open-settings",
+                label: "Open settings",
+                chord: keybinds.tertiaryActionChord,
+                handler: runSilentTypingOpenSettings
+            })
+        ]
     };
 }

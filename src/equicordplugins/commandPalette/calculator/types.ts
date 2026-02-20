@@ -17,6 +17,7 @@ export interface CalculatorResult {
     displayAnswer: string;
     rawAnswer: string;
     secondaryText?: string;
+    tertiaryText?: string;
 }
 
 export type CalculatorIntent =

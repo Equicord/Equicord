@@ -14,7 +14,7 @@ import {
     formatTimespanMinutes,
     numberToWords
 } from "./formatters";
-import { convertTimeBetweenTimezones, getNowInTimezone, getTimezoneCountryName } from "./timezones";
+import { convertTimeBetweenTimezones, getNowInTimezone, getTimezoneCountryName, getTimezoneDate } from "./timezones";
 import type { CalculatorIntent, CalculatorResult } from "./types";
 
 type UnitKind = "length" | "mass" | "temperature" | "duration";
@@ -81,6 +81,39 @@ function evaluateMathExpression(expression: string): number | null {
     } catch {
         return null;
     }
+}
+
+function getMathOperationLabel(expression: string): string {
+    const compact = expression.replace(/\s+/g, "");
+    const operations = new Set<"add" | "subtract" | "multiply" | "divide" | "power">();
+
+    const isBinary = (index: number, width = 1) => {
+        const prev = compact[index - 1];
+        const next = compact[index + width];
+        return /[0-9.)]/.test(prev ?? "") && /[0-9.(s]/.test(next ?? "");
+    };
+
+    for (let i = 0; i < compact.length; i++) {
+        const current = compact[i];
+
+        if (current === "*" && compact[i + 1] === "*") {
+            if (isBinary(i, 2)) operations.add("power");
+            i += 1;
+            continue;
+        }
+
+        if (current === "+" && isBinary(i)) operations.add("add");
+        if (current === "-" && isBinary(i)) operations.add("subtract");
+        if (current === "*" && isBinary(i)) operations.add("multiply");
+        if (current === "/" && isBinary(i)) operations.add("divide");
+    }
+
+    if (operations.size > 1) return "Expression";
+    if (operations.has("power")) return "Power";
+    if (operations.has("multiply")) return "Product";
+    if (operations.has("divide")) return "Divide";
+    if (operations.has("subtract")) return "Difference";
+    return "Sum";
 }
 
 function positiveModulo(value: number, divisor: number): number {
@@ -150,13 +183,13 @@ export function evaluateCalculatorIntent(intent: CalculatorIntent): CalculatorRe
     if (intent.kind === "math") {
         const value = evaluateMathExpression(intent.expression);
         if (value == null) return null;
-        const words = Number.isInteger(value) ? numberToWords(value) : undefined;
         return {
             kind: "number",
             displayInput: intent.displayInput,
             displayAnswer: formatNumber(value),
             rawAnswer: formatRawNumber(value),
-            secondaryText: words || undefined
+            secondaryText: "Answer",
+            tertiaryText: getMathOperationLabel(intent.expression)
         };
     }
 
@@ -215,12 +248,14 @@ export function evaluateCalculatorIntent(intent: CalculatorIntent): CalculatorRe
     if (intent.kind === "timezone_now") {
         const now = getNowInTimezone(intent.timezone);
         const country = getTimezoneCountryName(intent.timezone);
+        const date = getTimezoneDate(intent.timezone);
         return {
             kind: "time",
             displayInput: intent.displayInput,
             displayAnswer: formatTime24(now.hour, now.minute),
             rawAnswer: formatTime24(now.hour, now.minute),
-            secondaryText: country ?? intent.timezone
+            secondaryText: country ?? intent.timezone,
+            tertiaryText: formatDateMedium(date)
         };
     }
 

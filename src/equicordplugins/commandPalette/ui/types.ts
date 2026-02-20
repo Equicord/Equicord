@@ -12,7 +12,7 @@ export type CommandCandidate = {
     id: string;
     command: CommandEntry;
     subtitle?: string;
-    badge: "Command" | "Recent";
+    badge: string;
     pinned: boolean;
     shortcut?: string;
     icon?: React.ComponentType<{ className?: string; size?: string; }>;

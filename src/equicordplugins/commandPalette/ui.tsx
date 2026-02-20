@@ -4,10 +4,31 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { openModal } from "@utils/modal";
+import { closeModal, openModal } from "@utils/modal";
 
 import { CommandPaletteModal } from "./ui/CommandPaletteModal";
 
+let modalSerial = 0;
+let activeModalKey: string | null = null;
+
 export function openCommandPalette() {
-    openModal(modalProps => <CommandPaletteModal modalProps={modalProps} />);
+    if (activeModalKey) {
+        closeModal(activeModalKey);
+        activeModalKey = null;
+        return;
+    }
+
+    modalSerial += 1;
+    const modalKey = `equicord-command-palette-${modalSerial}`;
+    activeModalKey = openModal(
+        modalProps => <CommandPaletteModal modalProps={modalProps} instanceKey={modalSerial} />,
+        {
+            modalKey,
+            onCloseCallback: () => {
+                if (activeModalKey === modalKey) {
+                    activeModalKey = null;
+                }
+            }
+        }
+    );
 }

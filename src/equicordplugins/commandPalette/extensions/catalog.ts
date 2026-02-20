@@ -26,7 +26,6 @@ export const SILENT_MESSAGE_TOGGLE_EXTENSION_ID = "silent-message-toggle";
 export const SILENT_MESSAGE_TOGGLE_EXTENSION_DETAIL_CATEGORY_ID = "extensions-detail-silent-message-toggle";
 export const SCHEDULED_MESSAGES_EXTENSION_ID = "scheduled-messages";
 export const SCHEDULED_MESSAGES_EXTENSION_DETAIL_CATEGORY_ID = "extensions-detail-scheduled-messages";
-export const SCHEDULED_MESSAGES_CREATE_PAGE_CATEGORY_ID = "extensions-scheduled-messages-create-page";
 
 export const DEFAULT_EXTENSION_KEYBINDS: Record<string, ExtensionKeybindMap> = {
     [SILENT_TYPING_EXTENSION_ID]: {

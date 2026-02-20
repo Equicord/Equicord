@@ -315,18 +315,16 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
         }
     };
 
-    const selectedItem = selectedIndex >= 0 ? items[selectedIndex] : undefined;
-    const selectedLabel = isCommandItem(selectedItem) ? selectedItem.command.label : undefined;
-
     return (
-        <ModalRoot {...modalProps} size={ModalSize.SMALL} className="vc-command-palette">
-            <div className="vc-command-palette-shell" onKeyDown={handleKeyDown}>
+        <ModalRoot {...modalProps} size={ModalSize.SMALL} className="vc-command-palette vc-command-palette-picker">
+            <div className="vc-command-palette-shell vc-command-palette-picker-shell" onKeyDown={handleKeyDown}>
                 <div className="vc-command-palette-input">
                     <TextInput
                         autoFocus
                         value={query}
                         onChange={setQuery}
                         placeholder="Search commands"
+                        className="vc-command-palette-main-input"
                     />
                 </div>
                 <div className="vc-command-palette-list">
@@ -368,27 +366,6 @@ function CommandPickerModal({ modalProps, commands: providedCommands, allowMulti
                             </button>
                         );
                     })}
-                </div>
-                <div className="vc-command-palette-action-bar">
-                    <div className="vc-command-palette-action-bar-hints">
-                        <div className="vc-command-palette-action-bar-hint">
-                            <span className="vc-command-palette-action-bar-key">↑↓</span>
-                            <span>Navigate</span>
-                        </div>
-                        <div className="vc-command-palette-action-bar-hint">
-                            <span className="vc-command-palette-action-bar-key">↵</span>
-                            <span>{allowMultiple ? "Select" : "Execute"}</span>
-                        </div>
-                        <div className="vc-command-palette-action-bar-hint">
-                            <span className="vc-command-palette-action-bar-key">Esc</span>
-                            <span>Close</span>
-                        </div>
-                    </div>
-                    {selectedLabel && (
-                        <div className="vc-command-palette-action-bar-actions">
-                            <span className="vc-command-palette-row-subtitle">{selectedLabel}</span>
-                        </div>
-                    )}
                 </div>
             </div>
         </ModalRoot>
