@@ -55,16 +55,13 @@ export default definePlugin({
 
     patches: [
         // Change the max volume for sliders to allow for values above 200
-        ...[
-            "#{intl::USER_VOLUME}",
-            "currentVolume:"
-        ].map(find => ({
-            find,
+        {
+            find: "currentVolume:",
             replacement: {
                 match: /(?<=maxValue:)\i\.\i\?(\d+?):(\d+?)(?=,)/,
                 replace: (_, higherMaxVolume, minorMaxVolume) => `${higherMaxVolume}*$self.settings.store.multiplier`
             }
-        })),
+        },
         // Patches needed for web/vesktop
         {
             find: "streamSourceNode",
