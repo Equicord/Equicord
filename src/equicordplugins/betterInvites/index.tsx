@@ -37,7 +37,7 @@ export default definePlugin({
     authors: [EquicordDevs.iamme, Devs.thororen],
     patches: [
         {
-            find: "#{intl::xdCLeM::raw}",
+            find: "#{intl::INVITE_BUTTON_HIDE_DETAILS}",
             replacement: [
                 {
                     match: /profile:\i\}\),.{0,15}profile:\i/,
