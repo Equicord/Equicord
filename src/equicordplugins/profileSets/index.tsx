@@ -20,7 +20,7 @@ export const settings = definePluginSettings({
     avatarSize: {
         type: OptionType.SLIDER,
         description: "Avatar size in preset list.",
-        markers: [16, 32, 64],
+        markers: [64, 72, 80, 88, 96],
         default: 64,
         stickToMarkers: true
     },
