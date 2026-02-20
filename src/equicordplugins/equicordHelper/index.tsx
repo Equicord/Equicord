@@ -58,7 +58,7 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Adds back the Download button at the top right corner of files",
         restartNeeded: true,
-        default: true
+        default: false
     }
 });
 
@@ -120,6 +120,7 @@ export default definePlugin({
                 replace: "true||$&"
             },
         },
+        // Show your own activity buttons because discord removes them for who knows why
         {
             find: ".USER_PROFILE_ACTIVITY_BUTTONS),",
             predicate: () => settings.store.showYourOwnActivityButtons && !isPluginEnabled(customRPC.name),
@@ -159,10 +160,10 @@ export default definePlugin({
         // Restore File Download Button
         {
             predicate: () => settings.store.restoreFileDownloadButton,
-            find: "[\"VIDEO\",\"CLIP\",\"AUDIO\"]",
+            find: '"VISUAL_PLACEHOLDER":',
             replacement: {
-                match: /showDownload:\i,onRemoveItem:(\i\?\i:void 0),isVisualMediaType:(\i)/,
-                replace: "showDownload:!0,onRemoveItem:$1,isVisualMediaType:$2"
+                match: /(\.downloadUrl,showDownload:)\i/,
+                replace: "$1!0"
             }
         },
     ],
