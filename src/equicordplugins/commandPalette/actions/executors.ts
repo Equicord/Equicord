@@ -110,6 +110,10 @@ function normalizeUrl(input: string): URL | null {
     }
 }
 
+function isSafeUrlProtocol(url: URL): boolean {
+    return url.protocol === "http:" || url.protocol === "https:";
+}
+
 function isDirectMessageChannelForUser(channelId: string, userId: string): boolean {
     const channel = ChannelStore.getChannel(channelId);
     if (!channel) return false;
@@ -382,7 +386,7 @@ function buildTogglePluginCandidates(target: string): QueryActionCandidate[] {
 
 function buildOpenUrlCandidates(target: string): QueryActionCandidate[] {
     const parsed = normalizeUrl(target);
-    if (!parsed) {
+    if (!parsed || !isSafeUrlProtocol(parsed)) {
         return [{
             id: "query-open-url-invalid",
             label: "Open URL",
@@ -504,7 +508,8 @@ function parseScheduledTimeInput(input: string): number | null {
 
         const dateOnly = new Date(`${numericDate[1]}T09:00:00`);
         const timestamp = dateOnly.getTime();
-        return Number.isNaN(timestamp) ? null : timestamp;
+        if (Number.isNaN(timestamp) || timestamp <= now) return null;
+        return timestamp;
     }
 
     const parsed = new Date(normalized).getTime();

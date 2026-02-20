@@ -53,7 +53,7 @@ function parseSendChannel(raw: string): ParsedQuery | null {
     const parts = body.split(" ");
     if (parts.length < 2) return null;
 
-    const target = parts[0] ?? "";
+    const target = sanitizeTargetToken(parts[0] ?? "");
     const contentRaw = parts.slice(1).join(" ").trim();
     const { content, useFilePicker, silent } = extractSendFlags(contentRaw);
     if (!target || !content) return null;

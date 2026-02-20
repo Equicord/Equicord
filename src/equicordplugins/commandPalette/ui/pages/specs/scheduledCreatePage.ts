@@ -87,7 +87,8 @@ function parseScheduledTimeInput(input: string): number | null {
 
         const dateOnly = new Date(`${absolute[1]}T09:00:00`);
         const timestamp = dateOnly.getTime();
-        return Number.isNaN(timestamp) ? null : timestamp;
+        if (Number.isNaN(timestamp) || timestamp <= now) return null;
+        return timestamp;
     }
 
     const parsed = new Date(normalized).getTime();
