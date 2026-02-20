@@ -12,7 +12,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
-import { ChannelActions, ChannelStore, Menu, VoiceStateStore } from "@webpack/common";
+import { ChannelActions, ChannelStore, Menu, PermissionsBits, PermissionStore, VoiceStateStore } from "@webpack/common";
 
 let waitingChannelId: string | null = null;
 
@@ -33,6 +33,7 @@ const settings = definePluginSettings({
 
 const ChannelContext: NavContextMenuPatchCallback = (children, { channel }) => {
     if (channel?.type !== ChannelType.GUILD_VOICE || !channel.userLimit) return;
+    if (PermissionStore.can(PermissionsBits.MOVE_MEMBERS, channel)) return;
     if (Object.keys(VoiceStateStore.getVoiceStatesForChannel(channel.id)).length < channel.userLimit) return;
 
     const isWaiting = waitingChannelId === channel.id;
@@ -48,6 +49,7 @@ const ChannelContext: NavContextMenuPatchCallback = (children, { channel }) => {
 
 function promptVoiceChannel(channel: Channel | null | undefined): boolean {
     if (!channel || channel.type !== ChannelType.GUILD_VOICE || !channel.userLimit) return false;
+    if (PermissionStore.can(PermissionsBits.MOVE_MEMBERS, channel)) return false;
     if (Object.keys(VoiceStateStore.getVoiceStatesForChannel(channel.id)).length < channel.userLimit) return false;
     if (waitingChannelId === channel.id) return true;
 
