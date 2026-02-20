@@ -15,6 +15,8 @@ import type { Channel, Message } from "@vencord/discord-types";
 import { ApplicationIntegrationType, MessageFlags } from "@vencord/discord-types/enums";
 import { AuthenticationStore, Constants, EditMessageStore, FluxDispatcher, MessageActions, MessageTypeSets, PermissionsBits, PermissionStore, PinActions, RestAPI, Toasts, WindowStore } from "@webpack/common";
 
+import { AdditionalReactEmojisSetting, MAX_ADDITIONAL_REACT_EMOJIS, ReactEmojiSetting } from "./ReactEmojiSetting";
+
 type Modifier = "NONE" | "SHIFT" | "CTRL" | "ALT" | "BACKSPACE" | "DELETE";
 type ClickAction = "NONE" | "DELETE" | "COPY_LINK" | "COPY_ID" | "COPY_CONTENT" | "COPY_USER_ID" | "EDIT" | "REPLY" | "REACT" | "OPEN_THREAD" | "OPEN_TAB" | "EDIT_REPLY" | "QUOTE" | "PIN";
 
@@ -133,22 +135,7 @@ let mouseDownCount = 0;
 let doubleClickDetected = false;
 let secondMouseDownTime = 0;
 
-const settings = definePluginSettings({
-    reactEmoji: {
-        type: OptionType.STRING,
-        description: "Emoji to use for react actions",
-        default: "💀"
-    },
-    additionalReactEmojis: {
-        type: OptionType.STRING,
-        description: "Additional emojis to add when using React action (comma/newline separated, max 5)",
-        default: ""
-    },
-    addAdditionalReacts: {
-        type: OptionType.BOOLEAN,
-        description: "Also add additional configured reaction emojis",
-        default: false
-    },
+export const settings = definePluginSettings({
     singleClickAction: {
         type: OptionType.SELECT,
         description: "Action on single click (your messages)",
@@ -202,6 +189,26 @@ const settings = definePluginSettings({
         description: "Modifier required for triple-click action",
         options: modifiers,
         default: "NONE"
+    },
+    reactEmoji: {
+        type: OptionType.COMPONENT,
+        description: "Emoji to use for react actions.",
+        component: ReactEmojiSetting,
+        default: "💀"
+    },
+    addAdditionalReacts: {
+        type: OptionType.BOOLEAN,
+        description: "Also add additional configured reaction emojis",
+        default: false
+    },
+    additionalReactEmojis: {
+        type: OptionType.COMPONENT,
+        description: `Additional emojis to add when using React action (comma/newline separated, max ${MAX_ADDITIONAL_REACT_EMOJIS})`,
+        component: AdditionalReactEmojisSetting,
+        get hidden() {
+            return !settings.store.addAdditionalReacts;
+        },
+        default: ""
     },
     disableInDms: {
         type: OptionType.BOOLEAN,
@@ -297,7 +304,7 @@ function getConfiguredReactionEmojis() {
             .split(/[\n,]/g)
             .map(normalizeEmoji)
             .filter((emoji): emoji is string => Boolean(emoji))
-            .slice(0, 5); // limiting it to 5 for now but this may be tweaked in the future
+            .slice(0, MAX_ADDITIONAL_REACT_EMOJIS);
         configured.push(...extra);
     }
 
@@ -570,7 +577,7 @@ async function executeAction(
 export default definePlugin({
     name: "MessageClickActions",
     description: "Customize click actions on messages.",
-    authors: [Devs.Ven, EquicordDevs.keircn, EquicordDevs.ZcraftElite],
+    authors: [Devs.Ven, EquicordDevs.keircn, EquicordDevs.ZcraftElite, EquicordDevs.omaw],
     isModified: true,
 
     settings,
