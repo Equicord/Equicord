@@ -84,7 +84,7 @@ export default definePlugin({
             }
         },
         {
-            find: "this.renderEmbeddedActivity()",
+            find: "#{intl::POST_ACCOUNT_LINK_INVITE_CTA}",
             replacement: {
                 match: /"div"(?=.{0,50}this.renderActions)/,
                 replace: "$self.WrapperComponent"

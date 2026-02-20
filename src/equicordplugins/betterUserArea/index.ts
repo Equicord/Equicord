@@ -79,7 +79,7 @@ export default definePlugin({
             ],
         },
         {
-            find: '"MicrophoneButton"',
+            find: "#{intl::ACCOUNT_SPEAKING_WHILE_MUTED}",
             replacement: [
                 {
                     match: /:\{tooltipText:\i\};/,
@@ -99,7 +99,7 @@ export default definePlugin({
             ],
         },
         {
-            find: "#{intl::f+DDY/::raw},{outputDeviceName",
+            find: "#{intl::ACCOUNT_OUTPUT_DEVICE_CHANGED},{outputDeviceName",
             replacement: [
                 {
                     match: /(?<=role:"switch",)tooltipText:\i\}/,

@@ -13,7 +13,7 @@ export default definePlugin({
     authors: [Devs.Samwich],
     patches: [
         {
-            find: "._areActivitiesExperimentallyHidden=(",
+            find: "#{intl::MEMBERS_LIST_LANDMARK_LABEL}",
             replacement: {
                 match: /return \i===\i\.\i\.UNKNOWN/,
                 replace: "return null;$&"

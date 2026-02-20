@@ -155,7 +155,7 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: ".VOICE_HANGOUT_INVITE?",
+            find: "#{intl::SOURCE_MESSAGE_DELETED}",
             replacement: {
                 match: /(compact:\i}=(\i).+?)(\(0,.+\}\)\]\}\))/,
                 replace: "$1 $self.modify(arguments[0].message,$3)"

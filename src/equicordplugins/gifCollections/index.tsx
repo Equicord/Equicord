@@ -321,7 +321,7 @@ export default definePlugin({
             ]
         },
         {
-            find: "renderEmptyFavorite",
+            find: "#{intl::NO_GIF_FAVORITES_WHERE_TO_FAVORITE}",
             replacement: {
                 match: /render\(\){.{1,500}onClick:this\.handleClick,/,
                 replace: "$&onContextMenu: (e) => $self.collectionContextMenu(e, this),"

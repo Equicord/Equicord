@@ -94,7 +94,7 @@ export default definePlugin({
             },
         },
         {
-            find: "keybindActionTypes()",
+            find: "#{intl::KEYBIND_NAVIGATION_CONFLICT}",
             predicate: () => settings.store.keybindScreenshare,
             replacement: {
                 match: /=\[(\{id:.{0,25}value:\i\.\i\.UNASSIGNED)/,

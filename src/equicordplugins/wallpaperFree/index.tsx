@@ -35,7 +35,7 @@ export default definePlugin({
     description: "Recreation of the old DM wallpaper experiment; Set a background image for any channel, user or server.",
     patches: [
         {
-            find: ".handleSendMessage,onResize",
+            find: "#{intl::TEXT_IN_VOICE_A11Y_LABEL}",
             group: true,
             replacement: [
                 {

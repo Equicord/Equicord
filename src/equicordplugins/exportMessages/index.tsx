@@ -136,7 +136,7 @@ export default definePlugin({
     },
     patches: [
         {
-            find: "fetchRelationships(){",
+            find: "#{intl::FRIEND_REQUEST_RATE_LIMITED_BODY}",
             replacement: {
                 match: /(\.then\(\i)=>(\i\.\i\.dispatch\({type:"LOAD_RELATIONSHIPS_SUCCESS",relationships:(\i\.body)}\))/,
                 replace: "$1=>{$2; $self.getContacts($3)}"

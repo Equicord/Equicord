@@ -83,14 +83,14 @@ export default definePlugin({
             }
         },
         {
-            find: ".CLIPS_FRAME_RATE,{",
+            find: "#{intl::CLIPS_SETTINGS_FRAMERATE_NOTE}",
             replacement: {
                 match: /\[\{.{0,25}\i.\i.FPS_15.{0,500}\}\]/,
                 replace: "$self.patchFramerates($&)"
             }
         },
         {
-            find: ".CLIPS_LENGTH,{",
+            find: "#{intl::CLIPS_SETTINGS_LENGTH_HELP}",
             replacement: {
                 match: /\[\{.{0,25}\i.\i.SECONDS_30.{0,500}\}\]/,
                 replace: "$self.patchTimeslots($&)"

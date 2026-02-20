@@ -248,7 +248,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "_tryFetchMessagesCached",
+            find: "#{intl::BOT_DM_SEND_FAILED_WITH_HELP_LINK}",
             replacement: [
                 {
                     match: /(?<=\.get\({url.+?then\()(\i)=>\(/,

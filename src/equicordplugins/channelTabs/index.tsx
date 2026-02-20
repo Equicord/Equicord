@@ -82,7 +82,7 @@ export default definePlugin({
         },
         // ctrl click to open in new tab in inbox unread
         {
-            find: '[data-recents-channel="',
+            find: "#{intl::UNREADS_VIEW_CHANNEL}",
             replacement: {
                 match: /(?<=className:\i.\i,onJump:)\i=>(\i)\(\i,(\i)\.id\)/,
                 replace: "event => { if (event.ctrlKey) $self.open($2); else $1(event, $2.id) }"
@@ -90,7 +90,7 @@ export default definePlugin({
         },
         // ctrl click to open in new tab in inbox mentions
         {
-            find: ".deleteRecentMention(",
+            find: "#{intl::RECENT_MENTIONS_EMPTY_STATE_TIP}",
             replacement: {
                 match: /(?<=className:\i.\i,onJump:)(\i)(?=.{0,20}message:(\i))/,
                 replace: "event => { if (event.ctrlKey) $self.open($2); else $1(event) }"

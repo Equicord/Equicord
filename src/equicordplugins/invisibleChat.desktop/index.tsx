@@ -162,7 +162,7 @@ export default definePlugin({
     patches: [
         {
             // Indicator
-            find: ".SEND_FAILED,",
+            find: "#{intl::SOURCE_MESSAGE_DELETED}",
             replacement: {
                 match: /let\{className:\i,message:\i[^}]*\}=(\i)/,
                 replace: "try {$1 && $self.INV_REGEX.test($1.message.content) ? $1.content.push($self.indicator()) : null } catch {};$&"

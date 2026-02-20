@@ -85,7 +85,7 @@ export default definePlugin({
         },
         // Replace the default gif accessory with a custom one that skips fileType checks. Mostly affects image attachments.
         {
-            find: "renderComponentAccessories",
+            find: "#{intl::SUPPRESS_EMBED_TIP}",
             replacement: {
                 match: /\i=>\(\)=>\{.{200,300}?null\}/,
                 replace: "props=>()=>$self.Accessory({...props,video:false})"

@@ -53,7 +53,7 @@ export default definePlugin({
     patches: [
         // replace voice message embed speed control because ours provides more speeds
         {
-            find: "\"--:--\"",
+            find: "#{intl::VOICE_MESSAGES_PLAYBACK_RATE_LABEL}",
             replacement: {
                 match: /\(0,\i\.jsxs?\)\(.{0,50}\.\i,onClick:\(\).+?\}\)\}\)(?<=playbackCacheKey:\i\}=\i,(\i).+?)/,
                 replace: "$self.renderPlaybackSpeedComponent({mediaRef:$1})"
@@ -62,14 +62,14 @@ export default definePlugin({
         // audio & video embeds
         {
             // need to pass media ref via props to make it easily accessible from inside controls
-            find: "renderControls(){",
+            find: "#{intl::PLAY_AGAIN}",
             replacement: {
                 match: /onToggleMuted:this.toggleMuted,/,
                 replace: "$&mediaRef:this.mediaRef,"
             }
         },
         {
-            find: "AUDIO:\"AUDIO\"",
+            find: "#{intl::PLAY_AGAIN}",
             replacement: {
                 match: /sliderWrapperClassName:\i.\i\}\)\}\),/,
                 replace: "$&$self.renderPlaybackSpeedComponent({mediaRef:this?.props?.mediaRef}),"

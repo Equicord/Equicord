@@ -48,7 +48,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: ",queryMentionResults(",
+            find: "#{intl::ORBS_QUESTS}",
             replacement: [
                 {
                     match: /(filter:\i).{0,75}context:\i\}\)(?=,allowSnowflake)/,

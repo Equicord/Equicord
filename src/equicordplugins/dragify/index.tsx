@@ -166,7 +166,7 @@ export default definePlugin({
     patches: [
         // Voice user rows (voice channel sidebar list)
         {
-            find: "location:\"VoiceUser\"",
+            find: "#{intl::CONNECTED_ON_ANOTHER_CLIENT}",
             replacement: {
                 match: /(?<=previewIsOpen:.{0,100})"data-dnd-name":(\i)\.name,/,
                 replace: "$&\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,draggable:!0,onDragStart:e=>$self.onUserDragStart(e,arguments[0].user),"
@@ -215,7 +215,7 @@ export default definePlugin({
         },
         // Thread rows (active threads popout)
         {
-            find: "POPOUT)},children:",
+            find: "#{intl::ACTIVE_THREADS_POPOUT_HEADER}",
             replacement: {
                 match: /(?<=getUser\(\i\.ownerId\).{0,100})className:\i\.\i,onClick:\i=>\{\(0,\i\.\i\)\((\i),/,
                 replace: "draggable:!0,onDragStart:e=>$self.onChannelDragStart(e,{id:arguments[0]?.thread?.id,guild_id:arguments[0]?.thread?.guild_id}),$&"
@@ -239,7 +239,7 @@ export default definePlugin({
         },
         // Call avatars (DM/group call tiles)
         {
-            find: ".VOICE_CHANNEL_TILE,children:",
+            find: "#{intl::CALL_TILE_A11Y_LABEL_STREAM}",
             replacement: {
                 match: /(?<=\.VOICE_USER,.{0,250})className:\i\.\i,onDoubleClick:\i,/,
                 replace: "draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].participantUserId}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].participantUserId,$&"
@@ -247,7 +247,7 @@ export default definePlugin({
         },
         // DM list entries (private channel rows)
         {
-            find: "PrivateChannel.renderAvatar: Invalid prop configuration - no user or channel",
+            find: "#{intl::CLOSE_DM}",
             replacement: {
                 match: /\.CHANNEL\(\i\.\i,\i\.\i\),(?=.{0,150}\.isMultiUserDM\(\))/,
                 replace: "$&draggable:!0,onDragStart:e=>$self.onDmDragStart(e,arguments[0].channel),"

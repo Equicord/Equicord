@@ -28,7 +28,7 @@ export default definePlugin({
     authors: [EquicordDevs.iamme],
     patches: [
         {
-            find: "isUnsupported})",
+            find: "#{intl::SOURCE_MESSAGE_DELETED}",
             replacement: {
                 match: /WITH_CONTENT\}\)/,
                 replace: "$&,$self.PinnedIcon(arguments[0].message)"

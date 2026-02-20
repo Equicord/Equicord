@@ -168,7 +168,7 @@ export default definePlugin({
         },
         // member list
         {
-            find: "._areActivitiesExperimentallyHidden=(",
+            find: "#{intl::MEMBERS_LIST_LANDMARK_LABEL}",
             replacement: {
                 match: /(?<=user:(\i),guildId:\i,channel:(\i).*?)BOOST_GEM_ICON.{0,10}\);/,
                 replace: "$&if($self.shouldHideUser($1.id, $2.id)) return null; "
@@ -176,7 +176,7 @@ export default definePlugin({
         },
         // stop the role header from displaying if all users with that role are hidden (wip sorta)
         {
-            find: "._areActivitiesExperimentallyHidden=(",
+            find: "#{intl::MEMBERS_LIST_LANDMARK_LABEL}",
             replacement: {
                 match: /\i.memo\(function\(\i\){/,
                 replace: "$&if($self.isRoleAllBlockedMembers(arguments[0].id, arguments[0].guildId)) return null;"
@@ -194,7 +194,7 @@ export default definePlugin({
         },
         // replies
         {
-            find: ".GUILD_APPLICATION_PREMIUM_SUBSCRIPTION||",
+            find: "#{intl::CHANNEL_MESSAGE_REPLY_A11Y_LABEL}",
             replacement: [
                 {
                     match: /(?=let \i,\{repliedAuthor:)/,
@@ -204,7 +204,7 @@ export default definePlugin({
         },
         // dm list
         {
-            find: "PrivateChannel.renderAvatar",
+            find: "#{intl::CLOSE_DM}",
             replacement: {
                 // horror but it works
                 match: /(return \i\.isMultiUserDM\(\))(?<=function\(\i,(\i),\i\){.*)/,
@@ -223,7 +223,7 @@ export default definePlugin({
         },
         // active now list
         {
-            find: "ACTIVE_NOW_COLUMN)",
+            find: "#{intl::GAME_FEED_CURRENT_HEADER_TITLE}",
             replacement: {
                 match: /(\i\.\i),\{(?=\}\)\])/,
                 replace: '"div",{children:$self.activeNowView($1())'

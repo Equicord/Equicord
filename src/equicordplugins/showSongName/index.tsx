@@ -14,7 +14,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: '.join(", ");return{text:',
+            find: "#{intl::COMPETING}",
             replacement: {
                 match: /(?<=.join\(", "\);return\{text:)\i/,
                 replace: "arguments[0]?.details??$&"

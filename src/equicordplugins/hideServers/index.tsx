@@ -111,7 +111,7 @@ export default definePlugin({
     },
     patches: [
         {
-            find: '("guildsnav")',
+            find: "#{intl::GUILDS_BAR_A11Y_LABEL}",
             replacement: [
                 {
                     match: /(\i)(\.map\(.{0,30}\}\),\i)/,

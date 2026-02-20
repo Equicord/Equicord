@@ -15,7 +15,7 @@ export default definePlugin({
     description: "Mention someone randomly",
     patches: [
         {
-            find: ".LAUNCHABLE_APPLICATIONS;",
+            find: "#{intl::ORBS_QUESTS}",
             replacement: [
                 {
                     match: /&(\i)\(\)\((\i),\i\(\)\.test\)&&(\i)\.push\(\i\(\)\)/g,

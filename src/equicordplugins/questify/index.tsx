@@ -1219,7 +1219,7 @@ export default definePlugin({
         },
         {
             // Hides Quests tab in the Discovery page.
-            find: "GLOBAL_DISCOVERY_SIDEBAR},",
+            find: "#{intl::GLOBAL_DISCOVERY_TITLE}",
             replacement: [
                 {
                     match: /(GLOBAL_DISCOVERY_TABS).map/,
@@ -1229,7 +1229,7 @@ export default definePlugin({
         },
         {
             // Hides Quests tab in the DMs tab list.
-            find: "QUEST_HOME_V2):",
+            find: "#{intl::PRIVATE_CHANNELS_A11Y_LABEL}",
             replacement: [
                 {
                     match: /(?<="family-center"\):null,)/,
@@ -1239,7 +1239,7 @@ export default definePlugin({
         },
         {
             // Hides the sponsored banner on the Quests page.
-            find: "{isInDiscoverQuestHomeTab:",
+            find: "#{intl::GLOBAL_DISCOVERY_QUESTS_HOME_ORBS_INTRO_TITLE}",
             group: true,
             replacement: [
                 {
@@ -1487,14 +1487,14 @@ export default definePlugin({
         },
         {
             // Adds the "Questify" sort option to the sort dropdown.
-            find: "has no rewards configured`",
+            find: "#{intl::QUESTS_COMPLETION_PROGRESS_COMPLETE}",
             replacement: {
                 match: /(?=case (\i.\i).SUGGESTED)/,
                 replace: "case $1.QUESTIFY:return \"Questify\";"
             },
         },
         {
-            find: "CLAIMED=\"claimed\",",
+            find: "#{intl::QUESTS_REWARD_AVATAR_DECORATION_BODY}",
             group: true,
             replacement: [
                 {
@@ -1524,7 +1524,7 @@ export default definePlugin({
         {
             // Loads the last used sort method and filter choices.
             // Defaults to sorting by "Questify" and no filters.
-            find: "({resetSortingFiltering:()",
+            find: "#{intl::QUESTS_ALL_QUESTS_HEADING}",
             group: true,
             replacement: [
                 {
@@ -1558,7 +1558,7 @@ export default definePlugin({
             // Whether preloading assets is enabled or not, the placeholders loading
             // before the assets causes a lot of element shifting, whereas if
             // the elements load immediately instead, it doesn't.
-            find: ",{rewardWithArticleHook:()",
+            find: "#{intl::QUESTS_CLAIM_REWARD_HOOK}",
             replacement: {
                 match: /showPlaceholder:!\i/,
                 replace: "showPlaceholder:false"
@@ -1568,7 +1568,7 @@ export default definePlugin({
         //  - Cleanup once Discord rolls out the new quest CTA refactor completely.
         {
             // Sets intervals to progress Play Game Quests in the background and patches some common click handlers.
-            find: "IN_PROGRESS:if(",
+            find: "#{intl::QUESTS_IN_PROGRESS_TOOLTIP}",
             group: true,
             replacement: [
                 {
@@ -1607,7 +1607,7 @@ export default definePlugin({
         },
         {
             // Sets intervals to progress Video Quests in the background.
-            find: "CAPTCHA_FAILED:",
+            find: "#{intl::GENERIC_CAPTCHA_DESCRIPTION}",
             replacement: {
                 match: /(?<=SUCCESS:)(\i\({)/,
                 replace: "!$self.processQuestForAutoComplete(arguments[0])&&$1"
@@ -1634,7 +1634,7 @@ export default definePlugin({
         {
             // Sets intervals to progress Play Game Quests in the background.
             // Triggers if a Quest has already been started but was interrupted, such as by a reload.
-            find: "WATCH_VIDEO,skipEnrollmentCheck:!0})",
+            find: "#{intl::QUEST_MULTIPLATFORM_SELECT_SUBTITLE}",
             group: true,
             replacement: [
                 {

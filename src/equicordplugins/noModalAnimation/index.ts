@@ -34,7 +34,7 @@ export default definePlugin({
             }
         },
         {
-            find: "renderLurkerModeUpsellPopout,position:",
+            find: "#{intl::INVENTORY_EMOJI_DETAILS_V2}",
             replacement: {
                 match: /200:300/g,
                 replace: "0:0",

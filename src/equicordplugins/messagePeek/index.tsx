@@ -243,7 +243,7 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: "PrivateChannel.renderAvatar",
+            find: "#{intl::CLOSE_DM}",
             replacement: {
                 match: /,subText:(\i)\.isSystemDM\(\).{0,500}:null,(?=name:)/,
                 replace: ",subText:$self.getSubText(arguments[0]),"

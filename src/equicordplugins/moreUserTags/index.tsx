@@ -39,7 +39,7 @@ export default definePlugin({
     patches: [
         // Make discord actually use our tags
         {
-            find: ".STAFF_ONLY_DM:",
+            find: "#{intl::DISCORD_SYSTEM_MESSAGE_BOT_TAG_TOOLTIP_OFFICIAL}",
             replacement: [
                 {
                     match: /(?<=type:(\i).*?\.BOT:.{0,25})default:(\i)=/,

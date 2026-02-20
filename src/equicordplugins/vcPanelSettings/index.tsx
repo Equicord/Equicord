@@ -243,7 +243,7 @@ export default definePlugin({
     renderVoiceSettings() { return <VoiceSettings />; },
     patches: [
         {
-            find: "this.renderChannelButtons()",
+            find: "#{intl::VOICE_PANEL_INTRODUCTION_TEXT}",
             replacement: {
                 match: /this.renderChannelButtons\(\)/,
                 replace: "this.renderChannelButtons(), $self.renderVoiceSettings()"

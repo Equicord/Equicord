@@ -20,7 +20,7 @@ export default definePlugin({
     settings,
     patches: [
         {
-            find: ".VOICE_PANEL}}",
+            find: "#{intl::LOCAL_VIDEO_DISABLED}",
             replacement: [
                 {
                     match: /\[\i\.\i\]:\i\}\),children:\[/,

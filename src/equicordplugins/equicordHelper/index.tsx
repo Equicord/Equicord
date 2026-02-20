@@ -115,7 +115,7 @@ export default definePlugin({
     patches: [
         // Fixes Unknown Resolution/FPS Crashing
         {
-            find: "Unknown resolution:",
+            find: "#{intl::STREAM_FPS_OPTION}",
             replacement: [
                 {
                     match: /throw Error\(`Unknown resolution: \$\{(\i)\}`\)/,
@@ -157,7 +157,7 @@ export default definePlugin({
         },
         // Remove Activity Section above Member List
         {
-            find: ".MEMBERLIST_CONTENT_FEED_TOGGLED,",
+            find: "#{intl::CONTENT_INVENTORY_MEMBERLIST_GROUP_TITLE}",
             predicate: () => settings.store.removeActivitySection,
             replacement: {
                 match: /null==\i\|\|/,
@@ -183,7 +183,7 @@ export default definePlugin({
         },
         // Always show open legacy settings
         {
-            find: ".DEVELOPER_SECTION,",
+            find: "#{intl::DEVELOPER_SETTINGS}",
             replacement: [
                 {
                     match: /\i\.\i\.isDeveloper/,

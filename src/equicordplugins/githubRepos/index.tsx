@@ -94,7 +94,7 @@ export default definePlugin({
         },
         // User Profile Modal v2
         {
-            find: ".MODAL_V2,onClose:",
+            find: "#{intl::EDIT_PROFILE_FULL_PROFILE_PREVIEW}",
             replacement: {
                 match: /displayProfile:(\i).*?connections:\i.{0,25}\i.\i\}\)\}\)/,
                 replace: "$&,$self.ProfilePopoutComponent({ user: arguments[0].user, displayProfile: $1 }),",

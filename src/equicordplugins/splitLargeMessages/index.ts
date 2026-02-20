@@ -126,7 +126,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: 'type:"MESSAGE_LENGTH_UPSELL"', // bypass message length check
+            find: "#{intl::MESSAGE_TOO_LONG_HEADER}",
             replacement: {
                 match: /if\(\i.length>\i/,
                 replace: "if(false",
@@ -134,7 +134,7 @@ export default definePlugin({
         },
 
         {
-            find: ".onHideAutocomplete?", // disable file conversion
+            find: "#{intl::NO_SEND_MESSAGES_PERMISSION_PLACEHOLDER}",
             replacement: {
                 match: /(?<=getData\(\i\.type\);)if\(\i.length>\i\)/,
                 replace: "if(false)",

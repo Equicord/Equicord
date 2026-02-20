@@ -122,7 +122,7 @@ export default definePlugin({
             noWarn: true
         },
         {
-            find: "PrivateChannel.renderAvatar",
+            find: "#{intl::CLOSE_DM}",
             replacement: {
                 match: /(\i\]:\i\}\),children:\i\}\),)(?=.{0,100}isSystemDM\(\))/,
                 replace: "$1style:{color:`${$self.colorDMList(arguments[0])}`},"

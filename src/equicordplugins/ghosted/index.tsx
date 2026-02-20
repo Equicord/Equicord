@@ -151,7 +151,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "PrivateChannel.renderAvatar",
+            find: "#{intl::CLOSE_DM}",
             replacement: {
                 match: /\]:\i\|\|\i.{0,50}children:\[/,
                 replace: "$&$self.renderBoo(arguments[0]),"
