@@ -414,7 +414,7 @@ export default definePlugin({
                         if (!anyUpdated) return;
                         const { query } = instance.props;
                         FluxDispatcher.dispatch({ type: "GIF_PICKER_QUERY", query: `${query} ` });
-                        await new Promise<void>(r => setTimeout(r, 0));
+                        await new Promise<void>(r => setTimeout(r, 2500));
                         FluxDispatcher.dispatch({ type: "GIF_PICKER_QUERY", query });
                     });
                 }
