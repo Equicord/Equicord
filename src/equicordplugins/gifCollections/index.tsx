@@ -386,10 +386,21 @@ export default definePlugin({
                     height: g.height
                 })).reverse();
 
-                const expiredGifs = collection.gifs.filter(g => isCdnUrlExpired(g.src) || isCdnUrlExpired(g.url));
+                const expiredGifs = collection.gifs.filter(g => g.src && g.url && (isCdnUrlExpired(g.src) || isCdnUrlExpired(g.url)));
                 if (expiredGifs.length > 0) {
-                    const urlsToRefresh = ([...new Set(expiredGifs.flatMap(g => ([g.src, g.url] as string[]).filter(u => isCdnUrlExpired(u))))] as string[]).slice(0, 50);
-                    batchRefreshAttachmentUrls(urlsToRefresh).then(async refreshMap => {
+                    const allUrls = [...new Set<string>(
+                        expiredGifs.flatMap(g => [g.src, g.url].filter((u): u is string => !!u && isCdnUrlExpired(u)))
+                    )];
+                    const refreshInBatches = async () => {
+                        const fullMap: Record<string, string> = {};
+                        for (let i = 0; i < allUrls.length; i += 50) {
+                            const batch = allUrls.slice(i, i + 50);
+                            const result = await batchRefreshAttachmentUrls(batch);
+                            Object.assign(fullMap, result);
+                        }
+                        return fullMap;
+                    };
+                    refreshInBatches().then(async refreshMap => {
                         if (!Object.keys(refreshMap).length) return;
                         let anyUpdated = false;
                         for (const gif of expiredGifs) {
@@ -403,6 +414,7 @@ export default definePlugin({
                         if (!anyUpdated) return;
                         const { query } = instance.props;
                         FluxDispatcher.dispatch({ type: "GIF_PICKER_QUERY", query: `${query} ` });
+                        await new Promise<void>(r => setTimeout(r, 0));
                         FluxDispatcher.dispatch({ type: "GIF_PICKER_QUERY", query });
                     });
                 }
