@@ -424,7 +424,7 @@
         },
         "validation":{
             "discordId":"Deve ser um ID Discord válido.",
-            "discordLink":"Não use um link Discord. Use um link de imagem Imgur.",
+            "discordLink":"Não use um link do Discord. Use um link de imagem Imgur.",
             "imgurDirect":"O link Imgur deve ser um link direto para a imagem (por exemplo, https://i.imgur.com/...). Clique com o botão direito na imagem e clique em 'Copiar endereço da imagem'",
             "maxLength":"Não deve ter mais de {length} caracteres.",
             "number":"Deve ser um número.",
@@ -993,7 +993,7 @@
         "removeMessageHistory":"Remover histórico de mensagens",
         "removeMessageTemporary":"Remover mensagem (temporário)",
         "settings":{
-            "collapseDeleted":"Se as mensagens excluídas devem ser recolhidas, semelhante às mensagens bloqueadas",
+            "collapseDeleted":"Se deseja recolher mensagens apagadas, semelhante a mensagens bloqueadas",
             "deleteStyle":"O estilo das mensagens excluídas",
             "deleteStyleRedOverlay":"Overlay vermelho",
             "deleteStyleRedText":"Texto Vermelho",
@@ -1697,7 +1697,7 @@
         "allowedUsersAndRoles":"Usuários e cargos permitidos:",
         "archiveDuration":"Duração padrão da inatividade antes do arquivamento {type}: {duration}",
         "availableTags":"Tags disponíveis:",
-        "bitrate":"Taxa de bits: bits {bitrate}",
+        "bitrate":"Taxa de bits: {bitrate} bits",
         "cannotSeeMessages":"Você não pode ver o {type} deste canal.",
         "channelTypes":{
             "announcement":"anúncio",
@@ -1706,7 +1706,7 @@
             "messages":"mensagens",
             "post":"postar",
             "posts":"postagens",
-            "stage":"estágio",
+            "stage":"palco",
             "text":"texto",
             "thread":"tópico",
             "threads":"tópicos",
@@ -1731,7 +1731,7 @@
         "permissionDetails":"Detalhes da permissão",
         "region":"Região: {region}",
         "regionAutomatic":"Automático",
-        "requireTag":"As postagens neste fórum exigem a definição de uma tag.",
+        "requireTag":"Postagens neste fórum exigem que uma tag seja definida.",
         "seeGuidelines":" No entanto, você pode ver suas diretrizes:",
         "settings":{
             "channelStyle":{
@@ -1756,7 +1756,7 @@
             "creationDate":"Data de criação",
             "latestActivity":"Última atividade"
         },
-        "threadSlowmode":"Modo lento de thread padrão: {duration}",
+        "threadSlowmode":"Modo lento padrão do tópico: {duration}",
         "videoQuality":{
             "720p":"720p",
             "automatic":"Automático"
