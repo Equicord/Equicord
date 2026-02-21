@@ -143,6 +143,7 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
     const title = "Equicord QuickCSS Editor";
     const existingWindow = BrowserWindow.getAllWindows().find(w => w.title === title);
     if (existingWindow && !existingWindow.isDestroyed()) {
+        existingWindow.show();
         existingWindow.focus();
         return;
     }
@@ -167,10 +168,10 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
 
 app.on("before-quit", async (event) => {
     const monacoWindow = BrowserWindow.getAllWindows().find(w => w.title === "Equicord QuickCSS Editor");
-    
+
     if (monacoWindow && !monacoWindow.isDestroyed() && !monacoWindow.isVisible()) {
         event.preventDefault();
-        
+
         const result = await dialog.showMessageBox({
             type: "question",
             buttons: ["Cancel", "Close Anyway"],
@@ -179,7 +180,7 @@ app.on("before-quit", async (event) => {
             message: "QuickCSS editor is still open in the background.",
             detail: "Do you want to close Discord anyway? This will also close the QuickCSS editor."
         });
-        
+
         if (result.response === 1) {
             app.exit();
         }
