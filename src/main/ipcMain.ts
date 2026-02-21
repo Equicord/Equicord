@@ -22,7 +22,7 @@ import "./settings";
 
 import { debounce } from "@shared/debounce";
 import { IpcEvents } from "@shared/IpcEvents";
-import { BrowserWindow, ipcMain, nativeTheme, shell, systemPreferences } from "electron";
+import { BrowserWindow, ipcMain, nativeTheme, shell, systemPreferences, app, dialog } from "electron";
 import monacoHtml from "file://monacoWin.html?minify&base64";
 import { FSWatcher, mkdirSync, readFileSync, watch, writeFileSync } from "fs";
 import { open, readdir, readFile, unlink } from "fs/promises";
@@ -151,6 +151,7 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
         title,
         autoHideMenuBar: true,
         darkTheme: true,
+        alwaysOnTop: true,
         webPreferences: {
             preload: join(__dirname, "preload.js"),
             contextIsolation: true,
@@ -162,6 +163,27 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
     makeLinksOpenExternally(win);
 
     await win.loadURL(`data:text/html;base64,${monacoHtml}`);
+});
+
+app.on("before-quit", async (event) => {
+    const monacoWindow = BrowserWindow.getAllWindows().find(w => w.title === "Equicord QuickCSS Editor");
+    
+    if (monacoWindow && !monacoWindow.isDestroyed() && !monacoWindow.isVisible()) {
+        event.preventDefault();
+        
+        const result = await dialog.showMessageBox({
+            type: "question",
+            buttons: ["Cancel", "Close Anyway"],
+            defaultId: 0,
+            title: "QuickCSS Editor Open",
+            message: "QuickCSS editor is still open in the background.",
+            detail: "Do you want to close Discord anyway? This will also close the QuickCSS editor."
+        });
+        
+        if (result.response === 1) {
+            app.exit();
+        }
+    }
 });
 
 ipcMain.handle(IpcEvents.GET_RENDERER_CSS, () => readFile(RENDERER_CSS_PATH, "utf-8"));
