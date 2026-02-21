@@ -507,7 +507,7 @@
         "settings":{
             "keybind":"Alternar Marcador",
             "showBorderRadius":"Exibir os valores do raio da borda do elemento",
-            "showClasses":"Exibir os nomes das classes CSS do elemento na dica de ferramenta",
+            "showClasses":"Exibir os nomes das classes CSS do elemento na dica",
             "showDisplay":"Exibir o tipo de exibição do elemento junto com as propriedades flexíveis ou de grade",
             "showFont":"Exibir a família de fontes computadas e o tamanho da fonte",
             "showId":"Exibir o atributo ID do elemento na dica de ferramenta",
@@ -569,13 +569,13 @@
         }
     },
     "equissant":{
-        "description":"Cruze cada quantidade especificada de cliques:trolley:",
+        "description":"Crossant a cada quantidade especificada de cliques:trolley:",
         "settings":{
             "amount":"Quantidade de cliques para acionar o crossant"
         }
     },
     "exitSounds":{
-        "description":"Reproduza sons da mesa de som ao se desconectar da voz.",
+        "description":"Reproduza efeitos sonoros ao se desconectar da voz.",
         "settings":{
             "soundGuildId":"Selecione o servidor que contém o som.",
             "soundId":"Digite o ID do som que deseja reproduzir."
@@ -1123,7 +1123,7 @@
             "privacyMode":"Modo de privacidade (ocultar detalhes da mídia, como nome do episódio/música)",
             "serverUrl":"URL do servidor Jellyfin (ex: https://jellyfin.examplo.com)",
             "showEpisodeName":"Mostrar o nome do episódio após as informações da temporada/episódio",
-            "showPausedState":"Mostrar presença rica quando a mídia estiver pausada",
+            "showPausedState":"Mostrar atividade quando a mídia estiver pausada",
             "userId":"ID de usuário Jellyfin obtido a partir da URL do seu perfil de usuário"
         },
         "state":{
@@ -1216,7 +1216,7 @@
     "limitMiddleClickPaste":{
         "description":"Evite colar com o botão do meio sempre ou apenas quando uma área de texto não estiver em foco.",
         "options":{
-            "alwaysPrevent":"Sempre evite colar o clique do meio",
+            "alwaysPrevent":"Sempre evite colar com o clique do meio",
             "onlyWhenNotFocused":"Prevenir apenas quando a área de texto não estiver focada"
         },
         "settings":{
@@ -1671,7 +1671,7 @@
             "includeStates":"Incluir usuários que correspondam aos filtros de estado",
             "leaveEmpty":"Sair quando o canal ficar vazio",
             "mute":"Procure usuários silenciados",
-            "selfDeafen":"Ensurdecer automaticamente ao ingressar",
+            "selfDeafen":"Ensurdecer automaticamente ao entrar",
             "selfMute":"Silenciar automaticamente ao ingressar",
             "spacesLeft":"Espaços mínimos restantes no canal",
             "spacesLeftOperation":"Operador de comparação de espaços à esquerda",
@@ -1908,7 +1908,7 @@
         "description":"Sincronize o status do Steam com o status Discord",
         "settings":{
             "dndStatus":"Status do Steam quando ativado Não perturbe",
-            "goInvisibleIfActivityIsHidden":"Sempre fique invisível ao ocultar a atividade do jogo no Discord",
+            "goInvisibleIfActivityIsHidden":"Sempre fique invisível ao ocultar a atividade de jogo no Discord",
             "idleStatus":"Status do Steam quando inativo",
             "invisibleStatus":"Status do Steam quando está invisível",
             "onlineStatus":"Status do Steam quando estiver online"
@@ -2258,7 +2258,7 @@
         "description":"Transcreva mensagens de voz usando IA (Whisper)",
         "modal":{
             "action":"Ação",
-            "audioLanguage":"Idioma de áudio",
+            "audioLanguage":"Idioma do áudio",
             "autoDetect":"Detecção automática",
             "copied":"Copiado!",
             "copyToClipboard":"Copiar para a área de transferência",
