@@ -487,7 +487,7 @@
                 "5uses":"5 usos",
                 "noLimit":"Sem limite"
             },
-            "inviteTemporaryMembership":"Conceda adesão temporária.",
+            "inviteTemporaryMembership":"Concede entrada temporária.",
             "reuseExistingInvites":"Reutilize o convite existente em vez de criar um novo.",
             "userOutput":"Saída de soltura de usuário.",
             "userOutputOptions":{
@@ -967,7 +967,7 @@
         }
     },
     "idleAutoRestart":{
-        "description":"Reinicia automaticamente o cliente após ficar ocioso por um período de tempo configurável, mas evita reiniciar enquanto você estiver no VC.",
+        "description":"Reinicia automaticamente o cliente após ficar ausente por um período de tempo configurável, mas evita reiniciar enquanto você estiver em um canal de voz.",
         "settings":{
             "idleMinutes":"Minutos de inatividade antes de reiniciar (quando não estiver no VC)",
             "isEnabled":"Habilitar reinicialização automática após inatividade"
@@ -978,7 +978,7 @@
         }
     },
     "ignoreCalls":{
-        "description":"Permite ignorar chamadas de usuários ou grupos DM específicos.",
+        "description":"Permite ignorar chamadas de usuários ou grupos de DMs específicos.",
         "settings":{
             "permanentlyIgnoredUsers":"IDs de usuário (vírgula + espaço) que devem ser ignorados permanentemente"
         },
@@ -1162,9 +1162,9 @@
         "commands":{
             "openDevSettings":"Abra a guia Desenvolvedor"
         },
-        "description":"Permite que você navegue na IU com um teclado.",
+        "description":"Permite navegar na interface com um teclado.",
         "settings":{
-            "allowMouseControl":"Permita que o mouse controle a paleta de comandos.",
+            "allowMouseControl":"Permite que o mouse controle a paleta de comandos.",
             "hotkey":"A tecla de atalho para abrir a paleta de comandos."
         },
         "ui":{
@@ -1322,7 +1322,7 @@
         "settings":{
             "display":"Estilo de exibição para visualização de mensagens",
             "onForward":"Mostrar dica ao passar o mouse sobre mensagens encaminhadas",
-            "onLink":"Mostrar dica de ao passar o mouse sobre os links de mensagens",
+            "onLink":"Mostrar dica(s) ao passar o mouse sobre os links de mensagens",
             "onReply":"Mostrar dica ao passar o mouse sobre as respostas de mensagens"
         }
     },
@@ -1520,7 +1520,7 @@
             "messageAlignment":"Posição de alinhamento para sobreposição de mensagens",
             "messagesSemitransparent":"Tornar as mensagens sobrepostas semitransparentes",
             "port":"Número da porta para a conexão Orbolay WebSocket",
-            "userAlignment":"Posição de alinhamento para sobreposição do usuário",
+            "userAlignment":"Posição de alinhamento para sobreposição de usuário",
             "voiceSemitransparent":"Tornar a sobreposição de voz semitransparente"
         }
     },
@@ -1628,7 +1628,7 @@
     "quickThemeSwitcher":{
         "description":"Percorra rapidamente os temas usando atalhos de teclado",
         "settings":{
-            "autoRefresh":"Atualize automaticamente a lista de temas quando alterações forem detectadas",
+            "autoRefresh":"Atualizar automaticamente a lista de temas quando alterações forem detectadas",
             "includeLocal":"Incluir temas locais no ciclo",
             "includeOnline":"Incluir temas online no ciclo",
             "showNotifications":"Mostrar notificações quando temas são adicionados ou removidos",
@@ -1662,9 +1662,9 @@
             "UserAmount":"Contagem de usuários desejada no canal",
             "UserAmountOperation":"Operador de comparação de contagem de usuários",
             "autoCamera":"Ligar a câmera automaticamente",
-            "autoNavigate":"Navegue automaticamente para o canal de voz",
+            "autoNavigate":"Navegue automaticamente para um canal de voz",
             "autoStream":"Iniciar transmissão automaticamente",
-            "avoidAfk":"Evite canais AFK",
+            "avoidAfk":"Evitar canais AFK",
             "avoidStages":"Evite canais de palco",
             "avoidStates":"Evite que usuários correspondam a filtros de estado",
             "deafen":"Procure usuários ensurdecidos",
@@ -1672,7 +1672,7 @@
             "leaveEmpty":"Sair quando o canal ficar vazio",
             "mute":"Procure usuários silenciados",
             "selfDeafen":"Ensurdecer automaticamente ao entrar",
-            "selfMute":"Silenciar automaticamente ao ingressar",
+            "selfMute":"Silenciar automaticamente ao entrar",
             "spacesLeft":"Espaços mínimos restantes no canal",
             "spacesLeftOperation":"Operador de comparação de espaços à esquerda",
             "stream":"Procure canais com streams",
@@ -1774,7 +1774,7 @@
     "sekaiStickers":{
         "description":"Integração de figurinhas Sekai",
         "settings":{
-            "AutoCloseModal":"Fechar automaticamente a janela modal quando terminado"
+            "AutoCloseModal":"Fechar automaticamente a janela modal quando acabar"
         }
     },
     "selfForward":{
@@ -1899,7 +1899,7 @@
         "description":"Salvar e carregar predefinições de status"
     },
     "statusWhileActive":{
-        "description":"Definir status automaticamente enquanto estiver ativo em canais de voz",
+        "description":"Permite definir status automaticamente enquanto estiver ativo em canais de voz",
         "settings":{
             "statusToSet":"Status a ser definido em um canal de voz"
         }
@@ -1995,7 +1995,7 @@
             "topRight":"Canto Superior Direito"
         },
         "settings":{
-            "determineServerNotifications":"Determine automaticamente quais notificações do servidor serão exibidas com base nas configurações do seu canal/servidor",
+            "determineServerNotifications":"Determine automaticamente quais notificações de servidor serão mostradas com base em suas configurações de canal/servidor",
             "directMessages":"Mostrar notificações para mensagens diretas",
             "disableInStreamerMode":"Desative notificações no modo streamer",
             "exampleButton":"Mostrar um exemplo de notificação do sistema",
@@ -2140,7 +2140,7 @@
         "settings":{
             "announceOthersDeafen":"Anuncie quando outros usuários ensurdecerem ou deixarem de estar ensurdecidos no seu VC atual",
             "announceOthersMute":"Anuncie quando outros usuários silenciarem ou reativarem o áudio no seu VC atual",
-            "announceOthersStream":"Anuncie quando outros usuários iniciarem ou pararem a transmissão no seu VC atual",
+            "announceOthersStream":"Anunciar quando outros usuários iniciarem ou pararem a transmissão no seu canal de voz atual",
             "announceSelfStream":"Anuncie quando você iniciar ou parar a transmissão",
             "customVoice":"Voz do narrador",
             "ignoreSelf":"Ignore você mesmo em todos os eventos",
@@ -2290,7 +2290,7 @@
         }
     },
     "voiceRejoin":{
-        "description":"Reingresse automaticamente aos canais de voz após a conexão cair",
+        "description":"Entre de novo automaticamente em canais de voz após a conexão cair",
         "preventionOptions":{
             "both":"DMs e servidores",
             "dms":"Somente DMs",
@@ -2360,7 +2360,7 @@
         },
         "contextMenu":{
             "addAllGuildEmojis":"Adicionar Todos os Emojis do Servidor",
-            "addToWhitelist":"Adicionar à lista de permissões",
+            "addToWhitelist":"Adicionar à Lista Branca",
             "removeAllGuildEmojis":"Remover todos os emojis do Servidor",
             "removeFromWhitelist":"Remover da lista de permissões"
         },
@@ -2383,7 +2383,7 @@
             "imported":"Emojis importados com sucesso",
             "notInList":"\"{name}\" não está na lista",
             "removed":"Removido \"{name}\" da lista",
-            "removedBulk":"Emojis {count} removidos da lista",
+            "removedBulk":"Removidos {count} emojis da lista",
             "reset":"Redefinir emojis"
         },
         "ui":{
