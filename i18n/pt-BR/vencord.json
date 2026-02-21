@@ -114,7 +114,7 @@
         }
     },
     "arRPC":{
-        "connected":"Conectado a arRPC",
+        "connected":"Conectado ao arRPC",
         "connectionFailed":"Falha ao conectar-se ao arRPC, ele está em execução?",
         "retry":"Tentar novamente",
         "settingsAbout":{
