@@ -1,22 +1,22 @@
 {
     "absRPC":{
         "about":{
-            "automaticAuth":"The plugin will automatically authenticate and fetch your listening progress.",
-            "description":"Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.",
-            "title":"How to connect to AudioBookShelf"
+            "automaticAuth":"Das Plugin authentifiziert sich automatisch und ruft deinen Hörfortschritt ab.",
+            "description":"Gib deine AudioBookShelf Server URL, deinen Benutzernamen und dein Passwort ein, um deine laufenden Hörbücher in deiner Discord Rich Presence anzuzeigen.",
+            "title":"Wie man sich mit AudioBookShelf verbindet"
         },
         "description":"Rich presence für den AudioBookShelf Medienserver",
         "settings":{
-            "password":"AudioBookShelf password",
-            "serverUrl":"AudioBookShelf server URL (e.g., https://abs.example.com)",
-            "username":"AudioBookShelf username"
+            "password":"AudioBookShelf Passwort",
+            "serverUrl":"AudioBookShelf Server URL (z. B., https://abs.example.com)",
+            "username":"AudioBookShelf Benutzername"
         },
         "toasts":{
-            "notConfigured":"AudioBookShelf RPC is not configured."
+            "notConfigured":"AudioBookShelf RPC ist nicht konfiguriert."
         }
     },
     "altKrispSwitch":{
-        "description":"Makes the Noise Suppression Popout switch between None and Krisp instead of Krisp and Standard"
+        "description":"Ändert das Hintergrundgeräusche-Unterdrücken-Menü, sodass zwischen \"Keine\" und \"Krisp\" gewechselt wird, statt zwischen \"Krisp\" und \"Standard\"."
     },
     "alwaysExpandProfiles":{
         "description":"Always expands profile popouts to the full modal"
@@ -62,55 +62,55 @@
         }
     },
     "bannersEverywhere":{
-        "description":"Displays banners in the member list ",
+        "description":"Zeigt Banner in der Mitgliederliste an. ",
         "settings":{
-            "animate":"Animate banners",
-            "preferNameplate":"prefer nameplate over banner"
+            "animate":"Banner animieren",
+            "preferNameplate":"Namensschild statt Banner bevorzugen"
         }
     },
     "baseDecoder":{
-        "description":"Decode base64 content of any message and copy the decoded content.",
+        "description":"Dekodiere den Base64-Inhalt einer beliebigen Nachricht und kopiere ihn.",
         "settings":{
-            "clickMethod":"Change the button to decode base64 content of any message.",
+            "clickMethod":"Ändere den Button zum Dekodieren von Base64-Inhalten beliebiger Nachrichten.",
             "clickMethodOptions":{
-                "left":"Left Click to decode the base64 content.",
-                "right":"Right click to decode the base64 content."
+                "left":"Linksklick zum Dekodieren des Base64-Inhalts.",
+                "right":"Rechtsklick zum Dekodieren des Base64-Inhalts."
             }
         },
         "ui":{
-            "copiedToast":"Decoded content copied to clipboard!",
-            "copyDecoded":"Copy Decoded Content",
-            "decodedContent":"Decoded Content",
-            "modalTitle":"Decoded Base64 Content",
-            "tooltipLeft":"Copy Decoded (Left Click) / Decode Base64 (Right Click)",
-            "tooltipRight":"Decode Base64 (Left Click) / Copy Decoded (Right Click)"
+            "copiedToast":"Dekodierter Inhalt zur Zwischenablage kopiert!",
+            "copyDecoded":"Kopiere Dekodierten Inhalt",
+            "decodedContent":"Dekodierter Inhalt",
+            "modalTitle":"Dekodierter Base64-Inhalt",
+            "tooltipLeft":"Dekodierten Inhalt kopieren (Linksklick) / Base64-Inhalt Dekodieren (Rechtsklick)",
+            "tooltipRight":"Base64-Inhalt Dekodieren (Linksklick) / Dekodierten Inhalt kopieren (Rechtsklick)"
         }
     },
     "betterAudioPlayer":{
-        "description":"Adds a spectrograph and oscilloscope visualizer to audio attachment players",
+        "description":"Fügt Audioplayern für Anhänge einen Spektrogramm- und Oszilloskop-Visualizer hinzu.",
         "settings":{
-            "forceMoveBelow":"Force the visualizer below the audio player",
-            "oscilloscope":"Enable oscilloscope visualizer",
-            "oscilloscopeColor":"Color for oscilloscope",
-            "oscilloscopeSolidColor":"Use solid color for oscilloscope",
-            "spectrograph":"Enable spectrograph visualizer",
-            "spectrographColor":"Color for spectrograph",
-            "spectrographSolidColor":"Use solid color for spectrograph"
+            "forceMoveBelow":"Visualizer unter dem Audioplayer erzwingen",
+            "oscilloscope":"Oszilloskop-Visualizer aktivieren",
+            "oscilloscopeColor":"Farbe für das Oszilloskop",
+            "oscilloscopeSolidColor":"Einfarbige Darstellung für das Oszilloskop verwenden",
+            "spectrograph":"Spektrogramm-Visualizer aktivieren",
+            "spectrographColor":"Farbe für das Spektrogramm",
+            "spectrographSolidColor":"Einfarbige Darstellung für das Spektrogramm verwenden"
         },
         "toasts":{
-            "invalidColor":"Invalid color format for {settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'"
+            "invalidColor":"Ungültiges Farbformat für {settingKey}. Stelle sicher, dass es im Format 'R, G, B' oder '#RRGGBB' ist."
         }
     },
     "betterBanReasons":{
-        "description":"Create custom reasons to use in the Discord ban modal, and/or show a text input by default instead of the options.",
+        "description":"Erstelle benutzerdefinierte Gründe für das Discord-Bann-Modal und/oder zeige standardmäßig ein Texteingabefeld anstelle der Optionen.",
         "settings":{
-            "isTextInputDefault":"Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)",
-            "reasons":"Your custom reasons"
+            "isTextInputDefault":"Zeigt standardmäßig ein Texteingabefeld anstelle eines Auswahlmenüs an. (Entspricht dem Klicken auf die Option \"Sonstiges\")",
+            "reasons":"Deine benutzerdefinierten Gründe"
         },
         "ui":{
-            "addAnotherReason":"Add another reason",
-            "reasonPlaceholder":"Reason",
-            "reasons":"Reasons"
+            "addAnotherReason":"Einen weiteren Grund hinzufügen",
+            "reasonPlaceholder":"Grund",
+            "reasons":"Gründe"
         }
     },
     "betterBlockedUsers":{
@@ -452,22 +452,22 @@
             },
             "inviteExpireAfter":"Invite expiration.",
             "inviteExpireAfterOptions":{
-                "12hours":"12 hours",
-                "1day":"1 day",
-                "1hour":"1 hour",
-                "30min":"30 minutes",
-                "6hours":"6 hours",
-                "7days":"7 days",
+                "12hours":"12 Stunden",
+                "1day":"1 Tag",
+                "1hour":"1 Stunde",
+                "30min":"30 Minuten",
+                "6hours":"6 Stunden",
+                "7days":"7 Tage",
                 "never":"Never"
             },
             "inviteMaxUses":"Invite max uses.",
             "inviteMaxUsesOptions":{
-                "100uses":"100 uses",
-                "10uses":"10 uses",
-                "1use":"1 use",
-                "25uses":"25 uses",
-                "50uses":"50 uses",
-                "5uses":"5 uses",
+                "100uses":"100 Benutzungen",
+                "10uses":"10 Benutzungen",
+                "1use":"1 Benutzung",
+                "25uses":"25 Benutzungen",
+                "50uses":"50 Benutzungen",
+                "5uses":"5 Benutzungen",
                 "noLimit":"No limit"
             },
             "inviteTemporaryMembership":"Grant temporary membership.",
@@ -696,7 +696,7 @@
     "friendTags":{
         "description":"Allows you to filter by custom tags in the quick switcher by starting a search with &",
         "ui":{
-            "add":"Add",
+            "add":"Hinzufügen",
             "addTo":"Add to {tagName}",
             "name":"Name",
             "remove":"Remove",
@@ -782,7 +782,7 @@
         },
         "ui":{
             "addToCollection":"Add To Collection",
-            "addedAt":"Added At",
+            "addedAt":"Hinzugefügt am",
             "areYouSure":"Are you sure?",
             "ascending":"Ascending",
             "cannotRefresh":"Cannot refresh: GIF missing metadata (re-add to collection)",
@@ -1018,7 +1018,7 @@
     "instantScreenshare":{
         "description":"Instantly screenshare when joining a voice channel with support for desktop sources, windows, and video input devices (cameras, capture cards)",
         "info":{
-            "linux":"For Linux",
+            "linux":"Für Linux",
             "soundPreview":"Regarding Sound & Preview Settings",
             "soundPreviewInfo":"We use the settings set and used by discord to decide if stream preview and sound should be enabled or not",
             "videoDevices":"Video Devices",
@@ -1062,7 +1062,7 @@
         },
         "description":"Rich presence for Jellyfin media server",
         "episodeFormatOptions":{
-            "fulltext":"Season 1 Episode 1",
+            "fulltext":"Staffel 1 Episode 1",
             "s01e01":"S01E01",
             "short":"1x01"
         },
@@ -1178,7 +1178,7 @@
             "keywords":"Manage keywords"
         },
         "ui":{
-            "addId":"Add ID",
+            "addId":"ID hinzufügen",
             "addKeywordEntry":"Add Keyword Entry",
             "clearAll":"Clear All",
             "ignoreCase":"Ignore Case",
@@ -1326,5 +1326,42 @@
             "timeBasedCleanupMinutes":"Automatically remove messages from servers that are older than this many minutes. Set to 0 to disable time-based cleanup.",
             "whitelistedIds":"Whitelisted server, channel, or user IDs."
         }
+    },
+    "pinIcon":{
+        "description":"Fügt ein Symbol zu den angepinnten Nachrichten hinzu."
+    },
+    "platformSpoofer":{
+        "settings":{
+            "platformOptions":{
+                "ios":"iOS",
+                "xbox":"Xbox"
+            }
+        }
+    },
+    "signature":{
+        "description":"Fügt eine Signatur zu Nachrichten hinzu."
+    },
+    "snowfall":{
+        "description":"Fügt Weihnachts-Schnee-Partikel hinzu, die sich über das Discord-Fenster bewegen."
+    },
+    "toggleVideoBind":{
+        "description":"Fügt eine Tastenbelegung hinzu, mit der sich seine Kamera im Sprachchat an- und ausschalten lässt."
+    },
+    "translatePlus":{
+        "description":"Fügt Nachrichten einen Übersetzen-Button mit besserem Menü hinzu."
+    },
+    "voiceMessageTranscriber":{
+        "modal":{
+            "action":"Aktion"
+        }
+    },
+    "whitelistedEmojis":{
+        "toasts":{
+            "added":"\"{name}\" wurde der Liste hinzugefügt.",
+            "addedBulk":"{count} Emojis wurden zur Liste hinzugefügt, {skipped} Emojis sind bereits in der Liste."
+        }
+    },
+    "youtubeDescription":{
+        "description":"Fügt eine umschaltbare Beschreibung für YouTube-Video-Embeds hinzu."
     }
 }
