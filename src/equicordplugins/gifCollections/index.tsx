@@ -388,7 +388,7 @@ export default definePlugin({
 
                 const expiredGifs = collection.gifs.filter(g => isCdnUrlExpired(g.src) || isCdnUrlExpired(g.url));
                 if (expiredGifs.length > 0) {
-                    const urlsToRefresh = [...new Set(expiredGifs.flatMap(g => ([g.src, g.url] as string[]).filter(u => isCdnUrlExpired(u))))] as string[];
+                    const urlsToRefresh = ([...new Set(expiredGifs.flatMap(g => ([g.src, g.url] as string[]).filter(u => isCdnUrlExpired(u))))] as string[]).slice(0, 50);
                     batchRefreshAttachmentUrls(urlsToRefresh).then(async refreshMap => {
                         if (!Object.keys(refreshMap).length) return;
                         let anyUpdated = false;
