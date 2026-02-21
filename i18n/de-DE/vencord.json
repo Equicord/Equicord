@@ -9,6 +9,9 @@
     "addonCard":{
         "new":"NEU"
     },
+    "alwaysAnimate":{
+        "description":"Animiert alles, was animiert werden kann."
+    },
     "anonymiseFileNames":{
         "commands":{
             "spoiler":{
@@ -20,7 +23,7 @@
                 "optionName":"value"
             }
         },
-        "description":"Anonymise uploaded file names",
+        "description":"Anonymisiert hochgeladene Dateinamen.",
         "methods":{
             "consistent":"Consistent",
             "random":"Random Characters",
@@ -29,7 +32,7 @@
         "settings":{
             "anonymiseByDefault":"Whether to anonymise file names by default",
             "consistent":"Consistent filename",
-            "method":"Anonymising method",
+            "method":"Anonymisierungsmethode",
             "randomisedLength":"Random characters length",
             "spoilerMessages":"Spoiler messages"
         },
@@ -92,6 +95,11 @@
             "title":"How to use arRPC"
         }
     },
+    "autoDndWhilePlaying":{
+        "statusOptions":{
+            "online":"Online"
+        }
+    },
     "badgeAPI":{
         "description":"API zum Hinzufügen von Badges zu Benutzern"
     },
@@ -108,7 +116,7 @@
             "keepIcons":"Keep showing guild icons in the primary guild bar folder when it's open in the BetterFolders sidebar",
             "showFolderIcon":"Show the folder icon above the folder guilds in the BetterFolders sidebar",
             "sidebar":"Display servers from folder on dedicated sidebar",
-            "sidebarAnim":"Animate opening the folder sidebar"
+            "sidebarAnim":"Animiert das Öffnen der Ordneransicht."
         }
     },
     "betterRoleContext":{
@@ -122,7 +130,7 @@
         "viewRoleIcon":"View Role Icon"
     },
     "betterSessions":{
-        "newBadge":"NEW",
+        "newBadge":"NEU",
         "newSession":"New session:",
         "rename":"Rename",
         "renameModal":{
@@ -155,7 +163,7 @@
             "format":"Compact or human readable format:",
             "showRoleColor":"Show the user's role color (if this plugin is enabled)",
             "showSeconds":"Show seconds in the timer",
-            "showWithoutHover":"Always show the timer without needing to hover",
+            "showWithoutHover":"Zeigt den Timer immer an, ohne mit der Maus darüber sein zu müssen.",
             "trackSelf":"Also track yourself",
             "watchLargeGuilds":"Track users in large guilds. This may cause lag if you're in a lot of large guilds with active voice users. Tested with up to 2000 active voice users with no issues."
         }
@@ -176,7 +184,7 @@
     },
     "cloud":{
         "integrations":{
-            "enabled":"Cloud-Integrationen aktiviert!",
+            "enabled":"Cloud-Integration aktiviert!",
             "error":"Setup fehlgeschlagen ({e})",
             "failedToRetrieveOAuth":"Setup fehlgeschlagen (OAuth Konfiguration konnte nicht abgerufen werden).",
             "header":"Cloud-Integration",
@@ -195,7 +203,7 @@
             "header":"Cloud Einstellungen",
             "newerThanCloud":"Ihre lokalen Einstellungen sind neuer, als die in der Cloud.",
             "noSettings":"Es gibt keine Einstellungen in der Cloud.",
-            "success":"Synchronisierte Einstellungen zur Cloud!",
+            "success":"Einstellungen mit der Cloud synchronisiert!",
             "syncFromCloud":"Einstellungen aus der Cloud konnten nicht synchronisiert werden ({e}).",
             "upToDate":"Ihre Einstellungen sind aktuell.",
             "updated":"Deine Einstellungen wurden aktualisiert! Klicke hier, um neu zu Starten und die Änderungen vollständig zu bestätigen!",
@@ -203,7 +211,7 @@
         }
     },
     "commandsAPI":{
-        "description":"API wird für alles benötigt, was Befehle verwendet"
+        "description":"API die für alles benötigt wird, was Befehle verwendet."
     },
     "consoleJanitor":{
         "alwaysAllowLoggers":"Always allow loggers of these types",
@@ -327,7 +335,7 @@
     },
     "decor":{
         "accessFromProfiles":"You can also access Decor decorations from the {link} page.",
-        "changeDecoration":"Change Decoration",
+        "changeDecoration":"Dekoration ändern",
         "description":"Create and use your own custom avatar decorations, or pick your favorite from the presets.",
         "enableAndRestart":"Enable Decor and restart your client to change your avatar decoration.",
         "profilesLink":"Profiles",
@@ -348,13 +356,19 @@
             "title":"Unterstütze das Projekt!"
         }
     },
+    "dontRoundMyTimestamps":{
+        "description":"Rundet relative Zeitangaben immer ab, sodass aus 7.6 Jahren 7 Jahre statt 8 Jahre werden."
+    },
+    "dynamicImageModalAPI":{
+        "description":"Ermöglicht es, beim Öffnen eines Bild-Modals entweder Breite oder die Höhe wegzulassen."
+    },
     "experiments":{
         "description":"Enable Access to Experiments & other dev-only features in Discord!",
         "devToolsInfo":"You can open Discord's DevTools via {keyboardCombo}",
         "holdOn":"Hold on!!",
         "moreInfo":"More Information",
         "settings":{
-            "toolbarDevMenu":"Change the Help (?) toolbar button (top right in chat) to Discord's developer menu"
+            "toolbarDevMenu":"Ändert den Hilfe (?) Button (oben rechts im Chat) zu Discords Developer-Menü."
         },
         "warning1":"Experiments are unreleased Discord features. They might not work, or even break your client or get your account disabled.",
         "warning2":"Only use experiments if you know what you're doing. Equicord is not responsible for any damage caused by enabling experiments. If you don't know what an experiment does, ignore it. Do not ask us what experiments do either, we probably don't know.",
@@ -427,7 +441,7 @@
         }
     },
     "fixImagesQuality":{
-        "animatedImagesAlways":"Animated images (GIF, WebP, etc.) in chat will always animate, regardless of if the App is focused.",
+        "animatedImagesAlways":"Animierte Bilder (GIF, WebP etc.) im Chat werden immer animiert angezeigt, unabhängig davon, ob die App im Vordergrund ist.",
         "defaultBehavior":"The default behavior is the following:",
         "description":"Improves quality of images by loading them at their original resolution",
         "enableOriginalCaveats":"You can also enable original image in chat, but beware of the following caveats:",
@@ -438,6 +452,9 @@
         "settings":{
             "originalImagesInChat":"Also load the original image in Chat. WARNING: Read the caveats above"
         }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"Umgeht, dass YouTube-Videos in Discord blockiert werden."
     },
     "friendsSince":{
         "description":"Shows when you became friends with someone in the user popout",
@@ -553,20 +570,20 @@
     },
     "loading":"Laden...",
     "logs":{
-        "allLogsCleared":"Alle Logs wurden gelöscht",
+        "allLogsCleared":"Alle Protokolle wurden gelöscht",
         "clearAll":"Alles löschen",
-        "clearAllLogs":"Alle Logs löschen",
-        "clearAllLogsConfirmation":"Sind Sie sicher, dass Sie alle Logs löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+        "clearAllLogs":"Alle Protokolle löschen",
+        "clearAllLogsConfirmation":"Sind Sie sicher, dass Sie alle Protokolle löschen möchten? Dies kann nicht rückgängig gemacht werden.",
         "clearLog":"Protokoll löschen",
-        "clearLogConfirmation":"Sind Sie sicher, dass Sie dieses Log löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+        "clearLogConfirmation":"Sind Sie sicher, dass Sie dieses Protokoll löschen möchten? Dies kann nicht rückgängig gemacht werden.",
         "clearLogs":"Protokolle leeren",
-        "clearLogsConfirmation":"Sind Sie sicher, dass Sie diese Logs löschen möchten? Dies kann nicht rückgängig gemacht werden.",
-        "clearLogsConfirmationNum_one":"Sind Sie sicher, dass Sie {count} Log löschen möchten",
-        "clearLogsConfirmationNum_other":"Sind Sie sicher, dass Sie {count} Logs löschen möchten",
-        "hideLogs":"Logs ausblenden",
-        "logCleared":"Log wurde gelöscht",
-        "logsCleared":"Ausgewählte Logs wurden gelöscht",
-        "showLogs":"Logs anzeigen"
+        "clearLogsConfirmation":"Sind Sie sicher, dass Sie diese Protokolle löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+        "clearLogsConfirmationNum_one":"Sind Sie sicher, dass Sie {count} Protokolle löschen möchten",
+        "clearLogsConfirmationNum_other":"Sind Sie sicher, dass Sie {count} Protokolle löschen möchten",
+        "hideLogs":"Protokolle ausblenden",
+        "logCleared":"Protokoll wurde gelöscht",
+        "logsCleared":"Ausgewählte Protokolle wurden gelöscht",
+        "showLogs":"Protokolle anzeigen"
     },
     "memberCount":{
         "settings":{
@@ -574,6 +591,26 @@
             "toolTip":"Show member count on the server tooltip",
             "voiceActivity":"Show voice activity with member count in the member list"
         }
+    },
+    "memberListDecoratorsAPI":{
+        "description":"API zum Hinzufügen von Dekorationen zur Mitgliederliste (in Servern und Direktnachrichten)"
+    },
+    "menuItemDemanglerAPI":{
+        "description":"Entwirrt das Menu-Item Modul von Discord"
+    },
+    "messageAccessoriesAPI":{
+        "description":"API zum Hinzufügen von Nachrichten-Zubehör."
+    },
+    "messageClickActions":{
+        "toasts":{
+            "cannotQuote":"Dieser Nachrichtentyp kann nicht zitiert werden."
+        }
+    },
+    "messageDecorationsAPI":{
+        "description":"API zum Hinzufügen von Dekorationen zu Nachrichten."
+    },
+    "messageEventsAPI":{
+        "description":"API die für alles benötigt wird, was Nachrichtenereignisse verwendet."
     },
     "messageLatency":{
         "clockAhead":"This user's clock is {delta} ahead.",
@@ -588,21 +625,21 @@
             "showMillis":"Show milliseconds"
         },
         "timeUnits":{
-            "day":"day",
-            "days":"days",
-            "hour":"hour",
-            "hours":"hours",
-            "millisecond":"millisecond",
-            "milliseconds":"milliseconds",
-            "minute":"minute",
-            "minutes":"minutes",
-            "second":"second",
-            "seconds":"seconds"
+            "day":"Tag",
+            "days":"Tage",
+            "hour":"Stunde",
+            "hours":"Stunden",
+            "millisecond":"Millisekunde",
+            "milliseconds":"Millisekunden",
+            "minute":"Minute",
+            "minutes":"Minuten",
+            "second":"Sekunde",
+            "seconds":"Sekunden"
         }
     },
     "messageLinkEmbeds":{
         "automodOptions":{
-            "always":"Always use automod embeds",
+            "always":"Automod-Embeds immer verwenden.",
             "never":"Never use automod embeds",
             "prefer":"Prefer automod embeds, but use rich embeds if some content can't be shown"
         },
@@ -661,6 +698,12 @@
         },
         "toggleDeletedHighlight":"Toggle Deleted Highlight"
     },
+    "messagePopoverAPI":{
+        "description":"API zum Hinzufügen von Buttons zu Nachrichten-Popovers"
+    },
+    "messageUpdaterAPI":{
+        "description":"API zum Aktualisieren und erneuten Rendern von Nachrichten"
+    },
     "mutualGroupDMs":{
         "description":"Shows mutual group dms in profiles",
         "members_one":"{count} Member",
@@ -690,6 +733,9 @@
             "voiceChannels":"Hide names in Voice channels automatically"
         }
     },
+    "nicknameIconsAPI":{
+        "description":"API zum Hinzufügen von Symbolen zu Nicknamen in Profilen"
+    },
     "noReplyMention":{
         "description":"Disables reply pings by default",
         "settings":{
@@ -700,6 +746,9 @@
             "shouldPingListed":"Behaviour",
             "userList":"List of users to allow or exempt pings for (separated by commas or spaces)"
         }
+    },
+    "noticesAPI":{
+        "description":"Behebt das automatische Schließen von Benachrichtigungen"
     },
     "overrideForumDefaults":{
         "description":"Allows you to override default forum layout/sort order. you can still change it on a per-channel basis",
@@ -724,7 +773,7 @@
     },
     "permissionsViewer":{
         "noPermissions":"No permissions to display!",
-        "owner":"owner",
+        "owner":"Eigentümer",
         "permissions":"Permissions",
         "permissionsTitle":"{header} Permissions",
         "roleOptions":"Role Options",
@@ -776,9 +825,9 @@
         },
         "description":"Adds platform indicators (Desktop, Mobile, Web...) to users",
         "platforms":{
-            "console":"Console",
+            "console":"Konsole",
             "desktop":"Desktop",
-            "mobile":"Mobile",
+            "mobile":"Mobil",
             "web":"Web"
         },
         "settings":{
@@ -839,7 +888,7 @@
         }
     },
     "reverseImageSearch":{
-        "all":"All",
+        "all":"Alle",
         "description":"Adds ImageSearch to image context menus",
         "name":"ReverseImageSearch",
         "searchImage":"Search Image"
@@ -889,7 +938,10 @@
         "viewReviews":"View Reviews"
     },
     "secretRingTone":{
-        "description":"Spiele immer die geheime Version des Discord Klingeltons ab, außer bei speziellen Events, bei denen Discord andere Klingeltöne nutzt."
+        "description":"Spiele immer die geheime Version des Discord Klingeltons ab, außer bei speziellen Events, bei denen Discord andere Klingeltöne nutzt.",
+        "settings":{
+            "onlySnow":"Nur das Snow Halation Theme abspielen"
+        }
     },
     "seeSummaries":{
         "description":"Enables Discord's experimental Summaries feature on every server, displaying AI generated summaries of conversations",
@@ -913,6 +965,9 @@
         },
         "timestampFormat":"Timestamp Format",
         "timestampPicker":"Timestamp Picker"
+    },
+    "serverListAPI":{
+        "description":"API benötigt für Plugins die die Serverliste ändern"
     },
     "serverListIndicators":{
         "description":"Add online friend count or server count in the server list",
@@ -982,8 +1037,8 @@
                 "updatedPlugins":"Aktualisierte Plugins",
                 "updatedPluginsCount":" • {plugins} aktualisierte Plugins"
             },
-            "updateLogs_one":"Aktualisierungsprotokolle ({count} Log)",
-            "updateLogs_other":"Aktualisierungsprotokolle ({count} Logs)",
+            "updateLogs_one":"Aktualisierungsprotokolle ({count} Protokoll)",
+            "updateLogs_other":"Aktualisierungsprotokolle ({count} Protokolle)",
             "updateLogs_zero":"Keine Aktualisierungsprotokolle",
             "updatedPluginsCount":"Aktualisierte Plugins ({plugins})",
             "viewRecentChanges":"These are the new commits and plugin updates since your last version. You can see what features were added, bugs were fixed, and which plugins received updates",
@@ -1046,12 +1101,36 @@
         },
         "winNativeTitleBar":{
             "description":"Ersetzen Sie Discords benutzerdefinierte Titelleiste mit der Standard-Windows-Titelleiste. Dies kann die Kompatibilität mit einigen Fensterverwaltungswerkzeugen verbessern.",
-            "title":"Benutze die native Titelleiste von Windows anstelle von Discords benutzerdefiniertem"
+            "title":"Benutze die native Titelleiste von Windows anstelle der benutzerdefinierten Titelleiste von Discord."
         }
     },
     "settingsSync":{
         "failedToImport":"Fehler beim Importieren der Einstellungen: {e}",
         "imported":"Einstellungen erfolgreich importiert. Starten Sie neu, um die Änderungen anzuwenden!"
+    },
+    "shikiCodeblocks":{
+        "description":"Bringt Codeblöcke im Stil von VSCode in Discord, unterstützt von Shiki.",
+        "settings":{
+            "bgOpacity":"Hintergrundtransparenz",
+            "customTheme":"Link zu einem benutzerdefinierten VSCode-Theme",
+            "theme":"Standarddesigns",
+            "tryHljs":"Verwende den leichteren Standard-Highlighter und das Standard-Theme von Discord.",
+            "tryHljsOptions":{
+                "always":"Immer",
+                "never":"Niemals",
+                "preferHljs":"Highlight.js statt Shiki bevorzugen",
+                "preferShiki":"Shiki statt Highlight.js bevorzugen"
+            },
+            "useDevIcon":"Wie Sprachsymbole in Codeblöcken angezeigt werden",
+            "useDevIconOptions":{
+                "colored":"Farbig",
+                "colorless":"Farblos",
+                "disabled":"Deaktiviert"
+            }
+        }
+    },
+    "showAllMessageButtons":{
+        "description":"Zeigt immer alle Nachrichtenaktionen an, egal ob man die Shift-Taste drückt oder nicht."
     },
     "showConnections":{
         "description":"Show connected accounts in user popouts",
@@ -1072,10 +1151,10 @@
         "channelTypes":{
             "announcement":"announcement",
             "forum":"forum",
-            "messages":"messages",
+            "messages":"Nachrichten",
             "posts":"posts",
             "stage":"stage",
-            "text":"text",
+            "text":"Text",
             "voice":"voice"
         },
         "defaultLayout":"Default layout: {layout}",
@@ -1110,9 +1189,17 @@
         "videoQualityMode":"Video quality mode: {mode}",
         "viewAllowedUsersAndRoles":"View Allowed Users and Roles"
     },
+    "showHiddenThings":{
+        "description":"Zeigt verschiedene versteckte und nur für Moderatoren zugängliche Elemente an, unabhängig von den Berechtigungen.",
+        "settings":{
+            "showInvitesPaused":"Zeigt den Tooltip für pausierte Einladungen in der Serverliste an.",
+            "showModView":"Zeige den Kontextmenüeintrag für die Mitglieder-Moderationsansicht in allen Servern an.",
+            "showTimeouts":"Zeigt Symbole für Mitglied-Timeouts im Chat an."
+        }
+    },
     "showMeYourName":{
         "addNickname":"Add SMYN Nickname",
-        "cancel":"Cancel",
+        "cancel":"Abbrechen",
         "changeNickname":"Change SMYN Nickname",
         "modalDescription":"Set a custom SMYN nickname for this user. Make use of it by specifying {custom} in the SMYN template settings.",
         "nicknameLabel":"SMYN Nickname",
@@ -1184,7 +1271,7 @@
             "chatBarIndicators":"Chat Bar Indicators",
             "chatIcon":"Chat Icon",
             "defaultHidden":"Default Hidden",
-            "enabled":"Enabled",
+            "enabled":"Aktiviert",
             "membersListIndicators":"Members List Indicators",
             "silentTyping":"Silent Typing"
         },
@@ -1208,10 +1295,15 @@
         "typingVisibleGlobal":"Typing Visible (Global)"
     },
     "sortFriendRequests":{
-        "added":"Added",
+        "added":"Hinzugefügt",
         "description":"Sorts friend requests by date of receipt",
         "settings":{
             "showDates":"Show dates on friend requests"
+        }
+    },
+    "spotifyCrack":{
+        "settings":{
+            "noSpotifyAutoPause":"Automatisches Pausieren von Spotify deaktivieren"
         }
     },
     "tabs":{
@@ -1248,7 +1340,7 @@
     "typingIndicator":{
         "description":"Adds an indicator if someone is typing on a channel.",
         "settings":{
-            "animatedDots":"Animated dots",
+            "animatedDots":"Animierte Punkte",
             "avatars":"Avatars",
             "avatarsAndDots":"Avatars and animated dots",
             "includeBlockedUsers":"Whether to show the typing indicator for blocked users.",
@@ -1259,7 +1351,7 @@
         }
     },
     "typingTweaks":{
-        "andOthersTyping":"and {count} others are typing...",
+        "andOthersTyping":"und {count} andere schreiben...",
         "description":"Show avatars and role colours in the typing indicator",
         "settings":{
             "alternativeFormatting":"Show a more useful message when several users are typing",
@@ -1272,6 +1364,9 @@
         "description":"Allows you to unsuppress embeds in messages",
         "suppressEmbeds":"Suppress Embeds",
         "unsuppressEmbeds":"Unsuppress Embeds"
+    },
+    "userSettingsAPI":{
+        "description":"Patcht die Benutzereinstellungen von Discord, um deren Gruppe und Namen sichtbar zu machen."
     },
     "userVoiceShow":{
         "cannotJoinChannel":"You cannot join the user's Voice Channel",
@@ -1304,7 +1399,7 @@
             "undeafen":"{{USER}} undeafened",
             "unmute":"{{USER}} unmuted"
         },
-        "description":"Announces when users join, leave, or move voice channels via narrator",
+        "description":"Sagt über den Narrator, wenn ein Benutzer einen Sprachchat betritt, verlässt oder wechselt.",
         "linuxVoicesHelp":"Install speech-dispatcher or espeak and run Discord with the --enable-speech-dispatcher flag",
         "noEnglishVoices":"You don't have any English voices installed, so the narrator might sound weird",
         "noVoices":"No narrator voices found. ",
