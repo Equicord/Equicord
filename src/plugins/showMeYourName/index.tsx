@@ -112,8 +112,8 @@ function resolveColor(
     savedColor: string,
     canUseGradient: boolean,
     inGuild: boolean,
-    ircColorsEnabled: boolean = false,
-    isHovering: boolean = false,
+    ircColorsEnabled: boolean,
+    isHovering: boolean,
 ): Record<string, any> | null {
     const defaultColor = getComputedStyle(document.documentElement).getPropertyValue("--text-strong").trim() || null;
 
