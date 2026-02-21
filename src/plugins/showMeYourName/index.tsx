@@ -999,7 +999,7 @@ const settings = definePluginSettings({
     ignoreGradients: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "For the non-primary names, if the role has a gradient or nitro effect, ignore it in favor of the color set below if the color is set to \"Role+-#\".",
+        description: "For the non-primary names, if the role has a gradient and the color below is set to \"Role+-#\", use the primary color instead of the whole gradient, and if it has a nitro effect, ignore it entirely."
     },
     animateGradients: {
         type: OptionType.BOOLEAN,
