@@ -74,8 +74,14 @@ const settings = definePluginSettings({
     },
 });
 
-const args = {
+const args: {
+    ringing: string[];
+    ongoingRings: string[];
+    messageId: string;
+    region: string;
+} = {
     ringing: [],
+    ongoingRings: [],
     messageId: "",
     region: "",
 };
@@ -99,8 +105,9 @@ export default definePlugin({
         "gdm-context": ContextMenuPatch,
     },
     flux: {
-        async CALL_UPDATE({ ringing, messageId, region }) {
-            args.ringing = ringing;
+        async CALL_UPDATE({ ringing, ongoingRings, messageId, region }) {
+            args.ringing = Array.isArray(ringing) ? ringing : [];
+            args.ongoingRings = Array.isArray(ongoingRings) ? ongoingRings : [];
             args.messageId = messageId;
             args.region = region;
         }
@@ -113,6 +120,7 @@ export default definePlugin({
                 type: "CALL_UPDATE",
                 channelId: channel.id,
                 ringing: args.ringing.filter((id: string) => id !== currentUserId),
+                ongoingRings: args.ongoingRings.filter((id: string) => id !== currentUserId),
                 messageId: args.messageId,
                 region: args.region
             });
@@ -133,6 +141,7 @@ export default definePlugin({
                                     type: "CALL_UPDATE",
                                     channelId: channel.id,
                                     ringing: args.ringing.filter((id: string) => id !== currentUserId),
+                                    ongoingRings: args.ongoingRings.filter((id: string) => id !== currentUserId),
                                     messageId: args.messageId,
                                     region: args.region
                                 });
