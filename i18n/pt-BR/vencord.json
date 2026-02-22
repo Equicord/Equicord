@@ -151,7 +151,7 @@
             "keepIcons":"Manter os ícones dos servidores visíveis na pasta da barra principal de servidores quando estiver aberta na barra lateral do BetterFolders",
             "showFolderIcon":"Mostre o ícone da pasta acima das servidores da pasta na barra lateral do BetterFolders",
             "sidebar":"Exibir servidores da pasta na barra lateral dedicada",
-            "sidebarAnim":"Animar abrindo a barra lateral da pasta"
+            "sidebarAnim":"Animar a abertura da barra lateral de pastas"
         }
     },
     "betterGifAltText":{
@@ -231,7 +231,7 @@
             "format":"Formato compacto ou legível por humanos:",
             "showRoleColor":"Mostrar a cor do cargo do usuário (se este plugin estiver habilitado)",
             "showSeconds":"Mostrar segundos no cronômetro",
-            "showWithoutHover":"Sempre mostre o cronômetro sem precisar passar o mouse",
+            "showWithoutHover":"Sempre mostrar o cronômetro sem precisar passar o mouse",
             "trackSelf":"Também permite acompanhar você mesmo",
             "watchLargeGuilds":"Rastreie usuários em grandes servidores. Isso pode causar atraso se você estiver em muitas servidores grandes com usuários de voz ativos. Testado com até 2.000 usuários de voz ativos sem problemas."
         }
@@ -312,7 +312,7 @@
     },
     "copyEmojiMarkdown":{
         "copyEmojiMarkdown":"Copiar Emoji Markdown",
-        "copyUnicodeDescription":"Copie o caractere unicode bruto em vez de:name: para emojis padrão (👽)",
+        "copyUnicodeDescription":"Copie o caractere unicode bruto em vez de :name: para emojis padrão (👽)",
         "description":"Permite copiar emojis como string formatada (<:blobcatcozy:1026533070955872337>)",
         "success":"Sucesso! Remarcação de emoji copiada."
     },
@@ -338,7 +338,7 @@
             "crashedBody":"Awn :( O Discord crashou duas vezes seguidas, não tentando recuperar. Clique aqui para entrar no nosso servidor de suporte!",
             "crashedTitle":"Discord travou!",
             "invalidInvite":"Convite inválido ou expirado",
-            "recoveringBody":"Tentando recuperar... Clique aqui para ingressar em nosso servidor de suporte!"
+            "recoveringBody":"Tentando recuperar... Clique aqui para entrar em nosso servidor de suporte!"
         },
         "settings":{
             "attemptToNavigateToHome":"Define se deve tentar voltar para a tela inicial ao evitar travamentos do Discord.",
@@ -402,7 +402,7 @@
             "enable":"Ativar",
             "title":"Aviso"
         },
-        "partyMaxSize":"Tamanho máximo do grupo",
+        "partyMaxSize":"Tamanho máximo da Festa",
         "partySize":"Tamanho da festa",
         "placeholder":{
             "enterValue":"Insira um valor",
@@ -413,7 +413,7 @@
         "smallImageUrl":"URL/chave de imagem pequena",
         "startTimestamp":"Data/hora inicial (em milissegundos)",
         "stateLine2":"Estado (linha 2)",
-        "stateUrl":"URL do estado",
+        "stateUrl":"Estado da URL",
         "streamLink":"Stream Link (Twitch ou YouTube, somente se o tipo de atividade for Streaming)",
         "timestampMode":"Modo de data/hora",
         "timestampModes":{
@@ -437,7 +437,7 @@
         }
     },
     "dearrow":{
-        "clickToDearrow":"Clique para desmarcar",
+        "clickToDearrow":"Clique para dearrow",
         "dearrowByDefault":"Dearrow vídeos automaticamente",
         "dearrowedClickRestore":"Este embed foi desativado, clique para restaurar",
         "description":"Torna os títulos e miniaturas de embeds do YouTube menos sensacionalistas, desenvolvido pela Dearrow",
@@ -488,7 +488,7 @@
         "description":"Permite ignorar a largura ou altura ao abrir uma imagem expandida"
     },
     "experiments":{
-        "description":"Habilite o acesso a experimentos e outros recursos somente para desenvolvedores em Discord!",
+        "description":"Habilite acesso a experimentos e outros recursos somente para desenvolvedores no Discord!",
         "devToolsInfo":"Você pode abrir o DevTools do Discord via {keyboardCombo}",
         "holdOn":"Aguarde!",
         "moreInfo":"Mais informações",
@@ -814,8 +814,8 @@
         "description":"Substitua cotações de carregamento de Discords",
         "settings":{
             "additionalQuotes":"Citações personalizadas adicionais para possivelmente aparecerem, separadas pelo delimitador abaixo",
-            "additionalQuotesDelimiter":"Delimitador para cotações adicionais",
-            "enableDiscordPresetQuotes":"Habilite as cotações predefinidas do Discord (incluindo cotações de eventos, durante eventos)",
+            "additionalQuotesDelimiter":"Delimitador para citações adicionais",
+            "enableDiscordPresetQuotes":"Ativar as citações predefinidas do Discord (incluindo citações de eventos, durante eventos)",
             "enablePluginPresetQuotes":"Habilite as cotações predefinidas por este plugin",
             "replaceEvents":"Este plugin também deve ser aplicado durante eventos com citações temáticas especiais? (ex.: Halloween)"
         },
@@ -866,7 +866,7 @@
             "copyContent":"Copiar Conteúdo",
             "copyId":"Copiar ID",
             "copyLink":"Copiar Link",
-            "copyUserId":"Copiar ID do usuário",
+            "copyUserId":"Copiar ID de usuário",
             "delete":"Excluir",
             "edit":"Editar",
             "none":"Nenhum",
@@ -932,7 +932,7 @@
         "oldDiscordAndroid":"Suspeita-se que o usuário esteja em um cliente Discord Android antigo",
         "settings":{
             "detectDiscordKotlin":"Detectar clientes antigos do Discord para Android",
-            "ignoreSelf":"Não adicione indicadores às suas próprias mensagens",
+            "ignoreSelf":"Não adiciona indicadores às suas próprias mensagens",
             "latency":"Limite em segundos para indicador de latência",
             "showMillis":"Mostrar milissegundos"
         },
@@ -951,7 +951,7 @@
     },
     "messageLinkEmbeds":{
         "automodOptions":{
-            "always":"Sempre use embeds de automod",
+            "always":"Sempre usar embeds de automod",
             "never":"Nunca use embeds de automod",
             "prefer":"Prefira embeds de automod, mas use embeds avançados se algum conteúdo não puder ser exibido"
         },
@@ -975,7 +975,7 @@
         },
         "settings":{
             "automodEmbeds":"Use embeds de automod em vez de embeds ricos (menores, mas com menos informações)",
-            "clearMessageCache":"Limpe o cache de mensagens vinculadas",
+            "clearMessageCache":"Limpe o cache de mensagens vinculadas(linked)",
             "idList":"IDs de servidor/canal/usuário para lista negra ou lista branca (separados por vírgula)",
             "listMode":"Define se a lista de IDs será tratada como lista negra ou lista branca",
             "messageBackgroundColor":"Cor de fundo para mensagens em embeds avançados"
@@ -1066,7 +1066,7 @@
     },
     "newGuildSettings":{
         "applySettings":"Aplicar NewGuildSettings",
-        "description":"Silenciar automaticamente novos servidores e alterar várias outras configurações ao ingressar",
+        "description":"Silencie automaticamente novos servidores e altere várias outras configurações ao entrar",
         "settings":{
             "allMessages":"Todas as mensagens",
             "events":"Silenciar novos eventos automaticamente",
@@ -1098,7 +1098,7 @@
         }
     },
     "noDeepLinks":{
-        "description":"Desativa o recurso estúpido de deep linking do Discord, que tenta forçá-lo a usar o aplicativo de desktop"
+        "description":"Desativa o recurso estúpido de link direto do Discord que tenta forçá-lo a usar o aplicativo para Desktop"
     },
     "noDevtoolsWarning":{
         "description":"Desativa o banner 'Calma ai' no console. Como efeito colateral, também impede que o Discord oculte seu token, o que evita desconexões aleatórias."
@@ -1130,7 +1130,7 @@
         "description":"Remove completamente os temas do perfil Nitro de todos, menos de você"
     },
     "noReplyMention":{
-        "description":"Desativa pings de resposta por padrão",
+        "description":"Desativa pings na resposta por padrão",
         "settings":{
             "doNotPingListed":"Não marque os usuários/cargos listados",
             "inverseShiftReply":"Inverter o comportamento de resposta de turno do Discord (permitir que a resposta de turno mencione o usuário)",
@@ -1141,7 +1141,7 @@
         }
     },
     "noServerEmojis":{
-        "description":"Não mostre emojis do servidor no menu de preenchimento automático.",
+        "description":"Não mostra emojis do servidor no menu de preenchimento automático.",
         "settings":{
             "shownEmojis":"Os tipos de emojis a serem exibidos no menu de preenchimento automático.",
             "shownEmojisOptions":{
@@ -1210,7 +1210,7 @@
             "defaultSortOrder":"Qual ordem de classificação usar como padrão"
         },
         "sortOrders":{
-            "datePosted":"Data de publicação",
+            "datePosted":"Data de postagem",
             "recentlyActive":"Recentemente ativo"
         }
     },
@@ -1289,14 +1289,14 @@
         "settings":{
             "canCollapseDmSection":"Permitir que a seção de DMs não categorizadas seja colapsável",
             "customOrder":"Personalizado (clique com o botão direito nos canais para reordenar)",
-            "dmSectionCollapsed":"Recolher seção DM",
+            "dmSectionCollapsed":"Recolher seção de DMs",
             "mostRecentMessage":"Mensagem mais recente",
             "pinOrder":"Em qual ordem os DMs fixados devem ser exibidos?"
         },
         "unpinDm":"Desafixar DM"
     },
     "plainFolderIcon":{
-        "description":"Não mostre os pequenos ícones de servidor nas pastas"
+        "description":"Não mostra os pequenos ícones de servidor nas pastas"
     },
     "platformIndicators":{
         "consoleIcons":{
@@ -1686,7 +1686,7 @@
     "showConnections":{
         "description":"Mostrar contas conectadas em pop-outs de usuários",
         "settings":{
-            "compact":"Compactar",
+            "compact":"Compacto",
             "cozy":"Confortável",
             "iconSize":"Tamanho do ícone (px)",
             "iconSpacing":"Margem do ícone",
@@ -1790,18 +1790,18 @@
             "ignoreFonts":"Para nomes não primários, use as fontes padrão do Discord, independentemente da fonte nitro personalizada do usuário.",
             "ignoreGradients":"Para os nomes não primários, se o cargo tiver gradiente, ignore-o em favor da cor definida abaixo.",
             "includedNames":"A ordem para exibir nomes de usuário, apelidos de exibição, apelidos, nomes de amigos e nomes personalizados. Use os seguintes espaços reservados: {user}, {display}, {nick}, {friend}, {custom}. Você pode fornecer várias opções de nome para usar como substitutos se algum estiver indisponível, separando-os com vírgulas como: {custom, friend, nick}. Você pode ter até três prefixos e três sufixos por nome.",
-            "memberList":"Exiba o primeiro nome disponível listado em seu formato de nome personalizado na lista de membros.",
+            "memberList":"Exibir o primeiro nome disponível listado em seu formato de nome personalizado na lista de membros.",
             "mentions":"Exibir formato de nome personalizado nas menções.",
             "messages":"Exibir formato de nome personalizado em mensagens.",
             "nameSeparator":"O separador a ser usado entre nomes. O padrão é um espaço único.",
             "nicknameColor":"A cor a ser usada para o apelido se não for o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor do cargo principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
-            "profilePopout":"Exiba o primeiro nome disponível listado em seu formato de nome personalizado nas janelas pop-up do perfil.",
-            "reactions":"Exiba o primeiro nome disponível listado em seu formato de nome personalizado nas dicas de ferramentas de reação e o nome completo nos pop-outs de reação.",
+            "profilePopout":"Exibir o primeiro nome disponível listado em seu formato de nome personalizado nas janelas pop-up do perfil.",
+            "reactions":"Exibir o primeiro nome disponível listado em seu formato de nome personalizado nas dicas de reação, e o nome completo nos popouts de reação.",
             "removeDuplicates":"Se algum dos nomes for equivalente, remova-o, deixando apenas os nomes exclusivos.",
             "replies":"Exibir formato de nome personalizado nas respostas.",
             "truncateAllNamesWithStreamerMode":"Trunque todos os nomes, não apenas os nomes de usuário, no modo Streamer.",
             "usernameColor":"A cor a ser usada para o nome de usuário, caso não seja a primeira exibida. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor do cargo principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
-            "voiceChannels":"Exiba o primeiro nome disponível listado em seu formato de nome personalizado em canais de voz."
+            "voiceChannels":"Exibir o primeiro nome disponível listado em seu formato de nome personalizado em canais de voz."
         }
     },
     "showTimeoutDuration":{
@@ -1816,9 +1816,9 @@
         "disableSilentMessage":"Desativar mensagem silenciosa",
         "enableSilentMessage":"Ativar mensagem silenciosa",
         "settings":{
-            "autoDisable":"Desative automaticamente a alternância de mensagens silenciosas novamente após enviar uma",
+            "autoDisable":"Desativa automaticamente a alternância de mensagens silenciosas novamente após enviar uma",
             "persistChannels":"Persistência entre canais",
-            "persistNone":"Não persista (redefinir na mudança de canal)",
+            "persistNone":"Não persistir (redefinir na mudança de canal)",
             "persistRestarts":"Persistência entre canais e reinicializações",
             "persistState":"Como persistir o estado de alternância de mensagem silenciosa"
         }
@@ -1860,7 +1860,7 @@
             "defaultHidden":"Se ativado, o plugin ocultará sua digitação de outras pessoas em quaisquer DMs/canais/servidores não listados em \"Locais desativados\" abaixo. Se desativado, o plugin mostrará sua digitação para outras pessoas em quaisquer DMs/canais/servidores não listados em \"Locais habilitados\" abaixo.",
             "disabledLocations":"Desativar funcionalidade para estes IDs. Aceita uma lista separada por vírgulas de IDs de DM, IDs de canais e IDs de servidores. Usado apenas se \"Oculto por padrão\" estiver ativado.",
             "enabledGlobally":"Alterna globalmente o indicador da sua própria digitação.",
-            "enabledLocations":"Habilita a funcionalidade para estes IDs. Aceita uma lista separada por vírgulas de IDs de DM, IDs de canal e IDs de servidor. Usado apenas se \"Oculto por padrão\" estiver desativado.",
+            "enabledLocations":"Ativar funcionalidade para esses IDs. Aceita uma lista separada por vírgulas de IDs de DMs, IDs de canais e IDs de servidores. Usado apenas se \"Oculto por Padrão\" estiver desativado.",
             "hideChatBoxTypingIndicators":"Oculte os indicadores de digitação de outros usuários acima da barra de chat.",
             "hideMembersListTypingIndicators":"Oculte os indicadores de digitação de outros usuários da lista de membros."
         },
@@ -2007,7 +2007,7 @@
         }
     },
     "usrbg":{
-        "description":"Exibe banners de usuários do USRBG, permitindo que qualquer pessoa obtenha um banner sem o Nitro",
+        "description":"Exibe banners de usuários do USRBG, permitindo que qualquer pessoa obtenha um banner sem Nitro",
         "getOwnBanner":"Obtenha seu próprio banner USRBG",
         "settings":{
             "nitroBanner":"banner Nitro",
@@ -2044,12 +2044,12 @@
         "placeholdersHelp":"Os marcadores especiais <0>{{USER}}</0>, <1>{{DISPLAY_NAME}}</1>, <2>{{NICKNAME}}</2> e <3>{{CHANNEL}}</3> serão substituídos pelo nome do usuário (nada se for você), pelo apelido do usuário, pelo apelido no servidor atual e pelo nome do canal, respectivamente.",
         "playExampleSounds":"Reproduzir exemplos de sons",
         "settings":{
-            "deafenMessage":"Mensagem ao ensurdecer (apenas eu por enquanto)",
+            "deafenMessage":"Mensagem de desativar áudio (apenas si por enquanto)",
             "joinMessage":"Mensagem de entrada",
             "latinOnly":"Remova caracteres não latinos dos nomes antes da narração",
             "leaveMessage":"Mensagem de saída",
             "moveMessage":"Mover mensagem",
-            "muteMessage":"Mensagem ao silenciar (apenas eu por enquanto)",
+            "muteMessage":"Silenciar Mensagem (apenas para si por enquanto)",
             "sayOwnName":"Diga o próprio nome",
             "speed":"Velocidade do narrador",
             "undeafenMessage":"Mensagem ao voltar a ouvir (apenas eu por enquanto)",
