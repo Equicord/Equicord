@@ -89,7 +89,7 @@ const args: {
 export default definePlugin({
     name: "IgnoreCalls",
     description: "Allows you to ignore calls from specific users or dm groups.",
-    authors: [EquicordDevs.TheArmagan, Devs.thororen],
+    authors: [EquicordDevs.TheArmagan, Devs.thororen, EquicordDevs.omaw],
     settings,
     patches: [
         {
