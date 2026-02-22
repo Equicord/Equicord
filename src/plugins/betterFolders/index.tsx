@@ -103,7 +103,7 @@ export function getChildFolderIds(parentId: string | number): string[] {
 
 function nestFolder(childId: string, parentId: string) {
     if (childId === parentId) return;
-    if (getParentFolderId(parentId) === childId) return;
+    if (hasParentInChain(parentId, childId)) return;
 
     const map = { ...getNestedFolderMap() };
 
@@ -553,7 +553,7 @@ export default definePlugin({
         if (dragItem.nodeId === targetNode.id) return false;
 
         if (dragItem.type === "folder" && targetNode.type === "folder") {
-            if (isCombine) return true;
+            if (isCombine) return !hasParentInChain(String(targetNode.id), String(dragItem.nodeId));
             return targetNode.parentId == null;
         }
 
