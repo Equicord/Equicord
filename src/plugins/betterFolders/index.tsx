@@ -23,7 +23,7 @@ import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import { findByPropsLazy, findStoreLazy } from "@webpack";
+import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
 import { FluxDispatcher } from "@webpack/common";
 import { ReactNode } from "react";
 
@@ -38,12 +38,15 @@ enum FolderIconDisplay {
 export const ExpandedGuildFolderStore = findStoreLazy("ExpandedGuildFolderStore");
 export const SortedGuildStore = findStoreLazy("SortedGuildStore");
 const FolderUtils = findByPropsLazy("move", "toggleGuildFolderExpand");
+const FolderItem = findComponentByCodeLazy("FolderItem", "onExpandCollapse", "folderButtonSize");
+
+const logger = new Logger("BetterFolders");
 
 let lastGuildId = null as string | null;
 let dispatchingFoldersClose = false;
 
 function getGuildFolder(id: string) {
-    return SortedGuildStore.getGuildFolders().find(folder => folder.guildIds.includes(id));
+    return SortedGuildStore.getGuildFolders().find((folder: any) => folder.guildIds.includes(id));
 }
 
 function closeFolders() {
@@ -77,6 +80,61 @@ function filterTreeWithTargetNode(children: any, predicate: (node: any) => boole
     }
 
     return childIsTargetChild;
+}
+
+function getNestedFolderMap(): Record<string, string> {
+    return settings.store.nestedFolders ?? {};
+}
+
+function saveNestedFolderMap(map: Record<string, string>) {
+    settings.store.nestedFolders = map;
+}
+
+export function getParentFolderId(childId: string | number): string | undefined {
+    return getNestedFolderMap()[String(childId)];
+}
+
+export function getChildFolderIds(parentId: string | number): string[] {
+    const map = getNestedFolderMap();
+    return Object.entries(map)
+        .filter(([, pid]) => pid === String(parentId))
+        .map(([cid]) => cid);
+}
+
+function nestFolder(childId: string, parentId: string) {
+    if (childId === parentId) return;
+    if (getParentFolderId(parentId) === childId) return;
+
+    const map = { ...getNestedFolderMap() };
+
+    delete map[childId];
+
+    map[childId] = parentId;
+    saveNestedFolderMap(map);
+}
+
+function unnestFolder(childId: string) {
+    const map = { ...getNestedFolderMap() };
+    if (map[childId] == null) return;
+    delete map[childId];
+    saveNestedFolderMap(map);
+}
+
+function hasParentInChain(childId: string, parentId: string): boolean {
+    const seen = new Set<string>();
+    let current = getParentFolderId(childId);
+
+    while (current != null && !seen.has(current)) {
+        if (current === parentId) return true;
+        seen.add(current);
+        current = getParentFolderId(current);
+    }
+
+    return false;
+}
+
+function areNestedRelated(firstId: string, secondId: string): boolean {
+    return hasParentInChain(firstId, secondId) || hasParentInChain(secondId, firstId);
 }
 
 export const settings = definePluginSettings({
@@ -132,8 +190,10 @@ export const settings = definePluginSettings({
             { label: "When more than one folder is expanded", value: FolderIconDisplay.MoreThanOneFolderExpanded }
         ],
         restartNeeded: true
-    }
-});
+    },
+}).withPrivateSettings<{
+    nestedFolders?: Record<string, string>;
+}>();
 
 const IS_BETTER_FOLDERS_VAR = "typeof isBetterFolders!=='undefined'?isBetterFolders:arguments[0]?.isBetterFolders";
 const BETTER_FOLDERS_EXPANDED_IDS_VAR = "typeof betterFoldersExpandedIds!=='undefined'?betterFoldersExpandedIds:arguments[0]?.betterFoldersExpandedIds";
@@ -189,6 +249,14 @@ export default definePlugin({
                     replace: "$&.filter($self.makeGuildsBarSidebarFilter(!!arguments[0]?.isBetterFolders))"
                 }
             ]
+        },
+        {
+            find: '("guildsnav")',
+            predicate: () => !settings.store.sidebar,
+            replacement: {
+                match: /switch\((\i)\.type\){.+?default:return null}/,
+                replace: "return $self.wrapGuildNodeComponent($1,()=>{$&},false,void 0);"
+            }
         },
         {
             // This is the parent folder component
@@ -249,6 +317,19 @@ export default definePlugin({
             ]
         },
         {
+            find: ".FOLDER_ITEM_ANIMATION_DURATION),",
+            replacement: [
+                {
+                    match: /\{id:(\i),name:(\i),children:(\i)\}=(\i),/,
+                    replace: "{id:$1,name:$2,children:$3}=$self.getFolderNodeForRender($4),"
+                },
+                {
+                    match: /className:(\i\.\i),style:\{height:((\i)\.height\.to\((\i)=>\4\*(\i)\))\},(?="aria-label":\i\.name)/,
+                    replace: "className:$self.getFolderGuildsListClassName(arguments[0],$1),style:{height:$2},"
+                }
+            ]
+        },
+        {
             find: "APPLICATION_LIBRARY,render:",
             predicate: () => settings.store.sidebar,
             group: true,
@@ -263,7 +344,7 @@ export default definePlugin({
                     replace: (m, conditions, props) => `${m},${conditions}$self.FolderSideBar(${props})`
                 },
                 {
-                    // Add grid styles to fix aligment with other visual refresh elements
+                    // Add grid styles to fix alignment with other visual refresh elements
                     match: /(?<=className:)\i\.\i(?=,"data-fullscreen")/,
                     replace: `"${GRID_STYLE_NAME} "+$&`
                 }
@@ -276,6 +357,35 @@ export default definePlugin({
                 // Close all folders when clicking the home button
                 match: /(?<=onClick:\(\)=>{)(?=.{0,300}"discodo")/,
                 replace: "$self.closeFolders();"
+            }
+        },
+        {
+            find: "[GuildDropTarget] Tried using a root node as a drop target.",
+            all: true,
+            replacement: [
+                {
+                    match: /(\i)=!\i&&null==\i\.parentId/,
+                    replace: "$1=$self.shouldShowCombineTarget(s,n)"
+                },
+                {
+                    match: /canDrop:\i=>\i\.nodeId!==\i\.id&&\(!\i\|\|\i\.type!==\i\.\i\.FOLDER\|\|\i\.type!==\i\.\i\.FOLDER\)&&\(\i\.type!==\i\.\i\.FOLDER\|\|null==\i\.parentId\)/,
+                    replace: "canDrop:e=>$self.canDropOnFolder(e,t,i)"
+                },
+                {
+                    match: /drop\(\i\)\{let\{nodeId:\i\}=\i;\i&&\i\.type!==\i\.\i\.FOLDER&&\i\.default\.track\(\i\.\i\.\i\),\i\.\i\.moveById\(\i,\i\.id,\i,\i\)/,
+                    replace: "drop(e){let{nodeId:s}=e;if($self.handleFolderDrop(e,t,n,i))return;i&&t.type!==h.PJ.FOLDER&&u.default.track(p.HAw.GUILD_FOLDER_CREATED),d.A.moveById(s,t.id,n,i)"
+                },
+                {
+                    match: /\(0,\i\.H\)\(\(\)=>(\i)\(\[\i\.\i\.GUILD\],(\i),!0,!0\)\)/,
+                    replace: "(0,c.H)(()=>$1([...$self.getFolderAcceptTypes($2)],$2,!0,!0))"
+                }
+            ]
+        },
+        {
+            find: "renderChildNode:function",
+            replacement: {
+                match: /renderChildNode:function\((\i),(\i),(\i)\)\{return \i\.type!==\i\.\i\.GUILD\?null:\(0,\i\.jsx\)\((\i\.\i),\{guildNode:\i,"aria-setsize":\i,"aria-posinset":\i\},\i\.id\)\}/,
+                replace: "renderChildNode:function($1,$2,$3){return $self.renderFolderChild($1,$2,$3)||(0,i.jsx)($4,{guildNode:$1,\"aria-setsize\":$3,\"aria-posinset\":$2},$1.id)}"
             }
         }
     ],
@@ -308,10 +418,14 @@ export default definePlugin({
 
                 FluxDispatcher.wait(() => {
                     const expandedFolders = ExpandedGuildFolderStore.getExpandedFolders();
+                    const expandedId = String(data.folderId);
 
                     if (expandedFolders.size > 1) {
-                        for (const id of expandedFolders) if (id !== data.folderId)
+                        for (const id of expandedFolders) {
+                            const folderId = String(id);
+                            if (folderId === expandedId || areNestedRelated(folderId, expandedId)) continue;
                             FolderUtils.toggleGuildFolderExpand(id);
+                        }
                     }
 
                     dispatchingFoldersClose = false;
@@ -326,8 +440,148 @@ export default definePlugin({
 
     FolderSideBar,
     closeFolders,
+    augmentFolderChildren(folderNode: any, originalChildren: any[]): any[] {
+        const childIds = getChildFolderIds(folderNode.id);
+        if (childIds.length === 0) return originalChildren;
+
+        try {
+            const tree = SortedGuildStore.getGuildsTree();
+            const existingIds = new Set(originalChildren.map(child => String(child?.id)));
+            const childFolderNodes: any[] = [];
+
+            for (const id of childIds) {
+                if (existingIds.has(String(id))) continue;
+                const node = tree.getNode(id);
+                if (node) {
+                    childFolderNodes.push({
+                        ...node,
+                        parentId: folderNode.id,
+                        isBetterFoldersNested: true
+                    });
+                }
+            }
+
+            if (childFolderNodes.length === 0) return originalChildren;
+
+            return [...childFolderNodes, ...originalChildren];
+        } catch (e) {
+            logger.error("augmentFolderChildren failed", e);
+            return originalChildren;
+        }
+    },
+
+    getFolderNodeForRender(folderNode: any): any {
+        const children = this.augmentFolderChildren(folderNode, folderNode.children);
+        if (children === folderNode.children) return folderNode;
+        return {
+            ...folderNode,
+            children
+        };
+    },
+
+    getFolderGuildsListClassName(
+        props: { isBetterFolders?: boolean, folderNode?: any; } | undefined,
+        baseClassName: string
+    ): string {
+        if (props?.isBetterFolders) return baseClassName;
+
+        const folderNode = props?.folderNode;
+        if (folderNode == null) return baseClassName;
+
+        const children = this.getFolderNodeForRender(folderNode)?.children;
+        if (!Array.isArray(children)) return baseClassName;
+
+        return children.some(child => child?.type === "folder")
+            ? `${baseClassName} vc-betterFolders-nested-parent-list`
+            : baseClassName;
+    },
+
+    renderFolderChild(node: any, posInSet: number, setSize: number): ReactNode | null {
+        if (node?.type !== "folder") return null;
+
+        try {
+            if (!FolderItem) return null;
+            return (
+                <FolderItem
+                    folderNode={node}
+                    aria-setsize={setSize}
+                    aria-posinset={posInSet}
+                />
+            );
+        } catch (e) {
+            logger.error("renderFolderChild failed", e);
+            return null;
+        }
+    },
+
+    handleFolderDrop(dragItem: any, targetNode: any, _moveToBelow: boolean, isCombine: boolean): boolean {
+        if (dragItem.type !== "folder") return false;
+
+        if (!isCombine) {
+            unnestFolder(String(dragItem.nodeId));
+            return false;
+        }
+
+        if (targetNode.type !== "folder") return false;
+
+        const childId = String(dragItem.nodeId);
+        const parentId = String(targetNode.id);
+
+        try {
+            nestFolder(childId, parentId);
+            FluxDispatcher.dispatch({ type: "BETTER_FOLDERS_NESTED_UPDATE" } as any);
+        } catch (e) {
+            logger.error("handleFolderDrop failed", e);
+        }
+
+        return true;
+    },
+
+    shouldShowCombineTarget(noCombine: boolean, targetNode: any): boolean {
+        if (noCombine) return false;
+        return targetNode.parentId == null || targetNode.type === "folder";
+    },
+
+    getFolderAcceptTypes(targetNode: any): string[] {
+        const GUILD = "guild";
+        const FOLDER = "folder";
+        if (targetNode?.type === FOLDER) return [GUILD, FOLDER];
+        return [GUILD];
+    },
+
+    canDropOnFolder(dragItem: any, targetNode: any, isCombine: boolean): boolean {
+        if (dragItem.nodeId === targetNode.id) return false;
+
+        if (dragItem.type === "folder" && targetNode.type === "folder") {
+            if (isCombine) return true;
+            return targetNode.parentId == null;
+        }
+
+        if (isCombine && dragItem.type === "folder") return false;
+        if (dragItem.type === "folder" && targetNode.parentId != null) return false;
+
+        return true;
+    },
 
     wrapGuildNodeComponent(node: any, originalComponent: () => ReactNode, isBetterFolders: boolean, expandedFolderIds?: Set<any>) {
+        if (node.type === "folder") {
+            const mappedParentId = getParentFolderId(node.id);
+            if (mappedParentId != null && String(node.parentId) !== mappedParentId) {
+                return (
+                    <div style={{ display: "none" }}>
+                        {originalComponent()}
+                    </div>
+                );
+            }
+            if (mappedParentId != null && node.isBetterFoldersNested !== true) {
+                return (
+                    <div style={{ display: "none" }}>
+                        {originalComponent()}
+                    </div>
+                );
+            }
+        }
+
         if (
             !isBetterFolders ||
             node.type === "folder" && expandedFolderIds?.has(node.id) ||
@@ -353,7 +607,7 @@ export default definePlugin({
                 // can cause hang if intl message is not found
                 const serversIntlMsg = getIntlMessage("SERVERS");
                 if (!serversIntlMsg) {
-                    new Logger("BetterFolders").error("Failed to get SERVERS intl message");
+                    logger.error("Failed to get SERVERS intl message");
                     return true;
                 }
                 return child?.props?.["aria-label"] === serversIntlMsg;
