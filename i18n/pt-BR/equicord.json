@@ -512,7 +512,7 @@
             "showFont":"Exibir a família de fontes computadas e o tamanho da fonte",
             "showId":"Exibir o atributo ID do elemento na dica de ferramenta",
             "showMargin":"Exibir os valores de margem do elemento",
-            "showPadding":"Exibir os valores de preenchimento do elemento",
+            "showPadding":"Exibir os valores de padding do elemento",
             "showPosition":"Exibir o tipo de posição CSS e o índice z do elemento"
         },
         "ui":{
@@ -537,7 +537,7 @@
         "settings":{
             "accountStandingButton":"Mostrar um botão de situação da conta na barra de cabeçalho",
             "forceRoleIcon":"Força a exibição de ícones de cargo ao lado das mensagens no modo compacto",
-            "noDefaultHangStatus":"Desative o status de travamento padrão ao ingressar em canais de voz",
+            "noDefaultHangStatus":"Desativar o status de atividade padrão ao entrar em canais de voz",
             "noMirroredCamera":"Impede que a câmera seja espelhada na tela",
             "refreshSlashCommands":"Atualiza comandos de barra para mostrar comandos recém-adicionados sem reiniciar seu cliente.",
             "removeActivitySection":"Remove a seção de atividades acima da lista de membros",
@@ -597,7 +597,7 @@
             "title":"Exportar mensagens"
         },
         "settings":{
-            "exportContacts":"Exporte uma lista de amigos para sua área de transferência. Adiciona um novo botão à barra de menu da guia amigos.",
+            "exportContacts":"Exporte uma lista de amigos para a área de transferência. Adiciona um novo botão à barra de menu na aba de amigos",
             "openFileAfterExport":"Abra o arquivo exportado no gerenciador de arquivos padrão após a exportação"
         },
         "ui":{
@@ -610,7 +610,7 @@
     "fastDeleteChannels":{
         "description":"Adiciona um ícone de lixeira para excluir canais",
         "settings":{
-            "keyBind":"A tecla para alternar a lixeira quando pressionada.",
+            "keyBind":"A tecla para ativar/desativar a lixeira quando pressionada.",
             "reqAlt":"Exigir que alt seja segurado.",
             "reqCtrl":"Exigir que o controle seja mantido.",
             "reqShift":"Exigir que o shift seja segurado."
