@@ -45,7 +45,7 @@ import { getThemeInfo, stripBOM, type UserThemeHeader } from "@utils/themes/bd";
 import { usercssParse } from "@utils/themes/usercss";
 import { getStylusWebStoreUrl } from "@utils/web";
 import { findComponentByCodeLazy, findLazy } from "@webpack";
-import { Alerts, Menu, React, Select, showToast, TextInput, Toasts, Tooltip, useEffect, useMemo, useState } from "@webpack/common";
+import { Alerts, Menu, React, SearchBar, Select, showToast, TextInput, Toasts, Tooltip, useEffect, useMemo, useState } from "@webpack/common";
 import { ContextMenuApi } from "@webpack/common/menu";
 import type { ComponentType, Ref, SyntheticEvent } from "react";
 import type { UserstyleHeader } from "usercss-meta";
@@ -759,10 +759,11 @@ function ThemesTab() {
             </Paragraph>
 
             <div className={cl("filter-row")}>
-                <TextInput
-                    placeholder="Search for a theme..."
-                    value={searchQuery}
+                <SearchBar
+                    query={searchQuery}
                     onChange={setSearchQuery}
+                    onClear={() => setSearchQuery("")}
+                    placeholder="Search for a theme..."
                 />
                 <div>
                     <Select

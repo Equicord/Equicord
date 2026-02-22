@@ -114,6 +114,22 @@ export const MaskedLink = waitForComponent<t.MaskedLink>("MaskedLink", filters.c
 export const Timestamp = waitForComponent<t.Timestamp>("Timestamp", filters.componentByCode("#{intl::MESSAGE_EDITED_TIMESTAMP_A11Y_LABEL}"));
 export const OAuth2AuthorizeModal = waitForComponent("OAuth2AuthorizeModal", filters.componentByCode("hasContentBackground", "oauth2_authorize"));
 
+export const SearchBar = waitForComponent<React.ComponentType<{
+    query: string;
+    onChange: (value: string) => void;
+    onClear?: () => void;
+    placeholder?: string;
+    size?: "sm" | "md";
+    autoFocus?: boolean;
+    disabled?: boolean;
+    onKeyDown?: (e: React.KeyboardEvent) => void;
+    onBlur?: () => void;
+    onFocus?: () => void;
+    autoComplete?: string;
+    inputProps?: Record<string, any>;
+    "aria-label"?: string;
+}>>("SearchBar", filters.componentByCode("#{intl::SEARCH}", "clearable", "autoComplete"));
+
 export const Animations = mapMangledModuleLazy(".assign({colorNames:", {
     Transition: filters.componentByCode('["items","children"]', ",null,"),
     animated: filters.byProps("div", "text")
