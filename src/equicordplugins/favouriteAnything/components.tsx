@@ -88,7 +88,7 @@ export const AttachmentPreview = proxyLazyWebpack(() => {
     const MessageComponent = findComponentByCode("this.renderAttachments") as MessageComponentClass;
 
     const DmChannel: Channel & { new(base?: Partial<Channel>): Channel; } = findByProps("fromServer", "sortRecipients");
-    const MessageClass: Message & { new(base?: Partial<Message>): Message; } = findByCode("this.firstEditTimestamp");
+    const MessageClass: Message & { new(base?: Partial<Message>): Message; } = findByCode(";mentionChannels;mentionGames;");
 
     class MessageAttachmentsComponent extends MessageComponent {
         render(): ReactNode {
