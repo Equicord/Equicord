@@ -6,7 +6,7 @@
 
 import "./style.css";
 
-import { Devs } from "@utils/constants";
+import { Devs, EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import definePlugin from "@utils/types";
 import { Embed } from "@vencord/discord-types";
@@ -32,7 +32,7 @@ export const AttachmentContext = proxyLazyWebpack(() => React.createContext<null
 export default definePlugin({
     name: "FavouriteAnything",
     description: "Favourite any image",
-    authors: [Devs.nin0dev, { name: "Davri", id: 457579346282938368n }],
+    authors: [Devs.nin0dev, EquicordDevs.davri],
     patches: [
         // EMBEDS
         {
