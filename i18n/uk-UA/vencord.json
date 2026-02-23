@@ -1092,6 +1092,7 @@
     "shikiCodeblocks":{
         "description":"Впроваджує vscode-стилізовані блоки коду до Discord на базі Shiki",
         "settings":{
+            "bgOpacity":"Прозорість фону",
             "customTheme":"Посилання на власну vscode тему",
             "theme":"Стандартні теми",
             "tryHljs":"Використовувати більш легкий стандартний підсвічувач та тему Discord.",
@@ -1103,6 +1104,7 @@
             },
             "useDevIcon":"Як відображати іконки мов у блоках коду",
             "useDevIconOptions":{
+                "colored":"Кольорові",
                 "colorless":"Безкольорово",
                 "disabled":"Вимкнені"
             }
@@ -1164,6 +1166,14 @@
         },
         "videoQualityMode":"Video quality mode: {mode}",
         "viewAllowedUsersAndRoles":"View Allowed Users and Roles"
+    },
+    "showHiddenThings":{
+        "description":"Показує різні приховані елементи та елементи, доступні лише модераторам, незалежно від дозволів.",
+        "settings":{
+            "showInvitesPaused":"Показувати підказку «Запрошення призупинені» у списку серверів",
+            "showModView":"Показувати пункт контекстного меню «Відкрити з доступом модератора» у всіх серверах.",
+            "showTimeouts":"Показувати іконку тимчасового блоку в чаті."
+        }
     },
     "showMeYourName":{
         "addNickname":"Add SMYN Nickname",
@@ -1269,6 +1279,35 @@
             "showDates":"Show dates on friend requests"
         }
     },
+    "spotifyCrack":{
+        "description":"Безкоштовно слухайте разом, прибирає автоматичних пауз при вході до голосового чату та можливість продовжувати відтворення під час простою.",
+        "settings":{
+            "keepSpotifyActivityOnIdle":"Продовжувати відтворення активності Spotify під час простою",
+            "noSpotifyAutoPause":"Вимкнути автоматичну паузу Spotify"
+        }
+    },
+    "spotifyShareCommands":{
+        "commands":{
+            "notListening":"Ви не слухаєте ніякої музики.",
+            "shareDescription":"Поділіться вашим поточним {name} Spotify у чаті",
+            "trackNotFound":"Не вдалося знайти трек на Spotify."
+        },
+        "description":"Діліться вашим поточним треком, альбомом чи виконавцем Spotify за допомогою слеш-команд (/track, /album, /artist)"
+    },
+    "stickerPaste":{
+        "description":"Робить так щоб вибір стікера у вікні вибору, вставляв його у текстове поле замість миттєвого надсилання."
+    },
+    "streamerModeOnStream":{
+        "description":"Автоматично вмикає режим стрімера, коли ви починаєте стрімити у Discord"
+    },
+    "superReactionTweaks":{
+        "description":"Дозволяє встановлювати власний ліміт одночасного відтворення суперреакцій та використовувати суперреакції за замовчуванням.",
+        "settings":{
+            "superReactByDefault":"Використовувати суперреакції за замовчуванням у виборі реакцій",
+            "superReactionPlayingLimit":"Макс. одночасних суперреакцій для відтворення. 0 щоб вимкнути відтворення суперреакцій.",
+            "unlimitedSuperReactionPlaying":"Зняти обмеження на одночасне відтворення суперреакцій"
+        }
+    },
     "tabs":{
         "settings":"Налаштування Equicord"
     },
@@ -1284,6 +1323,9 @@
         "typeMessage":"Type a message",
         "usingRegex":"Using Regex",
         "usingString":"Using String"
+    },
+    "themeAttributes":{
+        "description":"Додає атрибути даних до різних елементів для цілей тематизації"
     },
     "translate":{
         "autoTranslate":"Автопереклад",
@@ -1323,10 +1365,25 @@
             "showRoleColors":"Show role colors in the typing indicator"
         }
     },
+    "unindent":{
+        "description":"Обрізає початковий відступ у блоках коду"
+    },
+    "unlockedAvatarZoom":{
+        "description":"Дозволяє збільшувати зображення глибше в інструменті кадрування при зміні аватара",
+        "settings":{
+            "zoomMultiplier":"Множник збільшення"
+        }
+    },
     "unsuppressEmbeds":{
         "description":"Allows you to unsuppress embeds in messages",
         "suppressEmbeds":"Suppress Embeds",
         "unsuppressEmbeds":"Unsuppress Embeds"
+    },
+    "userMessagesPronouns":{
+        "description":"Додає займенники до повідомлень користувачів у чаті",
+        "settings":{
+            "pronounsFormat":"Формат відображення займенників у чаті"
+        }
     },
     "userSettingsAPI":{
         "description":"Патчить Discord модуль UserSettings для розкриття групи та імені налаштувань"
