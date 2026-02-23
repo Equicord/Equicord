@@ -61,6 +61,7 @@ type FolderMentionProps = {
     folderNode?: GuildTreeNode;
 };
 
+const MAX_TREE_FILTER_DEPTH = 1000;
 let lastGuildId = null as string | null;
 let dispatchingFoldersClose = false;
 
@@ -79,7 +80,7 @@ function filterTreeWithTargetNode(children: any, predicate: (node: any) => boole
         return false;
     }
 
-    if (depth > 1000) {
+    if (depth > MAX_TREE_FILTER_DEPTH) {
         return false;
     }
 
@@ -121,7 +122,7 @@ function saveNestedFolderMap(map: Record<string, string>) {
 }
 
 export function getParentFolderId(childId: string | number): string | undefined {
-    return getNestedFolderMap()[String(childId)];
+    return getNestedFolderMap()[childId.toString()];
 }
 
 export function getChildFolderIds(parentId: string | number): string[] {
@@ -301,7 +302,7 @@ export default definePlugin({
             find: '("guildsnav")',
             predicate: () => !settings.store.sidebar,
             replacement: {
-                match: /switch\((\i)\.type\){.{0,2500}?default:return null}/,
+                match: /switch\((\i)\.type\){case \i\.\i\.FOLDER:.{0,800}?case \i\.\i\.GUILD:.{0,800}?default:return null}/,
                 replace: "return $self.wrapGuildNodeComponent($1,()=>{$&},false,void 0);"
             }
         },
@@ -525,7 +526,13 @@ export default definePlugin({
             };
         }
 
-        const tree = SortedGuildStore.getGuildsTree() as { getNode: (id: string) => GuildTreeNode | undefined; };
+        const tree = SortedGuildStore.getGuildsTree();
+        if (typeof tree?.getNode !== "function") {
+            return {
+                mentionCount: baseMentionCount,
+                hasNestedMention: false
+            };
+        }
 
         const nestedGuildIds = new Set<string>();
         for (const childFolderId of descendantIds) {
@@ -568,7 +575,10 @@ export default definePlugin({
         if (childIds.length === 0) return originalChildren;
 
         try {
-            const tree = SortedGuildStore.getGuildsTree() as { getNode: (id: string) => GuildTreeNode | undefined; };
+            const tree = SortedGuildStore.getGuildsTree();
+            if (typeof tree?.getNode !== "function") {
+                return originalChildren;
+            }
             const existingIds = new Set(originalChildren.map(child => String(child?.id)));
             const childFolderNodes: GuildTreeNode[] = [];
 
