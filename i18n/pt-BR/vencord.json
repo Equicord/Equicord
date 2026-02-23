@@ -1291,7 +1291,7 @@
             "customOrder":"Personalizado (clique com o botão direito nos canais para reordenar)",
             "dmSectionCollapsed":"Recolher seção de DMs",
             "mostRecentMessage":"Mensagem mais recente",
-            "pinOrder":"Em qual ordem os DMs fixados devem ser exibidos?"
+            "pinOrder":"Em qual ordem as DMs fixadas devem ser exibidas?"
         },
         "unpinDm":"Desafixar DM"
     },
