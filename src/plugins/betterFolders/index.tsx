@@ -35,10 +35,6 @@ enum FolderIconDisplay {
     MoreThanOneFolderExpanded
 }
 
-export const ExpandedGuildFolderStore = findStoreLazy("ExpandedGuildFolderStore");
-export const SortedGuildStore = findStoreLazy("SortedGuildStore");
-const FolderUtils = findByPropsLazy("move", "toggleGuildFolderExpand");
-const FolderItem = findComponentByCodeLazy("FolderItem", "onExpandCollapse", "folderButtonSize");
 type GuildTreeNode = {
     id: string | number;
     type?: string;
@@ -48,18 +44,26 @@ type GuildTreeNode = {
     isBetterFoldersNested?: boolean;
     [key: string]: unknown;
 };
+
 type FolderRenderProps = {
     isBetterFolders?: boolean;
     folderNode?: GuildTreeNode;
 };
+
 type FolderDragItem = {
     type?: string;
     nodeId: string | number;
 };
+
 type FolderMentionProps = {
     mentionCount?: number;
     folderNode?: GuildTreeNode;
 };
+
+export const ExpandedGuildFolderStore = findStoreLazy("ExpandedGuildFolderStore");
+export const SortedGuildStore = findStoreLazy("SortedGuildStore");
+const FolderUtils = findByPropsLazy("move", "toggleGuildFolderExpand");
+const FolderItem = findComponentByCodeLazy("FolderItem", "onExpandCollapse", "folderButtonSize");
 
 const MAX_TREE_FILTER_DEPTH = 1000;
 let lastGuildId = null as string | null;
