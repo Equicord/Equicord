@@ -2052,8 +2052,8 @@
             "muteMessage":"Silenciar Mensagem (apenas para si por enquanto)",
             "sayOwnName":"Diga o próprio nome",
             "speed":"Velocidade do narrador",
-            "undeafenMessage":"Mensagem ao voltar a ouvir (apenas eu por enquanto)",
-            "unmuteMessage":"Mensagem ao ativar o microfone (apenas eu por enquanto)",
+            "undeafenMessage":"Mensagem ao voltar a ouvir (apenas para si por enquanto)",
+            "unmuteMessage":"Mensagem ao ativar o microfone (apenas para si por enquanto)",
             "volume":"Volume do narrador"
         },
         "speechSynthesisNotSupported":"SpeechSynthesis não suportado ou nenhuma voz do Narrador encontrada. Portanto, este plugin não funcionará. Verifique minhas configurações para mais informações"
@@ -2076,7 +2076,7 @@
         "copyRawContent":"Copiar conteúdo Raw",
         "copyRawLeftViewRawRight":"Copiar Raw (clique com o botão esquerdo) / Ver Raw (clique com o botão direito)",
         "data":"Dados",
-        "dataCopied":"Dados {type} copiados para a área de transferência!",
+        "dataCopied":"Dados de {type} copiados para a área de transferência!",
         "description":"Copie e visualize o conteúdo/dados Raw de qualquer mensagem, canal ou servidor",
         "settings":{
             "clickMethodDescription":"Altere o botão para visualizar o conteúdo/dados raw de qualquer mensagem.",
