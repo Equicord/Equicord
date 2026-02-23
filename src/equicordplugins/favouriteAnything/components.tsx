@@ -6,16 +6,10 @@
 
 import { BaseText } from "@components/BaseText";
 import { Button } from "@components/Button";
-import { Channel, Embed, Message, MessageAttachment, ScrollerBaseRef, TextInput } from "@vencord/discord-types";
+import { LazyComponentWrapper } from "@utils/lazyReact";
+import { Channel, Message, MessageAttachment, ScrollerBaseRef } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
-import {
-    findByCode,
-    findByProps,
-    findComponentByCode,
-    findComponentByCodeLazy,
-    findCssClassesLazy,
-    proxyLazyWebpack
-} from "@webpack";
+import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, proxyLazyWebpack } from "@webpack";
 import {
     ChannelStore,
     ExpressionPickerStore,
@@ -31,18 +25,11 @@ import {
     useState,
     useStateFromStores
 } from "@webpack/common";
-import {
-    Component,
-    ComponentClass,
-    ComponentProps,
-    ComponentPropsWithRef,
-    Key,
-    ReactNode,
-} from "react";
+import { ReactNode } from "react";
 
 import { AttachmentContext, EmbedContext, EmbedMosaicContext } from ".";
 import { SignedUrlsStore } from "./stores";
-import { AttachmentItem, CustomItemFormat, FavouriteItem, FavouriteItemFormat } from "./types";
+import { AttachmentItem, AttachmentsComponentProps, CustomItemFormat, FavoriteButtonProps, FavouriteItemFormat, FilePickerItemProps, FilePickerProps, ManaSearchBarProps, MessageComponentClass } from "./types";
 import {
     cl,
     defs,
@@ -54,42 +41,18 @@ import {
     useResizeObserver
 } from "./utils";
 
-interface FavoriteButtonProps extends Omit<FavouriteItem, "order"> {
-    url: string;
-    gifSrc?: string;
-    className?: string;
-}
+const MessageComponent = findComponentByCodeLazy("this.renderAttachments") as LazyComponentWrapper<MessageComponentClass>;
 
+const ManaSearchBar = findComponentByCodeLazy<ManaSearchBarProps>("#{intl::SEARCH}),ref");
 const FavoriteButton = findComponentByCodeLazy<FavoriteButtonProps>("#{intl::GIF_TOOLTIP_ADD_TO_FAVORITES}");
-
 const SendIcon = findComponentByCodeLazy("M6.6 10.02 14 11.4a.6.6");
 
-// Partial type, renderAttachments only uses a few props
-interface MessageComponentProps {
-    message: Message;
-    channel: Channel;
-    gifAutoPlay?: boolean;
-    canDeleteAttachments?: boolean;
-    shouldHideMediaOptions?: boolean;
-    inlineAttachmentMedia?: boolean;
-}
+const DmChannel: Channel & { new(base?: Partial<Channel>): Channel; } = findByPropsLazy("fromServer", "sortRecipients");
+const MessageClass: Message & { new(base?: Partial<Message>): Message; } = findByCodeLazy(";mentionChannels;mentionGames;");
 
-export interface MessageComponentClass extends Omit<ComponentClass<MessageComponentProps>, "new"> {
-    new(props: MessageComponentProps): Component<MessageComponentProps> & {
-        renderAttachments(message: Partial<Message>): ReactNode;
-    };
-}
-
-interface AttachmentsComponentProps {
-    attachment: MessageAttachment;
-}
+const Classes = findCssClassesLazy("gifFavoriteButton", "ctaButtonContainer");
 
 export const AttachmentPreview = proxyLazyWebpack(() => {
-    const MessageComponent = findComponentByCode("this.renderAttachments") as MessageComponentClass;
-
-    const DmChannel: Channel & { new(base?: Partial<Channel>): Channel; } = findByProps("fromServer", "sortRecipients");
-    const MessageClass: Message & { new(base?: Partial<Message>): Message; } = findByCode(";mentionChannels;mentionGames;");
-
     class MessageAttachmentsComponent extends MessageComponent {
         render(): ReactNode {
             return this.renderAttachments(this.props.message);
@@ -115,21 +78,6 @@ export const AttachmentPreview = proxyLazyWebpack(() => {
         );
     };
 });
-
-interface ManaSearchBarProps extends Pick<
-    ComponentPropsWithRef<TextInput>,
-    "autoFocus" | "placeholder" | "onKeyDown" | "disabled" | "onChange" | "onBlur" | "onFocus" | "autoComplete" | "ref"
-> {
-    query?: string;
-    onClear?: () => void;
-    inputProps?: ComponentProps<TextInput>;
-}
-
-export const ManaSearchBar = findComponentByCodeLazy<ManaSearchBarProps>("#{intl::SEARCH}),ref");
-
-interface FilePickerProps {
-    onSelectItem: (item: { url: string; }) => void;
-}
 
 export function FilePicker({ onSelectItem }: FilePickerProps) {
     const listRef = useRef<ScrollerBaseRef>(null);
@@ -235,15 +183,6 @@ function Demo() {
     );
 }
 
-interface FilePickerItemProps {
-    url: string;
-    file: MessageAttachment;
-    channel: Channel | null;
-    reducePadding?: boolean;
-    onResize: (key: Key, height: number) => void;
-    onSubmit: (url: string) => void;
-}
-
 export function FilePickerItem({ url, file, channel, onResize, onSubmit, reducePadding }: FilePickerItemProps) {
     const [isFetching, setIsFetching] = useState(false);
 
@@ -294,8 +233,6 @@ export function FilePickerItem({ url, file, channel, onResize, onSubmit, reduceP
         </div>
     );
 }
-
-const Classes = findCssClassesLazy("gifFavoriteButton", "ctaButtonContainer");
 
 export function EmbedAccessory() {
     const embed = React.useContext(EmbedContext);
@@ -377,8 +314,4 @@ export function AttachmentAccessory() {
     }, [attachment]);
 
     return props && <FavoriteButton {...props} className={cl("attachment-accessory")} />;
-}
-
-export interface EmbedComponent extends Component<{ embed: Embed; }> {
-    __render: () => ReactNode;
 }
