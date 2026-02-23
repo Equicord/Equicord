@@ -40,7 +40,7 @@ export default definePlugin({
                 {
                     // Specify the index for individual items in embed.images
                     match: /\.images\.map\((\i)=>(this.renderImage\(\{[^}]{50,100}\}\))\)/,
-                    replace: ".images.map(($1,__index)=>$self.renderEmbedMosaicItem($2,__index))"
+                    replace: ".images.map(($1,index)=>$self.renderEmbedMosaicItem($2,index))"
                 }
             ]
         },

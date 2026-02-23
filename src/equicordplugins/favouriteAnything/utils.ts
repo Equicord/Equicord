@@ -19,6 +19,8 @@ import { JsonValue } from "type-fest";
 import { base64ToUint8Array, uint8ArrayToBase64 } from "./polyfills";
 import { CustomItemDef, CustomItemFormat, FavouriteItem, FavouriteItemFormat, ItemsDef, UnfurledEmbedsResponse } from "./types";
 
+const Native = VencordNative.pluginHelpers.FavouriteAnything as PluginNative<typeof import("./native")>;
+
 export const cl = classNameFactory("vc-favouriteAnything-");
 
 const defineItem = <const A, const B extends JsonValue>(item: CustomItemDef<A, B>) => item;
@@ -85,10 +87,8 @@ export const defs = defineItems({
     // This could be expanded in the future with other item types (e.g. voice messages)
 });
 
-// TODO: replace with something nicer looking idk
-const fallbackThumbnail = new URL(
-    "https://images-ext-1.discordapp.net/external/S4K7rlM4DWPFINDZKKmlrGGi3ULoMG4R6rcwRlQz8LU/%3Ftext%3Dinvalid/https/placehold.jp/42/444/fff/600x400.png"
-);
+// TODO: make thumbnails prettier
+const fallbackThumbnail = new URL("https://images-ext-1.discordapp.net/external/pGTJg3YdSHpyGTltH4vZUKEyQoNzf5mtqbSJs7I4ebc/https/equicord.org/assets/plugins/favoriteAnything/invalid.png");
 
 export async function getThumbnailUrl(data: string, width: number, height: number): Promise<URL | null> {
     try {
@@ -112,7 +112,6 @@ export async function getThumbnailUrl(data: string, width: number, height: numbe
     }
 }
 
-const Native = VencordNative.pluginHelpers.FavouriteAnything as PluginNative<typeof import("./native")>;
 async function fetchAttachment(attachment: MessageAttachment): Promise<File> {
     if (!IS_WEB)
         return Native.fetchAttachment(attachment).then(
