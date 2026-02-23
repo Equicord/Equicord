@@ -17,6 +17,20 @@ import { Channel } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
 import { FluxDispatcher, Menu, React, Tooltip, UserStore } from "@webpack/common";
 
+interface CallUpdate {
+    ringing: string[];
+    ongoingRings: Record<number, string>;
+    messageId: string;
+    region: string;
+}
+
+const args: CallUpdate = {
+    ringing: [],
+    ongoingRings: {},
+    messageId: "",
+    region: "",
+};
+
 const ignoredChannelIds = new Set<string>();
 const cl = classNameFactory("vc-ignore-calls-");
 const Deafen = findComponentByCodeLazy("0-1.02-.1H3.05a9");
@@ -74,18 +88,6 @@ const settings = definePluginSettings({
     },
 });
 
-const args: {
-    ringing: string[];
-    ongoingRings: string[];
-    messageId: string;
-    region: string;
-} = {
-    ringing: [],
-    ongoingRings: [],
-    messageId: "",
-    region: "",
-};
-
 export default definePlugin({
     name: "IgnoreCalls",
     description: "Allows you to ignore calls from specific users or dm groups.",
@@ -106,8 +108,8 @@ export default definePlugin({
     },
     flux: {
         async CALL_UPDATE({ ringing, ongoingRings, messageId, region }) {
-            args.ringing = Array.isArray(ringing) ? ringing : [];
-            args.ongoingRings = Array.isArray(ongoingRings) ? ongoingRings : [];
+            args.ringing = ringing || [];
+            args.ongoingRings = ongoingRings || {};
             args.messageId = messageId;
             args.region = region;
         }
@@ -120,7 +122,7 @@ export default definePlugin({
                 type: "CALL_UPDATE",
                 channelId: channel.id,
                 ringing: args.ringing.filter((id: string) => id !== currentUserId),
-                ongoingRings: args.ongoingRings.filter((id: string) => id !== currentUserId),
+                ongoingRings: args.ongoingRings,
                 messageId: args.messageId,
                 region: args.region
             });
@@ -141,7 +143,7 @@ export default definePlugin({
                                     type: "CALL_UPDATE",
                                     channelId: channel.id,
                                     ringing: args.ringing.filter((id: string) => id !== currentUserId),
-                                    ongoingRings: args.ongoingRings.filter((id: string) => id !== currentUserId),
+                                    ongoingRings: args.ongoingRings,
                                     messageId: args.messageId,
                                     region: args.region
                                 });

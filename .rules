@@ -187,7 +187,7 @@ From `@webpack/common`. **NEVER** hardcode `cdn.discordapp.com` URLs.
 
 #### Utils
 
-`Constants` (`Constants.Endpoints`), `SnowflakeUtils`, `Parser`, `PermissionsBits`, `moment`, `lodash`, `ColorUtils`, `ImageUtils`, `DateUtils`, `UsernameUtils`, `DisplayProfileUtils` from `@webpack/common`
+`Constants` (`Constants.Endpoints`), `SnowflakeUtils`, `Parser`, `PermissionsBits`, `moment`, `lodash`, `ColorUtils`, `ImageUtils`, `DateUtils`, `UsernameUtils`, `DisplayProfileUtils`, `URLUtils`, `Humanize`, `EmojiUtils` from `@webpack/common`
 
 #### Components
 

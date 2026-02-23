@@ -139,16 +139,17 @@ ipcMain.on(IpcEvents.GET_MONACO_THEME, e => {
     e.returnValue = nativeTheme.shouldUseDarkColors ? "vs-dark" : "vs-light";
 });
 
+let monacoWin: BrowserWindow | null = null;
+
 ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
-    const title = "Equicord QuickCSS Editor";
-    const existingWindow = BrowserWindow.getAllWindows().find(w => w.title === title);
-    if (existingWindow && !existingWindow.isDestroyed()) {
-        existingWindow.focus();
+    if (monacoWin && !monacoWin.isDestroyed()) {
+        monacoWin.show();
+        monacoWin.focus();
         return;
     }
 
-    const win = new BrowserWindow({
-        title,
+    monacoWin = new BrowserWindow({
+        title: "Equicord QuickCSS Editor",
         autoHideMenuBar: true,
         darkTheme: true,
         alwaysOnTop: true,
@@ -160,9 +161,28 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
         }
     });
 
-    makeLinksOpenExternally(win);
+    monacoWin.once("closed", () => { monacoWin = null; });
 
-    await win.loadURL(`data:text/html;base64,${monacoHtml}`);
+    makeLinksOpenExternally(monacoWin);
+
+    await monacoWin.loadURL(`data:text/html;base64,${monacoHtml}`);
+});
+
+app.on("before-quit", async (event) => {
+    if (monacoWin && !monacoWin.isDestroyed() && !monacoWin.isVisible()) {
+        const result = await dialog.showMessageBox({
+            type: "question",
+            buttons: ["Cancel", "Close Anyway"],
+            defaultId: 0,
+            title: "QuickCSS Editor Open",
+            message: "QuickCSS editor is still open in the background.",
+            detail: "Do you want to close Discord anyway? This will also close the QuickCSS editor."
+        });
+
+        if (result.response === 1) {
+            app.exit();
+        }
+    }
 });
 
 app.on("before-quit", async (event) => {
