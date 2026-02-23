@@ -1224,6 +1224,11 @@
             "showDates":"Show dates on friend requests"
         }
     },
+    "startupTimings":{
+        "ui":{
+            "title":"Czas uruchamiania"
+        }
+    },
     "tabs":{
         "settings":"Equicord Settings"
     },
