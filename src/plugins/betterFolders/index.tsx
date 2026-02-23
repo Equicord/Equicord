@@ -472,11 +472,11 @@ export default definePlugin({
 
                 FluxDispatcher.wait(() => {
                     const expandedFolders = ExpandedGuildFolderStore.getExpandedFolders();
-                    const expandedId = String(data.folderId);
+                    const expandedId = data.folderId?.toString();
 
                     if (expandedFolders.size > 1) {
                         for (const id of expandedFolders) {
-                            const folderId = String(id);
+                            const folderId = id?.toString();
                             if (folderId === expandedId || areNestedRelated(folderId, expandedId)) continue;
                             FolderUtils.toggleGuildFolderExpand(id);
                         }
@@ -539,7 +539,7 @@ export default definePlugin({
                 const node = stack.pop();
                 if (!node) continue;
                 if (node.type === "guild") {
-                    nestedGuildIds.add(String(node.id));
+                    nestedGuildIds.add(node.id?.toString());
                     continue;
                 }
                 if (node.type === "folder" && Array.isArray(node.children)) {
@@ -577,11 +577,11 @@ export default definePlugin({
             if (typeof tree?.getNode !== "function") {
                 return originalChildren;
             }
-            const existingIds = new Set(originalChildren.map(child => String(child?.id)));
+            const existingIds = new Set(originalChildren.map(child => child?.id?.toString()));
             const childFolderNodes: GuildTreeNode[] = [];
 
             for (const id of childIds) {
-                if (existingIds.has(String(id))) continue;
+                if (existingIds.has(id?.toString())) continue;
                 const node = tree.getNode(id);
                 if (node) {
                     childFolderNodes.push({
@@ -647,14 +647,14 @@ export default definePlugin({
         if (dragItem.type !== "folder") return false;
 
         if (!isCombine) {
-            unnestFolder(String(dragItem.nodeId));
+            unnestFolder(dragItem.nodeId?.toString());
             return false;
         }
 
         if (targetNode.type !== "folder") return false;
 
-        const childId = String(dragItem.nodeId);
-        const parentId = String(targetNode.id);
+        const childId = dragItem.nodeId?.toString();
+        const parentId = targetNode.id?.toString();
 
         try {
             nestFolder(childId, parentId);
@@ -681,7 +681,7 @@ export default definePlugin({
         if (dragItem.nodeId === targetNode.id) return false;
 
         if (dragItem.type === "folder" && targetNode.type === "folder") {
-            if (isCombine) return !hasParentInChain(String(targetNode.id), String(dragItem.nodeId));
+            if (isCombine) return !hasParentInChain(targetNode.id?.toString(), dragItem.nodeId?.toString());
             return targetNode.parentId == null;
         }
 
@@ -694,7 +694,7 @@ export default definePlugin({
     wrapGuildNodeComponent(node: GuildTreeNode, originalComponent: () => ReactNode, isBetterFolders: boolean, expandedFolderIds?: Set<string | number>) {
         if (node.type === "folder") {
             const mappedParentId = getParentFolderId(node.id);
-            if (mappedParentId != null && (String(node.parentId) !== mappedParentId || node.isBetterFoldersNested !== true)) {
+            if (mappedParentId != null && (node.parentId?.toString() !== mappedParentId || node.isBetterFoldersNested !== true)) {
                 return (
                     <div style={{ display: "none" }}>
                         {originalComponent()}
