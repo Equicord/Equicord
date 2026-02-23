@@ -74,9 +74,20 @@ function closeFolders() {
 }
 
 // Nuckyz: Unsure if this should be a general utility or not
-function filterTreeWithTargetNode(children: any, predicate: (node: any) => boolean) {
+function filterTreeWithTargetNode(children: any, predicate: (node: any) => boolean, visited = new WeakSet<object>(), depth = 0) {
     if (children == null) {
         return false;
+    }
+
+    if (depth > 1000) {
+        return false;
+    }
+
+    if (typeof children === "object") {
+        if (visited.has(children)) {
+            return false;
+        }
+        visited.add(children);
     }
 
     if (!Array.isArray(children)) {
@@ -84,12 +95,12 @@ function filterTreeWithTargetNode(children: any, predicate: (node: any) => boole
             return true;
         }
 
-        return filterTreeWithTargetNode(children.props?.children, predicate);
+        return filterTreeWithTargetNode(children.props?.children, predicate, visited, depth + 1);
     }
 
     let childIsTargetChild = false;
     for (let i = 0; i < children.length; i++) {
-        const shouldKeep = filterTreeWithTargetNode(children[i], predicate);
+        const shouldKeep = filterTreeWithTargetNode(children[i], predicate, visited, depth + 1);
         if (shouldKeep) {
             childIsTargetChild = true;
             continue;
