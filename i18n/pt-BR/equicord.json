@@ -648,7 +648,7 @@
         "description":"Siga um amigo no chat de voz.",
         "info":"Este plugin é usado para seguir um ou mais amigos em chats de voz.",
         "settings":{
-            "leaveWhenUserLeaves":"Saia do canal de voz quando o usuário sair. (Isso pode fazer com que você às vezes entre em um loop infinito de saída/entrada)",
+            "leaveWhenUserLeaves":"Sair do canal de voz quando o usuário sair. (Isso pode fazer com que você às vezes entre em um loop infinito de saída/entrada)",
             "onlyWhenInVoice":"Siga o usuário apenas quando você estiver em um canal de voz"
         },
         "ui":{
@@ -674,7 +674,7 @@
             "hash":"-#"
         },
         "settings":{
-            "forwardPreface":"O que deve ser encaminhado deve ser prefaciado com"
+            "forwardPreface":"O que encaminhado de deve conter como prefixo"
         }
     },
     "frequentQuickSwitcher":{
@@ -732,7 +732,7 @@
             },
             "blooming":{
                 "description":"Essa amizade está evoluindo! (1 mês)",
-                "title":"Em flor"
+                "title":"Florescendo"
             },
             "burning":{
                 "description":"Essa amizade está voando! (3 meses)",
@@ -760,8 +760,8 @@
         "description":"Faz com que os avatares ocupem todo o bloco do canal de voz"
     },
     "gensokyoRadioRPC":{
-        "description":"Presença rica em Discord para a Rádio Gensokyo!",
-        "info":"Presença rica em Discord para a Rádio Gensokyo!",
+        "description":"Rich Presence do Discord para a Gensokyo Radio!",
+        "info":"Rich Presence do Discord para a Gensokyo Radio!",
         "settings":{
             "refreshInterval":"O intervalo entre atualizações de atividades (segundos)"
         }
@@ -772,7 +772,7 @@
             "exemptedChannels":"Lista de IDs de canal separada por vírgulas para isentar do Ghosted (clique com o botão direito em um DM para copiar o ID)",
             "ignoreBots":"Ignorar DMs de bots",
             "ignoreGroupDms":"Excluir todos os DMs do grupo do fantasma",
-            "showDmIcons":"Mostrar ícones fantasmas ao lado de DMs individuais",
+            "showDmIcons":"Mostrar ícones fantasma ao lado de DMs individuais",
             "showIndicator":"Mostrar o contador de fantasmas no topo da lista de servidores"
         },
         "ui":{
