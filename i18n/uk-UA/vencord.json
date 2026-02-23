@@ -1294,6 +1294,12 @@
         },
         "description":"Діліться вашим поточним треком, альбомом чи виконавцем Spotify за допомогою слеш-команд (/track, /album, /artist)"
     },
+    "startupTimings":{
+        "description":"Додає Логи Запуску до меню Налаштувань",
+        "ui":{
+            "title":"Логи Запуску"
+        }
+    },
     "stickerPaste":{
         "description":"Робить так щоб вибір стікера у вікні вибору, вставляв його у текстове поле замість миттєвого надсилання."
     },
@@ -1382,7 +1388,12 @@
     "userMessagesPronouns":{
         "description":"Додає займенники до повідомлень користувачів у чаті",
         "settings":{
-            "pronounsFormat":"Формат відображення займенників у чаті"
+            "pronounsFormat":"Формат відображення займенників у чаті",
+            "pronounsFormatOptions":{
+                "capitalized":"У верхньому регістрі",
+                "lowercase":"У нижньому регістрі"
+            },
+            "showSelf":"Показувати власні займенники"
         }
     },
     "userSettingsAPI":{
@@ -1407,6 +1418,15 @@
             "usrbgBanner":"USRBG banner",
             "voiceBackground":"Use USRBG banners as voice chat backgrounds"
         }
+    },
+    "validReply":{
+        "description":"Виправляє «Не вдається завантажити повідомлення» при наведенні на відповідь"
+    },
+    "validUser":{
+        "description":"Виправляє відображення згадок як «@unknown-user» при наведення на неї"
+    },
+    "vcDoubleClick":{
+        "description":"Прибрати крамницю над списком ПП"
     },
     "vcNarrator":{
         "customiseMessages":"You can customise the spoken messages below. You can disable specific messages by setting them to nothing",
@@ -1486,6 +1506,12 @@
         "send":"Надіслати голосове повідомлення",
         "sending":"Now sending voice message... Please be patient",
         "uploadFile":"Upload File"
+    },
+    "volumeBooster":{
+        "description":"Дозволяє встановити гучність користувача та стріму вище за стандартний максимум",
+        "settings":{
+            "multiplier":"Множник Гучності"
+        }
     },
     "whoReacted":{
         "settings":{
