@@ -10,36 +10,13 @@ import { LazyComponentWrapper } from "@utils/lazyReact";
 import { Channel, Message, MessageAttachment, ScrollerBaseRef } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, proxyLazyWebpack } from "@webpack";
-import {
-    ChannelStore,
-    ExpressionPickerStore,
-    ListScrollerThin,
-    lodash,
-    PermissionsBits,
-    PermissionStore,
-    React,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-    useStateFromStores
-} from "@webpack/common";
+import { ChannelStore, ExpressionPickerStore, ListScrollerThin, lodash, PermissionsBits, PermissionStore, React, useCallback, useEffect, useMemo, useRef, useState, useStateFromStores } from "@webpack/common";
 import { ReactNode } from "react";
 
 import { AttachmentContext, EmbedContext, EmbedMosaicContext } from ".";
 import { SignedUrlsStore } from "./stores";
 import { AttachmentItem, AttachmentsComponentProps, CustomItemFormat, FavoriteButtonProps, FavouriteItemFormat, FilePickerItemProps, FilePickerProps, ManaSearchBarProps, MessageComponentClass } from "./types";
-import {
-    cl,
-    defs,
-    hasPermission,
-    ImageUtils,
-    sendAttachment,
-    useFavourites,
-    useListScroller,
-    useResizeObserver
-} from "./utils";
+import { cl, defs, hasPermission, ImageUtils, sendAttachment, useFavourites, useListScroller, useResizeObserver } from "./utils";
 
 const MessageComponent = findComponentByCodeLazy("this.renderAttachments") as LazyComponentWrapper<MessageComponentClass>;
 

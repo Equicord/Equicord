@@ -16,14 +16,7 @@ import { ComponentType, ReactNode } from "react";
 
 import { AttachmentAccessory, EmbedAccessory, FilePicker } from "./components";
 import { SignedUrlsStore } from "./stores";
-import {
-    AttachmentItem,
-    EmbedComponent,
-    ExpressionPickerTabProps,
-    ExpressionPickerView,
-    FavouriteItem,
-    FavouriteItemFormat,
-} from "./types";
+import { AttachmentItem, EmbedComponent, ExpressionPickerTabProps, ExpressionPickerView, FavouriteItem, FavouriteItemFormat } from "./types";
 import { getThumbnailUrl } from "./utils";
 
 export const EmbedContext = proxyLazyWebpack(() => React.createContext<null | Embed>(null));

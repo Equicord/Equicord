@@ -11,39 +11,13 @@ import { useForceUpdater } from "@utils/react";
 import { PluginNative } from "@utils/types";
 import { Channel, MessageAttachment } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
-import {
-    Constants,
-    DraftType,
-    FluxDispatcher,
-    MessageActions,
-    PendingReplyStore,
-    PermissionStore,
-    RestAPI,
-    Toasts,
-    UploadAttachmentStore,
-    UploadHandler,
-    UploadManager,
-    useCallback,
-    useEffect,
-    useRef,
-    UserSettingsActionCreators,
-    UserSettingsProtoStore,
-    useState,
-    useStateFromStores
-} from "@webpack/common";
+import { Constants, DraftType, FluxDispatcher, MessageActions, PendingReplyStore, PermissionStore, RestAPI, Toasts, UploadAttachmentStore, UploadHandler, UploadManager, useCallback, useEffect, useRef, UserSettingsActionCreators, UserSettingsProtoStore, useState, useStateFromStores } from "@webpack/common";
 import { deflateSync, inflateSync } from "fflate";
 import { Key, RefObject } from "react";
 import { JsonValue } from "type-fest";
 
 import { base64ToUint8Array, uint8ArrayToBase64 } from "./polyfills";
-import {
-    CustomItemDef,
-    CustomItemFormat,
-    FavouriteItem,
-    FavouriteItemFormat,
-    ItemsDef,
-    UnfurledEmbedsResponse
-} from "./types";
+import { CustomItemDef, CustomItemFormat, FavouriteItem, FavouriteItemFormat, ItemsDef, UnfurledEmbedsResponse } from "./types";
 
 export const cl = classNameFactory("vc-favouriteAnything-");
 
