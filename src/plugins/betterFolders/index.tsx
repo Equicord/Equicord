@@ -370,20 +370,16 @@ export default definePlugin({
             find: ".FOLDER_ITEM_ANIMATION_DURATION),",
             replacement: [
                 {
-                    match: /mentionCount:(\i)=0,isMentionLowImportance:(\i),/,
-                    replace: "mentionCount:$1=$self.getFolderMentionCountWithNested(arguments[0]),isMentionLowImportance:$2,"
-                },
-                {
                     match: /mentionCount:(\i),isMentionLowImportance:(\i)/,
                     replace: "mentionCount:$self.getFolderMentionCountWithNested(arguments[0]),isMentionLowImportance:$self.getFolderIsMentionLowImportanceWithNested(arguments[0],$2)"
                 },
                 {
-                    match: /\{id:(\i),name:(\i),children:(\i)\}=(\i),/,
-                    replace: "{id:$1,name:$2,children:$3}=$self.getFolderNodeForRender($4),"
+                    match: /(\{id:\i,name:\i,children:\i\})=(\i),/,
+                    replace: "$1=$self.getFolderNodeForRender($2),"
                 },
                 {
-                    match: /className:(\i\.\i),style:\{height:((\i)\.height\.to\((\i)=>\4\*(\i)\))\},(?="aria-label":\i\.name)/,
-                    replace: "className:$self.getFolderGuildsListClassName(arguments[0],$1),style:{height:$2},"
+                    match: /(?<=gap:"xs",className:)(\i\.\i)/,
+                    replace: "$self.getFolderGuildsListClassName(arguments[0],$1)"
                 }
             ]
         },
@@ -418,7 +414,7 @@ export default definePlugin({
             }
         },
         {
-            find: "[GuildDropTarget] Tried using a root node as a drop target.",
+            find: "[GuildDropTarget]",
             all: true,
             replacement: [
                 {
@@ -426,24 +422,24 @@ export default definePlugin({
                     replace: "$1=$self.shouldShowCombineTarget($2,$3)"
                 },
                 {
-                    match: /canDrop:(\i)=>(\i)\.nodeId!==(\i)\.id&&\(!(\i)\|\|\2\.type!==\i\.\i\.FOLDER\|\|\3\.type!==\i\.\i\.FOLDER\)&&\(\2\.type!==\i\.\i\.FOLDER\|\|null==\3\.parentId\)/,
-                    replace: "canDrop:$1=>$self.canDropOnFolder($1,$3,$4)"
+                    match: /canDrop:\i=>\i\.nodeId.{0,100}==\i\.parentId\)/,
+                    replace: "canDrop:e=>$self.canDropOnFolder(e,arguments[1],arguments[3])"
                 },
                 {
-                    match: /drop\((\i)\)\{let\{nodeId:(\i)\}=\1;(\i)&&(\i)\.type!==(\i)\.(\i)\.FOLDER&&(\i)\.default\.track\((\i)\.(\i)\.(\i)\),(\i)\.(\i)\.moveById\(\2,\4\.id,(\i),\3\)/,
-                    replace: "drop($1){if($self.handleFolderDrop($1,$4,$13,$3))return;let{nodeId:$2}=$1;$3&&$4.type!==$5.$6.FOLDER&&$7.default.track($8.$9.$10),$11.$12.moveById($2,$4.id,$13,$3)"
+                    match: /drop\(\i\)\{(?=.{0,25}!==\i\.\i\.FOLDER)/,
+                    replace: "$&if($self.handleFolderDrop(arguments[0],arguments[1],arguments[2],arguments[3]))return;"
                 },
                 {
-                    match: /\(0,(\i)\.H\)\(\(\)=>(\i)\(\[\i\.\i\.GUILD\],(\i),!0,!0\)\)/,
-                    replace: "(0,$1.H)(()=>$2([...$self.getFolderAcceptTypes($3)],$3,!0,!0))"
+                    match: /\[\i\.\i\.GUILD\](?=.{0,250}#{intl::DND_DROP_COMBINE})/,
+                    replace: "[...$self.getFolderAcceptTypes(arguments[0]?.targetNode)]"
                 }
             ]
         },
         {
-            find: "renderChildNode:function",
+            find: ".hasFetchedRequestToJoinGuilds)",
             replacement: {
-                match: /renderChildNode:function\((\i),(\i),(\i)\)\{return \i\.type!==\i\.\i\.GUILD\?null:\(0,\i\.jsx\)\((\i\.\i),\{guildNode:\i,"aria-setsize":\i,"aria-posinset":\i\},\i\.id\)\}/,
-                replace: "renderChildNode:function($1,$2,$3){return $self.renderFolderChild($1,$2,$3)||(0,i.jsx)($4,{guildNode:$1,\"aria-setsize\":$3,\"aria-posinset\":$2},$1.id)}"
+                match: /return \i\.type!==\i\.\i\.GUILD/,
+                replace: "return $self.renderFolderChild(arguments[0],arguments[1],arguments[2])"
             }
         }
     ],
