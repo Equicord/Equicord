@@ -17,9 +17,23 @@ import { Channel } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
 import { FluxDispatcher, Menu, React, Tooltip, UserStore } from "@webpack/common";
 
+interface CallUpdate {
+    ringing: string[];
+    ongoingRings: Record<number, string>;
+    messageId: string;
+    region: string;
+}
+
 const ignoredChannelIds = new Set<string>();
 const cl = classNameFactory("vc-ignore-calls-");
 const Deafen = findComponentByCodeLazy("0-1.02-.1H3.05a9");
+
+const args: CallUpdate = {
+    ringing: [],
+    ongoingRings: {},
+    messageId: "",
+    region: "",
+};
 
 const ContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { channel: Channel; }) => {
     if (!channel || (!channel.isDM() && !channel.isGroupDM())) return;
@@ -73,18 +87,6 @@ const settings = definePluginSettings({
         default: "",
     },
 });
-
-const args: {
-    ringing: string[];
-    ongoingRings: Record<number, string>;
-    messageId: string;
-    region: string;
-} = {
-    ringing: [],
-    ongoingRings: {},
-    messageId: "",
-    region: "",
-};
 
 export default definePlugin({
     name: "IgnoreCalls",
