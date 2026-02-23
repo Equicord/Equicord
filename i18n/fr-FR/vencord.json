@@ -1350,7 +1350,7 @@
     "startupTimings":{
         "description":"Ajoute les délais de démarrage dans le menu des Paramètres",
         "ui":{
-            "title":"Délais de démarrage"
+            "title":"Heure du démarrage"
         }
     },
     "stickerPaste":{
