@@ -85,9 +85,7 @@ function filterTreeWithTargetNode(children: any, predicate: (node: any) => boole
     }
 
     if (typeof children === "object") {
-        if (visited.has(children)) {
-            return false;
-        }
+        if (visited.has(children)) return false;
         visited.add(children);
     }
 
