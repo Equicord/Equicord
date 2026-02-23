@@ -1306,6 +1306,11 @@
             "noSpotifyAutoPause":"Automatisches Pausieren von Spotify deaktivieren"
         }
     },
+    "startupTimings":{
+        "ui":{
+            "title":"Start-Timing"
+        }
+    },
     "tabs":{
         "settings":"Equicord Einstellungen"
     },
