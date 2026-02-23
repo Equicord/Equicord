@@ -76,7 +76,7 @@ const settings = definePluginSettings({
 
 const args: {
     ringing: string[];
-    ongoingRings: Record<string, unknown>;
+    ongoingRings: Record<number, string>;
     messageId: string;
     region: string;
 } = {
@@ -106,8 +106,8 @@ export default definePlugin({
     },
     flux: {
         async CALL_UPDATE({ ringing, ongoingRings, messageId, region }) {
-            args.ringing = Array.isArray(ringing) ? ringing : [];
-            args.ongoingRings = ongoingRings && typeof ongoingRings === "object" ? ongoingRings : {};
+            args.ringing = ringing || [];
+            args.ongoingRings = ongoingRings || {};
             args.messageId = messageId;
             args.region = region;
         }
