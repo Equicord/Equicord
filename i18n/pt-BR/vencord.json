@@ -1894,7 +1894,7 @@
     "startupTimings":{
         "description":"Adiciona tempos de inicialização ao menu Configurações",
         "ui":{
-            "title":"Tempos de Inicialização"
+            "title":"Tempo de Inicialização"
         }
     },
     "stickerPaste":{
