@@ -9,7 +9,7 @@ import { Button } from "@components/Button";
 import { LazyComponentWrapper } from "@utils/lazyReact";
 import { Channel, Message, MessageAttachment, ScrollerBaseRef } from "@vencord/discord-types";
 import { ChannelType } from "@vencord/discord-types/enums";
-import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy, findCssClassesLazy, proxyLazyWebpack } from "@webpack";
+import { findByCodeLazy, findByPropsLazy, findComponentByCode, findComponentByCodeLazy, findCssClassesLazy, proxyLazyWebpack } from "@webpack";
 import { ChannelStore, ExpressionPickerStore, ListScrollerThin, lodash, PermissionsBits, PermissionStore, React, useCallback, useEffect, useMemo, useRef, useState, useStateFromStores } from "@webpack/common";
 import { ReactNode } from "react";
 
@@ -17,8 +17,6 @@ import { AttachmentContext, EmbedContext, EmbedMosaicContext } from ".";
 import { SignedUrlsStore } from "./stores";
 import { AttachmentItem, AttachmentsComponentProps, CustomItemFormat, FavoriteButtonProps, FavouriteItemFormat, FilePickerItemProps, FilePickerProps, ManaSearchBarProps, MessageComponentClass } from "./types";
 import { cl, defs, hasPermission, ImageUtils, sendAttachment, useFavourites, useListScroller, useResizeObserver } from "./utils";
-
-const MessageComponent = findComponentByCodeLazy("this.renderAttachments") as LazyComponentWrapper<MessageComponentClass>;
 
 const ManaSearchBar = findComponentByCodeLazy<ManaSearchBarProps>("#{intl::SEARCH}),ref");
 const FavoriteButton = findComponentByCodeLazy<FavoriteButtonProps>("#{intl::GIF_TOOLTIP_ADD_TO_FAVORITES}");
@@ -30,6 +28,9 @@ const MessageClass: Message & { new(base?: Partial<Message>): Message; } = findB
 const Classes = findCssClassesLazy("gifFavoriteButton", "ctaButtonContainer");
 
 export const AttachmentPreview = proxyLazyWebpack(() => {
+    // findComponentByCodeLazy doesn't work properly with component classes, this must be kept within the lazy scope
+    const MessageComponent = findComponentByCode("this.renderAttachments") as LazyComponentWrapper<MessageComponentClass>;
+
     class MessageAttachmentsComponent extends MessageComponent {
         render(): ReactNode {
             return this.renderAttachments(this.props.message);
