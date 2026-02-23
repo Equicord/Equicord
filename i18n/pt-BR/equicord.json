@@ -773,7 +773,7 @@
             "ignoreBots":"Ignorar DMs de bots",
             "ignoreGroupDms":"Excluir todos os DMs do grupo do fantasma",
             "showDmIcons":"Mostrar ícones fantasmas ao lado de DMs individuais",
-            "showIndicator":"Mostrar o contador fantasma no topo da lista de servidores"
+            "showIndicator":"Mostrar o contador de fantasmas no topo da lista de servidores"
         },
         "ui":{
             "ghostedUsers":"Usuários fantasmas {count}",
