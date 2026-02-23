@@ -152,7 +152,6 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
         title: "Equicord QuickCSS Editor",
         autoHideMenuBar: true,
         darkTheme: true,
-        alwaysOnTop: true,
         webPreferences: {
             preload: join(__dirname, "preload.js"),
             contextIsolation: true,
