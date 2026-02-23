@@ -89,7 +89,7 @@
     "betterAudioPlayer":{
         "description":"Додає візуалізатори спектрографа та осцилографа до програвачів аудіовкладень",
         "settings":{
-            "forceMoveBelow":"Force the visualizer below the audio player",
+            "forceMoveBelow":"Змусити візуалайзер знизу аудіоплеєру",
             "oscilloscope":"Увімкнути візуалізатор осцилографа",
             "oscilloscopeColor":"Колір для осцилографа",
             "oscilloscopeSolidColor":"Використовувати суцільний колір для осцилографа",
@@ -98,25 +98,25 @@
             "spectrographSolidColor":"Використовувати суцільний колір для спектрографа"
         },
         "toasts":{
-            "invalidColor":"Invalid color format for {settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'"
+            "invalidColor":"Неправильний формат кольору для {settingKey}, переконайтесь що він у форматі 'R, G, B' чи '#RRGGBB'"
         }
     },
     "betterBanReasons":{
-        "description":"Create custom reasons to use in the Discord ban modal, and/or show a text input by default instead of the options.",
+        "description":"Створюйте власні причини для використання у модальному вікні бану Discord, і/або показуйте текстове поле за замовчуванням замість списку варіантів",
         "settings":{
-            "isTextInputDefault":"Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)",
-            "reasons":"Your custom reasons"
+            "isTextInputDefault":"Показує текстове поле за замовчуванням замість випадаючого списку. (Еквівалентно вибору опції «Інше»)",
+            "reasons":"Ваші власні причини"
         },
         "ui":{
-            "addAnotherReason":"Add another reason",
-            "reasonPlaceholder":"Reason",
-            "reasons":"Reasons"
+            "addAnotherReason":"Додати іншу причину",
+            "reasonPlaceholder":"Причина",
+            "reasons":"Причини"
         }
     },
     "betterBlockedUsers":{
-        "description":"Allows you to search in blocked users list and makes names selectable in settings.",
+        "description":"Дозволяє шукати у списку заблокованих користувачів та дає змогу виділяти їхні імена курсором у налаштуваннях.",
         "ui":{
-            "searchPlaceholder":"Search users..."
+            "searchPlaceholder":"Шукати користувачів..."
         }
     },
     "betterCommands":{
@@ -136,12 +136,12 @@
         }
     },
     "betterInvites":{
-        "description":"See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
+        "description":"Показує термін дії запрошень, профіль запрошувача та дозволяє вмикати режим попереднього перегляду серверу при натисканні на назву.",
         "ui":{
-            "expireTooltip":"This invite will {expiry}",
-            "expireWill":"expire",
-            "invitedYouTo":"{inviter} invited you to {guild}",
-            "notExpire":"not expire"
+            "expireTooltip":"Це запрошення {expiry}",
+            "expireWill":"втратить чинність",
+            "invitedYouTo":"{inviter} запрошує вас до {guild}",
+            "notExpire":"не втратить чинність"
         }
     },
     "betterPlusReacts":{
@@ -178,24 +178,24 @@
             "addStatusBypass":"Add Status Bypass",
             "removeStatusBypass":"Remove Status Bypass"
         },
-        "description":"Still get notifications from specific sources when in do not disturb mode. Right-click on users/channels/guilds to set them to bypass do not disturb mode.",
+        "description":"Все ще отримувати сповіщення від певних джерел, навіть у режимі «Не турбувати». Клацніть правою кнопкою миші на користувачів/каналів/серверах, щоб налаштувати їх на обхід режиму «Не турбувати».",
         "placeholder":{
             "separateWithCommas":"Separate with commas"
         },
         "settings":{
-            "allowOutsideOfDms":"Allow selected users to bypass status outside of DMs too (acts like a channel/guild bypass, but it's for all messages sent by the selected users)",
-            "channels":"Channels to let bypass (notified when pinged in that channel)",
-            "guilds":"Guilds to let bypass (notified when pinged anywhere in guild)",
-            "notificationSound":"Whether the notification sound should be played",
-            "respectSilentPings":"Respect silent pings (@silent / suppress notifications)",
-            "statusToUse":"Status to use for whitelist",
-            "users":"Users to let bypass (notified for all messages sent in DMs)"
+            "allowOutsideOfDms":"Дозволити вибраним користувачам обхід статусу також поза ПП (діє як обхід каналу/сервера, але тільки для повідомлень, надісланих цими користувачами)",
+            "channels":"Канали, яким дозволено обхід (сповіщення при @згадці вас у каналі)",
+            "guilds":"Сервери, яким дозволено обхід (сповіщення при @згадці вас будь-де на сервері)",
+            "notificationSound":"Відтворювати звук сповіщення",
+            "respectSilentPings":"Поважати тихі згадки (@silent / приглушені сповіщення)",
+            "statusToUse":"Статус для білого списку",
+            "users":"Користувачі, яким дозволено обхід (сповіщає при надсиланні усіх повідомлень в ПП)"
         },
         "statusOptions":{
-            "dnd":"Do Not Disturb",
-            "idle":"Idle",
-            "invisible":"Invisible",
-            "online":"Online"
+            "dnd":"Не турбувати",
+            "idle":"Відійшов",
+            "invisible":"Невидимий",
+            "online":"В мережі"
         }
     },
     "channelBadges":{
