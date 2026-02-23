@@ -1,6 +1,6 @@
 /*
  * Vencord, a Discord client mod
- * Copyright (c) 2025 nin0
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -14,10 +14,11 @@ import { proxyLazyWebpack } from "@webpack";
 import { React } from "@webpack/common";
 import { ComponentType, ReactNode } from "react";
 
-import { AttachmentAccessory, EmbedAccessory, EmbedComponent, FilePicker } from "./components";
+import { AttachmentAccessory, EmbedAccessory, FilePicker } from "./components";
 import { SignedUrlsStore } from "./stores";
 import {
     AttachmentItem,
+    EmbedComponent,
     ExpressionPickerTabProps,
     ExpressionPickerView,
     FavouriteItem,
