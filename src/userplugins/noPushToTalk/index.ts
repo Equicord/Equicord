@@ -16,8 +16,8 @@ export default definePlugin({
             find: "PermissionVADStore",
             replacement: [
                 {
-                    match: /(isGuildStageVoice\(\)\|\|)\i(?:\.\i)+\.can\(\i(?:\.\i)+\.USE_VAD,\i\)(\|\|\i\(\i\))/,
-                    replace: "$1true$2"
+                    match: /\|\|\i\.\i\.can\(\i\.\i\.USE_VAD,\i\)\|\|/,
+                    replace: "||true||"
                 },
                 {
                     match: /shouldShowWarning\(\)\{return!\i\}/,
