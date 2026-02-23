@@ -1894,7 +1894,7 @@
     "startupTimings":{
         "description":"Agrega tiempos de inicio al menú de configuración",
         "ui":{
-            "title":"Tiempos de inicio"
+            "title":"Tiempo de inicio"
         }
     },
     "stickerPaste":{
