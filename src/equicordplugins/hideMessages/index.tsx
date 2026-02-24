@@ -5,8 +5,9 @@
  */
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { IconComponent } from "@utils/types";
+import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { findExportedComponentLazy } from "@webpack";
 import { ChannelStore, FluxDispatcher, Menu } from "@webpack/common";
@@ -37,6 +38,14 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
     ));
 };
 
+const settings = definePluginSettings({
+    hidePopoverButton: {
+        type: OptionType.BOOLEAN,
+        description: "Hide the hide button in the message popover.",
+        default: false
+    }
+});
+
 export default definePlugin({
     name: "HideMessages",
     description: "A plugin to temporarily hide messages until you restart.",
@@ -44,9 +53,11 @@ export default definePlugin({
     contextMenus: {
         "message": messageCtxPatch
     },
+    settings,
     messagePopoverButton: {
         icon: EyeIcon,
         render(message: Message) {
+            if (settings.store.hidePopoverButton) return null;
             return {
                 label: "Hide",
                 icon: EyeIcon,
