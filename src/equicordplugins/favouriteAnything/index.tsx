@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./style.css";
-
 import { Devs, EquicordDevs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
 import definePlugin from "@utils/types";
@@ -16,6 +14,7 @@ import { ComponentType, ReactNode } from "react";
 
 import { AttachmentAccessory, EmbedAccessory, FilePicker } from "./components";
 import { SignedUrlsStore } from "./stores";
+import managedStyle from "./style.css?managed";
 import { AttachmentItem, EmbedComponent, ExpressionPickerTabProps, ExpressionPickerView, FavouriteItem, FavouriteItemFormat } from "./types";
 import { getThumbnailUrl } from "./utils";
 
@@ -27,6 +26,7 @@ export default definePlugin({
     name: "FavouriteAnything",
     description: "Favourite any image",
     authors: [Devs.nin0dev, EquicordDevs.davri],
+    managedStyle,
     patches: [
         // EMBEDS
         {
