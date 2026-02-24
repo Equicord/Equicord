@@ -21,7 +21,7 @@ export async function authorizeUser(triggerModal: boolean = true) {
             responseType="code"
             redirectUri="https://themes.equicord.org/api/user/auth"
             permissions={0n}
-            clientId="1257819493422465235"
+            clientId="1464006702125940736"
             cancelCompletesFlow={false}
             callback={async ({ location }: any) => {
                 if (!location) return logger.error("No redirect location returned");

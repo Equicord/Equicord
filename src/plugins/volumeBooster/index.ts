@@ -61,7 +61,7 @@ export default definePlugin({
         ].map(find => ({
             find,
             replacement: {
-                match: /(?<=maxValue:)\i\.\i\?(\d+?):(\d+?)(?=,)/,
+                match: /(?<=maxValue:)\i\.\i\?(\i\.\i|\d+?):(\i\.\i|\d+?)(?=,)/,
                 replace: (_, higherMaxVolume, minorMaxVolume) => `${higherMaxVolume}*$self.settings.store.multiplier`
             }
         })),

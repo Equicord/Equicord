@@ -223,7 +223,7 @@ export default definePlugin({
         },
         // Member list items (server member list)
         {
-            find: "MemberListItem",
+            find: ".MEMBER_USER})]",
             replacement: {
                 match: /(?<=useRawTargetDimensions.{0,250})onContextMenu:\i,(?=onMouseEnter:)/,
                 replace: "$&draggable:!0,onDragStart:e=>$self.onUserDragStart(e,{id:arguments[0].user?.id}),\"data-dragify-user\":!0,\"data-user-id\":arguments[0].user?.id,"

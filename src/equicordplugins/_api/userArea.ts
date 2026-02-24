@@ -19,7 +19,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: ".NITRO_PRIVACY_PERK_BETA_COACHMARK));",
+            find: ".WIDGETS_RTC_UPSELL_COACHMARK),",
             replacement: [
                 {
                     match: /(?<=className:(\i)\.\i,style:\i,)children:\[/,
