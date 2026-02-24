@@ -241,7 +241,7 @@
         "description":"API para adicionar botões à entrada de chat"
     },
     "clearURLs":{
-        "description":"Remove automaticamente elementos de rastreamento dos URLs que você envia"
+        "description":"Remove automaticamente elementos de rastreamento das URLs que você envia"
     },
     "clientTheme":{
         "contrastWarning":"A cor selecionada não contrastará bem com o texto",
@@ -441,7 +441,7 @@
         "dearrowByDefault":"Dearrow vídeos automaticamente",
         "dearrowedClickRestore":"Este embed foi desativado, clique para restaurar",
         "description":"Torna os títulos e miniaturas de embeds do YouTube menos sensacionalistas, desenvolvido pela Dearrow",
-        "everything":"Tudo (títulos e miniaturas)",
+        "everything":"Tudo (títulos e Thumbnails)",
         "hideButton":"Oculta o botão Dearrow dos embeds do YouTube",
         "replaceElementsDescription":"Escolha quais elementos do embed serão substituídos",
         "thumbnails":"Miniaturas",
@@ -493,7 +493,7 @@
         "holdOn":"Aguarde!",
         "moreInfo":"Mais informações",
         "settings":{
-            "toolbarDevMenu":"Altere o botão da barra de ferramentas Ajuda (?) (canto superior direito no chat) para o menu do desenvolvedor do Discord"
+            "toolbarDevMenu":"Alterar o botão de Ajuda (?) na barra de ferramentas (canto superior direito no chat) para o menu de desenvolvedor do Discord"
         },
         "warning1":"Os experimentos são recursos não lançados do Discord. Eles podem não funcionar, ou até mesmo quebrar seu cliente ou desativar sua conta.",
         "warning2":"Use experimentos apenas se você souber o que está fazendo. Equicord não se responsabiliza por quaisquer danos causados pela ativação de experimentos. Se você não sabe o que um experimento faz, ignore-o. Também não nos pergunte o que os experimentos fazem, provavelmente não sabemos.",
@@ -816,7 +816,7 @@
             "additionalQuotes":"Citações personalizadas adicionais para possivelmente aparecerem, separadas pelo delimitador abaixo",
             "additionalQuotesDelimiter":"Delimitador para citações adicionais",
             "enableDiscordPresetQuotes":"Ativar as citações predefinidas do Discord (incluindo citações de eventos, durante eventos)",
-            "enablePluginPresetQuotes":"Habilite as cotações predefinidas por este plugin",
+            "enablePluginPresetQuotes":"Habilite as citações predefinidas por este plugin",
             "replaceEvents":"Este plugin também deve ser aplicado durante eventos com citações temáticas especiais? (ex.: Halloween)"
         },
         "ui":{
@@ -880,7 +880,7 @@
         "description":"Personalize ações de clique nas mensagens.",
         "modifiers":{
             "alt":"Alt",
-            "backspace":"Retrocesso",
+            "backspace":"Backspace",
             "ctrl":"Ctrl",
             "delete":"Excluir",
             "none":"Nenhum",
@@ -1215,15 +1215,15 @@
         }
     },
     "pauseInvitesForever":{
-        "description":"Traz de volta a opção de pausar convites indefinidamente que o Discord removeu.",
+        "description":"Traz de volta a opção de pausar convites indefinidamente que o Discord idiota removeu.",
         "name":"PauseInvitesForever",
         "pauseIndefinitely":"Pausa indefinidamente."
     },
     "permissionFreeWill":{
         "description":"Desativa as restrições do lado do cliente para gerenciamento de permissões de canal.",
         "settings":{
-            "lockout":"Ignora a prevenção de bloqueio de permissões (Provavelmente você não quer fazer isso)",
-            "onboarding":"Ignora os requisitos de integração (Fazer esta alteração tornará seu servidor incompatível [...])"
+            "lockout":"Ignorar a prevenção de bloqueio de permissão (\"Certeza que você não quer fazer isso\")",
+            "onboarding":"Ignora os requisitos de onboarding (\"Fazer esta alteração tornará seu servidor incompatível [...]\")"
         }
     },
     "permissionsViewer":{
