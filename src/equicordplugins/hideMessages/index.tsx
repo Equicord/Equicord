@@ -107,6 +107,11 @@ function syncRecentHidden(entry: HiddenMessageEntry) {
     if (recentHiddenMessages.length > HISTORY_LIMIT) recentHiddenMessages.length = HISTORY_LIMIT;
 }
 
+function removeRecentHidden(id: string) {
+    const index = recentHiddenMessages.findIndex(m => m.id === id);
+    if (index !== -1) recentHiddenMessages.splice(index, 1);
+}
+
 function persistState() {
     void DataStore.set(HIDDEN_STORE_KEY, [...hiddenMessages.values()]);
     void DataStore.set(HISTORY_STORE_KEY, recentHiddenMessages);
@@ -119,6 +124,7 @@ function updateHiddenMessage(entry: HiddenMessageEntry, hidden: boolean, preserv
     } else {
         if (rememberUnhidden) lastUnhiddenMessage = entry;
         hiddenMessages.delete(entry.id);
+        removeRecentHidden(entry.id);
     }
 
     updateMessage(entry.channelId, entry.id);
@@ -185,6 +191,7 @@ function unhideAllMessages() {
     const entries = [...hiddenMessages.values()];
     if (entries.length > 0) lastUnhiddenMessage = entries[entries.length - 1];
     hiddenMessages.clear();
+    recentHiddenMessages.length = 0;
 
     for (const entry of entries) updateMessage(entry.channelId, entry.id);
     persistState();
@@ -271,7 +278,7 @@ export default definePlugin({
     dependencies: ["MessageUpdaterAPI"],
 
     patches: [
-          {
+        {
             find: "Message must not be a thread starter message",
             replacement: {
                 match: /(let .{0,260}?message:)(\i)(,message:\{id:\i\}.{0,260}?=\i;)/,
