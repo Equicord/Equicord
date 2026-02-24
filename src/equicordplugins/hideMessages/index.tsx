@@ -32,7 +32,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
             id="vc-hidemessages"
             label="Hide"
             icon={EyeIcon}
-            action={async () => hideMessage(message.id, message.channel_id)}
+            action={() => hideMessage(message.id, message.channel_id)}
         />
     ));
 };
