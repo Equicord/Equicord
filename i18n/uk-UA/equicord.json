@@ -19,17 +19,17 @@
         "description":"Змінює перемикач випливаючого вікна Поглинання Шуму з Krisp та Стандартне на Krisp та Пусто"
     },
     "alwaysExpandProfiles":{
-        "description":"Always expands profile popouts to the full modal"
+        "description":"Завжди розгортає попапи профілів до повного розміру модального вікна"
     },
     "anammox":{
-        "description":"Hides various features related to nitro and the store",
+        "description":"Приховує елементи, пов'язані з Nitro та магазином",
         "settings":{
-            "billing":"Remove billing settings",
-            "dms":"Remove shops above DMs list",
+            "billing":"Приховати налаштування оплати",
+            "dms":"Прибрати крамницю над списком ПП",
             "emojiList":"Remove unavailable categories from the emoji picker",
             "gift":"Remove gift button",
-            "quests":"Remove quests above DMs list",
-            "serverBoost":"Remove server boost info above channel list"
+            "quests":"Прибрати квести над списком ПП",
+            "serverBoost":"Прибрати інформацію про бусти сервера над списком каналів"
         }
     },
     "animalese":{
@@ -175,12 +175,12 @@
     },
     "bypassStatus":{
         "contextMenu":{
-            "addStatusBypass":"Add Status Bypass",
-            "removeStatusBypass":"Remove Status Bypass"
+            "addStatusBypass":"Додати обхід статусу",
+            "removeStatusBypass":"Видалити Обхід Статусу"
         },
         "description":"Все ще отримувати сповіщення від певних джерел, навіть у режимі «Не турбувати». Клацніть правою кнопкою миші на користувачів/каналів/серверах, щоб налаштувати їх на обхід режиму «Не турбувати».",
         "placeholder":{
-            "separateWithCommas":"Separate with commas"
+            "separateWithCommas":"Розділяйте комами"
         },
         "settings":{
             "allowOutsideOfDms":"Дозволити вибраним користувачам обхід статусу також поза ПП (діє як обхід каналу/сервера, але тільки для повідомлень, надісланих цими користувачами)",
