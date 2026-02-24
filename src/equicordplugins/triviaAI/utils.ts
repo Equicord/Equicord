@@ -38,35 +38,20 @@ export function parseMessageContent(message: Message): ContentPayload | null {
     message.embeds.forEach(embed => {
         const embedBuffer: string[] = [];
 
-        if (embed.provider?.name) {
-            embedBuffer.push(`> ${embed.provider.name}`);
-        }
+        const parts = [
+            embed.provider?.name ? `> ${embed.provider.name}` : null,
+            embed.author?.name ? `**${embed.author.name}**` : null,
+            embed.rawTitle ? `## ${embed.rawTitle}` : null,
+            embed.rawDescription ?? null,
+            ...(embed.fields?.map(f => (f.rawName && f.rawValue) ? `**${f.rawName}**: ${f.rawValue}` : null) ?? []),
+            embed.footer?.text ? `_${embed.footer.text}_` : null,
+        ];
 
-        if (embed.author?.name) {
-            embedBuffer.push(`**${embed.author.name}**`);
-        }
-
-        if (embed.rawTitle) {
-            embedBuffer.push(`## ${embed.rawTitle}`);
-        }
-
-        if (embed.rawDescription) {
-            embedBuffer.push(embed.rawDescription);
-        }
-
-        embed.fields?.forEach(field => {
-            if (field.rawName && field.rawValue) {
-                embedBuffer.push(`**${field.rawName}**: ${field.rawValue}`);
-            }
+        parts.forEach(p => {
+            if (p) embedBuffer.push(p);
         });
 
-        if (embed.footer?.text) {
-            embedBuffer.push(`_${embed.footer.text}_`);
-        }
-
-        if (embedBuffer.length > 0) {
-            textParts.push(embedBuffer.join("\n"));
-        }
+        if (embedBuffer.length > 0) textParts.push(embedBuffer.join("\n"));
     });
 
     const combinedText = textParts.join("\n\n");
@@ -82,16 +67,14 @@ export function parseMessageContent(message: Message): ContentPayload | null {
         .forEach(att => imageUrls.add(att.url));
 
     message.embeds.forEach(embed => {
-        if (embed.image?.url) {
-            imageUrls.add(embed.image.url);
-        }
+        const potentialUrls = [
+            embed.image?.url,
+            embed.thumbnail?.url,
+            ...(embed.images?.map(img => img.url) ?? [])
+        ];
 
-        if (embed.thumbnail?.url) {
-            imageUrls.add(embed.thumbnail.url);
-        }
-
-        embed.images?.forEach(img => {
-            if (img.url) imageUrls.add(img.url);
+        potentialUrls.forEach(url => {
+            if (url) imageUrls.add(url);
         });
     });
 
