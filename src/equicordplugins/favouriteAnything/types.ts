@@ -5,7 +5,7 @@
  */
 
 import { Channel, Embed, EmbedJSON, Message, MessageAttachment, TextInput } from "@vencord/discord-types";
-import { Component, ComponentClass, ComponentProps, ComponentPropsWithRef, Key, PropsWithChildren, ReactNode } from "react";
+import { Component, ComponentClass, ComponentProps, ComponentPropsWithRef, Key, PropsWithChildren, ReactNode, RefObject } from "react";
 import { JsonValue, PartialDeep } from "type-fest";
 
 export enum ExpressionPickerView {
@@ -128,3 +128,9 @@ export interface RefreshedUrlsResponse {
 export interface UnfurledEmbedsResponse {
     embeds: EmbedJSON[];
 }
+
+export type ResizeObserverHook = (
+    ref: RefObject<Element | null>,
+    callback: (size: { width: number; height: number; }) => void,
+    deps?: unknown[]
+) => void;

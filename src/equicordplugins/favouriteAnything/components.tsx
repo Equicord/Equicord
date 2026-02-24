@@ -165,8 +165,7 @@ export function FilePickerItem({ url, file, channel, onResize, onSubmit, reduceP
     const [isFetching, setIsFetching] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);
-    const height = useResizeObserver(ref);
-    useEffect(() => void (height && onResize(url, height)), [url, height]);
+    useResizeObserver(ref, ({ height }) => onResize(url, height), [onResize, url]);
 
     const attachment = useStateFromStores(
         [SignedUrlsStore],

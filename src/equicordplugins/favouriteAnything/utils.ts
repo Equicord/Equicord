@@ -10,18 +10,20 @@ import { Queue } from "@utils/Queue";
 import { useForceUpdater } from "@utils/react";
 import { PluginNative } from "@utils/types";
 import { Channel, MessageAttachment } from "@vencord/discord-types";
-import { findByPropsLazy } from "@webpack";
-import { Constants, DraftType, FluxDispatcher, MessageActions, PendingReplyStore, PermissionStore, RestAPI, Toasts, UploadAttachmentStore, UploadHandler, UploadManager, useCallback, useEffect, useRef, UserSettingsActionCreators, UserSettingsProtoStore, useState, useStateFromStores } from "@webpack/common";
+import { findByCodeLazy, findByPropsLazy } from "@webpack";
+import { Constants, DraftType, FluxDispatcher, MessageActions, PendingReplyStore, PermissionStore, RestAPI, Toasts, UploadAttachmentStore, UploadHandler, UploadManager, useCallback, useEffect, useRef, UserSettingsActionCreators, UserSettingsProtoStore, useStateFromStores } from "@webpack/common";
 import { deflateSync, inflateSync } from "fflate";
-import { Key, RefObject } from "react";
+import { Key } from "react";
 import { JsonValue } from "type-fest";
 
 import { base64ToUint8Array, uint8ArrayToBase64 } from "./polyfills";
-import { CustomItemDef, CustomItemFormat, FavouriteItem, FavouriteItemFormat, ItemsDef, UnfurledEmbedsResponse } from "./types";
+import { CustomItemDef, CustomItemFormat, FavouriteItem, FavouriteItemFormat, ItemsDef, ResizeObserverHook, UnfurledEmbedsResponse } from "./types";
 
 const Native = VencordNative.pluginHelpers.FavouriteAnything as PluginNative<typeof import("./native")>;
 
 export const cl = classNameFactory("vc-favouriteAnything-");
+
+export const useResizeObserver: ResizeObserverHook = findByCodeLazy("borderBoxSize?.[0]?.blockSize");
 
 const defineItem = <const A, const B extends JsonValue>(item: CustomItemDef<A, B>) => item;
 function defineItems<T extends Record<CustomItemFormat, CustomItemDef>>(def: ItemsDef<T>) {
@@ -166,25 +168,6 @@ export async function sendAttachment(attachment: MessageAttachment, channel: Cha
 
 export function hasPermission(permission: bigint, channel: Channel | null): boolean {
     return !!channel && (PermissionStore.can(permission, channel) || channel.isPrivate());
-}
-
-export function useResizeObserver<T extends HTMLElement = HTMLElement>(ref: RefObject<T | null>): number {
-    const [height, setHeight] = useState<number>(0);
-
-    useEffect(() => {
-        if (!ref.current) return;
-
-        const observer = new ResizeObserver(([{ borderBoxSize }]) => {
-            const [{ blockSize }] = borderBoxSize;
-            setHeight(blockSize);
-        });
-
-        observer.observe(ref.current, { box: "border-box" });
-
-        return () => observer.disconnect();
-    }, [ref]);
-
-    return height;
 }
 
 const diacriticsRegex = /[\u0300-\u036f]/g;
