@@ -271,11 +271,11 @@ export default definePlugin({
     dependencies: ["MessageUpdaterAPI"],
 
     patches: [
-        {
+          {
             find: "Message must not be a thread starter message",
             replacement: {
-                match: /(\i\.memo\(function\((\i)\)\{)/,
-                replace: "$1if($self.isHidden($2?.message?.id))return null;",
+                match: /(let .{0,260}?message:)(\i)(,message:\{id:\i\}.{0,260}?=\i;)/,
+                replace: "$1$2$3if($self.isHidden($2?.id))return null;",
             },
         }
     ],
