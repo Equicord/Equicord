@@ -6,6 +6,7 @@
 
 import { classNameFactory } from "@utils/css";
 import { sendMessage } from "@utils/discord";
+import { proxyLazy } from "@utils/lazy";
 import { Queue } from "@utils/Queue";
 import { useForceUpdater } from "@utils/react";
 import { PluginNative } from "@utils/types";
@@ -114,13 +115,28 @@ export async function getThumbnailUrl(data: string, width: number, height: numbe
     }
 }
 
+export const isAllowedHost = proxyLazy(() => {
+    // GLOBAL_ENV is not initialized immediately
+    const allowedHosts = new Set<string>([
+        window.GLOBAL_ENV.CDN_HOST,
+        ...[window.GLOBAL_ENV.IMAGE_PROXY_ENDPOINTS, window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT]
+            .flatMap(endpoint => endpoint.split(","))
+            .map(endpoint => URL.parse(`https://${endpoint}`)?.hostname)
+            .filter(Boolean)
+    ]);
+    return (value: string) => allowedHosts.has(value);
+});
+
 async function fetchAttachment(attachment: MessageAttachment): Promise<File> {
     if (!IS_WEB)
         return Native.fetchAttachment(attachment).then(
             ({ data, filename, type }) => new File([data], filename, { type })
         );
 
-    const { url, content_type, filename } = attachment;
+    const { content_type, filename } = attachment;
+    const url = URL.parse(attachment.url);
+    if (!url || !isAllowedHost(url.hostname)) throw new Error("Invalid URL");
+
     const res = await fetch(url, { headers: { Accept: "*/*" } });
     if (!res.ok) throw new Error("Server error");
 

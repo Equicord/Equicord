@@ -8,7 +8,7 @@ import { proxyLazyWebpack } from "@webpack";
 import { Constants, Flux, FluxDispatcher, RestAPI } from "@webpack/common";
 
 import { RefreshedUrlsResponse } from "./types";
-import { BatchedRequestQueue } from "./utils";
+import { BatchedRequestQueue, isAllowedHost } from "./utils";
 
 /** Used for storing and automatically refreshing signed CDN/Media proxy urls ({@link https://docs.discord.food/reference#signed-attachment-urls}). */
 export const SignedUrlsStore = proxyLazyWebpack(() => {
@@ -19,13 +19,6 @@ export const SignedUrlsStore = proxyLazyWebpack(() => {
 
     class SignedUrlsStore extends Flux.Store implements Store {
         private static readonly _expirationThreshold = 60 * 60 * 1000;
-        private static readonly _allowedHosts = new Set<string>([
-            window.GLOBAL_ENV.CDN_HOST,
-            ...[window.GLOBAL_ENV.IMAGE_PROXY_ENDPOINTS, window.GLOBAL_ENV.MEDIA_PROXY_ENDPOINT]
-                .flatMap(endpoint => endpoint.split(","))
-                .map(endpoint => URL.parse(`https://${endpoint}`)?.host)
-                .filter(Boolean)
-        ]);
 
         private _urls = new Map<string, string>();
         private _queue = new BatchedRequestQueue<string>(batch => this._handleBatch(batch), {
@@ -69,7 +62,7 @@ export const SignedUrlsStore = proxyLazyWebpack(() => {
         }
 
         private _isValid(url: URL | null): url is URL {
-            return !!(url && SignedUrlsStore._allowedHosts.has(url.host));
+            return !!(url && isAllowedHost(url.hostname));
         }
 
         private _willExpire(url: URL): boolean {

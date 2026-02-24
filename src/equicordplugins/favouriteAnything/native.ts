@@ -6,9 +6,20 @@
 
 import { MessageAttachment } from "@vencord/discord-types";
 
+const allowedHosts = new Set([
+    "cdn.discordapp.com",
+    "images-ext-1.discordapp.net",
+    "images-ext-2.discordapp.net",
+    "media.discordapp.net"
+]);
+
 // Discord has very strict CORS rules for which types of assets can be fetched from where (CDN/Media proxy),
 // and most binary file types are prohibited by both. This function serves as a simple bypass.
-export async function fetchAttachment(_: unknown, { url, content_type, filename }: MessageAttachment) {
+export async function fetchAttachment(_: unknown, attachment: MessageAttachment) {
+    const { content_type, filename } = attachment;
+    const url = URL.parse(attachment.url);
+    if (!url || !allowedHosts.has(url.hostname)) throw new Error("Invalid URL");
+
     const res = await fetch(url, { headers: { Accept: "*/*" } });
     if (!res.ok) throw new Error("Server error");
 
