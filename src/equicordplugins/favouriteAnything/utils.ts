@@ -24,7 +24,7 @@ const Native = VencordNative.pluginHelpers.FavouriteAnything as PluginNative<typ
 
 export const cl = classNameFactory("vc-favouriteAnything-");
 
-export const useResizeObserver: ResizeObserverHook = findByCodeLazy("borderBoxSize?.[0]?.blockSize");
+export const useResizeObserver: ResizeObserverHook = findByCodeLazy("borderBoxSize", "blockSize", "inlineSize");
 export const ImageUtils: ImageUtils_ = findByPropsLazy("isAnimated", "getFormatQuality");
 
 const defineItem = <const A, const B extends JsonValue>(item: CustomItemDef<A, B>) => item;
