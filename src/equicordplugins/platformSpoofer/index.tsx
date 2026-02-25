@@ -42,7 +42,7 @@ const settings = definePluginSettings({
                 value: "playstation",
             },
             {
-                label: "VR (Quest / Headset)",
+                label: "VR",
                 value: "vr",
             },
         ]
