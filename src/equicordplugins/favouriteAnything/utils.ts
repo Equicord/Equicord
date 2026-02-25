@@ -18,13 +18,14 @@ import { Key } from "react";
 import { JsonValue } from "type-fest";
 
 import { base64ToUint8Array, uint8ArrayToBase64 } from "./polyfills";
-import { CustomItemDef, CustomItemFormat, FavouriteItem, FavouriteItemFormat, ItemsDef, ResizeObserverHook, UnfurledEmbedsResponse } from "./types";
+import { CustomItemDef, CustomItemFormat, FavouriteItem, FavouriteItemFormat, ImageUtils as ImageUtils_, ItemsDef, ResizeObserverHook, UnfurledEmbedsResponse } from "./types";
 
 const Native = VencordNative.pluginHelpers.FavouriteAnything as PluginNative<typeof import("./native")>;
 
 export const cl = classNameFactory("vc-favouriteAnything-");
 
 export const useResizeObserver: ResizeObserverHook = findByCodeLazy("borderBoxSize?.[0]?.blockSize");
+export const ImageUtils: ImageUtils_ = findByPropsLazy("isAnimated", "getFormatQuality");
 
 const defineItem = <const A, const B extends JsonValue>(item: CustomItemDef<A, B>) => item;
 function defineItems<T extends Record<CustomItemFormat, CustomItemDef>>(def: ItemsDef<T>) {
@@ -309,7 +310,3 @@ export class BatchedRequestQueue<T> {
         this.queue.push(() => this.cb(batch).catch(() => this.items.push(...batch)));
     }
 }
-
-export const ImageUtils: {
-    isAnimated(image: { src: string; original?: string; animated: boolean; srcIsAnimated?: boolean; }): boolean;
-} = findByPropsLazy("isAnimated", "getFormatQuality");

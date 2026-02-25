@@ -134,3 +134,7 @@ export type ResizeObserverHook = (
     callback: (size: { width: number; height: number; }) => void,
     deps?: unknown[]
 ) => void;
+
+export interface ImageUtils {
+    isAnimated(image: { src: string; original?: string; animated: boolean; srcIsAnimated?: boolean; }): boolean;
+}
