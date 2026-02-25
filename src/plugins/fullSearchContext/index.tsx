@@ -18,32 +18,39 @@
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { migratePluginSettings } from "@api/Settings";
-import { Devs } from "@utils/constants";
-import { getIntlMessage } from "@utils/discord";
+import { Devs, EquicordDevs } from "@utils/constants";
+import { getIntlMessage, insertTextIntoChatInputBox, openUserProfile } from "@utils/discord";
 import { NoopComponent } from "@utils/react";
 import definePlugin from "@utils/types";
-import { Message } from "@vencord/discord-types";
+import { Channel, Message } from "@vencord/discord-types";
 import { filters, findByCodeLazy, waitFor } from "@webpack";
-import { ChannelStore, ContextMenuApi, UserStore } from "@webpack/common";
+import { ChannelStore, ContextMenuApi, Menu, UserStore } from "@webpack/common";
 
 const useMessageMenu = findByCodeLazy(".MESSAGE,commandTargetId:");
+const INTERACTIVE_CONTEXT_MENU_SELECTOR = "button, [contenteditable='true']";
 
-interface CopyIdMenuItemProps {
-    id: string;
-    label: string;
-}
-
-let CopyIdMenuItem: (props: CopyIdMenuItemProps) => React.ReactElement | null = NoopComponent;
+let CopyIdMenuItem: (props: { id: string; label: string; }) => React.ReactElement | null = NoopComponent;
 waitFor(filters.componentByCode('"cannot copy null text"'), m => CopyIdMenuItem = m);
 
-function MessageMenu({ message, channel, onHeightUpdate }) {
+interface MessageMenuTargetInfo {
+    itemHref?: string;
+    itemSrc?: string;
+    itemSafeSrc?: string;
+    itemTextContent?: string;
+}
+
+function MessageMenu({ message, channel, onHeightUpdate, targetInfo }: {
+    message: Message;
+    channel: Channel;
+    onHeightUpdate: (...args: unknown[]) => void;
+    targetInfo: MessageMenuTargetInfo;
+}) {
     const canReport = message.author &&
         !(message.author.id === UserStore.getCurrentUser().id || message.author.system);
 
     return useMessageMenu({
         navId: "message-actions",
         ariaLabel: getIntlMessage("MESSAGE_UTILITIES_A11Y_LABEL"),
-
         message,
         channel,
         canReport,
@@ -54,56 +61,191 @@ function MessageMenu({ message, channel, onHeightUpdate }) {
         favoriteableType: null,
         favoriteableId: null,
         favoriteableName: null,
-        itemHref: void 0,
-        itemSrc: void 0,
-        itemSafeSrc: void 0,
-        itemTextContent: void 0,
+        itemHref: targetInfo.itemHref,
+        itemSrc: targetInfo.itemSrc,
+        itemSafeSrc: targetInfo.itemSafeSrc,
+        itemTextContent: targetInfo.itemTextContent,
 
         isFullSearchContextMenu: true
     });
 }
 
-interface MessageActionsProps {
-    message: Message;
-    isFullSearchContextMenu?: boolean;
-}
-
-const contextMenuPatch: NavContextMenuPatchCallback = (children, props: MessageActionsProps) => {
+const contextMenuPatch: NavContextMenuPatchCallback = (children, props: { message: Message; isFullSearchContextMenu?: boolean; }) => {
     if (props?.isFullSearchContextMenu == null) return;
+    const author = props.message.author;
+    if (!author) return;
 
-    const group = findGroupChildrenByChildId("devmode-copy-id", children, true);
-    group?.push(
-        CopyIdMenuItem({ id: props.message.author.id, label: getIntlMessage("COPY_ID_AUTHOR") })
+    children.unshift(
+        <Menu.MenuGroup id="vc-full-search-context-user-actions">
+            <Menu.MenuItem
+                id="vc-full-search-context-profile"
+                label="Profile"
+                action={() => void openUserProfile(author.id)}
+            />
+            <Menu.MenuItem
+                id="vc-full-search-context-mention"
+                label="Mention"
+                action={() => insertTextIntoChatInputBox(`<@${author.id}> `)}
+            />
+        </Menu.MenuGroup>
     );
+
+    findGroupChildrenByChildId("devmode-copy-id", children, true)
+        ?.push(CopyIdMenuItem({ id: author.id, label: getIntlMessage("COPY_ID_AUTHOR") }));
 };
 
 migratePluginSettings("FullSearchContext", "SearchReply");
 export default definePlugin({
     name: "FullSearchContext",
     description: "Makes the message context menu in message search results have all options you'd expect",
-    authors: [Devs.Ven, Devs.Aria],
-
-    patches: [{
-        find: "onClick:this.handleMessageClick,",
-        replacement: {
-            match: /this(?=\.handleContextMenu\(\i,\i\))/,
-            replace: "$self"
+    authors: [Devs.Ven, Devs.Aria, EquicordDevs.omaw],
+    requiresRestart: true,
+    isModified: true,
+    patches: [
+        {
+            find: "onClick:this.handleMessageClick,",
+            replacement: [
+                {
+                    match: /handleContextMenu=\((\i),(\i)\)=>\{/,
+                    replace: "handleContextMenu=($1,$2)=>{if($self.shouldUseNativeContextMenu($1))return;"
+                },
+                {
+                    match: /message:(\i),channel:\i,onContextMenu:\i=>this\.handleContextMenu\(\i,\1\),animateAvatar:!1/,
+                    replace: "$&,onClickCapture:t=>$self.handlePreviewNameClick(t,$1)"
+                },
+                {
+                    match: /handleMessageClick=(\i)=>\{/,
+                    replace: "handleMessageClick=$1=>{if($self.handlePreviewNameClick($1,this.props.message))return;"
+                },
+                {
+                    match: /this(?=\.handleContextMenu\(\i,\i\))/,
+                    replace: "$self"
+                }
+            ]
+        },
+        {
+            find: "renderJumpButton(){",
+            replacement: {
+                match: /className:\i\.\i,message:(\i),channel:\i/,
+                replace: "$&,onContextMenu:e=>$self.handleContextMenu(e,$1),onClickCapture:ev=>$self.handlePreviewNameClick(ev,$1)"
+            }
+        },
+        {
+            find: "listName:\"recents\"",
+            replacement: {
+                match: /message:(\i),channel:\i,className:\i\.\i/,
+                replace: "$&,onContextMenu:e=>$self.handleContextMenu(e,$1)"
+            }
+        },
+        {
+            find: "location:\"NotificationsInboxMessageUnit\"",
+            replacement: {
+                match: /onContextMenu:\i=>\{\i\.preventDefault\(\),[\s\S]{0,180}?interactionType:\i\.\i\.CONTEXT_MENU,message:(\i),viewId:\i\}[\s\S]{0,320}?disableClickTrap:!0\}\)\}/,
+                replace: "onContextMenu:e=>$self.handleContextMenu(e,$1)"
+            }
         }
-    }],
+    ],
 
     handleContextMenu(event: React.MouseEvent, message: Message) {
         const channel = ChannelStore.getChannel(message.channel_id);
         if (!channel) return;
 
+        const targetInfo = this.getMessageMenuTargetInfo(event);
         event.stopPropagation();
 
-        ContextMenuApi.openContextMenu(event, contextMenuProps =>
-            <MessageMenu
-                message={message}
-                channel={channel}
-                onHeightUpdate={contextMenuProps.onHeightUpdate}
-            />
-        );
+        ContextMenuApi.openContextMenu(event, contextMenuProps => (
+            <MessageMenu message={message} channel={channel} onHeightUpdate={contextMenuProps.onHeightUpdate} targetInfo={targetInfo} />
+        ));
+    },
+
+    handlePreviewNameClick(event: React.MouseEvent, message?: Message | null): boolean {
+        if (!message?.author || !this.isAuthorLabelTarget(event)) return false;
+        if (event.button !== 0) return false;
+
+        if (event.currentTarget instanceof Node && !event.currentTarget.ownerDocument.getSelection()?.isCollapsed) return false;
+
+        event.preventDefault();
+        event.stopPropagation();
+        void openUserProfile(message.author.id);
+        return true;
+    },
+
+    shouldUseNativeContextMenu(event: React.MouseEvent): boolean {
+        if (this.isAuthorLabelTarget(event)) return true;
+
+        const target = event.target;
+        if (!(target instanceof Element)) return false;
+
+        return target.closest(INTERACTIVE_CONTEXT_MENU_SELECTOR) != null ||
+            this.getComposedPathElements(event).some(node => node.matches(INTERACTIVE_CONTEXT_MENU_SELECTOR));
+    },
+
+    getMessageMenuTargetInfo(event: React.MouseEvent): MessageMenuTargetInfo {
+        const target = event.target;
+        if (!(target instanceof Element)) return {};
+
+        let itemHref: string | undefined;
+        let itemSrc: string | undefined;
+        let itemSafeSrc: string | undefined;
+
+        const stopAt = event.currentTarget instanceof Element ? event.currentTarget : null;
+        let node: Node | null = target;
+
+        while (node instanceof Element) {
+            if (node instanceof HTMLImageElement && node.src) {
+                itemSrc ??= node.src;
+                itemSafeSrc ??= node.getAttribute("data-safe-src") ?? node.src;
+            }
+
+            if (node instanceof HTMLVideoElement || node instanceof HTMLAudioElement) {
+                itemSrc ??= node.currentSrc || node.src || undefined;
+                itemSafeSrc ??= node.getAttribute("data-safe-src") ?? itemSrc;
+            }
+
+            if (node instanceof HTMLAnchorElement && node.href) {
+                itemHref ??= node.href;
+            }
+
+            itemSrc ??= node.getAttribute("src") ?? undefined;
+            itemSafeSrc ??= node.getAttribute("data-safe-src") ?? itemSafeSrc;
+            itemHref ??= node.getAttribute("href") ?? undefined;
+
+            if (stopAt && node === stopAt) break;
+            node = node.parentNode;
+        }
+
+        return { itemHref, itemSrc, itemSafeSrc: itemSafeSrc ?? itemSrc, itemTextContent: target.textContent?.trim() || undefined };
+    },
+
+    getComposedPathElements(event: React.MouseEvent): Element[] {
+        const nativeEvent = event.nativeEvent as MouseEvent & { composedPath?: () => EventTarget[]; };
+        return (typeof nativeEvent.composedPath === "function" ? nativeEvent.composedPath() : [])
+            .filter((node): node is Element => node instanceof Element);
+    },
+
+    isAuthorLabelTarget(event: React.MouseEvent): boolean {
+        const target = event.target;
+        if (!(target instanceof Element)) return false;
+
+        const candidates = [
+            ...(event.currentTarget instanceof Element ? [event.currentTarget] : []),
+            ...this.getComposedPathElements(event)
+        ];
+
+        for (const owner of candidates) {
+            const labelledBy = owner.getAttribute("aria-labelledby");
+            if (!labelledBy) continue;
+
+            for (const id of labelledBy.split(/\s+/)) {
+                if (!id) continue;
+                const labelElement = owner.ownerDocument.getElementById(id);
+                if (labelElement && (labelElement === target || labelElement.contains(target))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     },
 
     contextMenus: {
