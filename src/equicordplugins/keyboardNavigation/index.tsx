@@ -9,7 +9,7 @@ import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { closeAllModals } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
-import { openUserSettingsPanel, useState } from "@webpack/common";
+import { SettingsRouter, useState } from "@webpack/common";
 
 import { registerAction } from "./commands";
 import { openCommandPalette } from "./components/CommandPalette";
@@ -97,7 +97,7 @@ export default definePlugin({
             registerAction({
                 id: "openDevSettings",
                 label: "Open Dev tab",
-                callback: () => openUserSettingsPanel("equicord_patch_helper"),
+                callback: () => SettingsRouter.openUserSettings("equicord_patch_helper_panel"),
                 registrar: "Equicord"
             });
         }

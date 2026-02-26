@@ -4,20 +4,124 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { settings } from "@equicordplugins/fileUpload/index";
-import { ServiceType, UploadResponse } from "@equicordplugins/fileUpload/types";
+import { settings } from "@equicordplugins/fileUpload/settings";
+import { ServiceType, ShareXUploaderConfig, UploadResponse } from "@equicordplugins/fileUpload/types";
 import { copyToClipboard } from "@utils/clipboard";
 import { PluginNative } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
 
 import { convertApngToGif } from "./apngToGif";
 import { getExtensionFromBytes, getExtensionFromMime, getMimeFromExtension, getUrlExtension } from "./getMediaUrl";
+import { isS3Configured, uploadToS3 } from "./s3";
+import { parseShareXConfig, resolveShareXTemplate } from "./sharex";
 
 const Native = IS_DISCORD_DESKTOP
     ? VencordNative.pluginHelpers.FileUpload as PluginNative<typeof import("../native")>
     : null;
 
+const CORS_PROXY = "https://cors.keiran0.workers.dev"; // im hosting this on cloudflare workers so uptime and latency should be reliable
+
 let isUploading = false;
+
+function resolveShareXRequestValue(value: string | number | boolean, filename: string): string {
+    return String(value)
+        .replace(/\$filename\$/g, filename)
+        .replace(/\{filename\}/g, filename);
+}
+
+function parseShareXConfigFromSettings(): ShareXUploaderConfig {
+    const configText = settings.store.sharexConfig || "";
+    if (!configText.trim()) {
+        throw new Error("ShareX config is required");
+    }
+
+    return parseShareXConfig(configText);
+}
+
+async function uploadToShareX(fileBlob: Blob, filename: string): Promise<string> {
+    const config = parseShareXConfigFromSettings();
+    const method = (config.RequestMethod || "POST").toUpperCase();
+    const requestUrl = config.RequestURL!.trim();
+    const bodyType = (config.Body || "MultipartFormData").toLowerCase();
+
+    const headers = new Headers();
+    for (const [key, value] of Object.entries(config.Headers || {})) {
+        headers.set(key, resolveShareXRequestValue(value, filename));
+    }
+
+    const buildArguments = () => {
+        const args: Record<string, string> = {};
+        for (const [key, value] of Object.entries(config.Arguments || {})) {
+            args[key] = resolveShareXRequestValue(value, filename);
+        }
+        return args;
+    };
+
+    let body: BodyInit;
+
+    if (bodyType === "multipartformdata" || bodyType === "formdata") {
+        headers.delete("content-type");
+
+        const formData = new FormData();
+        const fileField = config.FileFormName || "file";
+        formData.append(fileField, fileBlob, filename);
+
+        const args = buildArguments();
+        for (const [key, value] of Object.entries(args)) {
+            formData.append(key, value);
+        }
+
+        body = formData;
+    } else if (bodyType === "binary") {
+        body = fileBlob;
+    } else if (bodyType === "json") {
+        if (!headers.has("content-type")) {
+            headers.set("content-type", "application/json");
+        }
+
+        const payload = buildArguments();
+        body = JSON.stringify(payload);
+    } else {
+        throw new Error(`Unsupported ShareX Body type: ${config.Body || "unknown"}`);
+    }
+
+    let response: Response;
+    try {
+        response = await fetch(requestUrl, { method, headers, body });
+    } catch (error) {
+        if (Native) {
+            throw error;
+        }
+
+        const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent(requestUrl)}`;
+        response = await fetch(proxiedUrl, { method, headers, body });
+    }
+
+    const responseText = await response.text();
+    let responseJson: unknown = null;
+    try {
+        responseJson = responseText ? JSON.parse(responseText) : null;
+    } catch {
+        responseJson = null;
+    }
+
+    if (!response.ok) {
+        const configuredError = resolveShareXTemplate(config.ErrorMessage, responseText, responseJson);
+        throw new Error(configuredError || `Upload failed: ${response.status} ${response.statusText}`);
+    }
+
+    const configuredUrl = resolveShareXTemplate(config.URL, responseText, responseJson)?.trim();
+    const fallbackUrl = typeof responseJson === "object" && responseJson && "url" in responseJson
+        ? String((responseJson as Record<string, unknown>).url || "")
+        : responseText.trim();
+
+    const resultUrl = configuredUrl || fallbackUrl;
+    if (!resultUrl) {
+        throw new Error("No URL returned from ShareX uploader");
+    }
+
+    return resultUrl;
+}
 
 async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string> {
     const { serviceUrl, ziplineToken, folderId } = settings.store;
@@ -65,37 +169,86 @@ async function uploadToZipline(fileBlob: Blob, filename: string): Promise<string
 }
 
 async function uploadToNest(fileBlob: Blob, filename: string): Promise<string> {
-    if (!Native) {
-        throw new Error("Nest upload is only available on desktop");
-    }
-
     const { nestToken } = settings.store;
 
     if (!nestToken) {
         throw new Error("Auth token is required");
     }
 
-    const arrayBuffer = await fileBlob.arrayBuffer();
-    const result = await Native.uploadToNest(arrayBuffer, filename, nestToken);
+    if (Native) {
+        const arrayBuffer = await fileBlob.arrayBuffer();
+        const result = await Native.uploadToNest(arrayBuffer, filename, nestToken);
 
-    if (!result.success) {
-        throw new Error(result.error || "Upload failed");
+        if (!result.success) {
+            throw new Error(result.error || "Upload failed");
+        }
+
+        if (!result.url) {
+            throw new Error("No URL returned from upload");
+        }
+
+        return result.url;
     }
 
-    if (!result.url) {
-        throw new Error("No URL returned from upload");
+    const formData = new FormData();
+    formData.append("file", fileBlob, filename);
+
+    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://nest.rip/api/files/upload")}`;
+
+    const response = await fetch(proxiedUrl, {
+        method: "POST",
+        headers: {
+            "Authorization": nestToken
+        },
+        body: formData
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Upload failed: ${response.status} ${errorText}`);
     }
 
-    return result.url;
+    const data = await response.json() as { fileURL?: string; };
+
+    if (data.fileURL) {
+        return data.fileURL;
+    }
+
+    throw new Error("No URL returned from upload");
 }
 
 export function isConfigured(): boolean {
-    const { serviceType, serviceUrl, ziplineToken, nestToken } = settings.store;
+    const {
+        serviceType,
+        serviceUrl,
+        ziplineToken,
+        nestToken
+    } = settings.store as {
+        serviceType: ServiceType;
+        serviceUrl?: string;
+        ziplineToken?: string;
+        nestToken?: string;
+    };
     switch (serviceType) {
         case ServiceType.NEST:
             return Boolean(nestToken);
         case ServiceType.EZHOST:
-            return Boolean((settings.store as { ezHostKey?: string }).ezHostKey);
+            return Boolean((settings.store as { ezHostKey?: string; }).ezHostKey);
+        case ServiceType.S3:
+            return isS3Configured();
+        case ServiceType.CATBOX:
+            return true;
+        case ServiceType.ZEROX0:
+            return Boolean(Native);
+        case ServiceType.LITTERBOX:
+            return true;
+        case ServiceType.SHAREX:
+            try {
+                parseShareXConfigFromSettings();
+                return true;
+            } catch {
+                return false;
+            }
         case ServiceType.ZIPLINE:
         default:
             return Boolean(serviceUrl && ziplineToken);
@@ -103,7 +256,7 @@ export function isConfigured(): boolean {
 }
 
 async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string> {
-    const { ezHostKey } = (settings.store as { ezHostKey?: string });
+    const { ezHostKey } = (settings.store as { ezHostKey?: string; });
 
     if (!ezHostKey) throw new Error("E-Z Host API key is required");
 
@@ -127,7 +280,8 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
 
     const headers: Record<string, string> = { key: ezHostKey };
 
-    const response = await fetch("https://api.e-z.host/files", {
+    const proxiedUrl = `${CORS_PROXY}?url=${encodeURIComponent("https://api.e-z.host/files")}`;
+    const response = await fetch(proxiedUrl, {
         method: "POST",
         headers,
         body: formData
@@ -144,6 +298,75 @@ async function uploadToEzHost(fileBlob: Blob, filename: string): Promise<string>
     }
 
     return data.imageUrl || data.rawUrl;
+}
+
+async function uploadToCatbox(fileBlob: Blob, filename: string): Promise<string> {
+    const { catboxUserhash } = settings.store;
+
+    if (Native) {
+        const result = await Native.uploadToCatbox(await fileBlob.arrayBuffer(), filename, catboxUserhash || undefined);
+        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
+        return result.url;
+    }
+
+    const formData = new FormData();
+    formData.append("reqtype", "fileupload");
+    if (catboxUserhash) formData.append("userhash", catboxUserhash);
+    formData.append("fileToUpload", fileBlob, filename);
+
+    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent("https://catbox.moe/user/api.php")}`, {
+        method: "POST",
+        body: formData
+    });
+
+    if (!response.ok) throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
+    const text = (await response.text()).trim();
+    if (!text) throw new Error("No URL returned from upload");
+    return text;
+}
+
+async function uploadTo0x0(fileBlob: Blob, filename: string): Promise<string> {
+    if (!Native) {
+        throw new Error("0x0.st uploads are only supported on the desktop client");
+    }
+
+    const arrayBuffer = await fileBlob.arrayBuffer();
+    const result = await Native.uploadTo0x0(arrayBuffer, filename);
+
+    if (!result.success) {
+        throw new Error(result.error || "Upload failed");
+    }
+
+    if (!result.url) {
+        throw new Error("No URL returned from upload");
+    }
+
+    return result.url;
+}
+
+async function uploadToLitterbox(fileBlob: Blob, filename: string): Promise<string> {
+    const expiry = settings.store.litterboxExpiry || "24h";
+
+    if (Native) {
+        const result = await Native.uploadToLitterbox(await fileBlob.arrayBuffer(), filename, expiry);
+        if (!result.success || !result.url) throw new Error(result.error || "No URL returned from upload");
+        return result.url;
+    }
+
+    const formData = new FormData();
+    formData.append("reqtype", "fileupload");
+    formData.append("time", expiry);
+    formData.append("fileToUpload", fileBlob, filename);
+
+    const response = await fetch(`${CORS_PROXY}?url=${encodeURIComponent("https://litterbox.catbox.moe/resources/internals/api.php")}`, {
+        method: "POST",
+        body: formData
+    });
+
+    if (!response.ok) throw new Error(`Upload failed: ${response.status} ${await response.text()}`);
+    const text = (await response.text()).trim();
+    if (!text) throw new Error("No URL returned from upload");
+    return text;
 }
 
 export async function uploadFile(url: string): Promise<void> {
@@ -220,6 +443,21 @@ export async function uploadFile(url: string): Promise<void> {
                 break;
             case ServiceType.EZHOST:
                 uploadedUrl = await uploadToEzHost(typedBlob, filename);
+                break;
+            case ServiceType.S3:
+                uploadedUrl = await uploadToS3(typedBlob, filename, Native);
+                break;
+            case ServiceType.CATBOX:
+                uploadedUrl = await uploadToCatbox(typedBlob, filename);
+                break;
+            case ServiceType.ZEROX0:
+                uploadedUrl = await uploadTo0x0(typedBlob, filename);
+                break;
+            case ServiceType.LITTERBOX:
+                uploadedUrl = await uploadToLitterbox(typedBlob, filename);
+                break;
+            case ServiceType.SHAREX:
+                uploadedUrl = await uploadToShareX(typedBlob, filename);
                 break;
             default:
                 throw new Error("Unknown service type");

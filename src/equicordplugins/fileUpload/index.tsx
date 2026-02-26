@@ -5,81 +5,14 @@
  */
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin from "@utils/types";
 import { Menu } from "@webpack/common";
 
-import { SettingsComponent } from "./settings";
+import { settings } from "./settings";
 import { serviceLabels, ServiceType } from "./types";
 import { getMediaUrl } from "./utils/getMediaUrl";
 import { uploadFile } from "./utils/upload";
-
-export const settings = definePluginSettings({
-    serviceType: {
-        type: OptionType.SELECT,
-        description: "",
-        options: [
-            { label: "Zipline", value: ServiceType.ZIPLINE, default: true },
-            { label: "E-Z Host", value: ServiceType.EZHOST },
-            ...(IS_DISCORD_DESKTOP ? [{ label: "Nest", value: ServiceType.NEST }] : [])
-        ],
-        hidden: true
-    },
-    serviceUrl: {
-        type: OptionType.STRING,
-        description: "",
-        default: "",
-        hidden: true
-    },
-    ezHostKey: {
-        type: OptionType.STRING,
-        description: "E-Z Host API key",
-        default: "",
-        hidden: true
-    },
-    ziplineToken: {
-        type: OptionType.STRING,
-        description: "",
-        default: "",
-        hidden: true
-    },
-    nestToken: {
-        type: OptionType.STRING,
-        description: "",
-        default: "",
-        hidden: true
-    },
-    folderId: {
-        type: OptionType.STRING,
-        description: "",
-        default: "",
-        hidden: true
-    },
-    stripQueryParams: {
-        type: OptionType.BOOLEAN,
-        description: "",
-        default: false,
-        hidden: true
-    },
-    apngToGif: {
-        type: OptionType.BOOLEAN,
-        description: "",
-        default: false,
-        hidden: true
-    },
-    autoCopy: {
-        type: OptionType.BOOLEAN,
-        description: "",
-        default: true,
-        hidden: true
-    },
-    settingsComponent: {
-        type: OptionType.COMPONENT,
-        description: "Settings",
-        component: SettingsComponent
-    }
-});
 
 const messageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => {
     if (!props) return;
@@ -135,7 +68,7 @@ const imageContextMenuPatch: NavContextMenuPatchCallback = (children, props) => 
 export default definePlugin({
     name: "FileUpload",
     description: "Upload images and videos to file hosting services like Zipline and Nest",
-    authors: [EquicordDevs.creations],
+    authors: [EquicordDevs.creations, EquicordDevs.keircn],
     settings,
     contextMenus: {
         "message": messageContextMenuPatch,

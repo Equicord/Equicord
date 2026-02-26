@@ -5,11 +5,20 @@
  */
 
 import { Animations, ManaButton, Paragraph, SpringConfigs, useSpring, useState, useTrail, useTransition } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { DocPage, type PropDef } from "../DocPage";
 
 const { animated } = Animations;
 
 const TRAIL_ITEMS = ["Discord", "uses", "react-spring", "for", "animations"];
+
+const SPRING_CONFIG_PROPS: PropDef[] = [
+    { name: "default", type: "{ tension: 170, friction: 26 }", description: "Standard spring. Balanced speed and bounce." },
+    { name: "gentle", type: "{ tension: 120, friction: 14 }", description: "Soft, slow spring with more bounce." },
+    { name: "wobbly", type: "{ tension: 180, friction: 12 }", description: "Bouncy, playful spring with high overshoot." },
+    { name: "stiff", type: "{ tension: 210, friction: 20 }", description: "Quick, snappy spring with minimal bounce." },
+    { name: "slow", type: "{ tension: 280, friction: 60 }", description: "High tension with heavy damping. Slow and deliberate." },
+    { name: "molasses", type: "{ tension: 280, friction: 120 }", description: "Extremely slow and heavily damped. No bounce." },
+];
 
 function SpringDemo() {
     const [toggled, setToggled] = useState(false);
@@ -23,10 +32,7 @@ function SpringDemo() {
     });
 
     return (
-        <SectionWrapper title="useSpring">
-            <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                Animate values with spring physics. Click the box or change config.
-            </Paragraph>
+        <>
             <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
                 {(Object.keys(SpringConfigs) as (keyof typeof SpringConfigs)[]).map(c => (
                     <ManaButton
@@ -53,7 +59,7 @@ function SpringDemo() {
             >
                 <Paragraph color="text-strong">Click me</Paragraph>
             </animated.div>
-        </SectionWrapper>
+        </>
     );
 }
 
@@ -69,22 +75,13 @@ function TransitionDemo() {
         config: SpringConfigs.gentle
     });
 
-    const addItem = () => {
-        setItems([...items, nextId]);
-        setNextId(nextId + 1);
-    };
-
-    const removeItem = (id: number) => {
-        setItems(items.filter(i => i !== id));
-    };
-
     return (
-        <SectionWrapper title="useTransition">
-            <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                Animate items entering and leaving a list.
-            </Paragraph>
+        <>
             <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-                <ManaButton variant="primary" size="sm" text="Add Item" onClick={addItem} />
+                <ManaButton variant="primary" size="sm" text="Add Item" onClick={() => {
+                    setItems([...items, nextId]);
+                    setNextId(nextId + 1);
+                }} />
                 <ManaButton
                     variant="secondary"
                     size="sm"
@@ -103,13 +100,13 @@ function TransitionDemo() {
                             borderRadius: 8,
                             cursor: "pointer"
                         }}
-                        onClick={() => removeItem(item)}
+                        onClick={() => setItems(items.filter(i => i !== item))}
                     >
                         <Paragraph>Item {item}</Paragraph>
                     </animated.div>
                 ))}
             </div>
-        </SectionWrapper>
+        </>
     );
 }
 
@@ -123,10 +120,7 @@ function TrailDemo() {
     }) as object[];
 
     return (
-        <SectionWrapper title="useTrail">
-            <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                Staggered animations for multiple items. Each item animates slightly after the previous.
-            </Paragraph>
+        <>
             <div style={{ marginBottom: 16 }}>
                 <ManaButton
                     variant="secondary"
@@ -150,7 +144,7 @@ function TrailDemo() {
                     </animated.div>
                 ))}
             </div>
-        </SectionWrapper>
+        </>
     );
 }
 
@@ -166,67 +160,61 @@ function AnimatedElementsDemo() {
     });
 
     return (
-        <SectionWrapper title="animated Elements">
-            <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                Use animated.div, animated.span, animated.svg, etc. for spring-animated elements.
-            </Paragraph>
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-                <animated.div
-                    onMouseEnter={() => setHover(true)}
-                    onMouseLeave={() => setHover(false)}
-                    style={{
-                        ...hoverSpring,
-                        width: 100,
-                        height: 100,
-                        background: "var(--background-secondary)",
-                        borderRadius: 12,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer"
-                    }}
-                >
-                    <Paragraph color="text-muted" style={{ fontSize: 12 }}>Hover me</Paragraph>
-                </animated.div>
-            </div>
-        </SectionWrapper>
+        <animated.div
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+            style={{
+                ...hoverSpring,
+                width: 100,
+                height: 100,
+                background: "var(--background-secondary)",
+                borderRadius: 12,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer"
+            }}
+        >
+            <Paragraph color="text-muted" style={{ fontSize: 12 }}>Hover me</Paragraph>
+        </animated.div>
     );
 }
 
 export default function AnimationsTab() {
     return (
-        <div className="vc-compfinder-section">
-            <SpringDemo />
-            <TransitionDemo />
-            <TrailDemo />
-            <AnimatedElementsDemo />
-
-            <SectionWrapper title="Spring Configs">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Preset spring configurations for different animation feels.
-                </Paragraph>
-                <Paragraph color="text-muted">• default - Standard spring</Paragraph>
-                <Paragraph color="text-muted">• gentle - Soft, slow spring</Paragraph>
-                <Paragraph color="text-muted">• wobbly - Bouncy, playful spring</Paragraph>
-                <Paragraph color="text-muted">• stiff - Quick, snappy spring</Paragraph>
-                <Paragraph color="text-muted">• slow - Very slow spring</Paragraph>
-                <Paragraph color="text-muted">• molasses - Extremely slow spring</Paragraph>
-            </SectionWrapper>
-
-            <SectionWrapper title="Available Hooks">
-                <Paragraph color="text-muted">• useSpring - Single spring animation</Paragraph>
-                <Paragraph color="text-muted">• useSprings - Multiple springs</Paragraph>
-                <Paragraph color="text-muted">• useTransition - Enter/leave animations</Paragraph>
-                <Paragraph color="text-muted">• useTrail - Staggered animations</Paragraph>
-                <Paragraph color="text-muted">• useChain - Sequence animations</Paragraph>
-            </SectionWrapper>
-
-            <SectionWrapper title="Available Components">
-                <Paragraph color="text-muted">• Transition - Declarative transitions</Paragraph>
-                <Paragraph color="text-muted">• Spring - Declarative spring</Paragraph>
-                <Paragraph color="text-muted">• Trail - Declarative trail</Paragraph>
-                <Paragraph color="text-muted">• animated.* - Animated HTML/SVG elements</Paragraph>
-            </SectionWrapper>
-        </div>
+        <DocPage
+            componentName="Animations"
+            overview="Discord uses react-spring for physics-based animations. The Animations module exposes useSpring, useTransition, useTrail, useChain, useSprings hooks plus animated.* element wrappers and preset spring configs. All animations are interruptible and use spring physics rather than duration-based easing."
+            notices={[
+                { type: "info", children: "These are re-exports of react-spring. All animations are interruptible and respect the user's reduced motion preference when used with Discord's built-in motion settings." },
+            ]}
+            importPath={'import { Animations, useSpring, useTransition, useTrail, SpringConfigs } from "../components";'}
+            sections={[
+                {
+                    title: "useSpring",
+                    description: "Animate values with spring physics. Click the box to toggle, and switch between config presets to see different animation feels.",
+                    children: <SpringDemo />,
+                    code: "const spring = useSpring({ opacity: visible ? 1 : 0, config: SpringConfigs.gentle });\nreturn <animated.div style={spring}>Content</animated.div>;"
+                },
+                {
+                    title: "useTransition",
+                    description: "Animate items entering and leaving a list. Click items to remove them, or use the buttons to add/clear.",
+                    children: <TransitionDemo />,
+                    code: "const transitions = useTransition(items, {\n  from: { opacity: 0 },\n  enter: { opacity: 1 },\n  leave: { opacity: 0 },\n  keys: item => item.id,\n});\nreturn transitions((style, item) => <animated.div style={style}>{item.name}</animated.div>);"
+                },
+                {
+                    title: "useTrail",
+                    description: "Staggered animations for multiple items. Each item animates slightly after the previous one.",
+                    children: <TrailDemo />,
+                    code: 'const trail = useTrail(items.length, {\n  opacity: show ? 1 : 0,\n  transform: show ? "translateY(0)" : "translateY(20px)",\n  config: SpringConfigs.gentle,\n});'
+                },
+                {
+                    title: "animated Elements",
+                    description: "Use animated.div, animated.span, animated.svg etc. to create spring-animated HTML elements. Hover the box below.",
+                    children: <AnimatedElementsDemo />
+                },
+            ]}
+            props={SPRING_CONFIG_PROPS}
+        />
     );
 }

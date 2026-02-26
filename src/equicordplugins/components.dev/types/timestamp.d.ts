@@ -20,6 +20,7 @@ export interface TimestampProps {
     isInline?: boolean;
     isVisibleOnlyOnHover?: boolean;
     isEdited?: boolean;
+    application?: any;
     id?: string;
     className?: string;
     children?: React.ReactNode;

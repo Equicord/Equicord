@@ -23,10 +23,10 @@ export interface EmbedMedia {
     height: number;
     width: number;
     url: string;
-    proxyURL: string;
+    proxyURL?: string;
     placeholder: string;
     placeholderVersion: number;
-    description: string;
+    description?: string;
     srcIsAnimated: boolean;
     flags: number;
     contentType: string;

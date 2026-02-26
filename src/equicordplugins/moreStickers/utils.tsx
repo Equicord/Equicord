@@ -14,7 +14,7 @@ import { FFmpegState } from "./types";
 export const cl = classNameFactory("vc-more-stickers-");
 export const clPicker = (className: string, ...args: any[]) => cl("picker-" + className, ...args);
 
-const CORS_PROXY = "https://corsproxy.io/?url=";
+const CORS_PROXY = "https://cors.keiran0.workers.dev?url=";
 
 function corsUrl(url: string | URL) {
     return CORS_PROXY + encodeURIComponent(url.toString());

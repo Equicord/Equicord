@@ -8,6 +8,13 @@
     color: var(--text-normal);
 }
 
+.vc-message-peek-timestamp-favorites {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    color: var(--text-normal);
+}
+
 [class*="interactiveSelected__"] .vc-message-peek-timestamp {
     color: var(--white);
 }
@@ -38,7 +45,6 @@
 }
 
 .vc-message-peek-activity-row>[class*="textXs"] {
-    flex: 1;
     min-width: 0;
 }
 

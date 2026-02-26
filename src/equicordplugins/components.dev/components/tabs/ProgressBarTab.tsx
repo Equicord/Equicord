@@ -5,112 +5,155 @@
  */
 
 import { Paragraph, ProgressBar, useEffect, useState } from "..";
-import { SectionWrapper } from "../SectionWrapper";
+import { DocPage, type PropDef } from "../DocPage";
 
-export default function ProgressBarTab() {
-    const [animatedProgress, setAnimatedProgress] = useState(0);
+const PROGRESSBAR_PROPS: PropDef[] = [
+    { name: "progress", type: "number", required: true, description: "Current progress value." },
+    { name: "minimum", type: "number", default: "0", description: "Minimum range value." },
+    { name: "maximum", type: "number", default: "100", description: "Maximum range value." },
+    { name: "variant", type: '"blue" | "orange" | "unset"', default: '"blue"', description: 'Color variant. Use "unset" with override for custom colors.' },
+    { name: "override", type: "{ default?: { background, gradientStart, gradientEnd } }", description: 'Custom colors when variant is "unset".' },
+    { name: "weight", type: '"light" | "medium"', default: '"light"', description: "Visual weight of the progress bar." },
+    { name: "glowing", type: "boolean", default: "true", description: "Whether the progress bar has a glow effect." },
+    { name: "labelledBy", type: "string", internal: true, description: "ID of the labelling element for accessibility." },
+];
+
+function AnimatedDemo() {
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setAnimatedProgress(prev => (prev >= 100 ? 0 : prev + 5));
+            setProgress(prev => (prev >= 100 ? 0 : prev + 5));
         }, 200);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="vc-compfinder-section">
-            <SectionWrapper title="Variants">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Blue (default) and Orange variants.
-                </Paragraph>
-                <div className="vc-compfinder-grid-vertical">
-                    <div>
-                        <Paragraph color="text-muted" style={{ marginBottom: 4 }}>Blue:</Paragraph>
-                        <ProgressBar progress={60} variant="blue" />
-                    </div>
-                    <div>
-                        <Paragraph color="text-muted" style={{ marginBottom: 4 }}>Orange:</Paragraph>
-                        <ProgressBar progress={60} variant="orange" />
-                    </div>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Progress Values">
-                <div className="vc-compfinder-grid-vertical">
-                    <div>
-                        <Paragraph color="text-muted" style={{ marginBottom: 4 }}>0%:</Paragraph>
-                        <ProgressBar progress={0} variant="blue" />
-                    </div>
-                    <div>
-                        <Paragraph color="text-muted" style={{ marginBottom: 4 }}>25%:</Paragraph>
-                        <ProgressBar progress={25} variant="blue" />
-                    </div>
-                    <div>
-                        <Paragraph color="text-muted" style={{ marginBottom: 4 }}>50%:</Paragraph>
-                        <ProgressBar progress={50} variant="blue" />
-                    </div>
-                    <div>
-                        <Paragraph color="text-muted" style={{ marginBottom: 4 }}>75%:</Paragraph>
-                        <ProgressBar progress={75} variant="blue" />
-                    </div>
-                    <div>
-                        <Paragraph color="text-muted" style={{ marginBottom: 4 }}>100%:</Paragraph>
-                        <ProgressBar progress={100} variant="blue" />
-                    </div>
-                </div>
-            </SectionWrapper>
-
-            <SectionWrapper title="Animated">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Progress: {animatedProgress}%
-                </Paragraph>
-                <ProgressBar progress={animatedProgress} variant="blue" />
-            </SectionWrapper>
-
-            <SectionWrapper title="Custom Range">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Using minimum=0 and maximum=200, progress=150 (75% filled).
-                </Paragraph>
-                <ProgressBar progress={150} minimum={0} maximum={200} variant="orange" />
-            </SectionWrapper>
-
-            <SectionWrapper title="Custom Override">
-                <Paragraph color="text-muted" style={{ marginBottom: 8 }}>
-                    Using variant="unset" with custom gradient colors.
-                </Paragraph>
-                <ProgressBar
-                    progress={70}
-                    variant="unset"
-                    override={{
-                        default: {
-                            background: "rgba(88, 101, 242, 0.3)",
-                            gradientStart: "#5865F2",
-                            gradientEnd: "#EB459E"
-                        }
-                    }}
-                />
-            </SectionWrapper>
-
-            <SectionWrapper title="Props">
-                <Paragraph color="text-muted">
-                    • progress: number - Current progress value
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • minimum?: number - Minimum value (default: 0)
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • maximum?: number - Maximum value (default: 100)
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • variant?: "blue" | "orange" | "unset" - Color variant
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • override?: object - Custom colors when variant="unset"
-                </Paragraph>
-                <Paragraph color="text-muted">
-                    • labelledBy?: string - ID of labelling element for a11y
-                </Paragraph>
-            </SectionWrapper>
+        <div>
+            <Paragraph color="text-muted" style={{ marginBottom: 4 }}>Progress: {progress}%</Paragraph>
+            <ProgressBar progress={progress} variant="blue" />
         </div>
+    );
+}
+
+export default function ProgressBarTab() {
+    return (
+        <DocPage
+            overview="ProgressBar displays a horizontal progress indicator with support for blue and orange color variants, light and medium weights, a glow effect, custom color overrides via gradients, and configurable min/max ranges."
+            importPath={'import { ProgressBar } from "../components";'}
+            sections={[
+                {
+                    title: "Variants",
+                    description: "Blue (default) and orange color variants.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            <div>
+                                <Paragraph color="text-muted" style={{ marginBottom: 4 }}>Blue:</Paragraph>
+                                <ProgressBar progress={60} variant="blue" />
+                            </div>
+                            <div>
+                                <Paragraph color="text-muted" style={{ marginBottom: 4 }}>Orange:</Paragraph>
+                                <ProgressBar progress={60} variant="orange" />
+                            </div>
+                        </div>
+                    ),
+                    code: '<ProgressBar progress={60} variant="blue" />',
+                    relevantProps: ["variant"],
+                },
+                {
+                    title: "Progress Values",
+                    description: "Various progress levels from 0% to 100%.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            {[0, 25, 50, 75, 100].map(v => (
+                                <div key={v}>
+                                    <Paragraph color="text-muted" style={{ marginBottom: 4 }}>{v}%:</Paragraph>
+                                    <ProgressBar progress={v} variant="blue" />
+                                </div>
+                            ))}
+                        </div>
+                    ),
+                    relevantProps: ["progress"],
+                },
+                {
+                    title: "Animated",
+                    description: "Progress bar that increments automatically.",
+                    children: <AnimatedDemo />,
+                },
+                {
+                    title: "Weight",
+                    description: "Light (default) and medium weight variants.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            <div>
+                                <Paragraph color="text-muted" style={{ marginBottom: 4 }}>Light (default):</Paragraph>
+                                <ProgressBar progress={60} weight="light" />
+                            </div>
+                            <div>
+                                <Paragraph color="text-muted" style={{ marginBottom: 4 }}>Medium:</Paragraph>
+                                <ProgressBar progress={60} weight="medium" />
+                            </div>
+                        </div>
+                    ),
+                    code: '<ProgressBar progress={60} weight="medium" />',
+                    relevantProps: ["weight"],
+                },
+                {
+                    title: "Glowing",
+                    description: "Glow effect is enabled by default. Set glowing={false} to disable.",
+                    children: (
+                        <div className="vc-compfinder-grid-vertical">
+                            <div>
+                                <Paragraph color="text-muted" style={{ marginBottom: 4 }}>Glowing (default):</Paragraph>
+                                <ProgressBar progress={60} glowing={true} />
+                            </div>
+                            <div>
+                                <Paragraph color="text-muted" style={{ marginBottom: 4 }}>No glow:</Paragraph>
+                                <ProgressBar progress={60} glowing={false} />
+                            </div>
+                        </div>
+                    ),
+                    code: "<ProgressBar progress={60} glowing={false} />",
+                    relevantProps: ["glowing"],
+                },
+                {
+                    title: "Custom Range",
+                    description: "Using minimum=0 and maximum=200 with progress=150 (75% filled).",
+                    children: <ProgressBar progress={150} minimum={0} maximum={200} variant="orange" />,
+                    code: '<ProgressBar progress={150} minimum={0} maximum={200} variant="orange" />',
+                    relevantProps: ["minimum", "maximum"],
+                },
+                {
+                    title: "Custom Override",
+                    description: 'Using variant="unset" with custom gradient colors.',
+                    children: (
+                        <ProgressBar
+                            progress={70}
+                            variant="unset"
+                            override={{
+                                default: {
+                                    background: "rgba(88, 101, 242, 0.3)",
+                                    gradientStart: "#5865F2",
+                                    gradientEnd: "#EB459E",
+                                },
+                            }}
+                        />
+                    ),
+                    code: `<ProgressBar
+  progress={70}
+  variant="unset"
+  override={{
+    default: {
+      background: "rgba(88, 101, 242, 0.3)",
+      gradientStart: "#5865F2",
+      gradientEnd: "#EB459E",
+    },
+  }}
+/>`,
+                    relevantProps: ["override"],
+                },
+            ]}
+            props={PROGRESSBAR_PROPS}
+        />
     );
 }

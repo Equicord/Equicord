@@ -25,8 +25,4 @@ export function getAttachmentIdFromFilename(filename: string) {
     return path.parse(filename).name;
 }
 
-export function getAttachmentExtFromFilename(filename: string) {
-    return path.parse(filename).ext;
-}
-
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

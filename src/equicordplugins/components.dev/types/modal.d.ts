@@ -21,11 +21,20 @@ export interface ModalNotice {
     type: "info" | "warn" | "critical" | "positive";
 }
 
+export type ModalAnimationVariant = "default" | "fade" | "slide-up";
+
+export type ModalMaxHeight = "default" | "full";
+
 export interface ModalProps {
     title: string;
     subtitle?: string;
     size?: NativeModalSize;
     transitionState?: number;
+    animationVariant?: ModalAnimationVariant;
+    paddingSize?: "sm" | "lg";
+    fullScreenOnMobile?: boolean;
+    maxHeight?: ModalMaxHeight;
+    dismissable?: boolean;
     children?: React.ReactNode;
     actions?: ModalAction[];
     actionBarInput?: React.ReactNode;
@@ -35,7 +44,11 @@ export interface ModalProps {
     listProps?: Record<string, any>;
     notice?: ModalNotice;
     onClose: () => void;
+    onScroll?: (e: React.UIEvent) => void;
+    scrollerRef?: React.Ref<HTMLDivElement>;
+    returnRef?: React.Ref<HTMLElement>;
     role?: string;
+    "aria-label"?: string;
     className?: string;
 }
 
@@ -54,13 +67,25 @@ export interface ConfirmModalProps extends Omit<ModalProps, "actions" | "transit
     };
 }
 
+export type ExpressiveGradientColor = "purple" | "blue" | "pink" | "green";
+
+export interface ModalGraphic {
+    type: "image";
+    src: string;
+    aspectRatio?: string;
+}
+
 export interface ExpressiveModalProps {
     title: string;
-    description?: string;
+    subtitle?: string;
+    size?: NativeModalSize;
     transitionState?: number;
-    graphic?: { src: string; aspectRatio?: string };
+    gradientColor?: ExpressiveGradientColor;
+    graphic?: ModalGraphic;
     badge?: React.ReactNode;
+    actionBarInput?: React.ReactNode;
     actions?: ModalAction[];
+    children?: React.ReactNode;
     onClose: () => void;
 }
 

@@ -40,13 +40,11 @@ export default definePlugin({
             replacement: [
                 {
                     match: /navId:(?=.+?([,}].*?\)))/g,
-                    replace: (m, rest) => {
-                        // Check if this navId: match is a destructuring statement, ignore it if it is
-                        const destructuringMatch = rest.match(/}=.+/);
-                        if (destructuringMatch == null) {
-                            return `contextMenuAPIArguments:typeof arguments!=='undefined'?arguments:[],${m}`;
-                        }
-                        return m;
+                    replace: (m, rest, ...args) => {
+                        if (rest.match(/}=.+/)) return m;
+                        const src = args[1]?.slice(Math.max(0, +args[0] - 2000), +args[0]);
+                        if (src && Math.max(src.lastIndexOf("PureComponent{"), src.lastIndexOf("Component{")) > src.lastIndexOf("function")) return m;
+                        return `contextMenuAPIArguments:typeof arguments!=='undefined'?arguments:[],${m}`;
                     }
                 }
             ]

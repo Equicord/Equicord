@@ -4,26 +4,64 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { isNonNullish } from "@utils/guards";
 import { ProfilePreset } from "@vencord/discord-types";
+import { findStoreLazy } from "@webpack";
 import { showToast, Toasts } from "@webpack/common";
 
 import { getCurrentProfile } from "./profile";
-import { addPreset, movePresetInArray, presets, removePreset, replaceAllPresets, savePresetsData, updatePreset } from "./storage";
+import { addPreset, movePresetInArray, presets, PresetSection, type ProfilePresetEx, removePreset, replaceAllPresets, savePresetsData, updatePreset } from "./storage";
 
-export async function savePreset(name: string, guildId?: string) {
-    const profile = await getCurrentProfile(guildId);
-    const newPreset: ProfilePreset = {
+const UserProfileSettingsStore = findStoreLazy("UserProfileSettingsStore");
+
+function isImageInput(value: unknown): value is string | { imageUri: string; } {
+    if (typeof value === "string") return value.length > 0;
+    return typeof value === "object" && isNonNullish(value) && "imageUri" in value && typeof (value as { imageUri: unknown }).imageUri === "string";
+}
+
+function getFreshPendingAvatar(section: PresetSection, guildId?: string): string | null {
+    const pending = (section === "server" && guildId
+        ? UserProfileSettingsStore.getPendingChanges?.(guildId)
+        : UserProfileSettingsStore.getPendingChanges?.()) ?? {};
+    const pendingObj = pending as Record<string, unknown>;
+
+    const candidates = [
+        pendingObj.selectedAvatarRaw,
+        pendingObj.presetAvatarRaw,
+        pendingObj.pendingAvatar,
+        pendingObj.avatar,
+        pendingObj.selectedAvatarProcessed,
+        pendingObj.presetAvatarProcessed
+    ];
+    const selected = candidates.find(isImageInput);
+    if (!selected) return null;
+    return typeof selected === "string" ? selected : selected.imageUri;
+}
+
+export async function savePreset(name: string, section: PresetSection, guildId?: string) {
+    const profile = await getCurrentProfile(guildId, { isGuildProfile: section === "server" });
+    const freshPendingAvatar = getFreshPendingAvatar(section, guildId);
+    const effectiveAvatar = freshPendingAvatar ?? profile.avatarDataUrl ?? null;
+
+    const newPreset: ProfilePresetEx = {
         name,
         timestamp: Date.now(),
         ...profile,
+        avatarDataUrl: effectiveAvatar,
     };
     addPreset(newPreset);
-    await savePresetsData();
-    showToast(`Profile "${name}" saved successfully`, Toasts.Type.SUCCESS);
+    await savePresetsData(section);
 }
 
-export async function updatePresetField(index: number, field: keyof Omit<ProfilePreset, "name" | "timestamp">, value: any) {
+export async function updatePresetField<K extends keyof Omit<ProfilePreset, "name" | "timestamp">>(
+    index: number,
+    field: K,
+    value: Omit<ProfilePreset, "name" | "timestamp">[K],
+    section: PresetSection,
+    guildId?: string
+) {
     if (index < 0 || index >= presets.length) return;
+    void guildId;
 
     const updatedPreset = {
         ...presets[index],
@@ -31,91 +69,71 @@ export async function updatePresetField(index: number, field: keyof Omit<Profile
         timestamp: Date.now()
     };
     updatePreset(index, updatedPreset);
-    await savePresetsData();
+    await savePresetsData(section);
 }
 
-export async function deletePreset(index: number) {
+export async function deletePreset(index: number, section: PresetSection, guildId?: string) {
     if (index < 0 || index >= presets.length) return;
 
-    const preset = presets[index];
     removePreset(index);
-    await savePresetsData();
-    showToast(`Profile "${preset.name}" deleted`, Toasts.Type.MESSAGE);
+    await savePresetsData(section);
 }
 
-export async function movePreset(fromIndex: number, toIndex: number) {
+export async function movePreset(fromIndex: number, toIndex: number, section: PresetSection, guildId?: string) {
     if (fromIndex < 0 || fromIndex >= presets.length || toIndex < 0 || toIndex >= presets.length) return;
 
     movePresetInArray(fromIndex, toIndex);
-    await savePresetsData();
+    await savePresetsData(section);
 }
 
-export async function renamePreset(index: number, newName: string) {
+export async function renamePreset(index: number, newName: string, section: PresetSection, guildId?: string) {
     if (index < 0 || index >= presets.length || !newName.trim()) return;
 
     const updatedPreset = { ...presets[index], name: newName.trim() };
     updatePreset(index, updatedPreset);
-    await savePresetsData();
-    showToast(`Profile renamed to "${newName}"`, Toasts.Type.SUCCESS);
+    await savePresetsData(section);
 }
 
-export function exportPresets() {
-    try {
-        const dataStr = JSON.stringify(presets, null, 2);
-        const dataBlob = new Blob([dataStr], { type: "application/json" });
-        const url = URL.createObjectURL(dataBlob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `profile-presets-${Date.now()}.json`;
-        link.click();
-        URL.revokeObjectURL(url);
-        showToast("Profiles exported successfully", Toasts.Type.SUCCESS);
-    } catch (err) {
-        showToast("Failed to export profiles", Toasts.Type.FAILURE);
-    }
+export function exportPresets(section: PresetSection) {
+    const dataStr = JSON.stringify(presets, null, 2);
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `profile-presets-${section}-${Date.now()}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
 }
 
-function presetsAreEqual(preset1: ProfilePreset, preset2: ProfilePreset): boolean {
-    return preset1.avatarDataUrl === preset2.avatarDataUrl &&
-        preset1.bannerDataUrl === preset2.bannerDataUrl &&
-        preset1.bio === preset2.bio &&
-        preset1.pronouns === preset2.pronouns &&
-        JSON.stringify(preset1.themeColors) === JSON.stringify(preset2.themeColors) &&
-        JSON.stringify(preset1.avatarDecoration) === JSON.stringify(preset2.avatarDecoration) &&
-        JSON.stringify(preset1.profileEffect) === JSON.stringify(preset2.profileEffect) &&
-        JSON.stringify(preset1.nameplate) === JSON.stringify(preset2.nameplate);
-}
+export type ImportDecision = "override" | "merge" | "cancel";
 
-export async function importPresets(forceUpdate: () => void, onOverridePrompt: () => Promise<boolean>) {
+export async function importPresets(
+    forceUpdate: () => void,
+    onImportPrompt: (existingCount: number) => Promise<ImportDecision>,
+    section: PresetSection,
+    guildId?: string
+) {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "application/json";
-    input.onchange = async (e: any) => {
+    input.onchange = async (event: Event) => {
         try {
-            const file = e.target.files[0];
+            const target = event.currentTarget as HTMLInputElement | null;
+            const file = target?.files?.[0];
             if (!file) return;
 
             const text = await file.text();
             const importedPresets = JSON.parse(text);
 
             if (!Array.isArray(importedPresets)) {
-                showToast("Invalid profile file format", Toasts.Type.FAILURE);
                 return;
             }
 
             if (presets.length > 0) {
-                const hasDuplicates = importedPresets.some(imported =>
-                    presets.some(existing => presetsAreEqual(imported, existing))
-                );
-
-                if (hasDuplicates) {
-                    const shouldOverride = await onOverridePrompt();
-                    if (shouldOverride) {
-                        replaceAllPresets(importedPresets);
-                    } else {
-                        const combined = [...presets, ...importedPresets];
-                        replaceAllPresets(combined);
-                    }
+                const decision = await onImportPrompt(presets.length);
+                if (decision === "cancel") return;
+                if (decision === "override") {
+                    replaceAllPresets(importedPresets);
                 } else {
                     const combined = [...presets, ...importedPresets];
                     replaceAllPresets(combined);
@@ -124,11 +142,10 @@ export async function importPresets(forceUpdate: () => void, onOverridePrompt: (
                 replaceAllPresets(importedPresets);
             }
 
-            await savePresetsData();
+            await savePresetsData(section);
             forceUpdate();
-            showToast(`Imported ${importedPresets.length} profiles successfully`, Toasts.Type.SUCCESS);
-        } catch (err) {
-            showToast("Failed to import profiles", Toasts.Type.FAILURE);
+        } catch {
+            showToast("Failed to import presets. The file might be invalid.", Toasts.Type.FAILURE);
         }
     };
     input.click();

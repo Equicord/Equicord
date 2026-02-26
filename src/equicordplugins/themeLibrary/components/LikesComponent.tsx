@@ -5,10 +5,12 @@
  */
 
 import * as DataStore from "@api/DataStore";
+import { Button } from "@components/Button";
+import { Margins } from "@components/margins";
 import type { Theme, ThemeLikeProps } from "@equicordplugins/themeLibrary/types";
 import { isAuthorized } from "@equicordplugins/themeLibrary/utils/auth";
 import { LikeIcon } from "@equicordplugins/themeLibrary/utils/Icons";
-import { Button, useEffect, useRef, useState } from "@webpack/common";
+import { useEffect, useRef, useState } from "@webpack/common";
 
 import { logger, themeRequest } from "./ThemeTab";
 
@@ -78,16 +80,13 @@ export const LikesComponent = ({ themeId, likedThemes: initialLikedThemes }: { t
     const hasLiked = likedThemes?.likes.some(like => like.themeId === themeId as unknown as Number && like?.hasLiked === true) ?? false;
 
     return (
-        <div>
-            <Button onClick={() => handleLikeClick(themeId)}
-                size={Button.Sizes.MEDIUM}
-                color={Button.Colors.PRIMARY}
-                look={Button.Looks.FILLED}
-                disabled={themeId === "preview"}
-                style={{ marginLeft: "8px" }}
-            >
-                {LikeIcon(hasLiked || themeId === "preview")} {themeId === "preview" ? 143 : likesCount}
-            </Button>
-        </div>
+        <Button onClick={() => handleLikeClick(themeId)}
+            variant="secondary"
+            size="medium"
+            disabled={themeId === "preview"}
+            className={Margins.right8}
+        >
+            {LikeIcon(hasLiked || themeId === "preview")} {themeId === "preview" ? 143 : likesCount}
+        </Button>
     );
 };

@@ -14,7 +14,7 @@ import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
 import { Guild } from "@vencord/discord-types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
-import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, NavigationRouter, openUserSettingsPanel, React, ReadStateUtils, RelationshipStore, SelectedChannelStore, SelectedGuildStore, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
+import { ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, MediaEngineStore, NavigationRouter, React, ReadStateUtils, RelationshipStore, SelectedChannelStore, SelectedGuildStore, SettingsRouter, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
 import type { FC, ReactElement, ReactNode } from "react";
 import { Settings } from "Vencord";
 
@@ -1283,7 +1283,7 @@ const BUILT_IN_COMMANDS: CommandEntry[] = [
         keywords: ["settings", "equicord"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_NAVIGATION, TAG_CORE],
-        handler: () => openUserSettingsPanel("equicord_main")
+        handler: () => SettingsRouter.openUserSettings("equicord_main_panel")
     },
     {
         id: "open-plugin-settings",
@@ -1291,7 +1291,7 @@ const BUILT_IN_COMMANDS: CommandEntry[] = [
         keywords: ["settings", "plugins"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_NAVIGATION, TAG_PLUGINS],
-        handler: () => openUserSettingsPanel("equicord_plugins")
+        handler: () => SettingsRouter.openUserSettings("equicord_plugins_panel")
     },
     {
         id: "reload-windows",
@@ -1305,15 +1305,15 @@ const BUILT_IN_COMMANDS: CommandEntry[] = [
 ];
 
 const DISCORD_SETTINGS_COMMANDS: Array<{ id: string; label: string; route: string; keywords: string[]; description?: string; }> = [
-    { id: "settings-account", label: "Open My Account", route: "my_account", keywords: ["account", "profile"] },
-    { id: "settings-privacy", label: "Open Data & Privacy", route: "data_and_privacy", keywords: ["privacy", "safety", "data"] },
-    { id: "settings-notifications", label: "Open Notifications", route: "legacy_notifications_settings", keywords: ["notifications"] },
-    { id: "settings-voice", label: "Open Voice & Video", route: "voice_and_video", keywords: ["voice", "video", "audio"] },
-    { id: "settings-text", label: "Open Text & Images", route: "text_and_images", keywords: ["text", "images"] },
-    { id: "settings-appearance", label: "Open Appearance", route: "appearance", keywords: ["appearance", "theme"] },
-    { id: "settings-accessibility", label: "Open Accessibility", route: "accessibility", keywords: ["accessibility"] },
-    { id: "settings-keybinds", label: "Open Keybinds", route: "keybinds", keywords: ["keybinds", "shortcuts"] },
-    { id: "settings-advanced", label: "Open Advanced", route: "advanced", keywords: ["advanced"] }
+    { id: "settings-account", label: "Open My Account", route: "my_account_panel", keywords: ["account", "profile"] },
+    { id: "settings-privacy", label: "Open Data & Privacy", route: "data_and_privacy_panel", keywords: ["privacy", "safety", "data"] },
+    { id: "settings-notifications", label: "Open Notifications", route: "notifications_panel", keywords: ["notifications"] },
+    { id: "settings-voice", label: "Open Voice & Video", route: "voice_and_video_panel", keywords: ["voice", "video", "audio"] },
+    { id: "settings-text", label: "Open Text & Images", route: "text_and_images_panel", keywords: ["text", "images"] },
+    { id: "settings-appearance", label: "Open Appearance", route: "appearance_panel", keywords: ["appearance", "theme"] },
+    { id: "settings-accessibility", label: "Open Accessibility", route: "accessibility_panel", keywords: ["accessibility"] },
+    { id: "settings-keybinds", label: "Open Keybinds", route: "keybinds_panel", keywords: ["keybinds", "shortcuts"] },
+    { id: "settings-advanced", label: "Open Advanced", route: "advanced_panel", keywords: ["advanced"] }
 ];
 
 const settingsCommandsById = new Map<string, typeof DISCORD_SETTINGS_COMMANDS[number]>();
@@ -1692,7 +1692,7 @@ function registerUpdateCommands() {
         keywords: ["updates", "changelog"],
         categoryId: "updates",
         tags: [TAG_DEVELOPER, TAG_NAVIGATION],
-        handler: () => openUserSettingsPanel("equicord_changelog")
+        handler: () => SettingsRouter.openUserSettings("equicord_changelog_panel")
     });
 }
 
@@ -1711,13 +1711,13 @@ function registerDiscordSettingsCommands() {
             categoryId: "discord-settings",
             tags: [TAG_NAVIGATION],
             handler: async () => {
-                const fallbackRoute = command.id === "settings-privacy" ? "privacy_and_safety" : null;
+                const fallbackRoute = command.id === "settings-privacy" ? "privacy_and_safety_panel" : null;
 
                 try {
-                    await openUserSettingsPanel(command.route);
+                    await SettingsRouter.openUserSettings(command.route);
                 } catch (error) {
                     if (fallbackRoute) {
-                        await openUserSettingsPanel(fallbackRoute);
+                        await SettingsRouter.openUserSettings(fallbackRoute);
                     } else {
                         console.error("CommandPalette", "Failed to open Discord settings", command.route, error);
                         showToast(`Unable to open ${command.label}.`, Toasts.Type.FAILURE);
@@ -2012,7 +2012,7 @@ async function executeCustomCommand(command: CustomCommandDefinition) {
                 await runCommandById(action.commandId, new Set([command.id]));
                 break;
             case "settings":
-                openUserSettingsPanel(action.route);
+                SettingsRouter.openUserSettings(action.route);
                 break;
             case "url": {
                 const external = (window as any)?.DiscordNative?.app?.openExternalURL;
@@ -2708,7 +2708,7 @@ function registerCustomizationCommands() {
         keywords: ["theme", "library"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_CUSTOMIZATION, TAG_NAVIGATION],
-        handler: () => openUserSettingsPanel("equicord_themes")
+        handler: () => SettingsRouter.openUserSettings("equicord_themes_panel")
     });
 }
 

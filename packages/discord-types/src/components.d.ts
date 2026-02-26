@@ -411,6 +411,24 @@ export type MaskedLink = ComponentType<PropsWithChildren<{
     channelId?: string;
 }>>;
 
+interface ScrollToOptions {
+    animate?: boolean;
+    callback?: (() => unknown);
+}
+
+/** Full type can be found at {@link https://github.com/fedeericodl/discord-client-types/blob/main/src/discord_common/js/packages/design/components/Scroller/utils/core/getAnimatedScrollHelpers.ts} */
+export interface ScrollerBaseRef {
+    scrollTo: (props: { to: number; } & ScrollToOptions) => void;
+    scrollPageUp: (props?: ScrollToOptions) => void;
+    scrollPageDown: (props?: ScrollToOptions) => void;
+    scrollToTop: (props?: ScrollToOptions) => void;
+    scrollToBottom: (props?: ScrollToOptions) => void;
+    isScrolledToTop: () => boolean;
+    isScrolledToBottom: () => boolean;
+    getDistanceFromTop: () => number;
+    getDistanceFromBottom: () => number;
+}
+
 export interface ScrollerBaseProps {
     className?: string;
     style?: CSSProperties;
@@ -418,6 +436,7 @@ export interface ScrollerBaseProps {
     paddingFix?: boolean;
     onClose?(): void;
     onScroll?(): void;
+    ref?: Ref<ScrollerBaseRef>;
 }
 
 export type ScrollerThin = ComponentType<PropsWithChildren<ScrollerBaseProps & {
@@ -448,9 +467,9 @@ export type ListScrollerThin = ComponentType<ScrollerBaseProps & {
     renderSidebar?: (listVisible: boolean, sidebarVisible: boolean) => React.ReactNode;
     wrapSection?: (section: number, children: React.ReactNode) => React.ReactNode;
 
-    sectionHeight: number;
-    rowHeight: number;
-    footerHeight?: number;
+    sectionHeight: number | ((section: number) => number);
+    rowHeight: number | ((section: number, row: number) => number);
+    footerHeight?: number | ((section: number) => number);
     sidebarHeight?: number;
 
     chunkSize?: number;
