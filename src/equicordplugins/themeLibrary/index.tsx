@@ -26,7 +26,7 @@ export default definePlugin({
 
     start() {
         SettingsPlugin.customEntries.push({
-            key: "theme_library",
+            key: "equicord_theme_library",
             title: "Theme Library",
             Component: require("./components/ThemeTab").default,
             Icon: ColorPaletteIcon

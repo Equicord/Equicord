@@ -10,8 +10,8 @@ import { PaintbrushIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { closeModal, openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
-import { extractAndLoadChunksLazy, findStoreLazy } from "@webpack";
-import { ChannelStore, DraftType, FluxDispatcher, Menu, SelectedChannelStore, UploadHandler } from "@webpack/common";
+import { extractAndLoadChunksLazy } from "@webpack";
+import { ChannelStore, DraftType, FluxDispatcher, Menu, PendingReplyStore, SelectedChannelStore, UploadHandler } from "@webpack/common";
 
 import RemixModal from "./RemixModal";
 import css from "./styles.css?managed";
@@ -19,7 +19,6 @@ import css from "./styles.css?managed";
 const requireCreateStickerModal = extractAndLoadChunksLazy([".CREATE_STICKER_MODAL,", "isDisplayingIndividualStickers"]);
 const requireSettingsMenu = extractAndLoadChunksLazy(['type:"USER_SETTINGS_MODAL_OPEN"']);
 
-const PendingReplyStore = findStoreLazy("PendingReplyStore");
 const validMediaTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
 
 const UploadContextMenuPatch: NavContextMenuPatchCallback = (children, props) => {

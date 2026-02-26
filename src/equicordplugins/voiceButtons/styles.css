@@ -2,6 +2,15 @@
     flex: none !important;
 }
 
+.voice-user-buttons-left {
+    order: -1;
+}
+
+.voice-user-buttons-right {
+    order: 1;
+    margin-left: 4px;
+}
+
 .voice-user-button-container {
     padding-right: 4px;
 }
