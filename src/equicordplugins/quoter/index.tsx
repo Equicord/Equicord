@@ -12,11 +12,11 @@ import { getCurrentChannel } from "@utils/discord";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, ModalSize, openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
-import { Button, Menu, TextInput, UploadHandler, useEffect, useState } from "@webpack/common";
+import { Button, IconUtils, Menu, TextInput, UploadHandler, useEffect, useState } from "@webpack/common";
 
 import { QuoteIcon } from "./components/QuoteIcon";
 import { QuoteFont } from "./types";
-import { createQuoteImage, ensureFontLoaded, generateFileNamePreview, getFileExtension, getMimeType, resetFontLoading, sizeUpgrade } from "./utils";
+import { createQuoteImage, ensureFontLoaded, generateFileNamePreview, getFileExtension, getMimeType, resetFontLoading } from "./utils";
 
 const settings = definePluginSettings({
     quoteFont: {
@@ -105,7 +105,7 @@ function QuoteModal({ message, ...props }: ModalProps & { message: Message; }) {
 
     const generateImage = async () => {
         const image = await createQuoteImage({
-            avatarUrl: sizeUpgrade(message.author.getAvatarURL()),
+            avatarUrl: IconUtils.getUserAvatarURL(message.author, true, 512),
             quote: message.content,
             grayScale: gray,
             author: message.author,
