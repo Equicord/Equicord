@@ -5,6 +5,7 @@
  */
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
+import { isPluginEnabled } from "@api/PluginManager";
 import { BaseText } from "@components/BaseText";
 import { CodeBlock } from "@components/CodeBlock";
 import { Divider } from "@components/Divider";
@@ -101,6 +102,7 @@ function makeContextCallback(
     action: (any) => void,
 ): NavContextMenuPatchCallback {
     return (children, props) => {
+        if (isPluginEnabled("ViewRaw")) return;
         if (props.label === getIntlMessage("CHANNEL_ACTIONS_MENU_LABEL"))
             return; // random shit like notification settings
 
