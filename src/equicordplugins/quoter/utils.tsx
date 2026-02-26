@@ -22,7 +22,7 @@ interface CustomEmojiToken {
 }
 
 export function sizeUpgrade(url: string): string {
-    const u = new URL(url);
+    const u = new URL(url, window.location.url);
     u.searchParams.set("size", "512");
     return u.toString();
 }
