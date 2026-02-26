@@ -71,6 +71,16 @@ export const settings = definePluginSettings({
             { label: "Default Username", value: "username" },
             { label: "Both", value: "both" },
         ],
+    },
+    buttonPosition: {
+        type: OptionType.SELECT,
+        default: "left",
+        description: "Choose where to place voice buttons in the voice user row.",
+        restartNeeded: false,
+        options: [
+            { label: "Left", value: "left" },
+            { label: "Right", value: "right" },
+        ],
     }
 }, {
     useServer: {
