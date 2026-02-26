@@ -41,6 +41,10 @@ const settings = definePluginSettings({
                 label: "Playstation",
                 value: "playstation",
             },
+            {
+                label: "VR",
+                value: "vr",
+            },
         ]
     }
 });
@@ -48,7 +52,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "PlatformSpoofer",
     description: "Spoof what platform or device you're on",
-    authors: [EquicordDevs.Drag],
+    authors: [EquicordDevs.Drag, EquicordDevs.neoarz],
     settingsAboutComponent: () => (
         <Notice.Warning>
             We can't guarantee this plugin won't get you warned or banned.
@@ -95,6 +99,8 @@ export default definePlugin({
                     return { browser: "Discord Embedded", vcIcon: 2 };
                 case "playstation":
                     return { browser: "Discord Embedded", vcIcon: 3 };
+                case "vr":
+                    return { browser: "Discord VR", vcIcon: 4 };
                 default:
                     return null;
             }

@@ -31,8 +31,12 @@ export default definePlugin({
     ],
     renderButtons(user: User) {
         if (!user) return null;
+        const positionClass = settings.store.buttonPosition === "right"
+            ? "voice-user-buttons-right"
+            : "voice-user-buttons-left";
+
         return (
-            <Flex flexDirection="row" className="voice-user-buttons">
+            <Flex flexDirection="row" className={`voice-user-buttons ${positionClass}`}>
                 {settings.store.showChatButton && <UserChatButton user={user} />}
                 {settings.store.showMuteButton && <UserMuteButton user={user} />}
                 {settings.store.showDeafenButton && <UserDeafenButton user={user} />}

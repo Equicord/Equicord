@@ -5,133 +5,159 @@
  */
 
 import { Devs, EquicordDevs } from "@utils/constants";
+import { getIntlMessage } from "@utils/discord";
 import definePlugin from "@utils/types";
 import { Embed } from "@vencord/discord-types";
-import { findComponentByCodeLazy, findCssClassesLazy, proxyLazyWebpack } from "@webpack";
+import { proxyLazyWebpack } from "@webpack";
 import { React } from "@webpack/common";
-import { Component, ReactNode } from "react";
+import { ComponentType, ReactNode } from "react";
 
-enum Format {
-    NONE = 0,
-    IMAGE = 1,
-    VIDEO = 2
-}
+import { AttachmentAccessory, EmbedAccessory, FilePicker } from "./components";
+import { SignedUrlsStore } from "./stores";
+import managedStyle from "./style.css?managed";
+import { AttachmentItem, EmbedComponent, ExpressionPickerTabProps, ExpressionPickerView, FavouriteItem, FavouriteItemFormat } from "./types";
+import { getThumbnailUrl } from "./utils";
 
-interface FavoriteButtonProps {
-    width: number;
-    height: number;
-    // Media URL
-    src: string;
-    // Provider source URL
-    url: string;
-    format: Format;
-    className?: string;
-}
-
-interface AccessoryProps
-    extends Pick<FavoriteButtonProps, "width" | "height" | "url"> {
-    proxyUrl?: string;
-    video?: boolean;
-}
-
-interface EmbedComponent extends Component<{ embed: Embed; }> {
-    __render: () => ReactNode;
-}
-
-const FavoriteButton = findComponentByCodeLazy<FavoriteButtonProps>("#{intl::GIF_TOOLTIP_ADD_TO_FAVORITES}");
-const Classes = findCssClassesLazy("gifFavoriteButton", "ctaButtonContainer");
-const EmbedContext = proxyLazyWebpack(() => React.createContext<null | Embed>(null));
+export const EmbedContext = proxyLazyWebpack(() => React.createContext<null | Embed>(null));
+export const EmbedMosaicContext = proxyLazyWebpack(() => React.createContext<null | number>(null));
+export const AttachmentContext = proxyLazyWebpack(() => React.createContext<null | AttachmentItem>(null));
 
 export default definePlugin({
     name: "FavouriteAnything",
-    description: "Favourite any image",
+    description: "Favourite any image, video, or file attachment",
     authors: [Devs.nin0dev, EquicordDevs.davri],
+    managedStyle,
     patches: [
+        // EMBEDS
         {
-            find: "static isAnimated",
+            find: "#{intl::SUPPRESS_ALL_EMBEDS}",
             replacement: [
-                // .isAnimated is checked in almost every media overlay event listener, so it's easier to patch the source.
                 {
-                    match: /static isAnimated\((\i)\)\{/,
-                    replace:
-                        "static isAnimated($1,override){if(!override)return true;"
+                    // Wrap the embed component's render method in a custom context to avoid having to drill props
+                    match: "render()",
+                    replace: "$&{return $self.renderEmbed.call(this)}__render()"
                 },
-                // Always render the custom accessory if the prop wasn't provided. This mostly affects video attachments.
-                // Url and proxyUrl are additionally set to the same value, since the original url property only stores the thumbnail.
                 {
-                    match: /(?<=this\.props\.renderAccessory\(\):)null/,
-                    replace:
-                        "$self.Accessory({...this.props,url:this.props.proxyUrl,video:true})"
-                },
-                // Always return static thumbnails for non gif media to prevent graphical glitches (side effect of the first patch).
-                {
-                    match: /getSrc\(\i\)\{.*?let \i=/,
-                    replace: "$&!this.constructor.isAnimated(this.props,true)||"
-                },
-                // Hide the default "GIF" tag accessory that is visible when discord is unfocused.
-                {
-                    match: "return this.props.shouldRenderAccessory?",
-                    replace: "$&!this.constructor.isAnimated(this.props,true)||"
+                    // Specify the index for individual items in embed.images
+                    match: /\.images\.map\((\i)=>(this.renderImage\(\{[^}]{50,100}\}\))\)/,
+                    replace: ".images.map(($1,index)=>$self.renderEmbedMosaicItem($2,index))"
                 }
             ]
         },
-        // Wrap the embed component with a custom context provider to avoid having to drill props.
         {
-            find: "#{intl::SUPPRESS_ALL_EMBEDS}",
+            // Override the default renderAdjacentContent prop value for all types of embed components (renderImageComponent, renderVideoComponent...)
+            find: "#{intl::MEDIA_MOSAIC_ALT_TEXT_POPOUT_TITLE}",
             replacement: {
-                match: "render()",
-                replace: "$&{return $self.renderEmbed.call(this)}__render()"
+                match: /renderAdjacentContent:(\i)/g,
+                replace: "$&=$self.renderEmbedAccessory"
             }
         },
-        // Replace the default gif accessory with a custom one that skips fileType checks. Mostly affects image attachments.
+        // ATTACHMENTS
         {
-            find: "renderComponentAccessories",
+            find: '["VIDEO","CLIP","AUDIO"]',
+            replacement: [
+                {
+                    // Wrap the attachment component in a custom context to avoid having to drill props
+                    match: /(?<=children:)(\i)=>(\i\(\1\))\}\):(\i\(\))/,
+                    replace: "$1=>$self.renderAttachment($2,arguments[0])}):$self.renderAttachment($3,arguments[0])"
+                },
+                {
+                    // Always add our custom accessory to the attachment's adjacent content
+                    match: "=[];",
+                    replace: "=[$self.renderAttachmentAccessory()];"
+                }
+            ]
+        },
+        // EXPRESSION PICKER
+        {
+            find: "#{intl::EXPRESSION_PICKER_CATEGORIES_A11Y_LABEL}",
+            replacement: [
+                {
+                    // Replace the "GIFs" tab with two custom tabs
+                    match: /\(0,\i\.jsx\)\((\i),[^}]{20,40}?"aria-selected":(\i)[^}]{50,100}?#{intl::EXPRESSION_PICKER_GIF}\)\}\)/,
+                    replace: "$self.renderTabs($1,$2)"
+                },
+                {
+                    // Insert the custom file picker into the expression picker's body
+                    match: /\{onSelectGIF:(\i),[^}]{20,40}\}\):null,(?=(\i)===)/,
+                    replace: "$&$self.renderFilePicker($2,$1),"
+                }
+            ]
+        },
+        {
+            // Hide favourite files from the GIFs/Media tab
+            find: '.sortBy("order").reverse().value()',
             replacement: {
-                match: /\i=>\(\)=>\{.{200,300}?null\}/,
-                replace: "props=>()=>$self.Accessory({...props,video:false})"
+                match: '.sortBy("order").reverse()',
+                replace: "$&.filter($self.filterGifs)"
             }
         },
-        // Add a proxyUrl prop alongside the src prop, which is used for video thumbnails.
+        // FAVOURITE BUTTON
         {
-            find: /disableArrowKeySeek:\i\}\)\}/,
+            find: "#{intl::GIF_TOOLTIP_REMOVE_FROM_FAVORITES}",
             replacement: {
-                match: /src:\i(?=,\.\.\.\i)/,
-                replace: "$&,proxyUrl:this.props.src"
+                // Intercept the onClick callback to replace the placeholder thumbnail with a valid CDN link
+                match: /\(0,(\i\.\i)\)\((\{[^}].{40,60}?\})\)/,
+                replace: "$self.interceptAddToFavourites($2).then($1)"
             }
         }
     ],
-    renderEmbed(this: EmbedComponent) {
+    renderTabs(Tab: ComponentType<ExpressionPickerTabProps>, activeView: ExpressionPickerView) {
         return (
-            <EmbedContext.Provider value={this.props.embed}>
-                {this.__render()}
-            </EmbedContext.Provider>
+            <>
+                <Tab
+                    id="gif-picker-tab"
+                    key="gif-picker-tab"
+                    aria-controls="gif-picker-tab-panel"
+                    aria-selected={activeView === ExpressionPickerView.GIF}
+                    isActive={activeView === ExpressionPickerView.GIF}
+                    viewType={ExpressionPickerView.GIF}
+                >
+                    Media
+                </Tab>
+                <Tab
+                    id="files-picker-tab"
+                    key="files-picker-tab"
+                    aria-controls="files-picker-tab-panel"
+                    aria-selected={activeView === ExpressionPickerView.FILES}
+                    isActive={activeView === ExpressionPickerView.FILES}
+                    viewType={ExpressionPickerView.FILES}
+                >
+                    {getIntlMessage("FILES")}
+                </Tab>
+            </>
         );
     },
-    Accessory(props: AccessoryProps) {
-        const embed = React.useContext(EmbedContext);
-        const content = embed?.image ?? embed?.video;
+    renderFilePicker(activeView: ExpressionPickerView, onSelectGIF: (item: { url: string; }) => void) {
+        return activeView === ExpressionPickerView.FILES ? <FilePicker onSelectItem={onSelectGIF} /> : null;
+    },
+    renderAttachment(children: ReactNode, props: { item: AttachmentItem; }) {
+        return <AttachmentContext.Provider value={props.item}>{children}</AttachmentContext.Provider>;
+    },
+    renderEmbed(this: EmbedComponent) {
+        return <EmbedContext.Provider value={this.props.embed}>{this.__render()}</EmbedContext.Provider>;
+    },
+    renderEmbedMosaicItem(children: ReactNode, index: number) {
+        return <EmbedMosaicContext.Provider value={index}>{children}</EmbedMosaicContext.Provider>;
+    },
+    renderAttachmentAccessory: () => <AttachmentAccessory />,
+    renderEmbedAccessory: () => <EmbedAccessory />,
+    filterGifs: (item: FavouriteItem) => item.format !== FavouriteItemFormat.NONE,
+    interceptAddToFavourites: async (item: FavouriteItem & { url: string; }) => {
+        if (item.format !== FavouriteItemFormat.NONE) return item;
 
-        const { url, proxyUrl, width, height, video } =
-            embed && content
-                ? {
-                    ...content,
-                    url: (embed.type === "gifv" && embed.url) || content.url,
-                    proxyUrl: content.proxyURL,
-                    video: !!embed.video
-                }
-                : props;
+        SignedUrlsStore.addSigned(item.url);
 
-        if (!width || !height || !url) return null;
+        if (URL.canParse(item.src)) {
+            SignedUrlsStore.addSigned(item.src);
+            return item;
+        }
 
-        return (
-            <FavoriteButton
-                format={video ? Format.VIDEO : Format.IMAGE}
-                className={Classes?.gifFavoriteButton}
-                src={proxyUrl ?? url}
-                url={url}
-                width={width}
-                height={height}
-            />
-        );
+        const thumbnail = await getThumbnailUrl(item.src, item.width, item.height);
+        if (!thumbnail) return item;
+
+        thumbnail.search = "";
+        thumbnail.hash = item.src;
+        return { ...item, src: `${thumbnail}` };
     }
 });
