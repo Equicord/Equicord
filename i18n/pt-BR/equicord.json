@@ -1414,6 +1414,20 @@
     "micLoopbackTester":{
         "description":"Teste seu microfone com um botão de loopback na área do usuário"
     },
+    "middleClickTweaks":{
+        "description":"Diversos ajustes do clique do meio, como na colagem e na abertura de links.",
+        "settings":{
+            "always":"Sempre impedir a colagem com o clique do meio",
+            "both":"Links e Mídia",
+            "focus":"Impedir apenas quando a área de texto não estiver focada",
+            "links":"Links",
+            "media":"Mídia",
+            "none":"Nenhum",
+            "openScope":"Impedir que o clique com o botão do meio nesses tipos de conteúdo os abra.",
+            "pasteScope":"Impedir que o clique com o botão do meio cole nestas situações.",
+            "pasteThreshold":"Milissegundos até que a colagem seja reativada após um clique do meio."
+        }
+    },
     "moreCommands":{
         "description":"Comandos de barra adicionais incluindo informações do sistema, rolagem de dados, cara ou coroa, e mais",
         "settings":{
