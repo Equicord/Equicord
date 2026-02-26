@@ -19,14 +19,14 @@ import { FluxDispatcher, Menu, React, Tooltip, UserStore } from "@webpack/common
 
 interface CallUpdate {
     ringing: string[];
-    ongoingRings: Record<number, string>;
+    ongoingRings: string[];
     messageId: string;
     region: string;
 }
 
 const args: CallUpdate = {
     ringing: [],
-    ongoingRings: {},
+    ongoingRings: [],
     messageId: "",
     region: "",
 };
@@ -35,7 +35,7 @@ const ignoredChannelIds = new Set<string>();
 const cl = classNameFactory("vc-ignore-calls-");
 const Deafen = findComponentByCodeLazy("0-1.02-.1H3.05a9");
 const filterOngoingRings = (currentUserId: string): CallUpdate["ongoingRings"] =>
-    Object.fromEntries(Object.entries(args.ongoingRings).filter(([, id]) => id !== currentUserId)) as CallUpdate["ongoingRings"];
+    args.ongoingRings.filter((id: string) => id !== currentUserId);
 
 const ContextMenuPatch: NavContextMenuPatchCallback = (children, { channel }: { channel: Channel; }) => {
     if (!channel || (!channel.isDM() && !channel.isGroupDM())) return;
@@ -111,7 +111,7 @@ export default definePlugin({
     flux: {
         async CALL_UPDATE({ ringing, ongoingRings, messageId, region }) {
             args.ringing = ringing || [];
-            args.ongoingRings = ongoingRings || {};
+            args.ongoingRings = Array.isArray(ongoingRings) ? ongoingRings : [];
             args.messageId = messageId;
             args.region = region;
         }
