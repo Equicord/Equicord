@@ -52,33 +52,28 @@ export const settings = definePluginSettings({
     },
     showButtonsSelf: {
         type: OptionType.SELECT,
-        default: "display",
         description: "Whether you want to display buttons for your own user. Same functionality as other button(s) except it'll open DMs panel and mute/deafen for yourself upon clicking button(s).",
         restartNeeded: true,
         options: [
-            { label: "Display", value: "display" },
+            { label: "Display", value: "display", default: true },
             { label: "Hide", value: "hide" },
             { label: "Disable", value: "disable" },
         ],
     },
     whichNameToShow: {
         type: OptionType.SELECT,
-        default: "both",
         description: "Choose whether to show nickname or username in tooltip.",
-        restartNeeded: false,
         options: [
             { label: "Global Name", value: "global" },
             { label: "Default Username", value: "username" },
-            { label: "Both", value: "both" },
+            { label: "Both", value: "both", default: true },
         ],
     },
     buttonPosition: {
         type: OptionType.SELECT,
-        default: "left",
         description: "Choose where to place voice buttons in the voice user row.",
-        restartNeeded: false,
         options: [
-            { label: "Left", value: "left" },
+            { label: "Left", value: "left", default: true },
             { label: "Right", value: "right" },
         ],
     }
