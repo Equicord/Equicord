@@ -102,6 +102,7 @@
 ### Patch Examples
 
 **Clean replacement:**
+
 ```js
 find: "#{intl::PIN_MESSAGE}),icon:"
 match: /#{intl::PIN_MESSAGE}\)/
@@ -109,6 +110,7 @@ replace: "$self.getPinLabel(arguments[0]))"
 ```
 
 **Appending:**
+
 ```js
 find: "#{intl::VIEW_AS_ROLES_MENTIONS_WARNING}"
 match: /#{intl::VIEW_AS_ROLES_MENTIONS_WARNING}.{0,100}(?=])/
@@ -116,6 +118,7 @@ replace: "$&,$self.renderTooltip(arguments[0].guild)"
 ```
 
 **Wrapping:**
+
 ```js
 find: "#{intl::THREE_USERS_TYPING}"
 match: /(?<="aria-atomic":!0,children:)\i/
@@ -168,7 +171,6 @@ Use `definePluginSettings` from `@api/Settings`, not inline settings object.
 From `@webpack/common`. **NEVER** hardcode `cdn.discordapp.com` URLs.
 
 - `IconUtils.getUserAvatarURL(user, canAnimate?, size?)`
-- `IconUtils.getDefaultAvatarURL(id)`
 - `IconUtils.getUserBannerURL({ id, banner, canAnimate?, size })`
 - `IconUtils.getGuildIconURL({ id, icon, size?, canAnimate? })`
 - `IconUtils.getGuildBannerURL(guild, canAnimate?)`
@@ -208,4 +210,3 @@ From `@webpack/common`. **NEVER** hardcode `cdn.discordapp.com` URLs.
 - `"/api/v9"`, `"/users/@me"` ⟹ `Constants.Endpoints` or `RestAPI`
 - `console.log/warn/error` ⟹ `Logger` from `@utils/Logger`
 - `` `${a} ${b}` `` for class names ⟹ `classes(a, b)` from `@utils/misc`
-- `"/assets/*.png"` for default avatars ⟹ `IconUtils.getDefaultAvatarURL(id)`
