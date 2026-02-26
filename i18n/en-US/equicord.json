@@ -1436,16 +1436,18 @@
             "jumpFailed": "Failed to jump to message. Check console for details."
         }
     },
-    "limitMiddleClickPaste": {
-        "description": "Prevent middle click pasting either always or just when a text area is not focused.",
+    "middleClickTweaks": {
+        "description": "Various middle click tweaks, such as with pasting and link opening.",
         "settings": {
-            "scope": "Situations in which to prevent middle click from pasting.",
-            "threshold": "Milliseconds until pasting is enabled again after a middle click.",
-            "preventLinkOpen": "Prevent middle-click on links from opening new tabs while preserving autoscroll."
-        },
-        "options": {
-            "alwaysPrevent": "Always Prevent Middle Click Pasting",
-            "onlyWhenNotFocused": "Only Prevent When Text Area Not Focused"
+            "openScope": "Prevent middle clicking on these content types from opening them.",
+            "links": "Links",
+            "media": "Media",
+            "both": "Links & Media",
+            "none": "None",
+            "pasteScope": "Prevent middle click from pasting during these situations.",
+            "always": "Always Prevent Middle Click Pasting",
+            "focus": "Only Prevent When Text Area Not Focused",
+            "pasteThreshold": "Milliseconds until pasting is enabled again after a middle click."
         }
     },
     "listenBrainzRPC": {

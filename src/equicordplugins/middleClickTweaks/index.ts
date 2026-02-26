@@ -6,6 +6,7 @@
 
 import { definePluginSettings, SettingsStore } from "@api/Settings";
 import { EquicordDevs } from "@utils/index";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 const MIDDLE_CLICK = 1;
@@ -50,26 +51,26 @@ function handleMouseUp(event: MouseEvent) {
 const settings = definePluginSettings({
     openScope: {
         type: OptionType.SELECT,
-        description: "Prevent middle clicking on these content types from opening them.",
+        description: t("middleClickTweaks.settings.openScope"),
         options: [
-            { label: "Links", value: "links" },
-            { label: "Media", value: "media" },
-            { label: "Links & Media", value: "both" },
-            { label: "None", value: "none", default: true },
+            { label: t("middleClickTweaks.settings.links"), value: "links" },
+            { label: t("middleClickTweaks.settings.media"), value: "media" },
+            { label: t("middleClickTweaks.settings.both"), value: "both" },
+            { label: t("middleClickTweaks.settings.none"), value: "none", default: true },
         ],
         onChange(newValue) { updateListeners(newValue !== "none"); }
     },
     pasteScope: {
         type: OptionType.SELECT,
-        description: "Prevent middle click from pasting during these situations.",
+        description: t("middleClickTweaks.settings.pasteScope"),
         options: [
-            { label: "Always Prevent Middle Click Pasting", value: "always", default: true },
-            { label: "Only Prevent When Text Area Not Focused", value: "focus" },
+            { label: t("middleClickTweaks.settings.always"), value: "always", default: true },
+            { label: t("middleClickTweaks.settings.focus"), value: "focus" },
         ]
     },
     pasteThreshold: {
         type: OptionType.NUMBER,
-        description: "Milliseconds until pasting is enabled again after a middle click.",
+        description: t("middleClickTweaks.settings.pasteThreshold"),
         default: 100,
         onChange(newValue) { if (newValue < 1) { settings.store.pasteThreshold = 1; } }
     }
@@ -97,7 +98,7 @@ migrate();
 
 export default definePlugin({
     name: "MiddleClickTweaks",
-    description: "Various middle click tweaks, such as with pasting and link opening.",
+    description: t("middleClickTweaks.description"),
     authors: [EquicordDevs.Etorix, EquicordDevs.korzi],
     settings,
 
