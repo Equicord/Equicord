@@ -38,7 +38,7 @@ function toggleStreamerMode({ streamKey }: StreamEvent, value: boolean) {
 export default definePlugin({
     name: "StreamerModeOn",
     description: t("streamerModeOnStream.description"),
-    authors: [Devs.Kodarru],
+    authors: [Devs.IcedMarina],
     flux: {
         STREAM_CREATE: d => toggleStreamerMode(d, true),
         STREAM_DELETE: d => toggleStreamerMode(d, false)

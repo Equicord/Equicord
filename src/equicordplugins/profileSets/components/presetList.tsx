@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { isNonNullish } from "@utils/guards";
 import { classes } from "@utils/misc";
+import { ProfilePreset } from "@vencord/discord-types";
 import { ContextMenuApi, Menu, React, TextInput } from "@webpack/common";
 
 import { cl } from "..";
@@ -37,6 +39,7 @@ export function PresetList({
     currentPage,
     onPageChange
 }: PresetListProps) {
+    type EditableProfile = Omit<ProfilePreset, "name" | "timestamp">;
     const [renaming, setRenaming] = React.useState<number>(-1);
     const [renameText, setRenameText] = React.useState("");
     const isGuildProfile = section === "server";
@@ -149,11 +152,11 @@ export function PresetList({
                                                 label="Update"
                                                 action={async () => {
                                                     const profile = await getCurrentProfile(guildId, { isGuildProfile });
-                                                    Object.entries(profile).forEach(([key, value]) => {
-                                                        if (value !== null && value !== undefined) {
-                                                            updatePresetField(actualIndex, key as any, value, section, guildId);
-                                                        }
-                                                    });
+                                                    await Promise.all(
+                                                        (Object.entries(profile) as [keyof EditableProfile, EditableProfile[keyof EditableProfile]][])
+                                                            .filter(([, value]) => isNonNullish(value))
+                                                            .map(([key, value]) => updatePresetField(actualIndex, key, value, section, guildId))
+                                                    );
                                                     onUpdate();
                                                 }}
                                             />

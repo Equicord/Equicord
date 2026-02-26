@@ -42,6 +42,10 @@ const settings = definePluginSettings({
                 label: t("platformSpoofer.settings.platformOptions.playstation"),
                 value: "playstation",
             },
+            {
+                label: "VR",
+                value: "vr",
+            },
         ]
     }
 });
@@ -49,7 +53,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "PlatformSpoofer",
     description: t("platformSpoofer.description"),
-    authors: [EquicordDevs.Drag],
+    authors: [EquicordDevs.Drag, EquicordDevs.neoarz],
     settingsAboutComponent: () => (
         <Notice.Warning>
             {t("platformSpoofer.warning")}
@@ -96,6 +100,8 @@ export default definePlugin({
                     return { browser: "Discord Embedded", vcIcon: 2 };
                 case "playstation":
                     return { browser: "Discord Embedded", vcIcon: 3 };
+                case "vr":
+                    return { browser: "Discord VR", vcIcon: 4 };
                 default:
                     return null;
             }

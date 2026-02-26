@@ -7,6 +7,7 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { insertTextIntoChatInputBox } from "@utils/discord";
 import { t } from "@utils/translation";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import type { Channel } from "@vencord/discord-types";
@@ -49,6 +50,17 @@ function sendPatch(channel: Channel, body: Record<string, any>, bypass = false) 
     });
 }
 
+function mentionVoiceUsers(channel: Channel) {
+    const currentUserId = UserStore.getCurrentUser()?.id;
+    const mentions = Object.values(VoiceStateStore.getVoiceStatesForChannel(channel.id))
+        .map(state => state.userId)
+        .filter((userId, index, arr) => userId && userId !== currentUserId && arr.indexOf(userId) === index)
+        .map(userId => `<@${userId}>`);
+
+    if (mentions.length === 0) return;
+    insertTextIntoChatInputBox(`${mentions.join(" ")} `);
+}
+
 interface VoiceChannelContextProps {
     channel: Channel;
 }
@@ -70,6 +82,13 @@ const VoiceChannelContext: NavContextMenuPatchCallback = (children, { channel }:
             key="voice-tools"
             id="voice-tools"
         >
+            <Menu.MenuItem
+                key="voice-tools-mention-all"
+                id="voice-tools-mention-all"
+                label="Mention all Users"
+                action={() => mentionVoiceUsers(channel)}
+            />
+
             <Menu.MenuItem
                 key="voice-tools-disconnect-all"
                 id="voice-tools-disconnect-all"

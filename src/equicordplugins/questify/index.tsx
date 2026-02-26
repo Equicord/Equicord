@@ -1008,6 +1008,8 @@ function getQuestAcceptedButtonText(quest: Quest, prepositional: boolean = false
 }
 
 function getQuestPanelPercentComplete({ quest, percentCompleteText }: { quest: Quest; percentCompleteText?: string; }): { percentComplete: number; } | { percentComplete: number; percentCompleteText: string; } | null {
+    if (!quest) { return null; }
+
     const task = getQuestTask(quest);
 
     if (!task) { return null; }
@@ -1295,8 +1297,8 @@ export default definePlugin({
             // Fixes the progress tracking for auto-completing Quests.
             find: ",{progressTextAnimation:",
             replacement: {
-                match: /(?<=children:\i}=)(\i)/,
-                replace: "Object.assign({},$1,$1.quest?$self.getQuestPanelPercentComplete($1):{})"
+                match: /(let{percentComplete:.{0,115}?children:\i}=)(\i)/,
+                replace: "const questifyProgress=$self.getQuestPanelPercentComplete({...$2,quest:$2.children?.props?.quest});$1Object.assign({},$2,questifyProgress??{})"
             }
         },
         {
@@ -1605,16 +1607,8 @@ export default definePlugin({
             ]
         },
         {
-            // Sets intervals to progress Video Quests in the background.
-            find: "CAPTCHA_FAILED:",
-            replacement: {
-                match: /(?<=SUCCESS:)(\i\({)/,
-                replace: "!$self.processQuestForAutoComplete(arguments[0])&&$1"
-            }
-        },
-        {
             // Adds support for dev://experiment/2025-12-quest-cta-refactor-rollout
-            find: '"sm",preClickCallback:',
+            find: '"primary",preClickCallback:',
             replacement: [
                 {
                     match: /(?=let{quest:)/,
@@ -1625,10 +1619,18 @@ export default definePlugin({
                     replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&($1)"
                 },
                 {
-                    match: /(?<=,text:)(?=\i)/,
-                    replace: "questifyText??"
+                    match: /(?<=,text:)(\i),icon:\i/,
+                    replace: "questifyText??$1"
                 }
             ]
+        },
+        {
+            // Sets intervals to progress Video Quests in the background.
+            find: "CAPTCHA_FAILED:",
+            replacement: {
+                match: /(?<=SUCCESS:)(\i\({)/,
+                replace: "!$self.processQuestForAutoComplete(arguments[0])&&$1"
+            }
         },
         {
             // Sets intervals to progress Play Game Quests in the background.

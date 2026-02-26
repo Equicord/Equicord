@@ -98,15 +98,21 @@ const settings = definePluginSettings({
     accountStandingButton: {
         type: OptionType.BOOLEAN,
         description: t("equicordHelper.settings.accountStandingButton"),
-        default: false,
         restartNeeded: true,
-    }
+        default: false,
+    },
+    restoreFileDownloadButton: {
+        type: OptionType.BOOLEAN,
+        description: "Adds back the Download button at the top right corner of files",
+        restartNeeded: true,
+        default: false
+    },
 });
 
 export default definePlugin({
     name: "EquicordHelper",
     description: t("equicordHelper.description"),
-    authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keircn, EquicordDevs.SerStars, EquicordDevs.mart],
+    authors: [Devs.thororen, EquicordDevs.nyx, EquicordDevs.Naibuu, EquicordDevs.keircn, EquicordDevs.SerStars, EquicordDevs.mart, EquicordDevs.omaw],
     required: true,
     settings,
     headerBarButton: {
@@ -165,6 +171,7 @@ export default definePlugin({
                 replace: "true||$&"
             },
         },
+        // Show your own activity buttons because discord removes them for who knows why
         {
             find: ".USER_PROFILE_ACTIVITY_BUTTONS),",
             predicate: () => settings.store.showYourOwnActivityButtons && !isPluginEnabled(customRPC.name),
@@ -199,6 +206,15 @@ export default definePlugin({
             replacement: {
                 match: /(?<=\}\):null\].{0,150}\?2:)0(?=\})/,
                 replace: "1"
+            }
+        },
+        // Restore File Download Button
+        {
+            predicate: () => settings.store.restoreFileDownloadButton,
+            find: '"VISUAL_PLACEHOLDER":',
+            replacement: {
+                match: /(\.downloadUrl,showDownload:)\i/,
+                replace: "$1!0"
             }
         },
     ],
