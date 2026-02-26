@@ -104,7 +104,7 @@
         "settingsAbout":{
             "albumPlaceholder":"{album} é substituído pelo nome do álbum.",
             "artistPlaceholder":"{artist} é substituído pelo(s) nome(s) do(s) artista(s)",
-            "intro":"Para as sequências de formato de atividade personalizáveis, você pode usar diversas sequências especiais para incluir dados de rastreamento nas atividades!",
+            "intro":"Para as strings de formato de atividade personalizáveis, você pode usar várias strings especiais para incluir dados da faixa nas atividades!",
             "namePlaceholder":"{name} é substituído pelo nome da faixa"
         },
         "statusDisplayTypes":{
@@ -366,7 +366,7 @@
         },
         "ui":{
             "backOnlineMessage":"Bem vindo de volta! Clique no botão para ficar online. Clique no X para ficar ocioso até recarregar.",
-            "exitIdle":"Sair ocioso"
+            "exitIdle":"Sair inativo"
         }
     },
     "customRPC":{
@@ -490,7 +490,7 @@
     "experiments":{
         "description":"Habilite acesso a experimentos e outros recursos somente para desenvolvedores no Discord!",
         "devToolsInfo":"Você pode abrir o DevTools do Discord via {keyboardCombo}",
-        "holdOn":"Aguarde!",
+        "holdOn":"Aguarde!!",
         "moreInfo":"Mais informações",
         "settings":{
             "toolbarDevMenu":"Alterar o botão de Ajuda (?) na barra de ferramentas (canto superior direito no chat) para o menu de desenvolvedor do Discord"
@@ -523,7 +523,7 @@
         },
         "noEmbedPerms":{
             "body1":"Você está tentando enviar/editar uma mensagem que contém um emoji ou figurinha FakeNitro,",
-            "body2":"entretanto, você não tem permissão para incorporar links no canal atual.",
+            "body2":"entretanto, você não tem permissão para embed links no canal atual.",
             "body3":"Tem certeza de que deseja enviar esta mensagem? Seus itens FakeNitro aparecerão apenas como um link.",
             "disableNotice":"Você pode desativar este aviso nas configurações do plugin."
         },
@@ -690,7 +690,7 @@
         "unholyMultiGreet":"Multi-cumprimento profano"
     },
     "hideAttachments":{
-        "description":"Ocultar anexos e embeds de mensagens individuais por meio do botão suspenso",
+        "description":"Ocultar anexos e embeds para mensagens individuais através de um botão ao passar o mouse",
         "hideMedia":"Ocultar mídia",
         "mediaHidden":"Mídia oculta",
         "showMedia":"Mostrar mídia"
@@ -713,7 +713,7 @@
         },
         "settings":{
             "blacklist":"Lista negra",
-            "ignoreCompeting":"Ignore todas as atividades concorrentes (normalmente são atividades de jogo especiais)",
+            "ignoreCompeting":"Ignorar todas as atividades concorrentes (Normalmente, estas são atividades de jogo especiais)",
             "ignoreListening":"Ignore todas as atividades de escuta (geralmente são atividades do Spotify)",
             "ignorePlaying":"Ignore todas as atividades de jogo (geralmente são atividades de jogos e RPC)",
             "ignoreStreaming":"Ignore todas as atividades de streaming",
@@ -1781,7 +1781,7 @@
         "resetNickname":"Redefinir Apelido SMYN",
         "save":"Salvar",
         "settings":{
-            "animateGradients":"Para os nomes não primários, se o cargo tiver gradiente, anime-a. Isso é desativado por \"Ignorar gradientes\" e movimento reduzido.",
+            "animateGradients":"Para os nomes não primários, se o cargo tiver gradiente, anime-o. Isso é desativado por \"Ignorar gradientes\" e movimento reduzido.",
             "customNameColor":"A cor a ser usada para o nome personalizado atribuído a um usuário, caso não seja o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor do cargo principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
             "discriminators":"Anexe discriminadores aos nomes de usuário dos bots. Os discriminadores foram descontinuados para os usuários, mas ainda são usados para bots. Por padrão, o nome de usuário de um bot é equivalente ao nome global de um usuário, portanto, vários bots podem ter o mesmo nome de usuário. Acrescentar discriminadores os torna únicos novamente.",
             "displayNameColor":"A cor a ser usada para o apelido se não for o primeiro exibido. Deixe em branco por padrão. Aceita entrada hex(a), rgb(a) ou hsl(a). Use \"Role\" para seguir a cor do cargo principal do usuário. Use \"Role+-#\" para ajustar o brilho por essa porcentagem (ex: \"Role+15\")",
@@ -1820,7 +1820,7 @@
             "persistChannels":"Persistência entre canais",
             "persistNone":"Não persistir (redefinir na mudança de canal)",
             "persistRestarts":"Persistência entre canais e reinicializações",
-            "persistState":"Como persistir o estado de alternância de mensagem silenciosa"
+            "persistState":"Como manter o estado do alternador de mensagem silenciosa"
         }
     },
     "silentTyping":{
@@ -2136,7 +2136,7 @@
         "dmNotifications":"Permitir notificações de mensagens diretas",
         "embed":"embed",
         "groupDmNotifications":"Permitir notificações de Grupo de DM",
-        "helloFromVendor":"Olá do fornecedor!",
+        "helloFromVendor":"Olá do Vendor!",
         "image":"imagem",
         "incomingCall":"Chamada recebida",
         "isCallingYou":"está ligando para você...",
