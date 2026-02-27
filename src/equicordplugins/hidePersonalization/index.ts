@@ -71,14 +71,11 @@ export default definePlugin({
     },
     {
       // Clan tag
-      find: "handleSetTypingRef:eD",
-      replacement: [
-        {
-          match: /!\w+&&\(0,\w+\.jsx\)\(\w+\.Ay,\{primaryGuild:\w+\?\.primaryGuild/,
-          replace: "false&&(0,r.jsx)(S.Ay,{primaryGuild:o?.primaryGuild",
-          predicate: () => settings.store.clanTag
-        }
-      ]
+      find: "Wb:()=>h",
+      replacement: {
+        match: /function h\(e,t,n\)\{/,
+        replace: "function h(e,t,n){return false;"
+      }
     }
 
   ]
