@@ -10,7 +10,7 @@ import * as DataStore from "@api/DataStore";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { PluginNative } from "@utils/types";
-import { useState } from "@webpack/common";
+import { useEffect, useState } from "@webpack/common";
 import { JSX } from "react";
 
 import MultiboxTabBar from "./components/TabBar";
@@ -18,6 +18,7 @@ import MultiboxTabBar from "./components/TabBar";
 const Native = VencordNative.pluginHelpers.Multibox as PluginNative<typeof import("./native")>;
 
 const STORE_KEY = "multibox-accounts";
+const OFFSET_STYLE_ID = "vc-multibox-offset";
 
 export interface AccountTab {
     id: string;
@@ -27,18 +28,21 @@ export interface AccountTab {
 let accounts: AccountTab[] = [];
 let activeTab = "main";
 let forceUpdateFn: (() => void) | null = null;
+let isMain = false;
 
 function generateId(): string {
     return Math.random().toString(36).substring(2, 10);
 }
 
 async function switchTab(id: string) {
+    if (!isMain) return;
     activeTab = id;
     await Native.switchTo(id);
     forceUpdateFn?.();
 }
 
 async function addTab() {
+    if (!isMain) return;
     const id = generateId();
     const label = `Account ${accounts.length + 2}`;
     accounts = [...accounts, { id, label }];
@@ -48,6 +52,7 @@ async function addTab() {
 }
 
 async function removeTab(id: string) {
+    if (!isMain) return;
     await Native.removeAccount(id);
     accounts = accounts.filter(a => a.id !== id);
     await DataStore.set(STORE_KEY, accounts);
@@ -58,9 +63,27 @@ async function removeTab(id: string) {
     }
 }
 
+function injectOffsetStyle() {
+    if (document.getElementById(OFFSET_STYLE_ID)) return;
+    const style = document.createElement("style");
+    style.id = OFFSET_STYLE_ID;
+    style.textContent = "#app-mount { margin-top: 36px !important; height: calc(100vh - 36px) !important; }";
+    document.head.appendChild(style);
+}
+
+function removeOffsetStyle() {
+    document.getElementById(OFFSET_STYLE_ID)?.remove();
+}
+
 function MultiboxContainer({ children }: { children: JSX.Element; }) {
     const [, setTick] = useState(0);
     forceUpdateFn = () => setTick(t => t + 1);
+
+    useEffect(() => {
+        if (isMain) injectOffsetStyle();
+    });
+
+    if (!isMain) return children;
 
     return (
         <>
@@ -98,6 +121,10 @@ export default definePlugin({
     },
 
     async start() {
+        isMain = await Native.isMainWindow();
+        if (!isMain) return;
+
+        injectOffsetStyle();
         await Native.initialize();
 
         const saved: AccountTab[] = await DataStore.get(STORE_KEY) ?? [];
@@ -111,9 +138,13 @@ export default definePlugin({
     },
 
     async stop() {
+        if (!isMain) return;
+
+        removeOffsetStyle();
         await Native.cleanup();
         accounts = [];
         activeTab = "main";
         forceUpdateFn = null;
+        isMain = false;
     }
 });

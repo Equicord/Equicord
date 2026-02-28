@@ -4,11 +4,27 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { BrowserWindow, IpcMainInvokeEvent, session, shell, WebContentsView } from "electron";
+import { join } from "path";
+
+import { app, BrowserWindow, IpcMainInvokeEvent, session, shell, WebContentsView } from "electron";
 
 const views = new Map<string, WebContentsView>();
 let mainWindow: BrowserWindow | null = null;
 const TAB_BAR_HEIGHT = 36;
+
+// Find Equibop's preload script path
+function getEquibopPreload(): string | undefined {
+    // Equibop's app.asar contains dist/js/preload.js
+    const appPath = app.getAppPath();
+    const preloadPath = join(appPath, "dist", "js", "preload.js");
+    try {
+        require.resolve(preloadPath);
+        return preloadPath;
+    } catch {
+        console.log("[Multibox] Could not find Equibop preload at:", preloadPath);
+        return undefined;
+    }
+}
 
 function onResize() {
     if (!mainWindow) return;
@@ -20,20 +36,29 @@ function onResize() {
     }
 }
 
+export async function isMainWindow(event: IpcMainInvokeEvent): Promise<boolean> {
+    return BrowserWindow.fromWebContents(event.sender) !== null;
+}
+
 export async function initialize(event: IpcMainInvokeEvent) {
-    mainWindow = BrowserWindow.fromWebContents(event.sender);
-    if (mainWindow) {
-        mainWindow.on("resize", onResize);
-    }
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (!win) return;
+    mainWindow = win;
+    mainWindow.on("resize", onResize);
 }
 
 export async function addAccount(event: IpcMainInvokeEvent, id: string) {
     if (!mainWindow || views.has(id)) return;
 
+    const preload = getEquibopPreload();
+
     const ses = session.fromPartition(`persist:multibox-${id}`);
     const view = new WebContentsView({
         webPreferences: {
             session: ses,
+            preload,
+            sandbox: true,
+            contextIsolation: true,
         }
     });
 

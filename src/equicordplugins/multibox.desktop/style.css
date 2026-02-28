@@ -1,4 +1,4 @@
-/* Multibox tab bar — fixed at top so native WebContentsViews can't cover it */
+/* Multibox tab bar */
 .vc-multibox-bar {
     position: fixed;
     top: 0;
@@ -83,10 +83,4 @@
 .vc-multibox-tab-add:hover {
     background: var(--background-modifier-hover, #2b2d31);
     color: var(--interactive-hover, #dbdee1);
-}
-
-/* Push Discord content below the fixed tab bar */
-#app-mount {
-    margin-top: 36px !important;
-    height: calc(100vh - 36px) !important;
 }
