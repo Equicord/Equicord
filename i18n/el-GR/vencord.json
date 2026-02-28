@@ -1,760 +1,760 @@
 {
     "accountPanelServerProfile":{
-        "description":"Right click your account panel in the bottom left to view your profile in the current server",
-        "prioritizeServerProfile":"Prioritize Server Profile",
-        "prioritizeServerProfileDescription":"Prioritize Server Profile when left clicking your account panel",
-        "viewAccountProfile":"View Account Profile",
-        "viewServerProfile":"View Server Profile"
+        "description":"Κάντε δεξί κλικ στον πίνακα του λογαριασμού σας κάτω αριστερά για να προβάλετε το προφίλ σας στον τρέχοντα διακομιστή",
+        "prioritizeServerProfile":"Δώστε προτεραιότητα στο προφίλ διακομιστή",
+        "prioritizeServerProfileDescription":"Δώστε προτεραιότητα στο προφίλ διακομιστή όταν κάνετε αριστερό κλικ στον πίνακα του λογαριασμού σας",
+        "viewAccountProfile":"Προβολή προφίλ λογαριασμού",
+        "viewServerProfile":"Προβολή προφίλ διακομιστή"
     },
     "addonCard":{
-        "new":"NEW"
+        "new":"ΝΕΟΣ"
     },
     "anonymiseFileNames":{
         "commands":{
             "spoiler":{
-                "description":"Toggle your spoiler",
-                "disabled":"Spoiler disabled!",
-                "enabled":"Spoiler enabled!",
-                "name":"Spoiler",
-                "optionDescription":"Toggle your Spoiler (default is toggle)",
-                "optionName":"value"
+                "description":"Εναλλάξτε το σπόιλερ σας",
+                "disabled":"Το spoiler απενεργοποιήθηκε!",
+                "enabled":"Ενεργοποιήθηκε το Spoiler!",
+                "name":"Φθείρων",
+                "optionDescription":"Ενεργοποιήστε το Spoiler σας (η προεπιλογή είναι εναλλαγή)",
+                "optionName":"αξία"
             }
         },
-        "description":"Anonymise uploaded file names",
+        "description":"Ανωνυμοποιήστε τα ονόματα των μεταφορτωμένων αρχείων",
         "methods":{
-            "consistent":"Consistent",
-            "random":"Random Characters",
-            "timestamp":"Timestamp"
+            "consistent":"Συνεπής",
+            "random":"Τυχαίοι χαρακτήρες",
+            "timestamp":"Χρονική σήμανση"
         },
         "settings":{
-            "anonymiseByDefault":"Whether to anonymise file names by default",
-            "consistent":"Consistent filename",
-            "method":"Anonymising method",
-            "randomisedLength":"Random characters length",
-            "spoilerMessages":"Spoiler messages"
+            "anonymiseByDefault":"Εάν θα ανωνυμοποιηθούν τα ονόματα των αρχείων από προεπιλογή",
+            "consistent":"Συνεπές όνομα αρχείου",
+            "method":"Μέθοδος ανωνυμοποίησης",
+            "randomisedLength":"Μήκος τυχαίων χαρακτήρων",
+            "spoilerMessages":"Spoiler μηνύματα"
         },
-        "usingAnonymous":"Using anonymous file name",
-        "usingNormal":"Using normal file name"
+        "usingAnonymous":"Χρήση ανώνυμου ονόματος αρχείου",
+        "usingNormal":"Χρήση κανονικού ονόματος αρχείου"
     },
     "appleMusicRichPresence":{
         "activityTypes":{
-            "listening":"Listening",
-            "playing":"Playing"
+            "listening":"Ακούγοντας",
+            "playing":"Παιχνίδι"
         },
         "assetImageTypes":{
-            "album":"Album artwork",
-            "artist":"Artist artwork",
-            "disabled":"Disabled"
+            "album":"Έργο άλμπουμ",
+            "artist":"Έργο τέχνης καλλιτέχνη",
+            "disabled":"Απενεργοποιημένο"
         },
         "buttons":{
-            "listenOnAppleMusic":"Listen on Apple Music",
-            "viewOnSongLink":"View on SongLink"
+            "listenOnAppleMusic":"Ακούστε στο Apple Music",
+            "viewOnSongLink":"Προβολή στο SongLink"
         },
         "defaultDetails":"{name}",
         "defaultLargeText":"{album}",
         "defaultName":"Apple Music",
         "defaultSmallText":"{artist}",
         "defaultState":"{artist} · {album}",
-        "description":"Discord rich presence for your Apple Music!",
+        "description":"Discord πλούσια παρουσία για το Apple Music σας!",
         "name":"AppleMusicRichPresence",
         "settings":{
-            "activityType":"Which type of activity",
-            "detailsString":"Activity details format string",
-            "enableButtons":"Whether or not to enable buttons",
-            "enableTimestamps":"Whether or not to enable timestamps",
-            "largeImageType":"Activity assets large image type",
-            "largeTextString":"Activity assets large text format string",
-            "nameString":"Activity name format string",
-            "refreshInterval":"The interval between activity refreshes (seconds)",
-            "smallImageType":"Activity assets small image type",
-            "smallTextString":"Activity assets small text format string",
-            "stateString":"Activity state format string",
-            "statusDisplayType":"Show the track / artist name in the member list"
+            "activityType":"Ποιο είδος δραστηριότητας",
+            "detailsString":"Συμβολοσειρά μορφής λεπτομερειών δραστηριότητας",
+            "enableButtons":"Αν θα ενεργοποιηθούν ή όχι τα κουμπιά",
+            "enableTimestamps":"Αν θα ενεργοποιηθούν ή όχι οι χρονικές σημάνσεις",
+            "largeImageType":"Στοιχεία δραστηριότητας μεγάλος τύπος εικόνας",
+            "largeTextString":"Στοιχεία δραστηριότητας μεγάλη συμβολοσειρά μορφής κειμένου",
+            "nameString":"Συμβολοσειρά μορφής ονόματος δραστηριότητας",
+            "refreshInterval":"Το διάστημα μεταξύ των ανανεώσεων δραστηριότητας (δευτερόλεπτα)",
+            "smallImageType":"Στοιχεία δραστηριότητας μικρός τύπος εικόνας",
+            "smallTextString":"Στοιχεία δραστηριότητας μικρή συμβολοσειρά μορφής κειμένου",
+            "stateString":"Συμβολοσειρά μορφής κατάστασης δραστηριότητας",
+            "statusDisplayType":"Εμφάνιση του ονόματος κομματιού/καλλιτέχνη στη λίστα μελών"
         },
         "settingsAbout":{
-            "albumPlaceholder":"{album} is replaced with the album name.",
-            "artistPlaceholder":"{artist} is replaced with the artist(s)' name(s)",
-            "intro":"For the customizable activity format strings, you can use several special strings to include track data in activities!",
-            "namePlaceholder":"{name} is replaced with the track name"
+            "albumPlaceholder":"Το {album} αντικαθίσταται με το όνομα του άλμπουμ.",
+            "artistPlaceholder":"Το {artist} αντικαθίσταται με το όνομα ή τα ονόματα του καλλιτέχνη",
+            "intro":"Για τις προσαρμόσιμες συμβολοσειρές μορφής δραστηριότητας, μπορείτε να χρησιμοποιήσετε πολλές ειδικές συμβολοσειρές για να συμπεριλάβετε δεδομένα κομματιού στις δραστηριότητες!",
+            "namePlaceholder":"Το {name} αντικαθίσταται με το όνομα του κομματιού"
         },
         "statusDisplayTypes":{
-            "artist":"Show artist name",
-            "off":"Don't show (shows generic listening message)",
-            "track":"Show track name"
+            "artist":"Εμφάνιση ονόματος καλλιτέχνη",
+            "off":"Να μην εμφανίζεται (εμφανίζει γενικό μήνυμα ακρόασης)",
+            "track":"Εμφάνιση ονόματος κομματιού"
         }
     },
     "arRPC":{
-        "connected":"Connected to arRPC",
-        "connectionFailed":"Failed to connect to arRPC, is it running?",
-        "retry":"Retry",
+        "connected":"Συνδέθηκε στο arRPC",
+        "connectionFailed":"Απέτυχε η σύνδεση στο arRPC, εκτελείται;",
+        "retry":"Νέα προσπάθεια",
         "settingsAbout":{
-            "description":"Follow the instructions in the GitHub repo to get the server running, and then enable the plugin.",
-            "title":"How to use arRPC"
+            "description":"Ακολουθήστε τις οδηγίες στο αποθετήριο GitHub για να ενεργοποιήσετε τον διακομιστή και, στη συνέχεια, ενεργοποιήστε την προσθήκη.",
+            "title":"Πώς να χρησιμοποιήσετε το arRPC"
         }
     },
     "betterFolders":{
         "settings":{
-            "closeAllFolders":"Close all folders when selecting a server not in a folder",
-            "closeAllHomeButton":"Close all folders when clicking on the home button",
-            "closeOthers":"Close other folders when opening a folder",
-            "closeServerFolder":"Close folder when selecting a server in that folder",
-            "folderIconAlways":"Always",
-            "folderIconMultipleExpanded":"When more than one folder is expanded",
-            "folderIconNever":"Never",
-            "forceOpen":"Force a folder to open when switching to a server of that folder",
-            "keepIcons":"Keep showing guild icons in the primary guild bar folder when it's open in the BetterFolders sidebar",
-            "showFolderIcon":"Show the folder icon above the folder guilds in the BetterFolders sidebar",
-            "sidebar":"Display servers from folder on dedicated sidebar",
-            "sidebarAnim":"Animate opening the folder sidebar"
+            "closeAllFolders":"Κλείστε όλους τους φακέλους όταν επιλέγετε διακομιστή που δεν βρίσκεται σε φάκελο",
+            "closeAllHomeButton":"Κλείστε όλους τους φακέλους όταν κάνετε κλικ στο κουμπί αρχικής οθόνης",
+            "closeOthers":"Κλείστε άλλους φακέλους κατά το άνοιγμα ενός φακέλου",
+            "closeServerFolder":"Κλείστε το φάκελο όταν επιλέγετε διακομιστή σε αυτόν τον φάκελο",
+            "folderIconAlways":"Πάντα",
+            "folderIconMultipleExpanded":"Όταν επεκτείνονται περισσότεροι από ένας φάκελοι",
+            "folderIconNever":"Ποτέ",
+            "forceOpen":"Αναγκάστε να ανοίξει ένας φάκελος κατά τη μετάβαση σε διακομιστή αυτού του φακέλου",
+            "keepIcons":"Συνεχίστε να εμφανίζετε εικονίδια συντεχνίας στον κύριο φάκελο της γραμμής συντεχνίας όταν είναι ανοιχτός στην πλαϊνή γραμμή BetterFolders",
+            "showFolderIcon":"Εμφανίστε το εικονίδιο του φακέλου πάνω από τα σωματεία φακέλων στην πλαϊνή γραμμή BetterFolders",
+            "sidebar":"Εμφάνιση διακομιστών από φάκελο στην αποκλειστική πλαϊνή γραμμή",
+            "sidebarAnim":"Κίνηση ανοίγματος της πλαϊνής γραμμής φακέλου"
         }
     },
     "betterRoleContext":{
-        "copyRoleColor":"Copy Role Color",
-        "description":"Adds options to copy role color / edit role / view role icon when right clicking roles in the user profile",
-        "editRole":"Edit Role",
+        "copyRoleColor":"Χρώμα αντιγραφής ρόλου",
+        "description":"Προσθέτει επιλογές για αντιγραφή χρώματος ρόλου / επεξεργασία ρόλου / εικονίδιο ρόλου όταν κάνετε δεξί κλικ σε ρόλους στο προφίλ χρήστη",
+        "editRole":"Επεξεργασία ρόλου",
         "name":"BetterRoleContext",
         "settings":{
-            "roleIconFileFormat":"File format to use when viewing role icons"
+            "roleIconFileFormat":"Μορφή αρχείου για χρήση κατά την προβολή εικονιδίων ρόλων"
         },
-        "viewRoleIcon":"View Role Icon"
+        "viewRoleIcon":"Προβολή εικονιδίου ρόλου"
     },
     "betterSessions":{
-        "newBadge":"NEW",
-        "newSession":"New session:",
-        "rename":"Rename",
+        "newBadge":"ΝΕΟΣ",
+        "newSession":"Νέα συνεδρία:",
+        "rename":"Μετονομάζω",
         "renameModal":{
-            "newDeviceName":"New device name",
-            "resetName":"Reset Name",
-            "save":"Save",
-            "title":"Rename"
+            "newDeviceName":"Νέο όνομα συσκευής",
+            "resetName":"Επαναφορά ονόματος",
+            "save":"Αποθήκευση",
+            "title":"Μετονομάζω"
         },
         "settings":{
-            "backgroundCheck":"Check for new sessions in the background, and display notifications when they are detected",
-            "checkInterval":"How often to check for new sessions in the background (if enabled), in minutes"
+            "backgroundCheck":"Ελέγξτε για νέες περιόδους σύνδεσης στο παρασκήνιο και εμφανίστε ειδοποιήσεις όταν εντοπίζονται",
+            "checkInterval":"Πόσο συχνά να ελέγχετε για νέες περιόδους σύνδεσης στο παρασκήνιο (αν είναι ενεργοποιημένες), μέσα σε λίγα λεπτά"
         }
     },
     "betterSettings":{
         "settings":{
-            "disableFade":"Disable the crossfade animation",
-            "eagerLoad":"Removes the loading delay when opening the menu for the first time",
-            "organizeMenu":"Organizes the settings cog context menu into categories"
+            "disableFade":"Απενεργοποιήστε την κίνηση crossfade",
+            "eagerLoad":"Καταργεί την καθυστέρηση φόρτωσης κατά το άνοιγμα του μενού για πρώτη φορά",
+            "organizeMenu":"Οργανώνει το μενού περιβάλλοντος του γρανάζι ρυθμίσεων σε κατηγορίες"
         }
     },
     "biggerStreamPreview":{
-        "description":"This plugin allows you to enlarge stream previews",
+        "description":"Αυτή η προσθήκη σάς επιτρέπει να μεγεθύνετε τις προεπισκοπήσεις ροής",
         "name":"BiggerStreamPreview",
-        "viewStreamPreview":"View Stream Preview"
+        "viewStreamPreview":"Προβολή προεπισκόπησης ροής"
     },
     "callTimer":{
-        "description":"Add call timers for all users in voice channels and in the connection status.",
+        "description":"Προσθέστε χρονόμετρα κλήσεων για όλους τους χρήστες στα κανάλια φωνής και στην κατάσταση σύνδεσης.",
         "settings":{
-            "allCallTimers":"Add call timer to all users in a server voice channel",
-            "format":"Compact or human readable format:",
-            "showRoleColor":"Show the user's role color (if this plugin is enabled)",
-            "showSeconds":"Show seconds in the timer",
-            "showWithoutHover":"Always show the timer without needing to hover",
-            "trackSelf":"Also track yourself",
-            "watchLargeGuilds":"Track users in large guilds. This may cause lag if you're in a lot of large guilds with active voice users. Tested with up to 2000 active voice users with no issues."
+            "allCallTimers":"Προσθήκη χρονοδιακόπτη κλήσεων σε όλους τους χρήστες σε κανάλι φωνής διακομιστή",
+            "format":"Συμπαγής ή αναγνώσιμη μορφή από τον άνθρωπο:",
+            "showRoleColor":"Εμφάνιση του χρώματος του ρόλου του χρήστη (εάν αυτή η προσθήκη είναι ενεργοποιημένη)",
+            "showSeconds":"Εμφάνιση δευτερολέπτων στο χρονόμετρο",
+            "showWithoutHover":"Να εμφανίζεται πάντα το χρονόμετρο χωρίς να χρειάζεται να τοποθετήσετε το δείκτη του ποντικιού",
+            "trackSelf":"Παρακολουθήστε επίσης τον εαυτό σας",
+            "watchLargeGuilds":"Παρακολούθηση χρηστών σε μεγάλες συντεχνίες. Αυτό μπορεί να προκαλέσει καθυστέρηση εάν βρίσκεστε σε πολλές μεγάλες συντεχνίες με ενεργούς χρήστες φωνής. Δοκιμασμένο με έως και 2000 ενεργούς χρήστες φωνής χωρίς προβλήματα."
         }
     },
-    "cancel":"Cancel",
+    "cancel":"Ακύρωση",
     "clientTheme":{
-        "contrastWarning":"Selected color won't contrast well with text",
-        "disableNitroTheme":"Disable Nitro Theme",
-        "nitroNotSupported":"Nitro themes aren't supported",
-        "resetThemeColor":"Reset Theme Color",
-        "switchToMode":"Switch to {mode} mode",
-        "themeColor":"Theme Color",
-        "themeColorDescription":"Add a color to your Discord client theme",
-        "themeWontLookGood":"Your theme won't look good!"
+        "contrastWarning":"Το επιλεγμένο χρώμα δεν θα κάνει καλή αντίθεση με το κείμενο",
+        "disableNitroTheme":"Απενεργοποιήστε το θέμα Nitro",
+        "nitroNotSupported":"Τα θέματα Nitro δεν υποστηρίζονται",
+        "resetThemeColor":"Επαναφορά χρώματος θέματος",
+        "switchToMode":"Μετάβαση σε λειτουργία {mode}",
+        "themeColor":"Χρώμα θέματος",
+        "themeColorDescription":"Προσθέστε ένα χρώμα στο Discord θέμα πελάτη σας",
+        "themeWontLookGood":"Το θέμα σας δεν θα φαίνεται καλό!"
     },
     "cloud":{
         "integrations":{
-            "enabled":"Cloud integrations enabled!",
-            "error":"Setup failed ({e})",
-            "failedToRetrieveOAuth":"Setup failed (couldn't retrieve OAuth configuration).",
-            "header":"Cloud Integrations",
-            "noSecret":"Setup failed (no secret returned?).",
-            "reauthenticateOtherClient":"We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!"
+            "enabled":"Οι ενσωματώσεις στο cloud ενεργοποιήθηκαν!",
+            "error":"Η ρύθμιση απέτυχε ({e})",
+            "failedToRetrieveOAuth":"Η εγκατάσταση απέτυχε (δεν ήταν δυνατή η ανάκτηση της διαμόρφωσης OAuth).",
+            "header":"Ενσωματώσεις στο σύννεφο",
+            "noSecret":"Η εγκατάσταση απέτυχε (δεν επιστράφηκε μυστικό;).",
+            "reauthenticateOtherClient":"Παρατηρήσαμε ότι έχετε ενεργοποιημένες ενσωματώσεις cloud σε άλλο πελάτη! Λόγω περιορισμών, θα χρειαστεί να κάνετε εκ νέου έλεγχο ταυτότητας για να συνεχίσετε να τα χρησιμοποιείτε. Κάντε κλικ εδώ για να μεταβείτε στη σελίδα ρυθμίσεων για να το κάνετε!"
         },
         "settings":{
-            "accountChanged":"Cloud sync was disabled because this account isn't connected to the cloud App. You can enable it again by connecting this account in Cloud Settings. (note: it will store your preferences separately)",
-            "apiDelete":"Could not delete settings (API returned {e}).",
-            "apiEraseAll":"Could not erase all data (API returned {e}), please contact support.",
-            "apiReject":"Could not synchronize settings to cloud (API returned {e}).",
-            "deleted":"Settings deleted from cloud!",
-            "erased":"Successfully erased all data.",
-            "failedToDelete":"Could not delete settings ({e}).",
-            "failedToSync":"Could not synchronize settings to the cloud ({e}).",
-            "header":"Cloud Settings",
-            "newerThanCloud":"Your local settings are newer than the cloud ones.",
-            "noSettings":"There are no settings in the cloud.",
-            "success":"Synchronized settings to the cloud!",
-            "syncFromCloud":"Could not synchronize settings from the cloud ({e}).",
-            "upToDate":"Your settings are up to date.",
-            "updated":"Your settings have been updated! Click here to restart to fully apply changes!",
-            "updatedRemote":"Your settings have been updated! Click here to restart to fully apply changes!"
+            "accountChanged":"Ο συγχρονισμός cloud απενεργοποιήθηκε επειδή αυτός ο λογαριασμός δεν είναι συνδεδεμένος στην εφαρμογή cloud. Μπορείτε να το ενεργοποιήσετε ξανά συνδέοντας αυτόν τον λογαριασμό στις Ρυθμίσεις Cloud. (σημείωση: θα αποθηκεύσει τις προτιμήσεις σας ξεχωριστά)",
+            "apiDelete":"Δεν ήταν δυνατή η διαγραφή των ρυθμίσεων (API επέστρεψε {e}).",
+            "apiEraseAll":"Δεν ήταν δυνατή η διαγραφή όλων των δεδομένων (API επέστρεψε {e}), επικοινωνήστε με την υποστήριξη.",
+            "apiReject":"Δεν ήταν δυνατός ο συγχρονισμός των ρυθμίσεων στο cloud (API επέστρεψε {e}).",
+            "deleted":"Οι ρυθμίσεις διαγράφηκαν από το cloud!",
+            "erased":"Όλα τα δεδομένα διαγράφηκαν με επιτυχία.",
+            "failedToDelete":"Δεν ήταν δυνατή η διαγραφή των ρυθμίσεων ({e}).",
+            "failedToSync":"Δεν ήταν δυνατός ο συγχρονισμός των ρυθμίσεων με το cloud ({e}).",
+            "header":"Ρυθμίσεις Cloud",
+            "newerThanCloud":"Οι τοπικές σας ρυθμίσεις είναι νεότερες από αυτές του cloud.",
+            "noSettings":"Δεν υπάρχουν ρυθμίσεις στο cloud.",
+            "success":"Συγχρονισμένες ρυθμίσεις στο cloud!",
+            "syncFromCloud":"Δεν ήταν δυνατός ο συγχρονισμός των ρυθμίσεων από το cloud ({e}).",
+            "upToDate":"Οι ρυθμίσεις σας είναι ενημερωμένες.",
+            "updated":"Οι ρυθμίσεις σας έχουν ενημερωθεί! Κάντε κλικ εδώ για επανεκκίνηση για να εφαρμόσετε πλήρως τις αλλαγές!",
+            "updatedRemote":"Οι ρυθμίσεις σας έχουν ενημερωθεί! Κάντε κλικ εδώ για επανεκκίνηση για να εφαρμόσετε πλήρως τις αλλαγές!"
         }
     },
     "consoleJanitor":{
-        "alwaysAllowLoggers":"Always allow loggers of these types",
-        "description":"Disables annoying console messages/errors",
-        "filterList":"Filter List",
+        "alwaysAllowLoggers":"Να επιτρέπονται πάντα τα καταγραφικά αυτού του τύπου",
+        "description":"Απενεργοποιεί τα ενοχλητικά μηνύματα/λάθη της κονσόλας",
+        "filterList":"Λίστα φίλτρων",
         "name":"ConsoleJanitor",
         "settings":{
-            "disableLoggers":"Disables Discords loggers",
-            "disableSpotifyLogger":"Disable the Spotify logger, which leaks account information and access token",
-            "whitelistedLoggers":"Semi colon separated list of loggers to allow even if others are hidden"
+            "disableLoggers":"Απενεργοποιεί τα καταγραφικά Discords",
+            "disableSpotifyLogger":"Απενεργοποιήστε το καταγραφικό Spotify, το οποίο διαρρέει πληροφορίες λογαριασμού και διακριτικό πρόσβασης",
+            "whitelistedLoggers":"Λίστα καταγραφών διαχωρισμένη με άνω και κάτω τελεία για να επιτρέπονται ακόμη και αν είναι κρυφά άλλα"
         }
     },
     "contributorCard":{
-        "contributionsButton":"See what you've contributed to",
-        "description":"Since you've contributed to Equicord you now have a cool new badge!",
-        "subtitle":"Thank you for contributing!",
-        "title":"Contributions"
+        "contributionsButton":"Δείτε σε τι έχετε συνεισφέρει",
+        "description":"Εφόσον έχετε συνεισφέρει στο Equicord έχετε τώρα ένα υπέροχο νέο σήμα!",
+        "subtitle":"Σας ευχαριστούμε που συνεισφέρετε!",
+        "title":"Συνεισφορές"
     },
     "copyEmojiMarkdown":{
-        "copyEmojiMarkdown":"Copy Emoji Markdown",
-        "copyUnicodeDescription":"Copy the raw unicode character instead of :name: for default emojis (👽)",
-        "description":"Allows you to copy emojis as formatted string (<:blobcatcozy:1026533070955872337>)",
-        "success":"Success! Copied emoji markdown."
+        "copyEmojiMarkdown":"Αντιγράψτε το Emoji Markdown",
+        "copyUnicodeDescription":"Αντιγράψτε τον ακατέργαστο χαρακτήρα unicode αντί για :name: για προεπιλεγμένα emoji (👽)",
+        "description":"Σας επιτρέπει να αντιγράψετε emoji ως μορφοποιημένη συμβολοσειρά (<:blobcatcozy:1026533070955872337>)",
+        "success":"Επιτυχία! Αντιγράφηκε σήμανση emoji."
     },
     "copyFileContents":{
-        "copied":"Copied!",
-        "copyFileContents":"Copy File Contents",
-        "description":"Adds a button to text file attachments to copy their contents",
-        "fileTooLarge":"File too large to copy"
+        "copied":"Αντιγράφηκε!",
+        "copyFileContents":"Αντιγραφή περιεχομένων αρχείου",
+        "description":"Προσθέτει ένα κουμπί στα συνημμένα αρχείων κειμένου για να αντιγράψετε το περιεχόμενό τους",
+        "fileTooLarge":"Το αρχείο είναι πολύ μεγάλο για αντιγραφή"
     },
     "copyStickerLinks":{
-        "copyLink":"Copy Link",
-        "description":"Adds the ability to copy & open Sticker links",
-        "linkCopied":"Link copied!",
-        "openLink":"Open Link"
+        "copyLink":"Αντιγραφή συνδέσμου",
+        "description":"Προσθέτει τη δυνατότητα αντιγραφής και ανοίγματος συνδέσμων αυτοκόλλητων",
+        "linkCopied":"Ο σύνδεσμος αντιγράφηκε!",
+        "openLink":"Άνοιγμα συνδέσμου"
     },
     "copyUserURLs":{
-        "copyUserURL":"Copy User URL",
-        "description":"Adds a 'Copy User URL' option to the user context menu."
+        "copyUserURL":"Αντιγραφή χρήστη URL",
+        "description":"Προσθέτει μια επιλογή \"Αντιγραφή χρήστη URL\" στο μενού περιβάλλοντος χρήστη."
     },
     "customRPC":{
-        "activityType":"Activity Type",
+        "activityType":"Τύπος δραστηριότητας",
         "activityTypes":{
-            "competing":"Competing",
-            "listening":"Listening",
-            "playing":"Playing",
-            "streaming":"Streaming",
-            "watching":"Watching"
+            "competing":"Αγωνιστικά",
+            "listening":"Ακούγοντας",
+            "playing":"Παιχνίδι",
+            "streaming":"Ζωντανά",
+            "watching":"Παρακολούθηση"
         },
-        "appId":"Application ID",
-        "appName":"Application Name",
-        "button1Text":"Button1 Text",
-        "button1Url":"Button1 URL",
-        "button2Text":"Button2 Text",
-        "button2Url":"Button2 URL",
-        "detailLine1":"Detail (line 1)",
-        "detailUrl":"Detail URL",
-        "endTimestamp":"End Timestamp (in milliseconds)",
+        "appId":"Αναγνωριστικό Εφαρμογής",
+        "appName":"Όνομα εφαρμογής",
+        "button1Text":"Κουμπί 1 Κείμενο",
+        "button1Url":"Κουμπί 1 URL",
+        "button2Text":"Κουμπί 2 Κείμενο",
+        "button2Url":"Κουμπί 2 URL",
+        "detailLine1":"Λεπτομέρεια (γραμμή 1)",
+        "detailUrl":"Λεπτομέρεια URL",
+        "endTimestamp":"Χρονική σήμανση λήξης (σε χιλιοστά του δευτερολέπτου)",
         "instructions":{
-            "buttons":"You can't see your own buttons on your profile, but everyone else can see it fine.",
-            "devPortal":"Go to the <0>Discord Developer Portal</0> to create an application and get the application ID.",
-            "imgur":"If you want to use an image link, download your image and reupload the image to <0>Imgur</0> and get the image link by right-clicking the image and selecting \"Copy image address\".",
-            "unicode":"Some weird unicode text (\"fonts\" 𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘) may cause the rich presence to not show up, try using normal letters instead.",
-            "uploadImages":"Upload images in the Rich Presence tab to get the image keys."
+            "buttons":"Δεν μπορείτε να δείτε τα δικά σας κουμπιά στο προφίλ σας, αλλά όλοι οι άλλοι μπορούν να το δουν μια χαρά.",
+            "devPortal":"Μεταβείτε στην <0>Discord Πύλη προγραμματιστών</0> για να δημιουργήσετε μια εφαρμογή και να λάβετε το αναγνωριστικό της εφαρμογής.",
+            "imgur":"Εάν θέλετε να χρησιμοποιήσετε έναν σύνδεσμο εικόνας, κάντε λήψη της εικόνας σας και μεταφορτώστε ξανά την εικόνα στο <0>Imgur</0> και λάβετε τον σύνδεσμο της εικόνας κάνοντας δεξί κλικ στην εικόνα και επιλέγοντας \"Αντιγραφή διεύθυνσης εικόνας\".",
+            "unicode":"Κάποιο περίεργο κείμενο unicode (\"γραμματοσειρές\" 𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘) μπορεί να κάνει την πλούσια παρουσία να μην εμφανίζεται, δοκιμάστε να χρησιμοποιήσετε κανονικά γράμματα.",
+            "uploadImages":"Ανεβάστε εικόνες στην καρτέλα Rich Presence για να λάβετε τα κλειδιά εικόνας."
         },
-        "largeImageClickUrl":"Large Image clickable URL",
-        "largeImageText":"Large Image Text",
-        "largeImageUrl":"Large Image URL/Key",
+        "largeImageClickUrl":"Μεγάλη εικόνα με δυνατότητα κλικ URL",
+        "largeImageText":"Κείμενο μεγάλης εικόνας",
+        "largeImageUrl":"Μεγάλη εικόνα URL/Κλειδί",
         "notice":{
-            "body":"Activity Sharing isn't enabled, people won't be able to see your custom rich presence!",
-            "enable":"Enable",
-            "title":"Notice"
+            "body":"Η κοινή χρήση δραστηριότητας δεν είναι ενεργοποιημένη, οι χρήστες δεν θα μπορούν να δουν την προσαρμοσμένη εμπλουτισμένη παρουσία σας!",
+            "enable":"Ενεργοποίηση",
+            "title":"Ανακοίνωση"
         },
-        "partyMaxSize":"Maximum Party Size",
-        "partySize":"Party Size",
+        "partyMaxSize":"Μέγιστο μέγεθος πάρτι",
+        "partySize":"Μέγεθος πάρτι",
         "placeholder":{
-            "enterValue":"Enter a value",
-            "selectOption":"Select an option"
+            "enterValue":"Εισαγάγετε μια τιμή",
+            "selectOption":"Επιλέξτε μια επιλογή"
         },
-        "smallImageClickUrl":"Small Image clickable URL",
-        "smallImageText":"Small Image Text",
-        "smallImageUrl":"Small Image URL/Key",
-        "startTimestamp":"Start Timestamp (in milliseconds)",
-        "stateLine2":"State (line 2)",
-        "stateUrl":"State URL",
-        "streamLink":"Stream Link (Twitch or YouTube, only if activity type is Streaming)",
-        "timestampMode":"Timestamp Mode",
+        "smallImageClickUrl":"Μικρή εικόνα με δυνατότητα κλικ URL",
+        "smallImageText":"Κείμενο μικρής εικόνας",
+        "smallImageUrl":"Μικρή εικόνα URL/Κλειδί",
+        "startTimestamp":"Χρονική σήμανση έναρξης (σε χιλιοστά του δευτερολέπτου)",
+        "stateLine2":"Πολιτεία (γραμμή 2)",
+        "stateUrl":"Κατάσταση URL",
+        "streamLink":"Σύνδεσμος ροής (Twitch ή YouTube, μόνο εάν ο τύπος δραστηριότητας είναι Ροή)",
+        "timestampMode":"Λειτουργία χρονοσήμανσης",
         "timestampModes":{
-            "currentTime":"Same as your current time (not reset after 24h)",
-            "custom":"Custom",
-            "none":"None",
-            "sinceOpen":"since discord open"
+            "currentTime":"Ίδια με την τρέχουσα ώρα σας (δεν επαναφέρεται μετά από 24 ώρες)",
+            "custom":"Προσαρμοσμένο",
+            "none":"Κανένα",
+            "sinceOpen":"αφού άνοιξε η διχόνοια"
         },
         "validation":{
-            "discordId":"Must be a valid Discord ID.",
-            "discordLink":"Don't use a Discord link. Use an Imgur image link instead.",
-            "imgurDirect":"Imgur link must be a direct link to the image (e.g. https://i.imgur.com/...). Right click the image and click 'Copy image address'",
-            "maxLength":"Must be not longer than {length} characters.",
-            "number":"Must be a number.",
-            "positiveNumber":"Must be a positive number.",
-            "required":"This field is required.",
-            "streamingLink":"Streaming link must be a valid URL.",
-            "streamingLinkLength":"Streaming link must be not longer than 512 characters.",
-            "tenorDirect":"Tenor link must be a direct link to the image (e.g. https://media.tenor.com/...). Right click the GIF and click 'Copy image address'",
-            "url":"Must be a valid URL."
+            "discordId":"Πρέπει να είναι έγκυρο Discord αναγνωριστικό.",
+            "discordLink":"Μην χρησιμοποιείτε σύνδεσμο Discord. Χρησιμοποιήστε έναν σύνδεσμο εικόνας Imgur.",
+            "imgurDirect":"Ο σύνδεσμος Imgur πρέπει να είναι ένας άμεσος σύνδεσμος προς την εικόνα (π.χ. https://i.imgur.com/...). Κάντε δεξί κλικ στην εικόνα και κάντε κλικ στην επιλογή \"Αντιγραφή διεύθυνσης εικόνας\"",
+            "maxLength":"Δεν πρέπει να είναι μεγαλύτερος από {length} χαρακτήρες.",
+            "number":"Πρέπει να είναι αριθμός.",
+            "positiveNumber":"Πρέπει να είναι θετικός αριθμός.",
+            "required":"Αυτό το πεδίο είναι υποχρεωτικό.",
+            "streamingLink":"Ο σύνδεσμος ροής πρέπει να είναι έγκυρος URL.",
+            "streamingLinkLength":"Ο σύνδεσμος ροής δεν πρέπει να είναι μεγαλύτερος από 512 χαρακτήρες.",
+            "tenorDirect":"Ο σύνδεσμος Tenor πρέπει να είναι ένας άμεσος σύνδεσμος προς την εικόνα (π.χ. https://media.tenor.com/...). Κάντε δεξί κλικ στο GIF και κάντε κλικ στην επιλογή \"Αντιγραφή διεύθυνσης εικόνας\"",
+            "url":"Πρέπει να είναι έγκυρο URL."
         }
     },
     "dearrow":{
-        "clickToDearrow":"Click to dearrow",
-        "dearrowByDefault":"Dearrow videos automatically",
-        "dearrowedClickRestore":"This embed has been dearrowed, click to restore",
-        "description":"Makes YouTube embed titles and thumbnails less sensationalist, powered by Dearrow",
-        "everything":"Everything (Titles & Thumbnails)",
-        "hideButton":"Hides the Dearrow button from YouTube embeds",
-        "replaceElementsDescription":"Choose which elements of the embed will be replaced",
-        "thumbnails":"Thumbnails",
-        "titles":"Titles"
+        "clickToDearrow":"Κάντε κλικ στο dearrow",
+        "dearrowByDefault":"Dearrow βίντεο αυτόματα",
+        "dearrowedClickRestore":"Αυτή η ενσωμάτωση έχει καταργηθεί, κάντε κλικ για επαναφορά",
+        "description":"Κάνει το YouTube να ενσωματώνει τίτλους και μικρογραφίες λιγότερο εντυπωσιακές, με την υποστήριξη του Dearrow",
+        "everything":"Τα πάντα (τίτλοι και μικρογραφίες)",
+        "hideButton":"Αποκρύπτει το κουμπί Dearrow από τις ενσωματώσεις του YouTube",
+        "replaceElementsDescription":"Επιλέξτε ποια στοιχεία της ενσωμάτωσης θα αντικατασταθούν",
+        "thumbnails":"Μικρογραφίες",
+        "titles":"Τίτλοι"
     },
     "decor":{
-        "accessFromProfiles":"You can also access Decor decorations from the {link} page.",
-        "changeDecoration":"Change Decoration",
-        "description":"Create and use your own custom avatar decorations, or pick your favorite from the presets.",
-        "enableAndRestart":"Enable Decor and restart your client to change your avatar decoration.",
-        "profilesLink":"Profiles",
-        "removeDecoration":"Remove Decoration",
-        "title":"Decor"
+        "accessFromProfiles":"Μπορείτε επίσης να αποκτήσετε πρόσβαση στα διακοσμητικά στοιχεία από τη σελίδα {link}.",
+        "changeDecoration":"Αλλαγή Διακόσμησης",
+        "description":"Δημιουργήστε και χρησιμοποιήστε τις δικές σας προσαρμοσμένες διακοσμήσεις avatar ή επιλέξτε το αγαπημένο σας από τις προεπιλογές.",
+        "enableAndRestart":"Ενεργοποιήστε το Decor και επανεκκινήστε τον πελάτη σας για να αλλάξετε τη διακόσμηση του avatar σας.",
+        "profilesLink":"Προφίλ",
+        "removeDecoration":"Αφαιρέστε τη διακόσμηση",
+        "title":"Ντεκόρ"
     },
-    "donate":"Donate",
+    "donate":"Προσφέρω",
     "donorCard":{
         "donated":{
-            "description":"All Vencord users can see your Vencord donor badge, and Equicord users can see your Equicord donor badge. To change your Vencord donor badge, contact @vending.machine. For your Equicord donor badge, make a ticket in Equicord's server.",
-            "equicordDescription":"All Equicord users can see your badge! You can manage your perks by making a ticket in Equicord's server.",
-            "subtitle":"Thank you for donating!",
-            "title":"Donations",
-            "vencordDescription":"All Vencord users can see your badge! You can manage your perks by messaging @{v}."
+            "description":"Όλοι οι χρήστες Vencord μπορούν να δουν το σήμα δότη Vencord και οι Equicord χρήστες μπορούν να δουν το σήμα δότη Equicord. Για να αλλάξετε το σήμα δότη Vencord, επικοινωνήστε με το @vending.machine. Για το σήμα δότη Equicord, δημιουργήστε ένα εισιτήριο στον διακομιστή του Equicord.",
+            "equicordDescription":"Όλοι οι [[PH0]]] χρήστες μπορούν να δουν το σήμα σας! Μπορείτε να διαχειριστείτε τα προνόμιά σας κάνοντας ένα εισιτήριο στον διακομιστή του Equicord.",
+            "subtitle":"Σας ευχαριστούμε για τη δωρεά!",
+            "title":"Δωρεές",
+            "vencordDescription":"Όλοι οι [[PH1]]] χρήστες μπορούν να δουν το σήμα σας! Μπορείτε να διαχειριστείτε τα προνόμιά σας στέλνοντας μήνυμα στον @{v}."
         },
         "notDonated":{
-            "description":"Please consider supporting the development of Equicord by donating!",
-            "title":"Support the Project"
+            "description":"Σκεφτείτε το ενδεχόμενο να υποστηρίξετε την ανάπτυξη του Equicord κάνοντας δωρεές!",
+            "title":"Υποστήριξη του Έργου"
         }
     },
     "experiments":{
-        "description":"Enable Access to Experiments & other dev-only features in Discord!",
-        "devToolsInfo":"You can open Discord's DevTools via {keyboardCombo}",
-        "holdOn":"Hold on!!",
-        "moreInfo":"More Information",
+        "description":"Ενεργοποιήστε την πρόσβαση σε πειράματα και άλλες λειτουργίες μόνο για προγραμματιστές στο Discord!",
+        "devToolsInfo":"Μπορείτε να ανοίξετε τα Εργαλεία προγραμματιστών του Discord μέσω του {keyboardCombo}",
+        "holdOn":"Υπομονή!!",
+        "moreInfo":"Περισσότερες Πληροφορίες",
         "settings":{
-            "toolbarDevMenu":"Change the Help (?) toolbar button (top right in chat) to Discord's developer menu"
+            "toolbarDevMenu":"Αλλάξτε το κουμπί της γραμμής εργαλείων Βοήθεια (?) (πάνω δεξιά στη συνομιλία) στο μενού προγραμματιστών του Discord"
         },
-        "warning1":"Experiments are unreleased Discord features. They might not work, or even break your client or get your account disabled.",
-        "warning2":"Only use experiments if you know what you're doing. Equicord is not responsible for any damage caused by enabling experiments. If you don't know what an experiment does, ignore it. Do not ask us what experiments do either, we probably don't know.",
-        "warning3":"No, you cannot use server-side features like checking the \"Send to Client\" box."
+        "warning1":"Τα πειράματα είναι ακυκλοφόρητες Discord χαρακτηριστικά. Ενδέχεται να μην λειτουργούν ή ακόμη και να σπάσουν τον πελάτη σας ή να απενεργοποιήσουν τον λογαριασμό σας.",
+        "warning2":"Χρησιμοποιήστε πειράματα μόνο εάν ξέρετε τι κάνετε. Ο Equicord δεν είναι υπεύθυνος για τυχόν ζημιές που προκαλούνται από την ενεργοποίηση πειραμάτων. Αν δεν ξέρετε τι κάνει ένα πείραμα, αγνοήστε το. Μην μας ρωτήσετε τι κάνουν τα πειράματα, μάλλον δεν ξέρουμε.",
+        "warning3":"Όχι, δεν μπορείτε να χρησιμοποιήσετε λειτουργίες από την πλευρά του διακομιστή, όπως να επιλέξετε το πλαίσιο \"Αποστολή σε πελάτη\"."
     },
     "expressionCloner":{
-        "cloneEmoji":"Clone Emoji",
-        "cloneSticker":"Clone Sticker",
-        "cloneTo":"Clone to {guild}",
-        "clonedSuccess":"Successfully cloned {name} to {guild}!",
-        "customName":"Custom Name",
-        "failedToClone":"Failed to clone: {error}",
-        "nameValidation":"Name must be between 2 and 32 characters",
-        "somethingWentWrong":"Something went wrong (check console!)"
+        "cloneEmoji":"Κλωνοποίηση Emoji",
+        "cloneSticker":"Αυτοκόλλητο κλώνος",
+        "cloneTo":"Κλωνοποίηση σε {guild}",
+        "clonedSuccess":"Κλωνοποιήθηκε με επιτυχία {name} σε {guild}!",
+        "customName":"Προσαρμοσμένο όνομα",
+        "failedToClone":"Η κλωνοποίηση απέτυχε: {error}",
+        "nameValidation":"Το όνομα πρέπει να αποτελείται από 2 έως 32 χαρακτήρες",
+        "somethingWentWrong":"Κάτι πήγε στραβά (ελέγξτε την κονσόλα!)"
     },
-    "failedToRender":"Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!",
+    "failedToRender":"Απέτυχε η απόδοση της καρτέλας {tab}. Εάν αυτό το ζήτημα παραμένει, δοκιμάστε να χρησιμοποιήσετε το πρόγραμμα εγκατάστασης για επανεγκατάσταση!",
     "fakeNitro":{
-        "description":"Allows you to send fake emojis/stickers, use nitro themes, and stream in nitro quality",
-        "doNotShowAgain":"Do not show again",
-        "emojiNotice":"This is a FakeNitro emoji and renders like a real emoji only for you. Appears as a link to non-plugin users.",
-        "holdOn":"Hold on!",
+        "description":"Σας επιτρέπει να στέλνετε ψεύτικα emoji/αυτοκόλλητα, να χρησιμοποιείτε θέματα nitro και να κάνετε ροή σε ποιότητα νιτρο",
+        "doNotShowAgain":"Να μην εμφανιστεί ξανά",
+        "emojiNotice":"Αυτό είναι ένα emoji FakeNitro και αποδίδεται σαν πραγματικό emoji μόνο για εσάς. Εμφανίζεται ως σύνδεσμος προς χρήστες που δεν έχουν προσθήκες.",
+        "holdOn":"Υπομονή!",
         "noAttachmentPerms":{
-            "body":"You cannot send this message because it contains an animated FakeNitro sticker, and you do not have permissions to attach files in the current channel. Please remove the sticker to proceed."
+            "body":"Δεν μπορείτε να στείλετε αυτό το μήνυμα επειδή περιέχει ένα κινούμενο αυτοκόλλητο FakeNitro και δεν έχετε δικαιώματα για να επισυνάψετε αρχεία στο τρέχον κανάλι. Αφαιρέστε το αυτοκόλλητο για να συνεχίσετε."
         },
         "noEmbedPerms":{
-            "body1":"You are trying to send/edit a message that contains a FakeNitro emoji or sticker,",
-            "body2":"however you do not have permissions to embed links in the current channel.",
-            "body3":"Are you sure you want to send this message? Your FakeNitro items will appear as a link only.",
-            "disableNotice":"You can disable this notice in the plugin settings."
+            "body1":"Προσπαθείτε να στείλετε/επεξεργαστείτε ένα μήνυμα που περιέχει ένα emoji ή αυτοκόλλητο FakeNitro,",
+            "body2":"Ωστόσο, δεν έχετε δικαιώματα για ενσωμάτωση συνδέσμων στο τρέχον κανάλι.",
+            "body3":"Είστε βέβαιοι ότι θέλετε να στείλετε αυτό το μήνυμα; Τα στοιχεία FakeNitro θα εμφανίζονται μόνο ως σύνδεσμος.",
+            "disableNotice":"Μπορείτε να απενεργοποιήσετε αυτήν την ειδοποίηση στις ρυθμίσεις της προσθήκης."
         },
-        "sendAnyway":"Send Anyway",
+        "sendAnyway":"Αποστολή πάντως",
         "settings":{
-            "disableEmbedPermissionCheck":"Whether to disable the embed permission check when sending fake emojis and stickers",
-            "emojiSize":"Size of the emojis when sending",
-            "enableEmojiBypass":"Allows sending fake emojis (also bypasses missing permission to use custom emojis)",
-            "enableStickerBypass":"Allows sending fake stickers (also bypasses missing permission to use stickers)",
-            "enableStreamQualityBypass":"Allow streaming in nitro quality",
-            "hyperLinkText":"What text the hyperlink should use. {{NAME}} will be replaced with the emoji/sticker name.",
-            "stickerSize":"Size of the stickers when sending",
-            "transformCompoundSentence":"Whether to transform fake stickers and emojis in compound sentences (sentences with more content than just the fake emoji or sticker link)",
-            "transformEmojis":"Whether to transform fake emojis into real ones",
-            "transformStickers":"Whether to transform fake stickers into real ones",
-            "useEmojiHyperLinks":"Whether to use hyperlinks when sending fake emojis",
-            "useStickerHyperLinks":"Whether to use hyperlinks when sending fake stickers"
+            "disableEmbedPermissionCheck":"Εάν θα απενεργοποιηθεί ο έλεγχος αδειών ενσωμάτωσης κατά την αποστολή πλαστών emoji και αυτοκόλλητων",
+            "emojiSize":"Το μέγεθος των emojis κατά την αποστολή",
+            "enableEmojiBypass":"Επιτρέπει την αποστολή ψεύτικων emoji (παρακάμπτει επίσης την άδεια που λείπει για τη χρήση προσαρμοσμένων emoji)",
+            "enableStickerBypass":"Επιτρέπει την αποστολή πλαστών αυτοκόλλητων (παρακάμπτει επίσης την άδεια χρήσης αυτοκόλλητων που λείπει)",
+            "enableStreamQualityBypass":"Επιτρέψτε τη ροή σε ποιότητα νίτρο",
+            "hyperLinkText":"Τι κείμενο πρέπει να χρησιμοποιεί ο υπερσύνδεσμος. Το {{NAME}} θα αντικατασταθεί με το όνομα emoji/αυτοκόλλητο.",
+            "stickerSize":"Το μέγεθος των αυτοκόλλητων κατά την αποστολή",
+            "transformCompoundSentence":"Εάν θέλετε να μετατρέψετε ψεύτικα αυτοκόλλητα και emoji σε σύνθετες προτάσεις (προτάσεις με περισσότερο περιεχόμενο από το ψεύτικο σύνδεσμο emoji ή αυτοκόλλητο)",
+            "transformEmojis":"Είτε να μετατρέψετε τα ψεύτικα emoji σε αληθινά",
+            "transformStickers":"Είτε θα μετατρέψετε τα ψεύτικα αυτοκόλλητα σε αληθινά",
+            "useEmojiHyperLinks":"Εάν πρέπει να χρησιμοποιείτε υπερσυνδέσμους κατά την αποστολή πλαστών emoji",
+            "useStickerHyperLinks":"Εάν θα χρησιμοποιηθούν υπερσυνδέσεις κατά την αποστολή πλαστών αυτοκόλλητων"
         },
-        "stickerNotice":"This is a FakeNitro sticker and renders like a real sticker only for you. Appears as a link to non-plugin users."
+        "stickerNotice":"Αυτό είναι ένα αυτοκόλλητο FakeNitro και αποδίδεται σαν πραγματικό αυτοκόλλητο μόνο για εσάς. Εμφανίζεται ως σύνδεσμος προς χρήστες που δεν έχουν προσθήκες."
     },
     "fakeProfileThemes":{
-        "accent":"Accent",
-        "colorPickers":"Color pickers",
-        "copy3y3":"Copy 3y3",
-        "fakeColors":"Fake colors",
-        "instructions":"Set your profile colors using the color pickers below. The colors will be encoded into your profile's 'About Me' section.",
-        "nitroColors":"Nitro colors",
-        "preview":"Preview",
-        "primary":"Primary",
-        "usage":"Usage"
+        "accent":"Προφορά",
+        "colorPickers":"Επιλογείς χρωμάτων",
+        "copy3y3":"Αντίγραφο 3y3",
+        "fakeColors":"Ψεύτικα χρώματα",
+        "instructions":"Ορίστε τα χρώματα του προφίλ σας χρησιμοποιώντας τους παρακάτω επιλογείς χρώματος. Τα χρώματα θα κωδικοποιηθούν στην ενότητα \"Σχετικά με εμένα\" του προφίλ σας.",
+        "nitroColors":"Νίτρο χρώματα",
+        "preview":"Προεπισκόπηση",
+        "primary":"Πρωταρχικός",
+        "usage":"Χρήση"
     },
     "favGifSearch":{
-        "description":"Adds a search bar to favorite gifs.",
+        "description":"Προσθέτει μια γραμμή αναζήτησης στα αγαπημένα gif.",
         "name":"FavoriteGifSearch",
         "searchOptions":{
-            "entireUrl":"Entire Url",
-            "hostAndPath":"Host & Path (tenor.com somgif.gif)",
-            "pathOnly":"Path Only (/somegif.gif)"
+            "entireUrl":"Ολόκληρο το URL",
+            "hostAndPath":"Κεντρικός υπολογιστής και διαδρομή (tenor.com somgif.gif)",
+            "pathOnly":"Μόνο διαδρομή (/somegif.gif)"
         },
-        "searchPlaceholder":"Search Favorite Gifs",
+        "searchPlaceholder":"Αναζήτηση Αγαπημένα Gif",
         "settings":{
-            "searchOption":"The part of the url you want to search"
+            "searchOption":"Το τμήμα του url που θέλετε να αναζητήσετε"
         }
     },
     "fixImagesQuality":{
-        "animatedImagesAlways":"Animated images (GIF, WebP, etc.) in chat will always animate, regardless of if the App is focused.",
-        "defaultBehavior":"The default behavior is the following:",
-        "description":"Improves quality of images by loading them at their original resolution",
-        "enableOriginalCaveats":"You can also enable original image in chat, but beware of the following caveats:",
-        "inChatOptimised":"In chat, optimised but full resolution images will be loaded.",
-        "inModalOriginal":"In the image modal, the original image will be loaded.",
-        "mayCauseLag":"May cause lag.",
+        "animatedImagesAlways":"Οι κινούμενες εικόνες (GIF, WebP, κ.λπ.) στη συνομιλία θα κινούνται πάντα, ανεξάρτητα από το εάν η εφαρμογή είναι εστιασμένη.",
+        "defaultBehavior":"Η προεπιλεγμένη συμπεριφορά είναι η εξής:",
+        "description":"Βελτιώνει την ποιότητα των εικόνων φορτώνοντάς τες στην αρχική τους ανάλυση",
+        "enableOriginalCaveats":"Μπορείτε επίσης να ενεργοποιήσετε την αρχική εικόνα στη συνομιλία, αλλά προσέξτε τις ακόλουθες προειδοποιήσεις:",
+        "inChatOptimised":"Στη συνομιλία, θα φορτωθούν βελτιστοποιημένες αλλά πλήρους ανάλυσης εικόνες.",
+        "inModalOriginal":"Στο μοντέλο εικόνας, θα φορτωθεί η αρχική εικόνα.",
+        "mayCauseLag":"Μπορεί να προκαλέσει υστέρηση.",
         "name":"FixImagesQuality",
         "settings":{
-            "originalImagesInChat":"Also load the original image in Chat. WARNING: Read the caveats above"
+            "originalImagesInChat":"Φορτώστε επίσης την αρχική εικόνα στο Chat. ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Διαβάστε τις προειδοποιήσεις παραπάνω"
         }
     },
     "friendsSince":{
-        "description":"Shows when you became friends with someone in the user popout",
-        "heading":"Friends Since"
+        "description":"Εμφανίζεται πότε γίνατε φίλοι με κάποιον στο αναδυόμενο παράθυρο χρήστη",
+        "heading":"Φίλοι Από τότε"
     },
     "gameActivityToggle":{
-        "description":"Adds a button next to the mic and deafen button to toggle game activity.",
-        "disableGameActivity":"Disable Game Activity",
-        "enableGameActivity":"Enable Game Activity",
+        "description":"Προσθέτει ένα κουμπί δίπλα στο μικρόφωνο και το κουμπί κουφώματος για εναλλαγή της δραστηριότητας του παιχνιδιού.",
+        "disableGameActivity":"Απενεργοποιήστε τη Δραστηριότητα παιχνιδιού",
+        "enableGameActivity":"Ενεργοποιήστε τη Δραστηριότητα παιχνιδιού",
         "settings":{
-            "location":"Where to show the game activity toggle button",
-            "locationPanel":"Next to Mute/Deafen",
-            "locationToolbox":"Equicord Toolbox",
-            "oldIcon":"Use the old icon style before Discord icon redesign"
+            "location":"Πού να εμφανιστεί το κουμπί εναλλαγής δραστηριότητας παιχνιδιού",
+            "locationPanel":"Δίπλα στο Mute/Deafen",
+            "locationToolbox":"Equicord Εργαλειοθήκη",
+            "oldIcon":"Χρησιμοποιήστε το παλιό στυλ εικονιδίου πριν από τον επανασχεδιασμό του εικονιδίου Discord"
         }
     },
     "greetStickerPicker":{
-        "ariaLabel":"Greet Sticker Picker",
-        "description":"Allows you to use any greet sticker instead of only the random one by right-clicking the 'Wave to say hi!' button",
-        "greetMode":"Greet Mode",
-        "greetModeDescription":"Choose the greet mode",
-        "greetModeLabel":"Greet (you can only greet 3 times)",
-        "greetStickers":"Greet Stickers",
-        "normalMessageLabel":"Normal Message (you can greet spam)",
-        "sendGreets":"Send Greets",
-        "unholyMultiGreet":"Unholy Multi-Greet"
+        "ariaLabel":"Επιλογέας αυτοκόλλητου χαιρετισμού",
+        "description":"Σας επιτρέπει να χρησιμοποιείτε οποιοδήποτε αυτοκόλλητο χαιρετισμού αντί μόνο του τυχαίου κάνοντας δεξί κλικ στο \"Wave to say hi!\" κουμπί",
+        "greetMode":"Λειτουργία χαιρετισμού",
+        "greetModeDescription":"Επιλέξτε τη λειτουργία χαιρετισμού",
+        "greetModeLabel":"Χαιρετίστε (μπορείτε να χαιρετήσετε μόνο 3 φορές)",
+        "greetStickers":"Αυτοκόλλητα χαιρετισμού",
+        "normalMessageLabel":"Κανονικό μήνυμα (μπορείτε να χαιρετίσετε ανεπιθύμητα μηνύματα)",
+        "sendGreets":"Στείλτε χαιρετισμούς",
+        "unholyMultiGreet":"Ανίερος Πολυχαιρετισμός"
     },
     "hideAttachments":{
-        "description":"Hide attachments and embeds for individual messages via hover button",
-        "hideMedia":"Hide Media",
-        "mediaHidden":"Media Hidden",
-        "showMedia":"Show Media"
+        "description":"Απόκρυψη συνημμένων και ενσωματώσεων για μεμονωμένα μηνύματα μέσω του κουμπιού αιώρησης",
+        "hideMedia":"Απόκρυψη πολυμέσων",
+        "mediaHidden":"Κρυφά μέσα",
+        "showMedia":"Εμφάνιση πολυμέσων"
     },
     "ignoreActivities":{
-        "disableActivity":"Disable activity",
-        "enableActivity":"Enable activity",
+        "disableActivity":"Απενεργοποίηση δραστηριότητας",
+        "enableActivity":"Ενεργοποίηση δραστηριότητας",
         "filterList":{
-            "description":"Comma separated list of activity IDs to filter (Useful for filtering specific RPC activities and CustomRPC)",
-            "title":"Filter List"
+            "description":"Λίστα αναγνωριστικών δραστηριότητας προς φιλτράρισμα διαχωρισμένη με κόμματα (Χρήσιμα για φιλτράρισμα συγκεκριμένων δραστηριοτήτων RPC και CustomRPC)",
+            "title":"Λίστα φίλτρων"
         },
         "importCustomRPC":{
-            "alreadyAdded":"CustomRPC application ID is already added.",
-            "button":"Import CustomRPC ID",
-            "description":"Import the application id of the CustomRPC plugin to the filter list",
-            "notSet":"CustomRPC application ID is not set."
+            "alreadyAdded":"Το αναγνωριστικό εφαρμογής CustomRPC έχει ήδη προστεθεί.",
+            "button":"Εισαγωγή CustomRPC ID",
+            "description":"Εισαγάγετε το αναγνωριστικό εφαρμογής της προσθήκης CustomRPC στη λίστα φίλτρων",
+            "notSet":"Το αναγνωριστικό εφαρμογής CustomRPC δεν έχει οριστεί."
         },
         "settings":{
-            "blacklist":"Blacklist",
-            "ignoreCompeting":"Ignore all competing activities (These are normally special game activities)",
-            "ignoreListening":"Ignore all listening activities (These are usually spotify activities)",
-            "ignorePlaying":"Ignore all playing activities (These are usually game and RPC activities)",
-            "ignoreStreaming":"Ignore all streaming activities",
-            "ignoreWatching":"Ignore all watching activities",
-            "listMode":"Change the mode of the filter list",
-            "whitelist":"Whitelist"
+            "blacklist":"Προγράφω",
+            "ignoreCompeting":"Αγνοήστε όλες τις ανταγωνιστικές δραστηριότητες (Αυτές είναι συνήθως ειδικές δραστηριότητες παιχνιδιού)",
+            "ignoreListening":"Αγνοήστε όλες τις δραστηριότητες ακρόασης (Αυτές είναι συνήθως δραστηριότητες spotify)",
+            "ignorePlaying":"Αγνοήστε όλες τις δραστηριότητες παιχνιδιού (Αυτές είναι συνήθως δραστηριότητες παιχνιδιού και RPC)",
+            "ignoreStreaming":"Αγνοήστε όλες τις δραστηριότητες ροής",
+            "ignoreWatching":"Αγνοήστε όλες τις δραστηριότητες παρακολούθησης",
+            "listMode":"Αλλάξτε τη λειτουργία της λίστας φίλτρων",
+            "whitelist":"Λευκή λίστα"
         }
     },
     "imageZoom":{
-        "lensSize":"Lens Size",
-        "nearestNeighbour":"Nearest Neighbour",
+        "lensSize":"Μέγεθος φακού",
+        "nearestNeighbour":"Πλησιέστερος Γείτονας",
         "settings":{
-            "invertScroll":"Invert scroll",
-            "nearestNeighbour":"Use Nearest Neighbour Interpolation when scaling images",
-            "saveZoomValues":"Whether to save zoom and lens size values",
-            "size":"Radius / Size of the lens",
-            "square":"Make the lens square",
-            "zoom":"Zoom of the lens",
-            "zoomSpeed":"How fast the zoom / lens size changes"
+            "invertScroll":"Αντιστροφή κύλισης",
+            "nearestNeighbour":"Χρησιμοποιήστε την παρεμβολή πλησιέστερου γείτονα κατά την κλιμάκωση των εικόνων",
+            "saveZoomValues":"Εάν θέλετε να αποθηκεύσετε τις τιμές ζουμ και μεγέθους φακού",
+            "size":"Ακτίνα / Μέγεθος φακού",
+            "square":"Κάντε τον φακό τετράγωνο",
+            "zoom":"Ζουμ του φακού",
+            "zoomSpeed":"Πόσο γρήγορα αλλάζει το μέγεθος του ζουμ / του φακού"
         },
-        "squareLens":"Square Lens",
-        "zoom":"Zoom",
-        "zoomSpeed":"Zoom Speed"
+        "squareLens":"Τετράγωνος φακός",
+        "zoom":"Ανίπταμαι διαγωνίως",
+        "zoomSpeed":"Ταχύτητα ζουμ"
     },
-    "invite":"Invite",
+    "invite":"Πρόσκληση",
     "lastfmRichPresence":{
-        "apiKeyInstructions":"Set <0>Application name</0> and <1>Application description</1> to anything and leave the rest blank.",
-        "createApiKey":"Create API Key",
-        "description":"Little plugin for Last.fm rich presence",
-        "howToCreateApiKey":"How to create an API key",
-        "lastfmProfile":"Last.fm Profile",
+        "apiKeyInstructions":"Ορίστε τα <0>Όνομα εφαρμογής</0> και <1>Περιγραφή εφαρμογής</1> σε οτιδήποτε και αφήστε τα υπόλοιπα κενά.",
+        "createApiKey":"Δημιουργία κλειδιού API",
+        "description":"Μικρό πρόσθετο για πλούσια παρουσία στο Last.fm",
+        "howToCreateApiKey":"Πώς να δημιουργήσετε ένα κλειδί API",
+        "lastfmProfile":"Προφίλ Last.fm",
         "missingArt":{
-            "lastfmLogo":"Use large Last.fm logo",
-            "placeholder":"Use generic placeholder"
+            "lastfmLogo":"Χρησιμοποιήστε μεγάλο λογότυπο Last.fm",
+            "placeholder":"Χρησιμοποιήστε γενικό σύμβολο κράτησης θέσης"
         },
         "nameFormat":{
-            "albumName":"Use album name (falls back to custom status text if song has no album)",
-            "artistFirst":"Use format 'artist - song'",
-            "artistOnly":"Use artist name only",
-            "songFirst":"Use format 'song - artist'",
-            "songOnly":"Use song name only",
-            "statusName":"Use custom status name"
+            "albumName":"Χρήση ονόματος άλμπουμ (επιστρέφει στο προσαρμοσμένο κείμενο κατάστασης εάν το τραγούδι δεν έχει άλμπουμ)",
+            "artistFirst":"Χρήση μορφής \"καλλιτέχνης - τραγούδι\"",
+            "artistOnly":"Χρησιμοποιήστε μόνο όνομα καλλιτέχνη",
+            "songFirst":"Χρήση μορφής \"τραγούδι - καλλιτέχνης\"",
+            "songOnly":"Χρησιμοποιήστε μόνο όνομα τραγουδιού",
+            "statusName":"Χρησιμοποιήστε προσαρμοσμένο όνομα κατάστασης"
         },
         "settings":{
-            "alwaysHideArt":"Disable downloading album art",
-            "apiKey":"Custom Last.fm API key. Not required but highly recommended to avoid rate limiting with our shared key",
-            "clickableLinks":"Make track, artist and album names clickable links",
-            "hideWithActivity":"Hide Last.fm presence if you have any other presence",
-            "hideWithSpotify":"Hide Last.fm presence if spotify is running",
-            "missingArt":"When album or album art is missing",
-            "nameFormat":"Show name of song and artist in status name",
-            "shareUsername":"Show link to Last.fm profile",
-            "showLastFmLogo":"Show the Last.fm logo by the album cover",
-            "statusDisplayType":"Show the track / artist name in the member list",
-            "statusName":"Custom status text",
-            "useListeningStatus":"Show \"Listening to\" status instead of \"Playing\"",
-            "username":"Last.fm username"
+            "alwaysHideArt":"Απενεργοποιήστε τη λήψη εξώφυλλου άλμπουμ",
+            "apiKey":"Προσαρμοσμένο πλήκτρο Last.fm API. Δεν απαιτείται, αλλά συνιστάται ιδιαίτερα για να αποφύγετε τον περιορισμό των τιμών με το κοινό κλειδί μας",
+            "clickableLinks":"Δημιουργήστε συνδέσμους με δυνατότητα κλικ στα ονόματα κομματιών, καλλιτεχνών και άλμπουμ",
+            "hideWithActivity":"Απόκρυψη της παρουσίας Last.fm εάν έχετε άλλη παρουσία",
+            "hideWithSpotify":"Απόκρυψη της παρουσίας του Last.fm εάν εκτελείται το spotify",
+            "missingArt":"Όταν λείπει το εξώφυλλο άλμπουμ ή άλμπουμ",
+            "nameFormat":"Εμφάνιση ονόματος τραγουδιού και καλλιτέχνη στο όνομα κατάστασης",
+            "shareUsername":"Εμφάνιση συνδέσμου προς το προφίλ Last.fm",
+            "showLastFmLogo":"Εμφάνιση του λογότυπου Last.fm από το εξώφυλλο του άλμπουμ",
+            "statusDisplayType":"Εμφάνιση του ονόματος κομματιού/καλλιτέχνη στη λίστα μελών",
+            "statusName":"Προσαρμοσμένο κείμενο κατάστασης",
+            "useListeningStatus":"Εμφάνιση κατάστασης \"Ακούγοντας\" αντί για \"Αναπαραγωγή\"",
+            "username":"Όνομα χρήστη Last.fm"
         },
         "statusDisplayType":{
-            "artist":"Show artist name",
-            "off":"Don't show (shows generic listening message)",
-            "track":"Show track name"
+            "artist":"Εμφάνιση ονόματος καλλιτέχνη",
+            "off":"Να μην εμφανίζεται (εμφανίζει γενικό μήνυμα ακρόασης)",
+            "track":"Εμφάνιση ονόματος κομματιού"
         }
     },
-    "loading":"Loading...",
+    "loading":"Φόρτωση...",
     "logs":{
-        "allLogsCleared":"All logs have been cleared",
-        "clearAll":"Clear All",
-        "clearAllLogs":"Clear All Logs",
-        "clearAllLogsConfirmation":"Are you sure you would like to clear all logs? This can't be undone.",
-        "clearLog":"Clear Log",
-        "clearLogConfirmation":"Are you sure you would like to clear this log? This can't be undone.",
-        "clearLogs":"Clear Logs",
-        "clearLogsConfirmation":"Are you sure you would like to clear these logs? This can't be undone.",
-        "clearLogsConfirmationNum_one":"Are you sure you want to clear {count} log",
-        "clearLogsConfirmationNum_other":"Are you sure you want to clear {count} logs",
-        "hideLogs":"Hide Logs",
-        "logCleared":"Log has been cleared",
-        "logsCleared":"Selected logs have been cleared",
-        "showLogs":"Show Logs"
+        "allLogsCleared":"Όλα τα αρχεία καταγραφής έχουν διαγραφεί",
+        "clearAll":"Εκκαθάριση όλων",
+        "clearAllLogs":"Εκκαθάριση όλων των αρχείων καταγραφής",
+        "clearAllLogsConfirmation":"Είστε βέβαιοι ότι θέλετε να διαγράψετε όλα τα αρχεία καταγραφής; Αυτό δεν μπορεί να αναιρεθεί.",
+        "clearLog":"Εκκαθάριση αρχείου καταγραφής",
+        "clearLogConfirmation":"Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το αρχείο καταγραφής; Αυτό δεν μπορεί να αναιρεθεί.",
+        "clearLogs":"Εκκαθάριση αρχείων καταγραφής",
+        "clearLogsConfirmation":"Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτά τα αρχεία καταγραφής; Αυτό δεν μπορεί να αναιρεθεί.",
+        "clearLogsConfirmationNum_one":"Είστε βέβαιοι ότι θέλετε να διαγράψετε το αρχείο καταγραφής {count}",
+        "clearLogsConfirmationNum_other":"Είστε βέβαιοι ότι θέλετε να διαγράψετε τα αρχεία καταγραφής {count}",
+        "hideLogs":"Απόκρυψη αρχείων καταγραφής",
+        "logCleared":"Το αρχείο καταγραφής έχει διαγραφεί",
+        "logsCleared":"Τα επιλεγμένα αρχεία καταγραφής έχουν διαγραφεί",
+        "showLogs":"Εμφάνιση αρχείων καταγραφής"
     },
     "memberCount":{
         "settings":{
-            "memberList":"Show member count in the member list",
-            "toolTip":"Show member count on the server tooltip",
-            "voiceActivity":"Show voice activity with member count in the member list"
+            "memberList":"Εμφάνιση αριθμού μελών στη λίστα μελών",
+            "toolTip":"Εμφάνιση αριθμού μελών στην επεξήγηση εργαλείου διακομιστή",
+            "voiceActivity":"Εμφάνιση φωνητικής δραστηριότητας με αριθμό μελών στη λίστα μελών"
         }
     },
     "messageLatency":{
-        "clockAhead":"This user's clock is {delta} ahead.",
-        "delayedMessage":"Delayed Message",
-        "messageDelayed":"This message was sent with a delay of {delta}.",
-        "oldAndroidClient":"Old Discord Android client",
-        "oldDiscordAndroid":"User is suspected to be on an old Discord Android client",
+        "clockAhead":"Το ρολόι αυτού του χρήστη είναι {delta} μπροστά.",
+        "delayedMessage":"Καθυστερημένο μήνυμα",
+        "messageDelayed":"Αυτό το μήνυμα στάλθηκε με καθυστέρηση {delta}.",
+        "oldAndroidClient":"Παλιό [[PH0]]] πελάτη Android",
+        "oldDiscordAndroid":"Ο χρήστης υποπτεύεται ότι είναι σε παλιό Discord πελάτη Android",
         "settings":{
-            "detectDiscordKotlin":"Detect old Discord Android clients",
-            "ignoreSelf":"Don't add indicator to your own messages",
-            "latency":"Threshold in seconds for latency indicator",
-            "showMillis":"Show milliseconds"
+            "detectDiscordKotlin":"Εντοπίστε παλιούς Discord πελάτες Android",
+            "ignoreSelf":"Μην προσθέτετε ένδειξη στα δικά σας μηνύματα",
+            "latency":"Όριο σε δευτερόλεπτα για ένδειξη καθυστέρησης",
+            "showMillis":"Εμφάνιση χιλιοστών του δευτερολέπτου"
         },
         "timeUnits":{
-            "day":"day",
-            "days":"days",
-            "hour":"hour",
-            "hours":"hours",
-            "millisecond":"millisecond",
-            "milliseconds":"milliseconds",
-            "minute":"minute",
-            "minutes":"minutes",
-            "second":"second",
-            "seconds":"seconds"
+            "day":"ημέρα",
+            "days":"ημέρες",
+            "hour":"ώρα",
+            "hours":"ώρες",
+            "millisecond":"μιλιδευτερόλεπτο",
+            "milliseconds":"χιλιοστά του δευτερολέπτου",
+            "minute":"λεπτό",
+            "minutes":"πρακτικά",
+            "second":"δεύτερος",
+            "seconds":"δευτερόλεπτα"
         }
     },
     "messageLinkEmbeds":{
         "automodOptions":{
-            "always":"Always use automod embeds",
-            "never":"Never use automod embeds",
-            "prefer":"Prefer automod embeds, but use rich embeds if some content can't be shown"
+            "always":"Να χρησιμοποιείτε πάντα ενσωματώσεις automod",
+            "never":"Μην χρησιμοποιείτε ποτέ ενσωματώσεις αυτοκινήτων",
+            "prefer":"Προτιμήστε τις ενσωματώσεις automod, αλλά χρησιμοποιήστε εμπλουτισμένες ενσωματώσεις εάν δεν είναι δυνατό να εμφανιστεί κάποιο περιεχόμενο"
         },
         "channelLabels":{
-            "directMessage":"Direct Message",
+            "directMessage":"Άμεσο μήνυμα",
             "groupDM":"Group DM",
-            "server":"Server"
+            "server":"Υπηρέτης"
         },
-        "description":"Adds a preview to messages that link another message",
+        "description":"Προσθέτει μια προεπισκόπηση σε μηνύματα που συνδέουν ένα άλλο μήνυμα",
         "listModeOptions":{
-            "blacklist":"Blacklist",
-            "whitelist":"Whitelist"
+            "blacklist":"Προγράφω",
+            "whitelist":"Λευκή λίστα"
         },
         "noContent":{
-            "attachments_only_one":"[no content, {count} attachment]",
-            "attachments_only_other":"[no content, {count} attachments]",
-            "both_one":"[no content, {attachments} attachment and {embeds} embed]",
-            "both_other":"[no content, {attachments} attachments and {embeds} embeds]",
-            "embeds_only_one":"[no content, {count} embed]",
-            "embeds_only_other":"[no content, {count} embeds]"
+            "attachments_only_one":"[χωρίς περιεχόμενο, {count} συνημμένο]",
+            "attachments_only_other":"[χωρίς περιεχόμενο, {count} συνημμένα]",
+            "both_one":"[χωρίς περιεχόμενο, {attachments} συνημμένο και {embeds} ενσωμάτωση]",
+            "both_other":"[χωρίς περιεχόμενο, {attachments} συνημμένα και {embeds} ενσωματώσεις]",
+            "embeds_only_one":"[χωρίς περιεχόμενο, {count} ενσωμάτωση]",
+            "embeds_only_other":"[χωρίς περιεχόμενο, {count} ενσωματώσεις]"
         },
         "settings":{
-            "automodEmbeds":"Use automod embeds instead of rich embeds (smaller but less info)",
-            "clearMessageCache":"Clear the linked message cache",
-            "idList":"Guild/channel/user IDs to blacklist or whitelist (separate with comma)",
-            "listMode":"Whether to use ID list as blacklist or whitelist",
-            "messageBackgroundColor":"Background color for messages in rich embeds"
+            "automodEmbeds":"Χρησιμοποιήστε ενσωματώσεις automod αντί για πλούσιες ενσωματώσεις (μικρότερες αλλά λιγότερες πληροφορίες)",
+            "clearMessageCache":"Εκκαθαρίστε την προσωρινή μνήμη των συνδεδεμένων μηνυμάτων",
+            "idList":"Αναγνωριστικά συντεχνίας/καναλιών/χρήστη στη μαύρη λίστα ή στη λίστα επιτρεπόμενων (διαχωρίστε με κόμμα)",
+            "listMode":"Είτε θα χρησιμοποιηθεί η λίστα αναγνωριστικών ως μαύρη λίστα είτε ως λευκή λίστα",
+            "messageBackgroundColor":"Χρώμα φόντου για μηνύματα σε πλούσιες ενσωματώσεις"
         }
     },
     "messageLogger":{
-        "clearMessageLog":"Clear Message Log",
-        "deletedMessages_one":"{count} deleted message",
-        "deletedMessages_other":"{count} deleted messages",
-        "deletedMessages_zero":"No deleted messages",
-        "disableDiffView":"Disable Diff View",
-        "editHistory":"Message Edit History",
-        "enableDiffView":"Enable Diff View",
-        "notLoggedTooltip":"This edit state was not logged so it can't be displayed.",
-        "removeMessageHistory":"Remove Message History",
-        "removeMessageTemporary":"Remove Message (Temporary)",
+        "clearMessageLog":"Εκκαθάριση αρχείου καταγραφής μηνυμάτων",
+        "deletedMessages_one":"{count} διαγραμμένο μήνυμα",
+        "deletedMessages_other":"{count} διαγραμμένα μηνύματα",
+        "deletedMessages_zero":"Δεν υπάρχουν διαγραμμένα μηνύματα",
+        "disableDiffView":"Απενεργοποιήστε την προβολή διαφοράς",
+        "editHistory":"Ιστορικό επεξεργασίας μηνυμάτων",
+        "enableDiffView":"Ενεργοποιήστε την προβολή διαφοράς",
+        "notLoggedTooltip":"Αυτή η κατάσταση επεξεργασίας δεν καταγράφηκε, επομένως δεν μπορεί να εμφανιστεί.",
+        "removeMessageHistory":"Κατάργηση ιστορικού μηνυμάτων",
+        "removeMessageTemporary":"Κατάργηση μηνύματος (Προσωρινή)",
         "settings":{
-            "collapseDeleted":"Whether to collapse deleted messages, similar to blocked messages",
-            "deleteStyle":"The style of deleted messages",
-            "deleteStyleRedOverlay":"Red overlay",
-            "deleteStyleRedText":"Red text",
-            "ignoreBots":"Whether to ignore messages by bots",
-            "ignoreChannels":"Comma-separated list of channel IDs to ignore",
-            "ignoreGuilds":"Comma-separated list of guild IDs to ignore",
-            "ignoreSelf":"Whether to ignore messages by yourself",
-            "ignoreUsers":"Comma-separated list of user IDs to ignore",
-            "inlineEdits":"Whether to display edit history as part of message content",
-            "logDeletes":"Whether to log deleted messages",
-            "logEdits":"Whether to log edited messages",
-            "separatedDiffs":"Separate addition and removals in diffs for a more readable differential",
-            "showEditDiffs":"Show visual differences between edited message versions"
+            "collapseDeleted":"Αν θέλετε να συμπτύξετε τα διαγραμμένα μηνύματα, παρόμοια με τα αποκλεισμένα μηνύματα",
+            "deleteStyle":"Το στυλ των διαγραμμένων μηνυμάτων",
+            "deleteStyleRedOverlay":"Κόκκινη επικάλυψη",
+            "deleteStyleRedText":"Κόκκινο κείμενο",
+            "ignoreBots":"Αν πρέπει να αγνοήσετε μηνύματα από bots",
+            "ignoreChannels":"Λίστα αναγνωριστικών καναλιών διαχωρισμένη με κόμματα προς παράβλεψη",
+            "ignoreGuilds":"Λίστα με κόμματα με αναγνωριστικά συντεχνιών που πρέπει να αγνοηθούν",
+            "ignoreSelf":"Είτε θα αγνοήσετε τα μηνύματα μόνοι σας",
+            "ignoreUsers":"Λίστα αναγνωριστικών χρηστών που πρέπει να αγνοηθούν διαχωρισμένα με κόμματα",
+            "inlineEdits":"Εάν θα εμφανιστεί το ιστορικό επεξεργασίας ως μέρος του περιεχομένου του μηνύματος",
+            "logDeletes":"Εάν θα καταγραφούν τα διαγραμμένα μηνύματα",
+            "logEdits":"Εάν θα καταγραφούν επεξεργασμένα μηνύματα",
+            "separatedDiffs":"Ξεχωριστή προσθήκη και αφαίρεση σε διαφορικά για πιο ευανάγνωστο διαφορικό",
+            "showEditDiffs":"Εμφάνιση οπτικών διαφορών μεταξύ των επεξεργασμένων εκδόσεων μηνυμάτων"
         },
-        "toggleDeletedHighlight":"Toggle Deleted Highlight"
+        "toggleDeletedHighlight":"Εναλλαγή διαγραμμένων επισήμανσης"
     },
     "mutualGroupDMs":{
-        "description":"Shows mutual group dms in profiles",
-        "members_one":"{count} Member",
-        "members_other":"{count} Members",
-        "mutualGroupsHeader":"Mutual Groups",
-        "mutualGroups_one":"{count} Mutual Group",
-        "mutualGroups_other":"{count} Mutual Groups",
-        "noGroupDms":"No group dms in common",
-        "noMutualGroups":"No Mutual Groups"
+        "description":"Εμφανίζει αμοιβαία ομαδικά dms στα προφίλ",
+        "members_one":"{count} Μέλος",
+        "members_other":"{count} Μέλη",
+        "mutualGroupsHeader":"Αμοιβαία Ομάδες",
+        "mutualGroups_one":"{count} Αμοιβαία Group",
+        "mutualGroups_other":"{count} Αμοιβαίες Ομάδες",
+        "noGroupDms":"Κανένα κοινό ομαδικό dms",
+        "noMutualGroups":"Δεν υπάρχουν αμοιβαίες ομάδες"
     },
     "newGuildSettings":{
-        "applySettings":"Apply NewGuildSettings",
-        "description":"Automatically mute new servers and change various other settings upon joining",
+        "applySettings":"Εφαρμογή NewGuildSettings",
+        "description":"Αυτόματη σίγαση νέων διακομιστών και αλλαγή διαφόρων άλλων ρυθμίσεων κατά την εγγραφή",
         "settings":{
-            "allMessages":"All messages",
-            "events":"Mute New Events automatically",
-            "everyone":"Suppress @everyone and @here",
-            "guild":"Mute Guild automatically",
-            "highlights":"Suppress Highlights automatically",
-            "messages":"Server Notification Settings",
-            "mobilePush":"Mute Mobile Push Notifications automatically",
-            "nothing":"Nothing",
-            "onlyMentions":"Only @mentions",
-            "role":"Suppress All Role @mentions",
-            "serverDefault":"Server default",
-            "showAllChannels":"Show all channels automatically",
-            "voiceChannels":"Hide names in Voice channels automatically"
+            "allMessages":"Όλα τα μηνύματα",
+            "events":"Σίγαση νέων συμβάντων αυτόματα",
+            "everyone":"Καταστολή @everyone και @here",
+            "guild":"Σίγαση Guild αυτόματα",
+            "highlights":"Καταργήστε αυτόματα τα Highlights",
+            "messages":"Ρυθμίσεις ειδοποιήσεων διακομιστή",
+            "mobilePush":"Σίγαση Mobile Αυτόματη ώθηση ειδοποιήσεων",
+            "nothing":"Τίποτα",
+            "onlyMentions":"Μόνο @αναφορές",
+            "role":"Καταργήστε όλες τις @αναφορές ρόλου",
+            "serverDefault":"Προεπιλογή διακομιστή",
+            "showAllChannels":"Εμφάνιση όλων των καναλιών αυτόματα",
+            "voiceChannels":"Αυτόματη απόκρυψη ονομάτων στα κανάλια Voice"
         }
     },
     "noReplyMention":{
-        "description":"Disables reply pings by default",
+        "description":"Απενεργοποιεί τα ping απαντήσεων από προεπιλογή",
         "settings":{
-            "doNotPingListed":"Do not ping the listed users / roles",
-            "inverseShiftReply":"Invert Discord's shift replying behaviour (enable to make shift reply mention user)",
-            "onlyPingListed":"Only ping the listed users / roles",
-            "roleList":"List of roles to allow or exempt pings for (separated by commas or spaces)",
-            "shouldPingListed":"Behaviour",
-            "userList":"List of users to allow or exempt pings for (separated by commas or spaces)"
+            "doNotPingListed":"Μην κάνετε ping στους αναφερόμενους χρήστες/ρόλους",
+            "inverseShiftReply":"Αντιστροφή της συμπεριφοράς απάντησης shift του Discord (ενεργοποίηση για να γίνει η απάντηση αλλαγής αναφοράς χρήστη)",
+            "onlyPingListed":"Κάντε ping μόνο στους αναφερόμενους χρήστες/ρόλους",
+            "roleList":"Λίστα ρόλων για τους οποίους επιτρέπονται ή εξαιρούνται τα ping (διαχωρίζονται με κόμματα ή κενά)",
+            "shouldPingListed":"Συμπεριφορά",
+            "userList":"Λίστα χρηστών για τους οποίους επιτρέπονται ή εξαιρούνται τα ping (διαχωρίζονται με κόμματα ή κενά)"
         }
     },
     "overrideForumDefaults":{
-        "description":"Allows you to override default forum layout/sort order. you can still change it on a per-channel basis",
+        "description":"Σας επιτρέπει να παρακάμψετε την προεπιλεγμένη διάταξη/σειρά ταξινόμησης του φόρουμ. μπορείτε ακόμα να το αλλάξετε ανά κανάλι",
         "layouts":{
-            "gallery":"Gallery",
-            "list":"List"
+            "gallery":"Στοά",
+            "list":"Λίστα"
         },
         "name":"OverrideForumDefaults",
         "settings":{
-            "defaultLayout":"Which layout to use as default",
-            "defaultSortOrder":"Which sort order to use as default"
+            "defaultLayout":"Ποια διάταξη θα χρησιμοποιηθεί ως προεπιλογή",
+            "defaultSortOrder":"Ποια σειρά ταξινόμησης θα χρησιμοποιηθεί ως προεπιλογή"
         },
         "sortOrders":{
-            "datePosted":"Date Posted",
-            "recentlyActive":"Recently Active"
+            "datePosted":"Ημερομηνία δημοσίευσης",
+            "recentlyActive":"Πρόσφατα ενεργός"
         }
     },
     "pauseInvitesForever":{
-        "description":"Brings back the option to pause invites indefinitely that stupid Discord removed.",
+        "description":"Επαναφέρει την επιλογή παύσης προσκαλεί επ' αόριστον ότι το ανόητο Discord αφαιρέθηκε.",
         "name":"PauseInvitesForever",
-        "pauseIndefinitely":"Pause Indefinitely."
+        "pauseIndefinitely":"Παύση επ' αόριστον."
     },
     "permissionsViewer":{
-        "noPermissions":"No permissions to display!",
-        "owner":"owner",
-        "permissions":"Permissions",
-        "permissionsTitle":"{header} Permissions",
-        "roleOptions":"Role Options",
+        "noPermissions":"Δεν υπάρχουν δικαιώματα εμφάνισης!",
+        "owner":"ιδιοκτήτης",
+        "permissions":"Άδειες",
+        "permissionsTitle":"{header} Δικαιώματα",
+        "roleOptions":"Επιλογές ρόλου",
         "settings":{
-            "highestRole":"Highest Role",
-            "lowestRole":"Lowest Role",
-            "permissionsSortOrder":"The sort method used for defining which role grants a user a certain permission"
+            "highestRole":"Ανώτερος Ρόλος",
+            "lowestRole":"Χαμηλότερος Ρόλος",
+            "permissionsSortOrder":"Η μέθοδος ταξινόμησης που χρησιμοποιείται για τον καθορισμό του ρόλου που εκχωρεί σε έναν χρήστη ένα συγκεκριμένο δικαίωμα"
         },
-        "unknownRole":"Unknown Role",
-        "unknownUser":"Unknown User",
-        "userOptions":"User Options",
-        "viewPermissions":"View Permissions"
+        "unknownRole":"Άγνωστος Ρόλος",
+        "unknownUser":"Άγνωστος Χρήστης",
+        "userOptions":"Επιλογές χρήστη",
+        "viewPermissions":"Προβολή Δικαιωμάτων"
     },
     "pictureInPicture":{
-        "description":"Adds picture in picture to videos (next to the Download button)",
+        "description":"Προσθέτει εικόνα σε εικόνα σε βίντεο (δίπλα στο κουμπί Λήψη)",
         "settings":{
-            "loop":"Whether to make the PiP video loop or not"
+            "loop":"Είτε θα γίνει ο βρόχος βίντεο PiP είτε όχι"
         },
-        "togglePip":"Toggle Picture in Picture"
+        "togglePip":"Εναλλαγή εικόνας σε εικόνα"
     },
     "pinDms":{
-        "addCategory":"Add Category",
-        "color":"Color",
-        "create":"Create",
-        "deleteCategory":"Delete Category",
-        "editCategory":"Edit Category",
-        "editCategoryTitle":"Edit Category",
-        "moveDown":"Move Down",
-        "moveUp":"Move Up",
-        "name":"Name",
-        "newCategory":"New Category",
-        "pinCategory":"Pin Category {index}",
-        "pinDms":"Pin DMs",
-        "save":"Save",
+        "addCategory":"Προσθήκη κατηγορίας",
+        "color":"Χρώμα",
+        "create":"Δημιουργία",
+        "deleteCategory":"Διαγραφή κατηγορίας",
+        "editCategory":"Επεξεργασία κατηγορίας",
+        "editCategoryTitle":"Επεξεργασία κατηγορίας",
+        "moveDown":"Μετακίνηση προς τα κάτω",
+        "moveUp":"Μετακίνηση προς τα επάνω",
+        "name":"Όνομα",
+        "newCategory":"Νέα Κατηγορία",
+        "pinCategory":"Κατηγορία καρφιτσών {index}",
+        "pinDms":"Καρφιτσώστε DM",
+        "save":"Αποθήκευση",
         "settings":{
-            "canCollapseDmSection":"Allow uncategorised DMs section to be collapsable",
-            "customOrder":"Custom (right click channels to reorder)",
-            "dmSectionCollapsed":"Collapse DM section",
-            "mostRecentMessage":"Most recent message",
-            "pinOrder":"Which order should pinned DMs be displayed in?"
+            "canCollapseDmSection":"Επιτρέψτε στην ενότητα μη κατηγοριοποιημένων DM να είναι πτυσσόμενη",
+            "customOrder":"Προσαρμοσμένο (δεξί κλικ στα κανάλια για αναδιάταξη)",
+            "dmSectionCollapsed":"Σύμπτυξη ενότητας DM",
+            "mostRecentMessage":"Το πιο πρόσφατο μήνυμα",
+            "pinOrder":"Σε ποια σειρά θα πρέπει να εμφανίζονται τα καρφιτσωμένα DM;"
         },
-        "unpinDm":"Unpin DM"
+        "unpinDm":"Ξεκαρφιτσώστε το DM"
     },
     "platformIndicators":{
         "consoleIcons":{
@@ -762,441 +762,441 @@
             "suncord":"Suncord",
             "vencord":"Vencord"
         },
-        "description":"Adds platform indicators (Desktop, Mobile, Web...) to users",
+        "description":"Προσθέτει δείκτες πλατφόρμας (Desktop, Mobile, Web...) στους χρήστες",
         "platforms":{
-            "console":"Console",
-            "desktop":"Desktop",
+            "console":"Κονσόλα",
+            "desktop":"Υπολογιστής",
             "mobile":"Mobile",
-            "web":"Web"
+            "web":"Ιστός"
         },
         "settings":{
-            "colorMobileIndicator":"Whether to make the mobile indicator match the color of the user status.",
-            "consoleIcon":"What console icon to use",
-            "list":"Show indicators in the member list",
-            "messages":"Show indicators inside messages",
-            "profiles":"Show indicators in user profiles",
-            "showBots":"Whether to show platform indicators on bots"
+            "colorMobileIndicator":"Εάν η ένδειξη του κινητού θα ταιριάζει με το χρώμα της κατάστασης χρήστη.",
+            "consoleIcon":"Τι εικονίδιο κονσόλας να χρησιμοποιήσετε",
+            "list":"Εμφάνιση δεικτών στη λίστα μελών",
+            "messages":"Εμφάνιση ενδείξεων μέσα στα μηνύματα",
+            "profiles":"Εμφάνιση δεικτών στα προφίλ χρηστών",
+            "showBots":"Εάν θα εμφανίζονται δείκτες πλατφόρμας σε bots"
         }
     },
     "previewMessage":{
-        "description":"Lets you preview your message before sending it.",
-        "name":"PreviewMessage",
-        "previewMessage":"Preview Message"
+        "description":"Σας επιτρέπει να κάνετε προεπισκόπηση του μηνύματός σας πριν το στείλετε.",
+        "name":"Προεπισκόπηση Μήνυμα",
+        "previewMessage":"Προεπισκόπηση μηνύματος"
     },
     "quickActions":{
-        "editQuickCSS":"Edit QuickCSS",
-        "notificationLog":"Notification Log",
-        "openSettings":"Open Settings Folder",
-        "relaunchDiscord":"Relaunch Discord",
-        "title":"Quick Actions",
-        "viewSource":"View Source Code"
+        "editQuickCSS":"Επεξεργασία QuickCSS",
+        "notificationLog":"Μητρώο ειδοποιήσεων",
+        "openSettings":"Ανοίξτε το φάκελο \"Ρυθμίσεις\".",
+        "relaunchDiscord":"Επανεκκίνηση Discord",
+        "title":"Γρήγορες Ενέργειες",
+        "viewSource":"Δείτε τον Πηγαίο Κώδικα"
     },
     "quickMention":{
-        "description":"Adds a quick mention button to the message actions bar",
-        "label":"Quick Mention"
+        "description":"Προσθέτει ένα κουμπί γρήγορης αναφοράς στη γραμμή ενεργειών μηνυμάτων",
+        "label":"Γρήγορη αναφορά"
     },
     "readAllNotificationsButton":{
-        "description":"Read all server notifications with a single button click!",
-        "name":"ReadAllNotificationsButton",
-        "readAll":"Read All"
+        "description":"Διαβάστε όλες τις ειδοποιήσεις διακομιστή με ένα μόνο κλικ!",
+        "name":"Κουμπί ReadAll Notifications",
+        "readAll":"Διαβάστε όλα"
     },
     "relationshipNotifier":{
-        "friendRemoved":"{username} removed you as a friend.",
-        "friendRequestRemoved":"A friend request from {username} has been removed.",
-        "groupRemoved":"You were removed from the group {name}.",
-        "serverRemoved":"You were removed from the server {name}.",
+        "friendRemoved":"{username} σας αφαίρεσε ως φίλο.",
+        "friendRequestRemoved":"Ένα αίτημα φιλίας από τον {username} καταργήθηκε.",
+        "groupRemoved":"Καταργηθήκατε από την ομάδα {name}.",
+        "serverRemoved":"Καταργηθήκατε από τον διακομιστή {name}.",
         "settings":{
-            "friendRequestCancels":"Notify when a friend request is cancelled",
-            "friends":"Notify when a friend removes you",
-            "groups":"Notify when removed from a group chat",
-            "notices":"Also show a notice at the top of your screen when removed (use this if you don't want to miss any notifications).",
-            "offlineRemovals":"Notify you when starting discord if you were removed while offline.",
-            "servers":"Notify when removed from a server"
+            "friendRequestCancels":"Ειδοποιήστε όταν ακυρωθεί ένα αίτημα φιλίας",
+            "friends":"Ειδοποιήστε όταν κάποιος φίλος σας αφαιρεί",
+            "groups":"Ειδοποίηση όταν αφαιρείται από μια ομαδική συνομιλία",
+            "notices":"Επίσης, εμφανίστε μια ειδοποίηση στο επάνω μέρος της οθόνης σας όταν αφαιρεθεί (χρησιμοποιήστε αυτήν εάν δεν θέλετε να χάσετε καμία ειδοποίηση).",
+            "offlineRemovals":"Σας ειδοποιεί όταν ξεκινάτε τη διαφωνία εάν αφαιρεθήκατε όταν είστε εκτός σύνδεσης.",
+            "servers":"Ειδοποίηση όταν αφαιρείται από διακομιστή"
         }
     },
     "replaceGoogleSearch":{
-        "description":"Replaces the Google search with different Engine(s)",
-        "searchText":"Search Text",
-        "searchWith":"Search with {engine}",
+        "description":"Αντικαθιστά την αναζήτηση Google με διαφορετικές Μηχανές",
+        "searchText":"Αναζήτηση κειμένου",
+        "searchWith":"Αναζήτηση με {engine}",
         "settings":{
-            "customEngine":"Custom Engine",
-            "customEngineName":"Name of the custom search engine",
-            "customEngineURL":"The URL of your Engine",
-            "off":"Off",
-            "replacementEngine":"Replace with a specific search engine instead of adding a menu"
+            "customEngine":"Προσαρμοσμένη μηχανή",
+            "customEngineName":"Όνομα της προσαρμοσμένης μηχανής αναζήτησης",
+            "customEngineURL":"Το URL του κινητήρα σας",
+            "off":"Ανενεργό",
+            "replacementEngine":"Αντικαταστήστε με μια συγκεκριμένη μηχανή αναζήτησης αντί να προσθέσετε ένα μενού"
         }
     },
     "reverseImageSearch":{
-        "all":"All",
-        "description":"Adds ImageSearch to image context menus",
-        "name":"ReverseImageSearch",
-        "searchImage":"Search Image"
+        "all":"Όλα",
+        "description":"Προσθέτει ImageSearch στα μενού περιβάλλοντος εικόνας",
+        "name":"Αντίστροφη αναζήτηση εικόνων",
+        "searchImage":"Αναζήτηση εικόνας"
     },
     "reviewDB":{
-        "appeal":"Appeal",
-        "areYouSure":"Are you sure?",
-        "block":"Block",
-        "blockedUser":"You have blocked this user",
-        "blockedUsers":"Blocked Users",
-        "confirmBlock":"Do you really want to block this user? They will be unable to leave further reviews on your profile. You can unblock users in the plugin settings.",
-        "confirmDelete":"Do you really want to delete this review?",
-        "confirmReport":"Do you really want to report this review?",
-        "delete":"Delete",
-        "failedToFetchBlocks":"Failed to fetch blocks: {error}",
-        "mustBeLoggedInBlock":"You must be logged in to block users.",
-        "mustBeLoggedInDelete":"You must be logged in to delete reviews.",
-        "mustBeLoggedInReport":"You must be logged in to report reviews.",
-        "nevermind":"Nevermind",
-        "newReviews":"You have new reviews on your profile!",
-        "noBlockedUsers":"No blocked users.",
-        "notLoggedIn":"You are not logged into ReviewDB!",
-        "ok":"Ok",
-        "readMore":"Read more",
-        "report":"Report",
+        "appeal":"Εφεση",
+        "areYouSure":"Είσαι σίγουρος;",
+        "block":"Αποκλεισμός",
+        "blockedUser":"Έχετε αποκλείσει αυτόν τον χρήστη",
+        "blockedUsers":"Αποκλεισμένοι χρήστες",
+        "confirmBlock":"Θέλετε πραγματικά να αποκλείσετε αυτόν τον χρήστη; Δεν θα μπορούν να αφήσουν περαιτέρω κριτικές στο προφίλ σας. Μπορείτε να ξεμπλοκάρετε τους χρήστες στις ρυθμίσεις της προσθήκης.",
+        "confirmDelete":"Θέλετε πραγματικά να διαγράψετε αυτήν την κριτική;",
+        "confirmReport":"Θέλετε πραγματικά να αναφέρετε αυτήν την κριτική;",
+        "delete":"Διαγραφή",
+        "failedToFetchBlocks":"Αποτυχία ανάκτησης μπλοκ: {error}",
+        "mustBeLoggedInBlock":"Πρέπει να είστε συνδεδεμένοι για να αποκλείσετε χρήστες.",
+        "mustBeLoggedInDelete":"Πρέπει να είστε συνδεδεμένοι για να διαγράψετε κριτικές.",
+        "mustBeLoggedInReport":"Πρέπει να είστε συνδεδεμένοι για να αναφέρετε κριτικές.",
+        "nevermind":"Δεν πειράζει",
+        "newReviews":"Έχετε νέες κριτικές στο προφίλ σας!",
+        "noBlockedUsers":"Δεν υπάρχουν αποκλεισμένοι χρήστες.",
+        "notLoggedIn":"Δεν είστε συνδεδεμένοι στο ReviewDB!",
+        "ok":"Εντάξει",
+        "readMore":"Διαβάστε περισσότερα",
+        "report":"Αναφορά",
         "settings":{
-            "authorize":"Authorize with ReviewDB",
+            "authorize":"Εξουσιοδότηση με ReviewDB",
             "hideBlockedUsers":{
-                "description":"Hide reviews from blocked users"
+                "description":"Απόκρυψη κριτικών από αποκλεισμένους χρήστες"
             },
             "hideTimestamps":{
-                "description":"Hide timestamps on reviews"
+                "description":"Απόκρυψη χρονικών σημάνσεων σε κριτικές"
             },
-            "manageBlockedUsers":"Manage Blocked Users",
+            "manageBlockedUsers":"Διαχείριση αποκλεισμένων χρηστών",
             "notifyReviews":{
-                "description":"Notify about new reviews on startup"
+                "description":"Ειδοποιήστε για νέες κριτικές κατά την εκκίνηση"
             },
             "showWarning":{
-                "description":"Display warning to be respectful at the top of the reviews list"
+                "description":"Εμφανίστε την προειδοποίηση για σεβασμό στην κορυφή της λίστας κριτικών"
             },
-            "supportDevelopment":"Support ReviewDB development",
+            "supportDevelopment":"Υποστήριξη ανάπτυξης ReviewDB",
             "supportServer":"ReviewDB Support Server",
-            "website":"ReviewDB website"
+            "website":"Ιστότοπος ReviewDB"
         },
-        "system":"System",
-        "unblockUser":"Unblock user",
-        "viewReviews":"View Reviews"
+        "system":"Σύστημα",
+        "unblockUser":"Κατάργηση αποκλεισμού χρήστη",
+        "viewReviews":"Προβολή Κριτικών"
     },
     "seeSummaries":{
-        "description":"Enables Discord's experimental Summaries feature on every server, displaying AI generated summaries of conversations",
-        "name":"Summaries",
+        "description":"Ενεργοποιεί τη δυνατότητα πειραματικών περιλήψεων του Discord σε κάθε διακομιστή, εμφανίζοντας περιλήψεις συνομιλιών που δημιουργούνται από AI",
+        "name":"Περιλήψεις",
         "settings":{
-            "summaryExpiryThresholdDays":"The time in days before a summary is removed. Note that only up to 50 summaries are kept per channel"
+            "summaryExpiryThresholdDays":"Ο χρόνος σε ημέρες πριν από μια σύνοψη καταργείται. Σημειώστε ότι διατηρούνται μόνο έως 50 περιλήψεις ανά κανάλι"
         }
     },
     "sendTimestamps":{
-        "description":"Send timestamps easily via chat box button & text shortcuts. Read the extended description!",
+        "description":"Στείλτε εύκολα χρονικές σημάνσεις μέσω του κουμπιού πλαισίου συνομιλίας και των συντομεύσεων κειμένου. Διαβάστε την εκτεταμένη περιγραφή!",
         "extendedDescription":{
-            "examples":"Examples:",
-            "quickSend":"To quickly send time-only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message",
-            "seeBelow":"See below for examples. If you need anything more specific, use the Date button in the chat bar!"
+            "examples":"Παραδείγματα:",
+            "quickSend":"Για να στείλετε γρήγορα χρονικές σημάνσεις μόνο, συμπεριλάβετε στο μήνυμά σας χρονικές σημάνσεις που έχουν μορφοποιηθεί ως `HH:MM` (συμπεριλαμβανομένων των backtick!)",
+            "seeBelow":"Δείτε παρακάτω για παραδείγματα. Εάν χρειάζεστε κάτι πιο συγκεκριμένο, χρησιμοποιήστε το κουμπί Ημερομηνία στη γραμμή συνομιλίας!"
         },
-        "insert":"Insert",
-        "insertTimestamp":"Insert Timestamp",
-        "preview":"Preview",
+        "insert":"Εισάγω",
+        "insertTimestamp":"Εισαγωγή χρονοσήμανσης",
+        "preview":"Προεπισκόπηση",
         "settings":{
-            "replaceMessageContents":"Replace timestamps in message contents"
+            "replaceMessageContents":"Αντικαταστήστε τις χρονικές σημάνσεις στα περιεχόμενα του μηνύματος"
         },
-        "timestampFormat":"Timestamp Format",
-        "timestampPicker":"Timestamp Picker"
+        "timestampFormat":"Μορφή χρονοσήμανσης",
+        "timestampPicker":"Επιλογέας χρονοσήμανσης"
     },
     "serverListIndicators":{
-        "description":"Add online friend count or server count in the server list",
-        "friends":"Friends",
-        "servers":"Servers",
+        "description":"Προσθέστε τον αριθμό των διαδικτυακών φίλων ή τον αριθμό των διακομιστών στη λίστα διακομιστών",
+        "friends":"Φίλοι",
+        "servers":"Διακομιστές",
         "settings":{
-            "mode":"Mode",
-            "modeBoth":"Both server and online friend counts",
-            "modeOnlyFriends":"Only online friend count",
-            "modeOnlyServers":"Only server count",
-            "useCompact":"Makes the indicator appear with only text"
+            "mode":"Τρόπος",
+            "modeBoth":"Τόσο ο διακομιστής όσο και ο διαδικτυακός φίλος μετράει",
+            "modeOnlyFriends":"Μόνο οι διαδικτυακοί φίλοι μετράνε",
+            "modeOnlyServers":"Αριθμός μόνο διακομιστή",
+            "useCompact":"Κάνει την ένδειξη να εμφανίζεται μόνο με κείμενο"
         },
-        "tooltipBoth":"{friends} Friends, {servers} Servers",
-        "tooltipFriends":"{count} Friends",
-        "tooltipServers":"{count} Servers"
+        "tooltipBoth":"{friends} Φίλοι, {servers} Διακομιστές",
+        "tooltipFriends":"{count} Φίλοι",
+        "tooltipServers":"{count} Διακομιστές"
     },
     "settings":{
         "changelog":{
-            "alreadyUpToDate":"Already up todate with repository",
-            "checkYourConnection":"Failed to connect to repository. Check your internet connection",
-            "checkYourInternet":"Make sure you have an internet connection and try again",
-            "codeChanges_one":"Code Changes ({count} commit)",
-            "codeChanges_other":"Code Changes ({count} commits)",
-            "codeChanges_zero":"No Code Changes",
-            "emptyChangelog":"No commits available ahead of your current version. Click \"Fetch from Repository\" to check for new changes",
-            "failedToFetchRepo":"Failed to fetch from repository",
-            "failedToRetrieve":"Failed to retrieve - check console",
-            "failedtoFetchCommits":"Could not fetch commits from repository",
-            "fetchRepo":"Fetch from Repository",
-            "foundCommits_one":"Found {count} commit from repository",
-            "foundCommits_other":"Found {count} commits from repository",
-            "foundCommits_zero":"No new commits",
-            "info":"Check the repository for new commits, plugin updates, and code changes. This will compare your current version with the latest available and show you what's new",
-            "loggedCommits":"Logged commits from your latest update",
+            "alreadyUpToDate":"Ήδη ενημερωμένο με το αποθετήριο",
+            "checkYourConnection":"Αποτυχία σύνδεσης στο χώρο αποθήκευσης. Ελέγξτε τη σύνδεσή σας στο διαδίκτυο",
+            "checkYourInternet":"Βεβαιωθείτε ότι έχετε σύνδεση στο διαδίκτυο και δοκιμάστε ξανά",
+            "codeChanges_one":"Αλλαγές κώδικα ({count} δέσμευση)",
+            "codeChanges_other":"Αλλαγές κώδικα ({count} δεσμεύσεις)",
+            "codeChanges_zero":"Καμία αλλαγή κώδικα",
+            "emptyChangelog":"Δεν υπάρχουν διαθέσιμες δεσμεύσεις πριν από την τρέχουσα έκδοση. Κάντε κλικ στο \"Λήψη από το αποθετήριο\" για να ελέγξετε για νέες αλλαγές",
+            "failedToFetchRepo":"Απέτυχε η ανάκτηση από το χώρο αποθήκευσης",
+            "failedToRetrieve":"Αποτυχία ανάκτησης - έλεγχος κονσόλας",
+            "failedtoFetchCommits":"Δεν ήταν δυνατή η ανάκτηση δεσμεύσεων από το χώρο αποθήκευσης",
+            "fetchRepo":"Λήψη από το αποθετήριο",
+            "foundCommits_one":"Βρέθηκε [[PH0]]] δέσμευση από το αποθετήριο",
+            "foundCommits_other":"Βρέθηκαν [[PH0]]] δεσμεύσεις από το αποθετήριο",
+            "foundCommits_zero":"Χωρίς νέες δεσμεύσεις",
+            "info":"Ελέγξτε το αποθετήριο για νέες δεσμεύσεις, ενημερώσεις προσθηκών και αλλαγές κώδικα. Αυτό θα συγκρίνει την τρέχουσα έκδοση με την πιο πρόσφατη διαθέσιμη και θα σας δείξει τι νέο υπάρχει",
+            "loggedCommits":"Καταγεγραμμένες δεσμεύσεις από την τελευταία σας ενημέρωση",
             "manager":{
-                "days_one":"{count} day ago",
-                "days_other":"{count} days ago",
-                "hours_one":"{count} hour ago",
-                "hours_other":"{count} hours ago",
-                "minutes_one":"{count} minute ago",
-                "minutes_other":"{count} minutes ago"
+                "days_one":"{count} ημέρα πριν",
+                "days_other":"{count} ημέρες πριν",
+                "hours_one":"{count} ώρα πριν",
+                "hours_other":"{count} ώρες πριν",
+                "minutes_one":"{count} λεπτό πριν",
+                "minutes_other":"{count} λεπτά πριν"
             },
-            "missingRepoInfo":"Failed to retrieve repository information",
+            "missingRepoInfo":"Αποτυχία ανάκτησης πληροφοριών αποθήκης",
             "newPluginsSection":{
-                "newPluginsCount":"New Plugins ({count})",
-                "numMorePlugins_one":"+{count} more plugin",
-                "numMorePlugins_other":"+{count} more plugins",
-                "recentlyAddedPlugins":"The following plugins have been added in recent updates:"
+                "newPluginsCount":"Νέα πρόσθετα ({count})",
+                "numMorePlugins_one":"+{count} ακόμη προσθήκη",
+                "numMorePlugins_other":"+{count} περισσότερες προσθήκες",
+                "recentlyAddedPlugins":"Οι ακόλουθες προσθήκες έχουν προστεθεί σε πρόσφατες ενημερώσεις:"
             },
-            "previousSessions":"A history of your previous update sessions with their commit history and plugin changes. Click on a log to expand it and see the details",
-            "recentChanges":"Recent Changes",
-            "repository":"Repository",
-            "title":"Changelog",
-            "upToDate":"Repository Up To Date",
-            "upToDateLocalCopy":"Repository is up to date with your local copy",
+            "previousSessions":"Ένα ιστορικό των προηγούμενων περιόδων ενημέρωσης με το ιστορικό δεσμεύσεών τους και τις αλλαγές προσθηκών. Κάντε κλικ σε ένα αρχείο καταγραφής για να το αναπτύξετε και να δείτε τις λεπτομέρειες",
+            "recentChanges":"Πρόσφατες Αλλαγές",
+            "repository":"Αποθήκη",
+            "title":"Καταγραφή αλλαγών",
+            "upToDate":"Ενημερωμένο αποθετήριο",
+            "upToDateLocalCopy":"Το αποθετήριο είναι ενημερωμένο με το τοπικό σας αντίγραφο",
             "updateCard":{
-                "commits_one":" • {count} commit available",
-                "commits_other":" • {count} commits available",
-                "commits_zero":" • No new commits",
-                "newPluginsCount":" • {plugins} new plugins",
-                "newSettingInPlugin":"New setting in {pluginName}",
-                "newSettings":"New Settings",
-                "newSettingsCount":" • {settings} new settings",
-                "outOfDate":"Repository check: {fromHash} → {toHash}",
-                "upToDate":"Repository check: {fromHash} (up to date)",
-                "update":"Update: {fromHash} → {toHash}",
-                "updatedPlugins":"Updated Plugins",
-                "updatedPluginsCount":" • {plugins} updated plugins"
+                "commits_one":" • {count} δέσμευση διαθέσιμη",
+                "commits_other":" • {count} δεσμεύσεις διαθέσιμες",
+                "commits_zero":" • Χωρίς νέες δεσμεύσεις",
+                "newPluginsCount":" • {plugins} νέα πρόσθετα",
+                "newSettingInPlugin":"Νέα ρύθμιση σε {pluginName}",
+                "newSettings":"Νέες ρυθμίσεις",
+                "newSettingsCount":" • {settings} νέες ρυθμίσεις",
+                "outOfDate":"Έλεγχος αποθετηρίου: {fromHash} → {toHash}",
+                "upToDate":"Έλεγχος αποθετηρίου: {fromHash} (ενημερωμένο)",
+                "update":"Ενημέρωση: {fromHash} → {toHash}",
+                "updatedPlugins":"Ενημερωμένα πρόσθετα",
+                "updatedPluginsCount":" • {plugins} ενημερωμένα πρόσθετα"
             },
-            "updateLogs_one":"Update Logs ({count} log)",
-            "updateLogs_other":"Update Logs ({count} logs)",
-            "updateLogs_zero":"No Update Logs",
-            "updatedPluginsCount":"Updated Plugins ({plugins})",
-            "viewRecentChanges":"These are the new commits and plugin updates since your last version. You can see what features were added, bugs were fixed, and which plugins received updates",
-            "whereUpdatesFetch":"This is the GitHub repository where Equicord fetches updates from"
+            "updateLogs_one":"Ενημέρωση αρχείων καταγραφής ({count} αρχείο καταγραφής)",
+            "updateLogs_other":"Ενημέρωση αρχείων καταγραφής ({count} αρχεία καταγραφής)",
+            "updateLogs_zero":"Δεν υπάρχουν αρχεία καταγραφής ενημερώσεων",
+            "updatedPluginsCount":"Ενημερωμένα πρόσθετα ({plugins})",
+            "viewRecentChanges":"Αυτές είναι οι νέες δεσμεύσεις και ενημερώσεις προσθηκών από την τελευταία σας έκδοση. Μπορείτε να δείτε ποιες δυνατότητες προστέθηκαν, διορθώθηκαν σφάλματα και ποιες προσθήκες έλαβαν ενημερώσεις",
+            "whereUpdatesFetch":"Αυτό είναι το αποθετήριο GitHub από όπου ο Equicord ανακτά ενημερώσεις"
         },
         "disableMinSize":{
-            "description":"Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens.",
-            "title":"Disable minimum window size"
+            "description":"Επιτρέψτε στο παράθυρο Discord να αλλάξει μέγεθος μικρότερο από το προεπιλεγμένο ελάχιστο μέγεθος. Χρήσιμο για την τοποθέτηση πλακιδίων σε διαχειριστές παραθύρων ή μικρές οθόνες.",
+            "title":"Απενεργοποιήστε το ελάχιστο μέγεθος παραθύρου"
         },
         "enableReactDevtools":{
-            "description":"Enable the React Developer Tools extension for debugging Discord's React components. Useful for plugin development.",
-            "title":"Enable React Developer Tools"
+            "description":"Ενεργοποιήστε την επέκταση React Developer Tools για τον εντοπισμό σφαλμάτων των στοιχείων React του Discord. Χρήσιμο για την ανάπτυξη πρόσθετων.",
+            "title":"Ενεργοποίηση React Developer Tools"
         },
         "frameless":{
-            "description":"Remove the native window frame for a cleaner look. You can still move the window by dragging the title bar area.",
-            "title":"Disable the window frame"
+            "description":"Αφαιρέστε το εγγενές πλαίσιο παραθύρου για πιο καθαρή εμφάνιση. Μπορείτε ακόμα να μετακινήσετε το παράθυρο σύροντας την περιοχή της γραμμής τίτλου.",
+            "title":"Απενεργοποιήστε το πλαίσιο του παραθύρου"
         },
-        "hint":"Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
+        "hint":"Συμβουλή: Μπορείτε να αλλάξετε τη θέση αυτής της ενότητας ρυθμίσεων στις <0>ρυθμίσεις της προσθήκης Ρυθμίσεις</0>!",
         "macosVibrancyStyle":{
-            "placeholder":"Window vibrancy style",
-            "title":"Window vibrancy style (requires restart)"
+            "placeholder":"Στυλ ζωντάνιας παραθύρων",
+            "title":"Στυλ ζωντάνιας παραθύρου (απαιτείται επανεκκίνηση)"
         },
         "notification":{
-            "logButton":"View Notification Log",
-            "settingsButton":"Notification Settings"
+            "logButton":"Προβολή αρχείου καταγραφής ειδοποιήσεων",
+            "settingsButton":"Ρυθμίσεις ειδοποιήσεων"
         },
         "plugins":{
             "contributorModal":{
                 "contributorInfo":{
-                    "noPlugins":"This person has not made any plugins. They likely <0>contributed</0> to Equicord in other ways!",
-                    "plugins_one":"This person has <0>contributed</0> to {count} plugin!",
-                    "plugins_other":"This person has <0>contributed</0> to {count} plugins!"
+                    "noPlugins":"Αυτό το άτομο δεν έχει δημιουργήσει πρόσθετα. Πιθανότατα <0>συνεισέφεραν</0> στο Equicord με άλλους τρόπους!",
+                    "plugins_one":"Αυτό το άτομο έχει <0>συνεισφέρει</0> στην προσθήκη {count}!",
+                    "plugins_other":"Αυτό το άτομο έχει <0>συνεισφέρει</0> σε {count} προσθήκες!"
                 }
             },
-            "noDescription":"No description available",
-            "pluginRequiredBy":"This plugin is required by: {pluginNames}",
-            "requiredToFunction":"This plugin is required for Equicord to function"
+            "noDescription":"Δεν υπάρχει διαθέσιμη περιγραφή",
+            "pluginRequiredBy":"Αυτή η προσθήκη απαιτείται από: {pluginNames}",
+            "requiredToFunction":"Αυτό το πρόσθετο απαιτείται για να λειτουργήσει το Equicord"
         },
         "restartRequired":{
-            "body":"A restart is required to apply this change",
-            "cancel":"Later!",
-            "confirm":"Restart now",
-            "plugins":"The following plugins require a restart:",
-            "title":"Restart Required"
+            "body":"Απαιτείται επανεκκίνηση για την εφαρμογή αυτής της αλλαγής",
+            "cancel":"Αργότερα!",
+            "confirm":"Κάντε επανεκκίνηση τώρα",
+            "plugins":"Οι ακόλουθες προσθήκες απαιτούν επανεκκίνηση:",
+            "title":"Απαιτείται επανεκκίνηση"
         },
-        "title":"Settings",
+        "title":"Ρυθμίσεις",
         "transparent":{
-            "description":"Make the Discord window transparent. A theme that supports transparency is required or this will do nothing.",
-            "note":"This will stop the window from being resizable.",
-            "noteWindows":"This will stop the window from being resizable and prevents you from snapping the window to screen edges",
-            "title":"Enable window transparency"
+            "description":"Κάντε το παράθυρο [[PH0]]] διαφανές. Απαιτείται ένα θέμα που υποστηρίζει τη διαφάνεια, διαφορετικά αυτό δεν θα κάνει τίποτα.",
+            "note":"Αυτό θα σταματήσει την αλλαγή μεγέθους του παραθύρου.",
+            "noteWindows":"Αυτό θα σταματήσει την αλλαγή μεγέθους του παραθύρου και θα σας εμποδίσει να κουμπώσετε το παράθυρο στα άκρα της οθόνης",
+            "title":"Ενεργοποίηση διαφάνειας παραθύρου"
         },
         "useQuickCss":{
-            "description":"Load custom CSS from the QuickCSS editor. This allows you to customize Discord's appearance with your own styles.",
-            "title":"Enable Custom CSS"
+            "description":"Φορτώστε προσαρμοσμένο CSS από το πρόγραμμα επεξεργασίας QuickCSS. Αυτό σας επιτρέπει να προσαρμόσετε την εμφάνιση του Discord με τα δικά σας στυλ.",
+            "title":"Ενεργοποίηση προσαρμοσμένου CSS"
         },
         "winCtrlQ":{
-            "description":"Add Ctrl+Q as a keyboard shortcut to close Discord. This provides an alternative to Alt+F4 for quickly closing the application.",
-            "title":"Register Ctrl+Q as shortcut to close Discord"
+            "description":"Προσθέστε [[PH1]]]+Q ως συντόμευση πληκτρολογίου για να κλείσετε το Discord. Αυτό παρέχει μια εναλλακτική λύση στο Alt+F4 για γρήγορο κλείσιμο της εφαρμογής.",
+            "title":"Καταχωρίστε το [[PH1]]]+Q ως συντόμευση για να κλείσετε το Discord"
         },
         "winNativeTitleBar":{
-            "description":"Replace Discord's custom title bar with the standard Windows title bar. This may improve compatibility with some window management tools.",
-            "title":"Use Windows' native title bar instead of Discord's custom one"
+            "description":"Αντικαταστήστε την προσαρμοσμένη γραμμή τίτλου του Discord με την τυπική γραμμή τίτλου των Windows. Αυτό μπορεί να βελτιώσει τη συμβατότητα με ορισμένα εργαλεία διαχείρισης παραθύρων.",
+            "title":"Χρησιμοποιήστε την εγγενή γραμμή τίτλου των Windows αντί για την προσαρμοσμένη γραμμή τίτλου του Discord"
         }
     },
     "settingsSync":{
-        "failedToImport":"Failed to import settings: {e}",
-        "imported":"Settings successfully imported. Restart to apply changes!"
+        "failedToImport":"Αποτυχία εισαγωγής ρυθμίσεων: {e}",
+        "imported":"Οι ρυθμίσεις εισήχθησαν με επιτυχία. Κάντε επανεκκίνηση για να εφαρμόσετε αλλαγές!"
     },
     "showConnections":{
-        "description":"Show connected accounts in user popouts",
+        "description":"Εμφάνιση συνδεδεμένων λογαριασμών στα αναδυόμενα παράθυρα χρηστών",
         "settings":{
-            "compact":"Compact",
-            "cozy":"Cozy",
-            "iconSize":"Icon size (px)",
-            "iconSpacing":"Icon margin",
-            "roomy":"Roomy"
+            "compact":"Συμπαγής",
+            "cozy":"Ζεστός",
+            "iconSize":"Μέγεθος εικονιδίου (px)",
+            "iconSpacing":"Περιθώριο εικονιδίου",
+            "roomy":"Ευρύχωρος"
         }
     },
     "showHiddenChannels":{
-        "allowedUsersAndRoles":"Allowed users and roles:",
-        "archiveDuration":"Default inactivity duration before archiving {type}: {duration}",
-        "availableTags":"Available tags:",
-        "bitrate":"Bitrate: {bitrate} bits",
-        "cannotSeeMessages":"You can not see the {type} of this channel.",
+        "allowedUsersAndRoles":"Επιτρεπόμενοι χρήστες και ρόλοι:",
+        "archiveDuration":"Προεπιλεγμένη διάρκεια αδράνειας πριν από την αρχειοθέτηση {type}: {duration}",
+        "availableTags":"Διαθέσιμες ετικέτες:",
+        "bitrate":"Ρυθμός bit: {bitrate} bit",
+        "cannotSeeMessages":"Δεν μπορείτε να δείτε το {type} αυτού του καναλιού.",
         "channelTypes":{
-            "announcement":"announcement",
-            "forum":"forum",
-            "messages":"messages",
-            "posts":"posts",
-            "stage":"stage",
-            "text":"text",
-            "voice":"voice"
+            "announcement":"ανακοίνωση",
+            "forum":"δικαστήριο",
+            "messages":"μηνύματα",
+            "posts":"αναρτήσεις",
+            "stage":"στάδιο",
+            "text":"κείμενο",
+            "voice":"φωνή"
         },
-        "defaultLayout":"Default layout: {layout}",
-        "defaultReactionEmoji":"Default reaction emoji:",
-        "defaultSortOrder":"Default sort order: {order}",
+        "defaultLayout":"Προεπιλεγμένη διάταξη: {layout}",
+        "defaultReactionEmoji":"Προεπιλεγμένο emoji αντίδρασης:",
+        "defaultSortOrder":"Προεπιλεγμένη σειρά ταξινόμησης: {order}",
         "forumLayouts":{
-            "gridView":"Gallery view",
-            "listView":"List view",
-            "notSet":"Not set"
+            "gridView":"Προβολή γκαλερί",
+            "listView":"Προβολή λίστας",
+            "notSet":"Δεν έχει οριστεί"
         },
-        "hiddenChannel":"This is a hidden {type} channel",
-        "hideAllowedUsersAndRoles":"Hide Allowed Users and Roles",
-        "lastMessageCreated":"Last {type} created:",
-        "lastMessagePin":"Last message pin:",
-        "lockedChannel":"This is a locked {type} channel",
-        "nsfw":"NSFW",
-        "permissionDetails":"Permission Details",
-        "region":"Region: {region}",
-        "regionAutomatic":"Automatic",
-        "requireTag":"Posts on this forum require a tag to be set.",
-        "seeGuidelines":" However you may see its guidelines:",
-        "slowmode":"Slowmode: {duration}",
+        "hiddenChannel":"Αυτό είναι ένα κρυφό κανάλι {type}",
+        "hideAllowedUsersAndRoles":"Απόκρυψη επιτρεπόμενων χρηστών και ρόλων",
+        "lastMessageCreated":"Τελευταία δημιουργία {type}:",
+        "lastMessagePin":"Καρφίτσα τελευταίου μηνύματος:",
+        "lockedChannel":"Αυτό είναι ένα κλειδωμένο κανάλι {type}",
+        "nsfw":"Ακατάλληλο (NSFW) περιεχόμενο",
+        "permissionDetails":"Λεπτομέρειες άδειας",
+        "region":"Περιοχή: {region}",
+        "regionAutomatic":"Αυτόματο",
+        "requireTag":"Οι αναρτήσεις σε αυτό το φόρουμ απαιτούν να οριστεί μια ετικέτα.",
+        "seeGuidelines":" Ωστόσο, μπορείτε να δείτε τις οδηγίες του:",
+        "slowmode":"Αργή λειτουργία: {duration}",
         "sortOrders":{
-            "creationDate":"Creation date",
-            "latestActivity":"Latest activity"
+            "creationDate":"Ημερομηνία δημιουργίας",
+            "latestActivity":"Τελευταία δραστηριότητα"
         },
-        "threadSlowmode":"Default thread slowmode: {duration}",
+        "threadSlowmode":"Προεπιλεγμένη αργή λειτουργία νήματος: {duration}",
         "videoQuality":{
             "720p":"720p",
-            "automatic":"Automatic"
+            "automatic":"Αυτόματο"
         },
-        "videoQualityMode":"Video quality mode: {mode}",
-        "viewAllowedUsersAndRoles":"View Allowed Users and Roles"
+        "videoQualityMode":"Λειτουργία ποιότητας βίντεο: {mode}",
+        "viewAllowedUsersAndRoles":"Προβολή επιτρεπόμενων χρηστών και ρόλων"
     },
     "showMeYourName":{
-        "addNickname":"Add SMYN Nickname",
-        "cancel":"Cancel",
-        "changeNickname":"Change SMYN Nickname",
-        "modalDescription":"Set a custom SMYN nickname for this user. Make use of it by specifying {custom} in the SMYN template settings.",
-        "nicknameLabel":"SMYN Nickname",
-        "resetNickname":"Reset SMYN Nickname",
-        "save":"Save",
+        "addNickname":"Προσθέστε ψευδώνυμο SMYN",
+        "cancel":"Ακύρωση",
+        "changeNickname":"Αλλαγή ψευδώνυμου SMYN",
+        "modalDescription":"Ορίστε ένα προσαρμοσμένο ψευδώνυμο SMYN για αυτόν τον χρήστη. Χρησιμοποιήστε το καθορίζοντας {custom} στις ρυθμίσεις προτύπου SMYN.",
+        "nicknameLabel":"ΣΜΥΝ Ψευδώνυμο",
+        "resetNickname":"Επαναφορά ψευδωνύμου SMYN",
+        "save":"Αποθήκευση",
         "settings":{
-            "animateGradients":"For the non-primary names, if the role has a gradient, animate it. This is disabled by \"Ignore Gradients\" and reduced motion.",
-            "customNameColor":"The color to use for the custom name you assigned a user if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
-            "discriminators":"Append discriminators to usernames for bots. Discriminators were deprecated for users, but are still used for bots. By default, a bot's username is equivalent to a user's global name, therefore multiple bots can have the same username. Appending discriminators makes them unique again.",
-            "displayNameColor":"The color to use for the display name if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
-            "friendNameColor":"The color to use for a friend's nickname if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
-            "hideDefaultAtSign":"Hide the default \"@\" symbol before the name in mentions and replies. Only applied if either feature is enabled.",
-            "ignoreFonts":"For the non-primary names, use Discord's default fonts regardless of the user's custom nitro font.",
-            "ignoreGradients":"For the non-primary names, if the role has a gradient, ignore it in favor of the color set below.",
-            "includedNames":"The order to display usernames, display names, nicknames, friend names, and custom names. Use the following placeholders: {user}, {display}, {nick}, {friend}, {custom}. You can provide multiple name options to use as fallbacks if one is unavailable by separating them with commas as such: {custom, friend, nick}. You can have up to three prefixes and three suffixes per name.",
-            "memberList":"Display the first available name listed in your custom name format in the member list.",
-            "mentions":"Display custom name format in mentions.",
-            "messages":"Display custom name format in messages.",
-            "nameSeparator":"The separator to use between names. The default is a single space.",
-            "nicknameColor":"The color to use for the nickname if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
-            "profilePopout":"Display the first available name listed in your custom name format in profile popouts.",
-            "reactions":"Display the first available name listed in your custom name format in reaction tooltips, and the full name in reaction popouts.",
-            "removeDuplicates":"If any of the names are equivalent, remove them, leaving only the unique names.",
-            "replies":"Display custom name format in replies.",
-            "truncateAllNamesWithStreamerMode":"Truncate all names, not just usernames, while in Streamer Mode.",
-            "usernameColor":"The color to use for the username if it's not the first displayed. Leave blank for default. Accepts hex(a), rgb(a), or hsl(a) input. Use \"Role\" to follow the user's top role color. Use \"Role+-#\" to adjust the brightness by that percentage (ex: \"Role+15\")",
-            "voiceChannels":"Display the first available name listed in your custom name format in voice channels."
+            "animateGradients":"Για τα μη βασικά ονόματα, αν ο ρόλος έχει κλίση, κινήστε τον. Αυτό απενεργοποιείται από το \"Ignore Gradients\" και τη μειωμένη κίνηση.",
+            "customNameColor":"Το χρώμα που θα χρησιμοποιήσετε για το προσαρμοσμένο όνομα που εκχωρήσατε σε έναν χρήστη, εάν δεν είναι το πρώτο που εμφανίζεται. Αφήστε κενό για προεπιλογή. Δέχεται την είσοδο hex(a), rgb(a) ή hsl(a). Χρησιμοποιήστε το \"Ρόλος\" για να ακολουθήσετε το χρώμα του κορυφαίου ρόλου του χρήστη. Χρησιμοποιήστε το \"Role+-#\" για να προσαρμόσετε τη φωτεινότητα κατά αυτό το ποσοστό (π.χ. \"Role+15\")",
+            "discriminators":"Προσθήκη διακριτικών στα ονόματα χρήστη για bots. Οι διακρίσεις καταργήθηκαν για τους χρήστες, αλλά εξακολουθούν να χρησιμοποιούνται για bot. Από προεπιλογή, το όνομα χρήστη ενός bot είναι ισοδύναμο με το καθολικό όνομα ενός χρήστη, επομένως πολλά bot μπορούν να έχουν το ίδιο όνομα χρήστη. Η προσθήκη διακριτικών τα κάνει ξανά μοναδικά.",
+            "displayNameColor":"Το χρώμα που θα χρησιμοποιηθεί για το εμφανιζόμενο όνομα εάν δεν είναι το πρώτο που εμφανίζεται. Αφήστε κενό για προεπιλογή. Δέχεται την είσοδο hex(a), rgb(a) ή hsl(a). Χρησιμοποιήστε το \"Ρόλος\" για να ακολουθήσετε το χρώμα του κορυφαίου ρόλου του χρήστη. Χρησιμοποιήστε το \"Role+-#\" για να προσαρμόσετε τη φωτεινότητα κατά αυτό το ποσοστό (π.χ. \"Role+15\")",
+            "friendNameColor":"Το χρώμα που θα χρησιμοποιηθεί για το ψευδώνυμο ενός φίλου εάν δεν είναι το πρώτο που εμφανίζεται. Αφήστε κενό για προεπιλογή. Δέχεται την είσοδο hex(a), rgb(a) ή hsl(a). Χρησιμοποιήστε το \"Ρόλος\" για να ακολουθήσετε το χρώμα του κορυφαίου ρόλου του χρήστη. Χρησιμοποιήστε το \"Role+-#\" για να προσαρμόσετε τη φωτεινότητα κατά αυτό το ποσοστό (π.χ. \"Role+15\")",
+            "hideDefaultAtSign":"Απόκρυψη του προεπιλεγμένου συμβόλου \"@\" πριν από το όνομα στις αναφορές και τις απαντήσεις. Εφαρμόζεται μόνο εάν είναι ενεργοποιημένη κάποια από τις λειτουργίες.",
+            "ignoreFonts":"Για τα μη κύρια ονόματα, χρησιμοποιήστε τις προεπιλεγμένες γραμματοσειρές του Discord ανεξάρτητα από την προσαρμοσμένη γραμματοσειρά nitro του χρήστη.",
+            "ignoreGradients":"Για τα μη κύρια ονόματα, εάν ο ρόλος έχει κλίση, αγνοήστε το υπέρ του συνόλου χρωμάτων παρακάτω.",
+            "includedNames":"Η σειρά εμφάνισης ονομάτων χρήστη, εμφανιζόμενων ονομάτων, ψευδωνύμων, ονομάτων φίλων και προσαρμοσμένων ονομάτων. Χρησιμοποιήστε τα ακόλουθα σύμβολα κράτησης θέσης: {user}, {display}, {nick}, {friend}, {custom}. Μπορείτε να παρέχετε πολλές επιλογές ονομάτων που θα χρησιμοποιηθούν ως εναλλακτικά, εάν κάποια δεν είναι διαθέσιμη, διαχωρίζοντάς τες με κόμματα ως εξής: {custom, friend, nick}. Μπορείτε να έχετε έως και τρία προθέματα και τρία επιθήματα ανά όνομα.",
+            "memberList":"Εμφανίστε το πρώτο διαθέσιμο όνομα που αναφέρεται στην προσαρμοσμένη μορφή ονόματος στη λίστα μελών.",
+            "mentions":"Εμφάνιση προσαρμοσμένης μορφής ονόματος σε αναφορές.",
+            "messages":"Εμφάνιση προσαρμοσμένης μορφής ονόματος στα μηνύματα.",
+            "nameSeparator":"Το διαχωριστικό για χρήση μεταξύ ονομάτων. Η προεπιλογή είναι ένα ενιαίο διάστημα.",
+            "nicknameColor":"Το χρώμα που θα χρησιμοποιηθεί για το ψευδώνυμο εάν δεν εμφανίζεται το πρώτο. Αφήστε κενό για προεπιλογή. Δέχεται την είσοδο hex(a), rgb(a) ή hsl(a). Χρησιμοποιήστε το \"Ρόλος\" για να ακολουθήσετε το χρώμα του κορυφαίου ρόλου του χρήστη. Χρησιμοποιήστε το \"Role+-#\" για να προσαρμόσετε τη φωτεινότητα κατά αυτό το ποσοστό (π.χ. \"Role+15\")",
+            "profilePopout":"Εμφανίστε το πρώτο διαθέσιμο όνομα που παρατίθεται στην προσαρμοσμένη μορφή ονόματος στα αναδυόμενα παράθυρα προφίλ.",
+            "reactions":"Εμφανίστε το πρώτο διαθέσιμο όνομα που αναφέρεται στην προσαρμοσμένη μορφή ονόματος στις συμβουλές εργαλείων αντίδρασης και το πλήρες όνομα στα αναδυόμενα παράθυρα αντίδρασης.",
+            "removeDuplicates":"Εάν κάποιο από τα ονόματα είναι ισοδύναμα, αφαιρέστε το, αφήνοντας μόνο τα μοναδικά ονόματα.",
+            "replies":"Εμφάνιση προσαρμοσμένης μορφής ονόματος στις απαντήσεις.",
+            "truncateAllNamesWithStreamerMode":"Περικόψτε όλα τα ονόματα, όχι μόνο τα ονόματα χρήστη, ενώ βρίσκεστε σε λειτουργία ροής.",
+            "usernameColor":"Το χρώμα που θα χρησιμοποιηθεί για το όνομα χρήστη, εάν δεν είναι το πρώτο που εμφανίζεται. Αφήστε κενό για προεπιλογή. Δέχεται την είσοδο hex(a), rgb(a) ή hsl(a). Χρησιμοποιήστε το \"Ρόλος\" για να ακολουθήσετε το χρώμα του κορυφαίου ρόλου του χρήστη. Χρησιμοποιήστε το \"Role+-#\" για να προσαρμόσετε τη φωτεινότητα κατά αυτό το ποσοστό (π.χ. \"Role+15\")",
+            "voiceChannels":"Εμφανίστε το πρώτο διαθέσιμο όνομα που παρατίθεται στην προσαρμοσμένη μορφή ονόματος στα κανάλια φωνής."
         }
     },
     "showTimeoutDuration":{
-        "description":"Shows how much longer a user's timeout will last, either in the timeout icon tooltip or next to it",
-        "displayStyleDescription":"How to display the timeout duration",
-        "inTooltip":"In the Tooltip",
-        "nextToIcon":"Next to the timeout icon",
-        "timeoutRemaining":"timeout remaining"
+        "description":"Δείχνει πόσο περισσότερο θα διαρκέσει το χρονικό όριο λήξης ενός χρήστη, είτε στην επεξήγηση εργαλείου εικονιδίου χρονικού ορίου είτε δίπλα του",
+        "displayStyleDescription":"Πώς να εμφανίσετε τη διάρκεια του χρονικού ορίου",
+        "inTooltip":"Στην επεξήγηση εργαλείου",
+        "nextToIcon":"Δίπλα στο εικονίδιο χρονικού ορίου",
+        "timeoutRemaining":"απομένει τάιμ άουτ"
     },
     "silentMessageToggle":{
-        "description":"Adds a button to the chat bar to toggle sending a silent message.",
-        "disableSilentMessage":"Disable Silent Message",
-        "enableSilentMessage":"Enable Silent Message",
+        "description":"Προσθέτει ένα κουμπί στη γραμμή συνομιλίας για εναλλαγή της αποστολής σιωπηρού μηνύματος.",
+        "disableSilentMessage":"Απενεργοποιήστε το σιωπηλό μήνυμα",
+        "enableSilentMessage":"Ενεργοποιήστε το σιωπηλό μήνυμα",
         "settings":{
-            "autoDisable":"Automatically disable the silent message toggle again after sending one",
-            "persistChannels":"Persist between channels",
-            "persistNone":"Don't persist (reset on channel change)",
-            "persistRestarts":"Persist between channels and restarts",
-            "persistState":"How to persist the silent message toggle state"
+            "autoDisable":"Απενεργοποιήστε ξανά αυτόματα την εναλλαγή σιωπηρού μηνύματος μετά την αποστολή ενός",
+            "persistChannels":"Επιμονή μεταξύ καναλιών",
+            "persistNone":"Μην επιμείνετε (επαναφορά κατά την αλλαγή καναλιού)",
+            "persistRestarts":"Παραμονή μεταξύ καναλιών και επανεκκίνηση",
+            "persistState":"Πώς να διατηρήσετε την κατάσταση εναλλαγής σιωπηρού μηνύματος"
         }
     },
     "silentTyping":{
         "clickActions":{
-            "openPluginSettings":"Open Plugin Settings",
-            "toggleTypingGlobally":"Toggle Typing Globally",
-            "toggleTypingInChannel":"Toggle Typing in Channel",
-            "toggleTypingInGuild":"Toggle Typing in Guild"
+            "openPluginSettings":"Ανοίξτε τις Ρυθμίσεις προσθηκών",
+            "toggleTypingGlobally":"Εναλλαγή πληκτρολόγησης καθολικά",
+            "toggleTypingInChannel":"Εναλλαγή πληκτρολόγησης στο κανάλι",
+            "toggleTypingInGuild":"Εναλλαγή πληκτρολόγησης στο Guild"
         },
         "command":{
-            "chatBarIndicatorsOption":"Hide other users' typing indicators from above the chat bar.",
-            "chatContextMenuOption":"Show a dropdown in the chat context menu to toggle plugin settings on the go.",
-            "chatIconOption":"Show an icon in the chat bar for toggling the plugin on the go.",
-            "defaultHiddenOption":"Whether to hide typing in DMs/channels/guilds by default or not.",
-            "description":"Hide your typing indicator from chat.",
-            "membersListIndicatorsOption":"Hide other users' typing indicators from the members list.",
-            "toggleChannel":"Channel",
-            "toggleGlobal":"Global",
-            "toggleGuild":"Guild",
-            "toggleOption":"Toggle functionality globally, for the channel, or for the guild."
+            "chatBarIndicatorsOption":"Απόκρυψη ενδείξεων πληκτρολόγησης άλλων χρηστών από πάνω από τη γραμμή συνομιλίας.",
+            "chatContextMenuOption":"Εμφανίστε ένα αναπτυσσόμενο μενού στο μενού περιβάλλοντος συνομιλίας για εναλλαγή των ρυθμίσεων της προσθήκης εν κινήσει.",
+            "chatIconOption":"Εμφάνιση ενός εικονιδίου στη γραμμή συνομιλίας για εναλλαγή της προσθήκης εν κινήσει.",
+            "defaultHiddenOption":"Είτε θα αποκρύψετε την πληκτρολόγηση σε DM/κανάλια/συντεχνίες από προεπιλογή ή όχι.",
+            "description":"Απόκρυψη της ένδειξης πληκτρολόγησης από τη συνομιλία.",
+            "membersListIndicatorsOption":"Απόκρυψη ενδείξεων πληκτρολόγησης άλλων χρηστών από τη λίστα μελών.",
+            "toggleChannel":"Κανάλι",
+            "toggleGlobal":"Καθολικός",
+            "toggleGuild":"Συντεχνία",
+            "toggleOption":"Εναλλαγή της λειτουργικότητας καθολικά, για το κανάλι ή για τη συντεχνία."
         },
         "contextMenu":{
-            "chatBarIndicators":"Chat Bar Indicators",
-            "chatIcon":"Chat Icon",
-            "defaultHidden":"Default Hidden",
-            "enabled":"Enabled",
-            "membersListIndicators":"Members List Indicators",
-            "silentTyping":"Silent Typing"
+            "chatBarIndicators":"Chat Ενδείξεις ράβδων",
+            "chatIcon":"Chat Εικονίδιο",
+            "defaultHidden":"Προεπιλογή Κρυφό",
+            "enabled":"Ενεργοποιήθηκε",
+            "membersListIndicators":"Δείκτες λίστας μελών",
+            "silentTyping":"Αθόρυβη πληκτρολόγηση"
         },
-        "noChanges":"No changes made to silent typing settings.",
+        "noChanges":"Δεν έγιναν αλλαγές στις ρυθμίσεις αθόρυβης πληκτρολόγησης.",
         "settings":{
-            "chatContextMenu":"Show a dropdown in the chat context menu to modify plugin settings on the go.",
-            "chatIcon":"Show an icon in the chat bar for modifying the plugin on the go.",
-            "chatIconLeftClickAction":"What to do when left clicking the chat icon.",
-            "chatIconMiddleClickAction":"What to do when middle clicking the chat icon.",
-            "chatIconRightClickAction":"What to do when right clicking the chat icon.",
-            "defaultHidden":"If enabled, the plugin will hide your typing from others in any DMs/channels/guilds not listed in \"Disabled Locations\" below. If disabled, the plugin will show your typing to others for any DMs/channels/guilds not listed in \"Enabled Locations\" below.",
-            "disabledLocations":"Disable functionality for these IDs. Accepts a comma separated list of DM IDs, channel IDs, and guild IDs. Only used if \"Default Hidden\" is enabled.",
-            "enabledGlobally":"Toggle functionality of your own typing indicator globally.",
-            "enabledLocations":"Enable functionality for these IDs. Accepts a comma separated list of DM IDs, channel IDs, and guild IDs. Only used if \"Default Hidden\" is disabled.",
-            "hideChatBoxTypingIndicators":"Hide other users' typing indicators from above the chat bar.",
-            "hideMembersListTypingIndicators":"Hide other users' typing indicators from the members list."
+            "chatContextMenu":"Εμφανίστε ένα αναπτυσσόμενο μενού στο μενού περιβάλλοντος συνομιλίας για να τροποποιήσετε τις ρυθμίσεις της προσθήκης εν κινήσει.",
+            "chatIcon":"Εμφάνιση ενός εικονιδίου στη γραμμή συνομιλίας για την τροποποίηση της προσθήκης εν κινήσει.",
+            "chatIconLeftClickAction":"Τι να κάνετε όταν κάνετε αριστερό κλικ στο εικονίδιο συνομιλίας.",
+            "chatIconMiddleClickAction":"Τι να κάνετε όταν κάνετε κλικ στο εικονίδιο συνομιλίας.",
+            "chatIconRightClickAction":"Τι να κάνετε όταν κάνετε δεξί κλικ στο εικονίδιο συνομιλίας.",
+            "defaultHidden":"Εάν είναι ενεργοποιημένη, η προσθήκη θα αποκρύψει την πληκτρολόγηση από άλλους σε τυχόν DM/κανάλια/συντεχνίες που δεν αναφέρονται στις \"Απενεργοποιημένες τοποθεσίες\" παρακάτω. Εάν είναι απενεργοποιημένη, η προσθήκη θα εμφανίζει την πληκτρολόγηση σας σε άλλους για τυχόν DM/κανάλια/συντεχνίες που δεν αναφέρονται στις \"Ενεργοποιημένες τοποθεσίες\" παρακάτω.",
+            "disabledLocations":"Απενεργοποιήστε τη λειτουργικότητα για αυτά τα αναγνωριστικά. Αποδέχεται μια λίστα διαχωρισμένων με κόμματα αναγνωριστικών DM, αναγνωριστικών καναλιών και αναγνωριστικών συντεχνίας. Χρησιμοποιείται μόνο εάν το \"Προεπιλεγμένο κρυφό\" είναι ενεργοποιημένο.",
+            "enabledGlobally":"Εναλλαγή της λειτουργικότητας της δικής σας ένδειξης πληκτρολόγησης καθολικά.",
+            "enabledLocations":"Ενεργοποιήστε τη λειτουργικότητα για αυτά τα αναγνωριστικά. Αποδέχεται μια λίστα διαχωρισμένων με κόμματα αναγνωριστικών DM, αναγνωριστικών καναλιών και αναγνωριστικών συντεχνίας. Χρησιμοποιείται μόνο εάν το \"Προεπιλεγμένο κρυφό\" είναι απενεργοποιημένο.",
+            "hideChatBoxTypingIndicators":"Απόκρυψη ενδείξεων πληκτρολόγησης άλλων χρηστών από πάνω από τη γραμμή συνομιλίας.",
+            "hideMembersListTypingIndicators":"Απόκρυψη ενδείξεων πληκτρολόγησης άλλων χρηστών από τη λίστα μελών."
         },
-        "settingsUpdated":"Silent typing settings updated.",
-        "typingHidden":"Typing Hidden ({location})",
-        "typingVisible":"Typing Visible ({location})",
-        "typingVisibleGlobal":"Typing Visible (Global)"
+        "settingsUpdated":"Οι ρυθμίσεις αθόρυβης πληκτρολόγησης ενημερώθηκαν.",
+        "typingHidden":"Κρυφή πληκτρολόγηση ({location})",
+        "typingVisible":"Πληκτρολογώντας ορατό ({location})",
+        "typingVisibleGlobal":"Πληκτρολόγηση Ορατό (Καθολική)"
     },
     "sortFriendRequests":{
-        "added":"Added",
-        "description":"Sorts friend requests by date of receipt",
+        "added":"Προστέθηκε",
+        "description":"Ταξινομεί αιτήματα φιλίας κατά ημερομηνία παραλαβής",
         "settings":{
-            "showDates":"Show dates on friend requests"
+            "showDates":"Εμφάνιση ημερομηνιών σε αιτήματα φιλίας"
         }
     },
     "startupTimings":{
@@ -1205,195 +1205,195 @@
         }
     },
     "tabs":{
-        "settings":"Equicord Settings"
+        "settings":"Equicord Ρυθμίσεις"
     },
     "textReplace":{
-        "find":"Find",
-        "messageWithRules":"Message with rules applied",
-        "onlyIfIncludes":"Only if includes",
-        "replace":"Replace",
+        "find":"Εύρεση",
+        "messageWithRules":"Μήνυμα με εφαρμοστέους κανόνες",
+        "onlyIfIncludes":"Μόνο αν περιλαμβάνει",
+        "replace":"Αντικαθιστώ",
         "scope.allMessages":"Apply to all messages",
         "scope.myMessages":"Apply to your messages (visible to everyone)",
         "scope.othersMessages":"Apply to others' messages (only visible to you)",
-        "testRules":"Test Rules",
-        "typeMessage":"Type a message",
-        "usingRegex":"Using Regex",
-        "usingString":"Using String"
+        "testRules":"Κανόνες δοκιμής",
+        "typeMessage":"Πληκτρολογήστε ένα μήνυμα",
+        "usingRegex":"Χρησιμοποιώντας το Regex",
+        "usingString":"Χρησιμοποιώντας το String"
     },
     "translate":{
-        "autoTranslate":"Auto Translate",
+        "autoTranslate":"Αυτόματη μετάφραση",
         "autoTranslateEnabled":{
-            "body":"You just enabled Auto Translate! Any message <0>will automatically be translated</0> before being sent.",
-            "title":"Equicord Auto-Translate Enabled"
+            "body":"Μόλις ενεργοποιήσατε την Αυτόματη Μετάφραση! Οποιοδήποτε μήνυμα <0>θα μεταφραστεί αυτόματα</0> πριν σταλεί.",
+            "title":"Equicord Ενεργοποιήθηκε η αυτόματη μετάφραση"
         },
-        "autoTranslateEnabledLabel":"Auto Translate Enabled",
-        "disableAutoTranslate":"Disable Auto-Translate",
-        "dontShowAgain":"Don't show again",
-        "gotIt":"Got it",
-        "modalTitle":"Translate",
-        "openTranslateModal":"Open Translate Modal",
-        "selectLanguage":"Select a language",
-        "translate":"Translate"
+        "autoTranslateEnabledLabel":"Ενεργοποιήθηκε η αυτόματη μετάφραση",
+        "disableAutoTranslate":"Απενεργοποιήστε την αυτόματη μετάφραση",
+        "dontShowAgain":"Μην εμφανιστείτε ξανά",
+        "gotIt":"Κατάλαβα",
+        "modalTitle":"Μεταφράζω",
+        "openTranslateModal":"Ανοίξτε το Translate Modal",
+        "selectLanguage":"Επιλέξτε μια γλώσσα",
+        "translate":"Μεταφράζω"
     },
     "typingIndicator":{
-        "description":"Adds an indicator if someone is typing on a channel.",
+        "description":"Προσθέτει μια ένδειξη εάν κάποιος πληκτρολογεί σε ένα κανάλι.",
         "settings":{
-            "animatedDots":"Animated dots",
+            "animatedDots":"Κινούμενες κουκκίδες",
             "avatars":"Avatars",
-            "avatarsAndDots":"Avatars and animated dots",
-            "includeBlockedUsers":"Whether to show the typing indicator for blocked users.",
-            "includeCurrentChannel":"Whether to show the typing indicator for the currently selected channel",
-            "includeIgnoredUsers":"Whether to show the typing indicator for ignored users.",
-            "includeMutedChannels":"Whether to show the typing indicator for muted channels.",
-            "indicatorMode":"How should the indicator be displayed?"
+            "avatarsAndDots":"Avatars και κινούμενες κουκκίδες",
+            "includeBlockedUsers":"Αν θα εμφανίζεται η ένδειξη πληκτρολόγησης για αποκλεισμένους χρήστες.",
+            "includeCurrentChannel":"Εάν θα εμφανιστεί η ένδειξη πληκτρολόγησης για το τρέχον επιλεγμένο κανάλι",
+            "includeIgnoredUsers":"Εάν θα εμφανιστεί η ένδειξη πληκτρολόγησης για χρήστες που αγνοήθηκαν.",
+            "includeMutedChannels":"Εάν θα εμφανίζεται η ένδειξη πληκτρολόγησης για κανάλια σε σίγαση.",
+            "indicatorMode":"Πώς πρέπει να εμφανίζεται η ένδειξη;"
         }
     },
     "typingTweaks":{
-        "andOthersTyping":"and {count} others are typing...",
-        "description":"Show avatars and role colours in the typing indicator",
+        "andOthersTyping":"και {count} άλλοι πληκτρολογούν...",
+        "description":"Εμφάνιση άβαταρ και χρωμάτων ρόλων στην ένδειξη πληκτρολόγησης",
         "settings":{
-            "alternativeFormatting":"Show a more useful message when several users are typing",
-            "amITyping":"Shows you if other people can see you typing",
-            "showAvatars":"Show avatars in the typing indicator",
-            "showRoleColors":"Show role colors in the typing indicator"
+            "alternativeFormatting":"Εμφάνιση ενός πιο χρήσιμου μηνύματος όταν πολλοί χρήστες πληκτρολογούν",
+            "amITyping":"Σας δείχνει εάν τα άλλα άτομα μπορούν να σας δουν να πληκτρολογείτε",
+            "showAvatars":"Εμφάνιση avatar στην ένδειξη πληκτρολόγησης",
+            "showRoleColors":"Εμφάνιση χρωμάτων ρόλων στην ένδειξη πληκτρολόγησης"
         }
     },
     "unsuppressEmbeds":{
-        "description":"Allows you to unsuppress embeds in messages",
-        "suppressEmbeds":"Suppress Embeds",
-        "unsuppressEmbeds":"Unsuppress Embeds"
+        "description":"Σας επιτρέπει να καταργήσετε τις ενσωματώσεις σε μηνύματα",
+        "suppressEmbeds":"Καταστολή ενσωματώσεων",
+        "unsuppressEmbeds":"Κατάργηση καταστολής ενσωματώσεων"
     },
     "userVoiceShow":{
-        "cannotJoinChannel":"You cannot join the user's Voice Channel",
-        "description":"Shows an indicator when a user is in a Voice Channel",
+        "cannotJoinChannel":"Δεν μπορείτε να εγγραφείτε στο κανάλι φωνής του χρήστη",
+        "description":"Εμφανίζει μια ένδειξη όταν ένας χρήστης βρίσκεται σε κανάλι φωνής",
         "inVoiceChat":"In Voice Chat",
         "settings":{
-            "showInMemberList":"Show a user's Voice Channel indicator in the member and DMs list",
-            "showInMessages":"Show a user's Voice Channel indicator in messages",
-            "showInUserProfileModal":"Show a user's Voice Channel indicator in their profile next to the name"
+            "showInMemberList":"Εμφάνιση της ένδειξης καναλιού φωνής ενός χρήστη στη λίστα μελών και DM",
+            "showInMessages":"Εμφάνιση της ένδειξης καναλιού φωνής ενός χρήστη στα μηνύματα",
+            "showInUserProfileModal":"Εμφάνιση της ένδειξης καναλιού φωνής ενός χρήστη στο προφίλ του δίπλα στο όνομα"
         }
     },
     "usrbg":{
-        "description":"Displays user banners from USRBG, allowing anyone to get a banner without Nitro",
-        "getOwnBanner":"Get your own USRBG banner",
+        "description":"Εμφανίζει banner χρηστών από το USRBG, επιτρέποντας σε οποιονδήποτε να πάρει ένα banner χωρίς Nitro",
+        "getOwnBanner":"Αποκτήστε το δικό σας banner USRBG",
         "settings":{
             "nitroBanner":"Nitro banner",
-            "nitroFirst":"Banner to use if both Nitro and USRBG banners are present",
-            "usrbgBanner":"USRBG banner",
-            "voiceBackground":"Use USRBG banners as voice chat backgrounds"
+            "nitroFirst":"Banner για χρήση εάν υπάρχουν και Nitro και USRBG banner",
+            "usrbgBanner":"Πανό USRBG",
+            "voiceBackground":"Χρησιμοποιήστε πανό USRBG ως φόντο φωνητικής συνομιλίας"
         }
     },
     "vcNarrator":{
-        "customiseMessages":"You can customise the spoken messages below. You can disable specific messages by setting them to nothing",
+        "customiseMessages":"Μπορείτε να προσαρμόσετε τα εκφωνημένα μηνύματα παρακάτω. Μπορείτε να απενεργοποιήσετε συγκεκριμένα μηνύματα ορίζοντας τα σε τίποτα",
         "defaults":{
-            "deafen":"{{USER}} deafened",
-            "join":"{{USER}} joined",
-            "leave":"{{USER}} left",
-            "move":"{{USER}} moved to {{CHANNEL}}",
-            "mute":"{{USER}} muted",
-            "undeafen":"{{USER}} undeafened",
-            "unmute":"{{USER}} unmuted"
+            "deafen":"{{USER}} υπόκωφος",
+            "join":"{{USER}} έγινε μέλος",
+            "leave":"{{USER}} αριστερά",
+            "move":"{{USER}} μετακινήθηκε στο {{CHANNEL}}",
+            "mute":"{{USER}} σε σίγαση",
+            "undeafen":"{{USER}} άκουστος",
+            "unmute":"{{USER}} καταργήθηκε η σίγαση"
         },
-        "description":"Announces when users join, leave, or move voice channels via narrator",
-        "linuxVoicesHelp":"Install speech-dispatcher or espeak and run Discord with the --enable-speech-dispatcher flag",
-        "noEnglishVoices":"You don't have any English voices installed, so the narrator might sound weird",
-        "noVoices":"No narrator voices found. ",
-        "osVoicesHelp":"Try installing some in the Narrator settings of your Operating System",
-        "placeholdersHelp":"The special placeholders <0>{{USER}}</0>, <1>{{DISPLAY_NAME}}</1>, <2>{{NICKNAME}}</2> and <3>{{CHANNEL}}</3> will be replaced with the user's name (nothing if it's yourself), the user's display name, the user's nickname on current server and the channel's name respectively",
-        "playExampleSounds":"Play Example Sounds",
+        "description":"Ανακοινώνει πότε οι χρήστες εγγράφονται, αποχωρούν ή μετακινούν κανάλια φωνής μέσω αφηγητή",
+        "linuxVoicesHelp":"Εγκαταστήστε το speaker-dispatcher ή το espeak και εκτελέστε το [[PH0]]] με τη σημαία --enable-speech-dispatcher",
+        "noEnglishVoices":"Δεν έχετε εγκαταστήσει αγγλικές φωνές, οπότε ο αφηγητής μπορεί να ακούγεται περίεργος",
+        "noVoices":"Δεν βρέθηκαν φωνές αφηγητών. ",
+        "osVoicesHelp":"Δοκιμάστε να εγκαταστήσετε μερικές στις ρυθμίσεις Αφηγητή του λειτουργικού σας συστήματος",
+        "placeholdersHelp":"Τα ειδικά σύμβολα κράτησης θέσης <0>{{USER}}</0>, <1>{{DISPLAY_NAME}}</1>, <2>{{NICKNAME}}</2> και <3>{{CHANNEL}}</3> θα αντικατασταθούν με το όνομα του χρήστη (τίποτα αν είστε ο εαυτός σας), το εμφανιζόμενο όνομα του χρήστη στον τρέχοντα διακομιστή και το ψευδώνυμο του καναλιού του χρήστη",
+        "playExampleSounds":"Παίξτε Παράδειγμα Ήχους",
         "settings":{
-            "deafenMessage":"Deafen Message (only self for now)",
-            "joinMessage":"Join Message",
-            "latinOnly":"Strip non latin characters from names before saying them",
-            "leaveMessage":"Leave Message",
-            "moveMessage":"Move Message",
-            "muteMessage":"Mute Message (only self for now)",
-            "sayOwnName":"Say own name",
-            "speed":"Narrator Speed",
-            "undeafenMessage":"Undeafen Message (only self for now)",
-            "unmuteMessage":"Unmute Message (only self for now)",
-            "volume":"Narrator Volume"
+            "deafenMessage":"Deafen Message (μόνο εγώ προς το παρόν)",
+            "joinMessage":"Συμμετοχή στο Μήνυμα",
+            "latinOnly":"Αφαιρέστε τους μη λατινικούς χαρακτήρες από τα ονόματα πριν τους πείτε",
+            "leaveMessage":"Αφήστε Μήνυμα",
+            "moveMessage":"Μετακίνηση μηνύματος",
+            "muteMessage":"Σίγαση μηνύματος (μόνο ο ίδιος προς το παρόν)",
+            "sayOwnName":"Πες το δικό σου όνομα",
+            "speed":"Ταχύτητα Αφηγητή",
+            "undeafenMessage":"Undeafen Message (μόνο εγώ προς το παρόν)",
+            "unmuteMessage":"Κατάργηση σίγασης μηνύματος (μόνο ο εαυτός προς το παρόν)",
+            "volume":"Τόμος Αφηγητής"
         },
-        "speechSynthesisNotSupported":"SpeechSynthesis not supported or no Narrator voices found. Thus, this plugin will not work. Check my Settings for more info"
+        "speechSynthesisNotSupported":"Το SpeechSynthesis δεν υποστηρίζεται ή δεν βρέθηκαν φωνές Αφηγητή. Επομένως, αυτό το πρόσθετο δεν θα λειτουργήσει. Ελέγξτε τις Ρυθμίσεις μου για περισσότερες πληροφορίες"
     },
     "viewIcons":{
-        "description":"Makes avatars and banners in user profiles clickable, adds View Icon/Banner entries in the user, server and group channel context menu.",
+        "description":"Κάνει τα είδωλα και τα banner στα προφίλ χρηστών με δυνατότητα κλικ, προσθέτει καταχωρήσεις εικονιδίων προβολής/banner στο μενού περιβάλλοντος χρήστη, διακομιστή και καναλιών ομάδας.",
         "settings":{
-            "formatDescription":"Choose the image format to use for non animated images. Animated images will always use .gif",
-            "imgSizeDescription":"The image size to use"
+            "formatDescription":"Επιλέξτε τη μορφή εικόνας που θα χρησιμοποιήσετε για μη κινούμενες εικόνες. Οι κινούμενες εικόνες θα χρησιμοποιούν πάντα .gif",
+            "imgSizeDescription":"Το μέγεθος της εικόνας προς χρήση"
         },
-        "viewAvatar":"View Avatar",
-        "viewBanner":"View Banner",
-        "viewIcon":"View Icon",
-        "viewServerAvatar":"View Server Avatar"
+        "viewAvatar":"Προβολή Avatar",
+        "viewBanner":"Προβολή Banner",
+        "viewIcon":"Προβολή εικονιδίου",
+        "viewServerAvatar":"Προβολή Avatar διακομιστή"
     },
     "viewRaw":{
-        "content":"Content",
-        "contentCopied":"Content copied to clipboard!",
-        "copyJson":"Copy {type} JSON",
-        "copyRawContent":"Copy Raw Content",
-        "copyRawLeftViewRawRight":"Copy Raw (Left Click) / View Raw (Right Click)",
-        "data":"Data",
-        "dataCopied":"{type} data copied to clipboard!",
-        "description":"Copy and view the raw content/data of any message, channel or guild",
+        "content":"Περιεχόμενο",
+        "contentCopied":"Το περιεχόμενο αντιγράφηκε στο πρόχειρο!",
+        "copyJson":"Αντιγραφή [[PH0]]] JSON",
+        "copyRawContent":"Αντιγράψτε ακατέργαστο περιεχόμενο",
+        "copyRawLeftViewRawRight":"Αντιγραφή Raw (αριστερό κλικ) / Προβολή Raw (δεξί κλικ)",
+        "data":"Δεδομένα",
+        "dataCopied":"{type} δεδομένα αντιγράφηκαν στο πρόχειρο!",
+        "description":"Αντιγράψτε και προβάλετε το ακατέργαστο περιεχόμενο/δεδομένα οποιουδήποτε μηνύματος, καναλιού ή συντεχνίας",
         "settings":{
-            "clickMethodDescription":"Change the button to view the raw content/data of any message.",
-            "leftClick":"Left Click to view the raw content.",
-            "rightClick":"Right click to view the raw content."
+            "clickMethodDescription":"Αλλάξτε το κουμπί για να δείτε το ακατέργαστο περιεχόμενο/δεδομένα οποιουδήποτε μηνύματος.",
+            "leftClick":"Αριστερό κλικ για να δείτε το ακατέργαστο περιεχόμενο.",
+            "rightClick":"Κάντε δεξί κλικ για να δείτε το ακατέργαστο περιεχόμενο."
         },
-        "viewRaw":"View Raw",
-        "viewRawLeftCopyRawRight":"View Raw (Left Click) / Copy Raw (Right Click)"
+        "viewRaw":"Προβολή Raw",
+        "viewRawLeftCopyRawRight":"Προβολή Raw (αριστερό κλικ) / Αντιγραφή Raw (δεξί κλικ)"
     },
     "voiceDownload":{
-        "description":"Adds a download to voice messages. (Opens a new browser tab)",
-        "downloadVoiceMessage":"Download voice message"
+        "description":"Προσθέτει λήψη σε φωνητικά μηνύματα. (Ανοίγει μια νέα καρτέλα προγράμματος περιήγησης)",
+        "downloadVoiceMessage":"Λήψη φωνητικού μηνύματος"
     },
     "voiceMessages":{
-        "echoCancellation":"Echo Cancellation",
-        "failedToParse":"Failed to parse selected audio file: {error}",
-        "failedToUpload":"Failed to upload voice message",
-        "iosFix":"To fix it, first convert it to OggOpus, for example using the <0>convertio web converter</0>",
-        "iosWarning":"Voice Messages have to be OggOpus to be playable on iOS. This file is <0>{type}</0> so it will not be playable on iOS.",
-        "missingPermissions":"(Missing Permissions)",
-        "noiseSuppression":"Noise Suppression",
-        "preview":"Preview",
-        "recordModal":"Record Voice Message",
-        "send":"Send Voice Message",
-        "sending":"Now sending voice message... Please be patient",
-        "uploadFile":"Upload File"
+        "echoCancellation":"Ακύρωση ηχούς",
+        "failedToParse":"Απέτυχε η ανάλυση του επιλεγμένου αρχείου ήχου: {error}",
+        "failedToUpload":"Η μεταφόρτωση του φωνητικού μηνύματος απέτυχε",
+        "iosFix":"Για να το διορθώσετε, πρώτα μετατρέψτε το σε OggOpus, για παράδειγμα χρησιμοποιώντας τον <0>μετατροπέα web convertio</0>",
+        "iosWarning":"Τα φωνητικά μηνύματα πρέπει να είναι OggOpus για να μπορούν να αναπαραχθούν στο iOS. Αυτό το αρχείο είναι <0>{type}</0>, επομένως δεν θα μπορεί να αναπαραχθεί σε iOS.",
+        "missingPermissions":"(Λείπουν δικαιώματα)",
+        "noiseSuppression":"Καταστολή θορύβου",
+        "preview":"Προεπισκόπηση",
+        "recordModal":"Ηχογράφηση φωνητικού μηνύματος",
+        "send":"Αποστολή φωνητικού μηνύματος",
+        "sending":"Τώρα αποστέλλεται φωνητικό μήνυμα... Κάντε υπομονή",
+        "uploadFile":"Μεταφόρτωση αρχείου"
     },
     "whoReacted":{
         "settings":{
-            "avatarClick":"Toggle clicking avatars in reactions"
+            "avatarClick":"Εναλλαγή άβαταρ με κλικ στις αντιδράσεις"
         }
     },
     "xsOverlay":{
-        "attachment":"attachment",
-        "botNotifications":"Allow bot notifications",
-        "callNotifications":"Allow call notifications",
-        "channelPingColor":"Channel mention color",
-        "description":"Forwards discord notifications to XSOverlay, for easy viewing in VR",
-        "dmNotifications":"Allow Direct Message notifications",
-        "embed":"embed",
-        "groupDmNotifications":"Allow Group DM notifications",
-        "helloFromVendor":"Hello from Vendor!",
-        "image":"image",
-        "incomingCall":"Incoming call",
-        "isCallingYou":"is calling you...",
-        "lengthBasedTimeout":"Extend duration with message length",
-        "opacity":"Notif opacity",
-        "pingColor":"User mention color",
-        "preferUDPDescription":"Enable if you use an older build of XSOverlay unable to connect through websockets. This setting is ignored on web.",
-        "reply":"reply",
-        "sendTestNotification":"Send test notification",
-        "sentEmbeds":"sent message embed(s)",
-        "sentSticker":"sent a sticker",
-        "serverNotifications":"Allow server notifications",
-        "soundPath":"Notification sound (default/warning/error)",
-        "sticker":"sticker",
-        "testNotification":"This is a test notification! explode",
-        "timeout":"Notification duration (secs)",
-        "volume":"Volume",
-        "webSocketPort":"Websocket port"
+        "attachment":"προσάρτημα",
+        "botNotifications":"Να επιτρέπονται οι ειδοποιήσεις bot",
+        "callNotifications":"Να επιτρέπονται οι ειδοποιήσεις κλήσεων",
+        "channelPingColor":"Χρώμα αναφοράς καναλιού",
+        "description":"Προωθεί τις ειδοποιήσεις διαφωνίας στο XSOverlay, για εύκολη προβολή σε VR",
+        "dmNotifications":"Να επιτρέπονται οι ειδοποιήσεις απευθείας μηνυμάτων",
+        "embed":"ενσωμάτωση",
+        "groupDmNotifications":"Επιτρέπονται οι ειδοποιήσεις DM Group",
+        "helloFromVendor":"Γεια από τον προμηθευτή!",
+        "image":"εικόνα",
+        "incomingCall":"Εισερχόμενη κλήση",
+        "isCallingYou":"σε καλεί...",
+        "lengthBasedTimeout":"Επέκταση διάρκειας με μήκος μηνύματος",
+        "opacity":"Ειδοποίηση αδιαφάνειας",
+        "pingColor":"Αναφορά χρώματος από τον χρήστη",
+        "preferUDPDescription":"Ενεργοποιήστε εάν χρησιμοποιείτε μια παλαιότερη έκδοση του XSOverlay που δεν είναι δυνατή η σύνδεση μέσω διαδικτυακών υποδοχών. Αυτή η ρύθμιση αγνοείται στον ιστό.",
+        "reply":"απάντηση",
+        "sendTestNotification":"Αποστολή ειδοποίησης δοκιμής",
+        "sentEmbeds":"απεσταλμένο μήνυμα ενσωμάτωσης",
+        "sentSticker":"έστειλε αυτοκόλλητο",
+        "serverNotifications":"Να επιτρέπονται οι ειδοποιήσεις διακομιστή",
+        "soundPath":"Ήχος ειδοποίησης (προεπιλογή/προειδοποίηση/σφάλμα)",
+        "sticker":"αυτοκόλλητη ετικέτα",
+        "testNotification":"Αυτή είναι μια δοκιμαστική ειδοποίηση! ανατινάζω",
+        "timeout":"Διάρκεια ειδοποίησης (δευτερόλεπτα)",
+        "volume":"Ένταση ήχου",
+        "webSocketPort":"Θύρα Websocket"
     }
 }
