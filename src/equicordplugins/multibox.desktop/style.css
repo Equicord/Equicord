@@ -84,3 +84,9 @@
     background: var(--background-modifier-hover, #2b2d31);
     color: var(--interactive-hover, #dbdee1);
 }
+
+/* Offset app-mount when the tab bar is present (main window only) */
+#app-mount:has(.vc-multibox-bar) {
+    margin-top: 36px !important;
+    height: calc(100vh - 36px) !important;
+}

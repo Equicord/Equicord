@@ -10,7 +10,7 @@ import * as DataStore from "@api/DataStore";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
 import definePlugin, { PluginNative } from "@utils/types";
-import { useEffect, useState } from "@webpack/common";
+import { useState } from "@webpack/common";
 import { JSX } from "react";
 
 import MultiboxTabBar from "./components/TabBar";
@@ -18,7 +18,6 @@ import MultiboxTabBar from "./components/TabBar";
 const Native = VencordNative.pluginHelpers.Multibox as PluginNative<typeof import("./native")>;
 
 const STORE_KEY = "multibox-accounts";
-const OFFSET_STYLE_ID = "vc-multibox-offset";
 
 export interface AccountTab {
     id: string;
@@ -63,25 +62,9 @@ async function removeTab(id: string) {
     }
 }
 
-function injectOffsetStyle() {
-    if (document.getElementById(OFFSET_STYLE_ID)) return;
-    const style = document.createElement("style");
-    style.id = OFFSET_STYLE_ID;
-    style.textContent = "#app-mount { margin-top: 36px !important; height: calc(100vh - 36px) !important; }";
-    document.head.appendChild(style);
-}
-
-function removeOffsetStyle() {
-    document.getElementById(OFFSET_STYLE_ID)?.remove();
-}
-
 function MultiboxContainer({ children }: { children: JSX.Element; }) {
     const [, setTick] = useState(0);
     forceUpdateFn = () => setTick(t => t + 1);
-
-    useEffect(() => {
-        if (isMain) injectOffsetStyle();
-    });
 
     if (!isMain) return children;
 
@@ -124,7 +107,6 @@ export default definePlugin({
         isMain = await Native.isMainWindow();
         if (!isMain) return;
 
-        injectOffsetStyle();
         await Native.initialize();
 
         const saved: AccountTab[] = await DataStore.get(STORE_KEY) ?? [];
@@ -140,7 +122,6 @@ export default definePlugin({
     async stop() {
         if (!isMain) return;
 
-        removeOffsetStyle();
         await Native.cleanup();
         accounts = [];
         activeTab = "main";
