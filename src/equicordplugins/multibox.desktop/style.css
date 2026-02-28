@@ -1,0 +1,92 @@
+/* Multibox tab bar — fixed at top so native WebContentsViews can't cover it */
+.vc-multibox-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 36px;
+    background: var(--background-secondary-alt, #1e1f22);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    z-index: 99999;
+    border-bottom: 1px solid var(--background-modifier-accent, #2b2d31);
+    gap: 2px;
+    user-select: none;
+    -webkit-app-region: no-drag;
+}
+
+.vc-multibox-tab {
+    display: flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 4px;
+    color: var(--interactive-normal, #b5bac1);
+    font-size: 13px;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.vc-multibox-tab:hover {
+    background: var(--background-modifier-hover, #2b2d31);
+    color: var(--interactive-hover, #dbdee1);
+}
+
+.vc-multibox-tab-active {
+    background: var(--background-modifier-selected, #35373c);
+    color: var(--interactive-active, #f2f3f5);
+}
+
+.vc-multibox-tab-active:hover {
+    background: var(--background-modifier-selected, #35373c);
+}
+
+.vc-multibox-tab-label {
+    pointer-events: none;
+}
+
+.vc-multibox-tab-close {
+    margin-left: 6px;
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.15s;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+.vc-multibox-tab:hover .vc-multibox-tab-close {
+    opacity: 0.7;
+}
+
+.vc-multibox-tab-close:hover {
+    opacity: 1 !important;
+    background: var(--background-modifier-accent, #4e5058);
+}
+
+.vc-multibox-tab-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    color: var(--interactive-normal, #b5bac1);
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.vc-multibox-tab-add:hover {
+    background: var(--background-modifier-hover, #2b2d31);
+    color: var(--interactive-hover, #dbdee1);
+}
+
+/* Push Discord content below the fixed tab bar */
+#app-mount {
+    margin-top: 36px !important;
+    height: calc(100vh - 36px) !important;
+}
