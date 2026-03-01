@@ -29,8 +29,8 @@ export function createPinsStore(): PinsStore {
             if (Array.isArray(stored)) {
                 for (const id of stored) pinnedCommandIds.add(id);
             }
-        } catch (error) {
-            console.error("Failed to load pinned commands", error);
+        } catch {
+            return;
         }
     })();
 
@@ -42,8 +42,8 @@ export function createPinsStore(): PinsStore {
     const persist = async () => {
         try {
             await DataStore.set(PINNED_STORAGE_KEY, Array.from(pinnedCommandIds));
-        } catch (error) {
-            console.error("Failed to save pinned commands", error);
+        } catch {
+            return;
         }
     };
 

@@ -41,22 +41,12 @@ function toExtensionKeybindRecord(extensionKeybinds: Map<string, ExtensionKeybin
 
 async function checkExtensionFileExists(path: string): Promise<boolean> {
     const rawUrl = toRepositoryRawUrl(path);
+    const headResponse = await fetch(rawUrl, { method: "HEAD" }).catch(() => null);
+    if (headResponse?.ok) return true;
+    if (headResponse?.status === 404) return false;
 
-    try {
-        const headResponse = await fetch(rawUrl, { method: "HEAD" });
-        if (headResponse.ok) return true;
-        if (headResponse.status === 404) return false;
-    } catch (error) {
-        console.error("Failed to check extension file with HEAD", path, error);
-    }
-
-    try {
-        const getResponse = await fetch(rawUrl);
-        return getResponse.ok;
-    } catch (error) {
-        console.error("Failed to check extension file with GET", path, error);
-        return false;
-    }
+    const getResponse = await fetch(rawUrl).catch(() => null);
+    return getResponse?.ok ?? false;
 }
 
 export function createExtensionsState(
@@ -71,16 +61,16 @@ export function createExtensionsState(
     const persistInstalledExtensions = async () => {
         try {
             await DataStore.set(INSTALLED_EXTENSIONS_KEY, Array.from(installedExtensionIds));
-        } catch (error) {
-            console.error("Failed to persist installed extensions", error);
+        } catch {
+            return;
         }
     };
 
     const persistExtensionKeybinds = async () => {
         try {
             await DataStore.set(EXTENSION_KEYBINDS_KEY, toExtensionKeybindRecord(extensionKeybinds));
-        } catch (error) {
-            console.error("Failed to persist extension keybinds", error);
+        } catch {
+            return;
         }
     };
 
@@ -118,8 +108,8 @@ export function createExtensionsState(
                     installedExtensionIds.add(extensionId);
                 }
             }
-        } catch (error) {
-            console.error("Failed to load installed extensions", error);
+        } catch {
+            return;
         }
 
         try {
@@ -136,8 +126,8 @@ export function createExtensionsState(
                     extensionKeybinds.set(extension.id, fallback);
                 }
             }
-        } catch (error) {
-            console.error("Failed to load extension keybinds", error);
+        } catch {
+            return;
         } finally {
             ensureAllFileChecks();
             refreshContextProvider(EXTENSIONS_PACK_PROVIDER_ID);

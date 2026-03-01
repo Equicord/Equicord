@@ -16,7 +16,7 @@ import { ChannelActionCreators, ChannelStore, NavigationRouter, SelectedChannelS
 import { parseQuery } from "../query/parser";
 import { pluginToggleVerb, resolveAllChannels, resolveChannels, resolveGuilds, resolvePlugins, resolveRecentDmUsers, resolveSettingsCommandIds, resolveUsers } from "../query/resolvers";
 import type { QueryActionCandidate, QueryResolution } from "../query/types";
-import { executeCommand, getCommandById } from "../registry";
+import { DISCORD_INTERNAL_HOSTS, executeCommand, getCommandById } from "../registry";
 import { makeIconFromUrl } from "../ui/iconFromUrl";
 import { sendMessageToChannel, sendMessageToUser } from "./sendMessageAction";
 
@@ -91,8 +91,7 @@ function openExternalUrl(url: string) {
 
 function toDiscordRoute(url: URL): string | null {
     const host = url.hostname.toLowerCase();
-    const allowed = new Set(["discord.com", "www.discord.com", "canary.discord.com", "ptb.discord.com"]);
-    if (!allowed.has(host)) return null;
+    if (!DISCORD_INTERNAL_HOSTS.has(host)) return null;
 
     const path = `${url.pathname}${url.search}${url.hash}`;
     return path.startsWith("/") ? path : `/${path}`;

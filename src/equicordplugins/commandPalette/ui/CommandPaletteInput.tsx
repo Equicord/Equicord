@@ -4,33 +4,53 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 import { TextInput } from "@webpack/common";
-import type { ReactNode } from "react";
+import type { FocusEventHandler, MouseEventHandler, ReactNode } from "react";
+
+const cl = classNameFactory("vc-command-palette-");
 
 interface CommandPaletteInputProps {
     value: string;
     onChange(value: string): void;
-    compact?: boolean;
     placeholder?: string;
     autoFocus?: boolean;
-    hideMainInput?: boolean;
+    inputClassName?: string;
+    readOnly?: boolean;
+    onInputFocus?: FocusEventHandler<HTMLInputElement>;
+    onInputBlur?: FocusEventHandler<HTMLInputElement>;
+    onInputClick?: MouseEventHandler<HTMLInputElement>;
     children?: ReactNode;
 }
 
-export function CommandPaletteInput({ value, onChange, placeholder, autoFocus = true, hideMainInput = false, children }: CommandPaletteInputProps) {
+export function CommandPaletteInput({
+    value,
+    onChange,
+    placeholder,
+    autoFocus = true,
+    inputClassName,
+    readOnly = false,
+    onInputFocus,
+    onInputBlur,
+    onInputClick,
+    children
+}: CommandPaletteInputProps) {
     return (
-        <div className="vc-command-palette-input">
-            {!hideMainInput && (
-                <div className="vc-command-palette-main-input">
-                    <TextInput
-                        className="vc-command-palette-main-search-input"
-                        autoFocus={autoFocus}
-                        value={value}
-                        onChange={onChange}
-                        placeholder={placeholder ?? "Search commands or type a query"}
-                    />
-                </div>
-            )}
+        <div className={cl("input")}>
+            <div className={cl("main-input")}>
+                <TextInput
+                    className={classes(cl("main-search-input"), inputClassName)}
+                    autoFocus={autoFocus}
+                    value={value}
+                    onChange={onChange}
+                    readOnly={readOnly}
+                    placeholder={placeholder ?? "Search commands or type a query"}
+                    onFocus={onInputFocus}
+                    onBlur={onInputBlur}
+                    onClick={onInputClick}
+                />
+            </div>
             {children}
         </div>
     );

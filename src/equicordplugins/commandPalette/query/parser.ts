@@ -10,6 +10,26 @@ function normalizeSpaces(value: string): string {
     return value.trim().replace(/\s+/g, " ");
 }
 
+function normalizeLocaleToken(value: string): string {
+    return value
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/\p{Diacritic}/gu, "")
+        .replace(/[.'’]/g, "")
+        .replace(/\s+/g, " ");
+}
+
+const SEND_TO_PREFIXES = [
+    "send to ",
+    "enviar a ",
+    "senden an ",
+    "invia a ",
+    "envoyer a ",
+    "enviar para ",
+    "отправить в "
+];
+
 function extractSendFlags(content: string): { content: string; useFilePicker: boolean; silent: boolean; } {
     const useFilePicker = /\[file\]/i.test(content);
     const silent = /(^|\s)--silent(\s|$)/i.test(content);
@@ -47,7 +67,11 @@ function parseSendBody(raw: string): ParsedQuery | null {
 
 function parseSendChannel(raw: string): ParsedQuery | null {
     const normalized = normalizeSpaces(raw);
-    const body = normalized.slice("send to ".length).trim();
+    const normalizedLocale = normalizeLocaleToken(normalized);
+    const prefix = SEND_TO_PREFIXES.find(candidate => normalizedLocale.startsWith(candidate));
+    if (!prefix) return null;
+
+    const body = normalized.slice(prefix.length).trim();
     if (!body) return null;
 
     const parts = body.split(" ");
@@ -79,12 +103,42 @@ const SEND_PREFIXES = [
     "pm ",
     "msg ",
     "dm ",
-    "send "
+    "send ",
+    "enviar mensaje a ",
+    "enviar md a ",
+    "enviar mensaje ",
+    "enviar md ",
+    "mensaje ",
+    "decir ",
+    "susurrar ",
+    "md ",
+    "enviar ",
+    "envoyer message a ",
+    "envoyer mp a ",
+    "envoyer message ",
+    "message ",
+    "chuchoter ",
+    "mp ",
+    "envoyer ",
+    "nachricht an ",
+    "senden ",
+    "dm an ",
+    "dm ",
+    "invia messaggio a ",
+    "invia ",
+    "messaggio ",
+    "manda ",
+    "enviar mensagem para ",
+    "enviar dm para ",
+    "mensagem ",
+    "falar ",
+    "отправить сообщение ",
+    "отправить "
 ];
 
 function parseSemanticSend(raw: string): ParsedQuery | null {
-    const lower = raw.toLowerCase();
-    const prefix = SEND_PREFIXES.find(candidate => lower.startsWith(candidate));
+    const normalized = normalizeLocaleToken(raw);
+    const prefix = SEND_PREFIXES.find(candidate => normalized.startsWith(candidate));
     if (!prefix) return null;
     const body = raw.slice(prefix.length).trim();
     return parseSendBody(body);
@@ -93,9 +147,10 @@ function parseSemanticSend(raw: string): ParsedQuery | null {
 export function parseQuery(rawQuery: string): ParsedQuery | null {
     const raw = normalizeSpaces(rawQuery);
     const lower = raw.toLowerCase();
+    const normalizedLocale = normalizeLocaleToken(raw);
     if (!raw) return null;
 
-    if (lower.startsWith("send to ")) {
+    if (SEND_TO_PREFIXES.some(prefix => normalizedLocale.startsWith(prefix))) {
         return parseSendChannel(raw);
     }
 

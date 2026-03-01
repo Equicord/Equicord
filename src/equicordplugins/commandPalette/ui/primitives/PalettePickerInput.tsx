@@ -4,12 +4,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 import { TextInput } from "@webpack/common";
 import type { KeyboardEvent } from "react";
 
 import type { PaletteSuggestion } from "../pages/types";
 import { PaletteDropdown } from "./PaletteDropdown";
 import { usePaletteDropdown } from "./usePaletteDropdown";
+
+const cl = classNameFactory("vc-command-palette-");
 
 interface PalettePickerInputProps {
     value: string;
@@ -59,9 +63,9 @@ export function PalettePickerInput({
     };
 
     return (
-        <div className={className ? `vc-command-palette-page-picker ${className}` : "vc-command-palette-page-picker"}>
+        <div className={classes(cl("page-picker"), className)}>
             <TextInput
-                className="vc-command-palette-page-input"
+                className={cl("page-input")}
                 value={value}
                 placeholder={placeholder}
                 onChange={next => {

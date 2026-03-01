@@ -6,11 +6,13 @@
 
 import "../style.css";
 
+import { classNameFactory, classNameToSelector } from "@utils/css";
 import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
+import { classes } from "@utils/misc";
 import { type ModalProps, ModalRoot, ModalSize } from "@utils/modal";
 import { TextInput, Toasts, useEffect, useMemo, useRef, useState } from "@webpack/common";
-import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 
 import { buildQueryResolution } from "../actions/executors";
 import { resolveCalculatorQuery } from "../calculator";
@@ -75,6 +77,16 @@ const SINGLE_SELECT_PROMPT_COMMAND_IDS = new Set([
     "extension-holy-notes-jump-note-query"
 ]);
 const logger = new Logger("CommandPaletteModal");
+const cl = classNameFactory("vc-command-palette-");
+const cn = classNameFactory();
+const promptInputSelector = `input${classNameToSelector(cl("prompt-active-input"))}, ${classNameToSelector(cl("prompt-active-input"))} input`;
+const mainInputSelector = `input${classNameToSelector(cl("main-search-input"))}, ${classNameToSelector(cl("main-search-input"))} input`;
+const promptActiveSelector = classNameToSelector(cl("prompt-active-input"));
+const mainInputSelectorClass = classNameToSelector(cl("main-input"));
+const pageSelector = classNameToSelector(cl("page"));
+const promptChipFont = "500 17px \"gg sans\", \"Noto Sans\", \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+const promptChipWidthCache = new Map<string, number>();
+let promptChipCanvasContext: CanvasRenderingContext2D | null = null;
 
 function getCommandBadge(command: CommandEntry, fallback: "Command" | "Recent"): string {
     const defaultBadge = fallback === "Recent" ? "Command" : fallback;
@@ -205,6 +217,27 @@ function buildNavigationLevelForCategory(categoryId: string): NavigationLevel {
 
 function clearPersistedNavigation() {
     persistedCategoryId = null;
+}
+
+function measurePromptChipWidth(text: string): number {
+    const cached = promptChipWidthCache.get(text);
+    if (cached != null) return cached;
+
+    if (typeof document === "undefined") return 196;
+
+    if (!promptChipCanvasContext) {
+        const canvas = document.createElement("canvas");
+        promptChipCanvasContext = canvas.getContext("2d");
+    }
+
+    const context = promptChipCanvasContext;
+    if (!context) return 196;
+    context.font = promptChipFont;
+    const textWidth = context.measureText(text).width;
+    const chipHorizontalChromePx = 26;
+    const width = Math.ceil(Math.max(132, Math.min(420, textWidth + chipHorizontalChromePx)));
+    promptChipWidthCache.set(text, width);
+    return width;
 }
 
 function createInitialPageState(ref: PalettePageRef): PalettePageValuesState {
@@ -490,8 +523,10 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         return activePageSpec.resolveSuggestions(activePageFieldKey, value, activePageState.values, activePageState.selectedIds);
     }, [activePageSpec, activePageState, activePageFieldKey]);
 
-    const promptOffsetChars = Math.min(42, Math.max(1, trimmedQuery.length));
     const showPromptCommandPreview = Boolean(promptCommand && trimmedQuery.length === 0);
+    const promptChipPlaceholderText = promptCommand?.queryPlaceholder ?? "Action";
+    const promptChipWidthPx = useMemo(() => measurePromptChipWidth(promptChipPlaceholderText), [promptChipPlaceholderText]);
+    const promptChipStyle = { width: `${promptChipWidthPx}px` };
 
     useEffect(() => {
         if (!selectedPromptCandidateId) return;
@@ -571,14 +606,14 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         if (!focusPromptInput) return;
 
         requestAnimationFrame(() => {
-            const node = document.querySelector<HTMLInputElement>("input.vc-command-palette-prompt-input, .vc-command-palette-prompt-input input");
+            const node = document.querySelector<HTMLInputElement>(promptInputSelector);
             node?.focus();
         });
         setFocusPromptInput(false);
     }, [focusPromptInput]);
 
     const focusSearchInput = () => {
-        const node = document.querySelector<HTMLInputElement>("input.vc-command-palette-main-search-input, .vc-command-palette-main-search-input input");
+        const node = document.querySelector<HTMLInputElement>(mainInputSelector);
         node?.focus();
     };
 
@@ -890,11 +925,6 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         setSelectedKey(item.id);
         setKeyboardSelectedKey(item.id);
 
-        if (item.command.queryTemplate) {
-            activatePromptCommand(item.command, false);
-            return;
-        }
-
         if (activePromptCommand) {
             clearPromptState();
         }
@@ -962,9 +992,9 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
 
     const onKeyDown = async (event: ReactKeyboardEvent<HTMLDivElement>) => {
         const target = event.target as HTMLElement | null;
-        const isPromptInputTarget = Boolean(target?.closest(".vc-command-palette-header-prompt-active"));
-        const isMainInputTarget = Boolean(target?.closest(".vc-command-palette-main-input")) && !isPromptInputTarget;
-        const isPageTarget = Boolean(target?.closest(".vc-command-palette-page"));
+        const isPromptInputTarget = Boolean(target?.closest(promptActiveSelector));
+        const isMainInputTarget = Boolean(target?.closest(mainInputSelectorClass)) && !isPromptInputTarget;
+        const isPageTarget = Boolean(target?.closest(pageSelector));
 
         if (event.key === "Escape" && event.metaKey) {
             event.preventDefault();
@@ -1031,7 +1061,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
             }
         }
 
-        if (isPromptInputTarget) {
+        if (isPromptInputTarget && activePromptCommand) {
             if (!activePromptIsSingleSelect && selectedPromptCandidate && event.key === "Backspace" && promptInputValue.length === 0) {
                 event.preventDefault();
                 setSelectedPromptCandidateId(null);
@@ -1046,6 +1076,16 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
 
             if (event.key === "ArrowDown") {
                 event.preventDefault();
+                if (showPromptDropdown && promptDropdownSuggestions.length > 0) {
+                    const nextIndex = promptSelectedSuggestionIndex < promptDropdownSuggestions.length - 1
+                        ? promptSelectedSuggestionIndex + 1
+                        : 0;
+                    const candidate = promptDropdownSuggestions[nextIndex];
+                    if (candidate) {
+                        setSelectedPromptCandidateId(candidate.id);
+                    }
+                    return;
+                }
                 if (compact) {
                     setExpanded(true);
                     return;
@@ -1056,6 +1096,16 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
 
             if (event.key === "ArrowUp") {
                 event.preventDefault();
+                if (showPromptDropdown && promptDropdownSuggestions.length > 0) {
+                    const nextIndex = promptSelectedSuggestionIndex > 0
+                        ? promptSelectedSuggestionIndex - 1
+                        : promptDropdownSuggestions.length - 1;
+                    const candidate = promptDropdownSuggestions[nextIndex];
+                    if (candidate) {
+                        setSelectedPromptCandidateId(candidate.id);
+                    }
+                    return;
+                }
                 if (compact) return;
                 if (selectedIndex <= 0) {
                     focusSearchInput();
@@ -1067,6 +1117,10 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
 
             if (event.key === "Enter") {
                 event.preventDefault();
+                if (showPromptDropdown && selectedPromptCandidate) {
+                    await executePromptCandidate(selectedPromptCandidate.run, activePromptCommand?.id ?? activePromptCommandIdRef.current);
+                    return;
+                }
                 const candidate = selectedPromptCandidate ?? queryCandidates[0];
                 if (!candidate) return;
 
@@ -1077,6 +1131,10 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
             if (event.key === "Escape") {
                 event.preventDefault();
                 event.stopPropagation();
+                if (showPromptDropdown) {
+                    setShowPromptDropdown(false);
+                    return;
+                }
                 clearPromptState();
                 return;
             }
@@ -1287,7 +1345,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                     return (
                         <PaletteField key={field.key} label={field.label}>
                             <TextInput
-                                className="vc-command-palette-page-input"
+                                className={cl("page-input")}
                                 value={value}
                                 onChange={next => context.setValue(field.key, next)}
                                 onFocus={() => setActivePageFieldKey(field.key)}
@@ -1303,10 +1361,10 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
     return (
         <ModalRoot
             {...modalProps}
-            className={compact ? "vc-command-palette vc-command-palette-compact" : "vc-command-palette"}
+            className={cn("vc-command-palette", compact && cl("compact"))}
             size={isPageOpen ? ModalSize.DYNAMIC : (compact ? ModalSize.SMALL : ModalSize.LARGE)}
         >
-            <div className="vc-command-palette-shell" onKeyDown={onKeyDown}>
+            <div className={cl("shell")} onKeyDown={onKeyDown}>
                 {!isPageOpen && (
                     <CommandPaletteInput
                         value={query}
@@ -1316,7 +1374,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
 
                             if (next.length > 0) {
                                 setExpanded(true);
-                            } else if (!activePromptCommand) {
+                            } else {
                                 if (navigationLevel.type !== "root") {
                                     goBack();
                                     return;
@@ -1324,85 +1382,83 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                                 setExpanded(false);
                             }
                         }}
-                        placeholder={undefined}
-                        hideMainInput={showPromptCommandPreview}
-                        compact={compact}
+                        placeholder={showPromptCommandPreview ? (promptCommand?.label ?? "") : undefined}
+                        readOnly={false}
                     >
                         {promptCommand && (
                             <div
                                 ref={promptContainerRef}
-                                className={showPromptCommandPreview ? "vc-command-palette-header-prompt vc-command-palette-header-prompt-with-command-preview" : "vc-command-palette-header-prompt"}
-                                style={{ "--vc-prompt-offset-ch": String(promptOffsetChars) } as CSSProperties}
+                                className={cl("query-preview")}
                             >
-                                {showPromptCommandPreview && (
-                                    <span className="vc-command-palette-header-prompt-command-preview">
-                                        {promptCommand.label}
-                                    </span>
-                                )}
-                                {activePromptCommand ? (
-                                    <div className={selectedPromptCandidate ? "vc-command-palette-header-prompt-active vc-command-palette-header-prompt-active-with-selection" : "vc-command-palette-header-prompt-active"}>
-                                        {selectedPromptCandidate && (
-                                            <span className="vc-command-palette-header-prompt-selection">
-                                                <span className="vc-command-palette-header-prompt-selection-label">{selectedPromptCandidate.label}</span>
-                                            </span>
-                                        )}
-                                        {!(activePromptIsSingleSelect && selectedPromptCandidate) && (
-                                            <TextInput
-                                                className={selectedPromptCandidate ? "vc-command-palette-prompt-input vc-command-palette-prompt-input-with-selection" : "vc-command-palette-prompt-input"}
-                                                value={promptInputValue}
-                                                onChange={value => {
-                                                    setPromptInputValue(value);
-                                                    if (selectedPromptCandidateId) {
-                                                        setSelectedPromptCandidateId(null);
-                                                    }
-                                                }}
-                                                placeholder={selectedPromptCandidate ? "" : (promptCommand.queryPlaceholder ?? "Prompt")}
-                                                onFocus={() => setShowPromptDropdown(true)}
-                                                onBlur={() => {
-                                                    window.setTimeout(() => {
-                                                        const active = document.activeElement;
-                                                        if (promptContainerRef.current?.contains(active)) return;
-                                                        setShowPromptDropdown(false);
-                                                        if (selectedPromptCandidateId || promptInputValue.trim().length > 0) return;
-                                                        clearPromptState();
-                                                    }, 0);
-                                                }}
-                                            />
-                                        )}
-                                    </div>
-                                ) : (
-                                    <button
-                                        type="button"
-                                        className="vc-command-palette-header-prompt-trigger"
-                                        onClick={() => activatePromptCommand(promptCommand, true)}
-                                    >
-                                        <span className="vc-command-palette-header-prompt-placeholder">
-                                            {promptCommand.queryPlaceholder ?? "Prompt"}
-                                        </span>
-                                    </button>
-                                )}
-                                {activePromptCommand && showPromptDropdown && queryCandidates.length > 0 && (
-                                    <PaletteDropdown
-                                        className="vc-command-palette-header-prompt-dropdown"
-                                        suggestions={promptDropdownSuggestions}
-                                        highlightedIndex={promptSelectedSuggestionIndex}
-                                        onHover={index => {
-                                            const candidate = promptDropdownSuggestions[index];
-                                            if (!candidate) return;
-                                            setSelectedPromptCandidateId(candidate.id);
-                                        }}
-                                        onPick={candidate => {
-                                            setSelectedPromptCandidateId(candidate.id);
-                                            setPromptInputValue("");
-                                            if (activePromptIsSingleSelect) {
-                                                setShowPromptDropdown(false);
-                                                focusSearchInput();
-                                            } else {
-                                                setFocusPromptInput(true);
-                                            }
-                                        }}
-                                    />
-                                )}
+                                <span className={cl("query-preview-command-label")}>{promptCommand.label}</span>
+                                <div className={cl("query-preview-prompt")}>
+                                    {activePromptCommand ? (
+                                        <div
+                                            className={classes(cl("query-prompt-capsule"), cl("query-prompt-capsule-active"))}
+                                            style={promptChipStyle}
+                                            onMouseDown={() => setShowPromptDropdown(true)}
+                                        >
+                                            {!(activePromptIsSingleSelect && selectedPromptCandidate) ? (
+                                                <TextInput
+                                                    className={cl("prompt-active-input")}
+                                                    value={promptInputValue}
+                                                    onChange={value => {
+                                                        setPromptInputValue(value);
+                                                        if (selectedPromptCandidateId) {
+                                                            setSelectedPromptCandidateId(null);
+                                                        }
+                                                    }}
+                                                    placeholder={selectedPromptCandidate ? "" : (promptCommand.queryPlaceholder ?? "Action")}
+                                                    onFocus={() => setShowPromptDropdown(true)}
+                                                    onBlur={() => {
+                                                        window.setTimeout(() => {
+                                                            const active = document.activeElement;
+                                                            if (promptContainerRef.current?.contains(active)) return;
+                                                            setShowPromptDropdown(false);
+                                                            if (selectedPromptCandidateId || promptInputValue.trim().length > 0) return;
+                                                            clearPromptState();
+                                                        }, 0);
+                                                    }}
+                                                />
+                                            ) : (
+                                                <span className={cl("query-prompt-capsule-label")}>{selectedPromptCandidate.label}</span>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            className={cl("query-prompt-capsule")}
+                                            style={promptChipStyle}
+                                            onMouseDown={event => event.preventDefault()}
+                                            onClick={() => activatePromptCommand(promptCommand, true)}
+                                        >
+                                            <span className={cl("query-prompt-capsule-label")}>{promptCommand.queryPlaceholder ?? "Action"}</span>
+                                        </button>
+                                    )}
+                                    {activePromptCommand && showPromptDropdown && queryCandidates.length > 0 && (
+                                        <PaletteDropdown
+                                            className={cl("query-preview-dropdown")}
+                                            suggestions={promptDropdownSuggestions}
+                                            showIcons={false}
+                                            highlightedIndex={promptSelectedSuggestionIndex}
+                                            onHover={index => {
+                                                const candidate = promptDropdownSuggestions[index];
+                                                if (!candidate) return;
+                                                setSelectedPromptCandidateId(candidate.id);
+                                            }}
+                                            onPick={candidate => {
+                                                setSelectedPromptCandidateId(candidate.id);
+                                                setPromptInputValue("");
+                                                if (activePromptIsSingleSelect) {
+                                                    setShowPromptDropdown(false);
+                                                    focusSearchInput();
+                                                } else {
+                                                    setFocusPromptInput(true);
+                                                }
+                                            }}
+                                        />
+                                    )}
+                                </div>
                             </div>
                         )}
                     </CommandPaletteInput>
@@ -1413,8 +1469,8 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                 )}
 
                 {!compact && !isPageOpen && (
-                    <div ref={listRef} className="vc-command-palette-list">
-                        {!hasCommandItems && <div className="vc-command-palette-empty">{emptyStateText}</div>}
+                    <div ref={listRef} className={cl("list")}>
+                        {!hasCommandItems && <div className={cl("empty")}>{emptyStateText}</div>}
                         {items.map((item, index) => {
                             if (item.type === "section") {
                                 itemRefs.current[index] = null;

@@ -19,9 +19,70 @@ const WEEKDAY_TO_INDEX: Record<string, number> = {
     saturday: 6
 };
 
+const IN_WORDS = ["in", "en", "dans", "em", "fra", "через"];
+const TO_WORDS = ["to", "a", "au", "en", "para", "til"];
+const TIME_WORDS = ["time", "hora", "heure", "uhr", "ora", "время"];
+const DAYS_WORDS = ["days", "dias", "jours", "tage", "giorni", "дней"];
+const UNTIL_WORDS = ["until", "hasta", "jusqua", "bis", "fino", "до"];
+const SINCE_WORDS = ["since", "desde", "depuis", "seit", "da", "с"];
+const WEEK_WORDS = ["week", "weeks", "semana", "semanas", "semaine", "semaines", "woche", "wochen", "settimana", "settimane", "неделя", "недели", "недель"];
+
 function normalizeQuery(input: string): string {
     return input.trim().replace(/\s+/g, " ");
 }
+
+function normalizeLocaleToken(input: string): string {
+    return input
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/\p{Diacritic}/gu, "")
+        .replace(/[.'’]/g, "")
+        .replace(/\s+/g, " ");
+}
+
+function escapeRegexToken(input: string): string {
+    return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildPattern(words: string[]): string {
+    return words
+        .map(normalizeLocaleToken)
+        .filter(Boolean)
+        .sort((a, b) => b.length - a.length)
+        .map(escapeRegexToken)
+        .join("|");
+}
+
+function buildWeekdayLookup() {
+    const map: Record<string, number> = { ...WEEKDAY_TO_INDEX };
+    const locales = [
+        "en-US",
+        (typeof navigator !== "undefined" && navigator.language) ? navigator.language : "en-US"
+    ];
+
+    for (const locale of locales) {
+        for (let weekday = 0; weekday < 7; weekday++) {
+            const date = new Date(Date.UTC(2024, 0, 7 + weekday));
+            const longName = normalizeLocaleToken(new Intl.DateTimeFormat(locale, { weekday: "long" }).format(date));
+            const shortName = normalizeLocaleToken(new Intl.DateTimeFormat(locale, { weekday: "short" }).format(date));
+            if (longName) map[longName] = weekday;
+            if (shortName) map[shortName] = weekday;
+        }
+    }
+
+    return map;
+}
+
+const WEEKDAY_LOOKUP = buildWeekdayLookup();
+const WEEKDAY_PATTERN = buildPattern(Object.keys(WEEKDAY_LOOKUP));
+const IN_PATTERN = buildPattern(IN_WORDS);
+const TIME_PATTERN = buildPattern(TIME_WORDS);
+const DAYS_PATTERN = buildPattern(DAYS_WORDS);
+const UNTIL_PATTERN = buildPattern(UNTIL_WORDS);
+const SINCE_PATTERN = buildPattern(SINCE_WORDS);
+const WEEK_PATTERN = buildPattern(WEEK_WORDS);
+const TO_OR_IN_PATTERN = buildPattern([...TO_WORDS, ...IN_WORDS]);
 
 function parseNumber(input: string): number | null {
     const normalized = input.trim().toLowerCase().replace(/,/g, "");
@@ -177,7 +238,7 @@ function parseUnitConversion(query: string): CalculatorIntent | null {
 }
 
 function parseTimeTimezoneConversion(query: string): CalculatorIntent | null {
-    const match = query.match(/^(.+?)\s+([a-zA-Z/_ ]+)\s+(?:to|in)\s+([a-zA-Z/_ ]+)$/i);
+    const match = query.match(new RegExp(`^(.+?)\\s+([a-zA-Z/_ ]+)\\s+(?:${TO_OR_IN_PATTERN})\\s+([a-zA-Z/_ ]+)$`, "i"));
     if (!match) return null;
 
     const time = parseTimeToken(match[1]);
@@ -230,7 +291,8 @@ function parseSingleTime(query: string): CalculatorIntent | null {
 }
 
 function parseTimezoneNow(query: string): CalculatorIntent | null {
-    const match = query.match(/^time in (.+)$/i);
+    const normalized = normalizeLocaleToken(query);
+    const match = normalized.match(new RegExp(`^(?:${TIME_PATTERN})\\s+(?:${IN_PATTERN})\\s+(.+)$`, "i"));
     if (!match) return null;
 
     const timezone = resolveTimezone(match[1]);
@@ -244,7 +306,8 @@ function parseTimezoneNow(query: string): CalculatorIntent | null {
 }
 
 function parseDaysUntil(query: string): CalculatorIntent | null {
-    const match = query.match(/^days until (.+)$/i);
+    const normalized = normalizeLocaleToken(query);
+    const match = normalized.match(new RegExp(`^(?:${DAYS_PATTERN})\\s+(?:${UNTIL_PATTERN})\\s+(.+)$`, "i"));
     if (!match) return null;
 
     const targetDate = parseDateLoose(match[1], "until");
@@ -258,7 +321,8 @@ function parseDaysUntil(query: string): CalculatorIntent | null {
 }
 
 function parseDaysSince(query: string): CalculatorIntent | null {
-    const match = query.match(/^days since (.+)$/i);
+    const normalized = normalizeLocaleToken(query);
+    const match = normalized.match(new RegExp(`^(?:${DAYS_PATTERN})\\s+(?:${SINCE_PATTERN})\\s+(.+)$`, "i"));
     if (!match) return null;
 
     const targetDate = parseDateLoose(match[1], "since");
@@ -272,10 +336,11 @@ function parseDaysSince(query: string): CalculatorIntent | null {
 }
 
 function parseWeekdayInWeeks(query: string): CalculatorIntent | null {
-    const match = query.match(/^(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\s+in\s+(\d+)\s+weeks?$/i);
+    const normalized = normalizeLocaleToken(query);
+    const match = normalized.match(new RegExp(`^(${WEEKDAY_PATTERN})\\s+(?:${IN_PATTERN})\\s+(\\d+)\\s+(?:${WEEK_PATTERN})$`, "i"));
     if (!match) return null;
 
-    const weekday = WEEKDAY_TO_INDEX[match[1].toLowerCase()];
+    const weekday = WEEKDAY_LOOKUP[normalizeLocaleToken(match[1])];
     const weeks = Number(match[2]);
     if (!Number.isFinite(weeks)) return null;
 

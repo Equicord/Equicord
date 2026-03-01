@@ -39,8 +39,8 @@ export function createRecentsStore(bumpRegistryVersion: () => void): RecentsStor
                 recentCommandIds.push(id);
                 if (recentCommandIds.length >= RECENT_COMMAND_LIMIT) break;
             }
-        } catch (error) {
-            console.error("Failed to load recent commands", error);
+        } catch {
+            return;
         } finally {
             bumpRegistryVersion();
         }
@@ -50,8 +50,8 @@ export function createRecentsStore(bumpRegistryVersion: () => void): RecentsStor
         try {
             await ready;
             await DataStore.set(RECENT_STORAGE_KEY, [...recentCommandIds]);
-        } catch (error) {
-            console.error("Failed to save recent commands", error);
+        } catch {
+            return;
         }
     };
 

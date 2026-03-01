@@ -6,6 +6,7 @@
 
 import { openPrivateChannel, sendMessage } from "@utils/discord";
 import { Logger } from "@utils/Logger";
+import { chooseFile } from "@utils/web";
 import { CloudUpload } from "@vencord/discord-types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
 import { findLazy } from "@webpack";
@@ -42,31 +43,8 @@ function waitForDmChannel(userId: string, timeoutMs = 2500): Promise<string | nu
 
 async function pickFilesFromDisk(): Promise<File[]> {
     if (typeof document === "undefined") return [];
-
-    return new Promise(resolve => {
-        const input = document.createElement("input");
-        input.type = "file";
-        input.multiple = true;
-        input.style.display = "none";
-
-        const cleanup = () => {
-            input.remove();
-        };
-
-        input.addEventListener("change", () => {
-            const files = input.files ? Array.from(input.files) : [];
-            cleanup();
-            resolve(files);
-        }, { once: true });
-
-        input.addEventListener("cancel", () => {
-            cleanup();
-            resolve([]);
-        }, { once: true });
-
-        document.body.appendChild(input);
-        input.click();
-    });
+    const file = await chooseFile("*/*");
+    return file ? [file] : [];
 }
 
 async function uploadAttachment(channelId: string, file: File, index: number): Promise<{ id: string; filename: string; uploaded_filename: string; } | null> {

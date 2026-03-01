@@ -5,8 +5,12 @@
  */
 
 import { CogWheel, ColorPaletteIcon, CopyIcon, FolderIcon, LinkIcon, MagnifyingGlassIcon, MainSettingsIcon, Microphone, NotesIcon, OpenExternalIcon, PluginIcon, RestartIcon, SafetyIcon, UpdaterIcon, WarningIcon } from "@components/Icons";
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 
 import type { PaletteCandidate } from "./types";
+
+const cl = classNameFactory("vc-command-palette-");
 
 interface CommandPaletteRowProps {
     item: PaletteCandidate;
@@ -58,7 +62,7 @@ export function CommandPaletteRow({ item, selected, onClick, onDoubleClick, onHo
     };
 
     if (item.type === "section") {
-        return <div className="vc-command-palette-section-label">{item.label}</div>;
+        return <div className={cl("section-label")}>{item.label}</div>;
     }
 
     if (item.type === "query") {
@@ -67,26 +71,26 @@ export function CommandPaletteRow({ item, selected, onClick, onDoubleClick, onHo
         return (
             <button
                 type="button"
-                className={selected ? "vc-command-palette-row vc-command-palette-row-selected" : "vc-command-palette-row"}
+                className={classes(cl("row"), selected && cl("row-selected"))}
                 onClick={onClick}
                 onDoubleClick={onDoubleClick}
                 onMouseEnter={onHover}
             >
-                <div className="vc-command-palette-row-icon">
+                <div className={cl("row-icon")}>
                     <Icon size="18" />
                 </div>
-                <div className="vc-command-palette-row-content">
-                    <div className="vc-command-palette-row-title vc-command-palette-query-title">
-                        <span className="vc-command-palette-query-prefix">{item.query.label}</span>
+                <div className={cl("row-content")}>
+                    <div className={classes(cl("row-title"), cl("query-title"))}>
+                        <span className={cl("query-prefix")}>{item.query.label}</span>
                         {hasInputPreview && (
-                            <span className="vc-command-palette-query-field" title={item.query.inputPreview}>
+                            <span className={cl("query-field")} title={item.query.inputPreview}>
                                 {item.query.inputPreview}
                             </span>
                         )}
                     </div>
-                    {item.query.description && <div className="vc-command-palette-row-subtitle">{item.query.description}</div>}
+                    {item.query.description && <div className={cl("row-subtitle")}>{item.query.description}</div>}
                 </div>
-                <div className="vc-command-palette-row-meta">{item.query.badge}</div>
+                <div className={cl("row-meta")}>{item.query.badge}</div>
             </button>
         );
     }
@@ -97,23 +101,23 @@ export function CommandPaletteRow({ item, selected, onClick, onDoubleClick, onHo
     return (
         <button
             type="button"
-            className={selected ? "vc-command-palette-row vc-command-palette-row-selected" : "vc-command-palette-row"}
+            className={classes(cl("row"), selected && cl("row-selected"))}
             onClick={onClick}
             onDoubleClick={onDoubleClick}
             onMouseEnter={onHover}
         >
-            <div className="vc-command-palette-row-icon">
+            <div className={cl("row-icon")}>
                 <Icon size="18" />
             </div>
-            <div className="vc-command-palette-row-content">
-                <div className="vc-command-palette-row-title">{item.command.label}</div>
+            <div className={cl("row-content")}>
+                <div className={cl("row-title")}>{item.command.label}</div>
                 {hasDescription && (
-                    <div className="vc-command-palette-row-subtitle">
+                    <div className={cl("row-subtitle")}>
                         {item.command.description || item.subtitle}
                     </div>
                 )}
             </div>
-            <div className="vc-command-palette-row-meta">{item.badge}</div>
+            <div className={cl("row-meta")}>{item.badge}</div>
         </button>
     );
 }

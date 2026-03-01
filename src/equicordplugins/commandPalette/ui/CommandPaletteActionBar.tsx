@@ -5,6 +5,10 @@
  */
 
 import { EquicordIcon } from "@equicordplugins/components.dev/components/icons/EquicordIcon";
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
+
+const cl = classNameFactory("vc-command-palette-");
 
 interface CommandPaletteActionBarProps {
     selectedLabel?: string;
@@ -16,16 +20,16 @@ interface CommandPaletteActionBarProps {
 export function CommandPaletteActionBar({ selectedLabel, onOpenActions, compact, onExpand }: CommandPaletteActionBarProps) {
     if (compact) {
         return (
-            <div className="vc-command-palette-action-bar">
-                <div className="vc-command-palette-action-bar-label vc-command-palette-action-bar-logo">
+            <div className={cl("action-bar")}>
+                <div className={classes(cl("action-bar-label"), cl("action-bar-logo"))}>
                     <EquicordIcon />
                 </div>
                 <button
                     type="button"
-                    className="vc-command-palette-action-bar-compact-btn"
+                    className={cl("action-bar-compact-btn")}
                     onClick={onExpand}
                 >
-                    <span className="vc-command-palette-action-bar-actions-label">Show More</span>
+                    <span className={cl("action-bar-actions-label")}>Show More</span>
                     <span>↓</span>
                 </button>
             </div>
@@ -33,21 +37,21 @@ export function CommandPaletteActionBar({ selectedLabel, onOpenActions, compact,
     }
 
     return (
-        <div className="vc-command-palette-action-bar">
-            <div className="vc-command-palette-action-bar-label">
+        <div className={cl("action-bar")}>
+            <div className={cl("action-bar-label")}>
                 {selectedLabel ? (
-                    <span className="vc-command-palette-row-subtitle">{selectedLabel}</span>
+                    <span className={cl("row-subtitle")}>{selectedLabel}</span>
                 ) : (
-                    <span className="vc-command-palette-action-bar-placeholder">No selection</span>
+                    <span className={cl("action-bar-placeholder")}>No selection</span>
                 )}
             </div>
             <button
                 type="button"
-                className="vc-command-palette-action-bar-actions-button"
+                className={cl("action-bar-actions-button")}
                 onClick={onOpenActions}
             >
-                <span className="vc-command-palette-action-bar-actions-label">Actions</span>
-                <span className="vc-command-palette-action-bar-key">⌘L</span>
+                <span className={cl("action-bar-actions-label")}>Actions</span>
+                <span className={cl("action-bar-key")}>⌘L</span>
             </button>
         </div>
     );

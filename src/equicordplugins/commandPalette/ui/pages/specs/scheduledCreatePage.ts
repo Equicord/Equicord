@@ -13,6 +13,32 @@ import { resolveAllChannels } from "../../../query/resolvers";
 import type { PalettePageSpec, PaletteSuggestion } from "../types";
 
 const LIMIT = 12;
+const IN_WORDS = ["in", "en", "dans", "em", "fra", "через"];
+const TODAY_WORDS = ["today", "hoy", "aujourdhui", "heute", "oggi", "hoje", "сегодня"];
+const TOMORROW_WORDS = ["tomorrow", "manana", "demain", "morgen", "domani", "amanha", "завтра"];
+const AT_WORDS = ["at", "a", "alle", "às", "в"];
+const MINUTE_UNITS = ["m", "min", "mins", "minute", "minutes", "minuto", "minutos", "minute", "minutes", "minute", "minuten", "м", "мин", "минута", "минут"];
+const HOUR_UNITS = ["h", "hr", "hrs", "hour", "hours", "hora", "horas", "heure", "heures", "stunde", "stunden", "ч", "час", "часа", "часов"];
+const DAY_UNITS = ["d", "day", "days", "dia", "dias", "jour", "jours", "tag", "tage", "giorno", "giorni", "д", "день", "дня", "дней"];
+
+function normalizeLocaleToken(input: string): string {
+    return input
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/\p{Diacritic}/gu, "")
+        .replace(/[.'’]/g, "")
+        .replace(/\s+/g, " ");
+}
+
+function startsWithWord(input: string, words: string[]): string | null {
+    for (const word of words) {
+        if (input === word) return word;
+        if (input.startsWith(`${word} `)) return word;
+    }
+
+    return null;
+}
 
 function parseClockToken(value: string, base: Date): number | null {
     const match = value.trim().match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/i);
@@ -42,32 +68,48 @@ function parseScheduledTimeInput(input: string): number | null {
     const normalized = input.trim();
     if (!normalized) return null;
 
-    const lower = normalized.toLowerCase();
+    const lower = normalizeLocaleToken(normalized);
     const now = Date.now();
 
-    const relative = lower.match(/^in\s+(\d+)\s*(m|min|mins|minute|minutes|h|hr|hrs|hour|hours|d|day|days)$/);
+    const relativePrefix = startsWithWord(lower, IN_WORDS);
+    const relative = relativePrefix
+        ? lower.slice(relativePrefix.length).trim().match(/^(\d+)\s*([^\s]+)$/)
+        : null;
     if (relative) {
         const amount = Number.parseInt(relative[1], 10);
         if (amount < 1) return null;
-        const unit = relative[2];
-        const multiplier = unit.startsWith("m")
+        const unit = normalizeLocaleToken(relative[2]);
+        const multiplier = MINUTE_UNITS.includes(unit)
             ? 60_000
-            : unit.startsWith("h")
+            : HOUR_UNITS.includes(unit)
                 ? 3_600_000
-                : 86_400_000;
+                : DAY_UNITS.includes(unit)
+                    ? 86_400_000
+                    : null;
+        if (!multiplier) return null;
         return now + amount * multiplier;
     }
 
-    const tomorrow = lower.match(/^tomorrow(?:\s+at)?\s+(.+)$/);
-    if (tomorrow?.[1]) {
+    const tomorrowWord = startsWithWord(lower, TOMORROW_WORDS);
+    if (tomorrowWord) {
+        let remainder = lower.slice(tomorrowWord.length).trim();
+        const atWord = startsWithWord(remainder, AT_WORDS);
+        if (atWord) remainder = remainder.slice(atWord.length).trim();
+        if (!remainder) return null;
+
         const base = new Date();
         base.setDate(base.getDate() + 1);
-        return parseClockToken(tomorrow[1], base);
+        return parseClockToken(remainder, base);
     }
 
-    const today = lower.match(/^today(?:\s+at)?\s+(.+)$/);
-    if (today?.[1]) {
-        const timestamp = parseClockToken(today[1], new Date());
+    const todayWord = startsWithWord(lower, TODAY_WORDS);
+    if (todayWord) {
+        let remainder = lower.slice(todayWord.length).trim();
+        const atWord = startsWithWord(remainder, AT_WORDS);
+        if (atWord) remainder = remainder.slice(atWord.length).trim();
+        if (!remainder) return null;
+
+        const timestamp = parseClockToken(remainder, new Date());
         return timestamp && timestamp > now ? timestamp : null;
     }
 

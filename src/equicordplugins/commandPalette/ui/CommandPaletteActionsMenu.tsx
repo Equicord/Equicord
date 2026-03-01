@@ -5,10 +5,14 @@
  */
 
 import { CogWheel } from "@components/Icons";
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 import { TextInput, useCallback, useEffect, useMemo, useRef, useState } from "@webpack/common";
 import type { KeyboardEvent } from "react";
 
 import type { CommandActionIntent } from "../registry";
+
+const cl = classNameFactory("vc-command-palette-");
 
 export interface PaletteActionItem {
     id: string;
@@ -147,21 +151,21 @@ export function CommandPaletteActionsMenu({ actions, title, onClose, onAction, i
     return (
         <div
             ref={containerRef}
-            className="vc-command-palette-actions-dropdown"
+            className={cl("actions-dropdown")}
             onKeyDown={handleKeyDown}
             onAnimationEnd={handleAnimationEnd}
             data-closing={isClosing}
             tabIndex={-1}
         >
             {title && (
-                <div className="vc-command-palette-actions-dropdown-header">
-                    <span className="vc-command-palette-actions-dropdown-title">{title}</span>
+                <div className={cl("actions-dropdown-header")}>
+                    <span className={cl("actions-dropdown-title")}>{title}</span>
                 </div>
             )}
 
-            <div className="vc-command-palette-actions-dropdown-list vc-command-palette-dropdown-list">
+            <div className={classes(cl("actions-dropdown-list"), cl("dropdown-list"))}>
                 {filteredActions.length === 0 ? (
-                    <div className="vc-command-palette-actions-dropdown-empty">
+                    <div className={cl("actions-dropdown-empty")}>
                         No actions found
                     </div>
                 ) : (
@@ -176,19 +180,22 @@ export function CommandPaletteActionsMenu({ actions, title, onClose, onAction, i
                                 ref={el => { actionRefs.current[index] = el; }}
                                 type="button"
                                 disabled={action.disabled}
-                                className={isSelected
-                                    ? "vc-command-palette-action-dropdown-item vc-command-palette-dropdown-item vc-command-palette-action-dropdown-item-selected vc-command-palette-dropdown-item-selected"
-                                    : "vc-command-palette-action-dropdown-item vc-command-palette-dropdown-item"}
+                                className={classes(
+                                    cl("action-dropdown-item"),
+                                    cl("dropdown-item"),
+                                    isSelected && cl("action-dropdown-item-selected"),
+                                    isSelected && cl("dropdown-item-selected")
+                                )}
                                 onClick={() => handleActionClick(action)}
                                 onMouseEnter={() => setSelectedIndex(index)}
                             >
-                                <div className="vc-command-palette-action-dropdown-icon vc-command-palette-dropdown-icon">
+                                <div className={classes(cl("action-dropdown-icon"), cl("dropdown-icon"))}>
                                     <Icon size="18" />
                                 </div>
-                                <span className="vc-command-palette-action-dropdown-label vc-command-palette-dropdown-label">{action.label}</span>
-                                <div className="vc-command-palette-action-dropdown-shortcuts">
+                                <span className={classes(cl("action-dropdown-label"), cl("dropdown-label"))}>{action.label}</span>
+                                <div className={cl("action-dropdown-shortcuts")}>
                                     {shortcutKeys.map((key, keyIndex) => (
-                                        <kbd key={keyIndex} className="vc-command-palette-action-dropdown-key">
+                                        <kbd key={keyIndex} className={cl("action-dropdown-key")}>
                                             {key}
                                         </kbd>
                                     ))}
@@ -199,13 +206,13 @@ export function CommandPaletteActionsMenu({ actions, title, onClose, onAction, i
                 )}
             </div>
 
-            <div className="vc-command-palette-actions-dropdown-search">
+            <div className={cl("actions-dropdown-search")}>
                 <TextInput
                     inputRef={searchInputRef}
                     value={searchQuery}
                     onChange={setSearchQuery}
                     placeholder="Search for actions..."
-                    className="vc-command-palette-actions-search-input"
+                    className={cl("actions-search-input")}
                 />
             </div>
         </div>

@@ -460,8 +460,7 @@ export function activateChatBarCommand(state: ChatBarCommandState) {
 
     try {
         element.click();
-    } catch (error) {
-        console.error("CommandPalette", "Failed to click chat bar button", state.label, error);
+    } catch {
         showToast(`Failed to trigger ${state.label}.`, Toasts.Type.FAILURE);
         return;
     }
@@ -474,8 +473,8 @@ export function resolveChatBarElement(state: ChatBarCommandState): HTMLElement |
         try {
             const candidate = getter();
             if (candidate && candidate.isConnected) return candidate;
-        } catch (error) {
-            console.error("CommandPalette", "Failed to resolve chat bar button", error);
+        } catch {
+            continue;
         }
     }
     return document.querySelector<HTMLElement>(`[${CHATBAR_DATA_ATTRIBUTE}="${state.commandId}"]`);
@@ -667,8 +666,8 @@ function trackClosedRecipient(recipientId: string | null | undefined, fallbackCh
     if (typeof getDmFromUserId === "function") {
         try {
             dmChannelId = getDmFromUserId(recipientId) ?? null;
-        } catch (error) {
-            console.error("CommandPalette", "Failed to resolve DM channel", error);
+        } catch {
+            dmChannelId = null;
         }
     }
 
@@ -711,8 +710,8 @@ function patchChannelCloseMethods() {
                         trackClosedRecipient(userId, fallbackChannelId);
                     }
                 }
-            } catch (error) {
-                console.error("CommandPalette", `Failed to record closed channel via ${name}`, error);
+            } catch {
+                lastClosedDm = lastClosedDm ?? null;
             }
             return (original as (...inner: any[]) => unknown).apply(this, args);
         };
@@ -730,8 +729,8 @@ function patchChannelCloseMethods() {
         for (const restore of restorers) {
             try {
                 restore();
-            } catch (error) {
-                console.error("CommandPalette", "Failed to restore channel close method", error);
+            } catch {
+                continue;
             }
         }
         channelClosePatched = false;
@@ -795,12 +794,12 @@ const customCommandsReady = (async () => {
         if (Array.isArray(stored)) {
             setCustomCommands(stored);
         }
-    } catch (error) {
-        console.error("CommandPalette", "Failed to load custom commands", error);
+    } catch {
+        setCustomCommands([]);
     }
 })();
 
-const DISCORD_INTERNAL_HOSTS = new Set([
+export const DISCORD_INTERNAL_HOSTS = new Set([
     "discord.com",
     "www.discord.com",
     "canary.discord.com",
@@ -880,8 +879,8 @@ async function openDiscordSettingsRoute(route: string, label?: string) {
         try {
             await Promise.resolve(SettingsRouter.openUserSettings(candidate));
             return true;
-        } catch (error) {
-            console.error("CommandPalette", "Failed to open Discord settings route", candidate, error);
+        } catch {
+            continue;
         }
     }
 
@@ -1098,8 +1097,8 @@ export async function saveCustomCommands(commands: CustomCommandDefinition[]) {
     setCustomCommands(commands);
     try {
         await DataStore.set(CUSTOM_COMMANDS_KEY, customCommands);
-    } catch (error) {
-        console.error("CommandPalette", "Failed to persist custom commands", error);
+    } catch {
+        return;
     }
 }
 
@@ -1200,23 +1199,23 @@ export function cleanupCommandPaletteRuntime() {
         const callback = sessionCleanupCallbacks.pop();
         try {
             callback?.();
-        } catch (error) {
-            console.error("CommandPalette", "Failed to cleanup session callback", error);
+        } catch {
+            continue;
         }
     }
     while (runtimeCleanupCallbacks.length) {
         const callback = runtimeCleanupCallbacks.pop();
         try {
             callback?.();
-        } catch (error) {
-            console.error("CommandPalette", "Failed to cleanup runtime callback", error);
+        } catch {
+            continue;
         }
     }
     for (const record of contextProviders.values()) {
         try {
             record.unsubscribe?.();
-        } catch (error) {
-            console.error("CommandPalette", "Failed to unsubscribe context provider", record.provider.id, error);
+        } catch {
+            continue;
         }
         record.unsubscribe = undefined;
         record.commandIds.clear();
@@ -1268,8 +1267,7 @@ function refreshContextProvider(id: string) {
     let commands: CommandEntry[] = [];
     try {
         commands = record.provider.getCommands() ?? [];
-    } catch (error) {
-        console.error("CommandPalette", "Failed to compute commands for provider", record.provider.id, error);
+    } catch {
         commands = [];
     }
 
@@ -1599,7 +1597,6 @@ export async function togglePinned(commandId: string): Promise<boolean | null> {
     }
 
     if (!registry.has(commandId)) {
-        console.warn("CommandPalette", "Attempted to pin unavailable command", commandId);
         return null;
     }
 
@@ -1741,7 +1738,6 @@ export async function executeCommandAction(entry: CommandEntry, actionKey: strin
             type: Toasts.Type.FAILURE,
             id: Toasts.genId(),
         });
-        console.error("CommandPalette", error);
         return false;
     }
 }
@@ -2248,9 +2244,8 @@ function registerUpdateCommands() {
                 } else {
                     showToast("No updates found.", Toasts.Type.MESSAGE);
                 }
-            } catch (error) {
+            } catch {
                 showToast("Failed to check for updates.", Toasts.Type.FAILURE);
-                console.error("CommandPalette", error);
             }
         }
     });
@@ -2377,8 +2372,7 @@ function toggleChannelMuteState(channelId: string, guildId: string | null, mute:
     try {
         actions.updateChannelOverrideSettings(guildId, channelId, payload);
         showToast(`${mute ? "Muted" : "Unmuted"} channel.`, Toasts.Type.SUCCESS);
-    } catch (error) {
-        console.error("CommandPalette", "Failed to toggle channel mute", error);
+    } catch {
         showToast("Failed to update channel mute state.", Toasts.Type.FAILURE);
     }
 }
@@ -2398,8 +2392,7 @@ function toggleGuildMuteState(guildId: string, mute: boolean, durationMinutes?: 
     try {
         actions.updateGuildNotificationSettings(guildId, payload);
         showToast(`${mute ? "Muted" : "Unmuted"} server.`, Toasts.Type.SUCCESS);
-    } catch (error) {
-        console.error("CommandPalette", "Failed to toggle guild mute", error);
+    } catch {
         showToast("Failed to update server mute state.", Toasts.Type.FAILURE);
     }
 }
@@ -2427,8 +2420,8 @@ function openPinsForChannel(channelId: string) {
                 });
                 dispatched = true;
                 break;
-            } catch (error) {
-                console.error("CommandPalette", `Failed to dispatch ${event} for pins`, error);
+            } catch {
+                continue;
             }
         }
     }
@@ -2437,8 +2430,7 @@ function openPinsForChannel(channelId: string) {
 
     try {
         FluxDispatcher.dispatch({ type: "CHANNEL_PINS_MODAL_OPEN", channelId });
-    } catch (error) {
-        console.error("CommandPalette", "Failed to open pins", error);
+    } catch {
         showToast("Unable to open pins panel.", Toasts.Type.FAILURE);
     }
 }
@@ -2483,8 +2475,7 @@ function createContextualCommands(): CommandEntry[] {
                     if (!ackTarget) throw new Error("Channel not found");
                     await Promise.resolve(ackChannel(ackTarget));
                     showToast(`Marked ${channelLabel} as read.`, Toasts.Type.SUCCESS);
-                } catch (error) {
-                    console.error("CommandPalette", "Failed to mark read", error);
+                } catch {
                     showToast("Failed to mark channel as read.", Toasts.Type.FAILURE);
                 }
             }
@@ -2600,8 +2591,7 @@ function createContextualCommands(): CommandEntry[] {
                 handler: async () => {
                     try {
                         await Promise.resolve(GuildSettingsActions.open(guildId, "OVERVIEW"));
-                    } catch (error) {
-                        console.error("CommandPalette", "Failed to open guild settings", error);
+                    } catch {
                         showToast("Unable to open guild settings.", Toasts.Type.FAILURE);
                     }
                 }
@@ -2625,8 +2615,7 @@ function createContextualCommands(): CommandEntry[] {
                         await Promise.resolve(GuildMembershipActions.leaveGuild(guildId));
                         NavigationRouter.transitionTo("/channels/@me");
                         showToast(`Left ${guildLabel}.`, Toasts.Type.SUCCESS);
-                    } catch (error) {
-                        console.error("CommandPalette", "Failed to leave guild", error);
+                    } catch {
                         showToast("Unable to leave this server.", Toasts.Type.FAILURE);
                     }
                 }
@@ -2773,7 +2762,6 @@ async function executeCustomCommand(command: CustomCommandDefinition) {
         if (error instanceof CommandExecutionCanceled) {
             throw error;
         }
-        console.error("CommandPalette", "Failed to execute custom command", command, error);
         throw error;
     }
 }
@@ -2804,8 +2792,7 @@ function clearDesktopNotifications() {
         try {
             api.clearAll();
             showToast("Cleared desktop notifications.", Toasts.Type.SUCCESS);
-        } catch (error) {
-            console.error("CommandPalette", "Failed to clear notifications", error);
+        } catch {
             showToast("Failed to clear notifications.", Toasts.Type.FAILURE);
         }
     } else {
@@ -2914,8 +2901,8 @@ async function reopenLastClosedDm() {
                 if (typeof result === "string") {
                     reopenedId = result;
                 }
-            } catch (error) {
-                console.error("CommandPalette", "Failed to open DM via ChannelActionCreators", error);
+            } catch {
+                reopenedId = null;
             }
 
             if (!reopenedId) {
@@ -2940,8 +2927,7 @@ async function reopenLastClosedDm() {
         }
 
         showToast("The DM is no longer available.", Toasts.Type.FAILURE);
-    } catch (error) {
-        console.error("CommandPalette", "Failed to reopen DM", error);
+    } catch {
         showToast("The DM is no longer available.", Toasts.Type.FAILURE);
     } finally {
         lastClosedDm = null;
@@ -3601,8 +3587,7 @@ function createPluginToolboxCommands(): CommandEntry[] {
 async function runPluginToolboxAction(plugin: Plugin, action: () => void | Promise<void>, actionLabel: string) {
     try {
         await Promise.resolve(action.call(plugin));
-    } catch (error) {
-        console.error("CommandPalette", "Toolbox action failed", plugin.name, actionLabel, error);
+    } catch {
         showToast(`Failed to run ${plugin.name}: ${actionLabel}`, Toasts.Type.FAILURE);
     }
 }

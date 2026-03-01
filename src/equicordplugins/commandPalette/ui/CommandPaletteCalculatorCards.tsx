@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { classNameFactory } from "@utils/css";
+import { classes } from "@utils/misc";
 import { useEffect, useRef, useState } from "@webpack/common";
 
 import type { CalculatorResult } from "../calculator";
@@ -18,6 +20,8 @@ interface AutoFitLineProps {
     maxSize: number;
     minSize: number;
 }
+
+const cl = classNameFactory("vc-command-palette-");
 
 const SUPERSCRIPT_MAP: Record<string, string> = {
     "0": "⁰",
@@ -107,17 +111,17 @@ export function CommandPaletteCalculatorCards({ result }: CommandPaletteCalculat
         : result.displayInput;
 
     return (
-        <section className="vc-command-palette-calculator">
-            <h3 className="vc-command-palette-calculator-title">Calculator</h3>
-            <div className="vc-command-palette-calculator-card">
-                <div className="vc-command-palette-calculator-section vc-command-palette-calculator-section-left">
-                    <AutoFitLine text={displayInput} className="vc-command-palette-calculator-value" maxSize={44} minSize={18} />
-                    <span className="vc-command-palette-calculator-label">{leftLabel}</span>
+        <section className={cl("calculator")}>
+            <h3 className={cl("calculator-title")}>Calculator</h3>
+            <div className={cl("calculator-card")}>
+                <div className={classes(cl("calculator-section"), cl("calculator-section-left"))}>
+                    <AutoFitLine text={displayInput} className={cl("calculator-value")} maxSize={44} minSize={18} />
+                    <span className={cl("calculator-label")}>{leftLabel}</span>
                 </div>
-                <div className="vc-command-palette-calculator-arrow">→</div>
-                <div className="vc-command-palette-calculator-section vc-command-palette-calculator-section-right">
-                    <AutoFitLine text={result.displayAnswer} className="vc-command-palette-calculator-value" maxSize={44} minSize={18} />
-                    <span className="vc-command-palette-calculator-label">{rightLabel}</span>
+                <div className={cl("calculator-arrow")}>→</div>
+                <div className={classes(cl("calculator-section"), cl("calculator-section-right"))}>
+                    <AutoFitLine text={result.displayAnswer} className={cl("calculator-value")} maxSize={44} minSize={18} />
+                    <span className={cl("calculator-label")}>{rightLabel}</span>
                 </div>
             </div>
         </section>
