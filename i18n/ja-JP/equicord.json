@@ -1414,6 +1414,20 @@
     "micLoopbackTester":{
         "description":"ユーザーエリアのループバックボタンを使用してマイクをテストします"
     },
+    "middleClickTweaks":{
+        "description":"貼り付けやリンクを開くなど、さまざまな中クリックの調整。",
+        "settings":{
+            "always":"中クリックによる貼り付けを常に禁止する",
+            "both":"リンクとメディア",
+            "focus":"テキスト領域にフォーカスがない場合のみ防止する",
+            "links":"リンク",
+            "media":"メディア",
+            "none":"設定しない",
+            "openScope":"これらのコンテンツ タイプを中クリックしても開かないようにします。",
+            "pasteScope":"このような状況では、中クリックによる貼り付けを防止します。",
+            "pasteThreshold":"中クリックした後、貼り付けが再び有効になるまでのミリ秒。"
+        }
+    },
     "moreCommands":{
         "description":"システム情報、サイコロの出目、コイン投げなどを含む追加のスラッシュ コマンド",
         "settings":{
@@ -1497,6 +1511,32 @@
     },
     "noRPC":{
         "description":"Discord のリッチ プレゼンス (RPC) 機能を無効にします"
+    },
+    "noRoleHeaders":{
+        "description":"メンバーリストからロールヘッダーを削除し、見た目をすっきりさせます。"
+    },
+    "normalizeMessageLinks":{
+        "description":"一貫性を保つために Canary/ptb サブドメインを削除することで、Discord メッセージ リンクを正規化します"
+    },
+    "notificationTitle":{
+        "description":"送信者、チャネル、サーバー情報を示す詳細な通知タイトルを追加します"
+    },
+    "orbolayBridge":{
+        "description":"Orbolay オーバーレイ統合用のブリッジ プラグインにより、音声状態の同期とメッセージ通知が可能になります",
+        "settings":{
+            "alignmentOptions":{
+                "bottomLeft":"左下",
+                "bottomRight":"右下",
+                "topLeft":"左上",
+                "topRight":"右上"
+            },
+            "isKeybindEnabled":"Orbolay コントロールのキーバインド サポートを有効にする",
+            "messageAlignment":"メッセージオーバーレイの配置位置",
+            "messagesSemitransparent":"メッセージオーバーレイを半透明にする",
+            "port":"Orbolay WebSocket 接続のポート番号",
+            "userAlignment":"ユーザーオーバーレイの配置位置",
+            "voiceSemitransparent":"音声オーバーレイを半透明にする"
+        }
     },
     "partyMode":{
         "description":"紙吹雪や画面の揺れによるパーティー モードの効果を有効にする",
@@ -1867,5 +1907,505 @@
         "settings":{
             "onlineStatus":"オンライン時の Steam ステータス"
         }
+    },
+    "streamingCodecDisabler":{
+        "settings":{
+            "disableAv1Codec":"Discord がストリーミングに AV1 を使用することを考慮しないようにします",
+            "disableH264Codec":"Discord がストリーミングに H264 を使用することを考慮しないようにします",
+            "disableH265Codec":"Discord がストリーミングに H265 を使用することを考慮しないようにします",
+            "disableVP8Codec":"Discord がストリーミングに VP8 を使用することを考慮しないようにします",
+            "disableVP9Codec":"Discord がストリーミングに VP9 を使用することを考慮しないようにします"
+        }
+    },
+    "talkInReverse":{
+        "description":"送信前にメッセージを取り消すためのチャット バー ボタンを追加します"
+    },
+    "themeLibrary":{
+        "description":"Equicord テーマ ライブラリからテーマを参照および管理します",
+        "toolbox":{
+            "openThemeLibrary":"テーマライブラリを開く"
+        }
+    },
+    "tidalEmbeds":{
+        "description":"Tidal 音楽リンクをカスタム プレーヤーに埋め込む"
+    },
+    "tiktokTTS":{
+        "contextMenu":{
+            "playTikTokTTS":"TikTok TTS をプレイする"
+        },
+        "description":"TikTok テキスト読み上げでメッセージを再生する",
+        "settings":{
+            "volume":"再生音量"
+        }
+    },
+    "timezones":{
+        "contextMenu":{
+            "setLocalTimezone":"ローカルタイムゾーンの設定"
+        },
+        "description":"プロファイルとメッセージヘッダーにユーザーのタイムゾーンを表示する",
+        "settings":{
+            "24hTime":"24時間形式での上映時間",
+            "databaseUrl":"タイムゾーンストレージ用のデータベース URL",
+            "preferDatabaseOverLocal":"タイムゾーンについてはローカル ストレージよりもデータベースを優先する",
+            "resetDatabaseTimezone":"データベースのタイムゾーンをリセットする",
+            "setDatabaseTimezone":"データベースにタイムゾーンを設定する",
+            "showMessageHeaderTime":"メッセージヘッダーに時間を表示する",
+            "showOwnTimezone":"プロフィールとメッセージヘッダーに独自のタイムゾーンを表示する",
+            "showProfileTime":"プロフィールに時間を表示する",
+            "showTimezoneInfo":"時間の横にタイムゾーン情報を表示",
+            "useDatabase":"ユーザーのタイムゾーンを取得するためにデータベースを有効にする"
+        },
+        "toasts":{
+            "failed":"タイムゾーンを更新できませんでした。",
+            "refreshed":"タイムゾーンが正常に更新されました。"
+        },
+        "toolbox":{
+            "refreshDatabaseTimezones":"データベースのタイムゾーンを更新する",
+            "setDatabaseTimezone":"データベースのタイムゾーンを設定する"
+        }
+    },
+    "title":{
+        "description":"Discordのウィンドウタイトルを変更します",
+        "settings":{
+            "title":"ウィンドウタイトルのプレフィックス"
+        }
+    },
+    "toastNotifications":{
+        "description":"メッセージとイベントのトースト通知を表示する",
+        "positionOptions":{
+            "bottomLeft":"左下",
+            "bottomRight":"右下",
+            "topLeft":"左上",
+            "topRight":"右上"
+        },
+        "settings":{
+            "determineServerNotifications":"チャンネル/ギルド設定に基づいてどのサーバー通知を表示するかを自動的に決定します",
+            "directMessages":"ダイレクトメッセージの通知を表示する",
+            "disableInStreamerMode":"ストリーマーモード中に通知を無効にする",
+            "exampleButton":"トースト通知の例を表示する",
+            "friendActivity":"誰かの追加または友達リクエストの受信に関する通知を表示する",
+            "friendServerNotifications":"友達があなたと共有しているサーバーにメッセージを送信したときに通知を表示する",
+            "groupMessages":"グループメッセージの通知を表示する",
+            "ignoreUsers":"すべての通知を無視するユーザー ID のリストを作成します (カンマで区切ります)。",
+            "maxNotifications":"一度に表示される通知の最大数",
+            "notifyFor":"通知を受信するチャネル ID のリストを作成します (カンマで区切ります)。",
+            "opacity":"通知の不透明度",
+            "position":"トースト通知の位置",
+            "renderImages":"通知に画像をレンダリングする",
+            "streamingTreatment":"画面共有中に通知を処理する方法",
+            "timeout":"通知が表示される秒数"
+        },
+        "streamingOptions":{
+            "ignore":"無視 - 通知をまったく表示しません",
+            "noContent":"コンテンツなし - 通知本文を非表示にします",
+            "normal":"通常 - 通知を通常どおり表示します"
+        }
+    },
+    "toggleVideoBind":{
+        "description":"ボイスチャットでビデオ/ウェブカメラを切り替えるためのキーバインドを追加します",
+        "settings":{
+            "keyBind":"押すとウェブカメラを切り替えるキー",
+            "reqAlt":"alt を押し続ける必要がある",
+            "reqCtrl":"制御を保持する必要がある",
+            "reqShift":"シフトを保持する必要がある"
+        }
+    },
+    "toneIndicators":{
+        "description":"メッセージにトーンインジケーター（皮肉、冗談など）を追加します",
+        "settings":{
+            "customIndicators":"カスタムトーンインジケーター (形式: jk=冗談; srs=真剣)",
+            "maxIndicators":"メッセージごとに表示するトーン インジケータの最大数",
+            "prefix":"トーンインジケーターのプレフィックス文字"
+        }
+    },
+    "tosuRPC":{
+        "description":"osu! のリッチ プレゼンス統合鳥栖経由"
+    },
+    "translatePlus":{
+        "contextMenu":{
+            "translate":"翻訳する"
+        },
+        "description":"UI を改善したメッセージに翻訳ボタンを追加します。",
+        "popover":{
+            "translate":"翻訳する"
+        }
+    },
+    "unitConverter":{
+        "description":"メッセージ内の単位を変換します (帝国/メートル)",
+        "popover":{
+            "convertUnits":"単位の変換"
+        },
+        "settings":{
+            "myUnits":"使用している単位と変換したい単位"
+        },
+        "unitOptions":{
+            "imperial":"インペリアル",
+            "metric":"メトリック"
+        }
+    },
+    "universalMention":{
+        "description":"ユニバーサル形式を使用して任意のサーバーからユーザーをメンションします",
+        "settings":{
+            "globalMention":"現在のサーバーだけでなく、任意のサーバーのユーザーをメンションします",
+            "onlyDMUsers":"DM をやり取りしたユーザーのみを表示する"
+        },
+        "warning":"Global Mention を使用すると、パフォーマンスの問題が発生し、オートコンプリートに異常な数のユーザーが表示される可能性があります。"
+    },
+    "unlimitedAccounts":{
+        "description":"Discord のアカウント切り替えの 5 アカウント制限を削除します",
+        "settings":{
+            "maxAccounts":"追加できるアカウントの数、または制限なしの場合は 0"
+        }
+    },
+    "unreadBadgeCount":{
+        "description":"チャンネルに未読メッセージ数のバッジを表示する",
+        "settings":{
+            "notificationCountLimit":"通知数を 99 件以上に制限する",
+            "showOnMutedChannels":"ミュートされたチャンネルの未読数を表示する"
+        }
+    },
+    "urlHighlighter":{
+        "description":"メッセージ内の特定の URL をカスタム色で強調表示する",
+        "settings":{
+            "boldUrls":"ハイライトされた URL を太字にする",
+            "highlightEmbeds":"埋め込みコンテンツ内の URL も強調表示します",
+            "patterns":"グロブ パターンを使用して強調表示する URL パターン"
+        },
+        "ui":{
+            "addNew":"新規追加",
+            "patternPlaceholder":"*.example.com",
+            "urlPatterns":"URL パターン"
+        }
+    },
+    "userpfp":{
+        "avatarOptions":{
+            "nitro":"ニトロ",
+            "userpfp":"ユーザーPFP"
+        },
+        "buttons":{
+            "joinServer":"UserPFP サーバーに参加する",
+            "support":"ここでUserPFPをサポートします"
+        },
+        "contextMenu":{
+            "setAvatar":"アバターを設定する"
+        },
+        "description":"UserPFP データベースからのカスタム プロフィール写真を使用するか、独自のプロフィール写真を設定します",
+        "notice":"アバター設定機能の使用はローカルでのみ行われ、変更が表示されるのは自分だけです。",
+        "settings":{
+            "databaseSource":"URL データベースのロード元",
+            "overrideServerAvatars":"カスタム アバターが設定されていない場合は、サーバー アバターをカスタム アバターまたはデフォルトのユーザー アバターで上書きします",
+            "preferNitro":"デフォルトのアニメーション (Nitro) PFP アバターとユーザー PFP アバターの両方が存在する場合に使用するアバター"
+        }
+    },
+    "vcNarratorCustom":{
+        "contextMenu":{
+            "stateFilter":"状態変化フィルター",
+            "vcNarrator":"VCナレーター",
+            "voice":"音声"
+        },
+        "description":"ユーザーの参加/脱退および状態変更のための TTS を備えたカスタム音声チャネル ナレーター",
+        "filterOptions":{
+            "blacklist":"ブラックリスト（リストに載っている人以外全員に公表）",
+            "off":"オフ",
+            "whitelist":"ホワイトリスト (リストされたユーザーのみを発表)"
+        },
+        "modal":{
+            "cancel":"キャンセル",
+            "previewHint":"この声が名前でどのように聞こえるかをプレビューします。",
+            "save":"保存",
+            "selectVoice":"音声を選択してください",
+            "title":"VC ナレーターの声"
+        },
+        "preview":{
+            "playing":"遊んでいます...",
+            "subtitle":"選択したナレーターの声を使用します",
+            "title":"サウンドのプレビュー"
+        },
+        "settings":{
+            "announceOthersDeafen":"現在の VC で他のユーザーが聴覚障害者になったとき、または聴覚障害がなくなったときに通知します",
+            "announceOthersMute":"現在の VC で他のユーザーがミュート/ミュート解除したときに通知します",
+            "announceOthersStream":"現在の VC で他のユーザーがストリーミングを開始/停止したときに通知します",
+            "announceSelfStream":"ストリーミングの開始/停止を通知します",
+            "customVoice":"ナレーターの声",
+            "ignoreSelf":"すべての出来事に対して自分自身を無視する",
+            "joinMessage":"プレースホルダー: {{USER}}、{{DISPLAY_NAME}}、{{NICKNAME}}、{{CHANNEL}}",
+            "latinOnly":"名前を言う前に名前からラテン語以外の文字を削除する",
+            "leaveMessage":"メッセージを残す",
+            "moveMessage":"メッセージの移動",
+            "rate":"ナレーターの速度",
+            "sayOwnName":"自分の名前を言う",
+            "stateChangeCooldownMs":"状態変化アナウンスのクールダウン (ミリ秒)",
+            "stateChangeFilterList":"ホワイトリスト/ブラックリストのカンマ区切りのユーザー ID。ユーザーを右クリックして追加/削除します。",
+            "stateChangeFilterMode":"どのユーザーが状態変更アナウンスをトリガーするかをフィルタリングする",
+            "userVoiceMap":"ユーザーごとの音声オーバーライド (形式: userId:voiceId,userId2:voiceId2)。設定するユーザーを右クリックします。",
+            "volume":"ナレーターの音量"
+        },
+        "troubleshooting":{
+            "cacheInfo":"キャッシュ",
+            "clearCache":"キャッシュをクリアする",
+            "lastApiCall":"最後のAPIコール",
+            "refreshSize":"リフレッシュサイズ",
+            "title":"トラブルシューティング"
+        }
+    },
+    "vcPanelSettings":{
+        "description":"追加設定で音声チャンネルパネルをカスタマイズする",
+        "settings":{
+            "camera":"カメラセレクターを表示する",
+            "inputDevice":"入力デバイスセレクターを表示する",
+            "inputVolume":"入力音量スライダーを表示する",
+            "outputDevice":"出力デバイスセレクターを表示する",
+            "outputVolume":"出力音量スライダーを表示する",
+            "showInputDeviceHeader":"入力デバイスセレクターの上にヘッダーを表示",
+            "showInputVolumeHeader":"入力音量スライダーの上にヘッダーを表示",
+            "showOutputDeviceHeader":"出力デバイスセレクターの上にヘッダーを表示",
+            "showOutputVolumeHeader":"出力ボリュームスライダーの上にヘッダーを表示",
+            "showVideoDeviceHeader":"カメラセレクターの上にヘッダーを表示",
+            "uncollapseSettingsByDefault":"デフォルトで音声設定の折りたたみを自動的に展開する"
+        },
+        "ui":{
+            "camera":"カメラ",
+            "hide":"非表示",
+            "inputDevice":"入力デバイス",
+            "inputVolume":"入力ボリューム",
+            "outputDevice":"出力デバイス",
+            "outputVolume":"出力ボリューム",
+            "settings":"設定"
+        }
+    },
+    "viewRawVariant":{
+        "contextMenu":{
+            "viewRaw":"生で見る"
+        },
+        "description":"メッセージ、ユーザー、チャネル、ギルドの生の JSON データを表示する",
+        "modal":{
+            "content":"コンテンツ",
+            "data":"データ",
+            "title":"未加工で表示 {type}"
+        }
+    },
+    "voiceButtons":{
+        "description":"音声チャネル ユーザーにクイック アクション ボタン (チャット、ミュート、聴覚障害者) を追加します。",
+        "settings":{
+            "showChatButton":"チャットボタンを表示",
+            "showDeafenButton":"耳をつんざくボタンを表示",
+            "showMuteButton":"ミュートボタンを表示"
+        }
+    },
+    "voiceChannelLog":{
+        "contextMenu":{
+            "viewChannelLogs":"チャンネルログの表示"
+        },
+        "description":"音声チャネルの参加/離脱/移動イベントをログに記録する",
+        "modeOptions":{
+            "both":"チャットとログメニューにログを記録する",
+            "logMenu":"ログメニュー",
+            "logToChat":"関連するチャットに直接ログに記録する"
+        },
+        "settings":{
+            "ignoreBlockedUsers":"ブロックされたユーザーをログに記録しない",
+            "mode":"音声チャンネルのログを表示する方法",
+            "voiceChannelChatSelf":"独自の音声チャネル イベントを音声チャネルに記録します。",
+            "voiceChannelChatSilent":"ボイス チャネル チャットでのメッセージへの参加/退出/移動は沈黙します。",
+            "voiceChannelChatSilentSelf":"音声チャネルにいる場合、音声チャネルでのメッセージへの参加/退出/移動は無音になります"
+        }
+    },
+    "voiceChatUtils":{
+        "contextMenu":{
+            "deafenAll":"全員耳をつんざく",
+            "disconnectAll":"すべて切断する",
+            "moveAll":"すべて移動",
+            "muteAll":"すべてミュート",
+            "undeafenAll":"すべての聴覚を失わせる",
+            "unmuteAll":"すべてのミュートを解除する",
+            "voiceTools":"音声ツール"
+        },
+        "description":"音声チャネルモデレーションツールを追加します（すべてミュート、すべてを耳を聞こえなくする、すべてを移動、すべてを切断）",
+        "settings":{
+            "waitAfter":"待機する前に実行する API アクションの量 (レート制限を回避するため)",
+            "waitSeconds":"各アクション間の待機時間 (秒単位)"
+        }
+    },
+    "voiceJoinMessages":{
+        "description":"友達が音声チャンネルに参加したときに通知を受け取る",
+        "settings":{
+            "allowedFriends":"参加メッセージを受け取りたい友人のユーザー ID のカンマまたはスペース区切りのリスト",
+            "friendDirectMessages":"友達が音声チャンネルに参加すると、その友達の DM で通知を受け取ります",
+            "friendDirectMessagesSelf":"友達と同じ音声チャンネルにいる場合でも、友達の DM で通知を受け取ります",
+            "friendDirectMessagesShowMemberCount":"DM通知を受信したときに音声チャネル内の他のメンバーの数を表示します",
+            "friendDirectMessagesShowMembers":"DM通知を受信したときに音声チャンネル内の他のメンバーのリストを表示します",
+            "friendDirectMessagesSilent":"友達のメッセージに参加する DMは沈黙します",
+            "ignoreBlockedUsers":"ブロックされたユーザーの音声チャネルへの参加/離脱/移動に関するメッセージを送信しないでください"
+        }
+    },
+    "voiceMessageTranscriber":{
+        "description":"AIを利用した音声メッセージの文字起こし（Whisper）",
+        "modal":{
+            "action":"アクション",
+            "audioLanguage":"音声言語",
+            "autoDetect":"自動検出",
+            "copied":"コピーしました！",
+            "copyToClipboard":"クリップボードにコピー",
+            "downloadingAudio":"音声をダウンロード中...",
+            "error":"エラー",
+            "inProgress":"文字起こし中...",
+            "initializing":"初期化中...",
+            "loadingModel":"モデルをロード中...",
+            "processingAudio":"音声を処理中...",
+            "retry":"再試行",
+            "showTimestamps":"タイムスタンプを表示する",
+            "start":"開始",
+            "transcribe":"転写する",
+            "transcribing":"転記中...",
+            "transcription":"転写",
+            "transcriptionOptions":"文字起こしオプション",
+            "translateToEnglish":"英語に翻訳する"
+        },
+        "modelOptions":{
+            "base":"ベース（推奨）",
+            "medium":"中 (最も遅く、最高の精度)",
+            "small":"小",
+            "tiny":"極小 (最速、精度は最低)"
+        },
+        "settings":{
+            "delete":"キャッシュされたファイルをすべて削除する",
+            "quantized":"量子化モデルを使用します (サイズは小さく、精度はわずかに低くなります)",
+            "selectedModel":"モデルサイズ"
+        }
+    },
+    "voiceRejoin":{
+        "description":"接続が切断された後、音声チャネルに自動的に再参加します",
+        "preventionOptions":{
+            "both":"DMとサーバー",
+            "dms":"DMのみ",
+            "none":"設定しない",
+            "servers":"サーバーのみ"
+        },
+        "settings":{
+            "applyOnlyToDms":"DMのみ適用",
+            "preventReconnectIfCallEnded":"通話が終了した場合、または音声チャネルが空または存在しない場合は、再接続しないでください。",
+            "rejoinDelay":"音声チャンネルに再接続するまでの遅延を設定する",
+            "rejoinTimeout":"切断してからこの秒数が経過した後は再接続しないでください"
+        }
+    },
+    "waitForSlot":{
+        "contextMenu":{
+            "joinQueue":"キューに参加",
+            "leaveQueue":"キューを離れる"
+        },
+        "description":"フルボイスチャンネルのキューに登録し、スロットが開いたら通知を受け取ります",
+        "notices":{
+            "channelFull":"音声チャンネル {channel} がいっぱいです。スロットを待ちますか？",
+            "join":"参加",
+            "slotAvailable":"やあ、誰かが #{channel} から出て行ったので、今あなたの場所が空いています!",
+            "wait":"待って"
+        },
+        "settings":{
+            "autoJoin":"通知を表示せずにすぐにチャンネルに参加してください",
+            "notificationSound":"スロットが利用可能になったときにサウンドを再生する"
+        }
+    },
+    "wallpaperFree":{
+        "contextMenu":{
+            "removeWallpaper":"壁紙を削除する",
+            "setWallpaper":"壁紙を設定する"
+        },
+        "description":"チャンネル、ユーザー、またはグローバルにカスタム壁紙を設定",
+        "settings":{
+            "globalDefault":"すべてのチャンネルにグローバルなデフォルトの壁紙を設定する",
+            "stylingTips":"スタイリングのヒント"
+        }
+    },
+    "webpackTarball":{
+        "description":"Discord の Webpack モジュールを分析用の tarball としてエクスポートします",
+        "modal":{
+            "create":"新規作成",
+            "errors":"エラー",
+            "lazyChunks":"レイジーチャンク",
+            "loadAll":"すべてロードする",
+            "loaded":"ロード済み",
+            "loadedStatus":"ロード済み",
+            "loading":"読み込み中",
+            "title":"Webpack Tarball"
+        },
+        "settings":{
+            "patched":"パッチ適用されたモジュールを含める"
+        },
+        "toolbox":{
+            "webpackTarball":"Webpack Tarball"
+        }
+    },
+    "whitelistedEmojis":{
+        "alerts":{
+            "importConfirmBody":"これにより、現在のホワイトリストが上書きされます。",
+            "importConfirmTitle":"本気ですか？",
+            "resetConfirmBody":"これにより、ホワイトリストからすべての絵文字が削除されます。",
+            "resetConfirmTitle":"本気ですか？"
+        },
+        "contextMenu":{
+            "addAllGuildEmojis":"すべてのギルド絵文字を追加",
+            "addToWhitelist":"ホワイトリストに追加",
+            "removeAllGuildEmojis":"すべてのギルド絵文字を削除",
+            "removeFromWhitelist":"ホワイトリストから削除"
+        },
+        "description":"特定の絵文字をホワイトリストに登録し、他の絵文字をすべて絵文字ピッカーから非表示にします",
+        "settings":{
+            "defaultEmojis":"デフォルトの絵文字を非表示にする",
+            "disableToasts":"トーストを無効にする",
+            "exportEmojis":"絵文字のエクスポート",
+            "importEmojis":"絵文字をインポートする",
+            "resetEmojis":"絵文字をリセットする",
+            "serverEmojis":"サーバーの絵文字を非表示にする",
+            "whitelistedEmojis":"ホワイトリストに登録された絵文字"
+        },
+        "toasts":{
+            "added":"「{name}」をリストに追加しました",
+            "addedBulk":"{count} 絵文字をリストに追加しました。{skipped} はすでにリストにあります",
+            "alreadyInList":"「{name}」はすでにリストにあります",
+            "exported":"絵文字が正常にエクスポートされました",
+            "importFailed":"絵文字のインポートに失敗しました: {error}",
+            "imported":"絵文字が正常にインポートされました",
+            "notInList":"「{name}」はリストにありません",
+            "removed":"「{name}」をリストから削除しました",
+            "removedBulk":"{count} 絵文字をリストから削除しました",
+            "reset":"絵文字をリセットする"
+        },
+        "ui":{
+            "defaultEmojis":"デフォルトの絵文字",
+            "guildEmojis":"{guild} 絵文字",
+            "noEmojis":"ホワイトリストに絵文字はありません。",
+            "removeAll":"すべて削除"
+        }
+    },
+    "whosWatching":{
+        "description":"画面共有またはストリームを見ている人を確認する",
+        "settings":{
+            "showPanel":"画面共有パネルの下に観客を表示"
+        },
+        "ui":{
+            "noSpectators":"無観客",
+            "spectators":"視聴者数"
+        }
+    },
+    "wigglyText":{
+        "about":{
+            "circle":")~text~^( と入力して円で囲みます",
+            "description":"次の方法でテキストを小刻みに動かすことができます。",
+            "leftRight":"<~text~> と入力して左右に移動します",
+            "upDown":"^~text~^ と入力して上下に移動します"
+        },
+        "description":"特別な構文でテキストを小刻みに動かす (~text~)",
+        "settings":{
+            "intensity":"アニメーションの強度 (ピクセル単位)"
+        }
+    },
+    "writeUpperCase":{
+        "description":"文章の最初の文字を自動的に大文字にします",
+        "settings":{
+            "blockedWords":"大文字にしない文字列 (カンマで区切る)"
+        }
+    },
+    "youtubeDescription":{
+        "description":"YouTube ビデオの埋め込みに切り替え可能な説明を追加します"
     }
 }
