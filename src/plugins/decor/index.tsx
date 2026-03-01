@@ -87,7 +87,7 @@ export default definePlugin({
         },
         // Current user area, at bottom of channels/dm list
         {
-            find: ".NITRO_PRIVACY_PERK_BETA_COACHMARK));",
+            find: ".WIDGETS_RTC_UPSELL_COACHMARK),",
             replacement: [
                 // Use Decor avatar decoration hook
                 {
@@ -99,7 +99,7 @@ export default definePlugin({
         ...[
             '"Message Username"', // Messages
             "#{intl::COLLECTIBLES_NAMEPLATE_PREVIEW_A11Y}", // Nameplate preview
-            "#{intl::ayozFl::raw}", // Avatar preview
+            "#{intl::COLLECTIBLES_PROFILE_PREVIEW_A11Y}", // Avatar preview
         ].map(find => ({
             find,
             replacement: {

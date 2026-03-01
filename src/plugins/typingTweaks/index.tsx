@@ -122,7 +122,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "#{intl::Q8lUnE::raw}",
+            find: "#{intl::SEVERAL_USERS_TYPING_STRONG}",
             group: true,
             replacement: [
                 {

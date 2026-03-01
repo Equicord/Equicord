@@ -18,9 +18,11 @@ import { loadPresets, PresetSection } from "./utils/storage";
 export const cl = classNameFactory("vc-profile-presets-");
 export const settings = definePluginSettings({
     avatarSize: {
-        type: OptionType.NUMBER,
+        type: OptionType.SLIDER,
         description: "Avatar size in preset list.",
-        default: 40,
+        markers: [56, 64, 72, 80, 88, 96],
+        default: 56,
+        stickToMarkers: true
     },
 });
 
@@ -40,8 +42,8 @@ export default definePlugin({
         {
             find: "USER_SETTINGS_GUILD_PROFILE)",
             replacement: {
-                match: /onChange:\i\}\)(?=.{0,25}profilePreviewTitle:)/,
-                replace: '$&,$self.renderPresetSection("server")'
+                match: /guildId:(\i\.id),onChange:(\i)\}\)(?=.{0,25}profilePreviewTitle:)/,
+                replace: 'guildId:$1,onChange:$2}),$self.renderPresetSection("server",$1)'
             }
         }
     ],

@@ -1,0 +1,7 @@
+.vc-message-click-actions-primary-emoji-picker {
+    margin-top: 8px;
+    margin-left: 6px;
+    display: inline-flex;
+    transform: scale(1.3);
+    transform-origin: top left;
+}

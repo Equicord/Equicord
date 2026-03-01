@@ -51,6 +51,7 @@ export default definePlugin({ options: { myOption: { /* ... */ } } });
 ```
 
 **Prefer declarative APIs** over manual registration:
+
 - `flux: { EVENT_NAME(data) {} }` not manual FluxDispatcher subscribe
 - `contextMenus: { "nav-id": fn }` not manual addContextMenuPatch
 - `chatBarButton: { render, icon }` not addChatBarButton
@@ -81,7 +82,6 @@ Flag these and suggest the fix:
 | `cdn.discordapp.com/icons/...` | `IconUtils.getGuildIconURL(...)` | Same |
 | `cdn.discordapp.com/banners/...` | `IconUtils.getUserBannerURL(...)` | Same |
 | `cdn.discordapp.com/emojis/...` | `IconUtils.getEmojiURL(...)` | Same |
-| `/assets/*.png` default avatars | `IconUtils.getDefaultAvatarURL(id)` | Same |
 | `/api/v9/...` or `/users/@me` | `Constants.Endpoints.*` or `RestAPI` | Endpoints change |
 | `@api/Styles` for classNameFactory | `@utils/css` | `@api/Styles` is deprecated |
 | `any` for Discord objects | Import from `@vencord/discord-types` | Type safety |
@@ -361,6 +361,7 @@ If a PR reimplements any of these, flag it. They already exist:
 **@api/Commands:** `sendBotMessage`, `findOption`
 
 **@webpack/common:**
+
 - Stores: `UserStore`, `GuildStore`, `ChannelStore`, `GuildMemberStore`, `SelectedChannelStore`, `SelectedGuildStore`, `PresenceStore`, `RelationshipStore`, `MessageStore`, `EmojiStore`, `ThemeStore`, `PermissionStore`, `VoiceStateStore`, 30+ more
 - Actions: `RestAPI`, `FluxDispatcher`, `MessageActions`, `NavigationRouter`, `ChannelRouter`, `ChannelActionCreators`, `SettingsRouter`
 - Utils: `Constants` (`.Endpoints`), `SnowflakeUtils`, `Parser`, `PermissionsBits`, `moment`, `lodash`, `IconUtils`, `ColorUtils`, `ImageUtils`, `DateUtils`, `UsernameUtils`, `DisplayProfileUtils`

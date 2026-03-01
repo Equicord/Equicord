@@ -24,11 +24,6 @@ const settings = definePluginSettings({
         description: "Custom tone indicators (format: jk=Joking; srs=Serious)",
         default: "",
     },
-    maxIndicators: {
-        type: OptionType.NUMBER,
-        description: "Maximum number of tone indicators to show per message",
-        default: 5,
-    },
 });
 
 function getCustomIndicators(): Record<string, string> {
@@ -91,14 +86,16 @@ function buildIndicatorRegex(): RegExp {
 function splitTextWithIndicators(text: string): ReactNode[] {
     const nodes: ReactNode[] = [];
     let lastIndex = 0;
-    let count = 0;
     const regex = buildIndicatorRegex();
     const prefix = settings.store.prefix || "/";
     let match: RegExpExecArray | null;
 
-    while ((match = regex.exec(text)) && count < settings.store.maxIndicators) {
+    while ((match = regex.exec(text))) {
         const indicator = match[1];
         const desc = getIndicator(indicator);
+
+        const fullMatch = match[0];
+        const leadingWhitespace = fullMatch.match(/^(\s*)/)?.[1] ?? "";
 
         const matchStart = match.index;
         const matchEnd = regex.lastIndex;
@@ -108,6 +105,7 @@ function splitTextWithIndicators(text: string): ReactNode[] {
         }
 
         if (desc) {
+            if (leadingWhitespace) nodes.push(leadingWhitespace);
             nodes.push(
                 <ToneIndicator
                     key={`ti-${matchStart}`}
@@ -116,7 +114,6 @@ function splitTextWithIndicators(text: string): ReactNode[] {
                     desc={desc}
                 />,
             );
-            count++;
         }
 
         lastIndex = matchEnd;

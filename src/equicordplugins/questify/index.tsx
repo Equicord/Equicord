@@ -1229,7 +1229,7 @@ export default definePlugin({
         },
         {
             // Hides Quests tab in the DMs tab list.
-            find: "QUEST_HOME_V2):",
+            find: ".QUEST_HOME):",
             replacement: [
                 {
                     match: /(?<="family-center"\):null,)/,
@@ -1606,16 +1606,8 @@ export default definePlugin({
             ]
         },
         {
-            // Sets intervals to progress Video Quests in the background.
-            find: "CAPTCHA_FAILED:",
-            replacement: {
-                match: /(?<=SUCCESS:)(\i\({)/,
-                replace: "!$self.processQuestForAutoComplete(arguments[0])&&$1"
-            }
-        },
-        {
             // Adds support for dev://experiment/2025-12-quest-cta-refactor-rollout
-            find: '"sm",preClickCallback:',
+            find: '"primary",preClickCallback:',
             replacement: [
                 {
                     match: /(?=let{quest:)/,
@@ -1626,10 +1618,18 @@ export default definePlugin({
                     replace: "!$self.processQuestForAutoComplete(arguments[0].quest)&&($1)"
                 },
                 {
-                    match: /(?<=,text:)(?=\i)/,
-                    replace: "questifyText??"
+                    match: /(?<=,text:)(\i),icon:\i/,
+                    replace: "questifyText??$1"
                 }
             ]
+        },
+        {
+            // Sets intervals to progress Video Quests in the background.
+            find: "CAPTCHA_FAILED:",
+            replacement: {
+                match: /(?<=SUCCESS:)(\i\({)/,
+                replace: "!$self.processQuestForAutoComplete(arguments[0])&&$1"
+            }
         },
         {
             // Sets intervals to progress Play Game Quests in the background.
