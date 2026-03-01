@@ -296,21 +296,11 @@
 /* stylelint-disable-next-line no-descending-specificity */
 .vc-channeltabs-tab-selected .vc-channeltabs-name-text {
     font-weight: 600;
-    color: var(--white-500);
-}
-
-.vc-channeltabs-tab-selected .vc-channeltabs-guild-acronym-icon span {
-    color: var(--white-500);
+    color: var(---); /* Don't know how this is a valid colour but it works I guess */
 }
 
 .vc-channeltabs-tab-container svg {
     -webkit-app-region: no-drag;
-}
-
-.vc-channeltabs-tab-selected svg,
-.vc-channeltabs-tab-selected .vc-channeltabs-close-button svg {
-    color: var(--white-500);
-    fill: var(--white-500);
 }
 
 .vc-channeltabs-container [class*="iconContainer"] {
@@ -414,10 +404,6 @@
 
 .vc-channeltabs-close-button:active {
     transform: rotate(90deg) scale(0.9);
-}
-
-.vc-channeltabs-tab-selected .vc-channeltabs-close-button {
-    color: var(--white-500);
 }
 
 .vc-channeltabs-tab-selected .vc-channeltabs-close-button:hover {
