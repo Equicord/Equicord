@@ -115,17 +115,6 @@
     min-width: 0;
 }
 
-input.vc-command-palette-main-search-input:read-only,
-.vc-command-palette-main-search-input input:read-only {
-    color: var(--cp-text-muted) !important;
-    cursor: pointer;
-}
-
-input.vc-command-palette-main-search-input:not(:read-only),
-.vc-command-palette-main-search-input input:not(:read-only) {
-    color: var(--cp-text-primary) !important;
-}
-
 .vc-command-palette-query-prompt-capsule {
     display: inline-flex;
     align-items: center;
@@ -166,12 +155,6 @@ input.vc-command-palette-main-search-input:not(:read-only),
     min-width: 0;
 }
 
-.vc-command-palette-query-prompt-capsule .vc-command-palette-prompt-active-input {
-    flex: 1;
-    min-width: 0;
-    width: 100%;
-}
-
 .vc-command-palette-prompt-active-input {
     background: transparent !important;
     border: none !important;
@@ -205,6 +188,12 @@ input.vc-command-palette-main-search-input:not(:read-only),
     opacity: 1;
 }
 
+.vc-command-palette-query-prompt-capsule .vc-command-palette-prompt-active-input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+}
+
 .vc-command-palette-query-preview-dropdown {
     position: absolute;
     top: calc(100% + 10px);
@@ -212,15 +201,6 @@ input.vc-command-palette-main-search-input:not(:read-only),
     width: min(440px, 72vw);
     pointer-events: auto;
     margin-top: 0;
-}
-
-.vc-command-palette-query-preview-dropdown .vc-command-palette-dropdown-item {
-    gap: 0;
-    padding: 10px 12px;
-}
-
-.vc-command-palette-query-preview-dropdown .vc-command-palette-dropdown-label {
-    font-size: 15px;
 }
 
 /* Shared Dropdown */
@@ -291,6 +271,15 @@ input.vc-command-palette-main-search-input:not(:read-only),
     font-size: 14px;
     font-weight: 500;
     line-height: 1.25;
+}
+
+.vc-command-palette-query-preview-dropdown .vc-command-palette-dropdown-item {
+    gap: 0;
+    padding: 10px 12px;
+}
+
+.vc-command-palette-query-preview-dropdown .vc-command-palette-dropdown-label {
+    font-size: 15px;
 }
 
 .vc-command-palette-dropdown-sublabel {
@@ -947,4 +936,15 @@ input.vc-command-palette-main-search-input:not(:read-only),
 .vc-command-palette-page-input input:focus {
     border-color: var(--cp-accent) !important;
     outline: none !important;
+}
+
+input.vc-command-palette-main-search-input:read-only,
+.vc-command-palette-main-search-input input:read-only {
+    color: var(--cp-text-muted) !important;
+    cursor: pointer;
+}
+
+input.vc-command-palette-main-search-input:not(:read-only),
+.vc-command-palette-main-search-input input:not(:read-only) {
+    color: var(--cp-text-primary) !important;
 }
