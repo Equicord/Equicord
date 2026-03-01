@@ -78,21 +78,21 @@ const VoiceChannelContext: NavContextMenuPatchCallback = (children, { channel }:
         -1,
         0,
         <Menu.MenuItem
-            label="Voice Tools"
+            label={t("voiceChatUtils.contextMenu.voiceTools")}
             key="voice-tools"
             id="voice-tools"
         >
             <Menu.MenuItem
                 key="voice-tools-mention-all"
                 id="voice-tools-mention-all"
-                label="Mention all Users"
+                label={t("voiceChatUtils.contextMenu.mentionAllUsers")}
                 action={() => mentionVoiceUsers(channel)}
             />
 
             <Menu.MenuItem
                 key="voice-tools-disconnect-all"
                 id="voice-tools-disconnect-all"
-                label="Disconnect all"
+                label={t("voiceChatUtils.contextMenu.disconnectAll")}
                 action={() => sendPatch(channel, {
                     channel_id: null,
                 })}
@@ -101,7 +101,7 @@ const VoiceChannelContext: NavContextMenuPatchCallback = (children, { channel }:
             <Menu.MenuItem
                 key="voice-tools-mute-all"
                 id="voice-tools-mute-all"
-                label="Mute all"
+                label={t("voiceChatUtils.contextMenu.muteAll")}
                 action={() => sendPatch(channel, {
                     mute: true,
                 })}
@@ -110,7 +110,7 @@ const VoiceChannelContext: NavContextMenuPatchCallback = (children, { channel }:
             <Menu.MenuItem
                 key="voice-tools-unmute-all"
                 id="voice-tools-unmute-all"
-                label="Unmute all"
+                label={t("voiceChatUtils.contextMenu.unmuteAll")}
                 action={() => sendPatch(channel, {
                     mute: false,
                 })}
@@ -119,7 +119,7 @@ const VoiceChannelContext: NavContextMenuPatchCallback = (children, { channel }:
             <Menu.MenuItem
                 key="voice-tools-deafen-all"
                 id="voice-tools-deafen-all"
-                label="Deafen all"
+                label={t("voiceChatUtils.contextMenu.deafenAll")}
                 action={() => sendPatch(channel, {
                     deaf: true,
                 })}
@@ -128,14 +128,14 @@ const VoiceChannelContext: NavContextMenuPatchCallback = (children, { channel }:
             <Menu.MenuItem
                 key="voice-tools-undeafen-all"
                 id="voice-tools-undeafen-all"
-                label="Undeafen all"
+                label={t("voiceChatUtils.contextMenu.undeafenAll")}
                 action={() => sendPatch(channel, {
                     deaf: false,
                 })}
             />
 
             <Menu.MenuItem
-                label="Move all"
+                label={t("voiceChatUtils.contextMenu.moveAll")}
                 key="voice-tools-move-all"
                 id="voice-tools-move-all"
             >

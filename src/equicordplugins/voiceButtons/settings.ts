@@ -5,72 +5,73 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
+import { t } from "@utils/translation";
 import { OptionType } from "@utils/types";
 
 export const settings = definePluginSettings({
     showChatButton: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Whether you want to display the chat button",
+        description: t("voiceButtons.settings.showChatButton"),
         restartNeeded: true,
     },
     showMuteButton: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Whether you want to display the mute button",
+        description: t("voiceButtons.settings.showMuteButton"),
         restartNeeded: true,
     },
     showDeafenButton: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Whether you want to display the deafen button",
+        description: t("voiceButtons.settings.showDeafenButton"),
         restartNeeded: true,
     },
     muteSoundboard: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Toggles their soundboard upon clicking deafen button.",
+        description: t("voiceButtons.settings.muteSoundboard"),
     },
     disableVideo: {
         type: OptionType.BOOLEAN,
         default: true,
-        description: "Toggles their video upon clicking deafen button.",
+        description: t("voiceButtons.settings.disableVideo"),
     },
     useServer: {
         type: OptionType.BOOLEAN,
-        description: "Use server mute/deafen instead of local when you have permission.",
+        description: t("voiceButtons.settings.useServer"),
         default: false,
     },
     serverSelf: {
         type: OptionType.BOOLEAN,
-        description: "Deafen / Mute yourself on the server when using mute/deafen.",
+        description: t("voiceButtons.settings.serverSelf"),
         default: false,
     },
     showButtonsSelf: {
         type: OptionType.SELECT,
-        description: "Whether you want to display buttons for your own user. Same functionality as other button(s) except it'll open DMs panel and mute/deafen for yourself upon clicking button(s).",
+        description: t("voiceButtons.settings.showButtonsSelf"),
         restartNeeded: true,
         options: [
-            { label: "Display", value: "display", default: true },
-            { label: "Hide", value: "hide" },
-            { label: "Disable", value: "disable" },
+            { label: t("voiceButtons.options.display"), value: "display", default: true },
+            { label: t("voiceButtons.options.hide"), value: "hide" },
+            { label: t("voiceButtons.options.disable"), value: "disable" },
         ],
     },
     whichNameToShow: {
         type: OptionType.SELECT,
-        description: "Choose whether to show nickname or username in tooltip.",
+        description: t("voiceButtons.settings.whichNameToShow"),
         options: [
-            { label: "Both", value: "both", default: true },
-            { label: "Global Name", value: "global" },
-            { label: "Username", value: "username" },
+            { label: t("voiceButtons.options.both"), value: "both", default: true },
+            { label: t("voiceButtons.options.globalName"), value: "global" },
+            { label: t("voiceButtons.options.username"), value: "username" },
         ],
     },
     buttonPosition: {
         type: OptionType.SELECT,
-        description: "Choose where to place voice buttons in the voice user row.",
+        description: t("voiceButtons.settings.buttonPosition"),
         options: [
-            { label: "Left", value: "left", default: true },
-            { label: "Right", value: "right" },
+            { label: t("voiceButtons.options.left"), value: "left", default: true },
+            { label: t("voiceButtons.options.right"), value: "right" },
         ],
     }
 }, {

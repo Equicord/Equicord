@@ -7,6 +7,7 @@
 import "./styles.css";
 
 import { Heading } from "@components/Heading";
+import { t } from "@utils/translation";
 import type { IPluginOptionComponentProps } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { TextInput, useState } from "@webpack/common";
@@ -66,7 +67,7 @@ export function ReactEmojiSetting({ setValue }: IPluginOptionComponentProps) {
 
     return (
         <div>
-            <Heading>Select Emoji For Reactions</Heading>
+            <Heading>{t("messageClickActions.ui.selectEmojiForReactions")}</Heading>
             <div
                 className="vc-message-click-actions-primary-emoji-picker"
                 onClick={event => event.stopPropagation()}
@@ -106,7 +107,7 @@ export function AdditionalReactEmojisSetting({ setValue }: IPluginOptionComponen
 
     return (
         <div>
-            <Heading>Select Additional Emojis</Heading>
+            <Heading>{t("messageClickActions.ui.selectAdditionalEmojis")}</Heading>
             <div
                 style={{
                     marginTop: 8,
@@ -118,7 +119,7 @@ export function AdditionalReactEmojisSetting({ setValue }: IPluginOptionComponen
             >
                 <TextInput
                     value={emojiList}
-                    placeholder={`comma/newline separated, max ${MAX_ADDITIONAL_REACT_EMOJIS}`}
+                    placeholder={t("messageClickActions.ui.maxAdditionalEmojis", { count: MAX_ADDITIONAL_REMOJIS })}
                     onChange={newValue => {
                         setEmojiList(newValue);
                         setValue(newValue);
