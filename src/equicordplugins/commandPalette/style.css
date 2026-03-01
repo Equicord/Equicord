@@ -24,7 +24,7 @@
     --cp-dropdown-shadow: 0 10px 28px rgb(0 0 0 / 38%);
     --cp-radius: 14px;
     --cp-radius-sm: 8px;
-    --cp-shadow: 0 24px 64px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 30%);
+    --cp-shadow: 0 16px 44px rgb(0 0 0 / 38%), 0 6px 18px rgb(0 0 0 / 28%);
 
     width: min(900px, 92vw) !important;
     max-width: min(900px, 92vw) !important;
@@ -34,6 +34,11 @@
     border: 1px solid var(--cp-border) !important;
     overflow: hidden !important;
     box-sizing: border-box;
+    will-change: opacity, transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    contain: paint;
+    isolation: isolate;
 }
 
 .vc-command-palette-shell {
