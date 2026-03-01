@@ -9,6 +9,36 @@
     "addonCard":{
         "new":"חָדָשׁ"
     },
+    "alwaysAnimate":{
+        "description":"הנפשה של כל דבר שניתן להנפשה",
+        "settings":{
+            "icons":"הנפש תמיד סמלי שרת, אווטרים, תפאורה ועוד",
+            "nameplates":"תמיד הנפשת לוחיות שם",
+            "roleGradients":"הנפש תמיד מעברי תפקידים",
+            "serverBanners":"תמיד הנפשת באנרים של שרתים",
+            "statusEmojis":"הנפש תמיד אימוג'י סטטוס"
+        }
+    },
+    "alwaysExpandRoles":{
+        "description":"תמיד מרחיב את רשימת התפקידים בחלונות קופצים של פרופיל",
+        "settings":{
+            "hideArrow":"הסתר חץ"
+        }
+    },
+    "alwaysTrust":{
+        "description":"מסיר את הדומיין המעצבן הלא מהימן ואת הקובץ המוקפץ החשוד",
+        "settings":{
+            "confirmModal":"האם צריך להציג מודאל \"האם אתה בטוח שאתה רוצה למחוק\"?",
+            "domain":"הסר את חלון הדומיין הבלתי מהימן בעת פתיחת קישורים",
+            "file":"הסר את החלון הקופץ 'הורדה עלולה להיות מסוכנת' בעת פתיחת קישורים",
+            "noDeleteSafety":"מסיר את הדרישה להזין שם שרת בעת מחיקת שרת"
+        },
+        "ui":{
+            "deleteServerBody":"זה קבוע, אם זה לא היה ברור.",
+            "deleteServerConfirm":"לִמְחוֹק",
+            "deleteServerTitle":"למחוק את השרת?"
+        }
+    },
     "anonymiseFileNames":{
         "commands":{
             "spoiler":{
@@ -92,6 +122,19 @@
             "title":"כיצד להשתמש ב-arRPC"
         }
     },
+    "autoDndWhilePlaying":{
+        "description":"מעדכן אוטומטית את הסטטוס המקוון שלך (מקוון, סרק, dnd) בעת הפעלת משחקים",
+        "settings":{
+            "excludeInvisible":"מנע שינויי סטטוס אוטומטיים בזמן שהסטטוס שלך מוגדר לבלתי נראה",
+            "statusToSet":"סטטוס להגדרה בזמן משחק"
+        },
+        "statusOptions":{
+            "dnd":"אל תפריע",
+            "idle":"לְהִתְבַּטֵל",
+            "invisible":"בִּלתִי נִרְאֶה",
+            "online":"באינטרנט"
+        }
+    },
     "badgeAPI":{
         "description":"API להוסיף תגים למשתמשים"
     },
@@ -111,6 +154,22 @@
             "sidebarAnim":"הנפשה פתיחת סרגל הצד של התיקייה"
         }
     },
+    "betterGifAltText":{
+        "description":"שנה טקסט חלופי של GIF מפשוט להיות 'GIF' להכיל את תגי ה-GIF / שם הקובץ"
+    },
+    "betterGifPicker":{
+        "description":"גורם לבורר הגיפים לפתוח את הקטגוריה המועדפת כברירת מחדל",
+        "settings":{
+            "keepOpen":"שומר את בורר ה-GIF פתוח לאחר בחירת gif"
+        }
+    },
+    "betterNotesBox":{
+        "description":"הסתר הערות או השבת את בדיקת האיות (הגדר בהגדרות!!)",
+        "settings":{
+            "hide":"הסתר הערות",
+            "noSpellCheck":"השבת את בדיקת האיות בהערות"
+        }
+    },
     "betterRoleContext":{
         "copyRoleColor":"העתק את צבע התפקיד",
         "description":"מוסיף אפשרויות להעתקת צבע תפקיד / עריכת תפקיד / הצגת סמל תפקיד בעת לחיצה ימנית על תפקידים בפרופיל המשתמש",
@@ -120,6 +179,13 @@
             "roleIconFileFormat":"פורמט קובץ לשימוש בעת צפייה בסמלי תפקידים"
         },
         "viewRoleIcon":"הצג את סמל התפקיד"
+    },
+    "betterRoleDot":{
+        "description":"העתק את צבע התפקיד בלחיצה על RoleDot (הגדרת נגישות). מאפשר גם שימוש בשמות RoleDot וצבעוניים בו זמנית",
+        "settings":{
+            "bothStyles":"הצג גם שמות של נקודות תפקיד וגם שמות צבעוניים",
+            "copyRoleColorInProfilePopout":"אפשר ללחוץ על נקודת התפקיד בחלון קופץ של הפרופיל כדי להעתיק את צבע התפקיד"
+        }
     },
     "betterSessions":{
         "newBadge":"חָדָשׁ",
@@ -143,10 +209,20 @@
             "organizeMenu":"מארגן את תפריט ההקשר של גלגל השיניים של ההגדרות בקטגוריות"
         }
     },
+    "betterUploadButton":{
+        "description":"העלה בלחיצה אחת, פתח את התפריט בלחיצה ימנית"
+    },
     "biggerStreamPreview":{
         "description":"תוסף זה מאפשר לך להגדיל תצוגות מקדימות של זרם",
         "name":"BiggerStreamPreview",
         "viewStreamPreview":"הצג תצוגה מקדימה של זרם"
+    },
+    "blurNsfw":{
+        "description":"טשטוש קבצים מצורפים בערוצי NSFW עד לרחף",
+        "settings":{
+            "blurAllChannels":"טשטוש קבצים מצורפים בכל הערוצים (לא רק NSFW)",
+            "blurAmount":"כמות הטשטוש (בפיקסלים)"
+        }
     },
     "callTimer":{
         "description":"הוסף טיימרים לשיחות לכל המשתמשים בערוצי הקול ובסטטוס החיבור.",
@@ -163,6 +239,9 @@
     "cancel":"לְבַטֵל",
     "chatInputButtonAPI":{
         "description":"API כדי להוסיף כפתורים לקלט הצ'אט"
+    },
+    "clearURLs":{
+        "description":"מסיר אוטומטית רכיבי מעקב מכתובות אתרים שאתה שולח"
     },
     "clientTheme":{
         "contrastWarning":"הצבע שנבחר לא יעמוד בניגוד טוב לטקסט",
@@ -202,6 +281,9 @@
             "updatedRemote":"ההגדרות שלך עודכנו! לחץ כאן כדי להפעיל מחדש כדי להחיל שינויים במלואם!"
         }
     },
+    "colorSighted":{
+        "description":"מסיר את הסמלים הידידותיים לעיוורי צבעים מהסטטוסים, בדיוק כמו 2015-2017 Discord"
+    },
     "commandsAPI":{
         "description":"API מחויב על ידי כל דבר שמשתמש בפקודות"
     },
@@ -215,6 +297,9 @@
             "disableSpotifyLogger":"השבת את לוגר Spotify, שמדליף פרטי חשבון ואסימון גישה",
             "whitelistedLoggers":"רשימה מופרדת בנקודה נקודה של כורתים כדי לאפשר גם אם אחרים מוסתרים"
         }
+    },
+    "consoleShortcuts":{
+        "description":"מוסיף כינויים קצרים יותר עבור דברים רבים בחלון. הפעל את `shortcutList` לרשימה."
     },
     "contextMenuAPI":{
         "description":"API כדי להוסיף/להסיר פריטים תפריטי הקשר"
@@ -246,6 +331,43 @@
     "copyUserURLs":{
         "copyUserURL":"העתק משתמש URL",
         "description":"מוסיף אפשרות 'העתק משתמש URL' לתפריט ההקשר של המשתמש."
+    },
+    "crashHandler":{
+        "description":"תוסף עזר לטיפול ואולי להתאושש מקריסות ללא הפעלה מחדש",
+        "notifications":{
+            "crashedBody":"אוון :( Discord קרס פעמיים במהירות, לא מנסה להתאושש. לחץ כאן כדי להצטרף לשרת התמיכה שלנו!",
+            "crashedTitle":"Discord קרס!",
+            "invalidInvite":"הזמנה לא חוקית או שפג תוקפו",
+            "recoveringBody":"מנסה לשחזר... לחץ כאן כדי להצטרף לשרת התמיכה שלנו!"
+        },
+        "settings":{
+            "attemptToNavigateToHome":"האם לנסות לנווט אל הבית בעת מניעת קריסות Discord.",
+            "attemptToPreventCrashes":"האם לנסות למנוע Discord קריסות."
+        },
+        "updatePrompt":"אה הו, Discord הרגע קרס... אבל חדשות טובות, יש עדכון Equicord זמין שעשוי לפתור את הבעיה הזו! האם תרצה לעדכן עכשיו?"
+    },
+    "ctrlEnterSend":{
+        "description":"השתמש ב-Ctrl+Enter כדי לשלוח הודעות (ניתן להתאמה אישית)",
+        "settings":{
+            "sendMessageInTheMiddleOfACodeBlock":"האם לשלוח הודעה באמצע בלוק קוד",
+            "submitRule":"הדרך לשלוח הודעה"
+        },
+        "submitRuleOptions":{
+            "ctrlEnter":"Ctrl+Enter (Enter או Shift+Enter לשורה חדשה) (cmd+enter ב-macOS)",
+            "enter":"Enter (Shift+Enter לשורה חדשה; Discord ברירת מחדל)",
+            "shiftEnter":"Shift+Enter (Enter לשורה חדשה)"
+        }
+    },
+    "customIdle":{
+        "description":"מאפשר לך להגדיר את הזמן לפני ש-Discord יעבור למצב סרק (או השבתת סרק אוטומטי)",
+        "settings":{
+            "idleTimeout":"דקות לפני ש-Discord יעבור למצב סרק (0 כדי להשבית את ההשבתה האוטומטית)",
+            "remainInIdle":"כשתחזור אל Discord, השאר במצב לא פעיל עד שתאשר שברצונך להתחבר לאינטרנט"
+        },
+        "ui":{
+            "backOnlineMessage":"ברוך שובך! לחץ על הכפתור כדי להיכנס לאינטרנט. לחץ על ה-X כדי להישאר פעיל עד לטעינה מחדש.",
+            "exitIdle":"צא במצב סרק"
+        }
     },
     "customRPC":{
         "activityType":"סוג פעילות",
@@ -334,6 +456,17 @@
         "removeDecoration":"הסר עיטור",
         "title":"תַפאוּרָה"
     },
+    "devCompanion":{
+        "description":"Dev Companion Plugin. אנא דווח על כל דבר שלא עובד או מוזר (סביר להניח שזה באג) לסדן, או פינג או dm, תודה!",
+        "settings":{
+            "notifyOnAutoConnect":"האם להודיע כאשר Dev Companion התחבר אוטומטית.",
+            "reloadAfterToggle":"טען מחדש לאחר שהתקבלה פקודת השבת/הפעל תוסף.",
+            "usePatchedModule":"על בקשות חילוץ, השב עם המודול המתוקן הנוכחי (אם הוא מתוקן) במקום המקור."
+        }
+    },
+    "disableCallIdle":{
+        "description":"משבית אוטומטית קבלת בעיטה משיחה קולית DM לאחר 3 דקות והעברה לערוץ קולי AFK."
+    },
     "donate":"לִתְרוֹם",
     "donorCard":{
         "donated":{
@@ -347,6 +480,9 @@
             "description":"אנא שקול לתמוך בפיתוח של Equicord על ידי תרומה!",
             "title":"תמכו בפרויקט"
         }
+    },
+    "dontRoundMyTimestamps":{
+        "description":"תמיד מעגל חותמות זמן יחסיות כלפי מטה, כך ש-7.6y הופך ל-7y במקום 8y"
     },
     "dynamicImageModalAPI":{
         "description":"מאפשר לך להשאיר גובה או רוחב שפותחים תמונה מודאלית"
@@ -372,6 +508,9 @@
         "failedToClone":"השיבוט נכשל: {error}",
         "nameValidation":"השם חייב להיות בין 2 ל-32 תווים",
         "somethingWentWrong":"משהו השתבש (בדוק את המסוף!)"
+    },
+    "f8break":{
+        "description":"השהה את הלקוח כאשר אתה לוחץ על F8 עם DevTools (+ נקודות עצירה) פתוחות."
     },
     "failedToRender":"עיבוד הכרטיסייה {tab} נכשל. אם הבעיה נמשכת, נסה להשתמש במתקין כדי להתקין מחדש!",
     "fakeNitro":{
@@ -416,6 +555,40 @@
         "primary":"יְסוֹדִי",
         "usage":"נוֹהָג"
     },
+    "favEmojiFirst":{
+        "description":"שם את האימוג'י האהוב עליך ראשון בהשלמה האוטומטית של האמוג'י ויש לו גם כינוי לאמוג'י.",
+        "settings":{
+            "aliases":"נהל את כינויי האמוג'י שלך.",
+            "clearAll":"מחק את כל הכינויים."
+        },
+        "ui":{
+            "aliasRequired":"נדרש כינוי.",
+            "aliasSetFor":"כינוי מוגדר עבור {emoji}.",
+            "aliasValidation":"כינוי חייב להיות בן 2-32 תווים ולהשתמש רק באותיות קטנות, מספרים או קווים תחתונים.",
+            "confirmModal":{
+                "confirmButton":"מחק את כל הכינויים",
+                "description":"פעולה זו תסיר כל כינוי אמוג'י ששמרת.",
+                "title":"מחק את כל הכינויים"
+            },
+            "deleteAllAliases":"מחק את כל הכינויים",
+            "deletedAllAliases":"נמחקו את כל כינויי האמוג'י.",
+            "duplicateAlias":"שכפול כינוי",
+            "editAlias":"ערוך כינוי",
+            "failedToDelete":"מחיקת הכינויים נכשלה.",
+            "failedToRemove":"הסרת הכינוי נכשלה.",
+            "failedToSave":"שמירת הכינוי נכשלה.",
+            "modal":{
+                "placeholder":"כינוי, למשל. \"בֶּן כַּלבָּה\"",
+                "save":"לְהַצִיל",
+                "setDescription":"הגדר כינוי עבור {emoji}",
+                "setTitle":"הגדר כינוי"
+            },
+            "noAliasesYet":"עדיין לא הוגדרו כינויים.",
+            "remove":"לְהַסִיר",
+            "removedAlias":"הוסר כינוי:{alias}:",
+            "setAlias":"הגדר כינוי"
+        }
+    },
     "favGifSearch":{
         "description":"מוסיף שורת חיפוש לגיפים מועדפים.",
         "name":"FavoriteGifSearch",
@@ -428,6 +601,9 @@
         "settings":{
             "searchOption":"החלק בכתובת האתר שברצונך לחפש"
         }
+    },
+    "fixCodeblockGap":{
+        "description":"מסיר את הפער בין בלוקי קוד לטקסט שמתחתיו"
     },
     "fixImagesQuality":{
         "animatedImagesAlways":"תמונות מונפשות (GIF, WebP וכו') בצ'אט תמיד יהיו מונפשות, ללא קשר אם האפליקציה ממוקדת.",
@@ -442,9 +618,51 @@
             "originalImagesInChat":"טען גם את התמונה המקורית ב-Chat. אזהרה: קרא את האזהרות למעלה"
         }
     },
+    "fixSpotifyEmbeds":{
+        "description":"מתקן הטמעות של Spotify רועשות להפליא בכך שהוא מאפשר לך להתאים אישית את עוצמת הקול",
+        "settings":{
+            "volume":"% עוצמת הקול שיש להגדיר עבור הטמעות Spotify. כל דבר מעל 10% הוא רועש מאוד"
+        }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"עוקף סרטוני YouTube שנחסמים להצגה ב-Discord (לדוגמה על ידי UMG)"
+    },
+    "forceOwnerCrown":{
+        "description":"כפה את כתר הבעלים לצד שמות משתמש גם אם השרת גדול."
+    },
+    "friendInvites":{
+        "commands":{
+            "createFriendInvite":{
+                "description":"יוצר קישור להזמנת חבר.",
+                "name":"צור הזמנת חברים"
+            },
+            "revokeFriendInvites":{
+                "description":"מבטל את כל הזמנות החברים שנוצרו.",
+                "name":"לבטל הזמנות חברים"
+            },
+            "viewFriendInvites":{
+                "description":"הצג רשימה של כל הזמנות החברים שנוצרו.",
+                "name":"הצג הזמנות חברים"
+            }
+        },
+        "description":"צור ונהל קישורי הזמנת חברים באמצעות פקודות נטוי (/צור הזמנת חברים, /הצג הזמנות חברים, /בטל הזמנות חברים).",
+        "ui":{
+            "allRevoked":"כל הזמנות החברים בוטלו.",
+            "expires":"פג תוקף:",
+            "maxUses":"מקסימום שימושים:",
+            "noActiveInvites":"אין לך הזמנות חברים פעילות!",
+            "timesUsed":"זמני שימוש:"
+        }
+    },
     "friendsSince":{
         "description":"מראה מתי התיידדתם עם מישהו בחלון הקופץ של המשתמש",
         "heading":"חברים מאז"
+    },
+    "fullSearchContext":{
+        "description":"גורם לתפריט ההקשר של ההודעה בתוצאות חיפוש ההודעות לכלול את כל האפשרויות שאתה מצפה"
+    },
+    "fullUserInChatbox":{
+        "description":"גורם לאזכור המשתמש בתיבת הצ'אט לכלול יותר פונקציות, כמו לחיצה ימנית/שמאלית"
     },
     "gameActivityToggle":{
         "description":"מוסיף כפתור ליד המיקרופון וכפתור ההחרשה כדי להחליף את פעילות המשחק.",
@@ -456,6 +674,9 @@
             "locationToolbox":"Equicord ארגז כלים",
             "oldIcon":"השתמש בסגנון הסמל הישן לפני עיצוב מחדש של הסמל Discord"
         }
+    },
+    "gifPaste":{
+        "description":"גורם לבחירת GIF בבורר GIF להכניס קישור לתיבת הצ'אט במקום לשלוח אותו באופן מיידי"
     },
     "greetStickerPicker":{
         "ariaLabel":"בורר מדבקות של שלום",
@@ -473,6 +694,9 @@
         "hideMedia":"הסתר מדיה",
         "mediaHidden":"מדיה מוסתרת",
         "showMedia":"הצג מדיה"
+    },
+    "iLoveSpam":{
+        "description":"אל תסתיר הודעות מ'שולחי דואר זבל כנראה'"
     },
     "ignoreActivities":{
         "disableActivity":"השבת פעילות",
@@ -498,6 +722,15 @@
             "whitelist":"רשימת הלבנים"
         }
     },
+    "imageFilename":{
+        "description":"הצג את שם הקובץ של תמונות וקובצי GIF כהסבר כלים בעת ריחוף מעליהם",
+        "settings":{
+            "showFullUrl":"הצג את ה-[[PH0]]] המלא של התמונה במקום רק את שם הקובץ. מופעל תמיד עבור קובצי GIF מכיוון שבדרך כלל אין להם שם קובץ משמעותי"
+        }
+    },
+    "imageLink":{
+        "description":"לעולם אל תסתיר קישורי תמונה בהודעות, גם אם זה התוכן היחיד"
+    },
     "imageZoom":{
         "lensSize":"גודל עדשה",
         "nearestNeighbour":"השכן הקרוב ביותר",
@@ -514,7 +747,29 @@
         "zoom":"זום",
         "zoomSpeed":"מהירות זום"
     },
+    "implicitRelationships":{
+        "description":"מציג את מערכות היחסים המרומזות שלך בכרטיסייה חברים.",
+        "settings":{
+            "sortByAffinity":"האם למיין מערכות יחסים מרומזות לפי הזיקה שלהם אליך."
+        },
+        "ui":{
+            "implicitHeader":"משתמע - {count}",
+            "implicitSection":"מִשׁתַמֵעַ"
+        }
+    },
     "invite":"לְהַזמִין",
+    "ircColors":{
+        "description":"הופך את צבעי שם המשתמש בצ'אט לייחודיים, כמו בלקוחות IRC",
+        "settings":{
+            "applyColorOnlyInDms":"החל צבעים רק בהודעות ישירות; אין להחיל צבעים בשרתים.",
+            "applyColorOnlyToUsersWithoutColor":"החל צבעים רק על משתמשים שאין להם צבע מוגדר מראש",
+            "lightness":"קלילות, באחוזים. שנה אם הצבעים בהירים מדי או כהים מדי",
+            "memberListColors":"החלף צבעי תפקידים ברשימת החברים"
+        }
+    },
+    "keepCurrentChannel":{
+        "description":"נסה לנווט לערוץ שהיית בו לפני שהחלפת חשבונות או טעינת Discord."
+    },
     "lastfmRichPresence":{
         "apiKeyInstructions":"הגדר את <0>שם היישום</0> ו<1>תיאור היישום</1> לכל דבר והשאיר את השאר ריק.",
         "createApiKey":"צור מפתח API",
@@ -555,6 +810,19 @@
         }
     },
     "loading":"טְעִינָה...",
+    "loadingQuotes":{
+        "description":"החלף דיסקורד בטעינת ציטוטים",
+        "settings":{
+            "additionalQuotes":"ייתכן שיופיעו ציטוטים מותאמים אישית נוספים, מופרדים באמצעות המפריד למטה",
+            "additionalQuotesDelimiter":"תוחם להצעות מחיר נוספות",
+            "enableDiscordPresetQuotes":"אפשר את הציטוטים המוגדרים מראש של Discord (כולל ציטוטים של אירועים, במהלך אירועים)",
+            "enablePluginPresetQuotes":"אפשר את המירכאות שנקבעו מראש על ידי תוסף זה",
+            "replaceEvents":"האם תוסף זה צריך לחול גם במהלך אירועים עם ציטוטים בנושא אירועים מיוחדים? (למשל ליל כל הקדושים)"
+        },
+        "ui":{
+            "noQuotesQuote":"האם באמת השבתת את כל טעינת הציטוטים? איזה טמבל אתה..."
+        }
+    },
     "logs":{
         "allLogsCleared":"כל היומנים נוקו",
         "clearAll":"נקה הכל",
@@ -581,11 +849,74 @@
     "memberListDecoratorsAPI":{
         "description":"API כדי להוסיף מעצבים לרשימה של המשתמשים(גם בהתכתבות פרטית ובשרתים)"
     },
+    "mentionAvatars":{
+        "description":"מציג אווטרים של משתמשים וסמלי תפקידים בתוך אזכורים",
+        "settings":{
+            "showAtSymbol":"האם יש להציג את הסמל @ באזכורי המשתמש"
+        }
+    },
     "menuItemDemanglerAPI":{
         "description":"מנטרל את מודול פריט התפריט של Discord"
     },
     "messageAccessoriesAPI":{
         "description":"API כדי להוסיף עיצוב הודעות"
+    },
+    "messageClickActions":{
+        "actions":{
+            "copyContent":"העתק תוכן",
+            "copyId":"העתק מזהה",
+            "copyLink":"העתק קישור",
+            "copyUserId":"העתק את מזהה המשתמש",
+            "delete":"לִמְחוֹק",
+            "edit":"לַעֲרוֹך",
+            "none":"אַף לֹא אֶחָד",
+            "openTab":"פתח את הכרטיסייה",
+            "openThread":"פתח שרשור",
+            "pin":"פִּין",
+            "quote":"לְצַטֵט",
+            "react":"לְהָגִיב",
+            "reply":"תְגוּבָה"
+        },
+        "description":"התאם אישית פעולות לחיצה על הודעות.",
+        "modifiers":{
+            "alt":"Alt",
+            "backspace":"Backspace",
+            "ctrl":"Ctrl",
+            "delete":"לִמְחוֹק",
+            "none":"אַף לֹא אֶחָד",
+            "shift":"מִשׁמֶרֶת"
+        },
+        "settings":{
+            "clickTimeout":"זמן קצוב להבדיל בין קליקים כפולים/משולשים (ms)",
+            "deferDoubleClickForTriple":"עיכוב לחיצה כפולה כדי לאפשר פעולות לחיצה משולשת (משבית לחיצה משולשת כאשר כבוי)",
+            "disableInDms":"השבת את כל פעולות הלחיצה בהודעות ישירות",
+            "disableInSystemDms":"השבת את כל פעולות הלחיצה בהודעות DM של המערכת",
+            "doubleClickAction":"פעולה בלחיצה כפולה (ההודעות שלך)",
+            "doubleClickHoldThreshold":"זמן החזקה מקסימלי עבור פעולות לחיצה כפולה (ms). החזקת זמן ארוכה מאפשרת בחירת טקסט",
+            "doubleClickModifier":"נדרש שינוי עבור פעולת לחיצה כפולה",
+            "doubleClickOthersAction":"פעולה בלחיצה כפולה (הודעות של אחרים)",
+            "quoteWithReply":"בעת ציטוט, השב גם להודעה",
+            "reactEmoji":"אמוג'י לשימוש עבור פעולות תגובה",
+            "selectionHoldTimeout":"זמן קצוב לאפשר בחירת טקסט (ms)",
+            "singleClickAction":"פעולה בלחיצה אחת (ההודעות שלך)",
+            "singleClickModifier":"נדרש שינוי עבור פעולת קליק בודד (ההודעות שלך)",
+            "singleClickOthersAction":"פעולה בלחיצה אחת (הודעות של אחרים)",
+            "singleClickOthersModifier":"נדרש שינוי עבור פעולת קליק בודד (הודעות של אחרים)",
+            "tripleClickAction":"פעולה בלחיצה משולשת",
+            "tripleClickModifier":"נדרש שינוי עבור פעולת לחיצה משולשת",
+            "useSelectionForQuote":"בעת ציטוט, השתמש בטקסט שנבחר אם זמין"
+        },
+        "toasts":{
+            "cannotPin":"לא ניתן להצמיד: חסרות הרשאות",
+            "cannotQuote":"לא ניתן לצטט סוג הודעה זה",
+            "cannotReact":"לא ניתן להגיב: חסרות הרשאות"
+        },
+        "ui":{
+            "linkCopied":"הקישור הועתק!",
+            "messageContentCopied":"תוכן ההודעה הועתק!",
+            "messageIdCopied":"מזהה ההודעה הועתק!",
+            "userIdCopied":"זיהוי המשתמש הועתק!"
+        }
     },
     "messageDecorationsAPI":{
         "description":"API כדי להוסיף קישוטים להודעות"
@@ -682,8 +1013,46 @@
     "messagePopoverAPI":{
         "description":"API כדי להוסיף כפתורים לחלונות קופצים של הודעות"
     },
+    "messageTags":{
+        "commands":{
+            "create":"צור תג חדש",
+            "delete":"הסר תג מעצמך",
+            "list":"רשום את כל התגים מעצמך",
+            "message":"ההודעה שתשלח בעת השימוש בתג זה",
+            "preview":"תצוגה מקדימה של תג מבלי לשלוח אותו באופן ציבורי",
+            "tagName":"שם התג להפעלת התגובה",
+            "tags":"נהל את כל התגים בעצמך"
+        },
+        "description":"מאפשר לשמור הודעות ולהשתמש בהן בפקודה פשוטה.",
+        "settings":{
+            "clydeDescription":"אם מופעל, clyde ישלח לך הודעה ארעית כאשר נעשה שימוש בתג.",
+            "clydeName":"הודעת קלייד בשלח"
+        },
+        "ui":{
+            "allTags":"כל התגים:",
+            "invalidSubCommand":"פקודה משנה לא חוקית",
+            "noTagsYet":"אופס! אין עדיין תגים, השתמש ב-[[PH0]]] כדי ליצור אחד!",
+            "tagAlreadyExists":"תג עם השם **{name}** כבר קיים!",
+            "tagCreated":"נוצר בהצלחה את התג **{name}**!",
+            "tagDeleted":"התג **{name}** נמחק בהצלחה!",
+            "tagDoesNotExist":"התג **{name}** אינו קיים יותר! אנא טען מחדש את Discord כדי לתקן :)",
+            "tagDoesNotExist2":"תג עם השם **{name}** אינו קיים!",
+            "tagSent":"התג **{name}** נשלח!"
+        }
+    },
     "messageUpdaterAPI":{
         "description":"API כדי לעדכן ורלרנדר מחדש את ההודעות"
+    },
+    "moreQuickReactions":{
+        "description":"משפר את לחצני התגובה המהירה בתפריט ההקשר של ההודעה.",
+        "settings":{
+            "columns":"עמודות של תגובות מהירות לתצוגה",
+            "compactMode":"משנה את הלחצנים ל-75% מהקנה מידה המקורי שלהם, תוך הגדלת האימוג'י הפנימי ל-125%. אמוג'י יהיו 93.75% מהגודל המקורי. מומלץ לכלול לפחות 5 עמודות",
+            "frequentEmojis":"השתמש באימוג'י בשימוש תכוף במקום באימוג'י מועדפים",
+            "reactionCount":"מספר תגובות (0-42)",
+            "rows":"שורות של תגובות מהירות לתצוגה",
+            "scroll":"אפשר גלילה ברשימת האימוג'ים"
+        }
     },
     "mutualGroupDMs":{
         "description":"מציג dms קבוצתי הדדי בפרופילים",
@@ -717,6 +1086,49 @@
     "nicknameIconsAPI":{
         "description":"API כדי איקונים לשם חיבה בפרופילים"
     },
+    "noBlockedMessages":{
+        "description":"הסתר לחלוטין את כל ההודעות החסומות/התעלמות מהצ'אט.",
+        "settings":{
+            "allowAutoModMessages":"אפשר להודעות שנשלחות על ידי AutoMod לעקוף את הסינון.",
+            "alsoHideIgnoredUsers":"הסתר גם הודעות ממשתמשים שהתעלמו מהם.",
+            "defaultHideUsers":"אם מופעל, הודעות ממשתמשים חסומים יוסתרו לחלוטין וכל הודעה ממזהי משתמש ברשימת העקיפה תכווץ (התנהגות ברירת מחדל Discord) במקום זאת. אם מושבת, הודעות ממשתמשים חסומים יכוווצו וכל הודעה ממזהי משתמש ברשימת העקיפה יוסתרו לחלוטין במקום זאת.",
+            "disableNotifications":"הסתר הודעות חדשות עבור משתמשים חסומים. נכון תמיד אם \"ברירת מחדל הסתרת משתמשים\" מופעלת למטה והמשתמש שמפעיל את ההודעה אינו פטור ב\"עקוף משתמשים\".",
+            "hideBlockedUserReplies":"הסתר תשובות למשתמשים חסומים.",
+            "overrideUsers":"רשימה מופרדת בפסיקים של מזהי משתמש שיוסתרו או יכוווצו במקום התנהגות ברירת המחדל שנבחרה למעלה."
+        }
+    },
+    "noDeepLinks":{
+        "description":"משבית את תכונת הקישור העמוק המטופש של Discord שמנסה לאלץ אותך להשתמש באפליקציית שולחן העבודה שלהם"
+    },
+    "noDevtoolsWarning":{
+        "description":"משבית את הבאנר 'HOLD UP' במסוף. כתופעת לוואי, גם מונעת מ-[[PH0]]] להסתיר את האסימון שלך, מה שמונע התנתקות אקראית."
+    },
+    "noF1":{
+        "description":"השבת את F1 עזרה לאגד."
+    },
+    "noMaskedUrlPaste":{
+        "description":"הדבקת קישור בזמן בחירת טקסט לא תודבק כמסווה URL"
+    },
+    "noMosaic":{
+        "description":"מסיר פסיפס תמונה Discord",
+        "settings":{
+            "inlineVideo":"הפעל סרטונים ללא מודאל קרוסלה"
+        }
+    },
+    "noOnboardingDelay":{
+        "description":"מדלג על עיכוב העלייה האיטי והמעצבן"
+    },
+    "noPendingCount":{
+        "description":"מסיר את ספירת הפינג של בקשות חברים נכנסות, בקשות להודעות והצעות nitro.",
+        "settings":{
+            "hideFriendRequestsCount":"הסתר את ספירת בקשות החברים הנכנסות",
+            "hideMessageRequestsCount":"הסתר ספירת בקשות להודעות",
+            "hidePremiumOffersCount":"הסתר ספירת הצעות nitro"
+        }
+    },
+    "noProfileThemes":{
+        "description":"מסיר לחלוטין ערכות נושא של פרופיל Nitro מכולם מלבד עצמך"
+    },
     "noReplyMention":{
         "description":"משבית פינגי תשובה כברירת מחדל",
         "settings":{
@@ -728,8 +1140,63 @@
             "userList":"רשימת משתמשים לאפשר או לפטור פינגים עבורם (מופרדים בפסיקים או רווחים)"
         }
     },
+    "noServerEmojis":{
+        "description":"אל תציג אימוג'י שרת בתפריט ההשלמה האוטומטית.",
+        "settings":{
+            "shownEmojis":"סוגי האימוג'ים שיוצגו בתפריט ההשלמה האוטומטית.",
+            "shownEmojisOptions":{
+                "all":"אימוג'י Unicode וכל אימוג'י השרת (Discord ברירת מחדל)",
+                "currentServer":"אימוג'י Unicode ואימוג'י שרת מהשרת הנוכחי",
+                "onlyUnicode":"רק אימוג'י יוניקוד"
+            }
+        }
+    },
+    "noSystemBadge":{
+        "description":"משבית את שורת המשימות ואת תג ספירת שלא נקראו במגש המערכת."
+    },
+    "noTypingAnimation":{
+        "description":"משבית את אנימציית נקודות ההקלדה עתירת המעבד"
+    },
+    "noUnblockToJump":{
+        "description":"מאפשר לך לקפוץ להודעות של משתמשים שנחסמו או התעלמו מהם ושל שולחי דואר זבל סבירים מבלי לבטל את החסימה שלהם"
+    },
     "noticesAPI":{
         "description":"מתקן התראות נדחות באוטומת"
+    },
+    "notificationVolume":{
+        "description":"שמור את האוזניים שלך והגדר עוצמת קול נפרדת עבור התראות וצלילים בתוך האפליקציה",
+        "settings":{
+            "notificationVolume":"נפח הודעות"
+        }
+    },
+    "onePingPerDM":{
+        "description":"אם הודעות שלא נקראו נשלחות על ידי משתמש ב-DM מספר פעמים, תקבל רק פינג אודיו אחד.",
+        "settings":{
+            "allowEveryone":"קבל פינגי אודיו עבור @everyone ו-[[PH1]]] בהודעות DM קבוצתיות",
+            "allowMentions":"קבל פינגי אודיו עבור @אזכורים",
+            "alwaysPlaySound":"הפעל את צליל התראת ההודעה גם כשהיא מושבתת",
+            "channelToAffect":"בחר את סוג ה-DM שעל התוסף להשפיע",
+            "channelToAffectOptions":{
+                "both":"שְׁנֵיהֶם",
+                "groupDm":"Group הודעות DM",
+                "userDm":"הודעות DM של משתמשים"
+            },
+            "ignoreUsers":"מזהי משתמש (פסיק + רווח) שלעולם אין לחסום את הפינגים שלהם"
+        }
+    },
+    "openInApp":{
+        "description":"פתח קישורים באפליקציות שלהם במקום בדפדפן שלך",
+        "settings":{
+            "epic":"פתח קישורי Epic Games ב-Epic Games Launcher",
+            "itunes":"פתח את קישורי Apple Music באפליקציית iTunes",
+            "spotify":"פתח קישורי Spotify באפליקציית Spotify",
+            "steam":"פתח קישורי Steam באפליקציית Steam",
+            "tidal":"פתח קישורי Tidal באפליקציית Tidal",
+            "vrcx":"פתח קישורי VRChat באפליקציית VRCX"
+        },
+        "ui":{
+            "openedInApp":"קישור נפתח באפליקציה מקורית"
+        }
     },
     "overrideForumDefaults":{
         "description":"מאפשר לך לעקוף את ברירת המחדל של פריסת/סדר המיון של הפורום. אתה עדיין יכול לשנות את זה על בסיס ערוץ",
@@ -752,6 +1219,13 @@
         "name":"Pause InvitesForever",
         "pauseIndefinitely":"הפסקה ללא הגבלת זמן."
     },
+    "permissionFreeWill":{
+        "description":"משבית את ההגבלות בצד הלקוח לניהול הרשאות ערוץ.",
+        "settings":{
+            "lockout":"עוקף את מניעת נעילת ההרשאה (\"די בטוח שאתה לא רוצה לעשות את זה\")",
+            "onboarding":"עוקף את דרישות ההטמעה (\"ביצוע השינוי הזה יהפוך את השרת שלך לבלתי תואם [...]\")"
+        }
+    },
     "permissionsViewer":{
         "noPermissions":"אין הרשאות להציג!",
         "owner":"בַּעַל",
@@ -767,6 +1241,29 @@
         "unknownUser":"משתמש לא ידוע",
         "userOptions":"אפשרויות משתמש",
         "viewPermissions":"צפה בהרשאות"
+    },
+    "petpet":{
+        "commands":{
+            "petpet":{
+                "description":"צור GIF לחיות מחמד. אתה יכול לציין רק אחת מאפשרויות התמונה",
+                "name":"חיית מחמד",
+                "options":{
+                    "delay":"ההשהיה בין כל פריים ב-ms. מעוגל ל-10 אלפיות השנייה. ברירת המחדל לערך המינימלי של 20.",
+                    "image":"מצורף תמונה לשימוש",
+                    "noServerPfp":"השתמש באווטאר הרגיל במקום באוואטר הספציפי לשרת בעת שימוש באפשרות 'משתמש'",
+                    "resolution":"רזולוציה עבור ה-GIF. ברירת המחדל היא 120. אם אתה מזין מספר מטורף והוא קופא Discord זו אשמתך.",
+                    "url":"URL כדי להביא ממנה תמונה",
+                    "user":"משתמש שהדמות שלו להשתמש כתמונה"
+                }
+            }
+        },
+        "description":"מוסיף פקודת /petpet slash ליצירת GIFs של ראשות מכל תמונה",
+        "errors":{
+            "delayMinimum":"האיחור חייב להיות לפחות 20.",
+            "failedToFetchUser":"אחזור המשתמש נכשל. בדוק את המסוף למידע נוסף.",
+            "noImage":"לא צוינה תמונה!",
+            "uploadNotImage":"העלאה היא לא תמונה"
+        }
     },
     "pictureInPicture":{
         "description":"מוסיף תמונה בתמונה לסרטונים (ליד כפתור ההורדה)",
@@ -797,6 +1294,9 @@
             "pinOrder":"באיזה סדר יש להציג הודעות DM מוצמדות?"
         },
         "unpinDm":"בטל את ההצמדה של DM"
+    },
+    "plainFolderIcon":{
+        "description":"אל תציג את סמלי הגילדה הקטנים בתיקיות"
     },
     "platformIndicators":{
         "consoleIcons":{
@@ -837,15 +1337,36 @@
         "description":"מוסיף לחצן אזכור מהיר לסרגל פעולות ההודעה",
         "label":"אזכור מהיר"
     },
+    "quickReply":{
+        "description":"השב להודעות (ctrl + למעלה/למטה) וערוך (ctrl + shift + למעלה/מטה) הודעות באמצעות keybinds",
+        "settings":{
+            "ignoreBlockedAndIgnored":"התעלם מהודעות של משתמשים חסומים/שמתעלמים מהם בעת הניווט",
+            "shouldMention":"תשובת פינג כברירת מחדל",
+            "shouldMentionOptions":{
+                "disabled":"נָכֶה",
+                "enabled":"מופעל",
+                "followPlugin":"עקוב אחר הפלאגין NoReplyMention (אם מופעל)"
+            }
+        }
+    },
+    "reactErrorDecoder":{
+        "description":"מחליף את \"שגיאת תגובה ממוזערת\" בשגיאה בפועל."
+    },
     "readAllNotificationsButton":{
         "description":"קרא את כל הודעות השרת בלחיצת כפתור אחת!",
         "name":"ReadAllNotificationsButton",
         "readAll":"קרא הכל"
     },
     "relationshipNotifier":{
+        "description":"מודיע לך כאשר חבר, צ'אט קבוצתי או שרת מסירים אותך.",
         "friendRemoved":"{username} הסיר אותך כחבר.",
         "friendRequestRemoved":"בקשת חברות מ{username} הוסרה.",
         "groupRemoved":"הוסרת מהקבוצה {name}.",
+        "notificationTitle":"מודיע על מערכות יחסים",
+        "offlineFriendRemoved":"אתה כבר לא חבר של {username}.",
+        "offlineFriendRequestRevoked":"בקשת חברות מ-[[PH0]]] בוטלה.",
+        "offlineGroupRemoved":"אתה כבר לא בקבוצה {name}.",
+        "offlineServerRemoved":"אתה כבר לא בשרת {name}.",
         "serverRemoved":"הוסרת מהשרת {name}.",
         "settings":{
             "friendRequestCancels":"הודע כאשר בקשת חברות מבוטלת",
@@ -867,6 +1388,12 @@
             "off":"כבוי",
             "replacementEngine":"החלף במנוע חיפוש ספציפי במקום להוסיף תפריט"
         }
+    },
+    "replyTimestamp":{
+        "description":"מציג חותמת זמן בתצוגות מקדימות של הודעות שנענה"
+    },
+    "revealAllSpoilers":{
+        "description":"חשוף את כל הספוילרים בהודעה על ידי Ctrl-לחיצה על ספוילר, או בצ'אט עם Ctrl+Shift-הקלקה"
     },
     "reverseImageSearch":{
         "all":"כֹּל",
@@ -918,6 +1445,18 @@
         "unblockUser":"בטל את חסימת המשתמש",
         "viewReviews":"צפה בביקורות"
     },
+    "roleColorEverywhere":{
+        "description":"מוסיף את צבע התפקיד העליון בכל מקום אפשרי",
+        "settings":{
+            "chatMentions":"הצג צבעי תפקיד באזכורים בצ'אט (כולל בתיבת ההודעות)",
+            "colorChatMessages":"הודעות צ'אט צבעוניות המבוססות על צבע התפקיד של המחבר",
+            "memberList":"הצג צבעי תפקידים בכותרות תפקידים של רשימת חברים",
+            "messageSaturation":"עוצמת צביעת המסר.",
+            "pollResults":"הצג צבעי תפקידים בתוצאות הסקר",
+            "reactorsList":"הצג צבעי תפקידים ברשימת הכורים",
+            "voiceUsers":"הצג צבעי תפקידים ברשימת המשתמשים בצ'אט הקולי"
+        }
+    },
     "secretRingTone":{
         "description":"תמיד משמיע את הרינגטון הסודי של Discord (רק לא במהלך אירועי רינגטון מיוחדים)",
         "settings":{
@@ -946,6 +1485,33 @@
         },
         "timestampFormat":"פורמט חותמת זמן",
         "timestampPicker":"בוחר חותמות זמן"
+    },
+    "serverInfo":{
+        "description":"מאפשר לך להציג מידע על שרת",
+        "settings":{
+            "sorting":"שם משתמש או אם רלוונטי שם תצוגה",
+            "sortingOptions":{
+                "displayname":"שם תצוגה",
+                "none":"אל תמיין",
+                "username":"שם משתמש"
+            }
+        },
+        "ui":{
+            "blockedUsers":"משתמשים חסומים",
+            "channels":"ערוצים",
+            "createdAt":"נוצר ב-",
+            "friends":"חברים",
+            "ignoredUsers":"משתמשים שהתעלמו מהם",
+            "joinedAt":"הצטרף ל- At",
+            "mutualUsers":"משתמשים הדדיים",
+            "preferredLocale":"מקום מועדף",
+            "roles":"תפקידים",
+            "serverBoosts":"מגבירי שרת",
+            "serverInfo":"מידע על השרת",
+            "serverOwner":"בעל שרת",
+            "vanityLink":"קישור יהירות",
+            "verificationLevel":"רמת אימות"
+        }
     },
     "serverListAPI":{
         "description":"API מחויב בשביל Plugins שמשנים את הרשימה של השרת"
@@ -1110,6 +1676,13 @@
             }
         }
     },
+    "showAllMessageButtons":{
+        "description":"הצג תמיד את כל לחצני ההודעה, לא משנה אם אתה מחזיק את מקש Shift או לא.",
+        "settings":{
+            "noShiftDelete":"הסר את הדרישה להחזיק משמרת למחיקת הודעה.",
+            "noShiftPin":"הסר את הדרישה להחזיק משמרת לצורך הצמדת הודעה."
+        }
+    },
     "showConnections":{
         "description":"הצג חשבונות מחוברים בחלונות קופצים של משתמשים",
         "settings":{
@@ -1129,21 +1702,27 @@
         "channelTypes":{
             "announcement":"הַכרָזָה",
             "forum":"פוֹרוּם",
+            "message":"הוֹדָעָה",
             "messages":"הודעות",
+            "post":"שֶׁלְאַחַר",
             "posts":"פוסטים",
             "stage":"שָׁלָב",
             "text":"טֶקסט",
+            "thread":"פְּתִיל",
+            "threads":"חוטים",
             "voice":"קוֹל"
         },
         "defaultLayout":"פריסת ברירת מחדל: {layout}",
         "defaultReactionEmoji":"אימוג'י תגובה ברירת מחדל:",
         "defaultSortOrder":"סדר המיון המוגדר כברירת מחדל: {order}",
+        "description":"הצג ערוצים שאין לך גישה לצפות בהם.",
         "forumLayouts":{
             "gridView":"תצוגת גלריה",
             "listView":"תצוגת רשימה",
             "notSet":"לא מוגדר"
         },
         "hiddenChannel":"זהו ערוץ {type} מוסתר",
+        "hiddenChannelTooltip":"ערוץ נסתר",
         "hideAllowedUsersAndRoles":"הסתר משתמשים ותפקידים מורשים",
         "lastMessageCreated":"{type} אחרון שנוצר:",
         "lastMessagePin":"סיכת הודעה אחרונה:",
@@ -1154,6 +1733,24 @@
         "regionAutomatic":"אוֹטוֹמָטִי",
         "requireTag":"לפוסטים בפורום זה יש להגדיר תג.",
         "seeGuidelines":" עם זאת, ייתכן שתראה את ההנחיות שלו:",
+        "settings":{
+            "channelStyle":{
+                "classic":"קלַאסִי",
+                "description":"הסגנון המשמש להצגת ערוצים נסתרים.",
+                "muted":"מושתק",
+                "mutedAndShowUnreads":"מושתק והצג פריטים שלא נקראו",
+                "showUnreads":"הצג פריטים שלא נקראו"
+            },
+            "defaultAllowedUsersAndRolesDropdownState":{
+                "description":"האם התפריט הנפתח של משתמשים ותפקידים מותרים בערוצים מוסתרים צריך להיות פתוח כברירת מחדל"
+            },
+            "showMode":{
+                "description":"המצב המשמש להצגת ערוצים נסתרים.",
+                "eyeIconRight":"סמל עין בצד ימין",
+                "lockIcon":"סמל מנעול מחליף את סמל הערוץ",
+                "lockIconRight":"סמל מנעול בצד ימין"
+            }
+        },
         "slowmode":"מצב איטי: {duration}",
         "sortOrders":{
             "creationDate":"תאריך יצירה",
@@ -1168,7 +1765,12 @@
         "viewAllowedUsersAndRoles":"הצג משתמשים ותפקידים מורשים"
     },
     "showHiddenThings":{
-        "description":"מציג דברים שונים מוסתרים ומודרים בלבד ללא קשר להרשאות."
+        "description":"מציג דברים שונים מוסתרים ומודרים בלבד ללא קשר להרשאות.",
+        "settings":{
+            "showInvitesPaused":"הצג את הסבר הכלים של ההזמנות שהושהו ברשימת השרתים.",
+            "showModView":"הצג את פריט תפריט ההקשר של תצוגת מוד חבר בכל השרתים.",
+            "showTimeouts":"הצג סמלי פסק זמן של חבר בצ'אט."
+        }
     },
     "showMeYourName":{
         "addNickname":"הוסף כינוי SMYN",
@@ -1274,6 +1876,41 @@
             "showDates":"הצג תאריכים בבקשות חברים"
         }
     },
+    "spotifyCrack":{
+        "description":"האזנה חופשית, ללא השהייה אוטומטית בצ'אט קולי, ומאפשרת לפעילות להמשיך לשחק במצב סרק",
+        "settings":{
+            "keepSpotifyActivityOnIdle":"המשך לשחק בפעילות Spotify בזמן סרק",
+            "noSpotifyAutoPause":"השבת את ההשהיה האוטומטית של Spotify"
+        }
+    },
+    "spotifyShareCommands":{
+        "commands":{
+            "notListening":"אתה לא מקשיב לשום מוזיקה.",
+            "shareDescription":"שתף את Spotify הנוכחי שלך {name} בצ'אט",
+            "trackNotFound":"לא הצליח למצוא את הרצועה ב-spotify."
+        },
+        "description":"שתף את הרצועה, האלבום או האמן הנוכחי שלך ב-Spotify באמצעות פקודת נטוי (/track, /album, /artist)"
+    },
+    "startupTimings":{
+        "description":"מוסיף תזמוני הפעלה לתפריט ההגדרות",
+        "ui":{
+            "title":"תזמון הפעלה"
+        }
+    },
+    "stickerPaste":{
+        "description":"גורם לבחירת מדבקה בבורר המדבקות להכניס אותה לתיבת הצ'אט במקום לשלוח באופן מיידי"
+    },
+    "streamerModeOnStream":{
+        "description":"מפעיל באופן אוטומטי את מצב סטרימר כשאתה מתחיל להזרים ב-[[PH0]]]"
+    },
+    "superReactionTweaks":{
+        "description":"התאם אישית את מגבלת תגובות העל המושמעות בבת אחת, וסופר תגובה כברירת מחדל",
+        "settings":{
+            "superReactByDefault":"בורר התגובות יקבע כברירת מחדל Super Reactions",
+            "superReactionPlayingLimit":"מקסימום תגובות סופר לשחק בבת אחת. 0 כדי להשבית משחק Super Reactions",
+            "unlimitedSuperReactionPlaying":"הסר את המגבלה על משחק Super Reactions בבת אחת"
+        }
+    },
     "tabs":{
         "settings":"Equicord הגדרות"
     },
@@ -1289,6 +1926,9 @@
         "typeMessage":"הקלד הודעה",
         "usingRegex":"באמצעות Regex",
         "usingString":"שימוש במחרוזת"
+    },
+    "themeAttributes":{
+        "description":"מוסיף תכונות נתונים לאלמנטים שונים למטרות עיצוב"
     },
     "translate":{
         "autoTranslate":"תרגום אוטומטי",
@@ -1328,10 +1968,30 @@
             "showRoleColors":"הצג צבעי תפקידים במחוון ההקלדה"
         }
     },
+    "unindent":{
+        "description":"חותך הזחה מובילה מחסומי קוד"
+    },
+    "unlockedAvatarZoom":{
+        "description":"מאפשר לך להתקרב עוד יותר בכלי חיתוך התמונה בעת שינוי הדמות שלך",
+        "settings":{
+            "zoomMultiplier":"מכפיל זום"
+        }
+    },
     "unsuppressEmbeds":{
         "description":"מאפשר לך לבטל את דיכוי ההטמעות בהודעות",
         "suppressEmbeds":"דיכוי הטמעות",
         "unsuppressEmbeds":"בטל את דיכוי ההטמעות"
+    },
+    "userMessagesPronouns":{
+        "description":"מוסיף כינויים להודעות משתמש בצ'אט",
+        "settings":{
+            "pronounsFormat":"הפורמט להופעת כינויים בצ'אט",
+            "pronounsFormatOptions":{
+                "capitalized":"באותיות רישיות",
+                "lowercase":"אותיות קטנות"
+            },
+            "showSelf":"אפשר או השבת את הצגת כינויים עבור עצמך"
+        }
     },
     "userSettingsAPI":{
         "description":"גורם לUserSettings של Discord כדי לחשוף את הקבוצה והשם שלהם"
@@ -1355,6 +2015,15 @@
             "usrbgBanner":"באנר USBG",
             "voiceBackground":"השתמש באנרים של USBG כרקע צ'אט קולי"
         }
+    },
+    "validReply":{
+        "description":"תיקון \"לא ניתן היה לטעון את ההודעה\" עם ריחוף מעל התשובה"
+    },
+    "validUser":{
+        "description":"תקן אזכורים עבור משתמשים לא ידועים שמופיעים בתור '‎@unknown-user' (רחף מעל אזכור כדי לתקן את זה)"
+    },
+    "vcDoubleClick":{
+        "description":"הצטרף לצ'אטים קוליים באמצעות לחיצה כפולה במקום לחיצה אחת"
     },
     "vcNarrator":{
         "customiseMessages":"אתה יכול להתאים אישית את ההודעות המדוברות למטה. אתה יכול להשבית הודעות ספציפיות על ידי הגדרתן לכלום",
@@ -1435,6 +2104,24 @@
         "sending":"עכשיו שולחת הודעה קולית... נא להתאזר בסבלנות",
         "uploadFile":"העלה קובץ"
     },
+    "volumeBooster":{
+        "description":"מאפשר לך להגדיר את עוצמת הקול של המשתמש והסטרימינג מעל למקסימום ברירת המחדל",
+        "settings":{
+            "multiplier":"מכפיל נפח"
+        }
+    },
+    "webContextMenus":{
+        "description":"מוסיף מחדש תפריטי הקשר חסרים בגרסת האינטרנט של Discord: קישורים ותמונות (העתק/פתח קישור/תמונה), טקסט הם (העתק, גזור, הדבק, בדיקת איות)",
+        "settings":{
+            "addBack":"הוסף בחזרה את תפריטי ההקשר Discord עבור תמונות, קישורים וסרגל הקלט של הצ'אט"
+        }
+    },
+    "webKeybinds":{
+        "description":"מוסיף מחדש חיבורי מפתח שחסרים בגרסת האינטרנט של Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. עובד במלואו רק על Vesktop/Legcord, לא בתוך הדפדפן שלך"
+    },
+    "webScreenShareFixes":{
+        "description":"מסיר מכסת קצב סיביות של 2500kbps על לקוחות כרום ו-vesktop."
+    },
     "whoReacted":{
         "settings":{
             "avatarClick":"החלף אווטרים בלחיצה בתגובות"
@@ -1468,5 +2155,8 @@
         "timeout":"משך הודעה (שניות)",
         "volume":"כֶּרֶך",
         "webSocketPort":"יציאת Websocket"
+    },
+    "youtubeAdblock":{
+        "description":"חסום מודעות בהטמעות YouTube ואת פעילות WatchTogether באמצעות AdGuard"
     }
 }
