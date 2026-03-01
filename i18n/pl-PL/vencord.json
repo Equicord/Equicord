@@ -913,7 +913,9 @@
         },
         "ui":{
             "linkCopied":"Link skopiowany!",
-            "messageIdCopied":"Identyfikator wiadomości skopiowany!"
+            "messageContentCopied":"Treść wiadomości została skopiowana!",
+            "messageIdCopied":"Identyfikator wiadomości skopiowany!",
+            "userIdCopied":"Identyfikator użytkownika skopiowany!"
         }
     },
     "messageDecorationsAPI":{
@@ -1083,6 +1085,17 @@
     },
     "nicknameIconsAPI":{
         "description":"API, aby dodać ikony do pseudonimu w profilach"
+    },
+    "noBlockedMessages":{
+        "description":"Całkowicie ukryj wszystkie zablokowane/ignorowane wiadomości na czacie.",
+        "settings":{
+            "allowAutoModMessages":"Zezwól wiadomościom wysyłanym przez AutoModa na ominięcie filtrowania.",
+            "alsoHideIgnoredUsers":"Ukryj także wiadomości od ignorowanych użytkowników.",
+            "defaultHideUsers":"Jeśli ta opcja jest włączona, wiadomości od zablokowanych użytkowników będą całkowicie ukryte, a wszelkie wiadomości od identyfikatorów użytkowników na liście zastąpień zostaną zwinięte (domyślne zachowanie Discord). Jeśli ta opcja jest wyłączona, wiadomości od zablokowanych użytkowników zostaną zwinięte, a wszelkie wiadomości od identyfikatorów użytkowników na liście zastąpień zostaną całkowicie ukryte.",
+            "disableNotifications":"Ukryj powiadomienia o nowych wiadomościach dla zablokowanych użytkowników. Zawsze ma wartość true, jeśli poniżej włączona jest opcja „Domyślne ukrywanie użytkowników”, a użytkownik wyzwalający powiadomienie nie jest wykluczony z opcji „Zastąp użytkowników”.",
+            "hideBlockedUserReplies":"Ukryj odpowiedzi dla zablokowanych użytkowników.",
+            "overrideUsers":"Rozdzielana przecinkami lista identyfikatorów użytkowników, które zostaną ukryte lub zwinięte zamiast domyślnego zachowania wybranego powyżej."
+        }
     },
     "noDeepLinks":{
         "description":"Wyłącza głupią funkcję głębokiego linkowania Discord, która próbuje zmusić Cię do korzystania z aplikacji komputerowej"
@@ -1473,6 +1486,33 @@
         "timestampFormat":"Format znacznika czasu",
         "timestampPicker":"Selektor sygnatur czasowych"
     },
+    "serverInfo":{
+        "description":"Umożliwia przeglądanie informacji o serwerze",
+        "settings":{
+            "sorting":"Nazwa użytkownika lub, jeśli ma to zastosowanie, nazwa wyświetlana",
+            "sortingOptions":{
+                "displayname":"Nazwa wyświetlana",
+                "none":"Nie sortuj",
+                "username":"Nazwa użytkownika"
+            }
+        },
+        "ui":{
+            "blockedUsers":"Zablokowani użytkownicy",
+            "channels":"Kanały",
+            "createdAt":"Utworzono o godz",
+            "friends":"Znajomi",
+            "ignoredUsers":"Ignorowani użytkownicy",
+            "joinedAt":"Dołączył o godz",
+            "mutualUsers":"Wzajemni użytkownicy",
+            "preferredLocale":"Preferowane miejsce",
+            "roles":"Role",
+            "serverBoosts":"Wzmocnienia serwera",
+            "serverInfo":"Informacje o serwerze",
+            "serverOwner":"Właściciel serwera",
+            "vanityLink":"Próżne łącze",
+            "verificationLevel":"Poziom weryfikacji"
+        }
+    },
     "serverListAPI":{
         "description":"API wymagane dla wtyczek modyfikujących listę serwerów"
     },
@@ -1634,6 +1674,13 @@
                 "colorless":"Bezbarwny",
                 "disabled":"Wył."
             }
+        }
+    },
+    "showAllMessageButtons":{
+        "description":"Zawsze pokazuj wszystkie przyciski wiadomości, niezależnie od tego, czy trzymasz klawisz Shift, czy nie.",
+        "settings":{
+            "noShiftDelete":"Usuń wymóg przytrzymywania klawisza Shift w celu usunięcia wiadomości.",
+            "noShiftPin":"Usuń wymóg przytrzymywania klawisza Shift w celu przypięcia wiadomości."
         }
     },
     "showConnections":{
