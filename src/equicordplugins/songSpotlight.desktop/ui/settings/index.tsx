@@ -35,7 +35,7 @@ export function ImportButton({ overwrite, pending, setPending, onImport }: Impor
     const checkClipboard = useCallback(async () => {
         setPending(true);
 
-        let json: any;
+        let json: unknown;
         try {
             json = JSON.parse(await readClipboard());
         } catch {
