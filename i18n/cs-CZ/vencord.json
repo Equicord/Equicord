@@ -9,6 +9,36 @@
     "addonCard":{
         "new":"NOVÝ"
     },
+    "alwaysAnimate":{
+        "description":"Animuje vše, co se animovat dá",
+        "settings":{
+            "icons":"Vždy animujte ikony serveru, avatary, dekorace a další",
+            "nameplates":"Vždy animujte jmenovky",
+            "roleGradients":"Vždy animujte přechody rolí",
+            "serverBanners":"Vždy animujte bannery serveru",
+            "statusEmojis":"Vždy animujte stavové emotikony"
+        }
+    },
+    "alwaysExpandRoles":{
+        "description":"Vždy rozbalí seznam rolí ve vyskakovacích oknech profilu",
+        "settings":{
+            "hideArrow":"Skrýt šipku"
+        }
+    },
+    "alwaysTrust":{
+        "description":"Odstraňuje obtěžující nedůvěryhodnou doménu a vyskakovací okno podezřelých souborů",
+        "settings":{
+            "confirmModal":"Měl by se zobrazit modál „jste si jisti, že chcete smazat“?",
+            "domain":"Při otevírání odkazů odstraňte vyskakovací okno nedůvěryhodné domény",
+            "file":"Při otevírání odkazů odstraňte vyskakovací okno „Potenciálně nebezpečné stahování“.",
+            "noDeleteSafety":"Odebere požadavek na zadání názvu serveru při odstraňování serveru"
+        },
+        "ui":{
+            "deleteServerBody":"Je to trvalé, pokud to nebylo zřejmé.",
+            "deleteServerConfirm":"Smazat",
+            "deleteServerTitle":"Smazat server?"
+        }
+    },
     "anonymiseFileNames":{
         "commands":{
             "spoiler":{
@@ -92,6 +122,19 @@
             "title":"Jak používat arRPC"
         }
     },
+    "autoDndWhilePlaying":{
+        "description":"Automaticky aktualizuje váš online stav (online, nečinný, dnd) při spouštění her",
+        "settings":{
+            "excludeInvisible":"Zabraňte automatickým změnám stavu, když je váš stav nastaven na neviditelný",
+            "statusToSet":"Stav k nastavení při hraní hry"
+        },
+        "statusOptions":{
+            "dnd":"Nerušit",
+            "idle":"Nečinný",
+            "invisible":"Neviditelný",
+            "online":"Online"
+        }
+    },
     "badgeAPI":{
         "description":"API pro přidávání odznaky uživatelům"
     },
@@ -111,6 +154,22 @@
             "sidebarAnim":"Animujte otevření postranního panelu složky"
         }
     },
+    "betterGifAltText":{
+        "description":"Změňte alternativní text GIF z pouhého 'GIF' na obsahující značky gif / název souboru"
+    },
+    "betterGifPicker":{
+        "description":"Přizpůsobí výběr gifů jako výchozí otevření oblíbené kategorie",
+        "settings":{
+            "keepOpen":"Po výběru gifu ponechá výběr gifu otevřený"
+        }
+    },
+    "betterNotesBox":{
+        "description":"Skryjte poznámky nebo deaktivujte kontrolu pravopisu (Konfigurovat v nastavení!!)",
+        "settings":{
+            "hide":"Skrýt poznámky",
+            "noSpellCheck":"Zakázat kontrolu pravopisu v poznámkách"
+        }
+    },
     "betterRoleContext":{
         "copyRoleColor":"Kopírovat barvu role",
         "description":"Přidává možnosti pro kopírování barvy role / úpravy role / zobrazení ikony role při kliknutí pravým tlačítkem na role v uživatelském profilu",
@@ -120,6 +179,13 @@
             "roleIconFileFormat":"Formát souboru, který se má použít při zobrazení ikon rolí"
         },
         "viewRoleIcon":"Zobrazit ikonu role"
+    },
+    "betterRoleDot":{
+        "description":"Kopírovat barvu role po kliknutí na RoleDot (nastavení usnadnění). Také umožňuje současné použití RoleDot a barevných jmen",
+        "settings":{
+            "bothStyles":"Ukažte tečku rolí i barevná jména",
+            "copyRoleColorInProfilePopout":"Chcete-li zkopírovat barvu role, povolte kliknutím na tečku role ve vyskakovacím okně profilu"
+        }
     },
     "betterSessions":{
         "newBadge":"NOVÝ",
@@ -143,10 +209,20 @@
             "organizeMenu":"Uspořádá kontextovou nabídku ozubeného kolečka nastavení do kategorií"
         }
     },
+    "betterUploadButton":{
+        "description":"Nahrajte jediným kliknutím, otevřete nabídku pravým kliknutím"
+    },
     "biggerStreamPreview":{
         "description":"Tento plugin umožňuje zvětšit náhledy streamů",
         "name":"BiggerStreamPreview",
         "viewStreamPreview":"Zobrazit náhled streamu"
+    },
+    "blurNsfw":{
+        "description":"Rozmazat přílohy v kanálech NSFW, dokud neukážete kurzor",
+        "settings":{
+            "blurAllChannels":"Rozmazání příloh ve všech kanálech (nejen NSFW)",
+            "blurAmount":"Míra rozmazání (v pixelech)"
+        }
     },
     "callTimer":{
         "description":"Přidejte časovače hovorů pro všechny uživatele v hlasových kanálech a ve stavu připojení.",
@@ -163,6 +239,9 @@
     "cancel":"Zrušit",
     "chatInputButtonAPI":{
         "description":"API pro přidání tlačítka pro vstup do zpráv"
+    },
+    "clearURLs":{
+        "description":"Automaticky odstraní prvky sledování z odeslaných adres URL"
     },
     "clientTheme":{
         "contrastWarning":"Vybraná barva nebude dobře kontrastovat s textem",
@@ -202,6 +281,9 @@
             "updatedRemote":"Vaše nastavení byla aktualizována! Kliknutím sem restartujte a plně se projeví změny!"
         }
     },
+    "colorSighted":{
+        "description":"Odebere ze stavů ikony vhodné pro barvoslepé, stejně jako v letech 2015–2017 Discord"
+    },
     "commandsAPI":{
         "description":"API požaduje cokoli co používá příkazy"
     },
@@ -215,6 +297,9 @@
             "disableSpotifyLogger":"Vypněte záznamník Spotify, který uniká informace o účtu a přístupový token",
             "whitelistedLoggers":"Středníkem oddělený seznam loggerů, které lze povolit, i když jsou ostatní skryté"
         }
+    },
+    "consoleShortcuts":{
+        "description":"Přidá kratší aliasy pro mnoho věcí v okně. Seznam zobrazíte spuštěním `shortcutList`."
     },
     "contextMenuAPI":{
         "description":"API pro přidání/odstranění položek do/z kontextových nabídek"
@@ -246,6 +331,43 @@
     "copyUserURLs":{
         "copyUserURL":"Kopírovat uživatele URL",
         "description":"Přidá do kontextové nabídky uživatele možnost „Kopírovat uživatele URL“."
+    },
+    "crashHandler":{
+        "description":"Utility plugin pro zpracování a případné zotavení z pádů bez restartu",
+        "notifications":{
+            "crashedBody":"Awn :( Discord se dvakrát rychle zhroutil, bez pokusu o obnovení. Kliknutím sem se připojíte k našemu serveru podpory!",
+            "crashedTitle":"Discord se zhroutil!",
+            "invalidInvite":"Neplatná nebo vypršela platnost pozvánky",
+            "recoveringBody":"Pokus o obnovení... Klikněte sem a připojte se k našemu serveru podpory!"
+        },
+        "settings":{
+            "attemptToNavigateToHome":"Zda se pokusit o navigaci domů, když se zabrání selhání Discord.",
+            "attemptToPreventCrashes":"Zda se má pokusit zabránit selhání Discord."
+        },
+        "updatePrompt":"Och, Discord právě selhal... ale dobrá zpráva, k dispozici je aktualizace Equicord, která by mohla tento problém vyřešit! Chcete provést aktualizaci nyní?"
+    },
+    "ctrlEnterSend":{
+        "description":"K odesílání zpráv použijte Ctrl+Enter (přizpůsobitelné)",
+        "settings":{
+            "sendMessageInTheMiddleOfACodeBlock":"Zda se má odeslat zpráva uprostřed bloku kódu",
+            "submitRule":"Způsob odeslání zprávy"
+        },
+        "submitRuleOptions":{
+            "ctrlEnter":"Ctrl+Enter (Enter nebo Shift+Enter pro nový řádek) (cmd+enter na macOS)",
+            "enter":"Enter (Shift+Enter pro nový řádek; výchozí Discord)",
+            "shiftEnter":"Shift+Enter (Enter pro nový řádek)"
+        }
+    },
+    "customIdle":{
+        "description":"Umožňuje nastavit čas, po kterém Discord přejde do nečinnosti (nebo deaktivovat automatický nečinnost)",
+        "settings":{
+            "idleTimeout":"Minuty předtím, než Discord přejde do nečinnosti (0 pro deaktivaci automatického nečinnosti)",
+            "remainInIdle":"Až se vrátíte na Discord, zůstaňte nečinní, dokud nepotvrdíte, že chcete přejít online"
+        },
+        "ui":{
+            "backOnlineMessage":"Vítejte zpět! Klepnutím na tlačítko přejděte online. Kliknutím na X zůstanete nečinný, dokud se znovu nenačte.",
+            "exitIdle":"Ukončit nečinnost"
+        }
     },
     "customRPC":{
         "activityType":"Typ aktivity",
@@ -334,6 +456,17 @@
         "removeDecoration":"Odstraňte dekoraci",
         "title":"Výzdoba"
     },
+    "devCompanion":{
+        "description":"Dev Companion Plugin. Nahlaste prosím sadan něco, co nefunguje nebo je divné (s největší pravděpodobností je to chyba), buď ping nebo dm, díky!",
+        "settings":{
+            "notifyOnAutoConnect":"Zda se má upozornit, když se Dev Companion automaticky připojí.",
+            "reloadAfterToggle":"Znovu načtěte po přijetí příkazu zakázáno/povolit plugin.",
+            "usePatchedModule":"Na žádosti o extrahování odpovězte aktuálním opraveným modulem (pokud je opraven) namísto původního."
+        }
+    },
+    "disableCallIdle":{
+        "description":"Deaktivuje automatické vyhození z hlasového hovoru DM po 3 minutách a přesunutí na hlasový kanál AFK."
+    },
     "donate":"Darovat",
     "donorCard":{
         "donated":{
@@ -347,6 +480,12 @@
             "description":"Zvažte prosím podporu rozvoje Equicord darováním!",
             "title":"Podpořte Projekt"
         }
+    },
+    "dontRoundMyTimestamps":{
+        "description":"Vždy zaokrouhlí relativní časová razítka dolů, takže 7,6y se stane 7y místo 8y"
+    },
+    "dynamicImageModalAPI":{
+        "description":"Umožňuje vynechat šířku nebo výšku při otevírání modálního obrázku"
     },
     "experiments":{
         "description":"Povolte přístup k experimentům a dalším funkcím pouze pro vývojáře v Discord!",
@@ -369,6 +508,9 @@
         "failedToClone":"Nepodařilo se klonovat: {error}",
         "nameValidation":"Název musí mít 2 až 32 znaků",
         "somethingWentWrong":"Něco se pokazilo (zkontrolujte konzoli!)"
+    },
+    "f8break":{
+        "description":"Pozastavte klienta, když stisknete F8 s otevřenými nástroji DevTools (+ zarážky)."
     },
     "failedToRender":"Nepodařilo se vykreslit kartu {tab}. Pokud problém přetrvává, zkuste k přeinstalaci použít instalační program!",
     "fakeNitro":{
@@ -413,6 +555,40 @@
         "primary":"Primární",
         "usage":"Používání"
     },
+    "favEmojiFirst":{
+        "description":"Umístí vaše oblíbené emotikony na první místo v automatickém doplňování emodži a má také alias emodži.",
+        "settings":{
+            "aliases":"Spravujte své aliasy emodži.",
+            "clearAll":"Smazat všechny aliasy."
+        },
+        "ui":{
+            "aliasRequired":"Alias je povinný.",
+            "aliasSetFor":"Alias nastaven pro {emoji}.",
+            "aliasValidation":"Alias musí mít 2–32 znaků a používat pouze malá písmena, čísla nebo podtržítka.",
+            "confirmModal":{
+                "confirmButton":"Smazat všechny aliasy",
+                "description":"Tím odstraníte všechny uložené aliasy emotikonů.",
+                "title":"Smazat všechny aliasy"
+            },
+            "deleteAllAliases":"Smazat všechny aliasy",
+            "deletedAllAliases":"Smazány všechny aliasy emotikonů.",
+            "duplicateAlias":"Duplicitní alias",
+            "editAlias":"Upravit alias",
+            "failedToDelete":"Smazání aliasů se nezdařilo.",
+            "failedToRemove":"Alias se nepodařilo odebrat.",
+            "failedToSave":"Alias se nepodařilo uložit.",
+            "modal":{
+                "placeholder":"Přezdívka, např. \"vzlykat\"",
+                "save":"Uložit",
+                "setDescription":"Nastavit alias pro {emoji}",
+                "setTitle":"Nastavit alias"
+            },
+            "noAliasesYet":"Zatím nejsou nastaveny žádné aliasy.",
+            "remove":"Odebrat",
+            "removedAlias":"Odebrán alias :{alias}:",
+            "setAlias":"Nastavit alias"
+        }
+    },
     "favGifSearch":{
         "description":"Přidá vyhledávací panel k oblíbeným gifům.",
         "name":"Oblíbené GifSearch",
@@ -425,6 +601,9 @@
         "settings":{
             "searchOption":"Část adresy URL, kterou chcete vyhledat"
         }
+    },
+    "fixCodeblockGap":{
+        "description":"Odstraní mezeru mezi kódovými bloky a textem pod nimi"
     },
     "fixImagesQuality":{
         "animatedImagesAlways":"Animované obrázky (GIF, WebP atd.) v chatu se budou vždy animovat, bez ohledu na to, zda je aplikace zaměřena.",
@@ -439,9 +618,51 @@
             "originalImagesInChat":"Načtěte také původní obrázek v Chat. VAROVÁNÍ: Přečtěte si výše uvedená upozornění"
         }
     },
+    "fixSpotifyEmbeds":{
+        "description":"Opravuje neuvěřitelně hlasité vložení spotify tím, že vám umožňuje přizpůsobit hlasitost",
+        "settings":{
+            "volume":"% hlasitosti, které se má nastavit pro vložení spotify. Cokoli nad 10% je velmi hlasité"
+        }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"Obchází blokování zobrazení videí na youtube na Discord (například UMG)"
+    },
+    "forceOwnerCrown":{
+        "description":"Vynutit korunu vlastníka vedle uživatelských jmen, i když je server velký."
+    },
+    "friendInvites":{
+        "commands":{
+            "createFriendInvite":{
+                "description":"Vygeneruje odkaz na pozvání přítele.",
+                "name":"vytvořit pozvánku k přátelství"
+            },
+            "revokeFriendInvites":{
+                "description":"Odvolá všechna vygenerovaná pozvání k přátelství.",
+                "name":"zrušit pozvánky na přátelství"
+            },
+            "viewFriendInvites":{
+                "description":"Zobrazit seznam všech vygenerovaných pozvánek k přátelství.",
+                "name":"zobrazit pozvánky přátel"
+            }
+        },
+        "description":"Vytvářejte a spravujte odkazy na pozvání přátel pomocí příkazů s lomítkem (/vytvořit pozvánku k příteli, /zobrazit pozvánky k příteli, /revoke pozvání k příteli).",
+        "ui":{
+            "allRevoked":"Všechna pozvání přátel byla odvolána.",
+            "expires":"Platnost vyprší:",
+            "maxUses":"Max použití:",
+            "noActiveInvites":"Nemáte žádné aktivní pozvánky k přátelství!",
+            "timesUsed":"Použité časy:"
+        }
+    },
     "friendsSince":{
         "description":"Zobrazuje, kdy jste se s někým spřátelili ve vyskakovacím okně uživatele",
         "heading":"Přátelé od"
+    },
+    "fullSearchContext":{
+        "description":"Umožňuje kontextové nabídce zpráv ve výsledcích vyhledávání zpráv mít všechny možnosti, které byste očekávali"
+    },
+    "fullUserInChatbox":{
+        "description":"Umožňuje, aby zmínka uživatele v chatboxu měla více funkcí, jako je kliknutí levým/pravým tlačítkem"
     },
     "gameActivityToggle":{
         "description":"Přidá tlačítko vedle mikrofonu a tlačítka pro neslyšící přepínání herní aktivity.",
@@ -453,6 +674,9 @@
             "locationToolbox":"Equicord Toolbox",
             "oldIcon":"Před přepracováním ikony Discord použijte starý styl ikon"
         }
+    },
+    "gifPaste":{
+        "description":"Umožňuje vybrat gif v nástroji pro výběr gif vložit odkaz do chatboxu místo okamžitého odeslání"
     },
     "greetStickerPicker":{
         "ariaLabel":"Pozdravte výběr samolepek",
@@ -470,6 +694,9 @@
         "hideMedia":"Skrýt média",
         "mediaHidden":"Média skryta",
         "showMedia":"Zobrazit média"
+    },
+    "iLoveSpam":{
+        "description":"Neskrývat zprávy před „pravděpodobnými spammery“"
     },
     "ignoreActivities":{
         "disableActivity":"Zakázat aktivitu",
@@ -495,6 +722,15 @@
             "whitelist":"Seznam povolených"
         }
     },
+    "imageFilename":{
+        "description":"Zobrazte název souboru obrázků a GIFů jako nápovědu, když na ně umístíte ukazatel myši",
+        "settings":{
+            "showFullUrl":"Zobrazit celý URL obrázek namísto pouhého názvu souboru. Vždy povoleno pro GIFy, protože obvykle nemají žádný smysluplný název souboru"
+        }
+    },
+    "imageLink":{
+        "description":"Nikdy neschovávejte odkazy na obrázky ve zprávách, i když je to jediný obsah"
+    },
     "imageZoom":{
         "lensSize":"Velikost objektivu",
         "nearestNeighbour":"Nejbližší soused",
@@ -511,7 +747,29 @@
         "zoom":"Přiblížení",
         "zoomSpeed":"Rychlost zoomu"
     },
+    "implicitRelationships":{
+        "description":"Zobrazuje vaše implicitní vztahy na kartě Přátelé.",
+        "settings":{
+            "sortByAffinity":"Zda třídit implicitní vztahy podle jejich afinity k vám."
+        },
+        "ui":{
+            "implicitHeader":"Implicitní — {count}",
+            "implicitSection":"Implicitní"
+        }
+    },
     "invite":"Pozvat",
+    "ircColors":{
+        "description":"Učiní barvy uživatelského jména v chatu jedinečnými, jako v IRC klientech",
+        "settings":{
+            "applyColorOnlyInDms":"Použít barvy pouze v přímých zprávách; nepoužívejte barvy na serverech.",
+            "applyColorOnlyToUsersWithoutColor":"Aplikujte barvy pouze na uživatele, kteří nemají předdefinovanou barvu",
+            "lightness":"Lehkost, v %. Změňte, pokud jsou barvy příliš světlé nebo příliš tmavé",
+            "memberListColors":"Nahraďte barvy rolí v seznamu členů"
+        }
+    },
+    "keepCurrentChannel":{
+        "description":"Před přepnutím účtů nebo načtením Discord se pokuste přejít na kanál, ve kterém jste byli."
+    },
     "lastfmRichPresence":{
         "apiKeyInstructions":"Nastavte <0>Název aplikace</0> a <1>Popis aplikace</1> na cokoliv a zbytek nechte prázdný.",
         "createApiKey":"Vytvořit klíč API",
@@ -552,6 +810,19 @@
         }
     },
     "loading":"Načítání...",
+    "loadingQuotes":{
+        "description":"Nahraďte uvozovky načítání Discords",
+        "settings":{
+            "additionalQuotes":"Mohou se objevit další vlastní uvozovky oddělené níže uvedeným oddělovačem",
+            "additionalQuotesDelimiter":"Oddělovač pro další nabídky",
+            "enableDiscordPresetQuotes":"Povolit přednastavené uvozovky Discord (včetně uvozovek událostí, během událostí)",
+            "enablePluginPresetQuotes":"Povolit uvozovky přednastavené tímto pluginem",
+            "replaceEvents":"Měl by se tento plugin používat také během akcí se speciálními nabídkami na téma události? (např. Halloween)"
+        },
+        "ui":{
+            "noQuotesQuote":"Opravdu jste zakázali všechny načítání uvozovek? Jaký jsi blázen..."
+        }
+    },
     "logs":{
         "allLogsCleared":"Všechny protokoly byly vymazány",
         "clearAll":"Vymazat vše",
@@ -574,6 +845,84 @@
             "toolTip":"Zobrazit počet členů v popisku serveru",
             "voiceActivity":"Zobrazit hlasovou aktivitu s počtem členů v seznamu členů"
         }
+    },
+    "memberListDecoratorsAPI":{
+        "description":"API pro přidání dekoratérů do seznamu členů (na serverech i DM)"
+    },
+    "mentionAvatars":{
+        "description":"Zobrazuje uživatelské avatary a ikony rolí uvnitř zmínek",
+        "settings":{
+            "showAtSymbol":"Zda se má u zmínek uživatele zobrazovat symbol @"
+        }
+    },
+    "menuItemDemanglerAPI":{
+        "description":"Demangluje modul položek nabídky Discord"
+    },
+    "messageAccessoriesAPI":{
+        "description":"API pro přidání příslušenství pro zprávy"
+    },
+    "messageClickActions":{
+        "actions":{
+            "copyContent":"Kopírovat obsah",
+            "copyId":"Kopírovat ID",
+            "copyLink":"Kopírovat odkaz",
+            "copyUserId":"Zkopírovat ID uživatele",
+            "delete":"Smazat",
+            "edit":"Upravit",
+            "none":"Žádný",
+            "openTab":"Otevřít kartu",
+            "openThread":"Otevřete vlákno",
+            "pin":"Připnout",
+            "quote":"Citovat",
+            "react":"Reagovat",
+            "reply":"Odpovědět"
+        },
+        "description":"Přizpůsobte akce kliknutí na zprávy.",
+        "modifiers":{
+            "alt":"Alt",
+            "backspace":"Backspace",
+            "ctrl":"Ctrl",
+            "delete":"Smazat",
+            "none":"Žádný",
+            "shift":"Posun"
+        },
+        "settings":{
+            "clickTimeout":"Časový limit pro rozlišení dvojitých/trojitých kliknutí (ms)",
+            "deferDoubleClickForTriple":"Zpoždění dvojitého kliknutí pro povolení akcí trojitého kliknutí (deaktivuje trojité kliknutí, když je vypnuto)",
+            "disableInDms":"Zakázat všechny akce kliknutí v přímých zprávách",
+            "disableInSystemDms":"Zakázat všechny akce kliknutí v systémových DM",
+            "doubleClickAction":"Akce při dvojitém kliknutí (vaše zprávy)",
+            "doubleClickHoldThreshold":"Maximální doba zdržení pro akce poklepání (ms). Delší přidržení umožňuje výběr textu",
+            "doubleClickModifier":"Pro akci dvojitého kliknutí je vyžadován modifikátor",
+            "doubleClickOthersAction":"Akce při dvojitém kliknutí (zprávy ostatních)",
+            "quoteWithReply":"Při citaci také odpovězte na zprávu",
+            "reactEmoji":"Emoji k použití pro akce reakce",
+            "selectionHoldTimeout":"Časový limit pro výběr textu (ms)",
+            "singleClickAction":"Akce na jedno kliknutí (vaše zprávy)",
+            "singleClickModifier":"Pro akci jediným kliknutím (vaše zprávy) je vyžadován modifikátor",
+            "singleClickOthersAction":"Akce na jedno kliknutí (zprávy ostatních)",
+            "singleClickOthersModifier":"Pro akci jediným kliknutím (zprávy ostatních) je vyžadován modifikátor",
+            "tripleClickAction":"Akce na trojité kliknutí",
+            "tripleClickModifier":"Pro akci trojitého kliknutí je vyžadován modifikátor",
+            "useSelectionForQuote":"Při citování použijte vybraný text, pokud je k dispozici"
+        },
+        "toasts":{
+            "cannotPin":"Nelze připnout: Chybí oprávnění",
+            "cannotQuote":"Tento typ zprávy nelze citovat",
+            "cannotReact":"Nelze reagovat: Chybí oprávnění"
+        },
+        "ui":{
+            "linkCopied":"Odkaz zkopírován!",
+            "messageContentCopied":"Obsah zprávy zkopírován!",
+            "messageIdCopied":"ID zprávy zkopírováno!",
+            "userIdCopied":"ID uživatele zkopírováno!"
+        }
+    },
+    "messageDecorationsAPI":{
+        "description":"API pro přidání ozdob do zpráv"
+    },
+    "messageEventsAPI":{
+        "description":"API vyžaduje cokoliv pomocí událostí zpráv"
     },
     "messageLatency":{
         "clockAhead":"Hodiny tohoto uživatele jsou {delta} napřed.",
@@ -661,6 +1010,50 @@
         },
         "toggleDeletedHighlight":"Přepněte Odstraněné zvýraznění"
     },
+    "messagePopoverAPI":{
+        "description":"API pro přidání tlačítek do vyskakovacích oken"
+    },
+    "messageTags":{
+        "commands":{
+            "create":"Vytvořte novou značku",
+            "delete":"Odeberte ze sebe značku",
+            "list":"Uveďte všechny své značky",
+            "message":"Zpráva, kterou odešlete při použití této značky",
+            "preview":"Zobrazit náhled značky bez jejího veřejného odeslání",
+            "tagName":"Název značky, která spustí odpověď",
+            "tags":"Spravujte všechny štítky sami"
+        },
+        "description":"Umožňuje ukládat zprávy a používat je pomocí jednoduchého příkazu.",
+        "settings":{
+            "clydeDescription":"Pokud je povoleno, clyde vám pošle pomíjivou zprávu při použití značky.",
+            "clydeName":"Zpráva Clyde při odeslání"
+        },
+        "ui":{
+            "allTags":"Všechny štítky:",
+            "invalidSubCommand":"Neplatný dílčí příkaz",
+            "noTagsYet":"Jejda! Zatím nejsou žádné štítky, použijte `/tags create` k vytvoření!",
+            "tagAlreadyExists":"Značka s názvem **{name}** již existuje!",
+            "tagCreated":"Štítek byl úspěšně vytvořen **{name}**!",
+            "tagDeleted":"Štítek byl úspěšně smazán **{name}**!",
+            "tagDoesNotExist":"Značka **{name}** již neexistuje! Načtěte prosím znovu Discord a opravte :)",
+            "tagDoesNotExist2":"Značka s názvem **{name}** neexistuje!",
+            "tagSent":"Štítek **{name}** byl odeslán!"
+        }
+    },
+    "messageUpdaterAPI":{
+        "description":"API pro aktualizaci a opětovné vykreslení zpráv"
+    },
+    "moreQuickReactions":{
+        "description":"Vylepšuje tlačítka rychlé reakce v kontextové nabídce zprávy.",
+        "settings":{
+            "columns":"Sloupce rychlých reakcí k zobrazení",
+            "compactMode":"Změní měřítko tlačítek na 75 % jejich původního měřítka a zároveň zvětší vnitřní emotikon na 125 %. Emoji budou mít 93,75 % původní velikosti. Doporučuje se mít minimálně 5 sloupců",
+            "frequentEmojis":"Místo oblíbených emodži používejte často používané emotikony",
+            "reactionCount":"Počet reakcí (0-42)",
+            "rows":"Řádky rychlých reakcí k zobrazení",
+            "scroll":"Povolit posouvání seznamu emotikonů"
+        }
+    },
     "mutualGroupDMs":{
         "description":"Zobrazuje vzájemné skupinové dms v profilech",
         "members_one":"{count} Člen",
@@ -690,6 +1083,52 @@
             "voiceChannels":"Automaticky skrýt jména v hlasových kanálech"
         }
     },
+    "nicknameIconsAPI":{
+        "description":"API pro přidání ikon k přezdívce v profilech"
+    },
+    "noBlockedMessages":{
+        "description":"Úplně skryjte všechny blokované/ignorované zprávy z chatu.",
+        "settings":{
+            "allowAutoModMessages":"Povolit zprávám odeslaným AutoModem obejít filtrování.",
+            "alsoHideIgnoredUsers":"Také skrýt zprávy od ignorovaných uživatelů.",
+            "defaultHideUsers":"Pokud je tato možnost povolena, zprávy od blokovaných uživatelů budou zcela skryté a všechny zprávy od ID uživatelů v seznamu přepsání budou místo toho sbaleny (výchozí chování Discord). Pokud je zakázáno, zprávy od blokovaných uživatelů budou sbaleny a všechny zprávy od ID uživatelů v seznamu přepsání budou místo toho zcela skryty.",
+            "disableNotifications":"Skrýt upozornění na nové zprávy pro blokované uživatele. Vždy platí, pokud je níže povolena možnost „Výchozí skrýt uživatele“ a uživatel spouštějící oznámení není vyňat v části „Přepsat uživatele“.",
+            "hideBlockedUserReplies":"Skrýt odpovědi blokovaným uživatelům.",
+            "overrideUsers":"Čárkami oddělený seznam uživatelských ID, která budou skryta nebo sbalena namísto výchozího chování vybraného výše."
+        }
+    },
+    "noDeepLinks":{
+        "description":"Deaktivuje hloupou funkci přímých odkazů uživatele Discord, která se vás snaží donutit používat jejich aplikaci pro stolní počítače"
+    },
+    "noDevtoolsWarning":{
+        "description":"Deaktivuje banner 'HOLD UP' v konzole. Jako vedlejší efekt také zabrání Discord ve skrytí vašeho tokenu, což zabrání náhodnému odhlášení."
+    },
+    "noF1":{
+        "description":"Zakázat vazbu nápovědy F1."
+    },
+    "noMaskedUrlPaste":{
+        "description":"Vložení odkazu s vybraným textem se nevloží jako maskovaný URL"
+    },
+    "noMosaic":{
+        "description":"Odstraní mozaiku obrazu Discord",
+        "settings":{
+            "inlineVideo":"Přehrávejte videa bez karuselu"
+        }
+    },
+    "noOnboardingDelay":{
+        "description":"Přeskočí pomalé a nepříjemné zpoždění při nástupu"
+    },
+    "noPendingCount":{
+        "description":"Odstraní počet pingů příchozích žádostí o přátelství, žádostí o zprávy a nitro nabídek.",
+        "settings":{
+            "hideFriendRequestsCount":"Skrýt počet příchozích žádostí o přátelství",
+            "hideMessageRequestsCount":"Skrýt počet požadavků na zprávy",
+            "hidePremiumOffersCount":"Skryjte počet nabídek nitro"
+        }
+    },
+    "noProfileThemes":{
+        "description":"Úplně odstraní motivy profilu Nitro od všech kromě vás"
+    },
     "noReplyMention":{
         "description":"Ve výchozím nastavení zakáže pingy odpovědí",
         "settings":{
@@ -699,6 +1138,64 @@
             "roleList":"Seznam rolí, pro které mají být povoleny nebo vyjmuty pingy (oddělené čárkami nebo mezerami)",
             "shouldPingListed":"Chování",
             "userList":"Seznam uživatelů, pro které mají být povoleny nebo vyjmuty pingy (oddělené čárkami nebo mezerami)"
+        }
+    },
+    "noServerEmojis":{
+        "description":"Nezobrazovat emotikony serveru v nabídce automatického doplňování.",
+        "settings":{
+            "shownEmojis":"Typy emotikonů, které se mají zobrazit v nabídce automatického doplňování.",
+            "shownEmojisOptions":{
+                "all":"Unicode emodži a všechny serverové emodži (výchozí Discord)",
+                "currentServer":"Unicode emodži a serverové emodži z aktuálního serveru",
+                "onlyUnicode":"Pouze unicode emotikony"
+            }
+        }
+    },
+    "noSystemBadge":{
+        "description":"Deaktivuje odznak počtu nepřečtených na hlavním panelu a na systémové liště."
+    },
+    "noTypingAnimation":{
+        "description":"Zakáže animaci teček pro psaní náročných na CPU"
+    },
+    "noUnblockToJump":{
+        "description":"Umožňuje přeskočit na zprávy blokovaných nebo ignorovaných uživatelů a pravděpodobných spammerů, aniž byste je odblokovali"
+    },
+    "noticesAPI":{
+        "description":"Opravuje automatické zavírání oznámení"
+    },
+    "notificationVolume":{
+        "description":"Ušetřete si uši a nastavte samostatnou hlasitost pro upozornění a zvuky v aplikaci",
+        "settings":{
+            "notificationVolume":"Hlasitost oznámení"
+        }
+    },
+    "onePingPerDM":{
+        "description":"Pokud uživatel v DM posílá nepřečtené zprávy vícekrát, obdržíte pouze jeden zvukový ping.",
+        "settings":{
+            "allowEveryone":"Přijímat zvukové pingy pro @everyone a @here ve skupinových DM",
+            "allowMentions":"Přijímat zvukové pingy pro @zmínky",
+            "alwaysPlaySound":"Přehrajte zvuk upozornění na zprávu, i když je vypnutý",
+            "channelToAffect":"Vyberte typ DM, který má plugin ovlivnit",
+            "channelToAffectOptions":{
+                "both":"Obě",
+                "groupDm":"Group DM",
+                "userDm":"Uživatelské DM"
+            },
+            "ignoreUsers":"ID uživatelů (čárka + mezera), jejichž ping by NIKDY neměl být omezen"
+        }
+    },
+    "openInApp":{
+        "description":"Otevírejte odkazy v příslušných aplikacích namísto vašeho prohlížeče",
+        "settings":{
+            "epic":"Otevřete odkazy Epic Games ve spouštěči Epic Games",
+            "itunes":"Otevřete odkazy na Apple Music v aplikaci iTunes",
+            "spotify":"Otevřete odkazy Spotify v aplikaci Spotify",
+            "steam":"Otevřete odkazy na Steam v aplikaci Steam",
+            "tidal":"Otevřete odkazy Tidal v aplikaci Tidal",
+            "vrcx":"Otevřete odkazy VRCat v aplikaci VRCX"
+        },
+        "ui":{
+            "openedInApp":"Odkaz byl otevřen v nativní aplikaci"
         }
     },
     "overrideForumDefaults":{
@@ -722,6 +1219,13 @@
         "name":"PauseInvitesForever",
         "pauseIndefinitely":"Pozastavit na neurčito."
     },
+    "permissionFreeWill":{
+        "description":"Deaktivuje omezení na straně klienta pro správu oprávnění kanálu.",
+        "settings":{
+            "lockout":"Obejít prevenci uzamčení oprávnění (\"Tohle určitě nechcete udělat\")",
+            "onboarding":"Vynechejte požadavky na registraci („Provedením této změny bude váš server nekompatibilní [...]“)"
+        }
+    },
     "permissionsViewer":{
         "noPermissions":"Žádná oprávnění k zobrazení!",
         "owner":"majitel",
@@ -737,6 +1241,29 @@
         "unknownUser":"Neznámý uživatel",
         "userOptions":"Možnosti uživatele",
         "viewPermissions":"Zobrazit oprávnění"
+    },
+    "petpet":{
+        "commands":{
+            "petpet":{
+                "description":"Vytvořte petpet gif. Můžete zadat pouze jednu z možností obrázku",
+                "name":"petpet",
+                "options":{
+                    "delay":"Prodleva mezi jednotlivými snímky v ms. Zaokrouhleno na nejbližších 10 ms. Výchozí hodnota je minimální 20.",
+                    "image":"Obrazová příloha k použití",
+                    "noServerPfp":"Při použití možnosti 'uživatel' použijte normální avatar místo specifického pro server",
+                    "resolution":"Rozlišení pro gif. Výchozí hodnota je 120. Pokud zadáte šílené číslo a zamrzne Discord, je to vaše chyba.",
+                    "url":"URL pro načtení obrázku",
+                    "user":"Uživatel, jehož avatar použít jako obrázek"
+                }
+            }
+        },
+        "description":"Přidá příkaz /petpet lomítko pro vytvoření gifů pro náhlavní soupravu z libovolného obrázku",
+        "errors":{
+            "delayMinimum":"Zpoždění musí být alespoň 20.",
+            "failedToFetchUser":"Uživatele se nepodařilo načíst. Další informace naleznete na konzoli.",
+            "noImage":"Nebyl zadán žádný obrázek!",
+            "uploadNotImage":"Upload není obrázek"
+        }
     },
     "pictureInPicture":{
         "description":"Přidá do videí obrázek v obrázku (vedle tlačítka Stáhnout)",
@@ -767,6 +1294,9 @@
             "pinOrder":"V jakém pořadí se mají zobrazovat připnuté DM?"
         },
         "unpinDm":"Odepnout DM"
+    },
+    "plainFolderIcon":{
+        "description":"Nezobrazujte malé ikony cechu ve složkách"
     },
     "platformIndicators":{
         "consoleIcons":{
@@ -807,15 +1337,36 @@
         "description":"Přidá tlačítko rychlé zmínky na panel akcí zprávy",
         "label":"Rychlá zmínka"
     },
+    "quickReply":{
+        "description":"Odpovídat na (ctrl + nahoru/dolů) a upravovat (ctrl + shift + nahoru/dolů) zprávy pomocí kláves",
+        "settings":{
+            "ignoreBlockedAndIgnored":"Ignorovat zprávy od blokovaných/ignorovaných uživatelů při navigaci",
+            "shouldMention":"Ve výchozím nastavení odpověď ping",
+            "shouldMentionOptions":{
+                "disabled":"Vypnuto",
+                "enabled":"Povoleno",
+                "followPlugin":"Sledujte plugin NoReplyMention (pokud je povolen)"
+            }
+        }
+    },
+    "reactErrorDecoder":{
+        "description":"Nahrazuje \"Minifed React Error\" skutečnou chybou."
+    },
     "readAllNotificationsButton":{
         "description":"Přečtěte si všechna oznámení serveru jediným kliknutím!",
         "name":"Tlačítko ReadAllNotifications",
         "readAll":"Přečíst vše"
     },
     "relationshipNotifier":{
+        "description":"Upozorní vás, když vás přítel, skupinový chat nebo server odstraní.",
         "friendRemoved":"{username} vás odebral jako přítele.",
         "friendRequestRemoved":"Žádost o přátelství od {username} byla odstraněna.",
         "groupRemoved":"Byli jste odebráni ze skupiny {name}.",
+        "notificationTitle":"Oznamovatel vztahu",
+        "offlineFriendRemoved":"Už nejste přátelé s {username}.",
+        "offlineFriendRequestRevoked":"Žádost o přátelství od {username} byla odvolána.",
+        "offlineGroupRemoved":"Již nejste ve skupině {name}.",
+        "offlineServerRemoved":"Již nejste na serveru {name}.",
         "serverRemoved":"Byli jste odebráni ze serveru {name}.",
         "settings":{
             "friendRequestCancels":"Upozornit, když je žádost o přátelství zrušena",
@@ -837,6 +1388,12 @@
             "off":"Vypnuto",
             "replacementEngine":"Místo přidání nabídky nahraďte konkrétním vyhledávačem"
         }
+    },
+    "replyTimestamp":{
+        "description":"Zobrazuje časové razítko v náhledech odpovědí na zprávu"
+    },
+    "revealAllSpoilers":{
+        "description":"Odhalte všechny spoilery ve zprávě Ctrl-kliknutím na spoiler nebo v chatu Ctrl+Shift-kliknutím"
     },
     "reverseImageSearch":{
         "all":"Vše",
@@ -888,6 +1445,24 @@
         "unblockUser":"Odblokovat uživatele",
         "viewReviews":"Zobrazit recenze"
     },
+    "roleColorEverywhere":{
+        "description":"Přidává barvu hlavní role, kdekoli je to možné",
+        "settings":{
+            "chatMentions":"Zobrazovat barvy rolí ve zmínkách v chatu (včetně v poli zpráv)",
+            "colorChatMessages":"Barevné chatové zprávy podle barvy role autora",
+            "memberList":"Zobrazovat barvy rolí v záhlaví rolí seznamu členů",
+            "messageSaturation":"Intenzita vybarvení zprávy.",
+            "pollResults":"Zobrazit barvy rolí ve výsledcích ankety",
+            "reactorsList":"Zobrazit barvy rolí v seznamu reaktorů",
+            "voiceUsers":"Zobrazit barvy rolí v seznamu uživatelů hlasového chatu"
+        }
+    },
+    "secretRingTone":{
+        "description":"Vždy přehrávat tajnou verzi discordového vyzváněcího tónu (s výjimkou speciálních událostí vyzvánění)",
+        "settings":{
+            "onlySnow":"Hrajte pouze téma Snow Halation"
+        }
+    },
     "seeSummaries":{
         "description":"Aktivuje experimentální funkci Souhrny Discord na každém serveru a zobrazuje souhrny konverzací generované umělou inteligencí",
         "name":"Souhrny",
@@ -910,6 +1485,36 @@
         },
         "timestampFormat":"Formát časového razítka",
         "timestampPicker":"Výběr časového razítka"
+    },
+    "serverInfo":{
+        "description":"Umožňuje zobrazit informace o serveru",
+        "settings":{
+            "sorting":"Uživatelské jméno nebo případně zobrazované jméno",
+            "sortingOptions":{
+                "displayname":"Zobrazovaný název",
+                "none":"Neřadit",
+                "username":"Uživatelské jméno"
+            }
+        },
+        "ui":{
+            "blockedUsers":"Blokovaní uživatelé",
+            "channels":"Kanály",
+            "createdAt":"Vytvořeno v",
+            "friends":"Přátelé",
+            "ignoredUsers":"Ignorovaní uživatelé",
+            "joinedAt":"Připojil se v",
+            "mutualUsers":"Vzájemní uživatelé",
+            "preferredLocale":"Preferované národní prostředí",
+            "roles":"Role",
+            "serverBoosts":"Server Boosts",
+            "serverInfo":"Informace o serveru",
+            "serverOwner":"Majitel serveru",
+            "vanityLink":"Vanity Link",
+            "verificationLevel":"Úroveň ověření"
+        }
+    },
+    "serverListAPI":{
+        "description":"API je vyžadováno pro pluginy, které upravují seznam serverů"
     },
     "serverListIndicators":{
         "description":"Přidejte online počet přátel nebo počet serverů do seznamu serverů",
@@ -1050,6 +1655,34 @@
         "failedToImport":"Import nastavení se nezdařil: {e}",
         "imported":"Nastavení úspěšně importováno. Chcete-li použít změny, restartujte!"
     },
+    "shikiCodeblocks":{
+        "description":"Přináší kódové bloky ve stylu vscode do Discord, které používá Shiki",
+        "settings":{
+            "bgOpacity":"Neprůhlednost pozadí",
+            "customTheme":"Odkaz na vlastní téma vscode",
+            "theme":"Výchozí motivy",
+            "tryHljs":"Použijte odlehčený výchozí Discord zvýrazňovač a motiv.",
+            "tryHljsOptions":{
+                "always":"Vždy",
+                "never":"Nikdy",
+                "preferHljs":"Preferujte Highlight.js místo Shiki",
+                "preferShiki":"Preferujte Shiki místo Highlight.js"
+            },
+            "useDevIcon":"Jak zobrazit ikony jazyků na blocích kódu",
+            "useDevIconOptions":{
+                "colored":"Barevný",
+                "colorless":"Bezbarvý",
+                "disabled":"Vypnuto"
+            }
+        }
+    },
+    "showAllMessageButtons":{
+        "description":"Vždy zobrazit všechna tlačítka zpráv bez ohledu na to, zda držíte klávesu Shift nebo ne.",
+        "settings":{
+            "noShiftDelete":"Odebrat požadavek na držení Shift pro smazání zprávy.",
+            "noShiftPin":"Odstraňte požadavek na držení Shift pro připnutí zprávy."
+        }
+    },
     "showConnections":{
         "description":"Zobrazit připojené účty v uživatelských vyskakovacích oknech",
         "settings":{
@@ -1069,21 +1702,27 @@
         "channelTypes":{
             "announcement":"oznámení",
             "forum":"forum",
+            "message":"zpráva",
             "messages":"zprávy",
+            "post":"zveřejnit",
             "posts":"příspěvky",
             "stage":"fáze",
             "text":"text",
+            "thread":"vlákno",
+            "threads":"vlákna",
             "voice":"hlas"
         },
         "defaultLayout":"Výchozí rozvržení: {layout}",
         "defaultReactionEmoji":"Výchozí emodži reakce:",
         "defaultSortOrder":"Výchozí pořadí řazení: {order}",
+        "description":"Zobrazit kanály, ke kterým nemáte přístup.",
         "forumLayouts":{
             "gridView":"Zobrazení galerie",
             "listView":"Zobrazení seznamu",
             "notSet":"Není nastaveno"
         },
         "hiddenChannel":"Toto je skrytý kanál {type}",
+        "hiddenChannelTooltip":"Skrytý kanál",
         "hideAllowedUsersAndRoles":"Skrýt povolené uživatele a role",
         "lastMessageCreated":"Naposledy vytvořeno {type}:",
         "lastMessagePin":"Pin poslední zprávy:",
@@ -1094,6 +1733,24 @@
         "regionAutomatic":"Automatický",
         "requireTag":"Příspěvky na tomto fóru vyžadují nastavení štítku.",
         "seeGuidelines":" Můžete však vidět jeho pokyny:",
+        "settings":{
+            "channelStyle":{
+                "classic":"Klasický",
+                "description":"Styl použitý k zobrazení skrytých kanálů.",
+                "muted":"Ztlumeno",
+                "mutedAndShowUnreads":"Ztlumeno a Zobrazit nepřečtené",
+                "showUnreads":"Zobrazit nepřečtené"
+            },
+            "defaultAllowedUsersAndRolesDropdownState":{
+                "description":"Zda má být rozevírací seznam povolených uživatelů a rolí na skrytých kanálech ve výchozím nastavení otevřený"
+            },
+            "showMode":{
+                "description":"Režim používaný k zobrazení skrytých kanálů.",
+                "eyeIconRight":"Ikona oka vpravo",
+                "lockIcon":"Ikona zámku nahrazuje ikonu kanálu",
+                "lockIconRight":"Ikona zámku vpravo"
+            }
+        },
         "slowmode":"Pomalý režim: {duration}",
         "sortOrders":{
             "creationDate":"Datum vytvoření",
@@ -1106,6 +1763,14 @@
         },
         "videoQualityMode":"Režim kvality videa: {mode}",
         "viewAllowedUsersAndRoles":"Zobrazit povolené uživatele a role"
+    },
+    "showHiddenThings":{
+        "description":"Zobrazuje různé skryté věci a věci pouze pro moderátory bez ohledu na oprávnění.",
+        "settings":{
+            "showInvitesPaused":"Zobrazit popisek pozastavení pozvánek v seznamu serverů.",
+            "showModView":"Zobrazit položku místní nabídky zobrazení modu člena na všech serverech.",
+            "showTimeouts":"Zobrazit ikony časového limitu členů v chatu."
+        }
     },
     "showMeYourName":{
         "addNickname":"Přidejte přezdívku SMYN",
@@ -1211,9 +1876,39 @@
             "showDates":"Zobrazovat data na žádostech o přátelství"
         }
     },
+    "spotifyCrack":{
+        "description":"Poslouchejte zdarma, žádné automatické pauzy v hlasovém chatu a umožňuje pokračování přehrávání při nečinnosti",
+        "settings":{
+            "keepSpotifyActivityOnIdle":"Udržujte aktivitu Spotify spuštěnou při nečinnosti",
+            "noSpotifyAutoPause":"Zakázat automatické pozastavení Spotify"
+        }
+    },
+    "spotifyShareCommands":{
+        "commands":{
+            "notListening":"Neposloucháte žádnou hudbu.",
+            "shareDescription":"Sdílejte své aktuální Spotify {name} v chatu",
+            "trackNotFound":"Na spotify se stopu nepodařilo najít."
+        },
+        "description":"Sdílejte svou aktuální skladbu, album nebo interpreta Spotify pomocí příkazu lomítko (/track, /album, /artist)"
+    },
     "startupTimings":{
+        "description":"Přidá Časování spouštění do nabídky Nastavení",
         "ui":{
             "title":"Načasování spuštění"
+        }
+    },
+    "stickerPaste":{
+        "description":"Umožňuje výběrem nálepky ve výběru nálepek ji vložit do chatboxu místo okamžitého odeslání"
+    },
+    "streamerModeOnStream":{
+        "description":"Automaticky aktivuje režim streamování, když začnete streamovat v Discord"
+    },
+    "superReactionTweaks":{
+        "description":"Přizpůsobte si limit super reakcí hraní najednou a ve výchozím nastavení super reagujte",
+        "settings":{
+            "superReactByDefault":"Výběr reakce bude ve výchozím nastavení nastaven na Super reakce",
+            "superReactionPlayingLimit":"Max Super Reactions pro hraní najednou. 0 pro zakázání přehrávání Super Reactions",
+            "unlimitedSuperReactionPlaying":"Odstraňte limit pro hraní Super Reactions najednou"
         }
     },
     "tabs":{
@@ -1231,6 +1926,9 @@
         "typeMessage":"Napište zprávu",
         "usingRegex":"Pomocí Regex",
         "usingString":"Použití String"
+    },
+    "themeAttributes":{
+        "description":"Přidává datové atributy k různým prvkům pro účely tématiky"
     },
     "translate":{
         "autoTranslate":"Automatický překlad",
@@ -1270,10 +1968,33 @@
             "showRoleColors":"Zobrazit barvy rolí v indikátoru psaní"
         }
     },
+    "unindent":{
+        "description":"Ořízne odsazení začátku z kódových bloků"
+    },
+    "unlockedAvatarZoom":{
+        "description":"Umožňuje vám při změně avatara dále přiblížit nástroj pro oříznutí obrázku",
+        "settings":{
+            "zoomMultiplier":"Multiplikátor zoomu"
+        }
+    },
     "unsuppressEmbeds":{
         "description":"Umožňuje zrušit vkládání do zpráv",
         "suppressEmbeds":"Potlačit vkládání",
         "unsuppressEmbeds":"Zrušit potlačení vložení"
+    },
+    "userMessagesPronouns":{
+        "description":"Přidává zájmena do zpráv uživatelů chatu",
+        "settings":{
+            "pronounsFormat":"Formát zájmen, která se mají objevit v chatu",
+            "pronounsFormatOptions":{
+                "capitalized":"Velká písmena",
+                "lowercase":"Malá písmena"
+            },
+            "showSelf":"Povolte nebo zakažte zobrazování zájmen pro sebe"
+        }
+    },
+    "userSettingsAPI":{
+        "description":"Opraví uživatelská nastavení Discord, aby odhalila jejich skupinu a jméno"
     },
     "userVoiceShow":{
         "cannotJoinChannel":"Nemůžete se připojit k hlasovému kanálu uživatele",
@@ -1294,6 +2015,15 @@
             "usrbgBanner":"banner USRBG",
             "voiceBackground":"Použijte bannery USRBG jako pozadí hlasového chatu"
         }
+    },
+    "validReply":{
+        "description":"Opraveno \"Zprávu nelze načíst\" při najetí myší na odpověď"
+    },
+    "validUser":{
+        "description":"Opravte zmínky pro neznámé uživatele, kteří se zobrazují jako „@unknown-user“ (umístěním kurzoru na zmínku to opravíte)"
+    },
+    "vcDoubleClick":{
+        "description":"Připojte se k hlasovým chatům dvojitým kliknutím namísto jediného kliknutí"
     },
     "vcNarrator":{
         "customiseMessages":"Níže si můžete upravit mluvené zprávy. Konkrétní zprávy můžete zakázat tak, že je nastavíte na nic",
@@ -1374,6 +2104,24 @@
         "sending":"Právě odesílám hlasovou zprávu... Buďte prosím trpěliví",
         "uploadFile":"Nahrát soubor"
     },
+    "volumeBooster":{
+        "description":"Umožňuje nastavit hlasitost uživatele a streamu nad výchozí maximum",
+        "settings":{
+            "multiplier":"Multiplikátor objemu"
+        }
+    },
+    "webContextMenus":{
+        "description":"Znovu přidává kontextové nabídky chybějící ve webové verzi Discord: Odkazy a obrázky (Kopírovat/Otevřít odkaz/Obrázek), Text je (Kopírovat, Vyjmout, Vložit, Kontrola pravopisu)",
+        "settings":{
+            "addBack":"Přidejte zpět kontextové nabídky Discord pro obrázky, odkazy a vstupní panel chatu"
+        }
+    },
+    "webKeybinds":{
+        "description":"Znovu přidá klávesové zkratky chybějící ve webové verzi Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. Plně funguje pouze na Vesktop/Legcord, nikoli ve vašem prohlížeči"
+    },
+    "webScreenShareFixes":{
+        "description":"Odstraňuje omezení datového toku 2 500 kb/s na klientech typu chrom a vesktop."
+    },
     "whoReacted":{
         "settings":{
             "avatarClick":"Přepínat klikací avatary v reakcích"
@@ -1407,5 +2155,8 @@
         "timeout":"Trvání oznámení (sekundy)",
         "volume":"Hlasitost",
         "webSocketPort":"Port Websocket"
+    },
+    "youtubeAdblock":{
+        "description":"Blokujte reklamy ve vloženích na YouTube a aktivitu WatchTogether prostřednictvím AdGuard"
     }
 }
