@@ -3,13 +3,13 @@
         "errorExecuting":"Une erreur s'est produite lors de l'exécution de la commande \"{name}\""
     },
     "memberListDecorators":{
-        "fallback":"Failed to render {key} Member List Decorator"
+        "fallback":"Échec du rendu du décorateur de liste de membres {key}"
     },
     "messageAccessories":{
-        "fallback":"Failed to render {key} Message Accessory"
+        "fallback":"Échec du rendu de l'accessoire de message {key}"
     },
     "messageDecorations":{
-        "fallback":"Failed to render {key} Message Decoration"
+        "fallback":"Échec du rendu de la décoration du message {key}"
     },
     "notices":{
         "fallback":"Erreur d'affichage de la notification"
@@ -20,7 +20,7 @@
             "body_one":"Cela supprimera définitivement {count} notifications. Cette action ne peut pas être annulée.",
             "body_other":"Cela supprimera définitivement {count} notifications. Cette action ne peut pas être annulée.",
             "body_zero":"Aucune notification sélectionnée.",
-            "cancel":"Nevermind",
+            "cancel":"Tout compte fait, non.",
             "clearNotificationLog":"Nettoyer le journal de notifications",
             "confirm":"Fait le!",
             "title":"Êtes-vous sûr ?"
