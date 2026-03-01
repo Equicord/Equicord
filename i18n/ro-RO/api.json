@@ -1,37 +1,37 @@
 {
-				"commands":{
-								"errorExecuting":"An Error occurred while executing command \"{name}\""
-				},
-				"memberListDecorators":{
-								"fallback":"Failed to render {key} Member List Decorator"
-				},
-				"messageAccessories":{
-								"fallback":"Failed to render {key} Message Accessory"
-				},
-				"messageDecorations":{
-								"fallback":"Failed to render {key} Message Decoration"
-				},
-				"notices":{
-								"fallback":"Error Showing Notice"
-				},
-				"notifications":{
-								"dismissNotification":"Dismiss Notification",
-								"logs":{
-												"body_one":"This will permanently remove {count} notification. This action cannot be undone.",
-												"body_other":"This will permanently remove {count} notifications. This action cannot be undone.",
-												"body_zero":"No notification selected.",
-												"cancel":"Nevermind",
-												"clearNotificationLog":"Clear Notification Log",
-												"confirm":"Do it!",
-												"title":"Are you sure?"
-								},
-								"missedNotifications":{
-												"body_one":"{count} notification received",
-												"body_other":"{count} notifications received",
-												"title":"While you were away"
-								},
-								"noNotifications":"No notifications yet",
-								"notificationLog":"Notification Log",
-								"notificationSettings":"Notification Settings"
-				}
+    "commands":{
+        "errorExecuting":"A apărut o eroare la executarea comenzii „{name}”"
+    },
+    "memberListDecorators":{
+        "fallback":"Nu s-a redat {key} Decoratorul listei de membri"
+    },
+    "messageAccessories":{
+        "fallback":"Nu s-a putut randa {key} Accesoriu pentru mesaje"
+    },
+    "messageDecorations":{
+        "fallback":"Nu s-a redat {key} Decorarea mesajului"
+    },
+    "notices":{
+        "fallback":"Eroare la afișarea notificării"
+    },
+    "notifications":{
+        "dismissNotification":"Respinge notificarea",
+        "logs":{
+            "body_one":"Aceasta va elimina definitiv notificarea {count}. Această acțiune nu poate fi anulată.",
+            "body_other":"Acest lucru va elimina definitiv notificările {count}. Această acțiune nu poate fi anulată.",
+            "body_zero":"Nicio notificare selectată.",
+            "cancel":"Nu mai contează",
+            "clearNotificationLog":"Ștergeți jurnalul de notificări",
+            "confirm":"Fă-o!",
+            "title":"esti sigur?"
+        },
+        "missedNotifications":{
+            "body_one":"[[PH0]]] a primit notificare",
+            "body_other":"[[PH0]]] notificări primite",
+            "title":"În timp ce erai plecat"
+        },
+        "noNotifications":"Nicio notificare încă",
+        "notificationLog":"Jurnal de notificare",
+        "notificationSettings":"Setări de notificare"
+    }
 }

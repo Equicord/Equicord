@@ -1,10 +1,10 @@
 {
-				"description":"Assists with translating Equicord",
-				"settings":{
-								"forceLocale":{
-												"description":"Force a different locale for Equicord to use",
-												"followDiscord":"Default (follow Discord)"
-								},
-								"showMissingKeys":"If the current locale is missing translations, show the keys instead of falling back to English"
-				}
+    "description":"Помаже у превођењу [[[ПХ0]]]",
+    "settings":{
+        "forceLocale":{
+            "description":"Присилите да [[[ПХ0]]] користи другачији локал",
+            "followDiscord":"Подразумевано (прати [[[ПХ0]]])"
+        },
+        "showMissingKeys":"Ако тренутном локалитету недостају преводи, покажите кључеве уместо да се враћате на енглески"
+    }
 }

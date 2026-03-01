@@ -1,37 +1,37 @@
 {
-				"commands":{
-								"errorExecuting":"An Error occurred while executing command \"{name}\""
-				},
-				"memberListDecorators":{
-								"fallback":"Failed to render {key} Member List Decorator"
-				},
-				"messageAccessories":{
-								"fallback":"Failed to render {key} Message Accessory"
-				},
-				"messageDecorations":{
-								"fallback":"Failed to render {key} Message Decoration"
-				},
-				"notices":{
-								"fallback":"Error Showing Notice"
-				},
-				"notifications":{
-								"dismissNotification":"Dismiss Notification",
-								"logs":{
-												"body_one":"This will permanently remove {count} notification. This action cannot be undone.",
-												"body_other":"This will permanently remove {count} notifications. This action cannot be undone.",
-												"body_zero":"No notification selected.",
-												"cancel":"Nevermind",
-												"clearNotificationLog":"Clear Notification Log",
-												"confirm":"Do it!",
-												"title":"Are you sure?"
-								},
-								"missedNotifications":{
-												"body_one":"{count} notification received",
-												"body_other":"{count} notifications received",
-												"title":"While you were away"
-								},
-								"noNotifications":"No notifications yet",
-								"notificationLog":"Notification Log",
-								"notificationSettings":"Notification Settings"
-				}
+    "commands":{
+        "errorExecuting":"Ett fel uppstod när kommandot \"{name}\" kördes"
+    },
+    "memberListDecorators":{
+        "fallback":"Det gick inte att återge {key} Medlemslistadekoratör"
+    },
+    "messageAccessories":{
+        "fallback":"Det gick inte att återge {key} meddelandetillbehör"
+    },
+    "messageDecorations":{
+        "fallback":"Det gick inte att återge {key} meddelandedekoration"
+    },
+    "notices":{
+        "fallback":"Fel vid visning av meddelande"
+    },
+    "notifications":{
+        "dismissNotification":"Avvisa meddelande",
+        "logs":{
+            "body_one":"Detta kommer att ta bort {count} avisering permanent. Denna åtgärd kan inte ångras.",
+            "body_other":"Detta kommer att ta bort {count} aviseringar permanent. Denna åtgärd kan inte ångras.",
+            "body_zero":"Ingen avisering har valts.",
+            "cancel":"Avbryt",
+            "clearNotificationLog":"Rensa aviseringslogg",
+            "confirm":"Gör det!",
+            "title":"Är du säker?"
+        },
+        "missedNotifications":{
+            "body_one":"{count} avisering mottogs",
+            "body_other":"{count} aviseringar har tagits emot",
+            "title":"Medan du var borta"
+        },
+        "noNotifications":"Inga aviseringar än",
+        "notificationLog":"Aviseringslogg",
+        "notificationSettings":"Aviseringsinställningar"
+    }
 }

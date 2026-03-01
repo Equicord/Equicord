@@ -1,10 +1,10 @@
 {
-				"description":"Assists with translating Equicord",
-				"settings":{
-								"forceLocale":{
-												"description":"Force a different locale for Equicord to use",
-												"followDiscord":"Default (follow Discord)"
-								},
-								"showMissingKeys":"If the current locale is missing translations, show the keys instead of falling back to English"
-				}
+    "description":"Hỗ trợ dịch Equicord",
+    "settings":{
+        "forceLocale":{
+            "description":"Buộc một ngôn ngữ khác để Equicord sử dụng",
+            "followDiscord":"Mặc định (theo Discord)"
+        },
+        "showMissingKeys":"Nếu ngôn ngữ hiện tại thiếu bản dịch, hãy hiển thị các phím thay vì quay lại tiếng Anh"
+    }
 }

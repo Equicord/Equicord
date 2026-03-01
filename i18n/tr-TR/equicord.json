@@ -1,1330 +1,2425 @@
 {
-				"absRPC":{
-								"about":{
-												"automaticAuth":"The plugin will automatically authenticate and fetch your listening progress.",
-												"description":"Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.",
-												"title":"How to connect to AudioBookShelf"
-								},
-								"description":"Rich presence for AudioBookShelf media server",
-								"settings":{
-												"password":"AudioBookShelf password",
-												"serverUrl":"AudioBookShelf server URL (e.g., https://abs.example.com)",
-												"username":"AudioBookShelf username"
-								},
-								"toasts":{
-												"notConfigured":"AudioBookShelf RPC is not configured."
-								}
-				},
-				"altKrispSwitch":{
-								"description":"Makes the Noise Suppression Popout switch between None and Krisp instead of Krisp and Standard"
-				},
-				"alwaysExpandProfiles":{
-								"description":"Always expands profile popouts to the full modal"
-				},
-				"anammox":{
-								"description":"Hides various features related to nitro and the store",
-								"settings":{
-												"billing":"Remove billing settings",
-												"dms":"Remove shops above DMs list",
-												"emojiList":"Remove unavailable categories from the emoji picker",
-												"gift":"Remove gift button",
-												"quests":"Remove quests above DMs list",
-												"serverBoost":"Remove server boost info above channel list"
-								}
-				},
-				"animalese":{
-								"description":"Plays animal crossing animalese for every message sent (they yap a lot)",
-								"quality":{
-												"high":"High",
-												"low":"Low",
-												"lowest":"Lowest",
-												"medium":"Medium"
-								},
-								"settings":{
-												"messageLengthLimit":"Maximum length of message to process",
-												"pitch":"Pitch multiplier",
-												"processOwnMessages":"Enable to yap your own messages too",
-												"soundQuality":"Quality of sound to use",
-												"speed":"Speed of the animalese sound",
-												"volume":"Volume of the animalese sound"
-								}
-				},
-				"atSomeone":{
-								"contextMenu":{
-												"someone":"Mention someone randomly"
-								},
-								"description":"Mention someone randomly"
-				},
-				"autoZipper":{
-								"description":"Automatically zips specified file types and folders before uploading to Discord",
-								"settings":{
-												"extensions":"Comma-separated list of file extensions to auto-zip (e.g., .psd,.blend,.exe,.dmg)"
-								}
-				},
-				"bannersEverywhere":{
-								"description":"Displays banners in the member list ",
-								"settings":{
-												"animate":"Animate banners",
-												"preferNameplate":"prefer nameplate over banner"
-								}
-				},
-				"baseDecoder":{
-								"description":"Decode base64 content of any message and copy the decoded content.",
-								"settings":{
-												"clickMethod":"Change the button to decode base64 content of any message.",
-												"clickMethodOptions":{
-																"left":"Left Click to decode the base64 content.",
-																"right":"Right click to decode the base64 content."
-												}
-								},
-								"ui":{
-												"copiedToast":"Decoded content copied to clipboard!",
-												"copyDecoded":"Copy Decoded Content",
-												"decodedContent":"Decoded Content",
-												"modalTitle":"Decoded Base64 Content",
-												"tooltipLeft":"Copy Decoded (Left Click) / Decode Base64 (Right Click)",
-												"tooltipRight":"Decode Base64 (Left Click) / Copy Decoded (Right Click)"
-								}
-				},
-				"betterAudioPlayer":{
-								"description":"Adds a spectrograph and oscilloscope visualizer to audio attachment players",
-								"settings":{
-												"forceMoveBelow":"Force the visualizer below the audio player",
-												"oscilloscope":"Enable oscilloscope visualizer",
-												"oscilloscopeColor":"Color for oscilloscope",
-												"oscilloscopeSolidColor":"Use solid color for oscilloscope",
-												"spectrograph":"Enable spectrograph visualizer",
-												"spectrographColor":"Color for spectrograph",
-												"spectrographSolidColor":"Use solid color for spectrograph"
-								},
-								"toasts":{
-												"invalidColor":"Invalid color format for {settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'"
-								}
-				},
-				"betterBanReasons":{
-								"description":"Create custom reasons to use in the Discord ban modal, and/or show a text input by default instead of the options.",
-								"settings":{
-												"isTextInputDefault":"Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)",
-												"reasons":"Your custom reasons"
-								},
-								"ui":{
-												"addAnotherReason":"Add another reason",
-												"reasonPlaceholder":"Reason",
-												"reasons":"Reasons"
-								}
-				},
-				"betterBlockedUsers":{
-								"description":"Allows you to search in blocked users list and makes names selectable in settings.",
-								"ui":{
-												"searchPlaceholder":"Search users..."
-								}
-				},
-				"betterCommands":{
-								"commands":{
-												"refresh":{
-																"description":"Refreshes Discord application commands locally",
-																"failed":"Failed to refresh commands. Check the console for details.",
-																"refreshing":"Refreshing application commands...",
-																"success":"Commands refreshed successfully!",
-																"userOption":"specific user to try and refresh"
-												}
-								},
-								"description":"Enhances the command system with miscellaneous improvements.",
-								"settings":{
-												"allowNewlinesInCommands":"Allow newlines in command inputs (CTRL + Shift + Enter)",
-												"autoFillArguments":"Automatically fill command with all arguements instead of just required ones"
-								}
-				},
-				"betterInvites":{
-								"description":"See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
-								"ui":{
-												"expireTooltip":"This invite will {expiry}",
-												"expireWill":"expire",
-												"invitedYouTo":"{inviter} invited you to {guild}",
-												"notExpire":"not expire"
-								}
-				},
-				"betterPlusReacts":{
-								"description":"The amount of plus before :emoji: is the message to add it to"
-				},
-				"betterUserArea":{
-								"description":"Customize and make the user area more clean.",
-								"settings":{
-												"alwaysShowUsername":"Always show username instead of status.",
-												"removeAudioMenus":"Remove menus next to mute and deafen buttons.",
-												"removeAvatarDecoration":"Remove avatar decoration.",
-												"removeButtonTooltips":"Remove button tooltips.",
-												"removeNameplate":"Remove nameplate styling.",
-												"removeUsernameStyles":"Remove username colors and effects."
-								}
-				},
-				"blockKeywords":{
-								"description":"Blocks messages containing specific user-defined keywords, as if the user sending them was blocked.",
-								"settings":{
-												"blockedWords":"Comma-seperated list of words to block",
-												"caseSensitive":"Whether to use a case sensitive search or not",
-												"ignoreBlockedMessages":"Completely ignores (recent) new messages bar",
-												"useRegex":"Use each value as a regular expression when checking message content (advanced)"
-								}
-				},
-				"blockKrisp":{
-								"description":"Prevent Krisp from loading"
-				},
-				"bypassPinPrompt":{
-								"description":"Bypass the pin prompt when using the pin functions"
-				},
-				"bypassStatus":{
-								"contextMenu":{
-												"addStatusBypass":"Add Status Bypass",
-												"removeStatusBypass":"Remove Status Bypass"
-								},
-								"description":"Still get notifications from specific sources when in do not disturb mode. Right-click on users/channels/guilds to set them to bypass do not disturb mode.",
-								"placeholder":{
-												"separateWithCommas":"Separate with commas"
-								},
-								"settings":{
-												"allowOutsideOfDms":"Allow selected users to bypass status outside of DMs too (acts like a channel/guild bypass, but it's for all messages sent by the selected users)",
-												"channels":"Channels to let bypass (notified when pinged in that channel)",
-												"guilds":"Guilds to let bypass (notified when pinged anywhere in guild)",
-												"notificationSound":"Whether the notification sound should be played",
-												"respectSilentPings":"Respect silent pings (@silent / suppress notifications)",
-												"statusToUse":"Status to use for whitelist",
-												"users":"Users to let bypass (notified for all messages sent in DMs)"
-								},
-								"statusOptions":{
-												"dnd":"Do Not Disturb",
-												"idle":"Idle",
-												"invisible":"Invisible",
-												"online":"Online"
-								}
-				},
-				"channelBadges":{
-								"description":"Adds badges to channels based on their type",
-								"settings":{
-												"announcementBadgeColor":"Announcement badge color",
-												"announcementBadgeLabel":"Announcement badge label",
-												"announcementThreadBadgeColor":"Announcement Thread badge color",
-												"announcementThreadBadgeLabel":"Announcement Thread badge label",
-												"categoryBadgeColor":"Category badge color",
-												"categoryBadgeLabel":"Category badge label",
-												"directoryBadgeColor":"Directory badge color",
-												"directoryBadgeLabel":"Directory badge label",
-												"forumBadgeColor":"Forum badge color",
-												"forumBadgeLabel":"Forum badge label",
-												"lockedBadgeColor":"Locked badge color",
-												"lockedBadgeLabel":"Locked badge label",
-												"mediaBadgeColor":"Media badge color",
-												"mediaBadgeLabel":"Media badge label",
-												"nsfwBadgeColor":"NSFW badge color",
-												"nsfwBadgeLabel":"NSFW badge label",
-												"oneBadgePerChannel":"Show only one badge per channel",
-												"privateThreadBadgeColor":"Private Thread badge color",
-												"privateThreadBadgeLabel":"Private Thread badge label",
-												"publicThreadBadgeColor":"Public Thread badge color",
-												"publicThreadBadgeLabel":"Public Thread badge label",
-												"rulesBadgeColor":"Rules badge color",
-												"rulesBadgeLabel":"Rules badge label",
-												"showAnnouncementBadge":"Show Announcement badge",
-												"showAnnouncementThreadBadge":"Show Announcement Thread badge",
-												"showCategoryBadge":"Show Category badge",
-												"showDirectoryBadge":"Show Directory badge",
-												"showForumBadge":"Show Forum badge",
-												"showLockedBadge":"Show Locked badge",
-												"showMediaBadge":"Show Media badge",
-												"showNSFWBadge":"Show NSFW badge",
-												"showPrivateThreadBadge":"Show Private Thread badge",
-												"showPublicThreadBadge":"Show Public Thread badge",
-												"showRulesBadge":"Show Rules badge",
-												"showStageBadge":"Show Stage badge",
-												"showTextBadge":"Show Text badge",
-												"showUnknownBadge":"Show Unknown badge",
-												"showVoiceBadge":"Show Voice badge",
-												"stageBadgeColor":"Stage badge color",
-												"stageBadgeLabel":"Stage badge label",
-												"textBadgeColor":"Text badge color",
-												"textBadgeLabel":"Text badge label",
-												"unknownBadgeColor":"Unknown badge color",
-												"unknownBadgeLabel":"Unknown badge label",
-												"voiceBadgeColor":"Voice badge color",
-												"voiceBadgeLabel":"Voice badge label"
-								},
-								"tooltips":{
-												"lockedChannel":"This channel is locked.",
-												"nsfwChannel":"This channel is marked as NSFW.",
-												"rulesChannel":"This channel is the server rules channel."
-								}
-				},
-				"channelTabs":{
-								"contextMenu":{
-												"openInNewTab":"Open in New Tab"
-								},
-								"description":"Group your commonly visited channels in tabs, like a browser"
-				},
-				"characterCounter":{
-								"description":"Adds a character counter to the chat input",
-								"settings":{
-												"colorEffects":"Turn on or off color effects for getting close to the character limit"
-								}
-				},
-				"cleanChannelName":{
-								"description":"remove all emoji and decor shit from channel names"
-				},
-				"cleanerChannelGroups":{
-								"description":"Hides all channels in collapsed categories, even if they have unread messages."
-				},
-				"clientSideBlock":{
-								"description":"Allows you to locally hide almost all content from any user",
-								"reply":{
-												"replyingToBlocked":"Replying to blocked message"
-								},
-								"settings":{
-												"blockedReplyDisplay":"What should display instead of the message when someone replies to someone you have hidden",
-												"blockedReplyDisplayOptions":{
-																"displayText":"Display text saying a hidden message was replied to",
-																"hideReply":"Literally nothing"
-												},
-												"guildBlackList":"Guild ids to disable functionality in",
-												"guildWhiteList":"Guild ids to enable functionality in",
-												"hideBlockedMessages":"Should messages from blocked users should be hidden fully (same as the old noblockedmessages plugin)",
-												"hideBlockedUsers":"Should blocked users should also be hidden everywhere",
-												"hideEmptyRoles":"Should role headers be hidden if all of their members are blocked",
-												"hideVc":"Hide voice channels containing blocked users.",
-												"usersToBlock":"User IDs seperated by a comma and a space"
-								}
-				},
-				"clipsEnhancements":{
-								"description":"Add more Clip FPS and duration options, custom clip length, RPC tagging and more",
-								"settings":{
-												"clipsLink":"Change FPS and duration options in Clips settings!",
-												"enableAdvancedSignals":"Enable advanced clip signals (auto-clip triggers)",
-												"enableScreenshotKeybind":"Enable the screenshot keybind feature",
-												"enableVoiceOnlyClips":"Enable voice-only clips (audio without video)",
-												"ignorePlatformRestriction":"Allow Platform Restricted Clipping (may cause save errors)",
-												"richPresenceTagging":"When should clips be tagged with the current Rich Presence?",
-												"richPresenceTaggingOptions":{
-																"always":"Always",
-																"never":"Never",
-																"whenMatched":"Only when beginning or end of activity name matches"
-												}
-								}
-				},
-				"commandPalette":{
-								"description":"Quickly run actions through a searchable command palette",
-								"settings":{
-												"customCommands":"Manage custom command palette entries",
-												"enableTagFilter":"Show the tag filter bar",
-												"hotkey":"Hotkey used to open the command palette",
-												"showTags":"Display tag chips for commands",
-												"visualStyle":"Palette appearance",
-												"visualStyleOptions":{
-																"classic":"Classic",
-																"polished":"Polished"
-												}
-								},
-								"ui":{
-												"hotkeyDescription":"Hotkey used to open the command palette",
-												"hotkeyTitle":"Command Palette Hotkey",
-												"pressAnyKey":"Press any key...",
-												"reset":"Reset"
-								}
-				},
-				"components":{
-								"description":"Utility plugin for developers to test and preview Discord components"
-				},
-				"contentWarning":{
-								"description":"Allows you to specify certain trigger words that will be blurred by default. Hovering/Clicking on the blurred content will reveal it.",
-								"settings":{
-												"onClick":"Only show trigger content on click instead of hover"
-								},
-								"ui":{
-												"flaggedWords":"Flagged Words",
-												"placeholder":"Word"
-								}
-				},
-				"copyProfileColors":{
-								"contextMenu":{
-												"copyProfileColors":"Copy Profile Colors"
-								},
-								"description":"A plugin to copy people's profile gradient colors to clipboard.",
-								"toast":{
-												"copied":"Profile colors copied to clipboard!",
-												"error":"Error copying profile colors!",
-												"noColorsFound":"No profile colors found!"
-								}
-				},
-				"copyStatusUrls":{
-								"description":"Copy the users status url when you right-click it",
-								"toast":{
-												"copied":"Copied URL",
-												"error":"Error copying URL, check console for more info"
-								}
-				},
-				"copyUserMention":{
-								"contextMenu":{
-												"copyUserMention":"Copy User Mention"
-								},
-								"description":"Adds a button to copy user's mention on the user context menu, works best with ValidUser."
-				},
-				"cursorBuddy":{
-								"description":"Adds a sprite that follows your cursor.",
-								"settings":{
-												"buddy":"Pick a cursor buddy",
-												"buddyOptions":{
-																"fathorse":"Fatass Horse",
-																"oneko":"Oneko"
-												},
-												"fade":"If the horse should fade when the cursor is near",
-												"fps":"Framerate of your buddy",
-												"freeroam":"If the horse should roam freely when idle",
-												"furColor":"Fur hex color for Oneko",
-												"outlineColor":"Outline hex color for Oneko",
-												"shake":"If the horse should shake the window when it's walking",
-												"size":"Size of the fatass horse",
-												"speed":"Speed of your buddy"
-								},
-								"ui":{
-												"furColor":"Fur Color",
-												"outlineColor":"Outline Color"
-								}
-				},
-				"customFolderIcons":{
-								"description":"Customize folder icons with any png"
-				},
-				"customSounds":{
-								"description":"Customize Discord's sounds.",
-								"settings":{
-												"debug":"Debug",
-												"export":"Export",
-												"import":"Import",
-												"resetAll":"Reset All",
-												"searchPlaceholder":"Search by name or ID",
-												"searchSounds":"Search Sounds"
-								},
-								"toast":{
-												"exportSuccess":"Exported {count} settings (audio files not included)",
-												"importError":"Error importing settings. Check console for details.",
-												"importSuccess":"Settings imported successfully!",
-												"loadError":"Error loading custom sound file",
-												"resetSuccess":"All overrides reset successfully!"
-								}
-				},
-				"customTimestamps":{
-								"about":{
-												"additional":"Additionally you can use these in your inputs:",
-												"calendar":"enables dynamic date formatting such as \"Today\" or \"Yesterday\".",
-												"relative":"gives you times such as \"4 hours ago\".",
-												"title":"How to use:"
-								},
-								"description":"Custom timestamps on messages and tooltips",
-								"settings":{
-												"calendarFormats":"Calendar formats",
-												"calendarFormatsDescription":"How to format the [calendar] value if used in the above timestamps.",
-												"formats":"Customize the timestamp formats"
-								}
-				},
-				"customUserColors":{
-								"contextMenu":{
-												"setColor":"Set Color"
-								},
-								"description":"Lets you add a custom color to any user, anywhere! Highly recommend to use with typingTweaks and roleColorEverywhere",
-								"settings":{
-												"colorInServers":"If name colors should be changed within servers",
-												"dmList":"Users with custom colors defined will have their name in the dm list colored"
-								}
-				},
-				"disableCameras":{
-								"description":"Disables cameras in a call by default"
-				},
-				"discordDevBanner":{
-								"description":"Enables the Discord developer banner, in which displays the build-ID"
-				},
-				"dragFavoriteEmotes":{
-								"description":"Adds the ability to change the order of your favourite emotes"
-				},
-				"dragify":{
-								"description":"Drop users, channels, or servers into chat to insert mentions or invites.",
-								"settings":{
-												"allowChatBodyDrop":"Allow dropping into the main chat body to insert text.",
-												"channelOutput":"Channel drop output.",
-												"channelOutputOptions":{
-																"link":"Channel link",
-																"mention":"#channel mention"
-												},
-												"inviteExpireAfter":"Invite expiration.",
-												"inviteExpireAfterOptions":{
-																"12hours":"12 hours",
-																"1day":"1 day",
-																"1hour":"1 hour",
-																"30min":"30 minutes",
-																"6hours":"6 hours",
-																"7days":"7 days",
-																"never":"Never"
-												},
-												"inviteMaxUses":"Invite max uses.",
-												"inviteMaxUsesOptions":{
-																"100uses":"100 uses",
-																"10uses":"10 uses",
-																"1use":"1 use",
-																"25uses":"25 uses",
-																"50uses":"50 uses",
-																"5uses":"5 uses",
-																"noLimit":"No limit"
-												},
-												"inviteTemporaryMembership":"Grant temporary membership.",
-												"reuseExistingInvites":"Reuse existing invite instead of creating a new one.",
-												"userOutput":"User drop output.",
-												"userOutputOptions":{
-																"id":"User ID",
-																"mention":"Mention user"
-												}
-								},
-								"toast":{
-												"dropFailed":"Dragify failed to handle drop.",
-												"inviteCreated":"Invite created.",
-												"inviteFailed":"Unable to create invite.",
-												"noChannelForInvites":"No channel available for invites."
-								}
-				},
-				"elementHighlighter":{
-								"description":"Highlight and inspect elements easily.",
-								"settings":{
-												"keybind":"Toggle Highlighter",
-												"showBorderRadius":"Display the element's border-radius values",
-												"showClasses":"Display the element's CSS class names in the tooltip",
-												"showDisplay":"Display the element's display type along with flex or grid properties",
-												"showFont":"Display the computed font family and font size",
-												"showId":"Display the element's ID attribute in the tooltip",
-												"showMargin":"Display the element's margin values",
-												"showPadding":"Display the element's padding values",
-												"showPosition":"Display the element's CSS position type and z-index"
-								},
-								"ui":{
-												"copiedColor":"Copied color to clipboard!",
-												"recording":"Recording...",
-												"reset":"Reset"
-								}
-				},
-				"equicordHelper":{
-								"alerts":{
-												"equicordSupport":"Equicord Support",
-												"okayContinue":"Okay continue",
-												"supportWarningBody":"Before asking for help. Check updates and if this issue is actually caused by Equicord!",
-												"supportWarningTitle":"Vencord Support Channel Warning"
-								},
-								"commands":{
-												"refreshCommands":"Refresh Slash Commands",
-												"refreshFailed":"Failed to refresh commands. Check console for details.",
-												"refreshSuccess":"Slash Commands refreshed successfully."
-								},
-								"description":"Used to provide support, fix discord caused crashes, and other misc features.",
-								"settings":{
-												"accountStandingButton":"Show an account standing button in the header bar",
-												"forceRoleIcon":"Forces role icons to display next to messages in compact mode",
-												"noDefaultHangStatus":"Disable the default hang status when joining voice channels",
-												"noMirroredCamera":"Prevents the camera from being mirrored on your screen",
-												"refreshSlashCommands":"Refreshes Slash Commands to show newly added commands without restarting your client.",
-												"removeActivitySection":"Removes the activity section above member list",
-												"showYourOwnActivityButtons":"Discord hides your own activity buttons for some reason"
-								},
-								"standing":{
-												"allGood":"All good!",
-												"atRisk":"At risk",
-												"limited":"Limited",
-												"suspended":"Suspended",
-												"veryLimited":"Very limited"
-								}
-				},
-				"equicordToolbox":{
-								"description":"Adds a button next to the inbox button in the channel header that houses Equicord quick actions",
-								"settings":{
-												"showPluginMenu":"Show the plugins menu in the toolbox"
-								},
-								"ui":{
-												"editQuickCss":"Edit QuickCSS",
-												"enableQuickCss":"Enable QuickCSS",
-												"manageThemes":"Manage Themes",
-												"openNotificationLog":"Open Notification Log",
-												"openSettings":"Open Settings",
-												"plugins":"Plugins",
-												"restartToApply":"Restart to apply the change",
-												"themes":"Themes",
-												"tooltip":"Equicord Toolbox"
-								}
-				},
-				"equissant":{
-								"description":"Crossant every specified amount of clicks :trolley:",
-								"settings":{
-												"amount":"Amount of clicks to trigger crossant"
-								}
-				},
-				"exitSounds":{
-								"description":"Play soundboard sounds when you disconnect from voice.",
-								"settings":{
-												"soundGuildId":"Select the server containing the sound.",
-												"soundId":"Enter the ID of the sound you want to play."
-								},
-								"toasts":{
-												"somethingWentWrong":"Oops! Something went wrong."
-								},
-								"ui":{
-												"enterSoundId":"Enter sound ID...",
-												"selectServer":"Select a server...",
-												"setGlobalExitSound":"Set as global exit sound"
-								}
-				},
-				"exportMessages":{
-								"description":"Allows you to export any message to a file",
-								"notifications":{
-												"exportFailed":"Failed to export message",
-												"exportSuccess":"Message exported successfully as {filename}",
-												"title":"Export Messages"
-								},
-								"settings":{
-												"exportContacts":"Export a list of friends to your clipboard. Adds a new button to the menu bar for the friends tab.",
-												"openFileAfterExport":"Open the exported file in the default file handler after export"
-								},
-								"ui":{
-												"contactListUndefined":"Contact list is undefined. Click on the \"All\" tab before exporting.",
-												"contactsCopied":"Contacts copied to clipboard successfully.",
-												"export":"Export",
-												"exportMessage":"Export Message"
-								}
-				},
-				"fastDeleteChannels":{
-								"description":"Adds a trash icon to delete channels",
-								"settings":{
-												"keyBind":"The key to toggle trash when pressed.",
-												"reqAlt":"Require alt to be held.",
-												"reqCtrl":"Require control to be held.",
-												"reqShift":"Require shift to be held."
-								}
-				},
-				"favouriteAnything":{
-								"description":"Favourite any image"
-				},
-				"fileUpload":{
-								"description":"Upload images and videos to file hosting services like Zipline and Nest",
-								"ui":{
-												"uploadTo":"Upload to {serviceName}"
-								}
-				},
-				"findReply":{
-								"description":"Jumps to the earliest reply to a message in a channel (lets you follow past conversations more easily).",
-								"settings":{
-												"hideButtonIfNoReply":"Hides the button if there are no replies to the message",
-												"includeAuthor":"Will also search for messages that reply to the author in general, not just that exact message",
-												"includePings":"Will also search for messages that @ the author directly"
-								},
-								"toasts":{
-												"containerNotFound":"Couldn't find the container element.",
-												"noReplyFound":"Couldn't find a reply.",
-												"useBottomPanel":"Use the bottom panel to navigate between replies."
-								},
-								"ui":{
-												"jumpToReply":"Jump to Reply"
-								}
-				},
-				"fixFileExtensions":{
-								"description":"Fixes file extensions by renaming them to a compatible supported format if possible"
-				},
-				"followVoiceUser":{
-								"description":"Follow a friend in voice chat.",
-								"info":"This Plugin is used to follow a Friend/Friends into voice chat(s).",
-								"settings":{
-												"leaveWhenUserLeaves":"Leave the voice channel when the user leaves. (That can cause you to sometimes enter infinite leave/join loop)",
-												"onlyWhenInVoice":"Only follow the user when you are in a voice channel"
-								},
-								"ui":{
-												"followUser":"Follow User"
-								}
-				},
-				"fontLoader":{
-								"description":"Loads any font from Google Fonts",
-								"settings":{
-												"applyOnCodeBlocks":"Apply the font to code blocks"
-								},
-								"ui":{
-												"by":"by {authors}",
-												"clickToApply":"Click on any font to apply it.",
-												"searchFonts":"Search fonts...",
-												"searchGoogleFonts":"Search Google Fonts"
-								}
-				},
-				"forwardAnywhere":{
-								"description":"If a forward fails send it as a normal message also allows nsfw forwards",
-								"options":{
-												"greaterThan":">",
-												"hash":"-#"
-								},
-								"settings":{
-												"forwardPreface":"What should forwarded from be prefaced with"
-								}
-				},
-				"frequentQuickSwitcher":{
-								"description":"Rewrites and filters the quick switcher results to be your most frequent channels"
-				},
-				"friendCloud":{
-								"commands":{
-												"count":"Number of users to display",
-												"friendcloud":"Display user you most interact with in a cloud"
-								},
-								"description":"Adds a /friendcloud command to visualize the users you most interact with",
-								"errors":{
-												"couldntGenerate":"Couldn't generate the image :c",
-												"countMustBeHigher":"The count must be 1 or higher!",
-												"noAffinities":"No affinities found. Check your privacy settings.",
-												"noValidUsers":"No valid users found in affinities. Check your privacy settings."
-								}
-				},
-				"friendCodes":{
-								"panel":{
-												"copied":"Copied!",
-												"copyCode":"Copy Code",
-												"currentCode":"Current Friend Code",
-												"error":"Error: {error}",
-												"refresh":"Refresh",
-												"sendToServer":"Send to Server",
-												"sent":"Sent!",
-												"title":"Friend Codes"
-								},
-								"settings":{
-												"autoCopy":"Automatically copy friend code to clipboard when it changes",
-												"sendToServer":"Automatically send friend code to server when it changes",
-												"webhookUrl":"Webhook URL to send friend code to"
-								}
-				},
-				"friendTags":{
-								"description":"Allows you to filter by custom tags in the quick switcher by starting a search with &",
-								"ui":{
-												"add":"Add",
-												"addTo":"Add to {tagName}",
-												"name":"Name",
-												"remove":"Remove",
-												"removeFrom":"Remove from {tagName}",
-												"tag":"Tag",
-												"userList":"User List (Click A User To Remove)",
-												"usersSeperated":"Users (Seperated by comma)"
-								}
-				},
-				"friendshipRanks":{
-								"description":"Adds badges showcasing how long you have been friends with a user for",
-								"ranks":{
-												"besties":{
-																"description":"How do you even manage this??? (5 Years)",
-																"title":"Besties"
-												},
-												"blooming":{
-																"description":"Your friendship is getting there! (1 Month)",
-																"title":"Blooming"
-												},
-												"burning":{
-																"description":"Your friendship has reached terminal velocity (3 Months)",
-																"title":"Burning"
-												},
-												"fighter":{
-																"description":"Your friendship is strong (6 Months)",
-																"title":"Fighter"
-												},
-												"royal":{
-																"description":"Your friendship has gone through thick and thin- a whole 2 years!",
-																"title":"Royal"
-												},
-												"sprout":{
-																"description":"Your friendship is just starting",
-																"title":"Sprout"
-												},
-												"star":{
-																"description":"Your friendship has been going on for a WHILE (1 Year)",
-																"title":"Star"
-												}
-								}
-				},
-				"fullVcPfp":{
-								"description":"Makes avatars take up the entire vc tile"
-				},
-				"gensokyoRadioRPC":{
-								"description":"Discord rich presence for Gensokyo Radio!",
-								"info":"Discord rich presence for Gensokyo Radio!",
-								"settings":{
-												"refreshInterval":"The interval between activity refreshes (seconds)"
-								}
-				},
-				"ghosted":{
-								"description":"A cute ghost will appear if you don't answer their DMs",
-								"settings":{
-												"exemptedChannels":"Comma-separated list of channel IDs to exempt from ghosting (right-click a DM channel to copy its ID)",
-												"ignoreBots":"Ignore DMs from bots",
-												"ignoreGroupDms":"Exclude all group dms from ghosting",
-												"showDmIcons":"Show ghost icons next to individual DMs",
-												"showIndicator":"Show the ghost counter at the top of the server list"
-								},
-								"ui":{
-												"ghostedUsers":"{count} Ghosted Users",
-												"noGhostedUsers":"No Ghosted Users",
-												"unghost":"unghost"
-								}
-				},
-				"gifCollections":{
-								"description":"Allows you to create collections of gifs",
-								"settings":{
-												"collectionPrefix":"The prefix for collections",
-												"collectionsSortOrder":"The order of sorting for collections",
-												"collectionsSortType":"The type of sorting for collections",
-												"defaultEmptyCollectionImage":"The image / gif that will be shown when a collection has no images / gifs",
-												"itemPrefix":"The prefix for gif items",
-												"onlyShowCollections":"Only show collections",
-												"preventDuplicates":"Prevent adding the same GIF to a collection multiple times",
-												"showCopyImageLink":"Show 'Copy Image Link' option in context menus",
-												"stopWarnings":"Stop deletion warnings"
-								},
-								"toasts":{
-												"gifMissingMetadata":"Cannot refresh: GIF missing metadata (re-add to collection)"
-								},
-								"ui":{
-												"addToCollection":"Add To Collection",
-												"addedAt":"Added At",
-												"areYouSure":"Are you sure?",
-												"ascending":"Ascending",
-												"cannotRefresh":"Cannot refresh: GIF missing metadata (re-add to collection)",
-												"close":"Close",
-												"collectionInformation":"Collection Information",
-												"collectionName":"Collection Name",
-												"copyImageLink":"Copy Image Link",
-												"copyUrl":"Copy URL",
-												"createCollection":"Create Collection",
-												"createdAt":"Created At",
-												"creationDate":"Creation Date",
-												"deleteAction":"delete this collection",
-												"deleteCollection":"Delete Collection",
-												"deleteConfirm":"Do you really want to {action}?",
-												"descending":"Descending",
-												"exportCollections":"Export Collections",
-												"gifs":"Gifs",
-												"height":"Height",
-												"imageLinkCopied":"Image link copied to clipboard",
-												"import":"Import",
-												"importCollections":"Import Collections",
-												"importOverwrite":"Importing collections will overwrite your current collections.",
-												"information":"Information",
-												"lastUpdated":"Last Updated",
-												"modifiedDate":"Modified Date",
-												"moveToCollection":"Move To Collection",
-												"name":"Name",
-												"nevermind":"Nevermind",
-												"order":"Order",
-												"refreshFailed":"Failed to refresh URL",
-												"refreshSuccess":"URL refreshed successfully",
-												"refreshUrl":"Refresh URL",
-												"refreshing":"Refreshing URL...",
-												"remove":"Remove",
-												"removeAction":"remove this item",
-												"rename":"Rename",
-												"reset":"Reset",
-												"resetCollections":"Reset Collections",
-												"resetRemove":"Resetting collections will remove all your collections.",
-												"selectCollection":"Select a collection to move the item to",
-												"sortBy":"Sort By",
-												"sortCollections":"Sort Collections",
-												"unknown":"Unknown",
-												"urlCopied":"URL copied to clipboard",
-												"width":"Width"
-								}
-				},
-				"gifRoulette":{
-								"commands":{
-												"gifroulette":"Tempt fate and send a gif"
-								},
-								"description":"Adds a command to send a random gif from your favourites, and a one in ten chance to ping the owner of the server",
-								"settings":{
-												"pingOwnerChance":"If there should be a 1 in 10 change to ping the owner of the guild (oh no)"
-								}
-				},
-				"githubRepos":{
-								"description":"Displays a user's public GitHub repositories in their profile",
-								"settings":{
-												"showInMiniProfile":"Show full ui in the mini profile instead of just a button",
-												"showLanguage":"Show repository language",
-												"showRepositoryTab":"Show repositories tab in profile modal (hides button in connections when enabled)",
-												"showStars":"Show repository stars"
-								},
-								"ui":{
-												"error":"Error, Failed to render GithubRepos"
-								}
-				},
-				"globalBadges":{
-								"description":"Adds global badges from other client mods",
-								"ui":{
-												"joinServer":"Join GlobalBadges Server",
-												"refetchSuccess":"Successfully refetched global badges!"
-								}
-				},
-				"googleThat":{
-								"commands":{
-												"googlethat":"Send a search engine link",
-												"input":"The search query"
-								},
-								"description":"Adds a command to send a internet search link",
-								"settings":{
-												"customEngineURL":"The URL of the Engine you wish to use",
-												"defaultEngine":"The search engine to use",
-												"embed":"If the sent link should render an embed",
-												"hyperlink":"If the sent link should hyperlink with the query as the label"
-								}
-				},
-				"guildPickerDumper":{
-								"description":"Context menu to dump and download a server's emojis and stickers.",
-								"ui":{
-												"downloadEmojis":"Download Emojis",
-												"downloadStickers":"Download Stickers",
-												"serverNotFound":"Server not found!"
-								}
-				},
-				"guildTagSettings":{
-								"description":"Adds some settings for guild tags, such as hiding them or disabling the prompt to adopt them.",
-								"settings":{
-												"disableAdoptTagPrompt":"Disable the prompt to adopt tags",
-												"hideTags":"Hide tags"
-								}
-				},
-				"hideChatButtons":{
-								"description":"Able to hide the chat buttons",
-								"settings":{
-												"color":"Color it red on open",
-												"open":"Opened by default"
-								},
-								"ui":{
-												"close":"Close",
-												"open":"Open"
-								}
-				},
-				"hideServers":{
-								"description":"Allows you to hide servers from the guild list and quick switcher by right clicking them",
-								"ui":{
-												"hideFolder":"Hide Folder",
-												"hideServer":"Hide Server",
-												"unhideFolder":"Unhide Folder",
-												"unhideServer":"Unhide Server"
-								}
-				},
-				"holyNotes":{
-								"description":"Save messages as notes to revisit later",
-								"ui":{
-												"holyNotes":"Holy Notes",
-												"noteMessage":"Note Message",
-												"openNotes":"Open Notes",
-												"saveNote":"Save Note"
-								}
-				},
-				"homeTyping":{
-								"description":"Changes the home button to a typing indicator if someone in your dms is typing"
-				},
-				"hopOn":{
-								"description":"Hop on Fortnite or Hop on bloons :3",
-								"settings":{
-												"regex":"Regex to trigger on",
-												"url":"URL to open"
-								}
-				},
-				"husk":{
-								"description":"Adds Husk button (check settings to change used emoji)",
-								"settings":{
-												"emojiID":"Emoji ID (default (from Vencord Server): 1026532993923293184)",
-												"emojiName":"Emoji name (default (from Vencord Server): husk)",
-												"findInServer":"Attempt to find emoji of same name in server before using ID in settings (useful if no nitro)"
-								},
-								"ui":{
-												"husk":"Husk"
-								}
-				},
-				"iRememberYou":{
-								"description":"Locally saves everyone you've been communicating with (including servers), in case of lose",
-								"ui":{
-												"iRememberYou":"I Remember You"
-								}
-				},
-				"iconViewer":{
-								"description":"Adds a new tab to settings to preview all icons.",
-								"ui":{
-												"iconFinder":"Icon Finder",
-												"openIconsTab":"Open Icons Tab"
-								}
-				},
-				"idleAutoRestart":{
-								"description":"Automatically restarts the client after being idle for a configurable amount of time, but avoids restarting while you are in VC.",
-								"settings":{
-												"idleMinutes":"Minutes of inactivity before restarting (when not in VC)",
-												"isEnabled":"Enable automatic restart after idle"
-								},
-								"ui":{
-												"disableAutoIdle":"Disable Auto Idle Restart",
-												"enableAutoIdle":"Enable Auto Idle Restart"
-								}
-				},
-				"ignoreCalls":{
-								"description":"Allows you to ignore calls from specific users or dm groups.",
-								"settings":{
-												"permanentlyIgnoredUsers":"User IDs (comma + space) who should be permanetly ignored"
-								},
-								"ui":{
-												"ignore":"Ignore",
-												"permanentlyIgnore":"Permanently Ignore Calls",
-												"temporarilyIgnore":"Temporarily Ignore Calls"
-								}
-				},
-				"imgToGif":{
-								"commands":{
-												"height":"Height of the gif",
-												"image":"Image attachment to use",
-												"imgtogif":"Allows you to turn an image to a gif",
-												"width":"Width of the gif"
-								},
-								"description":"Adds a /imgtogif slash command to create a gif from any image",
-								"errors":{
-												"noImage":"No Image specified!",
-												"notAnImage":"Upload is not an image"
-								}
-				},
-				"inRole":{
-								"commands":{
-												"inrole":"Know who is in a role",
-												"role":"The role"
-								},
-								"description":"Know who is in a role with the role context menu or /inrole command (read plugin info!)",
-								"errors":{
-												"makeSureServer":"Make sure that you are in a server."
-								},
-								"limitations":{
-												"description":"If you don't have mod permissions on the server, and that server is large (over 100 members), the plugin may be limited in the following ways:",
-												"friendsAlwaysShown":"However, friends will always be shown regardless of their status.",
-												"offlineNotListed":"Offline members won't be listed",
-												"title":":warning: Limitations",
-												"upTo100":"Up to 100 members will be listed by default. To get more, scroll down in the member list to load more members."
-								},
-								"ui":{
-												"viewMembers":"View Members in Role"
-								}
-				},
-				"ingtoninator":{
-								"description":"Suffixes 'ington' to a random word in your message",
-								"settings":{
-												"isEnabled":"Enable or disable the Ingtoninator",
-												"showIcon":"Show a button to toggle the Ingtoninator plugin"
-								},
-								"ui":{
-												"disabled":"Ingtoninator Disabled",
-												"enabled":"Ingtoninator Enabled"
-								}
-				},
-				"instantScreenshare":{
-								"description":"Instantly screenshare when joining a voice channel with support for desktop sources, windows, and video input devices (cameras, capture cards)",
-								"info":{
-												"linux":"For Linux",
-												"soundPreview":"Regarding Sound & Preview Settings",
-												"soundPreviewInfo":"We use the settings set and used by discord to decide if stream preview and sound should be enabled or not",
-												"videoDevices":"Video Devices",
-												"videoDevicesInfo":"Supports cameras and capture cards (like Elgato HD60X) when enabled in settings",
-												"wayland":"For Wayland it only pops up the screenshare select",
-												"x11":"For X11 it may or may not work :shrug:"
-								},
-								"ui":{
-												"instantScreenshare":"Instant Screenshare",
-												"instantScreenshareDisabled":"Instant Screenshare Disabled",
-												"instantScreenshareEnabled":"Instant Screenshare Enabled"
-								}
-				},
-				"invisibleChat":{
-								"description":"Encrypt your Messages in a non-suspicious way!",
-								"settings":{
-												"savedPasswords":"Saved Passwords (Seperated with a , )"
-								},
-								"ui":{
-												"decryptMessage":"Decrypt Message",
-												"encryptMessage":"Encrypt Message",
-												"hiddenMessageIndicator":"This message has a hidden message! (InvisibleChat)"
-								}
-				},
-				"inviteDefaults":{
-								"description":"Allows you to edit the default values when creating server invites.",
-								"options":{
-												"forever":"Forever",
-												"infinite":"Infinite"
-								},
-								"settings":{
-												"inviteDuration":"Invite Duration",
-												"maxUses":"Invite Use Count",
-												"temporaryMembership":"Temporary Membership"
-								}
-				},
-				"jellyfinRichPresence":{
-								"coverTypeOptions":{
-												"episodeCover":"Episode Cover",
-												"seriesCover":"Series Cover"
-								},
-								"description":"Rich presence for Jellyfin media server",
-								"episodeFormatOptions":{
-												"fulltext":"Season 1 Episode 1",
-												"s01e01":"S01E01",
-												"short":"1x01"
-								},
-								"howToGetApiKey":{
-												"description":"Auth token can be found by following these steps:",
-												"title":"How to get an API key",
-												"userIdInfo":"You'll also need your User ID, which can be found in the url of your user profile page."
-								},
-								"nameFormatOptions":{
-												"custom":"Custom",
-												"seriesEpisodeName":"Series - Episode/Track/Movie Name",
-												"seriesMovieName":"Series/Movie Name"
-								},
-								"overrideTypeOptions":{
-												"listening":"Listening",
-												"off":"Off",
-												"playing":"Playing",
-												"streaming":"Streaming",
-												"watching":"Watching"
-								},
-								"privacyMode":{
-												"albumHidden":"[Album Hidden]",
-												"artistHidden":"[Artist Hidden]",
-												"episodeHidden":"[Episode Hidden]",
-												"listeningToMusic":"Listening to music",
-												"mediaHidden":"[Media Hidden]",
-												"movieHidden":"[Movie Hidden]",
-												"seriesHidden":"[Series Hidden]",
-												"titleHidden":"[Title Hidden]",
-												"trackHidden":"[Track Hidden]",
-												"watchingSomething":"Watching Something",
-												"watchingTvShow":"Watching a TV Show"
-								},
-								"settings":{
-												"apiKey":"Jellyfin API key obtained from your Jellyfin administration dashboard",
-												"coverType":"Choose which cover to display when watching a TV show",
-												"customName":"Custom Rich Presence name (only used if 'Custom' is selected). Options: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
-												"episodeFormat":"Episode number format",
-												"nameDisplay":"Choose how the application name should appear in Rich Presence",
-												"overrideRichPresenceType":"Override the rich presence type",
-												"privacyMode":"Privacy Mode (Hide media details like Episode/Song Name)",
-												"serverUrl":"Jellyfin server URL (e.g., https://jellyfin.example.com)",
-												"showEpisodeName":"Show episode name after season/episode info",
-												"showPausedState":"Show Rich Presence when media is paused",
-												"userId":"Jellyfin user ID obtained from your user profile URL"
-								},
-								"state":{
-												"episode":"Episode {episode}",
-												"paused":"Paused",
-												"season":"Season {season}"
-								},
-								"toasts":{
-												"notConfigured":"JellyfinRPC is not configured."
-								}
-				},
-				"jumpTo":{
-								"description":"Adds context menu options to jump to the start or bottom of a channel/DM.",
-								"errors":{
-												"channelNotAvailable":"Channel information not available.",
-												"failedJump":"Failed to jump to message. Check console for details.",
-												"failedSearch":"Failed to search for messages.",
-												"noMessagesFound":"No messages found from this user in this channel."
-								},
-								"ui":{
-												"jumpToFirst":"Jump To First Message",
-												"jumpToLast":"Jump To Last Message",
-												"usersLastMessage":"User's Last Message",
-												"yourLastMessage":"Your Last Message"
-								}
-				},
-				"jumpscare":{
-								"description":"Adds a configurable chance of jumpscaring you whenever you open a channel. Inspired by Geometry Dash Mega Hack",
-								"settings":{
-												"audioSource":"Sets the audio url of the jumpscare",
-												"chance":"The chance of a jumpscare happening (1 in X so: 100 = 1/100 or 1%, 50 = 1/50 or 2%, etc.)",
-												"imageSource":"Sets the image url of the jumpscare"
-								}
-				},
-				"keyboardNavigation":{
-								"commands":{
-												"openDevSettings":"Open Dev tab"
-								},
-								"description":"Allows you to navigate the UI with a keyboard.",
-								"settings":{
-												"allowMouseControl":"Allow the mouse to control the command palette.",
-												"hotkey":"The hotkey to open the command palette."
-								},
-								"ui":{
-												"recordKeybind":"Record keybind",
-												"recording":"Recording..."
-								}
-				},
-				"keyboardSounds":{
-								"description":"Adds OperaGX or osu! sound effects when typing on your keyboard.",
-								"options":{
-												"operaGx":"OperaGX",
-												"osu":"osu!"
-								},
-								"settings":{
-												"soundPack":"Sound pack to use.",
-												"volume":"Volume of the keyboard sounds."
-								}
-				},
-				"keywordNotify":{
-								"description":"Sends a notification if a given message matches certain keywords or regexes",
-								"options":{
-												"blacklist":"Blacklist",
-												"whitelist":"Whitelist"
-								},
-								"settings":{
-												"amountToKeep":"Amount of messages to keep in the log",
-												"ignoreBots":"Ignore messages from bots",
-												"keywords":"Manage keywords"
-								},
-								"ui":{
-												"addId":"Add ID",
-												"addKeywordEntry":"Add Keyword Entry",
-												"clearAll":"Clear All",
-												"ignoreCase":"Ignore Case",
-												"keywordEntry":"Keyword Entry {index}",
-												"keywords":"Keywords",
-												"whitelistBlacklist":"Whitelist/Blacklist"
-								}
-				},
-				"lastActive":{
-								"description":"A plugin to jump to last active message from yourself or another user in a channel/server.",
-								"errors":{
-												"channelNotAvailable":"Channel information not available.",
-												"findFailed":"Failed to find messages. Check console for details.",
-												"jumpFailed":"Failed to jump to message. Check console for details.",
-												"noRecentMessages":"Couldn't find any recent messages from this user."
-								}
-				},
-				"limitMiddleClickPaste":{
-								"description":"Prevent middle click pasting either always or just when a text area is not focused.",
-								"options":{
-												"alwaysPrevent":"Always Prevent Middle Click Pasting",
-												"onlyWhenNotFocused":"Only Prevent When Text Area Not Focused"
-								},
-								"settings":{
-												"preventLinkOpen":"Prevent middle-click on links from opening new tabs while preserving autoscroll.",
-												"scope":"Situations in which to prevent middle click from pasting.",
-												"threshold":"Milliseconds until pasting is enabled again after a middle click."
-								}
-				},
-				"listenBrainzRPC":{
-								"about":{
-												"description":"The MusicBrainz API does not require an API key, but it does require a meaningful user-agent string. For most, an email address should suffice.",
-												"title":"About MusicBrainz API"
-								},
-								"buttons":{
-												"profile":"ListenBrainz Profile",
-												"viewSong":"View Song"
-								},
-								"defaults":{
-												"statusName":"some music"
-								},
-								"description":"Little plugin for ListenBrainz rich presence",
-								"missingArtOptions":{
-												"listenbrainzLogo":"Use large ListenBrainz logo",
-												"placeholder":"Use generic placeholder"
-								},
-								"nameFormatOptions":{
-												"albumName":"Use album name (falls back to custom status text if song has no album)",
-												"artistFirst":"Use format 'artist - song'",
-												"artistOnly":"Use artist name only",
-												"customStatus":"Use custom status name",
-												"songFirst":"Use format 'song - artist'",
-												"songOnly":"Use song name only"
-								},
-								"settings":{
-												"hideWithActivity":"Hide ListenBrainz presence if you have any other presence",
-												"hideWithSpotify":"Hide ListenBrainz presence if Spotify is running",
-												"mbContact":"ListenBrainz contact",
-												"missingArt":"When album or album art is missing",
-												"nameFormat":"Show name of song and artist in status name",
-												"shareSong":"Show link to song on ListenBrainz (may only be visible to other users)",
-												"shareUsername":"Show link to ListenBrainz profile (may only be visible to other users)",
-												"statusName":"Custom status text",
-												"useListeningStatus":"Show \"Listening to\" status instead of \"Playing\"",
-												"useLogo":"Show ListenBrainz logo on album art",
-												"useTimeBar":"Use track duration to display a time bar (must be using Listening status)",
-												"username":"ListenBrainz username"
-								}
-				},
-				"loginWithQR":{
-								"description":"Allows you to login to another device by scanning a login QR code, just like on mobile!",
-								"settings":{
-												"scanQr":"Scan a QR code"
-								},
-								"ui":{
-												"enableAndRestart":"Enable the plugin and restart your client to scan a login QR code",
-												"scanQrCode":"Scan QR Code"
-								}
-				},
-				"messageLoggerEnhanced":{
-								"buttons":{
-												"exportLogs":"Export Logs",
-												"exporting":"Exporting...",
-												"importLogs":"Import Logs",
-												"importing":"Importing..."
-								},
-								"modal":{
-												"clearAllLogs":"Clear All Logs",
-												"clearVisibleLogs":"Clear Visible Logs",
-												"copyChannelId":"Copy Channel ID",
-												"copyContent":"Copy Content",
-												"copyMessageId":"Copy Message ID",
-												"copyServerId":"Copy Server ID",
-												"copyUserId":"Copy User ID",
-												"deleteLog":"Delete Log",
-												"deleted":"Deleted",
-												"edited":"Edited",
-												"emptyLogs":"Empty eh",
-												"filterMessages":"Filter Messages",
-												"fromChannel":"From {channel} in {guild}",
-												"fromDms":"From {username}'s DMs",
-												"fromGroupDm":"From {name} Group DM",
-												"ghostPinged":"Ghost Pinged",
-												"importLogs":"Import Logs",
-												"importLogsTooltip":"ML Enhanced now stores logs in indexeddb. You need to import your old logs from the logs directory. Importing wont overwrite existing logs",
-												"jumpToMessage":"Jump To Message",
-												"loadMore":"Load More",
-												"maybeTry":"Maybe try {nextTab} or {lastTab}",
-												"noResultsIn":"No results in {tab}.",
-												"openUserProfile":"Open user profile",
-												"sortNewestFirst":"Sort Newest First",
-												"sortOldestFirst":"Sort Oldest First"
-								},
-								"settings":{
-												"alwaysLogCurrentChannel":"Always log current selected channel. Blacklisted channels/users will still be ignored.",
-												"alwaysLogDirectMessages":"Always log DMs",
-												"attachmentFileExtensions":"Comma separated list of file extensions to save. Attachments with file extensions not in this list will not be saved. Leave empty to save all attachments.",
-												"attachmentSizeLimitInMegabytes":"Maximum size of an attachment in megabytes to save. Attachments larger than this size will not be saved.",
-												"blacklistedIds":"Blacklisted server, channel, or user IDs.",
-												"cacheLimit":"Maximum number of messages to store in the cache. Older messages are deleted when the limit is reached. This helps reduce memory usage and improve performance. 0 means there is no limit",
-												"cacheMessagesFromServers":"Usually message logger only logs from whitelisted ids and dms, enabling this would mean it would log messages from all servers as well. Note that this may cause the cache to exceed its limit, resulting in some messages being missed. If you are in a lot of servers, this may significantly increase the chances of messages being logged, which can result in a large message record and the inclusion of irrelevant messages.",
-												"exportLogsFromIndexedDB":"Export Logs From IndexedDB",
-												"hideMessageFromMessageLoggers":"When enabled, a context menu button will be added to messages to allow you to delete messages without them being logged by other loggers. Might not be safe, use at your own risk.",
-												"hideMessageFromMessageLoggersDeletedMessage":"The message content to replace the message with when using the hide message from message loggers feature.",
-												"ignoreBots":"Whether to ignore messages by bots",
-												"ignoreMutedCategories":"Messages in channels belonging to muted categories will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-												"ignoreMutedChannels":"Messages in muted channels will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-												"ignoreMutedGuilds":"Messages in muted guilds will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-												"ignoreSelf":"Whether to ignore messages by yourself",
-												"ignoreWebhooks":"Whether to ignore messages by webhooks",
-												"importLogsFromFile":"Import Logs From File",
-												"messageLimit":"Maximum number of messages to save. Older messages are deleted when the limit is reached. 0 means there is no limit",
-												"messagesToDisplayAtOnceInLogs":"Number of messages to display at once in logs & number of messages to load when loading more messages in logs.",
-												"openImageCacheFolder":"Opens the image cache directory",
-												"openLogs":"Open Logs",
-												"permanentlyRemoveLogByDefault":"Vencord's base MessageLogger remove log button wiil delete logs permanently",
-												"preserveCurrentChannel":"When enabled, messages in your currently selected channel are not affected by time-based cleanup.",
-												"saveImages":"Save deleted attachments.",
-												"saveMessages":"Whether to save the deleted and edited messages.",
-												"selectImageCacheDir":"Select saved images directory",
-												"selectLogsDir":"Select logs directory",
-												"showLogsButton":"Toggle to whenever show the toolbox or not",
-												"showWhereMessageIsFrom":"Show message channel/author name and server name",
-												"sortNewest":"Sort logs by newest.",
-												"timeBasedCleanupMinutes":"Automatically remove messages from servers that are older than this many minutes. Set to 0 to disable time-based cleanup.",
-												"whitelistedIds":"Whitelisted server, channel, or user IDs."
-								}
-				}
+    "absRPC":{
+        "about":{
+            "automaticAuth":"Eklenti otomatik olarak kimliğinizi doğrulayacak ve dinleme ilerlemenizi getirecektir.",
+            "description":"Şu anda oynatılan sesli kitaplarınızı Discord Zengin Durum olarak görüntülemek için AudioBookShelf sunucunuzu URL, kullanıcı adınızı ve şifrenizi girin.",
+            "title":"AudioBookShelf'e nasıl bağlanılır"
+        },
+        "description":"AudioBookShelf medya sunucusu için zengin varlık",
+        "settings":{
+            "password":"AudioBookShelf şifresi",
+            "serverUrl":"AudioBookShelf sunucusu URL (ör. https://abs.example.com)",
+            "username":"AudioBookShelf kullanıcı adı"
+        },
+        "toasts":{
+            "notConfigured":"AudioBookShelf RPC yapılandırılmamış."
+        }
+    },
+    "altKrispSwitch":{
+        "description":"Gürültü Bastırma Popout'unun Krisp ve Standart yerine Yok ve Krisp arasında geçiş yapmasını sağlar"
+    },
+    "alwaysExpandProfiles":{
+        "description":"Profil açılır pencerelerini her zaman tam modele genişletir"
+    },
+    "anammox":{
+        "description":"Nitro ve mağaza ile ilgili çeşitli özellikleri gizler",
+        "settings":{
+            "billing":"Faturalandırma ayarlarını kaldır",
+            "dms":"DM listesinin üstündeki mağazaları kaldır",
+            "emojiList":"Kullanılamayan kategorileri emoji seçiciden kaldırın",
+            "gift":"Hediye düğmesini kaldır",
+            "quests":"DM listesinin üzerindeki görevleri kaldırın",
+            "serverBoost":"Kanal listesinin üzerindeki sunucu güçlendirme bilgilerini kaldırın"
+        }
+    },
+    "animalese":{
+        "description":"Gönderilen her mesajda hayvan geçiş dili çalıyor (çok konuşuyorlar)",
+        "quality":{
+            "high":"Yüksek",
+            "low":"Düşük",
+            "lowest":"En düşük",
+            "medium":"Orta"
+        },
+        "settings":{
+            "messageLengthLimit":"İşlenecek maksimum mesaj uzunluğu",
+            "pitch":"Perde çarpanı",
+            "processOwnMessages":"Kendi mesajlarınızı da oluşturmayı etkinleştirin",
+            "soundQuality":"Kullanılacak sesin kalitesi",
+            "speed":"Hayvan sesinin hızı",
+            "volume":"Hayvan sesinin şiddeti"
+        }
+    },
+    "atSomeone":{
+        "contextMenu":{
+            "someone":"Birinden rastgele bahsedin"
+        },
+        "description":"Birinden rastgele bahsedin"
+    },
+    "autoZipper":{
+        "description":"Belirtilen dosya türlerini ve klasörleri Discord'a yüklemeden önce otomatik olarak sıkıştırır",
+        "settings":{
+            "extensions":"Otomatik ziplenecek dosya uzantılarının virgülle ayrılmış listesi (ör. .psd,.blend,.exe,.dmg)"
+        }
+    },
+    "bannersEverywhere":{
+        "description":"Üye listesindeki bannerları görüntüler ",
+        "settings":{
+            "animate":"Banner'ları canlandırın",
+            "preferNameplate":"Banner yerine isim plakasını tercih edin"
+        }
+    },
+    "baseDecoder":{
+        "description":"Herhangi bir mesajın base64 içeriğinin kodunu çözün ve kodu çözülen içeriği kopyalayın.",
+        "settings":{
+            "clickMethod":"Herhangi bir mesajın base64 içeriğinin kodunu çözmek için düğmeyi değiştirin.",
+            "clickMethodOptions":{
+                "left":"Base64 içeriğinin kodunu çözmek için Sol Tıklayın.",
+                "right":"Base64 içeriğinin kodunu çözmek için sağ tıklayın."
+            }
+        },
+        "ui":{
+            "copiedToast":"Kodu çözülen içerik panoya kopyalandı!",
+            "copyDecoded":"Kodu Çözülmüş İçeriği Kopyala",
+            "decodedContent":"Kodu Çözülmüş İçerik",
+            "modalTitle":"Base64 İçeriğinin Kodu Çözüldü",
+            "tooltipLeft":"Kod Çözmeyi Kopyala (Sol Tıklama) / Base64 Kod Çözme (Sağ Tıklama)",
+            "tooltipRight":"Base64 Kod Çözme (Sol Tıklama) / Kod Çözme İşlemini Kopyala (Sağ Tıklama)"
+        }
+    },
+    "betterActivities":{
+        "description":"Ekranı özelleştirme seçenekleriyle birlikte üye listesindeki ve kullanıcı açılır penceresindeki tüm etkinlikleri gösterir",
+        "options":{
+            "carousel":"Atlıkarınca",
+            "list":"Liste"
+        },
+        "settings":{
+            "allActivitiesStyle":"Tüm aktivitelerin görüntülenmesine yönelik stil",
+            "hideTooltip":"Etkinlik simgelerindeki araç ipucunu gizle",
+            "iconSize":"Etkinlik simgelerinin boyutu",
+            "memberList":"Üye listesinde etkinlikleri göster",
+            "removeGameActivityStatus":"Oyun etkinliği durumu göstergesini kaldırın",
+            "renderGifs":"Etkinlik simgelerinde GIF'leri işleme",
+            "specialFirst":"Önce özel etkinlikleri göster",
+            "userPopout":"Kullanıcı açılır penceresindeki tüm etkinlikleri göster"
+        }
+    },
+    "betterAudioPlayer":{
+        "description":"Ses eki oynatıcılarına bir spektrograf ve osiloskop görselleştiricisi ekler",
+        "settings":{
+            "forceMoveBelow":"Görselleştiriciyi ses oynatıcının altına zorlayın",
+            "oscilloscope":"Osiloskop görselleştiricisini etkinleştir",
+            "oscilloscopeColor":"Osiloskop için renk",
+            "oscilloscopeSolidColor":"Osiloskop için düz renk kullanın",
+            "spectrograph":"Spektrograf görselleştiricisini etkinleştir",
+            "spectrographColor":"Spektrograf için renk",
+            "spectrographSolidColor":"Spektrograf için düz renk kullanın"
+        },
+        "toasts":{
+            "invalidColor":"{settingKey} için geçersiz renk biçimi, 'R, G, B' veya '#RRGGBB' biçiminde olduğundan emin olun"
+        }
+    },
+    "betterBanReasons":{
+        "description":"Discord yasaklama modunda kullanmak için özel nedenler oluşturun ve/veya seçenekler yerine varsayılan olarak bir metin girişi gösterin.",
+        "settings":{
+            "isTextInputDefault":"Varsayılan olarak seçme menüsü yerine metin girişi gösterir. (\"Diğer\" seçeneğine tıklamaya eşdeğerdir)",
+            "reasons":"Özel nedenleriniz"
+        },
+        "ui":{
+            "addAnotherReason":"Başka bir neden ekle",
+            "reasonPlaceholder":"Neden",
+            "reasons":"Sebepler"
+        }
+    },
+    "betterBlockedUsers":{
+        "description":"Engellenen kullanıcılar listesinde arama yapmanızı sağlar ve ayarlarda adların seçilebilir olmasını sağlar.",
+        "ui":{
+            "searchPlaceholder":"Kullanıcıları ara..."
+        }
+    },
+    "betterCommands":{
+        "commands":{
+            "refresh":{
+                "description":"Discord uygulama komutlarını yerel olarak yeniler",
+                "failed":"Komutlar yenilenemedi. Ayrıntılar için konsolu kontrol edin.",
+                "refreshing":"Uygulama komutları yenileniyor...",
+                "success":"Komutlar başarıyla yenilendi!",
+                "userOption":"denemek ve yenilemek için belirli bir kullanıcı"
+            }
+        },
+        "description":"Komuta sistemini çeşitli iyileştirmelerle geliştirir.",
+        "settings":{
+            "allowNewlinesInCommands":"Komut girişlerinde yeni satırlara izin ver (CTRL + Shift + Enter)",
+            "autoFillArguments":"Komutu yalnızca gerekli olanlar yerine tüm argümanlarla otomatik olarak doldur"
+        }
+    },
+    "betterInvites":{
+        "description":"Davetlerin son kullanma tarihini görün, davetli profilini görüntüleyin ve katılmadan önce adı tıklayarak sunucuların ön izlemesini yapın",
+        "ui":{
+            "expireTooltip":"Bu davet {expiry}",
+            "expireWill":"süresi dolmak",
+            "invitedYouTo":"{inviter} sizi {guild}'e davet etti",
+            "notExpire":"süresi dolmamak"
+        }
+    },
+    "betterPlusReacts":{
+        "description":":emoji: öncesindeki artı miktarı, eklenecek mesajdır"
+    },
+    "betterUserArea":{
+        "description":"Kullanıcı alanını özelleştirin ve daha temiz hale getirin.",
+        "settings":{
+            "alwaysShowUsername":"Durum yerine her zaman kullanıcı adını göster.",
+            "removeAudioMenus":"Sessiz ve sağır düğmelerinin yanındaki menüleri kaldırın.",
+            "removeAvatarDecoration":"Avatar dekorasyonunu kaldırın.",
+            "removeButtonTooltips":"Düğme araç ipuçlarını kaldırın.",
+            "removeNameplate":"İsim plakası stilini kaldırın.",
+            "removeUsernameStyles":"Kullanıcı adı renklerini ve efektlerini kaldırın."
+        }
+    },
+    "blockKeywords":{
+        "description":"Belirli kullanıcı tanımlı anahtar sözcükleri içeren iletileri, bunları gönderen kullanıcı engellenmiş gibi engeller.",
+        "settings":{
+            "blockedWords":"Engellenecek kelimelerin virgülle ayrılmış listesi",
+            "caseSensitive":"Büyük/küçük harfe duyarlı aramanın kullanılıp kullanılmayacağı",
+            "ignoreBlockedMessages":"(En son) yeni mesajlar çubuğunu tamamen yok sayar",
+            "useRegex":"Mesaj içeriğini kontrol ederken her değeri normal ifade olarak kullanın (gelişmiş)"
+        }
+    },
+    "blockKrisp":{
+        "description":"Krisp'in yüklenmesini önle"
+    },
+    "bypassPinPrompt":{
+        "description":"PIN işlevlerini kullanırken PIN istemini atlayın"
+    },
+    "bypassStatus":{
+        "contextMenu":{
+            "addStatusBypass":"Durum Atlamayı Ekle",
+            "removeStatusBypass":"Durum Atlamayı Kaldır"
+        },
+        "description":"Rahatsız etmeyin modundayken belirli kaynaklardan bildirim almaya devam edin. Kullanıcıları/kanalları/loncaları rahatsız etmeyin moduna ayarlamak için sağ tıklayın.",
+        "placeholder":{
+            "separateWithCommas":"Virgülle ayırın"
+        },
+        "settings":{
+            "allowOutsideOfDms":"Seçili kullanıcıların, DM'lerin dışında da durumu atlamasına izin ver (kanal/lonca atlaması gibi davranır, ancak seçilen kullanıcılar tarafından gönderilen tüm mesajlar için geçerlidir)",
+            "channels":"Baypasa izin verilecek kanallar (o kanala ping atıldığında bilgi verilir)",
+            "guilds":"Loncaların baypas edilmesine izin verilir (loncanın herhangi bir yerine ping atıldığında bilgi verilir)",
+            "notificationSound":"Bildirim sesinin çalınıp çalınmayacağı",
+            "respectSilentPings":"Sessiz ping'lere saygı gösterin (@sessiz / bildirimleri bastırın)",
+            "statusToUse":"Beyaz liste için kullanılacak durum",
+            "users":"Kullanıcıların bypass'a izin vermesi (DM'lerde gönderilen tüm mesajlar için bilgilendirilir)"
+        },
+        "statusOptions":{
+            "dnd":"Rahatsız Etmeyin",
+            "idle":"Boşta",
+            "invisible":"Görünmez",
+            "online":"Çevrimiçi"
+        }
+    },
+    "channelBadges":{
+        "description":"Kanallara türlerine göre rozetler ekler",
+        "settings":{
+            "announcementBadgeColor":"Duyuru rozeti rengi",
+            "announcementBadgeLabel":"Duyuru rozeti etiketi",
+            "announcementThreadBadgeColor":"Duyuru Konusu rozet rengi",
+            "announcementThreadBadgeLabel":"Duyuru Konusu rozet etiketi",
+            "categoryBadgeColor":"Kategori rozeti rengi",
+            "categoryBadgeLabel":"Kategori rozeti etiketi",
+            "directoryBadgeColor":"Dizin rozeti rengi",
+            "directoryBadgeLabel":"Dizin rozeti etiketi",
+            "forumBadgeColor":"Forum rozeti rengi",
+            "forumBadgeLabel":"Forum rozet etiketi",
+            "lockedBadgeColor":"Kilitli rozet rengi",
+            "lockedBadgeLabel":"Kilitli rozet etiketi",
+            "mediaBadgeColor":"Medya rozeti rengi",
+            "mediaBadgeLabel":"Medya rozeti etiketi",
+            "nsfwBadgeColor":"NSFW rozet rengi",
+            "nsfwBadgeLabel":"NSFW rozet etiketi",
+            "oneBadgePerChannel":"Kanal başına yalnızca bir rozet göster",
+            "privateThreadBadgeColor":"Özel Konu rozeti rengi",
+            "privateThreadBadgeLabel":"Özel Konu rozeti etiketi",
+            "publicThreadBadgeColor":"Herkese Açık Konu rozeti rengi",
+            "publicThreadBadgeLabel":"Herkese Açık Konu rozeti etiketi",
+            "rulesBadgeColor":"Kural rozeti rengi",
+            "rulesBadgeLabel":"Kural rozeti etiketi",
+            "showAnnouncementBadge":"Duyuru rozetini göster",
+            "showAnnouncementThreadBadge":"Duyuru Konusu rozetini göster",
+            "showCategoryBadge":"Kategori rozetini göster",
+            "showDirectoryBadge":"Dizin rozetini göster",
+            "showForumBadge":"Forum rozetini göster",
+            "showLockedBadge":"Kilitli rozetini göster",
+            "showMediaBadge":"Medya rozetini göster",
+            "showNSFWBadge":"NSFW rozetini göster",
+            "showPrivateThreadBadge":"Özel Konu Rozetini Göster",
+            "showPublicThreadBadge":"Herkese Açık Konu rozetini göster",
+            "showRulesBadge":"Kurallar rozetini göster",
+            "showStageBadge":"Sahne Rozetini Göster",
+            "showTextBadge":"Metin rozetini göster",
+            "showUnknownBadge":"Bilinmeyen rozetini göster",
+            "showVoiceBadge":"Voice rozetini göster",
+            "stageBadgeColor":"Sahne rozeti rengi",
+            "stageBadgeLabel":"Sahne rozeti etiketi",
+            "textBadgeColor":"Metin rozeti rengi",
+            "textBadgeLabel":"Metin rozeti etiketi",
+            "unknownBadgeColor":"Bilinmeyen rozet rengi",
+            "unknownBadgeLabel":"Bilinmeyen rozet etiketi",
+            "voiceBadgeColor":"Ses rozeti rengi",
+            "voiceBadgeLabel":"Ses rozeti etiketi"
+        },
+        "tooltips":{
+            "lockedChannel":"Bu kanal kilitlidir.",
+            "nsfwChannel":"Bu kanal NSFW olarak işaretlenmiştir.",
+            "rulesChannel":"Bu kanal sunucu kuralları kanalıdır."
+        }
+    },
+    "channelTabs":{
+        "contextMenu":{
+            "openInNewTab":"Yeni Sekmede Aç"
+        },
+        "description":"Group tarayıcı gibi sekmelerde sık ziyaret ettiğiniz kanallarınız"
+    },
+    "characterCounter":{
+        "description":"Sohbet girişine bir karakter sayacı ekler",
+        "settings":{
+            "colorEffects":"Karakter sınırına yaklaşmak için renk efektlerini açın veya kapatın"
+        }
+    },
+    "cleanChannelName":{
+        "description":"Kanal adlarından tüm emojileri ve dekor saçmalıklarını kaldırın"
+    },
+    "cleanerChannelGroups":{
+        "description":"Okunmamış mesajları olsa bile daraltılmış kategorilerdeki tüm kanalları gizler."
+    },
+    "clientSideBlock":{
+        "description":"Neredeyse tüm içeriği herhangi bir kullanıcıdan yerel olarak gizlemenize olanak tanır",
+        "reply":{
+            "replyingToBlocked":"Engellenen mesajı yanıtlama"
+        },
+        "settings":{
+            "blockedReplyDisplay":"Birisi gizlediğiniz birine yanıt verdiğinde mesaj yerine ne görüntülenmelidir?",
+            "blockedReplyDisplayOptions":{
+                "displayText":"Gizli bir mesajın yanıtlandığını belirten metni görüntüle",
+                "hideReply":"Kelimenin tam anlamıyla hiçbir şey"
+            },
+            "guildBlackList":"İşlevselliği devre dışı bırakmak için lonca kimlikleri",
+            "guildWhiteList":"İşlevselliği etkinleştirmek için lonca kimlikleri",
+            "hideBlockedMessages":"Engellenen kullanıcılardan gelen mesajların tamamen gizlenmesi gerekir mi (eski noblockedmessages eklentisiyle aynı)",
+            "hideBlockedUsers":"Engellenen kullanıcılar da her yerde gizlenmeli mi?",
+            "hideEmptyRoles":"Tüm üyelerin engellenmesi durumunda rol başlıkları gizlenmeli mi?",
+            "hideVc":"Engellenen kullanıcıları içeren ses kanallarını gizleyin.",
+            "usersToBlock":"Virgül ve boşlukla ayrılmış kullanıcı kimlikleri"
+        }
+    },
+    "clipsEnhancements":{
+        "description":"Daha fazla Klip FPS ve süre seçeneği, özel klip uzunluğu, RPC etiketleme ve daha fazlasını ekleyin",
+        "settings":{
+            "clipsLink":"Klip ayarlarında FPS ve süre seçeneklerini değiştirin!",
+            "enableAdvancedSignals":"Gelişmiş klip sinyallerini etkinleştirin (otomatik klip tetikleyicileri)",
+            "enableScreenshotKeybind":"Ekran görüntüsü tuş atama özelliğini etkinleştirin",
+            "enableVoiceOnlyClips":"Yalnızca ses kliplerini etkinleştirin (videosuz ses)",
+            "ignorePlatformRestriction":"Platform Kısıtlı Kırpmaya İzin Ver (kaydetme hatalarına neden olabilir)",
+            "richPresenceTagging":"Klipler ne zaman mevcut Zengin Durum ile etiketlenmelidir?",
+            "richPresenceTaggingOptions":{
+                "always":"Her zaman",
+                "never":"Asla",
+                "whenMatched":"Yalnızca etkinliğin başlangıç ve bitiş adı eşleştiğinde"
+            }
+        }
+    },
+    "commandPalette":{
+        "description":"Aranabilir bir komut paleti aracılığıyla eylemleri hızlı bir şekilde çalıştırın",
+        "settings":{
+            "customCommands":"Özel komut paleti girişlerini yönetin",
+            "enableTagFilter":"Etiket filtre çubuğunu göster",
+            "hotkey":"Komut paletini açmak için kullanılan kısayol tuşu",
+            "showTags":"Komutlar için etiket çiplerini görüntüle",
+            "visualStyle":"Palet görünümü",
+            "visualStyleOptions":{
+                "classic":"Klasik",
+                "polished":"Cilalı"
+            }
+        },
+        "ui":{
+            "hotkeyDescription":"Komut paletini açmak için kullanılan kısayol tuşu",
+            "hotkeyTitle":"Komut Paleti Kısayol Tuşu",
+            "pressAnyKey":"Herhangi bir tuşa basın...",
+            "reset":"Sıfırla"
+        }
+    },
+    "components":{
+        "description":"Geliştiricilerin Discord bileşenlerini test etmesi ve önizlemesi için yardımcı program eklentisi"
+    },
+    "contentWarning":{
+        "description":"Varsayılan olarak bulanıklaştırılacak belirli tetikleyici sözcükleri belirtmenize olanak tanır. Bulanıklaştırılmış içeriğin üzerine gelindiğinde/tıklandığında onu ortaya çıkaracaktır.",
+        "settings":{
+            "onClick":"Tetikleyici içeriği fareyle üzerine gelmek yerine yalnızca tıklamayla göster"
+        },
+        "ui":{
+            "flaggedWords":"İşaretli Kelimeler",
+            "placeholder":"Kelime"
+        }
+    },
+    "copyProfileColors":{
+        "contextMenu":{
+            "copyProfileColors":"Profil Renklerini Kopyala"
+        },
+        "description":"İnsanların profil degrade renklerini panoya kopyalamak için bir eklenti.",
+        "toast":{
+            "copied":"Profil renkleri panoya kopyalandı!",
+            "error":"Profil renkleri kopyalanırken hata oluştu!",
+            "noColorsFound":"Profil rengi bulunamadı!"
+        }
+    },
+    "copyStatusUrls":{
+        "description":"Sağ tıkladığınızda kullanıcıların durum URL'sini kopyalayın",
+        "toast":{
+            "copied":"URL kopyalandı",
+            "error":"URL kopyalanırken hata oluştu, daha fazla bilgi için konsolu kontrol edin"
+        }
+    },
+    "copyUserMention":{
+        "contextMenu":{
+            "copyUserMention":"Kullanıcı İfadesini Kopyala"
+        },
+        "description":"Kullanıcı içerik menüsünde belirtilen kullanıcıları kopyalamak için bir düğme ekler; Geçerli Kullanıcı ile en iyi şekilde çalışır."
+    },
+    "cursorBuddy":{
+        "description":"İmlecinizi takip eden bir karakter ekler.",
+        "settings":{
+            "buddy":"Bir imleç dostum seç",
+            "buddyOptions":{
+                "fathorse":"Koca götlü at",
+                "oneko":"Oneko"
+            },
+            "fade":"İmleç yakındayken atın renginin kaybolması gerekiyorsa",
+            "fps":"Arkadaşınızın kare hızı",
+            "freeroam":"At boştayken serbestçe dolaşmalıysa",
+            "furColor":"Oneko için altıgen kürk rengi",
+            "outlineColor":"Oneko için anahat altıgen rengi",
+            "shake":"At yürürken camı sallarsa",
+            "size":"Koca götlü atın büyüklüğü",
+            "speed":"Arkadaşınızın hızı"
+        },
+        "ui":{
+            "furColor":"Kürk Rengi",
+            "outlineColor":"Anahat Rengi"
+        }
+    },
+    "customFolderIcons":{
+        "description":"Klasör simgelerini herhangi bir png ile özelleştirin"
+    },
+    "customSounds":{
+        "description":"Discord'ın seslerini özelleştirin.",
+        "settings":{
+            "debug":"Hata ayıklama",
+            "export":"İhracat",
+            "import":"İçe aktarmak",
+            "resetAll":"Tümünü Sıfırla",
+            "searchPlaceholder":"Ada veya kimliğe göre arayın",
+            "searchSounds":"Sesleri Ara"
+        },
+        "toast":{
+            "exportSuccess":"Dışa aktarılan {count} ayarlar (ses dosyaları dahil değildir)",
+            "importError":"Ayarlar içe aktarılırken hata oluştu. Ayrıntılar için konsolu kontrol edin.",
+            "importSuccess":"Ayarlar başarıyla içe aktarıldı!",
+            "loadError":"Özel ses dosyası yüklenirken hata oluştu",
+            "resetSuccess":"Tüm geçersiz kılmalar başarıyla sıfırlandı!"
+        }
+    },
+    "customTimestamps":{
+        "about":{
+            "additional":"Ek olarak bunları girişlerinizde kullanabilirsiniz:",
+            "calendar":"\"Bugün\" veya \"Dün\" gibi dinamik tarih biçimlendirmesini etkinleştirir.",
+            "relative":"size \"4 saat önce\" gibi zamanlar verir.",
+            "title":"Nasıl kullanılır:"
+        },
+        "description":"Mesajlarda ve ipuçlarında özel zaman damgaları",
+        "settings":{
+            "calendarFormats":"Takvim formatları",
+            "calendarFormatsDescription":"Yukarıdaki zaman damgalarında kullanılıyorsa [takvim] değeri nasıl biçimlendirilir?",
+            "formats":"Zaman damgası formatlarını özelleştirme"
+        }
+    },
+    "customUserColors":{
+        "contextMenu":{
+            "setColor":"Rengi Ayarla"
+        },
+        "description":"Herhangi bir kullanıcıya, herhangi bir yere özel bir renk eklemenizi sağlar! TypeTweaks ve roleColorEverywhere ile kullanmanızı önemle tavsiye ederiz",
+        "settings":{
+            "colorInServers":"Sunucularda ad renklerinin değiştirilmesi gerekiyorsa",
+            "dmList":"Özel renkler tanımlanmış kullanıcıların adları dm listesinde renkli olarak yer alacaktır"
+        }
+    },
+    "disableCameras":{
+        "description":"Bir çağrıdaki kameraları varsayılan olarak devre dışı bırakır"
+    },
+    "discordDevBanner":{
+        "description":"Yapı kimliğini görüntüleyen Discord geliştirici başlığını etkinleştirir"
+    },
+    "dragFavoriteEmotes":{
+        "description":"Favori ifadelerinizin sırasını değiştirme olanağını ekler"
+    },
+    "dragify":{
+        "description":"Bahsetme veya davet eklemek için kullanıcıları, kanalları veya sunucuları sohbete bırakın.",
+        "settings":{
+            "allowChatBodyDrop":"Metin eklemek için ana sohbet gövdesine girmeye izin verin.",
+            "channelOutput":"Kanal bırakma çıkışı.",
+            "channelOutputOptions":{
+                "link":"Kanal bağlantısı",
+                "mention":"#kanal bahsi"
+            },
+            "inviteExpireAfter":"Son kullanma tarihini davet edin.",
+            "inviteExpireAfterOptions":{
+                "12hours":"12 saat",
+                "1day":"1 gün",
+                "1hour":"1 saat",
+                "30min":"30 dakika",
+                "6hours":"6 saat",
+                "7days":"7 gün",
+                "never":"Asla"
+            },
+            "inviteMaxUses":"Maksimum kullanımları davet edin.",
+            "inviteMaxUsesOptions":{
+                "100uses":"100 kullanım",
+                "10uses":"10 kullanım",
+                "1use":"1 kullanım",
+                "25uses":"25 kullanım",
+                "50uses":"50 kullanım",
+                "5uses":"5 kullanım",
+                "noLimit":"Sınır yok"
+            },
+            "inviteTemporaryMembership":"Geçici üyelik verin.",
+            "reuseExistingInvites":"Yeni bir davet oluşturmak yerine mevcut daveti yeniden kullanın.",
+            "userOutput":"Kullanıcı bırakma çıkışı.",
+            "userOutputOptions":{
+                "id":"Kullanıcı kimliği",
+                "mention":"Kullanıcıdan bahsedin"
+            }
+        },
+        "toast":{
+            "dropFailed":"Dragify, bırakma işlemini gerçekleştiremedi.",
+            "inviteCreated":"Davet oluşturuldu.",
+            "inviteFailed":"Davet oluşturulamıyor.",
+            "noChannelForInvites":"Davetler için uygun kanal yok."
+        }
+    },
+    "elementHighlighter":{
+        "description":"Öğeleri kolayca vurgulayın ve inceleyin.",
+        "settings":{
+            "keybind":"Vurgulayıcıyı aç/kapat",
+            "showBorderRadius":"Öğenin kenarlık yarıçapı değerlerini görüntüle",
+            "showClasses":"Öğenin CSS sınıfı adlarını araç ipucunda görüntüleyin",
+            "showDisplay":"Öğenin görüntüleme türünü esnek veya ızgara özellikleriyle birlikte görüntüleyin",
+            "showFont":"Hesaplanan yazı tipi ailesini ve yazı tipi boyutunu görüntüleme",
+            "showId":"Öğenin kimlik özelliğini araç ipucunda görüntüleyin",
+            "showMargin":"Öğenin kenar boşluğu değerlerini görüntüle",
+            "showPadding":"Elemanın dolgu değerlerini görüntüle",
+            "showPosition":"Öğenin CSS konum türünü ve z-endeksini görüntüleyin"
+        },
+        "ui":{
+            "copiedColor":"Renk panoya kopyalandı!",
+            "recording":"Kayıt...",
+            "reset":"Sıfırla"
+        }
+    },
+    "equicordHelper":{
+        "alerts":{
+            "equicordSupport":"Equicord Destek",
+            "okayContinue":"Tamam devam et",
+            "supportWarningBody":"Yardım istemeden önce. Güncellemeleri kontrol edin ve bu sorunun gerçekten Equicord kaynaklı olup olmadığını kontrol edin!",
+            "supportWarningTitle":"Vencord Destek Kanalı Uyarısı"
+        },
+        "commands":{
+            "refreshCommands":"Eğik Çizgi Komutlarını Yenile",
+            "refreshFailed":"Komutlar yenilenemedi. Ayrıntılar için konsolu kontrol edin.",
+            "refreshSuccess":"Eğik Çizgi Komutları başarıyla yenilendi."
+        },
+        "description":"Destek sağlamak, uyumsuzluktan kaynaklanan çökmeleri düzeltmek ve diğer çeşitli özellikleri sağlamak için kullanılır.",
+        "settings":{
+            "accountStandingButton":"Başlık çubuğunda bir hesap durumu düğmesi göster",
+            "forceRoleIcon":"Kompakt modda mesajların yanında rol simgelerinin görüntülenmesini zorlar",
+            "noDefaultHangStatus":"Ses kanallarına katılırken varsayılan askıda kalma durumunu devre dışı bırakın",
+            "noMirroredCamera":"Kameranın ekranınıza yansımasını engeller",
+            "refreshSlashCommands":"İstemcinizi yeniden başlatmadan yeni eklenen komutları göstermek için Eğik Çizgi Komutlarını yeniler.",
+            "removeActivitySection":"Üye listesinin üzerindeki etkinlik bölümünü kaldırır",
+            "showYourOwnActivityButtons":"Discord bir nedenden dolayı kendi etkinlik düğmelerinizi gizler"
+        },
+        "standing":{
+            "allGood":"Her şey yolunda!",
+            "atRisk":"Risk altında",
+            "limited":"Sınırlı",
+            "suspended":"Askıya alınmış",
+            "veryLimited":"Çok sınırlı"
+        }
+    },
+    "equicordToolbox":{
+        "description":"Kanal başlığındaki gelen kutusu düğmesinin yanına, Equicord hızlı eylemi barındıran bir düğme ekler",
+        "settings":{
+            "showPluginMenu":"Araç kutusunda eklentiler menüsünü göster"
+        },
+        "ui":{
+            "editQuickCss":"QuickCSS'yi düzenleyin",
+            "enableQuickCss":"QuickCSS'yi etkinleştir",
+            "manageThemes":"Temaları Yönet",
+            "openNotificationLog":"Bildirim Günlüğünü Aç",
+            "openSettings":"Ayarları Aç",
+            "plugins":"Eklentiler",
+            "restartToApply":"Değişikliği uygulamak için yeniden başlatın",
+            "themes":"Temalar",
+            "tooltip":"Equicord Araç Kutusu"
+        }
+    },
+    "equissant":{
+        "description":"Belirtilen her tıklama miktarında kruvasan :tramvay:",
+        "settings":{
+            "amount":"Kruvasanı tetiklemek için tıklama miktarı"
+        }
+    },
+    "exitSounds":{
+        "description":"Ses bağlantısını kestiğinizde ses tahtası seslerini çalın.",
+        "settings":{
+            "soundGuildId":"Sesi içeren sunucuyu seçin.",
+            "soundId":"Çalmak istediğiniz sesin kimliğini girin."
+        },
+        "toasts":{
+            "somethingWentWrong":"Hata! Bir şeyler ters gitti."
+        },
+        "ui":{
+            "enterSoundId":"Ses kimliğini girin...",
+            "selectServer":"Bir sunucu seçin...",
+            "setGlobalExitSound":"Genel çıkış sesi olarak ayarla"
+        }
+    },
+    "exportMessages":{
+        "description":"Herhangi bir mesajı bir dosyaya aktarmanıza olanak tanır",
+        "notifications":{
+            "exportFailed":"Mesaj dışa aktarılamadı",
+            "exportSuccess":"Mesaj başarıyla {filename} olarak dışa aktarıldı",
+            "title":"Mesajları Dışa Aktar"
+        },
+        "settings":{
+            "exportContacts":"Arkadaş listenizi panonuza aktarın. Arkadaşlar sekmesi için menü çubuğuna yeni bir düğme ekler.",
+            "openFileAfterExport":"Dışa aktarılan dosyayı dışa aktarmanın ardından varsayılan dosya işleyicisinde açın"
+        },
+        "ui":{
+            "contactListUndefined":"Kişi listesi tanımsız. Dışa aktarmadan önce \"Tümü\" sekmesine tıklayın.",
+            "contactsCopied":"Kişiler panoya başarıyla kopyalandı.",
+            "export":"İhracat",
+            "exportMessage":"Mesajı Dışa Aktar"
+        }
+    },
+    "fastDeleteChannels":{
+        "description":"Kanalları silmek için bir çöp kutusu simgesi ekler",
+        "settings":{
+            "keyBind":"Basıldığında çöp kutusunu değiştirme tuşu.",
+            "reqAlt":"Alt'ın tutulmasını gerektir.",
+            "reqCtrl":"Kontrolün tutulmasını gerektirir.",
+            "reqShift":"Vardiyanın tutulmasını gerektir."
+        }
+    },
+    "favouriteAnything":{
+        "description":"Herhangi bir resmi favorilere ekleyin"
+    },
+    "fileUpload":{
+        "description":"Zipline ve Nest gibi dosya barındırma hizmetlerine resim ve video yükleyin",
+        "ui":{
+            "uploadTo":"{serviceName}'a yükle"
+        }
+    },
+    "findReply":{
+        "description":"Bir kanaldaki bir mesaja verilen ilk yanıta atlar (geçmiş konuşmaları daha kolay takip etmenizi sağlar).",
+        "settings":{
+            "hideButtonIfNoReply":"Mesaja yanıt yoksa düğmeyi gizler",
+            "includeAuthor":"Ayrıca yalnızca tam olarak yazara yanıt veren iletileri değil, genel olarak yazara yanıt veren iletileri de arayacaktır.",
+            "includePings":"Ayrıca doğrudan yazarın gönderdiği mesajları da arayacaktır"
+        },
+        "toasts":{
+            "containerNotFound":"Kapsayıcı öğesi bulunamadı.",
+            "noReplyFound":"Cevap bulunamadı.",
+            "useBottomPanel":"Yanıtlar arasında gezinmek için alt paneli kullanın."
+        },
+        "ui":{
+            "jumpToReply":"Yanıtlamak için Atla"
+        }
+    },
+    "fixFileExtensions":{
+        "description":"Mümkünse uyumlu, desteklenen bir formatta yeniden adlandırarak dosya uzantılarını düzeltir"
+    },
+    "followVoiceUser":{
+        "description":"Sesli sohbette bir arkadaşınızı takip edin.",
+        "info":"Bu Eklenti, bir Arkadaşınızı/Arkadaşlarınızı sesli sohbet(ler)de takip etmek için kullanılır.",
+        "settings":{
+            "leaveWhenUserLeaves":"Kullanıcı ayrıldığında ses kanalından ayrılın. (Bu bazen sonsuz ayrılma/katılma döngüsüne girmenize neden olabilir)",
+            "onlyWhenInVoice":"Kullanıcıyı yalnızca bir ses kanalındayken takip edin"
+        },
+        "ui":{
+            "followUser":"Kullanıcıyı Takip Et"
+        }
+    },
+    "fontLoader":{
+        "description":"Google Fonts'tan herhangi bir yazı tipini yükler",
+        "settings":{
+            "applyOnCodeBlocks":"Yazı tipini kod bloklarına uygulama"
+        },
+        "ui":{
+            "by":"yazan {authors}",
+            "clickToApply":"Uygulamak için herhangi bir yazı tipine tıklayın.",
+            "searchFonts":"Yazı tiplerini ara...",
+            "searchGoogleFonts":"Google Yazı Tiplerinde Ara"
+        }
+    },
+    "forwardAnywhere":{
+        "description":"İletme başarısız olursa bunu normal bir mesaj olarak gönderin, aynı zamanda nsfw'nin iletilmesine de izin verir",
+        "options":{
+            "greaterThan":">",
+            "hash":"-#"
+        },
+        "settings":{
+            "forwardPreface":"Önsözde ne iletilmelidir?"
+        }
+    },
+    "frequentQuickSwitcher":{
+        "description":"Hızlı değiştirici sonuçlarını en sık kullandığınız kanallarınız olacak şekilde yeniden yazar ve filtreler"
+    },
+    "friendCloud":{
+        "commands":{
+            "count":"Görüntülenecek kullanıcı sayısı",
+            "friendcloud":"Bulutta en çok etkileşimde bulunduğunuz kullanıcıyı görüntüleyin"
+        },
+        "description":"En çok etkileşimde bulunduğunuz kullanıcıları görselleştirmek için bir /friendcloud komutu ekler",
+        "errors":{
+            "couldntGenerate":"Görüntü oluşturulamadı :c",
+            "countMustBeHigher":"Sayım 1 veya daha yüksek olmalıdır!",
+            "noAffinities":"Hiçbir yakınlık bulunamadı. Gizlilik ayarlarınızı kontrol edin.",
+            "noValidUsers":"Yakın ilgi alanlarında geçerli kullanıcı bulunamadı. Gizlilik ayarlarınızı kontrol edin."
+        }
+    },
+    "friendCodes":{
+        "panel":{
+            "copied":"Kopyalandı!",
+            "copyCode":"Kodu Kopyala",
+            "currentCode":"Mevcut Arkadaş Kodu",
+            "error":"Hata: {error}",
+            "refresh":"Yenile",
+            "sendToServer":"Sunucuya Gönder",
+            "sent":"Gönderilmiş!",
+            "title":"Arkadaş Kodları"
+        },
+        "settings":{
+            "autoCopy":"Arkadaş kodunu değiştiğinde otomatik olarak panoya kopyala",
+            "sendToServer":"Arkadaş kodunu değiştiğinde sunucuya otomatik olarak gönder",
+            "webhookUrl":"Arkadaş kodunu göndermek için web kancasını URL"
+        }
+    },
+    "friendTags":{
+        "description":"& ile bir arama başlatarak hızlı değiştiricideki özel etiketlere göre filtrelemenize olanak tanır",
+        "ui":{
+            "add":"Ekle",
+            "addTo":"{tagName}'a ekle",
+            "name":"İsim",
+            "remove":"Kaldır",
+            "removeFrom":"{tagName}'dan kaldır",
+            "tag":"Etiket",
+            "userList":"Kullanıcı Listesi (Kaldırmak İçin Bir Kullanıcıya Tıklayın)",
+            "usersSeperated":"Kullanıcılar (Virgülle ayrılmış)"
+        }
+    },
+    "friendshipRanks":{
+        "description":"Bir kullanıcıyla ne kadar süredir arkadaş olduğunuzu gösteren rozetler ekler",
+        "ranks":{
+            "besties":{
+                "description":"Bunu nasıl başarıyorsun??? (5 Yıl)",
+                "title":"kankalar"
+            },
+            "blooming":{
+                "description":"Arkadaşlığınız oraya doğru gidiyor! (1 Ay)",
+                "title":"Çiçeklenme"
+            },
+            "burning":{
+                "description":"Arkadaşlığınız son hıza ulaştı (3 Ay)",
+                "title":"Yanan"
+            },
+            "fighter":{
+                "description":"Arkadaşlığınız güçlü (6 Ay)",
+                "title":"Dövüşçü"
+            },
+            "royal":{
+                "description":"Arkadaşlığınız hem iyi hem de kötü geçti; tam 2 yıl!",
+                "title":"Asil"
+            },
+            "sprout":{
+                "description":"Arkadaşlığınız yeni başlıyor",
+                "title":"Filiz"
+            },
+            "star":{
+                "description":"Arkadaşlığınız bir süredir devam ediyor (1 Yıl)",
+                "title":"Yıldız"
+            }
+        }
+    },
+    "fullVcPfp":{
+        "description":"Avatarların vc döşemesinin tamamını kaplamasını sağlar"
+    },
+    "gensokyoRadioRPC":{
+        "description":"Gensokyo Radyo için Discord zengin varlık!",
+        "info":"Gensokyo Radyo için Discord zengin varlık!",
+        "settings":{
+            "refreshInterval":"Etkinlik yenilemeleri arasındaki aralık (saniye)"
+        }
+    },
+    "ghosted":{
+        "description":"DM'lerine cevap vermezseniz sevimli bir hayalet ortaya çıkacak",
+        "settings":{
+            "exemptedChannels":"Gölgelenmeden muaf tutulacak kanal kimliklerinin virgülle ayrılmış listesi (kimliğini kopyalamak için bir DM kanalına sağ tıklayın)",
+            "ignoreBots":"Botlardan gelen DM'leri dikkate almayın",
+            "ignoreGroupDms":"Tüm grup dm'lerini gölgelenmeden hariç tutun",
+            "showDmIcons":"Bireysel DM'lerin yanında hayalet simgeleri göster",
+            "showIndicator":"Hayalet sayacını sunucu listesinin en üstünde göster"
+        },
+        "ui":{
+            "ghostedUsers":"{count} Hayalet Kullanıcılar",
+            "noGhostedUsers":"Hayalet Kullanıcı Yok",
+            "unghost":"hayalet olmayan"
+        }
+    },
+    "gifCollections":{
+        "description":"GIF koleksiyonları oluşturmanıza olanak sağlar",
+        "settings":{
+            "collectionPrefix":"Koleksiyonlar için önek",
+            "collectionsSortOrder":"Koleksiyonlar için sıralama sırası",
+            "collectionsSortType":"Koleksiyonlar için sıralama türü",
+            "defaultEmptyCollectionImage":"Bir koleksiyonda resim/gif bulunmadığında gösterilecek resim/gif",
+            "itemPrefix":"GIF öğelerinin öneki",
+            "onlyShowCollections":"Yalnızca koleksiyonları göster",
+            "preventDuplicates":"Aynı GIF'in bir koleksiyona birden çok kez eklenmesini önleyin",
+            "showCopyImageLink":"Bağlam menülerinde 'Resim Bağlantısını Kopyala' seçeneğini göster",
+            "stopWarnings":"Silme uyarılarını durdur"
+        },
+        "toasts":{
+            "gifMissingMetadata":"Yenilenemiyor: GIF'in meta verileri eksik (koleksiyona yeniden ekleyin)"
+        },
+        "ui":{
+            "addToCollection":"Koleksiyona Ekle",
+            "addedAt":"Eklenme tarihi:",
+            "areYouSure":"Emin misin?",
+            "ascending":"Artan",
+            "cannotRefresh":"Yenilenemiyor: GIF'in meta verileri eksik (koleksiyona yeniden ekleyin)",
+            "close":"Kapat",
+            "collectionInformation":"Koleksiyon Bilgileri",
+            "collectionName":"Koleksiyon Adı",
+            "copyImageLink":"Resim Bağlantısını Kopyala",
+            "copyUrl":"URL kopyala",
+            "createCollection":"Koleksiyon Oluştur",
+            "createdAt":"Oluşturulma Tarihi",
+            "creationDate":"Oluşturulma Tarihi",
+            "deleteAction":"bu koleksiyonu sil",
+            "deleteCollection":"Koleksiyonu Sil",
+            "deleteConfirm":"Gerçekten {action} istiyor musun?",
+            "descending":"Azalan",
+            "exportCollections":"Koleksiyonları Dışa Aktar",
+            "gifs":"Gif'ler",
+            "height":"Yükseklik",
+            "imageLinkCopied":"Resim bağlantısı panoya kopyalandı",
+            "import":"İçe aktarmak",
+            "importCollections":"Koleksiyonları İçe Aktar",
+            "importOverwrite":"Koleksiyonların içe aktarılması mevcut koleksiyonlarınızın üzerine yazılacaktır.",
+            "information":"Bilgi",
+            "lastUpdated":"Son Güncelleme",
+            "modifiedDate":"Değiştirilme Tarihi",
+            "moveToCollection":"Koleksiyona Taşı",
+            "name":"İsim",
+            "nevermind":"Boşver",
+            "order":"Emir",
+            "refreshFailed":"URL yenilenemedi",
+            "refreshSuccess":"URL başarıyla yenilendi",
+            "refreshUrl":"URL yenile",
+            "refreshing":"URL yenileniyor...",
+            "remove":"Kaldır",
+            "removeAction":"bu öğeyi kaldır",
+            "rename":"Yeniden isimlendirmek",
+            "reset":"Sıfırla",
+            "resetCollections":"Koleksiyonları Sıfırla",
+            "resetRemove":"Koleksiyonların sıfırlanması tüm koleksiyonlarınızın kaldırılmasına neden olacaktır.",
+            "selectCollection":"Öğenin taşınacağı koleksiyonu seçin",
+            "sortBy":"Göre sırala",
+            "sortCollections":"Koleksiyonları Sırala",
+            "unknown":"Bilinmeyen",
+            "urlCopied":"URL panoya kopyalandı",
+            "width":"Genişlik"
+        }
+    },
+    "gifRoulette":{
+        "commands":{
+            "gifroulette":"Kaderi baştan çıkar ve bir gif gönder"
+        },
+        "description":"Favorilerinizden rastgele bir gif göndermek için bir komut ve sunucunun sahibine ping atmak için onda bir şans ekler",
+        "settings":{
+            "pingOwnerChance":"Loncanın sahibine ping atılmasında 10'da 1 değişiklik olması gerekiyorsa (oh hayır)"
+        }
+    },
+    "githubRepos":{
+        "description":"Kullanıcının genel GitHub depolarını profilinde görüntüler",
+        "settings":{
+            "showInMiniProfile":"Mini profilde yalnızca bir düğme yerine tam kullanıcı arayüzünü göster",
+            "showLanguage":"Depo dilini göster",
+            "showRepositoryTab":"Profil modunda depolar sekmesini göster (etkinleştirildiğinde bağlantılardaki düğmeyi gizler)",
+            "showStars":"Depo yıldızlarını göster"
+        },
+        "ui":{
+            "error":"Hata, GithubRepos oluşturulamadı"
+        }
+    },
+    "globalBadges":{
+        "description":"Diğer istemci modlarından genel rozetler ekler",
+        "ui":{
+            "joinServer":"GlobalBadges Sunucusuna Katılın",
+            "refetchSuccess":"Küresel rozetler başarıyla yeniden getirildi!"
+        }
+    },
+    "googleThat":{
+        "commands":{
+            "googlethat":"Arama motoru bağlantısı gönder",
+            "input":"Arama sorgusu"
+        },
+        "description":"İnternet arama bağlantısı göndermek için bir komut ekler",
+        "settings":{
+            "customEngineURL":"Kullanmak istediğiniz Motorun URL'u",
+            "defaultEngine":"Kullanılacak arama motoru",
+            "embed":"Gönderilen bağlantının bir yerleştirme oluşturması gerekiyorsa",
+            "hyperlink":"Gönderilen bağlantının etiket olarak sorguya köprü oluşturması gerekiyorsa"
+        }
+    },
+    "guildPickerDumper":{
+        "description":"Bir sunucunun emojilerini ve çıkartmalarını boşaltmak ve indirmek için içerik menüsü.",
+        "ui":{
+            "downloadEmojis":"Emojileri İndir",
+            "downloadStickers":"Çıkartmaları İndir",
+            "serverNotFound":"Sunucu bulunamadı!"
+        }
+    },
+    "guildTagSettings":{
+        "description":"Lonca etiketleri için, onları gizlemek veya benimseme istemini devre dışı bırakmak gibi bazı ayarlar ekler.",
+        "settings":{
+            "disableAdoptTagPrompt":"Etiketleri benimseme istemini devre dışı bırakın",
+            "hideTags":"Etiketleri gizle"
+        }
+    },
+    "hideChatButtons":{
+        "description":"Sohbet düğmelerini gizleyebiliyor",
+        "settings":{
+            "color":"Açıkken kırmızıya boyayın",
+            "open":"Varsayılan olarak açıldı"
+        },
+        "ui":{
+            "close":"Kapat",
+            "open":"Açık"
+        }
+    },
+    "hideServers":{
+        "description":"Sağ tıklayarak sunucuları lonca listesinden ve hızlı değiştiriciden gizlemenizi sağlar",
+        "ui":{
+            "hideFolder":"Klasörü Gizle",
+            "hideServer":"Sunucuyu Gizle",
+            "unhideFolder":"Klasörü Göster",
+            "unhideServer":"Sunucuyu Göster"
+        }
+    },
+    "holyNotes":{
+        "description":"Daha sonra tekrar ziyaret etmek üzere mesajları not olarak kaydedin",
+        "ui":{
+            "holyNotes":"Kutsal Notlar",
+            "noteMessage":"Not Mesajı",
+            "openNotes":"Notları Aç",
+            "saveNote":"Notu Kaydet"
+        }
+    },
+    "homeTyping":{
+        "description":"Dms'inizdeki biri yazıyorsa ana sayfa düğmesini yazma göstergesine dönüştürür"
+    },
+    "hopOn":{
+        "description":"Fortnite'a atla veya balonlara atla :3",
+        "settings":{
+            "regex":"Tetiklenecek Regex",
+            "url":"URL açmak için"
+        }
+    },
+    "husk":{
+        "description":"Kabuk düğmesi ekler (kullanılan emojiyi değiştirmek için ayarları kontrol edin)",
+        "settings":{
+            "emojiID":"Emoji Kimliği (varsayılan (Vencord Sunucudan): 1026532993923293184)",
+            "emojiName":"Emoji adı (varsayılan (Vencord Sunucudan): kabuk)",
+            "findInServer":"Ayarlarda kimliği kullanmadan önce sunucuda aynı isimli emojiyi bulmaya çalışın (nitro yoksa kullanışlıdır)"
+        },
+        "ui":{
+            "husk":"Kabuk"
+        }
+    },
+    "iRememberYou":{
+        "description":"Kaybolmanız durumunda iletişim kurduğunuz herkesi (sunucular dahil) yerel olarak kaydeder",
+        "ui":{
+            "iRememberYou":"Seni hatırlıyorum"
+        }
+    },
+    "iconViewer":{
+        "description":"Tüm simgelerin önizlemesini görmek için ayarlara yeni bir sekme ekler.",
+        "ui":{
+            "iconFinder":"Simge Bulucu",
+            "openIconsTab":"Simgeler Sekmesini Aç"
+        }
+    },
+    "idleAutoRestart":{
+        "description":"Yapılandırılabilir bir süre boyunca boşta kaldıktan sonra istemciyi otomatik olarak yeniden başlatır, ancak VC'deyken yeniden başlatmayı önler.",
+        "settings":{
+            "idleMinutes":"Yeniden başlatmadan önce dakikalarca işlem yapılmaması (VC'de olmadığında)",
+            "isEnabled":"Boşta kaldıktan sonra otomatik yeniden başlatmayı etkinleştir"
+        },
+        "ui":{
+            "disableAutoIdle":"Otomatik Boşta Yeniden Başlatmayı Devre Dışı Bırak",
+            "enableAutoIdle":"Otomatik Boşta Yeniden Başlatmayı Etkinleştir"
+        }
+    },
+    "ignoreCalls":{
+        "description":"Belirli kullanıcılardan veya DM gruplarından gelen çağrıları yok saymanıza olanak tanır.",
+        "settings":{
+            "permanentlyIgnoredUsers":"Kalıcı olarak göz ardı edilmesi gereken kullanıcı kimlikleri (virgül + boşluk)"
+        },
+        "ui":{
+            "ignore":"Yoksay",
+            "permanentlyIgnore":"Çağrıları Kalıcı Olarak Yoksay",
+            "temporarilyIgnore":"Aramaları Geçici Olarak Yoksay"
+        }
+    },
+    "imgToGif":{
+        "commands":{
+            "height":"GIF'in yüksekliği",
+            "image":"Kullanılacak resim eki",
+            "imgtogif":"Bir görüntüyü gif'e dönüştürmenizi sağlar",
+            "width":"GIF'in genişliği"
+        },
+        "description":"Herhangi bir görüntüden gif oluşturmak için /imgtogif eğik çizgi komutunu ekler",
+        "errors":{
+            "noImage":"Resim belirtilmedi!",
+            "notAnImage":"Yükleme bir resim değil"
+        }
+    },
+    "inRole":{
+        "commands":{
+            "inrole":"Kimin rolde olduğunu bilin",
+            "role":"Rol"
+        },
+        "description":"Rol bağlam menüsü veya /inrole komutuyla kimin rolde olduğunu öğrenin (eklenti bilgilerini okuyun!)",
+        "errors":{
+            "makeSureServer":"Bir sunucuda olduğunuzdan emin olun."
+        },
+        "limitations":{
+            "description":"Sunucuda mod izinleriniz yoksa ve sunucu büyükse (100'den fazla üye), eklenti aşağıdaki şekillerde sınırlandırılabilir:",
+            "friendsAlwaysShown":"Ancak arkadaşlar durumları ne olursa olsun her zaman gösterilecektir.",
+            "offlineNotListed":"Çevrimdışı üyeler listelenmeyecek",
+            "title":":uyarı: Sınırlamalar",
+            "upTo100":"Varsayılan olarak 100'e kadar üye listelenecektir. Daha fazlasını elde etmek için, daha fazla üye yüklemek üzere üye listesinde aşağı kaydırın."
+        },
+        "ui":{
+            "viewMembers":"Roldeki Üyeleri Görüntüle"
+        }
+    },
+    "ingtoninator":{
+        "description":"Mesajınızda rastgele bir kelimeye 'ington' son ekini ekler",
+        "settings":{
+            "isEnabled":"Ingtoninator'ı etkinleştirme veya devre dışı bırakma",
+            "showIcon":"Ingtoninator eklentisini değiştirmek için bir düğme göster"
+        },
+        "ui":{
+            "disabled":"Ateşleyici Devre Dışı",
+            "enabled":"Ateşleyici Etkin"
+        }
+    },
+    "instantScreenshare":{
+        "description":"Masaüstü kaynakları, pencereler ve video giriş cihazları (kameralar, yakalama kartları) desteğiyle bir ses kanalına katıldığınızda anında ekran paylaşımı yapın",
+        "info":{
+            "linux":"Linux için",
+            "soundPreview":"Ses ve Önizleme Ayarlarıyla İlgili",
+            "soundPreviewInfo":"Yayın önizlemesinin ve sesin etkinleştirilip etkinleştirilmeyeceğine karar vermek için discord tarafından belirlenen ve kullanılan ayarları kullanırız",
+            "videoDevices":"Video Cihazları",
+            "videoDevicesInfo":"Ayarlarda etkinleştirildiğinde kameraları ve yakalama kartlarını (Elgato HD60X gibi) destekler",
+            "wayland":"Wayland için yalnızca ekran paylaşımı seçimi açılır",
+            "x11":"X11 için işe yarayabilir de çalışmayabilir de: omuz silkme:"
+        },
+        "ui":{
+            "instantScreenshare":"Anında Ekran Paylaşımı",
+            "instantScreenshareDisabled":"Anında Ekran Paylaşımı Devre Dışı",
+            "instantScreenshareEnabled":"Anında Ekran Paylaşımı Etkin"
+        }
+    },
+    "invisibleChat":{
+        "description":"Mesajlarınızı şüphe uyandırmayacak bir şekilde şifreleyin!",
+        "settings":{
+            "savedPasswords":"Kayıtlı Şifreler (, ile ayrılmış)"
+        },
+        "ui":{
+            "decryptMessage":"Mesajın Şifresini Çöz",
+            "encryptMessage":"Mesajı Şifrele",
+            "hiddenMessageIndicator":"Bu mesajın gizli bir mesajı var! (Görünmez Sohbet)"
+        }
+    },
+    "inviteDefaults":{
+        "description":"Sunucu davetleri oluştururken varsayılan değerleri düzenlemenizi sağlar.",
+        "options":{
+            "forever":"Sonsuza kadar",
+            "infinite":"Sonsuz"
+        },
+        "settings":{
+            "inviteDuration":"Davet Süresi",
+            "maxUses":"Kullanım Sayısını Davet Et",
+            "temporaryMembership":"Geçici Üyelik"
+        }
+    },
+    "jellyfinRichPresence":{
+        "coverTypeOptions":{
+            "episodeCover":"Bölüm Kapağı",
+            "seriesCover":"Seri Kapağı"
+        },
+        "description":"Jellyfin medya sunucusu için zengin varlık",
+        "episodeFormatOptions":{
+            "fulltext":"1. Sezon 1. Bölüm",
+            "s01e01":"S01E01",
+            "short":"1x01"
+        },
+        "howToGetApiKey":{
+            "description":"Kimlik doğrulama belirtecini şu adımları izleyerek bulabilirsiniz:",
+            "title":"API anahtarı nasıl alınır",
+            "userIdInfo":"Ayrıca, kullanıcı profili sayfanızın URL'sinde bulunabilecek Kullanıcı Kimliğinize de ihtiyacınız olacaktır."
+        },
+        "nameFormatOptions":{
+            "custom":"Özel",
+            "seriesEpisodeName":"Dizi - Bölüm/Parça/Film Adı",
+            "seriesMovieName":"Dizi/Film Adı"
+        },
+        "overrideTypeOptions":{
+            "listening":"Dinleme",
+            "off":"Kapalı",
+            "playing":"Oynanıyor",
+            "streaming":"Yayın Yapıyor",
+            "watching":"İzleniyor"
+        },
+        "privacyMode":{
+            "albumHidden":"[Albüm Gizli]",
+            "artistHidden":"[Sanatçı Gizli]",
+            "episodeHidden":"[Bölüm Gizli]",
+            "listeningToMusic":"Müzik dinlemek",
+            "mediaHidden":"[Medya Gizli]",
+            "movieHidden":"[Film Gizli]",
+            "seriesHidden":"[Seri Gizli]",
+            "titleHidden":"[Başlık Gizli]",
+            "trackHidden":"[Parça Gizli]",
+            "watchingSomething":"Bir şey izlemek",
+            "watchingTvShow":"Bir TV Programı İzlemek"
+        },
+        "settings":{
+            "apiKey":"Jellyfin yönetim panelinizden elde edilen Jellyfin API anahtarı",
+            "coverType":"Bir TV programı izlerken hangi kapağın görüntüleneceğini seçin",
+            "customName":"Özel Zengin Durum adı (yalnızca 'Özel' seçildiğinde kullanılır). Seçenekler: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
+            "episodeFormat":"Bölüm numarası formatı",
+            "nameDisplay":"Uygulama adının Zengin Durum'da nasıl görüneceğini seçin",
+            "overrideRichPresenceType":"Zengin iletişim durumu türünü geçersiz kıl",
+            "privacyMode":"Gizlilik Modu (Bölüm/Şarkı Adı gibi medya ayrıntılarını gizleyin)",
+            "serverUrl":"Jellyfin sunucusu URL (ör. https://jellyfin.example.com)",
+            "showEpisodeName":"Sezon/bölüm bilgisinden sonra bölüm adını göster",
+            "showPausedState":"Medya duraklatıldığında Zengin Durumu Göster",
+            "userId":"Jellyfin kullanıcı kimliği URL kullanıcı profilinizden alındı"
+        },
+        "state":{
+            "episode":"Bölüm {episode}",
+            "paused":"Duraklatıldı",
+            "season":"Sezon {season}"
+        },
+        "toasts":{
+            "notConfigured":"JellyfinRPC yapılandırılmamış."
+        }
+    },
+    "jumpTo":{
+        "description":"Bir kanalın/DM'nin başına veya altına atlamak için bağlam menüsü seçeneklerini ekler.",
+        "errors":{
+            "channelNotAvailable":"Kanal bilgisi mevcut değil.",
+            "failedJump":"Mesaja geçilemedi. Ayrıntılar için konsolu kontrol edin.",
+            "failedSearch":"Mesajlar aranamadı.",
+            "noMessagesFound":"Bu kullanıcıdan bu kanalda mesaj bulunamadı."
+        },
+        "ui":{
+            "jumpToFirst":"İlk Mesaja Atla",
+            "jumpToLast":"Son Mesaja Atla",
+            "usersLastMessage":"Kullanıcının Son Mesajı",
+            "yourLastMessage":"Son Mesajınız"
+        }
+    },
+    "jumpscare":{
+        "description":"Bir kanalı açtığınızda sizi korkutmak için yapılandırılabilir bir şans ekler. Geometry Dash Mega Hack'ten ilham alındı",
+        "settings":{
+            "audioSource":"Jumpscare'in ses URL'sini ayarlar",
+            "chance":"Jumpscare'in gerçekleşme şansı (X'te 1 yani: 100 = 1/100 veya %1, 50 = 1/50 veya %2, vb.)",
+            "imageSource":"Jumpscare'in resim URL'sini ayarlar"
+        }
+    },
+    "keyboardNavigation":{
+        "commands":{
+            "openDevSettings":"Geliştirici sekmesini aç"
+        },
+        "description":"Klavyeyle UI içinde gezinmenizi sağlar.",
+        "settings":{
+            "allowMouseControl":"Farenin komut paletini kontrol etmesine izin verin.",
+            "hotkey":"Komut paletini açmak için kısayol tuşu."
+        },
+        "ui":{
+            "recordKeybind":"Tuş atamasını kaydet",
+            "recording":"Kayıt..."
+        }
+    },
+    "keyboardSounds":{
+        "description":"OperaGX veya osu ekler! Klavyenizde yazarken ses efektleri.",
+        "options":{
+            "operaGx":"Opera GX",
+            "osu":"işte!"
+        },
+        "settings":{
+            "soundPack":"Kullanılacak ses paketi.",
+            "volume":"Klavye seslerinin düzeyi."
+        }
+    },
+    "keywordNotify":{
+        "description":"Belirli bir mesaj belirli anahtar kelimelerle veya normal ifadelerle eşleşirse bildirim gönderir",
+        "options":{
+            "blacklist":"Kara liste",
+            "whitelist":"Beyaz liste"
+        },
+        "settings":{
+            "amountToKeep":"Günlükte tutulacak mesaj miktarı",
+            "ignoreBots":"Botlardan gelen mesajları dikkate almayın",
+            "keywords":"Anahtar kelimeleri yönet"
+        },
+        "ui":{
+            "addId":"Kimlik ekle",
+            "addKeywordEntry":"Anahtar Kelime Girişi Ekle",
+            "clearAll":"Tümünü Temizle",
+            "ignoreCase":"Büyük/Küçük Harfleri Yoksay",
+            "keywordEntry":"Anahtar Kelime Girişi {index}",
+            "keywords":"Anahtar Kelimeler",
+            "whitelistBlacklist":"Beyaz liste/Kara liste"
+        }
+    },
+    "lastActive":{
+        "description":"Bir kanal/sunucudaki kendinizden veya başka bir kullanıcıdan gelen son aktif mesaja atlamak için bir eklenti.",
+        "errors":{
+            "channelNotAvailable":"Kanal bilgisi mevcut değil.",
+            "findFailed":"Mesajlar bulunamadı. Ayrıntılar için konsolu kontrol edin.",
+            "jumpFailed":"Mesaja geçilemedi. Ayrıntılar için konsolu kontrol edin.",
+            "noRecentMessages":"Bu kullanıcıdan gelen son ileti bulunamadı."
+        }
+    },
+    "limitMiddleClickPaste":{
+        "description":"Prevent middle click pasting either always or just when a text area is not focused.",
+        "options":{
+            "alwaysPrevent":"Always Prevent Middle Click Pasting",
+            "onlyWhenNotFocused":"Only Prevent When Text Area Not Focused"
+        },
+        "settings":{
+            "preventLinkOpen":"Prevent middle-click on links from opening new tabs while preserving autoscroll.",
+            "scope":"Situations in which to prevent middle click from pasting.",
+            "threshold":"Milliseconds until pasting is enabled again after a middle click."
+        }
+    },
+    "listenBrainzRPC":{
+        "about":{
+            "description":"MusicBrainz API, bir API anahtarı gerektirmez, ancak anlamlı bir kullanıcı aracısı dizesi gerektirir. Çoğu için bir e-posta adresi yeterli olacaktır.",
+            "title":"MusicBrainz Hakkında API"
+        },
+        "buttons":{
+            "profile":"ListenBrainz Profili",
+            "viewSong":"Şarkıyı Görüntüle"
+        },
+        "defaults":{
+            "statusName":"biraz müzik"
+        },
+        "description":"ListenBrainz'in zengin varlığı için küçük eklenti",
+        "missingArtOptions":{
+            "listenbrainzLogo":"Büyük ListenBrainz logosunu kullanın",
+            "placeholder":"Genel yer tutucu kullan"
+        },
+        "nameFormatOptions":{
+            "albumName":"Albüm adını kullan (şarkının albümü yoksa özel durum metnine geri döner)",
+            "artistFirst":"'Sanatçı - şarkı' biçimini kullanın",
+            "artistOnly":"Yalnızca sanatçı adını kullan",
+            "customStatus":"Özel durum adını kullan",
+            "songFirst":"'Şarkı - sanatçı' biçimini kullanın",
+            "songOnly":"Yalnızca şarkı adını kullan"
+        },
+        "settings":{
+            "hideWithActivity":"Başka bir varlığınız varsa ListenBrainz varlığını gizleyin",
+            "hideWithSpotify":"Spotify çalışıyorsa ListenBrainz varlığını gizle",
+            "mbContact":"ListenBrainz iletişim bilgileri",
+            "missingArt":"Albüm veya albüm kapağı eksik olduğunda",
+            "nameFormat":"Durum adında şarkının ve sanatçının adını göster",
+            "shareSong":"ListenBrainz'de şarkının bağlantısını göster (yalnızca diğer kullanıcılar görebilir)",
+            "shareUsername":"ListenBrainz profilinin bağlantısını göster (yalnızca diğer kullanıcılar görebilir)",
+            "statusName":"Özel durum metni",
+            "useListeningStatus":"\"Oynatılıyor\" yerine \"Dinleniyor\" durumunu göster",
+            "useLogo":"Albüm kapağında ListenBrainz logosunu göster",
+            "useTimeBar":"Zaman çubuğunu görüntülemek için parça süresini kullanın (Dinleme durumu kullanılıyor olmalıdır)",
+            "username":"ListenBrainz kullanıcı adı"
+        }
+    },
+    "loginWithQR":{
+        "description":"Tıpkı mobil cihazlarda olduğu gibi, oturum açma QR kodunu tarayarak başka bir cihazda oturum açmanıza olanak tanır!",
+        "settings":{
+            "scanQr":"QR kodunu tarayın"
+        },
+        "ui":{
+            "enableAndRestart":"Eklentiyi etkinleştirin ve oturum açma QR kodunu taramak için istemcinizi yeniden başlatın",
+            "scanQrCode":"QR Kodunu Tara"
+        }
+    },
+    "mediaPlaybackSpeed":{
+        "description":"Sesli mesajlar, videolar ve ses ekleri için medya oynatma hızını kontrol edin",
+        "settings":{
+            "defaultAudioSpeed":"Ses dosyaları için varsayılan oynatma hızı",
+            "defaultVideoSpeed":"Videolar için varsayılan oynatma hızı",
+            "defaultVoiceMessageSpeed":"Sesli mesajlar için varsayılan oynatma hızı"
+        }
+    },
+    "messageBurst":{
+        "description":"Belirli bir süre içinde ardışık mesajları birleştirerek seri mesaj gönderin",
+        "settings":{
+            "shouldMergeWithAttachment":"İletilerin eklerle birleştirilmesine izin ver",
+            "timePeriod":"İletilerin birleştirilmesi için saniye cinsinden süre",
+            "useSpace":"Ayırıcı olarak yeni satır yerine boşluk kullanın"
+        }
+    },
+    "messageColors":{
+        "description":"Renk önizlemesi ile iletilerdeki renk kodlarını (hex, rgb, hsl) işleme",
+        "settings":{
+            "blockView":"Renk bloğunun konumu",
+            "blockViewOptions":{
+                "bothSides":"Metnin her iki tarafı",
+                "leftSide":"Metnin sol tarafı",
+                "rightSide":"Metnin sağ tarafı"
+            },
+            "enableShortHexCodes":"Kısa onaltılık renk kodlarını etkinleştirin (3 karakter)",
+            "renderType":"Mesajlarda renkler nasıl oluşturulur?",
+            "renderTypeOptions":{
+                "backgroundColor":"Arka plan rengini değiştir",
+                "blockNearby":"Renk bloğunu göster",
+                "textColor":"Metin rengini değiştir"
+            }
+        }
+    },
+    "messageFetchTimer":{
+        "description":"Sohbet çubuğunda mesaj alma sürelerini göster",
+        "settings":{
+            "iconColor":"Getirme zamanlayıcısı simgesinin rengi",
+            "showIcon":"Getirme zamanlayıcısı simgesini göster",
+            "showMs":"Saniye yerine milisaniyeyi göster"
+        }
+    },
+    "messageLinkTooltip":{
+        "description":"Mesaj bağlantılarının, yanıtların ve iletilen mesajların üzerine gelindiğinde mesaj önizlemelerini göster",
+        "settings":{
+            "display":"Mesaj önizlemesi için görüntüleme stili",
+            "onForward":"İletilen mesajların üzerine gelindiğinde araç ipucunu göster",
+            "onLink":"Mesaj bağlantılarının üzerine gelindiğinde araç ipucunu göster",
+            "onReply":"Mesaj yanıtlarının üzerine gelindiğinde araç ipucunu göster"
+        }
+    },
+    "messageLoggerEnhanced":{
+        "buttons":{
+            "exportLogs":"Günlükleri Dışa Aktar",
+            "exporting":"Dışa aktarılıyor...",
+            "importLogs":"Günlükleri İçe Aktar",
+            "importing":"İçe aktarılıyor..."
+        },
+        "modal":{
+            "clearAllLogs":"Tüm Günlükleri Temizle",
+            "clearVisibleLogs":"Görünür Günlükleri Temizle",
+            "copyChannelId":"Kanal Kimliğini Kopyala",
+            "copyContent":"İçeriği Kopyala",
+            "copyMessageId":"Mesaj Kimliğini Kopyala",
+            "copyServerId":"Sunucu Kimliğini Kopyala",
+            "copyUserId":"Kullanıcı Kimliğini Kopyala",
+            "deleteLog":"Günlüğü Sil",
+            "deleted":"Silindi",
+            "edited":"Düzenlendi",
+            "emptyLogs":"Boş ha",
+            "filterMessages":"Mesajları Filtrele",
+            "fromChannel":"{guild} içindeki {channel}'dan",
+            "fromDms":"{username}'ın DM'lerinden",
+            "fromGroupDm":"{name} Group DM'den",
+            "ghostPinged":"Hayalet Ping'lendi",
+            "importLogs":"Günlükleri İçe Aktar",
+            "importLogsTooltip":"ML Enhanced artık günlükleri indexeddb'de saklıyor. Eski günlüklerinizi logs dizininden içe aktarmanız gerekir. İçe aktarma mevcut günlüklerin üzerine yazmaz",
+            "jumpToMessage":"Mesaja Git",
+            "loadMore":"Daha Fazlasını Yükle",
+            "maybeTry":"Belki {nextTab} veya {lastTab} deneyebilirsiniz",
+            "noResultsIn":"{tab} ile sonuç yok.",
+            "openUserProfile":"Kullanıcı profilini aç",
+            "sortNewestFirst":"En Yeniyi İlk Sırala",
+            "sortOldestFirst":"En Eskiyi Önce Sırala"
+        },
+        "settings":{
+            "alwaysLogCurrentChannel":"Her zaman geçerli seçili kanalı günlüğe kaydet. Kara listeye alınan kanallar/kullanıcılar yine de göz ardı edilecektir.",
+            "alwaysLogDirectMessages":"Her zaman DM'leri kaydedin",
+            "attachmentFileExtensions":"Kaydedilecek dosya uzantılarının virgülle ayrılmış listesi. Bu listede bulunmayan dosya uzantılarına sahip ekler kaydedilmeyecektir. Tüm ekleri kaydetmek için boş bırakın.",
+            "attachmentSizeLimitInMegabytes":"Kaydedilecek ekin megabayt cinsinden maksimum boyutu. Bu boyuttan daha büyük ekler kaydedilmeyecektir.",
+            "blacklistedIds":"Kara listeye alınmış sunucu, kanal veya kullanıcı kimlikleri.",
+            "cacheLimit":"Önbellekte depolanacak maksimum ileti sayısı. Sınıra ulaşıldığında eski mesajlar silinir. Bu, bellek kullanımını azaltmaya ve performansı artırmaya yardımcı olur. 0 sınır olmadığı anlamına gelir",
+            "cacheMessagesFromServers":"Genellikle mesaj kaydedici yalnızca beyaz listeye alınan kimliklerden ve dm'lerden günlük tutar; bunun etkinleştirilmesi, tüm sunuculardan gelen mesajların da günlüğe kaydedileceği anlamına gelir. Bunun, önbellek sınırını aşarak bazı mesajların gözden kaçmasına neden olabileceğini unutmayın. Çok sayıda sunucudaysanız, bu, mesajların günlüğe kaydedilme şansını önemli ölçüde artırabilir ve bu da büyük bir mesaj kaydına ve alakasız mesajların eklenmesine neden olabilir.",
+            "exportLogsFromIndexedDB":"Günlükleri IndexedDB'den Dışa Aktarma",
+            "hideMessageFromMessageLoggers":"Etkinleştirildiğinde, mesajları diğer kaydediciler tarafından günlüğe kaydedilmeden silmenize olanak sağlamak için mesajlara bir bağlam menüsü düğmesi eklenecektir. Güvenli olmayabilir, riski size ait olmak üzere kullanın.",
+            "hideMessageFromMessageLoggersDeletedMessage":"Mesaj günlükçülerinden mesajı gizle özelliği kullanılırken mesajın değiştirileceği mesaj içeriği.",
+            "ignoreBots":"Botlardan gelen mesajların göz ardı edilip edilmeyeceği",
+            "ignoreMutedCategories":"Sessize alınan kategorilere ait kanallardaki mesajlar günlüğe kaydedilmeyecektir. Sessiz loncalardaki beyaz listeye alınmış kullanıcılar/kanallar günlüğe kaydedilmeye devam edecek.",
+            "ignoreMutedChannels":"Sessiz kanallardaki mesajlar günlüğe kaydedilmeyecektir. Sessiz loncalardaki beyaz listeye alınmış kullanıcılar/kanallar günlüğe kaydedilmeye devam edecek.",
+            "ignoreMutedGuilds":"Sessize alınan loncalardaki mesajlar günlüğe kaydedilmeyecektir. Sessiz loncalardaki beyaz listeye alınmış kullanıcılar/kanallar günlüğe kaydedilmeye devam edecek.",
+            "ignoreSelf":"Mesajları kendiniz görmezden gelip gelmeyeceğiniz",
+            "ignoreWebhooks":"Web kancaları tarafından iletilerin yoksayılıp göz ardı edilmeyeceği",
+            "importLogsFromFile":"Günlükleri Dosyadan İçe Aktar",
+            "messageLimit":"Kaydedilecek maksimum mesaj sayısı. Sınıra ulaşıldığında eski mesajlar silinir. 0 sınır olmadığı anlamına gelir",
+            "messagesToDisplayAtOnceInLogs":"Günlüklerde aynı anda görüntülenecek mesaj sayısı ve günlüklere daha fazla mesaj yüklenirken yüklenecek mesaj sayısı.",
+            "openImageCacheFolder":"Görüntü önbellek dizinini açar",
+            "openLogs":"Günlükleri Aç",
+            "permanentlyRemoveLogByDefault":"Vencord'ın temel MesajLogger'ının günlüğü kaldırma düğmesi, günlükleri kalıcı olarak silecektir",
+            "preserveCurrentChannel":"Etkinleştirildiğinde, halihazırda seçili kanalınızdaki mesajlar zamana dayalı temizlemeden etkilenmez.",
+            "saveImages":"Silinen ekleri kaydedin.",
+            "saveMessages":"Silinen ve düzenlenen mesajların kaydedilip kaydedilmeyeceği.",
+            "selectImageCacheDir":"Kaydedilen resimler dizinini seçin",
+            "selectLogsDir":"Günlük dizinini seçin",
+            "showLogsButton":"Araç kutusunun gösterilip gösterilmeyeceğine geçiş yap",
+            "showWhereMessageIsFrom":"Mesaj kanalı/yazar adını ve sunucu adını göster",
+            "sortNewest":"Günlükleri en yeniye göre sıralayın.",
+            "timeBasedCleanupMinutes":"Bu dakikadan daha eski sunuculardaki iletileri otomatik olarak kaldırın. Zamana dayalı temizlemeyi devre dışı bırakmak için 0'a ayarlayın.",
+            "whitelistedIds":"Beyaz listeye alınan sunucu, kanal veya kullanıcı kimlikleri."
+        }
+    },
+    "messageNotifier":{
+        "description":"Belirli kullanıcılar mesaj gönderdiğinde bildirim alın",
+        "settings":{
+            "users":"Bildirim alınacak kullanıcı kimlikleri (virgülle ayrılmış)"
+        }
+    },
+    "messagePeek":{
+        "description":"DM kanallarındaki son mesaja açmadan göz atma"
+    },
+    "messageTranslate":{
+        "description":"Mesajları otomatik olarak tercih ettiğiniz dile çevirin",
+        "settings":{
+            "confidenceRequirement":"Çeviri için minimum güven düzeyi (0-1)",
+            "targetLanguage":"Çeviri için hedef dil (ör. en, es, fr)"
+        }
+    },
+    "micLoopbackTester":{
+        "description":"Kullanıcı alanındaki geridöngü düğmesiyle mikrofonunuzu test edin"
+    },
+    "middleClickTweaks":{
+        "description":"Yapıştırma ve bağlantı açma gibi çeşitli orta tıklama ayarları.",
+        "settings":{
+            "always":"Orta Tıklamayla Yapıştırmayı Her Zaman Önle",
+            "both":"Bağlantılar ve Medya",
+            "focus":"Yalnızca Metin Alanı Odaklanmadığında Önle",
+            "links":"Bağlantılar",
+            "media":"Medya",
+            "none":"Yok",
+            "openScope":"Bu içerik türlerine orta tıklamanın bunları açmasını önleyin.",
+            "pasteScope":"Bu durumlarda orta tıklamanın yapıştırılmasını önleyin.",
+            "pasteThreshold":"Orta tıklamanın ardından yapıştırmanın tekrar etkinleştirilmesine kadar geçen milisaniye."
+        }
+    },
+    "moreCommands":{
+        "description":"Sistem bilgisi, zar atma, yazı-tura atma ve daha fazlasını içeren ek eğik çizgi komutları",
+        "settings":{
+            "addFreakyEnding":"Garip komutun sonuna 👅 veya ❤️ ekleyin",
+            "uwuEveryMessage":"Her bir mesajı uwuified yapın",
+            "uwuEverything":"Tüm metni uwuified yapar - gerçekten kötü bir fikir"
+        }
+    },
+    "moreKaomoji":{
+        "description":"Duyguları ifade etmek için daha fazla kaomoji eğik çizgi komutu"
+    },
+    "moreStickers":{
+        "description":"Harici kaynaklardan daha fazla çıkartma paketi ekleyin",
+        "settings":{
+            "packs":"Çıkartma paketlerini yönet",
+            "promptToUpload":"Çıkartmaları yüklemeden önce sor"
+        }
+    },
+    "moreUserTags":{
+        "description":"İzinlere ve rollere göre ek kullanıcı etiketleri göster",
+        "settings":{
+            "dontShowBotTag":"Varsayılan BOT etiketini gizle",
+            "dontShowForBots":"Bot kullanıcıları için etiketleri gösterme",
+            "showWebhookTagFully":"Web kancası etiketlerini tam olarak göster",
+            "tagSettings":"Bireysel etiket ayarlarını yapılandırma"
+        }
+    },
+    "moyai":{
+        "description":"🗿 emoji kullanıldığında moyai ses efektini çal",
+        "settings":{
+            "ignoreBlocked":"Engellenen kullanıcılardan gelen mesajları yoksay",
+            "ignoreBots":"Botlardan gelen mesajları dikkate almayın",
+            "quality":"Moyai sesinin kalitesi",
+            "qualityOptions":{
+                "hd":"HD",
+                "normal":"Normal"
+            },
+            "triggerWhenUnfocused":"Pencere odaklanmadığında bile sesi tetikleyin",
+            "volume":"Moyai sesinin şiddeti"
+        }
+    },
+    "musicControls":{
+        "description":"Spotify, Tidal ve YouTube Music için müzik oynatıcı kontrollerini göster",
+        "settings":{
+            "FallbackProvider":"Birincil başarısız olduğunda yedek sağlayıcıyı kullanın",
+            "LyricDelay":"Şarkı sözü gecikmesi dengelemesi",
+            "LyricsConversion":"Romanlaştırılmış şarkı sözlerinde otomatik çeviri",
+            "LyricsPosition":"Şarkı sözlerinin oynatıcıya göre konumu",
+            "LyricsProvider":"Şarkı sözleri için kaynak",
+            "ShowFailedToasts":"Şarkı sözleri yüklenemediğinde hata bildirimlerini göster",
+            "TranslateTo":"Şarkı sözlerini şu dile çevir:",
+            "YoutubeMusicApiUrl":"Özel YouTube Müzik API URL",
+            "hoverControls":"Denetimleri yalnızca fareyle üzerine gelindiğinde göster",
+            "previousButtonRestartsTrack":"Önceki düğmeye basıldığında parçayı yeniden başlat",
+            "showSpotifyControls":"Spotify kontrollerini göster",
+            "showSpotifyLyrics":"Spotify şarkı sözlerini göster",
+            "showTidalControls":"Gelgit kontrollerini göster",
+            "showTidalLyrics":"Tidal şarkı sözlerini göster",
+            "showYoutubeMusicControls":"YouTube Music kontrollerini göster",
+            "useSpotifyUris":"URL'ler yerine Spotify URI'lerini açın"
+        }
+    },
+    "neverPausePreviews":{
+        "description":"Kanal değiştirirken veya odaklanmayı bırakırken video önizlemelerini asla duraklatmayın",
+        "warning":"Bu, kaynak kullanımını ve veri tüketimini artırabilir"
+    },
+    "newPluginsManager":{
+        "description":"Eklenti yöneticisiyle yeni eklentileri yönetin ve keşfedin"
+    },
+    "noAppsAllowed":{
+        "description":"Uygulamaların/kategorilerin uygulama başlatıcıda gösterilmesini engeller"
+    },
+    "noBulletPoints":{
+        "description":"Mesajlardan kaçarak madde işaretlerini kaldırın"
+    },
+    "noModalAnimation":{
+        "description":"Daha hızlı UI etkileşimler için modal animasyonları devre dışı bırakın"
+    },
+    "noNitroUpsell":{
+        "description":"Premium türünüzü geçersiz kılarak Nitro ek satışlarını kaldırır"
+    },
+    "noRPC":{
+        "description":"Discord'ın Zengin Durum (RPC) özelliğini devre dışı bırakır"
+    },
+    "noRoleHeaders":{
+        "description":"Üye listesinden rol başlıklarını kaldırarak daha temiz bir görünüm oluşturur"
+    },
+    "normalizeMessageLinks":{
+        "description":"Tutarlılık için canary/ptb alt alan adlarını kaldırarak Discord mesaj bağlantılarını normalleştirir"
+    },
+    "notificationTitle":{
+        "description":"Gönderen, kanal ve sunucu bilgilerini gösteren ayrıntılı bildirim başlıkları ekler"
+    },
+    "orbolayBridge":{
+        "description":"Orbolay yer paylaşımı entegrasyonu için köprü eklentisi, ses durumu senkronizasyonunu ve mesaj bildirimlerini etkinleştirir",
+        "settings":{
+            "alignmentOptions":{
+                "bottomLeft":"Sol Alt",
+                "bottomRight":"Sağ Alt",
+                "topLeft":"Sol Üst",
+                "topRight":"Sağ Üst"
+            },
+            "isKeybindEnabled":"Orbolay kontrolleri için tuş atama desteğini etkinleştirin",
+            "messageAlignment":"Mesaj yer paylaşımı için hizalama konumu",
+            "messagesSemitransparent":"Mesaj katmanını yarı şeffaf hale getirin",
+            "port":"Orbolay WebSocket bağlantısı için port numarası",
+            "userAlignment":"Kullanıcı katmanı için hizalama konumu",
+            "voiceSemitransparent":"Ses katmanını yarı şeffaf hale getirin"
+        }
+    },
+    "partyMode":{
+        "description":"Konfeti ve ekran sallamayla parti modu efektlerini etkinleştirin",
+        "settings":{
+            "intensityOptions":{
+                "better":"Daha iyi - Daha fazla konfeti",
+                "normal":"Normal - İnce efektler",
+                "projectX":"Proje X - Maksimum yoğunluk"
+            },
+            "superIntensePartyMode":"Parti modu yoğunluk seviyesi"
+        }
+    },
+    "pinIcon":{
+        "description":"Sabitlenmiş mesajlara bir raptiye simgesi ekler"
+    },
+    "pingNotifications":{
+        "description":"Ping'ler, DM'ler ve arkadaş mesajları için özel bildirim ayarları",
+        "settings":{
+            "dms":"DM ve grup DM mesajları için bildirim gönder",
+            "friends":"Arkadaşlarınız sunuculara mesaj gönderdiğinde bildirim alın",
+            "ignoreMuted":"Sessize alınan kanalları, loncaları ve engellenen kullanıcıları göz ardı edin",
+            "mentions":"Bahsedildiğinde bildir (@kullanıcı adı)",
+            "showInActive":"Kanal aktif olduğunda bile bildirimleri göster"
+        }
+    },
+    "platformSpoofer":{
+        "description":"Platform durumunuzu taklit edin (mobil, masaüstü, web, konsol)",
+        "settings":{
+            "platform":"Taklit etme platformu",
+            "platformOptions":{
+                "android":"Android",
+                "desktop":"Masaüstü (Discord İstemci)",
+                "ios":"iOS",
+                "playstation":"PlayStation'ı",
+                "web":"Web (Discord Web)",
+                "xbox":"Xbox"
+            }
+        },
+        "warning":"Platformun değiştirilmesi belirli özellikleri ve başkalarının durumunuzu nasıl gördüğünü etkileyebilir."
+    },
+    "polishWording":{
+        "description":"Daha iyi dilbilgisi, büyük harf kullanımı ve noktalama işaretleri ile mesaj metnini otomatik olarak iyileştirin",
+        "settings":{
+            "blockedWords":"Büyük harf düzeltmelerinin dışında tutulacak kelimelerin virgülle ayrılmış listesi",
+            "expandContractions":"Kısaltmaları genişletin (örneğin, 'yapma' → 'yapma')",
+            "fixApostrophes":"Kısaltmalardaki eksik kesme işaretlerini düzeltin (örneğin, 'yapma' → 'yapma')",
+            "fixCapitalization":"Cümlelerin büyük harf kullanımını düzeltin",
+            "fixPunctuation":"Cümlelerin sonuna nokta ekleme",
+            "fixPunctuationFrequency":"Otomatik ekleme dönemlerinin sıklığı (%0-100)",
+            "quickDisable":"Hızlı devre dışı bırakma - tüm düzeltmeleri geçici olarak devre dışı bırakın"
+        }
+    },
+    "profileSets":{
+        "description":"Profil özelleştirme ön ayarlarını kaydedin ve yönetin",
+        "settings":{
+            "avatarSize":"Ön ayar yöneticisinde avatar boyutu"
+        }
+    },
+    "questify":{
+        "buttonActions":{
+            "contextMenu":"Bağlam menüsünü göster",
+            "openQuests":"Görevler sayfasını aç",
+            "pluginSettings":"Eklenti ayarlarını aç"
+        },
+        "description":"Quest deneyiminizi bir dizi özellik ile geliştirin veya size göre değilse bunları tamamen devre dışı bırakın.",
+        "gradientOptions":{
+            "black":"Siyah",
+            "default":"Varsayılan",
+            "hide":"Gizle",
+            "intense":"Yoğun"
+        },
+        "sortOptions":{
+            "claimedAsc":"Hak talebinde bulunuldu (Önce en eskisi)",
+            "claimedDesc":"Hak talebinde bulunuldu (Önce en yeni)",
+            "expiringAsc":"Süresi doluyor (Önce en yakın)",
+            "expiringDesc":"Süresi doluyor (Önce en yeni)",
+            "recentAsc":"En yeni (Önce en eski)",
+            "recentDesc":"En yeni (Önce en yeni)"
+        }
+    },
+    "questionMarkReplacement":{
+        "description":"Mesaj yalnızca soru işaretleri içerdiğinde soru işaretlerini özel metin/emoji ile değiştirin",
+        "settings":{
+            "replace":"'?\" yerine kullanılacak metin veya emoji ile"
+        }
+    },
+    "quickThemeSwitcher":{
+        "description":"Klavye kısayollarını kullanarak temalar arasında hızla geçiş yapın",
+        "settings":{
+            "autoRefresh":"Değişiklikler algılandığında tema listesini otomatik olarak yenile",
+            "includeLocal":"Yerel temaları döngüye dahil edin",
+            "includeOnline":"Döngüye çevrimiçi temaları dahil edin",
+            "showNotifications":"Temalar eklendiğinde veya kaldırıldığında bildirimleri göster",
+            "sortOptions":{
+                "az":"A'dan Z'ye (Alfabetik)",
+                "recent":"Son Kullanılanlar",
+                "za":"Z-A (Ters Alfabetik)"
+            },
+            "sortOrder":"Tema listesinin sıralama düzeni"
+        }
+    },
+    "quoter":{
+        "description":"Mesajlardan stilize alıntı görselleri oluşturun",
+        "settings":{
+            "grayscale":"Gri tonlamalı filtreyi uygula",
+            "quoteFont":"Alıntı görselleri için yazı tipi",
+            "saveAsGif":"PNG yerine GIF olarak kaydet",
+            "showWatermark":"Tırnak işaretlerinde filigranı göster",
+            "watermark":"Filigran metni"
+        }
+    },
+    "randomVoice":{
+        "description":"Özelleştirilebilir filtrelere dayalı rastgele ses kanallarına katılın",
+        "operations":{
+            "equalTo":"Eşittir",
+            "lessThan":"Daha az",
+            "moreThan":"Bundan fazla"
+        },
+        "settings":{
+            "Servers":"Eklenecek sunucu kimlikleri (virgülle ayrılmış)",
+            "UserAmount":"Kanaldaki kullanıcı sayısını hedefleyin",
+            "UserAmountOperation":"Kullanıcı sayısı karşılaştırma operatörü",
+            "autoCamera":"Kamerayı otomatik olarak aç",
+            "autoNavigate":"Otomatik olarak ses kanalına gidin",
+            "autoStream":"Akışı otomatik olarak başlat",
+            "avoidAfk":"AFK kanallarından kaçının",
+            "avoidStages":"Sahne kanallarından kaçının",
+            "avoidStates":"Durum filtreleriyle eşleşen kullanıcılardan kaçının",
+            "deafen":"Sağır kullanıcıları arayın",
+            "includeStates":"Durum filtreleriyle eşleşen kullanıcıları dahil et",
+            "leaveEmpty":"Kanal boşalınca ayrılın",
+            "mute":"Sessize alınan kullanıcıları arayın",
+            "selfDeafen":"Katılırken otomatik sağır",
+            "selfMute":"Katılırken otomatik sessize alma",
+            "spacesLeft":"Kanalda kalan minimum boşluk",
+            "spacesLeftOperation":"Kalan boşluk karşılaştırma operatörü",
+            "stream":"Akışlı kanalları arayın",
+            "vcLimit":"Ses kanalı kullanıcı sınırı",
+            "vcLimitOperation":"Kanal sınırı karşılaştırma operatörü",
+            "video":"Videonun etkin olduğu kanalları arayın"
+        }
+    },
+    "recentDMSwitcher":{
+        "description":"Ctrl+Sekme (Alt+Sekme stili) tuşlarını kullanarak en son DM'ler arasında hızla geçiş yapın",
+        "overlayModes":{
+            "current":"Yalnızca mevcut DM",
+            "row":"Son DM'lerin satırı"
+        },
+        "settings":{
+            "amountOfUsers":"İzlenecek kullanıcı sayısı",
+            "clearRdms":"RDMS geçmişini temizle",
+            "overlayMode":"Yer paylaşımlı içerik modu",
+            "overlayRowLength":"Yer paylaşımı satırında gösterilecek DM sayısı",
+            "overlayShowAvatars":"Kaplamada avatarları göster",
+            "toastDurationMs":"Tost bildirim süresi (ms)",
+            "visualStyle":"Bisiklet sürerken görsel gösterge stili"
+        },
+        "visualStyles":{
+            "off":"Görsel gösterge yok",
+            "overlay":"Yer paylaşımı (Alt+Sekme stili)",
+            "toast":"Tost bildirimi"
+        }
+    },
+    "remix":{
+        "description":"Yerleşik düzenleyiciyle görüntüleri doğrudan Discord içinde yeniden düzenleyin"
+    },
+    "repeatMessages":{
+        "description":"İsteğe bağlı yanıtla mesajları tekrarlama (Shift+Yanıtlamak için tıklayın)"
+    },
+    "replyPingControl":{
+        "description":"Birisi mesajlarınıza yanıt verdiğinde ping alıp almayacağınızı kontrol edin",
+        "settings":{
+            "alwaysPingOnReply":"Birisi mesajlarınıza yanıt verdiğinde her zaman uyarı alın",
+            "replyPingWhitelist":"Her zaman yanıt ping'leri alınacak Kullanıcı Kimliklerinin virgülle ayrılmış listesi"
+        }
+    },
+    "richMagnetLinks":{
+        "description":"Dosya adı çıkarma özelliğiyle mıknatıs bağlantıları için zengin önizlemeler görüntüleyin"
+    },
+    "rpcEditor":{
+        "description":"Rich Presence (RPC) ekranınızı herhangi bir uygulama için düzenleyin ve özelleştirin",
+        "placeholders":{
+            "details":"Güncel ayrıntılar metni",
+            "largeImage":"Büyük resim URL",
+            "largeText":"Büyük resim ipucu metni",
+            "name":"Uygulama adı",
+            "smallImage":"Küçük resim URL",
+            "smallText":"Küçük resim ipucu metni",
+            "state":"Mevcut durum metni"
+        },
+        "settings":{
+            "replacedAppIds":"Uygulamaya özel RPC geçersiz kılmalarını yönetin"
+        }
+    },
+    "rpcStats":{
+        "description":"Rich Presence'ınızda özel istatistikleri görüntüleyin (gönderilen mesajlar, Last.fm'in en iyi albümü)",
+        "settings":{
+            "RPCTitle":"RPC için başlık metni",
+            "albumCoverImage":"Albüm kapağını RPC görüntüsü olarak kullanma (Last.fm modu)",
+            "assetURL":"RPC için özel resim URL (varsayılan: avatarınız)",
+            "lastFMApiKey":"Last.fm API tuşu (last.fm/api'den alın)",
+            "lastFMStatFormat":"Last.fm istatistik formatı ($albüm, $sanatçı)",
+            "lastFMUsername":"Last.fm kullanıcı adı",
+            "statDisplay":"Görüntülenecek istatistik"
+        },
+        "statOptions":{
+            "messagesAllTime":"Her zaman gönderilen mesajlar",
+            "messagesToday":"Bugün gönderilen mesajlar",
+            "mostListenedAlbum":"Bu hafta en çok dinlenen albüm (Last.fm)"
+        }
+    },
+    "saveFavoriteGIFs":{
+        "description":"Tüm favori GIF URL'lerini bir metin dosyasına kaydedin",
+        "settings":{
+            "showToolboxButton":"Equicord Araç Kutusunda 'Favori GIF'leri Kaydet' düğmesini göster (Yeniden Yükleme Gerekir)"
+        }
+    },
+    "scheduledMessages":{
+        "description":"Mesajları daha sonra gönderilecek şekilde planlayın",
+        "settings":{
+            "checkIntervalSeconds":"Gönderilecek mesajların kontrol edilme sıklığı (saniye)",
+            "maxMessagesPerMinute":"Kanal başına aynı dakikada tetiklenebilecek maksimum planlanmış mesaj",
+            "showNotifications":"Mesaj gönderildiğinde tost bildirimlerini göster",
+            "showPhantomMessages":"Planlanmış mesajları sohbette hayalet mesaj olarak göster"
+        }
+    },
+    "screenRecorder":{
+        "description":"Equibop için ekran kayıt işlevi"
+    },
+    "searchFix":{
+        "description":"Discord'ın 5000 mesaj ofset sınırı etrafında çalışarak arama işlevselliğini düzeltin"
+    },
+    "sekaiStickers":{
+        "description":"Sekai çıkartma entegrasyonu",
+        "settings":{
+            "AutoCloseModal":"Bittiğinde otomatik kapanma modu"
+        }
+    },
+    "selfForward":{
+        "description":"Mesajları kendinize iletin"
+    },
+    "serverSearch":{
+        "description":"Hızlı değiştirici entegrasyonuyla gelişmiş sunucu araması"
+    },
+    "showBadgesInChat":{
+        "description":"Sohbet mesajlarında kullanıcı rozetlerini göster",
+        "settings":{
+            "DiscordNitroPosition":"Discord Nitro rozetinin konumu",
+            "DiscordProfilePosition":"Discord profil rozetlerinin konumu",
+            "EquicordContributorPosition":"Equicord Katılımcı rozetinin konumu",
+            "EquicordDonorPosition":"Equicord Donör rozetlerinin konumu",
+            "VencordContributorPosition":"Vencord Katılımcı rozetinin konumu",
+            "VencordDonorPosition":"Vencord Donör rozetlerinin konumu",
+            "badgeSettings":"Rozet düzeni ve görünürlüğünü ayarlayın",
+            "showDiscordNitro":"Sohbette Discord Nitro rozetlerini göstermeyi etkinleştirin",
+            "showDiscordProfile":"Sohbette Discord profil rozetlerinin gösterilmesini etkinleştirin",
+            "showEquicordContributor":"Sohbette Equicord Katılımcı rozetini göstermeyi etkinleştirin",
+            "showEquicordDonor":"Sohbette Equicord Bağışçı rozetini göstermeyi etkinleştirin",
+            "showVencordContributor":"Sohbette Vencord katkıda bulunan rozetlerini göstermeyi etkinleştirin",
+            "showVencordDonor":"Sohbette Vencord bağışçı rozetinin gösterilmesini etkinleştirin"
+        }
+    },
+    "showMessageEmbeds":{
+        "description":"Mesajlara yerleştirme ekleme veya kaldırma seçeneklerini içeren mesaj yerleştirmelerini göster"
+    },
+    "showResourceChannels":{
+        "description":"Normalde gizli olan kaynak kanallarını göster"
+    },
+    "showSongName":{
+        "description":"Şu anda çalan şarkının adını durum bölümünde göster"
+    },
+    "sidebarChat":{
+        "description":"Birden fazla kanalı görüntülemek için kenar çubuğu sohbet arayüzü",
+        "settings":{
+            "patchCommunity":"Topluluk sunucularının sahip olduğu Kanal Tarayıcısı veya Üyeler sekmesi gibi şeyleri yamalayın",
+            "persistSidebar":"Discord yeniden başlatıldığında kenar çubuğu sohbetini açık tutun"
+        }
+    },
+    "signature":{
+        "description":"Mesajlara imza ekleme",
+        "settings":{
+            "contextMenu":"Sohbet girişi içerik menüsündeki işlevselliği değiştirmek için seçenek ekleyin",
+            "isEnabled":"İşlevselliği değiştir",
+            "name":"Mesajlarınızın sonuna eklenecek imza",
+            "showIcon":"Sohbet çubuğunda eklentiyi değiştirmek için bir simge göster",
+            "textHeader":"Metnin başında hangi başlık yer alacak?"
+        }
+    },
+    "snowfall":{
+        "description":"Discord arayüzünün üstüne Noel benzeri bir kar yağışı efekti ekler",
+        "settings":{
+            "flakesPerSecond":"Saniyedeki kar taneleri (daha yüksek = daha yoğun kar yağışı)",
+            "maxSize":"Maksimum kar tanesi boyutu",
+            "speed":"Kar yağışı hızı (daha yüksek = daha hızlı düşüş)",
+            "typeOfSnow":"Görüntülenen kar türünü değiştirin (Performansı etkiler)"
+        }
+    },
+    "soggy":{
+        "description":"Tıklanabilir görüntü ve ses efektlerine sahip ıslak eklenti",
+        "settings":{
+            "boopLink":"Boop sesi için URL",
+            "boopVolume":"Boop sesinin şiddeti",
+            "imageLink":"Görüntü için URL (düğme ve modal)",
+            "songLink":"Çalınacak şarkı için URL",
+            "songVolume":"Şarkının ses seviyesi. Devre dışı bırakmak için 0",
+            "tooltipText":"Düğmenin üzerine gelindiğinde gösterilen metin"
+        }
+    },
+    "songLink":{
+        "description":"Platformlar arasında müzik paylaşımı için Song.link entegrasyonu",
+        "settings":{
+            "servicesSettings":"Hizmetlere ilişkin ayarlar",
+            "userCountry":"Arama için kullanılan ülke (İki harfli ülke kodu)"
+        }
+    },
+    "soundBoardLogger":{
+        "description":"Ses kanallarında ses tahtası kullanımını günlüğe kaydedin",
+        "settings":{
+            "FileType":"Dosyanızı kaydetmek istediğiniz format",
+            "SavedIds":"Bir seferde kaydetmek istediğiniz ses tahtası kimliklerinin miktarı (0, sonsuz kaydetmenize olanak tanır)",
+            "soundVolume":"Geçiş sesinin yüksekliği (devre dışı bırakmak için 0)"
+        }
+    },
+    "splitLargeMessages":{
+        "description":"Büyük mesajları otomatik olarak parçalara ayırın",
+        "settings":{
+            "disableFileConversion":"Doğruysa, büyük iletiler için dosya dönüştürmeyi devre dışı bırakır",
+            "hardSplit":"Doğruysa, son boşluk/satırsonu yerine son karaktere göre bölünür",
+            "maxLength":"Bir mesajın bölünmeden önceki maksimum uzunluğu. Otomatik olarak algılamak için 0'a ayarlayın",
+            "sendDelay":"Saniye cinsinden her parça arasındaki gecikme",
+            "slowmodeMax":"Yavaş modda bölme yapılıyorsa maksimum yavaş mod süresi",
+            "splitInSlowmode":"Kanalda yavaş mod etkinse mesajlar bölünmeli mi?"
+        }
+    },
+    "spotifyActivityToggle":{
+        "description":"Spotify etkinlik paylaşımını aç ve kapat",
+        "settings":{
+            "location":"Spotify geçiş düğmesinin nerede gösterileceği"
+        }
+    },
+    "statsfmPresence":{
+        "description":"Stats.fm varlık entegrasyonu",
+        "settings":{
+            "alwaysHideArt":"Albüm resmini indirmeyi devre dışı bırak",
+            "hideWithExternalRPC":"Harici bir RPC çalışıyorsa stats.fm varlığını gizler",
+            "hideWithSpotify":"Spotify çalışıyorsa stats.fm varlığını gizle",
+            "missingArt":"Albümler veya albüm resimleri eksik olduğunda",
+            "nameFormat":"Durum adında şarkının ve sanatçının adını göster",
+            "shareSong":"Şarkının bağlantısını stats.fm'de göster",
+            "shareUsername":"stats.fm profilinin bağlantısını göster",
+            "showStatsFmLogo":"Albüm kapağının yanında Stats.fm'i göster",
+            "statusName":"Özel durum metni",
+            "useListeningStatus":"'Oynatılıyor' yerine 'Dinleniyor' durumunu göster",
+            "username":"Stats.fm kullanıcı adı"
+        }
+    },
+    "statusPresets":{
+        "description":"Durum ön ayarlarını kaydedin ve yükleyin"
+    },
+    "statusWhileActive":{
+        "description":"Ses kanallarında etkinken durumu otomatik olarak ayarla",
+        "settings":{
+            "statusToSet":"Ses kanalındayken ayarlanacak durum"
+        }
+    },
+    "steamStatusSync":{
+        "description":"Steam durumunu Discord durumuyla senkronize et",
+        "settings":{
+            "dndStatus":"Rahatsız Etmeyin modundayken Steam durumu",
+            "goInvisibleIfActivityIsHidden":"Discord üzerinde oyun etkinliğini gizlerseniz her zaman görünmez olun",
+            "idleStatus":"Boşta iken Steam durumu",
+            "invisibleStatus":"Görünmez durumdayken Steam durumu",
+            "onlineStatus":"Çevrimiçiyken Steam durumu"
+        }
+    },
+    "stickerBlocker":{
+        "description":"Belirli çıkartmaların görünmesini engelle",
+        "settings":{
+            "blockedStickers":"Engellenen çıkartma kimliklerinin listesi (ne yaptığınızı bilmiyorsanız düzenleme yapmayın)",
+            "showButton":"GIF'in engellemesini kaldırmak için bir düğme gösterilip gösterilmeyeceği",
+            "showGif":"Şık bir kedi gifinin gösterilip gösterilmeyeceği",
+            "showMessage":"Hangi kimliğin engellendiğini belirten bir mesajın gösterilip gösterilmeyeceği"
+        }
+    },
+    "streamingCodecDisabler":{
+        "description":"Discord akışı için akış codec bileşenini devre dışı bırakın",
+        "settings":{
+            "disableAv1Codec":"Discord'un akış için AV1'i kullanmayı düşünmemesini sağlayın",
+            "disableH264Codec":"Discord'un akış için H264 kullanmayı düşünmemesini sağlayın",
+            "disableH265Codec":"Discord'un akış için H265 kullanmayı düşünmemesini sağlayın",
+            "disableVP8Codec":"Discord'un akış için VP8 kullanmayı düşünmemesini sağlayın",
+            "disableVP9Codec":"Discord'un akış için VP9 kullanmayı düşünmemesini sağlayın"
+        }
+    },
+    "talkInReverse":{
+        "description":"Mesajlarınızı göndermeden önce tersine çevirmek için bir sohbet çubuğu düğmesi ekler"
+    },
+    "themeLibrary":{
+        "description":"Equicord tema kitaplığından temalara göz atın ve bunları yönetin",
+        "toolbox":{
+            "openThemeLibrary":"Tema Kitaplığını Aç"
+        }
+    },
+    "tidalEmbeds":{
+        "description":"Tidal müzik bağlantılarını özel bir oynatıcıya yerleştirir"
+    },
+    "tiktokTTS":{
+        "contextMenu":{
+            "playTikTokTTS":"TikTok TTS'yi oynayın"
+        },
+        "description":"Mesajlar için TikTok metin okuma özelliğini oynatın",
+        "settings":{
+            "volume":"Oynatma ses seviyesi"
+        }
+    },
+    "timezones":{
+        "contextMenu":{
+            "setLocalTimezone":"Yerel Saat Dilimini Ayarla"
+        },
+        "description":"Profillerde ve mesaj başlıklarında kullanıcı saat dilimlerini görüntüle",
+        "settings":{
+            "24hTime":"Saati 24 saat formatında göster",
+            "databaseUrl":"Saat dilimi depolaması için veritabanı URL",
+            "preferDatabaseOverLocal":"Saat dilimleri için yerel depolama yerine veritabanını tercih edin",
+            "resetDatabaseTimezone":"Veritabanındaki saat diliminizi sıfırlayın",
+            "setDatabaseTimezone":"Veritabanında saat diliminizi ayarlayın",
+            "showMessageHeaderTime":"Mesaj başlıklarında zamanı göster",
+            "showOwnTimezone":"Profillerde ve mesaj başlıklarında kendi saat diliminizi gösterin",
+            "showProfileTime":"Profillerde zamanı göster",
+            "showTimezoneInfo":"Saatin yanında saat dilimi bilgisini göster",
+            "useDatabase":"Kullanıcı saat dilimlerini almak için veritabanını etkinleştirin"
+        },
+        "toasts":{
+            "failed":"Saat Dilimleri Yenilenemedi!",
+            "refreshed":"Saat dilimleri başarıyla yenilendi!"
+        },
+        "toolbox":{
+            "refreshDatabaseTimezones":"Veritabanı Saat Dilimlerini Yenile",
+            "setDatabaseTimezone":"Veritabanı Saat Dilimini Ayarla"
+        }
+    },
+    "title":{
+        "description":"Discord'ın pencere başlığını değiştirin",
+        "settings":{
+            "title":"Pencere başlığı öneki"
+        }
+    },
+    "toastNotifications":{
+        "description":"Mesajlar ve etkinlikler için tost bildirimlerini göster",
+        "positionOptions":{
+            "bottomLeft":"Sol Alt",
+            "bottomRight":"Sağ Alt",
+            "topLeft":"Sol Üst",
+            "topRight":"Sağ Üst"
+        },
+        "settings":{
+            "determineServerNotifications":"Kanal/lonca ayarlarınıza göre hangi sunucu bildirimlerinin gösterileceğini otomatik olarak belirleyin",
+            "directMessages":"Doğrudan mesajlara ilişkin bildirimleri göster",
+            "disableInStreamerMode":"Yayıncı modundayken bildirimleri devre dışı bırakın",
+            "exampleButton":"Örnek bir tost bildirimi göster",
+            "friendActivity":"Birisini eklemeye veya arkadaşlık isteği almaya ilişkin bildirimleri göster",
+            "friendServerNotifications":"Arkadaşlarınız sizinle paylaştıkları sunuculara mesaj gönderdiğinde bildirim göster",
+            "groupMessages":"Grup mesajları için bildirimleri göster",
+            "ignoreUsers":"Tüm bildirimlerinin yok sayılacağı kullanıcı kimliklerinin bir listesini oluşturun (virgülle ayırın)",
+            "maxNotifications":"Aynı anda görüntülenen maksimum bildirim sayısı",
+            "notifyFor":"Bildirimlerin alınacağı kanal kimliklerinin bir listesini oluşturun (virgülle ayırın)",
+            "opacity":"Bildirimin şeffaflığı",
+            "position":"Tost bildiriminin konumu",
+            "renderImages":"Bildirimlerdeki görselleri işleme",
+            "streamingTreatment":"Ekranınızı paylaşırken bildirimleri nasıl ele alırsınız?",
+            "timeout":"Saniye cinsinden süre bildirimleri gösterilecek"
+        },
+        "streamingOptions":{
+            "ignore":"Yoksay - Bildirimi hiç gösterme",
+            "noContent":"İçerik Yok - Bildirim metnini gizle",
+            "normal":"Normal - Bildirimi normal şekilde göster"
+        }
+    },
+    "toggleVideoBind":{
+        "description":"Sesli sohbette videonuzu/web kameranızı değiştirmek için bir tuş ataması ekler",
+        "settings":{
+            "keyBind":"Basıldığında web kamerasını değiştirme tuşu",
+            "reqAlt":"Alt tutulmasını gerektir",
+            "reqCtrl":"Kontrolün tutulmasını gerektirir",
+            "reqShift":"Vardiyanın tutulmasını gerektir"
+        }
+    },
+    "toneIndicators":{
+        "description":"Mesajlara ton göstergeleri (alaycılık, şaka vb.) ekler",
+        "settings":{
+            "customIndicators":"Özel ton göstergeleri (format: jk=Şaka yapıyor; srs=Ciddi)",
+            "maxIndicators":"Mesaj başına gösterilecek maksimum ton göstergesi sayısı",
+            "prefix":"Ton göstergeleri için önek karakter(ler)i"
+        }
+    },
+    "tosuRPC":{
+        "description":"Osu için zengin varlık entegrasyonu! tosu aracılığıyla"
+    },
+    "translatePlus":{
+        "contextMenu":{
+            "translate":"Çevir"
+        },
+        "description":"Daha iyi bir UI ile mesajlara çevir düğmesi ekler",
+        "popover":{
+            "translate":"Çevir"
+        }
+    },
+    "unitConverter":{
+        "description":"Mesajlardaki birimleri dönüştürün (İngiliz/metrik)",
+        "popover":{
+            "convertUnits":"Birimleri Dönüştür"
+        },
+        "settings":{
+            "myUnits":"Kullandığınız ve dönüştürülmesini istediğiniz birimler"
+        },
+        "unitOptions":{
+            "imperial":"İmparatorluk",
+            "metric":"Metrik"
+        }
+    },
+    "universalMention":{
+        "description":"Evrensel bir format kullanarak herhangi bir sunucudaki kullanıcılardan bahsedin",
+        "settings":{
+            "globalMention":"Yalnızca mevcut sunucudaki değil, herhangi bir sunucudaki kullanıcılardan bahsedin",
+            "onlyDMUsers":"Yalnızca DM gönderdiğiniz kullanıcıları gösterin"
+        },
+        "warning":"Global Mansiyon'un kullanılması performans sorunlarına neden olabilir ve otomatik tamamlamada çok fazla sayıda kullanıcı gösterebilir."
+    },
+    "unlimitedAccounts":{
+        "description":"Discord'ın hesap değiştiricisi için 5 hesap sınırını kaldırır",
+        "settings":{
+            "maxAccounts":"Eklenebilecek hesap sayısı veya limitsiz olarak 0"
+        }
+    },
+    "unreadBadgeCount":{
+        "description":"Kanallarda okunmamış mesaj sayısı rozetlerini göster",
+        "settings":{
+            "notificationCountLimit":"Bildirim sayısını 99+ ile sınırlayın",
+            "showOnMutedChannels":"Sessize alınan kanallarda okunmamış sayıları göster"
+        }
+    },
+    "urlHighlighter":{
+        "description":"İletilerdeki belirli URL'leri özel renklerle vurgulayın",
+        "settings":{
+            "boldUrls":"Vurgulanan URL'leri kalın yapın",
+            "highlightEmbeds":"Yerleştirilen içerikteki URL'leri de vurgulayın",
+            "patterns":"Küresel desenleri kullanarak vurgulamak için URL desenleri"
+        },
+        "ui":{
+            "addNew":"Yeni Ekle",
+            "patternPlaceholder":"*.example.com",
+            "urlPatterns":"URL Desenler"
+        }
+    },
+    "userpfp":{
+        "avatarOptions":{
+            "nitro":"nitro",
+            "userpfp":"KullanıcıPFP"
+        },
+        "buttons":{
+            "joinServer":"UserPFP Sunucusuna Katılın",
+            "support":"UserPFP'yi burada destekleyin"
+        },
+        "contextMenu":{
+            "setAvatar":"Avatarı Ayarla"
+        },
+        "description":"UserPFP veritabanındaki özel profil resimlerini kullanın veya kendinizinkini ayarlayın",
+        "notice":"Ayarlanmış avatar özelliğini kullanmak yalnızca yereldir, yani değiştiğini yalnızca siz görürsünüz.",
+        "settings":{
+            "databaseSource":"Veritabanını yüklemek için URL",
+            "overrideServerAvatars":"Sunucu avatarlarını özel avatarlarla veya özel avatar ayarlanmamışsa varsayılan kullanıcı avatarıyla geçersiz kılın",
+            "preferNitro":"Hem varsayılan animasyonlu (Nitro) pfp hem de Kullanıcı PFP avatarları mevcutsa hangi avatarın kullanılacağı"
+        }
+    },
+    "vcNarratorCustom":{
+        "contextMenu":{
+            "stateFilter":"Durum değişikliği filtresi",
+            "vcNarrator":"VC Anlatıcı",
+            "voice":"Ses"
+        },
+        "description":"Kullanıcı katılmaları/ayrılmaları ve durum değişiklikleri için TTS'li özel sesli kanal anlatıcı",
+        "filterOptions":{
+            "blacklist":"Kara liste (listelenenler dışındaki herkesi duyurun)",
+            "off":"Kapalı",
+            "whitelist":"Beyaz liste (yalnızca listelenen kullanıcıları duyurun)"
+        },
+        "modal":{
+            "cancel":"İptal",
+            "previewHint":"Bu sesin kendi adıyla birlikte nasıl duyulduğunu önizleyin:",
+            "save":"Kaydet",
+            "selectVoice":"Bir ses seçin",
+            "title":"VC Anlatıcı Sesi"
+        },
+        "preview":{
+            "playing":"oynuyor...",
+            "subtitle":"Seçtiğiniz anlatıcı sesini kullanır",
+            "title":"Sesleri Önizle"
+        },
+        "settings":{
+            "announceOthersDeafen":"Mevcut VC'nizde diğer kullanıcıların ne zaman sağır/sağır olmadıklarını duyurun",
+            "announceOthersMute":"Mevcut VC'nizde diğer kullanıcıların sesini kapattığında/sesi açtığında duyurun",
+            "announceOthersStream":"Mevcut VC'nizde diğer kullanıcıların yayını başlattığını/durdurduğunu duyurun",
+            "announceSelfStream":"Akışı başlattığınızda/durdurduğunuzda duyurun",
+            "customVoice":"Anlatıcı sesi",
+            "ignoreSelf":"Tüm olaylar için kendinizi görmezden gelin",
+            "joinMessage":"Yer tutucular: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
+            "latinOnly":"İsimlerden Latin olmayan karakterleri söylemeden önce çıkarın",
+            "leaveMessage":"Mesaj Bırak",
+            "moveMessage":"Mesajı Taşı",
+            "rate":"Anlatıcı Hızı",
+            "sayOwnName":"Kendi adını söyle",
+            "stateChangeCooldownMs":"Durum değişikliği duyurusu bekleme süresi (ms)",
+            "stateChangeFilterList":"Beyaz liste/kara liste için virgülle ayrılmış kullanıcı kimlikleri. Eklemek/kaldırmak için kullanıcıları sağ tıklayın.",
+            "stateChangeFilterMode":"Hangi kullanıcıların durum değişikliği duyurularını tetiklediğini filtreleyin",
+            "userVoiceMap":"Kullanıcı başına ses geçersiz kılmaları (format: userId:voiceId, userId2:voiceId2). Ayarlamak için kullanıcıları sağ tıklayın.",
+            "volume":"Anlatıcı Sesi"
+        },
+        "troubleshooting":{
+            "cacheInfo":"Önbellek",
+            "clearCache":"Önbelleği temizle",
+            "lastApiCall":"Son API arama",
+            "refreshSize":"Boyutu yenile",
+            "title":"Sorun giderme"
+        }
+    },
+    "vcPanelSettings":{
+        "description":"Ses kanalı panelini ek ayarlarla özelleştirin",
+        "settings":{
+            "camera":"Bir kamera seçiciyi göster",
+            "inputDevice":"Giriş cihazı seçiciyi göster",
+            "inputVolume":"Giriş ses düzeyi kaydırıcısını göster",
+            "outputDevice":"Çıkış cihazı seçiciyi göster",
+            "outputVolume":"Çıkış ses düzeyi kaydırıcısını göster",
+            "showInputDeviceHeader":"Başlığı giriş cihazı seçicinin üzerinde göster",
+            "showInputVolumeHeader":"Başlığı giriş ses düzeyi kaydırıcısının üzerinde göster",
+            "showOutputDeviceHeader":"Başlığı çıkış cihazı seçicinin üzerinde göster",
+            "showOutputVolumeHeader":"Başlığı çıkış ses düzeyi kaydırıcısının üzerinde göster",
+            "showVideoDeviceHeader":"Başlığı kamera seçicinin üzerinde göster",
+            "uncollapseSettingsByDefault":"Ses ayarlarını varsayılan olarak otomatik olarak aç"
+        },
+        "ui":{
+            "camera":"Kamera",
+            "hide":"Gizle",
+            "inputDevice":"Giriş cihazı",
+            "inputVolume":"Giriş hacmi",
+            "outputDevice":"Çıkış cihazı",
+            "outputVolume":"Çıkış hacmi",
+            "settings":"Ayarlar"
+        }
+    },
+    "viewRawVariant":{
+        "contextMenu":{
+            "viewRaw":"Raw'ı görüntüle"
+        },
+        "description":"Mesajlar, kullanıcılar, kanallar ve loncalara ilişkin ham JSON verilerini görüntüleyin",
+        "modal":{
+            "content":"İçerik",
+            "data":"Veri",
+            "title":"Raw'ı görüntüle {type}"
+        }
+    },
+    "voiceButtons":{
+        "description":"Sesli kanal kullanıcılarına hızlı işlem düğmeleri (sohbet, sessize alma, sağır etme) ekler",
+        "settings":{
+            "showChatButton":"Sohbet düğmesini göster",
+            "showDeafenButton":"Sağır düğmesini göster",
+            "showMuteButton":"Sessiz düğmesini göster"
+        }
+    },
+    "voiceChannelLog":{
+        "contextMenu":{
+            "viewChannelLogs":"Kanal Günlüklerini Görüntüle"
+        },
+        "description":"Ses kanalına katılma/ayrılma/taşıma etkinliklerini günlüğe kaydet",
+        "modeOptions":{
+            "both":"Sohbet ve günlük menüsüne giriş yapın",
+            "logMenu":"Günlük menüsü",
+            "logToChat":"İlgili sohbete doğrudan giriş yapın"
+        },
+        "settings":{
+            "ignoreBlockedUsers":"Engellenen kullanıcıları günlüğe kaydetmeyin",
+            "mode":"Ses kanalı günlüğü nasıl gösterilir?",
+            "voiceChannelChatSelf":"Kendi ses kanalı olaylarınızı ses kanallarına kaydedin",
+            "voiceChannelChatSilent":"Sesli kanal sohbetlerindeki katılma/ayrılma/taşıma mesajları sessiz olacaktır",
+            "voiceChannelChatSilentSelf":"Sesli kanal sohbetlerinde katılma/ayrılma/taşıma mesajları, eğer sesli kanaldaysanız sessiz olacaktır"
+        }
+    },
+    "voiceChatUtils":{
+        "contextMenu":{
+            "deafenAll":"Hepsini sağır et",
+            "disconnectAll":"Tümünün bağlantısını kes",
+            "moveAll":"Tümünü taşı",
+            "muteAll":"Tümünü sessize al",
+            "undeafenAll":"Herkesi sağır etme",
+            "unmuteAll":"Tümünün sesini aç",
+            "voiceTools":"Ses Araçları"
+        },
+        "description":"Ses kanalı denetleme araçları ekler (hepsini sessize al, hepsini sağırlaştır, hepsini taşı, hepsinin bağlantısını kes)",
+        "settings":{
+            "waitAfter":"Beklemeden önce gerçekleştirilecek API eylem miktarı (hız sınırlamalarından kaçınmak için)",
+            "waitSeconds":"Her eylem arasında beklenecek süre (saniye cinsinden)"
+        }
+    },
+    "voiceJoinMessages":{
+        "description":"Arkadaşlarınız sesli kanallara katıldığında bildirim alın",
+        "settings":{
+            "allowedFriends":"Katılma mesajlarını almak istediğiniz arkadaşlarınızın kullanıcı kimliklerinin virgül veya boşlukla ayrılmış listesi",
+            "friendDirectMessages":"Arkadaşlarınızın bir sesli kanala katıldıklarında DM'lerinde bildirim alın",
+            "friendDirectMessagesSelf":"Arkadaşlarınızla aynı ses kanalında olsanız bile arkadaşlarınızın DM'lerinden bildirim alın",
+            "friendDirectMessagesShowMemberCount":"DM bildirimi alırken ses kanalındaki diğer üyelerin sayısını göster",
+            "friendDirectMessagesShowMembers":"DM bildirimi alırken ses kanalındaki diğer üyelerin listesini göster",
+            "friendDirectMessagesSilent":"Arkadaşlarınızdaki katılma mesajları DM'ler sessize alınacaktır",
+            "ignoreBlockedUsers":"Engellenen kullanıcıların ses kanallarına katılması/ayrılması/taşınması hakkında mesaj göndermeyin"
+        }
+    },
+    "voiceMessageTranscriber":{
+        "description":"AI (Whisper) kullanarak sesli mesajları yazıya dökün",
+        "modal":{
+            "action":"Eylem",
+            "audioLanguage":"Ses Dili",
+            "autoDetect":"Otomatik Algıla",
+            "copied":"Kopyalandı!",
+            "copyToClipboard":"Panoya kopyala",
+            "downloadingAudio":"Ses İndiriliyor...",
+            "error":"Hata",
+            "inProgress":"Metne dönüştürme işlemi devam ediyor...",
+            "initializing":"Başlatılıyor...",
+            "loadingModel":"Model Yükleniyor...",
+            "processingAudio":"Ses işleniyor...",
+            "retry":"Yeniden Dene",
+            "showTimestamps":"Zaman Damgalarını Göster",
+            "start":"Başla",
+            "transcribe":"Uyarlamak",
+            "transcribing":"Metne dönüştürülüyor...",
+            "transcription":"Transkripsiyon",
+            "transcriptionOptions":"Transkripsiyon Seçenekleri",
+            "translateToEnglish":"İngilizceye çevir"
+        },
+        "modelOptions":{
+            "base":"Baz (Önerilen)",
+            "medium":"Orta (En yavaş, en iyi doğruluk)",
+            "small":"Küçük",
+            "tiny":"Minik (En hızlı, en düşük doğruluk)"
+        },
+        "settings":{
+            "delete":"Önbelleğe alınmış tüm dosyaları sil",
+            "quantized":"Nicelenmiş modeli kullanın (daha küçük boyut, biraz daha düşük doğruluk)",
+            "selectedModel":"Modeli boyutu"
+        }
+    },
+    "voiceRejoin":{
+        "description":"Bağlantı kesildikten sonra ses kanallarına otomatik olarak yeniden katılın",
+        "preventionOptions":{
+            "both":"DM'ler ve Sunucular",
+            "dms":"Yalnızca DM'ler",
+            "none":"Yok",
+            "servers":"Yalnızca sunucular"
+        },
+        "settings":{
+            "applyOnlyToDms":"Yalnızca DM'ler için geçerli",
+            "preventReconnectIfCallEnded":"Çağrı sona ermişse, ses kanalı boşsa ya da mevcut değilse yeniden bağlanmayın",
+            "rejoinDelay":"Ses kanalına yeniden katılmadan önce Gecikmeyi ayarlayın",
+            "rejoinTimeout":"Bağlantının kesilmesinin üzerinden bu kadar saniye geçtikten sonra yeniden katılmaya çalışmayın"
+        }
+    },
+    "waitForSlot":{
+        "contextMenu":{
+            "joinQueue":"Sıraya Katıl",
+            "leaveQueue":"Sıradan Ayrıl"
+        },
+        "description":"Tam ses kanalları için sıraya girin ve bir yuva açıldığında bildirim alın",
+        "notices":{
+            "channelFull":"Ses kanalı {channel} dolu. Bir slot mu bekleyeceksin?",
+            "join":"Katıl",
+            "slotAvailable":"Hey, az önce birisi #{channel}'dan ayrıldı ve artık sana da yer var!",
+            "wait":"Beklemek"
+        },
+        "settings":{
+            "autoJoin":"Bildirim göstermek yerine hemen kanala katılın",
+            "notificationSound":"Bir yuva kullanılabilir hale geldiğinde ses çal"
+        }
+    },
+    "wallpaperFree":{
+        "contextMenu":{
+            "removeWallpaper":"Duvar Kağıdını Kaldır",
+            "setWallpaper":"Duvar Kağıdını Ayarla"
+        },
+        "description":"Kanallar, kullanıcılar veya genel olarak özel duvar kağıtları ayarlayın",
+        "settings":{
+            "globalDefault":"Tüm kanallar için genel bir varsayılan duvar kağıdı ayarlayın",
+            "stylingTips":"Şekillendirme ipuçları"
+        }
+    },
+    "webpackTarball":{
+        "description":"Analiz için Discord'ın web paketi modüllerini tarball olarak dışa aktarın",
+        "modal":{
+            "create":"Oluştur",
+            "errors":"hatalar",
+            "lazyChunks":"Tembel parçalar",
+            "loadAll":"Tümünü yükle",
+            "loaded":"Yüklendi",
+            "loadedStatus":"Yüklendi",
+            "loading":"Yükleniyor",
+            "title":"Web Paketi Tarball"
+        },
+        "settings":{
+            "patched":"Yamalı modülleri dahil et"
+        },
+        "toolbox":{
+            "webpackTarball":"Web Paketi Tarball"
+        }
+    },
+    "whitelistedEmojis":{
+        "alerts":{
+            "importConfirmBody":"Bu, mevcut beyaz listenizin üzerine yazacaktır.",
+            "importConfirmTitle":"Emin misin?",
+            "resetConfirmBody":"Bu, tüm emojileri beyaz listenizden kaldıracaktır.",
+            "resetConfirmTitle":"Emin misin?"
+        },
+        "contextMenu":{
+            "addAllGuildEmojis":"Tüm Lonca Emojilerini Ekle",
+            "addToWhitelist":"Beyaz Listeye Ekle",
+            "removeAllGuildEmojis":"Tüm Lonca Emojilerini Kaldır",
+            "removeFromWhitelist":"Beyaz Listeden Kaldır"
+        },
+        "description":"Belirli emojileri beyaz listeye ekleyin ve diğerlerini emoji seçiciden gizleyin",
+        "settings":{
+            "defaultEmojis":"Varsayılan emojileri gizle",
+            "disableToasts":"Tostları devre dışı bırak",
+            "exportEmojis":"Emojileri Dışa Aktar",
+            "importEmojis":"Emojileri İçe Aktar",
+            "resetEmojis":"Emojileri Sıfırla",
+            "serverEmojis":"Sunucu emojilerini gizle",
+            "whitelistedEmojis":"Beyaz listeye eklenen Emojiler"
+        },
+        "toasts":{
+            "added":"Listeye \"{name}\" eklendi",
+            "addedBulk":"Listeye {count} emoji eklendi, {skipped} zaten listede",
+            "alreadyInList":"\"{name}\" zaten listede",
+            "exported":"Emojiler başarıyla dışa aktarıldı",
+            "importFailed":"Emojiler içe aktarılamadı: {error}",
+            "imported":"Emojiler başarıyla içe aktarıldı",
+            "notInList":"\"{name}\" listede yok",
+            "removed":"\"{name}\" listeden kaldırıldı",
+            "removedBulk":"Listeden {count} emoji kaldırıldı",
+            "reset":"Emojileri sıfırla"
+        },
+        "ui":{
+            "defaultEmojis":"Varsayılan Emojiler",
+            "guildEmojis":"{guild} Emojiler",
+            "noEmojis":"Beyaz listede emoji yok.",
+            "removeAll":"Tümünü Kaldır"
+        }
+    },
+    "whosWatching":{
+        "description":"Ekran paylaşımınızı veya akışlarınızı kimlerin izlediğini görün",
+        "settings":{
+            "showPanel":"İzleyicileri ekran paylaşımı paneli altında göster"
+        },
+        "ui":{
+            "noSpectators":"Seyirci yok",
+            "spectators":"İzleyiciler"
+        }
+    },
+    "wigglyText":{
+        "about":{
+            "circle":"bir daire içine )~metin~^( yazarak",
+            "description":"Aşağıdakileri kullanarak metni kıpırdatabilirsiniz:",
+            "leftRight":"<~text~> yazarak sola ve sağa",
+            "upDown":"^~metin~^ yazarak yukarı ve aşağı"
+        },
+        "description":"Özel söz dizimi ile metnin kıpırdamasını sağlayın (~metin~)",
+        "settings":{
+            "intensity":"Piksel cinsinden animasyon yoğunluğu"
+        }
+    },
+    "writeUpperCase":{
+        "description":"Cümlelerin ilk harflerini otomatik olarak büyük harf yap",
+        "settings":{
+            "blockedWords":"Büyük harfle yazılmayacak dizeler (virgülle ayırın)"
+        }
+    },
+    "youtubeDescription":{
+        "description":"YouTube video yerleştirmeleri için değiştirilebilir bir açıklama ekler"
+    }
 }

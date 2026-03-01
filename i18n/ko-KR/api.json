@@ -1,37 +1,37 @@
 {
-				"commands":{
-								"errorExecuting":"An Error occurred while executing command \"{name}\""
-				},
-				"memberListDecorators":{
-								"fallback":"Failed to render {key} Member List Decorator"
-				},
-				"messageAccessories":{
-								"fallback":"Failed to render {key} Message Accessory"
-				},
-				"messageDecorations":{
-								"fallback":"Failed to render {key} Message Decoration"
-				},
-				"notices":{
-								"fallback":"Error Showing Notice"
-				},
-				"notifications":{
-								"dismissNotification":"Dismiss Notification",
-								"logs":{
-												"body_one":"This will permanently remove {count} notification. This action cannot be undone.",
-												"body_other":"This will permanently remove {count} notifications. This action cannot be undone.",
-												"body_zero":"No notification selected.",
-												"cancel":"Nevermind",
-												"clearNotificationLog":"Clear Notification Log",
-												"confirm":"Do it!",
-												"title":"Are you sure?"
-								},
-								"missedNotifications":{
-												"body_one":"{count} notification received",
-												"body_other":"{count} notifications received",
-												"title":"While you were away"
-								},
-								"noNotifications":"No notifications yet",
-								"notificationLog":"Notification Log",
-								"notificationSettings":"Notification Settings"
-				}
+    "commands":{
+        "errorExecuting":"\"{name}\" 명령을 실행하는 동안 오류가 발생했습니다."
+    },
+    "memberListDecorators":{
+        "fallback":"{key} 회원 목록 데코레이터를 렌더링하지 못했습니다."
+    },
+    "messageAccessories":{
+        "fallback":"{key} 메시지 액세서리를 렌더링하지 못했습니다."
+    },
+    "messageDecorations":{
+        "fallback":"{key} 메시지 장식을 렌더링하지 못했습니다."
+    },
+    "notices":{
+        "fallback":"알림 표시 중 오류가 발생했습니다."
+    },
+    "notifications":{
+        "dismissNotification":"알림 닫기",
+        "logs":{
+            "body_one":"{count} 알림이 영구적으로 삭제됩니다. 이 작업은 취소할 수 없습니다.",
+            "body_other":"{count} 알림이 영구적으로 삭제됩니다. 이 작업은 취소할 수 없습니다.",
+            "body_zero":"선택한 알림이 없습니다.",
+            "cancel":"괜찮아요",
+            "clearNotificationLog":"알림 로그 지우기",
+            "confirm":"하세요!",
+            "title":"확실합니까?"
+        },
+        "missedNotifications":{
+            "body_one":"{count} 알림 수신됨",
+            "body_other":"{count} 알림 수신됨",
+            "title":"당신이 없는 동안"
+        },
+        "noNotifications":"아직 알림이 없습니다",
+        "notificationLog":"알림 로그",
+        "notificationSettings":"알림 설정"
+    }
 }

@@ -1,37 +1,37 @@
 {
-				"commands":{
-								"errorExecuting":"An Error occurred while executing command \"{name}\""
-				},
-				"memberListDecorators":{
-								"fallback":"Failed to render {key} Member List Decorator"
-				},
-				"messageAccessories":{
-								"fallback":"Failed to render {key} Message Accessory"
-				},
-				"messageDecorations":{
-								"fallback":"Failed to render {key} Message Decoration"
-				},
-				"notices":{
-								"fallback":"Error Showing Notice"
-				},
-				"notifications":{
-								"dismissNotification":"Dismiss Notification",
-								"logs":{
-												"body_one":"This will permanently remove {count} notification. This action cannot be undone.",
-												"body_other":"This will permanently remove {count} notifications. This action cannot be undone.",
-												"body_zero":"No notification selected.",
-												"cancel":"Nevermind",
-												"clearNotificationLog":"Clear Notification Log",
-												"confirm":"Do it!",
-												"title":"Are you sure?"
-								},
-								"missedNotifications":{
-												"body_one":"{count} notification received",
-												"body_other":"{count} notifications received",
-												"title":"While you were away"
-								},
-								"noNotifications":"No notifications yet",
-								"notificationLog":"Notification Log",
-								"notificationSettings":"Notification Settings"
-				}
+    "commands":{
+        "errorExecuting":"\"{name}\" komutu yürütülürken bir hata oluştu"
+    },
+    "memberListDecorators":{
+        "fallback":"{key} Üye Listesi Dekoratörü oluşturulamadı"
+    },
+    "messageAccessories":{
+        "fallback":"{key} Mesaj Aksesuarı oluşturulamadı"
+    },
+    "messageDecorations":{
+        "fallback":"{key} Mesaj Dekorasyonu oluşturulamadı"
+    },
+    "notices":{
+        "fallback":"Bildirim Gösterilirken Hata oluştu"
+    },
+    "notifications":{
+        "dismissNotification":"Bildirimi Reddet",
+        "logs":{
+            "body_one":"Bu, {count} bildirimini kalıcı olarak kaldıracaktır. Bu eylem geri alınamaz.",
+            "body_other":"Bu, {count} bildirimlerini kalıcı olarak kaldıracaktır. Bu eylem geri alınamaz.",
+            "body_zero":"Hiçbir bildirim seçilmedi.",
+            "cancel":"Boşver",
+            "clearNotificationLog":"Bildirim Günlüğünü Temizle",
+            "confirm":"Yap!",
+            "title":"Emin misin?"
+        },
+        "missedNotifications":{
+            "body_one":"{count} bildirim alındı",
+            "body_other":"{count} bildirim alındı",
+            "title":"Sen uzaktayken"
+        },
+        "noNotifications":"Henüz bildirim yok",
+        "notificationLog":"Bildirim Günlüğü",
+        "notificationSettings":"Bildirim Ayarları"
+    }
 }

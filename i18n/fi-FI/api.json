@@ -1,37 +1,37 @@
 {
-				"commands":{
-								"errorExecuting":"An Error occurred while executing command \"{name}\""
-				},
-				"memberListDecorators":{
-								"fallback":"Failed to render {key} Member List Decorator"
-				},
-				"messageAccessories":{
-								"fallback":"Failed to render {key} Message Accessory"
-				},
-				"messageDecorations":{
-								"fallback":"Failed to render {key} Message Decoration"
-				},
-				"notices":{
-								"fallback":"Error Showing Notice"
-				},
-				"notifications":{
-								"dismissNotification":"Dismiss Notification",
-								"logs":{
-												"body_one":"This will permanently remove {count} notification. This action cannot be undone.",
-												"body_other":"This will permanently remove {count} notifications. This action cannot be undone.",
-												"body_zero":"No notification selected.",
-												"cancel":"Nevermind",
-												"clearNotificationLog":"Clear Notification Log",
-												"confirm":"Do it!",
-												"title":"Are you sure?"
-								},
-								"missedNotifications":{
-												"body_one":"{count} notification received",
-												"body_other":"{count} notifications received",
-												"title":"While you were away"
-								},
-								"noNotifications":"No notifications yet",
-								"notificationLog":"Notification Log",
-								"notificationSettings":"Notification Settings"
-				}
+    "commands":{
+        "errorExecuting":"Virhe suoritettaessa komentoa \"{name}\""
+    },
+    "memberListDecorators":{
+        "fallback":"{key} jäsenluettelon sisustajan hahmontaminen epäonnistui"
+    },
+    "messageAccessories":{
+        "fallback":"{key} Viestilisälaitteen renderöinti epäonnistui"
+    },
+    "messageDecorations":{
+        "fallback":"{key} Viestin koristelun hahmontaminen epäonnistui"
+    },
+    "notices":{
+        "fallback":"Virhe ilmoituksen näyttämisessä"
+    },
+    "notifications":{
+        "dismissNotification":"Hylkää ilmoitus",
+        "logs":{
+            "body_one":"Tämä poistaa pysyvästi {count}-ilmoituksen. Tätä toimintoa ei voi kumota.",
+            "body_other":"Tämä poistaa pysyvästi {count} ilmoitukset. Tätä toimintoa ei voi kumota.",
+            "body_zero":"Ilmoitusta ei ole valittu.",
+            "cancel":"Unohda koko juttu",
+            "clearNotificationLog":"Tyhjennä ilmoitusloki",
+            "confirm":"Tee se!",
+            "title":"Oletko varma?"
+        },
+        "missedNotifications":{
+            "body_one":"{count} ilmoitus vastaanotettu",
+            "body_other":"{count} ilmoituksia vastaanotettu",
+            "title":"Kun olit poissa"
+        },
+        "noNotifications":"Ei vielä ilmoituksia",
+        "notificationLog":"Ilmoitusloki",
+        "notificationSettings":"Ilmoitusasetukset"
+    }
 }
