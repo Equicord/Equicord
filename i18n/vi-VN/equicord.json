@@ -86,6 +86,23 @@
             "tooltipRight":"Giải mã Base64 (Click chuột trái) / Sao chép được giải mã (Click chuột phải)"
         }
     },
+    "betterActivities":{
+        "description":"Hiển thị tất cả các hoạt động trong danh sách thành viên và cửa sổ bật ra của người dùng, với các tùy chọn tùy chỉnh hiển thị",
+        "options":{
+            "carousel":"băng chuyền",
+            "list":"Danh sách"
+        },
+        "settings":{
+            "allActivitiesStyle":"Phong cách để hiển thị tất cả các hoạt động",
+            "hideTooltip":"Ẩn chú giải công cụ trên biểu tượng hoạt động",
+            "iconSize":"Kích thước của các biểu tượng hoạt động",
+            "memberList":"Hiển thị hoạt động trong danh sách thành viên",
+            "removeGameActivityStatus":"Xóa chỉ báo trạng thái hoạt động trò chơi",
+            "renderGifs":"Hiển thị ảnh GIF trong biểu tượng hoạt động",
+            "specialFirst":"Hiển thị các hoạt động đặc biệt đầu tiên",
+            "userPopout":"Hiển thị tất cả hoạt động trong cửa sổ bật lên của người dùng"
+        }
+    },
     "betterAudioPlayer":{
         "description":"Thêm máy quang phổ và máy hiển thị dao động vào trình phát tệp đính kèm âm thanh",
         "settings":{
@@ -1258,6 +1275,57 @@
             "scanQrCode":"Quét mã QR"
         }
     },
+    "mediaPlaybackSpeed":{
+        "description":"Kiểm soát tốc độ phát lại phương tiện cho tin nhắn thoại, video và tệp đính kèm âm thanh",
+        "settings":{
+            "defaultAudioSpeed":"Tốc độ phát lại mặc định cho tệp âm thanh",
+            "defaultVideoSpeed":"Tốc độ phát lại mặc định cho video",
+            "defaultVoiceMessageSpeed":"Tốc độ phát lại mặc định cho tin nhắn thoại"
+        }
+    },
+    "messageBurst":{
+        "description":"Gửi tin nhắn theo đợt bằng cách hợp nhất các tin nhắn liên tiếp trong một khoảng thời gian",
+        "settings":{
+            "shouldMergeWithAttachment":"Cho phép hợp nhất tin nhắn với tệp đính kèm",
+            "timePeriod":"Khoảng thời gian tính bằng giây để hợp nhất tin nhắn",
+            "useSpace":"Sử dụng dấu cách thay vì dòng mới làm dấu phân cách"
+        }
+    },
+    "messageColors":{
+        "description":"Hiển thị mã màu (hex, rgb, hsl) trong tin nhắn có bản xem trước màu",
+        "settings":{
+            "blockView":"Vị trí của khối màu",
+            "blockViewOptions":{
+                "bothSides":"Cả hai mặt của văn bản",
+                "leftSide":"Bên trái văn bản",
+                "rightSide":"Bên phải văn bản"
+            },
+            "enableShortHexCodes":"Kích hoạt mã màu hex ngắn (3 ký tự)",
+            "renderType":"Cách hiển thị màu trong tin nhắn",
+            "renderTypeOptions":{
+                "backgroundColor":"Thay đổi màu nền",
+                "blockNearby":"Hiển thị khối màu",
+                "textColor":"Thay đổi màu văn bản"
+            }
+        }
+    },
+    "messageFetchTimer":{
+        "description":"Hiển thị thời gian tìm nạp tin nhắn trong thanh trò chuyện",
+        "settings":{
+            "iconColor":"Màu của biểu tượng hẹn giờ tìm nạp",
+            "showIcon":"Hiển thị biểu tượng hẹn giờ tìm nạp",
+            "showMs":"Hiển thị mili giây thay vì giây"
+        }
+    },
+    "messageLinkTooltip":{
+        "description":"Hiển thị bản xem trước tin nhắn khi di chuột qua các liên kết tin nhắn, thư trả lời và tin nhắn được chuyển tiếp",
+        "settings":{
+            "display":"Kiểu hiển thị để xem trước tin nhắn",
+            "onForward":"Hiển thị chú giải công cụ khi di chuột qua các tin nhắn được chuyển tiếp",
+            "onLink":"Hiển thị chú giải công cụ khi di chuột qua liên kết tin nhắn",
+            "onReply":"Hiển thị chú giải công cụ khi di chuột qua thư trả lời"
+        }
+    },
     "messageLoggerEnhanced":{
         "buttons":{
             "exportLogs":"Xuất nhật ký",
@@ -1326,5 +1394,1032 @@
             "timeBasedCleanupMinutes":"Tự động xóa tin nhắn khỏi các máy chủ cũ hơn nhiều phút này. Đặt thành 0 để tắt tính năng dọn dẹp theo thời gian.",
             "whitelistedIds":"Máy chủ, kênh hoặc ID người dùng được đưa vào danh sách trắng."
         }
+    },
+    "messageNotifier":{
+        "description":"Nhận thông báo khi người dùng cụ thể gửi tin nhắn",
+        "settings":{
+            "users":"ID người dùng để nhận thông báo (được phân tách bằng dấu phẩy)"
+        }
+    },
+    "messagePeek":{
+        "description":"Xem tin nhắn cuối cùng trong các kênh DM mà không cần mở chúng"
+    },
+    "messageTranslate":{
+        "description":"Tự động dịch tin nhắn sang ngôn ngữ ưa thích của bạn",
+        "settings":{
+            "confidenceRequirement":"Mức độ tin cậy tối thiểu cho bản dịch (0-1)",
+            "targetLanguage":"Ngôn ngữ đích để dịch (ví dụ: en, es, fr)"
+        }
+    },
+    "micLoopbackTester":{
+        "description":"Kiểm tra micrô của bạn bằng nút lặp lại trong khu vực người dùng"
+    },
+    "middleClickTweaks":{
+        "description":"Nhiều chỉnh sửa nhấp chuột giữa khác nhau, chẳng hạn như dán và mở liên kết.",
+        "settings":{
+            "always":"Luôn ngăn chặn việc dán nhấp chuột giữa",
+            "both":"Liên kết & Phương tiện",
+            "focus":"Chỉ ngăn chặn khi vùng văn bản không được tập trung",
+            "links":"Liên kết",
+            "media":"Phương tiện truyền thông",
+            "none":"Không",
+            "openScope":"Ngăn chặn việc nhấp chuột giữa vào các loại nội dung này để mở chúng.",
+            "pasteScope":"Ngăn chặn nhấp chuột giữa dán trong những tình huống này.",
+            "pasteThreshold":"Một phần nghìn giây cho đến khi tính năng dán được bật lại sau lần nhấp chuột giữa."
+        }
+    },
+    "moreCommands":{
+        "description":"Các lệnh gạch chéo bổ sung bao gồm thông tin hệ thống, tung xúc xắc, lật đồng xu, v.v.",
+        "settings":{
+            "addFreakyEnding":"Thêm 👅 hoặc ❤️ vào cuối lệnh quái đản",
+            "uwuEveryMessage":"Làm cho mọi tin nhắn trở nên hữu ích",
+            "uwuEverything":"Làm cho tất cả văn bản trở nên uwuified - ý tưởng thực sự tồi tệ"
+        }
+    },
+    "moreKaomoji":{
+        "description":"Thêm lệnh gạch chéo kaomoji để thể hiện cảm xúc"
+    },
+    "moreStickers":{
+        "description":"Thêm nhiều gói nhãn dán từ nguồn bên ngoài",
+        "settings":{
+            "packs":"Quản lý gói nhãn dán",
+            "promptToUpload":"Nhắc trước khi tải nhãn dán lên"
+        }
+    },
+    "moreUserTags":{
+        "description":"Hiển thị thẻ người dùng bổ sung dựa trên quyền và vai trò",
+        "settings":{
+            "dontShowBotTag":"Ẩn thẻ BOT mặc định",
+            "dontShowForBots":"Không hiển thị thẻ cho người dùng bot",
+            "showWebhookTagFully":"Hiển thị đầy đủ thẻ webhook",
+            "tagSettings":"Định cấu hình cài đặt thẻ riêng lẻ"
+        }
+    },
+    "moyai":{
+        "description":"Phát hiệu ứng âm thanh moyai khi sử dụng 🗿 biểu tượng cảm xúc",
+        "settings":{
+            "ignoreBlocked":"Bỏ qua tin nhắn từ người dùng bị chặn",
+            "ignoreBots":"Bỏ qua tin nhắn từ bot",
+            "quality":"Chất lượng âm thanh moyai",
+            "qualityOptions":{
+                "hd":"HD",
+                "normal":"Bình thường"
+            },
+            "triggerWhenUnfocused":"Kích hoạt âm thanh ngay cả khi cửa sổ không được lấy nét",
+            "volume":"Âm lượng của âm thanh moyai"
+        }
+    },
+    "musicControls":{
+        "description":"Hiển thị các nút điều khiển trình phát nhạc cho Spotify, Tidal và YouTube Music",
+        "settings":{
+            "FallbackProvider":"Sử dụng nhà cung cấp dự phòng khi lỗi chính",
+            "LyricDelay":"Bù độ trễ lời bài hát",
+            "LyricsConversion":"Tự động dịch lời bài hát được La Mã hóa",
+            "LyricsPosition":"Vị trí của lời bài hát so với trình phát",
+            "LyricsProvider":"Nguồn lời bài hát",
+            "ShowFailedToasts":"Hiển thị lỗi khi tải lời bài hát không tải được",
+            "TranslateTo":"Dịch lời bài hát sang",
+            "YoutubeMusicApiUrl":"Âm nhạc tùy chỉnh trên YouTube API URL",
+            "hoverControls":"Chỉ hiển thị các điều khiển khi di chuột",
+            "previousButtonRestartsTrack":"Khởi động lại bài hát khi nhấn nút trước đó",
+            "showSpotifyControls":"Hiển thị các điều khiển Spotify",
+            "showSpotifyLyrics":"Hiển thị lời bài hát Spotify",
+            "showTidalControls":"Hiển thị điều khiển thủy triều",
+            "showTidalLyrics":"Hiển thị lời bài hát Tidal",
+            "showYoutubeMusicControls":"Hiển thị các nút điều khiển YouTube Music",
+            "useSpotifyUris":"Mở URI Spotify thay vì URL"
+        }
+    },
+    "neverPausePreviews":{
+        "description":"Không bao giờ tạm dừng xem trước video khi chuyển kênh hoặc mất tập trung",
+        "warning":"Điều này có thể làm tăng mức sử dụng tài nguyên và tiêu thụ dữ liệu"
+    },
+    "newPluginsManager":{
+        "description":"Quản lý và khám phá các plugin mới bằng trình quản lý plugin"
+    },
+    "noAppsAllowed":{
+        "description":"Chặn ứng dụng/danh mục hiển thị trong trình khởi chạy ứng dụng"
+    },
+    "noBulletPoints":{
+        "description":"Xóa dấu đầu dòng khỏi tin nhắn bằng cách thoát chúng"
+    },
+    "noModalAnimation":{
+        "description":"Tắt hoạt ảnh phương thức để tương tác UI nhanh hơn"
+    },
+    "noNitroUpsell":{
+        "description":"Loại bỏ các sản phẩm bán thêm của Nitro bằng cách ghi đè loại cao cấp của bạn"
+    },
+    "noRPC":{
+        "description":"Tắt tính năng Hiện diện phong phú (RPC) của Discord"
+    },
+    "noRoleHeaders":{
+        "description":"Xóa tiêu đề vai trò khỏi danh sách thành viên, tạo giao diện rõ ràng hơn"
+    },
+    "normalizeMessageLinks":{
+        "description":"Bình thường hóa các liên kết tin nhắn Discord bằng cách xóa tên miền phụ canary/ptb để đảm bảo tính nhất quán"
+    },
+    "notificationTitle":{
+        "description":"Thêm tiêu đề thông báo chi tiết hiển thị thông tin người gửi, kênh và máy chủ"
+    },
+    "orbolayBridge":{
+        "description":"Plugin cầu nối để tích hợp lớp phủ Orbolay, cho phép đồng bộ hóa trạng thái giọng nói và thông báo tin nhắn",
+        "settings":{
+            "alignmentOptions":{
+                "bottomLeft":"Dưới Cùng Bên Trái",
+                "bottomRight":"Dưới Cùng Bên Phải",
+                "topLeft":"Trên Cùng Bên Trái",
+                "topRight":"Trên Cùng Bên Phải"
+            },
+            "isKeybindEnabled":"Bật hỗ trợ liên kết phím cho điều khiển Orbolay",
+            "messageAlignment":"Vị trí căn chỉnh cho lớp phủ tin nhắn",
+            "messagesSemitransparent":"Làm cho lớp phủ tin nhắn ở dạng bán trong suốt",
+            "port":"Số cổng cho kết nối Orbolay WebSocket",
+            "userAlignment":"Vị trí căn chỉnh cho lớp phủ người dùng",
+            "voiceSemitransparent":"Làm cho lớp phủ giọng nói trở nên trong suốt"
+        }
+    },
+    "partyMode":{
+        "description":"Kích hoạt hiệu ứng chế độ bữa tiệc với hoa giấy và rung màn hình",
+        "settings":{
+            "intensityOptions":{
+                "better":"Tốt hơn - Nhiều hoa giấy hơn",
+                "normal":"Bình thường - Hiệu ứng tinh tế",
+                "projectX":"Dự án X - Cường độ tối đa"
+            },
+            "superIntensePartyMode":"Mức cường độ của chế độ nhóm"
+        }
+    },
+    "pinIcon":{
+        "description":"Thêm biểu tượng ghim vào tin nhắn đã ghim"
+    },
+    "pingNotifications":{
+        "description":"Cài đặt thông báo tùy chỉnh cho ping, DM và tin nhắn bạn bè",
+        "settings":{
+            "dms":"Thông báo tin nhắn DM và tin nhắn DM nhóm",
+            "friends":"Thông báo khi bạn bè gửi tin nhắn trên máy chủ",
+            "ignoreMuted":"Bỏ qua các kênh, bang hội và người dùng bị chặn",
+            "mentions":"Thông báo khi được nhắc đến (@username)",
+            "showInActive":"Hiển thị thông báo ngay cả khi kênh đang hoạt động"
+        }
+    },
+    "platformSpoofer":{
+        "description":"Giả mạo trạng thái nền tảng của bạn (di động, máy tính để bàn, web, bảng điều khiển)",
+        "settings":{
+            "platform":"Nền tảng để giả mạo như",
+            "platformOptions":{
+                "android":"Android",
+                "desktop":"Máy tính để bàn (Discord Máy khách)",
+                "ios":"iOS",
+                "playstation":"PlayStation",
+                "web":"Web (Discord Web)",
+                "xbox":"Xbox"
+            }
+        },
+        "warning":"Việc thay đổi nền tảng có thể ảnh hưởng đến một số tính năng nhất định và cách người khác nhìn thấy trạng thái của bạn."
+    },
+    "polishWording":{
+        "description":"Tự động cải thiện văn bản tin nhắn với ngữ pháp, cách viết hoa và dấu câu tốt hơn",
+        "settings":{
+            "blockedWords":"Danh sách các từ được phân tách bằng dấu phẩy để loại trừ khỏi việc sửa lỗi viết hoa",
+            "expandContractions":"Mở rộng các cơn co thắt (ví dụ: 'don't' → 'do not')",
+            "fixApostrophes":"Sửa các dấu nháy đơn bị thiếu trong cách viết tắt (ví dụ: 'dont' → 'don't')",
+            "fixCapitalization":"Sửa lỗi viết hoa câu",
+            "fixPunctuation":"Thêm dấu chấm vào cuối câu",
+            "fixPunctuationFrequency":"Tần suất tự động thêm dấu chấm (0-100%)",
+            "quickDisable":"Vô hiệu hóa nhanh - tạm thời vô hiệu hóa tất cả các chỉnh sửa"
+        }
+    },
+    "profileSets":{
+        "description":"Lưu và quản lý các cài đặt trước tùy chỉnh hồ sơ",
+        "settings":{
+            "avatarSize":"Kích thước hình đại diện trong trình quản lý đặt trước"
+        }
+    },
+    "questify":{
+        "buttonActions":{
+            "contextMenu":"Hiển thị menu ngữ cảnh",
+            "openQuests":"Mở trang Nhiệm vụ",
+            "pluginSettings":"Mở cài đặt plugin"
+        },
+        "description":"Nâng cao trải nghiệm Quest của bạn với một bộ tính năng hoặc tắt chúng hoàn toàn nếu chúng không phù hợp với bạn.",
+        "gradientOptions":{
+            "black":"Đen",
+            "default":"Mặc định",
+            "hide":"Ẩn",
+            "intense":"Mãnh liệt"
+        },
+        "sortOptions":{
+            "claimedAsc":"Đã xác nhận quyền sở hữu (Cũ nhất xếp trước)",
+            "claimedDesc":"Đã xác nhận quyền sở hữu (Mới nhất trước tiên)",
+            "expiringAsc":"Hết hạn (Sớm nhất trước tiên)",
+            "expiringDesc":"Hết hạn (Mới nhất trước)",
+            "recentAsc":"Gần đây (Cũ nhất xếp trước)",
+            "recentDesc":"Gần đây (Mới nhất đầu tiên)"
+        }
+    },
+    "questionMarkReplacement":{
+        "description":"Thay thế dấu chấm hỏi bằng văn bản/biểu tượng cảm xúc tùy chỉnh khi tin nhắn chỉ chứa dấu chấm hỏi",
+        "settings":{
+            "replace":"Văn bản hoặc biểu tượng cảm xúc để thay thế '?' với"
+        }
+    },
+    "quickThemeSwitcher":{
+        "description":"Chuyển nhanh qua các chủ đề bằng phím tắt",
+        "settings":{
+            "autoRefresh":"Tự động làm mới danh sách chủ đề khi phát hiện thay đổi",
+            "includeLocal":"Bao gồm các chủ đề địa phương trong chu trình",
+            "includeOnline":"Bao gồm các chủ đề trực tuyến trong chu trình",
+            "showNotifications":"Hiển thị thông báo khi chủ đề được thêm hoặc xóa",
+            "sortOptions":{
+                "az":"A-Z (Theo bảng chữ cái)",
+                "recent":"Được sử dụng gần đây",
+                "za":"Z-A (Bảng chữ cái đảo ngược)"
+            },
+            "sortOrder":"Sắp xếp thứ tự cho danh sách chủ đề"
+        }
+    },
+    "quoter":{
+        "description":"Tạo hình ảnh trích dẫn cách điệu từ tin nhắn",
+        "settings":{
+            "grayscale":"Áp dụng bộ lọc thang độ xám",
+            "quoteFont":"Font chữ cho hình ảnh trích dẫn",
+            "saveAsGif":"Lưu dưới dạng GIF thay vì PNG",
+            "showWatermark":"Hiển thị hình mờ trên dấu ngoặc kép",
+            "watermark":"Văn bản hình mờ"
+        }
+    },
+    "randomVoice":{
+        "description":"Tham gia các kênh thoại ngẫu nhiên dựa trên các bộ lọc có thể tùy chỉnh",
+        "operations":{
+            "equalTo":"bằng với",
+            "lessThan":"Ít hơn",
+            "moreThan":"Hơn"
+        },
+        "settings":{
+            "Servers":"ID máy chủ cần bao gồm (được phân tách bằng dấu phẩy)",
+            "UserAmount":"Số lượng người dùng mục tiêu trong kênh",
+            "UserAmountOperation":"Toán tử so sánh số lượng người dùng",
+            "autoCamera":"Tự động bật máy ảnh",
+            "autoNavigate":"Tự động điều hướng đến kênh thoại",
+            "autoStream":"Tự động bắt đầu truyền phát",
+            "avoidAfk":"Tránh các kênh AFK",
+            "avoidStages":"Tránh các kênh sân khấu",
+            "avoidStates":"Tránh người dùng khớp với bộ lọc trạng thái",
+            "deafen":"Tìm kiếm người dùng bị điếc",
+            "includeStates":"Bao gồm những người dùng phù hợp với bộ lọc trạng thái",
+            "leaveEmpty":"Rời đi khi kênh trở nên trống",
+            "mute":"Tìm kiếm người dùng bị tắt tiếng",
+            "selfDeafen":"Tự động điếc khi tham gia",
+            "selfMute":"Tự động tắt tiếng khi tham gia",
+            "spacesLeft":"Khoảng trống tối thiểu còn lại trong kênh",
+            "spacesLeftOperation":"Toán tử so sánh còn lại dấu cách",
+            "stream":"Tìm kiếm các kênh có luồng",
+            "vcLimit":"Giới hạn người dùng kênh thoại",
+            "vcLimitOperation":"Toán tử so sánh giới hạn kênh",
+            "video":"Tìm kiếm các kênh đã bật video"
+        }
+    },
+    "recentDMSwitcher":{
+        "description":"Chuyển đổi nhanh giữa các DM gần đây bằng cách sử dụng Ctrl+Tab (kiểu Alt+Tab)",
+        "overlayModes":{
+            "current":"Chỉ DM hiện tại",
+            "row":"Hàng DM gần đây"
+        },
+        "settings":{
+            "amountOfUsers":"Số lượng người dùng cần theo dõi",
+            "clearRdms":"Xóa lịch sử RDMS",
+            "overlayMode":"Chế độ nội dung lớp phủ",
+            "overlayRowLength":"Số lượng DM hiển thị trong hàng lớp phủ",
+            "overlayShowAvatars":"Hiển thị hình đại diện trong lớp phủ",
+            "toastDurationMs":"Thời lượng thông báo bánh mì nướng (ms)",
+            "visualStyle":"Kiểu chỉ báo trực quan khi đạp xe"
+        },
+        "visualStyles":{
+            "off":"Không có chỉ báo trực quan",
+            "overlay":"Lớp phủ (kiểu Alt+Tab)",
+            "toast":"Thông báo bánh mì nướng"
+        }
+    },
+    "remix":{
+        "description":"Phối lại hình ảnh trực tiếp trong Discord bằng trình chỉnh sửa tích hợp"
+    },
+    "repeatMessages":{
+        "description":"Lặp lại tin nhắn với câu trả lời tùy chọn (Shift+Click để trả lời)"
+    },
+    "replyPingControl":{
+        "description":"Kiểm soát xem bạn có bị ping khi ai đó trả lời tin nhắn của bạn hay không",
+        "settings":{
+            "alwaysPingOnReply":"Luôn nhận được ping khi ai đó trả lời tin nhắn của bạn",
+            "replyPingWhitelist":"Danh sách ID người dùng được phân tách bằng dấu phẩy để luôn nhận được ping trả lời từ"
+        }
+    },
+    "richMagnetLinks":{
+        "description":"Hiển thị các bản xem trước phong phú cho các liên kết nam châm với tính năng trích xuất tên tệp"
+    },
+    "rpcEditor":{
+        "description":"Chỉnh sửa và tùy chỉnh màn hình Hiện diện phong phú (RPC) của bạn cho bất kỳ ứng dụng nào",
+        "placeholders":{
+            "details":"Văn bản chi tiết hiện tại",
+            "largeImage":"Hình ảnh lớn URL",
+            "largeText":"Văn bản chú giải công cụ hình ảnh lớn",
+            "name":"Tên ứng dụng",
+            "smallImage":"Hình ảnh nhỏ URL",
+            "smallText":"Văn bản chú giải công cụ hình ảnh nhỏ",
+            "state":"Văn bản trạng thái hiện tại"
+        },
+        "settings":{
+            "replacedAppIds":"Quản lý ghi đè RPC dành riêng cho ứng dụng"
+        }
+    },
+    "rpcStats":{
+        "description":"Hiển thị số liệu thống kê tùy chỉnh trong Sự hiện diện phong phú của bạn (tin nhắn đã gửi, album hàng đầu của Last.fm)",
+        "settings":{
+            "RPCTitle":"Văn bản tiêu đề cho RPC",
+            "albumCoverImage":"Sử dụng bìa album làm hình ảnh RPC (chế độ Last.fm)",
+            "assetURL":"Hình ảnh tùy chỉnh URL cho RPC (mặc định: hình đại diện của bạn)",
+            "lastFMApiKey":"Khóa Last.fm API (lấy từ Last.fm/api)",
+            "lastFMStatFormat":"Định dạng cho chỉ số Last.fm ($album, $nghệ sĩ)",
+            "lastFMUsername":"tên người dùng Last.fm",
+            "statDisplay":"Thống kê để hiển thị"
+        },
+        "statOptions":{
+            "messagesAllTime":"Tin nhắn được gửi mọi lúc",
+            "messagesToday":"Tin nhắn được gửi hôm nay",
+            "mostListenedAlbum":"Album được nghe nhiều nhất tuần này (Last.fm)"
+        }
+    },
+    "saveFavoriteGIFs":{
+        "description":"Lưu tất cả các url GIF yêu thích vào một tệp văn bản",
+        "settings":{
+            "showToolboxButton":"Hiển thị nút 'Lưu ảnh GIF yêu thích' trong Hộp công cụ Equicord (Yêu cầu tải lại)"
+        }
+    },
+    "scheduledMessages":{
+        "description":"Lên lịch gửi tin nhắn sau",
+        "settings":{
+            "checkIntervalSeconds":"Tần suất kiểm tra tin nhắn sẽ gửi (giây)",
+            "maxMessagesPerMinute":"Số tin nhắn được lên lịch tối đa trên mỗi kênh có thể kích hoạt trong cùng một phút",
+            "showNotifications":"Hiển thị thông báo chúc mừng khi tin nhắn được gửi",
+            "showPhantomMessages":"Hiển thị tin nhắn đã lên lịch dưới dạng tin nhắn ảo trong cuộc trò chuyện"
+        }
+    },
+    "screenRecorder":{
+        "description":"Chức năng ghi màn hình cho Equibop"
+    },
+    "searchFix":{
+        "description":"Khắc phục chức năng tìm kiếm bằng cách xử lý giới hạn bù trừ 5000 tin nhắn của Discord"
+    },
+    "sekaiStickers":{
+        "description":"Tích hợp nhãn dán Sekai",
+        "settings":{
+            "AutoCloseModal":"Tự động đóng chế độ khi hoàn tất"
+        }
+    },
+    "selfForward":{
+        "description":"Chuyển tiếp tin nhắn cho chính bạn"
+    },
+    "serverSearch":{
+        "description":"Tìm kiếm máy chủ nâng cao với tích hợp trình chuyển đổi nhanh"
+    },
+    "showBadgesInChat":{
+        "description":"Hiển thị huy hiệu người dùng trong tin nhắn trò chuyện",
+        "settings":{
+            "DiscordNitroPosition":"Vị trí huy hiệu Nitro Discord",
+            "DiscordProfilePosition":"Vị trí của huy hiệu hồ sơ Discord",
+            "EquicordContributorPosition":"Vị trí của huy hiệu Cộng tác viên Equicord",
+            "EquicordDonorPosition":"Vị trí của huy hiệu Nhà tài trợ Equicord",
+            "VencordContributorPosition":"Vị trí của huy hiệu Cộng tác viên Vencord",
+            "VencordDonorPosition":"Vị trí của huy hiệu Nhà tài trợ Vencord",
+            "badgeSettings":"Thiết lập bố cục huy hiệu và khả năng hiển thị",
+            "showDiscordNitro":"Bật để hiển thị huy hiệu Nitro Discord trong cuộc trò chuyện",
+            "showDiscordProfile":"Bật hiển thị huy hiệu hồ sơ Discord trong cuộc trò chuyện",
+            "showEquicordContributor":"Cho phép hiển thị Equicord huy hiệu cộng tác viên trong cuộc trò chuyện",
+            "showEquicordDonor":"Cho phép hiển thị Equicord huy hiệu nhà tài trợ trong cuộc trò chuyện",
+            "showVencordContributor":"Cho phép hiển thị huy hiệu cộng tác viên Vencord trong cuộc trò chuyện",
+            "showVencordDonor":"Cho phép hiển thị huy hiệu nhà tài trợ Vencord trong cuộc trò chuyện"
+        }
+    },
+    "showMessageEmbeds":{
+        "description":"Hiển thị nội dung nhúng của tin nhắn với các tùy chọn để thêm hoặc xóa nội dung nhúng khỏi tin nhắn"
+    },
+    "showResourceChannels":{
+        "description":"Hiển thị các kênh tài nguyên thường bị ẩn"
+    },
+    "showSongName":{
+        "description":"Hiển thị tên bài hát đang phát trong trạng thái"
+    },
+    "sidebarChat":{
+        "description":"Giao diện chat sidebar để xem nhiều kênh",
+        "settings":{
+            "patchCommunity":"Vá những thứ như tab Trình duyệt kênh hoặc Thành viên mà máy chủ cộng đồng có",
+            "persistSidebar":"Giữ cuộc trò chuyện ở thanh bên luôn mở khi Discord khởi động lại"
+        }
+    },
+    "signature":{
+        "description":"Thêm chữ ký vào tin nhắn",
+        "settings":{
+            "contextMenu":"Thêm tùy chọn chuyển đổi chức năng trong menu ngữ cảnh nhập trò chuyện",
+            "isEnabled":"Chuyển đổi chức năng",
+            "name":"Chữ ký sẽ được thêm vào cuối tin nhắn của bạn",
+            "showIcon":"Hiển thị biểu tượng để chuyển đổi plugin trong thanh trò chuyện",
+            "textHeader":"Tiêu đề nào để mở đầu văn bản"
+        }
+    },
+    "snowfall":{
+        "description":"Thêm hiệu ứng tuyết rơi Giáng sinh lên trên giao diện của Discord",
+        "settings":{
+            "flakesPerSecond":"Bông tuyết mỗi giây (cao hơn = tuyết rơi dày đặc hơn)",
+            "maxSize":"Kích thước bông tuyết tối đa",
+            "speed":"Tốc độ tuyết rơi (cao hơn = rơi nhanh hơn)",
+            "typeOfSnow":"Thay đổi loại tuyết hiển thị (Ảnh hưởng đến hiệu suất)"
+        }
+    },
+    "soggy":{
+        "description":"Plugin Soggy với hiệu ứng hình ảnh và âm thanh có thể nhấp",
+        "settings":{
+            "boopLink":"URL cho âm thanh boop",
+            "boopVolume":"Âm lượng của âm thanh boop",
+            "imageLink":"URL cho hình ảnh (nút và phương thức)",
+            "songLink":"URL để phát bài hát",
+            "songVolume":"Âm lượng của bài hát. 0 để vô hiệu hóa",
+            "tooltipText":"Văn bản hiển thị khi di chuột qua nút"
+        }
+    },
+    "songLink":{
+        "description":"Tích hợp Song.link để chia sẻ nhạc trên các nền tảng",
+        "settings":{
+            "servicesSettings":"Cài đặt cho dịch vụ",
+            "userCountry":"Quốc gia được sử dụng để tra cứu (Mã quốc gia gồm hai chữ cái)"
+        }
+    },
+    "soundBoardLogger":{
+        "description":"Ghi lại việc sử dụng soundboard trong các kênh thoại",
+        "settings":{
+            "FileType":"Định dạng mà bạn muốn lưu tệp của mình",
+            "SavedIds":"Số lượng id soundboard bạn muốn lưu tại một thời điểm (0 cho phép bạn lưu vô hạn)",
+            "soundVolume":"Âm thanh chuyển đổi lớn đến mức nào (0 để tắt)"
+        }
+    },
+    "splitLargeMessages":{
+        "description":"Tự động chia tin nhắn lớn thành nhiều phần",
+        "settings":{
+            "disableFileConversion":"Nếu đúng, hãy tắt tính năng chuyển đổi tệp cho các tin nhắn lớn",
+            "hardSplit":"Nếu đúng, tách ký tự cuối cùng thay vì dấu cách/dòng mới cuối cùng",
+            "maxLength":"Độ dài tối đa của tin nhắn trước khi được chia nhỏ. Đặt thành 0 để tự động phát hiện",
+            "sendDelay":"Độ trễ giữa mỗi đoạn tính bằng giây",
+            "slowmodeMax":"Thời gian làm chậm tối đa nếu tách ở chế độ chậm",
+            "splitInSlowmode":"Có nên chia nhỏ tin nhắn nếu kênh đã bật chế độ chậm không?"
+        }
+    },
+    "spotifyActivityToggle":{
+        "description":"Bật và tắt chia sẻ hoạt động Spotify",
+        "settings":{
+            "location":"Nơi hiển thị nút chuyển đổi Spotify"
+        }
+    },
+    "statsfmPresence":{
+        "description":"Tích hợp hiện diện Stats.fm",
+        "settings":{
+            "alwaysHideArt":"Tắt tải ảnh bìa album xuống",
+            "hideWithExternalRPC":"Ẩn sự hiện diện stats.fm nếu RPC bên ngoài đang chạy",
+            "hideWithSpotify":"Ẩn sự hiện diện của stats.fm nếu Spotify đang chạy",
+            "missingArt":"Khi album hoặc ảnh bìa album bị thiếu",
+            "nameFormat":"Hiển thị tên bài hát và nghệ sĩ ở tên trạng thái",
+            "shareSong":"Hiển thị liên kết tới bài hát trên stats.fm",
+            "shareUsername":"Hiển thị liên kết tới hồ sơ stats.fm",
+            "showStatsFmLogo":"Hiển thị Stats.fm bên cạnh bìa album",
+            "statusName":"Văn bản trạng thái tùy chỉnh",
+            "useListeningStatus":"Hiển thị trạng thái 'Đang nghe' thay vì 'Đang phát'",
+            "username":"tên người dùng Stats.fm"
+        }
+    },
+    "statusPresets":{
+        "description":"Lưu và tải cài đặt trước trạng thái"
+    },
+    "statusWhileActive":{
+        "description":"Tự động đặt trạng thái khi hoạt động trong các kênh thoại",
+        "settings":{
+            "statusToSet":"Trạng thái được đặt khi đang ở kênh thoại"
+        }
+    },
+    "steamStatusSync":{
+        "description":"Đồng bộ trạng thái Steam với trạng thái Discord",
+        "settings":{
+            "dndStatus":"Trạng thái Steam khi ở chế độ Không làm phiền",
+            "goInvisibleIfActivityIsHidden":"Luôn ở chế độ ẩn nếu ẩn hoạt động trò chơi trên Discord",
+            "idleStatus":"Trạng thái Steam khi ở chế độ Chờ",
+            "invisibleStatus":"Trạng thái Steam khi ở chế độ Vô hình",
+            "onlineStatus":"Trạng thái Steam khi trực tuyến"
+        }
+    },
+    "stickerBlocker":{
+        "description":"Chặn xuất hiện các nhãn dán cụ thể",
+        "settings":{
+            "blockedStickers":"Danh sách ID nhãn dán bị chặn (không chỉnh sửa trừ khi bạn biết mình đang làm gì)",
+            "showButton":"Có hiển thị nút để bỏ chặn gif không",
+            "showGif":"Có nên hiển thị ảnh gif mèo hấp dẫn hay không",
+            "showMessage":"Có hiển thị thông báo nêu chi tiết id nào đã bị chặn hay không"
+        }
+    },
+    "streamingCodecDisabler":{
+        "description":"Tắt codec phát trực tuyến để phát trực tuyến Discord",
+        "settings":{
+            "disableAv1Codec":"Yêu cầu Discord không cân nhắc việc sử dụng AV1 để phát trực tuyến",
+            "disableH264Codec":"Yêu cầu Discord không cân nhắc việc sử dụng H264 để phát trực tuyến",
+            "disableH265Codec":"Yêu cầu Discord không cân nhắc việc sử dụng H265 để phát trực tuyến",
+            "disableVP8Codec":"Yêu cầu Discord không cân nhắc việc sử dụng VP8 để phát trực tuyến",
+            "disableVP9Codec":"Yêu cầu Discord không cân nhắc việc sử dụng VP9 để phát trực tuyến"
+        }
+    },
+    "talkInReverse":{
+        "description":"Thêm nút thanh trò chuyện để đảo ngược tin nhắn của bạn trước khi gửi"
+    },
+    "themeLibrary":{
+        "description":"Duyệt và quản lý chủ đề từ thư viện chủ đề Equicord",
+        "toolbox":{
+            "openThemeLibrary":"Mở thư viện chủ đề"
+        }
+    },
+    "tidalEmbeds":{
+        "description":"Nhúng liên kết nhạc Tidal vào trình phát tùy chỉnh"
+    },
+    "tiktokTTS":{
+        "contextMenu":{
+            "playTikTokTTS":"Chơi TikTok TTS"
+        },
+        "description":"Chơi tính năng chuyển văn bản thành giọng nói của TikTok cho tin nhắn",
+        "settings":{
+            "volume":"Âm lượng phát lại"
+        }
+    },
+    "timezones":{
+        "contextMenu":{
+            "setLocalTimezone":"Đặt múi giờ địa phương"
+        },
+        "description":"Hiển thị múi giờ của người dùng trong hồ sơ và tiêu đề tin nhắn",
+        "settings":{
+            "24hTime":"Hiển thị thời gian ở định dạng 24h",
+            "databaseUrl":"Cơ sở dữ liệu URL để lưu trữ múi giờ",
+            "preferDatabaseOverLocal":"Ưu tiên cơ sở dữ liệu hơn bộ nhớ cục bộ cho các múi giờ",
+            "resetDatabaseTimezone":"Đặt lại múi giờ của bạn trên cơ sở dữ liệu",
+            "setDatabaseTimezone":"Đặt múi giờ của bạn trên cơ sở dữ liệu",
+            "showMessageHeaderTime":"Hiển thị thời gian trong tiêu đề tin nhắn",
+            "showOwnTimezone":"Hiển thị múi giờ của riêng bạn trong hồ sơ và tiêu đề thư",
+            "showProfileTime":"Hiển thị thời gian trong hồ sơ",
+            "showTimezoneInfo":"Hiển thị thông tin múi giờ bên cạnh thời gian",
+            "useDatabase":"Kích hoạt cơ sở dữ liệu để nhận múi giờ của người dùng"
+        },
+        "toasts":{
+            "failed":"Múi giờ không thể làm mới!",
+            "refreshed":"Đã làm mới múi giờ thành công!"
+        },
+        "toolbox":{
+            "refreshDatabaseTimezones":"Làm mới múi giờ cơ sở dữ liệu",
+            "setDatabaseTimezone":"Đặt múi giờ cơ sở dữ liệu"
+        }
+    },
+    "title":{
+        "description":"Thay đổi tiêu đề cửa sổ của Discord",
+        "settings":{
+            "title":"Tiền tố tiêu đề cửa sổ"
+        }
+    },
+    "toastNotifications":{
+        "description":"Hiển thị thông báo chúc mừng cho tin nhắn và sự kiện",
+        "positionOptions":{
+            "bottomLeft":"Dưới Cùng Bên Trái",
+            "bottomRight":"Dưới Cùng Bên Phải",
+            "topLeft":"Trên Cùng Bên Trái",
+            "topRight":"Trên Cùng Bên Phải"
+        },
+        "settings":{
+            "determineServerNotifications":"Tự động xác định thông báo máy chủ nào sẽ hiển thị dựa trên cài đặt kênh/bang hội của bạn",
+            "directMessages":"Hiển thị thông báo cho tin nhắn trực tiếp",
+            "disableInStreamerMode":"Tắt thông báo khi ở chế độ truyền phát",
+            "exampleButton":"Hiển thị một ví dụ về thông báo bánh mì nướng",
+            "friendActivity":"Hiển thị thông báo để thêm ai đó hoặc nhận yêu cầu kết bạn",
+            "friendServerNotifications":"Hiển thị thông báo khi bạn bè gửi tin nhắn trong máy chủ họ chia sẻ với bạn",
+            "groupMessages":"Hiển thị thông báo cho tin nhắn nhóm",
+            "ignoreUsers":"Tạo danh sách id người dùng để bỏ qua tất cả các thông báo của họ (phân tách bằng dấu phẩy)",
+            "maxNotifications":"Số lượng thông báo tối đa được hiển thị cùng một lúc",
+            "notifyFor":"Tạo danh sách id kênh để nhận thông báo (phân tách bằng dấu phẩy)",
+            "opacity":"Độ mờ của thông báo",
+            "position":"Vị trí của thông báo bánh mì nướng",
+            "renderImages":"Hiển thị hình ảnh trong thông báo",
+            "streamingTreatment":"Cách xử lý thông báo khi chia sẻ màn hình của bạn",
+            "timeout":"Thông báo thời gian tính bằng giây sẽ được hiển thị cho"
+        },
+        "streamingOptions":{
+            "ignore":"Bỏ qua - Hoàn toàn không hiển thị thông báo",
+            "noContent":"Không có nội dung - Ẩn nội dung thông báo",
+            "normal":"Bình thường - Hiển thị thông báo như bình thường"
+        }
+    },
+    "toggleVideoBind":{
+        "description":"Thêm tổ hợp phím để chuyển đổi video/webcam của bạn trong trò chuyện thoại",
+        "settings":{
+            "keyBind":"Phím chuyển đổi webcam khi nhấn",
+            "reqAlt":"Yêu cầu giữ alt",
+            "reqCtrl":"Yêu cầu phải nắm quyền kiểm soát",
+            "reqShift":"Yêu cầu giữ ca"
+        }
+    },
+    "toneIndicators":{
+        "description":"Thêm chỉ báo giọng điệu (mỉa mai, đùa giỡn, v.v.) vào tin nhắn",
+        "settings":{
+            "customIndicators":"Chỉ báo âm tùy chỉnh (định dạng: jk=Đùa; srs=Nghiêm túc)",
+            "maxIndicators":"Số lượng chỉ báo âm tối đa hiển thị trên mỗi tin nhắn",
+            "prefix":"(Các) ký tự tiền tố cho chỉ báo âm thanh"
+        }
+    },
+    "tosuRPC":{
+        "description":"Tích hợp hiện diện phong phú cho osu! qua tosu"
+    },
+    "translatePlus":{
+        "contextMenu":{
+            "translate":"Dịch"
+        },
+        "description":"Thêm nút dịch vào tin nhắn có UI tốt hơn",
+        "popover":{
+            "translate":"Dịch"
+        }
+    },
+    "unitConverter":{
+        "description":"Chuyển đổi đơn vị trong tin nhắn (hệ đo lường Anh/số liệu)",
+        "popover":{
+            "convertUnits":"Chuyển đổi đơn vị"
+        },
+        "settings":{
+            "myUnits":"Đơn vị bạn sử dụng và muốn mọi thứ được chuyển đổi thành"
+        },
+        "unitOptions":{
+            "imperial":"hoàng gia",
+            "metric":"Số liệu"
+        }
+    },
+    "universalMention":{
+        "description":"Đề cập đến người dùng từ bất kỳ máy chủ nào bằng định dạng chung",
+        "settings":{
+            "globalMention":"Đề cập đến người dùng từ bất kỳ máy chủ nào, không chỉ máy chủ hiện tại",
+            "onlyDMUsers":"Chỉ hiển thị cho người dùng bạn đã có tin nhắn trực tiếp"
+        },
+        "warning":"Việc sử dụng Global Mention có thể gây ra vấn đề về hiệu suất và hiển thị số lượng người dùng vô lý trong phần tự động hoàn thành."
+    },
+    "unlimitedAccounts":{
+        "description":"Loại bỏ giới hạn 5 tài khoản cho trình chuyển đổi tài khoản của Discord",
+        "settings":{
+            "maxAccounts":"Số lượng tài khoản có thể được thêm hoặc 0 không giới hạn"
+        }
+    },
+    "unreadBadgeCount":{
+        "description":"Hiển thị huy hiệu đếm tin nhắn chưa đọc trên các kênh",
+        "settings":{
+            "notificationCountLimit":"Giới hạn số lượng thông báo ở mức 99+",
+            "showOnMutedChannels":"Hiển thị số lượng chưa đọc trên các kênh bị tắt tiếng"
+        }
+    },
+    "urlHighlighter":{
+        "description":"Đánh dấu các URL cụ thể trong tin nhắn bằng màu tùy chỉnh",
+        "settings":{
+            "boldUrls":"Làm đậm các URL được đánh dấu",
+            "highlightEmbeds":"Đồng thời đánh dấu các URL trong nội dung nhúng",
+            "patterns":"URL mẫu để làm nổi bật bằng cách sử dụng mẫu hình cầu"
+        },
+        "ui":{
+            "addNew":"Thêm mới",
+            "patternPlaceholder":"*.example.com",
+            "urlPatterns":"URL Mẫu"
+        }
+    },
+    "userpfp":{
+        "avatarOptions":{
+            "nitro":"Nitơ",
+            "userpfp":"Người dùngPFP"
+        },
+        "buttons":{
+            "joinServer":"Tham gia máy chủ UserPFP",
+            "support":"Hỗ trợ UserPFP tại đây"
+        },
+        "contextMenu":{
+            "setAvatar":"Đặt hình đại diện"
+        },
+        "description":"Sử dụng ảnh hồ sơ tùy chỉnh từ cơ sở dữ liệu UserPFP hoặc đặt ảnh hồ sơ của riêng bạn",
+        "notice":"Việc sử dụng tính năng hình đại diện đã đặt chỉ mang tính cục bộ, nghĩa là chỉ bạn mới thấy nó thay đổi.",
+        "settings":{
+            "databaseSource":"URL để tải cơ sở dữ liệu từ",
+            "overrideServerAvatars":"Ghi đè hình đại diện máy chủ bằng hình đại diện tùy chỉnh hoặc hình đại diện người dùng mặc định nếu không đặt hình đại diện tùy chỉnh",
+            "preferNitro":"Nên sử dụng hình đại diện nào nếu có cả hình đại diện pfp hoạt hình mặc định (Nitro) và hình đại diện PFP của người dùng"
+        }
+    },
+    "vcNarratorCustom":{
+        "contextMenu":{
+            "stateFilter":"Bộ lọc thay đổi trạng thái",
+            "vcNarrator":"Trình tường thuật VC",
+            "voice":"Giọng nói"
+        },
+        "description":"Trình tường thuật kênh giọng nói tùy chỉnh với TTS để người dùng tham gia/rời khỏi và thay đổi trạng thái",
+        "filterOptions":{
+            "blacklist":"Danh sách đen (thông báo tất cả mọi người ngoại trừ được liệt kê)",
+            "off":"Tắt",
+            "whitelist":"Danh sách trắng (chỉ công bố người dùng được liệt kê)"
+        },
+        "modal":{
+            "cancel":"Hủy bỏ",
+            "previewHint":"Xem trước giọng nói này phát ra như thế nào với tên của họ:",
+            "save":"Lưu",
+            "selectVoice":"Chọn một giọng nói",
+            "title":"Giọng kể chuyện của VC"
+        },
+        "preview":{
+            "playing":"đang chơi...",
+            "subtitle":"Sử dụng giọng kể chuyện đã chọn của bạn",
+            "title":"Xem trước âm thanh"
+        },
+        "settings":{
+            "announceOthersDeafen":"Thông báo khi người dùng khác chặn/không chặn trong VC hiện tại của bạn",
+            "announceOthersMute":"Thông báo khi người dùng khác tắt tiếng/bật tiếng trong VC hiện tại của bạn",
+            "announceOthersStream":"Thông báo khi người dùng khác bắt đầu/dừng phát trực tuyến trong VC hiện tại của bạn",
+            "announceSelfStream":"Thông báo khi bạn bắt đầu/dừng phát trực tuyến",
+            "customVoice":"Giọng kể chuyện",
+            "ignoreSelf":"Bỏ qua chính mình cho tất cả các sự kiện",
+            "joinMessage":"Phần giữ chỗ: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
+            "latinOnly":"Loại bỏ các ký tự không phải tiếng Latinh khỏi tên trước khi nói chúng",
+            "leaveMessage":"Để lại tin nhắn",
+            "moveMessage":"Di chuyển tin nhắn",
+            "rate":"Tốc độ của người kể chuyện",
+            "sayOwnName":"Nói tên riêng",
+            "stateChangeCooldownMs":"Thời gian hồi chiêu thông báo thay đổi trạng thái (ms)",
+            "stateChangeFilterList":"ID người dùng được phân tách bằng dấu phẩy cho danh sách trắng/danh sách đen. Nhấp chuột phải vào người dùng để thêm/xóa.",
+            "stateChangeFilterMode":"Lọc những người dùng kích hoạt thông báo thay đổi trạng thái",
+            "userVoiceMap":"Ghi đè giọng nói của mỗi người dùng (định dạng: userId:voiceId,userId2:voiceId2). Người dùng nhấp chuột phải để thiết lập.",
+            "volume":"Âm lượng của người kể chuyện"
+        },
+        "troubleshooting":{
+            "cacheInfo":"Bộ nhớ đệm",
+            "clearCache":"Xóa bộ nhớ đệm",
+            "lastApiCall":"Cuộc gọi API gần đây nhất",
+            "refreshSize":"Làm mới kích thước",
+            "title":"Khắc phục sự cố"
+        }
+    },
+    "vcPanelSettings":{
+        "description":"Tùy chỉnh bảng kênh thoại với các cài đặt bổ sung",
+        "settings":{
+            "camera":"Hiển thị bộ chọn camera",
+            "inputDevice":"Hiển thị bộ chọn thiết bị đầu vào",
+            "inputVolume":"Hiển thị thanh trượt âm lượng đầu vào",
+            "outputDevice":"Hiển thị bộ chọn thiết bị đầu ra",
+            "outputVolume":"Hiển thị thanh trượt âm lượng đầu ra",
+            "showInputDeviceHeader":"Hiển thị tiêu đề phía trên bộ chọn thiết bị đầu vào",
+            "showInputVolumeHeader":"Hiển thị tiêu đề phía trên thanh trượt âm lượng đầu vào",
+            "showOutputDeviceHeader":"Hiển thị tiêu đề phía trên bộ chọn thiết bị đầu ra",
+            "showOutputVolumeHeader":"Hiển thị tiêu đề phía trên thanh trượt âm lượng đầu ra",
+            "showVideoDeviceHeader":"Hiển thị tiêu đề phía trên bộ chọn camera",
+            "uncollapseSettingsByDefault":"Tự động thu gọn cài đặt giọng nói theo mặc định"
+        },
+        "ui":{
+            "camera":"Máy ảnh",
+            "hide":"Ẩn",
+            "inputDevice":"Thiết bị đầu vào",
+            "inputVolume":"Âm lượng đầu vào",
+            "outputDevice":"Thiết bị đầu ra",
+            "outputVolume":"Âm lượng đầu ra",
+            "settings":"Cài đặt"
+        }
+    },
+    "viewRawVariant":{
+        "contextMenu":{
+            "viewRaw":"Xem bản thô"
+        },
+        "description":"Xem dữ liệu JSON thô cho tin nhắn, người dùng, kênh và bang hội",
+        "modal":{
+            "content":"Nội dung",
+            "data":"dữ liệu",
+            "title":"Xem bản thô {type}"
+        }
+    },
+    "voiceButtons":{
+        "description":"Thêm các nút hành động nhanh (trò chuyện, tắt tiếng, tắt tiếng) cho người dùng kênh thoại",
+        "settings":{
+            "showChatButton":"Hiển thị nút trò chuyện",
+            "showDeafenButton":"Hiển thị nút điếc",
+            "showMuteButton":"Hiển thị nút tắt tiếng"
+        }
+    },
+    "voiceChannelLog":{
+        "contextMenu":{
+            "viewChannelLogs":"Xem nhật ký kênh"
+        },
+        "description":"Ghi nhật ký các sự kiện tham gia/rời/di chuyển kênh thoại",
+        "modeOptions":{
+            "both":"Đăng nhập vào menu trò chuyện và đăng nhập",
+            "logMenu":"Trình đơn nhật ký",
+            "logToChat":"Đăng nhập trực tiếp vào cuộc trò chuyện được liên kết"
+        },
+        "settings":{
+            "ignoreBlockedUsers":"Không đăng nhập người dùng bị chặn",
+            "mode":"Cách hiển thị nhật ký kênh thoại",
+            "voiceChannelChatSelf":"Ghi lại các sự kiện kênh thoại của riêng bạn trong các kênh thoại",
+            "voiceChannelChatSilent":"Tham gia/rời khỏi/di chuyển tin nhắn trong các cuộc trò chuyện trên kênh thoại sẽ ở chế độ im lặng",
+            "voiceChannelChatSilentSelf":"Tham gia/rời khỏi/di chuyển tin nhắn trong cuộc trò chuyện trên kênh thoại sẽ ở chế độ im lặng nếu bạn đang ở trong kênh thoại"
+        }
+    },
+    "voiceChatUtils":{
+        "contextMenu":{
+            "deafenAll":"Làm điếc tất cả",
+            "disconnectAll":"Ngắt kết nối tất cả",
+            "moveAll":"Di chuyển tất cả",
+            "muteAll":"Tắt tiếng tất cả",
+            "undeafenAll":"Làm điếc tất cả",
+            "unmuteAll":"Bật tiếng tất cả",
+            "voiceTools":"Công cụ giọng nói"
+        },
+        "description":"Thêm các công cụ kiểm duyệt kênh thoại (tắt tiếng tất cả, tắt tiếng tất cả, di chuyển tất cả, ngắt kết nối tất cả)",
+        "settings":{
+            "waitAfter":"Số lượng hành động API cần thực hiện trước khi chờ đợi (để tránh giới hạn tốc độ)",
+            "waitSeconds":"Thời gian chờ giữa mỗi hành động (tính bằng giây)"
+        }
+    },
+    "voiceJoinMessages":{
+        "description":"Nhận thông báo khi bạn bè tham gia kênh thoại",
+        "settings":{
+            "allowedFriends":"Danh sách ID người dùng của bạn bè được phân tách bằng dấu phẩy hoặc dấu cách mà bạn muốn nhận tin nhắn tham gia từ đó",
+            "friendDirectMessages":"Nhận thông báo trong DM của bạn bè khi họ tham gia kênh thoại",
+            "friendDirectMessagesSelf":"Nhận thông báo trong DM của bạn bè ngay cả khi bạn ở cùng kênh thoại với họ",
+            "friendDirectMessagesShowMemberCount":"Hiển thị số lượng thành viên khác trong kênh thoại khi nhận được thông báo DM",
+            "friendDirectMessagesShowMembers":"Hiển thị danh sách các thành viên khác trong kênh thoại khi nhận được thông báo DM",
+            "friendDirectMessagesSilent":"Tham gia tin nhắn với bạn bè của bạn DM sẽ im lặng",
+            "ignoreBlockedUsers":"Không gửi tin nhắn về việc người dùng bị chặn tham gia/rời/di chuyển kênh thoại"
+        }
+    },
+    "voiceMessageTranscriber":{
+        "description":"Chép lời tin nhắn bằng giọng nói bằng AI (Whisper)",
+        "modal":{
+            "action":"Hành động",
+            "audioLanguage":"Ngôn ngữ âm thanh",
+            "autoDetect":"Tự động phát hiện",
+            "copied":"Đã sao chép!",
+            "copyToClipboard":"Sao chép vào Clipboard",
+            "downloadingAudio":"Đang tải xuống âm thanh...",
+            "error":"Lỗi",
+            "inProgress":"Đang trong quá trình phiên âm...",
+            "initializing":"Đang khởi tạo...",
+            "loadingModel":"Đang tải mô hình...",
+            "processingAudio":"Đang xử lý âm thanh...",
+            "retry":"Thử lại",
+            "showTimestamps":"Hiển thị dấu thời gian",
+            "start":"Bắt đầu",
+            "transcribe":"Phiên âm",
+            "transcribing":"Phiên âm...",
+            "transcription":"Phiên âm",
+            "transcriptionOptions":"Tùy chọn phiên âm",
+            "translateToEnglish":"Dịch sang tiếng Anh"
+        },
+        "modelOptions":{
+            "base":"Cơ sở (Khuyến nghị)",
+            "medium":"Trung bình (Chậm nhất, độ chính xác tốt nhất)",
+            "small":"Nhỏ",
+            "tiny":"Tiny (Nhanh nhất, độ chính xác thấp nhất)"
+        },
+        "settings":{
+            "delete":"Xóa tất cả các tập tin được lưu trong bộ nhớ cache",
+            "quantized":"Sử dụng mô hình lượng tử hóa (kích thước nhỏ hơn, độ chính xác thấp hơn một chút)",
+            "selectedModel":"Kích thước mô hình"
+        }
+    },
+    "voiceRejoin":{
+        "description":"Tự động tham gia lại các kênh thoại sau khi mất kết nối",
+        "preventionOptions":{
+            "both":"DM và máy chủ",
+            "dms":"chỉ DM",
+            "none":"Không",
+            "servers":"Chỉ máy chủ"
+        },
+        "settings":{
+            "applyOnlyToDms":"Chỉ áp dụng cho DM",
+            "preventReconnectIfCallEnded":"Không kết nối lại nếu cuộc gọi đã kết thúc hoặc kênh thoại trống hoặc không tồn tại",
+            "rejoinDelay":"Đặt độ trễ trước khi nối lại kênh thoại",
+            "rejoinTimeout":"Đừng cố gắng tham gia lại sau nhiều giây trôi qua kể từ khi ngắt kết nối"
+        }
+    },
+    "waitForSlot":{
+        "contextMenu":{
+            "joinQueue":"Tham gia hàng đợi",
+            "leaveQueue":"Rời khỏi hàng đợi"
+        },
+        "description":"Xếp hàng cho các kênh thoại đầy đủ và nhận thông báo khi có vị trí mở",
+        "notices":{
+            "channelFull":"Kênh thoại {channel} đã đầy. Chờ một chỗ?",
+            "join":"Tham gia",
+            "slotAvailable":"Này, có người vừa rời khỏi #{channel} và hiện có chỗ dành cho bạn!",
+            "wait":"Chờ đợi"
+        },
+        "settings":{
+            "autoJoin":"Tham gia kênh ngay thay vì hiện thông báo",
+            "notificationSound":"Phát âm thanh khi có chỗ trống"
+        }
+    },
+    "wallpaperFree":{
+        "contextMenu":{
+            "removeWallpaper":"Xóa hình nền",
+            "setWallpaper":"Đặt hình nền"
+        },
+        "description":"Đặt hình nền tùy chỉnh cho kênh, người dùng hoặc toàn cầu",
+        "settings":{
+            "globalDefault":"Đặt hình nền mặc định chung cho tất cả các kênh",
+            "stylingTips":"Mẹo tạo kiểu"
+        }
+    },
+    "webpackTarball":{
+        "description":"Xuất mô-đun webpack của Discord dưới dạng tarball để phân tích",
+        "modal":{
+            "create":"Tạo",
+            "errors":"lỗi",
+            "lazyChunks":"Khối lười biếng",
+            "loadAll":"Tải tất cả",
+            "loaded":"Đã tải",
+            "loadedStatus":"Đã tải",
+            "loading":"Đang tải",
+            "title":"Tarball gói web"
+        },
+        "settings":{
+            "patched":"Bao gồm các mô-đun được vá"
+        },
+        "toolbox":{
+            "webpackTarball":"Tarball gói web"
+        }
+    },
+    "whitelistedEmojis":{
+        "alerts":{
+            "importConfirmBody":"Điều này sẽ ghi đè danh sách trắng hiện tại của bạn.",
+            "importConfirmTitle":"Bạn có chắc không?",
+            "resetConfirmBody":"Thao tác này sẽ xóa tất cả biểu tượng cảm xúc khỏi danh sách trắng của bạn.",
+            "resetConfirmTitle":"Bạn có chắc không?"
+        },
+        "contextMenu":{
+            "addAllGuildEmojis":"Thêm tất cả biểu tượng cảm xúc của bang hội",
+            "addToWhitelist":"Thêm vào danh sách trắng",
+            "removeAllGuildEmojis":"Xóa tất cả biểu tượng cảm xúc của bang hội",
+            "removeFromWhitelist":"Xóa khỏi danh sách trắng"
+        },
+        "description":"Đưa các biểu tượng cảm xúc cụ thể vào danh sách trắng và ẩn tất cả các biểu tượng cảm xúc khác khỏi bộ chọn biểu tượng cảm xúc",
+        "settings":{
+            "defaultEmojis":"Ẩn biểu tượng cảm xúc mặc định",
+            "disableToasts":"Tắt nâng ly chúc mừng",
+            "exportEmojis":"Xuất biểu tượng cảm xúc",
+            "importEmojis":"Nhập biểu tượng cảm xúc",
+            "resetEmojis":"Đặt lại biểu tượng cảm xúc",
+            "serverEmojis":"Ẩn biểu tượng cảm xúc của máy chủ",
+            "whitelistedEmojis":"Biểu tượng cảm xúc được đưa vào danh sách trắng"
+        },
+        "toasts":{
+            "added":"Đã thêm \"{name}\" vào danh sách",
+            "addedBulk":"Đã thêm biểu tượng cảm xúc {count} vào danh sách, {skipped} đã có trong danh sách",
+            "alreadyInList":"\"{name}\" đã có trong danh sách",
+            "exported":"Đã xuất biểu tượng cảm xúc thành công",
+            "importFailed":"Không nhập được biểu tượng cảm xúc: {error}",
+            "imported":"Đã nhập biểu tượng cảm xúc thành công",
+            "notInList":"\"{name}\" không có trong danh sách",
+            "removed":"Đã xóa \"{name}\" khỏi danh sách",
+            "removedBulk":"Đã xóa biểu tượng cảm xúc {count} khỏi danh sách",
+            "reset":"Đặt lại biểu tượng cảm xúc"
+        },
+        "ui":{
+            "defaultEmojis":"Biểu tượng cảm xúc mặc định",
+            "guildEmojis":"{guild} Biểu tượng cảm xúc",
+            "noEmojis":"Không có biểu tượng cảm xúc trong danh sách trắng.",
+            "removeAll":"Xóa tất cả"
+        }
+    },
+    "whosWatching":{
+        "description":"Xem ai đang xem chia sẻ màn hình hoặc luồng của bạn",
+        "settings":{
+            "showPanel":"Hiển thị người xem dưới bảng chia sẻ màn hình"
+        },
+        "ui":{
+            "noSpectators":"Không có khán giả",
+            "spectators":"Người xem"
+        }
+    },
+    "wigglyText":{
+        "about":{
+            "circle":"trong một vòng tròn bằng cách gõ )~text~^(",
+            "description":"Bạn có thể làm cho văn bản lung lay bằng cách sau:",
+            "leftRight":"trái và phải bằng cách gõ <~text~>",
+            "upDown":"lên xuống bằng cách gõ ^~text~^"
+        },
+        "description":"Làm cho văn bản lung lay với cú pháp đặc biệt (~text~)",
+        "settings":{
+            "intensity":"Cường độ hoạt ảnh tính bằng px"
+        }
+    },
+    "writeUpperCase":{
+        "description":"Tự động viết hoa chữ cái đầu câu",
+        "settings":{
+            "blockedWords":"Các chuỗi không viết hoa (phân tách bằng dấu phẩy)"
+        }
+    },
+    "youtubeDescription":{
+        "description":"Thêm mô tả có thể chuyển đổi để nhúng video YouTube"
     }
 }
