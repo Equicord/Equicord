@@ -903,7 +903,7 @@
         "confirmDelete":"Möchten Sie diese Bewertung wirklich löschen?",
         "confirmReport":"Möchten Sie diese Bewertung wirklich melden?",
         "delete":"Löschen",
-        "failedToFetchBlocks":"Blöcke konnten nicht abgerufen werden: {error}",
+        "failedToFetchBlocks":"Blockierungen konnten nicht abgerufen werden: {error}",
         "mustBeLoggedInBlock":"Sie müssen angemeldet sein, um Benutzer zu blockieren.",
         "mustBeLoggedInDelete":"Sie müssen angemeldet sein, um Bewertungen zu löschen.",
         "mustBeLoggedInReport":"Sie müssen angemeldet sein, um Bewertungen zu melden.",
