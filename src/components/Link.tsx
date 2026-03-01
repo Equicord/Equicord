@@ -7,12 +7,13 @@
 import "./Link.css";
 
 import { classes } from "@utils/misc";
-import type { AnchorHTMLAttributes, PropsWithChildren } from "react";
+import type { JSX, PropsWithChildren } from "react";
 
-export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface LinkProps extends AnchorProps {
     disabled?: boolean;
     useDefaultUnderlineStyles?: boolean;
 }
+type AnchorProps = JSX.IntrinsicElements["a"];
 
 export function Link({
     disabled,
@@ -24,6 +25,7 @@ export function Link({
     children,
     ...restProps
 }: PropsWithChildren<LinkProps>) {
+
     const isInternal = href && /^(?:discord:\/)?\/[a-zA-Z0-9_-]/.test(href);
     const needsSafeAttrs = href && !isInternal;
 
