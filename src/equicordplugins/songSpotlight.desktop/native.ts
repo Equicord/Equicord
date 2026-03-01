@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { CSPSrc, CspPolicies } from "@main/csp";
+import { CspPolicies,CSPSrc } from "@main/csp";
 import * as handlers from "@song-spotlight/api/handlers";
 import type { Song } from "@song-spotlight/api/structs";
 import { setFetchHandler } from "@song-spotlight/api/util";
