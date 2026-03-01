@@ -9,6 +9,36 @@
     "addonCard":{
         "new":"NOU"
     },
+    "alwaysAnimate":{
+        "description":"Animă tot ceea ce poate fi animat",
+        "settings":{
+            "icons":"Animați întotdeauna pictogramele serverului, avatarele, decorul și multe altele",
+            "nameplates":"Animați întotdeauna plăcuțele de identificare",
+            "roleGradients":"Animați întotdeauna gradienți de rol",
+            "serverBanners":"Animați întotdeauna bannere de server",
+            "statusEmojis":"Animați întotdeauna emoji-urile de stare"
+        }
+    },
+    "alwaysExpandRoles":{
+        "description":"Extinde întotdeauna lista de roluri în ferestrele pop-out de profil",
+        "settings":{
+            "hideArrow":"Ascunde săgeata"
+        }
+    },
+    "alwaysTrust":{
+        "description":"Elimină domeniul neîncrezător și pop-up-ul de fișier suspect",
+        "settings":{
+            "confirmModal":"Ar trebui afișat un mod „sunteți sigur că doriți să ștergeți”?",
+            "domain":"Eliminați pop-up-ul de domeniu neîncrezat când deschideți link-uri",
+            "file":"Eliminați fereastra pop-up „Descărcare potențial periculoasă” când deschideți link-uri",
+            "noDeleteSafety":"Elimină cerința de introducere a numelui serverului atunci când ștergeți un server"
+        },
+        "ui":{
+            "deleteServerBody":"Este permanent, dacă nu era evident.",
+            "deleteServerConfirm":"Șterge",
+            "deleteServerTitle":"Ștergeți serverul?"
+        }
+    },
     "anonymiseFileNames":{
         "commands":{
             "spoiler":{
@@ -92,6 +122,22 @@
             "title":"Cum se utilizează arRPC"
         }
     },
+    "autoDndWhilePlaying":{
+        "description":"Actualizează automat starea dvs. online (online, inactiv, dnd) atunci când lansați jocuri",
+        "settings":{
+            "excludeInvisible":"Preveniți modificările automate ale stării în timp ce starea dvs. este setată la invizibil",
+            "statusToSet":"Starea de setat în timpul jocului"
+        },
+        "statusOptions":{
+            "dnd":"Nu deranja",
+            "idle":"Inactiv",
+            "invisible":"Invizibil",
+            "online":"Online"
+        }
+    },
+    "badgeAPI":{
+        "description":"API pentru a adăuga insigne utilizatorilor"
+    },
     "betterFolders":{
         "settings":{
             "closeAllFolders":"Închideți toate folderele când selectați un server care nu se află într-un folder",
@@ -108,6 +154,22 @@
             "sidebarAnim":"Animați deschiderea barei laterale a folderului"
         }
     },
+    "betterGifAltText":{
+        "description":"Schimbați textul alternativ GIF de la pur și simplu „GIF” la conține etichetele GIF/numele fișierului"
+    },
+    "betterGifPicker":{
+        "description":"Face ca selectorul de gif să deschidă în mod implicit categoria preferată",
+        "settings":{
+            "keepOpen":"Păstrează deschis selectorul de gif după selectarea unui gif"
+        }
+    },
+    "betterNotesBox":{
+        "description":"Ascundeți notele sau dezactivați verificarea ortografică (Configurați în setări!!)",
+        "settings":{
+            "hide":"Ascunde notele",
+            "noSpellCheck":"Dezactivați verificarea ortografică în note"
+        }
+    },
     "betterRoleContext":{
         "copyRoleColor":"Copiați culoarea rolului",
         "description":"Adaugă opțiuni pentru a copia culoarea rolului / edita rolul / vizualiza pictograma rol atunci când faceți clic dreapta pe roluri din profilul utilizatorului",
@@ -117,6 +179,13 @@
             "roleIconFileFormat":"Format de fișier de utilizat la vizualizarea pictogramelor de rol"
         },
         "viewRoleIcon":"Pictograma Vizualizare Rol"
+    },
+    "betterRoleDot":{
+        "description":"Copiați culoarea rolului pe RoleDot (setare de accesibilitate) faceți clic. De asemenea, permite utilizarea simultană atât a numelor RoleDot, cât și a numelor colorate",
+        "settings":{
+            "bothStyles":"Afișați atât punctul de rol, cât și numele colorate",
+            "copyRoleColorInProfilePopout":"Permiteți clic pe punctul de rol din fereastra pop-up profil pentru a copia culoarea rolului"
+        }
     },
     "betterSessions":{
         "newBadge":"NOU",
@@ -140,10 +209,20 @@
             "organizeMenu":"Organizează meniul contextual al setărilor cog în categorii"
         }
     },
+    "betterUploadButton":{
+        "description":"Încărcați cu un singur clic, deschideți meniul cu clic dreapta"
+    },
     "biggerStreamPreview":{
         "description":"Acest plugin vă permite să măriți previzualizările fluxului",
         "name":"BiggerStreamPreview",
         "viewStreamPreview":"Vizualizați previzualizarea fluxului"
+    },
+    "blurNsfw":{
+        "description":"Estompați atașamentele în canalele NSFW până când treceți cu mouse-ul",
+        "settings":{
+            "blurAllChannels":"Estompați atașamentele pe toate canalele (nu doar NSFW)",
+            "blurAmount":"Cantitatea de estompare (în pixeli)"
+        }
     },
     "callTimer":{
         "description":"Adăugați temporizatoare de apel pentru toți utilizatorii în canalele vocale și în starea conexiunii.",
@@ -158,6 +237,12 @@
         }
     },
     "cancel":"Anulează",
+    "chatInputButtonAPI":{
+        "description":"[[PH0]]] pentru a adăuga butoane la intrarea în chat"
+    },
+    "clearURLs":{
+        "description":"Elimină automat elementele de urmărire din adresele URL pe care le trimiteți"
+    },
     "clientTheme":{
         "contrastWarning":"Culoarea selectată nu va contrasta bine cu textul",
         "disableNitroTheme":"Dezactivează tema Nitro",
@@ -196,6 +281,12 @@
             "updatedRemote":"Setările dvs. au fost actualizate! Faceți clic aici pentru a reporni pentru a aplica complet modificările!"
         }
     },
+    "colorSighted":{
+        "description":"Elimină pictogramele pentru daltonism din stări, la fel ca în 2015-2017 Discord"
+    },
+    "commandsAPI":{
+        "description":"[[PH0]]] cerut de orice lucru care utilizează comenzi"
+    },
     "consoleJanitor":{
         "alwaysAllowLoggers":"Permiteți întotdeauna loggerele de acest tip",
         "description":"Dezactivează mesajele/erorile enervante ale consolei",
@@ -206,6 +297,12 @@
             "disableSpotifyLogger":"Dezactivați loggerul Spotify, care scurge informații despre cont și simbolul de acces",
             "whitelistedLoggers":"Listă de jurnalişti separate prin punct şi două puncte, pentru a permite chiar dacă altele sunt ascunse"
         }
+    },
+    "consoleShortcuts":{
+        "description":"Adaugă aliasuri mai scurte pentru multe lucruri din fereastră. Rulați [[PH0]]] pentru o listă."
+    },
+    "contextMenuAPI":{
+        "description":"API pentru adăugarea/eliminarea elementelor din/din meniurile contextuale"
     },
     "contributorCard":{
         "contributionsButton":"Vezi la ce ai contribuit",
@@ -234,6 +331,43 @@
     "copyUserURLs":{
         "copyUserURL":"Copiați utilizatorul [[PH0]]]",
         "description":"Adaugă opțiunea „Copiere utilizator URL” în meniul contextual al utilizatorului."
+    },
+    "crashHandler":{
+        "description":"Plugin de utilitate pentru gestionarea și, eventual, recuperarea după blocări fără repornire",
+        "notifications":{
+            "crashedBody":"Awn :( Discord s-a prăbușit de două ori rapid, fără a încerca să se recupereze. Faceți clic aici pentru a vă alătura serverului nostru de asistență!",
+            "crashedTitle":"[[PH0]]] s-a prăbușit!",
+            "invalidInvite":"Invitație nevalidă sau expirată",
+            "recoveringBody":"Încercarea de recuperare... Faceți clic aici pentru a vă alătura serverului nostru de asistență!"
+        },
+        "settings":{
+            "attemptToNavigateToHome":"Dacă să încercați să navigați la casă atunci când preveniți blocările Discord.",
+            "attemptToPreventCrashes":"Dacă să încercați să preveniți blocările Discord."
+        },
+        "updatePrompt":"[[PH0]]] tocmai s-a prăbușit... dar vești bune, există o actualizare Equicord disponibilă care ar putea remedia această problemă! Doriți să actualizați acum?"
+    },
+    "ctrlEnterSend":{
+        "description":"Folosiți Ctrl+Enter pentru a trimite mesaje (personalizat)",
+        "settings":{
+            "sendMessageInTheMiddleOfACodeBlock":"Dacă trebuie să trimiteți un mesaj în mijlocul unui bloc de cod",
+            "submitRule":"Modul de a trimite un mesaj"
+        },
+        "submitRuleOptions":{
+            "ctrlEnter":"Ctrl+Enter (Enter sau Shift+Enter pentru linia nouă) (cmd+Enter pe macOS)",
+            "enter":"Enter (Shift+Enter pentru linia nouă; Discord implicit)",
+            "shiftEnter":"Shift+Enter (Enter pentru linia nouă)"
+        }
+    },
+    "customIdle":{
+        "description":"Vă permite să setați ora înainte ca Discord să devină inactiv (sau să dezactivați modul inactiv automat)",
+        "settings":{
+            "idleTimeout":"Minute înainte ca Discord să fie inactiv (0 pentru a dezactiva modul inactiv automat)",
+            "remainInIdle":"Când reveniți la Discord, rămâneți inactiv până când confirmați că doriți să vă conectați"
+        },
+        "ui":{
+            "backOnlineMessage":"Bine ai revenit! Faceți clic pe butonul pentru a intra online. Faceți clic pe X pentru a rămâne inactiv până la reîncărcare.",
+            "exitIdle":"Ieșiți inactiv"
+        }
     },
     "customRPC":{
         "activityType":"Tip de activitate",
@@ -322,6 +456,17 @@
         "removeDecoration":"Îndepărtați decorul",
         "title":"Decor"
     },
+    "devCompanion":{
+        "description":"Dev Companion Plugin. Vă rugăm să raportați orice nu funcționează sau este ciudat (cel mai probabil este o eroare) lui Sadan, fie ping, fie dm, mulțumesc!",
+        "settings":{
+            "notifyOnAutoConnect":"Dacă să notifice când Dev Companion s-a conectat automat.",
+            "reloadAfterToggle":"Reîncărcați după ce este primită o comandă de dezactivare/activare a pluginului.",
+            "usePatchedModule":"La solicitările de extragere, răspundeți cu modulul corecționat curent (dacă este corectat) în loc de modulul original."
+        }
+    },
+    "disableCallIdle":{
+        "description":"Dezactivează primirea automată de la un apel vocal DM după 3 minute și mutarea pe un canal vocal AFK."
+    },
     "donate":"Dona",
     "donorCard":{
         "donated":{
@@ -335,6 +480,12 @@
             "description":"Vă rugăm să luați în considerare sprijinirea dezvoltării Equicord prin donație!",
             "title":"Susține proiectul"
         }
+    },
+    "dontRoundMyTimestamps":{
+        "description":"Rotunjește întotdeauna marcajele de timp relative în jos, astfel încât 7.6y devine 7y în loc de 8y"
+    },
+    "dynamicImageModalAPI":{
+        "description":"Vă permite să omiteți fie lățimea, fie înălțimea atunci când deschideți un mod de imagine"
     },
     "experiments":{
         "description":"Activați accesul la Experimente și la alte funcții numai pentru dezvoltatori în Discord!",
@@ -357,6 +508,9 @@
         "failedToClone":"Clonarea eșuată: [[PH0]]]",
         "nameValidation":"Numele trebuie să aibă între 2 și 32 de caractere",
         "somethingWentWrong":"Ceva a mers prost (verificați consola!)"
+    },
+    "f8break":{
+        "description":"Întrerupeți clientul când apăsați F8 cu DevTools (+ puncte de întrerupere) deschise."
     },
     "failedToRender":"Nu s-a putut reda fila {tab}. Dacă această problemă persistă, încercați să utilizați programul de instalare pentru a reinstala!",
     "fakeNitro":{
@@ -401,6 +555,40 @@
         "primary":"Primar",
         "usage":"Utilizare"
     },
+    "favEmojiFirst":{
+        "description":"Pune emoji-ul tău preferat pe primul loc în completarea automată emoji și are, de asemenea, alias emoji.",
+        "settings":{
+            "aliases":"Gestionați-vă aliasurile emoji.",
+            "clearAll":"Ștergeți toate aliasurile."
+        },
+        "ui":{
+            "aliasRequired":"Aliasul este necesar.",
+            "aliasSetFor":"Alias setat pentru {emoji}.",
+            "aliasValidation":"Aliasul trebuie să aibă 2-32 de caractere și să folosească numai litere mici, cifre sau caractere de subliniere.",
+            "confirmModal":{
+                "confirmButton":"Ștergeți toate aliasurile",
+                "description":"Acest lucru va elimina fiecare alias emoji pe care l-ați salvat.",
+                "title":"Ștergeți toate aliasurile"
+            },
+            "deleteAllAliases":"Ștergeți toate aliasurile",
+            "deletedAllAliases":"S-au șters toate aliasurile emoji.",
+            "duplicateAlias":"Alias duplicat",
+            "editAlias":"Editați alias",
+            "failedToDelete":"Nu s-au șters aliasurile.",
+            "failedToRemove":"Nu s-a putut elimina aliasul.",
+            "failedToSave":"Nu s-a salvat aliasul.",
+            "modal":{
+                "placeholder":"Alias, de ex. \"suspin\"",
+                "save":"Salvează",
+                "setDescription":"Setați un alias pentru {emoji}",
+                "setTitle":"Setați alias"
+            },
+            "noAliasesYet":"Încă nu au fost stabilite aliasuri.",
+            "remove":"Eliminare",
+            "removedAlias":"Alias eliminat :{alias}:",
+            "setAlias":"Setați alias"
+        }
+    },
     "favGifSearch":{
         "description":"Adaugă o bară de căutare la gif-urile preferate.",
         "name":"FavoriteGifSearch",
@@ -413,6 +601,9 @@
         "settings":{
             "searchOption":"Partea din adresa URL pe care doriți să o căutați"
         }
+    },
+    "fixCodeblockGap":{
+        "description":"Elimină decalajul dintre blocurile de cod și textul de sub acesta"
     },
     "fixImagesQuality":{
         "animatedImagesAlways":"Imaginile animate (GIF, WebP etc.) din chat vor fi întotdeauna animate, indiferent dacă aplicația este focalizată.",
@@ -427,9 +618,51 @@
             "originalImagesInChat":"De asemenea, încărcați imaginea originală în Chat. AVERTISMENT: Citiți avertismentele de mai sus"
         }
     },
+    "fixSpotifyEmbeds":{
+        "description":"Remediază încorporarea spotify fiind incredibil de tare, permițându-vă să personalizați volumul",
+        "settings":{
+            "volume":"% de volum de setat pentru încorporarea spotify. Orice peste 10% este foarte tare"
+        }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"Omite videoclipurile YouTube blocate de afișare pe Discord (de exemplu, de către UMG)"
+    },
+    "forceOwnerCrown":{
+        "description":"Forțați coroana proprietarului lângă nume de utilizator, chiar dacă serverul este mare."
+    },
+    "friendInvites":{
+        "commands":{
+            "createFriendInvite":{
+                "description":"Generează un link de invitare a unui prieten.",
+                "name":"creați invitația unui prieten"
+            },
+            "revokeFriendInvites":{
+                "description":"Revocă toate invitațiile generate de prieteni.",
+                "name":"revoca invitațiile de prieteni"
+            },
+            "viewFriendInvites":{
+                "description":"Vedeți o listă cu toate invitațiile generate de prieteni.",
+                "name":"vizualizați invitațiile de prieteni"
+            }
+        },
+        "description":"Creați și gestionați link-uri de invitație de prieteni prin comenzi oblice (/creați invitația de prieteni, /vedeți invitațiile de prieteni, /revocați invitațiile de prieteni).",
+        "ui":{
+            "allRevoked":"Toate invitațiile de prieteni au fost revocate.",
+            "expires":"Expiră:",
+            "maxUses":"Utilizări maxime:",
+            "noActiveInvites":"Nu aveți invitații active de prieteni!",
+            "timesUsed":"Timp folosit:"
+        }
+    },
     "friendsSince":{
         "description":"Afișează când v-ați împrietenit cu cineva în fereastra pop-up utilizator",
         "heading":"Prieteni de când"
+    },
+    "fullSearchContext":{
+        "description":"Face ca meniul contextual al mesajului din rezultatele căutării mesajelor să aibă toate opțiunile la care te-ai aștepta"
+    },
+    "fullUserInChatbox":{
+        "description":"Face ca utilizatorul să menționeze în caseta de chat mai multe funcționalități, cum ar fi clic stânga/dreapta"
     },
     "gameActivityToggle":{
         "description":"Adaugă un buton lângă microfon și butonul de asurzire pentru a comuta activitatea de joc.",
@@ -441,6 +674,9 @@
             "locationToolbox":"[[PH0]]] Caseta de instrumente",
             "oldIcon":"Utilizați vechiul stil de pictogramă înainte de reproiectarea pictogramei Discord"
         }
+    },
+    "gifPaste":{
+        "description":"Face ca alegerea unui gif în selectorul de gif să insereze un link în caseta de chat în loc să îl trimită instantaneu"
     },
     "greetStickerPicker":{
         "ariaLabel":"Salutați Selectorul de autocolante",
@@ -458,6 +694,9 @@
         "hideMedia":"Ascundeți media",
         "mediaHidden":"Media ascunsă",
         "showMedia":"Afișează Media"
+    },
+    "iLoveSpam":{
+        "description":"Nu ascunde mesajele de la „probabilii spammeri”"
     },
     "ignoreActivities":{
         "disableActivity":"Dezactivați activitatea",
@@ -483,6 +722,15 @@
             "whitelist":"Lista albă"
         }
     },
+    "imageFilename":{
+        "description":"Afișați numele fișierului imaginilor și GIF-urilor ca un sfat explicativ atunci când treceți cu mouse-ul peste ele",
+        "settings":{
+            "showFullUrl":"Afișați întreaga imagine URL în loc de doar numele fișierului. Activat întotdeauna pentru GIF-uri, deoarece de obicei nu au un nume de fișier semnificativ"
+        }
+    },
+    "imageLink":{
+        "description":"Nu ascunde niciodată linkurile de imagini în mesaje, chiar dacă este singurul conținut"
+    },
     "imageZoom":{
         "lensSize":"Dimensiunea lentilelor",
         "nearestNeighbour":"Cel mai apropiat vecin",
@@ -499,7 +747,29 @@
         "zoom":"Zoom",
         "zoomSpeed":"Viteza de zoom"
     },
+    "implicitRelationships":{
+        "description":"Afișează relațiile implicite în fila Prieteni.",
+        "settings":{
+            "sortByAffinity":"Dacă să sortați relațiile implicite după afinitatea lor față de dvs."
+        },
+        "ui":{
+            "implicitHeader":"Implicit — [[PH0]]]",
+            "implicitSection":"Implicit"
+        }
+    },
     "invite":"Invită",
+    "ircColors":{
+        "description":"Face culorile numelor de utilizator din chat unice, ca în clienții IRC",
+        "settings":{
+            "applyColorOnlyInDms":"Aplica culori numai in mesajele directe; nu aplicați culori în servere.",
+            "applyColorOnlyToUsersWithoutColor":"Aplicați culori numai utilizatorilor care nu au o culoare predefinită",
+            "lightness":"Lejeritate, în %. Schimbați dacă culorile sunt prea deschise sau prea întunecate",
+            "memberListColors":"Înlocuiți culorile rolului în lista de membri"
+        }
+    },
+    "keepCurrentChannel":{
+        "description":"Încercați să navigați la canalul în care vă aflați înainte de a schimba conturile sau de a încărca Discord."
+    },
     "lastfmRichPresence":{
         "apiKeyInstructions":"Setați <0>Numele aplicației</0> și <1>Descrierea aplicației</1> la orice și lăsați restul necompletat.",
         "createApiKey":"Creați cheia [[PH0]]].",
@@ -540,6 +810,19 @@
         }
     },
     "loading":"Încărcare...",
+    "loadingQuotes":{
+        "description":"Înlocuiți ghilimele de încărcare Discords",
+        "settings":{
+            "additionalQuotes":"Pot apărea eventual citate personalizate suplimentare, separate prin delimitatorul de mai jos",
+            "additionalQuotesDelimiter":"Delimitator pentru citate suplimentare",
+            "enableDiscordPresetQuotes":"Activați ghilimele prestabilite ale lui Discord (inclusiv ghilimele pentru evenimente, în timpul evenimentelor)",
+            "enablePluginPresetQuotes":"Activați ghilimele prestabilite de acest plugin",
+            "replaceEvents":"Acest plugin ar trebui să se aplice și în timpul evenimentelor cu citate tematice pentru evenimente speciale? (de exemplu, Halloween)"
+        },
+        "ui":{
+            "noQuotesQuote":"Ai dezactivat cu adevărat toate ghilimelele de încărcare? ce bufon esti..."
+        }
+    },
     "logs":{
         "allLogsCleared":"Toate jurnalele au fost șterse",
         "clearAll":"Ștergeți tot",
@@ -562,6 +845,84 @@
             "toolTip":"Afișați numărul de membri pe sfatul cu instrumente al serverului",
             "voiceActivity":"Afișați activitatea vocală cu numărul de membri în lista de membri"
         }
+    },
+    "memberListDecoratorsAPI":{
+        "description":"API pentru a adăuga decoratori la lista de membri (atât în servere, cât și în DM)"
+    },
+    "mentionAvatars":{
+        "description":"Afișează avatarele utilizatorilor și pictogramele de rol în interiorul mențiunilor",
+        "settings":{
+            "showAtSymbol":"Dacă simbolul @ ar trebui să fie afișat pe mențiunile utilizatorului"
+        }
+    },
+    "menuItemDemanglerAPI":{
+        "description":"Demanglesează modulul Element de meniu al lui [[PH0]]]"
+    },
+    "messageAccessoriesAPI":{
+        "description":"[[PH0]]] pentru a adăuga accesorii pentru mesaje"
+    },
+    "messageClickActions":{
+        "actions":{
+            "copyContent":"Copiați conținut",
+            "copyId":"Copiază ID",
+            "copyLink":"Copiază link-ul",
+            "copyUserId":"Copiați ID-ul utilizatorului",
+            "delete":"Șterge",
+            "edit":"Editează",
+            "none":"Niciunul",
+            "openTab":"Deschide Tab",
+            "openThread":"Deschideți subiectul",
+            "pin":"Fixează",
+            "quote":"Citat",
+            "react":"Reacţiona",
+            "reply":"Răspunde"
+        },
+        "description":"Personalizați acțiunile de clic pe mesaje.",
+        "modifiers":{
+            "alt":"Alt",
+            "backspace":"Backspace",
+            "ctrl":"[[PH0]]]",
+            "delete":"Șterge",
+            "none":"Niciunul",
+            "shift":"Schimbare"
+        },
+        "settings":{
+            "clickTimeout":"Timeout pentru a distinge clicurile duble/triple (ms)",
+            "deferDoubleClickForTriple":"Întârzierea dublu clic pentru a permite acțiunile de triplu clic (dezactivează triplu clic atunci când este dezactivat)",
+            "disableInDms":"Dezactivați toate acțiunile de clic în mesajele directe",
+            "disableInSystemDms":"Dezactivați toate acțiunile de clic în mesajele de mesaje de sistem",
+            "doubleClickAction":"Acțiune la dublu clic (mesajele dvs.)",
+            "doubleClickHoldThreshold":"Timp maxim de reținere pentru acțiunile de dublu clic (ms). Dacă țineți apăsat mai mult, puteți selecta textul",
+            "doubleClickModifier":"Modificator necesar pentru acțiunea de dublu clic",
+            "doubleClickOthersAction":"Acțiune la dublu clic (mesajele altora)",
+            "quoteWithReply":"Când citezi, răspunde și la mesaj",
+            "reactEmoji":"Emoji de folosit pentru acțiuni de reacție",
+            "selectionHoldTimeout":"Timeout pentru a permite selectarea textului (ms)",
+            "singleClickAction":"Acțiune la un singur clic (mesajele dvs.)",
+            "singleClickModifier":"Modificator necesar pentru acțiunea cu un singur clic (mesajele dvs.)",
+            "singleClickOthersAction":"Acțiune la un singur clic (mesajele altora)",
+            "singleClickOthersModifier":"Modificator necesar pentru acțiunea cu un singur clic (mesajele altora)",
+            "tripleClickAction":"Acțiune la triplu clic",
+            "tripleClickModifier":"Modificator necesar pentru acțiunea de triplu clic",
+            "useSelectionForQuote":"Când citați, utilizați textul selectat dacă este disponibil"
+        },
+        "toasts":{
+            "cannotPin":"Nu se poate fixa: permisiunile lipsesc",
+            "cannotQuote":"Nu se poate cita acest tip de mesaj",
+            "cannotReact":"Nu pot reacționa: lipsesc permisiuni"
+        },
+        "ui":{
+            "linkCopied":"Link copiat!",
+            "messageContentCopied":"Conținutul mesajului a fost copiat!",
+            "messageIdCopied":"ID-ul mesajului a fost copiat!",
+            "userIdCopied":"ID utilizator copiat!"
+        }
+    },
+    "messageDecorationsAPI":{
+        "description":"API pentru a adăuga decorațiuni la mesaje"
+    },
+    "messageEventsAPI":{
+        "description":"[[PH0]]] cerut de orice lucru care utilizează evenimente de mesaj"
     },
     "messageLatency":{
         "clockAhead":"Ceasul acestui utilizator este {delta} înainte.",
@@ -649,6 +1010,50 @@
         },
         "toggleDeletedHighlight":"Comutați Evidențierea ștearsă"
     },
+    "messagePopoverAPI":{
+        "description":"API pentru a adăuga butoane la popover-urile de mesaje"
+    },
+    "messageTags":{
+        "commands":{
+            "create":"Creați o nouă etichetă",
+            "delete":"Eliminați o etichetă de pe dvs",
+            "list":"Listează toate etichetele de la tine",
+            "message":"Mesajul pe care îl veți trimite când utilizați această etichetă",
+            "preview":"Previzualizează o etichetă fără a o trimite public",
+            "tagName":"Numele etichetei care declanșează răspunsul",
+            "tags":"Gestionați toate etichetele pentru dvs"
+        },
+        "description":"Vă permite să salvați mesaje și să le utilizați cu o comandă simplă.",
+        "settings":{
+            "clydeDescription":"Dacă este activat, clyde vă va trimite un mesaj efemer atunci când a fost folosită o etichetă.",
+            "clydeName":"Mesaj Clyde la trimitere"
+        },
+        "ui":{
+            "allTags":"Toate etichetele:",
+            "invalidSubCommand":"Subcomandă nevalidă",
+            "noTagsYet":"Woops! Nu există încă etichete, utilizați `/tags create` pentru a crea una!",
+            "tagAlreadyExists":"O etichetă cu numele **[[PH0]]]** există deja!",
+            "tagCreated":"S-a creat cu succes eticheta **[[PH0]]]**!",
+            "tagDeleted":"Eticheta **[[PH0]]]** a fost ștearsă cu succes!",
+            "tagDoesNotExist":"Eticheta **[[PH0]]]** nu mai există! Vă rugăm să reîncărcați Discord pentru a remedia :)",
+            "tagDoesNotExist2":"O etichetă cu numele **[[PH0]]]** nu există!",
+            "tagSent":"Eticheta **[[PH0]]]** a fost trimisă!"
+        }
+    },
+    "messageUpdaterAPI":{
+        "description":"API pentru actualizarea și redarea din nou a mesajelor"
+    },
+    "moreQuickReactions":{
+        "description":"Îmbunătățește butoanele de reacție rapidă din meniul contextual al mesajului.",
+        "settings":{
+            "columns":"Coloane de reacții rapide de afișat",
+            "compactMode":"Scala butoanele la 75% din scara lor originală, în timp ce crește emoji-ul interior la scara de 125%. Emoji-urile vor avea 93,75% din dimensiunea originală. Se recomandă să aibă minimum 5 coloane",
+            "frequentEmojis":"Folosiți emoji-urile utilizate frecvent în loc de emoji-urile preferate",
+            "reactionCount":"Număr de reacții (0-42)",
+            "rows":"Rânduri de reacții rapide de afișat",
+            "scroll":"Activați derularea listei de emoji-uri"
+        }
+    },
     "mutualGroupDMs":{
         "description":"Afișează dms-uri de grup reciproc în profiluri",
         "members_one":"[[PH0]]] Membru",
@@ -678,6 +1083,52 @@
             "voiceChannels":"Ascundeți automat numele în canalele vocale"
         }
     },
+    "nicknameIconsAPI":{
+        "description":"API pentru a adăuga pictograme la porecla, în profiluri"
+    },
+    "noBlockedMessages":{
+        "description":"Ascunde complet toate mesajele blocate/ignorate din chat.",
+        "settings":{
+            "allowAutoModMessages":"Permiteți mesajelor trimise de AutoMod să ocolească filtrarea.",
+            "alsoHideIgnoredUsers":"De asemenea, ascundeți mesajele de la utilizatorii ignorați.",
+            "defaultHideUsers":"Dacă este activată, mesajele de la utilizatorii blocați vor fi complet ascunse și toate mesajele de la ID-urile de utilizator din lista de înlocuire vor fi restrânse (comportament Discord implicit). Dacă este dezactivată, mesajele de la utilizatorii blocați vor fi restrânse și toate mesajele de la ID-urile de utilizator din lista de înlocuire vor fi complet ascunse.",
+            "disableNotifications":"Ascundeți notificările de mesaje noi pentru utilizatorii blocați. Întotdeauna adevărat dacă „Ascundeți utilizatorii prestabiliți” este activat mai jos și utilizatorul care declanșează notificarea nu este scutit de „Înlocuire utilizatori”.",
+            "hideBlockedUserReplies":"Ascundeți răspunsurile utilizatorilor blocați.",
+            "overrideUsers":"Listă separată de virgulă cu ID-uri de utilizator care vor fi ascunse sau restrânse în loc de comportamentul implicit selectat mai sus."
+        }
+    },
+    "noDeepLinks":{
+        "description":"Dezactivează funcția stupidă de conectare profundă a lui Discord, care încearcă să te oblige să folosești aplicația pentru desktop"
+    },
+    "noDevtoolsWarning":{
+        "description":"Dezactivează bannerul „HOLD UP” din consolă. Ca efect secundar, împiedică Discord să-ți ascundă simbolul, ceea ce împiedică deconectarea aleatorie."
+    },
+    "noF1":{
+        "description":"Dezactivați legarea de ajutor F1."
+    },
+    "noMaskedUrlPaste":{
+        "description":"Lipirea unui link în timp ce textul este selectat nu se va lipi ca mascat URL"
+    },
+    "noMosaic":{
+        "description":"Elimină [[PH0]]] mozaic de imagine",
+        "settings":{
+            "inlineVideo":"Redați videoclipuri fără modal carusel"
+        }
+    },
+    "noOnboardingDelay":{
+        "description":"Omite întârzierea lentă și enervantă la îmbarcare"
+    },
+    "noPendingCount":{
+        "description":"Elimină numărul de ping al solicitărilor de prietenie, al solicitărilor de mesaje și al ofertelor nitro primite.",
+        "settings":{
+            "hideFriendRequestsCount":"Ascunde numărul de solicitări de prietenie primite",
+            "hideMessageRequestsCount":"Ascunde numărul de solicitări de mesaje",
+            "hidePremiumOffersCount":"Ascunde numărul de oferte nitro"
+        }
+    },
+    "noProfileThemes":{
+        "description":"Elimină complet temele de profil Nitro de la toată lumea, în afară de tine"
+    },
     "noReplyMention":{
         "description":"Dezactivează ping-urile de răspuns în mod implicit",
         "settings":{
@@ -687,6 +1138,64 @@
             "roleList":"Lista de roluri pentru care să se permită sau să scuteze ping-urile (separate prin virgule sau spații)",
             "shouldPingListed":"Comportament",
             "userList":"Lista de utilizatori pentru care să permită sau să excludă ping-urile (separați prin virgule sau spații)"
+        }
+    },
+    "noServerEmojis":{
+        "description":"Nu afișați emoji-urile serverului în meniul de completare automată.",
+        "settings":{
+            "shownEmojis":"Tipurile de emoji-uri de afișat în meniul de completare automată.",
+            "shownEmojisOptions":{
+                "all":"Emoji-uri Unicode și toate emoji-urile de server (Discord implicit)",
+                "currentServer":"Emoji-uri Unicode și emoji-uri de server de pe serverul actual",
+                "onlyUnicode":"Doar emoji-uri unicode"
+            }
+        }
+    },
+    "noSystemBadge":{
+        "description":"Dezactivează bara de activități și insigna de numărare necitite din bara de sistem."
+    },
+    "noTypingAnimation":{
+        "description":"Dezactivează animația cu puncte de tastare intensivă CPU"
+    },
+    "noUnblockToJump":{
+        "description":"Vă permite să accesați mesajele utilizatorilor blocați sau ignorați și probabili spammeri fără a le debloca"
+    },
+    "noticesAPI":{
+        "description":"Corectează notificările care au fost respinse automat"
+    },
+    "notificationVolume":{
+        "description":"Salvați-vă urechile și setați un volum separat pentru notificări și sunetele din aplicație",
+        "settings":{
+            "notificationVolume":"Volumul notificărilor"
+        }
+    },
+    "onePingPerDM":{
+        "description":"Dacă mesajele necitite sunt trimise de un utilizator în DM-uri de mai multe ori, veți primi un singur ping audio.",
+        "settings":{
+            "allowEveryone":"Primiți ping-uri audio pentru @everyone și @here în DM-uri de grup",
+            "allowMentions":"Primiți ping-uri audio pentru @mențiuni",
+            "alwaysPlaySound":"Redați sunetul de notificare a mesajului chiar și atunci când este dezactivat",
+            "channelToAffect":"Selectați tipul de DM pe care pluginul îl va afecta",
+            "channelToAffectOptions":{
+                "both":"ambele",
+                "groupDm":"[[PH0]]] DM-uri",
+                "userDm":"DM-urile utilizatorilor"
+            },
+            "ignoreUsers":"ID-uri de utilizator (virgulă + spațiu) ale căror ping-uri nu ar trebui NICIODATĂ reduse"
+        }
+    },
+    "openInApp":{
+        "description":"Deschideți linkuri în aplicațiile lor respective în loc de browser",
+        "settings":{
+            "epic":"Deschideți linkurile Epic Games în Epic Games Launcher",
+            "itunes":"Deschideți linkurile Apple Music în aplicația iTunes",
+            "spotify":"Deschideți linkurile Spotify în aplicația Spotify",
+            "steam":"Deschideți linkurile Steam în aplicația Steam",
+            "tidal":"Deschideți linkurile Tidal în aplicația Tidal",
+            "vrcx":"Deschideți linkurile VRChat în aplicația VRCX"
+        },
+        "ui":{
+            "openedInApp":"Link deschis în aplicația nativă"
         }
     },
     "overrideForumDefaults":{
@@ -710,6 +1219,13 @@
         "name":"PauseInvitesForever",
         "pauseIndefinitely":"Pauză la infinit."
     },
+    "permissionFreeWill":{
+        "description":"Dezactivează restricțiile la nivelul clientului pentru gestionarea permisiunilor de canal.",
+        "settings":{
+            "lockout":"Ocoliți prevenirea blocării permisiunii („Sunt sigur că nu doriți să faceți acest lucru”)",
+            "onboarding":"Ocoliți cerințele de îmbarcare („Efectuarea acestei modificări va face serverul dvs. incompatibil [...]”)"
+        }
+    },
     "permissionsViewer":{
         "noPermissions":"Fără permisiuni de afișare!",
         "owner":"proprietar",
@@ -725,6 +1241,29 @@
         "unknownUser":"Utilizator necunoscut",
         "userOptions":"Opțiuni utilizator",
         "viewPermissions":"Vedeți permisiunile"
+    },
+    "petpet":{
+        "commands":{
+            "petpet":{
+                "description":"Creați un gif pentru animale de companie. Puteți specifica doar una dintre opțiunile de imagine",
+                "name":"animal de companie",
+                "options":{
+                    "delay":"Întârzierea dintre fiecare cadru în ms. Rotunjit la 10 ms. Valoarea implicită este 20.",
+                    "image":"Atașament imagine de utilizat",
+                    "noServerPfp":"Utilizați avatarul obișnuit în loc de cel specific server atunci când utilizați opțiunea „utilizator”.",
+                    "resolution":"Rezoluție pentru gif. Implicit la 120. Dacă introduceți un număr nebun și acesta îngheață Discord, este vina ta.",
+                    "url":"[[PH0]]] pentru a prelua imaginea de la",
+                    "user":"Utilizator al cărui avatar să fie folosit ca imagine"
+                }
+            }
+        },
+        "description":"Adaugă o comandă /petpet slash pentru a crea gif-uri pentru cască din orice imagine",
+        "errors":{
+            "delayMinimum":"Întârzierea trebuie să fie de cel puțin 20.",
+            "failedToFetchUser":"Nu s-a putut prelua utilizatorul. Verificați consola pentru mai multe informații.",
+            "noImage":"Nicio imagine specificată!",
+            "uploadNotImage":"Încărcarea nu este o imagine"
+        }
     },
     "pictureInPicture":{
         "description":"Adaugă imagine în imagine la videoclipuri (lângă butonul Descărcare)",
@@ -755,6 +1294,9 @@
             "pinOrder":"În ce ordine ar trebui afișate DM-urile fixate?"
         },
         "unpinDm":"Anulați fixarea DM"
+    },
+    "plainFolderIcon":{
+        "description":"Nu afișa pictogramele de breaslă mici în foldere"
     },
     "platformIndicators":{
         "consoleIcons":{
@@ -795,15 +1337,36 @@
         "description":"Adaugă un buton de mențiune rapidă în bara de acțiuni ale mesajului",
         "label":"Mențiune rapidă"
     },
+    "quickReply":{
+        "description":"Răspundeți la mesajele (ctrl + sus/jos) și editați (ctrl + shift + sus/jos) prin combinații de taste",
+        "settings":{
+            "ignoreBlockedAndIgnored":"Ignorați mesajele utilizatorilor blocați/ignorați atunci când navigați",
+            "shouldMention":"Ping răspuns în mod implicit",
+            "shouldMentionOptions":{
+                "disabled":"Dezactivate",
+                "enabled":"Activat",
+                "followPlugin":"Urmați pluginul NoReplyMention (dacă este activat)"
+            }
+        }
+    },
+    "reactErrorDecoder":{
+        "description":"Înlocuiește „Minifed React Error” cu eroarea reală."
+    },
     "readAllNotificationsButton":{
         "description":"Citiți toate notificările serverului cu un singur clic!",
         "name":"CitițiToateNotificărileButon",
         "readAll":"Citiți Tot"
     },
     "relationshipNotifier":{
+        "description":"Vă anunță când un prieten, un chat de grup sau un server vă elimină.",
         "friendRemoved":"[[PH0]]] te-a eliminat ca prieten.",
         "friendRequestRemoved":"O solicitare de prietenie de la {username} a fost eliminată.",
         "groupRemoved":"Ai fost exclus din grupul {name}.",
+        "notificationTitle":"Notificator de relație",
+        "offlineFriendRemoved":"Nu mai sunteți prieten cu {username}.",
+        "offlineFriendRequestRevoked":"Solicitarea de prietenie de la [[PH0]]] a fost revocată.",
+        "offlineGroupRemoved":"Nu mai faci parte din grupul {name}.",
+        "offlineServerRemoved":"Nu mai sunteți pe serverul {name}.",
         "serverRemoved":"Ai fost eliminat de pe server {name}.",
         "settings":{
             "friendRequestCancels":"Notificați când o solicitare de prietenie este anulată",
@@ -825,6 +1388,12 @@
             "off":"Oprit",
             "replacementEngine":"Înlocuiți cu un anumit motor de căutare în loc să adăugați un meniu"
         }
+    },
+    "replyTimestamp":{
+        "description":"Afișează un marcaj de timp pentru previzualizările mesajului răspuns"
+    },
+    "revealAllSpoilers":{
+        "description":"Dezvăluie toate spoilerele într-un mesaj făcând Ctrl-clic pe un spoiler sau în chat cu Ctrl+Shift-clic"
     },
     "reverseImageSearch":{
         "all":"Toate",
@@ -876,6 +1445,24 @@
         "unblockUser":"Deblocați utilizatorul",
         "viewReviews":"Vezi recenzii"
     },
+    "roleColorEverywhere":{
+        "description":"Adaugă culoarea rolului superior oriunde este posibil",
+        "settings":{
+            "chatMentions":"Afișați culorile rolului în mențiunile de chat (inclusiv în caseta de mesaj)",
+            "colorChatMessages":"Colorează mesajele de chat în funcție de culoarea rolului autorului",
+            "memberList":"Afișați culorile rolului în anteturile de rol din lista de membri",
+            "messageSaturation":"Intensitatea colorării mesajului.",
+            "pollResults":"Afișați culorile rolului în rezultatele sondajului",
+            "reactorsList":"Afișați culorile rolului în lista de reactoare",
+            "voiceUsers":"Afișați culorile rolului în lista de utilizatori ai chatului vocal"
+        }
+    },
+    "secretRingTone":{
+        "description":"Redați întotdeauna versiunea secretă a tonului de apel Discord (cu excepția evenimentelor speciale de ton de apel)",
+        "settings":{
+            "onlySnow":"Joacă numai Tema Snow Halation"
+        }
+    },
     "seeSummaries":{
         "description":"Activează funcția Rezumate experimentale a lui Discord pe fiecare server, afișând rezumate ale conversațiilor generate de AI",
         "name":"Rezumate",
@@ -898,6 +1485,36 @@
         },
         "timestampFormat":"Format de marcaj de timp",
         "timestampPicker":"Selector de marcaje temporale"
+    },
+    "serverInfo":{
+        "description":"Vă permite să vizualizați informații despre un server",
+        "settings":{
+            "sorting":"Nume de utilizator sau, dacă este cazul, Nume afișat",
+            "sortingOptions":{
+                "displayname":"Numele de afișare",
+                "none":"Nu sortați",
+                "username":"Nume de utilizator"
+            }
+        },
+        "ui":{
+            "blockedUsers":"Utilizatori blocați",
+            "channels":"Canale",
+            "createdAt":"Creat la",
+            "friends":"Prieteni",
+            "ignoredUsers":"Utilizatori ignorați",
+            "joinedAt":"S-a alăturat la",
+            "mutualUsers":"Utilizatori reciproci",
+            "preferredLocale":"Localizare preferată",
+            "roles":"Roluri",
+            "serverBoosts":"Creșterea serverului",
+            "serverInfo":"Informații server",
+            "serverOwner":"Proprietarul server-ului",
+            "vanityLink":"Vanity Link",
+            "verificationLevel":"Nivel de verificare"
+        }
+    },
+    "serverListAPI":{
+        "description":"[[PH0]]] este necesar pentru pluginurile care modifică lista de servere"
     },
     "serverListIndicators":{
         "description":"Adăugați numărul de prieteni online sau numărul de servere în lista de servere",
@@ -1038,6 +1655,34 @@
         "failedToImport":"Nu s-au putut importa setările: {e}",
         "imported":"Setările au fost importate cu succes. Reporniți pentru a aplica modificările!"
     },
+    "shikiCodeblocks":{
+        "description":"Aduce blocuri de cod în stil vscode în Discord, dezvoltate de Shiki",
+        "settings":{
+            "bgOpacity":"Opacitatea fundalului",
+            "customTheme":"Un link către o temă vscode personalizată",
+            "theme":"Teme implicite",
+            "tryHljs":"Folosiți evidențiatorul și tema implicite mai ușoare Discord.",
+            "tryHljsOptions":{
+                "always":"Întotdeauna",
+                "never":"Niciodată",
+                "preferHljs":"Preferă Highlight.js în loc de Shiki",
+                "preferShiki":"Preferați Shiki în loc de Highlight.js"
+            },
+            "useDevIcon":"Cum să afișați pictogramele de limbă pe blocurile de cod",
+            "useDevIconOptions":{
+                "colored":"Colorat",
+                "colorless":"Incolor",
+                "disabled":"Dezactivate"
+            }
+        }
+    },
+    "showAllMessageButtons":{
+        "description":"Afișați întotdeauna toate butoanele pentru mesaje, indiferent dacă țineți apăsată tasta Shift sau nu.",
+        "settings":{
+            "noShiftDelete":"Eliminați cerința de a menține shift pentru ștergerea unui mesaj.",
+            "noShiftPin":"Eliminați cerința de a menține shift pentru fixarea unui mesaj."
+        }
+    },
     "showConnections":{
         "description":"Afișați conturile conectate în ferestrele pop-up pentru utilizatori",
         "settings":{
@@ -1057,21 +1702,27 @@
         "channelTypes":{
             "announcement":"anunţ",
             "forum":"forum",
+            "message":"mesaj",
             "messages":"mesaje",
+            "post":"post",
             "posts":"postări",
             "stage":"etapă",
             "text":"text",
+            "thread":"fir",
+            "threads":"fire",
             "voice":"voce"
         },
         "defaultLayout":"Aspect implicit: [[PH0]]]",
         "defaultReactionEmoji":"Emoji de reacție implicit:",
         "defaultSortOrder":"Ordine de sortare implicită: [[PH0]]]",
+        "description":"Afișați canalele pe care nu aveți acces să le vizualizați.",
         "forumLayouts":{
             "gridView":"Gallery view",
             "listView":"Vizualizare listă",
             "notSet":"Nu setat"
         },
         "hiddenChannel":"Acesta este un canal {type} ascuns",
+        "hiddenChannelTooltip":"Canal ascuns",
         "hideAllowedUsersAndRoles":"Ascundeți utilizatorii și rolurile permise",
         "lastMessageCreated":"Ultima [[PH0]]] creată:",
         "lastMessagePin":"Codul ultimului mesaj:",
@@ -1082,6 +1733,24 @@
         "regionAutomatic":"Automat",
         "requireTag":"Postările de pe acest forum necesită setarea unei etichete.",
         "seeGuidelines":" Cu toate acestea, puteți vedea liniile directoare ale acestuia:",
+        "settings":{
+            "channelStyle":{
+                "classic":"Clasic",
+                "description":"Stilul folosit pentru afișarea canalelor ascunse.",
+                "muted":"Amuțit",
+                "mutedAndShowUnreads":"Dezactivat și afișați necitite",
+                "showUnreads":"Afișați necitite"
+            },
+            "defaultAllowedUsersAndRolesDropdownState":{
+                "description":"Dacă meniul drop-down pentru utilizatorii și rolurile permise pe canalele ascunse ar trebui să fie deschis în mod implicit"
+            },
+            "showMode":{
+                "description":"Modul folosit pentru afișarea canalelor ascunse.",
+                "eyeIconRight":"Pictograma ochi din dreapta",
+                "lockIcon":"Pictograma de blocare care înlocuiește pictograma canalului",
+                "lockIconRight":"Pictograma de blocare din dreapta"
+            }
+        },
         "slowmode":"Mod lent: [[PH0]]]",
         "sortOrders":{
             "creationDate":"Data creării",
@@ -1094,6 +1763,14 @@
         },
         "videoQualityMode":"Mod calitate video: [[PH0]]]",
         "viewAllowedUsersAndRoles":"Vedeți utilizatorii și rolurile permise"
+    },
+    "showHiddenThings":{
+        "description":"Afișează diverse lucruri ascunse și numai pentru moderator, indiferent de permisiuni.",
+        "settings":{
+            "showInvitesPaused":"Afișați sfatul explicativ al invitațiilor întrerupte în lista de servere.",
+            "showModView":"Afișați elementul de meniu contextual pentru vizualizarea modului membru pe toate serverele.",
+            "showTimeouts":"Afișați pictogramele de expirare a membrilor în chat."
+        }
     },
     "showMeYourName":{
         "addNickname":"Adăugați pseudonimul SMYN",
@@ -1199,9 +1876,39 @@
             "showDates":"Afișați datele la cererile de prietenie"
         }
     },
+    "spotifyCrack":{
+        "description":"Ascultare gratuită, fără întrerupere automată în chatul vocal și permite activității să continue redarea atunci când este inactiv",
+        "settings":{
+            "keepSpotifyActivityOnIdle":"Păstrați activitatea Spotify redată atunci când este inactiv",
+            "noSpotifyAutoPause":"Dezactivați pauza automată Spotify"
+        }
+    },
+    "spotifyShareCommands":{
+        "commands":{
+            "notListening":"Nu asculți nicio muzică.",
+            "shareDescription":"Distribuiți-vă actualul Spotify {name} în chat",
+            "trackNotFound":"Nu s-a găsit piesa pe spotify."
+        },
+        "description":"Partajați piesa, albumul sau artistul dvs. curent Spotify prin comanda slash (/track, /album, /artist)"
+    },
     "startupTimings":{
+        "description":"Adaugă Timpurile de pornire în meniul Setări",
         "ui":{
             "title":"Moment pornire"
+        }
+    },
+    "stickerPaste":{
+        "description":"Face să alegeți un autocolant în selectorul de autocolante să îl inserați în caseta de chat în loc să îl trimiteți instantaneu"
+    },
+    "streamerModeOnStream":{
+        "description":"Activează automat modul streamer atunci când începeți transmiterea în Discord"
+    },
+    "superReactionTweaks":{
+        "description":"Personalizați limita Super Reactions care se joacă simultan și Super Reaction în mod implicit",
+        "settings":{
+            "superReactByDefault":"Selectorul de reacții va fi implicit Super Reacții",
+            "superReactionPlayingLimit":"Super reacții maxime pentru a juca simultan. 0 pentru a dezactiva redarea Super Reactions",
+            "unlimitedSuperReactionPlaying":"Eliminați limita pentru redarea Super Reacții deodată"
         }
     },
     "tabs":{
@@ -1219,6 +1926,9 @@
         "typeMessage":"Introduceți un mesaj",
         "usingRegex":"Folosind Regex",
         "usingString":"Folosind String"
+    },
+    "themeAttributes":{
+        "description":"Adaugă atribute de date la diferite elemente în scopuri tematice"
     },
     "translate":{
         "autoTranslate":"Traducere automată",
@@ -1258,10 +1968,33 @@
             "showRoleColors":"Afișați culorile rolului în indicatorul de tastare"
         }
     },
+    "unindent":{
+        "description":"Decupează indentarea principală din blocurile de cod"
+    },
+    "unlockedAvatarZoom":{
+        "description":"Vă permite să măriți mai mult instrumentul de tăiere a imaginii atunci când vă schimbați avatarul",
+        "settings":{
+            "zoomMultiplier":"Multiplicator de zoom"
+        }
+    },
     "unsuppressEmbeds":{
         "description":"Vă permite să anulați încorporarea în mesaje",
         "suppressEmbeds":"Suprimați încorporarea",
         "unsuppressEmbeds":"Dezactivați încorporarea"
+    },
+    "userMessagesPronouns":{
+        "description":"Adaugă pronume la mesajele utilizatorilor de chat",
+        "settings":{
+            "pronounsFormat":"Formatul pentru care pronumele să apară în chat",
+            "pronounsFormatOptions":{
+                "capitalized":"Cu majuscule",
+                "lowercase":"Litere mici"
+            },
+            "showSelf":"Activați sau dezactivați afișarea pronumelor pentru dvs"
+        }
+    },
+    "userSettingsAPI":{
+        "description":"Corectează Setările utilizatorului lui [[PH0]]] pentru a-și expune grupul și numele"
     },
     "userVoiceShow":{
         "cannotJoinChannel":"Nu vă puteți alătura canalului vocal al utilizatorului",
@@ -1282,6 +2015,15 @@
             "usrbgBanner":"Banner USRBG",
             "voiceBackground":"Folosiți bannere USRBG ca fundal de chat vocal"
         }
+    },
+    "validReply":{
+        "description":"S-a remediat „Mesajul nu a putut fi încărcat” la trecerea cursorului peste răspuns"
+    },
+    "validUser":{
+        "description":"Remediați mențiunile pentru utilizatorii necunoscuți care apar ca „@unknown-user” (pasați cursorul peste o mențiune pentru a o remedia)"
+    },
+    "vcDoubleClick":{
+        "description":"Alăturați-vă chaturilor vocale prin dublu clic în loc de un singur clic"
     },
     "vcNarrator":{
         "customiseMessages":"Puteți personaliza mesajele vorbite de mai jos. Puteți dezactiva anumite mesaje setându-le la nimic",
@@ -1362,6 +2104,24 @@
         "sending":"Acum se trimite mesajul vocal... Vă rugăm să aveți răbdare",
         "uploadFile":"Încărcați fișierul"
     },
+    "volumeBooster":{
+        "description":"Vă permite să setați volumul utilizatorului și al fluxului peste valoarea maximă implicită",
+        "settings":{
+            "multiplier":"Multiplicator de volum"
+        }
+    },
+    "webContextMenus":{
+        "description":"Readaugă meniurile contextuale care lipsesc în versiunea web a Discord: Linkuri și imagini (Copiare/Deschidere link/Imagine), Text are (Copiare, Decupare, Lipire, Verificare ortografică)",
+        "settings":{
+            "addBack":"Adăugați înapoi meniurile contextuale Discord pentru imagini, linkuri și bara de introducere a chatului"
+        }
+    },
+    "webKeybinds":{
+        "description":"Readaugă combinațiile de taste care lipsesc în versiunea web a Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. Funcționează complet numai pe Vesktop/Legcord, nu în browserul dvs"
+    },
+    "webScreenShareFixes":{
+        "description":"Elimină limita de rată de biți de 2500 kbps pentru clienții chromium și vesktop."
+    },
     "whoReacted":{
         "settings":{
             "avatarClick":"Comutați făcând clic pe avatare în reacții"
@@ -1395,5 +2155,8 @@
         "timeout":"Durata notificării (secunde)",
         "volume":"Volum",
         "webSocketPort":"Portul Websocket"
+    },
+    "youtubeAdblock":{
+        "description":"Blocați anunțurile în încorporările YouTube și activitatea WatchTogether prin AdGuard"
     }
 }
