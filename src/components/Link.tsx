@@ -7,13 +7,12 @@
 import "./Link.css";
 
 import { classes } from "@utils/misc";
-import type { JSX, PropsWithChildren } from "react";
+import type { AnchorHTMLAttributes, DetailedHTMLProps, PropsWithChildren } from "react";
 
-export interface LinkProps extends AnchorProps {
+export interface LinkProps extends DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement> {
     disabled?: boolean;
     useDefaultUnderlineStyles?: boolean;
 }
-type AnchorProps = JSX.IntrinsicElements["a"];
 
 export function Link({
     disabled,
