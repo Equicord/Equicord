@@ -114,7 +114,7 @@
         }
     },
     "betterBlockedUsers":{
-        "description":"Ermöglicht die Suche in der Liste blockierter Benutzer und macht Namen in den Einstellungen auswählbar.",
+        "description":"Ermöglicht die Suche in der Liste der blockierten Benutzer und macht Namen in den Einstellungen auswählbar.",
         "ui":{
             "searchPlaceholder":"Benutzer suchen..."
         }
@@ -139,7 +139,7 @@
         "description":"Sehen Sie sich das Ablaufdatum der Einladungen an, sehen Sie sich das Profil des Einladenden an und zeigen Sie eine Vorschau der Server an, bevor Sie beitreten, indem Sie auf den Namen klicken",
         "ui":{
             "expireTooltip":"Diese Einladung wird {expiry}",
-            "expireWill":"erlöschen",
+            "expireWill":"ablaufen",
             "invitedYouTo":"{inviter} hat Sie zu {guild} eingeladen",
             "notExpire":"nicht ablaufen"
         }
@@ -258,12 +258,12 @@
         "contextMenu":{
             "openInNewTab":"In neuem Tab öffnen"
         },
-        "description":"Group Ihre häufig besuchten Kanäle in Tabs, ähnlich einem Browser"
+        "description":"Gruppiere deine häufig besuchten Kanäle in Tabs, wie in einem Browser"
     },
     "characterCounter":{
         "description":"Fügt der Chat-Eingabe einen Zeichenzähler hinzu",
         "settings":{
-            "colorEffects":"Schalten Sie Farbeffekte ein oder aus, um der Zeichenbeschränkung nahe zu kommen"
+            "colorEffects":"Schalten Sie Farbeffekte ein oder aus, wenn sie der Zeichenbeschränkung nahe zu kommen"
         }
     },
     "cleanChannelName":{
@@ -317,7 +317,7 @@
             "showTags":"Tag-Chips für Befehle anzeigen",
             "visualStyle":"Aussehen der Palette",
             "visualStyleOptions":{
-                "classic":"Klassiker",
+                "classic":"Klassisch",
                 "polished":"Poliert"
             }
         },
@@ -355,7 +355,7 @@
     "copyStatusUrls":{
         "description":"Kopieren Sie die Status-URL des Benutzers, wenn Sie mit der rechten Maustaste darauf klicken",
         "toast":{
-            "copied":"Kopiert URL",
+            "copied":"URL kopiert",
             "error":"Beim Kopieren von URL ist ein Fehler aufgetreten. Weitere Informationen finden Sie in der Konsole"
         }
     },
@@ -363,7 +363,7 @@
         "contextMenu":{
             "copyUserMention":"Benutzererwähnung kopieren"
         },
-        "description":"Fügt eine Schaltfläche zum Kopieren der im Benutzerkontextmenü erwähnten Benutzer hinzu. Funktioniert am besten mit gültigem Benutzer."
+        "description":"Fügt eine Schaltfläche zum Kopieren der im Benutzerkontextmenü erwähnten Benutzer hinzu. Funktioniert am besten mit dem ValidUser Plugin."
     },
     "cursorBuddy":{
         "description":"Fügt ein Sprite hinzu, das Ihrem Cursor folgt.",
@@ -394,8 +394,8 @@
         "description":"Passen Sie die Sounds von Discord an.",
         "settings":{
             "debug":"Debuggen",
-            "export":"Export",
-            "import":"Import",
+            "export":"Exportieren",
+            "import":"Importieren",
             "resetAll":"Alles zurücksetzen",
             "searchPlaceholder":"Suche nach Name oder ID",
             "searchSounds":"Sounds suchen"
