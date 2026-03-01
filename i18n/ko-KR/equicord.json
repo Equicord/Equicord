@@ -86,6 +86,23 @@
             "tooltipRight":"Base64 디코딩(왼쪽 클릭) / 디코딩된 복사(오른쪽 클릭)"
         }
     },
+    "betterActivities":{
+        "description":"디스플레이를 사용자 정의하는 옵션과 함께 구성원 목록 및 사용자 팝아웃의 모든 활동을 표시합니다.",
+        "options":{
+            "carousel":"회전목마",
+            "list":"목록"
+        },
+        "settings":{
+            "allActivitiesStyle":"모든 활동을 표시하는 스타일",
+            "hideTooltip":"활동 아이콘의 툴팁 숨기기",
+            "iconSize":"활동 아이콘의 크기",
+            "memberList":"회원 목록에 활동 표시",
+            "removeGameActivityStatus":"게임 활동 상태 표시기 제거",
+            "renderGifs":"활동 아이콘에서 GIF 렌더링",
+            "specialFirst":"특별 활동을 먼저 표시",
+            "userPopout":"사용자 팝아웃에 모든 활동 표시"
+        }
+    },
     "betterAudioPlayer":{
         "description":"오디오 첨부 플레이어에 분광기와 오실로스코프 시각화 장치를 추가합니다.",
         "settings":{
@@ -1258,6 +1275,57 @@
             "scanQrCode":"QR 코드 스캔"
         }
     },
+    "mediaPlaybackSpeed":{
+        "description":"음성 메시지, 비디오, 오디오 첨부 파일의 미디어 재생 속도 제어",
+        "settings":{
+            "defaultAudioSpeed":"오디오 파일의 기본 재생 속도",
+            "defaultVideoSpeed":"비디오의 기본 재생 속도",
+            "defaultVoiceMessageSpeed":"음성 메시지의 기본 재생 속도"
+        }
+    },
+    "messageBurst":{
+        "description":"일정 기간 내에 연속된 메시지를 병합하여 메시지를 한꺼번에 보냅니다.",
+        "settings":{
+            "shouldMergeWithAttachment":"첨부파일이 있는 메시지 병합 허용",
+            "timePeriod":"메시지를 병합하는 기간(초)",
+            "useSpace":"구분 기호로 개행 대신 공백을 사용하십시오."
+        }
+    },
+    "messageColors":{
+        "description":"색상 미리보기가 포함된 메시지의 색상 코드(16진수, rgb, hsl) 렌더링",
+        "settings":{
+            "blockView":"컬러 블록의 위치",
+            "blockViewOptions":{
+                "bothSides":"텍스트의 양면",
+                "leftSide":"텍스트의 왼쪽",
+                "rightSide":"텍스트 오른쪽"
+            },
+            "enableShortHexCodes":"짧은 16진수 색상 코드 활성화(3자)",
+            "renderType":"메시지의 색상을 렌더링하는 방법",
+            "renderTypeOptions":{
+                "backgroundColor":"배경색 변경",
+                "blockNearby":"색상 블록 표시",
+                "textColor":"텍스트 색상 변경"
+            }
+        }
+    },
+    "messageFetchTimer":{
+        "description":"채팅 표시줄에 메시지 가져오기 시간 표시",
+        "settings":{
+            "iconColor":"가져오기 타이머 아이콘의 색상",
+            "showIcon":"가져오기 타이머 아이콘 표시",
+            "showMs":"초 대신 밀리초 표시"
+        }
+    },
+    "messageLinkTooltip":{
+        "description":"메시지 링크, 답장, 전달된 메시지 위로 마우스를 가져가면 메시지 미리보기 표시",
+        "settings":{
+            "display":"메시지 미리보기의 표시 스타일",
+            "onForward":"전달된 메시지 위로 마우스를 가져가면 도구 설명 표시",
+            "onLink":"메시지 링크 위로 마우스를 가져가면 도구 설명 표시",
+            "onReply":"메시지 답장 위로 마우스를 가져가면 도구 설명 표시"
+        }
+    },
     "messageLoggerEnhanced":{
         "buttons":{
             "exportLogs":"로그 내보내기",
@@ -1326,5 +1394,351 @@
             "timeBasedCleanupMinutes":"이 시간(분)보다 오래된 메시지를 서버에서 자동으로 제거합니다. 시간 기반 정리를 비활성화하려면 0으로 설정합니다.",
             "whitelistedIds":"화이트리스트에 있는 서버, 채널 또는 사용자 ID."
         }
+    },
+    "messageNotifier":{
+        "description":"특정 사용자가 메시지를 보낼 때 알림 받기",
+        "settings":{
+            "users":"알림을 받을 사용자 ID(쉼표로 구분)"
+        }
+    },
+    "messagePeek":{
+        "description":"DM 채널의 마지막 메시지를 열지 않고 엿보기"
+    },
+    "messageTranslate":{
+        "description":"메시지를 원하는 언어로 자동 번역합니다.",
+        "settings":{
+            "confidenceRequirement":"번역에 대한 최소 신뢰 수준(0-1)",
+            "targetLanguage":"번역 대상 언어(예: en, es, fr)"
+        }
+    },
+    "micLoopbackTester":{
+        "description":"사용자 영역의 루프백 버튼으로 마이크를 테스트하세요."
+    },
+    "moreCommands":{
+        "description":"시스템 정보, 주사위 굴림, 동전 뒤집기 등을 포함한 추가 슬래시 명령",
+        "settings":{
+            "addFreakyEnding":"이상한 명령 끝에 👅 또는 ❤️을 추가하세요.",
+            "uwuEveryMessage":"모든 메시지를 uwuified로 만드세요",
+            "uwuEverything":"모든 텍스트를 uwuified로 만듭니다. 정말 나쁜 생각입니다."
+        }
+    },
+    "moreKaomoji":{
+        "description":"감정 표현을 위한 추가 카오모지 슬래시 명령"
+    },
+    "moreStickers":{
+        "description":"외부 소스에서 더 많은 스티커 팩 추가",
+        "settings":{
+            "packs":"스티커 팩 관리",
+            "promptToUpload":"스티커를 업로드하기 전 메시지 표시"
+        }
+    },
+    "moreUserTags":{
+        "description":"권한 및 역할을 기반으로 추가 사용자 태그 표시",
+        "settings":{
+            "dontShowBotTag":"기본 BOT 태그 숨기기",
+            "dontShowForBots":"봇 사용자에게 태그를 표시하지 않음",
+            "showWebhookTagFully":"웹훅 태그를 완전히 표시",
+            "tagSettings":"개별 태그 설정 구성"
+        }
+    },
+    "moyai":{
+        "description":"🗿 이모티콘을 사용할 때 모아이 사운드 효과를 재생합니다.",
+        "settings":{
+            "ignoreBlocked":"차단된 사용자의 메시지 무시",
+            "ignoreBots":"봇의 메시지 무시",
+            "quality":"모아이 사운드의 품질",
+            "qualityOptions":{
+                "hd":"HD",
+                "normal":"정상"
+            },
+            "triggerWhenUnfocused":"창에 초점이 맞춰지지 않은 경우에도 소리 발생",
+            "volume":"모아이 소리의 볼륨"
+        }
+    },
+    "musicControls":{
+        "description":"Spotify, Tidal 및 YouTube Music용 음악 플레이어 컨트롤 표시",
+        "settings":{
+            "FallbackProvider":"기본 실패 시 대체 공급자 사용",
+            "LyricDelay":"가사 지연 오프셋",
+            "LyricsConversion":"로마자로 표기된 가사 자동 번역",
+            "LyricsPosition":"플레이어에 대한 가사의 위치",
+            "LyricsProvider":"가사 출처",
+            "ShowFailedToasts":"가사를 로드하지 못한 경우 오류 토스트 표시",
+            "TranslateTo":"가사를 다음으로 번역하세요",
+            "YoutubeMusicApiUrl":"맞춤 YouTube 뮤직 API URL",
+            "hoverControls":"마우스를 가져갈 때만 컨트롤 표시",
+            "previousButtonRestartsTrack":"이전 버튼을 누르면 트랙 다시 시작",
+            "showSpotifyControls":"Spotify 컨트롤 표시",
+            "showSpotifyLyrics":"Spotify 가사 표시",
+            "showTidalControls":"조수 컨트롤 표시",
+            "showTidalLyrics":"Tidal 가사 보기",
+            "showYoutubeMusicControls":"YouTube Music 컨트롤 표시",
+            "useSpotifyUris":"URL 대신 Spotify URI를 엽니다."
+        }
+    },
+    "neverPausePreviews":{
+        "description":"채널을 전환하거나 초점을 맞출 때 비디오 미리보기를 일시 중지하지 마십시오.",
+        "warning":"이로 인해 리소스 사용량과 데이터 소비가 증가할 수 있습니다."
+    },
+    "newPluginsManager":{
+        "description":"플러그인 관리자로 새로운 플러그인을 관리하고 검색하세요"
+    },
+    "noAppsAllowed":{
+        "description":"앱 실행기에 앱/카테고리가 표시되지 않도록 차단합니다."
+    },
+    "noBulletPoints":{
+        "description":"메시지를 이스케이프 처리하여 메시지에서 글머리 기호를 제거합니다."
+    },
+    "noModalAnimation":{
+        "description":"더 빠른 UI 상호작용을 위해 모달 애니메이션을 비활성화합니다."
+    },
+    "noNitroUpsell":{
+        "description":"프리미엄 유형을 재정의하여 Nitro 상향 판매를 제거합니다."
+    },
+    "noRPC":{
+        "description":"Discord의 RPC(Rich Presence) 기능을 비활성화합니다."
+    },
+    "partyMode":{
+        "description":"색종이 조각과 화면 흔들림으로 파티 모드 효과 활성화",
+        "settings":{
+            "intensityOptions":{
+                "better":"더 좋음 - 더 많은 색종이 조각",
+                "normal":"일반 - 미묘한 효과",
+                "projectX":"프로젝트 X - 최대 강도"
+            },
+            "superIntensePartyMode":"파티 모드 강도 수준"
+        }
+    },
+    "pinIcon":{
+        "description":"고정된 메시지에 핀 아이콘을 추가합니다."
+    },
+    "pingNotifications":{
+        "description":"핑, DM, 친구 메시지에 대한 맞춤 알림 설정",
+        "settings":{
+            "dms":"DM 및 그룹 DM 메시지 알림",
+            "friends":"친구가 서버에서 메시지를 보낼 때 알림",
+            "ignoreMuted":"음소거된 채널, 길드, 차단된 사용자를 무시합니다.",
+            "mentions":"멘션되면 알림(@username)",
+            "showInActive":"채널이 활성화된 경우에도 알림 표시"
+        }
+    },
+    "platformSpoofer":{
+        "description":"플랫폼 상태 스푸핑(모바일, 데스크톱, 웹, 콘솔)",
+        "settings":{
+            "platform":"스푸핑을 위한 플랫폼",
+            "platformOptions":{
+                "android":"기계적 인조 인간",
+                "desktop":"데스크톱(Discord 클라이언트)",
+                "ios":"iOS",
+                "playstation":"플레이스테이션",
+                "web":"웹(Discord 웹)",
+                "xbox":"엑스박스"
+            }
+        },
+        "warning":"플랫폼을 변경하면 특정 기능과 다른 사람이 귀하의 상태를 보는 방식에 영향을 미칠 수 있습니다."
+    },
+    "polishWording":{
+        "description":"더 나은 문법, 대문자 사용 및 구두점을 사용하여 메시지 텍스트를 자동으로 개선합니다.",
+        "settings":{
+            "blockedWords":"대문자 수정에서 제외할 쉼표로 구분된 단어 목록",
+            "expandContractions":"수축 확장(예: '하지 마세요' → '하지 마세요')",
+            "fixApostrophes":"약어에서 누락된 아포스트로피 수정(예: 'dont' → 'don't')",
+            "fixCapitalization":"문장 대문자 수정",
+            "fixPunctuation":"문장 끝에 마침표 추가",
+            "fixPunctuationFrequency":"기간 자동 추가 빈도(0~100%)",
+            "quickDisable":"빠른 비활성화 - 모든 수정 사항을 일시적으로 비활성화합니다."
+        }
+    },
+    "profileSets":{
+        "description":"프로필 사용자 정의 사전 설정 저장 및 관리",
+        "settings":{
+            "avatarSize":"사전 설정 관리자의 아바타 크기"
+        }
+    },
+    "questify":{
+        "buttonActions":{
+            "contextMenu":"상황에 맞는 메뉴 표시",
+            "openQuests":"퀘스트 페이지 열기",
+            "pluginSettings":"플러그인 설정 열기"
+        },
+        "description":"일련의 기능으로 Quest 경험을 향상시키거나 해당 기능이 마음에 들지 않으면 완전히 비활성화하십시오.",
+        "gradientOptions":{
+            "black":"검은색",
+            "default":"기본",
+            "hide":"숨기기",
+            "intense":"극심한"
+        },
+        "sortOptions":{
+            "claimedAsc":"청구됨(오래된 것부터)",
+            "claimedDesc":"청구됨(최신 항목순)",
+            "expiringAsc":"만료 예정(가장 빠른 것부터)",
+            "expiringDesc":"만료 예정(최신순)",
+            "recentAsc":"최근(오래된 것부터)",
+            "recentDesc":"최근(최신순)"
+        }
+    },
+    "questionMarkReplacement":{
+        "description":"메시지에 물음표만 포함된 경우 물음표를 맞춤 텍스트/이모지로 교체",
+        "settings":{
+            "replace":"'?'를 대체할 텍스트 또는 이모티콘 ~와 함께"
+        }
+    },
+    "quickThemeSwitcher":{
+        "description":"키보드 단축키를 사용하여 테마를 빠르게 순환",
+        "settings":{
+            "autoRefresh":"변경 사항이 감지되면 자동으로 테마 목록 새로 고침",
+            "includeLocal":"주기에 지역 테마 포함",
+            "includeOnline":"주기에 온라인 테마 포함",
+            "showNotifications":"테마가 추가되거나 제거되면 알림 표시",
+            "sortOptions":{
+                "az":"A-Z(알파벳순)",
+                "recent":"최근 사용됨",
+                "za":"Z-A(역알파벳순)"
+            },
+            "sortOrder":"테마 목록 정렬 순서"
+        }
+    },
+    "quoter":{
+        "description":"메시지에서 스타일화된 인용 이미지 만들기",
+        "settings":{
+            "grayscale":"회색조 필터 적용",
+            "quoteFont":"인용 이미지용 글꼴",
+            "saveAsGif":"PNG 대신 GIF로 저장",
+            "showWatermark":"인용문에 워터마크 표시",
+            "watermark":"워터마크 텍스트"
+        }
+    },
+    "randomVoice":{
+        "description":"사용자 정의 가능한 필터를 기반으로 임의의 음성 채널에 참여",
+        "operations":{
+            "equalTo":"같음",
+            "lessThan":"미만",
+            "moreThan":"이상"
+        },
+        "settings":{
+            "Servers":"포함할 서버 ID(쉼표로 구분)",
+            "UserAmount":"채널의 대상 사용자 수",
+            "UserAmountOperation":"사용자 수 비교 연산자",
+            "autoCamera":"자동으로 카메라 켜기",
+            "autoNavigate":"음성 채널로 자동 이동",
+            "autoStream":"자동으로 스트리밍 시작",
+            "avoidAfk":"AFK 채널 피하기",
+            "avoidStages":"무대 채널을 피하세요",
+            "avoidStates":"상태 필터와 일치하는 사용자 방지",
+            "deafen":"청각 장애가 있는 사용자를 찾아보세요",
+            "includeStates":"상태 필터와 일치하는 사용자 포함",
+            "leaveEmpty":"채널이 비면 나가세요",
+            "mute":"음소거된 사용자를 찾으세요",
+            "selfDeafen":"가입 시 자동으로 청각 장애가 발생합니다.",
+            "selfMute":"참가 시 자동 음소거",
+            "spacesLeft":"채널에 남은 최소 공간",
+            "spacesLeftOperation":"공백 왼쪽 비교 연산자",
+            "stream":"스트림이 있는 채널을 찾으세요.",
+            "vcLimit":"음성 채널 사용자 제한",
+            "vcLimitOperation":"채널 제한 비교 연산자",
+            "video":"비디오가 활성화된 채널을 찾으세요."
+        }
+    },
+    "recentDMSwitcher":{
+        "description":"Ctrl+Tab(Alt+Tab 스타일)을 사용하여 최근 DM 간에 빠르게 전환하세요.",
+        "overlayModes":{
+            "current":"현재 DM만",
+            "row":"최근 DM 행"
+        },
+        "settings":{
+            "amountOfUsers":"추적할 사용자 수",
+            "clearRdms":"RDMS 기록 지우기",
+            "overlayMode":"오버레이 콘텐츠 모드",
+            "overlayRowLength":"오버레이 행에 표시할 DM 수",
+            "overlayShowAvatars":"오버레이에 아바타 표시",
+            "toastDurationMs":"토스트 알림 기간(ms)",
+            "visualStyle":"사이클링 중 시각적 표시기 스타일"
+        },
+        "visualStyles":{
+            "off":"시각적 표시 없음",
+            "overlay":"오버레이(Alt+Tab 스타일)",
+            "toast":"토스트 알림"
+        }
+    },
+    "remix":{
+        "description":"내장된 편집기를 사용하여 Discord에서 이미지를 직접 리믹스하세요."
+    },
+    "repeatMessages":{
+        "description":"선택적 답장으로 메시지 반복(답장하려면 Shift+클릭)"
+    },
+    "replyPingControl":{
+        "description":"누군가가 귀하의 메시지에 답장할 때 핑을 받을지 여부를 제어하세요",
+        "settings":{
+            "alwaysPingOnReply":"누군가가 메시지에 답장하면 항상 핑이 울립니다.",
+            "replyPingWhitelist":"항상 응답 핑을 수신할 사용자 ID의 쉼표로 구분된 목록입니다."
+        }
+    },
+    "richMagnetLinks":{
+        "description":"파일 이름 추출을 통해 마그넷 링크에 대한 풍부한 미리보기 표시"
+    },
+    "rpcEditor":{
+        "description":"모든 애플리케이션에 대한 RPC(Rich Presence) 디스플레이 편집 및 사용자 정의",
+        "placeholders":{
+            "details":"현재 세부정보 텍스트",
+            "largeImage":"큰 이미지 URL",
+            "largeText":"큰 이미지 도구 설명 텍스트",
+            "name":"애플리케이션 이름",
+            "smallImage":"작은 이미지 URL",
+            "smallText":"작은 이미지 도구 설명 텍스트",
+            "state":"현재 상태 텍스트"
+        },
+        "settings":{
+            "replacedAppIds":"애플리케이션별 RPC 재정의 관리"
+        }
+    },
+    "rpcStats":{
+        "description":"Rich Presence에 사용자 정의 통계 표시(전송된 메시지, Last.fm 상위 앨범)",
+        "settings":{
+            "RPCTitle":"RPC의 제목 텍스트",
+            "albumCoverImage":"앨범 표지를 RPC 이미지로 사용(Last.fm 모드)",
+            "assetURL":"RPC용 사용자 정의 이미지 URL(기본값: 아바타)",
+            "lastFMApiKey":"Last.fm API 키(last.fm/api에서 가져오기)",
+            "lastFMStatFormat":"Last.fm 통계 형식($album, $artist)",
+            "lastFMUsername":"Last.fm 사용자 이름",
+            "statDisplay":"표시할 통계"
+        },
+        "statOptions":{
+            "messagesAllTime":"항상 전송되는 메시지",
+            "messagesToday":"오늘 보낸 메시지",
+            "mostListenedAlbum":"이번주 가장 많이 들은 앨범 (Last.fm)"
+        }
+    },
+    "saveFavoriteGIFs":{
+        "description":"즐겨찾는 모든 GIF URL을 텍스트 파일에 저장",
+        "settings":{
+            "showToolboxButton":"Equicord 도구 상자에 '좋아하는 GIF 저장' 버튼 표시(다시 로드 필요)"
+        }
+    },
+    "scheduledMessages":{
+        "description":"나중에 보낼 메시지 예약",
+        "settings":{
+            "checkIntervalSeconds":"보낼 메시지를 확인하는 빈도(초)",
+            "maxMessagesPerMinute":"같은 분에 실행될 수 있는 채널당 최대 예약 메시지",
+            "showNotifications":"메시지가 전송되면 토스트 알림 표시",
+            "showPhantomMessages":"채팅에서 예약된 메시지를 팬텀 메시지로 표시"
+        }
+    },
+    "screenRecorder":{
+        "description":"Equibop의 화면 녹화 기능"
+    },
+    "searchFix":{
+        "description":"Discord의 5000개 메시지 오프셋 제한을 해결하여 검색 기능을 수정합니다."
+    },
+    "sekaiStickers":{
+        "description":"세카이 스티커 통합",
+        "settings":{
+            "AutoCloseModal":"완료되면 자동 닫기 모달"
+        }
+    },
+    "selfForward":{
+        "description":"자신에게 메시지 전달"
+    },
+    "serverSearch":{
+        "description":"빠른 스위처 통합으로 향상된 서버 검색"
     }
 }
