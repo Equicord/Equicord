@@ -86,6 +86,23 @@
             "tooltipRight":"Base64 をデコード (左クリック) / デコードされたコピー (右クリック)"
         }
     },
+    "betterActivities":{
+        "description":"メンバーリストとユーザーポップアウトにすべてのアクティビティを表示します。表示をカスタマイズするオプションも付いています。",
+        "options":{
+            "carousel":"カルーセル",
+            "list":"リスト"
+        },
+        "settings":{
+            "allActivitiesStyle":"すべてのアクティビティを表示するスタイル",
+            "hideTooltip":"アクティビティアイコンのツールチップを非表示にする",
+            "iconSize":"アクティビティアイコンのサイズ",
+            "memberList":"メンバーリストにアクティビティを表示する",
+            "removeGameActivityStatus":"ゲームアクティビティステータスインジケーターを削除する",
+            "renderGifs":"アクティビティアイコンでGIFをレンダリングする",
+            "specialFirst":"特別なアクティビティを最初に表示する",
+            "userPopout":"ユーザーポップアウトにすべてのアクティビティを表示"
+        }
+    },
     "betterAudioPlayer":{
         "description":"スペクトログラフとオシロスコープのビジュアライザをオーディオ添付ファイル プレーヤーに追加します",
         "settings":{
@@ -1258,6 +1275,57 @@
             "scanQrCode":"QRコードをスキャン"
         }
     },
+    "mediaPlaybackSpeed":{
+        "description":"音声メッセージ、ビデオ、オーディオ添付ファイルのメディア再生速度を制御します",
+        "settings":{
+            "defaultAudioSpeed":"オーディオファイルのデフォルトの再生速度",
+            "defaultVideoSpeed":"ビデオのデフォルトの再生速度",
+            "defaultVoiceMessageSpeed":"音声メッセージのデフォルトの再生速度"
+        }
+    },
+    "messageBurst":{
+        "description":"一定期間内の連続するメッセージを結合して、メッセージをバーストで送信します",
+        "settings":{
+            "shouldMergeWithAttachment":"添付ファイル付きメッセージの結合を許可する",
+            "timePeriod":"メッセージをマージするまでの時間（秒）",
+            "useSpace":"区切り文字として改行の代わりにスペースを使用する"
+        }
+    },
+    "messageColors":{
+        "description":"カラー プレビューを使用してメッセージ内のカラー コード (hex、rgb、hsl) をレンダリングします。",
+        "settings":{
+            "blockView":"カラーブロックの位置",
+            "blockViewOptions":{
+                "bothSides":"テキストの両面",
+                "leftSide":"テキストの左側",
+                "rightSide":"テキストの右側"
+            },
+            "enableShortHexCodes":"短い 16 進カラー コード (3 文字) を有効にする",
+            "renderType":"メッセージ内の色をレンダリングする方法",
+            "renderTypeOptions":{
+                "backgroundColor":"背景色の変更",
+                "blockNearby":"カラーブロックを表示",
+                "textColor":"文字の色を変更する"
+            }
+        }
+    },
+    "messageFetchTimer":{
+        "description":"チャットバーにメッセージの取得時間を表示する",
+        "settings":{
+            "iconColor":"フェッチタイマーアイコンの色",
+            "showIcon":"フェッチタイマーアイコンを表示する",
+            "showMs":"秒の代わりにミリ秒を表示する"
+        }
+    },
+    "messageLinkTooltip":{
+        "description":"メッセージのリンク、返信、転送されたメッセージの上にマウスを置くとメッセージのプレビューを表示します",
+        "settings":{
+            "display":"メッセージプレビューの表示スタイル",
+            "onForward":"転送されたメッセージの上にマウスを置くとツールチップを表示します",
+            "onLink":"メッセージリンクの上にマウスを置いたときにツールチップを表示する",
+            "onReply":"メッセージの返信の上にマウスを置くとツールチップを表示します"
+        }
+    },
     "messageLoggerEnhanced":{
         "buttons":{
             "exportLogs":"ログのエクスポート",
@@ -1325,6 +1393,479 @@
             "sortNewest":"ログを最新順に並べ替えます。",
             "timeBasedCleanupMinutes":"この数分より古いメッセージをサーバーから自動的に削除します。時間ベースのクリーンアップを無効にするには、0 に設定します。",
             "whitelistedIds":"ホワイトリストに登録されたサーバー、チャネル、またはユーザー ID。"
+        }
+    },
+    "messageNotifier":{
+        "description":"特定のユーザーがメッセージを送信したときに通知を受け取る",
+        "settings":{
+            "users":"通知を受け取るユーザー ID (カンマ区切り)"
+        }
+    },
+    "messagePeek":{
+        "description":"DM チャネルを開かずに最後のメッセージを確認する"
+    },
+    "messageTranslate":{
+        "description":"メッセージを希望の言語に自動的に翻訳します",
+        "settings":{
+            "confidenceRequirement":"翻訳の最小信頼レベル (0-1)",
+            "targetLanguage":"翻訳対象言語 (例: en、es、fr)"
+        }
+    },
+    "micLoopbackTester":{
+        "description":"ユーザーエリアのループバックボタンを使用してマイクをテストします"
+    },
+    "moreCommands":{
+        "description":"システム情報、サイコロの出目、コイン投げなどを含む追加のスラッシュ コマンド",
+        "settings":{
+            "addFreakyEnding":"気まぐれなコマンドの最後に 👅 または ❤️ を追加します",
+            "uwuEveryMessage":"すべてのメッセージを非公開化する",
+            "uwuEverything":"すべてのテキストを非表示にする - 本当に悪いアイデア"
+        }
+    },
+    "moreKaomoji":{
+        "description":"感情を表現するための顔文字スラッシュ コマンドが追加されました"
+    },
+    "moreStickers":{
+        "description":"外部ソースからステッカー パックを追加する",
+        "settings":{
+            "packs":"ステッカーパックの管理",
+            "promptToUpload":"ステッカーをアップロードする前にプロンプトを表示する"
+        }
+    },
+    "moreUserTags":{
+        "description":"権限とロールに基づいて追加のユーザータグを表示する",
+        "settings":{
+            "dontShowBotTag":"デフォルトのBOTタグを非表示にする",
+            "dontShowForBots":"ボットユーザーのタグを表示しない",
+            "showWebhookTagFully":"Webhook タグを完全に表示する",
+            "tagSettings":"個別のタグ設定を構成する"
+        }
+    },
+    "moyai":{
+        "description":"🗿絵文字使用時に「もやい」効果音を鳴らす",
+        "settings":{
+            "ignoreBlocked":"ブロックされたユーザーからのメッセージを無視する",
+            "ignoreBots":"ボットからのメッセージを無視する",
+            "quality":"もやい音の質",
+            "qualityOptions":{
+                "hd":"HD",
+                "normal":"普通"
+            },
+            "triggerWhenUnfocused":"ウィンドウがフォーカスされていないときでもサウンドをトリガーする",
+            "volume":"もやい音の音量"
+        }
+    },
+    "musicControls":{
+        "description":"Spotify、Tidal、YouTube Music の音楽プレーヤー コントロールを表示する",
+        "settings":{
+            "FallbackProvider":"プライマリに障害が発生した場合はフォールバック プロバイダーを使用する",
+            "LyricDelay":"歌詞遅延オフセット",
+            "LyricsConversion":"ローマ字歌詞を自動翻訳",
+            "LyricsPosition":"プレーヤーに対する歌詞の位置",
+            "LyricsProvider":"歌詞の出典",
+            "ShowFailedToasts":"歌詞の読み込みに失敗した場合にエラートーストを表示する",
+            "TranslateTo":"歌詞を翻訳する",
+            "YoutubeMusicApiUrl":"カスタム YouTube ミュージック API URL",
+            "hoverControls":"ホバー時にのみコントロールを表示する",
+            "previousButtonRestartsTrack":"前ボタンを押すとトラックを再開します",
+            "showSpotifyControls":"Spotify コントロールを表示する",
+            "showSpotifyLyrics":"Spotify の歌詞を表示する",
+            "showTidalControls":"潮汐制御を表示する",
+            "showTidalLyrics":"タイダルの歌詞を表示",
+            "showYoutubeMusicControls":"YouTube Music コントロールを表示する",
+            "useSpotifyUris":"URL の代わりに Spotify URI を開く"
+        }
+    },
+    "neverPausePreviews":{
+        "description":"チャンネルを切り替えたりフォーカスを外したりするときにビデオプレビューを一時停止しないでください",
+        "warning":"これにより、リソースの使用量とデータ消費量が増加する可能性があります"
+    },
+    "newPluginsManager":{
+        "description":"プラグイン マネージャーを使用して新しいプラグインを管理および検出する"
+    },
+    "noAppsAllowed":{
+        "description":"アプリ/カテゴリがアプリ ランチャーに表示されないようにブロックします"
+    },
+    "noBulletPoints":{
+        "description":"メッセージから箇条書きをエスケープして削除する"
+    },
+    "noModalAnimation":{
+        "description":"UI インタラクションを高速化するにはモーダル アニメーションを無効にします"
+    },
+    "noNitroUpsell":{
+        "description":"プレミアム タイプをオーバーライドして Nitro アップセルを削除します"
+    },
+    "noRPC":{
+        "description":"Discord のリッチ プレゼンス (RPC) 機能を無効にします"
+    },
+    "partyMode":{
+        "description":"紙吹雪や画面の揺れによるパーティー モードの効果を有効にする",
+        "settings":{
+            "intensityOptions":{
+                "better":"より良い - 紙吹雪をもっと増やす",
+                "normal":"通常 - 微妙な効果",
+                "projectX":"プロジェクト X - 最大の強度"
+            },
+            "superIntensePartyMode":"パーティーモードの強度レベル"
+        }
+    },
+    "pinIcon":{
+        "description":"ピン留めされたメッセージにピンアイコンを追加します"
+    },
+    "pingNotifications":{
+        "description":"ping、DM、友人メッセージのカスタム通知設定",
+        "settings":{
+            "dms":"DM およびグループ DM メッセージの通知",
+            "friends":"友達がサーバーにメッセージを送信したときに通知する",
+            "ignoreMuted":"ミュートされたチャンネル、ギルド、ブロックされたユーザーを無視する",
+            "mentions":"メンションされたら通知 (@username)",
+            "showInActive":"チャンネルがアクティブな場合でも通知を表示する"
+        }
+    },
+    "platformSpoofer":{
+        "description":"プラットフォームのステータスを偽装します (モバイル、デスクトップ、Web、コンソール)",
+        "settings":{
+            "platform":"なりすますプラットフォーム",
+            "platformOptions":{
+                "android":"アンドロイド",
+                "desktop":"デスクトップ (Discord クライアント)",
+                "ios":"iOS",
+                "playstation":"プレイステーション",
+                "web":"ウェブ (Discord ウェブ)",
+                "xbox":"Xbox"
+            }
+        },
+        "warning":"プラットフォームを変更すると、特定の機能や他の人によるあなたのステータスの見方に影響が出る可能性があります。"
+    },
+    "polishWording":{
+        "description":"文法、大文字の使用、句読点を改善してメッセージ テキストを自動的に改善します。",
+        "settings":{
+            "blockedWords":"大文字小文字の修正から除外する単語のカンマ区切りのリスト",
+            "expandContractions":"拡張短縮形（例：「しない」→「しない」）",
+            "fixApostrophes":"短縮形で欠落しているアポストロフィを修正 (例: 'dont' → 'don't')",
+            "fixCapitalization":"文の大文字化を修正",
+            "fixPunctuation":"文末にピリオドを付ける",
+            "fixPunctuationFrequency":"期間を自動追加する頻度 (0 ～ 100%)",
+            "quickDisable":"クイック無効化 - すべての修正を一時的に無効にします"
+        }
+    },
+    "profileSets":{
+        "description":"プロファイルのカスタマイズ プリセットを保存および管理する",
+        "settings":{
+            "avatarSize":"プリセットマネージャーでのアバターのサイズ"
+        }
+    },
+    "questify":{
+        "buttonActions":{
+            "contextMenu":"コンテキストメニューを表示",
+            "openQuests":"クエストページを開く",
+            "pluginSettings":"プラグイン設定を開く"
+        },
+        "description":"一連の機能を使用して Quest エクスペリエンスを強化することも、気に入らない場合は完全に無効にすることもできます。",
+        "gradientOptions":{
+            "black":"黒",
+            "default":"既定値",
+            "hide":"非表示",
+            "intense":"激しい"
+        },
+        "sortOptions":{
+            "claimedAsc":"主張済み (古い順)",
+            "claimedDesc":"主張済み (新しい順)",
+            "expiringAsc":"期限切れ (早い順)",
+            "expiringDesc":"期限切れ (最新のものから順)",
+            "recentAsc":"最近 (古い順)",
+            "recentDesc":"最近 (新しい順)"
+        }
+    },
+    "questionMarkReplacement":{
+        "description":"メッセージに疑問符のみが含まれている場合は、疑問符をカスタム テキスト/絵文字に置き換えます",
+        "settings":{
+            "replace":"「?」を置き換えるテキストまたは絵文字と"
+        }
+    },
+    "quickThemeSwitcher":{
+        "description":"キーボード ショートカットを使用してテーマをすばやく切り替える",
+        "settings":{
+            "autoRefresh":"変更が検出されるとテーマリストを自動的に更新します",
+            "includeLocal":"サイクルに地域のテーマを含める",
+            "includeOnline":"サイクルにオンラインのテーマを含める",
+            "showNotifications":"テーマが追加または削除されたときに通知を表示する",
+            "sortOptions":{
+                "az":"A-Z (アルファベット順)",
+                "recent":"最近使用した",
+                "za":"Z-A (逆アルファベット)"
+            },
+            "sortOrder":"テーマリストのソート順"
+        }
+    },
+    "quoter":{
+        "description":"メッセージから定型化された引用画像を作成する",
+        "settings":{
+            "grayscale":"グレースケールフィルターを適用する",
+            "quoteFont":"引用画像のフォント",
+            "saveAsGif":"PNG ではなく GIF として保存",
+            "showWatermark":"引用符に透かしを表示する",
+            "watermark":"透かしテキスト"
+        }
+    },
+    "randomVoice":{
+        "description":"カスタマイズ可能なフィルターに基づいてランダムな音声チャンネルに参加します",
+        "operations":{
+            "equalTo":"に等しい",
+            "lessThan":"未満",
+            "moreThan":"より多い"
+        },
+        "settings":{
+            "Servers":"含めるサーバー ID (カンマ区切り)",
+            "UserAmount":"チャネル内の対象ユーザー数",
+            "UserAmountOperation":"ユーザー数比較演算子",
+            "autoCamera":"カメラを自動的にオンにする",
+            "autoNavigate":"音声チャンネルに自動的に移動します",
+            "autoStream":"ストリーミングを自動的に開始する",
+            "avoidAfk":"AFK チャネルを避ける",
+            "avoidStages":"ステージチャンネルを避ける",
+            "avoidStates":"状態フィルターに一致するユーザーを避ける",
+            "deafen":"聴覚障害のあるユーザーを探す",
+            "includeStates":"状態フィルターに一致するユーザーを含める",
+            "leaveEmpty":"チャンネルが空になったら退出する",
+            "mute":"ミュートされているユーザーを探す",
+            "selfDeafen":"参加時に自動的に耳を聞こえなくする",
+            "selfMute":"参加時に自動ミュート",
+            "spacesLeft":"チャネル内に残される最小スペース",
+            "spacesLeftOperation":"左スペース比較演算子",
+            "stream":"ストリームのあるチャンネルを探す",
+            "vcLimit":"音声チャンネルのユーザー制限",
+            "vcLimitOperation":"チャネル制限比較演算子",
+            "video":"ビデオが有効になっているチャンネルを探す"
+        }
+    },
+    "recentDMSwitcher":{
+        "description":"Ctrl+Tab (Alt+Tab スタイル) を使用して最近の DM をすばやく切り替えます",
+        "overlayModes":{
+            "current":"現在のDMのみ",
+            "row":"最近の DM の行"
+        },
+        "settings":{
+            "amountOfUsers":"追跡するユーザーの数",
+            "clearRdms":"RDMS履歴をクリアする",
+            "overlayMode":"オーバーレイコンテンツモード",
+            "overlayRowLength":"オーバーレイ行に表示する DM の数",
+            "overlayShowAvatars":"オーバーレイでアバターを表示",
+            "toastDurationMs":"トースト通知期間 (ミリ秒)",
+            "visualStyle":"サイクリング中の視覚的なインジケーターのスタイル"
+        },
+        "visualStyles":{
+            "off":"視覚的なインジケーターがない",
+            "overlay":"オーバーレイ (Alt+Tab スタイル)",
+            "toast":"トースト通知"
+        }
+    },
+    "remix":{
+        "description":"内蔵エディターを使用して Discord で画像を直接リミックスします"
+    },
+    "repeatMessages":{
+        "description":"オプションの返信を含めてメッセージを繰り返します (返信するには Shift+クリック)"
+    },
+    "replyPingControl":{
+        "description":"誰かがメッセージに返信したときに ping を受信するかどうかを制御する",
+        "settings":{
+            "alwaysPingOnReply":"誰かがあなたのメッセージに返信すると、常に ping が送信されます",
+            "replyPingWhitelist":"常に応答 ping を受信するユーザー ID のカンマ区切りリスト"
+        }
+    },
+    "richMagnetLinks":{
+        "description":"ファイル名抽出によるマグネット リンクの豊富なプレビューを表示"
+    },
+    "rpcEditor":{
+        "description":"あらゆるアプリケーション向けにリッチ プレゼンス (RPC) 表示を編集およびカスタマイズします。",
+        "placeholders":{
+            "details":"現在の詳細テキスト",
+            "largeImage":"大きな画像 URL",
+            "largeText":"大きな画像のツールチップのテキスト",
+            "name":"アプリケーション名",
+            "smallImage":"小さい画像 URL",
+            "smallText":"小さな画像ツールチップのテキスト",
+            "state":"現在の状態のテキスト"
+        },
+        "settings":{
+            "replacedAppIds":"アプリケーション固有の RPC オーバーライドを管理する"
+        }
+    },
+    "rpcStats":{
+        "description":"リッチ プレゼンスにカスタム統計を表示します (送信されたメッセージ、Last.fm のトップ アルバム)",
+        "settings":{
+            "RPCTitle":"RPC のタイトル テキスト",
+            "albumCoverImage":"アルバム カバーを RPC イメージとして使用する (Last.fm モード)",
+            "assetURL":"RPC 用のカスタム画像 URL (デフォルト: あなたのアバター)",
+            "lastFMApiKey":"Last.fm API キー (last.fm/api から取得)",
+            "lastFMStatFormat":"Last.fm 統計の形式 ($album、$artist)",
+            "lastFMUsername":"Last.fm ユーザー名",
+            "statDisplay":"表示する統計"
+        },
+        "statOptions":{
+            "messagesAllTime":"常に送信されるメッセージ",
+            "messagesToday":"今日送信されたメッセージ",
+            "mostListenedAlbum":"今週最も聴かれたアルバム (Last.fm)"
+        }
+    },
+    "saveFavoriteGIFs":{
+        "description":"お気に入りの GIF URL をすべてテキスト ファイルに保存します",
+        "settings":{
+            "showToolboxButton":"Equicord ツールボックスに「お気に入り GIF を保存」ボタンを表示 (再読み込みが必要)"
+        }
+    },
+    "scheduledMessages":{
+        "description":"後で送信するメッセージをスケジュールする",
+        "settings":{
+            "checkIntervalSeconds":"送信するメッセージを確認する頻度 (秒)",
+            "maxMessagesPerMinute":"同じ 1 分間に送信できるチャネルごとのスケジュールされたメッセージの最大数",
+            "showNotifications":"メッセージの送信時にトースト通知を表示する",
+            "showPhantomMessages":"スケジュールされたメッセージをチャットにファントム メッセージとして表示する"
+        }
+    },
+    "screenRecorder":{
+        "description":"Equibop の画面録画機能"
+    },
+    "searchFix":{
+        "description":"Discord の 5000 メッセージ オフセット制限を回避して検索機能を修正しました"
+    },
+    "sekaiStickers":{
+        "description":"セカイステッカー統合",
+        "settings":{
+            "AutoCloseModal":"完了したらモーダルを自動的に閉じる"
+        }
+    },
+    "selfForward":{
+        "description":"自分にメッセージを転送する"
+    },
+    "serverSearch":{
+        "description":"クイックスイッチャーの統合による強化されたサーバー検索"
+    },
+    "showBadgesInChat":{
+        "description":"チャットメッセージにユーザーバッジを表示する",
+        "settings":{
+            "DiscordNitroPosition":"Discord Nitro バッジの位置",
+            "DiscordProfilePosition":"Discord プロフィール バッジの位置",
+            "EquicordContributorPosition":"Equicord 貢献者バッジの位置",
+            "EquicordDonorPosition":"Equicord 寄付者バッジの位置",
+            "VencordContributorPosition":"Vencord 貢献者バッジの位置",
+            "VencordDonorPosition":"Vencord 寄付者バッジの位置",
+            "badgeSettings":"バッジのレイアウトと可視性を設定する",
+            "showDiscordNitro":"チャットで Discord Nitro バッジの表示を有効にする",
+            "showDiscordProfile":"チャットで Discord プロフィール バッジを表示できるようにします",
+            "showEquicordContributor":"チャットで Equicord の投稿者バッジを表示できるようにします",
+            "showEquicordDonor":"チャットで Equicord 寄付者バッジの表示を有効にする",
+            "showVencordContributor":"チャットで Vencord の投稿者バッジを表示できるようにします",
+            "showVencordDonor":"チャットで Vencord の寄付者バッジを表示できるようにします"
+        }
+    },
+    "showMessageEmbeds":{
+        "description":"メッセージの埋め込みを追加またはメッセージから削除するオプションを使用してメッセージの埋め込みを表示します"
+    },
+    "showResourceChannels":{
+        "description":"通常は非表示になっているリソース チャネルを表示する"
+    },
+    "showSongName":{
+        "description":"現在再生中の曲名をステータスに表示"
+    },
+    "sidebarChat":{
+        "description":"複数のチャンネルを表示するためのサイドバー チャット インターフェイス",
+        "settings":{
+            "patchCommunity":"コミュニティサーバーが持つチャンネルブラウザやメンバータブなどにパッチを適用します。",
+            "persistSidebar":"Discord の再起動後もサイドバー チャットを開いたままにしておきます"
+        }
+    },
+    "signature":{
+        "description":"メッセージに署名を追加する",
+        "settings":{
+            "contextMenu":"チャット入力コンテキスト メニューの機能を切り替えるオプションを追加",
+            "isEnabled":"機能の切り替え",
+            "name":"メッセージの最後に追加される署名",
+            "showIcon":"プラグインを切り替えるためのアイコンをチャットバーに表示します",
+            "textHeader":"テキストの先頭に付けるヘッダー"
+        }
+    },
+    "snowfall":{
+        "description":"Discord のインターフェースの上にクリスマス風の降雪効果を追加します",
+        "settings":{
+            "flakesPerSecond":"1 秒あたりの雪の結晶数 (高い = 降雪の密度が高くなります)",
+            "maxSize":"雪の結晶の最大サイズ",
+            "speed":"降雪速度 (高い = より速く降る)",
+            "typeOfSnow":"表示される雪の種類を変更します (パフォーマンスに影響します)"
+        }
+    },
+    "soggy":{
+        "description":"クリック可能な画像とサウンドエフェクトを備えたねっとりとしたプラグイン",
+        "settings":{
+            "boopLink":"URL ブー音",
+            "boopVolume":"ブー音の音量",
+            "imageLink":"画像の URL (ボタンとモーダル)",
+            "songLink":"再生する曲の URL",
+            "songVolume":"曲の音量。無効にする場合は 0",
+            "tooltipText":"ボタンの上にマウスを置いたときに表示されるテキスト"
+        }
+    },
+    "songLink":{
+        "description":"Song.link の統合によるプラットフォーム間での音楽共有",
+        "settings":{
+            "servicesSettings":"サービスの設定",
+            "userCountry":"検索に使用される国 (2 文字の国コード)"
+        }
+    },
+    "soundBoardLogger":{
+        "description":"音声チャンネルでサウンドボードの使用状況をログに記録する",
+        "settings":{
+            "FileType":"ファイルを保存する形式",
+            "SavedIds":"一度に保存したいサウンドボード ID の量 (0 を指定すると無限に保存できます)",
+            "soundVolume":"トグル音の大きさ (0 で無効)"
+        }
+    },
+    "splitLargeMessages":{
+        "description":"大きなメッセージを自動的にチャンクに分割します",
+        "settings":{
+            "disableFileConversion":"true の場合、大きなメッセージのファイル変換を無効にします。",
+            "hardSplit":"true の場合、最後のスペース/改行ではなく最後の文字で分割します。",
+            "maxLength":"分割される前のメッセージの最大長。自動検出するには 0 に設定します",
+            "sendDelay":"各チャンク間の遅延 (秒単位)",
+            "slowmodeMax":"スローモードで分割する場合の最大スローモード時間",
+            "splitInSlowmode":"チャネルでスローモードが有効になっている場合、メッセージを分割する必要がありますか?"
+        }
+    },
+    "spotifyActivityToggle":{
+        "description":"Spotify アクティビティの共有のオンとオフを切り替える",
+        "settings":{
+            "location":"Spotify トグルボタンを表示する場所"
+        }
+    },
+    "statsfmPresence":{
+        "description":"Stats.fm プレゼンスの統合",
+        "settings":{
+            "alwaysHideArt":"アルバムアートのダウンロードを無効にする",
+            "hideWithExternalRPC":"外部 RPC が実行されている場合、stats.fm の存在を非表示にします。",
+            "hideWithSpotify":"Spotify が実行されている場合は stats.fm の存在を非表示にする",
+            "missingArt":"アルバムまたはアルバムアートが見つからない場合",
+            "nameFormat":"ステータス名に曲名とアーティスト名を表示",
+            "shareSong":"stats.fm の曲へのリンクを表示",
+            "shareUsername":"stats.fm プロフィールへのリンクを表示",
+            "showStatsFmLogo":"アルバム カバーの横にある Stats.fm を表示します",
+            "statusName":"カスタムステータステキスト",
+            "useListeningStatus":"「再生中」ではなく「視聴中」ステータスを表示する",
+            "username":"Stats.fmのユーザー名"
+        }
+    },
+    "statusPresets":{
+        "description":"ステータスのプリセットの保存とロード"
+    },
+    "statusWhileActive":{
+        "description":"音声チャネルでアクティブなときにステータスを自動的に設定します",
+        "settings":{
+            "statusToSet":"音声チャネル中に設定するステータス"
+        }
+    },
+    "steamStatusSync":{
+        "description":"Steam ステータスを Discord ステータスと同期します",
+        "settings":{
+            "onlineStatus":"オンライン時の Steam ステータス"
         }
     }
 }
