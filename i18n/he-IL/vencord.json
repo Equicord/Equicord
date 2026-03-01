@@ -581,6 +581,9 @@
     "memberListDecoratorsAPI":{
         "description":"API כדי להוסיף מעצבים לרשימה של המשתמשים(גם בהתכתבות פרטית ובשרתים)"
     },
+    "menuItemDemanglerAPI":{
+        "description":"מנטרל את מודול פריט התפריט של Discord"
+    },
     "messageAccessoriesAPI":{
         "description":"API כדי להוסיף עיצוב הודעות"
     },
@@ -1085,6 +1088,20 @@
     "settingsSync":{
         "failedToImport":"ייבוא ההגדרות נכשל: {e}",
         "imported":"ההגדרות יובאו בהצלחה. הפעל מחדש כדי להחיל שינויים!"
+    },
+    "shikiCodeblocks":{
+        "description":"מביא בלוקי קוד בסגנון vscode לתוך Discord, מופעל על ידי Shiki",
+        "settings":{
+            "customTheme":"קישור לנושא vscode מותאם אישית",
+            "theme":"ערכות נושא ברירת מחדל",
+            "tryHljs":"השתמש בברירת המחדל הקלה יותר Discord בהדגשה ובערכת הנושא.",
+            "tryHljsOptions":{
+                "always":"תָמִיד",
+                "never":"לְעוֹלָם לֹא",
+                "preferHljs":"העדיפו Highlight.js במקום Shiki",
+                "preferShiki":"העדיפו את Shiki במקום Highlight.js"
+            }
+        }
     },
     "showConnections":{
         "description":"הצג חשבונות מחוברים בחלונות קופצים של משתמשים",
