@@ -9,6 +9,36 @@
     "addonCard":{
         "new":"UUSI"
     },
+    "alwaysAnimate":{
+        "description":"Animoi kaiken, mitä voidaan animoida",
+        "settings":{
+            "icons":"Animoi aina palvelinkuvakkeet, avatarit, sisustus ja paljon muuta",
+            "nameplates":"Animoi aina nimikyltit",
+            "roleGradients":"Animoi aina rooligradientit",
+            "serverBanners":"Animoi aina palvelinbannerit",
+            "statusEmojis":"Animoi aina tilaemojit"
+        }
+    },
+    "alwaysExpandRoles":{
+        "description":"Laajentaa aina rooliluettelon profiilin ponnahdusikkunoissa",
+        "settings":{
+            "hideArrow":"Piilota nuoli"
+        }
+    },
+    "alwaysTrust":{
+        "description":"Poistaa ärsyttävän epäluotetun verkkotunnuksen ja epäilyttävän tiedoston ponnahdusikkunan",
+        "settings":{
+            "confirmModal":"Pitäisikö \"Haluatko varmasti poistaa\" -modaalin näkyvän?",
+            "domain":"Poista epäluotetun verkkotunnuksen ponnahdusikkuna, kun avaat linkkejä",
+            "file":"Poista \"Mahdollisesti vaarallinen lataus\" -ponnahdusikkuna, kun avaat linkkejä",
+            "noDeleteSafety":"Poistaa palvelimen nimen syöttämistä koskevan vaatimuksen, kun palvelinta poistetaan"
+        },
+        "ui":{
+            "deleteServerBody":"Se on pysyvää, ellei se ollut selvää.",
+            "deleteServerConfirm":"Poista",
+            "deleteServerTitle":"Poistetaanko palvelin?"
+        }
+    },
     "anonymiseFileNames":{
         "commands":{
             "spoiler":{
@@ -92,6 +122,22 @@
             "title":"Kuinka käyttää arRPC:tä"
         }
     },
+    "autoDndWhilePlaying":{
+        "description":"Päivittää automaattisesti online-tilan (online, idle, dnd) pelejä käynnistettäessä",
+        "settings":{
+            "excludeInvisible":"Estä automaattiset tilan muutokset, kun tilasi on näkymätön",
+            "statusToSet":"Pelin aikana asetettava tila"
+        },
+        "statusOptions":{
+            "dnd":"Älä häiritse",
+            "idle":"Toimeton",
+            "invisible":"Näkymätön",
+            "online":"Paikalla"
+        }
+    },
+    "badgeAPI":{
+        "description":"API lisätäksesi merkkejä käyttäjille"
+    },
     "betterFolders":{
         "settings":{
             "closeAllFolders":"Sulje kaikki kansiot, kun valitset palvelimen, joka ei ole kansiossa",
@@ -108,6 +154,22 @@
             "sidebarAnim":"Animoi kansion sivupalkin avaaminen"
         }
     },
+    "betterGifAltText":{
+        "description":"Muuta GIF-altteksti yksinkertaisesti \"GIF\":stä sisältämään gif-tunnisteet/tiedostonimen"
+    },
+    "betterGifPicker":{
+        "description":"Tekee gif-valitsimen avaamaan suosikkiluokan oletuksena",
+        "settings":{
+            "keepOpen":"Pitää gif-valitsimen auki gif-valinnan jälkeen"
+        }
+    },
+    "betterNotesBox":{
+        "description":"Piilota muistiinpanot tai poista oikoluku käytöstä (Määritä asetuksissa!!)",
+        "settings":{
+            "hide":"Piilota muistiinpanot",
+            "noSpellCheck":"Poista oikoluku muistiinpanoista"
+        }
+    },
     "betterRoleContext":{
         "copyRoleColor":"Kopioi roolin väri",
         "description":"Lisää vaihtoehtoja roolin värin kopioimiseen / muokkaa roolia / näytä roolikuvake, kun napsautat roolia hiiren kakkospainikkeella käyttäjäprofiilissa",
@@ -117,6 +179,13 @@
             "roleIconFileFormat":"Tiedostomuoto, jota käytetään roolikuvakkeita katseltaessa"
         },
         "viewRoleIcon":"Näytä roolikuvake"
+    },
+    "betterRoleDot":{
+        "description":"Kopioi roolin väri RoleDot (esteettömyysasetus) -painikkeella. Mahdollistaa myös RoleDot- ja värillisten nimien käytön samanaikaisesti",
+        "settings":{
+            "bothStyles":"Näytä sekä roolipisteet että värilliset nimet",
+            "copyRoleColorInProfilePopout":"Anna roolin värin kopioiminen napsauttamalla profiilin ponnahdusikkunassa olevaa roolipistettä"
+        }
     },
     "betterSessions":{
         "newBadge":"UUSI",
@@ -140,10 +209,20 @@
             "organizeMenu":"Järjestää asetusten hampaiden kontekstivalikon luokkiin"
         }
     },
+    "betterUploadButton":{
+        "description":"Lataa yhdellä napsautuksella, avaa valikko hiiren kakkospainikkeella"
+    },
     "biggerStreamPreview":{
         "description":"Tämän laajennuksen avulla voit suurentaa suoratoiston esikatseluita",
         "name":"BiggerStreamPreview",
         "viewStreamPreview":"Näytä streamin esikatselu"
+    },
+    "blurNsfw":{
+        "description":"Sumenna liitteet NSFW-kanavilla, kunnes ne vievät hiiren osoitinta",
+        "settings":{
+            "blurAllChannels":"Sumenna liitteet kaikissa kanavissa (ei vain NSFW)",
+            "blurAmount":"Sumennuksen määrä (pikseleinä)"
+        }
     },
     "callTimer":{
         "description":"Lisää puheluajastimet kaikille äänikanavien ja yhteyden tilan käyttäjille.",
@@ -158,6 +237,12 @@
         }
     },
     "cancel":"Peruuta",
+    "chatInputButtonAPI":{
+        "description":"API lisätäksesi painikkeita chat-syötteeseen"
+    },
+    "clearURLs":{
+        "description":"Poistaa automaattisesti seurantaelementit lähettämistäsi URL-osoitteista"
+    },
     "clientTheme":{
         "contrastWarning":"Valittu väri ei ole hyvin kontrasti tekstin kanssa",
         "disableNitroTheme":"Poista Nitro-teema käytöstä",
@@ -196,6 +281,12 @@
             "updatedRemote":"Asetuksesi on päivitetty! Napsauta tätä aloittaaksesi uudelleen, jotta muutokset otetaan käyttöön kokonaan!"
         }
     },
+    "colorSighted":{
+        "description":"Poistaa värisokeille sopivat kuvakkeet tiloista, kuten 2015-2017 Discord"
+    },
+    "commandsAPI":{
+        "description":"[[PH0]]] vaaditaan kaikkeen, joka käyttää komentoja"
+    },
     "consoleJanitor":{
         "alwaysAllowLoggers":"Salli aina tämän tyyppiset kirjaajat",
         "description":"Poistaa käytöstä ärsyttävät konsolin viestit/virheet",
@@ -206,6 +297,12 @@
             "disableSpotifyLogger":"Poista käytöstä Spotify-loggeri, joka vuotaa tilitietoja ja käyttöoikeustunnusta",
             "whitelistedLoggers":"Puolipisteellä erotettu luettelo kirjaajista sallitaan, vaikka muut olisivat piilossa"
         }
+    },
+    "consoleShortcuts":{
+        "description":"Lisää lyhyempiä aliaksia monille ikkunan asioille. Suorita [[PH0]]] saadaksesi luettelo."
+    },
+    "contextMenuAPI":{
+        "description":"API kohteiden lisäämiseen tai poistamiseen kontekstivalikoista"
     },
     "contributorCard":{
         "contributionsButton":"Katso, mihin olet osallistunut",
@@ -234,6 +331,43 @@
     "copyUserURLs":{
         "copyUserURL":"Kopioi käyttäjä URL",
         "description":"Lisää 'Kopioi käyttäjä URL' -vaihtoehdon käyttäjän kontekstivalikkoon."
+    },
+    "crashHandler":{
+        "description":"Apuohjelmalaajennus kaatumisten käsittelyyn ja niistä mahdollisesti palautumiseen ilman uudelleenkäynnistystä",
+        "notifications":{
+            "crashedBody":"Awn :( Discord on kaatunut kaksi kertaa nopeasti, mutta ei yrittänyt toipua. Napsauta tätä liittyäksesi tukipalvelimeemme!",
+            "crashedTitle":"Discord on kaatunut!",
+            "invalidInvite":"Virheellinen tai vanhentunut kutsu",
+            "recoveringBody":"Yritetään palauttaa... Napsauta tästä liittyäksesi tukipalvelimeemme!"
+        },
+        "settings":{
+            "attemptToNavigateToHome":"Yritetäänkö navigoida kotiin, kun estetään Discord kaatumiset.",
+            "attemptToPreventCrashes":"Yritetäänkö estää Discord kaatumiset."
+        },
+        "updatePrompt":"Voi, Discord on juuri kaatunut... mutta hyviä uutisia, Equicord on saatavana päivitys, joka saattaa korjata tämän ongelman! Haluatko päivittää nyt?"
+    },
+    "ctrlEnterSend":{
+        "description":"Käytä Ctrl+Enter lähettääksesi viestejä (muokattavissa)",
+        "settings":{
+            "sendMessageInTheMiddleOfACodeBlock":"Lähetetäänkö viesti keskellä koodilohkoa",
+            "submitRule":"Tapa lähettää viesti"
+        },
+        "submitRuleOptions":{
+            "ctrlEnter":"Ctrl+Enter (Enter tai Vaihto+Enter uudelle riville) (cmd+enter macOS:ssä)",
+            "enter":"Enter (Vaihto+Enter uudelle riville; Discord oletus)",
+            "shiftEnter":"Vaihto+Enter (Enter uudelle riville)"
+        }
+    },
+    "customIdle":{
+        "description":"Voit asettaa ajan ennen kuin Discord siirtyy tyhjäkäynnille (tai poistaa automaattisen tyhjäkäynnin käytöstä)",
+        "settings":{
+            "idleTimeout":"Minuuttia ennen kuin Discord menee tyhjäkäynnille (0 automaattisen tyhjäkäynnin poistamiseksi)",
+            "remainInIdle":"Kun palaat osoitteeseen Discord, pysy käyttämättömänä, kunnes vahvistat, että haluat siirtyä verkkoon"
+        },
+        "ui":{
+            "backOnlineMessage":"Tervetuloa takaisin! Siirry verkkoon napsauttamalla painiketta. Napsauta X pysyäksesi käyttämättömänä uudelleenlataukseen asti.",
+            "exitIdle":"Poistu tyhjäkäynnistä"
+        }
     },
     "customRPC":{
         "activityType":"Toiminnan tyyppi",
@@ -322,6 +456,17 @@
         "removeDecoration":"Poista koristelu",
         "title":"Sisustus"
     },
+    "devCompanion":{
+        "description":"Dev Companion -laajennus. Ilmoita kaikesta, mikä ei toimi tai on outoa (todennäköisimmin se on bugi) sadanille, joko ping tai dm, kiitos!",
+        "settings":{
+            "notifyOnAutoConnect":"Ilmoittaako, kun Dev Companion on muodostanut yhteyden automaattisesti.",
+            "reloadAfterToggle":"Lataa uudelleen, kun liitännäisen käytöstä poistaminen/käyttöönotto -komento on vastaanotettu.",
+            "usePatchedModule":"Pura pyyntöihin vastaa nykyisellä korjatulla moduulilla (jos se on korjattu) alkuperäisen sijaan."
+        }
+    },
+    "disableCallIdle":{
+        "description":"Poistaa käytöstä automaattisesti potkut DM-äänipuhelusta 3 minuutin kuluttua ja siirron AFK-äänikanavalle."
+    },
     "donate":"Lahjoittaa",
     "donorCard":{
         "donated":{
@@ -335,6 +480,12 @@
             "description":"Harkitse Equicord:n kehittämisen tukemista lahjoittamalla!",
             "title":"Tue projektia"
         }
+    },
+    "dontRoundMyTimestamps":{
+        "description":"Pyöristää suhteelliset aikaleimat aina alaspäin, joten 7,6 vuodesta tulee 7 v 8 vuoden sijaan"
+    },
+    "dynamicImageModalAPI":{
+        "description":"Voit jättää joko leveyden tai korkeuden pois avattaessa kuvamodaalia"
     },
     "experiments":{
         "description":"Salli kokeilujen ja muiden vain kehittäjille tarkoitettujen ominaisuuksien käyttö Discordssa!",
@@ -357,6 +508,9 @@
         "failedToClone":"Kloonaus epäonnistui: {error}",
         "nameValidation":"Nimen tulee olla 2–32 merkkiä pitkä",
         "somethingWentWrong":"Jotain meni pieleen (tarkista konsoli!)"
+    },
+    "f8break":{
+        "description":"Keskeytä asiakas, kun painat F8 DevToolsin (+ keskeytyskohdat) ollessa auki."
     },
     "failedToRender":"{tab}-välilehden renderöinti epäonnistui. Jos ongelma jatkuu, yritä asentaa uudelleen asennusohjelman avulla!",
     "fakeNitro":{
@@ -401,6 +555,40 @@
         "primary":"Ensisijainen",
         "usage":"Käyttö"
     },
+    "favEmojiFirst":{
+        "description":"Asettaa suosikkiemojisi etusijalle emojien automaattisessa täydennyksessä ja sisältää myös emoji-aliaksen.",
+        "settings":{
+            "aliases":"Hallinnoi emoji-aliaksia.",
+            "clearAll":"Poista kaikki aliakset."
+        },
+        "ui":{
+            "aliasRequired":"Alias vaaditaan.",
+            "aliasSetFor":"Alias asetettu kohteelle {emoji}.",
+            "aliasValidation":"Aliaksen tulee olla 2–32 merkkiä pitkä, ja siinä saa käyttää vain pieniä kirjaimia, numeroita tai alaviivoja.",
+            "confirmModal":{
+                "confirmButton":"Poista kaikki aliakset",
+                "description":"Tämä poistaa kaikki tallentamasi emoji-aliakset.",
+                "title":"Poista kaikki aliakset"
+            },
+            "deleteAllAliases":"Poista kaikki aliakset",
+            "deletedAllAliases":"Poistettu kaikki emoji-aliakset.",
+            "duplicateAlias":"Päällekkäinen alias",
+            "editAlias":"Muokkaa aliasta",
+            "failedToDelete":"Aliaksien poistaminen epäonnistui.",
+            "failedToRemove":"Aliaksen poistaminen epäonnistui.",
+            "failedToSave":"Aliaksen tallentaminen epäonnistui.",
+            "modal":{
+                "placeholder":"Alias, esim. \"nyyhkyttää\"",
+                "save":"Tallenna",
+                "setDescription":"Aseta alias kohteelle {emoji}",
+                "setTitle":"Aseta alias"
+            },
+            "noAliasesYet":"Ei vielä asetettu aliaksia.",
+            "remove":"Poista",
+            "removedAlias":"Poistettu alias :{alias}:",
+            "setAlias":"Aseta alias"
+        }
+    },
     "favGifSearch":{
         "description":"Lisää hakupalkin suosikkigifiin.",
         "name":"SuosikkiGif-haku",
@@ -413,6 +601,9 @@
         "settings":{
             "searchOption":"URL-osoitteen osa, jota haluat etsiä"
         }
+    },
+    "fixCodeblockGap":{
+        "description":"Poistaa aukon koodilohkojen ja sen alla olevan tekstin välillä"
     },
     "fixImagesQuality":{
         "animatedImagesAlways":"Animoidut kuvat (GIF, WebP jne.) chatissa animoituvat aina riippumatta siitä, onko sovellus tarkennettu.",
@@ -427,9 +618,51 @@
             "originalImagesInChat":"Lataa myös alkuperäinen kuva Chatiin. VAROITUS: Lue yllä olevat varoitukset"
         }
     },
+    "fixSpotifyEmbeds":{
+        "description":"Korjaa spotify-upotuksen uskomattoman äänekkäiksi antamalla sinun muokata äänenvoimakkuutta",
+        "settings":{
+            "volume":"Spotify-upotuksille asetettava äänenvoimakkuusprosentti. Kaikki yli 10 % on todella kovaa"
+        }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"Ohittaa YouTube-videot, jotka on estetty näkymästä Discord (esimerkiksi UMG)"
+    },
+    "forceOwnerCrown":{
+        "description":"Pakota omistajan kruunu käyttäjänimien viereen, vaikka palvelin olisi suuri."
+    },
+    "friendInvites":{
+        "commands":{
+            "createFriendInvite":{
+                "description":"Luo kaverikutsulinkin.",
+                "name":"luo kaverikutsu"
+            },
+            "revokeFriendInvites":{
+                "description":"Peruuttaa kaikki luodut ystäväkutsut.",
+                "name":"peruuttaa ystäväkutsut"
+            },
+            "viewFriendInvites":{
+                "description":"Näytä luettelo kaikista luoduista ystäväkutsuista.",
+                "name":"katso ystäväkutsut"
+            }
+        },
+        "description":"Luo ja hallitse kaverikutsulinkkejä kauttaviivakomentojen avulla (/create friend kutsu, /view ystäväkutsut, /peru kaverikutsut).",
+        "ui":{
+            "allRevoked":"Kaikki kaverikutsut on peruutettu.",
+            "expires":"Vanhenee:",
+            "maxUses":"Enimmäiskäytöt:",
+            "noActiveInvites":"Sinulla ei ole aktiivisia ystäväkutsuja!",
+            "timesUsed":"Käytetty ajat:"
+        }
+    },
     "friendsSince":{
         "description":"Näyttää, milloin ystävystyit jonkun kanssa käyttäjän ponnahdusikkunassa",
         "heading":"Ystävät vuodesta"
+    },
+    "fullSearchContext":{
+        "description":"Tekee viestihaun tulosten viestin kontekstivalikosta kaikki odottamasi vaihtoehdot"
+    },
+    "fullUserInChatbox":{
+        "description":"Saa käyttäjän mainitsemaan chatboxissa lisää toimintoja, kuten vasen/oikea napsautus"
     },
     "gameActivityToggle":{
         "description":"Lisää painikkeen mikrofonin ja kuurouspainikkeen viereen pelitoiminnan vaihtamiseksi.",
@@ -441,6 +674,9 @@
             "locationToolbox":"Equicord Toolbox",
             "oldIcon":"Käytä vanhaa kuvaketyyliä ennen Discord kuvakkeen uudelleensuunnittelua"
         }
+    },
+    "gifPaste":{
+        "description":"Saa gif-kuvan poimimisen gif-valitsimesta lisäämään linkin chat-ruutuun sen sijaan, että lähetät sen välittömästi"
     },
     "greetStickerPicker":{
         "ariaLabel":"Tervehdys tarranpoimija",
@@ -458,6 +694,9 @@
         "hideMedia":"Piilota media",
         "mediaHidden":"Media piilotettu",
         "showMedia":"Näytä media"
+    },
+    "iLoveSpam":{
+        "description":"Älä piilota viestejä \"todennäköisiltä roskapostittajilta\""
     },
     "ignoreActivities":{
         "disableActivity":"Poista toiminta käytöstä",
@@ -483,6 +722,15 @@
             "whitelist":"Valkoinen lista"
         }
     },
+    "imageFilename":{
+        "description":"Näytä kuvien ja GIF-tiedostojen tiedostonimet työkaluvihjeenä, kun viet hiiren niiden päälle",
+        "settings":{
+            "showFullUrl":"Näytä kuvan koko URL pelkän tiedostonimen sijaan. GIF-tiedostot ovat aina käytössä, koska niillä ei yleensä ole merkityksellistä tiedostonimeä"
+        }
+    },
+    "imageLink":{
+        "description":"Älä koskaan piilota kuvalinkkejä viesteissä, vaikka se olisi ainoa sisältö"
+    },
     "imageZoom":{
         "lensSize":"Linssin koko",
         "nearestNeighbour":"Lähin naapuri",
@@ -499,7 +747,29 @@
         "zoom":"Zoomaa",
         "zoomSpeed":"Zoomausnopeus"
     },
+    "implicitRelationships":{
+        "description":"Näyttää implisiittiset suhteesi Ystävät-välilehdessä.",
+        "settings":{
+            "sortByAffinity":"Lajitteletko implisiittiset suhteet niiden affiniteetin mukaan."
+        },
+        "ui":{
+            "implicitHeader":"Implisiittinen — {count}",
+            "implicitSection":"Implisiittinen"
+        }
+    },
     "invite":"Kutsu",
+    "ircColors":{
+        "description":"Tekee käyttäjänimien värit chatissa ainutlaatuiset, kuten IRC-asiakkaissa",
+        "settings":{
+            "applyColorOnlyInDms":"Käytä värejä vain suorissa viesteissä; älä käytä värejä palvelimissa.",
+            "applyColorOnlyToUsersWithoutColor":"Käytä värejä vain käyttäjille, joilla ei ole ennalta määritettyä väriä",
+            "lightness":"Keveys, %. Muuta, jos värit ovat liian vaaleita tai tummia",
+            "memberListColors":"Korvaa roolin värit jäsenluettelossa"
+        }
+    },
+    "keepCurrentChannel":{
+        "description":"Yritä navigoida kanavalle, jolla olit ennen tilin vaihtamista tai Discord:n lataamista."
+    },
     "lastfmRichPresence":{
         "apiKeyInstructions":"Aseta <0>Sovelluksen nimi</0> ja <1>Sovelluksen kuvaus</1> mihin tahansa ja jätä loput tyhjäksi.",
         "createApiKey":"Luo API-avain",
@@ -540,6 +810,19 @@
         }
     },
     "loading":"Ladataan...",
+    "loadingQuotes":{
+        "description":"Korvaa Discordsin latauslainaukset",
+        "settings":{
+            "additionalQuotes":"Muita mukautettuja lainausmerkkejä, jotka saattavat näkyä, erotettuna alla olevalla erottimella",
+            "additionalQuotesDelimiter":"Erotin lisälainauksille",
+            "enableDiscordPresetQuotes":"Ota käyttöön käyttäjän Discord esiasetetut lainaukset (mukaan lukien tapahtumalainaukset tapahtumien aikana)",
+            "enablePluginPresetQuotes":"Ota käyttöön tämän laajennuksen esiasetetut lainausmerkit",
+            "replaceEvents":"Pitäisikö tätä laajennusta soveltaa myös tapahtumissa, joissa on erityisiä tapahtumateemoja? (esim. Halloween)"
+        },
+        "ui":{
+            "noQuotesQuote":"Oletko todella poistanut kaikki lataustarjoukset käytöstä? Mikä pelle sinä olet..."
+        }
+    },
     "logs":{
         "allLogsCleared":"Kaikki lokit on tyhjennetty",
         "clearAll":"Tyhjennä kaikki",
@@ -562,6 +845,84 @@
             "toolTip":"Näytä jäsenmäärä palvelimen työkaluvihjeessä",
             "voiceActivity":"Näytä äänitoiminta jäsenten lukumäärän kanssa jäsenluettelossa"
         }
+    },
+    "memberListDecoratorsAPI":{
+        "description":"API lisätäksesi sisustajia jäsenluetteloon (sekä palvelimissa että DM:issä)"
+    },
+    "mentionAvatars":{
+        "description":"Näyttää käyttäjien avatarit ja roolikuvakkeet mainintojen sisällä",
+        "settings":{
+            "showAtSymbol":"Onko @-symboli näytettävä käyttäjän mainitsemissa"
+        }
+    },
+    "menuItemDemanglerAPI":{
+        "description":"Purkaa Discord:n valikkokohdemoduulin"
+    },
+    "messageAccessoriesAPI":{
+        "description":"API lisätäksesi viestin lisälaitteita"
+    },
+    "messageClickActions":{
+        "actions":{
+            "copyContent":"Kopioi sisältö",
+            "copyId":"Kopioi tunniste",
+            "copyLink":"Kopioi linkki",
+            "copyUserId":"Kopioi käyttäjätunnus",
+            "delete":"Poista",
+            "edit":"Muokkaa",
+            "none":"Ei mitään",
+            "openTab":"Avaa välilehti",
+            "openThread":"Avaa ketju",
+            "pin":"Kiinnitä",
+            "quote":"Lainata",
+            "react":"Reagoi",
+            "reply":"Vastaa"
+        },
+        "description":"Mukauta viestien napsautustoimintoja.",
+        "modifiers":{
+            "alt":"Alt",
+            "backspace":"Askelpalautin",
+            "ctrl":"Ctrl",
+            "delete":"Poista",
+            "none":"Ei mitään",
+            "shift":"Siirtää"
+        },
+        "settings":{
+            "clickTimeout":"Aikakatkaisu kaksois- tai kolminkertaisten napsautusten erottamiseksi (ms)",
+            "deferDoubleClickForTriple":"Viivytä kaksoisnapsautusta salliaksesi kolmoisnapsautustoiminnot (poistaa kolmoisnapsautuksen käytöstä, kun se ei ole käytössä)",
+            "disableInDms":"Poista käytöstä kaikki napsautustoiminnot suorissa viesteissä",
+            "disableInSystemDms":"Poista käytöstä kaikki napsautustoiminnot järjestelmän DM:issä",
+            "doubleClickAction":"Toimenpide kaksoisnapsautuksessa (viestisi)",
+            "doubleClickHoldThreshold":"Kaksoisnapsautustoimintojen enimmäispitoaika (ms). Pitempi painallus mahdollistaa tekstin valinnan",
+            "doubleClickModifier":"Kaksoisnapsautustoimintoon tarvitaan muuntaja",
+            "doubleClickOthersAction":"Toimenpide kaksoisnapsautuksessa (muiden viestit)",
+            "quoteWithReply":"Kun lainaat, vastaa myös viestiin",
+            "reactEmoji":"Emoji, jota käytetään reagoimaan",
+            "selectionHoldTimeout":"Aikakatkaisu tekstin valinnan sallimiselle (ms)",
+            "singleClickAction":"Toimi yhdellä napsautuksella (viestisi)",
+            "singleClickModifier":"Muokkaus tarvitaan yhden napsautuksen toimintoon (viestisi)",
+            "singleClickOthersAction":"Toiminto yhdellä napsautuksella (muiden viestit)",
+            "singleClickOthersModifier":"Muokkaus tarvitaan yhden napsautuksen toimintoon (muiden viestit)",
+            "tripleClickAction":"Toiminto kolmoisnapsauttamalla",
+            "tripleClickModifier":"Muokkaus tarvitaan kolmoisnapsautustoimintoon",
+            "useSelectionForQuote":"Kun lainaat, käytä valittua tekstiä, jos mahdollista"
+        },
+        "toasts":{
+            "cannotPin":"Ei voi kiinnittää: Puuttuvat käyttöoikeudet",
+            "cannotQuote":"Tätä viestityyppiä ei voi lainata",
+            "cannotReact":"Ei voi reagoida: Luvat puuttuvat"
+        },
+        "ui":{
+            "linkCopied":"Linkki kopioitu!",
+            "messageContentCopied":"Viestin sisältö kopioitu!",
+            "messageIdCopied":"Viestitunnus kopioitu!",
+            "userIdCopied":"Käyttäjätunnus kopioitu!"
+        }
+    },
+    "messageDecorationsAPI":{
+        "description":"API lisätäksesi koristeita viesteihin"
+    },
+    "messageEventsAPI":{
+        "description":"[[PH0]]] vaaditaan mihin tahansa viestitapahtumiin"
     },
     "messageLatency":{
         "clockAhead":"Tämän käyttäjän kello on {delta} edellä.",
@@ -649,6 +1010,50 @@
         },
         "toggleDeletedHighlight":"Poistettu korostus päälle/pois"
     },
+    "messagePopoverAPI":{
+        "description":"API lisätäksesi painikkeita viestien ponnahdusikkunoihin"
+    },
+    "messageTags":{
+        "commands":{
+            "create":"Luo uusi tunniste",
+            "delete":"Poista tunniste itsestäsi",
+            "list":"Listaa kaikki tunnisteet itseltäsi",
+            "message":"Viesti, jonka lähetät, kun käytät tätä tunnistetta",
+            "preview":"Esikatsele tunnistetta lähettämättä sitä julkisesti",
+            "tagName":"Vastauksen käynnistävän tagin nimi",
+            "tags":"Hallitse kaikkia tunnisteita itse"
+        },
+        "description":"Voit tallentaa viestejä ja käyttää niitä yksinkertaisella komennolla.",
+        "settings":{
+            "clydeDescription":"Jos tämä on käytössä, clyde lähettää sinulle lyhytaikaisen viestin, kun tunnistetta käytettiin.",
+            "clydeName":"Clyden viesti lähetettäessä"
+        },
+        "ui":{
+            "allTags":"Kaikki tunnisteet:",
+            "invalidSubCommand":"Virheellinen alakomento",
+            "noTagsYet":"Hups! Tunnisteita ei ole vielä, luo sellainen käyttämällä `/tags create`!",
+            "tagAlreadyExists":"Tunniste, jonka nimi on **{name}**, on jo olemassa!",
+            "tagCreated":"Tunnisteen **{name}** luominen onnistui!",
+            "tagDeleted":"Tunnisteen **{name}** poistaminen onnistui!",
+            "tagDoesNotExist":"Tunnistetta **{name}** ei ole enää olemassa! Lataa Discord uudelleen korjataksesi :)",
+            "tagDoesNotExist2":"Tunnistetta, jonka nimi on **{name}**, ei ole olemassa!",
+            "tagSent":"Tunniste **{name}** on lähetetty!"
+        }
+    },
+    "messageUpdaterAPI":{
+        "description":"API viestien päivittämiseen ja uudelleenrenderöimiseen"
+    },
+    "moreQuickReactions":{
+        "description":"Parantaa viestin pikavalikon pikareagointipainikkeita.",
+        "settings":{
+            "columns":"Nopeiden reaktioiden sarakkeet näytettäväksi",
+            "compactMode":"Skaalaa painikkeet 75 %:iin niiden alkuperäisestä mittakaavasta ja nostaa sisäemojin 125 %:iin. Emojit ovat 93,75 % alkuperäisestä koosta. Vähintään 5 saraketta suositellaan",
+            "frequentEmojis":"Käytä usein käytettyjä hymiöitä suosikkiemojien sijaan",
+            "reactionCount":"Reaktioiden määrä (0-42)",
+            "rows":"Näytettäviä rivejä nopeita reaktioita",
+            "scroll":"Ota käyttöön emojiluettelon vierittäminen"
+        }
+    },
     "mutualGroupDMs":{
         "description":"Näyttää keskinäiset ryhmätiedot profiileissa",
         "members_one":"{count} Jäsen",
@@ -678,6 +1083,52 @@
             "voiceChannels":"Piilota nimet äänikanavissa automaattisesti"
         }
     },
+    "nicknameIconsAPI":{
+        "description":"API lisätäksesi kuvakkeita lempinimeen profiileissa"
+    },
+    "noBlockedMessages":{
+        "description":"Piilota kaikki estetyt / ohitetut viestit chatista kokonaan.",
+        "settings":{
+            "allowAutoModMessages":"Salli AutoModin lähettämien viestien ohittaa suodatus.",
+            "alsoHideIgnoredUsers":"Piilota myös viestit ohitetuilta käyttäjiltä.",
+            "defaultHideUsers":"Jos tämä on käytössä, estettyjen käyttäjien viestit piilotetaan kokonaan ja kaikki ohitusluettelossa olevista käyttäjätunnuksista tulevat viestit tiivistetään (oletusarvo Discord). Jos se ei ole käytössä, estettyjen käyttäjien viestit tiivistetään ja kaikki ohitusluettelossa olevista käyttäjätunnuksista tulevat viestit piilotetaan kokonaan.",
+            "disableNotifications":"Piilota estettyjen käyttäjien uusien viestien ilmoitukset. Aina tosi, jos \"Oletuspiilota käyttäjät\" on otettu käyttöön alla ja ilmoituksen käynnistävää käyttäjää ei ole vapautettu \"Ohita käyttäjät\" -kohdassa.",
+            "hideBlockedUserReplies":"Piilota vastaukset estetyille käyttäjille.",
+            "overrideUsers":"Pilkuilla eroteltu luettelo käyttäjätunnuksista, jotka piilotetaan tai tiivistetään yllä valitun oletustoiminnon sijaan."
+        }
+    },
+    "noDeepLinks":{
+        "description":"Poistaa käytöstä Discord:n typerän syvälinkkiominaisuuden, joka yrittää pakottaa sinut käyttämään heidän työpöytäsovellustaan"
+    },
+    "noDevtoolsWarning":{
+        "description":"Poistaa käytöstä 'HOLD UP' -bannerin konsolissa. Sivuvaikutuksena estää myös Discord piilottamasta merkkiäsi, mikä estää satunnaiset uloskirjautumiset."
+    },
+    "noF1":{
+        "description":"Poista F1 help bind käytöstä."
+    },
+    "noMaskedUrlPaste":{
+        "description":"Linkin liittäminen, kun teksti on valittuna, ei liity peitettynä URL"
+    },
+    "noMosaic":{
+        "description":"Poistaa [[PH0]]] kuvamosaiikin",
+        "settings":{
+            "inlineVideo":"Toista videoita ilman karusellimodaalia"
+        }
+    },
+    "noOnboardingDelay":{
+        "description":"Ohittaa hitaan ja ärsyttävän aloitusviiveen"
+    },
+    "noPendingCount":{
+        "description":"Poistaa saapuvien kaveripyyntöjen, viestipyyntöjen ja nitro-tarjousten ping-määrän.",
+        "settings":{
+            "hideFriendRequestsCount":"Piilota saapuvien kaveripyyntöjen määrä",
+            "hideMessageRequestsCount":"Piilota viestipyyntöjen määrä",
+            "hidePremiumOffersCount":"Piilota nitro-tarjousten määrä"
+        }
+    },
+    "noProfileThemes":{
+        "description":"Poistaa Nitro-profiiliteemat kokonaan kaikilta paitsi itseltäsi"
+    },
     "noReplyMention":{
         "description":"Poistaa oletuksena vastauspingit käytöstä",
         "settings":{
@@ -687,6 +1138,64 @@
             "roleList":"Luettelo rooleista, joille ping-kutsut sallitaan tai vapautetaan (eroteltu pilkuilla tai välilyönneillä)",
             "shouldPingListed":"Käyttäytyminen",
             "userList":"Luettelo käyttäjistä, joille ping-kutsut sallitaan tai vapautetaan (eroteltu pilkuilla tai välilyönneillä)"
+        }
+    },
+    "noServerEmojis":{
+        "description":"Älä näytä palvelimen hymiöitä automaattisen täydennyksen valikossa.",
+        "settings":{
+            "shownEmojis":"Automaattisen täydennyksen valikossa näytettävät emojit.",
+            "shownEmojisOptions":{
+                "all":"Unicode-emojit ja kaikki palvelimen emojit (Discord oletus)",
+                "currentServer":"Unicode-emojit ja palvelimen emojit nykyisestä palvelimesta",
+                "onlyUnicode":"Vain unicode-emojit"
+            }
+        }
+    },
+    "noSystemBadge":{
+        "description":"Poistaa käytöstä tehtäväpalkin ja ilmaisinalueen lukemattomien lukumäärän merkin."
+    },
+    "noTypingAnimation":{
+        "description":"Poistaa käytöstä prosessoria vaativan pisteanimoinnin"
+    },
+    "noUnblockToJump":{
+        "description":"Voit siirtyä estettyjen tai huomiotta jätettyjen käyttäjien ja todennäköisten roskapostittajien viesteihin poistamatta estoa"
+    },
+    "noticesAPI":{
+        "description":"Korjaa automaattisesti hylätyt ilmoitukset"
+    },
+    "notificationVolume":{
+        "description":"Säästä korvasi ja aseta erillinen äänenvoimakkuus ilmoituksille ja sovelluksen sisäisille äänille",
+        "settings":{
+            "notificationVolume":"Ilmoitusten määrä"
+        }
+    },
+    "onePingPerDM":{
+        "description":"Jos käyttäjä lähettää lukemattomia viestejä DM-viesteissä useita kertoja, saat vain yhden äänipingin.",
+        "settings":{
+            "allowEveryone":"Vastaanota äänipingit kohteille @everyone ja [[PH1]]] ryhmälähetyksissä",
+            "allowMentions":"Vastaanota äänipingit @maininnoille",
+            "alwaysPlaySound":"Toista viestin ilmoitusääni, vaikka se ei olisi käytössä",
+            "channelToAffect":"Valitse DM-tyyppi, johon laajennus vaikuttaa",
+            "channelToAffectOptions":{
+                "both":"Molemmat",
+                "groupDm":"Group DM",
+                "userDm":"Käyttäjien DM:t"
+            },
+            "ignoreUsers":"Käyttäjätunnukset (pilkku + välilyönti), joiden ping-kutsuja EI pidä KOSKAAN rajoittaa"
+        }
+    },
+    "openInApp":{
+        "description":"Avaa linkit vastaavissa sovelluksissa selaimesi sijaan",
+        "settings":{
+            "epic":"Avaa Epic Games -linkit Epic Games Launcherissa",
+            "itunes":"Avaa Apple Music -linkit iTunes-sovelluksessa",
+            "spotify":"Avaa Spotify-linkit Spotify-sovelluksessa",
+            "steam":"Avaa Steam-linkit Steam-sovelluksessa",
+            "tidal":"Avaa Tidal-linkit Tidal-sovelluksessa",
+            "vrcx":"Avaa VRChat-linkit VRCX-sovelluksessa"
+        },
+        "ui":{
+            "openedInApp":"Linkki avattu alkuperäisessä sovelluksessa"
         }
     },
     "overrideForumDefaults":{
@@ -710,6 +1219,13 @@
         "name":"PauseInvitesForever",
         "pauseIndefinitely":"Tauko toistaiseksi."
     },
+    "permissionFreeWill":{
+        "description":"Poistaa käytöstä asiakaspuolen rajoitukset kanavan käyttöoikeuksien hallinnassa.",
+        "settings":{
+            "lockout":"Ohita käyttölukituksen esto (\"Melko varma, ettet halua tehdä tätä\")",
+            "onboarding":"Ohita käyttöönottovaatimukset (\"Tämän muutoksen tekeminen tekee palvelimestasi yhteensopimattoman [...]\")"
+        }
+    },
     "permissionsViewer":{
         "noPermissions":"Ei näyttöoikeuksia!",
         "owner":"omistaja",
@@ -725,6 +1241,29 @@
         "unknownUser":"Tuntematon käyttäjä",
         "userOptions":"Käyttäjän asetukset",
         "viewPermissions":"Näytä käyttöoikeudet"
+    },
+    "petpet":{
+        "commands":{
+            "petpet":{
+                "description":"Luo petpet gif. Voit määrittää vain yhden kuvavaihtoehdoista",
+                "name":"lemmikki",
+                "options":{
+                    "delay":"Kunkin kehyksen välinen viive ms. Pyöristetty lähimpään 10 ms:iin. Oletusarvo on vähimmäisarvo 20.",
+                    "image":"Kuvaliite käytettäväksi",
+                    "noServerPfp":"Käytä normaalia avataria palvelinkohtaisen avatarin sijaan, kun käytät \"käyttäjä\"-vaihtoehtoa",
+                    "resolution":"Resoluutio gifille. Oletusarvo on 120. Jos syötät järjettömän luvun ja se pysähtyy Discord, se on sinun syytäsi.",
+                    "url":"URL, josta kuva haetaan",
+                    "user":"Käyttäjä, jonka avataria käytetään kuvana"
+                }
+            }
+        },
+        "description":"Lisää /petpet kauttaviiva-komennon headpet-gif-kuvien luomiseksi mistä tahansa kuvasta",
+        "errors":{
+            "delayMinimum":"Viiveen tulee olla vähintään 20.",
+            "failedToFetchUser":"Käyttäjän nouto epäonnistui. Tarkista konsolista lisätietoja.",
+            "noImage":"Kuvaa ei ole määritetty!",
+            "uploadNotImage":"Lataaminen ei ole kuva"
+        }
     },
     "pictureInPicture":{
         "description":"Lisää kuva kuvassa videoihin (Lataa-painikkeen vieressä)",
@@ -755,6 +1294,9 @@
             "pinOrder":"Missä järjestyksessä kiinnitetyt DM:t tulee näyttää?"
         },
         "unpinDm":"Irrota DM"
+    },
+    "plainFolderIcon":{
+        "description":"Älä näytä pieniä kiltakuvakkeita kansioissa"
     },
     "platformIndicators":{
         "consoleIcons":{
@@ -795,15 +1337,36 @@
         "description":"Lisää pikamainintapainikkeen viestitoimintopalkkiin",
         "label":"Pikamaininta"
     },
+    "quickReply":{
+        "description":"Vastaa (ctrl + ylös/alas) ja muokkaa (Ctrl + vaihto + ylös/alas) viesteihin näppäinpainikkeilla",
+        "settings":{
+            "ignoreBlockedAndIgnored":"Ohita estettyjen/ohitattujen käyttäjien viestit navigoinnin aikana",
+            "shouldMention":"Ping-vastaus oletuksena",
+            "shouldMentionOptions":{
+                "disabled":"Pois käytöstä",
+                "enabled":"Käytössä",
+                "followPlugin":"Seuraa NoReplyMention-laajennusta (jos käytössä)"
+            }
+        }
+    },
+    "reactErrorDecoder":{
+        "description":"Korvaa \"Minifed React Error\" todellisella virheellä."
+    },
     "readAllNotificationsButton":{
         "description":"Lue kaikki palvelinilmoitukset yhdellä napin painalluksella!",
         "name":"Lue kaikki ilmoitukset -painike",
         "readAll":"Lue kaikki"
     },
     "relationshipNotifier":{
+        "description":"Ilmoittaa, kun ystävä, ryhmäkeskustelu tai palvelin poistaa sinut.",
         "friendRemoved":"{username} poisti sinut ystävästäsi.",
         "friendRequestRemoved":"Ystäväpyyntö käyttäjältä {username} on poistettu.",
         "groupRemoved":"Sinut poistettiin ryhmästä {name}.",
+        "notificationTitle":"Suhteen ilmoittaja",
+        "offlineFriendRemoved":"Et ole enää ystäviä {username}:n kanssa.",
+        "offlineFriendRequestRevoked":"Ystäväpyyntö käyttäjältä {username} on peruutettu.",
+        "offlineGroupRemoved":"Et ole enää ryhmässä {name}.",
+        "offlineServerRemoved":"Et ole enää palvelimella {name}.",
         "serverRemoved":"Sinut poistettiin palvelimelta {name}.",
         "settings":{
             "friendRequestCancels":"Ilmoita, kun kaveripyyntö peruutetaan",
@@ -825,6 +1388,12 @@
             "off":"Pois",
             "replacementEngine":"Korvaa tietyllä hakukoneella valikon lisäämisen sijaan"
         }
+    },
+    "replyTimestamp":{
+        "description":"Näyttää aikaleiman vastausviestien esikatseluissa"
+    },
+    "revealAllSpoilers":{
+        "description":"Näytä kaikki viestissä olevat spoilerit Ctrl-klikkaamalla spoileria tai chatissa Ctrl+Vaihto-napsauttamalla"
     },
     "reverseImageSearch":{
         "all":"Kaikki",
@@ -876,6 +1445,24 @@
         "unblockUser":"Kumoa käyttäjän esto",
         "viewReviews":"Näytä arvostelut"
     },
+    "roleColorEverywhere":{
+        "description":"Lisää ylimmän roolin värin kaikkialle mahdollista",
+        "settings":{
+            "chatMentions":"Näytä roolivärit chat-maininnoissa (myös viestilaatikossa)",
+            "colorChatMessages":"Väritä chat-viestit kirjoittajan roolin värin perusteella",
+            "memberList":"Näytä roolien värit jäsenluettelon rooliotsikoissa",
+            "messageSaturation":"Viestin värityksen voimakkuus.",
+            "pollResults":"Näytä roolivärit kyselyn tuloksissa",
+            "reactorsList":"Näytä roolivärit reaktoriluettelossa",
+            "voiceUsers":"Näytä roolivärit äänikeskustelun käyttäjäluettelossa"
+        }
+    },
+    "secretRingTone":{
+        "description":"Toista aina epäsopivan soittoäänen salainen versio (paitsi erityisten soittoäänien aikana)",
+        "settings":{
+            "onlySnow":"Pelaa vain Snow Halation -teemaa"
+        }
+    },
     "seeSummaries":{
         "description":"Ottaa käyttöön [[PH0]]]:n kokeellisen yhteenvetoominaisuuden jokaisella palvelimella, joka näyttää tekoälyn luomat yhteenvedot keskusteluista",
         "name":"Yhteenvedot",
@@ -898,6 +1485,36 @@
         },
         "timestampFormat":"Aikaleiman muoto",
         "timestampPicker":"Aikaleiman valitsin"
+    },
+    "serverInfo":{
+        "description":"Voit tarkastella palvelimen tietoja",
+        "settings":{
+            "sorting":"Käyttäjätunnus tai tarvittaessa näyttönimi",
+            "sortingOptions":{
+                "displayname":"Näyttönimi",
+                "none":"Älä lajittele",
+                "username":"Käyttäjänimi"
+            }
+        },
+        "ui":{
+            "blockedUsers":"Estetyt käyttäjät",
+            "channels":"Kanavat",
+            "createdAt":"Luotu klo",
+            "friends":"Kaverit",
+            "ignoredUsers":"Ohitetut käyttäjät",
+            "joinedAt":"Liittyi klo",
+            "mutualUsers":"Keskinäiset käyttäjät",
+            "preferredLocale":"Ensisijainen alue",
+            "roles":"Roolit",
+            "serverBoosts":"Palvelin tehostaa",
+            "serverInfo":"Palvelimen tiedot",
+            "serverOwner":"Palvelimen omistaja",
+            "vanityLink":"Vanity Link",
+            "verificationLevel":"Vahvistustaso"
+        }
+    },
+    "serverListAPI":{
+        "description":"[[PH0]]] vaaditaan laajennuksille, jotka muokkaavat palvelinluetteloa"
     },
     "serverListIndicators":{
         "description":"Lisää online-ystävien tai palvelinten määrä palvelinluetteloon",
@@ -1038,6 +1655,34 @@
         "failedToImport":"Asetusten tuonti epäonnistui: {e}",
         "imported":"Asetusten tuonti onnistui. Aloita uudelleen ottaaksesi muutokset käyttöön!"
     },
+    "shikiCodeblocks":{
+        "description":"Tuo vscode-tyylisiä koodilohkoja Discord:iin, jota tarjoaa Shiki",
+        "settings":{
+            "bgOpacity":"Taustan läpinäkyvyys",
+            "customTheme":"Linkki mukautettuun vscode-teemaan",
+            "theme":"Oletusteemat",
+            "tryHljs":"Käytä kevyempää Discord-korostusainetta ja -teemaa.",
+            "tryHljsOptions":{
+                "always":"Aina",
+                "never":"Ei koskaan",
+                "preferHljs":"Valitse Highlight.js Shikin sijaan",
+                "preferShiki":"Valitse Shiki Highlight.js:n sijaan"
+            },
+            "useDevIcon":"Kuinka näyttää kielikuvakkeet koodilohkoissa",
+            "useDevIconOptions":{
+                "colored":"Värillinen",
+                "colorless":"Väritön",
+                "disabled":"Pois käytöstä"
+            }
+        }
+    },
+    "showAllMessageButtons":{
+        "description":"Näytä aina kaikki viestipainikkeet riippumatta siitä, pidätkö vaihtonäppäintä painettuna vai et.",
+        "settings":{
+            "noShiftDelete":"Poista vaatimus pitää vaihto painettuna viestin poistamiseksi.",
+            "noShiftPin":"Poista vaatimus pitää vaihto painettuna viestin kiinnittämiseksi."
+        }
+    },
     "showConnections":{
         "description":"Näytä yhdistetyt tilit käyttäjien ponnahdusikkunoissa",
         "settings":{
@@ -1057,21 +1702,27 @@
         "channelTypes":{
             "announcement":"ilmoitus",
             "forum":"foorumi",
+            "message":"viesti",
             "messages":"viestejä",
+            "post":"lähettää",
             "posts":"viestit",
             "stage":"vaiheessa",
             "text":"teksti",
+            "thread":"kierre",
+            "threads":"langat",
             "voice":"ääni"
         },
         "defaultLayout":"Oletusasettelu: {layout}",
         "defaultReactionEmoji":"Oletusreaktio-emoji:",
         "defaultSortOrder":"Oletuslajittelujärjestys: {order}",
+        "description":"Näytä kanavat, joita sinulla ei ole katseluoikeuksia.",
         "forumLayouts":{
             "gridView":"Gallerianäkymä",
             "listView":"Luettelonäkymä",
             "notSet":"Ei asetettu"
         },
         "hiddenChannel":"Tämä on piilotettu {type} kanava",
+        "hiddenChannelTooltip":"Piilotettu kanava",
         "hideAllowedUsersAndRoles":"Piilota sallitut käyttäjät ja roolit",
         "lastMessageCreated":"Viimeisin {type} luotu:",
         "lastMessagePin":"Viimeisen viestin pin:",
@@ -1082,6 +1733,24 @@
         "regionAutomatic":"Automaattinen",
         "requireTag":"Tämän foorumin viestit vaativat tunnisteen asettamisen.",
         "seeGuidelines":" Saatat kuitenkin nähdä sen ohjeet:",
+        "settings":{
+            "channelStyle":{
+                "classic":"Klassinen",
+                "description":"Tyyli, jota käytetään piilotettujen kanavien näyttämiseen.",
+                "muted":"Mykistetty",
+                "mutedAndShowUnreads":"Mykistetty ja Näytä lukemattomat",
+                "showUnreads":"Näytä lukemattomat"
+            },
+            "defaultAllowedUsersAndRolesDropdownState":{
+                "description":"Onko piilotettujen kanavien sallittujen käyttäjien ja roolien pudotusvalikon oltava avoinna oletuksena"
+            },
+            "showMode":{
+                "description":"Tila, jota käytetään piilotettujen kanavien näyttämiseen.",
+                "eyeIconRight":"Silmäkuvake oikealla",
+                "lockIcon":"Lukituskuvake korvaa kanavakuvakkeen",
+                "lockIconRight":"Lukkokuvake oikealla"
+            }
+        },
         "slowmode":"Hidas tila: {duration}",
         "sortOrders":{
             "creationDate":"Luontipäivämäärä",
@@ -1094,6 +1763,14 @@
         },
         "videoQualityMode":"Videon laatutila: {mode}",
         "viewAllowedUsersAndRoles":"Näytä sallitut käyttäjät ja roolit"
+    },
+    "showHiddenThings":{
+        "description":"Näyttää erilaisia piilotettuja ja vain valvojille tarkoitettuja asioita käyttöoikeuksista riippumatta.",
+        "settings":{
+            "showInvitesPaused":"Näytä keskeytetyt kutsut -työkaluvinkki palvelinluettelossa.",
+            "showModView":"Näytä jäsenmod-näkymän kontekstivalikon kohta kaikissa palvelimissa.",
+            "showTimeouts":"Näytä jäsenten aikakatkaisukuvakkeet chatissa."
+        }
     },
     "showMeYourName":{
         "addNickname":"Lisää SMYN lempinimi",
@@ -1199,9 +1876,39 @@
             "showDates":"Näytä päivämäärät ystäväpyynnöissä"
         }
     },
+    "spotifyCrack":{
+        "description":"Kuuntele ilmaiseksi, ei automaattista keskeytystä äänichatissa ja sallii toiminnan jatkamisen tyhjäkäynnillä",
+        "settings":{
+            "keepSpotifyActivityOnIdle":"Säilytä Spotifyn toimintaa tyhjäkäynnillä",
+            "noSpotifyAutoPause":"Poista Spotifyn automaattinen tauko käytöstä"
+        }
+    },
+    "spotifyShareCommands":{
+        "commands":{
+            "notListening":"Et kuuntele mitään musiikkia.",
+            "shareDescription":"Jaa nykyinen Spotifysi {name} chatissa",
+            "trackNotFound":"Raitaa ei löytynyt spotifysta."
+        },
+        "description":"Jaa nykyinen Spotify-raita, albumi tai artisti vinoviivakomennolla (/raita, /albumi, /artist)"
+    },
     "startupTimings":{
+        "description":"Lisää käynnistysajoitukset Asetukset-valikkoon",
         "ui":{
             "title":"Käynnistyksen aikatiedot"
+        }
+    },
+    "stickerPaste":{
+        "description":"Tarran poimiminen tarranpoimijassa saa sen lisäämään chatboxiin sen sijaan, että lähetät sen välittömästi"
+    },
+    "streamerModeOnStream":{
+        "description":"Ottaa automaattisesti käyttöön striimaustilan, kun aloitat suoratoiston paikassa Discord"
+    },
+    "superReactionTweaks":{
+        "description":"Mukauta kerralla toistettavien superreaktioiden rajaa ja oletuksena superreagoi",
+        "settings":{
+            "superReactByDefault":"Reaktionvalitsin on oletuksena Super Reactions",
+            "superReactionPlayingLimit":"Max Super Reactions pelata kerralla. 0 poistaaksesi Super Reactionsin toiston käytöstä",
+            "unlimitedSuperReactionPlaying":"Poista Super Reactions -toiston rajoitus kerralla"
         }
     },
     "tabs":{
@@ -1219,6 +1926,9 @@
         "typeMessage":"Kirjoita viesti",
         "usingRegex":"Regexin käyttö",
         "usingString":"Stringin käyttäminen"
+    },
+    "themeAttributes":{
+        "description":"Lisää tietoattribuutteja eri elementteihin teemoimista varten"
     },
     "translate":{
         "autoTranslate":"Automaattinen käännös",
@@ -1258,10 +1968,33 @@
             "showRoleColors":"Näytä roolin värit kirjoitusilmaisimessa"
         }
     },
+    "unindent":{
+        "description":"Leikkaa johtavan sisennyksen koodilohkoista"
+    },
+    "unlockedAvatarZoom":{
+        "description":"Voit zoomata lisää kuvan rajaustyökalussa, kun vaihdat avataria",
+        "settings":{
+            "zoomMultiplier":"Zoomauskerroin"
+        }
+    },
     "unsuppressEmbeds":{
         "description":"Voit poistaa viestien upottamisen eston",
         "suppressEmbeds":"Estää upotukset",
         "unsuppressEmbeds":"Poista upotusten esto"
+    },
+    "userMessagesPronouns":{
+        "description":"Lisää pronominit chat-käyttäjien viesteihin",
+        "settings":{
+            "pronounsFormat":"Chatissa näkyvien pronominien muoto",
+            "pronounsFormatOptions":{
+                "capitalized":"Isoilla kirjaimilla",
+                "lowercase":"Pienet kirjaimet"
+            },
+            "showSelf":"Ota pronominit käyttöön tai poista ne käytöstä itsellesi"
+        }
+    },
+    "userSettingsAPI":{
+        "description":"Korjaa Discord:n UserSettings paljastaakseen hänen ryhmänsä ja nimensä"
     },
     "userVoiceShow":{
         "cannotJoinChannel":"Et voi liittyä käyttäjän äänikanavaan",
@@ -1282,6 +2015,15 @@
             "usrbgBanner":"USRBG banneri",
             "voiceBackground":"Käytä USRBG-bannereita äänikeskustelujen taustana"
         }
+    },
+    "validReply":{
+        "description":"Korjaa \"Viestiä ei voitu ladata\" vietäessä hiiren osoitin vastauksen päälle"
+    },
+    "validUser":{
+        "description":"Korjaa maininnat tuntemattomille käyttäjille, jotka näkyvät nimellä \"@tuntematon-käyttäjä\" (korjaa se viemällä hiiri maininnan päälle)"
+    },
+    "vcDoubleClick":{
+        "description":"Liity äänikeskusteluun kaksoisnapsauttamalla yhden napsautuksen sijaan"
     },
     "vcNarrator":{
         "customiseMessages":"Voit muokata puhuttuja viestejä alla. Voit poistaa tietyt viestit käytöstä asettamalla ne tyhjäksi",
@@ -1362,6 +2104,24 @@
         "sending":"Lähetetään nyt ääniviestiä... Ole kärsivällinen",
         "uploadFile":"Lataa tiedosto"
     },
+    "volumeBooster":{
+        "description":"Mahdollistaa käyttäjän ja streamin äänenvoimakkuuden asettamisen oletusmaksimin yläpuolelle",
+        "settings":{
+            "multiplier":"Äänenvoimakkuuden kerroin"
+        }
+    },
+    "webContextMenus":{
+        "description":"Lisää uudelleen Discord:n verkkoversiosta puuttuvat kontekstivalikot: Linkit ja kuvat (Kopioi/Avaa linkki/Kuva), Teksti ovat (Kopioi, Leikkaa, Liitä, Oikeinkirjoituksen tarkistus)",
+        "settings":{
+            "addBack":"Lisää takaisin [[PH0]]]-kontekstivalikot kuville, linkeille ja chatin syöttöpalkkiin"
+        }
+    },
+    "webKeybinds":{
+        "description":"Lisää uudelleen [[PH0]]]:n verkkoversiosta puuttuvat näppäinsidokset: ctrl+t, ctrl+vaihto+t, ctrl+sarkain, ctrl+vaihto+sarkain, ctrl+1-9, ctrl+,. Toimii täysin vain Vesktop/Legcordissa, ei selaimessasi"
+    },
+    "webScreenShareFixes":{
+        "description":"Poistaa 2500 kbps:n bittinopeuden rajoituksen kromi- ja vesktop-asiakkailta."
+    },
     "whoReacted":{
         "settings":{
             "avatarClick":"Vaihda avataren napsauttaminen reaktioissa"
@@ -1395,5 +2155,8 @@
         "timeout":"Ilmoituksen kesto (sekuntia)",
         "volume":"Äänenvoimakkuus",
         "webSocketPort":"Websocket-portti"
+    },
+    "youtubeAdblock":{
+        "description":"Estä mainokset YouTube-upotuksissa ja WatchTogether-toiminta AdGuardin kautta"
     }
 }
