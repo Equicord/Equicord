@@ -12,7 +12,7 @@
         "fallback":"לא הצלחנו לראנדר את {key} קישוט הודעות"
     },
     "notices":{
-        "fallback":"Error Showing Notice"
+        "fallback":"שגיאה בהצגת הודעה"
     },
     "notifications":{
         "dismissNotification":"להתעלם מההודעה",
