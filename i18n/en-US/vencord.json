@@ -915,7 +915,10 @@
             "linkCopied":"Link copied!",
             "messageContentCopied":"Message content copied!",
             "messageIdCopied":"Message ID copied!",
-            "userIdCopied":"User ID copied!"
+            "userIdCopied":"User ID copied!",
+            "selectEmojiForReactions": "Select Emoji For Reactions",
+            "selectAdditionalEmojis": "Select Additional Emojis",
+            "maxAdditionalEmojis": "comma/newline separated, max {count}"
         }
     },
     "messageDecorationsAPI":{

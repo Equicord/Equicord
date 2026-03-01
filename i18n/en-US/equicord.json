@@ -722,6 +722,9 @@
     "noNitroUpsell": {
         "description": "Removes Nitro upsells by overriding your premium type"
     },
+    "noPushToTalk": {
+        "description": "Bypasses the push-to-talk requirement for voice activity in channels that enforce it."
+    },
     "noRPC": {
         "description": "Disables Discord's Rich Presence (RPC) feature"
     },
@@ -770,7 +773,8 @@
             "noDefaultHangStatus": "Disable the default hang status when joining voice channels",
             "refreshSlashCommands": "Refreshes Slash Commands to show newly added commands without restarting your client.",
             "forceRoleIcon": "Forces role icons to display next to messages in compact mode",
-            "accountStandingButton": "Show an account standing button in the header bar"
+            "accountStandingButton": "Show an account standing button in the header bar",
+            "restoreFileDownloadButton": "Adds back the Download button at the top right corner of files"
         },
         "standing": {
             "allGood": "All good!",
@@ -1135,6 +1139,15 @@
         "ui": {
             "close": "Close",
             "open": "Open"
+        }
+    },
+    "hideMessages": {
+        "description": "A plugin to temporarily hide messages until you restart.",
+        "settings": {
+            "hidePopoverButton": "Hide the hide button in the message popover."
+        },
+        "ui": {
+            "hide": "Hide"
         }
     },
     "hideServers": {
@@ -1902,6 +1915,21 @@
             "openThemeLibrary": "Open Theme Library"
         }
     },
+    "triviaAI": {
+        "description": "A plugin that helps you answer trivia questions using AI.",
+        "settings": {
+            "apiKey": "API Key.",
+            "model": "AI Model to use.",
+            "systemPrompt": "System Prompt for the AI.",
+            "maxTokens": "Maximum number of tokens in the response.",
+            "endpoint": "OpenAI Compatible AI Endpoint.",
+            "autoRespond": "Automatically respond to messages on receiving a response.",
+            "supportImages": "Pass images to the AI for context (if any). This is not supported by all models."
+        },
+        "ui": {
+            "answerWithAI": "Answer With AI"
+        }
+    },
     "tidalEmbeds": {
         "description": "Embeds Tidal music links with a custom player"
     },
@@ -2163,9 +2191,26 @@
     "voiceButtons": {
         "description": "Adds quick action buttons (chat, mute, deafen) to voice channel users",
         "settings": {
-            "showChatButton": "Show chat button",
-            "showMuteButton": "Show mute button",
-            "showDeafenButton": "Show deafen button"
+            "showChatButton": "Whether you want to display the chat button",
+            "showMuteButton": "Whether you want to display the mute button",
+            "showDeafenButton": "Whether you want to display the deafen button",
+            "muteSoundboard": "Toggles their soundboard upon clicking deafen button.",
+            "disableVideo": "Toggles their video upon clicking deafen button.",
+            "useServer": "Use server mute/deafen instead of local when you have permission.",
+            "serverSelf": "Deafen / Mute yourself on the server when using mute/deafen.",
+            "showButtonsSelf": "Whether you want to display buttons for your own user. Same functionality as other button(s) except it'll open DMs panel and mute/deafen for yourself upon clicking button(s).",
+            "whichNameToShow": "Choose whether to show nickname or username in tooltip.",
+            "buttonPosition": "Choose where to place voice buttons in the voice user row."
+        },
+        "options": {
+            "display": "Display",
+            "hide": "Hide",
+            "disable": "Disable",
+            "both": "Both",
+            "globalName": "Global Name",
+            "username": "Username",
+            "left": "Left",
+            "right": "Right"
         }
     },
     "voiceChannelLog": {
@@ -2194,6 +2239,7 @@
         },
         "contextMenu": {
             "voiceTools": "Voice Tools",
+            "mentionAllUsers": "Mention all Users",
             "disconnectAll": "Disconnect all",
             "muteAll": "Mute all",
             "unmuteAll": "Unmute all",
