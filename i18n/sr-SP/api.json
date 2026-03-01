@@ -1,37 +1,37 @@
 {
-				"commands":{
-								"errorExecuting":"An Error occurred while executing command \"{name}\""
-				},
-				"memberListDecorators":{
-								"fallback":"Failed to render {key} Member List Decorator"
-				},
-				"messageAccessories":{
-								"fallback":"Failed to render {key} Message Accessory"
-				},
-				"messageDecorations":{
-								"fallback":"Failed to render {key} Message Decoration"
-				},
-				"notices":{
-								"fallback":"Error Showing Notice"
-				},
-				"notifications":{
-								"dismissNotification":"Dismiss Notification",
-								"logs":{
-												"body_one":"This will permanently remove {count} notification. This action cannot be undone.",
-												"body_other":"This will permanently remove {count} notifications. This action cannot be undone.",
-												"body_zero":"No notification selected.",
-												"cancel":"Nevermind",
-												"clearNotificationLog":"Clear Notification Log",
-												"confirm":"Do it!",
-												"title":"Are you sure?"
-								},
-								"missedNotifications":{
-												"body_one":"{count} notification received",
-												"body_other":"{count} notifications received",
-												"title":"While you were away"
-								},
-								"noNotifications":"No notifications yet",
-								"notificationLog":"Notification Log",
-								"notificationSettings":"Notification Settings"
-				}
+    "commands":{
+        "errorExecuting":"Дошло је до грешке приликом извршавања команде „[[[ПХ0]]]“"
+    },
+    "memberListDecorators":{
+        "fallback":"Рендеровање [[[ПХ0]]] Декоратора листе чланова није успело"
+    },
+    "messageAccessories":{
+        "fallback":"Рендеровање [[[ПХ0]]] Додатка за поруке није успело"
+    },
+    "messageDecorations":{
+        "fallback":"Рендеровање [[[ПХ0]]] декорације поруке није успело"
+    },
+    "notices":{
+        "fallback":"Грешка при приказивању обавештења"
+    },
+    "notifications":{
+        "dismissNotification":"Одбаци обавештење",
+        "logs":{
+            "body_one":"Ово ће трајно уклонити [[[ПХ0]]] обавештење. Ова радња се не може опозвати.",
+            "body_other":"Ово ће трајно уклонити [[[ПХ0]]] обавештења. Ова радња се не може опозвати.",
+            "body_zero":"Није изабрано обавештење.",
+            "cancel":"Нема везе",
+            "clearNotificationLog":"Обриши дневник обавештења",
+            "confirm":"Уради то!",
+            "title":"Јесте ли сигурни?"
+        },
+        "missedNotifications":{
+            "body_one":"[[[ПХ0]]] обавештење је примљено",
+            "body_other":"[[[ПХ0]]] обавештења су примљена",
+            "title":"Док сте били одсутни"
+        },
+        "noNotifications":"Још нема обавештења",
+        "notificationLog":"Дневник обавештења",
+        "notificationSettings":"Подешавања обавештења"
+    }
 }
