@@ -1,1330 +1,1330 @@
 {
-				"absRPC":{
-								"about":{
-												"automaticAuth":"Plugin automaticky ověří a načte váš postup poslechu.",
-												"description":"Zadejte URL svého AudioBookShelf serveru, uživatelské jméno a heslo pro zobrazení tvých aktuálně přehrávaných audioknih jako Discord Rich Presence.",
-												"title":"Jak se připojit k AudioBookShelf"
-								},
-								"description":"Bohatá přítomnost pro AudioBookShelf server médií",
-								"settings":{
-												"password":"AudiobookShelf heslo",
-												"serverUrl":"Adresa URL serveru AudioBookShelf (např. https://abs.example.com)",
-												"username":"AudioBookShelf uživatelské jméno"
-								},
-								"toasts":{
-												"notConfigured":"AudioBookShelf RPC není nakonfigurován."
-								}
-				},
-				"altKrispSwitch":{
-								"description":"Umění přepínač Popout na potlačení šumu mezi None a Krisp namísto Krisp a Standard"
-				},
-				"alwaysExpandProfiles":{
-								"description":"Always expands profile popouts to the full modal"
-				},
-				"anammox":{
-								"description":"Hides various features related to nitro and the store",
-								"settings":{
-												"billing":"Remove billing settings",
-												"dms":"Remove shops above DMs list",
-												"emojiList":"Remove unavailable categories from the emoji picker",
-												"gift":"Remove gift button",
-												"quests":"Remove quests above DMs list",
-												"serverBoost":"Remove server boost info above channel list"
-								}
-				},
-				"animalese":{
-								"description":"Plays animal crossing animalese for every message sent (they yap a lot)",
-								"quality":{
-												"high":"Vysoký",
-												"low":"Nízká",
-												"lowest":"Nejnižší",
-												"medium":"Střední"
-								},
-								"settings":{
-												"messageLengthLimit":"Maximum length of message to process",
-												"pitch":"Pitch multiplier",
-												"processOwnMessages":"Enable to yap your own messages too",
-												"soundQuality":"Quality of sound to use",
-												"speed":"Speed of the animalese sound",
-												"volume":"Volume of the animalese sound"
-								}
-				},
-				"atSomeone":{
-								"contextMenu":{
-												"someone":"Mention someone randomly"
-								},
-								"description":"Mention someone randomly"
-				},
-				"autoZipper":{
-								"description":"Automatically zips specified file types and folders before uploading to Discord",
-								"settings":{
-												"extensions":"Comma-separated list of file extensions to auto-zip (e.g., .psd,.blend,.exe,.dmg)"
-								}
-				},
-				"bannersEverywhere":{
-								"description":"Zobrazuje bannery v seznamu členů ",
-								"settings":{
-												"animate":"Animovat bannery",
-												"preferNameplate":"preferovaná tabulka se jménem nad bannerem"
-								}
-				},
-				"baseDecoder":{
-								"description":"Dekódujte base64 obsah zprávy a zkopírujte dekódovaný obsah.",
-								"settings":{
-												"clickMethod":"Změňte tlačítko pro dekódování base64 obsahu jakékoli zprávy.",
-												"clickMethodOptions":{
-																"left":"Kliknutím levým tlačítkem dekódovat obsah base64.",
-																"right":"Kliknutím pravým tlačítkem myši dekódovat obsah base64."
-												}
-								},
-								"ui":{
-												"copiedToast":"Dekódovaný obsah zkopírován do schránky!",
-												"copyDecoded":"Zkopírovat dekódovaný obsah",
-												"decodedContent":"Dekódovaný Obsah",
-												"modalTitle":"Obsah base64 dekódován",
-												"tooltipLeft":"Kopírovat dekódované (kliknutím levým tlačítkem) / Dekódovat Base64 (pravé kliknutí)",
-												"tooltipRight":"Dekódovat Base64 (kliknutí levým tlačítkem) / Kopírovat dekódované (pravé kliknutí)"
-								}
-				},
-				"betterAudioPlayer":{
-								"description":"betterAudioPlayer.description",
-								"settings":{
-												"forceMoveBelow":"Vynutit vizualizér pod zvukovým přehrávačem",
-												"oscilloscope":"Povolit vizualizér osciloskopu",
-												"oscilloscopeColor":"Barva pro osciloskop",
-												"oscilloscopeSolidColor":"Použít pevnou barvu pro osciloskop",
-												"spectrograph":"Povolit vizualizér spektografu",
-												"spectrographColor":"Barva pro spektrograf",
-												"spectrographSolidColor":"Použít pevnou barvu pro spektrograf"
-								},
-								"toasts":{
-												"invalidColor":"Neplatný formát barvy pro {settingKey}, ujistěte se, že je ve formátu 'R, G, B' nebo '#RRGBB'"
-								}
-				},
-				"betterBanReasons":{
-								"description":"Vytvořte vlastní důvody pro použití v režimu zakázání Discord a/nebo zobrazí výchozí textový vstup namísto možností.",
-								"settings":{
-												"isTextInputDefault":"Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)",
-												"reasons":"Vaše vlastní důvody"
-								},
-								"ui":{
-												"addAnotherReason":"Přidat další důvod",
-												"reasonPlaceholder":"Důvod",
-												"reasons":"Zdůvodnění"
-								}
-				},
-				"betterBlockedUsers":{
-								"description":"Allows you to search in blocked users list and makes names selectable in settings.",
-								"ui":{
-												"searchPlaceholder":"Hledat uživatele..."
-								}
-				},
-				"betterCommands":{
-								"commands":{
-												"refresh":{
-																"description":"Refreshes Discord application commands locally",
-																"failed":"Failed to refresh commands. Check the console for details.",
-																"refreshing":"Refreshing application commands...",
-																"success":"Commands refreshed successfully!",
-																"userOption":"specific user to try and refresh"
-												}
-								},
-								"description":"Enhances the command system with miscellaneous improvements.",
-								"settings":{
-												"allowNewlinesInCommands":"Allow newlines in command inputs (CTRL + Shift + Enter)",
-												"autoFillArguments":"Automatically fill command with all arguements instead of just required ones"
-								}
-				},
-				"betterInvites":{
-								"description":"See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
-								"ui":{
-												"expireTooltip":"Tato pozvánka bude {expiry}",
-												"expireWill":"vyprší",
-												"invitedYouTo":"{inviter} vás pozval do {guild}",
-												"notExpire":"nevyprší"
-								}
-				},
-				"betterPlusReacts":{
-								"description":"The amount of plus before :emoji: is the message to add it to"
-				},
-				"betterUserArea":{
-								"description":"Customize and make the user area more clean.",
-								"settings":{
-												"alwaysShowUsername":"Always show username instead of status.",
-												"removeAudioMenus":"Remove menus next to mute and deafen buttons.",
-												"removeAvatarDecoration":"Remove avatar decoration.",
-												"removeButtonTooltips":"Remove button tooltips.",
-												"removeNameplate":"Remove nameplate styling.",
-												"removeUsernameStyles":"Remove username colors and effects."
-								}
-				},
-				"blockKeywords":{
-								"description":"Blocks messages containing specific user-defined keywords, as if the user sending them was blocked.",
-								"settings":{
-												"blockedWords":"Comma-seperated list of words to block",
-												"caseSensitive":"Whether to use a case sensitive search or not",
-												"ignoreBlockedMessages":"Completely ignores (recent) new messages bar",
-												"useRegex":"Use each value as a regular expression when checking message content (advanced)"
-								}
-				},
-				"blockKrisp":{
-								"description":"Prevent Krisp from loading"
-				},
-				"bypassPinPrompt":{
-								"description":"Bypass the pin prompt when using the pin functions"
-				},
-				"bypassStatus":{
-								"contextMenu":{
-												"addStatusBypass":"Add Status Bypass",
-												"removeStatusBypass":"Remove Status Bypass"
-								},
-								"description":"Still get notifications from specific sources when in do not disturb mode. Right-click on users/channels/guilds to set them to bypass do not disturb mode.",
-								"placeholder":{
-												"separateWithCommas":"Separate with commas"
-								},
-								"settings":{
-												"allowOutsideOfDms":"Allow selected users to bypass status outside of DMs too (acts like a channel/guild bypass, but it's for all messages sent by the selected users)",
-												"channels":"Channels to let bypass (notified when pinged in that channel)",
-												"guilds":"Guilds to let bypass (notified when pinged anywhere in guild)",
-												"notificationSound":"Whether the notification sound should be played",
-												"respectSilentPings":"Respect silent pings (@silent / suppress notifications)",
-												"statusToUse":"Status to use for whitelist",
-												"users":"Users to let bypass (notified for all messages sent in DMs)"
-								},
-								"statusOptions":{
-												"dnd":"Nerušit",
-												"idle":"Nečinný",
-												"invisible":"Neviditelný",
-												"online":"Online"
-								}
-				},
-				"channelBadges":{
-								"description":"Adds badges to channels based on their type",
-								"settings":{
-												"announcementBadgeColor":"Announcement badge color",
-												"announcementBadgeLabel":"Announcement badge label",
-												"announcementThreadBadgeColor":"Announcement Thread badge color",
-												"announcementThreadBadgeLabel":"Announcement Thread badge label",
-												"categoryBadgeColor":"Category badge color",
-												"categoryBadgeLabel":"Category badge label",
-												"directoryBadgeColor":"Directory badge color",
-												"directoryBadgeLabel":"Directory badge label",
-												"forumBadgeColor":"Forum badge color",
-												"forumBadgeLabel":"Forum badge label",
-												"lockedBadgeColor":"Locked badge color",
-												"lockedBadgeLabel":"Locked badge label",
-												"mediaBadgeColor":"Media badge color",
-												"mediaBadgeLabel":"Media badge label",
-												"nsfwBadgeColor":"NSFW badge color",
-												"nsfwBadgeLabel":"NSFW badge label",
-												"oneBadgePerChannel":"Show only one badge per channel",
-												"privateThreadBadgeColor":"Private Thread badge color",
-												"privateThreadBadgeLabel":"Private Thread badge label",
-												"publicThreadBadgeColor":"Public Thread badge color",
-												"publicThreadBadgeLabel":"Public Thread badge label",
-												"rulesBadgeColor":"Rules badge color",
-												"rulesBadgeLabel":"Rules badge label",
-												"showAnnouncementBadge":"Show Announcement badge",
-												"showAnnouncementThreadBadge":"Show Announcement Thread badge",
-												"showCategoryBadge":"Show Category badge",
-												"showDirectoryBadge":"Show Directory badge",
-												"showForumBadge":"Show Forum badge",
-												"showLockedBadge":"Show Locked badge",
-												"showMediaBadge":"Show Media badge",
-												"showNSFWBadge":"Show NSFW badge",
-												"showPrivateThreadBadge":"Show Private Thread badge",
-												"showPublicThreadBadge":"Show Public Thread badge",
-												"showRulesBadge":"Show Rules badge",
-												"showStageBadge":"Show Stage badge",
-												"showTextBadge":"Show Text badge",
-												"showUnknownBadge":"Show Unknown badge",
-												"showVoiceBadge":"Show Voice badge",
-												"stageBadgeColor":"Stage badge color",
-												"stageBadgeLabel":"Stage badge label",
-												"textBadgeColor":"Text badge color",
-												"textBadgeLabel":"Text badge label",
-												"unknownBadgeColor":"Unknown badge color",
-												"unknownBadgeLabel":"Unknown badge label",
-												"voiceBadgeColor":"Voice badge color",
-												"voiceBadgeLabel":"Voice badge label"
-								},
-								"tooltips":{
-												"lockedChannel":"This channel is locked.",
-												"nsfwChannel":"This channel is marked as NSFW.",
-												"rulesChannel":"This channel is the server rules channel."
-								}
-				},
-				"channelTabs":{
-								"contextMenu":{
-												"openInNewTab":"Open in New Tab"
-								},
-								"description":"Group your commonly visited channels in tabs, like a browser"
-				},
-				"characterCounter":{
-								"description":"Adds a character counter to the chat input",
-								"settings":{
-												"colorEffects":"Turn on or off color effects for getting close to the character limit"
-								}
-				},
-				"cleanChannelName":{
-								"description":"remove all emoji and decor shit from channel names"
-				},
-				"cleanerChannelGroups":{
-								"description":"Hides all channels in collapsed categories, even if they have unread messages."
-				},
-				"clientSideBlock":{
-								"description":"Allows you to locally hide almost all content from any user",
-								"reply":{
-												"replyingToBlocked":"Replying to blocked message"
-								},
-								"settings":{
-												"blockedReplyDisplay":"What should display instead of the message when someone replies to someone you have hidden",
-												"blockedReplyDisplayOptions":{
-																"displayText":"Display text saying a hidden message was replied to",
-																"hideReply":"Literally nothing"
-												},
-												"guildBlackList":"Guild ids to disable functionality in",
-												"guildWhiteList":"Guild ids to enable functionality in",
-												"hideBlockedMessages":"Should messages from blocked users should be hidden fully (same as the old noblockedmessages plugin)",
-												"hideBlockedUsers":"Should blocked users should also be hidden everywhere",
-												"hideEmptyRoles":"Should role headers be hidden if all of their members are blocked",
-												"hideVc":"Hide voice channels containing blocked users.",
-												"usersToBlock":"User IDs seperated by a comma and a space"
-								}
-				},
-				"clipsEnhancements":{
-								"description":"Add more Clip FPS and duration options, custom clip length, RPC tagging and more",
-								"settings":{
-												"clipsLink":"Change FPS and duration options in Clips settings!",
-												"enableAdvancedSignals":"Enable advanced clip signals (auto-clip triggers)",
-												"enableScreenshotKeybind":"Enable the screenshot keybind feature",
-												"enableVoiceOnlyClips":"Enable voice-only clips (audio without video)",
-												"ignorePlatformRestriction":"Allow Platform Restricted Clipping (may cause save errors)",
-												"richPresenceTagging":"When should clips be tagged with the current Rich Presence?",
-												"richPresenceTaggingOptions":{
-																"always":"Always",
-																"never":"Never",
-																"whenMatched":"Only when beginning or end of activity name matches"
-												}
-								}
-				},
-				"commandPalette":{
-								"description":"Quickly run actions through a searchable command palette",
-								"settings":{
-												"customCommands":"Manage custom command palette entries",
-												"enableTagFilter":"Show the tag filter bar",
-												"hotkey":"Hotkey used to open the command palette",
-												"showTags":"Display tag chips for commands",
-												"visualStyle":"Palette appearance",
-												"visualStyleOptions":{
-																"classic":"Classic",
-																"polished":"Polished"
-												}
-								},
-								"ui":{
-												"hotkeyDescription":"Hotkey used to open the command palette",
-												"hotkeyTitle":"Command Palette Hotkey",
-												"pressAnyKey":"Press any key...",
-												"reset":"Reset"
-								}
-				},
-				"components":{
-								"description":"Utility plugin for developers to test and preview Discord components"
-				},
-				"contentWarning":{
-								"description":"Allows you to specify certain trigger words that will be blurred by default. Hovering/Clicking on the blurred content will reveal it.",
-								"settings":{
-												"onClick":"Only show trigger content on click instead of hover"
-								},
-								"ui":{
-												"flaggedWords":"Flagged Words",
-												"placeholder":"Word"
-								}
-				},
-				"copyProfileColors":{
-								"contextMenu":{
-												"copyProfileColors":"Copy Profile Colors"
-								},
-								"description":"A plugin to copy people's profile gradient colors to clipboard.",
-								"toast":{
-												"copied":"Profile colors copied to clipboard!",
-												"error":"Error copying profile colors!",
-												"noColorsFound":"No profile colors found!"
-								}
-				},
-				"copyStatusUrls":{
-								"description":"Copy the users status url when you right-click it",
-								"toast":{
-												"copied":"Copied URL",
-												"error":"Error copying URL, check console for more info"
-								}
-				},
-				"copyUserMention":{
-								"contextMenu":{
-												"copyUserMention":"Copy User Mention"
-								},
-								"description":"Adds a button to copy user's mention on the user context menu, works best with ValidUser."
-				},
-				"cursorBuddy":{
-								"description":"Adds a sprite that follows your cursor.",
-								"settings":{
-												"buddy":"Pick a cursor buddy",
-												"buddyOptions":{
-																"fathorse":"Fatass Horse",
-																"oneko":"Oneko"
-												},
-												"fade":"If the horse should fade when the cursor is near",
-												"fps":"Framerate of your buddy",
-												"freeroam":"If the horse should roam freely when idle",
-												"furColor":"Fur hex color for Oneko",
-												"outlineColor":"Outline hex color for Oneko",
-												"shake":"If the horse should shake the window when it's walking",
-												"size":"Size of the fatass horse",
-												"speed":"Speed of your buddy"
-								},
-								"ui":{
-												"furColor":"Fur Color",
-												"outlineColor":"Outline Color"
-								}
-				},
-				"customFolderIcons":{
-								"description":"Customize folder icons with any png"
-				},
-				"customSounds":{
-								"description":"Customize Discord's sounds.",
-								"settings":{
-												"debug":"Debug",
-												"export":"Export",
-												"import":"Import",
-												"resetAll":"Reset All",
-												"searchPlaceholder":"Search by name or ID",
-												"searchSounds":"Search Sounds"
-								},
-								"toast":{
-												"exportSuccess":"Exported {count} settings (audio files not included)",
-												"importError":"Error importing settings. Check console for details.",
-												"importSuccess":"Settings imported successfully!",
-												"loadError":"Error loading custom sound file",
-												"resetSuccess":"All overrides reset successfully!"
-								}
-				},
-				"customTimestamps":{
-								"about":{
-												"additional":"Additionally you can use these in your inputs:",
-												"calendar":"enables dynamic date formatting such as \"Today\" or \"Yesterday\".",
-												"relative":"gives you times such as \"4 hours ago\".",
-												"title":"How to use:"
-								},
-								"description":"Custom timestamps on messages and tooltips",
-								"settings":{
-												"calendarFormats":"Calendar formats",
-												"calendarFormatsDescription":"How to format the [calendar] value if used in the above timestamps.",
-												"formats":"Customize the timestamp formats"
-								}
-				},
-				"customUserColors":{
-								"contextMenu":{
-												"setColor":"Set Color"
-								},
-								"description":"Lets you add a custom color to any user, anywhere! Highly recommend to use with typingTweaks and roleColorEverywhere",
-								"settings":{
-												"colorInServers":"If name colors should be changed within servers",
-												"dmList":"Users with custom colors defined will have their name in the dm list colored"
-								}
-				},
-				"disableCameras":{
-								"description":"Disables cameras in a call by default"
-				},
-				"discordDevBanner":{
-								"description":"Enables the Discord developer banner, in which displays the build-ID"
-				},
-				"dragFavoriteEmotes":{
-								"description":"Adds the ability to change the order of your favourite emotes"
-				},
-				"dragify":{
-								"description":"Drop users, channels, or servers into chat to insert mentions or invites.",
-								"settings":{
-												"allowChatBodyDrop":"Allow dropping into the main chat body to insert text.",
-												"channelOutput":"Channel drop output.",
-												"channelOutputOptions":{
-																"link":"Channel link",
-																"mention":"#channel mention"
-												},
-												"inviteExpireAfter":"Invite expiration.",
-												"inviteExpireAfterOptions":{
-																"12hours":"12 hours",
-																"1day":"1 day",
-																"1hour":"1 hour",
-																"30min":"30 minutes",
-																"6hours":"6 hours",
-																"7days":"7 days",
-																"never":"Never"
-												},
-												"inviteMaxUses":"Invite max uses.",
-												"inviteMaxUsesOptions":{
-																"100uses":"100 uses",
-																"10uses":"10 uses",
-																"1use":"1 use",
-																"25uses":"25 uses",
-																"50uses":"50 uses",
-																"5uses":"5 uses",
-																"noLimit":"No limit"
-												},
-												"inviteTemporaryMembership":"Grant temporary membership.",
-												"reuseExistingInvites":"Reuse existing invite instead of creating a new one.",
-												"userOutput":"User drop output.",
-												"userOutputOptions":{
-																"id":"User ID",
-																"mention":"Mention user"
-												}
-								},
-								"toast":{
-												"dropFailed":"Dragify failed to handle drop.",
-												"inviteCreated":"Invite created.",
-												"inviteFailed":"Unable to create invite.",
-												"noChannelForInvites":"No channel available for invites."
-								}
-				},
-				"elementHighlighter":{
-								"description":"Highlight and inspect elements easily.",
-								"settings":{
-												"keybind":"Toggle Highlighter",
-												"showBorderRadius":"Display the element's border-radius values",
-												"showClasses":"Display the element's CSS class names in the tooltip",
-												"showDisplay":"Display the element's display type along with flex or grid properties",
-												"showFont":"Display the computed font family and font size",
-												"showId":"Display the element's ID attribute in the tooltip",
-												"showMargin":"Display the element's margin values",
-												"showPadding":"Display the element's padding values",
-												"showPosition":"Display the element's CSS position type and z-index"
-								},
-								"ui":{
-												"copiedColor":"Copied color to clipboard!",
-												"recording":"Recording...",
-												"reset":"Reset"
-								}
-				},
-				"equicordHelper":{
-								"alerts":{
-												"equicordSupport":"Equicord Support",
-												"okayContinue":"Okay continue",
-												"supportWarningBody":"Before asking for help. Check updates and if this issue is actually caused by Equicord!",
-												"supportWarningTitle":"Vencord Support Channel Warning"
-								},
-								"commands":{
-												"refreshCommands":"Refresh Slash Commands",
-												"refreshFailed":"Failed to refresh commands. Check console for details.",
-												"refreshSuccess":"Slash Commands refreshed successfully."
-								},
-								"description":"Used to provide support, fix discord caused crashes, and other misc features.",
-								"settings":{
-												"accountStandingButton":"Show an account standing button in the header bar",
-												"forceRoleIcon":"Forces role icons to display next to messages in compact mode",
-												"noDefaultHangStatus":"Disable the default hang status when joining voice channels",
-												"noMirroredCamera":"Prevents the camera from being mirrored on your screen",
-												"refreshSlashCommands":"Refreshes Slash Commands to show newly added commands without restarting your client.",
-												"removeActivitySection":"Removes the activity section above member list",
-												"showYourOwnActivityButtons":"Discord hides your own activity buttons for some reason"
-								},
-								"standing":{
-												"allGood":"All good!",
-												"atRisk":"At risk",
-												"limited":"Limited",
-												"suspended":"Suspended",
-												"veryLimited":"Very limited"
-								}
-				},
-				"equicordToolbox":{
-								"description":"Adds a button next to the inbox button in the channel header that houses Equicord quick actions",
-								"settings":{
-												"showPluginMenu":"Show the plugins menu in the toolbox"
-								},
-								"ui":{
-												"editQuickCss":"Edit QuickCSS",
-												"enableQuickCss":"Enable QuickCSS",
-												"manageThemes":"Manage Themes",
-												"openNotificationLog":"Open Notification Log",
-												"openSettings":"Open Settings",
-												"plugins":"Plugins",
-												"restartToApply":"Restart to apply the change",
-												"themes":"Themes",
-												"tooltip":"Equicord Toolbox"
-								}
-				},
-				"equissant":{
-								"description":"Crossant every specified amount of clicks :trolley:",
-								"settings":{
-												"amount":"Amount of clicks to trigger crossant"
-								}
-				},
-				"exitSounds":{
-								"description":"Play soundboard sounds when you disconnect from voice.",
-								"settings":{
-												"soundGuildId":"Select the server containing the sound.",
-												"soundId":"Enter the ID of the sound you want to play."
-								},
-								"toasts":{
-												"somethingWentWrong":"Oops! Something went wrong."
-								},
-								"ui":{
-												"enterSoundId":"Enter sound ID...",
-												"selectServer":"Select a server...",
-												"setGlobalExitSound":"Set as global exit sound"
-								}
-				},
-				"exportMessages":{
-								"description":"Allows you to export any message to a file",
-								"notifications":{
-												"exportFailed":"Failed to export message",
-												"exportSuccess":"Message exported successfully as {filename}",
-												"title":"Export Messages"
-								},
-								"settings":{
-												"exportContacts":"Export a list of friends to your clipboard. Adds a new button to the menu bar for the friends tab.",
-												"openFileAfterExport":"Open the exported file in the default file handler after export"
-								},
-								"ui":{
-												"contactListUndefined":"Contact list is undefined. Click on the \"All\" tab before exporting.",
-												"contactsCopied":"Contacts copied to clipboard successfully.",
-												"export":"Export",
-												"exportMessage":"Export Message"
-								}
-				},
-				"fastDeleteChannels":{
-								"description":"Adds a trash icon to delete channels",
-								"settings":{
-												"keyBind":"The key to toggle trash when pressed.",
-												"reqAlt":"Require alt to be held.",
-												"reqCtrl":"Require control to be held.",
-												"reqShift":"Require shift to be held."
-								}
-				},
-				"favouriteAnything":{
-								"description":"Favourite any image"
-				},
-				"fileUpload":{
-								"description":"Upload images and videos to file hosting services like Zipline and Nest",
-								"ui":{
-												"uploadTo":"Upload to {serviceName}"
-								}
-				},
-				"findReply":{
-								"description":"Jumps to the earliest reply to a message in a channel (lets you follow past conversations more easily).",
-								"settings":{
-												"hideButtonIfNoReply":"Hides the button if there are no replies to the message",
-												"includeAuthor":"Will also search for messages that reply to the author in general, not just that exact message",
-												"includePings":"Will also search for messages that @ the author directly"
-								},
-								"toasts":{
-												"containerNotFound":"Couldn't find the container element.",
-												"noReplyFound":"Couldn't find a reply.",
-												"useBottomPanel":"Use the bottom panel to navigate between replies."
-								},
-								"ui":{
-												"jumpToReply":"Jump to Reply"
-								}
-				},
-				"fixFileExtensions":{
-								"description":"Fixes file extensions by renaming them to a compatible supported format if possible"
-				},
-				"followVoiceUser":{
-								"description":"Follow a friend in voice chat.",
-								"info":"This Plugin is used to follow a Friend/Friends into voice chat(s).",
-								"settings":{
-												"leaveWhenUserLeaves":"Leave the voice channel when the user leaves. (That can cause you to sometimes enter infinite leave/join loop)",
-												"onlyWhenInVoice":"Only follow the user when you are in a voice channel"
-								},
-								"ui":{
-												"followUser":"Follow User"
-								}
-				},
-				"fontLoader":{
-								"description":"Loads any font from Google Fonts",
-								"settings":{
-												"applyOnCodeBlocks":"Apply the font to code blocks"
-								},
-								"ui":{
-												"by":"by {authors}",
-												"clickToApply":"Click on any font to apply it.",
-												"searchFonts":"Search fonts...",
-												"searchGoogleFonts":"Search Google Fonts"
-								}
-				},
-				"forwardAnywhere":{
-								"description":"If a forward fails send it as a normal message also allows nsfw forwards",
-								"options":{
-												"greaterThan":">",
-												"hash":"-#"
-								},
-								"settings":{
-												"forwardPreface":"What should forwarded from be prefaced with"
-								}
-				},
-				"frequentQuickSwitcher":{
-								"description":"Rewrites and filters the quick switcher results to be your most frequent channels"
-				},
-				"friendCloud":{
-								"commands":{
-												"count":"Number of users to display",
-												"friendcloud":"Display user you most interact with in a cloud"
-								},
-								"description":"Adds a /friendcloud command to visualize the users you most interact with",
-								"errors":{
-												"couldntGenerate":"Couldn't generate the image :c",
-												"countMustBeHigher":"The count must be 1 or higher!",
-												"noAffinities":"No affinities found. Check your privacy settings.",
-												"noValidUsers":"No valid users found in affinities. Check your privacy settings."
-								}
-				},
-				"friendCodes":{
-								"panel":{
-												"copied":"Copied!",
-												"copyCode":"Copy Code",
-												"currentCode":"Current Friend Code",
-												"error":"Error: {error}",
-												"refresh":"Refresh",
-												"sendToServer":"Send to Server",
-												"sent":"Sent!",
-												"title":"Friend Codes"
-								},
-								"settings":{
-												"autoCopy":"Automatically copy friend code to clipboard when it changes",
-												"sendToServer":"Automatically send friend code to server when it changes",
-												"webhookUrl":"Webhook URL to send friend code to"
-								}
-				},
-				"friendTags":{
-								"description":"Allows you to filter by custom tags in the quick switcher by starting a search with &",
-								"ui":{
-												"add":"Add",
-												"addTo":"Add to {tagName}",
-												"name":"Name",
-												"remove":"Remove",
-												"removeFrom":"Remove from {tagName}",
-												"tag":"Tag",
-												"userList":"User List (Click A User To Remove)",
-												"usersSeperated":"Users (Seperated by comma)"
-								}
-				},
-				"friendshipRanks":{
-								"description":"Adds badges showcasing how long you have been friends with a user for",
-								"ranks":{
-												"besties":{
-																"description":"How do you even manage this??? (5 Years)",
-																"title":"Besties"
-												},
-												"blooming":{
-																"description":"Your friendship is getting there! (1 Month)",
-																"title":"Blooming"
-												},
-												"burning":{
-																"description":"Your friendship has reached terminal velocity (3 Months)",
-																"title":"Burning"
-												},
-												"fighter":{
-																"description":"Your friendship is strong (6 Months)",
-																"title":"Fighter"
-												},
-												"royal":{
-																"description":"Your friendship has gone through thick and thin- a whole 2 years!",
-																"title":"Royal"
-												},
-												"sprout":{
-																"description":"Your friendship is just starting",
-																"title":"Sprout"
-												},
-												"star":{
-																"description":"Your friendship has been going on for a WHILE (1 Year)",
-																"title":"Star"
-												}
-								}
-				},
-				"fullVcPfp":{
-								"description":"Makes avatars take up the entire vc tile"
-				},
-				"gensokyoRadioRPC":{
-								"description":"Discord rich presence for Gensokyo Radio!",
-								"info":"Discord rich presence for Gensokyo Radio!",
-								"settings":{
-												"refreshInterval":"The interval between activity refreshes (seconds)"
-								}
-				},
-				"ghosted":{
-								"description":"A cute ghost will appear if you don't answer their DMs",
-								"settings":{
-												"exemptedChannels":"Comma-separated list of channel IDs to exempt from ghosting (right-click a DM channel to copy its ID)",
-												"ignoreBots":"Ignore DMs from bots",
-												"ignoreGroupDms":"Exclude all group dms from ghosting",
-												"showDmIcons":"Show ghost icons next to individual DMs",
-												"showIndicator":"Show the ghost counter at the top of the server list"
-								},
-								"ui":{
-												"ghostedUsers":"{count} Ghosted Users",
-												"noGhostedUsers":"No Ghosted Users",
-												"unghost":"unghost"
-								}
-				},
-				"gifCollections":{
-								"description":"Allows you to create collections of gifs",
-								"settings":{
-												"collectionPrefix":"The prefix for collections",
-												"collectionsSortOrder":"The order of sorting for collections",
-												"collectionsSortType":"The type of sorting for collections",
-												"defaultEmptyCollectionImage":"The image / gif that will be shown when a collection has no images / gifs",
-												"itemPrefix":"The prefix for gif items",
-												"onlyShowCollections":"Only show collections",
-												"preventDuplicates":"Prevent adding the same GIF to a collection multiple times",
-												"showCopyImageLink":"Show 'Copy Image Link' option in context menus",
-												"stopWarnings":"Stop deletion warnings"
-								},
-								"toasts":{
-												"gifMissingMetadata":"Cannot refresh: GIF missing metadata (re-add to collection)"
-								},
-								"ui":{
-												"addToCollection":"Add To Collection",
-												"addedAt":"Added At",
-												"areYouSure":"Are you sure?",
-												"ascending":"Ascending",
-												"cannotRefresh":"Cannot refresh: GIF missing metadata (re-add to collection)",
-												"close":"Close",
-												"collectionInformation":"Collection Information",
-												"collectionName":"Collection Name",
-												"copyImageLink":"Copy Image Link",
-												"copyUrl":"Copy URL",
-												"createCollection":"Create Collection",
-												"createdAt":"Created At",
-												"creationDate":"Creation Date",
-												"deleteAction":"delete this collection",
-												"deleteCollection":"Delete Collection",
-												"deleteConfirm":"Do you really want to {action}?",
-												"descending":"Descending",
-												"exportCollections":"Export Collections",
-												"gifs":"Gifs",
-												"height":"Height",
-												"imageLinkCopied":"Image link copied to clipboard",
-												"import":"Import",
-												"importCollections":"Import Collections",
-												"importOverwrite":"Importing collections will overwrite your current collections.",
-												"information":"Information",
-												"lastUpdated":"Last Updated",
-												"modifiedDate":"Modified Date",
-												"moveToCollection":"Move To Collection",
-												"name":"Name",
-												"nevermind":"Nevermind",
-												"order":"Order",
-												"refreshFailed":"Failed to refresh URL",
-												"refreshSuccess":"URL refreshed successfully",
-												"refreshUrl":"Refresh URL",
-												"refreshing":"Refreshing URL...",
-												"remove":"Remove",
-												"removeAction":"remove this item",
-												"rename":"Rename",
-												"reset":"Reset",
-												"resetCollections":"Reset Collections",
-												"resetRemove":"Resetting collections will remove all your collections.",
-												"selectCollection":"Select a collection to move the item to",
-												"sortBy":"Sort By",
-												"sortCollections":"Sort Collections",
-												"unknown":"Unknown",
-												"urlCopied":"URL copied to clipboard",
-												"width":"Width"
-								}
-				},
-				"gifRoulette":{
-								"commands":{
-												"gifroulette":"Tempt fate and send a gif"
-								},
-								"description":"Adds a command to send a random gif from your favourites, and a one in ten chance to ping the owner of the server",
-								"settings":{
-												"pingOwnerChance":"If there should be a 1 in 10 change to ping the owner of the guild (oh no)"
-								}
-				},
-				"githubRepos":{
-								"description":"Displays a user's public GitHub repositories in their profile",
-								"settings":{
-												"showInMiniProfile":"Show full ui in the mini profile instead of just a button",
-												"showLanguage":"Show repository language",
-												"showRepositoryTab":"Show repositories tab in profile modal (hides button in connections when enabled)",
-												"showStars":"Show repository stars"
-								},
-								"ui":{
-												"error":"Error, Failed to render GithubRepos"
-								}
-				},
-				"globalBadges":{
-								"description":"Adds global badges from other client mods",
-								"ui":{
-												"joinServer":"Join GlobalBadges Server",
-												"refetchSuccess":"Successfully refetched global badges!"
-								}
-				},
-				"googleThat":{
-								"commands":{
-												"googlethat":"Send a search engine link",
-												"input":"The search query"
-								},
-								"description":"Adds a command to send a internet search link",
-								"settings":{
-												"customEngineURL":"The URL of the Engine you wish to use",
-												"defaultEngine":"The search engine to use",
-												"embed":"If the sent link should render an embed",
-												"hyperlink":"If the sent link should hyperlink with the query as the label"
-								}
-				},
-				"guildPickerDumper":{
-								"description":"Context menu to dump and download a server's emojis and stickers.",
-								"ui":{
-												"downloadEmojis":"Download Emojis",
-												"downloadStickers":"Download Stickers",
-												"serverNotFound":"Server not found!"
-								}
-				},
-				"guildTagSettings":{
-								"description":"Adds some settings for guild tags, such as hiding them or disabling the prompt to adopt them.",
-								"settings":{
-												"disableAdoptTagPrompt":"Disable the prompt to adopt tags",
-												"hideTags":"Hide tags"
-								}
-				},
-				"hideChatButtons":{
-								"description":"Able to hide the chat buttons",
-								"settings":{
-												"color":"Color it red on open",
-												"open":"Opened by default"
-								},
-								"ui":{
-												"close":"Close",
-												"open":"Open"
-								}
-				},
-				"hideServers":{
-								"description":"Allows you to hide servers from the guild list and quick switcher by right clicking them",
-								"ui":{
-												"hideFolder":"Hide Folder",
-												"hideServer":"Hide Server",
-												"unhideFolder":"Unhide Folder",
-												"unhideServer":"Unhide Server"
-								}
-				},
-				"holyNotes":{
-								"description":"Save messages as notes to revisit later",
-								"ui":{
-												"holyNotes":"Holy Notes",
-												"noteMessage":"Note Message",
-												"openNotes":"Open Notes",
-												"saveNote":"Save Note"
-								}
-				},
-				"homeTyping":{
-								"description":"Changes the home button to a typing indicator if someone in your dms is typing"
-				},
-				"hopOn":{
-								"description":"Hop on Fortnite or Hop on bloons :3",
-								"settings":{
-												"regex":"Regex to trigger on",
-												"url":"URL to open"
-								}
-				},
-				"husk":{
-								"description":"Adds Husk button (check settings to change used emoji)",
-								"settings":{
-												"emojiID":"Emoji ID (default (from Vencord Server): 1026532993923293184)",
-												"emojiName":"Emoji name (default (from Vencord Server): husk)",
-												"findInServer":"Attempt to find emoji of same name in server before using ID in settings (useful if no nitro)"
-								},
-								"ui":{
-												"husk":"Husk"
-								}
-				},
-				"iRememberYou":{
-								"description":"Locally saves everyone you've been communicating with (including servers), in case of lose",
-								"ui":{
-												"iRememberYou":"I Remember You"
-								}
-				},
-				"iconViewer":{
-								"description":"Adds a new tab to settings to preview all icons.",
-								"ui":{
-												"iconFinder":"Icon Finder",
-												"openIconsTab":"Open Icons Tab"
-								}
-				},
-				"idleAutoRestart":{
-								"description":"Automatically restarts the client after being idle for a configurable amount of time, but avoids restarting while you are in VC.",
-								"settings":{
-												"idleMinutes":"Minutes of inactivity before restarting (when not in VC)",
-												"isEnabled":"Enable automatic restart after idle"
-								},
-								"ui":{
-												"disableAutoIdle":"Disable Auto Idle Restart",
-												"enableAutoIdle":"Enable Auto Idle Restart"
-								}
-				},
-				"ignoreCalls":{
-								"description":"Allows you to ignore calls from specific users or dm groups.",
-								"settings":{
-												"permanentlyIgnoredUsers":"User IDs (comma + space) who should be permanetly ignored"
-								},
-								"ui":{
-												"ignore":"Ignore",
-												"permanentlyIgnore":"Permanently Ignore Calls",
-												"temporarilyIgnore":"Temporarily Ignore Calls"
-								}
-				},
-				"imgToGif":{
-								"commands":{
-												"height":"Height of the gif",
-												"image":"Image attachment to use",
-												"imgtogif":"Allows you to turn an image to a gif",
-												"width":"Width of the gif"
-								},
-								"description":"Adds a /imgtogif slash command to create a gif from any image",
-								"errors":{
-												"noImage":"No Image specified!",
-												"notAnImage":"Upload is not an image"
-								}
-				},
-				"inRole":{
-								"commands":{
-												"inrole":"Know who is in a role",
-												"role":"The role"
-								},
-								"description":"Know who is in a role with the role context menu or /inrole command (read plugin info!)",
-								"errors":{
-												"makeSureServer":"Make sure that you are in a server."
-								},
-								"limitations":{
-												"description":"If you don't have mod permissions on the server, and that server is large (over 100 members), the plugin may be limited in the following ways:",
-												"friendsAlwaysShown":"However, friends will always be shown regardless of their status.",
-												"offlineNotListed":"Offline members won't be listed",
-												"title":":warning: Limitations",
-												"upTo100":"Up to 100 members will be listed by default. To get more, scroll down in the member list to load more members."
-								},
-								"ui":{
-												"viewMembers":"View Members in Role"
-								}
-				},
-				"ingtoninator":{
-								"description":"Suffixes 'ington' to a random word in your message",
-								"settings":{
-												"isEnabled":"Enable or disable the Ingtoninator",
-												"showIcon":"Show a button to toggle the Ingtoninator plugin"
-								},
-								"ui":{
-												"disabled":"Ingtoninator Disabled",
-												"enabled":"Ingtoninator Enabled"
-								}
-				},
-				"instantScreenshare":{
-								"description":"Instantly screenshare when joining a voice channel with support for desktop sources, windows, and video input devices (cameras, capture cards)",
-								"info":{
-												"linux":"For Linux",
-												"soundPreview":"Regarding Sound & Preview Settings",
-												"soundPreviewInfo":"We use the settings set and used by discord to decide if stream preview and sound should be enabled or not",
-												"videoDevices":"Video Devices",
-												"videoDevicesInfo":"Supports cameras and capture cards (like Elgato HD60X) when enabled in settings",
-												"wayland":"For Wayland it only pops up the screenshare select",
-												"x11":"For X11 it may or may not work :shrug:"
-								},
-								"ui":{
-												"instantScreenshare":"Instant Screenshare",
-												"instantScreenshareDisabled":"Instant Screenshare Disabled",
-												"instantScreenshareEnabled":"Instant Screenshare Enabled"
-								}
-				},
-				"invisibleChat":{
-								"description":"Encrypt your Messages in a non-suspicious way!",
-								"settings":{
-												"savedPasswords":"Saved Passwords (Seperated with a , )"
-								},
-								"ui":{
-												"decryptMessage":"Decrypt Message",
-												"encryptMessage":"Encrypt Message",
-												"hiddenMessageIndicator":"This message has a hidden message! (InvisibleChat)"
-								}
-				},
-				"inviteDefaults":{
-								"description":"Allows you to edit the default values when creating server invites.",
-								"options":{
-												"forever":"Forever",
-												"infinite":"Infinite"
-								},
-								"settings":{
-												"inviteDuration":"Invite Duration",
-												"maxUses":"Invite Use Count",
-												"temporaryMembership":"Temporary Membership"
-								}
-				},
-				"jellyfinRichPresence":{
-								"coverTypeOptions":{
-												"episodeCover":"Episode Cover",
-												"seriesCover":"Series Cover"
-								},
-								"description":"Rich presence for Jellyfin media server",
-								"episodeFormatOptions":{
-												"fulltext":"Season 1 Episode 1",
-												"s01e01":"S01E01",
-												"short":"1x01"
-								},
-								"howToGetApiKey":{
-												"description":"Auth token can be found by following these steps:",
-												"title":"How to get an API key",
-												"userIdInfo":"You'll also need your User ID, which can be found in the url of your user profile page."
-								},
-								"nameFormatOptions":{
-												"custom":"Custom",
-												"seriesEpisodeName":"Series - Episode/Track/Movie Name",
-												"seriesMovieName":"Series/Movie Name"
-								},
-								"overrideTypeOptions":{
-												"listening":"Listening",
-												"off":"Off",
-												"playing":"Playing",
-												"streaming":"Streaming",
-												"watching":"Watching"
-								},
-								"privacyMode":{
-												"albumHidden":"[Album Hidden]",
-												"artistHidden":"[Artist Hidden]",
-												"episodeHidden":"[Episode Hidden]",
-												"listeningToMusic":"Listening to music",
-												"mediaHidden":"[Media Hidden]",
-												"movieHidden":"[Movie Hidden]",
-												"seriesHidden":"[Series Hidden]",
-												"titleHidden":"[Title Hidden]",
-												"trackHidden":"[Track Hidden]",
-												"watchingSomething":"Watching Something",
-												"watchingTvShow":"Watching a TV Show"
-								},
-								"settings":{
-												"apiKey":"Jellyfin API key obtained from your Jellyfin administration dashboard",
-												"coverType":"Choose which cover to display when watching a TV show",
-												"customName":"Custom Rich Presence name (only used if 'Custom' is selected). Options: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
-												"episodeFormat":"Episode number format",
-												"nameDisplay":"Choose how the application name should appear in Rich Presence",
-												"overrideRichPresenceType":"Override the rich presence type",
-												"privacyMode":"Privacy Mode (Hide media details like Episode/Song Name)",
-												"serverUrl":"Jellyfin server URL (e.g., https://jellyfin.example.com)",
-												"showEpisodeName":"Show episode name after season/episode info",
-												"showPausedState":"Show Rich Presence when media is paused",
-												"userId":"Jellyfin user ID obtained from your user profile URL"
-								},
-								"state":{
-												"episode":"Episode {episode}",
-												"paused":"Paused",
-												"season":"Season {season}"
-								},
-								"toasts":{
-												"notConfigured":"JellyfinRPC is not configured."
-								}
-				},
-				"jumpTo":{
-								"description":"Adds context menu options to jump to the start or bottom of a channel/DM.",
-								"errors":{
-												"channelNotAvailable":"Channel information not available.",
-												"failedJump":"Failed to jump to message. Check console for details.",
-												"failedSearch":"Failed to search for messages.",
-												"noMessagesFound":"No messages found from this user in this channel."
-								},
-								"ui":{
-												"jumpToFirst":"Jump To First Message",
-												"jumpToLast":"Jump To Last Message",
-												"usersLastMessage":"User's Last Message",
-												"yourLastMessage":"Your Last Message"
-								}
-				},
-				"jumpscare":{
-								"description":"Adds a configurable chance of jumpscaring you whenever you open a channel. Inspired by Geometry Dash Mega Hack",
-								"settings":{
-												"audioSource":"Sets the audio url of the jumpscare",
-												"chance":"The chance of a jumpscare happening (1 in X so: 100 = 1/100 or 1%, 50 = 1/50 or 2%, etc.)",
-												"imageSource":"Sets the image url of the jumpscare"
-								}
-				},
-				"keyboardNavigation":{
-								"commands":{
-												"openDevSettings":"Open Dev tab"
-								},
-								"description":"Allows you to navigate the UI with a keyboard.",
-								"settings":{
-												"allowMouseControl":"Allow the mouse to control the command palette.",
-												"hotkey":"The hotkey to open the command palette."
-								},
-								"ui":{
-												"recordKeybind":"Record keybind",
-												"recording":"Recording..."
-								}
-				},
-				"keyboardSounds":{
-								"description":"Adds OperaGX or osu! sound effects when typing on your keyboard.",
-								"options":{
-												"operaGx":"OperaGX",
-												"osu":"osu!"
-								},
-								"settings":{
-												"soundPack":"Sound pack to use.",
-												"volume":"Volume of the keyboard sounds."
-								}
-				},
-				"keywordNotify":{
-								"description":"Sends a notification if a given message matches certain keywords or regexes",
-								"options":{
-												"blacklist":"Blacklist",
-												"whitelist":"Whitelist"
-								},
-								"settings":{
-												"amountToKeep":"Amount of messages to keep in the log",
-												"ignoreBots":"Ignore messages from bots",
-												"keywords":"Manage keywords"
-								},
-								"ui":{
-												"addId":"Add ID",
-												"addKeywordEntry":"Add Keyword Entry",
-												"clearAll":"Clear All",
-												"ignoreCase":"Ignore Case",
-												"keywordEntry":"Keyword Entry {index}",
-												"keywords":"Keywords",
-												"whitelistBlacklist":"Whitelist/Blacklist"
-								}
-				},
-				"lastActive":{
-								"description":"A plugin to jump to last active message from yourself or another user in a channel/server.",
-								"errors":{
-												"channelNotAvailable":"Channel information not available.",
-												"findFailed":"Failed to find messages. Check console for details.",
-												"jumpFailed":"Failed to jump to message. Check console for details.",
-												"noRecentMessages":"Couldn't find any recent messages from this user."
-								}
-				},
-				"limitMiddleClickPaste":{
-								"description":"Prevent middle click pasting either always or just when a text area is not focused.",
-								"options":{
-												"alwaysPrevent":"Always Prevent Middle Click Pasting",
-												"onlyWhenNotFocused":"Only Prevent When Text Area Not Focused"
-								},
-								"settings":{
-												"preventLinkOpen":"Prevent middle-click on links from opening new tabs while preserving autoscroll.",
-												"scope":"Situations in which to prevent middle click from pasting.",
-												"threshold":"Milliseconds until pasting is enabled again after a middle click."
-								}
-				},
-				"listenBrainzRPC":{
-								"about":{
-												"description":"The MusicBrainz API does not require an API key, but it does require a meaningful user-agent string. For most, an email address should suffice.",
-												"title":"About MusicBrainz API"
-								},
-								"buttons":{
-												"profile":"ListenBrainz Profile",
-												"viewSong":"View Song"
-								},
-								"defaults":{
-												"statusName":"some music"
-								},
-								"description":"Little plugin for ListenBrainz rich presence",
-								"missingArtOptions":{
-												"listenbrainzLogo":"Use large ListenBrainz logo",
-												"placeholder":"Use generic placeholder"
-								},
-								"nameFormatOptions":{
-												"albumName":"Use album name (falls back to custom status text if song has no album)",
-												"artistFirst":"Use format 'artist - song'",
-												"artistOnly":"Use artist name only",
-												"customStatus":"Use custom status name",
-												"songFirst":"Use format 'song - artist'",
-												"songOnly":"Use song name only"
-								},
-								"settings":{
-												"hideWithActivity":"Hide ListenBrainz presence if you have any other presence",
-												"hideWithSpotify":"Hide ListenBrainz presence if Spotify is running",
-												"mbContact":"ListenBrainz contact",
-												"missingArt":"When album or album art is missing",
-												"nameFormat":"Show name of song and artist in status name",
-												"shareSong":"Show link to song on ListenBrainz (may only be visible to other users)",
-												"shareUsername":"Show link to ListenBrainz profile (may only be visible to other users)",
-												"statusName":"Custom status text",
-												"useListeningStatus":"Show \"Listening to\" status instead of \"Playing\"",
-												"useLogo":"Show ListenBrainz logo on album art",
-												"useTimeBar":"Use track duration to display a time bar (must be using Listening status)",
-												"username":"ListenBrainz username"
-								}
-				},
-				"loginWithQR":{
-								"description":"Allows you to login to another device by scanning a login QR code, just like on mobile!",
-								"settings":{
-												"scanQr":"Scan a QR code"
-								},
-								"ui":{
-												"enableAndRestart":"Enable the plugin and restart your client to scan a login QR code",
-												"scanQrCode":"Scan QR Code"
-								}
-				},
-				"messageLoggerEnhanced":{
-								"buttons":{
-												"exportLogs":"Export Logs",
-												"exporting":"Exporting...",
-												"importLogs":"Import Logs",
-												"importing":"Importing..."
-								},
-								"modal":{
-												"clearAllLogs":"Clear All Logs",
-												"clearVisibleLogs":"Clear Visible Logs",
-												"copyChannelId":"Copy Channel ID",
-												"copyContent":"Copy Content",
-												"copyMessageId":"Copy Message ID",
-												"copyServerId":"Copy Server ID",
-												"copyUserId":"Copy User ID",
-												"deleteLog":"Delete Log",
-												"deleted":"Deleted",
-												"edited":"Edited",
-												"emptyLogs":"Empty eh",
-												"filterMessages":"Filter Messages",
-												"fromChannel":"From {channel} in {guild}",
-												"fromDms":"From {username}'s DMs",
-												"fromGroupDm":"From {name} Group DM",
-												"ghostPinged":"Ghost Pinged",
-												"importLogs":"Import Logs",
-												"importLogsTooltip":"ML Enhanced now stores logs in indexeddb. You need to import your old logs from the logs directory. Importing wont overwrite existing logs",
-												"jumpToMessage":"Jump To Message",
-												"loadMore":"Load More",
-												"maybeTry":"Maybe try {nextTab} or {lastTab}",
-												"noResultsIn":"No results in {tab}.",
-												"openUserProfile":"Open user profile",
-												"sortNewestFirst":"Sort Newest First",
-												"sortOldestFirst":"Sort Oldest First"
-								},
-								"settings":{
-												"alwaysLogCurrentChannel":"Always log current selected channel. Blacklisted channels/users will still be ignored.",
-												"alwaysLogDirectMessages":"Always log DMs",
-												"attachmentFileExtensions":"Comma separated list of file extensions to save. Attachments with file extensions not in this list will not be saved. Leave empty to save all attachments.",
-												"attachmentSizeLimitInMegabytes":"Maximum size of an attachment in megabytes to save. Attachments larger than this size will not be saved.",
-												"blacklistedIds":"Blacklisted server, channel, or user IDs.",
-												"cacheLimit":"Maximum number of messages to store in the cache. Older messages are deleted when the limit is reached. This helps reduce memory usage and improve performance. 0 means there is no limit",
-												"cacheMessagesFromServers":"Usually message logger only logs from whitelisted ids and dms, enabling this would mean it would log messages from all servers as well. Note that this may cause the cache to exceed its limit, resulting in some messages being missed. If you are in a lot of servers, this may significantly increase the chances of messages being logged, which can result in a large message record and the inclusion of irrelevant messages.",
-												"exportLogsFromIndexedDB":"Export Logs From IndexedDB",
-												"hideMessageFromMessageLoggers":"When enabled, a context menu button will be added to messages to allow you to delete messages without them being logged by other loggers. Might not be safe, use at your own risk.",
-												"hideMessageFromMessageLoggersDeletedMessage":"The message content to replace the message with when using the hide message from message loggers feature.",
-												"ignoreBots":"Whether to ignore messages by bots",
-												"ignoreMutedCategories":"Messages in channels belonging to muted categories will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-												"ignoreMutedChannels":"Messages in muted channels will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-												"ignoreMutedGuilds":"Messages in muted guilds will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-												"ignoreSelf":"Whether to ignore messages by yourself",
-												"ignoreWebhooks":"Whether to ignore messages by webhooks",
-												"importLogsFromFile":"Import Logs From File",
-												"messageLimit":"Maximum number of messages to save. Older messages are deleted when the limit is reached. 0 means there is no limit",
-												"messagesToDisplayAtOnceInLogs":"Number of messages to display at once in logs & number of messages to load when loading more messages in logs.",
-												"openImageCacheFolder":"Opens the image cache directory",
-												"openLogs":"Open Logs",
-												"permanentlyRemoveLogByDefault":"Vencord's base MessageLogger remove log button wiil delete logs permanently",
-												"preserveCurrentChannel":"When enabled, messages in your currently selected channel are not affected by time-based cleanup.",
-												"saveImages":"Save deleted attachments.",
-												"saveMessages":"Whether to save the deleted and edited messages.",
-												"selectImageCacheDir":"Select saved images directory",
-												"selectLogsDir":"Select logs directory",
-												"showLogsButton":"Toggle to whenever show the toolbox or not",
-												"showWhereMessageIsFrom":"Show message channel/author name and server name",
-												"sortNewest":"Sort logs by newest.",
-												"timeBasedCleanupMinutes":"Automatically remove messages from servers that are older than this many minutes. Set to 0 to disable time-based cleanup.",
-												"whitelistedIds":"Whitelisted server, channel, or user IDs."
-								}
-				}
+    "absRPC":{
+        "about":{
+            "automaticAuth":"Plugin automaticky ověří a načte váš postup poslechu.",
+            "description":"Zadejte URL svého AudioBookShelf serveru, uživatelské jméno a heslo pro zobrazení tvých aktuálně přehrávaných audioknih jako Discord Rich Presence.",
+            "title":"Jak se připojit k AudioBookShelf"
+        },
+        "description":"Bohatá přítomnost pro AudioBookShelf server médií",
+        "settings":{
+            "password":"AudiobookShelf heslo",
+            "serverUrl":"Adresa URL serveru AudioBookShelf (např. https://abs.example.com)",
+            "username":"AudioBookShelf uživatelské jméno"
+        },
+        "toasts":{
+            "notConfigured":"AudioBookShelf RPC není nakonfigurován."
+        }
+    },
+    "altKrispSwitch":{
+        "description":"Umění přepínač Popout na potlačení šumu mezi None a Krisp namísto Krisp a Standard"
+    },
+    "alwaysExpandProfiles":{
+        "description":"Vždy rozbalí vyskakovací okna profilu na celý modální režim"
+    },
+    "anammox":{
+        "description":"Skrývá různé funkce související s nitro a obchodem",
+        "settings":{
+            "billing":"Odebrat nastavení fakturace",
+            "dms":"Odebrat obchody nad seznamem DM",
+            "emojiList":"Odstraňte nedostupné kategorie z výběru emodži",
+            "gift":"Tlačítko Odebrat dárek",
+            "quests":"Odstraňte questy nad seznamem DM",
+            "serverBoost":"Odebrat informace o posílení serveru nad seznamem kanálů"
+        }
+    },
+    "animalese":{
+        "description":"Hraje za každou odeslanou zprávu (hodně žvaní)",
+        "quality":{
+            "high":"Vysoký",
+            "low":"Nízká",
+            "lowest":"Nejnižší",
+            "medium":"Střední"
+        },
+        "settings":{
+            "messageLengthLimit":"Maximální délka zprávy ke zpracování",
+            "pitch":"Násobitel výšky tónu",
+            "processOwnMessages":"Enable to yap your own messages too",
+            "soundQuality":"Quality of sound to use",
+            "speed":"Rychlost zvířecího zvuku",
+            "volume":"Hlasitost zvířecího zvuku"
+        }
+    },
+    "atSomeone":{
+        "contextMenu":{
+            "someone":"Mention someone randomly"
+        },
+        "description":"Mention someone randomly"
+    },
+    "autoZipper":{
+        "description":"Před nahráním do Discord automaticky zazipuje zadané typy souborů a složky",
+        "settings":{
+            "extensions":"Čárkami oddělený seznam přípon souborů pro automatické zazipování (např. .psd,.blend,.exe,.dmg)"
+        }
+    },
+    "bannersEverywhere":{
+        "description":"Zobrazuje bannery v seznamu členů ",
+        "settings":{
+            "animate":"Animovat bannery",
+            "preferNameplate":"preferovaná tabulka se jménem nad bannerem"
+        }
+    },
+    "baseDecoder":{
+        "description":"Dekódujte base64 obsah zprávy a zkopírujte dekódovaný obsah.",
+        "settings":{
+            "clickMethod":"Změňte tlačítko pro dekódování base64 obsahu jakékoli zprávy.",
+            "clickMethodOptions":{
+                "left":"Kliknutím levým tlačítkem dekódovat obsah base64.",
+                "right":"Kliknutím pravým tlačítkem myši dekódovat obsah base64."
+            }
+        },
+        "ui":{
+            "copiedToast":"Dekódovaný obsah zkopírován do schránky!",
+            "copyDecoded":"Zkopírovat dekódovaný obsah",
+            "decodedContent":"Dekódovaný Obsah",
+            "modalTitle":"Obsah base64 dekódován",
+            "tooltipLeft":"Kopírovat dekódované (kliknutím levým tlačítkem) / Dekódovat Base64 (pravé kliknutí)",
+            "tooltipRight":"Dekódovat Base64 (kliknutí levým tlačítkem) / Kopírovat dekódované (pravé kliknutí)"
+        }
+    },
+    "betterAudioPlayer":{
+        "description":"betterAudioPlayer.description",
+        "settings":{
+            "forceMoveBelow":"Vynutit vizualizér pod zvukovým přehrávačem",
+            "oscilloscope":"Povolit vizualizér osciloskopu",
+            "oscilloscopeColor":"Barva pro osciloskop",
+            "oscilloscopeSolidColor":"Použít pevnou barvu pro osciloskop",
+            "spectrograph":"Povolit vizualizér spektografu",
+            "spectrographColor":"Barva pro spektrograf",
+            "spectrographSolidColor":"Použít pevnou barvu pro spektrograf"
+        },
+        "toasts":{
+            "invalidColor":"Neplatný formát barvy pro {settingKey}, ujistěte se, že je ve formátu 'R, G, B' nebo '#RRGBB'"
+        }
+    },
+    "betterBanReasons":{
+        "description":"Vytvořte vlastní důvody pro použití v režimu zakázání Discord a/nebo zobrazí výchozí textový vstup namísto možností.",
+        "settings":{
+            "isTextInputDefault":"Ve výchozím nastavení zobrazuje textový vstup namísto nabídky výběru. (Ekvivalentní kliknutí na možnost „Jiné“)",
+            "reasons":"Vaše vlastní důvody"
+        },
+        "ui":{
+            "addAnotherReason":"Přidat další důvod",
+            "reasonPlaceholder":"Důvod",
+            "reasons":"Zdůvodnění"
+        }
+    },
+    "betterBlockedUsers":{
+        "description":"Umožňuje vyhledávat v seznamu blokovaných uživatelů a umožňuje výběr jmen v nastavení.",
+        "ui":{
+            "searchPlaceholder":"Hledat uživatele..."
+        }
+    },
+    "betterCommands":{
+        "commands":{
+            "refresh":{
+                "description":"Obnovuje Discord aplikační příkazy lokálně",
+                "failed":"Obnovení příkazů se nezdařilo. Podrobnosti naleznete na konzole.",
+                "refreshing":"Obnovování příkazů aplikace...",
+                "success":"Příkazy byly úspěšně obnoveny!",
+                "userOption":"konkrétního uživatele vyzkoušet a obnovit"
+            }
+        },
+        "description":"Vylepšuje systém velení o různá vylepšení.",
+        "settings":{
+            "allowNewlinesInCommands":"Povolit nové řádky v příkazových vstupech (CTRL + Shift + Enter)",
+            "autoFillArguments":"Automaticky vyplňte příkaz všemi argumenty namísto pouze požadovaných"
+        }
+    },
+    "betterInvites":{
+        "description":"Kliknutím na jméno zobrazíte datum vypršení platnosti pozvánek, zobrazíte profil pozvaného a zobrazíte náhled serverů",
+        "ui":{
+            "expireTooltip":"Tato pozvánka bude {expiry}",
+            "expireWill":"vyprší",
+            "invitedYouTo":"{inviter} vás pozval do {guild}",
+            "notExpire":"nevyprší"
+        }
+    },
+    "betterPlusReacts":{
+        "description":"Množství plus před :emoji: je zpráva, ke které se má přidat"
+    },
+    "betterUserArea":{
+        "description":"Přizpůsobte a udělejte uživatelskou oblast čistší.",
+        "settings":{
+            "alwaysShowUsername":"Vždy zobrazovat uživatelské jméno místo stavu.",
+            "removeAudioMenus":"Odstraňte nabídky vedle tlačítek ztlumení a ohlušení.",
+            "removeAvatarDecoration":"Odstraňte ozdobu avatara.",
+            "removeButtonTooltips":"Odebrat popisky tlačítek.",
+            "removeNameplate":"Odstraňte styl štítku.",
+            "removeUsernameStyles":"Odstraňte barvy a efekty uživatelského jména."
+        }
+    },
+    "blockKeywords":{
+        "description":"Blokuje zprávy obsahující konkrétní uživatelsky definovaná klíčová slova, jako by byl zablokován uživatel, který je odesílal.",
+        "settings":{
+            "blockedWords":"Seznam slov k blokování oddělených čárkami",
+            "caseSensitive":"Zda použít vyhledávání rozlišující malá a velká písmena nebo ne",
+            "ignoreBlockedMessages":"Zcela ignoruje (poslední) lištu nových zpráv",
+            "useRegex":"Při kontrole obsahu zprávy použijte každou hodnotu jako regulární výraz (pokročilé)"
+        }
+    },
+    "blockKrisp":{
+        "description":"Zabraňte načítání Krispa"
+    },
+    "bypassPinPrompt":{
+        "description":"Při používání funkcí PIN přeskočte výzvu k připnutí"
+    },
+    "bypassStatus":{
+        "contextMenu":{
+            "addStatusBypass":"Přidat vynechání stavu",
+            "removeStatusBypass":"Odebrat vynechání stavu"
+        },
+        "description":"V režimu Nerušit budete stále dostávat oznámení z konkrétních zdrojů. Klikněte pravým tlačítkem na uživatele/kanály/cechy a nastavte je tak, aby obcházely režim Nerušit.",
+        "placeholder":{
+            "separateWithCommas":"Oddělte čárkami"
+        },
+        "settings":{
+            "allowOutsideOfDms":"Povolit vybraným uživatelům obejít stav i mimo DM (funguje jako obcházení kanálu/cechu, ale je to pro všechny zprávy odeslané vybranými uživateli)",
+            "channels":"Kanály, které mají být vynechány (upozorněno na ping v tomto kanálu)",
+            "guilds":"Cechy, které mají nechat obejít (upozorněno na ping kdekoli v cechu)",
+            "notificationSound":"Zda se má přehrát zvuk upozornění",
+            "respectSilentPings":"Respektujte tiché pingy (@silent / potlačit upozornění)",
+            "statusToUse":"Stav, který se má použít pro seznam povolených",
+            "users":"Uživatelé, kteří mají nechat obejít (upozornění na všechny zprávy odeslané v DM)"
+        },
+        "statusOptions":{
+            "dnd":"Nerušit",
+            "idle":"Nečinný",
+            "invisible":"Neviditelný",
+            "online":"Online"
+        }
+    },
+    "channelBadges":{
+        "description":"Přidá odznaky do kanálů na základě jejich typu",
+        "settings":{
+            "announcementBadgeColor":"Barva odznaku oznámení",
+            "announcementBadgeLabel":"Štítek odznaku oznámení",
+            "announcementThreadBadgeColor":"Barva odznaku oznámení",
+            "announcementThreadBadgeLabel":"Štítek odznaku s oznámením",
+            "categoryBadgeColor":"Barva odznaku kategorie",
+            "categoryBadgeLabel":"Štítek odznaku kategorie",
+            "directoryBadgeColor":"Barva odznaku adresáře",
+            "directoryBadgeLabel":"Štítek odznaku adresáře",
+            "forumBadgeColor":"Barva odznaku fóra",
+            "forumBadgeLabel":"Štítek odznaku fóra",
+            "lockedBadgeColor":"Barva zamčeného odznaku",
+            "lockedBadgeLabel":"Štítek s uzamčeným odznakem",
+            "mediaBadgeColor":"Barva mediálního odznaku",
+            "mediaBadgeLabel":"Štítek mediálního odznaku",
+            "nsfwBadgeColor":"Barva odznaku NSFW",
+            "nsfwBadgeLabel":"Štítek s odznakem NSFW",
+            "oneBadgePerChannel":"Zobrazit pouze jeden odznak na kanál",
+            "privateThreadBadgeColor":"Barva odznaku soukromého vlákna",
+            "privateThreadBadgeLabel":"Štítek odznaku Private Thread",
+            "publicThreadBadgeColor":"Barva odznaku Public Thread",
+            "publicThreadBadgeLabel":"Štítek odznaku Public Thread",
+            "rulesBadgeColor":"Barva odznaku pravidel",
+            "rulesBadgeLabel":"Štítek s pravidly",
+            "showAnnouncementBadge":"Zobrazit odznak oznámení",
+            "showAnnouncementThreadBadge":"Zobrazit odznak vlákna oznámení",
+            "showCategoryBadge":"Zobrazit odznak kategorie",
+            "showDirectoryBadge":"Zobrazit odznak adresáře",
+            "showForumBadge":"Zobrazit odznak fóra",
+            "showLockedBadge":"Zobrazit odznak Uzamčeno",
+            "showMediaBadge":"Zobrazit odznak Media",
+            "showNSFWBadge":"Zobrazit odznak NSFW",
+            "showPrivateThreadBadge":"Zobrazit odznak soukromého vlákna",
+            "showPublicThreadBadge":"Zobrazit odznak veřejného vlákna",
+            "showRulesBadge":"Zobrazit odznak pravidel",
+            "showStageBadge":"Zobrazit odznak jeviště",
+            "showTextBadge":"Zobrazit odznak Text",
+            "showUnknownBadge":"Zobrazit odznak Neznámý",
+            "showVoiceBadge":"Zobrazit odznak Hlas",
+            "stageBadgeColor":"Barva jevištního odznaku",
+            "stageBadgeLabel":"Štítek s jevištním odznakem",
+            "textBadgeColor":"Barva odznaku textu",
+            "textBadgeLabel":"Textový štítek odznaku",
+            "unknownBadgeColor":"Neznámá barva odznaku",
+            "unknownBadgeLabel":"Neznámý štítek odznaku",
+            "voiceBadgeColor":"Barva hlasového odznaku",
+            "voiceBadgeLabel":"Štítek s hlasovým odznakem"
+        },
+        "tooltips":{
+            "lockedChannel":"Tento kanál je uzamčen.",
+            "nsfwChannel":"Tento kanál je označen jako NSFW.",
+            "rulesChannel":"Tento kanál je kanál pravidel serveru."
+        }
+    },
+    "channelTabs":{
+        "contextMenu":{
+            "openInNewTab":"Otevřít na nové kartě"
+        },
+        "description":"Group vaše běžně navštěvované kanály na kartách, jako je prohlížeč"
+    },
+    "characterCounter":{
+        "description":"Přidá počítadlo znaků do chatového vstupu",
+        "settings":{
+            "colorEffects":"Zapněte nebo vypněte barevné efekty, abyste se přiblížili limitu počtu znaků"
+        }
+    },
+    "cleanChannelName":{
+        "description":"odstraňte z názvů kanálů všechny emotikony a dekorace"
+    },
+    "cleanerChannelGroups":{
+        "description":"Skryje všechny kanály ve sbalených kategoriích, i když obsahují nepřečtené zprávy."
+    },
+    "clientSideBlock":{
+        "description":"Umožňuje lokálně skrýt téměř veškerý obsah před jakýmkoli uživatelem",
+        "reply":{
+            "replyingToBlocked":"Odpověď na zablokovanou zprávu"
+        },
+        "settings":{
+            "blockedReplyDisplay":"Co by se mělo zobrazit místo zprávy, když někdo odpoví někomu, koho jste skryli",
+            "blockedReplyDisplayOptions":{
+                "displayText":"Zobrazený text oznamující, že byla zodpovězena skrytá zpráva",
+                "hideReply":"Doslova nic"
+            },
+            "guildBlackList":"ID cechu pro deaktivaci funkcí",
+            "guildWhiteList":"ID cechu pro aktivaci funkcí v",
+            "hideBlockedMessages":"Měly by být zprávy od blokovaných uživatelů plně skryty (stejně jako starý plugin noblockedmessages)",
+            "hideBlockedUsers":"Zablokovaní uživatelé by také měli být všude skryti",
+            "hideEmptyRoles":"Měla by být skryta záhlaví rolí, pokud jsou blokováni všichni jejich členové",
+            "hideVc":"Skrýt hlasové kanály obsahující blokované uživatele.",
+            "usersToBlock":"ID uživatelů oddělená čárkou a mezerou"
+        }
+    },
+    "clipsEnhancements":{
+        "description":"Přidejte další možnosti Clip FPS a trvání, vlastní délku klipu, RPC tagování a další",
+        "settings":{
+            "clipsLink":"Změňte možnosti FPS a trvání v nastavení Clips!",
+            "enableAdvancedSignals":"Povolit pokročilé signály klipů (spouštěče automatického klipu)",
+            "enableScreenshotKeybind":"Povolte funkci klávesové zkratky snímku obrazovky",
+            "enableVoiceOnlyClips":"Povolit pouze hlasové klipy (zvuk bez videa)",
+            "ignorePlatformRestriction":"Povolit ořezávání s omezením platformy (může způsobit chyby při ukládání)",
+            "richPresenceTagging":"Kdy by měly být klipy označeny aktuální Rich Presence?",
+            "richPresenceTaggingOptions":{
+                "always":"Vždy",
+                "never":"Nikdy",
+                "whenMatched":"Pouze v případě, že začátek nebo konec názvu aktivity odpovídá"
+            }
+        }
+    },
+    "commandPalette":{
+        "description":"Rychle spouštějte akce pomocí prohledávatelné palety příkazů",
+        "settings":{
+            "customCommands":"Správa vlastních položek palety příkazů",
+            "enableTagFilter":"Zobrazit panel filtru značek",
+            "hotkey":"Klávesová zkratka používaná k otevření palety příkazů",
+            "showTags":"Zobrazte čipy štítků pro příkazy",
+            "visualStyle":"Vzhled palety",
+            "visualStyleOptions":{
+                "classic":"Klasický",
+                "polished":"Leštěný"
+            }
+        },
+        "ui":{
+            "hotkeyDescription":"Klávesová zkratka používaná k otevření palety příkazů",
+            "hotkeyTitle":"Klávesová zkratka palety příkazů",
+            "pressAnyKey":"Stiskněte libovolnou klávesu...",
+            "reset":"Obnovit"
+        }
+    },
+    "components":{
+        "description":"Utility plugin pro vývojáře k testování a náhledu Discord komponent"
+    },
+    "contentWarning":{
+        "description":"Umožňuje zadat určitá spouštěcí slova, která budou ve výchozím nastavení rozmazána. Po najetí myší na rozmazaný obsah jej odhalíte.",
+        "settings":{
+            "onClick":"Zobrazovat obsah spouštěče pouze po kliknutí namísto umístění kurzoru myši"
+        },
+        "ui":{
+            "flaggedWords":"Označená slova",
+            "placeholder":"Slovo"
+        }
+    },
+    "copyProfileColors":{
+        "contextMenu":{
+            "copyProfileColors":"Kopírovat barvy profilu"
+        },
+        "description":"Plugin pro kopírování přechodových barev profilu lidí do schránky.",
+        "toast":{
+            "copied":"Barvy profilu zkopírovány do schránky!",
+            "error":"Chyba při kopírování barev profilu!",
+            "noColorsFound":"Nebyly nalezeny žádné barvy profilu!"
+        }
+    },
+    "copyStatusUrls":{
+        "description":"Zkopírujte adresu URL stavu uživatele, když na ni kliknete pravým tlačítkem",
+        "toast":{
+            "copied":"Zkopírováno URL",
+            "error":"Chyba při kopírování URL, další informace naleznete v konzoli"
+        }
+    },
+    "copyUserMention":{
+        "contextMenu":{
+            "copyUserMention":"Kopírovat zmínku uživatele"
+        },
+        "description":"Přidá tlačítko pro kopírování uživatelů uvedených v kontextové nabídce uživatele, nejlépe funguje s Valid User."
+    },
+    "cursorBuddy":{
+        "description":"Přidá sprite, který následuje váš kurzor.",
+        "settings":{
+            "buddy":"Vyberte si kurzorového kamaráda",
+            "buddyOptions":{
+                "fathorse":"Fatass Horse",
+                "oneko":"Oneko"
+            },
+            "fade":"Pokud by měl kůň vyblednout, když je kurzor blízko",
+            "fps":"Frekvence snímků vašeho kamaráda",
+            "freeroam":"Pokud by se měl kůň při nečinnosti volně pohybovat",
+            "furColor":"Kožešinová hex barva pro Oneko",
+            "outlineColor":"Obrysová šestihranná barva pro Oneko",
+            "shake":"Pokud by měl kůň zatřást oknem, když jde",
+            "size":"Velikost fatasského koně",
+            "speed":"Rychlost vašeho kamaráda"
+        },
+        "ui":{
+            "furColor":"Barva srsti",
+            "outlineColor":"Barva obrysu"
+        }
+    },
+    "customFolderIcons":{
+        "description":"Přizpůsobte si ikony složek s libovolným png"
+    },
+    "customSounds":{
+        "description":"Přizpůsobte si zvuky Discord.",
+        "settings":{
+            "debug":"Ladění",
+            "export":"Vývozní",
+            "import":"Importovat",
+            "resetAll":"Obnovit vše",
+            "searchPlaceholder":"Hledejte podle jména nebo ID",
+            "searchSounds":"Hledat zvuky"
+        },
+        "toast":{
+            "exportSuccess":"Exportovaná nastavení {count} (zvukové soubory nejsou součástí dodávky)",
+            "importError":"Při importu nastavení došlo k chybě. Podrobnosti najdete v konzole.",
+            "importSuccess":"Nastavení úspěšně importováno!",
+            "loadError":"Chyba při načítání vlastního zvukového souboru",
+            "resetSuccess":"Všechna přepsání byla úspěšně resetována!"
+        }
+    },
+    "customTimestamps":{
+        "about":{
+            "additional":"Navíc je můžete použít ve svých vstupech:",
+            "calendar":"umožňuje dynamické formátování data, jako je „Dnes“ nebo „Včera“.",
+            "relative":"zobrazí časy jako „před 4 hodinami“.",
+            "title":"Jak používat:"
+        },
+        "description":"Vlastní časová razítka ve zprávách a nápovědách",
+        "settings":{
+            "calendarFormats":"Formáty kalendáře",
+            "calendarFormatsDescription":"Jak formátovat hodnotu [calendar], pokud je použita ve výše uvedených časových razítkách.",
+            "formats":"Přizpůsobte formáty časových razítek"
+        }
+    },
+    "customUserColors":{
+        "contextMenu":{
+            "setColor":"Nastavit barvu"
+        },
+        "description":"Umožňuje přidat vlastní barvu každému uživateli, kdekoli! Důrazně doporučujeme používat s typeingTweaks a roleColorEverywhere",
+        "settings":{
+            "colorInServers":"Pokud by se barvy názvu měly změnit na serverech",
+            "dmList":"Uživatelé s definovanými vlastními barvami budou mít své jméno v seznamu dm obarvené"
+        }
+    },
+    "disableCameras":{
+        "description":"Ve výchozím nastavení deaktivuje kamery během hovoru"
+    },
+    "discordDevBanner":{
+        "description":"Aktivuje vývojářský banner Discord, ve kterém se zobrazuje ID sestavení"
+    },
+    "dragFavoriteEmotes":{
+        "description":"Přidá možnost změnit pořadí vašich oblíbených emocí"
+    },
+    "dragify":{
+        "description":"Chcete-li vložit zmínky nebo pozvánky, přetáhněte uživatele, kanály nebo servery do chatu.",
+        "settings":{
+            "allowChatBodyDrop":"Chcete-li vložit text, povolte přetažení do hlavního těla chatu.",
+            "channelOutput":"Výstup poklesu kanálu.",
+            "channelOutputOptions":{
+                "link":"Odkaz na kanál",
+                "mention":"#zmínka o kanálu"
+            },
+            "inviteExpireAfter":"Vypršení platnosti pozvánky.",
+            "inviteExpireAfterOptions":{
+                "12hours":"12 hodin",
+                "1day":"1 den",
+                "1hour":"1 hodina",
+                "30min":"30 minut",
+                "6hours":"6 hodin",
+                "7days":"7 dní",
+                "never":"Nikdy"
+            },
+            "inviteMaxUses":"Pozvěte maximální počet použití.",
+            "inviteMaxUsesOptions":{
+                "100uses":"100 použití",
+                "10uses":"10 použití",
+                "1use":"1 použití",
+                "25uses":"25 použití",
+                "50uses":"50 použití",
+                "5uses":"5 použití",
+                "noLimit":"Žádný limit"
+            },
+            "inviteTemporaryMembership":"Udělit dočasné členství.",
+            "reuseExistingInvites":"Místo vytváření nové pozvánky použijte znovu existující pozvánku.",
+            "userOutput":"Uživatelský pokles výstupu.",
+            "userOutputOptions":{
+                "id":"ID uživatele",
+                "mention":"Zmínit uživatele"
+            }
+        },
+        "toast":{
+            "dropFailed":"Dragify nezvládl drop.",
+            "inviteCreated":"Pozvánka byla vytvořena.",
+            "inviteFailed":"Pozvánku nelze vytvořit.",
+            "noChannelForInvites":"Pro pozvánky není k dispozici žádný kanál."
+        }
+    },
+    "elementHighlighter":{
+        "description":"Snadno zvýrazňujte a kontrolujte prvky.",
+        "settings":{
+            "keybind":"Přepnout zvýrazňovač",
+            "showBorderRadius":"Zobrazte hodnoty ohraničení a poloměru prvku",
+            "showClasses":"V popisku zobrazte názvy tříd CSS prvku",
+            "showDisplay":"Zobrazte typ zobrazení prvku spolu s vlastnostmi ohybu nebo mřížky",
+            "showFont":"Zobrazte vypočítanou rodinu písem a velikost písma",
+            "showId":"Zobrazit atribut ID prvku v popisku",
+            "showMargin":"Zobrazit hodnoty okrajů prvku",
+            "showPadding":"Zobrazte hodnoty výplně prvku",
+            "showPosition":"Zobrazte typ pozice CSS prvku a z-index"
+        },
+        "ui":{
+            "copiedColor":"Barva zkopírována do schránky!",
+            "recording":"Záznam...",
+            "reset":"Obnovit"
+        }
+    },
+    "equicordHelper":{
+        "alerts":{
+            "equicordSupport":"Equicord Podpora",
+            "okayContinue":"Dobře, pokračujte",
+            "supportWarningBody":"Než požádáte o pomoc. Zkontrolujte aktualizace a zda je tento problém skutečně způsoben Equicord!",
+            "supportWarningTitle":"Vencord Upozornění na kanál podpory"
+        },
+        "commands":{
+            "refreshCommands":"Obnovit příkazy lomítka",
+            "refreshFailed":"Obnovení příkazů se nezdařilo. Podrobnosti najdete v konzole.",
+            "refreshSuccess":"Příkazy lomítka byly úspěšně obnoveny."
+        },
+        "description":"Používá se k poskytování podpory, opravě pádů způsobených neshodou a dalším různým funkcím.",
+        "settings":{
+            "accountStandingButton":"Zobrazit tlačítko stavu účtu v záhlaví",
+            "forceRoleIcon":"Vynutí zobrazení ikon rolí vedle zpráv v kompaktním režimu",
+            "noDefaultHangStatus":"Při připojování k hlasovým kanálům deaktivujte výchozí stav zavěšení",
+            "noMirroredCamera":"Zabraňuje zrcadlení kamery na obrazovce",
+            "refreshSlashCommands":"Obnoví příkazy lomítka, aby se zobrazily nově přidané příkazy bez restartování klienta.",
+            "removeActivitySection":"Odebere sekci aktivit nad seznamem členů",
+            "showYourOwnActivityButtons":"Discord z nějakého důvodu skrývá vaše vlastní tlačítka aktivity"
+        },
+        "standing":{
+            "allGood":"Všechno dobré!",
+            "atRisk":"V ohrožení",
+            "limited":"Omezený",
+            "suspended":"Pozastaveno",
+            "veryLimited":"Velmi omezené"
+        }
+    },
+    "equicordToolbox":{
+        "description":"Přidá tlačítko vedle tlačítka doručené pošty v záhlaví kanálu, které obsahuje Equicord rychlé akce",
+        "settings":{
+            "showPluginMenu":"Zobrazit nabídku pluginů na panelu nástrojů"
+        },
+        "ui":{
+            "editQuickCss":"Upravit QuickCSS",
+            "enableQuickCss":"Povolit QuickCSS",
+            "manageThemes":"Správa motivů",
+            "openNotificationLog":"Otevřete protokol oznámení",
+            "openSettings":"Otevřít nastavení",
+            "plugins":"Pluginy",
+            "restartToApply":"Restartujte pro použití změny",
+            "themes":"Témata",
+            "tooltip":"Equicord Toolbox"
+        }
+    },
+    "equissant":{
+        "description":"Croissant každé zadané množství kliknutí :vozík:",
+        "settings":{
+            "amount":"Počet kliknutí ke spuštění croissantu"
+        }
+    },
+    "exitSounds":{
+        "description":"Přehrávejte zvuky zvukové desky, když se odpojíte od hlasu.",
+        "settings":{
+            "soundGuildId":"Vyberte server obsahující zvuk.",
+            "soundId":"Zadejte ID zvuku, který chcete přehrát."
+        },
+        "toasts":{
+            "somethingWentWrong":"Jejda! Něco se pokazilo."
+        },
+        "ui":{
+            "enterSoundId":"Zadejte ID zvuku...",
+            "selectServer":"Vyberte server...",
+            "setGlobalExitSound":"Nastavit jako globální výstupní zvuk"
+        }
+    },
+    "exportMessages":{
+        "description":"Umožňuje exportovat jakoukoli zprávu do souboru",
+        "notifications":{
+            "exportFailed":"Export zprávy se nezdařil",
+            "exportSuccess":"Zpráva byla úspěšně exportována jako {filename}",
+            "title":"Export zpráv"
+        },
+        "settings":{
+            "exportContacts":"Exportujte seznam přátel do schránky. Přidá nové tlačítko na panel nabídek pro kartu Přátelé.",
+            "openFileAfterExport":"Po exportu otevřete exportovaný soubor ve výchozím ovladači souboru"
+        },
+        "ui":{
+            "contactListUndefined":"Seznam kontaktů není definován. Před exportem klikněte na záložku \"Vše\".",
+            "contactsCopied":"Kontakty byly úspěšně zkopírovány do schránky.",
+            "export":"Vývozní",
+            "exportMessage":"Exportovat zprávu"
+        }
+    },
+    "fastDeleteChannels":{
+        "description":"Přidá ikonu koše pro odstranění kanálů",
+        "settings":{
+            "keyBind":"Klávesa pro přepínání koše při stisknutí.",
+            "reqAlt":"Vyžadovat držení alt.",
+            "reqCtrl":"Vyžadovat držení kontroly.",
+            "reqShift":"Vyžadovat držení posunu."
+        }
+    },
+    "favouriteAnything":{
+        "description":"Oblíbený jakýkoli obrázek"
+    },
+    "fileUpload":{
+        "description":"Nahrávejte obrázky a videa do služeb hostování souborů, jako jsou Zipline a Nest",
+        "ui":{
+            "uploadTo":"Nahrát do {serviceName}"
+        }
+    },
+    "findReply":{
+        "description":"Přeskočí na nejstarší odpověď na zprávu v kanálu (umožňuje vám snadněji sledovat minulé konverzace).",
+        "settings":{
+            "hideButtonIfNoReply":"Skryje tlačítko, pokud na zprávu nejsou žádné odpovědi",
+            "includeAuthor":"Bude také vyhledávat zprávy, které odpovídají autorovi obecně, ne pouze konkrétní zprávu",
+            "includePings":"Bude také hledat zprávy, které @ autor přímo"
+        },
+        "toasts":{
+            "containerNotFound":"Nepodařilo se najít prvek kontejneru.",
+            "noReplyFound":"Nepodařilo se najít odpověď.",
+            "useBottomPanel":"K navigaci mezi odpověďmi použijte spodní panel."
+        },
+        "ui":{
+            "jumpToReply":"Přejít na odpověď"
+        }
+    },
+    "fixFileExtensions":{
+        "description":"Opravuje přípony souborů jejich přejmenováním na kompatibilní podporovaný formát, pokud je to možné"
+    },
+    "followVoiceUser":{
+        "description":"Sledujte přítele v hlasovém chatu.",
+        "info":"Tento plugin se používá ke sledování přítele/přátel do hlasových chatů.",
+        "settings":{
+            "leaveWhenUserLeaves":"Když uživatel odejde, opusťte hlasový kanál. (To může způsobit, že někdy vstoupíte do nekonečné smyčky opuštění/připojení)",
+            "onlyWhenInVoice":"Sledujte uživatele, pouze když jste v hlasovém kanálu"
+        },
+        "ui":{
+            "followUser":"Sledovat uživatele"
+        }
+    },
+    "fontLoader":{
+        "description":"Načte libovolné písmo z Google Fonts",
+        "settings":{
+            "applyOnCodeBlocks":"Použijte písmo na bloky kódu"
+        },
+        "ui":{
+            "by":"od {authors}",
+            "clickToApply":"Kliknutím na libovolné písmo jej použijete.",
+            "searchFonts":"Hledat písma...",
+            "searchGoogleFonts":"Prohledejte Google Fonts"
+        }
+    },
+    "forwardAnywhere":{
+        "description":"Pokud se předávání nezdaří, pošlete ji jako normální zprávu také umožňuje přesměrování nsfw",
+        "options":{
+            "greaterThan":">",
+            "hash":"-#"
+        },
+        "settings":{
+            "forwardPreface":"To, co by mělo být předáno, je uvedeno v úvodu"
+        }
+    },
+    "frequentQuickSwitcher":{
+        "description":"Přepisuje a filtruje výsledky rychlého přepínání tak, aby byly vašimi nejčastějšími kanály"
+    },
+    "friendCloud":{
+        "commands":{
+            "count":"Počet uživatelů k zobrazení",
+            "friendcloud":"Zobrazte uživatele, se kterým nejčastěji komunikujete, v cloudu"
+        },
+        "description":"Přidá příkaz /friendcloud pro vizualizaci uživatelů, se kterými nejčastěji komunikujete",
+        "errors":{
+            "couldntGenerate":"Nelze vygenerovat obrázek :c",
+            "countMustBeHigher":"Počet musí být 1 nebo vyšší!",
+            "noAffinities":"Nebyly nalezeny žádné afinity. Zkontrolujte nastavení ochrany osobních údajů.",
+            "noValidUsers":"V zájmech nebyli nalezeni žádní platní uživatelé. Zkontrolujte nastavení ochrany osobních údajů."
+        }
+    },
+    "friendCodes":{
+        "panel":{
+            "copied":"Zkopírováno!",
+            "copyCode":"Kopírovat kód",
+            "currentCode":"Aktuální kód přítele",
+            "error":"Chyba: {error}",
+            "refresh":"Obnovit",
+            "sendToServer":"Odeslat na server",
+            "sent":"Odesláno!",
+            "title":"Přátelské kódy"
+        },
+        "settings":{
+            "autoCopy":"Automaticky zkopírovat kód přítele do schránky, když se změní",
+            "sendToServer":"Automaticky odeslat kód přítele na server, když se změní",
+            "webhookUrl":"Webhook URL, kterému chcete poslat kód přítele"
+        }
+    },
+    "friendTags":{
+        "description":"Umožňuje filtrovat podle vlastních značek v rychlém přepínači spuštěním vyhledávání pomocí &",
+        "ui":{
+            "add":"Přidat",
+            "addTo":"Přidat do {tagName}",
+            "name":"Jméno",
+            "remove":"Odebrat",
+            "removeFrom":"Odebrat z {tagName}",
+            "tag":"Štítek",
+            "userList":"Seznam uživatelů (klepněte na uživatele, kterého chcete odebrat)",
+            "usersSeperated":"Uživatelé (odděleno čárkou)"
+        }
+    },
+    "friendshipRanks":{
+        "description":"Přidává odznaky, které ukazují, jak dlouho jste s uživatelem přátelé",
+        "ranks":{
+            "besties":{
+                "description":"Jak to vůbec zvládáš??? (5 let)",
+                "title":"Besties"
+            },
+            "blooming":{
+                "description":"Vaše přátelství se blíží! (1 měsíc)",
+                "title":"Kvetoucí"
+            },
+            "burning":{
+                "description":"Vaše přátelství dosáhlo konečné rychlosti (3 měsíce)",
+                "title":"Hořící"
+            },
+            "fighter":{
+                "description":"Vaše přátelství je silné (6 měsíců)",
+                "title":"Bojovník"
+            },
+            "royal":{
+                "description":"Vaše přátelství prošlo úskalími - celé 2 roky!",
+                "title":"Královský"
+            },
+            "sprout":{
+                "description":"Vaše přátelství právě začíná",
+                "title":"Výhonek"
+            },
+            "star":{
+                "description":"Vaše přátelství trvá nějakou dobu (1 rok)",
+                "title":"Hvězda"
+            }
+        }
+    },
+    "fullVcPfp":{
+        "description":"Způsobí, že avataři zaberou celou dlaždici vc"
+    },
+    "gensokyoRadioRPC":{
+        "description":"Discord bohatá přítomnost pro Gensokyo Radio!",
+        "info":"Discord bohatá přítomnost pro Gensokyo Radio!",
+        "settings":{
+            "refreshInterval":"Interval mezi aktualizacemi aktivity (v sekundách)"
+        }
+    },
+    "ghosted":{
+        "description":"Pokud neodpovíte na jejich DM, objeví se roztomilý duch",
+        "settings":{
+            "exemptedChannels":"Čárkami oddělený seznam ID kanálů, které mají být vyňaty z ghostingu (kliknutím pravým tlačítkem na kanál DM zkopírujete jeho ID)",
+            "ignoreBots":"Ignorujte DM od robotů",
+            "ignoreGroupDms":"Vyloučit všechny skupinové dms z ghostingu",
+            "showDmIcons":"Zobrazit ikony duchů vedle jednotlivých DM",
+            "showIndicator":"Zobrazit počítadlo duchů v horní části seznamu serverů"
+        },
+        "ui":{
+            "ghostedUsers":"{count} Ghosted Users",
+            "noGhostedUsers":"Žádní ghostovaní uživatelé",
+            "unghost":"unhost"
+        }
+    },
+    "gifCollections":{
+        "description":"Umožňuje vytvářet sbírky gifů",
+        "settings":{
+            "collectionPrefix":"Předpona pro sbírky",
+            "collectionsSortOrder":"Pořadí třídění pro sbírky",
+            "collectionsSortType":"Typ třídění pro sbírky",
+            "defaultEmptyCollectionImage":"Obrázek/gif, který se zobrazí, když kolekce neobsahuje žádné obrázky/gif",
+            "itemPrefix":"Předpona pro položky GIF",
+            "onlyShowCollections":"Zobrazit pouze sbírky",
+            "preventDuplicates":"Zabraňte vícenásobnému přidávání stejného GIFu do sbírky",
+            "showCopyImageLink":"Zobrazit v kontextových nabídkách možnost 'Kopírovat odkaz obrázku'",
+            "stopWarnings":"Zastavit upozornění na mazání"
+        },
+        "toasts":{
+            "gifMissingMetadata":"Nelze obnovit: GIF chybí metadata (znovu přidat do kolekce)"
+        },
+        "ui":{
+            "addToCollection":"Přidat do sbírky",
+            "addedAt":"Přidáno v",
+            "areYouSure":"jsi si jistý?",
+            "ascending":"Vzestupně",
+            "cannotRefresh":"Nelze obnovit: GIF chybí metadata (znovu přidat do kolekce)",
+            "close":"Zavřít‏",
+            "collectionInformation":"Informace o sbírce",
+            "collectionName":"Název sbírky",
+            "copyImageLink":"Kopírovat odkaz na obrázek",
+            "copyUrl":"Kopírovat URL",
+            "createCollection":"Vytvořit sbírku",
+            "createdAt":"Vytvořeno v",
+            "creationDate":"Datum vytvoření",
+            "deleteAction":"smazat tuto sbírku",
+            "deleteCollection":"Smazat sbírku",
+            "deleteConfirm":"Opravdu chcete {action}?",
+            "descending":"Klesající",
+            "exportCollections":"Export sbírek",
+            "gifs":"Gify",
+            "height":"Výška",
+            "imageLinkCopied":"Odkaz na obrázek zkopírován do schránky",
+            "import":"Importovat",
+            "importCollections":"Import sbírek",
+            "importOverwrite":"Import sbírek přepíše vaše aktuální sbírky.",
+            "information":"Informace",
+            "lastUpdated":"Poslední aktualizace",
+            "modifiedDate":"Datum změny",
+            "moveToCollection":"Přesunout do sbírky",
+            "name":"Jméno",
+            "nevermind":"Nevadí",
+            "order":"Objednávka",
+            "refreshFailed":"Obnovení se nezdařilo URL",
+            "refreshSuccess":"URL úspěšně obnoveno",
+            "refreshUrl":"Obnovit URL",
+            "refreshing":"Obnovování URL...",
+            "remove":"Odebrat",
+            "removeAction":"odstranit tuto položku",
+            "rename":"Přejmenovat",
+            "reset":"Obnovit",
+            "resetCollections":"Obnovit sbírky",
+            "resetRemove":"Resetováním sbírek odstraníte všechny své sbírky.",
+            "selectCollection":"Vyberte sbírku, do které chcete položku přesunout",
+            "sortBy":"Seřadit podle",
+            "sortCollections":"Seřadit sbírky",
+            "unknown":"Neznámý",
+            "urlCopied":"URL zkopírováno do schránky",
+            "width":"Šířka"
+        }
+    },
+    "gifRoulette":{
+        "commands":{
+            "gifroulette":"Pokoušejte osud a pošlete gif"
+        },
+        "description":"Přidá příkaz k odeslání náhodného gif z vašich oblíbených položek a šanci jedna ku deseti pingnout vlastníka serveru",
+        "settings":{
+            "pingOwnerChance":"Pokud by mělo dojít ke změně 1 z 10 na ping vlastníka cechu (no ne)"
+        }
+    },
+    "githubRepos":{
+        "description":"Zobrazí veřejná úložiště GitHub uživatele v jeho profilu",
+        "settings":{
+            "showInMiniProfile":"Zobrazit celé uživatelské rozhraní v mini profilu namísto pouhého tlačítka",
+            "showLanguage":"Zobrazit jazyk úložiště",
+            "showRepositoryTab":"Zobrazit kartu úložiště v modálním profilu (pokud je povoleno, skryje tlačítko v připojeních)",
+            "showStars":"Zobrazit hvězdičky úložiště"
+        },
+        "ui":{
+            "error":"Chyba, nepodařilo se vykreslit GithubRepos"
+        }
+    },
+    "globalBadges":{
+        "description":"Přidává globální odznaky z jiných klientských modů",
+        "ui":{
+            "joinServer":"Připojte se k serveru GlobalBadges",
+            "refetchSuccess":"Globální odznaky byly úspěšně znovu načteny!"
+        }
+    },
+    "googleThat":{
+        "commands":{
+            "googlethat":"Pošlete odkaz na vyhledávač",
+            "input":"Vyhledávací dotaz"
+        },
+        "description":"Přidá příkaz pro odeslání odkazu pro vyhledávání na internetu",
+        "settings":{
+            "customEngineURL":"URL enginu, který chcete použít",
+            "defaultEngine":"Vyhledávač k použití",
+            "embed":"Pokud má odeslaný odkaz vykreslit vložení",
+            "hyperlink":"Pokud má odeslaný odkaz hypertextový odkaz s dotazem jako štítkem"
+        }
+    },
+    "guildPickerDumper":{
+        "description":"Kontextová nabídka pro výpis a stažení emodži a nálepek serveru.",
+        "ui":{
+            "downloadEmojis":"Stáhněte si Emojis",
+            "downloadStickers":"Stáhněte si samolepky",
+            "serverNotFound":"Server nenalezen!"
+        }
+    },
+    "guildTagSettings":{
+        "description":"Přidává některá nastavení pro značky cechu, jako je jejich skrytí nebo zakázání výzvy k jejich přijetí.",
+        "settings":{
+            "disableAdoptTagPrompt":"Zakázat výzvu k přijetí značek",
+            "hideTags":"Skrýt štítky"
+        }
+    },
+    "hideChatButtons":{
+        "description":"Možnost skrýt tlačítka chatu",
+        "settings":{
+            "color":"Při otevření vybarvěte červenou",
+            "open":"Ve výchozím nastavení otevřeno"
+        },
+        "ui":{
+            "close":"Zavřít‏",
+            "open":"OTEVŘENO"
+        }
+    },
+    "hideServers":{
+        "description":"Umožňuje skrýt servery ze seznamu cechů a rychlého přepínání kliknutím pravým tlačítkem na ně",
+        "ui":{
+            "hideFolder":"Skrýt složku",
+            "hideServer":"Skrýt server",
+            "unhideFolder":"Odkrýt složku",
+            "unhideServer":"Odkrýt server"
+        }
+    },
+    "holyNotes":{
+        "description":"Uložte zprávy jako poznámky, abyste se k nim mohli vrátit později",
+        "ui":{
+            "holyNotes":"Svaté poznámky",
+            "noteMessage":"Poznámka Zpráva",
+            "openNotes":"Otevřete Poznámky",
+            "saveNote":"Uložit poznámku"
+        }
+    },
+    "homeTyping":{
+        "description":"Změní domovské tlačítko na indikátor psaní, pokud někdo ve vašem dms píše"
+    },
+    "hopOn":{
+        "description":"Hop na Fortnite nebo Hop on bloons :3",
+        "settings":{
+            "regex":"Regex pro spuštění",
+            "url":"URL otevřete"
+        }
+    },
+    "husk":{
+        "description":"Přidá tlačítko Husk (zkontrolujte nastavení a změňte použité emotikony)",
+        "settings":{
+            "emojiID":"Emoji ID (výchozí (z Vencord serveru): 1026532993923293184)",
+            "emojiName":"Název emodži (výchozí (ze serveru Vencord): slupka)",
+            "findInServer":"Před použitím ID v nastavení se pokuste najít emoji stejného jména na serveru (užitečné, pokud nemáte nitro)"
+        },
+        "ui":{
+            "husk":"Lusk"
+        }
+    },
+    "iRememberYou":{
+        "description":"Lokálně ukládá každého, s kým jste komunikovali (včetně serverů), v případě ztráty",
+        "ui":{
+            "iRememberYou":"Pamatuji si Tě"
+        }
+    },
+    "iconViewer":{
+        "description":"Přidá do nastavení novou kartu pro náhled všech ikon.",
+        "ui":{
+            "iconFinder":"Vyhledávač ikon",
+            "openIconsTab":"Otevřete kartu Ikony"
+        }
+    },
+    "idleAutoRestart":{
+        "description":"Automaticky restartuje klienta poté, co je nečinný po konfigurovatelnou dobu, ale zabrání restartování, když jste ve VC.",
+        "settings":{
+            "idleMinutes":"Minuty nečinnosti před restartováním (pokud není ve VC)",
+            "isEnabled":"Povolit automatický restart po nečinnosti"
+        },
+        "ui":{
+            "disableAutoIdle":"Zakázat automatické restartování při nečinnosti",
+            "enableAutoIdle":"Povolit automatické restartování při nečinnosti"
+        }
+    },
+    "ignoreCalls":{
+        "description":"Umožňuje ignorovat hovory od konkrétních uživatelů nebo dm skupin.",
+        "settings":{
+            "permanentlyIgnoredUsers":"ID uživatelů (čárka + mezera), která by měla být trvale ignorována"
+        },
+        "ui":{
+            "ignore":"Ignorovat",
+            "permanentlyIgnore":"Trvale ignorujte hovory",
+            "temporarilyIgnore":"Dočasně Ignorovat hovory"
+        }
+    },
+    "imgToGif":{
+        "commands":{
+            "height":"Výška gifu",
+            "image":"Obrazová příloha k použití",
+            "imgtogif":"Umožňuje změnit obrázek na gif",
+            "width":"Šířka gifu"
+        },
+        "description":"Přidá /imgtogif lomítko příkaz k vytvoření gif z libovolného obrázku",
+        "errors":{
+            "noImage":"Nebyl zadán žádný obrázek!",
+            "notAnImage":"Upload není obrázek"
+        }
+    },
+    "inRole":{
+        "commands":{
+            "inrole":"Vědět, kdo je v roli",
+            "role":"Role"
+        },
+        "description":"Zjistěte, kdo je v roli, pomocí kontextové nabídky role nebo příkazu /inrole (přečtěte si informace o pluginu!)",
+        "errors":{
+            "makeSureServer":"Ujistěte se, že jste na serveru."
+        },
+        "limitations":{
+            "description":"Pokud na serveru nemáte oprávnění k úpravám a server je velký (více než 100 členů), plugin může být omezen následujícími způsoby:",
+            "friendsAlwaysShown":"Přátelé však budou vždy zobrazeni bez ohledu na jejich stav.",
+            "offlineNotListed":"Offline členové nebudou uvedeni",
+            "title":":varování: Omezení",
+            "upTo100":"Ve výchozím nastavení bude uvedeno až 100 členů. Chcete-li získat více, přejděte dolů v seznamu členů a načtěte další členy."
+        },
+        "ui":{
+            "viewMembers":"Zobrazit členy v roli"
+        }
+    },
+    "ingtoninator":{
+        "description":"Přípona 'ington' k náhodnému slovu ve vaší zprávě",
+        "settings":{
+            "isEnabled":"Povolte nebo zakažte Intoninator",
+            "showIcon":"Zobrazit tlačítko pro přepínání pluginu Intoninator"
+        },
+        "ui":{
+            "disabled":"Intoninátor zakázán",
+            "enabled":"Intoninátor povolen"
+        }
+    },
+    "instantScreenshare":{
+        "description":"Okamžité sdílení obrazovky při připojení k hlasovému kanálu s podporou zdrojů na ploše, oken a vstupních video zařízení (fotoaparáty, snímací karty)",
+        "info":{
+            "linux":"Pro Linux",
+            "soundPreview":"Ohledně nastavení zvuku a náhledu",
+            "soundPreviewInfo":"Používáme nastavení nastavená a používaná společností discord k rozhodnutí, zda má být náhled streamu a zvuk povoleny nebo ne",
+            "videoDevices":"Video zařízení",
+            "videoDevicesInfo":"Podporuje fotoaparáty a snímací karty (jako Elgato HD60X), pokud je povoleno v nastavení",
+            "wayland":"Pro Wayland se zobrazí pouze výběr sdílení obrazovky",
+            "x11":"Pro X11 to může nebo nemusí fungovat :shrug:"
+        },
+        "ui":{
+            "instantScreenshare":"Okamžité sdílení obrazovky",
+            "instantScreenshareDisabled":"Okamžité sdílení obrazovky zakázáno",
+            "instantScreenshareEnabled":"Okamžité sdílení obrazovky povoleno"
+        }
+    },
+    "invisibleChat":{
+        "description":"Zašifrujte své zprávy nepodezřelým způsobem!",
+        "settings":{
+            "savedPasswords":"Uložená hesla (oddělená , )"
+        },
+        "ui":{
+            "decryptMessage":"Dešifrovat zprávu",
+            "encryptMessage":"Šifrovat zprávu",
+            "hiddenMessageIndicator":"Tato zpráva má skrytou zprávu! (InvisibleChat)"
+        }
+    },
+    "inviteDefaults":{
+        "description":"Umožňuje upravit výchozí hodnoty při vytváření pozvánek na server.",
+        "options":{
+            "forever":"Navždy",
+            "infinite":"Nekonečný"
+        },
+        "settings":{
+            "inviteDuration":"Doba trvání pozvánky",
+            "maxUses":"Počet použití pozvánky",
+            "temporaryMembership":"Dočasné členství"
+        }
+    },
+    "jellyfinRichPresence":{
+        "coverTypeOptions":{
+            "episodeCover":"Obálka epizody",
+            "seriesCover":"Obálka série"
+        },
+        "description":"Bohatá přítomnost mediálního serveru Jellyfin",
+        "episodeFormatOptions":{
+            "fulltext":"Sezóna 1 Epizoda 1",
+            "s01e01":"S01E01",
+            "short":"1x01"
+        },
+        "howToGetApiKey":{
+            "description":"Ověřovací token lze nalézt podle následujících kroků:",
+            "title":"Jak získat klíč API",
+            "userIdInfo":"Budete také potřebovat své ID uživatele, které najdete na adrese URL stránky s uživatelským profilem."
+        },
+        "nameFormatOptions":{
+            "custom":"Vlastní",
+            "seriesEpisodeName":"Série – název epizody/stopy/filmu",
+            "seriesMovieName":"Název seriálu/filmu"
+        },
+        "overrideTypeOptions":{
+            "listening":"Naslouchání",
+            "off":"Vypnuto",
+            "playing":"Hraní",
+            "streaming":"Streamuje",
+            "watching":"Sledující"
+        },
+        "privacyMode":{
+            "albumHidden":"[Album skryté]",
+            "artistHidden":"[Skrytý umělec]",
+            "episodeHidden":"[Skrytá epizoda]",
+            "listeningToMusic":"Poslech hudby",
+            "mediaHidden":"[Média skryta]",
+            "movieHidden":"[Film skrytý]",
+            "seriesHidden":"[Série skrytá]",
+            "titleHidden":"[Název skrytý]",
+            "trackHidden":"[Track skrytá]",
+            "watchingSomething":"Sledování něčeho",
+            "watchingTvShow":"Sledování televizního pořadu"
+        },
+        "settings":{
+            "apiKey":"Klíč Jellyfin API získaný z řídicího panelu správy Jellyfin",
+            "coverType":"Vyberte, který kryt se zobrazí při sledování televizního pořadu",
+            "customName":"Vlastní název rozšířené přítomnosti (používá se pouze v případě, že je vybrána možnost Vlastní). Možnosti: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
+            "episodeFormat":"Formát čísla epizod",
+            "nameDisplay":"Zvolte, jak se má název aplikace zobrazit v bohaté přítomnosti",
+            "overrideRichPresenceType":"Přepsat typ rozšířené přítomnosti",
+            "privacyMode":"Režim soukromí (skrýt podrobnosti o médiích, jako je název epizody/skladby)",
+            "serverUrl":"Server Jellyfin URL (např. https://jellyfin.example.com)",
+            "showEpisodeName":"Zobrazit název epizody po sezóně/informacích o epizodě",
+            "showPausedState":"Zobrazit bohatou přítomnost při pozastavení média",
+            "userId":"ID uživatele Jellyfin získané z vašeho uživatelského profilu URL"
+        },
+        "state":{
+            "episode":"Epizoda {episode}",
+            "paused":"Pozastaveno",
+            "season":"Řada {season}"
+        },
+        "toasts":{
+            "notConfigured":"JellyfinRPC není nakonfigurován."
+        }
+    },
+    "jumpTo":{
+        "description":"Přidá možnosti kontextové nabídky pro skok na začátek nebo konec kanálu/DM.",
+        "errors":{
+            "channelNotAvailable":"Informace o kanálu nejsou k dispozici.",
+            "failedJump":"Nepodařilo se přejít na zprávu. Podrobnosti najdete v konzole.",
+            "failedSearch":"Vyhledávání zpráv se nezdařilo.",
+            "noMessagesFound":"V tomto kanálu nebyly nalezeny žádné zprávy od tohoto uživatele."
+        },
+        "ui":{
+            "jumpToFirst":"Přejít na první zprávu",
+            "jumpToLast":"Přejít na poslední zprávu",
+            "usersLastMessage":"Poslední zpráva uživatele",
+            "yourLastMessage":"Vaše poslední zpráva"
+        }
+    },
+    "jumpscare":{
+        "description":"Přidává konfigurovatelnou šanci, že vás vyděsí, kdykoli otevřete kanál. Inspirováno Geometry Dash Mega Hack",
+        "settings":{
+            "audioSource":"Nastaví adresu URL zvuku jumpscare",
+            "chance":"Pravděpodobnost, že nastane jumpscare (1 ku X, takže: 100 = 1/100 nebo 1 %, 50 = 1/50 nebo 2 %, atd.)",
+            "imageSource":"Nastaví adresu URL obrázku jumpscare"
+        }
+    },
+    "keyboardNavigation":{
+        "commands":{
+            "openDevSettings":"Otevřete kartu Vývoj"
+        },
+        "description":"Umožňuje procházet UI pomocí klávesnice.",
+        "settings":{
+            "allowMouseControl":"Umožněte myši ovládat paletu příkazů.",
+            "hotkey":"Klávesová zkratka pro otevření palety příkazů."
+        },
+        "ui":{
+            "recordKeybind":"Záznamová klíčenka",
+            "recording":"Záznam..."
+        }
+    },
+    "keyboardSounds":{
+        "description":"Přidá OperaGX nebo osu! zvukové efekty při psaní na klávesnici.",
+        "options":{
+            "operaGx":"Opera GX",
+            "osu":"osu!"
+        },
+        "settings":{
+            "soundPack":"Zvukový balíček k použití.",
+            "volume":"Hlasitost zvuků klávesnice."
+        }
+    },
+    "keywordNotify":{
+        "description":"Odešle upozornění, pokud daná zpráva odpovídá určitým klíčovým slovům nebo regulárním výrazům",
+        "options":{
+            "blacklist":"Černá listina",
+            "whitelist":"Seznam povolených"
+        },
+        "settings":{
+            "amountToKeep":"Počet zpráv, které se mají uchovávat v protokolu",
+            "ignoreBots":"Ignorujte zprávy od robotů",
+            "keywords":"Spravujte klíčová slova"
+        },
+        "ui":{
+            "addId":"Přidat ID",
+            "addKeywordEntry":"Přidat klíčové slovo",
+            "clearAll":"Vymazat vše",
+            "ignoreCase":"Ignorovat případ",
+            "keywordEntry":"Zadání klíčového slova {index}",
+            "keywords":"Klíčová slova",
+            "whitelistBlacklist":"Whitelist/Blacklist"
+        }
+    },
+    "lastActive":{
+        "description":"Plugin pro přechod na poslední aktivní zprávu od vás nebo jiného uživatele na kanálu/serveru.",
+        "errors":{
+            "channelNotAvailable":"Informace o kanálu nejsou k dispozici.",
+            "findFailed":"Zprávy se nepodařilo najít. Podrobnosti najdete v konzole.",
+            "jumpFailed":"Nepodařilo se přejít na zprávu. Podrobnosti najdete v konzole.",
+            "noRecentMessages":"Nebyly nalezeny žádné nedávné zprávy od tohoto uživatele."
+        }
+    },
+    "limitMiddleClickPaste":{
+        "description":"Prevent middle click pasting either always or just when a text area is not focused.",
+        "options":{
+            "alwaysPrevent":"Always Prevent Middle Click Pasting",
+            "onlyWhenNotFocused":"Only Prevent When Text Area Not Focused"
+        },
+        "settings":{
+            "preventLinkOpen":"Prevent middle-click on links from opening new tabs while preserving autoscroll.",
+            "scope":"Situations in which to prevent middle click from pasting.",
+            "threshold":"Milliseconds until pasting is enabled again after a middle click."
+        }
+    },
+    "listenBrainzRPC":{
+        "about":{
+            "description":"MusicBrainz API nevyžaduje klávesu API, ale vyžaduje smysluplný řetězec user-agent. Většině by měla stačit e-mailová adresa.",
+            "title":"O MusicBrainz API"
+        },
+        "buttons":{
+            "profile":"Poslouchejte profil Brainz",
+            "viewSong":"Zobrazit skladbu"
+        },
+        "defaults":{
+            "statusName":"nějakou hudbu"
+        },
+        "description":"Malý plugin pro bohatou přítomnost ListenBrainz",
+        "missingArtOptions":{
+            "listenbrainzLogo":"Použijte velké logo ListenBrainz",
+            "placeholder":"Použijte obecný zástupný symbol"
+        },
+        "nameFormatOptions":{
+            "albumName":"Použít název alba (pokud skladba nemá žádné album, vrátí se zpět na text vlastního stavu)",
+            "artistFirst":"Použít formát 'interpret - skladba'",
+            "artistOnly":"Použijte pouze jméno interpreta",
+            "customStatus":"Použít vlastní název stavu",
+            "songFirst":"Použít formát „skladba – umělec“",
+            "songOnly":"Použijte pouze název skladby"
+        },
+        "settings":{
+            "hideWithActivity":"Pokud máte jinou přítomnost, skryjte přítomnost ListenBrainz",
+            "hideWithSpotify":"Skryjte přítomnost ListenBrainz, pokud je spuštěna Spotify",
+            "mbContact":"Poslouchejte kontakt Brainz",
+            "missingArt":"Když chybí album nebo obal alba",
+            "nameFormat":"Zobrazit název skladby a interpreta v názvu stavu",
+            "shareSong":"Zobrazit odkaz na skladbu na ListenBrainz (může být viditelné pouze pro ostatní uživatele)",
+            "shareUsername":"Zobrazit odkaz na profil ListenBrainz (může být viditelný pouze pro ostatní uživatele)",
+            "statusName":"Vlastní text stavu",
+            "useListeningStatus":"Zobrazit stav „Poslouchám“ místo „Přehrávání“",
+            "useLogo":"Zobrazit logo ListenBrainz na obalu alba",
+            "useTimeBar":"Použít dobu trvání stopy k zobrazení časového pruhu (musí používat stav poslechu)",
+            "username":"Poslouchejte uživatelské jméno Brainz"
+        }
+    },
+    "loginWithQR":{
+        "description":"Umožňuje přihlášení do jiného zařízení naskenováním přihlašovacího QR kódu, stejně jako na mobilu!",
+        "settings":{
+            "scanQr":"Naskenujte QR kód"
+        },
+        "ui":{
+            "enableAndRestart":"Povolte plugin a restartujte klienta, aby naskenoval přihlašovací QR kód",
+            "scanQrCode":"Naskenujte QR kód"
+        }
+    },
+    "messageLoggerEnhanced":{
+        "buttons":{
+            "exportLogs":"Exportovat protokoly",
+            "exporting":"Exportování...",
+            "importLogs":"Importovat protokoly",
+            "importing":"Import..."
+        },
+        "modal":{
+            "clearAllLogs":"Vymazat všechny protokoly",
+            "clearVisibleLogs":"Vymazat viditelné protokoly",
+            "copyChannelId":"Zkopírovat ID kanálu",
+            "copyContent":"Kopírovat obsah",
+            "copyMessageId":"Zkopírovat ID zprávy",
+            "copyServerId":"Zkopírovat ID serveru",
+            "copyUserId":"Zkopírovat ID uživatele",
+            "deleteLog":"Smazat protokol",
+            "deleted":"Smazáno",
+            "edited":"Upraveno",
+            "emptyLogs":"Prázdný eh",
+            "filterMessages":"Filtrovat zprávy",
+            "fromChannel":"Od {channel} v {guild}",
+            "fromDms":"Od DM {username}",
+            "fromGroupDm":"Od {name} Group DM",
+            "ghostPinged":"Ghost Pinged",
+            "importLogs":"Importovat protokoly",
+            "importLogsTooltip":"ML Enhanced nyní ukládá protokoly do indexeddb. Musíte importovat své staré protokoly z adresáře protokolů. Import nepřepíše existující protokoly",
+            "jumpToMessage":"Přejít na zprávu",
+            "loadMore":"Zobrazit více",
+            "maybeTry":"Možná zkuste {nextTab} nebo {lastTab}",
+            "noResultsIn":"Žádné výsledky v {tab}.",
+            "openUserProfile":"Otevřete uživatelský profil",
+            "sortNewestFirst":"Nejdříve seřaďte nejnovější",
+            "sortOldestFirst":"Seřadit nejdříve od nejstarších"
+        },
+        "settings":{
+            "alwaysLogCurrentChannel":"Vždy zaznamenávat aktuálně vybraný kanál. Zakázané kanály/uživatelé budou stále ignorováni.",
+            "alwaysLogDirectMessages":"Vždy přihlašujte DM",
+            "attachmentFileExtensions":"Čárkami oddělený seznam přípon souborů k uložení. Přílohy s příponami souborů, které nejsou v tomto seznamu, nebudou uloženy. Chcete-li uložit všechny přílohy, ponechte prázdné.",
+            "attachmentSizeLimitInMegabytes":"Maximální velikost přílohy v megabajtech k uložení. Přílohy větší než tato velikost nebudou uloženy.",
+            "blacklistedIds":"ID serveru, kanálu nebo uživatele na černé listině.",
+            "cacheLimit":"Maximální počet zpráv pro uložení do mezipaměti. Starší zprávy jsou po dosažení limitu smazány. To pomáhá snížit využití paměti a zlepšit výkon. 0 znamená, že neexistuje žádný limit",
+            "cacheMessagesFromServers":"Logger zpráv obvykle protokoluje pouze z povolených id a dms, což by znamenalo, že by protokoloval i zprávy ze všech serverů. Všimněte si, že to může způsobit překročení limitu mezipaměti, což má za následek vynechání některých zpráv. Pokud se nacházíte na mnoha serverech, může to výrazně zvýšit šance na protokolování zpráv, což může vést k velkému záznamu zpráv a zahrnutí irelevantních zpráv.",
+            "exportLogsFromIndexedDB":"Exportovat protokoly z IndexedDB",
+            "hideMessageFromMessageLoggers":"Je-li povoleno, bude ke zprávám přidáno tlačítko kontextové nabídky, které vám umožní mazat zprávy, aniž by byly protokolovány jinými zapisovači. Nemusí to být bezpečné, použijte na vlastní nebezpečí.",
+            "hideMessageFromMessageLoggersDeletedMessage":"Obsah zprávy, kterým se má zpráva nahradit při použití funkce skrýt zprávu ze záznamníků zpráv.",
+            "ignoreBots":"Zda se mají ignorovat zprávy od robotů",
+            "ignoreMutedCategories":"Zprávy v kanálech patřících do ztlumených kategorií nebudou protokolovány. Uživatelé/kanály na seznamu povolených v cechách s tlumeným zvukem budou stále přihlášeni.",
+            "ignoreMutedChannels":"Zprávy ve ztlumených kanálech nebudou protokolovány. Uživatelé/kanály na seznamu povolených v cechách s tlumeným zvukem budou stále přihlášeni.",
+            "ignoreMutedGuilds":"Zprávy v ztlumených cechách nebudou protokolovány. Uživatelé/kanály na seznamu povolených v cechách s tlumeným zvukem budou stále přihlášeni.",
+            "ignoreSelf":"Zda chcete zprávy ignorovat sami",
+            "ignoreWebhooks":"Zda se mají ignorovat zprávy webhooky",
+            "importLogsFromFile":"Importovat protokoly ze souboru",
+            "messageLimit":"Maximální počet zpráv k uložení. Starší zprávy jsou po dosažení limitu smazány. 0 znamená, že neexistuje žádný limit",
+            "messagesToDisplayAtOnceInLogs":"Počet zpráv, které se mají zobrazit najednou v protokolech a počet zpráv, které se mají načíst při načítání více zpráv v protokolech.",
+            "openImageCacheFolder":"Otevře adresář mezipaměti obrázků",
+            "openLogs":"Otevřete protokoly",
+            "permanentlyRemoveLogByDefault":"Tlačítko pro odstranění protokolu Vencord základního MessageLoggeru trvale odstraní protokoly",
+            "preserveCurrentChannel":"Když je tato možnost povolena, zprávy ve vašem aktuálně vybraném kanálu nejsou ovlivněny čištěním na základě času.",
+            "saveImages":"Uložte smazané přílohy.",
+            "saveMessages":"Zda uložit odstraněné a upravené zprávy.",
+            "selectImageCacheDir":"Vyberte adresář uložených obrázků",
+            "selectLogsDir":"Vyberte adresář protokolů",
+            "showLogsButton":"Přepněte na kdykoli zobrazit panel nástrojů nebo ne",
+            "showWhereMessageIsFrom":"Zobrazit kanál zpráv/název autora a název serveru",
+            "sortNewest":"Seřadit protokoly podle nejnovějších.",
+            "timeBasedCleanupMinutes":"Automaticky odebírat zprávy ze serverů, které jsou starší než tento počet minut. Nastavením na 0 zakážete čištění na základě času.",
+            "whitelistedIds":"ID serveru, kanálu nebo uživatele na seznamu povolených."
+        }
+    }
 }
