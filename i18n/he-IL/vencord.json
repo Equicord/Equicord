@@ -1092,6 +1092,7 @@
     "shikiCodeblocks":{
         "description":"מביא בלוקי קוד בסגנון vscode לתוך Discord, מופעל על ידי Shiki",
         "settings":{
+            "bgOpacity":"אטימות רקע",
             "customTheme":"קישור לנושא vscode מותאם אישית",
             "theme":"ערכות נושא ברירת מחדל",
             "tryHljs":"השתמש בברירת המחדל הקלה יותר Discord בהדגשה ובערכת הנושא.",
@@ -1100,6 +1101,12 @@
                 "never":"לְעוֹלָם לֹא",
                 "preferHljs":"העדיפו Highlight.js במקום Shiki",
                 "preferShiki":"העדיפו את Shiki במקום Highlight.js"
+            },
+            "useDevIcon":"כיצד להציג סמלי שפה בחסימות קוד",
+            "useDevIconOptions":{
+                "colored":"צבעוני",
+                "colorless":"חֲסַר צֶבַע",
+                "disabled":"נָכֶה"
             }
         }
     },
@@ -1159,6 +1166,9 @@
         },
         "videoQualityMode":"מצב איכות וידאו: {mode}",
         "viewAllowedUsersAndRoles":"הצג משתמשים ותפקידים מורשים"
+    },
+    "showHiddenThings":{
+        "description":"מציג דברים שונים מוסתרים ומודרים בלבד ללא קשר להרשאות."
     },
     "showMeYourName":{
         "addNickname":"הוסף כינוי SMYN",
