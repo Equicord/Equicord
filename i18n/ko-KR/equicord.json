@@ -1414,6 +1414,20 @@
     "micLoopbackTester":{
         "description":"사용자 영역의 루프백 버튼으로 마이크를 테스트하세요."
     },
+    "middleClickTweaks":{
+        "description":"붙여넣기 및 링크 열기와 같은 다양한 중간 클릭 조정이 가능합니다.",
+        "settings":{
+            "always":"항상 중간 클릭 붙여넣기 방지",
+            "both":"링크 및 미디어",
+            "focus":"텍스트 영역에 초점이 맞춰지지 않은 경우에만 방지",
+            "links":"모래밭",
+            "media":"메디아",
+            "none":"없음",
+            "openScope":"이러한 콘텐츠 유형을 마우스 가운데 버튼으로 클릭하면 열리지 않도록 방지하세요.",
+            "pasteScope":"이러한 상황에서는 마우스 가운데 버튼을 클릭하여 붙여넣는 것을 방지하세요.",
+            "pasteThreshold":"가운데 클릭 후 붙여넣기가 다시 활성화될 때까지의 시간은 밀리초입니다."
+        }
+    },
     "moreCommands":{
         "description":"시스템 정보, 주사위 굴림, 동전 뒤집기 등을 포함한 추가 슬래시 명령",
         "settings":{
@@ -1497,6 +1511,32 @@
     },
     "noRPC":{
         "description":"Discord의 RPC(Rich Presence) 기능을 비활성화합니다."
+    },
+    "noRoleHeaders":{
+        "description":"구성원 목록에서 역할 헤더를 제거하여 더욱 깔끔한 모양을 만듭니다."
+    },
+    "normalizeMessageLinks":{
+        "description":"일관성을 위해 Canary/ptb 하위 도메인을 제거하여 Discord 메시지 링크를 표준화합니다."
+    },
+    "notificationTitle":{
+        "description":"보낸 사람, 채널 및 서버 정보를 표시하는 자세한 알림 제목을 추가합니다."
+    },
+    "orbolayBridge":{
+        "description":"음성 상태 동기화 및 메시지 알림을 활성화하는 Orbolay 오버레이 통합용 브리지 플러그인",
+        "settings":{
+            "alignmentOptions":{
+                "bottomLeft":"좌측 하단",
+                "bottomRight":"우측 하단",
+                "topLeft":"좌측 상단",
+                "topRight":"우측 상단"
+            },
+            "isKeybindEnabled":"Orbolay 컨트롤에 대한 키 바인딩 지원 활성화",
+            "messageAlignment":"메시지 오버레이 정렬 위치",
+            "messagesSemitransparent":"메시지 오버레이를 반투명하게 만들기",
+            "port":"Orbolay WebSocket 연결을 위한 포트 번호",
+            "userAlignment":"사용자 오버레이 정렬 위치",
+            "voiceSemitransparent":"음성 오버레이를 반투명하게 만들기"
+        }
     },
     "partyMode":{
         "description":"색종이 조각과 화면 흔들림으로 파티 모드 효과 활성화",
@@ -1740,5 +1780,646 @@
     },
     "serverSearch":{
         "description":"빠른 스위처 통합으로 향상된 서버 검색"
+    },
+    "showBadgesInChat":{
+        "description":"채팅 메시지에 사용자 배지 표시",
+        "settings":{
+            "DiscordNitroPosition":"Discord Nitro 배지의 위치",
+            "DiscordProfilePosition":"Discord 프로필 배지의 위치",
+            "EquicordContributorPosition":"Equicord 기여자 배지의 위치",
+            "EquicordDonorPosition":"Equicord 기부자 배지의 위치",
+            "VencordContributorPosition":"Vencord 기여자 배지의 위치",
+            "VencordDonorPosition":"Vencord 기부자 배지의 위치",
+            "badgeSettings":"배지 레이아웃 및 가시성 설정",
+            "showDiscordNitro":"채팅에 Discord Nitro 배지를 표시하려면 활성화하세요.",
+            "showDiscordProfile":"채팅에서 Discord 프로필 배지를 표시하도록 설정",
+            "showEquicordContributor":"채팅에서 Equicord 기여자 배지를 표시하려면 활성화하세요.",
+            "showEquicordDonor":"채팅에서 Equicord 기부자 배지를 표시하도록 설정",
+            "showVencordContributor":"채팅에서 Vencord 기여자 배지를 표시하려면 활성화하세요.",
+            "showVencordDonor":"채팅에서 Vencord 기부자 배지를 표시하도록 설정"
+        }
+    },
+    "showMessageEmbeds":{
+        "description":"메시지 삽입을 추가하거나 제거하는 옵션이 있는 메시지 삽입 표시"
+    },
+    "showResourceChannels":{
+        "description":"일반적으로 숨겨져 있는 리소스 채널 표시"
+    },
+    "showSongName":{
+        "description":"현재 재생 중인 곡명을 상태로 표시"
+    },
+    "sidebarChat":{
+        "description":"여러 채널을 볼 수 있는 사이드바 채팅 인터페이스",
+        "settings":{
+            "patchCommunity":"커뮤니티 서버에 있는 채널 브라우저나 회원 탭과 같은 패치를 적용하세요.",
+            "persistSidebar":"Discord이 다시 시작되어도 사이드바 채팅을 열어두세요."
+        }
+    },
+    "signature":{
+        "description":"메시지에 서명 추가",
+        "settings":{
+            "contextMenu":"채팅 입력 상황에 맞는 메뉴의 기능을 전환하는 옵션 추가",
+            "isEnabled":"기능 전환",
+            "name":"메시지 끝에 추가될 서명",
+            "showIcon":"채팅 표시줄에 플러그인을 전환하기 위한 아이콘 표시",
+            "textHeader":"텍스트 앞에 어떤 헤더를 붙일 것인가"
+        }
+    },
+    "snowfall":{
+        "description":"Discord 인터페이스 위에 크리스마스 같은 폭설 효과를 추가합니다.",
+        "settings":{
+            "flakesPerSecond":"초당 눈송이 수(더 높을수록 강설량 밀도가 높음)",
+            "maxSize":"최대 눈송이 크기",
+            "speed":"강설 속도(더 높을수록 더 빨리 내림)",
+            "typeOfSnow":"표시되는 눈의 유형 변경(성능에 영향)"
+        }
+    },
+    "soggy":{
+        "description":"클릭 가능한 이미지와 사운드 효과를 제공하는 Soggy 플러그인",
+        "settings":{
+            "boopLink":"URL 펑 소리",
+            "boopVolume":"펑 소리의 볼륨",
+            "imageLink":"이미지용 URL(버튼 및 모달)",
+            "songLink":"URL 재생할 노래",
+            "songVolume":"노래의 볼륨. 비활성화하려면 0",
+            "tooltipText":"버튼 위로 마우스를 가져갈 때 표시되는 텍스트"
+        }
+    },
+    "songLink":{
+        "description":"여러 플랫폼에서 음악을 공유하기 위한 Song.link 통합",
+        "settings":{
+            "servicesSettings":"서비스 설정",
+            "userCountry":"조회에 사용되는 국가(2자리 국가 코드)"
+        }
+    },
+    "soundBoardLogger":{
+        "description":"음성 채널에 사운드보드 사용 기록",
+        "settings":{
+            "FileType":"파일을 저장하려는 형식",
+            "SavedIds":"한 번에 저장하려는 사운드보드 ID의 양(0이면 무한 저장 가능)",
+            "soundVolume":"토글 사운드의 크기(0은 비활성화)"
+        }
+    },
+    "splitLargeMessages":{
+        "description":"대용량 메시지를 자동으로 청크로 분할",
+        "settings":{
+            "disableFileConversion":"true인 경우 대용량 메시지에 대한 파일 변환이 비활성화됩니다.",
+            "hardSplit":"true인 경우 마지막 공백/줄바꿈 대신 마지막 문자로 분할됩니다.",
+            "maxLength":"분할되기 전 메시지의 최대 길이입니다. 0으로 설정하면 자동으로 감지됩니다.",
+            "sendDelay":"초 단위로 각 청크 사이의 지연",
+            "slowmodeMax":"저속 모드로 분할하는 경우 최대 저속 모드 시간",
+            "splitInSlowmode":"채널에 저속 모드가 활성화된 경우 메시지를 분할해야 합니까?"
+        }
+    },
+    "spotifyActivityToggle":{
+        "description":"Spotify 활동 공유 켜기 및 끄기 전환",
+        "settings":{
+            "location":"Spotify 토글 버튼을 표시할 위치"
+        }
+    },
+    "statsfmPresence":{
+        "description":"Stats.fm 존재 통합",
+        "settings":{
+            "alwaysHideArt":"앨범아트 다운로드 비활성화",
+            "hideWithExternalRPC":"외부 RPC가 실행 중인 경우 stats.fm 존재를 숨깁니다.",
+            "hideWithSpotify":"Spotify가 실행 중인 경우 stats.fm 존재 숨기기",
+            "missingArt":"앨범이나 앨범아트가 누락된 경우",
+            "nameFormat":"상태 이름에 노래 이름과 아티스트 표시",
+            "shareSong":"stats.fm에 노래 링크 표시",
+            "shareUsername":"stats.fm 프로필 링크 표시",
+            "showStatsFmLogo":"앨범 표지 옆에 Stats.fm을 표시합니다.",
+            "statusName":"맞춤 상태 텍스트",
+            "useListeningStatus":"'재생 중' 대신 '듣는 중' 상태 표시",
+            "username":"Stats.fm 사용자 이름"
+        }
+    },
+    "statusPresets":{
+        "description":"상태 사전 설정 저장 및 로드"
+    },
+    "statusWhileActive":{
+        "description":"음성 채널에서 활성 상태인 동안 자동으로 상태 설정",
+        "settings":{
+            "statusToSet":"음성 채널에서 설정할 상태"
+        }
+    },
+    "steamStatusSync":{
+        "description":"Steam 상태를 Discord 상태와 동기화",
+        "settings":{
+            "dndStatus":"방해 금지 모드일 때 Steam 상태",
+            "goInvisibleIfActivityIsHidden":"Discord에서 게임 활동을 숨기면 항상 보이지 않게 됩니다.",
+            "idleStatus":"유휴 상태일 때의 Steam 상태",
+            "invisibleStatus":"Invisible일 때의 Steam 상태",
+            "onlineStatus":"온라인일 때 Steam 상태"
+        }
+    },
+    "stickerBlocker":{
+        "description":"특정 스티커가 표시되지 않도록 차단",
+        "settings":{
+            "blockedStickers":"차단된 스티커 ID 목록(무엇을 하고 있는지 모르면 편집하지 마세요)",
+            "showButton":"GIF 차단을 해제하는 버튼을 표시할지 여부",
+            "showGif":"멋진 고양이 gif를 보여줄지 여부",
+            "showMessage":"어떤 ID가 차단되었는지 자세히 설명하는 메시지를 표시할지 여부"
+        }
+    },
+    "streamingCodecDisabler":{
+        "description":"Discord 스트리밍에 대한 스트리밍 코덱 비활성화",
+        "settings":{
+            "disableAv1Codec":"Discord가 스트리밍에 AV1 사용을 고려하지 않도록 설정",
+            "disableH264Codec":"Discord가 스트리밍에 H264 사용을 고려하지 않도록 설정",
+            "disableH265Codec":"Discord가 스트리밍에 H265 사용을 고려하지 않도록 설정",
+            "disableVP8Codec":"Discord가 스트리밍에 VP8 사용을 고려하지 않도록 설정",
+            "disableVP9Codec":"Discord가 스트리밍에 VP9 사용을 고려하지 않도록 설정"
+        }
+    },
+    "talkInReverse":{
+        "description":"메시지를 보내기 전에 메시지를 되돌릴 수 있는 채팅 표시줄 버튼을 추가합니다."
+    },
+    "themeLibrary":{
+        "description":"Equicord 테마 라이브러리에서 테마 검색 및 관리",
+        "toolbox":{
+            "openThemeLibrary":"테마 라이브러리 열기"
+        }
+    },
+    "tidalEmbeds":{
+        "description":"맞춤형 플레이어에 Tidal 음악 링크 포함"
+    },
+    "tiktokTTS":{
+        "contextMenu":{
+            "playTikTokTTS":"틱톡 TTS 재생"
+        },
+        "description":"메시지에 대한 TikTok 텍스트 음성 변환 재생",
+        "settings":{
+            "volume":"재생 볼륨"
+        }
+    },
+    "timezones":{
+        "contextMenu":{
+            "setLocalTimezone":"현지 시간대 설정"
+        },
+        "description":"프로필 및 메시지 헤더에 사용자 시간대 표시",
+        "settings":{
+            "24hTime":"24시간 형식으로 시간 표시",
+            "databaseUrl":"시간대 저장을 위한 데이터베이스 URL",
+            "preferDatabaseOverLocal":"시간대에 대해 로컬 저장소보다 데이터베이스를 선호합니다.",
+            "resetDatabaseTimezone":"데이터베이스에서 시간대 재설정",
+            "setDatabaseTimezone":"데이터베이스에 시간대를 설정하세요",
+            "showMessageHeaderTime":"메시지 헤더에 시간 표시",
+            "showOwnTimezone":"프로필과 메시지 헤더에 자신의 시간대를 표시하세요.",
+            "showProfileTime":"프로필에 시간 표시",
+            "showTimezoneInfo":"시간 옆에 시간대 정보 표시",
+            "useDatabase":"사용자 시간대를 가져오기 위해 데이터베이스를 활성화합니다."
+        },
+        "toasts":{
+            "failed":"시간대를 새로 고치지 못했습니다!",
+            "refreshed":"시간대가 새로고침되었습니다."
+        },
+        "toolbox":{
+            "refreshDatabaseTimezones":"데이터베이스 시간대 새로 고침",
+            "setDatabaseTimezone":"데이터베이스 시간대 설정"
+        }
+    },
+    "title":{
+        "description":"Discord의 창 제목 변경",
+        "settings":{
+            "title":"창 제목 접두어"
+        }
+    },
+    "toastNotifications":{
+        "description":"메시지 및 이벤트에 대한 토스트 알림 표시",
+        "positionOptions":{
+            "bottomLeft":"좌측 하단",
+            "bottomRight":"우측 하단",
+            "topLeft":"좌측 상단",
+            "topRight":"우측 상단"
+        },
+        "settings":{
+            "determineServerNotifications":"채널/길드 설정에 따라 표시할 서버 알림을 자동으로 결정합니다.",
+            "directMessages":"다이렉트 메시지에 대한 알림 표시",
+            "disableInStreamerMode":"스트리머 모드에서는 알림 비활성화",
+            "exampleButton":"토스트 알림 예시 표시",
+            "friendActivity":"누군가를 추가하거나 친구 요청을 받으면 알림 표시",
+            "friendServerNotifications":"친구가 나와 공유하는 서버에 메시지를 보낼 때 알림 표시",
+            "groupMessages":"그룹 메시지에 대한 알림 표시",
+            "ignoreUsers":"모든 알림을 무시할 사용자 ID 목록을 만듭니다(쉼표로 구분).",
+            "maxNotifications":"한 번에 표시되는 최대 알림 수",
+            "notifyFor":"알림을 받을 채널 ID 목록을 만듭니다(쉼표로 구분).",
+            "opacity":"알림의 불투명도",
+            "position":"토스트 알림의 위치",
+            "renderImages":"알림의 이미지 렌더링",
+            "streamingTreatment":"화면을 공유하는 동안 알림을 처리하는 방법",
+            "timeout":"시간(초) 알림이 표시됩니다."
+        },
+        "streamingOptions":{
+            "ignore":"무시 - 알림을 전혀 표시하지 않습니다.",
+            "noContent":"콘텐츠 없음 - 알림 본문 숨기기",
+            "normal":"일반 - 알림을 정상적으로 표시합니다."
+        }
+    },
+    "toggleVideoBind":{
+        "description":"음성 채팅에서 비디오/웹캠을 전환할 수 있는 키 바인딩을 추가합니다.",
+        "settings":{
+            "keyBind":"누르면 웹캠을 전환하는 키",
+            "reqAlt":"Alt를 유지해야 함",
+            "reqCtrl":"통제를 유지해야 함",
+            "reqShift":"교대 근무가 필요함"
+        }
+    },
+    "toneIndicators":{
+        "description":"메시지에 어조 표시기(풍자, 농담 등)를 추가합니다.",
+        "settings":{
+            "customIndicators":"사용자 정의 톤 표시기(형식: jk=농담, srs=심각함)",
+            "maxIndicators":"메시지당 표시할 최대 신호음 표시기 수",
+            "prefix":"톤 표시기의 접두사 문자"
+        }
+    },
+    "tosuRPC":{
+        "description":"osu를 위한 풍부한 존재감 통합! 토스를 통해"
+    },
+    "translatePlus":{
+        "contextMenu":{
+            "translate":"번역하다"
+        },
+        "description":"더 나은 UI 메시지에 번역 버튼을 추가합니다.",
+        "popover":{
+            "translate":"번역하다"
+        }
+    },
+    "unitConverter":{
+        "description":"메시지의 단위 변환(영국식/미터법)",
+        "popover":{
+            "convertUnits":"단위 변환"
+        },
+        "settings":{
+            "myUnits":"당신이 사용하고 변환하려는 단위"
+        },
+        "unitOptions":{
+            "imperial":"장엄한",
+            "metric":"미터법"
+        }
+    },
+    "universalMention":{
+        "description":"범용 형식을 사용하여 모든 서버의 사용자를 언급합니다.",
+        "settings":{
+            "globalMention":"현재 서버뿐만 아니라 모든 서버의 사용자를 언급합니다.",
+            "onlyDMUsers":"DM을 받은 사용자만 표시"
+        },
+        "warning":"전역 언급을 사용하면 성능 문제가 발생할 수 있으며 자동 완성에 터무니없는 양의 사용자가 표시될 수 있습니다."
+    },
+    "unlimitedAccounts":{
+        "description":"Discord 계정 전환에 대한 5개 계정 제한을 제거합니다.",
+        "settings":{
+            "maxAccounts":"추가할 수 있는 계정 수 또는 제한이 없는 경우 0개"
+        }
+    },
+    "unreadBadgeCount":{
+        "description":"채널에 읽지 않은 메시지 수 배지 표시",
+        "settings":{
+            "notificationCountLimit":"알림 수를 99개 이상으로 제한",
+            "showOnMutedChannels":"음소거된 채널에 읽지 않은 개수 표시"
+        }
+    },
+    "urlHighlighter":{
+        "description":"맞춤 색상으로 메시지의 특정 URL을 강조표시하세요.",
+        "settings":{
+            "boldUrls":"강조표시된 URL을 굵게 표시",
+            "highlightEmbeds":"삽입된 콘텐츠의 URL도 강조표시합니다.",
+            "patterns":"URL 글로브 패턴을 사용하여 강조 표시할 패턴"
+        },
+        "ui":{
+            "addNew":"새로 추가",
+            "patternPlaceholder":"*.example.com",
+            "urlPatterns":"URL 패턴"
+        }
+    },
+    "userpfp":{
+        "avatarOptions":{
+            "nitro":"니트로",
+            "userpfp":"사용자PFP"
+        },
+        "buttons":{
+            "joinServer":"UserPFP 서버에 가입",
+            "support":"여기에서 UserPFP를 지원하세요."
+        },
+        "contextMenu":{
+            "setAvatar":"아바타 설정"
+        },
+        "description":"UserPFP 데이터베이스의 사용자 정의 프로필 사진을 사용하거나 직접 설정하세요.",
+        "notice":"아바타 설정 기능을 사용하는 것은 로컬에서만 가능하며, 이는 귀하만이 변경 사항을 볼 수 있음을 의미합니다.",
+        "settings":{
+            "databaseSource":"URL에서 데이터베이스를 로드합니다.",
+            "overrideServerAvatars":"사용자 정의 아바타가 설정되지 않은 경우 사용자 정의 아바타 또는 기본 사용자 아바타로 서버 아바타를 재정의합니다.",
+            "preferNitro":"기본 애니메이션(Nitro) pfp 아바타와 사용자 PFP 아바타가 모두 있는 경우 사용할 아바타"
+        }
+    },
+    "vcNarratorCustom":{
+        "contextMenu":{
+            "stateFilter":"상태 변경 필터",
+            "vcNarrator":"VC 내레이터",
+            "voice":"음성"
+        },
+        "description":"사용자 참여/탈퇴 및 상태 변경을 위한 TTS 기능을 갖춘 맞춤형 음성 채널 내레이터",
+        "filterOptions":{
+            "blacklist":"블랙리스트(나열된 사람을 제외한 모든 사람에게 알림)",
+            "off":"끄기",
+            "whitelist":"화이트리스트(나열된 사용자만 공지)"
+        },
+        "modal":{
+            "cancel":"취소",
+            "previewHint":"이 목소리가 이름과 어떻게 들리는지 미리 보세요.",
+            "save":"저장",
+            "selectVoice":"음성을 선택하세요",
+            "title":"VC 내레이터 음성"
+        },
+        "preview":{
+            "playing":"연주하다...",
+            "subtitle":"선택한 내레이터 음성을 사용합니다.",
+            "title":"미리보기 사운드"
+        },
+        "settings":{
+            "announceOthersDeafen":"현재 VC에서 다른 사용자가 귀를 막거나 귀를 기울이지 않을 때 알림",
+            "announceOthersMute":"현재 VC에서 다른 사용자가 음소거/음소거 해제할 때 알림",
+            "announceOthersStream":"현재 VC에서 다른 사용자가 스트리밍을 시작/중지할 때 알림",
+            "announceSelfStream":"스트리밍을 시작/중지할 때 알림",
+            "customVoice":"내레이터 음성",
+            "ignoreSelf":"모든 이벤트에 대해 자신을 무시합니다.",
+            "joinMessage":"자리 표시자: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
+            "latinOnly":"이름을 말하기 전에 라틴어가 아닌 문자를 이름에서 제거하세요.",
+            "leaveMessage":"메시지 남기기",
+            "moveMessage":"메시지 이동",
+            "rate":"내레이터 속도",
+            "sayOwnName":"자신의 이름을 말해 보세요",
+            "stateChangeCooldownMs":"상태 변경 알림 쿨다운(ms)",
+            "stateChangeFilterList":"화이트리스트/블랙리스트의 쉼표로 구분된 사용자 ID입니다. 추가/제거하려면 사용자를 마우스 오른쪽 버튼으로 클릭하세요.",
+            "stateChangeFilterMode":"상태 변경 알림을 트리거하는 사용자 필터링",
+            "userVoiceMap":"사용자별 음성 재정의(형식: userId:voiceId,userId2:voiceId2). 설정할 사용자를 마우스 오른쪽 버튼으로 클릭하세요.",
+            "volume":"내레이터 볼륨"
+        },
+        "troubleshooting":{
+            "cacheInfo":"은닉처",
+            "clearCache":"캐시 지우기",
+            "lastApiCall":"마지막 API 통화",
+            "refreshSize":"새로 고침 크기",
+            "title":"문제 해결"
+        }
+    },
+    "vcPanelSettings":{
+        "description":"추가 설정으로 음성 채널 패널을 사용자 정의하세요",
+        "settings":{
+            "camera":"카메라 선택기 표시",
+            "inputDevice":"입력 장치 선택기 표시",
+            "inputVolume":"입력 볼륨 슬라이더 표시",
+            "outputDevice":"출력 장치 선택기 표시",
+            "outputVolume":"출력 볼륨 슬라이더 표시",
+            "showInputDeviceHeader":"입력 장치 선택기 위에 헤더 표시",
+            "showInputVolumeHeader":"입력 볼륨 슬라이더 위에 헤더 표시",
+            "showOutputDeviceHeader":"출력 장치 선택기 위에 헤더 표시",
+            "showOutputVolumeHeader":"출력 볼륨 슬라이더 위에 헤더 표시",
+            "showVideoDeviceHeader":"카메라 선택기 위에 헤더 표시",
+            "uncollapseSettingsByDefault":"기본적으로 음성 설정 자동 축소 해제"
+        },
+        "ui":{
+            "camera":"카메라",
+            "hide":"숨기기",
+            "inputDevice":"입력 장치",
+            "inputVolume":"입력 볼륨",
+            "outputDevice":"출력 장치",
+            "outputVolume":"출력량",
+            "settings":"설정"
+        }
+    },
+    "viewRawVariant":{
+        "contextMenu":{
+            "viewRaw":"원시 보기"
+        },
+        "description":"메시지, 사용자, 채널, 길드에 대한 원시 JSON 데이터 보기",
+        "modal":{
+            "content":"콘텐츠",
+            "data":"데이터",
+            "title":"원본 보기 {type}"
+        }
+    },
+    "voiceButtons":{
+        "description":"음성 채널 사용자에게 빠른 동작 버튼(채팅, 음소거, 청각 장애)을 추가합니다.",
+        "settings":{
+            "showChatButton":"채팅 버튼 표시",
+            "showDeafenButton":"귀머거리 버튼 표시",
+            "showMuteButton":"음소거 버튼 표시"
+        }
+    },
+    "voiceChannelLog":{
+        "contextMenu":{
+            "viewChannelLogs":"채널 로그 보기"
+        },
+        "description":"음성 채널 참여/나가기/이동 이벤트 기록",
+        "modeOptions":{
+            "both":"채팅 및 로그 메뉴에 로그인",
+            "logMenu":"로그 메뉴",
+            "logToChat":"관련 채팅에 직접 로그인"
+        },
+        "settings":{
+            "ignoreBlockedUsers":"차단된 사용자를 기록하지 않음",
+            "mode":"음성 채널 로그를 표시하는 방법",
+            "voiceChannelChatSelf":"음성 채널에 자신의 음성 채널 이벤트를 기록하세요.",
+            "voiceChannelChatSilent":"음성 채널 채팅의 참여/나가기/이동 메시지는 무음으로 설정됩니다.",
+            "voiceChannelChatSilentSelf":"음성 채널에 있는 경우 음성 채널 채팅의 메시지 참여/나가기/이동이 무음으로 설정됩니다."
+        }
+    },
+    "voiceChatUtils":{
+        "contextMenu":{
+            "deafenAll":"모두의 귀를 막다",
+            "disconnectAll":"모두 연결 해제",
+            "moveAll":"모두 이동",
+            "muteAll":"모두 음소거",
+            "undeafenAll":"모두 언데드",
+            "unmuteAll":"모두 음소거 해제",
+            "voiceTools":"음성 도구"
+        },
+        "description":"음성 채널 조절 도구 추가(모두 음소거, 모두 귀머거리, 모두 이동, 모두 연결 해제)",
+        "settings":{
+            "waitAfter":"대기 전에 수행할 API 작업의 양(속도 제한을 피하기 위해)",
+            "waitSeconds":"각 작업 간 대기 시간(초)"
+        }
+    },
+    "voiceJoinMessages":{
+        "description":"친구가 음성 채널에 참여할 때 알림 받기",
+        "settings":{
+            "allowedFriends":"가입 메시지를 받고 싶은 친구의 사용자 ID를 쉼표 또는 공백으로 구분한 목록입니다.",
+            "friendDirectMessages":"친구가 음성 채널에 참여하면 DM으로 알림을 받습니다.",
+            "friendDirectMessagesSelf":"같은 음성 채널에 있어도 친구의 DM으로 알림을 받을 수 있습니다.",
+            "friendDirectMessagesShowMemberCount":"DM 알림 수신 시 음성채널 내 다른 멤버 수 표시",
+            "friendDirectMessagesShowMembers":"DM 알림 수신 시 음성채널 내 다른 멤버 목록 표시",
+            "friendDirectMessagesSilent":"친구의 메시지에 참여하면 DM이 무음 처리됩니다.",
+            "ignoreBlockedUsers":"차단된 사용자의 음성 채널 가입/탈퇴/이동에 대한 메시지를 보내지 않습니다."
+        }
+    },
+    "voiceMessageTranscriber":{
+        "description":"AI(속삭임)를 사용하여 음성 메시지를 녹음합니다.",
+        "modal":{
+            "action":"명령",
+            "audioLanguage":"오디오 언어",
+            "autoDetect":"자동 감지",
+            "copied":"복사됨",
+            "copyToClipboard":"클립보드에 복사",
+            "downloadingAudio":"오디오 다운로드 중...",
+            "error":"오류",
+            "inProgress":"스크립트 작성 중...",
+            "initializing":"초기화 중...",
+            "loadingModel":"모델 로드 중...",
+            "processingAudio":"오디오 처리 중...",
+            "retry":"다시 시도",
+            "showTimestamps":"타임스탬프 표시",
+            "start":"시작",
+            "transcribe":"고쳐 쓰다",
+            "transcribing":"스크립트 작성 중...",
+            "transcription":"전사",
+            "transcriptionOptions":"전사 옵션",
+            "translateToEnglish":"영어로 번역"
+        },
+        "modelOptions":{
+            "base":"베이스(권장)",
+            "medium":"중간(가장 느리고 정확도가 가장 높음)",
+            "small":"작게",
+            "tiny":"매우 작음(가장 빠르고 정확도가 낮음)"
+        },
+        "settings":{
+            "delete":"캐시된 파일 모두 삭제",
+            "quantized":"양자화된 모델 사용(크기가 작고 정확도가 약간 낮음)",
+            "selectedModel":"모델 크기"
+        }
+    },
+    "voiceRejoin":{
+        "description":"연결이 끊어진 후 자동으로 음성 채널에 다시 참여",
+        "preventionOptions":{
+            "both":"DM 및 서버",
+            "dms":"DM만",
+            "none":"없음",
+            "servers":"서버만"
+        },
+        "settings":{
+            "applyOnlyToDms":"DM에만 적용",
+            "preventReconnectIfCallEnded":"통화가 종료되었거나 음성채널이 비어 있거나 존재하지 않는 경우 재접속하지 마세요.",
+            "rejoinDelay":"음성 채널에 다시 참여하기 전 지연 설정",
+            "rejoinTimeout":"연결을 끊은 후 몇 초가 지난 후에는 다시 참여를 시도하지 마세요."
+        }
+    },
+    "waitForSlot":{
+        "contextMenu":{
+            "joinQueue":"대기열에 참여",
+            "leaveQueue":"대기열에서 나가기"
+        },
+        "description":"전체 음성 채널 대기열에 등록하고 슬롯이 열리면 알림을 받습니다.",
+        "notices":{
+            "channelFull":"음성 채널 {channel}이 가득 찼습니다. 슬롯을 기다리시겠습니까?",
+            "join":"접속",
+            "slotAvailable":"안녕하세요, 누군가가 방금 #{channel}를 떠났는데 이제 자리가 남았습니다!",
+            "wait":"기다리다"
+        },
+        "settings":{
+            "autoJoin":"공지를 표시하는 대신 즉시 채널에 참여하세요.",
+            "notificationSound":"슬롯을 사용할 수 있게 되면 소리 재생"
+        }
+    },
+    "wallpaperFree":{
+        "contextMenu":{
+            "removeWallpaper":"배경화면 제거",
+            "setWallpaper":"배경화면 설정"
+        },
+        "description":"채널, 사용자 또는 전 세계에 대한 사용자 정의 배경 화면 설정",
+        "settings":{
+            "globalDefault":"모든 채널에 대한 전역 기본 배경화면 설정",
+            "stylingTips":"스타일링 팁"
+        }
+    },
+    "webpackTarball":{
+        "description":"분석을 위해 Discord의 웹팩 모듈을 타르볼로 내보내기",
+        "modal":{
+            "create":"만들기",
+            "errors":"오류",
+            "lazyChunks":"게으른 덩어리",
+            "loadAll":"모두 로드",
+            "loaded":"짐을 실은",
+            "loadedStatus":"짐을 실은",
+            "loading":"불러오는 중",
+            "title":"웹팩 타르볼"
+        },
+        "settings":{
+            "patched":"패치된 모듈 포함"
+        },
+        "toolbox":{
+            "webpackTarball":"웹팩 타르볼"
+        }
+    },
+    "whitelistedEmojis":{
+        "alerts":{
+            "importConfirmBody":"현재 허용 목록을 덮어쓰게 됩니다.",
+            "importConfirmTitle":"확실합니까?",
+            "resetConfirmBody":"그러면 허용 목록에서 모든 이모티콘이 제거됩니다.",
+            "resetConfirmTitle":"확실합니까?"
+        },
+        "contextMenu":{
+            "addAllGuildEmojis":"모든 길드 이모티콘 추가",
+            "addToWhitelist":"화이트리스트에 추가",
+            "removeAllGuildEmojis":"모든 길드 이모티콘 제거",
+            "removeFromWhitelist":"화이트리스트에서 제거"
+        },
+        "description":"특정 이모티콘을 허용하고 이모티콘 선택기에서 다른 모든 이모티콘을 숨깁니다.",
+        "settings":{
+            "defaultEmojis":"기본 이모티콘 숨기기",
+            "disableToasts":"토스트 비활성화",
+            "exportEmojis":"이모티콘 내보내기",
+            "importEmojis":"이모티콘 가져오기",
+            "resetEmojis":"이모티콘 재설정",
+            "serverEmojis":"서버 이모티콘 숨기기",
+            "whitelistedEmojis":"허용된 이모티콘"
+        },
+        "toasts":{
+            "added":"목록에 \"{name}\"를 추가했습니다.",
+            "addedBulk":"{count} 이모티콘을 목록에 추가했습니다. {skipped}은(는) 이미 목록에 있습니다.",
+            "alreadyInList":"\"{name}\"이(가) 이미 목록에 있습니다.",
+            "exported":"이모티콘을 성공적으로 내보냈습니다.",
+            "importFailed":"이모티콘을 가져오지 못했습니다: {error}",
+            "imported":"이모티콘을 성공적으로 가져왔습니다.",
+            "notInList":"\"{name}\"이(가) 목록에 없습니다.",
+            "removed":"목록에서 \"{name}\"를 제거했습니다.",
+            "removedBulk":"목록에서 {count} 이모티콘을 제거했습니다.",
+            "reset":"이모티콘 재설정"
+        },
+        "ui":{
+            "defaultEmojis":"기본 이모티콘",
+            "guildEmojis":"{guild} 이모티콘",
+            "noEmojis":"허용 목록에 이모티콘이 없습니다.",
+            "removeAll":"모두 제거"
+        }
+    },
+    "whosWatching":{
+        "description":"화면 공유나 스트리밍을 보고 있는 사람이 누구인지 확인하세요.",
+        "settings":{
+            "showPanel":"화면 공유 패널 아래에 관중 표시"
+        },
+        "ui":{
+            "noSpectators":"관중 없음",
+            "spectators":"관전자"
+        }
+    },
+    "wigglyText":{
+        "about":{
+            "circle":")~text~^(를 입력하여 원 안에",
+            "description":"다음을 사용하여 텍스트를 흔들게 만들 수 있습니다.",
+            "leftRight":"<~text~>를 입력하여 왼쪽 및 오른쪽으로",
+            "upDown":"^~text~^를 입력하여 위아래로"
+        },
+        "description":"특수 구문으로 텍스트를 흔들기(~text~)",
+        "settings":{
+            "intensity":"애니메이션 강도(px)"
+        }
+    },
+    "writeUpperCase":{
+        "description":"문장의 첫 글자를 자동으로 대문자로 시작",
+        "settings":{
+            "blockedWords":"대문자로 쓰지 않는 문자열(쉼표로 구분)"
+        }
+    },
+    "youtubeDescription":{
+        "description":"YouTube 비디오 삽입에 대해 전환 가능한 설명을 추가합니다."
     }
 }
