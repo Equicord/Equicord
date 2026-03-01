@@ -86,6 +86,23 @@
             "tooltipRight":"Dekode Base64 (venstreklikk) / Kopier dekodet (høyreklikk)"
         }
     },
+    "betterActivities":{
+        "description":"Viser alle aktiviteter i medlemslisten og brukerpopout, med alternativer for å tilpasse visningen",
+        "options":{
+            "carousel":"Karusell",
+            "list":"Liste"
+        },
+        "settings":{
+            "allActivitiesStyle":"Stil for å vise alle aktiviteter",
+            "hideTooltip":"Skjul verktøytipset på aktivitetsikoner",
+            "iconSize":"Størrelsen på aktivitetsikonene",
+            "memberList":"Vis aktiviteter i medlemslisten",
+            "removeGameActivityStatus":"Fjern spillaktivitetsstatusindikatoren",
+            "renderGifs":"Gjengi GIF-er i aktivitetsikoner",
+            "specialFirst":"Vis spesielle aktiviteter først",
+            "userPopout":"Vis alle aktiviteter i brukerpopout"
+        }
+    },
     "betterAudioPlayer":{
         "description":"Legger til en spektrograf og en oscilloskopvisualisering til spillere for lydvedlegg",
         "settings":{
@@ -1258,6 +1275,57 @@
             "scanQrCode":"Skann QR-kode"
         }
     },
+    "mediaPlaybackSpeed":{
+        "description":"Kontroller medieavspillingshastigheten for talemeldinger, videoer og lydvedlegg",
+        "settings":{
+            "defaultAudioSpeed":"Standard avspillingshastighet for lydfiler",
+            "defaultVideoSpeed":"Standard avspillingshastighet for videoer",
+            "defaultVoiceMessageSpeed":"Standard avspillingshastighet for talemeldinger"
+        }
+    },
+    "messageBurst":{
+        "description":"Send meldinger i serier ved å slå sammen påfølgende meldinger innen en tidsperiode",
+        "settings":{
+            "shouldMergeWithAttachment":"Tillat sammenslåing av meldinger med vedlegg",
+            "timePeriod":"Tidsperiode i sekunder for å slå sammen meldinger",
+            "useSpace":"Bruk mellomrom i stedet for ny linje som skilletegn"
+        }
+    },
+    "messageColors":{
+        "description":"Gjengi fargekoder (hex, rgb, hsl) i meldinger med fargeforhåndsvisning",
+        "settings":{
+            "blockView":"Plassering av fargeblokken",
+            "blockViewOptions":{
+                "bothSides":"Begge sider av teksten",
+                "leftSide":"Venstre side av teksten",
+                "rightSide":"Høyre side av teksten"
+            },
+            "enableShortHexCodes":"Aktiver korte sekskantede fargekoder (3 tegn)",
+            "renderType":"Hvordan gjengi farger i meldinger",
+            "renderTypeOptions":{
+                "backgroundColor":"Endre bakgrunnsfarge",
+                "blockNearby":"Vis fargeblokk",
+                "textColor":"Endre tekstfarge"
+            }
+        }
+    },
+    "messageFetchTimer":{
+        "description":"Vis tider for henting av meldinger i chattelinjen",
+        "settings":{
+            "iconColor":"Farge på ikonet for hentetidtaker",
+            "showIcon":"Vis ikonet for hentetidtaker",
+            "showMs":"Vis millisekunder i stedet for sekunder"
+        }
+    },
+    "messageLinkTooltip":{
+        "description":"Vis forhåndsvisninger av meldinger når du holder markøren over meldingslenker, svar og videresendte meldinger",
+        "settings":{
+            "display":"Vis stil for forhåndsvisning av melding",
+            "onForward":"Vis verktøytips når du holder markøren over videresendte meldinger",
+            "onLink":"Vis verktøytips når du holder markøren over meldingslenker",
+            "onReply":"Vis verktøytips når du holder markøren over meldingssvar"
+        }
+    },
     "messageLoggerEnhanced":{
         "buttons":{
             "exportLogs":"Eksporter logger",
@@ -1326,5 +1394,1032 @@
             "timeBasedCleanupMinutes":"Fjern automatisk meldinger fra servere som er eldre enn så mange minutter. Sett til 0 for å deaktivere tidsbasert opprydding.",
             "whitelistedIds":"Hvitelistede server-, kanal- eller bruker-ID-er."
         }
+    },
+    "messageNotifier":{
+        "description":"Bli varslet når bestemte brukere sender meldinger",
+        "settings":{
+            "users":"Bruker-IDer å få varsler for (kommaseparert)"
+        }
+    },
+    "messagePeek":{
+        "description":"Se på siste melding i DM-kanaler uten å åpne dem"
+    },
+    "messageTranslate":{
+        "description":"Oversett meldinger automatisk til ditt foretrukne språk",
+        "settings":{
+            "confidenceRequirement":"Minimum konfidensnivå for oversettelse (0-1)",
+            "targetLanguage":"Målspråk for oversettelse (f.eks. en, es, fr)"
+        }
+    },
+    "micLoopbackTester":{
+        "description":"Test mikrofonen din med en loopback-knapp i brukerområdet"
+    },
+    "middleClickTweaks":{
+        "description":"Ulike mellomklikkjusteringer, for eksempel med liming og åpning av koblinger.",
+        "settings":{
+            "always":"Forhindr alltid innliming av mellomklikk",
+            "both":"Lenker og media",
+            "focus":"Forhindre bare når tekstområdet ikke er i fokus",
+            "links":"Lenker",
+            "media":"Media",
+            "none":"Ingen",
+            "openScope":"Forhindre at midtklikk på disse innholdstypene åpner dem.",
+            "pasteScope":"Hindre at midtklikk limes inn i disse situasjonene.",
+            "pasteThreshold":"Millisekunder til liming er aktivert igjen etter et midtklikk."
+        }
+    },
+    "moreCommands":{
+        "description":"Ytterligere skråstrekkommandoer, inkludert systeminformasjon, terningkast, myntsvingninger og mer",
+        "settings":{
+            "addFreakyEnding":"Legg til 👅 eller ❤️ på slutten av freaky kommando",
+            "uwuEveryMessage":"Gjør hver enkelt melding uwuified",
+            "uwuEverything":"Gjør all tekst uuifisert - virkelig dårlig idé"
+        }
+    },
+    "moreKaomoji":{
+        "description":"Flere kaomoji-slash-kommandoer for å uttrykke følelser"
+    },
+    "moreStickers":{
+        "description":"Legg til flere klistremerkepakker fra eksterne kilder",
+        "settings":{
+            "packs":"Administrer klistremerkepakker",
+            "promptToUpload":"Spør før du laster opp klistremerker"
+        }
+    },
+    "moreUserTags":{
+        "description":"Vis flere brukertagger basert på tillatelser og roller",
+        "settings":{
+            "dontShowBotTag":"Skjul standard BOT-taggen",
+            "dontShowForBots":"Ikke vis tagger for bot-brukere",
+            "showWebhookTagFully":"Vis webhook-tagger fullstendig",
+            "tagSettings":"Konfigurer individuelle taginnstillinger"
+        }
+    },
+    "moyai":{
+        "description":"Spill moyai-lydeffekten når 🗿 emoji brukes",
+        "settings":{
+            "ignoreBlocked":"Ignorer meldinger fra blokkerte brukere",
+            "ignoreBots":"Ignorer meldinger fra roboter",
+            "quality":"Kvaliteten på moyai-lyden",
+            "qualityOptions":{
+                "hd":"HD",
+                "normal":"Normal"
+            },
+            "triggerWhenUnfocused":"Utløs lyd selv når vinduet ikke er fokusert",
+            "volume":"Volum av moyai-lyden"
+        }
+    },
+    "musicControls":{
+        "description":"Vis musikkspillerkontroller for Spotify, Tidal og YouTube Music",
+        "settings":{
+            "FallbackProvider":"Bruk reserveleverandør når primære feiler",
+            "LyricDelay":"Lyrisk forsinkelsesforskyvning",
+            "LyricsConversion":"Oversett automatisk på romaniserte tekster",
+            "LyricsPosition":"Plassering av tekster i forhold til spiller",
+            "LyricsProvider":"Kilde for tekster",
+            "ShowFailedToasts":"Vis feilskåler når tekstene ikke lastes inn",
+            "TranslateTo":"Oversett tekster til",
+            "YoutubeMusicApiUrl":"Egendefinert YouTube Music API URL",
+            "hoverControls":"Vis kontroller bare ved å holde musepekeren",
+            "previousButtonRestartsTrack":"Start sporet på nytt når du trykker på forrige knapp",
+            "showSpotifyControls":"Vis Spotify-kontroller",
+            "showSpotifyLyrics":"Vis Spotify-tekster",
+            "showTidalControls":"Vis tidevannskontroller",
+            "showTidalLyrics":"Vis Tidal-tekster",
+            "showYoutubeMusicControls":"Vis YouTube Music-kontroller",
+            "useSpotifyUris":"Åpne Spotify-URI-er i stedet for URL-er"
+        }
+    },
+    "neverPausePreviews":{
+        "description":"Sett aldri videoforhåndsvisninger på pause når du bytter kanal eller ufokuserer",
+        "warning":"Dette kan øke ressursbruken og dataforbruket"
+    },
+    "newPluginsManager":{
+        "description":"Administrer og oppdag nye plugins med plugin manager"
+    },
+    "noAppsAllowed":{
+        "description":"Blokkerer apper/kategorier fra å vises i appstarteren"
+    },
+    "noBulletPoints":{
+        "description":"Fjern punktpunkter fra meldinger ved å unnslippe dem"
+    },
+    "noModalAnimation":{
+        "description":"Deaktiver modale animasjoner for raskere UI interaksjoner"
+    },
+    "noNitroUpsell":{
+        "description":"Fjerner Nitro-oppsalg ved å overstyre premiumtypen din"
+    },
+    "noRPC":{
+        "description":"Deaktiverer Discords funksjon for Rich Presence (RPC)."
+    },
+    "noRoleHeaders":{
+        "description":"Fjerner rolleoverskrifter fra medlemslisten, og skaper et renere utseende"
+    },
+    "normalizeMessageLinks":{
+        "description":"Normaliserer Discord meldingskoblinger ved å fjerne canary/ptb underdomener for konsistens"
+    },
+    "notificationTitle":{
+        "description":"Legger til detaljerte varslingstitler som viser avsender-, kanal- og serverinformasjon"
+    },
+    "orbolayBridge":{
+        "description":"Bridge-plugin for Orbolay-overleggsintegrasjon, som muliggjør synkronisering av stemmetilstand og meldingsvarsler",
+        "settings":{
+            "alignmentOptions":{
+                "bottomLeft":"Nede til venstre",
+                "bottomRight":"Nede til høyre",
+                "topLeft":"Oppe til venstre",
+                "topRight":"Oppe til høyre"
+            },
+            "isKeybindEnabled":"Aktiver nøkkelbindingsstøtte for Orbolay-kontroller",
+            "messageAlignment":"Justeringsposisjon for meldingsoverlegg",
+            "messagesSemitransparent":"Gjør meldinger som er halvgjennomsiktige",
+            "port":"Portnummer for Orbolay WebSocket-tilkoblingen",
+            "userAlignment":"Justeringsposisjon for brukeroverlegg",
+            "voiceSemitransparent":"Gjør stemmeoverlegg halvgjennomsiktig"
+        }
+    },
+    "partyMode":{
+        "description":"Aktiver festmoduseffekter med konfetti og skjermristing",
+        "settings":{
+            "intensityOptions":{
+                "better":"Bedre - Mer konfetti",
+                "normal":"Normal - subtile effekter",
+                "projectX":"Prosjekt X - Maksimal intensitet"
+            },
+            "superIntensePartyMode":"Festmodus intensitetsnivå"
+        }
+    },
+    "pinIcon":{
+        "description":"Legger til et pin-ikon til festede meldinger"
+    },
+    "pingNotifications":{
+        "description":"Egendefinerte varslingsinnstillinger for ping, DM og vennemeldinger",
+        "settings":{
+            "dms":"Varsle for DM- og gruppe-DM-meldinger",
+            "friends":"Varsle når venner sender meldinger på servere",
+            "ignoreMuted":"Ignorer dempede kanaler, laug og blokkerte brukere",
+            "mentions":"Gi beskjed når nevnt (@brukernavn)",
+            "showInActive":"Vis varsler selv når kanalen er aktiv"
+        }
+    },
+    "platformSpoofer":{
+        "description":"Forfalske plattformstatusen din (mobil, desktop, nett, konsoll)",
+        "settings":{
+            "platform":"Plattform for å forfalske som",
+            "platformOptions":{
+                "android":"Android",
+                "desktop":"Desktop (Discord klient)",
+                "ios":"iOS",
+                "playstation":"PlayStation",
+                "web":"Nett (Discord Nett)",
+                "xbox":"Xbox"
+            }
+        },
+        "warning":"Endring av plattform kan påvirke visse funksjoner og hvordan andre ser statusen din."
+    },
+    "polishWording":{
+        "description":"Forbedre meldingstekst automatisk med bedre grammatikk, store bokstaver og tegnsetting",
+        "settings":{
+            "blockedWords":"Kommaseparert liste over ord som skal utelukkes fra rettelser for store bokstaver",
+            "expandContractions":"Utvid sammentrekninger (f.eks. 'ikke' → 'ikke')",
+            "fixApostrophes":"Rett opp manglende apostrof i sammentrekninger (f.eks. 'ikke' → 'ikke')",
+            "fixCapitalization":"Rett opp store bokstaver i setninger",
+            "fixPunctuation":"Legg til punktum til slutten av setninger",
+            "fixPunctuationFrequency":"Hyppighet av automatiske tilleggsperioder (0–100 %)",
+            "quickDisable":"Rask deaktiver - deaktiver alle rettelser midlertidig"
+        }
+    },
+    "profileSets":{
+        "description":"Lagre og administrer forhåndsinnstillinger for profiltilpasning",
+        "settings":{
+            "avatarSize":"Avatarstørrelse i forhåndsinnstillingsbehandling"
+        }
+    },
+    "questify":{
+        "buttonActions":{
+            "contextMenu":"Vis kontekstmeny",
+            "openQuests":"Åpne Oppdrag-siden",
+            "pluginSettings":"Åpne plugin-innstillinger"
+        },
+        "description":"Forbedre Quest-opplevelsen din med en rekke funksjoner, eller deaktiver dem helt hvis de ikke er noe for deg.",
+        "gradientOptions":{
+            "black":"Svart",
+            "default":"Standard",
+            "hide":"Skjul",
+            "intense":"Intens"
+        },
+        "sortOptions":{
+            "claimedAsc":"Hevdet (eldste først)",
+            "claimedDesc":"gjort krav på (nyeste først)",
+            "expiringAsc":"Utløper (snarst først)",
+            "expiringDesc":"Utløper (siste først)",
+            "recentAsc":"Nylig (eldste først)",
+            "recentDesc":"Nylig (nyeste først)"
+        }
+    },
+    "questionMarkReplacement":{
+        "description":"Erstatt spørsmålstegn med egendefinert tekst/emoji når meldingen bare inneholder spørsmålstegn",
+        "settings":{
+            "replace":"Tekst eller emoji for å erstatte '?' med"
+        }
+    },
+    "quickThemeSwitcher":{
+        "description":"Bla raskt gjennom temaer ved hjelp av hurtigtaster",
+        "settings":{
+            "autoRefresh":"Oppdater temalisten automatisk når endringer oppdages",
+            "includeLocal":"Inkluder lokale temaer i syklusen",
+            "includeOnline":"Inkluder nettbaserte temaer i syklusen",
+            "showNotifications":"Vis varsler når temaer legges til eller fjernes",
+            "sortOptions":{
+                "az":"A-Å (alfabetisk)",
+                "recent":"Nylig brukt",
+                "za":"Z-A (omvendt alfabetisk)"
+            },
+            "sortOrder":"Sorteringsrekkefølge for temalisten"
+        }
+    },
+    "quoter":{
+        "description":"Lag stiliserte sitatbilder fra meldinger",
+        "settings":{
+            "grayscale":"Bruk gråtonefilter",
+            "quoteFont":"Font for sitatbilder",
+            "saveAsGif":"Lagre som GIF i stedet for PNG",
+            "showWatermark":"Vis vannmerke på anførselstegn",
+            "watermark":"Vannmerketekst"
+        }
+    },
+    "randomVoice":{
+        "description":"Bli med i tilfeldige stemmekanaler basert på tilpassbare filtre",
+        "operations":{
+            "equalTo":"lik",
+            "lessThan":"Mindre enn",
+            "moreThan":"Mer enn"
+        },
+        "settings":{
+            "Servers":"Server-ID-er som skal inkluderes (kommaseparert)",
+            "UserAmount":"Målbrukerantall i kanal",
+            "UserAmountOperation":"Operatør for sammenligning av brukertall",
+            "autoCamera":"Slå på kameraet automatisk",
+            "autoNavigate":"Naviger automatisk til talekanal",
+            "autoStream":"Start streaming automatisk",
+            "avoidAfk":"Unngå AFK-kanaler",
+            "avoidStages":"Unngå scenekanaler",
+            "avoidStates":"Unngå at brukere samsvarer med tilstandsfiltre",
+            "deafen":"Se etter døvede brukere",
+            "includeStates":"Inkluder brukere som samsvarer med tilstandsfiltre",
+            "leaveEmpty":"Gå ut når kanalen blir tom",
+            "mute":"Se etter dempede brukere",
+            "selfDeafen":"Auto-døv når du blir med",
+            "selfMute":"Autodemp når du blir med",
+            "spacesLeft":"Minimumsplasser igjen i kanalen",
+            "spacesLeftOperation":"Mellomrom igjen sammenligningsoperatør",
+            "stream":"Se etter kanaler med strømmer",
+            "vcLimit":"Brukergrense for talekanal",
+            "vcLimitOperation":"Operator for sammenligning av kanalgrenser",
+            "video":"Se etter kanaler med video aktivert"
+        }
+    },
+    "recentDMSwitcher":{
+        "description":"Bytt raskt mellom nylige DM-er med Ctrl+Tab (Alt+Tab-stil)",
+        "overlayModes":{
+            "current":"Kun gjeldende DM",
+            "row":"Rekke med nylige DM-er"
+        },
+        "settings":{
+            "amountOfUsers":"Antall brukere å spore",
+            "clearRdms":"Tøm RDMS-historikk",
+            "overlayMode":"Overlegg innholdsmodus",
+            "overlayRowLength":"Antall DM-er som skal vises i overleggsraden",
+            "overlayShowAvatars":"Vis avatarer i overlegg",
+            "toastDurationMs":"Toast-varslingsvarighet (ms)",
+            "visualStyle":"Visuell indikatorstil mens du sykler"
+        },
+        "visualStyles":{
+            "off":"Ingen visuell indikator",
+            "overlay":"Overlegg (Alt+Tab-stil)",
+            "toast":"Toast-varsel"
+        }
+    },
+    "remix":{
+        "description":"Remiks bilder direkte i Discord med en innebygd editor"
+    },
+    "repeatMessages":{
+        "description":"Gjenta meldinger med valgfritt svar (Shift+klikk for å svare)"
+    },
+    "replyPingControl":{
+        "description":"Kontroller om du blir pinget når noen svarer på meldingene dine",
+        "settings":{
+            "alwaysPingOnReply":"Blir alltid pinget når noen svarer på meldingene dine",
+            "replyPingWhitelist":"Kommaseparert liste over bruker-IDer som du alltid kan motta svarping fra"
+        }
+    },
+    "richMagnetLinks":{
+        "description":"Vis rike forhåndsvisninger for magnetlenker med filnavnutvinning"
+    },
+    "rpcEditor":{
+        "description":"Rediger og tilpass Rich Presence (RPC)-skjermen for enhver applikasjon",
+        "placeholders":{
+            "details":"Gjeldende detaljtekst",
+            "largeImage":"Stort bilde URL",
+            "largeText":"Stort bildeverktøytipstekst",
+            "name":"Søknadsnavn",
+            "smallImage":"Lite bilde URL",
+            "smallText":"Lite bildeverktøytipstekst",
+            "state":"Gjeldende tilstandstekst"
+        },
+        "settings":{
+            "replacedAppIds":"Administrer applikasjonsspesifikke RPC-overstyringer"
+        }
+    },
+    "rpcStats":{
+        "description":"Vis tilpasset statistikk i din Rich Presence (meldinger sendt, Last.fm toppalbum)",
+        "settings":{
+            "RPCTitle":"Titteltekst for RPC",
+            "albumCoverImage":"Bruk albumomslag som RPC-bilde (Last.fm-modus)",
+            "assetURL":"Egendefinert bilde URL for RPC (standard: din avatar)",
+            "lastFMApiKey":"Last.fm API-tast (hent fra last.fm/api)",
+            "lastFMStatFormat":"Format for Last.fm stat ($album, $artist)",
+            "lastFMUsername":"Last.fm brukernavn",
+            "statDisplay":"Statistikk å vise"
+        },
+        "statOptions":{
+            "messagesAllTime":"Meldinger sendt hele tiden",
+            "messagesToday":"Meldinger sendt i dag",
+            "mostListenedAlbum":"Mest lyttet album denne uken (Last.fm)"
+        }
+    },
+    "saveFavoriteGIFs":{
+        "description":"Lagre alle favoritt-GIF-nettadresser til en tekstfil",
+        "settings":{
+            "showToolboxButton":"Vis \"Lagre favoritt-gif-er\"-knappen i Equicord-verktøykassen (krever innlasting på nytt)"
+        }
+    },
+    "scheduledMessages":{
+        "description":"Planlegg meldinger som skal sendes senere",
+        "settings":{
+            "checkIntervalSeconds":"Hvor ofte skal du se etter meldinger som skal sendes (sekunder)",
+            "maxMessagesPerMinute":"Maks planlagte meldinger per kanal som kan sendes i samme minutt",
+            "showNotifications":"Vis toast-varsler når meldinger sendes",
+            "showPhantomMessages":"Vis planlagte meldinger som fantommeldinger i chat"
+        }
+    },
+    "screenRecorder":{
+        "description":"Skjermopptaksfunksjonalitet for Equibop"
+    },
+    "searchFix":{
+        "description":"Fiks søkefunksjonaliteten ved å omgå Discords grense på 5000 meldinger"
+    },
+    "sekaiStickers":{
+        "description":"Integrasjon av Sekai-klistremerker",
+        "settings":{
+            "AutoCloseModal":"Automatisk lukkemodus når du er ferdig"
+        }
+    },
+    "selfForward":{
+        "description":"Videresend meldinger til deg selv"
+    },
+    "serverSearch":{
+        "description":"Forbedret serversøk med rask bytterintegrasjon"
+    },
+    "showBadgesInChat":{
+        "description":"Vis brukermerker i chat-meldinger",
+        "settings":{
+            "DiscordNitroPosition":"Posisjonen til Discord Nitro-merket",
+            "DiscordProfilePosition":"Plasseringen av Discord profilmerkene",
+            "EquicordContributorPosition":"Posisjonen til Equicord Bidragsyter-merket",
+            "EquicordDonorPosition":"Plasseringen til Equicord givermerkene",
+            "VencordContributorPosition":"Posisjonen til Vencord Bidragsyter-merket",
+            "VencordDonorPosition":"Plasseringen til Vencord givermerkene",
+            "badgeSettings":"Konfigurer merkeoppsett og synlighet",
+            "showDiscordNitro":"Aktiver for å vise Discord Nitro-merker i chat",
+            "showDiscordProfile":"Aktiver for å vise Discord profilmerker i chat",
+            "showEquicordContributor":"Aktiver for å vise Equicord Contributor-merker i chat",
+            "showEquicordDonor":"Aktiver for å vise Equicord givermerker i chat",
+            "showVencordContributor":"Aktiver for å vise [[PH0]]] bidragsytermerker i chat",
+            "showVencordDonor":"Aktiver for å vise Vencord givermerker i chat"
+        }
+    },
+    "showMessageEmbeds":{
+        "description":"Vis meldingsinnbygginger med alternativer for å legge til eller fjerne innbygginger fra meldinger"
+    },
+    "showResourceChannels":{
+        "description":"Vis ressurskanaler som vanligvis er skjult"
+    },
+    "showSongName":{
+        "description":"Vis navnet på sangen som spilles i status"
+    },
+    "sidebarChat":{
+        "description":"Sidebar chat-grensesnitt for visning av flere kanaler",
+        "settings":{
+            "patchCommunity":"Oppdater ting som kanalnettleseren eller fanen Medlemmer som fellesskapsservere har",
+            "persistSidebar":"Hold sidebarchatten åpen over Discord omstarter"
+        }
+    },
+    "signature":{
+        "description":"Legg til signaturer i meldinger",
+        "settings":{
+            "contextMenu":"Legg til alternativ for å veksle mellom funksjonaliteten i chat-inndata-kontekstmenyen",
+            "isEnabled":"Slå på funksjonalitet",
+            "name":"Signaturen som legges til på slutten av meldingene dine",
+            "showIcon":"Vis et ikon for å veksle mellom plugin-en i chattelinjen",
+            "textHeader":"Hvilken overskrift skal forordet tekst med"
+        }
+    },
+    "snowfall":{
+        "description":"Legger til en juleaktig snøfallseffekt på toppen av Discords grensesnitt",
+        "settings":{
+            "flakesPerSecond":"Snøflak per sekund (høyere = tettere snøfall)",
+            "maxSize":"Maksimal snøfnuggstørrelse",
+            "speed":"Snøfallshastighet (høyere = raskere fall)",
+            "typeOfSnow":"Endre snøtypen som vises (påvirker ytelsen)"
+        }
+    },
+    "soggy":{
+        "description":"Soggy plugin med klikkbart bilde og lydeffekter",
+        "settings":{
+            "boopLink":"URL for boop-lyden",
+            "boopVolume":"Volum på boop-lyden",
+            "imageLink":"URL for bildet (knapp og modal)",
+            "songLink":"URL for sangen som skal spilles av",
+            "songVolume":"Volum av sangen. 0 for å deaktivere",
+            "tooltipText":"Teksten som vises når du holder musepekeren over knappen"
+        }
+    },
+    "songLink":{
+        "description":"Song.link-integrasjon for å dele musikk på tvers av plattformer",
+        "settings":{
+            "servicesSettings":"Innstillinger for tjenester",
+            "userCountry":"Land som brukes for oppslag (landskode på to bokstaver)"
+        }
+    },
+    "soundBoardLogger":{
+        "description":"Logg bruk av lydplanker i talekanaler",
+        "settings":{
+            "FileType":"Formatet du vil lagre filen",
+            "SavedIds":"Mengden lydbord-ID-er du vil lagre om gangen (0 lar deg lagre uendelig)",
+            "soundVolume":"Hvor høy vekslelyden er (0 for å deaktivere)"
+        }
+    },
+    "splitLargeMessages":{
+        "description":"Del store meldinger i biter automatisk",
+        "settings":{
+            "disableFileConversion":"Hvis sant, deaktiverer filkonvertering for store meldinger",
+            "hardSplit":"Hvis det er sant, deler du det siste tegnet i stedet for siste mellomrom/nylinje",
+            "maxLength":"Maksimal lengde på en melding før den deles. Sett til 0 for å oppdage automatisk",
+            "sendDelay":"Forsinkelse mellom hver del i sekunder",
+            "slowmodeMax":"Maksimal langsom modus-tid hvis du deler i sakte modus",
+            "splitInSlowmode":"Bør meldinger deles hvis kanalen har sakte modus aktivert?"
+        }
+    },
+    "spotifyActivityToggle":{
+        "description":"Slå Spotify-aktivitetsdeling på og av",
+        "settings":{
+            "location":"Hvor skal du vise Spotify-veksleknappen"
+        }
+    },
+    "statsfmPresence":{
+        "description":"Stats.fm tilstedeværelsesintegrasjon",
+        "settings":{
+            "alwaysHideArt":"Deaktiver nedlasting av albumgrafikk",
+            "hideWithExternalRPC":"Skjuler stats.fm-tilstedeværelse hvis en ekstern RPC kjører",
+            "hideWithSpotify":"Skjul stats.fm-tilstedeværelse hvis spotify kjører",
+            "missingArt":"Når album eller albumgrafikk mangler",
+            "nameFormat":"Vis navn på sang og artist i statusnavn",
+            "shareSong":"Vis link til sang på stats.fm",
+            "shareUsername":"Vis lenke til stats.fm-profilen",
+            "showStatsFmLogo":"Vis Stats.fm ved siden av albumomslaget",
+            "statusName":"Egendefinert statustekst",
+            "useListeningStatus":"Vis statusen «Lytter til» i stedet for «Spiller»",
+            "username":"Stats.fm brukernavn"
+        }
+    },
+    "statusPresets":{
+        "description":"Lagre og last inn forhåndsinnstillinger for status"
+    },
+    "statusWhileActive":{
+        "description":"Still inn status automatisk mens du er aktiv i talekanaler",
+        "settings":{
+            "statusToSet":"Status for å angi mens du er i en talekanal"
+        }
+    },
+    "steamStatusSync":{
+        "description":"Synkroniser Steam-status med Discord-status",
+        "settings":{
+            "dndStatus":"Steam-status når på Ikke forstyrr",
+            "goInvisibleIfActivityIsHidden":"Bli alltid usynlig hvis du skjuler spillaktivitet på Discord",
+            "idleStatus":"Steam-status når den er på inaktiv",
+            "invisibleStatus":"Steam-status når den er på Invisible",
+            "onlineStatus":"Steam-status når du er online"
+        }
+    },
+    "stickerBlocker":{
+        "description":"Blokker spesifikke klistremerker fra å vises",
+        "settings":{
+            "blockedStickers":"Listen over blokkerte klistremerke-ID-er (ikke rediger med mindre du vet hva du gjør)",
+            "showButton":"Om du vil vise en knapp for å oppheve blokkeringen av gif-en",
+            "showGif":"Om du skal vise en snerten katt-gif",
+            "showMessage":"Om det skal vises en melding som beskriver hvilken ID som ble blokkert"
+        }
+    },
+    "streamingCodecDisabler":{
+        "description":"Deaktiver strømmekodeken for Discord strømming",
+        "settings":{
+            "disableAv1Codec":"Gjør at Discord ikke vurderer å bruke AV1 til streaming",
+            "disableH264Codec":"Gjør at Discord ikke vurderer å bruke H264 for strømming",
+            "disableH265Codec":"Sørg for at Discord ikke vurderer å bruke H265 til strømming",
+            "disableVP8Codec":"Sørg for at Discord ikke vurderer å bruke VP8 for strømming",
+            "disableVP9Codec":"Sørg for at Discord ikke vurderer å bruke VP9 til strømming"
+        }
+    },
+    "talkInReverse":{
+        "description":"Legger til en chatbar-knapp for å reversere meldingene dine før sending"
+    },
+    "themeLibrary":{
+        "description":"Bla gjennom og administrer temaer fra temabiblioteket Equicord",
+        "toolbox":{
+            "openThemeLibrary":"Åpne temabibliotek"
+        }
+    },
+    "tidalEmbeds":{
+        "description":"Bygger inn Tidal-musikklinker med en tilpasset spiller"
+    },
+    "tiktokTTS":{
+        "contextMenu":{
+            "playTikTokTTS":"Spill TikTok TTS"
+        },
+        "description":"Spill TikTok tekst-til-tale for meldinger",
+        "settings":{
+            "volume":"Avspillingsvolum"
+        }
+    },
+    "timezones":{
+        "contextMenu":{
+            "setLocalTimezone":"Angi lokal tidssone"
+        },
+        "description":"Vis brukerens tidssoner i profiler og meldingshoder",
+        "settings":{
+            "24hTime":"Vis tid i 24-timers format",
+            "databaseUrl":"Database URL for tidssonelagring",
+            "preferDatabaseOverLocal":"Foretrekk database fremfor lokal lagring for tidssoner",
+            "resetDatabaseTimezone":"Tilbakestill tidssonen din på databasen",
+            "setDatabaseTimezone":"Angi tidssonen din i databasen",
+            "showMessageHeaderTime":"Vis tid i meldingshoder",
+            "showOwnTimezone":"Vis din egen tidssone i profiler og meldingshoder",
+            "showProfileTime":"Vis tid i profiler",
+            "showTimezoneInfo":"Vis tidssoneinformasjon ved siden av klokkeslett",
+            "useDatabase":"Aktiver database for å få brukertidssoner"
+        },
+        "toasts":{
+            "failed":"Tidssoner Kunne ikke oppdatere!",
+            "refreshed":"Tidssonene ble oppdatert!"
+        },
+        "toolbox":{
+            "refreshDatabaseTimezones":"Oppdater databasetidssoner",
+            "setDatabaseTimezone":"Angi databasetidssone"
+        }
+    },
+    "title":{
+        "description":"Endre Discords vindustittel",
+        "settings":{
+            "title":"Vindutittelprefiks"
+        }
+    },
+    "toastNotifications":{
+        "description":"Vis toast-varsler for meldinger og hendelser",
+        "positionOptions":{
+            "bottomLeft":"Nede til venstre",
+            "bottomRight":"Nede til høyre",
+            "topLeft":"Oppe til venstre",
+            "topRight":"Oppe til høyre"
+        },
+        "settings":{
+            "determineServerNotifications":"Bestem automatisk hvilke servervarsler som skal vises basert på innstillingene for kanalen/lauget",
+            "directMessages":"Vis varsler for direktemeldinger",
+            "disableInStreamerMode":"Deaktiver varsler mens du er i streamer-modus",
+            "exampleButton":"Vis et eksempel på et toastvarsel",
+            "friendActivity":"Vis varsler for å legge til noen eller motta en venneforespørsel",
+            "friendServerNotifications":"Vis varsler når venner sender meldinger på servere de deler med deg",
+            "groupMessages":"Vis varsler for gruppemeldinger",
+            "ignoreUsers":"Lag en liste over bruker-ID-er for å ignorere alle varslene deres fra (skill med kommaer)",
+            "maxNotifications":"Maksimalt antall varsler som vises samtidig",
+            "notifyFor":"Lag en liste over kanal-ID-er du kan motta varsler fra (skill med kommaer)",
+            "opacity":"Ugjennomsiktighet for varselet",
+            "position":"Plasseringen av toastvarslingen",
+            "renderImages":"Gjengi bilder i varsler",
+            "streamingTreatment":"Slik behandler du varsler mens du deler skjermen",
+            "timeout":"Tid i sekunder varsler vises for"
+        },
+        "streamingOptions":{
+            "ignore":"Ignorer – Ikke vis varselet i det hele tatt",
+            "noContent":"Ingen innhold – Skjul varslingsorganet",
+            "normal":"Normal – Vis varselet som normalt"
+        }
+    },
+    "toggleVideoBind":{
+        "description":"Legger til en tastebinding for å bytte video/webkamera i talechat",
+        "settings":{
+            "keyBind":"Tasten for å bytte webkamera når den trykkes",
+            "reqAlt":"Krev at alt holdes",
+            "reqCtrl":"Krev at kontroll holdes",
+            "reqShift":"Krev at skift holdes"
+        }
+    },
+    "toneIndicators":{
+        "description":"Legger til toneindikatorer (sarkasme, spøk osv.) til meldinger",
+        "settings":{
+            "customIndicators":"Egendefinerte toneindikatorer (format: jk=Spøk; srs=Seriøs)",
+            "maxIndicators":"Maksimalt antall toneindikatorer å vise per melding",
+            "prefix":"Prefikstegn(er) for toneindikatorer"
+        }
+    },
+    "tosuRPC":{
+        "description":"Rik tilstedeværelsesintegrasjon for osu! via tosu"
+    },
+    "translatePlus":{
+        "contextMenu":{
+            "translate":"Oversett"
+        },
+        "description":"Legger til en oversettelsesknapp i meldinger med en bedre UI",
+        "popover":{
+            "translate":"Oversett"
+        }
+    },
+    "unitConverter":{
+        "description":"Konverter enheter i meldinger (imperial/metrisk)",
+        "popover":{
+            "convertUnits":"Konverter enheter"
+        },
+        "settings":{
+            "myUnits":"Enhetene du bruker og vil ha ting konvertert til"
+        },
+        "unitOptions":{
+            "imperial":"Imperial",
+            "metric":"Metrisk"
+        }
+    },
+    "universalMention":{
+        "description":"Nevn brukere fra hvilken som helst server som bruker et universelt format",
+        "settings":{
+            "globalMention":"Nevn brukere fra hvilken som helst server, ikke bare den nåværende",
+            "onlyDMUsers":"Vis kun brukere du har hatt DM med"
+        },
+        "warning":"Bruk av Global Mention kan forårsake ytelsesproblemer og vise en absurd mengde brukere i autofullføringen."
+    },
+    "unlimitedAccounts":{
+        "description":"Fjerner grensen på 5 kontoer for kontobytteren til Discord",
+        "settings":{
+            "maxAccounts":"Antall kontoer som kan legges til, eller 0 for ingen grense"
+        }
+    },
+    "unreadBadgeCount":{
+        "description":"Vis merker for antall uleste meldinger på kanaler",
+        "settings":{
+            "notificationCountLimit":"Begrens antallet varsler til 99+",
+            "showOnMutedChannels":"Vis antall uleste på kanaler som er dempet"
+        }
+    },
+    "urlHighlighter":{
+        "description":"Fremhev spesifikke nettadresser i meldinger med egendefinerte farger",
+        "settings":{
+            "boldUrls":"Gjør uthevede nettadresser fete",
+            "highlightEmbeds":"Fremhev også nettadresser i innebygd innhold",
+            "patterns":"URL mønstre for å fremheve ved hjelp av glob-mønstre"
+        },
+        "ui":{
+            "addNew":"Legg til ny",
+            "patternPlaceholder":"*.example.com",
+            "urlPatterns":"URL Mønstre"
+        }
+    },
+    "userpfp":{
+        "avatarOptions":{
+            "nitro":"Nitro",
+            "userpfp":"UserPFP"
+        },
+        "buttons":{
+            "joinServer":"Bli med i UserPFP Server",
+            "support":"Støtt UserPFP her"
+        },
+        "contextMenu":{
+            "setAvatar":"Sett Avatar"
+        },
+        "description":"Bruk egendefinerte profilbilder fra UserPFP-databasen eller angi dine egne",
+        "notice":"Bruk av den angitte avatar-funksjonen er kun lokal, noe som betyr at bare du ser den endres.",
+        "settings":{
+            "databaseSource":"URL å laste database fra",
+            "overrideServerAvatars":"Overstyr serveravatarer med egendefinerte avatarer eller standard brukeravatar hvis ingen egendefinert avatar er angitt",
+            "preferNitro":"Hvilken avatar skal brukes hvis både standard animerte (Nitro) pfp- og bruker-PFP-avatarer er tilstede"
+        }
+    },
+    "vcNarratorCustom":{
+        "contextMenu":{
+            "stateFilter":"Tilstandsendringsfilter",
+            "vcNarrator":"VC-forteller",
+            "voice":"Tale"
+        },
+        "description":"Egendefinert stemmekanalforteller med TTS for brukertilslutninger/forlater og tilstandsendringer",
+        "filterOptions":{
+            "blacklist":"Svarteliste (kunngjør alle unntatt oppført)",
+            "off":"Av",
+            "whitelist":"Hviteliste (kun annonser oppførte brukere)"
+        },
+        "modal":{
+            "cancel":"Avbryt",
+            "previewHint":"Forhåndsvis hvordan denne stemmen høres ut med navnet sitt:",
+            "save":"Lagre",
+            "selectVoice":"Velg en stemme",
+            "title":"VC-fortellerstemme"
+        },
+        "preview":{
+            "playing":"spiller...",
+            "subtitle":"Bruker den valgte fortellerstemmen",
+            "title":"Forhåndsvis lyder"
+        },
+        "settings":{
+            "announceOthersDeafen":"Fortell når andre brukere døver/unddøver i din nåværende VC",
+            "announceOthersMute":"Fortell når andre brukere slår av/på i din nåværende VC",
+            "announceOthersStream":"Annonser når andre brukere starter/stopper strømming i din nåværende VC",
+            "announceSelfStream":"Fortell når du starter/stopper strømming",
+            "customVoice":"Fortellerstemme",
+            "ignoreSelf":"Ignorer deg selv for alle hendelser",
+            "joinMessage":"Plassholdere: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
+            "latinOnly":"Fjern ikke-latinske tegn fra navn før du sier dem",
+            "leaveMessage":"Legg igjen melding",
+            "moveMessage":"Flytt melding",
+            "rate":"Fortellerhastighet",
+            "sayOwnName":"Si eget navn",
+            "stateChangeCooldownMs":"Tilstandsendring kunngjør nedkjøling (ms)",
+            "stateChangeFilterList":"Kommaseparerte bruker-IDer for hviteliste/svarteliste. Høyreklikk brukere for å legge til/fjerne.",
+            "stateChangeFilterMode":"Filtrer hvilke brukere som utløser kunngjøringer om tilstandsendring",
+            "userVoiceMap":"Stemmeoverstyringer per bruker (format: userId:voiceId,userId2:voiceId2). Høyreklikk brukere for å angi.",
+            "volume":"Fortellervolum"
+        },
+        "troubleshooting":{
+            "cacheInfo":"Cache",
+            "clearCache":"Tøm hurtigbufferen",
+            "lastApiCall":"Siste API samtale",
+            "refreshSize":"Oppdater størrelse",
+            "title":"Feilsøking"
+        }
+    },
+    "vcPanelSettings":{
+        "description":"Tilpass stemmekanalpanelet med tilleggsinnstillinger",
+        "settings":{
+            "camera":"Vis en kameravelger",
+            "inputDevice":"Vis en inndataenhetsvelger",
+            "inputVolume":"Vis en glidebryter for inngangsvolum",
+            "outputDevice":"Vis en utgangsenhetsvelger",
+            "outputVolume":"Vis en glidebryter for utgangsvolum",
+            "showInputDeviceHeader":"Vis overskriften over inndataenhetsvelgeren",
+            "showInputVolumeHeader":"Vis overskriften over glidebryteren for inngangsvolum",
+            "showOutputDeviceHeader":"Vis overskriften over utgangsenhetsvelgeren",
+            "showOutputVolumeHeader":"Vis overskriften over utgangsvolumskyveknappen",
+            "showVideoDeviceHeader":"Vis topptekst over kameravelger",
+            "uncollapseSettingsByDefault":"Opphev automatisk stemmeinnstillinger som standard"
+        },
+        "ui":{
+            "camera":"Kamera",
+            "hide":"Skjul",
+            "inputDevice":"Inndataenhet",
+            "inputVolume":"Inngangsvolum",
+            "outputDevice":"Utgangsenhet",
+            "outputVolume":"Utgangsvolum",
+            "settings":"Innstillinger"
+        }
+    },
+    "viewRawVariant":{
+        "contextMenu":{
+            "viewRaw":"Se Raw"
+        },
+        "description":"Se rå JSON-data for meldinger, brukere, kanaler og guilds",
+        "modal":{
+            "content":"Innhold",
+            "data":"Data",
+            "title":"Se rå {type}"
+        }
+    },
+    "voiceButtons":{
+        "description":"Legger til hurtighandlingsknapper (chat, mute, overdøve) for brukere av talekanal",
+        "settings":{
+            "showChatButton":"Vis chat-knapp",
+            "showDeafenButton":"Vis døveknapp",
+            "showMuteButton":"Vis demp-knappen"
+        }
+    },
+    "voiceChannelLog":{
+        "contextMenu":{
+            "viewChannelLogs":"Se kanallogger"
+        },
+        "description":"Logg talekanal bli med/forlate/flytte hendelser",
+        "modeOptions":{
+            "both":"Logg til chat og loggmeny",
+            "logMenu":"Loggmeny",
+            "logToChat":"Logg direkte til tilknyttet chat"
+        },
+        "settings":{
+            "ignoreBlockedUsers":"Ikke logg blokkerte brukere",
+            "mode":"Slik viser du talekanalloggen",
+            "voiceChannelChatSelf":"Logg dine egne talekanalhendelser i talekanalene",
+            "voiceChannelChatSilent":"Bli med/legg igjen/flytt meldinger i talekanalchatter vil være stille",
+            "voiceChannelChatSilentSelf":"Bli med/legg igjen/flytt meldinger i talekanalchatter vil være stille hvis du er i talekanalen"
+        }
+    },
+    "voiceChatUtils":{
+        "contextMenu":{
+            "deafenAll":"Døv alle sammen",
+            "disconnectAll":"Koble fra alle",
+            "moveAll":"Flytt alle",
+            "muteAll":"Demp alle",
+            "undeafenAll":"Udøve alle sammen",
+            "unmuteAll":"Slå på lyden for alle",
+            "voiceTools":"Stemmeverktøy"
+        },
+        "description":"Legger til verktøy for moderering av stemmekanaler (demp alle, overdøv alle, flytt alle, koble fra alle)",
+        "settings":{
+            "waitAfter":"Antall API handlinger som må utføres før du venter (for å unngå satsgrenser)",
+            "waitSeconds":"Tid til å vente mellom hver handling (i sekunder)"
+        }
+    },
+    "voiceJoinMessages":{
+        "description":"Motta varsler når venner blir med i talekanaler",
+        "settings":{
+            "allowedFriends":"Komma- eller mellomromseparert liste over venners bruker-IDer du vil motta meldinger fra",
+            "friendDirectMessages":"Motta varsler i dine venners DM-er når de blir med i en talekanal",
+            "friendDirectMessagesSelf":"Motta varsler i dine venners DM-er selv om du er i samme talekanal som dem",
+            "friendDirectMessagesShowMemberCount":"Vis antall andre medlemmer i talekanalen når du mottar et DM-varsel",
+            "friendDirectMessagesShowMembers":"Vis en liste over andre medlemmer i talekanalen når du mottar et DM-varsel",
+            "friendDirectMessagesSilent":"Bli med meldinger i dine venners DM-er vil være stille",
+            "ignoreBlockedUsers":"Ikke send meldinger om blokkerte brukere som blir med/forlater/flytter talekanaler"
+        }
+    },
+    "voiceMessageTranscriber":{
+        "description":"Transkribere talemeldinger ved hjelp av AI (Whisper)",
+        "modal":{
+            "action":"Handling",
+            "audioLanguage":"Lydspråk",
+            "autoDetect":"Automatisk oppdagelse",
+            "copied":"Kopiert!",
+            "copyToClipboard":"Kopier til utklippstavlen",
+            "downloadingAudio":"Laster ned lyd...",
+            "error":"Feil",
+            "inProgress":"Transkribering pågår...",
+            "initializing":"Initialiserer...",
+            "loadingModel":"Laster inn modell...",
+            "processingAudio":"Behandler lyd...",
+            "retry":"Prøv på nytt",
+            "showTimestamps":"Vis tidsstempler",
+            "start":"Start",
+            "transcribe":"Transkribere",
+            "transcribing":"Transkriberer...",
+            "transcription":"Transkripsjon",
+            "transcriptionOptions":"Transkripsjonsalternativer",
+            "translateToEnglish":"Oversett til engelsk"
+        },
+        "modelOptions":{
+            "base":"Base (anbefalt)",
+            "medium":"Middels (tregest, best nøyaktighet)",
+            "small":"Liten",
+            "tiny":"Tiny (Raskest, lavest nøyaktighet)"
+        },
+        "settings":{
+            "delete":"Slett alle bufrede filer",
+            "quantized":"Bruk kvantisert modell (mindre størrelse, litt lavere nøyaktighet)",
+            "selectedModel":"Modellstørrelse"
+        }
+    },
+    "voiceRejoin":{
+        "description":"Bli automatisk med i talekanaler etter at tilkoblingen faller",
+        "preventionOptions":{
+            "both":"DM-er og servere",
+            "dms":"Kun DM",
+            "none":"Ingen",
+            "servers":"Kun servere"
+        },
+        "settings":{
+            "applyOnlyToDms":"Gjelder kun DM",
+            "preventReconnectIfCallEnded":"Ikke koble til igjen hvis samtalen er avsluttet eller talekanalen er tom eller ikke eksisterer",
+            "rejoinDelay":"Still inn forsinkelse før du blir med på talekanalen igjen",
+            "rejoinTimeout":"Ikke prøv å bli med igjen etter at så mange sekunder har gått siden frakoblingen"
+        }
+    },
+    "waitForSlot":{
+        "contextMenu":{
+            "joinQueue":"Bli med i kø",
+            "leaveQueue":"Forlat køen"
+        },
+        "description":"Still deg i kø for fulltalekanaler og bli varslet når et spor åpnes",
+        "notices":{
+            "channelFull":"Talekanalen {channel} er full. Vente på et spor?",
+            "join":"Meld deg på",
+            "slotAvailable":"Hei, noen har nettopp forlatt #{channel} og det er en plass til deg nå!",
+            "wait":"Vente"
+        },
+        "settings":{
+            "autoJoin":"Bli med i kanalen umiddelbart i stedet for å vise et varsel",
+            "notificationSound":"Spill av en lyd når en spilleautomat blir tilgjengelig"
+        }
+    },
+    "wallpaperFree":{
+        "contextMenu":{
+            "removeWallpaper":"Fjern bakgrunnsbilde",
+            "setWallpaper":"Sett bakgrunn"
+        },
+        "description":"Angi egendefinerte bakgrunnsbilder for kanaler, brukere eller globalt",
+        "settings":{
+            "globalDefault":"Angi en global standard bakgrunn for alle kanaler",
+            "stylingTips":"Styling tips"
+        }
+    },
+    "webpackTarball":{
+        "description":"Eksporter Discord sine webpack-moduler som en tarball for analyse",
+        "modal":{
+            "create":"Opprett",
+            "errors":"feil",
+            "lazyChunks":"Late biter",
+            "loadAll":"Last inn alle",
+            "loaded":"Lastet",
+            "loadedStatus":"Lastet",
+            "loading":"Laster inn",
+            "title":"Webpack Tarball"
+        },
+        "settings":{
+            "patched":"Inkluder lappede moduler"
+        },
+        "toolbox":{
+            "webpackTarball":"Webpack Tarball"
+        }
+    },
+    "whitelistedEmojis":{
+        "alerts":{
+            "importConfirmBody":"Dette vil overskrive din nåværende hviteliste.",
+            "importConfirmTitle":"Er du sikker?",
+            "resetConfirmBody":"Dette vil fjerne alle emojiene fra hvitelisten din.",
+            "resetConfirmTitle":"Er du sikker?"
+        },
+        "contextMenu":{
+            "addAllGuildEmojis":"Legg til alle Guild Emojis",
+            "addToWhitelist":"Legg til hviteliste",
+            "removeAllGuildEmojis":"Fjern alle Guild Emojis",
+            "removeFromWhitelist":"Fjern fra hviteliste"
+        },
+        "description":"Hviteliste spesifikke emojier og skjul alle andre fra emojivelgeren",
+        "settings":{
+            "defaultEmojis":"Skjul standard emojier",
+            "disableToasts":"Deaktiver toasts",
+            "exportEmojis":"Eksporter emojier",
+            "importEmojis":"Importer emojier",
+            "resetEmojis":"Tilbakestill emojier",
+            "serverEmojis":"Skjul server-emojier",
+            "whitelistedEmojis":"Hvitelistede emojier"
+        },
+        "toasts":{
+            "added":"La \"{name}\" til listen",
+            "addedBulk":"La til {count} emojier i listen, {skipped} er allerede på listen",
+            "alreadyInList":"«{name}» er allerede på listen",
+            "exported":"Eksporterte emojier",
+            "importFailed":"Kunne ikke importere emojier: {error}",
+            "imported":"Emojier er importert",
+            "notInList":"«{name}» er ikke på listen",
+            "removed":"Fjernet \"{name}\" fra listen",
+            "removedBulk":"Fjernet {count} emojier fra listen",
+            "reset":"Tilbakestill emojier"
+        },
+        "ui":{
+            "defaultEmojis":"Standard Emojis",
+            "guildEmojis":"{guild} Emojis",
+            "noEmojis":"Ingen emojier i hvitelisten.",
+            "removeAll":"Fjern alle"
+        }
+    },
+    "whosWatching":{
+        "description":"Se hvem som ser på skjermdelingen din eller strømmer",
+        "settings":{
+            "showPanel":"Vis tilskuere under skjermdelingspanelet"
+        },
+        "ui":{
+            "noSpectators":"Ingen tilskuere",
+            "spectators":"Tilskuere"
+        }
+    },
+    "wigglyText":{
+        "about":{
+            "circle":"i en sirkel ved å skrive )~text~^(",
+            "description":"Du kan få teksten til å svinge med følgende:",
+            "leftRight":"venstre og høyre ved å skrive <~tekst~>",
+            "upDown":"opp og ned ved å skrive ^~tekst~^"
+        },
+        "description":"Få tekst til å vrikke med spesiell syntaks (~tekst~)",
+        "settings":{
+            "intensity":"Animasjonsintensitet i px"
+        }
+    },
+    "writeUpperCase":{
+        "description":"Skriv automatisk den første bokstaven i setninger med stor bokstav",
+        "settings":{
+            "blockedWords":"Strenger som ikke skal skrives med store bokstaver (separeres med komma)"
+        }
+    },
+    "youtubeDescription":{
+        "description":"Legger til en vekslebar beskrivelse for YouTube-videoinnbygginger"
     }
 }
