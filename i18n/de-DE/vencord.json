@@ -85,7 +85,7 @@
         "defaultName":"Apple-Musik",
         "defaultSmallText":"{artist}",
         "defaultState":"{artist} · {album}",
-        "description":"Discord satte Präsenz für Ihre Apple Music!",
+        "description":"Discord rich presence für Apple Music!",
         "name":"AppleMusicRichPresence",
         "settings":{
             "activityType":"Welche Art von Aktivität",
