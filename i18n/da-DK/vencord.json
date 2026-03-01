@@ -9,6 +9,36 @@
     "addonCard":{
         "new":"NY"
     },
+    "alwaysAnimate":{
+        "description":"Animerer alt, der kan animeres",
+        "settings":{
+            "icons":"Animer altid serverikoner, avatarer, indretning og mere",
+            "nameplates":"Animer altid navneskilte",
+            "roleGradients":"Animer altid rollegradienter",
+            "serverBanners":"Animer altid serverbannere",
+            "statusEmojis":"Animer altid status-emojis"
+        }
+    },
+    "alwaysExpandRoles":{
+        "description":"Udvider altid rollelisten i profil-popouts",
+        "settings":{
+            "hideArrow":"Skjul pil"
+        }
+    },
+    "alwaysTrust":{
+        "description":"Fjerner det irriterende upålidelige domæne og mistænkelige fil-popup",
+        "settings":{
+            "confirmModal":"Skal en \"er du sikker på, at du vil slette\"-modal vises?",
+            "domain":"Fjern popup-vinduet for domæne, der ikke er tillid til, når du åbner links",
+            "file":"Fjern pop op-vinduet 'Potentielt farligt download', når du åbner links",
+            "noDeleteSafety":"Fjerner kravet om indtast servernavn ved sletning af en server"
+        },
+        "ui":{
+            "deleteServerBody":"Det er permanent, hvis det ikke var indlysende.",
+            "deleteServerConfirm":"Slet",
+            "deleteServerTitle":"Vil du slette serveren?"
+        }
+    },
     "anonymiseFileNames":{
         "commands":{
             "spoiler":{
@@ -92,6 +122,22 @@
             "title":"Sådan bruger du arRPC"
         }
     },
+    "autoDndWhilePlaying":{
+        "description":"Opdaterer automatisk din onlinestatus (online, inaktiv, dnd), når du starter spil",
+        "settings":{
+            "excludeInvisible":"Undgå automatiske statusændringer, mens din status er indstillet til usynlig",
+            "statusToSet":"Status, der skal indstilles, mens du spiller et spil"
+        },
+        "statusOptions":{
+            "dnd":"Vil ikke forstyrres",
+            "idle":"Inaktiv",
+            "invisible":"Usynlig",
+            "online":"Online"
+        }
+    },
+    "badgeAPI":{
+        "description":"API for at tilføje badges til brugere"
+    },
     "betterFolders":{
         "settings":{
             "closeAllFolders":"Luk alle mapper, når du vælger en server, der ikke er i en mappe",
@@ -108,6 +154,22 @@
             "sidebarAnim":"Animer åbning af mappesidebjælken"
         }
     },
+    "betterGifAltText":{
+        "description":"Skift GIF alt-tekst fra blot at være 'GIF' til at indeholde gif-tags / filnavn"
+    },
+    "betterGifPicker":{
+        "description":"Får gif-vælgeren til at åbne favoritkategorien som standard",
+        "settings":{
+            "keepOpen":"Holder gif-vælgeren åben efter valg af gif"
+        }
+    },
+    "betterNotesBox":{
+        "description":"Skjul noter eller deaktiver stavekontrol (Konfigurer i indstillinger!!)",
+        "settings":{
+            "hide":"Skjul noter",
+            "noSpellCheck":"Deaktiver stavekontrol i noter"
+        }
+    },
     "betterRoleContext":{
         "copyRoleColor":"Kopier rollefarve",
         "description":"Tilføjer muligheder for at kopiere rollefarve / redigere rolle / se rolleikon, når du højreklikker på roller i brugerprofilen",
@@ -117,6 +179,13 @@
             "roleIconFileFormat":"Filformat til brug ved visning af rolleikoner"
         },
         "viewRoleIcon":"Se rolleikon"
+    },
+    "betterRoleDot":{
+        "description":"Kopiér rollefarve på RoleDot (tilgængelighedsindstilling) klik. Tillader også at bruge både RoleDot og farvede navne samtidigt",
+        "settings":{
+            "bothStyles":"Vis både rolleprikker og farvede navne",
+            "copyRoleColorInProfilePopout":"Tillad klik på rolleprikken i profilens popout for at kopiere rollefarven"
+        }
     },
     "betterSessions":{
         "newBadge":"NY",
@@ -140,10 +209,20 @@
             "organizeMenu":"Organiserer indstillings-tand-kontekstmenuen i kategorier"
         }
     },
+    "betterUploadButton":{
+        "description":"Upload med et enkelt klik, åbn menuen med højreklik"
+    },
     "biggerStreamPreview":{
         "description":"Dette plugin giver dig mulighed for at forstørre stream forhåndsvisninger",
         "name":"BiggerStreamPreview",
         "viewStreamPreview":"Se forhåndsvisning af stream"
+    },
+    "blurNsfw":{
+        "description":"Slør vedhæftede filer i NSFW-kanaler, indtil de svæver",
+        "settings":{
+            "blurAllChannels":"Slør vedhæftede filer i alle kanaler (ikke kun NSFW)",
+            "blurAmount":"Sløringsmængde (i pixels)"
+        }
     },
     "callTimer":{
         "description":"Tilføj opkaldstimere for alle brugere i talekanaler og i forbindelsesstatus.",
@@ -158,6 +237,12 @@
         }
     },
     "cancel":"Afbryd",
+    "chatInputButtonAPI":{
+        "description":"API for at tilføje knapper til chatinputtet"
+    },
+    "clearURLs":{
+        "description":"Fjerner automatisk sporingselementer fra URL'er, du sender"
+    },
     "clientTheme":{
         "contrastWarning":"Den valgte farve kontrasterer ikke godt med tekst",
         "disableNitroTheme":"Deaktiver Nitro-tema",
@@ -196,6 +281,12 @@
             "updatedRemote":"Dine indstillinger er blevet opdateret! Klik her for at genstarte for fuldt ud at anvende ændringerne!"
         }
     },
+    "colorSighted":{
+        "description":"Fjerner de farveblindevenlige ikoner fra statusser, ligesom 2015-2017 Discord"
+    },
+    "commandsAPI":{
+        "description":"API påkrævet af alt, der bruger kommandoer"
+    },
     "consoleJanitor":{
         "alwaysAllowLoggers":"Tillad altid loggere af disse typer",
         "description":"Deaktiverer irriterende konsolmeddelelser/fejl",
@@ -206,6 +297,12 @@
             "disableSpotifyLogger":"Deaktiver Spotify-loggeren, som lækker kontooplysninger og adgangstoken",
             "whitelistedLoggers":"Semikolon adskilt liste over loggere for at tillade, selvom andre er skjulte"
         }
+    },
+    "consoleShortcuts":{
+        "description":"Tilføjer kortere aliaser til mange ting på vinduet. Kør `shortcutList` for at få en liste."
+    },
+    "contextMenuAPI":{
+        "description":"API til at tilføje/fjerne elementer til/fra kontekstmenuer"
     },
     "contributorCard":{
         "contributionsButton":"Se, hvad du har bidraget til",
@@ -234,6 +331,43 @@
     "copyUserURLs":{
         "copyUserURL":"Kopiér bruger URL",
         "description":"Tilføjer muligheden 'Kopiér bruger URL' til brugerens kontekstmenu."
+    },
+    "crashHandler":{
+        "description":"Utility-plugin til håndtering og muligvis genopretning efter nedbrud uden genstart",
+        "notifications":{
+            "crashedBody":"Awn :( Discord er gået ned to gange hurtigt og forsøger ikke at komme sig. Klik her for at blive medlem af vores supportserver!",
+            "crashedTitle":"Discord er gået ned!",
+            "invalidInvite":"Ugyldig eller udløbet invitation",
+            "recoveringBody":"Forsøger at genoprette... Klik her for at tilmelde dig vores supportserver!"
+        },
+        "settings":{
+            "attemptToNavigateToHome":"Om du skal forsøge at navigere til hjemmet, når Discord nedbrud forhindres.",
+            "attemptToPreventCrashes":"Om man skal forsøge at forhindre Discord nedbrud."
+        },
+        "updatePrompt":"Åh åh, Discord er lige gået ned... men gode nyheder, der er en tilgængelig [[PH1]]] opdatering, som muligvis løser dette problem! Vil du opdatere nu?"
+    },
+    "ctrlEnterSend":{
+        "description":"Brug Ctrl+Enter til at sende beskeder (kan tilpasses)",
+        "settings":{
+            "sendMessageInTheMiddleOfACodeBlock":"Om der skal sendes en besked midt i en kodeblok",
+            "submitRule":"Måden at sende en besked på"
+        },
+        "submitRuleOptions":{
+            "ctrlEnter":"Ctrl+Enter (Enter eller Shift+Enter for ny linje) (cmd+enter på macOS)",
+            "enter":"Enter (Shift+Enter for ny linje; Discord standard)",
+            "shiftEnter":"Shift+Enter (Enter for ny linje)"
+        }
+    },
+    "customIdle":{
+        "description":"Giver dig mulighed for at indstille tiden før Discord går i inaktiv (eller deaktiverer automatisk tomgang)",
+        "settings":{
+            "idleTimeout":"Minutter før Discord går i inaktiv (0 for at deaktivere automatisk tomgang)",
+            "remainInIdle":"Når du kommer tilbage til Discord, forbliv inaktiv, indtil du bekræfter, at du vil gå online"
+        },
+        "ui":{
+            "backOnlineMessage":"Velkommen tilbage! Klik på knappen for at gå online. Klik på X for at forblive inaktiv indtil genindlæsning.",
+            "exitIdle":"Afslut inaktiv"
+        }
     },
     "customRPC":{
         "activityType":"Aktivitetstype",
@@ -322,6 +456,17 @@
         "removeDecoration":"Fjern dekoration",
         "title":"Indretning"
     },
+    "devCompanion":{
+        "description":"Dev Companion Plugin. Rapportér venligst alt, der ikke virker eller er mærkeligt (sandsynligvis er det en fejl) til sadan, enten ping eller dm, tak!",
+        "settings":{
+            "notifyOnAutoConnect":"Om der skal gives besked, når Dev Companion automatisk har oprettet forbindelse.",
+            "reloadAfterToggle":"Genindlæs efter en deaktiveret/aktiver plugin-kommando er modtaget.",
+            "usePatchedModule":"Ved udtrækningsanmodninger skal du svare med det aktuelle patchede modul (hvis det er patchet) i stedet for originalen."
+        }
+    },
+    "disableCallIdle":{
+        "description":"Deaktiverer automatisk at blive sparket fra et DM-taleopkald efter 3 minutter og blive flyttet til en AFK-talekanal."
+    },
     "donate":"Doner",
     "donorCard":{
         "donated":{
@@ -335,6 +480,12 @@
             "description":"Overvej venligst at støtte udviklingen af Equicord ved at donere!",
             "title":"Støt projektet"
         }
+    },
+    "dontRoundMyTimestamps":{
+        "description":"Runder altid relative tidsstempler ned, så 7.6y bliver 7y i stedet for 8y"
+    },
+    "dynamicImageModalAPI":{
+        "description":"Giver dig mulighed for at udelade enten bredde eller højde, når du åbner en billedmodal"
     },
     "experiments":{
         "description":"Aktiver adgang til eksperimenter og andre dev-kun funktioner i Discord!",
@@ -357,6 +508,9 @@
         "failedToClone":"Kunne ikke klone: {error}",
         "nameValidation":"Navnet skal være mellem 2 og 32 tegn",
         "somethingWentWrong":"Noget gik galt (tjek konsollen!)"
+    },
+    "f8break":{
+        "description":"Sæt klienten på pause, når du trykker på F8 med DevTools (+ breakpoints) åbne."
     },
     "failedToRender":"Fanen {tab} kunne ikke gengives. Hvis dette problem fortsætter, prøv at bruge installationsprogrammet til at geninstallere!",
     "fakeNitro":{
@@ -401,6 +555,40 @@
         "primary":"Primær",
         "usage":"Brug"
     },
+    "favEmojiFirst":{
+        "description":"Sætter din yndlings-emoji først i emoji-autofuldførelsen og har også emoji-alias.",
+        "settings":{
+            "aliases":"Administrer dine emoji-aliasser.",
+            "clearAll":"Slet alle aliasser."
+        },
+        "ui":{
+            "aliasRequired":"Alias er påkrævet.",
+            "aliasSetFor":"Alias indstillet til {emoji}.",
+            "aliasValidation":"Alias skal være på 2-32 tegn og kun bruge små bogstaver, tal eller understregninger.",
+            "confirmModal":{
+                "confirmButton":"Slet alle aliasser",
+                "description":"Dette fjerner alle emoji-aliaser, du har gemt.",
+                "title":"Slet alle aliasser"
+            },
+            "deleteAllAliases":"Slet alle aliasser",
+            "deletedAllAliases":"Slettede alle emoji-aliasser.",
+            "duplicateAlias":"Dublet alias",
+            "editAlias":"Rediger alias",
+            "failedToDelete":"Kunne ikke slette aliaser.",
+            "failedToRemove":"Aliaset kunne ikke fjernes.",
+            "failedToSave":"Aliaset kunne ikke gemmes.",
+            "modal":{
+                "placeholder":"Alias, f.eks. \"hulke\"",
+                "save":"Gem",
+                "setDescription":"Indstil et alias for {emoji}",
+                "setTitle":"Sæt alias"
+            },
+            "noAliasesYet":"Der er ikke angivet aliaser endnu.",
+            "remove":"Fjern",
+            "removedAlias":"Fjernet alias:{alias}:",
+            "setAlias":"Sæt alias"
+        }
+    },
     "favGifSearch":{
         "description":"Tilføjer en søgelinje til foretrukne gifs.",
         "name":"FavoriteGifSearch",
@@ -413,6 +601,9 @@
         "settings":{
             "searchOption":"Den del af url'en, du vil søge efter"
         }
+    },
+    "fixCodeblockGap":{
+        "description":"Fjerner afstanden mellem kodeblokke og tekst under den"
     },
     "fixImagesQuality":{
         "animatedImagesAlways":"Animerede billeder (GIF, WebP osv.) i chat vil altid animeres, uanset om appen er fokuseret.",
@@ -427,9 +618,51 @@
             "originalImagesInChat":"Indlæs også det originale billede i Chat. ADVARSEL: Læs advarslerne ovenfor"
         }
     },
+    "fixSpotifyEmbeds":{
+        "description":"Løser, at spotify-indlejringer bliver utrolig høje ved at lade dig tilpasse lydstyrken",
+        "settings":{
+            "volume":"Volumen %, der skal indstilles for spotify-indlejringer. Alt over 10 % er meget højt"
+        }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"Omgår youtube-videoer, der blokeres fra visning på Discord (for eksempel af UMG)"
+    },
+    "forceOwnerCrown":{
+        "description":"Tving ejerkronen ud for brugernavne, selvom serveren er stor."
+    },
+    "friendInvites":{
+        "commands":{
+            "createFriendInvite":{
+                "description":"Genererer et venneinvitationslink.",
+                "name":"oprette en venneinvitation"
+            },
+            "revokeFriendInvites":{
+                "description":"Tilbagekalder alle genererede venneinvitationer.",
+                "name":"tilbagekald venneinvitationer"
+            },
+            "viewFriendInvites":{
+                "description":"Se en liste over alle genererede venneinvitationer.",
+                "name":"se venneinvitationer"
+            }
+        },
+        "description":"Opret og administrer links til venneinvitationer via skråstreg-kommandoer (/opret venneinvitation, /se venneinvitationer, /tilbagekald venneinvitationer).",
+        "ui":{
+            "allRevoked":"Alle venneinvitationer er blevet tilbagekaldt.",
+            "expires":"Udløber:",
+            "maxUses":"Maksimal brug:",
+            "noActiveInvites":"Du har ingen aktive venneinvitationer!",
+            "timesUsed":"Brugte tider:"
+        }
+    },
     "friendsSince":{
         "description":"Viser, hvornår du blev venner med nogen i brugerens popout",
         "heading":"Venner siden"
+    },
+    "fullSearchContext":{
+        "description":"Får meddelelseskontekstmenuen i meddelelsessøgeresultater til at have alle de muligheder, du forventer"
+    },
+    "fullUserInChatbox":{
+        "description":"Får brugeren omtale i chatboksen til at have flere funktioner, såsom venstre/højreklik"
     },
     "gameActivityToggle":{
         "description":"Tilføjer en knap ved siden af mikrofonen og døveknappen for at skifte spilaktivitet.",
@@ -441,6 +674,9 @@
             "locationToolbox":"Equicord Værktøjskasse",
             "oldIcon":"Brug den gamle ikonstil før Discord ikon redesign"
         }
+    },
+    "gifPaste":{
+        "description":"Får valg af en gif i gif-vælgeren til at indsætte et link i chatboksen i stedet for at sende det med det samme"
     },
     "greetStickerPicker":{
         "ariaLabel":"Hils klistermærkevælger",
@@ -458,6 +694,9 @@
         "hideMedia":"Skjul medier",
         "mediaHidden":"Medier skjult",
         "showMedia":"Vis medier"
+    },
+    "iLoveSpam":{
+        "description":"Skjul ikke beskeder fra 'sandsynlige spammere'"
     },
     "ignoreActivities":{
         "disableActivity":"Deaktiver aktivitet",
@@ -483,6 +722,15 @@
             "whitelist":"Hvidliste"
         }
     },
+    "imageFilename":{
+        "description":"Vis filnavnet på billeder og GIF'er som et værktøjstip, når du holder markøren over dem",
+        "settings":{
+            "showFullUrl":"Vis hele URL af billedet i stedet for blot filnavnet. Altid aktiveret for GIF'er, fordi de normalt ikke har noget meningsfuldt filnavn"
+        }
+    },
+    "imageLink":{
+        "description":"Skjul aldrig billedlinks i beskeder, selvom det er det eneste indhold"
+    },
     "imageZoom":{
         "lensSize":"Linsestørrelse",
         "nearestNeighbour":"Nærmeste nabo",
@@ -499,7 +747,29 @@
         "zoom":"Zoom",
         "zoomSpeed":"Zoomhastighed"
     },
+    "implicitRelationships":{
+        "description":"Viser dine implicitte relationer på fanen Venner.",
+        "settings":{
+            "sortByAffinity":"Om man skal sortere implicitte forhold efter deres tilhørsforhold til dig."
+        },
+        "ui":{
+            "implicitHeader":"Implicit – {count}",
+            "implicitSection":"Implicit"
+        }
+    },
     "invite":"Inviter",
+    "ircColors":{
+        "description":"Gør brugernavnsfarver i chat unikke, som i IRC-klienter",
+        "settings":{
+            "applyColorOnlyInDms":"Anvend kun farver i direkte beskeder; anvend ikke farver på servere.",
+            "applyColorOnlyToUsersWithoutColor":"Anvend kun farver på brugere, der ikke har en foruddefineret farve",
+            "lightness":"Lethed, i %. Skift, hvis farverne er for lyse eller for mørke",
+            "memberListColors":"Erstat rollefarver i medlemslisten"
+        }
+    },
+    "keepCurrentChannel":{
+        "description":"Forsøg at navigere til den kanal, du var på, før du skiftede konto eller indlæste Discord."
+    },
     "lastfmRichPresence":{
         "apiKeyInstructions":"Indstil <0>Applikationsnavn</0> og <1>Programbeskrivelse</1> til hvad som helst, og lad resten stå tomt.",
         "createApiKey":"Opret API nøgle",
@@ -540,6 +810,19 @@
         }
     },
     "loading":"Indlæser...",
+    "loadingQuotes":{
+        "description":"Erstat Discords indlæsning af citater",
+        "settings":{
+            "additionalQuotes":"Yderligere tilpassede citater vises muligvis, adskilt af nedenstående afgrænsning",
+            "additionalQuotesDelimiter":"Afgrænsning for yderligere tilbud",
+            "enableDiscordPresetQuotes":"Aktiver Discords forudindstillede citater (inklusive begivenhedscitater, under begivenheder)",
+            "enablePluginPresetQuotes":"Aktiver de forudindstillede citater af dette plugin",
+            "replaceEvents":"Skal dette plugin også gælde under arrangementer med særlige begivenhedstema-citater? (f.eks. Halloween)"
+        },
+        "ui":{
+            "noQuotesQuote":"Deaktiverede du virkelig alle indlæsningstilbud? Hvor er du en nar..."
+        }
+    },
     "logs":{
         "allLogsCleared":"Alle logfiler er blevet ryddet",
         "clearAll":"Ryd alle",
@@ -562,6 +845,84 @@
             "toolTip":"Vis medlemsantal på serverens værktøjstip",
             "voiceActivity":"Vis stemmeaktivitet med medlemsantal på medlemslisten"
         }
+    },
+    "memberListDecoratorsAPI":{
+        "description":"API for at tilføje dekoratører til medlemslisten (både på servere og DM'er)"
+    },
+    "mentionAvatars":{
+        "description":"Viser brugeravatarer og rolleikoner indeni omtaler",
+        "settings":{
+            "showAtSymbol":"Om @-symbolet skal vises på brugeromtaler"
+        }
+    },
+    "menuItemDemanglerAPI":{
+        "description":"Deangler Discords menupunktsmodul"
+    },
+    "messageAccessoriesAPI":{
+        "description":"API for at tilføje meddelelsestilbehør"
+    },
+    "messageClickActions":{
+        "actions":{
+            "copyContent":"Kopier indhold",
+            "copyId":"Kopiér ID",
+            "copyLink":"Kopiér link",
+            "copyUserId":"Kopiér bruger-id",
+            "delete":"Slet",
+            "edit":"Rediger",
+            "none":"Ingen",
+            "openTab":"Åbn fanen",
+            "openThread":"Åbn tråden",
+            "pin":"Fastgør",
+            "quote":"Citere",
+            "react":"Reagere",
+            "reply":"Svar"
+        },
+        "description":"Tilpas klikhandlinger på beskeder.",
+        "modifiers":{
+            "alt":"Alt",
+            "backspace":"Backspace",
+            "ctrl":"Ctrl",
+            "delete":"Slet",
+            "none":"Ingen",
+            "shift":"Flytte"
+        },
+        "settings":{
+            "clickTimeout":"Timeout for at skelne mellem dobbeltklik og tredobbelt klik (ms)",
+            "deferDoubleClickForTriple":"Forsinket dobbeltklik for at tillade tredobbeltklik-handlinger (deaktiverer tredobbeltklik, når de er slået fra)",
+            "disableInDms":"Deaktiver alle klikhandlinger i direkte beskeder",
+            "disableInSystemDms":"Deaktiver alle klikhandlinger i system DM'er",
+            "doubleClickAction":"Handling ved dobbeltklik (dine beskeder)",
+            "doubleClickHoldThreshold":"Maks. holdetid for dobbeltklikhandlinger (ms). Hold længere tillader tekstvalg",
+            "doubleClickModifier":"Modifikator påkrævet til dobbeltklikhandling",
+            "doubleClickOthersAction":"Handling ved dobbeltklik (andres beskeder)",
+            "quoteWithReply":"Når du citerer, skal du også svare på beskeden",
+            "reactEmoji":"Emoji til brug for reaktionshandlinger",
+            "selectionHoldTimeout":"Timeout for at tillade tekstvalg (ms)",
+            "singleClickAction":"Handling ved et enkelt klik (dine beskeder)",
+            "singleClickModifier":"Modifikator påkrævet for handling med et enkelt klik (dine beskeder)",
+            "singleClickOthersAction":"Handling ved et enkelt klik (andres beskeder)",
+            "singleClickOthersModifier":"Modifikator påkrævet til handling med et enkelt klik (andres beskeder)",
+            "tripleClickAction":"Handling ved tredobbelt-klik",
+            "tripleClickModifier":"Modifikator påkrævet for tredobbelt-klik handling",
+            "useSelectionForQuote":"Når du citerer, skal du bruge valgt tekst, hvis den er tilgængelig"
+        },
+        "toasts":{
+            "cannotPin":"Kan ikke fastgøre: Manglende tilladelser",
+            "cannotQuote":"Kan ikke citere denne meddelelsestype",
+            "cannotReact":"Kan ikke reagere: Manglende tilladelser"
+        },
+        "ui":{
+            "linkCopied":"Linket er kopieret!",
+            "messageContentCopied":"Beskedens indhold er kopieret!",
+            "messageIdCopied":"Besked-id kopieret!",
+            "userIdCopied":"Bruger-id kopieret!"
+        }
+    },
+    "messageDecorationsAPI":{
+        "description":"API for at tilføje dekorationer til beskeder"
+    },
+    "messageEventsAPI":{
+        "description":"API kræves af alt ved hjælp af meddelelsesbegivenheder"
     },
     "messageLatency":{
         "clockAhead":"Denne brugers ur er {delta} foran.",
@@ -649,6 +1010,50 @@
         },
         "toggleDeletedHighlight":"Slå slettet fremhævning til/fra"
     },
+    "messagePopoverAPI":{
+        "description":"API for at tilføje knapper til popover-beskeder"
+    },
+    "messageTags":{
+        "commands":{
+            "create":"Opret et nyt tag",
+            "delete":"Fjern et tag fra dig selv",
+            "list":"Liste over alle tags fra dig selv",
+            "message":"Beskeden, du vil sende, når du bruger dette tag",
+            "preview":"Se forhåndsvisning af et tag uden at sende det offentligt",
+            "tagName":"Navnet på tagget, der udløser svaret",
+            "tags":"Administrer alle tags for dig selv"
+        },
+        "description":"Giver dig mulighed for at gemme beskeder og bruge dem med en simpel kommando.",
+        "settings":{
+            "clydeDescription":"Hvis aktiveret, vil clyde sende dig en kortvarig besked, når et tag blev brugt.",
+            "clydeName":"Clyde besked ved afsendelse"
+        },
+        "ui":{
+            "allTags":"Alle tags:",
+            "invalidSubCommand":"Ugyldig underkommando",
+            "noTagsYet":"Ups! Der er ingen tags endnu, brug `/tags create` til at oprette et!",
+            "tagAlreadyExists":"Et tag med navnet **{name}** findes allerede!",
+            "tagCreated":"Taget **{name}** er oprettet med succes!",
+            "tagDeleted":"Taget **{name}** blev slettet!",
+            "tagDoesNotExist":"Tagget **{name}** eksisterer ikke længere! Genindlæs din Discord for at rette :)",
+            "tagDoesNotExist2":"Et tag med navnet **{name}** eksisterer ikke!",
+            "tagSent":"Tagget **{name}** er blevet sendt!"
+        }
+    },
+    "messageUpdaterAPI":{
+        "description":"API til opdatering og gengivelse af meddelelser"
+    },
+    "moreQuickReactions":{
+        "description":"Forbedrer hurtigreaktionsknapperne i meddelelseskontekstmenuen.",
+        "settings":{
+            "columns":"Kolonner med hurtige reaktioner til visning",
+            "compactMode":"Skalerer knapperne til 75 % af deres oprindelige skala, mens den indre emoji øges til 125 % skala. Emojis vil være 93,75 % af den originale størrelse. Det anbefales at have minimum 5 kolonner",
+            "frequentEmojis":"Brug ofte brugte emojis i stedet for foretrukne emojis",
+            "reactionCount":"Antal reaktioner (0-42)",
+            "rows":"Rækker af hurtige reaktioner til visning",
+            "scroll":"Aktiver rulning af listen over emojis"
+        }
+    },
     "mutualGroupDMs":{
         "description":"Viser fælles gruppe-dms i profiler",
         "members_one":"{count} Medlem",
@@ -678,6 +1083,52 @@
             "voiceChannels":"Skjul navne i stemmekanaler automatisk"
         }
     },
+    "nicknameIconsAPI":{
+        "description":"API for at tilføje ikoner til kaldenavnet i profiler"
+    },
+    "noBlockedMessages":{
+        "description":"Skjul alle blokerede/ignorerede beskeder fra chat fuldstændigt.",
+        "settings":{
+            "allowAutoModMessages":"Tillad meddelelser sendt af AutoMod at omgå filtrering.",
+            "alsoHideIgnoredUsers":"Skjul også beskeder fra ignorerede brugere.",
+            "defaultHideUsers":"Hvis aktiveret, vil meddelelser fra blokerede brugere blive fuldstændig skjult, og alle meddelelser fra bruger-id'er på listen over tilsidesættelser vil blive skjult (standard [[PH0]]] adfærd) i stedet. Hvis deaktiveret, vil beskeder fra blokerede brugere blive skjult, og alle beskeder fra bruger-id'er på tilsidesættelseslisten vil i stedet blive fuldstændig skjult.",
+            "disableNotifications":"Skjul nye beskedmeddelelser for blokerede brugere. Altid sandt, hvis \"Standardskjul brugere\" er aktiveret nedenfor, og den bruger, der udløser meddelelsen, ikke er fritaget i \"Tilsidesæt brugere\".",
+            "hideBlockedUserReplies":"Skjul svar til blokerede brugere.",
+            "overrideUsers":"Kommasepareret liste over bruger-id'er, som vil blive skjult eller skjult i stedet for standardadfærden valgt ovenfor."
+        }
+    },
+    "noDeepLinks":{
+        "description":"Deaktiverer Discords dumme dybe link-funktion, som forsøger at tvinge dig til at bruge deres desktop-app"
+    },
+    "noDevtoolsWarning":{
+        "description":"Deaktiverer 'HOLD UP'-banneret i konsollen. Som en bivirkning forhindrer også Discord i at skjule dit token, hvilket forhindrer tilfældige logout."
+    },
+    "noF1":{
+        "description":"Deaktiver F1 hjælpebinding."
+    },
+    "noMaskedUrlPaste":{
+        "description":"Indsættelse af et link, mens du har valgt tekst, indsættes ikke som maskeret URL"
+    },
+    "noMosaic":{
+        "description":"Fjerner Discord billedmosaik",
+        "settings":{
+            "inlineVideo":"Afspil videoer uden karruselmodal"
+        }
+    },
+    "noOnboardingDelay":{
+        "description":"Springer den langsomme og irriterende onboarding-forsinkelse over"
+    },
+    "noPendingCount":{
+        "description":"Fjerner ping-antallet af indgående venneanmodninger, beskedanmodninger og nitro-tilbud.",
+        "settings":{
+            "hideFriendRequestsCount":"Skjul tæller for indgående venneanmodninger",
+            "hideMessageRequestsCount":"Skjul antal meddelelsesanmodninger",
+            "hidePremiumOffersCount":"Skjul nitro tilbud tæller"
+        }
+    },
+    "noProfileThemes":{
+        "description":"Fjerner fuldstændigt Nitro-profiltemaer fra alle andre end dig selv"
+    },
     "noReplyMention":{
         "description":"Deaktiverer som standard svarpings",
         "settings":{
@@ -687,6 +1138,64 @@
             "roleList":"Liste over roller, der skal tillades eller fritages ping for (adskilt af kommaer eller mellemrum)",
             "shouldPingListed":"Opførsel",
             "userList":"Liste over brugere at tillade eller fritage ping for (adskilt af kommaer eller mellemrum)"
+        }
+    },
+    "noServerEmojis":{
+        "description":"Vis ikke server-emojis i autofuldførelsesmenuen.",
+        "settings":{
+            "shownEmojis":"De typer emojis, der skal vises i autofuldførelsesmenuen.",
+            "shownEmojisOptions":{
+                "all":"Unicode-emojis og alle server-emojis (Discord standard)",
+                "currentServer":"Unicode-emojis og server-emojis fra den nuværende server",
+                "onlyUnicode":"Kun unicode-emojis"
+            }
+        }
+    },
+    "noSystemBadge":{
+        "description":"Deaktiverer proceslinjen og systembakkens ulæste tællermærke."
+    },
+    "noTypingAnimation":{
+        "description":"Deaktiverer den CPU-intensive indtastningspunktanimation"
+    },
+    "noUnblockToJump":{
+        "description":"Giver dig mulighed for at hoppe til beskeder fra blokerede eller ignorerede brugere og sandsynligvis spammere uden at fjerne blokeringen af dem"
+    },
+    "noticesAPI":{
+        "description":"Retter meddelelser, der automatisk afvises"
+    },
+    "notificationVolume":{
+        "description":"Gem dine ører, og indstil en separat lydstyrke for notifikationer og lyde i appen",
+        "settings":{
+            "notificationVolume":"Notifikationsvolumen"
+        }
+    },
+    "onePingPerDM":{
+        "description":"Hvis ulæste beskeder sendes af en bruger i DM'er flere gange, vil du kun modtage ét lyd-ping.",
+        "settings":{
+            "allowEveryone":"Modtag lydpings for @everyone og @here i gruppe DM'er",
+            "allowMentions":"Modtag lydpings for @omtaler",
+            "alwaysPlaySound":"Afspil beskedens lyd, selv når den er deaktiveret",
+            "channelToAffect":"Vælg den type DM, som plugin'et skal påvirke",
+            "channelToAffectOptions":{
+                "both":"Begge",
+                "groupDm":"Group DM'er",
+                "userDm":"Bruger DM'er"
+            },
+            "ignoreUsers":"Bruger-id'er (komma + mellemrum), hvis ping ALDRIG bør begrænses"
+        }
+    },
+    "openInApp":{
+        "description":"Åbn links i deres respektive apps i stedet for din browser",
+        "settings":{
+            "epic":"Åbn Epic Games-links i Epic Games Launcher",
+            "itunes":"Åbn Apple Music-links i iTunes-appen",
+            "spotify":"Åbn Spotify-links i Spotify-appen",
+            "steam":"Åbn Steam-links i Steam-appen",
+            "tidal":"Åbn Tidal-links i Tidal-appen",
+            "vrcx":"Åbn VRChat-links i VRCX-appen"
+        },
+        "ui":{
+            "openedInApp":"Åbnet link i native app"
         }
     },
     "overrideForumDefaults":{
@@ -710,6 +1219,13 @@
         "name":"PauseInviter for evigt",
         "pauseIndefinitely":"Pause på ubestemt tid."
     },
+    "permissionFreeWill":{
+        "description":"Deaktiverer begrænsningerne på klientsiden for administration af kanaltilladelser.",
+        "settings":{
+            "lockout":"Omgå tilladelseslåseforhindring (\"ret sikker på, at du ikke vil gøre dette\")",
+            "onboarding":"Omgå onboarding-kravene (\"Hvis du laver denne ændring, bliver din server inkompatibel [...]\")"
+        }
+    },
     "permissionsViewer":{
         "noPermissions":"Ingen tilladelser til at vise!",
         "owner":"ejer",
@@ -725,6 +1241,29 @@
         "unknownUser":"Ukendt bruger",
         "userOptions":"Brugerindstillinger",
         "viewPermissions":"Se tilladelser"
+    },
+    "petpet":{
+        "commands":{
+            "petpet":{
+                "description":"Opret en petpet-gif. Du kan kun angive en af billedindstillingerne",
+                "name":"kæledyr",
+                "options":{
+                    "delay":"Forsinkelsen mellem hvert billede i ms. Afrundet til nærmeste 10ms. Som standard er minimumsværdien 20.",
+                    "image":"Billedvedhæftning til brug",
+                    "noServerPfp":"Brug den normale avatar i stedet for den serverspecifikke, når du bruger indstillingen 'bruger'",
+                    "resolution":"Opløsning til gif. Standard er 120. Hvis du indtaster et vanvittigt tal, og det fryser Discord, er det din skyld.",
+                    "url":"URL at hente billede fra",
+                    "user":"Bruger, hvis avatar skal bruges som billede"
+                }
+            }
+        },
+        "description":"Tilføjer en /petpet skråstreg-kommando for at skabe headpet-gifs fra ethvert billede",
+        "errors":{
+            "delayMinimum":"Forsinkelsen skal være mindst 20.",
+            "failedToFetchUser":"Brugeren kunne ikke hentes. Tjek konsollen for mere information.",
+            "noImage":"Intet billede angivet!",
+            "uploadNotImage":"Upload er ikke et billede"
+        }
     },
     "pictureInPicture":{
         "description":"Tilføjer billede i billede til videoer (ved siden af knappen Download)",
@@ -755,6 +1294,9 @@
             "pinOrder":"Hvilken rækkefølge skal fastgjorte DM'er vises i?"
         },
         "unpinDm":"Løsn DM"
+    },
+    "plainFolderIcon":{
+        "description":"Vis ikke de små guild-ikoner i mapper"
     },
     "platformIndicators":{
         "consoleIcons":{
@@ -795,15 +1337,36 @@
         "description":"Tilføjer en hurtig omtale-knap til meddelelseshandlingslinjen",
         "label":"Hurtig omtale"
     },
+    "quickReply":{
+        "description":"Besvar (ctrl + op/ned) og rediger (ctrl + shift + op/ned) beskeder via tastebindinger",
+        "settings":{
+            "ignoreBlockedAndIgnored":"Ignorer beskeder fra blokerede/ignorerede brugere, når de navigerer",
+            "shouldMention":"Ping-svar som standard",
+            "shouldMentionOptions":{
+                "disabled":"Deaktiveret",
+                "enabled":"Aktiveret",
+                "followPlugin":"Følg NoReplyMention plugin (hvis aktiveret)"
+            }
+        }
+    },
+    "reactErrorDecoder":{
+        "description":"Erstatter \"Minifed React Error\" med den faktiske fejl."
+    },
     "readAllNotificationsButton":{
         "description":"Læs alle servermeddelelser med et enkelt klik på en knap!",
         "name":"ReadAllNotifications Button",
         "readAll":"Læs alle"
     },
     "relationshipNotifier":{
+        "description":"Giver dig besked, når en ven, gruppechat eller server fjerner dig.",
         "friendRemoved":"{username} fjernede dig som ven.",
         "friendRequestRemoved":"En venneanmodning fra {username} er blevet fjernet.",
         "groupRemoved":"Du blev fjernet fra gruppen {name}.",
+        "notificationTitle":"Relationsanmelder",
+        "offlineFriendRemoved":"Du er ikke længere venner med {username}.",
+        "offlineFriendRequestRevoked":"Venneanmodning fra {username} er blevet tilbagekaldt.",
+        "offlineGroupRemoved":"Du er ikke længere i gruppen {name}.",
+        "offlineServerRemoved":"Du er ikke længere på serveren {name}.",
         "serverRemoved":"Du blev fjernet fra serveren {name}.",
         "settings":{
             "friendRequestCancels":"Giv besked, når en venneanmodning er annulleret",
@@ -825,6 +1388,12 @@
             "off":"Slukket",
             "replacementEngine":"Erstat med en bestemt søgemaskine i stedet for at tilføje en menu"
         }
+    },
+    "replyTimestamp":{
+        "description":"Viser et tidsstempel på forhåndsvisninger af besvarede beskeder"
+    },
+    "revealAllSpoilers":{
+        "description":"Afslør alle spoilere i en besked ved at Ctrl-klikke på en spoiler, eller i chatten med Ctrl+Shift-klik"
     },
     "reverseImageSearch":{
         "all":"Alle",
@@ -876,6 +1445,24 @@
         "unblockUser":"Fjern blokering af bruger",
         "viewReviews":"Se anmeldelser"
     },
+    "roleColorEverywhere":{
+        "description":"Tilføjer den øverste rollefarve hvor som helst det er muligt",
+        "settings":{
+            "chatMentions":"Vis rollefarver i chatomtaler (inklusive i beskedboksen)",
+            "colorChatMessages":"Farvechatbeskeder baseret på forfatterens rollefarve",
+            "memberList":"Vis rollefarver i medlemslistens rolleoverskrifter",
+            "messageSaturation":"Intensiteten af beskedfarvning.",
+            "pollResults":"Vis rollefarver i afstemningsresultaterne",
+            "reactorsList":"Vis rollefarver i reaktorlisten",
+            "voiceUsers":"Vis rollefarver i stemmechatbrugerlisten"
+        }
+    },
+    "secretRingTone":{
+        "description":"Spil altid den hemmelige version af discord-ringetonen (undtagen under særlige ringetonebegivenheder)",
+        "settings":{
+            "onlySnow":"Spil kun Snow Halation Theme"
+        }
+    },
     "seeSummaries":{
         "description":"Aktiverer Discords eksperimentelle oversigtsfunktion på hver server, der viser AI-genererede oversigter over samtaler",
         "name":"Resuméer",
@@ -898,6 +1485,36 @@
         },
         "timestampFormat":"Tidsstempelformat",
         "timestampPicker":"Tidsstempelvælger"
+    },
+    "serverInfo":{
+        "description":"Giver dig mulighed for at se information om en server",
+        "settings":{
+            "sorting":"Brugernavn eller hvis relevant Vist navn",
+            "sortingOptions":{
+                "displayname":"Vist navn",
+                "none":"Sorter ikke",
+                "username":"Brugernavn"
+            }
+        },
+        "ui":{
+            "blockedUsers":"Blokerede brugere",
+            "channels":"Kanaler",
+            "createdAt":"Oprettet kl",
+            "friends":"Venner",
+            "ignoredUsers":"Ignorerede brugere",
+            "joinedAt":"Tiltrådte kl",
+            "mutualUsers":"Gensidige brugere",
+            "preferredLocale":"Foretrukken lokalitet",
+            "roles":"Roller",
+            "serverBoosts":"Server booster",
+            "serverInfo":"Server info",
+            "serverOwner":"Ejer af server",
+            "vanityLink":"Vanity Link",
+            "verificationLevel":"Verifikationsniveau"
+        }
+    },
+    "serverListAPI":{
+        "description":"API påkrævet for plugins, der ændrer serverlisten"
     },
     "serverListIndicators":{
         "description":"Tilføj online-vennetal eller serverantal i serverlisten",
@@ -1038,6 +1655,34 @@
         "failedToImport":"Kunne ikke importere indstillinger: {e}",
         "imported":"Indstillinger blev importeret. Genstart for at anvende ændringer!"
     },
+    "shikiCodeblocks":{
+        "description":"Bringer kodeblokke i vscode-stil til Discord, drevet af Shiki",
+        "settings":{
+            "bgOpacity":"Baggrundens uigennemsigtighed",
+            "customTheme":"Et link til et brugerdefineret vscode-tema",
+            "theme":"Standard temaer",
+            "tryHljs":"Brug den mere lette standard Discord highlighter og tema.",
+            "tryHljsOptions":{
+                "always":"Altid",
+                "never":"Aldrig",
+                "preferHljs":"Foretrækker Highlight.js i stedet for Shiki",
+                "preferShiki":"Foretrækker Shiki i stedet for Highlight.js"
+            },
+            "useDevIcon":"Sådan viser du sprogikoner på kodeblokke",
+            "useDevIconOptions":{
+                "colored":"Farvet",
+                "colorless":"Farveløs",
+                "disabled":"Deaktiveret"
+            }
+        }
+    },
+    "showAllMessageButtons":{
+        "description":"Vis altid alle beskedknapper, uanset om du holder shift-tasten nede eller ej.",
+        "settings":{
+            "noShiftDelete":"Fjern kravet om at holde skift for at slette en besked.",
+            "noShiftPin":"Fjern kravet om at holde shift for at fastgøre en besked."
+        }
+    },
     "showConnections":{
         "description":"Vis forbundne konti i bruger-popouts",
         "settings":{
@@ -1057,21 +1702,27 @@
         "channelTypes":{
             "announcement":"bekendtgørelse",
             "forum":"forum",
+            "message":"besked",
             "messages":"beskeder",
+            "post":"stolpe",
             "posts":"indlæg",
             "stage":"etape",
             "text":"tekst",
+            "thread":"tråd",
+            "threads":"tråde",
             "voice":"stemme"
         },
         "defaultLayout":"Standardlayout: {layout}",
         "defaultReactionEmoji":"Standard reaktion emoji:",
         "defaultSortOrder":"Standard sorteringsrækkefølge: {order}",
+        "description":"Vis kanaler, som du ikke har adgang til at se.",
         "forumLayouts":{
             "gridView":"Gallerivisning",
             "listView":"Listevisning",
             "notSet":"Ikke indstillet"
         },
         "hiddenChannel":"Dette er en skjult {type} kanal",
+        "hiddenChannelTooltip":"Skjult kanal",
         "hideAllowedUsersAndRoles":"Skjul tilladte brugere og roller",
         "lastMessageCreated":"Sidst {type} oprettet:",
         "lastMessagePin":"Pin til sidste besked:",
@@ -1082,6 +1733,24 @@
         "regionAutomatic":"Automatisk",
         "requireTag":"Indlæg på dette forum kræver et tag for at blive sat.",
         "seeGuidelines":" Du kan dog se dens retningslinjer:",
+        "settings":{
+            "channelStyle":{
+                "classic":"Klassisk",
+                "description":"Den stil, der bruges til at vise skjulte kanaler.",
+                "muted":"Gjort stum",
+                "mutedAndShowUnreads":"Slået fra og vis ulæste",
+                "showUnreads":"Vis ulæste"
+            },
+            "defaultAllowedUsersAndRolesDropdownState":{
+                "description":"Om rullemenuen for tilladte brugere og roller på skjulte kanaler skal være åben som standard"
+            },
+            "showMode":{
+                "description":"Den tilstand, der bruges til at vise skjulte kanaler.",
+                "eyeIconRight":"Øjeikon til højre",
+                "lockIcon":"Låseikon erstatter kanalikon",
+                "lockIconRight":"Låseikon til højre"
+            }
+        },
         "slowmode":"Slowmode: {duration}",
         "sortOrders":{
             "creationDate":"Oprettelsesdato",
@@ -1094,6 +1763,14 @@
         },
         "videoQualityMode":"Videokvalitetstilstand: {mode}",
         "viewAllowedUsersAndRoles":"Se tilladte brugere og roller"
+    },
+    "showHiddenThings":{
+        "description":"Viser forskellige skjulte og kun moderatorer uanset tilladelser.",
+        "settings":{
+            "showInvitesPaused":"Vis værktøjstip for invitationer, der er sat på pause på serverlisten.",
+            "showModView":"Vis kontekstmenupunktet medlemsmodvisning på alle servere.",
+            "showTimeouts":"Vis timeout-ikoner for medlemmer i chat."
+        }
     },
     "showMeYourName":{
         "addNickname":"Tilføj SMYN kaldenavn",
@@ -1199,9 +1876,39 @@
             "showDates":"Vis datoer på venneanmodninger"
         }
     },
+    "spotifyCrack":{
+        "description":"Lyt gratis med, ingen automatisk pause i stemmechat og tillader aktivitet at fortsætte med at spille i tomgang",
+        "settings":{
+            "keepSpotifyActivityOnIdle":"Fortsæt med at spille Spotify-aktivitet i tomgang",
+            "noSpotifyAutoPause":"Deaktiver Spotify auto-pause"
+        }
+    },
+    "spotifyShareCommands":{
+        "commands":{
+            "notListening":"Du lytter ikke til noget musik.",
+            "shareDescription":"Del din nuværende Spotify {name} i chatten",
+            "trackNotFound":"Det lykkedes ikke at finde nummeret på spotify."
+        },
+        "description":"Del dit aktuelle Spotify-nummer, album eller kunstner via skråstreg-kommando (/track, /album, /artist)"
+    },
     "startupTimings":{
+        "description":"Tilføjer starttidspunkter til menuen Indstillinger",
         "ui":{
             "title":"Starttidspunkt"
+        }
+    },
+    "stickerPaste":{
+        "description":"Får valg af et klistermærke i klistermærkevælgeren til at indsætte det i chatboksen i stedet for at sende det med det samme"
+    },
+    "streamerModeOnStream":{
+        "description":"Aktiverer automatisk streamertilstand, når du begynder at streame i Discord"
+    },
+    "superReactionTweaks":{
+        "description":"Tilpas grænsen for superreaktioner, der spiller på én gang, og superreager som standard",
+        "settings":{
+            "superReactByDefault":"Reaktionsvælgeren vil som standard være Superreaktioner",
+            "superReactionPlayingLimit":"Max superreaktioner at spille på én gang. 0 for at deaktivere afspilning af Super Reactions",
+            "unlimitedSuperReactionPlaying":"Fjern grænsen for Super Reactions afspilning på én gang"
         }
     },
     "tabs":{
@@ -1219,6 +1926,9 @@
         "typeMessage":"Skriv en besked",
         "usingRegex":"Brug af Regex",
         "usingString":"Brug af streng"
+    },
+    "themeAttributes":{
+        "description":"Tilføjer dataattributter til forskellige elementer til tematiske formål"
     },
     "translate":{
         "autoTranslate":"Auto Oversæt",
@@ -1258,10 +1968,33 @@
             "showRoleColors":"Vis rollefarver i indtastningsindikatoren"
         }
     },
+    "unindent":{
+        "description":"Trimmer førende indrykning fra kodeblokke"
+    },
+    "unlockedAvatarZoom":{
+        "description":"Giver dig mulighed for at zoome yderligere ind i billedbeskæringsværktøjet, når du ændrer din avatar",
+        "settings":{
+            "zoomMultiplier":"Zoom multiplikator"
+        }
+    },
     "unsuppressEmbeds":{
         "description":"Giver dig mulighed for at fjerne indlejringer i beskeder",
         "suppressEmbeds":"Undertryk indlejringer",
         "unsuppressEmbeds":"Fjern indlejringer"
+    },
+    "userMessagesPronouns":{
+        "description":"Tilføjer pronominer til chatbrugerbeskeder",
+        "settings":{
+            "pronounsFormat":"Formatet for pronominer, der vises i chat",
+            "pronounsFormatOptions":{
+                "capitalized":"Med store bogstaver",
+                "lowercase":"Små bogstaver"
+            },
+            "showSelf":"Aktiver eller deaktiver visning af pronominer for dig selv"
+        }
+    },
+    "userSettingsAPI":{
+        "description":"Patcher Discords brugerindstillinger for at afsløre deres gruppe og navn"
     },
     "userVoiceShow":{
         "cannotJoinChannel":"Du kan ikke tilmelde dig brugerens stemmekanal",
@@ -1282,6 +2015,15 @@
             "usrbgBanner":"USBG banner",
             "voiceBackground":"Brug USBG-bannere som baggrund for stemmechat"
         }
+    },
+    "validReply":{
+        "description":"Retter \"Meddelelsen kunne ikke indlæses\" ved at holde markøren over svaret"
+    },
+    "validUser":{
+        "description":"Ret omtaler for ukendte brugere, der vises som '@ukendt-bruger' (svæv over en omtale for at rette det)"
+    },
+    "vcDoubleClick":{
+        "description":"Deltag i stemmechat via dobbeltklik i stedet for enkeltklik"
     },
     "vcNarrator":{
         "customiseMessages":"Du kan tilpasse de talte beskeder nedenfor. Du kan deaktivere bestemte meddelelser ved at indstille dem til ingenting",
@@ -1362,6 +2104,24 @@
         "sending":"Sender nu talebesked... Vær tålmodig",
         "uploadFile":"Upload fil"
     },
+    "volumeBooster":{
+        "description":"Giver dig mulighed for at indstille bruger- og streamlydstyrken over standardmaksimum",
+        "settings":{
+            "multiplier":"Volumen multiplikator"
+        }
+    },
+    "webContextMenus":{
+        "description":"Gentilføjer kontekstmenuer, der mangler i webversionen af Discord: Links og billeder (Kopier/Åbn link/billede), Tekst er (Kopier, Klip, Indsæt, Stavekontrol)",
+        "settings":{
+            "addBack":"Tilføj tilbage [[PH0]]] kontekstmenuerne for billeder, links og chatinputlinjen"
+        }
+    },
+    "webKeybinds":{
+        "description":"Gentilføjer nøglebindinger, der mangler i webversionen af Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. Virker kun fuldt ud på Vesktop/Legcord, ikke i din browser"
+    },
+    "webScreenShareFixes":{
+        "description":"Fjerner 2500 kbps bitrate cap på chrom- og vesktop-klienter."
+    },
     "whoReacted":{
         "settings":{
             "avatarClick":"Skift klikke på avatarer i reaktioner"
@@ -1395,5 +2155,8 @@
         "timeout":"Underretningsvarighed (sekunder)",
         "volume":"Lydstyrke",
         "webSocketPort":"Websocket port"
+    },
+    "youtubeAdblock":{
+        "description":"Bloker annoncer i YouTube-indlejringer og WatchTogether-aktiviteten via AdGuard"
     }
 }
