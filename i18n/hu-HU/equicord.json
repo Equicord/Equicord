@@ -86,6 +86,23 @@
             "tooltipRight":"Base64 dekódolása (bal kattintás) / Dekódolt másolás (jobb kattintás)"
         }
     },
+    "betterActivities":{
+        "description":"Megjeleníti az összes tevékenységet a taglistában és a felhasználói előugró ablakban, a megjelenítés testreszabási lehetőségeivel",
+        "options":{
+            "carousel":"Körhinta",
+            "list":"Lista"
+        },
+        "settings":{
+            "allActivitiesStyle":"Stílus az összes tevékenység megjelenítéséhez",
+            "hideTooltip":"Az eszköztipp elrejtése a tevékenységikonokon",
+            "iconSize":"A tevékenységikonok mérete",
+            "memberList":"Tevékenységek megjelenítése a taglistában",
+            "removeGameActivityStatus":"Távolítsa el a játéktevékenység állapotjelzőjét",
+            "renderGifs":"GIF-ek megjelenítése a tevékenységikonokban",
+            "specialFirst":"Először mutasson speciális tevékenységeket",
+            "userPopout":"Az összes tevékenység megjelenítése a felhasználói előugró ablakban"
+        }
+    },
     "betterAudioPlayer":{
         "description":"Spektrográfot és oszcilloszkópos megjelenítőt ad az audiomelléklet-lejátszókhoz",
         "settings":{
@@ -1258,6 +1275,57 @@
             "scanQrCode":"QR-kód beolvasása"
         }
     },
+    "mediaPlaybackSpeed":{
+        "description":"Szabályozza a hangüzenetek, videók és hangmellékletek médialejátszási sebességét",
+        "settings":{
+            "defaultAudioSpeed":"Az audiofájlok alapértelmezett lejátszási sebessége",
+            "defaultVideoSpeed":"Videók alapértelmezett lejátszási sebessége",
+            "defaultVoiceMessageSpeed":"A hangüzenetek alapértelmezett lejátszási sebessége"
+        }
+    },
+    "messageBurst":{
+        "description":"Üzeneteket küldhet sorozatokban az egymást követő üzenetek egy időtartamon belüli összevonásával",
+        "settings":{
+            "shouldMergeWithAttachment":"Engedélyezze az üzenetek és a mellékletek egyesítését",
+            "timePeriod":"Az üzenetek egyesítésének időtartama másodpercben",
+            "useSpace":"Használjon szóközt az újsor helyett elválasztóként"
+        }
+    },
+    "messageColors":{
+        "description":"Színkódok (hex, rgb, hsl) megjelenítése az üzenetekben színes előnézettel",
+        "settings":{
+            "blockView":"A színblokk helyzete",
+            "blockViewOptions":{
+                "bothSides":"A szöveg mindkét oldala",
+                "leftSide":"A szöveg bal oldala",
+                "rightSide":"A szöveg jobb oldala"
+            },
+            "enableShortHexCodes":"Rövid hexadecimális színkódok engedélyezése (3 karakter)",
+            "renderType":"Hogyan lehet színeket megjeleníteni az üzenetekben",
+            "renderTypeOptions":{
+                "backgroundColor":"Háttérszín módosítása",
+                "blockNearby":"Színblokk megjelenítése",
+                "textColor":"A szöveg színének módosítása"
+            }
+        }
+    },
+    "messageFetchTimer":{
+        "description":"Üzenetlekérési idők megjelenítése a csevegősávon",
+        "settings":{
+            "iconColor":"A lekérési időzítő ikon színe",
+            "showIcon":"Mutassa meg a lekérési időzítő ikont",
+            "showMs":"Ezredmásodpercek megjelenítése másodpercek helyett"
+        }
+    },
+    "messageLinkTooltip":{
+        "description":"Üzenetek előnézetének megjelenítése, amikor az egérmutatót az üzenethivatkozások, válaszok és továbbított üzenetek fölé viszi",
+        "settings":{
+            "display":"Megjelenítési stílus az üzenet előnézetéhez",
+            "onForward":"Elemleírás megjelenítése, amikor az egérmutatót a továbbított üzenetek fölé viszi",
+            "onLink":"Elemleírás megjelenítése, amikor az egérmutatót az üzenetlinkek fölé viszi",
+            "onReply":"Elemleírás megjelenítése, ha az üzenetre adott válaszok fölé viszi az egérmutatót"
+        }
+    },
     "messageLoggerEnhanced":{
         "buttons":{
             "exportLogs":"Naplók exportálása",
@@ -1326,5 +1394,968 @@
             "timeBasedCleanupMinutes":"Automatikusan távolítsa el az üzeneteket a szerverekről, amelyek régebbiek ennél a percnél. Állítsa 0-ra az időalapú tisztítás letiltásához.",
             "whitelistedIds":"Engedélyezőlistán szereplő szerver-, csatorna- vagy felhasználói azonosítók."
         }
+    },
+    "messageNotifier":{
+        "description":"Értesítést kaphat, ha bizonyos felhasználók üzeneteket küldenek",
+        "settings":{
+            "users":"Felhasználói azonosítók, amelyekről értesítéseket kapni (vesszővel elválasztva)"
+        }
+    },
+    "messagePeek":{
+        "description":"Tekintse meg az utolsó üzenetet a DM-csatornákon anélkül, hogy megnyitná azokat"
+    },
+    "messageTranslate":{
+        "description":"Üzenetek automatikus fordítása a kívánt nyelvre",
+        "settings":{
+            "confidenceRequirement":"Minimális megbízhatósági szint a fordításhoz (0-1)",
+            "targetLanguage":"Fordítás célnyelve (pl. en, es, fr)"
+        }
+    },
+    "micLoopbackTester":{
+        "description":"Tesztelje mikrofonját a felhasználói területen található visszacsatolás gombbal"
+    },
+    "middleClickTweaks":{
+        "settings":{
+            "always":"Mindig akadályozza meg a középső kattintással történő beillesztést",
+            "both":"Linkek és média",
+            "focus":"Csak akkor akadályozza meg, ha a szövegterület nincs fókuszban",
+            "media":"Média",
+            "openScope":"Akadályozza meg, hogy középső kattintással ezekre a tartalomtípusokra nyíljanak meg.",
+            "pasteScope":"Akadályozza meg a középső kattintás beillesztését ilyen helyzetekben.",
+            "pasteThreshold":"Ezredmásodperc, amíg a beillesztés ismét engedélyezve lesz egy középső kattintás után."
+        }
+    },
+    "moreCommands":{
+        "description":"További perjel parancsok, beleértve a rendszerinformációkat, a kockadobást, az érmefeldobást és egyebeket",
+        "settings":{
+            "addFreakyEnding":"Adja hozzá a 👅 vagy ❤️ karaktert a freaky parancs végéhez",
+            "uwuEveryMessage":"Minden egyes üzenetet uwuified",
+            "uwuEverything":"Az összes szöveget uwuable-ra teszi – nagyon rossz ötlet"
+        }
+    },
+    "moreKaomoji":{
+        "description":"További kaomoji perjel parancsok az érzelmek kifejezésére"
+    },
+    "moreStickers":{
+        "description":"Adjon hozzá további matricacsomagokat külső forrásokból",
+        "settings":{
+            "packs":"Matricacsomagok kezelése",
+            "promptToUpload":"Kérdezzen matricák feltöltése előtt"
+        }
+    },
+    "moreUserTags":{
+        "description":"További felhasználói címkék megjelenítése az engedélyek és szerepkörök alapján",
+        "settings":{
+            "dontShowBotTag":"Az alapértelmezett BOT címke elrejtése",
+            "dontShowForBots":"Ne jelenítsen meg címkéket a bot-felhasználók számára",
+            "showWebhookTagFully":"A webhook-címkék teljes megjelenítése",
+            "tagSettings":"Konfigurálja az egyéni címkebeállításokat"
+        }
+    },
+    "moyai":{
+        "description":"Játssza le a moyai hangeffektust, ha 🗿 emojit használ",
+        "settings":{
+            "ignoreBlocked":"Figyelmen kívül hagyja a blokkolt felhasználók üzeneteit",
+            "ignoreBots":"Figyelmen kívül hagyja a robotoktól érkező üzeneteket",
+            "quality":"A moyai hang minősége",
+            "qualityOptions":{
+                "hd":"HD",
+                "normal":"Normál"
+            },
+            "triggerWhenUnfocused":"Trigger hang akkor is, ha az ablak nincs fókuszban",
+            "volume":"A moyai hang hangereje"
+        }
+    },
+    "musicControls":{
+        "description":"A Spotify, a Tidal és a YouTube Music zenelejátszó vezérlőinek megjelenítése",
+        "settings":{
+            "FallbackProvider":"Használjon tartalék szolgáltatót, ha az elsődleges meghibásodik",
+            "LyricDelay":"Lyric késleltetés offset",
+            "LyricsConversion":"Automatikus fordítás romanizált dalszövegekre",
+            "LyricsPosition":"A dalszöveg helyzete a játékoshoz képest",
+            "LyricsProvider":"A dalszöveg forrása",
+            "ShowFailedToasts":"Hibajelzések megjelenítése, ha a dalszöveg betöltése sikertelen",
+            "TranslateTo":"Dalszöveg fordítása nyelvre",
+            "YoutubeMusicApiUrl":"Egyéni YouTube Music API URL",
+            "hoverControls":"A vezérlők megjelenítése csak az egérmutatóval",
+            "previousButtonRestartsTrack":"A műsorszám újraindítása az előző gomb megnyomásával",
+            "showSpotifyControls":"Spotify vezérlők megjelenítése",
+            "showSpotifyLyrics":"Spotify dalszöveg megjelenítése",
+            "showTidalControls":"Árapály-vezérlők megjelenítése",
+            "showTidalLyrics":"Mutasd Tidal dalszövegeket",
+            "showYoutubeMusicControls":"YouTube Music vezérlők megjelenítése",
+            "useSpotifyUris":"Nyissa meg a Spotify URI-kat az URL-ek helyett"
+        }
+    },
+    "neverPausePreviews":{
+        "description":"Soha ne szüneteltesse a videó előnézetét csatornaváltáskor vagy élességtelenítéskor",
+        "warning":"Ez növelheti az erőforrás- és adatfelhasználást"
+    },
+    "newPluginsManager":{
+        "description":"Kezelje és fedezze fel az új beépülő modulokat a bővítménykezelővel"
+    },
+    "noAppsAllowed":{
+        "description":"Letiltja az alkalmazások/kategóriák megjelenését az alkalmazásindítóban"
+    },
+    "noBulletPoints":{
+        "description":"Távolítsa el a felsorolásjeleket az üzenetekből a kihagyással"
+    },
+    "noModalAnimation":{
+        "description":"A gyorsabb UI interakciók érdekében tiltsa le a modális animációkat"
+    },
+    "noNitroUpsell":{
+        "description":"A prémium típus felülbírálásával eltávolítja a Nitro felárakat"
+    },
+    "noRPC":{
+        "description":"Letiltja Discord Rich Presence (RPC) funkcióját"
+    },
+    "partyMode":{
+        "description":"Engedélyezze a party mód effektusait konfettivel és képernyőrázással",
+        "settings":{
+            "intensityOptions":{
+                "better":"Jobb - Több konfetti",
+                "normal":"Normál – Finom hatások",
+                "projectX":"X projekt – Maximális intenzitás"
+            },
+            "superIntensePartyMode":"Party mód intenzitási szintje"
+        }
+    },
+    "pinIcon":{
+        "description":"Pin ikont ad a rögzített üzenetekhez"
+    },
+    "pingNotifications":{
+        "description":"Egyéni értesítési beállítások a pingekhez, DM-ekhez és baráti üzenetekhez",
+        "settings":{
+            "dms":"Értesítés DM és csoportos DM üzenetekről",
+            "friends":"Értesítés, ha barátok üzeneteket küldenek a szervereken",
+            "ignoreMuted":"Figyelmen kívül hagyja a némított csatornákat, céheket és letiltott felhasználókat",
+            "mentions":"Értesítés, ha megemlítik (@felhasználónév)",
+            "showInActive":"Értesítések megjelenítése akkor is, ha a csatorna aktív"
+        }
+    },
+    "platformSpoofer":{
+        "description":"A platform állapotának meghamisítása (mobil, asztali számítógép, web, konzol)",
+        "settings":{
+            "platform":"Platform a hamisításhoz",
+            "platformOptions":{
+                "android":"Android",
+                "desktop":"Asztali (Discord kliens)",
+                "ios":"iOS",
+                "playstation":"PlayStation",
+                "web":"Web (Discord Web)",
+                "xbox":"Xbox"
+            }
+        },
+        "warning":"A platform módosítása hatással lehet bizonyos funkciókra, és arra, hogy mások hogyan látják az Ön állapotát."
+    },
+    "polishWording":{
+        "description":"Automatikusan javítja az üzenet szövegét jobb nyelvtani, nagybetűs és írásjelekkel",
+        "settings":{
+            "blockedWords":"A kis- és nagybetűs írásmódjavításokból kizárandó szavak vesszővel elválasztott listája",
+            "expandContractions":"Az összehúzódások kiterjesztése (pl. „ne” → „nem”)",
+            "fixApostrophes":"Javítsa ki a hiányzó aposztrófokat az összehúzódásokban (pl. „ne” → „nem”)",
+            "fixCapitalization":"Javítsa ki a mondat nagybetűit",
+            "fixPunctuation":"Adjon pontokat a mondat végéhez",
+            "fixPunctuationFrequency":"Az automatikus hozzáadási időszakok gyakorisága (0-100%)",
+            "quickDisable":"Gyors tiltás – ideiglenesen letiltja az összes javítást"
+        }
+    },
+    "profileSets":{
+        "description":"Mentse és kezelje a profil testreszabási beállításait",
+        "settings":{
+            "avatarSize":"Avatar mérete az előre beállított kezelőben"
+        }
+    },
+    "questify":{
+        "buttonActions":{
+            "contextMenu":"Helyi menü megjelenítése",
+            "openQuests":"Nyissa meg a Küldetések oldalt",
+            "pluginSettings":"Nyissa meg a bővítmény beállításait"
+        },
+        "description":"Fokozza a Quest-élményt egy sor funkcióval, vagy teljesen tiltsa le őket, ha nem a te dolgod.",
+        "gradientOptions":{
+            "black":"Fekete",
+            "default":"Alapértelmezett",
+            "hide":"Elrejt",
+            "intense":"Erős"
+        },
+        "sortOptions":{
+            "claimedAsc":"Követelve (a legrégebbi elöl)",
+            "claimedDesc":"Követelve (a legújabbak előtt)",
+            "expiringAsc":"Lejár (leghamarabb)",
+            "expiringDesc":"Lejár (a legfrissebb először)",
+            "recentAsc":"Legutóbbi (a legrégebbi először)",
+            "recentDesc":"Legutóbbi (a legújabbak előtt)"
+        }
+    },
+    "questionMarkReplacement":{
+        "description":"Cserélje le a kérdőjeleket egyéni szövegre/emojira, ha az üzenet csak kérdőjeleket tartalmaz",
+        "settings":{
+            "replace":"Szöveg vagy hangulatjel a „?” helyett -vel"
+        }
+    },
+    "quickThemeSwitcher":{
+        "description":"Gyorsan lépkedhet a témák között a billentyűparancsok segítségével",
+        "settings":{
+            "autoRefresh":"A témalista automatikus frissítése, ha változásokat észlel",
+            "includeLocal":"Helyezzen be helyi témákat a ciklusba",
+            "includeOnline":"Vegyen be online témákat a ciklusba",
+            "showNotifications":"Értesítések megjelenítése témák hozzáadásakor vagy eltávolításakor",
+            "sortOptions":{
+                "az":"A-Z (ábécé sorrendben)",
+                "recent":"Nemrég használt",
+                "za":"Z-A (fordított ábécé sorrendben)"
+            },
+            "sortOrder":"A témalista rendezési sorrendje"
+        }
+    },
+    "quoter":{
+        "description":"Hozzon létre stilizált idézeteket az üzenetekből",
+        "settings":{
+            "grayscale":"Szürkeárnyalatos szűrő alkalmazása",
+            "quoteFont":"Betűtípus idézet képekhez",
+            "saveAsGif":"Mentés GIF-ként PNG helyett",
+            "showWatermark":"Vízjel megjelenítése idézőjeleken",
+            "watermark":"Vízjel szöveg"
+        }
+    },
+    "randomVoice":{
+        "description":"Csatlakozzon véletlenszerű hangcsatornákhoz testreszabható szűrők alapján",
+        "operations":{
+            "equalTo":"Egyenlő",
+            "lessThan":"Kevesebb mint",
+            "moreThan":"Több mint"
+        },
+        "settings":{
+            "Servers":"Szerverazonosítók (vesszővel elválasztva)",
+            "UserAmount":"Cél felhasználók száma a csatornában",
+            "UserAmountOperation":"Felhasználószám-összehasonlító operátor",
+            "autoCamera":"A kamera automatikus bekapcsolása",
+            "autoNavigate":"Automatikusan navigáljon a hangcsatornára",
+            "autoStream":"A streamelés automatikus indítása",
+            "avoidAfk":"Kerülje az AFK csatornákat",
+            "avoidStages":"Kerülje a színpadi csatornákat",
+            "avoidStates":"Kerülje el, hogy a felhasználók megfeleljenek az állapotszűrőknek",
+            "deafen":"Keressen megsüketült felhasználókat",
+            "includeStates":"Tartalmazza az állapotszűrőknek megfelelő felhasználókat",
+            "leaveEmpty":"Ha a csatorna kiürül, hagyja el",
+            "mute":"Keressen elnémított felhasználókat",
+            "selfDeafen":"Automatikus süketelés csatlakozáskor",
+            "selfMute":"Automatikus némítás csatlakozáskor",
+            "spacesLeft":"Minimális szabad hely a csatornában",
+            "spacesLeftOperation":"Szóközök maradt összehasonlító operátor",
+            "stream":"Keressen streamet tartalmazó csatornákat",
+            "vcLimit":"Hangcsatorna felhasználói korlát",
+            "vcLimitOperation":"Csatornakorlát-összehasonlító operátor",
+            "video":"Keressen olyan csatornákat, amelyeken engedélyezve van a videó"
+        }
+    },
+    "recentDMSwitcher":{
+        "description":"Gyorsan válthat a legutóbbi DM-ek között a Ctrl+Tab (Alt+Tab stílus) használatával",
+        "overlayModes":{
+            "current":"Csak aktuális DM",
+            "row":"A legutóbbi DM-ek sora"
+        },
+        "settings":{
+            "amountOfUsers":"A követendő felhasználók száma",
+            "clearRdms":"RDMS előzmények törlése",
+            "overlayMode":"Fedvénytartalom mód",
+            "overlayRowLength":"A fedvénysorban megjelenítendő DM-ek száma",
+            "overlayShowAvatars":"Avatarok megjelenítése fedvényben",
+            "toastDurationMs":"Pirítós értesítés időtartama (ms)",
+            "visualStyle":"Vizuális jelző stílus kerékpározás közben"
+        },
+        "visualStyles":{
+            "off":"Nincs vizuális jelző",
+            "overlay":"Fedvény (Alt+Tab stílus)",
+            "toast":"Pirítós értesítés"
+        }
+    },
+    "remix":{
+        "description":"A beépített szerkesztővel közvetlenül a Discord-ban keverje újra a képeket"
+    },
+    "repeatMessages":{
+        "description":"Üzenetek ismétlése opcionális válaszokkal (Shift+kattintás a válaszadáshoz)"
+    },
+    "replyPingControl":{
+        "description":"Szabályozhatja, hogy megkapja-e a pingelését, amikor valaki válaszol az üzeneteire",
+        "settings":{
+            "alwaysPingOnReply":"Mindig pingált, ha valaki válaszol az üzeneteire",
+            "replyPingWhitelist":"A felhasználói azonosítók vesszővel elválasztott listája, amelyektől mindig kap válaszpingeket"
+        }
+    },
+    "richMagnetLinks":{
+        "description":"A mágneses hivatkozások gazdag előnézeteinek megjelenítése fájlnév-kivonattal"
+    },
+    "rpcEditor":{
+        "description":"Szerkessze és szabja testre Rich Presence (RPC) képernyőjét bármely alkalmazáshoz",
+        "placeholders":{
+            "details":"Aktuális részletek szövege",
+            "largeImage":"Nagy kép URL",
+            "largeText":"Nagyméretű kép elemleírás szövege",
+            "name":"Alkalmazás neve",
+            "smallImage":"Kis kép URL",
+            "smallText":"Kis kép elemleírás szövege",
+            "state":"Jelenlegi állapot szövege"
+        },
+        "settings":{
+            "replacedAppIds":"Alkalmazás-specifikus RPC-felülírások kezelése"
+        }
+    },
+    "rpcStats":{
+        "description":"Egyéni statisztikák megjelenítése a gazdag jelenlétben (elküldött üzenetek, Last.fm legnépszerűbb album)",
+        "settings":{
+            "RPCTitle":"Az RPC címszövege",
+            "albumCoverImage":"Albumborító használata RPC-képként (Last.fm mód)",
+            "assetURL":"Egyéni kép URL RPC-hez (alapértelmezett: az avatarod)",
+            "lastFMApiKey":"Last.fm API kulcs (letöltés a last.fm/api webhelyről)",
+            "lastFMStatFormat":"A Last.fm stat formátuma ($album, $artist)",
+            "lastFMUsername":"Last.fm felhasználónév",
+            "statDisplay":"Megjelenítendő statisztika"
+        },
+        "statOptions":{
+            "messagesAllTime":"Mindig elküldött üzenetek",
+            "messagesToday":"Ma elküldött üzenetek",
+            "mostListenedAlbum":"A hét leghallgatottabb albuma (Last.fm)"
+        }
+    },
+    "saveFavoriteGIFs":{
+        "description":"Mentse el az összes kedvenc GIF URL-t egy szöveges fájlba",
+        "settings":{
+            "showToolboxButton":"A „Kedvenc GIF-ek mentése” gomb megjelenítése a Equicord eszköztárban (újratöltés szükséges)"
+        }
+    },
+    "scheduledMessages":{
+        "description":"Üzenetek ütemezése későbbi elküldésre",
+        "settings":{
+            "checkIntervalSeconds":"Milyen gyakran kell ellenőrizni az elküldendő üzeneteket (másodpercben)",
+            "maxMessagesPerMinute":"Maximum ütemezett üzenetek száma csatornánként, amelyek ugyanabban a percben aktiválódhatnak",
+            "showNotifications":"Pohárköszöntő értesítések megjelenítése üzenetek elküldésekor",
+            "showPhantomMessages":"Ütemezett üzenetek megjelenítése fantomüzenetként a csevegésben"
+        }
+    },
+    "screenRecorder":{
+        "description":"Képernyőrögzítési funkció az Equibop számára"
+    },
+    "searchFix":{
+        "description":"Javítsa ki a keresési funkciókat a Discord 5000-es üzeneteltolási korlátjának megkerülésével"
+    },
+    "sekaiStickers":{
+        "description":"Sekai matricák integrációja",
+        "settings":{
+            "AutoCloseModal":"Automatikus bezárás, ha kész"
+        }
+    },
+    "selfForward":{
+        "description":"Továbbítsd az üzeneteket magadnak"
+    },
+    "serverSearch":{
+        "description":"Továbbfejlesztett szerverkeresés gyors váltóintegrációval"
+    },
+    "showBadgesInChat":{
+        "description":"Felhasználói jelvények megjelenítése a csevegőüzenetekben",
+        "settings":{
+            "DiscordNitroPosition":"A Discord Nitro jelvény pozíciója",
+            "DiscordProfilePosition":"A Discord profiljelvények pozíciója",
+            "EquicordContributorPosition":"A Equicord Közreműködő jelvény pozíciója",
+            "EquicordDonorPosition":"A Equicord adományozói jelvények pozíciója",
+            "VencordContributorPosition":"A Vencord Közreműködő jelvény pozíciója",
+            "VencordDonorPosition":"A Vencord adományozói jelvények pozíciója",
+            "badgeSettings":"A jelvény elrendezésének és láthatóságának beállítása",
+            "showDiscordNitro":"Engedélyezze a Discord Nitro jelvények megjelenítését a chatben",
+            "showDiscordProfile":"Engedélyezze a Discord profiljelvények megjelenítését a csevegésben",
+            "showEquicordContributor":"Engedélyezze a Equicord közreműködői jelvények megjelenítését a csevegésben",
+            "showEquicordDonor":"Engedélyezze a Equicord adományozói jelvények megjelenítését a csevegésben",
+            "showVencordContributor":"Engedélyezze a Vencord közreműködői jelvények megjelenítését a csevegésben",
+            "showVencordDonor":"Engedélyezze a Vencord adományozói jelvények megjelenítését a csevegésben"
+        }
+    },
+    "showMessageEmbeds":{
+        "description":"Üzenetbeágyazások megjelenítése az üzenetek beágyazásának hozzáadásának vagy eltávolításának lehetőségeivel"
+    },
+    "showResourceChannels":{
+        "description":"Az általában rejtett erőforráscsatornák megjelenítése"
+    },
+    "showSongName":{
+        "description":"Az aktuálisan lejátszott dal nevének megjelenítése állapotában"
+    },
+    "sidebarChat":{
+        "description":"Sidebar chat felület több csatorna megtekintésére",
+        "settings":{
+            "patchCommunity":"Javítsa meg az olyan dolgokat, mint a Csatornaböngésző vagy a Tagok lap, amelyek a közösségi szervereken vannak",
+            "persistSidebar":"Tartsa nyitva az oldalsávi csevegést a Discord újraindulásakor"
+        }
+    },
+    "signature":{
+        "description":"Aláírások hozzáadása az üzenetekhez",
+        "settings":{
+            "contextMenu":"Adjon hozzá lehetőséget a csevegés beviteli helyi menüjének funkcióinak váltásához",
+            "isEnabled":"Funkciók váltása",
+            "name":"Az aláírás, amely az üzenetek végére kerül",
+            "showIcon":"Mutasson egy ikont a bővítmény váltására a csevegősávon",
+            "textHeader":"Milyen fejléccel kell bevezetni a szöveget"
+        }
+    },
+    "snowfall":{
+        "description":"Karácsonyi hóesés hatást ad Discord felületére",
+        "settings":{
+            "flakesPerSecond":"Hópelyhek másodpercenként (nagyobb = sűrűbb hóesés)",
+            "maxSize":"Maximális hópehely méret",
+            "speed":"Havazás sebessége (nagyobb = gyorsabb esés)",
+            "typeOfSnow":"A megjelenített hó típusának módosítása (Befolyásolja a teljesítményt)"
+        }
+    },
+    "soggy":{
+        "description":"Elázott bővítmény kattintható kép- és hangeffektusokkal",
+        "settings":{
+            "boopLink":"URL a boop hanghoz",
+            "boopVolume":"A boop hang hangereje",
+            "imageLink":"[[PH0]]] a képhez (gomb és modális)",
+            "songLink":"URL a dal lejátszásához",
+            "songVolume":"A dal hangereje. 0 a letiltáshoz",
+            "tooltipText":"A gomb fölé mutató szöveg"
+        }
+    },
+    "songLink":{
+        "description":"Song.link integráció a zene platformok közötti megosztásához",
+        "settings":{
+            "servicesSettings":"A szolgáltatások beállításai",
+            "userCountry":"A kereséshez használt ország (kétbetűs országkód)"
+        }
+    },
+    "soundBoardLogger":{
+        "description":"A soundboard használatának naplózása a hangcsatornákban",
+        "settings":{
+            "FileType":"A fájlt menteni kívánt formátum",
+            "SavedIds":"Az egyszerre menteni kívánt soundboard azonosítók száma (a 0-val végtelen számú mentést tesz lehetővé)",
+            "soundVolume":"Milyen hangos a kapcsoló hangja (0 a letiltáshoz)"
+        }
+    },
+    "splitLargeMessages":{
+        "description":"A nagy üzenetek automatikus felosztása részekre",
+        "settings":{
+            "disableFileConversion":"Ha igaz, letiltja a fájlkonverziót a nagyméretű üzeneteknél",
+            "hardSplit":"Ha igaz, az utolsó karakterre hasad az utolsó szóköz/újsor helyett",
+            "maxLength":"Az üzenet maximális hossza a felosztás előtt. Állítsa 0-ra az automatikus észleléshez",
+            "sendDelay":"Késleltetés az egyes darabok között másodpercben",
+            "slowmodeMax":"Maximális lassított mód, ha lassított módban oszt fel",
+            "splitInSlowmode":"Fel kell osztani az üzeneteket, ha a csatornán engedélyezve van a lassú üzemmód?"
+        }
+    },
+    "spotifyActivityToggle":{
+        "description":"Kapcsolja be és ki a Spotify tevékenységmegosztást",
+        "settings":{
+            "location":"Hol jelenítse meg a Spotify váltógombját"
+        }
+    },
+    "statsfmPresence":{
+        "description":"Stats.fm jelenlét integráció",
+        "settings":{
+            "alwaysHideArt":"Az albumborító letöltésének letiltása",
+            "hideWithExternalRPC":"Elrejti a stats.fm jelenlétét, ha külső RPC fut",
+            "hideWithSpotify":"A stats.fm jelenlétének elrejtése, ha a spotify fut",
+            "missingArt":"Ha hiányzik az album vagy az albumborító",
+            "nameFormat":"A dal és az előadó nevének megjelenítése az állapotnévben",
+            "shareSong":"A dal linkjének megjelenítése a stats.fm oldalon",
+            "shareUsername":"A stats.fm profilra mutató hivatkozás megjelenítése",
+            "showStatsFmLogo":"Jelenítse meg a Stats.fm-et az album borítója mellett",
+            "statusName":"Egyéni állapotszöveg",
+            "useListeningStatus":"A „Hallgat” állapot megjelenítése a „Lejátszás” helyett",
+            "username":"Stats.fm felhasználónév"
+        }
+    },
+    "statusPresets":{
+        "description":"Mentse és töltse be az előre beállított állapotokat"
+    },
+    "statusWhileActive":{
+        "description":"Állapot automatikus beállítása aktív hangcsatornákban",
+        "settings":{
+            "statusToSet":"Hangcsatornában beállítandó állapot"
+        }
+    },
+    "steamStatusSync":{
+        "description":"A Steam állapotának szinkronizálása a Discord állapottal",
+        "settings":{
+            "dndStatus":"A Steam állapota, ha be van kapcsolva a Ne zavarjanak",
+            "goInvisibleIfActivityIsHidden":"Mindig legyen láthatatlan, ha játéktevékenységet rejt el a Discord oldalon",
+            "idleStatus":"Steam állapot tétlen állapotban",
+            "invisibleStatus":"Steam állapot, amikor a Láthatatlan",
+            "onlineStatus":"Steam állapota online állapotban"
+        }
+    },
+    "stickerBlocker":{
+        "description":"Bizonyos matricák megjelenésének letiltása",
+        "settings":{
+            "blockedStickers":"A blokkolt matricaazonosítók listája (ne szerkessze, hacsak nem tudja, mit csinál)",
+            "showButton":"Megjelenik-e egy gomb a gif letiltásának feloldásához",
+            "showGif":"Mutassunk-e egy pompás macska-gifet",
+            "showMessage":"Megjelenik-e a letiltott azonosítót részletező üzenet"
+        }
+    },
+    "streamingCodecDisabler":{
+        "description":"A streaming kodek letiltása a Discord adatfolyamhoz",
+        "settings":{
+            "disableAv1Codec":"Ne vegye fontolóra a Discord AV1 használatát streamelésre",
+            "disableH264Codec":"Ne vegye fontolóra a Discord H264 használatát streamelésre",
+            "disableH265Codec":"A Discord ne vegye fontolóra a H265 használatát streameléshez",
+            "disableVP8Codec":"Ne vegye fontolóra a Discord VP8 használatát streamelésre",
+            "disableVP9Codec":"Ne vegye fontolóra a Discord VP9 használatát streameléshez"
+        }
+    },
+    "talkInReverse":{
+        "description":"Hozzáad egy gombot a csevegősávhoz, amely visszafordítja az üzeneteket küldés előtt"
+    },
+    "themeLibrary":{
+        "description":"Böngésszen és kezeljen témákat a Equicord témakönyvtárból",
+        "toolbox":{
+            "openThemeLibrary":"Nyissa meg a témakönyvtárat"
+        }
+    },
+    "tidalEmbeds":{
+        "description":"Tidal zenei kapcsolatokat ágyaz be egyéni lejátszóba"
+    },
+    "tiktokTTS":{
+        "contextMenu":{
+            "playTikTokTTS":"Játssz TikTok TTS-t"
+        },
+        "description":"Játssz a TikTok szövegfelolvasó funkcióval az üzenetekhez",
+        "settings":{
+            "volume":"Lejátszási hangerő"
+        }
+    },
+    "timezones":{
+        "contextMenu":{
+            "setLocalTimezone":"Helyi időzóna beállítása"
+        },
+        "description":"Felhasználói időzónák megjelenítése a profilokban és az üzenetek fejlécében",
+        "settings":{
+            "24hTime":"A műsoridő 24 órás formátumban",
+            "databaseUrl":"Adatbázis URL az időzóna tárolására",
+            "preferDatabaseOverLocal":"Időzónák esetén előnyben részesítse az adatbázist a helyi tárhely helyett",
+            "resetDatabaseTimezone":"Állítsa vissza az időzónát az adatbázisban",
+            "setDatabaseTimezone":"Állítsa be az időzónát az adatbázisban",
+            "showMessageHeaderTime":"Idő megjelenítése az üzenetek fejlécében",
+            "showOwnTimezone":"Jelenítse meg saját időzónáját a profilokban és az üzenetek fejlécében",
+            "showProfileTime":"Idő megjelenítése a profilokban",
+            "showTimezoneInfo":"Időzóna információ megjelenítése az idő mellett",
+            "useDatabase":"Adatbázis engedélyezése a felhasználói időzónák lekéréséhez"
+        },
+        "toasts":{
+            "failed":"Az időzónákat nem sikerült frissíteni!",
+            "refreshed":"Az időzónák sikeresen frissítve!"
+        },
+        "toolbox":{
+            "refreshDatabaseTimezones":"Adatbázis időzónák frissítése",
+            "setDatabaseTimezone":"Állítsa be az adatbázis időzónáját"
+        }
+    },
+    "title":{
+        "description":"Módosítsa Discord ablakcímét",
+        "settings":{
+            "title":"Az ablak címének előtagja"
+        }
+    },
+    "toastNotifications":{
+        "description":"Üzenetekkel és eseményekkel kapcsolatos pohárköszöntések megjelenítése",
+        "positionOptions":{
+            "bottomLeft":"Bal alsó",
+            "bottomRight":"Jobb alsó",
+            "topLeft":"Bal felső",
+            "topRight":"Jobb felső"
+        },
+        "settings":{
+            "determineServerNotifications":"A csatorna/céh beállításai alapján automatikusan meghatározza, hogy milyen szerverértesítések jelenjenek meg",
+            "directMessages":"Értesítések megjelenítése a közvetlen üzenetekről",
+            "disableInStreamerMode":"Az értesítések letiltása streamelő módban",
+            "exampleButton":"Mutasson egy példa pirítós értesítést",
+            "friendActivity":"Értesítések megjelenítése valakinek a felvételéről vagy baráti kérés fogadásáról",
+            "friendServerNotifications":"Értesítések megjelenítése, amikor ismerősei üzenetet küldenek az Önnel megosztott szervereken",
+            "groupMessages":"Értesítések megjelenítése a csoportos üzenetekről",
+            "ignoreUsers":"Hozzon létre egy listát azokról a felhasználói azonosítókról, amelyek figyelmen kívül hagyják az összes értesítésüket (vesszővel elválasztva)",
+            "maxNotifications":"Az egyszerre megjelenített értesítések maximális száma",
+            "notifyFor":"Hozzon létre egy listát azokról a csatornaazonosítókról, amelyektől értesítéseket kaphat (vesszővel válassza el)",
+            "opacity":"Az értesítés átlátszatlansága",
+            "position":"A pohárköszöntő helyzete",
+            "renderImages":"Rendereljen képeket az értesítésekben",
+            "streamingTreatment":"Az értesítések kezelése a képernyő megosztása közben",
+            "timeout":"A másodpercben megadott időre vonatkozó értesítések jelennek meg"
+        },
+        "streamingOptions":{
+            "ignore":"Figyelmen kívül hagyás – Egyáltalán ne jelenítse meg az értesítést",
+            "noContent":"Nincs tartalom – A bejelentés törzsének elrejtése",
+            "normal":"Normál – Az értesítést a szokásos módon jelenítse meg"
+        }
+    },
+    "toggleVideoBind":{
+        "description":"Hozzáad egy billentyűkombinációt a videó/webkamera váltásához hangcsevegésben",
+        "settings":{
+            "keyBind":"A gomb a webkamera váltásához, amikor megnyomják",
+            "reqAlt":"Megköveteli az alt tartását",
+            "reqCtrl":"Megköveteli az irányítás megtartását",
+            "reqShift":"Szükséges a műszak megtartása"
+        }
+    },
+    "toneIndicators":{
+        "description":"Hangjelzéseket (szarkaszmus, viccelődés stb.) ad hozzá az üzenetekhez",
+        "settings":{
+            "customIndicators":"Egyéni hangjelzések (formátum: jk=Joking; srs=Serious)",
+            "maxIndicators":"Üzenetenként megjeleníthető hangjelzések maximális száma",
+            "prefix":"Előtag karakter(ek) a hangjelzésekhez"
+        }
+    },
+    "tosuRPC":{
+        "description":"Gazdag jelenléti integráció az osu számára! keresztül tosu"
+    },
+    "translatePlus":{
+        "contextMenu":{
+            "translate":"Fordítás"
+        },
+        "description":"Fordítás gombot ad az üzenetekhez jobb UI",
+        "popover":{
+            "translate":"Fordítás"
+        }
+    },
+    "unitConverter":{
+        "description":"Mértékegységek konvertálása üzenetekben (birodalmi/metrikus)",
+        "popover":{
+            "convertUnits":"Mértékegységek konvertálása"
+        },
+        "settings":{
+            "myUnits":"Azok az egységek, amelyeket használ, és amelyekre át szeretné alakítani a dolgokat"
+        },
+        "unitOptions":{
+            "imperial":"Császári",
+            "metric":"Metrikus"
+        }
+    },
+    "universalMention":{
+        "description":"Univerzális formátumot használva említsen meg felhasználókat bármely szerverről",
+        "settings":{
+            "globalMention":"Említse meg a felhasználókat bármely szerverről, ne csak a jelenlegiről",
+            "onlyDMUsers":"Csak azokat a felhasználókat jelenítse meg, akikkel már volt DM-je"
+        },
+        "warning":"A Global Mention használata teljesítménybeli problémákat okozhat, és abszurd számú felhasználót jeleníthet meg az automatikus kiegészítésben."
+    },
+    "unlimitedAccounts":{
+        "description":"Eltávolítja az 5-ös fiókkorlátot Discord fiókváltójára vonatkozóan",
+        "settings":{
+            "maxAccounts":"A hozzáadható fiókok száma, vagy 0 korlátozás nélkül"
+        }
+    },
+    "unreadBadgeCount":{
+        "description":"Olvasatlan üzenetszámláló jelvények megjelenítése a csatornákon",
+        "settings":{
+            "notificationCountLimit":"Korlátozza az értesítések számát 99+-ra",
+            "showOnMutedChannels":"Olvasatlan szám megjelenítése elnémított csatornákon"
+        }
+    },
+    "urlHighlighter":{
+        "description":"Egyéni színekkel emelje ki az üzenetekben szereplő URL-címeket",
+        "settings":{
+            "boldUrls":"Tegye félkövérre a kiemelt URL-eket",
+            "highlightEmbeds":"Az URL-eket is kiemelje a beágyazott tartalomban",
+            "patterns":"[[PH0]]] minták kiemeléséhez glob-mintákkal"
+        },
+        "ui":{
+            "addNew":"Új hozzáadása",
+            "patternPlaceholder":"*.example.com",
+            "urlPatterns":"URL Minták"
+        }
+    },
+    "userpfp":{
+        "avatarOptions":{
+            "nitro":"Nitró",
+            "userpfp":"UserPFP"
+        },
+        "buttons":{
+            "joinServer":"Csatlakozzon a UserPFP szerverhez",
+            "support":"Támogassa a UserPFP-t itt"
+        },
+        "contextMenu":{
+            "setAvatar":"Állítsa be az Avatárt"
+        },
+        "description":"Használjon egyéni profilképeket a UserPFP adatbázisból, vagy állítsa be a sajátját",
+        "notice":"A beállított avatar funkció használata csak helyi, vagyis csak te látod, hogy megváltozik.",
+        "settings":{
+            "databaseSource":"URL az adatbázis betöltéséhez",
+            "overrideServerAvatars":"A szerver avatarok felülbírálása egyéni avatarokkal vagy az alapértelmezett felhasználói avatarral, ha nincs egyéni avatar beállítva",
+            "preferNitro":"Melyik avatárt kell használni, ha mind az alapértelmezett animált (Nitro) pfp, mind a felhasználói PFP avatar jelen van"
+        }
+    },
+    "vcNarratorCustom":{
+        "contextMenu":{
+            "stateFilter":"Állapotváltó szűrő",
+            "vcNarrator":"VC Narrátor",
+            "voice":"Hang"
+        },
+        "description":"Egyéni hangcsatorna narrátor TTS-sel a felhasználók csatlakozásához/kilépéséhez és állapotváltoztatáshoz",
+        "filterOptions":{
+            "blacklist":"Feketelista (a listán kívül mindenkit bejelenteni)",
+            "off":"Ki",
+            "whitelist":"Engedélyezőlista (csak a listán szereplő felhasználók bejelentése)"
+        },
+        "modal":{
+            "cancel":"Mégse",
+            "previewHint":"Nézze meg, hogyan hangzik ez a hang a nevükkel együtt:",
+            "save":"Mentés",
+            "selectVoice":"Válasszon ki egy hangot",
+            "title":"VC Narrátor hangja"
+        },
+        "preview":{
+            "playing":"játszani...",
+            "subtitle":"A kiválasztott narrátor hangját használja",
+            "title":"Hangok előnézete"
+        },
+        "settings":{
+            "announceOthersDeafen":"Értesítse, ha más felhasználók megsüketülnek/süketítenek a jelenlegi VC-jében",
+            "announceOthersMute":"Értesítse, ha más felhasználók elnémítják/feloldják a némítást az Ön jelenlegi VC-jében",
+            "announceOthersStream":"Értesítse, ha más felhasználók elkezdik/leállítják a streamelést az Ön jelenlegi VC-jén",
+            "announceSelfStream":"Jelentse be, amikor elindítja/leállítja a streamelést",
+            "customVoice":"Narrátor hangja",
+            "ignoreSelf":"Figyelmen kívül hagyja magát minden eseménynél",
+            "joinMessage":"Helyőrzők: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
+            "latinOnly":"Távolítsa el a nem latin karaktereket a nevekből, mielőtt kimondja őket",
+            "leaveMessage":"Hagyjon üzenetet",
+            "moveMessage":"Üzenet áthelyezése",
+            "rate":"Narrátor sebessége",
+            "sayOwnName":"Mondja ki a saját nevét",
+            "stateChangeCooldownMs":"Állapotváltozás bejelentése lehűlés (ms)",
+            "stateChangeFilterList":"Vesszővel elválasztott felhasználói azonosítók az engedélyező-/feketelistához. Kattintson a jobb gombbal a felhasználókra a hozzáadáshoz/eltávolításhoz.",
+            "stateChangeFilterMode":"Szűrheti, hogy mely felhasználók indítanak állapotváltozási bejelentést",
+            "userVoiceMap":"Felhasználónkénti hangfelülírások (formátum: userId:voiceId,userId2:voiceId2). Kattintson a jobb gombbal a felhasználókra a beállításhoz.",
+            "volume":"Narrátor kötet"
+        },
+        "troubleshooting":{
+            "cacheInfo":"Gyorsítótár",
+            "clearCache":"Gyorsítótár törlése",
+            "lastApiCall":"Utolsó API hívás",
+            "refreshSize":"Frissítési méret",
+            "title":"Hibaelhárítás"
+        }
+    },
+    "vcPanelSettings":{
+        "description":"Testreszabhatja a hangcsatorna panelt további beállításokkal",
+        "settings":{
+            "camera":"Kameraválasztó megjelenítése",
+            "inputDevice":"Bemeneti eszköz választó megjelenítése",
+            "inputVolume":"Bemeneti hangerő-csúszka megjelenítése",
+            "outputDevice":"Kimeneti eszköz választó megjelenítése",
+            "outputVolume":"Kimeneti hangerő-csúszka megjelenítése",
+            "showInputDeviceHeader":"Fejléc megjelenítése a beviteli eszköz választó felett",
+            "showInputVolumeHeader":"Fejléc megjelenítése a bemeneti hangerő csúszkája felett",
+            "showOutputDeviceHeader":"Fejléc megjelenítése a kimeneti eszköz választó felett",
+            "showOutputVolumeHeader":"Fejléc megjelenítése a kimeneti hangerő csúszkája felett",
+            "showVideoDeviceHeader":"Fejléc megjelenítése a kameraválasztó felett",
+            "uncollapseSettingsByDefault":"Alapértelmezés szerint automatikusan feloldja a hangbeállításokat"
+        },
+        "ui":{
+            "camera":"Kamera",
+            "hide":"Elrejt",
+            "inputDevice":"Beviteli eszköz",
+            "inputVolume":"Bemeneti hangerő",
+            "outputDevice":"Kimeneti eszköz",
+            "outputVolume":"Kimeneti hangerő",
+            "settings":"Beállítások"
+        }
+    },
+    "viewRawVariant":{
+        "contextMenu":{
+            "viewRaw":"Nyers megtekintése"
+        },
+        "description":"Nyers JSON-adatok megtekintése üzenetekhez, felhasználókhoz, csatornákhoz és céhekhez",
+        "modal":{
+            "content":"Tartalom",
+            "data":"Adat",
+            "title":"Nyers {type} megtekintése"
+        }
+    },
+    "voiceButtons":{
+        "description":"Gyors műveleti gombokat (csevegés, némítás, süket) ad a hangcsatorna felhasználóinak",
+        "settings":{
+            "showChatButton":"Csevegés gomb megjelenítése",
+            "showDeafenButton":"Süket gomb megjelenítése",
+            "showMuteButton":"Mutassa a némító gombot"
+        }
+    },
+    "voiceChannelLog":{
+        "contextMenu":{
+            "viewChannelLogs":"Csatornanaplók megtekintése"
+        },
+        "description":"Hangcsatorna csatlakozási/kilépési/áthelyezési események naplózása",
+        "modeOptions":{
+            "both":"Jelentkezzen be a csevegéshez és a napló menübe",
+            "logMenu":"Napló menü",
+            "logToChat":"Jelentkezzen be közvetlenül a kapcsolódó csevegésbe"
+        },
+        "settings":{
+            "ignoreBlockedUsers":"Ne naplózza a letiltott felhasználókat",
+            "mode":"A hangcsatorna-napló megjelenítése",
+            "voiceChannelChatSelf":"Saját hangcsatorna-események naplózása a hangcsatornákban",
+            "voiceChannelChatSilent":"Az üzenetekhez való csatlakozás/kilépés/áthelyezés a hangcsatorna-csevegésekben néma lesz",
+            "voiceChannelChatSilentSelf":"Az üzenetekhez való csatlakozás/kilépés/áthelyezés a hangcsatorna-csevegésekben néma lesz, ha a hangcsatornán van"
+        }
+    },
+    "voiceChatUtils":{
+        "contextMenu":{
+            "deafenAll":"Süketítsd meg mindet",
+            "disconnectAll":"Válassza le az összeset",
+            "moveAll":"Az összes áthelyezése",
+            "muteAll":"Az összes némítása",
+            "undeafenAll":"Undeafen minden",
+            "unmuteAll":"Az összes némítás feloldása",
+            "voiceTools":"Hangeszközök"
+        },
+        "description":"Hangcsatorna-moderálási eszközöket ad hozzá (minden némítása, mindenki süketítése, összes áthelyezése, összes leválasztása)",
+        "settings":{
+            "waitAfter":"A várakozás előtt végrehajtandó API műveletek száma (a sebességkorlátozás elkerülése érdekében)",
+            "waitSeconds":"Az egyes műveletek közötti várakozási idő (másodpercben)"
+        }
+    },
+    "voiceJoinMessages":{
+        "description":"Értesítéseket kaphat, amikor ismerősei csatlakoznak a hangcsatornákhoz",
+        "settings":{
+            "allowedFriends":"Vesszővel vagy szóközzel elválasztott azon barátok felhasználói azonosítóinak listája, amelyektől csatlakozási üzeneteket szeretne kapni",
+            "friendDirectMessages":"Értesítéseket kaphat barátai DM-jeiben, amikor csatlakoznak egy hangcsatornához",
+            "friendDirectMessagesSelf":"Értesítéseket kaphat barátai DM-jeiben, még akkor is, ha ugyanazon a hangcsatornán van, mint ők",
+            "friendDirectMessagesShowMemberCount":"Mutassa meg a többi tag számát a hangcsatornában, amikor DM-értesítést kap",
+            "friendDirectMessagesShowMembers":"A hangcsatorna többi tagjának listájának megjelenítése DM-értesítés fogadásakor",
+            "friendDirectMessagesSilent":"Csatlakozz az üzenetekhez a barátaidban. A DM-ek némák lesznek",
+            "ignoreBlockedUsers":"Ne küldjön üzenetet a letiltott felhasználók csatlakozásáról/kilépéséről/költözéséről"
+        }
+    },
+    "voiceMessageTranscriber":{
+        "description":"Hangüzenetek átírása AI (Suttogás) segítségével",
+        "modal":{
+            "action":"Művelet",
+            "audioLanguage":"Hang nyelve",
+            "autoDetect":"Automatikus észlelés",
+            "copied":"Másolva!",
+            "copyToClipboard":"Másolás a vágólapra",
+            "downloadingAudio":"Hang letöltése...",
+            "error":"Hiba",
+            "inProgress":"Átírás folyamatban...",
+            "initializing":"Inicializálás...",
+            "loadingModel":"Modell betöltése...",
+            "processingAudio":"Hang feldolgozása...",
+            "retry":"Újra",
+            "showTimestamps":"Időbélyegek megjelenítése",
+            "start":"Indítás",
+            "transcribe":"Lemásol",
+            "transcribing":"Átírás...",
+            "transcription":"Átírás",
+            "transcriptionOptions":"Átírási beállítások",
+            "translateToEnglish":"Fordítás angolra"
+        },
+        "modelOptions":{
+            "base":"Alap (ajánlott)",
+            "medium":"Közepes (leglassabb, legjobb pontosság)",
+            "small":"Kicsi",
+            "tiny":"Apró (leggyorsabb, legkisebb pontosság)"
+        },
+        "settings":{
+            "delete":"Törölje az összes gyorsítótárazott fájlt",
+            "quantized":"Használjon kvantált modellt (kisebb méret, valamivel kisebb pontosság)",
+            "selectedModel":"Modell mérete"
+        }
+    },
+    "voiceRejoin":{
+        "description":"A kapcsolat megszakadása után automatikusan csatlakozzon a hangcsatornákhoz",
+        "preventionOptions":{
+            "both":"DM-ek és szerverek",
+            "dms":"Csak DM-ek",
+            "none":"Nincs",
+            "servers":"Csak szerverek"
+        },
+        "settings":{
+            "applyOnlyToDms":"Csak DM-ekre vonatkozik",
+            "preventReconnectIfCallEnded":"Ne csatlakozzon újra, ha a hívás véget ért, vagy a hangcsatorna üres vagy nem létezik",
+            "rejoinDelay":"Állítsa be a késleltetést, mielőtt újracsatlakozna a hangcsatornához",
+            "rejoinTimeout":"Ne próbáljon újra csatlakozni, miután ennyi másodperc eltelt a leválasztás óta"
+        }
+    },
+    "waitForSlot":{
+        "contextMenu":{
+            "joinQueue":"Csatlakozás a sorhoz",
+            "leaveQueue":"Kilépés a sorból"
+        },
+        "description":"Álljon sorba a teljes hangcsatornákért, és kap értesítést, ha egy slot megnyílik",
+        "notices":{
+            "channelFull":"A {channel} hangcsatorna megtelt. Várni egy slotot?",
+            "join":"Csatlakozás",
+            "slotAvailable":"Hé, valaki most elhagyta a #{channel} címet, és most van egy hely a számodra!",
+            "wait":"Várjon"
+        },
+        "settings":{
+            "autoJoin":"Azonnal csatlakozzon a csatornához ahelyett, hogy értesítést jelenítene meg",
+            "notificationSound":"Játssz le egy hangot, amikor szabaddá válik egy slot"
+        }
+    },
+    "wallpaperFree":{
+        "contextMenu":{
+            "removeWallpaper":"Távolítsa el a háttérképet",
+            "setWallpaper":"Háttérkép beállítása"
+        },
+        "description":"Állítson be egyéni háttérképeket csatornákhoz, felhasználókhoz vagy globálisan",
+        "settings":{
+            "globalDefault":"Állítson be egy globális alapértelmezett háttérképet az összes csatornához",
+            "stylingTips":"Styling tippek"
+        }
+    },
+    "webpackTarball":{
+        "description":"Exportálja a Discord webcsomag moduljait tarballként elemzéshez",
+        "modal":{
+            "create":"Létrehozás",
+            "errors":"hibákat",
+            "lazyChunks":"Lusta darabok",
+            "loadAll":"Az összes betöltése",
+            "loaded":"Töltött",
+            "loadedStatus":"Töltött",
+            "loading":"Betöltés",
+            "title":"Webpack Tarball"
+        },
+        "settings":{
+            "patched":"Tartalmazza a javított modulokat"
+        },
+        "toolbox":{
+            "webpackTarball":"Webpack Tarball"
+        }
+    },
+    "whitelistedEmojis":{
+        "alerts":{
+            "importConfirmBody":"Ez felülírja az aktuális engedélyezőlistát.",
+            "importConfirmTitle":"Biztos vagy benne?",
+            "resetConfirmBody":"Ezzel eltávolítja az összes hangulatjelet az engedélyezőlistáról.",
+            "resetConfirmTitle":"Biztos vagy benne?"
+        },
+        "contextMenu":{
+            "addAllGuildEmojis":"Adja hozzá az összes Guild hangulatjelet",
+            "addToWhitelist":"Hozzáadás a fehérlistához",
+            "removeAllGuildEmojis":"Távolítsa el az összes Guild hangulatjelet",
+            "removeFromWhitelist":"Eltávolítás az engedélyezési listáról"
+        },
+        "description":"Adott hangulatjelek engedélyezési listája, az összes többi elrejtése pedig a hangulatjelválasztó elől",
+        "settings":{
+            "defaultEmojis":"Az alapértelmezett hangulatjelek elrejtése",
+            "disableToasts":"Pirítósok letiltása",
+            "exportEmojis":"Hangulatjelek exportálása",
+            "importEmojis":"Hangulatjelek importálása",
+            "resetEmojis":"Állítsa vissza a hangulatjeleket",
+            "serverEmojis":"Szerver hangulatjelek elrejtése",
+            "whitelistedEmojis":"Az engedélyezési listán szereplő hangulatjelek"
+        },
+        "toasts":{
+            "added":"\"{name}\" hozzáadva a listához",
+            "alreadyInList":"A „{name}” már szerepel a listán",
+            "removed":"\"{name}\" eltávolítva a listáról"
+        },
+        "ui":{
+            "defaultEmojis":"Alapértelmezett hangulatjelek",
+            "guildEmojis":"{guild} Hangulatjelek",
+            "noEmojis":"Nincsenek hangulatjelek az engedélyezőlistán.",
+            "removeAll":"Összes eltávolítása"
+        }
+    },
+    "youtubeDescription":{
+        "description":"Bekapcsolható leírást ad a YouTube-videó beágyazásához"
     }
 }
