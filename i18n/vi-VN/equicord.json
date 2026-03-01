@@ -1,1330 +1,1330 @@
 {
-				"absRPC":{
-								"about":{
-												"automaticAuth":"The plugin will automatically authenticate and fetch your listening progress.",
-												"description":"Enter your AudioBookShelf server URL, username, and password to display your currently playing audiobooks as Discord Rich Presence.",
-												"title":"How to connect to AudioBookShelf"
-								},
-								"description":"Rich presence for AudioBookShelf media server",
-								"settings":{
-												"password":"AudioBookShelf password",
-												"serverUrl":"AudioBookShelf server URL (e.g., https://abs.example.com)",
-												"username":"AudioBookShelf username"
-								},
-								"toasts":{
-												"notConfigured":"AudioBookShelf RPC is not configured."
-								}
-				},
-				"altKrispSwitch":{
-								"description":"Makes the Noise Suppression Popout switch between None and Krisp instead of Krisp and Standard"
-				},
-				"alwaysExpandProfiles":{
-								"description":"Always expands profile popouts to the full modal"
-				},
-				"anammox":{
-								"description":"Hides various features related to nitro and the store",
-								"settings":{
-												"billing":"Remove billing settings",
-												"dms":"Remove shops above DMs list",
-												"emojiList":"Remove unavailable categories from the emoji picker",
-												"gift":"Remove gift button",
-												"quests":"Remove quests above DMs list",
-												"serverBoost":"Remove server boost info above channel list"
-								}
-				},
-				"animalese":{
-								"description":"Plays animal crossing animalese for every message sent (they yap a lot)",
-								"quality":{
-												"high":"High",
-												"low":"Low",
-												"lowest":"Lowest",
-												"medium":"Medium"
-								},
-								"settings":{
-												"messageLengthLimit":"Maximum length of message to process",
-												"pitch":"Pitch multiplier",
-												"processOwnMessages":"Enable to yap your own messages too",
-												"soundQuality":"Quality of sound to use",
-												"speed":"Speed of the animalese sound",
-												"volume":"Volume of the animalese sound"
-								}
-				},
-				"atSomeone":{
-								"contextMenu":{
-												"someone":"Mention someone randomly"
-								},
-								"description":"Mention someone randomly"
-				},
-				"autoZipper":{
-								"description":"Automatically zips specified file types and folders before uploading to Discord",
-								"settings":{
-												"extensions":"Comma-separated list of file extensions to auto-zip (e.g., .psd,.blend,.exe,.dmg)"
-								}
-				},
-				"bannersEverywhere":{
-								"description":"Displays banners in the member list ",
-								"settings":{
-												"animate":"Animate banners",
-												"preferNameplate":"prefer nameplate over banner"
-								}
-				},
-				"baseDecoder":{
-								"description":"Decode base64 content of any message and copy the decoded content.",
-								"settings":{
-												"clickMethod":"Change the button to decode base64 content of any message.",
-												"clickMethodOptions":{
-																"left":"Left Click to decode the base64 content.",
-																"right":"Right click to decode the base64 content."
-												}
-								},
-								"ui":{
-												"copiedToast":"Decoded content copied to clipboard!",
-												"copyDecoded":"Copy Decoded Content",
-												"decodedContent":"Decoded Content",
-												"modalTitle":"Decoded Base64 Content",
-												"tooltipLeft":"Copy Decoded (Left Click) / Decode Base64 (Right Click)",
-												"tooltipRight":"Decode Base64 (Left Click) / Copy Decoded (Right Click)"
-								}
-				},
-				"betterAudioPlayer":{
-								"description":"Adds a spectrograph and oscilloscope visualizer to audio attachment players",
-								"settings":{
-												"forceMoveBelow":"Force the visualizer below the audio player",
-												"oscilloscope":"Enable oscilloscope visualizer",
-												"oscilloscopeColor":"Color for oscilloscope",
-												"oscilloscopeSolidColor":"Use solid color for oscilloscope",
-												"spectrograph":"Enable spectrograph visualizer",
-												"spectrographColor":"Color for spectrograph",
-												"spectrographSolidColor":"Use solid color for spectrograph"
-								},
-								"toasts":{
-												"invalidColor":"Invalid color format for {settingKey}, make sure it's in the format 'R, G, B' or '#RRGGBB'"
-								}
-				},
-				"betterBanReasons":{
-								"description":"Create custom reasons to use in the Discord ban modal, and/or show a text input by default instead of the options.",
-								"settings":{
-												"isTextInputDefault":"Shows a text input instead of a select menu by default. (Equivalent to clicking the \"Other\" option)",
-												"reasons":"Your custom reasons"
-								},
-								"ui":{
-												"addAnotherReason":"Add another reason",
-												"reasonPlaceholder":"Reason",
-												"reasons":"Reasons"
-								}
-				},
-				"betterBlockedUsers":{
-								"description":"Allows you to search in blocked users list and makes names selectable in settings.",
-								"ui":{
-												"searchPlaceholder":"Search users..."
-								}
-				},
-				"betterCommands":{
-								"commands":{
-												"refresh":{
-																"description":"Refreshes Discord application commands locally",
-																"failed":"Failed to refresh commands. Check the console for details.",
-																"refreshing":"Refreshing application commands...",
-																"success":"Commands refreshed successfully!",
-																"userOption":"specific user to try and refresh"
-												}
-								},
-								"description":"Enhances the command system with miscellaneous improvements.",
-								"settings":{
-												"allowNewlinesInCommands":"Allow newlines in command inputs (CTRL + Shift + Enter)",
-												"autoFillArguments":"Automatically fill command with all arguements instead of just required ones"
-								}
-				},
-				"betterInvites":{
-								"description":"See invites expiration date, view inviter profile and preview servers before joining by clicking the name",
-								"ui":{
-												"expireTooltip":"This invite will {expiry}",
-												"expireWill":"expire",
-												"invitedYouTo":"{inviter} invited you to {guild}",
-												"notExpire":"not expire"
-								}
-				},
-				"betterPlusReacts":{
-								"description":"The amount of plus before :emoji: is the message to add it to"
-				},
-				"betterUserArea":{
-								"description":"Customize and make the user area more clean.",
-								"settings":{
-												"alwaysShowUsername":"Always show username instead of status.",
-												"removeAudioMenus":"Remove menus next to mute and deafen buttons.",
-												"removeAvatarDecoration":"Remove avatar decoration.",
-												"removeButtonTooltips":"Remove button tooltips.",
-												"removeNameplate":"Remove nameplate styling.",
-												"removeUsernameStyles":"Remove username colors and effects."
-								}
-				},
-				"blockKeywords":{
-								"description":"Blocks messages containing specific user-defined keywords, as if the user sending them was blocked.",
-								"settings":{
-												"blockedWords":"Comma-seperated list of words to block",
-												"caseSensitive":"Whether to use a case sensitive search or not",
-												"ignoreBlockedMessages":"Completely ignores (recent) new messages bar",
-												"useRegex":"Use each value as a regular expression when checking message content (advanced)"
-								}
-				},
-				"blockKrisp":{
-								"description":"Prevent Krisp from loading"
-				},
-				"bypassPinPrompt":{
-								"description":"Bypass the pin prompt when using the pin functions"
-				},
-				"bypassStatus":{
-								"contextMenu":{
-												"addStatusBypass":"Add Status Bypass",
-												"removeStatusBypass":"Remove Status Bypass"
-								},
-								"description":"Still get notifications from specific sources when in do not disturb mode. Right-click on users/channels/guilds to set them to bypass do not disturb mode.",
-								"placeholder":{
-												"separateWithCommas":"Separate with commas"
-								},
-								"settings":{
-												"allowOutsideOfDms":"Allow selected users to bypass status outside of DMs too (acts like a channel/guild bypass, but it's for all messages sent by the selected users)",
-												"channels":"Channels to let bypass (notified when pinged in that channel)",
-												"guilds":"Guilds to let bypass (notified when pinged anywhere in guild)",
-												"notificationSound":"Whether the notification sound should be played",
-												"respectSilentPings":"Respect silent pings (@silent / suppress notifications)",
-												"statusToUse":"Status to use for whitelist",
-												"users":"Users to let bypass (notified for all messages sent in DMs)"
-								},
-								"statusOptions":{
-												"dnd":"Do Not Disturb",
-												"idle":"Idle",
-												"invisible":"Invisible",
-												"online":"Online"
-								}
-				},
-				"channelBadges":{
-								"description":"Adds badges to channels based on their type",
-								"settings":{
-												"announcementBadgeColor":"Announcement badge color",
-												"announcementBadgeLabel":"Announcement badge label",
-												"announcementThreadBadgeColor":"Announcement Thread badge color",
-												"announcementThreadBadgeLabel":"Announcement Thread badge label",
-												"categoryBadgeColor":"Category badge color",
-												"categoryBadgeLabel":"Category badge label",
-												"directoryBadgeColor":"Directory badge color",
-												"directoryBadgeLabel":"Directory badge label",
-												"forumBadgeColor":"Forum badge color",
-												"forumBadgeLabel":"Forum badge label",
-												"lockedBadgeColor":"Locked badge color",
-												"lockedBadgeLabel":"Locked badge label",
-												"mediaBadgeColor":"Media badge color",
-												"mediaBadgeLabel":"Media badge label",
-												"nsfwBadgeColor":"NSFW badge color",
-												"nsfwBadgeLabel":"NSFW badge label",
-												"oneBadgePerChannel":"Show only one badge per channel",
-												"privateThreadBadgeColor":"Private Thread badge color",
-												"privateThreadBadgeLabel":"Private Thread badge label",
-												"publicThreadBadgeColor":"Public Thread badge color",
-												"publicThreadBadgeLabel":"Public Thread badge label",
-												"rulesBadgeColor":"Rules badge color",
-												"rulesBadgeLabel":"Rules badge label",
-												"showAnnouncementBadge":"Show Announcement badge",
-												"showAnnouncementThreadBadge":"Show Announcement Thread badge",
-												"showCategoryBadge":"Show Category badge",
-												"showDirectoryBadge":"Show Directory badge",
-												"showForumBadge":"Show Forum badge",
-												"showLockedBadge":"Show Locked badge",
-												"showMediaBadge":"Show Media badge",
-												"showNSFWBadge":"Show NSFW badge",
-												"showPrivateThreadBadge":"Show Private Thread badge",
-												"showPublicThreadBadge":"Show Public Thread badge",
-												"showRulesBadge":"Show Rules badge",
-												"showStageBadge":"Show Stage badge",
-												"showTextBadge":"Show Text badge",
-												"showUnknownBadge":"Show Unknown badge",
-												"showVoiceBadge":"Show Voice badge",
-												"stageBadgeColor":"Stage badge color",
-												"stageBadgeLabel":"Stage badge label",
-												"textBadgeColor":"Text badge color",
-												"textBadgeLabel":"Text badge label",
-												"unknownBadgeColor":"Unknown badge color",
-												"unknownBadgeLabel":"Unknown badge label",
-												"voiceBadgeColor":"Voice badge color",
-												"voiceBadgeLabel":"Voice badge label"
-								},
-								"tooltips":{
-												"lockedChannel":"This channel is locked.",
-												"nsfwChannel":"This channel is marked as NSFW.",
-												"rulesChannel":"This channel is the server rules channel."
-								}
-				},
-				"channelTabs":{
-								"contextMenu":{
-												"openInNewTab":"Open in New Tab"
-								},
-								"description":"Group your commonly visited channels in tabs, like a browser"
-				},
-				"characterCounter":{
-								"description":"Adds a character counter to the chat input",
-								"settings":{
-												"colorEffects":"Turn on or off color effects for getting close to the character limit"
-								}
-				},
-				"cleanChannelName":{
-								"description":"remove all emoji and decor shit from channel names"
-				},
-				"cleanerChannelGroups":{
-								"description":"Hides all channels in collapsed categories, even if they have unread messages."
-				},
-				"clientSideBlock":{
-								"description":"Allows you to locally hide almost all content from any user",
-								"reply":{
-												"replyingToBlocked":"Replying to blocked message"
-								},
-								"settings":{
-												"blockedReplyDisplay":"What should display instead of the message when someone replies to someone you have hidden",
-												"blockedReplyDisplayOptions":{
-																"displayText":"Display text saying a hidden message was replied to",
-																"hideReply":"Literally nothing"
-												},
-												"guildBlackList":"Guild ids to disable functionality in",
-												"guildWhiteList":"Guild ids to enable functionality in",
-												"hideBlockedMessages":"Should messages from blocked users should be hidden fully (same as the old noblockedmessages plugin)",
-												"hideBlockedUsers":"Should blocked users should also be hidden everywhere",
-												"hideEmptyRoles":"Should role headers be hidden if all of their members are blocked",
-												"hideVc":"Hide voice channels containing blocked users.",
-												"usersToBlock":"User IDs seperated by a comma and a space"
-								}
-				},
-				"clipsEnhancements":{
-								"description":"Add more Clip FPS and duration options, custom clip length, RPC tagging and more",
-								"settings":{
-												"clipsLink":"Change FPS and duration options in Clips settings!",
-												"enableAdvancedSignals":"Enable advanced clip signals (auto-clip triggers)",
-												"enableScreenshotKeybind":"Enable the screenshot keybind feature",
-												"enableVoiceOnlyClips":"Enable voice-only clips (audio without video)",
-												"ignorePlatformRestriction":"Allow Platform Restricted Clipping (may cause save errors)",
-												"richPresenceTagging":"When should clips be tagged with the current Rich Presence?",
-												"richPresenceTaggingOptions":{
-																"always":"Always",
-																"never":"Never",
-																"whenMatched":"Only when beginning or end of activity name matches"
-												}
-								}
-				},
-				"commandPalette":{
-								"description":"Quickly run actions through a searchable command palette",
-								"settings":{
-												"customCommands":"Manage custom command palette entries",
-												"enableTagFilter":"Show the tag filter bar",
-												"hotkey":"Hotkey used to open the command palette",
-												"showTags":"Display tag chips for commands",
-												"visualStyle":"Palette appearance",
-												"visualStyleOptions":{
-																"classic":"Classic",
-																"polished":"Polished"
-												}
-								},
-								"ui":{
-												"hotkeyDescription":"Hotkey used to open the command palette",
-												"hotkeyTitle":"Command Palette Hotkey",
-												"pressAnyKey":"Press any key...",
-												"reset":"Reset"
-								}
-				},
-				"components":{
-								"description":"Utility plugin for developers to test and preview Discord components"
-				},
-				"contentWarning":{
-								"description":"Allows you to specify certain trigger words that will be blurred by default. Hovering/Clicking on the blurred content will reveal it.",
-								"settings":{
-												"onClick":"Only show trigger content on click instead of hover"
-								},
-								"ui":{
-												"flaggedWords":"Flagged Words",
-												"placeholder":"Word"
-								}
-				},
-				"copyProfileColors":{
-								"contextMenu":{
-												"copyProfileColors":"Copy Profile Colors"
-								},
-								"description":"A plugin to copy people's profile gradient colors to clipboard.",
-								"toast":{
-												"copied":"Profile colors copied to clipboard!",
-												"error":"Error copying profile colors!",
-												"noColorsFound":"No profile colors found!"
-								}
-				},
-				"copyStatusUrls":{
-								"description":"Copy the users status url when you right-click it",
-								"toast":{
-												"copied":"Copied URL",
-												"error":"Error copying URL, check console for more info"
-								}
-				},
-				"copyUserMention":{
-								"contextMenu":{
-												"copyUserMention":"Copy User Mention"
-								},
-								"description":"Adds a button to copy user's mention on the user context menu, works best with ValidUser."
-				},
-				"cursorBuddy":{
-								"description":"Adds a sprite that follows your cursor.",
-								"settings":{
-												"buddy":"Pick a cursor buddy",
-												"buddyOptions":{
-																"fathorse":"Fatass Horse",
-																"oneko":"Oneko"
-												},
-												"fade":"If the horse should fade when the cursor is near",
-												"fps":"Framerate of your buddy",
-												"freeroam":"If the horse should roam freely when idle",
-												"furColor":"Fur hex color for Oneko",
-												"outlineColor":"Outline hex color for Oneko",
-												"shake":"If the horse should shake the window when it's walking",
-												"size":"Size of the fatass horse",
-												"speed":"Speed of your buddy"
-								},
-								"ui":{
-												"furColor":"Fur Color",
-												"outlineColor":"Outline Color"
-								}
-				},
-				"customFolderIcons":{
-								"description":"Customize folder icons with any png"
-				},
-				"customSounds":{
-								"description":"Customize Discord's sounds.",
-								"settings":{
-												"debug":"Debug",
-												"export":"Export",
-												"import":"Import",
-												"resetAll":"Reset All",
-												"searchPlaceholder":"Search by name or ID",
-												"searchSounds":"Search Sounds"
-								},
-								"toast":{
-												"exportSuccess":"Exported {count} settings (audio files not included)",
-												"importError":"Error importing settings. Check console for details.",
-												"importSuccess":"Settings imported successfully!",
-												"loadError":"Error loading custom sound file",
-												"resetSuccess":"All overrides reset successfully!"
-								}
-				},
-				"customTimestamps":{
-								"about":{
-												"additional":"Additionally you can use these in your inputs:",
-												"calendar":"enables dynamic date formatting such as \"Today\" or \"Yesterday\".",
-												"relative":"gives you times such as \"4 hours ago\".",
-												"title":"How to use:"
-								},
-								"description":"Custom timestamps on messages and tooltips",
-								"settings":{
-												"calendarFormats":"Calendar formats",
-												"calendarFormatsDescription":"How to format the [calendar] value if used in the above timestamps.",
-												"formats":"Customize the timestamp formats"
-								}
-				},
-				"customUserColors":{
-								"contextMenu":{
-												"setColor":"Set Color"
-								},
-								"description":"Lets you add a custom color to any user, anywhere! Highly recommend to use with typingTweaks and roleColorEverywhere",
-								"settings":{
-												"colorInServers":"If name colors should be changed within servers",
-												"dmList":"Users with custom colors defined will have their name in the dm list colored"
-								}
-				},
-				"disableCameras":{
-								"description":"Disables cameras in a call by default"
-				},
-				"discordDevBanner":{
-								"description":"Enables the Discord developer banner, in which displays the build-ID"
-				},
-				"dragFavoriteEmotes":{
-								"description":"Adds the ability to change the order of your favourite emotes"
-				},
-				"dragify":{
-								"description":"Drop users, channels, or servers into chat to insert mentions or invites.",
-								"settings":{
-												"allowChatBodyDrop":"Allow dropping into the main chat body to insert text.",
-												"channelOutput":"Channel drop output.",
-												"channelOutputOptions":{
-																"link":"Channel link",
-																"mention":"#channel mention"
-												},
-												"inviteExpireAfter":"Invite expiration.",
-												"inviteExpireAfterOptions":{
-																"12hours":"12 hours",
-																"1day":"1 day",
-																"1hour":"1 hour",
-																"30min":"30 minutes",
-																"6hours":"6 hours",
-																"7days":"7 days",
-																"never":"Never"
-												},
-												"inviteMaxUses":"Invite max uses.",
-												"inviteMaxUsesOptions":{
-																"100uses":"100 uses",
-																"10uses":"10 uses",
-																"1use":"1 use",
-																"25uses":"25 uses",
-																"50uses":"50 uses",
-																"5uses":"5 uses",
-																"noLimit":"No limit"
-												},
-												"inviteTemporaryMembership":"Grant temporary membership.",
-												"reuseExistingInvites":"Reuse existing invite instead of creating a new one.",
-												"userOutput":"User drop output.",
-												"userOutputOptions":{
-																"id":"User ID",
-																"mention":"Mention user"
-												}
-								},
-								"toast":{
-												"dropFailed":"Dragify failed to handle drop.",
-												"inviteCreated":"Invite created.",
-												"inviteFailed":"Unable to create invite.",
-												"noChannelForInvites":"No channel available for invites."
-								}
-				},
-				"elementHighlighter":{
-								"description":"Highlight and inspect elements easily.",
-								"settings":{
-												"keybind":"Toggle Highlighter",
-												"showBorderRadius":"Display the element's border-radius values",
-												"showClasses":"Display the element's CSS class names in the tooltip",
-												"showDisplay":"Display the element's display type along with flex or grid properties",
-												"showFont":"Display the computed font family and font size",
-												"showId":"Display the element's ID attribute in the tooltip",
-												"showMargin":"Display the element's margin values",
-												"showPadding":"Display the element's padding values",
-												"showPosition":"Display the element's CSS position type and z-index"
-								},
-								"ui":{
-												"copiedColor":"Copied color to clipboard!",
-												"recording":"Recording...",
-												"reset":"Reset"
-								}
-				},
-				"equicordHelper":{
-								"alerts":{
-												"equicordSupport":"Equicord Support",
-												"okayContinue":"Okay continue",
-												"supportWarningBody":"Before asking for help. Check updates and if this issue is actually caused by Equicord!",
-												"supportWarningTitle":"Vencord Support Channel Warning"
-								},
-								"commands":{
-												"refreshCommands":"Refresh Slash Commands",
-												"refreshFailed":"Failed to refresh commands. Check console for details.",
-												"refreshSuccess":"Slash Commands refreshed successfully."
-								},
-								"description":"Used to provide support, fix discord caused crashes, and other misc features.",
-								"settings":{
-												"accountStandingButton":"Show an account standing button in the header bar",
-												"forceRoleIcon":"Forces role icons to display next to messages in compact mode",
-												"noDefaultHangStatus":"Disable the default hang status when joining voice channels",
-												"noMirroredCamera":"Prevents the camera from being mirrored on your screen",
-												"refreshSlashCommands":"Refreshes Slash Commands to show newly added commands without restarting your client.",
-												"removeActivitySection":"Removes the activity section above member list",
-												"showYourOwnActivityButtons":"Discord hides your own activity buttons for some reason"
-								},
-								"standing":{
-												"allGood":"All good!",
-												"atRisk":"At risk",
-												"limited":"Limited",
-												"suspended":"Suspended",
-												"veryLimited":"Very limited"
-								}
-				},
-				"equicordToolbox":{
-								"description":"Adds a button next to the inbox button in the channel header that houses Equicord quick actions",
-								"settings":{
-												"showPluginMenu":"Show the plugins menu in the toolbox"
-								},
-								"ui":{
-												"editQuickCss":"Edit QuickCSS",
-												"enableQuickCss":"Enable QuickCSS",
-												"manageThemes":"Manage Themes",
-												"openNotificationLog":"Open Notification Log",
-												"openSettings":"Open Settings",
-												"plugins":"Plugins",
-												"restartToApply":"Restart to apply the change",
-												"themes":"Themes",
-												"tooltip":"Equicord Toolbox"
-								}
-				},
-				"equissant":{
-								"description":"Crossant every specified amount of clicks :trolley:",
-								"settings":{
-												"amount":"Amount of clicks to trigger crossant"
-								}
-				},
-				"exitSounds":{
-								"description":"Play soundboard sounds when you disconnect from voice.",
-								"settings":{
-												"soundGuildId":"Select the server containing the sound.",
-												"soundId":"Enter the ID of the sound you want to play."
-								},
-								"toasts":{
-												"somethingWentWrong":"Oops! Something went wrong."
-								},
-								"ui":{
-												"enterSoundId":"Enter sound ID...",
-												"selectServer":"Select a server...",
-												"setGlobalExitSound":"Set as global exit sound"
-								}
-				},
-				"exportMessages":{
-								"description":"Allows you to export any message to a file",
-								"notifications":{
-												"exportFailed":"Failed to export message",
-												"exportSuccess":"Message exported successfully as {filename}",
-												"title":"Export Messages"
-								},
-								"settings":{
-												"exportContacts":"Export a list of friends to your clipboard. Adds a new button to the menu bar for the friends tab.",
-												"openFileAfterExport":"Open the exported file in the default file handler after export"
-								},
-								"ui":{
-												"contactListUndefined":"Contact list is undefined. Click on the \"All\" tab before exporting.",
-												"contactsCopied":"Contacts copied to clipboard successfully.",
-												"export":"Export",
-												"exportMessage":"Export Message"
-								}
-				},
-				"fastDeleteChannels":{
-								"description":"Adds a trash icon to delete channels",
-								"settings":{
-												"keyBind":"The key to toggle trash when pressed.",
-												"reqAlt":"Require alt to be held.",
-												"reqCtrl":"Require control to be held.",
-												"reqShift":"Require shift to be held."
-								}
-				},
-				"favouriteAnything":{
-								"description":"Favourite any image"
-				},
-				"fileUpload":{
-								"description":"Upload images and videos to file hosting services like Zipline and Nest",
-								"ui":{
-												"uploadTo":"Upload to {serviceName}"
-								}
-				},
-				"findReply":{
-								"description":"Jumps to the earliest reply to a message in a channel (lets you follow past conversations more easily).",
-								"settings":{
-												"hideButtonIfNoReply":"Hides the button if there are no replies to the message",
-												"includeAuthor":"Will also search for messages that reply to the author in general, not just that exact message",
-												"includePings":"Will also search for messages that @ the author directly"
-								},
-								"toasts":{
-												"containerNotFound":"Couldn't find the container element.",
-												"noReplyFound":"Couldn't find a reply.",
-												"useBottomPanel":"Use the bottom panel to navigate between replies."
-								},
-								"ui":{
-												"jumpToReply":"Jump to Reply"
-								}
-				},
-				"fixFileExtensions":{
-								"description":"Fixes file extensions by renaming them to a compatible supported format if possible"
-				},
-				"followVoiceUser":{
-								"description":"Follow a friend in voice chat.",
-								"info":"This Plugin is used to follow a Friend/Friends into voice chat(s).",
-								"settings":{
-												"leaveWhenUserLeaves":"Leave the voice channel when the user leaves. (That can cause you to sometimes enter infinite leave/join loop)",
-												"onlyWhenInVoice":"Only follow the user when you are in a voice channel"
-								},
-								"ui":{
-												"followUser":"Follow User"
-								}
-				},
-				"fontLoader":{
-								"description":"Loads any font from Google Fonts",
-								"settings":{
-												"applyOnCodeBlocks":"Apply the font to code blocks"
-								},
-								"ui":{
-												"by":"by {authors}",
-												"clickToApply":"Click on any font to apply it.",
-												"searchFonts":"Search fonts...",
-												"searchGoogleFonts":"Search Google Fonts"
-								}
-				},
-				"forwardAnywhere":{
-								"description":"If a forward fails send it as a normal message also allows nsfw forwards",
-								"options":{
-												"greaterThan":">",
-												"hash":"-#"
-								},
-								"settings":{
-												"forwardPreface":"What should forwarded from be prefaced with"
-								}
-				},
-				"frequentQuickSwitcher":{
-								"description":"Rewrites and filters the quick switcher results to be your most frequent channels"
-				},
-				"friendCloud":{
-								"commands":{
-												"count":"Number of users to display",
-												"friendcloud":"Display user you most interact with in a cloud"
-								},
-								"description":"Adds a /friendcloud command to visualize the users you most interact with",
-								"errors":{
-												"couldntGenerate":"Couldn't generate the image :c",
-												"countMustBeHigher":"The count must be 1 or higher!",
-												"noAffinities":"No affinities found. Check your privacy settings.",
-												"noValidUsers":"No valid users found in affinities. Check your privacy settings."
-								}
-				},
-				"friendCodes":{
-								"panel":{
-												"copied":"Copied!",
-												"copyCode":"Copy Code",
-												"currentCode":"Current Friend Code",
-												"error":"Error: {error}",
-												"refresh":"Refresh",
-												"sendToServer":"Send to Server",
-												"sent":"Sent!",
-												"title":"Friend Codes"
-								},
-								"settings":{
-												"autoCopy":"Automatically copy friend code to clipboard when it changes",
-												"sendToServer":"Automatically send friend code to server when it changes",
-												"webhookUrl":"Webhook URL to send friend code to"
-								}
-				},
-				"friendTags":{
-								"description":"Allows you to filter by custom tags in the quick switcher by starting a search with &",
-								"ui":{
-												"add":"Add",
-												"addTo":"Add to {tagName}",
-												"name":"Name",
-												"remove":"Remove",
-												"removeFrom":"Remove from {tagName}",
-												"tag":"Tag",
-												"userList":"User List (Click A User To Remove)",
-												"usersSeperated":"Users (Seperated by comma)"
-								}
-				},
-				"friendshipRanks":{
-								"description":"Adds badges showcasing how long you have been friends with a user for",
-								"ranks":{
-												"besties":{
-																"description":"How do you even manage this??? (5 Years)",
-																"title":"Besties"
-												},
-												"blooming":{
-																"description":"Your friendship is getting there! (1 Month)",
-																"title":"Blooming"
-												},
-												"burning":{
-																"description":"Your friendship has reached terminal velocity (3 Months)",
-																"title":"Burning"
-												},
-												"fighter":{
-																"description":"Your friendship is strong (6 Months)",
-																"title":"Fighter"
-												},
-												"royal":{
-																"description":"Your friendship has gone through thick and thin- a whole 2 years!",
-																"title":"Royal"
-												},
-												"sprout":{
-																"description":"Your friendship is just starting",
-																"title":"Sprout"
-												},
-												"star":{
-																"description":"Your friendship has been going on for a WHILE (1 Year)",
-																"title":"Star"
-												}
-								}
-				},
-				"fullVcPfp":{
-								"description":"Makes avatars take up the entire vc tile"
-				},
-				"gensokyoRadioRPC":{
-								"description":"Discord rich presence for Gensokyo Radio!",
-								"info":"Discord rich presence for Gensokyo Radio!",
-								"settings":{
-												"refreshInterval":"The interval between activity refreshes (seconds)"
-								}
-				},
-				"ghosted":{
-								"description":"A cute ghost will appear if you don't answer their DMs",
-								"settings":{
-												"exemptedChannels":"Comma-separated list of channel IDs to exempt from ghosting (right-click a DM channel to copy its ID)",
-												"ignoreBots":"Ignore DMs from bots",
-												"ignoreGroupDms":"Exclude all group dms from ghosting",
-												"showDmIcons":"Show ghost icons next to individual DMs",
-												"showIndicator":"Show the ghost counter at the top of the server list"
-								},
-								"ui":{
-												"ghostedUsers":"{count} Ghosted Users",
-												"noGhostedUsers":"No Ghosted Users",
-												"unghost":"unghost"
-								}
-				},
-				"gifCollections":{
-								"description":"Allows you to create collections of gifs",
-								"settings":{
-												"collectionPrefix":"The prefix for collections",
-												"collectionsSortOrder":"The order of sorting for collections",
-												"collectionsSortType":"The type of sorting for collections",
-												"defaultEmptyCollectionImage":"The image / gif that will be shown when a collection has no images / gifs",
-												"itemPrefix":"The prefix for gif items",
-												"onlyShowCollections":"Only show collections",
-												"preventDuplicates":"Prevent adding the same GIF to a collection multiple times",
-												"showCopyImageLink":"Show 'Copy Image Link' option in context menus",
-												"stopWarnings":"Stop deletion warnings"
-								},
-								"toasts":{
-												"gifMissingMetadata":"Cannot refresh: GIF missing metadata (re-add to collection)"
-								},
-								"ui":{
-												"addToCollection":"Add To Collection",
-												"addedAt":"Added At",
-												"areYouSure":"Are you sure?",
-												"ascending":"Ascending",
-												"cannotRefresh":"Cannot refresh: GIF missing metadata (re-add to collection)",
-												"close":"Close",
-												"collectionInformation":"Collection Information",
-												"collectionName":"Collection Name",
-												"copyImageLink":"Copy Image Link",
-												"copyUrl":"Copy URL",
-												"createCollection":"Create Collection",
-												"createdAt":"Created At",
-												"creationDate":"Creation Date",
-												"deleteAction":"delete this collection",
-												"deleteCollection":"Delete Collection",
-												"deleteConfirm":"Do you really want to {action}?",
-												"descending":"Descending",
-												"exportCollections":"Export Collections",
-												"gifs":"Gifs",
-												"height":"Height",
-												"imageLinkCopied":"Image link copied to clipboard",
-												"import":"Import",
-												"importCollections":"Import Collections",
-												"importOverwrite":"Importing collections will overwrite your current collections.",
-												"information":"Information",
-												"lastUpdated":"Last Updated",
-												"modifiedDate":"Modified Date",
-												"moveToCollection":"Move To Collection",
-												"name":"Name",
-												"nevermind":"Nevermind",
-												"order":"Order",
-												"refreshFailed":"Failed to refresh URL",
-												"refreshSuccess":"URL refreshed successfully",
-												"refreshUrl":"Refresh URL",
-												"refreshing":"Refreshing URL...",
-												"remove":"Remove",
-												"removeAction":"remove this item",
-												"rename":"Rename",
-												"reset":"Reset",
-												"resetCollections":"Reset Collections",
-												"resetRemove":"Resetting collections will remove all your collections.",
-												"selectCollection":"Select a collection to move the item to",
-												"sortBy":"Sort By",
-												"sortCollections":"Sort Collections",
-												"unknown":"Unknown",
-												"urlCopied":"URL copied to clipboard",
-												"width":"Width"
-								}
-				},
-				"gifRoulette":{
-								"commands":{
-												"gifroulette":"Tempt fate and send a gif"
-								},
-								"description":"Adds a command to send a random gif from your favourites, and a one in ten chance to ping the owner of the server",
-								"settings":{
-												"pingOwnerChance":"If there should be a 1 in 10 change to ping the owner of the guild (oh no)"
-								}
-				},
-				"githubRepos":{
-								"description":"Displays a user's public GitHub repositories in their profile",
-								"settings":{
-												"showInMiniProfile":"Show full ui in the mini profile instead of just a button",
-												"showLanguage":"Show repository language",
-												"showRepositoryTab":"Show repositories tab in profile modal (hides button in connections when enabled)",
-												"showStars":"Show repository stars"
-								},
-								"ui":{
-												"error":"Error, Failed to render GithubRepos"
-								}
-				},
-				"globalBadges":{
-								"description":"Adds global badges from other client mods",
-								"ui":{
-												"joinServer":"Join GlobalBadges Server",
-												"refetchSuccess":"Successfully refetched global badges!"
-								}
-				},
-				"googleThat":{
-								"commands":{
-												"googlethat":"Send a search engine link",
-												"input":"The search query"
-								},
-								"description":"Adds a command to send a internet search link",
-								"settings":{
-												"customEngineURL":"The URL of the Engine you wish to use",
-												"defaultEngine":"The search engine to use",
-												"embed":"If the sent link should render an embed",
-												"hyperlink":"If the sent link should hyperlink with the query as the label"
-								}
-				},
-				"guildPickerDumper":{
-								"description":"Context menu to dump and download a server's emojis and stickers.",
-								"ui":{
-												"downloadEmojis":"Download Emojis",
-												"downloadStickers":"Download Stickers",
-												"serverNotFound":"Server not found!"
-								}
-				},
-				"guildTagSettings":{
-								"description":"Adds some settings for guild tags, such as hiding them or disabling the prompt to adopt them.",
-								"settings":{
-												"disableAdoptTagPrompt":"Disable the prompt to adopt tags",
-												"hideTags":"Hide tags"
-								}
-				},
-				"hideChatButtons":{
-								"description":"Able to hide the chat buttons",
-								"settings":{
-												"color":"Color it red on open",
-												"open":"Opened by default"
-								},
-								"ui":{
-												"close":"Close",
-												"open":"Open"
-								}
-				},
-				"hideServers":{
-								"description":"Allows you to hide servers from the guild list and quick switcher by right clicking them",
-								"ui":{
-												"hideFolder":"Hide Folder",
-												"hideServer":"Hide Server",
-												"unhideFolder":"Unhide Folder",
-												"unhideServer":"Unhide Server"
-								}
-				},
-				"holyNotes":{
-								"description":"Save messages as notes to revisit later",
-								"ui":{
-												"holyNotes":"Holy Notes",
-												"noteMessage":"Note Message",
-												"openNotes":"Open Notes",
-												"saveNote":"Save Note"
-								}
-				},
-				"homeTyping":{
-								"description":"Changes the home button to a typing indicator if someone in your dms is typing"
-				},
-				"hopOn":{
-								"description":"Hop on Fortnite or Hop on bloons :3",
-								"settings":{
-												"regex":"Regex to trigger on",
-												"url":"URL to open"
-								}
-				},
-				"husk":{
-								"description":"Adds Husk button (check settings to change used emoji)",
-								"settings":{
-												"emojiID":"Emoji ID (default (from Vencord Server): 1026532993923293184)",
-												"emojiName":"Emoji name (default (from Vencord Server): husk)",
-												"findInServer":"Attempt to find emoji of same name in server before using ID in settings (useful if no nitro)"
-								},
-								"ui":{
-												"husk":"Husk"
-								}
-				},
-				"iRememberYou":{
-								"description":"Locally saves everyone you've been communicating with (including servers), in case of lose",
-								"ui":{
-												"iRememberYou":"I Remember You"
-								}
-				},
-				"iconViewer":{
-								"description":"Adds a new tab to settings to preview all icons.",
-								"ui":{
-												"iconFinder":"Icon Finder",
-												"openIconsTab":"Open Icons Tab"
-								}
-				},
-				"idleAutoRestart":{
-								"description":"Automatically restarts the client after being idle for a configurable amount of time, but avoids restarting while you are in VC.",
-								"settings":{
-												"idleMinutes":"Minutes of inactivity before restarting (when not in VC)",
-												"isEnabled":"Enable automatic restart after idle"
-								},
-								"ui":{
-												"disableAutoIdle":"Disable Auto Idle Restart",
-												"enableAutoIdle":"Enable Auto Idle Restart"
-								}
-				},
-				"ignoreCalls":{
-								"description":"Allows you to ignore calls from specific users or dm groups.",
-								"settings":{
-												"permanentlyIgnoredUsers":"User IDs (comma + space) who should be permanetly ignored"
-								},
-								"ui":{
-												"ignore":"Ignore",
-												"permanentlyIgnore":"Permanently Ignore Calls",
-												"temporarilyIgnore":"Temporarily Ignore Calls"
-								}
-				},
-				"imgToGif":{
-								"commands":{
-												"height":"Height of the gif",
-												"image":"Image attachment to use",
-												"imgtogif":"Allows you to turn an image to a gif",
-												"width":"Width of the gif"
-								},
-								"description":"Adds a /imgtogif slash command to create a gif from any image",
-								"errors":{
-												"noImage":"No Image specified!",
-												"notAnImage":"Upload is not an image"
-								}
-				},
-				"inRole":{
-								"commands":{
-												"inrole":"Know who is in a role",
-												"role":"The role"
-								},
-								"description":"Know who is in a role with the role context menu or /inrole command (read plugin info!)",
-								"errors":{
-												"makeSureServer":"Make sure that you are in a server."
-								},
-								"limitations":{
-												"description":"If you don't have mod permissions on the server, and that server is large (over 100 members), the plugin may be limited in the following ways:",
-												"friendsAlwaysShown":"However, friends will always be shown regardless of their status.",
-												"offlineNotListed":"Offline members won't be listed",
-												"title":":warning: Limitations",
-												"upTo100":"Up to 100 members will be listed by default. To get more, scroll down in the member list to load more members."
-								},
-								"ui":{
-												"viewMembers":"View Members in Role"
-								}
-				},
-				"ingtoninator":{
-								"description":"Suffixes 'ington' to a random word in your message",
-								"settings":{
-												"isEnabled":"Enable or disable the Ingtoninator",
-												"showIcon":"Show a button to toggle the Ingtoninator plugin"
-								},
-								"ui":{
-												"disabled":"Ingtoninator Disabled",
-												"enabled":"Ingtoninator Enabled"
-								}
-				},
-				"instantScreenshare":{
-								"description":"Instantly screenshare when joining a voice channel with support for desktop sources, windows, and video input devices (cameras, capture cards)",
-								"info":{
-												"linux":"For Linux",
-												"soundPreview":"Regarding Sound & Preview Settings",
-												"soundPreviewInfo":"We use the settings set and used by discord to decide if stream preview and sound should be enabled or not",
-												"videoDevices":"Video Devices",
-												"videoDevicesInfo":"Supports cameras and capture cards (like Elgato HD60X) when enabled in settings",
-												"wayland":"For Wayland it only pops up the screenshare select",
-												"x11":"For X11 it may or may not work :shrug:"
-								},
-								"ui":{
-												"instantScreenshare":"Instant Screenshare",
-												"instantScreenshareDisabled":"Instant Screenshare Disabled",
-												"instantScreenshareEnabled":"Instant Screenshare Enabled"
-								}
-				},
-				"invisibleChat":{
-								"description":"Encrypt your Messages in a non-suspicious way!",
-								"settings":{
-												"savedPasswords":"Saved Passwords (Seperated with a , )"
-								},
-								"ui":{
-												"decryptMessage":"Decrypt Message",
-												"encryptMessage":"Encrypt Message",
-												"hiddenMessageIndicator":"This message has a hidden message! (InvisibleChat)"
-								}
-				},
-				"inviteDefaults":{
-								"description":"Allows you to edit the default values when creating server invites.",
-								"options":{
-												"forever":"Forever",
-												"infinite":"Infinite"
-								},
-								"settings":{
-												"inviteDuration":"Invite Duration",
-												"maxUses":"Invite Use Count",
-												"temporaryMembership":"Temporary Membership"
-								}
-				},
-				"jellyfinRichPresence":{
-								"coverTypeOptions":{
-												"episodeCover":"Episode Cover",
-												"seriesCover":"Series Cover"
-								},
-								"description":"Rich presence for Jellyfin media server",
-								"episodeFormatOptions":{
-												"fulltext":"Season 1 Episode 1",
-												"s01e01":"S01E01",
-												"short":"1x01"
-								},
-								"howToGetApiKey":{
-												"description":"Auth token can be found by following these steps:",
-												"title":"How to get an API key",
-												"userIdInfo":"You'll also need your User ID, which can be found in the url of your user profile page."
-								},
-								"nameFormatOptions":{
-												"custom":"Custom",
-												"seriesEpisodeName":"Series - Episode/Track/Movie Name",
-												"seriesMovieName":"Series/Movie Name"
-								},
-								"overrideTypeOptions":{
-												"listening":"Listening",
-												"off":"Off",
-												"playing":"Playing",
-												"streaming":"Streaming",
-												"watching":"Watching"
-								},
-								"privacyMode":{
-												"albumHidden":"[Album Hidden]",
-												"artistHidden":"[Artist Hidden]",
-												"episodeHidden":"[Episode Hidden]",
-												"listeningToMusic":"Listening to music",
-												"mediaHidden":"[Media Hidden]",
-												"movieHidden":"[Movie Hidden]",
-												"seriesHidden":"[Series Hidden]",
-												"titleHidden":"[Title Hidden]",
-												"trackHidden":"[Track Hidden]",
-												"watchingSomething":"Watching Something",
-												"watchingTvShow":"Watching a TV Show"
-								},
-								"settings":{
-												"apiKey":"Jellyfin API key obtained from your Jellyfin administration dashboard",
-												"coverType":"Choose which cover to display when watching a TV show",
-												"customName":"Custom Rich Presence name (only used if 'Custom' is selected). Options: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
-												"episodeFormat":"Episode number format",
-												"nameDisplay":"Choose how the application name should appear in Rich Presence",
-												"overrideRichPresenceType":"Override the rich presence type",
-												"privacyMode":"Privacy Mode (Hide media details like Episode/Song Name)",
-												"serverUrl":"Jellyfin server URL (e.g., https://jellyfin.example.com)",
-												"showEpisodeName":"Show episode name after season/episode info",
-												"showPausedState":"Show Rich Presence when media is paused",
-												"userId":"Jellyfin user ID obtained from your user profile URL"
-								},
-								"state":{
-												"episode":"Episode {episode}",
-												"paused":"Paused",
-												"season":"Season {season}"
-								},
-								"toasts":{
-												"notConfigured":"JellyfinRPC is not configured."
-								}
-				},
-				"jumpTo":{
-								"description":"Adds context menu options to jump to the start or bottom of a channel/DM.",
-								"errors":{
-												"channelNotAvailable":"Channel information not available.",
-												"failedJump":"Failed to jump to message. Check console for details.",
-												"failedSearch":"Failed to search for messages.",
-												"noMessagesFound":"No messages found from this user in this channel."
-								},
-								"ui":{
-												"jumpToFirst":"Jump To First Message",
-												"jumpToLast":"Jump To Last Message",
-												"usersLastMessage":"User's Last Message",
-												"yourLastMessage":"Your Last Message"
-								}
-				},
-				"jumpscare":{
-								"description":"Adds a configurable chance of jumpscaring you whenever you open a channel. Inspired by Geometry Dash Mega Hack",
-								"settings":{
-												"audioSource":"Sets the audio url of the jumpscare",
-												"chance":"The chance of a jumpscare happening (1 in X so: 100 = 1/100 or 1%, 50 = 1/50 or 2%, etc.)",
-												"imageSource":"Sets the image url of the jumpscare"
-								}
-				},
-				"keyboardNavigation":{
-								"commands":{
-												"openDevSettings":"Open Dev tab"
-								},
-								"description":"Allows you to navigate the UI with a keyboard.",
-								"settings":{
-												"allowMouseControl":"Allow the mouse to control the command palette.",
-												"hotkey":"The hotkey to open the command palette."
-								},
-								"ui":{
-												"recordKeybind":"Record keybind",
-												"recording":"Recording..."
-								}
-				},
-				"keyboardSounds":{
-								"description":"Adds OperaGX or osu! sound effects when typing on your keyboard.",
-								"options":{
-												"operaGx":"OperaGX",
-												"osu":"osu!"
-								},
-								"settings":{
-												"soundPack":"Sound pack to use.",
-												"volume":"Volume of the keyboard sounds."
-								}
-				},
-				"keywordNotify":{
-								"description":"Sends a notification if a given message matches certain keywords or regexes",
-								"options":{
-												"blacklist":"Blacklist",
-												"whitelist":"Whitelist"
-								},
-								"settings":{
-												"amountToKeep":"Amount of messages to keep in the log",
-												"ignoreBots":"Ignore messages from bots",
-												"keywords":"Manage keywords"
-								},
-								"ui":{
-												"addId":"Add ID",
-												"addKeywordEntry":"Add Keyword Entry",
-												"clearAll":"Clear All",
-												"ignoreCase":"Ignore Case",
-												"keywordEntry":"Keyword Entry {index}",
-												"keywords":"Keywords",
-												"whitelistBlacklist":"Whitelist/Blacklist"
-								}
-				},
-				"lastActive":{
-								"description":"A plugin to jump to last active message from yourself or another user in a channel/server.",
-								"errors":{
-												"channelNotAvailable":"Channel information not available.",
-												"findFailed":"Failed to find messages. Check console for details.",
-												"jumpFailed":"Failed to jump to message. Check console for details.",
-												"noRecentMessages":"Couldn't find any recent messages from this user."
-								}
-				},
-				"limitMiddleClickPaste":{
-								"description":"Prevent middle click pasting either always or just when a text area is not focused.",
-								"options":{
-												"alwaysPrevent":"Always Prevent Middle Click Pasting",
-												"onlyWhenNotFocused":"Only Prevent When Text Area Not Focused"
-								},
-								"settings":{
-												"preventLinkOpen":"Prevent middle-click on links from opening new tabs while preserving autoscroll.",
-												"scope":"Situations in which to prevent middle click from pasting.",
-												"threshold":"Milliseconds until pasting is enabled again after a middle click."
-								}
-				},
-				"listenBrainzRPC":{
-								"about":{
-												"description":"The MusicBrainz API does not require an API key, but it does require a meaningful user-agent string. For most, an email address should suffice.",
-												"title":"About MusicBrainz API"
-								},
-								"buttons":{
-												"profile":"ListenBrainz Profile",
-												"viewSong":"View Song"
-								},
-								"defaults":{
-												"statusName":"some music"
-								},
-								"description":"Little plugin for ListenBrainz rich presence",
-								"missingArtOptions":{
-												"listenbrainzLogo":"Use large ListenBrainz logo",
-												"placeholder":"Use generic placeholder"
-								},
-								"nameFormatOptions":{
-												"albumName":"Use album name (falls back to custom status text if song has no album)",
-												"artistFirst":"Use format 'artist - song'",
-												"artistOnly":"Use artist name only",
-												"customStatus":"Use custom status name",
-												"songFirst":"Use format 'song - artist'",
-												"songOnly":"Use song name only"
-								},
-								"settings":{
-												"hideWithActivity":"Hide ListenBrainz presence if you have any other presence",
-												"hideWithSpotify":"Hide ListenBrainz presence if Spotify is running",
-												"mbContact":"ListenBrainz contact",
-												"missingArt":"When album or album art is missing",
-												"nameFormat":"Show name of song and artist in status name",
-												"shareSong":"Show link to song on ListenBrainz (may only be visible to other users)",
-												"shareUsername":"Show link to ListenBrainz profile (may only be visible to other users)",
-												"statusName":"Custom status text",
-												"useListeningStatus":"Show \"Listening to\" status instead of \"Playing\"",
-												"useLogo":"Show ListenBrainz logo on album art",
-												"useTimeBar":"Use track duration to display a time bar (must be using Listening status)",
-												"username":"ListenBrainz username"
-								}
-				},
-				"loginWithQR":{
-								"description":"Allows you to login to another device by scanning a login QR code, just like on mobile!",
-								"settings":{
-												"scanQr":"Scan a QR code"
-								},
-								"ui":{
-												"enableAndRestart":"Enable the plugin and restart your client to scan a login QR code",
-												"scanQrCode":"Scan QR Code"
-								}
-				},
-				"messageLoggerEnhanced":{
-								"buttons":{
-												"exportLogs":"Export Logs",
-												"exporting":"Exporting...",
-												"importLogs":"Import Logs",
-												"importing":"Importing..."
-								},
-								"modal":{
-												"clearAllLogs":"Clear All Logs",
-												"clearVisibleLogs":"Clear Visible Logs",
-												"copyChannelId":"Copy Channel ID",
-												"copyContent":"Copy Content",
-												"copyMessageId":"Copy Message ID",
-												"copyServerId":"Copy Server ID",
-												"copyUserId":"Copy User ID",
-												"deleteLog":"Delete Log",
-												"deleted":"Deleted",
-												"edited":"Edited",
-												"emptyLogs":"Empty eh",
-												"filterMessages":"Filter Messages",
-												"fromChannel":"From {channel} in {guild}",
-												"fromDms":"From {username}'s DMs",
-												"fromGroupDm":"From {name} Group DM",
-												"ghostPinged":"Ghost Pinged",
-												"importLogs":"Import Logs",
-												"importLogsTooltip":"ML Enhanced now stores logs in indexeddb. You need to import your old logs from the logs directory. Importing wont overwrite existing logs",
-												"jumpToMessage":"Jump To Message",
-												"loadMore":"Load More",
-												"maybeTry":"Maybe try {nextTab} or {lastTab}",
-												"noResultsIn":"No results in {tab}.",
-												"openUserProfile":"Open user profile",
-												"sortNewestFirst":"Sort Newest First",
-												"sortOldestFirst":"Sort Oldest First"
-								},
-								"settings":{
-												"alwaysLogCurrentChannel":"Always log current selected channel. Blacklisted channels/users will still be ignored.",
-												"alwaysLogDirectMessages":"Always log DMs",
-												"attachmentFileExtensions":"Comma separated list of file extensions to save. Attachments with file extensions not in this list will not be saved. Leave empty to save all attachments.",
-												"attachmentSizeLimitInMegabytes":"Maximum size of an attachment in megabytes to save. Attachments larger than this size will not be saved.",
-												"blacklistedIds":"Blacklisted server, channel, or user IDs.",
-												"cacheLimit":"Maximum number of messages to store in the cache. Older messages are deleted when the limit is reached. This helps reduce memory usage and improve performance. 0 means there is no limit",
-												"cacheMessagesFromServers":"Usually message logger only logs from whitelisted ids and dms, enabling this would mean it would log messages from all servers as well. Note that this may cause the cache to exceed its limit, resulting in some messages being missed. If you are in a lot of servers, this may significantly increase the chances of messages being logged, which can result in a large message record and the inclusion of irrelevant messages.",
-												"exportLogsFromIndexedDB":"Export Logs From IndexedDB",
-												"hideMessageFromMessageLoggers":"When enabled, a context menu button will be added to messages to allow you to delete messages without them being logged by other loggers. Might not be safe, use at your own risk.",
-												"hideMessageFromMessageLoggersDeletedMessage":"The message content to replace the message with when using the hide message from message loggers feature.",
-												"ignoreBots":"Whether to ignore messages by bots",
-												"ignoreMutedCategories":"Messages in channels belonging to muted categories will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-												"ignoreMutedChannels":"Messages in muted channels will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-												"ignoreMutedGuilds":"Messages in muted guilds will not be logged. Whitelisted users/channels in muted guilds will still be logged.",
-												"ignoreSelf":"Whether to ignore messages by yourself",
-												"ignoreWebhooks":"Whether to ignore messages by webhooks",
-												"importLogsFromFile":"Import Logs From File",
-												"messageLimit":"Maximum number of messages to save. Older messages are deleted when the limit is reached. 0 means there is no limit",
-												"messagesToDisplayAtOnceInLogs":"Number of messages to display at once in logs & number of messages to load when loading more messages in logs.",
-												"openImageCacheFolder":"Opens the image cache directory",
-												"openLogs":"Open Logs",
-												"permanentlyRemoveLogByDefault":"Vencord's base MessageLogger remove log button wiil delete logs permanently",
-												"preserveCurrentChannel":"When enabled, messages in your currently selected channel are not affected by time-based cleanup.",
-												"saveImages":"Save deleted attachments.",
-												"saveMessages":"Whether to save the deleted and edited messages.",
-												"selectImageCacheDir":"Select saved images directory",
-												"selectLogsDir":"Select logs directory",
-												"showLogsButton":"Toggle to whenever show the toolbox or not",
-												"showWhereMessageIsFrom":"Show message channel/author name and server name",
-												"sortNewest":"Sort logs by newest.",
-												"timeBasedCleanupMinutes":"Automatically remove messages from servers that are older than this many minutes. Set to 0 to disable time-based cleanup.",
-												"whitelistedIds":"Whitelisted server, channel, or user IDs."
-								}
-				}
+    "absRPC":{
+        "about":{
+            "automaticAuth":"Plugin sẽ tự động xác thực và tìm nạp tiến trình nghe của bạn.",
+            "description":"Nhập máy chủ AudioBookShelf URL, tên người dùng và mật khẩu để hiển thị sách nói hiện đang phát của bạn dưới dạng Discord Rich Presence.",
+            "title":"Cách kết nối với AudioBookShelf"
+        },
+        "description":"Sự hiện diện phong phú của máy chủ phương tiện AudioBookShelf",
+        "settings":{
+            "password":"Mật khẩu kệ sách âm thanh",
+            "serverUrl":"Máy chủ AudioBookShelf URL (ví dụ: https://abs.example.com)",
+            "username":"Tên người dùng AudioBookShelf"
+        },
+        "toasts":{
+            "notConfigured":"AudioBookShelf RPC chưa được định cấu hình."
+        }
+    },
+    "altKrispSwitch":{
+        "description":"Làm cho Cửa sổ bật lên loại bỏ tiếng ồn chuyển đổi giữa Không có và Krisp thay vì Krisp và Tiêu chuẩn"
+    },
+    "alwaysExpandProfiles":{
+        "description":"Luôn mở rộng cửa sổ bật lên của hồ sơ sang chế độ đầy đủ"
+    },
+    "anammox":{
+        "description":"Ẩn các tính năng khác nhau liên quan đến nitro và cửa hàng",
+        "settings":{
+            "billing":"Xóa cài đặt thanh toán",
+            "dms":"Xóa các cửa hàng trên danh sách DM",
+            "emojiList":"Xóa các danh mục không có sẵn khỏi bộ chọn biểu tượng cảm xúc",
+            "gift":"Nút xóa quà tặng",
+            "quests":"Xóa nhiệm vụ trên danh sách DM",
+            "serverBoost":"Xóa thông tin tăng cường máy chủ phía trên danh sách kênh"
+        }
+    },
+    "animalese":{
+        "description":"Chơi trò động vật vượt qua động vật đối với mỗi tin nhắn được gửi (chúng ngáp rất nhiều)",
+        "quality":{
+            "high":"Cao",
+            "low":"Thấp",
+            "lowest":"Thấp nhất",
+            "medium":"Trung bình"
+        },
+        "settings":{
+            "messageLengthLimit":"Độ dài tối đa của tin nhắn cần xử lý",
+            "pitch":"Hệ số sân",
+            "processOwnMessages":"Cho phép gửi tin nhắn của riêng bạn",
+            "soundQuality":"Chất lượng âm thanh sử dụng",
+            "speed":"Tốc độ của âm thanh động vật",
+            "volume":"Âm lượng của âm thanh động vật"
+        }
+    },
+    "atSomeone":{
+        "contextMenu":{
+            "someone":"Đề cập đến ai đó một cách ngẫu nhiên"
+        },
+        "description":"Đề cập đến ai đó một cách ngẫu nhiên"
+    },
+    "autoZipper":{
+        "description":"Tự động nén các loại tệp và thư mục được chỉ định trước khi tải lên Discord",
+        "settings":{
+            "extensions":"Danh sách các phần mở rộng tệp được phân tách bằng dấu phẩy để tự động nén (ví dụ: .psd,.blend,.exe,.dmg)"
+        }
+    },
+    "bannersEverywhere":{
+        "description":"Hiển thị banner trong danh sách thành viên ",
+        "settings":{
+            "animate":"Biểu ngữ sinh động",
+            "preferNameplate":"thích bảng tên hơn banner"
+        }
+    },
+    "baseDecoder":{
+        "description":"Giải mã nội dung base64 của bất kỳ tin nhắn nào và sao chép nội dung được giải mã.",
+        "settings":{
+            "clickMethod":"Thay đổi nút để giải mã nội dung base64 của bất kỳ tin nhắn nào.",
+            "clickMethodOptions":{
+                "left":"Nhấp chuột trái để giải mã nội dung base64.",
+                "right":"Nhấp chuột phải để giải mã nội dung base64."
+            }
+        },
+        "ui":{
+            "copiedToast":"Nội dung được giải mã được sao chép vào clipboard!",
+            "copyDecoded":"Sao chép nội dung được giải mã",
+            "decodedContent":"Nội dung được giải mã",
+            "modalTitle":"Nội dung Base64 được giải mã",
+            "tooltipLeft":"Sao chép Đã giải mã (Click chuột trái) / Giải mã Base64 (Click chuột phải)",
+            "tooltipRight":"Giải mã Base64 (Click chuột trái) / Sao chép được giải mã (Click chuột phải)"
+        }
+    },
+    "betterAudioPlayer":{
+        "description":"Thêm máy quang phổ và máy hiển thị dao động vào trình phát tệp đính kèm âm thanh",
+        "settings":{
+            "forceMoveBelow":"Buộc trình hiển thị bên dưới trình phát âm thanh",
+            "oscilloscope":"Bật trình hiển thị dao động",
+            "oscilloscopeColor":"Màu sắc cho máy hiện sóng",
+            "oscilloscopeSolidColor":"Sử dụng màu đồng nhất cho máy hiện sóng",
+            "spectrograph":"Bật trình hiển thị quang phổ",
+            "spectrographColor":"Màu sắc cho máy quang phổ",
+            "spectrographSolidColor":"Sử dụng màu đồng nhất cho máy quang phổ"
+        },
+        "toasts":{
+            "invalidColor":"Định dạng màu không hợp lệ cho {settingKey}, hãy đảm bảo nó ở định dạng 'R, G, B' hoặc '#RRGGBB'"
+        }
+    },
+    "betterBanReasons":{
+        "description":"Tạo lý do tùy chỉnh để sử dụng trong phương thức cấm Discord và/hoặc hiển thị kiểu nhập văn bản theo mặc định thay vì các tùy chọn.",
+        "settings":{
+            "isTextInputDefault":"Hiển thị kiểu nhập văn bản thay vì menu chọn theo mặc định. (Tương đương với việc nhấp vào tùy chọn \"Khác\")",
+            "reasons":"Lý do tùy chỉnh của bạn"
+        },
+        "ui":{
+            "addAnotherReason":"Thêm một lý do khác",
+            "reasonPlaceholder":"Lý do",
+            "reasons":"Lý do"
+        }
+    },
+    "betterBlockedUsers":{
+        "description":"Cho phép bạn tìm kiếm trong danh sách người dùng bị chặn và có thể chọn tên trong cài đặt.",
+        "ui":{
+            "searchPlaceholder":"Tìm kiếm người dùng..."
+        }
+    },
+    "betterCommands":{
+        "commands":{
+            "refresh":{
+                "description":"Làm mới cục bộ các lệnh ứng dụng Discord",
+                "failed":"Không thể làm mới lệnh. Kiểm tra bảng điều khiển để biết chi tiết.",
+                "refreshing":"Đang làm mới các lệnh ứng dụng...",
+                "success":"Lệnh được làm mới thành công!",
+                "userOption":"người dùng cụ thể để thử và làm mới"
+            }
+        },
+        "description":"Tăng cường hệ thống chỉ huy với những cải tiến khác.",
+        "settings":{
+            "allowNewlinesInCommands":"Cho phép dòng mới trong đầu vào lệnh (CTRL + Shift + Enter)",
+            "autoFillArguments":"Tự động điền lệnh với tất cả các đối số thay vì chỉ những đối số bắt buộc"
+        }
+    },
+    "betterInvites":{
+        "description":"Xem ngày hết hạn của lời mời, xem hồ sơ người mời và xem trước máy chủ trước khi tham gia bằng cách nhấp vào tên",
+        "ui":{
+            "expireTooltip":"Lời mời này sẽ {expiry}",
+            "expireWill":"hết hạn",
+            "invitedYouTo":"{inviter} đã mời bạn tham gia {guild}",
+            "notExpire":"không hết hạn"
+        }
+    },
+    "betterPlusReacts":{
+        "description":"Số lượng dấu cộng trước :emoji: là thông báo để thêm vào"
+    },
+    "betterUserArea":{
+        "description":"Tùy chỉnh và làm cho khu vực người dùng sạch sẽ hơn.",
+        "settings":{
+            "alwaysShowUsername":"Luôn hiển thị tên người dùng thay vì trạng thái.",
+            "removeAudioMenus":"Loại bỏ các menu bên cạnh nút tắt tiếng và tắt tiếng.",
+            "removeAvatarDecoration":"Loại bỏ trang trí avatar.",
+            "removeButtonTooltips":"Xóa chú giải công cụ nút.",
+            "removeNameplate":"Loại bỏ kiểu dáng bảng tên.",
+            "removeUsernameStyles":"Xóa màu sắc và hiệu ứng tên người dùng."
+        }
+    },
+    "blockKeywords":{
+        "description":"Chặn các tin nhắn chứa các từ khóa cụ thể do người dùng xác định, như thể người dùng gửi chúng đã bị chặn.",
+        "settings":{
+            "blockedWords":"Danh sách các từ cần chặn được phân tách bằng dấu phẩy",
+            "caseSensitive":"Có nên sử dụng tìm kiếm phân biệt chữ hoa chữ thường hay không",
+            "ignoreBlockedMessages":"Hoàn toàn bỏ qua thanh tin nhắn mới (gần đây)",
+            "useRegex":"Sử dụng từng giá trị làm biểu thức chính quy khi kiểm tra nội dung thư (nâng cao)"
+        }
+    },
+    "blockKrisp":{
+        "description":"Ngăn chặn tải Krisp"
+    },
+    "bypassPinPrompt":{
+        "description":"Bỏ qua lời nhắc ghim khi sử dụng chức năng ghim"
+    },
+    "bypassStatus":{
+        "contextMenu":{
+            "addStatusBypass":"Thêm bỏ qua trạng thái",
+            "removeStatusBypass":"Xóa bỏ qua trạng thái"
+        },
+        "description":"Vẫn nhận được thông báo từ các nguồn cụ thể khi ở chế độ không làm phiền. Nhấp chuột phải vào người dùng/kênh/bang hội để đặt họ bỏ qua chế độ không làm phiền.",
+        "placeholder":{
+            "separateWithCommas":"Phân cách bằng dấu phẩy"
+        },
+        "settings":{
+            "allowOutsideOfDms":"Cho phép người dùng được chọn bỏ qua trạng thái bên ngoài DM (hoạt động giống như bỏ qua kênh/bang hội, nhưng dành cho tất cả tin nhắn được gửi bởi người dùng đã chọn)",
+            "channels":"Các kênh được phép bỏ qua (được thông báo khi được ping trong kênh đó)",
+            "guilds":"Bang hội được phép bỏ qua (được thông báo khi được ping ở bất kỳ đâu trong bang hội)",
+            "notificationSound":"Có nên phát âm thanh thông báo hay không",
+            "respectSilentPings":"Tôn trọng ping im lặng (@silent / ngăn chặn thông báo)",
+            "statusToUse":"Trạng thái sử dụng cho danh sách trắng",
+            "users":"Người dùng cho phép bỏ qua (được thông báo cho tất cả tin nhắn được gửi trong DM)"
+        },
+        "statusOptions":{
+            "dnd":"Vui Lòng Không Làm Phiền",
+            "idle":"Chờ",
+            "invisible":"Vô hình",
+            "online":"Trực tuyến"
+        }
+    },
+    "channelBadges":{
+        "description":"Thêm huy hiệu vào các kênh dựa trên loại của chúng",
+        "settings":{
+            "announcementBadgeColor":"Màu huy hiệu thông báo",
+            "announcementBadgeLabel":"Nhãn huy hiệu thông báo",
+            "announcementThreadBadgeColor":"Màu huy hiệu chủ đề thông báo",
+            "announcementThreadBadgeLabel":"Thông báo Nhãn huy hiệu chủ đề",
+            "categoryBadgeColor":"Màu huy hiệu danh mục",
+            "categoryBadgeLabel":"Nhãn huy hiệu danh mục",
+            "directoryBadgeColor":"Màu huy hiệu thư mục",
+            "directoryBadgeLabel":"Nhãn huy hiệu thư mục",
+            "forumBadgeColor":"Màu huy hiệu diễn đàn",
+            "forumBadgeLabel":"Nhãn huy hiệu diễn đàn",
+            "lockedBadgeColor":"Màu huy hiệu bị khóa",
+            "lockedBadgeLabel":"Nhãn huy hiệu bị khóa",
+            "mediaBadgeColor":"Màu huy hiệu truyền thông",
+            "mediaBadgeLabel":"Nhãn huy hiệu truyền thông",
+            "nsfwBadgeColor":"Màu huy hiệu NSFW",
+            "nsfwBadgeLabel":"Nhãn huy hiệu NSFW",
+            "oneBadgePerChannel":"Chỉ hiển thị một huy hiệu cho mỗi kênh",
+            "privateThreadBadgeColor":"Màu huy hiệu Chủ đề riêng tư",
+            "privateThreadBadgeLabel":"Nhãn huy hiệu Chủ đề riêng tư",
+            "publicThreadBadgeColor":"Màu huy hiệu Chủ đề công khai",
+            "publicThreadBadgeLabel":"Nhãn huy hiệu Chủ đề công khai",
+            "rulesBadgeColor":"Màu huy hiệu quy tắc",
+            "rulesBadgeLabel":"Nhãn huy hiệu quy tắc",
+            "showAnnouncementBadge":"Hiển thị huy hiệu thông báo",
+            "showAnnouncementThreadBadge":"Hiển thị huy hiệu Chủ đề Thông báo",
+            "showCategoryBadge":"Hiển thị huy hiệu Danh mục",
+            "showDirectoryBadge":"Hiển thị huy hiệu Thư mục",
+            "showForumBadge":"Hiển thị huy hiệu diễn đàn",
+            "showLockedBadge":"Hiển thị huy hiệu Đã khóa",
+            "showMediaBadge":"Hiển thị huy hiệu Phương tiện",
+            "showNSFWBadge":"Hiển thị huy hiệu NSFW",
+            "showPrivateThreadBadge":"Hiển thị huy hiệu Chủ đề riêng tư",
+            "showPublicThreadBadge":"Hiển thị huy hiệu Chủ đề công khai",
+            "showRulesBadge":"Hiển thị huy hiệu Quy tắc",
+            "showStageBadge":"Hiển thị huy hiệu Sân khấu",
+            "showTextBadge":"Hiển thị huy hiệu văn bản",
+            "showUnknownBadge":"Hiển thị huy hiệu Không xác định",
+            "showVoiceBadge":"Hiển thị huy hiệu giọng nói",
+            "stageBadgeColor":"Màu huy hiệu sân khấu",
+            "stageBadgeLabel":"Nhãn huy hiệu sân khấu",
+            "textBadgeColor":"Màu huy hiệu văn bản",
+            "textBadgeLabel":"Nhãn huy hiệu văn bản",
+            "unknownBadgeColor":"Màu huy hiệu không xác định",
+            "unknownBadgeLabel":"Nhãn huy hiệu không xác định",
+            "voiceBadgeColor":"Màu huy hiệu giọng nói",
+            "voiceBadgeLabel":"Nhãn huy hiệu giọng nói"
+        },
+        "tooltips":{
+            "lockedChannel":"Kênh này đã bị khóa.",
+            "nsfwChannel":"Kênh này được đánh dấu là NSFW.",
+            "rulesChannel":"Kênh này là kênh quy tắc máy chủ."
+        }
+    },
+    "channelTabs":{
+        "contextMenu":{
+            "openInNewTab":"Mở trong tab mới"
+        },
+        "description":"Group các kênh bạn thường truy cập trong tab, như trình duyệt"
+    },
+    "characterCounter":{
+        "description":"Thêm bộ đếm ký tự vào đầu vào trò chuyện",
+        "settings":{
+            "colorEffects":"Bật hoặc tắt hiệu ứng màu sắc để đạt gần giới hạn ký tự"
+        }
+    },
+    "cleanChannelName":{
+        "description":"xóa tất cả biểu tượng cảm xúc và nội dung trang trí khỏi tên kênh"
+    },
+    "cleanerChannelGroups":{
+        "description":"Ẩn tất cả các kênh trong danh mục thu gọn, ngay cả khi chúng có tin nhắn chưa đọc."
+    },
+    "clientSideBlock":{
+        "description":"Cho phép bạn ẩn cục bộ gần như tất cả nội dung khỏi bất kỳ người dùng nào",
+        "reply":{
+            "replyingToBlocked":"Trả lời tin nhắn bị chặn"
+        },
+        "settings":{
+            "blockedReplyDisplay":"Nội dung nào sẽ hiển thị thay vì tin nhắn khi ai đó trả lời người mà bạn đã ẩn",
+            "blockedReplyDisplayOptions":{
+                "displayText":"Hiển thị văn bản cho biết tin nhắn ẩn đã được trả lời",
+                "hideReply":"Nghĩa đen là không có gì"
+            },
+            "guildBlackList":"Id bang hội để vô hiệu hóa chức năng trong",
+            "guildWhiteList":"Id bang hội để kích hoạt chức năng trong",
+            "hideBlockedMessages":"Có nên ẩn hoàn toàn tin nhắn từ người dùng bị chặn không (giống như plugin noblockedmessages cũ)",
+            "hideBlockedUsers":"Nên người dùng bị chặn cũng nên ẩn ở mọi nơi",
+            "hideEmptyRoles":"Có nên ẩn tiêu đề vai trò nếu tất cả thành viên của họ bị chặn",
+            "hideVc":"Ẩn các kênh thoại có chứa người dùng bị chặn.",
+            "usersToBlock":"ID người dùng được phân tách bằng dấu phẩy và dấu cách"
+        }
+    },
+    "clipsEnhancements":{
+        "description":"Thêm nhiều tùy chọn về FPS và thời lượng Clip, độ dài clip tùy chỉnh, gắn thẻ RPC, v.v.",
+        "settings":{
+            "clipsLink":"Thay đổi tùy chọn FPS và thời lượng trong cài đặt Clip!",
+            "enableAdvancedSignals":"Bật tín hiệu clip nâng cao (trình kích hoạt clip tự động)",
+            "enableScreenshotKeybind":"Kích hoạt tính năng keybind ảnh chụp màn hình",
+            "enableVoiceOnlyClips":"Bật clip chỉ có giọng nói (âm thanh không có video)",
+            "ignorePlatformRestriction":"Cho phép cắt hạn chế nền tảng (có thể gây ra lỗi lưu)",
+            "richPresenceTagging":"Khi nào clip nên được gắn thẻ với Sự hiện diện phong phú hiện tại?",
+            "richPresenceTaggingOptions":{
+                "always":"Luôn luôn",
+                "never":"Không bao giờ",
+                "whenMatched":"Chỉ khi tên bắt đầu hoặc kết thúc của hoạt động trùng khớp"
+            }
+        }
+    },
+    "commandPalette":{
+        "description":"Chạy nhanh các hành động thông qua bảng lệnh có thể tìm kiếm",
+        "settings":{
+            "customCommands":"Quản lý các mục bảng lệnh tùy chỉnh",
+            "enableTagFilter":"Hiển thị thanh bộ lọc thẻ",
+            "hotkey":"Phím nóng dùng để mở bảng lệnh",
+            "showTags":"Hiển thị chip thẻ cho lệnh",
+            "visualStyle":"Xuất hiện bảng màu",
+            "visualStyleOptions":{
+                "classic":"Cổ điển",
+                "polished":"đánh bóng"
+            }
+        },
+        "ui":{
+            "hotkeyDescription":"Phím nóng dùng để mở bảng lệnh",
+            "hotkeyTitle":"Phím nóng bảng lệnh",
+            "pressAnyKey":"Nhấn phím bất kỳ...",
+            "reset":"Đặt lại"
+        }
+    },
+    "components":{
+        "description":"Plugin tiện ích dành cho nhà phát triển để kiểm tra và xem trước các thành phần Discord"
+    },
+    "contentWarning":{
+        "description":"Cho phép bạn chỉ định một số từ kích hoạt nhất định sẽ bị làm mờ theo mặc định. Di chuột/Nhấp vào nội dung bị mờ sẽ hiển thị nội dung đó.",
+        "settings":{
+            "onClick":"Chỉ hiển thị nội dung kích hoạt khi nhấp chuột thay vì di chuột"
+        },
+        "ui":{
+            "flaggedWords":"Từ được gắn cờ",
+            "placeholder":"Từ"
+        }
+    },
+    "copyProfileColors":{
+        "contextMenu":{
+            "copyProfileColors":"Sao chép màu hồ sơ"
+        },
+        "description":"Một plugin để sao chép màu gradient trong hồ sơ của mọi người vào khay nhớ tạm.",
+        "toast":{
+            "copied":"Màu hồ sơ được sao chép vào clipboard!",
+            "error":"Lỗi sao chép màu hồ sơ!",
+            "noColorsFound":"Không tìm thấy màu hồ sơ!"
+        }
+    },
+    "copyStatusUrls":{
+        "description":"Sao chép url trạng thái người dùng khi bạn nhấp chuột phải vào nó",
+        "toast":{
+            "copied":"Đã sao chép URL",
+            "error":"Lỗi sao chép URL, hãy kiểm tra bảng điều khiển để biết thêm thông tin"
+        }
+    },
+    "copyUserMention":{
+        "contextMenu":{
+            "copyUserMention":"Sao chép đề cập của người dùng"
+        },
+        "description":"Thêm nút để sao chép người dùng được đề cập trên menu ngữ cảnh của người dùng, hoạt động tốt nhất với Người dùng hợp lệ."
+    },
+    "cursorBuddy":{
+        "description":"Thêm một sprite đi theo con trỏ của bạn.",
+        "settings":{
+            "buddy":"Chọn một con trỏ đi bạn ơi",
+            "buddyOptions":{
+                "fathorse":"Ngựa Béo",
+                "oneko":"Oneko"
+            },
+            "fade":"Nếu con ngựa mờ dần khi con trỏ ở gần",
+            "fps":"Tốc độ khung hình của bạn bè bạn",
+            "freeroam":"Nếu con ngựa có thể đi lang thang tự do khi nhàn rỗi",
+            "furColor":"Màu lông lục giác cho Oneko",
+            "outlineColor":"Phác thảo màu hex cho Oneko",
+            "shake":"Nếu con ngựa lắc cửa sổ khi nó đang đi",
+            "size":"Kích thước của ngựa béo",
+            "speed":"Tốc độ của bạn thân"
+        },
+        "ui":{
+            "furColor":"Màu lông",
+            "outlineColor":"Màu phác thảo"
+        }
+    },
+    "customFolderIcons":{
+        "description":"Tùy chỉnh biểu tượng thư mục với bất kỳ png nào"
+    },
+    "customSounds":{
+        "description":"Tùy chỉnh âm thanh của Discord.",
+        "settings":{
+            "debug":"Sửa lỗi",
+            "export":"Xuất khẩu",
+            "import":"Nhập khẩu",
+            "resetAll":"Đặt lại tất cả",
+            "searchPlaceholder":"Tìm kiếm theo tên hoặc ID",
+            "searchSounds":"Tìm kiếm âm thanh"
+        },
+        "toast":{
+            "exportSuccess":"Đã xuất cài đặt {count} (không bao gồm tệp âm thanh)",
+            "importError":"Lỗi khi nhập cài đặt. Kiểm tra bảng điều khiển để biết chi tiết.",
+            "importSuccess":"Cài đặt đã được nhập thành công!",
+            "loadError":"Lỗi tải tập tin âm thanh tùy chỉnh",
+            "resetSuccess":"Tất cả ghi đè được thiết lập lại thành công!"
+        }
+    },
+    "customTimestamps":{
+        "about":{
+            "additional":"Ngoài ra, bạn có thể sử dụng những thứ này trong đầu vào của mình:",
+            "calendar":"cho phép định dạng ngày động như \"Hôm nay\" hoặc \"Hôm qua\".",
+            "relative":"cung cấp cho bạn những thời điểm như \"4 giờ trước\".",
+            "title":"Cách sử dụng:"
+        },
+        "description":"Dấu thời gian tùy chỉnh trên tin nhắn và chú giải công cụ",
+        "settings":{
+            "calendarFormats":"Định dạng lịch",
+            "calendarFormatsDescription":"Cách định dạng giá trị [lịch] nếu được sử dụng trong các dấu thời gian trên.",
+            "formats":"Tùy chỉnh các định dạng dấu thời gian"
+        }
+    },
+    "customUserColors":{
+        "contextMenu":{
+            "setColor":"Đặt màu"
+        },
+        "description":"Cho phép bạn thêm màu tùy chỉnh cho bất kỳ người dùng nào, ở bất cứ đâu! Rất khuyến khích sử dụng với TypingTweaks và roleColorEverywhere",
+        "settings":{
+            "colorInServers":"Nếu màu tên nên được thay đổi trong máy chủ",
+            "dmList":"Người dùng có màu tùy chỉnh được xác định sẽ có tên trong danh sách dm được tô màu"
+        }
+    },
+    "disableCameras":{
+        "description":"Theo mặc định, tắt camera trong cuộc gọi"
+    },
+    "discordDevBanner":{
+        "description":"Bật biểu ngữ nhà phát triển Discord, trong đó hiển thị ID bản dựng"
+    },
+    "dragFavoriteEmotes":{
+        "description":"Thêm khả năng thay đổi thứ tự các biểu tượng cảm xúc yêu thích của bạn"
+    },
+    "dragify":{
+        "description":"Đưa người dùng, kênh hoặc máy chủ vào cuộc trò chuyện để chèn đề cập hoặc lời mời.",
+        "settings":{
+            "allowChatBodyDrop":"Cho phép thả vào nội dung trò chuyện chính để chèn văn bản.",
+            "channelOutput":"Đầu ra giảm kênh.",
+            "channelOutputOptions":{
+                "link":"Liên kết kênh",
+                "mention":"#kênh đề cập"
+            },
+            "inviteExpireAfter":"Lời mời hết hạn.",
+            "inviteExpireAfterOptions":{
+                "12hours":"12 giờ",
+                "1day":"1 ngày",
+                "1hour":"1 giờ",
+                "30min":"30 phút",
+                "6hours":"6 giờ",
+                "7days":"7 ngày",
+                "never":"Không bao giờ"
+            },
+            "inviteMaxUses":"Mời sử dụng tối đa.",
+            "inviteMaxUsesOptions":{
+                "100uses":"100 công dụng",
+                "10uses":"10 công dụng",
+                "1use":"1 lần sử dụng",
+                "25uses":"25 công dụng",
+                "50uses":"50 công dụng",
+                "5uses":"5 công dụng",
+                "noLimit":"Không giới hạn"
+            },
+            "inviteTemporaryMembership":"Cấp thành viên tạm thời.",
+            "reuseExistingInvites":"Sử dụng lại lời mời hiện có thay vì tạo lời mời mới.",
+            "userOutput":"Người dùng thả đầu ra.",
+            "userOutputOptions":{
+                "id":"ID người dùng",
+                "mention":"Đề cập đến người dùng"
+            }
+        },
+        "toast":{
+            "dropFailed":"Kéo không thể xử lý thả.",
+            "inviteCreated":"Đã tạo lời mời.",
+            "inviteFailed":"Không thể tạo lời mời.",
+            "noChannelForInvites":"Không có kênh nào có sẵn cho lời mời."
+        }
+    },
+    "elementHighlighter":{
+        "description":"Làm nổi bật và kiểm tra các yếu tố một cách dễ dàng.",
+        "settings":{
+            "keybind":"Chuyển đổi công cụ đánh dấu",
+            "showBorderRadius":"Hiển thị giá trị bán kính đường viền của phần tử",
+            "showClasses":"Hiển thị tên lớp CSS của phần tử trong chú giải công cụ",
+            "showDisplay":"Hiển thị kiểu hiển thị của phần tử cùng với thuộc tính flex hoặc lưới",
+            "showFont":"Hiển thị họ phông chữ và kích thước phông chữ được tính toán",
+            "showId":"Hiển thị thuộc tính ID của phần tử trong chú giải công cụ",
+            "showMargin":"Hiển thị giá trị lề của phần tử",
+            "showPadding":"Hiển thị giá trị đệm của phần tử",
+            "showPosition":"Hiển thị loại vị trí CSS và chỉ mục z của phần tử"
+        },
+        "ui":{
+            "copiedColor":"Đã sao chép màu vào clipboard!",
+            "recording":"Đang ghi...",
+            "reset":"Đặt lại"
+        }
+    },
+    "equicordHelper":{
+        "alerts":{
+            "equicordSupport":"Equicord Hỗ trợ",
+            "okayContinue":"Được rồi tiếp tục",
+            "supportWarningBody":"Trước khi yêu cầu giúp đỡ. Hãy kiểm tra các bản cập nhật và xem liệu sự cố này có thực sự do Equicord gây ra hay không!",
+            "supportWarningTitle":"Vencord Cảnh báo kênh hỗ trợ"
+        },
+        "commands":{
+            "refreshCommands":"Làm mới các lệnh gạch chéo",
+            "refreshFailed":"Không thể làm mới lệnh. Kiểm tra bảng điều khiển để biết chi tiết.",
+            "refreshSuccess":"Lệnh gạch chéo được làm mới thành công."
+        },
+        "description":"Được sử dụng để cung cấp hỗ trợ, khắc phục sự cố do bất hòa và các tính năng linh tinh khác.",
+        "settings":{
+            "accountStandingButton":"Hiển thị nút trạng thái tài khoản trên thanh tiêu đề",
+            "forceRoleIcon":"Buộc các biểu tượng vai trò hiển thị bên cạnh tin nhắn ở chế độ thu gọn",
+            "noDefaultHangStatus":"Tắt trạng thái treo mặc định khi tham gia các kênh thoại",
+            "noMirroredCamera":"Ngăn không cho máy ảnh được phản chiếu trên màn hình của bạn",
+            "refreshSlashCommands":"Làm mới Lệnh gạch chéo để hiển thị các lệnh mới được thêm mà không cần khởi động lại máy khách của bạn.",
+            "removeActivitySection":"Xóa phần hoạt động phía trên danh sách thành viên",
+            "showYourOwnActivityButtons":"Discord ẩn các nút hoạt động của chính bạn vì lý do nào đó"
+        },
+        "standing":{
+            "allGood":"Tất cả đều tốt!",
+            "atRisk":"Có nguy cơ",
+            "limited":"Giới hạn",
+            "suspended":"Cấm",
+            "veryLimited":"Rất hạn chế"
+        }
+    },
+    "equicordToolbox":{
+        "description":"Thêm một nút bên cạnh nút hộp thư đến trong tiêu đề kênh chứa các thao tác nhanh Equicord",
+        "settings":{
+            "showPluginMenu":"Hiển thị menu plugin trong hộp công cụ"
+        },
+        "ui":{
+            "editQuickCss":"Chỉnh sửa QuickCSS",
+            "enableQuickCss":"Kích hoạt QuickCSS",
+            "manageThemes":"Quản lý chủ đề",
+            "openNotificationLog":"Mở nhật ký thông báo",
+            "openSettings":"Mở Cài Đặt",
+            "plugins":"Plugin",
+            "restartToApply":"Khởi động lại để áp dụng thay đổi",
+            "themes":"Chủ đề",
+            "tooltip":"Equicord Hộp công cụ"
+        }
+    },
+    "equissant":{
+        "description":"Bánh sừng bò theo số lượng nhấp chuột được chỉ định :trolley:",
+        "settings":{
+            "amount":"Số lần nhấp chuột để kích hoạt bánh sừng bò"
+        }
+    },
+    "exitSounds":{
+        "description":"Phát âm thanh soundboard khi bạn ngắt kết nối với giọng nói.",
+        "settings":{
+            "soundGuildId":"Chọn máy chủ chứa âm thanh.",
+            "soundId":"Nhập ID của âm thanh bạn muốn phát."
+        },
+        "toasts":{
+            "somethingWentWrong":"Ối! Đã xảy ra lỗi."
+        },
+        "ui":{
+            "enterSoundId":"Nhập ID âm thanh...",
+            "selectServer":"Chọn máy chủ...",
+            "setGlobalExitSound":"Đặt làm âm thanh thoát chung"
+        }
+    },
+    "exportMessages":{
+        "description":"Cho phép bạn xuất bất kỳ tin nhắn nào sang một tập tin",
+        "notifications":{
+            "exportFailed":"Không xuất được tin nhắn",
+            "exportSuccess":"Đã xuất thành công tin nhắn dưới dạng {filename}",
+            "title":"Xuất tin nhắn"
+        },
+        "settings":{
+            "exportContacts":"Xuất danh sách bạn bè vào clipboard của bạn. Thêm nút mới vào thanh menu cho tab bạn bè.",
+            "openFileAfterExport":"Mở tệp đã xuất trong trình xử lý tệp mặc định sau khi xuất"
+        },
+        "ui":{
+            "contactListUndefined":"Danh sách liên hệ không được xác định. Nhấp vào tab \"Tất cả\" trước khi xuất.",
+            "contactsCopied":"Đã sao chép danh bạ vào clipboard thành công.",
+            "export":"Xuất khẩu",
+            "exportMessage":"Xuất tin nhắn"
+        }
+    },
+    "fastDeleteChannels":{
+        "description":"Thêm biểu tượng thùng rác để xóa kênh",
+        "settings":{
+            "keyBind":"Phím chuyển đổi thùng rác khi nhấn.",
+            "reqAlt":"Yêu cầu giữ alt.",
+            "reqCtrl":"Yêu cầu phải giữ quyền kiểm soát.",
+            "reqShift":"Yêu cầu phải giữ ca."
+        }
+    },
+    "favouriteAnything":{
+        "description":"Yêu thích bất kỳ hình ảnh"
+    },
+    "fileUpload":{
+        "description":"Tải hình ảnh và video lên các dịch vụ lưu trữ tệp như Zipline và Nest",
+        "ui":{
+            "uploadTo":"Tải lên {serviceName}"
+        }
+    },
+    "findReply":{
+        "description":"Chuyển tới câu trả lời sớm nhất cho tin nhắn trong một kênh (cho phép bạn theo dõi các cuộc hội thoại trước đây dễ dàng hơn).",
+        "settings":{
+            "hideButtonIfNoReply":"Ẩn nút nếu không có phản hồi cho tin nhắn",
+            "includeAuthor":"Cũng sẽ tìm kiếm những tin nhắn trả lời tác giả nói chung chứ không chỉ chính xác tin nhắn đó",
+            "includePings":"Cũng sẽ tìm kiếm các tin nhắn mà @ tác giả trực tiếp"
+        },
+        "toasts":{
+            "containerNotFound":"Không thể tìm thấy phần tử vùng chứa.",
+            "noReplyFound":"Không thể tìm thấy câu trả lời.",
+            "useBottomPanel":"Sử dụng bảng điều khiển phía dưới để điều hướng giữa các câu trả lời."
+        },
+        "ui":{
+            "jumpToReply":"Chuyển đến Trả lời"
+        }
+    },
+    "fixFileExtensions":{
+        "description":"Sửa các phần mở rộng tệp bằng cách đổi tên chúng thành định dạng được hỗ trợ tương thích nếu có thể"
+    },
+    "followVoiceUser":{
+        "description":"Theo dõi một người bạn trong trò chuyện thoại.",
+        "info":"Plugin này được sử dụng để theo dõi Bạn bè/Bạn bè tham gia trò chuyện thoại.",
+        "settings":{
+            "leaveWhenUserLeaves":"Rời khỏi kênh thoại khi người dùng rời đi. (Điều đó có thể khiến bạn đôi khi phải vào vòng lặp rời/tham gia vô hạn)",
+            "onlyWhenInVoice":"Chỉ theo dõi người dùng khi bạn đang ở trong kênh thoại"
+        },
+        "ui":{
+            "followUser":"Theo dõi người dùng"
+        }
+    },
+    "fontLoader":{
+        "description":"Tải bất kỳ phông chữ nào từ Google Fonts",
+        "settings":{
+            "applyOnCodeBlocks":"Áp dụng phông chữ cho khối mã"
+        },
+        "ui":{
+            "by":"bởi {authors}",
+            "clickToApply":"Bấm vào bất kỳ phông chữ nào để áp dụng nó.",
+            "searchFonts":"Tìm kiếm phông chữ...",
+            "searchGoogleFonts":"Tìm kiếm phông chữ của Google"
+        }
+    },
+    "forwardAnywhere":{
+        "description":"Nếu chuyển tiếp không thành công, hãy gửi nó dưới dạng tin nhắn bình thường cũng cho phép chuyển tiếp nsfw",
+        "options":{
+            "greaterThan":">",
+            "hash":"-#"
+        },
+        "settings":{
+            "forwardPreface":"Những gì nên được chuyển tiếp từ được mở đầu bằng"
+        }
+    },
+    "frequentQuickSwitcher":{
+        "description":"Viết lại và lọc kết quả chuyển đổi nhanh để trở thành kênh thường xuyên nhất của bạn"
+    },
+    "friendCloud":{
+        "commands":{
+            "count":"Số lượng người dùng hiển thị",
+            "friendcloud":"Hiển thị người dùng mà bạn tương tác nhiều nhất trên đám mây"
+        },
+        "description":"Thêm lệnh /friendcloud để trực quan hóa những người dùng mà bạn tương tác nhiều nhất",
+        "errors":{
+            "couldntGenerate":"Không tạo được ảnh :c",
+            "countMustBeHigher":"Số lượng phải là 1 hoặc cao hơn!",
+            "noAffinities":"Không tìm thấy mối quan hệ nào. Kiểm tra cài đặt quyền riêng tư của bạn.",
+            "noValidUsers":"Không tìm thấy người dùng hợp lệ nào trong mối quan hệ. Kiểm tra cài đặt quyền riêng tư của bạn."
+        }
+    },
+    "friendCodes":{
+        "panel":{
+            "copied":"Đã sao chép!",
+            "copyCode":"Sao chép mã",
+            "currentCode":"Mã bạn bè hiện tại",
+            "error":"Lỗi: {error}",
+            "refresh":"Làm cho khỏe lại",
+            "sendToServer":"Gửi tới máy chủ",
+            "sent":"Đã gửi!",
+            "title":"Mã bạn bè"
+        },
+        "settings":{
+            "autoCopy":"Tự động sao chép mã bạn bè vào clipboard khi nó thay đổi",
+            "sendToServer":"Tự động gửi mã bạn bè đến máy chủ khi nó thay đổi",
+            "webhookUrl":"Webhook URL để gửi mã kết bạn tới"
+        }
+    },
+    "friendTags":{
+        "description":"Cho phép bạn lọc theo thẻ tùy chỉnh trong trình chuyển đổi nhanh bằng cách bắt đầu tìm kiếm với &",
+        "ui":{
+            "add":"Thêm",
+            "addTo":"Thêm vào {tagName}",
+            "name":"Tên",
+            "remove":"Gỡ bỏ",
+            "removeFrom":"Xóa khỏi {tagName}",
+            "tag":"Nhãn",
+            "userList":"Danh sách người dùng (Nhấp vào Người dùng để xóa)",
+            "usersSeperated":"Người dùng (Cách nhau bằng dấu phẩy)"
+        }
+    },
+    "friendshipRanks":{
+        "description":"Thêm huy hiệu cho biết bạn đã làm bạn với người dùng được bao lâu",
+        "ranks":{
+            "besties":{
+                "description":"Làm thế nào để bạn thậm chí quản lý điều này ??? (5 Năm)",
+                "title":"Bạn thân"
+            },
+            "blooming":{
+                "description":"Tình bạn của bạn đang đến đó! (1 tháng)",
+                "title":"nở hoa"
+            },
+            "burning":{
+                "description":"Tình bạn của bạn đã đạt đến tốc độ cuối cùng (3 tháng)",
+                "title":"Đốt cháy"
+            },
+            "fighter":{
+                "description":"Tình bạn của bạn rất bền chặt (6 tháng)",
+                "title":"máy bay chiến đấu"
+            },
+            "royal":{
+                "description":"Tình bạn của bạn đã trải qua nhiều thăng trầm - suốt 2 năm!",
+                "title":"Hoàng gia"
+            },
+            "sprout":{
+                "description":"Tình bạn của bạn chỉ mới bắt đầu",
+                "title":"Mầm"
+            },
+            "star":{
+                "description":"Tình bạn của bạn đã kéo dài được một thời gian (1 năm)",
+                "title":"Ngôi sao"
+            }
+        }
+    },
+    "fullVcPfp":{
+        "description":"Làm cho hình đại diện chiếm toàn bộ ô vc"
+    },
+    "gensokyoRadioRPC":{
+        "description":"Discord sự hiện diện phong phú của Đài Gensokyo!",
+        "info":"Discord sự hiện diện phong phú của Đài Gensokyo!",
+        "settings":{
+            "refreshInterval":"Khoảng thời gian giữa các lần làm mới hoạt động (giây)"
+        }
+    },
+    "ghosted":{
+        "description":"Một con ma dễ thương sẽ xuất hiện nếu bạn không trả lời DM của họ",
+        "settings":{
+            "exemptedChannels":"Danh sách ID kênh được phân tách bằng dấu phẩy để tránh hiện tượng bóng ma (nhấp chuột phải vào kênh DM để sao chép ID của kênh đó)",
+            "ignoreBots":"Bỏ qua DM từ bot",
+            "ignoreGroupDms":"Loại trừ tất cả dms nhóm khỏi bóng ma",
+            "showDmIcons":"Hiển thị biểu tượng ma bên cạnh từng DM riêng lẻ",
+            "showIndicator":"Hiển thị bộ đếm ghost ở đầu danh sách máy chủ"
+        },
+        "ui":{
+            "ghostedUsers":"{count} Người dùng bị ma",
+            "noGhostedUsers":"Không có người dùng bị ma",
+            "unghost":"không lưu trữ"
+        }
+    },
+    "gifCollections":{
+        "description":"Cho phép bạn tạo bộ sưu tập gifs",
+        "settings":{
+            "collectionPrefix":"Tiền tố cho bộ sưu tập",
+            "collectionsSortOrder":"Thứ tự sắp xếp của các bộ sưu tập",
+            "collectionsSortType":"Kiểu sắp xếp cho bộ sưu tập",
+            "defaultEmptyCollectionImage":"Hình ảnh / gif sẽ được hiển thị khi bộ sưu tập không có hình ảnh / gif",
+            "itemPrefix":"Tiền tố cho các mục gif",
+            "onlyShowCollections":"Chỉ hiển thị bộ sưu tập",
+            "preventDuplicates":"Ngăn chặn việc thêm cùng một GIF vào bộ sưu tập nhiều lần",
+            "showCopyImageLink":"Hiển thị tùy chọn 'Sao chép liên kết hình ảnh' trong menu ngữ cảnh",
+            "stopWarnings":"Dừng cảnh báo xóa"
+        },
+        "toasts":{
+            "gifMissingMetadata":"Không thể làm mới: GIF thiếu siêu dữ liệu (thêm lại vào bộ sưu tập)"
+        },
+        "ui":{
+            "addToCollection":"Thêm vào bộ sưu tập",
+            "addedAt":"Đã thêm vào lúc",
+            "areYouSure":"Bạn có chắc không?",
+            "ascending":"Tăng dần",
+            "cannotRefresh":"Không thể làm mới: GIF thiếu siêu dữ liệu (thêm lại vào bộ sưu tập)",
+            "close":"Tắt",
+            "collectionInformation":"Thông tin thu thập",
+            "collectionName":"Tên bộ sưu tập",
+            "copyImageLink":"Sao chép liên kết hình ảnh",
+            "copyUrl":"Sao chép URL",
+            "createCollection":"Tạo bộ sưu tập",
+            "createdAt":"Được tạo tại",
+            "creationDate":"Ngày tạo",
+            "deleteAction":"xóa bộ sưu tập này",
+            "deleteCollection":"Xóa bộ sưu tập",
+            "deleteConfirm":"Bạn có thực sự muốn {action} không?",
+            "descending":"Giảm dần",
+            "exportCollections":"Xuất bộ sưu tập",
+            "gifs":"Gif",
+            "height":"Chiều cao",
+            "imageLinkCopied":"Đã sao chép liên kết hình ảnh vào bảng nhớ tạm",
+            "import":"Nhập khẩu",
+            "importCollections":"Nhập bộ sưu tập",
+            "importOverwrite":"Nhập bộ sưu tập sẽ ghi đè bộ sưu tập hiện tại của bạn.",
+            "information":"Thông tin",
+            "lastUpdated":"Cập nhật lần cuối",
+            "modifiedDate":"Ngày sửa đổi",
+            "moveToCollection":"Di chuyển đến bộ sưu tập",
+            "name":"Tên",
+            "nevermind":"Không có gì",
+            "order":"Đặt hàng",
+            "refreshFailed":"Không làm mới được URL",
+            "refreshSuccess":"URL được làm mới thành công",
+            "refreshUrl":"Làm mới URL",
+            "refreshing":"Đang làm mới URL...",
+            "remove":"Gỡ bỏ",
+            "removeAction":"loại bỏ mục này",
+            "rename":"Đổi tên",
+            "reset":"Đặt lại",
+            "resetCollections":"Đặt lại bộ sưu tập",
+            "resetRemove":"Việc đặt lại bộ sưu tập sẽ xóa tất cả bộ sưu tập của bạn.",
+            "selectCollection":"Chọn một bộ sưu tập để di chuyển mục tới",
+            "sortBy":"Sắp xếp theo",
+            "sortCollections":"Sắp xếp bộ sưu tập",
+            "unknown":"Không xác định",
+            "urlCopied":"URL đã sao chép vào bảng nhớ tạm",
+            "width":"Chiều rộng"
+        }
+    },
+    "gifRoulette":{
+        "commands":{
+            "gifroulette":"Cám dỗ số phận và gửi một gif"
+        },
+        "description":"Thêm lệnh gửi một ảnh gif ngẫu nhiên từ mục yêu thích của bạn và một phần mười cơ hội để ping chủ sở hữu máy chủ",
+        "settings":{
+            "pingOwnerChance":"Nếu có 1 trong 10 thay đổi ping chủ hội (ồ không)"
+        }
+    },
+    "githubRepos":{
+        "description":"Hiển thị kho GitHub công khai của người dùng trong hồ sơ của họ",
+        "settings":{
+            "showInMiniProfile":"Hiển thị giao diện người dùng đầy đủ trong hồ sơ mini thay vì chỉ một nút",
+            "showLanguage":"Hiển thị ngôn ngữ kho lưu trữ",
+            "showRepositoryTab":"Hiển thị tab kho lưu trữ trong chế độ hồ sơ (ẩn nút trong các kết nối khi được bật)",
+            "showStars":"Hiển thị sao kho lưu trữ"
+        },
+        "ui":{
+            "error":"Lỗi, Không thể hiển thị GithubRepos"
+        }
+    },
+    "globalBadges":{
+        "description":"Thêm huy hiệu toàn cầu từ các mod khách hàng khác",
+        "ui":{
+            "joinServer":"Tham gia máy chủ GlobalBadges",
+            "refetchSuccess":"Đã tải lại thành công huy hiệu toàn cầu!"
+        }
+    },
+    "googleThat":{
+        "commands":{
+            "googlethat":"Gửi liên kết công cụ tìm kiếm",
+            "input":"Truy vấn tìm kiếm"
+        },
+        "description":"Thêm lệnh gửi liên kết tìm kiếm trên internet",
+        "settings":{
+            "customEngineURL":"URL của Engine bạn muốn sử dụng",
+            "defaultEngine":"Công cụ tìm kiếm sẽ sử dụng",
+            "embed":"Nếu liên kết đã gửi sẽ hiển thị phần nhúng",
+            "hyperlink":"Nếu liên kết đã gửi phải siêu liên kết với truy vấn dưới dạng nhãn"
+        }
+    },
+    "guildPickerDumper":{
+        "description":"Menu ngữ cảnh để kết xuất và tải xuống biểu tượng cảm xúc và nhãn dán của máy chủ.",
+        "ui":{
+            "downloadEmojis":"Tải xuống biểu tượng cảm xúc",
+            "downloadStickers":"Tải xuống nhãn dán",
+            "serverNotFound":"Không tìm thấy máy chủ!"
+        }
+    },
+    "guildTagSettings":{
+        "description":"Thêm một số cài đặt cho thẻ bang hội, chẳng hạn như ẩn chúng hoặc tắt lời nhắc chấp nhận chúng.",
+        "settings":{
+            "disableAdoptTagPrompt":"Tắt lời nhắc chấp nhận thẻ",
+            "hideTags":"Ẩn thẻ"
+        }
+    },
+    "hideChatButtons":{
+        "description":"Có thể ẩn các nút trò chuyện",
+        "settings":{
+            "color":"Tô màu đỏ khi mở",
+            "open":"Được mở theo mặc định"
+        },
+        "ui":{
+            "close":"Tắt",
+            "open":"Mở"
+        }
+    },
+    "hideServers":{
+        "description":"Cho phép bạn ẩn máy chủ khỏi danh sách bang hội và trình chuyển đổi nhanh bằng cách nhấp chuột phải vào chúng",
+        "ui":{
+            "hideFolder":"Ẩn thư mục",
+            "hideServer":"Ẩn máy chủ",
+            "unhideFolder":"Bỏ ẩn thư mục",
+            "unhideServer":"Hiện máy chủ"
+        }
+    },
+    "holyNotes":{
+        "description":"Lưu tin nhắn dưới dạng ghi chú để xem lại sau",
+        "ui":{
+            "holyNotes":"Thánh ghi chú",
+            "noteMessage":"Tin nhắn ghi chú",
+            "openNotes":"Mở ghi chú",
+            "saveNote":"Lưu ghi chú"
+        }
+    },
+    "homeTyping":{
+        "description":"Thay đổi nút home thành chỉ báo đang gõ nếu ai đó trong dms của bạn đang gõ"
+    },
+    "hopOn":{
+        "description":"Nhảy lên Fortnite hoặc Nhảy lên bloons :3",
+        "settings":{
+            "regex":"Regex để kích hoạt",
+            "url":"URL để mở"
+        }
+    },
+    "husk":{
+        "description":"Thêm nút Husk (kiểm tra cài đặt để thay đổi biểu tượng cảm xúc đã sử dụng)",
+        "settings":{
+            "emojiID":"ID biểu tượng cảm xúc (mặc định (từ Vencord Máy chủ): 1026532993923293184)",
+            "emojiName":"Tên biểu tượng cảm xúc (mặc định (từ Vencord Máy chủ): husk)",
+            "findInServer":"Cố gắng tìm biểu tượng cảm xúc cùng tên trong máy chủ trước khi sử dụng ID trong cài đặt (hữu ích nếu không có nitro)"
+        },
+        "ui":{
+            "husk":"vỏ trấu"
+        }
+    },
+    "iRememberYou":{
+        "description":"Lưu cục bộ tất cả những người bạn đã liên lạc (bao gồm cả máy chủ), trong trường hợp bị mất",
+        "ui":{
+            "iRememberYou":"Tôi nhớ bạn"
+        }
+    },
+    "iconViewer":{
+        "description":"Thêm tab mới vào cài đặt để xem trước tất cả các biểu tượng.",
+        "ui":{
+            "iconFinder":"Trình tìm biểu tượng",
+            "openIconsTab":"Mở tab biểu tượng"
+        }
+    },
+    "idleAutoRestart":{
+        "description":"Tự động khởi động lại máy khách sau khi không hoạt động trong một khoảng thời gian có thể định cấu hình nhưng tránh khởi động lại khi bạn đang ở trong VC.",
+        "settings":{
+            "idleMinutes":"Số phút không hoạt động trước khi khởi động lại (khi không ở trong VC)",
+            "isEnabled":"Bật tự động khởi động lại sau khi không hoạt động"
+        },
+        "ui":{
+            "disableAutoIdle":"Vô hiệu hóa Tự động khởi động lại khi không hoạt động",
+            "enableAutoIdle":"Bật Tự động khởi động lại khi không hoạt động"
+        }
+    },
+    "ignoreCalls":{
+        "description":"Cho phép bạn bỏ qua cuộc gọi từ người dùng hoặc nhóm dm cụ thể.",
+        "settings":{
+            "permanentlyIgnoredUsers":"ID người dùng (dấu phẩy + dấu cách) sẽ bị bỏ qua vĩnh viễn"
+        },
+        "ui":{
+            "ignore":"Bỏ qua",
+            "permanentlyIgnore":"Bỏ qua cuộc gọi vĩnh viễn",
+            "temporarilyIgnore":"Tạm thời bỏ qua cuộc gọi"
+        }
+    },
+    "imgToGif":{
+        "commands":{
+            "height":"Chiều cao của gif",
+            "image":"Đính kèm hình ảnh để sử dụng",
+            "imgtogif":"Cho phép bạn biến hình ảnh thành gif",
+            "width":"Chiều rộng của gif"
+        },
+        "description":"Thêm lệnh gạch chéo /imgtogif để tạo ảnh gif từ bất kỳ hình ảnh nào",
+        "errors":{
+            "noImage":"Không có hình ảnh được chỉ định!",
+            "notAnImage":"Tải lên không phải là hình ảnh"
+        }
+    },
+    "inRole":{
+        "commands":{
+            "inrole":"Biết ai đang đóng một vai trò nào đó",
+            "role":"Vai trò"
+        },
+        "description":"Biết ai có vai trò bằng menu ngữ cảnh vai trò hoặc lệnh /inrole (đọc thông tin plugin!)",
+        "errors":{
+            "makeSureServer":"Hãy chắc chắn rằng bạn đang ở trong một máy chủ."
+        },
+        "limitations":{
+            "description":"Nếu bạn không có quyền mod trên máy chủ và máy chủ đó lớn (trên 100 thành viên), plugin có thể bị hạn chế theo những cách sau:",
+            "friendsAlwaysShown":"Tuy nhiên, bạn bè sẽ luôn được hiển thị bất kể trạng thái của họ.",
+            "offlineNotListed":"Thành viên ngoại tuyến sẽ không được liệt kê",
+            "title":":cảnh báo: Hạn chế",
+            "upTo100":"Tối đa 100 thành viên sẽ được liệt kê theo mặc định. Để có thêm, hãy cuộn xuống danh sách thành viên để tải thêm thành viên."
+        },
+        "ui":{
+            "viewMembers":"Xem thành viên trong vai trò"
+        }
+    },
+    "ingtoninator":{
+        "description":"Thêm 'ington' vào một từ ngẫu nhiên trong tin nhắn của bạn",
+        "settings":{
+            "isEnabled":"Bật hoặc tắt Intoninator",
+            "showIcon":"Hiển thị nút để chuyển đổi plugin Intoninator"
+        },
+        "ui":{
+            "disabled":"Bộ kích hoạt bị vô hiệu hóa",
+            "enabled":"Kích hoạt bộ kích hoạt"
+        }
+    },
+    "instantScreenshare":{
+        "description":"Chia sẻ màn hình ngay lập tức khi tham gia kênh thoại có hỗ trợ nguồn máy tính để bàn, cửa sổ và thiết bị đầu vào video (máy ảnh, thẻ chụp)",
+        "info":{
+            "linux":"Dành cho Linux",
+            "soundPreview":"Về cài đặt âm thanh và xem trước",
+            "soundPreviewInfo":"Chúng tôi sử dụng cài đặt do Discord thiết lập và sử dụng để quyết định xem có nên bật âm thanh và xem trước luồng hay không",
+            "videoDevices":"Thiết bị Video",
+            "videoDevicesInfo":"Hỗ trợ máy ảnh và thẻ chụp (như Elgato HD60X) khi được bật trong cài đặt",
+            "wayland":"Đối với Wayland, nó chỉ bật lên phần chọn chia sẻ màn hình",
+            "x11":"Đối với X11 nó có thể hoạt động hoặc không :srug:"
+        },
+        "ui":{
+            "instantScreenshare":"Chia sẻ màn hình tức thì",
+            "instantScreenshareDisabled":"Chia sẻ màn hình tức thì bị vô hiệu hóa",
+            "instantScreenshareEnabled":"Đã bật chia sẻ màn hình tức thì"
+        }
+    },
+    "invisibleChat":{
+        "description":"Mã hóa tin nhắn của bạn theo cách không đáng ngờ!",
+        "settings":{
+            "savedPasswords":"Mật khẩu đã lưu (Được phân tách bằng dấu , )"
+        },
+        "ui":{
+            "decryptMessage":"Giải mã tin nhắn",
+            "encryptMessage":"Mã hóa tin nhắn",
+            "hiddenMessageIndicator":"Tin nhắn này có một tin nhắn ẩn! (Trò chuyện vô hình)"
+        }
+    },
+    "inviteDefaults":{
+        "description":"Cho phép bạn chỉnh sửa các giá trị mặc định khi tạo lời mời máy chủ.",
+        "options":{
+            "forever":"Mãi mãi",
+            "infinite":"vô hạn"
+        },
+        "settings":{
+            "inviteDuration":"Thời lượng mời",
+            "maxUses":"Số lượt sử dụng mời",
+            "temporaryMembership":"Thành Viên Tạm Thời"
+        }
+    },
+    "jellyfinRichPresence":{
+        "coverTypeOptions":{
+            "episodeCover":"Bìa tập",
+            "seriesCover":"Bìa bộ truyện"
+        },
+        "description":"Sự hiện diện phong phú của máy chủ media Jellyfin",
+        "episodeFormatOptions":{
+            "fulltext":"Phần 1 Tập 1",
+            "s01e01":"S01E01",
+            "short":"1x01"
+        },
+        "howToGetApiKey":{
+            "description":"Mã thông báo xác thực có thể được tìm thấy bằng cách làm theo các bước sau:",
+            "title":"Cách lấy khóa API",
+            "userIdInfo":"Bạn cũng sẽ cần ID người dùng của mình, có thể tìm thấy ID này trong url của trang hồ sơ người dùng của bạn."
+        },
+        "nameFormatOptions":{
+            "custom":"Tùy biến",
+            "seriesEpisodeName":"Sê-ri - Tên tập/Bài hát/Phim",
+            "seriesMovieName":"Tên phim/bộ phim"
+        },
+        "overrideTypeOptions":{
+            "listening":"Nghe",
+            "off":"Tắt",
+            "playing":"Đang chơi",
+            "streaming":"Đang stream",
+            "watching":"Đang xem"
+        },
+        "privacyMode":{
+            "albumHidden":"[Album bị ẩn]",
+            "artistHidden":"[Nghệ sĩ ẩn]",
+            "episodeHidden":"[Tập ẩn]",
+            "listeningToMusic":"Nghe nhạc",
+            "mediaHidden":"[Phương tiện bị ẩn]",
+            "movieHidden":"[Phim ẩn]",
+            "seriesHidden":"[Loạt phim ẩn]",
+            "titleHidden":"[Tiêu đề bị ẩn]",
+            "trackHidden":"[Theo dõi ẩn]",
+            "watchingSomething":"Xem cái gì đó",
+            "watchingTvShow":"Xem một chương trình truyền hình"
+        },
+        "settings":{
+            "apiKey":"Khóa Jellyfin API lấy được từ bảng điều khiển quản trị Jellyfin của bạn",
+            "coverType":"Chọn bìa nào sẽ hiển thị khi xem chương trình truyền hình",
+            "customName":"Tên Hiện diện phong phú tùy chỉnh (chỉ được sử dụng nếu 'Tùy chỉnh' được chọn). Tùy chọn: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
+            "episodeFormat":"Định dạng số tập",
+            "nameDisplay":"Chọn cách tên ứng dụng sẽ xuất hiện trong Rich Presence",
+            "overrideRichPresenceType":"Ghi đè loại hiện diện phong phú",
+            "privacyMode":"Chế độ riêng tư (Ẩn chi tiết phương tiện như Tập/Tên bài hát)",
+            "serverUrl":"Máy chủ Jellyfin URL (ví dụ: https://jellyfin.example.com)",
+            "showEpisodeName":"Hiển thị tên tập sau thông tin phần/tập",
+            "showPausedState":"Hiển thị sự hiện diện phong phú khi phương tiện bị tạm dừng",
+            "userId":"ID người dùng Jellyfin được lấy từ hồ sơ người dùng của bạn URL"
+        },
+        "state":{
+            "episode":"Tập {episode}",
+            "paused":"Đã dừng",
+            "season":"Phần {season}"
+        },
+        "toasts":{
+            "notConfigured":"JellyfinRPC không được cấu hình."
+        }
+    },
+    "jumpTo":{
+        "description":"Thêm tùy chọn menu ngữ cảnh để chuyển về đầu hoặc cuối kênh/DM.",
+        "errors":{
+            "channelNotAvailable":"Thông tin kênh không có sẵn.",
+            "failedJump":"Không thể chuyển tới tin nhắn. Kiểm tra bảng điều khiển để biết chi tiết.",
+            "failedSearch":"Không thể tìm kiếm tin nhắn.",
+            "noMessagesFound":"Không tìm thấy tin nhắn từ người dùng này trong kênh này."
+        },
+        "ui":{
+            "jumpToFirst":"Chuyển đến tin nhắn đầu tiên",
+            "jumpToLast":"Chuyển đến tin nhắn cuối cùng",
+            "usersLastMessage":"Tin nhắn cuối cùng của người dùng",
+            "yourLastMessage":"Tin nhắn cuối cùng của bạn"
+        }
+    },
+    "jumpscare":{
+        "description":"Thêm một cơ hội có thể định cấu hình để khiến bạn sợ hãi bất cứ khi nào bạn mở một kênh. Lấy cảm hứng từ Geometry Dash Mega Hack",
+        "settings":{
+            "audioSource":"Đặt url âm thanh của jumpscare",
+            "chance":"Khả năng xảy ra jumpscare (1 trong X nên: 100 = 1/100 hoặc 1%, 50 = 1/50 hoặc 2%, v.v.)",
+            "imageSource":"Đặt url hình ảnh của jumpscare"
+        }
+    },
+    "keyboardNavigation":{
+        "commands":{
+            "openDevSettings":"Mở tab Nhà phát triển"
+        },
+        "description":"Cho phép bạn điều hướng UI bằng bàn phím.",
+        "settings":{
+            "allowMouseControl":"Cho phép chuột điều khiển bảng lệnh.",
+            "hotkey":"Phím nóng để mở bảng lệnh."
+        },
+        "ui":{
+            "recordKeybind":"Ghi lại liên kết phím",
+            "recording":"Đang ghi..."
+        }
+    },
+    "keyboardSounds":{
+        "description":"Thêm OperaGX hoặc osu! hiệu ứng âm thanh khi gõ trên bàn phím của bạn.",
+        "options":{
+            "operaGx":"Opera GX",
+            "osu":"ôi!"
+        },
+        "settings":{
+            "soundPack":"Gói âm thanh để sử dụng.",
+            "volume":"Âm lượng của bàn phím."
+        }
+    },
+    "keywordNotify":{
+        "description":"Gửi thông báo nếu một tin nhắn nhất định khớp với các từ khóa hoặc biểu thức chính quy nhất định",
+        "options":{
+            "blacklist":"Danh sách đen",
+            "whitelist":"Danh sách trắng"
+        },
+        "settings":{
+            "amountToKeep":"Số lượng tin nhắn cần lưu trong nhật ký",
+            "ignoreBots":"Bỏ qua tin nhắn từ bot",
+            "keywords":"Quản lý từ khóa"
+        },
+        "ui":{
+            "addId":"Thêm giấy tờ tùy thân",
+            "addKeywordEntry":"Thêm mục nhập từ khóa",
+            "clearAll":"Xóa tất cả",
+            "ignoreCase":"Bỏ qua trường hợp",
+            "keywordEntry":"Nhập từ khóa {index}",
+            "keywords":"Từ khóa",
+            "whitelistBlacklist":"Danh sách trắng/Danh sách đen"
+        }
+    },
+    "lastActive":{
+        "description":"Một plugin để chuyển tới tin nhắn hoạt động cuối cùng từ chính bạn hoặc người dùng khác trong kênh/máy chủ.",
+        "errors":{
+            "channelNotAvailable":"Thông tin kênh không có sẵn.",
+            "findFailed":"Không tìm thấy tin nhắn. Kiểm tra bảng điều khiển để biết chi tiết.",
+            "jumpFailed":"Không thể chuyển tới tin nhắn. Kiểm tra bảng điều khiển để biết chi tiết.",
+            "noRecentMessages":"Không thể tìm thấy bất kỳ tin nhắn gần đây từ người dùng này."
+        }
+    },
+    "limitMiddleClickPaste":{
+        "description":"Prevent middle click pasting either always or just when a text area is not focused.",
+        "options":{
+            "alwaysPrevent":"Always Prevent Middle Click Pasting",
+            "onlyWhenNotFocused":"Only Prevent When Text Area Not Focused"
+        },
+        "settings":{
+            "preventLinkOpen":"Prevent middle-click on links from opening new tabs while preserving autoscroll.",
+            "scope":"Situations in which to prevent middle click from pasting.",
+            "threshold":"Milliseconds until pasting is enabled again after a middle click."
+        }
+    },
+    "listenBrainzRPC":{
+        "about":{
+            "description":"MusicBrainz API không yêu cầu khóa API nhưng yêu cầu chuỗi tác nhân người dùng có ý nghĩa. Đối với hầu hết, một địa chỉ email là đủ.",
+            "title":"Giới thiệu về MusicBrainz API"
+        },
+        "buttons":{
+            "profile":"Hồ sơ ListenBrainz",
+            "viewSong":"Xem bài hát"
+        },
+        "defaults":{
+            "statusName":"một số âm nhạc"
+        },
+        "description":"Plugin nhỏ cho sự hiện diện phong phú của ListenBrainz",
+        "missingArtOptions":{
+            "listenbrainzLogo":"Sử dụng logo ListenBrainz lớn",
+            "placeholder":"Sử dụng trình giữ chỗ chung"
+        },
+        "nameFormatOptions":{
+            "albumName":"Sử dụng tên album (quay lại văn bản trạng thái tùy chỉnh nếu bài hát không có album)",
+            "artistFirst":"Sử dụng định dạng 'nghệ sĩ - bài hát'",
+            "artistOnly":"Chỉ sử dụng tên nghệ sĩ",
+            "customStatus":"Sử dụng tên trạng thái tùy chỉnh",
+            "songFirst":"Sử dụng định dạng 'bài hát - nghệ sĩ'",
+            "songOnly":"Chỉ sử dụng tên bài hát"
+        },
+        "settings":{
+            "hideWithActivity":"Ẩn sự hiện diện ListenBrainz nếu bạn có bất kỳ sự hiện diện nào khác",
+            "hideWithSpotify":"Ẩn sự hiện diện của ListenBrainz nếu Spotify đang chạy",
+            "mbContact":"ListenBrainz liên hệ",
+            "missingArt":"Khi album hoặc ảnh bìa album bị thiếu",
+            "nameFormat":"Hiển thị tên bài hát và nghệ sĩ ở tên trạng thái",
+            "shareSong":"Hiển thị liên kết tới bài hát trên ListenBrainz (chỉ người dùng khác mới có thể nhìn thấy)",
+            "shareUsername":"Hiển thị liên kết tới hồ sơ ListenBrainz (chỉ có thể hiển thị với những người dùng khác)",
+            "statusName":"Văn bản trạng thái tùy chỉnh",
+            "useListeningStatus":"Hiển thị trạng thái \"Đang nghe\" thay vì \"Đang phát\"",
+            "useLogo":"Hiển thị logo ListenBrainz trên ảnh bìa album",
+            "useTimeBar":"Sử dụng thời lượng bản nhạc để hiển thị thanh thời gian (phải sử dụng trạng thái Nghe)",
+            "username":"Tên người dùng ListenBrainz"
+        }
+    },
+    "loginWithQR":{
+        "description":"Cho phép bạn đăng nhập vào thiết bị khác bằng cách quét mã QR đăng nhập, giống như trên thiết bị di động!",
+        "settings":{
+            "scanQr":"Quét mã QR"
+        },
+        "ui":{
+            "enableAndRestart":"Kích hoạt plugin và khởi động lại ứng dụng khách của bạn để quét mã QR đăng nhập",
+            "scanQrCode":"Quét mã QR"
+        }
+    },
+    "messageLoggerEnhanced":{
+        "buttons":{
+            "exportLogs":"Xuất nhật ký",
+            "exporting":"Đang xuất...",
+            "importLogs":"Nhập nhật ký",
+            "importing":"Đang nhập khẩu..."
+        },
+        "modal":{
+            "clearAllLogs":"Xóa tất cả nhật ký",
+            "clearVisibleLogs":"Xóa nhật ký hiển thị",
+            "copyChannelId":"Sao chép ID kênh",
+            "copyContent":"Sao chép nội dung",
+            "copyMessageId":"Sao chép ID tin nhắn",
+            "copyServerId":"Sao chép ID máy chủ",
+            "copyUserId":"Sao chép ID người dùng",
+            "deleteLog":"Xóa nhật ký",
+            "deleted":"Đã xóa",
+            "edited":"Đã chỉnh sửa",
+            "emptyLogs":"trống rỗng à",
+            "filterMessages":"Lọc tin nhắn",
+            "fromChannel":"Từ {channel} trong {guild}",
+            "fromDms":"Từ DM của {username}",
+            "fromGroupDm":"Từ {name} Group DM",
+            "ghostPinged":"ma ping",
+            "importLogs":"Nhập nhật ký",
+            "importLogsTooltip":"ML Nâng cao hiện lưu trữ nhật ký trong indexeddb. Bạn cần nhập nhật ký cũ của mình từ thư mục nhật ký. Nhập sẽ không ghi đè lên nhật ký hiện có",
+            "jumpToMessage":"Chuyển đến tin nhắn",
+            "loadMore":"Tải Thêm",
+            "maybeTry":"Có thể thử {nextTab} hoặc {lastTab}",
+            "noResultsIn":"Không có kết quả nào trong {tab}.",
+            "openUserProfile":"Mở hồ sơ người dùng",
+            "sortNewestFirst":"Sắp xếp mới nhất đầu tiên",
+            "sortOldestFirst":"Sắp xếp cũ nhất trước"
+        },
+        "settings":{
+            "alwaysLogCurrentChannel":"Luôn ghi lại kênh đã chọn hiện tại. Các kênh/người dùng nằm trong danh sách đen vẫn sẽ bị bỏ qua.",
+            "alwaysLogDirectMessages":"Luôn đăng nhập DM",
+            "attachmentFileExtensions":"Danh sách các phần mở rộng tệp được phân tách bằng dấu phẩy để lưu. Các tệp đính kèm có phần mở rộng tệp không có trong danh sách này sẽ không được lưu. Để trống để lưu tất cả các tệp đính kèm.",
+            "attachmentSizeLimitInMegabytes":"Kích thước tối đa của tệp đính kèm tính bằng megabyte cần lưu. Các tệp đính kèm lớn hơn kích thước này sẽ không được lưu.",
+            "blacklistedIds":"Máy chủ, kênh hoặc ID người dùng bị liệt vào danh sách đen.",
+            "cacheLimit":"Số lượng tin nhắn tối đa để lưu trữ trong bộ đệm. Tin nhắn cũ hơn sẽ bị xóa khi đạt đến giới hạn. Điều này giúp giảm mức sử dụng bộ nhớ và cải thiện hiệu suất. 0 có nghĩa là không có giới hạn",
+            "cacheMessagesFromServers":"Thông thường, trình ghi nhật ký tin nhắn chỉ ghi nhật ký từ các id và dms trong danh sách cho phép, việc bật tính năng này có nghĩa là nó cũng sẽ ghi nhật ký tin nhắn từ tất cả các máy chủ. Lưu ý rằng điều này có thể khiến bộ đệm vượt quá giới hạn, dẫn đến một số thư bị bỏ sót. Nếu bạn đang ở trong nhiều máy chủ, điều này có thể làm tăng đáng kể khả năng thư được ghi lại, điều này có thể dẫn đến bản ghi thư lớn và bao gồm các thư không liên quan.",
+            "exportLogsFromIndexedDB":"Xuất nhật ký từ IndexedDB",
+            "hideMessageFromMessageLoggers":"Khi được bật, nút menu ngữ cảnh sẽ được thêm vào tin nhắn để cho phép bạn xóa tin nhắn mà không bị các trình ghi nhật ký khác ghi lại. Có thể không an toàn, hãy tự chịu rủi ro khi sử dụng.",
+            "hideMessageFromMessageLoggersDeletedMessage":"Nội dung tin nhắn cần thay thế khi sử dụng tính năng ẩn tin nhắn khỏi trình ghi nhật ký tin nhắn.",
+            "ignoreBots":"Có bỏ qua tin nhắn của bot hay không",
+            "ignoreMutedCategories":"Tin nhắn trong các kênh thuộc danh mục bị tắt tiếng sẽ không được ghi lại. Người dùng/kênh trong danh sách trắng trong bang hội bị tắt tiếng sẽ vẫn được ghi lại.",
+            "ignoreMutedChannels":"Tin nhắn trong các kênh bị tắt tiếng sẽ không được ghi lại. Người dùng/kênh trong danh sách trắng trong bang hội bị tắt tiếng sẽ vẫn được ghi lại.",
+            "ignoreMutedGuilds":"Tin nhắn trong các bang hội bị tắt tiếng sẽ không được ghi lại. Người dùng/kênh trong danh sách trắng trong bang hội bị tắt tiếng sẽ vẫn được ghi lại.",
+            "ignoreSelf":"Có nên tự mình bỏ qua tin nhắn hay không",
+            "ignoreWebhooks":"Có bỏ qua tin nhắn của webhooks hay không",
+            "importLogsFromFile":"Nhập nhật ký từ tệp",
+            "messageLimit":"Số lượng tin nhắn tối đa để lưu. Tin nhắn cũ hơn sẽ bị xóa khi đạt đến giới hạn. 0 có nghĩa là không có giới hạn",
+            "messagesToDisplayAtOnceInLogs":"Số lượng tin nhắn hiển thị cùng một lúc trong nhật ký và số lượng tin nhắn cần tải khi tải thêm tin nhắn trong nhật ký.",
+            "openImageCacheFolder":"Mở thư mục bộ đệm hình ảnh",
+            "openLogs":"Nhật ký mở",
+            "permanentlyRemoveLogByDefault":"Nút xóa nhật ký cơ sở của Vencord MessageLogger sẽ xóa nhật ký vĩnh viễn",
+            "preserveCurrentChannel":"Khi được bật, các tin nhắn trong kênh hiện được chọn của bạn sẽ không bị ảnh hưởng bởi việc dọn dẹp theo thời gian.",
+            "saveImages":"Lưu các tệp đính kèm đã xóa.",
+            "saveMessages":"Có lưu lại tin nhắn đã xóa và chỉnh sửa hay không.",
+            "selectImageCacheDir":"Chọn thư mục hình ảnh đã lưu",
+            "selectLogsDir":"Chọn thư mục nhật ký",
+            "showLogsButton":"Chuyển sang bất cứ khi nào hiển thị hộp công cụ hay không",
+            "showWhereMessageIsFrom":"Hiển thị kênh tin nhắn/tên tác giả và tên máy chủ",
+            "sortNewest":"Sắp xếp nhật ký theo mới nhất.",
+            "timeBasedCleanupMinutes":"Tự động xóa tin nhắn khỏi các máy chủ cũ hơn nhiều phút này. Đặt thành 0 để tắt tính năng dọn dẹp theo thời gian.",
+            "whitelistedIds":"Máy chủ, kênh hoặc ID người dùng được đưa vào danh sách trắng."
+        }
+    }
 }
