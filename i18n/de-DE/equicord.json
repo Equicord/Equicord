@@ -114,7 +114,7 @@
         }
     },
     "betterBlockedUsers":{
-        "description":"Ermöglicht die Suche in der Liste der blockierten Benutzer und macht Namen in den Einstellungen auswählbar.",
+        "description":"Ermöglicht die Suche in der Liste blockierter Benutzer und macht Namen in den Einstellungen auswählbar.",
         "ui":{
             "searchPlaceholder":"Benutzer suchen..."
         }
@@ -139,7 +139,7 @@
         "description":"Sehen Sie sich das Ablaufdatum der Einladungen an, sehen Sie sich das Profil des Einladenden an und zeigen Sie eine Vorschau der Server an, bevor Sie beitreten, indem Sie auf den Namen klicken",
         "ui":{
             "expireTooltip":"Diese Einladung wird {expiry}",
-            "expireWill":"ablaufen",
+            "expireWill":"erlöschen",
             "invitedYouTo":"{inviter} hat Sie zu {guild} eingeladen",
             "notExpire":"nicht ablaufen"
         }
