@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import * as handlers from "@equicordplugins/songSpotlight.desktop/lib/ssapi/handlers";
+import type { Song } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/structs";
+import { setFetchHandler } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/util";
 import { CspPolicies,CSPSrc } from "@main/csp";
-import * as handlers from "@song-spotlight/api/handlers";
-import type { Song } from "@song-spotlight/api/structs";
-import { setFetchHandler } from "@song-spotlight/api/util";
 import { type IpcMainInvokeEvent, net } from "electron";
 
 setFetchHandler(net.fetch as unknown as typeof fetch);

@@ -8,12 +8,12 @@ import { BaseText } from "@components/BaseText";
 import { Flex } from "@components/Flex";
 import { LinkIcon } from "@components/Icons";
 import { apiConstants } from "@equicordplugins/songSpotlight.desktop/lib/api";
+import { Song, UserData } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/structs";
+import { sid } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/util";
 import { cl } from "@equicordplugins/songSpotlight.desktop/lib/utils";
 import { useRender } from "@equicordplugins/songSpotlight.desktop/service";
 import { TrashIcon } from "@equicordplugins/songSpotlight.desktop/ui/common";
 import { ServiceIcon } from "@equicordplugins/songSpotlight.desktop/ui/components/ServiceIcon";
-import { Song, UserData } from "@song-spotlight/api/structs";
-import { sid } from "@song-spotlight/api/util";
 import { copyWithToast } from "@utils/discord";
 import { LazyComponent } from "@utils/lazyReact";
 import {

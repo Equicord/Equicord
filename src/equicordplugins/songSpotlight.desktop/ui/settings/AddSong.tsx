@@ -9,10 +9,10 @@ import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { PlusIcon } from "@components/Icons";
+import { parsers } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/handlers";
+import { Song } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/structs";
 import { cl, logger } from "@equicordplugins/songSpotlight.desktop/lib/utils";
 import { parseLink } from "@equicordplugins/songSpotlight.desktop/service";
-import { parsers } from "@song-spotlight/api/handlers";
-import { Song } from "@song-spotlight/api/structs";
 import { closeModal, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/modal";
 import { Clickable, TextInput, useState } from "@webpack/common";
 

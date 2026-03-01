@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { RenderSongInfo } from "@song-spotlight/api/handlers";
-import { Song } from "@song-spotlight/api/structs";
-import { sid } from "@song-spotlight/api/util";
+import { RenderSongInfo } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/handlers";
+import { Song } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/structs";
+import { sid } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/util";
 import { PluginNative } from "@utils/types";
 import { useEffect, useState } from "@webpack/common";
 

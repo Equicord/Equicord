@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { getServiceLabel } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/util";
 import { cl } from "@equicordplugins/songSpotlight.desktop/lib/utils";
 import { AppleMusicIcon, SoundcloudIcon, SpotifyIcon } from "@equicordplugins/songSpotlight.desktop/ui/common";
-import { getServiceLabel } from "@song-spotlight/api/util";
 import { Tooltip, useMemo } from "@webpack/common";
 import { JSX } from "react";
 

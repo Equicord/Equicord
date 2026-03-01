@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import type { UserData } from "@song-spotlight/api/structs";
+import type { UserData } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/structs";
 import { showToast, Toasts, UserStore } from "@webpack/common";
 
 import { useAuthorizationStore } from "./store/AuthorizationStore";

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { RenderSongInfo } from "@song-spotlight/api/handlers";
-import type { Song } from "@song-spotlight/api/structs";
+import { RenderSongInfo } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/handlers";
+import type { Song } from "@equicordplugins/songSpotlight.desktop/lib/ssapi/structs";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 
