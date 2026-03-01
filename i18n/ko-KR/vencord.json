@@ -9,6 +9,36 @@
     "addonCard":{
         "new":"새로운"
     },
+    "alwaysAnimate":{
+        "description":"애니메이션할 수 있는 모든 것을 애니메이션화합니다.",
+        "settings":{
+            "icons":"항상 서버 아이콘, 아바타, 장식 등에 애니메이션을 적용하세요.",
+            "nameplates":"항상 명판에 애니메이션 적용",
+            "roleGradients":"항상 역할 변화에 애니메이션 적용",
+            "serverBanners":"항상 서버 배너에 애니메이션 적용",
+            "statusEmojis":"상태 이모티콘에 항상 애니메이션 적용"
+        }
+    },
+    "alwaysExpandRoles":{
+        "description":"항상 프로필 팝아웃에서 역할 목록을 확장합니다.",
+        "settings":{
+            "hideArrow":"화살표 숨기기"
+        }
+    },
+    "alwaysTrust":{
+        "description":"짜증나는 신뢰할 수 없는 도메인과 의심스러운 파일 팝업을 제거합니다.",
+        "settings":{
+            "confirmModal":"\"삭제하시겠습니까?\"라는 모달이 표시되어야 합니까?",
+            "domain":"링크를 열 때 신뢰할 수 없는 도메인 팝업 제거",
+            "file":"링크를 열 때 '잠재적으로 위험한 다운로드' 팝업 제거",
+            "noDeleteSafety":"서버 삭제 시 서버 이름 입력 요구 사항을 제거합니다."
+        },
+        "ui":{
+            "deleteServerBody":"그것이 명백하지 않다면 그것은 영구적입니다.",
+            "deleteServerConfirm":"삭제",
+            "deleteServerTitle":"서버를 삭제하시겠습니까?"
+        }
+    },
     "anonymiseFileNames":{
         "commands":{
             "spoiler":{
@@ -92,6 +122,22 @@
             "title":"arRPC를 사용하는 방법"
         }
     },
+    "autoDndWhilePlaying":{
+        "description":"게임을 시작할 때 온라인 상태(온라인, 유휴, 방해 금지)를 자동으로 업데이트합니다.",
+        "settings":{
+            "excludeInvisible":"상태가 숨김으로 설정된 동안 자동 상태 변경 방지",
+            "statusToSet":"게임 중 설정할 상태"
+        },
+        "statusOptions":{
+            "dnd":"다른 용무 중",
+            "idle":"자리 비움",
+            "invisible":"오프라인 표시",
+            "online":"온라인"
+        }
+    },
+    "badgeAPI":{
+        "description":"API 사용자에게 배지를 추가하려면"
+    },
     "betterFolders":{
         "settings":{
             "closeAllFolders":"폴더에 없는 서버를 선택할 때 모든 폴더를 닫습니다.",
@@ -108,6 +154,22 @@
             "sidebarAnim":"폴더 사이드바 열기 애니메이션"
         }
     },
+    "betterGifAltText":{
+        "description":"GIF 대체 텍스트를 단순히 'GIF'에서 gif 태그/파일 이름을 포함하도록 변경합니다."
+    },
+    "betterGifPicker":{
+        "description":"기본적으로 GIF 선택기가 즐겨찾는 카테고리를 열도록 합니다.",
+        "settings":{
+            "keepOpen":"GIF를 선택한 후 GIF 선택기를 열어 둡니다."
+        }
+    },
+    "betterNotesBox":{
+        "description":"메모 숨기기 또는 맞춤법 검사 비활성화(설정에서 구성!!)",
+        "settings":{
+            "hide":"메모 숨기기",
+            "noSpellCheck":"메모에서 맞춤법 검사 비활성화"
+        }
+    },
     "betterRoleContext":{
         "copyRoleColor":"역할 색상 복사",
         "description":"사용자 프로필에서 역할을 마우스 오른쪽 버튼으로 클릭하면 역할 색상 복사 / 역할 편집 / 역할 아이콘 보기 옵션이 추가되었습니다.",
@@ -117,6 +179,13 @@
             "roleIconFileFormat":"역할 아이콘을 볼 때 사용할 파일 형식"
         },
         "viewRoleIcon":"역할 아이콘 보기"
+    },
+    "betterRoleDot":{
+        "description":"RoleDot(접근성 설정) 클릭 시 역할 색상을 복사합니다. 또한 RoleDot과 색상 이름을 동시에 사용할 수 있습니다.",
+        "settings":{
+            "bothStyles":"역할 점과 색상 이름을 모두 표시",
+            "copyRoleColorInProfilePopout":"프로필 팝아웃에서 역할 점을 클릭하여 역할 색상을 복사할 수 있도록 허용"
+        }
     },
     "betterSessions":{
         "newBadge":"새로운",
@@ -140,10 +209,20 @@
             "organizeMenu":"설정 톱니바퀴 상황에 맞는 메뉴를 카테고리로 구성합니다."
         }
     },
+    "betterUploadButton":{
+        "description":"한 번의 클릭으로 업로드, 마우스 오른쪽 버튼 클릭으로 메뉴 열기"
+    },
     "biggerStreamPreview":{
         "description":"이 플러그인을 사용하면 스트림 미리보기를 확대할 수 있습니다.",
         "name":"BiggerStream미리보기",
         "viewStreamPreview":"스트림 미리보기 보기"
+    },
+    "blurNsfw":{
+        "description":"마우스를 가져갈 때까지 NSFW 채널의 첨부 파일을 흐리게 처리합니다.",
+        "settings":{
+            "blurAllChannels":"NSFW뿐만 아니라 모든 채널의 첨부 파일을 흐리게 처리합니다.",
+            "blurAmount":"흐림 정도(픽셀 단위)"
+        }
     },
     "callTimer":{
         "description":"음성 채널 및 연결 상태의 모든 사용자에 대한 통화 타이머를 추가합니다.",
@@ -158,6 +237,12 @@
         }
     },
     "cancel":"취소",
+    "chatInputButtonAPI":{
+        "description":"API 채팅 입력에 버튼을 추가합니다."
+    },
+    "clearURLs":{
+        "description":"보내는 URL에서 추적 요소를 자동으로 제거합니다."
+    },
     "clientTheme":{
         "contrastWarning":"선택한 색상이 텍스트와 잘 대비되지 않습니다.",
         "disableNitroTheme":"Nitro 테마 비활성화",
@@ -196,6 +281,12 @@
             "updatedRemote":"설정이 업데이트되었습니다! 변경 사항을 완전히 적용하려면 여기를 클릭하여 다시 시작하세요!"
         }
     },
+    "colorSighted":{
+        "description":"2015-2017 Discord처럼 상태에서 색맹 친화적인 아이콘을 제거합니다."
+    },
+    "commandsAPI":{
+        "description":"API 명령을 사용하는 모든 항목에 필요"
+    },
     "consoleJanitor":{
         "alwaysAllowLoggers":"항상 이러한 유형의 로거를 허용합니다.",
         "description":"성가신 콘솔 메시지/오류를 비활성화합니다.",
@@ -206,6 +297,12 @@
             "disableSpotifyLogger":"계정 정보 및 액세스 토큰을 유출하는 Spotify 로거를 비활성화합니다.",
             "whitelistedLoggers":"다른 로거가 숨겨져 있어도 허용하는 세미콜론으로 구분된 로거 목록"
         }
+    },
+    "consoleShortcuts":{
+        "description":"창의 많은 항목에 대해 더 짧은 별칭을 추가합니다. 목록을 보려면 `shortcutList`를 실행하세요."
+    },
+    "contextMenuAPI":{
+        "description":"API 상황에 맞는 메뉴에 항목을 추가/제거하는 데 사용됩니다."
     },
     "contributorCard":{
         "contributionsButton":"당신이 기여한 내용을 확인하세요",
@@ -234,6 +331,43 @@
     "copyUserURLs":{
         "copyUserURL":"사용자 복사 URL",
         "description":"사용자 상황에 맞는 메뉴에 '사용자 복사 URL' 옵션을 추가합니다."
+    },
+    "crashHandler":{
+        "description":"다시 시작하지 않고도 충돌을 처리하고 복구할 수 있는 유틸리티 플러그인",
+        "notifications":{
+            "crashedBody":"Awn :( Discord는 복구를 시도하지 않고 두 번 빠르게 충돌했습니다. 지원 서버에 참여하려면 여기를 클릭하십시오!",
+            "crashedTitle":"Discord이(가) 충돌했습니다!",
+            "invalidInvite":"유효하지 않거나 만료된 초대",
+            "recoveringBody":"복구를 시도하는 중... 지원 서버에 참여하려면 여기를 클릭하세요!"
+        },
+        "settings":{
+            "attemptToNavigateToHome":"Discord 충돌을 방지할 때 집으로 이동을 시도할지 여부입니다.",
+            "attemptToPreventCrashes":"Discord 충돌 방지 시도 여부."
+        },
+        "updatePrompt":"아, Discord이(가) 방금 충돌했습니다... 하지만 좋은 소식은 이 문제를 해결할 수 있는 Equicord 업데이트가 있다는 것입니다! 지금 업데이트하시겠습니까?"
+    },
+    "ctrlEnterSend":{
+        "description":"Ctrl+Enter를 사용하여 메시지 보내기(사용자 정의 가능)",
+        "settings":{
+            "sendMessageInTheMiddleOfACodeBlock":"코드 블록 중간에 메시지를 보낼지 여부",
+            "submitRule":"메시지를 보내는 방법"
+        },
+        "submitRuleOptions":{
+            "ctrlEnter":"Ctrl+Enter(새 줄의 경우 Enter 또는 Shift+Enter)(macOS에서는 cmd+enter)",
+            "enter":"Enter(새 줄은 Shift+Enter, 기본값은 Discord)",
+            "shiftEnter":"Shift+Enter(새 줄을 입력하려면 Enter)"
+        }
+    },
+    "customIdle":{
+        "description":"Discord가 유휴 상태가 되기 전의 시간을 설정할 수 있습니다(또는 자동 유휴 비활성화).",
+        "settings":{
+            "idleTimeout":"Discord이 유휴 상태가 되기 전 분(0은 자동 유휴를 비활성화함)",
+            "remainInIdle":"Discord로 돌아오면 온라인 연결을 확인할 때까지 유휴 상태를 유지하세요."
+        },
+        "ui":{
+            "backOnlineMessage":"돌아온 것을 환영합니다! 버튼을 클릭하면 온라인으로 전환됩니다. 다시 로드할 때까지 유휴 상태를 유지하려면 X를 클릭하세요.",
+            "exitIdle":"유휴 종료"
+        }
     },
     "customRPC":{
         "activityType":"활동 유형",
@@ -322,6 +456,17 @@
         "removeDecoration":"장식 제거",
         "title":"장식"
     },
+    "devCompanion":{
+        "description":"Dev Companion 플러그인. 작동하지 않거나 이상한 점(버그일 가능성이 높음)이 있으면 Sadan에게 핑이나 DM으로 보고해 주세요. 감사합니다!",
+        "settings":{
+            "notifyOnAutoConnect":"Dev Companion이 자동으로 연결되었을 때 알림을 보낼지 여부입니다.",
+            "reloadAfterToggle":"비활성화/활성화 플러그인 명령을 받은 후 다시 로드하세요.",
+            "usePatchedModule":"추출 요청 시 원본 대신 현재 패치된 모듈(패치된 경우)로 응답하세요."
+        }
+    },
+    "disableCallIdle":{
+        "description":"DM 음성 통화에서 3분 후 자동으로 추방되고 AFK 음성 채널로 이동되는 것을 비활성화합니다."
+    },
     "donate":"기부",
     "donorCard":{
         "donated":{
@@ -335,6 +480,12 @@
             "description":"기부를 통해 Equicord 개발을 지원해 보세요!",
             "title":"프로젝트 지원"
         }
+    },
+    "dontRoundMyTimestamps":{
+        "description":"항상 상대 타임스탬프를 반내림하므로 7.6y는 8y 대신 7y가 됩니다."
+    },
+    "dynamicImageModalAPI":{
+        "description":"이미지 모달을 열 때 너비나 높이를 생략할 수 있습니다."
     },
     "experiments":{
         "description":"Discord에서 실험 및 기타 개발자 전용 기능에 대한 액세스를 활성화하세요!",
@@ -357,6 +508,9 @@
         "failedToClone":"복제 실패: {error}",
         "nameValidation":"이름은 2~32자 사이여야 합니다.",
         "somethingWentWrong":"문제가 발생했습니다(콘솔을 확인하세요!)"
+    },
+    "f8break":{
+        "description":"DevTools(+ 중단점)가 열린 상태에서 F8을 누르면 클라이언트를 일시 중지합니다."
     },
     "failedToRender":"{tab} 탭을 렌더링하지 못했습니다. 이 문제가 지속되면 설치 프로그램을 사용하여 다시 설치해 보세요!",
     "fakeNitro":{
@@ -401,6 +555,40 @@
         "primary":"주요한",
         "usage":"용법"
     },
+    "favEmojiFirst":{
+        "description":"이모티콘 자동완성에서 가장 좋아하는 이모티콘을 먼저 표시하고 이모티콘 별칭도 제공합니다.",
+        "settings":{
+            "aliases":"이모티콘 별칭을 관리하세요.",
+            "clearAll":"모든 별칭을 삭제합니다."
+        },
+        "ui":{
+            "aliasRequired":"별칭이 필요합니다.",
+            "aliasSetFor":"{emoji}에 대한 별칭이 설정되었습니다.",
+            "aliasValidation":"별칭은 2~32자여야 하며 소문자, 숫자 또는 밑줄만 사용할 수 있습니다.",
+            "confirmModal":{
+                "confirmButton":"모든 별칭 삭제",
+                "description":"이렇게 하면 저장한 모든 이모티콘 별칭이 제거됩니다.",
+                "title":"모든 별칭 삭제"
+            },
+            "deleteAllAliases":"모든 별칭 삭제",
+            "deletedAllAliases":"모든 이모티콘 별칭을 삭제했습니다.",
+            "duplicateAlias":"중복된 별칭",
+            "editAlias":"별칭 수정",
+            "failedToDelete":"별칭을 삭제하지 못했습니다.",
+            "failedToRemove":"별칭을 제거하지 못했습니다.",
+            "failedToSave":"별칭을 저장하지 못했습니다.",
+            "modal":{
+                "placeholder":"별칭(예: \"흐느낌\"",
+                "save":"저장",
+                "setDescription":"{emoji}에 대한 별칭을 설정하세요.",
+                "setTitle":"별칭 설정"
+            },
+            "noAliasesYet":"아직 설정된 별칭이 없습니다.",
+            "remove":"제거하기",
+            "removedAlias":"제거된 별칭:{alias}:",
+            "setAlias":"별칭 설정"
+        }
+    },
     "favGifSearch":{
         "description":"즐겨찾는 gif에 검색창을 추가합니다.",
         "name":"즐겨찾기Gif검색",
@@ -413,6 +601,9 @@
         "settings":{
             "searchOption":"검색하려는 URL 부분"
         }
+    },
+    "fixCodeblockGap":{
+        "description":"코드 블록과 그 아래 텍스트 사이의 간격을 제거합니다."
     },
     "fixImagesQuality":{
         "animatedImagesAlways":"채팅의 애니메이션 이미지(GIF, WebP 등)는 앱에 초점이 맞춰져 있는지 여부에 관계없이 항상 애니메이션으로 표시됩니다.",
@@ -427,9 +618,51 @@
             "originalImagesInChat":"또한 Chat에 원본 이미지를 로드합니다. 경고: 위의 주의사항을 읽어보세요."
         }
     },
+    "fixSpotifyEmbeds":{
+        "description":"볼륨을 사용자 정의할 수 있도록 하여 Spotify 임베드가 엄청나게 큰 문제를 수정했습니다.",
+        "settings":{
+            "volume":"Spotify 삽입을 위해 설정할 볼륨 %입니다. 10% 이상이면 너무 시끄럽습니다."
+        }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"Discord에서 표시되지 않도록 차단된 YouTube 비디오를 우회합니다(예: UMG)."
+    },
+    "forceOwnerCrown":{
+        "description":"서버 규모가 큰 경우에도 사용자 이름 옆에 소유자 왕관을 강제 적용합니다."
+    },
+    "friendInvites":{
+        "commands":{
+            "createFriendInvite":{
+                "description":"친구 초대 링크를 생성합니다.",
+                "name":"친구 초대 만들기"
+            },
+            "revokeFriendInvites":{
+                "description":"생성된 모든 친구 초대를 취소합니다.",
+                "name":"친구 초대 취소"
+            },
+            "viewFriendInvites":{
+                "description":"생성된 모든 친구 초대 목록을 봅니다.",
+                "name":"친구 초대 보기"
+            }
+        },
+        "description":"슬래시 명령(/친구 초대 생성, /친구 초대 보기, /친구 초대 취소)을 통해 친구 초대 링크를 생성하고 관리합니다.",
+        "ui":{
+            "allRevoked":"친구 초대가 모두 취소되었습니다.",
+            "expires":"만료:",
+            "maxUses":"최대 용도:",
+            "noActiveInvites":"활성화된 친구 초대가 없습니다!",
+            "timesUsed":"사용 시간:"
+        }
+    },
     "friendsSince":{
         "description":"사용자 팝아웃에 누군가와 언제 친구가 되었는지 표시됩니다.",
         "heading":"이후 친구"
+    },
+    "fullSearchContext":{
+        "description":"메시지 검색 결과의 메시지 컨텍스트 메뉴에 사용자가 기대하는 모든 옵션이 포함되도록 합니다."
+    },
+    "fullUserInChatbox":{
+        "description":"채팅 상자에서 사용자 언급이 왼쪽/오른쪽 클릭과 같은 더 많은 기능을 갖도록 만듭니다."
     },
     "gameActivityToggle":{
         "description":"마이크 옆에 버튼을 추가하고 게임 활동을 전환하는 데 방해가 되는 버튼을 추가합니다.",
@@ -441,6 +674,9 @@
             "locationToolbox":"Equicord 도구 상자",
             "oldIcon":"Discord 아이콘을 재설계하기 전에 이전 아이콘 스타일을 사용하세요."
         }
+    },
+    "gifPaste":{
+        "description":"gif 선택기에서 gif를 선택하면 즉시 보내는 대신 채팅 상자에 링크를 삽입합니다."
     },
     "greetStickerPicker":{
         "ariaLabel":"인사 스티커 선택기",
@@ -458,6 +694,9 @@
         "hideMedia":"미디어 숨기기",
         "mediaHidden":"미디어 숨김",
         "showMedia":"미디어 표시"
+    },
+    "iLoveSpam":{
+        "description":"'스패머 가능성이 있는 사람'의 메시지를 숨기지 마세요."
     },
     "ignoreActivities":{
         "disableActivity":"활동 비활성화",
@@ -483,6 +722,15 @@
             "whitelist":"화이트리스트"
         }
     },
+    "imageFilename":{
+        "description":"이미지 및 GIF 위에 마우스를 올리면 파일 이름이 툴팁으로 표시됩니다.",
+        "settings":{
+            "showFullUrl":"파일 이름만 표시하는 대신 이미지의 전체 URL를 표시합니다. 일반적으로 의미 있는 파일 이름이 없기 때문에 GIF에 대해 항상 활성화됩니다."
+        }
+    },
+    "imageLink":{
+        "description":"유일한 콘텐츠인 경우에도 메시지에서 이미지 링크를 숨기지 마세요."
+    },
     "imageZoom":{
         "lensSize":"렌즈 크기",
         "nearestNeighbour":"가장 가까운 이웃",
@@ -499,7 +747,29 @@
         "zoom":"줌",
         "zoomSpeed":"줌 속도"
     },
+    "implicitRelationships":{
+        "description":"친구 탭에 암시적 관계가 표시됩니다.",
+        "settings":{
+            "sortByAffinity":"암시적 관계를 귀하에 대한 선호도에 따라 정렬할지 여부입니다."
+        },
+        "ui":{
+            "implicitHeader":"암시적 — {count}",
+            "implicitSection":"절대적인"
+        }
+    },
     "invite":"초대하기",
+    "ircColors":{
+        "description":"IRC 클라이언트처럼 채팅의 사용자 이름 색상을 고유하게 만듭니다.",
+        "settings":{
+            "applyColorOnlyInDms":"직접 메시지에만 색상을 적용하세요. 서버에 색상을 적용하지 마십시오.",
+            "applyColorOnlyToUsersWithoutColor":"미리 정의된 색상이 없는 사용자에게만 색상 적용",
+            "lightness":"밝기(%) 색상이 너무 밝거나 어두우면 변경하세요.",
+            "memberListColors":"구성원 목록의 역할 색상 바꾸기"
+        }
+    },
+    "keepCurrentChannel":{
+        "description":"계정을 전환하거나 Discord을(를) 로드하기 전에 있었던 채널로 이동해 보세요."
+    },
     "lastfmRichPresence":{
         "apiKeyInstructions":"<0>애플리케이션 이름</0> 및 <1>애플리케이션 설명</1>을 원하는 대로 설정하고 나머지는 비워 두세요.",
         "createApiKey":"API 키 생성",
@@ -540,6 +810,19 @@
         }
     },
     "loading":"불러오는 중",
+    "loadingQuotes":{
+        "description":"Discords 로딩 인용문 교체",
+        "settings":{
+            "additionalQuotes":"아래 구분 기호로 구분되어 표시될 수 있는 추가 사용자 정의 따옴표",
+            "additionalQuotesDelimiter":"추가 견적을 위한 구분 기호",
+            "enableDiscordPresetQuotes":"Discord의 미리 설정된 인용문 활성화(이벤트 중 이벤트 인용문 포함)",
+            "enablePluginPresetQuotes":"이 플러그인으로 미리 설정된 인용문을 활성화하세요.",
+            "replaceEvents":"특별 이벤트 테마 인용문이 포함된 이벤트 중에도 이 플러그인을 적용해야 합니까? (예: 할로윈)"
+        },
+        "ui":{
+            "noQuotesQuote":"정말 모든 로딩 따옴표를 비활성화하셨나요? 당신은 얼마나 바보입니까 ..."
+        }
+    },
     "logs":{
         "allLogsCleared":"모든 로그가 삭제되었습니다.",
         "clearAll":"모두 지우기",
@@ -562,6 +845,84 @@
             "toolTip":"서버 툴팁에 멤버 수 표시",
             "voiceActivity":"회원 목록에 회원 수와 함께 음성 활동 표시"
         }
+    },
+    "memberListDecoratorsAPI":{
+        "description":"API 멤버 목록에 데코레이터를 추가합니다(서버 및 DM 모두)."
+    },
+    "mentionAvatars":{
+        "description":"멘션 내부에 사용자 아바타와 역할 아이콘 표시",
+        "settings":{
+            "showAtSymbol":"사용자 멘션에 @ 기호를 표시할지 여부"
+        }
+    },
+    "menuItemDemanglerAPI":{
+        "description":"Discord의 메뉴 아이템 모듈 해체"
+    },
+    "messageAccessoriesAPI":{
+        "description":"API 메시지 액세서리를 추가하려면"
+    },
+    "messageClickActions":{
+        "actions":{
+            "copyContent":"콘텐츠 복사",
+            "copyId":"ID 복사하기",
+            "copyLink":"링크 복사하기",
+            "copyUserId":"사용자 ID 복사",
+            "delete":"삭제",
+            "edit":"수정",
+            "none":"없음",
+            "openTab":"탭 열기",
+            "openThread":"오픈 스레드",
+            "pin":"고정",
+            "quote":"인용하다",
+            "react":"반응하다",
+            "reply":"답장"
+        },
+        "description":"메시지에 대한 클릭 동작을 사용자 정의합니다.",
+        "modifiers":{
+            "alt":"Alt",
+            "backspace":"역행 키이",
+            "ctrl":"Ctrl",
+            "delete":"삭제",
+            "none":"없음",
+            "shift":"옮기다"
+        },
+        "settings":{
+            "clickTimeout":"더블/트리플 클릭을 구분하는 시간 초과(ms)",
+            "deferDoubleClickForTriple":"세 번 클릭 동작을 허용하려면 두 번 클릭을 지연시키세요(해제 시 세 번 클릭 비활성화).",
+            "disableInDms":"다이렉트 메시지의 모든 클릭 동작을 비활성화합니다.",
+            "disableInSystemDms":"시스템 DM에서 모든 클릭 동작을 비활성화합니다.",
+            "doubleClickAction":"두 번 클릭 시 작업(메시지)",
+            "doubleClickHoldThreshold":"두 번 클릭 작업의 최대 유지 시간(ms)입니다. 길게 누르면 텍스트를 선택할 수 있습니다.",
+            "doubleClickModifier":"두 번 클릭 작업에 수정자가 필요합니다.",
+            "doubleClickOthersAction":"더블클릭 시 동작(다른 사람의 메시지)",
+            "quoteWithReply":"인용할 때 메시지에도 답장하세요.",
+            "reactEmoji":"반응 작업에 사용할 이모티콘",
+            "selectionHoldTimeout":"텍스트 선택을 허용하는 시간 초과(ms)",
+            "singleClickAction":"한 번의 클릭으로 작업(귀하의 메시지)",
+            "singleClickModifier":"한 번의 클릭 작업에 필요한 수정자(메시지)",
+            "singleClickOthersAction":"한 번의 클릭으로 동작(다른 사람의 메시지)",
+            "singleClickOthersModifier":"한 번의 클릭 작업에 필요한 수정자(다른 사람의 메시지)",
+            "tripleClickAction":"삼중 클릭 시 동작",
+            "tripleClickModifier":"삼중 클릭 동작에 필요한 수정자",
+            "useSelectionForQuote":"인용할 때 가능한 경우 선택한 텍스트를 사용하세요."
+        },
+        "toasts":{
+            "cannotPin":"고정할 수 없음: 권한 누락",
+            "cannotQuote":"이 메시지 유형을 인용할 수 없습니다.",
+            "cannotReact":"대응할 수 없음: 권한 누락"
+        },
+        "ui":{
+            "linkCopied":"링크가 복사되었습니다!",
+            "messageContentCopied":"메시지 내용이 복사되었습니다!",
+            "messageIdCopied":"메시지 ID가 복사되었습니다!",
+            "userIdCopied":"사용자 ID가 복사되었습니다!"
+        }
+    },
+    "messageDecorationsAPI":{
+        "description":"API 메시지에 장식을 추가하려면"
+    },
+    "messageEventsAPI":{
+        "description":"API 메시지 이벤트를 사용하는 모든 항목에 필요"
     },
     "messageLatency":{
         "clockAhead":"이 사용자의 시계는 {delta} 앞서 있습니다.",
@@ -649,6 +1010,50 @@
         },
         "toggleDeletedHighlight":"삭제된 강조 표시 전환"
     },
+    "messagePopoverAPI":{
+        "description":"API 메시지 팝오버에 버튼을 추가하려면"
+    },
+    "messageTags":{
+        "commands":{
+            "create":"새 태그 만들기",
+            "delete":"자신에게서 태그를 제거하세요.",
+            "list":"자신의 모든 태그 나열",
+            "message":"이 태그를 사용할 때 보낼 메시지",
+            "preview":"태그를 공개적으로 보내지 않고 미리보기",
+            "tagName":"응답을 트리거하는 태그의 이름",
+            "tags":"모든 태그를 직접 관리하세요"
+        },
+        "description":"간단한 명령으로 메시지를 저장하고 사용할 수 있습니다.",
+        "settings":{
+            "clydeDescription":"활성화하면 태그가 사용될 때 clyde가 임시 메시지를 보냅니다.",
+            "clydeName":"전송 시 클라이드 메시지"
+        },
+        "ui":{
+            "allTags":"모든 태그:",
+            "invalidSubCommand":"잘못된 하위 명령",
+            "noTagsYet":"앗! 아직 태그가 없습니다. `/tags create`를 사용하여 태그를 만드세요!",
+            "tagAlreadyExists":"이름이 **[[PH0]]]**인 태그가 이미 존재합니다!",
+            "tagCreated":"**{name}** 태그가 성공적으로 생성되었습니다!",
+            "tagDeleted":"**{name}** 태그를 성공적으로 삭제했습니다!",
+            "tagDoesNotExist":"**[[PH0]]]** 태그는 더 이상 존재하지 않습니다! 수정하려면 Discord을(를) 다시 로드하세요. :)",
+            "tagDoesNotExist2":"**[[PH0]]]** 이름의 태그가 존재하지 않습니다!",
+            "tagSent":"**[[PH0]]]** 태그가 전송되었습니다!"
+        }
+    },
+    "messageUpdaterAPI":{
+        "description":"메시지 업데이트 및 다시 렌더링을 위한 API"
+    },
+    "moreQuickReactions":{
+        "description":"메시지 컨텍스트 메뉴의 빠른 반응 버튼을 개선합니다.",
+        "settings":{
+            "columns":"표시할 빠른 반응 열",
+            "compactMode":"버튼의 크기를 원래 크기의 75%로 조정하고 내부 이모티콘의 크기를 125%로 늘립니다. 이모티콘은 원본 크기의 93.75%로 표시됩니다. 최소 5개의 열을 사용하는 것이 좋습니다.",
+            "frequentEmojis":"좋아하는 이모티콘 대신 자주 사용하는 이모티콘을 사용하세요",
+            "reactionCount":"반응 수(0-42)",
+            "rows":"표시할 빠른 반응 행",
+            "scroll":"이모티콘 목록 스크롤 활성화"
+        }
+    },
     "mutualGroupDMs":{
         "description":"프로필에 상호 그룹 dms 표시",
         "members_one":"{count} 회원",
@@ -678,6 +1083,52 @@
             "voiceChannels":"음성 채널에서 자동으로 이름 숨기기"
         }
     },
+    "nicknameIconsAPI":{
+        "description":"API 프로필의 닉네임에 아이콘을 추가하려면"
+    },
+    "noBlockedMessages":{
+        "description":"채팅에서 차단/무시된 모든 메시지를 완전히 숨깁니다.",
+        "settings":{
+            "allowAutoModMessages":"AutoMod에서 보낸 메시지가 필터링을 우회하도록 허용합니다.",
+            "alsoHideIgnoredUsers":"또한 무시된 사용자의 메시지를 숨깁니다.",
+            "defaultHideUsers":"활성화하면 차단된 사용자의 메시지가 완전히 숨겨지고 재정의 목록에 있는 사용자 ID의 모든 메시지가 축소됩니다(기본 Discord 동작). 비활성화하면 차단된 사용자의 메시지가 축소되고 대신 재정의 목록에 있는 사용자 ID의 메시지가 완전히 숨겨집니다.",
+            "disableNotifications":"차단된 사용자에 대한 새 메시지 알림을 숨깁니다. 아래에서 \"기본 사용자 숨기기\"가 활성화되어 있고 알림을 트리거하는 사용자가 \"사용자 재정의\"에서 제외되지 않은 경우 항상 true입니다.",
+            "hideBlockedUserReplies":"차단된 사용자에 대한 답글을 숨깁니다.",
+            "overrideUsers":"위에서 선택한 기본 동작 대신 숨겨지거나 접힐 사용자 ID의 쉼표로 구분된 목록입니다."
+        }
+    },
+    "noDeepLinks":{
+        "description":"사용자가 데스크탑 앱을 사용하도록 강요하는 Discord의 어리석은 딥링킹 기능을 비활성화합니다."
+    },
+    "noDevtoolsWarning":{
+        "description":"콘솔에서 'HOLD UP' 배너를 비활성화합니다. 부작용으로 Discord이(가) 토큰을 숨기는 것을 방지하여 무작위 로그아웃을 방지합니다."
+    },
+    "noF1":{
+        "description":"F1 도움말 바인딩을 비활성화합니다."
+    },
+    "noMaskedUrlPaste":{
+        "description":"텍스트를 선택한 상태에서 링크를 붙여넣으면 마스크된 URL로 붙여넣어지지 않습니다."
+    },
+    "noMosaic":{
+        "description":"Discord 이미지 모자이크 제거",
+        "settings":{
+            "inlineVideo":"캐러셀 모달 없이 동영상 재생"
+        }
+    },
+    "noOnboardingDelay":{
+        "description":"느리고 성가신 온보딩 지연을 건너뜁니다."
+    },
+    "noPendingCount":{
+        "description":"수신 친구 요청, 메시지 요청 및 니트로 제안의 핑 횟수를 제거합니다.",
+        "settings":{
+            "hideFriendRequestsCount":"수신 친구 요청 수 숨기기",
+            "hideMessageRequestsCount":"메시지 요청 수 숨기기",
+            "hidePremiumOffersCount":"니트로 제안 수 숨기기"
+        }
+    },
+    "noProfileThemes":{
+        "description":"자신을 제외한 모든 사람의 Nitro 프로필 테마를 완전히 제거합니다."
+    },
     "noReplyMention":{
         "description":"기본적으로 응답 핑을 비활성화합니다.",
         "settings":{
@@ -687,6 +1138,64 @@
             "roleList":"핑을 허용하거나 면제할 역할 목록(쉼표나 공백으로 구분)",
             "shouldPingListed":"행동",
             "userList":"핑을 허용하거나 면제할 사용자 목록(쉼표나 공백으로 구분)"
+        }
+    },
+    "noServerEmojis":{
+        "description":"자동 완성 메뉴에 서버 이모티콘을 표시하지 않습니다.",
+        "settings":{
+            "shownEmojis":"자동완성 메뉴에 표시되는 이모티콘 유형입니다.",
+            "shownEmojisOptions":{
+                "all":"유니코드 이모티콘 및 모든 서버 이모티콘(Discord 기본값)",
+                "currentServer":"현재 서버의 유니코드 이모티콘 및 서버 이모티콘",
+                "onlyUnicode":"유니코드 이모티콘만 가능"
+            }
+        }
+    },
+    "noSystemBadge":{
+        "description":"작업 표시줄과 시스템 트레이의 읽지 않은 읽지 않은 개수 배지를 비활성화합니다."
+    },
+    "noTypingAnimation":{
+        "description":"CPU를 많이 사용하는 타이핑 도트 애니메이션을 비활성화합니다."
+    },
+    "noUnblockToJump":{
+        "description":"차단을 해제하지 않고도 차단되거나 무시된 사용자 및 스패머 가능성이 있는 사용자의 메시지로 이동할 수 있습니다."
+    },
+    "noticesAPI":{
+        "description":"알림이 자동으로 사라지는 문제 수정"
+    },
+    "notificationVolume":{
+        "description":"귀를 보호하고 알림 및 인앱 사운드에 대해 별도의 볼륨을 설정하십시오.",
+        "settings":{
+            "notificationVolume":"알림 볼륨"
+        }
+    },
+    "onePingPerDM":{
+        "description":"사용자가 읽지 않은 메시지를 DM으로 여러 번 보내는 경우 오디오 핑은 한 번만 수신됩니다.",
+        "settings":{
+            "allowEveryone":"그룹 DM에서 @everyone 및 @here에 대한 오디오 핑 수신",
+            "allowMentions":"@멘션에 대한 오디오 핑 수신",
+            "alwaysPlaySound":"비활성화된 경우에도 메시지 알림 소리를 재생합니다.",
+            "channelToAffect":"플러그인이 영향을 미칠 DM 유형을 선택하세요.",
+            "channelToAffectOptions":{
+                "both":"둘 다",
+                "groupDm":"Group DM",
+                "userDm":"사용자 DM"
+            },
+            "ignoreUsers":"핑을 조절해서는 안 되는 사용자 ID(쉼표 + 공백)"
+        }
+    },
+    "openInApp":{
+        "description":"브라우저 대신 해당 앱에서 링크 열기",
+        "settings":{
+            "epic":"Epic Games Launcher에서 Epic Games 링크를 엽니다.",
+            "itunes":"iTunes 앱에서 Apple Music 링크 열기",
+            "spotify":"Spotify 앱에서 Spotify 링크 열기",
+            "steam":"Steam 앱에서 Steam 링크 열기",
+            "tidal":"Tidal 앱에서 Tidal 링크 열기",
+            "vrcx":"VRCX 앱에서 VRChat 링크 열기"
+        },
+        "ui":{
+            "openedInApp":"기본 앱에서 링크를 열었습니다."
         }
     },
     "overrideForumDefaults":{
@@ -710,6 +1219,13 @@
         "name":"일시중지초대영원히",
         "pauseIndefinitely":"무기한 일시중지합니다."
     },
+    "permissionFreeWill":{
+        "description":"채널 권한 관리에 대한 클라이언트 측 제한을 비활성화합니다.",
+        "settings":{
+            "lockout":"권한 잠금 방지 우회(\"확실히 이 작업을 원하지 않으실 겁니다.\")",
+            "onboarding":"온보딩 요구 사항 우회(\"이렇게 변경하면 서버가 호환되지 않게 됩니다 [...]\")"
+        }
+    },
     "permissionsViewer":{
         "noPermissions":"표시할 권한이 없습니다!",
         "owner":"소유자",
@@ -725,6 +1241,29 @@
         "unknownUser":"알 수 없는 사용자",
         "userOptions":"사용자 옵션",
         "viewPermissions":"권한 보기"
+    },
+    "petpet":{
+        "commands":{
+            "petpet":{
+                "description":"애완동물 gif를 만들어보세요. 이미지 옵션 중 하나만 지정할 수 있습니다.",
+                "name":"애완동물",
+                "options":{
+                    "delay":"각 프레임 사이의 지연 시간(ms)입니다. 가장 가까운 10ms로 반올림되었습니다. 기본값은 최소값 20입니다.",
+                    "image":"사용할 이미지 첨부",
+                    "noServerPfp":"'사용자' 옵션 사용 시 서버 전용 아바타가 아닌 일반 아바타를 사용하세요.",
+                    "resolution":"gif의 해상도입니다. 기본값은 120입니다. 이상한 숫자를 입력했는데 Discord이 멈춘 경우 이는 귀하의 잘못입니다.",
+                    "url":"URL에서 이미지를 가져옵니다.",
+                    "user":"아바타를 이미지로 사용할 사용자"
+                }
+            }
+        },
+        "description":"모든 이미지에서 headpet gif를 생성하기 위해 /petpet 슬래시 명령을 추가합니다.",
+        "errors":{
+            "delayMinimum":"지연 시간은 20 이상이어야 합니다.",
+            "failedToFetchUser":"사용자를 가져오지 못했습니다. 자세한 내용은 콘솔을 확인하세요.",
+            "noImage":"지정된 이미지가 없습니다!",
+            "uploadNotImage":"업로드한 이미지가 아닙니다."
+        }
     },
     "pictureInPicture":{
         "description":"비디오에 그림 속 그림 추가(다운로드 버튼 옆)",
@@ -755,6 +1294,9 @@
             "pinOrder":"고정된 DM은 어떤 순서로 표시되어야 하나요?"
         },
         "unpinDm":"DM 고정 해제"
+    },
+    "plainFolderIcon":{
+        "description":"폴더에 작은 길드 아이콘을 표시하지 않음"
     },
     "platformIndicators":{
         "consoleIcons":{
@@ -795,15 +1337,36 @@
         "description":"메시지 작업 표시줄에 빠른 멘션 버튼을 추가합니다.",
         "label":"빠른 언급"
     },
+    "quickReply":{
+        "description":"키 바인드를 통해 메시지에 답장(ctrl + up/down) 및 편집(ctrl + Shift + up/down)",
+        "settings":{
+            "ignoreBlockedAndIgnored":"탐색 시 차단/무시된 사용자의 메시지를 무시합니다.",
+            "shouldMention":"기본적으로 핑 응답",
+            "shouldMentionOptions":{
+                "disabled":"비활성화",
+                "enabled":"활성화됐어요",
+                "followPlugin":"NoReplyMention 플러그인 팔로우(활성화된 경우)"
+            }
+        }
+    },
+    "reactErrorDecoder":{
+        "description":"\"Minifed React Error\"를 실제 오류로 대체합니다."
+    },
     "readAllNotificationsButton":{
         "description":"버튼 클릭 한 번으로 모든 서버 알림을 읽어보세요!",
         "name":"모든 알림 읽기버튼",
         "readAll":"모두 읽기"
     },
     "relationshipNotifier":{
+        "description":"친구, 그룹 채팅 또는 서버가 귀하를 제거하면 알려줍니다.",
         "friendRemoved":"{username}님이 귀하를 친구에서 삭제했습니다.",
         "friendRequestRemoved":"{username}님의 친구 요청이 삭제되었습니다.",
         "groupRemoved":"귀하는 {name} 그룹에서 제거되었습니다.",
+        "notificationTitle":"관계 알리미",
+        "offlineFriendRemoved":"귀하는 더 이상 {username}님과 친구가 아닙니다.",
+        "offlineFriendRequestRevoked":"{username}님의 친구 요청이 취소되었습니다.",
+        "offlineGroupRemoved":"귀하는 더 이상 {name} 그룹에 속하지 않습니다.",
+        "offlineServerRemoved":"귀하는 더 이상 {name} 서버에 없습니다.",
         "serverRemoved":"귀하는 {name} 서버에서 제거되었습니다.",
         "settings":{
             "friendRequestCancels":"친구 요청이 취소되면 알림",
@@ -825,6 +1388,12 @@
             "off":"끄기",
             "replacementEngine":"메뉴를 추가하는 대신 특정 검색엔진으로 대체"
         }
+    },
+    "replyTimestamp":{
+        "description":"응답된 메시지 미리보기에 타임스탬프를 표시합니다."
+    },
+    "revealAllSpoilers":{
+        "description":"스포일러를 Ctrl-클릭하거나 채팅에서 Ctrl+Shift를 누른 채 클릭하여 메시지의 모든 스포일러를 공개하세요."
     },
     "reverseImageSearch":{
         "all":"모두",
@@ -876,6 +1445,24 @@
         "unblockUser":"사용자 차단 해제",
         "viewReviews":"리뷰 보기"
     },
+    "roleColorEverywhere":{
+        "description":"가능한 모든 위치에 최상위 역할 색상을 추가합니다.",
+        "settings":{
+            "chatMentions":"채팅 멘션에 역할 색상 표시(메시지 상자 포함)",
+            "colorChatMessages":"작성자의 역할 색상에 따라 채팅 메시지 색상을 지정합니다.",
+            "memberList":"구성원 목록 역할 헤더에 역할 색상 표시",
+            "messageSaturation":"메시지 색상의 강도.",
+            "pollResults":"설문조사 결과에 역할 색상 표시",
+            "reactorsList":"반응기 목록에 역할 색상 표시",
+            "voiceUsers":"음성채팅 사용자 목록에 역할 색상 표시"
+        }
+    },
+    "secretRingTone":{
+        "description":"항상 디스코드 벨소리의 비밀 버전을 재생하세요(특별 벨소리 이벤트 기간 제외).",
+        "settings":{
+            "onlySnow":"Snow Halation 테마만 재생하세요"
+        }
+    },
     "seeSummaries":{
         "description":"모든 서버에서 Discord의 실험적인 요약 기능을 활성화하여 AI가 생성한 대화 요약을 표시합니다.",
         "name":"요약",
@@ -898,6 +1485,36 @@
         },
         "timestampFormat":"타임스탬프 형식",
         "timestampPicker":"타임스탬프 선택기"
+    },
+    "serverInfo":{
+        "description":"서버에 대한 정보를 볼 수 있습니다.",
+        "settings":{
+            "sorting":"사용자 이름 또는 해당하는 경우 표시 이름",
+            "sortingOptions":{
+                "displayname":"표시 이름",
+                "none":"정렬하지 않음",
+                "username":"사용자명"
+            }
+        },
+        "ui":{
+            "blockedUsers":"차단된 사용자",
+            "channels":"채널",
+            "createdAt":"생성 날짜",
+            "friends":"친구",
+            "ignoredUsers":"무시된 사용자",
+            "joinedAt":"가입 날짜",
+            "mutualUsers":"상호 사용자",
+            "preferredLocale":"선호하는 로케일",
+            "roles":"역할",
+            "serverBoosts":"서버 부스트",
+            "serverInfo":"서버 정보",
+            "serverOwner":"서버 주인",
+            "vanityLink":"배니티 링크",
+            "verificationLevel":"보안 수준"
+        }
+    },
+    "serverListAPI":{
+        "description":"API 서버 목록을 수정하는 플러그인에 필요"
     },
     "serverListIndicators":{
         "description":"서버 목록에 온라인 친구 수 또는 서버 수 추가",
@@ -1038,6 +1655,34 @@
         "failedToImport":"설정을 가져오지 못했습니다: {e}",
         "imported":"설정을 성공적으로 가져왔습니다. 변경 사항을 적용하려면 다시 시작하세요!"
     },
+    "shikiCodeblocks":{
+        "description":"Shiki가 제공하는 vscode 스타일 코드 블록을 Discord에 가져옵니다.",
+        "settings":{
+            "bgOpacity":"배경 불투명도",
+            "customTheme":"사용자 정의 vscode 테마 링크",
+            "theme":"기본 테마",
+            "tryHljs":"보다 가벼운 기본 Discord 형광펜과 테마를 사용하세요.",
+            "tryHljsOptions":{
+                "always":"항상",
+                "never":"절대로 안 함",
+                "preferHljs":"Shiki 대신 하이라이트.js를 선호하세요",
+                "preferShiki":"하이라이트.js 대신 Shiki를 선호하세요"
+            },
+            "useDevIcon":"코드블록에 언어 아이콘을 표시하는 방법",
+            "useDevIconOptions":{
+                "colored":"컬러",
+                "colorless":"무색",
+                "disabled":"비활성화"
+            }
+        }
+    },
+    "showAllMessageButtons":{
+        "description":"Shift 키를 누르고 있는지 여부에 관계없이 항상 모든 메시지 버튼을 표시합니다.",
+        "settings":{
+            "noShiftDelete":"메시지 삭제 시 교대 근무를 보류해야 하는 요구 사항을 제거합니다.",
+            "noShiftPin":"메시지 고정을 위해 교대 근무를 보류해야 하는 요구 사항을 제거합니다."
+        }
+    },
     "showConnections":{
         "description":"사용자 팝아웃에 연결된 계정 표시",
         "settings":{
@@ -1057,21 +1702,27 @@
         "channelTypes":{
             "announcement":"발표",
             "forum":"법정",
+            "message":"메시지",
             "messages":"메시지",
+            "post":"우편",
             "posts":"게시물",
             "stage":"단계",
             "text":"텍스트",
+            "thread":"실",
+            "threads":"스레드",
             "voice":"목소리"
         },
         "defaultLayout":"기본 레이아웃: {layout}",
         "defaultReactionEmoji":"기본 반응 이모티콘:",
         "defaultSortOrder":"기본 정렬 순서: {order}",
+        "description":"볼 수 있는 액세스 권한이 없는 채널을 표시합니다.",
         "forumLayouts":{
             "gridView":"갤러리 보기",
             "listView":"목록 보기",
             "notSet":"설정되지 않음"
         },
         "hiddenChannel":"숨겨진 {type} 채널입니다",
+        "hiddenChannelTooltip":"숨겨진 채널",
         "hideAllowedUsersAndRoles":"허용된 사용자 및 역할 숨기기",
         "lastMessageCreated":"마지막으로 생성된 {type}:",
         "lastMessagePin":"마지막 메시지 핀:",
@@ -1082,6 +1733,24 @@
         "regionAutomatic":"오토매틱",
         "requireTag":"이 포럼의 게시물에는 태그 설정이 필요합니다.",
         "seeGuidelines":" 그러나 다음 지침을 볼 수 있습니다.",
+        "settings":{
+            "channelStyle":{
+                "classic":"권위 있는",
+                "description":"숨겨진 채널을 표시하는 데 사용되는 스타일입니다.",
+                "muted":"음소거 됨",
+                "mutedAndShowUnreads":"음소거 및 읽지 않은 항목 표시",
+                "showUnreads":"읽지 않은 항목 표시"
+            },
+            "defaultAllowedUsersAndRolesDropdownState":{
+                "description":"숨겨진 채널의 허용된 사용자 및 역할 드롭다운을 기본적으로 열어야 하는지 여부"
+            },
+            "showMode":{
+                "description":"숨겨진 채널을 표시하는 데 사용되는 모드입니다.",
+                "eyeIconRight":"오른쪽 눈 아이콘",
+                "lockIcon":"채널 아이콘을 대체하는 잠금 아이콘",
+                "lockIconRight":"오른쪽에 자물쇠 아이콘"
+            }
+        },
         "slowmode":"저속 모드: {duration}",
         "sortOrders":{
             "creationDate":"생성일",
@@ -1094,6 +1763,14 @@
         },
         "videoQualityMode":"비디오 품질 모드: {mode}",
         "viewAllowedUsersAndRoles":"허용된 사용자 및 역할 보기"
+    },
+    "showHiddenThings":{
+        "description":"권한에 관계없이 다양한 숨겨진 및 중재자 전용 항목을 표시합니다.",
+        "settings":{
+            "showInvitesPaused":"서버 목록에 초대 일시 중지 툴팁을 표시합니다.",
+            "showModView":"모든 서버에 회원 모드 보기 컨텍스트 메뉴 항목을 표시합니다.",
+            "showTimeouts":"채팅에 회원 시간 초과 아이콘을 표시합니다."
+        }
     },
     "showMeYourName":{
         "addNickname":"SMYN 닉네임 추가",
@@ -1199,9 +1876,39 @@
             "showDates":"친구 요청에 날짜 표시"
         }
     },
+    "spotifyCrack":{
+        "description":"무료로 함께 들을 수 있고, 음성 채팅이 자동으로 일시 중지되지 않으며, 유휴 상태에서도 활동을 계속 재생할 수 있습니다.",
+        "settings":{
+            "keepSpotifyActivityOnIdle":"유휴 상태에서도 Spotify 활동을 계속 재생하세요",
+            "noSpotifyAutoPause":"Spotify 자동 일시 중지 비활성화"
+        }
+    },
+    "spotifyShareCommands":{
+        "commands":{
+            "notListening":"당신은 어떤 음악도 듣고 있지 않습니다.",
+            "shareDescription":"채팅에서 현재 Spotify {name}를 공유하세요",
+            "trackNotFound":"Spotify에서 트랙을 찾지 못했습니다."
+        },
+        "description":"슬래시 명령(/track, /album, /artist)을 통해 현재 Spotify 트랙, 앨범 또는 아티스트를 공유하세요."
+    },
     "startupTimings":{
+        "description":"설정 메뉴에 시작 타이밍을 추가합니다.",
         "ui":{
             "title":"시작 타이밍"
+        }
+    },
+    "stickerPaste":{
+        "description":"스티커 선택기에서 스티커를 선택하면 즉시 보내는 대신 채팅 상자에 삽입됩니다."
+    },
+    "streamerModeOnStream":{
+        "description":"Discord에서 스트리밍을 시작하면 자동으로 스트리머 모드가 활성화됩니다."
+    },
+    "superReactionTweaks":{
+        "description":"한 번에 재생되는 슈퍼 리액션의 제한을 사용자 정의하고 기본적으로 슈퍼 리액션",
+        "settings":{
+            "superReactByDefault":"반응 선택기는 기본적으로 Super Reactions로 설정됩니다.",
+            "superReactionPlayingLimit":"한번에 플레이할 수 있는 맥스 슈퍼리액션. 0은 슈퍼 리액션 재생을 비활성화합니다.",
+            "unlimitedSuperReactionPlaying":"슈퍼리액션 동시 재생 제한 제거"
         }
     },
     "tabs":{
@@ -1219,6 +1926,9 @@
         "typeMessage":"메시지를 입력하세요",
         "usingRegex":"정규식 사용",
         "usingString":"문자열 사용"
+    },
+    "themeAttributes":{
+        "description":"테마 목적을 위해 다양한 요소에 데이터 속성을 추가합니다."
     },
     "translate":{
         "autoTranslate":"자동 번역",
@@ -1258,10 +1968,33 @@
             "showRoleColors":"입력 표시기에 역할 색상 표시"
         }
     },
+    "unindent":{
+        "description":"코드블록에서 선행 들여쓰기를 자릅니다."
+    },
+    "unlockedAvatarZoom":{
+        "description":"아바타를 변경할 때 이미지 자르기 도구에서 더 확대할 수 있습니다.",
+        "settings":{
+            "zoomMultiplier":"줌 승수"
+        }
+    },
     "unsuppressEmbeds":{
         "description":"메시지에 포함된 내용을 억제 해제할 수 있습니다.",
         "suppressEmbeds":"삽입 억제",
         "unsuppressEmbeds":"포함 억제 해제"
+    },
+    "userMessagesPronouns":{
+        "description":"채팅 사용자 메시지에 대명사를 추가합니다.",
+        "settings":{
+            "pronounsFormat":"채팅에 표시되는 대명사의 형식",
+            "pronounsFormatOptions":{
+                "capitalized":"대문자로 표기",
+                "lowercase":"소문자"
+            },
+            "showSelf":"자신에 대한 대명사 표시를 활성화 또는 비활성화합니다."
+        }
+    },
+    "userSettingsAPI":{
+        "description":"Discord의 UserSettings를 패치하여 그룹과 이름을 노출합니다."
     },
     "userVoiceShow":{
         "cannotJoinChannel":"사용자의 음성 채널에 참여할 수 없습니다.",
@@ -1282,6 +2015,15 @@
             "usrbgBanner":"USRBG 배너",
             "voiceBackground":"USRBG 배너를 음성 채팅 배경으로 사용"
         }
+    },
+    "validReply":{
+        "description":"답장 위로 마우스를 가져가면 \"메시지를 로드할 수 없습니다\" 오류 수정"
+    },
+    "validUser":{
+        "description":"'@unknown-user'로 표시되는 알 수 없는 사용자에 대한 멘션 수정(수정하려면 멘션 위로 마우스를 가져가세요)"
+    },
+    "vcDoubleClick":{
+        "description":"한 번 클릭하는 대신 두 번 클릭하여 음성 채팅에 참여하세요."
     },
     "vcNarrator":{
         "customiseMessages":"아래에서 음성 메시지를 맞춤설정할 수 있습니다. 특정 메시지를 없음으로 설정하여 비활성화할 수 있습니다.",
@@ -1362,6 +2104,24 @@
         "sending":"지금 음성 메시지를 보내는 중입니다... 잠시만 기다려주세요",
         "uploadFile":"파일 업로드"
     },
+    "volumeBooster":{
+        "description":"사용자 및 스트림 볼륨을 기본 최대값 이상으로 설정할 수 있습니다.",
+        "settings":{
+            "multiplier":"볼륨 승수"
+        }
+    },
+    "webContextMenus":{
+        "description":"Discord 웹 버전에 누락된 컨텍스트 메뉴를 다시 추가합니다: 링크 및 이미지(링크 복사/열기/이미지), 텍스트 영역(복사, 잘라내기, 붙여넣기, 맞춤법 검사)",
+        "settings":{
+            "addBack":"이미지, 링크 및 채팅 입력 표시줄에 대한 Discord 컨텍스트 메뉴를 다시 추가합니다."
+        }
+    },
+    "webKeybinds":{
+        "description":"Discord 웹 버전에서 누락된 키 바인딩을 다시 추가합니다: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. 브라우저 내부가 아닌 Vesktop/Legcord에서만 완전히 작동합니다."
+    },
+    "webScreenShareFixes":{
+        "description":"크롬 및 Vesktop 클라이언트에서 2500kbps 비트 전송률 제한을 제거합니다."
+    },
     "whoReacted":{
         "settings":{
             "avatarClick":"반응에서 아바타 클릭 전환"
@@ -1395,5 +2155,8 @@
         "timeout":"알림 기간(초)",
         "volume":"음량",
         "webSocketPort":"웹소켓 포트"
+    },
+    "youtubeAdblock":{
+        "description":"AdGuard를 통한 YouTube 삽입 및 WatchTogether 활동의 광고 차단"
     }
 }
