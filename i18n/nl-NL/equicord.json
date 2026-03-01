@@ -86,6 +86,23 @@
             "tooltipRight":"Decodeer Base64 (klik met de linkermuisknop) / Kopieer gedecodeerd (klik met de rechtermuisknop)"
         }
     },
+    "betterActivities":{
+        "description":"Toont alle activiteiten in de ledenlijst en gebruikerspop-out, met opties om de weergave aan te passen",
+        "options":{
+            "carousel":"Carrousel",
+            "list":"Lijst"
+        },
+        "settings":{
+            "allActivitiesStyle":"Stijl voor het weergeven van alle activiteiten",
+            "hideTooltip":"Verberg de tooltip op activiteitspictogrammen",
+            "iconSize":"Grootte van de activiteitspictogrammen",
+            "memberList":"Toon activiteiten in de ledenlijst",
+            "removeGameActivityStatus":"Verwijder de statusindicator voor spelactiviteit",
+            "renderGifs":"Geef GIF's weer in activiteitspictogrammen",
+            "specialFirst":"Toon eerst bijzondere activiteiten",
+            "userPopout":"Toon alle activiteiten in gebruikerspop-out"
+        }
+    },
     "betterAudioPlayer":{
         "description":"Voegt een spectrograaf en oscilloscoop-visualizer toe aan spelers met audiobijlagen",
         "settings":{
@@ -1258,6 +1275,57 @@
             "scanQrCode":"QR-code scannen"
         }
     },
+    "mediaPlaybackSpeed":{
+        "description":"Beheer de afspeelsnelheid van media voor spraakberichten, video's en audiobijlagen",
+        "settings":{
+            "defaultAudioSpeed":"Standaard afspeelsnelheid voor audiobestanden",
+            "defaultVideoSpeed":"Standaard afspeelsnelheid voor video's",
+            "defaultVoiceMessageSpeed":"Standaard afspeelsnelheid voor gesproken berichten"
+        }
+    },
+    "messageBurst":{
+        "description":"Verzend berichten in bursts door opeenvolgende berichten binnen een bepaalde periode samen te voegen",
+        "settings":{
+            "shouldMergeWithAttachment":"Samenvoegen van berichten met bijlagen toestaan",
+            "timePeriod":"Tijdsperiode in seconden voor het samenvoegen van berichten",
+            "useSpace":"Gebruik een spatie in plaats van een nieuwe regel als scheidingsteken"
+        }
+    },
+    "messageColors":{
+        "description":"Geef kleurcodes (hex, rgb, hsl) weer in berichten met kleurvoorbeeld",
+        "settings":{
+            "blockView":"Positie van het kleurblok",
+            "blockViewOptions":{
+                "bothSides":"Beide zijden van de tekst",
+                "leftSide":"Linkerkant van de tekst",
+                "rightSide":"Rechterkant van de tekst"
+            },
+            "enableShortHexCodes":"Schakel korte hexadecimale kleurcodes in (3 tekens)",
+            "renderType":"Kleuren weergeven in berichten",
+            "renderTypeOptions":{
+                "backgroundColor":"Achtergrondkleur wijzigen",
+                "blockNearby":"Toon kleurblok",
+                "textColor":"Tekstkleur wijzigen"
+            }
+        }
+    },
+    "messageFetchTimer":{
+        "description":"Toon de ophaaltijden van berichten in de chatbalk",
+        "settings":{
+            "iconColor":"Kleur van het ophaaltimerpictogram",
+            "showIcon":"Toon het ophaaltimerpictogram",
+            "showMs":"Toon milliseconden in plaats van seconden"
+        }
+    },
+    "messageLinkTooltip":{
+        "description":"Toon berichtvoorbeelden wanneer u over berichtlinks, antwoorden en doorgestuurde berichten beweegt",
+        "settings":{
+            "display":"Weergavestijl voor berichtvoorbeeld",
+            "onForward":"Toon tooltip wanneer u over doorgestuurde berichten zweeft",
+            "onLink":"Knopinfo weergeven wanneer u over berichtlinks beweegt",
+            "onReply":"Toon tooltip wanneer u met de muis over berichtantwoorden beweegt"
+        }
+    },
     "messageLoggerEnhanced":{
         "buttons":{
             "exportLogs":"Logboeken exporteren",
@@ -1327,51 +1395,1031 @@
             "whitelistedIds":"Server-, kanaal- of gebruikers-ID's op de witte lijst gezet."
         }
     },
+    "messageNotifier":{
+        "description":"Ontvang een melding wanneer specifieke gebruikers berichten verzenden",
+        "settings":{
+            "users":"Gebruikers-ID's waarvoor meldingen moeten worden ontvangen (door komma's gescheiden)"
+        }
+    },
+    "messagePeek":{
+        "description":"Kijk naar het laatste bericht in DM-kanalen zonder ze te openen"
+    },
+    "messageTranslate":{
+        "description":"Vertaal berichten automatisch naar de taal van uw voorkeur",
+        "settings":{
+            "confidenceRequirement":"Minimumbetrouwbaarheidsniveau voor vertaling (0-1)",
+            "targetLanguage":"Doeltaal voor vertaling (bijvoorbeeld en, es, fr)"
+        }
+    },
+    "micLoopbackTester":{
+        "description":"Test uw microfoon met een loopback-knop in het gebruikersgedeelte"
+    },
+    "middleClickTweaks":{
+        "description":"Diverse middenklik-tweaks, zoals plakken en openen van links.",
+        "settings":{
+            "always":"Voorkom altijd middenklikplakken",
+            "both":"Links en media",
+            "focus":"Alleen voorkomen als het tekstgebied niet is scherpgesteld",
+            "links":"Koppelingen",
+            "media":"Media",
+            "none":"Geen",
+            "openScope":"Voorkom dat middelklikken op deze inhoudstypen ze opent.",
+            "pasteScope":"Voorkom dat de middelste klik in deze situaties wordt geplakt.",
+            "pasteThreshold":"Milliseconden totdat plakken weer wordt ingeschakeld na een middelste klik."
+        }
+    },
     "moreCommands":{
         "description":"Eztra slash-commandos,waaronder systeeminformatie, dobbelsteenworpen, kop of munt en meer",
         "settings":{
-            "addFreakyEnding":"Voeg 👅 of ❤️ aan het einde van een freaky command"
+            "addFreakyEnding":"Voeg 👅 of ❤️ aan het einde van een freaky command",
+            "uwuEveryMessage":"Maak elk bericht uniek",
+            "uwuEverything":"Maakt alle tekst onzuiver - echt een slecht idee"
         }
     },
+    "moreKaomoji":{
+        "description":"Meer kaomoji-slash-opdrachten voor het uiten van emoties"
+    },
     "moreStickers":{
-        "description":"Voeg meer stickers van externe bronnen"
+        "description":"Voeg meer stickers van externe bronnen",
+        "settings":{
+            "packs":"Beheer stickerpakketten",
+            "promptToUpload":"Vragen voordat stickers worden geüpload"
+        }
+    },
+    "moreUserTags":{
+        "description":"Toon extra gebruikerstags op basis van machtigingen en rollen",
+        "settings":{
+            "dontShowBotTag":"Verberg de standaard BOT-tag",
+            "dontShowForBots":"Toon geen tags voor botgebruikers",
+            "showWebhookTagFully":"Toon webhooktags volledig",
+            "tagSettings":"Configureer individuele tag-instellingen"
+        }
+    },
+    "moyai":{
+        "description":"Speel het moyai-geluidseffect wanneer 🗿 emoji wordt gebruikt",
+        "settings":{
+            "ignoreBlocked":"Negeer berichten van geblokkeerde gebruikers",
+            "ignoreBots":"Negeer berichten van bots",
+            "quality":"Kwaliteit van het moyai-geluid",
+            "qualityOptions":{
+                "hd":"HD",
+                "normal":"Normaal"
+            },
+            "triggerWhenUnfocused":"Activeer geluid, zelfs als het venster niet is scherpgesteld",
+            "volume":"Volume van het moyai-geluid"
+        }
+    },
+    "musicControls":{
+        "description":"Toon bedieningselementen voor de muziekspeler voor Spotify, Tidal en YouTube Music",
+        "settings":{
+            "FallbackProvider":"Gebruik een fallback-provider wanneer de primaire mislukt",
+            "LyricDelay":"Lyrische vertragingsoffset",
+            "LyricsConversion":"Automatisch vertalen van geromaniseerde songteksten",
+            "LyricsPosition":"Positie van de songtekst ten opzichte van de speler",
+            "LyricsProvider":"Bron voor songteksten",
+            "ShowFailedToasts":"Toon fouttoasts wanneer de songtekst niet kan worden geladen",
+            "TranslateTo":"Vertaal songteksten naar",
+            "YoutubeMusicApiUrl":"Aangepaste YouTube-muziek API URL",
+            "hoverControls":"Toon bedieningselementen alleen bij zweven",
+            "previousButtonRestartsTrack":"Start het nummer opnieuw wanneer u op de vorige knop drukt",
+            "showSpotifyControls":"Toon Spotify-bedieningselementen",
+            "showSpotifyLyrics":"Toon Spotify-teksten",
+            "showTidalControls":"Toon getijdencontroles",
+            "showTidalLyrics":"Toon Tidal-teksten",
+            "showYoutubeMusicControls":"Toon YouTube Music-bedieningselementen",
+            "useSpotifyUris":"Open Spotify-URI's in plaats van URL's"
+        }
+    },
+    "neverPausePreviews":{
+        "description":"Pauzeer videovoorbeelden nooit tijdens het wisselen van kanaal of bij het onscherpstellen",
+        "warning":"Dit kan het gebruik van bronnen en data vergroten"
+    },
+    "newPluginsManager":{
+        "description":"Beheer en ontdek nieuwe plug-ins met de plug-inmanager"
+    },
+    "noAppsAllowed":{
+        "description":"Blokkeert dat apps/categorieën worden weergegeven in het app-opstartprogramma"
+    },
+    "noBulletPoints":{
+        "description":"Verwijder opsommingstekens uit berichten door eraan te ontsnappen"
+    },
+    "noModalAnimation":{
+        "description":"Schakel modale animaties uit voor snellere UI-interacties"
+    },
+    "noNitroUpsell":{
+        "description":"Verwijdert Nitro-upsells door uw premiumtype te overschrijven"
+    },
+    "noRPC":{
+        "description":"Schakelt de Rich Presence (RPC)-functie van Discord uit"
+    },
+    "noRoleHeaders":{
+        "description":"Verwijdert rolkoppen uit de ledenlijst, waardoor een overzichtelijker uiterlijk ontstaat"
+    },
+    "normalizeMessageLinks":{
+        "description":"Normaliseert Discord berichtlinks door canary/ptb-subdomeinen te verwijderen voor consistentie"
+    },
+    "notificationTitle":{
+        "description":"Voegt gedetailleerde meldingstitels toe die de afzender-, kanaal- en serverinformatie tonen"
+    },
+    "orbolayBridge":{
+        "description":"Bridge-plug-in voor Orbolay-overlay-integratie, waardoor synchronisatie van stemstatus en berichtmeldingen mogelijk is",
+        "settings":{
+            "alignmentOptions":{
+                "bottomLeft":"Linksonder",
+                "bottomRight":"Rechtsonder",
+                "topLeft":"Linksboven",
+                "topRight":"Rechtsboven"
+            },
+            "isKeybindEnabled":"Schakel keybind-ondersteuning in voor Orbolay-bedieningen",
+            "messageAlignment":"Uitlijningspositie voor berichtoverlay",
+            "messagesSemitransparent":"Maak de berichtoverlay semi-transparant",
+            "port":"Poortnummer voor de Orbolay WebSocket-verbinding",
+            "userAlignment":"Uitlijningspositie voor gebruikersoverlay",
+            "voiceSemitransparent":"Maak stemoverlay semi-transparant"
+        }
+    },
+    "partyMode":{
+        "description":"Schakel partymodus-effecten in met confetti en schermschudden",
+        "settings":{
+            "intensityOptions":{
+                "better":"Beter - Meer confetti",
+                "normal":"Normaal - Subtiele effecten",
+                "projectX":"Project X - Maximale intensiteit"
+            },
+            "superIntensePartyMode":"Intensiteitsniveau partymodus"
+        }
+    },
+    "pinIcon":{
+        "description":"Voegt een pinpictogram toe aan vastgezette berichten"
+    },
+    "pingNotifications":{
+        "description":"Aangepaste meldingsinstellingen voor pings, DM's en vriendberichten",
+        "settings":{
+            "dms":"Melding voor DM- en groeps-DM-berichten",
+            "friends":"Waarschuw wanneer vrienden berichten verzenden op servers",
+            "ignoreMuted":"Negeer gedempte kanalen, gilden en geblokkeerde gebruikers",
+            "mentions":"Waarschuw bij vermelding (@gebruikersnaam)",
+            "showInActive":"Toon meldingen, zelfs als het kanaal actief is"
+        }
+    },
+    "platformSpoofer":{
+        "description":"Spoof uw platformstatus (mobiel, desktop, web, console)",
+        "settings":{
+            "platform":"Platform om te vervalsen",
+            "platformOptions":{
+                "android":"Android",
+                "desktop":"Desktop (Discord Client)",
+                "ios":"iOS",
+                "playstation":"PlayStation",
+                "web":"Web (Discord Web)",
+                "xbox":"Xbox"
+            }
+        },
+        "warning":"Het veranderen van platform kan van invloed zijn op bepaalde functies en hoe anderen uw status zien."
     },
     "polishWording":{
+        "description":"Verbeter automatisch de berichttekst met betere grammatica, hoofdlettergebruik en interpunctie",
         "settings":{
-            "fixPunctuation":"Punten toevoegen aan het einde van zinnen"
+            "blockedWords":"Door komma's gescheiden lijst met woorden die moeten worden uitgesloten van hoofdlettercorrecties",
+            "expandContractions":"Verruim de weeën (bijvoorbeeld 'niet doen' → 'niet doen')",
+            "fixApostrophes":"Ontbrekende apostrofs in weeën corrigeren (bijvoorbeeld 'niet' → 'niet')",
+            "fixCapitalization":"Corrigeer het hoofdlettergebruik van zinnen",
+            "fixPunctuation":"Punten toevoegen aan het einde van zinnen",
+            "fixPunctuationFrequency":"Frequentie van perioden voor automatisch toevoegen (0-100%)",
+            "quickDisable":"Snel uitschakelen - schakel tijdelijk alle correcties uit"
+        }
+    },
+    "profileSets":{
+        "description":"Bewaar en beheer voorinstellingen voor profielaanpassing",
+        "settings":{
+            "avatarSize":"Avatargrootte in vooraf ingesteld beheer"
+        }
+    },
+    "questify":{
+        "buttonActions":{
+            "contextMenu":"Contextmenu weergeven",
+            "openQuests":"Open de pagina Quests",
+            "pluginSettings":"Open plug-ininstellingen"
+        },
+        "description":"Verbeter je Quest-ervaring met een reeks functies, of schakel ze volledig uit als ze niet jouw ding zijn.",
+        "gradientOptions":{
+            "black":"Zwart",
+            "default":"Standaard",
+            "hide":"Verbergen",
+            "intense":"Intens"
+        },
+        "sortOptions":{
+            "claimedAsc":"Geclaimd (oudste eerst)",
+            "claimedDesc":"Geclaimd (nieuwste eerst)",
+            "expiringAsc":"Verloopt (zo spoedig mogelijk eerst)",
+            "expiringDesc":"Verloopt (laatste eerst)",
+            "recentAsc":"Recent (oudste eerst)",
+            "recentDesc":"Recent (nieuwste eerst)"
+        }
+    },
+    "questionMarkReplacement":{
+        "description":"Vervang vraagtekens door aangepaste tekst/emoji als het bericht alleen vraagtekens bevat",
+        "settings":{
+            "replace":"Sms of emoji om '?' te vervangen met"
+        }
+    },
+    "quickThemeSwitcher":{
+        "description":"Blader snel door thema's met behulp van sneltoetsen",
+        "settings":{
+            "autoRefresh":"Vernieuw de themalijst automatisch wanneer er wijzigingen worden gedetecteerd",
+            "includeLocal":"Neem lokale thema’s op in de cyclus",
+            "includeOnline":"Neem online thema’s op in de cyclus",
+            "showNotifications":"Toon meldingen wanneer thema's worden toegevoegd of verwijderd",
+            "sortOptions":{
+                "az":"A-Z (alfabetisch)",
+                "recent":"Recent gebruikt",
+                "za":"Z-A (omgekeerd alfabetisch)"
+            },
+            "sortOrder":"Sorteervolgorde voor de themalijst"
+        }
+    },
+    "quoter":{
+        "description":"Maak gestileerde citaatafbeeldingen van berichten",
+        "settings":{
+            "grayscale":"Grijswaardenfilter toepassen",
+            "quoteFont":"Lettertype voor citaatafbeeldingen",
+            "saveAsGif":"Opslaan als GIF in plaats van PNG",
+            "showWatermark":"Toon watermerk op offertes",
+            "watermark":"Watermerk tekst"
+        }
+    },
+    "randomVoice":{
+        "description":"Sluit je aan bij willekeurige spraakkanalen op basis van aanpasbare filters",
+        "operations":{
+            "equalTo":"Gelijk aan",
+            "lessThan":"Minder dan",
+            "moreThan":"Meer dan"
+        },
+        "settings":{
+            "Servers":"Op te nemen server-ID's (door komma's gescheiden)",
+            "UserAmount":"Doelaantal gebruikers in kanaal",
+            "UserAmountOperation":"Operator voor het vergelijken van gebruikerstellingen",
+            "autoCamera":"Camera automatisch inschakelen",
+            "autoNavigate":"Navigeer automatisch naar het spraakkanaal",
+            "autoStream":"Start automatisch met streamen",
+            "avoidAfk":"Vermijd AFK-kanalen",
+            "avoidStages":"Vermijd podiumkanalen",
+            "avoidStates":"Vermijd gebruikers die overeenkomen met staatsfilters",
+            "deafen":"Zoek naar dove gebruikers",
+            "includeStates":"Gebruikers opnemen die overeenkomen met staatsfilters",
+            "leaveEmpty":"Verlaat wanneer het kanaal leeg raakt",
+            "mute":"Zoek naar gedempte gebruikers",
+            "selfDeafen":"Automatisch doven bij deelname",
+            "selfMute":"Automatisch dempen bij deelname",
+            "spacesLeft":"Minimale vrije ruimte in kanaal",
+            "spacesLeftOperation":"Vergelijkingsoperator voor spaties links",
+            "stream":"Zoek naar kanalen met streams",
+            "vcLimit":"Gebruikerslimiet spraakkanaal",
+            "vcLimitOperation":"Operator voor het vergelijken van kanaallimieten",
+            "video":"Zoek naar kanalen waarvoor video is ingeschakeld"
+        }
+    },
+    "recentDMSwitcher":{
+        "description":"Schakel snel tussen recente DM's met Ctrl+Tab (Alt+Tab-stijl)",
+        "overlayModes":{
+            "current":"Alleen huidige DM",
+            "row":"Rij met recente DM's"
+        },
+        "settings":{
+            "amountOfUsers":"Aantal gebruikers dat moet worden bijgehouden",
+            "clearRdms":"RDMS-geschiedenis wissen",
+            "overlayMode":"Overlay-inhoudsmodus",
+            "overlayRowLength":"Aantal DM's dat in de overlayrij moet worden weergegeven",
+            "overlayShowAvatars":"Toon avatars in overlay",
+            "toastDurationMs":"Duur van toastmelding (ms)",
+            "visualStyle":"Visuele indicatorstijl tijdens het fietsen"
+        },
+        "visualStyles":{
+            "off":"Geen visuele indicator",
+            "overlay":"Overlay (Alt+Tab-stijl)",
+            "toast":"Toastmelding"
+        }
+    },
+    "remix":{
+        "description":"Remix afbeeldingen rechtstreeks in Discord met een ingebouwde editor"
+    },
+    "repeatMessages":{
+        "description":"Herhaal berichten met optioneel antwoord (Shift+klik om te antwoorden)"
+    },
+    "replyPingControl":{
+        "description":"Bepaal of u wordt gepingd wanneer iemand op uw berichten reageert",
+        "settings":{
+            "alwaysPingOnReply":"Ontvang altijd een ping als iemand op uw berichten reageert",
+            "replyPingWhitelist":"Door komma's gescheiden lijst met gebruikers-ID's waarvan u altijd antwoordpings ontvangt"
+        }
+    },
+    "richMagnetLinks":{
+        "description":"Geef rijke voorbeelden weer van magneetkoppelingen met extractie van bestandsnamen"
+    },
+    "rpcEditor":{
+        "description":"Bewerk en pas uw Rich Presence (RPC)-display aan voor elke toepassing",
+        "placeholders":{
+            "details":"Tekst met huidige details",
+            "largeImage":"Grote afbeelding URL",
+            "largeText":"Tooltiptekst voor grote afbeeldingen",
+            "name":"Applicatienaam",
+            "smallImage":"Kleine afbeelding URL",
+            "smallText":"Kleine tooltiptekst voor afbeeldingen",
+            "state":"Huidige staatstekst"
+        },
+        "settings":{
+            "replacedAppIds":"Beheer applicatiespecifieke RPC-overschrijvingen"
+        }
+    },
+    "rpcStats":{
+        "description":"Aangepaste statistieken weergeven in uw Rich Presence (verzonden berichten, Last.fm-topalbum)",
+        "settings":{
+            "RPCTitle":"Titeltekst voor de RPC",
+            "albumCoverImage":"Gebruik albumhoes als RPC-afbeelding (Last.fm-modus)",
+            "assetURL":"Aangepaste afbeelding URL voor RPC (standaard: jouw avatar)",
+            "lastFMApiKey":"Last.fm API-toets (ophalen van last.fm/api)",
+            "lastFMStatFormat":"Formaat voor Last.fm-statistiek ($album, $artist)",
+            "lastFMUsername":"Last.fm-gebruikersnaam",
+            "statDisplay":"Statistiek om weer te geven"
+        },
+        "statOptions":{
+            "messagesAllTime":"Berichten die de hele tijd worden verzonden",
+            "messagesToday":"Berichten verzonden vandaag",
+            "mostListenedAlbum":"Meest beluisterde album deze week (Last.fm)"
+        }
+    },
+    "saveFavoriteGIFs":{
+        "description":"Bewaar alle favoriete GIF-URL's in een tekstbestand",
+        "settings":{
+            "showToolboxButton":"Knop 'Favoriete GIF's opslaan' tonen in Equicord Toolbox (opnieuw laden vereist)"
+        }
+    },
+    "scheduledMessages":{
+        "description":"Plan berichten om later te verzenden",
+        "settings":{
+            "checkIntervalSeconds":"Hoe vaak controleren of er berichten zijn verzonden (seconden)",
+            "maxMessagesPerMinute":"Maximaal aantal geplande berichten per kanaal die in dezelfde minuut kunnen worden verzonden",
+            "showNotifications":"Toon toastmeldingen wanneer er berichten worden verzonden",
+            "showPhantomMessages":"Toon geplande berichten als fantoomberichten in de chat"
+        }
+    },
+    "screenRecorder":{
+        "description":"Schermopnamefunctionaliteit voor Equibop"
+    },
+    "searchFix":{
+        "description":"Verbeter de zoekfunctionaliteit door de limiet van 5000 berichten van Discord te omzeilen"
+    },
+    "sekaiStickers":{
+        "description":"Integratie van Sekai-stickers",
+        "settings":{
+            "AutoCloseModal":"Modaal automatisch sluiten als u klaar bent"
+        }
+    },
+    "selfForward":{
+        "description":"Stuur berichten door naar uzelf"
+    },
+    "serverSearch":{
+        "description":"Verbeterd zoeken naar servers met snelle switcher-integratie"
+    },
+    "showBadgesInChat":{
+        "description":"Toon gebruikersbadges in chatberichten",
+        "settings":{
+            "DiscordNitroPosition":"De positie van de Discord Nitro-badge",
+            "DiscordProfilePosition":"De positie van de Discord profielbadges",
+            "EquicordContributorPosition":"De positie van de Equicord Contributor-badge",
+            "EquicordDonorPosition":"De positie van de Equicord Donorbadges",
+            "VencordContributorPosition":"De positie van de Vencord Contributor-badge",
+            "VencordDonorPosition":"De positie van de Vencord Donorbadges",
+            "badgeSettings":"Badge-indeling en -zichtbaarheid instellen",
+            "showDiscordNitro":"Inschakelen om Discord Nitro-badges in de chat weer te geven",
+            "showDiscordProfile":"Schakel in om Discord profielbadges in de chat weer te geven",
+            "showEquicordContributor":"Inschakelen om Equicord bijdragersbadges in de chat weer te geven",
+            "showEquicordDonor":"Schakel in om Equicord Donorbadges in de chat weer te geven",
+            "showVencordContributor":"Schakel in om Vencord bijdragerbadges in de chat weer te geven",
+            "showVencordDonor":"Schakel in om Vencord donorbadges in de chat weer te geven"
+        }
+    },
+    "showMessageEmbeds":{
+        "description":"Toon ingesloten berichten met opties om ingesloten berichten toe te voegen of te verwijderen"
+    },
+    "showResourceChannels":{
+        "description":"Toon bronkanalen die normaal gesproken verborgen zijn"
+    },
+    "showSongName":{
+        "description":"Toon de naam van het momenteel afgespeelde nummer in de status"
+    },
+    "sidebarChat":{
+        "description":"Zijbalkchatinterface voor het bekijken van meerdere kanalen",
+        "settings":{
+            "patchCommunity":"Patch zaken zoals het tabblad Kanaalbrowser of Leden die communityservers hebben",
+            "persistSidebar":"Houd de chat in de zijbalk open terwijl Discord opnieuw wordt opgestart"
         }
     },
     "signature":{
+        "description":"Voeg handtekeningen toe aan berichten",
         "settings":{
-            "contextMenu":"Voeg een schakeloptie toe aan het contextmenu van het tekstveld"
+            "contextMenu":"Voeg een schakeloptie toe aan het contextmenu van het tekstveld",
+            "isEnabled":"Schakel functionaliteit in",
+            "name":"De handtekening die aan het einde van uw berichten wordt toegevoegd",
+            "showIcon":"Toon een pictogram voor het schakelen tussen de plug-in in de chatbalk",
+            "textHeader":"Met welke koptekst moet de tekst worden voorafgegaan"
         }
     },
     "snowfall":{
-        "description":"Voegt een kerstachtig sneeuweffect toe over de interface van Discord"
+        "description":"Voegt een kerstachtig sneeuweffect toe over de interface van Discord",
+        "settings":{
+            "flakesPerSecond":"Sneeuwvlokken per seconde (hoger = dichtere sneeuwval)",
+            "maxSize":"Maximale sneeuwvlokgrootte",
+            "speed":"Sneeuwvalsnelheid (hoger = snellere val)",
+            "typeOfSnow":"Wijzig het weergegeven type sneeuw (beïnvloedt de prestaties)"
+        }
+    },
+    "soggy":{
+        "description":"Doorweekte plug-in met klikbare beeld- en geluidseffecten",
+        "settings":{
+            "boopLink":"URL voor het boopgeluid",
+            "boopVolume":"Volume van het boopgeluid",
+            "imageLink":"URL voor de afbeelding (knop en modaal)",
+            "songLink":"URL om het nummer af te spelen",
+            "songVolume":"Volume van het nummer. 0 om uit te schakelen",
+            "tooltipText":"De tekst die wordt weergegeven als u met de muis over de knop beweegt"
+        }
+    },
+    "songLink":{
+        "description":"Song.link-integratie voor het delen van muziek op verschillende platforms",
+        "settings":{
+            "servicesSettings":"Instellingen voor diensten",
+            "userCountry":"Land gebruikt voor opzoeken (landcode van twee letters)"
+        }
+    },
+    "soundBoardLogger":{
+        "description":"Registreer het klankbordgebruik in spraakkanalen",
+        "settings":{
+            "FileType":"Het formaat waarin u uw bestand wilt opslaan",
+            "SavedIds":"Het aantal klankbord-ID's dat u tegelijk wilt opslaan (met 0 kunt u oneindig opslaan)",
+            "soundVolume":"Hoe luid het schakelgeluid is (0 om uit te schakelen)"
+        }
+    },
+    "splitLargeMessages":{
+        "description":"Splits grote berichten automatisch in stukjes",
+        "settings":{
+            "disableFileConversion":"Indien waar, wordt de bestandsconversie voor grote berichten uitgeschakeld",
+            "hardSplit":"Indien waar, wordt gesplitst op het laatste teken in plaats van op de laatste spatie/nieuwe regel",
+            "maxLength":"Maximale lengte van een bericht voordat het wordt gesplitst. Stel in op 0 om automatisch te detecteren",
+            "sendDelay":"Vertraging tussen elk deel in seconden",
+            "slowmodeMax":"Maximale slowmode-tijd bij splitsen in slowmode",
+            "splitInSlowmode":"Moeten berichten worden gesplitst als op het kanaal slowmode is ingeschakeld?"
+        }
+    },
+    "spotifyActivityToggle":{
+        "description":"Schakel het delen van Spotify-activiteiten in en uit",
+        "settings":{
+            "location":"Waar de Spotify-schakelknop moet worden weergegeven"
+        }
+    },
+    "statsfmPresence":{
+        "description":"Stats.fm-aanwezigheidsintegratie",
+        "settings":{
+            "alwaysHideArt":"Schakel het downloaden van albumhoezen uit",
+            "hideWithExternalRPC":"Verbergt de aanwezigheid van stats.fm als er een externe RPC actief is",
+            "hideWithSpotify":"Verberg de aanwezigheid van stats.fm als Spotify actief is",
+            "missingArt":"Wanneer albums of albumhoezen ontbreken",
+            "nameFormat":"Toon naam van nummer en artiest in statusnaam",
+            "shareSong":"Toon link naar nummer op stats.fm",
+            "shareUsername":"Link naar stats.fm-profiel tonen",
+            "showStatsFmLogo":"Toon Stats.fm naast de albumomslag",
+            "statusName":"Aangepaste statustekst",
+            "useListeningStatus":"Toon de status 'Luisteren naar' in plaats van 'Afspelen'",
+            "username":"Stats.fm-gebruikersnaam"
+        }
+    },
+    "statusPresets":{
+        "description":"Statusvoorinstellingen opslaan en laden"
+    },
+    "statusWhileActive":{
+        "description":"Automatisch de status instellen terwijl u actief bent in spraakkanalen",
+        "settings":{
+            "statusToSet":"Status die moet worden ingesteld terwijl u zich in een spraakkanaal bevindt"
+        }
+    },
+    "steamStatusSync":{
+        "description":"Synchroniseer de Steam-status met de Discord-status",
+        "settings":{
+            "dndStatus":"Steam-status wanneer Niet storen is ingeschakeld",
+            "goInvisibleIfActivityIsHidden":"Wees altijd onzichtbaar als je gameactiviteit verbergt op Discord",
+            "idleStatus":"Steam-status wanneer inactief",
+            "invisibleStatus":"Steam-status wanneer onzichtbaar",
+            "onlineStatus":"Steam-status wanneer online"
+        }
+    },
+    "stickerBlocker":{
+        "description":"Blokkeer dat specifieke stickers verschijnen",
+        "settings":{
+            "blockedStickers":"De lijst met geblokkeerde sticker-ID's (niet bewerken tenzij je weet wat je doet)",
+            "showButton":"Of er een knop moet worden weergegeven om de gif te deblokkeren",
+            "showGif":"Of je nu een hippe kattengif wilt laten zien",
+            "showMessage":"Of er een bericht moet worden weergegeven waarin wordt aangegeven welke ID is geblokkeerd"
+        }
+    },
+    "streamingCodecDisabler":{
+        "description":"Schakel streamingcodec uit voor Discord-streaming",
+        "settings":{
+            "disableAv1Codec":"Zorg ervoor dat Discord niet overweegt AV1 te gebruiken voor streaming",
+            "disableH264Codec":"Zorg ervoor dat Discord niet overweegt H264 te gebruiken voor streaming",
+            "disableH265Codec":"Zorg ervoor dat Discord niet overweegt H265 te gebruiken voor streaming",
+            "disableVP8Codec":"Zorg ervoor dat Discord niet overweegt om VP8 te gebruiken voor streaming",
+            "disableVP9Codec":"Zorg ervoor dat Discord niet overweegt om VP9 te gebruiken voor streaming"
+        }
     },
     "talkInReverse":{
         "description":"Voegt een knop toe aan de chatbalk om je berichten om te draaien voordat je ze verstuurt"
     },
+    "themeLibrary":{
+        "description":"Blader door en beheer thema's uit de Equicord-themabibliotheek",
+        "toolbox":{
+            "openThemeLibrary":"Themabibliotheek openen"
+        }
+    },
+    "tidalEmbeds":{
+        "description":"Sluit Tidal-muzieklinks in met een aangepaste speler"
+    },
+    "tiktokTTS":{
+        "contextMenu":{
+            "playTikTokTTS":"Speel TikTok TTS"
+        },
+        "description":"Speel TikTok tekst-naar-spraak voor berichten",
+        "settings":{
+            "volume":"Afspeelvolume"
+        }
+    },
+    "timezones":{
+        "contextMenu":{
+            "setLocalTimezone":"Lokale tijdzone instellen"
+        },
+        "description":"Geef gebruikerstijdzones weer in profielen en berichtkoppen",
+        "settings":{
+            "24hTime":"Toon de tijd in 24-uursformaat",
+            "databaseUrl":"Database URL voor tijdzoneopslag",
+            "preferDatabaseOverLocal":"Geef de voorkeur aan een database boven lokale opslag voor tijdzones",
+            "resetDatabaseTimezone":"Reset uw tijdzone in de database",
+            "setDatabaseTimezone":"Stel uw tijdzone in de database in",
+            "showMessageHeaderTime":"Toon tijd in berichtkoppen",
+            "showOwnTimezone":"Toon uw eigen tijdzone in profielen en berichtkoppen",
+            "showProfileTime":"Toon tijd in profielen",
+            "showTimezoneInfo":"Toon tijdzone-informatie naast de tijd",
+            "useDatabase":"Database inschakelen voor het ophalen van tijdzones van gebruikers"
+        },
+        "toasts":{
+            "failed":"Tijdzones kunnen niet worden vernieuwd!",
+            "refreshed":"Tijdzones zijn succesvol vernieuwd!"
+        },
+        "toolbox":{
+            "refreshDatabaseTimezones":"Databasetijdzones vernieuwen",
+            "setDatabaseTimezone":"Databasetijdzone instellen"
+        }
+    },
+    "title":{
+        "description":"Wijzig de venstertitel van Discord.",
+        "settings":{
+            "title":"Voorvoegsel voor venstertitel"
+        }
+    },
+    "toastNotifications":{
+        "description":"Toon toastmeldingen voor berichten en evenementen",
+        "positionOptions":{
+            "bottomLeft":"Linksonder",
+            "bottomRight":"Rechtsonder",
+            "topLeft":"Linksboven",
+            "topRight":"Rechtsboven"
+        },
+        "settings":{
+            "determineServerNotifications":"Bepaal automatisch welke servermeldingen moeten worden weergegeven op basis van je kanaal-/gilde-instellingen",
+            "directMessages":"Toon meldingen voor directe berichten",
+            "disableInStreamerMode":"Schakel meldingen uit in de streamermodus",
+            "exampleButton":"Toon een voorbeeld van een toastmelding",
+            "friendActivity":"Toon meldingen als je iemand toevoegt of een vriendschapsverzoek ontvangt",
+            "friendServerNotifications":"Toon meldingen wanneer vrienden berichten verzenden op servers die ze met u delen",
+            "groupMessages":"Toon meldingen voor groepsberichten",
+            "ignoreUsers":"Maak een lijst met gebruikers-ID's waarvan u al hun meldingen wilt negeren (gescheiden door komma's)",
+            "maxNotifications":"Maximaal aantal meldingen dat tegelijk wordt weergegeven",
+            "notifyFor":"Maak een lijst met kanaal-ID's waarvan u meldingen wilt ontvangen (gescheiden door komma's)",
+            "opacity":"Ondoorzichtigheid van de melding",
+            "position":"De positie van de toastmelding",
+            "renderImages":"Render afbeeldingen in meldingen",
+            "streamingTreatment":"Hoe u meldingen kunt behandelen terwijl u uw scherm deelt",
+            "timeout":"Tijd in seconden worden meldingen weergegeven"
+        },
+        "streamingOptions":{
+            "ignore":"Negeren - Laat de melding helemaal niet zien",
+            "noContent":"Geen inhoud - Verberg de meldingstekst",
+            "normal":"Normaal - Toon de melding zoals normaal"
+        }
+    },
     "toggleVideoBind":{
-        "description":"Voegt een sneltoets toe om je video/webcam in spraakkanalen aan of uit te zetten"
+        "description":"Voegt een sneltoets toe om je video/webcam in spraakkanalen aan of uit te zetten",
+        "settings":{
+            "keyBind":"De toets om de webcam te schakelen wanneer deze wordt ingedrukt",
+            "reqAlt":"Vereisen dat alt wordt vastgehouden",
+            "reqCtrl":"Vereist dat de controle wordt vastgehouden",
+            "reqShift":"Vereisen dat de dienst wordt vastgehouden"
+        }
+    },
+    "toneIndicators":{
+        "description":"Voegt toonindicatoren (sarcasme, grapjes, enz.) toe aan berichten",
+        "settings":{
+            "customIndicators":"Aangepaste toonindicatoren (formaat: jk=Grapje; srs=Serieus)",
+            "maxIndicators":"Maximaal aantal toonindicatoren dat per bericht kan worden weergegeven",
+            "prefix":"Voorvoegselteken(s) voor toonindicatoren"
+        }
+    },
+    "tosuRPC":{
+        "description":"Rijke aanwezigheidsintegratie voor osu! via tosu"
+    },
+    "translatePlus":{
+        "contextMenu":{
+            "translate":"Vertalen"
+        },
+        "description":"Voegt een vertaalknop toe aan berichten met een betere UI",
+        "popover":{
+            "translate":"Vertalen"
+        }
+    },
+    "unitConverter":{
+        "description":"Eenheden in berichten converteren (imperiaal/metrisch)",
+        "popover":{
+            "convertUnits":"Eenheden converteren"
+        },
+        "settings":{
+            "myUnits":"De eenheden die u gebruikt en waarnaar u wilt converteren"
+        },
+        "unitOptions":{
+            "imperial":"Imperiaal",
+            "metric":"Metrisch"
+        }
+    },
+    "universalMention":{
+        "description":"Vermeld gebruikers vanaf elke server met behulp van een universeel formaat",
+        "settings":{
+            "globalMention":"Noem gebruikers van elke server, niet alleen de huidige",
+            "onlyDMUsers":"Toon alleen gebruikers met wie u DM's heeft gehad"
+        },
+        "warning":"Het gebruik van Global Mention kan prestatieproblemen veroorzaken en een absurd aantal gebruikers tonen in de autocomplete."
+    },
+    "unlimitedAccounts":{
+        "description":"Verwijdert de limiet van vijf accounts voor de accountwisselaar van Discord.",
+        "settings":{
+            "maxAccounts":"Aantal accounts dat kan worden toegevoegd, of 0 voor geen limiet"
+        }
+    },
+    "unreadBadgeCount":{
+        "description":"Toon badges voor het aantal ongelezen berichten op kanalen",
+        "settings":{
+            "notificationCountLimit":"Beperk het aantal meldingen tot 99+",
+            "showOnMutedChannels":"Toon ongelezen aantal op gedempte kanalen"
+        }
     },
     "urlHighlighter":{
+        "description":"Markeer specifieke URL's in berichten met aangepaste kleuren",
+        "settings":{
+            "boldUrls":"Maak gemarkeerde URL's vetgedrukt",
+            "highlightEmbeds":"Markeer ook URL's in ingesloten inhoud",
+            "patterns":"URL patronen om te markeren met globpatronen"
+        },
         "ui":{
-            "addNew":"Voeg nieuwe toe"
+            "addNew":"Voeg nieuwe toe",
+            "patternPlaceholder":"*.voorbeeld.com",
+            "urlPatterns":"URL Patronen"
+        }
+    },
+    "userpfp":{
+        "avatarOptions":{
+            "nitro":"Nitro",
+            "userpfp":"GebruikerPFP"
+        },
+        "buttons":{
+            "joinServer":"Sluit u aan bij de UserPFP-server",
+            "support":"Ondersteun UserPFP hier"
+        },
+        "contextMenu":{
+            "setAvatar":"Avatar instellen"
+        },
+        "description":"Gebruik aangepaste profielfoto's uit de UserPFP-database of stel uw eigen profielfoto's in",
+        "notice":"Het gebruik van de ingestelde avatarfunctie is alleen lokaal, wat betekent dat alleen jij deze ziet veranderen.",
+        "settings":{
+            "databaseSource":"URL waaruit de database wordt geladen",
+            "overrideServerAvatars":"Overschrijf serveravatars met aangepaste avatars of de standaardgebruikersavatar als er geen aangepaste avatar is ingesteld",
+            "preferNitro":"Welke avatar moet worden gebruikt als zowel standaard geanimeerde (Nitro) PFP- als gebruikers-PFP-avatars aanwezig zijn"
+        }
+    },
+    "vcNarratorCustom":{
+        "contextMenu":{
+            "stateFilter":"Filter voor statusverandering",
+            "vcNarrator":"VC Verteller",
+            "voice":"Spraak"
+        },
+        "description":"Aangepaste stemkanaalverteller met TTS voor toetreden/verlaten van gebruikers en statuswijzigingen",
+        "filterOptions":{
+            "blacklist":"Zwarte lijst (kondig iedereen aan behalve vermeld)",
+            "off":"Uit",
+            "whitelist":"Witte lijst (kondig alleen vermelde gebruikers aan)"
+        },
+        "modal":{
+            "cancel":"Annuleren",
+            "previewHint":"Bekijk een voorbeeld van hoe deze stem klinkt met hun naam:",
+            "save":"Opslaan",
+            "selectVoice":"Selecteer een stem",
+            "title":"VC Vertellerstem"
+        },
+        "preview":{
+            "playing":"spelen...",
+            "subtitle":"Gebruikt de door u geselecteerde vertellerstem",
+            "title":"Voorbeeldgeluiden"
+        },
+        "settings":{
+            "announceOthersDeafen":"Kondig aan wanneer andere gebruikers doof/ondoof worden in uw huidige VC",
+            "announceOthersMute":"Laat weten wanneer andere gebruikers het dempen/dempen opheffen in uw huidige VC",
+            "announceOthersStream":"Kondig aan wanneer andere gebruikers beginnen/stoppen met streamen in uw huidige VC",
+            "announceSelfStream":"Kondig aan wanneer je begint/stopt met streamen",
+            "customVoice":"Verteller stem",
+            "ignoreSelf":"Negeer jezelf bij alle gebeurtenissen",
+            "joinMessage":"Tijdelijke aanduidingen: {{USER}}, {{DISPLAY_NAME}}, {{NICKNAME}}, {{CHANNEL}}",
+            "latinOnly":"Verwijder niet-Latijnse tekens uit namen voordat u ze uitspreekt",
+            "leaveMessage":"Laat bericht achter",
+            "moveMessage":"Bericht verplaatsen",
+            "rate":"Vertellersnelheid",
+            "sayOwnName":"Zeg eigen naam",
+            "stateChangeCooldownMs":"Afkoelperiode voor statuswijziging aangekondigd (ms)",
+            "stateChangeFilterList":"Door komma's gescheiden gebruikers-ID's voor witte/zwarte lijst. Klik met de rechtermuisknop op gebruikers die u wilt toevoegen/verwijderen.",
+            "stateChangeFilterMode":"Filter welke gebruikers aankondigingen van statuswijzigingen activeren",
+            "userVoiceMap":"Stemoverschrijvingen per gebruiker (indeling: userId:voiceId,userId2:voiceId2). Klik met de rechtermuisknop op de gebruikers die u wilt instellen.",
+            "volume":"Vertellervolume"
+        },
+        "troubleshooting":{
+            "cacheInfo":"Cache",
+            "clearCache":"Cache wissen",
+            "lastApiCall":"Laatste API oproep",
+            "refreshSize":"Grootte vernieuwen",
+            "title":"Problemen oplossen"
+        }
+    },
+    "vcPanelSettings":{
+        "description":"Pas het spraakkanaalpaneel aan met aanvullende instellingen",
+        "settings":{
+            "camera":"Toon een camerakiezer",
+            "inputDevice":"Toon een invoerapparaatselector",
+            "inputVolume":"Toon een schuifregelaar voor het invoervolume",
+            "outputDevice":"Toon een uitvoerapparaatselector",
+            "outputVolume":"Toon een schuifregelaar voor het uitvoervolume",
+            "showInputDeviceHeader":"Koptekst boven invoerapparaatkiezer weergeven",
+            "showInputVolumeHeader":"Toon de kop boven de schuifregelaar voor het invoervolume",
+            "showOutputDeviceHeader":"Toon kop boven uitvoerapparaatselector",
+            "showOutputVolumeHeader":"Toon koptekst boven de schuifregelaar voor uitvoervolume",
+            "showVideoDeviceHeader":"Koptekst boven camerakiezer weergeven",
+            "uncollapseSettingsByDefault":"Standaard automatisch de spraakinstellingen uitvouwen"
+        },
+        "ui":{
+            "camera":"Camera",
+            "hide":"Verbergen",
+            "inputDevice":"Invoerapparaat",
+            "inputVolume":"Invoervolume",
+            "outputDevice":"Uitvoerapparaat",
+            "outputVolume":"Uitvoervolume",
+            "settings":"Instellingen"
+        }
+    },
+    "viewRawVariant":{
+        "contextMenu":{
+            "viewRaw":"Bekijk Ruw"
+        },
+        "description":"Bekijk onbewerkte JSON-gegevens voor berichten, gebruikers, kanalen en gilden",
+        "modal":{
+            "content":"Inhoud",
+            "data":"Gegevens",
+            "title":"Bekijk onbewerkt {type}"
+        }
+    },
+    "voiceButtons":{
+        "description":"Voegt snelle actieknoppen toe (chatten, dempen, doof maken) voor gebruikers van spraakkanalen",
+        "settings":{
+            "showChatButton":"Chatknop tonen",
+            "showDeafenButton":"Toon dove knop",
+            "showMuteButton":"Toon mute-knop"
+        }
+    },
+    "voiceChannelLog":{
+        "contextMenu":{
+            "viewChannelLogs":"Kanaallogboeken bekijken"
+        },
+        "description":"Spraakkanaal registreren/verlaten/verplaatsen gebeurtenissen",
+        "modeOptions":{
+            "both":"Log in om te chatten en logmenu",
+            "logMenu":"Log-menu",
+            "logToChat":"Log rechtstreeks in bij de bijbehorende chat"
+        },
+        "settings":{
+            "ignoreBlockedUsers":"Log geen geblokkeerde gebruikers in",
+            "mode":"Hoe het spraakkanaallogboek te tonen",
+            "voiceChannelChatSelf":"Registreer uw eigen spraakkanaalgebeurtenissen in de spraakkanalen",
+            "voiceChannelChatSilent":"Het deelnemen aan/verlaten/verplaatsen van berichten in spraakkanaalchats is stil",
+            "voiceChannelChatSilentSelf":"Het deelnemen aan/verlaten/verplaatsen van berichten in spraakkanaalchats is stil als u zich in het spraakkanaal bevindt"
+        }
+    },
+    "voiceChatUtils":{
+        "contextMenu":{
+            "deafenAll":"Verdoof allemaal",
+            "disconnectAll":"Ontkoppel alles",
+            "moveAll":"Verplaats alles",
+            "muteAll":"Demp alles",
+            "undeafenAll":"Ondoof allemaal",
+            "unmuteAll":"Schakel alles uit",
+            "voiceTools":"Spraakhulpmiddelen"
+        },
+        "description":"Voegt hulpmiddelen voor het modereren van spraakkanalen toe (alles dempen, alles doof maken, alles verplaatsen, alles verbreken)",
+        "settings":{
+            "waitAfter":"Aantal API acties die moeten worden uitgevoerd voordat wordt gewacht (om snelheidslimieten te vermijden)",
+            "waitSeconds":"Wachttijd tussen elke actie (in seconden)"
+        }
+    },
+    "voiceJoinMessages":{
+        "description":"Ontvang meldingen wanneer vrienden zich aansluiten bij spraakkanalen",
+        "settings":{
+            "allowedFriends":"Door komma's of spaties gescheiden lijst met gebruikers-ID's van vrienden waarvan u deelnameberichten wilt ontvangen",
+            "friendDirectMessages":"Ontvang meldingen in de DM's van uw vrienden wanneer zij zich aansluiten bij een spraakkanaal",
+            "friendDirectMessagesSelf":"Ontvang meldingen in de DM's van uw vrienden, zelfs als u zich in hetzelfde spraakkanaal bevindt als zij",
+            "friendDirectMessagesShowMemberCount":"Toon het aantal andere leden in het spraakkanaal wanneer u een DM-melding ontvangt",
+            "friendDirectMessagesShowMembers":"Toon een lijst met andere leden in het spraakkanaal wanneer u een DM-melding ontvangt",
+            "friendDirectMessagesSilent":"Sluit je aan bij berichten in de DM's van je vrienden. Het blijft stil",
+            "ignoreBlockedUsers":"Stuur geen berichten over geblokkeerde gebruikers die zich aansluiten bij/verlaten/verplaatsen van spraakkanalen"
         }
     },
     "voiceMessageTranscriber":{
+        "description":"Spraakberichten transcriberen met AI (Whisper)",
         "modal":{
-            "action":"Actie"
+            "action":"Actie",
+            "audioLanguage":"Audiotaal",
+            "autoDetect":"Automatische detectie",
+            "copied":"Gekopieerd!",
+            "copyToClipboard":"Kopiëren naar Klembord",
+            "downloadingAudio":"Audio downloaden...",
+            "error":"Fout",
+            "inProgress":"Bezig met transcriberen...",
+            "initializing":"Initialiseren...",
+            "loadingModel":"Model laden...",
+            "processingAudio":"Audio verwerken...",
+            "retry":"Opnieuw proberen",
+            "showTimestamps":"Tijdstempels weergeven",
+            "start":"Starten",
+            "transcribe":"Transcriberen",
+            "transcribing":"Transcriberen...",
+            "transcription":"Transcriptie",
+            "transcriptionOptions":"Transcriptieopties",
+            "translateToEnglish":"Vertalen naar het Engels"
+        },
+        "modelOptions":{
+            "base":"Basis (aanbevolen)",
+            "medium":"Gemiddeld (langzaamst, beste nauwkeurigheid)",
+            "small":"Klein",
+            "tiny":"Tiny (snelste, laagste nauwkeurigheid)"
+        },
+        "settings":{
+            "delete":"Verwijder alle cachebestanden",
+            "quantized":"Gebruik een gekwantiseerd model (kleiner formaat, iets lagere nauwkeurigheid)",
+            "selectedModel":"Modelgrootte"
+        }
+    },
+    "voiceRejoin":{
+        "description":"Automatisch opnieuw deelnemen aan spraakkanalen nadat de verbinding is verbroken",
+        "preventionOptions":{
+            "both":"DM's en servers",
+            "dms":"Alleen DM's",
+            "none":"Geen",
+            "servers":"Alleen servers"
+        },
+        "settings":{
+            "applyOnlyToDms":"Geldt alleen voor DM's",
+            "preventReconnectIfCallEnded":"Maak niet opnieuw verbinding als het gesprek is beëindigd of als het spraakkanaal leeg is of niet bestaat",
+            "rejoinDelay":"Stel Vertraging in voordat u weer verbinding maakt met het spraakkanaal",
+            "rejoinTimeout":"Probeer niet opnieuw deel te nemen nadat zoveel seconden zijn verstreken sinds het verbreken van de verbinding"
+        }
+    },
+    "waitForSlot":{
+        "contextMenu":{
+            "joinQueue":"Sluit je aan bij de wachtrij",
+            "leaveQueue":"Wachtrij verlaten"
+        },
+        "description":"Wachtrij voor volledige spraakkanalen en ontvang een melding wanneer er een slot vrijkomt",
+        "notices":{
+            "channelFull":"Spraakkanaal {channel} is vol. Wachten op een slot?",
+            "join":"Deelnemen",
+            "slotAvailable":"Hé, iemand heeft zojuist #{channel} verlaten en er is nu een plekje voor je vrij!",
+            "wait":"Wachten"
+        },
+        "settings":{
+            "autoJoin":"Word onmiddellijk lid van het kanaal in plaats van een melding te tonen",
+            "notificationSound":"Speel een geluid af wanneer er een slot vrijkomt"
+        }
+    },
+    "wallpaperFree":{
+        "contextMenu":{
+            "removeWallpaper":"Verwijder behang",
+            "setWallpaper":"Achtergrond instellen"
+        },
+        "description":"Stel aangepaste achtergronden in voor kanalen, gebruikers of wereldwijd",
+        "settings":{
+            "globalDefault":"Stel een algemene standaardachtergrond in voor alle kanalen",
+            "stylingTips":"Stylingtips"
+        }
+    },
+    "webpackTarball":{
+        "description":"Exporteer de webpack-modules van Discord als tarball voor analyse",
+        "modal":{
+            "create":"Creëren",
+            "errors":"fouten",
+            "lazyChunks":"Luie brokken",
+            "loadAll":"Laad alles",
+            "loaded":"Geladen",
+            "loadedStatus":"Geladen",
+            "loading":"Bezig met laden",
+            "title":"Webpack Tarball"
+        },
+        "settings":{
+            "patched":"Inclusief gepatchte modules"
+        },
+        "toolbox":{
+            "webpackTarball":"Webpack Tarball"
         }
     },
     "whitelistedEmojis":{
+        "alerts":{
+            "importConfirmBody":"Hierdoor wordt uw huidige witte lijst overschreven.",
+            "importConfirmTitle":"Weet je het zeker?",
+            "resetConfirmBody":"Hiermee worden alle emoji's van uw witte lijst verwijderd.",
+            "resetConfirmTitle":"Weet je het zeker?"
+        },
         "contextMenu":{
-            "addAllGuildEmojis":"Voeg alle Guild emojis toe"
+            "addAllGuildEmojis":"Voeg alle Guild emojis toe",
+            "addToWhitelist":"Toevoegen aan witte lijst",
+            "removeAllGuildEmojis":"Verwijder alle gilde-emoji's",
+            "removeFromWhitelist":"Verwijderen van witte lijst"
+        },
+        "description":"Zet specifieke emoji's op de witte lijst en verberg alle andere voor de emoji-kiezer",
+        "settings":{
+            "defaultEmojis":"Standaardemoji's verbergen",
+            "disableToasts":"Toast uitschakelen",
+            "exportEmojis":"Emoji's exporteren",
+            "importEmojis":"Emoji's importeren",
+            "resetEmojis":"Emoji's opnieuw instellen",
+            "serverEmojis":"Server-emoji's verbergen",
+            "whitelistedEmojis":"Emoji's op de witte lijst"
         },
         "toasts":{
             "added":"“{name}” toegevoegd aan de lijst",
-            "addedBulk":"{count} emoji’s toegevoegd aan de lijst, {skipped} stonden al in de lijst"
+            "addedBulk":"{count} emoji’s toegevoegd aan de lijst, {skipped} stonden al in de lijst",
+            "alreadyInList":"\"{name}\" staat al in de lijst",
+            "exported":"Emoji's zijn succesvol geëxporteerd",
+            "importFailed":"Kan emoji's niet importeren: {error}",
+            "imported":"Emoji's zijn geïmporteerd",
+            "notInList":"\"{name}\" staat niet in de lijst",
+            "removed":"\"{name}\" is uit de lijst verwijderd",
+            "removedBulk":"{count} emoji's uit de lijst verwijderd",
+            "reset":"Emoji's opnieuw instellen"
+        },
+        "ui":{
+            "defaultEmojis":"Standaard Emoji's",
+            "guildEmojis":"{guild} Emoji's",
+            "noEmojis":"Geen emoji's op de witte lijst.",
+            "removeAll":"Alles verwijderen"
         }
+    },
+    "whosWatching":{
+        "description":"Bekijk wie uw scherm deelt of streamt",
+        "settings":{
+            "showPanel":"Toon toeschouwers onder het schermdeelpaneel"
+        },
+        "ui":{
+            "noSpectators":"Geen toeschouwers",
+            "spectators":"Meekijkers"
+        }
+    },
+    "wigglyText":{
+        "about":{
+            "circle":"in een cirkel door )~text~^( te typen",
+            "description":"Je kunt tekst laten wiebelen met het volgende:",
+            "leftRight":"links en rechts door <~text~> te typen",
+            "upDown":"omhoog en omlaag door ^~text~^ te typen"
+        },
+        "description":"Laat tekst wiebelen met speciale syntaxis (~text~)",
+        "settings":{
+            "intensity":"Animatie-intensiteit in px"
+        }
+    },
+    "writeUpperCase":{
+        "description":"Automatisch de eerste letter van zinnen met een hoofdletter schrijven",
+        "settings":{
+            "blockedWords":"Tekenreeksen die niet met hoofdletters moeten worden geschreven (gescheiden door een komma)"
+        }
+    },
+    "youtubeDescription":{
+        "description":"Voegt een schakelbare beschrijving toe voor het insluiten van YouTube-video's"
     }
 }
