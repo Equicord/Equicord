@@ -5,8 +5,9 @@
  */
 
 import { $, parseLink, parseNextData, PLAYLIST_LIMIT, request } from "./finders";
+import type { SongParser, SongService } from "./types";
 
-const songdotlink = {
+const songdotlink: SongParser = {
 	name: "song.link",
 	label: "song.link",
 	hosts: [
@@ -18,7 +19,7 @@ const songdotlink = {
 		"mylink.page",
 		"odesli.co"
 	],
-	async parse(link, _host, path) {
+	async parse(link: string, _host: string, path: string[]) {
 		const [first, second, third] = path;
 		if (!first || third) return null;
 		if (second && Number.isNaN(+second)) return null;
@@ -33,8 +34,8 @@ const songdotlink = {
 	}
 };
 
-const handlerCache = /* @__PURE__ */ new Map();
-function makeCache(name, retrieve) {
+const handlerCache = /* @__PURE__ */ new Map<string, unknown>();
+function makeCache(name: string, retrieve: (...args: any[]) => any) {
 	return { retrieve(...args) {
 		if (handlerCache.has(name)) return handlerCache.get(name);
 		const res = retrieve(...args);
@@ -50,16 +51,16 @@ function makeCache(name, retrieve) {
 }
 
 const geo = "us", defaultName = "songspotlight";
-function applemusicLink(type, id) {
+function applemusicLink(type: string, id: string) {
 	return `https://music.apple.com/${geo}/${type}/${defaultName}/${id}`;
 }
-const applemusicToken = makeCache("applemusicToken", async html => {
+const applemusicToken = makeCache("applemusicToken", async (html?: string) => {
 	html ??= (await request({ url: `https://music.apple.com/${geo}/new` })).text;
 	const asset = html.match(/src="(\/assets\/index~\w+\.js)"/i)?.[1];
 	if (!asset) return;
 	return (await request({ url: `https://music.apple.com${asset}` })).text.match(/\w+="(ey.*?)"/i)?.[1];
 });
-const applemusic = {
+const applemusic: SongService = {
 	name: "applemusic",
 	label: "Apple Music",
 	hosts: ["music.apple.com", "geo.music.apple.com"],
@@ -69,7 +70,7 @@ const applemusic = {
 		"playlist",
 		"song"
 	],
-	async parse(_link, _host, path) {
+	async parse(_link: string, _host: string, path: string[]) {
 		const [country, type, name, id, fourth] = path;
 		if (!country || !type || !this.types.includes(type) || !name || !id || fourth) return null;
 		const res = await request({ url: applemusicLink(type, id) });
@@ -81,7 +82,7 @@ const applemusic = {
 			id
 		};
 	},
-	async render(type, id) {
+	async render(type: string, id: string) {
 		const token = await applemusicToken.retrieve();
 		if (!token) return null;
 		const res = await request({
@@ -134,13 +135,13 @@ const applemusic = {
 			})
 		};
 	},
-	async validate(type, id) {
+	async validate(type: string, id: string) {
 		return (await request({ url: applemusicLink(type, id) })).status === 200;
 	}
 };
 
 const client_id = "nIjtjiYnjkOhMyh5xrbqEW12DxeJVnic";
-async function parseWidget(type, id, tracks) {
+async function parseWidget(type: string, id: string, tracks: boolean) {
 	return (await request({
 		url: `https://api-widget.soundcloud.com/${type}s/${id}${tracks ? "/tracks" : ""}`,
 		query: {
@@ -151,7 +152,7 @@ async function parseWidget(type, id, tracks) {
 		}
 	})).json;
 }
-async function parsePreview(transcodings) {
+async function parsePreview(transcodings: any[]) {
 	const preview = transcodings.sort((a, b) => {
 		const isA = a.format.protocol === "progressive";
 		const isB = b.format.protocol === "progressive";
@@ -169,7 +170,7 @@ async function parsePreview(transcodings) {
 		};
 	}
 }
-const soundcloud = {
+const soundcloud: SongService = {
 	name: "soundcloud",
 	label: "Soundcloud",
 	hosts: [
@@ -182,7 +183,7 @@ const soundcloud = {
 		"track",
 		"playlist"
 	],
-	async parse(link, host, path) {
+	async parse(link: string, host: string, path: string[]) {
 		if (host === "on.soundcloud.com") {
 			if (!path[0] || path[1]) return null;
 			const { url, status } = await request({ url: link });
@@ -214,7 +215,7 @@ const soundcloud = {
 			};
 		}
 	},
-	async render(type, id) {
+	async render(type: string, id: string) {
 		const data = await parseWidget(type, id, false);
 		if (!data?.id) return null;
 		const base = {
@@ -233,7 +234,7 @@ const soundcloud = {
 				single: { audio }
 			};
 		} else {
-			let tracks = [];
+			let tracks: any[] = [];
 			if (type === "user") {
 				const got = await parseWidget(type, id, true).catch(() => void 0);
 				if (got?.collection) tracks = got.collection;
@@ -252,20 +253,20 @@ const soundcloud = {
 			};
 		}
 	},
-	async validate(type, id) {
+	async validate(type: string, id: string) {
 		return (await parseWidget(type, id, false))?.id !== void 0;
 	}
 };
 
-async function parseEmbed(type, id) {
+async function parseEmbed(type: string, id: string) {
 	return parseNextData((await request({ url: `https://open.spotify.com/embed/${type}/${id}` })).text);
 }
-function fromUri(uri) {
+function fromUri(uri: string) {
 	const [sanityCheck, type, id] = uri.split(":");
 	if (sanityCheck === "spotify" && type && id) return `https://open.spotify.com/${type}/${id}`;
 	else return null;
 }
-const spotify = {
+const spotify: SongService = {
 	name: "spotify",
 	label: "Spotify",
 	hosts: ["open.spotify.com"],
@@ -275,7 +276,7 @@ const spotify = {
 		"playlist",
 		"artist"
 	],
-	async parse(_link, _host, path) {
+	async parse(_link: string, _host: string, path: string[]) {
 		const [type, id, third] = path;
 		if (!type || !this.types.includes(type) || !id || third) return null;
 		if (!await this.validate(type, id)) return null;
@@ -285,13 +286,13 @@ const spotify = {
 			id
 		};
 	},
-	async render(type, id) {
+	async render(type: string, id: string) {
 		const data = (await parseEmbed(type, id))?.props?.pageProps?.state?.data?.entity;
 		if (!data) return null;
 		const base = {
 			label: data.title,
 			sublabel: data.subtitle ?? data.artists?.map(x => x.name).join(", "),
-			link: fromUri(data.uri),
+			link: fromUri(data.uri) ?? "https://open.spotify.com",
 			explicit: Boolean(data.isExplicit)
 		};
 		const thumbnailUrl = data.visualIdentity.image.sort((a, b) => a.maxWidth - b.maxWidth)[0]?.url.replace(/:\/\/.*?\.spotifycdn\.com\/image/, "://i.scdn.co/image");
@@ -308,11 +309,11 @@ const spotify = {
 			form: "list",
 			...base,
 			thumbnailUrl,
-			list: (data.trackList ?? []).slice(0, PLAYLIST_LIMIT).map(track => ({
-				label: track.title,
-				sublabel: track.subtitle ?? track.artists?.map(x => x.name).join(", "),
-				link: fromUri(track.uri),
-				explicit: Boolean(track.isExplicit),
+				list: (data.trackList ?? []).slice(0, PLAYLIST_LIMIT).map(track => ({
+					label: track.title,
+					sublabel: track.subtitle ?? track.artists?.map(x => x.name).join(", "),
+					link: fromUri(track.uri) ?? "https://open.spotify.com",
+					explicit: Boolean(track.isExplicit),
 				audio: track.audioPreview && track.duration ? {
 					duration: track.duration,
 					previewUrl: track.audioPreview.url
@@ -320,18 +321,18 @@ const spotify = {
 			}))
 		};
 	},
-	async validate(type, id) {
+	async validate(type: string, id: string) {
 		return !(await parseEmbed(type, id))?.props?.pageProps?.title;
 	}
 };
 
-const services = [
+const services: SongService[] = [
 	spotify,
 	soundcloud,
 	applemusic
 ];
 $.services = services;
-const parsers = [songdotlink, ...services];
+const parsers: SongParser[] = [songdotlink, ...services];
 $.parsers = parsers;
 
 export { parsers, services };
