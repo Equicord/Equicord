@@ -451,8 +451,26 @@
     },
     "declutter":{
         "description":"Uporządkuj discord ui, usuwając niechciane elementy takie jak personalizacje profilu, sklepy, zadania i inne",
+        "headers":{
+            "friendsList":"Nad listą znajomych/DM",
+            "misc":"Różne",
+            "userProfile":"Profil użytkownika"
+        },
         "settings":{
-            "removeNameplate":"Usuń stylizację tabliczki z nazwą."
+            "alwaysShowUsername":"Zawsze pokazuj nazwę użytkownika zamiast statusu.",
+            "removeAudioMenus":"Usuń menu obok przycisków wyciszenia i wyłączenia dźwięku.",
+            "removeAvatarDecoration":"Usuń dekorację awatara.",
+            "removeBillingSettings":"Usuń ustawienia rozliczeń.",
+            "removeButtonTooltips":"Usuń podpowiedzi przycisków.",
+            "removeClanTag":"Usuń tagi klanów.",
+            "removeGiftButton":"Usuń przycisk prezentu.",
+            "removeNameplate":"Usuń stylizację tabliczki z nazwą.",
+            "removeProfileEffect":"Usuń animacje profilu przy otwieraniu.",
+            "removeQuestsAboveDM":"Usuń zadania nad listą DM.",
+            "removeServerBoostInfo":"Usuń informacje o boostach serwera nad listą kanałów.",
+            "removeShopAboveDM":"Usuń sklepy nad listą DM.",
+            "removeUnavailableEmojiPicker":"Usuń niedostępne kategorie z wyboru emoji.",
+            "removeUsernameStyles":"Usuń kolory i efekty nazwy użytkownika."
         }
     },
     "disableCameras":{
