@@ -285,7 +285,7 @@
         "description":"Usuwa ikony przyjazne dla daltonistów ze statusów, podobnie jak w latach 2015-2017 Discord"
     },
     "commandsAPI":{
-        "description":"API wymagane przez wszystko, co korzysta z poleceń"
+        "description":"API wymagane przez wszystko, korzystające z poleceń"
     },
     "consoleJanitor":{
         "alwaysAllowLoggers":"Zawsze zezwalaj na rejestratory tego typu",
@@ -847,7 +847,7 @@
         }
     },
     "memberListDecoratorsAPI":{
-        "description":"API do dodawania dekoratorów do listy członków (zarówno na serwerach, jak i w DM-ach)"
+        "description":"API do dodawania ozdób do listy członków (zarówno na serwerach, jak i w DM-ach)"
     },
     "mentionAvatars":{
         "description":"Pokazuje awatary użytkowników i ikony ról we wzmiankach",
@@ -1161,7 +1161,7 @@
         "description":"Umożliwia przechodzenie do wiadomości zablokowanych lub ignorowanych użytkowników i potencjalnych spamerów bez ich odblokowywania"
     },
     "noticesAPI":{
-        "description":"Naprawiono automatyczne odrzucanie powiadomień"
+        "description":"Naprawia automatyczne odrzucanie powiadomień"
     },
     "notificationVolume":{
         "description":"Oszczędzaj uszy i ustaw oddzielną głośność powiadomień i dźwięków w aplikacji",
@@ -1458,9 +1458,9 @@
         }
     },
     "secretRingTone":{
-        "description":"Zawsze odtwarzaj tajną wersję dzwonka niezgody (z wyjątkiem specjalnych wydarzeń związanych z dzwonkiem)",
+        "description":"Zawsze odtwarzaj sekretną wersję dzwonka discord'a (z wyjątkiem specjalnych wydarzeń związanych z dzwonkiem)",
         "settings":{
-            "onlySnow":"Graj tylko w motyw Snow Halation"
+            "onlySnow":"Odtwarzaj tylko motyw \"Snow Halation\""
         }
     },
     "seeSummaries":{
@@ -1994,7 +1994,7 @@
         }
     },
     "userSettingsAPI":{
-        "description":"Poprawia ustawienia użytkownika Discord, aby ujawnić jego grupę i nazwę"
+        "description":"Łata ustawienia użytkownika Discord, aby ujawnić jego grupę i nazwę"
     },
     "userVoiceShow":{
         "cannotJoinChannel":"Nie możesz dołączyć do kanału głosowego użytkownika",
