@@ -93,6 +93,10 @@
     overflow: visible;
 }
 
+.vc-command-palette-query-preview-without-label {
+    justify-content: flex-end;
+}
+
 .vc-command-palette-query-preview-command-label {
     color: var(--cp-text-muted);
     font-size: 20px;

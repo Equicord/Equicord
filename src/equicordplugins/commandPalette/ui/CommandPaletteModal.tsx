@@ -480,19 +480,15 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         : "No results.";
     const hasCommandItems = items.some(item => item.type === "command");
 
-    const explicitlySelectedCommand = useMemo(() => {
-        if (!keyboardSelectedKey) return null;
-        const keyed = items.find(item => item.type === "command" && item.id === keyboardSelectedKey);
-        return keyed?.type === "command" ? keyed.command : null;
-    }, [items, keyboardSelectedKey]);
-
-    const previewPromptCommand = !activePromptCommand
-        && selectionSource === "keyboard"
-        && explicitlySelectedCommand?.queryTemplate
-        ? explicitlySelectedCommand
+    const selectedItem = selectedIndex >= 0 ? items[selectedIndex] : undefined;
+    const currentSelectedCommand = isSelectable(selectedItem) ? selectedItem.command : null;
+    const previewPromptCommand = !activePromptCommand && currentSelectedCommand?.queryTemplate
+        ? currentSelectedCommand
         : null;
     const promptCommand = activePromptCommand ?? previewPromptCommand;
-    const shouldRenderPromptPreview = Boolean(promptCommand && (activePromptCommand || trimmedQuery.length === 0));
+    const hasMainInputText = query.length > 0;
+    const hasPromptInProgress = Boolean(activePromptCommand || promptInputValue.length > 0 || selectedPromptCandidateId);
+    const shouldRenderPromptPreview = Boolean(promptCommand);
     const calculatorResult = useMemo(() => {
         if (!trimmedQuery) return null;
         if (activePromptCommand) return null;
@@ -513,7 +509,6 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
     }, [queryCandidates, selectedPromptCandidateId]);
     const activePromptIsSingleSelect = Boolean(activePromptCommand?.id && SINGLE_SELECT_PROMPT_COMMAND_IDS.has(activePromptCommand.id));
 
-    const selectedItem = selectedIndex >= 0 ? items[selectedIndex] : undefined;
     const selectedLabel = getSelectedLabel(selectedItem);
     const activePage = pageStack.length > 0 ? pageStack[pageStack.length - 1] : null;
     const activePageSpec = activePage ? getPalettePageSpec(activePage.ref.id) ?? null : null;
@@ -543,7 +538,11 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         return activePageSpec.resolveSuggestions(activePageFieldKey, value, activePageState.values, activePageState.selectedIds);
     }, [activePageSpec, activePageState, activePageFieldKey]);
 
-    const showPromptCommandPreview = Boolean(promptCommand && trimmedQuery.length === 0);
+    const shouldShowPromptCommandLabel = Boolean(promptCommand && !hasMainInputText);
+    const showPromptCommandPreview = Boolean(promptCommand && !hasMainInputText && !hasPromptInProgress);
+    const mainInputPlaceholder = showPromptCommandPreview
+        ? (promptCommand?.label ?? "")
+        : "";
     const promptChipPlaceholderText = promptCommand?.queryPlaceholder ?? "Action";
     const promptChipWidthPx = useMemo(() => measurePromptChipWidth(promptChipPlaceholderText), [promptChipPlaceholderText]);
     const promptChipStyle = { width: `${promptChipWidthPx}px` };
@@ -954,7 +953,6 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         if (!isSelectable(item)) return;
         if (!force && Date.now() - keyboardNavigationAtRef.current < 200) return;
         if (!force && activePromptCommand) return;
-        if (!force && isSelectable(selectedItem) && selectedItem.command.queryTemplate) return;
 
         setSelectionSource("pointer");
         setSelectedIndex(index);
@@ -1402,6 +1400,10 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                         autoFocus={!activePromptCommand}
                         value={query}
                         onChange={value => {
+                            if (activePromptCommand && value.length > 0) {
+                                clearPromptState();
+                            }
+
                             const next = value.trim();
                             setQuery(value);
 
@@ -1415,15 +1417,17 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                                 setExpanded(false);
                             }
                         }}
-                        placeholder={showPromptCommandPreview && trimmedQuery.length === 0 ? (promptCommand?.label ?? "") : undefined}
+                        placeholder={mainInputPlaceholder}
                         readOnly={false}
                     >
                         {shouldRenderPromptPreview && promptCommand && (
                             <div
                                 ref={promptContainerRef}
-                                className={cl("query-preview")}
+                                className={classes(cl("query-preview"), !shouldShowPromptCommandLabel && cl("query-preview-without-label"))}
                             >
-                                <span className={cl("query-preview-command-label")}>{promptCommand.label}</span>
+                                {shouldShowPromptCommandLabel && (
+                                    <span className={cl("query-preview-command-label")}>{promptCommand.label}</span>
+                                )}
                                 <div className={cl("query-preview-prompt")}>
                                     {activePromptCommand ? (
                                         <div

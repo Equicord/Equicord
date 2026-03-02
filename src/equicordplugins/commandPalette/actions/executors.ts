@@ -235,7 +235,7 @@ function buildSendChannelCandidates(target: string, content: string, useFilePick
 function buildOpenDmCandidates(target: string): QueryActionCandidate[] {
     const trimmedTarget = target.trim();
     const currentUserId = UserStore.getCurrentUser?.()?.id;
-    const matches = (trimmedTarget ? resolveUsers(trimmedTarget) : resolveRecentDmUsers(10))
+    const matches = (trimmedTarget ? resolveUsers(trimmedTarget) : resolveRecentDmUsers(40))
         .filter(match => !currentUserId || match.user.id !== currentUserId);
     if (matches.length === 0) {
         return [{
@@ -247,7 +247,7 @@ function buildOpenDmCandidates(target: string): QueryActionCandidate[] {
         }];
     }
 
-    return matches.slice(0, 5).map(match => ({
+    return matches.slice(0, 24).map(match => ({
         id: `query-open-dm-${match.user.id}`,
         label: match.display,
         description: "Direct message",
