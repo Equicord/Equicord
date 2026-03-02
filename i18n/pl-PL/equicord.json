@@ -1,11 +1,11 @@
 {
     "absRPC":{
         "about":{
-            "automaticAuth":"Wtyczka automatycznie uwierzytelni się i pobierze postęp słuchania.",
+            "automaticAuth":"Wtyczka automatycznie uwierzytelni się i pobierze postęp słuchanych mediów.",
             "description":"Wprowadź adres URL serwera AudioBookShelf, nazwę użytkownika i hasło, aby wyświetlać aktualnie odtwarzane audiobooki jako Discord Rich Presence.",
             "title":"Jak połączyć się z AudioBookShelf"
         },
-        "description":"Rich Presence dla serwera multimediów AudioBookShelf",
+        "description":"Wyświetlaj aktywność dla serwera multimediów AudioBookShelf",
         "settings":{
             "password":"Hasło do AudioBookShelf",
             "serverUrl":"Adres URL serwera AudioBookShelf (np. https://abs.example.com)",
@@ -16,7 +16,7 @@
         }
     },
     "altKrispSwitch":{
-        "description":"Powoduje, że wyskakujące okienko tłumienia szumów przełącza się pomiędzy Brakiem i Krisp zamiast Krisp i Standard"
+        "description":"Powoduje, że wyskakujące okienko tłumienia szumów przełącza się pomiędzy brakiem tłumenia, a Krisp zamiast Krisp i Standard"
     },
     "alwaysExpandProfiles":{
         "description":"Zawsze rozwija wyskakujące okienka profilu do pełnego modalu"
@@ -65,7 +65,7 @@
         "description":"Wyświetla banery na liście członków ",
         "settings":{
             "animate":"Animuj banery",
-            "preferNameplate":"wolą tabliczkę znamionową od banera"
+            "preferNameplate":"Preferuj tabliczkę dekoracyjną od banera"
         }
     },
     "baseDecoder":{
@@ -80,7 +80,7 @@
         "ui":{
             "copiedToast":"Zdekodowana zawartość skopiowana do schowka!",
             "copyDecoded":"Skopiuj zdekodowaną zawartość",
-            "decodedContent":"Zdekodowana treść/zawartość",
+            "decodedContent":"Zdekodowana zawartość",
             "modalTitle":"Zdekodowana zawartość Base64",
             "tooltipLeft":"Kopiuj dekodowane (kliknij lewym przyciskiem myszy) / Dekoduj Base64 (kliknij prawym przyciskiem myszy)",
             "tooltipRight":"Dekoduj Base64 (kliknij lewym przyciskiem myszy) / Kopiuj dekodowany (kliknij prawym przyciskiem myszy)"
