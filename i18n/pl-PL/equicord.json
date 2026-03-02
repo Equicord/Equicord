@@ -449,6 +449,12 @@
             "dmList":"Użytkownicy, dla których zdefiniowano niestandardowe kolory, będą mieli kolorowe nazwy na liście dm"
         }
     },
+    "declutter":{
+        "description":"Uporządkuj discord ui, usuwając niechciane elementy takie jak personalizacje profilu, sklepy, zadania i inne",
+        "settings":{
+            "removeNameplate":"Usuń stylizację tabliczki z nazwą."
+        }
+    },
     "disableCameras":{
         "description":"Domyślnie wyłącza kamery podczas połączenia"
     },
