@@ -785,8 +785,8 @@
         "description":"Sprawia, że awatary zajmują całą płytkę vc"
     },
     "gensokyoRadioRPC":{
-        "description":"Discord bogata obecność Radia Gensokyo!",
-        "info":"Discord bogata obecność Radia Gensokyo!",
+        "description":"Discord RPC dla Gensokyo Radio!",
+        "info":"Discord RPC dla Gensokyo Radio!",
         "settings":{
             "refreshInterval":"Odstęp między odświeżeniami aktywności (sekundy)"
         }
@@ -1007,7 +1007,7 @@
             "isEnabled":"Włącz automatyczny restart po bezczynności"
         },
         "ui":{
-            "disableAutoIdle":"Wyłącz automatyczne ponowne uruchamianie w stanie bezczynności",
+            "disableAutoIdle":"Wyłącz Bezczynnościowe Uruchomienie Ponowne",
             "enableAutoIdle":"Włącz automatyczny restart w stanie bezczynności"
         }
     },
@@ -1375,7 +1375,7 @@
             "copyMessageId":"Skopiuj identyfikator wiadomości",
             "copyServerId":"Skopiuj identyfikator serwera",
             "copyUserId":"Skopiuj identyfikator użytkownika",
-            "deleteLog":"Usuń dziennik",
+            "deleteLog":"Usuń Wpis",
             "deleted":"Usunięto",
             "edited":"Edytowane",
             "emptyLogs":"Puste, ech",
@@ -1547,7 +1547,7 @@
         "description":"Omija wymóg „Naciśnij i mów” w przypadku aktywności głosowej w kanałach, które go wymuszają."
     },
     "noRPC":{
-        "description":"Wyłącza funkcję Rich Presence (RPC) Discord."
+        "description":"Wyłącza funkcje RPC Discord'a"
     },
     "noRoleHeaders":{
         "description":"Usuwa nagłówki ról z listy członków, tworząc bardziej przejrzysty wygląd"
