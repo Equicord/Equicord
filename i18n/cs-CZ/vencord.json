@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Odkaz zkopírován!",
+            "maxAdditionalEmojis":"oddělené čárkou/nový řádek, max {count}",
             "messageContentCopied":"Obsah zprávy zkopírován!",
             "messageIdCopied":"ID zprávy zkopírováno!",
+            "selectAdditionalEmojis":"Vyberte Další emotikony",
+            "selectEmojiForReactions":"Vyberte Emoji pro reakce",
             "userIdCopied":"ID uživatele zkopírováno!"
         }
     },
