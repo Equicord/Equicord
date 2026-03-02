@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Linkki kopioitu!",
+            "maxAdditionalEmojis":"pilkku/rivi uusi erotettu, enintään {count}",
             "messageContentCopied":"Viestin sisältö kopioitu!",
             "messageIdCopied":"Viestitunnus kopioitu!",
+            "selectAdditionalEmojis":"Valitse Muut emojit",
+            "selectEmojiForReactions":"Valitse Emoji Reaktioita varten",
             "userIdCopied":"Käyttäjätunnus kopioitu!"
         }
     },
