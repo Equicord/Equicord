@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Ссылка скопирована!",
+            "maxAdditionalEmojis":"через запятую/новую строку, максимум {count}",
             "messageContentCopied":"Содержимое сообщения скопировано!",
             "messageIdCopied":"Идентификатор сообщения скопирован!",
+            "selectAdditionalEmojis":"Выберите дополнительные смайлы",
+            "selectEmojiForReactions":"Выберите эмодзи для реакции",
             "userIdCopied":"Идентификатор пользователя скопирован!"
         }
     },
