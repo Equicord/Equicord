@@ -541,6 +541,7 @@
             "noMirroredCamera":"Empêche la caméra d'être reflétée sur votre écran",
             "refreshSlashCommands":"Actualise les commandes Slash pour afficher les commandes nouvellement ajoutées sans redémarrer votre client.",
             "removeActivitySection":"Supprime la section d'activité au-dessus de la liste des membres",
+            "restoreFileDownloadButton":"Rajoute le bouton Télécharger dans le coin supérieur droit des fichiers",
             "showYourOwnActivityButtons":"Discord masque vos propres boutons d'activité pour une raison quelconque"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Fermer",
             "open":"Ouvrir"
+        }
+    },
+    "hideMessages":{
+        "description":"Un plugin pour masquer temporairement les messages jusqu'à ce que vous redémarriez.",
+        "settings":{
+            "hidePopoverButton":"Masquez le bouton Masquer dans la fenêtre contextuelle du message."
+        },
+        "ui":{
+            "hide":"Masquer"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Supprime les ventes incitatives de Nitro en remplaçant votre type de prime"
     },
+    "noPushToTalk":{
+        "description":"Contourne l'exigence de push-to-talk pour l'activité vocale dans les canaux qui l'appliquent."
+    },
     "noRPC":{
         "description":"Désactive la fonctionnalité Rich Presence (RPC) de Discord"
     },
@@ -2044,6 +2057,21 @@
             "translate":"Traduire"
         }
     },
+    "triviaAI":{
+        "description":"Un plugin qui vous aide à répondre à des questions triviales en utilisant l'IA.",
+        "settings":{
+            "apiKey":"API Clé.",
+            "autoRespond":"Répondez automatiquement aux messages dès réception d'une réponse.",
+            "endpoint":"Point de terminaison IA compatible OpenAI.",
+            "maxTokens":"Nombre maximum de jetons dans la réponse.",
+            "model":"Modèle d'IA à utiliser.",
+            "supportImages":"Transmettez les images à l'IA pour le contexte (le cas échéant). Ceci n'est pas pris en charge par tous les modèles.",
+            "systemPrompt":"Invite système pour l’IA."
+        },
+        "ui":{
+            "answerWithAI":"Répondez avec l'IA"
+        }
+    },
     "unitConverter":{
         "description":"Convertir les unités en messages (impérial/métrique)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Ajoute des boutons d'action rapide (discussion, sourdine, assourdissement) aux utilisateurs du canal vocal",
+        "options":{
+            "both":"Les deux",
+            "disable":"Désactiver",
+            "display":"Afficher",
+            "globalName":"Nom global",
+            "hide":"Masquer",
+            "left":"Gauche",
+            "right":"Droite",
+            "username":"Nom d'utilisateur"
+        },
         "settings":{
-            "showChatButton":"Afficher le bouton de discussion",
-            "showDeafenButton":"Afficher le bouton sourd",
-            "showMuteButton":"Afficher le bouton muet"
+            "buttonPosition":"Choisissez où placer les boutons vocaux dans la ligne des utilisateurs vocaux.",
+            "disableVideo":"Bascule leur vidéo en cliquant sur le bouton sourd.",
+            "muteSoundboard":"Bascule leur table d'harmonie en cliquant sur le bouton sourd.",
+            "serverSelf":"Deafen / Mettez-vous en sourdine sur le serveur lorsque vous utilisez mute/deafen.",
+            "showButtonsSelf":"Si vous souhaitez afficher des boutons pour votre propre utilisateur. Même fonctionnalité que les autres boutons, sauf qu'il ouvrira le panneau DM et vous coupera le son en cliquant sur le ou les boutons.",
+            "showChatButton":"Si vous souhaitez afficher le bouton de discussion",
+            "showDeafenButton":"Si vous souhaitez afficher le bouton sourd",
+            "showMuteButton":"Si vous souhaitez afficher le bouton muet",
+            "useServer":"Utilisez le serveur muet/assourdissant au lieu de local lorsque vous en avez l'autorisation.",
+            "whichNameToShow":"Choisissez d'afficher le surnom ou le nom d'utilisateur dans l'info-bulle."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Assourdir tout",
             "disconnectAll":"Tout déconnecter",
+            "mentionAllUsers":"Mentionner tous les utilisateurs",
             "moveAll":"Déplacez tout",
             "muteAll":"Tout désactiver",
             "undeafenAll":"Désassourdir tout",
