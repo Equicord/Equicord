@@ -452,8 +452,11 @@
     "declutter":{
         "description":"Limpe a UI do Discord removendo elementos indesejados, como customizações de perfil, lojas, missões e muito mais.",
         "settings":{
+            "alwaysShowUsername":"Mostrar nome ao invés dos status.",
             "removeAudioMenus":"Remover menus ao lado dos botões de silenciar e ensurdecer.",
-            "removeNameplate":"Remover estilização da placa de identificação."
+            "removeAvatarDecoration":"Remover decoração de avatar.",
+            "removeNameplate":"Remover estilização da placa de identificação.",
+            "removeShopAboveDM":"Removwr loja acima da lista de DMs"
         }
     },
     "disableCameras":{
