@@ -451,12 +451,26 @@
     },
     "declutter":{
         "description":"Limpe a UI do Discord removendo elementos indesejados, como customizações de perfil, lojas, missões e muito mais.",
+        "headers":{
+            "friendsList":"Acima da Lista de Amigos/DMs",
+            "misc":"Diversos",
+            "userProfile":"Perfil de Usuário"
+        },
         "settings":{
             "alwaysShowUsername":"Mostrar nome ao invés dos status.",
             "removeAudioMenus":"Remover menus ao lado dos botões de silenciar e ensurdecer.",
             "removeAvatarDecoration":"Remover decoração de avatar.",
+            "removeBillingSettings":"Remover configurações de cobrança.",
+            "removeButtonTooltips":"Remover dicas dos botões.",
+            "removeClanTag":"Remover tags de servidores.",
+            "removeGiftButton":"Remover botão de presente.",
             "removeNameplate":"Remover estilização da placa de identificação.",
-            "removeShopAboveDM":"Removwr loja acima da lista de DMs"
+            "removeProfileEffect":"Remover efeitos de animação de perfil ao abrir.",
+            "removeQuestsAboveDM":"Remover missões acima da lista de DMs.",
+            "removeServerBoostInfo":"Remover informações de impulso de servidor acima da lista de canais.",
+            "removeShopAboveDM":"Removwr loja acima da lista de DMs",
+            "removeUnavailableEmojiPicker":"Remover categorias indisponíveis do seletor de emojis.",
+            "removeUsernameStyles":"Remover cores e efeitos de nome de usuário."
         }
     },
     "disableCameras":{
