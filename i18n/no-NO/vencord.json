@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Linken er kopiert!",
+            "maxAdditionalEmojis":"komma/nylinje separert, maks {count}",
             "messageContentCopied":"Meldingsinnholdet er kopiert!",
             "messageIdCopied":"Meldings-ID kopiert!",
+            "selectAdditionalEmojis":"Velg flere emojier",
+            "selectEmojiForReactions":"Velg Emoji for reaksjoner",
             "userIdCopied":"Bruker-ID kopiert!"
         }
     },
@@ -1486,6 +1489,33 @@
         "timestampFormat":"Tidsstempelformat",
         "timestampPicker":"Tidsstempelvelger"
     },
+    "serverInfo":{
+        "description":"Lar deg se informasjon om en server",
+        "settings":{
+            "sorting":"Brukernavn eller eventuelt visningsnavn",
+            "sortingOptions":{
+                "displayname":"Vist navn",
+                "none":"Ikke sorter",
+                "username":"Brukernavn"
+            }
+        },
+        "ui":{
+            "blockedUsers":"Blokkerte brukere",
+            "channels":"Kanaler",
+            "createdAt":"Opprettet kl",
+            "friends":"Venner",
+            "ignoredUsers":"Ignorerte brukere",
+            "joinedAt":"Ble med på",
+            "mutualUsers":"Gjensidige brukere",
+            "preferredLocale":"Foretrukket lokalitet",
+            "roles":"Roller",
+            "serverBoosts":"Serverforsterkninger",
+            "serverInfo":"Serverinfo",
+            "serverOwner":"Servereier",
+            "vanityLink":"Vanity Link",
+            "verificationLevel":"Bekreftelsesnivå"
+        }
+    },
     "serverListAPI":{
         "description":"API kreves for plugins som endrer serverlisten"
     },
@@ -1647,6 +1677,13 @@
                 "colorless":"Fargeløs",
                 "disabled":"Deaktivert"
             }
+        }
+    },
+    "showAllMessageButtons":{
+        "description":"Vis alltid alle meldingsknapper uansett om du holder nede shift-tasten eller ikke.",
+        "settings":{
+            "noShiftDelete":"Fjern kravet om å holde skift for å slette en melding.",
+            "noShiftPin":"Fjern kravet om å holde shift for å feste en melding."
         }
     },
     "showConnections":{

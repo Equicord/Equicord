@@ -541,6 +541,7 @@
             "noMirroredCamera":"Împiedică camera să fie reflectată pe ecran",
             "refreshSlashCommands":"Actualizează comenzile Slash pentru a afișa comenzile nou adăugate fără a reporni clientul.",
             "removeActivitySection":"Elimină secțiunea de activitate de deasupra listei de membri",
+            "restoreFileDownloadButton":"Adaugă înapoi butonul Descărcare din colțul din dreapta sus al fișierelor",
             "showYourOwnActivityButtons":"[[PH0]]] ascunde propriile butoane de activitate dintr-un motiv oarecare"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Închide",
             "open":"Deschide"
+        }
+    },
+    "hideMessages":{
+        "description":"Un plugin pentru a ascunde temporar mesajele până când reporniți.",
+        "settings":{
+            "hidePopoverButton":"Ascundeți butonul de ascunde în fereastra popover pentru mesaje."
+        },
+        "ui":{
+            "hide":"Ascunde"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Elimină vânzările suplimentare Nitro prin suprascrierea tipului dvs. premium"
     },
+    "noPushToTalk":{
+        "description":"Ocolește cerința de apăsare pentru a vorbi pentru activitatea vocală în canalele care o impun."
+    },
     "noRPC":{
         "description":"Dezactivează funcția Rich Presence (RPC) a lui [[PH0]]]"
     },
@@ -2044,6 +2057,21 @@
             "translate":"Traduce"
         }
     },
+    "triviaAI":{
+        "description":"Un plugin care vă ajută să răspundeți la întrebări trivia folosind AI.",
+        "settings":{
+            "apiKey":"[[PH0]]] Tasta.",
+            "autoRespond":"Răspunde automat la mesaje la primirea unui răspuns.",
+            "endpoint":"Endpoint AI compatibil cu OpenAI.",
+            "maxTokens":"Numărul maxim de jetoane în răspuns.",
+            "model":"Model AI de utilizat.",
+            "supportImages":"Transmite imagini la AI pentru context (dacă există). Acest lucru nu este acceptat de toate modelele.",
+            "systemPrompt":"Prompt de sistem pentru AI."
+        },
+        "ui":{
+            "answerWithAI":"Răspunde cu AI"
+        }
+    },
     "unitConverter":{
         "description":"Convertiți unități în mesaje (imperial/metric)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Adaugă butoane de acțiune rapidă (chat, sunet, surd) utilizatorilor canalului vocal",
+        "options":{
+            "both":"ambele",
+            "disable":"Dezactivează",
+            "display":"Afișează",
+            "globalName":"Nume global",
+            "hide":"Ascunde",
+            "left":"Stânga",
+            "right":"Corect",
+            "username":"Nume de utilizator"
+        },
         "settings":{
-            "showChatButton":"Afișează butonul de chat",
-            "showDeafenButton":"Afișează butonul asurzi",
-            "showMuteButton":"Afișează butonul de sunet"
+            "buttonPosition":"Alegeți unde să plasați butoanele vocale în rândul utilizatorului vocal.",
+            "disableVideo":"Comută video-ul lor când faceți clic pe butonul asurzi.",
+            "muteSoundboard":"Comută placa lor de sunet la clic pe butonul asurzi.",
+            "serverSelf":"Deafen / Dezactivați-vă pe server când utilizați mute/defen.",
+            "showButtonsSelf":"Indiferent dacă doriți să afișați butoane pentru propriul dvs. utilizator. Aceeași funcționalitate ca și alte butoane, cu excepția faptului că va deschide panoul DM-uri și va dezactiva/asurzi pentru dvs. când faceți clic pe buton(e).",
+            "showChatButton":"Indiferent dacă doriți să afișați butonul de chat",
+            "showDeafenButton":"Indiferent dacă doriți să afișați butonul asurzi",
+            "showMuteButton":"Indiferent dacă doriți să afișați butonul de sunet",
+            "useServer":"Folosiți serverul mute/asurzi în loc de local când aveți permisiunea.",
+            "whichNameToShow":"Alegeți dacă doriți să afișați porecla sau numele de utilizator în balonul."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Asurzi toate",
             "disconnectAll":"Deconectați toate",
+            "mentionAllUsers":"Menționați toți utilizatorii",
             "moveAll":"Mutați totul",
             "muteAll":"Dezactivați totul",
             "undeafenAll":"Asurzi toate",

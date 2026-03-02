@@ -541,6 +541,7 @@
             "noMirroredCamera":"Impedisce il mirroring della fotocamera sullo schermo",
             "refreshSlashCommands":"Aggiorna i comandi barra per mostrare i comandi appena aggiunti senza riavviare il client.",
             "removeActivitySection":"Rimuove la sezione delle attività sopra l'elenco dei membri",
+            "restoreFileDownloadButton":"Aggiunge nuovamente il pulsante Download nell'angolo in alto a destra dei file",
             "showYourOwnActivityButtons":"Discord nasconde i pulsanti delle tue attività per qualche motivo"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Chiudi",
             "open":"Aprire"
+        }
+    },
+    "hideMessages":{
+        "description":"Un plugin per nascondere temporaneamente i messaggi fino al riavvio.",
+        "settings":{
+            "hidePopoverButton":"Nascondi il pulsante Nascondi nel popover del messaggio."
+        },
+        "ui":{
+            "hide":"Nascondi"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Rimuove gli upsell Nitro sovrascrivendo il tuo tipo premium"
     },
+    "noPushToTalk":{
+        "description":"Ignora il requisito push-to-talk per l'attività vocale nei canali che lo applicano."
+    },
     "noRPC":{
         "description":"Disabilita la funzione Rich Presence (RPC) di Discord"
     },
@@ -2044,6 +2057,21 @@
             "translate":"Tradurre"
         }
     },
+    "triviaAI":{
+        "description":"Un plugin che ti aiuta a rispondere a domande banali utilizzando l'intelligenza artificiale.",
+        "settings":{
+            "apiKey":"API Tasto.",
+            "autoRespond":"Rispondi automaticamente ai messaggi quando ricevi una risposta.",
+            "endpoint":"Endpoint AI compatibile con OpenAI.",
+            "maxTokens":"Numero massimo di token nella risposta.",
+            "model":"Modello AI da utilizzare.",
+            "supportImages":"Passa le immagini all'intelligenza artificiale per il contesto (se presente). Questo non è supportato da tutti i modelli.",
+            "systemPrompt":"Prompt del sistema per l'IA."
+        },
+        "ui":{
+            "answerWithAI":"Rispondi con l'intelligenza artificiale"
+        }
+    },
     "unitConverter":{
         "description":"Convertire unità in messaggi (imperiale/metrico)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Aggiunge pulsanti di azione rapida (chat, mute, assordante) agli utenti del canale vocale",
+        "options":{
+            "both":"Entrambi",
+            "disable":"Disattiva",
+            "display":"Visualizza",
+            "globalName":"Nome globale",
+            "hide":"Nascondi",
+            "left":"Sinistra",
+            "right":"Giusto",
+            "username":"Nome utente"
+        },
         "settings":{
-            "showChatButton":"Mostra il pulsante della chat",
-            "showDeafenButton":"Mostra il pulsante sordo",
-            "showMuteButton":"Mostra il pulsante Muto"
+            "buttonPosition":"Scegli dove posizionare i pulsanti vocali nella riga dell'utente vocale.",
+            "disableVideo":"Attiva/disattiva il video facendo clic sul pulsante sordo.",
+            "muteSoundboard":"Attiva/disattiva la tavola armonica facendo clic sul pulsante sordo.",
+            "serverSelf":"Deafen / Disattiva l'audio sul server quando usi Mute/Deafen.",
+            "showButtonsSelf":"Se desideri visualizzare i pulsanti per il tuo utente. Stessa funzionalità degli altri pulsanti, tranne per il fatto che aprirà il pannello DM e ti disattiverà/assorderà quando fai clic sui pulsanti.",
+            "showChatButton":"Se desideri visualizzare il pulsante della chat",
+            "showDeafenButton":"Se vuoi visualizzare il pulsante sordo",
+            "showMuteButton":"Se desideri visualizzare il pulsante di disattivazione audio",
+            "useServer":"Utilizza il server muto/assordo anziché locale quando hai l'autorizzazione.",
+            "whichNameToShow":"Scegli se mostrare il nickname o il nome utente nel tooltip."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Assordare tutti",
             "disconnectAll":"Disconnetti tutto",
+            "mentionAllUsers":"Menziona tutti gli utenti",
             "moveAll":"Sposta tutto",
             "muteAll":"Disattiva tutto",
             "undeafenAll":"Tutti non sordi",

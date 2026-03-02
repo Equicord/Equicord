@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Link copiado!",
+            "maxAdditionalEmojis":"separados por vírgula/nova linha, máx. {count}",
             "messageContentCopied":"Conteúdo da mensagem copiado!",
             "messageIdCopied":"ID da mensagem copiado!",
+            "selectAdditionalEmojis":"Selecione Emojis Adicionais",
+            "selectEmojiForReactions":"Selecione Emoji para reações",
             "userIdCopied":"ID do usuário copiado!"
         }
     },

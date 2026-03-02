@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"링크가 복사되었습니다!",
+            "maxAdditionalEmojis":"쉼표/줄바꿈으로 구분, 최대 {count}",
             "messageContentCopied":"메시지 내용이 복사되었습니다!",
             "messageIdCopied":"메시지 ID가 복사되었습니다!",
+            "selectAdditionalEmojis":"추가 이모티콘 선택",
+            "selectEmojiForReactions":"반응을 위한 이모티콘 선택",
             "userIdCopied":"사용자 ID가 복사되었습니다!"
         }
     },

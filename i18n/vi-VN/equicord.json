@@ -541,6 +541,7 @@
             "noMirroredCamera":"Ngăn không cho máy ảnh được phản chiếu trên màn hình của bạn",
             "refreshSlashCommands":"Làm mới Lệnh gạch chéo để hiển thị các lệnh mới được thêm mà không cần khởi động lại máy khách của bạn.",
             "removeActivitySection":"Xóa phần hoạt động phía trên danh sách thành viên",
+            "restoreFileDownloadButton":"Thêm lại nút Tải xuống ở góc trên cùng bên phải của tệp",
             "showYourOwnActivityButtons":"Discord ẩn các nút hoạt động của chính bạn vì lý do nào đó"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Tắt",
             "open":"Mở"
+        }
+    },
+    "hideMessages":{
+        "description":"Một plugin để tạm thời ẩn tin nhắn cho đến khi bạn khởi động lại.",
+        "settings":{
+            "hidePopoverButton":"Ẩn nút ẩn trong cửa sổ bật lên tin nhắn."
+        },
+        "ui":{
+            "hide":"Ẩn"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Loại bỏ các sản phẩm bán thêm của Nitro bằng cách ghi đè loại cao cấp của bạn"
     },
+    "noPushToTalk":{
+        "description":"Bỏ qua yêu cầu nhấn để nói đối với hoạt động bằng giọng nói trong các kênh thực thi yêu cầu đó."
+    },
     "noRPC":{
         "description":"Tắt tính năng Hiện diện phong phú (RPC) của Discord"
     },
@@ -2044,6 +2057,21 @@
             "translate":"Dịch"
         }
     },
+    "triviaAI":{
+        "description":"Một plugin giúp bạn trả lời các câu hỏi đố bằng AI.",
+        "settings":{
+            "apiKey":"API Khóa.",
+            "autoRespond":"Tự động trả lời tin nhắn khi nhận được phản hồi.",
+            "endpoint":"Điểm cuối AI tương thích OpenAI.",
+            "maxTokens":"Số lượng mã thông báo tối đa trong phản hồi.",
+            "model":"Mô hình AI để sử dụng.",
+            "supportImages":"Truyền hình ảnh cho AI để biết ngữ cảnh (nếu có). Điều này không được hỗ trợ bởi tất cả các mô hình.",
+            "systemPrompt":"Lời nhắc hệ thống cho AI."
+        },
+        "ui":{
+            "answerWithAI":"Trả lời bằng AI"
+        }
+    },
     "unitConverter":{
         "description":"Chuyển đổi đơn vị trong tin nhắn (hệ đo lường Anh/số liệu)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Thêm các nút hành động nhanh (trò chuyện, tắt tiếng, tắt tiếng) cho người dùng kênh thoại",
+        "options":{
+            "both":"Cả hai",
+            "disable":"Tắt",
+            "display":"Hiển thị",
+            "globalName":"Global Name",
+            "hide":"Ẩn",
+            "left":"Bên trái",
+            "right":"Phải",
+            "username":"Tên đăng nhập"
+        },
         "settings":{
-            "showChatButton":"Hiển thị nút trò chuyện",
-            "showDeafenButton":"Hiển thị nút điếc",
-            "showMuteButton":"Hiển thị nút tắt tiếng"
+            "buttonPosition":"Chọn vị trí đặt nút thoại trong hàng người dùng giọng nói.",
+            "disableVideo":"Chuyển đổi video của họ khi nhấp vào nút tắt tiếng.",
+            "muteSoundboard":"Chuyển đổi soundboard của họ khi nhấp vào nút điếc.",
+            "serverSelf":"Điếc/Tắt tiếng trên máy chủ khi sử dụng tắt tiếng/điếc.",
+            "showButtonsSelf":"Cho dù bạn muốn hiển thị các nút cho người dùng của riêng bạn. Chức năng tương tự như (các) nút khác, ngoại trừ nó sẽ mở bảng điều khiển DM và tắt tiếng/điếc cho chính bạn khi nhấp vào (các) nút.",
+            "showChatButton":"Bạn có muốn hiển thị nút trò chuyện hay không",
+            "showDeafenButton":"Cho dù bạn muốn hiển thị nút điếc",
+            "showMuteButton":"Cho dù bạn muốn hiển thị nút tắt tiếng",
+            "useServer":"Sử dụng chế độ tắt tiếng/điếc máy chủ thay vì cục bộ khi bạn được phép.",
+            "whichNameToShow":"Chọn hiển thị biệt hiệu hoặc tên người dùng trong chú giải công cụ."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Làm điếc tất cả",
             "disconnectAll":"Ngắt kết nối tất cả",
+            "mentionAllUsers":"Mention all Users",
             "moveAll":"Di chuyển tất cả",
             "muteAll":"Tắt tiếng tất cả",
             "undeafenAll":"Làm điếc tất cả",

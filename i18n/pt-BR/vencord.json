@@ -595,7 +595,7 @@
         "searchOptions":{
             "entireUrl":"URL inteiro",
             "hostAndPath":"Host e caminho (tenor.com somgif.gif)",
-            "pathOnly":"Somente caminho (/somegif.gif)"
+            "pathOnly":"Somente caminho (/algumgif.gif)"
         },
         "searchPlaceholder":"Pesquisar Gifs Favoritos",
         "settings":{
@@ -612,7 +612,7 @@
         "enableOriginalCaveats":"Você também pode ativar a imagem original no chat, mas tome cuidado com as seguintes advertências:",
         "inChatOptimised":"No chat, serão carregadas imagens otimizadas, mas com resolução total.",
         "inModalOriginal":"No modal de imagem, a imagem original será carregada.",
-        "mayCauseLag":"Pode causar atraso.",
+        "mayCauseLag":"Pode causar lag.",
         "name":"FixImagesQuality",
         "settings":{
             "originalImagesInChat":"Carrega também a imagem original no Chat. AVISO: Leia os avisos acima."
@@ -811,7 +811,7 @@
     },
     "loading":"Carregando...",
     "loadingQuotes":{
-        "description":"Substitua cotações de carregamento de Discords",
+        "description":"Substitua citações de carregamento do Discord",
         "settings":{
             "additionalQuotes":"Citações personalizadas adicionais para possivelmente aparecerem, separadas pelo delimitador abaixo",
             "additionalQuotesDelimiter":"Delimitador para citações adicionais",
@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Link copiado!",
+            "maxAdditionalEmojis":"separado por vírgula/linha, máx. {count}",
             "messageContentCopied":"Conteúdo da mensagem copiado!",
             "messageIdCopied":"ID da mensagem copiado!",
+            "selectAdditionalEmojis":"Selecionar Emojis Adicionais",
+            "selectEmojiForReactions":"Selecionar Emoji para Reações",
             "userIdCopied":"ID do usuário copiado!"
         }
     },
@@ -1133,7 +1136,7 @@
         "description":"Desativa pings na resposta por padrão",
         "settings":{
             "doNotPingListed":"Não marque os usuários/cargos listados",
-            "inverseShiftReply":"Inverter o comportamento de resposta de turno do Discord (permitir que a resposta de turno mencione o usuário)",
+            "inverseShiftReply":"Inverter o comportamento do shift para responder do Discord (ative para fazer o shift mencionar o usuário ao responder)",
             "onlyPingListed":"Marque apenas os usuários/cargos listados",
             "roleList":"Lista de cargos para permitir ou isentar pings (separados por vírgulas ou espaços)",
             "shouldPingListed":"Comportamento",
@@ -1355,14 +1358,14 @@
     "readAllNotificationsButton":{
         "description":"Leia todas as notificações do servidor com um único clique de botão!",
         "name":"ReadAllNotificationsButton",
-        "readAll":"Leia tudo"
+        "readAll":"Ler tudo"
     },
     "relationshipNotifier":{
         "description":"Notifica você quando um amigo, chat em grupo ou servidor te remove.",
         "friendRemoved":"{username} removeu você como amigo.",
         "friendRequestRemoved":"Um pedido de amizade de {username} foi removido.",
         "groupRemoved":"Você foi removido do grupo {name}.",
-        "notificationTitle":"Notificador de relacionamento",
+        "notificationTitle":"Relationship Notifier",
         "offlineFriendRemoved":"Você não é mais amigo de {username}.",
         "offlineFriendRequestRevoked":"A solicitação de amizade de {username} foi revogada.",
         "offlineGroupRemoved":"Você não está mais no grupo {name}.",
@@ -1850,7 +1853,7 @@
             "membersListIndicators":"Indicadores da Lista de Membros",
             "silentTyping":"Digitação silenciosa"
         },
-        "noChanges":"Nenhuma alteração feita nas configurações de digitação silenciosa.",
+        "noChanges":"Nenhuma alteração feita nas configurações de silent typing",
         "settings":{
             "chatContextMenu":"Mostra um submenu no menu de contexto do chat para modificar as configurações do plugin em qualquer lugar.",
             "chatIcon":"Mostra um ícone na barra de chat para modificar o plugin em qualquer lugar.",

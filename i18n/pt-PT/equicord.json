@@ -541,6 +541,7 @@
             "noMirroredCamera":"Impede que a câmera seja espelhada na tela",
             "refreshSlashCommands":"Atualiza comandos de barra para mostrar comandos recém-adicionados sem reiniciar seu cliente.",
             "removeActivitySection":"Remove a seção de atividades acima da lista de membros",
+            "restoreFileDownloadButton":"Adiciona de volta o botão Download no canto superior direito dos arquivos",
             "showYourOwnActivityButtons":"Discord oculta seus próprios botões de atividade por algum motivo"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Fechar",
             "open":"Abrir"
+        }
+    },
+    "hideMessages":{
+        "description":"Um plugin para ocultar mensagens temporariamente até você reiniciar.",
+        "settings":{
+            "hidePopoverButton":"Oculte o botão ocultar no popover da mensagem."
+        },
+        "ui":{
+            "hide":"Ocultar"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Remove upsell do Nitro substituindo seu tipo premium"
     },
+    "noPushToTalk":{
+        "description":"Ignora o requisito push-to-talk para atividade de voz em canais que o impõem."
+    },
     "noRPC":{
         "description":"Desativa o recurso Rich Presence (RPC) do Discord"
     },
@@ -2044,6 +2057,21 @@
             "translate":"Traduzir"
         }
     },
+    "triviaAI":{
+        "description":"Um plugin que ajuda você a responder perguntas triviais usando IA.",
+        "settings":{
+            "apiKey":"API Chave.",
+            "autoRespond":"Responda automaticamente às mensagens ao receber uma resposta.",
+            "endpoint":"Endpoint de IA compatível com OpenAI.",
+            "maxTokens":"Número máximo de tokens na resposta.",
+            "model":"Modelo de IA a ser usado.",
+            "supportImages":"Passe imagens para a IA para contexto (se houver). Isto não é suportado por todos os modelos.",
+            "systemPrompt":"Prompt do sistema para a IA."
+        },
+        "ui":{
+            "answerWithAI":"Responda com IA"
+        }
+    },
     "unitConverter":{
         "description":"Converter unidades em mensagens (imperial/métrica)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Adiciona botões de ação rápida (bate-papo, mudo, surdo) para usuários de canais de voz",
+        "options":{
+            "both":"Ambos",
+            "disable":"Desativar",
+            "display":"Exibição",
+            "globalName":"Nome global",
+            "hide":"Ocultar",
+            "left":"Esquerda",
+            "right":"Certo",
+            "username":"Nome de usuário"
+        },
         "settings":{
-            "showChatButton":"Mostrar botão de bate-papo",
-            "showDeafenButton":"Mostrar botão surdo",
-            "showMuteButton":"Mostrar botão mudo"
+            "buttonPosition":"Escolha onde colocar os botões de voz na linha do usuário de voz.",
+            "disableVideo":"Alterna o vídeo ao clicar no botão ensurdecer.",
+            "muteSoundboard":"Alterna a mesa de som ao clicar no botão ensurdecer.",
+            "serverSelf":"Deafen/Silenciar-se no servidor ao usar mute/deafen.",
+            "showButtonsSelf":"Se você deseja exibir botões para seu próprio usuário. Mesma funcionalidade de outros botões, exceto que abrirá o painel DMs e silenciará/surdez você mesmo ao clicar no(s) botão(s).",
+            "showChatButton":"Se você deseja exibir o botão de bate-papo",
+            "showDeafenButton":"Se você deseja exibir o botão surdo",
+            "showMuteButton":"Se você deseja exibir o botão mudo",
+            "useServer":"Use o servidor mudo/surdo em vez de local quando você tiver permissão.",
+            "whichNameToShow":"Escolha se deseja mostrar o apelido ou nome de usuário na dica de ferramenta."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Ensurdecer todos",
             "disconnectAll":"Desconectar tudo",
+            "mentionAllUsers":"Mencione todos os usuários",
             "moveAll":"Mova tudo",
             "muteAll":"Silenciar tudo",
             "undeafenAll":"Deixar tudo surdo",

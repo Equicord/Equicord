@@ -1,0 +1,2165 @@
+{
+    "accountPanelServerProfile":{
+        "description":"右鍵單擊左下角您的帳戶面板可以查看您在目前伺服器中的個人資料",
+        "prioritizeServerProfile":"優先考慮伺服器設定檔",
+        "prioritizeServerProfileDescription":"左鍵單擊帳戶面板時優先考慮伺服器配置文件",
+        "viewAccountProfile":"查看帳號資料",
+        "viewServerProfile":"查看伺服器設定檔"
+    },
+    "addonCard":{
+        "new":"新的"
+    },
+    "alwaysAnimate":{
+        "description":"為任何可以動畫化的東西製作動畫",
+        "settings":{
+            "icons":"始終為伺服器圖示、頭像、裝飾等設定動畫",
+            "nameplates":"Always animate nameplates",
+            "roleGradients":"始終為角色漸層設定動畫",
+            "serverBanners":"始終為伺服器橫幅設定動畫",
+            "statusEmojis":"始終為狀態表情符號新增動畫"
+        }
+    },
+    "alwaysExpandRoles":{
+        "description":"始終擴展個人資料彈出視窗中的角色列表",
+        "settings":{
+            "hideArrow":"隱藏箭頭"
+        }
+    },
+    "alwaysTrust":{
+        "description":"刪除煩人的不受信任網域和可疑檔案彈出窗口",
+        "settings":{
+            "confirmModal":"是否應該顯示“您確定要刪除”模式嗎？",
+            "domain":"刪除開啟連結時的不受信任網域彈出窗口",
+            "file":"刪除開啟連結時的「潛在危險下載」彈出窗口",
+            "noDeleteSafety":"刪除刪除伺服器時刪除輸入伺服器名稱的要求"
+        },
+        "ui":{
+            "deleteServerBody":"如果這不是很明顯的話，它是永久性的。",
+            "deleteServerConfirm":"删除",
+            "deleteServerTitle":"刪除伺服器？"
+        }
+    },
+    "anonymiseFileNames":{
+        "commands":{
+            "spoiler":{
+                "description":"切換你的劇透",
+                "disabled":"劇透已停用！",
+                "enabled":"劇透啟用！",
+                "name":"劇透",
+                "optionDescription":"切換劇透（預設為切換）",
+                "optionName":"價值"
+            }
+        },
+        "description":"匿名上傳的檔案名",
+        "methods":{
+            "consistent":"持續的",
+            "random":"隨機字符",
+            "timestamp":"時間戳"
+        },
+        "settings":{
+            "anonymiseByDefault":"預設是否對檔案名稱進行匿名化",
+            "consistent":"一致的檔案名",
+            "method":"匿名方式",
+            "randomisedLength":"隨機字元長度",
+            "spoilerMessages":"劇透消息"
+        },
+        "usingAnonymous":"使用匿名檔案名稱",
+        "usingNormal":"使用普通檔案名稱"
+    },
+    "appleMusicRichPresence":{
+        "activityTypes":{
+            "listening":"聽力",
+            "playing":"演奏"
+        },
+        "assetImageTypes":{
+            "album":"專輯封面",
+            "artist":"藝術家藝術品",
+            "disabled":"关闭"
+        },
+        "buttons":{
+            "listenOnAppleMusic":"在 Apple Music 收聽",
+            "viewOnSongLink":"在 SongLink 上查看"
+        },
+        "defaultDetails":"{name}",
+        "defaultLargeText":"{album}",
+        "defaultName":"蘋果音樂",
+        "defaultSmallText":"{artist}",
+        "defaultState":"{artist}·{album}",
+        "description":"Discord 讓您的 Apple Music 更加豐富！",
+        "name":"AppleMusicRichPresence",
+        "settings":{
+            "activityType":"哪種類型的活動",
+            "detailsString":"活動詳細資訊格式字串",
+            "enableButtons":"是否啟用按鈕",
+            "enableTimestamps":"是否啟用時間戳",
+            "largeImageType":"活動資產大圖類型",
+            "largeTextString":"活動生產大文字格式字串",
+            "nameString":"活動名稱格式字串",
+            "refreshInterval":"活動刷新間隔（秒）",
+            "smallImageType":"活動生產小圖型",
+            "smallTextString":"活動生產小文字格式字串",
+            "stateString":"活動狀態格式字串",
+            "statusDisplayType":"在成員清單中顯示曲目/藝人姓名"
+        },
+        "settingsAbout":{
+            "albumPlaceholder":"{album} 被替換為專輯名稱。",
+            "artistPlaceholder":"{artist} 替換為藝術家姓名",
+            "intro":"For the customizable activity format strings, you can use several special strings to include track data in activities!",
+            "namePlaceholder":"{name} 替換為曲目名稱"
+        },
+        "statusDisplayTypes":{
+            "artist":"顯示藝術家姓名",
+            "off":"不顯示（顯示一般監聽訊息）",
+            "track":"顯示曲目名稱"
+        }
+    },
+    "arRPC":{
+        "connected":"連接到arRPC",
+        "connectionFailed":"無法連接到 arRPC，它是否正在運行？",
+        "retry":"重试",
+        "settingsAbout":{
+            "description":"按照 GitHub 儲存庫中的說明運行伺服器，然後啟用插件。",
+            "title":"如何使用arRPC"
+        }
+    },
+    "autoDndWhilePlaying":{
+        "description":"啟動遊戲時自動更新您的線上狀態（線上、空閒、免打擾）",
+        "settings":{
+            "excludeInvisible":"當您的狀態設定為不可見時，防止自動狀態變更",
+            "statusToSet":"玩遊戲時設定的狀態"
+        },
+        "statusOptions":{
+            "dnd":"请勿打扰",
+            "idle":"闲置",
+            "invisible":"隐身",
+            "online":"在线"
+        }
+    },
+    "badgeAPI":{
+        "description":"API 為使用者新增徽章"
+    },
+    "betterFolders":{
+        "settings":{
+            "closeAllFolders":"選擇不在資料夾中的伺服器時關閉所有資料夾",
+            "closeAllHomeButton":"點擊主頁按鈕時關閉所有資料夾",
+            "closeOthers":"打開資料夾時關閉其他資料夾",
+            "closeServerFolder":"在該資料夾中選擇伺服器時關閉該資料夾",
+            "folderIconAlways":"总是",
+            "folderIconMultipleExpanded":"當展開多個資料夾時",
+            "folderIconNever":"永不",
+            "forceOpen":"切換到該資料夾的伺服器時強制開啟該資料夾",
+            "keepIcons":"當主公會欄資料夾在 BetterFolders 側邊欄中開啟時，繼續在主公會欄資料夾中顯示公會圖標",
+            "showFolderIcon":"在 BetterFolders 側邊欄中的資料夾行會上方顯示資料夾圖標",
+            "sidebar":"在專用側邊欄上顯示資料夾中的伺服器",
+            "sidebarAnim":"開啟資料夾側邊欄的動畫"
+        }
+    },
+    "betterGifAltText":{
+        "description":"將 GIF 替代文字從簡單的“GIF”更改為包含 gif 標籤/檔案名"
+    },
+    "betterGifPicker":{
+        "description":"使 gif 選擇器預設為開啟最喜歡的類別",
+        "settings":{
+            "keepOpen":"選擇 gif 後保持 gif 選擇器打開"
+        }
+    },
+    "betterNotesBox":{
+        "description":"隱藏註釋或停用拼字檢查（在設定中配置！！）",
+        "settings":{
+            "hide":"隱藏筆記",
+            "noSpellCheck":"停用筆記中的拼字檢查"
+        }
+    },
+    "betterRoleContext":{
+        "copyRoleColor":"複製角色顏色",
+        "description":"新增右鍵點選使用者設定檔中的角色時複製角色顏色/編輯角色/檢視角色圖示的選項",
+        "editRole":"編輯角色",
+        "name":"更好的角色環境",
+        "settings":{
+            "roleIconFileFormat":"查看角色圖示時使用的文件格式"
+        },
+        "viewRoleIcon":"查看角色圖標"
+    },
+    "betterRoleDot":{
+        "description":"在 RoleDot（輔助使用設定）上點選複製角色顏色。也允許同時使用 RoleDot 和彩色名稱",
+        "settings":{
+            "bothStyles":"顯示角色點和彩色名稱",
+            "copyRoleColorInProfilePopout":"允許單擊設定檔彈出視窗中的角色點來複製角色顏色"
+        }
+    },
+    "betterSessions":{
+        "newBadge":"新的",
+        "newSession":"新會話：",
+        "rename":"重新命名",
+        "renameModal":{
+            "newDeviceName":"新設備名稱",
+            "resetName":"重置名稱",
+            "save":"保存",
+            "title":"重新命名"
+        },
+        "settings":{
+            "backgroundCheck":"在背景檢查新會話，並在偵測到新會話時顯示通知",
+            "checkInterval":"在背景檢查新會話的頻率（如果已啟用），以分鐘為單位"
+        }
+    },
+    "betterSettings":{
+        "settings":{
+            "disableFade":"禁用交叉淡入淡出動畫",
+            "eagerLoad":"消除了第一次開啟選單時的載入延遲",
+            "organizeMenu":"將設定齒輪上下文選單組織成類別"
+        }
+    },
+    "betterUploadButton":{
+        "description":"點擊上傳，右鍵打開選單"
+    },
+    "biggerStreamPreview":{
+        "description":"該插件可讓您放大串流預覽",
+        "name":"更大的串流預覽",
+        "viewStreamPreview":"查看串流預覽"
+    },
+    "blurNsfw":{
+        "description":"模糊 NSFW 頻道中的附件直到懸停",
+        "settings":{
+            "blurAllChannels":"模糊所有頻道中的配件（不僅僅是 NSFW）",
+            "blurAmount":"模糊量（以像素為單位）"
+        }
+    },
+    "callTimer":{
+        "description":"為語音通道和連線狀態中的所有使用者新增呼叫計時器。",
+        "settings":{
+            "allCallTimers":"為伺服器語音通道中的所有使用者新增呼叫計時器",
+            "format":"緊湊或人類可讀的格式：",
+            "showRoleColor":"顯示使用者的角色顏色（如果啟用此外掛）",
+            "showSeconds":"在計時器中顯示秒數",
+            "showWithoutHover":"始終顯示計時器，無需懸停",
+            "trackSelf":"也追蹤自己",
+            "watchLargeGuilds":"追蹤大型公會中的使用者。如果您在許多擁有活躍語音使用者的大型公會中，這可能會導致延遲。經過多達 2000 個主動語音使用者的測試，沒有出現任何問題。"
+        }
+    },
+    "cancel":"取消",
+    "chatInputButtonAPI":{
+        "description":"API 將按鈕加入聊天輸入"
+    },
+    "clearURLs":{
+        "description":"自動從您發送的網址中刪除追蹤元素"
+    },
+    "clientTheme":{
+        "contrastWarning":"所選顏色與文字對比度不佳",
+        "disableNitroTheme":"禁用硝基主題",
+        "nitroNotSupported":"不支援 Nitro 主題",
+        "resetThemeColor":"重設主題顏色",
+        "switchToMode":"切換到{mode}模式",
+        "themeColor":"主題顏色",
+        "themeColorDescription":"為您的 Discord 用戶端主題添加顏色",
+        "themeWontLookGood":"你的主題看起來不太好！"
+    },
+    "cloud":{
+        "integrations":{
+            "enabled":"雲端整合已啟用！",
+            "error":"設定失敗 ({e})",
+            "failedToRetrieveOAuth":"安裝失敗（無法檢索 OAuth 配置）。",
+            "header":"雲端整合",
+            "noSecret":"安裝失敗（沒有回傳秘密？）。",
+            "reauthenticateOtherClient":"我們注意到您在另一個客戶端中啟用了雲端整合！由於限制，您需要重新進行身份驗證才能繼續使用它們。點擊此處轉到設定頁面即可執行此操作！"
+        },
+        "settings":{
+            "accountChanged":"雲端同步已停用，因為該帳戶未連接到雲端應用程式。您可以透過在雲端設定中連接此帳戶來再次啟用它。 （注意：它將單獨存儲您的偏好）",
+            "apiDelete":"無法刪除設定（API 回傳 {e}）。",
+            "apiEraseAll":"無法刪除所有資料（API 返回 {e}]），請聯絡支援人員。",
+            "apiReject":"無法將設定同步到雲端（API 返回 {e}）。",
+            "deleted":"設定已從雲端刪除！",
+            "erased":"成功刪除所有資料。",
+            "failedToDelete":"無法刪除設定 ({e})。",
+            "failedToSync":"無法將設定同步到雲端 ({e})。",
+            "header":"雲端設定",
+            "newerThanCloud":"您的本地設定比雲端設定更新。",
+            "noSettings":"雲端沒有任何設定。",
+            "success":"同步設定到雲端！",
+            "syncFromCloud":"無法從雲端同步設定 ({e})。",
+            "upToDate":"您的設定是最新的。",
+            "updated":"您的設定已更新！點擊此處重新啟動以完全應用變更！",
+            "updatedRemote":"您的設定已更新！點擊此處重新啟動以完全應用變更！"
+        }
+    },
+    "colorSighted":{
+        "description":"從狀態中刪除色盲友善圖標，就像 2015-2017 Discord"
+    },
+    "commandsAPI":{
+        "description":"使用命令的任何內容都需要 API"
+    },
+    "consoleJanitor":{
+        "alwaysAllowLoggers":"始終允許這些類型的記錄器",
+        "description":"禁用煩人的控制台訊息/錯誤",
+        "filterList":"過濾器列表",
+        "name":"控制台管理員",
+        "settings":{
+            "disableLoggers":"停用 Discords 記錄器",
+            "disableSpotifyLogger":"停用 Spotify 記錄器，該記錄器會洩露帳戶資訊和存取令牌",
+            "whitelistedLoggers":"即使其他記錄器被隱藏，分號分隔的記錄器清單也允許"
+        }
+    },
+    "consoleShortcuts":{
+        "description":"為視窗上的許多內容添加較短的別名。運行 `shortcutList` 以取得清單。"
+    },
+    "contextMenuAPI":{
+        "description":"API 用於在上下文選單中新增/刪除項目"
+    },
+    "contributorCard":{
+        "contributionsButton":"查看您所做的貢獻",
+        "description":"由於您已經為 Equicord 做出了貢獻，您現在擁有了一個很酷的新徽章！",
+        "subtitle":"感謝您的貢獻！",
+        "title":"貢獻"
+    },
+    "copyEmojiMarkdown":{
+        "copyEmojiMarkdown":"複製表情符號 Markdown",
+        "copyUnicodeDescription":"複製原始 unicode 字元而不是 :name: 作為預設表情符號 (👽)",
+        "description":"允許您將表情符號複製為格式化字串 (<:blobcatcozy:1026533070955872337>)",
+        "success":"成功！複製表情符號降價。"
+    },
+    "copyFileContents":{
+        "copied":"複製了！",
+        "copyFileContents":"複製文件內容",
+        "description":"在文字檔案附件中新增一個按鈕以複製其內容",
+        "fileTooLarge":"文件太大無法複製"
+    },
+    "copyStickerLinks":{
+        "copyLink":"复制链接",
+        "description":"新增複製和開啟貼紙連結的功能",
+        "linkCopied":"連結已複製！",
+        "openLink":"打开链接"
+    },
+    "copyUserURLs":{
+        "copyUserURL":"複製用戶 URL",
+        "description":"在使用者上下文選單中新增“複製使用者 URL]”選項。"
+    },
+    "crashHandler":{
+        "description":"用於處理崩潰並可能在不重新啟動的情況下恢復的實用插件",
+        "notifications":{
+            "crashedBody":"Awn :( Discord 已快速崩潰兩次，且未嘗試恢復。點擊此處加入我們的支援伺服器！",
+            "crashedTitle":"Discord 崩潰了！",
+            "invalidInvite":"邀請無效或過期",
+            "recoveringBody":"正在嘗試恢復...點擊此處加入我們的支援伺服器！"
+        },
+        "settings":{
+            "attemptToNavigateToHome":"在防止 Discord 崩潰時是否嘗試導航到家。",
+            "attemptToPreventCrashes":"是否嘗試防止 Discord 崩潰。"
+        },
+        "updatePrompt":"呃哦，Discord 剛剛崩潰了...但好消息，有一個 Equicord 更新可以解決這個問題！您想現在更新嗎？"
+    },
+    "ctrlEnterSend":{
+        "description":"使用Ctrl+Enter發送訊息（可自訂）",
+        "settings":{
+            "sendMessageInTheMiddleOfACodeBlock":"是否在程式碼區塊中間發送訊息",
+            "submitRule":"發送訊息的方式"
+        },
+        "submitRuleOptions":{
+            "ctrlEnter":"Ctrl+Enter（Enter 或 Shift+Enter 換行）（macOS 上為 cmd+enter）",
+            "enter":"Enter（Shift+Enter 換行；預設為 Discord）",
+            "shiftEnter":"Shift+Enter（輸入換行）"
+        }
+    },
+    "customIdle":{
+        "description":"允許您設定 Discord 空閒之前的時間（或停用自動空閒）",
+        "settings":{
+            "idleTimeout":"Discord 空閒前的分鐘數（0 表示停用自動空閒）",
+            "remainInIdle":"當您返回Discord時，保持空閒狀態，直到您確認要上網"
+        },
+        "ui":{
+            "backOnlineMessage":"歡迎回來！單擊按鈕即可上網。點擊 X 保持空閒直至重新加載。",
+            "exitIdle":"退出空閒狀態"
+        }
+    },
+    "customRPC":{
+        "activityType":"活動類型",
+        "activityTypes":{
+            "competing":"競爭",
+            "listening":"聽力",
+            "playing":"演奏",
+            "streaming":"正在直播",
+            "watching":"正在观看"
+        },
+        "appId":"APP ID",
+        "appName":"應用程式名稱",
+        "button1Text":"按鈕 1 文字",
+        "button1Url":"按鈕 1 URL",
+        "button2Text":"按鈕2文字",
+        "button2Url":"按鈕2 URL",
+        "detailLine1":"詳細資訊（第 1 行）",
+        "detailUrl":"詳細資訊 URL",
+        "endTimestamp":"結束時間戳記（以毫秒為單位）",
+        "instructions":{
+            "buttons":"您在個人資料上看不到自己的按鈕，但其他人都可以正常看到。",
+            "devPortal":"進入<0>Discord開發者入口網站</0>建立應用程式並取得應用程式ID。",
+            "imgur":"如果您想使用圖片鏈接，請下載圖片並將圖片重新上傳到<0>Imgur</0>，然後右鍵單擊圖片並選擇“複製圖片地址”即可獲取圖片鏈接。",
+            "unicode":"一些奇怪的 unicode 文字（「字體」𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘）可能會導致豐富的存在無法顯示，請嘗試使用普通字母代替。",
+            "uploadImages":"在 Rich Presence 標籤中上傳圖像以取得圖像金鑰。"
+        },
+        "largeImageClickUrl":"可點選大圖 URL",
+        "largeImageText":"大圖像文字",
+        "largeImageUrl":"大圖像 URL/鍵",
+        "notice":{
+            "body":"活動共享未啟用，人們將無法看到您自訂的豐富狀態！",
+            "enable":"开启",
+            "title":"注意"
+        },
+        "partyMaxSize":"最大聚會人數",
+        "partySize":"聚會規模",
+        "placeholder":{
+            "enterValue":"輸入一個值",
+            "selectOption":"選擇一個選項"
+        },
+        "smallImageClickUrl":"可點擊的小圖像 URL",
+        "smallImageText":"小圖像文字",
+        "smallImageUrl":"小圖像 URL/鍵",
+        "startTimestamp":"開始時間戳（以毫秒為單位）",
+        "stateLine2":"狀態（第 2 行）",
+        "stateUrl":"狀態 URL",
+        "streamLink":"串流媒體連結（Twitch 或 YouTube，僅當活動類型為串流媒體時）",
+        "timestampMode":"時間戳模式",
+        "timestampModes":{
+            "currentTime":"與您目前時間相同（24小時後不重置）",
+            "custom":"自定义",
+            "none":"暂无",
+            "sinceOpen":"自從不和諧開放以來"
+        },
+        "validation":{
+            "discordId":"必須是有效的 Discord ID。",
+            "discordLink":"Don't use a Discord link. Use an Imgur image link instead.",
+            "imgurDirect":"Imgur 連結必須是圖像的直接連結（例如 https://i.imgur.com/...). 右鍵單擊圖像，然後按一下“複製圖像地址”",
+            "maxLength":"長度不得超過 {length} 個字元。",
+            "number":"必須是一個數字。",
+            "positiveNumber":"必須是正數。",
+            "required":"此欄位是必需的。",
+            "streamingLink":"串流連結必須是有效的 URL。",
+            "streamingLinkLength":"串流媒體連結不得超過 512 個字元。",
+            "tenorDirect":"Tenor 連結必須是圖像的直接連結（例如 https://media.tenor.com/...). 右鍵單擊 GIF，然後按一下“複製圖片位址”",
+            "url":"必須是有效的 URL。"
+        }
+    },
+    "dearrow":{
+        "clickToDearrow":"點擊取消箭頭",
+        "dearrowByDefault":"自動刪除視頻",
+        "dearrowedClickRestore":"該嵌入已被取消箭頭，點擊恢復",
+        "description":"讓 YouTube 嵌入的標題和縮圖不那麼聳人聽聞，由 Dearrow 提供支持",
+        "everything":"一切（標題和縮圖）",
+        "hideButton":"在 YouTube 嵌入中隱藏 Dearrow 按鈕",
+        "replaceElementsDescription":"選擇將替換嵌入的哪些元素",
+        "thumbnails":"縮圖",
+        "titles":"標題"
+    },
+    "decor":{
+        "accessFromProfiles":"您也可以從 {link} 頁面存取裝飾裝飾。",
+        "changeDecoration":"更換裝修",
+        "description":"建立並使用您自己的自訂頭像裝飾，或從預設中選擇您最喜歡的。",
+        "enableAndRestart":"啟用裝飾並重新啟動用戶端以更改您的頭像裝飾。",
+        "profilesLink":"型材",
+        "removeDecoration":"移除裝飾",
+        "title":"裝潢風格"
+    },
+    "devCompanion":{
+        "description":"開發伴侶插件。請向 Sadan 報告任何不工作或奇怪的情況（很可能是錯誤），無論是 ping 還是 dm，謝謝！",
+        "settings":{
+            "notifyOnAutoConnect":"是否在 Dev Companion 自動連線時發出通知。",
+            "reloadAfterToggle":"收到禁用/啟用插件命令後重新載入。",
+            "usePatchedModule":"對於提取請求，請使用目前已修補的模組（如果已修補）而不是原始模組進行回應。"
+        }
+    },
+    "disableCallIdle":{
+        "description":"禁止在 3 分鐘後自動從 DM 語音通話中踢出並轉移到 AFK 語音頻道。"
+    },
+    "donate":"捐",
+    "donorCard":{
+        "donated":{
+            "description":"所有 Vencord 使用者都可以看到您的 Vencord 捐贈者徽章，Equicord 使用者可以看到您的 Equicord 捐贈者徽章。若要更改您的 Vencord 捐贈者徽章，請聯絡@vending.machine。對於您的 Equicord 捐贈者徽章，請在 Equicord 的伺服器中製作票證。",
+            "equicordDescription":"所有Equicord用戶都可以看到您的徽章！您可以透過在 Equicord 的伺服器中製作票證來管理您的福利。",
+            "subtitle":"感謝您的捐贈！",
+            "title":"捐款",
+            "vencordDescription":"所有Vencord用戶都可以看到您的徽章！您可以透過發送訊息@{v}來管理您的福利。"
+        },
+        "notDonated":{
+            "description":"請考慮透過捐贈來支持Equicord的發展！",
+            "title":"支援專案"
+        }
+    },
+    "dontRoundMyTimestamps":{
+        "description":"始終向下舍入相對時間戳，因此 7.6y 變為 7y 而不是 8y"
+    },
+    "dynamicImageModalAPI":{
+        "description":"讓您在開啟影像模式時省略寬度或高度"
+    },
+    "experiments":{
+        "description":"允許存取 Discord 中的實驗和其他僅限開發的功能！",
+        "devToolsInfo":"您可以透過{keyboardCombo}開啟Discord的DevTools",
+        "holdOn":"堅持，稍等！ ！",
+        "moreInfo":"更多資訊",
+        "settings":{
+            "toolbarDevMenu":"將說明 (?) 工具列按鈕（聊天右上角）變更為 Discord 的開發者選單"
+        },
+        "warning1":"實驗是未發布的 Discord 功能。它們可能不起作用，甚至會破壞您的客戶端或停用您的帳戶。",
+        "warning2":"僅當您知道自己在做什麼時才使用實驗。 Equicord 對啟用實驗造成的任何損害不承擔任何責任。如果您不知道實驗的作用，請忽略它。也不要問我們實驗是做什麼的，我們可能也不知道。",
+        "warning3":"不可以，您不能使用伺服器端功能，例如選取「傳送至客戶端」方塊。"
+    },
+    "expressionCloner":{
+        "cloneEmoji":"克隆表情符號",
+        "cloneSticker":"複製貼紙",
+        "cloneTo":"克隆到 {guild}",
+        "clonedSuccess":"成功將{name}克隆到{guild}！",
+        "customName":"自訂名稱",
+        "failedToClone":"克隆失敗：{error}",
+        "nameValidation":"名稱必須介於 2 到 32 個字元之間",
+        "somethingWentWrong":"出了點問題（檢查控制台！）"
+    },
+    "f8break":{
+        "description":"當您在 DevTools（+ 斷點）開啟的情況下按 F8 時，會暫停客戶端。"
+    },
+    "failedToRender":"無法呈現 {tab} 選項卡。如果問題仍然存在，請嘗試使用安裝程式重新安裝！",
+    "fakeNitro":{
+        "description":"允許您發送假表情符號/貼紙、使用硝基主題並以硝基品質進行串流傳輸",
+        "doNotShowAgain":"不再顯示",
+        "emojiNotice":"這是一個 FakeNitro 表情符號，並且像真正的表情符號一樣只為您呈現。顯示為非插件用戶的連結。",
+        "holdOn":"堅持，稍等！",
+        "noAttachmentPerms":{
+            "body":"您無法發送此訊息，因為它包含動畫 FakeNitro 貼紙，而且您無權在當前頻道中附加文件。請撕下貼紙以繼續。"
+        },
+        "noEmbedPerms":{
+            "body1":"您正在嘗試傳送/編輯包含 FakeNitro 表情符號或貼圖的訊息，",
+            "body2":"但是您無權在目前頻道中嵌入連結。",
+            "body3":"您確定要發送此訊息嗎？您的 FakeNitro 項目將僅顯示為連結。",
+            "disableNotice":"您可以在插件設定中停用此通知。"
+        },
+        "sendAnyway":"無論如何發送",
+        "settings":{
+            "disableEmbedPermissionCheck":"發送虛假表情符號和貼紙時是否停用嵌入權限檢查",
+            "emojiSize":"發送時表情符號的大小",
+            "enableEmojiBypass":"允許發送假表情符號（也繞過缺少使用自訂表情符號的權限）",
+            "enableStickerBypass":"允許發送假貼紙（也繞過缺少使用貼紙的權限）",
+            "enableStreamQualityBypass":"允許以硝基質量進行串流傳輸",
+            "hyperLinkText":"超連結應使用什麼文字。 {{NAME}} 將會被替換為表情符號/貼圖名稱。",
+            "stickerSize":"發送時貼紙尺寸",
+            "transformCompoundSentence":"是否將假貼紙和表情符號轉換為複合句（內容比假表情符號或貼紙連結更多的句子）",
+            "transformEmojis":"是否將假表情符號轉為真表情符號",
+            "transformStickers":"是否將假貼紙轉為真貼紙",
+            "useEmojiHyperLinks":"發送假表情符號時是否使用超連結",
+            "useStickerHyperLinks":"發送假貼紙時是否使用超鏈接"
+        },
+        "stickerNotice":"這是一個 FakeNitro 貼紙，只為您呈現像真正的貼紙一樣的效果。顯示為非插件用戶的連結。"
+    },
+    "fakeProfileThemes":{
+        "accent":"口音",
+        "colorPickers":"顏色選擇器",
+        "copy3y3":"複製 3y3",
+        "fakeColors":"假色",
+        "instructions":"使用下面的顏色選擇器設定您的設定檔顏色。這些顏色將被編碼到您的個人資料的「關於我」部分。",
+        "nitroColors":"硝基色",
+        "preview":"预览",
+        "primary":"基本的",
+        "usage":"用法"
+    },
+    "favEmojiFirst":{
+        "description":"將您最喜歡的表情符號放在表情符號自動完成中的第一位，並且還具有表情符號別名。",
+        "settings":{
+            "aliases":"管理您的表情符號別名。",
+            "clearAll":"刪除所有別名。"
+        },
+        "ui":{
+            "aliasRequired":"需要別名。",
+            "aliasSetFor":"別名設定為 {emoji}。",
+            "aliasValidation":"別名必須為 2-32 個字符，並且只能使用小寫字母、數字或底線。",
+            "confirmModal":{
+                "confirmButton":"刪除所有別名",
+                "description":"這將刪除您儲存的每個表情符號別名。",
+                "title":"刪除所有別名"
+            },
+            "deleteAllAliases":"刪除所有別名",
+            "deletedAllAliases":"刪除了所有表情符號別名。",
+            "duplicateAlias":"別名重複",
+            "editAlias":"編輯別名",
+            "failedToDelete":"無法刪除別名。",
+            "failedToRemove":"無法刪除別名。",
+            "failedToSave":"Failed to save alias.",
+            "modal":{
+                "placeholder":"別名，例如“哭泣”",
+                "save":"保存",
+                "setDescription":"Set an alias for {emoji}",
+                "setTitle":"設定別名"
+            },
+            "noAliasesYet":"尚未設定別名。",
+            "remove":"移除",
+            "removedAlias":"刪除別名：{alias}：",
+            "setAlias":"設定別名"
+        }
+    },
+    "favGifSearch":{
+        "description":"為喜歡的 gif 新增搜尋欄。",
+        "name":"收藏 Gif 搜尋",
+        "searchOptions":{
+            "entireUrl":"整個網址",
+            "hostAndPath":"主機和路徑 (tenor.com somgif.gif)",
+            "pathOnly":"僅路徑 (/somegif.gif)"
+        },
+        "searchPlaceholder":"搜尋最喜歡的 GIF 動圖",
+        "settings":{
+            "searchOption":"您要搜尋的網址部分"
+        }
+    },
+    "fixCodeblockGap":{
+        "description":"消除程式碼區塊與其下方文字之間的間隙"
+    },
+    "fixImagesQuality":{
+        "animatedImagesAlways":"無論應用程式是否聚焦，聊天中的動畫圖像（GIF、WebP 等）始終會呈現動畫。",
+        "defaultBehavior":"預設行為如下：",
+        "description":"透過以原始解析度載入影像來提高影像品質",
+        "enableOriginalCaveats":"您也可以在聊天中啟用原始影像，但請注意以下注意事項：",
+        "inChatOptimised":"在聊天中，將加載優化但全解析度的圖像。",
+        "inModalOriginal":"在圖像模式中，將載入原始圖像。",
+        "mayCauseLag":"可能會導致滯後。",
+        "name":"修復影像品質",
+        "settings":{
+            "originalImagesInChat":"同時將原始影像載入到Chat。警告：閱讀上面的注意事項"
+        }
+    },
+    "fixSpotifyEmbeds":{
+        "description":"透過讓您自訂音量，修復了 Spotify 嵌入聲音異常響亮的問題",
+        "settings":{
+            "volume":"為 Spotify 嵌入設定的音量百分比。任何高於 10% 的聲音都非常響亮"
+        }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"繞過在 Discord 上封鎖顯示的 YouTube 影片（例如 UMG）"
+    },
+    "forceOwnerCrown":{
+        "description":"即使伺服器很大，也強制將所有者冠放在使用者名稱旁邊。"
+    },
+    "friendInvites":{
+        "commands":{
+            "createFriendInvite":{
+                "description":"產生好友邀請連結。",
+                "name":"建立好友邀請"
+            },
+            "revokeFriendInvites":{
+                "description":"撤銷所有產生的好友邀請。",
+                "name":"撤銷好友邀請"
+            },
+            "viewFriendInvites":{
+                "description":"查看所有產生的好友邀請的清單。",
+                "name":"查看好友邀請"
+            }
+        },
+        "description":"透過斜線指令建立和管理好友邀請連結（/建立好友邀請、/查看好友邀請、/撤銷好友邀請）。",
+        "ui":{
+            "allRevoked":"所有好友邀請均已撤銷。",
+            "expires":"到期時間：",
+            "maxUses":"最大用途：",
+            "noActiveInvites":"您沒有有效的好友邀約！",
+            "timesUsed":"使用次數："
+        }
+    },
+    "friendsSince":{
+        "description":"在用戶彈出視窗中顯示您何時與某人成為朋友",
+        "heading":"從此成為朋友"
+    },
+    "fullSearchContext":{
+        "description":"使訊息搜尋結果中的訊息上下文選單包含您期望的所有選項"
+    },
+    "fullUserInChatbox":{
+        "description":"使聊天框中的使用者提及具有更多功能，例如左/右鍵單擊"
+    },
+    "gameActivityToggle":{
+        "description":"在麥克風和震耳欲聾的按鈕旁邊添加一個按鈕來切換遊戲活動。",
+        "disableGameActivity":"禁用遊戲活動",
+        "enableGameActivity":"啟用遊戲活動",
+        "settings":{
+            "location":"在哪裡顯示遊戲活動切換按鈕",
+            "locationPanel":"靜音/失聰旁邊",
+            "locationToolbox":"Equicord 工具箱",
+            "oldIcon":"使用Discord圖示重新設計先前的舊圖示樣式"
+        }
+    },
+    "gifPaste":{
+        "description":"讓在 gif 選擇器中選擇 gif 將連結插入到聊天框中，而不是立即發送"
+    },
+    "greetStickerPicker":{
+        "ariaLabel":"問候貼紙選擇器",
+        "description":"允許您透過右鍵點擊「揮手打招呼！」來使用任何問候貼紙，而不僅僅是隨機貼紙。按鈕",
+        "greetMode":"問候模式",
+        "greetModeDescription":"選擇問候模式",
+        "greetModeLabel":"打招呼（只能打招呼3次）",
+        "greetStickers":"問候貼紙",
+        "normalMessageLabel":"普通訊息（您可以迎接垃圾郵件）",
+        "sendGreets":"發送問候",
+        "unholyMultiGreet":"邪惡多重問候"
+    },
+    "hideAttachments":{
+        "description":"透過懸停按鈕隱藏單一訊息的附件和嵌入",
+        "hideMedia":"隱藏媒體",
+        "mediaHidden":"媒體隱藏",
+        "showMedia":"展會媒體"
+    },
+    "iLoveSpam":{
+        "description":"不要隱藏來自「可能的垃圾郵件發送者」的訊息"
+    },
+    "ignoreActivities":{
+        "disableActivity":"禁用活動",
+        "enableActivity":"啟用活動",
+        "filterList":{
+            "description":"要過濾的活動 ID 的逗號分隔清單（對於過濾特定 RPC 活動和 CustomRPC 很有用）",
+            "title":"過濾器列表"
+        },
+        "importCustomRPC":{
+            "alreadyAdded":"CustomRPC 應用程式 ID 已新增。",
+            "button":"導入自訂RPC ID",
+            "description":"將CustomRPC插件的應用程式id匯入到過濾器清單中",
+            "notSet":"未設定 CustomRPC 應用程式 ID。"
+        },
+        "settings":{
+            "blacklist":"黑名單",
+            "ignoreCompeting":"忽略所有競爭活動（這些通常是特殊的遊戲活動）",
+            "ignoreListening":"忽略所有收聽活動（這些通常是 Spotify 活動）",
+            "ignorePlaying":"忽略所有遊戲活動（這些通常是遊戲和 RPC 活動）",
+            "ignoreStreaming":"忽略所有串流媒體活動",
+            "ignoreWatching":"忽略所有觀看活動",
+            "listMode":"更改過濾器列表的模式",
+            "whitelist":"白名單"
+        }
+    },
+    "imageFilename":{
+        "description":"將滑鼠懸停在圖像和 GIF 上時將其檔案名稱顯示為工具提示",
+        "settings":{
+            "showFullUrl":"顯示影像的完整 URL，而不僅僅是檔案名稱。始終啟用 GIF，因為它們通常沒有有意義的檔名"
+        }
+    },
+    "imageLink":{
+        "description":"切勿隱藏訊息中的圖像鏈接，即使它是唯一的內容"
+    },
+    "imageZoom":{
+        "lensSize":"鏡片尺寸",
+        "nearestNeighbour":"最近鄰",
+        "settings":{
+            "invertScroll":"反轉滾動",
+            "nearestNeighbour":"縮放影像時使用最近鄰插值",
+            "saveZoomValues":"是否儲存變焦和鏡頭尺寸值",
+            "size":"透鏡半徑/尺寸",
+            "square":"將鏡片設為正方形",
+            "zoom":"鏡頭變焦",
+            "zoomSpeed":"變焦/鏡頭尺寸變化的速度有多快"
+        },
+        "squareLens":"方形鏡片",
+        "zoom":"飛漲",
+        "zoomSpeed":"變焦速度"
+    },
+    "implicitRelationships":{
+        "description":"在「好友」標籤中顯示您的隱式關係。",
+        "settings":{
+            "sortByAffinity":"是否按隱式關係與您的親和力對它們進行排序。"
+        },
+        "ui":{
+            "implicitHeader":"隱式 — {count}",
+            "implicitSection":"隱含的"
+        }
+    },
+    "invite":"邀请",
+    "ircColors":{
+        "description":"讓聊天中的使用者名稱顏色獨一無二，就像在 IRC 用戶端中一樣",
+        "settings":{
+            "applyColorOnlyInDms":"僅在直接訊息中套用顏色；不要在伺服器中套用顏色。",
+            "applyColorOnlyToUsersWithoutColor":"僅將顏色套用至沒有預定義顏色的用戶",
+            "lightness":"亮度，以 % 為單位。如果顏色太淺或太深，請進行更改",
+            "memberListColors":"替換成員清單中的角色顏色"
+        }
+    },
+    "keepCurrentChannel":{
+        "description":"在切換帳戶或載入 Discord 之前嘗試導航到您所在的頻道。"
+    },
+    "lastfmRichPresence":{
+        "apiKeyInstructions":"將<0>應用程式名稱</0>和<1>應用程式描述</1>設定為任何內容，並將其餘部分留空。",
+        "createApiKey":"建立 API 金鑰",
+        "description":"用於 Last.fm 豐富存在的小插件",
+        "howToCreateApiKey":"如何建立 API 鍵",
+        "lastfmProfile":"Last.fm 個人資料",
+        "missingArt":{
+            "lastfmLogo":"使用大型 Last.fm 標誌",
+            "placeholder":"使用通用佔位符"
+        },
+        "nameFormat":{
+            "albumName":"使用專輯名稱（如果歌曲沒有專輯，則返回自訂狀態文字）",
+            "artistFirst":"使用格式“藝術家 - 歌曲”",
+            "artistOnly":"僅使用藝術家姓名",
+            "songFirst":"使用格式“歌曲 - 藝術家”",
+            "songOnly":"僅使用歌曲名稱",
+            "statusName":"使用自訂狀態名稱"
+        },
+        "settings":{
+            "alwaysHideArt":"禁止下載專輯封面",
+            "apiKey":"自訂 Last.fm API 鍵。不是必需的，但強烈建議避免使用我們的共享金鑰進行速率限制",
+            "clickableLinks":"使曲目、藝術家和專輯名稱可點擊鏈接",
+            "hideWithActivity":"如果您有任何其他狀態，請隱藏 Last.fm 狀態",
+            "hideWithSpotify":"Hide Last.fm presence if spotify is running",
+            "missingArt":"當專輯或專輯封面遺失時",
+            "nameFormat":"在狀態名稱中顯示歌曲名稱和藝術家名稱",
+            "shareUsername":"顯示 Last.fm 個人資料的鏈接",
+            "showLastFmLogo":"在專輯封面旁顯示 Last.fm 標誌",
+            "statusDisplayType":"在成員清單中顯示曲目/藝人姓名",
+            "statusName":"自訂狀態文字",
+            "useListeningStatus":"顯示“正在收聽”狀態而不是“正在播放”",
+            "username":"Last.fm 使用者名稱"
+        },
+        "statusDisplayType":{
+            "artist":"顯示藝術家姓名",
+            "off":"不顯示（顯示一般監聽訊息）",
+            "track":"顯示曲目名稱"
+        }
+    },
+    "loading":"載入中...",
+    "loadingQuotes":{
+        "description":"替換 Discords 載入引號",
+        "settings":{
+            "additionalQuotes":"可能出現的其他自訂引號，由以下分隔符號分隔",
+            "additionalQuotesDelimiter":"Delimiter for additional quotes",
+            "enableDiscordPresetQuotes":"啟用Discord的預設報價（包括活動期間的活動報價）",
+            "enablePluginPresetQuotes":"啟用此外掛程式預設的報價",
+            "replaceEvents":"该插件是否也适用于具有特殊活动主题报价的活动？ （例如萬聖節）"
+        },
+        "ui":{
+            "noQuotesQuote":"Did you really disable all loading quotes? What a buffoon you are..."
+        }
+    },
+    "logs":{
+        "allLogsCleared":"所有日誌已清除",
+        "clearAll":"全部清除",
+        "clearAllLogs":"清除所有日誌",
+        "clearAllLogsConfirmation":"您确定要清除所有日志吗？這無法撤消。",
+        "clearLog":"清除日誌",
+        "clearLogConfirmation":"您确定要清除此日志吗？這無法撤消。",
+        "clearLogs":"清除日誌",
+        "clearLogsConfirmation":"您确定要清除这些日志吗？這無法撤消。",
+        "clearLogsConfirmationNum_one":"Are you sure you want to clear {count} log",
+        "clearLogsConfirmationNum_other":"Are you sure you want to clear {count} logs",
+        "hideLogs":"隱藏日誌",
+        "logCleared":"日誌已被清除",
+        "logsCleared":"Selected logs have been cleared",
+        "showLogs":"顯示日誌"
+    },
+    "memberCount":{
+        "settings":{
+            "memberList":"在會員清單中顯示會員數量",
+            "toolTip":"Show member count on the server tooltip",
+            "voiceActivity":"在成員清單中顯示語音活動和成員計數"
+        }
+    },
+    "memberListDecoratorsAPI":{
+        "description":"API to add decorators to member list (both in servers and DMs)"
+    },
+    "mentionAvatars":{
+        "description":"在提及中顯示使用者頭像和角色圖標",
+        "settings":{
+            "showAtSymbol":"@ 符號是否應顯示在使用者提及中"
+        }
+    },
+    "menuItemDemanglerAPI":{
+        "description":"破壞 Discord 的選單項目模組"
+    },
+    "messageAccessoriesAPI":{
+        "description":"API to add message accessories"
+    },
+    "messageClickActions":{
+        "actions":{
+            "copyContent":"複製內容",
+            "copyId":"复制 ID",
+            "copyLink":"复制链接",
+            "copyUserId":"複製使用者 ID",
+            "delete":"删除",
+            "edit":"编辑",
+            "none":"暂无",
+            "openTab":"打開選項卡",
+            "openThread":"打開執行緒",
+            "pin":"钉上",
+            "quote":"引用",
+            "react":"反應",
+            "reply":"回复"
+        },
+        "description":"Customize click actions on messages.",
+        "modifiers":{
+            "alt":"替代",
+            "backspace":"退格鍵",
+            "ctrl":"Ctrl",
+            "delete":"删除",
+            "none":"暂无",
+            "shift":"轉移"
+        },
+        "settings":{
+            "clickTimeout":"Timeout to distinguish double/triple clicks (ms)",
+            "deferDoubleClickForTriple":"Delay double-click to allow triple-click actions (disables triple-click when off)",
+            "disableInDms":"禁用私訊中的所有點擊操作",
+            "disableInSystemDms":"停用系統 DM 中的所有點擊操作",
+            "doubleClickAction":"雙擊操作（您的訊息）",
+            "doubleClickHoldThreshold":"雙擊操作的最長保持時間（毫秒）。按住較長時間可以選擇文字",
+            "doubleClickModifier":"Modifier required for double-click action",
+            "doubleClickOthersAction":"Action on double-click (others' messages)",
+            "quoteWithReply":"When quoting, also reply to the message",
+            "reactEmoji":"用於反應動作的表情符號",
+            "selectionHoldTimeout":"允許文字選擇的超時（毫秒）",
+            "singleClickAction":"單擊即可執行操作（您的訊息）",
+            "singleClickModifier":"按一下操作所需的修飾符（您的訊息）",
+            "singleClickOthersAction":"單擊時的操作（其他人的消息）",
+            "singleClickOthersModifier":"按一下操作所需的修飾符（其他人的消息）",
+            "tripleClickAction":"Action on triple-click",
+            "tripleClickModifier":"三擊操作所需的修飾符",
+            "useSelectionForQuote":"When quoting, use selected text if available"
+        },
+        "toasts":{
+            "cannotPin":"Cannot pin: Missing permissions",
+            "cannotQuote":"Cannot quote this message type",
+            "cannotReact":"Cannot react: Missing permissions"
+        },
+        "ui":{
+            "linkCopied":"連結已複製！",
+            "maxAdditionalEmojis":"逗號/換行符號分隔，最大 {count}",
+            "messageContentCopied":"Message content copied!",
+            "messageIdCopied":"訊息 ID 已複製！",
+            "selectAdditionalEmojis":"Select Additional Emojis",
+            "selectEmojiForReactions":"Select Emoji For Reactions",
+            "userIdCopied":"用戶ID已複製！"
+        }
+    },
+    "messageDecorationsAPI":{
+        "description":"API 為訊息添加裝飾"
+    },
+    "messageEventsAPI":{
+        "description":"使用訊息事件的任何內容都需要 API"
+    },
+    "messageLatency":{
+        "clockAhead":"該用戶的時鐘提前 {delta}。",
+        "delayedMessage":"延遲訊息",
+        "messageDelayed":"This message was sent with a delay of {delta}.",
+        "oldAndroidClient":"舊的 Discord Android 用戶端",
+        "oldDiscordAndroid":"懷疑用戶使用舊的 Discord Android 用戶端",
+        "settings":{
+            "detectDiscordKotlin":"檢測舊的 Discord Android 用戶端",
+            "ignoreSelf":"不要將指示符添加到您自己的訊息中",
+            "latency":"Threshold in seconds for latency indicator",
+            "showMillis":"顯示毫秒"
+        },
+        "timeUnits":{
+            "day":"天",
+            "days":"天",
+            "hour":"小時",
+            "hours":"小時",
+            "millisecond":"毫秒",
+            "milliseconds":"毫秒",
+            "minute":"分分鐘",
+            "minutes":"分分鐘",
+            "second":"第二",
+            "seconds":"秒"
+        }
+    },
+    "messageLinkEmbeds":{
+        "automodOptions":{
+            "always":"Always use automod embeds",
+            "never":"切勿使用 automod 嵌入",
+            "prefer":"更喜歡 automod 嵌入，但如果某些內容無法顯示，請使用豐富的嵌入"
+        },
+        "channelLabels":{
+            "directMessage":"私信",
+            "groupDM":"Group DM",
+            "server":"伺服器"
+        },
+        "description":"Adds a preview to messages that link another message",
+        "listModeOptions":{
+            "blacklist":"黑名單",
+            "whitelist":"白名單"
+        },
+        "noContent":{
+            "attachments_only_one":"[no content, {count} attachment]",
+            "attachments_only_other":"[no content, {count} attachments]",
+            "both_one":"[無內容，{attachments}附件和{embeds}嵌入]",
+            "both_other":"[無內容，{attachments}附件和{embeds}嵌入]",
+            "embeds_only_one":"[無內容，{count}嵌入]",
+            "embeds_only_other":"[無內容，{count} 嵌入]"
+        },
+        "settings":{
+            "automodEmbeds":"使用 automod 嵌入而不是豐富的嵌入（較小但資訊較少）",
+            "clearMessageCache":"清除連結訊息緩存",
+            "idList":"加入黑名單或白名單的公會/頻道/使用者 ID（以逗號分隔）",
+            "listMode":"Whether to use ID list as blacklist or whitelist",
+            "messageBackgroundColor":"豐富嵌入中訊息的背景顏色"
+        }
+    },
+    "messageLogger":{
+        "clearMessageLog":"清除訊息日誌",
+        "deletedMessages_one":"{count}已刪除訊息",
+        "deletedMessages_other":"{count}已刪除的訊息",
+        "deletedMessages_zero":"沒有刪除的訊息",
+        "disableDiffView":"停用差異視圖",
+        "editHistory":"留言編輯歷史",
+        "enableDiffView":"啟用差異視圖",
+        "notLoggedTooltip":"此編輯狀態未記錄，因此無法顯示。",
+        "removeMessageHistory":"Remove Message History",
+        "removeMessageTemporary":"Remove Message (Temporary)",
+        "settings":{
+            "collapseDeleted":"是否折疊已刪除的訊息，類似於封鎖的訊息",
+            "deleteStyle":"已刪除訊息的樣式",
+            "deleteStyleRedOverlay":"紅色疊加",
+            "deleteStyleRedText":"紅色文字",
+            "ignoreBots":"是否忽略機器人發送的訊息",
+            "ignoreChannels":"Comma-separated list of channel IDs to ignore",
+            "ignoreGuilds":"要忽略的以逗號分隔的行會 ID 列表",
+            "ignoreSelf":"是否自行忽略訊息",
+            "ignoreUsers":"Comma-separated list of user IDs to ignore",
+            "inlineEdits":"是否將編輯歷史顯示為訊息內容的一部分",
+            "logDeletes":"是否記錄已刪除的訊息",
+            "logEdits":"是否記錄編輯的訊息",
+            "separatedDiffs":"差異中單獨的添加和刪除以獲得更具可讀性的差異",
+            "showEditDiffs":"顯示已編輯訊息版本之間的視覺差異"
+        },
+        "toggleDeletedHighlight":"Toggle Deleted Highlight"
+    },
+    "messagePopoverAPI":{
+        "description":"API 將按鈕新增至訊息彈出窗口"
+    },
+    "messageTags":{
+        "commands":{
+            "create":"建立一個新標籤",
+            "delete":"去掉自己身上的標籤",
+            "list":"List all tags from yourself",
+            "message":"使用此標籤時您將發送的訊息",
+            "preview":"預覽標籤而不公開發送",
+            "tagName":"觸發響應的標籤名稱",
+            "tags":"Manage all the tags for yourself"
+        },
+        "description":"允許您保存訊息並透過簡單的命令使用它們。",
+        "settings":{
+            "clydeDescription":"如果啟用，當使用標籤時，clyde 會向您發送短暫訊息。",
+            "clydeName":"發送克萊德訊息"
+        },
+        "ui":{
+            "allTags":"所有標籤：",
+            "invalidSubCommand":"無效的子命令",
+            "noTagsYet":"哎呀！還沒有標籤，請使用 `/tags create` 建立一個！",
+            "tagAlreadyExists":"名為 **{name}** 的標籤已存在！",
+            "tagCreated":"Successfully created the tag **{name}**!",
+            "tagDeleted":"Successfully deleted the tag **{name}**!",
+            "tagDoesNotExist":"The tag **{name}** does not exist anymore! Please reload ur Discord to fix :)",
+            "tagDoesNotExist2":"A Tag with the name **{name}** does not exist!",
+            "tagSent":"The tag **{name}** has been sent!"
+        }
+    },
+    "messageUpdaterAPI":{
+        "description":"API for updating and re-rendering messages"
+    },
+    "moreQuickReactions":{
+        "description":"Improves the quick react buttons in the message context menu.",
+        "settings":{
+            "columns":"顯示快速反應列",
+            "compactMode":"將按鈕縮放至原始比例的 75%，同時將內部表情符號放大至 125%。表情符号将是原始大小的 93.75%。建議至少有 5 列",
+            "frequentEmojis":"使用常用的表情符號代替最喜歡的表情符號",
+            "reactionCount":"反應次數（0-42）",
+            "rows":"顯示成排的快速反應",
+            "scroll":"啟用滾動表情符號列表"
+        }
+    },
+    "mutualGroupDMs":{
+        "description":"Shows mutual group dms in profiles",
+        "members_one":"{count} 會員",
+        "members_other":"{count} 成員",
+        "mutualGroupsHeader":"相互團體",
+        "mutualGroups_one":"{count} 相互 Group",
+        "mutualGroups_other":"{count} 相互組",
+        "noGroupDms":"沒有共同的組 dms",
+        "noMutualGroups":"無相互群組"
+    },
+    "newGuildSettings":{
+        "applySettings":"應用新公會設置",
+        "description":"Automatically mute new servers and change various other settings upon joining",
+        "settings":{
+            "allMessages":"所有訊息",
+            "events":"自動靜音新事件",
+            "everyone":"抑制 @everyone 和 @here",
+            "guild":"自動靜音公會",
+            "highlights":"自動抑制高光",
+            "messages":"服务器通知设置",
+            "mobilePush":"自動靜音 Mobile 推播通知",
+            "nothing":"无通知",
+            "onlyMentions":"仅 @被提及",
+            "role":"禁止所有角色@提及",
+            "serverDefault":"Server default",
+            "showAllChannels":"Show all channels automatically",
+            "voiceChannels":"Hide names in Voice channels automatically"
+        }
+    },
+    "nicknameIconsAPI":{
+        "description":"API 在個人資料中向暱稱添加圖標"
+    },
+    "noBlockedMessages":{
+        "description":"完全隱藏聊天中所有被封鎖/忽略的訊息。",
+        "settings":{
+            "allowAutoModMessages":"允許 AutoMod 發送的訊息繞過過濾。",
+            "alsoHideIgnoredUsers":"還可以隱藏被忽略的用戶的訊息。",
+            "defaultHideUsers":"如果启用，来自被阻止用户的消息将被完全隐藏，并且来自覆盖列表中用户 ID 的任何消息将被折叠（默认 Discord 行为）。如果停用，來自封鎖使用者的訊息將被折疊，並且來自覆蓋清單中使用者 ID 的任何訊息將完全隱藏。",
+            "disableNotifications":"Hide new message notifications for blocked users. Always true if \"Default Hide Users\" is enabled below and the user triggering the notification is not exempted in \"Override Users\".",
+            "hideBlockedUserReplies":"Hide replies to blocked users.",
+            "overrideUsers":"Comma separated list of user IDs which will be hidden or collapsed instead of the default behavior selected above."
+        }
+    },
+    "noDeepLinks":{
+        "description":"停用 Discord 愚蠢的深層連結功能，該功能試圖強迫您使用他們的桌面應用程式"
+    },
+    "noDevtoolsWarning":{
+        "description":"禁用控制台中的“HOLD UP”橫幅。作为副作用，还可以防止 Discord 隐藏您的令牌，从而防止随机注销。"
+    },
+    "noF1":{
+        "description":"Disables F1 help bind."
+    },
+    "noMaskedUrlPaste":{
+        "description":"Pasting a link while having text selected will not paste as masked URL"
+    },
+    "noMosaic":{
+        "description":"Removes Discord image mosaic",
+        "settings":{
+            "inlineVideo":"Play videos without carousel modal"
+        }
+    },
+    "noOnboardingDelay":{
+        "description":"Skips the slow and annoying onboarding delay"
+    },
+    "noPendingCount":{
+        "description":"刪除傳入好友請求、訊息請求和硝基優惠的 ping 計數。",
+        "settings":{
+            "hideFriendRequestsCount":"Hide incoming friend requests count",
+            "hideMessageRequestsCount":"Hide message requests count",
+            "hidePremiumOffersCount":"Hide nitro offers count"
+        }
+    },
+    "noProfileThemes":{
+        "description":"Completely removes Nitro profile themes from everyone but yourself"
+    },
+    "noReplyMention":{
+        "description":"Disables reply pings by default",
+        "settings":{
+            "doNotPingListed":"不要 ping 列出的使用者/角色",
+            "inverseShiftReply":"Invert Discord's shift replying behaviour (enable to make shift reply mention user)",
+            "onlyPingListed":"Only ping the listed users / roles",
+            "roleList":"List of roles to allow or exempt pings for (separated by commas or spaces)",
+            "shouldPingListed":"行為",
+            "userList":"List of users to allow or exempt pings for (separated by commas or spaces)"
+        }
+    },
+    "noServerEmojis":{
+        "description":"Do not show server emojis in the autocomplete menu.",
+        "settings":{
+            "shownEmojis":"The types of emojis to show in the autocomplete menu.",
+            "shownEmojisOptions":{
+                "all":"Unicode emojis and all server emojis (Discord default)",
+                "currentServer":"目前伺服器中的 Unicode 表情符號和伺服器表情符號",
+                "onlyUnicode":"Only unicode emojis"
+            }
+        }
+    },
+    "noSystemBadge":{
+        "description":"Disables the taskbar and system tray unread count badge."
+    },
+    "noTypingAnimation":{
+        "description":"Disables the CPU-intensive typing dots animation"
+    },
+    "noUnblockToJump":{
+        "description":"允許您跳到被封鎖或被忽略的用戶以及可能的垃圾郵件發送者的訊息，而無需取消封鎖他們"
+    },
+    "noticesAPI":{
+        "description":"修復通知被自動忽略的問題"
+    },
+    "notificationVolume":{
+        "description":"Save your ears and set a separate volume for notifications and in-app sounds",
+        "settings":{
+            "notificationVolume":"Notification volume"
+        }
+    },
+    "onePingPerDM":{
+        "description":"If unread messages are sent by a user in DMs multiple times, you'll only receive one audio ping.",
+        "settings":{
+            "allowEveryone":"Receive audio pings for @everyone and @here in group DMs",
+            "allowMentions":"接收@提及的音訊 ping",
+            "alwaysPlaySound":"即使在停用時也播放訊息通知聲音",
+            "channelToAffect":"Select the type of DM for the plugin to affect",
+            "channelToAffectOptions":{
+                "both":"兩個都",
+                "groupDm":"Group DMs",
+                "userDm":"User DMs"
+            },
+            "ignoreUsers":"User IDs (comma + space) whose pings should NEVER be throttled"
+        }
+    },
+    "openInApp":{
+        "description":"Open links in their respective apps instead of your browser",
+        "settings":{
+            "epic":"Open Epic Games links in the Epic Games Launcher",
+            "itunes":"Open Apple Music links in the iTunes app",
+            "spotify":"Open Spotify links in the Spotify app",
+            "steam":"Open Steam links in the Steam app",
+            "tidal":"Open Tidal links in the Tidal app",
+            "vrcx":"Open VRChat links in the VRCX app"
+        },
+        "ui":{
+            "openedInApp":"Opened link in native app"
+        }
+    },
+    "overrideForumDefaults":{
+        "description":"Allows you to override default forum layout/sort order. you can still change it on a per-channel basis",
+        "layouts":{
+            "gallery":"畫廊",
+            "list":"清單"
+        },
+        "name":"OverrideForumDefaults",
+        "settings":{
+            "defaultLayout":"Which layout to use as default",
+            "defaultSortOrder":"使用哪種排序順序作為預設值"
+        },
+        "sortOrders":{
+            "datePosted":"發布日期",
+            "recentlyActive":"最近活躍"
+        }
+    },
+    "pauseInvitesForever":{
+        "description":"Brings back the option to pause invites indefinitely that stupid Discord removed.",
+        "name":"PauseInvitesForever",
+        "pauseIndefinitely":"無限期暫停。"
+    },
+    "permissionFreeWill":{
+        "description":"停用頻道權限管理的客戶端限制。",
+        "settings":{
+            "lockout":"Bypass the permission lockout prevention (\"Pretty sure you don't want to do this\")",
+            "onboarding":"Bypass the onboarding requirements (\"Making this change will make your server incompatible [...]\")"
+        }
+    },
+    "permissionsViewer":{
+        "noPermissions":"No permissions to display!",
+        "owner":"擁有者",
+        "permissions":"权限",
+        "permissionsTitle":"{header} Permissions",
+        "roleOptions":"角色選項",
+        "settings":{
+            "highestRole":"Highest Role",
+            "lowestRole":"Lowest Role",
+            "permissionsSortOrder":"The sort method used for defining which role grants a user a certain permission"
+        },
+        "unknownRole":"Unknown Role",
+        "unknownUser":"未知用戶",
+        "userOptions":"使用者選項",
+        "viewPermissions":"查看權限"
+    },
+    "petpet":{
+        "commands":{
+            "petpet":{
+                "description":"创建宠物 gif。您只能指定圖像選項之一",
+                "name":"petpet",
+                "options":{
+                    "delay":"The delay between each frame in ms. Rounded to nearest 10ms. Defaults to the minimum value of 20.",
+                    "image":"使用的圖像附件",
+                    "noServerPfp":"Use the normal avatar instead of the server specific one when using the 'user' option",
+                    "resolution":"Resolution for the gif. Defaults to 120. If you enter an insane number and it freezes Discord that's your fault.",
+                    "url":"URL to fetch image from",
+                    "user":"User whose avatar to use as image"
+                }
+            }
+        },
+        "description":"Adds a /petpet slash command to create headpet gifs from any image",
+        "errors":{
+            "delayMinimum":"Delay must be at least 20.",
+            "failedToFetchUser":"Failed to fetch user. Check the console for more info.",
+            "noImage":"沒有指定圖片！",
+            "uploadNotImage":"上傳的不是圖片"
+        }
+    },
+    "pictureInPicture":{
+        "description":"Adds picture in picture to videos (next to the Download button)",
+        "settings":{
+            "loop":"Whether to make the PiP video loop or not"
+        },
+        "togglePip":"Toggle Picture in Picture"
+    },
+    "pinDms":{
+        "addCategory":"新增類別",
+        "color":"顏色",
+        "create":"创建",
+        "deleteCategory":"删除类别",
+        "editCategory":"编辑类别",
+        "editCategoryTitle":"编辑类别",
+        "moveDown":"下移",
+        "moveUp":"上移",
+        "name":"名称",
+        "newCategory":"新類別",
+        "pinCategory":"引腳類別 {index}",
+        "pinDms":"引腳 DM",
+        "save":"保存",
+        "settings":{
+            "canCollapseDmSection":"Allow uncategorised DMs section to be collapsable",
+            "customOrder":"Custom (right click channels to reorder)",
+            "dmSectionCollapsed":"折疊 DM 部分",
+            "mostRecentMessage":"最近的消息",
+            "pinOrder":"Which order should pinned DMs be displayed in?"
+        },
+        "unpinDm":"取消固定式 DM"
+    },
+    "plainFolderIcon":{
+        "description":"Dont show the small guild icons in folders"
+    },
+    "platformIndicators":{
+        "consoleIcons":{
+            "equicord":"Equicord",
+            "suncord":"Suncord",
+            "vencord":"Vencord"
+        },
+        "description":"為使用者新增平台指示器（桌面、Mobile、Web...）",
+        "platforms":{
+            "console":"安慰",
+            "desktop":"桌面",
+            "mobile":"Mobile",
+            "web":"網路"
+        },
+        "settings":{
+            "colorMobileIndicator":"Whether to make the mobile indicator match the color of the user status.",
+            "consoleIcon":"使用什麼控制台圖標",
+            "list":"在成員清單中顯示指標",
+            "messages":"顯示訊息內的指示器",
+            "profiles":"在用戶個人資料中顯示指標",
+            "showBots":"是否在機器人上顯示平台指示器"
+        }
+    },
+    "previewMessage":{
+        "description":"讓您在發送訊息之前預覽訊息。",
+        "name":"PreviewMessage",
+        "previewMessage":"Preview Message"
+    },
+    "quickActions":{
+        "editQuickCSS":"編輯 QuickCSS",
+        "notificationLog":"通知日誌",
+        "openSettings":"打開設定資料夾",
+        "relaunchDiscord":"Relaunch Discord",
+        "title":"快速行動",
+        "viewSource":"查看原始碼"
+    },
+    "quickMention":{
+        "description":"在訊息操作列中新增快速提及按鈕",
+        "label":"快速提及"
+    },
+    "quickReply":{
+        "description":"Reply to (ctrl + up/down) and edit (ctrl + shift + up/down) messages via keybinds",
+        "settings":{
+            "ignoreBlockedAndIgnored":"Ignore messages by blocked/ignored users when navigating",
+            "shouldMention":"預設 Ping 回复",
+            "shouldMentionOptions":{
+                "disabled":"关闭",
+                "enabled":"啟用",
+                "followPlugin":"Follow NoReplyMention plugin (if enabled)"
+            }
+        }
+    },
+    "reactErrorDecoder":{
+        "description":"Replaces \"Minifed React Error\" with the actual error."
+    },
+    "readAllNotificationsButton":{
+        "description":"Read all server notifications with a single button click!",
+        "name":"ReadAllNotificationsButton",
+        "readAll":"閱讀全部"
+    },
+    "relationshipNotifier":{
+        "description":"Notifies you when a friend, group chat, or server removes you.",
+        "friendRemoved":"{username}刪除了你的好友身分。",
+        "friendRequestRemoved":"A friend request from {username} has been removed.",
+        "groupRemoved":"You were removed from the group {name}.",
+        "notificationTitle":"Relationship Notifier",
+        "offlineFriendRemoved":"You are no longer friends with {username}.",
+        "offlineFriendRequestRevoked":"Friend request from {username} has been revoked.",
+        "offlineGroupRemoved":"您已不再屬於 {name} 群組。",
+        "offlineServerRemoved":"您不再在伺服器{name}。",
+        "serverRemoved":"You were removed from the server {name}.",
+        "settings":{
+            "friendRequestCancels":"Notify when a friend request is cancelled",
+            "friends":"Notify when a friend removes you",
+            "groups":"從群組聊天中刪除時發出通知",
+            "notices":"Also show a notice at the top of your screen when removed (use this if you don't want to miss any notifications).",
+            "offlineRemovals":"如果您在離線狀態下被刪除，請在啟動 Discord 時通知您。",
+            "servers":"Notify when removed from a server"
+        }
+    },
+    "replaceGoogleSearch":{
+        "description":"Replaces the Google search with different Engine(s)",
+        "searchText":"搜尋文字",
+        "searchWith":"Search with {engine}",
+        "settings":{
+            "customEngine":"Custom Engine",
+            "customEngineName":"Name of the custom search engine",
+            "customEngineURL":"您引擎的 URL",
+            "off":"关",
+            "replacementEngine":"替換為特定的搜尋引擎而不是添加菜單"
+        }
+    },
+    "replyTimestamp":{
+        "description":"Shows a timestamp on replied-message previews"
+    },
+    "revealAllSpoilers":{
+        "description":"透過 Ctrl-點擊劇透，或在聊天中使用 Ctrl+Shift-單擊，顯示訊息中的所有劇透"
+    },
+    "reverseImageSearch":{
+        "all":"全部",
+        "description":"將 ImageSearch 新增至映像上下文選單",
+        "name":"反向影像搜尋",
+        "searchImage":"搜尋圖片"
+    },
+    "reviewDB":{
+        "appeal":"上訴",
+        "areYouSure":"你確定嗎？",
+        "block":"屏蔽",
+        "blockedUser":"You have blocked this user",
+        "blockedUsers":"Blocked Users",
+        "confirmBlock":"您真的要阻止该用户吗？他們將無法對您的個人資料留下進一步的評論。您可以在插件设置中取消阻止用户。",
+        "confirmDelete":"Do you really want to delete this review?",
+        "confirmReport":"Do you really want to report this review?",
+        "delete":"删除",
+        "failedToFetchBlocks":"Failed to fetch blocks: {error}",
+        "mustBeLoggedInBlock":"You must be logged in to block users.",
+        "mustBeLoggedInDelete":"You must be logged in to delete reviews.",
+        "mustBeLoggedInReport":"You must be logged in to report reviews.",
+        "nevermind":"呃，没事了～",
+        "newReviews":"You have new reviews on your profile!",
+        "noBlockedUsers":"沒有被封鎖的用戶。",
+        "notLoggedIn":"You are not logged into ReviewDB!",
+        "ok":"好的",
+        "readMore":"閱讀更多",
+        "report":"举报",
+        "settings":{
+            "authorize":"使用 ReviewDB 授權",
+            "hideBlockedUsers":{
+                "description":"Hide reviews from blocked users"
+            },
+            "hideTimestamps":{
+                "description":"Hide timestamps on reviews"
+            },
+            "manageBlockedUsers":"Manage Blocked Users",
+            "notifyReviews":{
+                "description":"Notify about new reviews on startup"
+            },
+            "showWarning":{
+                "description":"Display warning to be respectful at the top of the reviews list"
+            },
+            "supportDevelopment":"支援ReviewDB開發",
+            "supportServer":"ReviewDB Support Server",
+            "website":"ReviewDB website"
+        },
+        "system":"系統",
+        "unblockUser":"解鎖用戶",
+        "viewReviews":"查看評論"
+    },
+    "roleColorEverywhere":{
+        "description":"在任何可能的地方添加頂級角色顏色",
+        "settings":{
+            "chatMentions":"Show role colors in chat mentions (including in the message box)",
+            "colorChatMessages":"根據作者的角色顏色對聊天訊息進行顏色設置",
+            "memberList":"Show role colors in member list role headers",
+            "messageSaturation":"Intensity of message coloring.",
+            "pollResults":"Show role colors in the poll results",
+            "reactorsList":"Show role colors in the reactors list",
+            "voiceUsers":"Show role colors in the voice chat user list"
+        }
+    },
+    "secretRingTone":{
+        "description":"始終播放不和諧鈴聲的秘密版本（特殊鈴聲活動期間除外）",
+        "settings":{
+            "onlySnow":"Only play the Snow Halation Theme"
+        }
+    },
+    "seeSummaries":{
+        "description":"Enables Discord's experimental Summaries feature on every server, displaying AI generated summaries of conversations",
+        "name":"摘要",
+        "settings":{
+            "summaryExpiryThresholdDays":"The time in days before a summary is removed. Note that only up to 50 summaries are kept per channel"
+        }
+    },
+    "sendTimestamps":{
+        "description":"通过聊天框按钮和文本快捷方式轻松发送时间戳。閱讀擴充說明！",
+        "extendedDescription":{
+            "examples":"範例：",
+            "quickSend":"To quickly send time-only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message",
+            "seeBelow":"See below for examples. If you need anything more specific, use the Date button in the chat bar!"
+        },
+        "insert":"插入",
+        "insertTimestamp":"插入時間戳",
+        "preview":"预览",
+        "settings":{
+            "replaceMessageContents":"Replace timestamps in message contents"
+        },
+        "timestampFormat":"時間戳格式",
+        "timestampPicker":"時間戳選擇器"
+    },
+    "serverInfo":{
+        "description":"Allows you to view info about a server",
+        "settings":{
+            "sorting":"Username or if applicable Display Name",
+            "sortingOptions":{
+                "displayname":"顯示名稱",
+                "none":"Dont Sort",
+                "username":"用户名"
+            }
+        },
+        "ui":{
+            "blockedUsers":"Blocked Users",
+            "channels":"频道",
+            "createdAt":"創建於",
+            "friends":"好友",
+            "ignoredUsers":"被忽略的用戶",
+            "joinedAt":"Joined At",
+            "mutualUsers":"Mutual Users",
+            "preferredLocale":"首選區域設置",
+            "roles":"角色",
+            "serverBoosts":"Server Boosts",
+            "serverInfo":"伺服器資訊",
+            "serverOwner":"服务器所有者",
+            "vanityLink":"Vanity Link",
+            "verificationLevel":"验证级别"
+        }
+    },
+    "serverListAPI":{
+        "description":"API required for plugins that modify the server list"
+    },
+    "serverListIndicators":{
+        "description":"Add online friend count or server count in the server list",
+        "friends":"好友",
+        "servers":"服务器",
+        "settings":{
+            "mode":"模式",
+            "modeBoth":"伺服器和線上好友都算數",
+            "modeOnlyFriends":"Only online friend count",
+            "modeOnlyServers":"Only server count",
+            "useCompact":"Makes the indicator appear with only text"
+        },
+        "tooltipBoth":"{friends} Friends, {servers} Servers",
+        "tooltipFriends":"{count} 朋友",
+        "tooltipServers":"{count} 伺服器"
+    },
+    "settings":{
+        "changelog":{
+            "alreadyUpToDate":"已與儲存庫保持同步",
+            "checkYourConnection":"無法連接到儲存庫。檢查您的網路連接",
+            "checkYourInternet":"確保您有互聯網連接，然後重試",
+            "codeChanges_one":"程式碼變更（{count} 提交）",
+            "codeChanges_other":"程式碼變更（{count} 提交）",
+            "codeChanges_zero":"沒有程式碼更改",
+            "emptyChangelog":"No commits available ahead of your current version. Click \"Fetch from Repository\" to check for new changes",
+            "failedToFetchRepo":"無法從存儲庫獲取",
+            "failedToRetrieve":"Failed to retrieve - check console",
+            "failedtoFetchCommits":"Could not fetch commits from repository",
+            "fetchRepo":"從存儲庫中獲取",
+            "foundCommits_one":"從儲存庫中找到 {count} 提交",
+            "foundCommits_other":"從儲存庫中找到 {count} 提交",
+            "foundCommits_zero":"沒有新的提交",
+            "info":"Check the repository for new commits, plugin updates, and code changes. This will compare your current version with the latest available and show you what's new",
+            "loggedCommits":"Logged commits from your latest update",
+            "manager":{
+                "days_one":"{count} 天前",
+                "days_other":"{count} 天前",
+                "hours_one":"{count} hour ago",
+                "hours_other":"{count} hours ago",
+                "minutes_one":"{count} 分鐘前",
+                "minutes_other":"{count} minutes ago"
+            },
+            "missingRepoInfo":"檢索儲存庫資訊失敗",
+            "newPluginsSection":{
+                "newPluginsCount":"New Plugins ({count})",
+                "numMorePlugins_one":"+{count}更多插件",
+                "numMorePlugins_other":"+{count}更多插件",
+                "recentlyAddedPlugins":"The following plugins have been added in recent updates:"
+            },
+            "previousSessions":"A history of your previous update sessions with their commit history and plugin changes. Click on a log to expand it and see the details",
+            "recentChanges":"Recent Changes",
+            "repository":"儲存庫",
+            "title":"變更日誌",
+            "upToDate":"儲存庫是最新的",
+            "upToDateLocalCopy":"儲存庫與您的本機副本保持同步",
+            "updateCard":{
+                "commits_one":" • {count} 提交可用",
+                "commits_other":" • {count} 可用提交",
+                "commits_zero":" • 沒有新的提交",
+                "newPluginsCount":" • {plugins}新插件",
+                "newSettingInPlugin":"New setting in {pluginName}",
+                "newSettings":"新設定",
+                "newSettingsCount":" • {settings}新設置",
+                "outOfDate":"Repository check: {fromHash} → {toHash}",
+                "upToDate":"Repository check: {fromHash} (up to date)",
+                "update":"Update: {fromHash} → {toHash}",
+                "updatedPlugins":"Updated Plugins",
+                "updatedPluginsCount":" • {plugins} updated plugins"
+            },
+            "updateLogs_one":"Update Logs ({count} log)",
+            "updateLogs_other":"Update Logs ({count} logs)",
+            "updateLogs_zero":"無更新日誌",
+            "updatedPluginsCount":"更新的插件（{plugins}）",
+            "viewRecentChanges":"These are the new commits and plugin updates since your last version. You can see what features were added, bugs were fixed, and which plugins received updates",
+            "whereUpdatesFetch":"This is the GitHub repository where Equicord fetches updates from"
+        },
+        "disableMinSize":{
+            "description":"Allow the Discord window to be resized smaller than its default minimum size. Useful for tiling window managers or small screens.",
+            "title":"Disable minimum window size"
+        },
+        "enableReactDevtools":{
+            "description":"啟用 React Developer Tools 擴充功能來偵錯 Discord 的 React 元件。對於插件開發很有用。",
+            "title":"Enable React Developer Tools"
+        },
+        "frameless":{
+            "description":"移除原生窗框以获得更干净的外观。您仍然可以透過拖曳標題列區域來移動視窗。",
+            "title":"Disable the window frame"
+        },
+        "hint":"Hint: You can change the position of this settings section in the <0>settings of the Settings plugin</0>!",
+        "macosVibrancyStyle":{
+            "placeholder":"窗戶活力風格",
+            "title":"Window vibrancy style (requires restart)"
+        },
+        "notification":{
+            "logButton":"查看通知日誌",
+            "settingsButton":"通知设定"
+        },
+        "plugins":{
+            "contributorModal":{
+                "contributorInfo":{
+                    "noPlugins":"此人没有制作过任何插件。他們可能以其他方式<0>為</0>Equicord做出了貢獻！",
+                    "plugins_one":"This person has <0>contributed</0> to {count} plugin!",
+                    "plugins_other":"This person has <0>contributed</0> to {count} plugins!"
+                }
+            },
+            "noDescription":"無可用描述",
+            "pluginRequiredBy":"This plugin is required by: {pluginNames}",
+            "requiredToFunction":"This plugin is required for Equicord to function"
+        },
+        "restartRequired":{
+            "body":"需要重新啟動才能應用此更改",
+            "cancel":"之後！",
+            "confirm":"Restart now",
+            "plugins":"以下插件需要重新啟動：",
+            "title":"需要重新啟動"
+        },
+        "title":"设置",
+        "transparent":{
+            "description":"使 Discord 窗口透明。需要一個支持透明度的主題，否則將不起作用。",
+            "note":"這將阻止視窗調整大小。",
+            "noteWindows":"This will stop the window from being resizable and prevents you from snapping the window to screen edges",
+            "title":"Enable window transparency"
+        },
+        "useQuickCss":{
+            "description":"從 QuickCSS 編輯器載入自訂 CSS。這允許您使用自己的樣式自訂 Discord 的外觀。",
+            "title":"啟用自訂 CSS"
+        },
+        "winCtrlQ":{
+            "description":"新增 Ctrl+Q 作為關閉 Discord 的鍵盤快速鍵。這提供了 Alt+F4 的替代方法來快速關閉應用程式。",
+            "title":"將Ctrl+Q註冊為關閉Discord的捷徑"
+        },
+        "winNativeTitleBar":{
+            "description":"將 Discord 的自訂標題列替換為標準 Windows 標題列。這可能會提高與某些視窗管理工具的相容性。",
+            "title":"Use Windows' native title bar instead of Discord's custom one"
+        }
+    },
+    "settingsSync":{
+        "failedToImport":"Failed to import settings: {e}",
+        "imported":"设置已成功导入。重新啟動以應用更改！"
+    },
+    "shikiCodeblocks":{
+        "description":"將 vscode 風格的程式碼區塊引入 Discord，由 Shiki 提供支援",
+        "settings":{
+            "bgOpacity":"背景不透明度",
+            "customTheme":"A link to a custom vscode theme",
+            "theme":"預設主題",
+            "tryHljs":"Use the more lightweight default Discord highlighter and theme.",
+            "tryHljsOptions":{
+                "always":"总是",
+                "never":"永不",
+                "preferHljs":"Prefer Highlight.js instead of Shiki",
+                "preferShiki":"Prefer Shiki instead of Highlight.js"
+            },
+            "useDevIcon":"How to show language icons on codeblocks",
+            "useDevIconOptions":{
+                "colored":"有色",
+                "colorless":"無色",
+                "disabled":"关闭"
+            }
+        }
+    },
+    "showAllMessageButtons":{
+        "description":"Always show all message buttons no matter if you are holding the shift key or not.",
+        "settings":{
+            "noShiftDelete":"Remove requirement to hold shift for deleting a message.",
+            "noShiftPin":"Remove requirement to hold shift for pinning a message."
+        }
+    },
+    "showConnections":{
+        "description":"在使用者彈出視窗中顯示連線的帳戶",
+        "settings":{
+            "compact":"袖珍的",
+            "cozy":"舒適",
+            "iconSize":"Icon size (px)",
+            "iconSpacing":"Icon margin",
+            "roomy":"寬敞"
+        }
+    },
+    "showHiddenChannels":{
+        "allowedUsersAndRoles":"Allowed users and roles:",
+        "archiveDuration":"Default inactivity duration before archiving {type}: {duration}",
+        "availableTags":"Available tags:",
+        "bitrate":"位元速率：{bitrate} 位",
+        "cannotSeeMessages":"You can not see the {type} of this channel.",
+        "channelTypes":{
+            "announcement":"公告",
+            "forum":"論壇",
+            "message":"訊息",
+            "messages":"訊息",
+            "post":"郵政",
+            "posts":"貼文",
+            "stage":"階段",
+            "text":"文字",
+            "thread":"線",
+            "threads":"執行緒",
+            "voice":"嗓音"
+        },
+        "defaultLayout":"Default layout: {layout}",
+        "defaultReactionEmoji":"Default reaction emoji:",
+        "defaultSortOrder":"預設排序順序：{order}",
+        "description":"Show channels that you do not have access to view.",
+        "forumLayouts":{
+            "gridView":"畫廊視圖",
+            "listView":"清單視圖",
+            "notSet":"未設定"
+        },
+        "hiddenChannel":"這是一個隱藏的 {type} 頻道",
+        "hiddenChannelTooltip":"Hidden Channel",
+        "hideAllowedUsersAndRoles":"隱藏允許的使用者和角色",
+        "lastMessageCreated":"最後創建的 {type}：",
+        "lastMessagePin":"Last message pin:",
+        "lockedChannel":"This is a locked {type} channel",
+        "nsfw":"上班别偷看",
+        "permissionDetails":"權限詳情",
+        "region":"區域：{region}",
+        "regionAutomatic":"自動的",
+        "requireTag":"此論壇上的貼文需要設定標籤。",
+        "seeGuidelines":" 但是您可能會看到它的指南：",
+        "settings":{
+            "channelStyle":{
+                "classic":"經典的",
+                "description":"用於顯示隱藏通道的樣式。",
+                "muted":"已静音",
+                "mutedAndShowUnreads":"靜音並顯示未讀內容",
+                "showUnreads":"顯示未讀內容"
+            },
+            "defaultAllowedUsersAndRolesDropdownState":{
+                "description":"預設是否應開啟隱藏頻道上允許的使用者和角色下拉列表"
+            },
+            "showMode":{
+                "description":"The mode used to display hidden channels.",
+                "eyeIconRight":"右邊的眼睛圖標",
+                "lockIcon":"Lock Icon replacing channel icon",
+                "lockIconRight":"右側的鎖定圖標"
+            }
+        },
+        "slowmode":"慢速模式：{duration}",
+        "sortOrders":{
+            "creationDate":"建立日期",
+            "latestActivity":"最新活動"
+        },
+        "threadSlowmode":"預設線程慢速模式：{duration}",
+        "videoQuality":{
+            "720p":"720p",
+            "automatic":"自動的"
+        },
+        "videoQualityMode":"視訊品質模式：{mode}",
+        "viewAllowedUsersAndRoles":"查看允許的使用者和角色"
+    },
+    "showHiddenThings":{
+        "description":"顯示各種隱藏的和僅限主持人的內容，無論權限如何。",
+        "settings":{
+            "showInvitesPaused":"在伺服器清單中顯示邀請已暫停的工具提示。",
+            "showModView":"在所有伺服器中顯示成員 mod 視圖上下文選單項目。",
+            "showTimeouts":"在聊天中顯示成員超時圖示。"
+        }
+    },
+    "showMeYourName":{
+        "addNickname":"新增 SMYN 暱稱",
+        "cancel":"取消",
+        "changeNickname":"更改 SMYN 暱稱",
+        "modalDescription":"為此使用者設定自訂 SMYN 暱稱。透過在 SMYN 模板設定中指定 {custom} 來使用它。",
+        "nicknameLabel":"SMYN 暱稱",
+        "resetNickname":"重置 SMYN 暱稱",
+        "save":"保存",
+        "settings":{
+            "animateGradients":"對於非主要名稱，如果角色有漸變，請為其設定動畫。這可以透過「忽略漸層」和減少運動來停用。",
+            "customNameColor":"用於指派給使用者的自訂名稱的顏色（如果不是第一次顯示）。預設留空。接受 hex(a)、rgb(a) 或 hsl(a) 輸入。使用“角色”來遵循使用者的頂級角色顏色。使用“Role+-#”以該百分比調整亮度（例如：“Role+15”）",
+            "discriminators":"將鑑別符附加到機器人的使用者名稱中。鑑別器已不再用於用戶，但仍用於機器人。預設情況下，機器人的使用者名稱相當於使用者的全域名稱，因此多個機器人可以具有相同的使用者名稱。附加鑑別器使它們再次變得獨一無二。",
+            "displayNameColor":"如果不是第一次顯示，則用於顯示名稱的顏色。預設留空。接受 hex(a)、rgb(a) 或 hsl(a) 輸入。使用“角色”來遵循使用者的頂級角色顏色。使用“Role+-#”以該百分比調整亮度（例如：“Role+15”）",
+            "friendNameColor":"如果朋友的暱稱不是第一次顯示，則使用該顏色。預設留空。接受 hex(a)、rgb(a) 或 hsl(a) 輸入。使用“角色”來遵循使用者的頂級角色顏色。使用“Role+-#”以該百分比調整亮度（例如：“Role+15”）",
+            "hideDefaultAtSign":"隱藏提及和回覆中姓名前的預設「@」符號。仅当任一功能启用时才适用。",
+            "ignoreFonts":"對於非主要名稱，無論使用者的自訂硝基字體為何，都使用 Discord 的預設字體。",
+            "ignoreGradients":"對於非主要名稱，如果角色有漸變，請忽略它，而使用下面的顏色集。",
+            "includedNames":"顯示使用者名稱、顯示名稱、暱稱、好友名稱和自訂名稱的順序。使用下列佔位符：{user}、{display}、{nick}、{friend}、[[PH4]]]。您可以提供多個名稱選項以用作後備（如果某個名稱選項不可用），方法是用逗號分隔它們，例如：{custom, friend, nick}。每個名稱最多可以有三個前綴和三個後綴。",
+            "memberList":"顯示成員清單中以自訂名稱格式列出的第一個可用名稱。",
+            "mentions":"在提及中顯示自訂名稱格式。",
+            "messages":"在訊息中顯示自訂名稱格式。",
+            "nameSeparator":"名稱之間使用的分隔符號。默认为单个空格。",
+            "nicknameColor":"如果暱稱不是第一次顯示，則用於暱稱的顏色。預設留空。接受 hex(a)、rgb(a) 或 hsl(a) 輸入。使用“角色”來遵循使用者的頂級角色顏色。使用“Role+-#”以該百分比調整亮度（例如：“Role+15”）",
+            "profilePopout":"在個人資料彈出視窗中顯示以自訂名稱格式列出的第一個可用名稱。",
+            "reactions":"在反應工具提示中顯示以自訂名稱格式列出的第一個可用名稱，並在反應彈出視窗中顯示全名。",
+            "removeDuplicates":"如果任何名稱相同，請將其刪除，只保留唯一的名稱。",
+            "replies":"Display custom name format in replies.",
+            "truncateAllNamesWithStreamerMode":"在串流媒體模式下截斷所有名稱，而不僅僅是使用者名稱。",
+            "usernameColor":"如果使用者名稱不是第一次顯示，則用於使用者名稱的顏色。預設留空。接受 hex(a)、rgb(a) 或 hsl(a) 輸入。使用“角色”來遵循使用者的頂級角色顏色。使用“Role+-#”以該百分比調整亮度（例如：“Role+15”）",
+            "voiceChannels":"Display the first available name listed in your custom name format in voice channels."
+        }
+    },
+    "showTimeoutDuration":{
+        "description":"Shows how much longer a user's timeout will last, either in the timeout icon tooltip or next to it",
+        "displayStyleDescription":"如何顯示超時時長",
+        "inTooltip":"在工具提示中",
+        "nextToIcon":"逾時圖示旁邊",
+        "timeoutRemaining":"剩餘超時時間"
+    },
+    "silentMessageToggle":{
+        "description":"Adds a button to the chat bar to toggle sending a silent message.",
+        "disableSilentMessage":"Disable Silent Message",
+        "enableSilentMessage":"啟用靜默訊息",
+        "settings":{
+            "autoDisable":"發送一則訊息後自動再次停用靜默訊息切換",
+            "persistChannels":"在通道之間保持",
+            "persistNone":"不要堅持（頻道更改時重置）",
+            "persistRestarts":"在通道之間保持並重新啟動",
+            "persistState":"How to persist the silent message toggle state"
+        }
+    },
+    "silentTyping":{
+        "clickActions":{
+            "openPluginSettings":"開啟插件設定",
+            "toggleTypingGlobally":"Toggle Typing Globally",
+            "toggleTypingInChannel":"Toggle 在頻道中輸入內容",
+            "toggleTypingInGuild":"在公會中切換輸入"
+        },
+        "command":{
+            "chatBarIndicatorsOption":"從聊天列上方隱藏其他使用者的打字指示器。",
+            "chatContextMenuOption":"Show a dropdown in the chat context menu to toggle plugin settings on the go.",
+            "chatIconOption":"Show an icon in the chat bar for toggling the plugin on the go.",
+            "defaultHiddenOption":"Whether to hide typing in DMs/channels/guilds by default or not.",
+            "description":"在聊天中隱藏您的打字指示器。",
+            "membersListIndicatorsOption":"Hide other users' typing indicators from the members list.",
+            "toggleChannel":"频道",
+            "toggleGlobal":"全球的",
+            "toggleGuild":"公會",
+            "toggleOption":"Toggle functionality globally, for the channel, or for the guild."
+        },
+        "contextMenu":{
+            "chatBarIndicators":"Chat 條形指示器",
+            "chatIcon":"Chat 圖標",
+            "defaultHidden":"預設隱藏",
+            "enabled":"啟用",
+            "membersListIndicators":"Members List Indicators",
+            "silentTyping":"Silent Typing"
+        },
+        "noChanges":"未對靜默打字設定進行任何更改。",
+        "settings":{
+            "chatContextMenu":"在聊天上下文選單中顯示下拉式選單，以便隨時修改插件設定。",
+            "chatIcon":"在聊天欄中顯示一個圖標，以便隨時修改插件。",
+            "chatIconLeftClickAction":"左鍵點選聊天圖示時該怎麼做。",
+            "chatIconMiddleClickAction":"中鍵點選聊天圖示時要執行的操作。",
+            "chatIconRightClickAction":"右鍵單擊聊天圖示時該怎麼做。",
+            "defaultHidden":"If enabled, the plugin will hide your typing from others in any DMs/channels/guilds not listed in \"Disabled Locations\" below. If disabled, the plugin will show your typing to others for any DMs/channels/guilds not listed in \"Enabled Locations\" below.",
+            "disabledLocations":"停用這些 ID 的功能。接受以逗号分隔的 DM ID、频道 ID 和行会 ID 列表。僅在啟用“預設隱藏”時使用。",
+            "enabledGlobally":"全域切換您自己的打字指示器的功能。",
+            "enabledLocations":"啟用這些 ID 的功能。接受以逗號分隔的 DM ID、頻道 ID 和行會 ID 清單。僅在停用“預設隱藏”時使用。",
+            "hideChatBoxTypingIndicators":"從聊天列上方隱藏其他使用者的打字指示器。",
+            "hideMembersListTypingIndicators":"Hide other users' typing indicators from the members list."
+        },
+        "settingsUpdated":"更新了無聲打字設定。",
+        "typingHidden":"隱藏鍵入 ({location})",
+        "typingVisible":"Typing Visible ({location})",
+        "typingVisibleGlobal":"鍵入可見（全域）"
+    },
+    "sortFriendRequests":{
+        "added":"額外",
+        "description":"按收到日期對好友請求進行排序",
+        "settings":{
+            "showDates":"顯示好友請求的日期"
+        }
+    },
+    "spotifyCrack":{
+        "description":"免費聆聽，語音聊天不會自動暫停，並允許活動在空閒時繼續播放",
+        "settings":{
+            "keepSpotifyActivityOnIdle":"閒置時保持 Spotify 活動播放",
+            "noSpotifyAutoPause":"Disable Spotify auto-pause"
+        }
+    },
+    "spotifyShareCommands":{
+        "commands":{
+            "notListening":"你沒有在聽任何音樂。",
+            "shareDescription":"Share your current Spotify {name} in chat",
+            "trackNotFound":"Failed to find the track on spotify."
+        },
+        "description":"透過斜槓指令分享您目前的 Spotify 曲目、專輯或藝人（/track、/album、/artist）"
+    },
+    "startupTimings":{
+        "description":"將啟動時間新增至「設定」選單",
+        "ui":{
+            "title":"啟動時序"
+        }
+    },
+    "stickerPaste":{
+        "description":"使得在貼紙選擇器中選擇貼紙並將其插入聊天框中而不是立即發送"
+    },
+    "streamerModeOnStream":{
+        "description":"Automatically enables streamer mode when you start streaming in Discord"
+    },
+    "superReactionTweaks":{
+        "description":"自訂超級反應同時播放的限制，預設超級反應",
+        "settings":{
+            "superReactByDefault":"反應選擇器將預設為超級反應",
+            "superReactionPlayingLimit":"立即播放最大超級反應。 0 禁用超級反應",
+            "unlimitedSuperReactionPlaying":"Remove the limit on Super Reactions playing at once"
+        }
+    },
+    "tabs":{
+        "settings":"Equicord 設置"
+    },
+    "textReplace":{
+        "find":"搜索",
+        "messageWithRules":"應用規則的訊息",
+        "onlyIfIncludes":"僅當包含",
+        "replace":"代替",
+        "scope.allMessages":"適用於所有訊息",
+        "scope.myMessages":"應用於您的訊息（所有人都可見）",
+        "scope.othersMessages":"Apply to others' messages (only visible to you)",
+        "testRules":"測試規則",
+        "typeMessage":"輸入訊息",
+        "usingRegex":"使用正規表示式",
+        "usingString":"使用字串"
+    },
+    "themeAttributes":{
+        "description":"Adds data attributes to various elements for theming purposes"
+    },
+    "translate":{
+        "autoTranslate":"自動翻譯",
+        "autoTranslateEnabled":{
+            "body":"您剛剛啟用了自動翻譯！任何訊息在發送之前都會<0>自動翻譯</0>。",
+            "title":"Equicord 自動翻譯已啟用"
+        },
+        "autoTranslateEnabledLabel":"自動翻譯已啟用",
+        "disableAutoTranslate":"停用自動翻譯",
+        "dontShowAgain":"不再顯示",
+        "gotIt":"知道了",
+        "modalTitle":"翻譯",
+        "openTranslateModal":"開啟翻譯模態",
+        "selectLanguage":"Select a language",
+        "translate":"翻譯"
+    },
+    "typingIndicator":{
+        "description":"如果有人在頻道上打字，則添加一個指示器。",
+        "settings":{
+            "animatedDots":"Animated dots",
+            "avatars":"頭像",
+            "avatarsAndDots":"頭像和動畫點",
+            "includeBlockedUsers":"是否為被封鎖的使用者顯示打字指示器。",
+            "includeCurrentChannel":"Whether to show the typing indicator for the currently selected channel",
+            "includeIgnoredUsers":"是否為被忽略的使用者顯示鍵入指示符。",
+            "includeMutedChannels":"是否顯示靜音通道的打字指示器。",
+            "indicatorMode":"How should the indicator be displayed?"
+        }
+    },
+    "typingTweaks":{
+        "andOthersTyping":"和 {count} 其他人正在輸入...",
+        "description":"在打字指示器中顯示頭像和角色顏色",
+        "settings":{
+            "alternativeFormatting":"當多個用戶打字時顯示更有用的消息",
+            "amITyping":"顯示其他人是否可以看到您正在打字",
+            "showAvatars":"在打字指示器中顯示頭像",
+            "showRoleColors":"在打字指示器中顯示角色顏色"
+        }
+    },
+    "unindent":{
+        "description":"修剪程式碼區塊的前導縮排"
+    },
+    "unlockedAvatarZoom":{
+        "description":"讓您在更改頭像時進一步放大影像裁切工具",
+        "settings":{
+            "zoomMultiplier":"變焦倍數"
+        }
+    },
+    "unsuppressEmbeds":{
+        "description":"允許您取消抑制訊息中的嵌入",
+        "suppressEmbeds":"抑制嵌入",
+        "unsuppressEmbeds":"取消抑制嵌入"
+    },
+    "userMessagesPronouns":{
+        "description":"在聊天用戶訊息中加入代名詞",
+        "settings":{
+            "pronounsFormat":"代名詞在聊天中出現的格式",
+            "pronounsFormatOptions":{
+                "capitalized":"大寫",
+                "lowercase":"小寫"
+            },
+            "showSelf":"啟用或停用為自己顯示代名詞"
+        }
+    },
+    "userSettingsAPI":{
+        "description":"Patches Discord's UserSettings to expose their group and name"
+    },
+    "userVoiceShow":{
+        "cannotJoinChannel":"您無法加入使用者的語音頻道",
+        "description":"當使用者處於語音頻道時顯示指示器",
+        "inVoiceChat":"語音 Chat",
+        "settings":{
+            "showInMemberList":"Show a user's Voice Channel indicator in the member and DMs list",
+            "showInMessages":"在訊息中顯示用戶的語音通道指示器",
+            "showInUserProfileModal":"在使用者個人資料中的姓名旁邊顯示使用者的語音頻道指示器"
+        }
+    },
+    "usrbg":{
+        "description":"顯示來自 USRBG 的用戶橫幅，允許任何人在沒有 Nitro 的情況下獲得橫幅",
+        "getOwnBanner":"獲得您自己的 USRBG 橫幅",
+        "settings":{
+            "nitroBanner":"硝基橫幅",
+            "nitroFirst":"如果同時存在 Nitro 和 USRBG 橫幅，則使用橫幅",
+            "usrbgBanner":"美國RBG橫幅",
+            "voiceBackground":"使用 USRBG 橫幅作為語音聊天背景"
+        }
+    },
+    "validReply":{
+        "description":"修正了將滑鼠懸停在回復上時「無法載入訊息」的問題"
+    },
+    "validUser":{
+        "description":"修正顯示為「@unknown-user」的未知使用者的提及（將滑鼠懸停在提及上即可修復）"
+    },
+    "vcDoubleClick":{
+        "description":"透過雙擊而不是點擊加入語音聊天"
+    },
+    "vcNarrator":{
+        "customiseMessages":"您可以自訂下面的語音訊息。您可以通过将特定消息设置为空来禁用它们",
+        "defaults":{
+            "deafen":"{{USER}}震耳欲聾",
+            "join":"{{USER}} 已加入",
+            "leave":"{{USER}} 左",
+            "move":"{{USER}} 移至 {{CHANNEL}}",
+            "mute":"{{USER}}靜音",
+            "undeafen":"{{USER}} 不聾",
+            "unmute":"{{USER}} 取消靜音"
+        },
+        "description":"當用戶加入、離開或移動語音頻道時透過講述者進行宣布",
+        "linuxVoicesHelp":"安裝語音調度程序或 espeak 並使用 --enable-speech-dispatcher 標誌運行 Discord",
+        "noEnglishVoices":"您沒有安裝任何英文語音，因此旁白可能聽起來很奇怪",
+        "noVoices":"No narrator voices found. ",
+        "osVoicesHelp":"嘗試在作業系統的講述人設定中安裝一些",
+        "placeholdersHelp":"特殊佔位符<0>{{USER}}</0>、<1>{{DISPLAY_NAME}}</1>、<2>{{NICKNAME}}</2>和<3>[[[PH3]]</3>將分別替換為使用者名稱（如果是您自己則不填）、使用者的顯示名稱、使用者在當前伺服器上的暱稱",
+        "playExampleSounds":"Play Example Sounds",
+        "settings":{
+            "deafenMessage":"震耳欲聾的消息（目前只有自己）",
+            "joinMessage":"加盟留言",
+            "latinOnly":"在說出名字之前先從名字中去除非拉丁字符",
+            "leaveMessage":"留言",
+            "moveMessage":"移動留言",
+            "muteMessage":"靜音訊息（目前僅限自己）",
+            "sayOwnName":"說出自己的名字",
+            "speed":"講述人速度",
+            "undeafenMessage":"不聾的消息（目前只有自己）",
+            "unmuteMessage":"取消訊息靜音（目前僅限自己）",
+            "volume":"旁白音量"
+        },
+        "speechSynthesisNotSupported":"不支援 SpeechSynthesis 或未找到講述人聲音。因此，這個插件將無法運作。檢查我的設置以獲取更多信息"
+    },
+    "viewIcons":{
+        "description":"使用戶設定檔中的頭像和橫幅可點擊，在使用者、伺服器和群組通道上下文選單中新增檢視圖示/橫幅條目。",
+        "settings":{
+            "formatDescription":"選擇用於非動畫圖像的圖像格式。動畫圖像將始終使用 .gif",
+            "imgSizeDescription":"要使用的圖像尺寸"
+        },
+        "viewAvatar":"查看頭像",
+        "viewBanner":"查看橫幅",
+        "viewIcon":"查看圖示",
+        "viewServerAvatar":"查看伺服器頭像"
+    },
+    "viewRaw":{
+        "content":"內容",
+        "contentCopied":"內容已複製到剪貼簿！",
+        "copyJson":"複製 {type} JSON",
+        "copyRawContent":"複製原始內容",
+        "copyRawLeftViewRawRight":"複製原始資料（左鍵單擊）/查看原始資料（右鍵單擊）",
+        "data":"數據",
+        "dataCopied":"{type}資料已複製到剪貼簿！",
+        "description":"複製並查看任何訊息、頻道或公會的原始內容/數據",
+        "settings":{
+            "clickMethodDescription":"更改按鈕以查看任何訊息的原始內容/數據。",
+            "leftClick":"左鍵點選查看原始內容。",
+            "rightClick":"右鍵單擊查看原始內容。"
+        },
+        "viewRaw":"查看原始數據",
+        "viewRawLeftCopyRawRight":"查看原始資料（左鍵單擊）/複製原始資料（右鍵單擊）"
+    },
+    "voiceDownload":{
+        "description":"新增語音訊息下載。 （開啟新的瀏覽器標籤）",
+        "downloadVoiceMessage":"下載語音留言"
+    },
+    "voiceMessages":{
+        "echoCancellation":"回音抵消",
+        "failedToParse":"無法解析所選音訊檔案：{error}",
+        "failedToUpload":"上傳語音留言失敗",
+        "iosFix":"若要修復此問題，請先將其轉換為 OggOpus，例如使用 <0>convertio Web 轉換器</0>",
+        "iosWarning":"語音訊息必須是 OggOpus 才能在 iOS 上播放。該檔案為 <0>{type}</0>，因此無法在 iOS 上播放。",
+        "missingPermissions":"（缺少權限）",
+        "noiseSuppression":"噪音抑制",
+        "preview":"预览",
+        "recordModal":"錄製語音留言",
+        "send":"傳送語音留言",
+        "sending":"正在發送語音訊息...請耐心等待",
+        "uploadFile":"上傳文件"
+    },
+    "volumeBooster":{
+        "description":"允許您將使用者和串流音量設定為高於預設最大值",
+        "settings":{
+            "multiplier":"音量倍增器"
+        }
+    },
+    "webContextMenus":{
+        "description":"重新新增 Discord 網路版本中缺少的上下文功能表：連結和圖像（複製/開啟連結/圖像）、文字（複製、剪下、貼上、拼字檢查）",
+        "settings":{
+            "addBack":"新增回圖像、連結和聊天輸入列的 Discord 上下文選單"
+        }
+    },
+    "webKeybinds":{
+        "description":"重新加入 Discord 網頁版中缺少的按鍵綁定：ctrl+t、ctrl+shift+t、ctrl+tab、ctrl+shift+tab、ctrl+1-9、ctrl+,。只能在 Vesktop/Legcord 上完全運行，不能在瀏覽器中運行"
+    },
+    "webScreenShareFixes":{
+        "description":"取消了 chromium 和 vesktop 用戶端上 2500kbps 的位元率上限。"
+    },
+    "whoReacted":{
+        "settings":{
+            "avatarClick":"切換點擊反應中的頭像"
+        }
+    },
+    "xsOverlay":{
+        "attachment":"依戀",
+        "botNotifications":"允許機器人通知",
+        "callNotifications":"允許來電通知",
+        "channelPingColor":"頻道提及顏色",
+        "description":"將不和諧通知轉發到 XSOverlay，以便在 VR 中輕鬆查看",
+        "dmNotifications":"允許私訊通知",
+        "embed":"嵌入",
+        "groupDmNotifications":"允許 Group DM 通知",
+        "helloFromVendor":"供應商您好！",
+        "image":"图片",
+        "incomingCall":"來電",
+        "isCallingYou":"正在呼喚你...",
+        "lengthBasedTimeout":"透過訊息長度延長持續時間",
+        "opacity":"通知不透明度",
+        "pingColor":"使用者提及顏色",
+        "preferUDPDescription":"如果您使用舊版的 XSOverlay 無法透過 websockets 連接，請啟用。此設定在網路上被忽略。",
+        "reply":"回覆",
+        "sendTestNotification":"發送測試通知",
+        "sentEmbeds":"已發送訊息嵌入",
+        "sentSticker":"發送了一張貼紙",
+        "serverNotifications":"允許伺服器通知",
+        "soundPath":"通知聲音（預設/警告/錯誤）",
+        "sticker":"貼紙",
+        "testNotification":"這是測試通知！霹靂",
+        "timeout":"通知持續時間（秒）",
+        "volume":"音量",
+        "webSocketPort":"Websocket端口"
+    },
+    "youtubeAdblock":{
+        "description":"透過 AdGuard 封鎖 YouTube 嵌入廣告和 WatchTogether 活動"
+    }
+}
