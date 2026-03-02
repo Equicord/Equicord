@@ -541,6 +541,7 @@
             "noMirroredCamera":"Impede que a câmera seja espelhada na tela",
             "refreshSlashCommands":"Atualiza comandos de barra para mostrar comandos recém-adicionados sem reiniciar seu cliente.",
             "removeActivitySection":"Remove a seção de atividades acima da lista de membros",
+            "restoreFileDownloadButton":"Adiciona novamente o botão de Download no canto superior direito dos arquivos",
             "showYourOwnActivityButtons":"Discord oculta seus próprios botões de atividade por algum motivo"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Fechar",
             "open":"Abrir"
+        }
+    },
+    "hideMessages":{
+        "description":"Um plugin para ocultar mensagens temporariamente até você reiniciar.",
+        "settings":{
+            "hidePopoverButton":"Ocultar o botão ocultar no popover da mensagem."
+        },
+        "ui":{
+            "hide":"Ocultar"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Remove propagandas do Nitro substituindo seu tipo de premium"
     },
+    "noPushToTalk":{
+        "description":"Ignora a obrigatoriedade do Pressionar para Falar para atividade de voz em canais que a exigem."
+    },
     "noRPC":{
         "description":"Desativa o recurso de Atividade (RPC) do Discord"
     },
@@ -2060,6 +2073,21 @@
             "translate":"Traduzir"
         }
     },
+    "triviaAI":{
+        "description":"Um plugin que ajuda você a responder perguntas de trivia usando IA.",
+        "settings":{
+            "apiKey":"Chave API",
+            "autoRespond":"Responder automaticamente a mensagens ao receber uma resposta.",
+            "endpoint":"Endpoint de IA compatível com a OpenAI.",
+            "maxTokens":"Número máximo de tokens na resposta.",
+            "model":"Modelo de IA a usar.",
+            "supportImages":"Passar imagens para a IA para contexto (se houver). Isso não é compatível com todos os modelos.",
+            "systemPrompt":"Prompt de Sistema para a IA."
+        },
+        "ui":{
+            "answerWithAI":"Responder com IA"
+        }
+    },
     "unitConverter":{
         "description":"Converter unidades em mensagens (imperial/métrica)",
         "popover":{
@@ -2216,10 +2244,27 @@
     },
     "voiceButtons":{
         "description":"Adiciona botões de ação rápida (chat, silenciar, ensurdecer) para usuários de canais de voz",
+        "options":{
+            "both":"Ambos",
+            "disable":"Desativar",
+            "display":"Mostrar",
+            "globalName":"Nome global",
+            "hide":"Ocultar",
+            "left":"Esquerda",
+            "right":"Direita",
+            "username":"Nome de usuário"
+        },
         "settings":{
-            "showChatButton":"Mostrar botão de chat",
-            "showDeafenButton":"Mostrar botão de ensurdecer",
-            "showMuteButton":"Mostrar botão de silenciar"
+            "buttonPosition":"Escolha onde colocar os botões de voz na linha de usuário de voz.",
+            "disableVideo":"Alterna o vídeo ao clicar no botão de ensurdecer.",
+            "muteSoundboard":"Alterna o soundboard ao clicar no botão de ensurdecer.",
+            "serverSelf":"Ensurdeça / Silencie a si mesmo no servidor ao usar silenciar/ensurdecer.",
+            "showButtonsSelf":"Se você deseja exibir botões para o seu próprio usuário. Mesma funcionalidade que os outros botão(ões), exceto que abrirá o painel de DMs e silenciará/ensurdecerá a si mesmo ao clicar no(s) botão(ões).",
+            "showChatButton":"Se deseja mostrar o botão de chat",
+            "showDeafenButton":"Se deseja mostrar botão de ensurdecer",
+            "showMuteButton":"Se deseja mostrar botão de silenciar",
+            "useServer":"Usa silenciamento/ensurdecimento de servidor em vez de local quando tiver permissão.",
+            "whichNameToShow":"Escolha se deseja mostrar o apelido ou o nome de usuário na dica"
         }
     },
     "voiceChannelLog":{
@@ -2244,6 +2289,7 @@
         "contextMenu":{
             "deafenAll":"Ensurdecer todos",
             "disconnectAll":"Desconectar tudo",
+            "mentionAllUsers":"Menciona todos os usuários",
             "moveAll":"Mover todos",
             "muteAll":"Silenciar todos",
             "undeafenAll":"Remover surdez de todos",

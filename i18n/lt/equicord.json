@@ -541,6 +541,7 @@
             "noMirroredCamera":"Apsaugo nuo fotoaparato atspindėjimo ekrane",
             "refreshSlashCommands":"Atnaujina \"Slash\" komandas, kad būtų rodomos naujai pridėtos komandos, nepaleidžiant kliento iš naujo.",
             "removeActivitySection":"Pašalina veiklos skyrių virš narių sąrašo",
+            "restoreFileDownloadButton":"Vėl pridedamas atsisiuntimo mygtukas viršutiniame dešiniajame failų kampe",
             "showYourOwnActivityButtons":"Discord dėl tam tikrų priežasčių paslepia jūsų veiklos mygtukus"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Uždaryti",
             "open":"Atidaryti"
+        }
+    },
+    "hideMessages":{
+        "description":"Papildinys, skirtas laikinai paslėpti pranešimus, kol paleisite iš naujo.",
+        "settings":{
+            "hidePopoverButton":"Paslėpkite slėpimo mygtuką pranešimo iššokančiame lange."
+        },
+        "ui":{
+            "hide":"Paslėpti"
         }
     },
     "hideServers":{
@@ -1497,6 +1507,9 @@
     "noNitroUpsell":{
         "description":"Pašalina „Nitro“ papildomus pardavimus, nepaisydamas jūsų aukščiausios kokybės tipo"
     },
+    "noPushToTalk":{
+        "description":"Apeina tiesioginio ryšio reikalavimą balso veiklai kanaluose, kurie tai užtikrina."
+    },
     "noRPC":{
         "description":"Išjungia Discord turtingo buvimo (RPC) funkciją"
     },
@@ -2032,6 +2045,21 @@
             "translate":"Išversti"
         }
     },
+    "triviaAI":{
+        "description":"Papildinys, padedantis atsakyti į smulkmenas naudojant AI.",
+        "settings":{
+            "apiKey":"API Raktas.",
+            "autoRespond":"Automatiškai atsakykite į pranešimus gavus atsakymą.",
+            "endpoint":"„OpenAI“ suderinamas AI galutinis taškas.",
+            "maxTokens":"Maksimalus žetonų skaičius atsakyme.",
+            "model":"Naudojamas AI modelis.",
+            "supportImages":"Perduokite vaizdus dirbtinio intelekto kontekstui (jei yra). Tai palaiko ne visi modeliai.",
+            "systemPrompt":"Sistemos raginimas dirbtiniam intelektui."
+        },
+        "ui":{
+            "answerWithAI":"Atsakykite su AI"
+        }
+    },
     "unitConverter":{
         "description":"Konvertuoti vienetus pranešimuose (imperinis / metrinis)",
         "popover":{
@@ -2188,10 +2216,27 @@
     },
     "voiceButtons":{
         "description":"Balso kanalo naudotojams pridedami greito veiksmo mygtukai (pokalbių, nutildymo, apkurtimo).",
+        "options":{
+            "both":"Abu",
+            "disable":"Išjungti",
+            "display":"Rodyti",
+            "globalName":"Visuotinis pavadinimas",
+            "hide":"Paslėpti",
+            "left":"Kairė",
+            "right":"Teisingai",
+            "username":"Slapyvardis"
+        },
         "settings":{
-            "showChatButton":"Rodyti pokalbio mygtuką",
-            "showDeafenButton":"Rodyti apkurtimo mygtuką",
-            "showMuteButton":"Rodyti nutildymo mygtuką"
+            "buttonPosition":"Pasirinkite, kur dėti balso mygtukus balso naudotojo eilutėje.",
+            "disableVideo":"Perjungia jų vaizdo įrašą spustelėjus apkurtimo mygtuką.",
+            "muteSoundboard":"Perjungia jų garso plokštę spustelėjus apkurtimo mygtuką.",
+            "serverSelf":"Apkurti / nutildyti save serveryje, kai naudojate nutildymą / nutildymą.",
+            "showButtonsSelf":"Nesvarbu, ar norite rodyti mygtukus savo vartotojui. Tos pačios funkcijos kaip ir kitas (-i) mygtukas (-iai), išskyrus tai, kad jis atidarys DM skydelį ir nutildys / nutildys save spustelėjus mygtuką (-ius).",
+            "showChatButton":"Ar norite rodyti pokalbio mygtuką",
+            "showDeafenButton":"Nesvarbu, ar norite rodyti apkurtimo mygtuką",
+            "showMuteButton":"Ar norite rodyti nutildymo mygtuką",
+            "useServer":"Jei turite leidimą, naudokite serverio nutildymą / apkurtimą, o ne vietinį.",
+            "whichNameToShow":"Pasirinkite, ar patarime rodyti slapyvardį ar naudotojo vardą."
         }
     },
     "voiceChannelLog":{
@@ -2216,6 +2261,7 @@
         "contextMenu":{
             "deafenAll":"Apkurti visi",
             "disconnectAll":"Atjungti visus",
+            "mentionAllUsers":"Paminėkite visus vartotojus",
             "moveAll":"Perkelti visus",
             "muteAll":"Nutildyti visus",
             "undeafenAll":"Nekurtūs visi",

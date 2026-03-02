@@ -541,6 +541,7 @@
             "noMirroredCamera":"Forhindrer at kameraet speiles på skjermen",
             "refreshSlashCommands":"Oppdaterer skråstrekkommandoer for å vise nylig lagt til kommandoer uten å starte klienten på nytt.",
             "removeActivitySection":"Fjerner aktivitetsdelen over medlemslisten",
+            "restoreFileDownloadButton":"Legger til nedlastningsknappen øverst til høyre på filene",
             "showYourOwnActivityButtons":"Discord skjuler dine egne aktivitetsknapper av en eller annen grunn"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Lukk",
             "open":"Åpne"
+        }
+    },
+    "hideMessages":{
+        "description":"En plugin for midlertidig å skjule meldinger til du starter på nytt.",
+        "settings":{
+            "hidePopoverButton":"Skjul skjul-knappen i meldingsvinduet."
+        },
+        "ui":{
+            "hide":"Skjul"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Fjerner Nitro-oppsalg ved å overstyre premiumtypen din"
     },
+    "noPushToTalk":{
+        "description":"Omgår push-to-talk-kravet for taleaktivitet i kanaler som håndhever det."
+    },
     "noRPC":{
         "description":"Deaktiverer Discords funksjon for Rich Presence (RPC)."
     },
@@ -2044,6 +2057,21 @@
             "translate":"Oversett"
         }
     },
+    "triviaAI":{
+        "description":"En plugin som hjelper deg å svare på trivia-spørsmål ved hjelp av AI.",
+        "settings":{
+            "apiKey":"API Tast.",
+            "autoRespond":"Svar automatisk på meldinger når du mottar et svar.",
+            "endpoint":"OpenAI-kompatibelt AI-endepunkt.",
+            "maxTokens":"Maksimalt antall tokens i svaret.",
+            "model":"AI-modell å bruke.",
+            "supportImages":"Send bilder til AI for kontekst (hvis noen). Dette støttes ikke av alle modeller.",
+            "systemPrompt":"Systemmelding for AI."
+        },
+        "ui":{
+            "answerWithAI":"Svar med AI"
+        }
+    },
     "unitConverter":{
         "description":"Konverter enheter i meldinger (imperial/metrisk)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Legger til hurtighandlingsknapper (chat, mute, overdøve) for brukere av talekanal",
+        "options":{
+            "both":"Både",
+            "disable":"Deaktiver",
+            "display":"Vis",
+            "globalName":"Globalt navn",
+            "hide":"Skjul",
+            "left":"Igjen",
+            "right":"Høyre",
+            "username":"Brukernavn"
+        },
         "settings":{
-            "showChatButton":"Vis chat-knapp",
-            "showDeafenButton":"Vis døveknapp",
-            "showMuteButton":"Vis demp-knappen"
+            "buttonPosition":"Velg hvor du vil plassere stemmeknapper i stemmebrukerraden.",
+            "disableVideo":"Veksler videoen deres når du klikker på overdøve-knappen.",
+            "muteSoundboard":"Veksler på lydplanken ved å klikke på overdøve-knappen.",
+            "serverSelf":"Døv / Demp deg selv på serveren når du bruker mute/deafen.",
+            "showButtonsSelf":"Om du vil vise knapper for din egen bruker. Samme funksjonalitet som andre knapp(er), bortsett fra at den vil åpne DM-panelet og dempe/døve for deg selv når du klikker på knappen(e).",
+            "showChatButton":"Om du vil vise chat-knappen",
+            "showDeafenButton":"Om du vil vise døveknappen",
+            "showMuteButton":"Om du vil vise mute-knappen",
+            "useServer":"Bruk server mute/deafen i stedet for lokal når du har tillatelse.",
+            "whichNameToShow":"Velg om du vil vise kallenavn eller brukernavn i verktøytips."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Døv alle sammen",
             "disconnectAll":"Koble fra alle",
+            "mentionAllUsers":"Nevn alle brukere",
             "moveAll":"Flytt alle",
             "muteAll":"Demp alle",
             "undeafenAll":"Udøve alle sammen",

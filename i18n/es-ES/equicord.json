@@ -541,6 +541,7 @@
             "noMirroredCamera":"Evita que la cámara se refleje en tu pantalla",
             "refreshSlashCommands":"Actualiza los comandos de barra diagonal para mostrar los comandos recién agregados sin reiniciar su cliente.",
             "removeActivitySection":"Elimina la sección de actividad encima de la lista de miembros.",
+            "restoreFileDownloadButton":"Vuelve a agregar el botón Descargar en la esquina superior derecha de los archivos.",
             "showYourOwnActivityButtons":"Discord oculta tus propios botones de actividad por algún motivo"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Cerca",
             "open":"Abierto"
+        }
+    },
+    "hideMessages":{
+        "description":"Un complemento para ocultar mensajes temporalmente hasta que reinicies.",
+        "settings":{
+            "hidePopoverButton":"Oculte el botón Ocultar en la ventana emergente del mensaje."
+        },
+        "ui":{
+            "hide":"Ocultar"
         }
     },
     "hideServers":{
@@ -1414,6 +1424,20 @@
     "micLoopbackTester":{
         "description":"Pruebe su micrófono con un botón de loopback en el área de usuario"
     },
+    "middleClickTweaks":{
+        "description":"Varios ajustes con el clic central, como pegar y abrir enlaces.",
+        "settings":{
+            "always":"Evite siempre pegar el clic central",
+            "both":"Enlaces y medios",
+            "focus":"Prevenir solo cuando el área de texto no esté enfocada",
+            "links":"Campo de golf",
+            "media":"Medios de comunicación",
+            "none":"Ninguno",
+            "openScope":"Evite que al hacer clic con el botón central en estos tipos de contenido se abran.",
+            "pasteScope":"Evite que el clic central se pegue durante estas situaciones.",
+            "pasteThreshold":"Milisegundos hasta que se habilite nuevamente el pegado después de un clic central."
+        }
+    },
     "moreCommands":{
         "description":"Comandos de barra diagonal adicionales que incluyen información del sistema, tiradas de dados, lanzamiento de monedas y más",
         "settings":{
@@ -1494,6 +1518,9 @@
     },
     "noNitroUpsell":{
         "description":"Elimina Nitro ventas adicionales al anular su tipo de prima"
+    },
+    "noPushToTalk":{
+        "description":"Omite el requisito de pulsar para hablar para la actividad de voz en canales que lo imponen."
     },
     "noRPC":{
         "description":"Desactiva la función de presencia enriquecida (RPC) de Discord"
@@ -2030,6 +2057,21 @@
             "translate":"Traducir"
         }
     },
+    "triviaAI":{
+        "description":"Un complemento que te ayuda a responder preguntas de trivia utilizando IA.",
+        "settings":{
+            "apiKey":"API Tecla.",
+            "autoRespond":"Responda automáticamente a los mensajes al recibir una respuesta.",
+            "endpoint":"Punto final de IA compatible con OpenAI.",
+            "maxTokens":"Número máximo de tokens en la respuesta.",
+            "model":"Modelo de IA a utilizar.",
+            "supportImages":"Pase imágenes a la IA para contexto (si corresponde). Esto no es compatible con todos los modelos.",
+            "systemPrompt":"Aviso del sistema para la IA."
+        },
+        "ui":{
+            "answerWithAI":"Responde con IA"
+        }
+    },
     "unitConverter":{
         "description":"Convertir unidades en mensajes (imperial/métrico)",
         "popover":{
@@ -2186,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Agrega botones de acción rápida (chat, silenciar, ensordecer) a los usuarios del canal de voz",
+        "options":{
+            "both":"Ambos",
+            "disable":"Deshabilitar",
+            "display":"Mostrar",
+            "globalName":"Nombre global",
+            "hide":"Ocultar",
+            "left":"Izquierda",
+            "right":"Bien",
+            "username":"Nombre de usuario"
+        },
         "settings":{
-            "showChatButton":"Mostrar botón de chat",
-            "showDeafenButton":"Mostrar botón sordo",
-            "showMuteButton":"Mostrar botón de silencio"
+            "buttonPosition":"Elija dónde colocar los botones de voz en la fila del usuario de voz.",
+            "disableVideo":"Cambia su video al hacer clic en el botón ensordecedor.",
+            "muteSoundboard":"Cambia su caja de resonancia al hacer clic en el botón ensordecedor.",
+            "serverSelf":"Ensordecer/silenciarse en el servidor cuando utilice silencio/sordecer.",
+            "showButtonsSelf":"Si desea mostrar botones para su propio usuario. La misma funcionalidad que otros botones, excepto que abrirá el panel de mensajes directos y se silenciará/ensordecerá al hacer clic en los botones.",
+            "showChatButton":"Si desea mostrar el botón de chat",
+            "showDeafenButton":"Si desea mostrar el botón sordo",
+            "showMuteButton":"Si desea mostrar el botón de silencio",
+            "useServer":"Utilice el servidor silenciado/sordo en lugar de local cuando tenga permiso.",
+            "whichNameToShow":"Elija si desea mostrar el apodo o el nombre de usuario en la información sobre herramientas."
         }
     },
     "voiceChannelLog":{
@@ -2214,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"ensordecer a todos",
             "disconnectAll":"Desconectar todo",
+            "mentionAllUsers":"Mencionar a todos los usuarios",
             "moveAll":"mover todo",
             "muteAll":"Silenciar todo",
             "undeafenAll":"ensordecidos todos",

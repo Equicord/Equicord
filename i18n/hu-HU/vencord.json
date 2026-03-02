@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Link másolva!",
+            "maxAdditionalEmojis":"vesszővel/újsorral elválasztva, max {count}",
             "messageContentCopied":"Az üzenet tartalma másolva!",
             "messageIdCopied":"Üzenetazonosító másolva!",
+            "selectAdditionalEmojis":"Válassza a További hangulatjelek lehetőséget",
+            "selectEmojiForReactions":"Válassza a Emoji for Reactions lehetőséget",
             "userIdCopied":"Felhasználói azonosító másolva!"
         }
     },

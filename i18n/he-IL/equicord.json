@@ -541,6 +541,7 @@
             "noMirroredCamera":"מונע מהמצלמה להיות שיקוף על המסך שלך",
             "refreshSlashCommands":"מרענן את פקודות Slash כדי להציג פקודות חדשות שנוספו מבלי להפעיל מחדש את הלקוח שלך.",
             "removeActivitySection":"מסיר את קטע הפעילות מעל רשימת החברים",
+            "restoreFileDownloadButton":"מוסיף בחזרה את כפתור ההורדה בפינה השמאלית העליונה של הקבצים",
             "showYourOwnActivityButtons":"Discord מסתיר את לחצני הפעילות שלך מסיבה כלשהי"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"לִסְגוֹר",
             "open":"לִפְתוֹחַ"
+        }
+    },
+    "hideMessages":{
+        "description":"תוסף להסתרת הודעות זמנית עד להפעלה מחדש.",
+        "settings":{
+            "hidePopoverButton":"הסתר את כפתור ההסתרה בחלון המוקפץ של ההודעה."
+        },
+        "ui":{
+            "hide":"לְהַסתִיר"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"מסיר את מכירות הניטרו על ידי ביטול סוג הפרימיום שלך"
     },
+    "noPushToTalk":{
+        "description":"עוקף את דרישת ה-push-to-talk לפעילות קולית בערוצים האוכפים אותה."
+    },
     "noRPC":{
         "description":"משבית את תכונת נוכחות עשירה (RPC) של Discord"
     },
@@ -2044,6 +2057,21 @@
             "translate":"לְתַרְגֵם"
         }
     },
+    "triviaAI":{
+        "description":"תוסף שעוזר לך לענות על שאלות טריוויה באמצעות AI.",
+        "settings":{
+            "apiKey":"API מקש.",
+            "autoRespond":"השב אוטומטית להודעות עם קבלת תגובה.",
+            "endpoint":"נקודת קצה AI תואמת OpenAI.",
+            "maxTokens":"המספר המרבי של אסימונים בתגובה.",
+            "model":"דגם AI לשימוש.",
+            "supportImages":"העבר תמונות ל-AI לצורך הקשר (אם יש). זה לא נתמך על ידי כל הדגמים.",
+            "systemPrompt":"בקשת מערכת עבור AI."
+        },
+        "ui":{
+            "answerWithAI":"תשובה עם AI"
+        }
+    },
     "unitConverter":{
         "description":"המרת יחידות בהודעות (אימפריאלי/מטרי)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"מוסיף לחצני פעולה מהירים (צ'אט, השתקה, חריש אוזניים) למשתמשי ערוץ קולי",
+        "options":{
+            "both":"שְׁנֵיהֶם",
+            "disable":"השבת",
+            "display":"לְהַצִיג",
+            "globalName":"שם גלובלי",
+            "hide":"לְהַסתִיר",
+            "left":"שְׁמֹאל",
+            "right":"יָמִינָה",
+            "username":"שם משתמש"
+        },
         "settings":{
-            "showChatButton":"הצג כפתור צ'אט",
-            "showDeafenButton":"הצג כפתור חירשת",
-            "showMuteButton":"הצג לחצן השתקה"
+            "buttonPosition":"בחר היכן למקם לחצני קול בשורת המשתמש הקולי.",
+            "disableVideo":"מחליף את הסרטון שלהם בלחיצה על כפתור ההחרשה.",
+            "muteSoundboard":"מחליף את לוח הקול שלהם בלחיצה על כפתור ההחרשה.",
+            "serverSelf":"חריש / השתיק את עצמך בשרת בעת שימוש בהשתקה/חריש.",
+            "showButtonsSelf":"אם ברצונך להציג לחצנים עבור המשתמש שלך. פונקציונליות זהה ללחצנים אחרים, מלבד זה יפתח את לוח ה-DMs וישתק/יחריש את עצמך בלחיצה על כפתורים.",
+            "showChatButton":"האם ברצונך להציג את כפתור הצ'אט",
+            "showDeafenButton":"האם ברצונך להציג את כפתור ההחרשה",
+            "showMuteButton":"האם ברצונך להציג את לחצן ההשתקה",
+            "useServer":"השתמש בשרת השתקה/חריש במקום מקומי כשיש לך הרשאה.",
+            "whichNameToShow":"בחר אם להציג כינוי או שם משתמש בהסבר."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"מחריש הכל",
             "disconnectAll":"נתק הכל",
+            "mentionAllUsers":"ציין את כל המשתמשים",
             "moveAll":"תזיז הכל",
             "muteAll":"השתק הכל",
             "undeafenAll":"חסרי אוזניים כולם",

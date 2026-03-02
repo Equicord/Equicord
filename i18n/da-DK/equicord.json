@@ -541,6 +541,7 @@
             "noMirroredCamera":"Forhindrer kameraet i at blive spejlet på din skærm",
             "refreshSlashCommands":"Opdaterer skråstregkommandoer for at vise nyligt tilføjede kommandoer uden at genstarte din klient.",
             "removeActivitySection":"Fjerner aktivitetssektionen over medlemslisten",
+            "restoreFileDownloadButton":"Tilføjer tilbage Download-knappen i øverste højre hjørne af filer",
             "showYourOwnActivityButtons":"Discord skjuler dine egne aktivitetsknapper af en eller anden grund"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Luk",
             "open":"Åben"
+        }
+    },
+    "hideMessages":{
+        "description":"Et plugin til midlertidigt at skjule beskeder, indtil du genstarter.",
+        "settings":{
+            "hidePopoverButton":"Skjul skjul-knappen i popover-meddelelsen."
+        },
+        "ui":{
+            "hide":"Skjul"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Fjerner Nitro-mersalg ved at tilsidesætte din premium-type"
     },
+    "noPushToTalk":{
+        "description":"Omgår push-to-talk-kravet for taleaktivitet i kanaler, der håndhæver det."
+    },
     "noRPC":{
         "description":"Deaktiverer Discords Rich Presence-funktion (RPC)."
     },
@@ -2044,6 +2057,21 @@
             "translate":"Oversætte"
         }
     },
+    "triviaAI":{
+        "description":"Et plugin, der hjælper dig med at besvare trivia-spørgsmål ved hjælp af AI.",
+        "settings":{
+            "apiKey":"API Tast.",
+            "autoRespond":"Svar automatisk på beskeder, når du modtager et svar.",
+            "endpoint":"OpenAI-kompatibelt AI-endepunkt.",
+            "maxTokens":"Maksimalt antal tokens i svaret.",
+            "model":"AI-model til brug.",
+            "supportImages":"Send billeder til AI'en til kontekst (hvis nogen). Dette understøttes ikke af alle modeller.",
+            "systemPrompt":"Systemprompt for AI."
+        },
+        "ui":{
+            "answerWithAI":"Svar med AI"
+        }
+    },
     "unitConverter":{
         "description":"Konverter enheder i meddelelser (imperial/metrisk)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Tilføjer hurtige handlingsknapper (chat, mute, overdøv) til stemmekanalbrugere",
+        "options":{
+            "both":"Begge",
+            "disable":"Deaktiver",
+            "display":"Vis",
+            "globalName":"Globalt navn",
+            "hide":"Skjul",
+            "left":"Venstre",
+            "right":"Højre",
+            "username":"Brugernavn"
+        },
         "settings":{
-            "showChatButton":"Vis chatknap",
-            "showDeafenButton":"Vis døve-knap",
-            "showMuteButton":"Vis mute-knap"
+            "buttonPosition":"Vælg, hvor stemmeknapperne skal placeres i stemmebrugerrækken.",
+            "disableVideo":"Skifter deres video ved at klikke på Døve-knappen.",
+            "muteSoundboard":"Skifter deres klangbund, når du klikker på Døve-knappen.",
+            "serverSelf":"Døv / Døv dig selv på serveren, når du bruger mute/deafen.",
+            "showButtonsSelf":"Om du vil vise knapper for din egen bruger. Samme funktionalitet som andre knapper, bortset fra at den åbner DM'er-panelet og slår lyden fra/døver for dig selv, når du klikker på knappen.",
+            "showChatButton":"Om du vil vise chat-knappen",
+            "showDeafenButton":"Om du vil vise døveknappen",
+            "showMuteButton":"Om du vil vise mute-knappen",
+            "useServer":"Brug server mute/deafen i stedet for lokal, når du har tilladelse.",
+            "whichNameToShow":"Vælg, om du vil vise kaldenavn eller brugernavn i værktøjstip."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Døv alle sammen",
             "disconnectAll":"Afbryd alle",
+            "mentionAllUsers":"Nævn alle brugere",
             "moveAll":"Flyt alle",
             "muteAll":"Slå alle fra",
             "undeafenAll":"Døve alle sammen",

@@ -541,6 +541,7 @@
             "noMirroredCamera":"Estää kameraa peilautumasta näytölle",
             "refreshSlashCommands":"Päivittää vinoviivakomennot näyttääkseen juuri lisätyt komennot käynnistämättä asiakasta uudelleen.",
             "removeActivitySection":"Poistaa aktiviteettiosion jäsenluettelon yläpuolelta",
+            "restoreFileDownloadButton":"Lisää takaisin Lataa-painikkeen tiedostojen oikeaan yläkulmaan",
             "showYourOwnActivityButtons":"Discord piilottaa omat toimintapainikkeesi jostain syystä"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Sulje",
             "open":"Avata"
+        }
+    },
+    "hideMessages":{
+        "description":"Laajennus, joka piilottaa viestit tilapäisesti, kunnes käynnistät sen uudelleen.",
+        "settings":{
+            "hidePopoverButton":"Piilota piilotuspainike viestin ponnahdusikkunassa."
+        },
+        "ui":{
+            "hide":"Piilota"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Poistaa Nitro-lisämyynnistä ohittaen premium-tyypin"
     },
+    "noPushToTalk":{
+        "description":"Ohittaa push-to-talk-vaatimuksen puhetoiminnalle kanavilla, jotka panevat sen täytäntöön."
+    },
     "noRPC":{
         "description":"Poistaa käytöstä Discord:n Rich Presence (RPC) -ominaisuuden"
     },
@@ -1953,6 +1966,9 @@
         }
     },
     "timezones":{
+        "contextMenu":{
+            "setLocalTimezone":"Aseta paikallinen aikavyöhyke"
+        },
         "description":"Näytä käyttäjien aikavyöhykkeet profiileissa ja viestien otsikoissa",
         "settings":{
             "24hTime":"Esitysaika 24h-muodossa",
@@ -2039,6 +2055,21 @@
         "description":"Lisää käännöspainikkeen viesteihin, joilla on parempi UI",
         "popover":{
             "translate":"Kääntää"
+        }
+    },
+    "triviaAI":{
+        "description":"Laajennus, joka auttaa sinua vastaamaan triviakysymyksiin tekoälyn avulla.",
+        "settings":{
+            "apiKey":"API Näppäin.",
+            "autoRespond":"Vastaa automaattisesti viesteihin, kun saat vastauksen.",
+            "endpoint":"OpenAI-yhteensopiva AI-päätepiste.",
+            "maxTokens":"Vastauksessa olevien merkkien enimmäismäärä.",
+            "model":"Käytettävä AI-malli.",
+            "supportImages":"Lähetä kuvat tekoälylle kontekstia varten (jos sellainen on). Kaikki mallit eivät tue tätä.",
+            "systemPrompt":"Järjestelmäkehote tekoälylle."
+        },
+        "ui":{
+            "answerWithAI":"Vastaa tekoälyllä"
         }
     },
     "unitConverter":{
@@ -2197,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Lisää pikatoimintopainikkeita (chat, mykistys, kuuro) äänikanavan käyttäjille",
+        "options":{
+            "both":"Molemmat",
+            "disable":"Poista käytöstä",
+            "display":"Näytä",
+            "globalName":"Maailmanlaajuinen nimi",
+            "hide":"Piilota",
+            "left":"Vasen",
+            "right":"Oikein",
+            "username":"Käyttäjänimi"
+        },
         "settings":{
-            "showChatButton":"Näytä chat-painike",
-            "showDeafenButton":"Näytä kuuropainike",
-            "showMuteButton":"Näytä mykistyspainike"
+            "buttonPosition":"Valitse, mihin äänipainikkeet sijoitetaan äänikäyttäjäriville.",
+            "disableVideo":"Vaihtaa videonsa, kun napsautetaan kuurouspainiketta.",
+            "muteSoundboard":"Vaihtaa äänilevynsä päälle, kun napsautetaan kuurouspainiketta.",
+            "serverSelf":"Kuuro / Mykistä itsesi palvelimella, kun käytät mykistystä/kuuroa.",
+            "showButtonsSelf":"Haluatpa näyttää painikkeita omalle käyttäjällesi. Samat toiminnot kuin muut painikkeet, paitsi että se avaa DM-paneelin ja mykistää/kuuroa itsellesi napsautettaessa painikkeita.",
+            "showChatButton":"Haluatko näyttää chat-painikkeen",
+            "showDeafenButton":"Haluatko näyttää kuurouspainikkeen",
+            "showMuteButton":"Haluatko näyttää mykistyspainikkeen",
+            "useServer":"Käytä palvelimen mykistystä/kuuroa paikallisen sijaan, kun sinulla on lupa.",
+            "whichNameToShow":"Valitse, näytetäänkö työkaluvihjeessä lempinimi vai käyttäjätunnus."
         }
     },
     "voiceChannelLog":{
@@ -2225,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Kuuroi kaikki",
             "disconnectAll":"Irrota kaikki",
+            "mentionAllUsers":"Mainitse kaikki käyttäjät",
             "moveAll":"Siirrä kaikki",
             "muteAll":"Mykistä kaikki",
             "undeafenAll":"Huonosti kaikki",
