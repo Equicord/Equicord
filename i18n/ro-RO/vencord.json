@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Link copiat!",
+            "maxAdditionalEmojis":"separate prin virgulă/linie nouă, max {count}",
             "messageContentCopied":"Conținutul mesajului a fost copiat!",
             "messageIdCopied":"ID-ul mesajului a fost copiat!",
+            "selectAdditionalEmojis":"Selectați Emoji suplimentare",
+            "selectEmojiForReactions":"Selectați Emoji pentru reacții",
             "userIdCopied":"ID utilizator copiat!"
         }
     },
