@@ -149,14 +149,21 @@ export function resolveRecentDmUsers(limit = 10): ResolvedUser[] {
     return results;
 }
 
-export function resolveGuildIds(target: string): string[] {
+export function resolveGuildIds(target: string, options?: { includeAllWhenEmpty?: boolean; }): string[] {
     const normalizedTarget = normalizeText(target);
-    if (!normalizedTarget) return [];
+    const includeAllWhenEmpty = options?.includeAllWhenEmpty ?? false;
+    if (!normalizedTarget && !includeAllWhenEmpty) return [];
 
     const guildById = GuildStore.getGuild?.(target);
     if (guildById) return [guildById.id];
 
     const guilds = Object.values(GuildStore.getGuilds?.() ?? {});
+    if (!normalizedTarget && includeAllWhenEmpty) {
+        return guilds
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(guild => guild.id);
+    }
+
     const scored = guilds
         .map(guild => {
             const score = scoreTargetMatch(normalizedTarget, normalizeText(guild.name));
@@ -168,8 +175,8 @@ export function resolveGuildIds(target: string): string[] {
     return scored.map(item => item.guild.id);
 }
 
-export function resolveGuilds(target: string): ResolvedGuild[] {
-    const ids = resolveGuildIds(target);
+export function resolveGuilds(target: string, options?: { includeAllWhenEmpty?: boolean; }): ResolvedGuild[] {
+    const ids = resolveGuildIds(target, options);
     const results: ResolvedGuild[] = [];
 
     for (const id of ids) {
@@ -505,7 +512,6 @@ const SETTINGS_COMMANDS = [
     { id: "settings-profiles", aliases: ["profiles", "avatar", "bio"] },
     { id: "settings-privacy", aliases: ["data and privacy", "privacy", "privacy and safety"] },
     { id: "settings-notifications", aliases: ["notifications", "notifs"] },
-    { id: "settings-clips", aliases: ["clips", "recording"] },
     { id: "settings-voice", aliases: ["voice", "voice and video", "audio"] },
     { id: "settings-chat", aliases: ["chat", "messages"] },
     { id: "settings-text", aliases: ["text", "text and images", "images"] },

@@ -199,6 +199,10 @@ export function parseQuery(rawQuery: string): ParsedQuery | null {
         return { raw, intent: "go_to", target };
     }
 
+    if (lower === "go to") {
+        return { raw, intent: "go_to", target: "" };
+    }
+
     if (lower.startsWith("open settings ")) {
         const target = raw.slice(14).trim();
         if (!target) return null;

@@ -26,6 +26,8 @@ export const SILENT_MESSAGE_TOGGLE_EXTENSION_ID = "silent-message-toggle";
 export const SILENT_MESSAGE_TOGGLE_EXTENSION_DETAIL_CATEGORY_ID = "extensions-detail-silent-message-toggle";
 export const SCHEDULED_MESSAGES_EXTENSION_ID = "scheduled-messages";
 export const SCHEDULED_MESSAGES_EXTENSION_DETAIL_CATEGORY_ID = "extensions-detail-scheduled-messages";
+export const THEME_LIBRARY_EXTENSION_ID = "theme-library";
+export const THEME_LIBRARY_EXTENSION_DETAIL_CATEGORY_ID = "extensions-detail-theme-library";
 
 export const DEFAULT_EXTENSION_KEYBINDS: Record<string, ExtensionKeybindMap> = {
     [SILENT_TYPING_EXTENSION_ID]: {
@@ -102,6 +104,18 @@ export const EXTENSIONS_CATALOG: ExtensionDefinition[] = [
         sourcePath: "src/equicordplugins/scheduledMessages",
         tags: [TAG_PLUGINS, TAG_UTILITY],
         keywords: ["extension", "plugin", "schedule", "message", "queue", "remind", "delay"]
+    },
+    {
+        id: THEME_LIBRARY_EXTENSION_ID,
+        label: "ThemeLibrary",
+        description: "Control ThemeLibrary from the command palette.",
+        detailCategoryId: THEME_LIBRARY_EXTENSION_DETAIL_CATEGORY_ID,
+        commandId: "extension-theme-library-open",
+        commandLabel: "Open Theme Library",
+        commandDescription: "Open the ThemeLibrary settings page.",
+        sourcePath: "src/equicordplugins/themeLibrary",
+        tags: [TAG_PLUGINS, TAG_UTILITY],
+        keywords: ["extension", "plugin", "theme", "library", "themes", "settings"]
     }
 ];
 

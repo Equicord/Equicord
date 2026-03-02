@@ -24,10 +24,10 @@ export function usePaletteDropdown<T>(items: T[]) {
     const moveHighlight = (direction: 1 | -1) => {
         if (items.length === 0) return;
         setHighlightIndex(current => {
-            if (current < 0) return direction > 0 ? 0 : items.length - 1;
+            if (current < 0) return direction > 0 ? 0 : 0;
             const next = current + direction;
-            if (next < 0) return items.length - 1;
-            if (next >= items.length) return 0;
+            if (next < 0) return 0;
+            if (next >= items.length) return items.length - 1;
             return next;
         });
     };

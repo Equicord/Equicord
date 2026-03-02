@@ -58,6 +58,8 @@ export interface QueryActionCandidate {
     badge: string;
     shortcut?: string;
     icon?: React.ComponentType<{ className?: string; size?: string; }>;
+    iconUrl?: string;
+    suggestionKind?: "user" | "channel" | "guild" | "generic";
     run(): boolean | void | Promise<boolean | void>;
 }
 

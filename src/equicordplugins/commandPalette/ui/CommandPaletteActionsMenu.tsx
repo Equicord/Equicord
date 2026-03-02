@@ -33,33 +33,16 @@ interface CommandPaletteActionsMenuProps {
 
 function parseShortcut(shortcut: string): string[] {
     if (!shortcut) return [];
-    const keys: string[] = [];
-    const remaining = shortcut;
-    const specialKeys: { [key: string]: string } = {
-        "⌘": "⌘",
-        "⌥": "⌥",
-        "⇧": "⇧",
-        "⌃": "⌃",
-        "↵": "↵",
-        "←": "←",
-        "→": "→",
-        "↑": "↑",
-        "↓": "↓",
-        "Tab": "Tab",
-        "Esc": "Esc",
-        "Space": "Space"
-    };
+    const tokens = shortcut
+        .match(/Esc|Tab|Space|[⌘⌥⇧⌃↵←→↑↓]|[A-Za-z0-9]+/g) ?? [];
 
-    for (let i = 0; i < remaining.length; i++) {
-        const char = remaining[i];
-        if (specialKeys[char]) {
-            keys.push(specialKeys[char]);
-        } else if (char.match(/[a-zA-Z0-9]/)) {
-            keys.push(char.toUpperCase());
-        }
-    }
+    if (!tokens.length) return [shortcut];
 
-    return keys.length > 0 ? keys : [shortcut];
+    return tokens.map(token => {
+        if (token === "Esc" || token === "Tab" || token === "Space") return token;
+        if (token.length === 1) return token.toUpperCase();
+        return token.toUpperCase();
+    });
 }
 
 export function CommandPaletteActionsMenu({ actions, title, onClose, onAction, isClosing }: CommandPaletteActionsMenuProps) {

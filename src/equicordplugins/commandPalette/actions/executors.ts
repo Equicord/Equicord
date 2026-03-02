@@ -253,6 +253,8 @@ function buildOpenDmCandidates(target: string): QueryActionCandidate[] {
         description: "Direct message",
         badge: "Query",
         icon: makeIconFromUrl(match.iconUrl) ?? NotesIcon,
+        iconUrl: match.iconUrl,
+        suggestionKind: "user",
         run: async () => {
             const dmId = await openDmByUserId(match.user.id);
             if (!dmId) {
@@ -266,8 +268,8 @@ function buildOpenDmCandidates(target: string): QueryActionCandidate[] {
 }
 
 function buildGoToCandidates(target: string): QueryActionCandidate[] {
-    const guilds = resolveGuilds(target).slice(0, 5);
-    const channels = resolveChannels(target).slice(0, 5);
+    const trimmedTarget = target.trim();
+    const guilds = resolveGuilds(trimmedTarget, { includeAllWhenEmpty: true }).slice(0, 24);
     const candidates: QueryActionCandidate[] = [];
 
     for (const guild of guilds) {
@@ -276,26 +278,9 @@ function buildGoToCandidates(target: string): QueryActionCandidate[] {
             label: guild.display,
             badge: "Query",
             icon: makeIconFromUrl(guild.iconUrl),
+            iconUrl: guild.iconUrl,
+            suggestionKind: "guild",
             run: () => NavigationRouter.transitionToGuild(guild.id)
-        });
-    }
-
-    for (const channel of channels) {
-        candidates.push({
-            id: `query-go-channel-${channel.id}`,
-            label: channel.display,
-            badge: "Query",
-            icon: makeIconFromUrl(channel.iconUrl),
-            run: () => {
-                const resolved = ChannelStore.getChannel(channel.id);
-                const guildId = resolved?.guild_id;
-                if (guildId) {
-                    NavigationRouter.transitionTo(`/channels/${guildId}/${channel.id}`);
-                    return;
-                }
-
-                NavigationRouter.transitionTo(`/channels/@me/${channel.id}`);
-            }
         });
     }
 
@@ -304,9 +289,9 @@ function buildGoToCandidates(target: string): QueryActionCandidate[] {
     return [{
         id: "query-go-invalid",
         label: "Navigate to",
-        description: "No channel or guild matches that target.",
+        description: "No server matches that target.",
         badge: "Query",
-        run: () => showToast("No channel or guild matches that target.", Toasts.Type.FAILURE)
+        run: () => showToast("No server matches that target.", Toasts.Type.FAILURE)
     }];
 }
 

@@ -14,7 +14,7 @@ import { copyWithToast } from "@utils/discord";
 import type { Plugin } from "@utils/types";
 import { changes, checkForUpdates } from "@utils/updater";
 import { Guild } from "@vencord/discord-types";
-import { findByPropsLazy, findStoreLazy } from "@webpack";
+import { findByPropsLazy, findExportedComponentLazy, findStoreLazy } from "@webpack";
 import { Alerts, ChannelActionCreators, ChannelRouter, ChannelStore, ComponentDispatch, FluxDispatcher, GuildStore, IconUtils, MediaEngineStore, MessageStore, NavigationRouter, React, ReadStateStore, ReadStateUtils, SelectedChannelStore, SelectedGuildStore, SettingsRouter, StreamerModeStore, Toasts, useEffect, UserStore, VoiceActions } from "@webpack/common";
 import type { FC, ReactElement, ReactNode } from "react";
 import { Settings } from "Vencord";
@@ -748,6 +748,7 @@ const runtimeCleanupCallbacks: Array<() => void> = [];
 const NotificationSettingsActionCreators = findByPropsLazy("updateGuildNotificationSettings", "updateChannelOverrideSettings");
 const GuildSettingsActions = findByPropsLazy("open", "selectRole", "updateGuild");
 const GuildMembershipActions = findByPropsLazy("leaveGuild");
+const HeadphonesIcon = findExportedComponentLazy("HeadphonesIcon");
 const UserGuildSettingsStore = findStoreLazy("UserGuildSettingsStore");
 const NotificationsInboxStore = findStoreLazy("NotificationsInboxStore") as NotificationsInboxStoreLike;
 const RecentMentionsStore = findStoreLazy("RecentMentionsStore") as RecentMentionsStoreLike;
@@ -830,17 +831,12 @@ const DISCORD_SETTINGS_ROUTE_LOOKUP = (() => {
 })();
 
 function normalizeSettingsRouteInput(route: string): string {
-    const normalized = route
+    return route
         .trim()
         .toLowerCase()
         .replace(/^\/+/, "")
         .replace(/\s+/g, "_")
         .replace(/&/g, "and");
-
-    if (!normalized) return "";
-    return normalized.endsWith("_panel")
-        ? normalized.slice(0, -"_panel".length)
-        : normalized;
 }
 
 function resolveCanonicalSettingsRoute(route: string): string {
@@ -860,9 +856,18 @@ function resolveSettingsRouteCandidates(route: string): string[] {
 
     for (const candidate of candidates) {
         const sanitized = normalizeSettingsRouteInput(candidate);
-        if (!sanitized || seen.has(sanitized)) continue;
-        seen.add(sanitized);
-        unique.push(sanitized);
+        if (!sanitized) continue;
+
+        const expanded = sanitized.endsWith("_panel")
+            ? [sanitized, sanitized.slice(0, -"_panel".length)]
+            : [`${sanitized}_panel`, sanitized];
+
+        for (const expandedCandidate of expanded) {
+            const normalizedCandidate = normalizeSettingsRouteInput(expandedCandidate);
+            if (!normalizedCandidate || seen.has(normalizedCandidate)) continue;
+            seen.add(normalizedCandidate);
+            unique.push(normalizedCandidate);
+        }
     }
 
     return unique;
@@ -1443,7 +1448,6 @@ const DISCORD_SETTINGS_COMMANDS: Array<{ id: string; label: string; route: strin
     { id: "settings-profiles", label: "Open Profiles", route: "profiles", keywords: ["profile", "avatar", "bio"] },
     { id: "settings-privacy", label: "Open Data & Privacy", route: "data_and_privacy", keywords: ["privacy", "safety", "data"] },
     { id: "settings-notifications", label: "Open Notifications", route: "notifications", keywords: ["notifications"] },
-    { id: "settings-clips", label: "Open Clips", route: "clips", keywords: ["clips", "recording"] },
     { id: "settings-voice", label: "Open Voice & Video", route: "voice_and_video", keywords: ["voice", "video", "audio", "mic", "microphone", "input", "output", "speaker", "camera"] },
     { id: "settings-chat", label: "Open Chat", route: "chat", keywords: ["chat", "messages"] },
     { id: "settings-text", label: "Open Text & Images", route: "text_and_images", keywords: ["text", "images"] },
@@ -1809,7 +1813,7 @@ function registerPluginManagerCommands() {
         label: "Plugins",
         description: "Manage plugins by category.",
         keywords: ["plugins", "plugin manager", "enable", "disable", "settings"],
-        categoryId: "plugins",
+        categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_PLUGINS, TAG_NAVIGATION],
         drilldownCategoryId: "plugins",
         handler: () => undefined
@@ -3345,7 +3349,7 @@ function registerCommandPaletteUtilities() {
 }
 
 function registerSystemUtilityCommands() {
-    const commands: Array<{ id: string; label: string; description?: string; handler: () => void; keywords: string[]; tags: string[]; }> = [
+    const commands: Array<{ id: string; label: string; description?: string; handler: () => void; keywords: string[]; tags: string[]; icon?: CommandEntry["icon"]; }> = [
         {
             id: "set-status-online",
             label: "Quick Status: Online",
@@ -3400,7 +3404,8 @@ function registerSystemUtilityCommands() {
             label: "Toggle Self Deafen",
             handler: toggleSelfDeaf,
             keywords: ["voice", "deafen"],
-            tags: [TAG_UTILITY]
+            tags: [TAG_UTILITY],
+            icon: HeadphonesIcon
         }
     ];
 
@@ -3412,6 +3417,7 @@ function registerSystemUtilityCommands() {
             keywords: entry.keywords,
             categoryId: DEFAULT_CATEGORY_ID,
             tags: entry.tags,
+            icon: entry.icon,
             handler: entry.handler
         });
     }
@@ -3647,8 +3653,8 @@ function registerCustomizationCommands() {
 
     registerCommand({
         id: "open-theme-library",
-        label: "Open Theme Library",
-        keywords: ["theme", "library"],
+        label: "Open Themes",
+        keywords: ["theme", "themes", "library"],
         categoryId: DEFAULT_CATEGORY_ID,
         tags: [TAG_CUSTOMIZATION, TAG_NAVIGATION],
         handler: () => SettingsRouter.openUserSettings("equicord_themes_panel")

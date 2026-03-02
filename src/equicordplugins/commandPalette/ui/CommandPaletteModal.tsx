@@ -88,7 +88,7 @@ const promptChipFont = "500 17px \"gg sans\", \"Noto Sans\", \"Helvetica Neue\",
 const promptChipWidthCache = new Map<string, number>();
 let promptChipCanvasContext: CanvasRenderingContext2D | null = null;
 
-function getCommandBadge(command: CommandEntry, fallback: "Command" | "Recent"): string {
+function getCommandBadge(command: CommandEntry, fallback: "Command" | "Recent" | "Pinned"): string {
     const defaultBadge = fallback === "Recent" ? "Command" : fallback;
     if (!command.id.startsWith("custom-")) return defaultBadge;
 
@@ -109,7 +109,7 @@ function getCommandBadge(command: CommandEntry, fallback: "Command" | "Recent"):
     }
 }
 
-function asCommandCandidate(command: CommandEntry, pinned: boolean, badge: "Command" | "Recent"): CommandCandidate {
+function asCommandCandidate(command: CommandEntry, pinned: boolean, badge: "Command" | "Recent" | "Pinned"): CommandCandidate {
     const path = getCategoryPath(command.categoryId)
         .filter(category => category.id !== DEFAULT_CATEGORY_ID)
         .map(category => category.label)
@@ -401,6 +401,19 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
     const recentCandidates = useMemo(() => {
         return getRecentCommandEntries(5).map(command => asCommandCandidate(command, pinnedIds.has(command.id), "Recent"));
     }, [registryVersion, pinnedIds]);
+    const pinnedCandidates = useMemo(() => {
+        if (navigationLevel.type !== "root") return [];
+        if (trimmedQuery.length > 0) return [];
+
+        const pinnedItems: CommandCandidate[] = [];
+        for (const id of pinnedIds) {
+            const command = allCommands.find(entry => entry.id === id);
+            if (!command || command.hiddenInSearch) continue;
+            pinnedItems.push(asCommandCandidate(command, true, "Pinned"));
+        }
+
+        return pinnedItems.sort((left, right) => left.command.label.localeCompare(right.command.label));
+    }, [allCommands, navigationLevel.type, pinnedIds, trimmedQuery.length]);
 
     const suggestedCandidates = useMemo(() => {
         if (navigationLevel.type !== "root") return [];
@@ -426,6 +439,11 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         }
 
         if (!compact && navigationLevel.type === "root" && trimmedQuery.length === 0) {
+            if (pinnedCandidates.length > 0) {
+                expandedItems.push({ type: "section", id: "section-pinned", label: "Pinned" });
+                expandedItems.push(...pinnedCandidates);
+            }
+
             if (recentCandidates.length > 0) {
                 expandedItems.push({ type: "section", id: "section-recent", label: "Recent" });
                 expandedItems.push(...recentCandidates);
@@ -455,7 +473,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         }
 
         return expandedItems;
-    }, [compact, navigationLevel, rankedCommandCandidates, recentCandidates, suggestedCandidates, trimmedQuery]);
+    }, [compact, navigationLevel, pinnedCandidates, rankedCommandCandidates, recentCandidates, suggestedCandidates, trimmedQuery]);
 
     const emptyStateText = navigationLevel.type === "category" && navigationLevel.categoryId === MENTIONS_CATEGORY_ID
         ? "All caught up."
@@ -474,6 +492,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         ? explicitlySelectedCommand
         : null;
     const promptCommand = activePromptCommand ?? previewPromptCommand;
+    const shouldRenderPromptPreview = Boolean(promptCommand && (activePromptCommand || trimmedQuery.length === 0));
     const calculatorResult = useMemo(() => {
         if (!trimmedQuery) return null;
         if (activePromptCommand) return null;
@@ -508,9 +527,10 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
     const promptDropdownSuggestions = useMemo<PaletteSuggestion[]>(() => queryCandidates.map(candidate => ({
         id: candidate.id,
         label: candidate.label,
-        iconUrl: undefined,
-        kind: "generic"
+        iconUrl: candidate.iconUrl,
+        kind: candidate.suggestionKind ?? "generic"
     })), [queryCandidates]);
+    const shouldShowPromptDropdown = Boolean(activePromptCommand && showPromptDropdown && queryCandidates.length > 0);
     const promptSelectedSuggestionIndex = useMemo(() => {
         if (!selectedPromptCandidateId) return -1;
         return promptDropdownSuggestions.findIndex(candidate => candidate.id === selectedPromptCandidateId);
@@ -992,7 +1012,10 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
 
     const onKeyDown = async (event: ReactKeyboardEvent<HTMLDivElement>) => {
         const target = event.target as HTMLElement | null;
-        const isPromptInputTarget = Boolean(target?.closest(promptActiveSelector));
+        const isPromptInputTarget = Boolean(
+            target?.closest(promptActiveSelector)
+            || (target && promptContainerRef.current?.contains(target))
+        );
         const isMainInputTarget = Boolean(target?.closest(mainInputSelectorClass)) && !isPromptInputTarget;
         const isPageTarget = Boolean(target?.closest(pageSelector));
 
@@ -1076,29 +1099,15 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
 
             if (event.key === "ArrowDown") {
                 event.preventDefault();
-                if (showPromptDropdown && promptDropdownSuggestions.length > 0) {
-                    const nextIndex = promptSelectedSuggestionIndex < promptDropdownSuggestions.length - 1
-                        ? promptSelectedSuggestionIndex + 1
-                        : 0;
-                    const candidate = promptDropdownSuggestions[nextIndex];
-                    if (candidate) {
-                        setSelectedPromptCandidateId(candidate.id);
+                if (promptDropdownSuggestions.length > 0) {
+                    if (!showPromptDropdown) {
+                        setShowPromptDropdown(true);
                     }
-                    return;
-                }
-                if (compact) {
-                    setExpanded(true);
-                    return;
-                }
-                moveSelection(1);
-                return;
-            }
-
-            if (event.key === "ArrowUp") {
-                event.preventDefault();
-                if (showPromptDropdown && promptDropdownSuggestions.length > 0) {
-                    const nextIndex = promptSelectedSuggestionIndex > 0
-                        ? promptSelectedSuggestionIndex - 1
+                    const baseIndex = showPromptDropdown && promptSelectedSuggestionIndex >= 0
+                        ? promptSelectedSuggestionIndex
+                        : -1;
+                    const nextIndex = baseIndex < promptDropdownSuggestions.length - 1
+                        ? baseIndex + 1
                         : promptDropdownSuggestions.length - 1;
                     const candidate = promptDropdownSuggestions[nextIndex];
                     if (candidate) {
@@ -1106,12 +1115,29 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                     }
                     return;
                 }
-                if (compact) return;
-                if (selectedIndex <= 0) {
-                    focusSearchInput();
+                setShowPromptDropdown(true);
+                return;
+            }
+
+            if (event.key === "ArrowUp") {
+                event.preventDefault();
+                if (promptDropdownSuggestions.length > 0) {
+                    if (!showPromptDropdown) {
+                        setShowPromptDropdown(true);
+                    }
+                    const baseIndex = showPromptDropdown && promptSelectedSuggestionIndex >= 0
+                        ? promptSelectedSuggestionIndex
+                        : 0;
+                    const nextIndex = baseIndex > 0
+                        ? baseIndex - 1
+                        : 0;
+                    const candidate = promptDropdownSuggestions[nextIndex];
+                    if (candidate) {
+                        setSelectedPromptCandidateId(candidate.id);
+                    }
                     return;
                 }
-                moveSelection(-1);
+                setShowPromptDropdown(true);
                 return;
             }
 
@@ -1145,6 +1171,12 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         if (isMainInputTarget && promptCommand && !isPageOpen && (event.key === "Tab" || event.key === "ArrowRight")) {
             event.preventDefault();
             activatePromptCommand(promptCommand, true);
+            return;
+        }
+
+        if (isMainInputTarget && activePromptCommand && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
+            event.preventDefault();
+            setFocusPromptInput(true);
             return;
         }
 
@@ -1362,11 +1394,12 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
         <ModalRoot
             {...modalProps}
             className={cn("vc-command-palette", compact && cl("compact"))}
-            size={isPageOpen ? ModalSize.DYNAMIC : (compact ? ModalSize.SMALL : ModalSize.LARGE)}
+            size={compact ? ModalSize.SMALL : ModalSize.LARGE}
         >
             <div className={cl("shell")} onKeyDown={onKeyDown}>
                 {!isPageOpen && (
                     <CommandPaletteInput
+                        autoFocus={!activePromptCommand}
                         value={query}
                         onChange={value => {
                             const next = value.trim();
@@ -1382,10 +1415,10 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                                 setExpanded(false);
                             }
                         }}
-                        placeholder={showPromptCommandPreview ? (promptCommand?.label ?? "") : undefined}
+                        placeholder={showPromptCommandPreview && trimmedQuery.length === 0 ? (promptCommand?.label ?? "") : undefined}
                         readOnly={false}
                     >
-                        {promptCommand && (
+                        {shouldRenderPromptPreview && promptCommand && (
                             <div
                                 ref={promptContainerRef}
                                 className={cl("query-preview")}
@@ -1398,31 +1431,28 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                                             style={promptChipStyle}
                                             onMouseDown={() => setShowPromptDropdown(true)}
                                         >
-                                            {!(activePromptIsSingleSelect && selectedPromptCandidate) ? (
-                                                <TextInput
-                                                    className={cl("prompt-active-input")}
-                                                    value={promptInputValue}
-                                                    onChange={value => {
-                                                        setPromptInputValue(value);
-                                                        if (selectedPromptCandidateId) {
-                                                            setSelectedPromptCandidateId(null);
-                                                        }
-                                                    }}
-                                                    placeholder={selectedPromptCandidate ? "" : (promptCommand.queryPlaceholder ?? "Action")}
-                                                    onFocus={() => setShowPromptDropdown(true)}
-                                                    onBlur={() => {
-                                                        window.setTimeout(() => {
-                                                            const active = document.activeElement;
-                                                            if (promptContainerRef.current?.contains(active)) return;
-                                                            setShowPromptDropdown(false);
-                                                            if (selectedPromptCandidateId || promptInputValue.trim().length > 0) return;
-                                                            clearPromptState();
-                                                        }, 0);
-                                                    }}
-                                                />
-                                            ) : (
-                                                <span className={cl("query-prompt-capsule-label")}>{selectedPromptCandidate.label}</span>
-                                            )}
+                                            <TextInput
+                                                className={cl("prompt-active-input")}
+                                                value={promptInputValue}
+                                                onChange={value => {
+                                                    setPromptInputValue(value);
+                                                    setShowPromptDropdown(true);
+                                                    if (selectedPromptCandidateId) {
+                                                        setSelectedPromptCandidateId(null);
+                                                    }
+                                                }}
+                                                placeholder={selectedPromptCandidate ? "" : (promptCommand.queryPlaceholder ?? "Action")}
+                                                onFocus={() => setShowPromptDropdown(true)}
+                                                onBlur={() => {
+                                                    window.setTimeout(() => {
+                                                        const active = document.activeElement;
+                                                        if (promptContainerRef.current?.contains(active)) return;
+                                                        setShowPromptDropdown(false);
+                                                        if (selectedPromptCandidateId || promptInputValue.trim().length > 0) return;
+                                                        clearPromptState();
+                                                    }, 0);
+                                                }}
+                                            />
                                         </div>
                                     ) : (
                                         <button
@@ -1435,11 +1465,10 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                                             <span className={cl("query-prompt-capsule-label")}>{promptCommand.queryPlaceholder ?? "Action"}</span>
                                         </button>
                                     )}
-                                    {activePromptCommand && showPromptDropdown && queryCandidates.length > 0 && (
+                                    {shouldShowPromptDropdown && (
                                         <PaletteDropdown
                                             className={cl("query-preview-dropdown")}
                                             suggestions={promptDropdownSuggestions}
-                                            showIcons={false}
                                             highlightedIndex={promptSelectedSuggestionIndex}
                                             onHover={index => {
                                                 const candidate = promptDropdownSuggestions[index];
@@ -1448,13 +1477,15 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                                             }}
                                             onPick={candidate => {
                                                 setSelectedPromptCandidateId(candidate.id);
-                                                setPromptInputValue("");
+                                                if (activePromptIsSingleSelect) {
+                                                    setPromptInputValue(candidate.label);
+                                                } else {
+                                                    setPromptInputValue("");
+                                                }
                                                 if (activePromptIsSingleSelect) {
                                                     setShowPromptDropdown(false);
-                                                    focusSearchInput();
-                                                } else {
-                                                    setFocusPromptInput(true);
                                                 }
+                                                setFocusPromptInput(true);
                                             }}
                                         />
                                     )}

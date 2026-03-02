@@ -78,3 +78,5 @@ export type SilentMessageTogglePluginWithSettings = Plugin & {
 export type ScheduledMessagesPlugin = Plugin & {
     toolboxActions?: Record<string, () => void | Promise<void>>;
 };
+
+export type ThemeLibraryPlugin = Plugin;

@@ -14,6 +14,7 @@ import { createRandomVoiceExtensionCommand } from "./actions/randomVoice";
 import { createScheduledMessagesExtensionCommands } from "./actions/scheduledMessages";
 import { createSilentMessageToggleExtensionCommand } from "./actions/silentMessageToggle";
 import { createSilentTypingExtensionCommand } from "./actions/silentTyping";
+import { createThemeLibraryExtensionCommand } from "./actions/themeLibrary";
 import {
     EXTENSIONS_CATALOG_CATEGORY_ID,
     EXTENSIONS_DETAIL_PROVIDER_ID,
@@ -23,6 +24,7 @@ import {
     SCHEDULED_MESSAGES_EXTENSION_ID,
     SILENT_MESSAGE_TOGGLE_EXTENSION_ID,
     SILENT_TYPING_EXTENSION_ID,
+    THEME_LIBRARY_EXTENSION_ID,
     toRepositoryBlobUrl
 } from "./catalog";
 import type { ExtensionsState } from "./state";
@@ -63,6 +65,10 @@ function createInstalledExtensionCommands(extensionsState: ExtensionsState): Com
 
     if (extensionsState.installedExtensionIds.has(SCHEDULED_MESSAGES_EXTENSION_ID)) {
         entries.push(...createScheduledMessagesExtensionCommands());
+    }
+
+    if (extensionsState.installedExtensionIds.has(THEME_LIBRARY_EXTENSION_ID)) {
+        entries.push(createThemeLibraryExtensionCommand());
     }
 
     return entries;

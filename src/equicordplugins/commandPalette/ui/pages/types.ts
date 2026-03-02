@@ -18,6 +18,7 @@ export interface PaletteSuggestion {
     label: string;
     sublabel?: string;
     iconUrl?: string;
+    icon?: React.ComponentType<{ className?: string; size?: string; }>;
     kind?: "user" | "channel" | "guild" | "generic";
 }
 

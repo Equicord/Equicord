@@ -4,16 +4,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { findExportedComponentLazy } from "@webpack";
+
 import { cancelScheduledStatusReset, setStatusDndForDuration } from "../../../registry";
 import type { PalettePageSpec, PaletteSuggestion } from "../types";
 
+const TimerIcon = findExportedComponentLazy("TimerIcon");
 const DURATION_CHOICES = [
-    { id: "15", label: "15 minutes" },
-    { id: "30", label: "30 minutes" },
-    { id: "45", label: "45 minutes" },
-    { id: "60", label: "1 hour" },
-    { id: "120", label: "2 hours" },
-    { id: "cancel", label: "Cancel active timer" }
+    { id: "15", label: "15 minutes", icon: TimerIcon },
+    { id: "30", label: "30 minutes", icon: TimerIcon },
+    { id: "45", label: "45 minutes", icon: TimerIcon },
+    { id: "60", label: "1 hour", icon: TimerIcon },
+    { id: "120", label: "2 hours", icon: TimerIcon },
+    { id: "cancel", label: "Cancel active timer", icon: TimerIcon }
 ] satisfies PaletteSuggestion[];
 
 function resolveDurationId(input: string, selectedId: string | null): string | null {
