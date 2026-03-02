@@ -541,6 +541,7 @@
             "noMirroredCamera":"防止相機鏡像到螢幕上",
             "refreshSlashCommands":"刷新斜線命令以顯示新新增的命令，而無需重新啟動客戶端。",
             "removeActivitySection":"刪除會員清單上方的活動部分",
+            "restoreFileDownloadButton":"在檔案右上角新增了「下載」按鈕",
             "showYourOwnActivityButtons":"Discord 由於某種原因隱藏了您自己的活動按鈕"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"关闭",
             "open":"打開"
+        }
+    },
+    "hideMessages":{
+        "description":"一個插件，可暫時隱藏訊息，直到您重新啟動為止。",
+        "settings":{
+            "hidePopoverButton":"隱藏訊息彈出視窗中的隱藏按鈕。"
+        },
+        "ui":{
+            "hide":"隐藏"
         }
     },
     "hideServers":{
@@ -1497,6 +1507,9 @@
     "noNitroUpsell":{
         "description":"透過涵蓋您的高級類型來消除 Nitro 追加銷售"
     },
+    "noPushToTalk":{
+        "description":"繞過強制執行頻道中語音活動的一鍵通要求。"
+    },
     "noRPC":{
         "description":"停用 Discord 的豐富狀態 (RPC) 功能"
     },
@@ -2032,6 +2045,21 @@
             "translate":"翻譯"
         }
     },
+    "triviaAI":{
+        "description":"一個可以幫助您使用人工智慧回答瑣事問題的外掛程式。",
+        "settings":{
+            "apiKey":"API 鍵。",
+            "autoRespond":"收到回覆後自動回覆訊息。",
+            "endpoint":"OpenAI 相容的 AI 端點。",
+            "maxTokens":"回應中的最大令牌數。",
+            "model":"要使用的 AI 模型。",
+            "supportImages":"將圖像傳遞給 AI 以獲取上下文（如果有）。並非所有型號都支援此功能。",
+            "systemPrompt":"AI的系統提示。"
+        },
+        "ui":{
+            "answerWithAI":"AI 解答"
+        }
+    },
     "unitConverter":{
         "description":"轉換訊息中的單位（英制/公制）",
         "popover":{
@@ -2188,10 +2216,27 @@
     },
     "voiceButtons":{
         "description":"為語音通道使用者新增快速操作按鈕（聊天、靜音、聾）",
+        "options":{
+            "both":"兩個都",
+            "disable":"关闭",
+            "display":"显示",
+            "globalName":"全球名稱",
+            "hide":"隐藏",
+            "left":"左邊",
+            "right":"正確的",
+            "username":"用户名"
+        },
         "settings":{
-            "showChatButton":"顯示聊天按鈕",
-            "showDeafenButton":"顯示震耳欲聾的按鈕",
-            "showMuteButton":"顯示靜音按鈕"
+            "buttonPosition":"選擇語音用戶行中語音按鈕的放置位置。",
+            "disableVideo":"點擊震耳欲聾的按鈕即可切換影片。",
+            "muteSoundboard":"點擊震耳欲聾的按鈕即可切換音板。",
+            "serverSelf":"使用靜音/耳聾時，在伺服器上將自己靜音。",
+            "showButtonsSelf":"是否要為您自己的使用者顯示按鈕。與其他按鈕的功能相同，只是它會在單擊按鈕時打開 DM 面板並為您自己靜音/失聰。",
+            "showChatButton":"是否要顯示聊天按鈕",
+            "showDeafenButton":"是否要顯示震耳欲聾的按鈕",
+            "showMuteButton":"是否要顯示靜音按鈕",
+            "useServer":"當您有權限時，請使用伺服器靜音/失聰而不是本機靜音。",
+            "whichNameToShow":"選擇是否在工具提示中顯示暱稱或使用者名稱。"
         }
     },
     "voiceChannelLog":{
@@ -2216,6 +2261,7 @@
         "contextMenu":{
             "deafenAll":"震耳欲聾",
             "disconnectAll":"斷開所有連接",
+            "mentionAllUsers":"提及所有用戶",
             "moveAll":"全部移動",
             "muteAll":"全部靜音",
             "undeafenAll":"全部不聾",
