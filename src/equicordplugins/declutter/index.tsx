@@ -7,6 +7,7 @@
 import { definePluginSettings, migratePluginSetting, migratePluginSettings } from "@api/Settings";
 import { HeadingSecondary } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/index";
+import { t } from "@utils/translation";
 import definePlugin, { OptionType } from "@utils/types";
 
 migratePluginSettings("Declutter", "BetterUserArea", "Anammox");
@@ -27,97 +28,97 @@ for (const [oldKey, newKey] of migrationsAnammox) {
 export const settings = definePluginSettings({
     userProfileHeader: {
         type: OptionType.COMPONENT,
-        component: () => SectionSeparator("User Profile"),
+        component: () => SectionSeparator(t("declutter.headers.userProfile")),
     },
     removeAvatarDecoration: {
         type: OptionType.BOOLEAN,
-        description: "Remove avatar decorations.",
+        description: t("declutter.settings.removeAvatarDecoration"),
         default: true,
         restartNeeded: true,
     },
     removeNameplate: {
         type: OptionType.BOOLEAN,
-        description: "Remove nameplates.",
+        description: t("declutter.settings.removeNameplate"),
         default: true,
         restartNeeded: true,
     },
     removeProfileEffect: {
         type: OptionType.BOOLEAN,
-        description: "Remove profile animation effects on open.",
+        description: t("declutter.settings.removeProfileEffect"),
         default: true,
         restartNeeded: true,
     },
     removeClanTag: {
         type: OptionType.BOOLEAN,
-        description: "Remove clan tags.",
+        description: t("declutter.settings.removeClanTag"),
         default: true,
         restartNeeded: true,
     },
     alwaysShowUsername: {
         type: OptionType.BOOLEAN,
-        description: "Always show username instead of status.",
+        description: t("declutter.settings.alwaysShowUsername"),
         default: true,
         restartNeeded: true
     },
     removeUsernameStyles: {
         type: OptionType.BOOLEAN,
-        description: "Remove username colors and effects.",
+        description: t("declutter.settings.removeUsernameStyles"),
         default: true,
         restartNeeded: true
     },
     friendsListHeader: {
         type: OptionType.COMPONENT,
-        component: () => SectionSeparator("Above Friends/DMs List"),
+        component: () => SectionSeparator(t("declutter.headers.friendsList")),
     },
     removeShopAboveDM: {
         type: OptionType.BOOLEAN,
-        description: "Remove shops above DMs list.",
+        description: t("declutter.settings.removeShopAboveDM"),
         default: true,
         restartNeeded: true,
     },
     removeQuestsAboveDM: {
         type: OptionType.BOOLEAN,
-        description: "Remove quests above DMs list.",
+        description: t("declutter.settings.removeQuestsAboveDM"),
         default: false,
         restartNeeded: true,
     },
     miscHeader: {
         type: OptionType.COMPONENT,
-        component: () => SectionSeparator("Misc"),
+        component: () => SectionSeparator(t("declutter.headers.misc")),
     },
     removeServerBoostInfo: {
         type: OptionType.BOOLEAN,
-        description: "Remove server boost info above channel list.",
+        description: t("declutter.settings.removeServerBoostInfo"),
         default: true,
         restartNeeded: true,
     },
     removeBillingSettings: {
         type: OptionType.BOOLEAN,
-        description: "Remove billing settings.",
+        description: t("declutter.settings.removeBillingSettings"),
         default: true,
         restartNeeded: true,
     },
     removeGiftButton: {
         type: OptionType.BOOLEAN,
-        description: "Remove gift button.",
+        description: t("declutter.settings.removeGiftButton"),
         default: true,
         restartNeeded: true,
     },
     removeUnavailableEmojiPicker: {
         type: OptionType.BOOLEAN,
-        description: "Remove unavailable categories from the emoji picker.",
+        description: t("declutter.settings.removeUnavailableEmojiPicker"),
         default: true,
         restartNeeded: true,
     },
     removeAudioMenus: {
         type: OptionType.BOOLEAN,
-        description: "Remove menus next to mute and deafen buttons.",
+        description: t("declutter.settings.removeAudioMenus"),
         default: true,
         restartNeeded: true
     },
     removeButtonTooltips: {
         type: OptionType.BOOLEAN,
-        description: "Remove button tooltips.",
+        description: t("declutter.settings.removeButtonTooltips"),
         default: false,
         restartNeeded: true
     },
@@ -135,7 +136,7 @@ function SectionSeparator(title: string) {
 
 export default definePlugin({
     name: "Declutter",
-    description: "Declutter discord ui by removing unwanted elements such as profile customizations, shops, quests and more.",
+    description: t("declutter.description"),
     authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi],
     settings,
     patches: [

@@ -113,17 +113,6 @@
     "alwaysExpandProfiles": {
         "description": "Always expands profile popouts to the full modal"
     },
-    "anammox": {
-        "description": "Hides various features related to nitro and the store",
-        "settings": {
-            "dms": "Remove shops above DMs list",
-            "quests": "Remove quests above DMs list",
-            "serverBoost": "Remove server boost info above channel list",
-            "billing": "Remove billing settings",
-            "gift": "Remove gift button",
-            "emojiList": "Remove unavailable categories from the emoji picker"
-        }
-    },
     "animalese": {
         "description": "Plays animal crossing animalese for every message sent (they yap a lot)",
         "settings": {
@@ -188,17 +177,6 @@
     },
     "betterPlusReacts": {
         "description": "The amount of plus before :emoji: is the message to add it to"
-    },
-    "betterUserArea": {
-        "description": "Customize and make the user area more clean.",
-        "settings": {
-            "removeNameplate": "Remove nameplate styling.",
-            "removeAudioMenus": "Remove menus next to mute and deafen buttons.",
-            "alwaysShowUsername": "Always show username instead of status.",
-            "removeButtonTooltips": "Remove button tooltips.",
-            "removeAvatarDecoration": "Remove avatar decoration.",
-            "removeUsernameStyles": "Remove username colors and effects."
-        }
     },
     "blockKeywords": {
         "description": "Blocks messages containing specific user-defined keywords, as if the user sending them was blocked.",
@@ -447,6 +425,30 @@
         },
         "contextMenu": {
             "setColor": "Set Color"
+        }
+    },
+    "declutter": {
+        "description": "Declutter discord ui by removing unwanted elements such as profile customizations, shops, quests and more.",
+        "settings": {
+            "removeNameplate": "Remove nameplate styling.",
+            "removeAudioMenus": "Remove menus next to mute and deafen buttons.",
+            "alwaysShowUsername": "Always show username instead of status.",
+            "removeButtonTooltips": "Remove button tooltips.",
+            "removeAvatarDecoration": "Remove avatar decoration.",
+            "removeUsernameStyles": "Remove username colors and effects.",
+            "removeShopAboveDM": "Remove shops above DMs list.",
+            "removeQuestsAboveDM": "Remove quests above DMs list.",
+            "removeServerBoostInfo": "Remove server boost info above channel list.",
+            "removeBillingSettings": "Remove billing settings.",
+            "removeGiftButton": "Remove gift button.",
+            "removeUnavailableEmojiPicker": "Remove unavailable categories from the emoji picker.",
+            "removeProfileEffect": "Remove profile animation effects on open.",
+            "removeClanTag": "Remove clan tags."
+        },
+        "headers": {
+            "userProfile": "User Profile",
+            "friendsList": "Above Friends/DMs List",
+            "misc": "Misc"
         }
     },
     "disableCameras": {
