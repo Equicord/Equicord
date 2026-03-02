@@ -22,7 +22,7 @@ const migrationsAnammox = [
 ];
 
 for (const [oldKey, newKey] of migrationsAnammox) {
-    migratePluginSetting("Anammox", newKey, oldKey);
+    migratePluginSetting("Declutter", newKey, oldKey);
 }
 
 export const settings = definePluginSettings({
