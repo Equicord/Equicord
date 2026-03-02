@@ -621,7 +621,7 @@
     "fixSpotifyEmbeds":{
         "description":"Naprawiono niewiarygodną głośność osadzonych spotify, umożliwiając dostosowanie głośności",
         "settings":{
-            "volume":"% głośności do ustawienia dla osadzania Spotify. Wszystko powyżej 10% jest baaardzo głośne"
+            "volume":"Procent głośności do ustawienia dla osadzania Spotify. Wszystko powyżej 10% jest baaardzo głośne"
         }
     },
     "fixYoutubeEmbeds":{
