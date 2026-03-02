@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"リンクがコピーされました!",
+            "maxAdditionalEmojis":"カンマ/改行区切り、最大 {count}",
             "messageContentCopied":"メッセージの内容がコピーされました!",
             "messageIdCopied":"メッセージIDがコピーされました!",
+            "selectAdditionalEmojis":"追加の絵文字を選択",
+            "selectEmojiForReactions":"リアクション用の絵文字を選択",
             "userIdCopied":"ユーザーIDがコピーされました!"
         }
     },

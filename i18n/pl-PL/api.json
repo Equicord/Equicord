@@ -3,7 +3,7 @@
         "errorExecuting":"Wystąpił błąd podczas wykonywania polecenia „[[PH0]]]”"
     },
     "memberListDecorators":{
-        "fallback":"Nie udało się wyrenderować {key} dekoratora listy członków"
+        "fallback":"Nie udało się wyrenderować {key} ozdobnika listy członków"
     },
     "messageAccessories":{
         "fallback":"Nie udało się wyrenderować {key} akcesorium wiadomości"
@@ -22,16 +22,16 @@
             "body_zero":"Nie wybrano powiadomienia.",
             "cancel":"Nieważne",
             "clearNotificationLog":"Wyczyść dziennik powiadomień",
-            "confirm":"Zrób to!",
-            "title":"Jesteś tego pewny?"
+            "confirm":"Wykonaj!",
+            "title":"Jesteś pewny?"
         },
         "missedNotifications":{
-            "body_one":"{count} otrzymano powiadomienie",
-            "body_other":"Otrzymano {count} powiadomienia",
-            "title":"Kiedy cię nie było"
+            "body_one":"Liczba powiadomień: {count}",
+            "body_other":"Liczba powiadomień: {count}",
+            "title":"W trakcie twojej nieobecności"
         },
-        "noNotifications":"Brak powiadomień na razie",
-        "notificationLog":"Dziennik Powiadomień",
+        "noNotifications":"Brak powiadomień jak na razie",
+        "notificationLog":"Dziennik powiadomień",
         "notificationSettings":"Ustawienia powiadomień"
     }
 }

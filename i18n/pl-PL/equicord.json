@@ -1,11 +1,11 @@
 {
     "absRPC":{
         "about":{
-            "automaticAuth":"Wtyczka automatycznie uwierzytelni się i pobierze postęp słuchania.",
+            "automaticAuth":"Wtyczka automatycznie uwierzytelni się i pobierze postęp słuchanych mediów.",
             "description":"Wprowadź adres URL serwera AudioBookShelf, nazwę użytkownika i hasło, aby wyświetlać aktualnie odtwarzane audiobooki jako Discord Rich Presence.",
             "title":"Jak połączyć się z AudioBookShelf"
         },
-        "description":"Rich Presence dla serwera multimediów AudioBookShelf",
+        "description":"Wyświetlaj aktywność dla serwera multimediów AudioBookShelf",
         "settings":{
             "password":"Hasło do AudioBookShelf",
             "serverUrl":"Adres URL serwera AudioBookShelf (np. https://abs.example.com)",
@@ -16,7 +16,7 @@
         }
     },
     "altKrispSwitch":{
-        "description":"Powoduje, że wyskakujące okienko tłumienia szumów przełącza się pomiędzy Brakiem i Krisp zamiast Krisp i Standard"
+        "description":"Powoduje, że wyskakujące okienko tłumienia szumów przełącza się pomiędzy brakiem tłumenia, a Krisp zamiast Krisp i Standard"
     },
     "alwaysExpandProfiles":{
         "description":"Zawsze rozwija wyskakujące okienka profilu do pełnego modalu"
@@ -65,7 +65,7 @@
         "description":"Wyświetla banery na liście członków ",
         "settings":{
             "animate":"Animuj banery",
-            "preferNameplate":"wolą tabliczkę znamionową od banera"
+            "preferNameplate":"Preferuj tabliczkę dekoracyjną od banera"
         }
     },
     "baseDecoder":{
@@ -80,7 +80,7 @@
         "ui":{
             "copiedToast":"Zdekodowana zawartość skopiowana do schowka!",
             "copyDecoded":"Skopiuj zdekodowaną zawartość",
-            "decodedContent":"Zdekodowana treść/zawartość",
+            "decodedContent":"Zdekodowana zawartość",
             "modalTitle":"Zdekodowana zawartość Base64",
             "tooltipLeft":"Kopiuj dekodowane (kliknij lewym przyciskiem myszy) / Dekoduj Base64 (kliknij prawym przyciskiem myszy)",
             "tooltipRight":"Dekoduj Base64 (kliknij lewym przyciskiem myszy) / Kopiuj dekodowany (kliknij prawym przyciskiem myszy)"
@@ -449,6 +449,12 @@
             "dmList":"Użytkownicy, dla których zdefiniowano niestandardowe kolory, będą mieli kolorowe nazwy na liście dm"
         }
     },
+    "declutter":{
+        "description":"Uporządkuj discord ui, usuwając niechciane elementy takie jak personalizacje profilu, sklepy, zadania i inne",
+        "settings":{
+            "removeNameplate":"Usuń stylizację tabliczki z nazwą."
+        }
+    },
     "disableCameras":{
         "description":"Domyślnie wyłącza kamery podczas połączenia"
     },
@@ -541,6 +547,7 @@
             "noMirroredCamera":"Zapobiega odbiciu lustrzanemu obrazu z kamery na ekranie",
             "refreshSlashCommands":"Odświeża polecenia ukośnika, aby wyświetlić nowo dodane polecenia bez ponownego uruchamiania klienta.",
             "removeActivitySection":"Usuwa sekcję aktywności nad listą członków",
+            "restoreFileDownloadButton":"Dodaje przycisk Pobierz w prawym górnym rogu plików",
             "showYourOwnActivityButtons":"Discord z jakiegoś powodu ukrywa Twoje przyciski aktywności"
         },
         "standing":{
@@ -912,6 +919,15 @@
         "ui":{
             "close":"Zamknij",
             "open":"Otwarte"
+        }
+    },
+    "hideMessages":{
+        "description":"Wtyczka do tymczasowego ukrywania wiadomości do czasu ponownego uruchomienia.",
+        "settings":{
+            "hidePopoverButton":"Ukryj przycisk ukrywania w wyskakującym okienku wiadomości."
+        },
+        "ui":{
+            "hide":"Ukryj"
         }
     },
     "hideServers":{
@@ -1509,6 +1525,9 @@
     "noNitroUpsell":{
         "description":"Usuwa dodatkową sprzedaż Nitro, zastępując Twój typ premium"
     },
+    "noPushToTalk":{
+        "description":"Omija wymóg „Naciśnij i mów” w przypadku aktywności głosowej w kanałach, które go wymuszają."
+    },
     "noRPC":{
         "description":"Wyłącza funkcję Rich Presence (RPC) Discord."
     },
@@ -2044,6 +2063,21 @@
             "translate":"Tłumaczyć"
         }
     },
+    "triviaAI":{
+        "description":"Wtyczka, która pomaga odpowiadać na ciekawostki za pomocą sztucznej inteligencji.",
+        "settings":{
+            "apiKey":"Klawisz API",
+            "autoRespond":"Automatycznie odpowiadaj na wiadomości po otrzymaniu odpowiedzi.",
+            "endpoint":"Punkt końcowy AI zgodny z OpenAI.",
+            "maxTokens":"Maksymalna liczba tokenów w odpowiedzi.",
+            "model":"Model AI do użycia.",
+            "supportImages":"Przekaż obrazy do sztucznej inteligencji w celu uzyskania kontekstu (jeśli istnieje). Nie jest to obsługiwane przez wszystkie modele.",
+            "systemPrompt":"Monit systemowy dla AI."
+        },
+        "ui":{
+            "answerWithAI":"Odpowiedz za pomocą sztucznej inteligencji"
+        }
+    },
     "unitConverter":{
         "description":"Konwersja jednostek w wiadomościach (calowe/metryczne)",
         "popover":{
@@ -2200,10 +2234,27 @@
     },
     "voiceButtons":{
         "description":"Dodaje przyciski szybkiej akcji (czat, wyciszenie, ogłuszenie) dla użytkowników kanału głosowego",
+        "options":{
+            "both":"Obydwa",
+            "disable":"Wyłącz",
+            "display":"Wyświetl",
+            "globalName":"Nazwa globalna",
+            "hide":"Ukryj",
+            "left":"Lewy",
+            "right":"Prawidłowy",
+            "username":"Nazwa użytkownika"
+        },
         "settings":{
-            "showChatButton":"Pokaż przycisk czatu",
-            "showDeafenButton":"Pokaż przycisk wyciszenia",
-            "showMuteButton":"Pokaż przycisk wyciszenia"
+            "buttonPosition":"Wybierz, gdzie umieścić przyciski głosowe w wierszu użytkownika głosowego.",
+            "disableVideo":"Przełącza ich wideo po kliknięciu przycisku wyciszenia.",
+            "muteSoundboard":"Przełącza ich pulę rezonansową po kliknięciu przycisku wyciszenia.",
+            "serverSelf":"Ogłuszaj / Wycisz się na serwerze, gdy używasz wyciszenia/ogłuszenia.",
+            "showButtonsSelf":"Czy chcesz wyświetlać przyciski dla własnego użytkownika. Ta sama funkcjonalność, co inne przyciski, z tą różnicą, że otwiera panel czatu i wycisza/wycisza po kliknięciu przycisku(ów).",
+            "showChatButton":"Czy chcesz wyświetlać przycisk czatu",
+            "showDeafenButton":"Czy chcesz wyświetlić przycisk głuszenia",
+            "showMuteButton":"Czy chcesz wyświetlić przycisk wyciszenia",
+            "useServer":"Użyj wyciszenia/wygłuszenia serwera zamiast lokalnego, jeśli masz pozwolenie.",
+            "whichNameToShow":"Wybierz, czy chcesz wyświetlać pseudonim lub nazwę użytkownika w podpowiedzi."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2279,7 @@
         "contextMenu":{
             "deafenAll":"Ogłusz wszystko",
             "disconnectAll":"Rozłącz wszystkich",
+            "mentionAllUsers":"Wspomnij wszystkich Użytkowników",
             "moveAll":"Przesuń wszystko",
             "muteAll":"Wycisz wszystko",
             "undeafenAll":"Nieogłuszeni wszyscy",
