@@ -37,8 +37,8 @@ export default definePlugin({
         }
     ],
 
-    shouldShowButton(mimeType?: unknown, downloadURL?: string) {
-        const normalizedMimeType = Array.isArray(mimeType) ? mimeType.join("/") : `${mimeType ?? ""}`;
+    shouldShowButton(mimeType: string[] = [], downloadURL?: string) {
+        const normalizedMimeType = mimeType.join("/");
         if (normalizedMimeType.startsWith("video/")) return true;
         if (!downloadURL) return false;
         return /\.(mp4|webm|mov|m4v|ogv|avi)(?:$|[?#])/i.test(downloadURL);
