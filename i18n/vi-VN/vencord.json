@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Đã sao chép liên kết!",
+            "maxAdditionalEmojis":"được phân tách bằng dấu phẩy/dòng mới, tối đa {count}",
             "messageContentCopied":"Đã sao chép nội dung tin nhắn!",
             "messageIdCopied":"Đã sao chép ID tin nhắn!",
+            "selectAdditionalEmojis":"Chọn biểu tượng cảm xúc bổ sung",
+            "selectEmojiForReactions":"Chọn biểu tượng cảm xúc để phản ứng",
             "userIdCopied":"ID người dùng đã được sao chép!"
         }
     },
