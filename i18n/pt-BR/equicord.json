@@ -449,6 +449,13 @@
             "dmList":"Usuários com cores personalizadas definidas terão seus nomes coloridos na lista dm"
         }
     },
+    "declutter":{
+        "description":"Limpe a UI do Discord removendo elementos indesejados, como customizações de perfil, lojas, missões e muito mais.",
+        "settings":{
+            "removeAudioMenus":"Remover menus ao lado dos botões de silenciar e ensurdecer.",
+            "removeNameplate":"Remover estilização da placa de identificação."
+        }
+    },
     "disableCameras":{
         "description":"Desativa câmeras em uma chamada por padrão"
     },
