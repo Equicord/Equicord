@@ -85,8 +85,11 @@ const promptActiveSelector = classNameToSelector(cl("prompt-active-input"));
 const mainInputSelectorClass = classNameToSelector(cl("main-input"));
 const pageSelector = classNameToSelector(cl("page"));
 const promptChipFont = "500 17px \"gg sans\", \"Noto Sans\", \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+const queryPreviewFont = "400 20px \"gg sans\", \"Noto Sans\", \"Helvetica Neue\", Helvetica, Arial, sans-serif";
 const promptChipWidthCache = new Map<string, number>();
+const queryPreviewWidthCache = new Map<string, number>();
 let promptChipCanvasContext: CanvasRenderingContext2D | null = null;
+let queryPreviewCanvasContext: CanvasRenderingContext2D | null = null;
 
 function getCommandBadge(command: CommandEntry, fallback: "Command" | "Recent" | "Pinned"): string {
     const defaultBadge = fallback === "Recent" ? "Command" : fallback;
@@ -237,6 +240,23 @@ function measurePromptChipWidth(text: string): number {
     const chipHorizontalChromePx = 26;
     const width = Math.ceil(Math.max(132, Math.min(420, textWidth + chipHorizontalChromePx)));
     promptChipWidthCache.set(text, width);
+    return width;
+}
+
+function measureQueryPreviewWidth(text: string): number {
+    const cached = queryPreviewWidthCache.get(text);
+    if (cached !== undefined) return cached;
+
+    if (!queryPreviewCanvasContext) {
+        const canvas = document.createElement("canvas");
+        queryPreviewCanvasContext = canvas.getContext("2d");
+    }
+
+    const context = queryPreviewCanvasContext;
+    if (!context) return 0;
+    context.font = queryPreviewFont;
+    const width = Math.ceil(context.measureText(text).width);
+    queryPreviewWidthCache.set(text, width);
     return width;
 }
 
@@ -546,6 +566,14 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
     const promptChipPlaceholderText = promptCommand?.queryPlaceholder ?? "Action";
     const promptChipWidthPx = useMemo(() => measurePromptChipWidth(promptChipPlaceholderText), [promptChipPlaceholderText]);
     const promptChipStyle = { width: `${promptChipWidthPx}px` };
+    const queryPreviewPromptOffsetPx = useMemo(() => {
+        if (!hasMainInputText || shouldShowPromptCommandLabel) return 0;
+        const typedWidth = measureQueryPreviewWidth(query);
+        return Math.min(typedWidth + 16, 520);
+    }, [hasMainInputText, query, shouldShowPromptCommandLabel]);
+    const queryPreviewPromptStyle = queryPreviewPromptOffsetPx > 0
+        ? { marginLeft: `${queryPreviewPromptOffsetPx}px` }
+        : undefined;
 
     useEffect(() => {
         if (!selectedPromptCandidateId) return;
@@ -1428,7 +1456,7 @@ export function CommandPaletteModal({ modalProps, instanceKey }: { modalProps: M
                                 {shouldShowPromptCommandLabel && (
                                     <span className={cl("query-preview-command-label")}>{promptCommand.label}</span>
                                 )}
-                                <div className={cl("query-preview-prompt")}>
+                                <div className={cl("query-preview-prompt")} style={queryPreviewPromptStyle}>
                                     {activePromptCommand ? (
                                         <div
                                             className={classes(cl("query-prompt-capsule"), cl("query-prompt-capsule-active"))}

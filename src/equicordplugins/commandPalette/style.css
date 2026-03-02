@@ -94,7 +94,7 @@
 }
 
 .vc-command-palette-query-preview-without-label {
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 .vc-command-palette-query-preview-command-label {
