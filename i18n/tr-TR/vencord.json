@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Bağlantı kopyalandı!",
+            "maxAdditionalEmojis":"virgül/satır başı ayrılmış, maksimum {count}",
             "messageContentCopied":"Mesaj içeriği kopyalandı!",
             "messageIdCopied":"Mesaj kimliği kopyalandı!",
+            "selectAdditionalEmojis":"Ek Emojileri Seçin",
+            "selectEmojiForReactions":"Tepkiler İçin Emojiyi Seçin",
             "userIdCopied":"Kullanıcı kimliği kopyalandı!"
         }
     },
