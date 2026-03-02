@@ -5,6 +5,7 @@
  */
 
 import { definePluginSettings, migratePluginSetting, migratePluginSettings } from "@api/Settings";
+import { Divider } from "@components/Divider";
 import { HeadingSecondary } from "@components/Heading";
 import { Devs, EquicordDevs } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
@@ -125,11 +126,22 @@ export const settings = definePluginSettings({
 
 function SectionSeparator(title: string) {
     return (
-        <>
-            <hr style={{ width: "100%" }} />
-            <HeadingSecondary>{title}</HeadingSecondary>
-            <hr style={{ width: "100%" }} />
-        </>
+        <div style={{ marginTop: 12, marginBottom: 6 }}>
+            <Divider />
+            <HeadingSecondary
+                style={{
+                    marginTop: 14,
+                    marginBottom: 0,
+                    fontSize: 16,
+                    lineHeight: "20px",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.02em",
+                    color: "var(--text-muted)"
+                }}
+            >
+                {title}
+            </HeadingSecondary>
+        </div>
     );
 }
 
