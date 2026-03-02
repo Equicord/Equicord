@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Linken er kopiert!",
+            "maxAdditionalEmojis":"komma/nylinje separert, maks {count}",
             "messageContentCopied":"Meldingsinnholdet er kopiert!",
             "messageIdCopied":"Meldings-ID kopiert!",
+            "selectAdditionalEmojis":"Velg flere emojier",
+            "selectEmojiForReactions":"Velg Emoji for reaksjoner",
             "userIdCopied":"Bruker-ID kopiert!"
         }
     },
