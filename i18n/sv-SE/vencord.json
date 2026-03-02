@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Länken kopierad!",
+            "maxAdditionalEmojis":"komma/nyrad separerad, max {count}",
             "messageContentCopied":"Meddelandets innehåll har kopierats!",
             "messageIdCopied":"Meddelande-ID har kopierats!",
+            "selectAdditionalEmojis":"Välj Ytterligare emojis",
+            "selectEmojiForReactions":"Välj Emoji för reaktioner",
             "userIdCopied":"Användar-ID kopierat!"
         }
     },
