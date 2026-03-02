@@ -1,1 +1,2165 @@
-{}
+{
+    "accountPanelServerProfile":{
+        "description":"Desnom tipkom miša kliknite ploču računa u donjem lijevom kutu kako biste vidjeli svoj profil na trenutnom poslužitelju",
+        "prioritizeServerProfile":"Dajte prioritet profilu poslužitelja",
+        "prioritizeServerProfileDescription":"Dajte prioritet profilu poslužitelja kada lijevom tipkom miša kliknete ploču računa",
+        "viewAccountProfile":"Pregledajte profil računa",
+        "viewServerProfile":"Pregledajte profil poslužitelja"
+    },
+    "addonCard":{
+        "new":"NOVI"
+    },
+    "alwaysAnimate":{
+        "description":"Animira sve što se može animirati",
+        "settings":{
+            "icons":"Uvijek animirajte ikone poslužitelja, avatare, dekor i još mnogo toga",
+            "nameplates":"Uvijek animirajte pločice s imenima",
+            "roleGradients":"Uvijek animirajte gradijente uloga",
+            "serverBanners":"Uvijek animirajte bannere poslužitelja",
+            "statusEmojis":"Uvijek animirajte statusne emojije"
+        }
+    },
+    "alwaysExpandRoles":{
+        "description":"Uvijek proširuje popis uloga u skočnim prozorima profila",
+        "settings":{
+            "hideArrow":"Sakrij strelicu"
+        }
+    },
+    "alwaysTrust":{
+        "description":"Uklanja dosadnu nepouzdanu domenu i skočni prozor sumnjive datoteke",
+        "settings":{
+            "confirmModal":"Treba li se prikazati modal \"Jeste li sigurni da želite izbrisati\"?",
+            "domain":"Uklonite skočni prozor nepouzdane domene prilikom otvaranja veza",
+            "file":"Uklonite skočni prozor \"Potencijalno opasno preuzimanje\" prilikom otvaranja veza",
+            "noDeleteSafety":"Uklanja zahtjev za unos naziva poslužitelja prilikom brisanja poslužitelja"
+        },
+        "ui":{
+            "deleteServerBody":"Trajno je, ako to nije očito.",
+            "deleteServerConfirm":"Izbriši",
+            "deleteServerTitle":"Izbrisati poslužitelj?"
+        }
+    },
+    "anonymiseFileNames":{
+        "commands":{
+            "spoiler":{
+                "description":"Uključi spojler",
+                "disabled":"Spojler onemogućen!",
+                "enabled":"Spoiler omogućen!",
+                "name":"Spojler",
+                "optionDescription":"Uključi/isključi svoj spojler (zadano je prebacivanje)",
+                "optionName":"vrijednost"
+            }
+        },
+        "description":"Anonimiziraj učitane nazive datoteka",
+        "methods":{
+            "consistent":"Dosljedan",
+            "random":"Nasumični likovi",
+            "timestamp":"Vremenska oznaka"
+        },
+        "settings":{
+            "anonymiseByDefault":"Treba li prema zadanim postavkama anonimizirati nazive datoteka",
+            "consistent":"Dosljedan naziv datoteke",
+            "method":"Metoda anonimiziranja",
+            "randomisedLength":"Nasumična dužina znakova",
+            "spoilerMessages":"Spoiler poruke"
+        },
+        "usingAnonymous":"Korištenje anonimnog naziva datoteke",
+        "usingNormal":"Korištenje normalnog naziva datoteke"
+    },
+    "appleMusicRichPresence":{
+        "activityTypes":{
+            "listening":"Slušanje",
+            "playing":"Igranje"
+        },
+        "assetImageTypes":{
+            "album":"Ilustracija albuma",
+            "artist":"Umjetničko djelo",
+            "disabled":"Onemogućeno"
+        },
+        "buttons":{
+            "listenOnAppleMusic":"Slušajte na Apple Musicu",
+            "viewOnSongLink":"Pogledajte na SongLink"
+        },
+        "defaultDetails":"{name}",
+        "defaultLargeText":"{album}",
+        "defaultName":"Apple Music",
+        "defaultSmallText":"{artist}",
+        "defaultState":"{artist} · {album}",
+        "description":"Discord bogata prisutnost za vašu Apple Music!",
+        "name":"AppleMusicRichPresence",
+        "settings":{
+            "activityType":"Koju vrstu aktivnosti",
+            "detailsString":"Niz formata pojedinosti o aktivnosti",
+            "enableButtons":"Treba li omogućiti gumbe ili ne",
+            "enableTimestamps":"Treba li omogućiti vremenske oznake ili ne",
+            "largeImageType":"Vrsta velike slike sredstava aktivnosti",
+            "largeTextString":"Niz formata velikog teksta sredstava aktivnosti",
+            "nameString":"Niz formata naziva aktivnosti",
+            "refreshInterval":"Interval između osvježavanja aktivnosti (sekunde)",
+            "smallImageType":"Vrsta male slike sredstava aktivnosti",
+            "smallTextString":"Sredstva aktivnosti niz formata malog teksta",
+            "stateString":"Niz formata stanja aktivnosti",
+            "statusDisplayType":"Prikažite ime pjesme/izvođača na popisu članova"
+        },
+        "settingsAbout":{
+            "albumPlaceholder":"{album} zamjenjuje se nazivom albuma.",
+            "artistPlaceholder":"{artist} zamjenjuje se imenom(ima) izvođača(a)",
+            "intro":"Za nizove formata aktivnosti koje se mogu prilagoditi, možete koristiti nekoliko posebnih nizova za uključivanje podataka staze u aktivnosti!",
+            "namePlaceholder":"{name} zamjenjuje se nazivom zapisa"
+        },
+        "statusDisplayTypes":{
+            "artist":"Prikaži ime izvođača",
+            "off":"Ne prikazuj (prikazuje generičku poruku slušanja)",
+            "track":"Prikaži naziv staze"
+        }
+    },
+    "arRPC":{
+        "connected":"Povezan na arRPC",
+        "connectionFailed":"Nije uspjelo povezivanje s arRPC-om, radi li?",
+        "retry":"Pokušaj ponovno",
+        "settingsAbout":{
+            "description":"Slijedite upute u GitHub repou da pokrenete poslužitelj, a zatim omogućite dodatak.",
+            "title":"Kako koristiti arRPC"
+        }
+    },
+    "autoDndWhilePlaying":{
+        "description":"Automatski ažurira vaš mrežni status (online, idle, ne radi) prilikom pokretanja igrica",
+        "settings":{
+            "excludeInvisible":"Spriječite automatske promjene statusa dok je vaš status postavljen na nevidljiv",
+            "statusToSet":"Status za postavljanje tijekom igranja igre"
+        },
+        "statusOptions":{
+            "dnd":"Ne uznemiravaj",
+            "idle":"U mirovanju",
+            "invisible":"Nevidljiv/a",
+            "online":"Na mreži"
+        }
+    },
+    "badgeAPI":{
+        "description":"API za dodavanje bedževa korisnicima"
+    },
+    "betterFolders":{
+        "settings":{
+            "closeAllFolders":"Zatvorite sve mape kada odaberete poslužitelj koji nije u mapi",
+            "closeAllHomeButton":"Zatvorite sve mape kada kliknete na početni gumb",
+            "closeOthers":"Zatvorite ostale mape kada otvarate mapu",
+            "closeServerFolder":"Zatvorite mapu kada odaberete poslužitelj u toj mapi",
+            "folderIconAlways":"Uvijek",
+            "folderIconMultipleExpanded":"Kada je više od jedne mape prošireno",
+            "folderIconNever":"Nikada",
+            "forceOpen":"Prisilno otvaranje mape prilikom prebacivanja na poslužitelj te mape",
+            "keepIcons":"Nastavi prikazivati ikone saveza u primarnoj mapi trake saveza kada je otvorena na bočnoj traci BetterFolders",
+            "showFolderIcon":"Pokažite ikonu mape iznad cehova mapa na bočnoj traci BetterFolders",
+            "sidebar":"Prikaži poslužitelje iz mape na namjenskoj bočnoj traci",
+            "sidebarAnim":"Animirajte otvaranje bočne trake mape"
+        }
+    },
+    "betterGifAltText":{
+        "description":"Promijenite alternativni tekst GIF-a iz jednostavnog 'GIF' u sadržaj koji sadrži gif oznake / naziv datoteke"
+    },
+    "betterGifPicker":{
+        "description":"Čini da alat za odabir gifova otvori omiljenu kategoriju prema zadanim postavkama",
+        "settings":{
+            "keepOpen":"Održava birač gifova otvorenim nakon odabira gifa"
+        }
+    },
+    "betterNotesBox":{
+        "description":"Sakrij bilješke ili onemogući provjeru pravopisa (Konfigurirajte u postavkama!!)",
+        "settings":{
+            "hide":"Sakrij bilješke",
+            "noSpellCheck":"Onemogući provjeru pravopisa u bilješkama"
+        }
+    },
+    "betterRoleContext":{
+        "copyRoleColor":"Kopiraj boju uloge",
+        "description":"Dodaje opcije za kopiranje boje uloge/uređivanje uloge/prikaz ikone uloge kada desnom tipkom miša kliknete uloge u korisničkom profilu",
+        "editRole":"Uredi ulogu",
+        "name":"BetterRoleContext",
+        "settings":{
+            "roleIconFileFormat":"Format datoteke za korištenje pri gledanju ikona uloga"
+        },
+        "viewRoleIcon":"Prikaz ikone uloge"
+    },
+    "betterRoleDot":{
+        "description":"Kopiraj boju uloge na RoleDot (postavka pristupačnosti) kliknite. Također omogućuje istovremenu upotrebu RoleDot i imena u boji",
+        "settings":{
+            "bothStyles":"Prikaži i nazive uloga i nazive u boji",
+            "copyRoleColorInProfilePopout":"Dopustite klik na točku uloge u skočnom prozoru profila za kopiranje boje uloge"
+        }
+    },
+    "betterSessions":{
+        "newBadge":"NOVI",
+        "newSession":"Nova sesija:",
+        "rename":"Preimenovati",
+        "renameModal":{
+            "newDeviceName":"Novi naziv uređaja",
+            "resetName":"Poništi naziv",
+            "save":"Spremi",
+            "title":"Preimenovati"
+        },
+        "settings":{
+            "backgroundCheck":"Provjera novih sesija u pozadini i prikaz obavijesti kada se otkriju",
+            "checkInterval":"Koliko često provjeravati nove sesije u pozadini (ako je omogućeno), u minutama"
+        }
+    },
+    "betterSettings":{
+        "settings":{
+            "disableFade":"Onemogući animaciju križanja",
+            "eagerLoad":"Uklanja odgodu učitavanja pri prvom otvaranju izbornika",
+            "organizeMenu":"Organizira kontekstni izbornik zupčanika postavki u kategorije"
+        }
+    },
+    "betterUploadButton":{
+        "description":"Prenesite jednim klikom, otvorite izbornik desnim klikom"
+    },
+    "biggerStreamPreview":{
+        "description":"Ovaj vam dodatak omogućuje povećanje pregleda streama",
+        "name":"BiggerStreamPreview",
+        "viewStreamPreview":"Pregledajte pretpregled streama"
+    },
+    "blurNsfw":{
+        "description":"Zamutite privitke u NSFW kanalima dok ne zadržite pokazivač",
+        "settings":{
+            "blurAllChannels":"Zamućivanje privitaka na svim kanalima (ne samo na NSFW)",
+            "blurAmount":"Količina zamućenja (u pikselima)"
+        }
+    },
+    "callTimer":{
+        "description":"Dodajte mjerače vremena za sve korisnike u glasovnim kanalima i statusu veze.",
+        "settings":{
+            "allCallTimers":"Dodajte mjerač vremena za pozive svim korisnicima u glasovnom kanalu poslužitelja",
+            "format":"Kompaktan ili čovjeku čitljiv format:",
+            "showRoleColor":"Prikaži boju uloge korisnika (ako je ovaj dodatak omogućen)",
+            "showSeconds":"Prikaži sekunde u mjeraču vremena",
+            "showWithoutHover":"Uvijek pokaži mjerač vremena bez potrebe da lebdiš",
+            "trackSelf":"Također pratite sebe",
+            "watchLargeGuilds":"Pratite korisnike u velikim cehovima. To može uzrokovati kašnjenje ako ste u velikom broju velikih saveza s aktivnim glasovnim korisnicima. Testirano s do 2000 aktivnih glasovnih korisnika bez problema."
+        }
+    },
+    "cancel":"Poništi",
+    "chatInputButtonAPI":{
+        "description":"API za dodavanje gumba unosu chata"
+    },
+    "clearURLs":{
+        "description":"Automatski uklanja elemente praćenja s URL-ova koje šaljete"
+    },
+    "clientTheme":{
+        "contrastWarning":"Odabrana boja neće imati dobar kontrast s tekstom",
+        "disableNitroTheme":"Onemogući Nitro temu",
+        "nitroNotSupported":"Nitro teme nisu podržane",
+        "resetThemeColor":"Poništi boju teme",
+        "switchToMode":"Prebacite se na način {mode}.",
+        "themeColor":"Boja teme",
+        "themeColorDescription":"Dodajte boju vašoj Discord klijentskoj temi",
+        "themeWontLookGood":"Vaša tema neće izgledati dobro!"
+    },
+    "cloud":{
+        "integrations":{
+            "enabled":"Integracije u oblak omogućene!",
+            "error":"Postavljanje nije uspjelo ({e})",
+            "failedToRetrieveOAuth":"Postavljanje nije uspjelo (nije moguće dohvatiti OAuth konfiguraciju).",
+            "header":"Integracije u oblak",
+            "noSecret":"Postavljanje nije uspjelo (nije vraćena tajna?).",
+            "reauthenticateOtherClient":"Primijetili smo da ste u drugom klijentu omogućili integracije u oblak! Zbog ograničenja, morat ćete se ponovno autentificirati da biste ih nastavili koristiti. Kliknite ovdje da biste otišli na stranicu s postavkama!"
+        },
+        "settings":{
+            "accountChanged":"Sinkronizacija u oblaku je onemogućena jer ovaj račun nije povezan s aplikacijom u oblaku. Možete ga ponovno omogućiti povezivanjem ovog računa u postavkama oblaka. (napomena: zasebno će pohraniti vaše postavke)",
+            "apiDelete":"Nije moguće izbrisati postavke (API je vratio {e}).",
+            "apiEraseAll":"Nije moguće izbrisati sve podatke (API je vratio {e}), kontaktirajte podršku.",
+            "apiReject":"Nije moguće sinkronizirati postavke s oblakom (API je vratio {e}).",
+            "deleted":"Postavke izbrisane iz oblaka!",
+            "erased":"Uspješno izbrisani svi podaci.",
+            "failedToDelete":"Nije moguće izbrisati postavke ({e}).",
+            "failedToSync":"Nije moguće sinkronizirati postavke s oblakom ({e}).",
+            "header":"Postavke oblaka",
+            "newerThanCloud":"Vaše lokalne postavke novije su od onih u oblaku.",
+            "noSettings":"Nema postavki u oblaku.",
+            "success":"Sinkronizirane postavke u oblak!",
+            "syncFromCloud":"Nije moguće sinkronizirati postavke iz oblaka ({e}).",
+            "upToDate":"Vaše postavke su ažurne.",
+            "updated":"Vaše postavke su ažurirane! Kliknite ovdje za ponovno pokretanje kako biste u potpunosti primijenili promjene!",
+            "updatedRemote":"Vaše postavke su ažurirane! Kliknite ovdje za ponovno pokretanje kako biste u potpunosti primijenili promjene!"
+        }
+    },
+    "colorSighted":{
+        "description":"Uklanja ikone za daltoniste iz statusa, baš kao 2015-2017 Discord"
+    },
+    "commandsAPI":{
+        "description":"API zahtijeva sve što koristi naredbe"
+    },
+    "consoleJanitor":{
+        "alwaysAllowLoggers":"Uvijek dopustite zapisivače ove vrste",
+        "description":"Onemogućuje dosadne konzolne poruke/pogreške",
+        "filterList":"Popis filtera",
+        "name":"KonzolaDomar",
+        "settings":{
+            "disableLoggers":"Onemogućuje zapisivače Discords",
+            "disableSpotifyLogger":"Onemogućite Spotify logger, koji curi podatke o računu i pristupni token",
+            "whitelistedLoggers":"Popis zapisivača odvojenih točkom i zarezom koji se dopušta čak i ako su drugi skriveni"
+        }
+    },
+    "consoleShortcuts":{
+        "description":"Dodaje kraće pseudonime za mnoge stvari na prozoru. Pokrenite `shortcutList` za popis."
+    },
+    "contextMenuAPI":{
+        "description":"API za dodavanje/uklanjanje stavki u/iz kontekstnih izbornika"
+    },
+    "contributorCard":{
+        "contributionsButton":"Pogledajte čemu ste pridonijeli",
+        "description":"Budući da ste pridonijeli Equicord sada imate super novu značku!",
+        "subtitle":"Hvala vam na doprinosu!",
+        "title":"Prilozi"
+    },
+    "copyEmojiMarkdown":{
+        "copyEmojiMarkdown":"Kopiraj Emoji Markdown",
+        "copyUnicodeDescription":"Kopirajte neobrađeni unicode znak umjesto :name: za zadane emojije (👽)",
+        "description":"Omogućuje vam kopiranje emojija kao formatiranog niza (<:blobcatcozy:1026533070955872337>)",
+        "success":"Uspjeh! Kopirano označavanje emojija."
+    },
+    "copyFileContents":{
+        "copied":"Kopirano!",
+        "copyFileContents":"Kopiraj sadržaj datoteke",
+        "description":"Dodaje gumb privicima tekstualnih datoteka za kopiranje njihovog sadržaja",
+        "fileTooLarge":"Datoteka je prevelika za kopiranje"
+    },
+    "copyStickerLinks":{
+        "copyLink":"Kopiraj link",
+        "description":"Dodaje mogućnost kopiranja i otvaranja veza naljepnica",
+        "linkCopied":"Veza je kopirana!",
+        "openLink":"Otvori link"
+    },
+    "copyUserURLs":{
+        "copyUserURL":"Kopiraj korisnika URL",
+        "description":"Dodaje opciju 'Kopiraj korisnika URL' u korisnički kontekstni izbornik."
+    },
+    "crashHandler":{
+        "description":"Uslužni dodatak za rukovanje i mogući oporavak nakon padova bez ponovnog pokretanja",
+        "notifications":{
+            "crashedBody":"Awn :( Discord se srušio dva puta brzo, ne pokušavajući se oporaviti. Kliknite ovdje da se pridružite našem poslužitelju za podršku!",
+            "crashedTitle":"Discord se srušio!",
+            "invalidInvite":"Nevažeća ili istekla pozivnica",
+            "recoveringBody":"Pokušaj oporavka... Kliknite ovdje da se pridružite našem poslužitelju za podršku!"
+        },
+        "settings":{
+            "attemptToNavigateToHome":"Treba li pokušati navigirati do kuće prilikom sprječavanja rušenja Discord.",
+            "attemptToPreventCrashes":"Treba li pokušati spriječiti rušenje Discord."
+        },
+        "updatePrompt":"Uh, Discord se upravo srušio... ali dobre vijesti, dostupno je Equicord ažuriranje koje bi moglo riješiti ovaj problem! Želite li ažurirati sada?"
+    },
+    "ctrlEnterSend":{
+        "description":"Koristite Ctrl+Enter za slanje poruka (prilagodljivo)",
+        "settings":{
+            "sendMessageInTheMiddleOfACodeBlock":"Treba li poslati poruku usred bloka koda",
+            "submitRule":"Način slanja poruke"
+        },
+        "submitRuleOptions":{
+            "ctrlEnter":"Ctrl+Enter (Enter ili Shift+Enter za novi red) (cmd+enter na macOS-u)",
+            "enter":"Enter (Shift+Enter za novi red; Discord zadano)",
+            "shiftEnter":"Shift+Enter (Enter za novi red)"
+        }
+    },
+    "customIdle":{
+        "description":"Omogućuje vam da postavite vrijeme prije nego Discord pređe u mirovanje (ili onemogućite automatsko mirovanje)",
+        "settings":{
+            "idleTimeout":"Minute prije nego što Discord pređe u mirovanje (0 za onemogućavanje automatskog mirovanja)",
+            "remainInIdle":"Kada se vratite na Discord, ostanite neaktivni dok ne potvrdite da želite biti online"
+        },
+        "ui":{
+            "backOnlineMessage":"Dobro došao nazad! Pritisnite gumb za pristup mreži. Pritisnite X da ostanete mirni do ponovnog učitavanja.",
+            "exitIdle":"Izlaz iz mirovanja"
+        }
+    },
+    "customRPC":{
+        "activityType":"Vrsta aktivnosti",
+        "activityTypes":{
+            "competing":"Natječući se",
+            "listening":"Slušanje",
+            "playing":"Igranje",
+            "streaming":"Streaming",
+            "watching":"Gleda"
+        },
+        "appId":"ID aplikacije",
+        "appName":"Naziv aplikacije",
+        "button1Text":"Gumb1 Tekst",
+        "button1Url":"Gumb1 URL",
+        "button2Text":"Button2 Tekst",
+        "button2Url":"Gumb2 URL",
+        "detailLine1":"Detalj (linija 1)",
+        "detailUrl":"Detalj URL",
+        "endTimestamp":"Vremenska oznaka završetka (u milisekundama)",
+        "instructions":{
+            "buttons":"Ne možete vidjeti vlastite gumbe na svom profilu, ali svi drugi to mogu vidjeti.",
+            "devPortal":"Idite na <0>Discord Portal za razvojne programere</0> kako biste izradili aplikaciju i dobili ID aplikacije.",
+            "imgur":"Ako želite upotrijebiti poveznicu na sliku, preuzmite svoju sliku i ponovno je prenesite na <0>Imgur</0> i preuzmite vezu na sliku desnim klikom na sliku i odabirom \"Kopiraj adresu slike\".",
+            "unicode":"Neki čudni unicode tekst (\"fontovi\" 𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘) mogu uzrokovati da se obogaćena prisutnost ne prikaže, pokušajte umjesto toga upotrijebiti normalna slova.",
+            "uploadImages":"Učitajte slike na kartici Rich Presence da biste dobili ključeve slika."
+        },
+        "largeImageClickUrl":"Velika slika na koju se može kliknuti URL",
+        "largeImageText":"Tekst velike slike",
+        "largeImageUrl":"Velika slika URL/Ključ",
+        "notice":{
+            "body":"Dijeljenje aktivnosti nije omogućeno, ljudi neće moći vidjeti vašu prilagođenu bogatu prisutnost!",
+            "enable":"Omogući",
+            "title":"Obavijest"
+        },
+        "partyMaxSize":"Maksimalna veličina stranke",
+        "partySize":"Veličina stranke",
+        "placeholder":{
+            "enterValue":"Unesite vrijednost",
+            "selectOption":"Odaberite opciju"
+        },
+        "smallImageClickUrl":"Mala slika na koju se može kliknuti URL",
+        "smallImageText":"Tekst male slike",
+        "smallImageUrl":"Mala slika URL/Ključ",
+        "startTimestamp":"Vremenska oznaka početka (u milisekundama)",
+        "stateLine2":"Država (redak 2)",
+        "stateUrl":"Država URL",
+        "streamLink":"Veza za stream (Twitch ili YouTube, samo ako je vrsta aktivnosti Streaming)",
+        "timestampMode":"Način vremenskog žiga",
+        "timestampModes":{
+            "currentTime":"Isto kao vaše trenutačno vrijeme (ne resetirano nakon 24 sata)",
+            "custom":"Prilagođeno",
+            "none":"Ništa",
+            "sinceOpen":"budući da je nesklad otvoren"
+        },
+        "validation":{
+            "discordId":"Mora biti važeći Discord ID.",
+            "discordLink":"Nemojte koristiti vezu Discord. Umjesto toga upotrijebite poveznicu na Imgur sliku.",
+            "imgurDirect":"Imgur poveznica mora biti izravna poveznica na sliku (npr. https://i.imgur.com/...). Desnom tipkom miša kliknite sliku i kliknite 'Kopiraj adresu slike'",
+            "maxLength":"Ne smije biti duži od {length} znakova.",
+            "number":"Mora biti broj.",
+            "positiveNumber":"Mora biti pozitivan broj.",
+            "required":"Ovo polje je obavezno.",
+            "streamingLink":"Veza za strujanje mora biti važeća URL.",
+            "streamingLinkLength":"Veza za strujanje ne smije biti duža od 512 znakova.",
+            "tenorDirect":"Veza na Tenor mora biti izravna poveznica na sliku (npr. https://media.tenor.com/...). Kliknite desnom tipkom GIF i kliknite \"Kopiraj adresu slike\"",
+            "url":"Mora biti važeći URL."
+        }
+    },
+    "dearrow":{
+        "clickToDearrow":"Kliknite za uklanjanje strelice",
+        "dearrowByDefault":"Automatski uklonite strelice na videozapise",
+        "dearrowedClickRestore":"Ovo ugrađivanje je uklonjeno, kliknite za vraćanje",
+        "description":"Čini YouTube ugrađene naslove i minijature manje senzacionalističkima, omogućuje Dearrow",
+        "everything":"Sve (naslovi i sličice)",
+        "hideButton":"Skriva gumb Dearrow od YouTube ugrađenih sadržaja",
+        "replaceElementsDescription":"Odaberite koji će elementi ugrađenog biti zamijenjeni",
+        "thumbnails":"Sličice",
+        "titles":"Naslovi"
+    },
+    "decor":{
+        "accessFromProfiles":"Dekoracijama također možete pristupiti sa stranice {link}.",
+        "changeDecoration":"Promjena dekoracije",
+        "description":"Stvorite i koristite vlastite prilagođene ukrase za avatare ili odaberite svoje omiljene među unaprijed postavljenim postavkama.",
+        "enableAndRestart":"Omogućite Decor i ponovno pokrenite klijent kako biste promijenili ukras avatara.",
+        "profilesLink":"Profili",
+        "removeDecoration":"Uklonite ukras",
+        "title":"Dekor"
+    },
+    "devCompanion":{
+        "description":"Dev Companion dodatak. Prijavite sve što ne radi ili je čudno (najvjerojatnije je greška) sadanu, bilo pingu ili dm-u, hvala!",
+        "settings":{
+            "notifyOnAutoConnect":"Treba li obavijestiti kada se Dev Companion automatski poveže.",
+            "reloadAfterToggle":"Ponovno učitavanje nakon što se primi naredba za onemogućavanje/omogućavanje dodatka.",
+            "usePatchedModule":"Na zahtjeve za izdvajanje, odgovorite s trenutno zakrpanim modulom (ako je zakrpan) umjesto originala."
+        }
+    },
+    "disableCallIdle":{
+        "description":"Onemogućuje automatsko izbacivanje iz DM glasovnog poziva nakon 3 minute i premještanje na AFK glasovni kanal."
+    },
+    "donate":"Donirajte",
+    "donorCard":{
+        "donated":{
+            "description":"Svi Vencord korisnici mogu vidjeti vašu Vencord značku donatora, a Equicord korisnici mogu vidjeti vašu Equicord značku donatora. Za promjenu bedža donatora Vencord kontaktirajte @vending.machine. Za svoj bedž donatora Equicord napravite kartu na poslužitelju Equicord.",
+            "equicordDescription":"Svi Equicord korisnici mogu vidjeti vašu značku! Možete upravljati svojim pogodnostima tako što ćete napraviti kartu na poslužitelju Equicord.",
+            "subtitle":"Hvala vam na donaciji!",
+            "title":"Donacije",
+            "vencordDescription":"Svi Vencord korisnici mogu vidjeti vašu značku! Svojim pogodnostima možete upravljati slanjem poruka na @{v}."
+        },
+        "notDonated":{
+            "description":"Razmislite o podršci razvoju Equicord donacijom!",
+            "title":"Podržite projekt"
+        }
+    },
+    "dontRoundMyTimestamps":{
+        "description":"Uvijek zaokružuje relativne vremenske oznake prema dolje, tako da 7,6y postaje 7y umjesto 8y"
+    },
+    "dynamicImageModalAPI":{
+        "description":"Omogućuje izostavljanje širine ili visine pri otvaranju modala slike"
+    },
+    "experiments":{
+        "description":"Omogućite pristup eksperimentima i drugim značajkama samo za razvojne programere u Discord!",
+        "devToolsInfo":"Možete otvoriti Discord DevTools putem {keyboardCombo}",
+        "holdOn":"Drži se!!",
+        "moreInfo":"Više informacija",
+        "settings":{
+            "toolbarDevMenu":"Promijenite gumb alatne trake Pomoć (?) (gore desno u chatu) u Discord izbornik za razvojne programere"
+        },
+        "warning1":"Eksperimenti su neobjavljene značajke Discord. Možda neće raditi, ili čak slomiti vaš klijent ili onemogućiti vaš račun.",
+        "warning2":"Eksperimente koristite samo ako znate što radite. Equicord nije odgovoran za bilo kakvu štetu uzrokovanu omogućavanjem eksperimenata. Ako ne znate što eksperiment radi, zanemarite ga. Nemojte nas pitati što rade eksperimenti, vjerojatno ne znamo.",
+        "warning3":"Ne, ne možete koristiti značajke poslužitelja kao što je označavanje okvira \"Pošalji klijentu\"."
+    },
+    "expressionCloner":{
+        "cloneEmoji":"Klonirajte Emoji",
+        "cloneSticker":"Naljepnica klona",
+        "cloneTo":"Kloniraj u {guild}",
+        "clonedSuccess":"Uspješno klonirano {name} u {guild}!",
+        "customName":"Prilagođeno ime",
+        "failedToClone":"Kloniranje nije uspjelo: {error}",
+        "nameValidation":"Ime mora imati između 2 i 32 znaka",
+        "somethingWentWrong":"Nešto nije u redu (provjerite konzolu!)"
+    },
+    "f8break":{
+        "description":"Pauzirajte klijenta kada pritisnete F8 s otvorenim DevTools (+ prijelomne točke)."
+    },
+    "failedToRender":"Nije uspjelo generiranje kartice {tab}. Ako se ovaj problem nastavi, pokušajte upotrijebiti instalacijski program za ponovnu instalaciju!",
+    "fakeNitro":{
+        "description":"Omogućuje vam slanje lažnih emojija/naljepnica, korištenje nitro tema i strujanje u nitro kvaliteti",
+        "doNotShowAgain":"Ne prikazuj više",
+        "emojiNotice":"Ovo je FakeNitro emoji i prikazuje se kao pravi emoji samo za vas. Pojavljuje se kao poveznica za korisnike koji ne koriste dodatak.",
+        "holdOn":"izdrži!",
+        "noAttachmentPerms":{
+            "body":"Ne možete poslati ovu poruku jer sadrži animiranu naljepnicu FakeNitro i nemate dopuštenja za prilaganje datoteka na trenutnom kanalu. Uklonite naljepnicu za nastavak."
+        },
+        "noEmbedPerms":{
+            "body1":"Pokušavate poslati/urediti poruku koja sadrži FakeNitro emoji ili naljepnicu,",
+            "body2":"no nemate dopuštenja za ugrađivanje veza na trenutni kanal.",
+            "body3":"Jeste li sigurni da želite poslati ovu poruku? Vaši FakeNitro artikli pojavit će se samo kao poveznica.",
+            "disableNotice":"Ovu obavijest možete onemogućiti u postavkama dodatka."
+        },
+        "sendAnyway":"Svejedno pošalji",
+        "settings":{
+            "disableEmbedPermissionCheck":"Treba li onemogućiti provjeru dopuštenja za ugradnju prilikom slanja lažnih emojija i naljepnica",
+            "emojiSize":"Veličina emojija prilikom slanja",
+            "enableEmojiBypass":"Omogućuje slanje lažnih emojija (također zaobilazi dozvolu koja nedostaje za korištenje prilagođenih emojija)",
+            "enableStickerBypass":"Omogućuje slanje lažnih naljepnica (također zaobilazi dopuštenje koje nedostaje za korištenje naljepnica)",
+            "enableStreamQualityBypass":"Dopusti strujanje u nitro kvaliteti",
+            "hyperLinkText":"Koji tekst treba koristiti hiperveza. {{NAME}} bit će zamijenjen nazivom emotikona/naljepnice.",
+            "stickerSize":"Veličina naljepnica prilikom slanja",
+            "transformCompoundSentence":"Treba li pretvoriti lažne naljepnice i emojije u složene rečenice (rečenice s više sadržaja od samog lažnog emojija ili veze na naljepnicu)",
+            "transformEmojis":"Hoće li lažne emojije pretvoriti u prave",
+            "transformStickers":"Da li lažne naljepnice pretvoriti u prave",
+            "useEmojiHyperLinks":"Treba li koristiti hiperveze pri slanju lažnih emojija",
+            "useStickerHyperLinks":"Treba li koristiti hiperveze pri slanju lažnih naljepnica"
+        },
+        "stickerNotice":"Ovo je FakeNitro naljepnica i prikazuje se kao prava naljepnica samo za vas. Pojavljuje se kao poveznica za korisnike koji ne koriste dodatak."
+    },
+    "fakeProfileThemes":{
+        "accent":"Akcent",
+        "colorPickers":"Birači boja",
+        "copy3y3":"Kopiraj 3y3",
+        "fakeColors":"Lažne boje",
+        "instructions":"Postavite boje profila pomoću alata za odabir boja u nastavku. Boje će biti kodirane u odjeljku \"O meni\" vašeg profila.",
+        "nitroColors":"Nitro boje",
+        "preview":"Pretpregled",
+        "primary":"Primarni",
+        "usage":"Korištenje"
+    },
+    "favEmojiFirst":{
+        "description":"Stavlja vaš omiljeni emoji na prvo mjesto u automatskom dovršavanju emotikona i također ima alias emotikona.",
+        "settings":{
+            "aliases":"Upravljajte svojim aliasima emotikona.",
+            "clearAll":"Izbriši sve aliase."
+        },
+        "ui":{
+            "aliasRequired":"Alias je obavezan.",
+            "aliasSetFor":"Alias postavljen za {emoji}.",
+            "aliasValidation":"Alias mora imati 2-32 znaka i koristiti samo mala slova, brojeve ili podvlake.",
+            "confirmModal":{
+                "confirmButton":"Izbriši sve aliase",
+                "description":"Ovo će ukloniti svaki alias emojija koji ste spremili.",
+                "title":"Izbriši sve aliase"
+            },
+            "deleteAllAliases":"Izbriši sve aliase",
+            "deletedAllAliases":"Izbrisani su svi aliasi emotikona.",
+            "duplicateAlias":"Dvostruki alias",
+            "editAlias":"Uredi alias",
+            "failedToDelete":"Brisanje aliasa nije uspjelo.",
+            "failedToRemove":"Uklanjanje pseudonima nije uspjelo.",
+            "failedToSave":"Spremanje aliasa nije uspjelo.",
+            "modal":{
+                "placeholder":"Alias, npr. \"jecati\"",
+                "save":"Spremi",
+                "setDescription":"Postavite alias za {emoji}",
+                "setTitle":"Postavite alias"
+            },
+            "noAliasesYet":"Još nema postavljenih aliasa.",
+            "remove":"Ukloni",
+            "removedAlias":"Uklonjen alias :{alias}:",
+            "setAlias":"Postavite alias"
+        }
+    },
+    "favGifSearch":{
+        "description":"Dodaje traku za pretraživanje omiljenim gifovima.",
+        "name":"FavoriteGifSearch",
+        "searchOptions":{
+            "entireUrl":"Cijeli URL",
+            "hostAndPath":"Domaćin i put (tenor.com somgif.gif)",
+            "pathOnly":"Samo put (/somegif.gif)"
+        },
+        "searchPlaceholder":"Pretraživanje omiljenih GIF-ova",
+        "settings":{
+            "searchOption":"Dio url-a koji želite pretražiti"
+        }
+    },
+    "fixCodeblockGap":{
+        "description":"Uklanja razmak između blokova koda i teksta ispod njega"
+    },
+    "fixImagesQuality":{
+        "animatedImagesAlways":"Animirane slike (GIF, WebP, itd.) u chatu će uvijek biti animirane, bez obzira na to je li aplikacija fokusirana.",
+        "defaultBehavior":"Zadano ponašanje je sljedeće:",
+        "description":"Poboljšava kvalitetu slika učitavanjem u izvornoj razlučivosti",
+        "enableOriginalCaveats":"Također možete omogućiti izvornu sliku u chatu, ali pazite na sljedeća upozorenja:",
+        "inChatOptimised":"U chatu će se učitati optimizirane slike pune rezolucije.",
+        "inModalOriginal":"U modu slike, izvorna slika će se učitati.",
+        "mayCauseLag":"Može uzrokovati kašnjenje.",
+        "name":"FixImagesQuality",
+        "settings":{
+            "originalImagesInChat":"Također učitajte izvornu sliku u Chat. UPOZORENJE: Pročitajte gornja upozorenja"
+        }
+    },
+    "fixSpotifyEmbeds":{
+        "description":"Popravlja spotify ugradnje koje su nevjerojatno glasne dopuštajući vam da prilagodite glasnoću",
+        "settings":{
+            "volume":"% glasnoće za postavljanje za spotify ugradnje. Sve iznad 10% je jako glasno"
+        }
+    },
+    "fixYoutubeEmbeds":{
+        "description":"Zaobilazi youtube videozapise koji su blokirani za prikaz na Discord (na primjer od strane UMG-a)"
+    },
+    "forceOwnerCrown":{
+        "description":"Prisilno postavite krunu vlasnika uz korisnička imena čak i ako je poslužitelj velik."
+    },
+    "friendInvites":{
+        "commands":{
+            "createFriendInvite":{
+                "description":"Generira vezu za pozivnicu za prijateljstvo.",
+                "name":"kreiraj poziv za prijateljstvo"
+            },
+            "revokeFriendInvites":{
+                "description":"Opoziva sve generirane pozivnice za prijateljstvo.",
+                "name":"opozovi pozive za prijateljstvo"
+            },
+            "viewFriendInvites":{
+                "description":"Pogledajte popis svih generiranih pozivnica za prijateljstvo.",
+                "name":"pogledaj pozive za prijateljstvo"
+            }
+        },
+        "description":"Stvorite i upravljajte vezama za pozivnice za prijateljstvo pomoću naredbi s kosom crtom (/kreiraj poziv za prijateljstvo, /prikaži pozivnice za prijateljstvo, /opozovi pozivnice za prijateljstvo).",
+        "ui":{
+            "allRevoked":"Sve pozivnice za prijateljstvo su opozvane.",
+            "expires":"Ističe:",
+            "maxUses":"Max koristi:",
+            "noActiveInvites":"Nemaš nijednu aktivnu pozivnicu za prijateljstvo!",
+            "timesUsed":"Korišteno vrijeme:"
+        }
+    },
+    "friendsSince":{
+        "description":"Prikazuje kada ste s nekim postali prijatelji u korisničkom skočnom prozoru",
+        "heading":"Prijatelji Od"
+    },
+    "fullSearchContext":{
+        "description":"Čini da kontekstni izbornik poruke u rezultatima pretraživanja poruka ima sve opcije koje biste očekivali"
+    },
+    "fullUserInChatbox":{
+        "description":"Čini da korisnik koji spomene u okviru za chat ima više funkcija, poput lijevog/desnog klika"
+    },
+    "gameActivityToggle":{
+        "description":"Dodaje gumb pored mikrofona i gumba za gluhu za promjenu aktivnosti igre.",
+        "disableGameActivity":"Onemogući aktivnost igre",
+        "enableGameActivity":"Omogući aktivnost igre",
+        "settings":{
+            "location":"Gdje prikazati gumb za prebacivanje aktivnosti igre",
+            "locationPanel":"Pored Isključi/gluši",
+            "locationToolbox":"Equicord Kutija s alatima",
+            "oldIcon":"Koristite stari stil ikone prije Discord redizajna ikone"
+        }
+    },
+    "gifPaste":{
+        "description":"Odabir gifa u alatu za odabir gifova omogućuje umetanje poveznice u chatbox umjesto trenutnog slanja"
+    },
+    "greetStickerPicker":{
+        "ariaLabel":"Pozdravi birač naljepnica",
+        "description":"Omogućuje vam da koristite bilo koju pozdravnu naljepnicu umjesto samo nasumične tako da desnom tipkom miša kliknete 'Mahni za pozdrav!' dugme",
+        "greetMode":"Način pozdravljanja",
+        "greetModeDescription":"Odaberite način pozdravljanja",
+        "greetModeLabel":"Pozdrav (možete pozdraviti samo 3 puta)",
+        "greetStickers":"Pozdravne naljepnice",
+        "normalMessageLabel":"Normalna poruka (možete pozdraviti spam)",
+        "sendGreets":"Pošalji pozdrave",
+        "unholyMultiGreet":"Unholy Multi-Greet"
+    },
+    "hideAttachments":{
+        "description":"Sakrij privitke i ugradnje za pojedinačne poruke putem gumba za lebdenje",
+        "hideMedia":"Sakrij medije",
+        "mediaHidden":"Mediji skriveni",
+        "showMedia":"Prikaži medije"
+    },
+    "iLoveSpam":{
+        "description":"Nemojte skrivati poruke od \"vjerojatnih pošiljatelja neželjene pošte\""
+    },
+    "ignoreActivities":{
+        "disableActivity":"Onemogući aktivnost",
+        "enableActivity":"Omogući aktivnost",
+        "filterList":{
+            "description":"Popis ID-ova aktivnosti odvojenih zarezima za filtriranje (Korisno za filtriranje specifičnih RPC aktivnosti i prilagođenog RPC-a)",
+            "title":"Popis filtera"
+        },
+        "importCustomRPC":{
+            "alreadyAdded":"CustomRPC ID aplikacije već je dodan.",
+            "button":"Uvezi CustomRPC ID",
+            "description":"Uvezite ID aplikacije CustomRPC dodatka na popis filtera",
+            "notSet":"CustomRPC ID aplikacije nije postavljen."
+        },
+        "settings":{
+            "blacklist":"Crna lista",
+            "ignoreCompeting":"Ignorirajte sve natjecateljske aktivnosti (Ovo su obično posebne aktivnosti u igri)",
+            "ignoreListening":"Ignorirajte sve aktivnosti slušanja (To su obično spotify aktivnosti)",
+            "ignorePlaying":"Ignorirajte sve aktivnosti igranja (To su obično igre i RPC aktivnosti)",
+            "ignoreStreaming":"Ignorirajte sve aktivnosti strujanja",
+            "ignoreWatching":"Ignorirajte sve aktivnosti gledanja",
+            "listMode":"Promijenite način popisa filtara",
+            "whitelist":"Bijela lista"
+        }
+    },
+    "imageFilename":{
+        "description":"Prikažite naziv datoteke slika i GIF-ova kao opis alata kada lebdite iznad njih",
+        "settings":{
+            "showFullUrl":"Prikaži cijelu URL slike umjesto samo naziva datoteke. Uvijek omogućeno za GIF-ove jer obično nemaju smislen naziv datoteke"
+        }
+    },
+    "imageLink":{
+        "description":"Nikada nemojte skrivati poveznice na slike u porukama, čak i ako je to jedini sadržaj"
+    },
+    "imageZoom":{
+        "lensSize":"Veličina objektiva",
+        "nearestNeighbour":"Najbliži susjed",
+        "settings":{
+            "invertScroll":"Obrnuti svitak",
+            "nearestNeighbour":"Koristite interpolaciju najbližeg susjeda prilikom skaliranja slika",
+            "saveZoomValues":"Treba li spremiti vrijednosti zumiranja i veličine leće",
+            "size":"Radijus / Veličina leće",
+            "square":"Neka leća bude kvadratna",
+            "zoom":"Zumiranje objektiva",
+            "zoomSpeed":"Koliko se brzo mijenja zum / veličina objektiva"
+        },
+        "squareLens":"Kvadratna leća",
+        "zoom":"Zum",
+        "zoomSpeed":"Brzina zumiranja"
+    },
+    "implicitRelationships":{
+        "description":"Prikazuje vaše implicitne odnose na kartici Prijatelji.",
+        "settings":{
+            "sortByAffinity":"Razvrstati implicitne odnose prema njihovoj sklonosti prema vama."
+        },
+        "ui":{
+            "implicitHeader":"Implicitno — {count}",
+            "implicitSection":"Implicitno"
+        }
+    },
+    "invite":"Pozovi",
+    "ircColors":{
+        "description":"Čini boje korisničkog imena u chatu jedinstvenim, kao u IRC klijentima",
+        "settings":{
+            "applyColorOnlyInDms":"Primijenite boje samo u izravnim porukama; nemojte primjenjivati boje u poslužiteljima.",
+            "applyColorOnlyToUsersWithoutColor":"Primijeni boje samo na korisnike koji nemaju unaprijed definiranu boju",
+            "lightness":"Lakoća, u %. Promijenite ako su boje presvijetle ili pretamne",
+            "memberListColors":"Zamijenite boje uloga na popisu članova"
+        }
+    },
+    "keepCurrentChannel":{
+        "description":"Pokušajte prijeći na kanal na kojem ste bili prije promjene računa ili učitavanja Discord."
+    },
+    "lastfmRichPresence":{
+        "apiKeyInstructions":"Postavite <0>Naziv aplikacije</0> i <1>Opis aplikacije</1> na bilo što, a ostalo ostavite praznim.",
+        "createApiKey":"Izradi API ključ",
+        "description":"Mali dodatak za Last.fm bogatu prisutnost",
+        "howToCreateApiKey":"Kako stvoriti API ključ",
+        "lastfmProfile":"Last.fm profil",
+        "missingArt":{
+            "lastfmLogo":"Koristite veliki Last.fm logo",
+            "placeholder":"Koristite generičko rezervirano mjesto"
+        },
+        "nameFormat":{
+            "albumName":"Koristi naziv albuma (vraća se na tekst prilagođenog statusa ako pjesma nema album)",
+            "artistFirst":"Koristite format 'izvođač - pjesma'",
+            "artistOnly":"Koristite samo ime izvođača",
+            "songFirst":"Koristite format 'pjesma - izvođač'",
+            "songOnly":"Koristite samo naziv pjesme",
+            "statusName":"Koristite prilagođeni naziv statusa"
+        },
+        "settings":{
+            "alwaysHideArt":"Onemogući preuzimanje omota albuma",
+            "apiKey":"Prilagođena tipka Last.fm API. Nije potrebno, ali se toplo preporučuje kako bi se izbjeglo ograničavanje brzine s našim zajedničkim ključem",
+            "clickableLinks":"Napravite veze na nazive pjesama, izvođača i albuma koje se mogu kliknuti",
+            "hideWithActivity":"Sakrij Last.fm prisutnost ako imate bilo koju drugu prisutnost",
+            "hideWithSpotify":"Sakrij Last.fm prisutnost ako je spotify pokrenut",
+            "missingArt":"Kada album ili omot albuma nedostaju",
+            "nameFormat":"Prikaži naziv pjesme i izvođača u nazivu statusa",
+            "shareUsername":"Prikaži link na Last.fm profil",
+            "showLastFmLogo":"Pokažite logotip Last.fm pored naslovnice albuma",
+            "statusDisplayType":"Prikažite ime pjesme/izvođača na popisu članova",
+            "statusName":"Prilagođeni tekst statusa",
+            "useListeningStatus":"Prikaži status \"Slušam\" umjesto \"Sviram\"",
+            "username":"Last.fm korisničko ime"
+        },
+        "statusDisplayType":{
+            "artist":"Prikaži ime izvođača",
+            "off":"Ne prikazuj (prikazuje generičku poruku slušanja)",
+            "track":"Prikaži naziv staze"
+        }
+    },
+    "loading":"Učitavanje...",
+    "loadingQuotes":{
+        "description":"Zamijenite citate učitavanja Discordsa",
+        "settings":{
+            "additionalQuotes":"Dodatni prilagođeni citati koji se mogu pojaviti, odvojeni donjim razdjelnikom",
+            "additionalQuotesDelimiter":"Razdjelnik za dodatne citate",
+            "enableDiscordPresetQuotes":"Omogući unaprijed postavljene citate Discord (uključujući citate događaja, tijekom događaja)",
+            "enablePluginPresetQuotes":"Omogućite citate unaprijed postavljene ovim dodatkom",
+            "replaceEvents":"Treba li se ovaj dodatak primjenjivati i tijekom događaja s posebnim citatima na temu događaja? (npr. Noć vještica)"
+        },
+        "ui":{
+            "noQuotesQuote":"Jeste li stvarno onemogućili sve ponude za učitavanje? Koja si ti budaletina..."
+        }
+    },
+    "logs":{
+        "allLogsCleared":"Svi zapisnici su izbrisani",
+        "clearAll":"Obriši sve",
+        "clearAllLogs":"Izbriši sve zapisnike",
+        "clearAllLogsConfirmation":"Jeste li sigurni da želite obrisati sve zapisnike? Ovo se ne može poništiti.",
+        "clearLog":"Očisti zapisnik",
+        "clearLogConfirmation":"Jeste li sigurni da želite obrisati ovaj dnevnik? Ovo se ne može poništiti.",
+        "clearLogs":"Obriši zapisnike",
+        "clearLogsConfirmation":"Jeste li sigurni da želite obrisati ove zapisnike? Ovo se ne može poništiti.",
+        "clearLogsConfirmationNum_one":"Jeste li sigurni da želite izbrisati {count} dnevnik",
+        "clearLogsConfirmationNum_other":"Jeste li sigurni da želite izbrisati {count} zapisnike",
+        "hideLogs":"Sakrij zapise",
+        "logCleared":"Dnevnik je očišćen",
+        "logsCleared":"Odabrani dnevnici su izbrisani",
+        "showLogs":"Prikaži zapisnike"
+    },
+    "memberCount":{
+        "settings":{
+            "memberList":"Prikaži broj članova na popisu članova",
+            "toolTip":"Prikaži broj članova na opisu poslužitelja",
+            "voiceActivity":"Prikaži glasovnu aktivnost s brojem članova na popisu članova"
+        }
+    },
+    "memberListDecoratorsAPI":{
+        "description":"API za dodavanje dekoratera na popis članova (i na poslužiteljima i u DM-ovima)"
+    },
+    "mentionAvatars":{
+        "description":"Prikazuje korisničke avatare i ikone uloga unutar spominjanja",
+        "settings":{
+            "showAtSymbol":"Treba li simbol @ biti prikazan na spominjanju korisnika"
+        }
+    },
+    "menuItemDemanglerAPI":{
+        "description":"Uklanja Discord modul stavke izbornika"
+    },
+    "messageAccessoriesAPI":{
+        "description":"API za dodavanje dodataka porukama"
+    },
+    "messageClickActions":{
+        "actions":{
+            "copyContent":"Kopiraj sadržaj",
+            "copyId":"Kopiraj ID",
+            "copyLink":"Kopiraj link",
+            "copyUserId":"Kopiraj ID korisnika",
+            "delete":"Izbriši",
+            "edit":"Uredi",
+            "none":"Ništa",
+            "openTab":"Otvori karticu",
+            "openThread":"Otvori nit",
+            "pin":"Prikvači",
+            "quote":"Citat",
+            "react":"Reagiraj",
+            "reply":"Odgovor"
+        },
+        "description":"Prilagodite radnje klikova na poruke.",
+        "modifiers":{
+            "alt":"Alt",
+            "backspace":"Backspace",
+            "ctrl":"Ctrl",
+            "delete":"Izbriši",
+            "none":"Ništa",
+            "shift":"Shift"
+        },
+        "settings":{
+            "clickTimeout":"Istek vremena za razlikovanje dvostrukih/trostrukih klikova (ms)",
+            "deferDoubleClickForTriple":"Odgodi dvostruki klik za dopuštanje radnji trostrukog klika (onemogućuje trostruki klik kada je isključen)",
+            "disableInDms":"Onemogući sve klikove u izravnim porukama",
+            "disableInSystemDms":"Onemogući sve klikove u DM-ovima sustava",
+            "doubleClickAction":"Radnja na dvostruki klik (vaše poruke)",
+            "doubleClickHoldThreshold":"Maksimalno vrijeme zadržavanja za radnje dvostrukog klika (ms). Dulje držanje omogućuje odabir teksta",
+            "doubleClickModifier":"Modifikator potreban za radnju dvostrukog klika",
+            "doubleClickOthersAction":"Radnja na dvostruki klik (tuđe poruke)",
+            "quoteWithReply":"Kada citirate, također odgovorite na poruku",
+            "reactEmoji":"Emotikoni koji se koriste za reagiranje",
+            "selectionHoldTimeout":"Istek vremena za odabir teksta (ms)",
+            "singleClickAction":"Akcija na jedan klik (vaše poruke)",
+            "singleClickModifier":"Potreban modifikator za radnju jednim klikom (vaše poruke)",
+            "singleClickOthersAction":"Radnja na jedan klik (tuđe poruke)",
+            "singleClickOthersModifier":"Potreban modifikator za radnju jednim klikom (tuđe poruke)",
+            "tripleClickAction":"Radnja na trostruki klik",
+            "tripleClickModifier":"Modifikator potreban za radnju s tri klika",
+            "useSelectionForQuote":"Prilikom citiranja koristite odabrani tekst ako je dostupan"
+        },
+        "toasts":{
+            "cannotPin":"Nije moguće prikvačiti: nedostaju dopuštenja",
+            "cannotQuote":"Ne može se citirati ova vrsta poruke",
+            "cannotReact":"Ne mogu reagirati: nedostaju dopuštenja"
+        },
+        "ui":{
+            "linkCopied":"Veza je kopirana!",
+            "maxAdditionalEmojis":"odvojeni zarezom/novim redom, maks. {count}",
+            "messageContentCopied":"Sadržaj poruke kopiran!",
+            "messageIdCopied":"ID poruke kopiran!",
+            "selectAdditionalEmojis":"Odaberite Dodatne Emojije",
+            "selectEmojiForReactions":"Odaberite Emoji za reakcije",
+            "userIdCopied":"Korisnički ID kopiran!"
+        }
+    },
+    "messageDecorationsAPI":{
+        "description":"API za dodavanje ukrasa porukama"
+    },
+    "messageEventsAPI":{
+        "description":"API zahtijeva sve što koristi događaje poruka"
+    },
+    "messageLatency":{
+        "clockAhead":"Sat ovog korisnika je {delta} ispred.",
+        "delayedMessage":"Odgođena poruka",
+        "messageDelayed":"Ova je poruka poslana s odgodom od {delta}.",
+        "oldAndroidClient":"Stari Discord Android klijent",
+        "oldDiscordAndroid":"Sumnja se da korisnik koristi stari Discord Android klijent",
+        "settings":{
+            "detectDiscordKotlin":"Otkrij stare Discord Android klijente",
+            "ignoreSelf":"Nemojte dodavati indikator svojim porukama",
+            "latency":"Prag u sekundama za indikator latencije",
+            "showMillis":"Prikaži milisekunde"
+        },
+        "timeUnits":{
+            "day":"dan",
+            "days":"dana",
+            "hour":"sat",
+            "hours":"sati",
+            "millisecond":"milisekunda",
+            "milliseconds":"milisekundi",
+            "minute":"minuta",
+            "minutes":"minuta",
+            "second":"drugi",
+            "seconds":"sekundi"
+        }
+    },
+    "messageLinkEmbeds":{
+        "automodOptions":{
+            "always":"Uvijek koristite automod embeds",
+            "never":"Nikada nemojte koristiti automod ugrađene",
+            "prefer":"Preferirajte automod ugradnje, ali koristite bogate ugradnje ako se neki sadržaj ne može prikazati"
+        },
+        "channelLabels":{
+            "directMessage":"Izravna poruka",
+            "groupDM":"Group DM",
+            "server":"poslužitelj"
+        },
+        "description":"Dodaje pregled porukama koje povezuju drugu poruku",
+        "listModeOptions":{
+            "blacklist":"Crna lista",
+            "whitelist":"Bijela lista"
+        },
+        "noContent":{
+            "attachments_only_one":"[nema sadržaja, {count} privitak]",
+            "attachments_only_other":"[nema sadržaja, {count} privitaka]",
+            "both_one":"[bez sadržaja, {attachments} privitak i {embeds} ugrađen]",
+            "both_other":"[bez sadržaja, {attachments} privitaka i {embeds} ugrađenih]",
+            "embeds_only_one":"[nema sadržaja, {count} ugraditi]",
+            "embeds_only_other":"[nema sadržaja, {count} ugrađeno]"
+        },
+        "settings":{
+            "automodEmbeds":"Koristite automod ugrađene umjesto bogatih ugrađenih (manji, ali manje informacija)",
+            "clearMessageCache":"Očistite predmemoriju povezanih poruka",
+            "idList":"ID-ovi saveza/kanala/korisnika na crnu ili bijelu listu (odvojite zarezom)",
+            "listMode":"Treba li koristiti ID popis kao crni ili bijeli popis",
+            "messageBackgroundColor":"Boja pozadine za poruke u bogatim ugrađenim sadržajima"
+        }
+    },
+    "messageLogger":{
+        "clearMessageLog":"Očisti zapisnik poruka",
+        "deletedMessages_one":"{count} obrisana poruka",
+        "deletedMessages_other":"{count} obrisane poruke",
+        "deletedMessages_zero":"Nema izbrisanih poruka",
+        "disableDiffView":"Onemogući Diff View",
+        "editHistory":"Povijest uređivanja poruka",
+        "enableDiffView":"Omogući Diff View",
+        "notLoggedTooltip":"Ovo stanje uređivanja nije zapisano pa se ne može prikazati.",
+        "removeMessageHistory":"Ukloni povijest poruka",
+        "removeMessageTemporary":"Ukloni poruku (privremeno)",
+        "settings":{
+            "collapseDeleted":"Treba li sažeti izbrisane poruke, slično blokiranim porukama",
+            "deleteStyle":"Stil izbrisanih poruka",
+            "deleteStyleRedOverlay":"Crveni sloj",
+            "deleteStyleRedText":"Crveni tekst",
+            "ignoreBots":"Treba li ignorirati poruke botova",
+            "ignoreChannels":"Popis ID-ova kanala odvojenih zarezima koje treba zanemariti",
+            "ignoreGuilds":"Popis ID-ova saveza odvojenih zarezima koje treba zanemariti",
+            "ignoreSelf":"Želite li sami ignorirati poruke",
+            "ignoreUsers":"Popis korisničkih ID-ova odvojenih zarezima koje treba zanemariti",
+            "inlineEdits":"Treba li prikazati povijest uređivanja kao dio sadržaja poruke",
+            "logDeletes":"Treba li bilježiti izbrisane poruke",
+            "logEdits":"Treba li zabilježiti uređene poruke",
+            "separatedDiffs":"Odvojite dodavanje i uklanjanje u razlikama za čitljiviju razliku",
+            "showEditDiffs":"Prikaži vizualne razlike između uređenih verzija poruke"
+        },
+        "toggleDeletedHighlight":"Uključi/isključi izbrisano istaknuto"
+    },
+    "messagePopoverAPI":{
+        "description":"API za dodavanje gumba u skočne prozore poruka"
+    },
+    "messageTags":{
+        "commands":{
+            "create":"Napravite novu oznaku",
+            "delete":"Uklonite oznaku sa sebe",
+            "list":"Navedite sve oznake od sebe",
+            "message":"Poruka koju ćete poslati kada koristite ovu oznaku",
+            "preview":"Pregledajte oznaku bez javnog slanja",
+            "tagName":"Naziv oznake za pokretanje odgovora",
+            "tags":"Sami upravljajte svim oznakama"
+        },
+        "description":"Omogućuje spremanje poruka i njihovo korištenje jednostavnom naredbom.",
+        "settings":{
+            "clydeDescription":"Ako je omogućeno, clyde će vam poslati efemernu poruku kada je korištena oznaka.",
+            "clydeName":"Clyde poruka pri slanju"
+        },
+        "ui":{
+            "allTags":"Sve oznake:",
+            "invalidSubCommand":"Nevažeća podnaredba",
+            "noTagsYet":"Ups! Još nema oznaka, upotrijebite `/tags create` da biste je izradili!",
+            "tagAlreadyExists":"Oznaka s nazivom **{name}** već postoji!",
+            "tagCreated":"Uspješno kreirana oznaka **{name}**!",
+            "tagDeleted":"Uspješno izbrisana oznaka **{name}**!",
+            "tagDoesNotExist":"Tag **{name}** više ne postoji! Molimo ponovno učitajte svoj Discord da popravite :)",
+            "tagDoesNotExist2":"Oznaka s imenom **{name}** ne postoji!",
+            "tagSent":"Oznaka **{name}** je poslana!"
+        }
+    },
+    "messageUpdaterAPI":{
+        "description":"API za ažuriranje i ponovno iscrtavanje poruka"
+    },
+    "moreQuickReactions":{
+        "description":"Poboljšava gumbe za brzo reagiranje u kontekstnom izborniku poruke.",
+        "settings":{
+            "columns":"Kolone brzih reakcija za prikaz",
+            "compactMode":"Skalira gumbe na 75% njihove izvorne skale, dok povećava unutarnji emotikon na 125% skale. Emojiji će biti 93,75% izvorne veličine. Preporuča se da ima najmanje 5 stupaca",
+            "frequentEmojis":"Koristite često korištene emojije umjesto omiljenih emojija",
+            "reactionCount":"Broj reakcija (0-42)",
+            "rows":"Redovi brzih reakcija za prikaz",
+            "scroll":"Omogućite pomicanje popisa emojija"
+        }
+    },
+    "mutualGroupDMs":{
+        "description":"Prikazuje zajedničke grupne dms-ove u profilima",
+        "members_one":"{count} Član",
+        "members_other":"{count} Članovi",
+        "mutualGroupsHeader":"Međusobne grupe",
+        "mutualGroups_one":"{count} Međusobno Group",
+        "mutualGroups_other":"{count} Zajedničke grupe",
+        "noGroupDms":"Nema zajedničkog grupnog DMS-a",
+        "noMutualGroups":"Nema međusobnih grupa"
+    },
+    "newGuildSettings":{
+        "applySettings":"Primijenite NewGuildSettings",
+        "description":"Automatski utišajte nove poslužitelje i promijenite razne druge postavke nakon pridruživanja",
+        "settings":{
+            "allMessages":"Sve poruke",
+            "events":"Automatski isključi zvuk novih događaja",
+            "everyone":"Poništi @everyone i @here",
+            "guild":"Automatski isključi guild",
+            "highlights":"Automatski potisnuti Highlights",
+            "messages":"Postavke obavijesti servera",
+            "mobilePush":"Automatski isključi Mobile Push Obavijesti",
+            "nothing":"Ništa",
+            "onlyMentions":"Samo @spominjanja",
+            "role":"Poništi sva @spominjanja uloga",
+            "serverDefault":"Zadana vrijednost poslužitelja",
+            "showAllChannels":"Prikaži sve kanale automatski",
+            "voiceChannels":"Automatski sakrijte imena u glasovnim kanalima"
+        }
+    },
+    "nicknameIconsAPI":{
+        "description":"API za dodavanje ikona nadimku u profilima"
+    },
+    "noBlockedMessages":{
+        "description":"Potpuno sakrij sve blokirane/zanemarene poruke iz chata.",
+        "settings":{
+            "allowAutoModMessages":"Dopusti porukama koje šalje AutoMod da zaobiđu filtriranje.",
+            "alsoHideIgnoredUsers":"Također sakrijte poruke zanemarenih korisnika.",
+            "defaultHideUsers":"Ako je omogućeno, poruke blokiranih korisnika bit će potpuno skrivene, a sve poruke korisničkih ID-ova na popisu nadjačavanja bit će sažete (zadano ponašanje Discord). Ako je onemogućeno, poruke od blokiranih korisnika bit će sažete, a sve poruke od korisničkih ID-ova na popisu nadjačavanja bit će potpuno skrivene.",
+            "disableNotifications":"Sakrij obavijesti o novim porukama za blokirane korisnike. Uvijek istinito ako je \"Zadano sakrivanje korisnika\" omogućeno u nastavku i korisnik koji pokreće obavijest nije izuzet u \"Nadjačavanje korisnika\".",
+            "hideBlockedUserReplies":"Sakrij odgovore blokiranim korisnicima.",
+            "overrideUsers":"Popis korisničkih ID-ova odvojenih zarezima koji će biti skriveni ili sažeti umjesto gore odabranog zadanog ponašanja."
+        }
+    },
+    "noDeepLinks":{
+        "description":"Onemogućuje glupu značajku dubinskog povezivanja Discord koja vas pokušava prisiliti da koristite njihovu aplikaciju za stolna računala"
+    },
+    "noDevtoolsWarning":{
+        "description":"Onemogućuje natpis 'HOLD UP' u konzoli. Kao nuspojava, također sprječava Discord da sakrije vaš token, što sprječava nasumične odjave."
+    },
+    "noF1":{
+        "description":"Onemogući F1 povezivanje pomoći."
+    },
+    "noMaskedUrlPaste":{
+        "description":"Lijepljenje veze dok je tekst odabran neće se zalijepiti kao maskirani URL"
+    },
+    "noMosaic":{
+        "description":"Uklanja Discord mozaik slike",
+        "settings":{
+            "inlineVideo":"Reproducirajte videozapise bez moda vrtuljka"
+        }
+    },
+    "noOnboardingDelay":{
+        "description":"Preskače sporo i dosadno kašnjenje pri ukrcavanju"
+    },
+    "noPendingCount":{
+        "description":"Uklanja ping brojač dolaznih zahtjeva za prijateljstvo, zahtjeva za poruke i nitro ponuda.",
+        "settings":{
+            "hideFriendRequestsCount":"Sakrij broj dolaznih zahtjeva za prijateljstvo",
+            "hideMessageRequestsCount":"Sakrij broj zahtjeva za poruke",
+            "hidePremiumOffersCount":"Sakrij broj nitro ponuda"
+        }
+    },
+    "noProfileThemes":{
+        "description":"U potpunosti uklanja teme Nitro profila od svih osim od vas"
+    },
+    "noReplyMention":{
+        "description":"Onemogućuje pingove odgovora prema zadanim postavkama",
+        "settings":{
+            "doNotPingListed":"Nemojte pingati navedene korisnike/uloge",
+            "inverseShiftReply":"Preokreni Discord ponašanje odgovaranja smjene (omogući da korisnik spomene odgovor na smjenu)",
+            "onlyPingListed":"Pingajte samo navedene korisnike/uloge",
+            "roleList":"Popis uloga za dopuštanje ili izuzimanje pingova (odvojenih zarezima ili razmacima)",
+            "shouldPingListed":"Ponašanje",
+            "userList":"Popis korisnika za koje se dopuštaju ili izuzimaju pingovi (odvojeni zarezima ili razmacima)"
+        }
+    },
+    "noServerEmojis":{
+        "description":"Ne prikazuj emojije poslužitelja u izborniku za automatsko dovršavanje.",
+        "settings":{
+            "shownEmojis":"Vrste emojija za prikaz u izborniku za automatsko dovršavanje.",
+            "shownEmojisOptions":{
+                "all":"Unicode emojiji i svi emojiji poslužitelja (Discord zadano)",
+                "currentServer":"Unicode emoji i emoji poslužitelja s trenutnog poslužitelja",
+                "onlyUnicode":"Samo unicode emojiji"
+            }
+        }
+    },
+    "noSystemBadge":{
+        "description":"Onemogućuje oznaku broja nepročitanih na programskoj traci i traci sustava."
+    },
+    "noTypingAnimation":{
+        "description":"Onemogućuje CPU intenzivnu animaciju točaka za tipkanje"
+    },
+    "noUnblockToJump":{
+        "description":"Omogućuje vam skok na poruke blokiranih ili zanemarenih korisnika i vjerojatnih pošiljatelja neželjene pošte bez deblokiranja"
+    },
+    "noticesAPI":{
+        "description":"Popravlja automatsko odbacivanje obavijesti"
+    },
+    "notificationVolume":{
+        "description":"Čuvajte svoje uši i postavite zasebnu glasnoću za obavijesti i zvukove unutar aplikacije",
+        "settings":{
+            "notificationVolume":"Glasnoća obavijesti"
+        }
+    },
+    "onePingPerDM":{
+        "description":"Ako korisnik u DM-u više puta pošalje nepročitane poruke, primit ćete samo jedan audio ping.",
+        "settings":{
+            "allowEveryone":"Primajte audio pingove za @everyone i @here u grupnim DM-ovima",
+            "allowMentions":"Primajte audio pingove za @spominjanja",
+            "alwaysPlaySound":"Reproduciraj zvuk obavijesti o poruci čak i kada je onemogućen",
+            "channelToAffect":"Odaberite vrstu DM-a na koju će dodatak utjecati",
+            "channelToAffectOptions":{
+                "both":"Oba",
+                "groupDm":"Group DM-ovi",
+                "userDm":"DM-ovi korisnika"
+            },
+            "ignoreUsers":"ID-ovi korisnika (zarez + razmak) čiji se pingovi NIKADA ne smiju prigušivati"
+        }
+    },
+    "openInApp":{
+        "description":"Otvarajte veze u odgovarajućim aplikacijama umjesto u svom pregledniku",
+        "settings":{
+            "epic":"Otvorite veze Epic Games u Epic Games Launcheru",
+            "itunes":"Otvorite veze za Apple Music u aplikaciji iTunes",
+            "spotify":"Otvorite Spotify veze u aplikaciji Spotify",
+            "steam":"Otvorite Steam veze u aplikaciji Steam",
+            "tidal":"Otvori Tidal veze u aplikaciji Tidal",
+            "vrcx":"Otvorite VRChat veze u VRCX aplikaciji"
+        },
+        "ui":{
+            "openedInApp":"Otvorena veza u izvornoj aplikaciji"
+        }
+    },
+    "overrideForumDefaults":{
+        "description":"Omogućuje vam nadjačavanje zadanog rasporeda/poretka foruma. još uvijek ga možete promijeniti za svaki kanal",
+        "layouts":{
+            "gallery":"Galerija",
+            "list":"Popis"
+        },
+        "name":"NadjačajForumDefaults",
+        "settings":{
+            "defaultLayout":"Koji raspored koristiti kao zadani",
+            "defaultSortOrder":"Koji redoslijed sortiranja koristiti kao zadani"
+        },
+        "sortOrders":{
+            "datePosted":"Datum objave",
+            "recentlyActive":"Nedavno aktivan"
+        }
+    },
+    "pauseInvitesForever":{
+        "description":"Vraća opciju pauziranja pozivnica na neodređeno vrijeme koju je glupi Discord uklonio.",
+        "name":"PauseInvitesForever",
+        "pauseIndefinitely":"Pauza na neodređeno vrijeme."
+    },
+    "permissionFreeWill":{
+        "description":"Onemogućuje ograničenja na strani klijenta za upravljanje dopuštenjima kanala.",
+        "settings":{
+            "lockout":"Zaobići sprječavanje zaključavanja dopuštenja (\"Prilično sam siguran da to ne želiš učiniti\")",
+            "onboarding":"Zaobići zahtjeve za uključivanje (\"Uvođenje ove promjene učinit će vaš poslužitelj nekompatibilnim [...]\")"
+        }
+    },
+    "permissionsViewer":{
+        "noPermissions":"Nema dopuštenja za prikaz!",
+        "owner":"vlasnik",
+        "permissions":"Dozvole",
+        "permissionsTitle":"{header} Dozvole",
+        "roleOptions":"Mogućnosti uloga",
+        "settings":{
+            "highestRole":"Najviša uloga",
+            "lowestRole":"Najniža uloga",
+            "permissionsSortOrder":"Metoda sortiranja koja se koristi za definiranje koja uloga korisniku daje određenu dozvolu"
+        },
+        "unknownRole":"Nepoznata uloga",
+        "unknownUser":"Nepoznati korisnik",
+        "userOptions":"Korisničke opcije",
+        "viewPermissions":"Prikaz dopuštenja"
+    },
+    "petpet":{
+        "commands":{
+            "petpet":{
+                "description":"Napravite gif kućnog ljubimca. Možete odrediti samo jednu od opcija slike",
+                "name":"kućni ljubimac",
+                "options":{
+                    "delay":"Odgoda između svakog okvira u ms. Zaokruženo na najbližih 10 ms. Zadana minimalna vrijednost je 20.",
+                    "image":"Prilog slike za korištenje",
+                    "noServerPfp":"Koristite uobičajeni avatar umjesto onog specifičnog za poslužitelj kada koristite opciju 'korisnik'",
+                    "resolution":"Rezolucija za gif. Zadano je 120. Ako unesete sulud broj i on zamrzne Discord to je vaša greška.",
+                    "url":"URL za dohvaćanje slike",
+                    "user":"Korisnik čiji avatar koristiti kao sliku"
+                }
+            }
+        },
+        "description":"Dodaje naredbu /petpet kose crte za stvaranje gifova za glavu iz bilo koje slike",
+        "errors":{
+            "delayMinimum":"Kašnjenje mora biti najmanje 20.",
+            "failedToFetchUser":"Dohvaćanje korisnika nije uspjelo. Provjerite konzolu za više informacija.",
+            "noImage":"Nije navedena slika!",
+            "uploadNotImage":"Prijenos nije slika"
+        }
+    },
+    "pictureInPicture":{
+        "description":"Videozapisima dodaje sliku u slici (pored gumba Preuzmi)",
+        "settings":{
+            "loop":"Hoće li se PiP video ponavljati ili ne"
+        },
+        "togglePip":"Uključi/isključi sliku u slici"
+    },
+    "pinDms":{
+        "addCategory":"Dodaj kategoriju",
+        "color":"Boja",
+        "create":"Napravi",
+        "deleteCategory":"Izbriši kategoriju",
+        "editCategory":"Uredi kategoriju",
+        "editCategoryTitle":"Uredi kategoriju",
+        "moveDown":"Pomakni dolje",
+        "moveUp":"Pomakni gore",
+        "name":"Ime",
+        "newCategory":"Nova kategorija",
+        "pinCategory":"Oznaka kategorije {index}",
+        "pinDms":"Prikvači DM-ove",
+        "save":"Spremi",
+        "settings":{
+            "canCollapseDmSection":"Omogući mogućnost sažimanja odjeljka nekategoriziranih DM-ova",
+            "customOrder":"Prilagođeno (desni klik na kanale za promjenu redoslijeda)",
+            "dmSectionCollapsed":"Sažmi odjeljak DM-a",
+            "mostRecentMessage":"Najnovija poruka",
+            "pinOrder":"Kojim bi redoslijedom trebali biti prikazani prikvačeni DM-ovi?"
+        },
+        "unpinDm":"Otkvači DM"
+    },
+    "plainFolderIcon":{
+        "description":"Ne prikazuj male ikone saveza u mapama"
+    },
+    "platformIndicators":{
+        "consoleIcons":{
+            "equicord":"Equicord",
+            "suncord":"Sunčana vrpca",
+            "vencord":"Vencord"
+        },
+        "description":"Korisnicima dodaje indikatore platforme (Desktop, Mobile, Web...).",
+        "platforms":{
+            "console":"Konzola",
+            "desktop":"Računalo",
+            "mobile":"Mobile",
+            "web":"Web"
+        },
+        "settings":{
+            "colorMobileIndicator":"Hoće li indikator mobilnog telefona odgovarati boji statusa korisnika.",
+            "consoleIcon":"Koju ikonu konzole koristiti",
+            "list":"Prikaži indikatore na popisu članova",
+            "messages":"Prikaži indikatore unutar poruka",
+            "profiles":"Prikaži indikatore u korisničkim profilima",
+            "showBots":"Treba li prikazati indikatore platforme na botovima"
+        }
+    },
+    "previewMessage":{
+        "description":"Omogućuje vam da pregledate svoju poruku prije slanja.",
+        "name":"PreviewMessage",
+        "previewMessage":"Pregled poruke"
+    },
+    "quickActions":{
+        "editQuickCSS":"Uredi QuickCSS",
+        "notificationLog":"Dnevnik obavijesti",
+        "openSettings":"Otvorite mapu postavki",
+        "relaunchDiscord":"Ponovno pokreni Discord",
+        "title":"Brze radnje",
+        "viewSource":"Pregledajte izvorni kod"
+    },
+    "quickMention":{
+        "description":"Dodaje gumb za brzo spominjanje na radnu traku poruke",
+        "label":"Brzo spominjanje"
+    },
+    "quickReply":{
+        "description":"Odgovaranje na (ctrl + gore/dolje) i uređivanje (ctrl + shift + gore/dolje) poruka putem veza tipki",
+        "settings":{
+            "ignoreBlockedAndIgnored":"Ignorirajte poruke blokiranih/ignoriranih korisnika tijekom navigacije",
+            "shouldMention":"Ping odgovor prema zadanim postavkama",
+            "shouldMentionOptions":{
+                "disabled":"Onemogućeno",
+                "enabled":"Omogućeno",
+                "followPlugin":"Slijedite dodatak NoReplyMention (ako je omogućen)"
+            }
+        }
+    },
+    "reactErrorDecoder":{
+        "description":"Zamjenjuje \"Minifed React Error\" stvarnom pogreškom."
+    },
+    "readAllNotificationsButton":{
+        "description":"Pročitajte sve obavijesti poslužitelja jednim pritiskom na gumb!",
+        "name":"Gumb ReadAllNotifications",
+        "readAll":"Pročitaj sve"
+    },
+    "relationshipNotifier":{
+        "description":"Obavještava vas kada vas prijatelj, grupni chat ili poslužitelj ukloni.",
+        "friendRemoved":"{username} vas je uklonio kao prijatelja.",
+        "friendRequestRemoved":"Zahtjev za prijateljstvo od {username} je uklonjen.",
+        "groupRemoved":"Uklonjeni ste iz grupe {name}.",
+        "notificationTitle":"Obavijest o odnosima",
+        "offlineFriendRemoved":"Niste više prijatelji s {username}.",
+        "offlineFriendRequestRevoked":"Zahtjev za prijateljstvo od {username} je opozvan.",
+        "offlineGroupRemoved":"Niste više u grupi {name}.",
+        "offlineServerRemoved":"Niste više na poslužitelju {name}.",
+        "serverRemoved":"Uklonjeni ste s poslužitelja {name}.",
+        "settings":{
+            "friendRequestCancels":"Obavijesti kada je zahtjev za prijateljstvo otkazan",
+            "friends":"Obavijesti kada te prijatelj ukloni",
+            "groups":"Obavijesti kada se ukloni iz grupnog razgovora",
+            "notices":"Također prikaži obavijest na vrhu zaslona kada je uklonite (koristite ovo ako ne želite propustiti nijednu obavijest).",
+            "offlineRemovals":"Obavijesti vas kada pokrenete discord ako ste uklonjeni dok ste bili izvan mreže.",
+            "servers":"Obavijesti kada se ukloni s poslužitelja"
+        }
+    },
+    "replaceGoogleSearch":{
+        "description":"Zamjenjuje Google pretraživanje različitim motorom(ima)",
+        "searchText":"Traži tekst",
+        "searchWith":"Traži pomoću {engine}",
+        "settings":{
+            "customEngine":"Prilagođeni motor",
+            "customEngineName":"Naziv tražilice za prilagođeno pretraživanje",
+            "customEngineURL":"URL vašeg motora",
+            "off":"Isključeno",
+            "replacementEngine":"Zamijenite određenom tražilicom umjesto dodavanja izbornika"
+        }
+    },
+    "replyTimestamp":{
+        "description":"Prikazuje vremensku oznaku na pretpregledima odgovorenih poruka"
+    },
+    "revealAllSpoilers":{
+        "description":"Otkrijte sve spojlere u poruci tako što ćete Ctrl-kliknuti na spojler ili u chatu pomoću Ctrl+Shift-klik"
+    },
+    "reverseImageSearch":{
+        "all":"Svi",
+        "description":"Dodaje ImageSearch kontekstualnim izbornicima slika",
+        "name":"Obrnuto pretraživanje slika",
+        "searchImage":"Traži sliku"
+    },
+    "reviewDB":{
+        "appeal":"Apel",
+        "areYouSure":"Jeste li sigurni?",
+        "block":"Blokiraj",
+        "blockedUser":"Blokirali ste ovog korisnika",
+        "blockedUsers":"Blokirani korisnici",
+        "confirmBlock":"Želite li stvarno blokirati ovog korisnika? Neće moći ostavljati dalje recenzije na vašem profilu. Korisnike možete deblokirati u postavkama dodatka.",
+        "confirmDelete":"Želite li stvarno izbrisati ovu recenziju?",
+        "confirmReport":"Želite li stvarno prijaviti ovu recenziju?",
+        "delete":"Izbriši",
+        "failedToFetchBlocks":"Nije uspjelo dohvaćanje blokova: {error}",
+        "mustBeLoggedInBlock":"Morate biti prijavljeni da biste blokirali korisnike.",
+        "mustBeLoggedInDelete":"Za brisanje recenzija morate biti prijavljeni.",
+        "mustBeLoggedInReport":"Morate biti prijavljeni da prijavite recenzije.",
+        "nevermind":"Nema veze",
+        "newReviews":"Imate nove recenzije na svom profilu!",
+        "noBlockedUsers":"Nema blokiranih korisnika.",
+        "notLoggedIn":"Niste prijavljeni na ReviewDB!",
+        "ok":"U redu",
+        "readMore":"Pročitaj više",
+        "report":"Prijavi",
+        "settings":{
+            "authorize":"Autorizirajte s ReviewDB",
+            "hideBlockedUsers":{
+                "description":"Sakrij recenzije blokiranih korisnika"
+            },
+            "hideTimestamps":{
+                "description":"Sakrij vremenske oznake na recenzijama"
+            },
+            "manageBlockedUsers":"Upravljanje blokiranim korisnicima",
+            "notifyReviews":{
+                "description":"Obavijesti o novim recenzijama pri pokretanju"
+            },
+            "showWarning":{
+                "description":"Prikažite upozorenje da budete poštovani na vrhu popisa recenzija"
+            },
+            "supportDevelopment":"Podrška za razvoj ReviewDB-a",
+            "supportServer":"Poslužitelj za podršku ReviewDB",
+            "website":"Web stranica ReviewDB"
+        },
+        "system":"sustav",
+        "unblockUser":"Deblokiraj korisnika",
+        "viewReviews":"Pogledaj recenzije"
+    },
+    "roleColorEverywhere":{
+        "description":"Dodaje boju glavne uloge gdje god je to moguće",
+        "settings":{
+            "chatMentions":"Prikaži boje uloga u spominjanjima chata (uključujući i okvir za poruke)",
+            "colorChatMessages":"Obojite chat poruke na temelju boje uloge autora",
+            "memberList":"Prikaži boje uloga u zaglavljima uloga popisa članova",
+            "messageSaturation":"Intenzitet obojenosti poruke.",
+            "pollResults":"Prikaži boje uloga u rezultatima ankete",
+            "reactorsList":"Prikaži boje uloga na popisu reaktora",
+            "voiceUsers":"Prikaži boje uloga na popisu korisnika glasovnog chata"
+        }
+    },
+    "secretRingTone":{
+        "description":"Uvijek reproduciraj tajnu verziju discord melodije zvona (osim tijekom posebnih događaja zvona)",
+        "settings":{
+            "onlySnow":"Pustite samo temu Snow Halation"
+        }
+    },
+    "seeSummaries":{
+        "description":"Omogućuje Discord eksperimentalnu značajku Sažeci na svakom poslužitelju, prikazujući AI generirane sažetke razgovora",
+        "name":"Sažeci",
+        "settings":{
+            "summaryExpiryThresholdDays":"Vrijeme u danima prije uklanjanja sažetka. Imajte na umu da se po kanalu čuva samo do 50 sažetaka"
+        }
+    },
+    "sendTimestamps":{
+        "description":"Jednostavno pošaljite vremenske oznake putem gumba okvira za razgovor i tekstualnih prečaca. Pročitajte prošireni opis!",
+        "extendedDescription":{
+            "examples":"Primjeri:",
+            "quickSend":"Za brzo slanje vremenskih oznaka samo za vrijeme, uključite vremenske oznake formatirane kao `HH:MM` (uključujući povratne oznake!) u svoju poruku",
+            "seeBelow":"Pogledajte dolje za primjere. Ako trebate nešto konkretnije, upotrijebite gumb Datum na traci za razgovor!"
+        },
+        "insert":"Umetnuti",
+        "insertTimestamp":"Umetnite vremensku oznaku",
+        "preview":"Pretpregled",
+        "settings":{
+            "replaceMessageContents":"Zamijenite vremenske oznake u sadržaju poruke"
+        },
+        "timestampFormat":"Format vremenske oznake",
+        "timestampPicker":"Birač vremenske oznake"
+    },
+    "serverInfo":{
+        "description":"Omogućuje pregled informacija o poslužitelju",
+        "settings":{
+            "sorting":"Korisničko ime ili ako je primjenjivo Ime za prikaz",
+            "sortingOptions":{
+                "displayname":"Ime za prikaz",
+                "none":"Nemoj sortirati",
+                "username":"Korisničko ime"
+            }
+        },
+        "ui":{
+            "blockedUsers":"Blokirani korisnici",
+            "channels":"Kanali",
+            "createdAt":"Stvoreno u",
+            "friends":"Prijatelji",
+            "ignoredUsers":"Ignorirani korisnici",
+            "joinedAt":"Pridružio se At",
+            "mutualUsers":"Zajednički korisnici",
+            "preferredLocale":"Preferirana lokalizacija",
+            "roles":"Uloge",
+            "serverBoosts":"Povećanja poslužitelja",
+            "serverInfo":"Informacije o poslužitelju",
+            "serverOwner":"Vlasnik servera",
+            "vanityLink":"Vanity Link",
+            "verificationLevel":"Razina potvrde"
+        }
+    },
+    "serverListAPI":{
+        "description":"API potreban za dodatke koji mijenjaju popis poslužitelja"
+    },
+    "serverListIndicators":{
+        "description":"Dodajte broj online prijatelja ili poslužitelja na popis poslužitelja",
+        "friends":"Prijatelji",
+        "servers":"Serveri",
+        "settings":{
+            "mode":"Način rada",
+            "modeBoth":"Računaju se i poslužitelj i prijatelji na mreži",
+            "modeOnlyFriends":"Računaju se samo online prijatelji",
+            "modeOnlyServers":"Računa se samo poslužitelj",
+            "useCompact":"Čini da se indikator pojavljuje samo s tekstom"
+        },
+        "tooltipBoth":"{friends} Prijatelji, {servers} poslužitelji",
+        "tooltipFriends":"{count} Prijatelji",
+        "tooltipServers":"{count} Poslužitelji"
+    },
+    "settings":{
+        "changelog":{
+            "alreadyUpToDate":"Već ažuriran sa spremištem",
+            "checkYourConnection":"Povezivanje sa spremištem nije uspjelo. Provjerite internetsku vezu",
+            "checkYourInternet":"Provjerite imate li internetsku vezu i pokušajte ponovno",
+            "codeChanges_one":"Promjene koda ({count} commit)",
+            "codeChanges_other":"Promjene koda ({count} obveza)",
+            "codeChanges_zero":"Nema promjena koda",
+            "emptyChangelog":"Nema dostupnih obveza prije vaše trenutne verzije. Kliknite \"Dohvati iz repozitorija\" da provjerite ima li novih promjena",
+            "failedToFetchRepo":"Dohvaćanje iz repozitorija nije uspjelo",
+            "failedToRetrieve":"Dohvaćanje nije uspjelo - provjerite konzolu",
+            "failedtoFetchCommits":"Nije moguće dohvatiti obveze iz spremišta",
+            "fetchRepo":"Dohvati iz spremišta",
+            "foundCommits_one":"Pronađeno {count} predanje iz repozitorija",
+            "foundCommits_other":"Pronađena {count} predaja iz repozitorija",
+            "foundCommits_zero":"Nema novih obveza",
+            "info":"Provjerite ima li u repozitoriju novih obveza, ažuriranja dodataka i promjena koda. Ovo će usporediti vašu trenutnu verziju s najnovijom dostupnom i pokazati vam što je novo",
+            "loggedCommits":"Zabilježene obveze iz vašeg posljednjeg ažuriranja",
+            "manager":{
+                "days_one":"prije {count} dan",
+                "days_other":"prije {count} dana",
+                "hours_one":"prije {count} sat",
+                "hours_other":"prije {count} sati",
+                "minutes_one":"prije {count} minuta",
+                "minutes_other":"prije {count} minuta"
+            },
+            "missingRepoInfo":"Dohvaćanje informacija o spremištu nije uspjelo",
+            "newPluginsSection":{
+                "newPluginsCount":"Novi dodaci ({count})",
+                "numMorePlugins_one":"+{count} još dodatak",
+                "numMorePlugins_other":"+{count} više dodataka",
+                "recentlyAddedPlugins":"Sljedeći dodaci dodani su u nedavnim ažuriranjima:"
+            },
+            "previousSessions":"Povijest vaših prethodnih sesija ažuriranja s njihovom poviješću predaje i promjenama dodataka. Kliknite na zapisnik da ga proširite i vidite detalje",
+            "recentChanges":"Nedavne promjene",
+            "repository":"Spremište",
+            "title":"Dnevnik promjena",
+            "upToDate":"Repozitorij ažuriran",
+            "upToDateLocalCopy":"Repozitorij je ažuriran s vašom lokalnom kopijom",
+            "updateCard":{
+                "commits_one":" • {count} potvrda dostupna",
+                "commits_other":" • {count} su dostupni",
+                "commits_zero":" • Nema novih obveza",
+                "newPluginsCount":" • {plugins} novi dodaci",
+                "newSettingInPlugin":"Nova postavka u {pluginName}",
+                "newSettings":"Nove postavke",
+                "newSettingsCount":" • {settings} nove postavke",
+                "outOfDate":"Provjera repozitorija: {fromHash} → {toHash}",
+                "upToDate":"Provjera repozitorija: {fromHash} (ažurirano)",
+                "update":"Ažuriranje: {fromHash} → {toHash}",
+                "updatedPlugins":"Ažurirani dodaci",
+                "updatedPluginsCount":" • {plugins} ažurirani dodaci"
+            },
+            "updateLogs_one":"Ažuriraj zapisnike ({count} zapisnik)",
+            "updateLogs_other":"Ažuriranje zapisa ({count} zapisa)",
+            "updateLogs_zero":"Nema zapisa ažuriranja",
+            "updatedPluginsCount":"Ažurirani dodaci ({plugins})",
+            "viewRecentChanges":"Ovo su nova ažuriranja obveza i dodataka od vaše zadnje verzije. Možete vidjeti koje su značajke dodane, pogreške ispravljene i koji su dodaci ažurirani",
+            "whereUpdatesFetch":"Ovo je GitHub spremište odakle Equicord dohvaća ažuriranja"
+        },
+        "disableMinSize":{
+            "description":"Dopustite da prozor Discord bude smanjen u odnosu na zadanu minimalnu veličinu. Korisno za postavljanje upravitelja prozora ili malih ekrana.",
+            "title":"Onemogući minimalnu veličinu prozora"
+        },
+        "enableReactDevtools":{
+            "description":"Omogućite proširenje React Developer Tools za otklanjanje pogrešaka Discord React komponenti. Korisno za razvoj dodataka.",
+            "title":"Omogući React alate za razvojne programere"
+        },
+        "frameless":{
+            "description":"Uklonite izvorni okvir prozora za čišći izgled. I dalje možete pomicati prozor povlačenjem područja naslovne trake.",
+            "title":"Onemogućite okvir prozora"
+        },
+        "hint":"Savjet: Možete promijeniti položaj ovog odjeljka s postavkama u <0>postavkama dodatka za postavke</0>!",
+        "macosVibrancyStyle":{
+            "placeholder":"Stil živahnosti prozora",
+            "title":"Stil živahnosti prozora (zahtijeva ponovno pokretanje)"
+        },
+        "notification":{
+            "logButton":"Pregledaj zapisnik obavijesti",
+            "settingsButton":"Postavke obavijesti"
+        },
+        "plugins":{
+            "contributorModal":{
+                "contributorInfo":{
+                    "noPlugins":"Ova osoba nije napravila nijedan dodatak. Vjerojatno su <0>doprinijeli</0> Equicord na druge načine!",
+                    "plugins_one":"Ova je osoba <0>doprinijela</0> {count} dodatku!",
+                    "plugins_other":"Ova je osoba <0>doprinijela</0> {count} dodacima!"
+                }
+            },
+            "noDescription":"Opis nije dostupan",
+            "pluginRequiredBy":"Ovaj dodatak je potreban za: {pluginNames}",
+            "requiredToFunction":"Ovaj dodatak je potreban da Equicord funkcionira"
+        },
+        "restartRequired":{
+            "body":"Za primjenu ove promjene potrebno je ponovno pokretanje",
+            "cancel":"Kasnije!",
+            "confirm":"Ponovno pokrenite sada",
+            "plugins":"Sljedeći dodaci zahtijevaju ponovno pokretanje:",
+            "title":"Potrebno ponovno pokretanje"
+        },
+        "title":"Postavke",
+        "transparent":{
+            "description":"Učinite Discord prozor prozirnim. Potrebna je tema koja podržava transparentnost ili ovo neće učiniti ništa.",
+            "note":"Ovo će spriječiti promjenu veličine prozora.",
+            "noteWindows":"To će onemogućiti promjenu veličine prozora i spriječiti vas da pričvrstite prozor na rubove zaslona",
+            "title":"Omogući transparentnost prozora"
+        },
+        "useQuickCss":{
+            "description":"Učitajte prilagođeni CSS iz QuickCSS uređivača. To vam omogućuje da prilagodite izgled Discord svojim vlastitim stilovima.",
+            "title":"Omogući prilagođeni CSS"
+        },
+        "winCtrlQ":{
+            "description":"Dodajte Ctrl+Q kao tipkovni prečac za zatvaranje Discord. Ovo pruža alternativu Alt+F4 za brzo zatvaranje aplikacije.",
+            "title":"Registrirajte Ctrl+Q kao prečac za zatvaranje Discord"
+        },
+        "winNativeTitleBar":{
+            "description":"Zamijenite prilagođenu naslovnu traku Discord standardnom naslovnom trakom sustava Windows. Ovo može poboljšati kompatibilnost s nekim alatima za upravljanje prozorima.",
+            "title":"Koristite izvornu naslovnu traku sustava Windows umjesto prilagođene Discord."
+        }
+    },
+    "settingsSync":{
+        "failedToImport":"Uvoz postavki nije uspio: {e}",
+        "imported":"Postavke su uspješno uvezene. Ponovno pokrenite za primjenu promjena!"
+    },
+    "shikiCodeblocks":{
+        "description":"Donosi blokove koda u stilu vscode-a u Discord, koji pokreće Shiki",
+        "settings":{
+            "bgOpacity":"Neprozirnost pozadine",
+            "customTheme":"Veza na prilagođenu vscode temu",
+            "theme":"Zadane teme",
+            "tryHljs":"Koristite laganiji zadani Discord marker i temu.",
+            "tryHljsOptions":{
+                "always":"Uvijek",
+                "never":"Nikada",
+                "preferHljs":"Radije Highlight.js umjesto Shiki",
+                "preferShiki":"Radije Shiki umjesto Highlight.js"
+            },
+            "useDevIcon":"Kako prikazati ikone jezika na blokovima koda",
+            "useDevIconOptions":{
+                "colored":"U boji",
+                "colorless":"Bezbojan",
+                "disabled":"Onemogućeno"
+            }
+        }
+    },
+    "showAllMessageButtons":{
+        "description":"Uvijek prikaži sve gumbe za poruke bez obzira držite li tipku shift ili ne.",
+        "settings":{
+            "noShiftDelete":"Uklonite zahtjev za držanjem shifta za brisanje poruke.",
+            "noShiftPin":"Uklonite zahtjev za držanjem shifta za prikvačivanje poruke."
+        }
+    },
+    "showConnections":{
+        "description":"Prikaži povezane račune u korisničkim skočnim prozorima",
+        "settings":{
+            "compact":"Kompaktan",
+            "cozy":"Udoban",
+            "iconSize":"Veličina ikone (px)",
+            "iconSpacing":"Margina ikone",
+            "roomy":"Prostrano"
+        }
+    },
+    "showHiddenChannels":{
+        "allowedUsersAndRoles":"Dopušteni korisnici i uloge:",
+        "archiveDuration":"Zadano trajanje neaktivnosti prije arhiviranja {type}: {duration}",
+        "availableTags":"Dostupne oznake:",
+        "bitrate":"Bitrate: {bitrate} bita",
+        "cannotSeeMessages":"Ne možete vidjeti {type} ovog kanala.",
+        "channelTypes":{
+            "announcement":"najava",
+            "forum":"forum",
+            "message":"poruka",
+            "messages":"poruke",
+            "post":"objaviti",
+            "posts":"postovi",
+            "stage":"pozornici",
+            "text":"tekst",
+            "thread":"nit",
+            "threads":"niti",
+            "voice":"glas"
+        },
+        "defaultLayout":"Zadani izgled: {layout}",
+        "defaultReactionEmoji":"Zadani emoji reakcije:",
+        "defaultSortOrder":"Zadani redoslijed sortiranja: {order}",
+        "description":"Prikažite kanale kojima nemate pristup.",
+        "forumLayouts":{
+            "gridView":"Galerijski prikaz",
+            "listView":"Prikaz popisa",
+            "notSet":"Nije postavljeno"
+        },
+        "hiddenChannel":"Ovo je skriveni {type} kanal",
+        "hiddenChannelTooltip":"Skriveni kanal",
+        "hideAllowedUsersAndRoles":"Sakrij dopuštene korisnike i uloge",
+        "lastMessageCreated":"Zadnji {type} kreiran:",
+        "lastMessagePin":"Pin zadnje poruke:",
+        "lockedChannel":"Ovo je zaključani {type} kanal",
+        "nsfw":"NSFW",
+        "permissionDetails":"Detalji dopuštenja",
+        "region":"Regija: {region}",
+        "regionAutomatic":"Automatski",
+        "requireTag":"Postovi na ovom forumu zahtijevaju postavljanje oznake.",
+        "seeGuidelines":" Međutim, možete vidjeti njegove smjernice:",
+        "settings":{
+            "channelStyle":{
+                "classic":"klasična",
+                "description":"Stil koji se koristi za prikaz skrivenih kanala.",
+                "muted":"Utišano",
+                "mutedAndShowUnreads":"Isključeno i Prikaži nepročitane",
+                "showUnreads":"Prikaži nepročitano"
+            },
+            "defaultAllowedUsersAndRolesDropdownState":{
+                "description":"Treba li padajući izbornik dopuštenih korisnika i uloga na skrivenim kanalima biti otvoren prema zadanim postavkama"
+            },
+            "showMode":{
+                "description":"Način rada koji se koristi za prikaz skrivenih kanala.",
+                "eyeIconRight":"Ikona oka s desne strane",
+                "lockIcon":"Ikona lokota zamjenjuje ikonu kanala",
+                "lockIconRight":"Ikona lokota s desne strane"
+            }
+        },
+        "slowmode":"Spori način rada: {duration}",
+        "sortOrders":{
+            "creationDate":"Datum izrade",
+            "latestActivity":"Najnovija aktivnost"
+        },
+        "threadSlowmode":"Zadani spori način niti: {duration}",
+        "videoQuality":{
+            "720p":"720p",
+            "automatic":"Automatski"
+        },
+        "videoQualityMode":"Način kvalitete videa: {mode}",
+        "viewAllowedUsersAndRoles":"Pogledajte dopuštene korisnike i uloge"
+    },
+    "showHiddenThings":{
+        "description":"Prikazuje razne skrivene stvari i stvari samo za moderatora bez obzira na dozvole.",
+        "settings":{
+            "showInvitesPaused":"Prikaži opis pauziranih poziva na popisu poslužitelja.",
+            "showModView":"Prikaži stavku kontekstnog izbornika moda člana na svim poslužiteljima.",
+            "showTimeouts":"Prikaži ikone isteka članstva u chatu."
+        }
+    },
+    "showMeYourName":{
+        "addNickname":"Dodajte SMYN nadimak",
+        "cancel":"Poništi",
+        "changeNickname":"Promijeni SMYN nadimak",
+        "modalDescription":"Postavite prilagođeni SMYN nadimak za ovog korisnika. Iskoristite to navođenjem {custom} u postavkama SMYN predloška.",
+        "nicknameLabel":"SMYN nadimak",
+        "resetNickname":"Poništi SMYN nadimak",
+        "save":"Spremi",
+        "settings":{
+            "animateGradients":"Za imena koja nisu primarna, ako uloga ima gradijent, animirajte ga. To je onemogućeno \"Ignoriraj gradijente\" i smanjenim kretanjem.",
+            "customNameColor":"Boja koja se koristi za prilagođeno ime koje ste dodijelili korisniku ako nije prvo prikazano. Ostavite prazno za zadano. Prihvaća hex(a), rgb(a) ili hsl(a) unos. Upotrijebite \"Ulogu\" da biste pratili boju najviše uloge korisnika. Koristite \"Uloga+-#\" za podešavanje svjetline prema tom postotku (npr. \"Uloga+15\")",
+            "discriminators":"Dodajte diskriminatore korisničkim imenima za botove. Diskriminatori su zastarjeli za korisnike, ali se i dalje koriste za botove. Prema zadanim postavkama, korisničko ime bota je ekvivalentno globalnom imenu korisnika, stoga više botova može imati isto korisničko ime. Dodavanje diskriminatora ponovno ih čini jedinstvenima.",
+            "displayNameColor":"Boja koja se koristi za ime za prikaz ako nije prvo prikazano. Ostavite prazno za zadano. Prihvaća hex(a), rgb(a) ili hsl(a) unos. Upotrijebite \"Ulogu\" da biste pratili boju najviše uloge korisnika. Koristite \"Uloga+-#\" za podešavanje svjetline prema tom postotku (npr. \"Uloga+15\")",
+            "friendNameColor":"Boja koja se koristi za prijateljski nadimak ako nije prvi prikazan. Ostavite prazno za zadano. Prihvaća hex(a), rgb(a) ili hsl(a) unos. Upotrijebite \"Ulogu\" da biste pratili boju najviše uloge korisnika. Koristite \"Uloga+-#\" za podešavanje svjetline prema tom postotku (npr. \"Uloga+15\")",
+            "hideDefaultAtSign":"Sakrij zadani simbol \"@\" ispred imena u spominjanjima i odgovorima. Primjenjuje se samo ako je bilo koja značajka omogućena.",
+            "ignoreFonts":"Za nazive koji nisu primarni, koristite Discord zadane fontove bez obzira na korisnikov prilagođeni nitro font.",
+            "ignoreGradients":"Za imena koja nisu primarna, ako uloga ima gradijent, zanemarite ga u korist boje postavljene u nastavku.",
+            "includedNames":"Redoslijed prikaza korisničkih imena, imena za prikaz, nadimaka, imena prijatelja i prilagođenih imena. Koristite sljedeća rezervirana mjesta: {user}, {display}, {nick}, {friend}, {custom}. Možete dati više opcija imena koje ćete koristiti kao zamjenu ako jedna nije dostupna tako da ih odvojite zarezima: {custom, friend, nick}. Možete imati do tri prefiksa i tri sufiksa po imenu.",
+            "memberList":"Prikažite prvo dostupno ime navedeno u prilagođenom formatu imena na popisu članova.",
+            "mentions":"Prikaz prilagođenog formata imena u spominjanjima.",
+            "messages":"Prikaz prilagođenog formata imena u porukama.",
+            "nameSeparator":"Razdjelnik koji se koristi između imena. Zadani je jedan razmak.",
+            "nicknameColor":"Boja koja se koristi za nadimak ako nije prvi prikazan. Ostavite prazno za zadano. Prihvaća hex(a), rgb(a) ili hsl(a) unos. Upotrijebite \"Ulogu\" da biste pratili boju najviše uloge korisnika. Koristite \"Uloga+-#\" za podešavanje svjetline prema tom postotku (npr. \"Uloga+15\")",
+            "profilePopout":"Prikažite prvo dostupno ime navedeno u prilagođenom formatu imena u skočnim prozorima profila.",
+            "reactions":"Prikažite prvo dostupno ime navedeno u vašem prilagođenom formatu imena u opisima alata za reakcije i puno ime u skočnim prozorima za reakcije.",
+            "removeDuplicates":"Ako su neka od imena ekvivalentna, uklonite ih, ostavljajući samo jedinstvena imena.",
+            "replies":"Prikaz prilagođenog formata imena u odgovorima.",
+            "truncateAllNamesWithStreamerMode":"Skratite sva imena, a ne samo korisnička imena, dok ste u načinu rada Streamer.",
+            "usernameColor":"Boja koja se koristi za korisničko ime ako nije prvo prikazano. Ostavite prazno za zadano. Prihvaća hex(a), rgb(a) ili hsl(a) unos. Upotrijebite \"Ulogu\" da biste pratili boju najviše uloge korisnika. Koristite \"Uloga+-#\" za podešavanje svjetline prema tom postotku (npr. \"Uloga+15\")",
+            "voiceChannels":"Prikažite prvo dostupno ime navedeno u vašem prilagođenom formatu imena u glasovnim kanalima."
+        }
+    },
+    "showTimeoutDuration":{
+        "description":"Pokazuje koliko će još trajati vremensko ograničenje korisnika, bilo u opisu ikone vremenskog ograničenja ili pored njega",
+        "displayStyleDescription":"Kako prikazati trajanje vremenskog ograničenja",
+        "inTooltip":"U opisu alata",
+        "nextToIcon":"Pored ikone vremenskog ograničenja",
+        "timeoutRemaining":"preostalo vrijeme čekanja"
+    },
+    "silentMessageToggle":{
+        "description":"Dodaje gumb na traku za chat za prebacivanje slanja tihe poruke.",
+        "disableSilentMessage":"Onemogući tihu poruku",
+        "enableSilentMessage":"Omogući tihu poruku",
+        "settings":{
+            "autoDisable":"Automatski ponovno isključi tihu poruku nakon slanja",
+            "persistChannels":"Ustrajte između kanala",
+            "persistNone":"Nemoj ustrajati (resetiraj nakon promjene kanala)",
+            "persistRestarts":"Ustrajte između kanala i ponovnih pokretanja",
+            "persistState":"Kako ustrajati u stanju prebacivanja tihe poruke"
+        }
+    },
+    "silentTyping":{
+        "clickActions":{
+            "openPluginSettings":"Otvorite postavke dodataka",
+            "toggleTypingGlobally":"Globalno uključivanje/isključivanje tipkanja",
+            "toggleTypingInChannel":"Uključi/isključi tipkanje u kanalu",
+            "toggleTypingInGuild":"Uključi/isključi tipkanje u cehu"
+        },
+        "command":{
+            "chatBarIndicatorsOption":"Sakrij indikatore tipkanja drugih korisnika iznad trake za chat.",
+            "chatContextMenuOption":"Prikažite padajući izbornik u kontekstualnom izborniku chata za promjenu postavki dodatka u pokretu.",
+            "chatIconOption":"Pokažite ikonu na traci za chat za uključivanje/isključivanje dodatka u pokretu.",
+            "defaultHiddenOption":"Treba li prema zadanim postavkama sakriti upisivanje u DM-ove/kanale/cehove ili ne.",
+            "description":"Sakrij svoj indikator tipkanja iz chata.",
+            "membersListIndicatorsOption":"Sakrij indikatore tipkanja drugih korisnika s popisa članova.",
+            "toggleChannel":"Kanal",
+            "toggleGlobal":"Globalno",
+            "toggleGuild":"Ceh",
+            "toggleOption":"Promijenite funkcionalnost globalno, za kanal ili za ceh."
+        },
+        "contextMenu":{
+            "chatBarIndicators":"Chat Trakasti indikatori",
+            "chatIcon":"Chat Ikona",
+            "defaultHidden":"Zadano skriveno",
+            "enabled":"Omogućeno",
+            "membersListIndicators":"Pokazatelji popisa članova",
+            "silentTyping":"Tiho tipkanje"
+        },
+        "noChanges":"Nema promjena u postavkama tihog tipkanja.",
+        "settings":{
+            "chatContextMenu":"Prikaži padajući izbornik u kontekstualnom izborniku chata za izmjenu postavki dodatka u pokretu.",
+            "chatIcon":"Pokažite ikonu na traci za chat za izmjenu dodatka u pokretu.",
+            "chatIconLeftClickAction":"Što učiniti kada lijevom tipkom kliknete ikonu chata.",
+            "chatIconMiddleClickAction":"Što učiniti kada srednji klik na ikonu chata.",
+            "chatIconRightClickAction":"Što učiniti kada desnom tipkom kliknete ikonu chata.",
+            "defaultHidden":"Ako je omogućen, dodatak će sakriti vaše tipkanje od drugih u svim DM-ovima/kanalima/cehovima koji nisu navedeni u \"Onemogućenim lokacijama\" u nastavku. Ako je onemogućen, dodatak će pokazati vaše tipkanje drugima za sve DM-ove/kanale/cehove koji nisu navedeni u \"Omogućenim lokacijama\" u nastavku.",
+            "disabledLocations":"Onemogući funkcionalnost za ove ID-ove. Prihvaća popis DM ID-ova, ID-ova kanala i ID-ova saveza odvojenih zarezima. Koristi se samo ako je omogućeno \"Default Hidden\".",
+            "enabledGlobally":"Uključite/isključite funkcionalnost vlastitog indikatora tipkanja na globalnoj razini.",
+            "enabledLocations":"Omogući funkcionalnost za ove ID-ove. Prihvaća popis DM ID-ova, ID-ova kanala i ID-ova saveza odvojenih zarezima. Koristi se samo ako je \"Default Hidden\" onemogućen.",
+            "hideChatBoxTypingIndicators":"Sakrij indikatore tipkanja drugih korisnika iznad trake za chat.",
+            "hideMembersListTypingIndicators":"Sakrij indikatore tipkanja drugih korisnika s popisa članova."
+        },
+        "settingsUpdated":"Postavke tihog tipkanja su ažurirane.",
+        "typingHidden":"Upisivanje skriveno ({location})",
+        "typingVisible":"Vidljivo tipkanje ({location})",
+        "typingVisibleGlobal":"Vidljivo tipkanje (globalno)"
+    },
+    "sortFriendRequests":{
+        "added":"Dodano",
+        "description":"Razvrstava zahtjeve za prijateljstvo po datumu primitka",
+        "settings":{
+            "showDates":"Prikaži datume na zahtjevima za prijateljstvo"
+        }
+    },
+    "spotifyCrack":{
+        "description":"Besplatno slušanje, nema automatskog pauziranja u glasovnom chatu i omogućuje nastavak reprodukcije aktivnosti u mirovanju",
+        "settings":{
+            "keepSpotifyActivityOnIdle":"Održava aktivnost Spotifyja u mirovanju",
+            "noSpotifyAutoPause":"Onemogućite automatsko pauziranje Spotifyja"
+        }
+    },
+    "spotifyShareCommands":{
+        "commands":{
+            "notListening":"Ne slušaš nikakvu glazbu.",
+            "shareDescription":"Podijelite svoj trenutni Spotify {name} u chatu",
+            "trackNotFound":"Traženje pjesme na spotifyu nije uspjelo."
+        },
+        "description":"Podijelite svoju trenutnu Spotify pjesmu, album ili izvođača putem naredbe kose crte (/track, /album, /artist)"
+    },
+    "startupTimings":{
+        "description":"Dodaje vrijeme pokretanja u izbornik postavki",
+        "ui":{
+            "title":"Vrijeme pokretanja"
+        }
+    },
+    "stickerPaste":{
+        "description":"Odabirom naljepnice u alatu za odabir naljepnica ona se umeće u chatbox umjesto trenutnog slanja"
+    },
+    "streamerModeOnStream":{
+        "description":"Automatski omogućuje način rada streamera kada počnete streamati u Discord"
+    },
+    "superReactionTweaks":{
+        "description":"Prilagodite ograničenje Super reakcija koje se igraju odjednom i super reakcija prema zadanim postavkama",
+        "settings":{
+            "superReactByDefault":"Alat za odabir reakcija prema zadanim postavkama postavit će Super reakcije",
+            "superReactionPlayingLimit":"Max Super Reactions za igranje odjednom. 0 za onemogućavanje igranja Super Reactions",
+            "unlimitedSuperReactionPlaying":"Uklonite ograničenje za Super Reactions igranje odjednom"
+        }
+    },
+    "tabs":{
+        "settings":"Equicord Postavke"
+    },
+    "textReplace":{
+        "find":"Pronađi",
+        "messageWithRules":"Poruka s primijenjenim pravilima",
+        "onlyIfIncludes":"Samo ako uključuje",
+        "replace":"Zamijeniti",
+        "scope.allMessages":"Primijeni na sve poruke",
+        "scope.myMessages":"Primijeni na svoje poruke (vidljivo svima)",
+        "scope.othersMessages":"Primijeni na tuđe poruke (vidljivo samo tebi)",
+        "testRules":"Pravila testiranja",
+        "typeMessage":"Upišite poruku",
+        "usingRegex":"Korištenje Regexa",
+        "usingString":"Korištenje niza"
+    },
+    "themeAttributes":{
+        "description":"Dodaje atribute podataka različitim elementima u svrhu tematiziranja"
+    },
+    "translate":{
+        "autoTranslate":"Automatski prijevod",
+        "autoTranslateEnabled":{
+            "body":"Upravo ste omogućili Automatski prijevod! Sve poruke <0>automatski će biti prevedene</0> prije slanja.",
+            "title":"Equicord Automatsko prevođenje omogućeno"
+        },
+        "autoTranslateEnabledLabel":"Automatski prijevod omogućen",
+        "disableAutoTranslate":"Onemogući automatsko prevođenje",
+        "dontShowAgain":"Ne prikazuj više",
+        "gotIt":"shvaćam",
+        "modalTitle":"Prevesti",
+        "openTranslateModal":"Otvorite Translate Modal",
+        "selectLanguage":"Odaberite jezik",
+        "translate":"Prevesti"
+    },
+    "typingIndicator":{
+        "description":"Dodaje indikator ako netko tipka na kanalu.",
+        "settings":{
+            "animatedDots":"Animirane točke",
+            "avatars":"Avatari",
+            "avatarsAndDots":"Avatari i animirane točke",
+            "includeBlockedUsers":"Treba li prikazati indikator tipkanja za blokirane korisnike.",
+            "includeCurrentChannel":"Hoće li se prikazati indikator tipkanja za trenutno odabrani kanal",
+            "includeIgnoredUsers":"Treba li prikazati indikator tipkanja za zanemarene korisnike.",
+            "includeMutedChannels":"Treba li prikazati indikator tipkanja za isključene kanale.",
+            "indicatorMode":"Kako bi indikator trebao biti prikazan?"
+        }
+    },
+    "typingTweaks":{
+        "andOthersTyping":"i {count} drugi pišu...",
+        "description":"Prikaži avatare i boje uloga u indikatoru tipkanja",
+        "settings":{
+            "alternativeFormatting":"Prikažite korisniju poruku kada više korisnika piše",
+            "amITyping":"Pokazuje vam mogu li vas drugi ljudi vidjeti kako tipkate",
+            "showAvatars":"Prikaži avatare u indikatoru tipkanja",
+            "showRoleColors":"Prikaži boje uloga u indikatoru tipkanja"
+        }
+    },
+    "unindent":{
+        "description":"Skraćuje početnu uvlaku iz blokova koda"
+    },
+    "unlockedAvatarZoom":{
+        "description":"Omogućuje dodatno povećanje u alatu za obrezivanje slike kada mijenjate svoj avatar",
+        "settings":{
+            "zoomMultiplier":"Množitelj zumiranja"
+        }
+    },
+    "unsuppressEmbeds":{
+        "description":"Omogućuje poništavanje ugrađivanja u poruke",
+        "suppressEmbeds":"Spriječi ugradnje",
+        "unsuppressEmbeds":"Poništi potiskivanje ugrađivanja"
+    },
+    "userMessagesPronouns":{
+        "description":"Dodaje zamjenice u poruke korisnika chata",
+        "settings":{
+            "pronounsFormat":"Format za zamjenice koje se pojavljuju u chatu",
+            "pronounsFormatOptions":{
+                "capitalized":"Velikom slovom",
+                "lowercase":"mala slova"
+            },
+            "showSelf":"Omogućite ili onemogućite prikazivanje zamjenica za sebe"
+        }
+    },
+    "userSettingsAPI":{
+        "description":"Zakrpe Discord's UserSettings kako bi otkrili njihovu grupu i ime"
+    },
+    "userVoiceShow":{
+        "cannotJoinChannel":"Ne možete se pridružiti glasovnom kanalu korisnika",
+        "description":"Prikazuje indikator kada je korisnik u glasovnom kanalu",
+        "inVoiceChat":"In Voice Chat",
+        "settings":{
+            "showInMemberList":"Prikaži indikator glasovnog kanala korisnika na popisu članova i DM-ova",
+            "showInMessages":"Prikaži indikator glasovnog kanala korisnika u porukama",
+            "showInUserProfileModal":"Prikaži indikator glasovnog kanala korisnika u njegovom profilu pored imena"
+        }
+    },
+    "usrbg":{
+        "description":"Prikazuje korisničke bannere iz USRBG-a, dopuštajući svakome da dobije banner bez Nitra",
+        "getOwnBanner":"Nabavite vlastiti USRBG banner",
+        "settings":{
+            "nitroBanner":"Nitro banner",
+            "nitroFirst":"Banner koji se koristi ako su prisutni i Nitro i USRBG banneri",
+            "usrbgBanner":"Transparent USRBG",
+            "voiceBackground":"Koristite USRBG bannere kao pozadinu za glasovni chat"
+        }
+    },
+    "validReply":{
+        "description":"Popravlja \"Poruku nije bilo moguće učitati\" nakon prelaska pokazivača iznad odgovora"
+    },
+    "validUser":{
+        "description":"Ispravite spominjanje nepoznatih korisnika koji se prikazuju kao '@unknown-user' (zadržite pokazivač miša iznad spominjanja da biste to popravili)"
+    },
+    "vcDoubleClick":{
+        "description":"Pridružite se glasovnim razgovorima dvostrukim klikom umjesto jednim klikom"
+    },
+    "vcNarrator":{
+        "customiseMessages":"U nastavku možete prilagoditi izgovorene poruke. Možete onemogućiti određene poruke tako da ih postavite na ništa",
+        "defaults":{
+            "deafen":"{{USER}} se oglušio",
+            "join":"{{USER}} se pridružio",
+            "leave":"{{USER}} lijevo",
+            "move":"{{USER}} premješteno u {{CHANNEL}}",
+            "mute":"{{USER}} isključen",
+            "undeafen":"{{USER}} negluh",
+            "unmute":"{{USER}} uključen zvuk"
+        },
+        "description":"Najavljuje kada se korisnici pridruže, napuste ili premjeste glasovne kanale putem naratora",
+        "linuxVoicesHelp":"Instalirajte voice-dispatcher ili espeak i pokrenite Discord s oznakom --enable-speech-dispatcher",
+        "noEnglishVoices":"Nemate instaliran nijedan engleski glas, pa bi pripovjedač mogao zvučati čudno",
+        "noVoices":"Nije pronađen nijedan glas pripovjedača. ",
+        "osVoicesHelp":"Pokušajte instalirati nešto u postavkama Naratora vašeg operativnog sustava",
+        "placeholdersHelp":"Posebna rezervirana mjesta <0>{{USER}}</0>, <1>{{DISPLAY_NAME}}</1>, <2>{{NICKNAME}}</2> i <3>{{CHANNEL}}</3> bit će zamijenjena korisničkim imenom (ništa ako ste vi sami), korisničkim imenom za prikaz, korisničkim nadimkom na trenutnom poslužitelju i imenom kanala, redom",
+        "playExampleSounds":"Reproducirajte primjere zvukova",
+        "settings":{
+            "deafenMessage":"Oglušiti poruku (za sada samo sebe)",
+            "joinMessage":"Pridruži se Poruka",
+            "latinOnly":"Uklonite nelatinične znakove iz imena prije nego što ih izgovorite",
+            "leaveMessage":"Ostavite poruku",
+            "moveMessage":"Premjesti poruku",
+            "muteMessage":"Isključi poruku (za sada samo sebe)",
+            "sayOwnName":"Reci svoje ime",
+            "speed":"Brzina pripovjedača",
+            "undeafenMessage":"Undeafen Poruka (za sada samo ja)",
+            "unmuteMessage":"Uključi zvuk poruke (za sada samo sebe)",
+            "volume":"Svezak pripovjedača"
+        },
+        "speechSynthesisNotSupported":"SpeechSynthesis nije podržan ili nisu pronađeni glasovi pripovjedača. Stoga ovaj dodatak neće raditi. Provjerite moje postavke za više informacija"
+    },
+    "viewIcons":{
+        "description":"Omogućuje klikanje na avatare i bannere u korisničkim profilima, dodaje unose ikone prikaza/bannera u kontekstni izbornik kanala korisnika, poslužitelja i grupe.",
+        "settings":{
+            "formatDescription":"Odaberite format slike za neanimirane slike. Animirane slike uvijek će koristiti .gif",
+            "imgSizeDescription":"Veličina slike za korištenje"
+        },
+        "viewAvatar":"Pogledaj avatar",
+        "viewBanner":"Pogledaj banner",
+        "viewIcon":"Ikona pogleda",
+        "viewServerAvatar":"Pogledajte avatar poslužitelja"
+    },
+    "viewRaw":{
+        "content":"Sadržaj",
+        "contentCopied":"Sadržaj kopiran u međuspremnik!",
+        "copyJson":"Kopiraj {type} JSON",
+        "copyRawContent":"Kopiraj sirovi sadržaj",
+        "copyRawLeftViewRawRight":"Kopiraj Raw (lijevi klik) / Pogledaj Raw (desni klik)",
+        "data":"Podaci",
+        "dataCopied":"{type} podaci kopirani u međuspremnik!",
+        "description":"Kopirajte i pregledajte neobrađeni sadržaj/podatke bilo koje poruke, kanala ili saveza",
+        "settings":{
+            "clickMethodDescription":"Promijenite gumb za pregled neobrađenog sadržaja/podataka bilo koje poruke.",
+            "leftClick":"Lijevi klik za pregled sirovog sadržaja.",
+            "rightClick":"Desni klik za pregled sirovog sadržaja."
+        },
+        "viewRaw":"Pogledaj sirovo",
+        "viewRawLeftCopyRawRight":"Pregledaj sirovo (lijevi klik) / Kopiraj sirovo (desni klik)"
+    },
+    "voiceDownload":{
+        "description":"Dodaje preuzimanje glasovnim porukama. (Otvara novu karticu preglednika)",
+        "downloadVoiceMessage":"Preuzmite glasovnu poruku"
+    },
+    "voiceMessages":{
+        "echoCancellation":"Poništavanje odjeka",
+        "failedToParse":"Nije uspjelo analiziranje odabrane audio datoteke: {error}",
+        "failedToUpload":"Prijenos glasovne poruke nije uspio",
+        "iosFix":"Da biste to popravili, prvo ga pretvorite u OggOpus, na primjer pomoću <0>convertio web converter</0>",
+        "iosWarning":"Glasovne poruke moraju biti OggOpus da bi se mogle reproducirati na iOS-u. Ova datoteka je <0>{type}</0> pa se neće moći reproducirati na iOS-u.",
+        "missingPermissions":"(Nedostaju dozvole)",
+        "noiseSuppression":"Potiskivanje šuma",
+        "preview":"Pretpregled",
+        "recordModal":"Snimi glasovnu poruku",
+        "send":"Pošalji glasovnu poruku",
+        "sending":"Sada šaljem glasovnu poruku... Budite strpljivi",
+        "uploadFile":"Prenesi datoteku"
+    },
+    "volumeBooster":{
+        "description":"Omogućuje postavljanje korisnika i glasnoće streama iznad zadanog maksimuma",
+        "settings":{
+            "multiplier":"Volume Multiplier"
+        }
+    },
+    "webContextMenus":{
+        "description":"Ponovno dodaje kontekstne izbornike koji nedostaju u web verziji Discord: veze i slike (kopiraj/otvori vezu/sliku), tekst je (kopiraj, izreži, zalijepi, provjera pravopisa)",
+        "settings":{
+            "addBack":"Dodajte Discord kontekstne izbornike za slike, veze i traku za unos chata"
+        }
+    },
+    "webKeybinds":{
+        "description":"Ponovno dodaje poveznice tipki koje nedostaju u web verziji Discord: ctrl+t, ctrl+shift+t, ctrl+tab, ctrl+shift+tab, ctrl+1-9, ctrl+,. U potpunosti radi samo na Vesktop/Legcordu, ne u vašem pregledniku"
+    },
+    "webScreenShareFixes":{
+        "description":"Uklanja ograničenje brzine prijenosa od 2500 kbps na Chromium i Vesktop klijentima."
+    },
+    "whoReacted":{
+        "settings":{
+            "avatarClick":"Uključivanje/isključivanje klikanja avatara u reakcijama"
+        }
+    },
+    "xsOverlay":{
+        "attachment":"privitak",
+        "botNotifications":"Dopusti obavijesti botova",
+        "callNotifications":"Dopusti obavijesti o pozivima",
+        "channelPingColor":"Boja spominjanja kanala",
+        "description":"Prosljeđuje discord obavijesti na XSOverlay, za jednostavno gledanje u VR",
+        "dmNotifications":"Dopusti obavijesti izravnim porukama",
+        "embed":"ugradnju",
+        "groupDmNotifications":"Dopusti Group DM obavijesti",
+        "helloFromVendor":"Pozdrav od dobavljača!",
+        "image":"sliku",
+        "incomingCall":"Dolazni poziv",
+        "isCallingYou":"zove te...",
+        "lengthBasedTimeout":"Produžite trajanje s duljinom poruke",
+        "opacity":"Neprozirnost obavijesti",
+        "pingColor":"Boja spomena korisnika",
+        "preferUDPDescription":"Omogućite ako koristite stariju verziju XSOverlay-a koja se ne može povezati putem web-utičnica. Ova se postavka zanemaruje na webu.",
+        "reply":"odgovor",
+        "sendTestNotification":"Pošalji obavijest o testu",
+        "sentEmbeds":"poslana poruka ugrađen(a)",
+        "sentSticker":"poslao naljepnicu",
+        "serverNotifications":"Dopusti obavijesti poslužitelja",
+        "soundPath":"Zvuk obavijesti (zadano/upozorenje/pogreška)",
+        "sticker":"naljepnica",
+        "testNotification":"Ovo je testna obavijest! eksplodirati",
+        "timeout":"Trajanje obavijesti (sekunde)",
+        "volume":"Glasnoća",
+        "webSocketPort":"Websocket priključak"
+    },
+    "youtubeAdblock":{
+        "description":"Blokirajte oglase u YouTube ugrađenim sadržajima i aktivnosti WatchTogether putem AdGuarda"
+    }
+}
