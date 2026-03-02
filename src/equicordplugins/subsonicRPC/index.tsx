@@ -18,7 +18,6 @@ interface SubsonicEntry {
     title: string;
     artist?: string;
     album?: string;
-    coverArt?: string;
     duration?: number;
     username: string;
     minutesAgo: number;
@@ -38,9 +37,40 @@ const SOCKET_ID = "SubsonicRPC";
 
 const logger = new Logger("SubsonicRPC");
 
+const MB_USER_AGENT = "EquicordSubsonicRPC/1.0 (https://github.com/Equicord/Equicord)";
+
 let updateInterval: NodeJS.Timeout | undefined;
 let currentSongId = "";
 let currentStart = 0;
+const coverArtCache = new Map<string, string | null>();
+
+async function fetchCoverArtUrl(artist: string, album: string): Promise<string | null> {
+    try {
+        const mbRes = await fetch(
+            `https://musicbrainz.org/ws/2/release/?query=release:${encodeURIComponent(album)}%20AND%20artist:${encodeURIComponent(artist)}&fmt=json&limit=1`,
+            { headers: { "User-Agent": MB_USER_AGENT } }
+        );
+        if (!mbRes.ok) return null;
+
+        const mbJson = await mbRes.json();
+        const { releases } = mbJson;
+        if (!releases?.length) return null;
+
+        const releaseGroupId = releases[0]["release-group"]?.id;
+        if (!releaseGroupId) return null;
+
+        const caaRes = await fetch(`https://coverartarchive.org/release-group/${releaseGroupId}`);
+        if (!caaRes.ok) return null;
+
+        const image = (await caaRes.json()).images?.[0];
+        if (!image) return null;
+
+        return image.thumbnails?.["500"] ?? image.thumbnails?.large ?? image.image ?? null;
+    } catch (e) {
+        logger.error("Failed to fetch cover art", e);
+        return null;
+    }
+}
 
 async function getApplicationAsset(key: string): Promise<string> {
     return (await ApplicationAssetUtils.fetchAssetIds(DISCORD_APP_ID, [key]))[0];
@@ -133,8 +163,7 @@ export default definePlugin({
 
     settingsAboutComponent: () => (
         <Paragraph>
-            Enter your server URL and login credentials. If album art isn't showing, make sure your
-            Navidrome server is publicly accessible because Discord needs to reach it to proxy the image.
+            Enter your server URL and login credentials.
         </Paragraph>
     ),
 
@@ -146,6 +175,7 @@ export default definePlugin({
     stop() {
         clearInterval(updateInterval);
         updateInterval = undefined;
+        coverArtCache.clear();
         setActivity(null);
     },
 
@@ -200,14 +230,14 @@ export default definePlugin({
             currentStart = Date.now() - entry.minutesAgo * 60_000;
         }
 
-        const { serverUrl, username, password } = settings.store;
-        const base = serverUrl!.replace(/\/$/, "");
-        const auth = buildAuthParams(username!, password!);
+        if (!coverArtCache.has(entry.id)) {
+            const url = entry.artist && entry.album
+                ? await fetchCoverArtUrl(entry.artist, entry.album)
+                : null;
+            coverArtCache.set(entry.id, url);
+        }
 
-        const coverArtUrl = entry.coverArt
-            ? `${base}/rest/getCoverArt?id=${entry.coverArt}&size=512&${auth}`
-            : null;
-
+        const coverArtUrl = coverArtCache.get(entry.id) ?? null;
         const largeImage = coverArtUrl
             ? await getApplicationAsset(coverArtUrl)
             : await getApplicationAsset(settings.store.missingArt === "placeholder" ? "placeholder" : "navidrome");
