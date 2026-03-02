@@ -20,16 +20,13 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { migratePluginSettings } from "@api/Settings";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { getIntlMessage, insertTextIntoChatInputBox, openUserProfile } from "@utils/discord";
-import { NoopComponent } from "@utils/react";
 import definePlugin from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
-import { filters, findByCodeLazy, waitFor } from "@webpack";
+import { findByCodeLazy } from "@webpack";
 import { ChannelStore, ContextMenuApi, Menu, UserStore } from "@webpack/common";
 
 const useMessageMenu = findByCodeLazy(".MESSAGE,commandTargetId:");
-
-let CopyIdMenuItem: (props: { id: string; label: string; }) => React.ReactElement | null = NoopComponent;
-waitFor(filters.componentByCode('"cannot copy null text"'), m => CopyIdMenuItem = m);
+const CopyIdMenuItem = findByCodeLazy('"cannot copy null text"');
 
 function MessageMenu({ message, channel, onHeightUpdate }: {
     message: Message;
