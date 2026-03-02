@@ -163,7 +163,7 @@ export default definePlugin({
 
     settingsAboutComponent: () => (
         <Paragraph>
-            Enter your server URL and login credentials.
+            Enter your Subsonic server URL and login credentials.
         </Paragraph>
     ),
 
