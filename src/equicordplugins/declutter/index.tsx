@@ -37,12 +37,6 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => SectionSeparator(t("equicord.declutter.headers.userProfile")),
     },
-    removeAvatarDecoration: {
-        type: OptionType.BOOLEAN,
-        description: t("equicord.declutter.settings.removeAvatarDecoration"),
-        default: true,
-        restartNeeded: true,
-    },
     removeNameplate: {
         type: OptionType.BOOLEAN,
         description: t("equicord.declutter.settings.removeNameplate"),
@@ -152,15 +146,6 @@ export default definePlugin({
     authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi],
     settings,
     patches: [
-        {
-            // Avatar decoration
-            find: "getAvatarDecorationURL:",
-            replacement: {
-                match: /(?<=function \i\((\i)\){)(?=.{0,150}let{avatarDecoration)/,
-                replace: "$&return null;"
-            },
-            predicate: () => settings.store.removeAvatarDecoration,
-        },
         {
             // Nameplate
             find: "#{intl::AVATAR_MALLOW}",
