@@ -449,6 +449,30 @@
             "dmList":"Ім’я користувачів із визначеними власними кольорами у списку dm буде забарвлено"
         }
     },
+    "declutter":{
+        "description":"",
+        "headers":{
+            "friendsList":"",
+            "misc":"",
+            "userProfile":""
+        },
+        "settings":{
+            "alwaysShowUsername":"",
+            "removeAudioMenus":"",
+            "removeAvatarDecoration":"",
+            "removeBillingSettings":"",
+            "removeButtonTooltips":"",
+            "removeClanTag":"",
+            "removeGiftButton":"",
+            "removeNameplate":"",
+            "removeProfileEffect":"",
+            "removeQuestsAboveDM":"",
+            "removeServerBoostInfo":"",
+            "removeShopAboveDM":"",
+            "removeUnavailableEmojiPicker":"",
+            "removeUsernameStyles":""
+        }
+    },
     "disableCameras":{
         "description":"За умовчанням вимикає камери під час виклику"
     },
