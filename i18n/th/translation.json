@@ -1,1 +1,10 @@
-{}
+{
+    "description": "ช่วยในการแปล Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "บังคับให้ใช้ภาษาอื่นเพื่อให้ Equicord ใช้",
+            "followDiscord": "ค่าเริ่มต้น (ตาม Discord)"
+        },
+        "showMissingKeys": "หากสถานที่ปัจจุบันไม่มีการแปล ให้แสดงคีย์ต่างๆ แทนที่จะถอยกลับไปเป็นภาษาอังกฤษ"
+    }
+}

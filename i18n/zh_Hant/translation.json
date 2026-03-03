@@ -1,1 +1,10 @@
-{}
+{
+    "description": "協助翻譯 Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "強制 Equicord 使用不同的區域設置",
+            "followDiscord": "預設（遵循Discord）"
+        },
+        "showMissingKeys": "如果當前語言環境缺少翻譯，則顯示按鍵而不是回退到英語"
+    }
+}

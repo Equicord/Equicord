@@ -1,1 +1,10 @@
-{}
+{
+    "description": "Pomaže pri prevođenju Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "Prisilno koristite različite lokalne postavke za Equicord.",
+            "followDiscord": "Zadano (slijedite Discord)"
+        },
+        "showMissingKeys": "Ako trenutni jezik nema prijevode, prikažite ključeve umjesto da se vratite na engleski"
+    }
+}
