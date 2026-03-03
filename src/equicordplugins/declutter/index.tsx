@@ -7,6 +7,7 @@
 import { definePluginSettings, migratePluginSetting, migratePluginSettings } from "@api/Settings";
 import { Divider } from "@components/Divider";
 import { HeadingSecondary } from "@components/Heading";
+import { Notice } from "@components/Notice";
 import { Devs, EquicordDevs } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 
@@ -59,6 +60,14 @@ export const settings = definePluginSettings({
         description: "Always show username instead of status.",
         default: true,
         restartNeeded: true
+    },
+    accessibilityNotice: {
+        type: OptionType.COMPONENT,
+        component: () => (
+            <Notice.Info style={{ marginTop: 8, marginBottom: 8 }}>
+                Discord already has a built-in username style option in Accessibility settings.
+            </Notice.Info>
+        )
     },
     friendsListHeader: {
         type: OptionType.COMPONENT,
