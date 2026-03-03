@@ -1,1 +1,10 @@
-{}
+{
+    "description": "Ayuda con la traducción Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "Forzar el uso de una configuración regional diferente para Equicord",
+            "followDiscord": "Predeterminado (siga Discord)"
+        },
+        "showMissingKeys": "Si a la configuración regional actual le faltan traducciones, muestre las claves en lugar de volver al inglés."
+    }
+}
