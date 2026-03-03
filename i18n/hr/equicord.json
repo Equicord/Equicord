@@ -458,6 +458,7 @@
 	"declutter":{
 		"description":"Čisti Discord uklanjanjem nebitnih UI elemenata poput efekata profila, kartica za kupnju, pojačanja i više.",
 		"headers":{
+			"accessibilityNotice":"Discord već ima ugrađenu opciju stila korisničkog imena u postavkama pristupačnosti.",
 			"friendsList":"Iznad liste prijatelja/DM-ova",
 			"misc":"razno",
 			"userProfile":"Korisnički profil"
