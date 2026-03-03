@@ -3,35 +3,35 @@
         "errorExecuting":"Đã xảy ra lỗi khi thực hiện lệnh \"{name}\""
     },
     "memberListDecorators":{
-        "fallback":"Không thể hiển thị {key} Trình trang trí danh sách thành viên"
+        "fallback":"Không thể hiển thị {key} Trình trang trí Danh sách Thành viên"
     },
     "messageAccessories":{
-        "fallback":"Không thể hiển thị {key} Phụ kiện tin nhắn"
+        "fallback":"Không thể hiển thị Phụ kiện tin nhắn {key}"
     },
     "messageDecorations":{
-        "fallback":"Không thể hiển thị {key} Trang trí tin nhắn"
+        "fallback":"Không thể hiển thị Trang trí Tin nhắn {key}"
     },
     "notices":{
-        "fallback":"Lỗi hiển thị thông báo"
+        "fallback":"Lỗi trong việc hiển thị thông báo"
     },
     "notifications":{
-        "dismissNotification":"Loại bỏ thông báo",
+        "dismissNotification":"Loại bỏ Thông báo",
         "logs":{
-            "body_one":"Thao tác này sẽ xóa vĩnh viễn thông báo {count}. Không thể hoàn tác hành động này.",
-            "body_other":"Thao tác này sẽ xóa vĩnh viễn thông báo {count}. Không thể hoàn tác hành động này.",
+            "body_one":"Thao tác này sẽ xóa vĩnh viễn {count} thông báo. Không thể hoàn tác được hành động này.",
+            "body_other":"Thao tác này sẽ xóa vĩnh viễn {count} thông báo. Không thể hoàn tác được hành động này.",
             "body_zero":"Không có thông báo nào được chọn.",
             "cancel":"Không có gì",
-            "clearNotificationLog":"Xóa nhật ký thông báo",
+            "clearNotificationLog":"Xóa Nhật ký Thông báo",
             "confirm":"Làm đi!",
             "title":"Bạn có chắc không?"
         },
         "missedNotifications":{
-            "body_one":"Đã nhận được thông báo {count}",
-            "body_other":"Đã nhận được thông báo {count}",
+            "body_one":"Đã nhận được {count} thông báo",
+            "body_other":"Đã nhận được {count} thông báo",
             "title":"Trong khi bạn đi vắng"
         },
         "noNotifications":"Chưa có thông báo nào",
-        "notificationLog":"Nhật ký thông báo",
-        "notificationSettings":"Cài đặt thông báo"
+        "notificationLog":"Nhật ký Thông báo",
+        "notificationSettings":"Cài đặt Thông báo"
     }
 }
