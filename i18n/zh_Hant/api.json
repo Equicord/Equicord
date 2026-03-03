@@ -1,1 +1,11 @@
-{}
+{
+	"notifications":{
+		"logs":{
+			"cancel":"呃，没事了～",
+			"clearNotificationLog":"通知日誌",
+			"title":"你確定嗎？"
+		},
+		"notificationLog":"通知日誌",
+		"notificationSettings":"通知设定"
+	}
+}
