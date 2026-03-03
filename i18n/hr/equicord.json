@@ -290,7 +290,10 @@
 		"description":"Skriva sve kanale u sažetim kategorijama, čak i ako imaju nepročitane poruke."
 	},
 	"clickableRoles":{
-		"description":"Kliknite na uloge u korisničkim profilima i na popisu članova kako biste vidjeli koji ih članovi imaju."
+		"andNumMore":"i {count} više",
+		"description":"Kliknite na uloge u korisničkim profilima i na popisu članova kako biste vidjeli koji ih članovi imaju.",
+		"loadingMembers":"Učitavanje članova...",
+		"noMembers":"Nema pronađenih članova."
 	},
 	"clientSideBlock":{
 		"description":"Omogućuje vam da lokalno sakrijete gotovo sav sadržaj od bilo kojeg korisnika",
