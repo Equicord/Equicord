@@ -533,7 +533,7 @@
             "emojiSize":"Kích thước của biểu tượng cảm xúc khi gửi",
             "enableEmojiBypass":"Cho phép gửi biểu tượng cảm xúc giả (cũng bỏ qua việc thiếu quyền sử dụng biểu tượng cảm xúc tùy chỉnh)",
             "enableStickerBypass":"Cho phép gửi nhãn dán giả (cũng bỏ qua việc thiếu quyền sử dụng nhãn dán)",
-            "enableStreamQualityBypass":"Cho phép phát trực tuyến ở chất lượng nitro",
+            "enableStreamQualityBypass":"Cho phép stream ở chất lượng nitro",
             "hyperLinkText":"Văn bản nào siêu liên kết nên sử dụng. {{NAME}} sẽ được thay thế bằng tên biểu tượng cảm xúc/nhãn dán.",
             "stickerSize":"Kích thước của nhãn dán khi gửi",
             "transformCompoundSentence":"Có chuyển đổi nhãn dán và biểu tượng cảm xúc giả thành câu ghép hay không (các câu có nhiều nội dung hơn chỉ là liên kết biểu tượng cảm xúc hoặc nhãn dán giả)",
