@@ -1383,7 +1383,7 @@
             "fromChannel":"Từ {channel} trong {guild}",
             "fromDms":"Từ DM của {username}",
             "fromGroupDm":"Từ {name} Group DM",
-            "ghostPinged":"ma ping",
+            "ghostPinged":"Ghost Ping",
             "importLogs":"Nhập nhật ký",
             "importLogsTooltip":"ML Nâng cao hiện lưu trữ nhật ký trong indexeddb. Bạn cần nhập nhật ký cũ của mình từ thư mục nhật ký. Nhập sẽ không ghi đè lên nhật ký hiện có",
             "jumpToMessage":"Chuyển đến tin nhắn",
