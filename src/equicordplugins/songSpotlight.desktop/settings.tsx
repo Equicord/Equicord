@@ -12,7 +12,7 @@ import Settings from "./ui/settings";
 export default definePluginSettings({
     collapseSongList: {
         type: OptionType.BOOLEAN,
-        description: "Minimizes the song list on profiles to a button to view all songs",
+        description: "Collapses the song list on user profiles to a button which opens a separate menu",
         default: false,
     },
     profileSongsLimit: {
