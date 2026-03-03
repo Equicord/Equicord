@@ -1,1 +1,11 @@
-{}
+{
+	"notifications":{
+		"logs":{
+			"cancel":"Nema veze",
+			"clearNotificationLog":"Dnevnik obavijesti",
+			"title":"Jeste li sigurni?"
+		},
+		"notificationLog":"Dnevnik obavijesti",
+		"notificationSettings":"Postavke obavijesti"
+	}
+}
