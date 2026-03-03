@@ -150,19 +150,17 @@ export default definePlugin({
 
     patches: [
         {
-            /* 👉 👈 */
-            find: "overflowOnly:!0,ariaHidden:!0",
+            find: "#{intl::T+3Adg::raw}",
             replacement: {
-                match: /;return(.{0,400}null,\i\]\}\))(?=\}function)/,
-                replace: ";return $self.wrapRolePill(arguments[0],()=>$1)",
+                match: /(colors:\i\}\);)return(.*?enableTooltip:!1\}\):null,\i\]\}\))/,
+                replace: "$1return $self.wrapRolePill(arguments[0],()=>$2)",
             },
         },
         {
-            /* 👉 👈 */
             find: 'tutorialId:"whos-online"',
             replacement: {
-                match: /(\i=\i\.memo)\((function\(\i\)\{let\{id:\i.{0,900}(?:\]\}\))+)\}\);/,
-                replace: "$1($self.wrapRoleGroup($2}));",
+                match: /\((function\(\i\)\{let\{id:.*?"\\xa0— ".{0,15})\}\);/,
+                replace: "($self.wrapRoleGroup($1}));",
             },
         },
     ],
