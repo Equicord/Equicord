@@ -3,7 +3,7 @@
         "errorExecuting": "Ocurrió un error al ejecutar el comando \"{name}\""
     },
     "memberListDecorators": {
-        "fallback": "Fallo al renderizar el Decorador de Lista de Miembros {key}"
+        "fallback": "Fallo al renderizar {key} Decorador de Lista de Miembros"
     },
     "messageAccessories": {
         "fallback": "Fallo al renderizar el Accesorio de Mensaje {key}"
