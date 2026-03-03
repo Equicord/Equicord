@@ -440,7 +440,6 @@
             "removeAudioMenus": "Remove menus next to mute and deafen buttons.",
             "alwaysShowUsername": "Always show username instead of status.",
             "removeButtonTooltips": "Remove button tooltips.",
-            "removeAvatarDecoration": "Remove avatar decoration.",
             "removeShopAboveDM": "Remove shops above DMs list.",
             "removeQuestsAboveDM": "Remove quests above DMs list.",
             "removeServerBoostInfo": "Remove server boost info above channel list.",
