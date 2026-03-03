@@ -1,40 +1,40 @@
 {
     "accountPanelServerProfile":{
         "description":"Nhấp chuột phải vào bảng tài khoản của bạn ở phía dưới bên trái để xem hồ sơ của bạn trong máy chủ hiện tại",
-        "prioritizeServerProfile":"Ưu tiên hồ sơ máy chủ",
+        "prioritizeServerProfile":"Ưu tiên Hồ sơ Máy chủ",
         "prioritizeServerProfileDescription":"Ưu tiên Hồ sơ Máy chủ khi nhấp chuột trái vào bảng tài khoản của bạn",
         "viewAccountProfile":"Xem hồ sơ tài khoản",
-        "viewServerProfile":"Xem hồ sơ máy chủ"
+        "viewServerProfile":"Xem Hồ sơ Máy chủ"
     },
     "addonCard":{
         "new":"MỚI"
     },
     "alwaysAnimate":{
-        "description":"Hoạt hình bất cứ thứ gì có thể hoạt hình",
+        "description":"Tạo hiệu ứng cho mọi thứ có thể được hiệu ứng",
         "settings":{
             "icons":"Luôn tạo hiệu ứng động cho các biểu tượng máy chủ, hình đại diện, trang trí và hơn thế nữa",
             "nameplates":"Luôn tạo ảnh động cho bảng tên",
-            "roleGradients":"Luôn tạo hiệu ứng chuyển màu vai trò",
+            "roleGradients":"Luôn tạo hiệu ứng chuyển màu của vai trò",
             "serverBanners":"Luôn làm động các biểu ngữ máy chủ",
-            "statusEmojis":"Luôn tạo hiệu ứng cho biểu tượng cảm xúc trạng thái"
+            "statusEmojis":"Luôn tạo hiệu ứng cho biểu tượng cảm xúc trong trạng thái"
         }
     },
     "alwaysExpandRoles":{
         "description":"Luôn mở rộng danh sách vai trò trong cửa sổ bật lên hồ sơ",
         "settings":{
-            "hideArrow":"Ẩn mũi tên"
+            "hideArrow":"Ẩn Mũi Tên"
         }
     },
     "alwaysTrust":{
-        "description":"Loại bỏ tên miền không đáng tin cậy gây phiền nhiễu và cửa sổ bật lên tệp đáng ngờ",
+        "description":"Loại bỏ cửa sổ bật lên gây phiền về tên miền không đáng tin cậy và tệp đáng ngờ",
         "settings":{
-            "confirmModal":"Chế độ \"bạn có chắc chắn muốn xóa\" có nên được hiển thị không?",
+            "confirmModal":"Có nên hiển thị hộp thoại \"bạn có chắc chắn muốn xóa\" không?",
             "domain":"Loại bỏ cửa sổ bật lên tên miền không đáng tin cậy khi mở liên kết",
             "file":"Xóa cửa sổ bật lên 'Tải xuống có thể nguy hiểm' khi mở liên kết",
             "noDeleteSafety":"Loại bỏ yêu cầu nhập tên máy chủ khi xóa máy chủ"
         },
         "ui":{
-            "deleteServerBody":"Nó là vĩnh viễn, nếu điều đó không rõ ràng.",
+            "deleteServerBody":"Đó là vĩnh viễn, nếu điều đó không rõ ràng.",
             "deleteServerConfirm":"Xóa",
             "deleteServerTitle":"Xóa máy chủ?"
         }
@@ -42,38 +42,38 @@
     "anonymiseFileNames":{
         "commands":{
             "spoiler":{
-                "description":"Chuyển đổi spoiler của bạn",
-                "disabled":"Đã vô hiệu hóa spoiler!",
+                "description":"Bật/Tắt nội dung ẩn của bạn",
+                "disabled":"Đã tắt spoiler!",
                 "enabled":"Đã bật spoiler!",
-                "name":"tiết lộ nội dung",
-                "optionDescription":"Chuyển đổi spoiler của bạn (mặc định là chuyển đổi)",
+                "name":"Nội dung ẩn",
+                "optionDescription":"Bật/Tắt nội dung ẩn của bạn (mặc định là Bật/Tắt)",
                 "optionName":"giá trị"
             }
         },
         "description":"Ẩn danh tên tập tin đã tải lên",
         "methods":{
             "consistent":"Nhất quán",
-            "random":"Nhân vật ngẫu nhiên",
+            "random":"Kí tự ngẫu nhiên",
             "timestamp":"Dấu thời gian"
         },
         "settings":{
-            "anonymiseByDefault":"Có ẩn danh tên tệp theo mặc định hay không",
+            "anonymiseByDefault":"Có nên ẩn danh tên tệp theo mặc định hay không",
             "consistent":"Tên tệp nhất quán",
             "method":"Phương pháp ẩn danh",
             "randomisedLength":"Độ dài ký tự ngẫu nhiên",
-            "spoilerMessages":"Tin nhắn spoiler"
+            "spoilerMessages":"Tin nhắn ẩn"
         },
         "usingAnonymous":"Sử dụng tên tệp ẩn danh",
         "usingNormal":"Sử dụng tên tập tin bình thường"
     },
     "appleMusicRichPresence":{
         "activityTypes":{
-            "listening":"Nghe",
+            "listening":"Đang nghe",
             "playing":"Đang chơi"
         },
         "assetImageTypes":{
-            "album":"Album ảnh nghệ thuật",
-            "artist":"Tác phẩm nghệ thuật của nghệ sĩ",
+            "album":"Ảnh bìa album",
+            "artist":"Ảnh nghệ sĩ",
             "disabled":"Tắt"
         },
         "buttons":{
@@ -82,35 +82,35 @@
         },
         "defaultDetails":"{name}",
         "defaultLargeText":"{album}",
-        "defaultName":"Apple Âm nhạc",
+        "defaultName":"Apple Music",
         "defaultSmallText":"{artist}",
         "defaultState":"{artist} · {album}",
-        "description":"Discord sự hiện diện phong phú cho Apple Music của bạn!",
-        "name":"TáoÂm NhạcGiàuSự Hiện Diện",
+        "description":"Discord rich presense cho Apple Music của bạn!",
+        "name":"AppleMusicRichPresence",
         "settings":{
-            "activityType":"Loại hoạt động nào",
+            "activityType":"Loại hoạt động",
             "detailsString":"Chuỗi định dạng chi tiết hoạt động",
             "enableButtons":"Có bật nút hay không",
-            "enableTimestamps":"Có hay không bật dấu thời gian",
-            "largeImageType":"Nội dung hoạt động loại hình ảnh lớn",
-            "largeTextString":"Nội dung hoạt động chuỗi định dạng văn bản lớn",
+            "enableTimestamps":"Có bật dấu thời gian hay không",
+            "largeImageType":"Hình ảnh lớn của hoạt động",
+            "largeTextString":"Chuỗi định dạng văn bản lớn của hoạt động",
             "nameString":"Chuỗi định dạng tên hoạt động",
             "refreshInterval":"Khoảng thời gian giữa các lần làm mới hoạt động (giây)",
-            "smallImageType":"Nội dung hoạt động loại hình ảnh nhỏ",
-            "smallTextString":"Nội dung hoạt động chuỗi định dạng văn bản nhỏ",
+            "smallImageType":"Loại hình ảnh nhỏ của hoạt động",
+            "smallTextString":"Chuỗi định dạng văn bản nhỏ của hoạt động",
             "stateString":"Chuỗi định dạng trạng thái hoạt động",
-            "statusDisplayType":"Hiển thị tên bài hát/nghệ sĩ trong danh sách thành viên"
+            "statusDisplayType":"Hiển thị tên bài hát / nghệ sĩ trong danh sách thành viên"
         },
         "settingsAbout":{
             "albumPlaceholder":"{album} được thay thế bằng tên album.",
             "artistPlaceholder":"{artist} được thay thế bằng tên của (các) nghệ sĩ",
             "intro":"Đối với các chuỗi định dạng hoạt động có thể tùy chỉnh, bạn có thể sử dụng một số chuỗi đặc biệt để đưa dữ liệu theo dõi vào hoạt động!",
-            "namePlaceholder":"{name} được thay thế bằng tên bản nhạc"
+            "namePlaceholder":"{name} được thay thế bằng tên bài hát"
         },
         "statusDisplayTypes":{
             "artist":"Hiển thị tên nghệ sĩ",
-            "off":"Không hiển thị (hiển thị thông báo nghe chung)",
-            "track":"Hiển thị tên bản nhạc"
+            "off":"Không hiển thị (hiển thị thông báo nghe thông thường)",
+            "track":"Hiển thị tên bài hát"
         }
     },
     "arRPC":{
@@ -118,12 +118,12 @@
         "connectionFailed":"Không kết nối được với arRPC, nó có đang chạy không?",
         "retry":"Thử lại",
         "settingsAbout":{
-            "description":"Làm theo hướng dẫn trong kho lưu trữ GitHub để máy chủ chạy, sau đó kích hoạt plugin.",
+            "description":"Làm theo hướng dẫn trong repo GitHub để chạy máy chủ, sau đó kích hoạt plugin.",
             "title":"Cách sử dụng arRPC"
         }
     },
     "autoDndWhilePlaying":{
-        "description":"Tự động cập nhật trạng thái trực tuyến của bạn (trực tuyến, nhàn rỗi, dnd) khi khởi chạy trò chơi",
+        "description":"Tự động cập nhật trạng thái trực tuyến của bạn (trực tuyến, chờ, không làm phiền) khi khởi chạy trò chơi",
         "settings":{
             "excludeInvisible":"Ngăn chặn thay đổi trạng thái tự động trong khi trạng thái của bạn được đặt ở chế độ ẩn",
             "statusToSet":"Trạng thái cần đặt khi chơi trò chơi"
@@ -143,19 +143,19 @@
             "closeAllFolders":"Đóng tất cả các thư mục khi chọn máy chủ không có trong thư mục",
             "closeAllHomeButton":"Đóng tất cả các thư mục khi nhấp vào nút home",
             "closeOthers":"Đóng các thư mục khác khi mở một thư mục",
-            "closeServerFolder":"Đóng thư mục khi chọn máy chủ trong thư mục đó",
+            "closeServerFolder":"Đóng thư mục khi chọn một máy chủ trong thư mục đó",
             "folderIconAlways":"Luôn luôn",
             "folderIconMultipleExpanded":"Khi có nhiều thư mục được mở rộng",
             "folderIconNever":"Không bao giờ",
-            "forceOpen":"Buộc mở một thư mục khi chuyển sang máy chủ của thư mục đó",
-            "keepIcons":"Tiếp tục hiển thị các biểu tượng bang hội trong thư mục thanh bang hội chính khi nó được mở trong thanh bên BetterFolders",
-            "showFolderIcon":"Hiển thị biểu tượng thư mục phía trên các bang hội thư mục trong thanh bên BetterFolders",
-            "sidebar":"Hiển thị máy chủ từ thư mục trên thanh bên chuyên dụng",
-            "sidebarAnim":"Hoạt hình mở thanh bên thư mục"
+            "forceOpen":"Buộc mở một thư mục khi chuyển sang một máy chủ của thư mục đó",
+            "keepIcons":"Giữ việc hiển thị các biểu tượng máy chủ trong thư mục thanh máy chủ chính khi nó được mở trong thanh bên của BetterFolders",
+            "showFolderIcon":"Hiển thị biểu tượng thư mục phía trên các thư mục máy chủ trong thanh bên BetterFolders",
+            "sidebar":"Hiển thị máy chủ từ thư mục trên thanh bên riêng",
+            "sidebarAnim":"Hoạt ảnh mở thanh bên thư mục"
         }
     },
     "betterGifAltText":{
-        "description":"Thay đổi văn bản thay thế GIF từ chỉ đơn giản là 'GIF' sang chứa thẻ gif/tên tệp"
+        "description":"Thay đổi văn bản thay thế GIF từ chỉ đơn giản là 'GIF' sang thẻ gif / tên tệp"
     },
     "betterGifPicker":{
         "description":"Làm cho bộ chọn gif mở danh mục yêu thích theo mặc định",
@@ -164,7 +164,7 @@
         }
     },
     "betterNotesBox":{
-        "description":"Ẩn ghi chú hoặc tắt tính năng kiểm tra chính tả (Định cấu hình trong cài đặt!!)",
+        "description":"Ẩn ghi chú hoặc tắt tính năng kiểm tra chính tả (Cấu hình trong cài đặt!!)",
         "settings":{
             "hide":"Ẩn ghi chú",
             "noSpellCheck":"Vô hiệu hóa kiểm tra chính tả trong ghi chú"
@@ -172,18 +172,18 @@
     },
     "betterRoleContext":{
         "copyRoleColor":"Sao chép màu vai trò",
-        "description":"Thêm tùy chọn sao chép màu vai trò/chỉnh sửa vai trò/xem biểu tượng vai trò khi nhấp chuột phải vào vai trò trong hồ sơ người dùng",
+        "description":"Thêm tùy chọn sao chép màu vai trò / chỉnh sửa vai trò / xem biểu tượng vai trò khi nhấp chuột phải vào vai trò trong hồ sơ người dùng",
         "editRole":"Chỉnh sửa vai trò",
-        "name":"Bối cảnh tốt hơnVai trò",
+        "name":"BetterRoleContext",
         "settings":{
             "roleIconFileFormat":"Định dạng tệp để sử dụng khi xem biểu tượng vai trò"
         },
         "viewRoleIcon":"Xem biểu tượng vai trò"
     },
     "betterRoleDot":{
-        "description":"Sao chép màu vai trò trên RoleDot (cài đặt khả năng truy cập) nhấp chuột. Cũng cho phép sử dụng đồng thời cả tên RoleDot và tên màu",
+        "description":"Sao chép màu vai trò khi nhấp vào RoleDot (cài đặt trợ năng). Đồng thời cho phép sử dụng cả RoleDot và tên màu cùng lúc.",
         "settings":{
-            "bothStyles":"Hiển thị cả vai trò dấu chấm và tên màu",
+            "bothStyles":"Hiển thị cả dấu chấm vai trò và tên màu",
             "copyRoleColorInProfilePopout":"Cho phép nhấp vào dấu chấm vai trò trong cửa sổ bật lên của hồ sơ để sao chép màu vai trò"
         }
     },
@@ -198,47 +198,47 @@
             "title":"Đổi tên"
         },
         "settings":{
-            "backgroundCheck":"Kiểm tra các phiên mới ở chế độ nền và hiển thị thông báo khi chúng được phát hiện",
-            "checkInterval":"Tần suất kiểm tra các phiên mới ở chế độ nền (nếu được bật), tính bằng phút"
+            "backgroundCheck":"Kiểm tra các phiên mới trong nền và hiển thị thông báo khi chúng được phát hiện",
+            "checkInterval":"Tần suất kiểm tra các phiên mới trong nền (nếu bật), tính bằng phút"
         }
     },
     "betterSettings":{
         "settings":{
             "disableFade":"Tắt hoạt ảnh xen kẽ",
             "eagerLoad":"Loại bỏ độ trễ tải khi mở menu lần đầu tiên",
-            "organizeMenu":"Sắp xếp menu ngữ cảnh bánh răng cài đặt thành các danh mục"
+            "organizeMenu":"Sắp xếp menu ngữ cảnh của biểu tượng cài đặt thành các danh mục"
         }
     },
     "betterUploadButton":{
         "description":"Tải lên chỉ bằng một cú nhấp chuột, mở menu bằng nhấp chuột phải"
     },
     "biggerStreamPreview":{
-        "description":"Plugin này cho phép bạn phóng to bản xem trước luồng",
-        "name":"Xem trước luồng lớn hơn",
-        "viewStreamPreview":"Xem bản xem trước luồng"
+        "description":"Plugin này cho phép bạn phóng to bản xem trước stream",
+        "name":"BiggerStreamPreview",
+        "viewStreamPreview":"Xem bản xem trước stream"
     },
     "blurNsfw":{
         "description":"Làm mờ tệp đính kèm trong các kênh NSFW cho đến khi được di chuột",
         "settings":{
             "blurAllChannels":"Làm mờ tệp đính kèm ở tất cả các kênh (không chỉ NSFW)",
-            "blurAmount":"Số lượng mờ (tính bằng pixel)"
+            "blurAmount":"Độ mờ (tính bằng pixel)"
         }
     },
     "callTimer":{
-        "description":"Thêm bộ hẹn giờ cuộc gọi cho tất cả người dùng trong các kênh thoại và trạng thái kết nối.",
+        "description":"Thêm bộ hẹn giờ cuộc gọi cho tất cả người dùng trong các kênh thoại và trong trạng thái kết nối.",
         "settings":{
             "allCallTimers":"Thêm bộ hẹn giờ cuộc gọi cho tất cả người dùng trong kênh thoại của máy chủ",
-            "format":"Định dạng nhỏ gọn hoặc có thể đọc được cho con người:",
+            "format":"Định dạng thu gọn hoặc dễ đọc:",
             "showRoleColor":"Hiển thị màu vai trò của người dùng (nếu plugin này được bật)",
-            "showSeconds":"Hiển thị giây trong bộ đếm thời gian",
+            "showSeconds":"Hiển thị số giây trong bộ đếm thời gian",
             "showWithoutHover":"Luôn hiển thị bộ đếm thời gian mà không cần di chuột",
             "trackSelf":"Đồng thời theo dõi chính bạn",
-            "watchLargeGuilds":"Theo dõi người dùng trong các bang hội lớn. Điều này có thể gây ra hiện tượng lag nếu bạn tham gia nhiều bang hội lớn có người dùng giọng nói tích cực. Đã thử nghiệm với tối đa 2000 người dùng giọng nói đang hoạt động mà không gặp vấn đề gì."
+            "watchLargeGuilds":"Theo dõi người dùng trong các máy chủ lớn. Điều này có thể gây ra hiện tượng lag nếu bạn tham gia nhiều máy chủ lớn có nhiều người dùng trong kênh thoại đang hoạt động. Đã thử nghiệm với tối đa 2000 người dùng trong kênh thoại đang hoạt động mà không gặp vấn đề gì."
         }
     },
     "cancel":"Hủy bỏ",
     "chatInputButtonAPI":{
-        "description":"API để thêm nút vào đầu vào trò chuyện"
+        "description":"API để thêm nút vào thanh trò chuyện"
     },
     "clearURLs":{
         "description":"Tự động xóa các yếu tố theo dõi khỏi URL bạn gửi"
@@ -250,17 +250,17 @@
         "resetThemeColor":"Đặt lại màu chủ đề",
         "switchToMode":"Chuyển sang chế độ {mode}",
         "themeColor":"Màu chủ đề",
-        "themeColorDescription":"Thêm màu vào chủ đề ứng dụng khách Discord của bạn",
-        "themeWontLookGood":"Chủ đề của bạn sẽ không đẹp!"
+        "themeColorDescription":"Thêm màu sắc cho giao diện ứng dụng Discord của bạn",
+        "themeWontLookGood":"Chủ đề của bạn nhìn sẽ không được đẹp!"
     },
     "cloud":{
         "integrations":{
             "enabled":"Đã bật tích hợp đám mây!",
             "error":"Thiết lập không thành công ({e})",
             "failedToRetrieveOAuth":"Thiết lập không thành công (không thể truy xuất cấu hình OAuth).",
-            "header":"Tích hợp đám mây",
-            "noSecret":"Thiết lập không thành công (không trả lại bí mật nào?).",
-            "reauthenticateOtherClient":"Chúng tôi nhận thấy bạn đã bật tích hợp đám mây trong một ứng dụng khách khác! Do những hạn chế, bạn sẽ cần phải xác thực lại để tiếp tục sử dụng chúng. Bấm vào đây để đến trang cài đặt để thực hiện việc này!"
+            "header":"Tích hợp Đám mây",
+            "noSecret":"Thiết lập không thành công (không trả lại secret nào?).",
+            "reauthenticateOtherClient":"Chúng tôi nhận thấy bạn đã bật tích hợp đám mây trong một ứng dụng khác! Do những hạn chế, bạn sẽ cần phải xác thực lại để tiếp tục sử dụng chúng. Bấm vào đây để đến trang cài đặt để thực hiện việc này!"
         },
         "settings":{
             "accountChanged":"Đồng bộ hóa đám mây đã bị tắt vì tài khoản này không được kết nối với Ứng dụng đám mây. Bạn có thể kích hoạt lại nó bằng cách kết nối tài khoản này trong Cài đặt đám mây. (lưu ý: nó sẽ lưu trữ riêng các tùy chọn của bạn)",
@@ -271,55 +271,55 @@
             "erased":"Đã xóa thành công toàn bộ dữ liệu.",
             "failedToDelete":"Không thể xóa cài đặt ({e}).",
             "failedToSync":"Không thể đồng bộ hóa cài đặt với đám mây ({e}).",
-            "header":"Cài đặt đám mây",
+            "header":"Cài đặt Đám mây",
             "newerThanCloud":"Cài đặt cục bộ của bạn mới hơn cài đặt đám mây.",
             "noSettings":"Không có cài đặt nào trên đám mây.",
             "success":"Cài đặt được đồng bộ hóa lên đám mây!",
             "syncFromCloud":"Không thể đồng bộ hóa cài đặt từ đám mây ({e}).",
             "upToDate":"Cài đặt của bạn đã được cập nhật.",
-            "updated":"Cài đặt của bạn đã được cập nhật! Bấm vào đây để khởi động lại để áp dụng đầy đủ các thay đổi!",
-            "updatedRemote":"Cài đặt của bạn đã được cập nhật! Bấm vào đây để khởi động lại để áp dụng đầy đủ các thay đổi!"
+            "updated":"Cài đặt của bạn đã được cập nhật! Bấm vào đây để khởi động lại để áp dụng hoàn toàn các thay đổi!",
+            "updatedRemote":"Cài đặt của bạn đã được cập nhật! Bấm vào đây để khởi động lại để áp dụng hoàn toàn các thay đổi!"
         }
     },
     "colorSighted":{
-        "description":"Xóa các biểu tượng thân thiện với người mù màu khỏi trạng thái, giống như 2015-2017 Discord"
+        "description":"Xóa các biểu tượng thân thiện với người mù màu khỏi trạng thái, giống như Discord 2015-2017"
     },
     "commandsAPI":{
-        "description":"API được yêu cầu bởi mọi thứ sử dụng lệnh"
+        "description":"API bắt buộc cho mọi thứ sử dụng lệnh"
     },
     "consoleJanitor":{
         "alwaysAllowLoggers":"Luôn cho phép logger thuộc loại này",
-        "description":"Vô hiệu hóa các thông báo/lỗi bảng điều khiển gây phiền nhiễu",
-        "filterList":"Danh sách bộ lọc",
-        "name":"Bảng điều khiểnNgười gác cổng",
+        "description":"Vô hiệu hóa các thông báo/lỗi trong console gây phiền nhiễu",
+        "filterList":"Danh sách Bộ lọc",
+        "name":"ConsoleJanitor",
         "settings":{
-            "disableLoggers":"Tắt trình ghi nhật ký Discords",
-            "disableSpotifyLogger":"Tắt trình ghi nhật ký Spotify, làm rò rỉ thông tin tài khoản và mã thông báo truy cập",
+            "disableLoggers":"Tắt trình ghi nhật ký Discord",
+            "disableSpotifyLogger":"Tắt trình ghi nhật ký Spotify, cái mà làm rò rỉ thông tin tài khoản và mã truy cập",
             "whitelistedLoggers":"Danh sách logger được phân tách bằng dấu hai chấm để cho phép ngay cả khi những cái khác bị ẩn"
         }
     },
     "consoleShortcuts":{
-        "description":"Thêm Bí danh ngắn hơn cho nhiều thứ trên cửa sổ. Chạy `shortcutList` để có danh sách."
+        "description":"Thêm các Alias ngắn cho nhiều thành phần trong đối tượng window. Chạy `shortcutList` để xem danh sách."
     },
     "contextMenuAPI":{
         "description":"API để thêm/xóa các mục vào/khỏi menu ngữ cảnh"
     },
     "contributorCard":{
         "contributionsButton":"Xem những gì bạn đã đóng góp",
-        "description":"Vì bạn đã đóng góp cho Equicord nên giờ đây bạn có một huy hiệu mới thú vị!",
+        "description":"Vì bạn đã đóng góp cho Equicord nên giờ đây bạn có một huy hiệu mới cực ngầu!",
         "subtitle":"Cảm ơn bạn đã đóng góp!",
         "title":"Đóng góp"
     },
     "copyEmojiMarkdown":{
-        "copyEmojiMarkdown":"Sao chép đánh dấu biểu tượng cảm xúc",
-        "copyUnicodeDescription":"Sao chép ký tự unicode thô thay vì :name: cho biểu tượng cảm xúc mặc định (👽)",
+        "copyEmojiMarkdown":"Sao chép Markdown Emoji",
+        "copyUnicodeDescription":"Sao chép ký tự unicode gốc thay vì :tên: cho biểu tượng cảm xúc mặc định (👽)",
         "description":"Cho phép bạn sao chép biểu tượng cảm xúc dưới dạng chuỗi được định dạng (<:blobcatcozy:1026533070955872337>)",
-        "success":"Thành công! Đã sao chép đánh dấu biểu tượng cảm xúc."
+        "success":"Thành công! Đã sao chép markdown của emoji."
     },
     "copyFileContents":{
         "copied":"Đã sao chép!",
-        "copyFileContents":"Sao chép nội dung tập tin",
-        "description":"Thêm nút vào tệp đính kèm tệp văn bản để sao chép nội dung của chúng",
+        "copyFileContents":"Sao chép Nội dung Tập tin",
+        "description":"Thêm nút vào tệp đính kèm văn bản để sao chép nội dung của chúng",
         "fileTooLarge":"Tệp quá lớn để sao chép"
     },
     "copyStickerLinks":{
@@ -329,22 +329,22 @@
         "openLink":"Mở Link"
     },
     "copyUserURLs":{
-        "copyUserURL":"Sao chép người dùng URL",
-        "description":"Thêm tùy chọn 'Sao chép người dùng URL' vào menu ngữ cảnh của người dùng."
+        "copyUserURL":"Sao chép URL Người dùng",
+        "description":"Thêm tùy chọn 'Sao chép URL Người dùng' vào menu ngữ cảnh của người dùng."
     },
     "crashHandler":{
         "description":"Plugin tiện ích để xử lý và có thể khôi phục sau sự cố mà không cần khởi động lại",
         "notifications":{
-            "crashedBody":"Awn :( Discord đã bị hỏng nhanh chóng hai lần, không thể khôi phục. Nhấp vào đây để tham gia máy chủ hỗ trợ của chúng tôi!",
-            "crashedTitle":"Discord đã bị lỗi!",
+            "crashedBody":"Aww :( Discord đã gặp sự cố hai lần liên tiếp, không tiếp tục thử khôi phục. Nhấp vào đây để tham gia máy chủ hỗ trợ của chúng tôi!",
+            "crashedTitle":"Discord đã gặp sự cố!",
             "invalidInvite":"Lời mời không hợp lệ hoặc đã hết hạn",
             "recoveringBody":"Đang cố gắng khôi phục... Nhấp vào đây để tham gia máy chủ hỗ trợ của chúng tôi!"
         },
         "settings":{
-            "attemptToNavigateToHome":"Có cố gắng điều hướng đến nhà khi ngăn chặn sự cố Discord hay không.",
+            "attemptToNavigateToHome":"Có cố gắng điều hướng về trang nhà khi ngăn chặn sự cố Discord hay không.",
             "attemptToPreventCrashes":"Có cố gắng ngăn chặn sự cố Discord hay không."
         },
-        "updatePrompt":"Uh ồ, Discord vừa gặp sự cố... nhưng tin vui là hiện có bản cập nhật Equicord có thể khắc phục sự cố này! Bạn có muốn cập nhật ngay bây giờ không?"
+        "updatePrompt":"Ôi không, Discord vừa gặp sự cố... nhưng tin vui là hiện có bản cập nhật Equicord có thể khắc phục sự cố này! Bạn có muốn cập nhật ngay bây giờ không?"
     },
     "ctrlEnterSend":{
         "description":"Sử dụng Ctrl+Enter để gửi tin nhắn (có thể tùy chỉnh)",
@@ -354,73 +354,73 @@
         },
         "submitRuleOptions":{
             "ctrlEnter":"Ctrl+Enter (Enter hoặc Shift+Enter cho dòng mới) (cmd+enter trên macOS)",
-            "enter":"Enter (Shift+Enter cho dòng mới; Discord mặc định)",
-            "shiftEnter":"Shift+Enter (Nhập cho dòng mới)"
+            "enter":"Enter (Shift+Enter cho dòng mới; mặc định của Discord)",
+            "shiftEnter":"Shift+Enter (Enter để xuống dòng)"
         }
     },
     "customIdle":{
-        "description":"Cho phép bạn đặt thời gian trước khi Discord không hoạt động (hoặc tắt tính năng tự động không hoạt động)",
+        "description":"Cho phép bạn đặt thời gian trước khi Discord về chế độ chờ (hoặc tắt tính năng tự động về chế độ chờ)",
         "settings":{
-            "idleTimeout":"Vài phút trước khi Discord không hoạt động (0 để tắt chế độ tự động không hoạt động)",
-            "remainInIdle":"Khi bạn quay lại Discord, hãy giữ nguyên trạng thái chờ cho đến khi bạn xác nhận rằng bạn muốn trực tuyến"
+            "idleTimeout":"Vài phút trước khi Discord về chế độ chờ (0 để tắt chế độ tự động về chế độ chờ)",
+            "remainInIdle":"Khi bạn quay lại Discord, giữ nguyên trạng thái chờ cho đến khi bạn xác nhận rằng bạn muốn trực tuyến"
         },
         "ui":{
-            "backOnlineMessage":"Chào mừng trở lại! Bấm vào nút để truy cập trực tuyến. Nhấp vào X để ở chế độ chờ cho đến khi tải lại.",
-            "exitIdle":"Thoát khỏi trạng thái rảnh rỗi"
+            "backOnlineMessage":"Chào mừng trở lại! Bấm vào nút để quay lại trực tuyến. Nhấp vào X để ở chế độ chờ cho đến khi khởi động lại.",
+            "exitIdle":"Thoát khỏi trạng thái rảnh chờ"
         }
     },
     "customRPC":{
-        "activityType":"Loại hoạt động",
+        "activityType":"Loại Hoạt Động",
         "activityTypes":{
-            "competing":"Cạnh tranh",
-            "listening":"Nghe",
+            "competing":"Đang cạnh tranh",
+            "listening":"Đang nghe",
             "playing":"Đang chơi",
             "streaming":"Đang stream",
             "watching":"Đang xem"
         },
-        "appId":"ID ứng dụng",
-        "appName":"Tên ứng dụng",
+        "appId":"ID Ứng dụng",
+        "appName":"Tên Ứng dụng",
         "button1Text":"Văn bản Nút1",
-        "button1Url":"Nút1 URL",
-        "button2Text":"Văn bản nút 2",
-        "button2Url":"Nút2 URL",
+        "button1Url":"URL Nút1",
+        "button2Text":"Văn bản Nút2",
+        "button2Url":"URL Nút2",
         "detailLine1":"Chi tiết (dòng 1)",
-        "detailUrl":"Chi tiết URL",
+        "detailUrl":"URL Chi tiết",
         "endTimestamp":"Dấu thời gian kết thúc (tính bằng mili giây)",
         "instructions":{
             "buttons":"Bạn không thể nhìn thấy các nút của chính mình trên hồ sơ của mình nhưng những người khác vẫn có thể nhìn thấy nó.",
-            "devPortal":"Đi tới <0>Discord Cổng thông tin dành cho nhà phát triển</0> để tạo ứng dụng và lấy ID ứng dụng.",
-            "imgur":"Nếu bạn muốn sử dụng liên kết hình ảnh, hãy tải xuống hình ảnh của bạn và tải lại hình ảnh lên <0>Imgur</0> và lấy liên kết hình ảnh bằng cách nhấp chuột phải vào hình ảnh và chọn \"Sao chép địa chỉ hình ảnh\".",
-            "unicode":"Một số văn bản unicode kỳ lạ (\"phông chữ\" 𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘) có thể khiến sự hiện diện phong phú không hiển thị, thay vào đó hãy thử sử dụng các chữ cái bình thường.",
-            "uploadImages":"Tải hình ảnh lên tab Hiện diện phong phú để nhận khóa hình ảnh."
+            "devPortal":"Đi tới <0>Discord Developer Portal</0> để tạo ứng dụng và lấy ID ứng dụng.",
+            "imgur":"Nếu bạn muốn sử dụng liên kết hình ảnh, hãy tải xuống hình ảnh của bạn và đăng hình ảnh lên <0>Imgur</0> và lấy liên kết hình ảnh bằng cách nhấp chuột phải vào hình ảnh và chọn \"Sao chép địa chỉ hình ảnh\".",
+            "unicode":"Một số văn bản unicode kỳ lạ (\"phông chữ\" 𝖓𝖍ư 𝖙𝖍ế 𝖓à𝖞) có thể khiến rich presence không hiển thị, thay vào đó hãy thử sử dụng các chữ cái bình thường.",
+            "uploadImages":"Tải hình ảnh lên tab Rich Presence để nhận khóa hình ảnh."
         },
-        "largeImageClickUrl":"Hình ảnh lớn có thể nhấp vào URL",
+        "largeImageClickUrl":"URL hình ảnh lớn có thể nhấp vào",
         "largeImageText":"Văn bản hình ảnh lớn",
-        "largeImageUrl":"Hình ảnh lớn URL/Khóa",
+        "largeImageUrl":"URL Hình ảnh lớn/Khóa",
         "notice":{
-            "body":"Chia sẻ hoạt động không được bật, mọi người sẽ không thể thấy sự hiện diện phong phú tùy chỉnh của bạn!",
-            "enable":"Mở",
-            "title":"Để ý"
+            "body":"Chia sẻ hoạt động không được bật, mọi người sẽ không thể thấy rich presence tùy chỉnh của bạn!",
+            "enable":"Bật",
+            "title":"Lưu ý"
         },
-        "partyMaxSize":"Quy mô bữa tiệc tối đa",
-        "partySize":"Quy mô bữa tiệc",
+        "partyMaxSize":"Kích thước nhóm tối đa",
+        "partySize":"Quy mô nhóm",
         "placeholder":{
             "enterValue":"Nhập một giá trị",
             "selectOption":"Chọn một tùy chọn"
         },
-        "smallImageClickUrl":"Hình ảnh nhỏ có thể nhấp vào URL",
+        "smallImageClickUrl":"URL hình ảnh nhỏ có thể nhấp vào",
         "smallImageText":"Văn bản hình ảnh nhỏ",
-        "smallImageUrl":"Hình ảnh nhỏ URL/Khóa",
+        "smallImageUrl":"URL Hình ảnh nhỏ/Khóa",
         "startTimestamp":"Dấu thời gian bắt đầu (tính bằng mili giây)",
-        "stateLine2":"Bang (dòng 2)",
-        "stateUrl":"Bang URL",
-        "streamLink":"Liên kết luồng (Twitch hoặc YouTube, chỉ khi loại hoạt động là Phát trực tuyến)",
+        "stateLine2":"Trạng thái (dòng 2)",
+        "stateUrl":"URL trạng thái",
+        "streamLink":"Liên kết stream (Twitch hoặc YouTube, chỉ khi loại hoạt động là Đang stream)",
         "timestampMode":"Chế độ dấu thời gian",
         "timestampModes":{
             "currentTime":"Giống như thời gian hiện tại của bạn (không được đặt lại sau 24h)",
-            "custom":"Tùy biến",
+            "custom":"Tùy chỉnh",
             "none":"Không",
-            "sinceOpen":"kể từ khi mối bất hòa mở ra"
+            "sinceOpen":"kể từ khi discord được bật"
         },
         "validation":{
             "discordId":"Phải là ID Discord hợp lệ.",
@@ -428,61 +428,61 @@
             "imgurDirect":"Liên kết Imgur phải là liên kết trực tiếp tới hình ảnh (ví dụ: https://i.imgur.com/...). Nhấp chuột phải vào hình ảnh và nhấp vào 'Sao chép địa chỉ hình ảnh'",
             "maxLength":"Không được dài hơn {length} ký tự.",
             "number":"Phải là một con số.",
-            "positiveNumber":"Phải là số dương.",
+            "positiveNumber":"Phải là một số dương.",
             "required":"Trường này là bắt buộc.",
-            "streamingLink":"Liên kết phát trực tuyến phải là URL hợp lệ.",
-            "streamingLinkLength":"Liên kết phát trực tuyến không được dài quá 512 ký tự.",
+            "streamingLink":"Liên kết stream phải là URL hợp lệ.",
+            "streamingLinkLength":"Liên kết stream không được dài quá 512 ký tự.",
             "tenorDirect":"Liên kết tenor phải là liên kết trực tiếp tới hình ảnh (ví dụ: https://media.tenor.com/...). Nhấp chuột phải vào GIF và nhấp vào 'Sao chép địa chỉ hình ảnh'",
             "url":"Phải là URL hợp lệ."
         }
     },
     "dearrow":{
-        "clickToDearrow":"Bấm vào để thu nhỏ",
-        "dearrowByDefault":"Tự động thu hẹp video",
-        "dearrowedClickRestore":"Nội dung nhúng này đã bị thu hẹp lại, nhấp để khôi phục",
+        "clickToDearrow":"Bấm vào để dearrow",
+        "dearrowByDefault":"Tự động dearrow video",
+        "dearrowedClickRestore":"Nội dung nhúng này đã được dearrow, nhấp để khôi phục",
         "description":"Làm cho tiêu đề và hình thu nhỏ nhúng của YouTube bớt giật gân hơn, được cung cấp bởi Dearrow",
         "everything":"Mọi thứ (Tiêu đề và Hình thu nhỏ)",
-        "hideButton":"Ẩn nút Dearrow khỏi nội dung nhúng trên YouTube",
+        "hideButton":"Ẩn nút Dearrow khỏi nội dung nhúng của YouTube",
         "replaceElementsDescription":"Chọn thành phần nào của phần nhúng sẽ được thay thế",
         "thumbnails":"Hình thu nhỏ",
         "titles":"Tiêu đề"
     },
     "decor":{
-        "accessFromProfiles":"Bạn cũng có thể truy cập trang trí Trang trí từ trang {link}.",
+        "accessFromProfiles":"Bạn cũng có thể truy cập trang trí Decor từ trang {link}.",
         "changeDecoration":"Thay đổi trang trí",
-        "description":"Tạo và sử dụng trang trí hình đại diện tùy chỉnh của riêng bạn hoặc chọn mục yêu thích của bạn từ các cài đặt trước.",
-        "enableAndRestart":"Bật Trang trí và khởi động lại ứng dụng khách của bạn để thay đổi trang trí hình đại diện của bạn.",
+        "description":"Tạo và sử dụng trang trí hình đại diện tùy chỉnh của riêng bạn, hoặc chọn mục yêu thích của bạn từ các cài đặt trước.",
+        "enableAndRestart":"Bật Decor và khởi động lại ứng dụng của bạn để thay đổi trang trí hình đại diện của bạn.",
         "profilesLink":"Hồ sơ",
         "removeDecoration":"Xóa trang trí",
-        "title":"Thiết kế nội thất"
+        "title":"Decor"
     },
     "devCompanion":{
-        "description":"Plugin đồng hành với Dev. Vui lòng báo cáo bất kỳ điều gì không hoạt động hoặc kỳ lạ (rất có thể đó là lỗi) cho sadan, ping hoặc dm, cảm ơn!",
+        "description":"Dev Companion Plugin. Vui lòng báo cáo bất kỳ điều gì không hoạt động hoặc kỳ lạ (rất có thể đó là lỗi) cho sadan, có thể ping hoặc dm, cảm ơn!",
         "settings":{
             "notifyOnAutoConnect":"Có thông báo khi Dev Companion tự động kết nối hay không.",
             "reloadAfterToggle":"Tải lại sau khi nhận được lệnh tắt/bật plugin.",
-            "usePatchedModule":"Đối với các yêu cầu giải nén, hãy trả lời bằng mô-đun đã vá hiện tại (nếu nó được vá) thay vì mô-đun gốc."
+            "usePatchedModule":"Đối với các yêu cầu phân tách, trả lời bằng mô-đun đã vá hiện tại (nếu nó được vá) thay vì mô-đun gốc."
         }
     },
     "disableCallIdle":{
-        "description":"Tắt tính năng tự động thoát khỏi cuộc gọi thoại DM sau 3 phút và được chuyển sang kênh thoại AFK."
+        "description":"Tắt tính năng tự động thoát khỏi cuộc gọi thoại DM sau 3 phút và chuyển sang kênh thoại AFK."
     },
-    "donate":"Quyên tặng",
+    "donate":"Ủng hộ",
     "donorCard":{
         "donated":{
-            "description":"Tất cả người dùng Vencord có thể thấy huy hiệu nhà tài trợ Vencord của bạn và người dùng Equicord có thể thấy huy hiệu nhà tài trợ Equicord của bạn. Để thay đổi huy hiệu nhà tài trợ Vencord của bạn, hãy liên hệ với @vending.machine. Để có huy hiệu nhà tài trợ Equicord của bạn, hãy tạo một vé trong máy chủ của Equicord.",
-            "equicordDescription":"Tất cả người dùng Equicord đều có thể thấy huy hiệu của bạn! Bạn có thể quản lý các đặc quyền của mình bằng cách tạo một vé trong máy chủ của Equicord.",
+            "description":"Tất cả người dùng Vencord có thể thấy huy hiệu nhà tài trợ Vencord của bạn và người dùng Equicord có thể thấy huy hiệu nhà tài trợ Equicord của bạn. Để thay đổi huy hiệu nhà tài trợ Vencord của bạn, hãy liên hệ với @vending.machine. Đối với huy hiệu nhà tài trợ Equicord của bạn, hãy tạo một ticket trong máy chủ của Equicord.",
+            "equicordDescription":"Tất cả người dùng Equicord đều có thể thấy huy hiệu của bạn! Bạn có thể quản lý các đặc quyền của mình bằng cách tạo một ticket trong máy chủ của Equicord.",
             "subtitle":"Cảm ơn bạn đã quyên góp!",
-            "title":"Đóng góp",
-            "vencordDescription":"Tất cả người dùng Vencord đều có thể nhìn thấy huy hiệu của bạn! Bạn có thể quản lý các đặc quyền của mình bằng cách nhắn tin @{v}."
+            "title":"Quyên góp",
+            "vencordDescription":"Tất cả người dùng Vencord đều có thể nhìn thấy huy hiệu của bạn! Bạn có thể quản lý các đặc quyền của mình bằng cách nhắn tin cho @{v}."
         },
         "notDonated":{
             "description":"Vui lòng cân nhắc hỗ trợ sự phát triển của Equicord bằng cách quyên góp!",
-            "title":"Hỗ trợ dự án"
+            "title":"Hỗ trợ Dự án"
         }
     },
     "dontRoundMyTimestamps":{
-        "description":"Luôn làm tròn dấu thời gian tương đối xuống, do đó 7,6y trở thành 7y thay vì 8y"
+        "description":"Luôn làm tròn xuống dấu thời gian tương đối, do đó 7,6y trở thành 7y thay vì 8y"
     },
     "dynamicImageModalAPI":{
         "description":"Cho phép bạn bỏ qua chiều rộng hoặc chiều cao khi mở chế độ hình ảnh"
@@ -490,34 +490,34 @@
     "experiments":{
         "description":"Bật quyền truy cập vào Thử nghiệm và các tính năng khác chỉ dành cho nhà phát triển trong Discord!",
         "devToolsInfo":"Bạn có thể mở DevTools của Discord thông qua {keyboardCombo}",
-        "holdOn":"Giữ lấy!!",
+        "holdOn":"Từ từ đã!!",
         "moreInfo":"Thêm thông tin",
         "settings":{
             "toolbarDevMenu":"Thay đổi nút thanh công cụ Trợ giúp (?) (trên cùng bên phải trong trò chuyện) thành menu nhà phát triển của Discord"
         },
-        "warning1":"Thử nghiệm là các tính năng Discord chưa được phát hành. Chúng có thể không hoạt động hoặc thậm chí làm hỏng ứng dụng khách của bạn hoặc khiến tài khoản của bạn bị vô hiệu hóa.",
-        "warning2":"Chỉ sử dụng các thử nghiệm nếu bạn biết mình đang làm gì. Equicord không chịu trách nhiệm về bất kỳ thiệt hại nào do việc bật thử nghiệm gây ra. Nếu bạn không biết thử nghiệm làm gì, hãy bỏ qua nó. Đừng hỏi chúng tôi thí nghiệm làm gì, chắc chúng tôi cũng không biết.",
-        "warning3":"Không, bạn không thể sử dụng các tính năng phía máy chủ như đánh dấu vào ô \"Gửi cho khách hàng\"."
+        "warning1":"Thử nghiệm là các tính năng Discord chưa được phát hành. Chúng có thể không hoạt động hoặc thậm chí làm hỏng ứng dụng của bạn hoặc khiến tài khoản của bạn bị vô hiệu hóa.",
+        "warning2":"Chỉ sử dụng các thử nghiệm nếu bạn biết mình đang làm gì. Equicord không chịu trách nhiệm về bất kỳ thiệt hại nào do việc bật thử nghiệm gây ra. Nếu bạn không biết thử nghiệm làm gì, hãy bỏ qua nó. Đừng hỏi chúng tôi thử nghiệm làm gì, chắc chúng tôi cũng không biết.",
+        "warning3":"Không, bạn không thể sử dụng các tính năng phía máy chủ như đánh dấu vào ô \"Send to Client\"."
     },
     "expressionCloner":{
-        "cloneEmoji":"Sao chép biểu tượng cảm xúc",
-        "cloneSticker":"Nhãn dán nhân bản",
-        "cloneTo":"Sao chép vào {guild}",
-        "clonedSuccess":"Đã sao chép thành công {name} sang {guild}!",
+        "cloneEmoji":"Nhân bản biểu tượng cảm xúc",
+        "cloneSticker":"Nhân bản Nhãn dán",
+        "cloneTo":"Nhân bản vào {guild}",
+        "clonedSuccess":"Đã nhân bản thành công {name} sang {guild}!",
         "customName":"Tên tùy chỉnh",
-        "failedToClone":"Không sao chép được: {error}",
-        "nameValidation":"Tên phải có từ 2 đến 32 ký tự",
-        "somethingWentWrong":"Đã xảy ra lỗi (kiểm tra bảng điều khiển!)"
+        "failedToClone":"Không nhân bản được: {error}",
+        "nameValidation":"Tên phải có độ dài từ 2 đến 32 ký tự",
+        "somethingWentWrong":"Đã xảy ra lỗi (kiểm tra console!)"
     },
     "f8break":{
-        "description":"Tạm dừng ứng dụng khách khi bạn nhấn F8 khi đang mở DevTools (+ điểm dừng)."
+        "description":"Tạm dừng ứng dụng khi bạn nhấn F8 khi đang mở DevTools (+ điểm dừng)."
     },
     "failedToRender":"Không thể hiển thị tab {tab}. Nếu sự cố này vẫn tiếp diễn, hãy thử sử dụng trình cài đặt để cài đặt lại!",
     "fakeNitro":{
-        "description":"Cho phép bạn gửi biểu tượng cảm xúc/nhãn dán giả, sử dụng chủ đề nitro và phát trực tuyến ở chất lượng nitro",
+        "description":"Cho phép bạn gửi biểu tượng cảm xúc/nhãn dán giả, sử dụng chủ đề nitro và stream ở chất lượng nitro",
         "doNotShowAgain":"Không hiển thị lại",
-        "emojiNotice":"Đây là biểu tượng cảm xúc FakeNitro và hiển thị giống như biểu tượng cảm xúc thực sự chỉ dành cho bạn. Xuất hiện dưới dạng liên kết tới người dùng không sử dụng plugin.",
-        "holdOn":"Giữ lấy!",
+        "emojiNotice":"Đây là emoji FakeNitro và hiển thị giống như emoji thật chỉ dành cho bạn. Xuất hiện dưới dạng liên kết tới người dùng không sử dụng plugin.",
+        "holdOn":"Đợi đã!",
         "noAttachmentPerms":{
             "body":"Bạn không thể gửi tin nhắn này vì nó chứa nhãn dán FakeNitro hoạt hình và bạn không có quyền đính kèm tệp trong kênh hiện tại. Vui lòng gỡ nhãn dán để tiếp tục."
         },
