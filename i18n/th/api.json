@@ -1,9 +1,36 @@
 {
+	"commands":{
+		"errorExecuting":"เกิดข้อผิดพลาดขณะดำเนินการคำสั่ง \"{name}\""
+	},
+	"memberListDecorators":{
+		"fallback":"ไม่สามารถแสดงผล {key} ตัวตกแต่งรายชื่อสมาชิก"
+	},
+	"messageAccessories":{
+		"fallback":"ไม่สามารถแสดง {key} อุปกรณ์เสริมข้อความ"
+	},
+	"messageDecorations":{
+		"fallback":"ไม่สามารถแสดงผล {key} การตกแต่งข้อความ"
+	},
+	"notices":{
+		"fallback":"เกิดข้อผิดพลาดในการแสดงการแจ้งเตือน"
+	},
 	"notifications":{
+		"dismissNotification":"ยกเลิกการแจ้งเตือน",
 		"logs":{
+			"body_one":"การดำเนินการนี้จะลบการแจ้งเตือน {count} อย่างถาวร การดำเนินการนี้ไม่สามารถยกเลิกได้",
+			"body_other":"การดำเนินการนี้จะลบการแจ้งเตือน {count} อย่างถาวร การดำเนินการนี้ไม่สามารถยกเลิกได้",
+			"body_zero":"ไม่ได้เลือกการแจ้งเตือน",
 			"cancel":"ไม่เป็นไร",
+			"clearNotificationLog":"ล้างบันทึกการแจ้งเตือน",
+			"confirm":"ทำมัน!",
 			"title":"คุณแน่ใจเหรอ?"
 		},
+		"missedNotifications":{
+			"body_one":"{count} ได้รับการแจ้งเตือนแล้ว",
+			"body_other":"{count} ได้รับการแจ้งเตือนแล้ว",
+			"title":"ขณะที่คุณไม่อยู่"
+		},
+		"noNotifications":"ยังไม่มีการแจ้งเตือน",
 		"notificationLog":"บันทึกการแจ้งเตือน",
 		"notificationSettings":"ตั้งค่าการแจ้งเตือน"
 	}
