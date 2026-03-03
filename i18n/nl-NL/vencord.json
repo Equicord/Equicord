@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Link gekopieerd!",
+            "maxAdditionalEmojis":"komma/nieuwe regel gescheiden, max {count}",
             "messageContentCopied":"Berichtinhoud gekopieerd!",
             "messageIdCopied":"Bericht-ID gekopieerd!",
+            "selectAdditionalEmojis":"Selecteer Extra emoji's",
+            "selectEmojiForReactions":"Selecteer Emoji voor reacties",
             "userIdCopied":"Gebruikers-ID gekopieerd!"
         }
     },

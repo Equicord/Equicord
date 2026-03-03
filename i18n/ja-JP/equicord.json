@@ -541,6 +541,7 @@
             "noMirroredCamera":"カメラが画面にミラーリングされないようにします",
             "refreshSlashCommands":"スラッシュ コマンドを更新して、クライアントを再起動せずに新しく追加されたコマンドを表示します。",
             "removeActivitySection":"メンバーリストの上のアクティビティセクションを削除します",
+            "restoreFileDownloadButton":"ファイルの右上隅にダウンロード ボタンを再度追加します。",
             "showYourOwnActivityButtons":"Discord は何らかの理由で自分のアクティビティ ボタンを非表示にします"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"閉じる",
             "open":"開ける"
+        }
+    },
+    "hideMessages":{
+        "description":"再起動するまでメッセージを一時的に非表示にするプラグイン。",
+        "settings":{
+            "hidePopoverButton":"メッセージポップオーバーの非表示ボタンを非表示にします。"
+        },
+        "ui":{
+            "hide":"非表示"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"プレミアム タイプをオーバーライドして Nitro アップセルを削除します"
     },
+    "noPushToTalk":{
+        "description":"プッシュツートーク要件を強制するチャネルでの音声アクティビティに対するプッシュツートーク要件をバイパスします。"
+    },
     "noRPC":{
         "description":"Discord のリッチ プレゼンス (RPC) 機能を無効にします"
     },
@@ -1905,10 +1918,24 @@
     "steamStatusSync":{
         "description":"Steam ステータスを Discord ステータスと同期します",
         "settings":{
+            "dndStatus":"おやすみモード時の Steam ステータス",
+            "goInvisibleIfActivityIsHidden":"Discord でゲーム アクティビティを非表示にする場合は、常に非表示になります",
+            "idleStatus":"アイドル時の蒸気ステータス",
+            "invisibleStatus":"非表示時の蒸気ステータス",
             "onlineStatus":"オンライン時の Steam ステータス"
         }
     },
+    "stickerBlocker":{
+        "description":"特定のステッカーの表示をブロックする",
+        "settings":{
+            "blockedStickers":"ブロックされたステッカー ID のリスト (何をしているのかわからない場合は編集しないでください)",
+            "showButton":"gif のブロックを解除するボタンを表示するかどうか",
+            "showGif":"おしゃれな猫のGIFを表示するかどうか",
+            "showMessage":"どの ID がブロックされたかを詳細に示すメッセージを表示するかどうか"
+        }
+    },
     "streamingCodecDisabler":{
+        "description":"Discord ストリーミングのストリーミング コーデックを無効にする",
         "settings":{
             "disableAv1Codec":"Discord がストリーミングに AV1 を使用することを考慮しないようにします",
             "disableH264Codec":"Discord がストリーミングに H264 を使用することを考慮しないようにします",
@@ -2028,6 +2055,21 @@
         "description":"UI を改善したメッセージに翻訳ボタンを追加します。",
         "popover":{
             "translate":"翻訳する"
+        }
+    },
+    "triviaAI":{
+        "description":"AI を使用してトリビアの質問に答えるのに役立つプラグイン。",
+        "settings":{
+            "apiKey":"API キー。",
+            "autoRespond":"応答を受信すると、メッセージに自動的に応答します。",
+            "endpoint":"OpenAI互換のAIエンドポイント。",
+            "maxTokens":"応答内のトークンの最大数。",
+            "model":"使用するAIモデル。",
+            "supportImages":"コンテキスト (存在する場合) のために画像を AI に渡します。これはすべてのモデルでサポートされているわけではありません。",
+            "systemPrompt":"AI のシステム プロンプト。"
+        },
+        "ui":{
+            "answerWithAI":"AI で答える"
         }
     },
     "unitConverter":{
@@ -2186,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"音声チャネル ユーザーにクイック アクション ボタン (チャット、ミュート、聴覚障害者) を追加します。",
+        "options":{
+            "both":"両方",
+            "disable":"無効にする",
+            "display":"表示",
+            "globalName":"グローバル名",
+            "hide":"非表示",
+            "left":"左",
+            "right":"右",
+            "username":"ユーザー名"
+        },
         "settings":{
-            "showChatButton":"チャットボタンを表示",
-            "showDeafenButton":"耳をつんざくボタンを表示",
-            "showMuteButton":"ミュートボタンを表示"
+            "buttonPosition":"音声ユーザー行のどこに音声ボタンを配置するかを選択します。",
+            "disableVideo":"耳をつんざくボタンをクリックするとビデオが切り替わります。",
+            "muteSoundboard":"聴覚障害者ボタンをクリックすると、サウンドボードが切り替わります。",
+            "serverSelf":"聴覚障害者 / ミュート/聴覚障害者を使用する場合、サーバー上で自分自身をミュートします。",
+            "showButtonsSelf":"自分のユーザーのボタンを表示するかどうか。他のボタンと同じ機能ですが、ボタンをクリックすると DM パネルが開き、自分自身をミュート/聴覚障害者にします。",
+            "showChatButton":"チャットボタンを表示するかどうか",
+            "showDeafenButton":"耳をつんざくボタンを表示するかどうか",
+            "showMuteButton":"ミュートボタンを表示するかどうか",
+            "useServer":"許可がある場合は、ローカルの代わりにサーバーのミュート/聴覚障害者を使用してください。",
+            "whichNameToShow":"ツールチップにニックネームまたはユーザー名を表示するかどうかを選択します。"
         }
     },
     "voiceChannelLog":{
@@ -2214,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"全員耳をつんざく",
             "disconnectAll":"すべて切断する",
+            "mentionAllUsers":"すべてのユーザーに言及する",
             "moveAll":"すべて移動",
             "muteAll":"すべてミュート",
             "undeafenAll":"すべての聴覚を失わせる",

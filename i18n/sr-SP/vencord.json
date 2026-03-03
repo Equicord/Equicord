@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Линк је копиран!",
+            "maxAdditionalEmojis":"одвојено зарезом/новим редом, максимално [[[ПХ0]]]",
             "messageContentCopied":"Садржај поруке је копиран!",
             "messageIdCopied":"ИД поруке је копиран!",
+            "selectAdditionalEmojis":"Изаберите Додатне емоџије",
+            "selectEmojiForReactions":"Изаберите Емоји за реакције",
             "userIdCopied":"Кориснички ИД је копиран!"
         }
     },

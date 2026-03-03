@@ -541,6 +541,7 @@
             "noMirroredCamera":"카메라가 화면에 미러링되는 것을 방지합니다.",
             "refreshSlashCommands":"클라이언트를 다시 시작하지 않고도 새로 추가된 명령을 표시하려면 슬래시 명령을 새로 고칩니다.",
             "removeActivitySection":"회원 목록 위의 활동 섹션을 제거합니다.",
+            "restoreFileDownloadButton":"파일 오른쪽 상단에 다운로드 버튼을 다시 추가합니다.",
             "showYourOwnActivityButtons":"Discord는 어떤 이유로든 자신의 활동 버튼을 숨깁니다."
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"닫기",
             "open":"열려 있는"
+        }
+    },
+    "hideMessages":{
+        "description":"다시 시작할 때까지 메시지를 일시적으로 숨기는 플러그인입니다.",
+        "settings":{
+            "hidePopoverButton":"메시지 팝오버에서 숨기기 버튼을 숨깁니다."
+        },
+        "ui":{
+            "hide":"숨기기"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"프리미엄 유형을 재정의하여 Nitro 상향 판매를 제거합니다."
     },
+    "noPushToTalk":{
+        "description":"이를 시행하는 채널의 음성 활동에 대한 푸시-투-톡 요구 사항을 우회합니다."
+    },
     "noRPC":{
         "description":"Discord의 RPC(Rich Presence) 기능을 비활성화합니다."
     },
@@ -2044,6 +2057,21 @@
             "translate":"번역하다"
         }
     },
+    "triviaAI":{
+        "description":"AI를 사용하여 퀴즈 질문에 답하는 데 도움이 되는 플러그인입니다.",
+        "settings":{
+            "apiKey":"API 열쇠.",
+            "autoRespond":"응답을 받으면 메시지에 자동으로 응답합니다.",
+            "endpoint":"OpenAI 호환 AI 엔드포인트.",
+            "maxTokens":"응답의 최대 토큰 수입니다.",
+            "model":"사용할 AI 모델.",
+            "supportImages":"컨텍스트를 위해 이미지를 AI에 전달합니다(있는 경우). 모든 모델에서 지원되는 것은 아닙니다.",
+            "systemPrompt":"AI에 대한 시스템 프롬프트."
+        },
+        "ui":{
+            "answerWithAI":"AI로 답하다"
+        }
+    },
     "unitConverter":{
         "description":"메시지의 단위 변환(영국식/미터법)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"음성 채널 사용자에게 빠른 동작 버튼(채팅, 음소거, 청각 장애)을 추가합니다.",
+        "options":{
+            "both":"둘 다",
+            "disable":"비활성화",
+            "display":"디스플레이",
+            "globalName":"전역 이름",
+            "hide":"숨기기",
+            "left":"왼쪽",
+            "right":"오른쪽",
+            "username":"사용자명"
+        },
         "settings":{
-            "showChatButton":"채팅 버튼 표시",
-            "showDeafenButton":"귀머거리 버튼 표시",
-            "showMuteButton":"음소거 버튼 표시"
+            "buttonPosition":"음성 사용자 행에서 음성 버튼을 배치할 위치를 선택합니다.",
+            "disableVideo":"청각 장애 버튼을 클릭하면 비디오가 전환됩니다.",
+            "muteSoundboard":"청각 장애 버튼을 클릭하면 사운드보드가 전환됩니다.",
+            "serverSelf":"귀머거리 / 음소거 / 귀머거리를 사용할 때 서버에서 자신을 음소거합니다.",
+            "showButtonsSelf":"자신의 사용자를 위한 버튼을 표시할지 여부. 버튼을 클릭하면 DM 패널이 열리고 음소거/청각 기능이 해제된다는 점을 제외하면 다른 버튼과 기능이 동일합니다.",
+            "showChatButton":"채팅 버튼을 표시할지 여부",
+            "showDeafenButton":"귀머거리 버튼을 표시할지 여부",
+            "showMuteButton":"음소거 버튼을 표시할지 여부",
+            "useServer":"권한이 있는 경우 로컬 대신 서버 음소거/청각 장애를 사용하세요.",
+            "whichNameToShow":"툴팁에 닉네임 또는 사용자 이름을 표시할지 선택합니다."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"모두의 귀를 막다",
             "disconnectAll":"모두 연결 해제",
+            "mentionAllUsers":"모든 사용자 언급",
             "moveAll":"모두 이동",
             "muteAll":"모두 음소거",
             "undeafenAll":"모두 언데드",

@@ -541,6 +541,7 @@
             "noMirroredCamera":"Megakadályozza, hogy a kamera tükröződjön a képernyőn",
             "refreshSlashCommands":"Frissíti a Slash parancsokat az újonnan hozzáadott parancsok megjelenítéséhez az ügyfél újraindítása nélkül.",
             "removeActivitySection":"Eltávolítja a taglista feletti tevékenység részt",
+            "restoreFileDownloadButton":"Visszaadja a Letöltés gombot a fájlok jobb felső sarkában",
             "showYourOwnActivityButtons":"A Discord valamiért elrejti a saját tevékenységgombjait"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Bezárás",
             "open":"Nyitott"
+        }
+    },
+    "hideMessages":{
+        "description":"Beépülő modul az üzenetek ideiglenes elrejtésére az újraindításig.",
+        "settings":{
+            "hidePopoverButton":"Az elrejtés gomb elrejtése az üzenet előugró ablakában."
+        },
+        "ui":{
+            "hide":"Elrejt"
         }
     },
     "hideServers":{
@@ -1415,11 +1425,14 @@
         "description":"Tesztelje mikrofonját a felhasználói területen található visszacsatolás gombbal"
     },
     "middleClickTweaks":{
+        "description":"Különféle középső kattintással kapcsolatos módosítások, például beillesztés és hivatkozás megnyitása.",
         "settings":{
             "always":"Mindig akadályozza meg a középső kattintással történő beillesztést",
             "both":"Linkek és média",
             "focus":"Csak akkor akadályozza meg, ha a szövegterület nincs fókuszban",
+            "links":"Linkek",
             "media":"Média",
+            "none":"Nincs",
             "openScope":"Akadályozza meg, hogy középső kattintással ezekre a tartalomtípusokra nyíljanak meg.",
             "pasteScope":"Akadályozza meg a középső kattintás beillesztését ilyen helyzetekben.",
             "pasteThreshold":"Ezredmásodperc, amíg a beillesztés ismét engedélyezve lesz egy középső kattintás után."
@@ -1506,8 +1519,37 @@
     "noNitroUpsell":{
         "description":"A prémium típus felülbírálásával eltávolítja a Nitro felárakat"
     },
+    "noPushToTalk":{
+        "description":"Megkerüli az adó-beszélgetés követelményét a hangtevékenységhez az azt kikényszerítő csatornákon."
+    },
     "noRPC":{
         "description":"Letiltja Discord Rich Presence (RPC) funkcióját"
+    },
+    "noRoleHeaders":{
+        "description":"Eltávolítja a szerepkör fejléceit a taglistáról, tisztább megjelenést biztosítva"
+    },
+    "normalizeMessageLinks":{
+        "description":"Normalizálja a [[PH0]]] üzenethivatkozásait a canary/ptb aldomainek eltávolításával a következetesség érdekében"
+    },
+    "notificationTitle":{
+        "description":"Részletes értesítési címeket ad hozzá, amelyek a feladó, a csatorna és a szerver adatait mutatják"
+    },
+    "orbolayBridge":{
+        "description":"Bridge beépülő modul az Orbolay overlay integrációjához, amely lehetővé teszi a hangállapot-szinkronizálást és az üzenetértesítéseket",
+        "settings":{
+            "alignmentOptions":{
+                "bottomLeft":"Bal alsó",
+                "bottomRight":"Jobb alsó",
+                "topLeft":"Bal felső",
+                "topRight":"Jobb felső"
+            },
+            "isKeybindEnabled":"Engedélyezze a billentyűkombináció támogatását az Orbolay-vezérlők számára",
+            "messageAlignment":"Igazítási pozíció az üzenetfedéshez",
+            "messagesSemitransparent":"Tedd félig átlátszóvá az üzeneteket",
+            "port":"Az Orbolay WebSocket kapcsolat portszáma",
+            "userAlignment":"Igazítási pozíció a felhasználói fedvényhez",
+            "voiceSemitransparent":"Tegye félig átlátszóvá a hangfedvényt"
+        }
     },
     "partyMode":{
         "description":"Engedélyezze a party mód effektusait konfettivel és képernyőrázással",
@@ -2015,6 +2057,21 @@
             "translate":"Fordítás"
         }
     },
+    "triviaAI":{
+        "description":"Egy bővítmény, amely segít megválaszolni a triviális kérdéseket az AI segítségével.",
+        "settings":{
+            "apiKey":"API gomb.",
+            "autoRespond":"Automatikusan válaszol az üzenetekre, amikor választ kap.",
+            "endpoint":"OpenAI-kompatibilis AI végpont.",
+            "maxTokens":"A tokenek maximális száma a válaszban.",
+            "model":"Használható AI modell.",
+            "supportImages":"Adja át a képeket az AI-nak kontextusként (ha van ilyen). Ezt nem minden modell támogatja.",
+            "systemPrompt":"Rendszerkérdés az AI-hoz."
+        },
+        "ui":{
+            "answerWithAI":"Válaszoljon AI-val"
+        }
+    },
     "unitConverter":{
         "description":"Mértékegységek konvertálása üzenetekben (birodalmi/metrikus)",
         "popover":{
@@ -2171,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Gyors műveleti gombokat (csevegés, némítás, süket) ad a hangcsatorna felhasználóinak",
+        "options":{
+            "both":"Mindkét",
+            "disable":"Kikapcsolás",
+            "display":"Megjelenítés",
+            "globalName":"Globális név",
+            "hide":"Elrejt",
+            "left":"Balra",
+            "right":"Jobbra",
+            "username":"Felhasználónév"
+        },
         "settings":{
-            "showChatButton":"Csevegés gomb megjelenítése",
-            "showDeafenButton":"Süket gomb megjelenítése",
-            "showMuteButton":"Mutassa a némító gombot"
+            "buttonPosition":"Válassza ki, hová helyezze el a hanggombokat a hangfelhasználói sorban.",
+            "disableVideo":"Bekapcsolja a videójukat, ha a fülsiketítő gombra kattint.",
+            "muteSoundboard":"Bekapcsolja a hangfalukat a fülsiketítő gombra kattintva.",
+            "serverSelf":"Deafen / Mute magad a szerveren a némítás/süket használatakor.",
+            "showButtonsSelf":"Függetlenül attól, hogy saját felhasználója számára kíván-e gombokat megjeleníteni. Ugyanaz a funkcionalitás, mint a többi gomb(ok), kivéve, hogy megnyitja a DM panelt, és a gomb(ok)ra kattintva elnémítja/süketíti magát.",
+            "showChatButton":"Meg akarja-e jeleníteni a csevegés gombot",
+            "showDeafenButton":"Meg akarja-e jeleníteni a süketítő gombot",
+            "showMuteButton":"Meg akarja-e jeleníteni a némító gombot",
+            "useServer":"Használja a szerver némítását/süketítését a helyi helyett, ha rendelkezik engedéllyel.",
+            "whichNameToShow":"Válassza ki, hogy a becenév vagy a felhasználónév megjelenjen-e az elemleírásban."
         }
     },
     "voiceChannelLog":{
@@ -2199,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Süketítsd meg mindet",
             "disconnectAll":"Válassza le az összeset",
+            "mentionAllUsers":"Minden felhasználó megemlítése",
             "moveAll":"Az összes áthelyezése",
             "muteAll":"Az összes némítása",
             "undeafenAll":"Undeafen minden",
@@ -2345,14 +2420,49 @@
         },
         "toasts":{
             "added":"\"{name}\" hozzáadva a listához",
+            "addedBulk":"[[PH0]]] hangulatjelek hozzáadva a listához, {skipped} már szerepel a listán",
             "alreadyInList":"A „{name}” már szerepel a listán",
-            "removed":"\"{name}\" eltávolítva a listáról"
+            "exported":"A hangulatjelek sikeresen exportálva",
+            "importFailed":"Nem sikerült importálni a hangulatjeleket: {error}",
+            "imported":"A hangulatjelek sikeresen importálva",
+            "notInList":"A „{name}” nem szerepel a listában",
+            "removed":"\"{name}\" eltávolítva a listáról",
+            "removedBulk":"A {count} hangulatjelek eltávolítva a listáról",
+            "reset":"Hangulatjelek visszaállítása"
         },
         "ui":{
             "defaultEmojis":"Alapértelmezett hangulatjelek",
             "guildEmojis":"{guild} Hangulatjelek",
             "noEmojis":"Nincsenek hangulatjelek az engedélyezőlistán.",
             "removeAll":"Összes eltávolítása"
+        }
+    },
+    "whosWatching":{
+        "description":"Nézze meg, ki nézi a képernyőmegosztást vagy a streameket",
+        "settings":{
+            "showPanel":"A nézők megjelenítése a képernyőmegosztási panel alatt"
+        },
+        "ui":{
+            "noSpectators":"Nincsenek nézők",
+            "spectators":"Nézők"
+        }
+    },
+    "wigglyText":{
+        "about":{
+            "circle":"körbe a )~text~^(",
+            "description":"A szöveg mozgását a következőkkel állíthatja be:",
+            "leftRight":"balra és jobbra a <~text~> beírásával",
+            "upDown":"fel és le a ^~text~^ beírásával"
+        },
+        "description":"Szöveg mozgatása speciális szintaxissal (~text~)",
+        "settings":{
+            "intensity":"Az animáció intenzitása px-ben"
+        }
+    },
+    "writeUpperCase":{
+        "description":"A mondatok első betűjének automatikus írása",
+        "settings":{
+            "blockedWords":"Karakterláncok, amelyek nem írhatók nagybetűvel (vesszővel válassza el)"
         }
     },
     "youtubeDescription":{

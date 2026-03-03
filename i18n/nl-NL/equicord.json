@@ -541,6 +541,7 @@
             "noMirroredCamera":"Voorkomt dat de camera op uw scherm wordt gespiegeld",
             "refreshSlashCommands":"Vernieuwt Slash-opdrachten om nieuw toegevoegde opdrachten weer te geven zonder uw client opnieuw op te starten.",
             "removeActivitySection":"Verwijdert het activiteitengedeelte boven de ledenlijst",
+            "restoreFileDownloadButton":"Voegt de knop Downloaden weer toe in de rechterbovenhoek van bestanden",
             "showYourOwnActivityButtons":"Discord verbergt om de een of andere reden je eigen activiteitsknoppen"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Sluiten",
             "open":"Open"
+        }
+    },
+    "hideMessages":{
+        "description":"Een plug-in om berichten tijdelijk te verbergen totdat u opnieuw opstart.",
+        "settings":{
+            "hidePopoverButton":"Verberg de knop Verbergen in de berichtenpopover."
+        },
+        "ui":{
+            "hide":"Verbergen"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Verwijdert Nitro-upsells door uw premiumtype te overschrijven"
     },
+    "noPushToTalk":{
+        "description":"Omzeilt de push-to-talk-vereiste voor spraakactiviteit in kanalen die dit afdwingen."
+    },
     "noRPC":{
         "description":"Schakelt de Rich Presence (RPC)-functie van Discord uit"
     },
@@ -2044,6 +2057,21 @@
             "translate":"Vertalen"
         }
     },
+    "triviaAI":{
+        "description":"Een plug-in waarmee u trivia-vragen kunt beantwoorden met behulp van AI.",
+        "settings":{
+            "apiKey":"API Toets.",
+            "autoRespond":"Automatisch reageren op berichten wanneer u een reactie ontvangt.",
+            "endpoint":"OpenAI-compatibel AI-eindpunt.",
+            "maxTokens":"Maximaal aantal tokens in het antwoord.",
+            "model":"AI-model om te gebruiken.",
+            "supportImages":"Geef afbeeldingen door aan de AI voor context (indien aanwezig). Dit wordt niet door alle modellen ondersteund.",
+            "systemPrompt":"Systeemprompt voor de AI."
+        },
+        "ui":{
+            "answerWithAI":"Antwoord met AI"
+        }
+    },
     "unitConverter":{
         "description":"Eenheden in berichten converteren (imperiaal/metrisch)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Voegt snelle actieknoppen toe (chatten, dempen, doof maken) voor gebruikers van spraakkanalen",
+        "options":{
+            "both":"Beide",
+            "disable":"Uitschakelen",
+            "display":"Weergave",
+            "globalName":"Globale naam",
+            "hide":"Verbergen",
+            "left":"Links",
+            "right":"Rechts",
+            "username":"Gebruikersnaam"
+        },
         "settings":{
-            "showChatButton":"Chatknop tonen",
-            "showDeafenButton":"Toon dove knop",
-            "showMuteButton":"Toon mute-knop"
+            "buttonPosition":"Kies waar u stemknoppen wilt plaatsen in de stemgebruikersrij.",
+            "disableVideo":"Schakelt hun video in door op de dove knop te klikken.",
+            "muteSoundboard":"Schakelt hun klankbord in en uit door op de dove knop te klikken.",
+            "serverSelf":"Doof / Demp uzelf op de server wanneer u mute/deafen gebruikt.",
+            "showButtonsSelf":"Of u knoppen voor uw eigen gebruiker wilt weergeven. Dezelfde functionaliteit als andere knop(pen), behalve dat het het DM-paneel opent en voor jezelf dempt/verdooft als je op de knop(pen) klikt.",
+            "showChatButton":"Of u de chatknop wilt weergeven",
+            "showDeafenButton":"Of u de doofknop wilt weergeven",
+            "showMuteButton":"Of u de mute-knop wilt weergeven",
+            "useServer":"Gebruik server mute/deafen in plaats van lokaal als u daarvoor toestemming heeft.",
+            "whichNameToShow":"Kies of u de bijnaam of gebruikersnaam in de tooltip wilt weergeven."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Verdoof allemaal",
             "disconnectAll":"Ontkoppel alles",
+            "mentionAllUsers":"Noem alle gebruikers",
             "moveAll":"Verplaats alles",
             "muteAll":"Demp alles",
             "undeafenAll":"Ondoof allemaal",

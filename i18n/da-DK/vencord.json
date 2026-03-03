@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Linket er kopieret!",
+            "maxAdditionalEmojis":"komma/nylinje adskilt, maks. {count}",
             "messageContentCopied":"Beskedens indhold er kopieret!",
             "messageIdCopied":"Besked-id kopieret!",
+            "selectAdditionalEmojis":"Vælg Yderligere emojis",
+            "selectEmojiForReactions":"Vælg Emoji for reaktioner",
             "userIdCopied":"Bruger-id kopieret!"
         }
     },

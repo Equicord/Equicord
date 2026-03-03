@@ -541,6 +541,7 @@
             "noMirroredCamera":"Prevents the camera from being mirrored on your screen",
             "refreshSlashCommands":"Refreshes Slash Commands to show newly added commands without restarting your client.",
             "removeActivitySection":"Removes the activity section above member list",
+            "restoreFileDownloadButton":"Adds back the Download button at the top right corner of files",
             "showYourOwnActivityButtons":"Discord hides your own activity buttons for some reason"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Close",
             "open":"Open"
+        }
+    },
+    "hideMessages":{
+        "description":"A plugin to temporarily hide messages until you restart.",
+        "settings":{
+            "hidePopoverButton":"Hide the hide button in the message popover."
+        },
+        "ui":{
+            "hide":"Hide"
         }
     },
     "hideServers":{
@@ -1497,6 +1507,9 @@
     "noNitroUpsell":{
         "description":"Removes Nitro upsells by overriding your premium type"
     },
+    "noPushToTalk":{
+        "description":"Bypasses the push-to-talk requirement for voice activity in channels that enforce it."
+    },
     "noRPC":{
         "description":"Disables Discord's Rich Presence (RPC) feature"
     },
@@ -2032,6 +2045,21 @@
             "translate":"Translate"
         }
     },
+    "triviaAI":{
+        "description":"A plugin that helps you answer trivia questions using AI.",
+        "settings":{
+            "apiKey":"API Key.",
+            "autoRespond":"Automatically respond to messages on receiving a response.",
+            "endpoint":"OpenAI Compatible AI Endpoint.",
+            "maxTokens":"Maximum number of tokens in the response.",
+            "model":"AI Model to use.",
+            "supportImages":"Pass images to the AI for context (if any). This is not supported by all models.",
+            "systemPrompt":"System Prompt for the AI."
+        },
+        "ui":{
+            "answerWithAI":"Answer With AI"
+        }
+    },
     "unitConverter":{
         "description":"Convert units in messages (imperial/metric)",
         "popover":{
@@ -2188,10 +2216,27 @@
     },
     "voiceButtons":{
         "description":"Adds quick action buttons (chat, mute, deafen) to voice channel users",
+        "options":{
+            "both":"Both",
+            "disable":"Disable",
+            "display":"Display",
+            "globalName":"Global Name",
+            "hide":"Hide",
+            "left":"Left",
+            "right":"Right",
+            "username":"Username"
+        },
         "settings":{
-            "showChatButton":"Show chat button",
-            "showDeafenButton":"Show deafen button",
-            "showMuteButton":"Show mute button"
+            "buttonPosition":"Choose where to place voice buttons in the voice user row.",
+            "disableVideo":"Toggles their video upon clicking deafen button.",
+            "muteSoundboard":"Toggles their soundboard upon clicking deafen button.",
+            "serverSelf":"Deafen / Mute yourself on the server when using mute/deafen.",
+            "showButtonsSelf":"Whether you want to display buttons for your own user. Same functionality as other button(s) except it'll open DMs panel and mute/deafen for yourself upon clicking button(s).",
+            "showChatButton":"Whether you want to display the chat button",
+            "showDeafenButton":"Whether you want to display the deafen button",
+            "showMuteButton":"Whether you want to display the mute button",
+            "useServer":"Use server mute/deafen instead of local when you have permission.",
+            "whichNameToShow":"Choose whether to show nickname or username in tooltip."
         }
     },
     "voiceChannelLog":{
@@ -2216,6 +2261,7 @@
         "contextMenu":{
             "deafenAll":"Deafen all",
             "disconnectAll":"Disconnect all",
+            "mentionAllUsers":"Mention all Users",
             "moveAll":"Move all",
             "muteAll":"Mute all",
             "undeafenAll":"Undeafen all",

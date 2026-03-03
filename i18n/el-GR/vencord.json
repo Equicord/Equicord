@@ -913,8 +913,11 @@
         },
         "ui":{
             "linkCopied":"Ο σύνδεσμος αντιγράφηκε!",
+            "maxAdditionalEmojis":"διαχωρισμένα κόμμα/νέα γραμμή, μέγ. {count}",
             "messageContentCopied":"Το περιεχόμενο του μηνύματος αντιγράφηκε!",
             "messageIdCopied":"Το αναγνωριστικό μηνύματος αντιγράφηκε!",
+            "selectAdditionalEmojis":"Επιλέξτε Πρόσθετα Emojis",
+            "selectEmojiForReactions":"Επιλέξτε Emoji For Reactions",
             "userIdCopied":"Το αναγνωριστικό χρήστη αντιγράφηκε!"
         }
     },
