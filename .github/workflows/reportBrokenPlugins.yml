@@ -33,12 +33,8 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
-              if: ${{ github.event_name == 'schedule' }}
               with:
-                  ref: dev
-
-            - uses: actions/checkout@v4
-              if: ${{ github.event_name == 'workflow_dispatch' }}
+                  ref: ${{ github.event_name == 'schedule' && 'dev' || github.ref }}
 
             - uses: pnpm/action-setup@v3 # Install pnpm using packageManager key in package.json
 
@@ -58,7 +54,7 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  pnpm install --frozen-lockfile
+                  pnpm install --frozen-lockfile --prefer-offline
 
             - name: Build Equicord Reporter Version
               run: pnpm buildReporter
