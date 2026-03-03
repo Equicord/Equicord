@@ -1,1 +1,37 @@
-{}
+{
+	"commands":{
+		"errorExecuting":"Vykdant komandą „{name}“ įvyko klaida"
+	},
+	"memberListDecorators":{
+		"fallback":"Nepavyko pateikti {key} narių sąrašo dekoratoriaus"
+	},
+	"messageAccessories":{
+		"fallback":"Nepavyko pateikti {key} pranešimo priedo"
+	},
+	"messageDecorations":{
+		"fallback":"Nepavyko pateikti {key} pranešimo papuošimo"
+	},
+	"notices":{
+		"fallback":"Rodant pranešimą įvyko klaida"
+	},
+	"notifications":{
+		"dismissNotification":"Atmesti pranešimą",
+		"logs":{
+			"body_one":"Tai visam laikui pašalins {count} pranešimą. Šio veiksmo anuliuoti negalima.",
+			"body_other":"Tai visam laikui pašalins {count} pranešimus. Šio veiksmo anuliuoti negalima.",
+			"body_zero":"Nepasirinktas joks pranešimas.",
+			"cancel":"Nesvarbu",
+			"clearNotificationLog":"Išvalyti pranešimų žurnalą",
+			"confirm":"Padaryk tai!",
+			"title":"Ar esi tikras?"
+		},
+		"missedNotifications":{
+			"body_one":"{count} gautas pranešimas",
+			"body_other":"Gauti {count} pranešimai",
+			"title":"Kol tu buvai išvykęs"
+		},
+		"noNotifications":"Pranešimų dar nėra",
+		"notificationLog":"Pranešimų žurnalas",
+		"notificationSettings":"Pranešimų Nustatymai"
+	}
+}
