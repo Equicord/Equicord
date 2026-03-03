@@ -4,19 +4,25 @@ on:
         branches:
             - main
             - dev
+
     pull_request:
         branches:
             - main
             - dev
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
-    Test:
-        name: Test
+    Lint:
+        name: Lint
         runs-on: ubuntu-latest
+        timeout-minutes: 5
 
         steps:
             - uses: actions/checkout@v4
-            - uses: pnpm/action-setup@v3 # Install pnpm using packageManager key in package.json
+            - uses: pnpm/action-setup@v3
 
             - name: Use Node.js 20
               uses: actions/setup-node@v4
@@ -24,14 +30,109 @@ jobs:
                   node-version: 20
                   cache: "pnpm"
 
+            - name: Cache node_modules
+              uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            - name: Lint & Test if desktop version compiles
-              run: pnpm test
+            - name: Run ESLint
+              run: pnpm lint
 
-            - name: Test if web version compiles
+            - name: Run Stylelint
+              run: pnpm lint-styles
+
+    TypeCheck:
+        name: Type Check
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+
+        steps:
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v3
+
+            - name: Use Node.js 20
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: "pnpm"
+
+            - name: Cache node_modules
+              uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Run TypeScript
+              run: pnpm testTsc
+
+    BuildDesktop:
+        name: Build Desktop
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v3
+
+            - name: Use Node.js 20
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: "pnpm"
+
+            - name: Cache node_modules
+              uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Build desktop
+              run: pnpm buildStandalone
+
+    BuildWeb:
+        name: Build Web & Validate Plugins
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v3
+
+            - name: Use Node.js 20
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: "pnpm"
+
+            - name: Cache node_modules
+              uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Build web
               run: pnpm buildWeb
 
-            - name: Test if plugin structure is valid
+            - name: Validate plugin structure
               run: pnpm generatePluginJson

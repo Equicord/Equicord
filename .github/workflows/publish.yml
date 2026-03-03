@@ -4,6 +4,10 @@ on:
         branches:
             - main
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
 env:
     FORCE_COLOR: true
 
@@ -13,6 +17,7 @@ permissions:
 jobs:
     release:
         runs-on: ubuntu-latest
+        timeout-minutes: 15
 
         steps:
             - uses: actions/checkout@v4
@@ -68,6 +73,15 @@ jobs:
               with:
                   node-version: 20
                   cache: "pnpm"
+
+            - name: Cache node_modules
+              if: steps.check.outputs.release == 'true'
+              uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node_modules-
 
             - name: Install dependencies
               if: steps.check.outputs.release == 'true'
