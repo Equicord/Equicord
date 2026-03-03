@@ -1,1 +1,10 @@
-{}
+{
+    "description": "Padeda išversti Equicord",
+    "settings": {
+        "forceLocale": {
+            "description": "Priverskite naudoti kitą lokalę Equicord",
+            "followDiscord": "Numatytasis (sekite Discord)"
+        },
+        "showMissingKeys": "Jei dabartinėje lokalėje trūksta vertimų, rodykite klavišus, o ne grįžkite į anglų kalbą"
+    }
+}
