@@ -267,6 +267,12 @@
     "cleanerChannelGroups": {
         "description": "Hides all channels in collapsed categories, even if they have unread messages."
     },
+    "clickableRoles": {
+        "description": "Click on roles in user profiles and the member list to see which members have them.",
+        "loadingMembers": "Loading members...",
+        "noMembers": "No members found.",
+        "andNumMore": "and {count} more"
+    },
     "clientSideBlock": {
         "description": "Allows you to locally hide almost all content from any user",
         "settings": {
@@ -428,14 +434,13 @@
         }
     },
     "declutter": {
-        "description": "Declutter discord ui by removing unwanted elements such as profile customizations, shops, quests and more.",
+        "description": "Cleans up Discord by removing non-essential UI elements like profile effects, shop tabs, boosts, and more.",
         "settings": {
             "removeNameplate": "Remove nameplate styling.",
             "removeAudioMenus": "Remove menus next to mute and deafen buttons.",
             "alwaysShowUsername": "Always show username instead of status.",
             "removeButtonTooltips": "Remove button tooltips.",
             "removeAvatarDecoration": "Remove avatar decoration.",
-            "removeUsernameStyles": "Remove username colors and effects.",
             "removeShopAboveDM": "Remove shops above DMs list.",
             "removeQuestsAboveDM": "Remove quests above DMs list.",
             "removeServerBoostInfo": "Remove server boost info above channel list.",
@@ -448,7 +453,8 @@
         "headers": {
             "userProfile": "User Profile",
             "friendsList": "Above Friends/DMs List",
-            "misc": "Misc"
+            "misc": "Misc",
+            "accessibilityNotice": "Discord already has a built-in username style option in Accessibility settings."
         }
     },
     "disableCameras": {

@@ -12,6 +12,7 @@ import { classNameFactory } from "@utils/css";
 import { openUserProfile } from "@utils/discord";
 import { isTruthy } from "@utils/guards";
 import { Logger } from "@utils/Logger";
+import { t, Translate } from "@utils/translation";
 import definePlugin from "@utils/types";
 import type { Role } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
@@ -94,9 +95,17 @@ function RoleMembersList({ roleId, guildId, closePopout, setPopoutRef }: { roleI
             </div>
             <ScrollerThin className={cl("list")} fade>
                 {loading ? (
-                    <div className={cl("empty")}>Loading members...</div>
+                    <div className={cl("empty")}>
+                        <Translate i18nKey="clickableRoles.loadingMembers">
+                            Loading members...
+                        </Translate>
+                    </div>
                 ) : users.length === 0 ? (
-                    <div className={cl("empty")}>No members found.</div>
+                    <div className={cl("empty")}>
+                        <Translate i18nKey="clickableRoles.noMembers">
+                            No members found.
+                        </Translate>
+                    </div>
                 ) : users.map(user => (
                     <div
                         key={user.id}
@@ -111,7 +120,11 @@ function RoleMembersList({ roleId, guildId, closePopout, setPopoutRef }: { roleI
                     </div>
                 ))}
                 {totalCount > MAX_VISIBLE_MEMBERS && (
-                    <div className={cl("overflow")}>and {totalCount - MAX_VISIBLE_MEMBERS} more</div>
+                    <div className={cl("overflow")}>
+                        <Translate i18nKey="clickableRoles.andNumMore" variables={{ count: totalCount - MAX_VISIBLE_MEMBERS }}>
+                            and {(totalCount - MAX_VISIBLE_MEMBERS).toString()} more
+                        </Translate>
+                    </div>
                 )}
             </ScrollerThin>
         </div>
@@ -145,7 +158,7 @@ const WrappedClickableRole = ErrorBoundary.wrap(ClickableRole, { noop: true });
 
 export default definePlugin({
     name: "ClickableRoles",
-    description: "Click on roles in user profiles and the member list to see which members have them.",
+    description: t("clickableRoles.description"),
     authors: [Devs.prism],
 
     patches: [
