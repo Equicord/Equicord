@@ -289,6 +289,12 @@
 	"cleanerChannelGroups":{
 		"description":"Skryje všechny kanály ve sbalených kategoriích, i když obsahují nepřečtené zprávy."
 	},
+	"clickableRoles":{
+		"andNumMore":"a {count} další",
+		"description":"Kliknutím na role v uživatelských profilech a seznamu členů zjistíte, kteří členové je mají.",
+		"loadingMembers":"Načítání členů...",
+		"noMembers":"Nebyli nalezeni žádní členové."
+	},
 	"clientSideBlock":{
 		"description":"Umožňuje lokálně skrýt téměř veškerý obsah před jakýmkoli uživatelem",
 		"reply":{
@@ -450,7 +456,28 @@
 		}
 	},
 	"declutter":{
-		"description":"Vyčistí Discord odstraněním nepodstatných UI prvků, jako jsou efekty profilu, karty obchodů, vylepšení a další."
+		"description":"Vyčistí Discord odstraněním nepodstatných UI prvků, jako jsou efekty profilu, karty obchodů, vylepšení a další.",
+		"headers":{
+			"accessibilityNotice":"Discord již má vestavěnou možnost stylu uživatelského jména v nastavení usnadnění.",
+			"friendsList":"Nad seznamem přátel/DM",
+			"misc":"Různé",
+			"userProfile":"Uživatelský profil"
+		},
+		"settings":{
+			"alwaysShowUsername":"Vždy zobrazovat uživatelské jméno místo stavu.",
+			"removeAudioMenus":"Odstraňte nabídky vedle tlačítek ztlumení a ohlušení.",
+			"removeAvatarDecoration":"Odstraňte ozdobu avatara.",
+			"removeBillingSettings":"Odebrat nastavení fakturace.",
+			"removeButtonTooltips":"Odebrat popisky tlačítek.",
+			"removeClanTag":"Odstraňte klanové štítky.",
+			"removeGiftButton":"Tlačítko Odebrat dárek.",
+			"removeNameplate":"Odstraňte styl štítku.",
+			"removeProfileEffect":"Odebrat efekty animace profilu při otevření.",
+			"removeQuestsAboveDM":"Odstraňte questy nad seznamem DM.",
+			"removeServerBoostInfo":"Odebrat informace o posílení serveru nad seznamem kanálů.",
+			"removeShopAboveDM":"Odebrat obchody nad seznamem DM.",
+			"removeUnavailableEmojiPicker":"Odstraňte nedostupné kategorie z výběru emodži."
+		}
 	},
 	"disableCameras":{
 		"description":"Ve výchozím nastavení deaktivuje kamery během hovoru"
