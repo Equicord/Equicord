@@ -60,12 +60,6 @@ export const settings = definePluginSettings({
         default: true,
         restartNeeded: true
     },
-    removeUsernameStyles: {
-        type: OptionType.BOOLEAN,
-        description: "Remove username colors and effects.",
-        default: true,
-        restartNeeded: true
-    },
     friendsListHeader: {
         type: OptionType.COMPONENT,
         component: () => SectionSeparator("Above Friends/DMs List"),
@@ -73,7 +67,7 @@ export const settings = definePluginSettings({
     removeShopAboveDM: {
         type: OptionType.BOOLEAN,
         description: "Remove shops above DMs list.",
-        default: true,
+        default: false,
         restartNeeded: true,
     },
     removeQuestsAboveDM: {
@@ -147,7 +141,7 @@ function SectionSeparator(title: string) {
 
 export default definePlugin({
     name: "Declutter",
-    description: "Declutter discord ui by removing unwanted elements such as profile customizations, shops, quests and more.",
+    description: "Cleans up Discord by removing non-essential UI elements like profile effects, shop tabs, boosts, and more.",
     authors: [EquicordDevs.Leon135, Devs.prism, Devs.Kyuuhachi],
     settings,
     patches: [
@@ -188,20 +182,13 @@ export default definePlugin({
             predicate: () => settings.store.removeClanTag,
         },
         {
-            // Username styles and allways show username
+            // Always show username
             find: ".NITRO_PRIVACY_PERK_BETA_COACHMARK));",
-            replacement: [
-                {
-                    match: /displayNameStyles:(\i),/,
-                    replace: "displayNameStyles:void 0,",
-                    predicate: () => settings.store.removeUsernameStyles
-                },
-                {
-                    match: /hoverText:(\i),forceHover:\i,children:/g,
-                    replace: "hoverText:$1,forceHover:!0,children:",
-                    predicate: () => settings.store.alwaysShowUsername
-                },
-            ],
+            replacement: {
+                match: /hoverText:(\i),forceHover:\i,children:/g,
+                replace: "hoverText:$1,forceHover:!0,children:"
+            },
+            predicate: () => settings.store.alwaysShowUsername
         },
         {
             // Button tooltips in user area
