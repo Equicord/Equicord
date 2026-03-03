@@ -47,10 +47,7 @@ export default function ProfileSongs({ userId, isSidebar }: ProfileSongsProps) {
     const [failed, setFailed] = useState(false);
     const { isAuthorized } = useAuthorizationStore();
     const { users } = useSongStore();
-    const { profileSongsLimit, collapseSongList } = settings.use([
-        "profileSongsLimit",
-        "collapseSongList",
-    ]);
+    const { profileSongsLimit, collapseSongList } = settings.use();
 
     const data = users[userId]?.data;
     useEffect(() => {
