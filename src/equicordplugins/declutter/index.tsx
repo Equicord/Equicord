@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./style.css";
+
 import { definePluginSettings, migratePluginSetting, migratePluginSettings } from "@api/Settings";
 import { Divider } from "@components/Divider";
 import { HeadingSecondary } from "@components/Heading";
 import { Notice } from "@components/Notice";
+import { classNameFactory } from "@utils/css";
 import { Devs, EquicordDevs } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 
@@ -25,6 +28,8 @@ const migrationsAnammox = [
 for (const [oldKey, newKey] of migrationsAnammox) {
     migratePluginSetting("Declutter", newKey, oldKey);
 }
+
+const cl = classNameFactory("vc-declutter-");
 
 export const settings = definePluginSettings({
     userProfileHeader: {
@@ -64,7 +69,7 @@ export const settings = definePluginSettings({
     accessibilityNotice: {
         type: OptionType.COMPONENT,
         component: () => (
-            <Notice.Info style={{ marginTop: 8, marginBottom: 8 }}>
+            <Notice.Info className={cl("accessibility-notice")}>
                 Discord already has a built-in username style option in Accessibility settings.
             </Notice.Info>
         )
@@ -129,19 +134,9 @@ export const settings = definePluginSettings({
 
 function SectionSeparator(title: string) {
     return (
-        <div style={{ marginTop: 12, marginBottom: 6 }}>
+        <div className={cl("section-separator")}>
             <Divider />
-            <HeadingSecondary
-                style={{
-                    marginTop: 14,
-                    marginBottom: 0,
-                    fontSize: 16,
-                    lineHeight: "20px",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.02em",
-                    color: "var(--text-muted)"
-                }}
-            >
+            <HeadingSecondary className={cl("section-title")}>
                 {title}
             </HeadingSecondary>
         </div>
