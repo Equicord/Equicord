@@ -1,1 +1,10 @@
-{}
+{
+	"notifications":{
+		"logs":{
+			"cancel":"ไม่เป็นไร",
+			"title":"คุณแน่ใจเหรอ?"
+		},
+		"notificationLog":"บันทึกการแจ้งเตือน",
+		"notificationSettings":"ตั้งค่าการแจ้งเตือน"
+	}
+}
