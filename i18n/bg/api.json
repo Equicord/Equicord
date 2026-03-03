@@ -1,1 +1,11 @@
-{}
+{
+	"notifications":{
+		"logs":{
+			"cancel":"Няма значение",
+			"clearNotificationLog":"Дневник на известията",
+			"title":"сигурен ли си"
+		},
+		"notificationLog":"Дневник на известията",
+		"notificationSettings":"Настройки за известията"
+	}
+}
