@@ -1,37 +1,37 @@
 {
-	"commands":{
-		"errorExecuting":"An Error occurred while executing command \"{name}\""
-	},
-	"memberListDecorators":{
-		"fallback":"No se pudo representar {key} Decorador de lista de miembros"
-	},
-	"messageAccessories":{
-		"fallback":"No se pudo representar el accesorio del mensaje {key}"
-	},
-	"messageDecorations":{
-		"fallback":"No se pudo representar {key} Decoración del mensaje"
-	},
-	"notices":{
-		"fallback":"Error al mostrar aviso"
-	},
-	"notifications":{
-		"dismissNotification":"Descartar notificación",
-		"logs":{
-			"body_one":"Esto eliminará permanentemente la notificación {count}. Esta acción no se puede deshacer.",
-			"body_other":"Esto eliminará permanentemente las notificaciones {count}. Esta acción no se puede deshacer.",
-			"body_zero":"No se seleccionó ninguna notificación.",
-			"cancel":"Olvídalo",
-			"clearNotificationLog":"Borrar registro de notificaciones",
-			"confirm":"¡Hazlo!",
-			"title":"¿Está seguro?"
-		},
-		"missedNotifications":{
-			"body_one":"{count} notificación recibida",
-			"body_other":"{count} notificaciones recibidas",
-			"title":"mientras estabas fuera"
-		},
-		"noNotifications":"Aún no hay notificaciones",
-		"notificationLog":"Registro de notificaciones",
-		"notificationSettings":"Ajustes de notificaciones"
-	}
+    "commands": {
+        "errorExecuting": "An Error occurred while executing command \"{name}\""
+    },
+    "memberListDecorators": {
+        "fallback": "No se pudo representar {key} Decorador de lista de miembros"
+    },
+    "messageAccessories": {
+        "fallback": "No se pudo representar el accesorio del mensaje {key}"
+    },
+    "messageDecorations": {
+        "fallback": "No se pudo representar {key} Decoración del mensaje"
+    },
+    "notices": {
+        "fallback": "Error al mostrar aviso"
+    },
+    "notifications": {
+        "dismissNotification": "Descartar notificación",
+        "logs": {
+            "body_one": "Esto eliminará permanentemente la notificación {count}. Esta acción no se puede deshacer.",
+            "body_other": "Esto eliminará permanentemente las notificaciones {count}. Esta acción no se puede deshacer.",
+            "body_zero": "No se seleccionó ninguna notificación.",
+            "cancel": "Olvídalo",
+            "clearNotificationLog": "Borrar registro de notificaciones",
+            "confirm": "¡Hazlo!",
+            "title": "¿Está seguro?"
+        },
+        "missedNotifications": {
+            "body_one": "{count} notificación recibida",
+            "body_other": "{count} notificaciones recibidas",
+            "title": "mientras estabas fuera"
+        },
+        "noNotifications": "Aún no hay notificaciones",
+        "notificationLog": "Registro de notificaciones",
+        "notificationSettings": "Ajustes de notificaciones"
+    }
 }

@@ -1,37 +1,37 @@
 {
-	"commands":{
-		"errorExecuting":"Došlo je do pogreške prilikom izvođenja naredbe \"{name}\""
-	},
-	"memberListDecorators":{
-		"fallback":"Nije uspjelo iscrtavanje {key} dekoratera popisa članova"
-	},
-	"messageAccessories":{
-		"fallback":"Nije uspjelo generiranje {key} pomoćnog uređaja za poruke"
-	},
-	"messageDecorations":{
-		"fallback":"Nije uspjelo iscrtavanje {key} ukrasa poruke"
-	},
-	"notices":{
-		"fallback":"Pogreška pri prikazu obavijesti"
-	},
-	"notifications":{
-		"dismissNotification":"Odbaci obavijest",
-		"logs":{
-			"body_one":"Ovo će trajno ukloniti {count} obavijest. Ova se radnja ne može poništiti.",
-			"body_other":"Ovo će trajno ukloniti {count} obavijesti. Ova se radnja ne može poništiti.",
-			"body_zero":"Nije odabrana nijedna obavijest.",
-			"cancel":"Nema veze",
-			"clearNotificationLog":"Očisti zapisnik obavijesti",
-			"confirm":"Učini to!",
-			"title":"Jeste li sigurni?"
-		},
-		"missedNotifications":{
-			"body_one":"{count} obavijest primljena",
-			"body_other":"{count} primljene obavijesti",
-			"title":"Dok vas nije bilo"
-		},
-		"noNotifications":"Još nema obavijesti",
-		"notificationLog":"Dnevnik obavijesti",
-		"notificationSettings":"Postavke obavijesti"
-	}
+    "commands": {
+        "errorExecuting": "Došlo je do pogreške prilikom izvođenja naredbe \"{name}\""
+    },
+    "memberListDecorators": {
+        "fallback": "Nije uspjelo iscrtavanje {key} dekoratera popisa članova"
+    },
+    "messageAccessories": {
+        "fallback": "Nije uspjelo generiranje {key} pomoćnog uređaja za poruke"
+    },
+    "messageDecorations": {
+        "fallback": "Nije uspjelo iscrtavanje {key} ukrasa poruke"
+    },
+    "notices": {
+        "fallback": "Pogreška pri prikazu obavijesti"
+    },
+    "notifications": {
+        "dismissNotification": "Odbaci obavijest",
+        "logs": {
+            "body_one": "Ovo će trajno ukloniti {count} obavijest. Ova se radnja ne može poništiti.",
+            "body_other": "Ovo će trajno ukloniti {count} obavijesti. Ova se radnja ne može poništiti.",
+            "body_zero": "Nije odabrana nijedna obavijest.",
+            "cancel": "Nema veze",
+            "clearNotificationLog": "Očisti zapisnik obavijesti",
+            "confirm": "Učini to!",
+            "title": "Jeste li sigurni?"
+        },
+        "missedNotifications": {
+            "body_one": "{count} obavijest primljena",
+            "body_other": "{count} primljene obavijesti",
+            "title": "Dok vas nije bilo"
+        },
+        "noNotifications": "Još nema obavijesti",
+        "notificationLog": "Dnevnik obavijesti",
+        "notificationSettings": "Postavke obavijesti"
+    }
 }

@@ -1,37 +1,37 @@
 {
-	"commands":{
-		"errorExecuting":"Възникна грешка при изпълнение на командата \"{name}\""
-	},
-	"memberListDecorators":{
-		"fallback":"Неуспешно изобразяване на {key} Декоратор на списък с членове"
-	},
-	"messageAccessories":{
-		"fallback":"Неуспешно изобразяване на {key} аксесоар за съобщения"
-	},
-	"messageDecorations":{
-		"fallback":"Неуспешно изобразяване на {key} декорация на съобщение"
-	},
-	"notices":{
-		"fallback":"Грешка при показване на известие"
-	},
-	"notifications":{
-		"dismissNotification":"Отхвърляне на известието",
-		"logs":{
-			"body_one":"Това ще премахне окончателно известието {count}. Това действие не може да бъде отменено.",
-			"body_other":"Това ще премахне за постоянно {count} известия. Това действие не може да бъде отменено.",
-			"body_zero":"Няма избрано известие.",
-			"cancel":"Няма значение",
-			"clearNotificationLog":"Изчистване на регистъра на известията",
-			"confirm":"направи го!",
-			"title":"сигурен ли си"
-		},
-		"missedNotifications":{
-			"body_one":"{count} известие е получено",
-			"body_other":"{count} известия са получени",
-			"title":"Докато те нямаше"
-		},
-		"noNotifications":"Все още няма известия",
-		"notificationLog":"Дневник на известията",
-		"notificationSettings":"Настройки за известията"
-	}
+    "commands": {
+        "errorExecuting": "Възникна грешка при изпълнение на командата \"{name}\""
+    },
+    "memberListDecorators": {
+        "fallback": "Неуспешно изобразяване на {key} Декоратор на списък с членове"
+    },
+    "messageAccessories": {
+        "fallback": "Неуспешно изобразяване на {key} аксесоар за съобщения"
+    },
+    "messageDecorations": {
+        "fallback": "Неуспешно изобразяване на {key} декорация на съобщение"
+    },
+    "notices": {
+        "fallback": "Грешка при показване на известие"
+    },
+    "notifications": {
+        "dismissNotification": "Отхвърляне на известието",
+        "logs": {
+            "body_one": "Това ще премахне окончателно известието {count}. Това действие не може да бъде отменено.",
+            "body_other": "Това ще премахне за постоянно {count} известия. Това действие не може да бъде отменено.",
+            "body_zero": "Няма избрано известие.",
+            "cancel": "Няма значение",
+            "clearNotificationLog": "Изчистване на регистъра на известията",
+            "confirm": "направи го!",
+            "title": "сигурен ли си"
+        },
+        "missedNotifications": {
+            "body_one": "{count} известие е получено",
+            "body_other": "{count} известия са получени",
+            "title": "Докато те нямаше"
+        },
+        "noNotifications": "Все още няма известия",
+        "notificationLog": "Дневник на известията",
+        "notificationSettings": "Настройки за известията"
+    }
 }
