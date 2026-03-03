@@ -541,6 +541,7 @@
             "noMirroredCamera":"Verhindert, dass die Kamera auf Ihrem Bildschirm gespiegelt wird",
             "refreshSlashCommands":"Aktualisiert Slash-Befehle, um neu hinzugefügte Befehle anzuzeigen, ohne Ihren Client neu starten zu müssen.",
             "removeActivitySection":"Entfernt den Aktivitätsbereich über der Mitgliederliste",
+            "restoreFileDownloadButton":"Fügt wieder die Schaltfläche „Herunterladen“ in der oberen rechten Ecke der Dateien hinzu",
             "showYourOwnActivityButtons":"Discord verbirgt aus irgendeinem Grund Ihre eigenen Aktivitätsschaltflächen"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Schließen",
             "open":"Offen"
+        }
+    },
+    "hideMessages":{
+        "description":"Ein Plugin zum vorübergehenden Ausblenden von Nachrichten bis zum Neustart.",
+        "settings":{
+            "hidePopoverButton":"Blenden Sie die Schaltfläche „Ausblenden“ im Nachrichten-Popover aus."
+        },
+        "ui":{
+            "hide":"Ausblenden"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Entfernt Nitro-Upsells durch Überschreiben Ihres Premium-Typs"
     },
+    "noPushToTalk":{
+        "description":"Umgeht die Push-to-Talk-Anforderung für Sprachaktivitäten in Kanälen, die dies erzwingen."
+    },
     "noRPC":{
         "description":"Deaktiviert die Rich Presence (RPC)-Funktion von Discord."
     },
@@ -2044,6 +2057,21 @@
             "translate":"Übersetzen"
         }
     },
+    "triviaAI":{
+        "description":"Ein Plugin, das Ihnen hilft, Quizfragen mithilfe von KI zu beantworten.",
+        "settings":{
+            "apiKey":"API-Taste.",
+            "autoRespond":"Reagieren Sie automatisch auf Nachrichten, wenn Sie eine Antwort erhalten.",
+            "endpoint":"OpenAI-kompatibler KI-Endpunkt.",
+            "maxTokens":"Maximale Anzahl von Tokens in der Antwort.",
+            "model":"Zu verwendendes KI-Modell.",
+            "supportImages":"Übergeben Sie Bilder für den Kontext an die KI (falls vorhanden). Dies wird nicht von allen Modellen unterstützt.",
+            "systemPrompt":"Systemaufforderung für die KI."
+        },
+        "ui":{
+            "answerWithAI":"Antworten Sie mit KI"
+        }
+    },
     "unitConverter":{
         "description":"Konvertieren Sie Einheiten in Nachrichten (imperial/metrisch)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Fügt Sprachkanalbenutzern Schnellaktionsschaltflächen (Chatten, Stummschalten, Betäuben) hinzu",
+        "options":{
+            "both":"Beide",
+            "disable":"Deaktivieren",
+            "display":"Anzeige",
+            "globalName":"Globaler Name",
+            "hide":"Ausblenden",
+            "left":"Links",
+            "right":"Rechts",
+            "username":"Benutzername"
+        },
         "settings":{
-            "showChatButton":"Chat-Button anzeigen",
-            "showDeafenButton":"Gehörlose Schaltfläche anzeigen",
-            "showMuteButton":"Stummschalttaste anzeigen"
+            "buttonPosition":"Wählen Sie aus, wo Sprachschaltflächen in der Sprachbenutzerzeile platziert werden sollen.",
+            "disableVideo":"Schaltet ihr Video um, wenn auf die Schaltfläche „Tauben“ geklickt wird.",
+            "muteSoundboard":"Schaltet den Soundboard um, wenn Sie auf die Schaltfläche „Tauben“ klicken.",
+            "serverSelf":"Machen Sie sich selbst auf dem Server taub/stumm, wenn Sie Stumm/Tauben verwenden.",
+            "showButtonsSelf":"Ob Sie Schaltflächen für Ihren eigenen Benutzer anzeigen möchten. Gleiche Funktionalität wie andere Schaltfläche(n), außer dass das DM-Panel geöffnet wird und Sie beim Klicken auf die Schaltfläche(n) stumm/taub werden.",
+            "showChatButton":"Ob Sie die Chat-Schaltfläche anzeigen möchten",
+            "showDeafenButton":"Ob Sie die ohrenbetäubende Schaltfläche anzeigen möchten",
+            "showMuteButton":"Ob Sie die Stummschalttaste anzeigen möchten",
+            "useServer":"Verwenden Sie die Server-Stumm-/Tauben-Funktion anstelle der lokalen Funktion, wenn Sie dazu berechtigt sind.",
+            "whichNameToShow":"Wählen Sie, ob Spitzname oder Benutzername im Tooltip angezeigt werden soll."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Alle taub machen",
             "disconnectAll":"Trennen Sie alle",
+            "mentionAllUsers":"Erwähnen Sie alle Benutzer",
             "moveAll":"Alles bewegen",
             "muteAll":"Alle stumm schalten",
             "undeafenAll":"Alle taub",

@@ -541,6 +541,7 @@
             "noMirroredCamera":"Förhindrar att kameran speglas på din skärm",
             "refreshSlashCommands":"Uppdaterar Slash-kommandon för att visa nyligen tillagda kommandon utan att starta om din klient.",
             "removeActivitySection":"Tar bort aktivitetsavsnittet ovanför medlemslistan",
+            "restoreFileDownloadButton":"Lägger till nedladdningsknappen i det övre högra hörnet av filer",
             "showYourOwnActivityButtons":"Discord döljer dina egna aktivitetsknappar av någon anledning"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Stäng",
             "open":"Öppna"
+        }
+    },
+    "hideMessages":{
+        "description":"Ett plugin för att tillfälligt dölja meddelanden tills du startar om.",
+        "settings":{
+            "hidePopoverButton":"Göm dölj-knappen i meddelandefönstret."
+        },
+        "ui":{
+            "hide":"Dölj"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Tar bort Nitro-merförsäljning genom att åsidosätta din premiumtyp"
     },
+    "noPushToTalk":{
+        "description":"Förbigår push-to-talk-kravet för röstaktivitet i kanaler som upprätthåller det."
+    },
     "noRPC":{
         "description":"Inaktiverar Discords RPC-funktion (Rich Presence)."
     },
@@ -2044,6 +2057,21 @@
             "translate":"Översätta"
         }
     },
+    "triviaAI":{
+        "description":"Ett plugin som hjälper dig att svara på triviafrågor med hjälp av AI.",
+        "settings":{
+            "apiKey":"API Tangent.",
+            "autoRespond":"Svara automatiskt på meddelanden när du får ett svar.",
+            "endpoint":"OpenAI-kompatibel AI-slutpunkt.",
+            "maxTokens":"Maximalt antal tokens i svaret.",
+            "model":"AI-modell att använda.",
+            "supportImages":"Skicka bilder till AI:n för sammanhang (om någon). Detta stöds inte av alla modeller.",
+            "systemPrompt":"Systemprompt för AI."
+        },
+        "ui":{
+            "answerWithAI":"Svara med AI"
+        }
+    },
     "unitConverter":{
         "description":"Konvertera enheter i meddelanden (imperial/metrisk)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Lägger till snabba åtgärdsknappar (chatta, tysta, döva) för röstkanalanvändare",
+        "options":{
+            "both":"Både",
+            "disable":"Inaktivera",
+            "display":"Visa",
+            "globalName":"Globalt namn",
+            "hide":"Dölj",
+            "left":"Vänster",
+            "right":"Rätt",
+            "username":"Användarnamn"
+        },
         "settings":{
-            "showChatButton":"Visa chattknapp",
-            "showDeafenButton":"Visa döva knapp",
-            "showMuteButton":"Visa avstängningsknapp"
+            "buttonPosition":"Välj var röstknapparna ska placeras i röstanvändarraden.",
+            "disableVideo":"Växlar deras video när du klickar på döva-knappen.",
+            "muteSoundboard":"Växlar deras soundboard när du klickar på döva-knappen.",
+            "serverSelf":"Döva / Döva dig själv på servern när du använder mute/deafen.",
+            "showButtonsSelf":"Oavsett om du vill visa knappar för din egen användare. Samma funktionalitet som andra knappar förutom att den öppnar DM-panelen och tystar/dövar för dig själv när du klickar på knapp(ar).",
+            "showChatButton":"Om du vill visa chattknappen",
+            "showDeafenButton":"Om du vill visa döva-knappen",
+            "showMuteButton":"Om du vill visa mute-knappen",
+            "useServer":"Använd server mute/deafen istället för lokal när du har tillstånd.",
+            "whichNameToShow":"Välj om du vill visa smeknamn eller användarnamn i verktygstipset."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Döva alla",
             "disconnectAll":"Koppla bort alla",
+            "mentionAllUsers":"Nämn alla användare",
             "moveAll":"Flytta alla",
             "muteAll":"Stäng av ljudet för alla",
             "undeafenAll":"Odöva alla",

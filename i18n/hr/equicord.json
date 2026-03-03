@@ -541,6 +541,7 @@
             "noMirroredCamera":"Sprječava zrcaljenje kamere na vašem zaslonu",
             "refreshSlashCommands":"Osvježava naredbe kose crte za prikaz novododanih naredbi bez ponovnog pokretanja klijenta.",
             "removeActivitySection":"Uklanja odjeljak aktivnosti iznad popisa članova",
+            "restoreFileDownloadButton":"Vraća gumb za preuzimanje u gornjem desnom kutu datoteka",
             "showYourOwnActivityButtons":"Discord iz nekog razloga skriva vaše gumbe aktivnosti"
         },
         "standing":{
@@ -914,6 +915,15 @@
             "open":"Otvoriti"
         }
     },
+    "hideMessages":{
+        "description":"Dodatak za privremeno skrivanje poruka do ponovnog pokretanja.",
+        "settings":{
+            "hidePopoverButton":"Sakrij gumb za skrivanje u skočnom prozoru poruke."
+        },
+        "ui":{
+            "hide":"Sakrij"
+        }
+    },
     "hideServers":{
         "description":"Omogućuje vam da sakrijete poslužitelje s popisa saveza i brzog prebacivanja desnim klikom na njih",
         "ui":{
@@ -945,19 +955,115 @@
     "husk":{
         "description":"Dodaje gumb Husk (provjerite postavke za promjenu korištenih emotikona)",
         "settings":{
+            "emojiID":"Emoji ID (zadano (s Vencord poslužitelja): 1026532993923293184)",
             "emojiName":"Ime emojija (zadano (s Vencord poslužitelja): husk)",
             "findInServer":"Pokušaj pronaći emoji istog naziva na poslužitelju prije upotrebe ID-a u postavkama (korisno ako nema nitro)"
+        },
+        "ui":{
+            "husk":"Mahuna"
+        }
+    },
+    "iRememberYou":{
+        "description":"Lokalno sprema sve s kojima ste komunicirali (uključujući poslužitelje), u slučaju gubitka",
+        "ui":{
+            "iRememberYou":"Sjećam te se"
+        }
+    },
+    "iconViewer":{
+        "description":"Dodaje novu karticu postavkama za pregled svih ikona.",
+        "ui":{
+            "iconFinder":"Tražilica ikona",
+            "openIconsTab":"Otvori karticu Ikone"
+        }
+    },
+    "idleAutoRestart":{
+        "description":"Automatski ponovno pokreće klijenta nakon mirovanja određeno vrijeme koje se može konfigurirati, ali izbjegava ponovno pokretanje dok ste u VC-u.",
+        "settings":{
+            "idleMinutes":"Minute neaktivnosti prije ponovnog pokretanja (kada nije u VC-u)",
+            "isEnabled":"Omogući automatsko ponovno pokretanje nakon mirovanja"
+        },
+        "ui":{
+            "disableAutoIdle":"Onemogući automatsko ponovno pokretanje u mirovanju",
+            "enableAutoIdle":"Omogući automatsko ponovno pokretanje u mirovanju"
+        }
+    },
+    "ignoreCalls":{
+        "description":"Omogućuje ignoriranje poziva određenih korisnika ili dm grupa.",
+        "settings":{
+            "permanentlyIgnoredUsers":"ID-ovi korisnika (zarez + razmak) koje treba trajno zanemariti"
+        },
+        "ui":{
+            "ignore":"Ignoriraj",
+            "permanentlyIgnore":"Trajno zanemarite pozive",
+            "temporarilyIgnore":"Privremeno zanemarite pozive"
+        }
+    },
+    "imgToGif":{
+        "commands":{
+            "height":"Visina gifa",
+            "image":"Prilog slike za korištenje",
+            "imgtogif":"Omogućuje pretvaranje slike u gif",
+            "width":"Širina gifa"
+        },
+        "description":"Dodaje naredbu /imgtogif kose crte za stvaranje gif-a iz bilo koje slike",
+        "errors":{
+            "noImage":"Nije navedena slika!",
+            "notAnImage":"Prijenos nije slika"
+        }
+    },
+    "inRole":{
+        "commands":{
+            "inrole":"Znati tko je u ulozi",
+            "role":"Uloga"
+        },
+        "description":"Saznajte tko je u ulozi pomoću kontekstnog izbornika uloge ili naredbe /inrole (pročitajte informacije o dodatku!)",
+        "errors":{
+            "makeSureServer":"Provjerite jeste li na poslužitelju."
+        },
+        "limitations":{
+            "description":"Ako nemate dopuštenja za mod na poslužitelju, a taj je poslužitelj velik (preko 100 članova), dodatak može biti ograničen na sljedeće načine:",
+            "friendsAlwaysShown":"Međutim, prijatelji će uvijek biti prikazani bez obzira na njihov status.",
+            "offlineNotListed":"Izvanmrežni članovi neće biti navedeni",
+            "title":":upozorenje: Ograničenja",
+            "upTo100":"Prema zadanim postavkama bit će navedeno do 100 članova. Da biste dobili više, pomaknite se prema dolje na popisu članova za učitavanje više članova."
+        },
+        "ui":{
+            "viewMembers":"Pregledajte članove u ulozi"
+        }
+    },
+    "ingtoninator":{
+        "description":"Dodaje sufiks 'ington' na slučajnu riječ u vašoj poruci",
+        "settings":{
+            "isEnabled":"Omogućite ili onemogućite Ingtoninator",
+            "showIcon":"Prikaži gumb za uključivanje i isključivanje dodatka Ingtoninator"
+        },
+        "ui":{
+            "disabled":"Ingtoninator onemogućen",
+            "enabled":"Ingtoninator omogućen"
         }
     },
     "instantScreenshare":{
+        "description":"Trenutačno dijeljenje zaslona kada se pridružite glasovnom kanalu s podrškom za izvore na radnoj površini, prozore i video ulazne uređaje (kamere, kartice za snimanje)",
         "info":{
+            "linux":"Za Linux",
+            "soundPreview":"Što se tiče postavki zvuka i pregleda",
             "soundPreviewInfo":"Koristimo postavke koje je postavio i koristio Discord kako bismo odlučili hoće li pretpregled streama i zvuk biti omogućeni ili ne",
+            "videoDevices":"Video uređaji",
             "videoDevicesInfo":"Podržava kamere i kartice za snimanje (kao što je Elgato HD60X) kada je omogućeno u postavkama",
+            "wayland":"Za Wayland iskače samo odabir dijeljenja zaslona",
             "x11":"Za X11 može i ne mora raditi :slegne ramenima:"
+        },
+        "ui":{
+            "instantScreenshare":"Trenutačno dijeljenje zaslona",
+            "instantScreenshareDisabled":"Instant dijeljenje zaslona onemogućeno",
+            "instantScreenshareEnabled":"Omogućeno trenutno dijeljenje zaslona"
         }
     },
     "invisibleChat":{
         "description":"Šifrirajte svoje poruke na nesumnjiv način!",
+        "settings":{
+            "savedPasswords":"Spremljene lozinke (odvojene s , )"
+        },
         "ui":{
             "decryptMessage":"Dešifriranje poruke",
             "encryptMessage":"Šifriranje poruke",
@@ -967,15 +1073,26 @@
     "inviteDefaults":{
         "description":"Omogućuje vam uređivanje zadanih vrijednosti prilikom stvaranja pozivnica poslužitelja.",
         "options":{
-            "forever":"Zauvijek"
+            "forever":"Zauvijek",
+            "infinite":"Beskonačno"
         },
         "settings":{
             "inviteDuration":"Trajanje poziva",
-            "maxUses":"Broj korištenja poziva"
+            "maxUses":"Broj korištenja poziva",
+            "temporaryMembership":"Privremeno članstvo"
         }
     },
     "jellyfinRichPresence":{
+        "coverTypeOptions":{
+            "episodeCover":"Naslovnica epizode",
+            "seriesCover":"Naslovnica serije"
+        },
         "description":"Bogata prisutnost za medijski poslužitelj Jellyfin",
+        "episodeFormatOptions":{
+            "fulltext":"Sezona 1 Epizoda 1",
+            "s01e01":"S01E01",
+            "short":"1x01"
+        },
         "howToGetApiKey":{
             "description":"Token za autentifikaciju možete pronaći slijedeći ove korake:",
             "title":"Kako dobiti API ključ",
@@ -1007,6 +1124,7 @@
             "watchingTvShow":"Gledanje TV emisije"
         },
         "settings":{
+            "apiKey":"Ključ Jellyfin API dobiven s nadzorne ploče Jellyfin administracije",
             "coverType":"Odaberite koju će naslovnicu prikazati tijekom gledanja TV emisije",
             "customName":"Naziv Custom Rich Presence (koristi se samo ako je odabrano 'Custom'). Opcije: {name}, {series}, {season}, {episode}, {artist}, {album}, {year}",
             "episodeFormat":"Format broja epizode",
@@ -1015,9 +1133,11 @@
             "privacyMode":"Način privatnosti (Sakrij medijske detalje poput naziva epizode/pjesme)",
             "serverUrl":"Jellyfin poslužitelj URL (npr. https://jellyfin.example.com)",
             "showEpisodeName":"Prikaži naziv epizode nakon informacija o sezoni/epizodi",
-            "showPausedState":"Prikaži bogatu prisutnost kada su mediji pauzirani"
+            "showPausedState":"Prikaži bogatu prisutnost kada su mediji pauzirani",
+            "userId":"Jellyfin korisnički ID dobiven iz vašeg korisničkog profila URL"
         },
         "state":{
+            "episode":"Epizoda {episode}",
             "paused":"Pauzirano",
             "season":"Sezona {season}"
         },
@@ -1029,18 +1149,23 @@
         "description":"Dodaje opcije kontekstnog izbornika za skok na početak ili dno kanala/DM-a.",
         "errors":{
             "channelNotAvailable":"Informacije o kanalu nisu dostupne.",
+            "failedJump":"Prelazak na poruku nije uspio. Provjerite konzolu za detalje.",
             "failedSearch":"Traženje poruka nije uspjelo.",
             "noMessagesFound":"Nema pronađenih poruka od ovog korisnika na ovom kanalu."
         },
         "ui":{
+            "jumpToFirst":"Skoči na prvu poruku",
             "jumpToLast":"Skoči na posljednju poruku",
+            "usersLastMessage":"Zadnja poruka korisnika",
             "yourLastMessage":"Vaša zadnja poruka"
         }
     },
     "jumpscare":{
+        "description":"Dodaje konfigurabilnu priliku da vas prestraše kad god otvorite kanal. Inspiriran Geometry Dash Mega Hackom",
         "settings":{
             "audioSource":"Postavlja audio url za jumpscare",
-            "chance":"Šansa da se dogodi preskok (1 u X, dakle: 100 = 1/100 ili 1%, 50 = 1/50 ili 2%, itd.)"
+            "chance":"Šansa da se dogodi preskok (1 u X, dakle: 100 = 1/100 ili 1%, 50 = 1/50 ili 2%, itd.)",
+            "imageSource":"Postavlja url slike jumpscarea"
         }
     },
     "keyboardNavigation":{
@@ -1057,12 +1182,26 @@
             "recording":"Snimanje..."
         }
     },
+    "keyboardSounds":{
+        "description":"Dodaje OperaGX ili osu! zvučni efekti prilikom tipkanja na tipkovnici.",
+        "options":{
+            "operaGx":"Opera GX",
+            "osu":"osu!"
+        },
+        "settings":{
+            "soundPack":"Zvučni paket za korištenje.",
+            "volume":"Glasnoća zvukova tipkovnice."
+        }
+    },
     "keywordNotify":{
+        "description":"Šalje obavijest ako određena poruka odgovara određenim ključnim riječima ili regularnim izrazima",
         "options":{
             "blacklist":"Crna lista",
             "whitelist":"Bijela lista"
         },
         "settings":{
+            "amountToKeep":"Količina poruka za čuvanje u dnevniku",
+            "ignoreBots":"Ignorirajte poruke botova",
             "keywords":"Upravljanje ključnim riječima"
         },
         "ui":{
@@ -1367,6 +1506,9 @@
     },
     "noNitroUpsell":{
         "description":"Uklanja Nitro upsells nadjačavanjem vaše premium vrste"
+    },
+    "noPushToTalk":{
+        "description":"Zaobilazi zahtjev pritisni za razgovor za glasovnu aktivnost u kanalima koji ga provode."
     },
     "noRPC":{
         "description":"Onemogućuje Discord značajku Rich Presence (RPC)."
@@ -1903,6 +2045,21 @@
             "translate":"Prevesti"
         }
     },
+    "triviaAI":{
+        "description":"Dodatak koji vam pomaže odgovoriti na trivijalna pitanja pomoću umjetne inteligencije.",
+        "settings":{
+            "apiKey":"API Tipka.",
+            "autoRespond":"Automatski odgovarajte na poruke kada primite odgovor.",
+            "endpoint":"OpenAI kompatibilna AI krajnja točka.",
+            "maxTokens":"Maksimalan broj tokena u odgovoru.",
+            "model":"AI model za korištenje.",
+            "supportImages":"Proslijedite slike umjetnoj inteligenciji za kontekst (ako postoji). Ovo ne podržavaju svi modeli.",
+            "systemPrompt":"Sustavski upit za AI."
+        },
+        "ui":{
+            "answerWithAI":"Odgovor s AI"
+        }
+    },
     "unitConverter":{
         "description":"Pretvorite jedinice u porukama (imperijalne/metričke)",
         "popover":{
@@ -2059,10 +2216,27 @@
     },
     "voiceButtons":{
         "description":"Dodaje gumbe za brze radnje (chat, isključivanje zvuka, oglušivanje) korisnicima glasovnog kanala",
+        "options":{
+            "both":"Oba",
+            "disable":"Onemogući",
+            "display":"Prikaz",
+            "globalName":"Globalno ime",
+            "hide":"Sakrij",
+            "left":"Lijevo",
+            "right":"Pravo",
+            "username":"Korisničko ime"
+        },
         "settings":{
-            "showChatButton":"Prikaži gumb za chat",
-            "showDeafenButton":"Prikaži gumb za odglušivanje",
-            "showMuteButton":"Prikaži gumb za isključivanje zvuka"
+            "buttonPosition":"Odaberite gdje želite postaviti glasovne gumbe u glasovnom korisničkom retku.",
+            "disableVideo":"Isključuje njihov video nakon klika na gumb za gluhu.",
+            "muteSoundboard":"Prebacuje njihovu zvučnu ploču nakon klika na gumb za gluhu.",
+            "serverSelf":"Zagluši / Isključi se na poslužitelju kada koristiš isključivanje/glušenje.",
+            "showButtonsSelf":"Želite li prikazati gumbe za vlastitog korisnika. Ista funkcija kao drugi gumb(i) osim što će otvoriti DM ploču i isključiti/glušiti za sebe nakon klika na gumb(e).",
+            "showChatButton":"Želite li prikazati gumb za chat",
+            "showDeafenButton":"Želite li prikazati gumb za gluhu",
+            "showMuteButton":"Želite li prikazati gumb za isključivanje zvuka",
+            "useServer":"Koristite isključivanje/glušenje poslužitelja umjesto lokalnog kada imate dopuštenje.",
+            "whichNameToShow":"Odaberite želite li prikazati nadimak ili korisničko ime u opisu alata."
         }
     },
     "voiceChannelLog":{
@@ -2087,6 +2261,7 @@
         "contextMenu":{
             "deafenAll":"Zaglušiti sve",
             "disconnectAll":"Odspojite sve",
+            "mentionAllUsers":"Navedite sve korisnike",
             "moveAll":"Pomaknite se svi",
             "muteAll":"Isključi sve",
             "undeafenAll":"Neoglušiti sve",

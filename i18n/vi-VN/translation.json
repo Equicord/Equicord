@@ -5,6 +5,6 @@
             "description":"Buộc một ngôn ngữ khác để Equicord sử dụng",
             "followDiscord":"Mặc định (theo Discord)"
         },
-        "showMissingKeys":"Nếu ngôn ngữ hiện tại thiếu bản dịch, hãy hiển thị các phím thay vì quay lại tiếng Anh"
+        "showMissingKeys":"Nếu ngôn ngữ hiện tại thiếu bản dịch, hãy hiển thị các khóa thay vì quay lại tiếng Anh"
     }
 }

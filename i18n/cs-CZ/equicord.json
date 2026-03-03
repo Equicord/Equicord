@@ -541,6 +541,7 @@
             "noMirroredCamera":"Zabraňuje zrcadlení kamery na obrazovce",
             "refreshSlashCommands":"Obnoví příkazy lomítka, aby se zobrazily nově přidané příkazy bez restartování klienta.",
             "removeActivitySection":"Odebere sekci aktivit nad seznamem členů",
+            "restoreFileDownloadButton":"Přidá zpět tlačítko Stáhnout v pravém horním rohu souborů",
             "showYourOwnActivityButtons":"Discord z nějakého důvodu skrývá vaše vlastní tlačítka aktivity"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Zavřít‏",
             "open":"OTEVŘENO"
+        }
+    },
+    "hideMessages":{
+        "description":"Plugin pro dočasné skrytí zpráv, dokud nerestartujete.",
+        "settings":{
+            "hidePopoverButton":"Skryjte tlačítko skrýt ve vyskakovacím okně zprávy."
+        },
+        "ui":{
+            "hide":"Schovat"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Odstraňuje upsells Nitro přepsáním vašeho prémiového typu"
     },
+    "noPushToTalk":{
+        "description":"Obchází požadavek push-to-talk pro hlasovou aktivitu v kanálech, které ji vynucují."
+    },
     "noRPC":{
         "description":"Deaktivuje funkci Discord funkce Rich Presence (RPC)."
     },
@@ -2044,6 +2057,21 @@
             "translate":"Přeložit"
         }
     },
+    "triviaAI":{
+        "description":"Plugin, který vám pomůže odpovědět na drobné otázky pomocí AI.",
+        "settings":{
+            "apiKey":"Tlačítko API.",
+            "autoRespond":"Automaticky odpovídat na zprávy po obdržení odpovědi.",
+            "endpoint":"Endpoint AI kompatibilní s OpenAI.",
+            "maxTokens":"Maximální počet tokenů v odpovědi.",
+            "model":"Model AI k použití.",
+            "supportImages":"Předejte obrázky AI pro kontext (pokud existuje). To není podporováno všemi modely.",
+            "systemPrompt":"Systémová výzva pro AI."
+        },
+        "ui":{
+            "answerWithAI":"Odpověď pomocí AI"
+        }
+    },
     "unitConverter":{
         "description":"Převod jednotek ve zprávách (imperiální/metrické)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Přidá uživatelům hlasového kanálu tlačítka rychlých akcí (chat, ztlumit, ohlušit).",
+        "options":{
+            "both":"Obě",
+            "disable":"Zakázat",
+            "display":"Displej",
+            "globalName":"Globální název",
+            "hide":"Schovat",
+            "left":"Vlevo",
+            "right":"Právo",
+            "username":"Uživatelské jméno"
+        },
         "settings":{
-            "showChatButton":"Zobrazit tlačítko chatu",
-            "showDeafenButton":"Zobrazit hluché tlačítko",
-            "showMuteButton":"Zobrazit tlačítko ztlumení"
+            "buttonPosition":"Vyberte, kam umístit hlasová tlačítka v řádku hlasového uživatele.",
+            "disableVideo":"Po kliknutí na tlačítko hluchý přepne jejich video.",
+            "muteSoundboard":"Po kliknutí na hluché tlačítko přepne jejich zvukovou desku.",
+            "serverSelf":"Ohlušit / Ztlumit se na serveru při použití ztlumení/ohlušení.",
+            "showButtonsSelf":"Zda chcete zobrazit tlačítka pro vlastního uživatele. Stejná funkce jako u ostatních tlačítek, kromě toho, že otevře panel DM a po kliknutí na tlačítko (tlačítka) se ztlumí/ohluší.",
+            "showChatButton":"Zda chcete zobrazit tlačítko chatu",
+            "showDeafenButton":"Zda chcete zobrazit neslyšící tlačítko",
+            "showMuteButton":"Zda chcete zobrazit tlačítko ztlumení",
+            "useServer":"Pokud máte oprávnění, použijte ztlumení/ohlušení serveru namísto místního.",
+            "whichNameToShow":"Vyberte, zda se má v popisku zobrazovat přezdívka nebo uživatelské jméno."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Ohlušit všechny",
             "disconnectAll":"Odpojit vše",
+            "mentionAllUsers":"Uveďte všechny uživatele",
             "moveAll":"Přesunout všechny",
             "muteAll":"Ztlumit všechny",
             "undeafenAll":"Neslyšící všechny",

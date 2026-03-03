@@ -541,6 +541,7 @@
             "noMirroredCamera":"Kameranın ekranınıza yansımasını engeller",
             "refreshSlashCommands":"İstemcinizi yeniden başlatmadan yeni eklenen komutları göstermek için Eğik Çizgi Komutlarını yeniler.",
             "removeActivitySection":"Üye listesinin üzerindeki etkinlik bölümünü kaldırır",
+            "restoreFileDownloadButton":"Dosyaların sağ üst köşesine İndir düğmesini geri ekler",
             "showYourOwnActivityButtons":"Discord bir nedenden dolayı kendi etkinlik düğmelerinizi gizler"
         },
         "standing":{
@@ -912,6 +913,15 @@
         "ui":{
             "close":"Kapat",
             "open":"Açık"
+        }
+    },
+    "hideMessages":{
+        "description":"Yeniden başlatılıncaya kadar mesajları geçici olarak gizleyen bir eklenti.",
+        "settings":{
+            "hidePopoverButton":"Mesaj açılır penceresindeki gizle düğmesini gizleyin."
+        },
+        "ui":{
+            "hide":"Gizle"
         }
     },
     "hideServers":{
@@ -1509,6 +1519,9 @@
     "noNitroUpsell":{
         "description":"Premium türünüzü geçersiz kılarak Nitro ek satışlarını kaldırır"
     },
+    "noPushToTalk":{
+        "description":"Zorunlu kılan kanallarda ses etkinliği için bas-konuş gereksinimini atlar."
+    },
     "noRPC":{
         "description":"Discord'ın Zengin Durum (RPC) özelliğini devre dışı bırakır"
     },
@@ -2044,6 +2057,21 @@
             "translate":"Çevir"
         }
     },
+    "triviaAI":{
+        "description":"Yapay zekayı kullanarak önemsiz soruları yanıtlamanıza yardımcı olan bir eklenti.",
+        "settings":{
+            "apiKey":"API Anahtarı.",
+            "autoRespond":"Yanıt alındığında mesajlara otomatik olarak yanıt verin.",
+            "endpoint":"OpenAI Uyumlu Yapay Zeka Uç Noktası.",
+            "maxTokens":"Yanıttaki maksimum jeton sayısı.",
+            "model":"Kullanılacak AI Modeli.",
+            "supportImages":"Bağlam için (varsa) görüntüleri yapay zekaya iletin. Bu, tüm modeller tarafından desteklenmez.",
+            "systemPrompt":"Yapay Zeka için Sistem İstemi."
+        },
+        "ui":{
+            "answerWithAI":"Yapay Zeka ile Yanıtlayın"
+        }
+    },
     "unitConverter":{
         "description":"Mesajlardaki birimleri dönüştürün (İngiliz/metrik)",
         "popover":{
@@ -2200,10 +2228,27 @@
     },
     "voiceButtons":{
         "description":"Sesli kanal kullanıcılarına hızlı işlem düğmeleri (sohbet, sessize alma, sağır etme) ekler",
+        "options":{
+            "both":"İkisi birden",
+            "disable":"Devre dışı bırak",
+            "display":"Görünüm",
+            "globalName":"Genel Ad",
+            "hide":"Gizle",
+            "left":"Sol",
+            "right":"Sağ",
+            "username":"Kullanıcı Adı"
+        },
         "settings":{
-            "showChatButton":"Sohbet düğmesini göster",
-            "showDeafenButton":"Sağır düğmesini göster",
-            "showMuteButton":"Sessiz düğmesini göster"
+            "buttonPosition":"Ses düğmelerinin sesli kullanıcı satırında nereye yerleştirileceğini seçin.",
+            "disableVideo":"Sağır düğmesine tıklandığında videolarını değiştirir.",
+            "muteSoundboard":"Sağır düğmesine basıldığında ses tahtasını değiştirir.",
+            "serverSelf":"Sessiz/sağır özelliğini kullanırken sunucuda kendinizi sağır/sessiz hale getirin.",
+            "showButtonsSelf":"Kendi kullanıcınız için düğmeleri görüntülemek isteyip istemediğiniz. DM panelini açması ve düğmelere tıkladığınızda kendinizi sessize alması/sağırlaştırması dışında diğer düğmelerle aynı işlevselliğe sahiptir.",
+            "showChatButton":"Sohbet düğmesini görüntülemek isteyip istemediğiniz",
+            "showDeafenButton":"Sağır düğmesini görüntülemek isteyip istemediğiniz",
+            "showMuteButton":"Sessiz düğmesini görüntülemek isteyip istemediğiniz",
+            "useServer":"İzniniz olduğunda yerel yerine sunucu sessize alma/sağırlaştırma özelliğini kullanın.",
+            "whichNameToShow":"Araç ipucunda takma adın mı yoksa kullanıcı adının mı gösterileceğini seçin."
         }
     },
     "voiceChannelLog":{
@@ -2228,6 +2273,7 @@
         "contextMenu":{
             "deafenAll":"Hepsini sağır et",
             "disconnectAll":"Tümünün bağlantısını kes",
+            "mentionAllUsers":"Tüm Kullanıcılardan Bahsedin",
             "moveAll":"Tümünü taşı",
             "muteAll":"Tümünü sessize al",
             "undeafenAll":"Herkesi sağır etme",
