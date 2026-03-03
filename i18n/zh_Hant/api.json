@@ -1,10 +1,36 @@
 {
+	"commands":{
+		"errorExecuting":"執行指令“{name}”時發生錯誤"
+	},
+	"memberListDecorators":{
+		"fallback":"無法渲染 {key} 成員清單裝飾器"
+	},
+	"messageAccessories":{
+		"fallback":"無法渲染 {key} 訊息附件"
+	},
+	"messageDecorations":{
+		"fallback":"無法渲染 {key} 訊息裝飾"
+	},
+	"notices":{
+		"fallback":"顯示通知時出錯"
+	},
 	"notifications":{
+		"dismissNotification":"關閉通知",
 		"logs":{
+			"body_one":"這將永久刪除 {count} 通知。此操作無法撤銷。",
+			"body_other":"這將永久刪除 {count} 通知。此操作無法撤銷。",
+			"body_zero":"未選擇通知。",
 			"cancel":"呃，没事了～",
-			"clearNotificationLog":"通知日誌",
+			"clearNotificationLog":"清除通知日誌",
+			"confirm":"做吧！",
 			"title":"你確定嗎？"
 		},
+		"missedNotifications":{
+			"body_one":"已收到 {count} 通知",
+			"body_other":"收到 {count} 通知",
+			"title":"當你不在的時候"
+		},
+		"noNotifications":"還沒有通知",
 		"notificationLog":"通知日誌",
 		"notificationSettings":"通知设定"
 	}
